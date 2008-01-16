@@ -3,7 +3,7 @@
 # ***** BEGIN LICENSE BLOCK *****
 #
 # Zimbra Collaboration Suite Server
-# Copyright (C) 2007 Zimbra, Inc.
+# Copyright (C) 2007-2008 Zimbra, Inc.
 #
 # The contents of this file are subject to the Yahoo! Public License
 # Version 1.0 ("License"); you may not use this file except in
@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = 1.6;
+my $version = 1.7;
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -37,7 +37,7 @@ my $logfilename = "icalmig.log";
 my $logfile;
 my $icalfile;
 my $invalidfile;
-$icalfile="C:\\Zimbra_Work\\IcalMigration\\Genentech\\test2.ics" if ($DEBUG);#;"C:\\Zimbra_Work\\IcalMigration\\data\\full_sas.txt" if (DEBUG);
+$icalfile="C:\\Zimbra_Work\\IcalMigration\\GATech\\ICS\\ICS\\rmb.ics" if ($DEBUG);
 
 my $outfile;
 
@@ -406,7 +406,6 @@ sub processfile
       if (($uidtosrch ne $prvuid)&&(!$g_isdelrdate)&&($g_isrdate))
       {
         $Iscreaterrule=1;
-        $IsFirstRecId=0;
         $uidtosrch=$prvuid;
         $del_pos=$prvrecevpos;
       }
@@ -416,6 +415,7 @@ sub processfile
       }
       $g_isdelrdate=0;
       $g_isrdate=0;
+      $IsFirstRecId=0;
     }
 
 #Case: 1 *******************************************************>>>>>>>>>>>
@@ -474,6 +474,7 @@ sub processfile
       my $RPrulecreated=0;
       my $sEvDate=0; my $eEvDate=0;
       my $orig_mstrsdt=0; my $orig_mstredt=0;
+      my %srtd_newrecarr=();
       #iterate through all occurences
       my %heventdates=();
       foreach my $newrec (@newrecarr)
@@ -486,7 +487,10 @@ sub processfile
         {
           $masterrec= $newrec;
         }
+        #create sorted hash for recurrences else exceptions are created in random way and cannot be shown in UI
+        push @{$srtd_newrecarr{$newrec->{'DTSTART'}}},$newrec;
       }#end foreach my $newrec
+      &print_srtdnewrecarr(%srtd_newrecarr);
 
       #Create master event
       if ($masterrec->{'MASTER_VEVENT'})
@@ -510,7 +514,7 @@ sub processfile
         for(my $i=0; $i<$#masterrecdata+1; $i++)
         {
           my $str=$masterrecdata[$i];
-          #if RDATE, calculate RDATE range and create RRULE with
+          #if RDATE; calculate RDATE range and create RRULE with
           #exceptions for same dates
           if ($str =~/^RDATE/)
           {
@@ -522,7 +526,22 @@ sub processfile
               {
                 my $dlctr=0;my $wkctr=0; my $bwkctr=0;
                 $rdarray= ($masterrec->{'RDATE'});
+
+                #get master weekday;Will be used to check for RDATE weekdays.
+                #if master weekday is not same as RDATE weekdays, create exceptions.
+                #As it is possible that recurrence has been changed to another weekday
+                #later.
+                my $midx= rindex($masterrec->{'DTSTART'},':');
+                my $mdt= substr($masterrec->{'DTSTART'},$midx+1);
+                my $masterweekday=get_weekday($mdt);
+                
+                #get time difference of rdate appointments, if time is different
+                #create exceptions else only RRULE will create recurrence only
+                #on base of master event
+                my $msttime=$mdt;
+                
                 my $k1;my $k2;my $v1; my $v2;
+                my $rweekday; my $isweekdayok=1; my $isrdtimeok=1;
                 my $floop=1;
                 for my $k1 ( sort keys %$rdarray )
                 {
@@ -540,6 +559,22 @@ sub processfile
                     my $tidx= rindex($sdt,':');
                     $sdt= substr($sdt,$tidx+1);
                     $ndt = substr($ndt,$tidx+1);
+                    #check for rdate weekdays
+                    $rweekday= get_weekday($sdt);
+                    #if master weekday is not same as RDATE weekday
+                    if ($masterweekday != $rweekday)
+                    {
+                      $isweekdayok=0;
+                    }
+                    
+                    #check for if master date time is equal to rdate time component
+
+                    my $rsttime= $sdt;
+
+                    if (!istime_equal($msttime,$rsttime))
+                    {
+                      $isrdtimeok = 0;
+                    }
                     #delta days
                     $delta_days=get_date_diff($sdt, $ndt);
                     if ($delta_days==$DAILY)
@@ -597,11 +632,17 @@ sub processfile
                   $rdpattern=$DAILY;
                   $freq="DAILY";
                   $interval=1;
+                  #reset isweekok as in case of DAILY frequency, weekdays will
+                  #be always different.
+                  $isweekdayok=1;
                 }
                 &log_message("Match Percentage: $pmatch");
                 &log_message("Total RDATEs: $rdcnt DailyCtr: $dlctr WeeklyCtr: $wkctr");
-                #if recurrence pattern found, No need to create exceptions
-                if ($rdpattern)
+                #1. if recurrence pattern found, No need to create exceptions
+                #2. if weekdays has changed due to meeting has moved to another day,
+                # dont create RRULE.
+                #3. if time has changed for RDATE occurences, dont create RRULE
+                if (($rdpattern) && ($isweekdayok)&&($isrdtimeok))
                 {
                   if ($freq eq "DAILY")
                   {
@@ -626,7 +667,7 @@ sub processfile
                   &log_message("New RRULE: $newrrule.");
                   $RPrulecreated=1;
                 }
-              }
+              }#end_if($createPatternRRULE)
 
               #if recurrence pattern based RRULE could NOT be created
               #Go for RRULE for exceptions
@@ -644,7 +685,7 @@ sub processfile
                 #delta days
                 $delta_days=get_date_diff($fdt, $ldt)+2;
                 my $reccnt=keys(%$rdarray)+1;
-                my $newrrule= "RRULE:FREQ=DAILY;COUNT=$reccnt;INTERVAL=1";
+                my $newrrule= "RRULE:FREQ=YEARLY;COUNT=$reccnt;INTERVAL=1";
                 print_outfile("$newrrule");
                 &log_message("New RRULE: $newrrule.");
               }
@@ -702,10 +743,13 @@ sub processfile
           $recidfmtstr=":";
         }
         $mstrdtstart = substr($mstrdtstart,$ridx+1);
-
-        for(my $rrctr=$#newrecarr;$rrctr>=0;$rrctr--)
+        my $ndtstart=$mstrdtstart;
+        my $syear= substr($ndtstart,0,4);
+        #for(my $rrctr=$#srtd_newrecarr;$rrctr>=0;$rrctr--)
+        foreach my $srdtkey (sort keys %srtd_newrecarr)
         {
-          my $occurrec= $newrecarr[$rrctr];
+          #my $occurrec= $srtd_newrecarr[$rrctr];
+          my $occurrec=$srtd_newrecarr{$srdtkey}[0];
           #only for recurrences
           if (!$occurrec->{'MASTER_VEVENT'})
           {
@@ -720,10 +764,14 @@ sub processfile
                 #create RECURRENCE-ID
                 #it should be increment to masterevent's DTSTART
                 #and continue for range need to cover
-                my $ndtstart= get_date_by_days($mstrdtstart,$recctr);
-                $ndtstart= "RECURRENCE-ID$TZTag$recidfmtstr$ndtstart";
-                print_outfile("$ndtstart");
-                &log_message("New RECURRENCE-ID:$ndtstart");
+                #increment by year as Outlook cannot show exceptions, if
+                #recurrecneID is less than the DTSTART
+                $syear++;
+                $ndtstart= $syear.substr($ndtstart,4);
+                #$ndtstart= get_date_by_days($ndtstart,$dyinyr); #for yearly increment
+                my $rndtstart= "RECURRENCE-ID$TZTag$recidfmtstr$ndtstart";
+                print_outfile("$rndtstart");
+                &log_message("New RECURRENCE-$rndtstart");
                 $recctr++;
               
                 #start date
@@ -820,7 +868,7 @@ sub get_date_by_days
 #takes dates in yyyymmdd/yyyymmddThhmmss format and return number of days
 sub get_date_diff
 {
-  #format: 220070302T153000Z, 20070406
+  #format: 20070302T153000Z, 20070406
   #check for Timezone format, presence of T
   my $fd=@_[0];
   my $ld=@_[1];
@@ -842,7 +890,49 @@ sub get_date_diff
   my $diff = &Delta_Days(@date1, @date2);
   
   return $diff;
+}
 
+#Input format: 20070302T153000Z, 20070406
+#returns Week Day
+sub get_weekday
+{
+  my $dt=shift;
+  my @darr = split(/T/, $dt);
+  $dt= $darr[0];
+  my $yr1= substr($dt,0,4);
+  my $mm1= substr($dt,4,2);
+  my $dd1= substr($dt,6,2);
+  my $dow=Day_of_Week($yr1,$mm1,$dd1);
+  my $tdow = Day_of_Week_to_Text($dow);
+  log_message("Weekday: $dow - $tdow");
+  return $dow;
+}
+
+#Input format 20070302T153000Z, 20070406
+#Compare 2 date-time components for eqality
+sub istime_equal
+{
+  my $tm=shift;
+  my @tarr = split(/T/, $tm);
+  my $dt= $tarr[1];
+  my $hr1= substr($dt,0,2);
+  my $mn1= substr($dt,2,2);
+  my $ss1= substr($dt,4,2);
+  
+  $tm=shift;
+  @tarr= split(/T/, $tm);
+  $dt= $tarr[1];
+  my $hr2= substr($dt,0,2);
+  my $mn2= substr($dt,2,2);
+  my $ss2= substr($dt,4,2);
+  if(($hr1==$hr2)&&($mn1==$mn2)&&($ss1==$ss2))
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 sub print_outfile
@@ -883,6 +973,15 @@ sub print_hlist
   }
 }
 
+#test function
+sub print_srtdnewrecarr
+{
+  my %tmphlist = @_;
+  foreach my $srdate ( sort keys %tmphlist)
+  {
+    &log_message("$srdate");
+  }
+}
 #TimeZone information header for GeorgiaTech
 sub init_TZHeader
 {
