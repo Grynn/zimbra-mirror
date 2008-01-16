@@ -494,6 +494,37 @@
     </tag>
 
     <tag>
+        <description>Sets voice mail-specific data on a compose</description>
+        <name>voiceMailCompose</name>
+        <tag-class>com.zimbra.cs.taglib.tag.voice.VoiceMailComposeTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                Compose bean
+            </description>
+            <name>compose</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                Serialized voice mail
+            </description>
+            <name>voiceid</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                "reply" or "forward"
+            </description>
+            <name>operation</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <description>construct a file uploader bean</description>
         <name>fileUploader</name>
         <tag-class>com.zimbra.cs.taglib.tag.FileUploaderTag</tag-class>
