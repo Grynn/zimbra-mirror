@@ -217,12 +217,14 @@ function(obj, results) {
 
 Com_Zimbra_Amzn.prototype._searchCallback = 
 function(obj, results) {
-	var result = AjxXmlDoc.createFromXml(results.text).toJSObject(true, false);
-	var bookInfo = new Object();
-	DBG.dumpObj(result);
-	if(result.Items.Item) {
-		this._displayBooks(result.Items.Item, obj);
-	} else {
-		this._displayBooks(null, obj);
-	}
+    if(results && results.success){
+        var result = AjxXmlDoc.createFromXml(results.text).toJSObject(true, false);
+        DBG.dumpObj(result);
+        var items = result.Items;
+        if(items && items.Item){
+            this._displayBooks(items.Item, obj);
+            return;
+        }
+    }
+    this._displayBooks(null, obj);
 };
