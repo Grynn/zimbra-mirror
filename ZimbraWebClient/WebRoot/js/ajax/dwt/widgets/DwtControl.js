@@ -892,9 +892,16 @@ DwtControl.prototype.setDragSource =
 function(dragSource) {
 	this._dragSource = dragSource;
 	if (dragSource != null && this._ctrlCaptureObj == null) {
-		this._ctrlCaptureObj = new DwtMouseEventCapture(this, "DwtControl", DwtControl.__mouseOverHdlr,
-				DwtControl.__mouseDownHdlr, DwtControl.__mouseMoveHdlr,
-				DwtControl.__mouseUpHdlr, DwtControl.__mouseOutHdlr);
+		this._ctrlCaptureObj = new DwtMouseEventCapture(this,
+			"DwtControl",
+			DwtControl.__mouseOverHdlr,
+			DwtControl.__mouseDownHdlr,
+			DwtControl.__mouseMoveHdlr,
+			DwtControl.__mouseUpHdlr,
+			DwtControl.__mouseOutHdlr,
+			null,						// mouse wheel
+			null						// hard capture
+		);
 		this._dndHoverAction = new AjxTimedAction(null, this.__dndDoHover);
 	}
 };

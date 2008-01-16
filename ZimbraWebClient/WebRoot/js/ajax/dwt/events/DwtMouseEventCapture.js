@@ -33,7 +33,7 @@
 * @param mouseOutHdlr [function:optional]	Browser event handler
 * @param hardCapture [boolean:optional]		If true, then event propagation is halted at this element
 */
-DwtMouseEventCapture = function(targetObj, id, mouseOverHdlr, mouseDownHdlr, mouseMoveHdlr, mouseUpHdlr, mouseOutHdlr, hardCapture) {
+DwtMouseEventCapture = function(targetObj, id, mouseOverHdlr, mouseDownHdlr, mouseMoveHdlr, mouseUpHdlr, mouseOutHdlr, mouseWheelHdlr, hardCapture) {
 	this.targetObj = targetObj;
 	this._id = id
 	this._mouseOverHdlr = (mouseOverHdlr != null) ? mouseOverHdlr : DwtMouseEventCapture.emptyHdlr;
@@ -41,6 +41,7 @@ DwtMouseEventCapture = function(targetObj, id, mouseOverHdlr, mouseDownHdlr, mou
 	this._mouseMoveHdlr = (mouseMoveHdlr != null) ? mouseMoveHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._mouseUpHdlr = (mouseUpHdlr != null) ? mouseUpHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._mouseOutHdlr = (mouseOutHdlr != null) ? mouseOutHdlr : DwtMouseEventCapture.emptyHdlr;
+	this._mouseWheelHdlr = (mouseWheelHdlr != null) ? mouseWheelHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._hardCapture = (hardCapture == null || hardCapture == true) ? true : false;
 }
 
@@ -83,17 +84,20 @@ function() {
 		document.body.addEventListener("mousemove", this._mouseMoveHdlr, true);
 		document.body.addEventListener("mouseup", this._mouseUpHdlr, true);
 		document.body.addEventListener("mouseout", this._mouseOutHdlr, true);
+		document.body.addEventListener("DOMMouseScroll", this._mouseWheelHdlr, true);
 	} else {
 		this._savedMouseOverHdlr = document.onmouseover;
 		this._savedMouseDownHdlr = document.onmousedown;
 		this._savedMouseMoveHdlr = document.onmousemove;
 		this._savedMouseUpHdlr = document.onmouseup;
 		this._savedMouseOutHdlr = document.onmouseout;
+		this._savedMouseWheelHdlr = document.onmousewheel;
 		document.onmouseover = this._mouseOverHdlr;
 		document.onmousedown = this._mouseDownHdlr;
 		document.onmousemove = this._mouseMoveHdlr;
 		document.onmouseup = this._mouseUpHdlr;
 		document.onmouseout = this._mouseOutHdlr;
+		document.onmousewheel = this._mouseWheelHdlr;
 	}
 	if (this._hardCapture && document.body && document.body.setCapture) {
 		document.body.setCapture();
@@ -114,12 +118,14 @@ function() {
 		document.body.removeEventListener("mousemove", this._mouseMoveHdlr, true);
 		document.body.removeEventListener("mouseup", this._mouseUpHdlr, true);
 		document.body.removeEventListener("mouseout", this._mouseOutHdlr, true);
+		document.body.removeEventListener("DOMMouseScroll", this._mouseWheelHdlr, true);
 	} else {
 		document.onmouseover = this._savedMouseOverHdlr
 		document.onmousedown = this._savedMouseDownHdlr;
 		document.onmousemove = this._savedMouseMoveHdlr;
 		document.onmouseup = this._savedMouseUpHdlr;
 		document.onmouseout = this._savedMouseOutHdlr;
+		document.onmousewheel = this._savedMouseWheelHdlr;
 	}
 	if (this._hardCapture && document.body && document.body.releaseCapture) {
 		document.body.releaseCapture();

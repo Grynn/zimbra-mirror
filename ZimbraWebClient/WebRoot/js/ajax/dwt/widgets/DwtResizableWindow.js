@@ -277,6 +277,7 @@ DwtResizableWindow.prototype.__initCtrl = function() {
 		DwtResizableWindow.__static_resizeMouseMove,
 		DwtResizableWindow.__static_resizeMouseUp,
 		null,		// mouseout
+		null,		// mouse wheel
 		true		// hard capture
 	);
 

@@ -80,6 +80,7 @@ DwtSpinner = function(params) {
 		null, // no mousemove
 		AjxCallback.simpleClosure(this._stopCapture, this), // mouseup
 		null, // no mouseout
+		null, // no mouse wheel
 		true);  // hard capture
 
 	this._createElements();

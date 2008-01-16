@@ -35,9 +35,16 @@ DwtSash = function(parent, style, className, threshold, posStyle) {
 	}
 	this._threshold = (threshold > 0) ? threshold : 1;
 
-	this._captureObj = new DwtMouseEventCapture(this, "DwtSash", DwtSash._mouseOverHdlr,
-			DwtSash._mouseDownHdlr, DwtSash._mouseMoveHdlr, 
-			DwtSash._mouseUpHdlr, DwtSash._mouseOutHdlr);
+	this._captureObj = new DwtMouseEventCapture(this,
+		"DwtSash",
+		DwtSash._mouseOverHdlr,
+		DwtSash._mouseDownHdlr,
+		DwtSash._mouseMoveHdlr,
+		DwtSash._mouseUpHdlr,
+		DwtSash._mouseOutHdlr,
+		null,					// mouse wheel
+		null					// hard capture
+	);
 	this.setHandler(DwtEvent.ONMOUSEDOWN, DwtSash._mouseDownHdlr);
 	this.setHandler(DwtEvent.ONMOUSEOVER, DwtSash._mouseOverHdlr);
 	this.setHandler(DwtEvent.ONMOUSEOUT, DwtSash._mouseOutHdlr);
