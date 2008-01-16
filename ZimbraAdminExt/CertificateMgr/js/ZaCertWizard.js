@@ -17,7 +17,6 @@ function ZaCertWizard (parent, app) {
 	this.uploadResults = null ;
 	//this.initForm(null,this.getMyXForm());	
 	this.initForm(ZaCert.myXModel,this.getMyXForm());	
-	//this.license = new ZaLicense(app);
    
 	this._localXForm.setController(this._app);	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaCertWizard.prototype.handleXFormChange));
@@ -490,7 +489,7 @@ function() {
 
 /**
 * @method setObject sets the object contained in the view
-* @param entry - ZaLicense object to display
+* @param entry -  object to display
 **/
 ZaCertWizard.prototype.setObject =
 function(entry) {
