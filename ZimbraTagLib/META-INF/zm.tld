@@ -5963,6 +5963,12 @@
         <function-signature>java.lang.String getWindowsId(java.util.TimeZone)</function-signature>
     </function>
 
+	<function>
+		<name>getJavaId</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+		<function-signature>java.lang.String getJavaId(java.util.TimeZone)</function-signature>
+	</function>
+
     <function>
         <name>getFolderStyleColor</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>

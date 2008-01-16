@@ -817,6 +817,10 @@ public class BeanUtils {
         return TZIDMapper.toWindows(tz.getID());
     }
 
+	public static String getJavaId(TimeZone tz) {
+		return TZIDMapper.toJava(tz.getID());
+	}
+
     public static String getCanonicalTimeZoneId(String id) {
         return TZIDMapper.canonicalize(id);
     }

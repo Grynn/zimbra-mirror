@@ -33,4 +33,8 @@ public class ZTimeZoneBean {
     public String getId() {
         return mTz.getWindowsID();
     }
+
+	public String getJavaId() {
+		return mTz.getJavaID();
+	}
 }
