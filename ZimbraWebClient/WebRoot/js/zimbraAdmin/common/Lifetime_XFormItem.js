@@ -22,7 +22,7 @@
 MLifetime_XModelItem = function () {}
 XModelItemFactory.createItemType("_MLIFETIME_", "mlifetime", MLifetime_XModelItem);
 MLifetime_XModelItem.prototype.validateType = function (value) {
-	var val = "1";
+	var val = "";
 	if(value != null && value.length >0) {
 		if(value.length > 1) {
 			val = value.substr(0, value.length-1);				
@@ -30,7 +30,7 @@ MLifetime_XModelItem.prototype.validateType = function (value) {
 			if(value == "0") {
 				val = "0";
 			} else {
-				val = "1";
+				val = "";
 			}
 		}
 	}
@@ -63,7 +63,7 @@ Lifetime_XFormItem.prototype.TIME_CHOICES = [
 Lifetime_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
-			var val = "1";
+			var val = "";
 			if(itemVal != null && itemVal.length >0) {
 				if(itemVal.length > 1) {
 					val = parseInt(itemVal);			
@@ -71,7 +71,7 @@ Lifetime_XFormItem.prototype.items = [
 					if(itemVal == "0") {
 						val = "0";
 					} else {
-						val = "1";
+						val = "";
 					}
 				}
 			}
@@ -115,7 +115,7 @@ Lifetime1_XFormItem.prototype.TIME_CHOICES = [
 Lifetime1_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
-			var val = "1";
+			var val = "";
 			if(itemVal != null && itemVal.length >0) {
 				if(itemVal.length > 1) {
 					val = itemVal.substr(0, itemVal.length-1);				
@@ -123,7 +123,7 @@ Lifetime1_XFormItem.prototype.items = [
 					if(itemVal == "0") {
 						val = "0";
 					} else {
-						val = "1";
+						val = "";
 					}
 				}
 			}
