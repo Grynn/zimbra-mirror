@@ -24,6 +24,12 @@ if [ "x$1" != "x" ]; then
 	exit 1
 fi
 
+u=`id -un`
+if [ $u != ${zimbra_user} ]; then
+    echo "Error: must be run as ${zimbra_user} user"
+    exit 1
+fi
+
 zmsetvars -f\
 	zimbra_home \
 	zimbra_server_hostname \
