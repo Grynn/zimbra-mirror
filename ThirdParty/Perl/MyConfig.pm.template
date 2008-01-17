@@ -42,7 +42,7 @@ $CPAN::Config = {
   'tar' => q[@@TAR@@],
   'term_is_latin' => q[1],
   'unzip' => q[@@UNZIP@@],
-  'urllist' => [q[http://inside.zimbra.com/public/software/shared/CPAN/],],
+  'urllist' => [q[http://depot.zimbra.com/cpan/],],
   'wget' => q[@@WGET@@],
 };
 1;
