@@ -24,12 +24,6 @@ if [ "x$1" != "x" ]; then
 	exit 1
 fi
 
-u=`id -un`
-if [ $u != ${zimbra_user} ]; then
-    echo "Error: must be run as ${zimbra_user} user"
-    exit 1
-fi
-
 zmsetvars -f\
 	zimbra_home \
 	zimbra_server_hostname \
@@ -39,6 +33,12 @@ zmsetvars -f\
 	zimbra_ldap_password \
 	zimbra_ldap_userdn \
 	ldap_replication_password
+
+u=`id -un`
+if [ $u != ${zimbra_user} ]; then
+    echo "Error: must be run as ${zimbra_user} user"
+    exit 1
+fi
 
 ldap_master_host=`echo ${ldap_master_url} | sed -e 's|ldaps*://\([^:]*\):*.*|\1|'`
 
