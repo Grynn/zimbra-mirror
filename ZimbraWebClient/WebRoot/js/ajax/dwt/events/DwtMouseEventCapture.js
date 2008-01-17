@@ -41,6 +41,11 @@ DwtMouseEventCapture = function(targetObj, id, mouseOverHdlr, mouseDownHdlr, mou
 	this._mouseMoveHdlr = (mouseMoveHdlr != null) ? mouseMoveHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._mouseUpHdlr = (mouseUpHdlr != null) ? mouseUpHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._mouseOutHdlr = (mouseOutHdlr != null) ? mouseOutHdlr : DwtMouseEventCapture.emptyHdlr;
+	// NOTE: This is for any code that relies on the old signature
+	if (typeof mouseWheelHdlr == "boolean") {
+		hardCapture = mouseWheelHdlr;
+		mouseWheelHdlr = null;
+	}
 	this._mouseWheelHdlr = (mouseWheelHdlr != null) ? mouseWheelHdlr : DwtMouseEventCapture.emptyHdlr;
 	this._hardCapture = (hardCapture == null || hardCapture == true) ? true : false;
 }
