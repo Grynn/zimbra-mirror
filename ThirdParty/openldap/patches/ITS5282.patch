@@ -115,17 +115,6 @@
  				break;
  			}
  			goto done;
-@@ -1920,6 +1915,10 @@
- 				op->orr_nnewSup = NULL;
- 			}
- 			op->orr_deleteoldrdn = 0;
-+			op->orr_modlist = NULL;
-+			if (( rc = slap_modrdn2mods( op, &rs_modify ))) {
-+				goto done;
-+			}
- 			rc = be->be_modrdn( op, &rs_modify );
- 			Debug( LDAP_DEBUG_SYNC,
- 					"syncrepl_entry: rid %03d be_modrdn (%d)\n", 
 @@ -1928,7 +1927,6 @@
  				op->o_req_dn = entry->e_name;
  				op->o_req_ndn = entry->e_nname;
@@ -197,3 +186,14 @@
  }
  
  static void
+--- openldap-2.3.40/servers/slapd/proto-slap.h.orig	2008-01-17 12:59:07.000000000 -0800
++++ openldap-2.3.40/servers/slapd/proto-slap.h	2008-01-17 12:59:29.000000000 -0800
+@@ -1603,7 +1603,7 @@
+  * syncrepl.c
+  */
+ 
+-LDAP_SLAPD_F (void)  syncrepl_add_glue LDAP_P(( 
++LDAP_SLAPD_F (int)  syncrepl_add_glue LDAP_P(( 
+ 					Operation*, Entry* ));
+ LDAP_SLAPD_F (void) syncinfo_free LDAP_P(( struct syncinfo_s * ));
+ 
