@@ -179,6 +179,7 @@ index   zimbraMailCatchAllAddress   eq,sub
 index   zimbraMailDeliveryAddress   eq,sub
 index   zimbraMailForwardingAddress eq
 index   zimbraMailAlias             eq,sub
+index   zimbraMailTransport         eq
 index   zimbraDomainName            eq,sub
 index   zimbraShareInfo             sub
 index   uid                         pres,eq
