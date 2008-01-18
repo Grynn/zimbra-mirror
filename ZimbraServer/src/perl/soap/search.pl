@@ -64,7 +64,7 @@ if (!defined($user) || !defined($searchString) || defined($help)) {
     my $usage = <<END_OF_USAGE;
     
 USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-fetch FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-es END-SORT-VALUE] [-conv CONVID] [-tz TZID] [-l LOCALE] [-calExpandInstStart STARTTIME -calExpandInstEnd ENDTIME]
-    SORT = dateDesc|dateAsc|subjDesc|subjAsc|nameDesc|nameAsc|score
+    SORT = dateDesc|dateAsc|subjDesc|subjAsc|nameDesc|nameAsc|score|none
     TYPES = message|conversation|contact|appointment
 END_OF_USAGE
     die $usage;
