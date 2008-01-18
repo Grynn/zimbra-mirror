@@ -34,6 +34,7 @@ my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
 my $zimbra_ldap_password = getLocalConfig("zimbra_ldap_password");
 my $ldap_root_password = getLocalConfig("ldap_root_password");
 my $ldap_master_url = getLocalConfig("ldap_master_url");
+my $ldap_is_master = getLocalConfig("ldap_is_master");
 
 # Get the SHA password.
 my $ctx = Crypt::SaltedHash->new(algorithm => 'SHA-1');
@@ -123,6 +124,17 @@ while( not $ldifin->eof()) {
 }
 $ldifin->done ( );
 $ldifout->done ( );
+
+#bug 23764 -- We must enable replication before updating the master.
+if ( -f "/opt/zimbra/.enable_replica" ) {
+  my $rc=`${zimbra_home}/libexec/zmldapenablereplica`;
+  $rc=`${zimbra_home}/bin/ldap stop`;
+  $rc=`${zimbra_home}/bin/ldap start`;
+}
+
+if ($ldap_is_master ne "true" ) {
+    exit 0;
+}
 
 # Start ldap
 my $rc=`${zimbra_home}/bin/ldap start`;
@@ -214,12 +226,6 @@ if ( -d "/opt/zimbra/lib/conf/" ) {
        }
     }
     closedir DIR;
-}
-
-if ( -f "/opt/zimbra/.enable_replica" ) {
-  my $rc=`${zimbra_home}/libexec/zmldapenablereplica`;
-  $rc=`${zimbra_home}/bin/ldap stop`;
-  $rc=`${zimbra_home}/bin/ldap start`;
 }
 
 exit 0;
