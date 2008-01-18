@@ -82,7 +82,7 @@ public class GetCert extends AdminDocumentHandler {
                 }else if (option.equals(CERT_STAGED_OPTION_SELF) || option.equals(CERT_STAGED_OPTION_COMM)){
                     cmd = ZimbraCertMgrExt.GET_STAGED_CERT_CMD + " " + option;
                     ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
-                    addCertInfo(response, rmgr.execute(cmd), certType) ;
+                    addCertInfo(response, rmgr.execute(cmd), certType, server.getName()) ;
                 }else{
                     throw ServiceException.INVALID_REQUEST(
                            "Invalid option is set in GetCertRequest for staged certs: " 
@@ -92,13 +92,13 @@ public class GetCert extends AdminDocumentHandler {
                 for (int i=0; i < CERT_TYPES.length; i ++) {
                     cmd = ZimbraCertMgrExt.GET_DEPLOYED_CERT_CMD + " " + CERT_TYPES[i] ;
                     ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
-                    addCertInfo(response, rmgr.execute(cmd), CERT_TYPES[i]) ;
+                    addCertInfo(response, rmgr.execute(cmd), CERT_TYPES[i], server.getName()) ;
                 }
             }else if (CERT_TYPES.toString().contains(certType)){
                     //individual types
                 cmd = ZimbraCertMgrExt.GET_DEPLOYED_CERT_CMD + " " + certType;
                 ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
-                addCertInfo(response, rmgr.execute(cmd), certType) ;
+                addCertInfo(response, rmgr.execute(cmd), certType, server.getName()) ;
             }else{
                 throw ServiceException.INVALID_REQUEST("Invalid certificate type: " + certType + ". Must be (self|comm).", null);
             }
@@ -109,12 +109,13 @@ public class GetCert extends AdminDocumentHandler {
         }
     }
     
-    public void addCertInfo(Element parent, RemoteResult rr, String certType) throws ServiceException, IOException{
+    public void addCertInfo(Element parent, RemoteResult rr, String certType, String serverName) throws ServiceException, IOException{
         try {
             byte[] stdOut = rr.getMStdout() ;
             HashMap <String, String> output = OutputParser.parseOuput(stdOut) ;
             Element el = parent.addElement("cert");
             el.addAttribute("type", certType);
+            el.addAttribute("server", serverName);
             for (String k: output.keySet()) {
                 ZimbraLog.security.debug("Adding element " + k + " = " + output.get(k)) ;
                 Element certEl = el.addElement(k);

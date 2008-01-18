@@ -207,10 +207,7 @@ ZaCert.getCerts = function (app, serverId) {
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
 	if (serverId && serverId != ZaCert.ALL_SERVERS) {
-		//csfeParams.targetServer = serverId ;
 		soapDoc.getMethod().setAttribute("server", serverId);
-	}else{
-		
 	}
 	
 	try {
@@ -231,10 +228,11 @@ ZaCert.getCSR = function (app, serverId, type) {
 	soapDoc.getMethod().setAttribute("type", type);
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
-	/* for now, getCSR is executed on the local server
+	
 	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
-		csfeParams.targetServer = serverId ;
-	}*/
+		soapDoc.getMethod().setAttribute("server", serverId);
+	}
+	
 	try {
 		var reqMgrParams = {} ;
 		reqMgrParams.controller = app.getCurrentController();
@@ -246,7 +244,7 @@ ZaCert.getCSR = function (app, serverId, type) {
 	}
 }
 
-ZaCert.genCSR = function (app, subject_attrs,  type, newCSR) {
+ZaCert.genCSR = function (app, subject_attrs,  type, newCSR, serverId) {
 	if (AjxEnv.hasFirebug) console.log("Generating certificates") ;
 	var soapDoc = AjxSoapDoc.create("GenCSRRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
@@ -254,6 +252,10 @@ ZaCert.genCSR = function (app, subject_attrs,  type, newCSR) {
 		soapDoc.getMethod().setAttribute("new", "1");
 	}else{
 		soapDoc.getMethod().setAttribute("new", "0");		
+	}
+	
+	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
+		soapDoc.getMethod().setAttribute("server", serverId);
 	}
 	
 	for (var n in subject_attrs) {
@@ -282,7 +284,7 @@ ZaCert.genCSR = function (app, subject_attrs,  type, newCSR) {
 	}
 }
 
-ZaCert.installCert = function (app, params) {
+ZaCert.installCert = function (app, params, serverId) {
 	if (AjxEnv.hasFirebug) console.log("Installing certificates") ;
 	var type = params.type ;
 	var comm_cert = params.comm_cert ;
@@ -300,7 +302,9 @@ ZaCert.installCert = function (app, params) {
 	
 	var soapDoc = AjxSoapDoc.create("InstallCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
-	
+	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
+		soapDoc.getMethod().setAttribute("server", serverId);
+	}
 	if (type == ZaCert.A_type_self || type == ZaCert.A_type_comm) {
 		soapDoc.set(ZaCert.A_validation_days, validation_days);	
 		soapDoc.set(ZaCert.A_allserver, allserver) ;

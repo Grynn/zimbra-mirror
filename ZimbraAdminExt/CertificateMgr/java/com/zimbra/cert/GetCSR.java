@@ -33,6 +33,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.rmgmt.RemoteManager;
 import com.zimbra.cs.rmgmt.RemoteResult;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
@@ -50,12 +51,14 @@ public class GetCSR extends AdminDocumentHandler {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
         Provisioning prov = Provisioning.getInstance();
         
-        //get a server
-        Server server = prov.getLocalServer();
-        
+        String serverId = request.getAttribute("server") ;
+    	Server server = prov.get(ServerBy.id, serverId);
+    	
         if (server == null) {
-            throw ServiceException.INVALID_REQUEST("No valid server was found", null);
+            throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
         }
+        ZimbraLog.security.debug("load the CSR info from server:  " + server.getName()) ;
+        
         
         String cmd = ZimbraCertMgrExt.GET_CSR_CMD ;
         String type = request.getAttribute("type") ;
@@ -103,16 +106,8 @@ public class GetCSR extends AdminDocumentHandler {
                         el.setText(value) ;
                     }
                 }
-                
-                //check if the zimbra.csr in the csr directory exists
-                //csr_exists only matters for the commercial cert
-                /*
-                if ((new File (ZimbraCertMgrExt.COMM_CSR_FILE)).exists()) {
-                    csr_exists = "1" ;
-                    isComm = "1" ;
-                }*/
+            
                 csr_exists = "1" ;
-                
             }
             
         } catch (ServiceException e) {
@@ -125,6 +120,7 @@ public class GetCSR extends AdminDocumentHandler {
          
         response.addAttribute("csr_exists", csr_exists) ;
         response.addAttribute("isComm", isComm) ;
+        response.addAttribute("server", server.getName());
         return response ;
     }
 }

@@ -23,11 +23,11 @@ Name: C, ST, L, O, OU, CN, SubjectAltName
 Note: now only staged and all is handled. May need to support other options in the future
 -----------------------------
 
-<GetCSRRequest type="self|comm">
+<GetCSRRequest type="self|comm" server="server-id">
 	
 </GetCSRRequest>
 
-<GetCSRResponse csr_exists="0|1" isComm="0|1">
+<GetCSRResponse csr_exists="0|1" isComm="0|1" server="server-name">
 	<name>{value}</name>*
 </GetCSRResponse>
 
@@ -37,11 +37,11 @@ isComm (Currently not working/used): is the commercially signed cert exists 0 - 
 
 
 -----------------------------
-<GenCSRRequest new="0|1" type="self|comm">
+<GenCSRRequest new="0|1" type="self|comm" server="server-id">
   	<name>{value}</name>*
 </GenCSRRequest>
 
-<GenCSRResponse>
+<GenCSRResponse server="server-name">
 	<name>{value}</name>*
 </GenCSRResponse>
 Request a CSR:
@@ -52,7 +52,7 @@ SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the cer
 
 
 -----------------------------
-<InstallCertRequest type="self|comm">
+<InstallCertRequest type="self|comm" server="server-id">
 	<allserver>{value}</allserver>
   	<validation_days>{value}</validation_days>
   	<comm_cert>
@@ -71,7 +71,7 @@ SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the cer
 	</comm_cert>?
 </InstallCertRequest>
 
-<InstallCertResponse />
+<InstallCertResponse server="server-name" />
 
 Ask server to install the certificates
 allserver: 0 | 1. Default 0. If present and value = 1, the certs will be applied to all the servers

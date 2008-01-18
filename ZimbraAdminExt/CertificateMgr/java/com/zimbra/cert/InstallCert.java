@@ -56,12 +56,13 @@ public class InstallCert extends AdminDocumentHandler {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
         Provisioning prov = Provisioning.getInstance();
         
-        //get a server
-        Server server = prov.getLocalServer();
-        
+        String serverId = request.getAttribute("server") ;
+    	Server server = prov.get(ServerBy.id, serverId);
+    	
         if (server == null) {
-            throw ServiceException.INVALID_REQUEST("No valid server was found", null);
+            throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
         }
+        ZimbraLog.security.debug("Generate the CSR info from server:  " + server.getName()) ;
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
         String cmd = ZimbraCertMgrExt.INSTALL_CERT_CMD ;
         String certType = request.getAttribute(TYPE) ;
@@ -116,7 +117,7 @@ public class InstallCert extends AdminDocumentHandler {
         }**/
         
         Element response = lc.createElement(ZimbraCertMgrService.INSTALL_CERT_RESPONSE);
-        
+        response.addAttribute("server", server.getName());
         return response;    
     }
     

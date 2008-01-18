@@ -128,7 +128,7 @@ function() {
 			allserver: (this._containedObject[ZaCert.A_target_server] == ZaCert.ALL_SERVERS) ? 1 : 0,
 			callback: callback 
 		}
-		ZaCert.installCert (this._app, params ) ;
+		ZaCert.installCert (this._app, params, this._containedObject[ZaCert.A_target_server]  ) ;
 			
 		this.popdown();	
 			
@@ -326,8 +326,8 @@ function() {
 	}else if (cStep == ZaCertWizard.STEP_GEN_CSR) {
 		//validate the CN and SubjectAltNames
 		var cn = this._containedObject.attrs[ZaCert.A_commonName];
-		var cn_regEx = /^[A-Za-z0-9\-\*]{1,}(\.[A-Za-z0-9\-]{2,}){1,}$/;
-		var san_regEx = /^[A-Za-z0-9\-]{1,}(\.[A-Za-z0-9\-]{2,}){1,}$/;
+		var cn_regEx = /^[A-Za-z0-9\-\_\*]{1,}(\.[A-Za-z0-9\-\_]{2,}){1,}$/;
+		var san_regEx = /^[A-Za-z0-9\-\_]{1,}(\.[A-Za-z0-9\-\_]{2,}){1,}$/;
 		if (cn.match(cn_regEx) == null){
 			//show error msg
 			this._app.getCurrentController().popupErrorDialog(
@@ -351,7 +351,7 @@ function() {
 		}
 		try {
 			if ((!this._containedObject[ZaCert.A_csr_exists]) || (this._containedObject[ZaCert.A_force_new_csr] == 'TRUE')){
-				ZaCert.genCSR (this._app, this._containedObject.attrs, type, true) ;
+				ZaCert.genCSR (this._app, this._containedObject.attrs, type, true,  this._containedObject[ZaCert.A_target_server]) ;
 			}else{
 				if (AjxEnv.hasFirebug) console.log("Previous CSR exists, skip the CSR generation.") ;
 			}

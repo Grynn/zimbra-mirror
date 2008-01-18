@@ -26,6 +26,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.rmgmt.RemoteManager;
 import com.zimbra.cs.rmgmt.RemoteResult;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
@@ -45,12 +46,14 @@ public class GenerateCSR extends AdminDocumentHandler {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
         Provisioning prov = Provisioning.getInstance();
         
-        //get a server
-        Server server = prov.getLocalServer();
-          
+        String serverId = request.getAttribute("server") ;
+    	Server server = prov.get(ServerBy.id, serverId);
+    	
         if (server == null) {
-            throw ServiceException.INVALID_REQUEST("No valid server was found", null);
+            throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
         }
+        ZimbraLog.security.debug("Generate the CSR info from server:  " + server.getName()) ;
+        
         String cmd = ZimbraCertMgrExt.GENERATE_CSR_CMD  ;
         String newCSR = request.getAttribute("new") ;
         String type = request.getAttribute("type") ;
@@ -83,6 +86,7 @@ public class GenerateCSR extends AdminDocumentHandler {
         }
         
         Element response = lc.createElement(ZimbraCertMgrService.GEN_CSR_RESPONSE);
+        response.addAttribute("server", server.getName());
         return response;  
     }
 
