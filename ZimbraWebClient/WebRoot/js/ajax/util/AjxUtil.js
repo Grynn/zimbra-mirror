@@ -98,22 +98,21 @@ function(size, round, fractions) {
 	if (round == null) round = true;
 	if (fractions == null) fractions = 20; // max allowed for toFixed is 20
 
-	var units = AjxMsg.sizeBytes;
+	var formattedUnits = AjxMsg.sizeBytes;
+	var units = AjxMsg.SIZE_BYTES;
 	if (size >= 1073741824) {
-		//size /= 1073741824;
 		formattedUnits = AjxMsg.sizeGigaBytes;
 		units = AjxUtil.SIZE_GIGABYTES;
 	}
 	else if (size >= 1048576) {
-		//size /= 1048576;
 		formattedUnits = AjxMsg.sizeMegaBytes;
 		units = AjxUtil.SIZE_MEGABYTES;
 	}
 	else if (size > 1023) {
-		//size /= 1024;
 		formattedUnits = AjxMsg.sizeKiloBytes;
 		units = AjxUtil.SIZE_KILOBYTES;
 	}
+
 
 	var formattedSize = AjxUtil.formatSizeForUnits(size, units, round, fractions);
 	return AjxMessageFormat.format(AjxMsg.formatSizeAndUnits, [formattedSize, formattedUnits]);
