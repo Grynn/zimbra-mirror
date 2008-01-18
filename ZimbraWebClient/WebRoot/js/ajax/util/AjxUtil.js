@@ -100,22 +100,27 @@ function(size, round, fractions) {
 
 	var units = AjxMsg.sizeBytes;
 	if (size >= 1073741824) {
-		size /= 1073741824;
-		units = AjxMsg.sizeGigaBytes;
+		//size /= 1073741824;
+		formattedUnits = AjxMsg.sizeGigaBytes;
+		units = AjxUtil.SIZE_GIGABYTES;
 	}
 	else if (size >= 1048576) {
-		size /= 1048576;
-		units = AjxMsg.sizeMegaBytes;
+		//size /= 1048576;
+		formattedUnits = AjxMsg.sizeMegaBytes;
+		units = AjxUtil.SIZE_MEGABYTES;
 	}
 	else if (size > 1023) {
-		size /= 1024;
-		units = AjxMsg.sizeKiloBytes;
+		//size /= 1024;
+		formattedUnits = AjxMsg.sizeKiloBytes;
+		units = AjxUtil.SIZE_KILOBYTES;
 	}
 
-	var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
-	var formattedUnits = ' '+units;
+	//var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
+	//var formattedUnits = ' '+units;
 	
-	return formattedSize + formattedUnits;
+	//return formattedSize + formattedUnits;
+	var formattedSize = AjxUtil.formatSizeForUnits(size, units, round, fractions);
+	return AjxMessageFormat.format(AjxMsg.formatSizeAndUnits, [formattedSize, formattedUnits]);
 };
 
 /**
@@ -142,8 +147,17 @@ function(size, units, round, fractions) {
 		case AjxUtil.SIZE_KILOBYTES: { size /= 1024; break; }
 	}
 	
-	var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
-	return formattedSize;
+	var pattern = I18nMsg.formatNumber.replace(/\..*$/, ""); // Strip off decimal, we'll be adding one anyway
+	pattern = pattern.replace(/,/, "");       // Remove the ,
+	if (!round && fractions) {
+		pattern = pattern += ".";
+		for (var i = 0; i < fractions; i++) {
+			pattern += "#";
+		}
+	}
+	//var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
+	//return formattedSize;
+	return AjxNumberFormat.format(pattern, size);
 };
 
 /**
