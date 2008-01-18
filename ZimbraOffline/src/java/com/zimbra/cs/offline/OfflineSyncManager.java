@@ -30,15 +30,12 @@ public class OfflineSyncManager {
 	
     private static final QName ZDSYNC_ZDSYNC = QName.get("zdsync", OfflineService.NAMESPACE);
     private static final QName ZDSYNC_ACCOUNT = QName.get("account", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_DATASOURCE = QName.get("datasource", OfflineService.NAMESPACE);
     private static final QName ZDSYNC_ERROR = QName.get("error", OfflineService.NAMESPACE);
     private static final QName ZDSYNC_EXCEPTION = QName.get("exception", OfflineService.NAMESPACE);
     
     private static final String A_ZDSYNC_NAME = "name";
-    private static final String A_ZDSYNC_STAGE = "stage";
-    private static final String A_ZDSYNC_STATE = "state";
+    private static final String A_ZDSYNC_STATUS = "status";
     private static final String A_ZDSYNC_LASTSYNC = "lastsync";
-    private static final String A_ZDSYNC_LASTTRY = "lasttry";
     private static final String A_ZDSYNC_MESSAGE = "message";
     
     
@@ -133,12 +130,8 @@ public class OfflineSyncManager {
     	}
     	
     	void encode(Element e) {
-    		if (mStage != null) {
-    			e.addAttribute(A_ZDSYNC_STAGE, mStage);
-    		}
-    		e.addAttribute(A_ZDSYNC_STATE, mStatus.toString());
+    		e.addAttribute(A_ZDSYNC_STATUS, mStatus.toString());
         	e.addAttribute(A_ZDSYNC_LASTSYNC, Long.toString(mLastSyncTime));
-        	e.addAttribute(A_ZDSYNC_LASTTRY, Long.toString(mLastTryTime));
         	if (mError != null) {
         		mError.encode(e);
         	}
@@ -386,45 +379,33 @@ public class OfflineSyncManager {
 	/*
 		<zdsync xmlns="urn:zimbraOffline">
 		  <account name="foo@domain1.com">
-			  <stage>{STAGE}</stage>
-			  <state>{STATE}</state>
+			  <status>{STATUS}</status>
 			  <lastsync>{LASTSYNC}</lastsync>
-			  <lasttry>{LASTTRY}</lasttry>
-			  [<error>
-			    <code>{CODE}</code>
-			    [<message>{MESSAGE}</message>]
+			  [<error [message="{MESSAGE}"]>
 			    [<exception>{EXCEPTION}</exception>]
 			  </error>]
 		  </account>
-		  <account name="bar@domain2.com">
-		     ...
-		  </account>
-		  <datasource name="GmailPop">
-		     ...
-		  </datasource>
-		  <datasource name="YahooMail">
-		     ...
-		  </datasource>
 		</zdsync>
 	 */
-    public void encode(Element context) {
+    public void encode(Element context, String requestedAccountId) throws ServiceException {
+    	if (requestedAccountId == null)
+    		return;
+    	
+    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+    	Account account = prov.getAccount(requestedAccountId);
+    	if (!(account instanceof OfflineAccount) || prov.isLocalAccount(account))
+    		return;
+    	
     	Element zdsync = context.addUniqueElement(ZDSYNC_ZDSYNC);
-    	try {
-    		OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-	        for (Account acct : prov.getAllSyncAccounts()) {
-	        	String user = acct.getName();
-	        	Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, user);
-	        	getStatus(user).encode(e);
-	        }
-			List<DataSource> dataSources = prov.getAllDataSources();
-			for (DataSource ds : dataSources) {
-				String user = ds.getName();
-	        	Element e = zdsync.addElement(ZDSYNC_DATASOURCE).addAttribute(A_ZDSYNC_NAME, user);
-	        	getStatus(user).encode(e);
-			}
-    	} catch (ServiceException x) {
+		String user = account.getName();
+		Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, user);
+		if (prov.isSyncAccount(account))
+			getStatus(user).encode(e);
+		else if (prov.isDataSourceAccount(account))
+			getStatus(OfflineProvisioning.getOfflineInstance().getDataSourceName(account)).encode(e);
+		else {
     		zdsync.detach();
-    		OfflineLog.offline.warn(x);
-    	}
+    		OfflineLog.offline.warn("Invalid account: " + user);
+		}
     }
 }
