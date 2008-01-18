@@ -183,12 +183,21 @@ function (params) {
 		for (var i = 0; i < this._currentObject.nifs.length; i++) {
 			if(this._currentObject.nifs[i] && this._currentObject.nifs[i].attrs && this._currentObject.nifs[i].attrs.addr && this._currentObject.nifs[i].attrs.mask) {
 				locals.push(
-						[ZaServer.getStartingAddress([this._currentObject.nifs[i].attrs.addr,"/",ZaServer.DOT_TO_CIDR[this._currentObject.nifs[i].attrs.mask]].join("")),
+				 	{
+				 		lAddr: ZaServer.octetsToLong(this._currentObject.nifs[i].attrs.addr),
+				 		szAddr: this._currentObject.nifs[i].attrs.addr,
+				 		iNetBits: ZaServer.DOT_TO_CIDR[this._currentObject.nifs[i].attrs.mask]
+				 	}
+				 );
+				/*locals.push(
+						[ZaServer.oGetStartingAddress([this._currentObject.nifs[i].attrs.addr,"/",ZaServer.DOT_TO_CIDR[this._currentObject.nifs[i].attrs.mask]].join("")),
 						"/",ZaServer.DOT_TO_CIDR[this._currentObject.nifs[i].attrs.mask]].join("")
 					);
+				*/ 
 			}
 		}
-	}		
+	
+	}	
 	if(obj.attrs[ZaServer.A_zimbraMtaMyNetworks]) {
 		var chunks = obj.attrs[ZaServer.A_zimbraMtaMyNetworks].split(/[\s,]+/);
 		var cnt = chunks.length;
@@ -196,13 +205,26 @@ function (params) {
 		var gotLocal = false;
 		for(var i=0;i<cnt;i++){
 			if(chunks[i]!=null && chunks[i].length>8) {
-				masks.push(chunks[i]);
+				var _lStartIP = ZaServer.lGetStartingAddress(chunks[i]);
+				var _iNetBits = ZaServer.iGetNumNetBits(chunks[i]);
+				var _obj = {
+						lStartingAddr: _lStartIP,
+						iNetBits: _iNetBits,
+						lEndingAddr:ZaServer.lGetEndingAddress(_lStartIP,_iNetBits),
+						szCIDR: chunks[i]
+					};
+					
+				masks.push(_obj);
 				
 				for(var j=(numIFs-1);j>=0;j--) {
-					if(locals[j]==chunks[i]) {
+					if(locals[j].lAddr >= _obj.lStartingAddr && locals[j].lAddr <= _obj.lEndingAddr && locals[j].iNetBits <= _obj.iNetBits) {
 						locals.splice(j,1);
 						numIFs--;
 					}
+					/*if(locals[j]==chunks[i]) {
+						locals.splice(j,1);
+						numIFs--;
+					}*/
 				}
 
 			}
@@ -213,17 +235,21 @@ function (params) {
 			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NO_VALID_SUBNETS,[obj.attrs[ZaServer.A_zimbraMtaMyNetworks]]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
 		}
 		
-		//do we have a 127.0.0.0/8 (255.0.0.0)
+		//do we have a 127.0.0.0/8 (255.0.0.0) and other local interfaces
 		if(numIFs>0) {
 			//error! missing local interfaces
-			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_MISSING_LOCAL,locals.join(",")),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
+			var missingIfs = [];
+			for(var ix=0;ix<numIFs;ix++) {
+				missingIfs.push(locals[ix].szAddr);
+			}
+			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_MISSING_LOCAL,missingIfs.join(",")),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
 		}
 		cnt = masks.length;
 		for(var i=0;i<cnt;i++) {
-			if(ZaServer.isValidPostfixSubnetString(masks[i]) == ZaServer.ERR_NOT_CIDR) {
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_CIDR,[masks[i]]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
-			} else if (ZaServer.isValidPostfixSubnetString(masks[i]) == ZaServer.ERR_NOT_STARTING_ADDR) {
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_STARTING_ADDR,[masks[i],ZaServer.getStartingAddress(masks[i])]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");				
+			if(ZaServer.isValidPostfixSubnetString(masks[i].szCIDR) == ZaServer.ERR_NOT_CIDR) {
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_CIDR,[masks[i].szCIDR]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
+			} else if (ZaServer.isValidPostfixSubnetString(masks[i].szCIDR) == ZaServer.ERR_NOT_STARTING_ADDR) {
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_STARTING_ADDR,[masks[i].szCIDR,ZaServer.longToOctets(masks[i].lStartingAddr)]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");				
 			}
 		}
 	} else {

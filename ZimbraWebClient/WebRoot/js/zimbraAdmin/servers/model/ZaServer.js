@@ -228,11 +228,33 @@ ZaServer.isValidPostfixSubnetString = function(mask) {
 	}
 	return 0;
 }
-
-ZaServer.getStartingAddress = function (mask) {
+/**
+ * extract number of network bits from CIDR string
+ * @return integer
+ */
+ZaServer.iGetNumNetBits = function(mask) {
 	var pos = mask.indexOf("/");
 	var lastPos = mask.lastIndexOf("/");
 	var numNetworkBits = parseInt(mask.substr(lastPos+1,(mask.length-lastPos-1)));
+	return numNetworkBits;
+}
+/**
+ * @member ZaServer.oGetStartingAddress
+ * @argument mask - CIDR representation of a network (A.B.C.D/E)
+ * @return octet string that represents the last address of the network segment
+ */
+ZaServer.oGetStartingAddress = function (mask) {
+	return ZaServer.longToOctets(ZaServer.lGetStartingAddress(mask));
+}
+
+/**
+ * @member ZaServer.lGetStartingAddress
+ * @argument mask - CIDR representation of a network (A.B.C.D/E)
+ * @return long number represents the first address of the network segment
+ */
+ZaServer.lGetStartingAddress = function (mask) {
+	var numNetworkBits = ZaServer.iGetNumNetBits(mask);
+	var lastPos = mask.lastIndexOf("/");
 	//convert the address to a number
 	var addrString = mask.substr(0,lastPos);
 	var addrNumber = ZaServer.octetsToLong(addrString);
@@ -241,11 +263,30 @@ ZaServer.getStartingAddress = function (mask) {
 	for(var j=31; j>=lastIndex;j-- ) {
 		maskNumber += Math.pow(2,j);
 	}	
-	var firstAddr = ZaServer.longToOctets(ZaServer.applyMask(addrNumber, maskNumber));
+	var firstAddr = ZaServer.applyMask(addrNumber, maskNumber);
 	return firstAddr;
 }
-ZaServer.applyMask = function (addr1, addr2) {
-	var val = (addr1 & addr2);
+
+/**
+ * @member ZaServer.lGetEndingAddress
+ * @argument firstAddr - long
+ * @argument numNetBits - int
+ * @return long number represents the last address of the network segment
+ */
+ZaServer.lGetEndingAddress = function (firstAddr, numNetBits) {
+	var lLastAddr = firstAddr + Math.pow(2,(32 - numNetBits))-1;
+	return lLastAddr;
+}
+
+/**
+ * @member ZaServer.applyMask
+ * @argument addr1 - long address
+ * @argument netMask - long network mask
+ * @return long number that represents the starting address of the network defined by addr1 and netMask
+ */
+
+ZaServer.applyMask = function (addr1, netMask) {
+	var val = (addr1 & netMask);
 	if(val >= 0) {
 		return val;
 	} else 	{
