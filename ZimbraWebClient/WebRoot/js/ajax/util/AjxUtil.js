@@ -115,10 +115,6 @@ function(size, round, fractions) {
 		units = AjxUtil.SIZE_KILOBYTES;
 	}
 
-	//var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
-	//var formattedUnits = ' '+units;
-	
-	//return formattedSize + formattedUnits;
 	var formattedSize = AjxUtil.formatSizeForUnits(size, units, round, fractions);
 	return AjxMessageFormat.format(AjxMsg.formatSizeAndUnits, [formattedSize, formattedUnits]);
 };
@@ -155,8 +151,6 @@ function(size, units, round, fractions) {
 			pattern += "#";
 		}
 	}
-	//var formattedSize = round ? Math.round(size) : size.toFixed(fractions).replace(/\.?0+$/,"");
-	//return formattedSize;
 	return AjxNumberFormat.format(pattern, size);
 };
 
