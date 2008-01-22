@@ -73,6 +73,8 @@ public class GenerateData {
 	
 	protected File dir;
 	protected String basename;
+	protected boolean client;
+	protected boolean server;
 	
 	//
 	// Public methods
@@ -89,26 +91,45 @@ public class GenerateData {
 	public void setBaseName(String basename) {
 	    this.basename = basename;
 	} // setBaseName(String)
-	
+
+	public void setClient(boolean generate) {
+		this.client = generate;
+	}
+
+	public void setServer(boolean generate) {
+		this.server = generate;
+	}
+
 	public void generate() throws Exception {
         // generate properties for the available locales
         Map<Locale,Properties> map = new HashMap<Locale,Properties>();
-        for (Locale locale : LOCALES) {
-            //System.out.println(locale);
-            Properties props = generate(locale);
-            map.put(locale, props);
-        }
-        
-        // merge en and en_US and make it default
+		if (this.client) {
+			for (Locale locale : LOCALES) {
+				//System.out.println(locale);
+				Properties props = generateClient(locale);
+				map.put(locale, props);
+			}
+		}
+		if (this.server) {
+			Properties props = map.get(Locale.ENGLISH);
+			if (props == null) {
+				map.put(Locale.ENGLISH, props = new Properties());
+			}
+			generateServer(props);
+		}
+
+		// merge en and en_US and make it default
         Properties en = map.get(Locale.ENGLISH);
         Properties enUS = map.get(Locale.US);
-		Iterator pnames = enUS.keySet().iterator();
-        while (pnames.hasNext()) {
-            String pname = (String)pnames.next();
-			String pvalue = enUS.getProperty(pname);
-            en.put(pname, pvalue);
-        }
-        map.remove(Locale.ENGLISH);
+		if (enUS != null) {
+			Iterator pnames = enUS.keySet().iterator();
+			while (pnames.hasNext()) {
+				String pname = (String)pnames.next();
+				String pvalue = enUS.getProperty(pname);
+				en.put(pname, pvalue);
+			}
+		}
+		map.remove(Locale.ENGLISH);
         map.put(Locale.US, en);
         
         // remove duplicates
@@ -138,7 +159,7 @@ public class GenerateData {
             out.close();
         }
 	} // generate()
-	
+
     //
     // MAIN
     //
@@ -146,8 +167,10 @@ public class GenerateData {
     public static void main(String[] argv) throws Exception {
         String dirname = ".";
         String basename = "I18nMsg";
-        
-        for (int i = 0; i < argv.length; i++) {
+		boolean client = true;
+		boolean server = true;
+
+		for (int i = 0; i < argv.length; i++) {
             String arg = argv[i];
             if (arg.equals("-d")) {
                 dirname = argv[++i];
@@ -157,13 +180,23 @@ public class GenerateData {
                 basename = argv[++i];
                 continue;
             }
-            if (arg.equals("-h")) {
+			if (arg.equals("-c") || arg.equals("-C")) {
+				client = arg.equals("-c");
+				continue;
+			}
+			if (arg.equals("-s") || arg.equals("-S")) {
+				server = arg.equals("-s");
+				continue;
+			}
+			if (arg.equals("-h")) {
                 System.out.println("usage: java "+GenerateData.class.getName()+" (options)");
                 System.out.println();
                 System.out.println("options:");
                 System.out.println("  -d dirname   Output directory.");
                 System.out.println("  -b basename  Output file base name.");
-                System.out.println("  -h           Help.");
+				System.out.println("  -c | -s      Output client or server messages.");
+				System.out.println("  -C | -S      Do NOT output client or server messages.");
+				System.out.println("  -h           Help.");
                 System.exit(1);
             }
         }
@@ -171,23 +204,30 @@ public class GenerateData {
         GenerateData generator = new GenerateData();
         generator.setDirName(dirname);
         generator.setBaseName(basename);
-        generator.generate();
+		generator.setClient(client);
+		generator.setServer(server);
+		generator.generate();
         
     } // main(String[])
-    
+
     //
     // Private static methods
     //
     
-    private static Properties generate(Locale locale) {
+    private static Properties generateClient(Locale locale) {
         Properties props = new Properties();
-        //generateLocaleNames(props, locale);
         generateCalendarNames(props, locale);
         generateDateTimeFormats(props, locale);
         generateNumberFormats(props, locale);
         return props;
-    } // generate(Locale):Properties
-    
+    } // generateClient(Locale):Properties
+
+	private static Properties generateServer(Properties props) {
+		props = props == null ? new Properties() : props;
+		generateLocaleNames(props);
+		return props;
+	} // generateServer(Locale):Properties
+
     private static void store(Properties props, PrintStream out, String header) throws IOException {
         
         // sort keys
@@ -235,30 +275,18 @@ public class GenerateData {
     } // store(Properties,OutputStream,String)
     
     // Generation methods
-    
-    /***
-    private static void generateLocaleNames(Properties props, Locale locale) {
-        // locale names
-        Set languages = new TreeSet();
-        List countries = new LinkedList();
-        for (int i = 0; i < LOCALES.length; i++) {
+
+	private static void generateLocaleNames(Properties props) {
+		for (int i = 0; i < LOCALES.length; i++) {
             Locale LOCALE = LOCALES[i];
-            String languageCode = toCamel(LOCALE.getLanguage());
-            String countryCode = toCamel(LOCALE.getCountry());
-            String variantCode = toCamel(LOCALE.getVariant());
-            String localeCode = languageCode + countryCode + variantCode;
-            props.setProperty("language"+languageCode, LOCALE.getDisplayLanguage(locale));
-            props.setProperty("country"+countryCode, LOCALE.getDisplayCountry(locale));
-            props.setProperty("variant"+countryCode+variantCode, LOCALE.getDisplayCountry(locale));
-            props.setProperty("locale"+localeCode, LOCALE.getDisplayName(locale));
-            languages.add(languageCode);
-            countries.add(countryCode);
-        }
-        props.setProperty("languages", toString(languages));
-        props.setProperty("countries", toString(countries));
-    } // generateLocaleNames(Properties,Locale)
-    /***/
-    
+			String languageCode = LOCALE.getLanguage();
+			String countryCode = toSuffix(LOCALE.getCountry());
+			String variantCode = toSuffix(LOCALE.getVariant());
+			String localeCode = languageCode + countryCode + variantCode;
+            props.setProperty(localeCode, LOCALE.getDisplayName(LOCALE));
+		}
+	} // generateLocaleNames(Properties)
+
     private static void generateCalendarNames(Properties props, Locale locale) {
         Calendar calendar = Calendar.getInstance(locale);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -462,4 +490,8 @@ public class GenerateData {
 	    return Character.toUpperCase(s.charAt(0))+s.substring(1);
 	}
 	
+	public static String toSuffix(String s) {
+	    return s == null || s.length() == 0 ? "" : "_"+s;
+	}
+
 } // class GenerateI18nData

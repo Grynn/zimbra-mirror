@@ -32,6 +32,8 @@ public class GenerateDataTask
 
 	private File destdir = null;
 	private String basename = "I18nMsg";
+	private boolean client = true;
+	private boolean server = false;
 
 	//
 	// Public methods
@@ -45,6 +47,14 @@ public class GenerateDataTask
 
 	public void setBaseName(String basename) {
 		this.basename = basename;
+	}
+
+	public void setClient(boolean generate) {
+		this.client = generate;
+	}
+
+	public void setServer(boolean generate) {
+		this.server = generate;
 	}
 
 	//
@@ -65,7 +75,10 @@ public class GenerateDataTask
 		}
 
 		// build argument list
-		String[] argv = { "-d", destdir.getAbsolutePath(), "-b", basename };
+		String[] argv = {
+			this.client ? "-c" : "-C", this.server ? "-s" : "-S",
+			"-d", destdir.getAbsolutePath(), "-b", basename
+		};
 
 		// run program
 		try {
