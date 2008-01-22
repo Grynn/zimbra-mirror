@@ -328,6 +328,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
             deleteItem(item);
             break;
         case PARTSTAT_CHANGED:
+        	itemHasFocus(item);
             mMidlet.mDisplay.setCurrent(mView);
             break;
         default:

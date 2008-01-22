@@ -327,6 +327,6 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
         String exceptionDate = null;
         if (!series)
             exceptionDate = mAppt.getStartDateTime();
-        mMidlet.mMbox.sendInviteReply(mAppt.mId, null, exceptionDate, status, this);
+        mMidlet.mMbox.sendInviteReply(mAppt.mInvId, null, exceptionDate, status, this);
     }
 }
