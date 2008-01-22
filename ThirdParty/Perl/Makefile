@@ -24,7 +24,7 @@ MAKE    := $(shell which make)
 
 BDB_VERSION ?= 4.2.52.6
 SSL_VERSION ?= 0.9.8g
-LDAP_VERSION ?= 2.3.40.6z
+LDAP_VERSION ?= 2.3.40.7z
 BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
