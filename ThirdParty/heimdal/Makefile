@@ -8,10 +8,7 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-HEIMDAL_RELEASE ?= 0.7.2
-HEIMDAL_PATCH_LEVEL ?= 1z
-HEIMDAL_VERSION ?= $(HEIMDAL_RELEASE).$(HEIMDAL_PATCH_LEVEL)
-
+HEIMDAL_VERSION ?=  1.0.2
 HEIMDAL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/heimdal/heimdal-$(HEIMDAL_VERSION).tgz
 HEIMDAL_SOURCE := $(HEIMDAL_ROOT)/heimdal-$(HEIMDAL_VERSION)
 
@@ -23,10 +20,8 @@ HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
 all: build tar
 
 build:
-	(tar xzf src/heimdal-$(HEIMDAL_RELEASE).tar.gz; \
-	mv heimdal-$(HEIMDAL_RELEASE) heimdal-$(HEIMDAL_VERSION); \
+	(tar xzf src/heimdal-$(HEIMDAL_VERSION).tar.gz; \
 	cd heimdal-$(HEIMDAL_VERSION); \
-	patch -p1 < ../patches/setuid.patch; \
 	CFLAGS="-g -O2 -D_REENTRANT" \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
 	COMPILE_ET="NO" \
@@ -40,6 +35,7 @@ build:
 	--with-openssl=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
 	--disable-berkeley-db \
 	--disable-ndbm-db \
+	--disable-afs-support \
 	--without-readline \
 	--without-openldap \
 	--without-hesiod \
@@ -49,13 +45,23 @@ build:
 	cd $(HEIMDAL_SOURCE)/lib/vers; make; \
 	cd $(HEIMDAL_SOURCE)/lib/com_err; make; \
 	cd $(HEIMDAL_SOURCE)/lib/asn1; make; \
+	cd $(HEIMDAL_SOURCE)/lib/editline; make; \
+	cd $(HEIMDAL_SOURCE)/lib/sl; make; \
+	cd $(HEIMDAL_SOURCE)/lib/hcrypto; make; \
+	cd $(HEIMDAL_SOURCE)/lib/hx509; make; \
 	cd $(HEIMDAL_SOURCE)/lib/krb5; make; \
+	cd $(HEIMDAL_SOURCE)/lib/ntlm; make; \
 	cd $(HEIMDAL_SOURCE)/lib/gssapi; make; \
 	cd $(HEIMDAL_SOURCE)/include; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/roken; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/com_err; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/asn1; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/editline; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/sl; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/hcrypto; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/hx509; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/krb5; make install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/ntlm; make install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/gssapi; make install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s heimdal-$(HEIMDAL_VERSION) heimdal)
 
