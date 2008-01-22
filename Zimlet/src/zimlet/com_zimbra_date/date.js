@@ -100,6 +100,31 @@ var $RE_OP_YEAR42 = "(?:" + $RE_COMMA_OR_SP + $RE_YEAR42 + ")?";
 
 var $RE_OP_YEAR4 = "(?:" + $RE_COMMA_OR_SP + $RE_YEAR4 + ")?";
 
+Com_Zimbra_Date.validate = function(day, month, year){
+
+    //"Day must be between 1 and 31.";
+    if (day < 1 || day > 31) {
+        return false;
+    }
+    //"Month must be between 0 and 11."
+    if (month < 0 || month > 11) {
+        return false;
+    }
+    // Make sure month and day of month is valid 
+    if ((month == 3 || month == 5 || month == 8 || month == 10) && day == 31) {
+        return  false;
+    }
+    // Check for February date validity (including leap years)
+    if (year && month == 1) {
+        // figure out if "year" is a leap year;
+        var isleap=(year%4==0 && (year%100!=0 || year%400==0));
+        if (day > 29 || (day == 29 && !isleap)) {
+            return false;
+        }
+    }
+    return true;
+};
+
 Com_Zimbra_Date.prototype.getCurrentDate =
 function(date) {
 	var d = this[ZmObjectManager.ATTR_CURRENT_DATE];
@@ -172,6 +197,20 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	}
 };
 
+Com_Zimbra_Date.prototype.match = function(line, startIndex){
+    var result = null;
+    while(true){
+       result = this.matchRegex(line,startIndex);
+       if(result == null || (result && result.context.valid)) return result;
+       startIndex = result.index + (result.matchLength || result[0].length);
+    }
+};
+
+//Overwrite to implement the functionality
+Com_Zimbra_Date.prototype.matchRegex = function(line,startIndex){
+    return null;
+};
+
 // today/yesterday =======================
 
 function ZmDate1ObjectHandler() {
@@ -184,7 +223,7 @@ ZmDate1ObjectHandler.prototype.name = "com_zimbra_date1";
 
 ZmDate1ObjectHandler.REGEX = new RegExp("\\b" + $RE_TODAY_TOMORROW_YESTERDAY + "\\b", "ig");
 
-ZmDate1ObjectHandler.prototype.match =
+ZmDate1ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate1ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate1ObjectHandler.REGEX.exec(line);
@@ -197,7 +236,7 @@ function(line, startIndex) {
 	} else if (when == "tomorrow") {
 		d.setDate(d.getDate() + 1);
 	}
-	result.context = {date: d, monthOnly: 0};
+	result.context = {date: d, monthOnly: 0, valid: true};
 	return result;
 };
 
@@ -213,7 +252,7 @@ ZmDate2ObjectHandler.prototype.name = "com_zimbra_date2";
 
 ZmDate2ObjectHandler.REGEX = new RegExp("\\b" + $RE_NEXT_THIS_LAST + $RE_SP + $RE_DOW + "\\b", "ig");
 
-ZmDate2ObjectHandler.prototype.match =
+ZmDate2ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate2ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate2ObjectHandler.REGEX.exec(line);
@@ -236,7 +275,7 @@ function(line, startIndex) {
 		}
 	}
 	d.setDate(d.getDate() + addDays);
-	result.context = {date: d, monthOnly: 0};
+	result.context = {date: d, monthOnly: 0, valid: true};
 	return result;
 };
 
@@ -251,7 +290,7 @@ ZmDate3ObjectHandler.prototype.constructor = ZmDate3ObjectHandler;
 ZmDate3ObjectHandler.prototype.name = "com_zimbra_date3";
 ZmDate3ObjectHandler.REGEX = new RegExp("\\b" + $RE_DOM + $RE_COMMA_OR_SP + $RE_MONTH + $RE_OP_YEAR42 + "\\b", "ig");
 
-ZmDate3ObjectHandler.prototype.match =
+ZmDate3ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate3ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate3ObjectHandler.REGEX.exec(line);
@@ -260,17 +299,19 @@ function(line, startIndex) {
 	var d = new Date(this.getCurrentDate().getTime());
 	var dom = parseInt(result[1], 10);
 	var month = Com_Zimbra_Date.MONTH[result[2].toLowerCase()];
-	d.setMonth(month, dom);
+    d.setMonth(month, dom);
+    var year = null;
 	if (result[3]) {
-		var year = parseInt(result[3], 10);
+		year = parseInt(result[3], 10);
 		if (year < 20) {
 			year += 2000;
 		} else if (year < 100) {
 			year += 1900;
 		}
-		d.setYear(year);
-	}
-	result.context = {date: d, monthOnly: 0};
+        d.setYear(year);
+    }
+    var isValid = Com_Zimbra_Date.validate(dom,month,year);    
+    result.context = {date: d, monthOnly: 0, valid: isValid};
 	return result;
 };
 
@@ -285,7 +326,7 @@ ZmDate4ObjectHandler.prototype.constructor = ZmDate4ObjectHandler;
 ZmDate4ObjectHandler.prototype.name = "com_zimbra_date4";
 ZmDate4ObjectHandler.REGEX = new RegExp("\\b" + $RE_MONTH + $RE_SP + $RE_DOM + $RE_OP_TIME + $RE_OP_YEAR4 + "\\b", "ig");
 
-ZmDate4ObjectHandler.prototype.match =
+ZmDate4ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate4ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate4ObjectHandler.REGEX.exec(line);
@@ -294,19 +335,21 @@ function(line, startIndex) {
 	var d = new Date(this.getCurrentDate().getTime());
 	var month = Com_Zimbra_Date.MONTH[result[1].toLowerCase()];
 	var dom = parseInt(result[2], 10);
-	d.setMonth(month, dom);
-	if (result[4]) {
-		var year = parseInt(result[3], 10);
+    d.setMonth(month, dom);
+    var year = null;
+    if (result[4]) {
+		year = parseInt(result[3], 10);
 		if (year > 1000) {
 			d.setYear(year);
 		}		
 	} else if (result[3]) {
-		var year = parseInt(result[3], 10);
+		year = parseInt(result[3], 10);
 		if (year > 1000) {
 			d.setYear(year);
 		}
 	}
-	result.context = {date: d, monthOnly: 0};
+    var isValid = Com_Zimbra_Date.validate(dom,month,year);
+    result.context = {date: d, monthOnly: 0, valid: isValid};
 	return result;
 };
 
@@ -321,7 +364,7 @@ ZmDate5ObjectHandler.prototype.constructor = ZmDate5ObjectHandler;
 ZmDate5ObjectHandler.prototype.name = "com_zimbra_date5";
 ZmDate5ObjectHandler.REGEX = new RegExp("\\b" + $RE_MM + $RE_DASH + $RE_DD + $RE_DASH + $RE_YEAR42 + "\\b", "ig");
 
-ZmDate5ObjectHandler.prototype.match =
+ZmDate5ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate5ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate5ObjectHandler.REGEX.exec(line);
@@ -330,7 +373,7 @@ function(line, startIndex) {
 	var d = new Date(this.getCurrentDate().getTime());
 	var month = parseInt(result[1], 10) - 1;
 	var dom = parseInt(result[2], 10);
-	d.setMonth(month, dom);
+    d.setMonth(month, dom);
 	var year = parseInt(result[3], 10);
 	if (year < 20) {
 		year += 2000;
@@ -338,8 +381,8 @@ function(line, startIndex) {
 		year += 1900;
 	}
 	d.setYear(year);
-
-	result.context = {date: d, monthOnly: 0};
+    var isValid = Com_Zimbra_Date.validate(dom, month, year);
+	result.context = {date: d, monthOnly: 0, valid: isValid};
 	return result;
 };
 
@@ -354,7 +397,7 @@ ZmDate6ObjectHandler.prototype.constructor = ZmDate6ObjectHandler;
 ZmDate6ObjectHandler.prototype.name = "com_zimbra_date6";
 ZmDate6ObjectHandler.REGEX = new RegExp("\\b" + $RE_YEAR4 + $RE_DASH + $RE_MM + $RE_DASH + $RE_DD + "\\b", "ig");
 
-ZmDate6ObjectHandler.prototype.match =
+ZmDate6ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate6ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate6ObjectHandler.REGEX.exec(line);
@@ -364,10 +407,10 @@ function(line, startIndex) {
 	var year = parseInt(result[1], 10);
 	var month = parseInt(result[2], 10) - 1;
 	var dom = parseInt(result[3], 10);
-	d.setMonth(month, dom);
+    d.setMonth(month, dom);
 	d.setYear(year);
-
-	result.context = {date: d, monthOnly: 0};
+    var isValid = Com_Zimbra_Date.validate(dom,month,year);
+	result.context = {date: d, monthOnly: 0, valid: isValid};
 	return result;
 };
 
@@ -382,7 +425,7 @@ ZmDate7ObjectHandler.prototype.constructor = ZmDate7ObjectHandler;
 ZmDate7ObjectHandler.prototype.name = "com_zimbra_date7";
 ZmDate7ObjectHandler.REGEX = new RegExp("\\b" + $RE_MM + $RE_SLASH + $RE_DD + $RE_SLASH + $RE_YEAR42 + "\\b", "ig");
 
-ZmDate7ObjectHandler.prototype.match =
+ZmDate7ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate7ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate7ObjectHandler.REGEX.exec(line);
@@ -391,7 +434,8 @@ function(line, startIndex) {
 	var d = new Date(this.getCurrentDate().getTime());
 	var month = parseInt(result[1], 10) - 1;
 	var dom = parseInt(result[2], 10);
-	d.setMonth(month, dom);
+
+    d.setMonth(month, dom);
 	var year = parseInt(result[3], 10);
 	if (year < 20) {
 		year += 2000;
@@ -399,8 +443,8 @@ function(line, startIndex) {
 		year += 1900;
 	}
 	d.setYear(year);
-
-	result.context = {date: d, monthOnly: 0};
+    var isValid = Com_Zimbra_Date.validate(dom,month,year);
+	result.context = {date: d, monthOnly: 0, valid: isValid};
 	return result;
 };
 
@@ -415,7 +459,7 @@ ZmDate8ObjectHandler.prototype.constructor = ZmDate8ObjectHandler;
 ZmDate8ObjectHandler.prototype.name = "com_zimbra_date8";
 ZmDate8ObjectHandler.REGEX = new RegExp("\\b" + $RE_YEAR4 + $RE_SLASH + $RE_MM + $RE_SLASH + $RE_DD + "\\b", "ig");
 
-ZmDate8ObjectHandler.prototype.match =
+ZmDate8ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate8ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate8ObjectHandler.REGEX.exec(line);
@@ -424,9 +468,10 @@ function(line, startIndex) {
 	var year = parseInt(result[1], 10);
 	var month = parseInt(result[2], 10) - 1;
 	var dom = parseInt(result[3], 10);
-	d.setMonth(month, dom);
+    d.setMonth(month, dom);
 	d.setYear(year);
-	result.context = {date: d, monthOnly: 0};
+    var isValid = Com_Zimbra_Date.validate(dom, month, year);
+    result.context = {date: d, monthOnly: 0, valid: isValid};
 	return result;
 };
 
@@ -441,7 +486,7 @@ ZmDate9ObjectHandler.prototype.constructor = ZmDate9ObjectHandler;
 ZmDate9ObjectHandler.prototype.name = "com_zimbra_date9";
 ZmDate9ObjectHandler.REGEX = new RegExp("\\b" + $RE_MONTH + $RE_SP + $RE_YEAR4 + "\\b", "ig");
 
-ZmDate9ObjectHandler.prototype.match =
+ZmDate9ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate9ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate9ObjectHandler.REGEX.exec(line);
@@ -452,7 +497,8 @@ function(line, startIndex) {
 	d.setMonth(month, 1);
 	var year = result[2] ? parseInt(result[2], 10) : null;
 	if (year) d.setYear(year);
-	result.context = {date: d, monthOnly: 1};
+    var isValid = Com_Zimbra_Date.validate(2, month, year); //Dummy dayOfMonth to validate the month,year
+    result.context = {date: d, monthOnly: 1, valid: isValid};
 	return result;
 };
 
@@ -469,7 +515,7 @@ ZmDate10ObjectHandler.prototype.name = "com_zimbra_date10";
 
 ZmDate10ObjectHandler.REGEX = new RegExp("\\b" + $RE_DOW_FULL + "\\b", "ig");
 
-ZmDate10ObjectHandler.prototype.match =
+ZmDate10ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
 	ZmDate10ObjectHandler.REGEX.lastIndex = startIndex;
 	var result = ZmDate10ObjectHandler.REGEX.exec(line);
@@ -480,6 +526,6 @@ function(line, startIndex) {
 	var ndow = Com_Zimbra_Date.DOW[result[1].toLowerCase().substring(0,2)];
 	var addDays = ndow - dow;
 	d.setDate(d.getDate() + addDays);
-	result.context = {date: d, monthOnly: 0};
+	result.context = {date: d, monthOnly: 0, valid: true};
 	return result;
 };
