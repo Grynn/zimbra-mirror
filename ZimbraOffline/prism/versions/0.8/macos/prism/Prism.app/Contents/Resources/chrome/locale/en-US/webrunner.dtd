@@ -1,4 +1,4 @@
-<!ENTITY app.title                  "Prism">
+<!ENTITY app.title                  "Zimbra Desktop">
 
 <!ENTITY file.label                 "File">
 <!ENTITY cut.label                  "Cut">
@@ -16,8 +16,8 @@
 <!ENTITY home.label                 "Home">
 <!ENTITY reload.label               "Reload">
 <!ENTITY close.label                "Close">
-<!ENTITY quit.label                 "Quit Prism">
-<!ENTITY about.label                "About Prism">
+<!ENTITY quit.label                 "Quit">
+<!ENTITY about.label                "About">
 <!ENTITY console.label              "Error Console">
 <!ENTITY install.label              "Install to Desktop">
 <!ENTITY commands.tooltip           "Commands">

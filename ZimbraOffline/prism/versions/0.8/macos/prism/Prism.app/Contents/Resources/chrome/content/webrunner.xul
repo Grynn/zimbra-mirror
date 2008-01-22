@@ -34,7 +34,7 @@
         id="webrunner"
         windowtype="webrunner"
         title="&app.title;"
-        width="750" height="550"
+        width="1024" height="768"
         screenX="10" screenY="10">
 
   <script type="application/x-javascript" src="chrome://global/content/globalOverlay.js"/>
@@ -61,6 +61,8 @@
     <command id="cmd_quit" label="&quit.label;" oncommand="WebRunner.doCommand(this.id);"/>
     <command id="cmd_console" label="&console.label;" oncommand="WebRunner.doCommand(this.id);"/>
     <command id="cmd_install" label="&install.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_statusbar" label="&install.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_clearcache" label="&install.label;" oncommand="WebRunner.doCommand(this.id);"/>
   </commandset>
 
   <keyset id="keyset_app">
@@ -70,6 +72,8 @@
     <key id="key_reload" class="nav" keycode="VK_F5" command="cmd_reload"/>
     <key id="key_close" modifiers="accel" key="W" command="cmd_close"/>
     <key id="key_quit" modifiers="accel" key="q" command="cmd_quit"/>
+    <key id="key_statusbar" modifiers="accel" key="s" command="cmd_statusbar"/>
+    <key id="key_clearcache" modifiers="shift" keycode="VK_F5" command="cmd_clearcache"/>
   </keyset>
 
   <popupset>
@@ -96,6 +100,8 @@
     <menubar id="menu_main" style="min-height: 0px;">
       <menu id="menu_file" label="&file.label;">
         <menupopup>
+          <menuitem id="menuitem_about" label="&about.label;" oncommand="WebRunner.doCommand('cmd_about');"/>
+          <menuitem id="menuitem_print" label="&print.label;" oncommand="WebRunner.doCommand('cmd_print');"/>
           <menuitem id="menu_FileQuitItem" label="&quit.label;" key="key_quit" oncommand="WebRunner.doCommand('cmd_quit');"/>
         </menupopup>
       </menu>
@@ -128,12 +134,7 @@
     <statusbarpanel id="security" class="statusbarpanel-iconic-text"/>
       <toolbarbutton id="button_commands" type="menu" tooltiptext="&commands.tooltip;">
         <menupopup id="popup_main">
-          <menuitem id="menuitem_print" command="cmd_print"/>
-          <menuitem id="menuitem_install" command="cmd_install"/>
-          <menuseparator/>
           <menuitem id="menuitem_console" command="cmd_console"/>
-          <menuseparator/>
-          <menuitem id="menuitem_about" command="cmd_about"/>
         </menupopup>
       </toolbarbutton>
   </statusbar>

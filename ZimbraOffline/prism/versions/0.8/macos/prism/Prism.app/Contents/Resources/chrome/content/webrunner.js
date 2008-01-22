@@ -127,8 +127,8 @@ var WebRunner = {
       if (this._profile.hasOwnProperty("id")) {
         var json = JSON.toString(settings);
         var file = IO.getFile("Profile", null);
-        file.append("webapps");
-        file.append(this._profile.id);
+        //file.append("webapps");
+        //file.append(this._profile.id);
         file.append("localstore.json");
         if (!file.exists())
           file.create(Ci.nsIFile.NORMAL_FILE_TYPE, 0600);
@@ -143,8 +143,8 @@ var WebRunner = {
       var settings;
       if (this._profile.hasOwnProperty("id")) {
         var file = IO.getFile("Profile", null);
-        file.append("webapps");
-        file.append(this._profile.id);
+        //file.append("webapps");
+        //file.append(this._profile.id);
         file.append("localstore.json");
         if (file.exists()) {
           var stream = IO.newInputStream(file, "text");
@@ -177,6 +177,7 @@ var WebRunner = {
 
   _delayedStartup : function() {
     this._loadSettings();
+    document.getElementById("statusbar").setAttribute("collapsed", "true");
 
     this._profile.script["host"] = HostUI;
     if (this._profile.script.startup)
@@ -333,16 +334,19 @@ var WebRunner = {
   },
 
   _isLinkExternal : function(aLink) {
-    var isExternal = true;
+    var isExternal = false;
     if (aLink instanceof HTMLAnchorElement) {
       if (aLink.target == "_self" || aLink.target == "_top") {
         isExternal = false;
       }
       else {
-        var linkDomain = this._tld.getBaseDomain(this._ios.newURI(aLink.href, null, null).QueryInterface(Ci.nsIURL));
-        var currentDomain = this._tld.getBaseDomain(this._getBrowser().currentURI);
-        if (linkDomain == currentDomain)
-          isExternal = false;
+        //var linkDomain = this._tld.getBaseDomain(this._ios.newURI(aLink.href, null, null).QueryInterface(Ci.nsIURL));
+        //var currentDomain = this._tld.getBaseDomain(this._getBrowser().currentURI);
+        //if (linkDomain == currentDomain)
+        if ((aLink.href.indexOf("http://") == 0 && aLink.href.indexOf("http://localhost") != 0) ||
+            aLink.href.indexOf("https://") == 0 || aLink.href.indexOf("ftp://") == 0) {
+          isExternal = true;
+        }
       }
     }
     return isExternal;
@@ -541,6 +545,17 @@ var WebRunner = {
       this._profile.script.shutdown();
   },
 
+  toggleStatusbar : function()
+  {
+    var collapsed = document.getElementById("statusbar").getAttribute("collapsed") == "true";
+    document.getElementById("statusbar").setAttribute("collapsed", collapsed ? "false" : "true");
+  },
+
+  clearCache : function()
+  {
+    //TODO
+  },
+
   doCommand : function(aCmd) {
     switch (aCmd) {
       case "cmd_cut":
@@ -589,6 +604,12 @@ var WebRunner = {
         break;
       case "cmd_install":
         window.openDialog("chrome://webrunner/content/install-shortcut.xul", "install", "centerscreen,modal", this._profile);
+        break;
+      case "cmd_statusbar":
+        this.toggleStatusbar();
+        break;
+      case "cmd_clearcache":
+        this.clearCache();
         break;
     }
   },
