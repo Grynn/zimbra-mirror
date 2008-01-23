@@ -4,13 +4,17 @@
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.PageBean"/>
 
+<c:if test="${empty bean.loginUsername}">
+    <c:redirect url="/desktop/console.jsp"/>
+</c:if>
+
 <c:set var="prefsToFetch" value="zimbraPrefSkin,zimbraPrefClientType,zimbraPrefLocale"/>
 <c:set var="attrsToFetch" value="zimbraFeatureMailEnabled,zimbraFeatureCalendarEnabled,zimbraFeatureContactsEnabled,zimbraFeatureIMEnabled,zimbraFeatureNotebookEnabled,zimbraFeatureOptionsEnabled,zimbraFeaturePortalEnabled,zimbraFeatureTasksEnabled,zimbraFeatureVoiceEnabled,zimbraFeatureBriefcasesEnabled,zimbraFeatureMailUpsellEnabled,zimbraFeatureContactsUpsellEnabled,zimbraFeatureCalendarUpsellEnabled,zimbraFeatureVoiceUpsellEnabled"/>
 
 <c:catch var="loginException">
             <zm:login username="${empty param.username ? bean.loginUsername : param.username}" password="anythingisfine"
                     varRedirectUrl="postLoginUrl" varAuthResult="authResult"
-                    rememberme="${requestScope.zrememberme == '1'}"
+                    rememberme="true"
                     prefs="${prefsToFetch}" attrs="${attrsToFetch}"
                     requestedSkin="${param.skin}"/>
 </c:catch>
@@ -21,7 +25,7 @@
 	<c:if test="${not empty authtoken}">
 	    <zm:login authtoken="${authtoken}" authtokenInUrl="${not empty param.zauthtoken}"
 	              varRedirectUrl="postLoginUrl" varAuthResult="authResult"
-	              rememberme="${param.zrememberme == '1'}"
+	              rememberme="true"
 	              prefs="${prefsToFetch}" attrs="${attrsToFetch}"
 	              requestedSkin="${param.skin}"/>
 	    <%-- continue on at not empty authResult test --%>
@@ -33,6 +37,6 @@
     <jsp:forward page="/public/login.jsp"/>
 </c:when>
 <c:otherwise>
-    <c:redirect url="/"/>
+    <c:redirect url="/desktop/console.jsp"/>
 </c:otherwise>
 </c:choose>

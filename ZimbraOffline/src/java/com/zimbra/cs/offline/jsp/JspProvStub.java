@@ -56,7 +56,9 @@ public class JspProvStub {
         List<Account> accounts = prov.getAllAccounts(null);
         if (accounts.size() == 1)
         	return accounts.get(0).getName();
-        return JspConstants.LOCAL_ACCOUNT;
+        else if (accounts.size() > 1)
+        	return JspConstants.LOCAL_ACCOUNT;
+        return null;
     }
     
     public Account getOfflineAccount(String accountId) throws ServiceException {
