@@ -38,6 +38,8 @@ public class ZTagLibException extends ServiceException {
 
     public static final String SERVER_REDIRECT = "ztaglib.SERVER_REDIRECT";
 
+    public static final String INVALID_CRUMB = "ztaglib.INVALID_CRUMB";
+
     public ZTagLibException(String message, String code) {
         super(message, code, true);
     }
@@ -48,6 +50,10 @@ public class ZTagLibException extends ServiceException {
 
     private ZTagLibException(String message, String code, boolean isReceiversFault, Throwable cause) {
         super(message, code, isReceiversFault, cause);
+    }
+
+    public static ZTagLibException INVALID_CRUMB(String msg, Throwable cause) {
+        return new ZTagLibException(msg, INVALID_CRUMB, SENDERS_FAULT, cause);
     }
 
     public static ZTagLibException TAG_EXCEPTION(String msg, Throwable cause) {

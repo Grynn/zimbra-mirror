@@ -1153,6 +1153,23 @@
 
     <tag>
         <description>
+            Compares passed in crumb to crumb returned in GetInfoResponse.
+        </description>
+        <name>checkCrumb</name>
+        <tag-class>com.zimbra.cs.taglib.tag.CheckCrumbTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                Crumb passed in from input field or query param.
+            </description>
+            <name>crumb</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>p
+        <description>
             logout. clears cookie and JSP session.
         </description>
         <name>logout</name>
