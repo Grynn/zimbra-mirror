@@ -35,7 +35,8 @@ public class ZmailBean extends FormBean {
 			return;
 		}
 		
-		accountName = account.getAttr(OfflineConstants.A_offlineAccountName);
+		accountName = account.getAttr(Provisioning.A_zimbraLabel);
+		accountName = accountName != null ? accountName : account.getAttr(OfflineConstants.A_offlineAccountName);
 		email = account.getName();
 		password = JspConstants.MASKED_PASSWORD;
 		host = account.getAttr(JspConstants.OFFLINE_REMOTE_HOST);
@@ -66,7 +67,7 @@ public class ZmailBean extends FormBean {
 			    	addInvalid("port");
                     
 			    if (isAllOK()) {
-			    	attrs.put(OfflineConstants.A_offlineAccountName, accountName);
+			    	attrs.put(Provisioning.A_zimbraLabel, accountName);
                     attrs.put(OfflineConstants.A_offlineRemoteServerUri, getRemoteServerUri());
                     attrs.put(OfflineConstants.A_offlineSyncFreq, Long.toString(syncFreqSecs));
 			        if (!password.equals(JspConstants.MASKED_PASSWORD)) {

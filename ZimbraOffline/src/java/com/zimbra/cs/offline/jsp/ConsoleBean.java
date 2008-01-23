@@ -9,6 +9,7 @@ import java.util.List;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 
@@ -89,7 +90,8 @@ public class ConsoleBean extends PageBean {
 			AccountSummary sum = new AccountSummary();
 			sum.isZmail = true;
 			sum.id = account.getId();
-			sum.name = account.getAttr(OfflineConstants.A_offlineAccountName);
+			sum.name = account.getAttr(Provisioning.A_zimbraLabel);
+			sum.name = sum.name != null ? sum.name : account.getAttr(OfflineConstants.A_offlineAccountName); //TODO: remove this line
 			sum.email = account.getName();
 			
 			sum.lastSync = account.getLongAttr(OfflineConstants.A_offlineLastSync, 0);

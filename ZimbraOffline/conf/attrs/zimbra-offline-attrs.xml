@@ -46,7 +46,7 @@
   <desc>proxy server password</desc>
 </attr>
 
-<attr name="offlineAccountName" type="string" cardinality="single" optionalIn="account" flags="accountInfo">
+<attr name="offlineAccountName" type="string" cardinality="single" optionalIn="account">
   <desc>A user given name for a Zimbra account</desc>
 </attr>
 
