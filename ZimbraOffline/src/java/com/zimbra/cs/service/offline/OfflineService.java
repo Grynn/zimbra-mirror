@@ -22,6 +22,7 @@ import org.dom4j.QName;
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentService;
 import com.zimbra.soap.SoapContextExtension;
+import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.MailConstants;
 
 public class OfflineService implements DocumentService {
@@ -41,6 +42,7 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(MailConstants.FOLDER_ACTION_REQUEST, new OfflineFolderAction());
         dispatcher.registerHandler(MailConstants.GET_IMPORT_STATUS_REQUEST, new OfflineGetImportStatus());
         dispatcher.registerHandler(MailConstants.IMPORT_DATA_REQUEST, new OfflineImportData());
+        dispatcher.registerHandler(AccountConstants.GET_INFO_REQUEST, new OfflineGetInfo());
         
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());

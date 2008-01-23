@@ -97,6 +97,7 @@ public class JspProvStub {
         String fromDisplay = (String)dsAttrs.get(Provisioning.A_zimbraPrefFromDisplay);
         if (fromDisplay != null)
         	attrs.put(Provisioning.A_zimbraPrefFromDisplay, fromDisplay);
+        attrs.put(OfflineConstants.A_offlineAccountName, dsName);
         Account account = prov.createAccount(email, JspConstants.DUMMY_PASSWORD, attrs);
         try {
         	return prov.createDataSource(account, dsType, dsName, dsAttrs);

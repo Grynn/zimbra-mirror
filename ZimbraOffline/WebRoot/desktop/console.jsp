@@ -107,7 +107,7 @@ function OnLoginTo(username) {
     	
     	<c:forEach items="${bean.accounts}" var="account">
 	        <tr><td><a href="javascript:OnAccount('${account.id}', ${account.zmail})">${account.name}</a></td>
-	            <td><a href="javascript:OnLoginTo('${account.email}')">${account.email}</a></td>
+	            <td>${account.email}</td>
 	            <td>${account.lastSync}</td>
 	            <td><table border=0 cellspacing=0 cellpadding=0><tr><td class="noborder">
 		            <c:choose>
