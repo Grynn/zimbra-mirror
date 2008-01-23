@@ -808,7 +808,7 @@ function(params) {
 	// out iframe doc's body in IE - so create a new body... + bug fix#21171
 	// same thing happening in Mac Firefox
 
-	if (AjxEnv.isIE || AjxEnv.isMac) {
+	if (AjxEnv.isIE || AjxEnv.isMac || AjxEnv.isLinux) {
 		doc.open();
 		doc.write(this._pendingContent || "");
 		doc.close();
