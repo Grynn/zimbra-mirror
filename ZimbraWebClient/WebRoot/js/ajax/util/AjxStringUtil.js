@@ -397,6 +397,7 @@ function(str, decodeSpaces) {
  */
 AjxStringUtil.stripTags =
 function(str, removeContent) {
+	if (!str) { return ""; }
 	if (removeContent) {
 		str = str.replace(/(<(\w+)[^>]*>).*(<\/\2[^>]*>)/, "$1$3");
 	}
