@@ -162,9 +162,7 @@ function(str, dels) {
 
 /**
  * Wraps text to the given length and quotes it, breaking on space when possible.
- * Preserves line breaks. At this point, it assumes that the text to be wrapped
- * is raw text, not HTML, and that line returns are represented by '\n'. Wrapping
- * is optionally done across line returns that appear in paragraphs.
+ * Preserves line breaks. Wrapping is optionally done across line returns that appear in paragraphs.
  *
  * @param params	[hash]			hash of params:
  *        text 		[string]		the text to be wrapped
@@ -185,13 +183,15 @@ function(params) {
 	var len = params.len || 80;
 	var pre = params.pre || '';
 	len -= pre.length;
-	var eol = params.eol || '\n';
+	var eol = params.htmlMode ? '<br>' : '\n';
 
 	// For HTML, just insert the prefix. The browser should handle wrapping.
 	if (params.htmlMode) {
-		text = text.replace(/(<br>)+$/gi, eol);	// collapse multiple trailing <br>
-		text = text.replace(/(<body>)/i, "$1" + pre);
-		text = text.replace(/<br>/gi, eol + pre);
+		var lines = text.split(AjxStringUtil.HTML_BR_RE);
+		if (lines.length > 0) {
+			lines = AjxUtil.collapseList(lines);
+			text = pre + lines.join(eol + pre)
+		}
 		return text;
 	}
 
@@ -604,6 +604,9 @@ AjxStringUtil.LINE_RE = /^\s*_{30,}\s*$/;
 AjxStringUtil.BLANK_RE = /^\s*$/;
 AjxStringUtil.HTML_BLANK_RE = /^\s*<br>\s*$/i;
 AjxStringUtil.HDR_RE = /^\s*\w+:/;
+AjxStringUtil.HTML_BR_RE = /<br\s*\/?>/gi;
+AjxStringUtil.HTML_BODY_RE = /<body(\s|>)/i;
+
 
 /**
  * Returns a list of chunks of top-level content in a message body. Top-level
@@ -636,14 +639,14 @@ AjxStringUtil.HDR_RE = /^\s*\w+:/;
  * chunks of original text. That is so they may be separated when they are quoted.
  *
  * @param text		[string]		a message body
- * @param eol		[string]*		the eol sequence, defaults to '\n'
- * @param htmlMode	[boolean]*		if true, text is HTML
  */
 AjxStringUtil.getTopLevel =
 function(text, eol, htmlMode) {
-	eol = eol || (htmlMode ? '<br>' : '\n');
-	text = AjxStringUtil._trimBlankLines(text, eol, htmlMode);
-	var lines = text.split(eol);
+	var isHtml = /<br|<div/i.test(text);
+	var split = isHtml ? AjxStringUtil.HTML_BR_RE : '\n';
+	var eol = isHtml ? '<br>' : '\n';
+	text = AjxStringUtil._trimBlankLines(text, split, eol, isHtml);
+	var lines = text.split(split);
 	var len = lines.length;
 	var i = 0, start = 0;
 	var chunks = [];
@@ -656,13 +659,13 @@ function(text, eol, htmlMode) {
 		if (wasSkipping && !skipping) {
 			start = i;
 		} else if (!wasSkipping && skipping && i > start) {
-			chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol, htmlMode) + eol);
+			chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), split, eol, htmlMode) + eol);
 		}
 		i += skipping ? skip : 1;
 	}
 
 	if (!skipping && i > start) {
-		chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), eol, htmlMode) + eol);
+		chunks.push(AjxStringUtil._trimBlankLines(lines.slice(start, i).join(eol), split, eol, htmlMode) + eol);
 	}
 
 	return chunks;
@@ -734,13 +737,14 @@ function(lines, i, htmlMode) {
 /**
  * Removes blank lines from the beginning and end of text
  * 
- * @param text		[string]		a message body
- * @param eol		[string]		the eol sequence
- * @param htmlMode	[boolean]*		if true, text is HTML
+ * @param text		[string]			a message body
+ * @param split		[RegExp | string]	used to divide text into lines
+ * @param eol		[string]			the eol sequence
+ * @param htmlMode	[boolean]*			if true, text is HTML
  */
 AjxStringUtil._trimBlankLines =
-function(text, eol, htmlMode) {
-	var lines = text.split(eol);
+function(text, split, eol, htmlMode) {
+	var lines = text.split(split);
 	var len = lines.length;
 	var regEx = htmlMode ? AjxStringUtil.HTML_BLANK_RE : AjxStringUtil.BLANK_RE;
 	var i = 0;
@@ -755,10 +759,10 @@ function(text, eol, htmlMode) {
 		text = lines.slice(i, j).join(eol) + eol;
 	}
 	
-	// if the HTML text has a body tag, use it to denote start and end
-	if (htmlMode && /<body>/i.test(text)) {
-		text = text.replace(/<body>(<br>)+/i, "<body>");
-		text = text.replace(/(<br>)+<\/body>/i, "</body>");
+	// if the HTML text has a <body> tag, remove leading/trailing returns
+	if (htmlMode && AjxStringUtil.HTML_BODY_RE.test(text)) {
+		text = text.replace(/<body\s*[^>]*>(<br\s*\/?>)+/i, "<body>");
+		text = text.replace(/(<br\s*\/?>)+<\/body>/i, "</body>");
 	}
 
 	return text;
