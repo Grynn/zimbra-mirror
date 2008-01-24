@@ -266,7 +266,7 @@ sub getLocalConfig {
   }
 
   # if no output was returned we have a potential avoid stopping all services
-  if (scalar(@{$ref->{output}}) == 0) {
+  if (scalar(@{$ref->{output}}) == 0 || !validLCData($ref)) {
     logMsg(2, "Skipping $ref->{desc} No data returned.");
     $ref->{status} = 1;
     $state->{anyFailed}++;
@@ -305,6 +305,49 @@ sub getLocalConfig {
   logMsg(4, "Leaving Function");
 }
 
+sub validLCData {
+  my ($ref) = @_;
+  my @data = @{$ref->{output}};
+  my $foundValid=0;
+  my $cnt = scalar @data;
+  while (scalar(@data) > 0)  {
+    chomp(my $line = shift(@data));
+    $foundValid++ if $line =~ m/^(\w+)\s=\s(.*)/;
+    while ($data[0] !~ m/^\w+\s=\s.*/ && scalar(@data) > 0) {;
+      shift(@data);
+    }
+  }
+  my $percent = 0;
+  if ($cnt != 0 && $foundValid != 0) {
+    $percent = int((1-($foundValid/$cnt))*100);
+    logMsg(5, "foundValid:$foundValid cnt:$cnt percent:$percent");
+    $foundValid = 0 if ($percent > 50); 
+  }
+  logMsg(4, "Validating LC $percent data found $foundValid entries out of $cnt lines.");
+  return $foundValid;
+}
+
+sub validProvData {
+  my ($ref) = @_;
+  my @data = @{$ref->{output}};
+  my $foundValid=0;
+  my $cnt = scalar @data;
+  while (scalar(@data) > 0)  {
+    chomp(my $line = shift(@data));
+    $foundValid++ if $line =~ m/^(\w+):\s(.*)/;
+    while ($data[0] !~ m/^\w+:\s.*/ && scalar(@data) > 0) {;
+      shift(@data);
+    }
+  }
+  if ($cnt != 0 && $foundValid != 0) {
+    my $percent = int((1-($foundValid/$cnt))*100);
+    logMsg(5, "foundValid:$foundValid cnt:$cnt percent:$percent");
+    $foundValid = 0 if ($percent > 50); 
+  }
+  logMsg(4, "Validating LC data found $foundValid entries out of $cnt lines.");
+  return $foundValid;
+}
+
 
 sub getGlobalConfig {
   my ($var) = @_;
@@ -322,7 +365,7 @@ sub getGlobalConfig {
   }
 
   # if no output was returned we have a potential avoid stopping all services
-  if (scalar(@{$ref->{output}}) == 0) {
+  if (scalar(@{$ref->{output}}) == 0 || !validProvData($ref)) {
     logMsg(2, "Skipping $ref->{desc} No data returned.");
     $ref->{status} = 1;
     $state->{anyFailed}++;
@@ -408,7 +451,7 @@ sub getServerConfig {
   }
 
   # if no output was returned we have a potential avoid stopping all services
-  if (scalar(@{$ref->{output}}) == 0) {
+  if (scalar(@{$ref->{output}}) == 0 || !validProvData($ref)) {
     logMsg(2, "Skipping $ref->{desc} No data returned.");
     $ref->{status} = 1;
     $state->{anyFailed}++;
@@ -1143,17 +1186,21 @@ sub executeCommand($) {
   @error = <$efh>;
   waitpid($pid,0);
   if ($? == -1) {
-    if (scalar(@output) != 0) {
-      @{$ref->{'output'}} = @output;
-      @{$ref->{'error'}} = @error;
-      $ref->{status} = 0;
-      $rc = 0;
-    } elsif (scalar(@error) == 0) {
+    $state->{sigchld}++;
+    if ($state->{sigchld} >= 15) {
+      logMsg(2, "CHLD processes are being reaped automatically ignoring them now.");
+      $SIG{CHLD}  = \&catchSignal;
+    }
+
+    $rc = $? >> 8;
+    @{$ref->{'output'}} = @output;
+    @{$ref->{'error'}} = @error;
+    $ref->{status} = $rc;
+    if (scalar(@error) != 0) {
       $ref->{status} = 1;
-      push(@{$ref->{error}}, "$ref->{cmd} failed to execute: $!");
-      push(@{$ref->{error}}, "@{$ref->{output}} failed to execute: $!");
-    } else {
-      @$ref->{error} = @error;
+    } elsif (scalar(@output) != 0) {
+      $ref->{status} = 0;
+      $rc=0;
     }
   } elsif ($? & 127) {
     $rc = $? & 127;
