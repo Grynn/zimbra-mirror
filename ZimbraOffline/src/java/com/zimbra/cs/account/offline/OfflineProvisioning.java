@@ -388,7 +388,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraAccountStatus,
             A_zimbraPrefSkin,
             A_zimbraZimletAvailableZimlets,
-            A_zimbraFeatureSharingEnabled
+            A_zimbraFeatureSharingEnabled,
+            A_zimbraLabel
     }));
 
     @Override
