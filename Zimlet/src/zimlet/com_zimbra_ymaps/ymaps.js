@@ -138,7 +138,9 @@ function(img_src, obj) {
 Com_Zimbra_YMaps._callback = 
 function(obj, result) {
 	var r = result.text;
-	Com_Zimbra_YMaps._displayImage(r.substring(r.indexOf("http://gws"),r.indexOf("</Result>")), obj);
+    var url = r.substring(r.indexOf("http://gws"),r.indexOf("</Result>"));
+    url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
+    Com_Zimbra_YMaps._displayImage(url, obj);
 };
 
 
