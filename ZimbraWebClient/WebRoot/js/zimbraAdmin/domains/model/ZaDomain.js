@@ -106,7 +106,7 @@ ZaDomain.A_domainType = "zimbraDomainType" ;
 ZaDomain.A_domainDefaultCOSId = "zimbraDomainDefaultCOSId";
 ZaDomain.A_zimbraDomainStatus = "zimbraDomainStatus";
 ZaDomain.A_zimbraPublicServiceHostname = "zimbraPublicServiceHostname";
-//GAL
+//GAL search
 ZaDomain.A_GalMaxResults = "zimbraGalMaxResults";
 ZaDomain.A_GalMode = "zimbraGalMode";
 ZaDomain.A_GalLdapURL = "zimbraGalLdapURL";
@@ -116,6 +116,13 @@ ZaDomain.A_GalLdapBindPassword = "zimbraGalLdapBindPassword";
 ZaDomain.A_GalLdapBindPasswordConfirm = "zimbraGalLdapBindPasswordConfirm";
 ZaDomain.A_GalLdapFilter = "zimbraGalLdapFilter";
 ZaDomain.A_zimbraGalAutoCompleteLdapFilter = "zimbraGalAutoCompleteLdapFilter";
+//GAL Sync
+ZaDomain.A_zimbraGalSyncLdapURL = "zimbraGalSyncLdapURL";
+ZaDomain.A_zimbraGalSyncLdapSearchBase="zimbraGalSyncLdapSearchBase";
+ZaDomain.A_zimbraGalSyncLdapFilter="zimbraGalSyncLdapFilter";
+ZaDomain.A_zimbraGalSyncLdapAuthMech="zimbraGalSyncLdapAuthMech";
+ZaDomain.A_zimbraGalSyncLdapBindDn="zimbraGalSyncLdapBindDn";
+ZaDomain.A_zimbraGalSyncLdapBindPassword="zimbraGalSyncLdapBindPassword";
 
 //Auth
 ZaDomain.A_AuthMech = "zimbraAuthMech";
@@ -129,6 +136,8 @@ ZaDomain.A_AuthLdapSearchBindPassword="zimbraAuthLdapSearchBindPassword";
 //internal attributes - not synched with the server code yet
 //GAL
 ZaDomain.A_GALServerType = "galservertype";
+ZaDomain.A_GALSyncServerType = "galsyncservertype";
+ZaDomain.A_GALSyncUseGALSearch = "galsyncusegalsearch";
 //ZaDomain.A_GALServerName = "galservername";
 //ZaDomain.A_GALServerPort = "galserverport";
 //ZaDomain.A_GALUseSSL = "galusessl";
@@ -136,6 +145,7 @@ ZaDomain.A_GALTestMessage = "galtestmessage";
 ZaDomain.A_GALTestResultCode = "galtestresutcode";
 ZaDomain.A_GALSampleQuery = "samplequery";
 ZaDomain.A_UseBindPassword = "usebindpassword";
+ZaDomain.A_SyncUseBindPassword = "syncusebindpassword";
 ZaDomain.A_GALTestSearchResults = "galtestsearchresults";
 ZaDomain.A_NotebookTemplateDir = "templatedir";
 ZaDomain.A_NotebookTemplateFolder = "templatefolder";
@@ -172,6 +182,7 @@ ZaDomain.A_AuthTestResultCode = "authtestresutcode";
 ZaDomain.A_AuthComputedBindDn = "authcomputedbinddn";
 ZaDomain.A_AuthUseBindPassword = "authusebindpassword";
 ZaDomain.A_AuthLdapSearchBindPasswordConfirm = "authldapsearchBindpasswordconfirm";
+ZaDomain.A_GalSyncLdapBindPasswordConfirm = "syncldappasswordconfirm";
 ZaDomain.A_zimbraVirtualHostname = "zimbraVirtualHostname";
 //server value constants
 ZaDomain.AuthMech_ad = "ad";
@@ -830,9 +841,27 @@ function (obj) {
 			} else {
 				this.attrs[ZaDomain.A_GALServerType] = "ldap";
 			}
+			if(!this.attrs[ZaDomain.A_zimbraGalSyncLdapURL]) {
+				this.attrs[ZaDomain.A_GALSyncUseGALSearch]="TRUE";
+			} else {
+				this.attrs[ZaDomain.A_GALSyncUseGALSearch]="FALSE";
+				if(this.attrs[ZaDomain.A_zimbraGalSyncLdapBindDn] || this.attrs[ZaDomain.A_zimbraGalSyncLdapBindPassword]) {
+					this.attrs[ZaDomain.A_SyncUseBindPassword] = "TRUE";
+				} else {
+					this.attrs[ZaDomain.A_SyncUseBindPassword] = "FALSE";
+				}
+				if(this.attrs[ZaDomain.A_zimbraGalSyncLdapFilter] == "ad") {
+					this.attrs[ZaDomain.A_GALSyncServerType] = "ad";
+				} else {
+					this.attrs[ZaDomain.A_GALSyncServerType] = "ldap";
+				}
+			}
+		} else {
+			this.attrs[ZaDomain.A_GALSyncUseGALSearch]="TRUE";
 		}
 	} else {
 		this.attrs[ZaDomain.A_GalMode] = "zimbra";
+		this.attrs[ZaDomain.A_GALSyncUseGALSearch]="TRUE";
 	}
 	
 	if(this.attrs[ZaDomain.A_GalLdapBindDn] || this.attrs[ZaDomain.A_GalLdapBindPassword]) {
@@ -841,6 +870,9 @@ function (obj) {
 		this.attrs[ZaDomain.A_UseBindPassword] = "FALSE";
 	}
 	
+	
+	
+		
 	if(this.attrs[ZaDomain.A_AuthLdapSearchBindDn] || this.attrs[ZaDomain.A_AuthLdapSearchBindPassword]) {
 		this[ZaDomain.A_AuthUseBindPassword] = "TRUE";
 	} else {
@@ -1029,11 +1061,14 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GalMode, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalMode},
 		{id:ZaDomain.A_GalMaxResults, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_GalMaxResults, maxInclusive:2147483647, minInclusive:1},					
 		{id:ZaDomain.A_GALServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALServerType},
+		{id:ZaDomain.A_GALSyncServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALSyncServerType},
+		{id:ZaDomain.A_GALSyncUseGALSearch, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_GALSyncUseGALSearch},
 		{id:ZaDomain.A_GalLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapFilter,required:true},
 		{id:ZaDomain.A_zimbraGalAutoCompleteLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalAutoCompleteLdapFilter},		
 		{id:ZaDomain.A_GalLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapSearchBase},
 		{id:ZaDomain.A_UseBindPassword, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_UseBindPassword},
 		{id:ZaDomain.A_GalLdapURL, type:_LIST_,  listItem:{type:_SHORT_URL_}, ref:"attrs/" + ZaDomain.A_GalLdapURL},
+		{id:ZaDomain.A_zimbraGalSyncLdapURL, type:_LIST_,  listItem:{type:_SHORT_URL_}, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapURL},
 		{id:ZaDomain.A_GalLdapBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindDn},
 		{id:ZaDomain.A_GalLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPassword},
 		{id:ZaDomain.A_GalLdapBindPasswordConfirm, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPasswordConfirm},		
