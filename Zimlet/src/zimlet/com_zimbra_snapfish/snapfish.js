@@ -1065,6 +1065,11 @@ Com_Zimbra_Snapfish.prototype.done_attachImage = function(callback,imageURL,imag
         attachmentId = attachmentId.substring(0,len-2);
         len = attachmentId.length;
     }
+	// Double Yuck - sometimes it just comes back with \n
+    if(attachmentId.indexOf("\n") != -1){
+        attachmentId = attachmentId.substring(0,len-1);
+        len = attachmentId.length;
+    }
     attachmentId = attachmentId.substring(1,len-1);
 
     if(isInline){ //YUCK: Tmp. hack for Inline attachments. Just to make it look like extended response format.
