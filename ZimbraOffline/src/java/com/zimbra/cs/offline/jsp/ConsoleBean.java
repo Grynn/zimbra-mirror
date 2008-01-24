@@ -90,7 +90,7 @@ public class ConsoleBean extends PageBean {
 			AccountSummary sum = new AccountSummary();
 			sum.isZmail = true;
 			sum.id = account.getId();
-			sum.name = account.getAttr(Provisioning.A_zimbraLabel);
+			sum.name = account.getAttr(Provisioning.A_zimbraPrefLabel);
 			sum.name = sum.name != null ? sum.name : account.getAttr(OfflineConstants.A_offlineAccountName); //TODO: remove this line
 			sum.email = account.getName();
 			

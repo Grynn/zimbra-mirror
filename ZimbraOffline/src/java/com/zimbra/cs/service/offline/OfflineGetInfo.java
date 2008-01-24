@@ -13,11 +13,11 @@ public class OfflineGetInfo extends GetInfo {
 	protected Element encodeChildAccount(Element parent, Account child,
 			boolean isVisible) {
 		Element elem = super.encodeChildAccount(parent, child, isVisible);
-        String accountName = child.getAttr(Provisioning.A_zimbraLabel);
+        String accountName = child.getAttr(Provisioning.A_zimbraPrefLabel);
         accountName = accountName != null ? accountName : child.getAttr(OfflineConstants.A_offlineAccountName);
         if (elem != null && accountName != null) {
             Element attrsElem = elem.addUniqueElement(AccountConstants.E_ATTRS);
-            attrsElem.addKeyValuePair(Provisioning.A_zimbraLabel, accountName, AccountConstants.E_ATTR, AccountConstants.A_NAME);
+            attrsElem.addKeyValuePair(Provisioning.A_zimbraPrefLabel, accountName, AccountConstants.E_ATTR, AccountConstants.A_NAME);
         }
         return elem;
 	}

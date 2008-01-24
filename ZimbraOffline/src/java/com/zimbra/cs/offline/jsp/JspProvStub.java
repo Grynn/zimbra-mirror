@@ -67,7 +67,7 @@ public class JspProvStub {
     
     public Account createOfflineAccount(String accountName, String email, Map<String, Object> attrs)
     		throws ServiceException {
-        attrs.put(Provisioning.A_zimbraLabel, accountName);
+        attrs.put(Provisioning.A_zimbraPrefLabel, accountName);
         return prov.createAccount(email, JspConstants.DUMMY_PASSWORD, attrs);
     }
     
@@ -97,7 +97,7 @@ public class JspProvStub {
         String fromDisplay = (String)dsAttrs.get(Provisioning.A_zimbraPrefFromDisplay);
         if (fromDisplay != null)
         	attrs.put(Provisioning.A_zimbraPrefFromDisplay, fromDisplay);
-        attrs.put(Provisioning.A_zimbraLabel, dsName);
+        attrs.put(Provisioning.A_zimbraPrefLabel, dsName);
         Account account = prov.createAccount(email, JspConstants.DUMMY_PASSWORD, attrs);
         try {
         	return prov.createDataSource(account, dsType, dsName, dsAttrs);
