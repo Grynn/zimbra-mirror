@@ -59,6 +59,9 @@ public class OfflineLC {
     public static final KnownKey zdesktop_datasource_properties;
     
     public static final KnownKey zdesktop_membuf_limit;
+    
+    public static final KnownKey zdesktop_yauth_appid;
+    public static final KnownKey zdesktop_yauth_baseuri;
 
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -167,5 +170,13 @@ public class OfflineLC {
 	    zdesktop_membuf_limit = new KnownKey("zdesktop_membuf_limit");
 	    zdesktop_membuf_limit.setDefault("4194304"); //4 * 1024 * 1024
 	    zdesktop_membuf_limit.setDoc("Number of bytes to hold in memory before start disk streaming during message sync.");
+	    
+	    zdesktop_yauth_appid = new KnownKey("zdesktop_yauth_appid");
+	    zdesktop_yauth_appid.setDefault("D2hTUBHAkY0IEL5MA7ibTS_1K86E8RErSSaTGn4-");
+	    zdesktop_yauth_appid.setDoc("appid for yauth with rw access to ab");
+	    
+	    zdesktop_yauth_baseuri = new KnownKey("zdesktop_yauth_baseuri");
+	    zdesktop_yauth_baseuri.setDefault("https://login.yahoo.com/WSLogin/V1");
+	    zdesktop_yauth_baseuri.setDoc("base uri for yauth");
     }
 }
