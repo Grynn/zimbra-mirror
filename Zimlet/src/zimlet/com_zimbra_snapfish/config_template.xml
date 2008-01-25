@@ -1,8 +1,0 @@
-<zimletConfig name="com_zimbra_snapfish" version="2.0">
-    <global>
-        <property name="loginServer">https://www.sfus7.qa.snapfish.com/externalapi/v2</property>
-        <property name="authMethod">standard</property>
-        <property name="allowedDomains">*.snapfish.com</property>
-		<property name="signUpLink">#</property>
-    </global>
-</zimletConfig>
