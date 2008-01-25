@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_browserperf" version="1.3" description="Browser perf zimlet to allow access to *.liquidsys.com">
+	<include>com_zimbra_browserperf.js</include>
+	<handlerObject>com_zimbra_browserperf</handlerObject>
+</zimlet>
