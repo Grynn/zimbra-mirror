@@ -18,7 +18,7 @@
 function Com_Zimbra_Search_Yahoo(zimlet) {
 	this.zimlet = zimlet;
 	this.icon = "Yahoo-Icon";
-	this.label = "Search Yahoo";
+	this.label = this.zimlet.getMessage("com_zimbra_search_yahoo");
 };
 
 Com_Zimbra_Search_Yahoo.prototype.getSearchFormHTML =

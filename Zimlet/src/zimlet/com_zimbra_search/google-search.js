@@ -18,7 +18,7 @@
 function Com_Zimbra_Search_Google(zimlet) {
 	this.zimlet = zimlet;
 	this.icon = "Google-Icon";
-	this.label = "Search Google";
+	this.label = this.zimlet.getMessage("com_zimbra_search_google");
 };
 
 Com_Zimbra_Search_Google.prototype.getSearchFormHTML =
