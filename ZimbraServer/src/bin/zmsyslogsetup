@@ -97,7 +97,7 @@ echo "mail.*                $logfile" >> /tmp/syslog.zimbra2
 
 cp -f /tmp/syslog.zimbra2 /etc/syslog.conf
 
-if [ x"$platform" = "xUBUNTU6" -o x"$platform" = "xUBUNTU6_64" ]; then
+if [ x"$platform" = "xUBUNTU6" -o x"$platform" = "xUBUNTU6_64" -o x"$platform" = "xDEBIAN4.0" ]; then
   if [ -e "/etc/init.d/sysklogd" ]; then
     /etc/init.d/sysklogd restart > /dev/null 2>&1 
   else 
