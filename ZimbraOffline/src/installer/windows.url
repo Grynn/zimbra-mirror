@@ -1,2 +1,5 @@
 [InternetShortcut]
-URL=http://localhost:7633/zimbra/mail
+URL=http://localhost:7633/desktop/login.jsp
+IconIndex=0
+IconFile=@install@\launcher_32x32.ico
+

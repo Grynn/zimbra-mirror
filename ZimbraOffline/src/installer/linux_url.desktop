@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Open Zimbra Desktop in Browser
+Type=Link
+URL=http://localhost:7633/desktop/login.jsp
+Icon=@install@/launcher_32x32.xpm
