@@ -2124,7 +2124,11 @@ Textarea_XFormItem.prototype.outputHTML = function (html, updateScript,  current
 		"></textarea>");
 }
 
-
+// you can use these to 
+Textarea_XFormItem.prototype.setElementDisabledProperty = function (enable) {
+	this.getElement().disabled = (enable != true);
+	this.getElement().readOnly = (enable != true)
+}
 
 
 

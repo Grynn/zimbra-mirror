@@ -42,6 +42,7 @@ ZaDomain = function(app) {
 		this.attrs[ZaDomain.A_GalMaxResults] = 100;
 	}
 	this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra;
+	this.attrs[ZaDomain.A_GALSyncUseGALSearch]='TRUE';
 	this.notebookAcls = {};
 	this[ZaDomain.A_NotebookTemplateFolder] = "Template";
 	this[ZaDomain.A_NotebookTemplateDir] = "/opt/zimbra/wiki/Template";
@@ -141,8 +142,10 @@ ZaDomain.A_GALSyncUseGALSearch = "galsyncusegalsearch";
 //ZaDomain.A_GALServerName = "galservername";
 //ZaDomain.A_GALServerPort = "galserverport";
 //ZaDomain.A_GALUseSSL = "galusessl";
-ZaDomain.A_GALTestMessage = "galtestmessage";
-ZaDomain.A_GALTestResultCode = "galtestresutcode";
+ZaDomain.A_GALSearchTestMessage = "galsearchtestmessage";
+ZaDomain.A_GALSyncTestMessage = "galsynctestmessage";
+ZaDomain.A_GALSearchTestResultCode = "galsearchtestresutcode";
+ZaDomain.A_GALSyncTestResultCode = "galsynctestresutcode";
 ZaDomain.A_GALSampleQuery = "samplequery";
 ZaDomain.A_UseBindPassword = "usebindpassword";
 ZaDomain.A_SyncUseBindPassword = "syncusebindpassword";
@@ -592,30 +595,93 @@ ZaDomain.initNotebook = function (obj, callback, controller) {
 
 ZaDomain.testGALSettings =
 function (obj, callback, sampleQuery) {
-	var soapDoc = AjxSoapDoc.create("CheckGalConfigRequest", "urn:zimbraAdmin", null);
-	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external);
+	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "continue");	
+	
+	//search
+	var searchTestReq = soapDoc.set("CheckGalConfigRequest", null, null, "urn:zimbraAdmin");
+	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external,searchTestReq);
 	attr.setAttribute("n", ZaDomain.A_GalMode);
 
 	var temp = obj.attrs[ZaDomain.A_GalLdapURL].join(" ");
-	attr = soapDoc.set("a", temp);
+	attr = soapDoc.set("a", temp,searchTestReq);
 	attr.setAttribute("n", ZaDomain.A_GalLdapURL);	
 	
-	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapSearchBase]);
+	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapSearchBase],searchTestReq);
 	attr.setAttribute("n", ZaDomain.A_GalLdapSearchBase);	
 
-	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapFilter]);
+	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapFilter],searchTestReq);
 	attr.setAttribute("n", ZaDomain.A_GalLdapFilter);	
 
 	if(obj.attrs[ZaDomain.A_GalLdapBindDn]) {
-		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapBindDn]);
+		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapBindDn],searchTestReq);
 		attr.setAttribute("n", ZaDomain.A_GalLdapBindDn);
 	}
 
 	if(obj.attrs[ZaDomain.A_GalLdapBindPassword]) {
-		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapBindPassword]);
+		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapBindPassword],searchTestReq);
 		attr.setAttribute("n", ZaDomain.A_GalLdapBindPassword);
 	}
-	soapDoc.set("query", "*" + sampleQuery + "*");
+	soapDoc.set("query", "*" + sampleQuery + "*",searchTestReq);
+	soapDoc.set("action", "search",searchTestReq);
+	
+	//sync
+	
+	var synchTestReq = soapDoc.set("CheckGalConfigRequest", null, null, "urn:zimbraAdmin");
+	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external,synchTestReq);
+	attr.setAttribute("n", ZaDomain.A_GalMode);
+
+	var temp = obj.attrs[ZaDomain.A_GalLdapURL].join(" ");
+	attr = soapDoc.set("a", temp,synchTestReq);
+	attr.setAttribute("n", ZaDomain.A_GalLdapURL);	
+	
+	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapSearchBase],synchTestReq);
+	attr.setAttribute("n", ZaDomain.A_GalLdapSearchBase);	
+
+	attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapFilter],synchTestReq);
+	attr.setAttribute("n", ZaDomain.A_GalLdapFilter);	
+
+	if(obj.attrs[ZaDomain.A_GalLdapBindDn]) {
+		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapBindDn],synchTestReq);
+		attr.setAttribute("n", ZaDomain.A_GalLdapBindDn);
+	}
+
+	if(obj.attrs[ZaDomain.A_GalLdapBindPassword]) {
+		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapBindPassword],synchTestReq);
+		attr.setAttribute("n", ZaDomain.A_GalLdapBindPassword);
+	}
+
+//	
+	if(obj.attrs[ZaDomain.A_GALSyncUseGALSearch]=="FALSE") {
+		if(obj.attrs[ZaDomain.A_zimbraGalSyncLdapURL]) {
+			var temp = obj.attrs[ZaDomain.A_zimbraGalSyncLdapURL].join(" ");
+			attr = soapDoc.set("a", temp,synchTestReq);
+			attr.setAttribute("n", ZaDomain.A_zimbraGalSyncLdapURL);	
+		}
+		
+		if(obj.attrs[ZaDomain.A_zimbraGalSyncLdapSearchBase]) {
+			attr = soapDoc.set("a", obj.attrs[ZaDomain.A_zimbraGalSyncLdapSearchBase],synchTestReq);
+			attr.setAttribute("n", ZaDomain.A_zimbraGalSyncLdapSearchBase);	
+		}
+	
+		if(obj.attrs[ZaDomain.A_zimbraGalSyncLdapFilter]) {
+			attr = soapDoc.set("a", obj.attrs[ZaDomain.A_zimbraGalSyncLdapFilter],synchTestReq);
+			attr.setAttribute("n", ZaDomain.A_zimbraGalSyncLdapFilter);	
+		}
+	
+		if(obj.attrs[ZaDomain.A_zimbraGalSyncLdapBindDn]) {
+			attr = soapDoc.set("a", obj.attrs[ZaDomain.A_zimbraGalSyncLdapBindDn],synchTestReq);
+			attr.setAttribute("n", ZaDomain.A_zimbraGalSyncLdapBindDn);
+		}
+	
+		if(obj.attrs[ZaDomain.A_GalLdapBindPassword]) {
+			attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapBindPassword],synchTestReq);
+			attr.setAttribute("n", ZaDomain.A_GalLdapBindPassword);
+		}
+	}
+
+	soapDoc.set("action", "sync",synchTestReq);	
+	
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -1067,6 +1133,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_zimbraGalAutoCompleteLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalAutoCompleteLdapFilter},		
 		{id:ZaDomain.A_GalLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapSearchBase},
 		{id:ZaDomain.A_UseBindPassword, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_UseBindPassword},
+		{id:ZaDomain.A_SyncUseBindPassword, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_SyncUseBindPassword},
 		{id:ZaDomain.A_GalLdapURL, type:_LIST_,  listItem:{type:_SHORT_URL_}, ref:"attrs/" + ZaDomain.A_GalLdapURL},
 		{id:ZaDomain.A_zimbraGalSyncLdapURL, type:_LIST_,  listItem:{type:_SHORT_URL_}, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapURL},
 		{id:ZaDomain.A_GalLdapBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindDn},
@@ -1091,8 +1158,10 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_AuthTestResultCode, type:_STRING_},
 		{id:ZaDomain.A_AuthTestMessage, type:_STRING_},
 		{id:ZaDomain.A_AuthComputedBindDn, type:_STRING_},
-		{id:ZaDomain.A_GALTestMessage, type:_STRING_},
-		{id:ZaDomain.A_GALTestResultCode, type:_STRING_},
+		{id:ZaDomain.A_GALSearchTestMessage, type:_STRING_},
+		{id:ZaDomain.A_GALSyncTestMessage, type:_STRING_},
+		{id:ZaDomain.A_GALSearchTestResultCode, type:_STRING_},
+		{id:ZaDomain.A_GALSyncTestResultCode, type:_STRING_},		
 		{id:ZaDomain.A_GALSampleQuery, type:_STRING_,required:true},
 		{id:ZaDomain.A_AuthUseBindPassword, type:_STRING_,type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
 		{id:ZaDomain.A_AuthLdapSearchBindPasswordConfirm, type:_STRING_},				
@@ -1106,8 +1175,7 @@ ZaDomain.myXModel = {
 					{id:"lastName", type:_STRING_}														
 				]
 			}
-		},
-		
+		},		
 		{id:ZaDomain.A_NotebookTemplateDir, type:_STRING_, ref:ZaDomain.A_NotebookTemplateDir},
 		{id:ZaDomain.A_NotebookTemplateFolder, type:_STRING_, ref:ZaDomain.A_NotebookTemplateFolder},
 		{id:ZaDomain.A_NotebookAccountName, type:_STRING_},
