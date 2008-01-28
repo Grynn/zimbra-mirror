@@ -440,6 +440,25 @@
          </attribute>
     </tag>
 
+	<tag>
+		<description>
+			Check document spelling
+		</description>
+
+		<name>checkSpelling</name>
+
+		<tag-class>com.zimbra.cs.taglib.tag.CheckSpellingTag</tag-class>
+
+		<body-content>empty</body-content>
+
+		<attribute>
+			<description>text</description>
+			<name>text</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
     <tag>
          <description>use uploaded form data with message containing attachments to fix up the compose object</description>
          <name>fixupMessageCompose</name>

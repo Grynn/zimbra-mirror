@@ -25,7 +25,7 @@ Copyright (c) 2007, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
-(function() {
+function enableSpellCheck(myEditor) {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Lang = YAHOO.lang;
@@ -41,11 +41,6 @@ http://developer.yahoo.net/yui/license.txt
         }),
         body = document.createElement('div');
 
-        body.innerHTML = '<strong>Suggestions:</strong><br>';
-        var ul = document.createElement('ul');
-        ul.className = 'yui-spellcheck-list';
-        body.appendChild(ul);
-
         var list = '';
         //Change this code to suit your backend checker
         for (var i = 0; i < this._spellData.length; i++) {
@@ -55,10 +50,17 @@ http://developer.yahoo.net/yui/license.txt
                 }
             }
         }
+		if (list) {
+			body.innerHTML = '<strong>Suggestions:</strong><br>';
+			var ul = document.createElement('ul');
+			ul.className = 'yui-spellcheck-list';
+			body.appendChild(ul);
+			ul.innerHTML = list;
+		} else {
+			body.innerHTML = "No suggestions"			
+		}
 
-        ul.innerHTML = list;
-
-        Event.on(ul, 'click', function(ev) {
+		Event.on(ul, 'click', function(ev) {
             var tar = Event.getTarget(ev);
             Event.stopEvent(ev);
             if (this._isElement(tar, 'li')) {
@@ -95,13 +97,6 @@ http://developer.yahoo.net/yui/license.txt
 
     };
 
-    var myEditor = new YAHOO.widget.Editor('editor', {
-        height: '300px',
-        width: '570px',
-        dompath: true,
-        animate: true,
-        extracss: '.yui-spellcheck { background-color: yellow; }'
-    });
     /* {{{ Override _handleClick method to keep the window open on click */
     myEditor._handleClick = function(ev) {
         if (this._isNonEditable(ev)) {
@@ -140,13 +135,21 @@ http://developer.yahoo.net/yui/license.txt
     myEditor._checkSpelling = function(o) {
         //Change this code to suit your backend checker
         var data = eval('(' + o.responseText + ')');
-        var html = this._getDoc().body.innerHTML;
-        for (var i = 0; i < data.data.length; i++) {
-            html = html.replace(data.data[i].word, '<span class="yui-spellcheck">' + data.data[i].word + '</span>');
-        }
-        this.setEditorHTML(html);
-        this._spellData = data.data;
-    };
+		if (!data || !data.available) {
+			alert('The spell checking service is unavailable.');
+			this.endSpellCheck();
+		} else if (!data.data.length) {
+			alert('The spelling is correct.');
+			this.endSpellCheck();
+		} else {
+			var html = this._getDoc().body.innerHTML;
+			for (var i = 0; i < data.data.length; i++) {
+				html = html.replace(data.data[i].word, '<span class="yui-spellcheck">' + data.data[i].word + '</span>');
+			}
+			this.setEditorHTML(html);
+			this._spellData = data.data;
+		}
+	};
 
     myEditor.on('windowspellcheckClose', function() {
         _handleWindowClose.call(this);
@@ -174,30 +177,38 @@ http://developer.yahoo.net/yui/license.txt
             this.toolbar.selectButton('spellcheck');
         }
     }, myEditor, true);
-    myEditor.on('editorContentLoaded', function() {
-        this._getDoc().body.spellcheck = false; //Turn off native spell check
-    }, myEditor, true);
-    myEditor.on('toolbarLoaded', function() {
+	myEditor.startSpellCheck = function() {
+		if (!this.checking) {
+			this.checking = true;
+			var body = myEditor._getDoc().body;
+			document.getElementById("SpellCheckData").value = body.textContent || body.innerText; // FF uses textContent, IE uses innerText
+			YAHOO.util.Connect.setForm('SpellCheckForm', false, null);
+			this._conn = YAHOO.util.Connect.asyncRequest('POST', '/zimbra/h/checkspelling', {
+				success: this._checkSpelling,
+				failure: function() {},
+				scope: this
+			}, null);
+		}
+	}
+	myEditor.endSpellCheck = function() {
+		if (this.checking) {
+			this.checking = false;
+			var el = Dom.getElementsByClassName('yui-spellcheck', 'span', this._getDoc().body);
+			//More work needed here for cleanup..
+			Dom.removeClass(el, 'yui-spellcheck');
+			Dom.addClass(el, 'yui-none');
+			this.toolbar.set('disabled', false);
+			this.nodeChange();
+		}
+	}
+	myEditor.on('toolbarLoaded', function() {
         this.toolbar.on('spellcheckClick', function() {
-            if (!this.checking) {
-                this.checking = true;
-                this._conn = YAHOO.util.Connect.asyncRequest('GET', 'check.php', {
-                    success: this._checkSpelling,
-                    failure: function() {},
-                    scope: this
-                }, null);
-            } else {
-                this.checking = false;
-                var el = Dom.getElementsByClassName('yui-spellcheck', 'span', this._getDoc().body);
-                //More work needed here for cleanup..
-                Dom.removeClass(el, 'yui-spellcheck');
-                Dom.addClass(el, 'yui-none');
-                this.toolbar.set('disabled', false);
-                this.nodeChange();
-            }
-            return false;
+			if (!this.checking) {
+				this.startSpellCheck();
+			} else {
+				this.endSpellCheck();
+			}
+			return false;
         }, this, true);
     }, myEditor, true);
-    myEditor.render();
-
-})();
+};
