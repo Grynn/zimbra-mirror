@@ -2744,7 +2744,7 @@ var Dom = YAHOO.util.Dom,
         _setInitialContent: function() {
             var html = Lang.substitute(this.get('html'), {
                 TITLE: this.STR_TITLE,
-                CONTENT: this._cleanIncomingHTML(this.get('element').value),
+                CONTENT: this._cleanIncomingHTML(this.get('element').innerHTML),
                 CSS: this.get('css'),
                 HIDDEN_CSS: ((this.get('hiddencss')) ? this.get('hiddencss') : '/* No Hidden CSS */'),
                 EXTRA_CSS: ((this.get('extracss')) ? this.get('extracss') : '/* No Extra CSS */')
