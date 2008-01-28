@@ -2206,13 +2206,6 @@ var Dom = YAHOO.util.Dom,
         */
         _nodeChangeTimer: null,
         /**
-        * @property _lastNodeChangeEvent
-        * @private
-        * @description Flag to determine the last event that fired a node change
-        * @type Event
-        */
-        _lastNodeChangeEvent: null,
-        /**
         * @property _lastNodeChange
         * @private
         * @description Flag to determine when the last node change was fired
@@ -3592,9 +3585,6 @@ var Dom = YAHOO.util.Dom,
                 }
             }
             this._lastNodeChange = thisNodeChange;
-            if (this.currentEvent) {
-                this._lastNodeChangeEvent = this.currentEvent.type;
-            }
 
             var beforeNodeChange = this.fireEvent('beforeNodeChange', { type: 'beforeNodeChange', target: this });
             if (beforeNodeChange === false) {
