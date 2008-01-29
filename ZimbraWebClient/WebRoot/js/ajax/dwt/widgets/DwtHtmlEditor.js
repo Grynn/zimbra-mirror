@@ -806,17 +806,16 @@ function(params) {
 
 	// bug fix #4722 - setting design mode for the first time seems to null
 	// out iframe doc's body in IE - so create a new body... + bug fix#21171
-	// same thing happening in Mac Firefox
+	// same thing happening in Mac Firefox + bug fix #24056 calendar notes editor
+	// is broken in Windows Firefox due to init problem
 
-	if (AjxEnv.isIE || AjxEnv.isMac || AjxEnv.isLinux) {
-		doc.open();
-		doc.write(this._pendingContent || "");
-		doc.close();
-		// doc.body.innerHTML = this._pendingContent || "";
-		// these 2 seem to be no-ops.
-		// this._execCommand("2D-Position", false);
-		// this._execCommand("MultipleSelection", true);
-	}
+	doc.open();
+	doc.write(this._pendingContent || "");
+	doc.close();
+	// doc.body.innerHTML = this._pendingContent || "";
+	// these 2 seem to be no-ops.
+	// this._execCommand("2D-Position", false);
+	// this._execCommand("MultipleSelection", true);
 
 	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
 }
