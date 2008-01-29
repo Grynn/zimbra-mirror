@@ -208,43 +208,71 @@ function (arg) {
 	if(!arg)
 		return;
 	if(arg.isException()) {
+		var msg = [arg.getException().detail,arg.getException().msg,arg.getException().trace].join("\n");
 		this._containedObject[ZaDomain.A_GALSearchTestResultCode] = arg.getException().code;
-		this._containedObject[ZaDomain.A_GALSearchTestMessage] = arg.getException().detail+"\n"+arg.getException().msg;
+		this._containedObject[ZaDomain.A_GALSearchTestMessage] = msg;
 		this._containedObject[ZaDomain.A_GALSearchTestSearchResults] = null;		
 
 		this._containedObject[ZaDomain.A_GALSyncTestResultCode] = arg.getException().code;
-		this._containedObject[ZaDomain.A_GALSyncTestMessage] = arg.getException().detail+"\n"+arg.getException().msg;
+		this._containedObject[ZaDomain.A_GALSyncTestMessage] = msg;
 		this._containedObject[ZaDomain.A_GALSyncTestSearchResults] = null;	
 	} else {
 		var batchResp = arg.getResponse().Body.BatchResponse;
-		if(batchResp && batchResp.CheckGalConfigResponse) {
-			var searchResponse = batchResp.CheckGalConfigResponse[0];
-			this._containedObject[ZaDomain.A_GALSearchTestResultCode] = searchResponse.code[0]._content;	
-			if(this._containedObject[ZaDomain.A_GALSearchTestResultCode] != ZaDomain.Check_OK) {
-				this._containedObject[ZaDomain.A_GALSearchTestMessage] = searchResponse.message[0]._content;		
-				this._containedObject[ZaDomain.A_GALSearchTestSearchResults] = null;			
-			} else {
-				this._containedObject[ZaDomain.A_GALTestSearchResults] = new Array();
-				if(searchResponse.cn && searchResponse.cn.length) {
-					var len = searchResponse.cn.length;
-					for (var ix=0;ix<len;ix++) {
-						var cnObject = new Object();
-						if(searchResponse.cn[ix]._attrs) {
-							for (var a in searchResponse.cn[ix]._attrs) {
-								cnObject[a] = searchResponse.cn[ix]._attrs[a];
+		if(batchResp) {
+			var searchResponse;
+			if(batchResp.CheckGalConfigResponse) {
+				searchResponse = batchResp.CheckGalConfigResponse[0];
+				this._containedObject[ZaDomain.A_GALSearchTestResultCode] = searchResponse.code[0]._content;	
+				if(this._containedObject[ZaDomain.A_GALSearchTestResultCode] != ZaDomain.Check_OK) {
+					this._containedObject[ZaDomain.A_GALSearchTestMessage] = searchResponse.message[0]._content;		
+					this._containedObject[ZaDomain.A_GALSearchTestSearchResults] = null;			
+				} else {
+					this._containedObject[ZaDomain.A_GALTestSearchResults] = new Array();
+					if(searchResponse.cn && searchResponse.cn.length) {
+						var len = searchResponse.cn.length;
+						for (var ix=0;ix<len;ix++) {
+							var cnObject = new Object();
+							if(searchResponse.cn[ix]._attrs) {
+								for (var a in searchResponse.cn[ix]._attrs) {
+									cnObject[a] = searchResponse.cn[ix]._attrs[a];
+								}
+								this._containedObject[ZaDomain.A_GALTestSearchResults].push(cnObject);						
 							}
-							this._containedObject[ZaDomain.A_GALTestSearchResults].push(cnObject);						
 						}
 					}
 				}
+				
+				var syncResponse = batchResp.CheckGalConfigResponse[1];
+				this._containedObject[ZaDomain.A_GALSyncTestResultCode] = syncResponse.code[0]._content;	
+				if(this._containedObject[ZaDomain.A_GALSyncTestResultCode] != ZaDomain.Check_OK) {
+					this._containedObject[ZaDomain.A_GALSyncTestMessage] = syncResponse.message[0]._content;		
+					this._containedObject[ZaDomain.A_GALSyncTestSearchResults] = null;			
+				}				
 			}
+		}
+		if(batchResp.Fault) {
+			var fault = batchResp.Fault[0];
 			
-			var syncResponse = batchResp.CheckGalConfigResponse[1];
-			this._containedObject[ZaDomain.A_GALSyncTestResultCode] = syncResponse.code[0]._content;	
-			if(this._containedObject[ZaDomain.A_GALSyncTestResultCode] != ZaDomain.Check_OK) {
-				this._containedObject[ZaDomain.A_GALSyncTestMessage] = syncResponse.message[0]._content;		
-				this._containedObject[ZaDomain.A_GALSyncTestSearchResults] = null;			
-			}				
+			var faultCode = AjxStringUtil.getAsString(fault.Code.Value);
+			var errorCode = AjxStringUtil.getAsString(fault.Detail.Error.Code);
+			var msg = AjxStringUtil.getAsString(fault.Reason.Text);
+			var trace="";
+			if(fault.Detail.Error.Trace) {
+				trace = fault.Detail.Error.Trace;
+			}
+				
+			var errMsg = [errorCode,msg,trace].join("\n");
+			if(searchResponse) {
+				this._containedObject[ZaDomain.A_GALSyncTestResultCode] = errorCode;
+				this._containedObject[ZaDomain.A_GALSyncTestMessage] = errMsg;
+				this._containedObject[ZaDomain.A_GALSyncTestSearchResults] = null;
+			} else {
+				this._containedObject[ZaDomain.A_GALSearchTestResultCode] = errorCode;
+				this._containedObject[ZaDomain.A_GALSearchTestMessage] = errMsg;
+				this._containedObject[ZaDomain.A_GALSearchTestSearchResults] = null;
+				
+				this._containedObject[ZaDomain.A_GALSyncTestResultCode] = ZaDomain.Check_SKIPPED;
+			}
 		}
 	}
 
@@ -564,10 +592,27 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 									colSpan:"2",
 									iconVisible: true,
 									align:_CENTER_,				
-									style: DwtAlert.WARNING
-								},							
-								{type:_OUTPUT_, ref:ZaDomain.A_GALSyncTestResultCode, label:ZaMsg.Domain_GALTestResult, choices:this.TestResultChoices},
-								{type:_TEXTAREA_, ref:ZaDomain.A_GALSyncTestMessage, label:ZaMsg.Domain_GALTestMessage, height:"200px", width:"380px"}
+									style: DwtAlert.WARNING,
+									relevant:"(instance[ZaDomain.A_GALSyncTestResultCode] != ZaDomain.Check_SKIPPED)",
+									relevantBehavior:_HIDE_
+								},
+								{type:_DWT_ALERT_,content:ZaMsg.Domain_GALSyncTestSkipped,
+									ref:null,
+									colSpan:"2",
+									iconVisible: true,
+									align:_CENTER_,				
+									style: DwtAlert.WARNING,
+									relevant:"(instance[ZaDomain.A_GALSyncTestResultCode] == ZaDomain.Check_SKIPPED)",
+									relevantBehavior:_HIDE_
+								},															
+								{type:_OUTPUT_, ref:ZaDomain.A_GALSyncTestResultCode, label:ZaMsg.Domain_GALTestResult, choices:this.TestResultChoices,
+									relevant:"(instance[ZaDomain.A_GALSyncTestResultCode] != ZaDomain.Check_SKIPPED)",
+									relevantBehavior:_HIDE_
+								},
+								{type:_TEXTAREA_, ref:ZaDomain.A_GALSyncTestMessage, label:ZaMsg.Domain_GALTestMessage, height:"200px", width:"380px",
+									relevant:"(instance[ZaDomain.A_GALSyncTestResultCode] != ZaDomain.Check_SKIPPED)",
+									relevantBehavior:_HIDE_
+								}
 							]
 						}
 					]

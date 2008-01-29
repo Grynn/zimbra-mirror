@@ -205,6 +205,7 @@ ZaDomain.Check_NAME_NOT_FOUND = "check.NAME_NOT_FOUND";
 ZaDomain.Check_INVALID_SEARCH_FILTER = "check.INVALID_SEARCH_FILTER";
 ZaDomain.Check_FAILURE = "check.FAILURE"; 
 ZaDomain.Check_FAULT = "Fault";
+ZaDomain.Check_SKIPPED = "Skiped";
 
 ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDomain.AuthMech_zimbra];
 
@@ -596,7 +597,7 @@ ZaDomain.initNotebook = function (obj, callback, controller) {
 ZaDomain.testGALSettings =
 function (obj, callback, sampleQuery) {
 	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
-	soapDoc.setMethodAttribute("onerror", "continue");	
+	soapDoc.setMethodAttribute("onerror", "stop");	
 	
 	//search
 	var searchTestReq = soapDoc.set("CheckGalConfigRequest", null, null, "urn:zimbraAdmin");

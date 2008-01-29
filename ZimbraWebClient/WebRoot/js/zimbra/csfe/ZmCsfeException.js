@@ -15,7 +15,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-ZmCsfeException = function(msg, code, method, detail, data) {
+ZmCsfeException = function(msg, code, method, detail, data,trace) {
 	AjxException.call(this, msg, code, method, detail);
 	
 	if (data) {
@@ -28,6 +28,10 @@ ZmCsfeException = function(msg, code, method, detail, data) {
 			}
 			this.data[key].push(item._content);
 		}
+	}
+	
+	if(trace) {
+		this.trace=trace;
 	}
 };
 

@@ -85,7 +85,11 @@ function(fault, method) {
 	var faultCode = AjxStringUtil.getAsString(fault.Code.Value);
 	var errorCode = AjxStringUtil.getAsString(fault.Detail.Error.Code);
 	var msg = AjxStringUtil.getAsString(fault.Reason.Text);
-	return new ZmCsfeException(msg, errorCode, method, faultCode, fault.Detail.Error.a);
+	var trace="";
+	if(fault.Detail.Error.Trace) {
+		trace = fault.Detail.Error.Trace;
+	}
+	return new ZmCsfeException(msg, errorCode, method, faultCode, fault.Detail.Error.a, trace);
 };
 
 /**
