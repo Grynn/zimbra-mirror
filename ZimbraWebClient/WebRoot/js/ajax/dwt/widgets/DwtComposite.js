@@ -266,7 +266,7 @@ DwtComposite.prototype._mouseDownListener =
 function(ev) {
 	if (ev.button == DwtMouseEvent.LEFT) {
 		// reset mouse event to propagate event to browser (allows text selection)
-		ev._stopPropagation = false;
+		ev._stopPropagation = true;
 		ev._returnValue = true;
 	}
 };
@@ -279,6 +279,6 @@ function(ev) {
 DwtComposite.prototype._contextMenuListener =
 function(ev) {
 	// reset mouse event to propagate event to browser (allows context menu)
-	ev._stopPropagation = false;
+	ev._stopPropagation = true;
 	ev._returnValue = true;
 };
