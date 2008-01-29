@@ -1,7 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.ConsoleBean"/>
+
+<c:if test="${param.client == 'advanced' || (param.client == 'standard' && fn:length(bean.accounts) == 1)}">
+    <jsp:forward page="/desktop/login.jsp"/>
+</c:if>
 
 <html>
 <head>
@@ -109,7 +114,7 @@ function OnLoginTo(username) {
 	        <tr><td><a href="javascript:OnAccount('${account.id}', ${account.zmail})">${account.name}</a></td>
 	            <td>${account.email}</td>
 	            <td>${account.lastSync}</td>
-	            <td><table border=0 cellspacing=0 cellpadding=0><tr><td class="noborder">
+	            <td><table border="0" cellspacing="0" cellpadding="0"><tr><td class="noborder">
 		            <c:choose>
 	                   <c:when test="${account.statusUnknown}">
 	                      <img src="/zimbra/img/im/ImgOffline.gif">
