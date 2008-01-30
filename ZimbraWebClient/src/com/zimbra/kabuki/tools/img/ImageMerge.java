@@ -793,7 +793,7 @@ public class ImageMerge {
 					// this image uses transparency and not the color we support
 					throw new ImageMergeException("Cannot handle images with different transparency");
 					*/
-					System.out.println("\tCannot handle images with different transparency");
+					System.err.println("\tCannot handle images with different transparency");
 					unmerged.add(i);
 				}
 			}
@@ -828,7 +828,7 @@ public class ImageMerge {
 				colorTableCount = origGIF[i].addImageColors(colorTable, colorTableCount);
 			} catch (Exception e) {
 				// If the image uses a weird color palatte, just mark it and move on.
-				System.out.println("Caught exception while adding colors from image \""+originals[i]+"\" to colormap");
+				System.err.println("Caught exception while adding colors from image \""+originals[i]+"\" to colormap");
 				unmerged.add(i);
 				continue;
 			}
@@ -854,7 +854,7 @@ public class ImageMerge {
 				// add image's bits to the combined image
 				addImageBits(combinedImageBits, origGIF[i], colorTable, colorTableCount);
 			} catch (Exception e) {
-				System.out.println("Caught exception while adding image data from image \""+originals[i]+"\" to combined image");
+				System.err.println("Caught exception while adding image data from image \""+originals[i]+"\" to combined image");
 				unmerged.add(i);
 				continue;
 			}

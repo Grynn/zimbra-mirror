@@ -29,7 +29,6 @@ BASE_URL=`${BIN_ROOT}/zmprov gacf ZimbraMailURL | sed -e 's/^[^:]*: //'`
 
 CP="${mailboxd_directory}/webapps${BASE_URL}/WEB-INF/classes/"
 
-
 usage() {
     echo "Usage: "`basename $0`" <path/to/skin/dir/or/zipfile>" >&2
 #    echo "  -v              verbose" >&2
@@ -40,8 +39,6 @@ usage() {
 #    #echo "  -o <output dir> skin output directory (defaults to .)" >&2
     exit 2
 }
-
-#set -x
 
 # Check the number of arguments
 if [ "$#" -ne "1" ]; then
@@ -54,14 +51,16 @@ SKIN_WORK_BASE="${mailboxd_directory}/webapps${BASE_URL}"
 
 # Make sure source exists, and copy it to working dir
 if [ -d "$SKIN_SRC" ]; then
-    SKIN_SRC_DIR=$SKIN_SRC
+    SKIN_SRC_DIR=`cd $SKIN_SRC && pwd`
     SKIN_NAME=`basename $SKIN_SRC`
     SKIN_WORK_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
 
-    if [ -e "$SKIN_WORK_DIR" ]; then
-        rm -rf "$SKIN_WORK_DIR"
+    if [ "$SKIN_WORK_DIR" != "$SKIN_SRC_DIR" ]; then
+        if [ -e "$SKIN_WORK_DIR" ]; then
+            rm -rf "$SKIN_WORK_DIR"
+        fi
+        cp -r "$SKIN_SRC_DIR" "$SKIN_WORK_DIR"
     fi
-    cp -r "$SKIN_SRC_DIR" "$SKIN_WORK_DIR"
 elif [ -f "$SKIN_SRC" ]; then
     # For now, assuming it is a .zip file.  Do we need to handle .tgz?
     SKIN_NAME=`basename $SKIN_SRC .zip`
@@ -88,10 +87,13 @@ SKIN_DEST_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
 #fi
 #mkdir -p ${SKIN_DEST_DIR}
 
+pushd $SKIN_WORK_DIR > /dev/null
 
-pushd $SKIN_WORK_DIR
-
-sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.templates.Template --prefix "${SKIN_NAME}" --authoritative  --inputdir ${SKIN_WORK_DIR} --outputdir ${SKIN_WORK_DIR} -- `find . -type f -name "*.html"`
+TEMPLATES=`find . -type f -name \*.template`
+if [ ${TEMPLATES} ]; then
+    echo "Processing templates..."
+    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.templates.Template --prefix "${SKIN_NAME}" --authoritative  --inputdir ${SKIN_WORK_DIR} --outputdir ${SKIN_WORK_DIR} -- ${TEMPLATES} > /dev/null
+fi
 
 IMAGE_SUBDIRS=
 for E in `find img -type d`; do
@@ -102,14 +104,22 @@ for E in `find img -type d`; do
 done
 
 
-sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge --css-path "${BASE_URL}/skins/${SKIN_NAME}/" --css-file "img/images.css" --output ${SKIN_DEST_DIR} --input ${IMAGE_SUBDIRS}
+if [ ${IMAGE_SUBDIRS} ]; then
+    echo "Processing images..."
+    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge --css-path "${BASE_URL}/skins/${SKIN_NAME}/" --css-file "img/images.css" --output ${SKIN_DEST_DIR} --input ${IMAGE_SUBDIRS} > /dev/null
 
-perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images.css"
+    perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images.css"
+fi
 
-popd
+popd > /dev/null
 
 ${BIN_ROOT}/zmprov mcf +ZimbraInstalledSkin ${SKIN_NAME}
 # TODO: Should use ${BIN_ROOT}/zmcontrol to stop/start, but it doesn't work for me
-${BIN_ROOT}/jetty stop
-${BIN_ROOT}/jetty start
 
+echo "Restarting server..."
+${BIN_ROOT}/jetty stop > /dev/null \
+    || echo "Couldn't shut down web server" >&2 && exit 1
+${BIN_ROOT}/jetty start > /dev/null \
+    || echo "Couldn't restart web server" >&2 && exit 1
+
+echo "...skin deployed!"
