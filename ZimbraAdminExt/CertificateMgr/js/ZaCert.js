@@ -30,7 +30,7 @@ ZaCert.A_target_server = "target_server" ;
 ZaCert.A_subject_alt = "SubjectAltName";
 ZaCert.A_use_wildcard_server_name = "user_wildcard_server_name";
 
-ZaCert.ALL_SERVERS = "--- All Servers ---" ;
+ZaCert.ALL_SERVERS = "--- All Servers ---" ; //Don't modify it, it need to be consistent with server side value
 
 ZaCert.TARGET_SERVER_CHOICES =  [
 		{label:ZaCert.ALL_SERVERS, value: ZaCert.ALL_SERVERS }
@@ -206,8 +206,10 @@ ZaCert.getCerts = function (app, serverId) {
 	soapDoc.getMethod().setAttribute("type", "all");
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
-	if (serverId && serverId != ZaCert.ALL_SERVERS) {
+	if (serverId != null) {
 		soapDoc.getMethod().setAttribute("server", serverId);
+	}else{
+		if (AjxEnv.hasFirebug) console.log("Warning: serverId is missing for ZaCert.getCerts.") ;
 	}
 	
 	try {
@@ -229,8 +231,11 @@ ZaCert.getCSR = function (app, serverId, type) {
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;	
 	
-	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
+	//if (serverId && serverId != ZaCert.ALL_SERVERS) {
+	if (serverId != null){
 		soapDoc.getMethod().setAttribute("server", serverId);
+	}else{
+		if (AjxEnv.hasFirebug) console.log("Warning: serverId is missing for ZaCert.getCSR.") ;
 	}
 	
 	try {
@@ -254,8 +259,10 @@ ZaCert.genCSR = function (app, subject_attrs,  type, newCSR, serverId) {
 		soapDoc.getMethod().setAttribute("new", "0");		
 	}
 	
-	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
+	if (serverId != null) {
 		soapDoc.getMethod().setAttribute("server", serverId);
+	}else{
+		if (AjxEnv.hasFirebug) console.log("Warning: serverId is missing for ZaCert.genCSR.") ;
 	}
 	
 	for (var n in subject_attrs) {
@@ -302,9 +309,12 @@ ZaCert.installCert = function (app, params, serverId) {
 	
 	var soapDoc = AjxSoapDoc.create("InstallCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
-	if (serverId&& serverId != ZaCert.ALL_SERVERS) {
+	if (serverId != null) {
 		soapDoc.getMethod().setAttribute("server", serverId);
+	}else{
+		if (AjxEnv.hasFirebug) console.log("Warning: serverId is missing for ZaCert.installCert.") ;
 	}
+	
 	if (type == ZaCert.A_type_self || type == ZaCert.A_type_comm) {
 		soapDoc.set(ZaCert.A_validation_days, validation_days);	
 		soapDoc.set(ZaCert.A_allserver, allserver) ;

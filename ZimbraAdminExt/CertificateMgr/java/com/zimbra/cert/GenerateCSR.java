@@ -46,8 +46,13 @@ public class GenerateCSR extends AdminDocumentHandler {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
         Provisioning prov = Provisioning.getInstance();
         
+        Server server = null;
         String serverId = request.getAttribute("server") ;
-    	Server server = prov.get(ServerBy.id, serverId);
+        if (serverId != null && serverId.equals(ZimbraCertMgrExt.ALL_SERVERS)) {
+        	server = prov.getLocalServer() ;
+        }else {
+        	server = prov.get(ServerBy.id, serverId);
+        }
     	
         if (server == null) {
             throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);

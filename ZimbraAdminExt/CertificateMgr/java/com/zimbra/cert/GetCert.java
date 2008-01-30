@@ -49,19 +49,14 @@ public class GetCert extends AdminDocumentHandler {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
         Provisioning prov = Provisioning.getInstance();
         try {
-            //get the server
-        	/* server attribute is required for GetCert
-        	String serverId = request.getAttribute("server", null) ;
-        	Server server =  null ;
-        	if (serverId == null)  {
-        		server = prov.getLocalServer();
-        	}else {
-        		server = prov.get(ServerBy.id, serverId);
-        	}*/
-        	
-        	String serverId = request.getAttribute("server") ;
-        	Server server = prov.get(ServerBy.id, serverId);
-        	
+        	Server server = null;
+            String serverId = request.getAttribute("server") ;
+            if (serverId != null && serverId.equals(ZimbraCertMgrExt.ALL_SERVERS)) {
+            	server = prov.getLocalServer() ;
+            }else { 
+            	server = prov.get(ServerBy.id, serverId);
+            }
+            
             if (server == null) {
                 throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
             }

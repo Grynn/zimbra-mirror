@@ -196,7 +196,7 @@ ZaCertWizard.prototype._uploadCallback =
 function (status, uploadResults) {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
 	if (AjxEnv.hasFirebug) 
-		console.log("Cert File Upload: status = " + status + ", attId = " + attId);
+		console.log("Cert File Upload: status = " + status);
 	if ((status == AjxPost.SC_OK) && (uploadResults != null) && (uploadResults.length > 0)) {
 		this.uploadResults = {
 			cert: {},

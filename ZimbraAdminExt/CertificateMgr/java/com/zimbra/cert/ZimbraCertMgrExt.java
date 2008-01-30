@@ -44,13 +44,10 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     public static final String GET_CSR_CMD = "zmcertmgr viewcsr" ;
     public static final String VERIFY_CRTKEY_CMD = "zmcertmgr verifycrtkey" ;
     public static final String VERIFY_CRTCHAIN_CMD = "zmcertmgr verifycrtchain" ;
-    //public static final String COMM_CSR_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/commercial.csr" ;
     public static final String UPLOADED_CRT_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/current.crt" ;
     public static final String UPLOADED_CRT_CHAIN_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/current_chain.crt" ;
     public static final String COMM_CRT_KEY_FILE = LC.zimbra_home.value() + "/ssl/zimbra/commercial/commercial.key" ;
-    //final static String COMM_CRT_FILE =  "/zimbra/server/commmercial.crt" ;
-    
-    //public static final String CMD_LOG = " &> /tmp/cert.log.`date +%Y%m%d%H%M%S`" ;
+    public static final String ALL_SERVERS = "--- All Servers ---" ;
     public void destroy() {
     }
 
