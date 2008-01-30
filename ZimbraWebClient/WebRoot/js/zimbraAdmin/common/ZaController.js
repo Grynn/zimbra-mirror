@@ -228,6 +228,7 @@ function(entry, openInNewTab) {
 					methods[i].call(this,entry);
 				} catch (ex) {
 					this._handleException(ex, "ZaController.prototype._setView");
+					break;
 				}
 			}
 		}
