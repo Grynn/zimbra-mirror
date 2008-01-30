@@ -817,7 +817,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         throw new UnsupportedOperationException();
     }
 
-    synchronized List<Account> getAllAccounts() throws ServiceException {
+    public synchronized List<Account> getAllAccounts() throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
         for (String zimbraId : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT)) {
             Account acct = get(AccountBy.id, zimbraId);

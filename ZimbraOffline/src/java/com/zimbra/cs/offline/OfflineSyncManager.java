@@ -34,6 +34,7 @@ public class OfflineSyncManager {
     private static final QName ZDSYNC_EXCEPTION = QName.get("exception", OfflineService.NAMESPACE);
     
     private static final String A_ZDSYNC_NAME = "name";
+    private static final String A_ZDSYNC_ID = "id";
     private static final String A_ZDSYNC_STATUS = "status";
     private static final String A_ZDSYNC_LASTSYNC = "lastsync";
     private static final String A_ZDSYNC_MESSAGE = "message";
@@ -378,34 +379,35 @@ public class OfflineSyncManager {
 	
 	/*
 		<zdsync xmlns="urn:zimbraOffline">
-		  <account name="foo@domain1.com">
+		  <account name="foo@domain1.com" id="1234-5678">
 			  <status>{STATUS}</status>
 			  <lastsync>{LASTSYNC}</lastsync>
 			  [<error [message="{MESSAGE}"]>
 			    [<exception>{EXCEPTION}</exception>]
 			  </error>]
 		  </account>
+		  [(<account>...</account>)*]
 		</zdsync>
 	 */
     public void encode(Element context, String requestedAccountId) throws ServiceException {
-    	if (requestedAccountId == null)
-    		return;
-    	
     	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-    	Account account = prov.getAccount(requestedAccountId);
-    	if (!(account instanceof OfflineAccount) || prov.isLocalAccount(account))
-    		return;
     	
     	Element zdsync = context.addUniqueElement(ZDSYNC_ZDSYNC);
-		String user = account.getName();
-		Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, user);
-		if (prov.isSyncAccount(account))
-			getStatus(user).encode(e);
-		else if (prov.isDataSourceAccount(account))
-			getStatus(OfflineProvisioning.getOfflineInstance().getDataSourceName(account)).encode(e);
-		else {
-    		zdsync.detach();
-    		OfflineLog.offline.warn("Invalid account: " + user);
-		}
+    	List<Account> accounts = prov.getAllAccounts();
+    	for (Account account : accounts) {
+        	if (!(account instanceof OfflineAccount) || prov.isLocalAccount(account))
+        		continue;
+        	
+        	String user = account.getName();
+    		Element e = zdsync.addElement(ZDSYNC_ACCOUNT).addAttribute(A_ZDSYNC_NAME, user).addAttribute(A_ZDSYNC_ID, account.getId());
+    		if (prov.isSyncAccount(account))
+    			getStatus(user).encode(e);
+    		else if (prov.isDataSourceAccount(account))
+    			getStatus(OfflineProvisioning.getOfflineInstance().getDataSourceName(account)).encode(e);
+    		else {
+        		e.detach();
+        		OfflineLog.offline.warn("Invalid account: " + user);
+    		}
+    	}
     }
 }
