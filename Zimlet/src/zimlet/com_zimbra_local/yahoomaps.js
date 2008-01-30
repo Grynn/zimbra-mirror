@@ -470,7 +470,8 @@ YahooMaps.prototype.getMarker = function(geoPt,info,imgSrc){
    var m = new YMarker(geoPt);
    if(imgSrc){
         var new_image = new YImage();
-	    new_image.src = imgSrc;
+       imgSrc = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(imgSrc);
+        new_image.src = imgSrc;
 	    m.changeImage(new_image);
     }
    m.addAutoExpand(info);
@@ -516,7 +517,7 @@ YahooMaps._getZimlet = function(name){
 YahooMaps._loadYAPI = function(file){
     var fileref=document.createElement('script');
     fileref.setAttribute("type","text/javascript");
-	fileref.setAttribute("src", file);
+	fileref.setAttribute("src", ( ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(file) ));
     document.getElementsByTagName("head").item(0).appendChild(fileref);
 };
 
