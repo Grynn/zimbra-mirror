@@ -213,6 +213,7 @@ CREATE TABLE ${DATABASE_NAME}.imap_message (
    imap_folder_id INTEGER NOT NULL,
    uid            BIGINT NOT NULL,
    item_id        INTEGER NOT NULL,
+   flags         INTEGER NOT NULL DEFAULT 0,
    
    PRIMARY KEY (mailbox_id, item_id),
    CONSTRAINT fk_imap_message_mailbox_id FOREIGN KEY (mailbox_id)
