@@ -330,10 +330,15 @@ function() {
 
 /**
 * Returns the button's menu
+*
+* @param dontCreate	 If true the menu will not be lazily created here.
 */
 DwtButton.prototype.getMenu =
-function() {
+function(dontCreate) {
 	if (this._menu instanceof AjxCallback) {
+		if (dontCreate) {
+			return null;
+		}
 		var callback = this._menu;
 		this.setMenu(callback.run());
 		if ((this.__preventMenuFocus != null) && (this._menu instanceof DwtMenu))
