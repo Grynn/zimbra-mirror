@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>ObjectCreationTest</title>
+  </head>
+
+  <body>
+	<script type="text/javascript" src="/zimbra/js/zimbraMail/share/model/events/ZmEvent.js?v=080131154555"></script>
+    <h1>ObjectCreationTest</h1>
+    <div><a href="javascript:createAnonymousObjects()"><code>CreateAnonymousObjects</code></a></div>
+    <div id='results1' style="border:1px solid black; width:400px; overflow:auto">Results</div>
+    <p/>
+    <div><a href="javascript:createSimpleObjects()"><code>CreateSimpleObjects</code></a></div>
+    <div id='results2' style="border:1px solid black; width:400px; overflow:auto">Results</div>
+    <p/>
+    <div><a href="javascript:createZmEventObjects()"><code>CreateZmEventObjects</code></a></div>
+    <div id='results3' style="border:1px solid black; width:400px; overflow:auto">Results</div>
+  </body>
+  <script>
+
+var iterations = 20000;
+function createAnonymousObjects () {
+    var startTime = new Date();
+    for (var i = 0; i < iterations; ++i){
+		var obj = {a:"hello", b:"there", c:"foo"};
+    }
+    var endTime = new Date();
+    var elapsed = endTime.getTime() - startTime.getTime();
+    document.getElementById("results1").innerHTML = "Total time = " +
+	elapsed + "ms; number of objects = " + iterations + "<br>Avg = "
+	+ elapsed/iterations + "ms";
+}
+
+SimpleObject = function(a, b, c) {
+	this.a = a;
+	this.b = b;
+	this.c = c;
+}
+
+function createSimpleObjects () {
+    var startTime = new Date();
+    for (var i = 0; i < iterations; ++i){
+		var obj = new SimpleObject("hello", "there", "foo");
+    }
+    var endTime = new Date();
+    var elapsed = endTime.getTime() - startTime.getTime();
+    document.getElementById("results2").innerHTML = "Total time = " +
+	elapsed + "ms; number of objects = " + iterations + "<br>Avg = "
+	+ elapsed/iterations + "ms";
+}
+
+function createZmEventObjects () {
+    var startTime = new Date();
+    for (var i = 0; i < iterations; ++i){
+		var obj = new ZmEvent("MSG");
+    }
+    var endTime = new Date();
+    var elapsed = endTime.getTime() - startTime.getTime();
+    document.getElementById("results3").innerHTML = "Total time = " +
+	elapsed + "ms; number of objects = " + iterations + "<br>Avg = "
+	+ elapsed/iterations + "ms";
+}
+
+</script>
+</html>
