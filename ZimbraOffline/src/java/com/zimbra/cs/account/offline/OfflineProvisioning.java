@@ -22,7 +22,6 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
-import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -477,8 +476,27 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return account.getAttr(A_offlineRemoteServerUri, null) instanceof String;
     }
 
-    private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
-        String accountId = LdapUtil.generateUUID();
+    private void testDataSource(Account account, DataSource.Type type, String name, String dsid, Map<String, Object> attrs) throws ServiceException {
+        DataSource testDs = new OfflineDataSource(account, type, name, dsid, attrs);
+        String error = DataSourceManager.test(testDs);
+        if (error != null)
+        	throw ServiceException.FAILURE(error, null);
+        
+        //TODO: need to test smtp settings as well
+    }
+    
+    private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String password, Map<String, Object> dsAttrs) throws ServiceException {
+        //first we need to verify datasource
+    	String accountLabel = (String)dsAttrs.remove(A_zimbraPrefLabel);
+    	dsAttrs.remove(A_offlineDataSourceName);
+    	String dsType = (String)dsAttrs.remove(A_offlineDataSourceType);
+    	DataSource.Type type = DataSource.Type.valueOf(dsType);
+        String dsid = UUID.randomUUID().toString();
+    	dsAttrs.put(A_zimbraDataSourceId, dsid);
+    	
+    	dsAttrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) dsAttrs.get(A_zimbraDataSourcePassword)));
+    	
+    	testDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs);
 
         validEmailAddress(emailAddress);
         emailAddress = emailAddress.toLowerCase().trim();
@@ -490,7 +508,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String domain = parts[1];
         domain = IDNUtil.toAsciiDomainName(domain);
         emailAddress = localPart + "@" + domain;
+    	String accountId = UUID.randomUUID().toString();
 
+        Map<String, Object> attrs = new HashMap<String, Object>();
+        attrs.put(A_offlineDataSourceName, dsName);
+        attrs.put(A_zimbraPrefLabel, accountLabel);
+        String displayName = (String)dsAttrs.get(A_zimbraPrefFromDisplay);
+        if (displayName != null)
+        	attrs.put(A_zimbraPrefFromDisplay, displayName);
+        
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
         attrs.put(A_zimbraMailHost, "localhost");
         attrs.put(A_uid, localPart);
@@ -503,7 +529,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         setDefaultAccountAttributes(attrs);
 
-        return createAccountInternal(emailAddress, accountId, attrs);
+        Account account = createAccountInternal(emailAddress, accountId, attrs);
+        try {
+        	createDataSource(account, type, dsName, dsAttrs, true, false);
+        } catch (Throwable t) {
+        	OfflineLog.offline.warn("failed creating datasource: " + dsName);
+        	deleteAccount(account.getId());
+        }
+        return account;
     }
 
     public synchronized List<Account> getAllDataSourceAccounts() throws ServiceException {
@@ -1529,21 +1562,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraDataSourceName, name); // must be the same
         attrs.put(A_offlineDataSourceType, type.toString());
         attrs.put(A_objectClass, "zimbraDataSource");
-        if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
+        if (!passwdAlreadyEncrypted)
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) attrs.get(A_zimbraDataSourcePassword)));
         if (markChanged)
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
-        if (isDataSourceAccount(account)) {
-            DataSource testDs = new OfflineDataSource(account, type, name, dsid, attrs);
-            String error = DataSourceManager.test(testDs);
-            if (error != null)
-            	throw ServiceException.FAILURE(error, null);
-            
-            //TODO: need to test smtp settings as well
-        	
+        if (isDataSourceAccount(account))
 		    attrs.put(A_zimbraDataSourceEnabled, TRUE);
-        }
 
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
@@ -1554,7 +1579,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         AttributeManager.getInstance().preModify(attrs, null, context, true, true);
 
         attrs.putAll(immutable);
-
+        
         DbOfflineDirectory.createDirectoryLeaf(EntryType.DATASOURCE, account, name, dsid, attrs, markChanged);
         DataSource ds = new OfflineDataSource(account, type, name, dsid, attrs);
         mHasDirtyAccounts |= markChanged;
@@ -1622,13 +1647,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourcePassword)));
 
         if (isDataSourceAccount(account) && attrs.get(A_zimbraDataSourceHost) != null) {
-        	if (attrs.get(A_zimbraDataSourcePassword) == null) {
+        	if (attrs.get(A_zimbraDataSourcePassword) == null)
         		attrs.put(A_zimbraDataSourcePassword, ds.getAttr(A_zimbraDataSourcePassword));
-        	}
-        	DataSource testDs = new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs);
-	        String error = DataSourceManager.test(testDs);
-	        if (error != null)
-	        	throw ServiceException.FAILURE(error, null);
+        	testDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs);
 	        attrs.put(A_zimbraDataSourceEnabled, TRUE);	        
         }
         

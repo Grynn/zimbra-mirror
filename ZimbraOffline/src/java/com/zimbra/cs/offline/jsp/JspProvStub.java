@@ -1,7 +1,6 @@
 package com.zimbra.cs.offline.jsp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -90,21 +89,12 @@ public class JspProvStub {
     	return prov.get(account, DataSourceBy.name, account.getAttr(OfflineConstants.A_offlineDataSourceName));
     }
     
-    public DataSource createOfflineDataSource(String dsName, String email, DataSource.Type dsType, Map<String, Object> dsAttrs)
+    public Account createOfflineDataSource(String dsName, String email, DataSource.Type dsType, Map<String, Object> dsAttrs)
     		throws ServiceException {
-        Map<String, Object> attrs = new HashMap<String, Object>();
-        attrs.put(OfflineConstants.A_offlineDataSourceName, dsName);
-        String fromDisplay = (String)dsAttrs.get(Provisioning.A_zimbraPrefFromDisplay);
-        if (fromDisplay != null)
-        	attrs.put(Provisioning.A_zimbraPrefFromDisplay, fromDisplay);
-        attrs.put(Provisioning.A_zimbraPrefLabel, dsName);
-        Account account = prov.createAccount(email, JspConstants.DUMMY_PASSWORD, attrs);
-        try {
-        	return prov.createDataSource(account, dsType, dsName, dsAttrs);
-        } catch (ServiceException e) {
-        	prov.deleteAccount(account.getId());
-        	throw e;
-        }
+        dsAttrs.put(OfflineConstants.A_offlineDataSourceName, dsName);
+        dsAttrs.put(OfflineConstants.A_offlineDataSourceType, dsType.toString());
+        dsAttrs.put(Provisioning.A_zimbraPrefLabel, dsName);
+        return prov.createAccount(email, JspConstants.DUMMY_PASSWORD, dsAttrs);
     }
     
     public void modifyOfflineDataSource(String accountId, String dsName, Map<String, Object> dsAttrs) throws ServiceException {
