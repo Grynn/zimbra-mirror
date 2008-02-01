@@ -82,6 +82,8 @@ function(params) {
 	var headerDiv = document.getElementById(this._htmlElId + "_header_" + itemNum);
 	headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnClickHeader, this, item);
 	headerDiv.oncontextmenu = AjxCallback.simpleClosure(this._handleOnRightClickHeader, this, item);
+	headerDiv.onmouseover = AjxCallback.simpleClosure(this._handleOnMouseoverHeader, this, item);
+	headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnMouseoutHeader, this, item);
 
 	this._items.push(item);
 
@@ -217,7 +219,6 @@ function(id, notify) {
 	}
 	if (selectedItem && notify && this.isListenerRegistered(DwtEvent.SELECTION)) {
 		var selEv = DwtShell.selectionEvent;
-//		DwtUiEvent.copy(selEv, ev);
 		selEv.item = this;
 		selEv.detail = selectedItem;
 		this.notifyListeners(DwtEvent.SELECTION, selEv);
@@ -262,21 +263,6 @@ function(show) {
 	if (div) {
 		Dwt.setVisible(div, show);
 	}
-};
-
-/**
- * Adds a listener to be notified when the button is pressed.
- *
- * @param listener	[AjxListener]	a listener
- */
-DwtAccordion.prototype.addSelectionListener =
-function(listener) {
-	this.addListener(DwtEvent.SELECTION, listener);
-};
-
-DwtAccordion.prototype.addContextListener =
-function(listener) {
-	this.addListener(DwtEvent.ONCONTEXTMENU, listener);
 };
 
 
@@ -354,6 +340,24 @@ function(item, ev) {
 		selEv.detail = item;
 		this.notifyListeners(DwtEvent.ONCONTEXTMENU, selEv);
 	}
+};
+
+DwtAccordion.prototype._handleOnMouseoverHeader =
+function(item, ev) {
+	ev = ev || window.event;
+
+	if (this.isListenerRegistered(DwtEvent.ONMOUSEOVER)) {
+		var selEv = DwtShell.selectionEvent;
+		DwtUiEvent.copy(selEv, ev);
+		selEv.item = this;
+		selEv.detail = item;
+		this.notifyListeners(DwtEvent.ONMOUSEOVER, selEv);
+	}
+};
+
+DwtAccordion.prototype._handleOnMouseoutHeader =
+function(ev) {
+	this.setToolTipContent("");
 };
 
 /**
