@@ -87,6 +87,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/libidn-1.0.jar" sourcepath="/Users/pshao/p4/main/ThirdParty/libidn/libidn-1.0/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/java_memcached-release_1.6.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.2.5.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.3.0.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.3.0.jar" sourcepath="/Lucene-2.3.0/src/java"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
