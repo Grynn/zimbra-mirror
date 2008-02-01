@@ -7,6 +7,9 @@
   <key name="data_source_trust_self_signed_certs">
     <value>true</value>
   </key>
+  <key name="data_source_fast_fetch">
+    <value>true</value>
+  </key>
   <key name="zdesktop_app_id">
     <value>4062-5711-9195-4050</value>
   </key>

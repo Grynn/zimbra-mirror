@@ -24,6 +24,7 @@ import javax.mail.Session;
 
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.CustomSSLSocketFactory;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -59,7 +60,8 @@ public class LocalJMSession {
     
     private static Session getSession(String smtpHost, int smtpPort, boolean isAuthRequired, String smtpUser, String smtpPass,
     		                         boolean useSSL, boolean useProxy, String proxyHost, int proxyPort) throws ServiceException {
-    	String timeout = "20000";
+    	long timeout = LC.javamail_smtp_timeout.longValue() * Constants.MILLIS_PER_SECOND;
+    	
     	String localhost = LC.zimbra_server_hostname.value();
     	if (smtpHost == null || smtpHost.length() == 0)
     		ServiceException.FAILURE("null smtp host", null);
@@ -82,8 +84,8 @@ public class LocalJMSession {
     	
     	if (useSSL) {
     		props.setProperty("mail.transport.protocol", "smtps");
-            props.setProperty("mail.smtps.connectiontimeout", timeout);
-            props.setProperty("mail.smtps.timeout", timeout);
+            props.setProperty("mail.smtps.connectiontimeout", Long.toString(timeout));
+            props.setProperty("mail.smtps.timeout", Long.toString(timeout));
             props.setProperty("mail.smtps.localhost", localhost);
             props.setProperty("mail.smtps.sendpartial", "true");
     		
@@ -104,8 +106,8 @@ public class LocalJMSession {
             session.setProtocolForAddress("rfc822", "smtps");
     	} else {
     		props.setProperty("mail.transport.protocol", "smtp");
-            props.setProperty("mail.smtp.connectiontimeout", timeout);
-            props.setProperty("mail.smtp.timeout", timeout);
+            props.setProperty("mail.smtp.connectiontimeout", Long.toString(timeout));
+            props.setProperty("mail.smtp.timeout", Long.toString(timeout));
             props.setProperty("mail.smtp.localhost", localhost);
             props.setProperty("mail.smtp.sendpartial", "true");
     		
