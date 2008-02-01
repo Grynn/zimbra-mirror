@@ -265,6 +265,15 @@ function(show) {
 	}
 };
 
+/**
+ * Adds a listener to be notified when the button is pressed.
+ *
+ * @param listener	[AjxListener]	a listener
+ */
+DwtAccordion.prototype.addSelectionListener =
+function(listener) {
+	this.addListener(DwtEvent.SELECTION, listener);
+};
 
 // Private Methods
 
