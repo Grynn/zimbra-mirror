@@ -83,7 +83,7 @@ function(params) {
 	headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnClickHeader, this, item);
 	headerDiv.oncontextmenu = AjxCallback.simpleClosure(this._handleOnRightClickHeader, this, item);
 	headerDiv.onmouseover = AjxCallback.simpleClosure(this._handleOnMouseoverHeader, this, item);
-	headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnMouseoutHeader, this, item);
+	headerDiv.onmouseout = AjxCallback.simpleClosure(this._handleOnMouseoutHeader, this, item);
 
 	this._items.push(item);
 
