@@ -1,5 +1,7 @@
 APP_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(APP_ROOT)/../..; pwd)
+MAKE ?= make
+MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 ZIMBRA_HOME ?= /opt/zimbra
@@ -23,7 +25,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
 		 LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib"
 		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
@@ -51,17 +53,17 @@ build:
 	(tar xzf src/$(PNG_NAME)-$(PNG_VERSION).tar.gz; \
 	cd $(PNG_NAME)-$(PNG_VERSION); \
 	./configure --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION) --mandir=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/man --enable-shared=no; \
-	make; make install; \
+	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(APP_ROOT); \
 	tar xfz src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz; \
 	cd $(FREETYPE_NAME)-$(FREETYPE_VERSION); \
 	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
-	make; make install; \
+	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(APP_ROOT); \
 	tar xfz src/$(LIBART_NAME)-$(LIBART_VERSION).tar.gz; \
 	cd $(LIBART_NAME)-$(LIBART_VERSION); \
 	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
-	make; make install; \
+	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib/pkgconfig; \
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/share; \
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/bin; \
@@ -70,7 +72,7 @@ build:
 	cd $(APP_NAME)-$(APP_VERSION); \
 	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) --enable-static --enable-shared=no \
 	 --disable-tcl --disable-ruby  --disable-python; \
-	make; make install; \
+	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/share/rrdtool/examples)
 	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(mkdir -p $(INSTALL_PREFIX)/var)

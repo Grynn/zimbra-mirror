@@ -1,5 +1,7 @@
 DSPAM_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(DSPAM_ROOT)/../..; pwd)
+MAKE ?= make
+MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -22,7 +24,7 @@ MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
 
@@ -39,7 +41,7 @@ build:
 	--with-mysql-includes=$(MYSQL_INCLUDE_DIR) \
 	--with-mysql-libraries=$(ZIMBRA_HOME)/mysql/lib \
 	--enable-debug --enable-clamav; \
-	make; make install)
+	$(MAKE) $(MAKEARGS); $(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s dspam-$(DSPAM_VERSION) dspam)
 
 tar:

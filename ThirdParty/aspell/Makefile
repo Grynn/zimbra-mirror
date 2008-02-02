@@ -1,5 +1,7 @@
 ASPELL_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(ASPELL_ROOT)/../..; pwd)
+MAKE ?= make
+MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -22,10 +24,10 @@ all: build install dict-install tar
 build:
 	tar xzf src/aspell-$(ASPELL_VERSION).tar.gz
 	(cd aspell-$(ASPELL_VERSION); \
-	./configure --prefix=/opt/zimbra/aspell-$(ASPELL_VERSION); make)
+	./configure --prefix=/opt/zimbra/aspell-$(ASPELL_VERSION); $(MAKE) $(MAKEARGS))
 
 install:
-	(cd aspell-$(ASPELL_VERSION); make install)
+	(cd aspell-$(ASPELL_VERSION); $(MAKE) $(MAKEARGS) install)
 	(cd $(ZIMBRA_HOME); ln -s aspell-$(ASPELL_VERSION) aspell)
 
 dict-install:
@@ -33,8 +35,8 @@ dict-install:
 	for dict in $(ASPELL_DICTS); do \
 		tar xjf src/$$dict.tar.bz2; \
 		(cd $$dict; PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH ./configure; \
-		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH make; \
-		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH make install) \
+		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH $(MAKE) $(MAKEARGS); \
+		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH $(MAKE) $(MAKEARGS) install) \
 	done
 	echo -e "zimbra\nzimlet\nzimlets\ncomcast" | $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin/aspell create master --lang=en $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/lib/aspell-0.60/zimbra.rws
 	echo "add zimbra.rws" >> $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/lib/aspell-0.60/en.multi

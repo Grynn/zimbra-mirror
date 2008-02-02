@@ -1,0 +1,20 @@
+diff -rup clamav-0.92-orig/configure.in clamav-0.92/configure.in
+--- clamav-0.92-orig/configure.in	2008-01-15 10:04:10.000000000 -0800
++++ clamav-0.92/configure.in	2008-01-31 17:36:09.000000000 -0800
+@@ -1084,8 +1084,13 @@ then
+     if test "$use_netinfo" = "yes"
+     then
+ 	AC_MSG_CHECKING(for $clamav_user using netinfo)
+-        clamavuser=`/usr/bin/nidump passwd . |grep ${clamav_user}`
+-        clamavgroup=`/usr/bin/nidump group . |grep ${clamav_group}`
++        if test -x "/usr/bin/nidump" ; then
++          clamavuser=`/usr/bin/nidump passwd . |grep ${clamav_user}`
++          clamavgroup=`/usr/bin/nidump group . |grep ${clamav_group}`
++        elif test -x "/usr/bin/dscl" ; then
++          clamavuser=`/usr/bin/dscl . -list users | grep ${clamav_user}`
++          clamavgroup=`/usr/bin/dscl . -list users | grep ${clamav_group}`
++        fi
+     fi
+ 
+     if test "$use_yp" = "yes"
+Only in clamav-0.92/: configure.in.orig

@@ -1,5 +1,7 @@
 HEIMDAL_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(HEIMDAL_ROOT)/../..; pwd)
+MAKE ?= make
+MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -40,29 +42,29 @@ build:
 	--without-openldap \
 	--without-hesiod \
 	--without-ipv6; \
-	cd $(HEIMDAL_SOURCE)/include; make; \
-	cd $(HEIMDAL_SOURCE)/lib/roken; make; \
-	cd $(HEIMDAL_SOURCE)/lib/vers; make; \
-	cd $(HEIMDAL_SOURCE)/lib/com_err; make; \
-	cd $(HEIMDAL_SOURCE)/lib/asn1; make; \
-	cd $(HEIMDAL_SOURCE)/lib/editline; make; \
-	cd $(HEIMDAL_SOURCE)/lib/sl; make; \
-	cd $(HEIMDAL_SOURCE)/lib/hcrypto; make; \
-	cd $(HEIMDAL_SOURCE)/lib/hx509; make; \
-	cd $(HEIMDAL_SOURCE)/lib/krb5; make; \
-	cd $(HEIMDAL_SOURCE)/lib/ntlm; make; \
-	cd $(HEIMDAL_SOURCE)/lib/gssapi; make; \
-	cd $(HEIMDAL_SOURCE)/include; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/roken; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/com_err; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/asn1; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/editline; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/sl; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/hcrypto; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/hx509; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/krb5; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/ntlm; make install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/gssapi; make install STRIP="")
+	cd $(HEIMDAL_SOURCE)/include; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/roken; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/vers; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/com_err; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/asn1; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/editline; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/sl; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/hcrypto; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/hx509; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/krb5; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/ntlm; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/gssapi; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/include; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/roken; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/com_err; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/asn1; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/editline; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/sl; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/hcrypto; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/hx509; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/krb5; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/ntlm; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/gssapi; $(MAKE) install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s heimdal-$(HEIMDAL_VERSION) heimdal)
 
 tar:

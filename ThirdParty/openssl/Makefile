@@ -1,5 +1,7 @@
 OPENSSL_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(OPENSSL_ROOT)/../..; pwd)
+MAKE ?= make
+MAKEARGS := -j1
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -7,7 +9,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	PLAT := darwin-i386-cc
 endif
 
@@ -50,6 +52,8 @@ OPENSSL_SOURCE := $(OPENSSL_ROOT)/openssl-$(OPENSSL_VERSION)
 
 all: build tar
 
+#patch -N -g0 -p1 < ../patches/leopard.sharedlib.fix; \
+
 build:
 	(tar xzf src/openssl-$(OPENSSL_VERSION).tar.gz; \
 	cd openssl-$(OPENSSL_VERSION); \
@@ -59,8 +63,8 @@ build:
 	LDFLAGS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" \
 	$(ENVMOD) ./Configure --prefix=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
 	shared $(PLAT) -g -O2; \
-	make; \
-	make install)
+	$(MAKE) $(MAKEARGS); \
+	$(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s openssl-$(OPENSSL_VERSION) openssl)
 
 tar:

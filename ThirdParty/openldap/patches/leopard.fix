@@ -1,0 +1,14 @@
+diff -rup openldap-2.3.40.orig/configure openldap-2.3.40/configure
+--- openldap-2.3.40.orig/configure	2007-10-08 09:38:57.000000000 -0700
++++ openldap-2.3.40/configure	2008-01-31 20:27:28.000000000 -0800
+@@ -11661,8 +11661,8 @@ echo "$as_me: error: could not locate pe
+ 		fi
+ 
+ 	else
+-		PERL_CPPFLAGS="`$PERLBIN -MExtUtils::Embed -e ccopts`"
+-		PERL_LDFLAGS="`$PERLBIN -MExtUtils::Embed -e ldopts|sed -e 's/ -lc / /' -e 's/ -lc$//'`"
++		PERL_CPPFLAGS="`$PERLBIN -MExtUtils::Embed -e ccopts | sed -e s'/-arch ppc //g' -e 's/-bundle //g'`"
++		PERL_LDFLAGS="`$PERLBIN -MExtUtils::Embed -e ldopts|sed -e 's/ -lc / /' -e 's/ -lc$//' -e s'/-arch ppc //g' -e 's/-bundle //g'`"
+ 
+ 		if test x"$ol_enable_perl" = "xyes" ; then
+ 			SLAPD_PERL_LDFLAGS="$PERL_LDFLAGS"

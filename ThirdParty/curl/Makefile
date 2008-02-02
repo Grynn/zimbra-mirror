@@ -1,5 +1,7 @@
 CURL_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(CURL_ROOT)/../..; pwd)
+MAKE ?= make
+MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -43,12 +45,12 @@ build:
 		--with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION) \
 		--with-zlib=/usr/lib64 \
 		--with-libidn=/usr/lib64;\
-	make curl_minimal_unittest curl_minimal_large_unittest \
+	$(MAKE) $(MAKEARGS) curl_minimal_unittest curl_minimal_large_unittest \
              addressmap_unittest atomicops_unittest frag_unittest \
              low_level_alloc_unittest markidle_unittest memalign_unittest \
              packed_cache_test stacktrace_unittest system_alloc_unittest \
              thread_dealloc_unittest; \
-	 make install)
+	 $(MAKE) $(MAKEARGS) install)
 	(cd $(ZIMBRA_HOME); ln -s curl-$(CURL_VERSION) curl)
 
 tar:

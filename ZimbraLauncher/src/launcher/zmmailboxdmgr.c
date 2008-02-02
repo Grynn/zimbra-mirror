@@ -31,8 +31,9 @@
 #include <syslog.h>
 #include <pwd.h>
 #include <time.h>
-#ifdef DARWIN
+#if defined(DARWIN) || defined(DARWIN9)
 #include <malloc/malloc.h>
+#elif
 #else
 #include <malloc.h>
 #endif

@@ -3,6 +3,10 @@ P4_ROOT ?= $(shell cd $(THIRDPARTY_ROOT)/..; pwd)
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
+MAKE := make
+ECHO := /bin/echo
+MAKEARGS ?= -j5
+
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
@@ -30,7 +34,7 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
 endif
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
 	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-i686
 endif
@@ -77,64 +81,64 @@ $(ZIMBRA_HOME):
 
 build:
 	 @(for dir in $(DIRS); do \
-		echo -n "*** Building in $$dir "; \
-		make -C $$dir >> $(LOGFILE) 2>&1; \
-		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "SUCCEEDED.";  fi ; \
+		$(ECHO) -n "*** Building in $$dir "; \
+		$(MAKE) -C $$dir >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  $(ECHO) "FAILED.";  else  $(ECHO) "SUCCEEDED.";  fi ; \
 		if [ -x /sbin/ldconfig ]; then /sbin/ldconfig; fi ;\
 	done)
-	@(echo -n "*** Building in Perl "; make -C Perl ) 
-	@(make -C apache-httpd tar >> $(LOGFILE) 2>&1)
+	@($(ECHO) -n "*** Building in Perl "; $(MAKE) -C Perl ) 
+	@($(MAKE) -C apache-httpd tar >> $(LOGFILE) 2>&1)
 
 clean:
 	for dir in $(DIRS); do \
-		echo "*** Building clean in $$dir"; \
-		make -C $$dir clean; \
+		$(ECHO) "*** Building clean in $$dir"; \
+		$(MAKE) -C $$dir clean; \
 	done
-	@(echo "*** Building clean in Perl"; make -C Perl clean )
+	@($(ECHO) "*** Building clean in Perl"; $(MAKE) -C Perl clean )
 
 allclean:
 	for dir in $(DIRS); do \
-		echo "*** Building allclean in $$dir"; \
-		make -C $$dir allclean; \
+		$(ECHO) "*** Building allclean in $$dir"; \
+		$(MAKE) -C $$dir allclean; \
 	done
-	@(echo "*** Building allclean in Perl"; make -C Perl allclean )
+	@($(ECHO) "*** Building allclean in Perl"; $(MAKE) -C Perl allclean )
 	rm -f $(LOGFILE)
 	rm -rf $(ZIMBRA_HOME)/conf
 	rm -rf $(ZIMBRA_HOME)/log
 	rm -rf $(ZIMBRA_HOME)/zimbramon
 
 mysql: force
-	(cd $@; make > $(LOGFILE).$$ 2>&1)
+	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 sleepycat: force
-	(cd $@; make > $(LOGFILE).$$ 2>&1)
+	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 openldap: force
-	(cd $@; make > $(LOGFILE).$$ 2>&1)
+	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 cyrus-sasl: force
-	(cd $@; make > $(LOGFILE).$$ 2>&1)
+	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 aspell: force
-	(cd $@; make > $(LOGFILE).$$ 2>&1)
+	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 clamav: force
-	(cd $@; make > $(LOGFILE).$$ 2>&1)
+	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 postfix: PostFix
 
 PostFix: force
-	(cd $@; make > $(LOGFILE).$$ 2>&1)
+	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 perl:
-	(cd $@; make)
+	(cd $@; $(MAKE))
 
 p4edit:
 	for dir in $(DIRS); do \
-		echo "***  p4 editing in $$dir"; \
-		make -C $$dir p4edit; \
+		$(ECHO) "***  p4 editing in $$dir"; \
+		$(MAKE) -C $$dir p4edit; \
 	done
-	@(echo -n "*** p4 editing in Perl "; make -C Perl p4edit ) 
+	@($(ECHO) -n "*** p4 editing in Perl "; $(MAKE) -C Perl p4edit ) 
 
 
 force: ;

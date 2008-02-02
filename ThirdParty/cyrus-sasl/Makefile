@@ -1,5 +1,7 @@
 CYRUS_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(CYRUS_ROOT)/../..; pwd)
+MAKE ?= make
+MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -28,13 +30,13 @@ all: build
 build: 
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
 	_S_='~' ./zimbra-cyrus-sasl-build.sh
-	(cd build/cyrus-sasl-$(CYRUS_VERSION); make install)
+	(cd build/cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_TGZ_TARGET) \
 	cyrus-sasl-$(CYRUS_VERSION))
 
 /opt/zimbra/libxml2/lib/libxml2.a:
-	make -C $(P4_ROOT)/ThirdParty/libxml2
+	$(MAKE) $(MAKEARGS) -C $(P4_ROOT)/ThirdParty/libxml2
 
 
 p4edit: $(CYRUS_TGZ_TARGET)

@@ -7,7 +7,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	ENVMOD := env LIBS="-lresolv" 
 endif
 ifeq ($(BUILD_PLATFORM), MACOSX)

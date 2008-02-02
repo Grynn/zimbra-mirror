@@ -1,5 +1,7 @@
 OPENLDAP_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(OPENLDAP_ROOT)/../..; pwd)
+MAKE ?= make
+MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
@@ -8,7 +10,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	ENVMOD := env LIBS="-lresolv" 
 endif
 ifeq ($(BUILD_PLATFORM), MACOSX)
@@ -34,16 +36,17 @@ OPENLDAP_CLIB_DIR ?= $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
 all: build tar
 
 build:
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	(tar xzf src/openldap-$(LDAP_RELEASE).tgz; \
 	mv openldap-$(LDAP_RELEASE) openldap-$(LDAP_VERSION); \
 	cd openldap-$(LDAP_VERSION); \
-	patch -p1 < ../patches/internal-config; \
-	patch -p1 < ../patches/internal-new-malloc; \
-	patch -p1 < ../patches/internal-add-improvements; \
-	patch -p1 < ../patches/ITS5037.patch; \
-	patch -p1 < ../patches/ITS5079.patch; \
-	patch -p1 < ../patches/ITS5282.patch; \
+	patch -N -p1 < ../patches/internal-config; \
+	patch -N -p1 < ../patches/internal-new-malloc; \
+	patch -N -p1 < ../patches/internal-add-improvements; \
+	patch -N -p1 < ../patches/ITS5037.patch; \
+	patch -N -p1 < ../patches/ITS5079.patch; \
+	patch -N -p1 < ../patches/ITS5282.patch; \
+	patch -N -p1 < ../patches/leopard.fix; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(OPENLDAP_CLIB_DIR) -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(OPENLDAP_CLIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) \
 	CPPFLAGS="-I$(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include" \
@@ -61,7 +64,7 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	--enable-debug \
 	--enable-crypt \
 	--enable-slurpd=no; \
-	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) make; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) make install STRIP="")
+	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) $(MAKE) $(MAKEARGS); LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) $(MAKE) install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 else
 	(tar xzf src/openldap-$(LDAP_RELEASE).tgz; \
@@ -91,7 +94,7 @@ else
 	--enable-debug \
 	--enable-crypt \
 	--enable-slurpd=no; \
-	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) make; LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) make install STRIP="")
+	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) $(MAKE) $(MAKEARGS); LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR) $(MAKE) install STRIP="")
 	(cd $(ZIMBRA_HOME); ln -s openldap-$(LDAP_VERSION) openldap)
 endif
 

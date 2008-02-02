@@ -1,5 +1,7 @@
 APP_ROOT := $(shell pwd)
 P4_ROOT ?= $(shell cd $(APP_ROOT)/../..; pwd)
+MAKE ?= make
+MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 ZIMBRA_HOME ?= /opt/zimbra
@@ -25,7 +27,7 @@ all: build tar
 build: $(APP_NAME)-$(APP_VERSION)
 	(cd $(APP_NAME)-$(APP_VERSION); \
 	CFLAGS="-g -O2 -fPIC" \
-	./configure $(APP_CONFIGURE); make; make install)
+	./configure $(APP_CONFIGURE); $(MAKE) $(MAKEARGS); $(MAKE) install)
 	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(cd $(ZIMBRA_HOME); ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
 
