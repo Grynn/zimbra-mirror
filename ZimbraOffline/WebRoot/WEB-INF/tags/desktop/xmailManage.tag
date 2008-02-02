@@ -26,6 +26,7 @@ function OnSubmit() {
 
 function OnReset() {
     if (confirm('All downloaded data will be deleted.  Data on the server will be downloaded again. OK to proceed?')) {
+        disableButtons();
         hidden_form.verb.value = "rst";
         hidden_form.submit();
     }
@@ -33,9 +34,17 @@ function OnReset() {
 
 function OnDelete() {
     if (confirm('Service information and downloaded data will be deleted.  Data on the server will not be affected. OK to proceed?')) {
+        disableButtons();
         hidden_form.verb.value = "del";
         hidden_form.submit();
     }
+}
+
+function disableButtons() {
+    zd.disable("resetButton");
+    zd.disable("deleteButton");
+    zd.disable("cancelButton");
+    zd.disable("saveButton");
 }
 //-->
 </script>
@@ -227,19 +236,19 @@ function OnDelete() {
 <table class="ZWizardButtonBar">
     <tr>
         <td class="ZWizardButton">
-            <button class='DwtButton' onclick="OnReset()">Reset Data...</button>
+            <button id='resetButton' class='DwtButton' onclick="OnReset()">Reset Data...</button>
         </td>
         <td class="ZWizardButton">
-            <button class='DwtButton' onclick="OnDelete()">Remove Account...</button>
+            <button id='deleteButton' class='DwtButton' onclick="OnDelete()">Remove Account...</button>
         </td>
         <td class="ZWizardButtonSpacer">
             <div></div>
         </td>
         <td class="ZWizardButton">
-            <button class='DwtButton' onclick="OnCancel()">Cancel</button>
+            <button id='cancelButton' class='DwtButton' onclick="OnCancel()">Cancel</button>
         </td>
         <td class="ZWizardButton">
-            <button class='DwtButton-focused' onclick="OnSubmit()">Save Settings</button>
+            <button id='saveButton' class='DwtButton-focused' onclick="OnSubmit()">Save Settings</button>
         </td>
 </table>
 </div>

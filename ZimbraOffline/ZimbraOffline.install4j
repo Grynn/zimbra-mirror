@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.8" transformSequenceNumber="1">
   <directoryPresets config="./src/installer/resources" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./build" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.73" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.75" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -48,9 +48,7 @@
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="240" file="./build/dist/db" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
-        <exclude>
-          <entry location="up_ver_ij.sql" launcher="false" />
-        </exclude>
+        <exclude />
       </dirEntry>
       <dirEntry mountPoint="814" file="./build/dist/lib" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
@@ -763,7 +761,7 @@ return true;</condition>
                 </object>
               </java>
             </serializedBean>
-            <condition>false</condition>
+            <condition />
           </action>
           <action name="up_ver_ij" id="92273" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -784,13 +782,13 @@ return true;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition>//File install = context.getDestinationFile(".");
-//File[] dirs = install.listFiles();
-//for (int i = 0; i &lt; dirs.length; ++i) {
-//    if (dirs[i].isDirectory() &amp;&amp; dirs[i].getName().equals("derby")) {
-//        return true;
-//   }
-//}
+            <condition>File install = context.getDestinationFile(".");
+File[] dirs = install.listFiles();
+for (int i = 0; i &lt; dirs.length; ++i) {
+    if (dirs[i].isDirectory() &amp;&amp; dirs[i].getName().equals("derby")) {
+        return true;
+   }
+}
 return false;</condition>
           </action>
           <action name="" id="8" beanClass="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
@@ -1918,6 +1916,8 @@ return false;</condition>
                       <void property="value">
                         <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
 
+org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
+
 org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
 String url = "http://localhost:7634/service/admin/soap";
 org.apache.commons.httpclient.methods.GetMethod get = new org.apache.commons.httpclient.methods.GetMethod(url);
@@ -1952,7 +1952,6 @@ File[] zimlets = zimletsDir.listFiles(fnf);
 boolean hasFailures = false;
 for (int i = 0; i &lt; zimlets.length; ++i) {
     try {
-        System.err.println(zimlets[i].getAbsolutePath());
         com.zimbra.cs.zimlet.ZimletUtil.main(new String[] {"-q", "deploy", zimlets[i].getAbsolutePath()});
         zimlets[i].delete();
     } catch (Exception x) {
@@ -2657,7 +2656,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
       <excludedInstallerScreens />
       <excludedUninstallerScreens />
     </win32>
-    <win32 name="Windows - No Prism" id="41" mediaFileName="${compiler:sys.shortName}_noprism_${compiler:sys.platform}_${compiler:sys.version}" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.5.0_10_us_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="C:\zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows - No Prism" id="41" mediaFileName="${compiler:sys.shortName}_light_${compiler:sys.platform}_${compiler:sys.version}" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.5.0_10_us_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="C:\zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -2708,7 +2707,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
         <scriptLines />
       </installerScript>
     </unixInstaller>
-    <unixInstaller name="Unix - No Prism" id="198399" mediaFileName="${compiler:sys.shortName}_noprism_${compiler:sys.platform}_intel_${compiler:sys.version}" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.5.0_11" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="~/zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Unix - No Prism" id="198399" mediaFileName="${compiler:sys.shortName}_light_${compiler:sys.platform}_intel_${compiler:sys.version}" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.5.0_11" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="~/zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -2757,7 +2756,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
       <excludedInstallerScreens />
       <excludedUninstallerScreens />
     </macosFolder>
-    <macosFolder name="Mac OS X Intel - No Prism" id="198402" mediaFileName="${compiler:sys.shortName}_noprism_${compiler:sys.platform}_intel_${compiler:sys.version}" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" customInstallBaseDir="~/zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <macosFolder name="Mac OS X Intel - No Prism" id="198402" mediaFileName="${compiler:sys.shortName}_light_${compiler:sys.platform}_intel_${compiler:sys.version}" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" customInstallBaseDir="~/zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -2804,7 +2803,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
       <excludedInstallerScreens />
       <excludedUninstallerScreens />
     </macosFolder>
-    <macosFolder name="Mac OS X PPC - No Prism" id="198405" mediaFileName="${compiler:sys.shortName}_noprism_${compiler:sys.platform}_ppc_${compiler:sys.version}" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" customInstallBaseDir="~/zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <macosFolder name="Mac OS X PPC - No Prism" id="198405" mediaFileName="${compiler:sys.shortName}_light_${compiler:sys.platform}_ppc_${compiler:sys.version}" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" customInstallBaseDir="~/zimbra" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -2830,9 +2829,8 @@ if (installDir.indexOf(" ") &gt;= 0) {
       <excludedUninstallerScreens />
     </macosFolder>
   </mediaSets>
-  <buildIds buildAll="false">
-    <mediaSet refId="59040" />
-    <mediaSet refId="198399" />
+  <buildIds buildAll="true">
+    <mediaSet refId="44" />
   </buildIds>
 </install4j>
 

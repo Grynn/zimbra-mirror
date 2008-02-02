@@ -60,15 +60,6 @@ function OnXmail() {
         </tr>
         <tr>
             <td valign=top>
-                <button class='DwtButton-disabled' onclick="alert('Not yet working')" style='width:100%' disabled>
-                    <nobr>Zimbra Test Drive</nobr>
-                </button>
-            </td>
-            <td>(Coming Soon) Set up a two-week Zimbra Test Drive Account.
-            </td>
-        </tr>
-        <tr>
-            <td valign=top>
                 <button class='DwtButton' onclick="OnYmail()" style='width:100%'>
                     <nobr>Yahoo! Mail Plus Account</nobr>
                 </button>
