@@ -49,6 +49,11 @@ public class ZExceptionBean {
     public String getCode() {
         return mException.getCode();
     }
+
+
+    public String getId() {
+        return mException.getId();
+    }
     
     public String getStackStrace() {
        return ExceptionToString.ToString(mException);

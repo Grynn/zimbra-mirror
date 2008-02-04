@@ -22,6 +22,10 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 import com.zimbra.cs.taglib.bean.ZExceptionBean;
+import com.zimbra.cs.taglib.bean.ZTagLibException;
+import com.zimbra.cs.zclient.ZClientException;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.common.service.ServiceException;
 
 public class GetExceptionTag extends ZimbraSimpleTag {
     
@@ -33,6 +37,12 @@ public class GetExceptionTag extends ZimbraSimpleTag {
     public void setException(Exception e) { this.mException = e; }
     
     public void doTag() throws JspException, IOException {
-        getJspContext().setAttribute(mVar, new ZExceptionBean(mException),  PageContext.PAGE_SCOPE);
+        ZExceptionBean eb = new ZExceptionBean(mException);
+        Exception e = eb.getException();
+        if (e != null) {
+            if ((!(e instanceof ServiceException)) || (e instanceof ZTagLibException) || (e instanceof ZClientException))
+                ZimbraLog.webclient.warn("local exception", e);
+        }
+        getJspContext().setAttribute(mVar, eb,  PageContext.PAGE_SCOPE);
     }
 }
