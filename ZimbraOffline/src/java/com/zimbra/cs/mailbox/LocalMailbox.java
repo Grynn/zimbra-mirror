@@ -8,7 +8,11 @@ import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.Message.RecipientType;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
@@ -21,7 +25,10 @@ import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
+import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.mime.Mime;
+import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
@@ -29,6 +36,7 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
+import com.zimbra.cs.util.JMSession;
 
 public class LocalMailbox extends DesktopMailbox {
 
@@ -115,6 +123,7 @@ public class LocalMailbox extends DesktopMailbox {
             }
             if (msg == null || msg.getFolderId() != ID_FOLDER_OUTBOX) {
             	OutboxTracker.remove(this, id);
+            	continue;
             }
             
             Session session = null;
@@ -128,9 +137,9 @@ public class LocalMailbox extends DesktopMailbox {
             	session = LocalJMSession.getSession(getAccount());
             }
             if (session == null) { 
-            	OutboxTracker.recordFailure(this, id);
-            	//TODO: bounce back to Inbox
         		OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
+    			bounceToInbox(context, id, msg, "SMTP configuration not valid");
+    			OutboxTracker.remove(this, id);
         		continue;
             }
             Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
@@ -157,13 +166,51 @@ public class LocalMailbox extends DesktopMailbox {
                 sSendUIDs.remove(id);
             } catch (ServiceException x) {
             	if (x.getCause() instanceof MessagingException) {
-            		OutboxTracker.recordFailure(this, id);
+            		OfflineLog.offline.debug("smtp: failed to send mail (" + id + "): " + msg.getSubject(), x);
 	        		OfflineLog.offline.info("SMTP send failure: " + msg.getSubject());
+            		if (x.getCause() instanceof SafeSendFailedException) {
+            			bounceToInbox(context, id, msg, x.getCause().getMessage());
+            			OutboxTracker.remove(this, id);
+            		} else {
+            			OutboxTracker.recordFailure(this, id);
+            		}
+            		continue;
             	} else {
             		throw x;
             	}
             }
         }
+    }
+    
+    private void bounceToInbox(OperationContext context, int id, Message msg, String error) {
+    	MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
+		try {
+			mm.setFrom(new InternetAddress(getAccount().getName()));
+    		mm.setRecipient(RecipientType.TO, new InternetAddress(getAccount().getName()));
+    		mm.setSubject("Delivery failed: " + error);
+    		
+    		mm.saveChanges(); //must call this to update the headers
+    		
+    		MimeMultipart mmp = new MimeMultipart();
+    		MimeBodyPart mbp = new MimeBodyPart();
+    		mbp.setText(error == null ? "SEND FAILED. PLEASE CHECK RECIPIENT ADDRESSES AND SMTP SETTINGS." : error);
+   			mmp.addBodyPart(mbp);
+    		
+    		mbp = new MimeBodyPart();
+    		mbp.setContent(msg.getMimeMessage(), "message/rfc822");
+    		mbp.setHeader("Content-Disposition", "attachment");
+    		mmp.addBodyPart(mbp, mmp.getCount());
+    		
+    		mm.setContent(mmp);
+    		mm.saveChanges();
+		
+    		//directly bounce to local inbox
+    		ParsedMessage pm = new ParsedMessage(mm, true);
+    		addMessage(context, pm, OfflineMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
+    		delete(context, id, MailItem.TYPE_MESSAGE);
+		} catch (Exception e) {
+			OfflineLog.offline.warn("smtp: can't bounce failed send (" + id + ")" + msg.getSubject(), e);
+		}
     }
     
     private boolean isAutoSyncDisabled(DataSource ds) {
