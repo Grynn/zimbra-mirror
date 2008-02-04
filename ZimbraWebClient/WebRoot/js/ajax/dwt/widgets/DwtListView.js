@@ -306,8 +306,18 @@ function(defaultColumnSort) {
 	this._headerColCreated = true;
 };
 
-DwtListView.prototype.getItemIndex = function(item) {
-	return this._getItemIndex(item);
+// returns the index of the given item based on its position in the list
+// underlying this view
+DwtListView.prototype.getItemIndex =
+function(item) {
+	var list = this._list;
+	var len = list.size();
+	for (var i = 0; i < len; ++i) {
+		if (list.get(i).id == item.id) {
+			return i;
+		}
+	}
+	return null;
 };
 
 // this returns the index into the header list array for the given ID
@@ -395,12 +405,14 @@ function(itemArray) {
 
 DwtListView.prototype.addItem =
 function(item, index, skipNotify) {
-	if (!this._list)
+	if (!this._list) {
 		this._list = new AjxVector();
+	}
 
 	// clear the "no results" message before adding!
-	if (this._list.size() == 0)
+	if (this._list.size() == 0) {
 		this._resetList();
+	}
 
 	this._list.add(item, index);
 	var div = this._createItemHtml(item, {now:this._now});
@@ -422,7 +434,8 @@ DwtListView.prototype.removeItem =
 function(item, skipNotify) {
 	var itemEl = this._getElFromItem(item);
 	if (!itemEl) { return; }
-    var sibling = itemEl ? itemEl.nextSibling : null;
+
+    var sibling = itemEl.nextSibling;
     if (sibling) {
         var odd = Boolean(itemEl.className && (itemEl.className.indexOf(DwtListView.ROW_CLASS_ODD) != -1));
         while (sibling) {
@@ -471,38 +484,10 @@ function(item) {
     }
 };
 
-DwtListView.prototype.reIndexColumn =
-function(columnIdx, newIdx) {
-	// do some sanity checks before continuing
-	if (this._headerList == null)
-		return;
-	var len = this._headerList.length;
-	if (columnIdx < 0 || newIdx < 0 || columnIdx >= len || newIdx >= len || columnIdx == newIdx)
-		return;
-
-	// reindex the header list
-	var temp = this._headerList.splice(columnIdx, 1);
-	this._headerList.splice(newIdx, 0, temp[0]);
-
-	// finally, relayout the list view (incl. header columns)
-	this._relayout();
-};
-
-DwtListView.prototype.reSizeColumn =
-function(headerIdx, newWidth) {
-	// TODO: do some (more?) sanity checks before changing the header width
-	if (newWidth == this._headerList._width || newWidth < DwtListView.MIN_COLUMN_WIDTH)
-		return;
-
-	this._headerList[headerIdx]._width = newWidth;
-	this._relayout();
-};
-
 // determine if col header needs padding to accomodate for scrollbars
 DwtListView.prototype._resetColWidth =
 function() {
-	if (this._headerList == null)
-		return;
+	if (this._headerList == null) { return; }
 
 	// dynamically get col idx for last column (b/c col may or may not be turned on)
 	var count = this._headerList.length-1;
@@ -512,7 +497,8 @@ function() {
 			lastColIdx = count;
 		count--;
 	}
-    if(lastColIdx){
+
+    if (lastColIdx) {
         var lastCol = this._headerList[lastColIdx];
         var lastCell = document.getElementById(lastCol._id);
         var div = lastCell.firstChild;
@@ -522,9 +508,9 @@ function() {
         var rowWidth = this._listDiv.clientWidth;
 
         if (headerWidth != rowWidth) {
-            lastCell.style.width = div.style.width = lastCol._width != null && lastCol._width != "auto"
-                    ? (lastCol._width + scrollbarPad)
-                    : (lastCell.clientWidth + scrollbarPad);
+            lastCell.style.width = div.style.width = (lastCol._width != null && lastCol._width != "auto")
+				? (lastCol._width + scrollbarPad)
+				: (lastCell.clientWidth + scrollbarPad);
         } else {
             lastCell.style.width = div.style.width = (lastCol._width || "");
         }
@@ -599,10 +585,7 @@ function(item, params) {
 	var htmlArr = [];
 	var idx = 0;
 
-	// Table
 	idx = this._getTable(htmlArr, idx, params);
-
-	// Row
 	idx = this._getRow(htmlArr, idx, item, params);
 
 	// Cells
@@ -630,9 +613,7 @@ function(item, params) {
  * @param item			[object]	item to render
  * @param params		[hash]*		hash of optional params
  */
-DwtListView.prototype._addParams =
-function(item, params) {
-};
+DwtListView.prototype._addParams = function(item, params) {};
 
 /**
  * Returns the DIV that contains the item HTML, and sets up styles that will
@@ -677,14 +658,9 @@ function(item, params) {
  */
 DwtListView.prototype._getDivClass =
 function(base, item, params) {
-	var style;
-	if (params.isDragProxy) {
-		style = base + " " + base + "-" + DwtCssStyle.DRAG_PROXY;;
-	} else {
-		style = base;
-	}
-
-	return style;
+	return (params.isDragProxy)
+		? ([base, " ", base, "-", DwtCssStyle.DRAG_PROXY].join(""))
+		: base;
 };
 
 /**
@@ -1012,8 +988,9 @@ function() {
     this._selectedItems.removeAll();
 	this._selAnchor = null;
 
-	if (this._kbAnchor != null && this.hasFocus())
+	if (this._kbAnchor != null && this.hasFocus()) {
 		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
+	}
 };
 
 DwtListView.prototype.getDnDSelection =
@@ -1054,11 +1031,12 @@ function(item, skipNotify) {
 		this._selAnchor = this._kbAnchor = el;
         Dwt.delClass(el, this._styleRe, this.getEnabled() ? this._selectedClass : this._disabledSelectedClass);
 
-		if (this.hasFocus())
+		if (this.hasFocus()) {
 			Dwt.addClass(el, this._kbFocusClass);
+		}
 
 		// reset the selected index
-		this._firstSelIndex = this._list && this._list.size() > 0
+		this._firstSelIndex = (this._list && this._list.size() > 0)
 			? this._list.indexOf(item) : -1;
 
 		this._scrollList(el);
@@ -1169,20 +1147,6 @@ function(item) {
 	return null;
 }
 
-// returns the index of the given item based on its position in the
-// list underlying this view
-DwtListView.prototype._getItemIndex =
-function(item) {
-	var list = this._list;
-	var len = list.size();
-	for (var i = 0; i < len; ++i) {
-		if (list.get(i).id == item.id) {
-			return i;
-		}
-	}
-	return null;
-};
-
 // returns the index of the given item based on the position of the row
 // in this list view that represents it
 DwtListView.prototype._getRowIndex =
@@ -1242,16 +1206,16 @@ function(row) {
 		// is different from the old selection.
 		// In the case where a header item is dragged over, the row might be
 		// null or void.
-		if (!row || row.id != oldRow.id){
+		if (!row || row.id != oldRow.id) {
 			this._updateDragSelection(oldRow, false);
 		}
 	}
 	// Don't try and select if we are over a header item
-	if (!row || Dwt.getAttr(row, "_type") != DwtListView.TYPE_LIST_ITEM) return;
+	if (!row || Dwt.getAttr(row, "_type") != DwtListView.TYPE_LIST_ITEM) { return; }
 
 	// Try and select only if the new row is different from the currently
 	// highlighted row.
-	if (row.id != this._dragHighlight){
+	if (row.id != this._dragHighlight) {
 		this._dragHighlight = row.id;
 		this._updateDragSelection(row, true);
 	}
@@ -1330,8 +1294,7 @@ DwtListView.prototype._mouseOverListener =
 function(ev) {
 	var div = ev.target;
 	div = Dwt.findAncestor(div, "_itemIndex");
-	if (!div)
-		return;
+	if (!div) { return; }
 
 	this._mouseOverAction(ev, div);
 }
@@ -1340,8 +1303,8 @@ DwtListView.prototype._mouseOutListener =
 function(ev) {
 	var div = ev.target;
 	div = Dwt.findAncestor(div, "_itemIndex");
-	if (!div)
-		return;
+	if (!div) { return; }
+
 	// NOTE: The DwtListView handles the mouse events on the list items
 	//		 that have associated tooltip text. Therefore, we must
 	//		 explicitly null out the tooltip content whenever we handle
@@ -1354,8 +1317,7 @@ function(ev) {
 
 DwtListView.prototype._mouseMoveListener =
 function(ev) {
-	if (this._clickDiv == null)
-		return;
+	if (this._clickDiv == null) { return; }
 
 	var type = Dwt.getAttr(this._clickDiv, "_type");
 	if (type == DwtListView.TYPE_HEADER_ITEM) {
@@ -1452,8 +1414,9 @@ function(ev) {
 DwtListView.prototype.emulateDblClick =
 function(item) {
 	var div = document.getElementById(this._getItemId(item));
-	if (div)
+	if (div) {
 		this._emulateDblClick(div);
+	}
 }
 
 DwtListView.prototype._emulateDblClick =
@@ -1474,12 +1437,9 @@ function(next, addSelect, kbNavEvent) {
 
 	// if there is currently a selection anchor, then find the next/prev item
 	// from the anchor
-	var itemDiv;
-	if (this._kbAnchor) {
-		itemDiv = this._getSiblingElement(this._kbAnchor, next);
-	} else {
-		itemDiv = this._parentEl.firstChild;
-	}
+	var itemDiv = (this._kbAnchor)
+		? this._getSiblingElement(this._kbAnchor, next)
+		: this._parentEl.firstChild;
 
 	this._scrollList(itemDiv);
 	this._emulateSingleClick({target:itemDiv, button:DwtMouseEvent.LEFT, shiftKey:addSelect, kbNavEvent:kbNavEvent});
@@ -1488,6 +1448,7 @@ function(next, addSelect, kbNavEvent) {
 DwtListView.prototype._getSiblingElement =
 function(element, next) {
 	if (!element) { return null; }
+
 	var el = next ? element.nextSibling : element.previousSibling;
 	while (this._hasHiddenRows && el && !Dwt.getVisible(el)) {
 		el = next ? el.nextSibling : el.previousSibling;
@@ -1536,8 +1497,7 @@ function(params) {
 DwtListView.prototype._setKbFocusElement =
 function(next) {
 	// If there are no elements in the list, then bail
-	if (!this._list)
-		return;
+	if (!this._list) { return; }
 
 	var orig = this._kbAnchor;
 	if (this._kbAnchor) {
@@ -1681,7 +1641,7 @@ function(clickedEl, ev) {
 	}
 };
 
-/*
+/* 	
 * Creates a list event from a mouse event. Returns true if it is okay to notify listeners.
 * Subclasses may override to add more properties to the list event.
 *
@@ -1898,7 +1858,7 @@ function(ev) {
 	if (this._headerCloneTarget) {
 		var divItemIdx = Dwt.getAttr(this._clickDiv, "_itemIndex");
 		var tgtItemIdx = Dwt.getAttr(this._headerCloneTarget, "_itemIndex");
-		this.reIndexColumn(divItemIdx, tgtItemIdx);
+		this._reIndexColumn(divItemIdx, tgtItemIdx);
 	}
 
 	this._clickDiv.className = this._clickDiv.id != this._currentColId 
@@ -1933,7 +1893,24 @@ function(ev) {
 	return true;
 }
 
-DwtListView.prototype._handleColSashDrop = 
+DwtListView.prototype._reIndexColumn =
+function(columnIdx, newIdx) {
+	// do some sanity checks before continuing
+	if (this._headerList == null)
+		return;
+	var len = this._headerList.length;
+	if (columnIdx < 0 || newIdx < 0 || columnIdx >= len || newIdx >= len || columnIdx == newIdx)
+		return;
+
+	// reindex the header list
+	var temp = this._headerList.splice(columnIdx, 1);
+	this._headerList.splice(newIdx, 0, temp[0]);
+
+	// finally, relayout the list view (incl. header columns)
+	this._relayout();
+};
+
+DwtListView.prototype._handleColSashDrop =
 function(ev) {
 	if (this._headerSash == null || ev.button == DwtMouseEvent.RIGHT)
 		return false;
@@ -1956,7 +1933,7 @@ function(ev) {
 				newWidth = cell ? Dwt.getSize(cell).x + delta : null;
 			}
 		}
-		this.reSizeColumn(headerIdx, newWidth);
+		this._reSizeColumn(headerIdx, newWidth);
 	} else {
 		DBG.println("XXX: Bad header ID.");
 	}
@@ -1971,7 +1948,17 @@ function(ev) {
 	return true;
 }
 
-DwtListView.prototype._relayout = 
+DwtListView.prototype._reSizeColumn =
+function(headerIdx, newWidth) {
+	// TODO: do some (more?) sanity checks before changing the header width
+	if (newWidth == this._headerList._width || newWidth < DwtListView.MIN_COLUMN_WIDTH)
+		return;
+
+	this._headerList[headerIdx]._width = newWidth;
+	this._relayout();
+};
+
+DwtListView.prototype._relayout =
 function() {
 	// force relayout of header column
 	this._headerColCreated = false;
