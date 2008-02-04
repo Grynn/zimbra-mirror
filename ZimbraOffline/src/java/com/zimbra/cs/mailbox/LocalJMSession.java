@@ -88,8 +88,6 @@ public class LocalJMSession {
             props.setProperty("mail.smtps.timeout", Long.toString(timeout));
             props.setProperty("mail.smtps.localhost", localhost);
             props.setProperty("mail.smtps.sendpartial", "true");
-    		
-    		props.put("mail.smtps.starttls.enable","true");
     		props.put("mail.smtps.socketFactory.class", CustomSSLSocketFactory.class.getName());
     		props.put("mail.smtps.socketFactory.fallback", "false");
     		
@@ -103,6 +101,8 @@ public class LocalJMSession {
             } else {
             	session = Session.getInstance(props);
             }
+            if (LC.javamail_smtp_enable_starttls.booleanValue())
+            	props.put("mail.smtps.starttls.enable","true");
             session.setProtocolForAddress("rfc822", "smtps");
     	} else {
     		props.setProperty("mail.transport.protocol", "smtp");
@@ -121,6 +121,8 @@ public class LocalJMSession {
             } else {
             	session = Session.getInstance(props);
             }
+            if (LC.javamail_smtp_enable_starttls.booleanValue())
+            	props.put("mail.smtp.starttls.enable","true");
             session.setProtocolForAddress("rfc822", "smtp");
     	}
         
