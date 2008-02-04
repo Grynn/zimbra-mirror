@@ -882,7 +882,8 @@ public class InitialSync {
 	        }
 	        pm.analyze();
         } catch (MessagingException e) {
-            throw MailServiceException.MESSAGE_PARSE_ERROR(e);
+        	OfflineLog.offline.error("Failed parsing message id=" + id, e);
+        	return;
         } catch (IOException e) {
             throw MailServiceException.MESSAGE_PARSE_ERROR(e);
         }
