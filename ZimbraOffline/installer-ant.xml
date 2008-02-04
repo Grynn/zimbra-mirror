@@ -1,4 +1,4 @@
-<project name="Offline-Installer" default="offline-make-installer">
+<project name="Offline-Installer" default="installer-make">
 
 	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/usr/local/install4j/bin/ant.jar"/>
 
