@@ -59,6 +59,8 @@ DwtMenu = function(parent, style, className, posStyle, dialog) {
 	if (parent == null) 
 		return;
 	this._dialog = dialog;
+
+	this._setMouseEvents();
 	
 	var htmlElement = this.getHtmlElement();
 	

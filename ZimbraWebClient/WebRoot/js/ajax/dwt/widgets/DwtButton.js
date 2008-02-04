@@ -65,17 +65,22 @@
 * @extends DwtLabel
 */
 DwtButton = function(parent, style, className, posStyle, actionTiming, id, index) {
-	if (arguments.length == 0) return;
+	if (arguments.length == 0) { return; }
+	
 	className = className || "ZButton";
 	DwtLabel.call(this, parent, style, className, posStyle, id, index);
 
-	this._setMouseEvents();
-
+	if (!parent._hasSetMouseEvents) {
+		this._setMouseEvents();
+	}
+	
+	this._addMouseListeners();
+	
 	this._dropDownEvtMgr = new AjxEventMgr();
 
 	this._selected = false;
 
-	this._actionTiming = actionTiming? actionTiming : DwtButton.ACTION_MOUSEUP;
+	this._actionTiming = actionTiming || DwtButton.ACTION_MOUSEUP;
 	this.__preventMenuFocus = null;
 }
 
@@ -177,21 +182,22 @@ DwtButton.prototype.setDropDownImages = function (enabledImg, disImg, hovImg, de
 
 DwtButton.prototype._addMouseListeners =
 function() {
-	this.addListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
-	this.addListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
-	this.addListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
-	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
+	this.addListener(DwtEvent.ONMOUSEOVER, DwtButton._mouseOverListenerObj);
+	this.addListener(DwtEvent.ONMOUSEOUT, DwtButton._mouseOutListenerObj);
+	this.addListener(DwtEvent.ONMOUSEDOWN, DwtButton._mouseDownListenerObj);
+	this.addListener(DwtEvent.ONMOUSEUP, DwtButton._mouseUpListenerObj);
 };
 
 DwtButton.prototype._removeMouseListeners =
 function() {
-	this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
-	this.removeListener(DwtEvent.ONMOUSEOUT, this._mouseOutListenerObj);
-	this.removeListener(DwtEvent.ONMOUSEDOWN, this._mouseDownListenerObj);
-	this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEOVER, DwtButton._mouseOverListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEOUT, DwtButton._mouseOutListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEDOWN, DwtButton._mouseDownListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEUP, DwtButton._mouseUpListenerObj);
 };
 
-DwtButton.prototype.setDisplayState = function(state, force) {
+DwtButton.prototype.setDisplayState =
+function(state, force) {
     if (this._selected && state != DwtControl.SELECTED && !force) {
         state = [ DwtControl.SELECTED, state ].join(" ");
     }
@@ -252,23 +258,6 @@ function() {
 	} else {
 		Dwt.delClass(this.getHtmlElement(), "ZHasText");
 	}
-}
-
-DwtButton.prototype._setMouseEvents =
-function() {
-	// add custom mouse handlers to standard ones
-	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
-					   DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
-	if (AjxEnv.isIE)
-		mouseEvents.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
-	else
-		mouseEvents.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
-	this._setEventHdlrs(mouseEvents);
-	this._mouseOverListenerObj = new AjxListener(this, this._mouseOverListener);
-	this._mouseOutListenerObj = new AjxListener(this, this._mouseOutListener);
-	this._mouseDownListenerObj = new AjxListener(this, this._mouseDownListener);
-	this._mouseUpListenerObj = new AjxListener(this, this._mouseUpListener);
-	this._addMouseListeners();
 }
 
 DwtButton.prototype.setHoverImage =
@@ -522,36 +511,6 @@ function () {
 	}
 };
 
-// Activates the button.
-DwtButton.prototype._mouseOverListener =
-function(ev) {
-    if (this._hoverImageInfo) {
-
-	    // if the button is image-only, the following is bad
-	    // because DwtLabel#setImage clears the element first
-	    // (innerHTML = "") causing a mouseout event, then it
-	    // re-sets the image, which results in a new mouseover
-	    // event, thus looping forever eating your CPU and
-	    // blinking.
-
-	    // this.setImage(this._hoverImageInfo); // sucks.
-
-	    // hope I'm not breaking anything (mihai@zimbra.com):
-
-	    var iconEl = this._getIconEl();
-	    iconEl.firstChild.className = AjxImg.getClassForImage(this._hoverImageInfo);
-    }
-    this.setDisplayState(DwtControl.HOVER);
-
-    var dropDown = this._dropDownEl;
-    if (this._menu && dropDown && this._dropDownHovImg && !this.noMenuBar &&
-        this.isListenerRegistered(DwtEvent.SELECTION)) {
-		AjxImg.setImage(dropDown, this._dropDownHovImg);
-    }
-
-    ev._stopPropagation = true;
-}
-
 DwtButton.prototype._isDropDownEvent =
 function(ev) {
 	if (this._dropDownEventsEnabled && this._dropDownEl) {
@@ -563,30 +522,6 @@ function(ev) {
 	}
 	return false;
 };
-
-// Triggers the button.
-DwtButton.prototype._mouseDownListener =
-function(ev) {
-	if (this._isDropDownEvent(ev)) {
-		return DwtButton._dropDownCellMouseDownHdlr(ev);
-	}
-
-	if (ev.button != DwtMouseEvent.LEFT) { return; }
-
-    var dropDown = this._dropDownEl;
-    if (this._menu && dropDown && this._dropDownDepImg) {
-		AjxImg.setImage(dropDown, this._dropDownDepImg);
-    }
-	switch (this._actionTiming) {
-	  case DwtButton.ACTION_MOUSEDOWN:
-		this.trigger();
-		this._handleClick(ev);
-		break;
-	  case DwtButton.ACTION_MOUSEUP:
-		this.trigger();
-		break;
-	}
-}
 
 DwtButton.prototype.trigger =
 function (){
@@ -617,39 +552,6 @@ DwtButton.prototype.dontStealFocus = function(val) {
 	this.__preventMenuFocus = val;
 };
 
-// Button has been pressed, notify selection listeners.
-DwtButton.prototype._mouseUpListener =
-function(ev) {
-	if (this._isDropDownEvent(ev)) {
-		return DwtButton._dropDownCellMouseUpHdlr(ev);
-	}
-	if (ev.button != DwtMouseEvent.LEFT) { return; }
-
-    var dropDown = this._dropDownEl;
-    if (this._menu && dropDown && this._dropDownHovImg && !this.noMenuBar){
-		AjxImg.setImage(dropDown, this._dropDownHovImg);
-    }
-	switch (this._actionTiming) {
-	  case DwtButton.ACTION_MOUSEDOWN:
- 	    this.deactivate();
-		break;
-
-	  case DwtButton.ACTION_MOUSEUP:
-	    var el = this.getHtmlElement();
-		if (this.isActive) {
-			this.deactivate();
-			this._handleClick(ev);
-		}
-		// So that listeners may remove this object from the flow, and not
-		// get errors, when DwtControl tries to do a this.getHtmlElement()
-		// ROSSD - I don't get this, basically this method does a this.getHtmlElement as the first thing it does
-		// so why would the line below cause a problem. It does have the side-effect of making buttons behave weirdly
-		// in that they will not remain active on mouse up
-		//el.className = this._origClassName;
-		break;
-	}
-};
-
 DwtButton.prototype._handleClick =
 function(ev) {
 	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
@@ -672,21 +574,10 @@ function() {
     this.setDisplayState(DwtControl.NORMAL);
 }
 
-// Button no longer hovered/active.
-DwtButton.prototype._mouseOutListener =
-function(ev) {
-    if (this._hoverImageInfo) {
-        this.setImage(this._enabledImageInfo);
-    }
-	this._setMouseOutClassName();
-    this.isActive = false;
-
-    var dropDown = this._dropDownEl;
-    if (this._menu && dropDown) {
-		AjxImg.setImage(dropDown, this._dropDownImg);
-    }
-}
-
+DwtButton.prototype._createHtmlFromTemplate = function(templateId, data) {
+    DwtLabel.prototype._createHtmlFromTemplate.call(this, templateId, data);
+    this._dropDownEl = document.getElementById(data.id+"_dropdown");
+};
 
 // Pops up the dropdown menu.
 DwtButton._dropDownCellMouseDownHdlr =
@@ -748,7 +639,115 @@ function(ev) {
 	return false;
 }
 
-DwtButton.prototype._createHtmlFromTemplate = function(templateId, data) {
-    DwtLabel.prototype._createHtmlFromTemplate.call(this, templateId, data);
-    this._dropDownEl = document.getElementById(data.id+"_dropdown");
+// Activates the button.
+DwtButton._mouseOverListener =
+function(ev) {
+	var button = ev.dwtObj;
+	if (!button) { return false; }
+    if (button._hoverImageInfo) {
+
+	    // if the button is image-only, the following is bad
+	    // because DwtLabel#setImage clears the element first
+	    // (innerHTML = "") causing a mouseout event, then it
+	    // re-sets the image, which results in a new mouseover
+	    // event, thus looping forever eating your CPU and
+	    // blinking.
+
+	    // this.setImage(this._hoverImageInfo); // sucks.
+
+	    // hope I'm not breaking anything (mihai@zimbra.com):
+
+	    var iconEl = button._getIconEl();
+	    iconEl.firstChild.className = AjxImg.getClassForImage(button._hoverImageInfo);
+    }
+    button.setDisplayState(DwtControl.HOVER);
+
+    var dropDown = button._dropDownEl;
+    if (button._menu && dropDown && button._dropDownHovImg && !button.noMenuBar &&
+        button.isListenerRegistered(DwtEvent.SELECTION)) {
+		AjxImg.setImage(dropDown, button._dropDownHovImg);
+    }
+
+    ev._stopPropagation = true;
 };
+
+DwtButton._mouseOutListener =
+function(ev) {
+	var button = ev.dwtObj;
+	if (!button) { return false; }
+    if (button._hoverImageInfo) {
+        button.setImage(button._enabledImageInfo);
+    }
+	button._setMouseOutClassName();
+    button.isActive = false;
+
+    var dropDown = button._dropDownEl;
+    if (button._menu && dropDown) {
+		AjxImg.setImage(dropDown, button._dropDownImg);
+    }
+};
+
+DwtButton._mouseDownListener =
+function(ev) {
+	var button = ev.dwtObj;
+	if (!button) { return false; }
+	if (button._isDropDownEvent(ev)) {
+		return DwtButton._dropDownCellMouseDownHdlr(ev);
+	}
+
+	if (ev.button != DwtMouseEvent.LEFT) { return; }
+
+    var dropDown = button._dropDownEl;
+    if (button._menu && dropDown && button._dropDownDepImg) {
+		AjxImg.setImage(dropDown, button._dropDownDepImg);
+    }
+	switch (button._actionTiming) {
+	  case DwtButton.ACTION_MOUSEDOWN:
+		button.trigger();
+		button._handleClick(ev);
+		break;
+	  case DwtButton.ACTION_MOUSEUP:
+		button.trigger();
+		break;
+	}
+};
+
+// Button has been pressed, notify selection listeners.
+DwtButton._mouseUpListener =
+function(ev) {
+	var button = ev.dwtObj;
+	if (!button) { return false; }
+	if (button._isDropDownEvent(ev)) {
+		return DwtButton._dropDownCellMouseUpHdlr(ev);
+	}
+	if (ev.button != DwtMouseEvent.LEFT) { return; }
+
+    var dropDown = button._dropDownEl;
+    if (button._menu && dropDown && button._dropDownHovImg && !button.noMenuBar){
+		AjxImg.setImage(dropDown, button._dropDownHovImg);
+    }
+	switch (button._actionTiming) {
+	  case DwtButton.ACTION_MOUSEDOWN:
+ 	    button.deactivate();
+		break;
+
+	  case DwtButton.ACTION_MOUSEUP:
+	    var el = button.getHtmlElement();
+		if (button.isActive) {
+			button.deactivate();
+			button._handleClick(ev);
+		}
+		// So that listeners may remove this object from the flow, and not
+		// get errors, when DwtControl tries to do a this.getHtmlElement()
+		// ROSSD - I don't get this, basically this method does a this.getHtmlElement as the first thing it does
+		// so why would the line below cause a problem. It does have the side-effect of making buttons behave weirdly
+		// in that they will not remain active on mouse up
+		//el.className = this._origClassName;
+		break;
+	}
+};
+
+DwtButton._mouseOverListenerObj = new AjxListener(null, DwtButton._mouseOverListener);
+DwtButton._mouseOutListenerObj = new AjxListener(null, DwtButton._mouseOutListener);
+DwtButton._mouseDownListenerObj = new AjxListener(null, DwtButton._mouseDownListener);
+DwtButton._mouseUpListenerObj = new AjxListener(null, DwtButton._mouseUpListener);

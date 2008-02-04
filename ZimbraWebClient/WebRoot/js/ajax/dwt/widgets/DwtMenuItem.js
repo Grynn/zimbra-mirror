@@ -31,15 +31,17 @@
 * @param posStyle		positioning style
 */
 DwtMenuItem = function(parent, style, radioGroupId, index, className, posStyle) {
-    if (arguments.length == 0) return;
+    if (arguments.length == 0) { return; }
 
     // check parameters
-    if (!(parent instanceof DwtMenu))
+    if (!(parent instanceof DwtMenu)) {
 		throw new DwtException("Parent must be a DwtMenu object", DwtException.INVALIDPARENT, "DwtMenuItem");
+    }
 		
 	style = style != null ? style : DwtMenuItem.NO_STYLE;
-	if (parent._style == DwtMenu.BAR_STYLE && style != DwtMenuItem.PUSH_STYLE)
-		throw new DwtException("DwtMenuItemInit: invalid style", DwtException.INVALID_PARAM, "DwtMenuItem"); 
+	if (parent._style == DwtMenu.BAR_STYLE && style != DwtMenuItem.PUSH_STYLE) {
+		throw new DwtException("DwtMenuItemInit: invalid style", DwtException.INVALID_PARAM, "DwtMenuItem");
+	}
 
     // call super constructor
     style &= ~DwtLabel.IMAGE_RIGHT; // remove image right style
@@ -200,12 +202,20 @@ function(checked, ev, skipNotify) {
 	}
 }
 
-DwtMenuItem.prototype._setMouseEvents =
+DwtMenuItem.prototype._addMouseListeners =
 function() {
-	// onlyset mouse events for non-separator style
-	if (!(this._style & DwtMenuItem.SEPARATOR_STYLE)) {
-		DwtButton.prototype._setMouseEvents.call(this);
-	}
+	this.addListener(DwtEvent.ONMOUSEOVER, DwtMenuItem._mouseOverListenerObj);
+	this.addListener(DwtEvent.ONMOUSEOUT, DwtButton._mouseOutListenerObj);
+	this.addListener(DwtEvent.ONMOUSEDOWN, DwtButton._mouseDownListenerObj);
+	this.addListener(DwtEvent.ONMOUSEUP, DwtButton._mouseUpListenerObj);
+};
+
+DwtMenuItem.prototype._removeMouseListeners =
+function() {
+	this.removeListener(DwtEvent.ONMOUSEOVER, DwtMenuItem._mouseOverListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEOUT, DwtButton._mouseOutListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEDOWN, DwtButton._mouseDownListenerObj);
+	this.removeListener(DwtEvent.ONMOUSEUP, DwtButton._mouseUpListenerObj);
 };
 
 DwtMenuItem.prototype._addIconCell = function() {
@@ -282,14 +292,6 @@ function() {
 	return (menu && menu.isPoppedup()) ? true : false;
 }
 
-DwtMenuItem.prototype._mouseOverListener = function(ev) {
-    DwtButton.prototype._mouseOverListener.call(this, ev);
-
-    this.parent._popdownSubmenus();
-    if (this._menu) {
-        this._popupMenu(this._hoverDelay);
-    }
-};
 
 //
 // Private methods
@@ -327,3 +329,17 @@ DwtMenuItem.prototype.__handleItemSelect = function(event) {
 DwtMenuItem.prototype.__handleSubMenuMouseOver = function(event) {
     this.setDisplayState(DwtControl.HOVER);
 };
+
+DwtMenuItem._mouseOverListener =
+function(ev) {
+	var menuItem = ev.dwtObj;
+	if (!menuItem) { return false; }
+	if (menuItem._style & DwtMenuItem.SEPARATOR_STYLE) { return false; }
+    DwtButton._mouseOverListener(ev, menuItem);
+    menuItem.parent._popdownSubmenus();
+    if (menuItem._menu) {
+        menuItem._popupMenu(menuItem._hoverDelay);
+    }
+};
+
+DwtMenuItem._mouseOverListenerObj = new AjxListener(null, DwtMenuItem._mouseOverListener);

@@ -57,26 +57,25 @@
  *
  * @author Ross Dargahi
  *
- * @param {DwtComposite} parent Parent widget. Except in the case of <i>DwtShell</i> the
- * 		parent will be a control that has subclassed from <i>DwtComposite</i>
- * @param {String} className CSS class. If not provided defaults to the class name (optional)
- * @param {String} posStyle Positioning style (absolute, static, or relative). If
- * 		not provided defaults to <i>DwtControl.STATIC_STYLE</i> (optional)
- * @param {Boolean} deferred If true, postpone initialization until needed. If not
- * 		specified defaults to false (optional)
- * @param {Int} id An explicit ID to use for the control's HTML element. If not
- * 		specified defaults to an auto-generated id (optional)
- * @param {int} index index at which to add this control among parent's children (optional)
- *
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		Parent widget. Except in the case of <i>DwtShell</i> the
+ * 											parent will be a control that has subclassed from <i>DwtComposite</i>
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			Positioning style (absolute, static, or relative). Defaults to <i>DwtControl.STATIC_STYLE</i>.
+ *        deferred		[boolean]*			If true, postpone initialization until needed.
+ *        id			[string]*			An explicit ID to use for the control's HTML element. If not
+ * 											specified defaults to an auto-generated id.
+ *        index 		[int]*				index at which to add this control among parent's children 
  */
 DwtControl = function(parent, className, posStyle, deferred, id, index) {
 
-	if (arguments.length == 0) return;
+	if (arguments.length == 0) { return; }
 
 	/** parent component. Read-Only */
- 	this.parent = parent;
-	if (parent != null && !(parent instanceof DwtComposite))
+	this.parent = parent;
+	if (parent && !(parent instanceof DwtComposite)) {
 		throw new DwtException("Parent must be a subclass of Composite", DwtException.INVALIDPARENT, "DwtControl");
+	}
 
 	/** the control's <i>DwtShell</i>*/
 	this.shell = null;
@@ -96,19 +95,18 @@ DwtControl = function(parent, className, posStyle, deferred, id, index) {
 	 * @type boolean */
 	this._disposed = false;
 
- 	if (parent == null)
- 		return;
+ 	if (!parent) { return; }
 
 	/** CSS class name
 	 * @type string*/
-	this._className = className ? className : "DwtControl";
+	this._className = className || "DwtControl";
 
 	/** @type private */
 	this.__posStyle = posStyle;
 
-	if (id != null) {
 	/** id of the control's HTML element
 	 * @type string */
+	if (id) {
 		this._htmlElId = id;
 	}
 
@@ -135,8 +133,9 @@ DwtControl = function(parent, className, posStyle, deferred, id, index) {
 	 * @type boolean*/
 	this._hasFocus = false;
 
-	if (!deferred)
+	if (!deferred) {
 		this.__initCtrl();
+	}
 
 	/** Hover over listener
 	 * @type AjxListener */
@@ -1954,11 +1953,26 @@ function(events, clear) {
 
 	var htmlElement = this.getHtmlElement();
 	for (var i = 0; i < events.length; i++) {
-		if (clear !== true)
+		if (clear !== true) {
 			Dwt.setHandler(htmlElement, events[i], DwtControl.__HANDLER[events[i]]);
-		else
+		} else {
 			Dwt.clearHandler(htmlElement, events[i]);
+		}
 	}
+};
+
+DwtControl.prototype._setMouseEvents =
+function() {
+	// add custom mouse handlers to standard ones
+	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
+					   DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
+	if (AjxEnv.isIE) {
+		mouseEvents.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
+	} else {
+		mouseEvents.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
+	}
+	this._setEventHdlrs(mouseEvents);
+	this._hasSetMouseEvents = true;
 };
 
 /**
@@ -2083,13 +2097,14 @@ function(ev) {
 		return false;
 	}
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (!obj) return false;
+	if (!obj) { return false; }
 
 	var mouseEv = DwtShell.mouseEvent;
 	if (obj._dragging == DwtControl._NO_DRAG) {
 		mouseEv.setFromDhtmlEvent(ev);
-		if (obj.isListenerRegistered(DwtEvent.ONMOUSEOVER))
+		if (obj.isListenerRegistered(DwtEvent.ONMOUSEOVER)) {
 			obj.notifyListeners(DwtEvent.ONMOUSEOVER, mouseEv);
+		}
 		// Call the tooltip after the listeners to give them a
 		// chance to change the tooltip text.
 		if (obj.__toolTipContent != null) {
@@ -2117,7 +2132,7 @@ function(ev) {
 DwtControl.__mouseDownHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (!obj) return false;
+	if (!obj) { return false; }
 
 	obj._focusByMouseDownEvent();
 
@@ -2157,7 +2172,7 @@ function(ev) {
 	// else do the draggable behaviour
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
 	var obj = (captureObj) ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
- 	if (!obj) return false;
+ 	if (!obj) { return false; }
 
 	//DND cancel point
 	if (obj.__dndHoverActionId != -1) {
@@ -2295,7 +2310,7 @@ function(ev) {
 	// See if are doing a drag n drop operation
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
 	var obj = (captureObj) ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
-	if (!obj) return false;
+	if (!obj) { return false; }
 
 	//DND
 	if (obj.__dndHoverActionId != -1) {
@@ -2441,7 +2456,7 @@ function(ev) {
 DwtControl.__mouseEvent =
 function(ev, eventType, obj, mouseEv) {
 	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
-	if (!obj) return false;
+	if (!obj) { return false; }
 
 	if (!mouseEv) {
 		mouseEv = DwtShell.mouseEvent;
