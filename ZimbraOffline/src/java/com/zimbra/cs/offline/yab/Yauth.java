@@ -12,10 +12,6 @@ import com.zimbra.cs.offline.OfflineLC;
 
 public class Yauth {
 	
-	public String cookie;
-	public String wssid;
-	public long expiration;
-	
 	private static final String GET_AUTH_TOKEN = "/get_auth_token";
 	private static final String GET_AUTH = "/get_auth";
 	
@@ -28,6 +24,10 @@ public class Yauth {
 	private static final String COOKIE_PREFIX = "Cookie=";
 	private static final String WSSID_PREFIX = "WSSID=";
 	private static final String EXPIRATION_PREFIX = "Expiration=";
+	
+	public String cookie;
+	public String wssid;
+	public long expiration;
 
 	public static Yauth authenticate(String yid, String ypw) throws ServiceException {
         GetMethod get = new GetMethod(OfflineLC.zdesktop_yauth_baseuri.value() + GET_AUTH_TOKEN);

@@ -27,6 +27,7 @@ public class OfflineServiceException extends ServiceException {
     
     public static final String UNEXPECTED = "offline.UNEXPECTED";
     public static final String AUTH_FAILED = "offline.AUTH_FAILED";
+    public static final String OUT_OF_SYNC = "offline.OUT_OF_SYNC";
 
     public static final String ITEM_ID = "itemId";
 
@@ -54,5 +55,9 @@ public class OfflineServiceException extends ServiceException {
     
     public static OfflineServiceException AUTH_FAILED(String username, String message) {
     	return new OfflineServiceException("authentication failed for " + username + ": " + message, AUTH_FAILED, RECEIVERS_FAULT);
+    }
+    
+    public static OfflineServiceException OUT_OF_SYNC() {
+    	return new OfflineServiceException("out of sync", OUT_OF_SYNC, RECEIVERS_FAULT);
     }
 }
