@@ -388,7 +388,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefSkin,
             A_zimbraZimletAvailableZimlets,
             A_zimbraFeatureSharingEnabled,
-            A_zimbraPrefLabel
+            A_zimbraPrefLabel,
+            A_zimbraPrefMailPollingInterval
     }));
 
     @Override
@@ -439,6 +440,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
         attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
+        
+        attrs.put(A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         
         attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
 
@@ -727,7 +730,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraPrefLocale, "en_US");
         addToMap(attrs, A_zimbraPrefMailInitialSearch, "in:inbox");
         addToMap(attrs, A_zimbraPrefMailItemsPerPage, "50");
-        addToMap(attrs, A_zimbraPrefMailPollingInterval, "60");
+        addToMap(attrs, A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         addToMap(attrs, A_zimbraPrefMailSignatureEnabled, FALSE);
         addToMap(attrs, A_zimbraPrefMailSignatureStyle, "outlook");
         addToMap(attrs, A_zimbraPrefMessageViewHtmlPreferred, TRUE);

@@ -36,6 +36,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_account_poll_interval;
     public static final KnownKey zdesktop_reauth_delay;
     
+    public static final KnownKey zdesktop_client_poll_interval;
+    
     public static final KnownKey zdesktop_retry_limit;
     public static final KnownKey zdesktop_enable_push;
     
@@ -62,6 +64,7 @@ public class OfflineLC {
     
     public static final KnownKey zdesktop_yauth_appid;
     public static final KnownKey zdesktop_yauth_baseuri;
+    public static final KnownKey zdesktop_yab_baseuri;
 
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -102,6 +105,10 @@ public class OfflineLC {
 	    zdesktop_account_poll_interval = new KnownKey("zdesktop_account_poll_interval");
 	    zdesktop_account_poll_interval.setDefault(Long.toString(Constants.MILLIS_PER_HOUR));
 	    zdesktop_account_poll_interval.setDoc("Minimum delay in milliseconds between two directory sync executions for the same account. Default 3600000 (1 hour).");
+	    
+	    zdesktop_client_poll_interval = new KnownKey("zdesktop_client_poll_interval");
+	    zdesktop_client_poll_interval.setDefault("15");
+	    zdesktop_client_poll_interval.setDoc("How often Ajax client should poll for updates. Default 15 (seconds).");
 	    
 	    zdesktop_reauth_delay = new KnownKey("zdesktop_reauth_delay");
 	    zdesktop_reauth_delay.setDefault(Long.toString(Constants.MILLIS_PER_HOUR));
@@ -178,5 +185,9 @@ public class OfflineLC {
 	    zdesktop_yauth_baseuri = new KnownKey("zdesktop_yauth_baseuri");
 	    zdesktop_yauth_baseuri.setDefault("https://login.yahoo.com/WSLogin/V1");
 	    zdesktop_yauth_baseuri.setDoc("base uri for yauth");
+	    
+	    zdesktop_yab_baseuri = new KnownKey("zdesktop_yab_baseuri");
+	    zdesktop_yab_baseuri.setDefault("http://address.yahooapis.com/v1");
+	    zdesktop_yab_baseuri.setDoc("base uri for yab");
     }
 }

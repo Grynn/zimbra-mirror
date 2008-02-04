@@ -19,6 +19,7 @@ package com.zimbra.cs.account.offline;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 
 import java.util.*;
@@ -116,6 +117,8 @@ public class OfflineAccount extends Account {
         // disable certain features here rather than trying to make the cached values and the remote values differ
         if (sDisabledFeaturesSet.contains(name.toLowerCase()))
             return "FALSE";
+        if (name.equals(Provisioning.A_zimbraPrefMailPollingInterval))
+        	return OfflineLC.zdesktop_client_poll_interval.value();
         return super.getAttr(name, applyDefaults);
     }
 
@@ -124,6 +127,7 @@ public class OfflineAccount extends Account {
         Map<String, Object> attrs = new HashMap<String, Object>(super.getRawAttrs());
         for (String feature : sDisabledFeatures)
             attrs.put(feature, "FALSE");
+        attrs.put(Provisioning.A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         return attrs;
     }
 
@@ -132,6 +136,7 @@ public class OfflineAccount extends Account {
         Map<String, Object> attrs = new HashMap<String, Object>(super.getAttrs(applyDefaults));
         for (String feature : sDisabledFeatures)
             attrs.put(feature, "FALSE");
+        attrs.put(Provisioning.A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         return attrs;
     }
     
