@@ -793,8 +793,10 @@ function(params) {
 			doc.close();
 		}
 		// XXX: DO NOT REMOVE THIS LINE EVER. IT CAUSES NASTY BUGS (8808, 8895)
-		doc.body.innerHTML = this._pendingContent || "";
-	} catch (ex) {
+        if(doc && doc.body!=null) {
+            doc.body.innerHTML = this._pendingContent || "";
+        }
+    } catch (ex) {
 		DBG.println("XXX: Error initializing HTML mode :XXX");
 		return;
 	}
