@@ -70,7 +70,7 @@ DwtButton = function(parent, style, className, posStyle, actionTiming, id, index
 	className = className || "ZButton";
 	DwtLabel.call(this, parent, style, className, posStyle, id, index);
 
-	if (!parent._hasSetMouseEvents) {
+	if (!parent._hasSetMouseEvents || AjxEnv.isIE) {
 		this._setMouseEvents();
 	}
 	

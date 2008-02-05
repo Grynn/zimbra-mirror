@@ -60,7 +60,9 @@ DwtMenu = function(parent, style, className, posStyle, dialog) {
 		return;
 	this._dialog = dialog;
 
-	this._setMouseEvents();
+	if (!AjxEnv.isIE) {
+		this._setMouseEvents();
+	}
 	
 	var htmlElement = this.getHtmlElement();
 	

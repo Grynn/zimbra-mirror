@@ -30,7 +30,9 @@ DwtSelect = function(parent, options, className, posStyle) {
     var positionStyle = posStyle || Dwt.STATIC_STYLE;
     DwtButton.call(this, parent, null, clsName, positionStyle);
 
-	this._setMouseEvents();
+	if (!AjxEnv.isIE) {
+		this._setMouseEvents();
+	}
 
     // initialize some variables
     this._currentSelectionId = -1;
