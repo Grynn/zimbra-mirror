@@ -97,7 +97,7 @@ function() {
 			var cell = cells[j];
 			Dwt.setHandler(cell, DwtEvent.ONMOUSEDOWN, DwtColorPicker._mouseDownHdlr);
 			Dwt.setHandler(cell, DwtEvent.ONMOUSEUP, DwtColorPicker._mouseUpHdlr);
-			if (AjxEnv.isIE) {
+			if (!AjxEnv.isIE) {
 				Dwt.setHandler(cell, DwtEvent.ONMOUSEOVER, DwtColorPicker._mouseOverHdlr);
 				Dwt.setHandler(cell, DwtEvent.ONMOUSEOUT, DwtColorPicker._mouseOutHdlr);
 			} else {
