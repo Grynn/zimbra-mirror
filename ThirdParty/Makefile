@@ -45,6 +45,8 @@ MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
 OPENSSL_VERSION ?= 0.9.8g
 OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
 
+OPENSSH_VERSION	?= 4.7p1
+
 HEIMDAL_VERSION ?= 1.0.2
 HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
 
@@ -54,6 +56,7 @@ POSTFIX_VERSION ?= 2.4.3.4z
 
 DIRS := mysql \
 	openssl \
+	openssh \
 	sleepycat \
 	libxml2 \
 	heimdal \
