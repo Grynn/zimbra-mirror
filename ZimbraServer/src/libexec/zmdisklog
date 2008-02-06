@@ -68,7 +68,7 @@ sub logDiskUsage {
 	foreach my $m (@mounts) {
 		chomp $m;
 		my ($dev,undef,$mp) = split(/\s+/,$m);
-		open DF, "$DFCMD $dev | tail -1 |" or die "Can't open $DFCMD: $!";
+		open DF, "$DFCMD \"$dev\" | tail -1 |" or die "Can't open $DFCMD: $!";
 		my @df = <DF>;
 		close DF;
 		my (undef, $total, undef, $avail) = split(/\s+/, $df[0]);
