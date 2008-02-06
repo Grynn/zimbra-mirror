@@ -26,10 +26,6 @@ use Zimbra::Util::Common;
 use DBI;
 use Time::Local;
 
-#$SIG{QUIT} = \&quit(0, "Received sigQUIT");
-#$SIG{KILL} = \&quit(0, "Received sigKILL");
-#$SIG{INT} = \&quit(0, "Received sigINT");
-
 my $debug = 0;
 my $data_source="dbi:mysql:database=zimbra_logger;mysql_read_default_file=${zimbra_home}/conf/my.logger.cnf;mysql_socket=${zimbra_home}/logger/db/mysql.sock";
 my $username="zimbra";
@@ -75,6 +71,10 @@ my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)\[(\d+)\]: (.
 while (<>) {
   next if (/last message repeated/);
 
+  # we should always have a parent process as we are opened with a pipe
+  quit(1, "No parent process. logswatch stopped?\n") if (getppid() == 1);
+
+  print FOO "Parent: ", getppid(), "\n" if $debug;
   # attempt to reconnect if mysql dropped
   if (!$dbh->ping) {
     logMsg("DEBUG", "DB Connection dropped.  Attempting to reconnect");
@@ -166,8 +166,10 @@ sub dbConnect($$$) {
   my $timeout=0;
 
   while (! isSqlRunning() && ($timeout <= 3600) ) {
+    quit(1, "No parent process. logswatch stopped?\n") if (getppid() == 1);
     logMsg("INFO", "database not running.  retrying connection");
     $timeout += sleep 5;
+
   }
   quit(1, "zmlogger database isn't running") unless isSqlRunning();
 
