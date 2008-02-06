@@ -1,19 +1,25 @@
 <project name="Offline-Installer" default="installer-make">
 
-	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/usr/local/install4j/bin/ant.jar"/>
+	<property file="build.properties"/>
+    <property name="build.dir" location="../../../build" />
 
-	<target name="installer-clean" description="Removes build files and undeploys extension">
-		<delete dir="build" includes="zdesktop*intel*" />
+	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/home/build/zdesktop/install4j/bin/ant.jar"/>
+
+	<target name="installer-clean">
+		<delete dir="${build.dir}" includes="zdesktop*" />
 	</target>
 
 	<target name="installer-pack-media">
-                <antcall target="installer-clean"/>
-		<install4j projectfile="ZimbraOffline.install4j" verbose="true"/>
-        </target>
+		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
+		           destination="${build.dir}" buildids="44,198394,59040">
+            <variable name="version_label" value="${offline.label}"/>
+            <variable name="version_build" value="${offline.build}"/>
+        </install4j>
+    </target>
 
 	<target name="installer-make">
-                <ant dir="." target="offline-make-install-files" inheritAll="false"/>
-                <antcall target="installer-pack-media"/>
+        <ant dir="." target="offline-make-install-files" inheritAll="false"/>
+        <antcall target="installer-pack-media"/>
 	</target>
 
 </project>

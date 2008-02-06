@@ -1,9 +1,12 @@
 <project name="ZimbraOffline" default="offline-jar">
 
+    <property file="build.properties"/>
 	<property environment="env" />
-	<property name="offline.version" value="Beta1"/>
 	<property name="offline.appid" value="4062-5711-9195-4050"/>
 	<property name="offline.name" value="Zimbra Desktop"/>
+	<condition property="offline.version" value="DEV_BUILD">
+	    <not><isset property="offline.version"/></not>
+    </condition>
 
 	<!-- Properties -->
 
@@ -171,8 +174,8 @@
 	</target>
 
 	<target name="offline-war" depends="offline-jar">
-		<copy file="${server.warfile}" todir="${build.dir}" />
-		<copy file="${config.dir}/web.xml" todir="${build.dir}" />
+		<copy file="${server.warfile}" todir="${build.dir}" overwrite="true"/>
+		<copy file="${config.dir}/web.xml" todir="${build.dir}" overwrite="true"/>
 		<war file="${warfile}" update="true" webxml="${build.dir}/web.xml">
 			<lib file="${build.dir}/${jarfile}" />
 		</war>
@@ -180,9 +183,9 @@
 
 	<target name="offline-zimbra-war">
 		<ant dir="../ZimbraWebClient" target="war" inheritAll="false" />
-		<copy file="${webclient.warfile}" todir="${build.dir}" />
+		<copy file="${webclient.warfile}" todir="${build.dir}" overwrite="true"/>
 
-		<copy file="${config.dir}/web_zimbra.xml" tofile="${build.dir}/zimbra/web.xml" />
+		<copy file="${config.dir}/web_zimbra.xml" tofile="${build.dir}/zimbra/web.xml" overwrite="true"/>
 		<tstamp><format property="build.simpleDate" pattern="yyMMddHHmmss" /></tstamp>
 		<replace file="${build.dir}/zimbra/web.xml" token="@jsVersion@" value="${build.simpleDate}"/>
 
@@ -203,18 +206,18 @@
 
 	<target name="offline-jspc">
 		<mkdir dir="../ZimbraWebClient/build/WebRoot/desktop"/>
-		<copy todir="../ZimbraWebClient/build/WebRoot/desktop">
+		<copy todir="../ZimbraWebClient/build/WebRoot/desktop" overwrite="true">
 			<fileset dir="WebRoot/desktop" includes="*.jsp"/>
 		</copy>
 		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop"/>
-		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop">
+		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
 		</copy>
                 <copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tlds" overwrite="true">
                         <fileset dir="WebRoot/WEB-INF/tlds" />
                 </copy>
 		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
-		<copy file="${build.dir}/offlinejsp.jar" todir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
+		<copy file="${build.dir}/offlinejsp.jar" todir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib" overwrite="true"/>
 
 		<ant dir="../ZimbraWebClient" target="jspc.build" inheritAll="false" />
         	<mkdir dir="${dist.dir}/jetty/work/zimbra/jsp"/>
@@ -497,7 +500,7 @@
 			<param name="param.install.dir" value="${zimbra.home.dir}" />
 		</antcall>
 
-		<copy todir="${zimbra.home.dir}">
+		<copy todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}" />
 		</copy>
 
@@ -515,11 +518,11 @@
 		<if>
 			<isset property="is-unix" />
 			<then>
-				<copy tofile="${zimbra.home.dir}/bin/offline" file="src/bin/offline" />
+				<copy tofile="${zimbra.home.dir}/bin/offline" file="src/bin/offline" overwrite="true"/>
 		        <chmod perm="a+rx">
 		            <fileset dir="${zimbra.home.dir}/bin"/>
 		        </chmod>
-				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX.i386" />
+				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX.i386" overwrite="true"/>
 			</then>
 		</if>
 
