@@ -124,7 +124,7 @@ sub sendEmailReport {
   my $from_address = getLocalConfig("smtp_source");
   my $to_address = getLocalConfig("smtp_destination");
   my $smtphost = getLdapConfigValue("zimbraSmtpHostname");
-
+  return if (scalar @$msg == 0);
   print "Sending daily report to $to_address via $smtphost\n" if $debug;
   eval { 
     my $mailer = Mail::Mailer->new("smtp", Server => $smtphost);
