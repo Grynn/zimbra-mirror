@@ -16,7 +16,6 @@
 <title>Zimbra Desktop ${bean.appVersion}</title>
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);
-    @import url(/zimbra/desktop/css/desktop.css);
 </style>
 <script type="text/javascript" src="js/desktop.js"></script>
 <script type="text/javascript">
@@ -48,7 +47,7 @@ function OnLoginTo(username) {
 </head>
 
 <body>
-
+<div align="center">
 <c:choose>
 <c:when test="${empty bean.accounts}">
 
@@ -181,7 +180,7 @@ function OnLoginTo(username) {
 
 </c:otherwise>
 </c:choose>
-
+</div>
 </body>
 </html>
 

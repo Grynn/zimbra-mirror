@@ -17,13 +17,12 @@ ${zdf:doRequest(bean)}
 <title>Zimbra Desktop ${bean.appVersion}</title>
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);
-    @import url(/zimbra/desktop/css/desktop.css);
 </style>
 <script type="text/javascript" src="js/desktop.js"></script>
 </head>
 
 <body onload="InitScreen()">
-
+<div align="center">
 <c:choose>
     <c:when test="${(bean.noVerb && empty bean.accountId) || (bean.add && not bean.allOK)}">
         <zd:xmailNew uri="${uri}"/>
@@ -46,6 +45,6 @@ ${zdf:doRequest(bean)}
         <p class='ZOfflineError'>Unexpected error!</p>
     </c:otherwise>
 </c:choose>
-
+</div>
 </body>
 </html>

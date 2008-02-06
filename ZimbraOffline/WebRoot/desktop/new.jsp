@@ -10,7 +10,6 @@
 <title>Zimbra Desktop ${bean.appVersion}</title>
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);
-    @import url(/zimbra/desktop/css/desktop.css);
 </style>
 <script type="text/javascript" src="js/desktop.js"></script>
 <script type="text/javascript">
@@ -39,7 +38,7 @@ function OnXmail() {
 </head>
 
 <body>
-
+<div align="center">
 <form name="hidden_form" method="POST">
     <input type="hidden" name="accountId">
 </form>
@@ -129,6 +128,6 @@ function OnXmail() {
             </td>
     </table>
 </div>
-
+</div>
 </body>
 </html>
