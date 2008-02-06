@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.8" transformSequenceNumber="1">
   <directoryPresets config="./src/installer/resources" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.76" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="Beta1" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -2831,12 +2831,8 @@ if (installDir.indexOf(" ") &gt;= 0) {
   </mediaSets>
   <buildIds buildAll="false">
     <mediaSet refId="198394" />
-    <mediaSet refId="41" />
     <mediaSet refId="59040" />
-    <mediaSet refId="198399" />
-    <mediaSet refId="198402" />
-    <mediaSet refId="137960" />
-    <mediaSet refId="198405" />
+    <mediaSet refId="44" />
   </buildIds>
 </install4j>
 
