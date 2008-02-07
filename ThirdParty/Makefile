@@ -56,7 +56,6 @@ POSTFIX_VERSION ?= 2.4.3.4z
 
 DIRS := mysql \
 	openssl \
-	openssh \
 	sleepycat \
 	libxml2 \
 	heimdal \
