@@ -47,6 +47,7 @@ function OnLoginTo(username) {
 </head>
 
 <body>
+<br><br><br><br><br><br>
 <div align="center">
 <c:choose>
 <c:when test="${empty bean.accounts}">
@@ -102,11 +103,10 @@ function OnLoginTo(username) {
 		</table>
     </div>
 
-	<p>Click an account name below to manage it.
-	</p>
+	<p>Click an account name below to manage it.</p>
 
 
-    <table class="ZWizardTable" cellpadding=5 border=0>
+    <table class="ZWizardTable" cellpadding=5 border=0 align="center">
     	<tr><th>Account Name</th><th>Email Address</th><th>Last Sync</th><th>Status</th></tr>
     	
     	<c:forEach items="${bean.accounts}" var="account">

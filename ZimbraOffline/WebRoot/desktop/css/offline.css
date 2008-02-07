@@ -42,7 +42,7 @@ a:link	{
 }
 
 .ZWizardPage {
-	margin:30px 50px 30px 50px;
+
 	width:600px;
 }
 
@@ -118,7 +118,6 @@ a:link	{
 
 .ZWizardTable {
 	width:90%;
-	margin:10px 20px;
 	border:1px solid tan;
 	border-collapse:collapse;
 }
@@ -139,19 +138,19 @@ a:link	{
 }
 .ZWizardPage p{text-align: left;}
 
-.ZWizardPage{display:block;padding:6px;-moz-border-radius:3px;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #d1c6ae;-moz-border-top-colors:#a29a87 #d1c6ae;-moz-border-bottom-colors:#686357 #aea591;-moz-border-right-colors:#8b8474 #aea591;background-color:#eee5d1;margin:40px 20% 20px 20%;padding:20px;}
+.ZWizardPage{display:block;padding:6px;-moz-border-radius:3px;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #d1c6ae;-moz-border-top-colors:#a29a87 #d1c6ae;-moz-border-bottom-colors:#686357 #aea591;-moz-border-right-colors:#8b8474 #aea591;background-color:#eee5d1;padding:20px;}
 .ZWizardPage BUTTON{height:24px;cursor:pointer;}
 .ZWizardPageTitle{position:relative;background-color:#bab09a;left:0;right:0;padding:5px 10px 5px 10px;margin:-20px -20px 10px -20px;font-size:15px;font-weight:bold;}
 .noborder {border-width:0px !important;}
 .ZWizardButtonBar{margin:10px -20px -20px -20px;padding:5px 10px 5px 10px;background-color:#bab09a;}
 .ZWizardButtonSpacer{width:100%;}
-.DwtButton{height:24px;cursor:pointer;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;}
-.DwtButton-hover{height:24px;cursor:pointer;background-color:#e8dcc1;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;}
-.DwtButton-active{height:24px;cursor:pointer;background-color:#f9f6f0;border:2px solid;-moz-border-left-colors:#a29a87 #746e61;-moz-border-top-colors:#a29a87 #746e61;-moz-border-bottom-colors:#d1c6ae #a29a87;-moz-border-right-colors:#d1c6ae #a29a87;}
-.DwtButton-selected{height:24px;cursor:pointer;background-color:#f9f6f0!important;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;}
-.DwtButton-disabled{height:24px;cursor:pointer;background-color:transparent;border:1px solid;-moz-border-left-colors:#d1c6ae;-moz-border-top-colors:#d1c6ae;-moz-border-bottom-colors:#d1c6ae;-moz-border-right-colors:#d1c6ae;cursor:default!important;cursor:not-allowed!important;}
-.DwtButton-active{height:24px;cursor:pointer;background-color:#d6e0ee;border:2px solid;-moz-border-left-colors:#78869b #b4c6e0;-moz-border-top-colors:#78869b #b4c6e0;-moz-border-bottom-colors:#56606f #8a9ab1;-moz-border-right-colors:#56606f #8a9ab1;}
-.DwtButton-focused{height:24px;cursor:pointer;background-color:#fdf8ba;border:2px solid;-moz-border-left-colors:#b1ae82 #fdf9c1;-moz-border-top-colors:#b1ae82 #fdf9c1;-moz-border-bottom-colors:#7f7c5d #cac695;-moz-border-right-colors:#7f7c5d #cac695;}
+.DwtButton{height:24px;cursor:pointer;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space: nowrap;}
+.DwtButton-hover{height:24px;cursor:pointer;background-color:#e8dcc1;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space: nowrap;}
+.DwtButton-active{height:24px;cursor:pointer;background-color:#f9f6f0;border:2px solid;-moz-border-left-colors:#a29a87 #746e61;-moz-border-top-colors:#a29a87 #746e61;-moz-border-bottom-colors:#d1c6ae #a29a87;-moz-border-right-colors:#d1c6ae #a29a87;white-space: nowrap;}
+.DwtButton-selected{height:24px;cursor:pointer;background-color:#f9f6f0!important;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space: nowrap;}
+.DwtButton-disabled{height:24px;cursor:pointer;background-color:transparent;border:1px solid;-moz-border-left-colors:#d1c6ae;-moz-border-top-colors:#d1c6ae;-moz-border-bottom-colors:#d1c6ae;-moz-border-right-colors:#d1c6ae;cursor:default!important;cursor:not-allowed!important;white-space: nowrap;}
+.DwtButton-active{height:24px;cursor:pointer;background-color:#d6e0ee;border:2px solid;-moz-border-left-colors:#78869b #b4c6e0;-moz-border-top-colors:#78869b #b4c6e0;-moz-border-bottom-colors:#56606f #8a9ab1;-moz-border-right-colors:#56606f #8a9ab1;white-space: nowrap;}
+.DwtButton-focused{height:24px;cursor:pointer;background-color:#fdf8ba;border:2px solid;-moz-border-left-colors:#b1ae82 #fdf9c1;-moz-border-top-colors:#b1ae82 #fdf9c1;-moz-border-bottom-colors:#7f7c5d #cac695;-moz-border-right-colors:#7f7c5d #cac695;white-space: nowrap;}
 .DwtButton .Text{text-align:center;color:black;}
 .DwtButton-hover .Text{text-align:center;color:black;}
 .DwtButton-active .Text{text-align:center;color:black;}
