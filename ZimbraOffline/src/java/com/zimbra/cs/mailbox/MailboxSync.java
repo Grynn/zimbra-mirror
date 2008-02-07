@@ -65,6 +65,9 @@ public class MailboxSync {
     }
     
     private boolean lockMailboxToSync() {
+    	if (ombx.isDeleting())
+    		return false;
+    	
     	if (!mSyncRunning) {
 	    	synchronized (this) {
 	    		if (!mSyncRunning) {
@@ -129,7 +132,10 @@ public class MailboxSync {
                 OfflineProvisioning.getOfflineInstance().setAccountAttribute(ombx.getAccount(), OfflineConstants.A_offlineLastSync,
                 		Long.toString(System.currentTimeMillis()));
             } catch (Exception e) {
-                syncMan.processSyncException(ombx.getAccount(), e);
+            	if (ombx.isDeleting())
+            		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccount().getName());
+            	else
+            		syncMan.processSyncException(ombx.getAccount(), e);
             } finally {
             	unlockMailbox();
             }

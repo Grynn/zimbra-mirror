@@ -7,12 +7,15 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.util.Zimbra;
 
 public abstract class DesktopMailbox extends Mailbox {
 
 	private Timer timer;
 	private TimerTask currentTask;
+	
+	private boolean isDeleting;
 	
 	public DesktopMailbox(MailboxData data) throws ServiceException {
 		super(data);
@@ -27,10 +30,17 @@ public abstract class DesktopMailbox extends Mailbox {
 		return false;
 	}
 	
+	public boolean isDeleting() {
+		return isDeleting;
+	}
+	
 	@Override
     public synchronized void deleteMailbox() throws ServiceException {
+		isDeleting = true;
 		cancelCurrentTask();
+		String name = getAccount().getName();
 		super.deleteMailbox();
+		OfflineSyncManager.getInstance().resetStatus(name);
     }
 	
 	@Override

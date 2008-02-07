@@ -94,7 +94,7 @@ function OnLoginTo(username) {
 		<table border=0 width=100% cellpadding=0 cellspacing=0>
 			<tr>
 				<td class='ZHeadTitle'>
-					Account Setup
+					Zimbra Desktop Accounts Setup
 				</td>
 				<td class='ZHeadHint'>
 					Click <b><img src='/zimbra/img/startup/ImgLogoff.gif' width=16px height=16px align=top> Setup</b> to come back here later.

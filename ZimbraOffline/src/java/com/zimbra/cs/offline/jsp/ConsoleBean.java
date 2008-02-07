@@ -44,7 +44,7 @@ public class ConsoleBean extends PageBean {
 		}
 		
 		public String getLastSync() {
-			return lastSync == 0 ? "Never" : sdf.format(new Date(lastSync));
+			return lastSync == 0 ? "not yet complete" : sdf.format(new Date(lastSync));
 		}
 		
 		public SyncStatus getSyncStatus() {

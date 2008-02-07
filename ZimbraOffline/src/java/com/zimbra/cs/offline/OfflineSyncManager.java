@@ -344,6 +344,12 @@ public class OfflineSyncManager {
     	}
 	}
 	
+	public void resetStatus(String targetName) {
+		synchronized (syncStatusTable) {
+			syncStatusTable.remove(targetName);
+		}
+	}
+	
 	private static OfflineSyncManager instance = new OfflineSyncManager();
 	public static OfflineSyncManager getInstance() {
 		return instance;

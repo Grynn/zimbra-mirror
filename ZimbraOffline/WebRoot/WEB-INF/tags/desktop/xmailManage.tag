@@ -21,12 +21,13 @@ function OnCancel() {
 }
 
 function OnSubmit() {
+    beforeSubmit();
     xmailManage.submit();
 }
 
 function OnReset() {
     if (confirm('All downloaded data will be deleted.  Data on the server will be downloaded again. OK to proceed?')) {
-        disableButtons();
+        beforeSubmit();
         hidden_form.verb.value = "rst";
         hidden_form.submit();
     }
@@ -34,10 +35,15 @@ function OnReset() {
 
 function OnDelete() {
     if (confirm('Service information and downloaded data will be deleted.  Data on the server will not be affected. OK to proceed?')) {
-        disableButtons();
+        beforeSubmit();
         hidden_form.verb.value = "del";
         hidden_form.submit();
     }
+}
+
+function beforeSubmit() {
+    disableButtons();
+    zd.set("whattodo", "<img src='/zimbra/img/animated/Imgwait_16.gif' align='absmiddle'></img> <span class='ZOfflineNotice'>Processing...</span>");
 }
 
 function disableButtons() {
@@ -231,7 +237,7 @@ function disableButtons() {
 
 </form>
 
-<p>Press <span class="ZWizardButtonRef">Save Settings</span> to verify these settings.</p>
+<p><span id="whattodo">Press <span class="ZWizardButtonRef">Save Settings</span> to verify these settings.</span></p>
 
 <table class="ZWizardButtonBar">
     <tr>

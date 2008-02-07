@@ -143,6 +143,7 @@ a:link	{
 .ZWizardPageTitle{position:relative;background-color:#bab09a;left:0;right:0;padding:5px 10px 5px 10px;margin:-20px -20px 10px -20px;font-size:15px;font-weight:bold;}
 .noborder {border-width:0px !important;}
 .ZWizardButtonBar{margin:10px -20px -20px -20px;padding:5px 10px 5px 10px;background-color:#bab09a;}
+.ZWizardButtonRef{font-weight:bold;}
 .ZWizardButtonSpacer{width:100%;}
 .DwtButton{height:24px;cursor:pointer;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space: nowrap;}
 .DwtButton-hover{height:24px;cursor:pointer;background-color:#e8dcc1;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space: nowrap;}

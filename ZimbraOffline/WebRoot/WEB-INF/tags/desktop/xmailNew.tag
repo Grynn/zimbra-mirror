@@ -53,9 +53,21 @@ function OnCancel() {
 }
 
 function OnSubmit() {
+    beforeSubmit();
     zd.enable("port");
     zd.enable("smtpPort");
     xmailNew.submit();
+}
+
+function beforeSubmit() {
+    disableButtons();
+    zd.set("whattodo", "<img src='/zimbra/img/animated/Imgwait_16.gif' align='absmiddle'></img> <span class='ZOfflineNotice'>Processing...</span>");
+}
+
+function disableButtons() {
+    zd.disable("typeButton");
+    zd.disable("cancelButton");
+    zd.disable("saveButton");
 }
 //-->
 </script>
@@ -234,14 +246,14 @@ function OnSubmit() {
 		</table>
 	</form>
 
-	<p>Press <span class="ZWizardButtonRef">Save Settings</span> to verify these settings.</p>
+	<p><span id="whattodo">Press <span class="ZWizardButtonRef">Save Settings</span> to verify these settings.</span></p>
 
 	<table class="ZWizardButtonBar">
 		<tr>
-			<td class="ZWizardButton"><button class='DwtButton' onclick="OnPickType()">Use a Different Account Type</button></td>
+			<td class="ZWizardButton"><button id='typeButton' class='DwtButton' onclick="OnPickType()">Use a Different Account Type</button></td>
 			<td class="ZWizardButtonSpacer"><div></div></td>
-			<td class="ZWizardButton"><button class='DwtButton' onclick="OnCancel()">Cancel</button></td>
-			<td class="ZWizardButton"><button class='DwtButton-focused' onclick="OnSubmit()">Save Settings</button></td>
+			<td class="ZWizardButton"><button id='cancelButton' class='DwtButton' onclick="OnCancel()">Cancel</button></td>
+			<td class="ZWizardButton"><button id='saveButton' class='DwtButton-focused' onclick="OnSubmit()">Save Settings</button></td>
 		</tr>
 	</table>
 </div>

@@ -22,6 +22,7 @@ ${zdf:doRequest(bean)}
 </head>
 
 <body onload="InitScreen()">
+<br><br><br><br><br><br>
 <div align="center">
 <c:choose>
     <c:when test="${(bean.noVerb && empty bean.accountId) || (bean.add && not bean.allOK)}">
