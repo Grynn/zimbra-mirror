@@ -107,7 +107,7 @@ public class OfflineLC {
 	    zdesktop_account_poll_interval.setDoc("Minimum delay in milliseconds between two directory sync executions for the same account. Default 3600000 (1 hour).");
 	    
 	    zdesktop_client_poll_interval = new KnownKey("zdesktop_client_poll_interval");
-	    zdesktop_client_poll_interval.setDefault("15");
+	    zdesktop_client_poll_interval.setDefault("60");
 	    zdesktop_client_poll_interval.setDoc("How often Ajax client should poll for updates. Default 15 (seconds).");
 	    
 	    zdesktop_reauth_delay = new KnownKey("zdesktop_reauth_delay");
