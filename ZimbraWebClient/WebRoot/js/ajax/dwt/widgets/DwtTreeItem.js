@@ -88,7 +88,6 @@ DwtTreeItem.prototype.TEMPLATE = "dwt.Widgets#ZTreeItem";
 DwtTreeItem._NODECELL_DIM = "16px";
 DwtTreeItem._processedMouseDown = false;
 
-
 // Public Methods
 
 DwtTreeItem.prototype.toString =
@@ -320,10 +319,10 @@ function(child) {
 
 DwtTreeItem.prototype._initialize =
 function(index, realizeDeferred) {
-	// DO NOT MOVE THIS - otherwise deferred items will never get initialized
-	// (since _checkState() gets called)
-	this._setMouseEventHdlrs();
-
+	this._checkState();
+	if (AjxEnv.isIE) {
+		this._setEventHdlrs([DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE]);
+	}
 	var data = {id:this._htmlElId,
 				divClassName:this._origClassName,
 				isCheckedStyle:this._tree._isCheckedStyle(),
@@ -381,13 +380,18 @@ function(index, realizeDeferred) {
 
 	this._expanded = this._selected = this._actioned = false;
 	this._gotMouseDownLeft = this._gotMouseDownRight = false;
-
-	this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._mouseDownListener));
-	this.addListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this._mouseOutListener));
-	this.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._mouseUpListener));
-	this.addListener(DwtEvent.ONDBLCLICK, new AjxListener(this, this._doubleClickListener));
+	this._addMouseListeners();
 
 	this._initialized = true;
+};
+
+DwtTreeItem.prototype._addMouseListeners =
+function() {
+	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONDBLCLICK];
+	events.push(AjxEnv.isIE ? DwtEvent.ONMOUSELEAVE : DwtEvent.ONMOUSEOUT);
+	for (var i = 0; i < events.length; i++) {
+		this.addListener(events[i], DwtTreeItem._listeners[events[i]]);
+	}
 };
 
 DwtTreeItem.prototype._addDeferredChild =
@@ -619,51 +623,6 @@ function(actioned) {
 	}
 };
 
-DwtTreeItem.prototype._mouseDownListener = 
-function(ev) {
-	if (ev.target == this._childDiv) return;
-
-	if (ev.button == DwtMouseEvent.LEFT && this._selectionEnabled)
-		this._gotMouseDownLeft = true;
-	else if (ev.button == DwtMouseEvent.RIGHT && this._actionEnabled)
-		this._gotMouseDownRight = true;
-};
-
-DwtTreeItem.prototype._mouseOutListener = 
-function(ev) {
-	if (ev.target == this._childDiv) return;
-
-	this._gotMouseDownLeft = false;
-	this._gotMouseDownRight = false;
-};
-
-DwtTreeItem.prototype._mouseUpListener = 
-function(ev) {
-	// Ignore any mouse events in the child div i.e. the div which 
-	// holds all the items children. In the case of IE, no clicks are
-	// reported when clicking in the padding area (note all children
-	// are indented using padding-left style); however, mozilla
-	// reports mouse events that happen in the padding area
-	if (ev.target == this._childDiv) return;
-
-	if (ev.button == DwtMouseEvent.LEFT && this._gotMouseDownLeft)
-		this._tree._itemClicked(this, ev);
-	else if (ev.button == DwtMouseEvent.RIGHT && this._gotMouseDownRight)
-		this._tree._itemActioned(this, ev);
-};
-
-DwtTreeItem.prototype._doubleClickListener =
-function(ev) {
-	// See comment in DwtTreeItem.prototype._mouseDownListener
-	if (ev.target == this._childDiv) 
-		return;
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
-	if (mouseEv.button == DwtMouseEvent.LEFT || mouseEv.button == DwtMouseEvent.NONE) // NONE for IE bug
-		mouseEv.dwtObj._tree._itemDblClicked(mouseEv.dwtObj, mouseEv);
-};
-
 DwtTreeItem._checkBoxMouseDownHdlr =
 function(ev) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
@@ -693,6 +652,67 @@ function(ev) {
 	}
 };
 
+DwtTreeItem._mouseDownListener = 
+function(ev) {
+	var treeItem = ev.dwtObj;
+	if (!treeItem) { return false; }
+	if (ev.target == treeItem._childDiv) { return; }
+
+	if (ev.button == DwtMouseEvent.LEFT && treeItem._selectionEnabled) {
+		treeItem._gotMouseDownLeft = true;
+	} else if (ev.button == DwtMouseEvent.RIGHT && treeItem._actionEnabled) {
+		treeItem._gotMouseDownRight = true;
+	}
+};
+
+DwtTreeItem._mouseOutListener = 
+function(ev) {
+	var treeItem = ev.dwtObj;
+	if (!treeItem) { return false; }
+	if (ev.target == treeItem._childDiv) { return; }
+
+	treeItem._gotMouseDownLeft = false;
+	treeItem._gotMouseDownRight = false;
+};
+
+DwtTreeItem._mouseUpListener = 
+function(ev) {
+	var treeItem = ev.dwtObj;
+	if (!treeItem) { return false; }
+	// Ignore any mouse events in the child div i.e. the div which 
+	// holds all the items children. In the case of IE, no clicks are
+	// reported when clicking in the padding area (note all children
+	// are indented using padding-left style); however, mozilla
+	// reports mouse events that happen in the padding area
+	if (ev.target == treeItem._childDiv) { return; }
+
+	if (ev.button == DwtMouseEvent.LEFT && treeItem._gotMouseDownLeft) {
+		treeItem._tree._itemClicked(treeItem, ev);
+	} else if (ev.button == DwtMouseEvent.RIGHT && treeItem._gotMouseDownRight) {
+		treeItem._tree._itemActioned(treeItem, ev);
+	}
+};
+
+DwtTreeItem._doubleClickListener =
+function(ev) {
+	var treeItem = ev.dwtObj;
+	if (!treeItem) { return false; }
+	// See comment in DwtTreeItem.prototype._mouseDownListener
+	if (ev.target == treeItem._childDiv) { return; }
+
+	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var mouseEv = DwtShell.mouseEvent;
+	mouseEv.setFromDhtmlEvent(ev);
+	if (mouseEv.button == DwtMouseEvent.LEFT || mouseEv.button == DwtMouseEvent.NONE) {	// NONE for IE bug
+		mouseEv.dwtObj._tree._itemDblClicked(mouseEv.dwtObj, mouseEv);
+	}
+};
+
+DwtTreeItem._listeners = {};
+DwtTreeItem._listeners[DwtEvent.ONMOUSEDOWN] = new AjxListener(null, DwtTreeItem._mouseDownListener);
+DwtTreeItem._listeners[DwtEvent.ONMOUSEOUT] = new AjxListener(null, DwtTreeItem._mouseOutListener);
+DwtTreeItem._listeners[DwtEvent.ONMOUSEUP] = new AjxListener(null, DwtTreeItem._mouseUpListener);
+DwtTreeItem._listeners[DwtEvent.ONDBLCLICK] = new AjxListener(null, DwtTreeItem._doubleClickListener);
 
 
 /**

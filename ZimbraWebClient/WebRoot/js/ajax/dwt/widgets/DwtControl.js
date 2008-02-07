@@ -2428,7 +2428,7 @@ function(ev, evType) {
  */
 DwtControl.__mouseLeaveHdlr =
 function(ev) {
-	return DwtControl.__mouseOverHdlr(ev, DwtEvent.ONMOUSELEAVE);
+	return DwtControl.__mouseOutHdlr(ev, DwtEvent.ONMOUSELEAVE);
 };
 
 /**

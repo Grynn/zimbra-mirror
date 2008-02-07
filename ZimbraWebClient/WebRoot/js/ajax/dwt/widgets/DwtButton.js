@@ -64,7 +64,7 @@
 *
 * @extends DwtLabel
 */
-DwtButton = function(parent, style, className, posStyle, actionTiming, id, index) {
+DwtButton = function(parent, style, className, posStyle, actionTiming, id, index, listeners) {
 	if (arguments.length == 0) { return; }
 	
 	className = className || "ZButton";
@@ -85,6 +85,7 @@ DwtButton = function(parent, style, className, posStyle, actionTiming, id, index
 	if (events && events.length) {
 		this._setEventHdlrs(events);
 	}
+	this._listeners = listeners || DwtButton._listeners
 	this._addMouseListeners();
 	
 	this._dropDownEvtMgr = new AjxEventMgr();
@@ -211,7 +212,7 @@ function() {
 	events = events.concat(AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
 										 [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
 	for (var i = 0; i < events.length; i++) {
-		this.addListener(events[i], DwtButton._listeners[events[i]]);
+		this.addListener(events[i], this._listeners[events[i]]);
 	}
 };
 
@@ -221,7 +222,7 @@ function() {
 	events = events.concat(AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
 										 [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
 	for (var i = 0; i < events.length; i++) {
-		this.removeListener(events[i], DwtButton._listeners[events[i]]);
+		this.removeListener(events[i], this._listeners[events[i]]);
 	}
 };
 

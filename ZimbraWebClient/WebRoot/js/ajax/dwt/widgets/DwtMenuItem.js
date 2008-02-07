@@ -47,7 +47,7 @@ DwtMenuItem = function(parent, style, radioGroupId, index, className, posStyle) 
     style &= ~DwtLabel.IMAGE_RIGHT; // remove image right style
     style |= DwtButton.ALWAYS_FLAT | DwtLabel.IMAGE_LEFT; // set default styles
     className = style & DwtMenuItem.SEPARATOR_STYLE ? "ZMenuItemSeparator" : (className || "ZMenuItem");
-    DwtButton.call(this, parent, style, className, posStyle);
+    DwtButton.call(this, parent, style, className, posStyle, null, null, null, DwtMenuItem._listeners);
 
     this.setDropDownImages("Cascade", "Cascade", "Cascade", "Cascade");
     this._radioGroupId = radioGroupId;
@@ -201,26 +201,6 @@ function(checked, ev, skipNotify) {
         }
 	}
 }
-
-DwtMenuItem.prototype._addMouseListeners =
-function() {
-	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP];
-	events = events.concat(AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
-										 [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
-	for (var i = 0; i < events.length; i++) {
-		this.addListener(events[i], DwtMenuItem._listeners[events[i]]);
-	}
-};
-
-DwtMenuItem.prototype._removeMouseListeners =
-function() {
-	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP];
-	events = events.concat(AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
-										 [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
-	for (var i = 0; i < events.length; i++) {
-		this.removeListener(events[i], DwtMenuItem._listeners[events[i]]);
-	}
-};
 
 DwtMenuItem.prototype._addIconCell = function() {
 //    this.setImage(this.getImage());

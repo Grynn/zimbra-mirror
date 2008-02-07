@@ -34,6 +34,12 @@ DwtTree = function(parent, style, className, posStyle) {
 	className = className || "DwtTree";
 	DwtComposite.call(this, parent, className, posStyle);
 
+	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONDBLCLICK];
+	if (!AjxEnv.isIE) {
+		events = events.concat([DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
+	}
+	this._setEventHdlrs(events);
+
 	if (style == null) {
 		this._style = DwtTree.SINGLE_STYLE;
 	} else {
