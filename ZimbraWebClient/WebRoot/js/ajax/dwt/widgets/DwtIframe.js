@@ -58,6 +58,11 @@ DwtIframe = function(params) {
 DwtIframe.prototype = new DwtControl;
 DwtIframe.prototype.constructor = DwtIframe;
 
+DwtIframe.prototype.toString =
+function() {
+	return "DwtIframe";
+};
+
 DwtIframe.prototype.getIframe = function() {
 	return document.getElementById(this._iframeID);
 };
@@ -168,16 +173,22 @@ DwtIframe._forwardEvents = [ DwtEvent.ONCHANGE,
 			     DwtEvent.ONSELECTSTART ];
 
 DwtIframe.prototype._createFrame = function(html) {
-	var self = this;
+	var myId = this.getHTMLElId();
 
 	// this is an inner function so that we can access the object (self).
 	// it shouldn't create a memory leak since it doesn't directly "see"
 	// the iframe variable (it's protected below)
-	function rawHandlerProxy(ev) { return self._rawEventHandler(ev); };
+	function rawHandlerProxy(ev) {
+		var myElement = document.getElementById(myId);
+		var self = Dwt.getObjectFromElement(myElement);		
+		return self._rawEventHandler(ev);
+	};
 
 	// closure: protect the reference to the iframe node here.
 	(function() {
 		var iframe, tmp = [], i = 0, idoc;
+		var myElement = document.getElementById(myId);
+		var self = Dwt.getObjectFromElement(myElement);
 
 		tmp[i++] = "<iframe";
 		if (self._noscroll)

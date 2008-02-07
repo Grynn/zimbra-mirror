@@ -92,6 +92,14 @@ function() {
 	return "DwtLabel";
 }
 
+DwtLabel.prototype.dispose =
+function() {
+	delete this._dropDownEl;
+	delete this._iconEl;
+	delete this._textEl;
+	DwtControl.prototype.dispose.call(this);
+};
+
 //
 // Constants
 //
