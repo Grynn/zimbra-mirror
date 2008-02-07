@@ -204,18 +204,22 @@ function(checked, ev, skipNotify) {
 
 DwtMenuItem.prototype._addMouseListeners =
 function() {
-	this.addListener(DwtEvent.ONMOUSEOVER, DwtMenuItem._mouseOverListenerObj);
-	this.addListener(DwtEvent.ONMOUSEOUT, DwtButton._mouseOutListenerObj);
-	this.addListener(DwtEvent.ONMOUSEDOWN, DwtButton._mouseDownListenerObj);
-	this.addListener(DwtEvent.ONMOUSEUP, DwtButton._mouseUpListenerObj);
+	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP];
+	events = events.concat(AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
+										 [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
+	for (var i = 0; i < events.length; i++) {
+		this.addListener(events[i], DwtMenuItem._listeners[events[i]]);
+	}
 };
 
 DwtMenuItem.prototype._removeMouseListeners =
 function() {
-	this.removeListener(DwtEvent.ONMOUSEOVER, DwtMenuItem._mouseOverListenerObj);
-	this.removeListener(DwtEvent.ONMOUSEOUT, DwtButton._mouseOutListenerObj);
-	this.removeListener(DwtEvent.ONMOUSEDOWN, DwtButton._mouseDownListenerObj);
-	this.removeListener(DwtEvent.ONMOUSEUP, DwtButton._mouseUpListenerObj);
+	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP];
+	events = events.concat(AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
+										 [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
+	for (var i = 0; i < events.length; i++) {
+		this.removeListener(events[i], DwtMenuItem._listeners[events[i]]);
+	}
 };
 
 DwtMenuItem.prototype._addIconCell = function() {
@@ -342,4 +346,11 @@ function(ev) {
     }
 };
 
-DwtMenuItem._mouseOverListenerObj = new AjxListener(null, DwtMenuItem._mouseOverListener);
+DwtMenuItem._listeners = {};
+DwtMenuItem._listeners[DwtEvent.ONMOUSEOVER] = new AjxListener(null, DwtMenuItem._mouseOverListener);
+DwtMenuItem._listeners[DwtEvent.ONMOUSEOUT] = new AjxListener(null, DwtButton._mouseOutListener);
+DwtMenuItem._listeners[DwtEvent.ONMOUSEDOWN] = new AjxListener(null, DwtButton._mouseDownListener);
+DwtMenuItem._listeners[DwtEvent.ONMOUSEUP] = new AjxListener(null, DwtButton._mouseUpListener);
+DwtMenuItem._listeners[DwtEvent.ONMOUSEENTER] = new AjxListener(null, DwtMenuItem._mouseOverListener);
+DwtMenuItem._listeners[DwtEvent.ONMOUSELEAVE] = new AjxListener(null, DwtButton._mouseOutListener);
+

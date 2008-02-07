@@ -30,9 +30,10 @@ DwtSelect = function(parent, options, className, posStyle) {
     var positionStyle = posStyle || Dwt.STATIC_STYLE;
     DwtButton.call(this, parent, null, clsName, positionStyle);
 
-	if (!AjxEnv.isIE) {
-		this._setMouseEvents();
-	}
+	var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
+							   [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
+	this._setEventHdlrs(events);
+	this._hasSetMouseEvents = true;
 
     // initialize some variables
     this._currentSelectionId = -1;

@@ -22,9 +22,10 @@ DwtToolBar = function(parent, className, posStyle, cellSpacing, cellPadding, wid
 	className = className || "ZToolbar";
 	DwtComposite.call(this, parent, className, posStyle, false, null, index);
 
-	if (!AjxEnv.isIE) {
-		this._setMouseEvents();
-	}
+	var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
+							   [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
+	this._setEventHdlrs(events);
+	this._hasSetMouseEvents = true;
 
 	this._style = style || DwtToolBar.HORIZ_STYLE;
     this._items = [];

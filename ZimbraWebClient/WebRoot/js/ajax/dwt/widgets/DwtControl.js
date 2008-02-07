@@ -1972,7 +1972,6 @@ function() {
 		mouseEvents.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
 	}
 	this._setEventHdlrs(mouseEvents);
-	this._hasSetMouseEvents = true;
 };
 
 /**
@@ -2087,7 +2086,7 @@ function(ev) {
  * @private
  */
 DwtControl.__mouseOverHdlr =
-function(ev) {
+function(ev, evType) {
 	// Check to see if a drag is occurring. If so, don't process the mouse
 	// over events.
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
@@ -2102,8 +2101,9 @@ function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	if (obj._dragging == DwtControl._NO_DRAG) {
 		mouseEv.setFromDhtmlEvent(ev);
-		if (obj.isListenerRegistered(DwtEvent.ONMOUSEOVER)) {
-			obj.notifyListeners(DwtEvent.ONMOUSEOVER, mouseEv);
+		evType = evType || DwtEvent.ONMOUSEOVER;
+		if (obj.isListenerRegistered(evType)) {
+			obj.notifyListeners(evType, mouseEv);
 		}
 		// Call the tooltip after the listeners to give them a
 		// chance to change the tooltip text.
@@ -2124,6 +2124,14 @@ function(ev) {
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
 	return false;
+};
+
+/**
+ * @private
+ */
+DwtControl.__mouseEnterHdlr =
+function(ev) {
+	return DwtControl.__mouseOverHdlr(ev, DwtEvent.ONMOUSEENTER);
 };
 
 /**
@@ -2401,7 +2409,7 @@ function(ev, obj, mouseEv) {
  * @private
  */
 DwtControl.__mouseOutHdlr =
-function(ev) {
+function(ev, evType) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) return false;
 
@@ -2412,7 +2420,15 @@ function(ev) {
 		manager.hoverOut();
 		obj.__tooltipClosed = false;
 	}
-	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEOUT, obj);
+	return DwtControl.__mouseEvent(ev, evType || DwtEvent.ONMOUSEOUT, obj);
+};
+
+/**
+ * @private
+ */
+DwtControl.__mouseLeaveHdlr =
+function(ev) {
+	return DwtControl.__mouseOverHdlr(ev, DwtEvent.ONMOUSELEAVE);
 };
 
 /**
@@ -2491,8 +2507,8 @@ DwtControl.__HANDLER = {};
 DwtControl.__HANDLER[DwtEvent.ONCONTEXTMENU] = DwtControl.__contextMenuHdlr;
 DwtControl.__HANDLER[DwtEvent.ONDBLCLICK] = DwtControl.__dblClickHdlr;
 DwtControl.__HANDLER[DwtEvent.ONMOUSEDOWN] = DwtControl.__mouseDownHdlr;
-DwtControl.__HANDLER[DwtEvent.ONMOUSEENTER] = DwtControl.__mouseOverHdlr;
-DwtControl.__HANDLER[DwtEvent.ONMOUSELEAVE] = DwtControl.__mouseOutHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSEENTER] = DwtControl.__mouseEnterHdlr;
+DwtControl.__HANDLER[DwtEvent.ONMOUSELEAVE] = DwtControl.__mouseLeaveHdlr;
 DwtControl.__HANDLER[DwtEvent.ONMOUSEMOVE] = DwtControl.__mouseMoveHdlr;
 DwtControl.__HANDLER[DwtEvent.ONMOUSEOUT] = DwtControl.__mouseOutHdlr;
 DwtControl.__HANDLER[DwtEvent.ONMOUSEOVER] = DwtControl.__mouseOverHdlr;

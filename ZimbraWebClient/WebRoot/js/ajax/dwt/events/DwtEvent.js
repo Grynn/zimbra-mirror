@@ -82,11 +82,11 @@ DwtEvent.ONKEYUP = "onkeyup";
  * @type String */
 DwtEvent.ONMOUSEDOWN = "onmousedown";
 
-/** Browser onmouseenter event (IE Only)
+/** Browser onmouseenter event (IE Only) - reported only for the element
  * @type String */
 DwtEvent.ONMOUSEENTER = "onmouseenter";
 
-/** Browser onmouseleave event (IE Only)
+/** Browser onmouseleave event (IE Only) - reported only for the element
  * @type String */
 DwtEvent.ONMOUSELEAVE = "onmouseleave";
 
@@ -94,11 +94,11 @@ DwtEvent.ONMOUSELEAVE = "onmouseleave";
  * @type String */
 DwtEvent.ONMOUSEMOVE = "onmousemove";
 
-/** Browser onmouseout event
+/** Browser onmouseout event - reported for element and children
  * @type String */
 DwtEvent.ONMOUSEOUT = "onmouseout";
 
-/** Browser onmouseover event
+/** Browser onmouseover event - reported for element and children
  * @type String */
 DwtEvent.ONMOUSEOVER = "onmouseover";
 

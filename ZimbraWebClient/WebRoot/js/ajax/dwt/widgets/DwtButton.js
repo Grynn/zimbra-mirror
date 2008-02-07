@@ -74,6 +74,17 @@ DwtButton = function(parent, style, className, posStyle, actionTiming, id, index
 		this._setMouseEvents();
 	}
 	
+	var events;
+	if (parent._hasSetMouseEvents) {
+		events = AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] : [];
+	} else {
+		events = AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
+							   [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
+		events = events.concat([DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP]);
+	}
+	if (events && events.length) {
+		this._setEventHdlrs(events);
+	}
 	this._addMouseListeners();
 	
 	this._dropDownEvtMgr = new AjxEventMgr();
@@ -180,20 +191,38 @@ DwtButton.prototype.setDropDownImages = function (enabledImg, disImg, hovImg, de
 	this._dropDownDepImg = depImg;
 };
 
+DwtButton.prototype._addEventListeners =
+function(listeners, events) {
+	for (var i = 0; i < events.length; i++) {
+		this.addListener(event, listeners[event]);
+	}
+};
+
+DwtButton.prototype._removeEventListeners =
+function(listeners, events) {
+	for (var i = 0; i < events.length; i++) {
+		this.removeListener(event, listeners[event]);
+	}
+};
+
 DwtButton.prototype._addMouseListeners =
 function() {
-	this.addListener(DwtEvent.ONMOUSEOVER, DwtButton._mouseOverListenerObj);
-	this.addListener(DwtEvent.ONMOUSEOUT, DwtButton._mouseOutListenerObj);
-	this.addListener(DwtEvent.ONMOUSEDOWN, DwtButton._mouseDownListenerObj);
-	this.addListener(DwtEvent.ONMOUSEUP, DwtButton._mouseUpListenerObj);
+	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP];
+	events = events.concat(AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
+										 [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
+	for (var i = 0; i < events.length; i++) {
+		this.addListener(events[i], DwtButton._listeners[events[i]]);
+	}
 };
 
 DwtButton.prototype._removeMouseListeners =
 function() {
-	this.removeListener(DwtEvent.ONMOUSEOVER, DwtButton._mouseOverListenerObj);
-	this.removeListener(DwtEvent.ONMOUSEOUT, DwtButton._mouseOutListenerObj);
-	this.removeListener(DwtEvent.ONMOUSEDOWN, DwtButton._mouseDownListenerObj);
-	this.removeListener(DwtEvent.ONMOUSEUP, DwtButton._mouseUpListenerObj);
+	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP];
+	events = events.concat(AjxEnv.isIE ? [DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE] :
+										 [DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT]);
+	for (var i = 0; i < events.length; i++) {
+		this.removeListener(events[i], DwtButton._listeners[events[i]]);
+	}
 };
 
 DwtButton.prototype.setDisplayState =
@@ -421,7 +450,6 @@ function() {
 
 DwtButton.prototype.handleKeyAction =
 function(actionCode, ev) {
-    DBG.println("DwtButton.prototype.handleKeyAction");
 	switch (actionCode) {
 		case DwtKeyMap.SELECT:
 			this._emulateSingleClick();
@@ -484,13 +512,11 @@ DwtButton.prototype._focusByMouseUpEvent =
 // NOTE: _focus and _blur will be reworked to reflect styles correctly
 DwtButton.prototype._focus =
 function() {
-	//DBG.println("DwtButton.prototype._focus");
     this.setDisplayState(DwtControl.FOCUSED);
 }
 
 DwtButton.prototype._blur =
 function() {
-	//DBG.println("DwtButton.prototype._blur");
     this.setDisplayState(DwtControl.NORMAL);
 }
 
@@ -747,7 +773,10 @@ function(ev) {
 	}
 };
 
-DwtButton._mouseOverListenerObj = new AjxListener(null, DwtButton._mouseOverListener);
-DwtButton._mouseOutListenerObj = new AjxListener(null, DwtButton._mouseOutListener);
-DwtButton._mouseDownListenerObj = new AjxListener(null, DwtButton._mouseDownListener);
-DwtButton._mouseUpListenerObj = new AjxListener(null, DwtButton._mouseUpListener);
+DwtButton._listeners = {};
+DwtButton._listeners[DwtEvent.ONMOUSEOVER] = new AjxListener(null, DwtButton._mouseOverListener);
+DwtButton._listeners[DwtEvent.ONMOUSEOUT] = new AjxListener(null, DwtButton._mouseOutListener);
+DwtButton._listeners[DwtEvent.ONMOUSEDOWN] = new AjxListener(null, DwtButton._mouseDownListener);
+DwtButton._listeners[DwtEvent.ONMOUSEUP] = new AjxListener(null, DwtButton._mouseUpListener);
+DwtButton._listeners[DwtEvent.ONMOUSEENTER] = new AjxListener(null, DwtButton._mouseOverListener);
+DwtButton._listeners[DwtEvent.ONMOUSELEAVE] = new AjxListener(null, DwtButton._mouseOutListener);

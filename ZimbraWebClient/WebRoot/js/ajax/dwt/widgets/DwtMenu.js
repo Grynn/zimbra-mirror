@@ -56,13 +56,13 @@ DwtMenu = function(parent, style, className, posStyle, dialog) {
 	// Hack to force us to hang off of the shell for positioning.
 	DwtComposite.call(this, (parent instanceof DwtShell) ? parent : parent.shell, className, posStyle);
 	this.parent = parent;
-	if (parent == null) 
-		return;
+	if (!parent) { return; }
 	this._dialog = dialog;
 
-	if (!AjxEnv.isIE) {
-		this._setMouseEvents();
-	}
+	var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
+							   [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
+	this._setEventHdlrs(events);
+	this._hasSetMouseEvents = true;
 	
 	var htmlElement = this.getHtmlElement();
 	
