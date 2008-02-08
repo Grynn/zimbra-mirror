@@ -18,39 +18,73 @@
 AjxLeakDetector = function() {
 	this._controls = [];
 	this._closures = {}; // Map of id to { closure, args }
-	this._closureReport = []; // Report that is created suring dispose event, not actually reported till later.
+	this._closureReport = []; // Report that is created during dispose event, not actually reported till later.
 	this._nextId = 1;
 	this._addHooks();
 };
 
+/**
+ * Executes a command. (This is intended to be run by the client special search handler.) 
+ * @param command "begin", "end", or "report"
+ * @return an object with 3 attributes: success, message, and details
+ */
+AjxLeakDetector.execute =
+function(command) {
+	var result = {
+		success: false,
+		message: "",
+		details: ""
+	};
+	if (command == "begin") {
+		result.success = AjxLeakDetector.begin();
+		result.message = result.success ? "Leak detector started." : "Leak detector already started.";
+	} else if (command == "end") {
+		result.success = AjxLeakDetector.end();
+		result.message = result.success ? "Leak detector stopped." : "Leak detector is not running.";
+	} else if (command == "report") {
+		var report = [];
+		result.success = AjxLeakDetector.report(report);
+		result.details = report.join("");
+		if (result.success) {
+			result.message = result.details ? "Problems found. See debug window for details." : "No problems found";
+		} else {
+			result.message = "Leak detector is not running.";
+		}
+	} else {
+		result.success = false;
+		result.message = "Invalid argument, use (begin/end/report)";
+	}
+	return result;
+};
+
 AjxLeakDetector.begin =
 function() {
-	if (AjxLeakDetector._instance) {
-		return "Leak detector already started!";
-	} else {
+	if (!AjxLeakDetector._instance) {
 		AjxLeakDetector._instance = new AjxLeakDetector();
-		return "Leak detector started successfully";
+		return true;
+	} else {
+		return false;
 	}
 };
 
 AjxLeakDetector.end =
 function() {
 	if (AjxLeakDetector._instance) {
-		var report = AjxLeakDetector._instance._createReport();
 		AjxLeakDetector._instance._removeHooks();
-		AjxLeakDetector._instance = null
-		return report;
+		AjxLeakDetector._instance = null;
+		return true;
 	} else {
-		return "Leak detector not started!";
+		return false;
 	}
 };
 
 AjxLeakDetector.report =
-function() {
+function(report) {
 	if (AjxLeakDetector._instance) {
-		return AjxLeakDetector._instance._createReport();
+		AjxLeakDetector._instance._createReport(report);
+		return true;
 	} else {
-		return "Leak detector not started!";
+		return false;
 	}
 };
 
@@ -98,8 +132,7 @@ function() {
 };
 
 AjxLeakDetector.prototype._createReport =
-function() {
-	var report = [];
+function(report) {
 	for (var i = 0, count = this._controls.length; i < count; i++) {
 		var control = this._controls[i];
 
