@@ -130,7 +130,7 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
                                        granteeId, folderId, folderName);
 
             ZMailbox.ZSendMessageResponse response = mbox.sendMessage(m, null, true);
-
+            //Change this to Java API call to bulkmailer Java interface 
             return response;
 
     }
