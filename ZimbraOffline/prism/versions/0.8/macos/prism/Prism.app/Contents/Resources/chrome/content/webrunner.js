@@ -553,7 +553,10 @@ var WebRunner = {
 
   clearCache : function()
   {
-    //TODO
+    var cacheService = Cc["@mozilla.org/network/cache-service;1"].getService(Ci.nsICacheService);
+    try {
+      cacheService.evictEntries(Ci.nsICache.STORE_ANYWHERE);
+    } catch(ex) {alert(ex);}
   },
 
   doCommand : function(aCmd) {
