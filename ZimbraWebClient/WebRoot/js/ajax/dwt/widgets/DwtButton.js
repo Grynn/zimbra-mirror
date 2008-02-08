@@ -481,10 +481,11 @@ function() {
 	mev.button = DwtMouseEvent.LEFT;
 	mev.docX = p.x;
 	mev.docY = p.y;
-	if (this._actionTiming == DwtButton.ACTION_MOUSEDOWN)
-		this._mouseDownListener(mev);
-	else
-		this._mouseUpListener(mev);
+	if (this._actionTiming == DwtButton.ACTION_MOUSEDOWN) {
+		DwtButton._mouseDownListener(mev);
+	} else {
+		DwtButton._mouseUpListener(mev);
+	}
 };
 
 DwtButton.prototype._emulateDropDownClick =
