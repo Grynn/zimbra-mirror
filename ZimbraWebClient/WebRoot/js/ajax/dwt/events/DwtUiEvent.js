@@ -57,7 +57,7 @@ function() {
 DwtUiEvent.getEvent =
 function(ev, target) {
 	ev = ev || window.event;
-	if (ev) return ev;
+	if (ev) { return ev; }
 
 	// get event from iframe in IE; see http://www.outofhanwell.com/blog/index.php?cat=25
 	if (target) {
@@ -67,29 +67,47 @@ function(ev, target) {
 	}
 }
 
+/**
+ * Returns the target element of the event.
+ * 
+ * @param ev				[Event]		DHTML event
+ * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
+ * 										for a MOUSEOVER or MOUSEOUT event, that's the element
+ * 										moved from/to.
+ */
 DwtUiEvent.getTarget =
-function(ev)  {
+function(ev, useRelatedTarget)  {
 	ev = DwtUiEvent.getEvent(ev);
-	if (ev && ev.target) {
-		// if text node (like on Safari) return parent
-		return ev.target.nodeType == 3 ? ev.target.parentNode : ev.target;
-	} else if (ev && ev.srcElement) {
-		return ev.srcElement;
+	if (!ev) { return null; }
+	if (!useRelatedTarget) {
+		if (ev.target) {
+			// if text node (like on Safari) return parent
+			return (ev.target.nodeType == 3) ? ev.target.parentNode : ev.target;
+		} else if (ev.srcElement) {		// IE
+			return ev.srcElement;
+		}
 	} else {
-		return null;
+		if (ev.relatedTarget) {
+			return ev.relatedTarget;
+		} else if (ev.toElement) {		// IE
+			return ev.toElement;
+		} else if (ev.fromElement) {	// IE
+			return ev.fromElement;
+		}
 	}
+	return null;
 }
 
 /**
-* Returns the first element with a value for the given property, working its way up the element chain.
-*
-* @param ev		a UI event
-* @param prop	the name of a property
-* @returns		an element
-*/
+ * Returns the first element with a value for the given property, working its way up the element chain.
+ *
+ * @param ev				[Event]		DHTML event
+ * @param prop				[string]	the name of a property
+ * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
+ */
 DwtUiEvent.getTargetWithProp =
-function(ev, prop)  {
-	var htmlEl = DwtUiEvent.getTarget(ev);
+function(ev, prop, useRelatedTarget)  {
+	var htmlEl = DwtUiEvent.getTarget(ev, useRelatedTarget);
 	while (htmlEl) {
 		if (Dwt.getAttr(htmlEl, prop) != null) {
 			return htmlEl;
@@ -100,12 +118,11 @@ function(ev, prop)  {
 }
 
 /**
-* Returns the first element with values for all of the given properties, working its way up the element chain.
-*
-* @param ev		a UI event
-* @param props	a list of property names
-* @returns		an element
-*/
+ * Returns the first element with values for all of the given properties, working its way up the element chain.
+ *
+ * @param ev				[Event]		DHTML event
+ * @param props				[array]		a list of property names (strings)
+ */
 DwtUiEvent.getTargetWithProps =
 function(ev, props)  {
 	var htmlEl = DwtUiEvent.getTarget(ev);
@@ -125,12 +142,26 @@ function(ev, props)  {
 	return null;
 }
 
+/**
+ * Returns a control (DWT object) based on the event, by finding the event target and using
+ * its reference to a DWT object.
+ * 
+ * @param ev				[Event]		DHTML event
+ * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
+ */
 DwtUiEvent.getDwtObjFromEvent =
-function(ev) {
-	var htmlEl = DwtUiEvent.getTargetWithProp(ev, "dwtObj");
+function(ev, useRelatedTarget) {
+	var htmlEl = DwtUiEvent.getTargetWithProp(ev, "dwtObj", useRelatedTarget);
 	return htmlEl ? Dwt.getObjectFromElement(htmlEl) : null;
 }
 
+/**
+ * Returns a control (DWT object) based on the event, by finding the event target with the
+ * given property and using its reference to a DWT object.
+ * 
+ * @param ev				[Event]		DHTML event
+ * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
+ */
 DwtUiEvent.getDwtObjWithProp =
 function(ev, prop) {
 	var htmlEl = DwtUiEvent.getTargetWithProps(ev, ["dwtObj", prop]);

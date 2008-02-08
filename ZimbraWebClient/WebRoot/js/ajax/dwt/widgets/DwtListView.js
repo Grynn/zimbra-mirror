@@ -43,6 +43,10 @@ DwtListView = function(parent, className, posStyle, headerList, noMaximize) {
 	}
 		
 	this._setMouseEventHdlrs();
+	
+	// we want to process internal OVER and OUT since those handlers are on a list view
+	// as a whole, but we want to show tooltips as the user moves between child elements
+	this._ignoreInternalOverOut = false;
 
 	this._listenerMouseOver = new AjxListener(this, this._mouseOverListener);
 	this._listenerMouseOut = new AjxListener(this, this._mouseOutListener);

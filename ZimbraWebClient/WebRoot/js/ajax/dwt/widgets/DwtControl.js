@@ -150,6 +150,9 @@ DwtControl = function(parent, className, posStyle, deferred, id, index) {
 	// before it is processed; useful if control has both single and double
 	// click actions, and single click action is heavy
 	this._dblClickIsolation = false;
+
+	// ignore OVER and OUT mouse events between elements in the same control
+	this._ignoreInternalOverOut = true;
 }
 
 DwtControl.ALL_BY_ID = {};
@@ -2097,11 +2100,17 @@ function(ev, evType) {
 	}
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
 	if (!obj) { return false; }
+	evType = evType || DwtEvent.ONMOUSEOVER;
+	if ((evType == DwtEvent.ONMOUSEOVER) && obj._ignoreInternalOverOut) {
+		var otherObj = DwtUiEvent.getDwtObjFromEvent(ev, true);
+		if (obj == otherObj) {
+			return false;
+		}
+	}
 
 	var mouseEv = DwtShell.mouseEvent;
 	if (obj._dragging == DwtControl._NO_DRAG) {
 		mouseEv.setFromDhtmlEvent(ev);
-		evType = evType || DwtEvent.ONMOUSEOVER;
 		if (obj.isListenerRegistered(evType)) {
 			obj.notifyListeners(evType, mouseEv);
 		}
@@ -2411,7 +2420,14 @@ function(ev, obj, mouseEv) {
 DwtControl.__mouseOutHdlr =
 function(ev, evType) {
 	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
-	if (!obj) return false;
+	if (!obj) { return false; }
+	evType = evType || DwtEvent.ONMOUSEOUT;
+	if ((evType == DwtEvent.ONMOUSEOUT) && obj._ignoreInternalOverOut) {
+		var otherObj = DwtUiEvent.getDwtObjFromEvent(ev, true);
+		if (obj == otherObj) {
+			return false;
+		}
+	}
 
 	if (obj.__toolTipContent != null) {
 		var shell = DwtShell.getShell(window);
