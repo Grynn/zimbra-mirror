@@ -4,11 +4,11 @@
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 
   <Description about="urn:mozilla:install-manifest">
-    <em:id>{202e3407-c819-40fc-abf5-ac97de0611e9}</em:id>
+    <em:id>{b91ca619-ccf5-43f0-b376-7acb740af50f}</em:id>
     <em:version>1.0.0</em:version>
     <em:type>2</em:type>
     <em:iconURL>chrome://zimbradnd/skin/zimbra.png</em:iconURL>
-    <em:updateURL>http://www.zimbra.com/extn/update.rdf</em:updateURL>
+    <em:updateURL>http://files.zimbra.com/update.rdf</em:updateURL>
     <em:file>
       <Description about="urn:mozilla:extension:file:zimbradnd.jar">
         <em:package>content/</em:package>
