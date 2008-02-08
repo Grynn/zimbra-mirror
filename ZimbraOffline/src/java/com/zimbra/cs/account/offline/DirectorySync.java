@@ -28,26 +28,21 @@ import java.util.UUID;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Signature;
-import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.Provisioning.SignatureBy;
-import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.account.ModifyPrefs;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.Zimbra;
-import com.zimbra.cs.zclient.ZDataSource;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZPop3DataSource;
 import com.zimbra.cs.zclient.ZSignature;
 
 public class DirectorySync {
@@ -215,19 +210,19 @@ public class DirectorySync {
             }
 
             // sync data sources from server
-            Set<String> dataSourceIds = new HashSet<String>();
-            for (ZDataSource zdsrc : zgi.getDataSources()) {
-                // create/update data source entries in local database
-                syncDataSource(prov, acct, zdsrc);
-                dataSourceIds.add(zdsrc.getId());
-            }
-            for (DataSource dsrc : prov.getAllDataSources(acct)) {
-                // delete any non-locally-created data source not in the list
-                if (!dataSourceIds.contains(dsrc.getId()) && !isLocallyCreated(dsrc)) {
-                    prov.deleteDataSource(acct, dsrc.getId(), false);
-                    OfflineLog.offline.debug("dsync: deleted data source: " + acct.getName() + '/' + dsrc.getName());
-                }
-            }
+//            Set<String> dataSourceIds = new HashSet<String>();
+//            for (ZDataSource zdsrc : zgi.getDataSources()) {
+//                // create/update data source entries in local database
+//                syncDataSource(prov, acct, zdsrc);
+//                dataSourceIds.add(zdsrc.getId());
+//            }
+//            for (DataSource dsrc : prov.getAllDataSources(acct)) {
+//                // delete any non-locally-created data source not in the list
+//                if (!dataSourceIds.contains(dsrc.getId()) && !isLocallyCreated(dsrc)) {
+//                    prov.deleteDataSource(acct, dsrc.getId(), false);
+//                    OfflineLog.offline.debug("dsync: deleted data source: " + acct.getName() + '/' + dsrc.getName());
+//                }
+//            }
             
             // sync signature server
             Set<String> signatureIds = new HashSet<String>();
@@ -363,44 +358,44 @@ public class DirectorySync {
         }
     }
 
-    void syncDataSource(OfflineProvisioning prov, Account acct, ZDataSource zdsrc) throws ServiceException {
-        String dsid = zdsrc.getId();
-        String name = zdsrc.getName();
-
-        Map<String, Object> attrs = zdsrc.getAttrs();
-
-        DataSource dsrc = prov.get(acct, DataSourceBy.id, dsid);
-        DataSource conflict = prov.get(acct, DataSourceBy.name, name);
-
-        if (conflict != null && (dsrc == null || !conflict.getId().equals(dsrc.getId()))) {
-            // handle any naming conflicts by renaming the *local* data source
-            // XXX: if the data source has been renamed locally, no need to rename the conflict
-            Map<String, Object> resolution = new HashMap<String, Object>(1);
-            resolution.put(Provisioning.A_zimbraDataSourceName, name + '{' + UUID.randomUUID().toString() + '}');
-            prov.modifyDataSource(acct, conflict.getId(), resolution);
-            OfflineLog.offline.debug("dsync: detected conflict and renamed data source: " + acct.getName() + '/' + conflict.getName());
-        }
-
-        if (dsrc != null && isLocallyCreated(dsrc)) {
-            // data source is marked as locally created, but it already exists on the server
-            Map<String, Object> resolution = new HashMap<String, Object>(1);
-            resolution.put('-' + OfflineProvisioning.A_offlineModifiedAttrs, OfflineProvisioning.A_offlineDn);
-            prov.modifyDataSource(acct, dsrc.getId(), resolution, false);
-            OfflineLog.offline.debug("dsync: marked data source as non-locally created: " + acct.getName() + '/' + dsrc.getName());
-        }
-
-        if (dsrc == null) {
-            // if we're here and haven't locally deleted the data source, it's a new one and needs to be created
-            if (!acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedDataSource).contains(dsid)) {
-                dsrc = prov.createDataSource(acct, zdsrc.getType(), name, attrs, false, false);
-                OfflineLog.offline.debug("dsync: created data source: " + acct.getName() + '/' + dsrc.getName());
-            }
-        } else {
-            prov.modifyDataSource(acct, dsrc.getId(), diffAttributes(dsrc, zdsrc.getAttrs()), false);
-            prov.reload(dsrc);
-            OfflineLog.offline.debug("dsync: updated data source: " + acct.getName() + '/' + dsrc.getName());
-        }
-    }
+//    void syncDataSource(OfflineProvisioning prov, Account acct, ZDataSource zdsrc) throws ServiceException {
+//        String dsid = zdsrc.getId();
+//        String name = zdsrc.getName();
+//
+//        Map<String, Object> attrs = zdsrc.getAttrs();
+//
+//        DataSource dsrc = prov.get(acct, DataSourceBy.id, dsid);
+//        DataSource conflict = prov.get(acct, DataSourceBy.name, name);
+//
+//        if (conflict != null && (dsrc == null || !conflict.getId().equals(dsrc.getId()))) {
+//            // handle any naming conflicts by renaming the *local* data source
+//            // XXX: if the data source has been renamed locally, no need to rename the conflict
+//            Map<String, Object> resolution = new HashMap<String, Object>(1);
+//            resolution.put(Provisioning.A_zimbraDataSourceName, name + '{' + UUID.randomUUID().toString() + '}');
+//            prov.modifyDataSource(acct, conflict.getId(), resolution);
+//            OfflineLog.offline.debug("dsync: detected conflict and renamed data source: " + acct.getName() + '/' + conflict.getName());
+//        }
+//
+//        if (dsrc != null && isLocallyCreated(dsrc)) {
+//            // data source is marked as locally created, but it already exists on the server
+//            Map<String, Object> resolution = new HashMap<String, Object>(1);
+//            resolution.put('-' + OfflineProvisioning.A_offlineModifiedAttrs, OfflineProvisioning.A_offlineDn);
+//            prov.modifyDataSource(acct, dsrc.getId(), resolution, false);
+//            OfflineLog.offline.debug("dsync: marked data source as non-locally created: " + acct.getName() + '/' + dsrc.getName());
+//        }
+//
+//        if (dsrc == null) {
+//            // if we're here and haven't locally deleted the data source, it's a new one and needs to be created
+//            if (!acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedDataSource).contains(dsid)) {
+//                dsrc = prov.createDataSource(acct, zdsrc.getType(), name, attrs, false, false);
+//                OfflineLog.offline.debug("dsync: created data source: " + acct.getName() + '/' + dsrc.getName());
+//            }
+//        } else {
+//            prov.modifyDataSource(acct, dsrc.getId(), diffAttributes(dsrc, zdsrc.getAttrs()), false);
+//            prov.reload(dsrc);
+//            OfflineLog.offline.debug("dsync: updated data source: " + acct.getName() + '/' + dsrc.getName());
+//        }
+//    }
 
 
     private void pushAccount(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
@@ -429,12 +424,12 @@ public class DirectorySync {
             OfflineLog.offline.debug("dpush: deleted identity: " + acct.getName() + '/' + identityId);
         }
 
-        for (DataSource dsrc : prov.getAllDataSources(acct))
-            pushDataSource(prov, acct, dsrc, zmbx);
-        for (String dsid : acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedDataSource)) {
-            zmbx.deleteDataSource(DataSourceBy.id, dsid);
-            OfflineLog.offline.debug("dpush: deleted data source: " + acct.getName() + '/' + dsid);
-        }
+//        for (DataSource dsrc : prov.getAllDataSources(acct))
+//            pushDataSource(prov, acct, dsrc, zmbx);
+//        for (String dsid : acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedDataSource)) {
+//            zmbx.deleteDataSource(DataSourceBy.id, dsid);
+//            OfflineLog.offline.debug("dpush: deleted data source: " + acct.getName() + '/' + dsid);
+//        }
         
         for (Signature signature : prov.getAllSignatures(acct))
             pushSignature(prov, acct, signature, zmbx);
@@ -472,32 +467,32 @@ public class DirectorySync {
         prov.modifyIdentity(acct, ident.getName(), postModify, false);
     }
 
-    private void pushDataSource(OfflineProvisioning prov, Account acct, DataSource dsrc, ZMailbox zmbx) throws ServiceException {
-        // check to see if this identity has been modified since the last sync
-        Set<String> modified = dsrc.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
-        if (modified == null || modified.isEmpty())
-            return;
-
-        Map<String, Object> attrs = dsrc.getAttrs();
-        attrs.remove(OfflineProvisioning.A_offlineModifiedAttrs);
-        if (dsrc.getType() != DataSource.Type.pop3)
-            throw OfflineServiceException.UNSUPPORTED("cannot push changes to " + dsrc.getType() + " data source: " + acct.getName() + '/' + dsrc.getName());
-        ZDataSource zdsrc = new ZPop3DataSource(dsrc);
-
-        // create or modify the identity, as requested
-        if (isLocallyCreated(dsrc)) {
-            zmbx.createDataSource(zdsrc);
-            OfflineLog.offline.debug("dpush: created data source: " + acct.getName() + '/' + dsrc.getName());
-        } else {
-            zmbx.modifyDataSource(zdsrc);
-            OfflineLog.offline.debug("dpush: modified data source: " + acct.getName() + '/' + dsrc.getName());
-        }
-
-        // clear the set of modified attributes, since we're now in sync
-        Map<String, Object> postModify = new HashMap<String, Object>(1);
-        postModify.put(OfflineProvisioning.A_offlineModifiedAttrs, null);
-        prov.modifyDataSource(acct, dsrc.getName(), postModify, false);
-    }
+//    private void pushDataSource(OfflineProvisioning prov, Account acct, DataSource dsrc, ZMailbox zmbx) throws ServiceException {
+//        // check to see if this identity has been modified since the last sync
+//        Set<String> modified = dsrc.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
+//        if (modified == null || modified.isEmpty())
+//            return;
+//
+//        Map<String, Object> attrs = dsrc.getAttrs();
+//        attrs.remove(OfflineProvisioning.A_offlineModifiedAttrs);
+//        if (dsrc.getType() != DataSource.Type.pop3)
+//            throw OfflineServiceException.UNSUPPORTED("cannot push changes to " + dsrc.getType() + " data source: " + acct.getName() + '/' + dsrc.getName());
+//        ZDataSource zdsrc = new ZPop3DataSource(dsrc);
+//
+//        // create or modify the identity, as requested
+//        if (isLocallyCreated(dsrc)) {
+//            zmbx.createDataSource(zdsrc);
+//            OfflineLog.offline.debug("dpush: created data source: " + acct.getName() + '/' + dsrc.getName());
+//        } else {
+//            zmbx.modifyDataSource(zdsrc);
+//            OfflineLog.offline.debug("dpush: modified data source: " + acct.getName() + '/' + dsrc.getName());
+//        }
+//
+//        // clear the set of modified attributes, since we're now in sync
+//        Map<String, Object> postModify = new HashMap<String, Object>(1);
+//        postModify.put(OfflineProvisioning.A_offlineModifiedAttrs, null);
+//        prov.modifyDataSource(acct, dsrc.getName(), postModify, false);
+//    }
     
     private void pushSignature(OfflineProvisioning prov, Account acct, Signature signature, ZMailbox zmbx) throws ServiceException {
         // check to see if this signature has been modified since the last sync

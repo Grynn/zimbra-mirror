@@ -34,7 +34,6 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.servlet.ZimbraServlet;
-import com.zimbra.cs.zclient.ZDataSource;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -451,8 +450,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             for (ZIdentity zident : zgi.getIdentities())
                 DirectorySync.getInstance().syncIdentity(this, account, zident);
             // create data source entries in database
-            for (ZDataSource zdsrc : zgi.getDataSources())
-                DirectorySync.getInstance().syncDataSource(this, account, zdsrc);
+//            for (ZDataSource zdsrc : zgi.getDataSources())
+//                DirectorySync.getInstance().syncDataSource(this, account, zdsrc);
         } catch (ServiceException e) {
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
             Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(account.getId(), false);
