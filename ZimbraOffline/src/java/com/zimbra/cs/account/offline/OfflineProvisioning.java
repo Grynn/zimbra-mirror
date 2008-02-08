@@ -857,8 +857,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         List<Account> accts = new ArrayList<Account>();
         for (String zimbraId : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT)) {
             Account acct = get(AccountBy.id, zimbraId);
-            if (acct != null && !isLocalAccount(acct))
+            if (acct != null && !isLocalAccount(acct)) {
+            	MailboxManager.getInstance().getMailboxByAccount(acct);
                 accts.add(acct);
+            }
         }
         return accts;
     }

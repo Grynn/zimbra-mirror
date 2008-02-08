@@ -4,7 +4,7 @@
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.ConsoleBean"/>
 
-<c:if test="${param.client == 'advanced' || (param.client == 'standard' && fn:length(bean.accounts) == 1)}">
+<c:if test="${param.loginOp != 'logout' && (param.client == 'advanced' || (param.client == 'standard' && fn:length(bean.accounts) == 1))}">
     <jsp:forward page="/desktop/login.jsp"/>
 </c:if>
 

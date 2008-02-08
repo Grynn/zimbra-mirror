@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.DataSource.ConnectionType;
@@ -173,6 +174,9 @@ public class XmailBean extends FormBean {
 	                }
 	            }
 			}
+	    } catch (SoapFaultException x) {
+	    	if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT")))
+	    		setError(x.getMessage());
         } catch (Throwable t) {
             setError(t.getMessage());
         }

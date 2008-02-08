@@ -258,7 +258,7 @@ public class LocalMailbox extends DesktopMailbox {
                 OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(System.currentTimeMillis()));
 			} catch (Exception x) {
             	if (isDeleting())
-            		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", getAccount().getName());
+            		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", getAccountName());
             	else
             		syncMan.processSyncException(ds, x);
 			}

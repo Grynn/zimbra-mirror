@@ -6,8 +6,10 @@ import java.util.TimerTask;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.offline.OfflineAccount;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.util.Zimbra;
 
 public abstract class DesktopMailbox extends Mailbox {
@@ -17,8 +19,16 @@ public abstract class DesktopMailbox extends Mailbox {
 	
 	private boolean isDeleting;
 	
+	private String accountName;
+	
 	public DesktopMailbox(MailboxData data) throws ServiceException {
 		super(data);
+		
+		OfflineAccount account = (OfflineAccount)getAccount();
+		if (account.isDataSourceAccount())
+			accountName = account.getAttr(OfflineProvisioning.A_offlineDataSourceName);
+		else
+			accountName = account.getName();
 	}
 	
 	@Override
@@ -34,13 +44,17 @@ public abstract class DesktopMailbox extends Mailbox {
 		return isDeleting;
 	}
 	
+	public String getAccountName() {
+		return accountName;
+	}
+	
 	@Override
     public synchronized void deleteMailbox() throws ServiceException {
 		isDeleting = true;
 		cancelCurrentTask();
-		String name = getAccount().getName();
 		super.deleteMailbox();
-		OfflineSyncManager.getInstance().resetStatus(name);
+		OfflineSyncManager.getInstance().resetStatus(accountName);
+		((OfflineAccount)getAccount()).resetLastSyncTimestamp();
     }
 	
 	@Override

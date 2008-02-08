@@ -133,7 +133,7 @@ public class MailboxSync {
                 		Long.toString(System.currentTimeMillis()));
             } catch (Exception e) {
             	if (ombx.isDeleting())
-            		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccount().getName());
+            		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccountName());
             	else
             		syncMan.processSyncException(ombx.getAccount(), e);
             } finally {

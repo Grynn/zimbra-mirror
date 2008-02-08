@@ -80,8 +80,7 @@ public class JspProvStub {
     }
     
     public void deleteOfflineAccount(String accountId) throws ServiceException {
-        prov.deleteMailbox(accountId);
-        prov.deleteAccount(accountId);
+    	prov.deleteAccount(accountId);
     }
     
     public DataSource getOfflineDataSource(String accountId) throws ServiceException {
@@ -108,7 +107,6 @@ public class JspProvStub {
     }
     
     public void deleteOfflineDataSource(String accountId) throws ServiceException {
-        prov.deleteMailbox(accountId);
-        prov.deleteAccount(accountId);
+    	prov.deleteAccount(accountId);
     }
 }

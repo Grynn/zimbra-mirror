@@ -18,9 +18,11 @@ package com.zimbra.cs.account.offline;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.common.OfflineConstants;
 
 import java.util.*;
 
@@ -175,5 +177,22 @@ public class OfflineAccount extends Account {
 
     public boolean isDataSourceAccount() {
         return OfflineProvisioning.getOfflineInstance().isDataSourceAccount(this);
+    }
+    
+    public void setLastSyncTimestamp() throws ServiceException {
+    	setLastSyncTimestampInternal(System.currentTimeMillis());
+    }
+    
+    public void resetLastSyncTimestamp() throws ServiceException {
+    	setLastSyncTimestampInternal(0);
+    }
+    
+    private void setLastSyncTimestampInternal(long time) throws ServiceException {
+    	if (isSyncAccount()) {
+            OfflineProvisioning.getOfflineInstance().setAccountAttribute(this, OfflineConstants.A_offlineLastSync, Long.toString(time));
+    	} else if (isDataSourceAccount()) {
+    		DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(this);
+    		OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(time));
+    	}
     }
 }
