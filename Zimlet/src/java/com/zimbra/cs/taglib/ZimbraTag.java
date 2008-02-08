@@ -30,6 +30,7 @@ import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
+import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.servlet.ZimbraServlet;
 
 public class ZimbraTag extends BodyTagSupport {
@@ -47,25 +48,16 @@ public class ZimbraTag extends BodyTagSupport {
 
     public Account getRequestAccount() throws ZimbraTagException, ServiceException {
     	HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-        Cookie cookies[] =  req.getCookies();
-        String authTokenStr = null;
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (cookies[i].getName().equals(ZimbraServlet.COOKIE_ZM_AUTH_TOKEN)) {
-                    authTokenStr = cookies[i].getValue();
-                    break;
-                }
-            }
+    	
+    	AuthToken token = null;
+    	try {
+    	    token = AuthProvider.getAuthToken(req, false);
+    	    if (token == null)
+    	        throw ZimbraTagException.AUTH_FAILURE("no auth cookie");
+    	} catch (AuthTokenException ate) {
+            throw ZimbraTagException.AUTH_FAILURE("cannot parse authtoken");
         }
-        if (authTokenStr == null) {
-        	throw ZimbraTagException.AUTH_FAILURE("no auth cookie");
-        }
-        AuthToken token;
-        try {
-        	token = AuthToken.getAuthToken(authTokenStr);
-        } catch (AuthTokenException ate) {
-        	throw ZimbraTagException.AUTH_FAILURE("cannot parse authtoken");
-        }
+
         if (token.isExpired()) {
         	throw ZimbraTagException.AUTH_FAILURE("authtoken expired");
         }
