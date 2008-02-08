@@ -92,14 +92,6 @@ function() {
 	return "DwtLabel";
 }
 
-DwtLabel.prototype.dispose =
-function() {
-	delete this._dropDownEl;
-	delete this._iconEl;
-	delete this._textEl;
-	DwtControl.prototype.dispose.call(this);
-};
-
 //
 // Constants
 //
@@ -138,6 +130,14 @@ DwtLabel.prototype.TEMPLATE = "dwt.Widgets#ZLabel";
 //
 // Public methods
 //
+
+DwtLabel.prototype.dispose =
+function() {
+	delete this._dropDownEl;
+	delete this._iconEl;
+	delete this._textEl;
+	DwtControl.prototype.dispose.call(this);
+};
 
 /**
  * Sets the enabled/disabled state of the label. A disabled label may have a different

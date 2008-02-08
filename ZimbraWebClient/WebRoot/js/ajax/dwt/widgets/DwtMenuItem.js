@@ -96,6 +96,12 @@ DwtMenuItem._MENU_POPDOWN_DELAY = 250
 DwtMenuItem._evt = new DwtUiEvent(true);
 /***/
 
+DwtMenuItem.prototype.dispose =
+function() {
+	delete this._checkEl;
+	DwtButton.prototype.dispose.call(this);
+};
+
 //
 // Data
 //
