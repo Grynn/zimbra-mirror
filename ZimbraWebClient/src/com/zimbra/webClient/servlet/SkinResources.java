@@ -537,12 +537,12 @@ public class SkinResources
                 cookie = getCookie(req, C_SKIN);
             }
             skin = cookie != null ? cookie.getValue() : DEFAULT_SKIN;
-			File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/"+SKIN_MANIFEST));
-			if (!manifest.exists()) {
-				skin = DEFAULT_SKIN;
-			}
-		}
-		return StringUtil.escapeHtml(skin);
+        }
+        File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/"+SKIN_MANIFEST));
+        if (!manifest.exists()) {
+            skin = DEFAULT_SKIN;
+        }
+        return StringUtil.escapeHtml(skin);
     }
 
     private static String getContentType(String uri) {
