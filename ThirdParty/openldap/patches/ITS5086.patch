@@ -1,0 +1,35 @@
+--- openldap-2.3.40/servers/slapd/back-bdb/idl.c.orig	2007-01-02 13:44:00.000000000 -0800
++++ openldap-2.3.40/servers/slapd/back-bdb/idl.c	2008-02-09 10:14:12.000000000 -0800
+@@ -696,10 +696,6 @@
+ 
+ 	assert( id != NOID );
+ 
+-	if ( bdb->bi_idl_cache_size ) {
+-		bdb_idl_cache_del( bdb, db, key );
+-	}
+-
+ 	DBTzero( &data );
+ 	data.size = sizeof( ID );
+ 	data.ulen = data.size;
+@@ -872,6 +868,12 @@
+ 		cursor->c_close( cursor );
+ 		return rc;
+ 	}
++	/* If key was added (didn't already exist) and using IDL cache,
++	 * update key in IDL cache.
++	 */
++	if ( !rc && bdb->bi_idl_cache_max_size ) {
++		bdb_idl_cache_add_id( bdb, db, key, id );
++	}
+ 	rc = cursor->c_close( cursor );
+ 	if( rc != 0 ) {
+ 		Debug( LDAP_DEBUG_ANY, "=> bdb_idl_insert_key: "
+@@ -904,7 +906,7 @@
+ 	}
+ 	assert( id != NOID );
+ 
+-	if ( bdb->bi_idl_cache_max_size ) {
++	if ( bdb->bi_idl_cache_size ) {
+ 		bdb_idl_cache_del( bdb, db, key );
+ 	}
+ 
