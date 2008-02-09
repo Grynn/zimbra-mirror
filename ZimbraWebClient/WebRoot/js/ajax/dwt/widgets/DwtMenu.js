@@ -142,7 +142,17 @@ DwtMenu._activeMenuUp = false;
 DwtMenu._activeMenuIds = new AjxVector();
 DwtMenu._activeMenus = new AjxVector() ;
 
-DwtMenu.prototype.addPopupListener = 
+DwtMenu.prototype.dispose =
+function() {
+	DwtComposite.prototype.dispose.call(this);
+
+	// Remove this from the shell. (Required because of hack in constructor.) 
+	if (!(this.parent instanceof DwtShell)) {
+		this.shell.removeChild(this);	
+	}
+};
+
+DwtMenu.prototype.addPopupListener =
 function(listener) {
 	this.addListener(DwtEvent.POPUP, listener);
 }

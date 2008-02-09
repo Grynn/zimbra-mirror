@@ -96,12 +96,6 @@ DwtMenuItem._MENU_POPDOWN_DELAY = 250
 DwtMenuItem._evt = new DwtUiEvent(true);
 /***/
 
-DwtMenuItem.prototype.dispose =
-function() {
-	delete this._checkEl;
-	DwtButton.prototype.dispose.call(this);
-};
-
 //
 // Data
 //
@@ -117,6 +111,12 @@ DwtMenuItem.prototype.BLANK_CASCADE_TEMPLATE = "dwt.Widgets#ZMenuItemBlankCascad
 //
 // Public methods
 //
+DwtMenuItem.prototype.dispose =
+function() {
+	delete this._checkEl;
+	DwtButton.prototype.dispose.call(this);
+};
+
 DwtMenuItem.create =
 function(parent, imageInfo, text, disImageInfo, enabled, style, radioGroupId, idx, className, posStyle) {
 	var mi = new DwtMenuItem(parent, style, radioGroupId, idx, className, posStyle);
