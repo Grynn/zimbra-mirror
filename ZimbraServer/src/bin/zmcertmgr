@@ -360,9 +360,14 @@ createCA() {
   # Create key/crt if it didn't exist in LDAP
   if [ ! -s "${zimbra_ca_key}" ]; then
     createCAKey
+  elif [ ! -s "${zimbra_ca_key}" -o x"$(grep "PRIVATE KEY" $zimbra_ca_key)" = "x" ]; then
+    createCAKey
   fi
+
   if [ ! -s "${zimbra_ca_crt}" -o x"${IS_NEW_CA}" = "x-new" ]; then
-    createCACert  
+    createCACert
+  elif [ ! -s "${zimbra_ca_crt}" -o x"$(grep "TRUSTED CERT" $zimbra_ca_crt)" = "x" ]; then
+    createCACert
   fi
 
 }
