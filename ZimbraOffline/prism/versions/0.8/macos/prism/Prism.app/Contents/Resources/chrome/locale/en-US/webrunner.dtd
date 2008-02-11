@@ -20,4 +20,6 @@
 <!ENTITY about.label                "About">
 <!ENTITY console.label              "Error Console">
 <!ENTITY install.label              "Install to Desktop">
+<!ENTITY clearCache.label           "Clear Cache">
+<!ENTITY statusbar.label            "Toggle Statusbar">
 <!ENTITY commands.tooltip           "Commands">

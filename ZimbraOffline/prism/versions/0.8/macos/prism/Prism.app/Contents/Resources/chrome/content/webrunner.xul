@@ -61,8 +61,8 @@
     <command id="cmd_quit" label="&quit.label;" oncommand="WebRunner.doCommand(this.id);"/>
     <command id="cmd_console" label="&console.label;" oncommand="WebRunner.doCommand(this.id);"/>
     <command id="cmd_install" label="&install.label;" oncommand="WebRunner.doCommand(this.id);"/>
-    <command id="cmd_statusbar" label="&install.label;" oncommand="WebRunner.doCommand(this.id);"/>
-    <command id="cmd_clearcache" label="&install.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_sb" label="&statusbar.label;" oncommand="WebRunner.doCommand(this.id);"/>
+    <command id="cmd_clearcache" label="&clearCache.label;" oncommand="WebRunner.doCommand(this.id);"/>
   </commandset>
 
   <keyset id="keyset_app">
@@ -72,7 +72,7 @@
     <key id="key_reload" class="nav" keycode="VK_F5" command="cmd_reload"/>
     <key id="key_close" modifiers="accel" key="W" command="cmd_close"/>
     <key id="key_quit" modifiers="accel" key="q" command="cmd_quit"/>
-    <key id="key_statusbar" modifiers="accel" key="s" command="cmd_statusbar"/>
+    <key id="key_sb" modifiers="shift" keycode="VK_F6" command="cmd_sb"/>
     <key id="key_clearcache" modifiers="shift" keycode="VK_F5" command="cmd_clearcache"/>
   </keyset>
 
@@ -101,7 +101,6 @@
       <menu id="menu_file" label="&file.label;">
         <menupopup>
           <menuitem id="menuitem_about" label="&about.label;" oncommand="WebRunner.doCommand('cmd_about');"/>
-          <menuitem id="menuitem_print" label="&print.label;" oncommand="WebRunner.doCommand('cmd_print');"/>
           <menuitem id="menu_FileQuitItem" label="&quit.label;" key="key_quit" oncommand="WebRunner.doCommand('cmd_quit');"/>
         </menupopup>
       </menu>

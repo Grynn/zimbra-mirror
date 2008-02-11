@@ -11,14 +11,15 @@
   <key>NSAppleScriptEnabled</key>
   <true/>
   <key>CFBundleGetInfoString</key>
-  <string>Prism 0.8</string>
+  <string>Zimbra Desktop @version@</string>
   <key>CFBundleName</key>
   <string>Zimbra Desktop</string>
   <key>CFBundleShortVersionString</key>
-  <string>0.8</string>
+  <string>@version@</string>
   <key>CFBundleVersion</key>
-  <string>0.8.20071010</string>
-  <key>CFBundleIconFile</key>	<string>webrunner</string>
+  <string>@build@</string>
+  <key>CFBundleIconFile</key>
+  <string>launcher_128x128.icns</string>
   <key>CFBundleDocumentTypes</key>
   <array>
     <dict>

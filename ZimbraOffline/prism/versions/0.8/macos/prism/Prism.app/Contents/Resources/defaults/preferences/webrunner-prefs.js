@@ -1,7 +1,7 @@
 pref("toolkit.defaultChromeURI", "chrome://webrunner/content/webrunner.xul");  // - main xul window
 pref("browser.chromeURL", "chrome://webrunner/content/webrunner.xul");         // - allow popup windows to open
 
-pref("general.useragent.extra.prism", "prism/0.8");
+pref("general.useragent.extra.prism", "prism/zdesktop");
 
 /* debugging prefs */
 pref("browser.dom.window.dump.enabled", true);
@@ -29,7 +29,7 @@ pref("browser.download.manager.retention", 2);
 pref("browser.download.manager.showWhenStarting", true);
 pref("browser.download.manager.useWindow", true);
 pref("browser.download.manager.closeWhenDone", true);
-pref("browser.download.manager.openDelay", 0);
+pref("browser.download.manager.openDelay", 2000);
 pref("browser.download.manager.focusWhenStarting", false);
 pref("browser.download.manager.flashCount", 2);
 
@@ -45,3 +45,5 @@ pref("signon.expireMasterPassword", false);
 pref("signon.SignonFileName", "signons.txt");
 
 pref("layout.spellcheckDefault", 1);
+
+pref("dom.max_script_run_time", 20);

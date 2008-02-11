@@ -126,15 +126,14 @@ var WebRunner = {
       // Save using JSON format
       if (this._profile.hasOwnProperty("id")) {
         var json = JSON.toString(settings);
-        var file = IO.getFile("Profile", null);
+        var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
         //file.append("webapps");
         //file.append(this._profile.id);
         file.append("localstore.json");
-        if (!file.exists())
-          file.create(Ci.nsIFile.NORMAL_FILE_TYPE, 0600);
-        var stream = IO.newOutputStream(file, "text write create truncate");
-        stream.writeString(json);
-        stream.close();
+        var foStream = Cc["@mozilla.org/network/file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
+        foStream.init(file, 0x02 | 0x08 | 0x20, 0600, 0); // write, create, truncate
+        foStream.write(json, json.length);
+        foStream.close();
       }
   },
 
@@ -142,15 +141,18 @@ var WebRunner = {
       // Load using JSON format
       var settings;
       if (this._profile.hasOwnProperty("id")) {
-        var file = IO.getFile("Profile", null);
+        var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
         //file.append("webapps");
         //file.append(this._profile.id);
         file.append("localstore.json");
         if (file.exists()) {
-          var stream = IO.newInputStream(file, "text");
-          var json = stream.readLine();
-          stream.close();
-          settings = JSON.fromString(json);
+          var istream = Cc["@mozilla.org/network/file-input-stream;1"].createInstance(Ci.nsIFileInputStream);
+          istream.init(file, -1, -1, 0);
+          istream.QueryInterface(Ci.nsILineInputStream);
+          var json = {};
+          istream.readLine(json);
+          istream.close();
+          settings = JSON.fromString(json.value);
 
           if (settings.window) {
             switch (settings.window.state) {
@@ -176,7 +178,9 @@ var WebRunner = {
   },
 
   _delayedStartup : function() {
-    this._loadSettings();
+    try {
+        this._loadSettings();
+    } catch (ex) {}
     document.getElementById("statusbar").setAttribute("collapsed", "true");
 
     this._profile.script["host"] = HostUI;
@@ -554,9 +558,7 @@ var WebRunner = {
   clearCache : function()
   {
     var cacheService = Cc["@mozilla.org/network/cache-service;1"].getService(Ci.nsICacheService);
-    try {
-      cacheService.evictEntries(Ci.nsICache.STORE_ANYWHERE);
-    } catch(ex) {alert(ex);}
+    cacheService.evictEntries(Ci.nsICache.STORE_ANYWHERE);
   },
 
   doCommand : function(aCmd) {
@@ -608,11 +610,12 @@ var WebRunner = {
       case "cmd_install":
         window.openDialog("chrome://webrunner/content/install-shortcut.xul", "install", "centerscreen,modal", this._profile);
         break;
-      case "cmd_statusbar":
+      case "cmd_sb":
         this.toggleStatusbar();
         break;
       case "cmd_clearcache":
         this.clearCache();
+        this._getBrowser().reload();
         break;
     }
   },
