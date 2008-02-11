@@ -41,12 +41,20 @@ function(command) {
 	} else if (command == "end") {
 		result.success = AjxLeakDetector.end();
 		result.message = result.success ? "Leak detector stopped." : "Leak detector is not running.";
-	} else if (command == "report") {
+	} else if (command == "report" || command == "dispose") {
+		if (command == "dispose") {
+			var shell = DwtShell.getShell(window);
+			shell.dispose(true);
+			document.title = "Shell has been disposed";
+		}
 		var report = [];
 		result.success = AjxLeakDetector.report(report);
-		result.details = report.join("");
+		if (report.length) {
+			DBG.println("Leak detector report.....");
+			DBG.printRaw(report.join(""));
+		}
 		if (result.success) {
-			result.message = result.details ? "Problems found. See debug window for details." : "No problems found";
+			result.message = report.length ? "Problems found. See debug window for details." : "No problems found";
 		} else {
 			result.message = "Leak detector is not running.";
 		}
@@ -96,13 +104,13 @@ function() {
 	var oldInit = DwtControl.prototype.__initCtrl;
 	DwtControl.prototype.__initCtrl = function() {
 		self._controls.push(this);
-		oldInit.call(this)
+		oldInit.call(this);
 	};
 
 	// Hook into dispose.
 	var oldDispose = DwtControl.prototype.dispose;
 	DwtControl.prototype.dispose = function() {
-		var element = this.getHtmlElement();
+		var element = document.getElementById(this.getHTMLElId());
 		oldDispose.call(this);
 		self._postDisposeCheck(this, element);
 	};
@@ -218,11 +226,14 @@ function(report, control) {
 AjxLeakDetector.prototype._postDisposeCheck =
 function(control, element) {
 	var report = [];
-	this._postDisposeElementCheck(report, element);
-	if (report.length) {
-		this._log(this._closureReport, "Suspicioius closure args in control: " + report.join(""), control);
+	if (!element) {
+		this._log(this._closureReport, "Very bad: control's element not in DOM: " + report.join(""), control);
+	} else {
+		this._postDisposeElementCheck(report, element);
+		if (report.length) {
+			this._log(this._closureReport, "Suspicioius closure args in control: " + report.join(""), control);
+		}
 	}
-
 };
 AjxLeakDetector.prototype._postDisposeElementCheck =
 function(report, element) {
@@ -230,7 +241,13 @@ function(report, element) {
 	var handlers = null;
 	for (var name in element) {
 		var argNames = null;
-		var value = element[name];
+		var value;
+		try {
+			value = element[name];
+		} catch (e) {
+			// Certain properties aren't readable in ff, probably harmless, but report it...	
+			DBG.println("AjxLeakDetector: error accessing property: " + name);
+		}
 		if (value && value.__leakDetectorId) {
 			var data = this._closures[value.__leakDetectorId];
 			if (data) {
