@@ -146,6 +146,14 @@ function() {
 	return "DwtListView";
 };
 
+DwtListView.prototype.dispose =
+function() {
+	this._listColDiv = null;
+	this._listDiv = null;
+	this._parentEl = null;
+	DwtComposite.prototype.dispose.call(this);
+};
+
 DwtListView.prototype.setEnabled =
 function(enabled) {
 	DwtComposite.prototype.setEnabled.call(this, enabled);

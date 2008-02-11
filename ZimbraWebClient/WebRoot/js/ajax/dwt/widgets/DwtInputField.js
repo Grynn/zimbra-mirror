@@ -190,6 +190,13 @@ DwtInputField._NOERROR_ICON_HTML = AjxImg.getImageHtml("Blank_9");
 // Public methods
 //
 
+DwtInputField.prototype.dispose =
+function() {
+	this._errorIconTd = null;
+	this._inputField = null;
+	DwtComposite.prototype.dispose.call(this);
+};
+
 DwtInputField.prototype.getTabGroupMember = function() {
 	return this._tabGroup;
 };

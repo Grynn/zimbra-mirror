@@ -90,6 +90,18 @@ DwtTreeItem._processedMouseDown = false;
 
 // Public Methods
 
+DwtTreeItem.prototype.dispose =
+function() {
+	this._itemDiv = null;
+	this._nodeCell = null;
+	this._checkBoxCell = null;
+	this._checkBox = null;
+	this._imageCell = null;
+	this._textCell = null;
+	this._childDiv = null;
+	DwtComposite.prototype.dispose.call(this);
+};
+
 DwtTreeItem.prototype.toString =
 function() {
 	return "DwtTreeItem";
@@ -297,7 +309,9 @@ DwtTreeItem.prototype.removeChild =
 function(child) {
 	if (child._initialized) {
 		this._tree._deselect(child);
-		this._childDiv.removeChild(child.getHtmlElement());
+		if (this._childDiv) {
+			this._childDiv.removeChild(child.getHtmlElement());
+		}
 	}
 	this._children.remove(child);
 
@@ -308,7 +322,7 @@ function(child) {
 		if (this._expanded)
 			this._expanded = false;
 		
-		if (this._initialized) {
+		if (this._initialized && this._nodeCell) {
 			AjxImg.setImage(this._nodeCell, "Blank_16");
 			var imgEl = AjxImg.getImageElement(this._nodeCell);
 			if (imgEl)

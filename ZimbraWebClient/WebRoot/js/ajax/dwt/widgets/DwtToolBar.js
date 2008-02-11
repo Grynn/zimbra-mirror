@@ -91,6 +91,14 @@ DwtToolBar.__itemCount = 0;
 // Public methods
 //
 
+DwtToolBar.prototype.dispose =
+function() {
+	this._itemsEl = null;
+	this._prefixEl = null;
+	this._suffixEl = null;
+	DwtComposite.prototype.dispose.call(this);
+};
+
 DwtToolBar.prototype.getItem =
 function(index) {
 	return this._children.get(index);
