@@ -24,7 +24,7 @@ function OnSubmit() {
 
 function beforeSubmit() {
     disableButtons();
-    zd.set("whattodo", "<img src='/zimbra/img/animated/Imgwait_16.gif' align='absmiddle'></img> <span class='ZOfflineNotice'>Processing...</span>");
+    zd.set("whattodo", "<span class='ZOfflineNotice'>Processing...</span>");
 }
 
 function disableButtons() {
