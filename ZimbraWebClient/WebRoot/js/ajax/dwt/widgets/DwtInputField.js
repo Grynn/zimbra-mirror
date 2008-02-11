@@ -147,7 +147,11 @@ DwtInputField = function(params) {
     this.setValidatorFunction(params.validatorCtxtObj, params.validator);
 	this._setMouseEventHdlrs(false);
 	this._setKeyPressEventHdlr(false);
-
+	
+	// avoid FF bug that throws "Permission Denied" when dealing with an input's relatedTarget
+	// https://bugzilla.mozilla.org/show_bug.cgi?id=101197
+	this._ignoreInternalOverOut = false;
+	
     if (params.required != null) {
         this.setRequired(params.required);
     }
