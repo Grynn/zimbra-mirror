@@ -852,9 +852,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         throw new UnsupportedOperationException();
     }
 
-    public synchronized List<Account> getAllAccounts() throws ServiceException {
+    public List<Account> getAllAccounts() throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
-        for (String zimbraId : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT)) {
+        List<String> accountIds = null;
+        synchronized (this) {
+        	accountIds = DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
+        }
+        for (String zimbraId : accountIds) {
             Account acct = get(AccountBy.id, zimbraId);
             if (acct != null && !isLocalAccount(acct)) {
             	MailboxManager.getInstance().getMailboxByAccount(acct);

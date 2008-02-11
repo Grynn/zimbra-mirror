@@ -1,2 +1,2 @@
 #!/bin/sh
-exec @install@/macos/prism/Prism.app/Contents/MacOS/xulrunner -webapp @install@/zdesktop.webapp
+exec @install@/macos/prism/Zimbra\ Desktop.app/Contents/MacOS/xulrunner -webapp @install@/zdesktop.webapp

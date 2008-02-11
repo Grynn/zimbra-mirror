@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.8" transformSequenceNumber="1">
-  <directoryPresets config="./src/installer/resources" />
+  <directoryPresets config="./src/installer/resources/launcher_128x128.icns" />
   <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Zimbra, Inc." publisherWeb="www.zimbra.com" version="0.78" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -33,10 +33,17 @@
       <mountPoint id="856" root="" location="zimlets" mode="755" />
       <mountPoint id="181400" root="" location="win32" mode="755" />
       <mountPoint id="181401" root="" location="win32/prism" mode="755" />
+      <mountPoint id="225932" root="" location="win32/prism/xulrunner" mode="755" />
       <mountPoint id="181402" root="" location="macos" mode="755" />
       <mountPoint id="181403" root="" location="macos/prism" mode="755" />
+      <mountPoint id="225928" root="" location="macos/prism/Zimbra Desktop.app" mode="755" />
+      <mountPoint id="225929" root="" location="macos/prism/Zimbra Desktop.app/Contents" mode="755" />
+      <mountPoint id="225930" root="" location="macos/prism/Zimbra Desktop.app/Contents/Frameworks" mode="755" />
+      <mountPoint id="225931" root="" location="macos/prism/Zimbra Desktop.app/Contents/Frameworks/XUL.framework" mode="755" />
+      <mountPoint id="235247" root="" location="macos/prism/Zimbra Desktop.app/Contents/Resources" mode="755" />
       <mountPoint id="181404" root="" location="linux" mode="755" />
       <mountPoint id="181405" root="" location="linux/prism" mode="755" />
+      <mountPoint id="225933" root="" location="linux/prism/xulrunner" mode="755" />
       <mountPoint id="4668" root="" location="" mode="755" />
     </mountPoints>
     <entries>
@@ -64,6 +71,9 @@
       <dirEntry mountPoint="856" file="../Zimlet/build/dist/zimlets-offline" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
+      <dirEntry mountPoint="225932" file="../ThirdParty/xulrunner/1.9b4pre.en-US/win32/xulrunner" overwrite="1" shared="false" mode="755" uninstallMode="2" excludeSuffixes="" dirMode="755">
+        <exclude />
+      </dirEntry>
       <dirEntry mountPoint="181401" file="./prism/versions/0.8/macos/prism/Prism.app/Contents/Resources" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude>
           <entry location="extensions" launcher="false" />
@@ -79,7 +89,16 @@
           <entry location="defaults" launcher="false" />
         </exclude>
       </dirEntry>
-      <dirEntry mountPoint="181403" file="./prism/versions/0.8/macos/prism" overwrite="1" shared="false" mode="755" uninstallMode="2" excludeSuffixes="" dirMode="755">
+      <dirEntry mountPoint="225931" file="../ThirdParty/xulrunner/1.9b4pre.en-US/macos/XUL.framework" overwrite="1" shared="false" mode="755" uninstallMode="2" excludeSuffixes="" dirMode="755">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="225929" file="./prism/versions/0.8/macos/prism/Prism.app/Contents" overwrite="1" shared="false" mode="755" uninstallMode="2" excludeSuffixes="" dirMode="755">
+        <exclude>
+          <entry location="Frameworks" launcher="false" />
+        </exclude>
+      </dirEntry>
+      <fileEntry mountPoint="235247" file="./src/installer/resources/launcher_128x128.icns" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <dirEntry mountPoint="225933" file="../ThirdParty/xulrunner/1.9b4pre.en-US/linux/xulrunner" overwrite="1" shared="false" mode="755" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="181405" file="./prism/versions/0.8/macos/prism/Prism.app/Contents/Resources" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
@@ -184,7 +203,6 @@
               <void property="displayedText">
                 <string>&lt;html&gt;
 &lt;body&gt;
-&lt;p&gt;
 PLEASE READ THIS AGREEMENT CAREFULLY BEFORE USING THE SOFTWARE.
 ZIMBRA, INC. ("ZIMBRA") WILL ONLY LICENSE THIS SOFTWARE TO YOU IF YOU
 FIRST ACCEPT THE TERMS OF THIS AGREEMENT. BY DOWNLOADING OR INSTALLING
@@ -882,6 +900,214 @@ return false;</condition>
                   </void>
                   <void property="uninstallMode">
                     <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="Info.plist" id="225934" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="encoding">
+                    <string />
+                  </void>
+                  <void property="escapeForPropertyFile">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>macos/prism/Zimbra Desktop.app/Contents/Info.plist</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${compiler:sys.version}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@version@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="Info.plist" id="225935" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="encoding">
+                    <string />
+                  </void>
+                  <void property="escapeForPropertyFile">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>macos/prism/Zimbra Desktop.app/Contents/Info.plist</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${compiler:version_build}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@build@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="mac application.ini" id="225936" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="encoding">
+                    <string />
+                  </void>
+                  <void property="escapeForPropertyFile">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>macos/prism/Zimbra Desktop.app/Contents/Resources/application.ini</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${compiler:sys.version}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@version@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="mac application.ini" id="225938" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="encoding">
+                    <string />
+                  </void>
+                  <void property="escapeForPropertyFile">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>macos/prism/Zimbra Desktop.app/Contents/Resources/application.ini</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${compiler:version_build}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@build@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="win application.ini" id="225939" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="encoding">
+                    <string />
+                  </void>
+                  <void property="escapeForPropertyFile">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>win32/prism/application.ini</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${compiler:sys.version}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@version@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="win application.ini" id="225940" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="encoding">
+                    <string />
+                  </void>
+                  <void property="escapeForPropertyFile">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>win32/prism/application.ini</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${compiler:version_build}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@build@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="linux application.ini" id="225941" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="encoding">
+                    <string />
+                  </void>
+                  <void property="escapeForPropertyFile">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>linux/prism/application.ini</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${compiler:sys.version}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@version@</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="linux application.ini" id="225942" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                  <void property="encoding">
+                    <string />
+                  </void>
+                  <void property="escapeForPropertyFile">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>linux/prism/application.ini</string>
+                    </object>
+                  </void>
+                  <void property="replaceValue">
+                    <string>${compiler:version_build}</string>
+                  </void>
+                  <void property="searchValue">
+                    <string>@build@</string>
                   </void>
                 </object>
               </java>
