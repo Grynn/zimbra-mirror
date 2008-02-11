@@ -18,11 +18,6 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.zclient.ZDateTime;
-import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZIdentity;
-import com.zimbra.cs.zclient.ZInvite;
 import com.zimbra.cs.zclient.ZInvite.ZAttendee;
 import com.zimbra.cs.zclient.ZInvite.ZByDayWeekDay;
 import com.zimbra.cs.zclient.ZInvite.ZClass;
@@ -34,16 +29,14 @@ import com.zimbra.cs.zclient.ZInvite.ZRole;
 import com.zimbra.cs.zclient.ZInvite.ZStatus;
 import com.zimbra.cs.zclient.ZInvite.ZTransparency;
 import com.zimbra.cs.zclient.ZInvite.ZWeekDay;
-import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMailbox.ReplyVerb;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
 import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
-import com.zimbra.cs.zclient.ZPrefs;
-import com.zimbra.cs.zclient.ZSignature;
-import com.zimbra.cs.zclient.ZSimpleRecurrence;
+import com.zimbra.cs.zclient.*;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceEnd;
 import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
+import com.zimbra.cs.mailbox.calendar.ParsedDuration;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.Part;
@@ -145,6 +138,7 @@ public class ZMessageComposeBean {
     private int mRepeatYearlyRelativeMonth;
     private String mRepeatEndType;
     private int mRepeatEndCount;
+
     private String mRepeatEndDate;
 
     // format to parse start/endDate
@@ -168,6 +162,14 @@ public class ZMessageComposeBean {
     private List<ZMimePartBean> mOriginalAttachments;
     private List<FileItem> mFileItems = new ArrayList<FileItem>();
     private String mUploadedAttachmentId;
+
+    // Reminder settings
+    private String mReminder1;
+    private String mReminder2;
+    private String mReminderEmail;
+    private boolean mSendReminderEmail;
+    private boolean mSendReminderMobile;
+    private boolean mSendReminderYIM;
 
     public ZMessageComposeBean(PageContext pageContext) {
         mMessageAttachments = new ArrayList<MessageAttachment>();
@@ -405,6 +407,62 @@ public class ZMessageComposeBean {
         return (value == null || value.length()==0) ? defaultValue : value;
     }
 
+    public String getReminder1() {
+        return mReminder1;
+    }
+
+    public void setReminder1(String mReminder1) {
+        if (mReminder1 != null && mReminder1.length() == 0){
+            this.mReminder1 = null;
+        } else {
+            this.mReminder1 = mReminder1;
+        }
+    }
+
+    public String getReminder2() {
+        return mReminder2;
+    }
+
+    public void setReminder2(String mReminder2) {
+        if (mReminder2 != null && mReminder2.length() == 0){
+            this.mReminder2 = null;
+        } else {
+            this.mReminder2 = mReminder2;
+        }
+    }
+
+    public String getReminderEmail() {
+        return mReminderEmail;
+    }
+
+    public void setReminderEmail(String mReminderEmail) {
+        this.mReminderEmail = mReminderEmail;
+    }
+
+    public boolean isSendReminderEmail() {
+        return mSendReminderEmail;
+    }
+
+    public void setSendReminderEmail(boolean mSendReminderEmail) {
+        this.mSendReminderEmail = mSendReminderEmail;
+    }
+
+    public boolean isSendReminderMobile() {
+        return mSendReminderMobile;
+    }
+
+    public void setSendReminderMobile(boolean mSendReminderMobile) {
+        this.mSendReminderMobile = mSendReminderMobile;
+    }
+
+    public boolean isSendReminderYIM() {
+        return mSendReminderYIM;
+    }
+
+    public void setSendReminderYIM(boolean mSendReminderYIM) {
+        this.mSendReminderYIM = mSendReminderYIM;
+    }
+
     public static class AppointmentOptions {
 
         private Calendar mDate;
@@ -598,7 +656,7 @@ public class ZMessageComposeBean {
                         setContent(bodyContent);
                     }
                 }
-                // RETURN!
+                // RETURN! No WAI! WAI! OK!
                 return;
             case NEW:
                 setSubject(req.getParameter("subject"));
@@ -990,6 +1048,30 @@ public class ZMessageComposeBean {
                 setEndMinute(endCalendar.get(Calendar.MINUTE));
             }
             initRepeat(appt.getSimpleRecurrence(), startDate, pc, mailbox);
+            initReminders(appt.getAlarms());
+        }
+    }
+
+    private void initReminders(List<ZAlarm> alarms){
+        for (ZAlarm alarm : alarms){
+            ZAlarm.ZAction action = alarm.getAction();
+            if (action.equals(ZAlarm.ZAction.EMAIL)){
+                this.mReminderEmail = alarm.getAttendees().get(0).getAddress();
+                this.mSendReminderEmail = true;
+            } else if (action.equals(ZAlarm.ZAction.X_YAHOO_CALENDAR_ACTION_IM)){
+                this.mSendReminderYIM = true;
+            } else if (action.equals(ZAlarm.ZAction.X_YAHOO_CALENDAR_ACTION_MOBILE)){
+                this.mSendReminderMobile = true;
+            }
+            String duration = alarm.getTriggerRelated().toString();
+            if (this.mReminder1 == null ||
+                this.mReminder2 == null){
+                if (this.mReminder1 == null){
+                    this.mReminder1 = duration;
+                } else if (!this.mReminder1.equalsIgnoreCase(duration)){
+                    this.mReminder2 = duration;
+                }
+            }
         }
     }
 
@@ -1271,7 +1353,48 @@ public class ZMessageComposeBean {
             if (getTaskStatus() == null) comp.setStatus(ecomp.getStatus());
             //comp.setClassProp(ecomp.getClassProp());
         }
+        if (getReminder1() != null && getReminder1().length() > 0){
+            toAlarm(comp, getReminder1());
+        }
+        if (getReminder2() != null && getReminder2().length() > 0){
+            toAlarm(comp, getReminder2());
+        }
+
         return invite;
+    }
+    
+    private void toAlarm(ZComponent comp, String remDuration) throws ServiceException{
+        ParsedDuration dur = ParsedDuration.parse(remDuration);
+        if (this.isSendReminderEmail()){
+            ZAlarm alarm = new ZAlarm();
+            alarm.setTriggerRelative(dur);
+            alarm.setSummary(getSubject());
+            alarm.setDescription(getContent());
+            alarm.setRepeatCount(0);
+            alarm.setAction(ZAlarm.ZAction.EMAIL);
+            ZAttendee attendee = new ZAttendee();
+            attendee.setAddress(this.getReminderEmail());
+            alarm.addAttendee(attendee);
+            comp.getAlarms().add(alarm);
+        }
+        if (this.isSendReminderMobile()) {
+            ZAlarm alarm = new ZAlarm();
+            alarm.setTriggerRelative(dur);
+            alarm.setSummary(getSubject());
+            alarm.setDescription(getContent());
+            alarm.setRepeatCount(0);
+            alarm.setAction(ZAlarm.ZAction.X_YAHOO_CALENDAR_ACTION_MOBILE);
+            comp.getAlarms().add(alarm);
+        }
+        if (this.isSendReminderYIM()) {
+            ZAlarm alarm = new ZAlarm();
+            alarm.setTriggerRelative(dur);
+            alarm.setSummary(getSubject());
+            alarm.setDescription(getContent());
+            alarm.setRepeatCount(0);
+            alarm.setAction(ZAlarm.ZAction.X_YAHOO_CALENDAR_ACTION_IM);
+            comp.getAlarms().add(alarm);
+        }
     }
 
     public boolean getIsValidStartTime() {

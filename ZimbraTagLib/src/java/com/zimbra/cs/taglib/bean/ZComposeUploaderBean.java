@@ -143,6 +143,12 @@ public class ZComposeUploaderBean {
     public static final String F_repeatEndType = "repeatEndType";
     public static final String F_repeatEndCount = "repeatEndCount";
     public static final String F_repeatEndDate = "repeatEndDate";
+    public static final String F_reminder1 = "reminderDuration1";
+    public static final String F_reminder2 = "reminderDuration2";
+    public static final String F_reminderEmail = "reminderEmail";
+    public static final String F_reminderSendEmail = "reminderSendEmail";
+    public static final String F_reminderSendMobile = "reminderSendMobile";
+    public static final String F_reminderSendYIM = "reminderSendYIM";
 
     private static final long DEFAULT_MAX_SIZE = 100 * 1024 * 1024;
 
@@ -325,6 +331,18 @@ public class ZComposeUploaderBean {
         compose.setRepeatEndType(getParam(F_repeatEndType));
         compose.setRepeatEndCount(getParamInt(F_repeatEndCount, 0));
         compose.setRepeatEndDate(getParam(F_repeatEndDate));
+
+        compose.setReminder1(getParam(F_reminder1));
+        compose.setReminder2(getParam(F_reminder2));
+        if ("true".equals(getParam(F_reminderSendEmail))){
+            compose.setReminderEmail(getParam(F_reminderEmail));
+            compose.setSendReminderEmail(true);
+        } else {
+            compose.setSendReminderEmail(false);
+        }
+        compose.setSendReminderMobile("true".equals(getParam(F_reminderSendMobile)));
+        compose.setSendReminderYIM("true".equals(getParam(F_reminderSendYIM)));
+        
 
         if (getIsContactDone()) {
             if (mPendingTo != null) compose.setTo(addToList(compose.getTo(), mPendingTo));
