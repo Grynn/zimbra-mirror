@@ -137,7 +137,7 @@ public class InstallCert extends AdminDocumentHandler {
             String filename = certEl.getAttribute("filename") ;
             ZimbraLog.security.debug("Certificate Filename  = " + filename + "; attid = " + attachId );
             
-            up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getRawAuthToken());
+            up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getAuthToken());
             if (up == null)
                 throw ServiceException.FAILURE("Uploaded file " + filename + " with " + attachId + " was not found.", null);
           
@@ -156,7 +156,7 @@ public class InstallCert extends AdminDocumentHandler {
             
             ZimbraLog.security.debug("Certificate Filename  = " + filename + "; attid = " + attachId );
             
-            up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getRawAuthToken());
+            up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getAuthToken());
             if (up == null)
                 throw ServiceException.FAILURE("Uploaded file " + filename + " with " + attachId + " was not found.", null);
             is = up.getInputStream();
@@ -175,7 +175,7 @@ public class InstallCert extends AdminDocumentHandler {
                     if (attachId != null && filename != null) {
                         ZimbraLog.security.debug("Certificate Filename  = " + filename + "; attid = " + attachId );
                         
-                        up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getRawAuthToken());
+                        up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getAuthToken());
                         if (up == null)
                             throw ServiceException.FAILURE("Uploaded file " + filename + " with " + attachId + " was not found.", null);
                         is = up.getInputStream();
