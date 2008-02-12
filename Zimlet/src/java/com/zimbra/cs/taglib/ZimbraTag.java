@@ -46,22 +46,27 @@ public class ZimbraTag extends BodyTagSupport {
         return "";
     }
 
-    public Account getRequestAccount() throws ZimbraTagException, ServiceException {
-    	HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-    	
-    	AuthToken token = null;
-    	try {
-    	    token = AuthProvider.getAuthToken(req, false);
-    	    if (token == null)
-    	        throw ZimbraTagException.AUTH_FAILURE("no auth cookie");
-    	} catch (AuthTokenException ate) {
+    private AuthToken getAuthToken() throws ZimbraTagException, ServiceException {
+        HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+        
+        AuthToken token = null;
+        try {
+            token = AuthProvider.getAuthToken(req, false);
+            if (token == null)
+                throw ZimbraTagException.AUTH_FAILURE("no auth cookie");
+        } catch (AuthTokenException ate) {
             throw ZimbraTagException.AUTH_FAILURE("cannot parse authtoken");
         }
 
         if (token.isExpired()) {
-        	throw ZimbraTagException.AUTH_FAILURE("authtoken expired");
+            throw ZimbraTagException.AUTH_FAILURE("authtoken expired");
         }
-        Provisioning prov = Provisioning.getInstance();
+        
+        return token;
+    }
+    
+    private Account getRequestAccount(AuthToken token) throws ZimbraTagException, ServiceException {
+    	Provisioning prov = Provisioning.getInstance();
         Account acct = prov.get(Provisioning.AccountBy.id, token.getAccountId());
         if (acct == null) {
         	throw ZimbraTagException.AUTH_FAILURE("account not found "+token.getAccountId());
@@ -71,7 +76,8 @@ public class ZimbraTag extends BodyTagSupport {
 
     public int doStartTag() throws JspTagException {
         try {
-            Account acct = getRequestAccount();
+            AuthToken authToken = getAuthToken();
+            Account acct = getRequestAccount(authToken);
             OperationContext octxt = new OperationContext(acct);
 
             String content = getContentStart(acct, octxt);
@@ -89,7 +95,8 @@ public class ZimbraTag extends BodyTagSupport {
 
     public int doEndTag() throws JspTagException {
         try {
-            Account acct = getRequestAccount();
+            AuthToken authToken = getAuthToken();
+            Account acct = getRequestAccount(authToken);
             OperationContext octxt = new OperationContext(acct);
 
             String content = getContentEnd(acct, octxt);
