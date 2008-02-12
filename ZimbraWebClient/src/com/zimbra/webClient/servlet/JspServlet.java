@@ -42,12 +42,11 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 		// set custom class loader
 		Thread thread = Thread.currentThread();
 		ClassLoader oLoader = thread.getContextClassLoader();
-		ClassLoader nLoader = new ResourceLoader(oLoader, this, request);
+		ClassLoader nLoader = new ResourceLoader(oLoader, this, request, response);
 		thread.setContextClassLoader(nLoader);
 
 		// default processing
 		try {
-			setSkin(request, response);
 			super.service(request, response);
 		}
 
@@ -61,7 +60,7 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 	// Private methods
 	//
 
-	private void setSkin(ServletRequest request, ServletResponse response) {
+	String setSkin(ServletRequest request, ServletResponse response) {
 		// start with if skin is already set as an attribute
 		String skin = (String)request.getAttribute(A_SKIN);
 //		ZimbraLog.webclient.debug("### request: "+skin);
@@ -145,6 +144,8 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 
 		// store in the request
 		request.setAttribute(A_SKIN, skin);
+
+		return skin;
 	}
 
 	//
@@ -157,18 +158,20 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 		// Data
 		//
 
-		private GenericServlet servlet;
+		private JspServlet servlet;
 		private ServletRequest request;
+		private ServletResponse response;
 
 		//
 		// Constructors
 		//
 
-		public ResourceLoader(ClassLoader parent, GenericServlet servlet,
-							  ServletRequest request) {
+		public ResourceLoader(ClassLoader parent, JspServlet servlet,
+							  ServletRequest request, ServletResponse response) {
 			super(parent);
 			this.servlet = servlet;
 			this.request = request;
+			this.response = response;
 		}
 
 		//
@@ -191,6 +194,9 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 			InputStream stream = super.getResourceAsStream(basename);
 
 			String skin = (String)this.request.getAttribute(JspServlet.A_SKIN);
+			if (skin == null) {
+				skin = this.servlet.setSkin(this.request, this.response);
+			}
 			File file = new File(this.servlet.getServletContext().getRealPath("/skins/"+skin+basename));
 			if (file.exists()) {
 				if (ZimbraLog.webclient.isDebugEnabled()) {
