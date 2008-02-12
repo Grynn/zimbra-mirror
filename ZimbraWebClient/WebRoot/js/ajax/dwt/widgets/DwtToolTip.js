@@ -77,19 +77,26 @@ function(content, setInnerHTML) {
 	
 DwtToolTip.prototype.popup = 
 function(x, y, skipInnerHTML) {
-	if (this._content != null) {
+    if (this._popupAction) {
+        AjxTimedAction.cancelAction(this._popupAction);
+        this._popupAction = null;
+    }
+    if (this._content != null) {
 		if(!skipInnerHTML) {
             this._contentDiv.innerHTML = this._content;
         }
 
-		var action = new AjxTimedAction(this, this._positionElement, [x, y]);
-		AjxTimedAction.scheduleAction(action, 5);
-		this._poppedUp = true;
+		this._popupAction = new AjxTimedAction(this, this._positionElement, [x, y]);
+		AjxTimedAction.scheduleAction(this._popupAction, 5);
 	}
 };
 
 DwtToolTip.prototype.popdown = 
 function() {
+    if (this._popupAction) {
+        AjxTimedAction.cancelAction(this._popupAction);
+        this._popupAction = null;
+    }
 	if (this._content != null && this._poppedUp) {
 		Dwt.setLocation(this._div, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 		this._poppedUp = false;
@@ -102,7 +109,9 @@ function() {
 
 DwtToolTip.prototype._positionElement = 
 function(startX, startY) {
-	var element =  this._div;
+    this._popupAction = null;
+
+    var element =  this._div;
 	var baseId = "tooltip";
 	var dialog = this._dialog;
 
@@ -205,4 +214,5 @@ function(startX, startY) {
 	Dwt.setLocation(element, popupX, popupY);
 	var zIndex = dialog ? dialog.getZIndex() + Dwt._Z_INC : Dwt.Z_TOOLTIP;
 	Dwt.setZIndex(element, zIndex);
+    this._poppedUp = true;
 };
