@@ -11,7 +11,7 @@ import com.zimbra.cs.zclient.ZMailbox;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,14 +145,14 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
         ZMailbox.ZOutgoingMessage m = new ZMailbox.ZOutgoingMessage();
 
         String subject =
-            LocaleSupport.getLocalizedMessage((PageContext)getJspContext(),
+            I18nUtil.getLocalizedMessage((PageContext)getJspContext(),
                                               "calendarAddShareMailSubject", grantorName);
 
         String acceptShareLink = "/zimbra/y/calendar?action=acceptShare&np=1&nn=" +
                                  folderName + "&ng=" + grantorId + "&nl=" + linkId;
         String [] bodyArgs = {grantorName, folderName, acceptShareLink};
         String body =
-                LocaleSupport.getLocalizedMessage((PageContext)getJspContext(),
+                I18nUtil.getLocalizedMessage((PageContext)getJspContext(),
                             "calendarAddShareMailBody", bodyArgs);
 
         if (granteeId != null && granteeId.length() > 0)

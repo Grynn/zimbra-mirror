@@ -61,7 +61,7 @@ import javax.naming.NamingException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -312,7 +312,7 @@ public class BeanUtils {
         if (df == null) {
             switch (fmt) {
             case DTF_DATE_MEDIUM:
-                df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "ZM_formatDateMediumNoYear"));
+                df = new SimpleDateFormat(I18nUtil.getLocalizedMessage(pc, "ZM_formatDateMediumNoYear"));
                 break;
             case DTF_TIME_SHORT:
                 df = DateFormat.getTimeInstance(DateFormat.SHORT, pc.getRequest().getLocale());
@@ -365,9 +365,9 @@ public class BeanUtils {
         long seconds = totalSeconds % 60;
         long minutes = (totalSeconds - seconds) / 60;
         if (minutes > 0) {
-            return LocaleSupport.getLocalizedMessage(pc, "durationDisplayMinutes", new Object[]{minutes, seconds});
+            return I18nUtil.getLocalizedMessage(pc, "durationDisplayMinutes", new Object[]{minutes, seconds});
         } else {
-            return LocaleSupport.getLocalizedMessage(pc, "durationDisplaySeconds", new Object[]{seconds});
+            return I18nUtil.getLocalizedMessage(pc, "durationDisplaySeconds", new Object[]{seconds});
         }
     }
 
@@ -494,7 +494,7 @@ public class BeanUtils {
         if (id == null) return null;
         ZFolder f = mbox.getFolderById(id);
         if (f == null) return null;
-        String lname = LocaleSupport.getLocalizedMessage(pc, "FOLDER_LABEL_"+f.getId());
+        String lname = I18nUtil.getLocalizedMessage(pc, "FOLDER_LABEL_"+f.getId());
         return (lname == null || lname.startsWith("???")) ? f.getName() : lname;
     }
 
@@ -860,56 +860,56 @@ public class BeanUtils {
         Calendar cal;
 
         if (repeat == null || repeat.getType() == null) {
-            return LocaleSupport.getLocalizedMessage(pc, "recurNone");
+            return I18nUtil.getLocalizedMessage(pc, "recurNone");
         }
 
         switch (repeat.getType()) {
             case NONE:
-                r = LocaleSupport.getLocalizedMessage(pc, "recurNone");
+                r = I18nUtil.getLocalizedMessage(pc, "recurNone");
                 break;
             case DAILY:
-                r = LocaleSupport.getLocalizedMessage(pc, "recurDailyEveryDay");
+                r = I18nUtil.getLocalizedMessage(pc, "recurDailyEveryDay");
                 break;
             case DAILY_WEEKDAY:
-                r = LocaleSupport.getLocalizedMessage(pc, "recurDailyEveryWeekday");
+                r = I18nUtil.getLocalizedMessage(pc, "recurDailyEveryWeekday");
                 break;
             case DAILY_INTERVAL:
-                r = LocaleSupport.getLocalizedMessage(pc, "recurDailyEveryNumDays", new Object[] {repeat.getDailyInterval()});
+                r = I18nUtil.getLocalizedMessage(pc, "recurDailyEveryNumDays", new Object[] {repeat.getDailyInterval()});
                 break;
             case WEEKLY:
-                r = LocaleSupport.getLocalizedMessage(pc, "recurDailyEveryWeek");
+                r = I18nUtil.getLocalizedMessage(pc, "recurDailyEveryWeek");
                 break;
             case WEEKLY_BY_DAY:
                 cal = getToday(timeZone);
                 setDayOfWeek(cal, repeat.getWeeklyByDay().ordinal()+1);
-                r = LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryWeekday", new Object[] {cal.getTime()});
+                r = I18nUtil.getLocalizedMessage(pc, "recurWeeklyEveryWeekday", new Object[] {cal.getTime()});
                 break;
             case WEEKLY_CUSTOM:
                 StringBuilder wc = new StringBuilder();
                 cal = getToday(timeZone);
-                wc.append(LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeks", new Object[] {repeat.getWeeklyInterval()}));
+                wc.append(I18nUtil.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeks", new Object[] {repeat.getWeeklyInterval()}));
                 wc.append(" ");
                 int wci = 1, wcmax = repeat.getWeeklyIntervalDays().size();
                 for (ZWeekDay day : repeat.getWeeklyIntervalDays()) {
-                    if (wci != 1 && wci != wcmax) wc.append(LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeksSep")).append(" ");
-                    if (wci != 1 && wci == wcmax) wc.append(" ").append(LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeksLastSep")).append(" ");
+                    if (wci != 1 && wci != wcmax) wc.append(I18nUtil.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeksSep")).append(" ");
+                    if (wci != 1 && wci == wcmax) wc.append(" ").append(I18nUtil.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeksLastSep")).append(" ");
                     setDayOfWeek(cal, day.getOrdinal()+1);
-                    wc.append(LocaleSupport.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeksDay", new Object[] {cal.getTime()}));
+                    wc.append(I18nUtil.getLocalizedMessage(pc, "recurWeeklyEveryNumWeeksDay", new Object[] {cal.getTime()}));
                     wci++;
                 }
                 r = wc.toString();
                 break;
             case MONTHLY:
-                r = LocaleSupport.getLocalizedMessage(pc, "recurMonthly");
+                r = I18nUtil.getLocalizedMessage(pc, "recurMonthly");
                 break;
             case MONTHLY_BY_MONTH_DAY:
-                r = LocaleSupport.getLocalizedMessage(pc, "recurMonthlyEveryNumMonthsDate",
+                r = I18nUtil.getLocalizedMessage(pc, "recurMonthlyEveryNumMonthsDate",
                         new Object[] {repeat.getMonthlyMonthDay(), repeat.getMonthlyInterval()});
                 break;
             case MONTHLY_RELATIVE:
                 cal = getToday(timeZone);
                 setDayOfWeek(cal, repeat.getMonthlyRelativeDay().getDay().getOrdinal()+1);
-                r = LocaleSupport.getLocalizedMessage(pc, "recurMonthlyEveryNumMonthsNumDay",
+                r = I18nUtil.getLocalizedMessage(pc, "recurMonthlyEveryNumMonthsNumDay",
                         new Object[] {
                                 repeat.getMonthlyRelativeDay().getWeekOrd(),
                                 cal.getTime(),
@@ -917,19 +917,19 @@ public class BeanUtils {
                         });
                 break;
             case YEARLY:
-                r = LocaleSupport.getLocalizedMessage(pc, "recurYearly");
+                r = I18nUtil.getLocalizedMessage(pc, "recurYearly");
                 break;
             case YEARLY_BY_DATE:
                 cal = getToday(timeZone);
                 setMonth(cal, repeat.getYearlyByDateMonth()-1);
-                r = LocaleSupport.getLocalizedMessage(pc, "recurYearlyEveryDate",
+                r = I18nUtil.getLocalizedMessage(pc, "recurYearlyEveryDate",
                         new Object[] { cal.getTime(), repeat.getYearlyByDateMonthDay()});
                 break;
             case YEARLY_RELATIVE:
                 cal = getToday(timeZone);
                 setDayOfWeek(cal, repeat.getYearlyRelativeDay().getDay().getOrdinal()+1);
                 setMonth(cal, repeat.getYearlyRelativeMonth()-1);
-                r = LocaleSupport.getLocalizedMessage(pc, "recurYearlyEveryMonthNumDay",
+                r = I18nUtil.getLocalizedMessage(pc, "recurYearlyEveryMonthNumDay",
                         new Object[] {
                                 repeat.getYearlyRelativeDay().getWeekOrd(),
                                 cal.getTime(),
@@ -937,7 +937,7 @@ public class BeanUtils {
                         });
                 break;
             default:
-                r = LocaleSupport.getLocalizedMessage(pc, "recurComplex");
+                r = I18nUtil.getLocalizedMessage(pc, "recurComplex");
                 break;
         }
 
@@ -948,16 +948,16 @@ public class BeanUtils {
 
         switch (repeat.getEnd()) {
             case NEVER:
-                e = LocaleSupport.getLocalizedMessage(pc, "recurEndNone");
+                e = I18nUtil.getLocalizedMessage(pc, "recurEndNone");
                 break;
             case COUNT:
-                e = LocaleSupport.getLocalizedMessage(pc, "recurEndNumber", new Object[] {repeat.getCount()});
+                e = I18nUtil.getLocalizedMessage(pc, "recurEndNumber", new Object[] {repeat.getCount()});
                 break;
             case UNTIL:
                 DateFormat untilDf = DateFormat.getDateInstance(DateFormat.MEDIUM, pc.getRequest().getLocale());
                 if (timeZone != null) untilDf.setTimeZone(timeZone);
                 String untilDate = untilDf.format(repeat.getUntilDate().getDate());
-                e = LocaleSupport.getLocalizedMessage(pc, "recurEndByDate", new Object[] { untilDate});
+                e = I18nUtil.getLocalizedMessage(pc, "recurEndByDate", new Object[] { untilDate});
                 break;
         }
 
@@ -965,11 +965,11 @@ public class BeanUtils {
         if (startDate != null) {
             DateFormat startDf = DateFormat.getDateInstance(DateFormat.MEDIUM, pc.getRequest().getLocale());
             if (timeZone != null) startDf.setTimeZone(timeZone);
-            s = LocaleSupport.getLocalizedMessage(pc, "recurStart", new Object[] { startDf.format(startDate)});
+            s = I18nUtil.getLocalizedMessage(pc, "recurStart", new Object[] { startDf.format(startDate)});
 
         }
 
-        return LocaleSupport.getLocalizedMessage(pc, "repeatBlurb", new Object[] { r, e, s});
+        return I18nUtil.getLocalizedMessage(pc, "repeatBlurb", new Object[] { r, e, s});
     }
 
     public static String getApptDateBlurb(PageContext pc, TimeZone timeZone, long startTime, long endTime, boolean allDay) {
@@ -987,20 +987,20 @@ public class BeanUtils {
         boolean sameDate = isSameDate(startCal, endCal);
 
         if (allDay && sameDate) {
-                return LocaleSupport.getLocalizedMessage(pc, "apptDateBlurbAllDay",
+                return I18nUtil.getLocalizedMessage(pc, "apptDateBlurbAllDay",
                         new Object[] {df.format(startCal.getTime())});
         } else if (allDay) {
-                return LocaleSupport.getLocalizedMessage(pc, "apptDateBlurbAllDayDiffEndDay",
+                return I18nUtil.getLocalizedMessage(pc, "apptDateBlurbAllDayDiffEndDay",
                         new Object[] {df.format(startCal.getTime()), df.format(endCal.getTime())});
         } else if (sameDate) {
-                return LocaleSupport.getLocalizedMessage(pc, "apptDateBlurb",
+                return I18nUtil.getLocalizedMessage(pc, "apptDateBlurb",
                         new Object[] {
                                 df.format(startCal.getTime()),
                                 tf.format(startCal.getTime()),
                                 tf.format(endCal.getTime())
                         });
         } else {
-                return LocaleSupport.getLocalizedMessage(pc, "apptDateBlurbDiffEndDay",
+                return I18nUtil.getLocalizedMessage(pc, "apptDateBlurbDiffEndDay",
                         new Object[] {
                                 df.format(startCal.getTime()),
                                 tf.format(startCal.getTime()),
@@ -1069,7 +1069,7 @@ public class BeanUtils {
         } else if (VoiceConstants.FNAME_TRASH.equals(name)) {
             key = "trash";
         }
-        return key != null ? LocaleSupport.getLocalizedMessage(pc, key) : name;
+        return key != null ? I18nUtil.getLocalizedMessage(pc, key) : name;
     }
 
     public static String getPhoneDisplay(String name) {

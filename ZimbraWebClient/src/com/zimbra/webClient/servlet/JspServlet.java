@@ -5,6 +5,7 @@ import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import java.io.*;
+import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
@@ -22,6 +23,17 @@ import javax.servlet.jsp.*;
 public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 
 	//
+	// Constants
+	//
+
+	public static final String P_SKIN = "skin";
+	public static final String P_DEFAULT_SKIN = "zimbraDefaultSkin";
+
+	public static final String A_SKIN = "skin";
+
+	protected static final String MANIFEST = "manifest.xml";
+
+	//
 	// Servlet methods
 	//
 
@@ -30,11 +42,12 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 		// set custom class loader
 		Thread thread = Thread.currentThread();
 		ClassLoader oLoader = thread.getContextClassLoader();
-		ClassLoader nLoader = new ResourceLoader(oLoader, this, request, response);
+		ClassLoader nLoader = new ResourceLoader(oLoader, this, request);
 		thread.setContextClassLoader(nLoader);
 
 		// default processing
 		try {
+			setSkin(request, response);
 			super.service(request, response);
 		}
 
@@ -42,6 +55,96 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 		finally {
 			thread.setContextClassLoader(oLoader);
 		}
+	}
+
+	//
+	// Private methods
+	//
+
+	private void setSkin(ServletRequest request, ServletResponse response) {
+		// start with if skin is already set as an attribute
+		String skin = (String)request.getAttribute(A_SKIN);
+//		ZimbraLog.webclient.debug("### request: "+skin);
+
+		// is skin specified in request parameter?
+		if (skin == null) {
+			skin = request.getParameter(P_SKIN);
+//			ZimbraLog.webclient.debug("### param: "+skin);
+		}
+
+		// is it available in session?
+		if (skin == null) {
+			HttpSession hsession = ((HttpServletRequest)request).getSession(false);
+			if (hsession != null) {
+				skin = (String)hsession.getAttribute(A_SKIN);
+//				ZimbraLog.webclient.debug("### http session: "+skin);
+			}
+		}
+
+		// user preference
+		ZMailbox mailbox = null;
+		if (skin == null) {
+			JspFactory factory  = JspFactory.getDefaultFactory();
+			PageContext context = factory.getPageContext(this, request, response, null, true, 0, true);
+			if (ZJspSession.hasSession(context)) {
+				try {
+					ZJspSession zsession = ZJspSession.getSession(context);
+					if (zsession != null) {
+						mailbox = ZJspSession.getZMailbox(context);
+						skin = mailbox.getPrefs().getSkin();
+//						ZimbraLog.webclient.debug("### zimbra session: "+skin);
+					}
+				}
+				catch (Exception e) {
+					if (ZimbraLog.webclient.isDebugEnabled()) {
+						ZimbraLog.webclient.debug("no zimbra session");
+					}
+				}
+				finally {
+					factory.releasePageContext(context);
+				}
+			}
+		}
+
+		/*** NOTE: This causes an additional SOAP request ***
+		// is this skin allowed?
+		if (skin != null && mailbox != null) {
+			try {
+				boolean found = false;
+				for (String name : mailbox.getAvailableSkins()) {
+					if (name.equals(skin)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					skin = null;
+				}
+			}
+			catch (Exception e) {
+				ZimbraLog.webclient.error("unable to get available skins");
+				skin = null;
+			}
+		}
+		/***/
+
+		// is the skin even present?
+		if (skin != null) {
+			File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/"+MANIFEST));
+			if (!manifest.exists()) {
+				ZimbraLog.webclient.debug("selected skin ("+skin+") doesn't exist");
+				skin = null;
+			}
+		}
+
+		// fall back to default skin
+		if (skin == null) {
+			skin = getServletContext().getInitParameter(P_DEFAULT_SKIN);
+//			ZimbraLog.webclient.debug("### default: "+skin);
+		}
+
+		// store in the request
+		request.setAttribute(A_SKIN, skin);
 	}
 
 	//
@@ -54,188 +157,67 @@ public class JspServlet extends org.apache.jasper.servlet.JspServlet {
 		// Data
 		//
 
-		private JspServlet servlet;
+		private GenericServlet servlet;
 		private ServletRequest request;
-		private ServletResponse response;
-
-		private boolean isInitialized = false;
-		private File skinDir;
 
 		//
 		// Constructors
 		//
 
-		public ResourceLoader(ClassLoader parent, JspServlet servlet,
-							  ServletRequest request, ServletResponse response) {
+		public ResourceLoader(ClassLoader parent, GenericServlet servlet,
+							  ServletRequest request) {
 			super(parent);
 			this.servlet = servlet;
 			this.request = request;
-			this.response = response;
 		}
 
 		//
 		// ClassLoader methods
 		//
 
-		public InputStream getResourceAsStream(String basename) {
+		public InputStream getResourceAsStream(String filename) {
 			if (ZimbraLog.webclient.isDebugEnabled()) {
-				ZimbraLog.webclient.debug("getResourceAsStream: basename="+basename);
+				ZimbraLog.webclient.debug("getResourceAsStream: filename="+filename);
 			}
 
-			// find resources
-			InputStream stream = super.getResourceAsStream(basename);
+			// default resource
+			String basename = filename.replaceAll("^/skins/[^/]+", "");
 			boolean isMsgOrKey = basename.startsWith("/messages/") || basename.startsWith("/keys/");
-			if (isMsgOrKey) {
-				// get skin dir
-				if (!this.isInitialized) {
-					this.isInitialized = true;
-					try {
-						String skin = (String)this.request.getAttribute("skin");
-						if (ZimbraLog.webclient.isDebugEnabled()) {
-							ZimbraLog.webclient.debug("ResourceLoader: attribute.skin="+skin);
-						}
-						if (skin == null) {
-							skin = this.request.getParameter("skin");
-							if (ZimbraLog.webclient.isDebugEnabled()) {
-								ZimbraLog.webclient.debug("ResourceLoader: parameter.skin="+skin);
-							}
-						}
-						if (skin == null && this.request instanceof HttpServletRequest) {
-							HttpSession session = ((HttpServletRequest)this.request).getSession(false);
-							if (session != null) {
-								skin = (String)session.getAttribute("skin");
-								if (ZimbraLog.webclient.isDebugEnabled()) {
-									ZimbraLog.webclient.debug("ResourceLoader: session.attribute.skin="+skin);
-								}
-								if (skin == null) {
-									JspFactory factory  = JspFactory.getDefaultFactory();
-									PageContext context = factory.getPageContext(this.servlet, this.request, this.response, null, true, 0, true);
-                                    if (ZJspSession.hasSession(context)) {
-                                        ZJspSession zsession = ZJspSession.getSession(context);
-                                        if (zsession != null) {
-                                            ZMailbox mailbox = ZJspSession.getZMailbox(context);
-                                            skin = mailbox.getPrefs().getSkin();
-                                            if (ZimbraLog.webclient.isDebugEnabled()) {
-                                                ZimbraLog.webclient.debug("ResourceLoader: mailbox.pref.skin="+skin);
-                                            }
-                                        }
-                                        factory.releasePageContext(context);
-                                    }
-                                }
-                            }
-						}
-						if (skin == null) {
-							skin = this.servlet.getServletContext().getInitParameter("zimbraDefaultSkin");
-							if (ZimbraLog.webclient.isDebugEnabled()) {
-								ZimbraLog.webclient.debug("ResourceLoader: context.init-parameter.zimbraDefaultSkin="+skin);
-							}
-						}
-						File dir = new File(this.servlet.getServletContext().getRealPath("/skins/"+skin));
-						if (dir.exists() && dir.isDirectory()) {
-							this.skinDir = dir;
-						}
-					}
-					catch (Exception e) {
-						if (ZimbraLog.webclient.isDebugEnabled()) {
-							ZimbraLog.webclient.debug(e);
-						}
-					}
+			if (!isMsgOrKey) {
+				return super.getResourceAsStream(filename);
+			}
+
+			// aggregated resources
+			InputStream stream = super.getResourceAsStream(basename);
+
+			String skin = (String)this.request.getAttribute(JspServlet.A_SKIN);
+			File file = new File(this.servlet.getServletContext().getRealPath("/skins/"+skin+basename));
+			if (file.exists()) {
+				if (ZimbraLog.webclient.isDebugEnabled()) {
+					ZimbraLog.webclient.debug("  found message overrides for skin="+skin);
 				}
-				// return resources
-				if (this.skinDir != null) {
-					File file = new File(this.skinDir, basename);
-					if (file.exists()) {
-						if (ZimbraLog.webclient.isDebugEnabled()) {
-							ZimbraLog.webclient.debug("  found message overrides for skin="+this.skinDir.getName());
-						}
-						try {
-							InputStream skinStream = new FileInputStream(file);
-							if (stream != null) {
-								// NOTE: We have to add a newline in case the original
-								//       stream doesn't end with one. Otherwise, the
-								//       first line from the skin stream will appear
-								//       as part of the value of the last line in the
-								//       original stream.
-								InputStream newlineStream = new ByteArrayInputStream("\n".getBytes());
-								stream = new ConcatInputStream(stream, newlineStream, skinStream);
-							}
-							else {
-								stream = skinStream;
-							}
-						}
-						catch (FileNotFoundException e) {
-							// ignore
-						}
-					}
+				try {
+					InputStream skinStream = new FileInputStream(file);
+
+					// NOTE: We have to add a newline in case the original
+					//       stream doesn't end with one. Otherwise, the
+					//       first line from the skin stream will appear
+					//       as part of the value of the last line in the
+					//       original stream.
+					InputStream newlineStream = new ByteArrayInputStream("\n".getBytes());
+
+					stream = stream != null
+						   ? new SequenceInputStream(stream, new SequenceInputStream(newlineStream, skinStream))
+						   : skinStream;
+				}
+				catch (FileNotFoundException e) {
+					// ignore
 				}
 			}
+
 			return stream;
 		}
-		
+
 	} // class ResourceLoader
-
-	static class ConcatInputStream extends InputStream {
-
-		//
-		// Data
-		//
-
-		private InputStream[] streams;
-		private InputStream current;
-		private int count = 0;
-		private int index = 0;
-
-		//
-		// Constructors
-		//
-
-		public ConcatInputStream(InputStream... streams) {
-			this.streams = streams;
-			if (this.streams != null) {
-				this.count = this.streams.length;
-			}
-		}
-
-		//
-		// InputStream methods
-		//
-		
-		public int read() throws IOException {
-			if (this.current == null) {
-				if (this.index == this.count) {
-					return -1;
-				}
-				this.current = this.streams[this.index++];
-			}
-			int c = this.current.read();
-			if (c == -1) {
-				try {
-					this.current.close();
-				}
-				catch (IOException e) {
-					this.close();
-					throw e;
-				}
-				this.current = null;
-			}
-			return c;
-		}
-
-		public void close() throws IOException {
-			IOException ex = null;
-			for (int i = this.index; i < this.count; i++) {
-				try {
-					this.streams[i].close();
-				}
-				catch (IOException e) {
-					ex = e;
-				}
-			}
-			if (ex != null) {
-				throw ex;
-			}
-		}
-
-	} // class ConcatInputStream
 
 } // class JspServlet

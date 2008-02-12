@@ -26,7 +26,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -183,11 +183,11 @@ public class BindKeyTag extends ZimbraSimpleTag {
         if (ua != null) {
             String os = ua.getIsOsWindows() ? ".win" : ua.getIsOsMac() ? ".mac" : ua.getIsOsLinux() ? ".linux" : null;
             if (os != null) {
-                String key = LocaleSupport.getLocalizedMessage((PageContext)ctxt, message+os, mBasename);
+                String key = I18nUtil.getLocalizedMessage((PageContext)ctxt, message+os, mBasename);
                 if (!key.startsWith("???")) return key;
             }
         }
-        return LocaleSupport.getLocalizedMessage((PageContext)ctxt, message, mBasename);
+        return I18nUtil.getLocalizedMessage((PageContext)ctxt, message, mBasename);
     }
 
     private String generateGoToTagAliases(JspContext ctxt, NumericShortCutType type) throws JspException, ServiceException, IOException {

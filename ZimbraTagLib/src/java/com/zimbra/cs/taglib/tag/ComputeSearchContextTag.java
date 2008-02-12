@@ -32,7 +32,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import java.io.IOException;
 import java.util.List;
 
@@ -208,7 +208,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
 
         if (sq != null) {
             result.setTitle(sq);
-            result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToSearch"));
+            result.setBackTo(I18nUtil.getLocalizedMessage(pageContext, "backToSearch"));
             result.setShortBackTo(sq);
             result.setQuery(sq);
             result.setShowMatches(true);
@@ -219,11 +219,11 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                 if (folder instanceof ZSearchFolder) {
                     result.setQuery(((ZSearchFolder)folder).getQuery());
                     result.setShowMatches(true);
-                    result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToSearchFolder", new Object[] {folder.getName()}));
+                    result.setBackTo(I18nUtil.getLocalizedMessage(pageContext, "backToSearchFolder", new Object[] {folder.getName()}));
                     result.setShortBackTo(folder.getName());
                 } else {
                     result.setQuery("in:\"" + folder.getRootRelativePath() + "\"");
-                    result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToFolder", new Object[] {folder.getName()}));
+                    result.setBackTo(I18nUtil.getLocalizedMessage(pageContext, "backToFolder", new Object[] {folder.getName()}));
                     result.setShortBackTo(folder.getName());
                 }
                 result.setFolder(new ZFolderBean(folder));
@@ -236,7 +236,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             if (tag != null) {
                 result.setQuery("tag:\"" + tag.getName() + "\"");
                 result.setTitle(tag.getName());
-                result.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToTag", new Object[] {tag.getName()}));
+                result.setBackTo(I18nUtil.getLocalizedMessage(pageContext, "backToTag", new Object[] {tag.getName()}));
                 result.setShortBackTo(tag.getName());
                 result.setSelectedId(tag.getId());
                 result.setTag(new ZTagBean(tag));                

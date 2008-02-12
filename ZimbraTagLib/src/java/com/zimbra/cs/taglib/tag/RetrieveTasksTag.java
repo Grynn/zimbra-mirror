@@ -20,7 +20,7 @@ package com.zimbra.cs.taglib.tag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import java.io.IOException;
 
 import com.zimbra.cs.zclient.ZMailbox;
@@ -61,7 +61,7 @@ public class RetrieveTasksTag extends ZimbraSimpleTag {
 /*
             sContext.setQuery("in:\"" + tasklist.getRootRelativePath() + "\"");
 
-            sContext.setBackTo(LocaleSupport.getLocalizedMessage(pageContext, "backToFolder", new Object[] {tasklist.getName()}));
+            sContext.setBackTo(I18nUtil.getLocalizedMessage(pageContext, "backToFolder", new Object[] {tasklist.getName()}));
             sContext.setShortBackTo(tasklist.getName());
 
             sContext.setFolder(new ZFolderBean(tasklist));

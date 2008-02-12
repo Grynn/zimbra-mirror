@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import java.io.IOException;
 
 // Sets up the compose bean when a voice mail is being forwarded/replied
@@ -52,7 +52,7 @@ public class VoiceMailComposeTag extends ZimbraSimpleTag {
             PageContext pageContext = (PageContext) jctxt;
 
             String subjectKey = F_reply.equals(mOperation) ? "voiceMailReplySubject" : "voiceMailForwardSubject";
-            String subject = LocaleSupport.getLocalizedMessage(pageContext, subjectKey);
+            String subject = I18nUtil.getLocalizedMessage(pageContext, subjectKey);
             mCompose.setSubject(subject);
 
             ZVoiceMailItemHit hit = ZVoiceMailItemHit.deserialize(mVoiceId, mPhone);
@@ -61,7 +61,7 @@ public class VoiceMailComposeTag extends ZimbraSimpleTag {
                     BeanUtils.displayDuration(pageContext, hit.getDuration()),
                     BeanUtils.displayMsgDate(pageContext, new Date(hit.getDate())),
             };
-            String body = LocaleSupport.getLocalizedMessage(pageContext, "voiceMailBody", bodyArgs);
+            String body = I18nUtil.getLocalizedMessage(pageContext, "voiceMailBody", bodyArgs);
             mCompose.setContent(body);
         } catch (ServiceException e) {
             throw new JspTagException("voice mail compose failed", e);

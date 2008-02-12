@@ -44,7 +44,7 @@ import org.apache.commons.httpclient.methods.multipart.PartSource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
+import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -174,7 +174,7 @@ public class ZMessageComposeBean {
     public ZMessageComposeBean(PageContext pageContext) {
         mMessageAttachments = new ArrayList<MessageAttachment>();
         mOriginalAttachments = new ArrayList<ZMimePartBean>();
-        mDateFormat = LocaleSupport.getLocalizedMessage(pageContext, "CAL_APPT_EDIT_DATE_FORMAT");
+        mDateFormat = I18nUtil.getLocalizedMessage(pageContext, "CAL_APPT_EDIT_DATE_FORMAT");
     }
 
     public void setInviteReplyVerb(String verb) { mInviteReplyVerb = verb; }
@@ -557,7 +557,7 @@ public class ZMessageComposeBean {
                                AppointmentOptions options) throws ServiceException {
         HttpServletRequest req = (HttpServletRequest) pc.getRequest();
 
-        setDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+        setDateFormat(I18nUtil.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
 
         Set<String> emailAddresses = mailbox.getAccountInfo(false).getEmailAddresses();
         List<ZIdentity> identities = mailbox.getAccountInfo(false).getIdentities();
@@ -673,15 +673,15 @@ public class ZMessageComposeBean {
             switch (action) {
                 case INVITE_ACCEPT:
                     setInviteReplyVerb(ReplyVerb.ACCEPT.name());
-                    setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyAcceptMessage"));
+                    setContent(I18nUtil.getLocalizedMessage(pc, "defaultInviteReplyAcceptMessage"));
                     break;
                 case INVITE_DECLINE:
                     setInviteReplyVerb(ReplyVerb.DECLINE.name());
-                    setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyDeclineMessage"));
+                    setContent(I18nUtil.getLocalizedMessage(pc, "defaultInviteReplyDeclineMessage"));
                     break;
                 case INVITE_TENTATIVE:
                     setInviteReplyVerb(ReplyVerb.TENTATIVE.name());
-                    setContent(LocaleSupport.getLocalizedMessage(pc, "defaultInviteReplyTentativeMessage"));
+                    setContent(I18nUtil.getLocalizedMessage(pc, "defaultInviteReplyTentativeMessage"));
                     break;
             }
             setInviteReplyInst(getParamLong(req.getParameter("inviteReplyInst"), 0));
@@ -887,7 +887,7 @@ public class ZMessageComposeBean {
         setRepeatEndCount((int)(repeat.getCount() > 0 ? repeat.getCount() : 1));
         
         Date endDate = repeat.getUntilDate() != null ? repeat.getUntilDate().getDate() : date;
-        DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+        DateFormat df = new SimpleDateFormat(I18nUtil.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
         df.setTimeZone(mailbox.getPrefs().getTimeZone());
         setRepeatEndDate(df.format(endDate));
         setRepeatEndType(repeat.getEnd().name());
@@ -931,7 +931,7 @@ public class ZMessageComposeBean {
             // start hour to current hour instead of 12:00 AM
             calendar.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
         }
-        DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+        DateFormat df = new SimpleDateFormat(I18nUtil.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
         df.setTimeZone(mailbox.getPrefs().getTimeZone());
         String dateStr = df.format(calendar.getTime());
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -979,7 +979,7 @@ public class ZMessageComposeBean {
 
         setClassProp(appt.getClassProp().name());
 
-        DateFormat df = new SimpleDateFormat(LocaleSupport.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+        DateFormat df = new SimpleDateFormat(I18nUtil.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
 
         if (options.isTask()) {
             setTaskPercentComplete(appt.getPercentCompleted());
@@ -1080,19 +1080,19 @@ public class ZMessageComposeBean {
         //from, to, cc, date, subject
         String fromHdr = msg.getDisplayFrom();
         if (fromHdr != null)
-            headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_FROM")).append(": ").append(fromHdr).append(CRLF);
+            headers.append(I18nUtil.getLocalizedMessage(pc, "ZM_HEADER_FROM")).append(": ").append(fromHdr).append(CRLF);
         String toHdr = msg.getDisplayTo();
         if (toHdr != null)
-            headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_TO")).append(": ").append(toHdr).append(CRLF);
+            headers.append(I18nUtil.getLocalizedMessage(pc, "ZM_HEADER_TO")).append(": ").append(toHdr).append(CRLF);
          String ccHdr = msg.getDisplayCc();
         if (ccHdr != null)
-            headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_CC")).append(": ").append(ccHdr).append(CRLF);
+            headers.append(I18nUtil.getLocalizedMessage(pc, "ZM_HEADER_CC")).append(": ").append(ccHdr).append(CRLF);
 
-        headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_SENT")).append(": ").append(msg.getDisplaySentDate()).append(CRLF);
+        headers.append(I18nUtil.getLocalizedMessage(pc, "ZM_HEADER_SENT")).append(": ").append(msg.getDisplaySentDate()).append(CRLF);
 
         String subjectHdr = msg.getSubject();
         if (subjectHdr != null)
-            headers.append(LocaleSupport.getLocalizedMessage(pc, "ZM_HEADER_SUBJECT")).append(": ").append(subjectHdr).append(CRLF);
+            headers.append(I18nUtil.getLocalizedMessage(pc, "ZM_HEADER_SUBJECT")).append(": ").append(subjectHdr).append(CRLF);
         return headers.toString();
     }
 
@@ -1112,7 +1112,7 @@ public class ZMessageComposeBean {
             mMessageAttachments = new ArrayList<MessageAttachment>();
             mMessageAttachments.add(new MessageAttachment(msg.getId(), msg.getSubject()));
         } else if (prefs.getForwardIncludeBody()) {
-            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardedMessage")).append(CRLF);
+            content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_forwardedMessage")).append(CRLF);
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
             ZMimePartBean body = msg.getBody();
             content.append(body == null ? "" : body.getContent());
@@ -1120,7 +1120,7 @@ public class ZMessageComposeBean {
             addAttachments(msg, true);
         } else if (prefs.getForwardIncludeBodyWithPrefx()) {
             String org = getQuotedDisplay(msg);
-            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {org})).append(CRLF);
+            content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_forwardPrefix", new Object[] {org})).append(CRLF);
             content.append(getQuotedBody(msg, prefs));
             content.append(CRLF);
             addAttachments(msg, true);
@@ -1131,7 +1131,7 @@ public class ZMessageComposeBean {
         if (prefs.getReplyIncludeNone()) {
             // nothing to see, move along
         } else if (prefs.getReplyIncludeBody()) {
-            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_originalMessage")).append(CRLF);
+            content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_originalMessage")).append(CRLF);
             content.append(getQuotedHeaders(msg, pc)).append(CRLF);
             ZMimePartBean body = msg.getBody();
             content.append(body == null ? "" : body.getContent());
@@ -1139,7 +1139,7 @@ public class ZMessageComposeBean {
             addAttachments(msg, false);
         } else if (prefs.getReplyIncludeBodyWithPrefx()) {
             String org = getQuotedDisplay(msg);
-            content.append(CRLF).append(CRLF).append(LocaleSupport.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {org})).append(CRLF);
+            content.append(CRLF).append(CRLF).append(I18nUtil.getLocalizedMessage(pc, "ZM_replyPrefix", new Object[] {org})).append(CRLF);
             content.append(getQuotedBody(msg, prefs));
             content.append(CRLF);
             addAttachments(msg, false);
@@ -1209,7 +1209,7 @@ public class ZMessageComposeBean {
 
 
     private static String getReplySubject(String subject, PageContext pc) {
-        String REPLY_PREFIX = LocaleSupport.getLocalizedMessage(pc, "ZM_replySubjectPrefix");                
+        String REPLY_PREFIX = I18nUtil.getLocalizedMessage(pc, "ZM_replySubjectPrefix");
         if (subject == null) subject = "";
         if ((subject.length() > 3) && subject.substring(0, 3).equalsIgnoreCase(REPLY_PREFIX))
             return subject;
@@ -1218,7 +1218,7 @@ public class ZMessageComposeBean {
     }
 
     private static String getForwardSubject(String subject, PageContext pc) {
-        String FORWARD_PREFIX = LocaleSupport.getLocalizedMessage(pc, "ZM_forwardSubjectPrefix");
+        String FORWARD_PREFIX = I18nUtil.getLocalizedMessage(pc, "ZM_forwardSubjectPrefix");
         if (subject == null) subject = "";
         if ((subject.length() > 3) && subject.substring(0, 3).equalsIgnoreCase(FORWARD_PREFIX))
             return subject;
@@ -1521,7 +1521,7 @@ public class ZMessageComposeBean {
 
         /*
         StringBuilder sb = new StringBuilder();
-        String blurbHeader = LocaleSupport.getLocalizedMessage(pc, blurbHeaderKey);
+        String blurbHeader = I18nUtil.getLocalizedMessage(pc, blurbHeaderKey);
 
         if (blurbHeader != null) {
             sb.append(blurbHeader);
@@ -1568,7 +1568,7 @@ da body
     }
 
     private static String msg(PageContext pc, String key) {
-        return LocaleSupport.getLocalizedMessage(pc, key);
+        return I18nUtil.getLocalizedMessage(pc, key);
     }
 
     private String generateInviteBlurb(ZMailbox mailbox, PageContext pc,
@@ -1585,7 +1585,7 @@ da body
         ZComponent oldAppt = previousInvite == null ? null : previousInvite.getComponent();
 
         if (html) sb.append("<h3>");
-        sb.append(LocaleSupport.getLocalizedMessage(pc, blurbHeaderKey));
+        sb.append(I18nUtil.getLocalizedMessage(pc, blurbHeaderKey));
         if (html) sb.append("</h3>");
         sb.append("\n\n");
 
