@@ -262,8 +262,13 @@ public class I18nUtil {
 			if (bundle == null) {
 				Locale locale = findLocale(pageContext);
 				ClassLoader loader = Thread.currentThread().getContextClassLoader();
-				bundle = ResourceBundle.getBundle(basename, locale, loader);
-				pageContext.setAttribute(bundleKey, bundle, PageContext.APPLICATION_SCOPE);
+				try {
+					bundle = ResourceBundle.getBundle(basename, locale, loader);
+					pageContext.setAttribute(bundleKey, bundle, PageContext.APPLICATION_SCOPE);
+				}
+				catch (MissingResourceException e) {
+					// ignore -- nothing we can do
+				}
 			}
 		}
 
