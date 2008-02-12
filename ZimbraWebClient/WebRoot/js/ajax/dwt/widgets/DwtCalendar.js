@@ -406,6 +406,7 @@ function(mo, yr) {
 DwtCalendar.prototype._installListeners =
 function() {
 	this._setMouseEventHdlrs();
+	this._ignoreInternalOverOut = false;
 	this.addListener(DwtEvent.ONMOUSEOVER, new AjxListener(this, this._mouseOverListener));
 	this.addListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, this._mouseOutListener));
 	this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._mouseDownListener));
