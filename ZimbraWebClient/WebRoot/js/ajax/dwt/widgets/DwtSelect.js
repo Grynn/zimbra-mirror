@@ -26,7 +26,9 @@
  *                        an array of DwtSelectOptions or an array of strings.
  */
 DwtSelect = function(parent, options, className, posStyle) {
-    var clsName = className || "ZSelect";
+
+	if(arguments.length == 0) return;
+	var clsName = className || "ZSelect";
     var positionStyle = posStyle || Dwt.STATIC_STYLE;
     DwtButton.call(this, parent, null, clsName, positionStyle);
 
