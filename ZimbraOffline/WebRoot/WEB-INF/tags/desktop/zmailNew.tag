@@ -124,8 +124,8 @@ function disableButtons() {
                     <option value="900" ${bean.syncFreqSecs == 900 ? 'selected' : ''}>every 15 minutes</option>
                     <option value="1800" ${bean.syncFreqSecs == 1800 ? 'selected' : ''}>every 30 minutes</option>
                     <option value="3600" ${bean.syncFreqSecs == 3600 ? 'selected' : ''}>every 1 hour</option>
-                    <option value="14400" ${bean.syncFreqSecs == 14400 ? 'selected' : ''}>every 4 hour</option>
-                    <option value="43200" ${bean.syncFreqSecs == 43200 ? 'selected' : ''}>every 12 hour</option>
+                    <option value="14400" ${bean.syncFreqSecs == 14400 ? 'selected' : ''}>every 4 hours</option>
+                    <option value="43200" ${bean.syncFreqSecs == 43200 ? 'selected' : ''}>every 12 hours</option>
                 </select>
             </td>
         </tr>
