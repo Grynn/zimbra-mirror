@@ -599,7 +599,8 @@ public class SkinResources
         boolean isMozilla1_4up = false;
         boolean isSafari = false;
         boolean isGeckoBased = false;
-        boolean isOpera = false;
+		boolean isGecko1_8up = false;
+		boolean isOpera = false;
         boolean isIPhone = false;
 
         // parse user agent
@@ -611,7 +612,8 @@ public class SkinResources
         boolean isHotJava = false;
         boolean beginsWithMozilla = false;
         boolean isCompatible = false;
-        if (agtArr.hasMoreTokens()) {
+
+		if (agtArr.hasMoreTokens()) {
             String token = agtArr.nextToken();
             Pattern pattern = Pattern.compile("\\s*mozilla");
             Matcher mozilla = pattern.matcher(token);
@@ -667,8 +669,7 @@ public class SkinResources
                     browserVersion = parseVersion(token.substring(index + 7));
                 } else if (token.indexOf("windows") != -1) {
                     isWindows = true;
-                } else if ((token.indexOf("macintosh") != -1) ||
-                        (token.indexOf("mac_") != -1)) {
+                } else if ((token.indexOf("macintosh") != -1) || (token.indexOf("mac_") != -1)) {
                     isMac = true;
                 } else if (token.indexOf("linux") != -1) {
                     isLinux = true;
@@ -677,89 +678,73 @@ public class SkinResources
                 token = agtArr.hasMoreTokens() ? agtArr.nextToken() : null;
             } while (token != null);
 
-            // Note: Opera and WebTV spoof Navigator.
-            // We do strict client detection.
-            isNav = (beginsWithMozilla && !isSpoofer && !isCompatible &&
-                    !isOpera && !isWebTv && !isHotJava &&
-                    !isSafari);
-
             isIE = (isIE && !isOpera);
+			isIE3 = (isIE && (browserVersion < 4));
+			isIE4 = (isIE && (browserVersion == 4.0));
+			isIE4up = (isIE && (browserVersion >= 4));
+			isIE5 = (isIE && (browserVersion == 5.0));
+			isIE5_5 = (isIE && (browserVersion == 5.5));
+			isIE5up = (isIE && (browserVersion >= 5.0));
+			isIE5_5up = (isIE && (browserVersion >= 5.5));
+			isIE6 = (isIE && (browserVersion == 6.0));
+			isIE6up = (isIE && (browserVersion >= 6.0));
+			isIE7 = (isIE && (browserVersion == 7.0));
+			isIE7up = (isIE && (browserVersion >= 7.0));
 
-            isNav4 = (isNav && (browserVersion == 4) &&
-                    (!isIE));
-            isNav6 = (isNav && trueNs &&
-                    (browserVersion >= 6.0) &&
-                    (browserVersion < 7.0));
-            isNav6up = (isNav && trueNs &&
-                    (browserVersion >= 6.0));
-            isNav7 = (isNav && trueNs &&
-                    (browserVersion == 7.0));
+			// Note: Opera and WebTV spoof Navigator. We do strict client detection.
+			isNav = (beginsWithMozilla && !isSpoofer && !isCompatible && !isOpera && !isWebTv && !isHotJava && !isSafari);
+            isNav4 = (isNav && (browserVersion == 4) && (!isIE));
+            isNav6 = (isNav && trueNs && (browserVersion >= 6.0) && (browserVersion < 7.0));
+            isNav6up = (isNav && trueNs && (browserVersion >= 6.0));
+            isNav7 = (isNav && trueNs && (browserVersion == 7.0));
 
-            isIE3 = (isIE && (browserVersion < 4));
-            isIE4 = (isIE && (browserVersion == 4.0));
-            isIE4up = (isIE && (browserVersion >= 4));
-            isIE5 = (isIE && (browserVersion == 5.0));
-            isIE5_5 = (isIE && (browserVersion == 5.5));
-            isIE5up = (isIE && (browserVersion >= 5.0));
-            isIE5_5up = (isIE && (browserVersion >= 5.5));
-            isIE6 = (isIE && (browserVersion == 6.0));
-            isIE6up = (isIE && (browserVersion >= 6.0));
-            isIE7 = (isIE && (browserVersion == 7.0));
-            isIE7up = (isIE && (browserVersion >= 7.0));
-
-            isMozilla = ((isNav && mozVersion > -1.0 &&
-                    isGeckoBased && (geckoDate != 0)));
+            isMozilla = ((isNav && mozVersion > -1.0 && isGeckoBased && (geckoDate != 0)));
             isMozilla1_4up = (isMozilla && (mozVersion >= 1.4));
             isFirefox = ((isMozilla && isFirefox));
             isFirefox1up = (isFirefox && browserVersion >= 1.0);
             isFirefox1_5up = (isFirefox && browserVersion >= 1.5);
+			isGecko1_8up = (isGeckoBased && browserVersion >= 1.8);
 
             // operating systems
-            define(macros, "WINDOWS", isWindows);
-            define(macros, "MACINTOSH", isMac);
-            define(macros, "LINUX", isLinux);
+			define(macros, "LINUX", isLinux);
+			define(macros, "MACINTOSH", isMac);
+			define(macros, "WINDOWS", isWindows);
 
             // browser variants
+			define(macros, "FIREFOX", isFirefox);
+			define(macros, "FIREFOX_1_OR_HIGHER", isFirefox1up);
+			define(macros, "FIREFOX_1_5_OR_HIGHER", isFirefox1_5up);
+			define(macros, "GECKO", isGeckoBased);
+			define(macros, "GECKO_1_8_OR_HIGHER", isGecko1_8up);
+			define(macros, "HOTJAVA", isHotJava);
+			define(macros, "IPHONE", isIPhone);
+			define(macros, "MOZILLA", isMozilla);
+			define(macros, "MOZILLA_1_4_OR_HIGHER", isMozilla1_4up);
+			define(macros, "MSIE", isIE);
+			define(macros, "MSIE_LOWER_THAN_7", isIE && !isIE7up);
+			define(macros, "MSIE_3", isIE3);
+			define(macros, "MSIE_4", isIE4);
+			define(macros, "MSIE_4_OR_HIGHER", isIE4up);
+			define(macros, "MSIE_5", isIE5);
+			define(macros, "MSIE_5_OR_HIGHER", isIE5up);
+			define(macros, "MSIE_5_5", isIE5_5);
+			define(macros, "MSIE_5_5_OR_HIGHER", isIE5_5up);
+			define(macros, "MSIE_6", isIE6);
+			define(macros, "MSIE_6_OR_HIGHER", isIE6up);
+			define(macros, "MSIE_7", isIE7);
+			define(macros, "MSIE_7_OR_HIGHER", isIE7up);
             define(macros, "NAVIGATOR", isNav);
             define(macros, "NAVIGATOR_4", isNav4);
             define(macros, "NAVIGATOR_6", isNav6);
             define(macros, "NAVIGATOR_6_OR_HIGHER", isNav6up);
             define(macros, "NAVIGATOR_7", isNav7);
             define(macros, "NAVIGATOR_COMPATIBLE", isCompatible);
-
-            define(macros, "MOZILLA", isMozilla);
-            define(macros, "MOZILLA_1_4_OR_HIGHER", isMozilla1_4up);
-
             define(macros, "OPERA", isOpera);
-
-            define(macros, "FIREFOX", isFirefox);
-            define(macros, "FIREFOX_1_OR_HIGHER", isFirefox1up);
-            define(macros, "FIREFOX_1_5_OR_HIGHER", isFirefox1_5up);
-
-            define(macros, "GECKO", isGeckoBased);
-
-            define(macros, "MSIE", isIE);
-            define(macros, "MSIE_3", isIE3);
-            define(macros, "MSIE_4", isIE4);
-            define(macros, "MSIE_4_OR_HIGHER", isIE4up);
-            define(macros, "MSIE_5", isIE5);
-            define(macros, "MSIE_5_OR_HIGHER", isIE5up);
-            define(macros, "MSIE_5_5", isIE5_5);
-            define(macros, "MSIE_5_5_OR_HIGHER", isIE5_5up);
-            define(macros, "MSIE_6", isIE6);
-            define(macros, "MSIE_6_OR_HIGHER", isIE6up);
-            define(macros, "MSIE_7", isIE7);
-            define(macros, "MSIE_7_OR_HIGHER", isIE7up);
-            define(macros, "MSIE_LOWER_THAN_7", isIE && !isIE7up);
-
             define(macros, "SAFARI", isSafari);
             define(macros, "SAFARI_2", isSafari && browserVersion == 2.0);
             define(macros, "SAFARI_2_OR_HIGHER", isSafari && browserVersion >= 2.0);
             define(macros, "SAFARI_3", isSafari && browserVersion >= 3.0);
-
             define(macros, "WEBTV", isWebTv);
-            define(macros, "HOTJAVA", isHotJava);
-            define(macros, "IPHONE", isIPhone);
         }
 
         return macros;
@@ -1350,22 +1335,17 @@ public class SkinResources
 		//
         private String outputRoundCorners(Stack<String> stack, String[] params) throws IOException {
 			boolean isSafari3 = isBrowser("SAFARI_3");
-			boolean isFF15Plus = isBrowser("FIREFOX_1_5_OR_HIGHER");
+			boolean isGecko1_8 = isBrowser("GECKO_1_8_OR_HIGHER");
 			
-			if (isSafari3 || isFF15Plus) {
+			if (isSafari3 || isGecko1_8) {
 				String propName = (isSafari3 ? "-webkit-border-radius:" : "-moz-border-radius:");
 				String size = (params.length > 0 ? params[0] : "3px").toLowerCase();
 
-				if (size.equals("") || size.equals("small")) {
-					size = "3px";
-				} else if (size.equals("medium")) {
-					size = "5px";
-				} else if (size.equals("big")) {
-					size = "10px";
-				} else if (size.equals("huge")) {
-					size = "10px";
-				}
-				return propName + size + ";";
+				if (size.equals("") || size.equals("small")){	size = "3px";	}
+				else if (size.equals("medium")) 			{	size = "5px";	}
+				else if (size.equals("big"))				{	size = "10px";	}
+				else if (size.equals("huge"))				{	size = "10px";	}
+				return (propName + size + ";");
 			}
 			return "";
 		}
