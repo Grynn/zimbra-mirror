@@ -16,60 +16,60 @@
  */
 
 /**
-* @constructor
-* @class
-* This class represents a button, which is basically a smart label that can handle
-* various UI events. It knows when it has been hovered (the mouse is over it),
-* when it is active (mouse down), and when it has been pressed (mouse up).
-* In addition to a label's image and/or text, a button may have a dropdown menu.
-*
-* There are several different types of button:
-* <ul>
-* <li> Push - this is the standard push button </li>
-* <li> Toggle - This is a button that exhibits selectable behaviour when clicked
-* 		e.g. on/off. To make a button selectable style "or" <i>DwtButton.SELECT_STYLE<i>
-* 		to the consturctor's style parameter</li>
-* <li> Menu - By setting a mene via the <i>setMenu</i> method a button will become
-* 		a drop down or menu button.</li>
-* </ul>
-*
-* <h4>CSS</h4>
-* <ul>
-* <li><i>className</i>-hover - hovered style
-* <li><i>className</i>-active - mouse down style
-* <li><i>className</i>-selected - permanently down style
-* <li><i>className</i>-disabled - disabled style
-* </ul>
-*
-* <h4>Keyboard Actions</h4>
-* <ul>
-* <li>DwtKeyMap.SELECT - triggers the button</li>
-* <li>DwtKeyMap.SUBMENU - display's the button's submenu if one is set
-* </ul>
-*
-* @author Ross Dargahi
-* @author Conrad Damon
-*
-* @param parent	{DwtControl} Parent widget (required)
-* @param style	{string} the label style. This is an "or'ed" set of attributes (see DwtLabel)
-* @param className {string} CSS class. If not provided defaults to the class name (optional)
-* @param posStyle {string} Positioning style (absolute, static, or relative). If
-* 		not provided defaults to DwtControl.STATIC_STYLE (optional)
-* @param actionTiming {enum} if DwtButton.ACTION_MOUSEUP, then the button is triggered
-* 		on mouseup events, else if DwtButton.ACTION_MOUSEDOWN, then the button is
-* 		triggered on mousedown events
-* @param {int} id An explicit ID to use for the control's HTML element. If not
-* 		specified defaults to an auto-generated id (optional)
-* @param {int} index index at which to add this control among parent's children (optional)
-*
-* @extends DwtLabel
-*/
-DwtButton = function(parent, style, className, posStyle, actionTiming, id, index, listeners) {
+ * @constructor
+ * @class
+ * This class represents a button, which is basically a smart label that can handle
+ * various UI events. It knows when it has been hovered (the mouse is over it),
+ * when it is active (mouse down), and when it has been pressed (mouse up).
+ * In addition to a label's image and/or text, a button may have a dropdown menu.
+ *
+ * There are several different types of button:
+ * <ul>
+ * <li> Push - this is the standard push button </li>
+ * <li> Toggle - This is a button that exhibits selectable behaviour when clicked
+ * 		e.g. on/off. To make a button selectable style "or" <i>DwtButton.SELECT_STYLE<i>
+ * 		to the consturctor's style parameter</li>
+ * <li> Menu - By setting a mene via the <i>setMenu</i> method a button will become
+ * 		a drop down or menu button.</li>
+ * </ul>
+ *
+ * <h4>CSS</h4>
+ * <ul>
+ * <li><i>className</i>-hover - hovered style
+ * <li><i>className</i>-active - mouse down style
+ * <li><i>className</i>-selected - permanently down style
+ * <li><i>className</i>-disabled - disabled style
+ * </ul>
+ *
+ * <h4>Keyboard Actions</h4>
+ * <ul>
+ * <li>DwtKeyMap.SELECT - triggers the button</li>
+ * <li>DwtKeyMap.SUBMENU - display's the button's submenu if one is set
+ * </ul>
+ *
+ * @author Ross Dargahi
+ * @author Conrad Damon
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        style			[constant]*			button style
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        actionTiming	[constant]*			if DwtButton.ACTION_MOUSEUP, then the button is triggered
+ *											on mouseup events, else if DwtButton.ACTION_MOUSEDOWN,
+ * 											then the button is triggered on mousedown events
+ *        id			[string]*			ID to use for the control's HTML element
+ *        index 		[int]*				index at which to add this control among parent's children
+ *        listeners		[hash]*				event listeners
+ */
+DwtButton = function(params) {
 	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtButton.PARAMS);
 	
-	className = className || "ZButton";
-	DwtLabel.call(this, parent, style, className, posStyle, id, index);
+	params.className = params.className || "ZButton";
+	DwtLabel.call(this, params);
 
+	var parent = params.parent;
 	if (!parent._hasSetMouseEvents || AjxEnv.isIE) {
 		this._setMouseEvents();
 	}
@@ -85,16 +85,18 @@ DwtButton = function(parent, style, className, posStyle, actionTiming, id, index
 	if (events && events.length) {
 		this._setEventHdlrs(events);
 	}
-	this._listeners = listeners || DwtButton._listeners
+	this._listeners = params.listeners || DwtButton._listeners
 	this._addMouseListeners();
 	
 	this._dropDownEvtMgr = new AjxEventMgr();
 
 	this._selected = false;
 
-	this._actionTiming = actionTiming || DwtButton.ACTION_MOUSEUP;
+	this._actionTiming = params.actionTiming || DwtButton.ACTION_MOUSEUP;
 	this.__preventMenuFocus = null;
 }
+
+DwtButton.PARAMS = ["parent", "style", "className", "posStyle", "actionTiming", "id", "index", "listeners"];
 
 DwtButton.prototype = new DwtLabel;
 DwtButton.prototype.constructor = DwtButton;

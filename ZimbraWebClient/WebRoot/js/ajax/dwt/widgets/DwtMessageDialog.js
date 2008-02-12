@@ -17,23 +17,34 @@
 
 
 /**
-* Creates a new message dialog.
-* @constructor
-* @class
-* This class represents a reusable message dialog box. Messages can be informational, warning, or
-* critical.
-* 
-* @author Ross Dargahi
-*/
-DwtMessageDialog = function(parent, className, buttons, extraButtons) {
-	if (arguments.length == 0) return;
+ * Creates a new message dialog.
+ * @constructor
+ * @class
+ * This class represents a reusable message dialog box. Messages can be informational, warning, or
+ * critical.
+ * 
+ * @author Ross Dargahi
+ * 
+ * @param params			[hash]				hash of params:
+ *        parent			[DwtComposite] 		parent widget (the shell)
+ *        className			[string]*			CSS class
+ *        buttons			[array]*			Buttons to show. Defaults to OK button.
+ *        extraButtons		[array]  			list of <i>DwtDialog_ButtonDescriptor</i> objects describing
+ *										 		custom buttons to add to the dialog
+ */
+DwtMessageDialog = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtMessageDialog.PARAMS);
 	this._msgCellId = Dwt.getNextId();
-	buttons = buttons ? buttons : [DwtDialog.OK_BUTTON];
-	DwtDialog.call(this, parent, className, null, buttons, extraButtons);
+	params.buttons = params.buttons || [DwtDialog.OK_BUTTON];
+	DwtDialog.call(this, params);
+	
 	this.setContent(this._contentHtml());
 	this._msgCell = document.getElementById(this._msgCellId);
 	this.addEnterListener(new AjxListener(this, this._enterListener));
-};
+}
+
+DwtMessageDialog.PARAMS = ["parent", "className", "buttons", "extraButtons"];
 
 DwtMessageDialog.prototype = new DwtDialog;
 DwtMessageDialog.prototype.constructor = DwtMessageDialog;

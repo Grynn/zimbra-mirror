@@ -35,8 +35,10 @@
  * @author Mihai Bazon, <mihai@zimbra.com>
  */
 DwtButtonColorPicker = function(parent, style, className, posStyle, id, index, noFillLabel) {
-    if (arguments.length == 0) return;
-    DwtButton.call(this, parent, style, className, posStyle, DwtButton.ACTION_MOUSEUP, id, index);
+    if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtButtonColorPicker.PARAMS);
+	params.actionTiming = DwtButton.ACTION_MOUSEUP;
+    DwtButton.call(this, params);
 
 	// WARNING: we pass boolean instead of a DwtDialog because (1) we don't
 	// have a dialog right now and (2) DwtMenu doesn't seem to make use of
@@ -44,12 +46,14 @@ DwtButtonColorPicker = function(parent, style, className, posStyle, id, index, n
 	// unnecessarily complex :-(
 	var m = new DwtMenu(this, DwtMenu.COLOR_PICKER_STYLE, null, null, true);
 	this.setMenu(m);
-	var cp = new DwtColorPicker(m, null, null, noFillLabel);
+	var cp = new DwtColorPicker(m, null, null, params.noFillLabel);
 	cp.addSelectionListener(new AjxListener(this, this._colorPicked));
 
 	// no color initially selected
 	this.__color = "";
 };
+
+DwtButtonColorPicker.PARAMS = ["parent", "style", "className", "posStyle", "id", "index", "noFillLabel"];
 
 DwtButtonColorPicker.prototype = new DwtButton;
 DwtButtonColorPicker.prototype.constructor = DwtButtonColorPicker;

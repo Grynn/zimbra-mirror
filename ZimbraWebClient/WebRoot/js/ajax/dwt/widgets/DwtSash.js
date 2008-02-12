@@ -15,25 +15,39 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
-DwtSash = function(parent, style, className, threshold, posStyle) {
-
-	className = className ? className : "DwtSash";
-	posStyle = posStyle ? posStyle : DwtControl.ABSOLUTE_STYLE;
-	DwtControl.call(this, parent, className, posStyle);
+/**
+ * @constructor
+ * @class
+ * A sash is a thin moveable border between two components that can be moved in
+ * order to change the sizes of the elements on either side. Those one one side
+ * will become larger, and those on the other side will become smaller.
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        style			[constant]*			sash style - either vertical (default) or horizontal 
+ *        className		[string]*			CSS class
+ *        threshold		[int]*				Minimum movement (in pixels) that forces a UI update.
+ * 											Defaults to 1. Clients will likely want to set it higher.
+ *        posStyle		[constant]*			positioning style
+ */
+DwtSash = function(params) {
+	params = Dwt.getParams(arguments, DwtSash.PARAMS);
+	params.className = params.className || "DwtSash";
+	params.posStyle = params.posStyle || DwtControl.ABSOLUTE_STYLE;
+	DwtControl.call(this, params);
 
     var htmlElement = this.getHtmlElement();
     var templatePrefix = "dwt.Widgets#";
-    if (style == null || style != DwtSash.HORIZONTAL_STYLE) {
+    if (!params.style || params.style != DwtSash.HORIZONTAL_STYLE) {
 		this._style = DwtSash.VERTICAL_STYLE;
 		htmlElement.style.cursor = AjxEnv.isIE ? "row-resize" : "s-resize";
-		htmlElement.innerHTML = AjxTemplate.expand(templatePrefix+"DwtVerticalSash");
+		htmlElement.innerHTML = AjxTemplate.expand(templatePrefix + "DwtVerticalSash");
 	} else {
 		this._style = DwtSash.HORIZONTAL_STYLE;
 		htmlElement.style.cursor = AjxEnv.isIE ? "col-resize" : "w-resize";
-		htmlElement.innerHTML = AjxTemplate.expand(templatePrefix+"DwtHorizontalSash");
+		htmlElement.innerHTML = AjxTemplate.expand(templatePrefix + "DwtHorizontalSash");
 	}
-	this._threshold = (threshold > 0) ? threshold : 1;
+	this._threshold = (params.threshold > 0) ? params.threshold : 1;
 
 	this._captureObj = new DwtMouseEventCapture(this,
 		"DwtSash",
@@ -51,6 +65,8 @@ DwtSash = function(parent, style, className, threshold, posStyle) {
 
 	this.setZIndex(Dwt.Z_VIEW);
 }
+
+DwtSash.PARAMS = ["parent", "style", "className", "threshold", "posStyle"];
 
 DwtSash.prototype = new DwtControl;
 DwtSash.prototype.constructor = DwtSash;

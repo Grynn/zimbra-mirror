@@ -16,18 +16,24 @@
  */
 
 /**
+ * @constructor
+ * @class
  * This class represents a combo box.
  *
- * @param parent    {DwtComposite} Parent widget (required)
- * @param className {string} CSS class. If not provided defaults to "DwtHorizontalSlider" or "DwtVerticalSlider" (optional)
- * @param positionType {string} Positioning style (absolute, static, or relative). If
- *         not provided defaults to DwtComposite.STATIC_STYLE (optional)
+ * @author Dave Comfort
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        inputParams	[hash]				params for the input (see DwtInputField)
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        dialog		[DwtDialog]*		containing dialog (to use as menu parent)
  */
-DwtComboBox = function(parent, inputParams, className, positionType, dialog) {
-    if (arguments.length == 0) return;
-
-    className = className || "DwtComboBox";
-    DwtComposite.call(this, parent, className, positionType);
+DwtComboBox = function(params) {
+    if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtComboBox.PARAMS);
+    params.className = params.className || "DwtComboBox";
+    DwtComposite.call(this, params);
     
     this.input = null;
     this._button = null;
@@ -37,13 +43,15 @@ DwtComboBox = function(parent, inputParams, className, positionType, dialog) {
     this._valueToItem = {};
 	this._size = 0;
 
-	this._dialog = dialog;
+	this._dialog = params.dialog;
     this._hasMenuCallback = true;
 	this._menuItemListenerObj = new AjxListener(this, this._menuItemListener);
 
-    this._inputParams = inputParams;
+    this._inputParams = params.inputParams;
     this._createHtml();
 };
+
+DwtComboBox.PARAMS = ["parent", "inputParams", "className", "posStyle", "dialog"];
 
 DwtComboBox.prototype = new DwtComposite;
 DwtComboBox.prototype.constructor = DwtComboBox;

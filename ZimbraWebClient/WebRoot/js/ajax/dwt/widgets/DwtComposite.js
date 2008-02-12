@@ -18,42 +18,32 @@
 /**
  * @constructor
  * @class
- * Creates a composite class. A composite class may contain other controls. All controls
- * that need to contain child controls (such as menus, trees) should inherit from this
- * class.
- * 
- * <h4>CSS</h4>
- * None
- * 
- * <h4>Keyboard Actions</h4>
- * None
- * 
- * <h4>Events</h4>
- * See <i>DwtControl</i>
+ * A composite may contain other controls. All controls that need to contain child controls
+ * (such as menus, trees) should inherit from this class.
  * 
  * @author Ross Dargahi
  * 
- * @param {DwtComposite} parent Parent widget. Except in the case of <i>DwtShell</i> the
- * 		parent will be a control that has subclassed from <i>DwtComposite</i> 
- * @param {string} className CSS class. If not provided defaults to the class name (optional)
- * @param {string} posStyle Positioning style (absolute, static, or relative). If
- * 		not provided defaults to <i>DwtControl.STATIC_STYLE</i> (optional)
- * @param {boolean} deferred If true, postpone initialization until needed. If not
- * 		specified defaults to false (optional)
- * @param {int} id An explicit ID to use for the control's HTML element. If not
- * 		specified defaults to an auto-generated id (optional)
- * @param {int} index index at which to add this control among parent's children (optional)
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        deferred		[boolean]*			if true, postpone initialization until needed
+ *        id			[string]*			an explicit ID to use for the control's HTML element
+ *        index 		[int]*				index at which to add this control among parent's children 
  */
-DwtComposite = function(parent, className, posStyle, deferred, id, index) {
-
-	if (arguments.length == 0) return;
-	className = className || "DwtComposite";
-	DwtControl.call(this, parent, className, posStyle, deferred, id, index);
+DwtComposite = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtComposite.PARAMS);
+	
+	params.className = params.className || "DwtComposite";
+	DwtControl.call(this, params);
 
 	/** Vector of child elements
 	 * @type AjxVector */
 	this._children = new AjxVector();
 }
+
+DwtComposite.PARAMS = ["parent", "className", "posStyle", "deferred", "id", "index"];
 
 DwtComposite.prototype = new DwtControl;
 DwtComposite.prototype.constructor = DwtComposite;

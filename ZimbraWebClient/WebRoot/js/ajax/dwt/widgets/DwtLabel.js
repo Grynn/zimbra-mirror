@@ -36,35 +36,29 @@
  * 
  * @author Ross Dargahi
  * 
- * @param {DwtComposite} parent Parent widget. Except in the case of <i>DwtShell</i> the
- * 		parent will be a control that has subclassed from <i>DwtComposite</i>
- * @param {Int} style The label style. May be one of: <i>DwtLabel.IMAGE_LEFT</i> 
- * 		or <i>DwtLabel.IMAGE_RIGHT</i> arithimatically or'd (|) with  one of:
- * 		<i>DwtLabel.ALIGN_LEFT</i>, <i>DwtLabel.ALIGN_CENTER</i>, or <i>DwtLabel.ALIGN_LEFT</i>
- * 		The first determines were in the label the icon will appear (if one is set), the second
- * 		determine how the content of the label will be aligned. The default value for
- * 		this parameter is: <code>DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER</code>
- * @param {String} className CSS class. If not provided defaults to the class name (optional)
- * @param {String} posStyle Positioning style (absolute, static, or relative). If
- * 		not provided defaults to <i>DwtControl.STATIC_STYLE</i> (optional)
- * @param {int} id An explicit ID to use for the control's HTML element. If not
- * 		specified defaults to an auto-generated id (optional)
- * @param {int} index index at which to add this control among parent's children (optional)
- * 
- * @see DwtButton
- * 
- * @extends DwtControl
- * 
- * @requires DwtControl
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        style			[constant]*			label style: May be one of: <i>DwtLabel.IMAGE_LEFT</i> 
+ * 											or <i>DwtLabel.IMAGE_RIGHT</i> arithmetically or'd (|) with  one of:
+ * 											<i>DwtLabel.ALIGN_LEFT</i>, <i>DwtLabel.ALIGN_CENTER</i>, or <i>DwtLabel.ALIGN_LEFT</i>
+ * 											The first determines were in the label the icon will appear (if one is set), the second
+ * 											determine how the content of the label will be aligned. The default value for
+ * 											this parameter is: <code>DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER</code>
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        id			[string]*			ID to use for the control's HTML element
+ *        index 		[int]*				index at which to add this control among parent's children 
  */
-DwtLabel = function(parent, style, className, posStyle, id, index) {
-	if (arguments.length == 0) return;
-	className = className ? className : "DwtLabel";
-	DwtControl.call(this, parent, className, posStyle, false, id, index);
+DwtLabel = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtLabel.PARAMS);
+	
+	params.className = params.className || "DwtLabel";
+	DwtControl.call(this, params);
 
 	/**The label's style. See the constructor documentation for more info
 	 * @type Int*/
-	this._style = style ? style : (DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER);
+	this._style = params.style || (DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER);
 	
 	/**The label text's background color
 	 * @type String*/
@@ -77,6 +71,8 @@ DwtLabel = function(parent, style, className, posStyle, id, index) {
     this._createHtml();
     //MOW:  this.setCursor("default");
 }
+
+DwtLabel.PARAMS = ["parent", "style", "className", "posStyle", "id", "index"];
 
 DwtLabel.prototype = new DwtControl;
 DwtLabel.prototype.constructor = DwtLabel;

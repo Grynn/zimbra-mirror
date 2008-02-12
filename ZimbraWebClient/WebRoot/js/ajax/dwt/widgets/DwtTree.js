@@ -17,22 +17,25 @@
 
 
 /**
-* Creates a Tree widget.
-* @constructor
-* @class
-* This class implements a tree widget. Tree widgets may contain one or more DwtTreeItems.
-*
-* @author Ross Dargahi
-* @param parent		the parent widget
-* @param style 		tree style either: DwtTree.SINGLE_STYLE (single selction) or DwtTree.MULTI_STYLE (multiselection);
-* @param className	CSS class
-* @param posStyle	positioning style (absolute, static, or relative)
-*/
-DwtTree = function(parent, style, className, posStyle) {
-
-	if (arguments.length == 0) return;
-	className = className || "DwtTree";
-	DwtComposite.call(this, parent, className, posStyle);
+ * Creates a Tree widget.
+ * @constructor
+ * @class
+ * This class implements a tree widget. Tree widgets may contain one or more DwtTreeItems.
+ *
+ * @author Ross Dargahi
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        style 		[constant]*			tree style: DwtTree.SINGLE_STYLE (single selection) or 
+ * 											DwtTree.MULTI_STYLE (multiselection);
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ */
+DwtTree = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtTree.PARAMS);
+	params.className = params.className || "DwtTree";
+	DwtComposite.call(this, params);
 
 	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONDBLCLICK];
 	if (!AjxEnv.isIE) {
@@ -40,16 +43,20 @@ DwtTree = function(parent, style, className, posStyle) {
 	}
 	this._setEventHdlrs(events);
 
-	if (style == null) {
+	var style = params.style;
+	if (!style) {
 		this._style = DwtTree.SINGLE_STYLE;
 	} else {
-		if (style == DwtTree.CHECKEDITEM_STYLE)
+		if (style == DwtTree.CHECKEDITEM_STYLE) {
 			style |= DwtTree.SINGLE_STYLE;
+		}
 		this._style = style;
 	}
 	this._selectedItems = new AjxVector();
 	this._selEv = new DwtSelectionEvent(true);
 }
+
+DwtTree.PARAMS = ["parent", "style", "className", "posStyle"];
 
 DwtTree.prototype = new DwtComposite;
 DwtTree.prototype.constructor = DwtTree;

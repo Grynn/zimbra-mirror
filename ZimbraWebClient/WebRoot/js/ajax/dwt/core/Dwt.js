@@ -1049,6 +1049,32 @@ function(obj, className) {
 	return (window[className] && obj instanceof window[className]);
 };
 
+/**
+ * Normalizes an argument list into a hash with the given argument names.
+ * If a single hash argument is passed, it is recognized as a params hash
+ * and returned. Otherwise, the argument list is exploded into a params
+ * hash with the given param names.
+ * 
+ * @param args			[arguments]		the arguments pseudo-array
+ * @param paramNames	[array]			ordered list of param names
+ */
+Dwt.getParams =
+function(args, paramNames) {
+	// Check for arg-list style of passing params. There will almost always
+	// be more than on arg, and the first one is the parent DwtControl.
+	if (args.length > 1 || args[0]._eventMgr) {
+		var params = {};
+		for (var i = 0; i < args.length; i++) {
+			params[paramNames[i]] = args[i];
+		}
+		return params;
+	} else if (args.length == 1) {
+		return args[0];
+	} else {
+		return {};
+	}
+};
+
 //////////////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS
 //////////////////////////////////////////////////////////////////////////////////

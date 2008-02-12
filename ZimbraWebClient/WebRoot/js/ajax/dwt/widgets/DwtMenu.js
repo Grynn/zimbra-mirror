@@ -16,48 +16,54 @@
  */
 
 /**
-* Creates a menu object to menu items can be added. Menus can be created in various styles as
-* follows:
-*
-* DwtMenu.BAR_STYLE - Traditional menu bar.
-* DwtMenu.POPUP_STYLE - Popup menu
-* DwtMenu.DROPDOWN_STYLE - Used when a menu is a drop down (e.g. parent is a button or another menu item);
-* DwtMenu.COLOR_PICKER_STYLE - Menu is hosting a single color picker;
-* DwtMenu.CALENDAR_PICKER_STYLE - Menu is hostng a single calendar;
-* DwtMenu.GENERIC_WIDGET_STYLE - Menu is hosting a single "DwtInsertTableGrid";
-*
-* @constructor
-* @class
-*
-* @author Ross Dargahi
-* 
-* @param parent		the parent widget
-* @param style 		menu's style
-* @param className	a CSS class
-* @param posStyle	positioning style
-* @param dialog 	Dialog that this menu is a part of (if any)
-*/
-DwtMenu = function(parent, style, className, posStyle, dialog) {
-	if (arguments.length == 0) return;
+ * Creates a menu object to menu items can be added. Menus can be created in various styles as
+ * follows:
+ *
+ * DwtMenu.BAR_STYLE - Traditional menu bar.
+ * DwtMenu.POPUP_STYLE - Popup menu
+ * DwtMenu.DROPDOWN_STYLE - Used when a menu is a drop down (e.g. parent is a button or another menu item);
+ * DwtMenu.COLOR_PICKER_STYLE - Menu is hosting a single color picker;
+ * DwtMenu.CALENDAR_PICKER_STYLE - Menu is hostng a single calendar;
+ * DwtMenu.GENERIC_WIDGET_STYLE - Menu is hosting a single "DwtInsertTableGrid";
+ *
+ * @constructor
+ * @class
+ *
+ * @author Ross Dargahi
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        style			[constant]*			menu style
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        dialog 		[DwtDialog]*		dialog that this menu is a part of
+ */
+DwtMenu = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtMenu.PARAMS);
+
+	var parent = params.parent;
 	if (parent) {
 		if (parent instanceof DwtMenuItem || parent instanceof DwtButton) {
-			if (style == DwtMenu.GENERIC_WIDGET_STYLE)
+			if (params.style == DwtMenu.GENERIC_WIDGET_STYLE) {
 				this._style = DwtMenu.GENERIC_WIDGET_STYLE;
-			else
+			} else {
 				this._style = DwtMenu.DROPDOWN_STYLE;
+			}
 		} else {
-			this._style = style || DwtMenu.POPUP_STYLE;
+			this._style = params.style || DwtMenu.POPUP_STYLE;
 		}
-		if (!posStyle)
-			posStyle = (this._style == DwtMenu.BAR_STYLE) ? DwtControl.STATIC_STYLE : DwtControl.ABSOLUTE_STYLE; 
+		if (!params.posStyle)
+			params.posStyle = (this._style == DwtMenu.BAR_STYLE) ? DwtControl.STATIC_STYLE : DwtControl.ABSOLUTE_STYLE; 
 	}
-	className = className || "DwtMenu";
+	params.className = params.className || "DwtMenu";
 
 	// Hack to force us to hang off of the shell for positioning.
-	DwtComposite.call(this, (parent instanceof DwtShell) ? parent : parent.shell, className, posStyle);
+	params.parent = (parent instanceof DwtShell) ? parent : parent.shell;
+	DwtComposite.call(this, params);
 	this.parent = parent;
 	if (!parent) { return; }
-	this._dialog = dialog;
+	this._dialog = params.dialog;
 
 	var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
 							   [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
@@ -80,7 +86,7 @@ DwtMenu = function(parent, style, className, posStyle, dialog) {
 		this._table.backgroundColor = DwtCssStyle.getProperty(htmlElement, "background-color");
 	}
 
-	if (style != DwtMenu.BAR_STYLE) {
+	if (params.style != DwtMenu.BAR_STYLE) {
 		this.setZIndex(Dwt.Z_HIDDEN);
  		this._isPoppedup = false;		
 	} else {
@@ -118,6 +124,8 @@ DwtMenu = function(parent, style, className, posStyle, dialog) {
 	this._tabGroup = new DwtTabGroup(this.toString(), true);
 	this._tabGroup.addMember(this);
 }
+
+DwtMenu.PARAMS = ["parent", "style", "className", "posStyle", "dialog"];
 
 DwtMenu.prototype = new DwtComposite;
 DwtMenu.prototype.constructor = DwtMenu;

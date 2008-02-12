@@ -16,61 +16,61 @@
  */
 
 /**
-* @constructor
-* @class
-* This class represents a popup dialog which has at least a title and up to 
-* three standard buttons (OK, Cancel). A client or subclass sets the content.
-* <p>
-* Dialogs always hang off the main shell since their stacking order is managed 
-* through z-index.
-*
-* @author Ross Dargahi
-* @author Conrad Damon
-*
-* @param {DwtShell} parent	parent widget
-* @param {string} classname	CSS class name for the instance. Defaults to the this classes
-* 		name (optional)
-* @param {string} title The title of the dialog (optional)
-* @param {array|number} standardButtons. The following are the possible values if
-* 		passing in an array (Note that the first button value passed in is bound
-* 		to the enter key):<ul>
-* 		<li>DwtDialog.CANCEL_BUTTON</li>
-* 		<li>DwtDialog.OK_BUTTON</li>
-* 		<li>DwtDialog.DISMISS_BUTTON</li>
-* 		<li>DwtDialog.NO_BUTTON</li>
-* 		<li>DwtDialog.YES_BUTTON</li>
-* 		</ul>
-* 		The following are passed in as individual items: <ul>
-* 		<li>DwtDialog.ALL_BUTTONS - Show all buttons</li>
-* 		<li>DwtDialog.NO_BUTTONS - Show no buttons</li></ul>
-* 		This parameter defaults to <code>[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]</code> if
-* 		no value is provided
-* @param {array} extraButtons Array of <i>DwtDialog_ButtonDescriptor</i> objects describing
-* 		The extra buttons to add to the dialog
-* @param {number} zIndex The z-index to set for this dialog when it is visible. Defaults
-* 		to <i>Dwt.Z_DIALOG</i> (optional)
-* @param {number} mode The modality of the dialog. One of: DwtBaseDialog.MODAL or 
-* 		DwtBaseDialog.MODELESS. Defaults to DwtBaseDialog.MODAL (optional)
-* @param {DwtPoint} loc	Location at which to popup the dialog. Defaults to being 
-* 		centered (optional)
-* 
-* @see DwtBaseDialog
-* @see DwtDialog_ButtonDescriptor
-*/
+ * @constructor
+ * @class
+ * This class represents a popup dialog which has at least a title and up to 
+ * three standard buttons (OK, Cancel). A client or subclass sets the content.
+ * <p>
+ * Dialogs always hang off the main shell since their stacking order is managed 
+ * through z-index.
+ *
+ * @author Ross Dargahi
+ * @author Conrad Damon
+ *
+ * @param params			[hash]				hash of params:
+ *        parent			[DwtComposite] 		parent widget (the shell)
+ *        className			[string]*			CSS class
+ *        title				[string]*			title of dialog
+ *        standardButtons	[array|constant]	The following are the possible values if passing in an array
+ * 												(Note: the first button value passed in is bound to the enter key):
+ * 												<ul><li>DwtDialog.CANCEL_BUTTON</li>
+ *											 		<li>DwtDialog.OK_BUTTON</li>
+ *											 		<li>DwtDialog.DISMISS_BUTTON</li>
+ *											 		<li>DwtDialog.NO_BUTTON</li>
+ *											 		<li>DwtDialog.YES_BUTTON</li>
+ *										 		</ul>
+ *										 		Instead of an array, one of the following can be provided:
+ * 												<ul><li>DwtDialog.ALL_BUTTONS - Show all buttons</li>
+ *											 		<li>DwtDialog.NO_BUTTONS - Show no buttons</li>
+ * 												</ul>
+ *										 		This parameter defaults to <code>[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]</code>
+ * 												if no value is provided.
+ *        extraButtons		[array]  			list of <i>DwtDialog_ButtonDescriptor</i> objects describing
+ *										 		custom buttons to add to the dialog
+ *        zIndex			[int]*				The z-index to set for this dialog when it is visible. Defaults
+ *									 			to <i>Dwt.Z_DIALOG</i>.
+ *        mode 				[constant]*			The modality of the dialog. One of: DwtBaseDialog.MODAL (default) or 
+ *									 			DwtBaseDialog.MODELESS.
+ *        loc				[DwtPoint]*			Location at which to popup the dialog. Defaults to being 
+ * 												centered within its parent.
+ */
 DwtDialog = function(parent, className, title, standardButtons, extraButtons, zIndex, mode, loc) {
 
-	if (arguments.length == 0) return;
-	className = className || "DwtDialog";
-	this._title = title || "";
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtDialog.PARAMS);
+	params.className = params.className || "DwtDialog";
+	this._title = params.title = params.title || "";
 
 	// standard buttons default to OK / Cancel
+	var standardButtons = params.standardButtons;
+	var extraButtons = params.extraButtons;
 	if (!standardButtons) {
 		standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];
 	} else if (standardButtons == DwtDialog.NO_BUTTONS) {
 		standardButtons = null;
 	}
 	// assemble the list of button IDs, and the list of button descriptors
-	this._buttonList = new Array();
+	this._buttonList = [];
 	if (standardButtons || extraButtons) {
 		this._buttonDesc = {};
 		if (standardButtons && standardButtons.length) {
@@ -99,10 +99,11 @@ DwtDialog = function(parent, className, title, standardButtons, extraButtons, zI
 
 	// get button IDs
 	this._buttonElementId = {};
-	for (var i = 0; i < this._buttonList.length; i++)
+	for (var i = 0; i < this._buttonList.length; i++) {
 		this._buttonElementId[this._buttonList[i]] = Dwt.getNextId();
+	}
 
-	DwtBaseDialog.call(this, parent, className, this._title, zIndex, mode, loc);
+	DwtBaseDialog.call(this, params);
 
 	// set up buttons
 	this._button = {};
@@ -119,6 +120,8 @@ DwtDialog = function(parent, className, title, standardButtons, extraButtons, zI
 		}
 	}
 }
+
+DwtDialog.PARAMS = ["parent", "className", "title", "standardButtons", "extraButtons", "zIndex", "mode", "loc"];
 
 DwtDialog.prototype = new DwtBaseDialog;
 DwtDialog.prototype.constructor = DwtDialog;

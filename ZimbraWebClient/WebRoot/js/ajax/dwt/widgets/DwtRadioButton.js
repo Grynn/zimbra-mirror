@@ -14,11 +14,37 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-DwtRadioButton = function(parent, style, name, checked, className, posStyle, id, index) {
-	if (arguments.length == 0) return;
-	className = className ? className : "DwtRadioButton";
-	DwtCheckbox.call(this, parent, style, name, checked, className, posStyle, id, index);
+
+/**
+ * @constructor
+ * @class
+ * This class implements a radio button.
+ * 
+ * @param params	[hash]			hash of params:
+ *        parent	[DwtComposite] 	parent widget
+ *        style 	[constant]*		The text style. May be one of: <i>DwtCheckbox.TEXT_LEFT</i> or
+ * 									<i>DwtCheckbox.TEXT_RIGHT</i> arithimatically or'd (|) with one of:
+ * 									<i>DwtCheckbox.ALIGN_LEFT</i>, <i>DwtCheckbox.ALIGN_CENTER</i>, or
+ * 									<i>DwtCheckbox.ALIGN_LEFT</i>.
+ * 									The first determines were in the checkbox the text will appear
+ * 									(if set), the second determine how the content of the text will be
+ * 									aligned. The default value for this parameter is: 
+ * 									<code>DwtCheckbox.TEXT_LEFT | DwtCheckbox.ALIGN_CENTER</code>.
+ *        name		[string]		The input control name. Required for IE.
+ *        checked	[boolean]		The input control checked status. Required for IE.
+ *        className	[string]*		CSS class
+ *        posStyle	[constant]*		positioning style
+ *        id		[string]*		an explicit ID to use for the control's HTML element
+ *        index 	[int]*			index at which to add this control among parent's children 
+ */
+DwtRadioButton = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtRadioButton.PARAMS);
+	params.className = params.className || "DwtRadioButton";
+	DwtCheckbox.call(this, params);
 }
+
+DwtRadioButton.PARAMS = ["parent", "style", "name", "checked", "className", "posStyle", "id", "index"];
 
 DwtRadioButton.prototype = new DwtCheckbox;
 DwtRadioButton.prototype.constructor = DwtRadioButton;

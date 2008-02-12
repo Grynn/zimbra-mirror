@@ -17,50 +17,54 @@
 
 
 /**
-* @constructor
-* @class
-* This is a base class for dialogs. Given content, this class will take care of 
-* showing, and hiding the dialog, as well as dragging it.
-* <p>
-* Content that is draggable (classes that override <code>_createHtml</code>), need to create
-* an element with an id of this.getHtmlElement().id + "_handle".
-* <p>
-* Dialogs always hang off the main shell since their stacking order is managed through z-index.
-*
-* @author Ross Dargahi
-* @author Conrad Damon
-* 
-* @param {DwtShell} parent	parent widget
-* @param {string} classname	CSS class name for the instance. Defaults to the this classes
-* 		name (optional)
-* @param {number} zIndex The z-index to set for this dialog when it is visible. Defaults
-* 		to <i>Dwt.Z_DIALOG</i> (optional)
-* @param {number} mode The modality of the dialog. One of: DwtBaseDialog.MODAL or 
-* 		DwtBaseDialog.MODELESS. Defaults to DwtBaseDialog.MODAL (optional)
-* @param {DwtPoint} loc	Location at which to popup the dialog. Defaults to being 
-* 		centered (optional)
-* @param {DwtControl} view Control whose element is to be reparented. (optional)
-* @param {string} dragHandleId
-*/
-DwtBaseDialog = function(parent, className, title, zIndex, mode, loc, view, dragHandleId) {
-	if (arguments.length == 0) return;
+ * @constructor
+ * @class
+ * This is a base class for dialogs. Given content, this class will take care of 
+ * showing and hiding the dialog, as well as dragging it.
+ * <p>
+ * If a subclass is draggable and overrides <code>_createHtml</code>, it needs to create
+ * an element with an id of this.getHtmlElement().id + "_handle".
+ * <p>
+ * Dialogs always hang off the main shell since their stacking order is managed through z-index.
+ *
+ * @author Ross Dargahi
+ * @author Conrad Damon
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget (the shell)
+ *        className		[string]*			CSS class
+ *        title			[string]*			title of dialog
+ *        zIndex		[int]*				The z-index to set for this dialog when it is visible. Defaults
+ *									 		to <i>Dwt.Z_DIALOG</i>.
+ *        mode 			[constant]*			The modality of the dialog. One of: DwtBaseDialog.MODAL (default) or 
+ *									 		DwtBaseDialog.MODELESS.
+ *        loc			[DwtPoint]*			Location at which to popup the dialog. Defaults to being 
+ * 											centered within its parent.
+ *        view 			[DwtControl]*		control whose element is to be reparented
+ *        dragHandleId	[string]*			ID of element used as drag handle
+ */
+DwtBaseDialog = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtBaseDialog.PARAMS);
+	var parent = params.parent;
 	if (!(parent instanceof DwtShell)) {
 		throw new DwtException("DwtBaseDialog parent must be a DwtShell", 
 							   DwtException.INVALIDPARENT, "DwtDialog");
 	}
-	className = className || "DwtBaseDialog";
-	this._title = title || "";
+	params.className = params.className || "DwtBaseDialog";
+	params.posStyle = DwtControl.ABSOLUTE_STYLE;
+	this._title = params.title || "";
 
-	DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
+	DwtComposite.call(this, params);
 
 	this._shell = parent;
-	this._zIndex = zIndex || Dwt.Z_DIALOG;
-	this._mode = mode || DwtBaseDialog.MODAL;
+	this._zIndex = params.zIndex || Dwt.Z_DIALOG;
+	this._mode = params.mode || DwtBaseDialog.MODAL;
 	
 	this._loc = new DwtPoint();
-	if (loc) {
-		this._loc.x = loc.x;
-		this._loc.y = loc.y
+	if (params.loc) {
+		this._loc.x = params.loc.x;
+		this._loc.y = params.loc.y
 	} else {
 		this._loc.x = this._loc.y = Dwt.LOC_NOWHERE;
 	}
@@ -70,18 +74,20 @@ DwtBaseDialog = function(parent, className, title, zIndex, mode, loc, view, drag
 	// keystrokes in the dialog.
 	this._tabGroup = new DwtTabGroup(this.toString(), true);
 
-    this._dragHandleId = dragHandleId || this._htmlElId+"_handle";
+    this._dragHandleId = params.dragHandleId || this._htmlElId + "_handle";
 	this._createHtml();
     this._initializeDragging(this._dragHandleId);
 
-	if (view != null) {
-		this.setView(view);
+	if (params.view) {
+		this.setView(params.view);
     }
 
 	// reset tab index
     this.setZIndex(Dwt.Z_HIDDEN); // not displayed until popup() called
 	this._positionDialog(DwtBaseDialog.__nowhereLoc);
 }
+
+DwtBaseDialog.PARAMS = ["parent", "className", "title", "zIndex", "mode", "loc", "view", "dragHandleId"];
 
 DwtBaseDialog.prototype = new DwtComposite;
 DwtBaseDialog.prototype.constructor = DwtBaseDialog;

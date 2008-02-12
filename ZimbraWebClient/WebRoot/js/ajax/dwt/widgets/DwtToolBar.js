@@ -16,18 +16,19 @@
  */
 
 
-DwtToolBar = function(parent, className, posStyle, cellSpacing, cellPadding, width, style, index) {
+DwtToolBar = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtToolBar.PARAMS);
 
-	if (arguments.length == 0) return;
-	className = className || "ZToolbar";
-	DwtComposite.call(this, parent, className, posStyle, false, null, index);
+	params.className = params.className || "ZToolbar";
+	DwtComposite.call(this, params);
 
 	var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
 							   [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
 	this._setEventHdlrs(events);
 	this._hasSetMouseEvents = true;
 
-	this._style = style || DwtToolBar.HORIZ_STYLE;
+	this._style = params.style || DwtToolBar.HORIZ_STYLE;
     this._items = [];
     this._createHtml();
 
@@ -37,6 +38,9 @@ DwtToolBar = function(parent, className, posStyle, cellSpacing, cellPadding, wid
 	var suffix = (this._style == DwtToolBar.HORIZ_STYLE) ? "horiz" : "vert";
 	this._keyMapName = ["DwtToolBar", suffix].join("-");
 };
+
+DwtToolBar.PARAMS = ["parent", "className", "posStyle", "cellSpacing",
+					 "cellPadding", "width", "style", "index"];
 
 DwtToolBar.prototype = new DwtComposite;
 DwtToolBar.prototype.constructor = DwtToolBar;

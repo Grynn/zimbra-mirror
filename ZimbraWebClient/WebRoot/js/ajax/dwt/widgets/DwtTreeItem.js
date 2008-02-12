@@ -17,22 +17,25 @@
 
 
 /**
-* Creates a Tree Item.
-* @constructor
-* @class
-* This class implements a tree item widget.
-*
-* @author Ross Dargahi
-* @param parent		the parent widget
-* @param index		location in siblings (optional)
-* @param text 		label text for the tree item (optional);
-* @param imageInfo	icon for the tree item (optional)
-* @param deferred	if true, then the UI elements of the item are not rendered until needed (i.e. when item becomes visible)
-* @param className	CSS class (optional)
-* @param posStyle	positioning style (absolute, static, or relative - optional defaults to static)
-*/
-DwtTreeItem = function(parent, index, text, imageInfo, deferred, className, posStyle) {
-
+ * Creates a Tree Item.
+ * @constructor
+ * @class
+ * This class implements a tree item widget.
+ *
+ * @author Ross Dargahi
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        index 		[int]*				index at which to add this control among parent's children 
+ *        text 			[string]*			label text for the tree item
+ *        imageInfo		[string]*			icon for the tree item
+ *        deferred		[boolean]*			If true, postpone initialization until needed.
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ */
+DwtTreeItem = function(params) {
+	params = Dwt.getParams(arguments, DwtTreeItem.PARAMS);
+	var parent = params.parent;
 	if (parent instanceof DwtTree) {
 		this._tree = parent;
 	} else if (parent instanceof DwtTreeItem) {
@@ -41,17 +44,18 @@ DwtTreeItem = function(parent, index, text, imageInfo, deferred, className, posS
 		throw new DwtException("DwtTreeItem parent must be a DwtTree or DwtTreeItem", DwtException.INVALIDPARENT, "DwtTreeItem");
 	}
 
-	this._origClassName = className ? className : "DwtTreeItem";
+	this._origClassName = params.className || "DwtTreeItem";
 	this._textClassName = this._origClassName + "-Text";
 	this._selectedClassName = this._origClassName + "-" + DwtCssStyle.SELECTED;
 	this._actionedClassName = this._origClassName + "-" + DwtCssStyle.ACTIONED;
 	this._dragOverClassName = this._origClassName + "-" + DwtCssStyle.DRAG_OVER;
 
+	params.deferred = (params.deferred !== false);
 	DwtComposite.call(this, parent, null, posStyle, true);
 
-	this._imageInfoParam = imageInfo;
-	this._textParam = text;
-	this._deferred = (deferred !== false);
+	this._imageInfoParam = params.imageInfo;
+	this._textParam = params.text;
+	this._deferred = params.deferred;
 	this._itemChecked = false;
 	this._initialized = false;
 	this._selectionEnabled = true;
@@ -65,17 +69,15 @@ DwtTreeItem = function(parent, index, text, imageInfo, deferred, className, posS
 
 	// if our parent is DwtTree or our parent is initialized and is not deferred
 	// type or is expanded, then initialize ourself, else wait
-	if (parent instanceof DwtTree ||
-		(parent._initialized && (!parent._deferred || parent._expanded)))
-	{
-		this._initialize(index);
-	}
-	else
-	{
-		parent._addDeferredChild(this, index);
-		this._index = index;
+	if (parent instanceof DwtTree || (parent._initialized && (!parent._deferred || parent._expanded))) {
+		this._initialize(params.index);
+	} else {
+		parent._addDeferredChild(this, params.index);
+		this._index = params.index;
 	}
 };
+
+DwtTreeItem.PARAMS = ["parent", "index", "text", "imageInfo", "deferred", "className", "posStyle"];
 
 DwtTreeItem.prototype = new DwtComposite;
 DwtTreeItem.prototype.constructor = DwtTreeItem;

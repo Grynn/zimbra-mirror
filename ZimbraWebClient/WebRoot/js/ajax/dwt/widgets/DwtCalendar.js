@@ -16,61 +16,66 @@
  */
 
 /**
-* Creates a calendar widget
-* @constructor
-* @class
-* The DwtCalendar widget provides a calendar view.
-*
-* @author Ross Dargahi
-* @author Roland Schemers
-*
-* @param parent 		Parent object
-* @param className		This instances class name defaults to DwtCalendar
-* @param posStyle		Positioning style defaults to DwtControl.STATIC_STYLE
-* @param firstDayOfWeek	The first day of the week. Defaults to DwtCalendar.SUN
-* @param forceRollOver 	If true, then clicking on (or setting) the widget to a 
-						date that is not part of the current month (i.e. one of 
-						the grey prev or next month days) will result in the 
-						widget rolling 	the date to that month. Default is true
-* @param workingDaysArray	An array specifying the working days. This array 
-						assume index 0 - Sunday etc. Defaults to Mon-Fri being 
-						working days
-* @param hidePrevNextMo Flag indicating whether widget should hide days of the 
-						previous/next month
-* @param readOnly 		Flag indicating this widget is read-only (should not 
-						process events, i.e. mouse clicks)
-*/
-DwtCalendar = function(parent, className, posStyle, firstDayOfWeek, forceRollOver, workingDaysArray, hidePrevNextMo, readOnly) {
-
-	if (arguments.length == 0) return;
-	className = className || "DwtCalendar";
-	DwtComposite.call(this, parent, className, posStyle);
+ * Creates a calendar widget
+ * @constructor
+ * @class
+ * The DwtCalendar widget provides a calendar view.
+ *
+ * @author Ross Dargahi
+ * @author Roland Schemers
+ *
+ * @param params			[hash]				hash of params:
+ *        parent			[DwtComposite] 		parent widget
+ *        className			[string]*			CSS class
+ *        posStyle			[constant]*			positioning style
+ * 
+ *        firstDayOfWeek	[constant]*			first day of the week - defaults to DwtCalendar.SUN
+ *        forceRollOver 	[boolean]*			If true, then clicking on (or setting) the widget to a 
+ *												date that is not part of the current month (i.e. one of 
+ *												the grey prev or next month days) will result in the 
+ *												widget rolling 	the date to that month. Default is true.
+ *        workingDays		[array]*			List of days that are work days. This array assumes that
+ * 												index 0 is Sunday. Defaults to Mon-Fri being work days.
+ *        hidePrevNextMo 	[boolean]*			flag indicating whether widget should hide days of the 
+ *												previous/next month
+ *        readOnly 			[boolean]*			flag indicating that this widget is read-only (should not 
+ *												process events such as mouse clicks)
+ */
+DwtCalendar = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtCalendar.PARAMS);
+	params.className = params.className || "DwtCalendar";
+	DwtComposite.call(this, params);
 
 	this._skipNotifyOnPage = false;
-	this._hidePrevNextMo = hidePrevNextMo;
-	this._readOnly = readOnly;
+	this._hidePrevNextMo = params.hidePrevNextMo;
+	this._readOnly = params.readOnly;
 	this._uuid = Dwt.getNextId();
-	var cn = this._origDayClassName = className + "Day";
-	this._todayClassName = " " + className + "Day-today";
+	var cn = this._origDayClassName = params.className + "Day";
+	this._todayClassName = " " + params.className + "Day-today";
 	this._selectedDayClassName = " " + cn + "-" + DwtCssStyle.SELECTED;
 	this._hoveredDayClassName = " " + cn + "-" + DwtCssStyle.HOVER;
 	this._activeDayClassName = " " + cn + "-" + DwtCssStyle.ACTIVE;
 	this._hiliteClassName = " " + cn + "-hilited";
 	this._greyClassName = " " + cn + "-grey"
 	
-	if (!this._readOnly)
+	if (!this._readOnly) {
 		this._installListeners();
+	}
 
 	this._selectionMode = DwtCalendar.DAY;
 	
 	this._init();
 
 	this._weekDays = new Array(7);
-	this._workingDays = (workingDaysArray == null) ? DwtCalendar._DEF_WORKING_DAYS : workingDaysArray;
-	this.setFirstDayOfWeek((firstDayOfWeek == null) ? DwtCalendar.SUN : firstDayOfWeek);
+	this._workingDays = params.workingDays || DwtCalendar._DEF_WORKING_DAYS;
+	this.setFirstDayOfWeek(params.firstDayOfWeek || DwtCalendar.SUN);
 	
-	this._forceRollOver = (forceRollOver) ? forceRollOver : true;
+	this._forceRollOver = (params.forceRollOver !== false);
 }
+
+DwtCalendar.PARAMS = ["parent", "className", "posStyle", "firstDayOfWeek", "forceRollOver",
+					  "workingDaysArray", "hidePrevNextMo", "readOnly"];
 
 DwtCalendar.prototype = new DwtComposite;
 DwtCalendar.prototype.constructor = DwtCalendar;

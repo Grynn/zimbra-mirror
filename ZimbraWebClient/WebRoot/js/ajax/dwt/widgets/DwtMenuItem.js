@@ -17,28 +17,32 @@
 
 
 /**
-* Creates a menu item. Menu items can be part of a radio group, or can be checked style menu items
-*
-* @constructor
-* @class
-*
-* @author Ross Dargahi
-* @param parent			the parent widget
-* @param style 			menu item's style
-* @param radioGroupId 	radio group that the menu item is part of
-* @param index 			position in menu
-* @param className		a CSS class
-* @param posStyle		positioning style
-*/
-DwtMenuItem = function(parent, style, radioGroupId, index, className, posStyle) {
+ * Creates a menu item. Menu items can be part of a radio group, or can be checked style menu items
+ *
+ * @constructor
+ * @class
+ *
+ * @author Ross Dargahi
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        style			[constant]*			menu item style
+ *        radioGroupId 	[string]*			radio group that the menu item is part of
+ *        index 		[int]*				position in menu
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ */
+DwtMenuItem = function(params) {
     if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtMenuItem.PARAMS);
 
     // check parameters
+    var parent = params.parent;
     if (!(parent instanceof DwtMenu)) {
 		throw new DwtException("Parent must be a DwtMenu object", DwtException.INVALIDPARENT, "DwtMenuItem");
     }
 		
-	style = style != null ? style : DwtMenuItem.NO_STYLE;
+	var style = params.style = params.style || DwtMenuItem.NO_STYLE;
 	if (parent._style == DwtMenu.BAR_STYLE && style != DwtMenuItem.PUSH_STYLE) {
 		throw new DwtException("DwtMenuItemInit: invalid style", DwtException.INVALID_PARAM, "DwtMenuItem");
 	}
@@ -46,15 +50,17 @@ DwtMenuItem = function(parent, style, radioGroupId, index, className, posStyle) 
     // call super constructor
     style &= ~DwtLabel.IMAGE_RIGHT; // remove image right style
     style |= DwtButton.ALWAYS_FLAT | DwtLabel.IMAGE_LEFT; // set default styles
-    className = style & DwtMenuItem.SEPARATOR_STYLE ? "ZMenuItemSeparator" : (className || "ZMenuItem");
-    DwtButton.call(this, parent, style, className, posStyle, null, null, null, DwtMenuItem._listeners);
+    params.className = (style & DwtMenuItem.SEPARATOR_STYLE) ?
+    					"ZMenuItemSeparator" : (params.className || "ZMenuItem");
+    params.listeners = DwtMenuItem._listeners;
+    DwtButton.call(this, params);
 
     this.setDropDownImages("Cascade", "Cascade", "Cascade", "Cascade");
-    this._radioGroupId = radioGroupId;
+    this._radioGroupId = params.radioGroupId;
 
     // add this item at the specified index
     if (parent._addItem) {
-		parent._addItem(this, index);
+		parent._addItem(this, params.index);
     }
 
     // add listeners if not menu item separator
@@ -63,6 +69,8 @@ DwtMenuItem = function(parent, style, radioGroupId, index, className, posStyle) 
 		this.addSelectionListener(new AjxListener(this, this.__handleItemSelect));
 	}
 }
+
+DwtMenuItem.PARAMS = ["parent", "style", "radioGroupId", "index", "className", "posStyle"];
 
 DwtMenuItem.prototype = new DwtButton;
 DwtMenuItem.prototype.constructor = DwtMenuItem;

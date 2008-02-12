@@ -58,21 +58,23 @@
  * @author Ross Dargahi
  *
  * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		Parent widget. Except in the case of <i>DwtShell</i> the
- * 											parent will be a control that has subclassed from <i>DwtComposite</i>
+ *        parent		[DwtComposite] 		Parent widget. Except in the case of <i>DwtShell</i>, the parent
+ * 											will be a control that is a subclass of <i>DwtComposite</i>.
  *        className		[string]*			CSS class
- *        posStyle		[constant]*			Positioning style (absolute, static, or relative). Defaults to <i>DwtControl.STATIC_STYLE</i>.
- *        deferred		[boolean]*			If true, postpone initialization until needed.
+ *        posStyle		[constant]*			Positioning style (absolute, static, or relative).
+ * 											Defaults to <i>DwtControl.STATIC_STYLE</i>.
+ *        deferred		[boolean]*			if true, postpone initialization until needed
  *        id			[string]*			An explicit ID to use for the control's HTML element. If not
- * 											specified defaults to an auto-generated id.
+ * 											provided, defaults to an auto-generated ID.
  *        index 		[int]*				index at which to add this control among parent's children 
  */
-DwtControl = function(parent, className, posStyle, deferred, id, index) {
+DwtControl = function(params) {
 
 	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtControl.PARAMS);
 
 	/** parent component. Read-Only */
-	this.parent = parent;
+	var parent = this.parent = params.parent;
 	if (parent && !(parent instanceof DwtComposite)) {
 		throw new DwtException("Parent must be a subclass of Composite", DwtException.INVALIDPARENT, "DwtControl");
 	}
@@ -99,19 +101,19 @@ DwtControl = function(parent, className, posStyle, deferred, id, index) {
 
 	/** CSS class name
 	 * @type string*/
-	this._className = className || "DwtControl";
+	this._className = params.className || "DwtControl";
 
 	/** @type private */
-	this.__posStyle = posStyle;
+	this.__posStyle = params.posStyle;
 
 	/** id of the control's HTML element
 	 * @type string */
-	if (id) {
-		this._htmlElId = id;
+	if (params.id) {
+		this._htmlElId = params.id;
 	}
 
 	/** @private */
-	this.__index = index;
+	this.__index = params.index;
 
 	/** enabled state of this control. Public APIs to this member are
 	 * <code>getEnabled</code> and <code>setEnabled</code>
@@ -133,7 +135,7 @@ DwtControl = function(parent, className, posStyle, deferred, id, index) {
 	 * @type boolean*/
 	this._hasFocus = false;
 
-	if (!deferred) {
+	if (!params.deferred) {
 		this.__initCtrl();
 	}
 
@@ -154,6 +156,8 @@ DwtControl = function(parent, className, posStyle, deferred, id, index) {
 	// ignore OVER and OUT mouse events between elements in the same control
 	this._ignoreInternalOverOut = true;
 }
+
+DwtControl.PARAMS = ["parent", "className", "posStyle", "deferred", "id", "index"];
 
 DwtControl.ALL_BY_ID = {};
 

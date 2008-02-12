@@ -16,29 +16,29 @@
  */
 
 /**
-* @constructor
-* @class
-* This class represents a button without a border
-*
-* @param parent	{DwtControl} Parent widget (required)
-* @param style	{string} the label style. This is an "or'ed" set of attributes (see DwtLabel)
-* @param className {string} CSS class. If not provided defaults to the class name (optional)
-* @param posStyle {string} Positioning style (absolute, static, or relative). If
-* 		not provided defaults to DwtControl.STATIC_STYLE (optional)
-* @param actionTiming {enum} if DwtButton.ACTION_MOUSEUP, then the button is triggered
-* 		on mouseup events, else if DwtButton.ACTION_MOUSEDOWN, then the button is
-* 		triggered on mousedown events
-* @param {int} id An explicit ID to use for the control's HTML element. If not
-* 		specified defaults to an auto-generated id (optional)
-* @param {int} index index at which to add this control among parent's children (optional)
-*
-* @extends DwtButton
-*/
-DwtBorderlessButton = function(parent, style, className, posStyle, actionTiming, id, index) {
-	if (arguments.length == 0) return;
+ * @constructor
+ * @class
+ * This class represents a button without a border
+ *
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        style			[constant]*			button style
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        actionTiming	[constant]*			if DwtButton.ACTION_MOUSEUP, then the button is triggered
+ *											on mouseup events, else if DwtButton.ACTION_MOUSEDOWN,
+ * 											then the button is triggered on mousedown events
+ *        id			[string]*			ID to use for the control's HTML element
+ *        index 		[int]*				index at which to add this control among parent's children
+ */
+DwtBorderlessButton = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtBorderlessButton.PARAMS);
 
-	DwtButton.call(this, parent, style, className, posStyle, id, index);
+	DwtButton.call(this, params);
 }
+
+DwtBorderlessButton.PARAMS = ["parent", "style", "className", "posStyle", "actionTiming", "id", "index"];
 
 DwtBorderlessButton.prototype = new DwtButton;
 DwtBorderlessButton.prototype.constructor = DwtBorderlessButton;

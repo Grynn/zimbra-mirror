@@ -15,13 +15,29 @@
  * ***** END LICENSE BLOCK *****
  */
 
-DwtListView = function(parent, className, posStyle, headerList, noMaximize) {
+/**
+ * @constructor
+ * @class
+ * A list view presents a list of items as rows with fields (columns).
+ * 
+ * @author Parag Shah
+ * @author Conrad Damon
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        headerList	[array]*			list of IDs for columns
+ *        noMaximize	[boolean]*			if true, all columns are fixed-width (otherwise, one will
+ * 											expand to fill available space)
+ */
+DwtListView = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtListView.PARAMS);
+	params.className = params.className || "DwtListView";
+	DwtComposite.call(this, params);
 
-	if (arguments.length == 0) return;
-	className = className || "DwtListView";
-	DwtComposite.call(this, parent, className, posStyle);
-
-	if (headerList) {
+	if (params.headerList) {
 		var htmlElement = this.getHtmlElement();
 
 		this._listColDiv = document.createElement("div");
@@ -69,8 +85,8 @@ DwtListView = function(parent, className, posStyle, headerList, noMaximize) {
 	this._selEv = new DwtSelectionEvent(true);
 	this._actionEv = new DwtListViewActionEvent(true);
 	this._stateChangeEv = new DwtEvent(true);
-	this._headerList = headerList;
-	this._noMaximize = noMaximize;
+	this._headerList = params.headerList;
+	this._noMaximize = params.noMaximize;
 	this._parentEl = this._headerList ? this._listDiv : this.getHtmlElement();
 	
 	this._list = null;
@@ -105,6 +121,8 @@ DwtListView = function(parent, className, posStyle, headerList, noMaximize) {
         ")\\b", "g"
     );
 };
+
+DwtListView.PARAMS = ["parent", "className", "posStyle", "headerList", "noMaximize"];
 
 DwtListView.ITEM_SELECTED 		= 1;
 DwtListView.ITEM_DESELECTED 	= 2;

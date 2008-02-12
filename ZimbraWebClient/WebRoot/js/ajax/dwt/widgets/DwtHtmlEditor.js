@@ -14,32 +14,44 @@
  *
  * ***** END LICENSE BLOCK *****
  */
+ 
 /**
+ * @constructor
+ * @class
  * Html Editor
  *
  * @author Ross Dargahi
+ * 
+ * @param params			[hash]				hash of params:
+ *        parent			[DwtComposite] 		parent widget
+ *        className			[string]*			CSS class
+ *        posStyle			[constant]*			positioning style
+ *        content
+ *        mode
+ *        blankIframeSrc
  */
-DwtHtmlEditor = function(parent, className, posStyle, content, mode, blankIframeSrc) {
-	if (arguments.length == 0) return;
-	this.setBlankIframeSrc(blankIframeSrc);
-	className = className || "DwtHtmlEditor";
-	DwtComposite.call(this, parent, className, posStyle);
+DwtHtmlEditor = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtHtmlEditor.PARAMS);
+	this.setBlankIframeSrc(params.blankIframeSrc);
+	params.className = params.className || "DwtHtmlEditor";
+	DwtComposite.call(this, params);
 
-	this._mode = mode == DwtHtmlEditor.HTML && this.isHtmlEditingSupported()
-		? mode : DwtHtmlEditor.TEXT;
+	this._mode = (params.mode == DwtHtmlEditor.HTML && this.isHtmlEditingSupported())
+		? params.mode : DwtHtmlEditor.TEXT;
 
 	this.__eventClosure = AjxCallback.simpleClosure(this.__eventClosure, this);
 
 	// init content
-	if (!content)
-		content = this._mode == DwtHtmlEditor.HTML ? "<html><head></head><body></body></html>" : "";
-
-	this._pendingContent = content;
+	this._pendingContent = params.content ? params.content :
+		(this._mode == DwtHtmlEditor.HTML) ? "<html><head></head><body></body></html>" : "";
 	this._htmlModeInited = false;
 
 	this._initialize();
 }
 
+DwtHtmlEditor.PARAMS = ["parent", "className", "posStyle", "content", "mode", "blankIframeSrc"];
+	
 DwtHtmlEditor.prototype = new DwtComposite();
 DwtHtmlEditor.prototype.constructor = DwtHtmlEditor;
 
