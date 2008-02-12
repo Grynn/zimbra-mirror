@@ -51,6 +51,7 @@ DwtTreeItem = function(params) {
 	this._dragOverClassName = this._origClassName + "-" + DwtCssStyle.DRAG_OVER;
 
 	params.deferred = (params.deferred !== false);
+	params.className = null;
 	DwtComposite.call(this, params);
 
 	this._imageInfoParam = params.imageInfo;
