@@ -620,3 +620,20 @@ DwtMissingSoundPlugin.prototype.addHelpListener =
 function(listener) {
 	this.addListener(DwtEvent.ONMOUSEDOWN, listener);
 };
+
+//////////////////////////////////////////////////////////////////////////////
+// Simple sound player to play sound files.
+//////////////////////////////////////////////////////////////////////////////
+DwtSimpleSoundPlayer = function(parent){
+    if(arguments.length == 0) return;
+    DwtControl.call(this,parent);
+    this.setEnabled(false);
+};
+
+DwtSimpleSoundPlayer.prototype = new DwtControl;
+DwtSimpleSoundPlayer.prototype.constructor = DwtSimpleSoundPlayer;
+
+DwtSimpleSoundPlayer.prototype.play = function(surl, params){
+    //params can be used in future to control the hidden,autostart,loop attributes.
+    this.getHtmlElement().innerHTML = "<embed src='"+surl+"' hidden=true autostart=true loop=false>";
+};
