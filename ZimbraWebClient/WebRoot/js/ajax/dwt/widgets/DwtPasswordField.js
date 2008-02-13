@@ -74,7 +74,7 @@ function(templateId, data) {
 
 	var showCheckboxEl = document.getElementById(data.id+"_show_password");
 	if (showCheckboxEl) {
-		this._showCheckbox = new DwtCheckbox(this);
+		this._showCheckbox = new DwtCheckbox({parent:this});
 		this._showCheckbox.setText(AjxMsg.showPassword);
 		this._showCheckbox.addSelectionListener(new AjxListener(this, this._handleShowCheckbox));
 		this._showCheckbox.replaceElement(showCheckboxEl);

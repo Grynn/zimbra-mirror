@@ -457,7 +457,7 @@ function(child) {
 * @param parent
 **/
 DwtStepLabel = function(parent) {
-	DwtLabel.call(this, parent, DwtLabel.ALIGN_CENTER, "DwtStepLabel");
+	DwtLabel.call(this, {parent:parent, style:DwtLabel.ALIGN_CENTER, className:"DwtStepLabel"});
 }
 
 DwtStepLabel.prototype = new DwtLabel;
