@@ -54,7 +54,7 @@ function disableButtons() {
     <div id='settings_hint' class='ZFloatInHead'></div>
     <span id='pageTitle'>Zimbra Account Setup</span>
 </div>
-
+<span class="padding">
 <c:choose>
     <c:when test="${not empty bean.error}" >
         <p class='ZOfflineError'>${bean.error}</p>
@@ -135,8 +135,8 @@ function disableButtons() {
 </form>
 
 <p><span id="whattodo">Press <span class="ZWizardButtonRef">Save Settings</span> to verify these settings.</span></p>
-
-<table class="ZWizardButtonBar">
+</span>
+<table class="ZWizardButtonBar" width="100%">
     <tr>
         <td class="ZWizardButton">
             <button id='typeButton' class='DwtButton' onclick="OnPickType()">Use a Different Account Type</button>
@@ -144,10 +144,10 @@ function disableButtons() {
         <td class="ZWizardButtonSpacer">
             <div></div>
         </td>
-        <td class="ZWizardButton">
+        <td class="ZWizardButton" width="1%">
             <button id='cancelButton' class='DwtButton' onclick="OnCancel()">Cancel</button>
         </td>
-        <td class="ZWizardButton">
+        <td class="ZWizardButton" width="1%">
             <button id='saveButton' class='DwtButton-focused' onclick="OnSubmit()">Save Settings</button>
         </td>
 </table>

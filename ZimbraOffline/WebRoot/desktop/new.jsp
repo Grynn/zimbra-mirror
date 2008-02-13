@@ -47,7 +47,7 @@ function OnXmail() {
 <div id="accountType" class="ZWizardPage">
     <div class="ZWizardPageTitle">What type of account do you want to set up?</div>
 
-
+<span class="padding">
     <table cellpadding=10 style='margin-left:20px;'>
         <tr>
             <td valign=top width=200px>
@@ -118,13 +118,13 @@ function OnXmail() {
             </td>
         </tr>
     </table>
-
-    <table class="ZWizardButtonBar">
+</span>
+    <table class="ZWizardButtonBar" width="100%">
         <tr>
             <td class="ZWizardButtonSpacer">
                 <div></div>
             </td>
-            <td class="ZWizardButton">
+            <td class="ZWizardButton" width="1%">
                 <button class='DwtButton' onclick="OnCancel()">Cancel</button>
             </td>
     </table>

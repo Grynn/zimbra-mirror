@@ -56,7 +56,7 @@ function OnLoginTo(username) {
     <div class='ZWizardPageTitle'>
         Welcome to the Zimbra Desktop setup wizard!
     </div>
-
+<span class="padding">
     <p>Zimbra Desktop allows you to access your email while your computer 
         is disconnected from the internet.
 
@@ -67,16 +67,17 @@ function OnLoginTo(username) {
     <p>     You must be online to setup the account -- if you are not online now, 
         please quit and launch the application again later when you are connected.
     </p>
-
-    <table class="ZWizardButtonBar">
+    </span>
+    <table class="ZWizardButtonBar" width="100%">
         <tr>
             <td class="ZWizardButtonSpacer">
                 <div></div>
             </td>
-            <td class="ZWizardButton">
+            <td class="ZWizardButton" width="1%">
                 <button class='DwtButton-focused' onclick="OnNew()">Set Up an Account</button>
             </td>
     </table>
+
 </div>
 
 </c:when>
@@ -102,7 +103,7 @@ function OnLoginTo(username) {
 			</tr>
 		</table>
     </div>
-
+<span class="padding">
 	<p>Click an account name below to manage it.</p>
 
 
@@ -162,8 +163,9 @@ function OnLoginTo(username) {
 	        </tr>
     	</c:forEach>
     </table>
-
-    <table class="ZWizardButtonBar">
+</span>
+<br>
+    <table class="ZWizardButtonBar" width="100%">
         <tr>
             <td class="ZWizardButton">
                 <button class='DwtButton' onclick="OnNew()">Set Up Another Account</button>
@@ -171,7 +173,7 @@ function OnLoginTo(username) {
             <td class="ZWizardButtonSpacer">
                 <div></div>
             </td>
-            <td class="ZWizardButton">
+            <td class="ZWizardButton" width="1%">
                 <button class='DwtButton-focused' onclick="OnLogin()">Go to Zimbra Desktop</button>
             </td>
          </tr>
