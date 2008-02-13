@@ -67,7 +67,7 @@ public class OfflineSyncManager {
         boolean mSyncRunning = false;
         
         long mLastSyncTime = 0;
-        long mLastTryTime = 0;
+        long mLastFailTime = 0;
         int mRetryCount = 0;
         
         SyncError mError;
@@ -83,22 +83,33 @@ public class OfflineSyncManager {
         }
         
         void syncComplete() {
-        	mLastSyncTime = mLastTryTime = System.currentTimeMillis();
+        	mLastSyncTime = System.currentTimeMillis();
+        	mLastFailTime = 0;
         	mStatus = SyncStatus.online;
+        	mRetryCount = 0;
         }
         
         void connecitonDown() {
         	if (++mRetryCount >= OfflineLC.zdesktop_retry_limit.intValue()) {
-        		mRetryCount = 0;
-        		mLastTryTime = System.currentTimeMillis();
+        		mLastFailTime = System.currentTimeMillis();
         	}
         	mStatus = SyncStatus.offline;
         }
         
         void syncFailed(String message, Exception exception) {
-        	mLastTryTime = System.currentTimeMillis();
+        	mLastFailTime = System.currentTimeMillis();
         	mError = new SyncError(message, exception);
         	mStatus = SyncStatus.error;
+        	++mRetryCount;
+        }
+        
+        boolean retryOK() {
+        	int clicks = mRetryCount - OfflineLC.zdesktop_retry_limit.intValue();
+        	clicks = clicks < 0 ? 0 : clicks;
+        	clicks = clicks > 15 ? 15 : clicks;
+        	long delay = OfflineLC.zdesktop_retry_delay_min.longValue() * (1 << clicks);
+        	delay = delay > OfflineLC.zdesktop_retry_delay_max.longValue() ? OfflineLC.zdesktop_retry_delay_max.longValue() : delay;
+        	return System.currentTimeMillis() - mLastFailTime > delay;
         }
         
     	String lookupAuthToken(String password) {
@@ -159,9 +170,9 @@ public class OfflineSyncManager {
 	// sync activity update
 	//
 	
-	public long getLastTryTime(String targetName) {
+	public long getLastSyncTime(String targetName) {
 		synchronized (syncStatusTable) {
-			return getStatus(targetName).mLastTryTime;
+			return getStatus(targetName).mLastSyncTime;
 		}
 	}
 	
@@ -246,6 +257,12 @@ public class OfflineSyncManager {
 		}
 	}
 	
+	public boolean retryOK(Account account) {
+		synchronized (syncStatusTable) {
+			return getStatus(account.getName()).retryOK();
+		}
+	}
+	
 	public void authSuccess(Account account, String token, long expires) {
 		authSuccess(account.getName(), ((OfflineAccount)account).getRemotePassword(), token, expires);
 	}
@@ -263,6 +280,12 @@ public class OfflineSyncManager {
 	public boolean reauthOK(DataSource dataSource) throws ServiceException {
 		synchronized (syncStatusTable) {
 			return getStatus(dataSource.getName()).reauthOK(dataSource.getDecryptedPassword());
+		}
+	}
+	
+	public boolean retryOK(DataSource dataSource) {
+		synchronized (syncStatusTable) {
+			return getStatus(dataSource.getName()).retryOK();
 		}
 	}
 	

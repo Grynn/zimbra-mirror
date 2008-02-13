@@ -109,11 +109,11 @@ public class MailboxSync {
                 	PushChanges.sendPendingMessages(ombx, isOnRequest);
             	
             	if (!isOnRequest) {
-        	    	if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()))
+        	    	if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()) || !syncMan.retryOK(ombx.getAccount()))
         	    		return;
         	    	
         	    	if (mStage == SyncStage.SYNC && !isPushReady(ombx) &&
-        	    			System.currentTimeMillis() - syncMan.getLastTryTime(user) < ombx.getSyncFrequency())
+        	    			System.currentTimeMillis() - syncMan.getLastSyncTime(user) < ombx.getSyncFrequency())
         	    		return;
         	    }
                 

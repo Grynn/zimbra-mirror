@@ -242,12 +242,12 @@ public class LocalMailbox extends DesktopMailbox {
 		OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
 		for (DataSource ds : dataSources) {
 	    	if (!isOnRequest) {
-		    	if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds))
+		    	if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds) || !syncMan.retryOK(ds))
 		    		continue;
 		    	
 		    	long now = System.currentTimeMillis();
 		    	long syncFreq = ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
-		    	if (now - syncMan.getLastTryTime(ds.getName()) < syncFreq)
+		    	if (now - syncMan.getLastSyncTime(ds.getName()) < syncFreq)
 		    		continue;
 		    }
 			

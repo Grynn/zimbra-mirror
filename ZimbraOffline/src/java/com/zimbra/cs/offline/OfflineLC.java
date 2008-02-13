@@ -35,6 +35,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_dirsync_fail_delay;
     public static final KnownKey zdesktop_account_poll_interval;
     public static final KnownKey zdesktop_reauth_delay;
+    public static final KnownKey zdesktop_retry_delay_min;
+    public static final KnownKey zdesktop_retry_delay_max;
     
     public static final KnownKey zdesktop_client_poll_interval;
     
@@ -113,6 +115,14 @@ public class OfflineLC {
 	    zdesktop_reauth_delay = new KnownKey("zdesktop_reauth_delay");
 	    zdesktop_reauth_delay.setDefault(Long.toString(Constants.MILLIS_PER_HOUR));
 	    zdesktop_reauth_delay.setDoc("Minimum delay in milliseconds to reauth after auth failure. Default 3600000 (1 hour).");
+	    
+	    zdesktop_retry_delay_min = new KnownKey("zdesktop_retry_delay_min");
+	    zdesktop_retry_delay_min.setDefault(Long.toString(Constants.MILLIS_PER_MINUTE));
+	    zdesktop_retry_delay_min.setDoc("Minimum delay in milliseconds to retry after becoming offline or encountering error. Default 60000 (1 minute).");
+	    
+	    zdesktop_retry_delay_max = new KnownKey("zdesktop_retry_delay_max");
+	    zdesktop_retry_delay_max.setDefault(Long.toString(Constants.MILLIS_PER_HOUR));
+	    zdesktop_retry_delay_max.setDoc("Maximum delay in milliseconds to retry after becoming offline or encountering error. Default 3600000 (1 hour).");
 	    
 	    zdesktop_retry_limit = new KnownKey("zdesktop_retry_limit");
 	    zdesktop_retry_limit.setDefault("2");
