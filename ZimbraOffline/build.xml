@@ -336,6 +336,8 @@
 
 		<unzip src="${warfile}" dest="${dist.dir}/jetty/webapps/service" />
 		<unzip src="${zimbra.warfile}" dest="${dist.dir}/jetty/webapps/zimbra" />
+		<copy tofile="${dist.dir}/jetty/webapps/service/WEB-INF/web.xml" file="${build.dir}/web.xml"/>
+		<copy tofile="${dist.dir}/jetty/webapps/zimbra/WEB-INF/web.xml" file="${build.dir}/zimbra/web.xml"/>
 		<unzip src="../ZimbraWebClient/WebRoot/help/WebHelp.zip" dest="${dist.dir}/jetty/webapps/zimbra" />
 		<move file="${dist.dir}/jetty/webapps/zimbra/WebHelp" tofile="${dist.dir}/jetty/webapps/zimbra/help" />
 		<copy file="src/installer/resources/launcher_16x16.ico" tofile="${dist.dir}/jetty/webapps/zimbra/favicon.ico" overwrite="true"/>
