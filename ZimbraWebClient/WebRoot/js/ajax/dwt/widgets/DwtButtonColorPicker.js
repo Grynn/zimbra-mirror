@@ -53,7 +53,7 @@ DwtButtonColorPicker = function(params) {
 	// have a dialog right now and (2) DwtMenu doesn't seem to make use of
 	// this parameter in other ways than to establish the zIndex.  That's
 	// unnecessarily complex :-(
-	var m = new DwtMenu(this, DwtMenu.COLOR_PICKER_STYLE, null, null, true);
+	var m = new DwtMenu({parent:this, style:DwtMenu.COLOR_PICKER_STYLE, inDialog:true});
 	this.setMenu(m);
 	var cp = new DwtColorPicker(m, null, null, params.noFillLabel);
 	cp.addSelectionListener(new AjxListener(this, this._colorPicked));

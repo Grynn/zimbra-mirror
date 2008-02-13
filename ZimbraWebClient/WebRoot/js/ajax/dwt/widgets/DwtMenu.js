@@ -36,7 +36,7 @@
  *        style			[constant]*			menu style
  *        className		[string]*			CSS class
  *        posStyle		[constant]*			positioning style
- *        dialog 		[DwtDialog]*		dialog that this menu is a part of
+ *        inDialog 		[boolean]*			if true, menu is part of a dialog
  */
 DwtMenu = function(params) {
 	if (arguments.length == 0) { return; }
@@ -63,7 +63,7 @@ DwtMenu = function(params) {
 	DwtComposite.call(this, params);
 	this.parent = parent;
 	if (!parent) { return; }
-	this._dialog = params.dialog;
+	this._inDialog = params.inDialog;
 
 	var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
 							   [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
@@ -125,7 +125,7 @@ DwtMenu = function(params) {
 	this._tabGroup.addMember(this);
 }
 
-DwtMenu.PARAMS = ["parent", "style", "className", "posStyle", "dialog"];
+DwtMenu.PARAMS = ["parent", "style", "className", "posStyle", "inDialog"];
 
 DwtMenu.prototype = new DwtComposite;
 DwtMenu.prototype.constructor = DwtMenu;
@@ -654,7 +654,7 @@ function(x, y, kbGenerated) {
 	// dialog object. This helps if you are adding an object to a dialog -- 
 	// where the object doesn't know anything about its container.
 	// var zIndex = this._dialog ? this._dialog.getZIndex() + Dwt._Z_INC : Dwt.Z_MENU;
-	var zIndex = this._dialog ? Dwt.Z_DIALOG_MENU : Dwt.Z_MENU;
+	var zIndex = this._inDialog ? Dwt.Z_DIALOG_MENU : Dwt.Z_MENU;
 	this.setZIndex(zIndex);
 	this._popupActionId = -1;
 	this._isPoppedup = true;

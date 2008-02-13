@@ -466,7 +466,7 @@ DwtTabBar = function(parent, tabCssClass, btnCssClass) {
 	this._currentTabKey = 1;
 	var myClass = tabCssClass || "ZTabBar";
 
-	DwtToolBar.call(this, parent, myClass, DwtControl.STATIC_STYLE);
+	DwtToolBar.call(this, {parent:parent, className:myClass, posStyle:DwtControl.STATIC_STYLE});
 };
 
 DwtTabBar.prototype = new DwtToolBar;
