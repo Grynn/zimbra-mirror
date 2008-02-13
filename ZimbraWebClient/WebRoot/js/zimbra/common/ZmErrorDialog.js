@@ -29,7 +29,7 @@ ZmErrorDialog = function(parent, msgs) {
 
 	var reportButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.REPORT_BUTTON, msgs.report, DwtDialog.ALIGN_LEFT);
 	var detailButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.DETAIL_BUTTON, msgs.showDetails, DwtDialog.ALIGN_LEFT);
-	DwtMessageDialog.call(this, parent, null, null, [reportButton, detailButton]);
+	DwtMessageDialog.call(this, {parent:parent, extraButtons:[reportButton, detailButton]});
 
 	this.registerCallback(ZmErrorDialog.REPORT_BUTTON, this._reportCallback, this);
 	this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this._showDetail, this);

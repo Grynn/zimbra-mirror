@@ -1024,7 +1024,7 @@ DwtChooserListView = function(parent, type, className) {
 	
 	if (arguments.length == 0) return;
 	className = className ? className : "DwtChooserListView";
-	DwtListView.call(this, parent, className, null, this._getHeaderList(parent));
+	DwtListView.call(this, {parent:parent, className:className, headerList:this._getHeaderList(parent)});
 
 	this.type = type;
 	this._chooserParent = parent.parent;

@@ -37,7 +37,7 @@ YSymbolLookupDialog.prototype._createSearchHtml = function() {
 	//this._searchBtn.setSize(100,Dwt.DEFAULT);
 	this._searchBtn.addSelectionListener(new AjxListener(this, this._searchButtonListener));						
 
-	this._searchResults = new DwtListView(this);
+	this._searchResults = new DwtListView({parent:this});
 	this._searchResults.setSize(200,150);	
 
 	var container = document.createElement("DIV");
