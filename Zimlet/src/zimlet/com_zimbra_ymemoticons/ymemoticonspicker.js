@@ -86,7 +86,7 @@ YMEmoticonsPicker = function(parent, className, posStyle){
 
     if (arguments.length == 0) return;
 	className = className || "DwtColorPicker";
-	DwtControl.call(this, parent, className, posStyle);
+	DwtControl.call(this, {parent:parent, className:className, posStyle:posStyle});
 
     this._createEmoticonsPicker(parent);
 

@@ -79,7 +79,7 @@ DwtShell = function(params) {
 	} catch (ex) {}
 	document.body.appendChild(htmlElement);
 	if (params.userShell) {
-		var userShellContainer = new DwtControl(this, null, Dwt.ABSOLUTE_STYLE);
+		var userShellContainer = new DwtControl({parent:this, posStyle:Dwt.ABSOLUTE_STYLE});
 		userShellContainer.getHtmlElement().appendChild(params.userShell);
 		userShellContainer.setSize("100%", "100%");
 		userShellContainer.zShow(true);

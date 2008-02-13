@@ -33,7 +33,7 @@
 DwtColorPicker = function(parent, className, posStyle, noFillLabel) {
 	if (arguments.length == 0) return;
 	className = className || "DwtColorPicker";
-	DwtControl.call(this, parent, className, posStyle);
+	DwtControl.call(this, {parent:parent, className:className, posStyle:posStyle});
 
 	this._noFillLabel = noFillLabel;
 	this._createColorTable();

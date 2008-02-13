@@ -30,13 +30,13 @@
  * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player
  * 							  to float in the wrong place when it's first created) (optional)
  * @param className {string} CSS class. If not provided defaults to the class name (optional)
- * @param positionType {string} Positioning style (absolute, static, or relative). If
+ * @param posStyle {string} Positioning style (absolute, static, or relative). If
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
 DwtSoundPlugin = function(params) {
 	if (arguments.length == 0) return;
 	params.className = params.className || "DwtSoundPlugin";
-	DwtControl.call(this, params.parent, params.className, params.positionType);
+	DwtControl.call(this, {parent:params.parent, className:params.className, posStyle:params.posStyle});
 	this._width = params.width || 200;
 	this._height = params.height || 18;
 	if (params.offscreen) {
@@ -67,7 +67,7 @@ DwtSoundPlugin.ERROR = 4;
  * 							  if you set this to true. (This reduces flicker, and a tendency for the QT player
  * 							  to float in the wrong place when it's first created) (optional)
  * @param className {string} CSS class. If not provided defaults to the class name (optional)
- * @param positionType {string} Positioning style (absolute, static, or relative). If
+ * @param posStyle {string} Positioning style (absolute, static, or relative). If
  * 		not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
 
@@ -292,7 +292,7 @@ function() {
 		width: 200,
 		height: 16,
 		offscreen: true,
-		positionType: DwtControl.RELATIVE_STYLE,
+		posStyle: DwtControl.RELATIVE_STYLE,
 		url: "/QuickTimeScriptTest.wav", // Not a valid url.
 		volume: 0
 	};

@@ -21,14 +21,14 @@
  * @param parent    {DwtControl} Parent widget (required)
  * @param orientation	{contant} Orientation of slider. DwtSlider.HORIZONTAL or DwtSlider.VERTICAL
  * @param className {string} CSS class. If not provided defaults to "DwtHorizontalSlider" or "DwtVerticalSlider" (optional)
- * @param positionType {string} Positioning style (absolute, static, or relative). If
+ * @param posStyle {string} Positioning style (absolute, static, or relative). If
  *         not provided defaults to DwtControl.STATIC_STYLE (optional)
  */
-DwtSlider = function(parent, orientation, className, positionType) {
+DwtSlider = function(parent, orientation, className, posStyle) {
     if (arguments.length == 0) return;
     this._orientation = orientation || DwtSlider.HORIZONTAL;
     className = className || (this._orientation == DwtSlider.HORIZONTAL ? "DwtHorizontalSlider" : "DwtVerticalSlider");
-    DwtControl.call(this, parent, className, positionType);
+    DwtControl.call(this, {parent:parent, className:className, posStyle:posStyle});
 
     this._size = 0;
     this._buttonSize = 0;

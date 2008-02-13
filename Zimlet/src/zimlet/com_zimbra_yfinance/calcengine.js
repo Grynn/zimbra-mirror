@@ -81,7 +81,7 @@ function(calcId){
 	
 	var buttons = this._getToolbarOps();
 	this._toolbar[ZmController.CALC_VIEW] = new ZmButtonToolBar({parent: appViewMgr._shell, buttons: buttons});
-	var calcView = this._calcView = new DwtControl(appViewMgr._shell, "DwtListView", Dwt.ABSOLUTE_STYLE);
+	var calcView = this._calcView = new DwtControl({parent:appViewMgr._shell, className:"DwtListView", posStyle:Dwt.ABSOLUTE_STYLE});
 	var el = calcView.getHtmlElement();
 	var htmlArr = [];
 	var idx = 0;
@@ -428,7 +428,7 @@ function(content) {
 	var buttons = [ZmOperation.CALC_IMPORT, ZmOperation.SEP, ZmOperation.CLOSE];
 	
 	this._toolbar[ZmController.CALC_RESULT_VIEW] = new ZmButtonToolBar({parent: appViewMgr._shell, buttons: buttons});
-	var resultView  = new DwtControl(appViewMgr._shell, "CalcResultView", Dwt.ABSOLUTE_STYLE);
+	var resultView  = new DwtControl({parent:appViewMgr._shell, className:"CalcResultView", posStyle:Dwt.ABSOLUTE_STYLE});
 	var el = resultView.getHtmlElement();
 
 	var htmlArr = [];

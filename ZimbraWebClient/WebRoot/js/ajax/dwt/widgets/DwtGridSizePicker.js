@@ -25,7 +25,7 @@
 DwtGridSizePicker = function(parent, title) {
 	if (arguments.length == 0)
 		return;
-	DwtControl.call(this, parent, "DwtGridSizePicker");
+	DwtControl.call(this, {parent:parent, className:"DwtGridSizePicker"});
 	this._title = title;
 	if (parent instanceof DwtMenu)
 		parent.addPopdownListener(new AjxListener(this, this._reset));

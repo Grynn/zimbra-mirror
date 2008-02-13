@@ -24,7 +24,7 @@ ZmBaseSplashScreen = function(shell, imageInfo, className) {
  	}
 	
  	className = className || "ZSplashScreen";
- 	DwtControl.call(this, shell, className, Dwt.ABSOLUTE_STYLE);
+ 	DwtControl.call(this, {parent:shell, className:className, posStyle:Dwt.ABSOLUTE_STYLE});
 
 	this.__createContents();
 }

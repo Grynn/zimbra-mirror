@@ -31,7 +31,7 @@ DwtAlert = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	className = className || "DwtAlert";
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
-	DwtControl.call(this, parent, className, posStyle);
+	DwtControl.call(this, {parent:parent, className:className, posStyle:posStyle});
 	this._alertStyle = DwtAlert.INFORMATION;
 	this._createHtml();
 }

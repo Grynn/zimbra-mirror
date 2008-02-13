@@ -36,7 +36,7 @@
  */
 DwtIframe = function(params) {
 	var posStyle = params.posStyle ? params.posStyle : DwtControl.STATIC_STYLE;
-	DwtControl.call(this, params.parent, params.className || "DwtIframe", posStyle, false);
+	DwtControl.call(this, {parent:params.parent, className:params.className || "DwtIframe", posStyle:posStyle});
 	this._styles = params.styles;
 	this._noscroll = params.noscroll;
 	this._iframeID = Dwt.getNextId();

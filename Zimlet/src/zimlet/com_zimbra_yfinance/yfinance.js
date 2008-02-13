@@ -173,7 +173,7 @@ function(symbol, result) {
 		ZmController.YF_RESULT_VIEW = "YFRV";	
 		var buttons = [ZmOperation.CLOSE];	
 		this._toolbar[ZmController.YF_RESULT_VIEW] = new ZmButtonToolBar({parent: appViewMgr._shell, buttons: buttons});
-		resultView  = this._searchResultView = new DwtControl(appViewMgr._shell, "DwtListView", Dwt.ABSOLUTE_STYLE);
+		resultView  = this._searchResultView = new DwtControl({parent:appViewMgr._shell, className:"DwtListView", posStyle:Dwt.ABSOLUTE_STYLE});
 
 		this._addSelectionListeners(this._toolbar[ZmController.YF_RESULT_VIEW]);	
 
