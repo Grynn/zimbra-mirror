@@ -252,7 +252,6 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
             mMsecsDayStart = 0;
 //        if (mMsecsDayEnd > MSECS_PER_DAY || mMsecsDayEnd < mMsecsDayStart)
 //            mMsecsDayEnd = MSECS_PER_DAY;
-
     }
     
     private int computeAllDayDaySpan(ZAppointmentHit match, List<ZApptDayLayoutBean> days, int dayIndex) {
