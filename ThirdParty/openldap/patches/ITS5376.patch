@@ -1,16 +1,51 @@
---- openldap-2.3.40/servers/slapd/syncrepl.c.orig	2008-02-12 20:59:26.000000000 -0800
-+++ openldap-2.3.40/servers/slapd/syncrepl.c	2008-02-12 21:04:58.000000000 -0800
-@@ -724,6 +724,9 @@
+--- openldap-2.3.40/servers/slapd/syncrepl.c.orig	2008-02-12 22:42:52.000000000 -0800
++++ openldap-2.3.40/servers/slapd/syncrepl.c	2008-02-12 22:46:46.000000000 -0800
+@@ -84,6 +84,7 @@
+ 	int					si_syncdata;
+ 	int					si_logstate;
+ 	int					si_conn_setup;
++	ber_int_t				si_msgid;
+ 	Avlnode				*si_presentlist;
+ 	LDAP				*si_ld;
+ 	LDAP_LIST_HEAD(np, nonpresent_entry) si_nonpresentlist;
+@@ -315,7 +316,6 @@
+ 	BerElement *ber = (BerElement *)&berbuf;
+ 	LDAPControl c[2], *ctrls[3];
+ 	struct timeval timeout;
+-	ber_int_t	msgid;
+ 	int rc;
+ 	int rhint;
+ 	char *base;
+@@ -403,7 +403,7 @@
+ 
+ 	rc = ldap_search_ext( si->si_ld, base, scope, filter, attrs, attrsonly,
+ 		ctrls, NULL, si->si_tlimit > 0 ? &timeout : NULL,
+-		si->si_slimit, &msgid );
++		si->si_slimit, &si->si_msgid );
+ 	ber_free_buf( ber );
+ 	return rc;
+ }
+@@ -669,7 +669,7 @@
+ 		tout_p = NULL;
+ 	}
+ 
+-	while (( rc = ldap_result( si->si_ld, LDAP_RES_ANY, LDAP_MSG_ONE,
++	while (( rc = ldap_result( si->si_ld, si->si_msgid, LDAP_MSG_ONE,
+ 		tout_p, &res )) > 0 )
+ 	{
+ 		if ( slapd_shutdown ) {
+@@ -724,6 +724,10 @@
  					if ( syncrepl_message_to_op( si, op, msg ) == LDAP_SUCCESS &&
  						!BER_BVISNULL( &syncCookie.ctxcsn ) ) {
  						syncrepl_updateCookie( si, op, psub, &syncCookie );
 +					} else if ( rc == LDAP_NO_SUCH_OBJECT ) {
 +						rc = LDAP_SYNC_REFRESH_REQUIRED;
 +						si->si_logstate = SYNCLOG_FALLBACK;
++						ldap_abandon_ext( si->si_ld, si->si_msgid, NULL, NULL );
  					}
  				} else if ( syncrepl_message_to_entry( si, op, msg,
  					&modlist, &entry, syncstate ) == LDAP_SUCCESS ) {
-@@ -1405,7 +1408,9 @@
+@@ -1405,7 +1409,9 @@
  			be_entry_release_w( op, op->ora_e );
  		} else {
  			op->orm_modlist = modlist;
