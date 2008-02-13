@@ -91,8 +91,8 @@ function OnLoginTo(username) {
 
 
 <div id="console" class="ZWizardPage">
-    <div class="ZWizardPageTitle">
-		<table border=0 width=100% cellpadding=0 cellspacing=0>
+
+		<table border=0 cellpadding=0 cellspacing=0 class="ZWizardPageTitle" width="100%">
 			<tr>
 				<td class='ZHeadTitle'>
 					Zimbra Desktop Accounts Setup
@@ -102,7 +102,7 @@ function OnLoginTo(username) {
 				</td>
 			</tr>
 		</table>
-    </div>
+
 <span class="padding">
 	<p>Click an account name below to manage it.</p>
 
@@ -163,9 +163,10 @@ function OnLoginTo(username) {
 	        </tr>
     	</c:forEach>
     </table>
+
 </span>
 <br>
-    <table class="ZWizardButtonBar" width="100%">
+    <table class="ZWizardButtonBar" width="100%" border="0">
         <tr>
             <td class="ZWizardButton">
                 <button class='DwtButton' onclick="OnNew()">Set Up Another Account</button>

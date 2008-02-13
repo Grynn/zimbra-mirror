@@ -145,12 +145,10 @@ a:link	{
 
 .ZWizardPage{display:block;-moz-border-radius:3px;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #d1c6ae;-moz-border-top-colors:#a29a87 #d1c6ae;-moz-border-bottom-colors:#686357 #aea591;-moz-border-right-colors:#8b8474 #aea591;background-color:#eee5d1;}
 .ZWizardPage BUTTON{height:24px;cursor:pointer;}
-.ZWizardPageTitle{background-color:#bab09a;left:0;right:0;padding:5px 10px 5px 10px;font-size:15px;font-weight:bold;}
+.ZWizardPageTitle{background-color:#bab09a;padding:7px;font-size:15px;font-weight:bold;}
 .noborder {border-width:0px !important;}
-.ZWizardButtonBar{padding:5px 10px 5px 10px;background-color:#bab09a;}
-#IFDEF SAFARI
-.ZWizardButtonBar{padding:5px 0px 5px 0px;background-color:#bab09a;}
-#ENDIF
+.ZWizardButtonBar{padding:5px;background-color:#bab09a;}
+
 
 .ZWizardButtonRef{font-weight:bold;}
 .ZWizardButtonSpacer{width:100%;}
