@@ -615,11 +615,15 @@ function(selected) {
 		if (!this._initialized)
 			this._initialize();
 		if (selected && this._selectionEnabled) {
-			this._textCell.className = this._selectedClassName;
-			return true;
+            if (this._textCell) {
+                this._textCell.className = this._selectedClassName;
+            }
+            return true;
 		} else {
-			this._textCell.className = this._textClassName;
-			return false;
+            if (this._textCell) {
+    			this._textCell.className = this._textClassName;
+            }
+            return false;
 		}
 	}
 };
