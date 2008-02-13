@@ -103,6 +103,7 @@ tar:
 	(cd $(ZIMBRA_HOME); tar czf $(LDAP_TGZ_TARGET) openldap-$(LDAP_VERSION))
 	mkdir -p $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
 	(cd $(ZIMBRA_HOME); cp -pfr $(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/lib/* $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib; \
+	ln -s openldap-clibs-$(LDAP_VERSION) openldap-clibs; \
 	tar cfz $(LDAP_LIB_TGZ_TARGET) openldap-clibs-$(LDAP_VERSION))
 
 p4edit: $(LDAP_TGZ_TARGET)
