@@ -388,7 +388,7 @@ function() {
 **/
 DwtWizProgressBar = function(parent) {
 	if (arguments.length == 0) return;
-	DwtComposite.call(this, parent, "DwtWizProgressBar", DwtControl.STATIC_STYLE);
+	DwtComposite.call(this, {parent:parent, className:"DwtWizProgressBar", posStyle:DwtControl.STATIC_STYLE});
 	this._table = document.createElement("table");
 	this._table.border = 0;
 	this._table.cellPadding = 0;

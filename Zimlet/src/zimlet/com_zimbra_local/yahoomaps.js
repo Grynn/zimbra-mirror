@@ -4,7 +4,7 @@ YahooMaps = function(parent, className,controller){
     //Initializations
     className = className || "YahooMap";
     //Create Composite to place the YahooMap
-    DwtComposite.call(this, parent, className, Dwt.ABSOLUTE_STYLE,null,"YahooMap");
+    DwtComposite.call(this, {parent:parent, className:className, posStyle:Dwt.ABSOLUTE_STYLE, id:"YahooMap"});
 
     this._controller = controller;
 

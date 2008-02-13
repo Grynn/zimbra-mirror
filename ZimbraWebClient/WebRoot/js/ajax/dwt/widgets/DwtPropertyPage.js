@@ -24,10 +24,10 @@
 * @author Greg Solovyev
 **/
 
-DwtPropertyPage = function(parent, className, positionType) {
+DwtPropertyPage = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	var clsName = className || "DwtPropertyPage";
-	DwtComposite.call(this, parent, className, positionType);
+	DwtComposite.call(this, {parent:parent, className:className, posStyle:posStyle});
 	this._fieldIds = new Object();
 	this._fildDivIds = new Object();
 	this._isDirty = false;

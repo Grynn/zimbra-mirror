@@ -44,7 +44,7 @@ DwtResizableWindow = function(parent, className) {
 	this._loc = { x: 0, y: 0 };
 	this._visible = false;
 	this._active = null;
-	DwtComposite.call(this, parent, className, DwtControl.ABSOLUTE_STYLE);
+	DwtComposite.call(this, {parent:parent, className:className, posStyle:DwtControl.ABSOLUTE_STYLE});
 
 	this.addControlListener(new AjxListener(this, this.__onControlEvent));
 	this.addDisposeListener(new AjxListener(this, this.__onDispose));
@@ -513,7 +513,7 @@ DwtResizableWindow.__static_resizeMouseUp = function(ev) {
 
 DwtWindowManager = function(parent) {
 	if (arguments.length > 0) {
-		DwtComposite.call(this, parent, "DwtWindowManager", Dwt.ABSOLUTE_STYLE);
+		DwtComposite.call(this, {parent:parent, className:"DwtWindowManager", posStyle:Dwt.ABSOLUTE_STYLE});
 
 		// all managed windows are present in this array
 		this.all_windows = new AjxVector();

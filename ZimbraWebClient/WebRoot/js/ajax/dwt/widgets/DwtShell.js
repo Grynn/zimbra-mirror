@@ -40,7 +40,7 @@ DwtShell = function(params) {
 	}
 
 	var className = params.className || "DwtShell";
-	DwtComposite.call(this, null, className);
+	DwtComposite.call(this, {className:className});
 
     // HACK! This is a hack to make sure that the control methods work 
     // with DwtShell since the parent of DwtShell is null. 

@@ -22,11 +22,11 @@
  *
  * See initProperties() below
  */
-DwtPropertyEditor = function(parent, useDwtInputField, className, positionType, deferred) {
+DwtPropertyEditor = function(parent, useDwtInputField, className, posStyle, deferred) {
 	if (arguments.length > 0) {
 		if (!className)
 			className = "DwtPropertyEditor";
-		DwtComposite.call(this, parent, className, positionType, deferred);
+		DwtComposite.call(this, {parent:parent, className:className, posStyle:posStyle, deferred:deferred});
 		this._useDwtInputField = useDwtInputField != null ? useDwtInputField : true;
 		this._schema = null;
 		this._init();

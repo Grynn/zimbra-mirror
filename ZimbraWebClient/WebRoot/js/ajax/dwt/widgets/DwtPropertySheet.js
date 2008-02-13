@@ -16,10 +16,10 @@
  */
 
 
-DwtPropertySheet = function(parent, className, positionType, labelSide) {
+DwtPropertySheet = function(parent, className, posStyle, labelSide) {
 	if (arguments.length == 0) return;
 	className = className || "DwtPropertySheet";
-	DwtComposite.call(this, parent, className, positionType);
+	DwtComposite.call(this, {parent:parent, className:className, posStyle:posStyle});
 
 	this._labelSide = labelSide || DwtPropertySheet.DEFAULT;
 

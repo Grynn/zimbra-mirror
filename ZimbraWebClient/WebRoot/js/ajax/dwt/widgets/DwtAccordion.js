@@ -31,7 +31,7 @@
 DwtAccordion = function(parent, className, posStyle) {
 
 	if (arguments.length == 0) return;
-	DwtComposite.call(this, parent, className, (posStyle || Dwt.ABSOLUTE_STYLE));
+	DwtComposite.call(this, {parent:parent, className:className, posStyle:(posStyle || Dwt.ABSOLUTE_STYLE)});
 
 	this._initialize(className);
 };

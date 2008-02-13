@@ -30,7 +30,7 @@
 DwtProgressBar = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	posStyle = posStyle || DwtControl.STATIC_STYLE;
-	DwtComposite.call(this, parent, null, posStyle);
+	DwtComposite.call(this, {parent:parent, posStyle:posStyle});
 	this._maxValue = 100;
 	this._value = 0;
 	this._quotabarDiv = null;

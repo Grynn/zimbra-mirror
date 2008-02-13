@@ -91,7 +91,7 @@
 DwtMessageComposite = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 	className = className || "DwtMessageComposite";
-	DwtComposite.call(this, parent, className, posStyle);
+	DwtComposite.call(this, {parent:parent, className:className, posStyle:posStyle});
 }
 
 DwtMessageComposite.prototype = new DwtComposite;

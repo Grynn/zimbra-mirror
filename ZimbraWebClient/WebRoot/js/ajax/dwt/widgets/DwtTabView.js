@@ -23,13 +23,10 @@
 * DwtTabView manages the z-index of the contained tabs. 
 * @author Greg Solovyev
 **/
-DwtTabView = function(parent, className, position) {
+DwtTabView = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
 
-	var clsName = className || "ZTabView";
-	var pos = position || DwtControl.ABSOLUTE_STYLE
-	
-	DwtComposite.call(this, parent, clsName, pos);
+	DwtComposite.call(this, {parent:parent, className:className || "ZTabView", posStyle:posStyle || DwtControl.ABSOLUTE_STYLE});
 
 	this._stateChangeEv = new DwtEvent(true);
 	this._tabs = [];
