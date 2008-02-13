@@ -362,7 +362,8 @@ DwtShell.prototype._getBusyDialog =
 function(htmlElement) {
 	if (!this._busyDialog) {
 		var cancelButton = new DwtDialog_ButtonDescriptor(DwtShell.CANCEL_BUTTON, AjxMsg.cancelRequest, DwtDialog.ALIGN_CENTER);
-	    this._busyDialog = new DwtDialog(this, "DwtShellBusyDialog", AjxMsg.workInProgress, DwtDialog.NO_BUTTONS, [cancelButton], Dwt.BUSY + 10);
+	    this._busyDialog = new DwtDialog({parent:this, className:"DwtShellBusyDialog", title:AjxMsg.workInProgress,
+	    								  standardButtons:DwtDialog.NO_BUTTONS, extraButtons:[cancelButton], zIndex:Dwt.BUSY + 10});
 	    this._busyDialog.registerCallback(DwtShell.CANCEL_BUTTON, this._busyCancelButtonListener, this);
 	    var txtId = Dwt.getNextId();
 	    var html = [

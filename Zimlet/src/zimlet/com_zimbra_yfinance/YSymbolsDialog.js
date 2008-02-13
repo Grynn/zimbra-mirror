@@ -19,7 +19,7 @@ YSymbolsDialog = function(shell, className, parent) {
 	className = className || "YSymbolsDialog";
 	this._zimlet = parent;
 	var title = "Stock polling options"; 
-	DwtDialog.call(this, shell, className, title);
+	DwtDialog.call(this, {parent:shell, className:className, title:title});
 	this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._symbolSelected));
 	this._createSearchHtml();
 	DBG.println("user prop:"+this._zimlet.getUserProperty("stockSymbols"));

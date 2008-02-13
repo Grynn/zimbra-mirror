@@ -18,7 +18,7 @@
 YSymbolLookupDialog = function(shell, className, parent) {
 	className = className || "YSymbolLookupDialog";
 	var title = "Company Symbol Lookup"; 
-	DwtDialog.call(this, shell, className, title);
+	DwtDialog.call(this, {parent:shell, className:className, title:title});
 	this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._symbolSelected));
 	this._createSearchHtml();
 	this._parent = parent;

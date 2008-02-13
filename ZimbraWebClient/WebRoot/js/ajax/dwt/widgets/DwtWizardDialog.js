@@ -28,13 +28,14 @@
 * This class represents a reusable wizard dialog. 
 */
 DwtWizardDialog = function(parent, className, title, w, h) {
-	if (arguments.length == 0) return;
-	var clsName = className || "DwtDialog";
+	if (arguments.length == 0) { return; }
+	className = className || "DwtDialog";
 	
 	var nextButton = new DwtDialog_ButtonDescriptor(DwtWizardDialog.NEXT_BUTTON, AjxMsg._next, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goNext));
 	var prevButton = new DwtDialog_ButtonDescriptor(DwtWizardDialog.PREV_BUTTON, AjxMsg._prev, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.goPrev));
 	var finishButton = new DwtDialog_ButtonDescriptor(DwtWizardDialog.FINISH_BUTTON, AjxMsg._finish, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.finishWizard));
-	DwtDialog.call(this, parent, clsName, null, [DwtDialog.CANCEL_BUTTON], [prevButton,nextButton,finishButton]);
+	DwtDialog.call(this, {parent:parent, className:className, standardButtons:[DwtDialog.CANCEL_BUTTON],
+						  extraButtons:[prevButton, nextButton, finishButton]});
 
 	if (!w) {
 		this._contentW = "80ex";

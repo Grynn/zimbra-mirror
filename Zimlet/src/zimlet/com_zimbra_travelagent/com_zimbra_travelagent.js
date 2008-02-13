@@ -208,7 +208,7 @@ function(obj) {
 
 function TravelDialog(parent,title,  view) {
 	if (arguments.length == 0) return;
-	DwtDialog.call(this, parent, null, title, [DwtDialog.CANCEL_BUTTON ], null);
+	DwtDialog.call(this, {parent:parent, title:title, standardButtons:[DwtDialog.CANCEL_BUTTON ]});
 	if (!view) {
 		this.setContent(this._contentHtml());
 	} else {

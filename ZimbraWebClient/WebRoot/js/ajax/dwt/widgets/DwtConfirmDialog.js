@@ -20,7 +20,7 @@ DwtConfirmDialog = function(parent, className) {
 	if (arguments.length == 0) return;
 	
 	var buttons = [ DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON ];
-	DwtDialog.call(this, parent, className, AjxMsg.confirmTitle, buttons);
+	DwtDialog.call(this, {parent:parent, className:className, title:AjxMsg.confirmTitle, standardButtons:buttons});
 	
 	this._questionDiv = document.createElement("DIV");
 	this._questionDiv.className = "DwtConfirmDialogQuestion";
