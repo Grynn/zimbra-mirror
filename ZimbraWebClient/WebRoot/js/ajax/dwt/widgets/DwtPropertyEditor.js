@@ -461,7 +461,7 @@ DwtPropertyEditor.prototype._createDropDown = function(prop, target) {
 		options[i++] = new DwtSelectOption(item.value,
 						   item.value == prop.value,
 						   item.label);
-	prop._select = sel = new DwtSelect(this, options);
+	prop._select = sel = new DwtSelect({parent:this, options:options});
 	sel.addChangeListener(new AjxListener(prop, prop._onSelectChange));
 	sel.addListener(DwtEvent.ONMOUSEDOWN, this._onMouseDown);
 	this._currentFieldCell = null;
@@ -469,7 +469,7 @@ DwtPropertyEditor.prototype._createDropDown = function(prop, target) {
 
 DwtPropertyEditor.prototype._createCalendar = function(prop, target) {
 	this._currentFieldCell = target;
-	var btn = new DwtButton(this);
+	var btn = new DwtButton({parent:this});
 	this._currentFieldCell = null;
 
 	btn.setText(prop._makeDisplayValue());

@@ -133,7 +133,7 @@ function(code) {
 FlightStatusDlg.prototype._createContentEl = 
 function() {
 	// create controls
-	this._airlineSelect = new DwtSelect(this);
+	this._airlineSelect = new DwtSelect({parent:this});
 	for (var i in Com_Flightexplorer_Fasttrack.airlines3) {
 		this._airlineSelect.addOption(Com_Flightexplorer_Fasttrack.airlines3[i], i == this.currentAirline, i);
 	}
@@ -187,7 +187,7 @@ function() {
 	//flightCodeInputCell.appendChild(this._flightCodeInputEl);
 			
 	var flightSearchBtnCell = row1.insertCell(row1.cells.length);		
-	var searchButton = new DwtButton(this);
+	var searchButton = new DwtButton({parent:this});
 	searchButton.setText("Track Flight");
 	searchButton.setToolTipContent("Click this button to get the status of the flight");
 	searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener));
@@ -219,7 +219,7 @@ function() {
 		this.detailValueCell.className = "Label";
 	
 		var add2CalCell = detailrow1.insertCell(detailrow1.cells.length);
-		var add2CalButton = new DwtButton(this, null, "TBButton");
+		var add2CalButton = new DwtButton({parent:this, className:"TBButton"});
 		add2CalButton.setImage("NewAppointment");
 		add2CalButton.addSelectionListener(new AjxListener(this, this._add2Cal));
 		add2CalButton.setToolTipContent("Add this flight to your calendar");
@@ -274,7 +274,7 @@ function() {
 		var depTable = document.createElement("TABLE");
 		var deprow1 = depTable.insertRow(depTable.rows.length);
 		var depMapBtnCell = deprow1.insertCell(deprow1.cells.length);
-		var getDepYMapButton = new DwtButton(this, null, "TBButton");
+		var getDepYMapButton = new DwtButton({parent:this, className:"TBButton"});
 		getDepYMapButton.setText("map of the airport");
 		getDepYMapButton.setImage("YMAP-Icon");
 		getDepYMapButton.setToolTipContent("Get the map of the airport");
@@ -282,7 +282,7 @@ function() {
 		depMapBtnCell.appendChild(getDepYMapButton.getHtmlElement());
 	
 /*		var depAdd2CalCell = deprow1.insertCell(deprow1.cells.length);
-		var depAdd2CalButton = new DwtButton(this);
+		var depAdd2CalButton = new DwtButton({parent:this});
 		depAdd2CalButton.setImage("NewAppointment");
 		depAdd2CalButton.addSelectionListener(new AjxListener(this, this._depAdd2Cal));
 		depAdd2CalCell.appendChild(depAdd2CalButton.getHtmlElement());
@@ -339,7 +339,7 @@ function() {
 		var arrTable = document.createElement("TABLE");
 		var arrrow1 = arrTable.insertRow(arrTable.rows.length);
 		var arMapBtnCell = arrrow1.insertCell(arrrow1.cells.length);
-		var getArrYMapButton = new DwtButton(this, null, "TBButton");
+		var getArrYMapButton = new DwtButton({parent:this, className:"TBButton"});
 		getArrYMapButton.setText("map of the airport");
 		getArrYMapButton.setImage("YMAP-Icon");
 		getArrYMapButton.setToolTipContent("Get the map of the airport");
@@ -347,7 +347,7 @@ function() {
 		arMapBtnCell.appendChild(getArrYMapButton.getHtmlElement());
 		
 	/*	var arrAdd2CalCell = arrrow1.insertCell(arrrow1.cells.length);
-		var arrAdd2CalButton = new DwtButton(this);
+		var arrAdd2CalButton = new DwtButton({parent:this});
 		arrAdd2CalButton.setImage("NewAppointment");
 		arrAdd2CalButton.addSelectionListener(new AjxListener(this, this._arrAdd2Cal));
 		arrAdd2CalCell.appendChild(arrAdd2CalButton.getHtmlElement());

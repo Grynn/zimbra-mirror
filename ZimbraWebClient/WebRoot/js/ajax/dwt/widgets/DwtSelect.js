@@ -22,15 +22,19 @@
  * Widget to replace the native select element.
  *
  * Note: Currently this does not support multiple selection.
- * @param options (Array) optional array of options. This can be either
- *                        an array of DwtSelectOptions or an array of strings.
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        options 		[array]				List of options. This can be either an array of DwtSelectOptions or an array of strings.
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
  */
-DwtSelect = function(parent, options, className, posStyle) {
-
-	if(arguments.length == 0) return;
-	var clsName = className || "ZSelect";
-    var positionStyle = posStyle || Dwt.STATIC_STYLE;
-    DwtButton.call(this, parent, null, clsName, positionStyle);
+DwtSelect = function(params) {
+	if (arguments.length == 0) { return; }
+	params = Dwt.getParams(arguments, DwtSelect.PARAMS);
+	params.className = params.className || "ZSelect";
+	params.posStyle = params.posStyle || Dwt.STATIC_STYLE;
+    DwtButton.call(this, params);
 
 	var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
 							   [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
@@ -40,10 +44,11 @@ DwtSelect = function(parent, options, className, posStyle) {
     // initialize some variables
     this._currentSelectionId = -1;
     this._options = new AjxVector();
-    this._optionValuesToIndices = new Object();
+    this._optionValuesToIndices = {};
     this._selectedValue = this._selectedOption = null;
 
     // add options
+    var options = params.options;
     if (options) {
         for (var i = 0; i < options.length; ++i) {
             this.addOption(options[i]);
@@ -60,6 +65,8 @@ DwtSelect = function(parent, options, className, posStyle) {
     this._menuCallback = new AjxListener(this, this._createMenu);
     this.setMenu(this._menuCallback, true);
 }
+
+DwtSelect.PARAMS = ["parent", "options", "style", "className"];
 
 DwtSelect.prototype = new DwtButton;
 DwtSelect.prototype.constructor = DwtSelect;
@@ -391,7 +398,7 @@ function() {
 DwtSelect.prototype._createMenu = function() {
     var menu = new DwtSelectMenu(this);
     for (var i = 0, len = this._options.size(); i < len; ++i) {
-		var mi = new DwtSelectMenuItem(menu, DwtMenuItem.SELECT_STYLE);
+		var mi = new DwtSelectMenuItem(menu);
 		var option = this._options.get(i);
         var image = option.getImage();
         if (image) {
@@ -597,7 +604,7 @@ DwtSelectMenu.prototype.TEMPLATE = "dwt.Widgets#ZSelectMenu";
 //
 
 DwtSelectMenuItem = function(parent) {
-    DwtMenuItem.call(this, parent, DwtMenuItem.SELECT_STYLE, null, null, "ZSelectMenuItem");
+    DwtMenuItem.call(this, {parent:parent, style:DwtMenuItem.SELECT_STYLE, className:"ZSelectMenuItem"});
 }
 DwtSelectMenuItem.prototype = new DwtMenuItem;
 DwtSelectMenuItem.prototype.constructor = DwtSelectMenuItem;

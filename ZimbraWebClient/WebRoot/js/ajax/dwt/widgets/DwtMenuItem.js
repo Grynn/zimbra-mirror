@@ -126,13 +126,15 @@ function() {
 };
 
 DwtMenuItem.create =
-function(parent, imageInfo, text, disImageInfo, enabled, style, radioGroupId, idx, className, posStyle) {
-	var mi = new DwtMenuItem(parent, style, radioGroupId, idx, className, posStyle);
-	if (imageInfo)
-		mi.setImage(imageInfo);
-	if (text)
-		mi.setText(text);
-	mi.setEnabled(enabled !== false);
+function(params) {
+	var mi = new DwtMenuItem(params);
+	if (params.imageInfo) {
+		mi.setImage(params.imageInfo);
+	}
+	if (params.text) {
+		mi.setText(params.text);
+	}
+	mi.setEnabled(params.enabled !== false);
 	return mi;
 }
 

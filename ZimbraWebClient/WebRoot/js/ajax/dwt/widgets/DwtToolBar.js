@@ -395,9 +395,12 @@ function(index) {
 //
 
 DwtToolBarButton = function(parent, style, className, posStyle, actionTiming, id, index) {
-    className = className || "ZToolbarButton";
-    DwtButton.call(this, parent, style, className, posStyle, actionTiming, id, index);
-};
+	params = Dwt.getParams(arguments, DwtToolBarButton.PARAMS);
+    params.className = params.className || "ZToolbarButton";
+    DwtButton.call(this, params);
+}
+
+DwtToolBarButton.PARAMS = ["parent", "style", "className", "posStyle", "actionTiming", "id", "index"];
 
 DwtToolBarButton.prototype = new DwtButton;
 DwtToolBarButton.prototype.constructor = DwtToolBarButton;

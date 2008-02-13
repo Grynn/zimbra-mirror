@@ -36,7 +36,7 @@ DwtMessageDialog = function(params) {
 	if (arguments.length == 0) { return; }
 	params = Dwt.getParams(arguments, DwtMessageDialog.PARAMS);
 	this._msgCellId = Dwt.getNextId();
-	params.buttons = params.buttons || [DwtDialog.OK_BUTTON];
+	params.standardButtons = params.buttons || [DwtDialog.OK_BUTTON];
 	DwtDialog.call(this, params);
 	
 	this.setContent(this._contentHtml());

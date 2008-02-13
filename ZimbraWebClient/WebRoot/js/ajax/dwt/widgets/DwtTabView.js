@@ -629,7 +629,7 @@ function(ev) {
 * @constructor
 **/
 DwtTabButton = function(parent) {
-	DwtButton.call(this, parent, "ZTab");
+	DwtButton.call(this, {parent:parent, className:"ZTab"});
 };
 
 DwtTabButton.prototype = new DwtButton;

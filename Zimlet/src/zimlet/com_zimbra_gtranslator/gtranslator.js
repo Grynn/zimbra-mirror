@@ -143,7 +143,7 @@ function() {
 	this._parentView.getHtmlElement().appendChild(div);
 
 	// add DwtSelect holding language options
-	this._langSelect = new DwtSelect(this._parentView);
+	this._langSelect = new DwtSelect({parent:this._parentView});
 	this._langSelect.reparentHtmlElement(selectId);
 	for (i = 0; i < this._languages.length; i++) {
 		var option = this._languages[i];
@@ -151,7 +151,7 @@ function() {
 	}
 
 	// add translate DwtButton
-	this._translateButton = new DwtButton(this._parentView);
+	this._translateButton = new DwtButton({parent:this._parentView});
 	this._translateButton.reparentHtmlElement(translateId);
 	this._translateButton.setText("Translate");
 	this._translateButton.addSelectionListener(new AjxListener(this, this._translateListener));

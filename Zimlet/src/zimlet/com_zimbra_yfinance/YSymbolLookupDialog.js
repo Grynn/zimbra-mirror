@@ -32,7 +32,7 @@ YSymbolLookupDialog.prototype._lookupCallback;
 YSymbolLookupDialog.prototype._createSearchHtml = function() {
 
 	this._textObj = new DwtInputField(this);
-	this._searchBtn = new DwtButton(this);
+	this._searchBtn = new DwtButton({parent:this});
 	this._searchBtn.setText("Search");		
 	//this._searchBtn.setSize(100,Dwt.DEFAULT);
 	this._searchBtn.addSelectionListener(new AjxListener(this, this._searchButtonListener));						

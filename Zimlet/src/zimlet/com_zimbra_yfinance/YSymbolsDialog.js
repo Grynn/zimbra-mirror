@@ -33,7 +33,7 @@ YSymbolsDialog.prototype._lookupCallback;
 YSymbolsDialog.prototype._createSearchHtml = function() {
 
 	this._textObj = new DwtInputField(this);
-	this._searchBtn = new DwtButton(this);
+	this._searchBtn = new DwtButton({parent:this});
 	this._searchBtn.setText("Add Symbol");		
 	this._searchBtn.addSelectionListener(new AjxListener(this, this._searchButtonListener));						
 
@@ -43,7 +43,7 @@ YSymbolsDialog.prototype._createSearchHtml = function() {
 	}
 	var pollInterval = this._zimlet.getUserProperty("pollInterval");
 
-	this._pollInterval = new DwtSelect(this, [ 
+	this._pollInterval = new DwtSelect({parent:this, options:[ 
 	new DwtSelectOption("", (pollInterval==""), "None"),
 	new DwtSelectOption("1", (pollInterval=="1"), "1 minute"),
 	new DwtSelectOption("2", (pollInterval=="2"), "2 minutes"),
@@ -53,8 +53,7 @@ YSymbolsDialog.prototype._createSearchHtml = function() {
 	new DwtSelectOption("10",(pollInterval=="10"), "10 minutes"),
 	new DwtSelectOption("20",(pollInterval=="20"), "20 minutes"),
 	new DwtSelectOption("30",(pollInterval=="30"), "30 minutes")
-	]);
-	
+	]});
 
 	var table = document.createElement("TABLE");
 	table.border = 0;

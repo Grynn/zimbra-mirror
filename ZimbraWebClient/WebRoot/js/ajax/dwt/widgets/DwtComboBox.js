@@ -190,7 +190,7 @@ function() {
 
 DwtComboBox.prototype._createMenuItem =
 function(menu, text) {
-	var item = new DwtMenuItem(menu);
+	var item = new DwtMenuItem({parent:menu});
 	item.setText(text);
 	item.addSelectionListener(this._menuItemListenerObj);
 	if (!this._menuWidth) {
@@ -231,7 +231,7 @@ DwtComboBox.prototype._createHtmlFromTemplate = function(templateId, data) {
     this.input = new DwtInputField(inputParams);
     this.input.replaceElement(data.id + "_input");
     
-    this._button = new DwtComboBoxButton(this);
+    this._button = new DwtComboBoxButton({parent:this});
 	this._button.setMenu(new AjxListener(this, this._createMenu), true);
     this._button.replaceElement(data.id + "_button");
 	this._updateButton();
@@ -260,9 +260,15 @@ function(oel, nel, inheritClass, inheritStyle) {
 
 /**
  * DwtComboBoxButton: Stylizable button just for use in combo boxes.
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        className		[string]*			CSS class
  */
-DwtComboBoxButton = function(parent, className) {
-	DwtButton.call(this, parent, null, className, Dwt.RELATIVE_STYLE);
+DwtComboBoxButton = function(params) {
+	params = Dwt.getParams(arguments, DwtComboBoxButton.PARAMS);
+	params.posStyle = Dwt.RELATIVE_STYLE;
+	DwtButton.call(this, params);
 }
 
 DwtComboBoxButton.prototype = new DwtButton;
@@ -272,6 +278,8 @@ DwtComboBoxButton.prototype.toString =
 function() {
     return "DwtComboBoxButton";
 };
+
+DwtComboBoxButton.PARAMS = ["parent", "className"];
 
 // Data
 

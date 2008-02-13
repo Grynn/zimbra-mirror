@@ -33,8 +33,17 @@
  *
  * @extends DwtButton
  * @author Mihai Bazon, <mihai@zimbra.com>
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        style			[constant]*			button style
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        id			[string]*			ID to use for the control's HTML element
+ *        index 		[int]*				index at which to add this control among parent's children
+ *        noFillLabel	
  */
-DwtButtonColorPicker = function(parent, style, className, posStyle, id, index, noFillLabel) {
+DwtButtonColorPicker = function(params) {
     if (arguments.length == 0) { return; }
 	params = Dwt.getParams(arguments, DwtButtonColorPicker.PARAMS);
 	params.actionTiming = DwtButton.ACTION_MOUSEUP;

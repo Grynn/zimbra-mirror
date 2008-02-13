@@ -253,7 +253,7 @@ function () {
 	}	
 	
 	if(searchSideStep=="true") {
-		var searchButton = new DwtButton(this);	
+		var searchButton = new DwtButton({parent:this});	
 		searchButton.setText("Search SideStep.com");
 		searchButton.setImage("SideStepIcon");		
 		searchButton.setSize("140");
@@ -264,7 +264,7 @@ function () {
 	}
 	
 	if(searchTravelocity=="true") {
-		var searchButton2 = new DwtButton(this);	
+		var searchButton2 = new DwtButton({parent:this});	
 		searchButton2.setText("Search travelocity.com");
 		searchButton2.setImage("TravelocityIcon");			
 		searchButton2.setSize("140");
@@ -275,7 +275,7 @@ function () {
 	}
 	
 	if(searchHotwire=="true") {
-		var searchButton3 = new DwtButton(this);	
+		var searchButton3 = new DwtButton({parent:this});	
 		searchButton3.setText("Search hotwire.com");
 		searchButton3.setImage("HotwireIcon");		
 		searchButton3.setSize("140");
@@ -285,7 +285,7 @@ function () {
 			searchButtonCell3.appendChild(searchButton3.getHtmlElement());
 	}
 	
-	this._countrySelect = new DwtSelect(this, [	new DwtSelectOption("AG", false, "Antigua and Barbuda"),new DwtSelectOption("AW",false,"Aruba"),
+	this._countrySelect = new DwtSelect({parent:this, options:[	new DwtSelectOption("AG", false, "Antigua and Barbuda"),new DwtSelectOption("AW",false,"Aruba"),
 		new DwtSelectOption("AU",false,"Australia"),new DwtSelectOption("AT",false,"Austria"),
 		new DwtSelectOption("BS",false,"Bahamas"),new DwtSelectOption("BB",false,"Barbados"),new DwtSelectOption("BE",false,"Belgium"),
 		new DwtSelectOption("BM",false,"Bermuda"),new DwtSelectOption("ANB",false,"Bonaire"),new DwtSelectOption("BR",false,"Brazil"),new DwtSelectOption("CA",false,"Canada"),
@@ -300,24 +300,24 @@ function () {
 		new DwtSelectOption("TW",false,"Taiwan"),new DwtSelectOption("TH",false,"Thailand"),new DwtSelectOption("TT",false,"Trinidad and Tobago"),new DwtSelectOption("TC",false,"Turks and Caicos Islands"),
 		new DwtSelectOption("GB",false,"United Kingdom"),new DwtSelectOption("US",true,"United States"),new DwtSelectOption("VG",false,"Virgin Islands British"),new DwtSelectOption("VI",false,"Virgin Islands US"),
 		new DwtSelectOption(null, false, "All Other Destinations")	
-	]);
+	]});
 	var countryCell = document.getElementById(this._countrySelectId);
 	if (countryCell)
 		countryCell.appendChild(this._countrySelect.getHtmlElement());	
 	
-	this._adultSelect = new DwtSelect(this,[new DwtSelectOption("1", true, "1"), 
+	this._adultSelect = new DwtSelect({parent:this, options:[new DwtSelectOption("1", true, "1"), 
 	new DwtSelectOption("2", false, "2"),
 	new DwtSelectOption("3", false, "3"),
-	new DwtSelectOption("4", false, "4")]);
+	new DwtSelectOption("4", false, "4")]});
 	var adultCell = document.getElementById(this._adultsSelectId);
 	if (adultCell)
 		adultCell.appendChild(this._adultSelect.getHtmlElement());	
 		
-	this._roomsSelect = new DwtSelect(this,[new DwtSelectOption("0", true, "0"),
+	this._roomsSelect = new DwtSelect({parent:this, options:[new DwtSelectOption("0", true, "0"),
 	new DwtSelectOption("1", true, "1"), 
 	new DwtSelectOption("2", false, "2"),
 	new DwtSelectOption("3", false, "3"),
-	new DwtSelectOption("4", false, "4")]);
+	new DwtSelectOption("4", false, "4")]});
 	var roomsCell = document.getElementById(this._roomsSelectId);
 	if (roomsCell)
 		roomsCell.appendChild(this._roomsSelect.getHtmlElement());		

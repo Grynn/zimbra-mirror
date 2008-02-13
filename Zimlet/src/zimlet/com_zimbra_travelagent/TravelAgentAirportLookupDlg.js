@@ -40,7 +40,7 @@ function () {
 
 TravelAgentAirportLookupDlg.prototype._createContentEl = 
 function () {
-	this._airportSelect = new DwtSelect(this);
+	this._airportSelect = new DwtSelect({parent:this});
 	
 	var table = document.createElement("TABLE");
 	table.border = 0;
@@ -60,7 +60,7 @@ function () {
 	
 	cityNameCell.appendChild(this._cityField.getHtmlElement());
 	var searchBtnCell = row2.insertCell(row2.cells.length);		
-	var searchButton = new DwtButton(this);
+	var searchButton = new DwtButton({parent:this});
 	searchButton.setText("Search");
 	searchButton.setToolTipContent("Click this button to find airports");
 	searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener));

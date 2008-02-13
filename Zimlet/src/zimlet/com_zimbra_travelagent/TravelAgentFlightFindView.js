@@ -444,7 +444,7 @@ function () {
 	var fTypeOptions = [new DwtSelectOption("roundtrip", true, "Roundtrip"), 
 	new DwtSelectOption("oneway", false, "One way")];
 	
-	this._flightTypeSelect = new DwtSelect(this,fTypeOptions);
+	this._flightTypeSelect = new DwtSelect({parent:this, options:fTypeOptions});
 	var flightTypeCell = document.getElementById(this._flightTypeSelectId);
 	if (flightTypeCell)
 		flightTypeCell.appendChild(this._flightTypeSelect.getHtmlElement());
@@ -467,7 +467,7 @@ function () {
 	new DwtSelectOption("14:33", false, "Afternoon"),
 	new DwtSelectOption("20:03", false, "Evening")];
 	
-	this._departTimeSelect = new DwtSelect(this,timeOptions);
+	this._departTimeSelect = new DwtSelect({parent:this, options:timeOptions});
 	var departTimeCell = document.getElementById(this._departTimeSelectId);
 	if (departTimeCell)
 		departTimeCell.appendChild(this._departTimeSelect.getHtmlElement());
@@ -486,7 +486,7 @@ function () {
 	this._flightToField.reparentHtmlElement(this._flightToId);
 	delete this._flightToId;	
 	
-	this._returnTimeSelect = new DwtSelect(this,timeOptions);
+	this._returnTimeSelect = new DwtSelect({parent:this, options:timeOptions});
 	var returnTimeCell = document.getElementById(this._returnTimeSelectId);
 	if (returnTimeCell)
 		returnTimeCell.appendChild(this._returnTimeSelect.getHtmlElement());
@@ -494,35 +494,35 @@ function () {
 
 	this._returnDateButton = ZmCalendarApp.createMiniCalButton(this, this._returnDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, true);
 	
-	this._adultSelect = new DwtSelect(this,[new DwtSelectOption("1", true, "1"), 
+	this._adultSelect = new DwtSelect({parent:this, options:[new DwtSelectOption("1", true, "1"), 
 	new DwtSelectOption("2", false, "2"),
 	new DwtSelectOption("3", false, "3"),
-	new DwtSelectOption("4", false, "4")]);
+	new DwtSelectOption("4", false, "4")]});
 	var adultCell = document.getElementById(this._adultsSelectId);
 	if (adultCell)
 		adultCell.appendChild(this._adultSelect.getHtmlElement());	
 		
-	this._youthSelect = new DwtSelect(this,[new DwtSelectOption("0", true, "0"),
+	this._youthSelect = new DwtSelect({parent:this, options:[new DwtSelectOption("0", true, "0"),
 	new DwtSelectOption("1", false, "1"), 
 	new DwtSelectOption("2", false, "2"),
 	new DwtSelectOption("3", false, "3"),
-	new DwtSelectOption("4", false, "4")]);
+	new DwtSelectOption("4", false, "4")]});
 	var youthCell = document.getElementById(this._youthSelectId);
 	if (youthCell)
 		youthCell.appendChild(this._youthSelect.getHtmlElement());	
 		
-	this._childrenSelect = new DwtSelect(this,[new DwtSelectOption("0", true, "0"),
+	this._childrenSelect = new DwtSelect({parent:this, options:[new DwtSelectOption("0", true, "0"),
 	new DwtSelectOption("1", false, "1"), 
 	new DwtSelectOption("2", false, "2"),
 	new DwtSelectOption("3", false, "3"),
-	new DwtSelectOption("4", false, "4")]);
+	new DwtSelectOption("4", false, "4")]});
 	var childrenCell = document.getElementById(this._childrenSelectId);
 	if (childrenCell)
 		childrenCell.appendChild(this._childrenSelect.getHtmlElement());	
 	
 	var cellNum = 0;
 	if(this.searchSideStep=="true" || this.searchSideStep===true) {	
-		var searchButton = new DwtButton(this);	
+		var searchButton = new DwtButton({parent:this});	
 		searchButton.setText("Search SideStep");
 		searchButton.setImage("SideStepIcon");
 		searchButton.setSize("140");
@@ -534,7 +534,7 @@ function () {
 		cellNum++;
 	}
 	if(this.searchTravelocity=="true" || this.searchTravelocity===true) {
-		var searchButton2 = new DwtButton(this);	
+		var searchButton2 = new DwtButton({parent:this});	
 		searchButton2.setText("Search Travelocity");
 		searchButton2.setImage("TravelocityIcon");		
 		searchButton2.setSize("140");
@@ -547,7 +547,7 @@ function () {
 	}
 	
 	if(this.searchHotwire=="true" || this.searchHotwire===true) {
-		var searchButton3 = new DwtButton(this);	
+		var searchButton3 = new DwtButton({parent:this});	
 		searchButton3.setText("Search Hotwire");
 		searchButton3.setImage("HotwireIcon");
 		searchButton3.setSize("140");
@@ -560,7 +560,7 @@ function () {
 	}
 	/*		
 	if(this.searchKayak=="true" || this.searchKayak===true) {
-		var searchButton = new DwtButton(this);	
+		var searchButton = new DwtButton({parent:this});	
 		searchButton.setText("Search kayak.com");
 		searchButton.setImage("KayakIcon");
 		searchButton.setSize("140");
@@ -573,7 +573,7 @@ function () {
 	}*/
 	/*
 	if(this.searchThomasCook=="true" || this.searchThomasCook===true) {
-		var searchButton = new DwtButton(this);	
+		var searchButton = new DwtButton({parent:this});	
 		searchButton.setText("Search ThomasCook.com");
 		searchButton.setImage("ThomasCookIcon");
 		searchButton.setSize("140");
@@ -586,7 +586,7 @@ function () {
 	}*/
 
 	if(this._departAirportsSelectIdWork && this.hasWorkAddr) {
-		this._departAirportsSelectWork = new DwtSelect(this,this.workAirportOptions);
+		this._departAirportsSelectWork = new DwtSelect({parent:this, options:this.workAirportOptions});
 		this._departAirportsSelectWork.addChangeListener(new AjxListener(this, this._selectChangeListener));
 		var departAirportsCellWork = document.getElementById(this._departAirportsSelectIdWork);		
 		if (departAirportsCellWork)
@@ -600,7 +600,7 @@ function () {
 	}
 
 	if(this._departAirportsSelectIdHome && this.hasHomeAddr) {
-		this._departAirportsSelectHome = new DwtSelect(this,this.homeAirportOptions);
+		this._departAirportsSelectHome = new DwtSelect({parent:this, options:this.homeAirportOptions});
 		this._departAirportsSelectHome.addChangeListener(new AjxListener(this, this._selectChangeListener));		
 		var departAirportsCellHome = document.getElementById(this._departAirportsSelectIdHome);		
 		if (departAirportsCellHome)
@@ -614,7 +614,7 @@ function () {
 	}
 	
 	if(this._arriveAirportsSelectIdWork && this.hasWorkAddr) {
-		this._arriveAirportsSelectWork = new DwtSelect(this,this.workAirportOptions);
+		this._arriveAirportsSelectWork = new DwtSelect({parent:this, options:this.workAirportOptions});
 		this._arriveAirportsSelectWork.addChangeListener(new AjxListener(this, this._selectChangeListener));		
 		var arriveAirportsCellWork = document.getElementById(this._arriveAirportsSelectIdWork);		
 		if (arriveAirportsCellWork)
@@ -631,7 +631,7 @@ function () {
 	}
 
 	if(this._arriveAirportsSelectIdHome && this.hasHomeAddr) {
-		this._arriveAirportsSelectHome = new DwtSelect(this,this.homeAirportOptions);
+		this._arriveAirportsSelectHome = new DwtSelect({parent:this, options:this.homeAirportOptions});
 		this._arriveAirportsSelectHome.addChangeListener(new AjxListener(this, this._selectChangeListener));		
 		var arriveAirportsCellHome = document.getElementById(this._arriveAirportsSelectIdHome);		
 		if (arriveAirportsCellHome)

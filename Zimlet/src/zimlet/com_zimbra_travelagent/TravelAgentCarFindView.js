@@ -381,7 +381,7 @@ function () {
 	new DwtSelectOption("7", false, "Convertible"),new DwtSelectOption("8", false, "SUV"),
 	new DwtSelectOption("9", false, "Mini"),new DwtSelectOption("10", true, "Standard")];
 	
-	this._vehicleTypeSelect = new DwtSelect(this,vTypeOptions);
+	this._vehicleTypeSelect = new DwtSelect({parent:this, options:vTypeOptions});
 	var vehicleTypeCell = document.getElementById(this._vehicleTypeSelectId);
 	if (vehicleTypeCell)
 		vehicleTypeCell.appendChild(this._vehicleTypeSelect.getHtmlElement());
@@ -419,7 +419,7 @@ function () {
 		timeOptions.push(new DwtSelectOption( [x+12, ":00"].join(""), true,[x, ":00 PM"].join("")));
 	}
 	
-	this._pickupTimeSelect = new DwtSelect(this,timeOptions);
+	this._pickupTimeSelect = new DwtSelect({parent:this, options:timeOptions});
 	var pickupTimeCell = document.getElementById(this._pickupTimeSelectId);
 	if (pickupTimeCell)
 		pickupTimeCell.appendChild(this._pickupTimeSelect.getHtmlElement());
@@ -438,7 +438,7 @@ function () {
 	this._dropoffAirportField.reparentHtmlElement(this._dropoffAirportCellId);
 	delete this._dropoffAirportCellId;	
 	
-	this._dropoffTimeSelect = new DwtSelect(this,timeOptions);
+	this._dropoffTimeSelect = new DwtSelect({parent:this, options:timeOptions});
 	var dropoffTimeCell = document.getElementById(this._dropoffTimeSelectId);
 	if (dropoffTimeCell)
 		dropoffTimeCell.appendChild(this._dropoffTimeSelect.getHtmlElement());
@@ -447,7 +447,7 @@ function () {
 	this._dropoffDateButton = ZmCalendarApp.createMiniCalButton(this, this._dropoffDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, true);
 	
 	if(searchSideStep=="true" || searchSideStep===true) {
-		var searchButton = new DwtButton(this);	
+		var searchButton = new DwtButton({parent:this});	
 		searchButton.setText("Search sidestep.com");
 		searchButton.setImage("SideStepIcon");		
 		searchButton.setSize("140");
@@ -458,7 +458,7 @@ function () {
 	}
 	
 	if(searchTravelocity=="true" || searchTravelocity===true) {
-		var searchButton2 = new DwtButton(this);	
+		var searchButton2 = new DwtButton({parent:this});	
 		searchButton2.setText("Search travelocity.com");
 		searchButton2.setImage("TravelocityIcon");		
 		searchButton2.setSize("140");
@@ -469,7 +469,7 @@ function () {
 	}
 
 	if(searchHotwire=="true" || searchHotwire===true) {
-		var searchButton3 = new DwtButton(this);	
+		var searchButton3 = new DwtButton({parent:this});	
 		searchButton3.setText("Search hotwire.com");
 		searchButton3.setImage("HotwireIcon");		
 		searchButton3.setSize("140");
@@ -480,7 +480,7 @@ function () {
 	}
 			
 	if(this._pickupAirportsSelectIdWork && this.hasWorkAddr) {
-		this._pickupAirportsSelectWork = new DwtSelect(this,this.workAirportOptions);
+		this._pickupAirportsSelectWork = new DwtSelect({parent:this, options:this.workAirportOptions});
 		this._pickupAirportsSelectWork.addChangeListener(new AjxListener(this, this._selectChangeListener));
 		var pickupAirportsCellWork = document.getElementById(this._pickupAirportsSelectIdWork);		
 		if (pickupAirportsCellWork)
@@ -494,7 +494,7 @@ function () {
 	}
 
 	if(this._pickupAirportsSelectIdHome && this.hasHomeAddr) {
-		this._pickupAirportsSelectHome = new DwtSelect(this,this.homeAirportOptions);
+		this._pickupAirportsSelectHome = new DwtSelect({parent:this, options:this.homeAirportOptions});
 		this._pickupAirportsSelectHome.addChangeListener(new AjxListener(this, this._selectChangeListener));		
 		var pickupAirportsCellHome = document.getElementById(this._pickupAirportsSelectIdHome);		
 		if (pickupAirportsCellHome)
@@ -508,7 +508,7 @@ function () {
 	}
 	
 	if(this._dropoffAirportsSelectIdWork && this.hasWorkAddr) {
-		this._dropoffAirportsSelectWork = new DwtSelect(this,this.workAirportOptions);
+		this._dropoffAirportsSelectWork = new DwtSelect({parent:this, options:this.workAirportOptions});
 		this._dropoffAirportsSelectWork.addChangeListener(new AjxListener(this, this._selectChangeListener));		
 		var dropoffAirportsCellWork = document.getElementById(this._dropoffAirportsSelectIdWork);		
 		if (dropoffAirportsCellWork)
@@ -525,7 +525,7 @@ function () {
 	}
 
 	if(this._dropoffAirportsSelectIdHome && this.hasHomeAddr) {
-		this._dropoffAirportsSelectHome = new DwtSelect(this,this.homeAirportOptions);
+		this._dropoffAirportsSelectHome = new DwtSelect({parent:this, options:this.homeAirportOptions});
 		this._dropoffAirportsSelectHome.addChangeListener(new AjxListener(this, this._selectChangeListener));		
 		var dropoffAirportsCellHome = document.getElementById(this._dropoffAirportsSelectIdHome);		
 		if (dropoffAirportsCellHome)

@@ -18,8 +18,10 @@
 YMEmoticonsPickerButton = function(parent, style, className, posStyle, id, index){
 
 	if (arguments.length == 0) return;
-	className = className || "YMEmoticonsPicker" ;
-    DwtButton.call(this, parent, style , className, posStyle, DwtButton.ACTION_MOUSEUP, id, index);
+	className = className || "YMEmoticonsPicker";
+	var params = {parent:parent, style:style , className:className, posStyle:posStyle,
+				  actionTiming:DwtButton.ACTION_MOUSEUP, id:id, index:index};
+    DwtButton.call(this, params);
 	this.setEmoticon();
     this.setMenu(new AjxCallback(this, this._createMenu));
 };

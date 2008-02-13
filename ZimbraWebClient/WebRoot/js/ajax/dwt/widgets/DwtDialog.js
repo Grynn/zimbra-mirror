@@ -54,8 +54,7 @@
  *        loc				[DwtPoint]*			Location at which to popup the dialog. Defaults to being 
  * 												centered within its parent.
  */
-DwtDialog = function(parent, className, title, standardButtons, extraButtons, zIndex, mode, loc) {
-
+DwtDialog = function(params) {
 	if (arguments.length == 0) { return; }
 	params = Dwt.getParams(arguments, DwtDialog.PARAMS);
 	params.className = params.className || "DwtDialog";
@@ -109,7 +108,7 @@ DwtDialog = function(parent, className, title, standardButtons, extraButtons, zI
 	this._button = {};
 	for (var i = 0; i < this._buttonList.length; i++) {
 		var buttonId = this._buttonList[i];
-		var b = this._button[buttonId] = new DwtButton(this);
+		var b = this._button[buttonId] = new DwtButton({parent:this});
 		b.setText(this._buttonDesc[buttonId].label);
 		b.buttonId = buttonId;
 		b.addSelectionListener(new AjxListener(this, this._buttonListener));
