@@ -1,18 +1,14 @@
-Index: servers/slapd/syncrepl.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/syncrepl.c,v
-retrieving revision 1.376
-retrieving revision 1.377
-diff -u -p -r1.376 -r1.377
---- openldap-2.3.40/servers/slapd/syncrepl.c	12 Feb 2008 17:49:37 -0000	1.376
-+++ openldap-2.3.40/servers/slapd/syncrepl.c	13 Feb 2008 03:36:58 -0000	1.377
-@@ -833,6 +833,9 @@ do_syncrep2(
- 						syncCookie.ctxcsn )
- 					{
- 						rc = syncrepl_updateCookie( si, op, psub, &syncCookie );
+--- openldap-2.3.40/servers/slapd/syncrepl.c.orig	2007-12-10 22:08:43.000000000 -0800
++++ openldap-2.3.40/servers/slapd/syncrepl.c	2008-02-12 19:52:50.000000000 -0800
+@@ -724,7 +724,11 @@
+ 					if ( syncrepl_message_to_op( si, op, msg ) == LDAP_SUCCESS &&
+ 						!BER_BVISNULL( &syncCookie.ctxcsn ) ) {
+ 						syncrepl_updateCookie( si, op, psub, &syncCookie );
 +					} else if ( rc == LDAP_NO_SUCH_OBJECT ) {
 +						rc = LDAP_SYNC_REFRESH_REQUIRED;
 +						si->si_logstate = SYNCLOG_FALLBACK;
  					}
- 				} else if ( ( rc = syncrepl_message_to_entry( si, op, msg,
- 					&modlist, &entry, syncstate ) ) == LDAP_SUCCESS )
++						
+ 				} else if ( syncrepl_message_to_entry( si, op, msg,
+ 					&modlist, &entry, syncstate ) == LDAP_SUCCESS ) {
+ 					rc_efree = syncrepl_entry( si, op, entry, &modlist,
