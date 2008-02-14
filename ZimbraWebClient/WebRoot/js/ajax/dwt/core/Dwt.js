@@ -286,7 +286,7 @@ function(domElement, attrName) {
 
 Dwt.findAncestor =
 function(domElement, attrName) {
-	while (domElement && (Dwt.getAttr(domElement, attrName) == void 0)) {
+	while (domElement && (Dwt.getAttr(domElement, attrName) == null)) {
 		domElement = domElement.parentNode;
 	}
 	return domElement;

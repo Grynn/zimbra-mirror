@@ -231,7 +231,7 @@ function() {
 DwtSelect.prototype.setSelectedValue =
 function(optionValue) {
     var index = this._optionValuesToIndices[optionValue];
-    if ((index !== void 0) && (index !== null)) {
+    if (index != null) {
         this.setSelected(index);
     }
 };
@@ -260,7 +260,7 @@ DwtSelect.prototype.getOptionWithValue =
 function(optionValue) {
 	var index = this._optionValuesToIndices[optionValue];
 	var option = null;
-    if ((index !== void 0) && ( index !== null)) {
+    if (index != null) {
         option = this.getOptionWithHandle(index);
     }
 	return option;

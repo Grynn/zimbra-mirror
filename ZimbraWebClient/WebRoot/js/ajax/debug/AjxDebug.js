@@ -307,9 +307,9 @@ function(anObj, isXml, isRaw, timestamp) {
 	var html = new Array();
 	var idx = 0;
 
-	if (AjxUtil.isUndefined(anObj)) {
+	if (anObj === undefined) {
 		html[idx++] = "<span>Undefined</span>";
-	} else if (AjxUtil.isNull(anObj)) {
+	} else if (anObj === null) {
 		html[idx++] = "<span>NULL</span>";
 	} else if (AjxUtil.isBoolean(anObj)) {
 		html[idx++] = "<span>" + anObj + "</span>";
@@ -371,9 +371,9 @@ function(obj, recurse) {
 	var indent = AjxStringUtil.repeat(" ", indentLevel);
 	var text = "";
 
-	if (AjxUtil.isUndefined(obj)) {
+	if (obj === undefined) {
 		text += "[undefined]";
-	} else if (AjxUtil.isNull(obj)) {
+	} else if (obj === null) {
 		text += "[null]";
 	} else if (AjxUtil.isBoolean(obj)) {
 		text += obj ? "true" : "false";
@@ -764,7 +764,7 @@ function(obj) {
 AjxDebug.prototype._add =
 function (aMsg, extraInfo, isXml, isRaw, linkName){
 	var timestamp = new Date();
-	if (AjxUtil.isSpecified(extraInfo)) {
+	if (extraInfo) {
 		extraInfo = this._getHtmlForObject(extraInfo, isXml, isRaw, timestamp);
 	}
 
@@ -928,10 +928,10 @@ function(str){
  * Simple wrapper for log messages
  */
 DebugMessage = function(aMsg, aType, aCategory, aTime, extraHtml, linkName) {
-    this.message = (AjxUtil.isSpecified(aMsg)) ? aMsg : '';
-    this.type = aType ? aType : null;
-    this.category = aCategory ? aCategory : '';
-    this.time = aTime ? aTime : (new Date().getTime());
-    this.eHtml = extraHtml ? extraHtml : '';
+    this.message = aMsg || "";
+    this.type = aType || null;
+    this.category = aCategory || "";
+    this.time = aTime || (new Date().getTime());
+    this.eHtml = extraHtml || "";
     this.linkName = linkName;
 };

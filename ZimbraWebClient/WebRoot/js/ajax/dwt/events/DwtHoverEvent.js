@@ -26,8 +26,8 @@ DwtHoverEvent = function(type, delay, object, x, y) {
 	this.type = type;
 	this.delay = delay;
 	this.object = object;
-	this.x = AjxUtil.isUndefined(x) ? -1 : x;
-	this.y = AjxUtil.isUndefined(y) ? -1 : y;
+	this.x = x || -1;
+	this.y = y || -1;
 }
 
 DwtHoverEvent.prototype = new DwtEvent;

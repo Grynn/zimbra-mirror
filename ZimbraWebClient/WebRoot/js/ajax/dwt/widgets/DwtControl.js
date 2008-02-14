@@ -1759,17 +1759,16 @@ DwtControl.__junkIconId = 0;
  */
 DwtControl.prototype._destroyDragProxy =
 function(icon) {
-	if (icon != null) {
+	if (icon) {
 		// not sure why there is no parent node, but if there isn't one,
 		// let's try and do our best to get rid of the icon
 		if (icon.parentNode) {
 			icon.parentNode.removeChild(icon);
 		} else {
-			// at least hide the icon, and change the id so we can't get it
-			// back later
+			// at least hide the icon, and change the id so we can't get it back later
 			icon.style.zIndex = -100;
 			icon.id = "DwtJunkIcon" + DwtControl.__junkIconId++;
-			icon = void 0;
+			icon = null;
 		}
 	}
 };

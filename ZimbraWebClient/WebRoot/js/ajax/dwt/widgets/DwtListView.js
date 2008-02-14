@@ -1194,9 +1194,10 @@ function(item) {
 DwtListView.prototype.getItemFromElement =
 function(element) {
 	var itemIdx = Dwt.getAttr(element, "_itemIndex");
-	if (itemIdx !== void 0) {
-		if (Dwt.getAttr(element, "_type") == DwtListView.TYPE_LIST_ITEM)
+	if (itemIdx != null) {
+		if (Dwt.getAttr(element, "_type") == DwtListView.TYPE_LIST_ITEM) {
 			return AjxCore.objectWithId(itemIdx);
+		}
 	}
 	return null;
 }
