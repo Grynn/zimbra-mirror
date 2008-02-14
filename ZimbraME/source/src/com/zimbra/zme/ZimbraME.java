@@ -49,6 +49,7 @@ public class ZimbraME extends MIDlet implements CommandListener {
 
 	public static final Command CANCEL = new Command(Locale.get("main.Cancel"), Command.CANCEL, 10);
 	public static final Command EXIT = new Command(Locale.get("main.Exit"), Command.EXIT, 10);
+	public static final Command LOGOUT = new Command(Locale.get("main.Logout"), Command.EXIT, 10);
 	public static final Command OK = new Command(Locale.get("main.Ok"), Command.OK, 10);
 	public static final Command SEARCH = new Command(Locale.get("main.Search"), Command.ITEM, 1);
 
@@ -465,52 +466,60 @@ public class ZimbraME extends MIDlet implements CommandListener {
 			Dialogs.popupErrorDialog(this, this, Locale.get("error.GeneralError") + errMsg);
 		}
 	}
+
+	public void logout() {
+		init();
+		mMbox.mAuthToken = null;
+		View loginView = getLoginView();
+		loginView.setNext(mInboxView);
+		loginView.setCurrent();
+	}
 	
+	private void init() {
+        mInited = true;
+        mServerUrl = getAppProperty(SERVER_URL_PROP);
+        mServerSvcPath = getAppProperty(SERVER_SVC_PATH); 
+        if (mServerSvcPath == null)
+        	mServerSvcPath = DEF_SVC_PATH;
+
+        mSettings = Settings.load();
+
+		try {
+			mMbox = new Mailbox(1);
+		} catch (ZmeException ex) {
+			//#debug
+			System.out.println("ZimbraME.startApp: ZmeException " + ex);
+			//TODO Fatal dialog, then exit
+		}
+
+		if (mServerUrl == null || mServerUrl.compareTo("USERDEFINED") == 0) {
+			mUserServerUrl = true;
+			mServerUrl = mSettings.getServerUrl();
+		} else {
+			mUserServerUrl = false;
+		}
+
+		mMbox.mServerUrl = mServerUrl + mServerSvcPath;
+		mMbox.mSetAuthCookieUrl = mServerUrl + ZimbraME.SET_AUTH_COOKIE_PATH;
+		mMbox.mRestUrl = mServerUrl + DEF_REST_PATH;
+		mMbox.mMidlet = this;
+		mMbox.mAuthToken = mSettings.getAuthToken();
+
+		mDisplay = Display.getDisplay(this); 
+
+		//#style InboxView
+		mInboxView = new ConvListView(null, this, ConvListView.INBOX_VIEW);
+		mInboxView.setQuery("in:inbox", null, null);
+		mTopView = mInboxView;
+
+	}
 
     protected void startApp() {
     	if (!mInited) {
-	        mInited = true;
-	        mServerUrl = getAppProperty(SERVER_URL_PROP);
-	        mServerSvcPath = getAppProperty(SERVER_SVC_PATH); 
-	        if (mServerSvcPath == null)
-	        	mServerSvcPath = DEF_SVC_PATH;
-
-	        mSettings = Settings.load();
-
-	        try {
-	        	mMbox = new Mailbox(1);
-	        } catch (ZmeException ex) {
-	        	//#debug
-	        	System.out.println("ZimbraME.startApp: ZmeException " + ex);
-	        	//TODO Fatal dialog, then exit
-	        }
-
-            if (mServerUrl == null || mServerUrl.compareTo("USERDEFINED") == 0) {
-                mUserServerUrl = true;
-                mServerUrl = mSettings.getServerUrl();
-            } else {
-                mUserServerUrl = false;
-            }
-
-            mMbox.mServerUrl = mServerUrl + mServerSvcPath;
-            mMbox.mSetAuthCookieUrl = mServerUrl + ZimbraME.SET_AUTH_COOKIE_PATH;
-            mMbox.mRestUrl = mServerUrl + DEF_REST_PATH;
-	        mMbox.mMidlet = this;
-	        mMbox.mAuthToken = mSettings.getAuthToken();
-	        
-	        mDisplay = Display.getDisplay(this); 
-
-	        //#style InboxView
-	        mInboxView = new ConvListView(null, this, ConvListView.INBOX_VIEW);
-	        mInboxView.setQuery("in:inbox", null, null);
-	        mTopView = mInboxView;
-
-//	        gotoSettingsView();
-//	    	return;
-
-	        View loginView = getLoginView();
- 	    	loginView.setNext(mInboxView);
-	    	loginView.setCurrent();
+			init();
+			View loginView = getLoginView();
+			loginView.setNext(mInboxView);
+			loginView.setCurrent();
     	}
     }
 

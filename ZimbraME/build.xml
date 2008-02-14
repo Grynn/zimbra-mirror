@@ -58,7 +58,7 @@
 <property name="default.server.url" value="https://dogfood.zimbra.com" />
 <property name="deploy.host" value="http://demo2.zimbra.com/zimbrame/jars" />
 <property name="notify.host" value="http://demo2.zimbra.com/zimbrame/deploy" />
-<property name="zme.version.major" value="0.8" />
+<property name="zme.version.major" value="0.9" />
 <property name="build.no.file" value="zme.build.number" />
 <property name="rapc.jar" value="${blackberry.home}/bin/rapc.jar" />
 <property name="rim.api.jar" value="${blackberry.home}/lib/net_rim_api.jar" />
@@ -157,14 +157,10 @@
 		</deviceRequirements>
 		<deviceRequirements unless="test or device:defined">
 			<or>
-				<requirement name="Identifier" value="BlackBerry/Pearl" />
-				<requirement name="Identifier" value="BlackBerry/Curve" />
-				<requirement name="Identifier" value="BlackBerry/8800" />
+                <requirement name="Identifier" value="Nokia/N73" />
 
 				<!--
 				<requirement name="Identifier" value="Motorola/Razr2V8" />
-				<requirement name="Identifier" value="Motorola/Motorokr_E6" />
-				<requirement name="Identifier" value="Motorola/Motorizr_Z3" />
 				<requirement name="Identifier" value="Motorola/Motorazr_V3xx" />
 				<requirement name="Identifier" value="Motorola/Motokrzr_K1" />
 				<requirement name="Identifier" value="Nokia/E61" />
@@ -186,6 +182,8 @@
 				
 				<requirement name="Identifier" value="Generic/MppPhone" />
 				<requirement name="Identifier" value="Generic/DefaultColorPhone" />
+                <requirement name="Identifier" value="Motorola/Motorokr_E6" />
+                <requirement name="Identifier" value="Motorola/Motorizr_Z3" />
     	        -->
 			</or>
 		</deviceRequirements>

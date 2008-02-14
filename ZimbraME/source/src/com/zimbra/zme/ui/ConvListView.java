@@ -41,7 +41,6 @@ public class ConvListView extends MailListView {
 	private static final Command SAVE = new Command(Locale.get("main.Save"), Command.ITEM, 1);
 	private static final Command SAVE_SEARCH = new Command(Locale.get("mailList.SaveSearch"), Command.ITEM, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.BACK, 1);
-	private static final Command EXIT = new Command(Locale.get("main.Exit"), Command.ITEM, 10);
 
 	private static boolean mInitialLoad = true;
 	
@@ -279,8 +278,10 @@ public class ConvListView extends MailListView {
 			if (cmd == REFRESH) {
 				if (!mGettingMore)
 					load();
-			} else if (cmd == EXIT) {
+			} else if (cmd == ZimbraME.EXIT) {
 				mMidlet.exit();
+			} else if (cmd == ZimbraME.LOGOUT) {
+				mMidlet.logout();
 			} else if (cmd == GOTO_SEARCHVIEW) {
 				mMidlet.gotoSearchView();
 			} else if (cmd == SAVE_SEARCH) {
@@ -502,6 +503,7 @@ public class ConvListView extends MailListView {
 		//#endif
 			
 		f.addCommand(ZimbraME.EXIT);
+		f.addCommand(ZimbraME.LOGOUT);
 		
 		//#ifdef polish.debugEnabled
 			f.addCommand(ZimbraME.SHOW_LOG);

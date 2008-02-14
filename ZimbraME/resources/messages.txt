@@ -43,6 +43,7 @@ main.InboxUnread=Inbox unread
 main.InboxEmpty=Inbox is empty
 main.LoadingContacts=Loading contacts...
 main.LoadingMbox=Loading mailbox...
+main.Logout=Logout
 main.MessageTruncated=\n[Message truncated]
 main.No=No
 main.NoSearchResultsMatched=No results matched
@@ -66,7 +67,7 @@ error.GeneralError=A general error has occurred
 error.NetworkError=A network error has occurred, probably due to poor reception. Please try again
 error.Parse=There is a syntax error in your query string. Please correct it and submit your search again.
 
-login.AuthFailed=Your entered you user name or password incorrectly
+login.AuthFailed=You entered user name or password incorrectly
 login.FieldsNotEmpty=Username & Password fields are required
 login.FormTitle=Zimbra Login
 login.GetMailboxInfo=Getting mailbox info...

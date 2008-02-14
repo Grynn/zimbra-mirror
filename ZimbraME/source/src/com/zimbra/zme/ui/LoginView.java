@@ -188,8 +188,7 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 				mMidlet.commandAction(cmd, d);
 			}
 		} else if (d == Dialogs.mWipD) {
-			mMidlet.mMbox.cancelOp();
-			mMidlet.mDisplay.setCurrent(mView);
+			cancel();
 		}
 	}
 	
