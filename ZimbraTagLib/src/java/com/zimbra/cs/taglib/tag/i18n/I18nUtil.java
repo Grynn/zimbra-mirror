@@ -166,9 +166,14 @@ public class I18nUtil {
 		//       This works fine in with the JSTL implementation but if we can't
 		//       make this assumption in the future, we'll have to change this!
 		for (int i = scope; i <= PageContext.APPLICATION_SCOPE; i++) {
-			Object object = pageContext.getAttribute(var, i);
-			if (object != null) {
-				return object;
+			try {
+				Object object = pageContext.getAttribute(var, i);
+				if (object != null) {
+					return object;
+				}
+			}
+			catch (Exception e) {
+				// ignore -- usually session scope checks when no session
 			}
 		}
 		return null;
