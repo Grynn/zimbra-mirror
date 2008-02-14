@@ -1,32 +1,26 @@
 <?xml version="1.0"?>
-
-<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
-
-  <Description about="urn:mozilla:install-manifest">
-    <em:id>{b91ca619-ccf5-43f0-b376-7acb740af50f}</em:id>
-    <em:version>1.0.0</em:version>
-    <em:type>2</em:type>
-    <em:iconURL>chrome://zimbradnd/skin/zimbra.png</em:iconURL>
-    <em:updateURL>http://files.zimbra.com/update.rdf</em:updateURL>
-    <em:file>
-      <Description about="urn:mozilla:extension:file:zimbradnd.jar">
-        <em:package>content/</em:package>
-        <em:skin>skin/</em:skin>
-      </Description>
-    </em:file>
-
-    <em:targetApplication>
-      <Description>
-        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>1.0</em:minVersion>
-        <em:maxVersion>2.0.0.*</em:maxVersion>
-      </Description>
-    </em:targetApplication>
-   
-    <em:name>ZimbraDnD</em:name>
-    <em:description>Zimbra Extension - Drag and Drop</em:description>
-    <em:creator>support@zimbra.com</em:creator>
-    <em:homepageURL>http://www.zimbra.com</em:homepageURL>
-  </Description>      
-</RDF>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="urn:mozilla:extension:file:zimbradnd.jar"
+                   em:package="content/"
+                   em:skin="skin/" />
+  <RDF:Description RDF:about="rdf:#$xPlhO3"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="1.5"
+                   em:maxVersion="3.0b3" />
+  <RDF:Description RDF:about="urn:mozilla:install-manifest"
+                   em:id="{b91ca619-ccf5-43f0-b376-7acb740af50f}"
+                   em:version="1.0.0"
+                   em:type="2"
+                   em:iconURL="chrome://zimbradnd/skin/zimbra.png"
+                   em:updateURL="http://files.zimbra.com/update.rdf"
+                   em:name="ZimbraDnD"
+                   em:description="Zimbra Extension - Drag and Drop"
+                   em:creator="support@zimbra.com"
+                   em:homepageURL="http://www.zimbra.com"
+                   em:updateKey="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDOJ7rTnNcHay09ZTXAYt2EhHAsuY4q8o/xrFwbocBwf5Xs+viu/fehIspdW3+mE4CsekVLN8s2mrccMu53+iHpyfjm9R0zlhvsIg6YcP4FP1GaYh05aSm53B/HH+KkfcziYe+53860yy1P80mELJhG+pR1e3wMDS2x+dDxYiElDQIDAQAB">
+    <em:file RDF:resource="urn:mozilla:extension:file:zimbradnd.jar"/>
+    <em:targetApplication RDF:resource="rdf:#$xPlhO3"/>
+  </RDF:Description>
+</RDF:RDF>
