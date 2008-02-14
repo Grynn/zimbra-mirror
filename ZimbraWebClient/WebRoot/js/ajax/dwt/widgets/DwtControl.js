@@ -1004,6 +1004,26 @@ function() {
 };
 
 /**
+ * Returns the control associated with the given event. Starts with the
+ * event target and works its way up the element chain until it finds one
+ * with an ID that maps to a DwtControl.
+ * 
+ * @param ev				[Event]		DHTML event
+ * @param useRelatedTarget	[boolean]*	if true, use element that was related to this event
+ */
+DwtControl.getTargetControl =
+function(ev, useRelatedTarget)  {
+	var htmlEl = DwtUiEvent.getTarget(ev, useRelatedTarget);
+	while (htmlEl) {
+		if (htmlEl.id && DwtControl.ALL_BY_ID[htmlEl.id]) {
+			return DwtControl.ALL_BY_ID[htmlEl.id];
+		}
+		htmlEl = htmlEl.parentNode;
+	}
+	return null;
+};
+
+/**
  * Sets the control's  HTML element's id attribute
  *
  * @param {String} id New id
@@ -2025,7 +2045,7 @@ function() {
  */
 DwtControl.__keyPressHdlr =
 function(ev) {
-	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = obj ? obj : DwtControl.getTargetControl(ev);
 	if (!obj) return false;
 
 	if (obj.__toolTipContent != null) {
@@ -2081,7 +2101,7 @@ function() {
  */
 DwtControl.__dblClickHdlr =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	if (obj && obj._dblClickIsolation) {
 		obj._clickPending = false;
 		AjxTimedAction.cancelAction(obj._dblClickActionId);
@@ -2102,11 +2122,11 @@ function(ev, evType) {
 		ev._stopPropagation = true;
 		return false;
 	}
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 	evType = evType || DwtEvent.ONMOUSEOVER;
 	if ((evType == DwtEvent.ONMOUSEOVER) && obj._ignoreInternalOverOut) {
-		var otherObj = DwtUiEvent.getDwtObjFromEvent(ev, true);
+		var otherObj = DwtControl.getTargetControl(ev, true);
 		if (obj == otherObj) {
 			return false;
 		}
@@ -2152,7 +2172,7 @@ function(ev) {
  */
 DwtControl.__mouseDownHdlr =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 
 	obj._focusByMouseDownEvent();
@@ -2192,7 +2212,7 @@ function(ev) {
 	// mousedown event has not occurred , so do the default behaviour,
 	// else do the draggable behaviour
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
-	var obj = (captureObj) ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = (captureObj) ? captureObj.targetObj : DwtControl.getTargetControl(ev);
  	if (!obj) { return false; }
 
 	//DND cancel point
@@ -2330,7 +2350,7 @@ DwtControl.__mouseUpHdlr =
 function(ev) {
 	// See if are doing a drag n drop operation
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
-	var obj = (captureObj) ? captureObj.targetObj : DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = (captureObj) ? captureObj.targetObj : DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 
 	//DND
@@ -2423,11 +2443,11 @@ function(ev, obj, mouseEv) {
  */
 DwtControl.__mouseOutHdlr =
 function(ev, evType) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 	evType = evType || DwtEvent.ONMOUSEOUT;
 	if ((evType == DwtEvent.ONMOUSEOUT) && obj._ignoreInternalOverOut) {
-		var otherObj = DwtUiEvent.getDwtObjFromEvent(ev, true);
+		var otherObj = DwtControl.getTargetControl(ev, true);
 		if (obj == otherObj) {
 			return false;
 		}
@@ -2456,7 +2476,7 @@ function(ev) {
  */
 DwtControl.__mouseWheelHdlr =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	if (!obj) return false;
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEWHEEL, obj);
 };
@@ -2476,7 +2496,7 @@ DwtControl.__contextMenuHdlr =
 function(ev) {
 	// for Safari, we have to fake a right click
 	if (AjxEnv.isSafari) {
-		var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+		var obj = DwtControl.getTargetControl(ev);
 		var prevent = obj ? obj.preventContextMenu() : true;
 		if (prevent) {
 			DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEDOWN);
@@ -2491,7 +2511,7 @@ function(ev) {
  */
 DwtControl.__mouseEvent =
 function(ev, eventType, obj, mouseEv) {
-	var obj = obj ? obj : DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = obj ? obj : DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 
 	if (!mouseEv) {
@@ -2544,8 +2564,8 @@ DwtControl.prototype.__initCtrl =
 function() {
 	this.shell = this.parent.shell || this.parent;
 	var htmlElement = this._elRef = document.createElement("div");
-	this._htmlElId = htmlElement.id = (this._htmlElId == null) ? Dwt.getNextId() : this._htmlElId;
-        DwtControl.ALL_BY_ID[this._htmlElId] = this;
+	this._htmlElId = htmlElement.id = this._htmlElId || Dwt.getNextId();
+	DwtControl.ALL_BY_ID[this._htmlElId] = this;
 	DwtComposite._pendingElements[this._htmlElId] = htmlElement;
 	Dwt.associateElementWithObject(htmlElement, this);
 	if (this.__posStyle == null || this.__posStyle == DwtControl.STATIC_STYLE) {
@@ -2563,7 +2583,6 @@ function() {
 	// Make sure this is the last thing we do
 	this.parent.addChild(this, this.__index);
 };
-
 
 /**
  * @private

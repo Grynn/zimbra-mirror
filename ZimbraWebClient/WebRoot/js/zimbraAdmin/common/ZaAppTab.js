@@ -245,13 +245,13 @@ function () {
 ZaAppTab._closeCellMouseDownHdlr =
 function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Close Button is clicked ....") ;
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev); //obj is ZaAppTab instance
+	var obj = DwtControl.getTargetControl(ev); //obj is ZaAppTab instance
 }
 
 ZaAppTab._closeCellMouseUpHdlr =
 function (ev) {
 	//close the tab and the view
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev); 
+	var obj = DwtControl.getTargetControl(ev); 
 	obj.closeTab();
 	/*
 	var app = obj._app ;
@@ -378,7 +378,7 @@ function () {
 ZaAppTab._closeCellMouseOverHdlr =
 function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Over the close button ....") ;
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	AjxImg.setImage (obj._closeCell, "Close") ;
 	obj.setCursor("pointer");
 	obj._mainToolTip = obj.getToolTipContent ();
@@ -387,7 +387,7 @@ function (ev) {
 
 ZaAppTab._closeCellMouseOutHdlr =
 function (ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	if (obj.isSelected()) {
 		AjxImg.setImage (obj._closeCell, "Close") ;
 	}else{

@@ -612,7 +612,7 @@ DwtButton.prototype._createHtmlFromTemplate = function(templateId, data) {
 // Pops up the dropdown menu.
 DwtButton._dropDownCellMouseDownHdlr =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
     /**
      * Below condition added for the bug 17089
      * If menu is there and already popped up, do pop it down first and then proceed.

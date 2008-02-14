@@ -233,18 +233,18 @@ function(ev, div) {
 
 DwtButtonColorPicker.__colorDisplay_onMouseOver =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	obj.__colorDisplay_onMouseOver(ev, this);
 };
 
 DwtButtonColorPicker.__colorDisplay_onMouseOut =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	obj.__colorDisplay_onMouseOut(ev, this);
 };
 
 DwtButtonColorPicker.__colorDisplay_onMouseDown =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	obj.__colorDisplay_onMouseDown(ev, this);
 };

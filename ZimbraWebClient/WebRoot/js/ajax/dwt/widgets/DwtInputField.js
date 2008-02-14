@@ -587,7 +587,7 @@ function(ev) {
 
 DwtInputField._blurHdlr =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	if (obj) {
 		obj._hasFocus = false;
 		if (obj._validationStyle == DwtInputField.ONEXIT_VALIDATION) {
@@ -603,7 +603,7 @@ function(ev) {
 
 DwtInputField._focusHdlr =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	if (obj) {
 		DwtShell.getShell(window).getKeyboardMgr().grabFocus(obj.getTabGroupMember());
 		if (obj._hintIsVisible) {

@@ -611,7 +611,7 @@ ZaAutoCompleteListView._outsideMouseDownListener =
 function(ev) {
 	var curList = ZaAutoCompleteListView._activeAcList;
     if (curList.getVisible()) {
-		var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+		var obj = DwtControl.getTargetControl(ev);
 		if (obj != curList) {
 			curList.show(false);
 			ev._stopPropagation = false;

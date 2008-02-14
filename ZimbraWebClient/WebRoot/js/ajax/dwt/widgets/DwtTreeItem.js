@@ -537,7 +537,7 @@ function() {
 
 DwtTreeItem._nodeIconMouseDownHdlr = 
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);	
 	if (mouseEv.button == DwtMouseEvent.LEFT) {
@@ -554,7 +554,7 @@ function(ev) {
 
 DwtTreeItem._nodeIconMouseUpHdlr = 
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
@@ -646,7 +646,7 @@ function(actioned) {
 
 DwtTreeItem._checkBoxMouseDownHdlr =
 function(ev) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);	
 	mouseEv._stopPropagation = true;
@@ -662,7 +662,7 @@ function(ev) {
 	if (!DwtTreeItem._processedMouseDown) { return; }
 	DwtTreeItem._processedMouseDown = false;
 
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
 	if (mouseEv.button == DwtMouseEvent.LEFT) {
@@ -721,7 +721,7 @@ function(ev) {
 	// See comment in DwtTreeItem.prototype._mouseDownListener
 	if (ev.target == treeItem._childDiv) { return; }
 
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
 	if (mouseEv.button == DwtMouseEvent.LEFT || mouseEv.button == DwtMouseEvent.NONE) {	// NONE for IE bug

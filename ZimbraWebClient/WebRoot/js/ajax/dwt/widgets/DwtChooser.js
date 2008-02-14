@@ -729,7 +729,7 @@ function(ev) {
 */
 DwtChooser.prototype._transferButtonListener =
 function(ev) {
-	var button = DwtUiEvent.getDwtObjFromEvent(ev);
+	var button = DwtControl.getTargetControl(ev);
 	var id = button._buttonId;
 	var sel = this.sourceListView.getSelection();
 	if (sel && sel.length) {

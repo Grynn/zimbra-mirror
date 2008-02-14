@@ -250,8 +250,9 @@ function(aMessage) {
 };
 
 // IE doesn't define Node type constants
-AjxUtil.ELEMENT_NODE	= 1;
-AjxUtil.TEXT_NODE		= 3;
+AjxUtil.ELEMENT_NODE		= 1;
+AjxUtil.TEXT_NODE			= 3;
+AjxUtil.DOCUMENT_NODE		= 9;
 
 AjxUtil.getInnerText = 
 function(node) {

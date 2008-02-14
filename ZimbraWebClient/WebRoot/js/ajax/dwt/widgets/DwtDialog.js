@@ -398,7 +398,7 @@ function(html, idx) {
 // Button listener that checks for callbacks
 DwtDialog.prototype._buttonListener =
 function(ev, args) {
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	var buttonId = obj.buttonId;
 	this._runCallbackForButtonId(buttonId, args);
 };

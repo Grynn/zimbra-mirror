@@ -143,19 +143,6 @@ function(ev, props)  {
 }
 
 /**
- * Returns a control (DWT object) based on the event, by finding the event target and using
- * its reference to a DWT object.
- * 
- * @param ev				[Event]		DHTML event
- * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
- */
-DwtUiEvent.getDwtObjFromEvent =
-function(ev, useRelatedTarget) {
-	var htmlEl = DwtUiEvent.getTargetWithProp(ev, "dwtObj", useRelatedTarget);
-	return htmlEl ? Dwt.getObjectFromElement(htmlEl) : null;
-}
-
-/**
  * Returns a control (DWT object) based on the event, by finding the event target with the
  * given property and using its reference to a DWT object.
  * 
@@ -260,4 +247,21 @@ function(dhtmlEv, stopPropagation, allowDefault, dontCallPreventDefault) {
 		dhtmlEv.returnValue = allowDefault;
 		dhtmlEv.cancelBubble = stopPropagation;
 	}
+};
+
+/**
+ * DEPRECATED! Use DwtControl.getTargetControl() instead.
+ * 
+ * Returns a control (DWT object) based on the event, by finding the event target and using
+ * its reference to a DWT object.
+ * 
+ * @param ev				[Event]		DHTML event
+ * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
+ * 
+ * @deprecated
+ */
+DwtUiEvent.getDwtObjFromEvent =
+function(ev, useRelatedTarget) {
+	var htmlEl = DwtUiEvent.getTargetWithProp(ev, "dwtObj", useRelatedTarget);
+	return htmlEl ? Dwt.getObjectFromElement(htmlEl) : null;
 };

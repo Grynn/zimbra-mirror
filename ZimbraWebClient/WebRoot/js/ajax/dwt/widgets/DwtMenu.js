@@ -788,7 +788,7 @@ function(ev) {
 	if (DwtMenu._activeMenuUp) {
 		// figure out if we are over the menu that is up
 		var menu = DwtMenu._activeMenu;
-		var nearestDwtObj = DwtUiEvent.getDwtObjFromEvent(ev);
+		var nearestDwtObj = DwtControl.getTargetControl(ev);
 		if (menu._associatedObj && menu._associatedObj == nearestDwtObj) {
 			return false;
 		}

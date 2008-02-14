@@ -90,7 +90,7 @@ DwtGridSizePicker.prototype._reset = function() {
 DwtGridSizePicker._onSelect = function(ev) {
 	if (AjxEnv.isIE)
 		ev = window.event;
-	DwtUiEvent.getDwtObjFromEvent(ev)._onSelect(ev);
+	DwtControl.getTargetControl(ev)._onSelect(ev);
 };
 
 DwtGridSizePicker.prototype._onSelect = function(ev) {
@@ -135,7 +135,7 @@ DwtGridSizePicker.prototype._onMouseOut = function(ev) {
 DwtGridSizePicker._onMouseOver = function(ev) {
 	if (AjxEnv.isIE)
 		ev = window.event;
-	DwtUiEvent.getDwtObjFromEvent(ev)._onMouseOver(ev);
+	DwtControl.getTargetControl(ev)._onMouseOver(ev);
 };
 
 DwtGridSizePicker.prototype._onMouseOver = function(ev) {

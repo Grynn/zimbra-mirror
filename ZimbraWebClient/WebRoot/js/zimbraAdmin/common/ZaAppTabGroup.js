@@ -295,7 +295,7 @@ function (ev){
 ZaAppTabGroup._arrowMouseOverHdlr =
 function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is over ....") ;
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	if (obj.getEnabled()) {
 		obj.setCursor("pointer") ;
 	}
@@ -304,14 +304,14 @@ function (ev) {
 ZaAppTabGroup._arrowMouseOutHdlr =
 function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is out ....") ;
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev);
+	var obj = DwtControl.getTargetControl(ev);
 	obj.setCursor("default") ;
 }
 
 ZaAppTabGroup._leftArrowMouseDownHdlr =
 function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is down ....") ;
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev); 
+	var obj = DwtControl.getTargetControl(ev); 
 	AjxImg.setImage(this, "LeftArrowDis");
 	if (obj.getEnabled()) {
 		obj.parent.shift (-1);
@@ -321,7 +321,7 @@ function (ev) {
 ZaAppTabGroup._rightArrowMouseDownHdlr =
 function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is down ....") ;
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev); 
+	var obj = DwtControl.getTargetControl(ev); 
 	AjxImg.setImage(this, "rightArrowDis");
 	if (obj.getEnabled()) {
 		obj.parent.shift (1) ;
@@ -331,7 +331,7 @@ function (ev) {
 ZaAppTabGroup._leftArrowMouseUpHdlr =
 function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is up ....") ;
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev); 
+	var obj = DwtControl.getTargetControl(ev); 
 	
 	if (obj.getEnabled()) {
 		obj.setCursor("pointer");
@@ -342,7 +342,7 @@ function (ev) {
 ZaAppTabGroup._rightArrowMouseUpHdlr =
 function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Mouse on arrow button is up ....") ;
-	var obj = DwtUiEvent.getDwtObjFromEvent(ev); 
+	var obj = DwtControl.getTargetControl(ev); 
 
 	if (obj.getEnabled()) {
 		obj.setCursor("pointer");
