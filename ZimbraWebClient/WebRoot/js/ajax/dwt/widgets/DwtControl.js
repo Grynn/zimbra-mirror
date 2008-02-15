@@ -1004,6 +1004,25 @@ function() {
 };
 
 /**
+ * Starts with an element and works its way up the element chain until it finds one
+ * with an ID that maps to a DwtControl.
+ * 
+ * @param htmlEl	[Element]	element to start with
+ */
+DwtControl.findControl =
+function(htmlEl)  {
+	while (htmlEl) {
+		// tagName ensures this is an HTML element (access of attr of non-HTML
+		// element may throw a "Permission Denied" error)
+		if (htmlEl.tagName && htmlEl.id && DwtControl.ALL_BY_ID[htmlEl.id]) {
+			return DwtControl.ALL_BY_ID[htmlEl.id];
+		}
+		htmlEl = htmlEl.parentNode;
+	}
+	return null;
+};
+
+/**
  * Returns the control associated with the given event. Starts with the
  * event target and works its way up the element chain until it finds one
  * with an ID that maps to a DwtControl.
@@ -1014,13 +1033,7 @@ function() {
 DwtControl.getTargetControl =
 function(ev, useRelatedTarget)  {
 	var htmlEl = DwtUiEvent.getTarget(ev, useRelatedTarget);
-	while (htmlEl) {
-		if (htmlEl.id && DwtControl.ALL_BY_ID[htmlEl.id]) {
-			return DwtControl.ALL_BY_ID[htmlEl.id];
-		}
-		htmlEl = htmlEl.parentNode;
-	}
-	return null;
+	return htmlEl ? DwtControl.findControl(htmlEl) : null;
 };
 
 /**
