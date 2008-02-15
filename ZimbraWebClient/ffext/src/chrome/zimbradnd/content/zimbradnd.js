@@ -60,7 +60,7 @@ var zDnDService = {
 	onDrop : function (evt, transferData, session) {
 	try
 	{
-    var td = transferData.flavour? transferData: transferData.first.first;
+    	var td = transferData.flavour? transferData: transferData.first.first;
 		if (td.flavour.contentType == "application/x-moz-file")
 		{
 			var files = [];
@@ -84,6 +84,38 @@ var zDnDService = {
 				files.push(td.data.path);
 			}
 			zUploadService.processFiles(evt, files);
+		} 
+		else if (td.flavour.contentType == "text/unicode")
+		{
+			var files = [];
+			if(transferData.dataList && transferData.dataList.length > 1)
+			{
+				for(var i = 0; i < transferData.dataList.length; i++)
+				{
+					var td = transferData.dataList[i];
+					for(var j = 0; j < td.dataList.length; j++)
+					{
+						var fd = td.dataList[j];
+						if(fd.flavour.contentType == "text/unicode")
+						{
+							var filePath = fd.data;
+							var splitType = "file:///";
+							if(filePath.substr(0,8) == "file:///") {
+								splitType = "file:///";
+							} else if(s.substr(0,7) == "file://") {
+								splitType = "file://";	
+							}
+							var filePaths = filePath.split(splitType);
+							files.push(splitType+filePaths[i+1]);
+						}
+					}
+				}
+			}
+			else
+			{
+				files.push(td.data);
+			}
+			zUploadService.processFiles(evt, files);
 		}
 	}
 	catch(e)
@@ -93,6 +125,7 @@ var zDnDService = {
 	getSupportedFlavours : function () {
 		var flavours = new FlavourSet();
 		flavours.appendFlavour("application/x-moz-file","nsIFile");
+		flavours.appendFlavour("application/x2-moz-file");
 		flavours.appendFlavour("text/unicode");
 		return flavours;
 	}
