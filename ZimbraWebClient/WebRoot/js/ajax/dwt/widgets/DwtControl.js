@@ -2225,7 +2225,6 @@ function(ev) {
 	// else do the draggable behaviour
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
 	var obj = (captureObj) ? captureObj.targetObj : DwtControl.getTargetControl(ev);
-//	DBG.println("move", "got obj: " + obj.toString());
  	if (!obj) { return false; }
 
 	//DND cancel point
@@ -2300,7 +2299,6 @@ function(ev) {
 		// will allow it (i.e. via the listeners on the DropTarget
 		if (obj._dragging != DwtControl._DRAG_REJECTED) {
 			var destDwtObj = mouseEv.dwtObj;
-	DBG.println("move", "got destDwtObj: " + destDwtObj.toString());
 			if (destDwtObj) {
 				// Set up the drag hover event. we will even let this item hover over itself as there may be
 				// scenarios where that will hold true
