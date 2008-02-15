@@ -55,7 +55,7 @@ public class LocalMailbox extends DesktopMailbox {
     }
     
     @Override
-    synchronized void initialize() throws ServiceException {
+    protected synchronized void initialize() throws ServiceException {
         super.initialize();
 
         // create a system outbox folder

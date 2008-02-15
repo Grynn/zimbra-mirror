@@ -42,7 +42,7 @@ public class OfflineMailboxManager extends MailboxManager {
 
     /** Returns a new {@link OfflineMailbox} object to wrap the given data. */
     @Override
-    Mailbox instantiateMailbox(MailboxData data) throws ServiceException {
+    protected Mailbox instantiateMailbox(MailboxData data) throws ServiceException {
     	OfflineAccount account = (OfflineAccount)Provisioning.getInstance().get(AccountBy.id, data.accountId);
     	if (account.isSyncAccount()) {
     		return new OfflineMailbox(data);
