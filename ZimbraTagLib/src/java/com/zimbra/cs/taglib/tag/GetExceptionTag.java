@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.SkipPageException;
 
 import com.zimbra.cs.taglib.bean.ZExceptionBean;
 import com.zimbra.cs.taglib.bean.ZTagLibException;
@@ -40,7 +41,9 @@ public class GetExceptionTag extends ZimbraSimpleTag {
         ZExceptionBean eb = new ZExceptionBean(mException);
         Exception e = eb.getException();
         if (e != null) {
-            if ((!(e instanceof ServiceException)) || (e instanceof ZTagLibException) || (e instanceof ZClientException))
+            if (
+                    (!(e instanceof ServiceException)) ||
+                            ((e instanceof ZTagLibException) && (!(e.getCause() instanceof SkipPageException))) || (e instanceof ZClientException))
                 ZimbraLog.webclient.warn("local exception", e);
         }
         getJspContext().setAttribute(mVar, eb,  PageContext.PAGE_SCOPE);
