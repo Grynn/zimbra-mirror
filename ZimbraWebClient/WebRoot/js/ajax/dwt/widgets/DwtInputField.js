@@ -561,12 +561,10 @@ function(value) {
 DwtInputField._keyUpHdlr =
 function(ev) {
 	var keyEv = DwtShell.keyEvent;
-	keyEv.setFromDhtmlEvent(ev);
+	keyEv.setFromDhtmlEvent(ev, true);
 
 	var obj = keyEv.dwtObj;
 	var keyCode = keyEv.keyCode;
-
-    var obj = keyEv.dwtObj;
     if (obj.notifyListeners(DwtEvent.ONKEYUP, keyEv)) {
         return true;
     }

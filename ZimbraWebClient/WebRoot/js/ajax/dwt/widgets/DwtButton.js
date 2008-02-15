@@ -618,12 +618,12 @@ function(ev) {
      * If menu is there and already popped up, do pop it down first and then proceed.
      */
 
-    if(obj && obj.getMenu() && obj.getMenu().isPoppedup()){
+    if (obj && obj.getMenu() && obj.getMenu().isPoppedup()){
         obj.getMenu().popdown();
     }
 
     var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, obj);
 
 	if (mouseEv.button == DwtMouseEvent.LEFT) {
 	    if (this._depImg){

@@ -83,7 +83,7 @@ function(ev) {
 DwtDragTracker._mouseDownHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);	
+	mouseEv.setFromDhtmlEvent(ev, true);	
 	if (mouseEv.button != DwtMouseEvent.LEFT) {
 		DwtUiEvent.setBehaviour(ev, true, false);
 		return false;

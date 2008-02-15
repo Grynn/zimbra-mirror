@@ -2133,7 +2133,7 @@ function(ev, evType) {
 
 	var mouseEv = DwtShell.mouseEvent;
 	if (obj._dragging == DwtControl._NO_DRAG) {
-		mouseEv.setFromDhtmlEvent(ev);
+		mouseEv.setFromDhtmlEvent(ev, obj);
 		if (obj.isListenerRegistered(evType)) {
 			obj.notifyListeners(evType, mouseEv);
 		}
@@ -2185,7 +2185,7 @@ function(ev) {
 
 	// If we have a dragSource, then we need to start capturing mouse events
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, obj);
 	if (obj._dragSource != null && mouseEv.button == DwtMouseEvent.LEFT
 			&& obj._isValidDragObject(mouseEv))
 	{
@@ -2221,7 +2221,7 @@ function(ev) {
 	}
 
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, obj);
 
 	// This following can happen during a DnD operation if the mouse moves
 	// out the window. This seems to happen on IE only.
@@ -2359,7 +2359,7 @@ function(ev) {
 	}
 
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, obj);
 	if (!obj._dragSource || !captureObj) {
 		//obj._focusByMouseUpEvent();
 		return DwtControl.__processMouseUpEvent(ev, obj, mouseEv);
@@ -2515,7 +2515,7 @@ function(ev, eventType, obj, mouseEv) {
 
 	if (!mouseEv) {
 		mouseEv = DwtShell.mouseEvent;
-		mouseEv.setFromDhtmlEvent(ev);
+		mouseEv.setFromDhtmlEvent(ev, obj);
 	}
 
 	// By default, we halt event processing. Listeners may override

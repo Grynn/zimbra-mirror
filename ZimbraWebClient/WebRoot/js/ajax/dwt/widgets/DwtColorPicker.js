@@ -204,7 +204,7 @@ function() {
 DwtColorPicker._mouseOverHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, true);
 	var target = mouseEv.target;
 	if (target.nodeName.toLowerCase() == "img")
 		target = target.parentNode;
@@ -226,7 +226,7 @@ function(ev) {
 DwtColorPicker._mouseOutHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, true);
 	var target = mouseEv.target;
 	if (target.nodeName.toLowerCase() == "img")
 		target = target.parentNode;
@@ -249,7 +249,7 @@ function(ev) {
 DwtColorPicker._mouseDownHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, true);
 	var target = mouseEv.target;
 	if (target.nodeName.toLowerCase() == "img")
 		target = target.parentNode;
@@ -310,7 +310,7 @@ function(hexStr) {
 DwtColorPicker._mouseUpHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, true);
 	var me = mouseEv.dwtObj;
 	
 	var target = mouseEv.target;

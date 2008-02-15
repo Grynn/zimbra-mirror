@@ -43,8 +43,8 @@ function(dontCallParent) {
 };
 
 DwtMouseEvent.prototype.setFromDhtmlEvent =
-function(ev) {
-	ev = DwtUiEvent.prototype.setFromDhtmlEvent.call(this, ev);
+function(ev, obj) {
+	ev = DwtUiEvent.prototype.setFromDhtmlEvent.apply(this, arguments);
 
 	if (ev.layerX != null) { // Mozilla or Safari3
 		switch (ev.which) {

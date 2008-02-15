@@ -173,24 +173,25 @@ function(dest, src) {
 	dest._returnValue = src._returnValue;
 }
 
+/**
+ * Copies properties from the native DHTML event to this DWT event object. The target
+ * control can be optionally fetched by providing true as the second argument.
+ * 
+ * @param ev	[Event]				DHTML event
+ * @param obj	[DwtControl|true]	if true, the target object will be fetched; otherwise
+ * 									used to set target object if present
+ */
 DwtUiEvent.prototype.setFromDhtmlEvent =
-function(ev) {
+function(ev, obj) {
 	ev = DwtUiEvent.getEvent(ev);
-	if (!ev) return;
+	if (!ev) { return; }
 	this.altKey = ev.altKey;
 	this.ctrlKey = ev.ctrlKey;
 	this.metaKey = ev.metaKey;
 	this.shiftKey = ev.shiftKey;
 	this.type = ev.type;
 	this.target = DwtUiEvent.getTarget(ev);
-	var target = this.target;
-	while (target != null) {
-		if (target.dwtObj != null) {
-			this.dwtObj = Dwt.getObjectFromElement(target);
-			break;
-		}
-		target = target.parentNode;
-	}
+	this.dwtObj = (obj === true) ? DwtControl.getTargetControl(ev) : obj;
 
 	// Compute document coordinates
 	if (ev.pageX != null) {

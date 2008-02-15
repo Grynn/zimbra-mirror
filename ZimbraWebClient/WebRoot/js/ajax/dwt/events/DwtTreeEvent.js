@@ -29,6 +29,6 @@ function() {
 }
 
 DwtTreeEvent.prototype.setFromDhtmlEvent =
-function(ev, win) {
-	ev = DwtSelectionEvent.prototype.setFromDhtmlEvent.call(this, ev);
+function(ev, obj) {
+	ev = DwtSelectionEvent.prototype.setFromDhtmlEvent.apply(this, arguments);
 }

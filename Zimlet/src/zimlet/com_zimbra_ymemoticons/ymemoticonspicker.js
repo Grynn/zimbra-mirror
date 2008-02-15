@@ -178,7 +178,7 @@ YMEmoticonsPicker.prototype._registerHandlers = function(){
 YMEmoticonsPicker._mouseDownHdlr = function(ev) {
 
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, true);
 	var target = mouseEv.target;
 	if (target.nodeName.toLowerCase() == "img")
 		target = target.parentNode;
@@ -187,7 +187,7 @@ YMEmoticonsPicker._mouseDownHdlr = function(ev) {
 
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
-	mouseEv.setToDhtmlEvent(ev)
+	mouseEv.setToDhtmlEvent(ev);
 	return false;
 
 
@@ -196,7 +196,7 @@ YMEmoticonsPicker._mouseDownHdlr = function(ev) {
 YMEmoticonsPicker._mouseUpHdlr = function(ev) {
 
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
+	mouseEv.setFromDhtmlEvent(ev, true);
 	var obj = mouseEv.dwtObj;
 
 	var target = mouseEv.target;

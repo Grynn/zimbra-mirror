@@ -401,7 +401,7 @@ function(ev) {
 DwtShell._preventDefaultSelectPrt =
 function(ev) {
     var evt = AjxCore.objectWithId(window._dwtShell)._uiEvent;
-    evt.setFromDhtmlEvent(ev);
+    evt.setFromDhtmlEvent(ev, true);
 
 	if (evt.dwtObj && evt.dwtObj instanceof DwtControl && !evt.dwtObj.preventSelection(evt.target)) {
         evt._stopPropagation = false;
@@ -420,7 +420,7 @@ function(ev) {
 	var target = ev.target ? ev.target : ev.srcElement;
 	
     var evt = AjxCore.objectWithId(window._dwtShell)._uiEvent;
-    evt.setFromDhtmlEvent(ev);
+    evt.setFromDhtmlEvent(ev, true);
 	//default behavior
     evt._stopPropagation = true;
     evt._returnValue = false;
