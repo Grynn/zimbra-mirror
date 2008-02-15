@@ -3324,6 +3324,13 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
+                <description>String of grants to revoke.</description>
+                <name>revokeGrantString</name>
+                <required>true</required>
+                <rtexprvalue>true</rtexprvalue>
+                <type>java.lang.String</type>
+        </attribute>
+        <attribute>
             <description>request var to put the results in </description>
             <name>var</name>
             <required>true</required>

@@ -40,6 +40,7 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
     private String mGrantorId;
     private String mGrantorName;
     private String mUpdateGrantString;
+    private String mRevokeGrantString;
     private String mVar;
     
     public void setFolderId(String id){
@@ -52,6 +53,10 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
 
     public void setUpdateGrantString(String grantString){
         this.mUpdateGrantString = grantString;
+    }
+
+    public void setRevokeGrantString(String grantString){
+        this.mRevokeGrantString = grantString;
     }
 
     public void setFolderName(String folderName){
@@ -73,7 +78,7 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
             ArrayList failures = new ArrayList();
             for (ZGrantBean grant : updateGrants) {
                 try{
-                    ZMailbox.ZActionResult result =
+                    ZMailbox.ZActionResult updateResult =
                         mbox.modifyFolderGrant(
                             mFolderId,
                             grant.getGranteeType(),
@@ -85,8 +90,12 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
                 }
                 try{
                     if (grant.getArgs().equalsIgnoreCase("true")) {
-                        sendMail(mbox, mFolderId, mFolderName,
-                                this.mGrantorName, this.mGrantorId, grant.getGranteeId());
+                        String subject =
+                            I18nUtil.getLocalizedMessage((PageContext)getJspContext(),
+                                                         "calendarAddShareMailSubject", mGrantorName);
+
+                        sendGrantMail(mbox, mFolderId, mFolderName,
+                                this.mGrantorName, this.mGrantorId, subject, grant.getGranteeId());
                     }
                 } catch (ServiceException e){
                     // eat the mta exceptions here, we probably need to use bulkmailer here, unclear whether that will
@@ -96,6 +105,12 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
                     // respond in realtime or not.
                 }
                 getJspContext().setAttribute(this.mVar, failures, PageContext.REQUEST_SCOPE);
+            }
+            for (String shareId : mRevokeGrantString.split(";")){
+                if (shareId.length() > 0){
+                    ZMailbox.ZActionResult updateResult =
+                        mbox.modifyFolderRevokeGrant(mFolderId, shareId.equals("pub") ? ZGrant.GUID_PUBLIC : shareId);
+                }
             }
         } catch (ServiceException e) {
             throw new JspTagException(e);
@@ -112,7 +127,7 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
         for (x = strGrants.length - 1; x > -1; x--) {
             String[] grantArgs = strGrants[x].split(",");
             ZGrantBean grant = new ZGrantBean();
-            grant.setGranteeId(grantArgs[0]);
+            grant.setGranteeId(grantArgs[0].equals("pub") ? ZGrant.GUID_PUBLIC : grantArgs[0]);
             grant.setGranteeType(ZGrant.GranteeType.valueOf(grantArgs[1]));
             grant.setPermissions(grantArgs[2]);
             grant.setArgs(grantArgs[3]);
@@ -121,13 +136,13 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
         return grants;
     }
 
-    public ZMailbox.ZSendMessageResponse sendMail(ZMailbox mbox, String folderId, String folderName,
+    public ZMailbox.ZSendMessageResponse sendGrantMail(ZMailbox mbox, String folderId, String folderName,
                                                   String grantorName, String grantorId,
-                                                  String granteeId)
+                                                  String granteeId, String subject)
             throws ServiceException, JspException {
             ZMailbox.ZOutgoingMessage m =
                     getOutgoingMessage(grantorId, grantorName,
-                                       granteeId, folderId, folderName);
+                                       granteeId, subject, folderId, folderName);
 
             ZMailbox.ZSendMessageResponse response = mbox.sendMessage(m, null, true);
             //Change this to Java API call to bulkmailer Java interface 
@@ -136,17 +151,13 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
     }
 
     private ZMailbox.ZOutgoingMessage getOutgoingMessage(String grantorId, String grantorName,
-                                                         String granteeId, String linkId, String folderName )
+                                                         String granteeId, String subject, String linkId, String folderName )
             throws ServiceException, JspException {
 
         List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
         List<String> messages = null;
         List<ZMailbox.ZOutgoingMessage.AttachedMessagePart> attachments = null;
         ZMailbox.ZOutgoingMessage m = new ZMailbox.ZOutgoingMessage();
-
-        String subject =
-            I18nUtil.getLocalizedMessage((PageContext)getJspContext(),
-                                              "calendarAddShareMailSubject", grantorName);
 
         String acceptShareLink = "/zimbra/y/calendar?action=acceptShare&np=1&nn=" +
                                  folderName + "&ng=" + grantorId + "&nl=" + linkId;
