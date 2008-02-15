@@ -331,6 +331,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								{ref:ZaCos.A_zimbraPrefIMAutoLogin, type:_CHECKBOX_, 
 									msgName:ZaMsg.NAD_zimbraPrefIMAutoLogin,label:ZaMsg.NAD_zimbraPrefIMAutoLogin, 
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaCos.A_zimbraJunkMessagesIndexingEnabled, type:_CHECKBOX_, 
+									msgName:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled,
+									label:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled, 
+									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
 								}
 							]},							
 							{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"cos_form_prefs_mail_header",

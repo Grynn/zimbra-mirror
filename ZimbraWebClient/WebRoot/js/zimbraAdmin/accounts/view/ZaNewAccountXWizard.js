@@ -749,7 +749,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_zimbraPrefShowSelectionCheckbox, type:_SUPER_WIZ_CHECKBOX_, 
 									labelWrap: true,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,checkBoxLabel:ZaMsg.NAD_zimbraPrefShowSelectionCheckbox,
-									trueValue:"TRUE", falseValue:"FALSE"}
+									trueValue:"TRUE", falseValue:"FALSE"},
+								{ref:ZaAccount.A_zimbraJunkMessagesIndexingEnabled, type:_SUPER_WIZ_CHECKBOX_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,checkBoxLabel:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled,
+									trueValue:"TRUE", falseValue:"FALSE"}	
 							]
 						},	
 						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_mail_header",

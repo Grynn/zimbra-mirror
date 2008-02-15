@@ -105,6 +105,7 @@ ZaCos.A_zimbraPrefDisplayExternalImages = "zimbraPrefDisplayExternalImages" ;
 ZaCos.A_zimbraPrefOutOfOfficeCacheDuration = "zimbraPrefOutOfOfficeCacheDuration";
 ZaCos.A_zimbraPrefIMAutoLogin = "zimbraPrefIMAutoLogin";
 ZaCos.A_zimbraPrefMailDefaultCharset = "zimbraPrefMailDefaultCharset";
+ZaCos.A_zimbraJunkMessagesIndexingEnabled = "zimbraJunkMessagesIndexingEnabled";
 
 //features
 ZaCos.A_zimbraFeatureMailPriorityEnabled = "zimbraFeatureMailPriorityEnabled";
@@ -539,6 +540,8 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraPrefDisplayExternalImages, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefDisplayExternalImages, type:_ENUM_},					
 		{id:ZaCos.A_zimbraPrefOutOfOfficeCacheDuration, ref:"attrs/"+ZaCos.A_zimbraPrefOutOfOfficeCacheDuration, type:_MLIFETIME_},				
 		{id:ZaCos.A_zimbraPrefMailDefaultCharset,type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraPrefMailDefaultCharset, choices:ZaSettings.mailCharsetChoices},
+		{id:ZaCos.A_zimbraJunkMessagesIndexingEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraJunkMessagesIndexingEnabled, type:_ENUM_},					
+		
 //features
 		{id:ZaCos.A_zimbraFeatureMailPriorityEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureMailPriorityEnabled, type:_ENUM_},
 		{id:ZaCos.A_zimbraFeaturePop3DataSourceEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeaturePop3DataSourceEnabled, type:_ENUM_},

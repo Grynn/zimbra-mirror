@@ -1101,7 +1101,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									colSizes:["175px","375px","190px"],
 									labelWrap: true,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, checkBoxLabel:ZaMsg.NAD_zimbraPrefShowSelectionCheckbox,
-									trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged}
+									trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged},
+								{ref:ZaAccount.A_zimbraJunkMessagesIndexingEnabled, 
+									type:_SUPER_CHECKBOX_,  colSpan:2,
+									colSizes:["175px","375px","190px"],
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled,
+									checkBoxLabel:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled, 
+									trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged}	
 							]
 						},	
 						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_mail_header",

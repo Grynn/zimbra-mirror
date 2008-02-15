@@ -148,6 +148,7 @@ ZaAccount.A_zimbraMailSignatureMaxLength = "zimbraMailSignatureMaxLength" ;
 ZaAccount.A_zimbraPrefDisplayExternalImages = "zimbraPrefDisplayExternalImages" ;
 ZaAccount.A_zimbraPrefOutOfOfficeCacheDuration = "zimbraPrefOutOfOfficeCacheDuration";
 ZaAccount.A_zimbraPrefMailDefaultCharset = "zimbraPrefMailDefaultCharset";
+ZaAccount.A_zimbraJunkMessagesIndexingEnabled = "zimbraJunkMessagesIndexingEnabled" ;
 
 //features
 ZaAccount.A_zimbraFeatureMailPriorityEnabled = "zimbraFeatureMailPriorityEnabled";
@@ -1423,6 +1424,8 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraPrefShowSelectionCheckbox, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefShowSelectionCheckbox},
 		{id:ZaAccount.A_zimbraPrefDisplayExternalImages, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefDisplayExternalImages, choices:ZaModel.BOOLEAN_CHOICES},		
 		{id:ZaAccount.A_zimbraPrefOutOfOfficeCacheDuration, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraPrefOutOfOfficeCacheDuration},
+		{id:ZaAccount.A_zimbraJunkMessagesIndexingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraJunkMessagesIndexingEnabled, choices:ZaModel.BOOLEAN_CHOICES},		
+		
 		//features
 		{id:ZaAccount.A_zimbraFeatureMailPriorityEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureMailPriorityEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_zimbraFeaturePop3DataSourceEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeaturePop3DataSourceEnabled, choices:ZaModel.BOOLEAN_CHOICES},
