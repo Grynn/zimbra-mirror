@@ -1186,11 +1186,11 @@ sub executeCommand($) {
   @error = <$efh>;
   waitpid($pid,0);
   if ($? == -1) {
-    $state->{sigchld}++;
-    if ($state->{sigchld} >= 15) {
-      logMsg(2, "CHLD processes are being reaped automatically ignoring them now.");
-      $SIG{CHLD}  = \&catchSignal;
-    }
+    #$state->{sigchld}++;
+    #if ($state->{sigchld} >= 15) {
+      #logMsg(2, "CHLD processes are being reaped automatically ignoring them now.");
+      #$SIG{CHLD}  = \&catchSignal;
+    #}
 
     $rc = $? >> 8;
     @{$ref->{'output'}} = @output;
