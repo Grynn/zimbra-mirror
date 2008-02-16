@@ -366,7 +366,7 @@ function(item, ev) {
 
 DwtAccordion.prototype._handleOnMouseoutHeader =
 function(ev) {
-	this.setToolTipContent("");
+	this.setToolTipContent(null);
 };
 
 /**
