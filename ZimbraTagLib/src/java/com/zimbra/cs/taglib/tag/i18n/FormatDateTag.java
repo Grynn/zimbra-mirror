@@ -30,7 +30,7 @@ public class FormatDateTag extends SimpleTagSupport  {
 	//
 
 	protected Date value;
-	protected String type = I18nUtil.DEFAULT_TYPE_NAME;
+	protected String type = I18nUtil.DEFAULT_DATE_TYPE_NAME;
 	protected String dateStyle;
 	protected String timeStyle;
 	protected String pattern;
@@ -126,7 +126,7 @@ public class FormatDateTag extends SimpleTagSupport  {
 
 		// clear state
 		this.value = null;
-		this.type = I18nUtil.DEFAULT_TYPE_NAME;
+		this.type = I18nUtil.DEFAULT_DATE_TYPE_NAME;
 		this.dateStyle = null;
 		this.timeStyle = null;
 		this.pattern = null;

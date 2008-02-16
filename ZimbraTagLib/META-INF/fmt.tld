@@ -11,7 +11,6 @@
   <short-name>zimbra-fmt</short-name>
   <uri>com.zimbra.i18n</uri>
 
-	<!--
   <tag>
     <description>
         Sets the request character encoding
@@ -29,7 +28,6 @@ decoding request parameters.
         <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
-  -->
 
   <tag>
     <description>
@@ -308,7 +306,6 @@ Argument used for parametric replacement.
 	</attribute>
   </tag>
 
-	<!--
   <tag>
     <description>
         Formats a numeric value as a number, currency, or percentage
@@ -503,7 +500,6 @@ Scope of var.
         <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
-  -->
 
   <tag>
     <description>

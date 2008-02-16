@@ -26,12 +26,17 @@ public class I18nUtil {
 	public static final String TYPE_TIME = "time";
 	public static final String TYPE_BOTH = "both";
 
+	public static final String TYPE_NUMBER = "number";
+	public static final String TYPE_CURRENCY = "currency";
+	public static final String TYPE_PERCENTAGE = "percent";
+
 	public static final String DEFAULT_SCOPE_NAME = PAGE;
 	public static final int DEFAULT_SCOPE_VALUE = PageContext.PAGE_SCOPE;
 
 	public static final String DEFAULT_STYLE_NAME = STYLE_MEDIUM;
 	public static final int DEFAULT_STYLE_VALUE = DateFormat.MEDIUM;
-	public static final String DEFAULT_TYPE_NAME = TYPE_DATE;
+	public static final String DEFAULT_DATE_TYPE_NAME = TYPE_DATE;
+	public static final String DEFAULT_NUMBER_TYPE_NAME = TYPE_NUMBER;
 
 	private static final String PACKAGE = I18nUtil.class.getPackage().getName();
 
