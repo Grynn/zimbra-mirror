@@ -30,6 +30,9 @@ AjxUtil.NOTFLOAT_RE = /[^\d\.]/;
 AjxUtil.NOTINT_RE = /[^0-9]+/;
 AjxUtil.LIFETIME_FIELD = /^([0-9])+([dhms])?$/;
 
+AjxUtil.isSpecified 		= function(aThing) { return ((aThing !== void 0) && (aThing !== null)); };
+AjxUtil.isUndefined 		= function(aThing) { return (aThing === void 0); };
+AjxUtil.isNull 				= function(aThing) { return (aThing === null); };
 AjxUtil.isBoolean 			= function(aThing) { return (typeof(aThing) == 'boolean'); };
 AjxUtil.isString 			= function(aThing) { return (typeof(aThing) == 'string'); };
 AjxUtil.isNumber 			= function(aThing) { return (typeof(aThing) == 'number'); };
