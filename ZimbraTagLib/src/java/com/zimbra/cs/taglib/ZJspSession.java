@@ -19,6 +19,7 @@ package com.zimbra.cs.taglib;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.zclient.ZAuthResult;
+import com.zimbra.cs.zclient.ZAuthToken;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.account.Provisioning;
@@ -58,15 +59,15 @@ public class ZJspSession {
     public static final String Q_ZLASTSERVER = "zlastserver";
 
     private ZMailbox mMbox;
-    private String mAuthToken;
+    private ZAuthToken mAuthToken;
  
-    public ZJspSession(String authToken, ZMailbox mbox) {
+    public ZJspSession(ZAuthToken authToken, ZMailbox mbox) {
         mAuthToken = authToken;
         mMbox = mbox;
     }
     
     public ZMailbox getMailbox() { return mMbox; }
-    public String getAuthToken() { return mAuthToken; }
+    public ZAuthToken getAuthToken() { return mAuthToken; }
 
     private static String sSoapUrl = null;
 
@@ -193,7 +194,7 @@ public class ZJspSession {
         String host;
         if (needRefer) {
             host = authResult.getRefer();
-            toAdd.put(Q_ZAUTHTOKEN, authResult.getAuthToken());
+            toAdd.put(Q_ZAUTHTOKEN, authResult.getAuthToken().getValue());
             if (rememberMe) {
                 toAdd.put(Q_ZREMBERME, "1");
                 Cookie lastServerCookie = new Cookie(ZJspSession.ZM_LAST_SERVER_COOKIE_NAME, host);
@@ -332,9 +333,10 @@ public class ZJspSession {
         }
     }
             
-    public static String getAuthToken(PageContext context) {
+    public static ZAuthToken getAuthToken(PageContext context) {
         // check here first, in case we are logging in and cookie isn't set yet.
-        String authToken = (String) context.getAttribute(ATTR_TEMP_AUTHTOKEN, PageContext.REQUEST_SCOPE);
+        // String authToken = (String) context.getAttribute(ATTR_TEMP_AUTHTOKEN, PageContext.REQUEST_SCOPE);
+        ZAuthToken authToken = (ZAuthToken) context.getAttribute(ATTR_TEMP_AUTHTOKEN, PageContext.REQUEST_SCOPE);
         if (authToken != null) return authToken;
         
         HttpServletRequest request= (HttpServletRequest) context.getRequest();
@@ -342,8 +344,9 @@ public class ZJspSession {
         if (cookies == null) return null;
         for (Cookie c : cookies){
             if (c.getName().equals(COOKIE_NAME)) {
-                return c.getValue();
+                return new ZAuthToken(null, c.getValue(), null);
             }
+            // AP-TODO-21: what to do with Yahoo Y&T cookies?
         }
         return null;
     }
@@ -353,7 +356,7 @@ public class ZJspSession {
         if (req.getSession(false) == null)
             return false;
 
-        String authToken = getAuthToken(context);
+        ZAuthToken authToken = getAuthToken(context);
         ZJspSession sess = (ZJspSession) context.getAttribute(ATTR_SESSION, PageContext.SESSION_SCOPE);
         // see if we have a session that matches auth token
         return sess != null && sess.getAuthToken().equals(authToken);
@@ -361,14 +364,14 @@ public class ZJspSession {
 
     public static ZJspSession getSession(PageContext context) throws ServiceException {
         ZJspSession sess = (ZJspSession) context.getAttribute(ATTR_SESSION, PageContext.SESSION_SCOPE);
-        String authToken = getAuthToken(context);
+        ZAuthToken authToken = getAuthToken(context);
         
         // see if we have a session that matches auth token
         if (sess != null && sess.getAuthToken().equals(authToken)) {
             return sess;
         }
 
-        if (authToken == null || authToken.length() == 0) {
+        if (authToken == null || authToken.isEmpty()) {
             return null;    
         } else {
             // see if we can get a mailbox from the auth token

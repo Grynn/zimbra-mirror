@@ -30,6 +30,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning;
+import com.zimbra.cs.zclient.ZAuthToken;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZMailbox;
 
@@ -47,7 +48,7 @@ public class OfflineServlet extends HttpServlet {
     }
 
     private void setAuthCookie(String username, String password, HttpServletResponse response) throws ServiceException {
-        String auth = ZMailbox.getMailbox(getMailboxOptions(username, password)).getAuthToken();
+        String auth = ZMailbox.getMailbox(getMailboxOptions(username, password)).getAuthToken().getValue();
         Cookie cookie = new Cookie("ZM_AUTH_TOKEN", auth);
         cookie.setPath("/");
         cookie.setMaxAge(31536000);

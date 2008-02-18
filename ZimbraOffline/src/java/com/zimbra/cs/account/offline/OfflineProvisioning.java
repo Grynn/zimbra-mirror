@@ -33,6 +33,7 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.zclient.ZAuthToken;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
@@ -148,7 +149,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         options.setDebugListener(new Offline.OfflineDebugListener());
         ZMailbox zmbox = ZMailbox.getMailbox(options);
         if (options.getAuthToken() == null) //it was auth by password
-        	OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken(), zmbox.getAuthResult().getExpires());
+        	OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken().getValue(), zmbox.getAuthResult().getExpires());
         return zmbox;
     }
 

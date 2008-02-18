@@ -19,6 +19,7 @@ package com.zimbra.cs.taglib.tag;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.taglib.ZJspSession;
+import com.zimbra.cs.zclient.ZAuthToken;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;
@@ -33,13 +34,13 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
 	private static final Pattern sSCRIPT = Pattern.compile("</script>", Pattern.CASE_INSENSITIVE);
 
     private String mVar;
-    private String mAuthToken;
+    private ZAuthToken mAuthToken;
     private String mItemsPerPage;
     private String mTypes;
     private boolean mDoSearch;
 
     public void setVar(String var) { this.mVar = var; }
-    public void setAuthtoken(String authToken) { this.mAuthToken = authToken; }
+    public void setAuthtoken(ZAuthToken authToken) { this.mAuthToken = authToken; }
     public void setDosearch(boolean doSearch) { mDoSearch = doSearch; }
     public void setItemsperpage(String itemsPerPage) { mItemsPerPage = itemsPerPage; }
     public void setTypes(String types) { mTypes = types; }
