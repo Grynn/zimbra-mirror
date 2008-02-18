@@ -42,7 +42,7 @@ DwtCheckbox = function(params) {
 	params = Dwt.getParams(arguments, DwtCheckbox.PARAMS);
 	params.className = params.className || "DwtCheckbox";
 	DwtControl.call(this, params);
-	this._initName = name;
+	this._initName = params.name;
 	this._initChecked = params.checked;
 	this._createHtml();
 }
