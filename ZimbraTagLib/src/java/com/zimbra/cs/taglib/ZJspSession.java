@@ -377,20 +377,6 @@ public class ZJspSession {
 
             //options.setAuthAuthToken(true);
             ZMailbox mbox = ZMailbox.getMailbox(options);
-
-            /*
-            HttpServletRequest request = (HttpServletRequest) context.getRequest();
-            String serverName = request.getServerName();
-            String refer = mbox.getAuthResult().getRefer();
-            boolean needRefer = (refer != null && !refer.equalsIgnoreCase(serverName));
-            
-            if (needRefer) {
-                context.setAttribute("SERVER_REDIRECT_URL",
-                        ZJspSession.getPostLoginRedirectUrl(context, null, mbox.getAuthResult(), false, needRefer),
-                        PageContext.REQUEST_SCOPE);
-                throw ZTagLibException.SERVER_REDIRECT("redirect to: "+mbox.getAuthResult().getRefer(), null);
-            }
-            */
             mbox.getAccountInfo(false);
             return setSession(context, mbox);
         }
