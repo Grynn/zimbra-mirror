@@ -244,15 +244,17 @@ function() {
 	return "DWT" + Dwt.__nextId++;
 }
 /**
+ * @deprecated
+ * The association between an element and a control is now via DwtControl.ALL_BY_ID,
+ * where the unique element ID is a key to the control. The association is made when
+ * the control is initialized.
+ * 
  * This method builds an indirect association between a DOM object and a JavaScript
  * object. This indirection is important to prevent memory leaks (particularly in IE) by
  * not directly creating a circular reference between a DOM object
  *
  * @param {DOMElement} domElement The DOM element (typically an HTML element)
  * @param {Object} jsObject The JavaScript object
- *
- * @see #disassociateElementFromObject
- * @see #getObjectFromElement
  */
 Dwt.associateElementWithObject =
 function(domElement, jsObject, attrName) {
@@ -260,14 +262,14 @@ function(domElement, jsObject, attrName) {
 };
 
 /**
+ * @deprecated
+ * The association will be broken by the control when it is disposed.
+ * 
  * This method breaks the indirect association between a DOM object and a JavaScript
  * object that was created by the <code>Dwt.associateElementWithObject</code>method
  *
  * @param {DOMElement} domElement The DOM element (typically an HTML element)
  * @param {Object} jsObject The JavaScript object
- *
- * @see #associateElementWithObject
- * @see #getObjectFromElement
  */
 Dwt.disassociateElementFromObject =
 function(domElement, jsObject, attrName) {
@@ -279,6 +281,10 @@ function(domElement, jsObject, attrName) {
 	}
 };
 
+/**
+ * @deprecated
+ * Instead, use DwtControl.fromElement().
+ */
 Dwt.getObjectFromElement =
 function(domElement, attrName) {
 	return AjxCore.objectWithId(domElement[attrName||"dwtObj"]);

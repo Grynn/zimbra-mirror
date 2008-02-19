@@ -446,12 +446,12 @@ DwtControl.prototype.dispose =
 function() {
 	if (this._disposed) return;
 
-	if (this.parent != null && this.parent instanceof DwtComposite)
+	if (this.parent != null && this.parent instanceof DwtComposite) {
 		this.parent.removeChild(this);
-
-        this._elRef = null;
-        delete DwtControl.ALL_BY_ID[this._htmlElId];
-	Dwt.disassociateElementFromObject(null, this);
+	}
+	this._elRef = null;
+	DwtControl.ALL_BY_ID[this._htmlElId] = null;
+	delete DwtControl.ALL_BY_ID[this._htmlElId];
 
 	this._disposed = true;
 	var ev = new DwtDisposeEvent();
@@ -1001,6 +1001,26 @@ function() {
 		htmlEl._rendered = true;
 	}
 	return this._elRef = htmlEl;
+};
+
+/**
+ * Returns the control associated with the given element, if any.
+ * 
+ * @param htmlEl	[Element]	an HTML element
+ */
+DwtControl.fromElement =
+function(htmlEl)  {
+	return DwtControl.ALL_BY_ID[htmlEl.id];
+};
+
+/**
+ * Returns the control associated with the given element ID, if any.
+ * 
+ * @param htmlElId	[string]	an HTML element ID
+ */
+DwtControl.fromElementId =
+function(htmlElId)  {
+	return DwtControl.ALL_BY_ID[htmlElId];
 };
 
 /**
@@ -2224,7 +2244,7 @@ function(ev) {
 	// mousedown event has not occurred , so do the default behaviour,
 	// else do the draggable behaviour
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
-	var obj = (captureObj) ? captureObj.targetObj : DwtControl.getTargetControl(ev);
+	var obj = captureObj ? captureObj.targetObj : DwtControl.getTargetControl(ev);
  	if (!obj) { return false; }
 
 	//DND cancel point
@@ -2234,7 +2254,7 @@ function(ev) {
 	}
 
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev, true);
+	mouseEv.setFromDhtmlEvent(ev, captureObj ? true : obj);
 
 	// This following can happen during a DnD operation if the mouse moves
 	// out the window. This seems to happen on IE only.
@@ -2362,7 +2382,7 @@ DwtControl.__mouseUpHdlr =
 function(ev) {
 	// See if are doing a drag n drop operation
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
-	var obj = (captureObj) ? captureObj.targetObj : DwtControl.getTargetControl(ev);
+	var obj = captureObj ? captureObj.targetObj : DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 
 	//DND
@@ -2372,7 +2392,7 @@ function(ev) {
 	}
 
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev, obj);
+	mouseEv.setFromDhtmlEvent(ev, captureObj ? true : obj);
 	if (!obj._dragSource || !captureObj) {
 		//obj._focusByMouseUpEvent();
 		return DwtControl.__processMouseUpEvent(ev, obj, mouseEv);
@@ -2576,10 +2596,10 @@ DwtControl.prototype.__initCtrl =
 function() {
 	this.shell = this.parent.shell || this.parent;
 	var htmlElement = this._elRef = document.createElement("div");
-	this._htmlElId = htmlElement.id = this._htmlElId || Dwt.getNextId();
+	// __internalId is for back-compatibility (was side effect of Dwt.associateElementWithObject)
+	this._htmlElId = htmlElement.id = this.__internalId = this._htmlElId || Dwt.getNextId();
 	DwtControl.ALL_BY_ID[this._htmlElId] = this;
 	DwtComposite._pendingElements[this._htmlElId] = htmlElement;
-	Dwt.associateElementWithObject(htmlElement, this);
 	if (this.__posStyle == null || this.__posStyle == DwtControl.STATIC_STYLE) {
         htmlElement.style.position = DwtControl.STATIC_STYLE;
 	} else {

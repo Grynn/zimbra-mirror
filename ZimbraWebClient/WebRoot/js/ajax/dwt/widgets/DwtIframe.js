@@ -180,7 +180,7 @@ DwtIframe.prototype._createFrame = function(html) {
 	// the iframe variable (it's protected below)
 	function rawHandlerProxy(ev) {
 		var myElement = document.getElementById(myId);
-		var self = Dwt.getObjectFromElement(myElement);		
+		var self = DwtControl.findControl(myElement);		
 		return self._rawEventHandler(ev);
 	};
 
@@ -188,7 +188,7 @@ DwtIframe.prototype._createFrame = function(html) {
 	(function() {
 		var iframe, tmp = [], i = 0, idoc;
 		var myElement = document.getElementById(myId);
-		var self = Dwt.getObjectFromElement(myElement);
+		var self = DwtControl.findControl(myElement);
 
 		tmp[i++] = "<iframe";
 		if (self._noscroll)
@@ -235,9 +235,6 @@ DwtIframe.prototype._createFrame = function(html) {
 			idoc.body.style.margin = "0";
 		}
 
-		// not sure this is needed, but it seems technically OK.
-		Dwt.associateElementWithObject(idoc, self);
-
 		// assign event handlers
 		tmp = DwtIframe._forwardEvents;
 		if (!AjxEnv.isIE)
@@ -263,9 +260,6 @@ DwtIframe.prototype._resetEventHandlers = function() {
 		var iframe, tmp = [], i = 0, idoc;
 		iframe = self.getIframe();
 		idoc = Dwt.getIframeDoc(iframe);
-
-		// not sure this is needed, but it seems technically OK.
-		Dwt.associateElementWithObject(idoc, self);
 
 		// assign event handlers
 		tmp = DwtIframe._forwardEvents;

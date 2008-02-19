@@ -20,7 +20,12 @@ AjxCore = function() {}
 
 AjxCore._objectIds = [null];
 
-
+/**
+ * @deprecated
+ * 
+ * The association is now made by DwtControl using the element's ID, so a separate
+ * unique ID is not needed.
+ */
 AjxCore.assignId = 
 function(anObject) {
 	var myId = AjxCore._objectIds.length;
@@ -28,11 +33,17 @@ function(anObject) {
 	return myId;
 };
 
+/**
+ * @deprecated
+ */
 AjxCore.unassignId = 
 function(anId) {
 	AjxCore._objectIds[anId]= null;
 };
 
+/**
+ * @deprecated
+ */
 AjxCore.objectWithId = 
 function(anId) {
 	return AjxCore._objectIds[anId];

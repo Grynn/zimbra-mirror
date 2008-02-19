@@ -122,8 +122,6 @@ DwtInputField = function(params) {
 	this._tabGroup = new DwtTabGroup(this._htmlElId);
 	if (this._rows > 1) {
         this._inputField = document.getElementById(inputFieldId);
-        Dwt.associateElementWithObject(this._inputField, this);
-
         this._inputField.onkeyup = DwtInputField._keyUpHdlr;
         this._inputField.onblur = DwtInputField._blurHdlr;
 		this._inputField.onfocus = DwtInputField._focusHdlr;
@@ -732,7 +730,6 @@ DwtInputField.prototype.__createInputEl = function(params) {
 		for (var eventType in this._inputEventHandlers) {
 			oinput.removeAttribute(eventType);
 		}
-		Dwt.disassociateElementFromObject(oinput, this);
 	}
 
 	// create new input field
@@ -756,9 +753,6 @@ DwtInputField.prototype.__createInputEl = function(params) {
 	}
 	ninput.value = (params ? params.initialValue : oinput.value) || "";
 	ninput.readonly = oinput ? oinput.readonly : false;
-
-	// associate with this control
-	Dwt.associateElementWithObject(ninput, this);
 
 	// add event handlers
 	ninput.onkeyup = DwtInputField._keyUpHdlr;

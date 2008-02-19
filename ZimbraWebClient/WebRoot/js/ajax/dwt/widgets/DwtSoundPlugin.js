@@ -286,7 +286,7 @@ function(version) {
 DwtQTSoundPlugin.checkScripting =
 function() {
 	var success = false;
-	var shell = AjxCore.objectWithId(window._dwtShell);
+	var shell = DwtControl.fromElementId(window._dwtShellId);
 	var args = {
 		parent: shell,
 		width: 200,

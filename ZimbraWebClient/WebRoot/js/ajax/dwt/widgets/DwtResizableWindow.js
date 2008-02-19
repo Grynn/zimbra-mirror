@@ -465,8 +465,10 @@ DwtResizableWindow.__static_handleMouseDown = function(side, obj, ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
 	if (mouseEv.button == DwtMouseEvent.LEFT) {
-		if (!obj)
-			obj = DwtUiEvent.getDwtObjWithProp(mouseEv, "isDwtResizableWindow");
+		if (!obj) {
+			var htmlEl = DwtUiEvent.getTargetWithProp(mouseEv, "isDwtResizableWindow");
+			obj = DwtControl.findControl(htmlEl);
+		}
 		obj.__dlgMouseDown(ev);
 		obj.__handleMouseDown(mouseEv, side);
         }
@@ -479,7 +481,9 @@ DwtResizableWindow.__static_handleMouseDown = function(side, obj, ev) {
 DwtResizableWindow.__static_dlgMouseDown = function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
-	DwtUiEvent.getDwtObjWithProp(mouseEv, "isDwtResizableWindow").__dlgMouseDown(mouseEv);
+	var htmlEl = DwtUiEvent.getTargetWithProp(mouseEv, "isDwtResizableWindow");
+	obj = DwtControl.findControl(htmlEl);
+	obj.__dlgMouseDown(mouseEv);
 };
 
 DwtResizableWindow.__static_resizeMouseMove = function(ev) {

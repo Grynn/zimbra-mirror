@@ -142,19 +142,6 @@ function(ev, props)  {
 	return null;
 }
 
-/**
- * Returns a control (DWT object) based on the event, by finding the event target with the
- * given property and using its reference to a DWT object.
- * 
- * @param ev				[Event]		DHTML event
- * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
- */
-DwtUiEvent.getDwtObjWithProp =
-function(ev, prop) {
-	var htmlEl = DwtUiEvent.getTargetWithProps(ev, ["dwtObj", prop]);
-	return htmlEl ? Dwt.getObjectFromElement(htmlEl) : null;
-}
-
 DwtUiEvent.copy = 
 function(dest, src) {
 	dest.altKey = src.altKey;
@@ -251,18 +238,35 @@ function(dhtmlEv, stopPropagation, allowDefault, dontCallPreventDefault) {
 };
 
 /**
- * DEPRECATED! Use DwtControl.getTargetControl() instead.
+ * @deprecated
+ * Use DwtControl.getTargetControl() instead.
  * 
  * Returns a control (DWT object) based on the event, by finding the event target and using
- * its reference to a DWT object.
+ * its reference to a DWT object in the element's "dwtObj" expando property.
  * 
  * @param ev				[Event]		DHTML event
  * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
- * 
- * @deprecated
  */
 DwtUiEvent.getDwtObjFromEvent =
 function(ev, useRelatedTarget) {
 	var htmlEl = DwtUiEvent.getTargetWithProp(ev, "dwtObj", useRelatedTarget);
+	return htmlEl ? Dwt.getObjectFromElement(htmlEl) : null;
+};
+
+/**
+ * @deprecated
+ * Instead, do something like this:
+ * 		var htmlEl = DwtUiEvent.getTargetWithProp(ev, "myProp");
+ * 		var obj = DwtControl.findControl(htmlEl);
+ * 
+ * Returns a control (DWT object) based on the event, by finding the event target with the
+ * given property and using its reference to a DWT object.
+ * 
+ * @param ev				[Event]		DHTML event
+ * @param useRelatedTarget	[boolean]*	if true, return element that was related to this event;
+ */
+DwtUiEvent.getDwtObjWithProp =
+function(ev, prop) {
+	var htmlEl = DwtUiEvent.getTargetWithProps(ev, ["dwtObj", prop]);
 	return htmlEl ? Dwt.getObjectFromElement(htmlEl) : null;
 };

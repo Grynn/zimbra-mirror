@@ -78,15 +78,13 @@ function(listener) {
 
 DwtColorPicker.prototype.dispose = 
 function () {
-	if (this._disposed) return;
-	Dwt.disassociateElementFromObject(this.getHtmlElement().firstChild, this);
+	if (this._disposed) { return; }
 	DwtControl.prototype.dispose.call(this);
 }
 
 DwtColorPicker.prototype._registerEventHdlrs =
 function() {
 	var table = this.getHtmlElement().firstChild;
-	Dwt.associateElementWithObject(table, this);	
 	var rows = table.rows;
 	var numRows = rows.length;
 

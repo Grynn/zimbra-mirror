@@ -591,7 +591,7 @@ function() {
 		var params = {parent: this, type: DwtInputField.STRING};
 		this._textField = new DwtInputField(params);
 		this._textField.reparentHtmlElement(this._textFieldTdId);
-		this._textField.getInputElement()._chooserId = AjxCore.assignId(this);
+		this._textField._chooser = this;
 		this._textField.setHandler(DwtEvent.ONKEYUP, DwtChooser._onKeyUp);
 		Dwt.setSize(this._textField.getInputElement(), "100%", Dwt.DEFAULT);
 	}
@@ -845,13 +845,13 @@ function(id) {
 	if (id != this._activeButtonId) {
 		var buttonId = (this._activeButtonId == DwtChooser.REMOVE_BTN_ID) ? this._removeButtonId : this._buttonId[this._activeButtonId];
 		if (buttonId) {
-			var oldButton = Dwt.getObjectFromElement(document.getElementById(buttonId));
+			var oldButton = DwtControl.findControl(document.getElementById(buttonId));
 			if (oldButton) {
 				oldButton.setDisplayState(DwtControl.NORMAL);
 			}
 		}
 		buttonId = (id == DwtChooser.REMOVE_BTN_ID) ? this._removeButtonId : this._buttonId[id];
-		var button = Dwt.getObjectFromElement(document.getElementById(buttonId));
+		var button = DwtControl.findControl(document.getElementById(buttonId));
 		if (button) {
 			button.setDisplayState(DwtControl.DEFAULT);
 		}
@@ -996,7 +996,8 @@ function() {
 DwtChooser._onKeyUp =
 function(ev) {
 	var el = DwtUiEvent.getTarget(ev);
-	var chooser = AjxCore.objectWithId(el._chooserId);
+	var obj = DwtControl.findControl(el);	// DwtInputField
+	var chooser = obj._chooser;
 	var key = DwtKeyEvent.getCharCode(ev);
 	if (key == 3 || key == 13) {
 		var email = chooser._getEmailFromText();

@@ -206,7 +206,6 @@ DwtCheckbox.prototype._createHtmlFromTemplate = function(templateId, data) {
 		var handleFocus = AjxCallback.simpleClosure(keyboardMgr.grabFocus, keyboardMgr, this.getTabGroupMember());
 		Dwt.setHandler(this._inputEl, DwtEvent.ONFOCUS, handleFocus);
 		Dwt.setHandler(this._inputEl, DwtEvent.ONCLICK, DwtCheckbox.__handleClick);
-		Dwt.associateElementWithObject(this._inputEl, this);
 	}
 	this._textElLeft = document.getElementById(data.id+"_text_left");
 	this._textElRight = document.getElementById(data.id+"_text_right");
@@ -226,7 +225,7 @@ DwtCheckbox.__handleClick = function(evt) {
     selEv.item = this;
     selEv.detail = target.checked;
 
-    var checkbox = Dwt.getObjectFromElement(target);
+    var checkbox = DwtControl.findControl(target);
     checkbox.setSelected(target.checked);
     checkbox.notifyListeners(DwtEvent.SELECTION, selEv);
 };

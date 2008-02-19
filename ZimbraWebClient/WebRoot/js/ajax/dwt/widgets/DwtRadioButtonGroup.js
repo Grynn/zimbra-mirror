@@ -31,14 +31,11 @@ DwtRadioButtonGroup = function(radios, selectedId) {
 	this._eventMgr = new AjxEventMgr();
 	
 	for (var id in radios) {
-		this.addRadio(id, radios[id], id == selectedId);
-	}
-	if (selectedId) {
-		this.setSelectedId(selectedId, true);
+		this.addRadio(id, radios[id], (id == selectedId));
 	}
 };
 
-DwtRadioButtonGroup.toString =
+DwtRadioButtonGroup.prototype.toString =
 function() {
 	return "DwtRadioButtonGroup";
 };
@@ -74,7 +71,6 @@ function(id, radioButtonOrValue, selected) {
 	this._radioButtons[id] = radioButton;
 	var handler = AjxCallback.simpleClosure(this._handleClick, this);
 	Dwt.setHandler(element, DwtEvent.ONCLICK, handler);
-    Dwt.associateElementWithObject(element, this);
    	element.checked = selected;
     if (selected) {
     	this._selectedId = id;

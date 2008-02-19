@@ -35,7 +35,7 @@
  *											using z-index. See Dwt.js for various layering constants
  */
 DwtShell = function(params) {
-	if (window._dwtShell != null) {
+	if (window._dwtShellId) {
 		throw new DwtException("DwtShell already exists for window", DwtException.INVALID_OP, "DwtShell");
 	}
 
@@ -45,8 +45,6 @@ DwtShell = function(params) {
     // HACK! This is a hack to make sure that the control methods work 
     // with DwtShell since the parent of DwtShell is null. 
 	this.__ctrlInited = true;
-
-	window._dwtShell = AjxCore.assignId(this);
 
 	document.body.style.margin = 0;
 	if (!params.docBodyScrollable) {
@@ -62,7 +60,8 @@ DwtShell = function(params) {
     window.onresize = DwtShell._resizeHdlr;
 
     var htmlElement = document.createElement("div");
-	this._htmlElId = htmlElement.id = Dwt.getNextId();
+	this._htmlElId = window._dwtShellId = htmlElement.id = Dwt.getNextId();
+	DwtControl.ALL_BY_ID[this._htmlElId] = this;
 
 	htmlElement.className = className;
 	htmlElement.style.width = htmlElement.style.height = "100%";
@@ -84,7 +83,6 @@ DwtShell = function(params) {
 		userShellContainer.setSize("100%", "100%");
 		userShellContainer.zShow(true);
 	}
-	Dwt.associateElementWithObject(htmlElement, this);
     this.shell = this;
 
     // Busy overlay - used when we want to enforce a modal busy state
@@ -155,7 +153,7 @@ function() {
 */
 DwtShell.getShell =
 function(win){
-	return AjxCore.objectWithId(win._dwtShell);
+	return DwtControl.fromElementId(win._dwtShellId);
 };
 
 /**
@@ -400,7 +398,7 @@ function(ev) {
 
 DwtShell._preventDefaultSelectPrt =
 function(ev) {
-    var evt = AjxCore.objectWithId(window._dwtShell)._uiEvent;
+    var evt = DwtControl.fromElementId(window._dwtShellId)._uiEvent;
     evt.setFromDhtmlEvent(ev, true);
 
 	if (evt.dwtObj && evt.dwtObj instanceof DwtControl && !evt.dwtObj.preventSelection(evt.target)) {
@@ -419,7 +417,7 @@ function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
 	var target = ev.target ? ev.target : ev.srcElement;
 	
-    var evt = AjxCore.objectWithId(window._dwtShell)._uiEvent;
+    var evt = DwtControl.fromElementId(window._dwtShellId)._uiEvent;
     evt.setFromDhtmlEvent(ev, true);
 	//default behavior
     evt._stopPropagation = true;
@@ -442,7 +440,7 @@ function(ev) {
 /* This the resize handler to track when the browser window size changes */
 DwtShell._resizeHdlr =
 function(ev) {
-	var shell = AjxCore.objectWithId(window._dwtShell);
+	var shell = DwtControl.fromElementId(window._dwtShellId);
 	if (shell.isListenerRegistered(DwtEvent.CONTROL)) {
 	 	var evt = DwtShell.controlEvent;
 	 	evt.reset();

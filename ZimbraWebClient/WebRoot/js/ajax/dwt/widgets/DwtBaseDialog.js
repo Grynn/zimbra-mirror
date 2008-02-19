@@ -337,7 +337,7 @@ DwtBaseDialog.prototype._initializeDragging =
 function(dragHandleId) {
 	var dragHandle = document.getElementById(dragHandleId);
 	if (dragHandle) {
-		var p = Dwt.getSize(AjxCore.objectWithId(window._dwtShell).getHtmlElement());
+		var p = Dwt.getSize(DwtControl.fromElementId(window._dwtShellId).getHtmlElement());
 		var dragObj = document.getElementById(this._htmlElId);
 		var size = this.getSize();
 		var dragEndCb = new AjxCallback(this, this._dragEnd);

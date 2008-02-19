@@ -2951,8 +2951,7 @@ Case_XFormItem.prototype._outputHTML = function () {
 		if(width)
 			element.style.width = width;
 
-		var container = (form.parent instanceof DwtControl) ? form.parent : AjxCore.objectWithId(window._dwtShell);
-//		var shell = AjxCore.objectWithId(window._dwtShell);
+		var container = (form.parent instanceof DwtControl) ? form.parent : DwtControl.fromElementId(window._dwtShellId);
 		if(container) {
 			if(this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr")) {
 				container.addControlListener(new AjxListener(this, this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr")));
@@ -4235,7 +4234,7 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 		createPopupMenumethod.call(this, widget);
 	}
 	var form=this.getForm();
-	var container = (form.parent instanceof DwtControl) ? form.parent : AjxCore.objectWithId(window._dwtShell);
+	var container = (form.parent instanceof DwtControl) ? form.parent : DwtControl.fromElementId(window._dwtShellId);
 	if(container) {
 		if(this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr") && this.cacheInheritedMethod("getCustomHeight", "$getCustomHeight") && this.cacheInheritedMethod("getCustomWidth", "$getCustomWidth")) {
 			container.addControlListener(new AjxListener(this, this.cacheInheritedMethod("resizeHdlr", "$resizeHdlr")));
