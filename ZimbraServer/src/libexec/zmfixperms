@@ -159,6 +159,13 @@ if [ -L ${zimbra_home}/jetty ]; then
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr
     chmod 444 ${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr
   fi
+
+  if [ ! -d ${zimbra_home}/fbqueue ]; then
+    mkdir -p ${zimbra_home}/fbqueue
+  fi
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/fbqueue
+  chmod 755 ${zimbra_home}/fbqueue
+
 fi
 
 if [ -d ${zimbra_home}/ssl ]; then
