@@ -1,0 +1,134 @@
+<html>
+<head>
+<style type='text/css'>
+@media print {
+	BUTTON { display: none; }
+	INPUT { border: none; }
+}
+</style>
+<script language='JavaScript' src='perf-array.js'></script>
+<script language='JavaScript' src='perf-string.js'></script>
+<script language='JavaScript' src='perf-object.js'></script>
+<script language='JavaScript' src='perf-js.js'></script>
+<script language='JavaScript' src='perf-dom.js'></script>
+<script language='JavaScript'>
+var TEST_SETS = [ STRING_TESTS, ARRAY_TESTS, OBJECT_TESTS, JS_TESTS, DOM_TESTS ];
+
+TEST_SETS.total = 0;
+for (var i = 0; i < TEST_SETS.length; i++) {
+	TEST_SETS.total += TEST_SETS[i].tests.length;
+}
+
+function onLoad() {
+	var a = [ 
+		"<h2>",navigator.userAgent,"</h2>",
+		"<button id='runAll' onclick='runAllTests()'>Run All</button>",
+		"&nbsp;&nbsp;",
+		"<button onclick='generatePrintable()'>Printable Version</button>"
+	];
+	var total = 0;
+	for (var i = 0; i < TEST_SETS.length; i++) {
+		var TEST_SET = TEST_SETS[i];
+		a.push(
+			"<h3>",
+			"<button onclick='runSomeTests(",total,",",total+TEST_SET.tests.length,")'>Run</button> ",
+			TEST_SET.name,
+			"</h3>"
+		);
+		a.push("<table border='1'>", "<tr><th>Name<th>Iterations<th>Results");
+		for (var j = 0; j < TEST_SET.tests.length; j++) {
+			var test = TEST_SET.tests[j];
+			a.push(
+				"<tr>",
+				"<td><button onclick='runTest(",total,")'>Run</button> ",test.name,
+				"<td><input id='input",total,"' value='",test.iters,"' size='8'>",
+				"<td align='center' id='results",total,"'>---"
+			);
+			total++;
+		}
+		a.push("</table>");
+	}
+	document.body.innerHTML = a.join("");
+}
+function getTest(index) {
+	var total = 0;
+	for (var i = 0; i < TEST_SETS.length; i++) {
+		var TEST_SET = TEST_SETS[i];
+		if (index < total + TEST_SET.tests.length) {
+			return TEST_SET.tests[index - total];
+		}
+		total += TEST_SET.tests.length;
+	}
+	return null;
+}
+function runTest(index) {
+	var iters = parseInt(document.getElementById("input"+index).value);
+	var resultsEl = document.getElementById("results"+index);
+	var args = [ iters, resultsEl ];
+	var test = getTest(index);
+	test.func.apply(this, test.args ? args.concat(test.args) : args);
+}
+function runAllTests() {
+	document.getElementById("runAll").disabled = true;
+	setTimeout("runTestAndContinue(0)", 0);
+}
+function runSomeTests(start, end) {
+	setTimeout("runTestAndContinue("+start+","+end+")", 0);
+}
+function runTestAndContinue(start, end) {
+	runTest(start);
+	end = end != null ? end : TEST_SETS.total;
+	if (start + 1 < end) {
+		setTimeout("runTestAndContinue("+(start+1)+","+end+")", 125);
+	}
+	else {
+		document.getElementById("runAll").disabled = false;
+	}
+}
+
+function generatePrintable() {
+	var content = [];
+	content.push(
+		"<html>",
+		"<body>",
+		"<h2>",navigator.userAgent,"</h2>"
+	);
+	var total = 0;
+	for (var i = 0; i < TEST_SETS.length; i++) {
+		var TEST_SET = TEST_SETS[i];
+		content.push(
+			"<h3>",TEST_SET.name,"</h3>",
+			"<table border='1'>", 
+			"<tr><th>Name<th>Iterations<th>Results"
+		);
+		for (var j = 0; j < TEST_SET.tests.length; j++) {
+			var test = TEST_SET.tests[j];
+			var input = this.document.getElementById("input"+total);
+			var results = this.document.getElementById("results"+total);
+			content.push(
+				"<tr>",
+				"<td>",test.name,
+				"<td align='right'>",input.value,
+				"<td align='center'>",results.innerHTML
+			);
+			total++;
+		}
+		content.push(
+			"</table>"
+		);
+	}
+	content.push(
+		"</body>",
+		"</html>"
+	);
+
+	var window = open();
+	var document = window.document;
+	document.open();
+	document.write(content.join("\n"));
+	document.close();
+}
+</script>
+</head>
+<body onload='onLoad()'></body>
+</html>
