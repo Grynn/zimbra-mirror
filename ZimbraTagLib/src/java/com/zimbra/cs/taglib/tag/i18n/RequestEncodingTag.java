@@ -24,11 +24,32 @@ import javax.servlet.jsp.tagext.*;
 public class RequestEncodingTag extends SimpleTagSupport  {
 
 	//
+	// Data
+	//
+
+	protected String value;
+
+	//
+	// Public methods
+	//
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	//
 	// SimpleTag methods
 	//
 
 	public void doTag() throws JspException, IOException {
-		throw new JspException("TODO: RequestEncodingTag");
+		PageContext pageContext = (PageContext)getJspContext();
+
+		String encoding = this.value;
+		if (encoding == null) encoding = pageContext.getResponse().getCharacterEncoding();
+		pageContext.getRequest().setCharacterEncoding(encoding);
+
+		// clear state
+		this.value = null;
 	}
 
 } // class RequestEncodingTag

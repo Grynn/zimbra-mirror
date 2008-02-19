@@ -8,17 +8,32 @@
 		MAP.put("long",		DateFormat.LONG);
 		MAP.put("full",		DateFormat.FULL);
 	}
+
+	static Locale getLocale(String s) {
+		StringTokenizer tok = new StringTokenizer(s, "_-");
+		String language = tok.nextToken();
+		if (tok.hasMoreTokens()) {
+			String country = tok.nextToken();
+			if (tok.hasMoreTokens()) {
+				String variant = tok.nextToken();
+				return new Locale(language, country, variant);
+			}
+			return new Locale(language, country);
+		}
+		return new Locale(language);
+	}
 %>
 <%
 	String type = request.getParameter("type");
 	int length = MAP.get(request.getParameter("length"));
+	Locale locale = getLocale(request.getParameter("locale"));
 
 	String pattern = "";
 	if ("date".equals(type)) {
-		pattern = ((SimpleDateFormat)DateFormat.getDateInstance(length)).toPattern();
+		pattern = ((SimpleDateFormat)DateFormat.getDateInstance(length, locale)).toPattern();
 	}
 	if ("time".equals(type)) {
-		pattern = ((SimpleDateFormat)DateFormat.getTimeInstance(length)).toPattern();
+		pattern = ((SimpleDateFormat)DateFormat.getTimeInstance(length, locale)).toPattern();
 	}
 
 	pageContext.setAttribute("pattern", pattern);

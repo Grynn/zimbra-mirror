@@ -90,15 +90,17 @@ public class ParseDateTag extends BodyTagSupport {
 	//
 
 	public int doStartTag() throws JspException {
-		return EVAL_BODY_BUFFERED;
+		return this.value == null ? EVAL_BODY_BUFFERED : SKIP_BODY;
+	}
+
+	public int doAfterBody() throws JspException {
+		this.value = getBodyContent().getString().trim();
+		return SKIP_BODY;
 	}
 
 	public int doEndTag() throws JspException {
+		PageContext pageContext = this.pageContext;
 		String value = this.value;
-		if (value == null) {
-			value = (String) I18nUtil.evaluate(pageContext, getBodyContent().getString(), String.class);
-		}
-
 		Locale locale = this.locale;
 		if (locale == null) locale = I18nUtil.findLocale(pageContext);
 
@@ -138,6 +140,10 @@ public class ParseDateTag extends BodyTagSupport {
 		// output
 		if (this.var == null) {
 			try {
+				// NOTE: The JSTL impl doesn't use the default formatter
+				//       but that defeats the whole purpose. So we'll do
+				//       the right thing.
+				// TODO: use default formatter
 				pageContext.getOut().print(date);
 			}
 			catch (IOException e) {

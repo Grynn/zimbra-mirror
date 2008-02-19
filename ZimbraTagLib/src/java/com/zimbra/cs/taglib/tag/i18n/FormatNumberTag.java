@@ -118,8 +118,12 @@ public class FormatNumberTag extends BodyTagSupport  {
 
 		// create formatter
 		Locale locale = I18nUtil.findLocale(pageContext);
-		NumberFormat formatter = this.pattern != null ? new DecimalFormat(this.pattern) : null;
-		if (formatter == null) {
+		NumberFormat formatter;
+		if (this.pattern != null) {
+			DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
+			formatter = new DecimalFormat(this.pattern, symbols);
+		}
+		else {
 			String type = this.type != null ? this.type : I18nUtil.DEFAULT_NUMBER_TYPE_NAME;
 			if (I18nUtil.TYPE_NUMBER.equals(type)) {
 				formatter = NumberFormat.getNumberInstance(locale);

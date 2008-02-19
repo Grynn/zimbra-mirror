@@ -8,6 +8,7 @@
 <jsp:useBean id="now" class='java.util.Date' scope="request" />
 
 <h2>${requestScope.now}</h2>
+<li>parse to output: <fmt:parseDate value='200601016' pattern="yyyyMMdd" /></li>
 
 <jsp:include page="parseDate_section.jsp">
 	<jsp:param name="timeZone" value="PST" />

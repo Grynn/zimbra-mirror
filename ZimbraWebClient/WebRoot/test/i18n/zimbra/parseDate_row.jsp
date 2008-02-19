@@ -1,4 +1,5 @@
 <%@ page import="java.text.*,java.util.*" %>
+<%@ page import="com.zimbra.cs.taglib.tag.i18n.*" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 <%!
 	static final Map<String,Integer> MAP = new HashMap<String,Integer>();
@@ -12,13 +13,14 @@
 <%
 	String type = request.getParameter("type");
 	int length = MAP.get(request.getParameter("length"));
+	Locale locale = I18nUtil.findLocale(pageContext);
 
 	String pattern = "";
 	if ("date".equals(type)) {
-		pattern = ((SimpleDateFormat)DateFormat.getDateInstance(length)).toPattern();
+		pattern = ((SimpleDateFormat)DateFormat.getDateInstance(length, locale)).toPattern();
 	}
 	if ("time".equals(type)) {
-		pattern = ((SimpleDateFormat)DateFormat.getTimeInstance(length)).toPattern();
+		pattern = ((SimpleDateFormat)DateFormat.getTimeInstance(length, locale)).toPattern();
 	}
 
 	pageContext.setAttribute("pattern", pattern);
