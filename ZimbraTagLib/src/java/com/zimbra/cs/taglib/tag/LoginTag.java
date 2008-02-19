@@ -18,6 +18,7 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.ZJspSession;
+import com.zimbra.cs.zclient.ZAuthToken;
 import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZMailbox;
 
@@ -123,16 +124,23 @@ public class LoginTag extends ZimbraSimpleTag {
             boolean needRefer = (refer != null && !refer.equalsIgnoreCase(serverName));
 
             if ((mAuthToken == null || mAuthTokenInUrl) && !needRefer) {
-                Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, mbox.getAuthToken().getValue());
+                // Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, mbox.getAuthToken().getValue());
+                ZAuthToken zat = mbox.getAuthToken();
+                Cookie[] authTokenCookies = zat.toCookies(false);
+                Integer maxAge = null;
                 if (mRememberMe) {
                     ZAuthResult authResult = mbox.getAuthResult();
                     long timeLeft = authResult.getExpires() - System.currentTimeMillis();
-                    if (timeLeft > 0) authTokenCookie.setMaxAge((int) (timeLeft/1000));
+                    if (timeLeft > 0) maxAge = new Integer((int)(timeLeft/1000));
                 } else {
-                    authTokenCookie.setMaxAge(-1);
+                    maxAge = new Integer(-1);
                 }
-                authTokenCookie.setPath("/");
-                response.addCookie(authTokenCookie);
+                for (Cookie authTokenCookie : authTokenCookies) {
+                    if (maxAge != null)
+                        authTokenCookie.setMaxAge(maxAge.intValue());
+                    authTokenCookie.setPath("/");
+                    response.addCookie(authTokenCookie);
+                }
             }
 
             //if (!needRefer)

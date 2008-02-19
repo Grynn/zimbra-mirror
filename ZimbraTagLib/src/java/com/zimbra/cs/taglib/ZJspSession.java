@@ -45,6 +45,7 @@ public class ZJspSession {
     public static final String ATTR_SESSION = ZJspSession.class.getCanonicalName()+".session";
     private static final String ATTR_TEMP_AUTHTOKEN = ZJspSession.class.getCanonicalName()+".authToken";    
  
+    // AP-TODO: COOKIE_NAME is no longer used, retire
     public static final String COOKIE_NAME = "ZM_AUTH_TOKEN";
     public static final String ZM_LAST_SERVER_COOKIE_NAME = "ZM_LAST_SERVER";
 
@@ -340,15 +341,11 @@ public class ZJspSession {
         if (authToken != null) return authToken;
         
         HttpServletRequest request= (HttpServletRequest) context.getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) return null;
-        for (Cookie c : cookies){
-            if (c.getName().equals(COOKIE_NAME)) {
-                return new ZAuthToken(null, c.getValue(), null);
-            }
-            // AP-TODO-21: what to do with Yahoo Y&T cookies?
-        }
-        return null;
+        ZAuthToken zat = new ZAuthToken(request, false);
+        if (zat.isEmpty())
+            return null;
+        else
+            return zat;
     }
 
     public static boolean hasSession(PageContext context) {

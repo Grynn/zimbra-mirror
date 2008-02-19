@@ -25,16 +25,15 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 
+import com.zimbra.cs.zclient.ZAuthToken;
+
 public class LogoutTag extends ZimbraSimpleTag {
     
     public void doTag() throws JspException, IOException {
         JspContext jctxt = getJspContext();
         PageContext pageContext = (PageContext) jctxt;
-        HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();            
-        Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, "");
-        authTokenCookie.setMaxAge(0);
-        authTokenCookie.setPath("/");
-        response.addCookie(authTokenCookie);
+        HttpServletResponse response = (HttpServletResponse) pageContext.getResponse(); 
+        ZAuthToken.clearCookies(response);
         ZJspSession.clearSession((PageContext)jctxt);
     }
 }
