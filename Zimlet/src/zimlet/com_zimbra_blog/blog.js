@@ -28,41 +28,47 @@ Com_Zimbra_Blog.prototype = new ZmZimletBase();
 Com_Zimbra_Blog.prototype.constructor = Com_Zimbra_Blog;
 
 Com_Zimbra_Blog.prototype.init = function(){
-	
 	DBG.println(AjxDebug.DBG1,"Blog  Zimlet Initialized");
-	
-	try
+};
+
+Com_Zimbra_Blog.prototype.onShowView = function(viewId, isNewView) {
+	 if (viewId == ZmController.NOTEBOOK_PAGE_EDIT_VIEW){
+	 	this._initPageEditToolbar();
+	 }
+};
+
+Com_Zimbra_Blog.prototype._initPageEditToolbar =
+function() {
+    try
 	{
-		this._composerCtrl = AjxDispatcher.run("GetPageEditController");
+        if(!ZmSetting.NOTEBOOK_ENABLED) return;
+        if(this._toolbar) { return; }
+        
+        this._composerCtrl = AjxDispatcher.run("GetPageEditController");
 		if (!this._composerCtrl) { return; }
 	    this._composerCtrl._blogPost = this;
     	if(!this._composerCtrl._toolbar[ZmController.NOTEBOOK_PAGE_EDIT_VIEW]) {
 	      // initialize the compose controller's toolbar
-    	  DBG.println(AjxDebug.DBG1,"blog zimlet :: initialize the compose controller's toolbar");
 	      this._composerCtrl._initializeToolBar(ZmController.NOTEBOOK_PAGE_EDIT_VIEW);
     	}
-    
+
     	this._toolbar = this._composerCtrl._toolbar[ZmController.NOTEBOOK_PAGE_EDIT_VIEW];	
-    	
+
 		ZmMsg.blogPost = "Post to Blog";
     	ZmMsg.blogPostTooltip = "Post this content to blog";
-	    
 	    ZmMsg["blogPost"] = "Post to Blog";
-	    
+
 	    var op = {textKey: "blogPost", tooltipKey: "blogPostTooltip", image: "Blog-panelIcon"};
-    	var opDesc = ZmOperation.defineOperation(null, op);	    
-	    
+    	var opDesc = ZmOperation.defineOperation(null, op);
     	ZmOperation.addOperation(this._toolbar, opDesc.id, this._toolbar._buttons, 1);
-	    
+
 	    this._toolbar.addSelectionListener(opDesc.id, new AjxListener(this, this._postToBlog));
 	}
 	catch(ex)
 	{
 		DBG.println(AjxDebug.DBG1,"exception in blog init:"+ex);
 	}
-	
 };
-
 
 Com_Zimbra_Blog.prototype._postToBlog = function(ev) {
 	
