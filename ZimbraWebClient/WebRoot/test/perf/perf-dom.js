@@ -214,6 +214,20 @@ function domWalkGetTags(iters, resultsEl) {
 	resultsEl.innerHTML = after - before;
 }
 
+function domGetElementsById(iters, resultsEl) {
+	var id = new Date().getTime();
+	var div = document.createElement("DIV");
+	div.id = id;
+
+	var before = new Date().getTime();
+	for (var i = 0; i < iters; i++) {
+		var element = document.getElementById(id);
+	}
+	var after = new Date().getTime();
+
+	resultsEl.innerHTML = after - before;
+}
+
 var DOM_TESTS = { 
 	name: "DOM Tests", tests: [
 		{ name: "innerHTML", iters: 1000, func: domInnerHTML },
@@ -232,6 +246,7 @@ var DOM_TESTS = {
 		{ name: "reverse children (in tree)", iters: 1000, func: domReverseChildren, args: [true] },
 		{ name: "traverse by index", iters: 100, func: domWalkIndexed },
 		{ name: "traverse by node", iters: 100, func: domWalkNodes },
-		{ name: "get elements by tag name", iters: 100, func: domWalkGetTags }
+		{ name: "get elements by tag name", iters: 100, func: domWalkGetTags },
+		{ name: "get element by id", iters: 100000, func: domGetElementsById }
 	]
 };
