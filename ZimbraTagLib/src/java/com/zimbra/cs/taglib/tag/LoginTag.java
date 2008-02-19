@@ -16,6 +16,8 @@
  */
 package com.zimbra.cs.taglib.tag;
 
+import java.util.Map;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZAuthToken;
@@ -126,7 +128,7 @@ public class LoginTag extends ZimbraSimpleTag {
             if ((mAuthToken == null || mAuthTokenInUrl) && !needRefer) {
                 // Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, mbox.getAuthToken().getValue());
                 ZAuthToken zat = mbox.getAuthToken();
-                Cookie[] authTokenCookies = zat.toCookies(false);
+                Map<String, String> cookieMap = zat.toCookieMap(false);
                 Integer maxAge = null;
                 if (mRememberMe) {
                     ZAuthResult authResult = mbox.getAuthResult();
@@ -135,7 +137,8 @@ public class LoginTag extends ZimbraSimpleTag {
                 } else {
                     maxAge = new Integer(-1);
                 }
-                for (Cookie authTokenCookie : authTokenCookies) {
+                for (Map.Entry<String, String> ck : cookieMap.entrySet()) {
+                    Cookie authTokenCookie = new Cookie(ck.getKey(), ck.getValue());
                     if (maxAge != null)
                         authTokenCookie.setMaxAge(maxAge.intValue());
                     authTokenCookie.setPath("/");
