@@ -90,7 +90,7 @@ DwtListView = function(params) {
 	this._parentEl = this._headerList ? this._listDiv : this.getHtmlElement();
 	
 	this._list = null;
-	this._offset = 0;
+	this.offset = 0;
 	this._headerColCreated = false;
 	this._firstSelIndex = -1;
 	this._tmpPoint = new DwtPoint(0, 0);
@@ -2075,26 +2075,11 @@ function(enabled) {
 	this._sortingEnabled = enabled;
 };
 
-DwtListView.prototype.getOffset = 
-function() { 
-	return this._offset;
-}
-
-DwtListView.prototype.setOffset = 
-function(newOffset) { 
-	this._offset = newOffset;
-}
-
 DwtListView.prototype.getNewOffset = 
 function(bPageForward) {
 	var limit = this.getLimit();
-	var offset = bPageForward ? this._offset + limit : this._offset - limit;
-	
-	// normalize..
-	if (offset < 0) 
-		offset = 0;
-	
-	return offset;
+	var offset = bPageForward ? (this.offset + limit) : (this.offset - limit);
+	return (offset < 0) ? 0 : offset;
 }
 
 DwtListView.prototype.getLimit = 
