@@ -257,6 +257,12 @@ function(buttonId, listener) {
 	this._button[buttonId].addSelectionListener(listener);
 }
 
+DwtDialog.prototype.setEnterListener =
+function(listener) {
+	this.removeAllListeners(DwtEvent.ENTER);
+	this.addEnterListener(listener);
+}
+
 DwtDialog.prototype.associateEnterWithButton =
 function(id) {
 	this._enterButtonId = id;

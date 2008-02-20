@@ -10,13 +10,13 @@
         <toolTipText> Yahoo! Local. Right click for more options </toolTipText>
         <contextMenu>
             <menuItem label="Search" id="SEARCH" />
-            <menuItem label="Search Addr." id="SEARCH_ADDR" />
+            <menuItem label="Search Address" id="SEARCH_ADDR" />
             <menuItem label="Traffic" id="TRAFFIC" />
             <menuItem label="Upcoming" id="UPCOMING"/>
             <menuItem label="My Location" id="MY_LOCATION" />
             <menuItem label="Change Location" id="MANUAL_LOCAION"/>
             <menuItem label="Change Location By Zip" id="MANULA_LOCATION_ZIP"/>
-            <menuItem label="Preference" id="PREFERENCES"/>
+            <menuItem label="Preferences" id="PREFERENCES"/>
         </contextMenu>
     </zimletPanelItem>
 

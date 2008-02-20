@@ -45,11 +45,11 @@
  */
 DwtBaseDialog = function(params) {
 	if (arguments.length == 0) { return; }
+
 	params = Dwt.getParams(arguments, DwtBaseDialog.PARAMS);
 	var parent = params.parent;
 	if (!(parent instanceof DwtShell)) {
-		throw new DwtException("DwtBaseDialog parent must be a DwtShell", 
-							   DwtException.INVALIDPARENT, "DwtDialog");
+		throw new DwtException("DwtBaseDialog parent must be a DwtShell", DwtException.INVALIDPARENT, "DwtDialog");
 	}
 	params.className = params.className || "DwtBaseDialog";
 	params.posStyle = DwtControl.ABSOLUTE_STYLE;
@@ -92,7 +92,8 @@ DwtBaseDialog.PARAMS = ["parent", "className", "title", "zIndex", "mode", "loc",
 DwtBaseDialog.prototype = new DwtComposite;
 DwtBaseDialog.prototype.constructor = DwtBaseDialog;
 
-DwtBaseDialog.prototype.toString = function() {
+DwtBaseDialog.prototype.toString =
+function() {
 	return "DwtBaseDialog";
 };
 
@@ -106,7 +107,7 @@ DwtBaseDialog.prototype.toString = function() {
  * @type number */
 DwtBaseDialog.MODELESS = 1;
 
-/** Modelal dialog
+/** Modal dialog
  * @type number */
 DwtBaseDialog.MODAL = 2;
 
@@ -151,23 +152,22 @@ function(listener) {
 }
 
 /**
-* Makes the dialog visible, and places it. Everything under the dialog will become veiled
-* if we are modal. Note also that popping up a dialog will block keyboard actions from
-* being delivered to the global key action handler (if one is registered). To unblock
-* this call <code>DwtKeyboadManager.prototype.
+* Makes the dialog visible, and places it. Everything under the dialog will
+* become veiled if we are modal. Note also that popping up a dialog will block
+* keyboard actions from being delivered to the global key action handler (if one
+* is registered). To unblock this call <code>DwtKeyboadManager.prototype.
 *
 * @param loc	the desired location
 */
 DwtBaseDialog.prototype.popup =
 function(loc) {
-	if (this._poppedUp) return;
+	if (this._poppedUp) { return; }
 
 	this.applyCaretHack();
-
 	this.cleanup(true);
 	var thisZ = this._zIndex;
-	// if we're modal, setup the veil effect,
-	// and track which dialogs are open
+
+	// if we're modal, setup the veil effect, and track which dialogs are open
 	if (this._mode == DwtBaseDialog.MODAL) {
 		thisZ = this._setModalEffect(thisZ);
 	}
@@ -193,12 +193,12 @@ function(loc) {
 	this._tabGroup.resetFocusMember(true);
 
 	this.notifyListeners(DwtEvent.POPUP, this);
-}
+};
 
 DwtBaseDialog.prototype.focus = 
 function () {
-	// if someone is listening for the focus to happen, give 
-	// control to them, otherwise focus on this dialog.
+	// if someone is listening for the focus to happen, give control to them,
+	// otherwise focus on this dialog.
 	if (this.isListenerRegistered(DwtEvent.ONFOCUS)) {
 		this.notifyListeners(DwtEvent.ONFOCUS);
 	} else if (this._focusElementId){
@@ -255,8 +255,9 @@ function() {
 DwtBaseDialog.prototype.setView =
 function(newView) {
 	this.reset();
-	if (newView)
+	if (newView) {
 		this._getContentDiv().appendChild(newView.getHtmlElement());
+	}
 };
 
 /**
