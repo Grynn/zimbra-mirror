@@ -432,3 +432,34 @@ function(params) {
 AjxUtil.byNumber = function(a, b) {
 	return Number(a) - Number(b);
 };
+
+AjxUtil.LOG = {};
+
+/**
+ * Enable logging for the given type.
+ * 
+ * @param type		[string]		key for this msg
+ * @param enable	[boolean]		if true, enable logging for this type
+*/
+AjxUtil.enableLogType =
+function(type, enable) {
+	if (enable) {
+		AjxUtil.LOG[type] = [];
+		AjxUtil.LOG[type].push("Log type: " + type);
+	} else {
+		AjxUtil.LOG[type] = null;
+	}
+};
+
+/**
+ * Logs a message with a particular key into memory, for on-demand output later.
+ * A key is a way to group related messages together.
+ * 
+ * @param type		[string]		key for this msg
+ * @param msg		[string]		text to log
+ */
+AjxUtil.log =
+function(type, msg) {
+	if (!AjxUtil.LOG[type]) { return; }
+	AjxUtil.LOG[type].push(msg);
+};
