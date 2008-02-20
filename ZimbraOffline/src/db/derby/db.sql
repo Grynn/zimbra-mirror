@@ -84,6 +84,7 @@ CREATE TABLE mailbox (
    comment            VARCHAR(255),               -- usually the main email address originally associated with the mailbox
    last_soap_access   INTEGER NOT NULL DEFAULT 0,
    new_messages       INTEGER NOT NULL DEFAULT 0,
+   idx_deferred_count INTEGER NOT NULL DEFAULT 0,
 
    CONSTRAINT pk_mailbox PRIMARY KEY (id),
    CONSTRAINT ui_mailbox_account_id UNIQUE (account_id),
