@@ -322,6 +322,9 @@ function(text) {
 
 DwtSelect.prototype.dispose =
 function() {
+	this._selectEl = null;
+	this._pseudoItemsEl = null;
+	this._containerEl = null;
 	DwtButton.prototype.dispose.call(this);
 	if (this._internalObjectId)
 		DwtSelect._unassignId(this._internalObjectId);
