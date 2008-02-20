@@ -90,12 +90,7 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
                 }
                 try{
                     if (grant.getArgs().equalsIgnoreCase("true")) {
-                        String subject =
-                            I18nUtil.getLocalizedMessage((PageContext)getJspContext(),
-                                                         "calendarAddShareMailSubject", mGrantorName);
-
-                        sendGrantMail(mbox, mFolderId, mFolderName,
-                                this.mGrantorName, this.mGrantorId, subject, grant.getGranteeId());
+                        sendGrantShareMail(mbox, grant.getGranteeId());
                     }
                 } catch (ServiceException e){
                     // eat the mta exceptions here, we probably need to use bulkmailer here, unclear whether that will
@@ -109,12 +104,71 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
             for (String shareId : mRevokeGrantString.split(";")){
                 if (shareId.length() > 0){
                     ZMailbox.ZActionResult updateResult =
-                        mbox.modifyFolderRevokeGrant(mFolderId, shareId.equals("pub") ? ZGrant.GUID_PUBLIC : shareId);
+                        mbox.modifyFolderRevokeGrant(mFolderId, 
+                                                     shareId.equals("pub") ? 
+                                                     ZGrant.GUID_PUBLIC : shareId);
                 }
             }
         } catch (ServiceException e) {
             throw new JspTagException(e);
         }
+    }
+
+    public ZMailbox.ZSendMessageResponse sendGrantShareMail(ZMailbox mbox, String granteeId)
+            throws ServiceException, JspException {
+
+        return sendMail(mbox, granteeId, "calendarAddShareMailSubject", "calendarAddShareMailBody");
+    }
+
+    public ZMailbox.ZSendMessageResponse sendRevokeShareMail(ZMailbox mbox, String granteeId)
+            throws ServiceException, JspException {
+
+        return sendMail(mbox, granteeId, 
+                        "calendarRevokeShareMailSubject", "calendarRevokeShareMailBody");
+        
+    }
+
+    private ZMailbox.ZSendMessageResponse sendMail(ZMailbox mbox, String granteeId, 
+                                                   String subjectKey, String bodyKey)
+            throws ServiceException, JspException {
+        String subject =
+            I18nUtil.getLocalizedMessage((PageContext)getJspContext(),
+                                         subjectKey, mGrantorName);
+        String acceptShareLink = "/zimbra/y/mcalendars?action=acceptShare" +
+                                 "&oc=" + mFolderName +
+                                 "&oe=" + mbox.getAccountInfo(false).getName() +
+                                 "&od=" + mFolderId;
+        String [] bodyArgs = {mGrantorName, mFolderName, acceptShareLink};
+        String body =
+            I18nUtil.getLocalizedMessage((PageContext)getJspContext(),
+                                         bodyKey, bodyArgs);
+        ZMailbox.ZOutgoingMessage m =
+            getOutgoingMessage(granteeId, subject, body);
+        ZMailbox.ZSendMessageResponse response = mbox.sendMessage(m, null, true);
+
+        return response;
+
+    }
+
+    private ZMailbox.ZOutgoingMessage getOutgoingMessage(String granteeId, String subject, String body )
+            throws ServiceException, JspException {
+
+        List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
+        List<String> messages = null;
+        List<ZMailbox.ZOutgoingMessage.AttachedMessagePart> attachments = null;
+        ZMailbox.ZOutgoingMessage m = new ZMailbox.ZOutgoingMessage();
+
+
+        if (granteeId != null && granteeId.length() > 0)
+            addrs.addAll(ZEmailAddress.parseAddresses(granteeId, ZEmailAddress.EMAIL_TYPE_TO));
+        m.setAddresses(addrs);
+        m.setSubject(subject);
+        m.setMessagePart(new ZMailbox.ZOutgoingMessage.MessagePart(ZMimePartBean.CT_TEXT_HTML, body));
+        m.setMessageIdsToAttach(messages);
+        m.setMessagePartsToAttach(attachments);
+
+        return m;
+
     }
 
     private ArrayList<ZGrantBean> getGrantsFromString (String grantsString) throws ServiceException {
@@ -136,47 +190,6 @@ public class UpdateFolderGrantTag extends ZimbraSimpleTag {
         return grants;
     }
 
-    public ZMailbox.ZSendMessageResponse sendGrantMail(ZMailbox mbox, String folderId, String folderName,
-                                                  String grantorName, String grantorId,
-                                                  String granteeId, String subject)
-            throws ServiceException, JspException {
-            ZMailbox.ZOutgoingMessage m =
-                    getOutgoingMessage(grantorId, grantorName,
-                                       granteeId, subject, folderId, folderName);
-
-            ZMailbox.ZSendMessageResponse response = mbox.sendMessage(m, null, true);
-            //Change this to Java API call to bulkmailer Java interface 
-            return response;
-
-    }
-
-    private ZMailbox.ZOutgoingMessage getOutgoingMessage(String grantorId, String grantorName,
-                                                         String granteeId, String subject, String linkId, String folderName )
-            throws ServiceException, JspException {
-
-        List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
-        List<String> messages = null;
-        List<ZMailbox.ZOutgoingMessage.AttachedMessagePart> attachments = null;
-        ZMailbox.ZOutgoingMessage m = new ZMailbox.ZOutgoingMessage();
-
-        String acceptShareLink = "/zimbra/y/calendar?action=acceptShare&np=1&nn=" +
-                                 folderName + "&ng=" + grantorId + "&nl=" + linkId;
-        String [] bodyArgs = {grantorName, folderName, acceptShareLink};
-        String body =
-                I18nUtil.getLocalizedMessage((PageContext)getJspContext(),
-                            "calendarAddShareMailBody", bodyArgs);
-
-        if (granteeId != null && granteeId.length() > 0)
-            addrs.addAll(ZEmailAddress.parseAddresses(granteeId, ZEmailAddress.EMAIL_TYPE_TO));
-        m.setAddresses(addrs);
-        m.setSubject(subject);
-        m.setMessagePart(new ZMailbox.ZOutgoingMessage.MessagePart(ZMimePartBean.CT_TEXT_HTML, body));
-        m.setMessageIdsToAttach(messages);
-        m.setMessagePartsToAttach(attachments);
-
-        return m;
-
-    }
 
 }
 
