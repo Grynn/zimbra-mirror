@@ -25,7 +25,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 
-import com.zimbra.cs.zclient.ZAuthToken;
+import com.zimbra.common.auth.ZAuthToken;
 
 public class LogoutTag extends ZimbraSimpleTag {
     

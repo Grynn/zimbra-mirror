@@ -16,6 +16,7 @@
  */
 package com.zimbra.cs.account.offline;
 
+import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
@@ -33,7 +34,6 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.zclient.ZAuthToken;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;

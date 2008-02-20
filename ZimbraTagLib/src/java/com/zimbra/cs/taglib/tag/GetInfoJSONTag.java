@@ -16,10 +16,10 @@
  */
 package com.zimbra.cs.taglib.tag;
 
+import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.zclient.ZAuthToken;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;

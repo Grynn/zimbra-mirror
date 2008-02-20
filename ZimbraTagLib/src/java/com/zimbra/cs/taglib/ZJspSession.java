@@ -16,10 +16,10 @@
  */
 package com.zimbra.cs.taglib;
 
+import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.zclient.ZAuthResult;
-import com.zimbra.cs.zclient.ZAuthToken;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.account.Provisioning;
