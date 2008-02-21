@@ -30,6 +30,10 @@ zmsetvars \
 
 pidfile=${zimbra_log_directory}/clamd.pid
 
+if [ ! -d "/opt/zimbra/data/clamav/db" ]; then
+    mkdir -p /opt/zimbra/data/clamav/db
+fi
+
 rewriteconfig() {
   /opt/zimbra/libexec/zmmtaconfig antivirus > /dev/null 2>&1
 }
