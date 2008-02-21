@@ -87,8 +87,8 @@ YahooLocalController = function(zimlet) {
 
 	ZmController.call(this, appCtxt.getShell());
 
-	ZmOperation.registerOp("TRAFFIC", {textKey:"traffic", tooltipKey:"trafficTooltip", image:"YLogo"});
-	ZmOperation.registerOp("UPCOMING",{textKey:"upcoming", tooltipKey:"upcomingTooltip", image:"ULogo"});
+	ZmOperation.registerOp("TRAFFIC", {image:"YLogo"});
+	ZmOperation.registerOp("UPCOMING",{image:"ULogo"});
 	this._listeners = {};
 	this._listeners[ZmOperation.TRAFFIC] = new AjxListener(this, this._trafficListener);
 	this._listeners[ZmOperation.CANCEL] = new AjxListener(this, this._cancelListener);
@@ -249,7 +249,7 @@ ZmController.YMAPS_VIEW = "YAHOOMAPS";
 YahooLocalController.prototype.getMapsView =
 function() {
 	if (!this._mapsView) {
-		this._mapsView = new YahooMaps(appCtxt.getShell(), null, this);
+		this._mapsView = new YahooMaps(appCtxt.getShell(), this);
 	}
 	return this._mapsView;
 };
@@ -308,6 +308,17 @@ function() {
 	// add listeners to the operations
 	for (var i = 0; i < this._toolbar.opList.length; i++) {
 		var button = this._toolbar.opList[i];
+
+		if (button == ZmOperation.UPCOMING) {
+			var b = this._toolbar.getOp(button);
+			b.setText(this._zimlet.getMessage("upcoming"));
+			b.setToolTipContent(this._zimlet.getMessage("upcomingTooltip"));
+		} else if (button == ZmOperation.TRAFFIC) {
+			var b = this._toolbar.getOp(button);
+			b.setText(this._zimlet.getMessage("traffic"));
+			b.setToolTipContent(this._zimlet.getMessage("trafficTooltip"));
+		}
+
 		if (this._listeners[button]) {
 			this._toolbar.addSelectionListener(button, this._listeners[button]);
 		}
