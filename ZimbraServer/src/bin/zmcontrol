@@ -430,7 +430,7 @@ sub checkAvailableServiceSpace {
   my %serviceDirs = ( 
     mailbox => ["/opt/zimbra/store", "/opt/zimbra/db", "/opt/zimbra/index", "/opt/zimbra/redolog"],
     logger => ["/opt/zimbra/logger/db"],
-    mta => ["/opt/zimbra/postfix/spool"]
+    mta => ["/opt/zimbra/data/postfix/spool"]
   );  
   my @dirs = ();
   @dirs = (@dirs, @{$serviceDirs{$service}})

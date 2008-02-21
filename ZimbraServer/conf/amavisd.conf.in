@@ -29,7 +29,7 @@ $daemon_group = 'zimbra';     # (no default;  customary: vscan or amavis)
 
 $mydomain = '@@av_notify_domain@@';   # a convenient default for other settings
 
-$MYHOME   = '/opt/zimbra/amavisd';   # a convenient default for other settings
+$MYHOME   = '/opt/zimbra/data/amavisd';   # a convenient default for other settings
 $TEMPBASE = "$MYHOME/tmp";   # working directory, needs to be created manually
 $ENV{TMPDIR} = $TEMPBASE;    # environment variable TMPDIR
 $QUARANTINEDIR = "$MYHOME/quarantine";

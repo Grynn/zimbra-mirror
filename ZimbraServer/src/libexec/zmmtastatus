@@ -39,7 +39,7 @@ my $verbose = $options{v} ? 1 : 0;
 $verbose = 1 if $debug;
 
 
-my $pidFile="${zimbra_home}/postfix/spool/pid/master.pid";
+my $pidFile="${zimbra_home}/data/postfix/spool/pid/master.pid";
 
 exit (mtaIsRunning() ? 0 : 1);
 

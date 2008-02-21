@@ -162,7 +162,7 @@ chomp $queue_directory;
 $hash_queue_depth = `$ENV{zimbra_home}/bin/postconf -h hash_queue_depth`;
 chomp $hash_queue_depth;
 
-#$queue_directory="/opt/zimbra/postfix/spool";
+#$queue_directory="/opt/zimbra/data/postfix/spool";
 #print STDERR "$queue_directory\n";
 
 my @queues = qw/incoming hold active deferred corrupt/;

@@ -67,12 +67,12 @@ case "$1" in
       exit 0
     fi
 
-    if [ ! -f ${zimbra_home}/clamav/db/daily.cvd ]; then
+    if [ ! -f ${zimbra_home}/data/clamav/db/daily.cvd ]; then
       # Start with the files we ship.
       cp -f ${zimbra_home}/clamav/db/daily.cvd.init \
-        ${zimbra_home}/clamav/db/daily.cvd
+        ${zimbra_home}/data/clamav/db/daily.cvd
       cp -f ${zimbra_home}/clamav/db/main.cvd.init \
-        ${zimbra_home}/clamav/db/main.cvd
+        ${zimbra_home}/data/clamav/db/main.cvd
       # Init the db
       ${zimbra_home}/clamav/bin/freshclam \
         --config-file=${zimbra_home}/conf/freshclam.conf &

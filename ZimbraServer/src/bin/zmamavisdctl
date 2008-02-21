@@ -68,28 +68,28 @@ case "$1" in
       echo "amavisd already running: pid $PID"
       exit 0
     else
-      if [ ! -d /opt/zimbra/amavisd/quarantine ]; then
-        mkdir /opt/zimbra/amavisd/quarantine
+      if [ ! -d /opt/zimbra/data/amavisd/quarantine ]; then
+        mkdir /opt/zimbra/data/amavisd/quarantine
       fi
       if [ ! -d /opt/zimbra/amavisd/db ]; then
         mkdir /opt/zimbra/amavisd/db
       fi
-      if [ ! -d /opt/zimbra/amavisd/tmp ]; then
-        mkdir /opt/zimbra/amavisd/tmp
+      if [ ! -d /opt/zimbra/data/amavisd/tmp ]; then
+        mkdir /opt/zimbra/data/amavisd/tmp
       else 
-        find /opt/zimbra/amavisd/tmp -maxdepth 1 -type d -name 'amavis-*' -exec rm -rf {} \; > /dev/null 2>&1
+        find /opt/zimbra/data/amavisd/tmp -maxdepth 1 -type d -name 'amavis-*' -exec rm -rf {} \; > /dev/null 2>&1
       fi
-      if [ ! -d /opt/zimbra/amavisd/var ]; then
-        mkdir /opt/zimbra/amavisd/var
+      if [ ! -d /opt/zimbra/data/amavisd/var ]; then
+        mkdir /opt/zimbra/data/amavisd/var
       fi
       if [ x$2 = "x" ]; then
         rewriteconfig
       fi
-      if [ ! -f ${zimbra_home}/amavisd/.spamassassin/bayes_toks ]; then
+      if [ ! -f ${zimbra_home}/data/amavisd/.spamassassin/bayes_toks ]; then
         # Initial bayes seeding.
         cp -f ${zimbra_home}/amavisd/.spamassassin/init/* \
-          ${zimbra_home}/amavisd/.spamassassin
-        chmod 644 ${zimbra_home}/amavisd/.spamassassin/bayes*
+          ${zimbra_home}/data/amavisd/.spamassassin/
+        chmod 644 ${zimbra_home}/amavisd/data/.spamassassin/bayes*
       fi
       ${zimbra_home}/amavisd/sbin/amavisd -c \
         ${zimbra_home}/conf/amavisd.conf &

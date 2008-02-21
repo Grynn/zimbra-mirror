@@ -27,16 +27,16 @@ autoTrainSystem() {
 
   timestampit "Starting spamassassin training."
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
-		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
+		--dbpath ${zimbra_home}/data/amavisd/.spamassassin -L --no-sync \
 		--siteconfigpath ${zimbra_home}/conf/spamassassin --spam ${spamdir}
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
-		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
+		--dbpath ${zimbra_home}/data/amavisd/.spamassassin -L --no-sync \
 		--siteconfigpath ${zimbra_home}/conf/spamassassin --ham ${hamdir}
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
 		--siteconfigpath ${zimbra_home}/conf/spamassassin \
-		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
+		--dbpath ${zimbra_home}/data/amavisd/.spamassassin --sync
   timestampit "Finished spamassassin training."
 
   if [ x"$DSPAM" = "xenabled" ]; then
@@ -69,12 +69,12 @@ trainAccountFolder() {
 	${zimbra_home}/libexec/zmspamextract -r -m $USER -o ${tempdir} -q in:${FOLDER}
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
-		--dbpath ${zimbra_home}/amavisd/.spamassassin/ -L --no-sync \
+		--dbpath ${zimbra_home}/data/amavisd/.spamassassin -L --no-sync \
 		--siteconfigpath ${zimbra_home}/conf/spamassassin --${MODE} ${tempdir}
 
 	${zimbra_home}/libexec/sa-learn -p ${zimbra_home}/conf/salocal.cf \
 		--siteconfigpath ${zimbra_home}/conf/spamassassin \
-		--dbpath ${zimbra_home}/amavisd/.spamassassin/ --sync
+		--dbpath ${zimbra_home}/data/amavisd/.spamassassin --sync
   timestampit  "Finished spamassassin $MODE training for $USER using folder $FOLDER"
 
   if [ x"$DSPAM" = "xenabled" ]; then

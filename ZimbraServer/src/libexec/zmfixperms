@@ -229,6 +229,7 @@ if [ -L ${zimbra_home}/clamav ]; then
   chown ${root_user}:${root_group} ${zimbra_home}/clamav-*
 	chown ${root_user}:${root_group} ${zimbra_home}/clamav/*
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/clamav/db
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/clamav/db
 fi
 
 if [ -L ${zimbra_home}/amavisd ]; then
@@ -275,13 +276,13 @@ fi
 
 if [ -L ${zimbra_home}/postfix ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/postfix"
-	if [ ! -d ${zimbra_home}/postfix/spool ]; then
-		mkdir -p ${zimbra_home}/postfix/spool
+	if [ ! -d ${zimbra_home}/data/postfix/spool ]; then
+		mkdir -p ${zimbra_home}/data/postfix/spool
 	fi
 	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix*
 	chown -fR postfix:postfix ${zimbra_home}/postfix/spool
 	chown -fR ${root_user}:postfix ${zimbra_home}/postfix/conf
-	chown -f root ${zimbra_home}/postfix/spool
+	chown -f root ${zimbra_home}/data/postfix/spool
 
 	chmod 777 ${zimbra_home}/postfix/conf
 	chmod -fR 644 ${zimbra_home}/postfix/conf/*
@@ -289,13 +290,13 @@ if [ -L ${zimbra_home}/postfix ]; then
 	chmod -f 755 ${zimbra_home}/postfix/conf/post-install
 
 	# Postfix specific permissions
-	if [ -d ${zimbra_home}/postfix/spool/public ]; then
-		chgrp -f postdrop ${zimbra_home}/postfix/spool/public
+	if [ -d ${zimbra_home}/data/postfix/spool/public ]; then
+		chgrp -f postdrop ${zimbra_home}/data/postfix/spool/public
 	fi
-	if [ -d ${zimbra_home}/postfix/spool/maildrop ]; then
-		chmod 730 ${zimbra_home}/postfix/spool/maildrop
-		chgrp -f postdrop ${zimbra_home}/postfix/spool/maildrop
-		chmod 730 ${zimbra_home}/postfix/spool/maildrop
+	if [ -d ${zimbra_home}/data/postfix/spool/maildrop ]; then
+		chmod 730 ${zimbra_home}/data/postfix/spool/maildrop
+		chgrp -f postdrop ${zimbra_home}/data/postfix/spool/maildrop
+		chmod 730 ${zimbra_home}/data/postfix/spool/maildrop
 	fi
 	if [ -d ${zimbra_home}/postfix/sbin ]; then
 		chgrp -f postdrop ${zimbra_home}/postfix/sbin/postqueue
