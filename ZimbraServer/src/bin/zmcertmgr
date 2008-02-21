@@ -26,7 +26,7 @@ umask 027
 #zimbra_crt=zimbra.crt
 #zimbra_csr=zimbra.csr
 
-platform=`/opt/zimbra/libexec/get_plat_tag.sh 2> /dev/null` || exit 1
+platform=$(/opt/zimbra/libexec/get_plat_tag.sh 2> /dev/null:=UNKNOWN)
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
   zimbra_home \
@@ -75,6 +75,12 @@ commercial_key=${zimbra_comm_cert_directory}/commercial.key
 commercial_crt=${zimbra_comm_cert_directory}/commercial.crt
 commercial_csr=${zimbra_comm_cert_directory}/commercial.csr
 commercial_ca_crt=${zimbra_comm_cert_directory}/commercial_ca.crt
+
+if [ -x "${zimbra_home}/openssl/bin/openssl" ]; then
+  openssl=${zimbra_home}/openssl/bin/openssl
+else
+  openssl=openssl
+fi
 
 subject_alt_names=""
 
@@ -180,7 +186,7 @@ createCAKey() {
 
   echo -n "** Creating CA private key ${zimbra_ca_key}..."
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
-  openssl req -batch -subj "${SUBJECT}" \
+  ${openssl} req -batch -subj "${SUBJECT}" \
     -config ${zimbra_ca_ssl_conf} \
     -new -newkey rsa:1024 -nodes  \
     -out ${zimbra_ca_csr} \
@@ -204,7 +210,7 @@ createCACert() {
   echo -n "** Creating CA cert ${zimbra_ca_crt}..."
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
-  openssl x509 -trustout \
+  ${openssl} x509 -trustout \
     -signkey ${zimbra_ca_key} \
     -days ${validation_days} \
     -CAserial ${zimbra_ca_srl} \
@@ -256,7 +262,7 @@ createKeystore () {
 
   echo -n "** Creating pkcs12 file ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12..."
 
-  openssl pkcs12 \
+  ${openssl} pkcs12 \
     -inkey ${current_key} -in ${current_crt} -name ${mailboxd_server} \
     -export -out ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12 \
     -passout pass:${mailboxd_keystore_password} > ${tmpfile} 2>&1
@@ -401,11 +407,11 @@ deployCA() {
   echo "done."
 
   # add hash to ca
-  ln -f -s ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
+  ln -f -s ca.pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
   if [ -f "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
     cd ${zimbra_conf_directory}/ca
     for pem in commercial_ca*.pem; do
-      ln -f -s $pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
+      ln -f -s $pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
       chmod 644 ${zimbra_conf_directory}/ca/$pem
     done
   fi
@@ -472,7 +478,7 @@ deployCert () {
   chmod 755 ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
-  ln -f -s ca.pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
+  ln -f -s ca.pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
   chmod 644 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
   if [ -f "${commercial_ca_crt}" ]; then
     cp -f ${commercial_ca_crt} ${zimbra_conf_directory}/ca/commercial_ca.pem
@@ -481,7 +487,7 @@ deployCert () {
     if [ -f "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
       cd ${zimbra_conf_directory}/ca
       for pem in commercial_ca*.pem; do
-        ln -f -s $pem ${zimbra_conf_directory}/ca/`openssl x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
+        ln -f -s $pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
         chmod 644 ${zimbra_conf_directory}/ca/$pem
       done
     fi
@@ -543,7 +549,7 @@ createServerCertReq() {
 
   echo -n "** Creating server cert request ${current_csr}..."
 
-  openssl req -new -nodes -out ${current_csr} -keyout ${current_key} \
+  ${openssl} req -new -nodes -out ${current_csr} -keyout ${current_key} \
     -newkey rsa:1024 -config ${zimbra_cert_ssl_conf} \
     -subj "${SUBJECT}" -batch > ${tmpfile} 2>&1
 
@@ -602,14 +608,14 @@ createServerCert() {
   fi
   
   #echo "validation days = " +   ${validation_days} 
-  openssl ca -out ${server_crt} -notext \
+  ${openssl} ca -out ${server_crt} -notext \
     -config ${zimbra_ca_ssl_conf} \
     -days ${validation_days} \
     -in ${server_csr} -keyfile ${zimbra_ca_key} \
     -extensions v3_req -extfile ${zimbra_ca_ssl_conf} \
     -cert ${zimbra_ca_crt} -batch > ${tmpfile} 2>&1
 
-  #openssl x509 -req -in ${server_csr} \
+  #${openssl} x509 -req -in ${server_csr} \
   #  -CA ${zimbra_ca_crt}  -CAkey ${zimbra_ca_key} \
   #  -days ${validation_days} -CAserial ${zimbra_ca_srl} \
   #  -extensions v3_req -extfile ${zimbra_ssl_conf} \
@@ -660,7 +666,7 @@ viewstagedcrt() {
     echo "$ERROR_PREFIX Certificate file ${current_crt} does not exist."
     usage
   fi 
-  openssl x509  -in ${current_crt} -dates -subject -issuer -noout
+  ${openssl} x509  -in ${current_crt} -dates -subject -issuer -noout
   getsubjectaltnames ${current_crt} crt
 }
 
@@ -680,7 +686,7 @@ getsubjectaltnames() {
       return
   esac
 
-  names=`openssl $req -in ${cert} -text | sed -n '/Subject Alternative Name/{n;p;}' | sed 's/^[ \t]*//' | sed 's/DNS://g'`
+  names=`${openssl} $req -in ${cert} -text | sed -n '/Subject Alternative Name/{n;p;}' | sed 's/^[ \t]*//' | sed 's/DNS://g'`
   echo "SubjectAltName= $names"
 }
 
@@ -698,7 +704,7 @@ viewdeployedcrt() {
     service_crt=/opt/zimbra/conf/smtpd.crt
     echo "::service mta::"
     if [ -f "${service_crt}" ]; then
-      openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+      ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
       getsubjectaltnames $service_crt crt
     else 
       echo "${ERROR_PREFIX} ${service_crt} does not exist"
@@ -709,7 +715,7 @@ viewdeployedcrt() {
     service_crt=/opt/zimbra/conf/nginx.crt
     echo "::service proxy::"
     if [ -f "${service_crt}" ]; then
-      openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+      ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
       getsubjectaltnames $service_crt crt
     else 
       echo "${ERROR_PREFIX} ${service_crt} does not exist"
@@ -731,8 +737,8 @@ viewdeployedcrt() {
     fi
     rm -f $tmpfile 2>/dev/null
     if [ -f "${service_der}" ]; then
-      openssl x509  -inform DER -outform PEM -in ${service_der} -out ${service_crt}
-      openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+      ${openssl} x509  -inform DER -outform PEM -in ${service_der} -out ${service_crt}
+      ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
       getsubjectaltnames $service_crt crt
     else 
       echo "${ERROR_PREFIX} ${service_crt} does not exist"
@@ -743,7 +749,7 @@ viewdeployedcrt() {
     service_crt=/opt/zimbra/conf/slapd.crt
     echo "::service ldap::"
     if [ -f "${service_crt}" ]; then
-      openssl x509  -in ${service_crt} -dates -subject -issuer -noout
+      ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
       getsubjectaltnames $service_crt crt
     else 
       echo "${ERROR_PREFIX} ${service_crt} does not exist"
@@ -773,7 +779,7 @@ showcsr() {
     usage
   fi
 
-  openssl req -in ${current_csr} -subject -noout
+  ${openssl} req -in ${current_csr} -subject -noout
   getsubjectaltnames ${current_csr} csr
 }
 
@@ -977,8 +983,8 @@ verifycrt() {
     echo "${ERROR_PREFIX} Can't find certificate ${crt} "
     exit 1
   else
-    key_md5=`openssl rsa -noout -modulus -in ${key} | openssl md5`
-    crt_md5=`openssl x509 -noout -modulus -in ${crt} | openssl md5`
+    key_md5=`${openssl} rsa -noout -modulus -in ${key} | ${openssl} md5`
+    crt_md5=`${openssl} x509 -noout -modulus -in ${crt} | ${openssl} md5`
   
     #echo "key_md5=${key_md5}"
     #echo "crt_md5=${crt_md5}"  
@@ -992,7 +998,7 @@ verifycrt() {
   fi
 
   # check validity of the cert
-  result=`openssl verify -purpose sslserver -CAfile $ca_crt $crt`
+  result=`${openssl} verify -purpose sslserver -CAfile $ca_crt $crt`
   if [ x"${result}" = x"${crt}: OK" ]; then
    echo "Valid Certificate: $result"
   else
@@ -1036,8 +1042,8 @@ verifycrtkey() {
     echo "${ERROR_PREFIX} Can't find certificate ${crt} "
     exit 1
   else
-    key_md5=`openssl rsa -noout -modulus -in ${key} | openssl md5`
-    crt_md5=`openssl x509 -noout -modulus -in ${crt} | openssl md5`
+    key_md5=`${openssl} rsa -noout -modulus -in ${key} | ${openssl} md5`
+    crt_md5=`${openssl} x509 -noout -modulus -in ${crt} | ${openssl} md5`
   
     #echo "key_md5=${key_md5}"
     #echo "crt_md5=${crt_md5}"  
@@ -1055,7 +1061,7 @@ verifycrtchain () {
     cafile=$1 
     crt=$2
    
-     result=`openssl verify -purpose sslserver -CAfile $cafile $crt`
+     result=`${openssl} verify -purpose sslserver -CAfile $cafile $crt`
     
     if [ x"${result}" = x"${crt}: OK" ]; then
         echo "Valid Certificate Chain: $result"
