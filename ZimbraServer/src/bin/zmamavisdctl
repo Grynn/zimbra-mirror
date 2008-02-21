@@ -29,6 +29,14 @@ zmsetvars \
 platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 pidfile=${zimbra_home}/log/amavisd.pid
 
+if [ ! -d "/opt/zimbra/data/amavisd/.spamassassin" ]; then
+    mkdir -p /opt/zimbra/data/amavisd/.spamassassin
+fi
+
+if [ ! -d "/opt/zimbra/data/amavisd/db" ]; then
+    mkdir -p /opt/zimbra/data/amavisd/db
+fi
+
 rewriteconfig() {
   /opt/zimbra/libexec/zmmtaconfig amavis > /dev/null 2>&1
 }
@@ -89,7 +97,7 @@ case "$1" in
         # Initial bayes seeding.
         cp -f ${zimbra_home}/amavisd/.spamassassin/init/* \
           ${zimbra_home}/data/amavisd/.spamassassin/
-        chmod 644 ${zimbra_home}/amavisd/data/.spamassassin/bayes*
+        chmod 644 ${zimbra_home}/data/amavisd/.spamassassin/bayes*
       fi
       ${zimbra_home}/amavisd/sbin/amavisd -c \
         ${zimbra_home}/conf/amavisd.conf &
