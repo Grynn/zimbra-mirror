@@ -187,13 +187,13 @@ function(result) {
 	html[idx++] = result.URL;
 	html[idx++] = "'});\">+Contact</a>";
 
-	if (YahooMaps._getZimlet("com_zimbra_asterisk")) {
+	if (appCtxt.getZimletMgr().zimletExists("com_zimbra_asterisk")) {
 		html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._phoneCall('";
 		html[idx++] = result.PHONE;
 		html[idx++] = "');\">Call</a>";
 	}
 
-	if (YahooMaps._getZimlet("com_zimbra_sms")) {
+	if (appCtxt.getZimletMgr().zimletExists("com_zimbra_sms")) {
 		//html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._sendSMS('"+result.PHONE+"');\">SMS</a>";
 		html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._sendSMS({";
 		html[idx++] = " title:'";
@@ -270,24 +270,30 @@ function(params) {
 
 YahooMaps._sendSMS =
 function(params) {
-	var smsZimlet = YahooMaps._getZimlet("com_zimbra_sms");
-	var addrFormat = [
-		params.title, "\n",
-		params.addr, "\n",
-		params.city, ",",
-		params.state, "\n",
-		"Phone:", params.phone, "\n",
-		"Business URL:", params.bizurl, "\n",
-		"For Reviews & more info view ", params.url, "\n"
-	].join("");
-	addrFormat = addrFormat + "\n\nYahoo! Local (local.yahoo.com)";
-	smsZimlet.callHandler("singleClicked",[params.phone,addrFormat]);
+	var zimlets = appCtxt.getZimletMgr().getZimletsHash();
+	var smsZimlet = zimlets ? zimlets["com_zimbra_sms"] : null;
+	if (smsZimlet) {
+		var addrFormat = [
+			params.title, "\n",
+			params.addr, "\n",
+			params.city, ",",
+			params.state, "\n",
+			"Phone:", params.phone, "\n",
+			"Business URL:", params.bizurl, "\n",
+			"For Reviews & more info view ", params.url, "\n"
+		].join("");
+		addrFormat = addrFormat + "\n\nYahoo! Local (local.yahoo.com)";
+		smsZimlet.callHandler("singleClicked", [params.phone, addrFormat]);
+	}
 };
 
 YahooMaps._phoneCall =
 function(phone) {
-	var astrZimlet = YahooMaps._getZimlet("com_zimbra_asterisk");
-	astrZimlet.callHandler("setupCall", [phone]);
+	var zimlets = appCtxt.getZimletMgr().getZimletsHash();
+	var astrZimlet = zimlets ? zimlets["com_zimbra_asterisk"] : null;
+	if (astrZimlet) {
+		astrZimlet.callHandler("setupCall", [phone]);
+	}
 };
 
 YahooMaps._addContact =
@@ -616,20 +622,8 @@ function(params) {
 };
 
 YahooMaps.prototype.getResource =
-function(resrc) {
-	return this._controller._zimlet.getResource(resrc);
-};
-
-YahooMaps._getZimlet =
-function(name) {
-	var zimlets = appCtxt.getZimletMgr().getZimlets();
-	for (var i = 0; i < zimlets.length; i++) {
-		var zimlet = zimlets[i];
-		if (zimlet.name == name) {
-			return zimlet;
-		}
-	}
-	return null;
+function(resource) {
+	return this._controller._zimlet.getResource(resource);
 };
 
 // load external JS API

@@ -6,24 +6,23 @@
     <includeCSS>local.css</includeCSS>
 	<handlerObject>Com_Zimbra_Local</handlerObject>
 
-    <zimletPanelItem label="Local" icon="YLogo">
-        <toolTipText> Yahoo! Local. Right click for more options </toolTipText>
-        <contextMenu>
-            <menuItem label="Search" id="SEARCH" />
-            <menuItem label="Search Address" id="SEARCH_ADDR" />
-            <menuItem label="Traffic" id="TRAFFIC" />
-            <menuItem label="Upcoming" id="UPCOMING"/>
-            <menuItem label="My Location" id="MY_LOCATION" />
-            <menuItem label="Change Location" id="MANUAL_LOCAION"/>
-            <menuItem label="Change Location By Zip" id="MANULA_LOCATION_ZIP"/>
-            <menuItem label="Preferences" id="PREFERENCES"/>
-        </contextMenu>
-    </zimletPanelItem>
+	<zimletPanelItem label="Local" icon="YLogo">
+		<toolTipText> Yahoo! Local. Right click for more options </toolTipText>
+		<contextMenu>
+			<menuItem label="Search" id="SEARCH" />
+			<menuItem label="Search Address" id="SEARCH_ADDR" />
+			<menuItem label="Traffic" id="TRAFFIC" />
+			<menuItem label="Upcoming" id="UPCOMING"/>
+			<menuItem label="My Location" id="MY_LOCATION" />
+			<menuItem label="Change Location" id="MANUAL_LOCAION"/>
+			<menuItem label="Change Location By Zip" id="MANULA_LOCATION_ZIP"/>
+			<menuItem label="Preferences" id="PREFERENCES"/>
+		</contextMenu>
+	</zimletPanelItem>
 
-    <userProperties>
-        <property type="string" name="latitude" maxLength="32" label="Latitude" />
-        <property type="string" name="longitude" maxLength="32" label="Longitude" />
-        <property type="boolean" name="manuallocation" label="Manual Location"/>
-    </userProperties>
-
-</zimlet>    
+	<userProperties>
+		<property type="string" name="latitude" maxLength="32" label="Latitude" />
+		<property type="string" name="longitude" maxLength="32" label="Longitude" />
+		<property type="boolean" name="manuallocation" label="Manual Location"/>
+	</userProperties>
+</zimlet>

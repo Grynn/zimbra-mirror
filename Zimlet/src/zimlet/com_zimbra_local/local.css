@@ -1,13 +1,13 @@
 .ImgYLogo {
-  background: url("ylogo.gif") no-repeat 0 0;
-  width: 16px;
-  height: 16px;
-  overflow: hidden;
+	background: url("ylogo.gif") no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
 }
 
 .ImgULogo {
-  background: url("ylogo.gif") no-repeat 0 0;  
-  width: 16px;
-  height: 16px;
-  overlfow: hidden;
+	background: url("ulogo.png") no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
 };

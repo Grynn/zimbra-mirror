@@ -1,7 +1,7 @@
 <zimletConfig name="com_zimbra_local" version="1.0">
-  <global>
-    <property name="allowedDomains">*.yahoo.com,*.yimg.com,*.yahooapis.com,*.csgnetwork.com,*.maxmind.com</property>
-    <property name="appid">ZimbraMail</property>
-    <property name="upcomingKey">ae7d801cfb</property>
-  </global>
+	<global>
+		<property name="allowedDomains">*.yahoo.com,*.yimg.com,*.yahooapis.com,*.csgnetwork.com,*.maxmind.com</property>
+		<property name="appid">ZimbraMail</property>
+		<property name="upcomingKey">ae7d801cfb</property>
+	</global>
 </zimletConfig>
