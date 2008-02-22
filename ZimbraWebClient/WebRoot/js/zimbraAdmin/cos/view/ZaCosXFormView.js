@@ -299,9 +299,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 								cssStyle:"padding-top:5px; padding-bottom:5px"
 							},
 							{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_general", items :[
-								{ref:ZaCos.A_zimbraPrefImapSearchFoldersEnabled, type:_CHECKBOX_, 
-									msgName:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,
-									label:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled, trueValue:"TRUE", falseValue:"FALSE", 
+								{ref:ZaCos.A_zimbraPrefClientType, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefClientType,
+									label:ZaMsg.NAD_zimbraPrefClientType, labelLocation:_LEFT_, 
 									onChange:ZaTabView.onFormFieldChanged
 								},
 								{ref:ZaCos.A_zimbraPrefShowSearchString, type:_CHECKBOX_, 
@@ -309,25 +308,27 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									label:ZaMsg.NAD_zimbraPrefShowSearchString, trueValue:"TRUE", falseValue:"FALSE", 
 									onChange:ZaTabView.onFormFieldChanged
 								},
-								{ref:ZaCos.A_zimbraPrefUseKeyboardShortcuts, type:_CHECKBOX_, 
-									msgName:ZaMsg.NAD_prefKeyboardShort,label:ZaMsg.NAD_prefKeyboardShort, 
-									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
-								},									
 								{ref:ZaCos.A_zimbraPrefMailInitialSearch, type:_TEXTFIELD_, cssClass:"admin_xform_name_input", 
 									msgName:ZaMsg.NAD_zimbraPrefMailInitialSearch,label:ZaMsg.NAD_zimbraPrefMailInitialSearch, 
 									labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged
 								},
-																
+								{ref:ZaCos.A_zimbraPrefImapSearchFoldersEnabled, type:_CHECKBOX_, 
+									msgName:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled,
+									label:ZaMsg.NAD_zimbraPrefImapSearchFoldersEnabled, trueValue:"TRUE", falseValue:"FALSE", 
+									onChange:ZaTabView.onFormFieldChanged
+								},
+								{ref:ZaCos.A_zimbraPrefUseKeyboardShortcuts, type:_CHECKBOX_, 
+									msgName:ZaMsg.NAD_prefKeyboardShort,label:ZaMsg.NAD_prefKeyboardShort, 
+									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
+								},									
 								{ref:ZaCos.A_zimbraPrefWarnOnExit, type:_CHECKBOX_, 
 									msgName:ZaMsg.NAD_zimbraPrefWarnOnExit,label:ZaMsg.NAD_zimbraPrefWarnOnExit, 
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
 								},
-															
 								{ref:ZaCos.A_zimbraPrefShowSelectionCheckbox, type:_CHECKBOX_, 
 									msgName:ZaMsg.NAD_zimbraPrefShowSelectionCheckbox,label:ZaMsg.NAD_zimbraPrefShowSelectionCheckbox, 
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged
 								},
-
 								{ref:ZaCos.A_zimbraPrefIMAutoLogin, type:_CHECKBOX_, 
 									msgName:ZaMsg.NAD_zimbraPrefIMAutoLogin,label:ZaMsg.NAD_zimbraPrefIMAutoLogin, 
 									trueValue:"TRUE", falseValue:"FALSE", onChange:ZaTabView.onFormFieldChanged

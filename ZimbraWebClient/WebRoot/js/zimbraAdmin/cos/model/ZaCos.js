@@ -70,6 +70,7 @@ ZaCos.A_zimbraMailHostPool = "zimbraMailHostPool";
 ZaCos.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 ZaCos.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 //prefs
+ZaCos.A_zimbraPrefClientType = "zimbraPrefClientType";
 ZaCos.A_zimbraPrefTimeZoneId = "zimbraPrefTimeZoneId";
 ZaCos.A_zimbraAllowAnyFromAddress = "zimbraAllowAnyFromAddress";
 ZaCos.A_zimbraPrefCalendarAlwaysShowMiniCal = "zimbraPrefCalendarAlwaysShowMiniCal";
@@ -502,6 +503,7 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraQuotaWarnMessage, type:_STRING_, ref:"attrs/" + ZaCos.A_zimbraQuotaWarnMessage},
 		
 //pref		
+		{id:ZaCos.A_zimbraPrefClientType,type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraPrefClientType, choices:ZaSettings.clientTypeChoices},
 		{id:ZaCos.A_zimbraPrefTimeZoneId,type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraPrefTimeZoneId, choices:ZaSettings.timeZoneChoices},
 		{id:ZaCos.A_zimbraPrefGroupMailBy, type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraPrefGroupMailBy},
 		{id:ZaCos.A_zimbraPrefIncludeSpamInSearch, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefIncludeSpamInSearch, type:_ENUM_},

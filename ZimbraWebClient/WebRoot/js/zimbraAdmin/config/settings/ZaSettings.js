@@ -248,7 +248,10 @@ ZaSettings.SKIN_LOGOFF_DOM_ID = "skin_container_logoff" ;
 ZaSettings.SKIN_HELP_DOM_ID = "skin_container_help" ;
 ZaSettings.SKIN_DW_DOM_ID = "skin_container_dw" ;
 ZaSettings.SKIN_TABS_DOM_ID = "skin_container_app_tabs" ;
-
+ZaSettings.clientTypeChoices = [
+	{value:"advanced", label:ZaMsg.clientAdvanced},
+	{value:"standard", label:ZaMsg.clientStandard}
+];
 ZaSettings.mailCharsetChoices = [
 	{ value: "Big5" , label: "Big5" } ,
 	{ value: "Big5-HKSCS" , label: "Big5-HKSCS" } ,
