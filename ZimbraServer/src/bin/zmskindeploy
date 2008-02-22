@@ -115,18 +115,4 @@ popd > /dev/null
 
 ${BIN_ROOT}/zmprov mcf +ZimbraInstalledSkin ${SKIN_NAME}
 
-#TODO: If /opt/zimbra/bin/jetty every ships with production, this test
-#      needs to be changed.
-if [ -e ${BIN_ROOT}/jetty ]; then
-    echo "Restarting development server..."
-    ${BIN_ROOT}/jetty stop > /dev/null
-    ${BIN_ROOT}/jetty start > /dev/null
-else
-    echo "Restarting production server (may require password)..."
-    ${BIN_ROOT}/zmmailboxdctl stop > /dev/null
-    ${BIN_ROOT}/zmmailboxdctl start > /dev/null
-fi
-
-echo "    ...skin deployed!"
-
 
