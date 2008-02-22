@@ -567,9 +567,7 @@ ZaResource.myXModel = {
 			constraints: {type:"method", value:
 			   function (value, form, formItem, instance) {				   
 				   if (value){
-					   //var re = ZaDistributionList._validEmailPattern;
-					  // if (AjxUtil.EMAIL_SHORT_RE.test(value)) {
-					  	if(value.lastIndexOf ("@")!=value.indexOf ("@")) {
+					  	if(value.lastIndexOf ("@")==value.indexOf ("@")) {
 						   return value;
 					   } else {
 						   throw ZaMsg.RES_ErrorInvalidContactEmail;
