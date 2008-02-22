@@ -75,6 +75,8 @@ innodb_log_file_size      = ${mysql_innodb_log_file_size}
 innodb_log_buffer_size    = ${mysql_innodb_log_buffer_size}
 innodb_file_per_table
 innodb_open_files         = ${mysql_table_cache}
+innodb_max_dirty_pages_pct = 10
+innodb_flush_method       = O_DIRECT
 
 [mysqld_safe]
 
