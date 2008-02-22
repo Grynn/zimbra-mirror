@@ -6,13 +6,13 @@
 			<regex attrs="ig">\b(mailto:[ ]*)?([0-9a-zA-Z]+[-._+&amp;])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}([\w/_\.]*(\?\S+)?)\b</regex>
 		</matchOn>
 		<contextMenu>
-			<menuItem label="Search" icon="Search" id="SEARCH"/>
-			<menuItem label="Advanced Search" icon="NewContact" id="SEARCHBUILDER"/>
-			<menuItem label="New Email" icon="NewMessage" id="NEWEMAIL"/>
-                        <menuItem label="New IM" icon="ImAvailable" id="NEWIM"/>
-			<menuItem label="Edit Contact" icon="Edit" id="NEWCONTACT"/>
-			<menuItem label="New Filter" icon="Plus" id="NEWFILTER"/>
-			<menuItem label="Go to URL" icon="URL" id="GOTOURL"/>
+			<menuItem label="${msg.search}" icon="Search" id="SEARCH"/>
+			<menuItem label="${msg.advancedSearch}" icon="NewContact" id="SEARCHBUILDER"/>
+			<menuItem label="${msg.newEmail}" icon="NewMessage" id="NEWEMAIL"/>
+            <menuItem label="${msg.newIM}" icon="ImAvailable" id="NEWIM"/>
+			<menuItem label="${msg.newContact}" icon="Edit" id="NEWCONTACT"/>
+			<menuItem label="${msg.newFilter}" icon="Plus" id="NEWFILTER"/>
+			<menuItem label="${msg.goToUrl}" icon="URL" id="GOTOURL"/>
 		</contextMenu>
 	</contentObject>
 </zimlet>
