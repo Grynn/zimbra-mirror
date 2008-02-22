@@ -79,44 +79,63 @@ function(ev) {
 	}
 };
 
+/*
+ * Look for the contact and buddy for the email address string.  
+ */
+Com_Zimbra_Email.prototype._lookup =
+function(address) {
+	var result = {
+		contact: null,
+		buddy: null
+	};
+	if (this._contacts && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+		result.contact = this._contacts.getContactByEmail(address);
+	}
+	if (!result.buddy && appCtxt.get(ZmSetting.IM_ENABLED)) {
+		if (result.contact) {
+			result.buddy = result.contact.getBuddy();
+		}
+		if (!result.buddy) {
+			result.buddy = AjxDispatcher.run("GetRoster").getRosterItem(address);
+		}
+	}
+	return result;
+};
+
 Com_Zimbra_Email.prototype._getHtmlContent =
 function(html, idx, obj) {
 	var content;
 	if (obj instanceof AjxEmailAddress) {
+		var person = this._lookup(obj.address);
 		if (this._contacts && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
-			var contact = this._contacts.getContactByEmail(obj.address);
-			if (contact) {
-				content = AjxStringUtil.htmlEncode(contact.getFullName());
+			var content;
 
-				var pres = contact.getImPresence();
-				// returns NULL if IM app not loaded or IM is disabled
+			if (person.buddy) {
+				var pres = person.buddy.getPresence();
+				var pres_id = Dwt.getNextId();
+				var tmp = [
+					AjxStringUtil.htmlEncode(person.buddy.getDisplayName()),
+					" ",
+					AjxImg.getImageHtml(pres.getIcon(), "display: inline; padding: 1px 8px;", "id=" + pres_id)
+				];
+				content = tmp.join("");
+				var params = {
+					contact : person.contact,
+					buddy   : person.buddy,
+					im_addr : person.buddy.getAddress(),
+					img_id  : pres_id
+				};
+				this._presenceCache.push(params);
 
-				if (pres) {
-					var pres_id = Dwt.getNextId();
-					var tmp = [
-						content,
-						" ",
-						AjxImg.getImageHtml(pres.getIcon(), "display: inline; padding: 1px 8px;", "id=" + pres_id)
-					];
-					content = tmp.join("");
-					var buddy = contact.getBuddy();
-					if (buddy) {
-						var params = {
-							contact : contact,
-							buddy   : buddy,
-							im_addr : buddy.getAddress(),
-							img_id  : pres_id
-						};
-						this._presenceCache.push(params);
-	
-						if (this._presenceCache.length > 50) {
-							// 50 should be enough.. maybe should be even smaller?
-							this._presenceCache.splice(0, 1);
-						}
-	
-						this._getRoster();
-					}
+				if (this._presenceCache.length > 50) {
+					// 50 should be enough.. maybe should be even smaller?
+					this._presenceCache.splice(0, 1);
 				}
+
+				this._getRoster();
+			}
+			else if (person.contact) {
+				content = AjxStringUtil.htmlEncode(person.contact.getFullName());
 			}
 		}
 		if (!content) {
@@ -159,6 +178,11 @@ function(obj, span, context) {
 	// call base class first to get the action menu
 	var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
 
+	var addr = (obj instanceof AjxEmailAddress) ? obj.getAddress() : obj;
+	if (this.isMailToLink(addr)) {
+		addr = (this.parseMailToLink(addr)).to || addr;
+	}
+	var person = this._lookup(addr);
 	if (!appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		// make sure to remove adding new contact menu item if contacts are disabled
 		if (actionMenu.getOp("NEWCONTACT")) {
@@ -168,21 +192,14 @@ function(obj, span, context) {
 		// bug fix #5262 - Change action menu item for contact depending on
 		// whether email address is found in address book or not.
 		if (this._contacts) {
-			var addr = (obj instanceof AjxEmailAddress) ? obj.getAddress() : obj;
-			if (this.isMailToLink(addr)) {
-				addr = (this.parseMailToLink(addr)).to || addr;
-			}
-
-			var contact = this._contacts.getContactByEmail(addr);
-			var newOp = contact ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
-			var newText = contact ? null : ZmMsg.AB_ADD_CONTACT;
+			var newOp = person.contact ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
+			var newText = person.contact ? null : ZmMsg.AB_ADD_CONTACT;
 			ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
 
-			if (actionMenu.getOp("NEWIM")) {
-				var buddy = contact ? contact.getBuddy() : null;
-				actionMenu.getOp("NEWIM").setEnabled(buddy != null);
-			}
 		}
+	}
+	if (actionMenu.getOp("NEWIM")) {
+		actionMenu.getOp("NEWIM").setEnabled(person.buddy != null);
 	}
 
 	if (actionMenu.getOp("SEARCH") && !appCtxt.get(ZmSetting.SEARCH_ENABLED)) {
@@ -270,12 +287,9 @@ function() {
 
 Com_Zimbra_Email.prototype._newImListener =
 function() {
-	var contact = this._getActionedContact();
-	if (contact) {
-		var buddy = contact.getBuddy();
-		if (buddy) {
-			AjxDispatcher.run("GetChatListController").chatWithRosterItem(buddy);
-		}
+	var person = this._lookup(this._getAddress(this._actionObject));
+	if (person.buddy) {
+		AjxDispatcher.run("GetChatListController").chatWithRosterItem(person.buddy);
 	}
 };
 
