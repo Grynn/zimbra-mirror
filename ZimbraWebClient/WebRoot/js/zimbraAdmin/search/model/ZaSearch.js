@@ -113,7 +113,7 @@ ZaSearch.standardAttributes = [ZaAccount.A_displayname,
 * */
 ZaSearch.searchDirectory = 
 function (params) {
-	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
 	if(params.query) {
 		soapDoc.set("query", params.query);
 		ZaSearch._currentQuery = params.query ;
@@ -186,7 +186,7 @@ ZaSearch.handleTooManyResultsException = function (ex, from) {
 }
 
 ZaSearch.findAccount = function(by, val) {
-	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.getMethod().setAttribute("limit", "1");
 	var query = ["(",by,"=",val,")"].join("");
 	soapDoc.set("query", query);
@@ -292,7 +292,7 @@ function(query, types, pagenum, orderby, isascending, app, attrs, limit, domainN
 	var offset = (pagenum-1) * limit;
 	attrs = (attrs != null)? attrs: ZaSearch.standardAttributes;
 	/*
-	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("SearchDirectoryRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("query", query);
 	if (domainName != null) {
 		soapDoc.getMethod().setAttribute("domain", domainName);
@@ -472,7 +472,7 @@ function (domainName, controller) {
 //         		The object is {name: "saved search name", query : "saved search query" }
 ZaSearch.modifySavedSearches =
 function (savedSearchArray, callback) {
-	var soapDoc = AjxSoapDoc.create("ModifyAdminSavedSearchesRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyAdminSavedSearchesRequest", ZaZimbraAdmin.URN, null);
 	for (var i=0; i < savedSearchArray.length; i ++) {
 		var cSavedSearch = savedSearchArray[i] ;
 		var el = soapDoc.set("search", cSavedSearch.query) ;
@@ -493,7 +493,7 @@ function (savedSearchArray, callback) {
 //@param searchNameArr: the array contains all the saved search names whose queries will be returned.
 ZaSearch.getSavedSearches = 
 function (searchNameArr, callback) {
-	var soapDoc = AjxSoapDoc.create("GetAdminSavedSearchesRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetAdminSavedSearchesRequest", ZaZimbraAdmin.URN, null);
 	if (searchNameArr) {
 		for (var i=0; i < searchNameArr.length; i ++) {
 			var el = soapDoc.set("search", "") ;

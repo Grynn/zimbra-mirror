@@ -411,7 +411,7 @@ ZaServer.prototype.toString = function() {
 
 ZaServer.getAll =
 function(app) {
-	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	
 //	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
@@ -550,7 +550,7 @@ ZaServer.modifyMethod = function (tmpObj) {
 	}	
 		
 	//create a ModifyServerRequest SOAP request
-	var soapDoc = AjxSoapDoc.create("ModifyServerRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyServerRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	//get the list of changed fields
 	var mods = new Object();
@@ -621,7 +621,7 @@ function() {
 
 ZaServer.prototype.remove = 
 function() {
-	var soapDoc = AjxSoapDoc.create("DeleteServerRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("DeleteServerRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
@@ -642,7 +642,7 @@ ZaServer.loadMethod =
 function(by, val, withConfig) {
 	var _by = by ? by : "id";
 	var _val = val ? val : this.id
-	var soapDoc = AjxSoapDoc.create("GetServerRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetServerRequest", ZaZimbraAdmin.URN, null);
 	if(withConfig) {
 		soapDoc.getMethod().setAttribute("applyConfig", "1");	
 	} else {
@@ -675,7 +675,7 @@ ZaServer.loadNIFS =
 function(by, val, withConfig) {
 	var _by = by ? by : "id";
 	var _val = val ? val : this.id
-	var soapDoc = AjxSoapDoc.create("GetServerNIfsRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetServerNIfsRequest", ZaZimbraAdmin.URN, null);
 	var elBy = soapDoc.set("server", _val);
 	elBy.setAttribute("by", _by);
 	//var command = new ZmCsfeCommand();
@@ -734,7 +734,7 @@ ZaServer.prototype.getCurrentVolumes =
 function () {
 	if(!this.id)
 		return;
-	var soapDoc = AjxSoapDoc.create("GetCurrentVolumesRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetCurrentVolumesRequest", ZaZimbraAdmin.URN, null);
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -766,7 +766,7 @@ function() {
 	this[ZaServer.A_Volumes] = new Array();
 	if(!this.id)
 		return;
-	var soapDoc = AjxSoapDoc.create("GetAllVolumesRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetAllVolumesRequest", ZaZimbraAdmin.URN, null);
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -819,7 +819,7 @@ function (id) {
 	if(!id)
 		return false;
 		
-	var soapDoc = AjxSoapDoc.create("DeleteVolumeRequest", "urn:zimbraAdmin", null);		
+	var soapDoc = AjxSoapDoc.create("DeleteVolumeRequest", ZaZimbraAdmin.URN, null);		
 	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeId, id);	
 	var params = {
 		soapDoc: soapDoc,
@@ -838,7 +838,7 @@ ZaServer.prototype.createVolume =
 function (volume) {
 	if(!volume)
 		return false;
-	var soapDoc = AjxSoapDoc.create("CreateVolumeRequest", "urn:zimbraAdmin", null);		
+	var soapDoc = AjxSoapDoc.create("CreateVolumeRequest", ZaZimbraAdmin.URN, null);		
 	var elVolume = soapDoc.set("volume", null);
 	elVolume.setAttribute("type", volume[ZaServer.A_VolumeType]);
 	elVolume.setAttribute("name", volume[ZaServer.A_VolumeName]);	
@@ -866,7 +866,7 @@ ZaServer.prototype.modifyVolume =
 function (volume) {
 	if(!volume)
 		return false;
-	var soapDoc = AjxSoapDoc.create("ModifyVolumeRequest", "urn:zimbraAdmin", null);		
+	var soapDoc = AjxSoapDoc.create("ModifyVolumeRequest", ZaZimbraAdmin.URN, null);		
 	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeId, volume[ZaServer.A_VolumeId]);	
 	var elVolume = soapDoc.set("volume", null);
 	elVolume.setAttribute("type", volume[ZaServer.A_VolumeType]);
@@ -890,7 +890,7 @@ function (volume) {
 ZaServer.prototype.setCurrentVolume = function (id, type) {
 	if(!id || !type)
 		return false;	
-	var soapDoc = AjxSoapDoc.create("SetCurrentVolumeRequest", "urn:zimbraAdmin", null);		
+	var soapDoc = AjxSoapDoc.create("SetCurrentVolumeRequest", ZaZimbraAdmin.URN, null);		
 	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeType, type);		
 	soapDoc.getMethod().setAttribute(ZaServer.A_VolumeId, id);	
 	var params = {

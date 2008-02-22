@@ -303,7 +303,7 @@ function(tmpObj, app) {
 		return null;
 	}*/	
 
-	var soapDoc = AjxSoapDoc.create("CreateDomainRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("CreateDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("name", tmpObj.attrs[ZaDomain.A_domainName]);
 	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMode]);
 	attr.setAttribute("n", ZaDomain.A_GalMode);	
@@ -423,7 +423,7 @@ function(tmpObj, app) {
 
 ZaDomain.testAuthSettings = 
 function (obj, callback) {
-	var soapDoc = AjxSoapDoc.create("CheckAuthConfigRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("CheckAuthConfigRequest", ZaZimbraAdmin.URN, null);
 	var attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthMech]);
 	attr.setAttribute("n", ZaDomain.A_AuthMech);
 	
@@ -563,7 +563,7 @@ ZaDomain.setNotebookACLs = function (obj, callback) {
 }
 
 ZaDomain.initNotebook = function (obj, callback, controller) {
-	var soapDoc = AjxSoapDoc.create("InitNotebookRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("InitNotebookRequest", ZaZimbraAdmin.URN, null);
 	if(obj[ZaDomain.A_NotebookTemplateDir]) {
 		var attr = soapDoc.set("template", obj[ZaDomain.A_NotebookTemplateDir]);
 		if(obj[ZaDomain.A_NotebookTemplateFolder]) {
@@ -600,7 +600,7 @@ function (obj, callback, sampleQuery) {
 	soapDoc.setMethodAttribute("onerror", "stop");	
 	
 	//search
-	var searchTestReq = soapDoc.set("CheckGalConfigRequest", null, null, "urn:zimbraAdmin");
+	var searchTestReq = soapDoc.set("CheckGalConfigRequest", null, null, ZaZimbraAdmin.URN);
 	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external,searchTestReq);
 	attr.setAttribute("n", ZaDomain.A_GalMode);
 
@@ -628,7 +628,7 @@ function (obj, callback, sampleQuery) {
 	
 	//sync
 	
-	var synchTestReq = soapDoc.set("CheckGalConfigRequest", null, null, "urn:zimbraAdmin");
+	var synchTestReq = soapDoc.set("CheckGalConfigRequest", null, null, ZaZimbraAdmin.URN);
 	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external,synchTestReq);
 	attr.setAttribute("n", ZaDomain.A_GalMode);
 
@@ -693,7 +693,7 @@ function (obj, callback, sampleQuery) {
 
 ZaDomain.modifyGalSettings = 
 function(tmpObj) {
-	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	
 	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_GalMode]);
@@ -738,7 +738,7 @@ function(tmpObj) {
 ZaDomain.modifyAuthSettings = 
 function(tmpObj) {
 
-	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	
 	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthMech]);
@@ -787,7 +787,7 @@ function(tmpObj) {
 }
 
 ZaDomain.prototype.setStatus = function (newStatus) {
-	var soapDoc = AjxSoapDoc.create("ModifyDomainStatusRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyDomainStatusRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 
 	var params = new Object();
@@ -807,7 +807,7 @@ ZaDomain.prototype.setStatus = function (newStatus) {
 /*
 ZaDomain.prototype.modify =
 function(mods,overWriteACLs) {
-	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
 		//multy value attribute
@@ -841,7 +841,7 @@ function(mods,overWriteACLs) {
 
 ZaDomain.modifyMethod =
 function(mods) {
-	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
 		//multy value attribute
@@ -1030,7 +1030,7 @@ function() {
 
 ZaDomain.prototype.remove = 
 function(callback) {
-	var soapDoc = AjxSoapDoc.create("DeleteDomainRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("DeleteDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
@@ -1063,7 +1063,7 @@ function(by, val) {
 			}
 		}*/];
 
-	var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);
 	var elBy = soapDoc.set("domain", val);
 	elBy.setAttribute("by", by);
 	

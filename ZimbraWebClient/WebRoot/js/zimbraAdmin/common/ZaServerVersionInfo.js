@@ -22,11 +22,11 @@ ZaServerVersionInfo.load = function () {
 	if (!ZaServerVersionInfo._loaded){
 		var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 		soapDoc.setMethodAttribute("onerror", "continue");
-		var versionInfoReq = soapDoc.set("GetVersionInfoRequest", null, null, "urn:zimbraAdmin");
+		var versionInfoReq = soapDoc.set("GetVersionInfoRequest", null, null, ZaZimbraAdmin.URN);
 		
 		
 		//var licenseInfoReq = soapDoc.set("GetLicenseInfoRequest");
-		//licenseInfoReq.setAttribute("xmlns", "urn:zimbraAdmin");
+		//licenseInfoReq.setAttribute("xmlns", ZaZimbraAdmin.URN);
 		var command = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	

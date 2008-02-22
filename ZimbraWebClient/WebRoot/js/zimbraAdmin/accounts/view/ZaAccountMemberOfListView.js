@@ -73,7 +73,7 @@ function (app, val, by){
 	var nonML = [];
 		 
 	try {
-		soapDoc = AjxSoapDoc.create("GetAccountMembershipRequest", "urn:zimbraAdmin", null);
+		soapDoc = AjxSoapDoc.create("GetAccountMembershipRequest", ZaZimbraAdmin.URN, null);
 		var elBy = soapDoc.set("account", val);
 		elBy.setAttribute("by", by);
 
@@ -117,7 +117,7 @@ function (app, val, by){
 	var nonML = [];
 		 
 	try {
-		soapDoc = AjxSoapDoc.create("GetDistributionListMembershipRequest", "urn:zimbraAdmin", null);
+		soapDoc = AjxSoapDoc.create("GetDistributionListMembershipRequest", ZaZimbraAdmin.URN, null);
 		var elBy = soapDoc.set("dl", val);
 		elBy.setAttribute("by", by);
 
@@ -375,7 +375,7 @@ function (account, addArray) {
 	var addMemberSoapDoc, r, addMemberSoapDoc;
 	var command = new ZmCsfeCommand();
 	for (var i = 0; i < len; ++i) {
-		addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
+		addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
 		addMemberSoapDoc.set("id", addArray[i].id); //group id 
 		addMemberSoapDoc.set("dlm", account.name); //account name
 		var params = new Object();
@@ -394,7 +394,7 @@ function (account, removeArray){
 	var addMemberSoapDoc, r, removeMemberSoapDoc;
 	var command = new ZmCsfeCommand();	
 	for (var i = 0; i < len; ++i) {
-		removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", "urn:zimbraAdmin", null);
+		removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
 		removeMemberSoapDoc.set("id", removeArray[i].id);
 		removeMemberSoapDoc.set("dlm", account.name);
 		var params = new Object();

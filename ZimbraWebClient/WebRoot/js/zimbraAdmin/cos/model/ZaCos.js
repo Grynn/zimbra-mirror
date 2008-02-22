@@ -154,7 +154,7 @@ ZaCos.A_zimbraPasswordLockoutFailureLifetime = "zimbraPasswordLockoutFailureLife
 
 ZaCos.loadMethod =
 function (by, val) {
-	var soapDoc = AjxSoapDoc.create("GetCosRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetCosRequest", ZaZimbraAdmin.URN, null);
 	var el = soapDoc.set("cos", val);
 	el.setAttribute("by", by);
 	//var command = new ZmCsfeCommand();
@@ -224,7 +224,7 @@ function (obj) {
 **/
 ZaCos.prototype.create = 
 function(name, mods) {
-	var soapDoc = AjxSoapDoc.create("CreateCosRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("CreateCosRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("name", name);
 	for (var aname in mods) {
 		//multy value attribute
@@ -264,7 +264,7 @@ function(name, mods) {
 **/
 ZaCos.prototype.rename = 
 function(newName) {
-	var soapDoc = AjxSoapDoc.create("RenameCosRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("RenameCosRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
 	//var command = new ZmCsfeCommand();
@@ -284,7 +284,7 @@ function(newName) {
 **/
 ZaCos.prototype.remove = 
 function() {
-	var soapDoc = AjxSoapDoc.create("DeleteCosRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("DeleteCosRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
@@ -301,7 +301,7 @@ function() {
 **/
 ZaCos.modifyMethod = 
 function (mods) {
-	var soapDoc = AjxSoapDoc.create("ModifyCosRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyCosRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
 		//multy value attribute
@@ -371,7 +371,7 @@ function() {
 
 ZaCos.getAll =
 function(app) {
-	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", ZaZimbraAdmin.URN, null);	
 	//var getAllCosCmd = new ZmCsfeCommand ();
 	var params = new Object ();
 	params.soapDoc = soapDoc ;
@@ -392,7 +392,7 @@ function(app, container) {
 	if(!(container instanceof ZaItemList)) {
 		throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_ARGUMENT_X_MUST_BE_A, ["container", "ZaItemList"]), AjxException.INVALID_PARAM, "ZaCos.loadAll");
 	}
-	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetAllCosRequest", ZaZimbraAdmin.URN, null);	
 	//var getAllCosCmd = new ZmCsfeCommand ();
 	var params = new Object ();
 	params.soapDoc = soapDoc ;
@@ -427,7 +427,7 @@ function (accountName, cosList, app){
 	var domainCosId ;
 	if (domainName && ((!this._domains) || (!this._domains[domainName]))){
 		//send the GetDomainRequest
-		var soapDoc = AjxSoapDoc.create("GetDomainRequest", "urn:zimbraAdmin", null);	
+		var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);	
 		var domainEl = soapDoc.set("domain", domainName);
 		domainEl.setAttribute ("by", "name");
 		//var getDomainCommand = new ZmCsfeCommand();

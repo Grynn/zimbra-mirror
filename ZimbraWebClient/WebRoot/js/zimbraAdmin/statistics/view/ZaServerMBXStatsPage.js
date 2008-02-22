@@ -91,7 +91,7 @@ ZaServerMBXStatsPage.prototype._render = function (server) {
 //data instance of the xform
 ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortBy, sortAscending  ){
 	var result = { totalPage: 0, curPage:0, mbxes: new Array() };
-	var soapDoc = AjxSoapDoc.create("GetQuotaUsageRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetQuotaUsageRequest", ZaZimbraAdmin.URN, null);
 	
 	this._prevAscending = sortAscending ;
 	this._prevSortBy = sortBy ;

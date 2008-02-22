@@ -68,7 +68,7 @@ ZaSettings.init = function () {
 	
 
 	try {
-		var soapDoc = AjxSoapDoc.create("GetAdminExtensionZimletsRequest", "urn:zimbraAdmin", null);	
+		var soapDoc = AjxSoapDoc.create("GetAdminExtensionZimletsRequest", ZaZimbraAdmin.URN, null);	
 		var command = new ZmCsfeCommand();
 		var params = new Object();
 		params.soapDoc = soapDoc;	

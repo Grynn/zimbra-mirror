@@ -134,7 +134,7 @@ ZaGlobalConfig.loadMethod =
 function(by, val, withConfig) {
 	if(!ZaSettings.GLOBAL_CONFIG_ENABLED)
 		return;
-	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", ZaZimbraAdmin.URN, null);
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -235,7 +235,7 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 
 //ZaGlobalConfig.prototype.modify = 
 ZaGlobalConfig.modifyMethod = function (mods) {
-	var soapDoc = AjxSoapDoc.create("ModifyConfigRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyConfigRequest", ZaZimbraAdmin.URN, null);
 	for (var aname in mods) {
 		//multy value attribute
 		if(mods[aname] instanceof Array) {

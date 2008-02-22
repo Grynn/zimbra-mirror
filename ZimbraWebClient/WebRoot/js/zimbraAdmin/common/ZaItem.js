@@ -361,7 +361,7 @@ function (newAlias) {
 		default: throw new Error("Can't add alias for account type: " + this.type) ;				
 	}
 	
-	var soapDoc = AjxSoapDoc.create(soapCmd, "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("alias", newAlias);	
 	
@@ -389,7 +389,7 @@ function (aliasToRemove) {
 		default: throw new Error("Can't add alias for account type: " + account.type) ;				
 	}
 	
-	var soapDoc = AjxSoapDoc.create(soapCmd, "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("alias", aliasToRemove);	
 	//var command = new ZmCsfeCommand();

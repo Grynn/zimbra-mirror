@@ -179,7 +179,7 @@ ZaDistributionList.prototype.remove = function () {
 
 ZaDistributionList.prototype.remove = 
 function(callback) {
-	var soapDoc = AjxSoapDoc.create("DeleteDistributionListRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("DeleteDistributionListRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	this.deleteCommand = new ZmCsfeCommand();
 	var params = new Object();
@@ -197,7 +197,7 @@ function(callback) {
 **/
 ZaDistributionList.prototype.rename = 
 function (newName) {
-	var soapDoc = AjxSoapDoc.create("RenameDistributionListRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("RenameDistributionListRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
 	//var command = new ZmCsfeCommand();
@@ -219,7 +219,7 @@ function (newName) {
 ZaDistributionList.prototype.modify =
 function(tmpObj, callback) {
 	//update the object
-	var soapDoc = AjxSoapDoc.create("ModifyDistributionListRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyDistributionListRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 
 	for (var aname in tmpObj.attrs) {
@@ -274,7 +274,7 @@ function(tmpObj, callback) {
 ZaDistributionList.create =
 function(tmpObj, callback) {	
 	//create SOAP request
-	var soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set(ZaAccount.A_name, tmpObj.name);
 	var resp;
 	for (var aname in tmpObj.attrs) {
@@ -426,7 +426,7 @@ ZaDistributionList.prototype.getMembers = function (limit) {
 	//DBG.println("Get members: memberList = " , this._memberList, "$");
 	if (this.id != null) {
 		this._memberList = null;
-		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", "urn:zimbraAdmin", null);
+		var soapDoc = AjxSoapDoc.create("GetDistributionListRequest", ZaZimbraAdmin.URN, null);
 		if(!limit)
 			limit = ZaDistributionList.MEMBER_QUERY_LIMIT;
 			
@@ -645,7 +645,7 @@ ZaDistributionList.prototype.addNewMembersAsync = function (obj, finishedCallbac
 	var addMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
 //	var member = list.getLast();
-	addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
+	addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
 	addMemberSoapDoc.set("id", this.id);
 	var len = obj._addList.getArray().length;
 	for (var i = 0; i < len; i++) {
@@ -666,7 +666,7 @@ ZaDistributionList.prototype.addNewMembers = function (list) {
 	var addMemberSoapDoc;
 	//var command = new ZmCsfeCommand();
 	for (var i = 0; i < len; ++i) {
-		addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", "urn:zimbraAdmin", null);
+		addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
 		addMemberSoapDoc.set("id", this.id);
 		addMemberSoapDoc.set("dlm", addArray[i].toString());
 		var params = new Object();
@@ -683,7 +683,7 @@ ZaDistributionList.prototype.removeDeletedMembersAsync = function (list, finishe
 	var removeMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
 	var member = list.getLast();
-	removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", "urn:zimbraAdmin", null);
+	removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
 	removeMemberSoapDoc.set("id", this.id);
 	removeMemberSoapDoc.set("dlm", member.toString());
 	var params = new Object();
@@ -701,7 +701,7 @@ ZaDistributionList.prototype.removeDeletedMembers = function (list) {
 	var addMemberSoapDoc, r, removeMemberSoapDoc;
 	//var command = new ZmCsfeCommand();	
 	for (var i = 0; i < len; ++i) {
-		removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", "urn:zimbraAdmin", null);
+		removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
 		removeMemberSoapDoc.set("id", this.id);
 		removeMemberSoapDoc.set("dlm", removeArray[i].toString());
 		var params = new Object();

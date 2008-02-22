@@ -155,7 +155,7 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 * @return {ZaItemList} a list of ZaMTA objects {@link ZaItemList}
 **/
 ZaMTA.getAll = function (app) {
-	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	
 	soapDoc.getMethod().setAttribute("service", "mta");
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
@@ -276,7 +276,7 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 **/
 ZaMTA.loadMethod = 
 function(by, val, withConfig) {
-	var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", ZaZimbraAdmin.URN, null);
 	var attr = soapDoc.set("server", "");
 	attr.setAttribute("name", this.name);		
 	var command = new ZmCsfeCommand();
@@ -304,7 +304,7 @@ ZaMTA.prototype.getMailQStatus = function (qName,query,offset,limit,force) {
 	offset = (offset != null) ? offset: "0";
 	//query = (query != null) ? query: "";	
 	
-	var soapDoc = AjxSoapDoc.create("GetMailQueueRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetMailQueueRequest", ZaZimbraAdmin.URN, null);
 
 	var serverEl = soapDoc.set("server", "");
 	serverEl.setAttribute("name", this.name);		
@@ -403,7 +403,7 @@ ZaMTA.prototype.mailQStatusCallback = function (arg,resp) {
 }
 
 ZaMTA.prototype.mailQueueAction = function (qName, action, by, val) {
-	var soapDoc = AjxSoapDoc.create("MailQueueActionRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("MailQueueActionRequest", ZaZimbraAdmin.URN, null);
 	var serverEl = soapDoc.set("server", "");
 	serverEl.setAttribute("name", this.name);		
 	var qEl = soapDoc.getDoc().createElement("queue");
@@ -478,7 +478,7 @@ ZaMTA.prototype.mailQueueActionClbck = function (qName, resp) {
 }
 
 ZaMTA.prototype.flushQueues = function () {
-	var soapDoc = AjxSoapDoc.create("MailQueueFlushRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("MailQueueFlushRequest", ZaZimbraAdmin.URN, null);
 	var serverEl = soapDoc.set("server", "");
 	serverEl.setAttribute("name", this.name);		
 

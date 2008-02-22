@@ -53,7 +53,7 @@ function(callback) {
 		default: throw new Error("Can't add alias for account type: " + this.attrs[ZaAlias.A_targetType]) ;				
 	}
 	
-	var soapDoc = AjxSoapDoc.create(soapCmd, "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
 	
 	soapDoc.set("id", this.attrs[ZaAlias.A_AliasTargetId]);
 	soapDoc.set("alias", this.name);
@@ -177,10 +177,10 @@ function (app, val, targetType) {
 	var elBy ;
 	
 	if (targetType == ZaAlias.TARGET_TYPE_DL) {
-		soapDoc = AjxSoapDoc.create("GetDistributionListRequest", "urn:zimbraAdmin", null);
+		soapDoc = AjxSoapDoc.create("GetDistributionListRequest", ZaZimbraAdmin.URN, null);
 		elBy = soapDoc.set("dl", val);
 	}else if (targetType == ZaAlias.TARGET_TYPE_ACCOUNT) {
-		soapDoc = AjxSoapDoc.create("GetAccountRequest", "urn:zimbraAdmin", null);
+		soapDoc = AjxSoapDoc.create("GetAccountRequest", ZaZimbraAdmin.URN, null);
 		elBy = soapDoc.set("account", val);
 	}else {
 		throw new Error ("Alias type " + targetType + " is not valid.") ;

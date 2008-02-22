@@ -205,7 +205,7 @@ function (tabId, hide ){
 
 ZaServerSessionStatsPage.prototype.dumpSession =
 function () {
-	var soapDoc = AjxSoapDoc.create("DumpSessionsRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("DumpSessionsRequest", ZaZimbraAdmin.URN, null);
 	//TODO need to provide the ability to customize the attributes
 	var listSession = "1" ;
 	var groupByAccount = "1" ;
@@ -223,7 +223,7 @@ function () {
 
 ZaServerSessionStatsPage.prototype.getSessions =
 function (params) {
-	var soapDoc = AjxSoapDoc.create("GetSessionsRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetSessionsRequest", ZaZimbraAdmin.URN, null);
 	if (!params) params = {} ;
 	var instance =	this._localXForm.getInstance () ;
 	var currentTabId = instance[ZaModel.currentTab] ;

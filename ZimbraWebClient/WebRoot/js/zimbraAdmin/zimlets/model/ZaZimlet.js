@@ -66,7 +66,7 @@ ZaZimlet.prototype.toString = function() {
 ZaZimlet.getAll =
 function(app, exclude) {
 	var exc = exclude ? exclude : "none";
-	var soapDoc = AjxSoapDoc.create("GetAllZimletsRequest", "urn:zimbraAdmin", null);	
+	var soapDoc = AjxSoapDoc.create("GetAllZimletsRequest", ZaZimbraAdmin.URN, null);	
 	soapDoc.getMethod().setAttribute("exclude", exc);	
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
@@ -93,7 +93,7 @@ function () {
 }
 
 ZaZimlet.prototype.enable = function (enabled, callback) {
-	var soapDoc = AjxSoapDoc.create("ModifyZimletRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyZimletRequest", ZaZimbraAdmin.URN, null);
 	var zimletEl = soapDoc.set("zimlet", "");
 	zimletEl.setAttribute("name", this.name);
 	var statusEl = soapDoc.set("status", "",zimletEl);	
@@ -124,7 +124,7 @@ ZaZimlet.prototype.enable = function (enabled, callback) {
 **/
 ZaZimlet.prototype.modify =
 function(mods) {
-	/*var soapDoc = AjxSoapDoc.create("ModifyZimletRequest", "urn:zimbraAdmin", null);
+	/*var soapDoc = AjxSoapDoc.create("ModifyZimletRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
 		if (mods[aname] instanceof Array) {
@@ -181,7 +181,7 @@ function() {
 
 ZaZimlet.prototype.remove = 
 function() {
-	var soapDoc = AjxSoapDoc.create("UndeployZimletRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("UndeployZimletRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.getMethod().setAttribute("name", this.name);	
 	//soapDoc.set("id", this.id);
 	//var command = new ZmCsfeCommand();
@@ -200,7 +200,7 @@ function() {
 }
 
 ZaZimlet.deploy = function (app, action,attId, callback) {
-	var soapDoc = AjxSoapDoc.create("DeployZimletRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("DeployZimletRequest", ZaZimbraAdmin.URN, null);
 	if(action)
 		soapDoc.getMethod().setAttribute("action", action);		
 		
@@ -227,7 +227,7 @@ ZaZimlet.deploy = function (app, action,attId, callback) {
 ZaZimlet.loadMethod = 
 function(by, val, withConfig) {
 	var _val = val ? val : this.name
-	var soapDoc = AjxSoapDoc.create("GetZimletRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetZimletRequest", ZaZimbraAdmin.URN, null);
 	var elZimlet = soapDoc.set("zimlet", "");
 	elZimlet.setAttribute("name", val);
 	//var command = new ZmCsfeCommand();

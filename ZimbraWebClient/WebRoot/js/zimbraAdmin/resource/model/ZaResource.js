@@ -195,7 +195,7 @@ function (tmpObj, resource, app) {
 	tmpObj.attrs[ZaResource.A_mail] = tmpObj.name;	
 	var resp;	
 	//create SOAP request
-	var soapDoc = AjxSoapDoc.create("CreateCalendarResourceRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("CreateCalendarResourceRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set(ZaResource.A_name, tmpObj.name);
 	
 	if(tmpObj.attrs[ZaResource.A_password] && tmpObj.attrs[ZaResource.A_password].length > 0)
@@ -257,7 +257,7 @@ ZaItem.createMethods["ZaResource"].push(ZaResource.createMethod);
 ZaResource.modifyMethod =
 function(mods) {
 	//update the object
-	var soapDoc = AjxSoapDoc.create("ModifyCalendarResourceRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("ModifyCalendarResourceRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	for (var aname in mods) {
 		//multy value attribute
@@ -297,7 +297,7 @@ ZaItem.modifyMethods["ZaResource"].push(ZaResource.modifyMethod);
 
 ZaResource.prototype.remove = 
 function(callback) {
-	var soapDoc = AjxSoapDoc.create("DeleteCalendarResourceRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("DeleteCalendarResourceRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	this.deleteCommand = new ZmCsfeCommand();
 	var params = new Object();
@@ -449,7 +449,7 @@ function() {
 
 ZaResource.loadMethod = 
 function(by, val, withCos) {
-	var soapDoc = AjxSoapDoc.create("GetCalendarResourceRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("GetCalendarResourceRequest", ZaZimbraAdmin.URN, null);
 	if(withCos) {
 		soapDoc.getMethod().setAttribute("applyCos", "1");	
 	} else {
@@ -511,7 +511,7 @@ function(withCos) {
 **/
 ZaResource.prototype.rename = 
 function (newName) {
-	var soapDoc = AjxSoapDoc.create("RenameCalendarResourceRequest", "urn:zimbraAdmin", null);
+	var soapDoc = AjxSoapDoc.create("RenameCalendarResourceRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("newName", newName);	
 	//var command = new ZmCsfeCommand();
