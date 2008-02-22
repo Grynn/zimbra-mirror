@@ -231,7 +231,6 @@ function () {
 	this._table.width = this._contentW;
 	this._table.cellPadding = this._table.cellSpacing = 0;
 
-	Dwt.associateElementWithObject(this._table, this);
 	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
 	
 	var row1; //_progressBar
