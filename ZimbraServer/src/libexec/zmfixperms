@@ -282,6 +282,7 @@ if [ -L ${zimbra_home}/postfix ]; then
 	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix*
 	chown -fR postfix:postfix ${zimbra_home}/postfix/spool
 	chown -fR ${root_user}:postfix ${zimbra_home}/postfix/conf
+	chown -fR postfix:postfix ${zimbra_home}/data/postfix/spool
 	chown -f root ${zimbra_home}/data/postfix/spool
 	chgrp -f postfix ${zimbra_home}/data/postfix/spool
 
