@@ -145,8 +145,8 @@ function () {
 		this._errorDialog.popup();		
 		return false;
 	}	
-	/*
-	// update zimbraMtaRestriction
+	
+	// update zimbraMtaRestriction (except RBLs)
 	var restrictions = [];
 	for (var i = 0; i < ZaGlobalConfig.MTA_RESTRICTIONS.length; i++) {
 		var restriction = ZaGlobalConfig.MTA_RESTRICTIONS[i];
@@ -170,11 +170,22 @@ function () {
 			}
 		}
 	}
+
+
+	
+	//check RBLs
+	var numRBLs = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length;
+	if( (numRBLs !=  this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length) ||
+		(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].join(""))) {
+		dirty = true;
+	}
+	for(var ix=0;ix<numRBLs;ix++) {
+		restrictions.push("reject_rbl_client "+tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient][ix]);
+	}
+
 	if (dirty) {
 		tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRestriction] = restrictions;
 	}
-*/
-
 	//transfer the fields from the tmpObj to the _currentObject, since _currentObject is an instance of ZaDomain
 	var mods = new Object();
 	for (var a in tmpObj.attrs) {

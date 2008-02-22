@@ -25,6 +25,7 @@ ZaGlobalConfig = function(app) {
 ZaGlobalConfig.prototype = new ZaItem;
 ZaGlobalConfig.prototype.constructor = ZaGlobalConfig;
 ZaItem.loadMethods["ZaGlobalConfig"] = new Array();
+ZaItem.modifyMethods["ZaGlobalConfig"] = new Array();
 
 ZaGlobalConfig.MTA_RESTRICTIONS = [
 	"reject_invalid_hostname", "reject_non_fqdn_hostname", "reject_non_fqdn_sender",
@@ -52,7 +53,7 @@ ZaGlobalConfig.A_zimbraMtaMyNetworks = "zimbraMtaMyNetworks";
 //ZaGlobalConfig.A_zimbraMtaRelayPortInternal = "__zimbraMtaRelayPort";
 ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
 ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP = "zimbraSmtpSendAddOriginatingIP";
-/*
+
 // --protocol checks
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
 ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";
@@ -62,7 +63,8 @@ ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender = "_"+ZaGlobalConfig.A_zimbraMtaRe
 ZaGlobalConfig.A_zimbraMtaRejectUnknownClient = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_client";
 ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_hostname";
 ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_unknown_sender_domain";
-*/
+//rbl check
+ZaGlobalConfig.A_zimbraMtaRejectRblClient = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_rbl_client";
   
 //Domain
 ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
@@ -204,6 +206,9 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 		}
 	}
 	
+	//init list of RBLs
+	this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient] = [];
+	
 	// convert restrictions to hidden fields for xform binding
 	var restrictions = this.attrs[ZaGlobalConfig.A_zimbraMtaRestriction];
 	if (restrictions) {
@@ -211,8 +216,16 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 			restrictions = [ restrictions ];
 		}
 		for (var i = 0; i < restrictions.length; i++) {
-			var restriction = restrictions[i];
-			this.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction] = true;
+			if(restrictions[i].indexOf("reject_rbl_client")>-1) {
+				var restriction = restrictions[i];
+				var chunks = restriction.split(" ");
+				if(chunks && chunks.length>0) {
+					this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].push(chunks[1]);
+				}
+			} else {
+				var restriction = restrictions[i];
+				this.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction] = true;
+			}
 		}
 	}
 	if(this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] != null && !(this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] instanceof Array)) {
@@ -220,8 +233,8 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 	}
 }
 
-ZaGlobalConfig.prototype.modify = 
-function (mods) {
+//ZaGlobalConfig.prototype.modify = 
+ZaGlobalConfig.modifyMethod = function (mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyConfigRequest", "urn:zimbraAdmin", null);
 	for (var aname in mods) {
 		//multy value attribute
@@ -265,7 +278,7 @@ function (mods) {
 		}
 	}
 }
-
+ZaItem.modifyMethods["ZaGlobalConfig"].push(ZaGlobalConfig.modifyMethod);
 
 // REVISIT: Move to a common location if needed by others
 LifetimeNumber_XFormItem = function() {}
@@ -337,6 +350,8 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, type: _ENUM_, choices: [false,true] },
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname, type: _ENUM_, choices: [false,true] },
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, type: _ENUM_, choices: [false,true] },
+		//rbl check
+		{ id:ZaGlobalConfig.A_zimbraMtaRejectRblClient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectRblClient, type: _LIST_, listItem:{type:_STRING_}},
 		// smtp
 		{ id:ZaGlobalConfig.A_zimbraSmtpTimeout, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpTimeout, type:_NUMBER_, minInclusive: 0 },
 		// pop

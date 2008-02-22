@@ -36,6 +36,14 @@ function () {
 	return ZaMsg.GlobalConfig_view_title;
 }
 
+GlobalConfigXFormView.onRepeatRemove = 
+function (index, form) {
+	var list = this.getInstanceValue();
+	if (list == null || typeof(list) == "string" || index >= list.length || index<0) return;
+	list.splice(index, 1);
+	form.parent.setDirty(true);
+}
+
 GlobalConfigXFormView.prototype.getTabIcon =
 function () {
 	return "GlobalSettings";
@@ -267,6 +275,23 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, type: _CHECKBOX_,
 						  	  label: ZaMsg.NAD_MTA_reject_unknown_sender_domain,
+							  onChange: ZaTabView.onFormFieldChanged
+						  	}
+						]},
+						{ type: _ZA_PLAIN_GROUPER_,
+						  items: [
+						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectRblClient, type: _REPEAT_,
+						  	  label: ZaMsg.NAD_MTA_reject_rbl_client,
+							  labelLocation:_LEFT_, 
+							  align:_LEFT_,
+							  repeatInstance:"", 
+							  showAddButton:true, 
+							  showRemoveButton:true, 
+							  showAddOnNextRow:true, 
+							  items: [
+								{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaTabView.onFormFieldChanged}
+							  ],
+							  onRemove:GlobalConfigXFormView.onRepeatRemove,
 							  onChange: ZaTabView.onFormFieldChanged
 						  	}
 						]}
