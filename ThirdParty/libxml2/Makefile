@@ -6,7 +6,7 @@ MAKEARGS ?= -j2
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 ZIMBRA_HOME ?= /opt/zimbra
 APP_NAME = libxml2
-APP_VERSION ?= 2.6.29
+APP_VERSION ?= 2.6.31
 APP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/$(APP_NAME)/$(APP_NAME)-$(APP_VERSION).tgz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/$(APP_NAME)-$(APP_VERSION)
 APP_CONFIGURE ?= --prefix=$(INSTALL_PREFIX) --enable-shared=no --enable-static=yes
