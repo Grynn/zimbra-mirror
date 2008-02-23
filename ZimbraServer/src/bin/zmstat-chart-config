@@ -27,6 +27,7 @@ my $ZIMBRA_HOME = getZimbraHome();
 
 my $mtaqstatCsv = 'mtaqueue.csv';
 my $cpustatCsv = 'cpu.csv';
+my $fdstatCsv = 'fd.csv';
 my $pstatCsv = 'proc.csv';
 my $vmstatCsv = 'vm.csv';
 my $iostatxCsv = 'io-x.csv';
@@ -191,6 +192,19 @@ sub mtaConfig() {
 _HERE_
 }
 
+sub getFDstatConfig() {
+    print <<_HERE_;
+  <chart title="Host $ZIMBRA_HOSTNAME: Total file descriptors open"
+      category="IO"
+      infile="$fdstatCsv"
+      outfile="${ZIMBRA_HOSTNAME}_fd_stat.png"
+      yAxis="fd"
+      showRaw="false"
+      showMovingAvg="true">
+    <plot data="fd_count" legend="file descriptors open"/>
+  </chart>
+_HERE_
+}
 sub cpuPstatConfig() {
     print <<_HERE_;
   <!-- CPU Stats -->
@@ -783,6 +797,9 @@ if ($HAS_MTA) {
 cpuPstatConfig();
 vmstatConfig();
 iostatConfig();
+if (!$isMac) {
+    getFDstatConfig();
+}
 if ($HAS_MAILBOX) {
     mailboxdConfig();
     gcConfig();

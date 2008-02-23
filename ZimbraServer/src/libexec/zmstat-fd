@@ -1,0 +1,107 @@
+#!/usr/bin/perl -w
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2007 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+# Periodically print FD open stats obtained from /proc/sys/fs/file-nr
+# The first column of /proc/sys/fs/file-nr gives an instantaneous reading
+# of all file descriptors open throughout all processes.  The third column
+# gives a maximum file descriptor count for the entire system.
+
+use strict;
+use Getopt::Long;
+use Zimbra::Mon::Zmstat;
+use vars qw($LOGFH $CONSOLE $LOGFILE $ROTATE_NOW $ROTATE_DEFER);
+
+zmstatInit();
+
+my $STAT = '/proc/sys/fs/file-nr';
+my $HEADING = 'timestamp, fd_count';
+
+sub get_fd_stat() {
+    open(STAT, "<$STAT") || die "Can't open $STAT: $!";
+    my $line = <STAT>;
+    $line =~ /^(\d+)\s+/;
+    my $stat = $1;
+    close(STAT);
+    $stat;
+}
+sub sighup {
+    if (!$CONSOLE) {
+        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+    } else {
+        $ROTATE_NOW = 1;
+    }
+}
+
+sub usage {
+    print STDERR << '_USAGE_';
+Usage: zmstat-fd [options]
+Monitor system filedescriptor usage
+-i, --interval: output a line every N seconds
+-l, --log:      log file (default is /opt/zimbra/zmstat/fd.csv)
+-c, --console:  output to stdout
+
+If logging to a file, rotation occurs when a HUP signal is sent or when
+the date changes.  The current log is renamed to <dir>/YYY-MM-DD/fd.csv
+and a new file is created.
+_USAGE_
+    exit(1);
+}
+
+$| = 1;
+
+$LOGFILE = getLogFilePath('fd.csv');
+my $interval = getZmstatInterval();
+my $opts_good = GetOptions(
+    'interval=i' => \$interval,
+    'log=s' => \$LOGFILE,
+    'console' => \$CONSOLE,
+);
+if (!$opts_good) {
+    print STDERR "\n";
+    usage();
+}
+createPidFile('zmstat-fd.pid');
+
+my $date = getDate();
+if ($CONSOLE) {
+    $LOGFH = \*STDOUT;
+    $LOGFH->print($HEADING . "\n");
+    
+} else {
+    $LOGFH = openLogFile($LOGFILE, $HEADING);
+}
+waitUntilNiceRoundSecond($interval);
+
+while (1) {
+    my $stat = get_fd_stat();
+    my $tstamp = getTstamp();
+    my $currDate = getDate();
+    if ($currDate ne $date && !$CONSOLE) {
+        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
+        $date = $currDate;
+    }
+    $ROTATE_DEFER = 1;
+    $LOGFH->print("$tstamp, $stat\n");
+    $LOGFH->flush();
+    $ROTATE_DEFER = 0;
+    if ($ROTATE_NOW) {
+        $ROTATE_NOW = 0;
+        $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+    }
+    sleep($interval);
+}

@@ -104,6 +104,7 @@ my @TOOL_ALL = (
 );
 if (!$isMac) {
     push(@TOOL_ALL, 'zmstat-io');
+    push(@TOOL_ALL, 'zmstat-fd');
 }
 my $TOOL_MYSQL = 'zmstat-mysql';
 my $TOOL_MTAQUEUE = 'zmstat-mtaqueue';
