@@ -908,7 +908,7 @@ function(dragOp) {
 			item = dndSelection;
 		}
 		icon = this._createItemHtml(item, {now:new Date(), isDragProxy:true});
-		icon._origClassName = icon.className;
+		this._setItemData(icon, "origClassName", icon.className);
 		Dwt.setPosition(icon, Dwt.ABSOLUTE_STYLE);
 
 		roundPlusStyle = "position:absolute; top:18; left:-11;visibility:hidden";
@@ -957,7 +957,8 @@ function(dropAllowed) {
 		AjxImg.setImage(this._dndImg, dropAllowed ? "DndMultiYes_48" : "DndMultiNo_48");
 	} else if (this._dndProxy) {
 		var addClass = dropAllowed ? DwtCssStyle.DROPPABLE : DwtCssStyle.NOT_DROPPABLE;
-		this._dndProxy.className = [this._dndProxy._origClassName, addClass].join(" ");
+		var origClass = this._getItemData(this._dndProxy, "origClassName");
+		this._dndProxy.className = [origClass, addClass].join(" ");
 	}
 };
 
@@ -1105,7 +1106,6 @@ function(clickedEl, bContained, ev) {
 	} else {
 		this._selectedItems.add(clickedEl, null, true);
 		Dwt.delClass(clickedEl, this._styleRe, this._selectedClass);
-		clickedEl.hoverSet = false;
 		this._selEv.detail = DwtListView.ITEM_SELECTED;
 	}
 
@@ -1310,14 +1310,16 @@ function(el, field, id) {
 };
 
 /**
- * Sets data associated with the given ID.
+ * Sets data associated with the given element.
  * 
- * @param id		[string]	ID of element/item
+ * @param el		[Element]	an HTML element
  * @param field		[string]	key
  * @param value		[object]	value
+ * @param id		[string]*	ID that overrides element ID (or if element is not provided)
  */
 DwtListView.prototype._setItemData =
-function(id, field, value) {
+function(el, field, value, id) {
+	id = id || (el ? el.id : null);
 	var data = this._data[id];
 	if (data) {
 		data[field] = value;
@@ -1376,9 +1378,9 @@ DwtListView.prototype._updateDragSelection =
 function(row, select) {
     // TODO
     if (!select) {
-		row.className = row._dwtListViewOldClassName;
+		row.className = this._getItemData(row, "origClassName");
 	} else {
-		row._dwtListViewOldClassName = row.className;
+		this._setItemData(row, "origClassName", row.className);
 		Dwt.delClass(row, this._styleRe, this._dndClass);
 	}
 };
@@ -1393,22 +1395,6 @@ function(mouseEv, div) {
 		}
 	} else if (type == DwtListView.TYPE_HEADER_SASH) {
 		div.style.cursor = AjxEnv.isIE ? "col-resize" : "e-resize";
-	} else if (type == DwtListView.TYPE_LIST_ITEM) {
-		if (div._hoverStyleClass == null || div == this._rightSelItem) {
-			div.hoverSet = false;
-		} else {
-			var selItems = this._selectedItems.getArray();
-			div.hoverSet = true;
-			for (var i = 0; i < selItems.length; i++) {
-				if (div == selItems[i]) {
-					div.hoverSet = false;
-					break;
-				}
-			}
-		}
-		if (div.hoverSet) {
-			Dwt.addClass(div, div._hoverStyleClass);
-		}
 	}
 
 	return true;
@@ -1423,10 +1409,6 @@ function(mouseEv, div) {
 			: "DwtListView-Column DwtListView-ColumnActive";
 	} else if (type == DwtListView.TYPE_HEADER_SASH) {
 		div.style.cursor = "auto";
-	} else if (type == DwtListView.TYPE_LIST_ITEM) {
-		if (div._hoverStyleClass && div.hoverSet) {
-			Dwt.delClass(div, this._styleRe);	// , this._normalClass		MOW
-		}
 	}
 
 	return true;
@@ -1711,7 +1693,6 @@ function(clickedEl, ev) {
 				Dwt.addClass(clickedEl, this._kbFocusClass);
 			}
 		}
-		clickedEl.hoverSet = false;
 	} else {
 		if (ev.ctrlKey) {
 			this.setMultiSelection(clickedEl, bContained, ev);
@@ -1752,7 +1733,6 @@ function(clickedEl, ev) {
 					this._selectedItems.remove(el);
 				} else if (state == 1 || el == clickedEl) {
 					if (el.className.indexOf(selStyleClass) == -1) {
-						el.hoverSet = false;
 						this._selectedItems.add(el);
 					}
 					Dwt.delClass(el, this._styleRe, selStyleClass);
