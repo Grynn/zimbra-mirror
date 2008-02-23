@@ -625,33 +625,3 @@ YahooMaps.prototype.getResource =
 function(resource) {
 	return this._controller._zimlet.getResource(resource);
 };
-
-// load external JS API
-YahooMaps._loadYAPI =
-function(file) {
-	var fileref=document.createElement('script');
-	fileref.setAttribute("type","text/javascript");
-	fileref.setAttribute("src", ( ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(file) ));
-	document.getElementsByTagName("head").item(0).appendChild(fileref);
-};
-
-YahooMaps._loadYMapsAPI =
-function(file) {
-	var callback = new AjxCallback(YahooMaps._postLoadYMapsAPI);
-	var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(file);
-	AjxRpc.invoke(null,serverURL,null,callback,true);
-};
-
-YahooMaps._postLoadYMapsAPI =
-function(result) {
-	var js = result.text;
-	js = js.replace(/<!--.*-->/,"") + "function _ywjs(inc){YahooMaps._loadYAPI(inc)};"
-	try{
-		AjxPackage.eval(js);
-	} catch(ex) {
-		alert('Failed to load Yahoo! Maps API.');
-	}
-};
-
-YahooMaps._loadYAPI("http://j.maxmind.com/app/geoip.js");
-YahooMaps._loadYMapsAPI("http://api.maps.yahoo.com/ajaxymap?v="+YahooMaps.VERSION+"&appid="+YahooMaps.APPID);

@@ -211,9 +211,7 @@ function(params) {
 
 	var rpcCallback;
 	try {
-		var uri = params.serverUri || ZmCsfeCommand.serverUri;
-		//if (params.logRequest)
-			uri = uri + soapDoc._methodEl.nodeName;
+		var uri = (params.serverUri || ZmCsfeCommand.serverUri) + methodNameStr;
 		var requestStr = soapDoc.getXml();
 
 		this._st = new Date();
@@ -224,17 +222,15 @@ function(params) {
 		}
 			
 		if (asyncMode) {
-//			DBG.println(AjxDebug.DBG1, "set callback for asynchronous response");	
+			//DBG.println(AjxDebug.DBG1, "set callback for asynchronous response");
 			rpcCallback = new AjxCallback(this, this._runCallback, [params]);
 			this._rpcId = AjxRpc.invoke(requestStr, uri, requestHeaders, rpcCallback);
 		} else {
-//			DBG.println(AjxDebug.DBG1, "parse response synchronously");	
+			//DBG.println(AjxDebug.DBG1, "parse response synchronously");
 			var response = AjxRpc.invoke(requestStr, uri, requestHeaders);
-			if (!params.returnXml) {
-				return this._getResponseData(response, false, soapDoc);
-			} else {
-				return response;
-			}
+			return (!params.returnXml)
+				? (this._getResponseData(response, false, soapDoc))
+				: response;
 		}
 	} catch (ex) {
 		if (!(ex && (ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException))) {

@@ -114,6 +114,10 @@ YahooLocalController.prototype.constructor = YahooLocalController;
 YahooLocalController.prototype.getLocal =
 function() {
 
+	if (!AjxUtil.isFunction(geoip_country_code)) {
+		return;
+	}
+
 	if (!this._ylocal) {
 		this._countryCode = geoip_country_code();
 		this._countryName = geoip_country_name();
@@ -160,13 +164,22 @@ function(lat, lon, callback) {
 
 YahooLocalController.prototype.searchLocal =
 function(query) {
-	var cord = this._setDefaultView();
+	this._getGeoIP(new AjxCallback(this, this._handleSearchLocal, query));
+};
 
-	this.getMapsView().searchLocal({
-		query: query,
-		defaultLat: cord.latitude,
-		defaultLon: cord.longitude
-	});
+YahooLocalController.prototype._handleSearchLocal =
+function(query) {
+	var coords = this._setDefaultView();
+
+	if (coords) {
+		this.getMapsView().searchLocal({
+			query: query,
+			defaultLat: coords.latitude,
+			defaultLon: coords.longitude
+		});
+	} else {
+		this._showErrorLoadingAPI();
+	}
 };
 
 YahooLocalController.prototype.searchQuery =
@@ -195,28 +208,59 @@ function(zip) {
 
 YahooLocalController.prototype.searchUpcoming =
 function() {
-	var cord = this._setDefaultView();
+	this._getGeoIP(new AjxCallback(this, this._handleSearchUpcoming));
+};
 
-	this.getMapsView().searchUpcoming({
-		latitude : cord.latitude,
-		longitude: cord.longitude
-	});
+YahooLocalController.prototype._handleSearchUpcoming =
+function() {
+	var coords = this._setDefaultView();
+
+	if (coords) {
+		this.getMapsView().searchUpcoming({
+			latitude : coords.latitude,
+			longitude: coords.longitude
+		});
+	} else {
+		this._showErrorLoadingAPI();
+	}
 };
 
 YahooLocalController.prototype.searchTraffic =
 function() {
-	var cord = this._setDefaultView();
+	this._getGeoIP(new AjxCallback(this, this._handleSearchTraffic));
+};
 
-	this.getMapsView().searchTraffic({
-		latitude:   cord.latitude,
-		longitude:  cord.longitude
-	});
+YahooLocalController.prototype._handleSearchTraffic =
+function() {
+	var coords = this._setDefaultView();
+
+	if (coords) {
+		this.getMapsView().searchTraffic({
+			latitude : coords.latitude,
+			longitude: coords.longitude
+		});
+	} else {
+		this._showErrorLoadingAPI();
+	}
 };
 
 YahooLocalController.prototype.markMe =
 function() {
-	var cord = this._setDefaultView();
-	this.getMapsView().markMe(cord.latitude, cord.longitude);
+	this._getGeoIP(new AjxCallback(this, this._handleMarkMe));
+};
+
+YahooLocalController.prototype._handleMarkMe =
+function() {
+	var coords = this._setDefaultView();
+
+	if (coords) {
+		var latitude = coords ? coords.latitude : null;
+		var longitude = coords ? coords.longitude : null;
+
+		this.getMapsView().markMe(latitude, longitude);
+	} else {
+		this._showErrorLoadingAPI();
+	}
 };
 
 YahooLocalController.prototype.displayAddress =
@@ -235,12 +279,21 @@ function(addr) {
 
 YahooLocalController.prototype.changeLocation =
 function() {
-	var cord = this._setDefaultView();
+	this._getGeoIP(new AjxCallback(this, this._handleChangeLocation));
+};
 
-	this.getMapsView().changeLocation({
-		latitude: cord.latitude,
-		longitude: cord.longitude
-	});
+YahooLocalController.prototype._handleChangeLocation =
+function() {
+	var coords = this._setDefaultView();
+
+	if (coords) {
+		this.getMapsView().changeLocation({
+			latitude : coords.latitude,
+			longitude: coords.longitude
+		});
+	} else {
+		this._showErrorLoadingAPI();
+	}
 };
 
 // View
@@ -360,18 +413,50 @@ function(title, inputLabel, okListener) {
 
 YahooLocalController.prototype._setDefaultView =
 function() {
-	var cord = this.getLocal();
-	this.setView({
-		clean: true,
-		typeControl:true,
-		panControl:false,
-		zoomControl:"long",
-		zoomLevel: 6,
-		defaultLat: cord.latitude,
-		defaultLon: cord.longitude
-	});
+	var coords = this.getLocal();
 
-	return cord;
+	if (coords) {
+		this.setView({
+			clean: true,
+			typeControl:true,
+			panControl:false,
+			zoomControl:"long",
+			zoomLevel: 6,
+			defaultLat: coords.latitude,
+			defaultLon: coords.longitude
+		});
+	}
+
+	return coords;
+};
+
+YahooLocalController.prototype._getGeoIP =
+function(callback) {
+	geoip_country_code = null;
+
+	var url = "http://j.maxmind.com/app/geoip.js";
+	var respCallback = new AjxCallback(this, this._handleGetIP, callback);
+	var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
+
+	// allow timeout of 5 seconds for browser to grab geoip code
+	AjxRpc.invoke(null, serverURL, null, respCallback, true, 5000);
+};
+
+YahooLocalController.prototype._handleGetIP =
+function(callback, result) {
+	if (result && result.success && result.text) {
+		AjxPackage.eval(result.text);
+	}
+
+	if (callback) { callback.run(); }
+};
+
+YahooLocalController.prototype._showErrorLoadingAPI =
+function() {
+	var errorDlg = appCtxt.getMsgDialog();
+	var msg = this._zimlet.getMessage("errorLoadingAPI");
+	errorDlg.setMessage(msg, DwtMessageDialog.CRITICAL_STYLE);
+	errorDlg.popup();
 };
 
 
@@ -407,15 +492,21 @@ function() {
 
 YahooLocalController.prototype._getLatLonForZip =
 function(zip) {
-	var url = "http://www.csgnetwork.com/cgi-bin/zipcodes.cgi?Zipcode=";
+	var url = "http://www.csgnetwork.com/cgi-bin/zipcodes.cgi?Zipcode=" + zip;
+	var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	var callback = new AjxCallback(this, this._handleLatLonForZip, zip);
-    var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url+zip);
 
-	AjxRpc.invoke(null, serverURL, null, callback, true);
+	// allow timeout of 5 seconds for browser to grab webservice code
+	AjxRpc.invoke(null, serverURL, null, callback, true, 5000);
 };
 
 YahooLocalController.prototype._handleLatLonForZip =
 function(zip, result) {
+	if (!result || (result && !result.success)) {
+		this._showErrorLoadingAPI();
+		return;
+	}
+
 	if (result.text.match(/Zipcode not found!/i)) {
 		appCtxt.setStatusMsg(this._zimlet.getMessage("zipCodeInvalid"), ZmStatusView.LEVEL_CRITICAL);
 		return;

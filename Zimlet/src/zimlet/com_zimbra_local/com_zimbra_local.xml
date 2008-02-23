@@ -2,8 +2,18 @@
 	<include>local.js</include>
     <include>yahoomaps.js</include>
     <include>upcoming.js</include>
-    <includeCSS>yahoomaps.css</includeCSS>
+
+	<!-- YUI library -->
+	<include>ajaxymap.js</include>
+	<include>animation_2.0.1-b2.js</include>
+	<include>dom_2.0.1-b2.js</include>
+	<include>dragdrop_2.0.1-b4.js</include>
+	<include>event_2.0.0-b2.js</include>
+	<include>ymapapi_3_7_1_11.js</include>
+
+	<includeCSS>yahoomaps.css</includeCSS>
     <includeCSS>local.css</includeCSS>
+
 	<handlerObject>Com_Zimbra_Local</handlerObject>
 
 	<zimletPanelItem label="Local" icon="YLogo">

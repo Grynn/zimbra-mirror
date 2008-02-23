@@ -40,27 +40,20 @@
 AjxRpcRequest = function(id) {
 	if (!AjxRpcRequest.__inited) {
 		AjxRpcRequest.__init();
-    }
+	}
 
 	/** (optional) id for this object.
-	 * @type String|Int */
-    this.id = id;
+	* @type String|Int */
+	this.id = id;
 	/** private*/
-    this.__httpReq = AjxRpcRequest.__msxmlVers ? new ActiveXObject(AjxRpcRequest.__msxmlVers) :
-    											 new XMLHttpRequest();
+	this.__httpReq = AjxRpcRequest.__msxmlVers
+		? (new ActiveXObject(AjxRpcRequest.__msxmlVers))
+		: (new XMLHttpRequest());
 };
 
-/**
- * Timed out exception
- * @type Int
- */
-AjxRpcRequest.TIMEDOUT = -1000;
-
-/** @private */
-AjxRpcRequest.__inited = false;
-
-/** @private */
-AjxRpcRequest.__msxmlVers = null;
+AjxRpcRequest.TIMEDOUT		= -1000;		// Timed out exception
+AjxRpcRequest.__inited		= false;
+AjxRpcRequest.__msxmlVers	= null;
 
 /**
  * @return class name
@@ -116,18 +109,18 @@ AjxRpcRequest.prototype.invoke =
 function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 
 	var asyncMode = (callback != null);
-	
+
 	// An exception here will be caught by AjxRpc.invoke
 	this.__httpReq.open((useGet) ? "get" : "post", serverUrl, asyncMode);
 
 	if (asyncMode) {
 		this.__callback = callback;
-        if (timeout) {
-            var action = new AjxTimedAction(this, AjxRpcRequest.__handleTimeout, {callback: callback, req: this});
-            callback._timedActionId = AjxTimedAction.scheduleAction(action, timeout);
-        }
-        var tempThis = this;
-//		DBG.println(AjxDebug.DBG3, "Async RPC request");
+		if (timeout) {
+			var action = new AjxTimedAction(this, AjxRpcRequest.__handleTimeout, {callback: callback, req: this});
+			callback._timedActionId = AjxTimedAction.scheduleAction(action, timeout);
+		}
+		var tempThis = this;
+		//DBG.println(AjxDebug.DBG3, "Async RPC request");
 		this.__httpReq.onreadystatechange = function(ev) {AjxRpcRequest.__handleResponse(tempThis, callback);};
 	} else {
 		// IE appears to run handler even on sync requests, so we need to clear it
@@ -137,7 +130,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 	if (requestHeaders) {
 		for (var i in requestHeaders) {
 			this.__httpReq.setRequestHeader(i, requestHeaders[i]);
-//			DBG.println(AjxDebug.DBG3, "Async RPC request: Add header " + i + " - " + requestHeaders[i]);
+			//DBG.println(AjxDebug.DBG3, "Async RPC request: Add header " + i + " - " + requestHeaders[i]);
 		}
 	}
 
@@ -146,9 +139,9 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 		return this.id;
 	} else {
 		if (this.__httpReq.status == 200 || this.__httpReq.status == 201) {
-			return {text: this.__httpReq.responseText, xml: this.__httpReq.responseXML, success: true};
+			return {text:this.__httpReq.responseText, xml:this.__httpReq.responseXML, success:true};
 		} else {
-			return {text: this.__httpReq.responseText, xml: this.__httpReq.responseXML, success: false, status: this.__httpReq.status};
+			return {text:this.__httpReq.responseText, xml:this.__httpReq.responseXML, success:false, status:this.__httpReq.status};
 		}
 	}
 };
@@ -158,7 +151,6 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
  */
 AjxRpcRequest.prototype.cancel =
 function() {
-//	DBG.println(AjxDebug.DBG1, "Aborting HTTP request");
 	this.__httpReq.abort();
 };
 
@@ -171,9 +163,8 @@ function() {
  */
 AjxRpcRequest.__handleTimeout =
 function(args) {
-//    DBG.println(AjxDebug.DBG3, "Async RPC request: _handleTimeout");
-    args.req.cancel();
-    args.callback.run( {text: null, xml: null, success: false, status: AjxRpcRequest.TIMEDOUT} );
+	args.req.cancel();
+	args.callback.run({ text:null, xml:null, success:false, status:AjxRpcRequest.TIMEDOUT} );
 };
 
 /**
@@ -193,31 +184,33 @@ function(req, callback) {
 		callback.run( {text: null, xml: null, success: false, status: 500} );
 		return;
 	}
-    //DBG.println(AjxDebug.DBG3, "Async RPC request: ready state = " + req.__httpReq.readyState);
+	//DBG.println(AjxDebug.DBG3, "Async RPC request: ready state = " + req.__httpReq.readyState);
 	if (req.__httpReq.readyState == 4) {
-        if(callback._timedActionId !== null) {
-            AjxTimedAction.cancelAction(callback._timedActionId);
-        }
-        var status = 500;
-        try {
-            status = req.__httpReq.status;
-        } catch (ex) {
-            // Use default status of 500 above.
-        }
-        if (status == 200 || status == 201) {
-			callback.run( {text: req.__httpReq.responseText, xml: req.__httpReq.responseXML, success: true} );				
-        } else {
-			callback.run( {text: req.__httpReq.responseText, xml: req.__httpReq.responseXML, success: false, status: status} );
-        }
-		
-		if (req.__ctxt)
+		if (callback._timedActionId !== null) {
+			AjxTimedAction.cancelAction(callback._timedActionId);
+		}
+
+		var status = 500;
+		try {
+			status = req.__httpReq.status;
+		} catch (ex) {
+			// Use default status of 500 above.
+		}
+
+		if (status == 200 || status == 201) {
+			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:true} );
+		} else {
+			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:false, status:status} );
+		}
+
+		if (req.__ctxt) {
 			req.__ctxt.busy = false;
+		}
 	}
 };
 
-
 /**
- * This method is called by <i>AjxRpc</i> which can be considered a "friend" clas
+ * This method is called by <i>AjxRpc</i> which can be considered a "friend" class
  * It is used to set the __RpcCtxt associated with this object
  * @private
  */
@@ -243,8 +236,7 @@ function() {
 		}
 		if (!AjxRpcRequest.__msxmlVers) {
 			throw new AjxException("MSXML not installed", AjxException.INTERNAL_ERROR, "AjxRpc._init");
-        }
-    }
+		}
+	}
 	AjxRpcRequest.__inited = true;
 };
-

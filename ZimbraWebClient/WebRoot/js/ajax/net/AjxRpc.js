@@ -32,21 +32,10 @@
 AjxRpc = function() {
 };
 
-/** The pool of RPC contexts
- * @private*/
-AjxRpc.__rpcCache = [];
-
-/** maximum number of busy contexts we can have
- * @private */
-AjxRpc.__RPC_CACHE_MAX = 100;
-
-/** run reaper when number of busy contexts is multiple of this
- * @private */
-AjxRpc.__RPC_REAP_COUNT = 5;
-
-/** mark any context older than this (in ms) as free
- * @private */
-AjxRpc.__RPC_REAP_AGE = 300000;
+AjxRpc.__rpcCache		= [];		// The pool of RPC contexts
+AjxRpc.__RPC_CACHE_MAX	= 100;		// maximum number of busy contexts we can have
+AjxRpc.__RPC_REAP_COUNT	= 5;		// run reaper when number of busy contexts is multiple of this
+AjxRpc.__RPC_REAP_AGE	= 300000;	// mark any context older than this (in ms) as free
 
 /**
  * Submits a request to a URL. The request is handled through a pool of request
@@ -100,7 +89,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 	var rpcCtxt = AjxRpc.__getFreeRpcCtxt();
 
 	try {
-	 	var response = rpcCtxt.req.invoke(requestStr, serverUrl, requestHeaders, callback, useGet, timeout);
+		var response = rpcCtxt.req.invoke(requestStr, serverUrl, requestHeaders, callback, useGet, timeout);
 	} catch (ex) {
 		var newEx = new AjxException();
 		newEx.method = "AjxRpc.prototype._invoke";
@@ -113,12 +102,14 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 			newEx.code = AjxException.UNKNOWN_ERROR;
 			newEx.msg = "Unknown Error";
 		}
-		if (!asyncMode)		
+		if (!asyncMode) {
 			rpcCtxt.busy = false;
+		}
 		throw newEx;
 	}
-	if (!asyncMode)
+	if (!asyncMode) {
 		rpcCtxt.busy = false;
+	}
 	return response;
 };
 
@@ -141,16 +132,14 @@ function(id) {
 	return null;
 };
 
-
 /**
  * Factory method for getting context objects.
  * @private
  */
 AjxRpc.__getFreeRpcCtxt = 
 function() {
+	var rpcCtxt;
 
-	var rpcCtxt = null;
-	
 	// See if we have one in the pool that's now free
 	for (var i = 0; i < AjxRpc.__rpcCache.length; i++) {
 		rpcCtxt = AjxRpc.__rpcCache[i];
@@ -194,7 +183,6 @@ function() {
 			rpcCtxt.busy = false;
 		}
 	}
-
 };
 
 /**
