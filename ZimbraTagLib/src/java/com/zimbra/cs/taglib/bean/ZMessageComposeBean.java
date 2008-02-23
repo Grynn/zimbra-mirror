@@ -16,35 +16,6 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.common.calendar.TZIDMapper;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.zclient.ZInvite.ZAttendee;
-import com.zimbra.cs.zclient.ZInvite.ZByDayWeekDay;
-import com.zimbra.cs.zclient.ZInvite.ZClass;
-import com.zimbra.cs.zclient.ZInvite.ZComponent;
-import com.zimbra.cs.zclient.ZInvite.ZFreeBusyStatus;
-import com.zimbra.cs.zclient.ZInvite.ZOrganizer;
-import com.zimbra.cs.zclient.ZInvite.ZParticipantStatus;
-import com.zimbra.cs.zclient.ZInvite.ZRole;
-import com.zimbra.cs.zclient.ZInvite.ZStatus;
-import com.zimbra.cs.zclient.ZInvite.ZTransparency;
-import com.zimbra.cs.zclient.ZInvite.ZWeekDay;
-import com.zimbra.cs.zclient.ZMailbox.ReplyVerb;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
-import com.zimbra.cs.zclient.*;
-import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceEnd;
-import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
-import com.zimbra.cs.mailbox.calendar.ParsedDuration;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.PartSource;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.PageContext;
-import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -60,6 +31,47 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.PageContext;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.PartSource;
+
+import com.zimbra.common.calendar.TZIDMapper;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.mailbox.calendar.ParsedDuration;
+import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
+import com.zimbra.cs.zclient.ZAlarm;
+import com.zimbra.cs.zclient.ZDateTime;
+import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZIdentity;
+import com.zimbra.cs.zclient.ZInvite;
+import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZPrefs;
+import com.zimbra.cs.zclient.ZSignature;
+import com.zimbra.cs.zclient.ZSimpleRecurrence;
+import com.zimbra.cs.zclient.ZInvite.ZAttendee;
+import com.zimbra.cs.zclient.ZInvite.ZByDayWeekDay;
+import com.zimbra.cs.zclient.ZInvite.ZClass;
+import com.zimbra.cs.zclient.ZInvite.ZComponent;
+import com.zimbra.cs.zclient.ZInvite.ZFreeBusyStatus;
+import com.zimbra.cs.zclient.ZInvite.ZOrganizer;
+import com.zimbra.cs.zclient.ZInvite.ZParticipantStatus;
+import com.zimbra.cs.zclient.ZInvite.ZRole;
+import com.zimbra.cs.zclient.ZInvite.ZStatus;
+import com.zimbra.cs.zclient.ZInvite.ZTransparency;
+import com.zimbra.cs.zclient.ZInvite.ZWeekDay;
+import com.zimbra.cs.zclient.ZMailbox.ReplyVerb;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
+import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
+import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceEnd;
+import com.zimbra.cs.zclient.ZSimpleRecurrence.ZSimpleRecurrenceType;
 
 public class ZMessageComposeBean {
 
@@ -1309,7 +1321,21 @@ public class ZMessageComposeBean {
         
         if (mLocation != null && mLocation.length() > 0) comp.setLocation(mLocation);
         comp.setName(mSubject);
-        comp.setOrganizer(new ZOrganizer(mailbox.getName()));
+        
+        List<ZIdentity> identities = mailbox.getIdentities();
+        String organizerEmail = null;
+        for (ZIdentity i : identities) {
+        	if (i.isDefault()) 
+        		organizerEmail = i.getFromAddress();
+        }
+       
+        
+        if (organizerEmail == null) {
+        	throw ServiceException.FAILURE("Default identity not found", null);
+        }
+        
+        
+        comp.setOrganizer(new ZOrganizer(organizerEmail));
         comp.setIsAllDay(getAllDay());
 
         if (mAttendees != null && mAttendees.length() > 0) {
