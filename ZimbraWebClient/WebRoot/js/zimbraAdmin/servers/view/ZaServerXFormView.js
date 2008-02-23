@@ -453,7 +453,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 				{type:_ZATABCASE_, colSizes:["auto"],numCols:1, relevant:"instance[ZaModel.currentTab] == 1", 
 					id:"server_general_tab",
 					items:[
-						{type:_ZAGROUP_,items:[
+						{type:_ZAGROUP_, items:[
 							{ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_},
 							{ ref: ZaServer.A_description, type:_INPUT_, 
 							  label:ZaMsg.NAD_Description,cssClass:"admin_xform_name_input",
@@ -471,9 +471,22 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							  label:ZaMsg.NAD_LmtpBindAddress, cssClass:"admin_xform_name_input",
 							  onChange:ZaServerXFormView.onFormFieldChanged
 							},
-							{ ref: ZaServer.A_zimbraScheduledTaskNumThreads, type:_INPUT_, 
-							  label:ZaMsg.NAD_zimbraScheduledTaskNumThreads, cssClass:"admin_xform_name_input",
+							{ ref: ZaServer.A_zimbraScheduledTaskNumThreads,
+								labelWrap: true,
+								type:_INPUT_, 
+							  	label:ZaMsg.NAD_zimbraScheduledTaskNumThreads, 
+							  	cssClass:"admin_xform_name_input",
 							  onChange:ZaServerXFormView.onFormFieldChanged
+							},
+							{type:_GROUP_, colSpan: "*", colSizes: [ 275, 85, 100, 150], numCols: 4, width: "100%", 
+								items: [
+									{ref:ZaServer.A_zimbraMailPurgeSleepInterval, type:_SUPER_LIFETIME_, 
+											resetToSuperLabel:ZaMsg.NAD_ResetToGlobal, 
+											msgName:ZaMsg.NAD_zimbraMailPurgeSleepInterval,
+											txtBoxLabel:ZaMsg.NAD_zimbraMailPurgeSleepInterval,
+											onChange:ZaServerXFormView.onFormFieldChanged
+									}
+								]
 							},
 							{ ref: ZaServer.A_notes, type:_TEXTAREA_, 
 							  label: ZaMsg.NAD_Notes, labelCssStyle: "vertical-align:top", width: "30em",

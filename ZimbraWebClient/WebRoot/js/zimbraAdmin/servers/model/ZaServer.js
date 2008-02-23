@@ -132,6 +132,7 @@ ZaServer.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
 
 // other
 ZaServer.A_zimbraScheduledTaskNumThreads = "zimbraScheduledTaskNumThreads" ;
+ZaServer.A_zimbraMailPurgeSleepInterval = "zimbraMailPurgeSleepInterval" ;
 ZaServer.A_zimbraIsMonitorHost = "zimbraIsMonitorHost";
 ZaServer.A_showVolumes = "show_volumes"; //this attribute is immutable
 ZaServer.A_zimbraLogHostname = "zimbraLogHostname";
@@ -368,6 +369,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_LmtpBindPort, ref:"attrs/" +  ZaServer.A_LmtpBindPort, type:_COS_PORT_},		
 		{id:ZaServer.A_LmtpNumThreads, ref:"attrs/" +  ZaServer.A_LmtpNumThreads, type:_COS_NUMBER_, minInclusive: 0 },
 		{id:ZaServer.A_zimbraScheduledTaskNumThreads, ref:"attrs/" +  ZaServer.A_zimbraScheduledTaskNumThreads, type:_COS_NUMBER_, minInclusive: 1 },
+		{id:ZaServer.A_zimbraMailPurgeSleepInterval, ref:"attrs/" +  ZaServer.A_zimbraMailPurgeSleepInterval, type:_COS_MLIFETIME_},
 		{id:ZaServer.A_zimbraPop3NumThreads, ref:"attrs/" +  ZaServer.A_zimbraPop3NumThreads, type:_COS_NUMBER_, minInclusive: 0 },		
 		{id:ZaServer.A_zimbraImapNumThreads, ref:"attrs/" +  ZaServer.A_zimbraImapNumThreads, type:_COS_NUMBER_, minInclusive: 0 },		
 		{id:ZaServer.A_Pop3AdvertisedName, ref:"attrs/" +  ZaServer.A_Pop3AdvertisedName, type:_STRING_, maxLength: 128 },
@@ -699,7 +701,7 @@ function(by, val, withConfig) {
 	}
 }
 
-ZaItem.loadMethods["ZaServer"].push(ZaServer.loadNIFS);
+//ZaItem.loadMethods["ZaServer"].push(ZaServer.loadNIFS);
 
 ZaServer.prototype.initFromJS = function(server) {
 	ZaItem.prototype.initFromJS.call(this, server);
