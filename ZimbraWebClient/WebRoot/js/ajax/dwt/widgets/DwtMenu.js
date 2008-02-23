@@ -212,7 +212,7 @@ function(style) {
 	var a = this._children.getArray();
 	for (var i = 0; i < a.length; i++) {
 		var mi = a[i];
-		if ((style == null || (mi._style & style != 0)) && mi.getChecked())
+		if ((style == null || (mi._style && style != 0)) && mi.getChecked())
 			return mi;
 	}
 	return null;
