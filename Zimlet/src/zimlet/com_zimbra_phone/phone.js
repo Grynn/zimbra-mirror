@@ -59,7 +59,24 @@ function() {
 	}
 	this.regexps = regexps;
 };
+Com_Zimbra_Phone.prototype.getActionMenu =
+	function(obj, span, context) {
+        var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
 
+        var op = actionMenu.getOp("SEARCH");
+        if (op) {
+            op.setText(ZmMsg.search);
+        }
+        op = actionMenu.getOp("ADDCONTACT");
+        if (op) {
+            op.setText(ZmMsg.AB_ADD_CONTACT);
+        }
+        op = actionMenu.getOp("CALL");
+        if (op) {
+            op.setText(ZmMsg.call);
+        }
+        return actionMenu;
+    };
 Com_Zimbra_Phone.prototype._getHtmlContent =
 function(html, idx, phone, context) {
 	var call = Com_Zimbra_Phone.getCallToLink(phone);

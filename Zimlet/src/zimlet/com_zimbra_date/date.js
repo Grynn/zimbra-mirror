@@ -44,7 +44,22 @@ function() {
 Com_Zimbra_Date.prototype.TYPE = ZmObjectManager.DATE;
 Com_Zimbra_Date.prototype.getActionMenu =
 	function(obj, span, context) {
-		if (this._zimletContext._contentActionMenu instanceof AjxCallback) {
+        var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
+
+        var op = actionMenu.getOp("DAYVIEW");
+        if (op) {
+            op.setText(ZmMsg.viewDay);
+        }
+        op = actionMenu.getOp("NEWAPPT");
+        if (op) {
+            op.setText(ZmMsg.appointmentNewTitle);
+        }
+        op = actionMenu.getOp("SEARCHMAIL");
+        if (op) {
+            op.setText(ZmMsg.searchForMessages);
+        }
+
+        if (this._zimletContext._contentActionMenu instanceof AjxCallback) {
 			this._zimletContext._contentActionMenu = this._zimletContext._contentActionMenu.run();
 		}
 		// Set some global context since the parent Zimlet (Com_Zimbra_Date) will be called for

@@ -183,7 +183,37 @@ function(obj, span, context) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
 	var person = this._lookup(addr);
-	if (!appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+    // start hack for bug 23917
+    var op = actionMenu.getOp("NEWCONTACT");
+    if (op) {
+        op.setText(ZmMsg.newContact);
+    }
+    op = actionMenu.getOp("SEARCH");
+    if (op) {
+        op.setText(ZmMsg.search);
+    }
+    op = actionMenu.getOp("SEARCHBUILDER");
+    if (op) {
+        op.setText(ZmMsg.advancedSearch);
+    }
+    op = actionMenu.getOp("NEWIM");
+    if (op) {
+        op.setText(ZmMsg.newIM);
+    }
+    op = actionMenu.getOp("NEWFILTER");
+    if (op) {
+        op.setText(ZmMsg.newFilter);
+    }
+    op = actionMenu.getOp("NEWEMAIL");
+    if (op) {
+        op.setText(ZmMsg.newEmail);
+    }
+    op = actionMenu.getOp("GOTOURL");
+    if (op) {
+        op.setText(ZmMsg.goToUrl.replace("{0}",ZmMsg.url));
+    }
+    // ends
+    if (!appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		// make sure to remove adding new contact menu item if contacts are disabled
 		if (actionMenu.getOp("NEWCONTACT")) {
 			ZmOperation.removeOperation(actionMenu, "NEWCONTACT", actionMenu._menuItems);
@@ -214,7 +244,7 @@ function(obj, span, context) {
 		ZmOperation.removeOperation(actionMenu, "NEWFILTER", actionMenu._menuItems);
 	}
 
-	return actionMenu;
+    return actionMenu;
 };
 
 Com_Zimbra_Email.prototype.isMailToLink =
