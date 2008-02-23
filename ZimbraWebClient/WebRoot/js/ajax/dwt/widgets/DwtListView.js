@@ -1388,7 +1388,7 @@ function(mouseEv, div) {
 	var type = this._getItemData(div, "type");
 	if (type == DwtListView.TYPE_HEADER_ITEM){
 		var hdr = this.getItemFromElement(div);
-		if (this._sortingEnabled && hdr._sortable && !this._headerClone) {
+		if (hdr && this._sortingEnabled && hdr._sortable && !this._headerClone) {
 			div.className = "DwtListView-Column DwtListView-ColumnHover";
 		}
 	} else if (type == DwtListView.TYPE_HEADER_SASH) {
