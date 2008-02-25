@@ -28,12 +28,22 @@ OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
 all: build 
 
 build: 
+ifeq	(MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
+	_S_='~' ./zimbra-cyrus-sasl-build.sh
+	(cd build/cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
+	(./fix-sasl.pl)
+	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
+	tar czf $(CYRUS_TGZ_TARGET) \
+	cyrus-sasl-$(CYRUS_VERSION))
+else
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/cyrus-sasl
 	_S_='~' ./zimbra-cyrus-sasl-build.sh
 	(cd build/cyrus-sasl-$(CYRUS_VERSION); $(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s cyrus-sasl-$(CYRUS_VERSION) cyrus-sasl; \
 	tar czf $(CYRUS_TGZ_TARGET) \
 	cyrus-sasl-$(CYRUS_VERSION))
+endif
 
 /opt/zimbra/libxml2/lib/libxml2.a:
 	$(MAKE) $(MAKEARGS) -C $(P4_ROOT)/ThirdParty/libxml2
