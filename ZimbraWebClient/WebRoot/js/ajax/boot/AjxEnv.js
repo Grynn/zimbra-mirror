@@ -115,6 +115,8 @@ function() {
 			} else if ((index = token.indexOf('firefox/')) != -1) {
 				AjxEnv.isFirefox = true;
 				browserVersion = parseFloat(token.substr(index + 8));
+			} else if ((index = token.indexOf('prism/')) != -1) {
+				AjxEnv.isPrism = true;
 			} else if ((index = token.indexOf('camino/')) != -1) {
 				AjxEnv.isCamino = true;
 				browserVersion = parseFloat(token.substr(index + 7));
@@ -175,6 +177,7 @@ function() {
 		else if (AjxEnv.isFirefox1_5up)		{	AjxEnv.browser = "FF1.5";	}
 		else if (AjxEnv.isFirefox1up)		{	AjxEnv.browser = "FF1.0";	}
 		else if (AjxEnv.isFirefox)			{	AjxEnv.browser = "FF";		}
+		else if (AjxEnv.isPrism)			{	AjxEnv.browser = "PRISM";		}
 		else if (AjxEnv.isNav7)				{	AjxEnv.browser = "NAV7";	}
 		else if (AjxEnv.isNav6)				{	AjxEnv.browser = "NAV6";	}
 		else if (AjxEnv.isNav4)				{	AjxEnv.browser = "NAV4";	}
