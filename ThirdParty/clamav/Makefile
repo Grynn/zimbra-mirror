@@ -20,7 +20,7 @@ all: build tar
 build:
 	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \
 	cd clamav-$(CLAMAV_VERSION); \
-	patch -N -g0 -p1 < ../patches/leopard.users.patch; \
+	patch -N -g0 -p1 < ../patches/fix-configure; \
 	aclocal; \
 	autoconf; \
 	CFLAGS="-g -O2" \
