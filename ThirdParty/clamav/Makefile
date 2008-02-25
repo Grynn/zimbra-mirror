@@ -21,6 +21,7 @@ build:
 	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \
 	cd clamav-$(CLAMAV_VERSION); \
 	patch -N -g0 -p1 < ../patches/leopard.users.patch; \
+	aclocal; \
 	autoconf; \
 	CFLAGS="-g -O2" \
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) \
