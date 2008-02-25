@@ -199,7 +199,7 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) \
 				-sdk openldap -lib_path $(LDAP_LIB) -include_path $(LDAP_INCLUDE) -sasl_include_path $(SASL_INCLUDE); \
-			LD_RUN_PATH="$(LDAP_LIB)"$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+			LD_RUN_PATH="$(LDAP_LIB)" $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
 			if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
 	done
 
