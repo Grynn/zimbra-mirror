@@ -4278,6 +4278,84 @@
         </attribute>
     </tag>
 
+
+    <tag>
+        <description>
+           get appointments that fall with the specified range.
+        </description>
+
+        <name>getMiniCal</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.calendar.GetMiniCalTag</tag-class>
+
+        <body-content>scriptless</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZMiniCalBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <variable>
+            <name-from-attribute>varexception</name-from-attribute>
+            <variable-class>com.zimbra.common.service.ServiceException</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                get hash of dates with appointment summaries for the specified time range
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                variable to store service exception, otherwise it is thrown.
+            </description>
+            <name>varexception</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>starting time in msecs</description>
+            <name>start</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>ending time in msecs</description>
+            <name>end</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>ZMailboxBean object to use</description>
+            <name>box</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                comma-separated list of folder ids to get dates with appts for. If not specified, get appts for
+                all calendar folders that are checked in the UI.
+            </description>
+            <name>folderid</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
     <tag>
         <description>
            get free busy for specified email address and return as appointment hits
