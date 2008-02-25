@@ -15,27 +15,27 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 endif
 
 ifeq ($(BUILD_PLATFORM), RHEL4_64)
-	CONF_OPS := --enable-frame-pointer
+	CONF_OPS := --enable-frame-pointers
 endif
 
 ifeq ($(BUILD_PLATFORM), CentOS4_64)
-	CONF_OPS := --enable-frame-pointer
+	CONF_OPS := --enable-frame-pointers
 endif
 
 ifeq ($(BUILD_PLATFORM), RHEL5_64)
-	CONF_OPS := --enable-frame-pointer
+	CONF_OPS := --enable-frame-pointers
 endif
 
 ifeq ($(BUILD_PLATFORM), CentOS5_64)
-	CONF_OPS := --enable-frame-pointer
+	CONF_OPS := --enable-frame-pointers
 endif
 
 ifeq ($(BUILD_PLATFORM), SLES10_64)
-	CONF_OPS := --enable-frame-pointer
+	CONF_OPS := --enable-frame-pointers
 endif
 
 ifeq ($(BUILD_PLATFORM), UBUNTU6_64)
-	CONF_OPS := --enable-frame-pointer
+	CONF_OPS := --enable-frame-pointers
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
