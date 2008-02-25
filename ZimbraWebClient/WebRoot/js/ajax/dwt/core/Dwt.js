@@ -1150,3 +1150,50 @@ Dwt.populateText = function(){
 Dwt.setInnerHtml = function(htmlEl,html){
 	htmlEl.innerHTML = html;
 };
+
+/**
+ * Sets the favicon
+ *
+ * @param {String} The url to the icon to display
+ */
+Dwt.setFavIcon = function(iconURL) {
+	if (AjxEnv.isIE) {
+		return; // Unsupported.
+	}
+	// Look for an existing fav icon to modify.
+	var favIcon = null;
+	if (Dwt._favIconId) {
+		favIcon = document.getElementById(Dwt._favIconId);
+	} else {
+		var docHead = document.getElementsByTagName("head")[0];
+		var links = docHead.getElementsByTagName("link");
+		for (var i = 0; i < links.length; i++) {
+			var link = links[i];
+			if (link.rel.toUpperCase() == "SHORTCUT ICON") {
+				if (!link.id) {
+					link.id = Dwt._favIconId = Dwt.getNextId();
+				}
+				favIcon = link;
+				break;
+			}
+		}
+	}
+	// If available, change the existing favicon.
+	// (Need to remove/add to dom in order to force a redraw.)   
+	if (favIcon) {
+		favIcon.href=iconURL;
+		var parent = favIcon.parentNode;
+		parent.removeChild(favIcon);
+		parent.appendChild(favIcon);
+	}
+	// If no favicon was found in the document, create a new one.
+	else {
+		var newLink = document.createElement("link");
+		newLink.id = Dwt._favIconId = Dwt.getNextId()
+		newLink.rel = "SHORTCUT ICON";
+		newLink.href = iconURL;
+		docHead = docHead || document.getElementsByTagName("head")[0];
+		docHead.appendChild(newLink);
+	}
+};
+
