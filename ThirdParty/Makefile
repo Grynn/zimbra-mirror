@@ -25,7 +25,7 @@ CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 ASPELL_VERSION ?= aspell-0.60.5
 CLAMAV_VERSION ?= 0.92.1
 
-MYSQL_VERSION_STRING ?= 5.0.45
+MYSQL_VERSION_STRING ?= 5.0.51a
 MYSQL_VERSION ?= standard-$(MYSQL_VERSION_STRING)-pc-linux-gnu-i686
 MYSQL_CLIENT_VERSION ?= standard-$(MYSQL_VERSION_STRING)-clientlibs
 
@@ -54,8 +54,8 @@ HTTPD_VERSION ?= 2.2.8
 
 POSTFIX_VERSION ?= 2.4.3.4z
 
-DIRS := mysql \
-	openssl \
+DIRS := openssl \
+	mysql \
 	sleepycat \
 	libxml2 \
 	heimdal \
