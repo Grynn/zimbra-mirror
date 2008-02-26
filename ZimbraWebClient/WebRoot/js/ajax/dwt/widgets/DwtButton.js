@@ -87,6 +87,7 @@ DwtButton = function(params) {
 	}
 	this._listeners = params.listeners || DwtButton._listeners
 	this._addMouseListeners();
+	this._ignoreInternalOverOut = true;
 	
 	this._dropDownEvtMgr = new AjxEventMgr();
 

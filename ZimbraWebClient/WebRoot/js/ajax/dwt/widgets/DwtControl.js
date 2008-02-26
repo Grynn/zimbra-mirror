@@ -153,8 +153,8 @@ DwtControl = function(params) {
 	// click actions, and single click action is heavy
 	this._dblClickIsolation = false;
 
-	// ignore OVER and OUT mouse events between elements in the same control
-	this._ignoreInternalOverOut = true;
+	// set to true to ignore OVER and OUT mouse events between elements in the same control
+	this._ignoreInternalOverOut = false;
 }
 
 DwtControl.PARAMS = ["parent", "className", "posStyle", "deferred", "id", "index"];
@@ -1438,7 +1438,6 @@ function() {
 DwtControl.prototype.setToolTipContent =
 function(text) {
 	if (this._disposed) { return; }
-
 	this.__toolTipContent = text;
 };
 
