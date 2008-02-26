@@ -78,8 +78,8 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-api-1.3.1.jar"/>
 	<classpathentry kind="lib" path="jars/xpp3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.0-zimbra.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jsieve-0.1-zimbra.jar" sourcepath="/ThirdParty/jsieve"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.6-zimbra.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
