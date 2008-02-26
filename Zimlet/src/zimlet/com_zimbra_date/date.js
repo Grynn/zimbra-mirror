@@ -71,15 +71,19 @@ Com_Zimbra_Date.prototype.getActionMenu =
 	};
 
 
-var $RE_DOW = "(Mon(?:d(?:ay?)?)?|Tue(?:s(?:d(?:ay?)?)?)?|Wed(?:n(?:e(?:s(?:d(?:ay?)?)?)?)?)?|Thu(?:r(?:s(?:d(?:ay?)?)?)?)?|Fri(?:d(?:ay?)?)?|Sat(?:u(?:r(?:d(?:ay?)?)?)?)?|Sun(?:d(?:ay?)?)?)";
-var $RE_DOW_FULL = "(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day";
+//var $RE_DOW = "(Mon(?:d(?:ay?)?)?|Tue(?:s(?:d(?:ay?)?)?)?|Wed(?:n(?:e(?:s(?:d(?:ay?)?)?)?)?)?|Thu(?:r(?:s(?:d(?:ay?)?)?)?)?|Fri(?:d(?:ay?)?)?|Sat(?:u(?:r(?:d(?:ay?)?)?)?)?|Sun(?:d(?:ay?)?)?)";
+var $RE_DOW = "("+I18nMsg.weekdayMonLong+"|"+I18nMsg.weekdayMonMedium+"|"+I18nMsg.weekdayTueLong+"|"+I18nMsg.weekdayTueMedium+"|"+I18nMsg.weekdayWedLong+"|"+I18nMsg.weekdayWedMedium+"|"+I18nMsg.weekdayThuLong+"|"+I18nMsg.weekdayThuMedium+"|"+I18nMsg.weekdayFriLong+"|"+I18nMsg.weekdayFriMedium+"|"+I18nMsg.weekdaySatLong+"|"+I18nMsg.weekdaySatMedium+"|"+I18nMsg.weekdaySunLong+"|"+I18nMsg.weekdaySunMedium+")";
+//var $RE_DOW_FULL = "(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day";
+var $RE_DOW_FULL = "("+I18nMsg.weekdayMonLong+"|"+I18nMsg.weekdayTueLong+"|"+I18nMsg.weekdayWedLong+"|"+I18nMsg.weekdayThuLong+"|"+I18nMsg.weekdayFriLong+"|"+I18nMsg.weekdaySatLong+"|"+I18nMsg.weekdaySunLong+")";
 
 Com_Zimbra_Date.DOW = {	su: 0, mo: 1, tu: 2, we: 3, th: 4, fr: 5, sa: 6};
 
-var $RE_DOM = "(\\d{1,2})(?:st|nd|rd|th)?";
+//var $RE_DOM = "(\\d{1,2})(?:st|nd|rd|th)?";
+var $RE_DOM = "(\\d{1,2})(?:"+I18nMsg.st+"|"+I18nMsg.nd+"|"+I18nMsg.rd+"|"+I18nMsg.th+")?";
 
 // needs to be kept in sync with Com_Zimbra_Date.MONTH
-var $RE_MONTH = "(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)";
+//var $RE_MONTH = "(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)";
+var $RE_MONTH = "("+I18nMsg.monthJanLong+"|"+I18nMsg.monthFebLong+"|"+I18nMsg.monthMarLong+"|"+I18nMsg.monthAprLong+"|"+I18nMsg.monthMayLong+"|"+I18nMsg.monthJunLong+"|"+I18nMsg.monthJulLong+"|"+I18nMsg.monthAugLong+"|"+I18nMsg.monthSepLong+"|"+I18nMsg.monthOctLong+"|"+I18nMsg.monthNovLong+"|"+I18nMsg.monthDecLong+"|"+I18nMsg.monthJanMedium+"|"+I18nMsg.monthFebMedium+"|"+I18nMsg.monthMarMedium+"|"+I18nMsg.monthAprMedium+"|"+I18nMsg.monthMayMedium+"|"+I18nMsg.monthJunMedium+"|"+I18nMsg.monthJulMedium+"|"+I18nMsg.monthAugMedium+"|"+I18nMsg.monthSepMedium+"|"+I18nMsg.monthOctMedium+"|"+I18nMsg.monthNovMedium+"|"+I18nMsg.monthDecMedium+")";
 
 Com_Zimbra_Date.MONTH = {
 	january: 0, jan: 0, february: 1, feb: 1, march: 2, mar: 2, april: 3, apr: 3, may: 4, june: 5, jun: 5,
@@ -87,9 +91,11 @@ Com_Zimbra_Date.MONTH = {
 	december: 11, dec: 11
 };
 
-var $RE_TODAY_TOMORROW_YESTERDAY = "(today|tomorrow|yesterday)";
+//var $RE_TODAY_TOMORROW_YESTERDAY = "(today|tomorrow|yesterday)";
+var $RE_TODAY_TOMORROW_YESTERDAY = "("+I18nMsg.today+"|"+I18nMsg.tomorrow+"|"+I18nMsg.yesterday+")";
 
-var $RE_NEXT_THIS_LAST = "(next|this|last)";
+//var $RE_NEXT_THIS_LAST = "(next|this|last)";
+var $RE_NEXT_THIS_LAST = "("+I18nMsg.next+"|"+I18nMsg.thiss+"|"+I18nMsg.last+")";
 
 var $RE_COMMA_OR_SP = "(?:\\s+|\\s*,\\s*)";
 
@@ -278,10 +284,10 @@ function(line, startIndex) {
 	var ndow = Com_Zimbra_Date.DOW[result[2].toLowerCase().substring(0,2)];
 	var addDays;
 
-	if (result[1].toLowerCase() == "next") {
+	if (result[1].toLowerCase() == /*"next"*/I18nMsg.next) {
 		addDays = ndow - dow;
 		addDays += 7;
-	} else if (result[1].toLowerCase() == "this") {
+	} else if (result[1].toLowerCase() == /*"this"*/I18nMsg.thiss) {
 		addDays = ndow - dow;
 	} else { // last
 		addDays = (-1 * (dow + 7 - ndow)) % 7;
