@@ -675,7 +675,6 @@ function(id, buttonId, buttonDivId, label) {
 	var button = new DwtButton({parent:this, id:buttonId});
 	button.setText(label);
 	button.id = buttonId;
-	button.setHtmlElementId(buttonId);
 	button._buttonId = id;
 
 	var buttonDiv = document.getElementById(buttonDivId);
