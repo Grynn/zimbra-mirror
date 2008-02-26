@@ -276,10 +276,6 @@ public class ConvListView extends MailListView {
 			if (cmd == REFRESH) {
 				if (!mGettingMore)
 					load();
-			} else if (cmd == ZimbraME.EXIT) {
-				mMidlet.exit();
-			} else if (cmd == ZimbraME.LOGOUT) {
-				mMidlet.logout();
 			} else if (cmd == GOTO_SEARCHVIEW) {
 				mMidlet.gotoSearchView();
 			} else if (cmd == SAVE_SEARCH) {

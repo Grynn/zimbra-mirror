@@ -338,6 +338,8 @@ public class ZimbraME extends MIDlet implements CommandListener {
     		gotoSavedSearchView(d);
     	} else if (cmd == GOTO_TAGS) {
     		gotoTagView(d, CollectionView.TAG_SEARCH, null);
+    	} else if (cmd == LOGOUT) {
+    		logout();
     	}
 
 

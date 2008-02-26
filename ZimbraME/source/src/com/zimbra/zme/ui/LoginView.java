@@ -126,7 +126,8 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 			}
 			
 			mUnameField.setString(uname);
-			mPwordField.setString(pword);
+			if (keepSignedIn)
+				mPwordField.setString(pword);
 			mKeepSignedInField.setSelectedIndex(0, keepSignedIn);
 	
 			// check to see if they are to be kept logged (note this field will only be set to true if the
@@ -214,7 +215,10 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 					boolean[] b = new boolean[1];
 					mKeepSignedInField.getSelectedFlags(b);
 					mMidlet.mSettings.setKeepSignedIn(b[0]);
-					mMidlet.mSettings.setAuthToken(mMidlet.mMbox.mAuthToken);
+					if (mMidlet.mSettings.getKeepSignedIn())
+						mMidlet.mSettings.setAuthToken(mMidlet.mMbox.mAuthToken);
+					else
+						mMidlet.mSettings.setAuthToken("");
 					
 					if (mMidlet.mUserServerUrl) {
 						mMidlet.mSettings.setServerUrl(mServerUrlField.getString());

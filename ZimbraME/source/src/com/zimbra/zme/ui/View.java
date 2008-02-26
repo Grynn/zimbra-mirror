@@ -111,7 +111,7 @@ public abstract class View implements CommandListener, ItemFactory {
 
 	public void commandAction(Command cmd, 
 			  				  Displayable d,
-			  				  boolean propogateToMidlet) {
+			  				  boolean propagateToMidlet) {
 		if (d == mView) {
 			if (cmd == DELETE) {
 				if (confirmDeletes())
@@ -127,7 +127,7 @@ public abstract class View implements CommandListener, ItemFactory {
 				setCurrent();
 				deleteItemConfirmed();
 			}
-		} else if (propogateToMidlet){
+		} else if (propagateToMidlet){
 			// Delegate the command handling up to the midlet
 			mMidlet.commandAction(cmd, d);			
 		}

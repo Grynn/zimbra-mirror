@@ -581,6 +581,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 			f.addCommand(NEW);
 		//#endif
 			
+		f.addCommand(ZimbraME.LOGOUT);
 		f.addCommand(BACK);
 			
 		//#undefine tmp.hasCmdKeyEvts
