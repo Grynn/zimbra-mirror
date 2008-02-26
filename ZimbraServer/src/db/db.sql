@@ -22,7 +22,7 @@ USE zimbra;
 GRANT ALL ON zimbra.* TO 'zimbra' IDENTIFIED BY 'zimbra';
 GRANT ALL ON zimbra.* TO 'zimbra'@'localhost' IDENTIFIED BY 'zimbra';
 GRANT ALL ON zimbra.* TO 'zimbra'@'localhost.localdomain' IDENTIFIED BY 'zimbra';
-GRANT ALL ON zimbra.* TO 'root'@'localhost.localdomain' IDENTIFIED BY 'zimbra';
+--GRANT ALL ON zimbra.* TO 'root'@'localhost.localdomain' IDENTIFIED BY 'zimbra';
 
 -- The zimbra user needs to be able to create and drop databases and perform
 -- backup and restore operations.  Give
