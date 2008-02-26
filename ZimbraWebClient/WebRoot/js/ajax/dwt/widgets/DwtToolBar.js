@@ -395,7 +395,7 @@ function(index) {
 //
 
 DwtToolBarButton = function(params) {
-	params = Dwt.getParams(arguments, DwtToolBarButton.PARAMS);
+	var params = Dwt.getParams(arguments, DwtToolBarButton.PARAMS);
         params.className = params.className || "ZToolbarButton";
         DwtButton.call(this, params);
 };
