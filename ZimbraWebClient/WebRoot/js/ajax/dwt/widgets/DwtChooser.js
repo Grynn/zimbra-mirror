@@ -672,7 +672,7 @@ function(width, height) {
 */
 DwtChooser.prototype._setupButton =
 function(id, buttonId, buttonDivId, label) {
-	var button = new DwtButton({parent:this});
+	var button = new DwtButton({parent:this, id:buttonId});
 	button.setText(label);
 	button.id = buttonId;
 	button.setHtmlElementId(buttonId);
