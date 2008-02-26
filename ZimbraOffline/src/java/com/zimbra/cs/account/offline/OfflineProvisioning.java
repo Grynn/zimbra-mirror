@@ -916,6 +916,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	//allow login without valid password
     	ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] {"cmd", "Auth", "account", acct.getName(), "protocol", proto}));
     }
+    
+    @Override
+    public synchronized void authAccount(Account acct, String password, String proto, Map<String, Object> context) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("authAccount with context");
+    }
 
     @Override
     public synchronized void preAuthAccount(Account acct, String accountName, String accountBy, long timestamp, long expires, String preAuth) throws ServiceException {
