@@ -23,6 +23,7 @@ build:
 	patch -N -g0 -p1 < ../patches/fix-configure; \
 	aclocal; \
 	autoconf; \
+	automake; \
 	CFLAGS="-g -O2" \
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) \
 	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck --disable-gcc-vcheck; \
