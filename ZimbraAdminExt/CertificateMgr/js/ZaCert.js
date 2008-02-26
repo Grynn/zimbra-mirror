@@ -18,7 +18,7 @@ ZaCert.A_city = "L" ;
 ZaCert.A_organization = "O" ;
 ZaCert.A_organizationUnit = "OU" ;
 ZaCert.A_validation_days = "validation_days" ;
-ZaCert.A_allserver = "allserver" ;
+//ZaCert.A_allserver = "allserver" ;
 ZaCert.A_subject = "subject" ;
 ZaCert.A_type = "type" ;
 ZaCert.A_type_self = "self" ;
@@ -297,8 +297,8 @@ ZaCert.installCert = function (app, params, serverId) {
 	var comm_cert = params.comm_cert ;
 	var validation_days = params.validation_days ;
 	var callback = params.callback ;
-	var allserver = 0 || params.allserver ;
-	if (AjxEnv.hasFirebug) console.log("allserver = " + allserver) ;
+	//var allserver = 0 || params.allserver ;
+	//if (AjxEnv.hasFirebug) console.log("allserver = " + allserver) ;
 	
 	var controller = app.getCurrentController();
 	
@@ -317,7 +317,7 @@ ZaCert.installCert = function (app, params, serverId) {
 	
 	if (type == ZaCert.A_type_self || type == ZaCert.A_type_comm) {
 		soapDoc.set(ZaCert.A_validation_days, validation_days);	
-		soapDoc.set(ZaCert.A_allserver, allserver) ;
+		//soapDoc.set(ZaCert.A_allserver, allserver) ;
 		if (type == ZaCert.A_type_comm) {
 			//set the comm_cert element
 			soapDoc.set("comm_cert", comm_cert);	

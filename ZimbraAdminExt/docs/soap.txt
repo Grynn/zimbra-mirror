@@ -1,6 +1,7 @@
 -----------------------------
  urn:zimbraAdmin
 -----------------------------
+*** If target Server id is "--- All Servers ---", the soap call will apply to all the servers. A flag will be set for the zmcertmgr
 
 -----------------------------
 <GetCertRequest type="staged|all|mta|mailboxd|proxy|ldap" option="self|comm"
@@ -53,7 +54,6 @@ SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the cer
 
 -----------------------------
 <InstallCertRequest type="self|comm" server="server-id">
-	<allserver>{value}</allserver>
   	<validation_days>{value}</validation_days>
   	<comm_cert>
   		<cert>
@@ -74,7 +74,6 @@ SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the cer
 <InstallCertResponse server="server-name" />
 
 Ask server to install the certificates
-allserver: 0 | 1. Default 0. If present and value = 1, the certs will be applied to all the servers
 validation_days: required, number of the validation days of the self signed license, 
 aid: attachedment ID of the uploaded commercial license
 

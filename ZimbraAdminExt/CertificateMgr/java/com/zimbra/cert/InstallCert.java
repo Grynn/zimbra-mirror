@@ -48,7 +48,7 @@ public class InstallCert extends AdminDocumentHandler {
     final static String CERT_TYPE_COMM = "comm" ;
     private final static String COMM_CERT = "comm_cert" ;
     private final static String AID = "aid" ;
-    private final static String ALLSERVER = "allserver" ;
+    //private final static String ALLSERVER = "allserver" ;
     private final static String ALLSERVER_FLAG = "-allserver" ;
     private final static String VALIDATION_DAYS = "validation_days" ;
      
@@ -58,8 +58,10 @@ public class InstallCert extends AdminDocumentHandler {
         
         Server server = null;
         String serverId = request.getAttribute("server") ;
+        boolean isTargetAllServer = false ;
         if (serverId != null && serverId.equals(ZimbraCertMgrExt.ALL_SERVERS)) {
         	server = prov.getLocalServer() ;
+        	isTargetAllServer = true ;
         }else {
         	server = prov.get(ServerBy.id, serverId);
         }
@@ -96,14 +98,9 @@ public class InstallCert extends AdminDocumentHandler {
             }
         }
         
-        try {
-            Element allserverEl = request.getElement(ALLSERVER) ;
-            String allserver = allserverEl.getText() ;
-            if (allserver != null && allserver.equals("1")) {
-                cmd += " " + ALLSERVER_FLAG;
-            }
-        }catch (ServiceException e) {
-            //allserver parameter is not present. Ignore
+       
+        if (isTargetAllServer) {
+            cmd += " " + ALLSERVER_FLAG;
         }
                 
         ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
