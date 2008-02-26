@@ -16,6 +16,7 @@ package Migrate;
 
 use strict;
 use DBI;
+use FileHandle;
 use POSIX qw(:signal_h :errno_h :sys_wait_h);
 
 #############
@@ -29,6 +30,7 @@ my $DATABASE = "zimbra";
 my $LOGGER_DATABASE = "zimbra_logger";
 my $ZIMBRA_HOME = $ENV{ZIMBRA_HOME} || '/opt/zimbra';
 my $ZMLOCALCONFIG = "$ZIMBRA_HOME/bin/zmlocalconfig";
+my $SQLLOGFH;
 
 if ($^O !~ /MSWin/i) {
     $DB_PASSWORD = `$ZMLOCALCONFIG -s -m nokey zimbra_mysql_password`;
@@ -181,10 +183,9 @@ sub getMailboxes() {
 sub runSql(@) {
     my ($script, $logScript) = @_;
 
-	  $logScript = 0
-      if (! defined($logScript));
+	  $logScript = 1;
 
-	  Migrate::log($script)
+	  Migrate::logSql($script)
       if ($logScript);
 
     # Run the mysql command and redirect output to a temp file
@@ -208,6 +209,8 @@ sub runSql(@) {
     while (<OUTPUT>) {
         s/\s+$//;
         push(@output, $_);
+        chomp;
+        Migrate::logSql($_);
     }
 
     unlink($tempFile);
@@ -247,6 +250,8 @@ sub runLoggerSql(@) {
     while (<OUTPUT>) {
         s/\s+$//;
         push(@output, $_);
+        chomp;
+        Migrate::logSql($_);
     }
 
     unlink($tempFile);
@@ -309,6 +314,7 @@ sub runSqlParallel(@) {
         sleep 1;
       }
       foreach my $statement (@$array) {
+        Migrate::logSql($statement);
         unless ($dbh->do($statement) ) {
           Migrate::myquit(1,"DB: $statement: $DBI::errstr\n");
         }
@@ -375,13 +381,27 @@ sub progress($$) {
 sub myquit($$) {
   my ($status, $msg) = @_;
   Migrate::log($msg);
+  $SQLLOGFH->close if (defined $SQLLOGFH);
   exit $status;
 }
 
 sub log($) {
   my ($input) = @_;
+  Migrate::logSql($input);
   my $output = scalar(localtime()).": $input\n";
   print $output;
+}
+
+sub logSql($) {
+  my ($input) = @_;
+  unless (defined($SQLLOGFH)) {
+    $SQLLOGFH = new FileHandle ">> /opt/zimbra/log/sqlMigration.log";    
+    select $SQLLOGFH;
+    $|=1;
+    select STDOUT;
+  }
+  my $output = scalar(localtime()).": $input\n";
+  print $SQLLOGFH $output;
 }
 
 1;

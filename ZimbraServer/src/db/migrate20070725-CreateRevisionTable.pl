@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS $group.revision (
    item_id       INTEGER UNSIGNED NOT NULL,
    version       INTEGER UNSIGNED NOT NULL,
    date          INTEGER UNSIGNED NOT NULL,  -- stored as a UNIX-style timestamp
-   size          INTEGER UNSIGNED NOT NULL,
+   size          BIGINT UNSIGNED NOT NULL,
    volume_id     TINYINT UNSIGNED,
    blob_digest   VARCHAR(28) BINARY,         -- reference to blob, meaningful for messages only (type == 5)
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
