@@ -159,15 +159,29 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	}
 
 	var toolTip;
-	var contact = this._contacts ? this._contacts.getContactByEmail(addr) : null;
-	if (contact) {
-		toolTip = contact.getToolTip(addr, false, this._composeTooltipHint);
+
+
+	var parts = addr.split("@");
+	var domain = (parts.length > 0) ? parts[1] : null;
+	if (domain && domain == "yahoo.com") {
+		var name = (contentObjText instanceof AjxEmailAddress) ? contentObjText.dispName : contentObjText;
+		var html = [];
+		var idx = 0;
+		html[idx++] = "<table border=0><tr><td><div class='ImgWebSearch'></div></td><td>Visit ";
+		html[idx++] = name;
+		html[idx++] = "'s Yahoo! profile</td></tr></table>";
+		toolTip = html.join("");
 	} else {
-		var subs = {
-			addrstr: addr.toString(),
-			hint: this._newTooltipHint
-		};
-		toolTip = AjxTemplate.expand("abook.Contacts#TooltipNotInAddrBook", subs);
+		var contact = this._contacts ? this._contacts.getContactByEmail(addr) : null;
+		if (contact) {
+			toolTip = contact.getToolTip(addr, false, this._composeTooltipHint);
+		} else {
+			var subs = {
+				addrstr: addr.toString(),
+				hint: this._newTooltipHint
+			};
+			toolTip = AjxTemplate.expand("abook.Contacts#TooltipNotInAddrBook", subs);
+		}
 	}
 	canvas.innerHTML = toolTip;
 };
@@ -273,6 +287,14 @@ function(spanElement, contentObjText, matchContext, ev) {
 
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
+
+	var parts = addr.split("@");
+	var domain = (parts.length > 0) ? parts[1] : null;
+	if (domain && domain == "yahoo.com") {
+		var yProfileUrl = "http://profiles.yahoo.com/" + parts[0];
+		window.open(yProfileUrl, "_blank");
+		return;
+	}
 
 	var contact = this._contacts ? this._contacts.getContactByEmail(addr) : null;
 	// if contact found or there is no contact list (i.e. contacts app is disabled), go to compose view
