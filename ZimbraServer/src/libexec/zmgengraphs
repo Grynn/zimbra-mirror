@@ -431,6 +431,10 @@ sub checkPID {
     open PID, "$pid_file";
     my $p = <PID>;
     close PID;
+    if ($p eq "") {
+      unlink($pid_file);
+      return
+    }
     if (kill (0, $p)){
       warn("$0 already running with pid $p\n");
       exit;
