@@ -919,7 +919,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     
     @Override
     public synchronized void authAccount(Account acct, String password, String proto, Map<String, Object> context) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("authAccount with context");
+	authAccount(acct, password, proto);
     }
 
     @Override
