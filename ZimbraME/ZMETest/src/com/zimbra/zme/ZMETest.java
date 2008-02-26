@@ -18,12 +18,20 @@ package com.zimbra.zme;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.TextField;
 import javax.microedition.midlet.MIDlet;
 
-public class ZMETest extends MIDlet {
+//#ifdef polish.usePolishGui
+//# import de.enough.polish.ui.FramedForm;
+//#endif
+
+public class ZMETest extends MIDlet implements CommandListener {
 
     private String req1 = 
         "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\">"+
@@ -94,24 +102,76 @@ public class ZMETest extends MIDlet {
         }
         return "OK";
     }
-    private void runDiag(Form f) {
-        f.append(new StringItem("Width: ", Integer.toString(f.getWidth())));
-        f.append(new StringItem("Height: ", Integer.toString(f.getHeight())));
-        f.append(new StringItem("Connect to yahoo: ", connectToUrl("http://www.yahoo.com/favicon.ico")));
-        f.append(new StringItem("Connect to dogfood: ", connectToUrl("https://dogfood.zimbra.com/favicon.ico")));
-        f.append(new StringItem("Connect to roadshow: ", connectToUrl("http://roadshow.zimbra.com/favicon.ico")));
-        f.append(new StringItem("Auth to dogfood: ", auth("https://dogfood.zimbra.com/service/soap", req1)));
-        f.append(new StringItem("Auth to roadshow: ", auth("http://roadshow.zimbra.com/service/soap", req2)));
+    private void runDiag() {
+        Form diagForm = new Form("diag");
+        Display.getDisplay(this).setCurrent(diagForm);
+        diagForm.append(new StringItem("Width: ", Integer.toString(mainForm.getWidth())));
+        diagForm.append(new StringItem("Height: ", Integer.toString(mainForm.getHeight())));
+        diagForm.append(new StringItem("Connect to yahoo: ", connectToUrl("http://www.yahoo.com/favicon.ico")));
+        diagForm.append(new StringItem("Connect to dogfood: ", connectToUrl("https://dogfood.zimbra.com/favicon.ico")));
+        diagForm.append(new StringItem("Connect to roadshow: ", connectToUrl("http://roadshow.zimbra.com/favicon.ico")));
+        diagForm.append(new StringItem("Auth to dogfood: ", auth("https://dogfood.zimbra.com/service/soap", req1)));
+        diagForm.append(new StringItem("Auth to roadshow: ", auth("http://roadshow.zimbra.com/service/soap", req2)));
+        diagForm.setCommandListener(this);
+        diagForm.addCommand(BACK);
     }
+    private void populateForm() {
+        //#ifdef polish.usePolishGui
+        //#style View
+        //# FramedForm ff = new FramedForm("ZMETest");
+        //# mainForm = ff;
+        //# ff.addCommand(OPTIONS);
+        //# ff.addSubCommand(ONE, OPTIONS);
+        //# ff.addSubCommand(TWO, ONE);
+        //# ff.addSubCommand(THREE, OPTIONS);
+        //#endif
+        if (mainForm == null)
+            mainForm = new Form("ZMETest");
+        mainForm.append(new StringItem(null, "One"));
+        //#style InputField
+        mainForm.append(new TextField("", null, 64, TextField.ANY));
+        mainForm.append(new StringItem(null, "Two"));
+        //#style InputField
+        mainForm.append(new TextField("", null, 64, TextField.ANY));
+        mainForm.append(new StringItem(null, "Three"));
+        //#style InputField
+        mainForm.append(new TextField("", null, 64, TextField.ANY));
+        mainForm.append(new StringItem(null, "Four"));
+        //#style InputField
+        mainForm.append(new TextField("", null, 64, TextField.ANY));
+        mainForm.append(new StringItem(null, "Five"));
+        //#style InputField
+        mainForm.append(new TextField("", null, 64, TextField.ANY));
+        mainForm.append(new StringItem(null, "Six"));
+        //#style InputField
+        mainForm.append(new TextField("", null, 64, TextField.ANY));
+        mainForm.addCommand(RUN_DIAG);
+        mainForm.setCommandListener(this);
+        Display.getDisplay(this).setCurrent(mainForm);
+    }
+
+    private Form mainForm;
+    
     protected void startApp() {
-        Form f = new Form("ZMETest");
-        Display.getDisplay(this).setCurrent(f);
-        runDiag(f);
+        populateForm();
     }
     protected void pauseApp() {
-        
     }
     protected void destroyApp(boolean a) {
-        
+    }
+    
+    private static final Command RUN_DIAG = new Command("Run Diagnostics", Command.ITEM, 1);
+    private static final Command BACK = new Command("Back", Command.BACK, 1);
+    private static final Command OPTIONS = new Command("Options", Command.ITEM, 1);
+    private static final Command ONE = new Command("One", Command.ITEM, 1);
+    private static final Command TWO = new Command("Two", Command.ITEM, 1);
+    private static final Command THREE = new Command("Three", Command.ITEM, 1);
+    
+    public void commandAction(Command cmd, Displayable d) {
+        if (cmd == RUN_DIAG) {
+            runDiag();
+        } else if (cmd == BACK) {
+            Display.getDisplay(this).setCurrent(mainForm);
+        }
     }
 }

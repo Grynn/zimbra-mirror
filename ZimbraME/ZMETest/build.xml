@@ -4,9 +4,10 @@
 	
 
 	<property name="polish.home" value="/Applications/J2ME-Polish" />
+	<property file="${polish.home}/global.properties" />
 	<property name="mpp.home" value="/Users/jylee/mpp-sdk" />
 	<property name="wtk.home" value="C:\WTK2.5.1" />
-	<property name="blackberry.home" value="/Users/jylee/BB-JDE-4.2.1" />
+	<property name="blackberry.home" value="/Users/jylee/jde" />
 
 	<property name="preverify" value="${mpp.home}/osx/preverify/preverify" />
 	<property name="jad.script" value="bin/jad.pl" />
@@ -17,7 +18,10 @@
 	<property name="rapc.jar" value="${blackberry.home}/bin/rapc.jar" />
 	<property name="rim.api.jar" value="${blackberry.home}/lib/net_rim_api.jar" />
 	
-	<property name="build.ver" value="0.1.3" />
+	<property name="build.no.file" value="zme.build.number" />
+	<property name="zme.version.major" value="0.1" />
+	<loadproperties srcfile="${build.no.file}" />
+	<property name="zme.version" value="${zme.version.major}.${build.number}" />
 
 	<path id="boot.class.path">
 		<fileset dir="${polish.home}/import">
@@ -33,7 +37,11 @@
 		</fileset>
 	</path>
 
-	<target name="compile">
+	<target name="update-build">
+		<buildnumber file="${build.no.file}" />
+	</target>
+	
+	<target name="compile" depends="update-build">
 	    <mkdir dir="${build.dir}/classes"/>
 	    <mkdir dir="${dist.dir}"/>
 	
@@ -63,15 +71,15 @@
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
 				<attribute name="MIDlet-Name" value="ZMETest" />
-				<attribute name="MIDlet-Version" value="${build.ver}" />
+				<attribute name="MIDlet-Version" value="${zme.version}" />
 				<attribute name="MIDlet-Vendor" value="Zimbra" />
 				<attribute name="MIDlet-Description" value="Zimbra Mobile Edition" />
 				<attribute name="MIDlet-Info-URL" value="http://www.zimbra.com" />
 				<attribute name="MIDlet-1" value="ZMETest,AppLogo.png,com.zimbra.zme.ZMETest" />
-				<attribute name="MIDlet-Delete-Confirm" value="Do you really want to uninstall ZMETest" />
-				<attribute name="MicroEdition-Configuration" value="CLDC-1.0" />
+				<attribute name="MIDlet-Delete-Confirm" value="Do you really want to uninstall ZMETest?" />
+				<attribute name="MicroEdition-Configuration" value="CLDC-1.1" />
 				<attribute name="MicroEdition-Profile" value="MIDP-2.0" />
-				<attribute name="MIDlet-Icon" value="AppLogo.png" />
+				<attribute name="MIDlet-Icon" value="/AppLogo.png" />
 			</manifest>
 		</jar>
 		
@@ -79,7 +87,7 @@
 		
 		<exec executable="${jad.script}" >
 			<arg value="${build.target}" />
-			<arg value="${build.ver}" />
+			<arg value="${zme.version}" />
 		</exec>
 		
 		<!-- rapc for blackberry -->
@@ -95,6 +103,179 @@
 		
 	</target>
 
+	<taskdef name="j2mepolish" 
+		classname="de.enough.polish.ant.PolishTask" 
+		classpath="${polish.home}/lib/enough-j2mepolish-build.jar:${polish.home}/lib/jdom.jar:${polish.home}/lib/proguard.jar"/>
+	
+	<target name="j2mepolish" 
+			description="This is the controller for the J2ME build process." 
+			depends="update-build"
+			>
+		<property name="zme.version" value="1.0" />
+		<j2mepolish>
+		    <!-- general settings, these settings basically form the JAD-attributes. -->
+		    <!-- Have a look at the <jad>-section for setting specialised attributes.
+		         You can also define localized attributes in the resources/messages.txt files -->
+			<info
+				license="GPL"
+				name="ZMETest"
+				version="${zme.version}"
+				description="Zimbra Mobile Edition"
+				vendorName="Zimbra"
+				infoUrl="http://www.zimbra.com"
+				jarName="zmetest.jar" 
+				jarUrl="${polish.jarName}"
+				copyright="Copyright 2006-2007 Zimbra. All rights reserved."
+				deleteConfirm="Do you really want to uninstall ZimbraME?" 
+			/>
+			
+			<!-- selection of supported devices -->
+			<!-- In the test mode the application is build only for the  -->
+			<!-- Generic/midp1 phone, but when the test-property is set to false, -->
+			<!-- the second deviceRequirements will be used instead. -->
+			<deviceRequirements if="test and !device:defined">
+				<requirement name="Identifier" value="Generic/MppPhone" />
+			</deviceRequirements>
+			<deviceRequirements if="device:defined">
+				<requirement name="Identifier" value="${device}" />
+			</deviceRequirements>
+			<deviceRequirements unless="test or device:defined">
+				<or>
+					<requirement name="Identifier" value="BlackBerry/8800" />
+					<!--
+					<requirement name="Identifier" value="Motorola/Motorokr_E6" />
+					<requirement name="Identifier" value="Motorola/Motorizr_Z3" />
+					<requirement name="Identifier" value="Motorola/Motorazr_V3xx" />
+					<requirement name="Identifier" value="Motorola/Motokrzr_K1" />
+					<requirement name="Identifier" value="Nokia/E61" />
+					<requirement name="Identifier" value="Nokia/N73" />
+					<requirement name="Identifier" value="Sony-Ericsson/W950i" />
+					<requirement name="Identifier" value="Samsung/SGH-E900" />
+	    	        <requirement name="Identifier" value="Generic/Midp2Cldc11" />
+					<requirement name="Identifier" value="Generic/MppPhone" />
+					<requirement name="Identifier" value="Generic/DefaultColorPhone" />
+	    	        -->
+				</or>
+			</deviceRequirements>
+			
+		    <!-- build settings -->
+			<!-- 
+			 -->
+			<build
+				fullscreen="menu"
+				usePolishGui="true"
+				sourceDir="src"
+				workDir="build"
+			>
+			    
+				<!-- midlets definition -->
+				<midlet class="com.zimbra.zme.ZMETest" name="ZMETest" icon="/AppLogo.png" />
+				
+				<!-- libraries -->
+				<libraries>
+					<!--library file="C:/p4/main/ZimbraME/lib/kxml2-2.3.0.jar"/-->
+					<!--library file="lib/tinylinegzip.zip"/-->
+				</libraries>
+					
+				<!-- user defined JAD attributes -->
+				<jad>
+					<attribute name="Midlet-Icon" value="/AppLogo.png"/>
+				</jad>	
+				
+				
+				<!-- project-wide variables - used for preprocessing.  -->
+				<!-- You can set localized variables in the resources/messages.txt files as well.  -->
+				<variables includeAntProperties="true" >
+					<!-- The MIDlet update URL -->
+					<variable name="update-url" value="http://www.zimbra.com/zimbrame/update" />
+					
+					<!-- suppress text field delete & clear commands -->
+					<variable name="polish.TextField.suppressCommands" value="true" />
+					
+					<!-- use the scrollbar instead of arrows -->
+					<variable name="polish.useScrollBar" value="true" />
+
+					<!-- enable the use of the ScreenInfo class -->
+					<variable name="polish.ScreenInfo.enable" value="true" />
+
+					<!-- enable typing directly in the field
+					<variable name="polish.TextField.useDirectInput" value="true"/>
+					-->
+
+				</variables>
+				<!-- Here you can set the dir attribute to "resources2" for an alternative design. -->
+				<resources
+					dir="resources"
+					defaultexcludes="yes"
+					excludes="readme.txt"
+				>
+					<!-- you can add resources based on complex criterias: 
+					<fileset 
+						dir="resources/multimedia" 
+						includes="*.wav" 
+						if="polish.audio.wav" 
+					/>
+					<fileset 
+						dir="resources/multimedia" 
+						includes="*.mid" 
+						if="polish.audio.midi and not polish.audio.wav" 
+					/>
+					-->
+					<!-- add the localization element for created localized
+					     versions of your application: -->
+					<localization locales="en_US" unless="test" />
+					<localization locales="en_US" if="test" />
+				</resources>
+				
+				<!-- obfuscator settings: do not obfuscate when the test-property is true -->
+				<obfuscator name="ProGuard" useDefaultPackage="false" unless="test || polish.blackberry || zme.blackberry" >
+					<parameter name="optimize" value="false" />
+					<!--
+					You can set additional parameters here, e.g.:
+					<parameter name="optimize" value="true" />
+					-->
+				</obfuscator>
+				
+				<!-- debug settings: only include debug setting when the test-property is true -->
+				<debug if="test" showLogOnError="true" verbose="true" level="error">
+					<filter pattern="com.zimbra.zme.*" level="debug" />
+					<filter pattern="de.enough.polish.ui.*" level="warn" />
+				</debug>
+				
+				
+			</build>
+			
+			
+			<!-- execution of emulator(s) -->
+			<emulator
+				wait="true"
+				securityDomain="trusted"
+				enableProfiler="false"
+				enableMemoryMonitor="false"
+				enableNetworkMonitor="false"
+				if="test and not debug and not zme.blackberry"
+				>
+			</emulator>
+		
+			<emulator
+				wait="false"
+				securityDomain="trusted"
+				enableProfiler="false"
+				enableMemoryMonitor="false"
+				enableNetworkMonitor="false"
+				if="debug">
+				<debugger port="8000" />
+			</emulator>
+			
+		</j2mepolish>
+	</target>
+
+	<target name="test">
+		<property name="test" value="true" />
+	</target>
+	
+	<target name="emulator" depends="test,j2mepolish" />
+	
 	<target name="clean" 
   			description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">
 		<delete dir="build" />
