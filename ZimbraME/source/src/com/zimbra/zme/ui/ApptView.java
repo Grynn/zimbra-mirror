@@ -327,9 +327,7 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
             } else if (op == Mailbox.MODIFYAPPT) {
                 //#debug 
                 System.out.println("ApptView.handleResponse: ModifyAppt successful");
-                if (mOrigAppt != null)
-                    mOrigAppt.copyFrom(mAppt);
-                mMidlet.getCalendarView().modifyAppt(mOrigAppt);
+                mMidlet.getCalendarView().modifyAppt(mOrigAppt, mAppt);
                 setNextCurrent();
             } else if (op == Mailbox.GETAPPT) {
                 //#debug 

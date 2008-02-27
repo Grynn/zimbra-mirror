@@ -141,10 +141,16 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
         populateResults();
     }
     
-    public void modifyAppt(Appointment appt) {
-        populateResults();
+    public void modifyAppt(Appointment oldAppt, Appointment appt) {
+    	if (oldAppt != null) {
+        	Calendar c = getDateForAppt(oldAppt);
+            ResultSet rs = getCachedResultSetForDate(c.getTime());
+            if (rs != null) {
+            	rs.mResults.removeElement(oldAppt);
+            }
+    	}
+        addAppt(appt);
     }
-
     private Calendar getDateForAppt(Appointment appt) {
         Date apptDate = new Date(appt.mStart);
         Calendar c = Calendar.getInstance();
