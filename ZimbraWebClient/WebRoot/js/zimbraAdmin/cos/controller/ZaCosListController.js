@@ -384,7 +384,7 @@ function () {
 	if(cnt >= 1) {
 		var arrDivs = this._contentView.getSelectedItems().getArray();
 		for(var key in arrDivs) {
-			var item = DwtListView.prototype.getItemFromElement.call(this, arrDivs[key]);
+			var item = this._contentView.getItemFromElement(arrDivs[key]);
 			if(item) {
 				if(item.name == "default") {
 					hasDefault = true;
