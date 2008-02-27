@@ -880,7 +880,6 @@ public class InitialSync {
                 pm.setRawDigest(digest);
                 size = blob.getRawSize();
 	        }
-	        pm.analyze();
         } catch (MessagingException e) {
         	OfflineLog.offline.error("Failed parsing message id=" + id, e);
         	return;
