@@ -340,6 +340,9 @@ function(index, realizeDeferred) {
 	if (AjxEnv.isIE) {
 		this._setEventHdlrs([DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE]);
 	}
+	if (AjxEnv.isSafari) {	// bug fix #25016
+		this._setEventHdlrs([DwtEvent.ONCONTEXTMENU]);
+	}
 	var data = {id:this._htmlElId,
 				divClassName:this._origClassName,
 				isCheckedStyle:this._tree._isCheckedStyle(),
@@ -406,6 +409,9 @@ DwtTreeItem.prototype._addMouseListeners =
 function() {
 	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONDBLCLICK];
 	events.push(AjxEnv.isIE ? DwtEvent.ONMOUSELEAVE : DwtEvent.ONMOUSEOUT);
+	if (AjxEnv.isSafari) {
+		events.push(DwtEvent.ONCONTEXTMENU);
+	}
 	for (var i = 0; i < events.length; i++) {
 		this.addListener(events[i], DwtTreeItem._listeners[events[i]]);
 	}
@@ -729,11 +735,25 @@ function(ev) {
 	}
 };
 
+DwtTreeItem._contextListener =
+function(ev) {
+	// for Safari, we have to fake a right click
+	if (AjxEnv.isSafari) {
+		var obj = DwtControl.getTargetControl(ev);
+		var prevent = obj ? obj.preventContextMenu() : true;
+		if (prevent) {
+			DwtTreeItem._mouseDownListener(ev);
+			return DwtTreeItem._mouseUpListener(ev);
+		}
+	}
+};
+
 DwtTreeItem._listeners = {};
 DwtTreeItem._listeners[DwtEvent.ONMOUSEDOWN] = new AjxListener(null, DwtTreeItem._mouseDownListener);
 DwtTreeItem._listeners[DwtEvent.ONMOUSEOUT] = new AjxListener(null, DwtTreeItem._mouseOutListener);
 DwtTreeItem._listeners[DwtEvent.ONMOUSEUP] = new AjxListener(null, DwtTreeItem._mouseUpListener);
 DwtTreeItem._listeners[DwtEvent.ONDBLCLICK] = new AjxListener(null, DwtTreeItem._doubleClickListener);
+DwtTreeItem._listeners[DwtEvent.ONCONTEXTMENU] = new AjxListener(null, DwtTreeItem._contextListener);
 
 
 /**
