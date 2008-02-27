@@ -47,12 +47,13 @@ import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
 
 import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.account.ldap.LdapDomain;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.soap.ZimbraSoapContext;
 
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
-import com.zimbra.cs.service.admin.AdminService;
+
 
 
 /**
@@ -66,7 +67,12 @@ public class GetLDAPEntries extends AdminDocumentHandler {
     	ZimbraSoapContext lc = getZimbraSoapContext(context);
         
     	Element b = request.getElement(ZimbraLDAPUtilsService.E_LDAPSEARCHBASE);
-        String ldapSearchBase = b.getText();
+        String ldapSearchBase;
+    	if(isDomainAdminOnly(lc)) {
+    		ldapSearchBase = ((LdapDomain)getAuthTokenAccountDomain(lc)).getDN();
+    	} else {
+    		ldapSearchBase = b.getText();
+    	}
         String sortBy = request.getAttribute(AdminConstants.A_SORT_BY, null);
         boolean sortAscending = request.getAttributeBool(AdminConstants.A_SORT_ASCENDING, true);
         int limit = (int) request.getAttributeLong(AdminConstants.A_LIMIT, Integer.MAX_VALUE);
@@ -88,15 +94,22 @@ public class GetLDAPEntries extends AdminDocumentHandler {
         
     	return response;
     }
-
-    public static LDAPEntry getObjectByDN(String dn, DirContext initCtxt) throws ServiceException {
+    
+    /** Returns whether domain admin auth is sufficient to run this command.
+     *  This should be overriden only on admin commands that can be run in a
+     *  restricted "domain admin" mode. */
+    public boolean domainAuthSufficient(Map<String, Object> context) {
+        return true; 
+    }
+    
+    public static LDAPUtilEntry getObjectByDN(String dn, DirContext initCtxt) throws ServiceException {
         DirContext ctxt = initCtxt;
         try {
             if (ctxt == null)
                 ctxt = LdapUtil.getDirContext();
                
             Attributes attrs = ctxt.getAttributes(dn);
-            LDAPEntry ne = new LDAPEntry(dn, attrs,null);
+            LDAPUtilEntry ne = new LDAPUtilEntry(dn, attrs,null);
             return ne;
             
         } catch (NameNotFoundException e) {
@@ -188,7 +201,7 @@ public class GetLDAPEntries extends AdminDocumentHandler {
                     	} else if(Arrays.binarySearch(LdapUtil.getMultiAttrString(attrs, Provisioning.A_objectClass), "posixAccount") > -1) {
                         	visitor.visit(new PosixAccount(dn, attrs,null));
                     	} else {
-                        	visitor.visit(new LDAPEntry(dn, attrs,null));
+                        	visitor.visit(new LDAPUtilEntry(dn, attrs,null));
                         }
                     }
                     cookie = getCookie(lctxt);

@@ -62,7 +62,7 @@ if(ZaSettings.initMethods)
 Zambra.initOUs = function () {
 	//check groups OU
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", Zambra.ldapSearchBase);
+	soapDoc.set("ldapSearchBase", Zambra.ldapSuffix);
 	soapDoc.set("query", Zambra.ldapGroupSuffix);	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
@@ -93,7 +93,7 @@ Zambra.initOUs = function () {
 
 	//check machines OU
 	soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", Zambra.ldapSearchBase);
+	soapDoc.set("ldapSearchBase", Zambra.ldapSuffix);
 	soapDoc.set("query", Zambra.ldapMachineSuffix);	
 	getSambaDomainsCommand = new ZmCsfeCommand();
 	params = new Object();

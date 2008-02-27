@@ -46,13 +46,13 @@ public class ModifyLDAPEntry extends AdminDocumentHandler {
 		Map<String, Object> attrs = AdminService.getAttrs(request, true);
 
 		try {
-			LDAPEntry ne = GetLDAPEntries.getObjectByDN(dn, ctxt);
+			LDAPUtilEntry ne = GetLDAPEntries.getObjectByDN(dn, ctxt);
 			LdapUtil.modifyAttrs(ctxt, ne.getDN(), attrs, ne);
 
 			ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] { "cmd",
 					"SaveLDAPEntry", "dn", dn }, attrs));
 			
-			LDAPEntry newNe = GetLDAPEntries.getObjectByDN(dn, ctxt);
+			LDAPUtilEntry newNe = GetLDAPEntries.getObjectByDN(dn, ctxt);
 			Element response = lc
 					.createElement(ZimbraLDAPUtilsService.MODIFY_LDAP_ENTRY_RESPONSE);
 			ZimbraLDAPUtilsService.encodeLDAPEntry(response, newNe);

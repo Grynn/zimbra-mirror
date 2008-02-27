@@ -22,28 +22,26 @@
  */
 package com.zimbra.ldaputils;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.ldap.LdapEntry;
 import com.zimbra.cs.account.ldap.LdapUtil;
 /**
  * @author Greg Solovyev
  */
-public class LDAPEntry extends NamedEntry  {
+public class LDAPUtilEntry extends NamedEntry  implements LdapEntry {
 
     protected String mDn;
 
-    LDAPEntry(String dn, Attributes attrs, Map<String, Object> defaults) throws NamingException {
+    LDAPUtilEntry(String dn, Attributes attrs, Map<String, Object> defaults) throws NamingException {
         super(LdapUtil.getAttrString(attrs, Provisioning.A_cn),
         		LdapUtil.getAttrString(attrs, Provisioning.A_cn), 
-                getAttrs(attrs), defaults);
+        		LdapUtil.getAttrs(attrs), defaults);
         mDn = dn;
     }
 
@@ -59,7 +57,7 @@ public class LDAPEntry extends NamedEntry  {
      * @param attrs the attributes to enumerate over
      * @throws NamingException
      */
-    static Map<String, Object> getAttrs(Attributes attrs) throws NamingException  {
+   /* static Map<String, Object> getAttrs(Attributes attrs) throws NamingException  {
         Map<String,Object> map = new HashMap<String,Object>();        
         for (NamingEnumeration ne = attrs.getAll(); ne.hasMore(); ) {
             Attribute attr = (Attribute) ne.next();
@@ -82,5 +80,5 @@ public class LDAPEntry extends NamedEntry  {
             }
         }
         return map;
-    }    
+    }    */
 }

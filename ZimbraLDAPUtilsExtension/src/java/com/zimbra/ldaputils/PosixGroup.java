@@ -25,7 +25,7 @@ import com.zimbra.cs.account.ldap.LdapUtil;
 /**
  * @author Greg Solovyev
  */
-public class PosixGroup extends LDAPEntry {
+public class PosixGroup extends LDAPUtilEntry {
 	private static final String A_gidNumber = "gidNumber";
 
 	public PosixGroup(String dn, Attributes attrs, Map<String, Object> defaults)

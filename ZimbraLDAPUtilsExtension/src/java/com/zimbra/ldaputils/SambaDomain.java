@@ -26,7 +26,7 @@ import com.zimbra.cs.account.ldap.LdapUtil;
 /**
  * @author Greg Solovyev
  */
-public class SambaDomain extends LDAPEntry {
+public class SambaDomain extends LDAPUtilEntry {
 
 	private static final String A_sambaSID = "sambaSID";
 	private static final String A_sambaDomainName = "sambaDomainName";	

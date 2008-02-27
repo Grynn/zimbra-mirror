@@ -28,7 +28,7 @@ ZaSambaDomain.loadMethod = function(by, val) {
 		return;
 		
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", Zambra.ldapSearchBase);
+	soapDoc.set("ldapSearchBase", Zambra.ldapSuffix);
 	soapDoc.set("query", "(&(objectClass=sambaDomain)(sambaDomainName="+val+"))");	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();

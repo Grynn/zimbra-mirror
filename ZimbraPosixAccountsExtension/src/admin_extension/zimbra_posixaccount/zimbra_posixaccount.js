@@ -44,7 +44,7 @@ if(ZaAccount.myXModel && ZaAccount.myXModel.items) {
 
 ZaPosixAccount.getNextUid = function () {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
+	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
 	soapDoc.set("query", "(objectClass=posixAccount)");	
 	soapDoc.set("sortBy", ZaPosixAccount.A_uidNumber);	
 	soapDoc.set("sortAscending", "false");		
@@ -208,7 +208,7 @@ if(ZaSettings.initMethods)
 zimbra_posixaccount.initOUs = function () {
 	
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
+	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
 	soapDoc.set("query", zimbra_posixaccount.ldapGroupSuffix);	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();

@@ -1,4 +1,4 @@
-<zimletConfig name="zimbra_posixaccount" version="1">
+<zimletConfig name="zimbra_posixaccount" version="4">
     <global>
        	<property name="loginShells">/bin/bash,/bin/sh,/bin/false</property>        
     	<property name="homePath">/home/%u</property>        

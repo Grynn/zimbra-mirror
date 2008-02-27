@@ -25,7 +25,7 @@ import com.zimbra.cs.account.ldap.LdapUtil;
 /**
  * @author Greg Solovyev
  */
-public class PosixAccount extends LDAPEntry {
+public class PosixAccount extends LDAPUtilEntry {
 	private static final String A_uidNumber = "uidNumber";
 	public PosixAccount(String dn, Attributes attrs,
 			Map<String, Object> defaults) throws NamingException {

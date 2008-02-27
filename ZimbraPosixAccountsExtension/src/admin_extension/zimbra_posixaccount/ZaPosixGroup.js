@@ -31,7 +31,7 @@ ZaPosixGroup.loadMethod = function(by, val) {
 		return;
 		
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
+	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
 	soapDoc.set("query", "(&(objectClass=posixGroup)(cn="+val+"))");	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();
@@ -53,7 +53,7 @@ if(ZaItem.initMethods["ZaPosixGroup"]) {
 
 ZaPosixGroup.getNextGid = function () {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
+	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
 	soapDoc.set("query", "(objectClass=posixGroup)");	
 	soapDoc.set("sortBy", ZaPosixGroup.A_gidNumber);	
 	soapDoc.set("sortAscending", "false");		
@@ -115,7 +115,7 @@ function(callback) {
 ZaPosixGroup.getAll =
 function(app) {
 	var soapDoc = AjxSoapDoc.create("GetLDAPEntriesRequest", "urn:zimbraAdmin", null);	
-	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSearchBase);
+	soapDoc.set("ldapSearchBase", zimbra_posixaccount.ldapSuffix);
 	soapDoc.set("query", "objectClass=posixGroup");	
 	var getSambaDomainsCommand = new ZmCsfeCommand();
 	var params = new Object();

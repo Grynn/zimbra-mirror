@@ -21,8 +21,6 @@ import java.util.Map;
 import org.dom4j.Namespace;
 import org.dom4j.QName;
 import com.zimbra.cs.account.NamedEntry;
-import com.zimbra.cs.service.account.AccountService;
-import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentService;
 import com.zimbra.common.soap.Element;
