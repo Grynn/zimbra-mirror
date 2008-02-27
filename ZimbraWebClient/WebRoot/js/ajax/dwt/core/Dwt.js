@@ -290,6 +290,11 @@ function(domElement, attrName) {
 	return AjxCore.objectWithId(domElement[attrName||"dwtObj"]);
 };
 
+/**
+ * Finds an ancestor element with the given attr.
+ * @param domElement
+ * @param attrName
+ */
 Dwt.findAncestor =
 function(domElement, attrName) {
 	while (domElement && (Dwt.getAttr(domElement, attrName) == null)) {
