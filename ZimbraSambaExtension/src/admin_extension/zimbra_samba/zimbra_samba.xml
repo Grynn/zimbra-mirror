@@ -9,4 +9,5 @@
 <include>ZaSambaDomainXFormView.js</include>
 <include>ZaSambaAcFlagsXFormItem.js</include>
 <include>ZaSambaGroupMapping.js</include>
+<testprop>trulialia</testprop>
 </zimlet>
