@@ -435,13 +435,12 @@
  			op->ora_e->e_name = op->o_req_dn;
  			op->ora_e->e_nname = op->o_req_ndn;
  			rc = slap_mods2entry( modlist, &op->ora_e, 1, 0, &text, txtbuf, textlen);
-@@ -1495,7 +1495,7 @@
+@@ -1495,6 +1495,6 @@
  		return -1;
  	}
  
 -	e = ( Entry * ) ch_calloc( 1, sizeof( Entry ) );
 +	e = entry_alloc();
- 	*entry = e;
  	e->e_name = op->o_req_dn;
  	e->e_nname = op->o_req_ndn;
 @@ -2273,12 +2273,11 @@
