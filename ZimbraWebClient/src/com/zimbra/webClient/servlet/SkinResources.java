@@ -61,6 +61,16 @@ public class SkinResources
 	private static final String P_COUNTRY = "country";
 	private static final String P_VARIANT = "variant";
 	private static final String P_SERVLET_PATH = "servlet-path";
+	private static final String P_TEMPLATES = "templates";
+
+	private static final String V_TRUE = "true";
+	private static final String V_FALSE = "false";
+	private static final String V_SPLIT = "split";
+	private static final String V_ONLY = "only";
+
+	private static final long MAX_INCLUDED_TEMPLATES_SIZE = 1 << 13; // 8K
+
+	private static final String A_TEMPLATES_INCLUDED = "skin.templates.included";
 
 	private static final String H_USER_AGENT = "User-Agent";
 
@@ -143,12 +153,15 @@ public class SkinResources
         String userAgent = getUserAgent(req);
         Map<String, String> macros = parseUserAgent(userAgent);
         String browserType = getMacroNames(macros.keySet());
-        String skin = getSkin(req);
+
+		String templates = req.getParameter(P_TEMPLATES);
+		if (templates == null) templates = V_TRUE;
+		String skin = getSkin(req) + "/templates=" + templates;
 
         Locale locale = getLocale(req);
-        String cacheId = client + ": " + skin + ": " + browserType;
+        String cacheId = client + ":" + skin + ":" + browserType;
         if (type.equals(T_JAVASCRIPT) || type.equals(T_CSS)) {
-            cacheId += ": " + locale;
+            cacheId += ":" + locale;
         }
 
         if (ZimbraLog.webclient.isDebugEnabled()) {
@@ -168,7 +181,7 @@ public class SkinResources
         String buffer = buffers != null && !debug ? buffers.get(uri) : null;
         if (buffer == null) {
             if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: generating buffer");
-            buffer = generate(req, resp, macros, type, client, locale);
+            buffer = generate(req, resp, macros, type, client, locale, templates);
             if (!debug) {
                 if (type.equals(T_CSS)) {
                     CssCompressor compressor = new CssCompressor(new StringReader(buffer));
@@ -275,7 +288,8 @@ public class SkinResources
 
     private String generate(HttpServletRequest req, HttpServletResponse resp,
                             Map<String, String> macros,
-                            String type, String client, Locale requestedLocale)
+                            String type, String client, Locale requestedLocale,
+							String templatesParam)
             throws IOException {
         String commentStart = "/* ";
         String commentContinue = " * ";
@@ -338,16 +352,38 @@ public class SkinResources
             List<File> files = new LinkedList<File>();
 
             if (filename.equals(N_SKIN)) {
-                files.addAll(manifest.getFiles(type));
                 if (type.equals(T_CSS)) {
-                    files.add(new File(skinDir, IMAGE_CSS));
-                } else if (type.equals(T_JAVASCRIPT)) {
-                    List<File> templates = manifest.templateFiles();
-                    for (File file : templates) {
-                        files.add(new File(file.getParentFile(), file.getName() + ".js"));
-                    }
-                }
-            } else {
+					files.addAll(manifest.getFiles(type));
+					files.add(new File(skinDir, IMAGE_CSS));
+				} 
+				else if (type.equals(T_JAVASCRIPT)) {
+					// decide whether to include templates
+					boolean only = templatesParam.equals(V_ONLY);
+					boolean split = templatesParam.equals(V_SPLIT);
+					boolean include = only || split || templatesParam.equals(V_TRUE);
+
+					// ignore main skin files if only want templates
+					if (!only) {
+						files.addAll(manifest.getFiles(type));
+					}
+
+					// include templates, unless request to split and too big
+					if (include) {
+						List<File> templates = manifest.templateFiles();
+						boolean included = includeTemplates(templates, split);
+						if (included) {
+							for (File file : templates) {
+								// TODO: optimize
+								files.add(new File(file.getParentFile(), file.getName() + ".js"));
+							}
+						}
+						req.setAttribute(A_TEMPLATES_INCLUDED, included);
+					}
+				}
+				else {
+					files.addAll(manifest.getFiles(type));
+				}
+			} else {
                 File file = new File(fileDir, filenameExt);
                 if (ZimbraLog.webclient.isDebugEnabled())
                     ZimbraLog.webclient.debug("DEBUG: file " + file.getAbsolutePath());
@@ -403,7 +439,21 @@ public class SkinResources
         return cout.toString();
     }
 
-    static void preprocess(File file,
+	static boolean includeTemplates(List<File> templates, boolean split) {
+		boolean include = true;
+		if (split) {
+			long size = 0;
+			for (File file : templates) {
+				// TODO: optimize
+				File template = new File(file.getParentFile(), file.getName()+".js");
+				size += template.exists() ? template.length() : 0;
+			}
+			include = size <= MAX_INCLUDED_TEMPLATES_SIZE;
+		}
+		return include;
+	}
+
+	static void preprocess(File file,
                            Writer writer,
                            Map<String, String> macros,
                            Manifest manifest,
