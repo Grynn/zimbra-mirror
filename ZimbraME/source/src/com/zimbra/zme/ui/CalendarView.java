@@ -132,6 +132,20 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 	}
 	
     public void addAppt(Appointment appt) {
+    	Calendar c = getDateForAppt(appt);
+        ResultSet rs = getCachedResultSetForDate(c.getTime());
+        if (rs != null) {
+            rs.addAppointment(appt);
+            mResults = rs;
+        }
+        populateResults();
+    }
+    
+    public void modifyAppt(Appointment appt) {
+        populateResults();
+    }
+
+    private Calendar getDateForAppt(Appointment appt) {
         Date apptDate = new Date(appt.mStart);
         Calendar c = Calendar.getInstance();
         c.setTime(apptDate);
@@ -139,12 +153,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
-        ResultSet rs = getCachedResultSetForDate(c.getTime());
-        if (rs != null) {
-            rs.addAppointment(appt);
-            mResults = rs;
-        }
-        populateResults();
+        return c;
     }
     
     private ResultSet getCachedResultSetForDate(Date d) {
