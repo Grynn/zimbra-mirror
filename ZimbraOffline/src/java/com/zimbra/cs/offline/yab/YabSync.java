@@ -20,11 +20,12 @@ import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.offline.OfflineLC;
 
 public class YabSync {
-	
-	private static final String SYNCHRONIZE = "/synchronize";
+    /*
+
+        private static final String SYNCHRONIZE = "/synchronize";
 	private static final String COOKIE = "Cookie";
 	
-	private Yauth yauth;
+	private RawAuth yauth;
 	private YabSyncState syncState;
 	private Mailbox mbox;
 	
@@ -45,13 +46,13 @@ public class YabSync {
 	public void sync() throws ServiceException {
 		
 		if (yauth == null || yauth.expiration < System.currentTimeMillis())
-			yauth = Yauth.authenticate(yid, ypw);
+			yauth = RawAuth.authenticate(yid, ypw);
 		
 		try {
 			runSync();
 		} catch (ServiceException x) {
 			if (x.getCode() == OfflineServiceException.AUTH_FAILED) {
-				yauth = Yauth.authenticate(yid, ypw);
+				yauth = RawAuth.authenticate(yid, ypw);
 				runSync();
 			} else {
 				throw x;
@@ -134,5 +135,6 @@ public class YabSync {
         method.setQueryString(nvps);
 		method.addRequestHeader(COOKIE, yauth.cookie);
 		return method;
-	}	
+	}
+		*/
 }

@@ -23,10 +23,9 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.cs.util.BuildInfo;
 
 public class OfflineLC {
-	
-	public static final KnownKey zdesktop_app_id;
-	public static final KnownKey zdesktop_name;
-	public static final KnownKey zdesktop_version;
+    public static final KnownKey zdesktop_app_id;
+    public static final KnownKey zdesktop_name;
+    public static final KnownKey zdesktop_version;
     public static final KnownKey zdesktop_skins;
     public static final KnownKey zdesktop_derby_properties;
     
