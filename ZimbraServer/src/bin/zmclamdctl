@@ -90,7 +90,7 @@ case "$1" in
         >> ${zimbra_log_directory}/freshclam.log 2>&1 &
 
     ${zimbra_home}/clamav/sbin/clamd \
-      --config-file ${zimbra_home}/conf/clamd.conf \
+      --config-file=${zimbra_home}/conf/clamd.conf \
         >> ${zimbra_log_directory}/clamd.log 2>&1 &
 
     for ((i = 0; i < 12; i++)); do
