@@ -19,6 +19,7 @@ describe DSPAM_HAM DSPAM claims it is ham
 score DSPAM_HAM -0.5
 
 %%uncomment VAR:zimbraMtaMyNetworks%%trusted_networks %%zimbraMtaMyNetworks%%
+%%uncomment VAR:zimbraMtaAntiSpamLockMethod%%lock_method %%zimbraMtaAntiSpamLockMethod%%
 
 rewrite_header Subject *SPAM* _STARS(*)_
 bayes_auto_learn 1
