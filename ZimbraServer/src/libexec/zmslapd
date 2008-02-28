@@ -16,6 +16,7 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-ulimit -c 32768
+ulimit -n 32768
+ulimit -c unlimited
 export LD_PRELOAD=/opt/zimbra/tcmalloc/lib/libtcmalloc.so
 exec /opt/zimbra/openldap/libexec/slapd "$@"
