@@ -92,33 +92,81 @@ function(fault, method) {
 	return new ZmCsfeException(msg, errorCode, method, faultCode, fault.Detail.Error.a, trace);
 };
 
+ZmCsfeCommand.prototype.toString =
+function() {
+	return "ZmCsfeCommand";
+};
+
 /**
- * Sends a SOAP request to the server and processes the response.
+ * Sends a SOAP request to the server and processes the response. The request can be in the form
+ * of a SOAP document, or a JSON object.
  *
- * @param params			[hash]			hash of params:
- *        soapDoc			[AjxSoapDoc]	the SOAP document that represents the request
- *        noAuthToken		[boolean]*		If true, the check for an auth token is skipped
- *        serverUri			[string]*		URI to send the request to
- *        targetServer		[string]*		Host that services the request
- *        useXml			[boolean]*		If true, an XML response is requested
- *        noSession			[boolean]*		If true, no session info is included
- *        changeToken		[string]*		Current change token
- *        highestNotifySeen [int]*  	    Sequence # of the highest notification we have processed
- *        asyncMode			[boolean]*		If true, request sent asynchronously
- *        callback			[AjxCallback]*	Callback to run when response is received (async mode)
- *        logRequest		[boolean]*		If true, SOAP command name is appended to server URL
- *        accountId			[string]*		ID of account to execute on behalf of
- *        accountName		[string]*		name of account to execute on behalf of
- *        skipAuthCheck		[boolean]*		don't check if auth token has changed
- *        resend			[constant]*		reason for resending request
+ * @param params			[hash]				hash of params:
+ *        soapDoc			[AjxSoapDoc]		the SOAP document that represents the request
+ *        jsonObj			[object]			JSON object that represents the request (alternative to soapDoc)
+ *        noAuthToken		[boolean]*			If true, the check for an auth token is skipped
+ *        serverUri			[string]*			URI to send the request to
+ *        targetServer		[string]*			Host that services the request
+ *        useXml			[boolean]*			If true, an XML response is requested
+ *        noSession			[boolean]*			If true, no session info is included
+ *        changeToken		[string]*			Current change token
+ *        highestNotifySeen [int]*  	    	Sequence # of the highest notification we have processed
+ *        asyncMode			[boolean]*			If true, request sent asynchronously
+ *        callback			[AjxCallback]*		Callback to run when response is received (async mode)
+ *        logRequest		[boolean]*			If true, SOAP command name is appended to server URL
+ *        accountId			[string]*			ID of account to execute on behalf of
+ *        accountName		[string]*			name of account to execute on behalf of
+ *        skipAuthCheck		[boolean]*			don't check if auth token has changed
+ *        resend			[constant]*			reason for resending request
  */
 ZmCsfeCommand.prototype.invoke =
 function(params) {
 
-	if (!(params && params.soapDoc)) { return; }
+	if (!(params && (params.soapDoc || params.jsonObj))) { return; }
+
+	var requestStr = params.soapDoc ? this._getSoapRequestStr(params) : this._getJsonRequestStr(params);
+
+	var rpcCallback;
+	try {
+		var uri = (params.serverUri || ZmCsfeCommand.serverUri) + params.methodNameStr;
+		this._st = new Date();
+		
+		var requestHeaders = {"Content-Type": "application/soap+xml; charset=utf-8"};
+		if (AjxEnv.isIE6 && (location.protocol == "https:")) { //bug 22829
+			requestHeaders["Connection"] = "Close";
+		}
+			
+		if (params.asyncMode) {
+			//DBG.println(AjxDebug.DBG1, "set callback for asynchronous response");
+			rpcCallback = new AjxCallback(this, this._runCallback, [params]);
+			this._rpcId = AjxRpc.invoke(requestStr, uri, requestHeaders, rpcCallback);
+		} else {
+			//DBG.println(AjxDebug.DBG1, "parse response synchronously");
+			var response = AjxRpc.invoke(requestStr, uri, requestHeaders);
+			return (!params.returnXml) ? (this._getResponseData(response, params)) : response;
+		}
+	} catch (ex) {
+		if (!(ex && (ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException))) {
+			var newEx = new ZmCsfeException();
+			newEx.method = params.methodNameStr;
+			newEx.detail = ex ? ex.toString() : "undefined exception";
+			newEx.code = ZmCsfeException.UNKNOWN_ERROR;
+			newEx.msg = "Unknown Error";
+			ex = newEx;
+		}
+		if (params.asyncMode) {
+			rpcCallback.run(new ZmCsfeResult(ex, true));
+		} else {
+			throw ex;
+		}
+	}
+};
+
+ZmCsfeCommand.prototype._getSoapRequestStr =
+function(params) {
 
 	var soapDoc = params.soapDoc;
-	
+
 	if (!params.resend) {
 
 		// Add the SOAP header and context
@@ -171,17 +219,17 @@ function(params) {
 		}
 	}
 
-	var methodNameStr = soapDoc.getMethod().nodeName;
+	params.methodNameStr = soapDoc.getMethod().nodeName;
 
 	// Get auth token from cookie if required
 	if (!params.noAuthToken) {
 		var authToken = ZmCsfeCommand.getAuthToken();
 		if (!authToken) {
-			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, methodNameStr);
+			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
 		}
 		if (ZmCsfeCommand._curAuthToken && !params.skipAuthCheck && 
 			(params.resend != ZmCsfeCommand.REAUTH) && (authToken != ZmCsfeCommand._curAuthToken)) {
-			throw new ZmCsfeException("AuthToken has changed", ZmCsfeException.AUTH_TOKEN_CHANGED, methodNameStr);
+			throw new ZmCsfeException("AuthToken has changed", ZmCsfeException.AUTH_TOKEN_CHANGED, params.methodNameStr);
 		}
 		ZmCsfeCommand._curAuthToken = authToken;
 		if (params.resend == ZmCsfeCommand.REAUTH) {
@@ -204,49 +252,11 @@ function(params) {
 			soapDoc.set("authToken", authToken, context);
 		}
 	}
-
-	var asyncMode = params.asyncMode;
-	DBG.println(AjxDebug.DBG1, ["<H4>", methodNameStr, (asyncMode) ? " (asynchronous)" : "" ,"</H4>"].join(""), methodNameStr);
+	
+	DBG.println(AjxDebug.DBG1, ["<H4>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" ,"</H4>"].join(""), params.methodNameStr);
 	DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 
-	var rpcCallback;
-	try {
-		var uri = (params.serverUri || ZmCsfeCommand.serverUri) + methodNameStr;
-		var requestStr = soapDoc.getXml();
-
-		this._st = new Date();
-		
-		var requestHeaders = {"Content-Type": "application/soap+xml; charset=utf-8"};
-		if (AjxEnv.isIE6 && (location.protocol == "https:")) { //bug 22829
-			requestHeaders["Connection"] = "Close";
-		}
-			
-		if (asyncMode) {
-			//DBG.println(AjxDebug.DBG1, "set callback for asynchronous response");
-			rpcCallback = new AjxCallback(this, this._runCallback, [params]);
-			this._rpcId = AjxRpc.invoke(requestStr, uri, requestHeaders, rpcCallback);
-		} else {
-			//DBG.println(AjxDebug.DBG1, "parse response synchronously");
-			var response = AjxRpc.invoke(requestStr, uri, requestHeaders);
-			return (!params.returnXml)
-				? (this._getResponseData(response, false, soapDoc))
-				: response;
-		}
-	} catch (ex) {
-		if (!(ex && (ex instanceof ZmCsfeException || ex instanceof AjxSoapException || ex instanceof AjxException))) {
-			var newEx = new ZmCsfeException();
-			newEx.method = methodNameStr;
-			newEx.detail = ex ? ex.toString() : "undefined exception";
-			newEx.code = ZmCsfeException.UNKNOWN_ERROR;
-			newEx.msg = "Unknown Error";
-			ex = newEx;
-		}
-		if (asyncMode) {
-			rpcCallback.run(new ZmCsfeResult(ex, true));
-		} else {
-			throw ex;
-		}
-	}
+	return soapDoc.getXml();
 };
 
 /**
@@ -285,8 +295,6 @@ function(response, params) {
 	this._en = new Date();
 	DBG.println(AjxDebug.DBG1, "ROUND TRIP TIME: " + (this._en.getTime() - this._st.getTime()));
 
-	var methodNameStr = params.soapDoc ? params.soapDoc.getMethod().nodeName : "";
-
 	var result = new ZmCsfeResult();
 	var xmlResponse = false;
 	var respDoc = null;
@@ -298,7 +306,7 @@ function(response, params) {
 			xmlResponse = true;
 			if (!(response.text || (response.xml && (typeof response.xml) == "string"))) {
 				// If we can't reach the server, req returns immediately with an empty response rather than waiting and timing out
-				throw new ZmCsfeException(null, ZmCsfeException.EMPTY_RESPONSE, methodNameStr);
+				throw new ZmCsfeException(null, ZmCsfeException.EMPTY_RESPONSE, params.methodNameStr);
 			}
 			// responseXML is empty under IE
 			respDoc = (AjxEnv.isIE || response.xml == null) ? AjxSoapDoc.createFromXml(response.text) :
@@ -313,7 +321,7 @@ function(response, params) {
 			}
 		}
 		if (!respDoc) {
-			var ex = new ZmCsfeException(null, ZmCsfeException.SOAP_ERROR, methodNameStr, "Bad XML response doc");
+			var ex = new ZmCsfeException(null, ZmCsfeException.SOAP_ERROR, params.methodNameStr, "Bad XML response doc");
 			DBG.dumpObj(AjxDebug.DBG1, ex);
 			if (params.asyncMode) {
 				result.set(ex, true);
@@ -341,7 +349,7 @@ function(response, params) {
 			eval("obj=" + respDoc);
 		} catch (ex) {
 			if (ex.name == "SyntaxError") {
-				ex = new ZmCsfeException(null, ZmCsfeException.BAD_JSON_RESPONSE, methodNameStr);
+				ex = new ZmCsfeException(null, ZmCsfeException.BAD_JSON_RESPONSE, params.methodNameStr);
 			}
 			DBG.dumpObj(AjxDebug.DBG1, ex);
 			if (params.asyncMode) {
@@ -359,7 +367,7 @@ function(response, params) {
 	var fault = obj.Body.Fault;
 	if (fault) {
 		// JS response with fault
-		var ex = ZmCsfeCommand.faultToEx(fault, methodNameStr);
+		var ex = ZmCsfeCommand.faultToEx(fault, params.methodNameStr);
 		if (params.asyncMode) {
 			result.set(ex, true, obj.Header);
 			return result;
@@ -368,7 +376,7 @@ function(response, params) {
 		}
 	} else if (!response.success) {
 		// bad XML or JS response that had no fault
-		var ex = new ZmCsfeException(null, ZmCsfeException.CSFE_SVC_ERROR, methodNameStr, "HTTP response status " + response.status);
+		var ex = new ZmCsfeException(null, ZmCsfeException.CSFE_SVC_ERROR, params.methodNameStr, "HTTP response status " + response.status);
 		if (params.asyncMode) {
 			result.set(ex, true);
 			return result;

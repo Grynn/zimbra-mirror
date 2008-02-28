@@ -1075,3 +1075,106 @@ function(sourceUri) {
     
     return uri;
 };
+
+AjxStringUtil._SPECIAL_CHARS = /["\\\x00-\x1f]/g;
+
+/**
+ * Converts a JS object to a string representation. Adapted from YAHOO.lang.JSON.stringify() in YUI 2.5.0, with the
+ * following differences:
+ * 		- does not support whitelist or depth limit
+ * 		- no special conversion for Date objects
+ * 
+ * @param o		[object]	object to convert to string
+ */
+AjxStringUtil.objToString =
+function(o) {
+	var t = typeof o,
+    i,len,j, // array iteration
+    k,v,     // object iteration
+    vt,      // typeof v during iteration
+    a,       // composition array for performance over string concat
+	pstack = []; // Processing stack used for cyclical ref detection
+
+	// escape encode special characters
+	var _char = function (c) {
+		if (!m[c]) {
+			var a = c.charCodeAt();
+			m[c] = '\\u00' + Math.floor(a / 16).toString(16) + (a % 16).toString(16);
+		}
+		return m[c];
+	};
+
+	var _string = function (s) {
+		return '"' + s.replace(AjxStringUtil._SPECIAL_CHARS, _char) + '"';
+	}
+	
+	// String
+	if (t === 'string') {
+		return _string(o);
+	}
+
+	// native boolean and Boolean instance
+	if (t === 'boolean' || o instanceof Boolean) {
+		return String(o);
+	}
+
+	// native number and Number instance
+	if (t === 'number' || o instanceof Number) {
+		return isFinite(o) ? String(o) : 'null';
+	}
+
+	// Array
+	if (AjxUtil.isArray(o)) {
+		// Check for cyclical references
+		for (i = pstack.length - 1; i >= 0; --i) {
+			if (pstack[i] === o) {
+				return 'null';
+			}
+		}
+	
+		// Add the array to the processing stack
+		pstack[pstack.length] = o;
+	
+		a = [];
+		for (i = o.length - 1; i >= 0; --i) {
+			a[i] = AjxStringUtil.objToString(o[i]);
+		}
+	
+		// remove the array from the stack
+		pstack.pop();
+	
+		return '[' + a.join(',') + ']';
+	}
+
+	// Object
+	if (t === 'object' && o) {
+		// Check for cyclical references
+		for (i = pstack.length - 1; i >= 0; --i) {
+			if (pstack[i] === o) {
+				return 'null';
+			}
+		}
+
+		// Add the object to the  processing stack
+		pstack[pstack.length] = o;
+
+		a = [];
+		j = 0;
+		for (k in o) {
+			if (typeof k === 'string' && o.hasOwnProperty(k)) {
+				v = o[k];
+				vt = typeof v;
+				if (vt !== 'undefined' && vt !== 'function') {
+					a[j++] = _string(k) + ':' + AjxStringUtil.objToString(v);
+				}
+			}
+		}
+
+		// Remove the object from processing stack
+		pstack.pop();
+
+		return '{' + a.join(',') + '}';
+	}
+
+	return 'null';
+};
