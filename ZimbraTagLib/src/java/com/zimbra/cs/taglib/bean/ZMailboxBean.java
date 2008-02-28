@@ -49,6 +49,8 @@ public class ZMailboxBean {
     }
 
     public ZMailbox getMailbox() { return mMbox; }
+
+    public String getNoOp() throws ServiceException { mMbox.noOp(); return "";}
     
     public ZFolderBean getInbox() throws ServiceException { return getFolderBeanById(ZFolder.ID_INBOX); }
 
