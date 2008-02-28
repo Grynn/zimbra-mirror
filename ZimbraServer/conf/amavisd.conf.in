@@ -55,7 +55,7 @@ $syslog_facility = 'local0';   # Syslog facility as a string
 $syslog_priority = 'info';  # Syslog base (minimal) priority as a string,
            # choose from: emerg, alert, crit, err, warning, notice, info, debug
 
-$enable_db = 1;              # enable use of BerkeleyDB/libdb (SNMP and nanny)
+$enable_db = 0;              # enable use of BerkeleyDB/libdb (SNMP and nanny)
 $enable_global_cache = 1;    # enable use of libdb-based cache if $enable_db=1
 
 $inet_socket_port = 10024;   # listen on this local TCP port(s) (see $protocol)
