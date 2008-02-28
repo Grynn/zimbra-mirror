@@ -379,7 +379,8 @@ AjxDateFormat = function(pattern) {
 				}
 			}
 			if (i == pattern.length) {
-				throw new FormatException(this, "unterminated string literal"); // I18n
+				// NOTE: try to avoid silent errors
+//				throw new FormatException(this, "unterminated string literal"); // I18n
 			}
 			var tail = i;
 			var segment = new AjxFormat.TextSegment(this, pattern.substring(head, tail));
@@ -1086,7 +1087,8 @@ AjxMessageFormat = function(pattern) {
 				}
 			}
 			if (i == pattern.length) {
-				throw new AjxFormat.FormatException(this, "unterminated string literal"); // I18n
+				// NOTE: try to avoid silent errors
+//				throw new AjxFormat.FormatException(this, "unterminated string literal"); // I18n
 			}
 			var tail = i;
 			var segment = new AjxFormat.TextSegment(this, pattern.substring(head, tail));
