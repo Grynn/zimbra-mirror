@@ -288,7 +288,7 @@
 		<echo file="${build.up_ver_ij}">
             CONNECT 'jdbc:derby:${param.derby.dir}';
 
-        	UPDATE zimbra.config set value='51' where name='db.version';
+        	UPDATE zimbra.config set value='52' where name='db.version';
 			COMMIT;
 
         	EXIT;
