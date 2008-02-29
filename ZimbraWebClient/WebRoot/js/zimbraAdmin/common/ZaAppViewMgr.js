@@ -55,7 +55,7 @@ ZaAppViewMgr = function(shell, controller, hasSkin) {
 	this._shell = shell;
 	this._controller = controller;
 	this._appCtxt = controller._appCtxt;
-	this._shellSz = this._shell.getSize();
+    this._shellSz = this._shell.getSize();
 	this._shell.addControlListener(new AjxListener(this, this._shellControlListener));
 	this._needBannerLayout = false;
 
@@ -288,7 +288,8 @@ function(visible) {
 	skin.showSearchBuilder(visible);
 	this._components[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR].zShow(visible);
 	this._components[ZaAppViewMgr.C_SEARCH_BUILDER].zShow(visible);
-	var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR,
+    if (visible) this._isAdvancedSearchBuilderDisplayed = true ;
+    var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR,
 				ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_APP_TABS, 
 				ZaAppViewMgr.C_TREE,
 				ZaAppViewMgr.C_TREE_FOOTER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
@@ -320,9 +321,23 @@ function(components) {
 				comp = elements[cid];
 			}
 			if (comp && (comp.getZIndex() != Dwt.Z_HIDDEN)) {
-				comp.setBounds(contBds.x, contBds.y, contBds.width, contBds.height);
-				this._contBounds[cid] = contBds;
-				
+                var y =  contBds.y ;
+                var h =  contBds.height ;
+                if (AjxEnv.isIE && (!this._isAdvancedSearchBuilderDisplayed)) {
+                    //bug  22173: IE hacking. Seems that the banner image size screw the height in IE. Maybe a small banner image on IE is the final solution?
+                    //Also the advanced Search Builder expand/collapse will also affect the display behavior. WEIRD! 
+                    if ( cid == ZaAppViewMgr.C_TREE )  {
+                        y += 8 ;
+                        h -= 5 ;
+                    }else if ( cid == ZaAppViewMgr.C_CURRENT_APP ) {
+                        y += 5 ;
+                    }
+                }
+
+                comp.setBounds(contBds.x, y, contBds.width, h);
+
+                this._contBounds[cid] = contBds;
+
 				//call the components resizeListener to rearrange the component layout
 				if (comp._resizeListener) {
 					comp._resizeListener();

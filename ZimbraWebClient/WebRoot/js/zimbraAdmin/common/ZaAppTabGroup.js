@@ -124,12 +124,17 @@ function (shouldShift){
 	}
 	var isShiftNeeded = false ;
 	var indexOfHiddenSelectedTab ;	
-	
-	if (AjxEnv.isIE) {
-		var y = -6 ;
-	}else{
-		var y = -9 ;
-	}
+
+    var y ;
+    if (AjxEnv.isIE) {
+		if (this._app._appViewMgr._isAdvancedSearchBuilderDisplayed)  { //once the advancedSearchBuilder is displayed, the skin height got changed. (weird). Hack to make it displayed properly
+            y = -11 ;
+        }else{
+            y = -4 ;
+        }
+    }else{
+		y = -9 ;
+	}                                                                            
 	for (var i=0; i < ZaAppTabGroup._TABS.size(); i++) {
 		var cTab = ZaAppTabGroup._TABS.get(i) ;
 				
