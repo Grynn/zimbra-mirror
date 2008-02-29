@@ -309,7 +309,7 @@ function(object, level) {
 	
 	if (level) {
 		for (var prop in object) {
-			if (typeof object[prop] == "object")
+			if (typeof object[prop] == "object" && object[prop] !== null)
 				proxy[prop] = AjxUtil.createProxy(object[prop], level - 1);
 		}
 	}	
