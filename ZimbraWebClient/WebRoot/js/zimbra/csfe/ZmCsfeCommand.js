@@ -162,6 +162,95 @@ function(params) {
 	}
 };
 
+ZmCsfeCommand.prototype._getJsonRequestStr =
+function(params) {
+
+	var obj = {Header:{}, Body:params.jsonObj};
+
+	if (!params.resend) {
+
+		var context = obj.Header.context = {_jsns:"urn:zimbra"};
+		var ua_name = ["ZimbraWebClient - ", AjxEnv.browser, " (", AjxEnv.platform, ")"].join("");
+		context.userAgent = {name:ua_name};
+		if (ZmCsfeCommand.clientVersion) {
+			context.userAgent.version = ZmCsfeCommand.clientVersion;
+		}
+		if (params.noSession) {
+			context.nosession = {};
+		}
+		var sessionId = ZmCsfeCommand.getSessionId();
+		if (sessionId) {
+			context.sessionId = {_content:sessionId, id:sessionId};
+		}
+		if (params.targetServer) {
+			context.targetServer = {_content:params.targetServer};
+		}
+		if (params.highestNotifySeen) {
+			context.notify = {seq:params.highestNotifySeen};
+		}
+		if (params.changeToken) {
+			context.change = {token:params.changeToken, type:"new"};
+		}
+	
+		// if we're not checking auth token, we don't want token/acct mismatch	
+		if (!params.skipAuthCheck) {
+			if (params.accountId) {
+				context.account = {_content:params.accountId, by:"id"}
+			} else if (params.accountName) {
+				context.account = {_content:params.accountName, by:"name"}
+			}
+		}
+		
+		// Tell server what kind of response we want
+		if (!params.useXml) {
+			context.format = {type:"js"};
+		}
+	}
+
+	for (var prop in params.jsonObj) {
+		params.methodNameStr = prop;
+		break;
+	}
+
+	// Get auth token from cookie if required
+	if (!params.noAuthToken) {
+		var authToken = ZmCsfeCommand.getAuthToken();
+		if (!authToken) {
+			throw new ZmCsfeException("AuthToken required", ZmCsfeException.NO_AUTH_TOKEN, params.methodNameStr);
+		}
+		if (ZmCsfeCommand._curAuthToken && !params.skipAuthCheck && 
+			(params.resend != ZmCsfeCommand.REAUTH) && (authToken != ZmCsfeCommand._curAuthToken)) {
+			throw new ZmCsfeException("AuthToken has changed", ZmCsfeException.AUTH_TOKEN_CHANGED, params.methodNameStr);
+		}
+		ZmCsfeCommand._curAuthToken = authToken;
+		if (false && params.resend == ZmCsfeCommand.REAUTH) {
+			// replace old auth token with current one
+			var nodes = soapDoc.getDoc().getElementsByTagName("authToken");
+			if (nodes && nodes.length == 1) {
+				DBG.println(AjxDebug.DBG1, "Re-auth: replacing auth token");
+				nodes[0].firstChild.data = authToken;
+			} else {
+				// can't find auth token, just add it to context element
+				nodes = soapDoc.getDoc().getElementsByTagName("context");
+				if (nodes && nodes.length == 1) {
+					DBG.println(AjxDebug.DBG1, "Re-auth: re-adding auth token");
+					soapDoc.set("authToken", authToken, nodes[0]);
+				} else {
+					DBG.println(AjxDebug.DBG1, "Re-auth: could not find context!");
+				}
+			}
+		} else if (!params.resend){
+			context.authToken = authToken;
+		}
+	}
+	
+	DBG.println(AjxDebug.DBG1, ["<H4>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" ,"</H4>"].join(""), params.methodNameStr);
+	var requestStr = AjxStringUtil.objToString(obj);
+	DBG.dumpObj(AjxDebug.DBG1, obj);
+
+	return requestStr;
+};
+
 ZmCsfeCommand.prototype._getSoapRequestStr =
 function(params) {
 
