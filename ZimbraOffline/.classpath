@@ -36,5 +36,6 @@
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.3.0.jar" sourcepath="/Lucene-2.3.0/src/java"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
