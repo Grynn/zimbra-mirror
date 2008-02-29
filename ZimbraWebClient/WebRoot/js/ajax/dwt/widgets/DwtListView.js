@@ -677,7 +677,8 @@ function(item, params) {
 		Dwt.setPosition(div, Dwt.ABSOLUTE_STYLE);
 	}
 
-	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
+	var id = params.isDragProxy ? this._getItemId(item) + "_dnd" : null;
+	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM, id);
 
 	return div;
 };
