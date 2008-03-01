@@ -68,27 +68,21 @@ public class SyncResponse extends Response {
         revision = Xml.getIntAttribute(e, "rev");
         ListIterator<Element> it = Xml.getChildren(e).listIterator();
         // Parse categories
-        Category category = parseCategory(it);
-        if (category != null) {
-            categories = new ArrayList<Category>();
-            do {
-                categories.add(category);
-            } while ((category = parseCategory(it)) != null);
+        categories = new ArrayList<Category>();
+        Category category;
+        while ((category = parseCategory(it)) != null) {
+            categories.add(category);
         }
         // Parse success or error results
-        Result result = parseResult(it);
-        if (result != null) {
-            results = new ArrayList<Result>();
-            do {
-                results.add(result);
-            } while ((result = parseResult(it)) != null);
+        results = new ArrayList<Result>();
+        Result result;
+        while ((result = parseResult(it)) != null) {
+            results.add(result);
         }
         // Parse events
-        if (it.hasNext()) {
-            events = new ArrayList<SyncResponseEvent>();
-            do {
-                events.add(SyncResponseEvent.fromXml(it.next()));
-            } while (it.hasNext());
+        events = new ArrayList<SyncResponseEvent>();
+        while (it.hasNext()) {
+            events.add(SyncResponseEvent.fromXml(it.next()));
         }
         return this;
     }

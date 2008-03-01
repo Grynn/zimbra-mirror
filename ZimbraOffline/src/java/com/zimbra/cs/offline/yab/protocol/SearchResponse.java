@@ -44,11 +44,9 @@ public class SearchResponse extends Response {
                 "Not a '" + TAG + "' element: " + e.getTagName());
         }
         List<Element> children = Xml.getChildren(e);
-        if (!children.isEmpty()) {
-            contacts = new ArrayList<Contact>(children.size());
-            for (Element child : children) {
-                contacts.add(Contact.fromXml(child));
-            }
+        contacts = new ArrayList<Contact>(children.size());
+        for (Element child : children) {
+            contacts.add(Contact.fromXml(child));
         }
         return this;
     }

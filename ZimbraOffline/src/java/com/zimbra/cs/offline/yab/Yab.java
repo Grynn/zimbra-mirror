@@ -51,7 +51,7 @@ public class Yab {
         System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
         System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
         Session session = createSession("D2hTUBHAkY0IEL5MA7ibTS_1K86E8RErSSaTGn4-", XML);
-        session.authenticate("dwconnelly", "lorx1246");
+        session.authenticate("dacztest", "test123");
         SearchRequest req = session.createSearchRequest("fields=all");
         SearchResponse res = (SearchResponse) req.send();
         System.out.printf("XXX Received %d contacts\n", res.getContacts().size());

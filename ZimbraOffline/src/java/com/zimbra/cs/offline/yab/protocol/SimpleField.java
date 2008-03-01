@@ -49,8 +49,16 @@ public class SimpleField extends Field {
         return new SimpleField(YAHOOID, yid, flags);
     }
 
+    public static SimpleField otherid(String yid, String... flags) {
+        return new SimpleField(OTHERID, yid, flags);
+    }
+
     public static SimpleField phone(String phone, String... flags) {
         return new SimpleField(PHONE, phone, flags);
+    }
+
+    public static SimpleField jobtitle(String phone, String... flags) {
+        return new SimpleField(JOBTITLE, phone, flags);
     }
 
     public static SimpleField company(String company) {
@@ -60,7 +68,11 @@ public class SimpleField extends Field {
     public static SimpleField notes(String notes) {
         return new SimpleField(NOTES, notes);
     }
-    
+
+    public static SimpleField custom(String phone, String... flags) {
+        return new SimpleField(CUSTOM, phone, flags);
+    }
+
     public SimpleField(String name) {
         super(name);
     }

@@ -44,6 +44,11 @@ public class SyncRequest extends Request {
     }
 
     @Override
+    protected boolean isPOST() {
+        return !events.isEmpty();
+    }
+    
+    @Override
     protected String getAction() {
         return SYNCHRONIZE;
     }
