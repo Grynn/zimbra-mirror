@@ -13,6 +13,9 @@
     <div><a href="javascript:createSimpleObjects()"><code>CreateSimpleObjects</code></a></div>
     <div id='results2' style="border:1px solid black; width:400px; overflow:auto">Results</div>
     <p/>
+    <div><a href="javascript:createSimpleObjectsParams()"><code>CreateSimpleObjectsParams</code></a></div>
+    <div id='results2a' style="border:1px solid black; width:400px; overflow:auto">Results</div>
+    <p/>
     <div><a href="javascript:createZmEventObjects()"><code>CreateZmEventObjects</code></a></div>
     <div id='results3' style="border:1px solid black; width:400px; overflow:auto">Results</div>
   </body>
@@ -37,6 +40,12 @@ SimpleObject = function(a, b, c) {
 	this.c = c;
 }
 
+SimpleObjectParams = function(params) {
+	this.a = params.a;
+	this.b = params.b;
+	this.c = params.c;
+}
+
 function createSimpleObjects () {
     var startTime = new Date();
     for (var i = 0; i < iterations; ++i){
@@ -45,6 +54,18 @@ function createSimpleObjects () {
     var endTime = new Date();
     var elapsed = endTime.getTime() - startTime.getTime();
     document.getElementById("results2").innerHTML = "Total time = " +
+	elapsed + "ms; number of objects = " + iterations + "<br>Avg = "
+	+ elapsed/iterations + "ms";
+}
+
+function createSimpleObjectsParams () {
+    var startTime = new Date();
+    for (var i = 0; i < iterations; ++i){
+		var obj = new SimpleObject({a:"hello", b:"there", c:"foo"});
+    }
+    var endTime = new Date();
+    var elapsed = endTime.getTime() - startTime.getTime();
+    document.getElementById("results2a").innerHTML = "Total time = " +
 	elapsed + "ms; number of objects = " + iterations + "<br>Avg = "
 	+ elapsed/iterations + "ms";
 }
