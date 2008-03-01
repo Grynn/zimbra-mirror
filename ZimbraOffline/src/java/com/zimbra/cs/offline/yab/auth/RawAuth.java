@@ -14,7 +14,7 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.yab;
+package com.zimbra.cs.offline.yab.auth;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,25 +23,20 @@ import java.util.ArrayList;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.methods.GetMethod;
-
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.offline.OfflineLC;
 
 /**
  * Implementation of Yahoo "Raw Auth" aka "Token Login v2"
  * See http://twiki.corp.yahoo.com/view/Membership/OpenTokenLogin
  */
-public class RawAuth {
+public class RawAuth implements Auth {
     private final String appId;
     private final String user;
     private String cookie;
     private String wssId;
     private long expiration;
 
-    private static final String BASE_URI = OfflineLC.zdesktop_yauth_baseuri.value();
+    private static final String BASE_URI = "https://login.yahoo.com/WSLogin/V1";
     private static final String GET_AUTH_TOKEN = BASE_URI + "/get_auth_token";
     private static final String GET_AUTH = BASE_URI + "/get_auth";
 
@@ -58,7 +53,7 @@ public class RawAuth {
     private static final String ERROR_DESCRIPTION = "ErrorDescription";
 
     public static RawAuth authenticate(String appId, String user, String pass)
-            throws ServiceException {
+            throws AuthenticationException, IOException {
         RawAuth auth = new RawAuth(appId, user);
         auth.authenticate(pass);
         return auth;
@@ -89,17 +84,8 @@ public class RawAuth {
         return expiration;
     }
 
-    public NameValuePair[] getParams() {
-        return new NameValuePair[] {
-            new NameValuePair(APPID, appId), new NameValuePair(WSSID, wssId)
-        };
-    }
-
-    public Header[] getHeaders() {
-        return new Header[] { new Header(COOKIE, cookie) };
-    }
-    
-    private void authenticate(String pass) throws ServiceException {
+    private void authenticate(String pass)
+            throws AuthenticationException, IOException {
         // Get auth token
         NameValuePair nvpAppId = new NameValuePair(APPID, appId);
         Response res = doGet(GET_AUTH_TOKEN, nvpAppId,
@@ -118,25 +104,22 @@ public class RawAuth {
         }
     }
 
-    private Response doGet(String uri, NameValuePair... params) throws ServiceException {
+    private Response doGet(String uri, NameValuePair... params)
+            throws AuthenticationException, IOException {
         GetMethod get = new GetMethod(uri);
         get.setQueryString(params);
-        try {
-            // XXX Should we share a single HttpClient() instance?
-            int code = new HttpClient().executeMethod(get);
-            Response res = new Response(uri, get);
-            switch (code) {
-            case 200:
-                return res;
-            case 403:
-                throw OfflineServiceException.AUTH_FAILED(user,
-                    "Authentication failed: " + res.getErrorMessage());
-            default:
-                throw badResponse(uri, "Unexpected response code: " + code);
-            }
-        } catch (IOException e) {
-            throw ServiceException.FAILURE(
-                "I/O error in '" + getRequestType(uri) + "' request", e);
+        // XXX Should we share a single HttpClient() instance?
+        int code = new HttpClient().executeMethod(get);
+        Response res = new Response(uri, get);
+        switch (code) {
+        case 200:
+            return res;
+        case 403:
+            throw new AuthenticationException(
+                "Authentication failed for user '" + user + "': " +
+                res.getErrorMessage());
+        default:
+            throw badResponse(uri, "Unexpected response code: " + code);
         }
     }
 
@@ -157,7 +140,7 @@ public class RawAuth {
             }
         }
 
-        String getRequiredValue(String name) throws ServiceException {
+        String getRequiredValue(String name) throws IOException {
             String value = getValue(name);
             if (value == null) {
                 throw badResponse(uri, "Missing required '" + name + "' field");
@@ -184,9 +167,9 @@ public class RawAuth {
         }
     }
 
-    private static ServiceException badResponse(String uri, String msg) {
-        return OfflineServiceException.UNEXPECTED(
-            "Bad '" + getRequestType(uri) + "' response: " + msg);
+    private static IOException badResponse(String uri, String msg) {
+        return new IOException(
+            "Unexpected '" + getRequestType(uri) + "' response: " + msg);
     }
 
     private static String getRequestType(String uri) {
@@ -195,7 +178,7 @@ public class RawAuth {
     }
 
     public static void main(String[] args) throws Exception {
-        RawAuth yauth = authenticate(OfflineLC.zdesktop_yauth_appid.value(), "jjztest", "test1234");
+        RawAuth yauth = authenticate("D2hTUBHAkY0IEL5MA7ibTS_1K86E8RErSSaTGn4-", "jjztest", "test1234");
         System.out.println("cookie=" + yauth.cookie);
         System.out.println("wssid=" + yauth.wssId);
         System.out.println("expiration=" + yauth.expiration);

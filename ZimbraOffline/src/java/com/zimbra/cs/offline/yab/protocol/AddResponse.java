@@ -24,26 +24,32 @@ import java.util.ArrayList;
 import com.zimbra.cs.offline.util.Xml;
 
 public class AddResponse extends Response {
-    private final List<Result> results;
+    private List<Result> results;
 
+    private static final String TAG = "add-response";
+    
     public static AddResponse fromXml(Element e) {
         return new AddResponse().parseXml(e);
     }
 
-    private AddResponse() {
-        results = new ArrayList<Result>();
-    }
+    private AddResponse() {}
 
     public List<Result> getResults() {
         return results;
     }
 
     private AddResponse parseXml(Element e) {
-        if (!e.getTagName().equals("add-response")) {
+        if (!e.getTagName().equals(TAG)) {
             throw new IllegalArgumentException(
-                "Not an 'add-response' element: " + e.getTagName());
+                "Not an '" + TAG + "' element: " + e.getTagName());
         }
-        for (Element child : Xml.getChildren(e)) {
+        List<Element> children = Xml.getChildren(e);
+        if (children.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Expected at least one result element");
+        }
+        results = new ArrayList<Result>(children.size());
+        for (Element child : children) {
             String tag = child.getTagName();
             if (tag.equals(ContactResult.TAG)) {
                 results.add(ContactResult.fromXml(child));
@@ -51,12 +57,8 @@ public class AddResponse extends Response {
                 results.add(ErrorResult.fromXml(child));
             } else {
                 throw new IllegalArgumentException(
-                    "Unrecognized 'add-response' result element: " + tag);
+                    "Unrecognized '" + TAG + "' result element: " + tag);
             }
-        }
-        if (results.size() == 0) {
-            throw new IllegalArgumentException(
-                "Expecting at least one 'add-response' result element");
         }
         return this;
     }

@@ -22,7 +22,7 @@ import org.w3c.dom.Document;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.zimbra.cs.offline.yab.RawAuth;
+import com.zimbra.cs.offline.yab.Session;
 
 public class AddRequest extends Request {
     private List<Contact> contacts;
@@ -30,8 +30,8 @@ public class AddRequest extends Request {
     public static final String ACTION = "addContacts";
     public static final String TAG = "add-request";
     
-    public AddRequest(RawAuth auth, String format) {
-        super(auth, format);
+    public AddRequest(Session session) {
+        super(session);
         contacts = new ArrayList<Contact>();
     }
 
@@ -55,5 +55,10 @@ public class AddRequest extends Request {
             e.appendChild(contact.toXml(doc, "contact"));
         }
         return e;
+    }
+
+    @Override
+    protected Response parseResponse(Document doc) {
+        return AddResponse.fromXml(doc.getDocumentElement());
     }
 }

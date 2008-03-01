@@ -55,6 +55,7 @@ public class ErrorResult extends Result {
     }
 
     public ErrorResult parseXml(Element e) {
+        assert e.getTagName().equals(TAG);
         for (Element child : Xml.getChildren(e)) {
             String name = child.getTagName();
             if (name.equals("code")) {
@@ -67,7 +68,7 @@ public class ErrorResult extends Result {
                 retryAfter = Xml.getIntValue(child);
             } else {
                 throw new IllegalArgumentException(
-                    "Invalid 'error' result element: " + name);
+                    "Invalid '" + TAG + "' result element: " + name);
             }
         }
         return this;

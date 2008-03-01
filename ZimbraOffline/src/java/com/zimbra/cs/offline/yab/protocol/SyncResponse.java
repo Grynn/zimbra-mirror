@@ -31,10 +31,12 @@ public class SyncResponse extends Response {
     private List<Result> results;
     private List<SyncResponseEvent> events;
 
+    private static final String TAG = "sync-response";
+    
     public static SyncResponse fromXml(Element e) {
         return new SyncResponse().parseXml(e);
     }
-    
+
     private SyncResponse() {}
 
     public int getLastModifiedTime() {
@@ -58,9 +60,9 @@ public class SyncResponse extends Response {
     }
     
     private SyncResponse parseXml(Element e) {
-        if (!e.getTagName().equals("sync-response")) {
+        if (!e.getTagName().equals(TAG)) {
             throw new IllegalArgumentException(
-                "Not a 'sync-response' element: " + e.getTagName());
+                "Not a '" + TAG + "' element: " + e.getTagName());
         }
         lastModifiedTime = Xml.getIntAttribute(e, "lmt");
         revision = Xml.getIntAttribute(e, "rev");

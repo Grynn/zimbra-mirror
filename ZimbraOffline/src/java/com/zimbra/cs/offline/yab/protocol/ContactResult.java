@@ -48,6 +48,7 @@ public class ContactResult extends Result {
     }
     
     private ContactResult parseXml(Element e) {
+        assert e.getTagName().equals(TAG);
         addAction = AddAction.fromXml(e);
         contact = Contact.fromXml(e);
         return this;

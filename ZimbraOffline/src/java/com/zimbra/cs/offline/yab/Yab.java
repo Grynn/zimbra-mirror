@@ -16,42 +16,44 @@
  */
 package com.zimbra.cs.offline.yab;
 
-import com.zimbra.cs.offline.OfflineLC;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.zimbra.cs.offline.yab.protocol.SearchRequest;
+import com.zimbra.cs.offline.yab.protocol.SearchResponse;
 
 /**
  * Yahoo Address book access.
  */
 public class Yab {
-    private final RawAuth auth;
-    private final String format;
-    private final NameValuePair[] params;
-    
-    private static final String BASE_URI = OfflineLC.zdesktop_yab_baseuri.value();
-    private static final String FORMAT = "format";
-
+    public static final String BASE_URI = "http://address.yahooapis.com/v1";
+    public static final String DTD = "http://l.yimg.com/us.yimg.com/lib/pim/r/abook/xml/2/pheasant.dtd";
     public static final String XML = "xml";
     public static final String JSON = "json";
 
-    public static final String SEARCH_CONTACTS = "searchContacts";
-    public static final String GET_CATEGORIES = "getCategories";
-    public static final String ADD_CONTACTS = "addContacts";
-    public static final String SYNCHRONIZE = "synchronize";
-
-    public Yab(RawAuth auth, String format, NameValuePair[] params) {
-        this.auth = auth;
-        this.format = format;
-        this.params = params;
+    public static final Boolean DEBUG = true; // Boolean.getBoolean("zimbra.yab.debug");
+    
+    public static Session createSession(String appId, String format) {
+        return new Session(appId, format);
     }
 
-    public Yab(RawAuth auth, NameValuePair[] params) {
-        this(auth, XML, params);
+    public static Session createSession(String appId) {
+        return new Session(appId, XML);
     }
 
+    public static void debug(String format, Object... args) {
+        if (DEBUG) {
+            System.out.printf("[DEBUG] " + format, args);
+            System.out.println();
+        }
+    }
+    
+    public static void main(String[] args) throws Exception {
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+        System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
+        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
+        Session session = createSession("D2hTUBHAkY0IEL5MA7ibTS_1K86E8RErSSaTGn4-", XML);
+        session.authenticate("dwconnelly", "lorx1246");
+        SearchRequest req = session.createSearchRequest("fields=all");
+        SearchResponse res = (SearchResponse) req.send();
+        System.out.printf("XXX Received %d contacts\n", res.getContacts().size());
+    }
 }

@@ -24,6 +24,8 @@ public class SuccessResult extends Result {
     private int cid = -1;
     private int catid = -1;
 
+    public static final String TAG = "success";
+    
     public static SuccessResult fromXml(Element e) {
         return new SuccessResult().parseXml(e);
     }
@@ -56,9 +58,7 @@ public class SuccessResult extends Result {
     }
 
     private SuccessResult parseXml(Element e) {
-        if (e.getTagName().equals("success")) {
-            throw new IllegalArgumentException("Not a 'success' element");
-        }
+        assert e.getTagName().equals(TAG);
         addAction = AddAction.fromXml(e);
         cid = Xml.getIntAttribute(e, "cid");
         catid = Xml.getIntAttribute(e, "catid");

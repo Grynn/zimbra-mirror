@@ -2,77 +2,96 @@ package com.zimbra.cs.offline.yab.protocol;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.IOException;
+import java.io.InputStream;
 
-import com.zimbra.cs.offline.OfflineLC;
-import com.zimbra.cs.offline.yab.RawAuth;
+import com.zimbra.cs.offline.yab.Session;
+import com.zimbra.cs.offline.yab.Yab;
+import com.zimbra.cs.offline.util.Xml;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public abstract class Request {
-    protected final RawAuth auth;
-    protected final String format;
+    protected Session session;
     protected HttpMethod method;
+    protected List<NameValuePair> params;
 
-    private static final String BASE_URI = OfflineLC.zdesktop_yab_baseuri.value();
-    private static final String FORMAT = "format";
-
-    public static final String XML = "xml";
-    public static final String JSON = "json";
-
-    protected Request(RawAuth auth, String format) {
-        this.auth = auth;
-        this.format = format;
+    protected Request(Session session) {
+        this.session = session;
+        params = new ArrayList<NameValuePair>();
+        addParam("appid", session.getAppId());
+        addParam("WSSID", session.getAuth().getWSSID());
+        addParam("format", session.getFormat());
     }
     
-    protected HttpMethod getHttpMethod() {
-        return null;
+    protected boolean isPOST() {
+        return false; // Default is GET request
     }
 
     protected abstract String getAction();
-    
-    protected NameValuePair[] getAdditionalParams() {
-        return new NameValuePair[0];
+
+    public void addParam(String name, String value) {
+        params.add(new NameValuePair(name, value));
     }
-
-    public abstract Element toXml(Document doc);
     
-    private NameValuePair[] getParams() {
-        NameValuePair[] authParams = auth.getParams();
-        NameValuePair[] additionalParams = getAdditionalParams();
-        List<NameValuePair> params = new ArrayList<NameValuePair>(
-            authParams.length + additionalParams.length + 2);
-        params.addAll(Arrays.asList(authParams));
-        params.add(new NameValuePair(FORMAT, format));
-        params.addAll(Arrays.asList(additionalParams));
-        return params.toArray(new NameValuePair[params.size()]);
-    }
-
-    /*
-    public Element encode(Mailbox mbox, OperationContext context, YabSyncState syncState) throws ServiceException {
-
-        int lastSeq = syncState.getModSequence();
-        int pushSeq = 0;
-        List<Integer> tombstones = null;
-        List<Tag> tags = null;
-        MailItem[] contacts = null;
-        synchronized (mbox) {
-            tombstones = mbox.getTombstones(lastSeq);
-            tags = mbox.getModifiedTags(context, lastSeq);
-            List<Integer> contactIds = mbox.getModifiedItems(context, lastSeq, MailItem.TYPE_CONTACT).getFirst();
-            if (contactIds.size() > 0) {
-                int[] ids = new int[contactIds.size()];
-                for (int i = 0; i < ids.length; ++i) ids[i] = contactIds.get(i);
-                contacts = mbox.getItemById(context, ids, MailItem.TYPE_CONTACT);
-            } else
-                contacts = new MailItem[0];
-            pushSeq = mbox.getLastChangeID();
-        }
-
-        for (Tag tag : tags) {
+    public void addParams(String params) {
+        for (String s : params.split("&")) {
+            int i = s.indexOf('=');
+            if (i == -1) {
+                throw new IllegalArgumentException(
+                    "Invalid parameter specification: " + params);
+            }
+            addParam(s.substring(0, i), s.substring(i + 1));
         }
     }
-    */
+
+    public Element toXml(Document doc) {
+        return null; // Only needed for POST requests
+    }
+
+    public Response send() throws IOException {
+        if (Yab.DEBUG && isPOST()) {
+            Yab.debug("Sending request:");
+            Xml.print(toXml(), System.out);
+        }
+        HttpMethod method = getHttpMethod();
+        int code = session.getHttpClient().executeMethod(method);
+        if (code != 200) {
+            throw new HttpException("HTTP request failed: " + code + ": " +
+                                    HttpStatus.getStatusText(code));
+        }
+        InputStream is = method.getResponseBodyAsStream();
+        Document doc = session.parseDocument(is);
+        if (Yab.DEBUG) {
+            Yab.debug("Received response:");
+            Xml.print(doc, System.out);
+        }
+        return parseResponse(doc);
+    }
+
+    protected abstract Response parseResponse(Document doc);
+
+    private HttpMethod getHttpMethod() {
+        String uri = Yab.BASE_URI + '/' + getAction();
+        HttpMethod method = isPOST() ? new PostMethod(uri) : new GetMethod(uri);
+        method.setQueryString(params.toArray(new NameValuePair[params.size()]));
+        method.addRequestHeader("Cookie", session.getAuth().getCookie());
+        method.addRequestHeader("Content-Type", "application/" + session.getFormat());
+        if (isPOST()) {
+            ((PostMethod) method).setRequestEntity(session.getRequestEntity(toXml()));
+        }
+        return method;
+    }
+
+    private Document toXml() {
+        Document doc = session.createDocument();
+        doc.appendChild(toXml(doc));
+        return doc;
+    }
 }

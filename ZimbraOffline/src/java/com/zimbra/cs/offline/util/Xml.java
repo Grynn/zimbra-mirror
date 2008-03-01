@@ -21,16 +21,22 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.OutputStream;
-import java.io.IOException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.dom.DOMSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.Writer;
+import java.io.OutputStreamWriter;
 
 /**
  * Various XML utility methods.
@@ -91,18 +97,25 @@ public final class Xml {
         return nodes;
     }
 
-    public static Document createDocument() throws ParserConfigurationException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        return db.newDocument();
+    public static DocumentBuilder createDocumentBuilder() {
+        try {
+            return DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new IllegalStateException("Unable to create document builder", e);
+        }
     }
-    
-    public static void prettyPrint(Document doc, OutputStream out) throws IOException {
-        OutputFormat format = new OutputFormat(doc);
-        format.setLineWidth(80);
-        format.setIndenting(true);
-        format.setIndent(2);
-        XMLSerializer serializer = new XMLSerializer(out, format);
-        serializer.serialize(doc);
+
+    public static void print(Node node, OutputStream os) throws IOException {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        tf.setAttribute("indent-number", 4);
+        Writer w = new OutputStreamWriter(os, "utf-8");
+        try {
+            Transformer t = tf.newTransformer();
+            t.setOutputProperty(OutputKeys.INDENT, "yes");
+            t.transform(new DOMSource(node), new StreamResult(w));
+            w.flush();
+        } catch (TransformerException e) {
+            throw new IllegalStateException("Unable to serialize document", e);
+        }
     }
 }
