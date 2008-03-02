@@ -30,7 +30,7 @@ YMEmoticonsPickerButton.prototype = new DwtButton;
 YMEmoticonsPickerButton.prototype.constructor = YMEmoticonsPickerButton;
 
 YMEmoticonsPickerButton.prototype._createMenu = function() {
-        var menu = new DwtMenu({parent:this, style:DwtMenu.GENERIC_WIDGET_STYLE, inDialog:true});
+        var menu = new DwtMenu({parent:this, style:DwtMenu.GENERIC_WIDGET_STYLE});
         this._picker = new YMEmoticonsPicker(menu,null,null);
 	    this._picker.addSelectionListener(new AjxListener(this, this._smileyPicked));
         return menu;

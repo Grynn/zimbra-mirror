@@ -595,7 +595,7 @@ function() {
 
 DwtSelectMenu = function(parent) {
 //    DwtMenu.call(this, parent, DwtMenu.DROPDOWN_STYLE, "ZSelectMenu", null, true);
-    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", inDialog:true});
+    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu"});
 }
 DwtSelectMenu.prototype = new DwtMenu;
 DwtSelectMenu.prototype.constructor = DwtSelectMenu;

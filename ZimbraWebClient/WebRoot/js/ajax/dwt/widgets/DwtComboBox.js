@@ -27,7 +27,6 @@
  *        inputParams	[hash]				params for the input (see DwtInputField)
  *        className		[string]*			CSS class
  *        posStyle		[constant]*			positioning style
- *        inDialog		[boolean]*			if true, combo box is part of a dialog
  */
 DwtComboBox = function(params) {
     if (arguments.length == 0) { return; }
@@ -43,7 +42,6 @@ DwtComboBox = function(params) {
     this._valueToItem = {};
 	this._size = 0;
 
-	this._inDialog = params.inDialog;
     this._hasMenuCallback = true;
 	this._menuItemListenerObj = new AjxListener(this, this._menuItemListener);
 
@@ -178,7 +176,7 @@ DwtComboBox.prototype.focus = function() {
 
 DwtComboBox.prototype._createMenu =
 function() {
-    var menu = new DwtMenu({parent:this, inDialog:this._inDialog});
+    var menu = new DwtMenu({parent:this});
     for (var i in this._textToValue) {
     	var item = this._createMenuItem(menu, i);
         var value = this._textToValue[i];

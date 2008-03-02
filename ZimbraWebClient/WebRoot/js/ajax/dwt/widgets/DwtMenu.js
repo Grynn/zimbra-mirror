@@ -36,7 +36,6 @@
  *        style			[constant]*			menu style
  *        className		[string]*			CSS class
  *        posStyle		[constant]*			positioning style
- *        inDialog 		[boolean]*			if true, menu is part of a dialog
  */
 DwtMenu = function(params) {
 	if (arguments.length == 0) { return; }
@@ -63,7 +62,6 @@ DwtMenu = function(params) {
 	DwtComposite.call(this, params);
 	this.parent = parent;
 	if (!parent) { return; }
-	this._inDialog = params.inDialog;
 
 	var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
 							   [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
@@ -125,7 +123,7 @@ DwtMenu = function(params) {
 	this._tabGroup.addMember(this);
 }
 
-DwtMenu.PARAMS = ["parent", "style", "className", "posStyle", "inDialog"];
+DwtMenu.PARAMS = ["parent", "style", "className", "posStyle"];
 
 DwtMenu.prototype = new DwtComposite;
 DwtMenu.prototype.constructor = DwtMenu;

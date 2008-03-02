@@ -473,7 +473,7 @@ DwtPropertyEditor.prototype._createCalendar = function(prop, target) {
 	this._currentFieldCell = null;
 
 	btn.setText(prop._makeDisplayValue());
-	var menu = new DwtMenu({parent:btn, style:DwtMenu.CALENDAR_PICKER_STYLE, inDialog:true});
+	var menu = new DwtMenu({parent:btn, style:DwtMenu.CALENDAR_PICKER_STYLE});
 	menu.setAssociatedObj(btn);
 	var cal = new DwtCalendar({parent:menu});
 	var date = new Date();

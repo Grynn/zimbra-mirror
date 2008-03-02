@@ -236,9 +236,9 @@ function () {
 	var dateButtonListener = new AjxListener(this, this._dateButtonListener);
 	var dateCalSelectionListener = new AjxListener(this, this._dateCalSelectionListener);
 		
-	this._checkinDateButton = ZmCalendarApp.createMiniCalButton(this, this._checkinDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, true);
+	this._checkinDateButton = ZmCalendarApp.createMiniCalButton(this, this._checkinDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener);
 									
-	this._checkoutDateButton = ZmCalendarApp.createMiniCalButton(this, this._checkoutDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, true);
+	this._checkoutDateButton = ZmCalendarApp.createMiniCalButton(this, this._checkoutDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener);
 	
 
 	var searchSideStep=true;

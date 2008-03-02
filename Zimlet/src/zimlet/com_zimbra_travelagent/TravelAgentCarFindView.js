@@ -428,7 +428,7 @@ function () {
 	var dateButtonListener = new AjxListener(this, this._dateButtonListener);
 	var dateCalSelectionListener = new AjxListener(this, this._dateCalSelectionListener);
 		
-	this._pickupDateButton = ZmCalendarApp.createMiniCalButton(this, this._pickupDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, true);
+	this._pickupDateButton = ZmCalendarApp.createMiniCalButton(this, this._pickupDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener);
 									
 	this._dropoffAirportField = new DwtInputField({parent:this, type:DwtInputField.STRING,
 											initialValue:myAirport, size:null, maxLen:null,
@@ -444,7 +444,7 @@ function () {
 		dropoffTimeCell.appendChild(this._dropoffTimeSelect.getHtmlElement());
 	delete this._dropoffTimeSelectId;	
 
-	this._dropoffDateButton = ZmCalendarApp.createMiniCalButton(this, this._dropoffDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener, true);
+	this._dropoffDateButton = ZmCalendarApp.createMiniCalButton(this, this._dropoffDateMiniCalBtnId, dateButtonListener, dateCalSelectionListener);
 	
 	if(searchSideStep=="true" || searchSideStep===true) {
 		var searchButton = new DwtButton({parent:this});	
