@@ -646,15 +646,12 @@ function(x, y, kbGenerated) {
 
 	// Hide the tooltip
 	var tooltip = this.shell.getToolTip();
-	if (tooltip)
+	if (tooltip) {
 		tooltip.popdown();
+	}
 
-	// 5/2/2005
-	// EMC -- changed this to Z_DIALOG_MENU so that you don't have to pass 
-	// dialog object. This helps if you are adding an object to a dialog -- 
-	// where the object doesn't know anything about its container.
-	// var zIndex = this._dialog ? this._dialog.getZIndex() + Dwt._Z_INC : Dwt.Z_MENU;
-	var zIndex = this._inDialog ? Dwt.Z_DIALOG_MENU : Dwt.Z_MENU;
+	// bump z-index if we're inside a dialog
+	var zIndex = DwtBaseDialog.getActiveDialog() ? Dwt.Z_DIALOG_MENU : Dwt.Z_MENU;
 	this.setZIndex(zIndex);
 	this._popupActionId = -1;
 	this._isPoppedup = true;
