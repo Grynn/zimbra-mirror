@@ -126,9 +126,8 @@ public class LoginTag extends ZimbraSimpleTag {
             boolean needRefer = (refer != null && !refer.equalsIgnoreCase(serverName));
 
             if ((mAuthToken == null || mAuthTokenInUrl) && !needRefer) {
-                // Cookie authTokenCookie = new Cookie(ZJspSession.COOKIE_NAME, mbox.getAuthToken().getValue());
                 ZAuthToken zat = mbox.getAuthToken();
-                Map<String, String> cookieMap = zat.toCookieMap(false);
+                Map<String, String> cookieMap = zat.cookieMap(false);
                 Integer maxAge = null;
                 if (mRememberMe) {
                     ZAuthResult authResult = mbox.getAuthResult();
