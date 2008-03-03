@@ -1077,6 +1077,15 @@ function(sourceUri) {
 };
 
 AjxStringUtil._SPECIAL_CHARS = /["\\\x00-\x1f]/g;
+AjxStringUtil._CHARS = {
+        '\b': '\\b',
+        '\t': '\\t',
+        '\n': '\\n',
+        '\f': '\\f',
+        '\r': '\\r',
+        '"' : '\\"',
+        '\\': '\\\\'
+};
 
 /**
  * Converts a JS object to a string representation. Adapted from YAHOO.lang.JSON.stringify() in YUI 2.5.0, with the
@@ -1097,11 +1106,11 @@ function(o) {
 
 	// escape encode special characters
 	var _char = function (c) {
-		if (!m[c]) {
+		if (!AjxStringUtil._CHARS[c]) {
 			var a = c.charCodeAt();
-			m[c] = '\\u00' + Math.floor(a / 16).toString(16) + (a % 16).toString(16);
+			AjxStringUtil._CHARS[c] = '\\u00' + Math.floor(a / 16).toString(16) + (a % 16).toString(16);
 		}
-		return m[c];
+		return AjxStringUtil._CHARS[c];
 	};
 
 	var _string = function (s) {
