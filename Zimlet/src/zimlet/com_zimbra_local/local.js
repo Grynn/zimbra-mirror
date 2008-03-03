@@ -30,23 +30,24 @@ Com_Zimbra_Local.prototype.init =
 function() {
 	this._controller = new YahooLocalController(this);
 	//Add "Search Local" to the Search toolbar.
-	//this.addLocalSearchToolBar((new AjxListener(this,this._localSearchListener))); //Commented as it was confusing existing users.
+    if(appCtxt.get(ZmSetting.WEB_SEARCH_ENABLED))
+        this.addLocalSearchToolBar((new AjxListener(this,this._localSearchListener)));
 };
 
-/*
+
 // Add "Search Local" button the existing
 Com_Zimbra_Local.prototype.addLocalSearchToolBar =
 function(listener) {
 	var searchToolBar = this._searchToolBar = appCtxt.getSearchController().getSearchToolbar();
 	//Add Custom Button to the Search Toolbar
 	var searchMenuBtnTd = document.getElementById(searchToolBar._htmlElId+"_searchMenuButton");
-	var td = searchMenuBtnTd.parentNode.insertCell(searchMenuBtnTd.cellIndex+1);
+	var td = searchMenuBtnTd.parentNode.insertCell(searchMenuBtnTd.cellIndex+2);
 	td.id = searchToolBar._htmlElId + "_searchLocal";
 	td.className  =  'ZmSearchToolbarCell';
-	var localSearchButton = searchToolBar._addButton({ buttonId:"_searchLocal", lbl:"Local Search", icon:"YLogo", tooltip:ZmMsg.searchTooltip});
+	var localSearchButton = searchToolBar._addButton({ buttonId:"_searchLocal", lbl:"Local", icon:"YLogo", tooltip:"Run Y! Local search"});
 	localSearchButton.addSelectionListener(listener);
 };
-*/
+
 
 Com_Zimbra_Local.prototype._localSearchListener =
 function(ev){
