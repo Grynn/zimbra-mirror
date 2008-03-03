@@ -86,6 +86,12 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 		dw = new DwtUiEvent(true);
 	dw.setFromDhtmlEvent(ev);
 
+	// If we have a mousedown event, then let DwtMenu know. This is a nasty hack that we have to do since
+	// the iFrame is in a different document etc
+	if (ev.type == "mousedown" && DwtMenu && DwtMenu._outsideMouseDownListener) {
+		DwtMenu._outsideMouseDownListener(ev);
+	}
+
 	// HACK! who would have know.. :-(
 	// perhaps we need a proper mapping
 	var type = dw.type.toLowerCase();

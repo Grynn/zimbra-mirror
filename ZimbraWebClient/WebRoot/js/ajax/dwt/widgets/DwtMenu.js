@@ -723,7 +723,7 @@ function() {
 	this._popdownActionId = -1;
 	this._isPoppedup = false;
 
-	if (this._capturing) {
+	if (this._capturing && (DwtMouseEventCapture.getId() == "DwtMenu")) {
 		this._menuCapObj.release();
 		this._capturing = false;
 	}

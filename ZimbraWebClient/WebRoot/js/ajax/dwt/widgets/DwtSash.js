@@ -100,7 +100,10 @@ function(ev) {
 DwtSash._mouseDownHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev, true);	
+	if (AjxEnv.isIE) {
+		mouseEv._checkMenuIE = (DwtMouseEventCapture.getId() == "DwtMenu" && DwtMenu._activeMenuUp);
+	}
+	mouseEv.setFromDhtmlEvent(ev, true);
 	if (mouseEv.button != DwtMouseEvent.LEFT) {
 		DwtUiEvent.setBehaviour(ev, true, false);
 		return false;
@@ -114,6 +117,12 @@ function(ev) {
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
+	
+	if (mouseEv._checkMenuIE) {
+		DwtMenu._capMouseDownHdlr(ev);
+		mouseEv._checkMenuIE = false;
+	}
+	
 	return false;	
 }
 

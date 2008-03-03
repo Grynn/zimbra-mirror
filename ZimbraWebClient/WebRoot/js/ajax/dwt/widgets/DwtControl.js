@@ -2215,12 +2215,14 @@ function(ev) {
 		manager.hoverOut();
 	}
 
-	// If we have a dragSource, then we need to start capturing mouse events
 	var mouseEv = DwtShell.mouseEvent;
+	if (AjxEnv.isIE) {
+		mouseEv._checkMenuIE = (DwtMouseEventCapture.getId() == "DwtMenu" && DwtMenu._activeMenuUp);
+	}
+
+	// If we have a dragSource, then we need to start capturing mouse events
 	mouseEv.setFromDhtmlEvent(ev, obj);
-	if (obj._dragSource != null && mouseEv.button == DwtMouseEvent.LEFT
-			&& obj._isValidDragObject(mouseEv))
-	{
+	if (obj._dragSource && (mouseEv.button == DwtMouseEvent.LEFT) && obj._isValidDragObject(mouseEv))	{
 		try {
 			obj._ctrlCaptureObj.capture();
 		} catch (ex) {
@@ -2564,8 +2566,14 @@ function(ev, eventType, obj, mouseEv) {
 	DwtEventManager.notifyListeners(eventType, mouseEv);
 
 	// notify widget listeners
-	if (obj.isListenerRegistered && obj.isListenerRegistered(eventType))
+	if (obj.isListenerRegistered && obj.isListenerRegistered(eventType)) {
 		obj.notifyListeners(eventType, mouseEv);
+	}
+
+	if (mouseEv._checkMenuIE) {
+		DwtMenu._capMouseDownHdlr(ev);
+		mouseEv._checkMenuIE = false;
+	}
 
 	// publish our settings to the DOM
 	mouseEv.setToDhtmlEvent(ev);

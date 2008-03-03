@@ -80,7 +80,7 @@ function() {
 DwtMouseEventCapture.prototype.capture =
 function() {
 	if (window._mouseEventCaptureObj) {
-		throw new DwtException("Mouse events already being captured", DwtException.INTERNAL_ERROR, "DwtMouseEventCapture.prototype.capture");
+		window._mouseEventCaptureObj.release();
 	}
 
 	if (document.body != null && document.body.addEventListener != null) {
