@@ -36,10 +36,6 @@ sub start {
 			exit;
 		}
 	}
-	if ( $arguments == 0 ) {
-		`/opt/zimbra/libexec/zmmtaconfig imapproxy`;
-	}
-	$p = getPid("memcached");
 	if ($p) {
 		my $r = 0;
 		$r = kill (0, $p);
@@ -49,6 +45,10 @@ sub start {
 			`/opt/zimbra/memcached/bin/memcached -d -P /opt/zimbra/log/memcached.pid`;
 		}
 	}
+	if ( $arguments == 0 ) {
+		`/opt/zimbra/libexec/zmmtaconfig imapproxy`;
+	}
+	$p = getPid("memcached");
 	`sudo /opt/zimbra/nginx/sbin/nginx -c /opt/zimbra/conf/nginx.conf`;
 }
 
