@@ -1,0 +1,93 @@
+#!/usr/bin/perl
+# This script enables and disables proxy, and sets the default values for each case
+use strict;
+use lib "/opt/zimbra/zimbramon/lib";
+use Zimbra::Util::Common;
+use Getopt::Std;
+
+our %options = ();
+our %loaded = ();
+
+getopts('dehH',\%options) or die "Unable to set options\n";
+
+if ($options{h})  {
+   usage();
+   exit 1;
+}
+
+if ( $options{d} + $options{e} > 1) {
+    usage();
+    exit 1;
+}
+
+if ($#ARGV == -1) {
+    usage();
+    exit 1;
+
+}
+
+my $hostname = $ARGV[0];
+
+my $zimbraReverseProxyMailHostQuery =
+      "\(\|\(zimbraMailDeliveryAddress=\${USER}\)\(zimbraMailAlias=\${USER}\)\)";
+my $zimbraReverseProxyDomainNameQuery =
+      '\(\&\(zimbraVirtualIPAddress=\${IPADDR}\)\(objectClass=zimbraDomain\)\)';
+my $zimbraReverseProxyPortQuery =
+      '\(\&\(zimbraServiceHostname=\${MAILHOST}\)\(objectClass=zimbraServer\)\)';
+
+open(ZMPROV, "|su - zimbra -c 'zmprov -l'");
+print ZMPROV "mcf zimbraReverseProxyDomainNameQuery $zimbraReverseProxyDomainNameQuery\n";
+print ZMPROV "mcf zimbraReverseProxyMailHostQuery $zimbraReverseProxyMailHostQuery\n";
+print ZMPROV "mcf zimbraReverseProxyPortQuery $zimbraReverseProxyPortQuery\n";
+print ZMPROV "mcf zimbraMemcachedBindPort 11211\n";
+print ZMPROV "mcf zimbraReverseProxyMailHostAttribute zimbraMailHost\n";
+print ZMPROV "mcf zimbraReverseProxyPop3PortAttribute zimbraPop3BindPort\n";
+print ZMPROV "mcf zimbraReverseProxyPop3SSLPortAttribute zimbraPop3SSLBindPort\n";
+print ZMPROV "mcf zimbraReverseProxyImapPortAttribute zimbraImapBindPort\n";
+print ZMPROV "mcf zimbraReverseProxyImapSSLPortAttribute zimbraImapSSLBindPort\n";
+print ZMPROV "mcf zimbraReverseProxyDomainNameAttribute zimbraDomainName\n";
+print ZMPROV "mcf zimbraReverseProxyAuthWaitInterval 10s\n";
+
+my $refer = getLocalConfig("zimbra_auth_always_send_refer");
+print ZMPROV "ms $hostname zimbraMailReferMode wronghost\n"
+  if (uc($refer) eq "TRUE");
+
+if ($options{e}) {
+  print ZMPROV "ms $hostname ".
+    "zimbraImapBindPort 7143 "."zimbraImapProxyBindPort 143 ".
+    "zimbraImapSSLBindPort 7993 "."zimbraImapSSLProxyBindPort 993 ".
+    "zimbraPop3BindPort 7110 "."zimbraPop3ProxyBindPort 110 ".
+    "zimbraPop3SSLBindPort 7995 "."zimbraPop3SSLProxyBindPort 995\n";
+}
+
+if ($options{d}) {
+  print ZMPROV "ms $hostname ".
+    "zimbraImapBindPort 143 "."zimbraImapProxyBindPort 7143 ".
+    "zimbraImapSSLBindPort 993 "."zimbraImapSSLProxyBindPort 7993 ".
+    "zimbraPop3BindPort 110 "."zimbraPop3ProxyBindPort 7110 ".
+    "zimbraPop3SSLBindPort 995 "."zimbraPop3SSLProxyBindPort 7995\n";
+}
+
+close ZMPROV;
+exit 0;
+
+sub usage() {
+  print "Usage: $0 [-h] [-e] [-d] FQDN\n";
+  print "\t-h: display this help message\n";
+  print "\t-e: enable proxy\n";
+  print "\t-d: disable proxy\n";
+  print "FQDN is the fully qualified domainname of the host to change settings for.\n";
+  exit 1;
+}
+
+sub getLocalConfig {
+  my $key = shift;
+
+  return $main::loaded{lc}{$key}
+    if (exists $main::loaded{lc}{$key});
+
+  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  chomp $val;
+  $main::loaded{lc}{$key} = $val;
+  return $val;
+}
