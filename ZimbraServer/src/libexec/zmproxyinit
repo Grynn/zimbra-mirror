@@ -8,7 +8,7 @@ use Getopt::Std;
 our %options = ();
 our %loaded = ();
 
-getopts('dehH',\%options) or die "Unable to set options\n";
+getopts('defhH',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
@@ -20,6 +20,11 @@ if ( $options{d} + $options{e} > 1) {
     exit 1;
 }
 
+if ( !$options{d} && !$options{e}) {
+    usage();
+    exit 1;
+}   
+
 if ($#ARGV == -1) {
     usage();
     exit 1;
@@ -28,25 +33,28 @@ if ($#ARGV == -1) {
 
 my $hostname = $ARGV[0];
 
-my $zimbraReverseProxyMailHostQuery =
-      "\(\|\(zimbraMailDeliveryAddress=\${USER}\)\(zimbraMailAlias=\${USER}\)\)";
-my $zimbraReverseProxyDomainNameQuery =
-      '\(\&\(zimbraVirtualIPAddress=\${IPADDR}\)\(objectClass=zimbraDomain\)\)';
-my $zimbraReverseProxyPortQuery =
-      '\(\&\(zimbraServiceHostname=\${MAILHOST}\)\(objectClass=zimbraServer\)\)';
-
 open(ZMPROV, "|su - zimbra -c 'zmprov -l'");
-print ZMPROV "mcf zimbraReverseProxyDomainNameQuery $zimbraReverseProxyDomainNameQuery\n";
-print ZMPROV "mcf zimbraReverseProxyMailHostQuery $zimbraReverseProxyMailHostQuery\n";
-print ZMPROV "mcf zimbraReverseProxyPortQuery $zimbraReverseProxyPortQuery\n";
-print ZMPROV "mcf zimbraMemcachedBindPort 11211\n";
-print ZMPROV "mcf zimbraReverseProxyMailHostAttribute zimbraMailHost\n";
-print ZMPROV "mcf zimbraReverseProxyPop3PortAttribute zimbraPop3BindPort\n";
-print ZMPROV "mcf zimbraReverseProxyPop3SSLPortAttribute zimbraPop3SSLBindPort\n";
-print ZMPROV "mcf zimbraReverseProxyImapPortAttribute zimbraImapBindPort\n";
-print ZMPROV "mcf zimbraReverseProxyImapSSLPortAttribute zimbraImapSSLBindPort\n";
-print ZMPROV "mcf zimbraReverseProxyDomainNameAttribute zimbraDomainName\n";
-print ZMPROV "mcf zimbraReverseProxyAuthWaitInterval 10s\n";
+
+if ($options{f}) {
+  my $zimbraReverseProxyMailHostQuery =
+        "\(\|\(zimbraMailDeliveryAddress=\${USER}\)\(zimbraMailAlias=\${USER}\)\)";
+  my $zimbraReverseProxyDomainNameQuery =
+        '\(\&\(zimbraVirtualIPAddress=\${IPADDR}\)\(objectClass=zimbraDomain\)\)';
+  my $zimbraReverseProxyPortQuery =
+        '\(\&\(zimbraServiceHostname=\${MAILHOST}\)\(objectClass=zimbraServer\)\)';
+  
+  print ZMPROV "mcf zimbraReverseProxyDomainNameQuery $zimbraReverseProxyDomainNameQuery\n";
+  print ZMPROV "mcf zimbraReverseProxyMailHostQuery $zimbraReverseProxyMailHostQuery\n";
+  print ZMPROV "mcf zimbraReverseProxyPortQuery $zimbraReverseProxyPortQuery\n";
+  print ZMPROV "mcf zimbraMemcachedBindPort 11211\n";
+  print ZMPROV "mcf zimbraReverseProxyMailHostAttribute zimbraMailHost\n";
+  print ZMPROV "mcf zimbraReverseProxyPop3PortAttribute zimbraPop3BindPort\n";
+  print ZMPROV "mcf zimbraReverseProxyPop3SSLPortAttribute zimbraPop3SSLBindPort\n";
+  print ZMPROV "mcf zimbraReverseProxyImapPortAttribute zimbraImapBindPort\n";
+  print ZMPROV "mcf zimbraReverseProxyImapSSLPortAttribute zimbraImapSSLBindPort\n";
+  print ZMPROV "mcf zimbraReverseProxyDomainNameAttribute zimbraDomainName\n";
+  print ZMPROV "mcf zimbraReverseProxyAuthWaitInterval 10s\n";
+}
 
 my $refer = getLocalConfig("zimbra_auth_always_send_refer");
 print ZMPROV "ms $hostname zimbraMailReferMode wronghost\n"
@@ -58,6 +66,8 @@ if ($options{e}) {
     "zimbraImapSSLBindPort 7993 "."zimbraImapSSLProxyBindPort 993 ".
     "zimbraPop3BindPort 7110 "."zimbraPop3ProxyBindPort 110 ".
     "zimbraPop3SSLBindPort 7995 "."zimbraPop3SSLProxyBindPort 995\n";
+  print ZMPROV "mcf zimbraImapCleartextLoginEnabled TRUE\n";
+  print ZMPROV "mcf zimbraPop3CleartextLoginEnabled TRUE\n";
 }
 
 if ($options{d}) {
@@ -66,17 +76,21 @@ if ($options{d}) {
     "zimbraImapSSLBindPort 993 "."zimbraImapSSLProxyBindPort 7993 ".
     "zimbraPop3BindPort 110 "."zimbraPop3ProxyBindPort 7110 ".
     "zimbraPop3SSLBindPort 995 "."zimbraPop3SSLProxyBindPort 7995\n";
+  print ZMPROV "mcf zimbraImapCleartextLoginEnabled FALSE\n";
+  print ZMPROV "mcf zimbraPop3CleartextLoginEnabled FALSE\n";
 }
 
 close ZMPROV;
 exit 0;
 
 sub usage() {
-  print "Usage: $0 [-h] [-e] [-d] FQDN\n";
+  print "Usage: $0 [-h] [-d] [-e][-f] FQDN\n";
   print "\t-h: display this help message\n";
   print "\t-e: enable proxy\n";
   print "\t-d: disable proxy\n";
+  print "\t-f: Full reset on memcached port and seach queries\n";
   print "FQDN is the fully qualified domainname of the host to change settings for.\n";
+  print "Either -e or -d is required\n";
   exit 1;
 }
 
