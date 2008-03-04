@@ -414,7 +414,7 @@ function(str) {
 		.replace(/\t/mg, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
 		.replace(/</mg, "&lt;")
 		.replace(/>/mg, "&gt;")
-		.replace(/\r?\n/mg, "<br />");
+		.replace(/\r?\n/mg, "<br>");
 	return str;
 };
 
