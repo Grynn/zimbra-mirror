@@ -129,7 +129,7 @@ function() {
 */
 ZaZimbraAdmin.run =
 function(domain) {
-	if(window._dwtShell)
+	if(window._dwtShellId )
 		return;
 	if(!DBG)
 		DBG = new AjxDebug(AjxDebug.NONE, null, false);
