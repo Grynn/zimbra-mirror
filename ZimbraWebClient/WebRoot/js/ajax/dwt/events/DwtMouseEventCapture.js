@@ -17,38 +17,41 @@
 
 
 /**
-* Helper class for event capturing
-*
-* @constructor
-* @class DwtMouseEventCapture
-*
-* @author Ross Dargahi
-*
-* @param targetObj [DOM Element:required]	Target element
-* @param id [string:optional]				ID for this capture instance.
-* @param mouseOverHdlr [function:optional]	Browser event handler
-* @param mouseDownHdlr [function:optional]	Browser event handler
-* @param mouseMoveHdlr [function:optional]	Browser event handler
-* @param mouseUpHdlr [function:optional]	Browser event handler
-* @param mouseOutHdlr [function:optional]	Browser event handler
-* @param hardCapture [boolean:optional]		If true, then event propagation is halted at this element
-*/
-DwtMouseEventCapture = function(targetObj, id, mouseOverHdlr, mouseDownHdlr, mouseMoveHdlr, mouseUpHdlr, mouseOutHdlr, mouseWheelHdlr, hardCapture) {
-	this.targetObj = targetObj;
-	this._id = id
-	this._mouseOverHdlr = (mouseOverHdlr != null) ? mouseOverHdlr : DwtMouseEventCapture.emptyHdlr;
-	this._mouseDownHdlr = (mouseDownHdlr != null) ? mouseDownHdlr : DwtMouseEventCapture.emptyHdlr;
-	this._mouseMoveHdlr = (mouseMoveHdlr != null) ? mouseMoveHdlr : DwtMouseEventCapture.emptyHdlr;
-	this._mouseUpHdlr = (mouseUpHdlr != null) ? mouseUpHdlr : DwtMouseEventCapture.emptyHdlr;
-	this._mouseOutHdlr = (mouseOutHdlr != null) ? mouseOutHdlr : DwtMouseEventCapture.emptyHdlr;
-	// NOTE: This is for any code that relies on the old signature
-	if (typeof mouseWheelHdlr == "boolean") {
-		hardCapture = mouseWheelHdlr;
-		mouseWheelHdlr = null;
-	}
-	this._mouseWheelHdlr = (mouseWheelHdlr != null) ? mouseWheelHdlr : DwtMouseEventCapture.emptyHdlr;
-	this._hardCapture = (hardCapture == null || hardCapture == true) ? true : false;
+ * Helper class for event capturing
+ *
+ * @constructor
+ * @class DwtMouseEventCapture
+ *
+ * @author Ross Dargahi
+ *
+ * @param params			[hash]		hash of params:
+ *        targetObj			[Element]	Target element
+ *        id				[string]	ID for this capture instance.
+ *        mouseOverHdlr		[function]	Browser event handler
+ *        mouseDownHdlr		[function]	Browser event handler
+ *        mouseMoveHdlr		[function]	Browser event handler
+ *        mouseUpHdlr		[function]	Browser event handler
+ *        mouseOutHdlr		[function]	Browser event handler
+ *        mouseWheelHdlr	[function]	Browser event handler
+ *        hardCapture		[boolean]	If true, event propagation is halted at this element (IE only)
+ */
+DwtMouseEventCapture = function(params) {
+
+	params = Dwt.getParams(arguments, DwtMouseEventCapture.PARAMS);
+
+	this.targetObj = params.targetObj;
+	this._id = params.id;
+	this._mouseOverHdlr = params.mouseOverHdlr || DwtMouseEventCapture.emptyHdlr;
+	this._mouseDownHdlr = params.mouseDownHdlr || DwtMouseEventCapture.emptyHdlr;
+	this._mouseMoveHdlr = params.mouseMoveHdlr || DwtMouseEventCapture.emptyHdlr;
+	this._mouseUpHdlr = params.mouseUpHdlr || DwtMouseEventCapture.emptyHdlr;
+	this._mouseOutHdlr = params.mouseOutHdlr || DwtMouseEventCapture.emptyHdlr;
+	this._mouseWheelHdlr = params.mouseWheelHdlr || DwtMouseEventCapture.emptyHdlr;
+	this._hardCapture = (params.hardCapture !== false);
 }
+
+DwtMouseEventCapture.PARAMS = ["targetObj", "id", "mouseOverHdlr", "mouseDownHdlr", "mouseMoveHdlr",
+							   "mouseUpHdlr", "mouseOutHdlr", "mouseWheelHdlr", "hardCapture"];
 
 DwtMouseEventCapture._capturing = false;
 

@@ -270,16 +270,12 @@ DwtResizableWindow.prototype.__initCtrl = function() {
                 el.firstChild.addEventListener("mousedown", DwtResizableWindow.__static_dlgMouseDown, true);
         }
 
-	this.__captureObj = new DwtMouseEventCapture(
-		this, "DwtResizableWindow",
-		null,		// mouseover
-		null,		// mousedown
-		DwtResizableWindow.__static_resizeMouseMove,
-		DwtResizableWindow.__static_resizeMouseUp,
-		null,		// mouseout
-		null,		// mouse wheel
-		true		// hard capture
-	);
+	this.__captureObj = new DwtMouseEventCapture({
+		targetObj:this,
+		id:"DwtResizableWindow",
+		mouseMoveHdlr:DwtResizableWindow.__static_resizeMouseMove,
+		mouseUpHdlr:DwtResizableWindow.__static_resizeMouseUp
+	});
 
 	// this._setMouseEventHdlrs();
 	// this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this.__dlgMouseDown));

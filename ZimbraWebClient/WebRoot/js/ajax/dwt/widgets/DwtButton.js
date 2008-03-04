@@ -643,9 +643,6 @@ function(ev) {
 	    	selEv.item = obj;
 	    	obj._dropDownEvtMgr.notifyListeners(DwtEvent.SELECTION, selEv);
 	    } else { 
-			if (AjxEnv.isIE) {
-				DwtMenu._outsideMouseDownListener(ev);
-			}
 			obj._toggleMenu();
 		}
 	}

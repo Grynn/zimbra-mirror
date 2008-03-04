@@ -49,16 +49,15 @@ DwtSash = function(params) {
 	}
 	this._threshold = (params.threshold > 0) ? params.threshold : 1;
 
-	this._captureObj = new DwtMouseEventCapture(this,
-		"DwtSash",
-		DwtSash._mouseOverHdlr,
-		DwtSash._mouseDownHdlr,
-		DwtSash._mouseMoveHdlr,
-		DwtSash._mouseUpHdlr,
-		DwtSash._mouseOutHdlr,
-		null,					// mouse wheel
-		null					// hard capture
-	);
+	this._captureObj = new DwtMouseEventCapture({
+		targetObj:this,
+		id:"DwtSash",
+		mouseOverHdlr:DwtSash._mouseOverHdlr,
+		mouseDownHdlr:DwtSash._mouseDownHdlr,
+		mouseMoveHdlr:DwtSash._mouseMoveHdlr,
+		mouseUpHdlr:DwtSash._mouseUpHdlr,
+		mouseOutHdlr:DwtSash._mouseOutHdlr
+	});
 	this.setHandler(DwtEvent.ONMOUSEDOWN, DwtSash._mouseDownHdlr);
 	this.setHandler(DwtEvent.ONMOUSEOVER, DwtSash._mouseOverHdlr);
 	this.setHandler(DwtEvent.ONMOUSEOUT, DwtSash._mouseOutHdlr);
@@ -100,14 +99,12 @@ function(ev) {
 DwtSash._mouseDownHdlr =
 function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
-	if (AjxEnv.isIE) {
-		mouseEv._checkMenuIE = (DwtMouseEventCapture.getId() == "DwtMenu" && DwtMenu._activeMenuUp);
-	}
 	mouseEv.setFromDhtmlEvent(ev, true);
 	if (mouseEv.button != DwtMouseEvent.LEFT) {
 		DwtUiEvent.setBehaviour(ev, true, false);
 		return false;
 	}
+	DwtEventManager.notifyListeners(DwtEvent.ONMOUSEDOWN, mouseEv);
 	var sash = mouseEv.dwtObj;
 	if (sash._callbackFunc != null) {
 		sash._captureObj.capture();
@@ -117,11 +114,6 @@ function(ev) {
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
-	
-	if (mouseEv._checkMenuIE) {
-		DwtMenu._capMouseDownHdlr(ev);
-		mouseEv._checkMenuIE = false;
-	}
 	
 	return false;	
 }

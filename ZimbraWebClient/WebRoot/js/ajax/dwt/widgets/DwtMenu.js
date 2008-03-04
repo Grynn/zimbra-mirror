@@ -95,6 +95,13 @@ DwtMenu = function(params) {
 	this._popdownActionId = -1;
 	this._popupAction = new AjxTimedAction(this, this._doPopup);
 	this._popupActionId = -1;
+	
+	if (AjxEnv.isIE) {
+	 	if ((this.parent instanceof DwtMenuItem && this.parent.parent._style == DwtMenu.BAR_STYLE) ||
+	 			!(this.parent instanceof DwtMenuItem)) {
+			this._outsideListener = new AjxListener(null, DwtMenu._outsideMouseDownListener);
+		}
+	}
 
 	this._menuItemsHaveChecks = false;	
 	this._menuItemsHaveIcons = false;
@@ -105,16 +112,13 @@ DwtMenu = function(params) {
 	// The global capture is used to detect mouse down events outside of the
 	// popped up menus and specifically outside of our scope of influence
 	// (particularly when Dwt is being used in existing HTML)
-	this._menuCapObj = new DwtMouseEventCapture(this,
-		"DwtMenu",
-		null,						// mouse over
-		DwtMenu._capMouseDownHdlr,
-		null,						// mouse move
-		null,						// mouse up
-		null,						// mouse out
-		DwtMenu._capMouseWheelHdlr,	// mouse wheel
-		false
-	);
+	this._menuCapObj = new DwtMouseEventCapture({
+		targetObj:this,
+		id:"DwtMenu",
+		mouseDownHdlr:DwtMenu._capMouseDownHdlr,
+		mouseWheelHdlr:DwtMenu._capMouseWheelHdlr,
+		hardCapture:false
+	});
 	
 	// Default menu tab group. Note that we disable application handling of
 	// keyboard shortcuts, since we don't want the view underneath reacting to
@@ -653,9 +657,20 @@ function(x, y, kbGenerated) {
 	this.setZIndex(zIndex);
 	this._popupActionId = -1;
 	this._isPoppedup = true;
+	
+	if (AjxEnv.isIE && this._outsideListener) {
+		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN,DwtEvent.ONMOUSEWHEEL]);
+		this.shell.addListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
+		this.shell.addListener(DwtEvent.ONMOUSEWHEEL, this._outsideListener);
+	}
+
 	if (!DwtMenu._activeMenu) {
 		DwtMenu._activeMenu = this;
 		DwtMenu._activeMenuUp = true;
+		if (AjxEnv.isIE) {
+			DwtEventManager.addListener(DwtEvent.ONMOUSEDOWN, DwtMenu._outsideMouseDownListener);
+			DwtEventManager.addListener(DwtEvent.ONMOUSEWHEEL, DwtMenu._outsideMouseDownListener);
+		}
 	}
 
 	DwtMenu._activeMenuIds.add(this._htmlElId);
@@ -713,10 +728,20 @@ function() {
 	this.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	
 	this.notifyListeners(DwtEvent.POPDOWN, this);
-	
+
+	if (AjxEnv.isIE && this._outsideListener) {
+		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN,DwtEvent.ONMOUSEWHEEL], true);
+		this.shell.removeListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
+		this.shell.removeListener(DwtEvent.ONMOUSEWHEEL, this._outsideListener);
+	}
+
 	if (DwtMenu._activeMenu == this) {
 		DwtMenu._activeMenu = null;
 		DwtMenu._activeMenuUp = false;
+		if (AjxEnv.isIE) {
+			DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN, DwtMenu._outsideMouseDownListener);
+			DwtEventManager.removeListener(DwtEvent.ONMOUSEWHEEL, DwtMenu._outsideMouseDownListener);
+		}
 	}
 	DwtMenu._activeMenuIds.remove(this._htmlElId);
 	DwtMenu._activeMenus.remove(this);

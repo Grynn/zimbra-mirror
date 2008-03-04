@@ -73,15 +73,11 @@ DwtSpinner = function(params) {
 	this._timerFunc = AjxCallback.simpleClosure(this._timerFunc, this);
 
 	// upon click and hold we capture mouse events
-	this._btnPressCapture = new DwtMouseEventCapture(
-		this, "DwtSpinner",
-		null, // no mouseover
-		null, // no mousedown
-		null, // no mousemove
-		AjxCallback.simpleClosure(this._stopCapture, this), // mouseup
-		null, // no mouseout
-		null, // no mouse wheel
-		true);  // hard capture
+	this._btnPressCapture = new DwtMouseEventCapture({
+		targetObj:this,
+		id:"DwtSpinner",
+		mouseUpHdlr:AjxCallback.simpleClosure(this._stopCapture, this)
+	});
 
 	this._createElements();
 };
