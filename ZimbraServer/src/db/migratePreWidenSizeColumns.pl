@@ -71,6 +71,9 @@ if ($allGroups) {
 	$toMigrate = $totalToMigrate;
 } else {
 	$toMigrate = $numGroups;
+
+	$toMigrate = $totalToMigrate
+    if ($numGroups >= $totalToMigrate);
 }
 print "Migrating $toMigrate out of $totalToMigrate mailbox groups\n";
 
