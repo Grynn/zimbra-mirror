@@ -201,6 +201,6 @@ index   entryCSN               eq
 sizelimit unlimited
 timelimit unlimited
 #overlay syncprov
-#syncprov-checkpoint 100 10
+#syncprov-checkpoint 20 10
 #syncprov-sessionlog 500
 ###include /opt/zimbra/conf/master-accesslog-overlay.conf
