@@ -21,12 +21,8 @@ if [ x`whoami` != "xroot" ]; then
   exit 1
 fi
 umask 027
-#drop these
-#zimbra_key=zimbra.key
-#zimbra_crt=zimbra.crt
-#zimbra_csr=zimbra.csr
 
-platform=$(/opt/zimbra/libexec/get_plat_tag.sh 2> /dev/null:=UNKNOWN)
+platform=$(/opt/zimbra/libexec/get_plat_tag.sh 2> /dev/null := UNKNOWN)
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
   zimbra_home \
@@ -44,10 +40,6 @@ zmsetvars \
   
 export JAVA_HOME=${zimbra_java_home}
 
-#echo "postfix_smtpd_tls_key_file = $postfix_smtpd_tls_key_file "
-#echo "postfix_smtpd_tls_cert_file = $postfix_smtpd_tls_cert_file "
-#echo "mailboxd_keystore = $mailboxd_keystore "
-#echo "mailboxd_directory = $mailboxd_directory "
 zimbra_home=${zimbra_home:=/opt/zimbra}
 zimbra_conf_directory=${zimbra_home}/conf
 
@@ -83,9 +75,6 @@ else
 fi
 
 subject_alt_names=""
-
-#zimbra_comm_csr_directory=${zimbra_home}/ssl/comm_csr
-#zimbra_self_csr_directory=${zimbra_home}/ssl/self_csr
 
 # this avoid "unable to write 'random state' errors from openssl
 export RANDFILE=${zimbra_home}/ssl/.rnd
@@ -380,14 +369,19 @@ createCA() {
 
 deployCA() {
 
+  if [ "x$1" = "x-localonly" ]; then
+    SKIP_LDAP=1
+    shift
+  fi  
+
   updateCACERTS
 
-  if [ x"$ldap_is_master" = "xtrue" ]; then
+  if [ x"$ldap_is_master" = "xtrue" -a x"$SKIP_LDAP" != "x1" ]; then
     echo -n "** Saving CA in ldap..."
     cert=`cat ${zimbra_ca_crt}` 
     key=`cat ${zimbra_ca_key}`
-    su - zimbra -c "zmprov -l -- mcf zimbraCertAuthorityCertSelfSigned \"$cert\""
-    su - zimbra -c "zmprov -l -- mcf zimbraCertAuthorityKeySelfSigned \"$key\""
+    su - zimbra -c "zmprov -l -- mcf zimbraCertAuthorityCertSelfSigned \"$cert\" 2> /dev/null"
+    su - zimbra -c "zmprov -l -- mcf zimbraCertAuthorityKeySelfSigned \"$key\" 2> /dev/null"
     echo "done."
   fi
 
@@ -419,7 +413,7 @@ deployCA() {
 }
 
 
-deployCert () {
+deployCert() {
 
   if [ x"$1" = "x" ]; then
     type=self
@@ -434,15 +428,68 @@ deployCert () {
   if [ x"$type" = "xself" ]; then
     current_crt=${server_crt}
     current_key=${server_key}
+    if [ ! -f "${current_crt}" ]; then
+      createCert
+    fi
   else 
-    current_crt=${commercial_crt} 
+
+    # ignore this for now 
+    if [ x"${1}" = "x-allserver" -o x"${1}" = "x-new" ]; then
+      shift
+    fi
+
+    cli_comm_crt=$1
+    shift
+    cli_ca_chain=$1
+    shift
+  
+    if [ x"${cli_comm_crt}" = "x" -a ! -f "${crt_download_file}" ]; then
+      echo "${ERROR_PREFIX} ${crt_download_file} does not exist."
+      usage
+    fi
+  
+    if [ x"$cli_comm_crt" != "x" ]; then
+      #$0 verifycrt comm ${commercial_key} ${cli_comm_crt} > /dev/null 2>&1
+      $0 verifycrt comm ${commercial_key} ${cli_comm_crt} ${cli_ca_chain}
+      if [ $? != 0 ]; then
+        echo "${ERROR_PREFIX} provided cert isn't valid."
+        exit 1
+      fi
+      echo "** Copying ${cli_comm_crt} to ${commercial_crt}"
+      cp -f ${cli_comm_crt} ${commercial_crt}
+    else
+      $0 verifycrt comm ${commercial_key} ${crt_download_file} ${ca_chain_download_file}
+      if [ $? != 0 ]; then
+        echo "${ERROR_PREFIX} provided cert isn't valid."
+        exit 1
+      fi
+      echo "** Copying ${crt_download_file} to ${commercial_crt}"
+      cp -f  ${crt_download_file} ${commercial_crt}
+    fi
+  
+    if [ x"${cli_ca_chain}" != "x" ]; then
+      echo "** Appending ca chain ${cli_ca_chain} to ${commercial_crt}"
+      cat ${cli_ca_chain} >> ${commercial_crt}
+      cp -f ${cli_ca_chain} ${commercial_ca_crt}
+    elif [ -f "${ca_chain_download_file}" -a x"${cli_comm_crt}" = "x" ]; then
+      echo "** Appending ca chain ${ca_chain_download_file} to ${commercial_crt}"
+      cat ${ca_chain_download_file} >> ${commercial_crt}
+      cp -f ${ca_chain_download_file} ${commercial_ca_crt}
+      
+    fi
+  
+    current_crt=${commercial_crt}
     current_key=${commercial_key} 
+    chmod 644 ${current_crt} 
   fi
   
   if [ "x$1" = "x" ]; then
     DEPLOY="all"
-  elif [ "x$1" = "xmta" -o "x$1" = "xproxy" -o "x$1" = "xmailbox" -o "x$1" = "xldap" ]; then
-    DEPLOY="$1"
+  elif [ "x$1" = "x-deploy" ]; then
+    shift
+    if [ "x$1" = "xmta" -o "x$1" = "xproxy" -o "x$1" = "xmailbox" -o "x$1" = "xldap" ]; then
+      DEPLOY="$1"
+    fi
   else
     echo "Can't deploy cert for $1.  Unknown service."
     return
@@ -471,6 +518,14 @@ deployCert () {
     cp -f ${current_key} ${zimbra_conf_directory}/nginx.key
     chmod 644 ${zimbra_conf_directory}/nginx.key ${zimbra_conf_directory}/nginx.crt
     echo "done."
+  fi
+
+  if [ $DEPLOY = "all" -o $DEPLOY = "mailbox" ]; then
+    #echo -n "** Installing mailboxd certificate and key..."
+    if [ "x${mailboxd_server}" != "x" ]; then 
+      createKeystore $type
+    fi
+    #echo "done."
   fi
 
   echo -n "** Installing CA to ${zimbra_conf_directory}/ca..." 
@@ -524,6 +579,11 @@ createConf() {
 }
 
 createCASerial() {
+
+  if [ ! -d "${zimbra_ssl_directory}" ]; then
+    initSSLDirs
+  fi
+
   SER=`date "+%s"`
   echo "$SER" > ${zimbra_ca_srl}
   if [ -f "${zimbra_ca_srl}" ]; then
@@ -571,7 +631,19 @@ createServerCertReq() {
   rm -f ${tmpfile} 2> /dev/null
 }
 
-createServerCert() {
+createCert() {
+
+  if [ x"${1}" = "x-new" ]; then
+    IS_NEW_CRT=$1
+    shift
+  fi
+
+  if [ x"${1}" = "x-days" ]; then
+    shift
+    validation_days=$1
+    shift
+    echo "Validation days: $validation_days"
+  fi
 
   createCASerial  
 
@@ -587,14 +659,19 @@ createServerCert() {
     fi
   fi
 
+  backupSSLDirs ${zimbra_ssl_directory}
+
   # make sure the CA exists
   if [ ! -s "${zimbra_ca_crt}" ]; then
     createCA
   fi
 
-  # make sure the csr req exists
-  if [ ! -s "${server_csr}" ]; then
-    createcsr
+  if [ x"${1}" = "x-allserver" ]; then
+    subject_alt_names=`su - zimbra -c "zmprov -l gas | xargs "`
+    createCSR self -new 
+    shift
+  elif [ ! -s "${server_csr}" ]; then
+    createCSR
   fi
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
@@ -607,7 +684,6 @@ createServerCert() {
     chmod 644 ${zimbra_ca_directory}/index.txt
   fi
   
-  #echo "validation days = " +   ${validation_days} 
   ${openssl} ca -out ${server_crt} -notext \
     -config ${zimbra_ca_ssl_conf} \
     -days ${validation_days} \
@@ -635,6 +711,7 @@ createServerCert() {
   fi
 
   rm -f ${tmpfile} 2> /dev/null
+  #viewstagedcrt self
 }
 
 
@@ -783,7 +860,7 @@ showcsr() {
   getsubjectaltnames ${current_csr} csr
 }
 
-createcsr() {
+createCSR() {
   
   echo "** Generating a server csr for download $*"
 
@@ -828,7 +905,7 @@ createcsr() {
     createConf "${zimbra_cert_ssl_conf}" "$subject_alt_names"
   fi
   
-  backupSSLDirs 
+  backupSSLDirs ${zimbra_ssl_directory}
   initSSLDirs
   createCA
   createServerCertReq $type
@@ -843,102 +920,6 @@ createcsr() {
   fi
 }
 
-deploycrt() {
-  # [required] <optional> 
-  # [self] <validation_days>
-  # [comm] <crt> <ca_chain>
-  if [ x"${1}" = "x" ] || [  x"${1}" != "xself" -a x"${1}" != "xcomm" ]; then
-    usage
-  else  
-    type=$1 
-    shift
-    if [ x"${1}" = "x-new" ]; then
-      IS_NEW_CRT=$1
-      shift;
-    fi
-    if [ "$type" = "self" ]; then
-      if [ x"${1}" != "x" ]; then
-        validation_days=$1
-        shift
-      fi
-
-      if [ x"${1}" = "x-allserver" ]; then
-        subject_alt_names=`su - zimbra -c "zmprov -l gas | xargs "`
-        createcsr self -new 
-        shift
-      elif [ ! -s "${server_csr}" ]; then
-        createcsr
-      fi
-
-      current_crt=${server_crt}
-
-    elif [ "$type" = "comm" ]; then
-
-      # ignore this for now 
-      if [ x"${1}" = "x-allserver" -o x"${1}" = "x-new" ]; then
-        shift
-      fi
-
-      cli_comm_crt=$1
-      shift
-      cli_ca_chain=$1
-      shift
-
-      if [ x"${cli_comm_crt}" = "x" -a ! -f "${crt_download_file}" ]; then
-        echo "${ERROR_PREFIX} ${crt_download_file} does not exist."
-        usage
-      fi
-
-      if [ x"$cli_comm_crt" != "x" ]; then
-        #$0 verifycrt comm ${commercial_key} ${cli_comm_crt} > /dev/null 2>&1
-        $0 verifycrt comm ${commercial_key} ${cli_comm_crt} ${cli_ca_chain}
-        if [ $? != 0 ]; then
-          echo "${ERROR_PREFIX} provided cert isn't valid."
-          exit 1
-        fi
-        echo "** Copying ${cli_comm_crt} to ${commercial_crt}"
-        cp -f ${cli_comm_crt} ${commercial_crt}
-      else
-        $0 verifycrt comm ${commercial_key} ${crt_download_file} ${ca_chain_download_file}
-        if [ $? != 0 ]; then
-          echo "${ERROR_PREFIX} provided cert isn't valid."
-          exit 1
-        fi
-        echo "** Copying ${crt_download_file} to ${commercial_crt}"
-        cp -f  ${crt_download_file} ${commercial_crt}
-      fi
-
-      if [ x"${cli_ca_chain}" != "x" ]; then
-        echo "** Appending ca chain ${cli_ca_chain} to ${commercial_crt}"
-        cat ${cli_ca_chain} >> ${commercial_crt}
-        cp -f ${cli_ca_chain} ${commercial_ca_crt}
-      elif [ -f "${ca_chain_download_file}" -a x"${cli_comm_crt}" = "x" ]; then
-        echo "** Appending ca chain ${ca_chain_download_file} to ${commercial_crt}"
-        cat ${ca_chain_download_file} >> ${commercial_crt}
-        cp -f ${ca_chain_download_file} ${commercial_ca_crt}
-        
-      fi
-
-      current_crt=${commercial_crt}
-      chmod 644 ${current_crt} 
-    fi
-    
-    
-    echo "** Installing Certificates from ${current_crt}"
-    backupSSLDirs ${zimbra_ssl_directory}
-    
-    if [ "x$type" = "xself" ]; then
-      createServerCert
-    fi
-  fi
- 
-  if [ "x${mailboxd_server}" != "x" ]; then 
-    createKeystore $type
-  fi
-  
-  deployCert $type
-
-}
 
 verifycrt() {
   if [ x"${1}" = "x" ] || [  x"${1}" != "xself" -a x"${1}" != "xcomm" ]; then
@@ -1130,8 +1111,9 @@ usage () {
   echo "  $0 -help"
   echo "  $0 createca [-new]"
   echo "  $0 deployca"
-  echo "  $0 createcsr <self|comm> [-new] [subject] [-subjectAltNames \"host1,host2\"]"
-  echo "  $0 deploycrt <self> [-new] [validation_days]"
+  echo "  $0 createcsr <self|comm> [-new] [-subject subject] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 createcrt [-new] [-subject subject] [-days validation days] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 deploycrt <self>"
   echo "  $0 deploycrt <comm> [certfile] [ca_chain_file]"
   echo "  $0 viewcsr <self|comm> [csr_file]"
   echo "  $0 viewdeployedcrt [all|ldap|mta|proxy|mailboxd]"
@@ -1182,10 +1164,12 @@ elif [ x"$ACTION" = "xcreateca" ]; then
   createCA $@
 elif [ x"$ACTION" = "xdeployca" ]; then
   deployCA $@
-elif [ x"$ACTION" = "xgencsr" -o x"$ACTION" = "xcreatecsr" ]; then
-  createcsr "$@"
-elif [ x"$ACTION" = "xinstall" -o x"$ACTION" = "xdeploycrt" ]; then
-  deploycrt $@
+elif [ x"$ACTION" = "xcreatecsr" ]; then
+  createCSR "$@"
+elif [ x"$ACTION" = "xcreatecrt" ]; then
+  createCert "$@"
+elif [ x"$ACTION" = "xdeploycrt" ]; then
+  deployCert $@
 elif [ x"$ACTION" = "xverifycrt" ]; then
   verifycrt $@
 elif [ x"$ACTION" = "xverifycrtkey" ]; then
