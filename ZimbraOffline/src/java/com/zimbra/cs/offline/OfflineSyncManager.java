@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
 
 import org.dom4j.QName;
 
+import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
@@ -74,7 +75,7 @@ public class OfflineSyncManager {
         
 		String authPassword;
 	    long lastAuthFail;
-	    String authToken; //null for data sources
+	    ZAuthToken authToken; //null for data sources
 	    long authExpires; //0 for data sources
         
         void syncStart() {
@@ -112,7 +113,7 @@ public class OfflineSyncManager {
         	return System.currentTimeMillis() - mLastFailTime > delay;
         }
         
-    	String lookupAuthToken(String password) {
+    	ZAuthToken lookupAuthToken(String password) {
     		if (authToken != null && System.currentTimeMillis() < authExpires && password.equals(authPassword))
     			return authToken;
     		authToken = null;
@@ -126,7 +127,7 @@ public class OfflineSyncManager {
     		return false;
     	}
     	
-    	void authSuccess(String password, String token, long expires) {
+    	void authSuccess(String password, ZAuthToken token, long expires) {
     		authPassword = password;
     		authToken = token;
     		authExpires = expires;
@@ -235,7 +236,7 @@ public class OfflineSyncManager {
     	}
     }
     
-    public void authSuccess(String targetName, String password, String token, long expires) {
+    public void authSuccess(String targetName, String password, ZAuthToken token, long expires) {
     	synchronized (syncStatusTable) {
     		getStatus(targetName).authSuccess(password, token, expires);
     	}
@@ -245,7 +246,7 @@ public class OfflineSyncManager {
     // account auth
     //
     
-	public String lookupAuthToken(Account account) {
+	public ZAuthToken lookupAuthToken(Account account) {
 		synchronized (syncStatusTable) {
 			return getStatus(account.getName()).lookupAuthToken(((OfflineAccount)account).getRemotePassword());
 		}
@@ -263,7 +264,7 @@ public class OfflineSyncManager {
 		}
 	}
 	
-	public void authSuccess(Account account, String token, long expires) {
+	public void authSuccess(Account account, ZAuthToken token, long expires) {
 		authSuccess(account.getName(), ((OfflineAccount)account).getRemotePassword(), token, expires);
 	}
 	

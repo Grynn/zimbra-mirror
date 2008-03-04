@@ -113,7 +113,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public ZMailbox newZMailbox(OfflineAccount account, String serviceUri) throws ServiceException {
     	ZMailbox.Options options = null;
     	String uri = Offline.getServerURI(account, serviceUri);
-    	String authToken = OfflineSyncManager.getInstance().lookupAuthToken(account);
+    	ZAuthToken authToken = OfflineSyncManager.getInstance().lookupAuthToken(account);
     	if (authToken != null) {
     		options = new ZMailbox.Options(authToken, uri);
     	} else {
@@ -149,7 +149,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         options.setDebugListener(new Offline.OfflineDebugListener());
         ZMailbox zmbox = ZMailbox.getMailbox(options);
         if (options.getAuthToken() == null) //it was auth by password
-        	OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken().getValue(), zmbox.getAuthResult().getExpires());
+        	OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken(), zmbox.getAuthResult().getExpires());
         return zmbox;
     }
 

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
@@ -118,8 +119,8 @@ public class OfflineMailbox extends DesktopMailbox {
     	return (OfflineAccount)getAccount();
     }
 
-    String getAuthToken() throws ServiceException {
-    	String authToken = OfflineSyncManager.getInstance().lookupAuthToken(getAccount());
+    ZAuthToken getAuthToken() throws ServiceException {
+    	ZAuthToken authToken = OfflineSyncManager.getInstance().lookupAuthToken(getAccount());
     	if (authToken == null) {
             String passwd = getAccount().getAttr(OfflineProvisioning.A_offlineRemotePassword);
 
@@ -128,7 +129,8 @@ public class OfflineMailbox extends DesktopMailbox {
             request.addElement(AccountConstants.E_PASSWORD).setText(passwd);
 
             Element response = sendRequest(request, false);
-            authToken = response.getAttribute(AccountConstants.E_AUTH_TOKEN);
+            // authToken = response.getAttribute(AccountConstants.E_AUTH_TOKEN);
+            authToken = new ZAuthToken(response.getElement(AccountConstants.E_AUTH_TOKEN), false);
             long expires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
     		
             OfflineSyncManager.getInstance().authSuccess(getAccount(), authToken, expires);
