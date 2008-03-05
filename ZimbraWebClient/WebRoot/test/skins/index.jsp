@@ -3,7 +3,7 @@
 <%@page import="java.util.*" %>
 <%
 String skin = request.getParameter("skin");
-if (skin == null) skin = "beach";
+if (skin == null) skin = application.getInitParameter("zimbraDefaultSkin");
 
 String contextPath = request.getContextPath();
 %>

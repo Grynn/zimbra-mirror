@@ -6314,4 +6314,10 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getFolderRestURL(com.zimbra.cs.taglib.bean.ZMailboxBean,com.zimbra.cs.taglib.bean.ZFolderBean)</function-signature>
     </function>
+
+	<function>
+		<name>contains</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+		<function-signature>boolean contains(java.lang.Object,java.lang.Object)</function-signature>
+	</function>
 </taglib>

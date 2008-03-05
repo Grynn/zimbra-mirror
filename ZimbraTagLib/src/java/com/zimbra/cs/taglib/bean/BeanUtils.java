@@ -65,12 +65,7 @@ import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1196,5 +1191,28 @@ public class BeanUtils {
 		} catch (NumberFormatException e) {
 			return defaultValue;
 		}
+	}
+
+	/**
+	 * Returns true if the specified object appears in the given container.
+	 * Container can be a Collection, an array, or a string.
+	 */
+	public static boolean contains(Object container, Object object) {
+		if (container == null || object == null) {
+			return false;
+		}
+		if (container instanceof Collection) {
+			return ((Collection)container).contains(object);
+		}
+		if (container instanceof Object[]) {
+			Object[] array = (Object[])container;
+			for (Object item : array) {
+				if (item.equals(object)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return String.valueOf(container).contains(String.valueOf(object));
 	}
 }

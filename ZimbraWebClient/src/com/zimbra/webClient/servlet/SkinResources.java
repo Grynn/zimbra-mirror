@@ -53,6 +53,7 @@ public class SkinResources
     //
 
     private static final String P_SKIN = "skin";
+	private static final String P_DEFAULT_SKIN = "zimbraDefaultSkin";
     private static final String P_USER_AGENT = "agent";
     private static final String P_DEBUG = "debug";
     private static final String P_CLIENT = "client";
@@ -84,7 +85,6 @@ public class SkinResources
     private static final String N_SKIN = "skin";
     private static final String N_IMAGES = "images";
 
-    private static final String DEFAULT_SKIN = "beach";
     private static final String SKIN_MANIFEST = "manifest.xml";
 
     private static final String CLIENT_STANDARD = "standard";
@@ -154,12 +154,12 @@ public class SkinResources
         Map<String, String> macros = parseUserAgent(userAgent);
         String browserType = getMacroNames(macros.keySet());
 
+		String skin = getSkin(req);
 		String templates = req.getParameter(P_TEMPLATES);
 		if (templates == null) templates = V_TRUE;
-		String skin = getSkin(req) + "/templates=" + templates;
 
         Locale locale = getLocale(req);
-        String cacheId = client + ":" + skin + ":" + browserType;
+        String cacheId = client + ":" + skin + "/templates=" + templates + ":" + browserType;
         if (type.equals(T_JAVASCRIPT) || type.equals(T_CSS)) {
             cacheId += ":" + locale;
         }
@@ -171,6 +171,7 @@ public class SkinResources
 			ZimbraLog.webclient.debug("DEBUG: contentType=" + contentType);
             ZimbraLog.webclient.debug("DEBUG: client=" + client);
             ZimbraLog.webclient.debug("DEBUG: skin=" + skin);
+			ZimbraLog.webclient.debug("DEBUG: templates="+templates);
 			ZimbraLog.webclient.debug("DEBUG: browserType=" + browserType);
             ZimbraLog.webclient.debug("DEBUG: locale=" + locale);
             ZimbraLog.webclient.debug("DEBUG: cacheId=" + cacheId);
@@ -586,11 +587,11 @@ public class SkinResources
             } else {
                 cookie = getCookie(req, C_SKIN);
             }
-            skin = cookie != null ? cookie.getValue() : DEFAULT_SKIN;
+            skin = cookie != null ? cookie.getValue() : getServletContext().getInitParameter(P_DEFAULT_SKIN);
         }
         File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/"+SKIN_MANIFEST));
         if (!manifest.exists()) {
-            skin = DEFAULT_SKIN;
+            skin = getServletContext().getInitParameter(P_DEFAULT_SKIN);
         }
         return StringUtil.escapeHtml(skin);
     }
