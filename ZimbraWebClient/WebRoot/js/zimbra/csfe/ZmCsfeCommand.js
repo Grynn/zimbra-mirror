@@ -92,6 +92,28 @@ function(fault, method) {
 	return new ZmCsfeException(msg, errorCode, method, faultCode, fault.Detail.Error.a, trace);
 };
 
+/**
+ * Returns the method name (*Request) of the given request, which may be either a SOAP doc
+ * or a JSON object.
+ * 
+ * @param request	[AjxSoapDoc|object]		request
+ */
+ZmCsfeCommand.getMethodName =
+function(request) {
+	if (request instanceof AjxSoapDoc) {
+		return request._methodEl.tagName
+	} else {
+		var methodName = "[unknown]";
+		for (var prop in request) {
+			if (prop.indexOf("Request") != -1) {
+				methodName = prop;
+				break;
+			}
+		}
+		return methodName;
+	}
+};
+
 ZmCsfeCommand.prototype.toString =
 function() {
 	return "ZmCsfeCommand";
@@ -207,10 +229,7 @@ function(params) {
 		}
 	}
 
-	for (var prop in params.jsonObj) {
-		params.methodNameStr = prop;
-		break;
-	}
+	params.methodNameStr = ZmCsfeCommand.getMethodName(params.jsonObj);
 
 	// Get auth token from cookie if required
 	if (!params.noAuthToken) {
@@ -308,7 +327,7 @@ function(params) {
 		}
 	}
 
-	params.methodNameStr = soapDoc.getMethod().nodeName;
+	params.methodNameStr = ZmCsfeCommand.getMethodName(soapDoc);
 
 	// Get auth token from cookie if required
 	if (!params.noAuthToken) {
