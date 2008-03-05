@@ -58,10 +58,12 @@ ZaNewAliasXDialog = function(parent,  app, w, h, title) {
 	ZaXDialog.call(this, parent, app, null, title, w, h);
 	this._containedObject = {};
 	this.initForm(ZaAlias.myXModel,this.getMyXForm());
+    this._helpURL = ZaNewAliasXDialog.helpURL;
 }
 
 ZaNewAliasXDialog.prototype = new ZaXDialog;
 ZaNewAliasXDialog.prototype.constructor = ZaNewAliasXDialog;
+ZaNewAliasXDialog.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/creating_a_mail_aliases.htm";
 
 ZaNewAliasXDialog.prototype.getMyXForm = 
 function() {	

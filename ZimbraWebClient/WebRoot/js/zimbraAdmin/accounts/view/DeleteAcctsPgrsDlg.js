@@ -39,11 +39,14 @@ DeleteAcctsPgrsDlg = function(parent,  app, w, h) {
 	this.initForm(DeleteAcctsPgrsDlg.myXModel,this.getMyXForm());
 	this._pollHandler = null;	
 	this._aborted = false;
+    this._helpURL = DeleteAcctsPgrsDlg.helpURL ;
+
 }
 
 DeleteAcctsPgrsDlg._ERROR_MSG = "errorMsg";
 DeleteAcctsPgrsDlg._STATUS = "status";
 DeleteAcctsPgrsDlg._DELETED_ACCTS = "deletedAccounts";
+DeleteAcctsPgrsDlg.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";
 
 DeleteAcctsPgrsDlg.myXModel = {
 	getDeletedAccounts: function (model, instance) {
