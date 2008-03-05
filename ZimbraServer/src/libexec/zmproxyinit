@@ -61,10 +61,6 @@ if ($options{f}) {
   print ZMPROV "mcf zimbraReverseProxyAuthWaitInterval 10s\n";
 }
 
-my $refer = getLocalConfig("zimbra_auth_always_send_refer");
-print ZMPROV "ms $hostname zimbraMailReferMode wronghost\n"
-  if (uc($refer) eq "TRUE");
-
 if ($options{e}) {
   print ZMPROV "ms $hostname ".
     "zimbraImapBindPort 7143 "."zimbraImapProxyBindPort 143 ".
