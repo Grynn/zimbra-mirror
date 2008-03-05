@@ -107,8 +107,12 @@ DwtResizableWindow.prototype.popup = function(pos) {
 			if (pos.y > maxPos.y)
 				pos.y = maxPos.y;
 	}
-        var wasVisible = this._visible;
-        this._visible = true;
+	if (pos.y != null) {
+		// Keep title bar from going offscreen.
+		pos.y = Math.max(pos.y, 0);
+	}
+	var wasVisible = this._visible;
+	this._visible = true;
 	this.setLocation(pos.x, pos.y);
 	if (!wasVisible && this.isListenerRegistered(DwtEvent.POPUP))
 		this.notifyListeners(DwtEvent.POPUP, { dwtObj: this });
@@ -409,9 +413,13 @@ DwtResizableWindow.prototype.__resizeMouseMove = function(ev) {
 		this.setSize(width == null ? Dwt.DEFAULT : width,
 			     height == null ? Dwt.DEFAULT : height);
 
-	if (x != null || y != null)
+	if (x != null || y != null) {
+		if (y != null) {
+			y = Math.max(y, 0);
+		}
 		this.setLocation(x == null ? Dwt.DEFAULT : x,
 				 y == null ? Dwt.DEFAULT : y);
+	}
 };
 
 DwtResizableWindow.prototype.__resizeMouseUp = function(ev) {
