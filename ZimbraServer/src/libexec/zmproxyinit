@@ -81,8 +81,6 @@ if ($options{d}) {
     "zimbraImapSSLBindPort 993 "."zimbraImapSSLProxyBindPort 7993 ".
     "zimbraPop3BindPort 110 "."zimbraPop3ProxyBindPort 7110 ".
     "zimbraPop3SSLBindPort 995 "."zimbraPop3SSLProxyBindPort 7995\n";
-  print ZMPROV "mcf zimbraImapCleartextLoginEnabled FALSE\n";
-  print ZMPROV "mcf zimbraPop3CleartextLoginEnabled FALSE\n";
 }
 
 close ZMPROV;
