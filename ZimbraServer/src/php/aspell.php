@@ -37,9 +37,12 @@ if ($text != NULL) {
     // when splitting words
     $text = preg_replace('/--+/', ' ', $text);
 
-    // Split on anything that's not a word character, quote or dash
-    $words = preg_split('/[^\w\'-]+/', $text);
+	// Convert to ISO-8859-1
+	$text = iconv("UTF-8", "iso-8859-1", $text);
 
+    // Split on anything that's not a word character, quote or dash
+    $words = preg_split('/[^\w\xc0-\xfd-\']+/', $text);
+	
     // Load dictionary
     $dictionary = pspell_new($locale);
     if ($dictionary == 0) {
@@ -69,7 +72,7 @@ if ($text != NULL) {
         }
 
         // Skip numbers
-        if (preg_match('/^[0-9\-]+$/', $word)) {
+        if (preg_match('/[0-9\-]+/', $word)) {
             continue;
         }
         
@@ -84,7 +87,8 @@ if ($text != NULL) {
         if (!pspell_check($dictionary, $word)) {
             $suggestions = implode(",", pspell_suggest($dictionary, $word));
             $suggestions = utf8_encode($suggestions);
-            $misspelled .= "$word:$suggestions\n";
+            $utfw = utf8_encode($word);
+            $misspelled .= "$utfw:$suggestions\n";
         }
     }
 
