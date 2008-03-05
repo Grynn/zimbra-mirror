@@ -5,6 +5,11 @@ use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
 use Getopt::Std;
 
+if ($> ne 0) {
+  print "$0 must be executed as root.\n";
+  exit 1;
+}
+
 our %options = ();
 our %loaded = ();
 
