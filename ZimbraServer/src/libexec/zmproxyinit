@@ -13,7 +13,7 @@ if ($> ne 0) {
 our %options = ();
 our %loaded = ();
 
-getopts('defhH',\%options) or die "Unable to set options\n";
+getopts('defhs',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
@@ -81,6 +81,10 @@ if ($options{d}) {
     "zimbraImapSSLBindPort 993 "."zimbraImapSSLProxyBindPort 7993 ".
     "zimbraPop3BindPort 110 "."zimbraPop3ProxyBindPort 7110 ".
     "zimbraPop3SSLBindPort 995 "."zimbraPop3SSLProxyBindPort 7995\n";
+    if ($options{s}) {
+      print ZMPROV "mcf zimbraImapCleartextLoginEnabled FALSE\n";
+      print ZMPROV "mcf zimbraPop3CleartextLoginEnabled FALSE\n";
+    }
 }
 
 close ZMPROV;
@@ -89,9 +93,10 @@ exit 0;
 sub usage() {
   print "Usage: $0 [-h] [-d] [-e][-f] FQDN\n";
   print "\t-h: display this help message\n";
-  print "\t-e: enable proxy\n";
   print "\t-d: disable proxy\n";
-  print "\t-f: Full reset on memcached port and seach queries\n";
+  print "\t-e: enable proxy\n";
+  print "\t-f: Full reset on memcached port and search queries\n";
+  print "\t-s: Set cleartext to FALSE (secure mode) on disable\n";
   print "FQDN is the fully qualified domainname of the host to change settings for.\n";
   print "Either -e or -d is required\n";
   exit 1;
