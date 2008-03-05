@@ -47,3 +47,21 @@ pref("signon.SignonFileName", "signons.txt");
 pref("layout.spellcheckDefault", 1);
 
 pref("dom.max_script_run_time", 20);
+
+pref("app.update.enabled", true);
+pref("app.update.auto", true);
+pref("app.update.mode", 3);
+pref("app.update.timer", 600000);
+pref("app.update.interval", 86400);
+pref("app.update.nagTimer.download", 86400);
+pref("app.update.nagTimer.restart", 86400);
+pref("app.update.idletime", 60);
+pref("app.update.lastUpdateDate.background-update-timer", 0);
+
+pref("app.update.silent", false);
+pref("app.update.log.all", true);
+pref("app.update.url.manual", "http://www.zimbra.com/products/desktop.html");
+pref("app.update.url.details", "http://www.zimbra.com/products/desktop.html");
+pref("app.update.url", "http://www.zimbra.com/update/zdesktop/%VERSION%/%BUILD_ID%/%OS%/update.xml");
+
+pref("browser.dom.window.dump.enabled", true);

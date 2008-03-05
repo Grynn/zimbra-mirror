@@ -1,0 +1,26 @@
+#!/bin/sh
+
+status=`head -1 "$1/update.status"`
+if [ ! "$status" = "applying" ]; then
+  echo WRONG STATUS: $status >> "$1/update.log"
+  exit 1
+fi
+
+if [ ! -r "$1/update.mar" ]; then
+  echo UPDATE FILE NOT FOUND >> "$1/update.log"
+  exit 1
+fi
+
+echo Start updating... >> "$1/update.log"
+
+stage=/tmp/zdupdate
+
+rm -fr $stage
+mkdir -p $stage
+mv "$1/update.mar" $stage/update.dmg
+/usr/bin/hdiutil attach $stage/update.dmg -mountpoint $stage/install
+open -W "$stage/install/Zimbra Desktop Installer.app"
+/usr/bin/hdiutil detach $stage/install
+rm -fr $stage
+
+echo Done updating >> "$1/update.log"

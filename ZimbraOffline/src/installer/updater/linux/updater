@@ -1,0 +1,24 @@
+#!/bin/sh
+
+status=`head -1 "$1/update.status"`
+if [ ! "$status" = "applying" ]; then
+  echo WRONG STATUS: $status >> "$1/update.log"
+  exit 1
+fi
+
+if [ ! -r "$1/update.mar" ]; then
+  echo UPDATE FILE NOT FOUND >> "$1/update.log"
+  exit 1
+fi
+
+echo Start updating... >> "$1/update.log"
+
+stage=/tmp/zdupdate
+
+rm -fr $stage
+mkdir -p /tmp/zdupdate
+mv "$1/update.mar" $stage/update.sh
+/bin/sh $stage/update.sh
+rm -fr $stage
+
+echo Done updating >> "$1/update.log"
