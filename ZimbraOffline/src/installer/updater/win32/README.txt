@@ -1,0 +1,1 @@
+This is a hack to turn downloaded upadte.mar into update.exe and run it.  updater.cpp is based on mozilla/toolkit/mozapps/update/src/updater/updater.cpp.  To build, overwrite mozilla/toolkit/mozapps/update/src/updater/updater.cpp with our copy of updater.cpp.
