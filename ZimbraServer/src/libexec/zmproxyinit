@@ -105,13 +105,13 @@ close ZMPROV;
 exit 0;
 
 sub usage() {
-  print "Usage: $0 [-h] [-d] [-e][-f] FQDN\n";
+  print "Usage: $0 [-h] [-d] [-e][-f] hostname\n";
   print "\t-h: display this help message\n";
   print "\t-d: disable proxy\n";
   print "\t-e: enable proxy\n";
   print "\t-f: Full reset on memcached port and search queries\n";
   print "\t-s: Set cleartext to FALSE (secure mode) on disable\n";
-  print "FQDN is the fully qualified domainname of the host to change settings for.\n";
+  print "hostname is the value of the zimbra_server_hostname LC key for the server being modified.\n";
   print "Either -e or -d is required\n";
   exit 1;
 }
