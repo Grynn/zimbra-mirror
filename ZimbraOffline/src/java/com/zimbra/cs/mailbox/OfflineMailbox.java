@@ -556,7 +556,7 @@ public class OfflineMailbox extends DesktopMailbox {
             int prevIndexId = item.getIndexId();
             item.move(getFolderById(folderId));
             if (prevIndexId != item.getIndexId())
-                queueForIndexing(item, false, item.generateIndexData());
+                queueForIndexing(item, false, item.generateIndexData(false));
             
             item.setColor(color);
             item.setTags(flags, tags);
