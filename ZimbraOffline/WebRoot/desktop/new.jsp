@@ -55,16 +55,26 @@ function OnXmail() {
                     <nobr><img src="/zimbra/img/logo/ImgZimbraIcon.gif" align="absmiddle"> Zimbra Account</nobr>
                 </button>
             </td>
-            <td>Set up an account on a Zimbra mail server.
+            <td>Set up an account on a <a href="javascript:zd.toggle('Zimbra')">Zimbra</a> mail server.
             </td>
         </tr>
+        <tr id='Zimbra' style='display:none'>
+            <td colspan=2>
+                <div class='infoBox' style='margin:0px 30px 0px 30px;'>
+                    <div class='infoTitle'>About Zimbra Collaboration Suite</div>
+                    <p>To learn more about Zimbra Collaboration Suite, visit <a href=http://www.zimbra.com target=_blank>www.zimbra.com</a>.</p>
+                    <a href="javascript:zd.toggle('Zimbra')">Done</a>
+                </div>
+            </td>
+        </tr>
+        
         <tr>
             <td valign=top>
                 <button class='DwtButton' onclick="OnYmail()" style='width:100%'>
                     <nobr>Yahoo! Mail Plus Account</nobr>
                 </button>
             </td>
-            <td>Note: you need a <a href="javascript:zd.toggle('YahooMailPlus')">Yahoo! Mail Plus account</a>
+            <td>Note: you need a <a href="javascript:zd.toggle('YahooMailPlus')">Yahoo! Mail Plus</a> account
                 for this to work.
             </td>
         </tr>
@@ -72,8 +82,7 @@ function OnXmail() {
             <td colspan=2>
                 <div class='infoBox' style='margin:0px 30px 0px 30px;'>
                     <div class='infoTitle'>About Yahoo! Mail Plus</div>
-                    <p>If you are not yet a Yahoo! Mail user, <a href=http://mail.yahoo.com target=_blank>go here</a> to sign up.</p>
-                    <p>Once you are a Yahoo! Mail user, login to your account and click on <b>Mail Upgrades</b> to upgrade to a Yahoo! Mail Plus account.</p>
+                    <p>If you are not yet a Yahoo! Mail Plus user, <a href=http://mailplus.mail.yahoo.com target=_blank>go here</a> to sign up a new account or upgrade an existing free account.</p>
                     <a href="javascript:zd.toggle('YahooMailPlus')">Done</a>
                 </div>
             </td>
@@ -94,7 +103,7 @@ function OnXmail() {
                     <div class='infoTitle'>To allow IMAP access from your Gmail account</div>
             
                         <ol>
-                            <li>Log in to your <a href=http://gmail.com target=_blank>Gmail account</a>.
+                            <li>Log in to your <a href=http://gmail.com target=_blank>Gmail</a> account.
                             <li>Click <b>Settings</b> at the top of any Gmail page.
                             <li>Click <b>Forwarding and POP/IMAP</b>.
                             <li>Select <b>Enable IMAP</b>.
