@@ -128,6 +128,8 @@ function() {
 				browserVersion = parseFloat(token.substr(index + 9));
 			} else if ((index = token.indexOf('safari/')) != -1) {
 				AjxEnv.isSafari = true;
+			} else if (index = token.indexOf('version/') != -1) {
+				// this is how safari sets browser version
 				browserVersion = parseFloat(token.substr(index + 7));
 			} else if (token.indexOf('windows') != -1) {
 				AjxEnv.isWindows = true;
@@ -164,10 +166,11 @@ function() {
 		AjxEnv.isFirefox1_5up	= (AjxEnv.isFirefox && browserVersion >= 1.5);
 		AjxEnv.isFirefox2_0up	= (AjxEnv.isFirefox && browserVersion >= 2.0);
 		AjxEnv.isFirefox3up		= (AjxEnv.isFirefox && browserVersion >= 3.0);
-		AjxEnv.isSafari3		= (AjxEnv.isSafari && agt.indexOf("version/3") != -1);	// XXX: hack for v3 until official release
+		AjxEnv.isSafari3		= (AjxEnv.isSafari && browserVersion >= 3.0);
 
 		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
+		else if (AjxEnv.isSafari3)			{	AjxEnv.browser = "SAF3";	}
 		else if (AjxEnv.isSafari)			{	AjxEnv.browser = "SAF";		}
 		else if (AjxEnv.isCamino)			{	AjxEnv.browser = "CAM";		}
 		else if (isWebTv)					{	AjxEnv.browser = "WEBTV";	}
