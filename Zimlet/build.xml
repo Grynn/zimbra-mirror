@@ -46,7 +46,7 @@
 	<property name="generated.java.dir" location="${generated.dir}/src/java" />
 
 	<property name="zimlets" value="com_zimbra_phone,com_zimbra_url,com_zimbra_email,com_zimbra_date,com_zimbra_search,com_zimbra_local"/>
-	<property name="zimlets-offline" value="com_zimbra_ymaps,com_flightexplorer_fasttrack"/>
+	<property name="zimlets-offline" value="com_zimbra_dnd,com_zimbra_ymaps,com_zimbra_yfinance,com_zimbra_yflickr,com_flightexplorer_fasttrack"/>
 
 	<!-- zimlets-extra is anything not in zimlets -->
 	<dirset id='zimlets-extra.dirset' dir='${src.zimlet.dir}' includes='*' excludes='${zimlets}' />

@@ -84,7 +84,7 @@ public class OfflineLC {
         zdesktop_version.setDoc("Version number of the Zimbra Desktop software.");
 
 	    zdesktop_skins = new KnownKey("zdesktop_skins");
-	    zdesktop_skins.setDefault("sand");
+	    zdesktop_skins.setDefault("beach");
 	    zdesktop_skins.setDoc("Comma delimited list of installed skins.");
 	    
 	    zdesktop_derby_properties = new KnownKey("zdesktop_derby_properties");

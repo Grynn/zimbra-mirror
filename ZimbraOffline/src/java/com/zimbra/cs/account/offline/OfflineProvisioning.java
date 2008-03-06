@@ -439,7 +439,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.remove(A_zimbraIsDomainAdminAccount);
         
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
-        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
+        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "beach" : skins[0]);
         
         attrs.put(A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         
@@ -531,6 +531,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
         setDefaultAccountAttributes(attrs);
+        
+        if (domain.equals("yahoo.com")) {
+        	attrs.put(A_zimbraPrefSkin, "yahoo");
+        }
 
         Account account = createAccountInternal(emailAddress, accountId, attrs);
         try {
@@ -746,7 +750,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraPrefUseTimeZoneListInCalendar, FALSE);
 
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
-        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "sand" : skins[0]);
+        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "beach" : skins[0]);
         
         attrs.put(A_zimbraPrefClientType, "advanced");
         attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
