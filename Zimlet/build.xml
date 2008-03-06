@@ -3,10 +3,10 @@
     <property file='build-custom.properties' />
 
     <!--
-	
+
 		Use the target reload-zimlets-extra to build all the zimlets, both core and extra,
 		install all the zimlets, then restart the webserver.
-		
+
 	-->
 	<property environment="env"/>
 
@@ -27,7 +27,8 @@
 	<property name="dist.lib.dir" location="${dist.dir}/lib" />
 	<property name="dist.zimlet.dir" location="${dist.dir}/zimlets" />
 	<property name="dist.zimlet-extra.dir" location="${dist.dir}/zimlets-extra" />
-	<property name="dist.zimlet-offline.dir" location="${dist.dir}/zimlets-offline" />
+    <property name="dist.zimlet-experimental.dir" location="${dist.dir}/zimlets-experimental" />
+    <property name="dist.zimlet-offline.dir" location="${dist.dir}/zimlets-offline" />
 
 	<property name="common.dir" location="../ZimbraCommon" />
 	<property name="common.jars.dir" location="${common.dir}/jars" />
@@ -45,11 +46,12 @@
 	<property name="generated.dir" location="${build.dir}/generated" />
 	<property name="generated.java.dir" location="${generated.dir}/src/java" />
 
-	<property name="zimlets" value="com_zimbra_phone,com_zimbra_url,com_zimbra_email,com_zimbra_date,com_zimbra_search,com_zimbra_local"/>
+	<property name="zimlets" value="com_zimbra_phone,com_zimbra_url,com_zimbra_email,com_zimbra_date,com_zimbra_local"/>
 	<property name="zimlets-offline" value="com_zimbra_dnd,com_zimbra_ymaps,com_zimbra_yfinance,com_zimbra_yflickr,com_flightexplorer_fasttrack"/>
+    <property name="zimlets-experimental" value="com_zimbra_amzn,com_zimbra_asterisk,com_zimbra_asteriskmwi,com_zimbra_blog,com_zimbra_browserperf,com_zimbra_edu,com_zimbra_evite,com_zimbra_html,com_zimbra_jspsample,com_zimbra_photo,com_zimbra_po,com_zimbra_videos,com_zimbra_webex,com_zimbra_wikipedia,com_zimbra_xslt,com_zimbra_ytraffic"/>
 
-	<!-- zimlets-extra is anything not in zimlets -->
-	<dirset id='zimlets-extra.dirset' dir='${src.zimlet.dir}' includes='*' excludes='${zimlets}' />
+    <!-- zimlets-extra is anything not in zimlets and not in zimlets-experimental -->
+	<dirset id='zimlets-extra.dirset' dir='${src.zimlet.dir}' includes='*' excludes='${zimlets},${zimlets-experimental}'/>
 	<pathconvert property='zimlets-extra' refid='zimlets-extra.dirset' pathsep=",">
 		<flattenmapper />
 	</pathconvert>
@@ -106,7 +108,8 @@
 		<mkdir dir="${dist.lib.dir}" />
 		<mkdir dir="${dist.zimlet.dir}" />
 		<mkdir dir="${dist.zimlet-extra.dir}" />
-		<mkdir dir="${dist.zimlet-offline.dir}" />
+        <mkdir dir="${dist.zimlet-experimental.dir}" />
+        <mkdir dir="${dist.zimlet-offline.dir}" />
 		<mkdir dir="${generated.java.dir}" />
 	</target>
 
@@ -115,7 +118,7 @@
 			<src refid="all.java.path" />
 		</javac>
 		<javac classpathref="class.path" destdir="${build.classes.dir}"
-			srcdir='../ZimbraWebClient/src' includes='**/templates/**/*.java' 
+			srcdir='../ZimbraWebClient/src' includes='**/templates/**/*.java'
 		/>
 	</target>
 
@@ -131,6 +134,7 @@
 
 	<target name="reload-zimlets" depends="deploy-zimlets,restart-webserver" description="Reload Zimlets"/>
 	<target name="reload-zimlets-extra" depends="deploy-zimlets-extra,restart-webserver" description="Reload Zimlets Extra"/>
+    <target name="reload-zimlets-experimental" depends="deploy-zimlets-experimental,restart-webserver" description="Reload Zimlets Experimental"/>
 
 	<target name="package-zimlets" depends="build-init,compile,templates">
 		<foreach list="${zimlets}" target="package-zimlet" param="zimlet"/>
@@ -145,7 +149,13 @@
 			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
 		</zip>
 	</target>
-	<target name="package-zimlets-offline" depends="build-init,compile,templates">
+    <target name="package-zimlets-experimental" depends="build-init,compile,templates">
+		<foreach list="${zimlets-experimental}" target="package-zimlet-experimental" param="zimlet"/>
+		<!--zip destfile="${dist.zimlet-experimental.dir}/com_zimbra_tracking.zip" update="true">
+			<fileset dir="${build.classes.dir}" includes="**/TrackingHandler.class"/>
+		</zip-->
+	</target>
+    <target name="package-zimlets-offline" depends="build-init,compile,templates">
 		<foreach list="${zimlets-offline}" target="package-zimlet-offline" param="zimlet"/>
 	</target>
 
@@ -165,7 +175,15 @@
 		</zip>
 	</target>
 
-	<target name="package-zimlet-offline">
+    <target name="package-zimlet-experimental">
+		<echo>${zimlet}</echo>
+		<zip destfile="${dist.zimlet-experimental.dir}/${zimlet}.zip" update="true" >
+			<fileset dir="${src.zimlet.dir}/${zimlet}" />
+			<fileset dir="${build.dir}/templates/${zimlet}" includes="templates/**/*.js" />
+		</zip>
+	</target>
+
+    <target name="package-zimlet-offline">
 		<echo>${zimlet}</echo>
 		<zip destfile="${dist.zimlet-offline.dir}/${zimlet}.zip" update="true" >
 			<fileset dir="${src.zimlet.dir}/${zimlet}" />
@@ -196,7 +214,16 @@
 				</template>
 			</sequential>
 		</for>
-	</target>
+        <for list="${zimlets-experimental}" param="zimlet">
+			<sequential>
+				<echo>compiling templates for @{zimlet}</echo>
+				<mkdir dir='${build.dir}/templates/@{zimlet}' />
+				<template destdir='${build.dir}/templates/@{zimlet}' prefix='@{zimlet}' define='true' authoritative="true">
+					<fileset dir='${src.zimlet.dir}/@{zimlet}' includes='templates/**/*.template' />
+				</template>
+			</sequential>
+		</for>
+    </target>
 
 	<target name="deploy-zimlets" depends="package-zimlets">
 		<foreach list="${zimlets}" target="install-zimlet" param="zimlet">
@@ -224,7 +251,20 @@
 		</foreach>
 	</target>
 
-	<target name="install-zimlet">
+    <target name="deploy-zimlets-experimental" depends="package-zimlets-experimental,deploy-zimlets">
+		<foreach list="${zimlets-experimental}" target="install-zimlet" param="zimlet">
+			<param name="action" value="deploy"/>
+			<param name="dir" value="${dist.zimlet-experimental.dir}"/>
+		</foreach>
+	</target>
+	<target name="install-zimlets-experimental" depends="install-zimlets">
+		<foreach list="${zimlets-experimental}" target="install-zimlet" param="zimlet">
+			<param name="action" value="install"/>
+			<param name="dir" value="${dist.zimlet-experimental.dir}"/>
+		</foreach>
+	</target>
+
+    <target name="install-zimlet">
 		<echo>${action} ${zimlet}</echo>
 		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="class.path" failonerror="true">
 			<arg line="-q" />
