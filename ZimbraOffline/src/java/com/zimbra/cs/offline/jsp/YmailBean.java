@@ -28,7 +28,7 @@ public class YmailBean extends XmailBean {
 		port = "143";
 		isSsl = false;
 		
-		smtpHost = "smtp.mail.yahoo.com";
+		smtpHost = "plus.smtp.mail.yahoo.com";
 		smtpPort = "465";
 		isSmtpSsl = true;
 		isSmtpAuth = true;
