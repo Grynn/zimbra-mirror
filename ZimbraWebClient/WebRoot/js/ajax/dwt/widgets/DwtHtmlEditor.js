@@ -14,14 +14,14 @@
  *
  * ***** END LICENSE BLOCK *****
  */
- 
+
 /**
  * @constructor
  * @class
  * Html Editor
  *
  * @author Ross Dargahi
- * 
+ *
  * @param params			[hash]				hash of params:
  *        parent			[DwtComposite] 		parent widget
  *        className			[string]*			CSS class
@@ -43,15 +43,14 @@ DwtHtmlEditor = function(params) {
 	this.__eventClosure = AjxCallback.simpleClosure(this.__eventClosure, this);
 
 	// init content
-	this._pendingContent = params.content ? params.content :
-		(this._mode == DwtHtmlEditor.HTML) ? "<html><head></head><body></body></html>" : "";
+	this._pendingContent = params.content || "";
 	this._htmlModeInited = false;
 
 	this._initialize();
 }
 
 DwtHtmlEditor.PARAMS = ["parent", "className", "posStyle", "content", "mode", "blankIframeSrc"];
-	
+
 DwtHtmlEditor.prototype = new DwtComposite();
 DwtHtmlEditor.prototype.constructor = DwtHtmlEditor;
 
@@ -271,13 +270,10 @@ function(content) {
 	if (this._mode == DwtHtmlEditor.HTML) {
 		// If the html is initialed then go ahead and set the content, else let the
 		// _finishHtmlModeInit run before we try setting the content
+                this._pendingContent = content ? ((content instanceof AjxVector) ? content[0] : content) : "";
 		if (this._htmlModeInited) {
-			this._pendingContent = content ? ((content instanceof AjxVector) ? content[0] : content) : "";
 			this._setContentOnTimer();
-		} else {
-			var ta = new AjxTimedAction(this, this.setContent, [content]);
-			AjxTimedAction.scheduleAction(ta, DwtHtmlEditor._INITDELAY + 1);
-		}
+		} // ELSE: _finishHtmlModeInit is about to run and it'll use _pendingContent
 	} else {
 		document.getElementById(this._textAreaId).value = (content || "");
 	}
@@ -628,7 +624,6 @@ function(mode, convert) {
 			var content = (convert)
 				? AjxStringUtil.convertToHtml(textArea.value)
 				: textArea.value;
-			content = ["<html><head></head><body>", content, "</body></html>"].join("");
 			iFrame = this._initHtmlMode(content);
 		}
 
@@ -646,9 +641,9 @@ function(mode, convert) {
 
 		// If we have pending content, then an iFrame is being created. This can happen
 		// if the widget is instantiated and immediate setMode is called w/o getting out
-		// to the event loop where _finishHtmlMode is triggered
+		// to the event loop where _finishHtmlModeInit is triggered
 		var content = (!this._pendingContent)
-			? this._getIframeDoc().innerHTML
+			? this._getIframeDoc().body.innerHTML
 			: (this._pendingContent || "");
 
 		textArea.value = (convert)
@@ -746,21 +741,12 @@ function(ignorePendingContent) {
 
 DwtHtmlEditor.prototype._initHtmlMode =
 function(content) {
-	var iFrame = this._createIFrameEl();
-
+        this._pendingContent = content || "";
 	this._keyEvent = new DwtKeyEvent();
 	this._stateEvent = new DwtHtmlEditorStateEvent();
 	this._stateEvent.dwtObj = this;
-
 	this._updateStateAction = new AjxTimedAction(this, this._updateState);
-
-	this._pendingContent = content || "";
-
-	// IE can sometimes race ahead and execute script before the underlying component is created
-	var timedAction = new AjxTimedAction(this, this._finishHtmlModeInit);
-	AjxTimedAction.scheduleAction(timedAction, DwtHtmlEditor._INITDELAY);
-
-	return iFrame;
+	return this._createIFrameEl();
 }
 
 DwtHtmlEditor.prototype._createIFrameEl =
@@ -776,6 +762,13 @@ function() {
 	iFrame.setAttribute("autocomplete", "off", false);
 // 	iFrame.setAttribute("marginwidth", "0", false);
 // 	iFrame.setAttribute("marginheight", "0", false);
+
+        var cont = AjxCallback.simpleClosure(this._finishHtmlModeInit, this);
+        if (!AjxEnv.isIE)
+                iFrame.onload = cont;
+        else
+                setTimeout(cont, DwtHtmlEditor._INITDELAY);
+
 //	if (AjxEnv.isIE && location.protocol == "https:")
 	iFrame.src = this._blankIframeSrc || "";
 	htmlEl.appendChild(iFrame);
@@ -783,20 +776,10 @@ function() {
 	return iFrame;
 }
 
-DwtHtmlEditor.prototype._initializeContent =
-function(content) {
-	var initHtml = "<html><head></head><body>" + (content || "") + "</body></html>";
-	var doc = this._getIframeDoc();
-	try {
-		doc.write(initHtml);
-	} finally {
-		doc.close();
-	}
-};
-
 DwtHtmlEditor.prototype._finishHtmlModeInit =
-function(params) {
-	var doc = this._getIframeDoc();
+function() {
+        var doc = this._getIframeDoc();
+
 	try {
 		// in case safari3 hasn't init'd BODY tag yet
 		if (AjxEnv.isSafari && doc.body == null) {
@@ -804,35 +787,28 @@ function(params) {
 			doc.write("<html><head></head><body></body></html>");
 			doc.close();
 		}
-		// XXX: DO NOT REMOVE THIS LINE EVER. IT CAUSES NASTY BUGS (8808, 8895)
-        if(doc && doc.body!=null) {
-            doc.body.innerHTML = this._pendingContent || "";
-        }
-    } catch (ex) {
+        } catch (ex) {
 		DBG.println("XXX: Error initializing HTML mode :XXX");
 		return;
 	}
 
-	this._enableDesignMode(doc);
-//	this.focus();
-	this._updateState();
-	this._htmlModeInited = true;
+        function cont() {
+                this._enableDesignMode(doc);
+                this._setContentOnTimer();
+	        this._updateState();
+	        this._htmlModeInited = true;
+	        this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
+                // this.focus();
+        };
 
-	// bug fix #4722 - setting design mode for the first time seems to null
-	// out iframe doc's body in IE - so create a new body... + bug fix#21171
-	// same thing happening in Mac Firefox + bug fix #24056 calendar notes editor
-	// is broken in Windows Firefox due to init problem
-
-	doc.open();
-	doc.write(this._pendingContent || "");
-	doc.close();
-	// doc.body.innerHTML = this._pendingContent || "";
-	// these 2 seem to be no-ops.
-	// this._execCommand("2D-Position", false);
-	// this._execCommand("MultipleSelection", true);
-
-	this._registerEditorEventHandlers(document.getElementById(this._iFrameId), doc);
-}
+        if (AjxEnv.isIE) {
+                // IE needs a timeout
+                setTimeout(AjxCallback.simpleClosure(cont, this, doc),
+                           DwtHtmlEditor._INITDELAY);
+        } else {
+	        cont.call(this);
+        }
+};
 
 DwtHtmlEditor.prototype._focus =
 function() {
