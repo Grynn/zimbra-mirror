@@ -74,13 +74,11 @@ public class OfflineMailbox extends DesktopMailbox {
         super(data);
     }
 
-    @Override
-    public MailSender getMailSender() {
+    @Override public MailSender getMailSender() {
         return new OfflineMailSender();
     }
     
-    @Override
-	public boolean isAutoSyncDisabled() {
+    @Override public boolean isAutoSyncDisabled() {
     	try {
     		return getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) < 0;
     	} catch (ServiceException x) {
@@ -89,8 +87,7 @@ public class OfflineMailbox extends DesktopMailbox {
     	return true;
 	}
 
-	@Override
-	protected void syncOnTimer() {
+	@Override protected void syncOnTimer() {
 		sync(false);
 	}
 	
@@ -150,8 +147,7 @@ public class OfflineMailbox extends DesktopMailbox {
     	return new URL(getSoapUri()).getHost();
     }
 
-    @Override
-    protected synchronized void initialize() throws ServiceException {
+    @Override protected synchronized void initialize() throws ServiceException {
         super.initialize();
 
         // create a system outbox folder
@@ -161,35 +157,29 @@ public class OfflineMailbox extends DesktopMailbox {
         		          MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR);
     }
 
-    @Override
-    int getInitialItemId() {
+    @Override int getInitialItemId() {
         // locally-generated items must be differentiable from authentic, server-blessed ones
         return FIRST_OFFLINE_ITEM_ID;
     }
 
-    @Override
-    boolean isTrackingSync() {
+    @Override boolean isTrackingSync() {
         return !(getOperationContext() instanceof OfflineContext);
     }
 
-    @Override
-    public boolean isTrackingImap() {
+    @Override public boolean isTrackingImap() {
         return false;
     }
 
-    @Override
-    public boolean checkItemChangeID(int modMetadata, int modContent) {
+    @Override public boolean checkItemChangeID(int modMetadata, int modContent) {
         return true;
     }
 
-    @Override
-    MailItem getItemById(int id, byte type) throws ServiceException {
+    @Override MailItem getItemById(int id, byte type) throws ServiceException {
         Integer renumbered = mRenumbers.get(id < -FIRST_USER_ID ? -id : id);
         return super.getItemById(renumbered == null ? id : (id < 0 ? -renumbered : renumbered), type);
     }
 
-    @Override
-    MailItem[] getItemById(int[] ids, byte type) throws ServiceException {
+    @Override MailItem[] getItemById(int[] ids, byte type) throws ServiceException {
         int renumbered[] = new int[ids.length], i = 0;
         for (int id : ids) {
             // use a little sleight-of-hand so we pick up virtual conv ids from the corresponding message id
@@ -199,8 +189,7 @@ public class OfflineMailbox extends DesktopMailbox {
         return super.getItemById(renumbered, type);
     }
 
-    @Override
-    public synchronized void delete(OperationContext octxt, int[] itemIds, byte type, TargetConstraint tcon) throws ServiceException {
+    @Override public synchronized void delete(OperationContext octxt, int[] itemIds, byte type, TargetConstraint tcon) throws ServiceException {
         mLocalTagDeletes.clear();
 
         for (int id : itemIds) {
@@ -221,8 +210,7 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    @Override
-    MailItem.TypedIdList collectPendingTombstones() {
+    @Override MailItem.TypedIdList collectPendingTombstones() {
         MailItem.TypedIdList tombstones = super.collectPendingTombstones();
         for (Integer tagId : mLocalTagDeletes)
             tombstones.remove(MailItem.TYPE_TAG, tagId);
@@ -351,7 +339,7 @@ public class OfflineMailbox extends DesktopMailbox {
         delete(octxt, folderId, MailItem.TYPE_FOLDER);
     }
 
-    boolean isPendingDelete(OperationContext octxt, int itemId, byte type) throws ServiceException {
+    synchronized boolean isPendingDelete(OperationContext octxt, int itemId, byte type) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("isPendingDelete", octxt);
@@ -364,7 +352,7 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    void removePendingDelete(OperationContext octxt, int itemId, byte type) throws ServiceException {
+    synchronized void removePendingDelete(OperationContext octxt, int itemId, byte type) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("removePendingDelete", octxt);
@@ -428,7 +416,7 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    int getChangeMask(OperationContext octxt, int id, byte type) throws ServiceException {
+    synchronized int getChangeMask(OperationContext octxt, int id, byte type) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getChangeMask", octxt);
@@ -444,7 +432,7 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    void setChangeMask(OfflineContext octxt, int id, byte type, int mask) throws ServiceException {
+    synchronized void setChangeMask(OfflineContext octxt, int id, byte type, int mask) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("setChangeMask", octxt);
@@ -568,8 +556,7 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    @Override
-    void snapshotCounts() throws ServiceException {
+    @Override void snapshotCounts() throws ServiceException {
         // do the normal persisting of folder/tag counts
         super.snapshotCounts();
 
@@ -634,7 +621,7 @@ public class OfflineMailbox extends DesktopMailbox {
 
     private Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
         String uri = getSoapUri();
-        OfflineAccount acct = (OfflineAccount)getAccount();
+        OfflineAccount acct = (OfflineAccount) getAccount();
         SoapHttpTransport transport = new SoapHttpTransport(uri, acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
         try {
             transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
@@ -655,9 +642,10 @@ public class OfflineMailbox extends DesktopMailbox {
             	response = transport.invoke(request.detach());
             }
             OfflineLog.response.debug(response);
-            
+
+            // update sessionId if changed
             if (transport.getSessionId() != null)
-            	mSessionId = transport.getSessionId(); //update sessionId is changed
+            	mSessionId = transport.getSessionId();
 
             return response;
         }catch (IOException e) {
@@ -668,7 +656,7 @@ public class OfflineMailbox extends DesktopMailbox {
     }
     
     OfflineAccount.Version getRemoteServerVersion() throws ServiceException {
-    	return ((OfflineAccount)getAccount()).getRemoteServerVersion();
+    	return ((OfflineAccount) getAccount()).getRemoteServerVersion();
     }
     
     void pollForUpdates() throws ServiceException {
