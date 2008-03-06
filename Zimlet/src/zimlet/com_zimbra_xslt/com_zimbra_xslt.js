@@ -35,13 +35,18 @@ Com_Zimbra_Xslt.prototype.init =
 function() {
 	var ctxt = this.xmlObj();
 	if (!ctxt._panelActionMenu) {
-		ctxt._panelActionMenu = new ZmPopupMenu(DwtShell.getShell(window));
+		ctxt._panelActionMenu = new AjxCallback(this, this._createMenu);
 	}
-	var menu = ctxt._panelActionMenu;
+};
+
+Com_Zimbra_Xslt.prototype._createMenu =
+function(ev) {
+	var menu = new ZmPopupMenu(DwtShell.getShell(window));
+	var ctxt = this.xmlObj();
 	for (var sid in this.services) {
 		var service = this.services[sid];
 		var item = menu.createMenuItem(service.id, {image:service.icon, text:service.label,
-								       disImage:service.disabledIcon});
+									   disImage:service.disabledIcon});
 		item.setData("xmlMenuItem", service);
 		item.addSelectionListener(ctxt._handleMenuItemSelected);
 		try {
@@ -51,6 +56,7 @@ function() {
 			return;
 		}
 	}
+	return menu;
 };
 
 Com_Zimbra_Xslt.prototype.buttonListener =
