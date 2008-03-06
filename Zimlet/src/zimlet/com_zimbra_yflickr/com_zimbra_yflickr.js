@@ -81,7 +81,7 @@ Com_Zimbra_Yflickr.prototype.constructor = Com_Zimbra_Yflickr;
 Com_Zimbra_Yflickr.prototype.init = function()
 {
     // connect to flickr, verify the api_key, get a frob
-    this.connect ();
+    //this.connect();
 
     // add a property page to the `attach files' dialog
     this.addFlickrTabToAttachDialog ();
@@ -89,29 +89,23 @@ Com_Zimbra_Yflickr.prototype.init = function()
     // add 'Save to Flickr' link
     this.addAttachmentHandler ();
 
-    // set up the flickr authorization required dialog
-    this.authDlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
-    this.authDlg.setContent ("<span style=\"text-align:center;\">" +
-                "A new browser window has been created for you to authorize the Flickr zimlet to access your photo albums." +
-                "<br/>" +
-                "Please log in using your Yahoo!/Flickr account, complete the authorization process, and then click OK to proceed" +
-                "<br/>" +
-                "</span>"
-                );
-
-    this.noauthDlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
-    this.noauthDlg.setContent ("<span style=\"text-align:center;\">" + 
-        "The Flickr Zimlet has not yet been authorized to access your photos." + 
-        "<br/>" +
-        "Please click 'Authorize' from the Flickr Zimlet context menu, and complete the authorization process first." +
-        "<br/>" +
-        "</span>"
-        );
-
-    this.uploadDlg = new DwtDialog (appCtxt.getShell(),null,"Upload Photo(s) to Flickr",[DwtDialog.OK_BUTTON,DwtDialog.CANCEL_BUTTON]);
-
     // assign self to window object because we need to execute some code in window context
     window.YFlickr_widget = this;
+};
+
+Com_Zimbra_Yflickr.prototype._getNoAuthDlg = function(){
+
+    if(!this.noauthDlg){
+        this.noauthDlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
+        this.noauthDlg.setContent ("<span style=\"text-align:center;\">" +
+                                   "The Flickr Zimlet has not yet been authorized to access your photos." +
+                                   "<br/>" +
+                                   "Please click 'Authorize' from the Flickr Zimlet context menu, and complete the authorization process first." +
+                                   "<br/>" +
+                                   "</span>"
+                );
+    }
+    return this.noauthDlg;
 };
 
 /* Utility functions for debugging */
@@ -381,6 +375,12 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
             }
             else
             {
+                 if(this.authorizeCallback){
+                     this.triedConnectingOnce = true;
+                     this.authorizeCallback.run();
+                     this.authorizeCallback = null;
+                     this.triedConnectingOnce = false;
+                 }
                 /* there isn't anything we can do until the user clicks `authorize' */
             }
         }
@@ -538,11 +538,32 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
     this.debug ("Leaving Flickr Stage: " + FLICKR_AUTHSTAGES[auth_stage]);
 }
 
+Com_Zimbra_Yflickr.prototype._getAuthDlg = function(){
+
+    if(!this.authDlg){
+        this.authDlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
+        this.authDlg.setContent ("<span style=\"text-align:center;\">" +
+                                 "A new browser window has been created for you to authorize the Flickr zimlet to access your photo albums." +
+                                 "<br/>" +
+                                 "Please log in using your Yahoo!/Flickr account, complete the authorization process, and then click OK to proceed" +
+                                 "<br/>" +
+                                 "</span>"
+                );
+    }
+    return this.authDlg;
+};
+
 // set up a window for the user to authorize the frob
 Com_Zimbra_Yflickr.prototype.authorize = function()
 {
     if (this.authStage < FLICKR_AUTHSTAGE_GOTFROB)
     {
+        if(!this.triedConnectingOnce){
+            this.authorizeCallback = new AjxCallback(this, this.authorize);
+            this.connect();
+            return;
+        }
+        
         // TODO: be more verbose in showing this error
         this.debug ("cannot proceed to authorization without frob");
 
@@ -562,11 +583,12 @@ Com_Zimbra_Yflickr.prototype.authorize = function()
         var authz_url = flickrapi_getsignedurl (gAuthzEndpoint, this.api_secret, [["api_key", this.api_key], ["perms", "write"], ["frob", this.frob]]);
         this.authWin = window.open (authz_url, "yflickr_authz", "toolbar=no,menubar=no,width=800,height=600");
 
-        if (this.authDlg)
+        var authDlg = this._getAuthDlg();
+        if (authDlg)
         {
             var listener = new AjxListener (this, this.get_token);
-            this.authDlg.setButtonListener (DwtDialog.OK_BUTTON, listener);
-            this.authDlg.popup();
+            authDlg.setButtonListener (DwtDialog.OK_BUTTON, listener);
+            authDlg.popup();
         }
 
         this.debug ("opened flickr authorization window");
@@ -576,8 +598,9 @@ Com_Zimbra_Yflickr.prototype.authorize = function()
 // this function is (should be) called after the user has finished the manual process of authorizing the flickr zimlet to connect
 Com_Zimbra_Yflickr.prototype.get_token = function()
 {
-    if (this.authDlg && this.authDlg.isPoppedUp()) {
-        this.authDlg.popdown();
+    var authDlg = this._getAuthDlg();
+    if (authDlg && authDlg.isPoppedUp()) {
+        authDlg.popdown();
         this.connect (FLICKR_AUTHSTAGE_AUTHORIZED);
     }
 }
@@ -818,11 +841,11 @@ Com_Zimbra_Yflickr.prototype.addSaveToFlickrLink = function (attachment)
 Com_Zimbra_Yflickr.prototype.onSaveToFlickr = function(ct,label,src)
 {
     if (this.authStage < FLICKR_AUTHSTAGE_GOTTOKEN) {
-        this.noauthDlg.popup();
+        this._getNoAuthDlg().popup();
         return;
     }
-
-    var d = this.uploadDlg._getContentDiv (); /* Initialize the Upload Dialog */
+    var uploadDlg = this._getUploadDlg();
+    var d = uploadDlg._getContentDiv (); /* Initialize the Upload Dialog */
     YFlickr_clearElement (d);
 
     var div = document.createElement ("div");
@@ -848,10 +871,11 @@ Com_Zimbra_Yflickr.prototype.onSaveToFlickr = function(ct,label,src)
     div.appendChild (tagsS);
     d.appendChild (div);
 
-    this.uploadDlg.setButtonListener (DwtDialog.OK_BUTTON, new AjxListener (this, function() { this.onConfirmSaveToFlickr (ct, label, src, titleI.value, tagsI.value); }));
-    this.uploadDlg.setButtonListener (DwtDialog.CANCEL_BUTTON, new AjxListener (this, function() { this.uploadDlg.popdown(); }));
 
-    this.uploadDlg.popup();
+    uploadDlg.setButtonListener (DwtDialog.OK_BUTTON, new AjxListener (this, function() { this.onConfirmSaveToFlickr (ct, label, src, titleI.value, tagsI.value); }));
+    uploadDlg.setButtonListener (DwtDialog.CANCEL_BUTTON, new AjxListener (this, function() { uploadDlg.popdown(); }));
+
+    uploadDlg.popup();
 }
 
 /* Upload a single Photo to Flickr */
@@ -874,13 +898,14 @@ Com_Zimbra_Yflickr.prototype.onConfirmSaveToFlickr = function (ct, label, src, t
     busy.appendChild (busyImgS);
     busy.appendChild (busyTextS);
 
-    var d = this.uploadDlg._getContentDiv();
+    var uploadDlg = this._getUploadDlg();
+    var d = uploadDlg._getContentDiv();
     YFlickr_clearElement (d);
 
     d.appendChild (busy);
 
-    this.uploadDlg.setButtonEnabled (DwtDialog.OK_BUTTON, false);
-    this.uploadDlg.setButtonEnabled (DwtDialog.CANCEL_BUTTON, false);
+    uploadDlg.setButtonEnabled (DwtDialog.OK_BUTTON, false);
+    uploadDlg.setButtonEnabled (DwtDialog.CANCEL_BUTTON, false);
 
     title = title || "";
     tags = tags || "";
@@ -906,12 +931,21 @@ Com_Zimbra_Yflickr.prototype.onConfirmSaveToFlickr = function (ct, label, src, t
     AjxRpc.invoke(params,url+"?"+params,null,callback,false);
 }
 
+Com_Zimbra_Yflickr.prototype._getUploadDlg = function(){
+    if(!this.uploadDlg){
+        this.uploadDlg = new DwtDialog (appCtxt.getShell(),null,"Upload Photo(s) to Flickr",[DwtDialog.OK_BUTTON,DwtDialog.CANCEL_BUTTON]);
+    }
+    return this.uploadDlg;
+};
+
 /* Callback function after a photo has been uploaded to Flickr 
    @result  contains the result of the Flickr upload operation 
  */
 Com_Zimbra_Yflickr.prototype.onDoneSaveToFlickr = function(result)
 {
-    var d = this.uploadDlg._getContentDiv();
+    var uploadDlg = this._getUploadDlg();
+    
+    var d = uploadDlg._getContentDiv();
     YFlickr_clearElement (d);
 
     var xmlo = null;
@@ -949,12 +983,12 @@ Com_Zimbra_Yflickr.prototype.onDoneSaveToFlickr = function(result)
     d.appendChild (statusS);
     d.appendChild (detailS);
 
-    this.uploadDlg.setButtonEnabled (DwtDialog.OK_BUTTON, true);
-    this.uploadDlg.setButtonEnabled (DwtDialog.CANCEL_BUTTON, true);
+    uploadDlg.setButtonEnabled (DwtDialog.OK_BUTTON, true);
+    uploadDlg.setButtonEnabled (DwtDialog.CANCEL_BUTTON, true);
 
-    this.uploadDlg.setButtonListener (DwtDialog.OK_BUTTON, new AjxListener (this, function() { this.uploadDlg.popdown(); }));
-    this.uploadDlg.setButtonListener (DwtDialog.CANCEL_BUTTON, new AjxListener (this, function() { this.uploadDlg.popdown(); }));
-    if (!this.uploadDlg.isPoppedUp()) { this.uploadDlg.popup(); }
+    uploadDlg.setButtonListener (DwtDialog.OK_BUTTON, new AjxListener (this, function() { uploadDlg.popdown(); }));
+    uploadDlg.setButtonListener (DwtDialog.CANCEL_BUTTON, new AjxListener (this, function() { uploadDlg.popdown(); }));
+    if (!uploadDlg.isPoppedUp()) { uploadDlg.popup(); }
 }
 
 Com_Zimbra_Yflickr.prototype.msgDropped = function(msg)
