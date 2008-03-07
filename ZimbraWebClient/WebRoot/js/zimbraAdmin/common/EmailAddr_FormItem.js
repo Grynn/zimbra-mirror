@@ -16,6 +16,33 @@
  */
 
 /**
+* XFormItem class: "dynselect_domain_part"
+* A select box with asynchronous autocomplete capability
+* @class DynSelectDomainPart_XFormItem
+* @constructor DynSelectDomainPart_XFormItem
+* @author Greg Solovyev
+**/
+DynSelectDomainPart_XFormItem = function() {}
+XFormItemFactory.createItemType("_DYNSELECT_DOMAIN_PART_", "dynselect_domain_part", DynSelectDomainPart_XFormItem, DynSelect_XFormItem);
+DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value) {
+	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
+		this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
+	}
+	if(!this.dataFetcherObject)
+		return;
+		
+	var callback = new AjxCallback(this, this.changeChoicesCallback);
+	this.dataFetcherMethod.call(this.dataFetcherObject, value, event, callback);
+	var val = "";
+	if(this.getParentItem()._namePart) {
+		val = this.getParentItem()._namePart;
+	}
+	val +="@";
+	val +=value;
+	this.getForm().itemChanged(this, val, event);	
+}
+
+/**
 * XFormItem class: "emailaddr (composite item)
 * this item is used in the Admin UI to display email address fields like alias and account name
 * @class EmailAddr_XFormItem
@@ -104,7 +131,7 @@ EmailAddr_XFormItem.prototype.items = [
 			return val;
 		}	
 	},
-	{type:_DYNSELECT_, ref:".", labelLocation:_NONE_, relevantBehavior:_HIDE_, 
+	{type:_DYNSELECT_DOMAIN_PART_, ref:".", labelLocation:_NONE_, relevantBehavior:_HIDE_, 
 	 	choices:EmailAddr_XFormItem.domainChoices,editable:true,
 	 	relevant:"ZaSettings.DOMAINS_ENABLED",dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
 		dataFetcherClass:ZaSearch,
@@ -116,7 +143,8 @@ EmailAddr_XFormItem.prototype.items = [
 			
 				if(emailChunks.length > 1 ) {
 					val = emailChunks[1];
-				} 
+				} else
+					val = itemVal;
 			}
 			if(!val) {
 				if(!this.getParentItem()._domainPart) {
@@ -155,7 +183,7 @@ EmailAddr_XFormItem.prototype.items = [
 			//bug: 14250, change the instance value here also even if the whole email address is invalid
 			this.getParentItem().setInstanceValue (val) ;
 			this.getForm().itemChanged(this.getParentItem(), val, event);
-		}/*,
+		}	/*,
 		keyUp:function(newValue,ev) {
 			if(!(ev.keyCode==XFG.ARROW_LEFT || ev.keyCode==XFG.ARROW_RIGHT)) {
 				//DBG.println(AjxDebug.DBG1, "EmailAddr_XFormItem.keyUp handled key code "+ ev.keyCode +" char code " + (new Date()).getTime());
