@@ -40,8 +40,8 @@ public abstract class FormBean extends PageBean {
 	}	
 	
 	protected void setError(String error) {
-		this.error = this.error == null ? (error == null ? "Unknown error" : error) : this.error;
-		
+		String failprefix = "system failure: ";
+		this.error = this.error == null ? (error == null ? "Unknown error" : (error.startsWith(failprefix) ? error.substring(failprefix.length()) : error)) : this.error;
 	}
 	
 	public String getError() {

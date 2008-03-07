@@ -16,6 +16,7 @@
  */
 package com.zimbra.cs.account.offline;
 
+import com.sun.mail.smtp.SMTPTransport;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
@@ -25,6 +26,7 @@ import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
+import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
@@ -40,6 +42,9 @@ import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import java.util.*;
+
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 
@@ -485,7 +490,21 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (error != null)
         	throw ServiceException.FAILURE(error, null);
         
-        //TODO: need to test smtp settings as well
+        //now try smtp
+        try {
+	        SMTPTransport smtp = (SMTPTransport)(LocalJMSession.getSession(testDs).getTransport());
+	        smtp.connect();
+	        smtp.issueCommand("MAIL FROM:<" + testDs.getEmailAddress() + ">", 250);
+	        smtp.issueCommand("RSET", 250);
+	        smtp.close();
+        } catch (Exception x) {
+        	if (x instanceof AuthenticationFailedException)
+        		throw ServiceException.FAILURE("SMTP authentication failure. Invalid username or password, or invalid access", x);
+        	else if (x instanceof MessagingException && x.getMessage() != null && x.getMessage().startsWith("530"))
+        		throw ServiceException.FAILURE("SMTP authentication required", x);
+        	else
+        		throw ServiceException.FAILURE("SMTP connect failure", x);
+        }
     }
     
     private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String password, Map<String, Object> dsAttrs) throws ServiceException {
@@ -498,6 +517,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	dsAttrs.put(A_zimbraDataSourceId, dsid);
     	
     	dsAttrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) dsAttrs.get(A_zimbraDataSourcePassword)));
+    	String smtpPassword = (String) dsAttrs.get(A_zimbraDataSourceSmtpAuthPassword);
+    	if (smtpPassword != null)
+    		dsAttrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dsid, smtpPassword));
     	
     	testDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs);
 
@@ -1663,10 +1685,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         if (attrs.get(A_zimbraDataSourcePassword) instanceof String)
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourcePassword)));
+        
+        if (attrs.get(A_zimbraDataSourceSmtpAuthPassword) instanceof String)
+        	attrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourceSmtpAuthPassword)));
 
         if (isDataSourceAccount(account) && attrs.get(A_zimbraDataSourceHost) != null) {
         	if (attrs.get(A_zimbraDataSourcePassword) == null)
         		attrs.put(A_zimbraDataSourcePassword, ds.getAttr(A_zimbraDataSourcePassword));
+        	if (attrs.get(A_zimbraDataSourceSmtpAuthPassword) == null)
+        		attrs.put(A_zimbraDataSourceSmtpAuthPassword, ds.getAttr(A_zimbraDataSourceSmtpAuthPassword));        	
         	testDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs);
 	        attrs.put(A_zimbraDataSourceEnabled, TRUE);	        
         }

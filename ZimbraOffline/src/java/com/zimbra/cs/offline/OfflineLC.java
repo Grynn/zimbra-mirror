@@ -188,8 +188,8 @@ public class OfflineLC {
 	    zdesktop_membuf_limit.setDoc("Number of bytes to hold in memory before start disk streaming during message sync.");
 	    
 	    zdesktop_yauth_appid = new KnownKey("zdesktop_yauth_appid");
-	    zdesktop_yauth_appid.setDefault("D2hTUBHAkY0IEL5MA7ibTS_1K86E8RErSSaTGn4-");
-	    zdesktop_yauth_appid.setDoc("appid for yauth with rw access to ab");
+	    zdesktop_yauth_appid.setDefault("0YbgbonAkY2iNypMZQOONB8mNDSJkrfBlr3wgxc-");
+	    zdesktop_yauth_appid.setDoc("appid for yauth with rw access to ab and mail");
 	    
 	    zdesktop_yauth_baseuri = new KnownKey("zdesktop_yauth_baseuri");
 	    zdesktop_yauth_baseuri.setDefault("https://login.yahoo.com/WSLogin/V1");

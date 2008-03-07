@@ -26,6 +26,7 @@ import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.CustomSSLSocketFactory;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
@@ -138,7 +139,10 @@ public class LocalJMSession {
 	    	int smtpPort = e.getIntAttr(OfflineProvisioning.A_zimbraDataSourceSmtpPort, 0);
 	    	boolean isAuthRequired = e.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthRequired, false);
 	    	String smtpUser = e.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthUsername, null);
+	    	
 	    	String smtpPass = e.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthPassword, null);
+	    	smtpPass = smtpPass == null ? null : DataSource.decryptData(e.getId(), smtpPass);
+	    	
 	    	boolean useSSL = "ssl".equals(e.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpConnectionType, null));
 	    	boolean useProxy = e.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceUseProxy, false);
 	    	String proxyHost = e.getAttr(OfflineProvisioning.A_zimbraDataSourceProxyHost, null);
