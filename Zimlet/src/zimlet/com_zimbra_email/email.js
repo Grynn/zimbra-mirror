@@ -24,8 +24,6 @@ Com_Zimbra_Email.prototype.constructor = Com_Zimbra_Email;
 Com_Zimbra_Email.prototype.init =
 function() {
 	if (appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
-		this._contacts = AjxDispatcher.run("GetContacts");
-
 		this._composeTooltipHint = ZmMsg.leftClickComposeHint + "<br>" + ZmMsg.rightClickHint;
 		this._newTooltipHint = ZmMsg.leftClickNewContactHint + "<br>" + ZmMsg.rightClickHint;
 
@@ -88,8 +86,10 @@ function(address) {
 		contact: null,
 		buddy: null
 	};
-	if (this._contacts && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
-		result.contact = this._contacts.getContactByEmail(address);
+	// bug fix #25215 - always fetch contact list in case of multi-account
+	var contactList = AjxDispatcher.run("GetContacts");
+	if (contactList && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+		result.contact = contactList.getContactByEmail(address);
 	}
 	if (!result.buddy && appCtxt.get(ZmSetting.IM_ENABLED)) {
 		if (result.contact) {
@@ -107,7 +107,8 @@ function(html, idx, obj) {
 	var content;
 	if (obj instanceof AjxEmailAddress) {
 		var person = this._lookup(obj.address);
-		if (this._contacts && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+		var contactList = AjxDispatcher.run("GetContacts");
+		if (contactList && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 			var content;
 
 			if (person.buddy) {
@@ -172,7 +173,8 @@ function(spanElement, contentObjText, matchContext, canvas) {
 		html[idx++] = "'s Yahoo! profile</td></tr></table>";
 		toolTip = html.join("");
 	} else {
-		var contact = this._contacts ? this._contacts.getContactByEmail(addr) : null;
+		var contactList = AjxDispatcher.run("GetContacts");
+		var contact = contactList ? contactList.getContactByEmail(addr) : null;
 		if (contact) {
 			toolTip = contact.getToolTip(addr, false, this._composeTooltipHint);
 		} else {
@@ -235,7 +237,8 @@ function(obj, span, context) {
 	} else {
 		// bug fix #5262 - Change action menu item for contact depending on
 		// whether email address is found in address book or not.
-		if (this._contacts) {
+		var contactList = AjxDispatcher.run("GetContacts");
+		if (contactList) {
 			var newOp = person.contact ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
 			var newText = person.contact ? null : ZmMsg.AB_ADD_CONTACT;
 			ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
@@ -296,10 +299,11 @@ function(spanElement, contentObjText, matchContext, ev) {
 		return;
 	}
 
-	var contact = this._contacts ? this._contacts.getContactByEmail(addr) : null;
+	var contactList = AjxDispatcher.run("GetContacts");
+	var contact = contactList ? contactList.getContactByEmail(addr) : null;
 	// if contact found or there is no contact list (i.e. contacts app is disabled), go to compose view
 	if (contact ||
-		this._contacts == null ||
+		contactList == null ||
 		(AjxUtil.isString(addr) && this.isMailToLink(addr)))
 	{
 		this._actionObject = null;
