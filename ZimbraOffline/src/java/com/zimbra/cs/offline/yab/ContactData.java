@@ -1,14 +1,14 @@
 package com.zimbra.cs.offline.yab;
 
-import com.zimbra.cs.offline.yab.protocol.NameField;
-import com.zimbra.cs.offline.yab.protocol.AddressField;
-import com.zimbra.cs.offline.yab.protocol.DateField;
-import com.zimbra.cs.offline.yab.protocol.SimpleField;
-import com.zimbra.cs.offline.yab.protocol.Flag;
-import com.zimbra.cs.offline.yab.protocol.Contact;
-import com.zimbra.cs.offline.yab.protocol.Field;
-import com.zimbra.cs.offline.yab.protocol.ContactChange;
-import com.zimbra.cs.offline.yab.protocol.FieldChange;
+import com.zimbra.cs.offline.util.yab.NameField;
+import com.zimbra.cs.offline.util.yab.AddressField;
+import com.zimbra.cs.offline.util.yab.DateField;
+import com.zimbra.cs.offline.util.yab.SimpleField;
+import com.zimbra.cs.offline.util.yab.Flag;
+import com.zimbra.cs.offline.util.yab.Contact;
+import com.zimbra.cs.offline.util.yab.Field;
+import com.zimbra.cs.offline.util.yab.ContactChange;
+import com.zimbra.cs.offline.util.yab.FieldChange;
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.service.ServiceException;
 
