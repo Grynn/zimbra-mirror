@@ -92,7 +92,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							  label: ZaMsg.NAD_GalMaxResults, width: "5em",
 							  onChange:ZaTabView.onFormFieldChanged
 							},
-							{ref: ZaGlobalConfig.A_zimbraDefaultDomainName, type:_OSELECT1_, 
+							/*{ref: ZaGlobalConfig.A_zimbraDefaultDomainName, type:_OSELECT1_, 
 								label: ZaMsg.NAD_DefaultDomainName, //width: "10em",
 								choices:EmailAddr_XFormItem.domainChoices,editable:true,
 								onChange:ZaTabView.onFormFieldChanged,
@@ -103,6 +103,11 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 	                	          	var query = "(zimbraDomainName=" + n + "*)";
                         	        this.getForm().getController().searchDomains(query);
                             	}
+							},*/
+							{ref:ZaGlobalConfig.A_zimbraDefaultDomainName, type:_DYNSELECT_,
+								label: ZaMsg.NAD_DefaultDomainName, onChange:ZaTabView.onFormFieldChanged,
+								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
+								dataFetcherClass:ZaSearch,choices:EmailAddr_XFormItem.domainChoices,editable:true
 							},
 							{ref: ZaGlobalConfig.A_zimbraScheduledTaskNumThreads, type:_INPUT_, 
 							  label: ZaMsg.NAD_zimbraScheduledTaskNumThreads, width: "5em",

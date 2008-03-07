@@ -104,10 +104,11 @@ EmailAddr_XFormItem.prototype.items = [
 			return val;
 		}	
 	},
-	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_HIDE_, 
-	 choices:EmailAddr_XFormItem.domainChoices,editable:true,
-	 relevant:"ZaSettings.DOMAINS_ENABLED",
-	 errorLocation:_PARENT_,
+	{type:_DYNSELECT_, ref:".", labelLocation:_NONE_, relevantBehavior:_HIDE_, 
+	 	choices:EmailAddr_XFormItem.domainChoices,editable:true,
+	 	relevant:"ZaSettings.DOMAINS_ENABLED",dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
+		dataFetcherClass:ZaSearch,
+	 	errorLocation:_PARENT_,
 		getDisplayValue:function (itemVal){
 			var val = null;
 			if(itemVal) {
@@ -154,7 +155,7 @@ EmailAddr_XFormItem.prototype.items = [
 			//bug: 14250, change the instance value here also even if the whole email address is invalid
 			this.getParentItem().setInstanceValue (val) ;
 			this.getForm().itemChanged(this.getParentItem(), val, event);
-		},
+		}/*,
 		keyUp:function(newValue,ev) {
 			if(!(ev.keyCode==XFG.ARROW_LEFT || ev.keyCode==XFG.ARROW_RIGHT)) {
 				//DBG.println(AjxDebug.DBG1, "EmailAddr_XFormItem.keyUp handled key code "+ ev.keyCode +" char code " + (new Date()).getTime());
@@ -180,7 +181,7 @@ EmailAddr_XFormItem.prototype.items = [
 				//this.getForm().getController().searchDomains(query);
 				EmailAddr_XFormItem.choicesDirty = true ;
 			}
-		}
+		}*/
 	}
 ];
 
