@@ -19,6 +19,7 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -543,8 +544,9 @@ public class OfflineMailbox extends DesktopMailbox {
 
             int prevIndexId = item.getIndexId();
             item.move(getFolderById(folderId));
-            if (prevIndexId != item.getIndexId())
-                queueForIndexing(item, false, item.generateIndexData(false));
+            if (prevIndexId != item.getIndexId()) {
+                queueForIndexing(item, false, null);
+            }
             
             item.setColor(color);
             item.setTags(flags, tags);
