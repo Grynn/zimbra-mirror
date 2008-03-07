@@ -25,7 +25,7 @@ import java.util.ListIterator;
 import com.zimbra.cs.offline.util.Xml;
 
 public class SyncResponse extends Response {
-    private int lastModifiedTime = -1;
+    private long lastModifiedTime = -1;
     private int revision = -1;
     private List<Category> categories;
     private List<Result> results;
@@ -39,7 +39,7 @@ public class SyncResponse extends Response {
 
     private SyncResponse() {}
 
-    public int getLastModifiedTime() {
+    public long getLastModifiedTime() {
         return lastModifiedTime;
     }
 

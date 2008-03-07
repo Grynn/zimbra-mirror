@@ -58,4 +58,14 @@ public class Flag {
     public boolean getValue() {
         return value;
     }
+
+    public int hashCode() {
+        return name.hashCode() ^ ((Boolean) value).hashCode();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != Flag.class) return false;
+        Flag flag = (Flag) obj;
+        return name.equals(flag.name) && value == flag.value;
+    }
 }

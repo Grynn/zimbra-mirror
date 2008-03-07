@@ -23,6 +23,8 @@ import org.w3c.dom.Attr;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.zimbra.cs.offline.util.Xml;
 
@@ -35,7 +37,7 @@ public abstract class Field {
     private List<Flag> flags;
 
     public static final String FID = "fid";
-    
+
     public static Field fromXml(Element e) {
         Field field = newField(e.getTagName());
         field.parseXml(e);
@@ -61,6 +63,11 @@ public abstract class Field {
         this.name = name;
     }
 
+    public boolean isName() { return this instanceof NameField; }
+    public boolean isDate() { return this instanceof DateField; }
+    public boolean isAddress() { return this instanceof AddressField; }
+    public boolean isSimple() { return this instanceof SimpleField; }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -85,19 +92,51 @@ public abstract class Field {
     }
 
     public void setFlags(String... flags) {
-        for (String flag : flags) {
-            addFlag(new Flag(flag, true));
-        }
+        for (String flag : flags) setFlag(flag);
     }
 
     public void unsetFlags(String... flags) {
-        for (String flag : flags) {
-            addFlag(new Flag(flag, false));
-        }
+        for (String flag : flags) unsetFlag(flag);
     }
 
+    public void setFlag(String flag) {
+        addFlag(new Flag(flag, true));
+    }
+
+    public void unsetFlag(String flag) {
+        addFlag(new Flag(flag, false));
+    }
+    
+    public boolean isFlagSet(String flag) {
+        Flag f = getFlag(flag);
+        return f != null ? f.getValue() : null;
+    }
+
+    public boolean isFlagUnset(String flag) {
+        Flag f = getFlag(flag);
+        return f != null ? !f.getValue() : null;
+    }
+
+    public Flag getFlag(String name) {
+        if (flags == null) return null;
+        for (Flag flag : flags) {
+            if (flag.getName().equals(name)) {
+                return flag;
+            }
+        }
+        return null;
+    }
+    
     public List<Flag> getFlags() {
         return flags;
+    }
+
+    public boolean isHome() {
+        return isFlagSet(Flag.HOME);
+    }
+
+    public boolean isWork() {
+        return isFlagSet(Flag.WORK);
     }
 
     public Element toXml(Document doc, String tag) {

@@ -20,6 +20,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import com.zimbra.cs.offline.util.Xml;
 
+import java.util.Date;
+
 /**
  * Structure aniversary or birthday YAB field.
  */
@@ -42,7 +44,7 @@ public class DateField extends Field {
     public static DateField anniversary(int day, int month, int year) {
         return new DateField(ANNIVERSARY, day, month, year);
     }
-    
+
     public DateField(String name) {
         super(name);
     }
@@ -54,6 +56,14 @@ public class DateField extends Field {
         this.year = year;
     }
 
+    public boolean isBirthday() {
+        return BIRTHDAY.equals(getName());
+    }
+
+    public boolean isAnniversary() {
+        return ANNIVERSARY.equals(getName());
+    }
+    
     public int getDay() {
         return day;
     }
@@ -78,6 +88,17 @@ public class DateField extends Field {
         this.year = year;
     }
 
+    @SuppressWarnings("deprecation")
+    public void setDate(Date date) {
+        day = date.getDay();
+        month = date.getMonth();
+        year = date.getYear() + 1900;
+    }
+
+    public Date getDate() {
+        return new Date(year - 1900, month, day);
+    }
+    
     @Override
     public Element toXml(Document doc, String tag) {
         Element e = super.toXml(doc, tag);

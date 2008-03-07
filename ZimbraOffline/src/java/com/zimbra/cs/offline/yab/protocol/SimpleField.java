@@ -57,8 +57,8 @@ public class SimpleField extends Field {
         return new SimpleField(PHONE, phone, flags);
     }
 
-    public static SimpleField jobtitle(String phone, String... flags) {
-        return new SimpleField(JOBTITLE, phone, flags);
+    public static SimpleField jobtitle(String title) {
+        return new SimpleField(JOBTITLE, title);
     }
 
     public static SimpleField company(String company) {
