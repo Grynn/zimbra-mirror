@@ -398,8 +398,9 @@ sub logSql($) {
     $SQLLOGFH = new FileHandle ">> /opt/zimbra/log/sqlMigration.log";    
     select $SQLLOGFH;
     $|=1;
-    chmod 0644, "/opt/zimbra/log/sqlMigration.log";
     select STDOUT;
+    chmod 0644, "/opt/zimbra/log/sqlMigration.log";
+    `chown zimbra:zimbra /opt/zimbra/log/sqlMigration.log`;
   }
   my $output = scalar(localtime()).": $input\n";
   print $SQLLOGFH $output;
