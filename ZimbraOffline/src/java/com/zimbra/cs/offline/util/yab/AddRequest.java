@@ -22,9 +22,6 @@ import org.w3c.dom.Document;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.zimbra.cs.offline.util.yab.Session;
-import com.zimbra.cs.offline.util.yab.Contact;
-
 public class AddRequest extends Request {
     private List<Contact> contacts;
 

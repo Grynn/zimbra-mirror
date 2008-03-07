@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import com.zimbra.cs.offline.util.Xml;
-import com.zimbra.cs.offline.util.yab.Category;
 
 public class SyncResponse extends Response {
     private long lastModifiedTime = -1;

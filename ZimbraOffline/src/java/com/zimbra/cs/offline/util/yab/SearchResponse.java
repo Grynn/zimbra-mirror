@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.zimbra.cs.offline.util.Xml;
-import com.zimbra.cs.offline.util.yab.Contact;
 
 public class SearchResponse extends Response {
     private List<Contact> contacts;

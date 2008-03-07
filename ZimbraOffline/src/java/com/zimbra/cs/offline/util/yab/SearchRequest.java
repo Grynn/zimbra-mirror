@@ -16,7 +16,6 @@
  */
 package com.zimbra.cs.offline.util.yab;
 
-import com.zimbra.cs.offline.util.yab.Session;
 import org.w3c.dom.Document;
 
 public class SearchRequest extends Request {

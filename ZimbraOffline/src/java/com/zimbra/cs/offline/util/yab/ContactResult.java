@@ -17,8 +17,6 @@
 package com.zimbra.cs.offline.util.yab;
 
 import org.w3c.dom.Element;
-import com.zimbra.cs.offline.util.yab.Contact;
-import com.zimbra.cs.offline.util.yab.AddAction;
 
 public class ContactResult extends Result {
     private AddAction addAction;

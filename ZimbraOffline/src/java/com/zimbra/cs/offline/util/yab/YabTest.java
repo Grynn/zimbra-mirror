@@ -17,13 +17,6 @@
 package com.zimbra.cs.offline.util.yab;
 
 import junit.framework.TestCase;
-import com.zimbra.cs.offline.util.yab.Contact;
-import com.zimbra.cs.offline.util.yab.NameField;
-import com.zimbra.cs.offline.util.yab.SimpleField;
-import com.zimbra.cs.offline.util.yab.Yab;
-import com.zimbra.cs.offline.util.yab.SyncRequest;
-import com.zimbra.cs.offline.util.yab.SyncResponse;
-import com.zimbra.cs.offline.util.yab.Session;
 
 public class YabTest extends TestCase {
     private Session session;

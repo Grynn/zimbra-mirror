@@ -18,7 +18,6 @@ package com.zimbra.cs.offline.util.yab;
 
 import org.w3c.dom.Element;
 import com.zimbra.cs.offline.util.Xml;
-import com.zimbra.cs.offline.util.yab.Contact;
 
 public class SyncResponseEvent {
     private Type type;

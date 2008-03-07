@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.zimbra.cs.offline.util.yab.Session;
-import com.zimbra.cs.offline.util.yab.Yab;
 import com.zimbra.cs.offline.util.Xml;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;

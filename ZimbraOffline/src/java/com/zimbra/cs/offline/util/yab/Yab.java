@@ -16,10 +16,6 @@
  */
 package com.zimbra.cs.offline.util.yab;
 
-import com.zimbra.cs.offline.util.yab.SearchRequest;
-import com.zimbra.cs.offline.util.yab.SearchResponse;
-import com.zimbra.cs.offline.util.yab.Session;
-
 /**
  * Yahoo Address book access.
  */
