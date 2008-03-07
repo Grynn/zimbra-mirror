@@ -42,7 +42,7 @@ import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 
 
-public class InstallCert extends AdminDocumentHandler {
+public class InstallCert extends AdminDocumentHandler {           
     private final static String TYPE = "type" ;
     final static String CERT_TYPE_SELF= "self" ;
     final static String CERT_TYPE_COMM = "comm" ;
@@ -71,12 +71,14 @@ public class InstallCert extends AdminDocumentHandler {
         }
         ZimbraLog.security.debug("Generate the CSR info from server:  " + server.getName()) ;
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
-        String cmd = ZimbraCertMgrExt.INSTALL_CERT_CMD ;
+        String cmd = ZimbraCertMgrExt.CREATE_CRT_CMD ;
+        String deploycrt_cmd = ZimbraCertMgrExt.DEPLOY_CERT_CMD ;         
         String certType = request.getAttribute(TYPE) ;
         if (certType == null || certType.length() == 0 ) {
             throw ServiceException.INVALID_REQUEST("No valid certificate type is set", null);
         }else if (certType.equals(CERT_TYPE_SELF) || certType.equals(CERT_TYPE_COMM)) {
-            cmd += " " + certType  ;   
+            //cmd += " " + certType  ;   //createcrt implies self signed
+            deploycrt_cmd += " " + certType ;
         }else {
             throw ServiceException.INVALID_REQUEST("Invalid certificate type: " + certType + ". Must be (self|comm).", null);
         }
@@ -94,29 +96,36 @@ public class InstallCert extends AdminDocumentHandler {
         if ((valDayEl != null) && (!certType.equals("comm"))) {
             validation_days = valDayEl.getText() ;
             if (validation_days != null && validation_days.length() > 0) {
-                cmd += " " + validation_days ;
+                cmd += " -days " + validation_days ;
             }
         }
         
        
         if (isTargetAllServer) {
             cmd += " " + ALLSERVER_FLAG;
+            deploycrt_cmd += " " + ALLSERVER_FLAG;
         }
-                
-        ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
-        RemoteResult rr = rmgr.execute(cmd);
-        //ZimbraLog.security.info("***** Exit Status Code = " + rr.getMExitStatus()) ;
+
+        RemoteResult rr ;
+        if (certType.equals("self")) {
+            ZimbraLog.security.debug("***** Executing the cmd = " + cmd) ;
+            rr = rmgr.execute(cmd);
+            //ZimbraLog.security.info("***** Exit Status Code = " + rr.getMExitStatus()) ;
+            try {
+                OutputParser.parseOuput(rr.getMStdout()) ;
+            }catch (IOException ioe) {
+                throw ServiceException.FAILURE("exception occurred handling command", ioe);
+            }
+        }
+        
+        //need to deploy the crt now
+        ZimbraLog.security.debug("***** Executing the cmd = " + deploycrt_cmd) ;
+        rr = rmgr.execute(deploycrt_cmd);
         try {
             OutputParser.parseOuput(rr.getMStdout()) ;
         }catch (IOException ioe) {
             throw ServiceException.FAILURE("exception occurred handling command", ioe);
         }
-        
-        /** getMExitStatus code is not properly implemented
-        if (rr.getMExitStatus() != 0) {
-            String error = new String (rr.getMStderr()) ;
-            throw ServiceException.FAILURE("exception occurred handling command", new Exception (error));
-        }**/
         
         Element response = lc.createElement(ZimbraCertMgrService.INSTALL_CERT_RESPONSE);
         response.addAttribute("server", server.getName());

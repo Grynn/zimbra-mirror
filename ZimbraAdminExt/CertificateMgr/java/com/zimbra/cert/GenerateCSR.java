@@ -59,7 +59,7 @@ public class GenerateCSR extends AdminDocumentHandler {
         }
         ZimbraLog.security.debug("Generate the CSR info from server:  " + server.getName()) ;
         
-        String cmd = ZimbraCertMgrExt.GENERATE_CSR_CMD  ;
+        String cmd = ZimbraCertMgrExt.CREATE_CSR_CMD  ;
         String newCSR = request.getAttribute("new") ;
         String type = request.getAttribute("type") ;
         if (newCSR.equalsIgnoreCase("1")) {            

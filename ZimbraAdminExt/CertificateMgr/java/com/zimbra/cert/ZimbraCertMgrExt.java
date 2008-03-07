@@ -37,10 +37,11 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     public static final String EXTENSION_NAME_CERTMGR = "com_zimbra_cert_manager";
     
     //Remote commands
-    public static final String INSTALL_CERT_CMD = "zmcertmgr install" ;
     public static final String GET_STAGED_CERT_CMD = "zmcertmgr viewstagedcrt" ;
     public static final String GET_DEPLOYED_CERT_CMD = "zmcertmgr viewdeployedcrt" ;
-    public static final String GENERATE_CSR_CMD = "zmcertmgr gencsr" ;
+    public static final String CREATE_CSR_CMD = "zmcertmgr createcsr" ;
+    public static final String CREATE_CRT_CMD = "zmcertmgr createcrt"   ;
+    public static final String DEPLOY_CERT_CMD = "zmcertmgr deploycrt" ;
     public static final String GET_CSR_CMD = "zmcertmgr viewcsr" ;
     public static final String VERIFY_CRTKEY_CMD = "zmcertmgr verifycrtkey" ;
     public static final String VERIFY_CRTCHAIN_CMD = "zmcertmgr verifycrtchain" ;
@@ -58,17 +59,7 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     public void init() throws ServiceException {
         SoapServlet.addService("AdminServlet", new ZimbraCertMgrService());
     }
-    /*
-    public static Server getCertServer (List<Server> serverList) {
-        Server server = null ;
-        for (int i = 0 ; i < serverList.size(); i ++) {
-            server = serverList.get(i) ;
-            if (server != null) { 
-                break ;
-            }
-        }
-        return server ;
-    }*/
+
 }
 
 
