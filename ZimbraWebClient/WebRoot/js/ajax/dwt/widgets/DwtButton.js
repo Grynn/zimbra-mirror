@@ -134,6 +134,15 @@ DwtButton.prototype.TEMPLATE = "dwt.Widgets#ZButton"
 // Public methods
 //
 
+DwtButton.prototype.dispose =
+function() {
+	if ((this._menu instanceof DwtMenu) && (this._menu.parent == this)) {
+		this._menu.dispose();
+		this._menu = null;
+	}
+	DwtLabel.prototype.dispose.call(this);
+};
+
 /**
  * Adds a listener to be notified when the button is pressed.
  *
