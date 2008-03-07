@@ -27,9 +27,7 @@ case "$1" in
 			/opt/zimbra/libexec/zmmtaconfig antivirus
 		fi
 		for i in $SCRIPTS; do
-			if [ $i != "zmamavisdctl" ]; then
-				/opt/zimbra/bin/$i start norewrite
-			fi
+			/opt/zimbra/bin/$i start norewrite
 		done
 	;;
 	stop)
