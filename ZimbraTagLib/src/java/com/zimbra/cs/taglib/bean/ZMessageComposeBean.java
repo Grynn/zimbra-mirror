@@ -243,9 +243,10 @@ public class ZMessageComposeBean {
     public void setTimeZone(String timeZone) {
         mTimeZone = timeZone;
     }
+    
     public String getTimeZone() {
         if (mTimeZone == null || mTimeZone.length() == 0) {
-            return TZIDMapper.toWindows(TimeZone.getDefault().getID());
+            return TZIDMapper.canonicalize(TimeZone.getDefault().getID());
         } else {
             return mTimeZone;
         }
@@ -929,7 +930,7 @@ public class ZMessageComposeBean {
         setAllDay("1".equals(req.getParameter(ZComposeUploaderBean.F_allDay)));
         setAttendees(req.getParameter(ZComposeUploaderBean.F_attendees));
         setFreeBusyStatus(paramInit(req, ZComposeUploaderBean.F_freeBusyStatus, ZInvite.ZFreeBusyStatus.B.name()));
-        setTimeZone(paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneWindowsId()));
+        setTimeZone(paramInit(req, ZComposeUploaderBean.F_timeZone, mailbox.getPrefs().getTimeZoneId()));
         setApptFolderId(ZFolder.ID_CALENDAR);
         if (options.isTask()) {
             setApptFolderId(ZFolder.ID_TASKS);
