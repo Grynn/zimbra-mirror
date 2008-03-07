@@ -24,7 +24,7 @@
 **/
 DynSelectDomainPart_XFormItem = function() {}
 XFormItemFactory.createItemType("_DYNSELECT_DOMAIN_PART_", "dynselect_domain_part", DynSelectDomainPart_XFormItem, DynSelect_XFormItem);
-DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value) {
+DynSelectDomainPart_XFormItem.prototype.handleKeyPressDelay = function (event,value) {
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
 		this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
 	}
@@ -108,6 +108,7 @@ EmailAddr_XFormItem.prototype.items = [
 
 			this.getParentItem()._namePart = val;	
 			this.getForm().itemChanged(this.getParentItem(), val, event);
+			if (AjxEnv.hasFirebug) console.log("EmailAddr_XFormItem setting value to "+val);
 		}
 	},
 	{type:_OUTPUT_, value:"@"},
@@ -153,7 +154,7 @@ EmailAddr_XFormItem.prototype.items = [
 						this.getParentItem()._domainPart = val;
 					}
 				} else {
-					val = this.getParentItem()._domainPart;
+					//val = this.getParentItem()._domainPart;
 				}
 			} else {
 				this.getParentItem()._domainPart = val;

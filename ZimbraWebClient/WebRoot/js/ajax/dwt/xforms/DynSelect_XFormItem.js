@@ -41,16 +41,20 @@ DynSelect_XFormItem.prototype.initFormItem = function () {
 	this.dataFetcherObject = null;
 }
 DynSelect_XFormItem.prototype.changeChoicesCallback = 
-function (data) {
+function (data, more, total) {
 	DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".choices came back"));
 	var choices = this.getChoices();
 	if(!choices)
 		return;
 	choices.setChoices(data);
 	choices.dirtyChoices();
+	if(more) {
+		this.showNote(AjxMessageFormat.format(ZaMsg.Alert_MoreResultsAvailable,total));
+	}
 }
 
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
+	this.hideNote();
 	if(event.keyCode==XFG.ARROW_UP) {
 		if(!this.menuUp)
 			this.showMenu();
@@ -68,7 +72,9 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 		this.isSelecting = true;
 		return;
 	} 
+	
 		
+
 	if(this.isSelecting && this.menuUp && event.keyCode==DwtKeyEvent.KEY_ENTER && this.__currentHiliteItem != null && this.__currentHiliteItem != undefined) {
 		var value = this.getNormalizedValues()[this.__currentHiliteItem];
 		if(value != null && value != undefined) {
@@ -97,7 +103,7 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 		if (key == DwtKeyEvent.KEY_TAB) {
 			DwtUiEvent.setBehaviour(event, true, false);
 			return false;
-		} else {
+		} else if(!(event.keyCode==XFG.ARROW_RIGHT || event.keyCode==XFG.ARROW_LEFT)) { 
 			var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, value]);
 			this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, DynSelect_XFormItem.LOAD_PAUSE);
 		}		

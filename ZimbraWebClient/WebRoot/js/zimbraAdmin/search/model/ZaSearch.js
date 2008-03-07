@@ -212,7 +212,7 @@ ZaSearch.prototype.dynSelectDataCallback = function (callback, resp) {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			var list = new ZaItemList(null, this._app);	
 			list.loadFromJS(response);	
-			callback.run(list.getArray());
+			callback.run(list.getArray(), response.more, response.searchTotal);
 		}
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataCallback");	

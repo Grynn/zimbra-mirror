@@ -40,6 +40,7 @@ OSelect1_XFormItem.prototype.writeElementDiv = false;
 OSelect1_XFormItem.prototype.width = "auto";
 OSelect1_XFormItem.prototype.editable = false;
 OSelect1_XFormItem.prototype.menuUp = false;
+OSelect1_XFormItem.prototype.noteUp = false;
 OSelect1_XFormItem.prototype.inputSize = 25;
 //TODO: get showing check working for the normal SELECT, requires:
 //		* separate notion of hilited row (for mouseover) and selected row(s)
@@ -48,7 +49,11 @@ OSelect1_XFormItem.prototype.inputSize = 25;
 //		* does &radic; work everywhere?  Use an image?
 OSelect1_XFormItem.prototype.showCheck = false;
 OSelect1_XFormItem.prototype.checkHTML = "&radic;";
-
+OSelect1_XFormItem.MENU_DIR_DOWN=1;
+OSelect1_XFormItem.MENU_DIR_UP=2;
+OSelect1_XFormItem.MENU_DIR_UNKNOWN=0;
+OSelect1_XFormItem.NOTE_HEIGHT=40;
+OSelect1_XFormItem.prototype.menuDirection = OSelect1_XFormItem.MENU_DIR_UNKNOWN;
 
 //	methods
 OSelect1_XFormItem.prototype.initFormItem = function () {
@@ -112,6 +117,17 @@ OSelect1_XFormItem.prototype.getMenuElement = function () {
 	return el;
 }
 
+OSelect1_XFormItem.prototype.getNoteElementId = function () {
+	return "___OSELECT_NOTE___";
+}
+OSelect1_XFormItem.prototype.getNoteElement = function () {
+	var id = this.getNoteElementId();
+	var el = this.getElement(id);
+	if (el == null) {
+		el = this.createElement(id, null, "div", "NOTE CONTENTS");
+	}
+	return el;
+}
 
 OSelect1_XFormItem.prototype.showMenu = function() {
 	if(!this._enabled)
@@ -180,10 +196,12 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 				//expand upwards
 				menu.style.height = parseInt(bounds.top) - WINDOW_GUTTER;												
 				menu.style.top = WINDOW_GUTTER;
+				this.menuDirection = OSelect1_XFormItem.MENU_DIR_UP;
 			} else {
 				//expand downwards
 				menu.style.top	= 	parseInt(menu.style.top)+2;				
 				menu.style.height = wh-WINDOW_GUTTER-parseInt(menu.style.top);								
+				this.menuDirection = OSelect1_XFormItem.MENU_DIR_DOWN;
 			}
 			menu.style.width = parseInt(bounds.width)+2;					
 			menu.style.overflow="auto";	
@@ -244,6 +262,63 @@ OSelect1_XFormItem.prototype.hideMenu = function () {
 		}
 	}
 	this.menuUp = false;
+	this.hideNote();
+}
+
+OSelect1_XFormItem.prototype.moveMenuY = function (y, shorten, lengthen) {
+	var menu = this.getMenuElement();
+	if (menu == null) return; 
+	var mBounds = this.getBounds(menu);
+	var menuHeight = mBounds.height;
+	var menuTop = mBounds.top;
+	var newTop = parseInt(menuTop)+parseInt(y);
+	var newBotton = parseInt(newTop)+parseInt(menuHeight);
+	menu.style.top = newTop;
+	//shorten the menu
+	if(shorten) {
+		menu.style.height = parseInt(menu.style.height)-Math.abs(parseInt(y));
+	} else if(lengthen) {
+		menu.style.height = parseInt(menu.style.height)+Math.abs(parseInt(y));
+	}
+	
+}
+
+OSelect1_XFormItem.prototype.showNote = function(noteText) {
+	var note = this.getNoteElement();
+	if(!note == null) return;
+	note.className = this.getNoteCssClass();
+	note.innerHTML = noteText;	
+	note.style.display = "block";
+	var menu = this.getMenuElement();
+	var mBounds = this.getBounds(menu);
+	var menuHeight = mBounds.height;
+	var menuTop = mBounds.top;
+	note.style.width = menu.style.width;
+	note.style.left = menu.style.left;
+	if(this.menuDirection == OSelect1_XFormItem.MENU_DIR_UP) {
+		note.style.top = menuTop - OSelect1_XFormItem.NOTE_HEIGHT + menuHeight;
+		this.moveMenuY((-1)*OSelect1_XFormItem.NOTE_HEIGHT,true,false);
+	} else {
+		note.style.top = menu.style.top;
+		this.moveMenuY(OSelect1_XFormItem.NOTE_HEIGHT,true,false);
+	}
+	note.style.zIndex = menu.style.zIndex+1;
+	this.noteUp = true;
+}
+
+OSelect1_XFormItem.prototype.hideNote = function() {
+	if(!this.noteUp) return;
+	var note = this.getNoteElement();
+	if(!note == null) return;
+	note.innerHTML = "";	
+	note.style.display = "none";
+	if(this.menuDirection == OSelect1_XFormItem.MENU_DIR_UP) {
+		this.moveMenuY(OSelect1_XFormItem.NOTE_HEIGHT,false,true);
+	} else {
+		this.moveMenuY((-1)*OSelect1_XFormItem.NOTE_HEIGHT,false,true);
+	}	
+	note.style.zIndex = Dwt.Z_HIDDEN;
+	this.noteUp = false;
 }
 
 OSelect1_XFormItem.prototype.oMouseUp = function (ev) {
@@ -681,7 +756,9 @@ OSelect1_XFormItem.prototype.getChoiceSelectedCssClass = function () {
 	return this.cssClass + "_choice_selected";
 }
 
-
+OSelect1_XFormItem.prototype.getNoteCssClass = function () {
+	return this.cssClass + "_note";
+}
 
 OSelect1_XFormItem.prototype.outputChoicesHTMLStart = function(html) {
 	html.append("<table cellspacing=0 cellpadding=0 id=", this.getId(),"_menu_table class=", this.getChoiceTableCssClass(), ">\r");
