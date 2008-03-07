@@ -115,4 +115,8 @@ popd > /dev/null
 
 ${BIN_ROOT}/zmprov mcf +ZimbraInstalledSkin ${SKIN_NAME}
 
+if [ $? = 0 ]; then
+  echo "${SKIN_NAME} successfully installed." 
+  echo "mailboxd restart is required to fully activate skin ${SKIN_NAME}"
+fi
 
