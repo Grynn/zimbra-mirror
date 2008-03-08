@@ -83,8 +83,15 @@ public class GenerateData {
     }
 
     public static void printJsonHeader(PrintWriter out) {
-        out.println("/** Generated at "+NOW.getTime()+" */");
-        out.println("function AjxTimezoneData() {}");
+		out.println("/**");
+		out.println(" * DO NOT EDIT! This file is generated at build-time.");
+		out.println(" * <p>");
+		out.println(" * Any copy of this file checked into source control is merely for");
+		out.println(" * convenience and should not be edited in any way.");
+		out.println(" * <p>");
+		out.println(" * Generated at "+NOW.getTime());
+		out.println(" */");
+        out.println("AjxTimezoneData = {};");
         out.println();
 
         out.print("AjxTimezoneData.TRANSITION_YEAR = ");
