@@ -165,49 +165,6 @@ getHostInfo() {
 
 }
 
-saveConfigKey() {
-  local key=$1
-  local file=$2
-  local location=$3
-  local content=`cat ${file}`
-  if [ $location = "global" ]; then
-    local zmprov_opts="mcf"
-  elif [ $location = "server" ]; then
-    local zmprov_opts="ms ${zimbra_server_hostname}"
-  else 
-    echo "Unknown config section $location"
-    return
-  fi
-  echo -n "** Saving $location config key $key..."
-  su - zimbra -c "zmprov -l -- ${zmprov_opts} ${key} \"$content\" 2> /dev/null"
-  if [ $? = 0 ]; then
-    echo "done."
-  else
-    echo "failed."
-  fi
-}
-
-loadConfigKey() {
-  local file=$1
-  local key=$2
-  local content=`cat ${file}`
-  if [ $location = "global" ]; then
-    local zmprov_opts="mcf"
-  elif [ $location = "server" ]; then
-    local zmprov_opts="ms ${zimbra_server_hostname}"
-  else 
-    echo "Unknown config section $location"
-    return
-  fi
-  echo -n "Saving $location config key $key..."
-  su - zimbra -c "zmprov -l -- ${zmprov_opts} ${key} \"$content\" 2> /dev/null"
-  if [ $? = 0 ]; then
-    echo "done."
-  else
-    echo "failed."
-  fi
-}
-
 createCAKey() {
 
   if [ ! -f ${zimbra_ca_ssl_conf} ]; then
@@ -477,11 +434,7 @@ deployCert() {
   else 
 
     # ignore this for now 
-    if [ x"${1}" = "x-allserver" ]; then
-      DEPLOY_GLOBAL=$1
-      shift
-    fi
-    if [ x"${1}" = "x-new" ]; then
+    if [ x"${1}" = "x-allserver" -o x"${1}" = "x-new" ]; then
       shift
     fi
 
@@ -540,15 +493,6 @@ deployCert() {
   else
     echo "Can't deploy cert for $1.  Unknown service."
     return
-  fi
-
-  if [ x"$ldap_is_master" = "xtrue" -a x"$SKIP_LDAP" != "x1" ]; then
-    echo -n "** Saving SSL Certificates in ldap..."
-    cert=`cat ${current_crt}` 
-    key=`cat ${current_key}`
-    su - zimbra -c "zmprov -l -- mcf zimbraSSLCertificate \"$cert\" 2> /dev/null"
-    su - zimbra -c "zmprov -l -- mcf zimbraSSLPrivateKey \"$key\" 2> /dev/null"
-    echo "done."
   fi
 
   if [ $DEPLOY = "all" -o $DEPLOY = "mta" ]; then
@@ -677,7 +621,6 @@ createServerCertReq() {
   else
     echo "done."
   fi
-  rm -f ${tmpfile} 2> /dev/null
 
   if [ -f "${current_csr}" ]; then
     chmod 644 ${current_csr}
@@ -685,7 +628,7 @@ createServerCertReq() {
   if [ -f "${current_key}" ]; then
     chmod 644 ${current_key}
   fi
-  saveConfigKey "zimbraSSLPrivateKey" ${current_key} "server"
+  rm -f ${tmpfile} 2> /dev/null
 }
 
 createCert() {
@@ -768,7 +711,6 @@ createCert() {
   fi
 
   rm -f ${tmpfile} 2> /dev/null
-  saveConfigKey "zimbraSSLCertificate" ${server_crt} "server"
   #viewstagedcrt self
 }
 
