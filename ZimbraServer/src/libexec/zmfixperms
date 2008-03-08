@@ -201,6 +201,7 @@ if [ -L ${zimbra_home}/snmp ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/snmp"
   chown ${root_user}:${root_group} ${zimbra_home}/net-snmp-*
   chown -R ${root_user}:${root_group} ${zimbra_home}/snmp/*
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/snmp/var
 fi
 
 if [ -L ${zimbra_home}/openldap ]; then

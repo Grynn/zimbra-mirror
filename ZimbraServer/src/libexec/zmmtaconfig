@@ -807,6 +807,16 @@ sub watchdog() {
 
   logMsg(4, "Watchdog enabled checking services");
 
+  # piggyback for snmp status.
+  foreach my $service (keys %{$state->{current}->{services}}) {
+    my $prevStatus = $state->{previous}->{services}->{$service};
+    my $curStatus = $state->{current}->{services}->{$service};
+    $curStatus = (processIsRunning($service) ? "running" : "stopped");
+    Zimbra::Mon::Logger::Log ("err", "Service status change: $config{hostname} $service changed from $prevStatus to $curStatus")
+      if ($curStatus ne $prevStatus && $prevStatus ne "");
+    $state->{previous}->{services}->{$service} = $curStatus;
+  }
+
   if ($config{wd_all}) {
     foreach my $service (keys %{$state->{current}->{services}}) {
       if (lookUpConfig("SERVICE", $service) && processIsNotRunning($service)) {

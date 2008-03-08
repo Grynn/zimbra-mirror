@@ -38,6 +38,9 @@ my $pidFile="${zimbra_home}/log/zmdisklog.pid";
 my $TIMEOUT=60;
 my $MNTCMD;
 my $DFCMD;
+my $DISK_CRIT_THRESHOLD = 90;
+my $DISK_WARN_THRESHOLD = 80;
+
 if ($platform =~ /MACOSX/) {
 	$MNTCMD = "mount -t hfs";
 	$DFCMD = "df -ml ";
@@ -72,7 +75,15 @@ sub logDiskUsage {
 		my @df = <DF>;
 		close DF;
 		my (undef, $total, undef, $avail) = split(/\s+/, $df[0]);
-		Zimbra::Mon::Logger::Log( "info", "$dt, DISK: ${hostname}: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
+    my $pct=int(($avail/$total)*100) if ($total > 0);
+    my $lvl = "info";
+    $lvl = "err" if ($pct > $DISK_WARN_THRESHOLD);
+    $lvl = "crit" if ($pct > $DISK_CRIT_THRESHOLD);
+    if ($lvl eq "info") {
+		  Zimbra::Mon::Logger::Log( "$lvl", "$dt, DISK: ${hostname}: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
+    } else {
+		  Zimbra::Mon::Logger::Log( "$lvl", "Disk warning: ${hostname} $dev at $pct%" );
+    }
 	}
   alarm(0);
 }
