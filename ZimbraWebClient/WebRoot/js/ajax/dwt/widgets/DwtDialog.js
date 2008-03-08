@@ -70,6 +70,10 @@ DwtDialog = function(params) {
 	}
 	// assemble the list of button IDs, and the list of button descriptors
 	this._buttonList = [];
+	var buttonOrder = {};
+	buttonOrder[DwtDialog.ALIGN_LEFT] = [];
+	buttonOrder[DwtDialog.ALIGN_CENTER] = [];
+	buttonOrder[DwtDialog.ALIGN_RIGHT] = [];
 	if (standardButtons || extraButtons) {
 		this._buttonDesc = {};
 		if (standardButtons && standardButtons.length) {
@@ -77,9 +81,12 @@ DwtDialog = function(params) {
 			for (var i = 0; i < standardButtons.length; i++) {
 				var buttonId = standardButtons[i];
 				this._buttonList.push(buttonId);
+				var align = DwtDialog.ALIGN[buttonId];
+				if (align) {
+					buttonOrder[align].push(buttonId);
+				}
 				// creating standard button descriptors on file read didn't work, so we create them here
-				this._buttonDesc[buttonId] = new DwtDialog_ButtonDescriptor(buttonId, AjxMsg[DwtDialog.MSG_KEY[buttonId]],
-																			DwtDialog.ALIGN[buttonId]);
+				this._buttonDesc[buttonId] = new DwtDialog_ButtonDescriptor(buttonId, AjxMsg[DwtDialog.MSG_KEY[buttonId]], align);
 			}
 			// set standard callbacks
 			this._resetCallbacks();
@@ -91,6 +98,10 @@ DwtDialog = function(params) {
 			for (var i = 0; i < extraButtons.length; i++) {
 				var buttonId = extraButtons[i].id;
 				this._buttonList.push(buttonId);
+				var align = extraButtons[i].align;
+				if (align) {
+					buttonOrder[align].push(buttonId);
+				}
 				this._buttonDesc[buttonId] = extraButtons[i];
 			}
 		}
@@ -112,11 +123,16 @@ DwtDialog = function(params) {
 		b.setText(this._buttonDesc[buttonId].label);
 		b.buttonId = buttonId;
 		b.addSelectionListener(new AjxListener(this, this._buttonListener));
-		this._tabGroup.addMember(b);
 		var el = document.getElementById(this._buttonElementId[buttonId]);
 		if (el) {
 			el.appendChild(b.getHtmlElement());
 		}
+	}
+	// add to tab group, in order
+	var list = buttonOrder[DwtDialog.ALIGN_LEFT].concat(buttonOrder[DwtDialog.ALIGN_CENTER], buttonOrder[DwtDialog.ALIGN_RIGHT]);
+	for (var i = 0; i < list.length; i++) {
+		var button = this._button[list[i]];
+		this._tabGroup.addMember(button);		
 	}
 }
 
