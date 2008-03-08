@@ -1537,10 +1537,7 @@ function(item) {
 DwtListView.prototype._emulateDblClick =
 function(target) {
 	var mev = DwtShell.mouseEvent;
-	mev.reset();
-	mev.target = target;
-	mev.button = DwtMouseEvent.LEFT;
-	mev.ersatz = true;
+	this._setMouseEvent(mev, {target:target, button:DwtMouseEvent.LEFT});
 	this._itemClicked(target, mev);
 	this._doubleClickListener(mev);
 };
@@ -1599,15 +1596,11 @@ function(itemDiv) {
 
 DwtListView.prototype._emulateSingleClick =
 function(params) {
-	// Gotta do what mousedown listener does
 	this._clickDiv = this.findItemDiv(params.target);
 	var mev = DwtShell.mouseEvent;
-	mev.reset();
-	mev.ersatz = true;
-	for (var p in params) {
-		mev[p] = params[p];
-	}
-	this._mouseUpListener(mev);
+	this._setMouseEvent(mev, params);
+	mev.kbNavEvent = params.kbNavEvent;
+	this.notifyListeners(DwtEvent.ONMOUSEUP, mev);
 };
 
 DwtListView.prototype._setKbFocusElement =
@@ -2310,8 +2303,7 @@ function(actionCode, ev) {
 				var s = Dwt.getSize(this._kbAnchor);
 				var docX = p.x + s.x / 4;
 				var docY = p.y + s.y / 2;
-				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.RIGHT,
-										  docX:docX, docY:docY});
+				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.RIGHT, docX:docX, docY:docY});
 			}
 			break;
 		

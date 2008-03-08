@@ -486,33 +486,23 @@ function() {
 	this.trigger();
 	var htmlEl = this.getHtmlElement();
 	var p = Dwt.toWindow(htmlEl);
-	// Gotta do what mousedown listener does
 	var mev = DwtShell.mouseEvent;
-	mev.reset();
-	mev.target = htmlEl;
-	mev.button = DwtMouseEvent.LEFT;
-	mev.docX = p.x;
-	mev.docY = p.y;
+	this._setMouseEvent(mev, {dwtObj:this, target:htmlEl, button:DwtMouseEvent.LEFT, docX:p.x, docY:p.y});
 	if (this._actionTiming == DwtButton.ACTION_MOUSEDOWN) {
-		DwtButton._mouseDownListener(mev);
+		this.notifyListeners(DwtEvent.ONMOUSEDOWN, mev);
 	} else {
-		DwtButton._mouseUpListener(mev);
+		this.notifyListeners(DwtEvent.ONMOUSEUP, mev);
 	}
 };
 
 DwtButton.prototype._emulateDropDownClick =
 function() {
     var htmlEl = this._dropDownEl;
-    if (!htmlEl) return;
+    if (!htmlEl) { return; }
 
 	var p = Dwt.toWindow(htmlEl);
-	// Gotta do what mousedown listener does
 	var mev = DwtShell.mouseEvent;
-	mev.reset();
-	mev.target = htmlEl;
-	mev.button = DwtMouseEvent.LEFT;
-	mev.docX = p.x;
-	mev.docY = p.y;
+	this._setMouseEvent(mev, {dwtObj:this, target:htmlEl, button:DwtMouseEvent.LEFT, docX:p.x, docY:p.y});
 	DwtButton._dropDownCellMouseDownHdlr(mev);
 };
 

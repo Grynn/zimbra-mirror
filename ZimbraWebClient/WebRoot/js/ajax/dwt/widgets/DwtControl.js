@@ -2032,6 +2032,21 @@ function() {
 };
 
 /**
+ * Populates a fake mouse event in preparation for the direct call of a listener (rather
+ * than via an event handler).
+ * 
+ * @param mev		[DwtMouseEvent]		mouse event
+ * @param params	[hash]				hash of event properties (see DwtUiEvent.copy)
+ */
+DwtControl.prototype._setMouseEvent =
+function(mev, params) {
+	mev.reset();
+	params.ersatz = true;
+	DwtUiEvent.copy(mev, params);
+	mev.button = params.button;
+};
+
+/**
  * TODO
  */
 DwtControl.prototype._getStopPropagationValForMouseEv =

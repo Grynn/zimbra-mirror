@@ -310,8 +310,8 @@ function(actionCode, ev) {
 		case DwtKeyMap.CANCEL:
 			if (this.__currentItem) {
 				var mev = DwtShell.mouseEvent;
-				this._setMouseEvent(mev, true, this.__currentItem, null, false, false, false, 0, 0);
-				DwtMenuItem._mouseOutListener(mev);
+				this._setMouseEvent(mev, {dwtObj:this.__currentItem});
+				this.notifyListeners(DwtEvent.ONMOUSEOUT, mev);
 				this.__currentItem = null;
 			}
 			this.popdown(0);
@@ -323,21 +323,6 @@ function(actionCode, ev) {
 	
 	return true;
 }
-
-DwtMenu.prototype._setMouseEvent =
-function(mev, ersatz, dwtObj, button, ctrl, shift, alt, docX, docY) {
-	mev.reset();
-	mev.target = dwtObj.getHtmlElement();
-	mev.button = button;
-	mev.docX = docX;
-	mev.docY = docY;
-	mev.shiftKey = shift;
-	mev.altKey = alt;
-	mev.ctrlKey = ctrl;
-	mev.dwtObj = dwtObj;
-	mev.ersatz = ersatz;
-}
-
 
 DwtMenu.prototype._focus =
 function() {
@@ -419,11 +404,11 @@ function(which) {
 	// mouseout event so that the UI can behave correctly
 	var mev = DwtShell.mouseEvent;
 	if (this.__currentItem) {
-		this._setMouseEvent(mev, true, this.__currentItem, null, false, false, false, 0, 0);
-		DwtMenuItem._mouseOutListener(mev);
+		this._setMouseEvent(mev, {dwtObj:this.__currentItem});
+		this.notifyListeners(DwtEvent.ONMOUSEOUT, mev);
 	}
-	this._setMouseEvent(mev, true, currItem, null, false, false, false, 0, 0);
-	DwtMenuItem._mouseOverListener(mev);	// mouseover selects a menu item
+	this._setMouseEvent(mev, {dwtObj:currItem});
+	this.notifyListeners(DwtEvent.ONMOUSEOVER, mev);	// mouseover selects a menu item
 	this.__currentItem = currItem;
 };
 

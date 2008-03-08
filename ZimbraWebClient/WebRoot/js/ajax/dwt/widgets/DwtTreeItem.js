@@ -742,8 +742,8 @@ function(ev) {
 		var obj = DwtControl.getTargetControl(ev);
 		var prevent = obj ? obj.preventContextMenu() : true;
 		if (prevent) {
-			DwtTreeItem._mouseDownListener(ev);
-			return DwtTreeItem._mouseUpListener(ev);
+			obj.notifyListeners(DwtEvent.ONMOUSEDOWN, ev);
+			return obj.notifyListeners(DwtEvent.ONMOUSEUP, ev);
 		}
 	}
 };
