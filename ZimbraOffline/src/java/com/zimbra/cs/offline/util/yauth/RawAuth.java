@@ -24,8 +24,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
-import com.zimbra.cs.offline.util.yauth.Auth;
-import com.zimbra.cs.offline.util.yauth.AuthenticationException;
 
 /**
  * Implementation of Yahoo "Raw Auth" aka "Token Login v2"
@@ -33,14 +31,13 @@ import com.zimbra.cs.offline.util.yauth.AuthenticationException;
  */
 public class RawAuth implements Auth {
     private final String appId;
-    private final String user;
     private String cookie;
     private String wssId;
     private long expiration;
 
     private static final String BASE_URI = "https://login.yahoo.com/WSLogin/V1";
-    private static final String GET_AUTH_TOKEN = BASE_URI + "/get_auth_token";
-    private static final String GET_AUTH = BASE_URI + "/get_auth";
+    private static final String GET_AUTH_TOKEN = "get_auth_token";
+    private static final String GET_AUTH = "get_auth";
 
     private static final String LOGIN = "login";
     private static final String PASSWD = "passwd";
@@ -54,26 +51,28 @@ public class RawAuth implements Auth {
     private static final String ERROR = "Error";
     private static final String ERROR_DESCRIPTION = "ErrorDescription";
 
-    public static RawAuth authenticate(String appId, String user, String pass)
+    public static String getToken(String appId, String user, String pass)
             throws AuthenticationException, IOException {
-        RawAuth auth = new RawAuth(appId, user);
-        auth.authenticate(pass);
+        Response res = doGet(GET_AUTH_TOKEN, new NameValuePair(APPID, appId),
+            new NameValuePair(LOGIN, user), new NameValuePair(PASSWD, pass));
+        return res.getRequiredValue(AUTH_TOKEN);
+    }
+
+    public static RawAuth authenticate(String appId, String token)
+            throws AuthenticationException, IOException {
+        RawAuth auth = new RawAuth(appId);
+        auth.authenticate(token);
         return auth;
     }
 
-    private RawAuth(String appId, String user) {
+    private RawAuth(String appId) {
         this.appId = appId;
-        this.user = user;
     }
-
+    
     public String getAppId() {
         return appId;
     }
 
-    public String getUser() {
-        return user;
-    }
-    
     public String getCookie() {
         return cookie;
     }
@@ -86,15 +85,10 @@ public class RawAuth implements Auth {
         return expiration;
     }
 
-    private void authenticate(String pass)
+    public void authenticate(String token)
             throws AuthenticationException, IOException {
-        // Get auth token
-        NameValuePair nvpAppId = new NameValuePair(APPID, appId);
-        Response res = doGet(GET_AUTH_TOKEN, nvpAppId,
-            new NameValuePair(LOGIN, user), new NameValuePair(PASSWD, pass));
-        String token = res.getRequiredValue(AUTH_TOKEN);
-        // Get cookie
-        res = doGet(GET_AUTH, nvpAppId, new NameValuePair(TOKEN, token));
+        Response res = doGet(GET_AUTH, new NameValuePair(APPID, appId),
+                                       new NameValuePair(TOKEN, token));
         cookie = res.getRequiredValue(COOKIE);
         wssId = res.getRequiredValue(WSSID);
         String s = res.getRequiredValue(EXPIRATION);
@@ -106,8 +100,9 @@ public class RawAuth implements Auth {
         }
     }
 
-    private Response doGet(String uri, NameValuePair... params)
+    private static Response doGet(String action, NameValuePair... params)
             throws AuthenticationException, IOException {
+        String uri = BASE_URI + '/' + action;
         GetMethod get = new GetMethod(uri);
         get.setQueryString(params);
         // XXX Should we share a single HttpClient() instance?
@@ -118,20 +113,19 @@ public class RawAuth implements Auth {
             return res;
         case 403:
             throw new AuthenticationException(
-                "Authentication failed for user '" + user + "': " +
-                res.getErrorMessage());
+                "Request '" + action + "' failed: " + res.getErrorMessage());
         default:
-            throw badResponse(uri, "Unexpected response code: " + code);
+            throw badResponse(action, "Unexpected response code: " + code);
         }
     }
 
     private static class Response {
-        final String uri;
+        final String action;
         final List<String> names = new ArrayList<String>(5);
         final List<String> values = new ArrayList<String>(5);
 
-        Response(String uri, HttpMethod method) throws IOException {
-            this.uri = uri;
+        Response(String action, HttpMethod method) throws IOException {
+            this.action = action;
             String body = method.getResponseBodyAsString();
             for (String line : body.split("\\r?\\n")) {
                 int i = line.indexOf('=');
@@ -145,7 +139,7 @@ public class RawAuth implements Auth {
         String getRequiredValue(String name) throws IOException {
             String value = getValue(name);
             if (value == null) {
-                throw badResponse(uri, "Missing required '" + name + "' field");
+                throw badResponse(action, "Missing required '" + name + "' field");
             }
             return value;
         }
@@ -169,20 +163,8 @@ public class RawAuth implements Auth {
         }
     }
 
-    private static IOException badResponse(String uri, String msg) {
+    private static IOException badResponse(String action, String msg) {
         return new IOException(
-            "Unexpected '" + getRequestType(uri) + "' response: " + msg);
-    }
-
-    private static String getRequestType(String uri) {
-        int i = uri.lastIndexOf('/');
-        return i != -1 ? uri.substring(i) : "";
-    }
-
-    public static void main(String[] args) throws Exception {
-        RawAuth yauth = authenticate("D2hTUBHAkY0IEL5MA7ibTS_1K86E8RErSSaTGn4-", "jjztest", "test1234");
-        System.out.println("cookie=" + yauth.cookie);
-        System.out.println("wssid=" + yauth.wssId);
-        System.out.println("expiration=" + yauth.expiration);
+            "Unexpected '" + action + "' response: " + msg);
     }
 }
