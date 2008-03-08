@@ -68,9 +68,9 @@ public class Session {
         baos = new ByteArrayOutputStream(4096);
     }
     
-    public void authenticate(String user, String pass)
+    public void authenticate(String token)
             throws AuthenticationException, IOException {
-        auth = RawAuth.authenticate(appId, user, pass);
+        auth = RawAuth.authenticate(appId, token);
     }
 
     public SearchRequest createSearchRequest(String params) {

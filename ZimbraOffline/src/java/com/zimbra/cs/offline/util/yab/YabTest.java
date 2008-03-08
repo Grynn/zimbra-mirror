@@ -17,6 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import junit.framework.TestCase;
+import com.zimbra.cs.offline.util.yauth.RawAuth;
 
 public class YabTest extends TestCase {
     private Session session;
@@ -29,6 +30,15 @@ public class YabTest extends TestCase {
     private static final String LAST = "Doe";
     private static final String YABTEST = "YABTEST";
 
+    private static String token;
+
+    private static String getToken() throws Exception {
+        if (token == null) {
+            token = RawAuth.getToken(APPID, USER, PASS);
+        }
+        return token;
+    }
+    
     static {
         //System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
         //System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
@@ -39,7 +49,7 @@ public class YabTest extends TestCase {
     public void setUp() throws Exception {
         if (session == null) {
             session = Yab.createSession(APPID, Yab.XML);
-            session.authenticate(USER, PASS);
+            session.authenticate(getToken());
         }
     }
 
