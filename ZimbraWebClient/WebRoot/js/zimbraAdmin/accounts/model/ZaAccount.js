@@ -1701,3 +1701,39 @@ function () {
 		this._app.getCurrentController().popupMsgDialog (warning, true);
 	}	
 }
+
+/**
+ * Test if the email retention policy should be enabled based on
+ * if (serversetting is not set) { //check global setting
+       if (gs != 0 ) {
+        enable ERP for account on this server
+        } else {
+        disable ERP for account on this server
+  }
+}else{  //check server setting
+    if ( serverSetting != 0 ) {
+        enable ERP for account on this server
+      } else if (serverSetting == 0 ){
+        disable ERP  for account on this server
+      }
+
+}
+ */
+ZaAccount.isEmailRetentionPolicyEnabled = function () {
+    var app = this.getController() ; // it actually returns the app
+    var instance  = this.getInstance () ;
+    var gc   = app.getGlobalConfig();
+    var sc =  app.getServerByName(instance.attrs[ZaAccount.A_mailHost]);
+    var s_mailpurge = sc.attrs[ZaServer.A_zimbraMailPurgeSleepInterval] ;    //always end with [s,m,h,d]
+    var g_mailpurge = gc.attrs[ZaGlobalConfig.A_zimbraMailPurgeSleepInterval] ;
+    if (s_mailpurge === _UNDEFINED_ || s_mailpurge === null)  {
+        if (AjxEnv.hasFirebug) console.log("server setting A_zimbraMailPurgeSleepInterval is NOT set.")
+        if (g_mailpurge != null && ZaUtil.getLifeTimeInSeconds(g_mailpurge) == 0) {
+            return false ;
+        }
+    }else if (ZaUtil.getLifeTimeInSeconds(s_mailpurge) == 0){
+         return false ;
+    }
+
+    return true ;
+}

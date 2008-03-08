@@ -1755,25 +1755,43 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									type:_SUPER_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_MailIdleSessionTimeout,
 									txtBoxLabel:ZaMsg.NAD_MailIdleSessionTimeout+":",
-									onChange:ZaTabView.onFormFieldChanged},																
-								{ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME1_, 
-									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-									msgName:ZaMsg.NAD_MailMessageLifetime,
-									txtBoxLabel:ZaMsg.NAD_MailMessageLifetime+":",
-									onChange:ZaTabView.onFormFieldChanged},
-								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_, 
-									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailTrashLifetime,
-									txtBoxLabel:ZaMsg.NAD_MailTrashLifetime+":", 
-									onChange:ZaTabView.onFormFieldChanged},
-								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_, 
-									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-									msgName:ZaMsg.NAD_MailSpamLifetime,
-									txtBoxLabel:ZaMsg.NAD_MailSpamLifetime,
-									onChange:ZaTabView.onFormFieldChanged}
+									onChange:ZaTabView.onFormFieldChanged}															
 							]
-						}					
-			
-					]
+						},
+                        { type:_ZA_TOP_GROUPER_, colSizes:["auto"], numCols:1,
+							label:ZaMsg.NAD_MailRetentionGrouper, id: "mailretention_settings",
+							items: [
+                                { type: _DWT_ALERT_,
+                                  containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
+                                  style: DwtAlert.WARNING,
+                                  iconVisible: false,
+                                  content: ZaMsg.Alert_EnableMailRetention,
+                                  relevant:"ZaAccount.isEmailRetentionPolicyEnabled.call (this) == false",
+						          relevantBehavior:_HIDE_
+                                },
+                                { type: _GROUP_ ,
+                                    relevant:"ZaAccount.isEmailRetentionPolicyEnabled.call (this) == true",
+						            relevantBehavior: _DISABLE_ ,
+                                    items: [
+                                        {ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME1_,
+                                            resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                            msgName:ZaMsg.NAD_MailMessageLifetime,
+                                            txtBoxLabel:ZaMsg.NAD_MailMessageLifetime+":",
+                                            onChange:ZaTabView.onFormFieldChanged},
+                                        {ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_,
+                                            resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_MailTrashLifetime,
+                                            txtBoxLabel:ZaMsg.NAD_MailTrashLifetime+":",
+                                            onChange:ZaTabView.onFormFieldChanged},
+                                        {ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_,
+                                            resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                            msgName:ZaMsg.NAD_MailSpamLifetime,
+                                            txtBoxLabel:ZaMsg.NAD_MailSpamLifetime,
+                                            onChange:ZaTabView.onFormFieldChanged}
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
 				});
 	}
 	
