@@ -112,7 +112,7 @@ public abstract class Field {
 
     public boolean isFlagUnset(String flag) {
         Flag f = getFlag(flag);
-        return f != null ? !f.getValue() : true;
+        return f != null ? !f.getValue() : false;
     }
 
     public Flag getFlag(String fname) {
