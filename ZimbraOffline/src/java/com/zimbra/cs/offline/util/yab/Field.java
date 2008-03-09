@@ -57,8 +57,8 @@ public abstract class Field {
     
     protected Field() {}
 
-    protected Field(String name) {
-        this.name = name;
+    protected Field(String fname) {
+        this.name = fname;
     }
 
     public boolean isName() { return this instanceof NameField; }
@@ -66,8 +66,8 @@ public abstract class Field {
     public boolean isAddress() { return this instanceof AddressField; }
     public boolean isSimple() { return this instanceof SimpleField; }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String fname) {
+        this.name = fname;
     }
     
     public String getName() {
@@ -107,18 +107,18 @@ public abstract class Field {
     
     public boolean isFlagSet(String flag) {
         Flag f = getFlag(flag);
-        return f != null ? f.getValue() : null;
+        return f != null ? f.getValue() : false;
     }
 
     public boolean isFlagUnset(String flag) {
         Flag f = getFlag(flag);
-        return f != null ? !f.getValue() : null;
+        return f != null ? !f.getValue() : true;
     }
 
-    public Flag getFlag(String name) {
+    public Flag getFlag(String fname) {
         if (flags == null) return null;
         for (Flag flag : flags) {
-            if (flag.getName().equals(name)) {
+            if (flag.getName().equals(fname)) {
                 return flag;
             }
         }

@@ -292,7 +292,7 @@ public class ContactData {
 
     private static String dateString(DateField date) {
         return date.getMonth() + '/' + date.getDay() + "/" +
-               (date.getYear() != -1 ? date.getYear() : "0000");
+               (date.getYear() != -1 ? Integer.toString(date.getYear()) : "0000");
     }
     
     private static void put(Map<String, String> fields, String name,
