@@ -41,19 +41,21 @@ DwtMenu = function(params) {
 	if (arguments.length == 0) { return; }
 	params = Dwt.getParams(arguments, DwtMenu.PARAMS);
 
+	this._origStyle = params.style;
 	var parent = params.parent;
 	if (parent) {
 		if (parent instanceof DwtMenuItem || parent instanceof DwtButton) {
 			if (params.style == DwtMenu.GENERIC_WIDGET_STYLE) {
-				this._style = DwtMenu.GENERIC_WIDGET_STYLE;
+				this._style = params.style;
 			} else {
 				this._style = DwtMenu.DROPDOWN_STYLE;
 			}
 		} else {
 			this._style = params.style || DwtMenu.POPUP_STYLE;
 		}
-		if (!params.posStyle)
-			params.posStyle = (this._style == DwtMenu.BAR_STYLE) ? DwtControl.STATIC_STYLE : DwtControl.ABSOLUTE_STYLE; 
+		if (!params.posStyle) {
+			params.posStyle = (this._style == DwtMenu.BAR_STYLE) ? DwtControl.STATIC_STYLE : DwtControl.ABSOLUTE_STYLE;
+		}
 	}
 	params.className = params.className || "DwtMenu";
 
@@ -676,20 +678,21 @@ function(x, y, kbGenerated) {
 	//	   and the menu items get pushed off of the visible area, the
 	//	   div's border doesn't surround the menu items. This hack
 	//	   forces the outer div's width to surround the table.
-	if ((AjxEnv.isGeckoBased || AjxEnv.isSafari)&& this._table) {
+	if ((AjxEnv.isGeckoBased || AjxEnv.isSafari || (this._origStyle == DwtMenu.CALENDAR_PICKER_STYLE)) && this._table) {
 		var htmlEl = this.getHtmlElement();
 		htmlEl.style.width = mySize.x + "px";
 	}
 	
 	// Put our tabgroup in play
-	if (!this.__preventMenuFocus)
+	if (!this.__preventMenuFocus) {
 		DwtShell.getShell(window).getKeyboardMgr().pushTabGroup(this._tabGroup);
+	}
 	
 	/* If the popup was keyboard generated, then pick the first enabled child item
 	 * we do this by simulating a DwtKeyMap.SELECT_NEXT keyboard action */
-	 if (kbGenerated)
+	if (kbGenerated) {
 	 	this.handleKeyAction(DwtKeyMap.SELECT_NEXT);
-	
+	}
 };
 
 DwtMenu.prototype.getSize =
