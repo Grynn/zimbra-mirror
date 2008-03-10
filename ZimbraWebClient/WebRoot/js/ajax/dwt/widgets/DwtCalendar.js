@@ -741,8 +741,8 @@ function() {
     html[idx++] = "</tr>";
 
     for (var i = 0; i < 6; i++) {
-		// bug fix #3355 - linux fix
-    	html[idx++] = AjxEnv.isLinux ? "<tr style='line-height:12px'>" : "<tr>";
+		// bug fix #3355 - linux fix and bug fix #25564 for Mac
+    	html[idx++] = (AjxEnv.isLinux  || AjxEnv.isMac) ? "<tr style='line-height:12px'>" : "<tr>";
     	for (var j = 0; j < 7; j++) {
     		html[idx++] = "<td id='";
     		html[idx++] = this._getDayCellId(i * 7 + j);
