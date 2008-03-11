@@ -187,6 +187,7 @@ ZaAccount.A_zimbraFeatureMailEnabled = "zimbraFeatureMailEnabled" ;
 ZaAccount.A_zimbraFeatureGroupCalendarEnabled = "zimbraFeatureGroupCalendarEnabled" ;
 ZaAccount.A_zimbraFeatureIMEnabled = "zimbraFeatureIMEnabled" ;
 ZaAccount.A_zimbraFeatureFlaggingEnabled = "zimbraFeatureFlaggingEnabled" ;
+ZaAccount.A_zimbraForeignPrincipal = "zimbraForeignPrincipal" ;
 //security
 ZaAccount.A_zimbraPasswordLockoutEnabled = "zimbraPasswordLockoutEnabled";
 ZaAccount.A_zimbraPasswordLockoutDuration = "zimbraPasswordLockoutDuration";
@@ -1071,8 +1072,9 @@ function(node) {
 	this.id = node.getAttribute("id");
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.attrs[ZaAccount.A_zimbraMailForwardingAddress] = new Array();
-	this.attrs[ZaAccount.A_zimbraAllowFromAddress] = new Array();	
-	var children = node.childNodes;
+	this.attrs[ZaAccount.A_zimbraAllowFromAddress] = new Array();
+    this.attrs[ZaAccount.A_zimbraForeignPrincipal ] = [];
+    var children = node.childNodes;
 	for (var i=0; i< children.length;  i++) {
 		child = children[i];
 		if (child.nodeName != 'a') continue;
@@ -1105,8 +1107,9 @@ function (account) {
 	var len = account.a.length;
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.attrs[ZaAccount.A_zimbraMailForwardingAddress] = new Array();	
-	this.attrs[ZaAccount.A_zimbraAllowFromAddress] = new Array();	
-	for(var ix = 0; ix < len; ix++) {
+	this.attrs[ZaAccount.A_zimbraAllowFromAddress] = new Array();
+    this.attrs[ZaAccount.A_zimbraForeignPrincipal ] = [];
+    for(var ix = 0; ix < len; ix++) {
 		if(!this.attrs[[account.a[ix].n]]) {
 			this.attrs[[account.a[ix].n]] = account.a[ix]._content;
 		} else {
@@ -1359,6 +1362,7 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A_zimbraMaxPwdAge, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMaxPwdAge, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraEnforcePwdHistory, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraEnforcePwdHistory, maxInclusive:2147483647, minInclusive:0},
 		{id:ZaAccount.A_zimbraMailAlias, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailAlias, listItem:{type:_EMAIL_ADDRESS_}},
+        {id:ZaAccount.A_zimbraForeignPrincipal, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraForeignPrincipal, listItem:{type:_STRING_}},
 		{id:ZaAccount.A_zimbraMailForwardingAddress, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddress, listItem:{type:_EMAIL_ADDRESS_}},
 		{id:ZaAccount.A_zimbraPasswordMustChange, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPasswordMustChange}, 
 		{id:ZaAccount.A_zimbraPasswordLocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPasswordLocked, choices:ZaModel.BOOLEAN_CHOICES}, 
@@ -1524,6 +1528,7 @@ ZaAccount.initMethod = function (app) {
 	this.id = "";
 	this.name="";
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
+    this.attrs[ZaAccount.A_zimbraForeignPrincipal] = new Array (); ;
 }
 ZaItem.initMethods["ZaAccount"].push(ZaAccount.initMethod);
 

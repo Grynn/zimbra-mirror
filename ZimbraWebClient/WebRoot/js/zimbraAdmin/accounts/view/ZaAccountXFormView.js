@@ -481,6 +481,140 @@ ZaAccountXFormView.addFwdAddr  = function () {
 		}
 	}
 }
+
+//interop account
+ZaAccountXFormView.fpSelectionListener =
+function (ev) {
+	var instance = this.getInstance();
+
+	var arr = this.widget.getSelection();
+	if(arr && arr.length) {
+		arr.sort();
+		instance.fp_selection_cache = arr;
+	} else
+		instance.fp_selection_cache = null;
+
+	this.getForm().refresh();
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaAccountXFormView.editFpButtonListener.call(this);
+	}
+}
+
+ZaAccountXFormView.isEditFpEnabled = function () {
+	return (this.instance.fp_selection_cache != null && this.instance.fp_selection_cache.length==1
+            && this.instance.attrs[ZaAccount.A_zimbraForeignPrincipal].length > 0);
+}
+
+ZaAccountXFormView.isDeleteFpEnabled = function () {
+	return (this.instance.fp_selection_cache != null && this.instance.fp_selection_cache.length>0
+              && this.instance.attrs[ZaAccount.A_zimbraForeignPrincipal].length > 0);
+}
+
+ZaAccountXFormView.isPushFpEnabled = function () {
+	return (this.instance.attrs[ZaAccount.A_zimbraForeignPrincipal].length > 0);
+}
+
+ZaAccountXFormView.deleteFpButtonListener = function () {
+	var instance = this.getInstance();
+	if(instance.fp_selection_cache != null) {
+		var cnt = instance.fp_selection_cache.length;
+		if(cnt && instance.attrs[ZaAccount.A_zimbraForeignPrincipal]) {
+			for(var i=0;i<cnt;i++) {
+				var cnt2 = instance.attrs[ZaAccount.A_zimbraForeignPrincipal].length-1;
+				for(var k=cnt2;k>=0;k--) {
+					if(instance.attrs[ZaAccount.A_zimbraForeignPrincipal][k]==instance.fp_selection_cache[i]) {
+						instance.attrs[ZaAccount.A_zimbraForeignPrincipal].splice(k,1);
+						break;
+					}
+				}
+			}
+
+		}
+	}
+	this.getForm().parent.setDirty(true);
+	this.getForm().refresh();
+}
+
+ZaAccountXFormView.editFpButtonListener =
+function () {
+	var instance = this.getInstance();
+	if(instance.fp_selection_cache && instance.fp_selection_cache[0]) {
+		var formPage = this.getForm().parent;
+		if(!formPage.editFpDlg) {
+			formPage.editFpDlg = new ZaEditFpXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.Edit_Fp_Title);
+			formPage.editFpDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateFp, this.getForm(), null);
+		}
+		var obj = ZaFp.getObject (instance.fp_selection_cache[0]) ;
+		var cnt = instance.attrs[ZaAccount.A_zimbraForeignPrincipal].length;
+		for(var i=0;i<cnt;i++) {
+			if(instance.fp_selection_cache[0]==instance.attrs[ZaAccount.A_zimbraForeignPrincipal][i]) {
+				obj[ZaFp.A_index] = i;
+				break;
+			}
+		}
+
+		formPage.editFpDlg.setObject(obj);
+		formPage.editFpDlg.popup();
+	}
+}
+
+ZaAccountXFormView.pushFpButtonListener = function () {
+	var instance = this.getInstance();
+    var app = this.getForm().parent._app ;
+    if (this.getForm().parent.isDirty()) {
+       app.getCurrentController().popupMsgDialog (ZaMsg.DIRTY_SAVE_ACCT, true);
+    }else if (instance.attrs[ZaAccount.A_zimbraForeignPrincipal].length > 0) {
+	   ZaFp.push (app, instance.id);
+  	}
+}
+
+ZaAccountXFormView.updateFp = function () {
+	if(this.parent.editFpDlg) {
+		this.parent.editFpDlg.popdown();
+		var obj = this.parent.editFpDlg.getObject();
+		var instance = this.getInstance();
+		if(obj[ZaFp.A_index] >=0 && instance.attrs[ZaAccount.A_zimbraForeignPrincipal][obj[ZaFp.A_index]] != ZaFp.getEntry (obj) ) {
+			instance.fp_selection_cache=new Array();
+			instance.attrs[ZaAccount.A_zimbraForeignPrincipal][obj[ZaFp.A_index]] = ZaFp.getEntry (obj);
+			instance.attrs[ZaAccount.A_zimbraForeignPrincipal]._version++;
+			this.parent.setDirty(true);
+			this.refresh();
+		}
+	}
+}
+
+ZaAccountXFormView.addFpButtonListener =
+function () {
+	var instance = this.getInstance();
+	var formPage = this.getForm().parent;
+	if(!formPage.addFpDlg) {
+		formPage.addFpDlg = new ZaEditFpXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.Add_Fp_Title);
+		formPage.addFpDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addFp, this.getForm(), null);
+	}
+
+    var obj = {};
+    obj [ZaFp.A_prefix] = "" ;
+    obj [ZaFp.A_name] = "";
+    obj [ZaFp.A_index] = -1 ;
+    
+    formPage.addFpDlg.setObject(obj);
+	formPage.addFpDlg.popup();
+}
+
+ZaAccountXFormView.addFp  = function () {
+	if(this.parent.addFpDlg) {
+		this.parent.addFpDlg.popdown();
+		var obj = this.parent.addFpDlg.getObject();
+		if(ZaFp.getEntry(obj).length > 1) { //count the :
+			var instance = this.getInstance();
+			instance.attrs[ZaAccount.A_zimbraForeignPrincipal].push(ZaFp.getEntry(obj));
+			instance.fp_selection_cache=new Array();
+			this.parent.setDirty(true);
+			this.refresh();
+		}
+	}
+}
+
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
 * @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
@@ -545,7 +679,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var _tab7 = ++this.TAB_INDEX;	
 	var _tab8 = ++this.TAB_INDEX;			
 	var _tab9 = ++this.TAB_INDEX;		
-	var _tab10 = ++this.TAB_INDEX;	
+	var _tab10 = ++this.TAB_INDEX;
+    var _tab11 = ++this.TAB_INDEX;
 		
 /*	var _tab1 = 1;
 	var _tab2 = 2;	
@@ -574,14 +709,18 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED)
 		this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Forwarding});
 
-	if(ZaSettings.SKIN_PREFS_ENABLED) 
-		this.tabChoices.push({value:_tab8, label:ZaMsg.TABT_Themes});	
+    if (ZaSettings.ACCOUNTS_INTEROP_ENABLED) {
+        this.tabChoices.push({value: _tab8, label: ZaMsg.TABT_Interop}) ;
+    }
+
+    if(ZaSettings.SKIN_PREFS_ENABLED)
+		this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_Themes});
 
 	if(ZaSettings.ZIMLETS_ENABLED) 
-		this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_Zimlets});	
+		this.tabChoices.push({value:_tab10, label:ZaMsg.TABT_Zimlets});
 			
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED)
-		this.tabChoices.push({value:_tab10, label:ZaMsg.TABT_Advanced});
+		this.tabChoices.push({value:_tab11, label:ZaMsg.TABT_Advanced});
 
 
 	var cases = [];
@@ -1539,8 +1678,54 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 
-	if(ZaSettings.SKIN_PREFS_ENABLED) {
-		cases.push({type:_ZATABCASE_, id:"account_form_themes_tab", numCols:1,relevant:("instance[ZaModel.currentTab] == " + _tab8),
+    if(ZaSettings.ACCOUNTS_INTEROP_ENABLED) {
+		cases.push({type:_ZATABCASE_, id:"account_form_interop_tab", width:"100%", numCols:1,colSizes:["auto"],
+					relevant:("instance[ZaModel.currentTab] == " + _tab8),
+					items: [
+						{type:_ZA_TOP_GROUPER_, id:"account_form_interop_group",
+                            borderCssClass:"LowPadedTopGrouperBorder",
+							 width:"100%", numCols:1,colSizes:["auto"],
+							label:ZaMsg.NAD_EditFpGroup,
+							items :[
+								{ref:ZaAccount.A_zimbraForeignPrincipal, type:_DWT_LIST_, height:"200", width:"350px",
+									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
+									headerList:null,onSelection:ZaAccountXFormView.fpSelectionListener
+								},
+								{type:_GROUP_, numCols:7, width:"350px", colSizes:["100px","auto","100px","auto","100px", "auto","100px"],
+									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									items: [
+										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Push,width:"100px",
+											onActivate:"ZaAccountXFormView.pushFpButtonListener.call(this);",
+											relevant:"ZaAccountXFormView.isPushFpEnabled.call(this)",
+                                            relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+                                        {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+                                            onActivate:"ZaAccountXFormView.deleteFpButtonListener.call(this);",
+                                            relevant:"ZaAccountXFormView.isDeleteFpEnabled.call(this)",
+                                            relevantBehavior:_DISABLE_
+                                        },
+                                        {type:_CELLSPACER_},
+                                        {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+                                            onActivate:"ZaAccountXFormView.editFpButtonListener.call(this);",
+                                            relevant:"ZaAccountXFormView.isEditFpEnabled.call(this)",
+                                            relevantBehavior:_DISABLE_
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+											onActivate:"ZaAccountXFormView.addFpButtonListener.call(this);"
+										}
+									]
+								}
+							]
+						}
+					]
+				});
+	}
+
+    if(ZaSettings.SKIN_PREFS_ENABLED) {
+		cases.push({type:_ZATABCASE_, id:"account_form_themes_tab", numCols:1,
+            relevant:("instance[ZaModel.currentTab] == " + _tab9),
 			items:[
 				{type:_SPACER_},
 				{type:_GROUP_, 
@@ -1555,7 +1740,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					ref:ZaAccount.A_zimbraAvailableSkin, 
 					choices:ZaAccountXFormView.themeChoices,
 					onChange: ZaTabView.onFormFieldChanged,
-					relevant:("instance[ZaModel.currentTab] == " + _tab8),
+					relevant:("instance[ZaModel.currentTab] == " + _tab9),
 					relevantBehavior:_HIDE_,
 					limitLabel:ZaMsg.NAD_LimitThemesTo
 				}
@@ -1564,7 +1749,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}	
 
 	if(ZaSettings.ZIMLETS_ENABLED) {
-		cases.push({type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,relevant:("instance[ZaModel.currentTab] == " + _tab9),
+		cases.push({type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,
+            relevant:("instance[ZaModel.currentTab] == " + _tab10),
 			items:[
 				{type:_ZAGROUP_, numCols:1,colSizes:["auto"], 
 					items: [
@@ -1573,7 +1759,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							ref:ZaAccount.A_zimbraZimletAvailableZimlets, 
 							choices:ZaAccountXFormView.zimletChoices,
 							onChange: ZaTabView.onFormFieldChanged,
-							relevant:("instance[ZaModel.currentTab] == " + _tab9),
+							relevant:("instance[ZaModel.currentTab] == " + _tab10),
 							relevantBehavior:_HIDE_,
 							limitLabel:ZaMsg.NAD_LimitZimletsTo
 						}
@@ -1584,7 +1770,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
 		cases.push({type:_ZATABCASE_, id:"account_form_advanced_tab", numCols:1,
-					relevant:("instance[ZaModel.currentTab] == " + _tab10),
+					relevant:("instance[ZaModel.currentTab] == " + _tab11),
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_AttachmentsGrouper,
