@@ -443,7 +443,7 @@ function() {
 ZaZimbraAdmin.prototype._setUserName =
 function () {
 	var e = document.getElementById("skin_container_username") ;
-	e.innerHTML = ZaZimbraAdmin.currentUserName ;
+	e.innerHTML = (ZaZimbraAdmin.currentUserName!=null && String(ZaZimbraAdmin.currentUserName).length>(skin.maxAdminName+1)) ? String(ZaZimbraAdmin.currentUserName).substr(0,skin.maxAdminName) : ZaZimbraAdmin.currentUserName;
 }
 
 ZaZimbraAdmin.prototype._helpListener =
