@@ -75,7 +75,6 @@ function() {
 * Sets the message style (info/warning/critical) and content.
 *
 * @param msgStr		message text
-* @param detailStr	additional text to show via Detail button
 * @param style		style (info/warning/critical)
 * @param title		dialog box title
 */
