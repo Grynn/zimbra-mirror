@@ -206,12 +206,13 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 			{ref:ZaResource.A_displayname, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ResourceName,
 				label:ZaMsg.NAD_ResourceName, labelLocation:_LEFT_, width: "200px", onChange:ZaTabView.onFormFieldChanged },			
 			{ref:ZaResource.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_ResAccountName,label:ZaMsg.NAD_ResAccountName, 
-				labelLocation:_LEFT_,
-				onChange: function(value, event, form) {
+				labelLocation:_LEFT_,onChange:ZaTabView.onFormFieldChanged
+				/*elementChanged: function(elementValue,instanceValue, event) {
 							//disable the autodisplayname whenever user does some action on the account name
 							this.getInstance()[ZaResource.A2_autodisplayname] = "FALSE";
-							this.setInstanceValue(value);						
-						}
+							form.itemChanged(this, elementValue, event);
+							//this.setInstanceValue(value);						
+						}*/
 			}]
 	};
 	var setupGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_ResourceSetupGrouper, id:"resource_form_setup_group",
