@@ -107,7 +107,7 @@ close ZMPROV;
 exit 0;
 
 sub usage() {
-  print "Usage: $0 [-h] [-d] [-e][-f] hostname\n";
+  print "Usage: $0 [-h] [-d] [-e] [-f] [-s] hostname\n";
   print "\t-h: display this help message\n";
   print "\t-d: disable proxy\n";
   print "\t-e: enable proxy\n";
