@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Element;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.SharedGroupException;
 import org.jivesoftware.wildfire.roster.Roster;
@@ -55,6 +56,7 @@ public final class Service extends ClassLogger implements Component, RosterEvent
         super(ZimbraLog.im);
         mRosterManager = new RosterManager();
         mFact = fact;
+        mName = fact.getName();
     }
     
     /* (non-Javadoc)
@@ -359,9 +361,33 @@ public final class Service extends ClassLogger implements Component, RosterEvent
         addOrUpdateRosterSubscription(userJid, remoteId, friendlyName, groupsAL, 
             subType, askType, recvType);
     }
+
+    void registerUser(JID jid, String name, String password, String transportName, String transportBuddyGroup)
+    throws ComponentException, UserNotFoundException {
+        // give the Interop Service a chance to encode or encrypt the password here, before it
+        // gets stored in the DB
+        try {
+            password = mFact.encodePassword(this, jid, name, password);
+            connectUser(jid, name, password, transportName, transportBuddyGroup);
+        } catch (Exception e) {
+            Message m = new Message();
+            m.setType(Message.Type.chat);
+            Element x = m.addChildElement("x", "zimbra:interop");
+            Element state = x.addElement("state");
+            state.addAttribute("value", "bad_auth");
+            m.setBody("Connection FAILED: Incorrect username or password");
+            m.setTo(jid);
+            m.setFrom(this.getServiceJID(jid));
+            try {
+                this.send(m);
+            } catch (ComponentException ex) {
+                error("ComponentException: %s", ex);
+            }
+        }
+    }
     
     void connectUser(JID jid, String name, String password, String transportName, String transportBuddyGroup)
-                throws ComponentException, UserNotFoundException {
+    throws ComponentException, UserNotFoundException {
         synchronized (mSessions) {
             // add the SERVICE user (two-way sub)
             addOrUpdateRosterSubscription(jid, getServiceJID(jid), transportName, transportBuddyGroup, 
@@ -374,6 +400,7 @@ public final class Service extends ClassLogger implements Component, RosterEvent
                 data.put(InteropRegistrationProvider.USERNAME, name);
                 data.put(InteropRegistrationProvider.PASSWORD, password);
                 try {
+                    
                     Interop.getDataProvider().putIMGatewayRegistration(jid, mName, data);
                 } catch (IOException ex) {
                     throw new ComponentException(ex);

@@ -543,9 +543,9 @@ public abstract class InteropSession extends ClassLogger {
         }
     }
     
-    protected final void setPassword(String password) {
-        this.mPassword = password;
-    }
+//    protected final void setPassword(String password) {
+//        this.mPassword = password;
+//    }
     
     protected final void setUsername(String username) {
         this.mUsername = username;

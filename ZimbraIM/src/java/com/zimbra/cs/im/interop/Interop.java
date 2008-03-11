@@ -126,9 +126,9 @@ public class Interop {
     }
     
     /**
-     * Called to connect a user to a specified Interop service. It only needs to
+     * Called to register a user to a specified Interop service. It only needs to
      * be called one time per user, or after disconnectUser() is called to
-     * re-connect the user
+     * re-register the user
      * 
      * @param service  The service
      * @param          jid JID of the the local user that wants to connect
@@ -139,10 +139,10 @@ public class Interop {
      * @throws UserNotFoundException
      *         The specified JID was invalid
      */
-    public void connectUser(String serviceName, JID jid, String name, String password)
+    public void registerUser(String serviceName, JID jid, String name, String password)
                 throws ComponentException, UserNotFoundException {
         Service service = mAvailableServices.get(serviceName);
-        service.connectUser(jid, name, password, service.getDescription(), SERVICES_GROUP);
+        service.registerUser(jid, name, password, service.getDescription(), SERVICES_GROUP);
     }
     
     /**
@@ -156,7 +156,7 @@ public class Interop {
      * @throws UserNotFoundException
      *         The specified JID was invalid
      */
-    public void disconnectUser(String serviceName, JID jid) throws ComponentException, UserNotFoundException {
+    public void unregisterUser(String serviceName, JID jid) throws ComponentException, UserNotFoundException {
         Service service = mAvailableServices.get(serviceName);
         service.disconnectUser(jid);
     }
