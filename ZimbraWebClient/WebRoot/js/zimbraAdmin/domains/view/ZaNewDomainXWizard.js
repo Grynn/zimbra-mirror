@@ -507,10 +507,10 @@ function() {
 	} 
 	if (this._containedObject[ZaModel.currentStep] == 1) {
 		this._containedObject.attrs[ZaDomain.A_AuthADDomainName] = this._containedObject.attrs[ZaDomain.A_domainName];
-//		this.changeButtonStateForStep(2);
+		this.changeButtonStateForStep(2);
 		this.goPage(2);		
 	} else if(this._containedObject[ZaModel.currentStep] == 2 && this._containedObject.attrs[ZaDomain.A_GalMode]==ZaDomain.GAL_Mode_internal) {
-//		this.changeButtonStateForStep(10);
+		this.changeButtonStateForStep(10);
 		this.goPage(10);
 	} else if(this._containedObject[ZaModel.currentStep] == 4) {
 		//clear the password if the checkbox is unchecked
@@ -525,12 +525,14 @@ function() {
 			return false;
 		}
 		this.goPage(5);
-//		this.changeButtonStateForStep(5);		
+		this.changeButtonStateForStep(5);		
 	} else if(this._containedObject[ZaModel.currentStep] == 5) { 
 		if(this._containedObject.attrs[ZaDomain.A_GALSyncUseGALSearch]=="FALSE") {
 			this.goPage(6);
+			this.changeButtonStateForStep(6);				
 		} else {
 			this.goPage(7);
+			this.changeButtonStateForStep(7);	
 		}
 	} else if(this._containedObject[ZaModel.currentStep] == 7) {
 		if(!this._containedObject[ZaDomain.A_GALSampleQuery]) {
@@ -539,7 +541,7 @@ function() {
 		}	
 		this.goPage(8);
  		this.testGALSettings();
-//		this.changeButtonStateForStep(8);
+		this.changeButtonStateForStep(8);
 	} else if(this._containedObject[ZaModel.currentStep] == 6) {
 		//clear the password if the checkbox is unchecked
 		if(this._containedObject.attrs[ZaDomain.A_SyncUseBindPassword]=="FALSE") {
@@ -553,15 +555,15 @@ function() {
 			return false;
 		}
 		this.goPage(7);
-//		this.changeButtonStateForStep(7);		
+		this.changeButtonStateForStep(7);		
 	} else if (this._containedObject[ZaModel.currentStep] == 10) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		if(this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_zimbra) {
 			this.goPage(16);		
-//			this.changeButtonStateForStep(16);
+			this.changeButtonStateForStep(16);
 		} else {
 			this.goPage(11);
-//			this.changeButtonStateForStep(11);			
+			this.changeButtonStateForStep(11);			
 		}
 	} else if (this._containedObject[ZaModel.currentStep] == 11) {
 		//check if LDAP URL is provided
@@ -573,7 +575,7 @@ function() {
 			this.goPage(13);		
 			this.changeButtonStateForStep(13);
 		} else {
-			this.goPage(10);
+			this.goPage(12);
 			this.changeButtonStateForStep(12);			
 		}
 	} else if (this._containedObject[ZaModel.currentStep] == 12) {
@@ -589,24 +591,24 @@ function() {
 			return false;
 		}
 		this.goPage(13);
-//		this.changeButtonStateForStep(13);
+		this.changeButtonStateForStep(13);
 	} else if(this._containedObject[ZaModel.currentStep] == 13) {
 		this.goPage(14);
  		this.testAuthSettings();
-//		this.changeButtonStateForStep(14);
+		this.changeButtonStateForStep(14);
 	} else if(this._containedObject[ZaModel.currentStep] == 17) {
 		if (this._containedObject[ZaDomain.A_CreateNotebook] != "TRUE") {
 			this.goPage(this._containedObject[ZaModel.currentStep] + 2);
-//			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
+			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
 		} else if(this._containedObject[ZaDomain.A_NotebookAccountPassword] != this._containedObject[ZaDomain.A_NotebookAccountPassword2]) {
 			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 		} else {		
 			this.goPage(this._containedObject[ZaModel.currentStep] + 1);
-//			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
+			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
 		}
 	} else {
 		this.goPage(this._containedObject[ZaModel.currentStep] + 1);
-//		this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
+		this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
 	}
 }
 
