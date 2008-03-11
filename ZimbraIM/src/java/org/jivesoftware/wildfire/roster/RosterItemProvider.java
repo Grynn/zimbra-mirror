@@ -300,16 +300,23 @@ public class RosterItemProvider {
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                // Create a new RosterItem (ie. user contact) from the stored information
-                RosterItem item = new RosterItem(rs.getLong(2),
-                        new JID(rs.getString(1)),
+                JID itemJID = null;
+                try {
+                    itemJID = new JID(rs.getString(1));
+                } catch (Exception e) {}
+                
+                if (itemJID != null) {
+                    // Create a new RosterItem (ie. user contact) from the stored information
+                    RosterItem item = new RosterItem(rs.getLong(2),
+                        itemJID,
                         RosterItem.SubType.getTypeFromInt(rs.getInt(3)),
                         RosterItem.AskType.getTypeFromInt(rs.getInt(4)),
                         RosterItem.RecvType.getTypeFromInt(rs.getInt(5)),
                         rs.getString(6),
                         null);
-                // Add the loaded RosterItem (ie. user contact) to the result
-                itemList.add(item);
+                    // Add the loaded RosterItem (ie. user contact) to the result
+                    itemList.add(item);
+                }
             }
             // Close the statement and result set
             pstmt.close();
