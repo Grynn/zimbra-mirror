@@ -672,7 +672,18 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 									{ref:ZaCos.A_zimbraMailTrashLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailTrashLifetime,label:ZaMsg.NAD_MailTrashLifetime+":", labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},
 									{ref:ZaCos.A_zimbraMailSpamLifetime, type:_LIFETIME1_, msgName:ZaMsg.NAD_MailSpamLifetime,label:ZaMsg.NAD_MailSpamLifetime, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged}
 								]
-							}
+							},
+                            {type:_ZA_TOP_GROUPER_, 
+								label:ZaMsg.NAD_InteropGrouper,
+								items: [
+									{ref:ZaCos.A_zimbraFreebusyExchangeUserOrg, type:_TEXTFIELD_,
+                                        msgName:ZaMsg.NAD_ExchangeUserGroup, width: "250px",
+                                        label:ZaMsg.NAD_ExchangeUserGroup,labelLocation:_LEFT_,
+                                        onChange:ZaTabView.onFormFieldChanged
+                                    }
+								]
+							} ,
+                            {type: _SPACER_ , height: "10px" }  //add some spaces at the bottom of the page
                         ]
 					}
 				]

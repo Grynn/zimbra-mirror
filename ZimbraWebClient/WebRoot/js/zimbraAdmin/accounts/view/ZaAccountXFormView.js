@@ -1976,9 +1976,23 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
                                     ]
                                 }
                             ]
-                        }
+                        },
+                        {type:_ZA_TOP_GROUPER_, colSizes:["auto"],numCols:1,
+								label:ZaMsg.NAD_InteropGrouper,   id: "interop_settings",
+							items: [
+                                { ref: ZaAccount.A_zimbraFreebusyExchangeUserOrg, type: _SUPER_TEXTFIELD_,
+                                    textFieldWidth: "250px",
+                                    resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                    msgName:ZaMsg.NAD_ExchangeUserGroup,
+                                    txtBoxLabel:ZaMsg.NAD_ExchangeUserGroup, labelLocation:_LEFT_,
+                                    textFieldCssClass:"admin_xform_number_input",
+                                    onChange:ZaTabView.onFormFieldChanged
+                                }
+                            ]
+                        },
+                        {type: _SPACER_ , height: "10px" }  //add some spaces at the bottom of the page
                     ]
-				});
+                });
 	}
 	
 	xFormObject.tableCssStyle="width:100%;";

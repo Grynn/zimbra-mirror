@@ -79,8 +79,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				{value:3, label:ZaMsg.NAD_Tab_MTA},
 				{value:4, label:ZaMsg.NAD_Tab_IMAP},
 				{value:5, label:ZaMsg.NAD_Tab_POP},
-				{value:6, label:ZaMsg.NAD_Tab_ASAV}
-			]
+				{value:6, label:ZaMsg.NAD_Tab_ASAV},
+                {value:7, label:ZaMsg.TABT_Interop}    
+            ]
 		},
 		{type:_SWITCH_, items:[
 			{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1", 
@@ -468,6 +469,32 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  	{ ref: ZaGlobalConfig.A_zimbraVirusWarnRecipient, type: _CHECKBOX_,
 						  	  label: ZaMsg.NAD_Virus_NotifyRecipient,
 							  trueValue:"TRUE", falseValue:"FALSE", 
+							  onChange: ZaTabView.onFormFieldChanged
+						  	}
+						  ]
+						}
+					]
+				} ,
+				// Interop
+				{type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 7",
+					colSizes:["auto"],numCols:1,id:"global_interop_tab",
+				 	items: [
+						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Exchange_Settings,
+						  items: [
+						  	{ ref: ZaGlobalConfig.A_zimbraFreebusyExchangeURL, type: _TEXTFIELD_,
+						  	  label: ZaMsg.NAD_Exchange_URL, width: "30em",
+							  onChange: ZaTabView.onFormFieldChanged
+						  	},
+                            { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, type: _DWT_SELECT_,
+						  	  label: ZaMsg.NAD_Exchange_Auth_Schema, width: "10em",
+							  onChange: ZaTabView.onFormFieldChanged
+						  	},
+                              { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, type: _TEXTFIELD_,
+						  	  label: ZaMsg.NAD_Exchange_Auth_User, width: "20em",
+							  onChange: ZaTabView.onFormFieldChanged
+						  	},
+						  	{ ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, type: _PASSWORD_,
+						  	  label: ZaMsg.NAD_Exchange_Auth_Password, width: "20em",
 							  onChange: ZaTabView.onFormFieldChanged
 						  	}
 						  ]

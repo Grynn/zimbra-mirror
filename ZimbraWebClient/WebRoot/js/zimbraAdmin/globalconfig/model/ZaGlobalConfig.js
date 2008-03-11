@@ -131,6 +131,11 @@ ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
 ZaGlobalConfig.A_originalMonitorHost = "_originalMonitorHost";
 ZaGlobalConfig.A_currentMonitorHost = "_currentMonitorHost";
 
+//interop
+ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername = "zimbraFreebusyExchangeAuthUsername" ;
+ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword = "zimbraFreebusyExchangeAuthPassword" ;
+ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme  = "zimbraFreebusyExchangeAuthScheme" ;
+ZaGlobalConfig.A_zimbraFreebusyExchangeURL ="zimbraFreebusyExchangeURL";
 
 ZaGlobalConfig.loadMethod = 
 function(by, val, withConfig) {
@@ -388,7 +393,14 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraLmtpBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpBindPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraLmtpNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpNumThreads, type:_PORT_ },		
-		{ id:ZaGlobalConfig.A_zimbraInstalledSkin, ref:"attrs/" + ZaGlobalConfig.A_zimbraInstalledSkin, type:_LIST_, listItem:{type:_STRING_}}
+		{ id:ZaGlobalConfig.A_zimbraInstalledSkin, ref:"attrs/" + ZaGlobalConfig.A_zimbraInstalledSkin, type:_LIST_, listItem:{type:_STRING_}},
 
-	]	
+         //interop
+        { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme,
+            type: _ENUM_, choices: ["basic", "form"]},
+        { id:ZaGlobalConfig.A_zimbraFreebusyExchangeURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeURL, type: _STRING_ }
+
+    ]
 }
