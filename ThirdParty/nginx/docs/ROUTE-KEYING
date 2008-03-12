@@ -1,0 +1,54 @@
+                              Cached Route Keying
+                              -------------------
+
+   Login names are traditionally fully qualified, eg "john@doe.com", and this
+   fully qualified login name is used for keying the route information in
+   memcached (see the CACHE document for details)
+
+   But in some cases, the login name may not be fully qualified, (eg "john").
+   This usually happens when there is only a single domain
+
+   But Zimbra may[?] allow a user to log in even if there are multiple domains
+   in the setup. In this case, one specific domain is designated as the 
+   default domain, and this domain is automatically appended to the login name
+   in the absence of the fully qualified domain name
+
+   In this latter case, the cached route information, which would be keyed by
+   *just* the login name (without domain), is problematic because another user
+   with the same name on a different domain (john@acme.com), may be incorrectly
+   routed because of the cached route for john at doe dot com
+
+   To partially[*] safeguard against such a possibility, nginx can optionally
+   append the originating IP address of a mail connection to the login name 
+   before caching (or looking up) the route in memcache
+
+   Thus, if john at doe dot com logged in via IP address 10.10.10.10 using just
+   his user name "john", then nginx appends @10.10.10.10 to the login name, so
+   that john's route is cached based on the key "john@10.10.10.10" so that 
+   john at acme dot com, who may subsequently log in (from a different IP), 
+   may not be routed to his namesake's mail server
+
+   This automatic qualification of login names can be suppressed by setting
+   memcache_entry_allow_unqualified to true, in which case nginx does nothing
+   to the login name, even if it is unqualified
+
+   To summarize, nginx algorithm for preparing a login name to become a key
+   for the route information is -
+
+   [step 1] if login name is fully qualified, use it as the route key
+   [step 2] otherwise, if memcache_entry_allow_unqualified is true, then 
+            still use the bare login as the route key
+   [step 3] else, append the origin IP address to the login and use that as 
+            the route key
+
+   This sequence of steps is refered to as "route key preparation"
+
+                                       .
+
+   [?] needs verification
+   [*] origin IP address suffixing is a partial safeguard, since johns at 
+       acme and doe may log in from the same client machine
+       (or client machines which appear to nginx proxy to have the same
+       IP address - usual with NAT)
+
+                                      ***
