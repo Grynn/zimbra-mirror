@@ -587,7 +587,8 @@ ZaAccountXFormView.addFpButtonListener =
 function () {
 	var instance = this.getInstance();
 	var formPage = this.getForm().parent;
-	if(!formPage.addFpDlg) {
+    
+    if(!formPage.addFpDlg) {
 		formPage.addFpDlg = new ZaEditFpXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.Add_Fp_Title);
 		formPage.addFpDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addFp, this.getForm(), null);
 	}

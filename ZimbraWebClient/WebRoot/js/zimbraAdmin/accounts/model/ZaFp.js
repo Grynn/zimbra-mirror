@@ -28,34 +28,47 @@ ZaFp.prototype.constructor = ZaFp;
 ZaFp.A_name = "name" ;
 ZaFp.A_index = "index";
 ZaFp.A_prefix = "prefix" ;
+//ZaFp.A_providers = "providers" ;
 
-ZaFp.myXModel = {
-	items: [
+ZaFp.INTEROP_PROVIDER_CHOICES = [] ;
+
+ZaFp.getXModel = function ()
+{
+    var model = { items:
+      [
 		{id:ZaFp.A_name, type:_STRING_, ref:ZaFp.A_name},
 		{id:ZaFp.A_index, type:_NUMBER_, ref:ZaFp.A_index},
         {id:ZaFp.A_prefix, type:_STRING_, ref:ZaFp.A_prefix}
-    ]
+      ]};
+    return model ;
 }
 
 //@entry: prefix:foreignEmailAccount
 //return ZaFp object
 ZaFp.getObject = function (entry) {
     var obj = {} ;
-    var regEx = /(.+):(.*)/  ;
-    var result = entry.match(regEx) ;
-    if (result != null) {
-        obj[ZaFp.A_prefix] = result [1] ;
-        obj[ZaFp.A_name] = result [2] ;
-    }else{
+    //var regEx = /(.+):(.*)/  ;
+    //var result = entry.match(regEx) ;
+    var found = false;
+    for (var i=0; i <= ZaFp.INTEROP_PROVIDER_CHOICES.length; i ++) {
+       if (entry.indexOf(ZaFp.INTEROP_PROVIDER_CHOICES[i].value) == 0) {
+           obj[ZaFp.A_prefix] = ZaFp.INTEROP_PROVIDER_CHOICES[i].label;
+           obj[ZaFp.A_name] = entry.substr(ZaFp.INTEROP_PROVIDER_CHOICES[i].value.length);
+           found = true ;
+           break;
+       }
+    }
+    if (! found) {
         obj[ZaFp.A_name] = entry ;
     }
-    return obj ;
+
+    return obj;
 }
 
 ZaFp.getEntry = function (obj) {
     var entry = "" ;
     if (obj != null) {
-        entry = obj [ZaFp.A_prefix] + ":" + obj [ZaFp.A_name] ;
+        entry = obj [ZaFp.A_prefix] + obj [ZaFp.A_name] ;
     }
     return entry  ;
 }
@@ -75,6 +88,36 @@ ZaFp.push = function (app, id) {
         }
 		resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.PushFreeBusyResponse;
 	} catch (ex) {
+		//show the error and go on
+		//we should not stop the Account from loading if some of the information cannot be accessed
+		app.getCurrentController()._handleException(ex, "ZaFp.push", null, false);
+	}
+}
+
+ZaFp.getProviders = function (app) {
+    var soapDoc = AjxSoapDoc.create("GetAllFreeBusyProvidersRequest", ZaZimbraAdmin.URN, null);
+    try {
+		params = new Object();
+		params.soapDoc = soapDoc;
+		var reqMgrParams ={
+			controller: app.getCurrentController() ,
+            asyncMode: false,
+            busyMsg: ZaMsg.BUSY_GET_INTEROP_PROVIDERS
+        }
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllFreeBusyProvidersResponse;
+	    ZaFp.INTEROP_PROVIDER_CHOICES = [] ;
+        var providers = resp.provider ;
+
+        if (providers != null) {
+            for (var i=0; i < providers.length; i ++) {
+                ZaFp.INTEROP_PROVIDER_CHOICES.push (
+                    { value: providers[i].prefix,
+                      label: providers[i].name }
+                );
+            }
+        }
+        
+    } catch (ex) {
 		//show the error and go on
 		//we should not stop the Account from loading if some of the information cannot be accessed
 		app.getCurrentController()._handleException(ex, "ZaFp.push", null, false);

@@ -26,8 +26,11 @@ ZaEditFpXDialog = function(parent,  app, w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];
 	ZaXDialog.call(this, parent, app, null, title, w, h);
-	this._containedObject = {};
-	this.initForm(ZaFp.myXModel,this.getMyXForm());
+
+    //get the provider first
+    ZaFp.getProviders(app);
+    this._containedObject = {};
+	this.initForm(ZaFp.getXModel(),this.getMyXForm());
 }
 
 ZaEditFpXDialog.prototype = new ZaXDialog;
@@ -38,7 +41,8 @@ function() {
 	var xFormObject = {
 		numCols:1,
 		items:[
-            {ref:ZaFp.A_prefix, type:_TEXTFIELD_, label:ZaMsg.Enter_FpPrefix,width:230} ,
+            {ref:ZaFp.A_prefix, type:_OSELECT1_, choices: ZaFp.INTEROP_PROVIDER_CHOICES,
+                label:ZaMsg.Select_Interop_Provider, width:230} ,
             {ref:ZaFp.A_name, type:_TEXTFIELD_, label:ZaMsg.Enter_ForeignAccount,width:230}
 		]
 	};
