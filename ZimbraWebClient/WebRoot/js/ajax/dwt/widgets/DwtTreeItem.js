@@ -405,6 +405,24 @@ function(index, realizeDeferred) {
 	this._initialized = true;
 };
 
+DwtTreeItem.prototype.setTreeItemColor = 
+function(className) {
+	var id = this._htmlElId +"_table";
+	var treeItemTableEl = document.getElementById(id);
+	var treeItemDivEl = document.getElementById(this._htmlElId + "_div");
+	var treeItemEl = this.getHtmlElement();
+	
+	var newClassName = this._origClassName	 + " " + className;
+	if(treeItemTableEl) {
+		treeItemTableEl.className =  newClassName;
+		if(treeItemDivEl) {
+			treeItemDivEl.className = newClassName
+		}		
+	}else if (treeItemEl) {
+		treeItemEl.className =  className;
+	}	
+};
+
 DwtTreeItem.prototype._addMouseListeners =
 function() {
 	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONDBLCLICK];
