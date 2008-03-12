@@ -1,0 +1,133 @@
+                        Memcache Protocol Handling Notes
+                        --------------------------------
+
+                      <<-- mcp_process_any_response() -->>
+    
+       This is the main handler that will be invoked to process a response
+       from a memcached server. We must be prepared to handle successful
+       and failed responses for the add/delete/get commands, according to 
+       the following:
+
+       (.) STORED         <successful add>
+       (.) NOT_STORED     <unsuccessful add>
+       (.) DELETED        <successful delete>
+       (.) NOT_FOUND      <unsuccessful delete>
+       (.) VALUE <keyname> <int> <int> <size>     <successful get>
+           ... data stream:<size> bytes ...
+           END
+       (.) END            <unsuccessful get>
+
+                        <<-- mc_any_read_handler() -->>
+
+       This is the generic handler for all read events that occur on the
+       memcached socket. This function will be invoked by nginx's event 
+       handling mechanism. All state information should be accessible
+       via the ngx_event_t argument to this function.
+
+                          ((memcache protocol notes))
+
+     . memcached will process `add' requests in a strictly first-come, 
+       first-served basis -- this implies that even if the response to 
+       an previous `add' operation is not immediately available (due to 
+       processing delay, network latencies, high load, etc), and even if 
+       other requests have been made in this time, memcached will[should?]
+       return the responses in the order that the requests were received.
+
+     . the response to a memcached `add' request is simply 'STORED' or
+       'NOT_STORED'. This is sufficient indication about the fact that 
+       memcached indeed returns the results in the order that the requests
+       were received. This is because the response to the `add' request
+       does not include the key name that was added. 
+
+     . this function will be invoked to handle any sort of read activity
+       from the connected memcached socket. we should be prepared to at
+       least handle the following responses:
+
+       (.) STORED         <successful add>
+       (.) NOT_STORED     <unsuccessful add>
+       (.) DELETED        <successful delete>
+       (.) NOT_FOUND      <unsuccessful delete>
+       (.) VALUE <keyname> <int> <int> <size>     <successful get>
+           ... data stream:<size> bytes ...
+           END
+       (.) END            <unsuccessful get>
+
+     . we must also make sure that we don't `split' any response, which 
+       means that if we encounter a VALUE keyword, then we must read the
+       response right till the end. since we are only concerned with the
+       get/add/delete responses for now, we only really need be worried
+       about the get response, since that's the only one that has a payload
+       along with the response. other responses, whether successful, or
+       not, don't have any payload that we need be worried about
+
+     . indeed, since our usage of memcached will be just to store the 
+       server:port info corresponding to a particular email address/protocol,
+       we don't really expect a huge payload even in a successful response
+       to a `get' operation
+
+
+                              ((work queue notes))
+
+       The head of the work queue corresponding to each memcache connection 
+       is stored in the corresponding ngx_event_t::data::data variable
+
+       the work-queue represents all the outstanding memcache requests on a 
+       particular connection. there is one connection established at startup
+       time with each of the memcached servers specified in the configuration
+       file
+
+       the head is a special node, it is associated with a `noop' code.
+       On the other hand, each of the remaining elements in the queue 
+       represent memcache operations that were already performed earlier.
+       So, the job of this function is to read data off the connected socket
+       and to fill in the data in the appropriate workqueue entry on the list
+
+       since the memcached protocol is first-come, first-served, we shouldn't
+       ever have to skip any node while processing the list
+
+                           ((circular buffer notes))
+
+       Here is the lifecycle of the readbuffer attached to the mc_context_t:
+
+       At initialization time, when the connection to the mc server is 
+       established, we allocate this buffer, and it contains a fixed number 
+       of bytes. 
+
+       Now, this buffer has 4 pointers, two mutable and two immutable:
+
+       The immutable (fixed) pointers are:
+       start -> pointing to the start of the buffer
+       end   -> pointing to the end of the buffer
+
+       The mutable (dynamic) pointers are `pos' and `last'
+
+       Here's how we use `pos' and `last':
+
+       `pos' and `last' will both be initialized to `start'
+
+       `last' will be positioned *after* the last byte in the buffer, which
+       contains valid data received from memcached (so, *last is never valid)
+
+       `last', therefore, in the worst case, will be same as `end'
+
+       `pos' will be positioned *after* the last byte in the buffer which 
+       has already been processed by the memcached handlers 
+
+       This is a circular buffer. Therefore it is possible, that very soon, 
+       `last' may get positioned at `end'. In this case, usually, `pos' will 
+       be positioned a few bytes before `last' (very rarely, pos == last == end)
+
+       In either case, the byte stream starting at `pos' should *always*
+       correspond to a valid memcached response. That means, pos should always
+       be at the beginning of the response
+
+       But it may also be that because `last' is too close to the `end', that
+       the entire response may not fit inside [`pos'..`last']
+
+       In this case, we will have to move [pos..last] to [start..[last-pos]]
+
+       This will be the memory moving operation, which is the whole point 
+       behind having a circular buffer
+
+
+                                      ***
