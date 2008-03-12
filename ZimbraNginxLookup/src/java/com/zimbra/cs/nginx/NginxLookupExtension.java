@@ -103,7 +103,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final long DEFAULT_WAIT_INTERVAL = 10;
 
         /* Generic Error Message for failure */
-        public static final String ERRMSG = "Account information not available";
+        public static final String ERRMSG = "login failed";
 
         /* protocols */
         public static final String IMAP     = "imap";
