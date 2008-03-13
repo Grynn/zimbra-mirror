@@ -28,7 +28,7 @@ build:
              --with-debug \
              --without-pcre \
              --without-http_rewrite_module \
-             --with-sasl-inc=/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
+             --with-sasl-inc=/opt/zimbra/$(CYRUS_VERSION)/include \
              --with-mail \
              --with-mail_ssl_module; \
 	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
