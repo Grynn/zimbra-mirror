@@ -26,6 +26,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_app_id;
     public static final KnownKey zdesktop_name;
     public static final KnownKey zdesktop_version;
+	public static final KnownKey zdesktop_relabel;
+	public static final KnownKey zdesktop_buildid;
     public static final KnownKey zdesktop_skins;
     public static final KnownKey zdesktop_derby_properties;
     
@@ -66,6 +68,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_yauth_appid;
     public static final KnownKey zdesktop_yauth_baseuri;
     public static final KnownKey zdesktop_yab_baseuri;
+    public static final KnownKey zdesktop_ymail_baseuri;
 
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -79,9 +82,17 @@ public class OfflineLC {
         zdesktop_name.setDefault("Zimbra Desktop");
         zdesktop_name.setDoc("UserAgent name of the Zimbra Desktop software.");
     	
+        zdesktop_relabel = new KnownKey("zdesktop_relabel");
+        zdesktop_relabel.setDefault("ALPHA");
+        zdesktop_relabel.setDoc("Release label such as R or BETA");
+        
         zdesktop_version = new KnownKey("zdesktop_version");
-        zdesktop_version.setDefault("ZCS " + BuildInfo.FULL_VERSION);
+        zdesktop_version.setDefault("0.1");
         zdesktop_version.setDoc("Version number of the Zimbra Desktop software.");
+        
+        zdesktop_buildid = new KnownKey("zdesktop_buildid");
+        zdesktop_buildid.setDefault("1");
+        zdesktop_buildid.setDoc("Build number of the Zimbra Desktop software.");
 
 	    zdesktop_skins = new KnownKey("zdesktop_skins");
 	    zdesktop_skins.setDefault("beach");
@@ -198,5 +209,9 @@ public class OfflineLC {
 	    zdesktop_yab_baseuri = new KnownKey("zdesktop_yab_baseuri");
 	    zdesktop_yab_baseuri.setDefault("http://address.yahooapis.com/v1");
 	    zdesktop_yab_baseuri.setDoc("base uri for yab");
+	    
+	    zdesktop_ymail_baseuri = new KnownKey("zdesktop_ymail_baseuri");
+	    zdesktop_ymail_baseuri.setDefault("http://mail.yahooapis.com/ws/mail/v1.1/soap");
+	    zdesktop_ymail_baseuri.setDoc("base uri for ymail");
     }
 }

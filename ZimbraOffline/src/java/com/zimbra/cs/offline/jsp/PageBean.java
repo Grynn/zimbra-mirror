@@ -5,10 +5,12 @@ import com.zimbra.common.service.ServiceException;
 
 public class PageBean {
 
+	private static final String APP_VERSION = LC.get("zdesktop_relabel") + LC.get("zdesktop_version") + " (build " + LC.get("zdesktop_buildid") + ")";
+	
 	public PageBean() {}
 	
 	public String getAppVersion() {
-		return LC.get("zdesktop_version");
+		return APP_VERSION;
 	}
 	
 	public String getLoginUsername() {

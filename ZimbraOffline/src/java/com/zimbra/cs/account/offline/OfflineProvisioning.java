@@ -393,6 +393,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefSkin,
             A_zimbraZimletAvailableZimlets,
             A_zimbraFeatureSharingEnabled,
+            A_zimbraPrefClientType,
             A_zimbraPrefLabel,
             A_zimbraPrefMailPollingInterval
     }));
@@ -448,7 +449,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         attrs.put(A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         
-        attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
+        attrs.put(A_zimbraPrefClientType, "advanced");
+        attrs.put(A_zimbraFeatureSharingEnabled, FALSE);
 
         Account account = createAccountInternal(emailAddress, zgi.getId(), attrs);
         try {
@@ -697,13 +699,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraFeatureInstantNotify, TRUE);
         addToMap(attrs, A_zimbraFeatureMailEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureMailForwardingEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureMailPriorityEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureNewMailNotificationEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureNotebookEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureOutOfOfficeReplyEnabled, TRUE);
         addToMap(attrs, A_zimbraFeaturePop3DataSourceEnabled, TRUE);
         addToMap(attrs, A_zimbraFeaturePortalEnabled, FALSE);
         addToMap(attrs, A_zimbraFeatureSavedSearchesEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureSharingEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureSharingEnabled, FALSE);
         addToMap(attrs, A_zimbraFeatureSkinChangeEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureTaggingEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureTasksEnabled, TRUE);
@@ -775,7 +778,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "beach" : skins[0]);
         
         attrs.put(A_zimbraPrefClientType, "advanced");
-        attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
+        attrs.put(A_zimbraFeatureSharingEnabled, FALSE);
         
         addToMap(attrs, A_zimbraIsAdminAccount, TRUE);
         addToMap(attrs, A_zimbraIsDomainAdminAccount, TRUE);
