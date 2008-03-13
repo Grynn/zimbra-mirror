@@ -67,7 +67,7 @@ public class ZimbraTag extends BodyTagSupport {
     
     private Account getRequestAccount(AuthToken token) throws ZimbraTagException, ServiceException {
     	Provisioning prov = Provisioning.getInstance();
-        Account acct = prov.get(Provisioning.AccountBy.id, token.getAccountId());
+        Account acct = prov.get(Provisioning.AccountBy.id, token.getAccountId(), token);
         if (acct == null) {
         	throw ZimbraTagException.AUTH_FAILURE("account not found "+token.getAccountId());
         }
