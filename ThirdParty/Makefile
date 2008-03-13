@@ -19,7 +19,7 @@ BDB_LIB_DIR ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
 BDB_ROOT ?= $(P4_ROOT)/ThirdParty/sleepycat
 
-CYRUS_VERSION ?= cyrus-sasl-2.1.22.3z
+CYRUS_VERSION ?= 2.1.22.3z
 CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 
 ASPELL_VERSION ?= aspell-0.60.5

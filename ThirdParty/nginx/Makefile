@@ -7,7 +7,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-CYRUS_VERSION ?= cyrus-sasl-2.1.22.3z
+CYRUS_VERSION ?= 2.1.22.3z
 CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 
 SSL_VERSION	?= 0.9.8g
@@ -28,7 +28,7 @@ build:
              --with-debug \
              --without-pcre \
              --without-http_rewrite_module \
-             --with-sasl-inc=/opt/zimbra/$(CYRUS_VERSION)/include \
+             --with-sasl-inc=/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
              --with-mail \
              --with-mail_ssl_module; \
 	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
