@@ -30,6 +30,10 @@ else
     java=java
 fi
 
+if [ -f ".hotspot_compiler" ]; then
+  cd $ZMROOT
+fi
+
 case "`uname`" in
 CYGWIN*) PATHSEP=";";;
 *) PATHSEP=":";;

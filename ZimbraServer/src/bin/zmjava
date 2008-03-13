@@ -26,6 +26,10 @@ else
 fi
 zmassert -d ${JRE_EXT_DIR}
 
+if [ -f ".hotspot_compiler" ]; then
+  cd $zimbra_home
+fi
+
 case "`uname`" in
 CYGWIN*) PATHSEP=";";;
 *) PATHSEP=":";;
