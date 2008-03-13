@@ -13,10 +13,6 @@ CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 SSL_VERSION	?= 0.9.8g
 CFLAGS := "-g -O2"
 
-ifeq ($(BUILD_PLATFORM), RPL1)
-	CFLAGS := "-g -O2 -DOPENSSL_NO_KRB5"
-endif
-
 ZIMBRA_HOME ?= /opt/zimbra
 
 NGINX_VERSION ?= 0.5.30
