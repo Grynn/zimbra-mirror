@@ -570,7 +570,7 @@ ZaAccountXFormView.pushFpButtonListener = function () {
 
 ZaAccountXFormView.updateFp = function () {
 	if(this.parent.editFpDlg) {
-		this.parent.editFpDlg.popdown();
+        this.parent.editFpDlg.popdown();
 		var obj = this.parent.editFpDlg.getObject();
 		var instance = this.getInstance();
 		if(obj[ZaFp.A_index] >=0 && instance.attrs[ZaAccount.A_zimbraForeignPrincipal][obj[ZaFp.A_index]] != ZaFp.getEntry (obj) ) {
@@ -604,16 +604,22 @@ function () {
 
 ZaAccountXFormView.addFp  = function () {
 	if(this.parent.addFpDlg) {
-		this.parent.addFpDlg.popdown();
-		var obj = this.parent.addFpDlg.getObject();
-		if(ZaFp.getEntry(obj).length > 1) { //count the :
-			var instance = this.getInstance();
-			instance.attrs[ZaAccount.A_zimbraForeignPrincipal].push(ZaFp.getEntry(obj));
-			instance.fp_selection_cache=new Array();
-			this.parent.setDirty(true);
-			this.refresh();
-		}
-	}
+        var obj = this.parent.addFpDlg.getObject();
+        var app = this.parent._app ;
+        var instance = this.getInstance();
+        var currentFps =  instance.attrs[ZaAccount.A_zimbraForeignPrincipal] ;
+        if (ZaFp.findDupPrefixFp(currentFps, obj[ZaFp.A_prefix])){
+            app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ONE_FP_PREFIX_ALLOWED, null);
+        }  else {
+            this.parent.addFpDlg.popdown();
+            if(ZaFp.getEntry(obj).length > 0) {
+                currentFps.push(ZaFp.getEntry(obj));
+               // instance.fp_selection_cache=new Array();
+                this.parent.setDirty(true);
+                this.refresh();
+            }
+        }
+    }
 }
 
 /**

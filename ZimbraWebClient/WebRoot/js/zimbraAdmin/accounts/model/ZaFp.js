@@ -52,7 +52,7 @@ ZaFp.getObject = function (entry) {
     var found = false;
     for (var i=0; i <= ZaFp.INTEROP_PROVIDER_CHOICES.length; i ++) {
        if (entry.indexOf(ZaFp.INTEROP_PROVIDER_CHOICES[i].value) == 0) {
-           obj[ZaFp.A_prefix] = ZaFp.INTEROP_PROVIDER_CHOICES[i].label;
+           obj[ZaFp.A_prefix] = ZaFp.INTEROP_PROVIDER_CHOICES[i].value;
            obj[ZaFp.A_name] = entry.substr(ZaFp.INTEROP_PROVIDER_CHOICES[i].value.length);
            found = true ;
            break;
@@ -87,7 +87,8 @@ ZaFp.push = function (app, id) {
             busyMsg: ZaMsg.BUSY_PUSH_FP
         }
 		resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.PushFreeBusyResponse;
-	} catch (ex) {
+        app.getCurrentController().popupMsgDialog (ZaMsg.PUSH_SUCCEED, true);
+    } catch (ex) {
 		//show the error and go on
 		//we should not stop the Account from loading if some of the information cannot be accessed
 		app.getCurrentController()._handleException(ex, "ZaFp.push", null, false);
@@ -122,4 +123,16 @@ ZaFp.getProviders = function (app) {
 		//we should not stop the Account from loading if some of the information cannot be accessed
 		app.getCurrentController()._handleException(ex, "ZaFp.push", null, false);
 	}
+}
+
+//@entries: foreign principal entries
+//@prefix: foreign principal prefixes
+ZaFp.findDupPrefixFp = function (entries, prefix) {
+    for (var i =0 ; i < entries.length; i ++) {
+        if (entries[i].indexOf(prefix) == 0) {
+            return true;
+        }
+    }
+
+    return false;
 }

@@ -485,8 +485,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  	  label: ZaMsg.NAD_Exchange_URL, width: "30em",
 							  onChange: ZaTabView.onFormFieldChanged
 						  	},
-                            { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, type: _DWT_SELECT_,
-						  	  label: ZaMsg.NAD_Exchange_Auth_Schema, width: "10em",
+                            { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, type: _OSELECT1_,
+						  	  label: ZaMsg.NAD_Exchange_Auth_Schema, 
 							  onChange: ZaTabView.onFormFieldChanged
 						  	},
                               { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, type: _TEXTFIELD_,
