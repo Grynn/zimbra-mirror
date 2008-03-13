@@ -12,8 +12,9 @@
 	<target name="installer-pack-media">
 		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
 		           destination="${build.dir}" buildids="44,198394,59040">
-            <variable name="version_label" value="${offline.label}"/>
-            <variable name="version_build" value="${offline.build}"/>
+            <variable name="offline_relabel" value="${offline.relabel}"/>
+            <variable name="offline_version" value="${offline.version}"/>
+            <variable name="offline_buildid" value="${offline.buildid}"/>
         </install4j>
     </target>
 
