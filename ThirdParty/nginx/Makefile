@@ -30,7 +30,7 @@ build:
 	CFLAGS=$(CFLAGS) ./configure \
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
              --with-debug \
-             --without-http  \
+             --without-pcre \
              --with-mail \
              --with-mail_ssl_module; \
 	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
