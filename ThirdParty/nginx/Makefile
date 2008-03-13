@@ -27,7 +27,7 @@ build:
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
              --with-debug \
              --without-pcre \
-             ----without-http_rewrite_module \
+             --without-http_rewrite_module \
              --with-mail \
              --with-mail_ssl_module; \
 	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
