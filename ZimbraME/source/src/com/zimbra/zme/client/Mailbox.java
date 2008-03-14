@@ -584,13 +584,8 @@ public class Mailbox implements Runnable {
      * by examining the parameters on the stack
      */
     public void run() {
-    	ResponseHdlr hdlr;
-    	Object op;
-    	Object respObj;
-		Stack s;
-		boolean shutdown = false;
 		String threadName = Thread.currentThread().toString();
-		ZClientMobile client = null;;
+		ZClientMobile client = null;
 
 		//#debug
 		System.out.println("Mailbox.run: starting thread: " + threadName);
@@ -605,94 +600,65 @@ public class Mailbox implements Runnable {
     	
 		mThreadClients.put(threadName, client);
     	while(true) {
-    		hdlr = null;
-    		s = null;
-    		synchronized(mQueue) {
-    			try {
-    				if (mQueue.size() == 0) {
-    					if (!shutdown) {
-		    		    	//#debug
-		    		    	System.out.println("Mailbox.run(" + threadName + "): about to wait");
-							mQueue.wait();
-					    	//#debug
-					    	System.out.println("Mailbox.run(" + threadName + "): woken up");
-    					} else {
-    						//#debug
-    						System.out.println("Mailbox.rum(" + threadName + "): exiting run method");
-    						return;
-    					}
-    				}
-				} catch (InterruptedException e) {
-					//Terminate
-					//#debug
-					System.out.println("Mailbox.run: terminating thread " + threadName);
-					shutdown = true;
-				} finally {
-			    	//#debug
-			    	System.out.println("Mailbox.run(" + threadName + "): processing request");
-			    	int sz = mQueue.size();
-			    	int i;
-                    if (sz == 0)
-                        continue;
-			    	for (i = 0; i < sz; i++) {
-			    		if (((Stack)mQueue.elementAt(i)).peek() == P1)
-			    			break;
-			    	}
-			    	if (i == sz)
-			    		i = 0;
-			    	
-			    	//#debug
-			    	System.out.println("Servicing queue element: " + i + " of " + sz);
-			    	
-			    	s = (Stack)mQueue.elementAt(i);
-			    	mQueue.removeElementAt(i);
-				}
-    		}
-    		// Pop off the priority
-    		s.pop();
-    		hdlr = (ResponseHdlr)s.pop();
-    		op = s.pop();
-    		
-    		/*
     		try {
-    			if (op == FLAGITEM)
-    				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
-    		
-            try {
-	    		handleOp(op, s, client, threadName);
-	    		respObj = this;
-	    	} catch (Exception ex) {
-	    		respObj = ex;
-                /*
-                ex.printStackTrace();
-                */
-	    	} catch (Error e) {
-	    		respObj = null;
-	    		//#debug
-	    		System.out.println("ERROR: " + e);
-	    		Thread t = new Thread(this);
-	    		t.start();
-	    	}
+        		ResponseHdlr hdlr = null;
+        		Stack s = null;
+        		try {
+        			s = dequeue();
+        		} catch (InterruptedException e) {
+    				//#debug
+    				System.out.println("Mailbox.run: terminating thread " + threadName);
+    				break;
+        		}
+        		if (s == null)
+        			continue;
+        		// Pop off the priority
+        		s.pop();
+        		hdlr = (ResponseHdlr)s.pop();
+        		Object op = s.pop();
+            	Object respObj = null;
+        		
+                try {
+    	    		handleOp(op, s, client, threadName);
+    	    		respObj = this;
+    	    	} catch (Throwable ex) {
+    	    		respObj = ex;
+    	    	}
 
-	    	try {
-	    	    if (respObj != null) {
-	    	        closeConnection();    			
-	    	        //#debug
-	    	        System.out.println("Mailbox.run(" + threadName + "): calling response handler");
-	    	        hdlr.handleResponse(op, respObj);
-	    	    }
-	    	} catch (Exception ex) {
-                //#debug
-                System.out.println("Error handling response: " + ex);
-	    	}
+    	        if (respObj != null) {
+    	        	hdlr.handleResponse(op, respObj);
+    	        }
+    		} catch (Throwable anything) {
+				//#debug
+				System.out.println("Mailbox.run: exception in the thread " + threadName + ": " + anything.getMessage());
+    		} finally {
+				client.reset();
+    		}
     	}
     }
 
+    private Stack dequeue() throws InterruptedException {
+    	Stack s = null;
+		synchronized(mQueue) {
+			if (mQueue.size() == 0) {
+				mQueue.wait();
+			}
+			int i;
+			int sz = mQueue.size();
+			if (sz == 0)
+				return s;
+			for (i = 0; i < sz; i++) {
+				if (((Stack)mQueue.elementAt(i)).peek() == P1)
+					break;
+			}
+			if (i == sz)
+				i = 0;
+			s = (Stack)mQueue.elementAt(i);
+			mQueue.removeElementAt(i);
+		}
+    	return s;
+    }
+    
     private void handleOp(Object op,
     					  Stack s,
     					  ZClientMobile client,
@@ -962,7 +928,7 @@ public class Mailbox implements Runnable {
         Enumeration e = mThreadClients.elements();
         while (e.hasMoreElements()) {
             ZClientMobile c = (ZClientMobile)e.nextElement();
-            c.cancel();
+            c.reset();
         }
     }
     

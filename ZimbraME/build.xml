@@ -1,6 +1,6 @@
 <project 
-	name="enough-j2mepolish-example" 
-	default="j2mepolish">
+	name="ZimbraME" 
+	default="all">
 	
     <condition property="is-windows">
         <os family="windows"/>
@@ -62,7 +62,7 @@
 <property name="build.no.file" value="zme.build.number" />
 <property name="rapc.jar" value="${blackberry.home}/bin/rapc.jar" />
 <property name="rim.api.jar" value="${blackberry.home}/lib/net_rim_api.jar" />
-	
+
 <!-- Definition of the J2ME Polish task:                      -->
 
 <taskdef name="j2mepolish" 
@@ -85,6 +85,7 @@
 	<property name="test" value="true" />
 	<property name="dir.work" value="build/test" />
 	<property name="server.url" value="USERDEFINED" />
+    <property name="deploy.url" value="" />
 </target>
 		
 <target name="init">
@@ -121,7 +122,6 @@
 <!--    3. The build-section controls the actual build        -->
 <!--       process.                                           -->	
 <target name="j2mepolish" 
-		depends="update-build,init"
 		description="This is the controller for the J2ME build process." 
 		>
 	<loadproperties srcfile="${build.no.file}" />
@@ -133,7 +133,7 @@
 	    <!-- Have a look at the <jad>-section for setting specialised attributes.
 	         You can also define localized attributes in the resources/messages.txt files -->
 		<info
-			license="GPL"
+			license="Zimbra Network License"
 			name="ZimbraME"
 			version="${zme.version}"
 			description="Zimbra Mobile Edition"
@@ -157,7 +157,13 @@
 		</deviceRequirements>
 		<deviceRequirements unless="test or device:defined">
 			<or>
+                <requirement name="Identifier" value="BlackBerry/Pearl" />
+                <requirement name="Identifier" value="BlackBerry/Curve" />
+                <requirement name="Identifier" value="BlackBerry/8800" />
+                <requirement name="Identifier" value="Nokia/E61" />
                 <requirement name="Identifier" value="Nokia/N73" />
+                <requirement name="Identifier" value="Nokia/N80" />
+                <requirement name="Identifier" value="Nokia/N95" />
 
 				<!--
 				<requirement name="Identifier" value="Motorola/Razr2V8" />
@@ -262,7 +268,7 @@
 			
 			<!-- obfuscator settings: do not obfuscate when the test-property is true -->
 			<obfuscator name="ProGuard" useDefaultPackage="false" unless="test || polish.blackberry || zme.blackberry" >
-				<parameter name="optimize" value="false" />
+                <parameter name="optimize" value="true" />
 				<!--
 				You can set additional parameters here, e.g.:
 				<parameter name="optimize" value="true" />
@@ -289,7 +295,7 @@
 			if="test and not debug and not zme.blackberry"
 			>
 		</emulator>
-	
+
 		<emulator
 			wait="false"
 			securityDomain="trusted"
@@ -304,6 +310,7 @@
 </target>
 
 <target name="emulator" depends="test,j2mepolish" />
+<target name="all" depends="init,update-build,setdeploy,j2mepolish" />
 
 <target name="clean" 
   		description="allows a clean build. You should call [ant clean] whenever you made changes to devices.xml, vendors.xml or groups.xml">

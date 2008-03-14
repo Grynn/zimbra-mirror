@@ -338,7 +338,7 @@ import de.enough.polish.util.StringTokenizer;
 		}
 	}
 
-	public void cancel() {
+	public void reset() {
 		if (mIs != null) {
 			try {
 				mIs.close();
