@@ -28,6 +28,7 @@ build:
              --with-debug \
              --without-pcre \
              --without-http_rewrite_module \
+             --with-http_ssl_module \
              --with-sasl-inc=/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
              --with-mail \
              --with-mail_ssl_module; \
