@@ -22,6 +22,11 @@ use strict;
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
 use Getopt::Std;
+use IPC::Open3;
+use FileHandle;
+
+my $enabledHTTPProxy;
+my $enabledMailProxy;
 
 if ($> ne 0) {
   print "$0 must be executed as root.\n";
@@ -31,7 +36,7 @@ if ($> ne 0) {
 our %options = ();
 our %loaded = ();
 
-getopts('defhs',\%options) or die "Unable to set options\n";
+getopts('defhmsw',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
@@ -43,10 +48,22 @@ if ( $options{d} + $options{e} > 1) {
     exit 1;
 }
 
-if ( !$options{d} && !$options{e}) {
-    usage();
-    exit 1;
-}   
+if (!$options{f}) {
+  if ( !$options{d} && !$options{e} ) {
+      usage();
+      exit 1;
+  }
+
+  if ( !$options{m} && !$options{w} ) {
+      usage();
+      exit 1;
+  }
+} else {
+   if ( ($options{d} || $options{e}) && (!$options{w} && !$options{m})) {
+      usage();
+      exit 1;
+   }
+}
 
 if ($#ARGV == -1) {
     usage();
@@ -77,58 +94,116 @@ if ($options{f}) {
   print ZMPROV "mcf zimbraReverseProxyImapSSLPortAttribute zimbraImapSSLBindPort\n";
   print ZMPROV "mcf zimbraReverseProxyDomainNameAttribute zimbraDomainName\n";
   print ZMPROV "mcf zimbraReverseProxyAuthWaitInterval 10s\n";
+  print ZMPROV "mcf zimbraReverseProxyIPLoginLimit 0\n";
+  print ZMPROV "mcf zimbraReverseProxyIPLoginLimitTime 3600\n";
+  print ZMPROV "mcf zimbraReverseProxyUserLoginLimit 0\n";
+  print ZMPROV "mcf zimbraReverseProxyUserLoginLimitTime 3600\n";
 }
 
 if ($options{e}) {
+  if ($options{m}) {
+     print ZMPROV "ms $hostname ".
+       "zimbraImapBindPort 7143 "."zimbraImapProxyBindPort 143 ".
+       "zimbraImapSSLBindPort 7993 "."zimbraImapSSLProxyBindPort 993 ".
+       "zimbraPop3BindPort 7110 "."zimbraPop3ProxyBindPort 110 ".
+       "zimbraPop3SSLBindPort 7995 "."zimbraPop3SSLProxyBindPort 995 ".
+       "zimbraReverseProxyMailEnabled TRUE ".
+       "zimbraImapCleartextLoginEnabled TRUE ".
+       "zimbraPop3CleartextLoginEnabled TRUE\n"
+  }
+  if ($options{w}) {
+     print ZMPROV "ms $hostname ".
+     "zimbraMailReferMode never ".
+     "zimbraMailPort 8080 ".
+     "zimbraMailSSLPort 8443 ".
+     "zimbraMailMode http ".
+     "zimbraMailProxyPort 80 ".
+     "zimbraMailSSLProxyPort 443 ".
+     "zimbraReverseProxyHttpEnabled TRUE ".
+     "zimbraReverseProxyLookupTarget TRUE\n";
+  }
+
   print ZMPROV "ms $hostname ".
-    "zimbraImapBindPort 7143 "."zimbraImapProxyBindPort 143 ".
-    "zimbraImapSSLBindPort 7993 "."zimbraImapSSLProxyBindPort 993 ".
-    "zimbraPop3BindPort 7110 "."zimbraPop3ProxyBindPort 110 ".
-    "zimbraPop3SSLBindPort 7995 "."zimbraPop3SSLProxyBindPort 995 ".
-    "zimbraReverseProxyMailEnabled TRUE ".
-    "zimbraImapCleartextLoginEnabled TRUE ".
-    "zimbraPop3CleartextLoginEnabled TRUE ".
     "+zimbraServiceEnabled imapproxy\n";
 }
 
 if ($options{d}) {
-  print ZMPROV "ms $hostname ".
-    "zimbraImapBindPort 143 "."zimbraImapProxyBindPort 7143 ".
-    "zimbraImapSSLBindPort 993 "."zimbraImapSSLProxyBindPort 7993 ".
-    "zimbraPop3BindPort 110 "."zimbraPop3ProxyBindPort 7110 ".
-    "zimbraPop3SSLBindPort 995 "."zimbraPop3SSLProxyBindPort 7995 ".
-    "zimbraReverseProxyMailEnabled FALSE ".
-    "-zimbraServiceEnabled imapproxy\n";
-    if ($options{s}) {
+  if ($options{m}) {
+     print ZMPROV "ms $hostname ".
+       "zimbraImapBindPort 143 "."zimbraImapProxyBindPort 7143 ".
+       "zimbraImapSSLBindPort 993 "."zimbraImapSSLProxyBindPort 7993 ".
+       "zimbraPop3BindPort 110 "."zimbraPop3ProxyBindPort 7110 ".
+       "zimbraPop3SSLBindPort 995 "."zimbraPop3SSLProxyBindPort 7995 ".
+       "zimbraReverseProxyMailEnabled FALSE\n";
+     if ($options{s}) {
        print ZMPROV "ms $hostname ".
          "zimbraImapCleartextLoginEnabled FALSE ".
          "zimbraPop3CleartextLoginEnabled FALSE\n";
-    }
+     }
+  }
+  if ($options{w}) {
+     print ZMPROV "ms $hostname ".
+       "zimbraMailReferMode wronghost ".
+       "zimbraMailPort 80 ".
+       "zimbraMailSSLPort 443 ".
+       "zimbraMailMode http ".
+       "zimbraMailProxyPort 0 ".
+       "zimbraMailSSLProxyPort 0 ".
+       "zimbraReverseProxyHttpEnabled FALSE ".
+       "zimbraReverseProxyLookupTarget FALSE\n";
+  }
+  $enabledHTTPProxy = getLdapServerValue("zimbraReverseProxyHttpEnabled");
+  $enabledMailProxy = getLdapServerValue("zimbraReverseProxyMailEnabled");
+  if ($enabledHTTPProxy eq "FALSE" && $enabledMailProxy eq "FALSE" ) {
+     print ZMPROV "ms $hostname ".
+       "-zimbraServiceEnabled imapproxy\n";
+  }
 }
 
 close ZMPROV;
 exit 0;
 
 sub usage() {
-  print "Usage: $0 [-h] [-d] [-e] [-f] [-s] hostname\n";
+  print "Usage: $0 [-h] [-m] [-w] [-d [-s]] [-e] [-f] hostname\n";
   print "\t-h: display this help message\n";
   print "\t-d: disable proxy\n";
   print "\t-e: enable proxy\n";
-  print "\t-f: Full reset on memcached port and search queries\n";
+  print "\t-f: Full reset on memcached port and search queries and POP/IMAP throttling.\n";
+  print "\t-m: Toggle mail proxy portions\n";
   print "\t-s: Set cleartext to FALSE (secure mode) on disable\n";
+  print "\t-w: Toggle Web proxy portions\n";
   print "hostname is the value of the zimbra_server_hostname LC key for the server being modified.\n";
-  print "Either -e or -d is required\n";
+  print "Required options are -f by itself, or -f with -d or -e.\n";
+  print "Note that -d or -e require one or both of -m and -w.\n"; 
   exit 1;
 }
 
-sub getLocalConfig {
-  my $key = shift;
+sub getLdapServerValue {
+  my $attrib = shift;
+  my ($val,$err);
+  my ($rfh,$wfh,$efh,$cmd,$rc);
+  $rfh = new FileHandle;
+  $wfh = new FileHandle;
+  $efh = new FileHandle;
+  $cmd = "/opt/zimbra/bin/zmprov -l gs $hostname $attrib";
+  my $pid = open3($wfh,$rfh,$efh, $cmd);
+  unless(defined($pid)) {
+    return undef;
+  }
+  close $wfh;
+  chomp($val = (split(/\s+/, <$rfh>))[-1]);
+  chomp($err = join "", <$efh>);
+  waitpid($pid,0);
+  if ($? == -1) {
+    # failed to execute
+    return undef;
+  } elsif ($? & 127) {
+    # died with signal
+    return undef;
+  } else {
+    $rc = $? >> 8;
+    return undef if ($rc != 0);
+  }
 
-  return $main::loaded{lc}{$key}
-    if (exists $main::loaded{lc}{$key});
-
-  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
-  chomp $val;
-  $main::loaded{lc}{$key} = $val;
   return $val;
 }
