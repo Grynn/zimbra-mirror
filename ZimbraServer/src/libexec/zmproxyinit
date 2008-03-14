@@ -85,6 +85,7 @@ if ($options{e}) {
     "zimbraImapSSLBindPort 7993 "."zimbraImapSSLProxyBindPort 993 ".
     "zimbraPop3BindPort 7110 "."zimbraPop3ProxyBindPort 110 ".
     "zimbraPop3SSLBindPort 7995 "."zimbraPop3SSLProxyBindPort 995 ".
+    "zimbraReverseProxyMailEnabled TRUE ".
     "+zimbraServiceEnabled imapproxy\n";
   print ZMPROV "mcf zimbraImapCleartextLoginEnabled TRUE\n";
   print ZMPROV "mcf zimbraPop3CleartextLoginEnabled TRUE\n";
@@ -96,6 +97,7 @@ if ($options{d}) {
     "zimbraImapSSLBindPort 993 "."zimbraImapSSLProxyBindPort 7993 ".
     "zimbraPop3BindPort 110 "."zimbraPop3ProxyBindPort 7110 ".
     "zimbraPop3SSLBindPort 995 "."zimbraPop3SSLProxyBindPort 7995 ".
+    "zimbraReverseProxyMailEnabled FALSE ".
     "-zimbraServiceEnabled imapproxy\n";
     if ($options{s}) {
       print ZMPROV "mcf zimbraImapCleartextLoginEnabled FALSE\n";

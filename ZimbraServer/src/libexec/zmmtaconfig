@@ -146,6 +146,11 @@ my $commands = {
     'name' => "getAllReverseProxyURLs",
     'cmd'  => "$exe{ZMPROV} garpu",
   },
+  "garpb" => {
+    'desc' => "All Reverse Proxy Backends",
+    'name' => "getAllReverseProxyBackends",
+    'cmd'  => "$exe{ZMPROV} garpb",
+  },
   "gamcs" => {
     'desc' => "All Memcached Servers",
     'name' => "getAllMemcachedServers",
@@ -153,7 +158,7 @@ my $commands = {
   },
 };
 
-my @miscCommands = qw(garpu gamcs gamau);
+my @miscCommands = qw(garpu garpb gamcs gamau);
 
 # get some of our config from localconfig
 getLocalConfig();
