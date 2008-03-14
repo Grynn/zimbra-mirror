@@ -66,6 +66,7 @@ error.FailedToSaveSettings=Failed to save settings to memory
 error.GeneralError=A general error has occurred
 error.NetworkError=A network error has occurred, probably due to poor reception. Please try again
 error.Parse=There is a syntax error in your query string. Please correct it and submit your search again.
+error.NetworkCoverage=The phone is currently out of the data network coverage.  Please try again when the signal improves.
 
 login.AuthFailed=You entered user name or password incorrectly
 login.FieldsNotEmpty=Username & Password fields are required

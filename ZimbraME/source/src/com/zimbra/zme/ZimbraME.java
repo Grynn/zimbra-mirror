@@ -426,6 +426,15 @@ public class ZimbraME extends MIDlet implements CommandListener {
 		System.out.println("ZimbraME.handleResponseError");
 
 		mPrevView = view.getDisplayable();
+		
+		//#ifdef polish.blackberry
+		//# int networkService = net.rim.device.api.system.RadioInfo.getNetworkService();
+		//# if ((networkService & net.rim.device.api.system.RadioInfo.NETWORK_SERVICE_DATA) == 0) {
+		//#     Dialogs.popupErrorDialog(this, this, Locale.get("error.NetworkCoverage"));
+		//#     return;
+		//# }
+		//#endif
+		
 		if (resp instanceof ZmeSvcException) {
 			//#debug
 			System.out.println("ZimbraME.handleResponseError: Fault from server");
