@@ -119,8 +119,7 @@ if ($options{e}) {
      "zimbraMailMode http ".
      "zimbraMailProxyPort 80 ".
      "zimbraMailSSLProxyPort 443 ".
-     "zimbraReverseProxyHttpEnabled TRUE ".
-     "zimbraReverseProxyLookupTarget TRUE\n";
+     "zimbraReverseProxyHttpEnabled TRUE\n";
   }
 
   print ZMPROV "ms $hostname ".
@@ -146,11 +145,10 @@ if ($options{d}) {
        "zimbraMailReferMode wronghost ".
        "zimbraMailPort 80 ".
        "zimbraMailSSLPort 443 ".
-       "zimbraMailMode http ".
+       "zimbraMailMode mixed ".
        "zimbraMailProxyPort 0 ".
        "zimbraMailSSLProxyPort 0 ".
-       "zimbraReverseProxyHttpEnabled FALSE ".
-       "zimbraReverseProxyLookupTarget FALSE\n";
+       "zimbraReverseProxyHttpEnabled FALSE\n";
   }
   $enabledHTTPProxy = getLdapServerValue("zimbraReverseProxyHttpEnabled");
   $enabledMailProxy = getLdapServerValue("zimbraReverseProxyMailEnabled");
