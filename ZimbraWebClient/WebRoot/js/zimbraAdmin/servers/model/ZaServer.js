@@ -129,12 +129,6 @@ ZaServer.A_zimbraImapProxyBindPort="zimbraImapProxyBindPort";
 ZaServer.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
 ZaServer.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";
 ZaServer.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
-
-//interop
-ZaServer.A_zimbraFreebusyExchangeAuthUsername = "zimbraFreebusyExchangeAuthUsername" ;
-ZaServer.A_zimbraFreebusyExchangeAuthPassword = "zimbraFreebusyExchangeAuthPassword" ;
-ZaServer.A_zimbraFreebusyExchangeAuthScheme  = "zimbraFreebusyExchangeAuthScheme" ;
-ZaServer.A_zimbraFreebusyExchangeURL ="zimbraFreebusyExchangeURL";
                      
 // other
 ZaServer.A_zimbraScheduledTaskNumThreads = "zimbraScheduledTaskNumThreads" ;
@@ -409,13 +403,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_MasterRedologClientTcpNoDelay, ref:"attrs/" + ZaServer.A_MasterRedologClientTcpNoDelay, type:_STRING_},		
 		{id:ZaServer.A_zimbraUserServicesEnabled, ref:"attrs/" + ZaServer.A_zimbraUserServicesEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaServer.A_Volumes, type:_LIST_, listItem:ZaServer.volumeObjModel},
-		{id:ZaServer.A_showVolumes, ref:ZaServer.A_showVolumes, type: _ENUM_, choices: [false,true]},
-        //interop
-        { id:ZaServer.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaServer.A_zimbraFreebusyExchangeAuthUsername, type: _COS_STRING_ },
-        { id:ZaServer.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaServer.A_zimbraFreebusyExchangeAuthPassword, type: _COS_STRING_ },
-        { id:ZaServer.A_zimbraFreebusyExchangeAuthScheme, ref:"attrs/" + ZaServer.A_zimbraFreebusyExchangeAuthScheme,
-              type: _COS_ENUM_ , choices: ["basic", "form"]},
-        { id:ZaServer.A_zimbraFreebusyExchangeURL, ref:"attrs/" + ZaServer.A_zimbraFreebusyExchangeURL, type: _COS_STRING_ }
+		{id:ZaServer.A_showVolumes, ref:ZaServer.A_showVolumes, type: _ENUM_, choices: [false,true]}
 
     ]
 };

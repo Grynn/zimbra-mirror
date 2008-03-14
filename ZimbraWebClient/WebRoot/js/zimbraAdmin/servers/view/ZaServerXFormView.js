@@ -445,8 +445,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 				{value:3, label:ZaMsg.NAD_Tab_MTA},
 				{value:4, label:ZaMsg.NAD_Tab_IMAP},					
 				{value:5, label:ZaMsg.NAD_Tab_POP},
-				{value:6, label:ZaMsg.NAD_Tab_VolumeMgt},
-                {value:7, label:ZaMsg.TABT_Interop}
+				{value:6, label:ZaMsg.NAD_Tab_VolumeMgt}
             ],
 			cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
@@ -873,35 +872,6 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						}						
 					]
 				
-				},
-                // Interop
-				{type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 7",
-					colSizes:["auto"],numCols:1,id:"global_interop_tab",
-				 	items: [
-						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Exchange_Settings,
-						  items: [
-						  	{ ref: ZaGlobalConfig.A_zimbraFreebusyExchangeURL, type: _SUPER_TEXTFIELD_,
-						  	  label: ZaMsg.NAD_Exchange_URL, textFieldWidth: "30em",
-                              onChange: ZaServerXFormView.onFormFieldChanged,
-						      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
-						  	},
-                            { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, type: _SUPER_SELECT1_,
-						  	  label: ZaMsg.NAD_Exchange_Auth_Schema,
-							  onChange: ZaServerXFormView.onFormFieldChanged,
-						      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
-						  	},
-                              { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, type: _SUPER_TEXTFIELD_,
-						  	  label: ZaMsg.NAD_Exchange_Auth_User, textFieldWidth: "20em",
-							  onChange: ZaServerXFormView.onFormFieldChanged,
-						      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
-						  	},
-						  	{ ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, type: _PASSWORD_,
-						  	  label: ZaMsg.NAD_Exchange_Auth_Password, width: "20em",
-							  onChange: ZaServerXFormView.onFormFieldChanged
-						  	}
-						  ]
-						}
-					]
 				}
             ]
 		},

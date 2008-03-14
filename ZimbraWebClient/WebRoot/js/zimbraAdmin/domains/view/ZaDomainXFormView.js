@@ -317,7 +317,8 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				{value:2, label:ZaMsg.Domain_Tab_GAL},
 				{value:3, label:ZaMsg.Domain_Tab_Authentication},
 				{value:4, label:ZaMsg.Domain_Tab_VirtualHost},
-				{value:5, label:ZaMsg.Domain_Tab_Notebook}				
+				{value:5, label:ZaMsg.Domain_Tab_Notebook},
+                {value:6, label:ZaMsg.TABT_Interop}				
 			],cssClass:"ZaTabBar", id:"xform_tabbar"
 		},
 		{type:_SWITCH_, items:[
@@ -515,8 +516,40 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 							]
 						}
 					]
+				},
+                
+                // Interop
+				{type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 6",
+					colSizes:["auto"],numCols:1,id:"global_interop_tab",
+				 	items: [
+						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Exchange_Settings,
+						  items: [
+						  	{ ref: ZaDomain.A_zimbraFreebusyExchangeURL,
+                            //  type: _SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,  textFieldWidth: "30em",
+                                  type: _TEXTFIELD_, width: "30em" ,
+                                  onChange: ZaDomainXFormView.onFormFieldChanged ,
+                                  label: ZaMsg.NAD_Exchange_URL
+                            },
+                            { ref: ZaDomain.A_zimbraFreebusyExchangeAuthScheme, label: ZaMsg.NAD_Exchange_Auth_Schema,
+                                type: _OSELECT1_,
+                                //type: _SUPER_SELECT1_,  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal ,
+							    onChange: ZaDomainXFormView.onFormFieldChanged
+                         	},
+                            { ref: ZaDomain.A_zimbraFreebusyExchangeAuthUsername,
+                                //type: _SUPER_TEXTFIELD_,    resetToSuperLabel:ZaMsg.NAD_ResetToGlobal ,textFieldWidth: "20em",
+						  	  type: _TEXTFIELD_, width: "20em",
+                              label: ZaMsg.NAD_Exchange_Auth_User,
+							  onChange: ZaDomainXFormView.onFormFieldChanged
+						  	},
+						  	{ ref: ZaDomain.A_zimbraFreebusyExchangeAuthPassword, type: _PASSWORD_,
+						  	  label: ZaMsg.NAD_Exchange_Auth_Password, width: "20em",
+							  onChange: ZaDomainXFormView.onFormFieldChanged
+						  	}
+						  ]
+						}
+					]
 				}
-			]
+            ]
 		}	
 	];
 }
