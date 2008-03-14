@@ -349,7 +349,7 @@ DwtListView.prototype.getColIndexForId =
 function(headerId) {
 	if (this._headerList) {
 		for (var i = 0; i < this._headerList.length; i++) {
-			if (DwtListHeaderItem.getHeaderField(this._headerList[i]._id) == headerId) {
+			if (this._headerList[i]._field == headerId) {
 				return i;
 			}
 		}
@@ -634,7 +634,7 @@ function(item, params) {
 		for (var colIdx = 0; colIdx < headerList.length; colIdx++) {
 			if (!headerList[colIdx]._visible) { continue; }
 
-			var field = DwtListHeaderItem.getHeaderField(headerList[colIdx]._id);
+			var field = headerList[colIdx]._field;
 			idx = this._getCell(htmlArr, idx, item, field, colIdx, params);
 		}
 	} else {
@@ -2343,30 +2343,23 @@ function(actionCode, ev) {
 */
 DwtListHeaderItem = function(id, label, iconInfo, width, sortable, resizeable, visible, name, align, noRemove) {
 	this._id = [id, Dwt.getNextId()].join("_");
+	this._field = id;
 	this._label = label;
 	this._iconInfo = iconInfo;
-	var w = parseInt(width);
-	this._widthUnits = null;
-	if (isNaN(w) || !w) {
-		this._width = "auto";
-	} else if(String(w).toString() == String(width).toString())	{
-		this._width = w;
-	} else {
-		this._width = parseInt(String(width).substr(0,String(w).length));
-		this._widthUnits = AjxStringUtil.getUnitsFromSizeString(width);
-	}
-
 	this._sortable = sortable;
 	this._resizeable = resizeable;
-	// only set visible if explicitly set to false
-	this._visible = (visible !== false);
+	this._visible = (visible !== false); // only set visible if explicitly set to false
 	this._name = name || label;
 	this._align = align;
 	this._noRemove = noRemove;
-};
-
-DwtListHeaderItem.getHeaderField =
-function(headerId) {
-	var parts = headerId.split("_");
-	return (parts && parts.length) ? parts[0] : null;
+	// width:
+	var w = parseInt(width);
+	if (isNaN(w) || !w) {
+		this._width = "auto";
+	} else if (String(w) == String(width)) {
+		this._width = w;
+	} else {
+		this._width = parseInt(String(width).substr(0, String(w).length));
+		this._widthUnits = AjxStringUtil.getUnitsFromSizeString(width);
+	}
 };
