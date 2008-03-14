@@ -74,9 +74,14 @@ fi
 
 cp -f /etc/syslog.conf /etc/syslog.conf.bak
 
-#cat /etc/syslog.conf | sed -e 's:\(^local0.*\):#\1:' > /tmp/syslog.zimbra
-grep -v local0 /etc/syslog.conf > /tmp/syslog.zimbra
+# Remove existing entries that we may have added.
+grep -v "^local0\.\*" /etc/syslog.conf > /tmp/syslog.zimbra
 sed -i -e '/^auth\.\* /d' /tmp/syslog.zimbra
+sed -i -e 's/;local0.none//g' /tmp/syslog.zimbra
+sed -i -e 's/;auth.none//g' /tmp/syslog.zimbra
+
+# Don't log local0 and auth twice 
+sed -i -e 's/^*.info/*.info;local0.none;auth.none/' /tmp/syslog.zimbra
 
 if [ $TYPE = "remote" ]; then
       echo "local0.*                @$LOGHOST" >> /tmp/syslog.zimbra
