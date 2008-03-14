@@ -962,7 +962,10 @@ function(dropAllowed) {
 DwtListView.prototype._setNoResultsHtml =
 function() {
 	var	div = document.createElement("div");
-	var subs = { message: this._getNoResultsMessage() };
+	var subs = {
+		message: this._getNoResultsMessage(),
+		type: this.type
+	};
 	div.innerHTML = AjxTemplate.expand("dwt.Widgets#DwtListView-NoResults", subs);
 	this._addRow(div);
 };
