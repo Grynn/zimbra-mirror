@@ -43,6 +43,7 @@ import org.jivesoftware.wildfire.roster.RosterManager;
 import org.jivesoftware.wildfire.spi.*;
 import org.jivesoftware.wildfire.transport.TransportHandler;
 import org.jivesoftware.wildfire.user.UserManager;
+import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.jivesoftware.wildfire.vcard.VCardManager;
 import org.xmpp.packet.JID;
 
@@ -188,10 +189,14 @@ public class XMPPServer {
      * @return true if the address is a local address to this server.
      */
     public boolean isLocal(JID jid) {
-        if (jid != null && isLocalDomain(jid.getDomain())) {
-            return mLocationManager.isLocal(jid);
-        }
-        return false;
+            if (jid != null && isLocalDomain(jid.getDomain())) {
+                try {
+                    return mLocationManager.isLocal(jid);
+                } catch (UserNotFoundException e) {
+                    return false;
+                }
+            }
+            return false;
     }
 
     /**

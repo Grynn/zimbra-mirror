@@ -274,7 +274,7 @@ public class PresenceUpdateHandler extends BasicModule implements ChannelHandler
         else {
             // Foreign updates will do a reverse lookup of entries in rosters
             // on the server
-            Log.warn("Presence requested from server "
+            Log.debug("Presence requested from server "
                     + localServer.getServerInfo().getDefaultName()
                     + " by unknown user: " + update.getFrom());
             /*
