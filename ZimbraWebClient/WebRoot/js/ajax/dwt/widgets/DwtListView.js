@@ -771,10 +771,10 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	var classText = className ? [" class=", className].join("") : "";
 	var alignValue = this._getCellAlign(colIdx, params);
 	var alignText = alignValue ? [" align=", alignValue].join("") : "";
-	var otherText = this._getCellAttrText(item, field, params);
-	var attrText = [idText, widthText, classText, alignText].join(" ");
+	var otherText = (this._getCellAttrText(item, field, params)) || "";
+	var attrText = [idText, widthText, classText, alignText, otherText].join(" ");
 	htmlArr[idx++] = "<td";
-	htmlArr[idx++] = attrText ? " " + attrText : "";
+	htmlArr[idx++] = attrText ? (" " + attrText) : "";
 	htmlArr[idx++] = ">";
 	idx = this._getCellContents(htmlArr, idx, item, field, colIdx, params);
 	htmlArr[idx++] = "</td>";
