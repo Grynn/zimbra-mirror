@@ -57,6 +57,7 @@
 	<property name="build.zmprov" location="${build.dir}/data/zmprov.txt" />
 
 	<property name="build.derbyij" location="${dist.dir}/db/derbyij.sql" />
+	<property name="zimbra.derbyij" location="${zimbra.home.dir}/db/derbyij.sql" />
 	<property name="build.up_ver_ij" location="${dist.dir}/db/up_ver_ij.sql" />
 	<property name="build.reindex_ij" location="${dist.dir}/db/reindex_ij.sql" />
 
@@ -272,7 +273,7 @@
 		<delete dir="${zimbra.derby.dir}" />
 
 		<java classname="org.apache.derby.tools.ij" fork="true" classpathref="offline.class.path" failonerror="true">
-			<arg file="${build.derbyij}" />
+			<arg file="${zimbra.derbyij}" />
 		</java>
 	</target>
 
@@ -375,22 +376,9 @@
 	</target>
 
 	<target name="offline-deploy-zimlets">
-		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
-		<ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" />
 		<foreach target="offline-install-zimlet" param="zimlet">
 			<path>
-				<fileset dir="${zimlet.dir}/zimlets" includes="**/*.zip" />
-				<fileset dir="${zimlet.dir}/zimlets-offline" includes="**/*.zip" />
-			</path>
-			<param name="action" value="deploy" />
-		</foreach>
-	</target>
-
-	<target name="offline-deploy-zimlets-extra">
-		<ant dir="../Zimlet" target="package-zimlets-extra" inheritAll="false" />
-		<foreach target="offline-install-zimlet" param="zimlet">
-			<path>
-				<fileset dir="${zimlet.dir}/zimlets-extra" includes="**/*.zip" />
+				<fileset dir="${zimbra.home.dir}/zimlets" includes="*.zip" />
 			</path>
 			<param name="action" value="deploy" />
 		</foreach>
@@ -399,7 +387,7 @@
 	<target name="offline-install-zimlet">
 		<echo>${action} ${zimlet}</echo>
 		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="deploy.class.path" failonerror="true">
-			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
 			<arg line="${action}" />
 			<arg file="${zimlet}" />
 		</java>
@@ -512,9 +500,9 @@
 			<param name="param.install.dir" value="${zimbra.home.dir}" />
 		</antcall>
 
-		<copy todir="${zimbra.home.dir}" overwrite="true">
-			<fileset dir="${dist.dir}" />
-		</copy>
+		<move todir="${zimbra.home.dir}" overwrite="true">
+			<fileset dir="${dist.dir}"/>
+		</move>
 
 		<!--touch>
     			<fileset dir="${zimbra.home.dir}/jetty/work/zimbra/jsp"/>

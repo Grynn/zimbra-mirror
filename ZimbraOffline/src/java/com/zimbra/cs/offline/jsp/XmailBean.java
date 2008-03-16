@@ -1,5 +1,6 @@
 package com.zimbra.cs.offline.jsp;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.offline.util.yauth.AuthenticationException;
 
 public class XmailBean extends FormBean {
 	
@@ -156,8 +158,8 @@ public class XmailBean extends FormBean {
 			    }
 			}
 			
-			JspProvStub stub = JspProvStub.getInstance();
 			if (isAllOK()) {                
+				JspProvStub stub = JspProvStub.getInstance();
 			    if (verb.isAdd()) {
 			        stub.createOfflineDataSource(dsName, email, dsType, dsAttrs);
 			    } else {
@@ -175,7 +177,11 @@ public class XmailBean extends FormBean {
 	            }
 			}
 	    } catch (SoapFaultException x) {
-	    	if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT")))
+	    	if (x.getCode().equals("account.AUTH_FAILED")) {
+	    		setError("Invalid username or password");
+	    	} else if (x.getCode().equals("account.ACCOUNT_INACTIVE")) {
+	    		setError("Yahoo! Mail Plus account required");
+	    	} else if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT")))
 	    		setError(x.getMessage());
         } catch (Throwable t) {
             setError(t.getMessage());

@@ -66,7 +66,7 @@
 				<!--classes dir="../ThirdParty/javamail/javamail-1.4.1ea/mail/build/classes" /-->
 			</webApp>
 
-              	<webApp name="ZimbraWebClient" warfile="build/dist/jetty/webapps/zimbra" contextpath="/zimbra">
+              	<webApp name="ZimbraWebClient" warfile="${jetty_run_base}/jetty/webapps/zimbra" contextpath="/zimbra">
 			<lib dir="${jetty_run_base}/jetty/common/lib" includes="*.jar" excludes="not-needed.jar" />
                 	<classes dir="${jetty_run_base}/jetty/webapps/zimbra/WEB-INF/classes"/>
                 	<classes dir="build/classes"/>

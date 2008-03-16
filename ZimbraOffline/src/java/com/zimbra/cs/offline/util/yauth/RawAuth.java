@@ -25,6 +25,8 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import com.zimbra.cs.offline.OfflineLC;
+
 /**
  * Implementation of Yahoo "Raw Auth" aka "Token Login v2"
  * See http://twiki.corp.yahoo.com/view/Membership/OpenTokenLogin
@@ -35,7 +37,7 @@ public class RawAuth implements Auth {
     private String wssId;
     private long expiration;
 
-    private static final String BASE_URI = "https://login.yahoo.com/WSLogin/V1";
+    private static final String BASE_URI = OfflineLC.zdesktop_yauth_baseuri.value();
     private static final String GET_AUTH_TOKEN = "get_auth_token";
     private static final String GET_AUTH = "get_auth";
 
@@ -50,11 +52,20 @@ public class RawAuth implements Auth {
     private static final String EXPIRATION = "Expiration";
     private static final String ERROR = "Error";
     private static final String ERROR_DESCRIPTION = "ErrorDescription";
+    private static final String INVALID_PASSWORD = "InvalidPassword";
 
     public static String getToken(String appId, String user, String pass)
             throws AuthenticationException, IOException {
         Response res = doGet(GET_AUTH_TOKEN, new NameValuePair(APPID, appId),
             new NameValuePair(LOGIN, user), new NameValuePair(PASSWD, pass));
+        
+        String error = res.getValue(ERROR);
+        if (error != null) {
+        	if (error.equalsIgnoreCase(INVALID_PASSWORD))
+        		throw new AuthenticationException(res.getValue(ERROR_DESCRIPTION));
+        	else
+        		throw new IOException(res.getValue(ERROR_DESCRIPTION));
+        }
         return res.getRequiredValue(AUTH_TOKEN);
     }
 

@@ -20,7 +20,6 @@ import java.io.File;
 
 import com.zimbra.common.localconfig.KnownKey;
 import com.zimbra.common.util.Constants;
-import com.zimbra.cs.util.BuildInfo;
 
 public class OfflineLC {
     public static final KnownKey zdesktop_app_id;

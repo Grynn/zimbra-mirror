@@ -36,6 +36,7 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.offline.jsp.YmailUserData;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
@@ -509,8 +510,25 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
     }
     
+
+    
+    
     private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String password, Map<String, Object> dsAttrs) throws ServiceException {
-        //first we need to verify datasource
+        validEmailAddress(emailAddress);
+        emailAddress = emailAddress.toLowerCase().trim();
+        String parts[] = emailAddress.split("@");
+        if (parts.length != 2)
+            throw ServiceException.INVALID_REQUEST("must be valid email address: "+emailAddress, null);
+
+        String localPart = parts[0];
+        String domain = parts[1];
+        domain = IDNUtil.toAsciiDomainName(domain);
+        emailAddress = localPart + "@" + domain;
+  
+        if (domain.equals("yahoo.com"))
+        	YmailUserData.checkYmailPlusStatus((String)dsAttrs.get(A_zimbraDataSourceUsername), (String)dsAttrs.get(A_zimbraDataSourcePassword));
+        
+    	//first we need to verify datasource
     	String accountLabel = (String)dsAttrs.remove(A_zimbraPrefLabel);
     	dsAttrs.remove(A_offlineDataSourceName);
     	String dsType = (String)dsAttrs.remove(A_offlineDataSourceType);
@@ -525,16 +543,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	
     	testDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs);
 
-        validEmailAddress(emailAddress);
-        emailAddress = emailAddress.toLowerCase().trim();
-        String parts[] = emailAddress.split("@");
-        if (parts.length != 2)
-            throw ServiceException.INVALID_REQUEST("must be valid email address: "+emailAddress, null);
-
-        String localPart = parts[0];
-        String domain = parts[1];
-        domain = IDNUtil.toAsciiDomainName(domain);
-        emailAddress = localPart + "@" + domain;
     	String accountId = UUID.randomUUID().toString();
 
         Map<String, Object> attrs = new HashMap<String, Object>();
@@ -655,7 +663,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         AttributeManager.getInstance().postModify(attrs, acct, context, true);
 
         try {
-            Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(acct);
+            MailboxManager.getInstance().getMailboxByAccount(acct);
         } catch (ServiceException e) {
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
             mAccountCache.remove(acct);
@@ -1693,10 +1701,20 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	attrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dataSourceId, (String) attrs.get(A_zimbraDataSourceSmtpAuthPassword)));
 
         if (isDataSourceAccount(account) && attrs.get(A_zimbraDataSourceHost) != null) {
-        	if (attrs.get(A_zimbraDataSourcePassword) == null)
-        		attrs.put(A_zimbraDataSourcePassword, ds.getAttr(A_zimbraDataSourcePassword));
+        	String password = (String)attrs.get(A_zimbraDataSourcePassword);
+        	if (password == null) {
+        		password = (String)ds.getAttr(A_zimbraDataSourcePassword);
+        		attrs.put(A_zimbraDataSourcePassword, password);
+        	}
         	if (attrs.get(A_zimbraDataSourceSmtpAuthPassword) == null)
-        		attrs.put(A_zimbraDataSourceSmtpAuthPassword, ds.getAttr(A_zimbraDataSourceSmtpAuthPassword));        	
+        		attrs.put(A_zimbraDataSourceSmtpAuthPassword, ds.getAttr(A_zimbraDataSourceSmtpAuthPassword));
+        	
+        	String email = ds.getAttr(A_zimbraDataSourceEmailAddress);
+        	if (email.endsWith("@yahoo.com")) {
+        		password = DataSource.decryptData(dataSourceId, password);
+        		YmailUserData.checkYmailPlusStatus(ds.getAttr(A_zimbraDataSourceUsername), password);
+        	}
+        	
         	testDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs);
 	        attrs.put(A_zimbraDataSourceEnabled, TRUE);	        
         }
