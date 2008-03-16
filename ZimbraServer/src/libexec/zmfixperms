@@ -230,6 +230,9 @@ if [ -L ${zimbra_home}/clamav ]; then
   chown ${root_user}:${root_group} ${zimbra_home}/clamav-*
 	chown ${root_user}:${root_group} ${zimbra_home}/clamav/*
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/clamav/db
+fi
+
+if [ -d ${zimbra_home}/data/clamav/db ]; then
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/clamav/db
 fi
 
@@ -277,20 +280,32 @@ fi
 
 if [ -L ${zimbra_home}/postfix ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/postfix"
-	if [ ! -d ${zimbra_home}/data/postfix/spool ]; then
-		mkdir -p ${zimbra_home}/data/postfix/spool
-	fi
 	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix*
 	chown -fR ${root_user}:postfix ${zimbra_home}/postfix/conf
-	chown -fR postfix:postfix ${zimbra_home}/data/postfix/spool
-	chown -f root ${zimbra_home}/data/postfix/spool
-	chgrp -f postfix ${zimbra_home}/data/postfix/spool
 
 	chmod 777 ${zimbra_home}/postfix/conf
 	chmod -fR 644 ${zimbra_home}/postfix/conf/*
 	chmod -f 755 ${zimbra_home}/postfix/conf/postfix-script
 	chmod -f 755 ${zimbra_home}/postfix/conf/post-install
 
+	# Postfix specific permissions
+	if [ -d ${zimbra_home}/postfix/sbin ]; then
+		chgrp -f postdrop ${zimbra_home}/postfix/sbin/postqueue
+		chgrp -f postdrop ${zimbra_home}/postfix/sbin/postdrop
+		chmod -f g+s ${zimbra_home}/postfix/sbin/postqueue
+		chmod -f g+s ${zimbra_home}/postfix/sbin/postdrop
+	fi
+
+fi
+
+if [ -d ${zimbra_home}/data/postfix ]; then
+  printMsg "Fixing ownership and permisions on ${zimbra_home}/data/postfix"
+	if [ ! -d ${zimbra_home}/data/postfix/spool ]; then
+		mkdir -p ${zimbra_home}/data/postfix/spool
+	fi
+	chown -fR postfix:postfix ${zimbra_home}/data/postfix/spool
+	chown -f root ${zimbra_home}/data/postfix/spool
+	chgrp -f postfix ${zimbra_home}/data/postfix/spool
 	# Postfix specific permissions
 	if [ -d ${zimbra_home}/data/postfix/spool/public ]; then
 		chgrp -f postdrop ${zimbra_home}/data/postfix/spool/public
@@ -300,13 +315,6 @@ if [ -L ${zimbra_home}/postfix ]; then
 		chgrp -f postdrop ${zimbra_home}/data/postfix/spool/maildrop
 		chmod 730 ${zimbra_home}/data/postfix/spool/maildrop
 	fi
-	if [ -d ${zimbra_home}/postfix/sbin ]; then
-		chgrp -f postdrop ${zimbra_home}/postfix/sbin/postqueue
-		chgrp -f postdrop ${zimbra_home}/postfix/sbin/postdrop
-		chmod -f g+s ${zimbra_home}/postfix/sbin/postqueue
-		chmod -f g+s ${zimbra_home}/postfix/sbin/postdrop
-	fi
-
 fi
 
 if [ -d ${zimbra_home}/index -a ${extended} = "yes" ]; then
