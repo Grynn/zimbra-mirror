@@ -625,7 +625,7 @@
                         <fileset dir="src/installer/webapp" includes="webapp.ini" />
 		</copy>
 		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.icns" file="src/installer/resources/launcher_128x128.icns" overwrite="true"/>
-		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.xpm" file="src/installer/resources/launcher_32x32.xpm" overwrite="true"/>
+		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.png" file="src/installer/resources/launcher_32x32.png" overwrite="true"/>
 		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.ico" file="src/installer/resources/launcher_32x32.ico" overwrite="true"/>
 
 		<mkdir dir="${dist.dir}/macos"/>

@@ -659,7 +659,7 @@ return false;</condition>
                     <boolean>false</boolean>
                   </void>
                   <void property="arguments">
-                    <string>-webapp ..\..\zdesktop.webapp</string>
+                    <string>-webapp ..\..\zdesktop.webapp -profile ..\..\profile</string>
                   </void>
                   <void property="description">
                     <string>${compiler:sys.fullName}</string>
@@ -690,7 +690,7 @@ return false;</condition>
                     <boolean>false</boolean>
                   </void>
                   <void property="arguments">
-                    <string>-webapp ..\..\zdesktop.webapp</string>
+                    <string>-webapp ..\..\zdesktop.webapp -profile ..\..\profile</string>
                   </void>
                   <void property="entryName">
                     <string>Zimbra Desktop</string>
@@ -1358,12 +1358,18 @@ return !hasFailures;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                   <void property="arguments">
-                    <array class="java.lang.String" length="2">
+                    <array class="java.lang.String" length="4">
                       <void index="0">
                         <string>-webapp</string>
                       </void>
                       <void index="1">
                         <string>${installer:sys.installationDir}\zdesktop.webapp</string>
+                      </void>
+                      <void index="2">
+                        <string>-profile</string>
+                      </void>
+                      <void index="3">
+                        <string>${installer:sys.installationDir}\profile</string>
                       </void>
                     </array>
                   </void>
@@ -1439,12 +1445,18 @@ return !hasFailures;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                   <void property="arguments">
-                    <array class="java.lang.String" length="2">
+                    <array class="java.lang.String" length="4">
                       <void index="0">
                         <string>-webapp</string>
                       </void>
                       <void index="1">
                         <string>${installer:sys.installationDir}/zdesktop.webapp</string>
+                      </void>
+                      <void index="2">
+                        <string>-profile</string>
+                      </void>
+                      <void index="3">
+                        <string>${installer:sys.installationDir}/profile</string>
                       </void>
                     </array>
                   </void>

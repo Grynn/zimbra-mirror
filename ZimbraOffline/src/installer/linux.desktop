@@ -2,5 +2,5 @@
 Name=Zimbra Desktop
 Type=Application
 Comment=Web Application
-Exec=@install@/linux/prism/prism -webapp @install@/zdesktop.webapp
+Exec=@install@/linux/prism/prism -webapp @install@/zdesktop.webapp -profile @install@/profile
 Icon=@install@/linux/launcher_32x32.xpm
