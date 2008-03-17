@@ -76,7 +76,7 @@ public abstract class Request {
     protected abstract Response parseResponse(Document doc);
 
     private HttpMethod getHttpMethod() {
-        String uri = Yab.BASE_URI + '/' + getAction();
+        String uri = Yab.getBaseUri() + '/' + getAction();
         HttpMethod method = isPOST() ? new PostMethod(uri) : new GetMethod(uri);
         method.setQueryString(params.toArray(new NameValuePair[params.size()]));
         method.addRequestHeader("Cookie", session.getAuth().getCookie());

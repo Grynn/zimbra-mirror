@@ -20,13 +20,22 @@ package com.zimbra.cs.offline.util.yab;
  * Yahoo Address book access.
  */
 public class Yab {
-    public static final String BASE_URI = "http://address.yahooapis.com/v1";
     public static final String DTD = "http://l.yimg.com/us.yimg.com/lib/pim/r/abook/xml/2/pheasant.dtd";
     public static final String XML = "xml";
     public static final String JSON = "json";
-
-    public static final Boolean DEBUG = true; // Boolean.getBoolean("zimbra.yab.debug");
     
+    public static final Boolean DEBUG = true; // Boolean.getBoolean("zimbra.yab.debug");
+
+    private static String baseUri = "http://address.yahooapis.com/v1";
+
+    public static String getBaseUri() {
+        return baseUri;
+    }
+
+    public static void setBaseUri(String uri) {
+        baseUri = uri;
+    }
+
     public static Session createSession(String appId, String format) {
         return new Session(appId, format);
     }

@@ -41,4 +41,14 @@ public class AuthTest extends TestCase {
         assertNotNull(auth.getWSSID());
         assertNotNull(auth.getCookie());
     }
+
+    public void testInvalidPassword() throws Exception {
+        Exception error = null;
+        try {
+            RawAuth.getToken(APPID, USER, "invalid");
+        } catch (AuthenticationException e) {
+            error = e;
+        }
+        assertNotNull(error);
+    }
 }

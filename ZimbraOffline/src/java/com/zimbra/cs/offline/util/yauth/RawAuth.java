@@ -25,8 +25,6 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 
-import com.zimbra.cs.offline.OfflineLC;
-
 /**
  * Implementation of Yahoo "Raw Auth" aka "Token Login v2"
  * See http://twiki.corp.yahoo.com/view/Membership/OpenTokenLogin
@@ -37,7 +35,6 @@ public class RawAuth implements Auth {
     private String wssId;
     private long expiration;
 
-    private static final String BASE_URI = OfflineLC.zdesktop_yauth_baseuri.value();
     private static final String GET_AUTH_TOKEN = "get_auth_token";
     private static final String GET_AUTH = "get_auth";
 
@@ -52,20 +49,17 @@ public class RawAuth implements Auth {
     private static final String EXPIRATION = "Expiration";
     private static final String ERROR = "Error";
     private static final String ERROR_DESCRIPTION = "ErrorDescription";
-    private static final String INVALID_PASSWORD = "InvalidPassword";
+    
+    private static String baseUri = "https://login.yahoo.com/WSLogin/V1";
 
+    public static void setBaseUri(String uri) {
+        baseUri = uri;
+    }
+    
     public static String getToken(String appId, String user, String pass)
             throws AuthenticationException, IOException {
         Response res = doGet(GET_AUTH_TOKEN, new NameValuePair(APPID, appId),
             new NameValuePair(LOGIN, user), new NameValuePair(PASSWD, pass));
-        
-        String error = res.getValue(ERROR);
-        if (error != null) {
-        	if (error.equalsIgnoreCase(INVALID_PASSWORD))
-        		throw new AuthenticationException(res.getValue(ERROR_DESCRIPTION));
-        	else
-        		throw new IOException(res.getValue(ERROR_DESCRIPTION));
-        }
         return res.getRequiredValue(AUTH_TOKEN);
     }
 
@@ -96,8 +90,8 @@ public class RawAuth implements Auth {
         return expiration;
     }
 
-    public void authenticate(String token)
-            throws AuthenticationException, IOException {
+    public void authenticate(String token) throws AuthenticationException,
+                                                  IOException {
         Response res = doGet(GET_AUTH, new NameValuePair(APPID, appId),
                                        new NameValuePair(TOKEN, token));
         cookie = res.getRequiredValue(COOKIE);
@@ -113,7 +107,7 @@ public class RawAuth implements Auth {
 
     private static Response doGet(String action, NameValuePair... params)
             throws AuthenticationException, IOException {
-        String uri = BASE_URI + '/' + action;
+        String uri = baseUri + '/' + action;
         GetMethod get = new GetMethod(uri);
         get.setQueryString(params);
         // XXX Should we share a single HttpClient() instance?
@@ -121,7 +115,12 @@ public class RawAuth implements Auth {
         Response res = new Response(uri, get);
         switch (code) {
         case 200:
-            return res;
+            // Make sure "Error" attribute is not present, since request may
+            // have failed even if response code indicates success. If present,
+            // fall through to be handled as in 403 case.
+            if (res.getValue(ERROR) == null) {
+                return res;
+            }
         case 403:
             throw new AuthenticationException(
                 "Request '" + action + "' failed: " + res.getErrorMessage());
