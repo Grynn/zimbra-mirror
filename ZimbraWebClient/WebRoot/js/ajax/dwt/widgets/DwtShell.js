@@ -319,6 +319,34 @@ function() {
 	this.setVisible(false);
 }
 
+DwtShell.prototype.addFocusListener =
+function(listener) {
+	if (!this._hasFocusHandler) {
+		var doc = document;
+		if (typeof doc.onfocusin != "undefined" ) {  // if (IE)
+			doc.attachEvent("onfocusin", DwtShell.__focusHdlr);
+		} else {
+			window.addEventListener("focus", DwtShell.__focusHdlr, false);
+		}
+		this._hasFocusHandler = true;
+	}
+	this.addListener(DwtEvent.ONFOCUS, listener);
+};
+
+DwtShell.prototype.addBlurListener =
+function(listener) {
+	if (!this._hasBlurHandler) {
+		var doc = document;
+		if (typeof doc.onfocusout != "undefined") {  // if (IE)
+			doc.attachEvent("onfocusout", this.__blurHdlr);
+		} else {
+			window.addEventListener("blur", DwtShell.__blurHdlr, false);
+		}
+		this._hasBlurHandler = true;
+	}
+	this.addListener(DwtEvent.ONBLUR, listener);
+};
+
 /**
  * @return true if the shell is virtual
  * @type Boolean
@@ -460,4 +488,22 @@ DwtShell.__onBodyScroll = function() {
 	document.body.scrollTop = 0;
 	document.body.scrollLeft = 0;
 	// DwtShell._resizeHdlr();
+};
+
+DwtShell.__focusHdlr =
+function() {
+	var focusEvent = DwtShell.focusEvent;
+	var self = DwtShell.getShell(window);
+	focusEvent.dwtObj = self;
+	focusEvent.state = DwtFocusEvent.FOCUS;
+	self.notifyListeners(DwtEvent.ONFOCUS, focusEvent);
+};
+
+DwtShell.__blurHdlr =
+function() {
+	var focusEvent = DwtShell.focusEvent;
+	var self = DwtShell.getShell(window);
+	focusEvent.dwtObj = self;
+	focusEvent.state = DwtFocusEvent.BLUR;
+	self.notifyListeners(DwtEvent.ONBLUR, focusEvent);
 };
