@@ -391,18 +391,24 @@ DwtListView.prototype._renderList =
 function(list, noResultsOk) {
 	if (list instanceof AjxVector && list.size()) {
 		var size = list.size();
+		var htmlArr = [];
 		for (var i = 0; i < size; i++) {
 			var item = list.get(i);
-			var div = this._createItemHtml(item, {now:this._now});
+			var div = this._createItemHtml(item, {now:this._now}, true, i);
 			if (div) {
 				if (div instanceof Array) {
 					for (var j = 0; j < div.length; j++){
 						this._addRow(div[j]);
 					}
-				} else {
+				} else if (div.tagName) {
 					this._addRow(div);
+				} else {
+					htmlArr.push(div);
 				}
 			}
+		}
+		if (htmlArr.length) {
+			this._parentEl.innerHTML = htmlArr.join("");
 		}
 	} else if (!noResultsOk) {
 		this._setNoResultsHtml();
@@ -411,7 +417,7 @@ function(list, noResultsOk) {
 
 DwtListView.prototype.addItems =
 function(itemArray) {
-	if (AjxUtil.isArray(itemArray)){
+	if (AjxUtil.isArray(itemArray)) {
 		if (!this._list) {
 			this._list = new AjxVector();
 		}
@@ -616,14 +622,20 @@ function(row, index) {
  *        headerList	[array]		list of column headers
  */
 DwtListView.prototype._createItemHtml =
-function(item, params) {
+function(item, params, asHtml, count) {
 
 	params = params || {};
-	this._addParams(item, params);
-	var div = params.div || this._getDiv(item, params);
+	this._addParams(item, params, htmlArr, idx);
+	var div;
 
 	var htmlArr = [];
 	var idx = 0;
+
+	if (asHtml) {
+		idx = this._getDivHtml(item, params, htmlArr, idx, count);
+	} else {
+		div = params.div || this._getDiv(item, params);
+	}
 
 	idx = this._getTable(htmlArr, idx, params);
 	idx = this._getRow(htmlArr, idx, item, params);
@@ -642,6 +654,11 @@ function(item, params) {
 	}
 
 	htmlArr[idx++] = "</tr></table>";
+
+	if (asHtml) {
+		htmlArr[idx++] = "</div>";
+		return htmlArr.join("");
+	}
 
 	div.innerHTML = htmlArr.join("");
 	return div;
@@ -681,6 +698,46 @@ function(item, params) {
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM, id);
 
 	return div;
+};
+
+/**
+ * This is the "HTML" version of the routine above. Instead of returning a DIV
+ * element, it returns HTML containing the DIV.
+ *
+ * @param item		[object]	item to render
+ * @param params	[hash]*		hash of optional params
+ * @param html		[Array]		array used to contain HTML code
+ * @param idx		[Integer]	index used to contain HTML code
+ * @param count		[Integer]	count of row currently being processed
+ */
+DwtListView.prototype._getDivHtml =
+function(item, params, html, idx, count) {
+
+	html[idx++] = "<div class='";
+	html[idx++] = this._getDivClass(this._normalClass, item, params);
+	html[idx++] = " ";
+	html[idx++] = (count%2) ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
+	html[idx++] = "'";
+
+	var style = [];
+	if (params.isDragProxy && AjxEnv.isMozilla) {
+		style.push("overflow:visible");		// bug fix #3654 - yuck
+	}
+	if (params.isDragProxy) {
+		style.push("position:absolute");
+	}
+	if (style.length) {
+		html[idx++] = " style='";
+		html[idx++] = style.join(";");
+		html[idx++] = "'";
+	}
+
+	var id = params.isDragProxy ? this._getItemId(item) + "_dnd" : null;
+	html[idx++] = " id='";
+	html[idx++] = this.associateItemWithElement(item, null, DwtListView.TYPE_LIST_ITEM, id);
+	html[idx++] = "'>";
+
+	return idx;
 };
 
 /**
@@ -1216,13 +1273,16 @@ function(item) {
 DwtListView.prototype.associateItemWithElement =
 function(item, element, type, id, data) {
 	id = id || this._getItemId(item);
-	element.id = id;
+	if (element) {
+		element.id = id;
+	}
 	this._data[id] = {item:item, id:id, type:type};
 	if (data) {
 		for (var key in data) {
 			this._data[id][key] = data[key];
 		}
 	}
+	return id;
 };
 
 DwtListView.prototype.getItemFromElement =
