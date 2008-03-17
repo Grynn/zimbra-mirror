@@ -338,7 +338,7 @@ function(listener) {
 	if (!this._hasBlurHandler) {
 		var doc = document;
 		if (typeof doc.onfocusout != "undefined") {  // if (IE)
-			doc.attachEvent("onfocusout", this.__blurHdlr);
+			doc.attachEvent("onfocusout", DwtShell.__blurHdlr);
 		} else {
 			window.addEventListener("blur", DwtShell.__blurHdlr, false);
 		}
