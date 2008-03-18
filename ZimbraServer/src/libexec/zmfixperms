@@ -29,6 +29,14 @@ else
   root_group=root
 fi
 
+if [ "X$PLAT" = "XMACOSXx86_10.5" ]; then
+  postfix_owner=_postfix
+  postfix_suid_group=_postdrop
+else
+  postfix_owner=postfix
+  postfix_suid_group=postdrop
+fi
+
 zimbra_user=zimbra
 zimbra_group=zimbra
 
@@ -281,7 +289,7 @@ fi
 if [ -L ${zimbra_home}/postfix ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/postfix"
 	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix*
-	chown -fR ${root_user}:postfix ${zimbra_home}/postfix/conf
+	chown -fR ${root_user}:${postfix_owner} ${zimbra_home}/postfix/conf
 
 	chmod 777 ${zimbra_home}/postfix/conf
 	chmod -fR 644 ${zimbra_home}/postfix/conf/*
@@ -290,8 +298,8 @@ if [ -L ${zimbra_home}/postfix ]; then
 
 	# Postfix specific permissions
 	if [ -d ${zimbra_home}/postfix/sbin ]; then
-		chgrp -f postdrop ${zimbra_home}/postfix/sbin/postqueue
-		chgrp -f postdrop ${zimbra_home}/postfix/sbin/postdrop
+		chgrp -f ${postfix_suid_group} ${zimbra_home}/postfix/sbin/postqueue
+		chgrp -f ${postfix_suid_group} ${zimbra_home}/postfix/sbin/postdrop
 		chmod -f g+s ${zimbra_home}/postfix/sbin/postqueue
 		chmod -f g+s ${zimbra_home}/postfix/sbin/postdrop
 	fi
@@ -303,16 +311,16 @@ if [ -d ${zimbra_home}/data/postfix ]; then
 	if [ ! -d ${zimbra_home}/data/postfix/spool ]; then
 		mkdir -p ${zimbra_home}/data/postfix/spool
 	fi
-	chown -fR postfix:postfix ${zimbra_home}/data/postfix/spool
+	chown -fR ${postfix_owner}:${postfix_owner} ${zimbra_home}/data/postfix/spool
 	chown -f root ${zimbra_home}/data/postfix/spool
-	chgrp -f postfix ${zimbra_home}/data/postfix/spool
+	chgrp -f ${postfix_owner} ${zimbra_home}/data/postfix/spool
 	# Postfix specific permissions
 	if [ -d ${zimbra_home}/data/postfix/spool/public ]; then
-		chgrp -f postdrop ${zimbra_home}/data/postfix/spool/public
+		chgrp -f ${postfix_suid_group} ${zimbra_home}/data/postfix/spool/public
 	fi
 	if [ -d ${zimbra_home}/data/postfix/spool/maildrop ]; then
 		chmod 730 ${zimbra_home}/data/postfix/spool/maildrop
-		chgrp -f postdrop ${zimbra_home}/data/postfix/spool/maildrop
+		chgrp -f ${postfix_suid_group} ${zimbra_home}/data/postfix/spool/maildrop
 		chmod 730 ${zimbra_home}/data/postfix/spool/maildrop
 	fi
 fi
