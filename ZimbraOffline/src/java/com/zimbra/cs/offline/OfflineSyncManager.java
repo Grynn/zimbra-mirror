@@ -20,6 +20,7 @@ import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.offline.DirectorySync;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.MailboxManager;
@@ -405,6 +406,7 @@ public class OfflineSyncManager {
 		for (Account syncAccount : syncAccounts) {
 			MailboxManager.getInstance().getMailboxByAccount(syncAccount);
 		}
+		DirectorySync.getInstance();
 	}
 	
 	/*

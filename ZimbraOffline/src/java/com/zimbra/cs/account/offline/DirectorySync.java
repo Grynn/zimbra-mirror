@@ -26,6 +26,9 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Entry;
@@ -34,12 +37,14 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Signature;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.Provisioning.SignatureBy;
+import com.zimbra.cs.filter.RuleManager;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.account.ModifyPrefs;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.Zimbra;
+import com.zimbra.cs.zclient.ZFilterRules;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -165,17 +170,36 @@ public class DirectorySync {
             ZMailbox zmbx = prov.newZMailbox((OfflineAccount)acct, ZimbraServlet.USER_SERVICE_URI);
             syncAccount(prov, acct, zmbx);
             pushAccount(prov, acct, zmbx);
+            syncFilterRules(prov, acct, zmbx);
 
+            // FIXME: there's a race condition here, as <tt>acct</tt> may have been modified during the push
+            prov.markAccountClean(acct);
             return true;
         } catch (Exception e) {
             OfflineSyncManager.getInstance().processSyncException(acct, e);
             return false;
         }
     }
+    
+    private void syncFilterRules(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
+        Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
+        if (modified.contains(Provisioning.A_zimbraMailSieveScript)) {
+        	Element xmlRules = RuleManager.getInstance().getRulesAsXML(XMLElement.mFactory, acct);
+        	ZFilterRules rules = new ZFilterRules(xmlRules);
+        	zmbx.saveFilterRules(rules);
+        	OfflineLog.offline.debug("dsync: pushed %d filter rules: %s", rules.getRules().size(), acct.getName());
+        } else {
+            ZFilterRules rules = zmbx.getFilterRules(true);
+            Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
+            rules.toElement(e);
+            RuleManager.getInstance().setXMLRules(acct, e.getElement(MailConstants.E_RULES));
+            OfflineLog.offline.debug("dsync: pulled %d filter rules: %s", rules.getRules().size(), acct.getName());
+        }
+    }
 
     private void syncAccount(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
         ZGetInfoResult zgi = zmbx.getAccountInfo(false);
-
+        
         synchronized (prov) {
             // make sure we're current
             prov.reload(acct);
@@ -245,13 +269,15 @@ public class DirectorySync {
         return e.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs).contains(OfflineProvisioning.A_offlineDn);
     }
 
+    @SuppressWarnings("unchecked")
     private static Map<String, Object> diffAttributes(Entry e, Map<String, Object> attrs) {
         // write over all unchanged account attributes
         Set<String> modified = e.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         Map<String, Object> changes = new HashMap<String, Object>();
         for (Map.Entry<String, Object> zattr : attrs.entrySet()) {
             String key = zattr.getKey();
-            if (modified.contains(key) || key.equals(Provisioning.A_zimbraMailHost) || OfflineProvisioning.sOfflineAttributes.contains(key))
+            if (modified.contains(key) || key.equals(Provisioning.A_zimbraMailHost) || key.equals(Provisioning.A_zimbraMailSieveScript) ||
+            		OfflineProvisioning.sOfflineAttributes.contains(key))
                 continue;
             Object value = zattr.getValue();
             if (value instanceof List) {
@@ -273,7 +299,7 @@ public class DirectorySync {
         existing.removeAll(modified);
         existing.removeAll(changes.keySet());
         for (String key : existing)
-            if (!key.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(key))
+            if (!key.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(key) && !key.equals(Provisioning.A_zimbraMailSieveScript))
                 changes.put(key, null);
 
         return changes;
@@ -407,7 +433,7 @@ public class DirectorySync {
                 // we're only authorized to push changes to user preferences
                 if (pref.startsWith(ModifyPrefs.PREF_PREFIX) && !OfflineProvisioning.sOfflineAttributes.contains(pref))
                     changes.put(pref, attrs.get(pref));
-                else if (!pref.startsWith("offline"))
+                else if (!pref.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(pref) && !pref.equals(Provisioning.A_zimbraMailSieveScript))
                     OfflineLog.offline.warn("dpush: could not push non-preference attribute: " + pref);
             }
             if (!changes.isEmpty()) {
@@ -437,9 +463,6 @@ public class DirectorySync {
             zmbx.deleteSignature(signatureId);
             OfflineLog.offline.debug("dpush: deleted signature: " + acct.getName() + '/' + signatureId);
         }
-
-        // FIXME: there's a race condition here, as <tt>acct</tt> may have been modified during the push
-        prov.markAccountClean(acct);
     }
 
     private void pushIdentity(OfflineProvisioning prov, Account acct, Identity ident, ZMailbox zmbx) throws ServiceException {
