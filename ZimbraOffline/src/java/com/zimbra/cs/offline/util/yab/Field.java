@@ -89,30 +89,17 @@ public abstract class Field {
         flags.add(flag);
     }
 
-    public void setFlags(String... flags) {
-        for (String flag : flags) setFlag(flag);
+    public void setFlags(String... fnames) {
+        for (String fname : fnames) setFlag(fname);
     }
 
-    public void unsetFlags(String... flags) {
-        for (String flag : flags) unsetFlag(flag);
+    public void setFlag(String fname) {
+        addFlag(new Flag(fname, true));
     }
 
-    public void setFlag(String flag) {
-        addFlag(new Flag(flag, true));
-    }
-
-    public void unsetFlag(String flag) {
-        addFlag(new Flag(flag, false));
-    }
-    
-    public boolean isFlagSet(String flag) {
-        Flag f = getFlag(flag);
-        return f != null ? f.getValue() : false;
-    }
-
-    public boolean isFlagUnset(String flag) {
-        Flag f = getFlag(flag);
-        return f != null ? !f.getValue() : false;
+    public boolean isFlagSet(String fname) {
+        Flag f = getFlag(fname);
+        return f != null && f.getValue();
     }
 
     public Flag getFlag(String fname) {

@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class SyncState {
-    private long revision;  // YAB revision number
-    private long sequence;  // Zimbra mailbox last change id
+    private int revision;  // YAB revision number
+    private int sequence;  // Zimbra mailbox last change id
     private Map<Integer, Integer> localRemoteCidMap = new HashMap<Integer, Integer>();
     private Map<Integer, Integer> remoteLocalCidMap = new HashMap<Integer, Integer>();
     private Map<Integer, Integer> localRemoteCatidMap = new HashMap<Integer, Integer>();
@@ -48,16 +48,40 @@ public class SyncState {
     private SyncState loadState(Mailbox mbox) throws ServiceException {
         Metadata md = mbox.getConfig(new Mailbox.OperationContext(mbox), YAB);
         if (md == null) return this;
-        revision = md.getLong(REV);
-        sequence = md.getLong(SEQ);
+        revision = (int) md.getLong(REV);
+        sequence = (int) md.getLong(SEQ);
         loadIds(md.getList(CIDS), localRemoteCidMap, remoteLocalCidMap);
         loadIds(md.getList(CATIDS), localRemoteCatidMap, remoteLocalCatidMap);
         return this;
     }
 
-    public long getRevision() { return revision; }
-    public long getSequence() { return sequence; }
+    public int getRevision() { return revision; }
+    public int getSequence() { return sequence; }
 
+    public int getCid(int contactId) {
+        return localRemoteCidMap.get(contactId);
+    }
+
+    public int getContactId(int cid) {
+        return remoteLocalCidMap.get(cid);
+    }
+
+    public int getCatid(int categoryId) {
+        return localRemoteCatidMap.get(categoryId);
+    }
+
+    public int getCategoryId(int catid) {
+        return remoteLocalCatidMap.get(catid);
+    }
+
+    public int[] getCids(int[] contactIds) {
+        int[] cids = new int[contactIds.length];
+        for (int i = 0; i < contactIds.length; i++) {
+            cids[i] = getCid(contactIds[i]);
+        }
+        return cids;
+    }
+    
     public void save() throws ServiceException {
         Metadata md = new Metadata();
         md.put(REV, revision);
@@ -76,18 +100,18 @@ public class SyncState {
         if (ids == null) return;
         assert ids.size() % 2 == 0;
         for (Iterator it = ids.asList().iterator(); it.hasNext(); ) {
-            Integer local = (Integer) it.next();
-            Integer remote = (Integer) it.next();
+            Integer local = ((Long) it.next()).intValue();
+            Integer remote = ((Long) it.next()).intValue();
             localRemoteMap.put(local, remote);
             remoteLocalMap.put(remote, local);
         }
     }
 
-    private static List<Integer> idList(Map<Integer, Integer> localRemoteMap) {
-        List<Integer> ids = new ArrayList<Integer>(localRemoteMap.size() * 2);
+    private static List<Long> idList(Map<Integer, Integer> localRemoteMap) {
+        List<Long> ids = new ArrayList<Long>(localRemoteMap.size() * 2);
         for (Map.Entry<Integer, Integer> e : localRemoteMap.entrySet()) {
-            ids.add(e.getKey());
-            ids.add(e.getValue());
+            ids.add(e.getKey().longValue());
+            ids.add(e.getValue().longValue());
         }
         return ids;
     }

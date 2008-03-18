@@ -42,6 +42,10 @@ public class SyncResponseEvent {
         return contact;
     }
 
+    public int getContactId() {
+        return contact.getId();
+    }
+    
     public int getLastModifiedTime() {
         return lastModifiedTime;
     }

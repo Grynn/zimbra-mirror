@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.RequestEntity;
@@ -73,6 +74,23 @@ public class Session {
         auth = RawAuth.authenticate(appId, token);
     }
 
+    public List<Contact> getContacts(int[] cids) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        for (int cid : cids) {
+            sb.append("cid=").append(cid).append('&');
+        }
+        return search(sb.toString());
+    }
+
+    public SyncResponse getChanges(int revision) throws IOException {
+        return (SyncResponse) createSyncRequest(revision).send();
+    }
+    
+    public List<Contact> search(String params) throws IOException {
+        SearchResponse res = (SearchResponse) createSearchRequest(params).send();
+        return res.getContacts();
+    }
+    
     public SearchRequest createSearchRequest(String params) {
         checkAuthenticated();
         SearchRequest req = new SearchRequest(this);

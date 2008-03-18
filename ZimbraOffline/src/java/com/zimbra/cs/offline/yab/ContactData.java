@@ -1,3 +1,19 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ *
+ * Zimbra Collaboration Suite Server
+ * Copyright (C) 2007, 2008 Zimbra, Inc.
+ *
+ * The contents of this file are subject to the Yahoo! Public License
+ * Version 1.0 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ *
+ * ***** END LICENSE BLOCK *****
+ */
 package com.zimbra.cs.offline.yab;
 
 import com.zimbra.cs.offline.util.yab.NameField;
@@ -65,9 +81,9 @@ public class ContactData {
         return result.toArray(new String[result.size()]);
     }
     
-    public static ParsedContact importChanges(Contact contact)
+    public static ParsedContact importChanges(Contact yabContact)
             throws ServiceException {
-        ContactData cd = new ContactData(contact.getFields());
+        ContactData cd = new ContactData(yabContact.getFields());
         Map<String, String> fields = cd.getFields();
         // Clear fields that were not set
         for (String field : ALL_FIELDS) {
@@ -76,9 +92,9 @@ public class ContactData {
         return new ParsedContact(fields);
     }
 
-    public static ParsedContact importNew(Contact contact)
+    public static ParsedContact importNew(Contact yabContact)
             throws ServiceException {
-        ContactData cd = new ContactData(contact.getFields());
+        ContactData cd = new ContactData(yabContact.getFields());
         return new ParsedContact(cd.getFields());
     }
 
@@ -93,7 +109,7 @@ public class ContactData {
         return ndata.getContactChange(yabContact.getId(), odata);
     }
 
-    public ContactData(Map<String, String> fields) {
+    private ContactData(Map<String, String> fields) {
         otherFields = new HashMap<String, SimpleField>();
         name = name(fields);
         homeAddress = address(fields, HOME_ADDRESS_FIELDS);
@@ -126,7 +142,7 @@ public class ContactData {
         put(SimpleField.NOTES, fields, A_notes);
     }
 
-    public ContactData(List<Field> fields) {
+    private ContactData(List<Field> fields) {
         for (Field field : fields) addField(field);
     }
     

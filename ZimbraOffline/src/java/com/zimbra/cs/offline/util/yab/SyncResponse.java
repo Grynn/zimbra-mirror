@@ -58,7 +58,36 @@ public class SyncResponse extends Response {
     public List<SyncResponseEvent> getEvents() {
         return events;
     }
+
+    public List<Contact> getAddedContacts() {
+        return getContacts(SyncResponseEvent.Type.ADD_CONTACT);
+    }
+
+    public List<Contact> getUpdatedContacts() {
+        return getContacts(SyncResponseEvent.Type.UPDATE_CONTACT);
+    }
+
+    public List<Integer> getRemovedContacts() {
+        List<Integer> cids = new ArrayList<Integer>();
+        for (SyncResponseEvent event : events) {
+            switch (event.getType()) {
+            case REMOVE_CONTACT:
+                cids.add(event.getContactId());
+            }
+        }
+        return cids;
+    }
     
+    private List<Contact> getContacts(SyncResponseEvent.Type type) {
+        List<Contact> contacts = new ArrayList<Contact>();
+        for (SyncResponseEvent event : events) {
+            if (event.getType() == type) {
+                contacts.add(event.getContact());
+            }
+        }
+        return contacts;
+    }
+
     private SyncResponse parseXml(Element e) {
         if (!e.getTagName().equals(TAG)) {
             throw new IllegalArgumentException(
