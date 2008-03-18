@@ -91,7 +91,7 @@ public class YmailUserData {
 			if (!yud.isPlus())
 				throw AccountServiceException.ACCOUNT_INACTIVE(username);
 		} catch (AuthenticationException x) {
-			throw AuthFailedServiceException.AUTH_FAILED(username, x.getMessage(), x);
+			throw AuthFailedServiceException.AUTH_FAILED(username, username, x.getMessage(), x);
 		} catch (IOException x) {
 			throw ServiceException.FAILURE("error communicating with server", x);
 		}
