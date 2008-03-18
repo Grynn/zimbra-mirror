@@ -490,6 +490,14 @@ icons
 	font-color: white;
 }
 
+.CollectionInputField extends InputField {
+    focused-style: CollectionInputFieldFocused;
+}
+
+.CollectionInputFieldFocused extends InputFieldFocused {
+    border-color: selectBlue;
+}
+
 /**********************************************************
  * Compose Form
  ***********************************************************/

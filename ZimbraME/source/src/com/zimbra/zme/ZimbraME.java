@@ -16,8 +16,6 @@ import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Image;
-import javax.microedition.lcdui.TextField;
-import javax.microedition.lcdui.TextBox;
 
 import java.io.IOException;
 import java.util.Vector;
@@ -55,10 +53,12 @@ public class ZimbraME extends MIDlet implements CommandListener {
 	public static final Command GOTO_CALENDAR = new Command(Locale.get("main.Calendar"), Command.ITEM, 1);
 	public static final Command GOTO_FOLDERS = new Command(Locale.get("main.Folders"), Command.ITEM, 1);
 	public static final Command GOTO_INBOX = new Command(Locale.get("main.Inbox"), Command.ITEM, 1);
-	public static final Command GOTO_SAVEDSEARCHES = new Command(Locale.get("main.SavedSearches"), Command.ITEM, 1);
 	public static final Command GOTO_SENT = new Command(Locale.get("main.SentMail"), Command.ITEM, 1);
 	public static final Command GOTO_SETTINGS = new Command(Locale.get("main.Settings"), Command.ITEM, 1);
 	public static final Command GOTO_TAGS = new Command(Locale.get("main.Tags"), Command.ITEM, 1);
+	
+	public static final String DEFAULT_QUERY = "in:inbox";
+	public static final String SENT_QUERY = "in:sent";
 
 	public static Image CLOCK_ICON;
 	public static int CLOCK_ICON_HEIGHT;
@@ -74,8 +74,6 @@ public class ZimbraME extends MIDlet implements CommandListener {
 			System.out.println("ZimbraME.init: IOException " + e);
 		}
 	}
-
-	private static final Command DOSEARCH = new Command(Locale.get("main.Search"), Command.OK, 1);
 
 	// if debugging is enabled, then create a debug command that will show the debug log on a real device
 	//#ifdef polish.debugEnabled
@@ -101,7 +99,6 @@ public class ZimbraME extends MIDlet implements CommandListener {
 	public boolean mUserServerUrl; //If true the user must enter the server url. Else is specified in JAD
 
     private boolean mInited;
-	private TextBox mSearchTextBox;
     private Displayable mPrevView; // Previous view
     private ContactListView mContactPickerListView;
     private CalendarView mCalendarView;
@@ -274,13 +271,12 @@ public class ZimbraME extends MIDlet implements CommandListener {
     					   String sortBy,
     					   String types) {
 
-		ConvListView clv = getSearchView();
-		if (query != null)
+		if (query != null) {
+			ConvListView clv = getSearchView();
 			clv.setQuery(query, sortBy, types);
-		else
-			clv.setQuery(mSearchTextBox.getString(), sortBy, types);
-		mTopView = clv;
-		clv.load();
+			mTopView = clv;
+			clv.load();
+		}
     }
 
     public void gotoFolder(String folderName) {
@@ -311,19 +307,12 @@ public class ZimbraME extends MIDlet implements CommandListener {
 
     public void commandAction(Command cmd,
     						  Displayable d) {
-    	if (d == mSearchTextBox) {
-    		// Dealing with the search box commands
-	    	if (cmd == DOSEARCH) {
-	    		execSearch(null, null, null);
-	    	} else if (cmd == CANCEL) {
-	    		mDisplay.setCurrent(mPrevView);
-	    	}
-    	} else if (d == Dialogs.mErrorD) {
+    	if (d == Dialogs.mErrorD) {
     		mDisplay.setCurrent(mPrevView);
     	} else if (cmd == EXIT) {
     		exit();
     	} else if (cmd == SEARCH) {
-    		doSearch(d);
+    		gotoSavedSearchView(d);
     	} else if (cmd == GOTO_CALENDAR) {
     		gotoCalendarView();
     	} else if (cmd == GOTO_FOLDERS) {
@@ -331,11 +320,9 @@ public class ZimbraME extends MIDlet implements CommandListener {
     	} else if (cmd == GOTO_INBOX) {
 			gotoInboxView();
     	} else if (cmd == GOTO_SENT) {
-    		execSearch("in:sent", null, null);
+    		execSearch(SENT_QUERY, null, null);
     	} else if (cmd == GOTO_SETTINGS) {
     		gotoSettings();
-    	} else if (cmd == GOTO_SAVEDSEARCHES) {
-    		gotoSavedSearchView(d);
     	} else if (cmd == GOTO_TAGS) {
     		gotoTagView(d, CollectionView.TAG_SEARCH, null);
     	} else if (cmd == LOGOUT) {
@@ -359,14 +346,11 @@ public class ZimbraME extends MIDlet implements CommandListener {
                            Displayable d) {
     	switch (keyCode) {
     		case Canvas.KEY_NUM1:
-    			doSearch(d);
+    			gotoSavedSearchView(d);
     			break;
     		case Canvas.KEY_NUM0:
     			mTopView = mInboxView;
     			setTopViewCurrent();
-    			break;
-    		case Canvas.KEY_NUM6:
-    			gotoSavedSearchView(d);
     			break;
     	}
     }
@@ -445,11 +429,7 @@ public class ZimbraME extends MIDlet implements CommandListener {
 				getLoginView().sessionExpired(view);
 				return;
 			} else if (ec == ZmeSvcException.MAIL_QUERYPARSEERROR) {
-				// TODO is the belwo true? What about a bogus saved search?
-				// Query string error. We will assume this can only happen due to the user
-				// entering a bogus string so send them back to the search view
 				Dialogs.popupErrorDialog(this, this, Locale.get("error.Parse"));
-				mPrevView = mSearchTextBox;
 			} else {
 				Dialogs.popupErrorDialog(this, this, ec);
 			}
@@ -461,6 +441,10 @@ public class ZimbraME extends MIDlet implements CommandListener {
 				String errMsg = (e.getMessage());
 				errMsg = (errMsg == null) ? "" : "\n\n" + errMsg;
 				Dialogs.popupErrorDialog(this, this, Locale.get("error.NetworkError") + errMsg);
+			} else if (e.mErrCode == ZmeException.SERVER_ERROR) {
+				String errMsg = (e.getMessage());
+				errMsg = (errMsg == null) ? "" : "\n\n" + errMsg;
+				Dialogs.popupErrorDialog(this, this, Locale.get("error.ServerError") + errMsg);
 			} else {
 				//#debug
 				System.out.println("ZimbraME.handleResponseError: General error (1): " + e.mErrCode);
@@ -512,13 +496,12 @@ public class ZimbraME extends MIDlet implements CommandListener {
 		mMbox.mSetAuthCookieUrl = mServerUrl + ZimbraME.SET_AUTH_COOKIE_PATH;
 		mMbox.mRestUrl = mServerUrl + DEF_REST_PATH;
 		mMbox.mMidlet = this;
-		mMbox.mAuthToken = mSettings.getAuthToken();
 
 		mDisplay = Display.getDisplay(this); 
 
 		//#style InboxView
 		mInboxView = new ConvListView(null, this, ConvListView.INBOX_VIEW);
-		mInboxView.setQuery("in:inbox", null, null);
+		mInboxView.setQuery(DEFAULT_QUERY, null, null);
 		mTopView = mInboxView;
 
 	}
@@ -536,18 +519,6 @@ public class ZimbraME extends MIDlet implements CommandListener {
     }
 
     protected void destroyApp(boolean bool) {
-    }
-
-    private void doSearch(Displayable d) {
-		if (mSearchTextBox == null) {
-			mSearchTextBox = new TextBox(Locale.get("main.Search"), null, 1024, TextField.ANY);
-			mSearchTextBox.setString("");
-			mSearchTextBox.addCommand(DOSEARCH);
-			mSearchTextBox.addCommand(CANCEL);
-			mSearchTextBox.setCommandListener(this);
-		}
-		mPrevView = d;
-		mDisplay.setCurrent(mSearchTextBox);
     }
 
     public void openAttachment(String msgId, String part) throws ConnectionNotFoundException {

@@ -87,9 +87,9 @@ public class MsgListView extends MailListView {
 	
 	public void load() {
 		if (mConvId != null) {
-			mMidlet.mMbox.searchConv(mConvId, mHasUnreadMsgs, null, DEF_RESULT_SIZE, this, mResults, this);		
 			//Show the work in progress dialog
 			Dialogs.popupWipDialog(mMidlet, this, Locale.get("msgList.RetrievingConv"));
+			mMidlet.mMbox.searchConv(mConvId, mHasUnreadMsgs, null, DEF_RESULT_SIZE, this, mResults, this);		
 		}
 	}
 

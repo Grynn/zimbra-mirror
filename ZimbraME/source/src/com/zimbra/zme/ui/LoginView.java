@@ -134,9 +134,9 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 			// profile was successfully loaded) and if so the uname/pword are specified. In this case 
 			// we don't even need to render the form just go ahead and login.
 			if (keepSignedIn && uname != null && uname.length() > 0 && serverUrl != null && serverUrl.length() > 0) {
-				mMidlet.mMbox.login(uname, pword, this);
 				//Show the work in progress dialog
 				Dialogs.popupWipDialog(mMidlet, this, Locale.get("login.LoggingIn"));
+				mMidlet.mMbox.login(uname, pword, this);
 				mSaveProfileInfo = false;
 			} else {				
 				mMidlet.mDisplay.setCurrent(mView);
@@ -177,10 +177,10 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
                     }
 					//#debug
 					System.out.println("LoginForm.commandAction: Initiating login");
-					mMidlet.mMbox.login(mUnameField.getString(), mPwordField.getString(), this);
-                    mMidlet.mUsername = mUnameField.getString();
 					//Show the work in progress dialog
 					Dialogs.popupWipDialog(mMidlet, this, Locale.get("login.LoggingIn"));
+					mMidlet.mMbox.login(mUnameField.getString(), mPwordField.getString(), this);
+                    mMidlet.mUsername = mUnameField.getString();
 				}
 			} else {
 				// Delegate the command handling up to the midlet since

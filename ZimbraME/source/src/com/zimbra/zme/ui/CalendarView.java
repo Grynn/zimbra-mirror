@@ -583,13 +583,6 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		f.addSubCommand(ZimbraME.GOTO_SETTINGS, ZimbraME.GOTO);
 				
 		//#ifdef tmp.hasCmdKeyEvts
-			//#style OneMenuItem
-			f.addCommand(ZimbraME.SEARCH);
-		//#else
-			f.addCommand(ZimbraME.SEARCH);
-		//#endif
-		
-		//#ifdef tmp.hasCmdKeyEvts
 			//#style TwoMenuItem
 			f.addCommand(NEW);
 		//#else

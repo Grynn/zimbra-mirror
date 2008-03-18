@@ -15,6 +15,7 @@ public class ZmeException extends Exception {
     public static final int MSG_FILE_NOT_FOUND = i++;
     public static final int OP_IN_PROGRESS = i++;
     public static final int PARSER_ERROR = i++;
+    public static final int SERVER_ERROR = i++;
 
     public int mErrCode;
 

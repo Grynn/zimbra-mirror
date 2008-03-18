@@ -17,6 +17,7 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.TextField;
 
 import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.ZimbraME;
@@ -110,6 +111,11 @@ public class CollectionView extends View implements ResponseHdlr {
 				return;
 			}
 		} else {
+			if (mType == SAVEDSEARCH) {
+	            //#style CollectionInputField
+	            TextField input = new TextField(Locale.get("main.NewSearch"), null, 128, TextField.ANY);
+	            f.append(input);
+			}
 			Vector collection = (mType == SAVEDSEARCH || mType == SAVEDSEARCH_PICK) ? mMidlet.mMbox.mSavedSearches : mMidlet.mMbox.mTags;
 			if (collection != null && collection.size() > 0) {
 				CollectionItem c;
@@ -162,20 +168,20 @@ public class CollectionView extends View implements ResponseHdlr {
 		switch (mType) {
 			case SAVEDSEARCH:
             case SAVEDSEARCH_PICK:
-				mMidlet.mMbox.getSavedSearches(this);
 				Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingSavedSearches"));
+				mMidlet.mMbox.getSavedSearches(this);
 				break;
 				
 			case FOLDER_PICK:
 			case FOLDER_SEARCH:
-				mMidlet.mMbox.getFolders(this);
 				Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingFolders"));
+				mMidlet.mMbox.getFolders(this);
 				break;
 				
 			case TAG_PICKER:
 			case TAG_SEARCH:
-				mMidlet.mMbox.getTags(this);
 				Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingTags"));
+				mMidlet.mMbox.getTags(this);
 				break;
 		}
 	}
@@ -217,23 +223,26 @@ public class CollectionView extends View implements ResponseHdlr {
 	public void commandAction(Command cmd, 
 							  Displayable d) {
 		if (d == mView) {
+			Item item = null;
+			//#if true
+				//# FramedForm f = (FramedForm)mView;
+				//# item = (Item)f.getCurrentItem();
+			//#endif
 			if (cmd == BACK) {
 				setNextCurrent();
 			} else if (cmd == ZimbraME.SEARCH) {
-				CollectionItem ci = null;
-				//#if true
-					//# FramedForm f = (FramedForm)mView;
-					//# ci = (CollectionItem)f.getCurrentItem();
-				//#endif
-				execSearch(ci);
+				if (item != null) {
+					if (item instanceof TextField) {
+						String txt = ((TextField)item).getString();
+						mMidlet.execSearch(txt, null, null); 
+					} else if (item instanceof CollectionItem) {
+						execSearch((CollectionItem)item);
+					}
+				}
 			} else if (cmd == REFRESH) {
 				load();
 			} else if (cmd == OPEN) {
-				CollectionItem ci = null;
-				//#if true
-					//# FramedForm f = (FramedForm)mView;
-					//# ci = (CollectionItem)f.getCurrentItem();
-				//#endif
+				CollectionItem ci = (CollectionItem)item;
                 if (ci.mItem.mItemType != MailboxItem.ATTACHMENT)
                     return;
                 Attachment att = (Attachment) ci.mItem;
@@ -255,21 +264,19 @@ public class CollectionView extends View implements ResponseHdlr {
 					}
 					setNextCurrent();
 				} else if (mType == FOLDER_PICK || mType == SAVEDSEARCH_PICK) {
-                    CollectionItem ci = null;
-                    //#if true
-                        //# FramedForm f = (FramedForm)mView;
-                        //# ci = (CollectionItem)f.getCurrentItem();
-                    //#endif
+                    CollectionItem ci = (CollectionItem)item;
                     mListener.action(this, ci.mItem);
                     setNextCurrent();
                 }
-			} else {
+			} else if (item instanceof CollectionItem) {
 				super.commandAction(cmd, d, false);
 			}
 		} else if (d == Dialogs.mWipD) {
 			mMidlet.mMbox.cancelOp();
 			mMidlet.mDisplay.setCurrent(mView);
 		} else if (d == Dialogs.mErrorD) {
+			mMidlet.mDisplay.setCurrent(mView);
+		} else if (d == Dialogs.mConfirmD && cmd == Dialogs.NO) {
 			mMidlet.mDisplay.setCurrent(mView);
 		} else {
 			super.commandAction(cmd, d, false);
@@ -354,11 +361,8 @@ public class CollectionView extends View implements ResponseHdlr {
                 this.mSelected = f.mParent.mParent;
                 render();
             }
-		} else if (keyCode == Canvas.KEY_NUM7) {
-			if (confirmDeletes())
-				Dialogs.popupConfirmDialog(mMidlet, this, Locale.get("main.DeleteConfirm"));
-			else 
-				deleteItemConfirmed();
+		} else {
+			super.keyPressed(keyCode, gameAction, item);
 		}
 	}
 
@@ -379,7 +383,7 @@ public class CollectionView extends View implements ResponseHdlr {
 				break;
 			case SAVEDSEARCH:
                 SavedSearch ss = (SavedSearch) ci.mItem;
-				mMidlet.execSearch(ss.mQuery, ss.mSortBy, ss.mTypes); 
+				mMidlet.execSearch(ss.mQuery, ss.mSortBy, ss.mTypes);
 				break;
 			case TAG_SEARCH:
 			case TAG_PICKER:

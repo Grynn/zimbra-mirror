@@ -243,8 +243,8 @@ public class MsgItem extends MailItem implements ResponseHdlr {
 		if (expanded) {
 			if (!mLoaded) {
 				//setUpdating(true, Locale.get("msgList.RetrievingMsg"));
-				mMidlet.mMbox.loadMsg(this);
 				Dialogs.popupWipDialog(mMidlet, mParentView, Locale.get("msgList.RetrievingMsg"));
+				mMidlet.mMbox.loadMsg(this);
 				mExpanding = true;
 			} else {
 				mExpanded = true;

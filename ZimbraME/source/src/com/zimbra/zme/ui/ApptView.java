@@ -167,8 +167,8 @@ public class ApptView extends View implements ResponseHdlr, ItemStateListener {
         addFields();
         
         if (appt != null && !appt.mLoaded) {
-            midlet.mMbox.getAppt(appt, this);
             Dialogs.popupWipDialog(mMidlet, this, Locale.get("appt.GettingAppt"));
+            midlet.mMbox.getAppt(appt, this);
         } else {
             mMidlet.mDisplay.setCurrent(mView);
         }

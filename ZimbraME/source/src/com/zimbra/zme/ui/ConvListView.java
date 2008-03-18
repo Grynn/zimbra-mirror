@@ -20,6 +20,7 @@ import javax.microedition.lcdui.TextField;
 import javax.microedition.lcdui.TextBox;
 
 import com.zimbra.zme.ZimbraME;
+import com.zimbra.zme.ZmeException;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.ZmeSvcException;
 
@@ -80,8 +81,10 @@ public class ConvListView extends MailListView {
 		
 		//TODO support sortBy and types
 		mQuery = queryStr;
+		if (mQuery == null || mQuery.equals(""))
+			mQuery = ZimbraME.DEFAULT_QUERY;
 		if (mViewType == SEARCH_VIEW && mHeader != null) {
-			mHeader.setText("\"" + queryStr + "\"");
+			mHeader.setText(Locale.get("main.Search") + ": " + queryStr);
 		}
 	}
 	
@@ -114,13 +117,14 @@ public class ConvListView extends MailListView {
 		
 		mResults.mNewSet = true;
 		
+        //Show the work in progress dialog
+        String msg = (mInitialLoad ? Locale.get("main.LoadingMbox") : Locale.get("main.Searching"));
+        Dialogs.popupWipDialog(mMidlet, this, msg);
+        
         if (mQuery != null)
             mMidlet.mMbox.searchMail(mQuery, true, null, INITIAL_RESULT_SIZE, this, mResults, this);
         else
             mMidlet.mMbox.searchMailRest(mUser, mFolder, null, INITIAL_RESULT_SIZE, this, mResults, this);
-        //Show the work in progress dialog
-        String msg = (mInitialLoad ? Locale.get("main.LoadingMbox") : Locale.get("main.Searching"));
-        Dialogs.popupWipDialog(mMidlet, this, msg);
 	}
 	
 	public ConvItem createConvItem() {
@@ -198,7 +202,9 @@ public class ConvListView extends MailListView {
 	
 			mGettingMore = false;
 		}
-		
+        if (op != Mailbox.LOADMAILBOX)
+            mMidlet.mDisplay.setCurrent(mView);
+
 		if (resp instanceof Mailbox) {
             MailItem lastItem = null;
 			if (op == Mailbox.SEARCHMAIL || op == Mailbox.SEARCHMAILREST) {
@@ -232,8 +238,6 @@ public class ConvListView extends MailListView {
 				
 			}
 
-            if (op != Mailbox.LOADMAILBOX)
-                mMidlet.mDisplay.setCurrent(mView);
             
             if (op == Mailbox.SEARCHMAIL && mMoreHits && f.size() <= INITIAL_RESULT_SIZE) {
                 // prefetch more messages
@@ -259,10 +263,10 @@ public class ConvListView extends MailListView {
 			} else {
 				mMidlet.handleResponseError(resp, this);
 			}
-		} else if (resp instanceof Exception) {
+		} else if (resp instanceof ZmeException) {
             //#debug
             System.out.println("ConvListView.handleResponse: Exception");
-            ((Exception)resp).printStackTrace();
+			mMidlet.handleResponseError(resp, this);
 		}
 	}
 
@@ -287,8 +291,8 @@ public class ConvListView extends MailListView {
 		} else if (d == mSaveSearchTB) {
 			mMidlet.mDisplay.setCurrent(mView);
 			if (cmd == SAVE) {
-				mMidlet.mMbox.createSavedSearch(mSaveSearchTB.getString(), mQuery, this);
 				Dialogs.popupWipDialog(mMidlet, this, Locale.get("mailList.SavingSearch"));
+				mMidlet.mMbox.createSavedSearch(mSaveSearchTB.getString(), mQuery, this);
 			}
 			mSaveSearchTB = null;
 		} else if (d == Dialogs.mWipD) {
@@ -474,7 +478,6 @@ public class ConvListView extends MailListView {
 		
 		f.addSubCommand(ZimbraME.GOTO_SENT, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_CALENDAR, ZimbraME.GOTO);
-		f.addSubCommand(ZimbraME.GOTO_SAVEDSEARCHES, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_FOLDERS, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_TAGS, ZimbraME.GOTO);
 		f.addSubCommand(ZimbraME.GOTO_SETTINGS, ZimbraME.GOTO);

@@ -659,7 +659,7 @@ import de.enough.polish.util.StringTokenizer;
             int numResults, 
             MailItem lastItem,
             ResultSet results) 
-    throws ZmeSvcException, IOException
+    throws ZmeSvcException, ZmeException, IOException
     {
         StringBuffer buf = new StringBuffer();
         buf.append(mMbox.mRestUrl).append(user).append("/").append(folder);
@@ -1846,11 +1846,13 @@ import de.enough.polish.util.StringTokenizer;
 	private void handleResp(boolean bufferResponse) 
 			throws IOException, 
 				   XmlPullParserException,
-				   ZmeSvcException {
+				   ZmeSvcException,
+				   ZmeException {
 		mIs = null;
+		int rc = 0;
 
 		try {
-			int rc = mConn.getResponseCode();
+			rc = mConn.getResponseCode();
 			switch (rc) {
 			case HttpConnection.HTTP_OK:
 			case HttpConnection.HTTP_INTERNAL_ERROR: // 500 happens on method failures
@@ -1873,13 +1875,13 @@ import de.enough.polish.util.StringTokenizer;
 
 			int eventType = mParser.getEventType();
 			if (eventType != XmlPullParser.START_DOCUMENT)
-				throw new IOException("Invalid response from server");
+				throw new ZmeException(ZmeException.IO_ERROR, "Invalid response from server");
 
 			mParser.next();
 			String elName = mParser.getName();
             if (elName.compareTo(EL_ITEMS) != 0) {
                 if (elName.compareTo(EL_ENV) != 0)
-                    throw new IOException("Invalid response: Expected Envelope encountered " + elName);
+                    throw new ZmeException(ZmeException.IO_ERROR, "Invalid response: Expected Envelope encountered " + elName);
 
                 mParser.next();
                 if (mParser.getName().compareTo(EL_HEADER) == 0) {
@@ -1920,8 +1922,12 @@ import de.enough.polish.util.StringTokenizer;
             } else if (elName.compareTo(EL_ITEMS) == 0) {
                 dispatchReponse(getClientData());
 			} else {
-				throw new IOException(
+				throw new ZmeException(ZmeException.IO_ERROR,
 						"Invalid response: Expected Body encountered " + elName);
+			}
+		} catch (IOException e) {
+			if (rc >= 200) {
+				throw new ZmeException(ZmeException.SERVER_ERROR, "Error code: "+rc+", "+e.getMessage());
 			}
 		} finally {
 			if (mIs != null) {
