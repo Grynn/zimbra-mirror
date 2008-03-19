@@ -2,6 +2,10 @@
 
 <attrs>
 
+<attr name="offlineAccountsOrder" type="string" cardinality="single" optionalIn="account">
+  <desc>visual order of all accounts in desktop UI</desc>
+</attr>
+
 <attr name="offlineModifiedAttrs" type="string" cardinality="multi" optionalIn="account,dataSource,identity">
   <desc>internal: set of attributes modified since the last synchronization</desc>
 </attr>

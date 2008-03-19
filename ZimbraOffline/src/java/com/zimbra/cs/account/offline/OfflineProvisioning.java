@@ -21,6 +21,7 @@ import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
@@ -37,6 +38,7 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.jsp.YmailUserData;
+import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
@@ -169,6 +171,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && isSyncAccount((Account)e));
     }
 
+    @SuppressWarnings("unchecked")
     synchronized void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged) throws ServiceException {
         EntryType etype = EntryType.typeForEntry(e);
         if (etype == null)
@@ -180,8 +183,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         else if (etype == EntryType.SIGNATURE)
         	throw ServiceException.INVALID_REQUEST("must use Provisioning.modifySignature() instead", null);
 
+        if (allowCallback && e instanceof Account && isLocalAccount((Account)e) && attrs.containsKey(A_offlineAccountsOrder))
+        	((Map<String, Object>)attrs).put(A_offlineAccountsOrder, promoteAccount((String)attrs.get(A_offlineAccountsOrder)));
+        
         // only tracking changes on account entries
-        markChanged &= e instanceof Account;
+        markChanged &= e instanceof OfflineAccount;
 
         if (markChanged) {
             attrs.remove(A_offlineModifiedAttrs);
@@ -402,11 +408,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public synchronized Account createAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
     	String dsName = (String)attrs.get(A_offlineDataSourceName);
+    	Account account = null;
     	if (dsName != null) {
-    		return createDataSourceAccount(dsName, emailAddress, password, attrs);
+    		account = createDataSourceAccount(dsName, emailAddress, password, attrs);
     	} else {
-    		return createSyncAccount(emailAddress, password, attrs);
+    		account = createSyncAccount(emailAddress, password, attrs);
     	}
+    	fixAccountsOrder(true);
+    	return account;
     }
     
     
@@ -510,9 +519,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
     }
     
-
-    
-    
     private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String password, Map<String, Object> dsAttrs) throws ServiceException {
         validEmailAddress(emailAddress);
         emailAddress = emailAddress.toLowerCase().trim();
@@ -609,7 +615,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return dataSources;
     }
 
-    private static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
     private static final String LOCAL_ACCOUNT_UID = "local";
     private static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
     private static final String LOCAL_ACCOUNT_DISPLAYNAME = "Loading...";
@@ -831,6 +836,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         Account acct = mAccountCache.getById(zimbraId);
         if (acct != null)
             mAccountCache.remove(acct);
+        
+        fixAccountsOrder(true);
     }
 
     @Override
@@ -1213,6 +1220,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public synchronized List getAllCalendarResources(Domain d) throws ServiceException {
         throw new UnsupportedOperationException();
     }
@@ -1223,6 +1231,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public synchronized List getAllDistributionLists(Domain d) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("getAllDistributionLists");
     }
@@ -1249,6 +1258,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public synchronized List searchCalendarResources(Domain d, EntrySearchFilter filter, String[] returnAttrs, String sortAttr, boolean sortAscending) throws ServiceException {
         return Collections.emptyList();
     }
@@ -1754,5 +1764,40 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public void flushCache(CacheEntryType type, CacheEntry[] entries) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("flushCache");
+    }
+    
+    private String promoteAccount(String accountId) throws ServiceException {
+    	String[] order = fixAccountsOrder(false);
+    	for (int i = 0; i < order.length; ++i) {
+    		if (order[i].equals(accountId) && i > 0) {
+    			order[i] = order[i - 1];
+    			order[i - 1] = accountId;
+    			break;
+    		}
+    	}
+    	return StringUtil.join(",", order);
+    }
+    
+    //append unknown and remove missing
+    private String[] fixAccountsOrder(boolean commit) throws ServiceException {
+    	Account localAccount = getLocalAccount();
+    	String oldOrderStr = localAccount.getAttr(A_offlineAccountsOrder, "");
+    	String[] oldOrder = oldOrderStr.length() > 0 ? oldOrderStr.split(",") : new String[0];
+
+    	List<Account> accounts = getAllAccounts();
+    	String[] newOrder = new String[accounts.size()];
+    	for (int i = 0; i < newOrder.length; ++i) {
+    		newOrder[i] = accounts.get(i).getId();
+    	}
+    	
+    	OfflineUtil.fixItemOrder(oldOrder, newOrder);
+    	String newOrderStr = newOrder.length > 0 ? StringUtil.join(",", newOrder) : "";
+
+    	if (commit && !newOrderStr.equals(oldOrderStr)) {
+    		Map<String, Object> attrs = new HashMap<String, Object>(1);
+    		attrs.put(A_offlineAccountsOrder, newOrderStr);
+    		modifyAttrs(localAccount, attrs, false, false, false);
+    	}
+    	return newOrder;
     }
 }

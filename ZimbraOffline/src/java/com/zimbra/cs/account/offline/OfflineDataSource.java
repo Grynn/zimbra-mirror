@@ -64,6 +64,8 @@ public class OfflineDataSource extends DataSource {
     
     private static class EProperties extends Properties {
     	
+		private static final long serialVersionUID = -8135956477865965194L;
+
 		@Override
 		public String getProperty(String key, String defaultValue) {
 			String val = super.getProperty(key, defaultValue);

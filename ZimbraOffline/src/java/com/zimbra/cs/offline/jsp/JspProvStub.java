@@ -1,6 +1,7 @@
 package com.zimbra.cs.offline.jsp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class JspProvStub {
     	return new JspProvStub();
     }
 
+    @SuppressWarnings("unchecked")
     public List<Account> getOfflineAccounts() throws ServiceException {
         List<Account> accounts = prov.getAllAccounts(null);
         for (Iterator<Account> i = accounts.iterator(); i.hasNext();) {
@@ -37,6 +39,7 @@ public class JspProvStub {
         return accounts;  
     }
     
+    @SuppressWarnings("unchecked")
     public List<DataSource> getOfflineDataSources() throws ServiceException {
         List<Account> accounts = prov.getAllAccounts(null);
         List<DataSource> dataSources = new ArrayList<DataSource>();
@@ -51,6 +54,7 @@ public class JspProvStub {
         return dataSources;    
     }
     
+    @SuppressWarnings("unchecked")
     public String getLoginAccountName() throws ServiceException {
         List<Account> accounts = prov.getAllAccounts(null);
         if (accounts.size() == 1)
@@ -108,5 +112,19 @@ public class JspProvStub {
     
     public void deleteOfflineDataSource(String accountId) throws ServiceException {
     	prov.deleteAccount(accountId);
+    }
+    
+    public String[] promoteAccount(String accountId) throws ServiceException {
+    	Map<String, Object> attrs = new HashMap<String, Object>(1);
+    	attrs.put(OfflineConstants.A_offlineAccountsOrder, accountId); //server side will fill in the rest
+    	Account account = prov.get(AccountBy.id, OfflineConstants.LOCAL_ACCOUNT_ID);
+    	prov.modifyAttrs(account, attrs);
+    	return getAccountsOrder();
+    }
+    
+    public String[] getAccountsOrder() throws ServiceException {
+    	Account account = prov.get(AccountBy.id, OfflineConstants.LOCAL_ACCOUNT_ID);
+    	String orderStr = account.getAttr(OfflineConstants.A_offlineAccountsOrder, "");
+    	return orderStr.length() > 0 ? orderStr.split(",") : new String[0];
     }
 }

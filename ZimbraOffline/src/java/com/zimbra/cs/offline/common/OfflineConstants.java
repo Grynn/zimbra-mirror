@@ -9,6 +9,8 @@ public interface OfflineConstants {
 		unknown, offline, online, running, authfail, error
 	}	
 	
+    public static final String A_offlineAccountsOrder = "offlineAccountsOrder";
+    
     public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
     public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
@@ -43,4 +45,6 @@ public interface OfflineConstants {
     public static final String A_zimbraDataSourceLastSync = "zimbraDataSourceLastSync";
     
     public static final long DEFAULT_SYNC_FREQ = 5 * Constants.MILLIS_PER_MINUTE;
+    
+    public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
 }

@@ -2,7 +2,8 @@ package com.zimbra.cs.offline.jsp;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class ConsoleBean extends PageBean {
 		private String email;
 		private long lastSync;
 		private SyncStatus status = SyncStatus.unknown;
+		private boolean isFirst;
 		//private boolean isAutoSyncDisabled;
 
 		public boolean isZmail() {
@@ -75,17 +77,39 @@ public class ConsoleBean extends PageBean {
 			return status == SyncStatus.error;
 		}
 		
+		public boolean isFirst() {
+			return isFirst;
+		}
+		
 //		private boolean isAutoSyncDisabled() {
 //			return isAutoSyncDisabled;
 //		}
 	}
+
+	private String accountId; //only set for promoting
 	
+	private AccountSummary[] savedAccounts;
 	
 	public ConsoleBean() {}
 	
-	public Collection<AccountSummary> getAccounts() throws ServiceException {
+	public void setAccountId(String accountId) {
+		this.accountId =  accountId;
+	}
+	
+	public AccountSummary[] getAccounts() throws ServiceException {
+		JspProvStub stub = JspProvStub.getInstance();
+		
+		String[] order = null;
+		if (accountId != null) {
+			order = stub.promoteAccount(accountId);
+			accountId = null;
+		} else if (savedAccounts != null)
+			return savedAccounts;
+		else
+			order = stub.getAccountsOrder();
+		
 		List<AccountSummary> sums = new ArrayList<AccountSummary>();		
-		List<Account> accounts = JspProvStub.getInstance().getOfflineAccounts();
+		List<Account> accounts = stub.getOfflineAccounts();
 		for (Account account : accounts) {
 			AccountSummary sum = new AccountSummary();
 			sum.isZmail = true;
@@ -101,7 +125,7 @@ public class ConsoleBean extends PageBean {
 			//sum.isAutoSyncDisabled = DateUtil.getTimeIntervalSecs(account.getAttr(OfflineConstants.A_offlineSyncFreq), OfflineConstants.DEFAULT_SYNC_FREQ / 1000) < 0;
 			sums.add(sum);
 		}
-		List<DataSource> dataSources = JspProvStub.getInstance().getOfflineDataSources();
+		List<DataSource> dataSources = stub.getOfflineDataSources();
 		for (DataSource ds : dataSources) {
 			AccountSummary sum = new AccountSummary();
 			sum.id = ds.getAccountId();
@@ -115,7 +139,29 @@ public class ConsoleBean extends PageBean {
 			//sum.isAutoSyncDisabled = DateUtil.getTimeIntervalSecs(ds.getAttr(OfflineConstants.A_zimbraDataSourceSyncFreq), OfflineConstants.DEFAULT_SYNC_FREQ / 1000) < 0;
 			sums.add(sum);
 		}
-		return sums;
+		
+		final String[] finalOrder = order;
+		final AccountSummary[] sumArray = new AccountSummary[sums.size()];
+		sums.toArray(sumArray);
+		
+		if (sumArray.length > 0) {
+	        Arrays.sort(sumArray, new Comparator<AccountSummary>() {
+				public int compare(AccountSummary o1, AccountSummary o2) {
+					int index1 = sumArray.length, index2 = sumArray.length;
+					for (int i = 0; i < finalOrder.length; ++i) {
+						if (o1.id.equals(finalOrder[i]))
+							index1 = i;
+						else if (o2.id.equals(finalOrder[i]))
+							index2 = i;
+					}
+					return index1 - index2;
+				}
+	        });
+	        sumArray[0].isFirst = true;
+		}
+
+		savedAccounts = sumArray;
+		return sumArray;
 	}
 	
 }

@@ -3,8 +3,11 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.ConsoleBean"/>
+<jsp:setProperty name="bean" property="*"/>
 
-<c:if test="${param.loginOp != 'logout' && (param.client == 'advanced' || (param.client == 'standard' && fn:length(bean.accounts) == 1))}">
+<c:set var="accounts" value="${bean.accounts}"/>
+
+<c:if test="${param.loginOp != 'logout' && (param.client == 'advanced' || (param.client == 'standard' && fn:length(accounts) == 1))}">
     <jsp:forward page="/desktop/login.jsp"/>
 </c:if>
 
@@ -29,6 +32,12 @@ function OnAccount(id, zmail) {
     hidden_form.submit();
 }
 
+function OnPromote(id) {
+    hidden_form.accountId.value = id;
+    hidden_form.action = "/zimbra/desktop/console.jsp";
+    hidden_form.submit();
+}
+
 function OnNew() {
     window.location = "/zimbra/desktop/new.jsp";
 }
@@ -50,7 +59,7 @@ function OnLoginTo(username) {
 <br><br><br><br><br><br>
 <div align="center">
 <c:choose>
-<c:when test="${empty bean.accounts}">
+<c:when test="${empty accounts}">
 
 <div id="welcome" class='ZWizardPage ZWizardPageBig'>
     <div class='ZWizardPageTitle'>
@@ -108,9 +117,9 @@ function OnLoginTo(username) {
 
 
     <table class="ZWizardTable" cellpadding=5 border=0 align="center">
-    	<tr><th>Account Name</th><th>Email Address</th><th>Last Sync</th><th>Status</th></tr>
+    	<tr><th>Account Name</th><th>Email Address</th><th>Last Sync</th><th>Status</th><th>Order</th></tr>
     	
-    	<c:forEach items="${bean.accounts}" var="account">
+    	<c:forEach items="${accounts}" var="account">
 	        <tr><td><a href="javascript:OnAccount('${account.id}', ${account.zmail})">${account.name}</a></td>
 	            <td>${account.email}</td>
 	            <td>${account.lastSync}</td>
@@ -160,6 +169,11 @@ function OnLoginTo(username) {
                    </c:choose>
 		       </td></tr></table>
 	           </td>
+		       <td align="center">
+		           <c:if test="${not account.first}">
+		               <a href="javascript:OnPromote('${account.id}')"><img src="/zimbra/img/arrows/ImgUpArrow.gif" border="0" alt="Move Up"></a>
+		           </c:if>
+		       </td>
 	        </tr>
     	</c:forEach>
     </table>

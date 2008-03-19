@@ -1,6 +1,5 @@
 package com.zimbra.cs.offline.jsp;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.offline.util.yauth.AuthenticationException;
 
 public class XmailBean extends FormBean {
 	

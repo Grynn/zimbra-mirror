@@ -23,6 +23,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.offline.util.OfflineUtil;
 
 import java.util.*;
 
@@ -146,12 +147,15 @@ public class OfflineAccount extends Account {
 	public String[] getMultiAttr(String name) {
     	if (isLocalAccount() && (name.equals(Provisioning.A_zimbraChildAccount) || name.equals(Provisioning.A_zimbraPrefChildVisibleAccount))) {
     		try {
-    			List<Account> accounts = OfflineProvisioning.getOfflineInstance().getAllAccounts();
+    			OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+    			List<Account> accounts = prov.getAllAccounts();
                 String[] accountIds = null;
     			if (accounts != null) {
     				accountIds = new String[accounts.size()];
     				for (int i = 0; i < accounts.size(); ++i)
     					accountIds[i] = accounts.get(i).getId();
+    				String[] order = prov.getLocalAccount().getAttr(OfflineConstants.A_offlineAccountsOrder, "").split(",");
+    				OfflineUtil.fixItemOrder(order, accountIds);
     			} else {
     				accountIds = new String[0];
     			}
