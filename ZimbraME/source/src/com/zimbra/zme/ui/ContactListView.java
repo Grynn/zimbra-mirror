@@ -40,7 +40,11 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 	private static final Command DONE = new Command(Locale.get("addressPicker.Done"), Command.CANCEL, 1);
 	private static final Command OK = new Command(Locale.get("main.Ok"), Command.OK, 1);
 	
+	//#if (${bytes(polish.HeapSize)} >= ${bytes(1MB)}) or (polish.HeapSize == dynamic)
+	//# private static final int MAX_TO_DISPLAY = 100;
+	//#else
 	private static final int MAX_TO_DISPLAY = 20;
+	//#endif
 	
 	private TextBox mNewAddrTB;
 	private ContactListSearchItem mCLSearchItem;
@@ -153,9 +157,6 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 		}
 		
 		mCLSearchItem.reset();
-		//Force call itemStateChanged since for some reason a the notification change nevers
-		//goes through
-		itemStateChanged(mCLSearchItem);
 	}
 	
 	public void setCurrent() {
@@ -288,23 +289,20 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 			for (Enumeration e = mMidlet.mMbox.mContacts.elements() ; e.hasMoreElements() && !overflow;) {
 				c = (Contact)e.nextElement();
 				
-				//#if (${bytes(polish.HeapSize)} >= ${bytes(1MB)}) or (polish.HeapSize == dynamic)
-					if ((c.mFirstName != null && (stem == null || c.mFirstName.toLowerCase().startsWith(stem)))
+				if ((c.mFirstName != null && (stem == null || c.mFirstName.toLowerCase().startsWith(stem)))
 						|| (c.mLastName != null && (stem == null || c.mLastName.toLowerCase().startsWith(stem)))) {
-						mTmpList[cnt++] = c;
-						if (cnt >= mTmpList.length) {
-							overflow = true;
-							break;
-						}
-					} else
-				//#endif 
-					if ((stem == null || c.mEmail.toLowerCase().startsWith(stem))) {
-						mTmpList[cnt++] = c;
-						if (cnt >= mTmpList.length) {
-							overflow = true;
-							break;
-						}
+					mTmpList[cnt++] = c;
+					if (cnt >= mTmpList.length) {
+						overflow = true;
+						break;
 					}
+				} else if ((stem == null || c.mEmail.toLowerCase().startsWith(stem))) {
+					mTmpList[cnt++] = c;
+					if (cnt >= mTmpList.length) {
+						overflow = true;
+						break;
+					}
+				}
 			}
 		}
 
@@ -314,6 +312,8 @@ public class ContactListView extends View implements ResponseHdlr, ItemStateList
 		//#endif
 	
 		f.deleteAll();
+		f.append(Graphics.TOP, mHeader);
+		f.append(Graphics.TOP, mCLSearchItem);
 		if (cnt == 0) {
 			mMsgItem.setText(Locale.get("contactListView.NoContacts"));
 			f.append(mMsgItem);

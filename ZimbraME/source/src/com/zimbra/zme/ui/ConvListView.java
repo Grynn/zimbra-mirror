@@ -284,6 +284,8 @@ public class ConvListView extends MailListView {
 				mMidlet.gotoSearchView();
 			} else if (cmd == SAVE_SEARCH) {
 				doSaveSearch();
+			} else if (cmd == BACK) {
+				mMidlet.gotoInboxView();
 			} else {
 				// Delegate the command handling up to the parent
 				super.commandAction(cmd, d);
@@ -506,7 +508,10 @@ public class ConvListView extends MailListView {
 			f.addCommand(ZimbraME.SHOW_LOG);
 		//#endif
 		
-		f.addCommand(REFRESH);
+		if (mViewType == INBOX_VIEW)
+			f.addCommand(REFRESH);
+		else
+			f.addCommand(BACK);
 			
 		//#undefine tmp.hasCmdKeyEvts
 	}

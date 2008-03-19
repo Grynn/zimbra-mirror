@@ -34,24 +34,23 @@ import de.enough.polish.ui.Style;
 import de.enough.polish.util.Locale;
 
 public class CollectionView extends View implements ResponseHdlr {
-	/* Different types of collection view. Trying to avoid creating a bunch
-	 * of classes for each type as this seems to be a big no no with J2ME devlopment
-	 */
+	
 	public static final int SAVEDSEARCH = 1;
-    public static final int SAVEDSEARCH_PICK = 2;
+    public static final int SAVEDSEARCH_PICKER = 2;
 	public static final int TAG_PICKER = 3;
 	public static final int TAG_SEARCH = 4;
 	public static final int FOLDER_SEARCH = 5;
-	public static final int FOLDER_PICK = 6;
+	public static final int FOLDER_PICKER = 6;
 	public static final int ATTACHMENTLIST = 7;
 	
-	private ZmeStringItem mNoData;
-	private Vector mAttachmentList;
-	private String[] mTags;
-	private int mType;
-	private ZmeListener mListener;
-    private Folder mSelected;
-    private StringItem mHeader;
+	protected ZmeStringItem mNoData;
+	protected Vector mAttachmentList;
+	protected String[] mTags;
+	protected int mType;
+	protected ZmeListener mListener;
+    protected Folder mSelected;
+    protected StringItem mHeader;
+    protected SelectedItems mSelection;
 
 	private static final Command OPEN = new Command(Locale.get("main.Open"), Command.ITEM, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.ITEM, 1);
@@ -77,6 +76,164 @@ public class CollectionView extends View implements ResponseHdlr {
 		return mType;
 	}
 	
+	public static CollectionView folderSearchView(ZimbraME midlet) {
+        //#style CollectionView
+		CollectionView cv = new FolderSearchView(midlet, false);
+		return cv;
+	}
+	public static CollectionView folderPickerView(ZimbraME midlet) {
+        //#style CollectionView
+		CollectionView cv = new FolderSearchView(midlet, true);
+		return cv;
+	}
+	public static CollectionView savedSearchView(ZimbraME midlet) {
+        //#style CollectionView
+		return new SavedSearchView(midlet, false);
+	}
+	public static CollectionView savedSearchPickerView(ZimbraME midlet) {
+        //#style CollectionView
+		return new SavedSearchView(midlet, true);
+	}
+	public static CollectionView attachmentView(ZimbraME midlet) {
+        //#style CollectionView
+		return new AttachmentView(midlet);
+	}
+	public static CollectionView tagSearchView(ZimbraME midlet) {
+        //#style CollectionView
+		return new TagSearchView(midlet, false);
+	}
+	public static CollectionView tagPickerView(ZimbraME midlet) {
+        //#style CollectionView
+		return new TagSearchView(midlet, true);
+	}
+	
+	private static class FolderSearchView extends CollectionView {
+		//#ifdef polish.usePolishGui
+		FolderSearchView(ZimbraME midlet, boolean picker, Style style) {
+			super(midlet, picker ? FOLDER_PICKER : FOLDER_SEARCH, style);
+		}
+		//#else
+		FolderSearchView(ZimbraME midlet, boolean picker) {
+			super(midlet, picker ? FOLDER_PICKER : FOLDER_SEARCH);
+		}
+		//#endif
+		protected Enumeration getItems() {
+			Folder f = mSelected;
+			if (f == null)
+				f = mMidlet.mMbox.mRootFolder;
+			return f.mSubfolders.elements();
+		}
+		public void load() {
+			Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingFolders"));
+			mMidlet.mMbox.getFolders(this);
+		}
+		protected void addCommands(Displayable d) {
+			if (mType == FOLDER_SEARCH)
+				d.addCommand(ZimbraME.SEARCH);
+			else
+				d.addCommand(ZimbraME.OK);
+			d.addCommand(REFRESH);
+			d.addCommand(BACK);
+		}
+		protected String getNoDataItem() { return Locale.get("collectionView.NoFolders"); }
+		protected String getHeader() { return Locale.get("collectionView.Folders"); }
+	}
+	
+	private static class SavedSearchView extends CollectionView {
+		//#ifdef polish.usePolishGui
+		SavedSearchView(ZimbraME midlet, boolean picker, Style style) {
+			super(midlet, picker ? SAVEDSEARCH_PICKER : SAVEDSEARCH, style);
+		}
+		//#else
+		SavedSearchView(ZimbraME midlet, boolean picker) {
+			super(midlet, picker ? SAVEDSEARCH_PICKER : SAVEDSEARCH);
+		}
+		//#endif
+		protected Enumeration getItems() {
+			return mMidlet.mMbox.mSavedSearches.elements();
+		}
+		public void load() {
+			Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingSavedSearches"));
+			mMidlet.mMbox.getSavedSearches(this);
+		}
+		protected void addCommands(Displayable d) {
+			if (mType == SAVEDSEARCH)
+				d.addCommand(ZimbraME.SEARCH);
+			else
+				d.addCommand(ZimbraME.OK);
+			d.addCommand(REFRESH);
+			d.addCommand(DELETE);
+			d.addCommand(BACK);
+		}
+		protected boolean hasSearchField() { return (mType == SAVEDSEARCH) ? true : false; }
+		protected String getSearchField() { return Locale.get("main.NewSearch"); }
+		protected String getNoDataItem() { return Locale.get("collectionView.NoSavedSearches"); }
+		protected String getHeader() { return Locale.get("collectionView.SavedSearches"); }
+	}
+
+	private static class AttachmentView extends CollectionView {
+		//#ifdef polish.usePolishGui
+		AttachmentView(ZimbraME midlet, Style style) {
+			super(midlet, ATTACHMENTLIST, style);
+		}
+		//#else
+		AttachmentView(ZimbraME midlet) {
+			super(midlet, ATTACHMENTLIST);
+		}
+		//#endif
+		protected Enumeration getItems() {
+			return mAttachmentList.elements();
+		}
+		protected void addCommands(Displayable d) {
+			d.addCommand(OPEN);
+			d.addCommand(BACK);
+		}
+		protected String getHeader() { return Locale.get("collectionView.Attachments"); }
+	}
+	
+	private static class TagSearchView extends CollectionView {
+		//#ifdef polish.usePolishGui
+		TagSearchView(ZimbraME midlet, boolean picker, Style style) {
+			super(midlet, picker ? TAG_PICKER : TAG_SEARCH, style);
+		}
+		//#else
+		TagSearchView(ZimbraME midlet, boolean picker) {
+			super(midlet, picker ? TAG_PICKER : TAG_SEARCH);
+		}
+		//#endif
+		protected Enumeration getItems() {
+			return mMidlet.mMbox.mTags.elements();
+		}
+		public void load() {
+			Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingTags"));
+			mMidlet.mMbox.getTags(this);
+		}
+		protected void addCommands(Displayable d) {
+			if (mType == TAG_SEARCH)
+				d.addCommand(ZimbraME.SEARCH);
+			else
+				d.addCommand(ZimbraME.OK);
+			d.addCommand(REFRESH);
+			d.addCommand(BACK);
+		}
+		protected boolean isSelectable() { return true; }
+		protected String getNoDataItem() { return Locale.get("collectionView.NoTags"); }
+		protected String getHeader() { return Locale.get("collectionView.Tags"); }
+	}
+	protected Enumeration getItems() {
+		return new Enumeration() {
+			public boolean hasMoreElements() { return false; }
+			public Object nextElement() { return null; }
+		};
+	}
+	
+	protected boolean isSelectable() { return false; }
+	protected boolean hasSearchField() { return false; }
+	protected String getSearchField()  { return null; }
+	protected String getNoDataItem() { return Locale.get("collectionView.NoData"); }
+	protected String getHeader() { return ""; }
+	protected void addCommands(Displayable d) { }
+	
 	public void render() {
 		FramedForm f = null;
 		//#if true
@@ -84,106 +241,28 @@ public class CollectionView extends View implements ResponseHdlr {
 		//#endif
 		f.deleteAll();
         f.append(Graphics.TOP, mHeader);
-		if (mType == FOLDER_PICK || mType == FOLDER_SEARCH) {
-            Folder selected = mMidlet.mMbox.mRootFolder;
-            if (mSelected != null)
-                selected = mSelected;
-            Vector folders = selected.mSubfolders;
-            if (folders != null && folders.size() > 0) {
-                for (Enumeration e = folders.elements(); e.hasMoreElements();) {
-                    Folder currentFolder = (Folder)e.nextElement();
-                    if (!currentFolder.showThisFolder())
-                        continue;
-                    //#style CollectionItem
-                    CollectionItem c = new CollectionItem(mMidlet, this, currentFolder, false);
-                    f.append(c);
-                }
-            }
-			return;
-		} else if (mType == ATTACHMENTLIST) {
-			if (mAttachmentList != null && mAttachmentList.size() > 0) {
-				CollectionItem c;
-				for (Enumeration e = mAttachmentList.elements(); e.hasMoreElements();) {
-					//#style CollectionItem
-					c = new CollectionItem(mMidlet, this, (Attachment)e.nextElement(), false);
-					f.append(c);
-			}
-				return;
-			}
-		} else {
-			if (mType == SAVEDSEARCH) {
-	            //#style CollectionInputField
-	            TextField input = new TextField(Locale.get("main.NewSearch"), null, 128, TextField.ANY);
-	            f.append(input);
-			}
-			Vector collection = (mType == SAVEDSEARCH || mType == SAVEDSEARCH_PICK) ? mMidlet.mMbox.mSavedSearches : mMidlet.mMbox.mTags;
-			if (collection != null && collection.size() > 0) {
-				CollectionItem c;
-                boolean selectable = (mType == TAG_SEARCH || mType == TAG_PICKER);
-				for (Enumeration e = collection.elements(); e.hasMoreElements();) {
-				    //#style CollectionItem
-				    c = new CollectionItem(mMidlet, this, (MailboxItem)e.nextElement(), selectable);
-
-				    if (mTags != null) {
-				        for (int i = 0; i < mTags.length; i++) {
-				            if (c.mItem.mId.compareTo(mTags[i]) == 0)
-				                c.setSelected(true);
-				        }
-				    }
-					f.append(c);
-				}
-				return;
-			}
-		}
-		if (mNoData == null) {
-			switch (mType) {
-				case FOLDER_PICK:
-				case FOLDER_SEARCH:
-					//#style NoResultItem
-					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoFolders"));
-					break;
-					
-				case SAVEDSEARCH:
-                case SAVEDSEARCH_PICK:
-					//#style NoResultItem
-					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoSavedSearches"));
-					break;
-					
-				case TAG_PICKER:
-				case TAG_SEARCH:
-					//#style NoResultItem
-					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoTags"));
-					break;
-					
-				default:
-					//#style NoResultItem
-					mNoData = new ZmeStringItem(mMidlet, this, Locale.get("collectionView.NoData"));
-					break;
-			}
-		}
-		f.append(mNoData);
-	}
-	
-	public void load() {
-		switch (mType) {
-			case SAVEDSEARCH:
-            case SAVEDSEARCH_PICK:
-				Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingSavedSearches"));
-				mMidlet.mMbox.getSavedSearches(this);
-				break;
-				
-			case FOLDER_PICK:
-			case FOLDER_SEARCH:
-				Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingFolders"));
-				mMidlet.mMbox.getFolders(this);
-				break;
-				
-			case TAG_PICKER:
-			case TAG_SEARCH:
-				Dialogs.popupWipDialog(mMidlet, this, Locale.get("collectionView.GettingTags"));
-				mMidlet.mMbox.getTags(this);
-				break;
-		}
+        if (hasSearchField()) {
+            //#style CollectionInputField
+            TextField input = new TextField(getSearchField(), null, 128, TextField.ANY);
+            f.append(input);
+        }
+        boolean noItems = true;
+        for (Enumeration e = getItems(); e.hasMoreElements();) {
+            MailboxItem item = (MailboxItem)e.nextElement();
+            
+            if (item instanceof Folder && !((Folder)item).showThisFolder())
+            	continue;
+            
+            //#style CollectionItem
+            CollectionItem c = new CollectionItem(mMidlet, this, item, isSelectable());
+            f.append(c);
+            noItems = false;
+        }
+        if (noItems) {
+			//#style NoResultItem
+			mNoData = new ZmeStringItem(mMidlet, this, getNoDataItem());
+			f.append(mNoData);
+        }
 	}
 	
 	public void setListener(ZmeListener listener) {
@@ -195,29 +274,63 @@ public class CollectionView extends View implements ResponseHdlr {
 		//render();
 	}
 	
-	public void setTags(String[] tags) {
-		if (mType != TAG_SEARCH && mType != TAG_PICKER)
-			return;
-		mTags = tags;
-		int sz = mView.size();
-		
-		//If we have an empty list return
-		if (sz == 1 && (mView.get(0) instanceof ZmeStringItem))
-			return;
-		
-		CollectionItem ci = null;
-		for (int i = 0; i < sz; i++) {
-			ci = (CollectionItem)mView.get(i);
-			ci.setSelected(false);
-			if (tags != null) {
-				for (int j = 0; j < tags.length; j++) {
-					if (ci.mItem.mId.compareTo(tags[j]) == 0) {
-						ci.setSelected(true);
+	private interface SelectedItems {
+		public void markSelection();
+		public Vector computeSelection();
+		public boolean isChanged();
+	}
+	
+	private class SelectedTags implements SelectedItems {
+		String[] mTags;
+		public SelectedTags(String[] tagIds) {
+			mTags = tagIds;
+		}
+		public void markSelection() {
+			if (mView.size() == 1 && (mView.get(0) instanceof ZmeStringItem))
+				return;
+			for (int elem = 0; elem < mView.size(); elem++) {
+				CollectionItem item = (CollectionItem)mView.get(elem);
+				if (item.mItem.mItemType != MailboxItem.TAG) {
+					continue;
+				}
+				boolean selected = false;
+				for (int i = 0; i < mTags.length; i++) {
+					if (item.mItem.mId.compareTo(mTags[i]) == 0) {
+						selected = true;
 						break;
 					}
 				}
+				item.setSelected(selected);
 			}
 		}
+		public Vector computeSelection() {
+			Vector v = new Vector();
+			for (int i = 0; i < mView.size(); i++) {
+				CollectionItem item = (CollectionItem) mView.get(i);
+				if (item.getSelected())
+					v.addElement(item.mItem);
+			}
+			return v;
+		}
+		public boolean isChanged() {
+			for (int i = 0; i < mView.size(); i++) {
+				CollectionItem item = (CollectionItem) mView.get(i);
+				boolean found = false;
+				for (int t = 0; t < mTags.length; t++) {
+					if (mTags[t].equals(item.mItem.mId))
+						found = true;
+				}
+				if (item.getSelected() && !found)
+					return true;
+				else if (!item.getSelected() && found)
+					return true;
+			}
+			return false;
+		}
+	}
+	public void setTags(String[] tags) {
+		mSelection = new SelectedTags(tags);
+		mSelection.markSelection();
 	}
 	
 	public void commandAction(Command cmd, 
@@ -257,17 +370,18 @@ public class CollectionView extends View implements ResponseHdlr {
 				setNextCurrent();
 			} else if (cmd == ZimbraME.OK) {
 				//selectable item scenario
-				if (mType == TAG_PICKER) {
-				    MailboxItem[]tags = computeTags();
-					if (tags != null && mListener != null) {
-						mListener.action(this, tags);
-					}
-					setNextCurrent();
-				} else if (mType == FOLDER_PICK || mType == SAVEDSEARCH_PICK) {
-                    CollectionItem ci = (CollectionItem)item;
-                    mListener.action(this, ci.mItem);
-                    setNextCurrent();
-                }
+				if (mListener != null) {
+					if (mType == TAG_PICKER) {
+						Vector selection = mSelection.computeSelection();
+						if (selection.size() > 0) {
+							mListener.action(this, selection);
+						}
+					} else if (mType == FOLDER_PICKER || mType == SAVEDSEARCH_PICKER) {
+	                    CollectionItem ci = (CollectionItem)item;
+	                    mListener.action(this, ci.mItem);
+	                }
+				}
+				setNextCurrent();
 			} else if (item instanceof CollectionItem) {
 				super.commandAction(cmd, d, false);
 			}
@@ -396,7 +510,7 @@ public class CollectionView extends View implements ResponseHdlr {
 						if (query == null)
 							query = new StringBuffer();
 						else
-							query.append(" AND ");
+							query.append(" ");//query.append(" AND ");
 						query.append("tag:\"").append(ci2.mItem.mName).append("\"");
 					}
 				}
@@ -406,132 +520,17 @@ public class CollectionView extends View implements ResponseHdlr {
 			}
 	}
 	
-	private void init(int type) {
+	protected void init(int type) {
 		mType = type;
-		
 		FramedForm f = null;
 		//#if true
 			//# f = (FramedForm)mView;
 		//#endif
 		
 		f.setCommandListener(this);
-		
 		//#style CollectionViewHeader
-		mHeader = new StringItem(null, "");
-		
-		switch (mType) {
-			case FOLDER_PICK:
-				mHeader.setText(Locale.get("collectionView.Folders"));
-				f.addCommand(ZimbraME.OK);
-				f.addCommand(REFRESH);
-				f.addCommand(ZimbraME.CANCEL);
-				break;
-			case FOLDER_SEARCH:
-				mHeader.setText(Locale.get("collectionView.Folders"));
-				f.addCommand(ZimbraME.SEARCH);
-				f.addCommand(REFRESH);
-				f.addCommand(BACK);
-				break;
-			case SAVEDSEARCH:
-				mHeader.setText(Locale.get("collectionView.SavedSearches"));
-				f.addCommand(ZimbraME.SEARCH);
-				f.addCommand(REFRESH);
-				f.addCommand(DELETE);
-				f.addCommand(BACK);
-				break;
-			case TAG_SEARCH:
-				mHeader.setText(Locale.get("collectionView.Tags"));
-				f.addCommand(ZimbraME.SEARCH);
-				f.addCommand(REFRESH);
-				f.addCommand(BACK);
-				break;
-			case TAG_PICKER:
-				mHeader.setText(Locale.get("collectionView.Tags"));
-				f.addCommand(ZimbraME.OK);
-				f.addCommand(REFRESH);
-				f.addCommand(ZimbraME.CANCEL);
-				break;
-            case SAVEDSEARCH_PICK:
-                mHeader.setText(Locale.get("collectionView.SavedSearches"));
-                f.addCommand(ZimbraME.OK);
-                f.addCommand(REFRESH);
-                f.addCommand(BACK);
-                break;
-			case ATTACHMENTLIST:
-				mHeader.setText(Locale.get("collectionView.Attachments"));
-				f.addCommand(OPEN);
-				f.addCommand(BACK);
-				break;
-
-		}
-		
+		mHeader = new StringItem(null, getHeader());
 		f.append(Graphics.TOP, mHeader);
+		addCommands(f);
 	}
-
-	private MailboxItem[] computeTags() {
-		MailboxItem[] tags = null;
-		CollectionItem ci;
-		boolean tagsChanged = false;
-		int cnt = 0;
-		int sz = mView.size();
-		for (int i = 0; i < sz; i++) {
-			ci = (CollectionItem)mView.get(i);
-			if (ci.getSelected()) {
-				cnt++;
-				if (!tagsChanged) {
-					// tag is selected. If it is not in mTags, then it is a new tag that has
-					// been added to the item. Indicate that the tag set has changed
-					if (mTags == null) {
-						tagsChanged = true;
-					} else {
-						boolean found = false;
-						for (int j = 0; j < mTags.length; j++) {
-							if (mTags[j].compareTo(ci.mItem.mId) == 0) {
-								found = true;
-								break;
-							}
-						}
-						if (!found)
-							tagsChanged = true;
-					}
-				}
-			} else {
-				if (!tagsChanged) {
-					// tag not selected. If the tag was in mTags, then it has now been removed so
-					// indicate that the tag set has been changed  
-					if (mTags != null) {
-						boolean found = false;
-						for (int j = 0; j < mTags.length; j++) {
-							if (mTags[j].compareTo(ci.mItem.mId) == 0) {
-								found = true;
-								break;
-							}
-						}
-						if (found)
-							tagsChanged = true;
-					}
-				}
-			}
-		}
-		
-		if (!tagsChanged) {
-			return null;
-		} else {
-			// Build the new tag list
-			if (cnt > 0) {
-				int idx = 0;
-				tags = new MailboxItem[cnt];
-				for (int i = 0; i < sz; i++) {
-					ci = (CollectionItem)mView.get(i);
-					if (ci.getSelected())
-						tags[idx++] = ci.mItem;
-				}
-			} else {
-				// Empty tag list
-				tags = new MailboxItem[0];
-			}
-			return tags;
-		}
-	}
-	
 }

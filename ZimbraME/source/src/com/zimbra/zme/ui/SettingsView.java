@@ -8,6 +8,7 @@
 package com.zimbra.zme.ui;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.microedition.lcdui.ChoiceGroup;
 import javax.microedition.lcdui.Command;
@@ -248,7 +249,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             v = mMidlet.gotoFolderPickerView(mView);
             break;
         case SHORTCUT_TAG:
-            v = mMidlet.gotoTagView(mView, CollectionView.TAG_PICKER, mSelectedShortcut.shortcut.destId);
+            v = mMidlet.gotoTagPickerView(mView, mSelectedShortcut.shortcut.destId);
             break;
         case SHORTCUT_SEARCH:
             v = mMidlet.gotoSavedSearchPickerView(mView);
@@ -532,8 +533,8 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
         public void action(Object obj, Object data) {
             if (data instanceof MailboxItem)
                 handleMailboxItemPick((MailboxItem)data);
-            else if (data instanceof MailboxItem[])
-                handleMultiMailboxItemPick((MailboxItem[])data);
+            else if (data instanceof Vector)
+                handleMultiMailboxItemPick((Vector)data);
         }
         public void handleMailboxItemPick(MailboxItem mi) {
             if (mi instanceof Folder)
@@ -546,12 +547,13 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
             s.shortcut.dest[0] = mi.mName;
             v.createShortcutEditTab(s);
         }
-        public void handleMultiMailboxItemPick(MailboxItem[] mi) {
-            s.shortcut.dest = new String[mi.length];
-            s.shortcut.destId = new String[mi.length];
-            for (int i = 0; i < mi.length; i++) {
-                s.shortcut.destId[i] = mi[i].mId;
-                s.shortcut.dest[i] = mi[i].mName;
+        public void handleMultiMailboxItemPick(Vector mi) {
+        	int sz = mi.size();
+            s.shortcut.dest = new String[sz];
+            s.shortcut.destId = new String[sz];
+            for (int i = 0; i < sz; i++) {
+                s.shortcut.destId[i] = ((MailboxItem)mi.elementAt(i)).mId;
+                s.shortcut.dest[i] = ((MailboxItem)mi.elementAt(i)).mName;
             }
             s.shortcut.action = Shortcut.ACTION_TAG;
             v.createShortcutEditTab(s);

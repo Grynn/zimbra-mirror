@@ -7,6 +7,8 @@
 
 package com.zimbra.zme.ui;
 
+import java.util.Vector;
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Displayable;
@@ -83,7 +85,7 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 				//#ifdef polish.usePolishGui
 					//# m = (MailItem)((FramedForm)mView).getCurrentItem();
 				//#endif				
-				CollectionView cv = mMidlet.gotoTagView(mView, CollectionView.TAG_PICKER, m.mTags);
+				CollectionView cv = mMidlet.gotoTagPickerView(mView, m.mTags);
 				cv.setListener(this);
 			}
 		}
@@ -100,11 +102,11 @@ public abstract class MailListView extends View implements ResponseHdlr, ZmeList
 					//# m = (MailItem)((FramedForm)mView).getCurrentItem();
 				//#endif
 				if (m != null) {
-                    MailboxItem[] tags = (MailboxItem[]) data;
-                    int count = tags.length;
+                    Vector tags = (Vector) data;
+                    int count = tags.size();
                     String[] tagIds = new String[count];
                     for (int i = 0; i < count; i++)
-                        tagIds[i] = tags[i].mId;
+                        tagIds[i] = ((MailboxItem)tags.elementAt(i)).mId;
 					m.setTags(tagIds); 
 				}
 			}

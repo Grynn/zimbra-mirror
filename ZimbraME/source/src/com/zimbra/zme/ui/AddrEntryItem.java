@@ -70,10 +70,6 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 			//#style AddrEntryEditForm
 			mEditForm = new FramedForm(null);
 			
-			//#style AddrEntryEditFormHeader
-			StringItem si = new StringItem(null, Locale.get("addrEntryEdit.EditRecipients"));
-			mEditForm.append(Graphics.TOP, si);
-			
 			mEditForm.addCommand(NEW);
 			mEditForm.addCommand(DONE);
 			mEditForm.setCommandListener(this);
@@ -103,6 +99,11 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 				/* If we are in edit mode and have some items in the field, then show the edit form, else
 				 * behave like new mode */
 				mEditForm.deleteAll();
+				
+				//#style AddrEntryEditFormHeader
+				StringItem si = new StringItem(null, Locale.get("addrEntryEdit.EditRecipients"));
+				mEditForm.append(Graphics.TOP, si);
+				
 				if (mContacts != null && mContacts.size() > 0) {
 					createConvListItems(mContacts, false, true);
 					ContactListItem cli;
@@ -174,7 +175,9 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	/* This method is called from ContactListView when the user has invoked the DONE command*/
 	public void action(Object source,
 					   Object data) {
-        Vector contacts = mMidlet.getContactPickerListView().getSelectedContacts();
+		if (!(source instanceof ContactListView))
+			return;
+        Vector contacts = ((ContactListView)source).getSelectedContacts();
         if (contacts == null)
             return;
 		if (mMode == NEW_MODE) {
@@ -187,9 +190,15 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 			for (Enumeration e = contacts.elements(); e.hasMoreElements(); )
 				mContacts.addElement(e.nextElement());
 			mEditForm.deleteAll();
+			
+			//#style AddrEntryEditFormHeader
+			StringItem si = new StringItem(null, Locale.get("addrEntryEdit.EditRecipients"));
+			mEditForm.append(Graphics.TOP, si);
+			
 			ContactListItem cli;
 			for (Enumeration e = mCLItems.elements(); e.hasMoreElements(); ) {
 				cli = (ContactListItem)e.nextElement();
+				cli.setChecked(true);
 				mEditForm.append(cli);
 			}
 		}
@@ -214,9 +223,9 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 			ContactListView clv = mMidlet.getContactPickerListView();
 			clv.setDoneListener(this);
 			clv.setNext(mEditForm);
+			clv.setCurrent();
 			// Don't want anything checked
 			clv.reset(null);
-			clv.setCurrent();
 		}
 	}
 
@@ -236,23 +245,21 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 			Contact c;
 			for (int i = 0; i < size; i++) {
 				c = (Contact)mContacts.elementAt(i);
-				//#if (${bytes(polish.HeapSize)} >= ${bytes(1MB)}) or (polish.HeapSize == dynamic)	
-					StringBuffer s = new StringBuffer();
-					if (c.mFirstName != null)
-						s.append(c.mFirstName);
-					
-					if (c.mLastName != null) {
-						if (s.length() > 0)
-							s.append(" ").append(c.mLastName);
-						else
-							s.append(c.mLastName);
-					}
-					if (s.length() > 0) {
-						s.append(" <").append(c.mEmail).append(">");
-						mAddrs[i] = s.toString();
-					} else
-				//#endif
-				mAddrs[i] = c.mEmail;
+				StringBuffer s = new StringBuffer();
+				if (c.mFirstName != null)
+					s.append(c.mFirstName);
+
+				if (c.mLastName != null) {
+					if (s.length() > 0)
+						s.append(" ").append(c.mLastName);
+					else
+						s.append(c.mLastName);
+				}
+				if (s.length() > 0) {
+					s.append(" <").append(c.mEmail).append(">");
+					mAddrs[i] = s.toString();
+				} else
+					mAddrs[i] = c.mEmail;
 			}
 		}
 	}

@@ -39,7 +39,6 @@ public class ContactListSearchItem extends CustomItem {
 	
 	private ZimbraME mMidlet;
 	private StringBuffer mText;
-	private String mStr;
 	private long mLastPressTime;
 	private int mLastKeyCode;
 	private Font mFont;
@@ -70,77 +69,91 @@ public class ContactListSearchItem extends CustomItem {
 	private void init(ZimbraME m,
 					  View parentView) {
 		mMidlet = m;
-		mStr = "";
 		mText = new StringBuffer();
 		UiAccess.setAccessible(this, false);
 	}
 	
 	public String getText() {
-		return mStr;
+		return mText.toString();
 	}
 	
 	public void reset() {
 		mText.delete(0, mText.length());
-		mStr = "";
 		notifyStateChanged();
 		repaint();
 	}
 	
 	public void addKeyPress(int keyCode) {
+		char c = 0;
+		boolean directInput = false;
+		//#ifdef polish.TextField.UseDirectInput
+		//# directInput = true;
+		//#endif
 		int gameAction = getGameAction(keyCode);
-		long now = (new Date()).getTime();
-		if (keyCode != Canvas.KEY_NUM4 && gameAction == Canvas.LEFT) {
-			if (mStr.length() > 0)
+		if (!directInput && keyCode != Canvas.KEY_NUM4 && gameAction == Canvas.LEFT) {
+			if (mText.length() > 0) {
 				mText.deleteCharAt(mText.length() - 1);
-			else
+				notifyStateChanged();
+			} else
 				return;
-		} else {
-			int len = mText.length();
-			if (len > MAX_LEN)
-				return;
-			
-			char last = (len != 0) ? mText.charAt(len - 1) : '*';
-			switch(keyCode) {
-				case Canvas.KEY_NUM0:
-					mText.append('0');
-					break;
-				case Canvas.KEY_NUM1:
-					mText.append('1');
-					break;
-				case Canvas.KEY_NUM2:
-					calcKeyChar(KEY2_CHARS, keyCode, last, now);
-					break;
-				case Canvas.KEY_NUM3:
-					calcKeyChar(KEY3_CHARS, keyCode, last, now);
-					break;
-				case Canvas.KEY_NUM4:
-					calcKeyChar(KEY4_CHARS, keyCode, last, now);
-					break;
-				case Canvas.KEY_NUM5:
-					calcKeyChar(KEY5_CHARS, keyCode, last, now);
-					break;
-				case Canvas.KEY_NUM6:
-					calcKeyChar(KEY6_CHARS, keyCode, last, now);
-					break;
-				case Canvas.KEY_NUM7:
-					calcKeyChar(KEY7_CHARS, keyCode, last, now);
-					break;
-				case Canvas.KEY_NUM8:
-					calcKeyChar(KEY8_CHARS, keyCode, last, now);
-					break;
-				case Canvas.KEY_NUM9:
-					calcKeyChar(KEY9_CHARS, keyCode, last, now);
-					break;
-				default:
-					//Break out of any other keys
-					return;
-			}
-			mLastPressTime = now;
-			mLastKeyCode = keyCode;
 		}
-		mStr = mText.toString();
-		notifyStateChanged();
+		//#ifdef polish.TextField.UseDirectInput
+		//# c = (char)keyCode;
+		//#else
+		//# c = addNativeInputChar(keyCode);
+		//#endif
+		if (c != 0) {
+			mText.append(c);
+			notifyStateChanged();
+		}
 		repaint();
+	}
+	
+	private char addNativeInputChar(int keyCode) {
+		char c = 0;
+		long now = (new Date()).getTime();
+		int len = mText.length();
+		if (len > MAX_LEN)
+			return c;
+
+		char last = (len != 0) ? mText.charAt(len - 1) : '*';
+		switch(keyCode) {
+		case Canvas.KEY_NUM0:
+			c = '0';
+			break;
+		case Canvas.KEY_NUM1:
+			c = '1';
+			break;
+		case Canvas.KEY_NUM2:
+			c = calcKeyChar(KEY2_CHARS, keyCode, last, now);
+			break;
+		case Canvas.KEY_NUM3:
+			c = calcKeyChar(KEY3_CHARS, keyCode, last, now);
+			break;
+		case Canvas.KEY_NUM4:
+			c = calcKeyChar(KEY4_CHARS, keyCode, last, now);
+			break;
+		case Canvas.KEY_NUM5:
+			c = calcKeyChar(KEY5_CHARS, keyCode, last, now);
+			break;
+		case Canvas.KEY_NUM6:
+			c = calcKeyChar(KEY6_CHARS, keyCode, last, now);
+			break;
+		case Canvas.KEY_NUM7:
+			c = calcKeyChar(KEY7_CHARS, keyCode, last, now);
+			break;
+		case Canvas.KEY_NUM8:
+			c = calcKeyChar(KEY8_CHARS, keyCode, last, now);
+			break;
+		case Canvas.KEY_NUM9:
+			c = calcKeyChar(KEY9_CHARS, keyCode, last, now);
+			break;
+		default:
+			break;
+		}
+		mLastPressTime = now;
+		mLastKeyCode = keyCode;
+		return c;
 	}
 	
 	protected int getMinContentHeight() {
@@ -175,7 +188,7 @@ public class ContactListSearchItem extends CustomItem {
 		g.setFont(mFont);
 		g.setColor(mFontColor);
 		g.drawString(SEARCH, 0, (h - mFontHeight) / 2, Graphics.TOP | Graphics.LEFT);
-		g.drawString(mStr, mLabelLen + PADDING * 3, PADDING , Graphics.TOP | Graphics.LEFT);
+		g.drawString(getText(), mLabelLen + PADDING * 3, PADDING , Graphics.TOP | Graphics.LEFT);
 	}
 
 	public void setStyle(Style style) {
@@ -188,18 +201,19 @@ public class ContactListSearchItem extends CustomItem {
 		mLabelLen = mFont.stringWidth(SEARCH);
 	}	
 
-	private void calcKeyChar(char[] targetChars,
+	private char calcKeyChar(char[] targetChars,
 							 int keyCode,
 							 char last,
             				 long now) {
 		int len = targetChars.length;
 		if (mLastKeyCode == keyCode && (now - mLastPressTime) < REPEAT_DELAY) {
 			for (int i = 0; i < len; i++) {
-				if (targetChars[i] == last)
-					mText.setCharAt(mText.length() - 1, ((i == len - 1) ? targetChars[0] : targetChars[i + 1]));
+				if (targetChars[i] == last) {
+					mText.delete(mText.length()-1, mText.length());
+					return ((i == len - 1) ? targetChars[0] : targetChars[i + 1]);
+				}
 			}
-		} else {
-			mText.append(targetChars[0]);
 		}
+		return targetChars[0];
 	}
 }
