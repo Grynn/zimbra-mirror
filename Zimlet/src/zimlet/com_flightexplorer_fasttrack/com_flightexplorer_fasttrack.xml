@@ -1,4 +1,4 @@
-<zimlet name="com_flightexplorer_fasttrack" version="1.18" description="Finds updated flight status using FlightExplorer FastTrack service">
+<zimlet name="com_flightexplorer_fasttrack" version="5.0" description="Finds updated flight status using FlightExplorer FastTrack service">
 	<include>com_flightexplorer_fasttrack.js</include>
 	<include>FlightStatusDlg.js</include>	
 	<resource>permission.txt</resource>
@@ -17,7 +17,9 @@
 	<resource>fog.gif</resource>			
 	<resource>dust.gif</resource>				
 	<resource>smoke.gif</resource>					
-	<resource>haze.gif</resource>						
+	<resource>haze.gif</resource>	
+	<resource>wait.gif</resource>						
+	<resource>imgna.gif</resource>						
 	<includeCSS>com_flightexplorer_fasttrack.css</includeCSS>	
 	<handlerObject>Com_Flightexplorer_Fasttrack</handlerObject>
 	<serverExtension hasKeyword="flight" regex="/((^[A-Z]{1}[0-9]{1})|([\s\n\t\)\(\]\[\}\{.,\-]{1}[A-Z]{1}[0-9]{1})|(^[A-Z]{2,3})|([\s\n\t\)\(\]\[\}\{.,\-]{1}[A-Z]{2,3})|(^[0-9]{1}[A-Z]{2})|([\s\n\t\)\(\]\[\}\{.,\-]{1}[0-9]{1}[A-Z]{2}))(([\s]?[0-9]{1,4}[\s\n\t\)\(\]\[\}\{.,\-]{1})|([\s]?[0-9]{1,4}$))/g"/>

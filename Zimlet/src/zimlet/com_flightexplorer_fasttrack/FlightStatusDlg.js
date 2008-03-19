@@ -519,10 +519,10 @@ FlightStatusDlg.prototype.dataClbk = function(flightInfo) {
 	}
 	
 	try {
-		if(!flightInfo.ImagePath)		
-			flightInfo.ImagePath = this.zimlet.getResource("blank.gif");
-		
-		this.flightImg.src = flightInfo.ImagePath;			
+		if(!flightInfo.ImagePath || flightInfo.ImagePath.length<2)		
+			this.flightImg.src = this.zimlet.getResource("imgna.gif");
+		else
+			this.flightImg.src = flightInfo.ImagePath;			
 	} catch (ex) {
 		//something went wrong, need error handling
 	}
@@ -604,17 +604,18 @@ function() {
 	this.setFlightCode(code);
 	this.resetFields("Please wait. Loading data...");	
 	this.zimlet.getFlightDataAndImage(new AjxCallback(this, this.dataClbk),code);
+	this.flightImg.src = this.zimlet.getResource("wait.gif");
 }
 
 FlightStatusDlg.prototype._getDepYMap =
 function () {
-	var url = [FlightStatusDlg.YMAP_URL, "?addr=", AjxStringUtil.urlEncode(this.Origin), "&csz=", AjxStringUtil.urlEncode(this.OriginLocation), "&new=1&name=&qty="].join("");
+	var url = [FlightStatusDlg.YMAP_URL, "?addr=", AjxStringUtil.urlEncode(this.Origin), "&new=1&name=&qty="].join("");
 	window.open(url);
 }
 
 FlightStatusDlg.prototype._getArrYMap =
 function () {
-	var url = [FlightStatusDlg.YMAP_URL, "?addr=", AjxStringUtil.urlEncode(this.Destination), "&csz=", AjxStringUtil.urlEncode(this.DestinationLocation), "&new=1&name=&qty="].join("");
+	var url = [FlightStatusDlg.YMAP_URL, "?addr=", AjxStringUtil.urlEncode(this.Destination), "&new=1&name=&qty="].join("");
 	window.open(url);
 }
 
