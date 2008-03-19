@@ -1,7 +1,7 @@
 <project name="Offline-Installer" default="installer-make">
 
 	<property file="build.properties"/>
-    <property name="build.dir" location="../../../build" />
+    <property name="build.dir" location="../ZimbraBuild/i386" />
 
 	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/home/build/zdesktop/install4j/bin/ant.jar"/>
 
