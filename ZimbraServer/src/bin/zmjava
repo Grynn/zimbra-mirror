@@ -45,6 +45,7 @@ done
 
 exec ${zimbra_java_home}/bin/java \
      -client -Xmx256m \
+     -XX:ErrorFile=${zimbra_home}/log \
      -Dzimbra.home=${zimbra_home} \
      -Djava.library.path=${zimbra_home}/lib \
      -Djava.ext.dirs=${JRE_EXT_DIR}${PATHSEP}${zimbra_home}/lib/jars${PATHSEP}${ZIMBRA_EXT_DIR} \
