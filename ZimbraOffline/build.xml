@@ -222,6 +222,8 @@
 		<move file="${dist.dir}/jetty/webapps/zimbra/WebHelp" tofile="${dist.dir}/jetty/webapps/zimbra/help" />
 		<copy file="src/installer/resources/launcher_16x16.ico" tofile="${dist.dir}/jetty/webapps/zimbra/favicon.ico" overwrite="true"/>
 		<copy file="${dist.dir}/jetty/webapps/zimbra/favicon.ico" tofile="${dist.dir}/jetty/webapps/zimbra/img/logo/favicon.ico" overwrite="true"/>
+
+		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base2/splash.html" token="&lt;td id='ZLoginSwitchMsg'&gt;&lt;script&gt;document.write(ZmMsg.splashScreenSwitch)&lt;/script&gt;&lt;/td&gt;" value=""/>
 	</target>
 
 	<target name="offline-jspc">
