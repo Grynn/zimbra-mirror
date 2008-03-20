@@ -232,8 +232,7 @@ public class ZimbraME extends MIDlet implements CommandListener {
 
     public CollectionView gotoAttachmentListView(Displayable current,
     										     Vector attachmentList) {
-     	CollectionView cv = CollectionView.attachmentView(this);
-    	cv.load(attachmentList);
+     	CollectionView cv = CollectionView.attachmentView(this, attachmentList);
     	cv.render();
     	cv.setCurrent();
 		cv.setNext(current);

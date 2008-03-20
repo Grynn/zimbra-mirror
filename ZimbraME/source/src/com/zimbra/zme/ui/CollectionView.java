@@ -18,6 +18,7 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.ItemStateListener;
 import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.TextBox;
 import javax.microedition.lcdui.TextField;
 
 import com.zimbra.zme.ResponseHdlr;
@@ -47,8 +48,6 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 	public static final int CONTACT = 8;
 	
 	protected ZmeStringItem mNoData;
-	protected Vector mAttachmentList;
-	protected String[] mTags;
 	protected int mType;
 	protected ZmeListener mListener;
     protected Folder mSelected;
@@ -101,9 +100,9 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
         //#style CollectionView
 		return new SavedSearchView(midlet, true);
 	}
-	public static CollectionView attachmentView(ZimbraME midlet) {
+	public static CollectionView attachmentView(ZimbraME midlet, Vector attachments) {
         //#style CollectionView
-		return new AttachmentView(midlet);
+		return new AttachmentView(midlet, attachments);
 	}
 	public static CollectionView tagSearchView(ZimbraME midlet) {
         //#style CollectionView
@@ -184,14 +183,17 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 
 	private static class AttachmentView extends CollectionView {
 		//#ifdef polish.usePolishGui
-		AttachmentView(ZimbraME midlet, Style style) {
+		AttachmentView(ZimbraME midlet, Vector attachments, Style style) {
 			super(midlet, ATTACHMENTLIST, style);
+			mAttachmentList = attachments;
 		}
 		//#else
-		AttachmentView(ZimbraME midlet) {
+		AttachmentView(ZimbraME midlet, Vector attachments) {
 			super(midlet, ATTACHMENTLIST);
+			mAttachmentList = attachments;
 		}
 		//#endif
+		protected Vector mAttachmentList;
 		protected Enumeration getItems() {
 			return mAttachmentList.elements();
 		}
@@ -254,18 +256,38 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 					mListener.action(this, mSelection.computeSelection());
 					setNextCurrent();
 				} else if (cmd == NEW) {
+					mAddNew = new TextBox(Locale.get("contactListView.NewContact"), null, 256, TextField.EMAILADDR);
+					mAddNew.addCommand(DONE);
+					mAddNew.setCommandListener(this);
+					mMidlet.mDisplay.setCurrent(mAddNew);
+				}
+			} else if (d == mAddNew) {
+				if (cmd == DONE) {
+					String newEmail = mAddNew.getString();
+					if (newEmail != null && newEmail.length() > 0) {
+						Contact c = new Contact();
+						c.mEmail = mAddNew.getString();
+						mMidlet.mMbox.mContacts.addElement(c);
+						mContacts.addElement(c);
+			            //#style CollectionItem
+			            CollectionItem ci = new CollectionItem(mMidlet, this, c, true);
+			            ci.setSelected(true);
+			            mView.append(ci);
+					}
+					mMidlet.mDisplay.setCurrent(mView);
 				}
 			}
 		}
-		private Vector contacts;
+		private Vector mContacts;
+		private TextBox mAddNew;
 		protected Enumeration getItems() {
-			if (contacts == null) {
-				contacts = new Vector();
+			if (mContacts == null) {
+				mContacts = new Vector();
 				Enumeration e = mMidlet.mMbox.mContacts.elements();
 				while (e.hasMoreElements())
-					contacts.addElement(e.nextElement());
+					mContacts.addElement(e.nextElement());
 			}
-			return contacts.elements();
+			return mContacts.elements();
 		}
 		protected void addCommands(Displayable d) {
 			d.addCommand(NEW);
@@ -277,15 +299,15 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 			if (item instanceof TextField) {
 				String stem = ((TextField)item).getString();
 				Enumeration e = mMidlet.mMbox.mContacts.elements();
-				contacts.removeAllElements();
+				mContacts.removeAllElements();
 				while (e.hasMoreElements()) {
 					Contact c = (Contact)e.nextElement();
 					
 					if ((c.mFirstName != null && (stem == null || c.mFirstName.toLowerCase().startsWith(stem)))
 							|| (c.mLastName != null && (stem == null || c.mLastName.toLowerCase().startsWith(stem)))) {
-						contacts.addElement(c);
+						mContacts.addElement(c);
 					} else if ((stem == null || c.mEmail.toLowerCase().startsWith(stem))) {
-						contacts.addElement(c);
+						mContacts.addElement(c);
 					}
 				}
 				render();
@@ -347,11 +369,6 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 	
 	public void setListener(ZmeListener listener) {
 		mListener = listener;
-	}
-	
-	public void load(Vector attachmentList) {
-		mAttachmentList = attachmentList;
-		//render();
 	}
 	
 	private class SelectedItems {

@@ -17,7 +17,9 @@ import javax.microedition.lcdui.CustomItem;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.StringItem;
 
 import com.zimbra.zme.Util;
@@ -25,7 +27,9 @@ import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.ZmeListener;
 import com.zimbra.zme.client.Contact;
 
-import de.enough.polish.ui.FramedForm;
+//#ifdef polish.usePolishGui
+//# import de.enough.polish.ui.FramedForm;
+//#endif
 import de.enough.polish.ui.Style;
 import de.enough.polish.util.Locale;
 
@@ -44,7 +48,7 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	private Font mFont;
 	private int mFontColor;
 	private int mMode;
-	private FramedForm mEditForm;
+	private Form mEditForm;
 	
 	//#ifdef polish.usePolishGui
 		public AddrEntryItem(ZimbraME m,
@@ -66,8 +70,12 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	public void setMode(int mode) {
 		mMode = mode;	
 		if (mode == EDIT_MODE && mEditForm == null) {
+			//#ifdef polish.usePolishGui
 			//#style AddrEntryEditForm
-			mEditForm = new FramedForm(null);
+			//# mEditForm = new FramedForm(null);
+			//#else
+			mEditForm = new Form(null);
+			//#endif
 			
 			mEditForm.addCommand(NEW);
 			mEditForm.addCommand(DONE);
@@ -76,7 +84,22 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	}
 	
 	public void setAddresses(String[] addrs) {
-		//mContacts = mMidlet.getContactPickerListView().getContactsForEmailAddrs(addrs);
+		for (int i = 0; i < addrs.length; i++) {
+			Contact c = null;
+			if (mMidlet.mMbox.mContacts != null) {
+				for (Enumeration e = mMidlet.mMbox.mContacts.elements(); e.hasMoreElements(); ) {
+					c = (Contact)e.nextElement();
+					if (c.mEmail != null && c.mEmail.equalsIgnoreCase(addrs[i]))
+						break;
+					c = null;
+				}
+			}
+			if (c == null) {
+				c = new Contact();
+				c.mEmail = addrs[i];
+			}
+			mContacts.addElement(c);
+		}
 		createAddrs();
 		invalidate();
 		notifyStateChanged();
@@ -90,32 +113,14 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	
 	protected void keyPressed(int keyCode) {
 		if (keyCode != Canvas.KEY_NUM5 && getGameAction(keyCode) == Canvas.FIRE) {
+			if (mContacts == null || mContacts.size() == 0)
+				setMode(NEW_MODE);
 			if (mMode == NEW_MODE) {
 				CollectionView cv = mMidlet.getContactPickerListView(mMidlet.mDisplay.getCurrent());
 				cv.setListener(this);
 				cv.setCurrent();
 			} else {
-				/* If we are in edit mode and have some items in the field, then show the edit form, else
-				 * behave like new mode */
-				mEditForm.deleteAll();
-				
-				//#style AddrEntryEditFormHeader
-				StringItem si = new StringItem(null, Locale.get("addrEntryEdit.EditRecipients"));
-				mEditForm.append(Graphics.TOP, si);
-
-				View v = mMidlet.getTopView();
-				if (mContacts != null && mContacts.size() > 0) {
-					for (Enumeration e = mContacts.elements(); e.hasMoreElements(); ) {
-			            //#style CollectionItem
-			            CollectionItem c = new CollectionItem(mMidlet, v, (Contact)e.nextElement(), true);
-			            c.setSelected(true);
-			            mEditForm.append(c);
-					}
-					mMidlet.mDisplay.setCurrent(mEditForm);
-				} else {
-					mMode = NEW_MODE;
-					keyPressed(keyCode);
-				}
+				showEditForm();
 			}
 		}
 	}
@@ -188,29 +193,49 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 				if (!mContacts.contains(obj))
 					mContacts.addElement(obj);
 			}
-			mEditForm.deleteAll();
-			
-			//#style AddrEntryEditFormHeader
-			StringItem si = new StringItem(null, Locale.get("addrEntryEdit.EditRecipients"));
-			mEditForm.append(Graphics.TOP, si);
-			
-			View v = mMidlet.getTopView();
-			if (mContacts != null && mContacts.size() > 0) {
-				for (Enumeration e = mContacts.elements(); e.hasMoreElements(); ) {
-		            //#style CollectionItem
-		            CollectionItem c = new CollectionItem(mMidlet, v, (Contact)e.nextElement(), true);
-		            c.setSelected(true);
-		            mEditForm.append(c);
-				}
-				mMidlet.mDisplay.setCurrent(mEditForm);
-			}
+			showEditForm();
 		}
 	}	
 
+	private void showEditForm() {
+		mEditForm.deleteAll();
+		
+		//#style AddrEntryEditFormHeader
+		StringItem si = new StringItem(null, Locale.get("addrEntryEdit.EditRecipients"));
+		//#ifdef polish.usePolishGui
+		//# ((FramedForm)mEditForm).append(Graphics.TOP, si);
+		//#else
+		mEditForm.append(si);
+		//#endif
+		
+		View v = mMidlet.getTopView();
+		if (mContacts != null && mContacts.size() > 0) {
+			for (Enumeration e = mContacts.elements(); e.hasMoreElements(); ) {
+	            //#style CollectionItem
+	            CollectionItem c = new CollectionItem(mMidlet, v, (Contact)e.nextElement(), true);
+	            c.setSelected(true);
+	            mEditForm.append(c);
+			}
+			mMidlet.mDisplay.setCurrent(mEditForm);
+		}
+	}
+	
 	/* This method is the commandAction handler for the edit form */
 	public void commandAction(Command cmd, 
 			  				  Displayable d) {
 		if (cmd == DONE) {
+			if (mEditForm != null) {
+				mContacts.removeAllElements();
+				for (int i = 0; i < mEditForm.size(); i++) {
+					Item item = mEditForm.get(i);
+					if (item instanceof CollectionItem) {
+						CollectionItem ci = (CollectionItem) item;
+						if (ci.getSelected())
+							mContacts.addElement(ci.mItem);
+						
+					}
+				}
+			}
 			createAddrs();
 			invalidate();
 			mMidlet.mDisplay.setCurrentItem(this);

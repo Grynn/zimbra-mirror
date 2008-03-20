@@ -163,6 +163,7 @@ addressPicker.New=New
 
 contactListView.ContactPicker=Contact Picker
 contactListView.Contacts=Contacts
+contactListView.NewContact=Enter New Contact Email Address
 contactListView.NoContacts=No matching Contacts
 contactListView.TooMany=Too many contacts to display. Please refine your search
 
