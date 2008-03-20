@@ -42,6 +42,9 @@ class OfflineConfig extends Config {
             }
            	String[] skins = OfflineLC.zdesktop_skins.value().split("\\s*,\\s*");
             attrs.put(Provisioning.A_zimbraInstalledSkin, skins);
+            
+            attrs.put(Provisioning.A_zimbraRedoLogEnabled, OfflineLC.zdesktop_redolog_enabled.booleanValue() ? "TRUE" : "FALSE");
+            
             return new OfflineConfig(attrs);
         } catch (ServiceException e) {
             // throw RuntimeException because we're being called at startup...
