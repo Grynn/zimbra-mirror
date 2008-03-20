@@ -35,8 +35,10 @@ $sortBy = "dateDesc";
 $types = "message";
 
 #standard options
-my ($user, $pw, $host, $help); #standard
+my ($admin, $user, $pw, $host, $help, $adminHost); #standard
 GetOptions("u|user=s" => \$user,
+           "admin" => \$admin,
+           "ah|adminHost=s" => \$adminHost,
            "pw=s" => \$pw,
            "h|host=s" => \$host,
            "help|?" => \$help,
@@ -70,8 +72,16 @@ END_OF_USAGE
     die $usage;
 }
 
-my $z = ZimbraSoapTest->new($user, $host, $pw);
-$z->doStdAuth();
+if (defined($adminHost)) {
+  $admin = 1;
+}
+
+my $z = ZimbraSoapTest->new($user, $host, $pw, undef, $adminHost);
+if (defined($admin)) {
+  $z->doAdminAuth();
+} else {
+  $z->doStdAuth();
+}
 
 my $d = new XmlDoc;
 my $searchName = "SearchRequest";

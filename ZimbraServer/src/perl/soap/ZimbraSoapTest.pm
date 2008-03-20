@@ -26,7 +26,7 @@ use XmlDoc;
 use Soap;
 
 sub new {
-    my ($class, $user, $host, $pw, $opts) = @_;
+    my ($class, $user, $host, $pw, $opts, $adminHost) = @_;
     my $self  = {};
     $self->{SOAP} = $Soap::Soap12;
     $self->{USER} = $user;
@@ -56,7 +56,11 @@ sub new {
         }
     } else {
         $self->{BASE_MAIL_URL} = $host;
-        $self->{BASE_ADMIN_URL} = $host;
+        if (defined $adminHost) {
+          $self->{BASE_ADMIN_URL} = $adminHost;
+        } else {
+          $self->{BASE_ADMIN_URL} = $host;
+        }
     }
     
     $self->{CONTEXT} = undef;
@@ -163,5 +167,12 @@ sub adminUrl
     my $self = shift;
     return $self->{ADMIN_URL};
 }
+
+sub context
+  {
+    my $self = shift;
+    return $self->{CONTEXT};
+  }
+
 
 1;
