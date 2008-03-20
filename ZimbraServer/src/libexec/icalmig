@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = 1.7;
+my $version = 1.71;
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -37,7 +37,7 @@ my $logfilename = "icalmig.log";
 my $logfile;
 my $icalfile;
 my $invalidfile;
-$icalfile="C:\\Zimbra_Work\\IcalMigration\\GATech\\ICS\\ICS\\rmb.ics" if ($DEBUG);
+$icalfile="" if ($DEBUG);
 
 my $outfile;
 
