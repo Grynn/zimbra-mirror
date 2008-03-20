@@ -40,8 +40,15 @@ CYGWIN*) PATHSEP=";";;
 esac
 
 CP=${ZMROOT}/lib/jars/zimbracommon.jar${PATHSEP}${ZMROOT}/lib/jars/commons-logging.jar${PATHSEP}${ZMROOT}/lib/jars/commons-cli-2.0.jar${PATHSEP}${ZMROOT}/lib/jars/dom4j-1.5.jar${PATHSEP}${ZMROOT}/lib/jars/log4j-1.2.8.jar${PATHSEP}${ZMROOT}/lib/jars/commons-httpclient-2.0.1.jar
-exec ${java} \
-  -XX:ErrorFile=${ZMROOT}/log \
+
+java_version=$(${java} -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
+if [ x"$java_version" = "x1.6.0" ]; then
+  java_options="-XX:ErrorFile=${ZMROOT}/log"
+else
+  java_options=""
+fi
+
+exec ${java} ${java_options} \
   -client -Dzimbra.home="${ZMROOT}" \
   -cp "$CP" \
   com.zimbra.common.localconfig.Main "$@"

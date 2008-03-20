@@ -40,9 +40,15 @@ if [ -e ${zimbra_home}/lib/ext-common ]; then
     jardirs=${jardirs}${PATHSEP}${zimbra_home}/lib/ext-common
 fi
 
-exec ${zimbra_java_home}/bin/java \
+java_version=$(${zimbra_java_home}/bin/java -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
+if [ x"$java_version" = "x1.6.0" ]; then
+  java_options="-XX:ErrorFile=${zimbra_home}/log"
+else
+  java_options=""
+fi
+
+exec ${zimbra_java_home}/bin/java ${java_options} \
      -client -Xmx256m \
-     -XX:ErrorFile=${zimbra_home}/log \
      -Dzimbra.home=${zimbra_home} \
      -Djava.library.path=${zimbra_home}/lib \
      -Djava.ext.dirs=${jardirs} \
