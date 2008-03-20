@@ -16,6 +16,7 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Item;
+import javax.microedition.lcdui.ItemStateListener;
 import javax.microedition.lcdui.StringItem;
 import javax.microedition.lcdui.TextField;
 
@@ -23,6 +24,7 @@ import com.zimbra.zme.ResponseHdlr;
 import com.zimbra.zme.ZimbraME;
 import com.zimbra.zme.ZmeListener;
 import com.zimbra.zme.client.Attachment;
+import com.zimbra.zme.client.Contact;
 import com.zimbra.zme.client.Folder;
 import com.zimbra.zme.client.Mailbox;
 import com.zimbra.zme.client.MailboxItem;
@@ -33,7 +35,7 @@ import de.enough.polish.ui.FramedForm;
 import de.enough.polish.ui.Style;
 import de.enough.polish.util.Locale;
 
-public class CollectionView extends View implements ResponseHdlr {
+public class CollectionView extends View implements ResponseHdlr, ItemStateListener {
 	
 	public static final int SAVEDSEARCH = 1;
     public static final int SAVEDSEARCH_PICKER = 2;
@@ -42,6 +44,7 @@ public class CollectionView extends View implements ResponseHdlr {
 	public static final int FOLDER_SEARCH = 5;
 	public static final int FOLDER_PICKER = 6;
 	public static final int ATTACHMENTLIST = 7;
+	public static final int CONTACT = 8;
 	
 	protected ZmeStringItem mNoData;
 	protected Vector mAttachmentList;
@@ -51,9 +54,12 @@ public class CollectionView extends View implements ResponseHdlr {
     protected Folder mSelected;
     protected StringItem mHeader;
     protected SelectedItems mSelection;
+    protected TextField mInputField;
 
 	private static final Command OPEN = new Command(Locale.get("main.Open"), Command.ITEM, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.ITEM, 1);
+	private static final Command NEW = new Command(Locale.get("addressPicker.New"), Command.ITEM, 1);
+	private static final Command DONE = new Command(Locale.get("addressPicker.Done"), Command.CANCEL, 1);
 
 	//#ifdef polish.usePolishGui
 		public CollectionView(ZimbraME midlet,
@@ -63,7 +69,8 @@ public class CollectionView extends View implements ResponseHdlr {
 			//#if true
 				//# mView = new FramedForm(null, style);
 			//#endif
-			init(type);		
+			init(type);
+			mView.setItemStateListener(this);
 		}
 	//#else
 		public CollectionView(ZimbraME midlet, 
@@ -105,6 +112,10 @@ public class CollectionView extends View implements ResponseHdlr {
 	public static CollectionView tagPickerView(ZimbraME midlet) {
         //#style CollectionView
 		return new TagSearchView(midlet, true);
+	}
+	public static CollectionView contactView(ZimbraME midlet) {
+        //#style CollectionView
+		return new ContactView(midlet);
 	}
 	
 	private static class FolderSearchView extends CollectionView {
@@ -220,6 +231,73 @@ public class CollectionView extends View implements ResponseHdlr {
 		protected String getNoDataItem() { return Locale.get("collectionView.NoTags"); }
 		protected String getHeader() { return Locale.get("collectionView.Tags"); }
 	}
+	
+	private static class ContactView extends CollectionView {
+		//#ifdef polish.usePolishGui
+		ContactView(ZimbraME midlet, Style style) {
+			super(midlet, CONTACT, style);
+		}
+		//#else
+		ContactView(ZimbraME midlet) {
+			super(midlet, CONTACT);
+		}
+		//#endif
+		public void load() {
+			Dialogs.popupWipDialog(mMidlet, this, Locale.get("main.LoadingContacts"));
+			mMidlet.mMbox.getContacts(this);
+		}
+		public void commandAction(Command cmd, 
+				  Displayable d) {
+			if (d == mView) {
+				if (cmd == DONE) {
+					mSelection = new SelectedItems();
+					mListener.action(this, mSelection.computeSelection());
+					setNextCurrent();
+				} else if (cmd == NEW) {
+				}
+			}
+		}
+		private Vector contacts;
+		protected Enumeration getItems() {
+			if (contacts == null) {
+				contacts = new Vector();
+				Enumeration e = mMidlet.mMbox.mContacts.elements();
+				while (e.hasMoreElements())
+					contacts.addElement(e.nextElement());
+			}
+			return contacts.elements();
+		}
+		protected void addCommands(Displayable d) {
+			d.addCommand(NEW);
+			d.addCommand(DONE);
+		}
+		public void itemStateChanged(Item item) {
+			//#debug
+			System.out.println("ContactView: itemStateChanged");
+			if (item instanceof TextField) {
+				String stem = ((TextField)item).getString();
+				Enumeration e = mMidlet.mMbox.mContacts.elements();
+				contacts.removeAllElements();
+				while (e.hasMoreElements()) {
+					Contact c = (Contact)e.nextElement();
+					
+					if ((c.mFirstName != null && (stem == null || c.mFirstName.toLowerCase().startsWith(stem)))
+							|| (c.mLastName != null && (stem == null || c.mLastName.toLowerCase().startsWith(stem)))) {
+						contacts.addElement(c);
+					} else if ((stem == null || c.mEmail.toLowerCase().startsWith(stem))) {
+						contacts.addElement(c);
+					}
+				}
+				render();
+			}
+		}
+		protected boolean hasSearchField() { return true; }
+		protected String getSearchField() { return Locale.get("main.Search"); }
+		protected boolean isSelectable() { return true; }
+		protected String getNoDataItem() { return Locale.get("contactListView.NoContacts"); }
+		protected String getHeader() { return Locale.get("contactListView.ContactPicker"); }
+	}
+	
 	protected Enumeration getItems() {
 		return new Enumeration() {
 			public boolean hasMoreElements() { return false; }
@@ -242,9 +320,11 @@ public class CollectionView extends View implements ResponseHdlr {
 		f.deleteAll();
         f.append(Graphics.TOP, mHeader);
         if (hasSearchField()) {
-            //#style CollectionInputField
-            TextField input = new TextField(getSearchField(), null, 128, TextField.ANY);
-            f.append(input);
+        	if (mInputField == null) {
+                //#style CollectionInputField
+                mInputField = new TextField(getSearchField(), null, 128, TextField.ANY);
+        	}
+            f.append(mInputField);
         }
         boolean noItems = true;
         for (Enumeration e = getItems(); e.hasMoreElements();) {
@@ -274,13 +354,24 @@ public class CollectionView extends View implements ResponseHdlr {
 		//render();
 	}
 	
-	private interface SelectedItems {
-		public void markSelection();
-		public Vector computeSelection();
-		public boolean isChanged();
+	private class SelectedItems {
+		public void markSelection() {}
+		public Vector computeSelection() {
+			Vector v = new Vector();
+			for (int i = 0; i < mView.size(); i++) {
+				Object o = mView.get(i);
+				if (!(o instanceof CollectionItem))
+					continue;
+				CollectionItem item = (CollectionItem) o;
+				if (item.getSelected())
+					v.addElement(item.mItem);
+			}
+			return v;
+		}
+		public boolean isChanged() { return false; }
 	}
 	
-	private class SelectedTags implements SelectedItems {
+	private class SelectedTags extends SelectedItems {
 		String[] mTags;
 		public SelectedTags(String[] tagIds) {
 			mTags = tagIds;
@@ -302,15 +393,6 @@ public class CollectionView extends View implements ResponseHdlr {
 				}
 				item.setSelected(selected);
 			}
-		}
-		public Vector computeSelection() {
-			Vector v = new Vector();
-			for (int i = 0; i < mView.size(); i++) {
-				CollectionItem item = (CollectionItem) mView.get(i);
-				if (item.getSelected())
-					v.addElement(item.mItem);
-			}
-			return v;
 		}
 		public boolean isChanged() {
 			for (int i = 0; i < mView.size(); i++) {
@@ -368,10 +450,10 @@ public class CollectionView extends View implements ResponseHdlr {
 			} else if (cmd == ZimbraME.CANCEL) {
 				// Selecteable item scenario
 				setNextCurrent();
-			} else if (cmd == ZimbraME.OK) {
+			} else if (cmd == ZimbraME.OK || cmd == DONE) {
 				//selectable item scenario
 				if (mListener != null) {
-					if (mType == TAG_PICKER) {
+					if (mType == TAG_PICKER || mType == CONTACT) {
 						Vector selection = mSelection.computeSelection();
 						if (selection.size() > 0) {
 							mListener.action(this, selection);
@@ -518,6 +600,9 @@ public class CollectionView extends View implements ResponseHdlr {
 					mMidlet.execSearch(query.toString(), null, null); 
 				break;
 			}
+	}
+	
+	public void itemStateChanged(Item item) {
 	}
 	
 	protected void init(int type) {

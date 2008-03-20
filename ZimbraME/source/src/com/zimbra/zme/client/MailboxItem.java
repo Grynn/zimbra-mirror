@@ -13,6 +13,7 @@ public abstract class MailboxItem {
     public static final int TAG = 4;
     public static final int ATTACHMENT = 5;
     public static final int APPOINTMENT = 6;
+    public static final int CONTACT = 7;
     
     public int mItemType;
     public String mId;
@@ -23,5 +24,11 @@ public abstract class MailboxItem {
     }
     public boolean hasParent() {
         return false;
+    }
+    public String getName() {
+    	return mName;
+    }
+    public String getDescription() {
+    	return null;
     }
 }

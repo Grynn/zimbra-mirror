@@ -27,7 +27,6 @@ import com.zimbra.zme.client.ZmeSvcException;
 import com.zimbra.zme.ui.ApptView;
 import com.zimbra.zme.ui.CalendarView;
 import com.zimbra.zme.ui.CollectionView;
-import com.zimbra.zme.ui.ContactListView;
 import com.zimbra.zme.ui.Dialogs;
 import com.zimbra.zme.ui.LoginView;
 import com.zimbra.zme.ui.ComposeView;
@@ -100,7 +99,6 @@ public class ZimbraME extends MIDlet implements CommandListener {
 
     private boolean mInited;
     private Displayable mPrevView; // Previous view
-    private ContactListView mContactPickerListView;
     private CalendarView mCalendarView;
     private View mTopView; // Top level view
 	private ConvListView mInboxView;
@@ -149,11 +147,16 @@ public class ZimbraME extends MIDlet implements CommandListener {
     	return new LoginView(this);
     }
 
-    public ContactListView getContactPickerListView() {
-    	if (mContactPickerListView == null)
-    		//#style ContactListView
-    		mContactPickerListView = new ContactListView(this, ContactListView.PICKER_STYLE);
-    	return mContactPickerListView;
+    public CollectionView getContactPickerListView(Displayable current) {
+    	CollectionView cv = CollectionView.contactView(this);
+    	if (mMbox.mContacts == null) {
+    		cv.load();
+    	} else {
+    		cv.render();
+    		cv.setCurrent();
+    	}
+    	cv.setNext(current);
+    	return cv;
     }
 
     public ComposeView createComposeView() {

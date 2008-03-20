@@ -39,7 +39,6 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	private static final int SPACING = 2;
 	
 	private ZimbraME mMidlet;
-	private Vector mCLItems;
 	private Vector mContacts;
 	private String[] mAddrs;
 	private Font mFont;
@@ -77,24 +76,24 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	}
 	
 	public void setAddresses(String[] addrs) {
-		mContacts = mMidlet.getContactPickerListView().getContactsForEmailAddrs(addrs);
+		//mContacts = mMidlet.getContactPickerListView().getContactsForEmailAddrs(addrs);
 		createAddrs();
 		invalidate();
 		notifyStateChanged();
 	}
 	
 	public Vector getContacts() {
-		return (mContacts == null || mContacts.size() == 0) ? null : mContacts;
+		if (mContacts == null || mContacts.size() == 0)
+			return null;
+		return mContacts;
 	}
 	
 	protected void keyPressed(int keyCode) {
 		if (keyCode != Canvas.KEY_NUM5 && getGameAction(keyCode) == Canvas.FIRE) {
 			if (mMode == NEW_MODE) {
-				ContactListView clv = mMidlet.getContactPickerListView();
-				clv.setDoneListener(this);
-				clv.setNext(this);
-				clv.reset(mContacts);
-				clv.setCurrent();
+				CollectionView cv = mMidlet.getContactPickerListView(mMidlet.mDisplay.getCurrent());
+				cv.setListener(this);
+				cv.setCurrent();
 			} else {
 				/* If we are in edit mode and have some items in the field, then show the edit form, else
 				 * behave like new mode */
@@ -103,14 +102,14 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 				//#style AddrEntryEditFormHeader
 				StringItem si = new StringItem(null, Locale.get("addrEntryEdit.EditRecipients"));
 				mEditForm.append(Graphics.TOP, si);
-				
+
+				View v = mMidlet.getTopView();
 				if (mContacts != null && mContacts.size() > 0) {
-					createConvListItems(mContacts, false, true);
-					ContactListItem cli;
-					for (Enumeration e = mCLItems.elements(); e.hasMoreElements(); ) {
-						cli = (ContactListItem)e.nextElement();
-						cli.setChecked(true);
-						mEditForm.append(cli);
+					for (Enumeration e = mContacts.elements(); e.hasMoreElements(); ) {
+			            //#style CollectionItem
+			            CollectionItem c = new CollectionItem(mMidlet, v, (Contact)e.nextElement(), true);
+			            c.setSelected(true);
+			            mEditForm.append(c);
 					}
 					mMidlet.mDisplay.setCurrent(mEditForm);
 				} else {
@@ -175,9 +174,7 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	/* This method is called from ContactListView when the user has invoked the DONE command*/
 	public void action(Object source,
 					   Object data) {
-		if (!(source instanceof ContactListView))
-			return;
-        Vector contacts = ((ContactListView)source).getSelectedContacts();
+        Vector contacts = (Vector)data;
         if (contacts == null)
             return;
 		if (mMode == NEW_MODE) {
@@ -186,20 +183,26 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 			createAddrs();
 			invalidate();
 		} else {
-			createConvListItems(contacts, true, true);
-			for (Enumeration e = contacts.elements(); e.hasMoreElements(); )
-				mContacts.addElement(e.nextElement());
+			for (Enumeration e = contacts.elements(); e.hasMoreElements(); ) {
+				Object obj = e.nextElement();
+				if (!mContacts.contains(obj))
+					mContacts.addElement(obj);
+			}
 			mEditForm.deleteAll();
 			
 			//#style AddrEntryEditFormHeader
 			StringItem si = new StringItem(null, Locale.get("addrEntryEdit.EditRecipients"));
 			mEditForm.append(Graphics.TOP, si);
 			
-			ContactListItem cli;
-			for (Enumeration e = mCLItems.elements(); e.hasMoreElements(); ) {
-				cli = (ContactListItem)e.nextElement();
-				cli.setChecked(true);
-				mEditForm.append(cli);
+			View v = mMidlet.getTopView();
+			if (mContacts != null && mContacts.size() > 0) {
+				for (Enumeration e = mContacts.elements(); e.hasMoreElements(); ) {
+		            //#style CollectionItem
+		            CollectionItem c = new CollectionItem(mMidlet, v, (Contact)e.nextElement(), true);
+		            c.setSelected(true);
+		            mEditForm.append(c);
+				}
+				mMidlet.mDisplay.setCurrent(mEditForm);
 			}
 		}
 	}	
@@ -208,31 +211,20 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	public void commandAction(Command cmd, 
 			  				  Displayable d) {
 		if (cmd == DONE) {
-			Vector tmp = new Vector();
-			ContactListItem cli;
-			for (Enumeration e = mCLItems.elements(); e.hasMoreElements(); ) {
-				cli = (ContactListItem)e.nextElement();
-				if (cli.getChecked())
-					tmp.addElement(cli.mContact);
-			}
-			mContacts = tmp;
 			createAddrs();
 			invalidate();
 			mMidlet.mDisplay.setCurrentItem(this);
 		} else if (cmd == NEW) {
-			ContactListView clv = mMidlet.getContactPickerListView();
-			clv.setDoneListener(this);
-			clv.setNext(mEditForm);
-			clv.setCurrent();
-			// Don't want anything checked
-			clv.reset(null);
+			CollectionView cv = mMidlet.getContactPickerListView(mMidlet.mDisplay.getCurrent());
+			cv.setListener(this);
+			cv.setCurrent();
 		}
 	}
 
 	private void init(ZimbraME m) {
 		mMidlet = m;
 		mMode = NEW_MODE;
-		mCLItems = new Vector();		
+		mContacts = new Vector();		
 	}
 	
 	private void createAddrs() {
@@ -240,11 +232,11 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 			mAddrs = null;
 			return;
 		} else {
-			int size = mContacts.size();;
+			int size = mContacts.size();
 			mAddrs = new String[size];
 			Contact c;
 			for (int i = 0; i < size; i++) {
-				c = (Contact)mContacts.elementAt(i);
+				c = (Contact) mContacts.elementAt(i);
 				StringBuffer s = new StringBuffer();
 				if (c.mFirstName != null)
 					s.append(c.mFirstName);
@@ -263,26 +255,4 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 			}
 		}
 	}
-	
-	private void createConvListItems(Vector contacts,
-									 boolean append,
-									 boolean setChecked) {
-		if (mContacts == null)
-			return;
-		
-		if (!append)
-			mCLItems.removeAllElements();
-		
-		ContactListItem cli;
-		Contact c;
-        for (Enumeration e = contacts.elements(); e.hasMoreElements(); ) {
-        	c = (Contact)e.nextElement();
-			//#style ContactListItem
-			cli = new ContactListItem(mMidlet, c, null, ContactListItem.PICKER); 
-			if (setChecked)
-				cli.setChecked(true);
-			mCLItems.addElement(cli);
-        }		
-	}
-
 }

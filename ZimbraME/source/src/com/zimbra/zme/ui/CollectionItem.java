@@ -30,16 +30,20 @@ public class CollectionItem extends ZmeCustomItem {
 	private static Image CHECKBOX_ICON;
 	private static Image CHECKBOXCHECKED_ICON;
 	private static int CHECKBOX_ICON_WIDTH;
+	private static int CHECKBOX_ICON_HEIGHT;
     private static int ARROW_ICON_WIDTH;
+    private static int ARROW_ICON_HEIGHT;
 
 	{
 		try {
 			CHECKBOX_ICON = Image.createImage("/CheckBox.png");
 			CHECKBOXCHECKED_ICON = Image.createImage("/CheckBoxChecked.png");
 			CHECKBOX_ICON_WIDTH = CHECKBOX_ICON.getWidth();
+			CHECKBOX_ICON_HEIGHT = CHECKBOX_ICON.getHeight();
 			LEFTARROW_ICON = Image.createImage("/LeftArrow.png");
 			RIGHTARROW_ICON = Image.createImage("/RightArrow.png");
 			ARROW_ICON_WIDTH = LEFTARROW_ICON.getWidth();
+			ARROW_ICON_HEIGHT = LEFTARROW_ICON.getHeight();
 		} catch (IOException e) {
 			//#debug
 			System.out.println("CollectionItem: IOException " + e);
@@ -51,6 +55,7 @@ public class CollectionItem extends ZmeCustomItem {
 	private boolean mSelected;
 	private View mParentView;
 	private Font mFont;
+	private int mFontHeight;
 	private int mFontColor;
 
 	//#ifdef polish.usePolishGui
@@ -110,11 +115,11 @@ public class CollectionItem extends ZmeCustomItem {
 	}
 
 	protected int getPrefContentHeight(int width) {
-		//#if true
-			//# return Math.max(style.font.getHeight(), CHECKBOX_ICON.getHeight());
-		//#else
-			return 40;
-		//#endif
+		boolean hasDescription = mItem.getDescription() != null;
+		if (hasDescription)
+			return Math.max(mFontHeight * 2 + SPACING, CHECKBOX_ICON_HEIGHT);
+		else
+			return Math.max(mFontHeight, CHECKBOX_ICON_HEIGHT);
 	}
 
 	protected int getPrefContentWidth(int height) {
@@ -132,24 +137,26 @@ public class CollectionItem extends ZmeCustomItem {
 
 		if (mSelectable) {
 			if (mSelected)
-				g.drawImage(CHECKBOXCHECKED_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
+				g.drawImage(CHECKBOXCHECKED_ICON, 0, (h - CHECKBOX_ICON_HEIGHT) / 2, Graphics.TOP | Graphics.LEFT);
 			else
-				g.drawImage(CHECKBOX_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
+				g.drawImage(CHECKBOX_ICON, 0, (h - CHECKBOX_ICON_HEIGHT) / 2, Graphics.TOP | Graphics.LEFT);
 			w -= (SPACING + CHECKBOX_ICON_WIDTH);
 		} else {
 		    if (mItem.hasParent())
-                g.drawImage(LEFTARROW_ICON, 0, 0, Graphics.TOP | Graphics.LEFT);
+                g.drawImage(LEFTARROW_ICON, 0, (h - ARROW_ICON_HEIGHT) / 2, Graphics.TOP | Graphics.LEFT);
             if (mItem.hasChildren())
-                g.drawImage(RIGHTARROW_ICON, w, 0, Graphics.TOP | Graphics.RIGHT);
+                g.drawImage(RIGHTARROW_ICON, w, (h - ARROW_ICON_HEIGHT) / 2, Graphics.TOP | Graphics.RIGHT);
             w -= (SPACING + ARROW_ICON_WIDTH * 2);
             offset = ARROW_ICON_WIDTH + SPACING;
         }
         
 
-		String str = Util.elidString(mItem.mName, w, mFont);
-        if (str == null)
-            str = "<NONE>"; // XXX
-		g.drawString(str, offset, 0, Graphics.TOP | Graphics.LEFT);				
+		String str = Util.elidString(mItem.getName(), w, mFont);
+		g.drawString(str, offset, 0, Graphics.TOP | Graphics.LEFT);
+		if (mItem.getDescription() != null) {
+			str = Util.elidString(mItem.getDescription(), w, mFont);
+			g.drawString(str, offset, SPACING + mFontHeight, Graphics.TOP | Graphics.LEFT);
+		}
 	}
 
 	public void setStyle(Style style) {
@@ -157,6 +164,7 @@ public class CollectionItem extends ZmeCustomItem {
 			//# super.setStyle(style);
 		//#endif
 		mFont = style.font;
+		mFontHeight = mFont.getHeight();
 		mFontColor = style.getFontColor();
 	}	
 }

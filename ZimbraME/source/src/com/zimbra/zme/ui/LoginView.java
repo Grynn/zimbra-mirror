@@ -271,8 +271,7 @@ public class LoginView extends View implements ItemStateListener, ResponseHdlr {
 
 	private void postAuth() {
 		if (mMidlet.mSettings.getPreloadContacts()) {
-			ContactListView clv = mMidlet.getContactPickerListView();
-			clv.preload();
+			mMidlet.getContactPickerListView(null).load();
 		}
 		
 		if (mNext instanceof View) {
