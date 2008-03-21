@@ -894,12 +894,10 @@ public class Mailbox implements Runnable {
 		String id = (String)s.pop();
 		String[] tagIds = (String[])s.pop();
 		
-		StringBuffer tagIdStr = null;
+		StringBuffer tagIdStr = new StringBuffer();
 		
 		for (int i = 0; i < tagIds.length; i++) {
-			if (tagIdStr == null)
-				tagIdStr = new StringBuffer();
-			else
+			if (tagIdStr.length() > 0)
 				tagIdStr.append(',');
 			tagIdStr.append(tagIds[i]);
 		}

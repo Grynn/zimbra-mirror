@@ -55,6 +55,8 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
     protected SelectedItems mSelection;
     protected TextField mInputField;
 
+    // use Command.ITEM as Command.OK has different default behavior
+	private static final Command OK = new Command(Locale.get("main.Ok"), Command.ITEM, 1);
 	private static final Command OPEN = new Command(Locale.get("main.Open"), Command.ITEM, 1);
 	private static final Command REFRESH = new Command(Locale.get("main.Refresh"), Command.ITEM, 1);
 	private static final Command NEW = new Command(Locale.get("addressPicker.New"), Command.ITEM, 1);
@@ -141,7 +143,7 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 			if (mType == FOLDER_SEARCH)
 				d.addCommand(ZimbraME.SEARCH);
 			else
-				d.addCommand(ZimbraME.OK);
+				d.addCommand(OK);
 			d.addCommand(REFRESH);
 			d.addCommand(BACK);
 		}
@@ -170,7 +172,7 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 			if (mType == SAVEDSEARCH)
 				d.addCommand(ZimbraME.SEARCH);
 			else
-				d.addCommand(ZimbraME.OK);
+				d.addCommand(OK);
 			d.addCommand(REFRESH);
 			d.addCommand(DELETE);
 			d.addCommand(BACK);
@@ -225,7 +227,7 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 			if (mType == TAG_SEARCH)
 				d.addCommand(ZimbraME.SEARCH);
 			else
-				d.addCommand(ZimbraME.OK);
+				d.addCommand(OK);
 			d.addCommand(REFRESH);
 			d.addCommand(BACK);
 		}
@@ -396,6 +398,8 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 		public void markSelection() {
 			if (mView.size() == 1 && (mView.get(0) instanceof ZmeStringItem))
 				return;
+			if (mTags == null)
+				return;
 			for (int elem = 0; elem < mView.size(); elem++) {
 				CollectionItem item = (CollectionItem)mView.get(elem);
 				if (item.mItem.mItemType != MailboxItem.TAG) {
@@ -415,9 +419,11 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 			for (int i = 0; i < mView.size(); i++) {
 				CollectionItem item = (CollectionItem) mView.get(i);
 				boolean found = false;
-				for (int t = 0; t < mTags.length; t++) {
-					if (mTags[t].equals(item.mItem.mId))
-						found = true;
+				if (mTags != null) {
+					for (int t = 0; t < mTags.length; t++) {
+						if (mTags[t].equals(item.mItem.mId))
+							found = true;
+					}
 				}
 				if (item.getSelected() && !found)
 					return true;
@@ -467,14 +473,12 @@ public class CollectionView extends View implements ResponseHdlr, ItemStateListe
 			} else if (cmd == ZimbraME.CANCEL) {
 				// Selecteable item scenario
 				setNextCurrent();
-			} else if (cmd == ZimbraME.OK || cmd == DONE) {
+			} else if (cmd == OK || cmd == DONE) {
 				//selectable item scenario
 				if (mListener != null) {
 					if (mType == TAG_PICKER || mType == CONTACT) {
 						Vector selection = mSelection.computeSelection();
-						if (selection.size() > 0) {
-							mListener.action(this, selection);
-						}
+						mListener.action(this, selection);
 					} else if (mType == FOLDER_PICKER || mType == SAVEDSEARCH_PICKER) {
 	                    CollectionItem ci = (CollectionItem)item;
 	                    mListener.action(this, ci.mItem);
