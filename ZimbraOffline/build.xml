@@ -345,6 +345,7 @@
 		<copy tofile="${dist.dir}/conf/datasource.properties" file="${config.dir}/datasource.properties" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/derby.properties" file="${config.dir}/derby.properties" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true" />
+		<copy tofile="${dist.dir}/conf/zimbra-contact-fields.xml" file="${server.config.dir}/contacts/zimbra-contact-fields.xml" overwrite="true" />
 		<copy todir="${dist.dir}/conf/msgs" overwrite="true">
 			<fileset dir="${server.config.dir}/msgs" />
 		</copy>
