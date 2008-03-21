@@ -74,8 +74,8 @@ sub logDiskUsage {
 		open DF, "$DFCMD \"$dev\" | tail -1 |" or die "Can't open $DFCMD: $!";
 		my @df = <DF>;
 		close DF;
-		my (undef, $total, undef, $avail) = split(/\s+/, $df[0]);
-    my $pct=int(($avail/$total)*100) if ($total > 0);
+		my (undef, $total, $used, $avail) = split(/\s+/, $df[0]);
+    my $pct=int(($used/$total)*100) if ($total > 0);
     my $lvl = "info";
     $lvl = "err" if ($pct > $DISK_WARN_THRESHOLD);
     $lvl = "crit" if ($pct > $DISK_CRIT_THRESHOLD);
