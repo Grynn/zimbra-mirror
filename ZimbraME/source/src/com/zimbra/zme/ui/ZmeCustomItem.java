@@ -48,12 +48,4 @@ public abstract class ZmeCustomItem extends CustomItem {
         
         return ret;
     }
-    
-    public int getGameAction(int keyCode) {
-        int ga = super.getGameAction(keyCode);
-        if (hasTrackBallNavigation() && (ga == Canvas.LEFT || ga == Canvas.RIGHT))
-            return 0;
-
-        return ga;
-    }
 }
