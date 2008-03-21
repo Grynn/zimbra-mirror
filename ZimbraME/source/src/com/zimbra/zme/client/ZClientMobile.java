@@ -1460,11 +1460,16 @@ import de.enough.polish.util.StringTokenizer;
 			} else if (!gettingMsg && elName.compareTo(EL_FRAGMENT) == 0) {
 				m.mFragment = mParser.nextText();
 			} else if (elName.compareTo(EL_INVITE) == 0) {
-				m.mInvite = true;
-                while (mParser.getName().compareTo(EL_COMP) != 0 ||
-                        mParser.getEventType() != XmlPullParser.START_TAG)
+                while ((mParser.getName().compareTo(EL_COMP) != 0 ||
+                        mParser.getEventType() != XmlPullParser.START_TAG) &&
+                       (mParser.getName().compareTo(EL_INVITE) != 0 ||
+                        mParser.getEventType() != XmlPullParser.END_TAG))
                     mParser.next();
-                m.mApptId = mParser.getAttributeValue(null, AT_APPTID);
+                if (mParser.getName().compareTo(EL_COMP) == 0 &&
+                        mParser.getEventType() == XmlPullParser.START_TAG)
+                	m.mApptId = mParser.getAttributeValue(null, AT_APPTID);
+                if (m.mApptId != null)
+                	m.mInvite = true;
 				skipToEnd(EL_INVITE);
 			} else if (elName.compareTo(EL_EMAILADDR) == 0) {
 				// Could do each of these in the respective case statement and
