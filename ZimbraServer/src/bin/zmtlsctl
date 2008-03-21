@@ -119,12 +119,14 @@ updateTomcatConfig() {
 		fi
 	fi
 	if [ -s ${zimbra_tmp_directory}/server.xml.$$ ]; then
+    echo "Updating ${mailboxd_conf_directory}/server.xml"
 		mv -f ${zimbra_tmp_directory}/server.xml.$$ \
       ${mailboxd_conf_directory}/server.xml
 	fi
 	sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
 		${mailboxd_directory}/webapps/zimbra/WEB-INF/web.xml > ${zimbra_tmp_directory}/web.xml.$$
   if [ -s ${zimbra_tmp_directory}/web.xml.$$ ]; then
+    echo "Updating ${mailboxd_directory}/webapps/zimbra/WEB-INF/web.xml"
 	  mv -f ${zimbra_tmp_directory}/web.xml.$$ ${mailboxd_directory}/webapps/zimbra/WEB-INF/web.xml
   fi
 	
@@ -132,73 +134,94 @@ updateTomcatConfig() {
 
 updateJettyConfig() {
 	if [ $MODE = "http" ]; then
+    echo "Creating tmp file ${zimbra_tmp_directory}/jetty.xml.$$ for mode $MODE"
 		sed -e 's/\(.*HTTPSBEGIN\).*/\1/' -e 's/.*\(HTTPSEND.*\)/\1/' \
 			-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
 			${mailboxd_conf_directory}/jetty.xml.in > \
 			${zimbra_tmp_directory}/jetty.xml.$$
+    echo "Creating tmp file ${zimbra_tmp_directory}/zimbra.web.xml.in for mode $MODE"
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
 			${jetty_web_xml}/zimbra.web.xml.in > \
 			${zimbra_tmp_directory}/zimbra.web.xml.in
+    echo "Creating tmp file ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in for mode $MODE"
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
 			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
 			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in
 	elif [ $MODE = "https" ]; then
+    echo "Creating tmp file ${zimbra_tmp_directory}/jetty.xml.$$ for mode $MODE"
 		sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
 			-e 's/\(.*HTTPBEGIN\).*/\1/' -e 's/.*\(HTTPEND.*\)/\1/' \
 			${mailboxd_conf_directory}/jetty.xml.in > \
 			${zimbra_tmp_directory}/jetty.xml.$$
+    echo "Creating tmp file ${zimbra_tmp_directory}/zimbra.web.xml.in for mode $MODE"
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
 			${jetty_web_xml}/zimbra.web.xml.in > \
 			${zimbra_tmp_directory}/zimbra.web.xml.in
+    echo "Creating tmp file ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in for mode $MODE"
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
 			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
 			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in
 	elif [ $MODE = "redirect" ]; then
 		# redirect - enable both
 		# Then enable the redirect block in web.xml
+    echo "Creating tmp file ${zimbra_tmp_directory}/jetty.xml.$$ for mode $MODE"
 		sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
 			-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
 			${mailboxd_conf_directory}/jetty.xml.in > \
 			${zimbra_tmp_directory}/jetty.xml.$$
+    echo "Creating tmp file ${zimbra_tmp_directory}/zimbra.web.xml.in for mode $MODE"
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1 -->/' -e 's/.*\(REDIRECTEND.*\)/<!-- \1/' \
 			${jetty_web_xml}/zimbra.web.xml.in > \
-			${zimbra_tmp_directory}/zimbra.web.xml.in.$$
+			${zimbra_tmp_directory}/zimbra.web.xml.in
+    echo "Creating tmp file ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in for mode $MODE"
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1 -->/' -e 's/.*\(REDIRECTEND.*\)/<!-- \1/' \
 			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
 			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$
 	else
 		# MIXED - enable both
+    echo "Creating tmp file ${zimbra_tmp_directory}/jetty.xml.$$ for mode $MODE"
 		sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
 			-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
 			${mailboxd_conf_directory}/jetty.xml.in > \
 			${zimbra_tmp_directory}/jetty.xml.$$
+    echo "Creating tmp file ${zimbra_tmp_directory}/zimbra.web.xml.in for mode $MODE"
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
 			${jetty_web_xml}/zimbra.web.xml.in > \
 			${zimbra_tmp_directory}/zimbra.web.xml.in
+    echo "Creating tmp file ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in for mode $MODE"
 		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
 			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
 			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in
 	fi
+
 	if [ -s ${zimbra_tmp_directory}/jetty.xml.$$ ]; then
+    echo "Updating ${mailboxd_conf_directory}/jetty.xml.in"
 		mv -f ${zimbra_tmp_directory}/jetty.xml.$$ \
       			${mailboxd_conf_directory}/jetty.xml.in
 	fi
-	if [ -s ${zimbra_tmp_directory}/zimbra.web.xml.in.$$ ]; then
-		mv -f ${zimbra_tmp_directory}/zimbra.web.xml.in.$$ \
+
+	if [ -s ${zimbra_tmp_directory}/zimbra.web.xml.in ]; then
+    echo "Updating REDIRECT Blocks in ${mailboxd_conf_directory}/zimbra.web.xml.in"
+		mv -f ${zimbra_tmp_directory}/zimbra.web.xml.in \
 			${jetty_web_xml}/zimbra.web.xml.in
+  else
+    echo "${zimbra_tmp_directory}/zimbra.web.xml.in didn't exist?"
+    ls -ld ${zimbra_tmp_directory}/zimbra.web.xml.in
 	fi
 	if [ -s ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$ ]; then
+    echo "Updating ${mailboxd_conf_directory}/zimbraAdmin.web.xml.in"
 		mv -f ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$ \
 			${jetty_web_xml}/zimbraAdmin.web.xml.in
 	fi
 	if [ $MODE = "redirect" ]; then
 		sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>https<\/env-entry-value><!-- PROTOCOL MODE -->/" \
 			${mailboxd_conf_directory}/zimbra.web.xml.in > ${zimbra_tmp_directory}/web.xml.$$
-        else
+  else
 		sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
 			${mailboxd_conf_directory}/zimbra.web.xml.in > ${zimbra_tmp_directory}/web.xml.$$
 	fi
   if [ -s ${zimbra_tmp_directory}/web.xml.$$ ]; then
+    echo "Updating PROTOCOL MODE in ${mailboxd_conf_directory}/zimbra.web.xml.in"
 	  mv -f ${zimbra_tmp_directory}/web.xml.$$ ${mailboxd_conf_directory}/zimbra.web.xml.in
   fi
   ${zimbra_home}/libexec/zmmtaconfig webxml mailbox
@@ -219,10 +242,11 @@ updateSASLConfig() {
 		fi
 	fi
 	if [ -s ${zimbra_tmp_directory}/saslauthd.conf.in.$$ ]; then
+    echo "Updating ${sasl_conf_directory}/saslauthd.conf.in"
 		mv -f ${zimbra_tmp_directory}/saslauthd.conf.in.$$ \
       ${sasl_conf_directory}/saslauthd.conf.in
 	fi
-
+  ${zimbra_home}/libexec/zmmtaconfig sasl
 }
 
 updateLdap() {
