@@ -37,7 +37,7 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.offline.jsp.YmailUserData;
+import com.zimbra.cs.offline.util.ymail.YmailUserData;
 import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZGetInfoResult;

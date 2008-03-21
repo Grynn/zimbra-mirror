@@ -52,4 +52,13 @@
   <key name="zimbra_class_provisioning">
     <value>com.zimbra.cs.account.offline.OfflineProvisioning</value>
   </key>
+  <key name="javamail_imap_debug">
+    <value>false</value>
+  </key>
+  <key name="javamail_pop3_debug">
+    <value>false</value>
+  </key>
+  <key name="javamail_smtp_debug">
+    <value>false</value>
+  </key>
 </localconfig>

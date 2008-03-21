@@ -156,6 +156,27 @@ public class XmailBean extends FormBean {
 			    }
 			}
 			
+			String ydomain = "yahoo.com";
+			String gdomain = "gmail.com";
+			
+			if (verb.isAdd()) {
+				if (email.endsWith(ydomain) || host.endsWith(ydomain) || smtpHost.endsWith(ydomain)) {
+					if (dsType == DataSource.Type.pop3) {
+						addInvalid("protocol");
+						setError("Yahoo! Mail Plus access must use IMAP");
+					} else {
+						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, ydomain);
+					}
+				} else if (email.endsWith(gdomain) || host.endsWith(gdomain) || smtpHost.endsWith(gdomain)) {
+					if (dsType == DataSource.Type.pop3) {
+						addInvalid("protocol");
+						setError("Gmail access must use IMAP");
+					} else {
+						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, gdomain);
+					}
+				}
+			}
+			
 			if (isAllOK()) {                
 				JspProvStub stub = JspProvStub.getInstance();
 			    if (verb.isAdd()) {

@@ -1,4 +1,4 @@
-package com.zimbra.cs.offline.jsp;
+package com.zimbra.cs.offline.util.ymail;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
