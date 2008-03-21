@@ -154,6 +154,8 @@ function(spanElement, contentObjText, matchContext, canvas) {
 
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
+	var name = (contentObjText instanceof AjxEmailAddress)
+		? contentObjText.dispName : contentObjText;
 
 	if (this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
@@ -161,30 +163,25 @@ function(spanElement, contentObjText, matchContext, canvas) {
 
 	var toolTip;
 
-
+	// @yahoo.com love
 	var parts = addr.split("@");
 	var domain = (parts.length > 0) ? parts[1] : null;
-	if (domain && domain == "yahoo.com") {
-		var name = (contentObjText instanceof AjxEmailAddress) ? contentObjText.dispName : contentObjText;
-		var html = [];
-		var idx = 0;
-		html[idx++] = "<table border=0><tr><td><div class='ImgWebSearch'></div></td><td>Visit ";
-		html[idx++] = name;
-		html[idx++] = "'s Yahoo! profile</td></tr></table>";
-		toolTip = html.join("");
+	var isYahoo = (domain && domain == "yahoo.com");
+
+	var contactList = AjxDispatcher.run("GetContacts");
+	var contact = contactList ? contactList.getContactByEmail(addr) : null;
+	if (contact) {
+		var hint = isYahoo ? this._getYahooHint(name) : this._composeTooltipHint;
+		toolTip = contact.getToolTip(addr, false, hint);
 	} else {
-		var contactList = AjxDispatcher.run("GetContacts");
-		var contact = contactList ? contactList.getContactByEmail(addr) : null;
-		if (contact) {
-			toolTip = contact.getToolTip(addr, false, this._composeTooltipHint);
-		} else {
-			var subs = {
-				addrstr: addr.toString(),
-				hint: this._newTooltipHint
-			};
-			toolTip = AjxTemplate.expand("abook.Contacts#TooltipNotInAddrBook", subs);
-		}
+		var hint = isYahoo ? this._getYahooHint(name) : this._newTooltipHint;
+		var subs = {
+			addrstr: addr.toString(),
+			hint: hint
+		};
+		toolTip = AjxTemplate.expand("abook.Contacts#TooltipNotInAddrBook", subs);
 	}
+
 	canvas.innerHTML = toolTip;
 };
 
@@ -328,6 +325,20 @@ function(itemId, item, ev) {
 		case "NEWFILTER":		this._filterListener();		break;
 		case "GOTOURL":			this._goToUrlListener();	break;
 	}
+};
+
+Com_Zimbra_Email.prototype._getYahooHint =
+function(name) {
+	var lastLetter = name.charAt(name.length-1);
+	var html = [];
+	var idx = 0;
+	html[idx++] = "<center><table border=0><tr><td valign=top><div class='ImgWebSearch'></div></td><td>Click to visit ";
+	html[idx++] = name;
+	html[idx++] = (lastLetter == "S" || lastLetter == "s") ? "' " : "'s ";
+	html[idx++] = "Yahoo! profile<div class='TooltipHint'>";
+	html[idx++] = ZmMsg.rightClickHint;
+	html[idx++] = "</div></td></tr></table></center>";
+	return html.join("");
 };
 
 Com_Zimbra_Email.prototype._getAddress =
