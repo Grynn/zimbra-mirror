@@ -22,8 +22,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Log;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.mailbox.Flag;
@@ -35,11 +38,17 @@ import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.datasource.ImapFolderCollection;
+import com.zimbra.cs.datasource.ImapFolder;
 
 public class OfflineDataSource extends DataSource {
-	
-	private KnownFolder[] knownFolders;
-	
+    private KnownFolder[] knownFolders;
+
+    // DEBUG
+    static {
+        OfflineLog.offline.setLevel(Log.Level.debug);
+    }
+    
     OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs) {
         super(acct, type, name, id, attrs);
         setServiceName(getAttr(OfflineConstants.A_zimbraDataSourceDomain));
@@ -61,6 +70,8 @@ public class OfflineDataSource extends DataSource {
     
     private static Map<String, KnownFolder[]> knownFolderMapping = new HashMap<String, KnownFolder[]>();
     private static boolean isSyncAllFoldersByDefault = false;
+    private static ConcurrentMap<String, ImapFolderCollection> imapFolderCache =
+        new ConcurrentHashMap<String, ImapFolderCollection>();
     
     private static class EProperties extends Properties {
     	
@@ -226,4 +237,38 @@ public class OfflineDataSource extends DataSource {
 		}
 		return isSyncEnabledByDefault(localPath);
 	}
+
+    @Override
+    public ImapFolderCollection getImapFolders() throws ServiceException {
+        OfflineLog.offline.debug("getImapFolders: id = %s", getId());
+        ImapFolderCollection folders = imapFolderCache.get(getId());
+        if (folders == null) {
+            // TODO Should it be an assertion error if another thread has
+            // created a folder cache entry for this data source?
+            OfflineLog.offline.debug("getImapFolders: loading folder tracker data: id = %s", getId());
+            folders = super.getImapFolders();
+            if (imapFolderCache.putIfAbsent(getId(), folders) != null) {
+                throw new IllegalStateException("Concurrent import of same data source: id = " + getId());
+            }
+        }
+        return folders;
+    }
+
+    @Override
+    public void deleteImapFolder(ImapFolder folder) throws ServiceException {
+        OfflineLog.offline.debug("deleteImapFolder: id = %s, folder = %s", getId(), folder.getLocalPath());
+        super.deleteImapFolder(folder);
+        ImapFolderCollection folders = imapFolderCache.get(getId());
+        folders.remove(folder);
+    }
+
+    @Override
+    public ImapFolder createImapFolder(int itemId, String localPath,
+                                       String remotePath, long uidValidity) throws ServiceException {
+        OfflineLog.offline.debug("createImapFolder: id = %s, folder = %s", getId(), localPath);
+        ImapFolder folder = super.createImapFolder(itemId, localPath, remotePath, uidValidity);
+        ImapFolderCollection folders = imapFolderCache.get(getId());
+        folders.add(folder);
+        return folder;
+    }
 }
