@@ -76,20 +76,17 @@ function() {
 
 	this._stockStatusPollAction = new AjxTimedAction(this, this._checkStockStatus);
 
-	if(ZmSetting.CALENDAR_ENABLED) {
-	    var calController = AjxDispatcher.run("GetCalController");
-    	this._miniCal = calController ? calController.getMiniCalendar().getHtmlElement() : null;
-	}
-
 	this._initSearchToolbar();
 	
 	var pollInterval = this.getUserProperty("pollInterval");
 	var stockSymbols = this.getUserProperty("stockSymbols");
 	
 	if(pollInterval && stockSymbols){		
-		this._checkStockStatus();
+		AjxTimedAction.scheduleAction(this._stockStatusPollAction, Com_Zimbra_YFinance.INIT_DELAY);
 	}	
 };
+
+Com_Zimbra_YFinance.INIT_DELAY = 15000;
 
 Com_Zimbra_YFinance.prototype.onShowView = function(viewId, isNewView) {
 	 if (viewId == ZmController.NOTEBOOK_PAGE_EDIT_VIEW){
@@ -602,6 +599,12 @@ Com_Zimbra_YFinance.prototype._showStockUpdate = function(modifiedList, force){
            	modifiedList: modifiedList
         };
         newDiv.innerHTML = AjxTemplate.expand("com_zimbra_yfinance.templates.YFinance#StockStatus", subs);
+
+		if(ZmSetting.CALENDAR_ENABLED && appCtxt.get(ZmSetting.CAL_ALWAYS_SHOW_MINI_CAL) && !this._miniCal) {
+			var calController = AjxDispatcher.run("GetCalController");
+    			this._miniCal = calController ? calController.getMiniCalendar().getHtmlElement() : null;
+		}
+
 
 		if(this._miniCal) {
 	        this._miniCal.style.visibility = "hidden";
