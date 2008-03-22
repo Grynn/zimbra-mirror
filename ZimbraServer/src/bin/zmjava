@@ -29,7 +29,6 @@ zmassert -d ${JRE_EXT_DIR}
 if [ -f ".hotspot_compiler" ]; then
   cd $zimbra_home
 fi
-echo $java_version
 case "`uname`" in
 CYGWIN*) PATHSEP=";";;
 *) PATHSEP=":";;
