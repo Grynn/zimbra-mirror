@@ -26,9 +26,9 @@ import org.jivesoftware.wildfire.multiplex.MultiplexerPacketDeliverer;
 import org.jivesoftware.wildfire.net.*;
 
 import java.io.IOException;
-import java.net.InetAddress;
+//import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
+//import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,13 +41,14 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     private SocketAcceptThread serverSocketThread;
     private SocketAcceptThread multiplexerSocketThread;
     private SocketAcceptThread cloudRoutingSocketThread;
+    private SSLSocketAcceptThread sslCloudRoutingSocketThread;
     private ArrayList<ServerPort> ports;
 
     private SessionManager sessionManager;
     private PacketDeliverer deliverer;
     private PacketRouter router;
     private RoutingTable routingTable;
-    private String localIPAddress = null;
+//    private String localIPAddress = null;
 
     // Used to know if the sockets can be started (the connection manager has been started)
     private boolean isStarted = false;
@@ -56,7 +57,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
 
     public ConnectionManagerImpl() {
         super("Connection Manager");
-        ports = new ArrayList<ServerPort>(4);
+        ports = new ArrayList<ServerPort>(8);
     }
 
     private void createSocket() {
@@ -67,15 +68,15 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         }
         isSocketStarted = true;
 
-        // Setup port info
-        try {
-            localIPAddress = InetAddress.getLocalHost().getHostAddress();
-        }
-        catch (UnknownHostException e) {
-            if (localIPAddress == null) {
-                localIPAddress = "Unknown";
-            }
-        }
+//        // Setup port info
+//        try {
+//            localIPAddress = InetAddress.getLocalHost().getHostAddress();
+//        }
+//        catch (UnknownHostException e) {
+//            if (localIPAddress == null) {
+//                localIPAddress = "Unknown";
+//            }
+//        }
         // start the listener for local cloud routing
         startCloudRoutingListener(getCloudroutingListenerAddress());
         // Start the port listener for s2s communication
@@ -90,14 +91,14 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         startClientSSLListeners(getClientSSLListenerAddress());
     }
 
-    private void startServerListener(String localIPAddress) {
+    private void startServerListener(String bindAddress) {
         // Start servers socket unless it's been disabled.
         if (isServerListenerEnabled()) {
             int port = getServerListenerPort();
             try {
                 serverSocketThread = new SocketAcceptThread(this, 
                             new ServerPort(port, XMPPServer.getInstance().getServerNames(),
-                                        localIPAddress, false, null, ServerPort.Type.server));
+                                        bindAddress, false, null, ServerPort.Type.server));
                 ports.add(serverSocketThread.getServerPort());
                 serverSocketThread.setDaemon(true);
                 serverSocketThread.setPriority(Thread.MAX_PRIORITY);
@@ -115,18 +116,32 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         }
     }
     
-    private void startCloudRoutingListener(String localIPAddress) {
+    private void startCloudRoutingListener(String bindAddress) {
         if (isCloudRoutingListenerEnabled()) {
             int port = getCloudRoutingPort();
+            String algorithm = null;
             if (port > 0) {
                 try {
-                    cloudRoutingSocketThread = new SocketAcceptThread(this, 
-                        new ServerPort(port, XMPPServer.getInstance().getServerNames(),
-                            localIPAddress, false, null, ServerPort.Type.cloudRouter));
-                    ports.add(cloudRoutingSocketThread.getServerPort());
-                    cloudRoutingSocketThread.setDaemon(true);
-                    cloudRoutingSocketThread.setPriority(Thread.MAX_PRIORITY);
-                    cloudRoutingSocketThread.start();
+                    if (JiveGlobals.getBooleanProperty("xmpp.cloudrouting.ssl", false)) {
+                        algorithm = JiveGlobals.getProperty("xmpp.socket.ssl.algorithm", "TLS");
+                    }
+                    
+                    if (algorithm == null || algorithm.length() == 0) {
+                        cloudRoutingSocketThread = new SocketAcceptThread(this, 
+                            new ServerPort(port, XMPPServer.getInstance().getServerNames(),
+                                bindAddress, (algorithm != null ? true : false), algorithm, ServerPort.Type.cloudRouter));
+                        ports.add(cloudRoutingSocketThread.getServerPort());
+                        cloudRoutingSocketThread.setDaemon(true);
+                        cloudRoutingSocketThread.setPriority(Thread.MAX_PRIORITY);
+                        cloudRoutingSocketThread.start();
+                    } else {
+                        sslCloudRoutingSocketThread = new SSLSocketAcceptThread(this, new ServerPort(port, XMPPServer.getInstance().getServerNames(),
+                            bindAddress, true, algorithm, ServerPort.Type.cloudRouter));
+                        ports.add(sslCloudRoutingSocketThread.getServerPort());
+                        sslCloudRoutingSocketThread.setDaemon(true);
+                        sslCloudRoutingSocketThread.setPriority(Thread.MAX_PRIORITY);
+                        sslCloudRoutingSocketThread.start();
+                    }
                 } catch (Exception e) {
                     System.err.println("Error starting cloudrouting listener on port " + port + ": " +
                         e.getMessage());
@@ -150,15 +165,20 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             ports.remove(cloudRoutingSocketThread.getServerPort());
             cloudRoutingSocketThread = null;
         }
+        if (sslCloudRoutingSocketThread != null) {
+            sslCloudRoutingSocketThread.shutdown();
+            ports.remove(sslCloudRoutingSocketThread.getServerPort());
+            sslCloudRoutingSocketThread = null;
+        }
     }
 
-    private void startConnectionManagerListener(String localIPAddress) {
+    private void startConnectionManagerListener(String bindAddress) {
         // Start multiplexers socket unless it's been disabled.
         if (isConnectionManagerListenerEnabled()) {
             int port = getConnectionManagerListenerPort();
             try {
                 multiplexerSocketThread = new SocketAcceptThread(this, new ServerPort(port,
-                        XMPPServer.getInstance().getServerNames(), localIPAddress, false, null,
+                        XMPPServer.getInstance().getServerNames(), bindAddress, false, null,
                         ServerPort.Type.connectionManager));
                 ports.add(multiplexerSocketThread.getServerPort());
                 multiplexerSocketThread.setDaemon(true);
@@ -185,13 +205,13 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         }
     }
 
-    private void startComponentListener(String localIPAddress) {
+    private void startComponentListener(String bindAddress) {
         // Start components socket unless it's been disabled.
         if (isComponentListenerEnabled()) {
             int port = getComponentListenerPort();
             try {
                 componentSocketThread = new SocketAcceptThread(this, new ServerPort(port,
-                            XMPPServer.getInstance().getServerNames(), localIPAddress, false, null, ServerPort.Type.component));
+                            XMPPServer.getInstance().getServerNames(), bindAddress, false, null, ServerPort.Type.component));
                 ports.add(componentSocketThread.getServerPort());
                 componentSocketThread.setDaemon(true);
                 componentSocketThread.setPriority(Thread.MAX_PRIORITY);
@@ -217,14 +237,15 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         }
     }
 
-    private void startClientListeners(String localIPAddress) {
+    private void startClientListeners(String bindAddress) {
         // Start clients plain socket unless it's been disabled.
         if (isClientListenerEnabled()) {
             int port = getClientListenerPort();
 
             try {
-                socketThread = new SocketAcceptThread(this, new ServerPort(port, XMPPServer.getInstance().getServerNames(),
-                        localIPAddress, false, null, ServerPort.Type.client));
+                socketThread = new SocketAcceptThread(this, 
+                    new ServerPort(port, XMPPServer.getInstance().getServerNames(), bindAddress, false, null, ServerPort.Type.client)
+                );
                 ports.add(socketThread.getServerPort());
                 socketThread.setDaemon(true);
                 socketThread.setPriority(Thread.MAX_PRIORITY);
@@ -250,7 +271,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         }
     }
 
-    private void startClientSSLListeners(String localIPAddress) {
+    private void startClientSSLListeners(String bindAddress) {
         // Start clients SSL unless it's been disabled.
         if (isClientSSLListenerEnabled()) {
             int port = getClientSSLListenerPort();
@@ -260,7 +281,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             }
             try {
                 sslSocketThread = new SSLSocketAcceptThread(this, new ServerPort(port, XMPPServer.getInstance().getServerNames(),
-                        localIPAddress, true, algorithm, ServerPort.Type.client));
+                        bindAddress, true, algorithm, ServerPort.Type.client));
                 ports.add(sslSocketThread.getServerPort());
                 sslSocketThread.setDaemon(true);
                 sslSocketThread.setPriority(Thread.MAX_PRIORITY);
@@ -371,27 +392,27 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     
     
     private String getClientPlainListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.socket.plain.address", localIPAddress); 
+        return JiveGlobals.getProperty("xmpp.socket.plain.address", null); 
     }
     
     private String getClientSSLListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.socket.ssl.address", localIPAddress); 
+        return JiveGlobals.getProperty("xmpp.socket.ssl.address", null); 
     }
 
     private String getComponentListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.component.address", localIPAddress); 
+        return JiveGlobals.getProperty("xmpp.component.address", null); 
     }
     
     private String getServerListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.server.address", localIPAddress); 
+        return JiveGlobals.getProperty("xmpp.server.address", null); 
     }
     
     private String getCloudroutingListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.cloudrouting.address", localIPAddress); 
+        return JiveGlobals.getProperty("xmpp.cloudrouting.address", null); 
     }
 
     private String getConnectionManagerListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.multiplex.address", localIPAddress); 
+        return JiveGlobals.getProperty("xmpp.multiplex.address", null); 
     }
 
     

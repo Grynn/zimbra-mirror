@@ -22,7 +22,7 @@ import org.jivesoftware.wildfire.ConnectionManager;
 import org.jivesoftware.wildfire.ServerPort;
 
 import java.io.IOException;
-import java.net.InetAddress;
+//import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -33,10 +33,9 @@ import java.net.Socket;
  */
 class BlockingAcceptingMode extends SocketAcceptingMode {
 
-    protected BlockingAcceptingMode(ConnectionManager connManager, ServerPort serverPort,
-            InetAddress bindInterface) throws IOException {
+    protected BlockingAcceptingMode(ConnectionManager connManager, ServerPort serverPort) throws IOException {
         super(connManager, serverPort);
-        serverSocket = new ServerSocket(serverPort.getPort(), -1, bindInterface);
+        serverSocket = new ServerSocket(serverPort.getPort(), -1, serverPort.getBindAddress());
     }
 
     /**

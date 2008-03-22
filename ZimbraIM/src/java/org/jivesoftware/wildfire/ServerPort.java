@@ -16,6 +16,9 @@
  */
 package org.jivesoftware.wildfire;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,16 +40,16 @@ public class ServerPort {
     private String algorithm;
     private Type type;
 
-    public ServerPort(int port, String name, String address,
-                      boolean isSecure, String algorithm, Type type)
-    {
-        this.port = port;
-        this.names.add(name);
-        this.address = address;
-        this.secure = isSecure;
-        this.algorithm = algorithm;
-        this.type = type;
-    }
+//    public ServerPort(int port, String name, String address,
+//                      boolean isSecure, String algorithm, Type type)
+//    {
+//        this.port = port;
+//        this.names.add(name);
+//        this.address = address;
+//        this.secure = isSecure;
+//        this.algorithm = algorithm;
+//        this.type = type;
+//    }
     
     public ServerPort(int port, Collection<String> names, String address,
                 boolean isSecure, String algorithm, Type type)
@@ -57,6 +60,14 @@ public class ServerPort {
         this.secure = isSecure;
         this.algorithm = algorithm;
         this.type = type;
+    }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder("ServerPort("+(address!=null?address:"0.0.0.0")+":"+port+(secure?",secure":""));
+        if (algorithm != null)
+            sb.append(",algorithm:"+algorithm);
+        sb.append(", type=").append(type.name());
+        return sb.toString();
     }
     
 
@@ -85,8 +96,14 @@ public class ServerPort {
      *
      * @return The dot separated IP address for the server
      */
-    public String getIPAddress() {
-        return address;
+    public InetAddress getBindAddress() throws IOException {
+        if (address == null)
+            return null;
+        try {
+            return InetAddress.getByName(address);
+        } catch (UnknownHostException e) {
+            throw new IOException("Unable to bind to requested address "+address+" exception: "+e.toString());
+        }
     }
 
     /**

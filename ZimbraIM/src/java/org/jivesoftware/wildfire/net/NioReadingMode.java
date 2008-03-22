@@ -29,6 +29,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.SocketException;
 import java.nio.channels.AsynchronousCloseException;
 import java.util.Date;
@@ -202,12 +204,17 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
             ie.printStackTrace();
         } catch (Exception e) {
             closeIt = true;
+//            StringWriter sw = new StringWriter();
+//            PrintWriter pw = new PrintWriter(sw); 
+//            e.printStackTrace(pw);
+//            pw.flush();
             if (socketReader.session != null) {
                 Log.warn(LocaleUtils.getLocalizedString("admin.error.stream") + ". Session: " +
-                            socketReader.session, e);
+                    socketReader.session, e);
             } else {
-                Log.warn(LocaleUtils.getLocalizedString("admin.error.stream") + e);
+                Log.warn(LocaleUtils.getLocalizedString("admin.error.stream"), e);
             }
+            
         } finally {
             if (closeIt) {
                 try {

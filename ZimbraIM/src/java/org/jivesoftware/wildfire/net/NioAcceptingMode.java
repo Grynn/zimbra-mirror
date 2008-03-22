@@ -106,10 +106,17 @@ class NioAcceptingMode extends SocketAcceptingMode {
      * @param bindInterface
      * @throws IOException
      */
-    NioAcceptingMode(ConnectionManager connManager, ServerPort serverPort, InetAddress bindInterface) throws IOException {
+    NioAcceptingMode(ConnectionManager connManager, ServerPort serverPort) throws IOException {
         super(connManager, serverPort);
         
         mIoAdapter = new NioIoHandlerAdapter();
+        
+        try {
+            InetAddress addr = serverPort.getBindAddress();
+            Log.debug("NioAcceptor starting for serverPort "+serverPort.toString()+" with bind address "+(addr != null ? addr.toString() : "0.0.0.0"));
+        } catch (IOException e) {
+            throw new IOException("Unable to bind to requested listener port: "+serverPort.toString()+" exception="+e.toString());
+        }
     }
 
     /* (non-Javadoc)
@@ -129,22 +136,22 @@ class NioAcceptingMode extends SocketAcceptingMode {
         DefaultIoFilterChainBuilder chain = mAcceptor.getFilterChain();
         System.out.println(chain);
 
-        InetSocketAddress addr = new InetSocketAddress( serverPort.getPort() ); 
-
+//        InetSocketAddress addr = new InetSocketAddress( serverPort.getPort() );
         try {
-            mAcceptor.bind(addr, mIoAdapter);
-
-        } catch (IOException ie) {
-            if (notTerminated) {
-                Log.error(LocaleUtils.getLocalizedString("admin.error.accept"),
-                            ie);
+            InetSocketAddress addr = new InetSocketAddress(serverPort.getBindAddress(), serverPort.getPort());
+            
+            try {
+                mAcceptor.bind(addr, mIoAdapter);
+                
+            } catch (IOException ie) {
+                if (notTerminated) {
+                    Log.error(LocaleUtils.getLocalizedString("admin.error.accept"),
+                        ie);
+                }
             }
+            System.out.println( "Listening on port " + addr );
+        } catch (IOException e) {
+            Log.error("Unable to start requested listener port: "+serverPort.toString()+" exception="+e.toString());
         }
-
-
-        System.out.println( "Listening on port " + addr );
     }        
-
-
-
 }

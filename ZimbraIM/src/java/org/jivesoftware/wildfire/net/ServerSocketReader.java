@@ -239,7 +239,7 @@ public class ServerSocketReader extends SocketReader {
 
     boolean createSession(String namespace, String host, Element streamElt) throws UnauthorizedException, XmlPullParserException,
             IOException {
-        if ("jabber:server".equals(namespace)) {
+        if (getNamespace().equals(namespace)) {
             // The connected client is a server so create an IncomingServerSession
             session = IncomingServerSession.createSession(host, connection, streamElt);
             return true;
