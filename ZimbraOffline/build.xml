@@ -573,12 +573,6 @@
 			<param name="param.store.dir" value="${param.install.dir}/store" />
 			<param name="param.index.dir" value="${param.install.dir}/index" />
 		</antcall>
-		<antcall target="offline-gen-upverij">
-			<param name="param.derby.dir" value="${param.install.dir}/derby" />
-		</antcall>
-		<antcall target="offline-gen-reindexij">
-			<param name="param.derby.dir" value="${param.install.dir}/derby" />
-		</antcall>
 
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />

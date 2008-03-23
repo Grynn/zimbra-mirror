@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.8" transformSequenceNumber="1">
-  <directoryPresets config="./build/dist/win32" />
+  <directoryPresets config="./build/dist/jetty/common/lib" />
   <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.84" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -16,6 +16,7 @@
       <variable name="offline_relabel" value="ALPHA" />
       <variable name="offline_version" value="0.1" />
       <variable name="offline_buildid" value="1" />
+      <variable name="dbMigrationFailed" value="false" />
     </variables>
   </application>
   <files>
@@ -34,6 +35,7 @@
       <mountPoint id="181402" root="" location="macos" mode="755" />
       <mountPoint id="181404" root="" location="linux" mode="755" />
       <mountPoint id="235368" root="" location="zdesktop.webapp" mode="755" />
+      <mountPoint id="271586" root="" location="profile" mode="755" />
       <mountPoint id="4668" root="" location="" mode="755" />
     </mountPoints>
     <entries>
@@ -97,18 +99,22 @@
     </launcher>
   </launchers>
   <installerGui installerType="1" suggestPreviousProgramGroup="true" addOnAppId="" suggestPreviousLocations="true" allowUnattended="true" allowConsole="true" useCustomInstallerHeaderImage="true" customInstallerHeaderImage="./src/installer/resources/installer_60x60.png" useCustomUninstallerHeaderImage="true" customUninstallerHeaderImage="./src/installer/resources/installer_60x60.png" customSize="false" customWidth="500" customHeight="390" useCustomIcon="true" customIcnsFile="./src/installer/resources/launcher_128x128.icns" customPngIcon16File="./src/installer/resources/launcher_16x16.png" customPngIcon32File="./src/installer/resources/launcher_32x32.png" customIcoFile="" vmParameters="" watermark="true" resizable="true" suppressProgressDialog="false">
-    <customCode useInstalledFiles="true">
+    <customCode useInstalledFiles="false">
       <archive location="../ZimbraCommon/jars/log4j-1.2.8.jar" />
       <archive location="./jars/derby.jar" />
       <archive location="./tools/lib/derbytools.jar" />
+      <archive location="./build/dist/jetty/common/lib/dom4j-1.5.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-cli-2.0.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-codec-1.3.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-httpclient-3.0.jar" />
-      <archive location="./build/dist/jetty/common/lib/dom4j-1.5.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-logging.jar" />
+      <archive location="./build/dist/jetty/common/lib/commons-collections-3.1.jar" />
+      <archive location="./build/dist/jetty/common/lib/commons-dbcp-1.1.jar" />
+      <archive location="./build/dist/jetty/common/lib/commons-pool-1.1.jar" />
+      <archive location="./build/dist/jetty/common/lib/mail.jar" />
       <archive location="./build/dist/jetty/common/lib/zimbracommon.jar" />
       <archive location="./build/dist/jetty/webapps/service/WEB-INF/lib/zimbrastore.jar" />
-      <archive location="./build/dist/jetty/common/lib/mail.jar" />
+      <archive location="./build/dist/jetty/webapps/service/WEB-INF/lib/zimbraoffline.jar" />
     </customCode>
     <installerScreens>
       <screen name="" id="1" beanClass="com.install4j.runtime.beans.screens.WelcomeScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
@@ -169,7 +175,7 @@ License Terms for this Zimbra Collaboration Suite Software:&lt;br&gt;
             <object class="com.install4j.runtime.beans.screens.DefaultInfoScreen">
               <void property="displayedText">
                 <string>A previous installation of Zimbra Desktop has been detected.
-It will be uninstalled before proceeding with new installation.</string>
+It must be uninstalled before proceeding with new installation.</string>
               </void>
             </object>
           </java>
@@ -184,31 +190,150 @@ if (appInfoList != null &amp;&amp; appInfoList.length &gt; 0) {
 return false;</condition>
         <validation />
         <actions>
-          <action name="" id="109995" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="" id="271582" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="Can't stop the background service">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.services.StopServiceAction">
+                  <void property="launcherId">
+                    <string>32</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>!Util.isMacOS()</condition>
+          </action>
+          <action name="launchctl stop" id="271581" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="Can't stop the background service">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="arguments">
+                    <array class="java.lang.String" length="2">
+                      <void index="0">
+                        <string>stop</string>
+                      </void>
+                      <void index="1">
+                        <string>com.zimbra.zdesktop</string>
+                      </void>
+                    </array>
+                  </void>
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>/bin/launchctl</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>.</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="migration" id="271585" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
                   <void property="script">
                     <object class="com.install4j.api.beans.ScriptProperty">
                       <void property="value">
-                        <string>String wipeIfBefore = context.getCompilerVariable("wipeIfBefore");
-if (wipeIfBefore == null || wipeIfBefore.length() == 0)
-    wipeIfBefore = context.getCompilerVariable("sys.version");
-    
-if (wipeIfBefore == null || wipeIfBefore.length() == 0)
-    return false;
+                        <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
 
-java.util.prefs.Preferences.userNodeForPackage(java.util.prefs.Preferences.class).put("zdesktop.wipeIfBefore", wipeIfBefore);
-return true;</string>
+String errorMsg = null;
+
+try {
+    new com.zimbra.cs.db.DbOfflineMigration().run();
+    return true;
+} catch (com.zimbra.cs.db.DbExclusiveAccessException x) {
+    Util.showMessage("Background service of previous version not shutdown.  Please rerun this installer after it's completely shutdown.",
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+    return false;
+} catch (com.zimbra.cs.db.DbNotFoundException x) {
+    errorMsg = "Some parts of your existing dataset is missing.";
+} catch (com.zimbra.cs.db.DbDataCorruptedException x) {
+    errorMsg = "Your existing dataset is corrupted and can't be recovered.";
+} catch (com.zimbra.cs.db.DbUnsupportedVersionException x) {
+    errorMsg = "Your existing dataset version is too old and can't be converted.";
+} catch (com.zimbra.cs.db.DbUpdateException x) {
+    errorMsg = "Your existing dataset is not compatible and can't be converted.";
+} catch (Exception x) {
+    errorMsg = "Your existing dataset can't be reused.";
+}
+
+int choice = Util.showOptionDialog(errorMsg, new String[] {"Quit", "Delete old dataset and continue with install"},
+        javax.swing.JOptionPane.WARNING_MESSAGE);
+
+switch (choice) {
+case 1:
+    try {
+        File install = context.getDestinationFile(".");
+        File[] dirs = install.listFiles();
+        for (int i = 0; i &lt; dirs.length; ++i) {
+            if (dirs[i].isDirectory() &amp;&amp; dirs[i].getName().equals("derby")) {
+                com.zimbra.common.util.FileUtil.deleteDir(dirs[i]);
+            }
+        }
+        return true;
+    } catch (Exception x) {
+        Util.showMessage("Can't delete old dataset.  Please delete it manually and rerun this installer.",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
+default:
+    return false;
+}</string>
                       </void>
                     </object>
                   </void>
                 </object>
               </java>
             </serializedBean>
-            <condition>false</condition>
+            <condition>File install = context.getDestinationFile(".");
+File[] dirs = install.listFiles();
+for (int i = 0; i &lt; dirs.length; ++i) {
+    if (dirs[i].isDirectory() &amp;&amp; dirs[i].getName().equals("derby")) {
+        return true;
+    }
+}
+return false;</condition>
           </action>
-          <action name="" id="9673" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="launchctl remove" id="271580" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="arguments">
+                    <array class="java.lang.String" length="2">
+                      <void index="0">
+                        <string>remove</string>
+                      </void>
+                      <void index="1">
+                        <string>com.zimbra.zdesktop</string>
+                      </void>
+                    </array>
+                  </void>
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>/bin/launchctl</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>.</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="macos uninstaller" id="9673" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
@@ -230,7 +355,7 @@ return true;</string>
             </serializedBean>
             <condition>Util.isMacOS()</condition>
           </action>
-          <action name="" id="6562" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="win32 uninstaller" id="6562" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
@@ -252,7 +377,7 @@ return true;</string>
             </serializedBean>
             <condition>Util.isWindows()</condition>
           </action>
-          <action name="" id="198285" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="linux uninstaller" id="198285" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
@@ -273,6 +398,29 @@ return true;</string>
               </java>
             </serializedBean>
             <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+          </action>
+          <action name="check uninstall" id="275808" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Previous version not uninstalled.  New install can't continue.">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                  <void property="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <void property="value">
+                        <string>String appId = context.getApplicationId();
+
+ApplicationRegistry.ApplicationInfo[] appInfoList = ApplicationRegistry.getApplicationInfoById(appId);
+if (appInfoList != null &amp;&amp; appInfoList.length &gt; 0) {
+    return false;
+}
+
+return true;</string>
+                      </void>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
           </action>
         </actions>
         <formComponents />
@@ -506,7 +654,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
             </serializedBean>
             <condition />
           </action>
-          <action name="derbyij.sql" id="852" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="derbyij.sql" id="263088" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
@@ -526,7 +674,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
             </serializedBean>
             <condition />
           </action>
-          <action name="derbyij" id="848" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="derbyij" id="263089" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -553,74 +701,6 @@ for (int i = 0; i &lt; dirs.length; ++i) {
     }
 }
 return true;</condition>
-          </action>
-          <action name="up_ver_ij.sql" id="92272" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                  <void property="file">
-                    <object class="java.io.File">
-                      <string>db/up_ver_ij.sql</string>
-                    </object>
-                  </void>
-                  <void property="replaceValue">
-                    <string>${installer:sys.installationDir}</string>
-                  </void>
-                  <void property="searchValue">
-                    <string>@install@</string>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition />
-          </action>
-          <action name="up_ver_ij" id="92273" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
-                  <void property="script">
-                    <object class="com.install4j.api.beans.ScriptProperty">
-                      <void property="value">
-                        <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
-
-File f = context.getDestinationFile("db" + File.separator + "up_ver_ij.sql");
-org.apache.derby.tools.ij.main(new String[] {f.getAbsolutePath()});
-
-return true;</string>
-                      </void>
-                    </object>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition>File install = context.getDestinationFile(".");
-File[] dirs = install.listFiles();
-for (int i = 0; i &lt; dirs.length; ++i) {
-    if (dirs[i].isDirectory() &amp;&amp; dirs[i].getName().equals("derby")) {
-        return true;
-   }
-}
-return false;</condition>
-          </action>
-          <action name="reindex_ij.sql" id="235373" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                  <void property="file">
-                    <object class="java.io.File">
-                      <string>db/reindex_ij.sql</string>
-                    </object>
-                  </void>
-                  <void property="replaceValue">
-                    <string>${installer:sys.installationDir}</string>
-                  </void>
-                  <void property="searchValue">
-                    <string>@install@</string>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition />
           </action>
           <action name="" id="8" beanClass="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -1642,7 +1722,7 @@ return Boolean.FALSE;</string>
         <condition />
         <validation />
         <actions>
-          <action name="" id="95843" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="" id="95843" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="Can't stop background service">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.services.StopServiceAction">
@@ -1654,7 +1734,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition>!Util.isMacOS()</condition>
           </action>
-          <action name="" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="launchctl stop" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="Can't stop background service">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
@@ -1686,7 +1766,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition>Util.isMacOS()</condition>
           </action>
-          <action name="" id="145683" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="launchctl remove" id="145683" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
@@ -1718,7 +1798,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition>Util.isMacOS()</condition>
           </action>
-          <action name="" id="95844" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="jetty" id="95844" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1735,7 +1815,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition />
           </action>
-          <action name="" id="95858" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="lib" id="95858" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1752,7 +1832,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition />
           </action>
-          <action name="" id="95848" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="conf" id="95848" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1769,7 +1849,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition />
           </action>
-          <action name="" id="95852" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="db" id="95852" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1786,7 +1866,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition />
           </action>
-          <action name="" id="95856" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="zimlets" id="271563" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1803,7 +1883,92 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition />
           </action>
-          <action name="" id="95851" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="profile" id="95856" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>profile</string>
+                    </object>
+                  </void>
+                  <void property="recurse">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="zdesktop.webapp" id="271564" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>zdesktop.webapp</string>
+                    </object>
+                  </void>
+                  <void property="recurse">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="macos" id="271565" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>macos</string>
+                    </object>
+                  </void>
+                  <void property="recurse">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="linux" id="271566" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>linux</string>
+                    </object>
+                  </void>
+                  <void property="recurse">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="win32" id="271567" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                  <void property="file">
+                    <object class="java.io.File">
+                      <string>win32</string>
+                    </object>
+                  </void>
+                  <void property="recurse">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+          </action>
+          <action name="log" id="95851" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1820,7 +1985,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition>context.getBooleanVariable("wipeUserData")</condition>
           </action>
-          <action name="" id="95850" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="redolog" id="95850" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1837,7 +2002,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition>context.getBooleanVariable("wipeUserData")</condition>
           </action>
-          <action name="" id="95849" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="store" id="95849" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1854,7 +2019,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition>context.getBooleanVariable("wipeUserData")</condition>
           </action>
-          <action name="" id="95857" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="index" id="95857" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1871,7 +2036,7 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition>context.getBooleanVariable("wipeUserData")</condition>
           </action>
-          <action name="" id="109912" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+          <action name="derby" id="109912" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -2039,7 +2204,7 @@ if (installDir.indexOf(" ") &gt;= 0) {
     </macosFolder>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="59040" />
+    <mediaSet refId="44" />
   </buildIds>
 </install4j>
 

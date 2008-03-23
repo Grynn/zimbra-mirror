@@ -24,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -136,6 +137,14 @@ public class Derby extends Db {
         return (numSchemas > 0);
     }
 
+    @Override
+    void shutdown() {
+    	try {
+    		DriverManager.getConnection("jdbc:derby:" + System.getProperty("derby.system.home", LC.zimbra_home.value() + File.separator + "derby") + ";shutdown=true");
+    	} catch (Exception x) {
+    		//an exception is always throw with a 08006 status to indicate shutdown
+    	}
+    }
 
     public static OutputStream disableDerbyLogFile(){
         return new OutputStream() {
