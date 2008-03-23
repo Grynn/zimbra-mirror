@@ -45,6 +45,9 @@ else
 	if [ -x /opt/local/bin/glibtoolize ]; then
 		export CPPFLAGS=-DDARWIN
 		LIBTOOLIZE=/opt/local/bin/glibtoolize
+  elif [ -x /usr/bin/glibtoolize ]; then
+		export CPPFLAGS=-DDARWIN
+		LIBTOOLIZE=/usr/bin/glibtoolize
 	else
 		echo "Where is libtoolize?"
 		exit 1
