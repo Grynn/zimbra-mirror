@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = 1.71;
+my $version = 1.8;
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -37,6 +37,7 @@ my $logfilename = "icalmig.log";
 my $logfile;
 my $icalfile;
 my $invalidfile;
+#used for debug purpose
 $icalfile="" if ($DEBUG);
 
 my $outfile;
@@ -81,7 +82,7 @@ while ($ARGV[0] =~ /^-(.+)/)
   }
   elsif ($switch eq "v")
   {
-    print "VERISON: $version\n";
+    print "VERSION: $version\n";
     exit;
   }
   elsif ($switch eq "f")
@@ -161,7 +162,6 @@ sub Initialize
   
   #open logfile
   open LFHANDLE, ">$logfile" or die "Cannot open logfile $logfile";
-  #open input ics file
   #open Output file
   $outfile="$icalfile"."$newfileext";
   open OTHANDLE, ">$outfile" or die "can not open output file.";
@@ -346,23 +346,43 @@ sub processfile
     }
     elsif ($_ =~/^ATTENDEE/)
     {
-      #check for empty "mailto" property, if found remove corresponding ATTENDEE
+      #check for empty "mailto" and 'mailto' property existence
+      #if it is empty or doesnt exists, remove corresponding ATTENDEE
       my $keepmove=1;
       my $tline=$_;
+      my $cmptline=$tline;
+      my $nomailto=0;
+      my $npos;
       my $curpos=tell CFHANDLE;
       while ($keepmove)
       {
-        if ($tline =~/mailto:/)
+        if (($cmptline =~/mailto:/)||($nomailto))
         {
           $keepmove=0;
-          if($tline =~/mailto:$/)
+          if(($cmptline =~/mailto:$/)||($nomailto))
           {
-            my $npos= tell CFHANDLE;
-            my $nline = readline(*CFHANDLE);
+            my $nline;
+            if (!$nomailto)
+            {
+              $npos= tell CFHANDLE;
+              $nline = readline(*CFHANDLE);
+            }
+            else
+            {
+              $nline = $tline;
+            }
             if ($nline=~/ATTENDEE|END/)
             {
-              &log_message("$tline");
-              &log_message("WARNING: EMPTY 'mailto:' found. May cause import error.\n");
+              if ($nomailto)
+              {
+                &log_message("$cmptline");
+                &log_message("WARNING: No 'mailto:' found. May cause import error.\n");
+              }
+              else
+              {
+                &log_message("$tline");
+                &log_message("WARNING: EMPTY 'mailto:' found. May cause import error.\n");
+              }
               &log_message("Removing it from output file.");
               $fdelete=1;
               seek CFHANDLE,$npos,0;
@@ -383,9 +403,23 @@ sub processfile
         }
         else
         {
+          $npos= tell CFHANDLE;
           $tline = readline(*CFHANDLE);
+          #trim to avoid any start/end spaces
+          $tline = trim($tline);
+          #form complete ATTENDEE line as 'mailto' can be divided into more than one line
+          $cmptline = $cmptline.$tline;
+          #globally replace all line-feeds with nothing
+          $cmptline =~ s/\n//g;
+          #globally replace all carriage-returns with nothing
+          $cmptline =~ s/\r//g;
+          #if next ATTENDEE or END:VEVENT found, it means no 'mailto' is found!!!.
+          if ($tline =~/ATTENDEE|END/)
+          {
+            $nomailto=1;
+          }
         }
-      }
+      }#end while keepmove
     }
     elsif ($_=~/^END:VEVENT/)         #end of VEVENT
     {
@@ -417,7 +451,6 @@ sub processfile
       $g_isrdate=0;
       $IsFirstRecId=0;
     }
-
 #Case: 1 *******************************************************>>>>>>>>>>>
     #shall we delete the RDATEs from VEVENT with RRULE and RDATEs?
     #if $fdelete is false, dont include the line
@@ -442,6 +475,13 @@ sub processfile
         my $tzrecid= $_;
         $tzrecid=~ s/RECURRENCE-ID/RECURRENCE-ID$TZTag/;
         print_outfile("$tzrecid");
+      }
+      #Add METHOD:PUBLISH to avoid NPE during import
+      elsif (/^BEGIN:VCALENDAR/)
+      {
+        print_outfile ($_);
+        &Add_METHOD_PUBLISH;
+        $write_pos = tell OTHANDLE;
       }
       else
       {
@@ -724,13 +764,6 @@ sub processfile
         #get last datetime portion
         $rdarray = ($masterrec->{'RDATE'});
         my $mstrdtstart = $masterrec->{'DTSTART'};
-        #my $mstrdtstart;
-        #for my $k1 ( sort keys %$rdarray )
-        #{
-        #  $mstrdtstart=$k1;
-        #  last;
-        #}
-
         my $idx2= index($mstrdtstart,';');
         my $ridx= rindex($mstrdtstart,':');
         my $recidfmtstr="";
@@ -982,7 +1015,31 @@ sub print_srtdnewrecarr
     &log_message("$srdate");
   }
 }
-#TimeZone information header for GeorgiaTech
+
+# trim function to remove whitespace from the start and end of the string
+sub trim($)
+{
+	my $string = shift;
+	$string =~ s/^\s+//;
+	$string =~ s/\s+$//;
+	return $string;
+}
+# Left trim function to remove leading whitespace
+sub ltrim($)
+{
+	my $string = shift;
+	$string =~ s/^\s+//;
+	return $string;
+}
+# Right trim function to remove trailing whitespace
+sub rtrim($)
+{
+	my $string = shift;
+	$string =~ s/\s+$//;
+	return $string;
+}
+
+#TimeZone information header for EST5EDT
 sub init_TZHeader
 {
   @TZHeader =(
@@ -1027,4 +1084,9 @@ sub Add_TZHeader
   {
     print_outfile("$TZHeader[$i]");
   }
+}
+
+sub Add_METHOD_PUBLISH
+{
+  print_outfile("METHOD:PUBLISH");
 }
