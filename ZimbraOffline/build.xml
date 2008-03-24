@@ -698,6 +698,9 @@
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/chrome/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 		<copy tofile="${dist.dir}/linux/prism/chrome/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 		<copy tofile="${dist.dir}/win32/prism/chrome/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+
+		<mkdir dir="${dist.dir}/profile/extensions/zimbradnd@zimbra.com"/>
+		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 	</target>
 
 	<target name="test-launcher-mac">
