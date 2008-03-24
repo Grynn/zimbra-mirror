@@ -28,8 +28,7 @@ Com_Zimbra_Wikipedia.prototype.constructor = Com_Zimbra_Wikipedia;
 
 Com_Zimbra_Wikipedia.prototype.init =
 function() {
-	// Pre-load placeholder image
-	(new Image()).src = this.getResource('blank_pixel.gif');
+    //Nothing to init.
 };
 
 // Called by the Zimbra framework when the panel item was double clicked
