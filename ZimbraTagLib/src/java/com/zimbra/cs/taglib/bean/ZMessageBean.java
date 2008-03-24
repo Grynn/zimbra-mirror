@@ -176,13 +176,15 @@ public class ZMessageBean {
             mAttachments = new ArrayList<ZMimePartBean>();
             ZMimePart top = mMsg.getMimeStructure();
             //if (top.getContentType().equalsIgnoreCase(Mime.CT_MULTIPART_MIXED)) {
-            for (ZMimePart child: top.getChildren()) {
-                addAttachments(mAttachments, child);
-            }
-            if (mAttachments.isEmpty() && !top.isBody()) {
-                ZMimePartBean bb = new ZMimePartBean(top);
-                if (!bb.isBody() && (bb.getIsVideo() || bb.getIsImage() || bb.getIsAudio() || bb.getIsApp())) {
-                    mAttachments.add(bb);
+            if (top != null) {
+                for (ZMimePart child: top.getChildren()) {
+                    addAttachments(mAttachments, child);
+                }
+                if (mAttachments.isEmpty() && !top.isBody()) {
+                    ZMimePartBean bb = new ZMimePartBean(top);
+                    if (!bb.isBody() && (bb.getIsVideo() || bb.getIsImage() || bb.getIsAudio() || bb.getIsApp())) {
+                        mAttachments.add(bb);
+                    }
                 }
             }
         }
