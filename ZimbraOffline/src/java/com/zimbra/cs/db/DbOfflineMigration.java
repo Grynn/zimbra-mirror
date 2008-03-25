@@ -10,7 +10,15 @@ import com.zimbra.cs.db.DbPool.Connection;
 
 public class DbOfflineMigration {
 
+	public void testRun() throws Exception {
+		runInternal(true);
+	}
+	
 	public void run() throws Exception {
+		runInternal(false);
+	}
+	
+	public void runInternal(boolean isTestRun) throws Exception {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -31,7 +39,7 @@ public class DbOfflineMigration {
             
             switch (oldDbVersion) {
             case 51:
-            	migrateFromVersion51(conn);
+            	migrateFromVersion51(conn, isTestRun);
             	break;
             default:
             	throw new DbUnsupportedVersionException();
@@ -60,8 +68,9 @@ public class DbOfflineMigration {
         }
 	}
 	
-	private void migrateFromVersion51(Connection conn) throws Exception {
+	private void migrateFromVersion51(Connection conn, boolean isTestRun) throws Exception {
         PreparedStatement stmt = null;
+        boolean isSuccess = false;
         try {
             stmt = conn.prepareStatement("ALTER TABLE zimbra.mailbox ADD COLUMN idx_deferred_count INTEGER NOT NULL DEFAULT 0");
             stmt.executeUpdate();
@@ -71,15 +80,19 @@ public class DbOfflineMigration {
             stmt.executeUpdate();
             stmt.close();
             
-            conn.commit();
+            isSuccess = true;
         } finally {
             DbPool.closeStatement(stmt);
+            if (isTestRun || !isSuccess)
+            	conn.rollback();
+            else
+            	conn.commit();
         }
 	}
 	
 	public static void main(String[] args) throws Exception {
 		System.setProperty("zimbra.config", "/opt/zimbra/zdesktop/conf/localconfig.xml");
 		
-		new DbOfflineMigration().run();
+		new DbOfflineMigration().testRun();
 	}
 }
