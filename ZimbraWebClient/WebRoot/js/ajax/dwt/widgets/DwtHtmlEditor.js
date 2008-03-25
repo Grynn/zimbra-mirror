@@ -1186,11 +1186,10 @@ function(ev) {
 
 DwtHtmlEditor.prototype._registerEditorEventHandlers =
 function(iFrame, iFrameDoc) {
-	var events = ["mouseup", "drag", "mousedown"];
-        if (AjxEnv.isIE7up)
-                events.push("keydown");
-        else
-                events.push("keypress");
+	var events = ["mouseup", "drag", "mousedown", "keydown"];
+	if (!AjxEnv.isIE7up) {
+		events.push("keypress");
+	}
 	// Note that since we're not creating the closure here anymore, it's
 	// safe to call this function any number of times (we do this for
 	// Gecko/Linux to work around bugs).  The browser won't add the same
@@ -1217,31 +1216,6 @@ function(iFrameDoc, name) {
 		iFrameDoc.removeEventListener(name, this.__eventClosure, true);
 	}
 };
-
-// Console (?dev=1 doesn't work in IE for now)
-
-// var TMP = document.createElement("div");
-// setTimeout(function(){
-//         document.body.appendChild(TMP);
-//         TMP.style.zIndex = 30000;
-//         TMP.style.backgroundColor = "yellow";
-//         TMP.style.border = "2px solid red";
-//         TMP.style.position = "absolute";
-//         TMP.style.left = "10px";
-//         TMP.style.top = "10px";
-//         TMP.style.width = "200px";
-//         TMP.style.height = "200px";
-//         TMP.style.overflow = "auto";
-// }, 1000);
-
-// function DEBUG(text) {
-//         var txt = document.createElement("div");
-//         txt.innerHTML = text;
-//         TMP.appendChild(txt);
-//         if (TMP.childNodes.length > 20)
-//                         TMP.removeChild(TMP.firstChild);
-// };
-
 
 DwtHtmlEditor.prototype._handleEditorEvent =
 function(ev) {
@@ -1313,28 +1287,26 @@ function(ev) {
 		}
 		//on pressing enter the editor losses track of formating
 		//ignore querying command state for this event alone
-		if(AjxEnv.isGeckoBased && ev.keyCode == 13)
-		{
-			this._stateEvent._ignoreCommandState=true;
-                        var r = this._getRange(), start = r.startContainer, hre = /^h[1-6]$/i;
-                        if (( start.nodeType == 3 && hre.test(start.parentNode.tagName) ) ||
-                                hre.test(start.tagName) ) {
-                                var self = this;
-                                // BUG 19255: pressing ENTER at the end of a heading
-                                // looks like an additional newline was added.
-                                // In fact it's only a refresh bug--the browser
-                                // does not redisplay the caret correctly;
-                                // force a refresh after 5ms (to allow the browser
-                                // to actually handle the keypress first).
-                                setTimeout(function(){
-                                        var doc = self._getIframeDoc();
-                                        doc.body.style.display = "none";
-                                        doc.body.style.display = "";
-                                        var sel = self._getSelection();
-                                        sel.removeAllRanges();
-                                        sel.addRange(r);
-                                }, 5);
-                        }
+		if (AjxEnv.isGeckoBased && ev.keyCode == 13) {
+			this._stateEvent._ignoreCommandState = true;
+			var r = this._getRange(), start = r.startContainer, hre = /^h[1-6]$/i;
+			if ((start.nodeType == 3 && hre.test(start.parentNode.tagName)) || hre.test(start.tagName) ) {
+				var self = this;
+				// BUG 19255: pressing ENTER at the end of a heading
+				// looks like an additional newline was added.
+				// In fact it's only a refresh bug--the browser
+				// does not redisplay the caret correctly;
+				// force a refresh after 5ms (to allow the browser
+				// to actually handle the keypress first).
+				setTimeout(function(){
+					var doc = self._getIframeDoc();
+					doc.body.style.display = "none";
+					doc.body.style.display = "";
+					var sel = self._getSelection();
+					sel.removeAllRanges();
+					sel.addRange(r);
+				}, 5);
+			}
 		}
 	}
 
@@ -1355,7 +1327,7 @@ function(ev) {
 				ke.setToDhtmlEvent(ev);
 				retVal = false;
 			}
-		} else {
+		} else if (DwtKeyboardMgr.isPossibleInputShortcut(ev)) {
 			// pass to keyboard mgr for kb nav
 			retVal = DwtKeyboardMgr.__keyDownHdlr(ev);
 		}

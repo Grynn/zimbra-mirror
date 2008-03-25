@@ -69,6 +69,20 @@ DwtKeyboardMgr.__KEYSEQ_PENDING		= 3;
 DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
 
 /**
+ * Returns true if the event may be a shortcut from within an input (text input or
+ * textarea). Since printable characters are echoed, the shortcut must be nonprintable.
+ * We currently use the ALT or CTRL key to create shortcuts from inputs. The ESC key may
+ * also be a shortcut.
+ * 
+ * @param ev	[Event]		native key event
+ */
+DwtKeyboardMgr.isPossibleInputShortcut =
+function(ev) {
+	return (!DwtKeyMapMgr.isModifier(ev.keyCode) && (ev.keyCode == 27 ||
+			(ev.ctrlKey || ev.altKey)));
+};
+
+/**
  * @return returns the class name
  * @type String
  */
