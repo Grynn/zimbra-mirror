@@ -924,7 +924,7 @@ Com_Zimbra_Yflickr.prototype.onConfirmSaveToFlickr = function (ct, label, src, t
                  "auth_token=" + this.token.token,
                  "api_sig=" + flickrsig,
                  "title=" + AjxStringUtil.urlEncode (title),
-                 "tags=" + AjxStringUtil.urlEncode (tags),
+                 "tags=" + AjxStringUtil.urlEncode (tags)
                 ].join ("&");
 
     var callback = new AjxCallback (this,this.onDoneSaveToFlickr);
@@ -1019,14 +1019,7 @@ FlickrTabView.prototype.gotAttachments = function() {
     return (this.zimlet.getSelectedPhotos().length > 0);
 }
 
-FlickrTabView.prototype._createHtml = function()
-{ 
-    this._contentEl = this.getContentHtmlElement ();
-    this._contentEl.innerHTML = "";
-
-    this.noauthDiv = document.createElement ("div");
-    this.noauthDiv.className = "Yflickr_busyMsg";
-    this.noauthDiv.appendChild (document.createTextNode ("The Flickr Zimlet has not yet been authorized to access your photos. Please click 'Authorize' from the Flickr Zimlet context menu, and complete the authorization process first."));
+FlickrTabView.prototype._createProgressDivs = function(){
 
     var apDiv = document.createElement ("div");
     apDiv.className = "Yflickr_busyMsg";
@@ -1044,22 +1037,31 @@ FlickrTabView.prototype._createHtml = function()
     apDiv.appendChild (approgressDiv);
 
     this.apDiv = apDiv;
-    this.apbusyDiv = apbusyDiv;
     this.approgressDiv = approgressDiv;
+};
 
-    /* fetch progress div */
-    var fpDiv = document.createElement ("div");
-    fpDiv.className = "Yflickr_busyMsg";
-    var fpbusyDiv = document.createElement ("div");
-    var fpbusyImg = document.createElement ("img");
-    fpbusyImg.setAttribute ("src", YFLICKR_BUSYIMGURL);
-    fpbusyDiv.appendChild (fpbusyImg);
-    fpDiv.appendChild (fpbusyDiv);
-    var fpText = document.createElement ("div");
-    fpText.appendChild (document.createTextNode("Please wait while your flickr photos are fetched"));
-    fpDiv.appendChild (fpText);
+FlickrTabView.prototype.getApprogressDiv = function(){
+    if(!this.approgressDiv){
+        this._createProgressDivs();
+    }
+    return this.approgressDiv;
+};
 
-    this.fpDiv = fpDiv;
+FlickrTabView.prototype.getApDiv = function(){
+    if(!this.apDiv){
+        this._createProgressDivs();
+    }
+    return this.apDiv;
+};
+
+FlickrTabView.prototype._createHtml = function()
+{ 
+    this._contentEl = this.getContentHtmlElement ();
+    this._contentEl.innerHTML = "";
+
+    this.noauthDiv = document.createElement ("div");
+    this.noauthDiv.className = "Yflickr_busyMsg";
+    this.noauthDiv.appendChild (document.createTextNode ("The Flickr Zimlet has not yet been authorized to access your photos. Please click 'Authorize' from the Flickr Zimlet context menu, and complete the authorization process first."));
 
     /* One time initialization (which was present in showMe () has been shifted here */
 
@@ -1137,20 +1139,20 @@ FlickrTabView.prototype._createHtml = function()
 /* Utility functions to show various stages of progress when the tab-view is visible */
 FlickrTabView.prototype.showAttachingPhotos = function ()
 {
-    this.showElement (this.apDiv);
+    this.showElement (this.getApDiv());
 }
 
 /* Updates the view of attaching photos */
 FlickrTabView.prototype.showAttachProgress = function ()
 {
-    YFlickr_clearElement (this.approgressDiv);
-    this.approgressDiv.appendChild (document.createTextNode ("Attached " + (this.zimlet.attach_current + 1) + " of " + this.zimlet.attach_photos.length + " photos"));
+    YFlickr_clearElement (this.getApprogressDiv());
+    this.getApprogressDiv().appendChild (document.createTextNode ("Attached " + (this.zimlet.attach_current + 1) + " of " + this.zimlet.attach_photos.length + " photos"));
 }
 
 FlickrTabView.prototype.resetAttachProgress = function ()
 {
-    YFlickr_clearElement (this.approgressDiv);
-    this.approgressDiv.appendChild (document.createTextNode ("Please wait while your photos are being attached"));
+    YFlickr_clearElement (this.getApprogressDiv());
+    this.getApprogressDiv().appendChild (document.createTextNode ("Please wait while your photos are being attached"));
 }
 
 // Utility function to show custom text in the attachment dialog. Useful when something else needs to be shown
@@ -1173,8 +1175,6 @@ FlickrTabView.prototype.showMe = function ()
         DwtTabViewPage.prototype.showMe.call (this,parent);
         return;
     }
-
-    // this._contentEl.appendChild (this.fpDiv); /* display a wait message while we fetch the photos from flickr */
 
     /* Find out which photoset has been selected for display, and then go display it */
     var ps = this.getSelectedPhotoset();
