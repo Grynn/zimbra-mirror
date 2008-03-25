@@ -28,7 +28,6 @@ Com_Zimbra_YMaps.prototype.constructor = Com_Zimbra_YMaps;
 
 Com_Zimbra_YMaps.prototype.init =
 function() {
-	(new Image()).src = this.getResource('blank_pixel.gif');
 	if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(new Com_Zimbra_YMaps_Asst());
 };
 

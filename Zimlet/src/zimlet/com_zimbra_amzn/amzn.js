@@ -27,10 +27,7 @@ Com_Zimbra_Amzn.prototype = new ZmZimletBase();
 Com_Zimbra_Amzn.prototype.constructor = Com_Zimbra_Amzn;
 
 Com_Zimbra_Amzn.prototype.init =
-function() {
-	// Pre-load placeholder image
-	(new Image()).src = this.getResource('blank_pixel.gif');
-};
+function() { };
 
 // AMZN Service URL
 Com_Zimbra_Amzn.URL = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=1582H242YD2K3JEANR82&Operation=ItemSearch&SearchIndex=Books&ResponseGroup=Medium&Keywords=";
