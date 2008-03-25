@@ -44,11 +44,6 @@ import com.zimbra.cs.datasource.ImapFolder;
 public class OfflineDataSource extends DataSource {
     private KnownFolder[] knownFolders;
 
-    // DEBUG
-    static {
-        OfflineLog.offline.setLevel(Log.Level.debug);
-    }
-    
     OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs) {
         super(acct, type, name, id, attrs);
         setServiceName(getAttr(OfflineConstants.A_zimbraDataSourceDomain));
@@ -70,8 +65,20 @@ public class OfflineDataSource extends DataSource {
     
     private static Map<String, KnownFolder[]> knownFolderMapping = new HashMap<String, KnownFolder[]>();
     private static boolean isSyncAllFoldersByDefault = false;
+    
     private static ConcurrentMap<String, ImapFolderCollection> imapFolderCache =
         new ConcurrentHashMap<String, ImapFolderCollection>();
+
+    /**
+     * Removes ImapFolderCollection from folder cache for specified data
+     * source id.
+     * 
+     * @param dataSourceId the data source id
+     */
+    public static void removeCachedImapFolders(String dataSourceId)  {
+        OfflineLog.offline.debug("Removing cached imap folders: id = " + dataSourceId);
+        imapFolderCache.remove(dataSourceId);
+    }
     
     private static class EProperties extends Properties {
     	
@@ -271,4 +278,5 @@ public class OfflineDataSource extends DataSource {
         folders.add(folder);
         return folder;
     }
+
 }

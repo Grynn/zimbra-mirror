@@ -21,9 +21,11 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
@@ -62,6 +64,19 @@ public class LocalMailbox extends DesktopMailbox {
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
         Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
         //Folder.create(ID_FOLDER_IMPORT_ROOT, this, userRoot, IMPORT_ROOT_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR, null); //root for all data sources
+    }
+
+    @Override
+    public synchronized void deleteMailbox() throws ServiceException {
+        super.deleteMailbox();
+        DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
+        if (ds != null) {
+            OfflineDataSource.removeCachedImapFolders(ds.getId());
+        } else {
+            OfflineLog.offline.warn(
+                "Cannot remove cached folder tracker data for data source (account " +
+                getAccount().getName() + ") because DataSource is null");
+        }
     }
     
     @Override
