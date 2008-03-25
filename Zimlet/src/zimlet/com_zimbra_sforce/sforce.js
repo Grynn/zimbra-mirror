@@ -42,13 +42,33 @@ Com_Zimbra_SForce.prototype.init = function() {
     // features such as adding a contact to an account
     this.XMLNS = "urn:enterprise.soap.sforce.com";
 
-    // Add the Salesforce Button to the Compose Page
+
+    // Register with Zimbra Assistant
+    var asst = new Com_Zimbra_SForce_Asst(this);
+    this._asst = asst;
+    if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(asst);
+};
+
+Com_Zimbra_SForce.prototype.onShowView = function(viewId, isNewView) {
+	 if (viewId == ZmController.COMPOSE_VIEW && !this._toolbar){ 
+        this._initComposeSFToolbar();
+     }
+};
+
+Com_Zimbra_SForce.prototype._initComposeSFToolbar = function(){
+
+    if(!appCtxt.get(ZmSetting.MAIL_ENABLED)) this._toolbar = true;
+
+    if(this._toolbar) return;
+
+   // Add the Salesforce Button to the Compose Page
     this._composerCtrl = AjxDispatcher.run("GetComposeController");
     this._composerCtrl._sforce = this;
     if(!this._composerCtrl._toolbar) {
       // initialize the compose controller's toolbar
       this._composerCtrl._initializeToolBar();
     }
+
     this._toolbar = this._composerCtrl._toolbar;
     // Add button to toolbar
     if(!this._toolbar.getButton(Com_Zimbra_SForce.SFORCE)){
@@ -57,21 +77,19 @@ Com_Zimbra_SForce.prototype.init = function() {
 	    var op = {
 	    	id: Com_Zimbra_SForce.SFORCE,
 	    	textKey: "sforceAdd",
-	    	text: ZmMsg.sforceAdd, 
-	    	tooltipKey: "sforceTooltip", 
+	    	text: ZmMsg.sforceAdd,
+	    	tooltipKey: "sforceTooltip",
 	    	tooltip: ZmMsg.sforceTooltip,
 	    	image: "SFORCE-panelIcon"
 	    };
 	    var opDesc = ZmOperation.defineOperation(null, op);
 	    this._toolbar.addOp(opDesc.id, 1);
-	 
+
 	    this._toolbar.addSelectionListener(opDesc.id, new AjxListener(this._composerCtrl, this._sendAddSForce));
     }
-    // Register with Zimbra Assistant
-    var asst = new Com_Zimbra_SForce_Asst(this);
-    this._asst = asst;
-    if (ZmAssistant && ZmAssistant.register) ZmAssistant.register(asst);
+
 };
+
 
 /// Store the default SOAP server.  Note that after a successful login, the URL
 /// may change--which is why we store it in an object instance too (this.SERVER)

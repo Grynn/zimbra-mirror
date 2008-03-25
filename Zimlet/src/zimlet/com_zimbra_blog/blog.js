@@ -32,16 +32,17 @@ Com_Zimbra_Blog.prototype.init = function(){
 };
 
 Com_Zimbra_Blog.prototype.onShowView = function(viewId, isNewView) {
-	 if (viewId == ZmController.NOTEBOOK_PAGE_EDIT_VIEW){
-	 	this._initPageEditToolbar();
-	 }
+    if (viewId == ZmController.NOTEBOOK_PAGE_EDIT_VIEW && !this._toolbar){
+        this._initPageEditToolbar();
+    }
 };
 
 Com_Zimbra_Blog.prototype._initPageEditToolbar =
 function() {
     try
 	{
-        if(!ZmSetting.NOTEBOOK_ENABLED) return;
+        if(!appCtxt.get(ZmSetting.NOTEBOOK_ENABLED)) this._toolbar = true;
+
         if(this._toolbar) { return; }
         
         this._composerCtrl = AjxDispatcher.run("GetPageEditController");
