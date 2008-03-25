@@ -158,6 +158,7 @@ public class XmailBean extends FormBean {
 			
 			String ydomain = "yahoo.com";
 			String gdomain = "gmail.com";
+			String adomain = "aol.com";
 			
 			if (verb.isAdd()) {
 				if (email.endsWith(ydomain) || host.endsWith(ydomain) || smtpHost.endsWith(ydomain)) {
@@ -173,6 +174,13 @@ public class XmailBean extends FormBean {
 						setError("Gmail access must use IMAP");
 					} else {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, gdomain);
+					}
+				} else if (email.endsWith(adomain) || host.endsWith(adomain) || smtpHost.endsWith(adomain)) {
+					if (dsType == DataSource.Type.pop3) {
+						addInvalid("protocol");
+						setError("AOL Mail access must use IMAP");
+					} else {
+						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, adomain);
 					}
 				}
 			}

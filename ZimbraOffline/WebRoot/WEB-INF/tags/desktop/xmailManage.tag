@@ -89,7 +89,7 @@ function disableButtons() {
         <input type="hidden" name="domain" value="${bean.domain}">
     </c:if>
     
-    <input type="hidden" name="protocol" value="${bean.pop ? 'pop' : 'imap'}">
+    <input type="hidden" name="protocol" value="${bean.pop ? 'pop3' : 'imap'}">
     <input type="hidden" name="dataSourceName" value="${bean.dataSourceName}">
     <input type="hidden" name="username" value="${bean.username}">
     <input type="hidden" name="email" value="${bean.email}">

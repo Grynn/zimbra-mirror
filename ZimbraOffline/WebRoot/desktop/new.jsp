@@ -30,6 +30,10 @@ function OnGmail() {
     window.location = "/zimbra/desktop/gmail.jsp";
 }
 
+function OnAmail() {
+    window.location = "/zimbra/desktop/amail.jsp";
+}
+
 function OnXmail() {
     window.location = "/zimbra/desktop/xmail.jsp";
 }
@@ -114,6 +118,14 @@ function OnXmail() {
                     <a href="javascript:zd.toggle('Gmail')">Done</a>
                 </div>
             </td>       
+        </tr>
+
+        <tr>
+            <td valign=top>
+                <button class='DwtButton' onclick="OnAmail()" style='width:100%'>
+                    <nobr>AOL Mail Account</nobr>
+                </button>
+            </td>
         </tr>
 
         <tr>

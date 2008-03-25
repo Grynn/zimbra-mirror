@@ -503,6 +503,19 @@
 			<param name="param.install.dir" value="${zimbra.home.dir}" />
 		</antcall>
 
+                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+                        <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+                        <arg line="-e javamail_imap_debug=true" />
+                </java>
+                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+                        <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+                        <arg line="-e javamail_pop3_debug=true" />
+                </java>
+                <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+                        <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+                        <arg line="-e javamail_smtp_debug=true" />
+                </java>
+
 		<move todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}"/>
 		</move>
