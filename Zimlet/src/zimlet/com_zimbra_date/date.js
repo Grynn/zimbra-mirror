@@ -79,7 +79,7 @@ var $RE_DOW_FULL = "("+I18nMsg.weekdayMonLong+"|"+I18nMsg.weekdayTueLong+"|"+I18
 Com_Zimbra_Date.DOW = {	su: 0, mo: 1, tu: 2, we: 3, th: 4, fr: 5, sa: 6};
 
 //var $RE_DOM = "(\\d{1,2})(?:st|nd|rd|th)?";
-var $RE_DOM = "(\\d{1,2})(?:"+I18nMsg.st+"|"+I18nMsg.nd+"|"+I18nMsg.rd+"|"+I18nMsg.th+")?";
+var $RE_DOM = AjxMsg.RE_DOM;//"(\\d{1,2})(?:"+I18nMsg.st+"|"+I18nMsg.nd+"|"+I18nMsg.rd+"|"+I18nMsg.th+")?";
 
 // needs to be kept in sync with Com_Zimbra_Date.MONTH
 //var $RE_MONTH = "(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)";
@@ -92,14 +92,14 @@ Com_Zimbra_Date.MONTH = {
 };
 
 //var $RE_TODAY_TOMORROW_YESTERDAY = "(today|tomorrow|yesterday)";
-var $RE_TODAY_TOMORROW_YESTERDAY = "("+I18nMsg.today+"|"+I18nMsg.tomorrow+"|"+I18nMsg.yesterday+")";
+var $RE_TODAY_TOMORROW_YESTERDAY = "("+AjxMsg.today+"|"+AjxMsg.tomorrow+"|"+AjxMsg.yesterday+")";
 
 //var $RE_NEXT_THIS_LAST = "(next|this|last)";
-var $RE_NEXT_THIS_LAST = "("+I18nMsg.next+"|"+I18nMsg.thiss+"|"+I18nMsg.last+")";
+var $RE_NEXT_THIS_LAST = "("+AjxMsg.next+"|"+AjxMsg.dis+"|"+AjxMsg.last+")";
 
-var $RE_COMMA_OR_SP = "(?:\\s+|\\s*,\\s*)";
+var $RE_COMMA_OR_SP = AjxMsg.RE_COMMA_OR_SP;//"(?:\\s+|\\s*,\\s*)";
 
-var $RE_DASH = "(?:-)";
+var $RE_DASH = AjxMsg.RE_DASH;//"(?:-)";
 
 var $RE_SLASH = "(?:\\/)";
 
@@ -242,7 +242,8 @@ ZmDate1ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate1ObjectHandler.prototype.constructor = ZmDate1ObjectHandler;
 ZmDate1ObjectHandler.prototype.name = "com_zimbra_date1";
 
-ZmDate1ObjectHandler.REGEX = new RegExp("\\b" + $RE_TODAY_TOMORROW_YESTERDAY + "\\b", "ig");
+//ZmDate1ObjectHandler.REGEX = new RegExp("\\b" + $RE_TODAY_TOMORROW_YESTERDAY + "\\b", "ig");
+ZmDate1ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern1.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1")) + "\\b", "ig");
 
 ZmDate1ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
@@ -252,9 +253,9 @@ function(line, startIndex) {
 
 	var d = new Date(this.getCurrentDate().getTime());
 	var when = result[1].toLowerCase();
-	if (when == "yesterday") {
+	if (when == I18nMsg.yesterday/*"yesterday"*/) {
 		d.setDate(d.getDate() - 1);
-	} else if (when == "tomorrow") {
+	} else if (when == I18nMsg.tomorrow/*"tomorrow"*/) {
 		d.setDate(d.getDate() + 1);
 	}
 	result.context = {date: d, monthOnly: 0, valid: true};
@@ -271,7 +272,8 @@ ZmDate2ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate2ObjectHandler.prototype.constructor = ZmDate2ObjectHandler;
 ZmDate2ObjectHandler.prototype.name = "com_zimbra_date2";
 
-ZmDate2ObjectHandler.REGEX = new RegExp("\\b" + $RE_NEXT_THIS_LAST + $RE_SP + $RE_DOW + "\\b", "ig");
+//ZmDate2ObjectHandler.REGEX = new RegExp("\\b" + $RE_NEXT_THIS_LAST + $RE_SP + $RE_DOW + "\\b", "ig");
+ZmDate2ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern2.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1"))+ "\\b", "ig");
 
 ZmDate2ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
@@ -284,10 +286,10 @@ function(line, startIndex) {
 	var ndow = Com_Zimbra_Date.DOW[result[2].toLowerCase().substring(0,2)];
 	var addDays;
 
-	if (result[1].toLowerCase() == /*"next"*/I18nMsg.next) {
+	if (result[1].toLowerCase() == /*"next"*/AjxMsg.next) {
 		addDays = ndow - dow;
 		addDays += 7;
-	} else if (result[1].toLowerCase() == /*"this"*/I18nMsg.thiss) {
+	} else if (result[1].toLowerCase() == /*"this"*/AjxMsg.dis) {
 		addDays = ndow - dow;
 	} else { // last
 		addDays = (-1 * (dow + 7 - ndow)) % 7;
@@ -309,7 +311,7 @@ function ZmDate3ObjectHandler() {
 ZmDate3ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate3ObjectHandler.prototype.constructor = ZmDate3ObjectHandler;
 ZmDate3ObjectHandler.prototype.name = "com_zimbra_date3";
-ZmDate3ObjectHandler.REGEX = new RegExp("\\b" + $RE_DOM + $RE_COMMA_OR_SP + $RE_MONTH + $RE_OP_YEAR42 + "\\b", "ig");
+ZmDate3ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern3.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1")) + "\\b", "ig");
 
 ZmDate3ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
@@ -345,7 +347,7 @@ function ZmDate4ObjectHandler() {
 ZmDate4ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate4ObjectHandler.prototype.constructor = ZmDate4ObjectHandler;
 ZmDate4ObjectHandler.prototype.name = "com_zimbra_date4";
-ZmDate4ObjectHandler.REGEX = new RegExp("\\b" + $RE_MONTH + $RE_SP + $RE_DOM + $RE_OP_TIME + $RE_OP_YEAR4 + "\\b", "ig");
+ZmDate4ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern4.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1")) + "\\b", "ig");
 
 ZmDate4ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
@@ -383,7 +385,7 @@ function ZmDate5ObjectHandler() {
 ZmDate5ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate5ObjectHandler.prototype.constructor = ZmDate5ObjectHandler;
 ZmDate5ObjectHandler.prototype.name = "com_zimbra_date5";
-ZmDate5ObjectHandler.REGEX = new RegExp("\\b" + $RE_MM + $RE_DASH + $RE_DD + $RE_DASH + $RE_YEAR42 + "\\b", "ig");
+ZmDate5ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern5.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1")) + "\\b", "ig");
 
 ZmDate5ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
@@ -416,7 +418,7 @@ function ZmDate6ObjectHandler() {
 ZmDate6ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate6ObjectHandler.prototype.constructor = ZmDate6ObjectHandler;
 ZmDate6ObjectHandler.prototype.name = "com_zimbra_date6";
-ZmDate6ObjectHandler.REGEX = new RegExp("\\b" + $RE_YEAR4 + $RE_DASH + $RE_MM + $RE_DASH + $RE_DD + "\\b", "ig");
+ZmDate6ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern6.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1")) + "\\b", "ig");
 
 ZmDate6ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
@@ -444,7 +446,7 @@ function ZmDate7ObjectHandler() {
 ZmDate7ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate7ObjectHandler.prototype.constructor = ZmDate7ObjectHandler;
 ZmDate7ObjectHandler.prototype.name = "com_zimbra_date7";
-ZmDate7ObjectHandler.REGEX = new RegExp("\\b" + $RE_MM + $RE_SLASH + $RE_DD + $RE_SLASH + $RE_YEAR42 + "\\b", "ig");
+ZmDate7ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern7.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1")) + "\\b", "ig");
 
 ZmDate7ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
@@ -453,7 +455,8 @@ function(line, startIndex) {
 	if (!result) {return null;}
 
 	var d = new Date(this.getCurrentDate().getTime());
-	var month = parseInt(result[1], 10) - 1;
+    
+    var month = parseInt(result[1], 10) - 1;
 	var dom = parseInt(result[2], 10);
 
     d.setMonth(month, dom);
@@ -478,7 +481,7 @@ function ZmDate8ObjectHandler() {
 ZmDate8ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate8ObjectHandler.prototype.constructor = ZmDate8ObjectHandler;
 ZmDate8ObjectHandler.prototype.name = "com_zimbra_date8";
-ZmDate8ObjectHandler.REGEX = new RegExp("\\b" + $RE_YEAR4 + $RE_SLASH + $RE_MM + $RE_SLASH + $RE_DD + "\\b", "ig");
+ZmDate8ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern8.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1")) + "\\b", "ig");
 
 ZmDate8ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
@@ -505,7 +508,7 @@ function ZmDate9ObjectHandler() {
 ZmDate9ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate9ObjectHandler.prototype.constructor = ZmDate9ObjectHandler;
 ZmDate9ObjectHandler.prototype.name = "com_zimbra_date9";
-ZmDate9ObjectHandler.REGEX = new RegExp("\\b" + $RE_MONTH + $RE_SP + $RE_YEAR4 + "\\b", "ig");
+ZmDate9ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern9.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1")) + "\\b", "ig");
 
 ZmDate9ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
@@ -534,7 +537,7 @@ ZmDate10ObjectHandler.prototype = new Com_Zimbra_Date();
 ZmDate10ObjectHandler.prototype.constructor = ZmDate10ObjectHandler;
 ZmDate10ObjectHandler.prototype.name = "com_zimbra_date10";
 
-ZmDate10ObjectHandler.REGEX = new RegExp("\\b" + $RE_DOW_FULL + "\\b", "ig");
+ZmDate10ObjectHandler.REGEX = new RegExp("\\b" + eval("''"+AjxMsg.datePattern10.replace(/{(RE_[a-zA-Z_]+[0-9]*)}/g,"+$$$1")) + "\\b", "ig");
 
 ZmDate10ObjectHandler.prototype.matchRegex =
 function(line, startIndex) {
