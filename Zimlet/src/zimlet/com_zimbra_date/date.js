@@ -253,9 +253,9 @@ function(line, startIndex) {
 
 	var d = new Date(this.getCurrentDate().getTime());
 	var when = result[1].toLowerCase();
-	if (when == I18nMsg.yesterday/*"yesterday"*/) {
+	if (when == AjxMsg.yesterday/*"yesterday"*/) {
 		d.setDate(d.getDate() - 1);
-	} else if (when == I18nMsg.tomorrow/*"tomorrow"*/) {
+	} else if (when == AjxMsg.tomorrow/*"tomorrow"*/) {
 		d.setDate(d.getDate() + 1);
 	}
 	result.context = {date: d, monthOnly: 0, valid: true};
@@ -455,9 +455,16 @@ function(line, startIndex) {
 	if (!result) {return null;}
 
 	var d = new Date(this.getCurrentDate().getTime());
-    
-    var month = parseInt(result[1], 10) - 1;
-	var dom = parseInt(result[2], 10);
+    var dIndex = 2;
+    var mIndex  = 1;
+
+    if(I18nMsg.formatDateShort.indexOf("d") == 0 || I18nMsg.formatDateShort.indexOf("D") == 0){
+        dIndex = 1;
+        mIndex = 2;
+    }
+
+    var month = parseInt(result[mIndex], 10) - 1;
+	var dom = parseInt(result[dIndex], 10);
 
     d.setMonth(month, dom);
 	var year = parseInt(result[3], 10);
