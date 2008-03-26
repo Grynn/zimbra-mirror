@@ -402,7 +402,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraFeatureSharingEnabled,
             A_zimbraPrefClientType,
             A_zimbraPrefLabel,
-            A_zimbraPrefMailPollingInterval
+            A_zimbraPrefMailPollingInterval,
+            A_zimbraChildAccount,
+            A_zimbraPrefChildVisibleAccount
     }));
 
     @Override
@@ -461,6 +463,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         attrs.put(A_zimbraPrefClientType, "advanced");
         attrs.put(A_zimbraFeatureSharingEnabled, FALSE);
+        
+        attrs.remove(A_zimbraChildAccount);
+        attrs.remove(A_zimbraPrefChildVisibleAccount);
 
         Account account = createAccountInternal(emailAddress, zgi.getId(), attrs);
         try {
