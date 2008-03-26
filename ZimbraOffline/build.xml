@@ -516,6 +516,9 @@
                         <arg line="-e javamail_smtp_debug=true" />
                 </java>
 
+		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.request=INFO" value="log4j.logger.zimbra.offline.request=DEBUG"/>
+		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.response=INFO" value="log4j.logger.zimbra.offline.response=DEBUG"/>
+
 		<move todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}"/>
 		</move>
