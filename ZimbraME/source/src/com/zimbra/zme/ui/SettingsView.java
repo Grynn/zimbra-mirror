@@ -192,7 +192,7 @@ public class SettingsView extends View implements ItemCommandListener, ItemState
 		//#if true
 			//# f = (TabbedForm)mView;
 		//#endif
-		switch(f.getSelectedTab()) {
+		switch(f.getActiveTab()) {
 			case GENERAL_TAB:
 				itemStateChangedGeneralTab(item);
 				break;

@@ -14,7 +14,6 @@
  */
 package com.zimbra.zme.ui;
 
-import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.CustomItem;
 
 import com.zimbra.zme.ZimbraME;
