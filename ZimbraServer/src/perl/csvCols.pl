@@ -20,12 +20,13 @@ use warnings;
 
 if (@ARGV < 1) {
   my $str =<<EOF;
-  Usage $0 CSVNAME [-z] [-NUMBER] [colname colname colname...]
+  Usage $0 CSVNAME [-z] [-NUMBER] [colregex colregex colregex...]
 
   This script takes a .CSV stats file, an optional number of lines,
-  and a set of column names.  It parses the CSV file, finds maps the
-  requested column names to the proper column index, and then formats
-  and prints the most recent values for the columns.
+  and a set of column names (or regular-expressions).  It parses the
+  CSV file, finds maps the requested column names to the proper column
+  index, and then formats and prints the most recent values for the
+  columns.
 
   Passing "-z" puts this in "zmstats" mode, a special-case mode for
   Zimbra stats CSV data that knows how to find the *most recent* column
@@ -34,8 +35,9 @@ if (@ARGV < 1) {
   Calling this script with no arguments will list the available columns.
 
   Example usage:
-     "$0"  - list available column names
-     "$0 -50 timestamp heap_free"  - Returns the most recent 50 values of the "timestamp" and "heap_free" column
+     "$0 foo.csv"  - list available column names
+     "$0 foo.csv -50 timestamp heap_free"  - Returns the most recent 50 values of the "timestamp" and "heap_free" column
+     "$0 foo.csv ^blah\*" -- Returns most recent 10 values of columns that have names starting with 'blah' 
 EOF
   
   die $str;
@@ -107,17 +109,21 @@ while(<IN>) {
 
 close IN;
 
+my @colnames; # most recent column-name row
+
 # map col names to col offsets
 if (@colsToReturn > 0) {
   if (!defined($lastColnamesRow) || ($lastColnamesRow eq "")) {
     die "Could not find colnames row.  (Using -z zmstats mode when you shouldn't be?)";
   }
 #  print "LastColNamesRow: $lastColnamesRow\n\n";
-  my @colnames = split(/,/, $lastColnamesRow);
+  @colnames = split(/,/, $lastColnamesRow);
   for (my $j = 0; $j < @colsToReturn; $j++) {
     my $matchedCol = 0;
     for (my $i = 0; $i < @colnames; $i++) {
-      if (lc($colnames[$i]) eq lc($colsToReturn[$j])) {
+#      if (lc($colnames[$i]) eq lc($colsToReturn[$j])) {
+      if ($colnames[$i]=~m/$colsToReturn[$j]/i) {
+#        print "Exp $colsToReturn[$j] matched colname: $colnames[$i]\n";
         push @colnums, $i;
         my $thisLength = (length $colsToReturn[$j]); 
         $widths{ $i } = $thisLength;
@@ -146,6 +152,9 @@ if (@colsToReturn > 0) {
           $thisVal = "";
         }
         my $thisLength = length($thisVal);
+        if ($thisLength < length($colnames[$_])) {
+          $thisLength = length($colnames[$_]);
+        }
         if ($widths{$_} < $thisLength) {
           $widths{$_} = $thisLength;
         } else {
@@ -155,9 +164,10 @@ if (@colsToReturn > 0) {
   }
 
   # tell the user what columns we're going to return  
-  for (my $i = 0; $i < @colsToReturn; $i++) {
+  for (my $i = 0; $i < @colnums; $i++) {
     my $width = $widths{$colnums[$i]};
-    print padToWidth($colsToReturn[$i], $width).", ";
+#    print padToWidth($colsToReturn[$i], $width).", ";
+    print padToWidth($colnames[$colnums[$i]], $width).", ";
   }
   print "\n";
   
