@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.8" transformSequenceNumber="1">
-  <directoryPresets config="./build/dist/jetty/common/lib" />
+  <directoryPresets config="./build/dist" />
   <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.84" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -65,6 +65,9 @@
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="235368" file="./build/dist/zdesktop.webapp" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="271586" file="./build/dist/profile" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
       <fileEntry mountPoint="4668" file="./build/dist/README.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
@@ -1885,7 +1888,7 @@ return !hasFailures;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition>Util.isWindows()</condition>
+            <condition>Util.isWindows() &amp;&amp; context.getBooleanVariable("launch")</condition>
           </action>
           <action name="macos" id="154832" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -1924,7 +1927,7 @@ return !hasFailures;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition>Util.isMacOS()</condition>
+            <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("launch")</condition>
           </action>
           <action name="linux" id="181368" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -1972,10 +1975,29 @@ return !hasFailures;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+            <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS() &amp;&amp; context.getBooleanVariable("launch")</condition>
           </action>
         </actions>
-        <formComponents />
+        <formComponents>
+          <formComponent name="" id="3856" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                  <void property="checkboxText">
+                    <string>Launch Zimbra Desktop</string>
+                  </void>
+                  <void property="initiallySelected">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="variableName">
+                    <string>launch</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <initScript />
+          </formComponent>
+        </formComponents>
       </screen>
     </installerScreens>
     <uninstallerScreens>
@@ -2566,7 +2588,7 @@ return Boolean.FALSE;</string>
         <entry location="win32" launcher="false" />
         <entry location="macos" launcher="false" />
       </exclude>
-      <variables/>
+      <variables />
       <excludedInstallerScreens />
       <excludedUninstallerScreens />
       <installerScript mode="1" file="">
@@ -2581,7 +2603,7 @@ return Boolean.FALSE;</string>
         <entry location="win32" launcher="false" />
         <entry location="linux" launcher="false" />
       </exclude>
-      <variables/>
+      <variables />
       <excludedInstallerScreens />
       <excludedUninstallerScreens />
     </macosFolder>
