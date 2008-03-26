@@ -931,7 +931,7 @@ function(item, id, skipNotify) {
 	}
 
 	item._buttonId = id;
-	item.id = Dwt.getNextId();
+	item.id = item.id || Dwt.getNextId();
 	this._data[id].add(item);
 	this.targetListView.addItem(item, idx, skipNotify);
 };
@@ -1028,6 +1028,7 @@ DwtChooserListView = function(parent, type, className) {
 
 	this.type = type;
 	this._chooserParent = parent.parent;
+	this._viewPrefix = Dwt.getNextId();
 };
 
 DwtChooserListView.SOURCE = 1;
