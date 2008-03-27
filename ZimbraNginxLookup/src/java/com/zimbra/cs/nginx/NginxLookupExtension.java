@@ -110,6 +110,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String IMAP_SSL = "imapssl";
         public static final String POP3     = "pop3";
         public static final String POP3_SSL = "pop3ssl";
+        public static final String HTTP     = "http";
         
         private static final SearchControls USER_SC   = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
         private static final SearchControls SERVER_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
@@ -148,6 +149,9 @@ public class NginxLookupExtension implements ZimbraExtension {
             if (attr != null)
                 attrs.add(attr);
             attr = config.getAttr(Provisioning.A_zimbraReverseProxyImapSSLPortAttribute);
+            if (attr != null)
+                attrs.add(attr);
+            attr = config.getAttr(Provisioning.A_zimbraReverseProxyHttpPortAttribute);
             if (attr != null)
                 attrs.add(attr);
             if (attrs.size() > 0)
@@ -248,6 +252,8 @@ public class NginxLookupExtension implements ZimbraExtension {
                 return Provisioning.A_zimbraReverseProxyPop3PortAttribute;
             else if (POP3_SSL.equalsIgnoreCase(proto))
                 return Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute;
+            else if (HTTP.equalsIgnoreCase(proto))
+                return Provisioning.A_zimbraReverseProxyHttpPortAttribute;
             else
                 throw new NginxLookupException("unsupported protocol: "+proto);
         }
