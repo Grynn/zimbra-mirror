@@ -31,6 +31,7 @@
  *        index 		[int]*				position in menu
  *        className		[string]*			CSS class
  *        posStyle		[constant]*			positioning style
+ *        id			[string]*			an explicit ID to use for the control's HTML element
  */
 DwtMenuItem = function(params) {
     if (arguments.length == 0) { return; }

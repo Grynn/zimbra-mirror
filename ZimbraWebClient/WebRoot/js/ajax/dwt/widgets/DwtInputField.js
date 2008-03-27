@@ -17,38 +17,41 @@
 
 
 /**
-* Creates an input field.
-* @constructor
-* @class
-* This class represents an input field..
-*
-* CSS Elements
-*	<className> input 			specifies the look of the input field during normal editing
-*   <className>-error input		specifies the look of the input field in an error state
-*
-*
-* @author Ross Dargahi
-*
-* @param parent				[DwtComposite]		the parent widget
-* @param type				[constant]			the data type of the input field
-* @param initialValue		[string]			the initial value of the field
-* @param size				[int]				size of the input field (in characters)
-* @param rows				[int]				number of rows (more than 1 means textarea)
-* @param maxLen				[int]				maximum length (in characters) of the input
-* @param errorIconStyle		[constant]			error icon style
-* @param validationStyle	[constant]			validation type
-* @param validator			[function]			custom validation function
-* @param validatorCtxtObj	[object]			object context for validation function
-* @param className			[string]			CSS class
-* @param posStyle			[constant]			positioning style
-* @param skipCaretHack		[boolean]			true to NOT do hack to make the caret show up in Firefox.
-* 												The hack uses a block display div, so for an input that needs
-* 												to be displayed inline, set this parameter to true.
-* @param required           [boolean]           True to mark as required.
-* @param hint				[string]			A hint to display in the input field when the value is empty.
-* 
-* TODO: override a bunch of DwtControl methods and apply them to input element
-*/
+ * Creates an input field.
+ * @constructor
+ * @class
+ * This class represents an input field..
+ *
+ * CSS Elements
+ *	<className> input 			specifies the look of the input field during normal editing
+ *   <className>-error input		specifies the look of the input field in an error state
+ *
+ *
+ * @author Ross Dargahi
+ *
+ * @param params			[hash]				hash of params:
+ *        parent			[DwtComposite]		the parent widget
+ *        type				[constant]*			the data type of the input field
+ *        initialValue		[string]*			the initial value of the field
+ *        size				[int]*				size of the input field (in characters)
+ *        rows				[int]*				number of rows (more than 1 means textarea)
+ *        maxLen			[int]*				maximum length (in characters) of the input
+ *        errorIconStyle	[constant]*			error icon style
+ *        validationStyle	[constant]*			validation type
+ *        validator			[function]*			custom validation function
+ *        validatorCtxtObj	[object]*			object context for validation function
+ *        className			[string]*			CSS class
+ *        posStyle			[constant]*			positioning style
+ *        skipCaretHack		[boolean]*			true to NOT do hack to make the caret show up in Firefox.
+ * 												The hack uses a block display div, so for an input that needs
+ * 												to be displayed inline, set this parameter to true.
+ *        required          [boolean]*          True to mark as required.
+ *        hint				[string]*			A hint to display in the input field when the value is empty.
+ *        id				[string]*			an explicit ID to use for the control's DIV element
+ *        inputId			[string]*			an explicit ID to use for the control's INPUT element
+ * 
+ * TODO: override a bunch of DwtControl methods and apply them to input element
+ */
 DwtInputField = function(params) {
 
 	if (arguments.length == 0) return;
@@ -57,7 +60,7 @@ DwtInputField = function(params) {
 	this._hintClassName = this._origClassName + "-hint";
 	this._disabledClassName = this._origClassName + "-disabled";
 	this._errorHintClassName = this._origClassName + "-errorhint";
-	DwtComposite.call(this, params.parent, params.className, params.posStyle);
+	DwtComposite.call(this, params);
 
     this._inputEventHandlers = {};
 
@@ -73,7 +76,7 @@ DwtInputField = function(params) {
 	this._hintIsVisible = false;
 	this._hint = params.hint;
 	
-	var inputFieldId = Dwt.getNextId();
+	var inputFieldId = params.inputID || Dwt.getNextId();
 	var errorIconId = Dwt.getNextId();
 	var htmlEl = this.getHtmlElement();
 	var doCursorHack = params.skipCaretHack;

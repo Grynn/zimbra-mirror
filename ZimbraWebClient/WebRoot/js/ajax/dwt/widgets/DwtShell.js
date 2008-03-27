@@ -60,7 +60,7 @@ DwtShell = function(params) {
     window.onresize = DwtShell._resizeHdlr;
 
     var htmlElement = document.createElement("div");
-	this._htmlElId = window._dwtShellId = htmlElement.id = Dwt.getNextId();
+	this._htmlElId = window._dwtShellId = htmlElement.id = params.id || Dwt.getNextId();
 	DwtControl.ALL_BY_ID[this._htmlElId] = this;
 
 	htmlElement.className = className;

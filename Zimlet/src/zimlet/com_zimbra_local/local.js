@@ -44,8 +44,10 @@ function(listener) {
 	var td = searchMenuBtnTd.parentNode.insertCell(searchMenuBtnTd.cellIndex+2);
 	td.id = searchToolBar._htmlElId + "_searchLocal";
 	td.className  =  'ZmSearchToolbarCell';
-	var localSearchButton = searchToolBar._addButton({ buttonId:"_searchLocal", lbl:this.getMessage("localSearchBtnLabel"), icon:"YLogo", tooltip:this.getMessage("localSearchBtnTooltip")});
-	localSearchButton.addSelectionListener(listener);
+	var b = searchToolBar._addButton({ tdId:"_searchLocal", lbl:this.getMessage("localSearchBtnLabel"),
+									   icon:"YLogo", tooltip:this.getMessage("localSearchBtnTooltip"),
+									   buttonId:ZmId.LOCAL_SEARCH_BUTTON});
+	b.addSelectionListener(listener);
 };
 
 
