@@ -188,16 +188,16 @@ DwtSelect.prototype.popup = function() {
 /**
  * Renames an option.
  *
- * @param value	{object} value the value of the option to rename
- * @param name	{string} name the new name
+ * @param value	{object} value 		the value of the option to rename
+ * @param name	{string} newValue 	the new display value
  */
 DwtSelect.prototype.rename =
-function(value, name) {
+function(value, newValue) {
 	var option = this.getOptionWithValue(value);
-	option._displayValue = name;
+	option._displayValue = newValue;
 
 	if (this.__selectedOption && (this.__selectedOption._value == value))	{
-		this.setText(name);
+		this.setText(AjxStringUtil.htmlEncode(newValue));
 	}
 
 	// Register listener to create new menu.
@@ -409,7 +409,7 @@ DwtSelect.prototype._createMenu = function() {
         }
         var text = option.getDisplayValue();
 		if (text) {
-			mi.setText(text);
+			mi.setText(AjxStringUtil.htmlEncode(text));
 		}
 
 		mi.addSelectionListener(new AjxListener(this, this._handleOptionSelection));
@@ -452,7 +452,7 @@ function(option) {
 	var image = option.getImage();
 	if (this._selectedOption != option) {
  		if (displayValue) {
- 			this.setText(displayValue);
+ 			this.setText(AjxStringUtil.htmlEncode(displayValue));
  		}
  		if (image) {
  			this.setImage(image);
