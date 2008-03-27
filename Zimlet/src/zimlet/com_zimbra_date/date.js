@@ -281,15 +281,22 @@ function(line, startIndex) {
 	var result = ZmDate2ObjectHandler.REGEX.exec(line);
 	if (!result) {return null;}
 
-	var d = new Date(this.getCurrentDate().getTime());
+    //find the position of last_next_this and dow in the pattern
+    var dowIndex = 2;
+    var ntlIndex = 1;
+    if(AjxMsg.datePattern2.indexOf("{RE_DOW}")==0){//reverse pattern
+        dowIndex = 1;
+        ntlIndex = 2;
+    }
+    var d = new Date(this.getCurrentDate().getTime());
 	var dow = d.getDay();
-	var ndow = Com_Zimbra_Date.DOW[result[2].toLowerCase().substring(0,2)];
+	var ndow = Com_Zimbra_Date.DOW[result[dowIndex].toLowerCase().substring(0,2)];
 	var addDays;
 
-	if (result[1].toLowerCase() == /*"next"*/AjxMsg.next) {
+	if (result[ntlIndex].toLowerCase() == /*"next"*/AjxMsg.next) {
 		addDays = ndow - dow;
 		addDays += 7;
-	} else if (result[1].toLowerCase() == /*"this"*/AjxMsg.dis) {
+	} else if (result[ntlIndex].toLowerCase() == /*"this"*/AjxMsg.dis) {
 		addDays = ndow - dow;
 	} else { // last
 		addDays = (-1 * (dow + 7 - ndow)) % 7;
@@ -394,8 +401,14 @@ function(line, startIndex) {
 	if (!result) {return null;}
 
 	var d = new Date(this.getCurrentDate().getTime());
-	var month = parseInt(result[1], 10) - 1;
-	var dom = parseInt(result[2], 10);
+	var domIndex = 2;
+    var monIndex = 1;
+    if(AjxMsg.datePattern5.indexOf("{RE_DD}")==0){ //its DD-MM-YYYY
+       domIndex = 1;
+       monIndex = 2; 
+    }
+    var month = parseInt(result[monIndex], 10) - 1;
+	var dom = parseInt(result[domIndex], 10);
     d.setMonth(month, dom);
 	var year = parseInt(result[3], 10);
 	if (year < 20) {
