@@ -75,6 +75,10 @@ public class DbOfflineMigration {
             stmt = conn.prepareStatement("ALTER TABLE zimbra.mailbox ADD COLUMN idx_deferred_count INTEGER NOT NULL DEFAULT 0");
             stmt.executeUpdate();
             stmt.close();
+           
+            stmt = conn.prepareStatement("DELETE FROM zimbra.directory_attrs WHERE name='offlineModifiedAttrs'");
+            stmt.executeUpdate();
+            stmt.close();
             
             stmt = conn.prepareStatement("UPDATE zimbra.config set value='52' where name='db.version'");
             stmt.executeUpdate();
