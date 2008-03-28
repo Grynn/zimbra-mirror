@@ -431,9 +431,14 @@ public class DirectorySync {
             Map<String, Object> changes = new HashMap<String, Object>(modified.size());
             for (String pref : modified) {
                 // we're only authorized to push changes to user preferences
-                if (pref.startsWith(ModifyPrefs.PREF_PREFIX) && !OfflineProvisioning.sOfflineAttributes.contains(pref))
-                    changes.put(pref, attrs.get(pref));
-                else if (!pref.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(pref) && !pref.equals(Provisioning.A_zimbraMailSieveScript))
+                if (pref.startsWith(ModifyPrefs.PREF_PREFIX) && !OfflineProvisioning.sOfflineAttributes.contains(pref)) {
+                	Object val = attrs.get(pref);
+                	if (val == null) {
+                		OfflineLog.offline.debug("dpush: attr name=%s has null value", pref);
+                		val = "";
+                	}
+                    changes.put(pref, val);
+                } else if (!pref.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(pref) && !pref.equals(Provisioning.A_zimbraMailSieveScript))
                     OfflineLog.offline.warn("dpush: could not push non-preference attribute: " + pref);
             }
             if (!changes.isEmpty()) {
