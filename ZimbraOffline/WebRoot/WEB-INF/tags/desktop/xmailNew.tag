@@ -228,7 +228,6 @@ function disableButtons() {
 				<td>
 					<select class="ZSelect" id="syncFreqSecs" name="syncFreqSecs">
 						<option value="-1" ${bean.syncFreqSecs == -1 ? 'selected' : ''}>manually</option>
-						<option value="60" ${bean.syncFreqSecs == 60 ? 'selected' : ''}>every 1 minute</option>
 						<option value="300" ${bean.syncFreqSecs == 300 ? 'selected' : ''}>every 5 minutes</option>
 						<option value="900" ${bean.syncFreqSecs == 900 ? 'selected' : ''}>every 15 minutes</option>
 						<option value="1800" ${bean.syncFreqSecs == 1800 ? 'selected' : ''}>every 30 minutes</option>
