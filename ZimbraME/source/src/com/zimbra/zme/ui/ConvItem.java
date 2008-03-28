@@ -194,9 +194,8 @@ public class ConvItem extends MailItem {
 
 	protected void handleKeyPress(int keyCode) {
 		int gameAction = getGameAction(keyCode);
-		if (!hasTrackBallNavigation() &&
-				(keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE
-				 || keyCode != Canvas.KEY_NUM6 && gameAction == Canvas.RIGHT)) {
+		if (keyCode != Canvas.KEY_NUM5 && gameAction == Canvas.FIRE ||
+				(!hasTrackBallNavigation() && keyCode != Canvas.KEY_NUM6 && gameAction == Canvas.RIGHT)) {
 			mMidlet.getMsgListView().retrieveConv(mId, mSubject, mParentView, (mFlags & UNREAD) == UNREAD);
 		} else if (keyCode == Canvas.KEY_NUM9 && !mParentView.mFragmentShowing 
 				   && mFragment != null && mFragment.length() > 0) {
