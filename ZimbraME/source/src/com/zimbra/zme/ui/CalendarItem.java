@@ -112,6 +112,13 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 		}
 	//#endif
 
+	public int getGameAction(int keyCode) {
+		int ga = super.getGameAction(keyCode);
+		if (hasTrackBallNavigation())
+			if (ga == Canvas.LEFT || ga == Canvas.RIGHT)
+				return 0;
+		return ga;
+	}
 	
 	protected void handleKeyPress(int keyCode) {
 		int ga = getGameAction(keyCode);
