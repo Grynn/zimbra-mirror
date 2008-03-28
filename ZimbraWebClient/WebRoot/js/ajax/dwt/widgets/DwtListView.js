@@ -1232,18 +1232,10 @@ function() {
 	return this._headerList ? this._headerTableId : null;
 }
 
-// AAA: easier to getElementById?
 DwtListView.prototype._getElFromItem =
 function(item) {
-	var childNodes = this._parentEl.childNodes;
-	var len = childNodes.length;
 	var comparisonId = this._getItemId(item);
-	for (var i = 0; i < len; i++) {
-		if (childNodes[i].id == comparisonId) {
-			return childNodes[i];
-		}
-	}
-	return null;
+	return Dwt.byId(comparisonId);
 }
 
 // returns the index of the given item based on the position of the row
