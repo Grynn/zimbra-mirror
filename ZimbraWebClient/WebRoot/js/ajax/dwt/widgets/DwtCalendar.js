@@ -769,6 +769,11 @@ function(callback) {
 	this._mouseOverDayCB = callback;
 }
 
+DwtCalendar.prototype.setMouseOutDayCallback =
+function(callback) {
+	this._mouseOutDayCB = callback;
+}
+
 /**
  * This method will return the date value for the last cell that the most recent Dnd operation occured over.
  * Typically it will be called by a DwtDropTarget listener when an item is dropped onto the mini calendar
@@ -825,7 +830,10 @@ function(ev) {
 	var target = ev.target;
 	if (target.id.charAt(0) == 'c') {
 		this._setClassName(target, DwtCalendar._NORMAL);
-	} else if (target.id.charAt(0) == 't') {
+        if (this._mouseOutDayCB) {
+            this._mouseOutDayCB.run(this);
+        }        
+    } else if (target.id.charAt(0) == 't') {
 		// Dont deactivate title for now
 		return;
 		target.className = DwtCalendar._TITLE_CLASS;
