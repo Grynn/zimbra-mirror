@@ -1,0 +1,109 @@
+diff -ru amavisd-new-2.4.3-orig/LDAP.schema amavisd-new-2.4.3/LDAP.schema
+--- amavisd-new-2.4.3-orig/LDAP.schema	2007-05-29 13:20:34.000000000 -0700
++++ amavisd-new-2.4.3/LDAP.schema	2007-05-29 13:20:37.000000000 -0700
+@@ -377,6 +377,17 @@
+   SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+   SINGLE-VALUE )
+ 
++#dn: cn=schema
++#changetype: modify
++#add: attributetypes
++attributetype ( 1.3.6.1.4.1.15312.2.2.1.34
++  NAME 'amavisArchiveQuarantineTo'
++  DESC 'Archive Quarantine to'
++  EQUALITY caseIgnoreIA5Match
++  SUBSTR caseIgnoreIA5SubstringsMatch
++  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
++  SINGLE-VALUE )
++
+ 
+ # Classes
+ #---------
+@@ -407,7 +418,7 @@
+         amavisSpamAdmin $ amavisBannedAdmin $ amavisBadHeaderAdmin $
+         amavisBannedRuleNames $
+         amavisSpamDsnCutoffLevel $ amavisSpamQuarantineCutoffLevel $
+-        amavisSpamSubjectTag $ amavisSpamSubjectTag2 $
++        amavisSpamSubjectTag $ amavisSpamSubjectTag2 $ amavisArchiveQuarantineTo $
+         cn $ description ) )
+ 
+ #--------------------------------------------------------------------------
+--- amavisd-new-2.5.2/amavisd.orig	2007-06-27 03:43:00.000000000 -0700
++++ amavisd-new-2.5.2/amavisd	2007-08-03 13:52:26.000000000 -0700
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -T
++#!/usr/bin/perl
+ 
+ #------------------------------------------------------------------------------
+ # This is amavisd-new.
+@@ -303,6 +303,7 @@
+     [qw(
+       $helpers_home $dspam $sa_spawned
+       $sa_local_tests_only $sa_auto_whitelist $sa_timeout $sa_debug
++      	  $sa_rules_file $sa_site_rules_file $sa_userprefs_file
+     )],
+     'platform' => [qw(
+       $can_truncate $unicode_aware $eol $my_pid
+@@ -677,7 +678,7 @@
+   $spam_quarantine_to       = 'spam-quarantine';
+   $bad_header_quarantine_to = 'bad-header-quarantine';
+   $clean_quarantine_to      = 'clean-quarantine';
+-  $archive_quarantine_to    = 'archive-quarantine';
++  $archive_quarantine_to    = undef; # 'archive-quarantine';
+ 
+   # similar to $spam_quarantine_to, but the lookup key is the sender address
+   $spam_quarantine_bysender_to = undef;  # dflt: no by-sender spam quarantine
+@@ -1424,7 +1425,7 @@
+     elsif ($errn)        { $msg = "is inaccessible: $!" }
+     elsif (-d _)         { $msg = "is a directory" }
+     elsif (!-f _)        { $msg = "is not a regular file" }
+-    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
++#    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
+     elsif ($> && -w _)   { $msg = "is writable by EUID $>, EGID $)" }
+     if (defined $msg)    { die "Config file \"$config_file\" $msg," }
+     $read_config_files_depth++;  push(@actual_config_files, $config_file);
+@@ -7789,8 +7790,8 @@
+           rename($config_file.'.moved', $config_file);  # try to rename back
+           $m = 'is writable (confirmed)';
+         }
+-        push(@msg, "Directory of a config file \"$config_file\" $m, ".
+-                   "UID $<, EUID $>, EGID $)" );
++#        push(@msg, "Directory of a config file \"$config_file\" $m, ".
++#                   "UID $<, EUID $>, EGID $)" );
+       }
+       last  if @msg;
+     }
+@@ -10413,6 +10414,14 @@
+       push(@qar_addr, $q)  if $q ne '' && !grep {$_ eq $q} @qar_addr;
+     }
+   }  # endfor per_recip_data
++  if (defined($qar_method) && $qar_method ne '') {  # archiving quarantine on sender
++    my($sender) = $msginfo->sender;
++    if ($sender ne '') {
++			my($q) = lookup(0,$sender,@{ca('archive_quarantine_to_maps')});
++			$q = $sender  if $q ne '' && $qar_method =~ /^bsmtp:/i;  # orig.recip
++			push(@qar_addr, $q)  if $q ne '' && !grep {$_ eq $q} @qar_addr;
++		}
++  }
+   if ($ccat == CC_SPAM) {
+     my($sqbsm) = ca('spam_quarantine_bysender_to_maps');
+     if (@$sqbsm) {  # by-sender spam quarantine (hardly useful, rarely used)
+@@ -12536,7 +12545,7 @@
+     amavisLocal amavisMessageSizeLimit amavisWarnVirusRecip
+     amavisWarnBannedRecip amavisWarnBadHeaderRecip amavisVirusAdmin
+     amavisNewVirusAdmin amavisSpamAdmin amavisBannedAdmin
+-    amavisBadHeaderAdmin amavisBannedRuleNames
++    amavisBadHeaderAdmin amavisBannedRuleNames amavisArchiveQuarantineTo
+   );
+ 
+   @mv_ldap_attrs = qw(amavisBlacklistSender amavisWhitelistSender);
+@@ -17909,6 +17918,9 @@
+     local_tests_only  => $sa_local_tests_only,
+     home_dir_for_helpers => $helpers_home,
+     stop_at_threshold => 0,
++	rules_filename => $sa_rules_file,
++	site_rules_filename => $sa_site_rules_file,
++	userprefs_filename => $sa_userprefs_file,
+ #   LOCAL_STATE_DIR   => '/var/lib',
+ #   PREFIX            => '/usr/local',
+ #   DEF_RULES_DIR     => '/usr/local/share/spamassassin',
