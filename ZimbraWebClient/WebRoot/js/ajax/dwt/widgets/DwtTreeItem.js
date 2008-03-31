@@ -662,7 +662,9 @@ function(actioned) {
 			this._textCell.className = this._actionedClassName;
 			return true;
 		} else if (!actioned) {
-			this._textCell.className = this._textClassName;
+			if (this._textCell) {
+				this._textCell.className = this._textClassName;
+			}
 			return false;
 		}
 	}
