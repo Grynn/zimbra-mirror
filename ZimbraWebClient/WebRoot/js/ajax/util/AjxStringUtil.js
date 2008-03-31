@@ -54,6 +54,27 @@ AjxStringUtil.capitalize = function(str) {
 	return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
 };
 
+/**
+ * Converts the given text to mixed-case. The input text is one or more words
+ * separated by spaces. The output is a single word in mixed (or camel) case.
+ * 
+ * @param text		[string]			text to convert
+ * @param sep		[string|RegExp]*	text separator (defaults to any space)
+ * @param camel		[boolean]*			if true, first character of result is lower-case
+ */
+AjxStringUtil.toMixed =
+function(text, sep, camel) {
+	if (!text) { return ""; }
+	sep = sep || /\s+/;
+	var wds = text.split(sep);
+	var newText = [];
+	newText.push(camel ? wds[0].toLowerCase() : wds[0].substring(0, 1).toUpperCase() + wds[0].substring(1).toLowerCase());
+	for (var i = 1; i < wds.length; i++) {
+		newText.push(wds[i].substring(0, 1).toUpperCase() + wds[i].substring(1).toLowerCase());
+	}
+	return newText.join("");
+};
+
 AjxStringUtil.trim =
 function(str, compress, space) {
 
