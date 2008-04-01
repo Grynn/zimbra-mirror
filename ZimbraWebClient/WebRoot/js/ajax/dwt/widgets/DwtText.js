@@ -16,12 +16,28 @@
  */
 
 
-DwtText = function(parent, className, posStyle) {
+/**
+ * @constructor
+ * @class
+ * Container for a piece of text.
+ * 
+ * @author Ross Dargahi
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        id			[string]*			an explicit ID to use for the control's HTML element
+ */
+DwtText = function(params) {
 
 	if (arguments.length == 0) return;
-	className = className || "DwtText";
-	DwtControl.call(this, {parent:parent, className:className, posStyle:posStyle});
+	params = Dwt.getParams(arguments, DwtText.PARAMS);
+	params.className = params.className || "DwtText";
+	DwtControl.call(this, params);
 }
+
+DwtText.PARAMS = ["parent", "className", "posStyle"];
 
 DwtText.prototype = new DwtControl;
 DwtText.prototype.constructor = DwtText;
