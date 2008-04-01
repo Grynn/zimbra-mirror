@@ -196,6 +196,8 @@ function(obj, span, context) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
 	var person = this._lookup(addr);
+    /* Not needed, refering those from zimlet specific props file 
+
     // start hack for bug 23917
     var op = actionMenu.getOp("NEWCONTACT");
     if (op) {
@@ -225,7 +227,7 @@ function(obj, span, context) {
     if (op) {
         op.setText(ZmMsg.goToUrl.replace("{0}",ZmMsg.url));
     }
-    // ends
+    // ends*/
     if (!appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		// make sure to remove adding new contact menu item if contacts are disabled
 		if (actionMenu.getOp("NEWCONTACT")) {

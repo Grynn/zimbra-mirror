@@ -9,9 +9,9 @@
             <!-- <regex paren="2">(\W|^)((?:(?:\+|00)\d+[-.\s]?)?(?:(?:\(\d{2,3}\)[-.\s]?|\d{2,3}[-.\s]?))?\d{3}[-.\s]?\d{3,4})(\W|$)</regex> -->
 		</matchOn>
 		<contextMenu>
-			<menuItem label="Search" icon="Search" id="SEARCH"/>
-			<menuItem label="Add to Contacts" icon="NewContact" id="ADDCONTACT"/>
-			<menuItem label="Skype Call" icon="Telephone" id="CALL"/>
+			<menuItem label="${msg.search}" icon="Search" id="SEARCH"/>
+			<menuItem label="${msg.addToContacts}" icon="NewContact" id="ADDCONTACT"/>
+			<menuItem label="${msg.skypeCall}" icon="Telephone" id="CALL"/>
 		</contextMenu>
 	</contentObject>
 </zimlet>

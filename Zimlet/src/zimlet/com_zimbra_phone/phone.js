@@ -59,7 +59,9 @@ function() {
 	}
 	this.regexps = regexps;
 };
-Com_Zimbra_Phone.prototype.getActionMenu =
+/**
+* Not needed anymore as labels are refered from zimlet specific props file now
+* Com_Zimbra_Phone.prototype.getActionMenu =
 	function(obj, span, context) {
         var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
 
@@ -77,6 +79,7 @@ Com_Zimbra_Phone.prototype.getActionMenu =
         }
         return actionMenu;
     };
+*/
 Com_Zimbra_Phone.prototype._getHtmlContent =
 function(html, idx, phone, context) {
 	var call = Com_Zimbra_Phone.getCallToLink(phone);
