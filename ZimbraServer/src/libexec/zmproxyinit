@@ -109,7 +109,7 @@ if ($options{e}) {
        "zimbraPop3SSLBindPort 7995 "."zimbraPop3SSLProxyBindPort 995 ".
        "zimbraReverseProxyMailEnabled TRUE ".
        "zimbraImapCleartextLoginEnabled TRUE ".
-       "zimbraReverseProxyLookup TRUE ".
+       "zimbraReverseProxyLookupTarget TRUE ".
        "zimbraPop3CleartextLoginEnabled TRUE\n"
   }
   if ($options{w}) {
@@ -134,7 +134,7 @@ if ($options{d}) {
        "zimbraImapSSLBindPort 993 "."zimbraImapSSLProxyBindPort 7993 ".
        "zimbraPop3BindPort 110 "."zimbraPop3ProxyBindPort 7110 ".
        "zimbraPop3SSLBindPort 995 "."zimbraPop3SSLProxyBindPort 7995 ".
-       "zimbraReverseProxyLookup FALSE ".
+       "zimbraReverseProxyLookupTarget FALSE ".
        "zimbraReverseProxyMailEnabled FALSE\n";
      if ($options{s}) {
        print ZMPROV "ms $hostname ".
