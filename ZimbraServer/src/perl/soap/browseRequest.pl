@@ -27,12 +27,14 @@ use ZimbraSoapTest;
 
 #standard options
 my ($user, $pw, $host, $help); #standard
-my ($type);
+my ($type, $regex, $max);
 
 GetOptions("u|user=s" => \$user,
            "pw=s" => \$pw,
            "h|host=s" => \$host,
            "help|?" => \$help,
+           "re|regex=s" => \$regex,
+           "max=s" => \$max,
            # add specific params below:
            "t=s" => \$type,
           );
@@ -40,7 +42,7 @@ GetOptions("u|user=s" => \$user,
 
 if (!defined($user) || defined($help) || !defined($type)) {
     my $usage = <<END_OF_USAGE;
-USAGE: $0 -u USER -t [domains|attachments|objects]
+USAGE: $0 -u USER -t {domains|attachments|objects} [-re regex] [-max max]
 END_OF_USAGE
     die $usage;
 }
@@ -52,6 +54,14 @@ my $d = new XmlDoc;
 
 my %args =  ( 'browseBy' => $type,
             );
+
+if (defined($regex)) {
+  $args{'regex'} = $regex;
+}
+
+if (defined($max)) {
+  $args{'maxToReturn'} = $max;
+}
 
  
 $d->start("BrowseRequest", $Soap::ZIMBRA_MAIL_NS, \%args);
