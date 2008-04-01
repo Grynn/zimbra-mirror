@@ -114,7 +114,7 @@ if ($options{e}) {
   }
   if ($options{w}) {
      print ZMPROV "ms $hostname ".
-     "zimbraMailReferMode never ".
+     "zimbraMailReferMode reverse-proxied ".
      "zimbraMailPort 8080 ".
      "zimbraMailSSLPort 8443 ".
      "zimbraMailMode http ".
