@@ -31,7 +31,6 @@ zmsetvars \
   zimbra_tmp_directory \
   zimbra_java_home \
   mailboxd_directory 
-platform=`${zimbra_home}/libexec/get_plat_tag.sh 2> /dev/null` || exit 1
 sasl_conf_directory=${zimbra_home}/cyrus-sasl/etc
 if [ x"${mailboxd_directory}" = "${zimbra_home}/tomcat" ]; then
   mailboxd_server=tomcat
