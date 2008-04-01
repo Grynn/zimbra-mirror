@@ -3,10 +3,10 @@
 	<handlerObject>Com_Zimbra_Date</handlerObject>
 	<contentObject type="date">
 		<contextMenu>
-			<menuItem label="Day" icon="DayView" id="DAYVIEW"/>
-			<menuItem label="New Appointment" icon="NewAppointment" id="NEWAPPT"/>
+			<menuItem label="${msg.viewDay}" icon="DayView" id="DAYVIEW"/>
+			<menuItem label="${msg.appointmentNewTitle}" icon="NewAppointment" id="NEWAPPT"/>
 			<menuItem/>
-			<menuItem label="Email Messages" icon="SearchMail" id="SEARCHMAIL"/>
+			<menuItem label="${msg.searchForMessages}" icon="SearchMail" id="SEARCHMAIL"/>
 		</contextMenu>
 	</contentObject>
 </zimlet>
