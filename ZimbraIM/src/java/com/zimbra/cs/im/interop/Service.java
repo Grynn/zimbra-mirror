@@ -389,25 +389,26 @@ public final class Service extends ClassLogger implements Component, RosterEvent
     void connectUser(JID jid, String name, String password, String transportName, String transportBuddyGroup)
     throws ComponentException, UserNotFoundException {
         synchronized (mSessions) {
+            InteropSession s = mSessions.get(jid.toBareJID());
+            if (s != null) {
+                disconnectUser(jid);
+            }
+            
             // add the SERVICE user (two-way sub)
             addOrUpdateRosterSubscription(jid, getServiceJID(jid), transportName, transportBuddyGroup, 
                 RosterItem.SUB_BOTH, RosterItem.ASK_NONE, RosterItem.RECV_NONE);
-            InteropSession s = mSessions.get(jid.toBareJID());
-            if (s != null) {
-                throw new AlreadyConnectedComponentException(transportName, s.getUsername());
-            } else {
-                HashMap<String, String> data = new HashMap<String, String>();
-                data.put(InteropRegistrationProvider.USERNAME, name);
-                data.put(InteropRegistrationProvider.PASSWORD, password);
-                try {
-                    
-                    Interop.getDataProvider().putIMGatewayRegistration(jid, mName, data);
-                } catch (IOException ex) {
-                    throw new ComponentException(ex);
-                }
-                mSessions.put(jid.toBareJID(), mFact.createSession(this, new JID(jid.toBareJID()), name,
-                            password));
+            
+            HashMap<String, String> data = new HashMap<String, String>();
+            data.put(InteropRegistrationProvider.USERNAME, name);
+            data.put(InteropRegistrationProvider.PASSWORD, password);
+            try {
+                
+                Interop.getDataProvider().putIMGatewayRegistration(jid, mName, data);
+            } catch (IOException ex) {
+                throw new ComponentException(ex);
             }
+            mSessions.put(jid.toBareJID(), mFact.createSession(this, new JID(jid.toBareJID()), name,
+                password));
         }
         // send a probe to the user's jid -- if the user is online, then we'll
         // get a presence packet which will trigger a logon
