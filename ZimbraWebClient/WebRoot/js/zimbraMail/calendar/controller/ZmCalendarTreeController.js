@@ -349,10 +349,8 @@ function(ev, checked) {
 	for (var i = 0;  i < items.length; i++) {
 		var item = items[i];
 		if (item._isSeparator) continue;
-		if (item.getChecked() != checked) {
-			item.setChecked(checked);
-			checkedItems.push(item);
-		}
+		item.setChecked(checked);
+		checkedItems.push(item);
 	}
 
 	// notify listeners of selection
