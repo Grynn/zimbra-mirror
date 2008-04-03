@@ -585,6 +585,7 @@ function(ev) {
 	if (DwtKeyboardMgr.__shell._blockInput) { return false; }
 	ev = DwtUiEvent.getEvent(ev, this);
 	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
+	if (!kbMgr || !kbMgr.__checkState()) { return false; }
 	var kev = DwtShell.keyEvent;
 	kev.setFromDhtmlEvent(ev);
 	var keyCode = kev.keyCode;
