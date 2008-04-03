@@ -2075,7 +2075,7 @@ sub upgrade505GA {
 	main::progress("Updating from 5.0.5_GA\n");
   if (main::isInstalled("zimbra-ldap")) {
 	  my @coses = `su - zimbra -c "$ZMPROV gac"`;
-    my %attrs = ( zimbraPrefCalendarReminderDiration1 => "-PT15M",
+    my %attrs = ( zimbraPrefCalendarReminderDuration1 => "-PT15M",
                zimbraFeatureNewAddrBookEnabled => "TRUE",
                zimbraInterceptSendHeadersOnly => "FALSE",
                zimbraInterceptFrom => 'Postmaster <postmaster@\${ACCOUNT_DOMAIN}>',
