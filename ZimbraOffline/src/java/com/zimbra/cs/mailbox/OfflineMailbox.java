@@ -60,6 +60,7 @@ public class OfflineMailbox extends DesktopMailbox {
         public OfflineContext(RedoableOp redo)  { super(redo); }
     }
 
+    public static final int ID_FOLDER_FAILURE = 252;
     public static final int ID_FOLDER_ARCHIVE = 253;
     public static final int ID_FOLDER_OUTBOX = 254;
     public static final int FIRST_OFFLINE_ITEM_ID = 2 << 29;
@@ -154,6 +155,7 @@ public class OfflineMailbox extends DesktopMailbox {
         // create a system outbox folder
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
         Folder.create(ID_FOLDER_OUTBOX, this, userRoot, "Outbox", Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
+        Folder.create(ID_FOLDER_FAILURE, this, userRoot, "Sync Failures", Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
         Mountpoint.create(ID_FOLDER_ARCHIVE, userRoot, "Archive", OfflineProvisioning.getOfflineInstance().getLocalAccount().getId(), Mailbox.ID_FOLDER_INBOX,
         		          MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR);
     }
