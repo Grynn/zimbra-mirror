@@ -268,11 +268,12 @@ function(params) {
 	
 		if (params.noSession) {
 			soapDoc.set("nosession", null, context);
-		}
-		var sessionId = ZmCsfeCommand.getSessionId();
-		if (sessionId) {
-			var si = soapDoc.set("sessionId", null, context);
-			si.setAttribute("id", sessionId);
+		} else {
+			var sessionId = ZmCsfeCommand.getSessionId();
+			var si = soapDoc.set("session", null, context);
+			if (sessionId) {
+				si.setAttribute("id", sessionId);
+			}
 		}
 		if (params.targetServer) {
 			soapDoc.set("targetServer", params.targetServer, context);

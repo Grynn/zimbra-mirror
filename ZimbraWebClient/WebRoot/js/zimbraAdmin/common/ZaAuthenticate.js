@@ -74,7 +74,7 @@ function(resp) {
 			authToken = el.firstChild.nodeValue;
 /*		else if (el.nodeName == "lifetime")
 			lifetime = el.firstChild.nodeValue;*/
-		else if (el.nodeName=="sessionId")
+		else if (el.nodeName=="session")
 			sessionId = el.firstChild.nodeValue;
 	}
 	ZmCsfeCommand.setAuthToken(authToken, -1, sessionId);
