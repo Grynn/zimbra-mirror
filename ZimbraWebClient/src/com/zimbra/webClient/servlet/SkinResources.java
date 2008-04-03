@@ -354,9 +354,15 @@ public class SkinResources
 
             if (filename.equals(N_SKIN)) {
                 if (type.equals(T_CSS)) {
-					files.addAll(manifest.getFiles(type));
-					files.add(new File(skinDir, IMAGE_CSS));
-				} 
+					for (File file : manifest.getFiles(type)) {
+						files.add(file);
+						addLocaleFiles(files, requestedLocale, file.getParentFile(), file.getName(), "");
+					}
+
+					File file = new File(skinDir, IMAGE_CSS);
+					files.add(file);
+					addLocaleFiles(files, requestedLocale, file.getParentFile(), file.getName(), "");
+				}
 				else if (type.equals(T_JAVASCRIPT)) {
 					// decide whether to include templates
 					boolean only = templatesParam.equals(V_ONLY);
@@ -365,7 +371,12 @@ public class SkinResources
 
 					// ignore main skin files if only want templates
 					if (!only) {
-						files.addAll(manifest.getFiles(type));
+						for (File file : manifest.getFiles(type)) {
+							files.add(file);
+							// TODO: Not sure if we want to allow different skin JS files
+							//       (aside from templates) based on locale.
+//							addLocaleFiles(files, requestedLocale, file.getParentFile(), file.getName(), "");
+						}
 					}
 
 					// include templates, unless request to split and too big
@@ -376,6 +387,8 @@ public class SkinResources
 							for (File file : templates) {
 								// TODO: optimize
 								files.add(new File(file.getParentFile(), file.getName() + ".js"));
+								String templateFilename = file.getName().replaceAll("\\.template$", ""); 
+								addLocaleFiles(files, requestedLocale, file.getParentFile(), templateFilename, ".template.js");
 							}
 						}
 						req.setAttribute(A_TEMPLATES_INCLUDED, included);
@@ -383,6 +396,7 @@ public class SkinResources
 				}
 				else {
 					files.addAll(manifest.getFiles(type));
+					// TODO: Add locale variants? Probably not...
 				}
 			} else {
                 File file = new File(fileDir, filenameExt);
@@ -394,29 +408,8 @@ public class SkinResources
                         ZimbraLog.webclient.debug("DEBUG: !file.exists() " + file.getAbsolutePath());
                 }
                 files.add(file);
-				// add locale overrides
-				if (type.equals(T_CSS)) {
-					Locale defaultLocale = Locale.getDefault();
-					Locale[] locales = defaultLocale.equals(requestedLocale)
-									 ? new Locale[]{ requestedLocale }
-									 : new Locale[]{ defaultLocale, requestedLocale };
-					for (Locale locale : locales) {
-						// NOTE: Overrides are loaded in backwards order from
-						//       resource bundles because CSS rules that appear
-						//       later in the file take precedence. This is
-						//       different than resource bundles where the
-						//       first entry seen takes precedence.
-						String language = locale.getLanguage();
-						files.add(new File(fileDir, filename+"_"+language+ext));
-						String country = locale.getCountry();
-						if (country != null && country.length() > 0) {
-							files.add(new File(fileDir, filename+"_"+language+"_"+country+ext));
-							String variant = locale.getVariant();
-							if (variant != null && variant.length() > 0) {
-								files.add(new File(fileDir, filename+"_"+language+"_"+country+"_"+variant+ext));
-							}
-						}
-					}
+				if (type.equals(T_CSS) || type.equals(T_JAVASCRIPT)) {
+					addLocaleFiles(files, requestedLocale, fileDir, filename, ext);
 				}
 			}
 
@@ -439,6 +432,40 @@ public class SkinResources
         out.flush();
         return cout.toString();
     }
+
+	static void addLocaleFiles(List<File> files, Locale requestedLocale,
+							   File dir, String filename, String ext) {
+		Locale defaultLocale = Locale.getDefault();
+		Locale[] locales = defaultLocale.equals(requestedLocale)
+						 ? new Locale[]{ requestedLocale }
+						 : new Locale[]{ defaultLocale, requestedLocale };
+		for (Locale locale : locales) {
+			// NOTE: Overrides are loaded in backwards order from
+			//       resource bundles because CSS/JS that appears
+			//       later in the file take precedence. This is
+			//       different than resource bundles where the
+			//       first entry seen takes precedence.
+			String language = locale.getLanguage();
+			File langFile = new File(dir, filename+"_"+language+ext);
+			if (langFile.exists()) {
+				files.add(langFile);
+			}
+			String country = locale.getCountry();
+			if (country != null && country.length() > 0) {
+				File langCountryFile = new File(dir, filename+"_"+language+"_"+country+ext);
+				if (langCountryFile.exists()) {
+					files.add(langCountryFile);
+				}
+				String variant = locale.getVariant();
+				if (variant != null && variant.length() > 0) {
+					File langCountryVariantFile = new File(dir, filename+"_"+language+"_"+country+"_"+variant+ext);
+					if (langCountryVariantFile.exists()) {
+						files.add(langCountryVariantFile);
+					}
+				}
+			}
+		}
+	}
 
 	static boolean includeTemplates(List<File> templates, boolean split) {
 		boolean include = true;
