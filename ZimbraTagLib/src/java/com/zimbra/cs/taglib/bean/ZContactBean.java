@@ -154,6 +154,8 @@ public class ZContactBean implements Comparable {
 
     public String getPager() { return mContact.getAttrs().get("pager"); }
 
+    public String getTollFree() { return mContact.getAttrs().get("tollFree"); }
+
     public String getWorkCity() { return mContact.getAttrs().get("workCity"); }
 
     public String getWorkCountry() { return mContact.getAttrs().get("workCountry"); }
