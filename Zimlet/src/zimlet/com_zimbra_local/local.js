@@ -45,7 +45,7 @@ function(listener) {
 	td.id = searchToolBar._htmlElId + "_searchLocal";
 	td.className  =  'ZmSearchToolbarCell';
 	var b = searchToolBar._addButton({ tdId:"_searchLocal", lbl:this.getMessage("localSearchBtnLabel"),
-									   icon:"YLogo", tooltip:this.getMessage("localSearchBtnTooltip"),
+									   icon:"WebSearch", tooltip:this.getMessage("localSearchBtnTooltip"),
 									   buttonId:ZmId.LOCAL_SEARCH_BUTTON});
 	b.addSelectionListener(listener);
 };
