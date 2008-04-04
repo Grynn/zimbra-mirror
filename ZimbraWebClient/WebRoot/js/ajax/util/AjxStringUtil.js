@@ -210,7 +210,6 @@ function(params) {
 	if (params.htmlMode) {
 		var lines = text.split(AjxStringUtil.HTML_BR_RE);
 		if (lines.length > 0) {
-			lines = AjxUtil.collapseList(lines);
 			text = pre + lines.join(eol + pre)
 		}
 		return text;
