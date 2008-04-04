@@ -1,0 +1,138 @@
+[http://www.iana.org/assignments/pop3-extension-mechanism]
+	
+POP3 Extension Mechanism
+
+(last updated 2007-10-04)
+
+The POP3 Extension Mechanism [RFC 2449] updates RFC 1939 to define a
+mechanism to announce support for optional commands, extensions, and
+unconditional server behavior.  Included is an initial set of
+currently deployed capabilities which vary between server
+implementations, and several new capabilities (SASL, RESP-CODES,
+LOGIN-DELAY, PIPELINING, EXPIRE and IMPLEMENTATION).  The RFC also
+extends POP3 error messages so that machine parsable codes can be
+provided to the client.
+
+
+POP3 capabilities
+
+New POP3 capabilities MUST be defined in a standards track or IESG
+approved experimental RFC, and MUST NOT begin with the letter "X".
+
+New POP3 capabilities MUST include the following information:
+
+CAPA tag
+Arguments
+Added commands
+Standard commands affected
+Announced states / possible differences
+Commands valid in states
+Specification reference
+Discussion
+
+
+Initial Set of Capabilities
+
+TOP                         [RFC2449]
+USER                        [RFC2449]
+SASL                        [RFC2449, RFC-siemborski-rfc1734bis-11.txt]
+RESP-CODES                  [RFC2449]
+LOGIN-DELAY                 [RFC2449]
+PIPELINING                  [RFC2449]
+EXPIRE                      [RFC2449]
+UIDL                        [RFC2449]
+IMPLEMENTATION              [RFC2449]
+AUTH-RESP-CODE              [RFC3206]
+
+
+In addition, new limits for POP3 command and response lengths may
+need to be included.
+
+POP3 Response Codes
+
+New POP3 response codes MUST be defined in an RFC or other
+permanent and readily available reference, in sufficient detail so that
+interoperability between independent implementations is possible.
+(This is the "Specification Required" policy described in [IANA]).
+
+New POP3 response code specifications MUST include the following
+information: the complete response code, for which responses (+OK
+or -ERR) and commands it is valid, and a definition of its meaning and
+expected client behavior.
+
+CAPA tag    CAPA Args Added cmds Affected  List Diffs Cmd Valid    References
+--------    --------- ---------- --------  ---- ----- ---------    ----------
+TOP         none      TOP        none      both no    TRANSACTION  [RFC2449,
+                                                                    RFC1939]
+
+USER        none      USER,PASS  none      both no    AUTHENTICAT  [RFC2449,
+                                                                    RFC1939]
+
+SASL        mech list AUTH       none      both no    AUTHENTICAT  [RFC2449,  
+                                                                    RFC-siemborski-rfc1734bis-11.txt]
+
+RESP-CODES  none      none       none      both no    n/a          [RFC2449]
+
+LOGIN-DELAY secs&USER none       USER,PASS both yes   n/a          [RFC2449]
+                                 APOP,AUTH
+
+PIPELINING  none      none       all       both no    n/a          [RFC2449]
+
+EXPIRE      days/     none       none      both yes   n/a          [RFC2449]
+            NEVER&USER
+
+UIDL        none      UIDL       none      both no    TRANSACTION  [RFC2449,
+                                                                    RFC1939]
+
+IMPLEMENTATION text   none       none      TRANS/both no n/a       [RFC2449,
+                                                                    RFC1939]
+
+STLS        none      STLS       USER,     both no     AUTHENTICAT [RFC2595]
+                                 PASS,CAPA
+
+
+Response Code    Response Types   Commands              Reference
+-------------    --------------   --------              ---------
+LOGIN-DELAY      -ERR             USER*,PASS,APOP,AUTH  [RFC2449]
+IN-USE           -ERR             PASS,APOP,AUTH        [RFC2449]
+SYS/PERM         -ERR             All commands          [RFC3206]
+SYS/TEMP         -ERR             All commands          [RFC3206]
+AUTH             -ERR             Any authentication    [RFC3206]
+                                  command including 
+                                  AUTH, USER (see note),
+                                  PASS, or APOP.
+
+* - see spec for details
+
+Note: Returning the AUTH response code to the USER command reveals
+to the client that the specified user exists.  It is strongly
+RECOMMENDED that the server not issue this response code to the
+USER command.
+
+
+REFERENCES
+----------
+
+[RFC1734] Myers, J., "POP3 AUTHentication command", RFC 1734, December
+          1994.
+
+[RFC1939] Myers, J. and M. Rose, "Post Office Protocol -- Version 3",
+          STD 53, RFC 1939, May 1996.
+
+[RFC2449] Gellens, R., Newman, C. and L. Lundblade, "POP3 Extension
+          Mechanism", RFC 2449, November 1998.
+
+[RFC2595] Newman, C., "Using TLS with IMAP, POP3 and ACAP", RFC 2595,
+          Innosoft, June 1999.
+
+[RFC3206] R. Gellens, "The SYS and AUTH POP Response Codes", RFC3206,
+          February 2002.
+
+[RFC-siemborski-rfc1734bis-11.txt]
+          R. Siemborski, A. Menon-Sen, "POP3 SASL Authentication 
+          Mechanism",  RFC XXXX, Month Year.
+
+[]
+
+
+
