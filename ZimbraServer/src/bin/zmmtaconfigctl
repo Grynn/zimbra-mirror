@@ -58,14 +58,14 @@ case "$1" in
         $0 start
         ;;
 	
-	'status')
+    'status')
 		if [ -f "/opt/zimbra/log/zmmtaconfig.pid" ]; then
 			cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
 			kill -0 "$cpid" 2> /dev/null
 			exit $?
 		fi
 		exit 1
-		;;
+    ;;
     
     *)
         echo "Usage: $0 start|stop|kill|restart|status"
