@@ -551,10 +551,16 @@ public class InitialSync {
             Element setAppointmentRequest = makeSetAppointmentRequest(apptElement, new RemoteInviteMimeLocator(ombx), ombx.getAccount());
             //OfflineLog.offline.debug(setAppointmentRequest.prettyPrint());
             
-            setCalendarItem(setAppointmentRequest, id, folderId, date, mod_content, change_date, mod_metadata, flags, tags);
-            
+            try {
+            	setCalendarItem(setAppointmentRequest, id, folderId, date, mod_content, change_date, mod_metadata, flags, tags);
+            } catch (ServiceException x) {
+            	SyncExceptionHandler.syncCalendarFailed(ombx, id, setAppointmentRequest.prettyPrint(), x);
+            }
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.info("initial: appointment " + id + " has been deleted; skipping");
+        } catch (ServiceException x) {
+        	SyncExceptionHandler.checkReceiversFault(x);
+        	SyncExceptionHandler.syncCalendarFailed(ombx, id, x);
         }
     }
     
@@ -802,7 +808,11 @@ public class InitialSync {
 		        			//so that we can block the call to close()
 		        		}
 		        	};
-		        	saveMessage(fin, headers, id, folderId, type);
+		        	try {
+		        		saveMessage(fin, headers, id, folderId, type);
+		        	} catch (ServiceException x) {
+			        	SyncExceptionHandler.syncMessageFailed(ombx, id, x);
+			        }
 		        }
 	        } catch (IOException x) {
 	        	OfflineLog.offline.error("Invalid sync format", x);
@@ -826,7 +836,12 @@ public class InitialSync {
             		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
             for (Header hdr : response.getFirst())
                 headers.put(hdr.getName(), hdr.getValue());
-            saveMessage(response.getSecond(), headers, id, folderId, type);
+            
+            try {
+            	saveMessage(response.getSecond(), headers, id, folderId, type);
+            } catch (ServiceException x) {
+	        	SyncExceptionHandler.syncMessageFailed(ombx, id, x);
+	        }
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.info("initial: message " + id + " has been deleted; skipping");
         } catch (IOException e) {
@@ -921,8 +936,10 @@ public class InitialSync {
         } catch (IOException e) {
             throw ServiceException.FAILURE("storing " + MailItem.getNameForType(type) + " " + id, e);
         } catch (ServiceException e) {
-            if (e.getCode() != MailServiceException.ALREADY_EXISTS)
-                throw e;
+            if (e.getCode() != MailServiceException.ALREADY_EXISTS) {
+            	SyncExceptionHandler.syncMessageFailed(ombx, id, pm, e);
+            	return;
+            }
             // fall through...
         }
 

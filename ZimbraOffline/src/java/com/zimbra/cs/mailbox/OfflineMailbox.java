@@ -19,7 +19,6 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -60,9 +59,6 @@ public class OfflineMailbox extends DesktopMailbox {
         public OfflineContext(RedoableOp redo)  { super(redo); }
     }
 
-    public static final int ID_FOLDER_FAILURE = 252;
-    public static final int ID_FOLDER_ARCHIVE = 253;
-    public static final int ID_FOLDER_OUTBOX = 254;
     public static final int FIRST_OFFLINE_ITEM_ID = 2 << 29;
 
     private String mSessionId;
@@ -149,16 +145,13 @@ public class OfflineMailbox extends DesktopMailbox {
     	return new URL(getSoapUri()).getHost();
     }
 
-    @Override protected synchronized void initialize() throws ServiceException {
-        super.initialize();
-
-        // create a system outbox folder
-        Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
-        Folder.create(ID_FOLDER_OUTBOX, this, userRoot, "Outbox", Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
-        Folder.create(ID_FOLDER_FAILURE, this, userRoot, "Sync Failures", Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
-        Mountpoint.create(ID_FOLDER_ARCHIVE, userRoot, "Archive", OfflineProvisioning.getOfflineInstance().getLocalAccount().getId(), Mailbox.ID_FOLDER_INBOX,
-        		          MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR);
-    }
+//    @Override protected synchronized void initialize() throws ServiceException {
+//        super.initialize();
+//
+//        Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
+//        Mountpoint.create(ID_FOLDER_ARCHIVE, userRoot, "Archive", OfflineProvisioning.getOfflineInstance().getLocalAccount().getId(), Mailbox.ID_FOLDER_INBOX,
+//        		          MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR);
+//    }
 
     @Override int getInitialItemId() {
         // locally-generated items must be differentiable from authentic, server-blessed ones
@@ -207,7 +200,7 @@ public class OfflineMailbox extends DesktopMailbox {
             try {
             	super.delete(octxt, new int[] {id}, type, tcon); //NOTE: don't call the one with single id as it will dead loop
             } catch (MailServiceException x) {
-            	OfflineLog.offline.error("Failed to delete item " + id, x);
+            	SyncExceptionHandler.localDeleteFailed(this, id, x);
             	//something is wrong, but we'll just skip since failed deleting a local item is not immediately fatal (not too good either)
             }
         }
@@ -588,7 +581,7 @@ public class OfflineMailbox extends DesktopMailbox {
                 if (!(change.what instanceof MailItem))
                     continue;
                 MailItem item = (MailItem) change.what;
-                if (item.getId() == ID_FOLDER_OUTBOX)
+                if (item.getId() == ID_FOLDER_OUTBOX || item.getId() == ID_FOLDER_FAILURE || item.getFolderId() == ID_FOLDER_FAILURE)
                 	continue;
                 if (item.getFolderId() == ID_FOLDER_OUTBOX)
                 	outboxed = true;

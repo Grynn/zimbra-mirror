@@ -69,6 +69,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_yauth_baseuri;
     public static final KnownKey zdesktop_yab_baseuri;
     public static final KnownKey zdesktop_ymail_baseuri;
+    
+    public static final KnownKey zdesktop_support_email;
 
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -217,5 +219,9 @@ public class OfflineLC {
 	    zdesktop_ymail_baseuri = new KnownKey("zdesktop_ymail_baseuri");
 	    zdesktop_ymail_baseuri.setDefault("http://mail.yahooapis.com/ws/mail/v1.1/soap");
 	    zdesktop_ymail_baseuri.setDoc("base uri for ymail");
+	    
+	    zdesktop_support_email = new KnownKey("zdesktop_support_email");
+	    zdesktop_support_email.setDefault("support@zimbra.com");
+	    zdesktop_support_email.setDoc("support email address");
     }
 }

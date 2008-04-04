@@ -7,13 +7,20 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
-import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.redolog.op.CreateFolder;
 import com.zimbra.cs.util.Zimbra;
 
 public abstract class DesktopMailbox extends Mailbox {
 
+	public static final String OUTBOX_PATH = "Outbox";
+	public static final String FAILURE_PATH = "Sync Failures";
+	public static final int ID_FOLDER_FAILURE = 252;
+    public static final int ID_FOLDER_ARCHIVE = 253;
+    public static final int ID_FOLDER_OUTBOX = 254;
+	
 	private Timer timer;
 	private TimerTask currentTask;
 	
@@ -31,6 +38,14 @@ public abstract class DesktopMailbox extends Mailbox {
 			accountName = account.getName();
 	}
 	
+    @Override protected synchronized void initialize() throws ServiceException {
+        super.initialize();
+
+        // create a system outbox folder
+        Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
+        Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
+    }
+    
 	@Override
 	synchronized boolean finishInitialization() throws ServiceException {
 		if (super.finishInitialization()) {
@@ -38,6 +53,19 @@ public abstract class DesktopMailbox extends Mailbox {
 			return true;
 		}
 		return false;
+	}
+	
+	synchronized void ensureFailureFolderExists() throws ServiceException {
+		Folder f = null;
+		try {
+			f = getFolderById(ID_FOLDER_FAILURE);
+		} catch (MailServiceException.NoSuchItemException x) {}
+		if (f == null) {
+	        CreateFolder redo = new CreateFolder(getId(), FAILURE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
+	        redo.setFolderId(ID_FOLDER_FAILURE);
+	        redo.start(System.currentTimeMillis());
+            createFolder(new OfflineContext(redo), FAILURE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
+		}
 	}
 	
 	public boolean isDeleting() {

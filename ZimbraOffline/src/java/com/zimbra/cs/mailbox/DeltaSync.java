@@ -746,40 +746,44 @@ public class DeltaSync {
 //    }
     
     void syncMessage(Element elt, int folderId, byte type) throws ServiceException {
-        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
-        Message msg = null;
-        try {
-            // make sure that the message we're delta-syncing actually exists
-            msg = ombx.getMessageById(sContext, id);
-        } catch (MailServiceException.NoSuchItemException nsie) {
-            // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
-            if (!ombx.isPendingDelete(sContext, id, type))
-                getInitialSync().syncMessage(id, folderId, type);
-            return;
-        }
-
-        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
-        int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
-
-        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
-        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
-        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
-
-        // double-check to make sure that it's just a metadata change
-//        if (mod_content != msg.getSavedSequence() || date != msg.getDate() / 1000) {
-//            // content changed; must re-download body
-//            getInitialSync().syncMessage(id, folderId);
-//            return;
-//        }
-
-        synchronized (ombx) {
-            ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
-            ombx.syncMetadata(sContext, id, type, folderId, flags, tags, color);
-            ombx.syncChangeIds(sContext, id, type, date, mod_content, timestamp, changeId);
-        }
-        OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
+   		int id = (int) elt.getAttributeLong(MailConstants.A_ID);
+    	try {
+	        Message msg = null;
+	        try {
+	            // make sure that the message we're delta-syncing actually exists
+	            msg = ombx.getMessageById(sContext, id);
+	        } catch (MailServiceException.NoSuchItemException nsie) {
+	            // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
+	            if (!ombx.isPendingDelete(sContext, id, type))
+	                getInitialSync().syncMessage(id, folderId, type);
+	            return;
+	        }
+	
+	        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+	        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+	        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
+	        int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
+	
+	        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
+	        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+	        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
+	        int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
+	
+	        // double-check to make sure that it's just a metadata change
+	//        if (mod_content != msg.getSavedSequence() || date != msg.getDate() / 1000) {
+	//            // content changed; must re-download body
+	//            getInitialSync().syncMessage(id, folderId);
+	//            return;
+	//        }
+	
+	        synchronized (ombx) {
+	            ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
+	            ombx.syncMetadata(sContext, id, type, folderId, flags, tags, color);
+	            ombx.syncChangeIds(sContext, id, type, date, mod_content, timestamp, changeId);
+	        }
+	        OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
+    	} catch (ServiceException x) {
+    		SyncExceptionHandler.syncMessageFailed(ombx, id, x);
+    	}
     }
 }

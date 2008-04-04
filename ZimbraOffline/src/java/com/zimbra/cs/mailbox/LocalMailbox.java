@@ -21,7 +21,6 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -41,11 +40,6 @@ import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.util.JMSession;
 
 public class LocalMailbox extends DesktopMailbox {
-
-	public static final String OUTBOX_PATH = "Outbox";
-    public static final int ID_FOLDER_OUTBOX = 254;
-    //public static final String IMPORT_ROOT_PATH = "IMPORT_ROOT";
-    //public static final int ID_FOLDER_IMPORT_ROOT = 253;
     
     LocalMailbox(MailboxData data) throws ServiceException {
         super(data);
@@ -54,16 +48,6 @@ public class LocalMailbox extends DesktopMailbox {
     @Override
     public MailSender getMailSender() {
         return new OfflineMailSender();
-    }
-    
-    @Override
-    protected synchronized void initialize() throws ServiceException {
-        super.initialize();
-
-        // create a system outbox folder
-        Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
-        Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
-        //Folder.create(ID_FOLDER_IMPORT_ROOT, this, userRoot, IMPORT_ROOT_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR, null); //root for all data sources
     }
 
     @Override

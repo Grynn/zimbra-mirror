@@ -236,12 +236,17 @@ public class PushChanges {
                 	
                 	if (batched.contains(id)) //already done
                 		continue;
-                    switch (type) {
-                        case MailItem.TYPE_TAG:         syncTag(id);          break;
-                        case MailItem.TYPE_CONTACT:     syncContact(id);      break;
-                        case MailItem.TYPE_MESSAGE:     syncMessage(id);      break;
-                        case MailItem.TYPE_APPOINTMENT: syncCalendarItem(id); break;
-                    }
+                	try {
+	                    switch (type) {
+	                        case MailItem.TYPE_TAG:         syncTag(id);          break;
+	                        case MailItem.TYPE_CONTACT:     syncContact(id);      break;
+	                        case MailItem.TYPE_MESSAGE:     syncMessage(id);      break;
+	                        case MailItem.TYPE_APPOINTMENT: syncCalendarItem(id); break;
+	                    }
+                	} catch (ServiceException x) {
+                		SyncExceptionHandler.checkReceiversFault(x);
+                		SyncExceptionHandler.pushItemFailed(ombx, id, x);
+                	}
                 }
             }
         }
