@@ -522,12 +522,12 @@ sub mailboxdConfig() {
     <plot data="Opened_tables" legend="opened_tables (cumulative)"/>
   </chart>
 
-  <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Slow Queries"
+  <chart title="Host $ZIMBRA_HOSTNAME: MySQL: Total Slow Queries Count"
          category="database"
          infile="$mysqlCsv"
          outfile="${ZIMBRA_HOSTNAME}_mysql-slow-queries.png"
          yAxis="queries">
-    <plot data="Slow_queries" legend="slow queries"/>
+    <plot data="Slow_queries" legend="slow queries (cumulative)"/>
   </chart>
 
   <!-- Mailboxd Stats -->
