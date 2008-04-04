@@ -225,6 +225,7 @@
 
 		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base2/splash.html" token="&lt;td id='ZLoginSwitchMsg'&gt;&lt;script&gt;document.write(ZmMsg.splashScreenSwitch)&lt;/script&gt;&lt;/td&gt;" value=""/>
 		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base/skin.html" token="&lt;a href='javascript:switchToStandardClient()'&gt;&lt;script&gt;document.write(ZmMsg.switchToStandardClient)&lt;/script&gt;&lt;/a&gt;" value=""/>
+		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/yahoo/skin.html" token="&lt;td id='ZLoginSwitchMsg'&gt;&lt;script&gt;document.write(ZmMsg.splashScreenSwitch)&lt;/script&gt;&lt;/td&gt;" value=""/>
 	</target>
 
 	<target name="offline-jspc">
