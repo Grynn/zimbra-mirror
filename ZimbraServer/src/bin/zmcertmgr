@@ -27,6 +27,7 @@ source `dirname $0`/zmshutil || exit 1
 zmsetvars \
   zimbra_home \
   zimbra_log_directory \
+  zimbra_server_hostname \
   zimbra_tmp_directory \
   zimbra_java_home \
   ldap_is_master \
@@ -163,6 +164,68 @@ getHostInfo() {
     exit 1
   fi
 
+}
+
+isLdapRunning() {
+
+  su - zimbra -c "/opt/zimbra/bin/ldap status > /dev/null 2>&1"
+  LDAP_IS_RUNNING=$?
+  
+}
+
+saveConfigKey() {
+  local key=$1
+  local file=$2
+  local location=$3
+  local content=`cat ${file}`
+  if [ $location = "global" ]; then
+    local zmprov_opts="mcf"
+  elif [ $location = "server" ]; then
+    local zmprov_opts="ms ${zimbra_server_hostname}"
+  else 
+    echo "Unknown config section $location"
+    return
+  fi
+
+  if [ x"$LDAP_IS_RUNNING" = "x" ]; then
+    isLdapRunning
+  fi
+  if [ x"$LDAP_IS_RUNNING" != "x0" ]; then
+    return
+  fi
+  echo -n "** Saving $location config key $key..."
+  su - zimbra -c "zmprov -l -- ${zmprov_opts} ${key} \"$content\" 2> /dev/null"
+  if [ $? = 0 ]; then
+    echo "done."
+  else
+    echo "failed."
+  fi
+}
+
+loadConfigKey() {
+  local key=$1
+  local file=$2
+  local location=$3
+  if [ $location = "global" ]; then
+    local zmprov_opts="gacf"
+  elif [ $location = "server" ]; then
+    local zmprov_opts="gs ${zimbra_server_hostname}"
+  else 
+    echo "Unknown config section $location"
+    return
+  fi
+  tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
+  chown zimbra ${tmpfile}
+  if [ ! -s ${file} ]; then
+    echo -n "** Retrieving $location config key $key..."
+    su - zimbra -c "zmprov -l -- ${zmprov_opts} ${key} | sed  -e 's/^${key}: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${file} 2> /dev/null
+    if [ $? = 0 -a -s "${file}" ]; then
+      echo "done."
+    else
+      echo "failed."
+    fi
+  fi
+  rm -f ${tmpfile} 2> /dev/null
 }
 
 createCAKey() {
@@ -377,12 +440,12 @@ deployCA() {
   updateCACERTS
 
   if [ x"$ldap_is_master" = "xtrue" -a x"$SKIP_LDAP" != "x1" ]; then
-    echo -n "** Saving CA in ldap..."
-    cert=`cat ${zimbra_ca_crt}` 
-    key=`cat ${zimbra_ca_key}`
-    su - zimbra -c "zmprov -l -- mcf zimbraCertAuthorityCertSelfSigned \"$cert\" 2> /dev/null"
-    su - zimbra -c "zmprov -l -- mcf zimbraCertAuthorityKeySelfSigned \"$key\" 2> /dev/null"
-    echo "done."
+    saveConfigKey "zimbraCertAuthorityCertSelfSigned" ${zimbra_ca_crt} "global"
+    saveConfigKey "zimbraCertAuthorityKeySelfSigned" ${zimbra_ca_key} "global"
+    #cert=`cat ${zimbra_ca_crt}` 
+    #key=`cat ${zimbra_ca_key}`
+    #su - zimbra -c "zmprov -l -- mcf zimbraCertAuthorityCertSelfSigned \"$cert\" 2> /dev/null"
+    #su - zimbra -c "zmprov -l -- mcf zimbraCertAuthorityKeySelfSigned \"$key\" 2> /dev/null"
   fi
 
 
@@ -433,8 +496,7 @@ deployCert() {
     fi
   else 
 
-    # ignore this for now 
-    if [ x"${1}" = "x-allserver" -o x"${1}" = "x-new" ]; then
+    if [ x"${1}" = "x-new" ]; then
       shift
     fi
 
@@ -482,6 +544,11 @@ deployCert() {
     current_key=${commercial_key} 
     chmod 644 ${current_crt} 
   fi
+
+  if [ x"${1}" = "x-allserver" ]; then
+    ALLSERVERS=$1
+    shift
+  fi
   
   if [ "x$1" = "x" ]; then
     DEPLOY="all"
@@ -493,6 +560,16 @@ deployCert() {
   else
     echo "Can't deploy cert for $1.  Unknown service."
     return
+  fi
+
+  if [ x"$ldap_is_master" = "xtrue" -a x"$SKIP_LDAP" != "x1" ]; then
+    if [ x"$ALLSERVERS" = "x-allserver" ]; then
+      saveConfigKey "zimbraSSLCertificate" ${current_crt} "global"
+      saveConfigKey "zimbraSSLPrivateKey" ${current_key} "global"
+    else 
+      saveConfigKey "zimbraSSLCertificate" ${current_crt} "server"
+      saveConfigKey "zimbraSSLPrivateKey" ${current_key} "server"
+    fi
   fi
 
   if [ $DEPLOY = "all" -o $DEPLOY = "mta" ]; then
@@ -521,11 +598,9 @@ deployCert() {
   fi
 
   if [ $DEPLOY = "all" -o $DEPLOY = "mailbox" ]; then
-    #echo -n "** Installing mailboxd certificate and key..."
     if [ "x${mailboxd_server}" != "x" ]; then 
       createKeystore $type
     fi
-    #echo "done."
   fi
 
   echo -n "** Installing CA to ${zimbra_conf_directory}/ca..." 
@@ -548,10 +623,82 @@ deployCert() {
     fi
   fi
   echo "done."
+
+  if [ x"$ALLSERVERS" = "x-allserver" ]; then
+    for host in `zmprov -l gas`; do
+      if [ x"$host" = "x${zimbra_server_hostname}" ]; then
+        continue
+      fi
+      echo "HOST:$host zmcertmgr getcrt $type -allserver" | ${zimbra_home}/libexec/zmrc $host   
+      echo "HOST:$host zmcertmgr deploycrt $type" | ${zimbra_home}/libexec/zmrc $host   
+    done
+  fi
  
 }
 
+saveCertToLdap() {
+  type=$1
+  if [ x"$type" = "xself" ]; then
+    current_crt=${server_crt}
+    current_key=${server_key}
+  else 
+    current_crt=${commercial_crt} 
+    current_key=${commercial_key} 
+  fi
+  shift
+  if [ ! -e ${current_crt} ]; then
+    echo "$ERROR_PREFIX Certificate file ${current_crt} does not exist."
+    return
+  fi
+  if [ ! -e ${current_key} ]; then
+    echo "$ERROR_PREFIX Private key file ${current_key} does not exist."
+    return
+  fi
 
+  if [ x"${1}" = "x-allserver" ]; then
+    ALLSERVERS=$1
+    shift
+  fi
+
+  if [ x"$ALLSERVERS" = "x-allserver" ]; then
+    saveConfigKey "zimbraSSLCertificate" ${current_crt} "global"
+    saveConfigKey "zimbraSSLPrivateKey" ${current_key} "global"
+  else 
+    saveConfigKey "zimbraSSLCertificate" ${current_crt} "server"
+    saveConfigKey "zimbraSSLPrivateKey" ${current_key} "server"
+  fi
+}
+
+getCertFromLdap() {
+  type=$1
+  if [ x"$type" = "xself" ]; then
+    current_crt=${server_crt}
+    current_key=${server_key}
+  else 
+    current_crt=${commercial_crt} 
+    current_key=${commercial_key} 
+  fi
+  shift
+  if [ -f ${current_crt} ]; then
+    rm ${current_crt}
+  fi
+  if [ -f ${current_key} ]; then
+    rm ${current_key}
+  fi
+
+  if [ x"${1}" = "x-allserver" ]; then
+    ALLSERVERS=$1
+    shift
+  fi
+
+  if [ x"$ALLSERVERS" = "x-allserver" ]; then
+    loadConfigKey "zimbraSSLCertificate" ${current_crt} "global"
+    loadConfigKey "zimbraSSLPrivateKey" ${current_key} "global"
+  else 
+    loadConfigKey "zimbraSSLCertificate" ${current_crt} "server"
+    loadConfigKey "zimbraSSLPrivateKey" ${current_key} "server"
+  fi
+}
 
 createConf() {
   ssl_conf=$1
@@ -621,6 +768,7 @@ createServerCertReq() {
   else
     echo "done."
   fi
+  rm -f ${tmpfile} 2> /dev/null
 
   if [ -f "${current_csr}" ]; then
     chmod 644 ${current_csr}
@@ -628,7 +776,7 @@ createServerCertReq() {
   if [ -f "${current_key}" ]; then
     chmod 644 ${current_key}
   fi
-  rm -f ${tmpfile} 2> /dev/null
+  saveConfigKey "zimbraSSLPrivateKey" ${current_key} "server"
 }
 
 createCert() {
@@ -645,12 +793,26 @@ createCert() {
     echo "Validation days: $validation_days"
   fi
 
+  if [ x"${1}" = "x-subject" ]; then
+    shift
+    SUBJECT="$1"
+    shift
+    echo "Subject: $SUBJECT"
+  fi
+
+  if [ x"${1}" = "x-allserver" ]; then
+    ALLSERVERS="$1"
+    shift
+  fi
+
+  initSSLDirs
+
   createCASerial  
 
   createConf "${zimbra_cert_ssl_conf}" "$subject_alt_names"
-
-  #why do we need verify the crt here? The cert is not even created yet.
-  #We need to allow validation_days to be changed
+  
+  # see if we already have a valid cert, we don't want to recreate
+  # self-signed certs on upgrade
   if [ -s "${server_crt}" -a "x${IS_NEW_CRT}" != "x-new" ]; then
   $0 verifycrt self ${server_key} ${server_crt} > /dev/null 2>&1
     if [ $? = 0 ]; then
@@ -661,12 +823,20 @@ createCert() {
 
   backupSSLDirs ${zimbra_ssl_directory}
 
-  # make sure the CA exists
-  if [ ! -s "${zimbra_ca_crt}" ]; then
-    createCA
+  # try and grab the cert from ldap
+  if [ x"${IS_NEW_CRT}" != "x-new" ]; then
+    getCertFromLdap self $ALLSERVERS
+
+    if [ -s "${server_crt}" -a "x${IS_NEW_CRT}" != "x-new" ]; then
+    $0 verifycrt self ${server_key} ${server_crt} > /dev/null 2>&1
+      if [ $? = 0 ]; then
+        #echo "** ${server_crt} downloaded from ldap."
+        return
+      fi
+    fi
   fi
 
-  if [ x"${1}" = "x-allserver" ]; then
+  if [ x"${ALLSERVERS}" = "x-allserver" ]; then
     subject_alt_names=`su - zimbra -c "zmprov -l gas | xargs "`
     createCSR self -new 
     shift
@@ -711,7 +881,11 @@ createCert() {
   fi
 
   rm -f ${tmpfile} 2> /dev/null
-  #viewstagedcrt self
+#  if [ x"$ALLSERVERS" = "x-allserver" ]; then
+#    saveConfigKey "zimbraSSLCertificate" ${server_crt} "global"
+#  else
+#    saveConfigKey "zimbraSSLCertificate" ${server_crt} "server"
+#  fi
 }
 
 
@@ -1112,9 +1286,10 @@ usage () {
   echo "  $0 createca [-new]"
   echo "  $0 deployca"
   echo "  $0 createcsr <self|comm> [-new] [-subject subject] [-subjectAltNames \"host1,host2\"]"
-  echo "  $0 createcrt [-new] [-subject subject] [-days validation days] [-subjectAltNames \"host1,host2\"]"
+  echo "  $0 createcrt [-new] [-days validation days] [-subject subject] [-subjectAltNames \"host1,host2\"]"
   echo "  $0 deploycrt <self>"
   echo "  $0 deploycrt <comm> [certfile] [ca_chain_file]"
+  echo "  $0 savecrt"
   echo "  $0 viewcsr <self|comm> [csr_file]"
   echo "  $0 viewdeployedcrt [all|ldap|mta|proxy|mailboxd]"
   echo "  $0 viewstagedcrt <self|comm> [certfile]"
@@ -1170,6 +1345,10 @@ elif [ x"$ACTION" = "xcreatecrt" ]; then
   createCert "$@"
 elif [ x"$ACTION" = "xdeploycrt" ]; then
   deployCert $@
+elif [ x"$ACTION" = "xsavecrt" ]; then
+  saveCertToLdap $@
+elif [ x"$ACTION" = "xgetcrt" ]; then
+  getCertFromLdap $@
 elif [ x"$ACTION" = "xverifycrt" ]; then
   verifycrt $@
 elif [ x"$ACTION" = "xverifycrtkey" ]; then

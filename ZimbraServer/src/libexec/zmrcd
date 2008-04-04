@@ -66,7 +66,7 @@ my %REGEX_CHECKED_COMMANDS = (
     # alphanumeric, slash, dot, dash, underscore, colon, at, space
     program => "/opt/zimbra/libexec/zmbackupldap"},
   "zmcertmgr" => {
-    regex => '(viewdeployedcrt|viewstagedcrt|createcsr|createcrt|deploycrt|viewcsr|verifycrt|verifycrtkey|verifycrtchain)\s*(self|comm)?\s*.*',
+    regex => '(viewdeployedcrt|viewstagedcrt|createcsr|createcrt|getcrt|deploycrt|viewcsr|verifycrt|verifycrtkey|verifycrtchain)\s*(self|comm)?\s*.*',
     program => "sudo /opt/zimbra/bin/zmcertmgr"},                
 );
 
