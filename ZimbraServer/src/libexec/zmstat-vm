@@ -48,6 +48,7 @@ zmstatInit();
 my $isMac = isMac();
 my $VMSTAT = !$isMac ? '/usr/bin/vmstat -n -S K' : '/usr/bin/vm_stat';
 my $MEMINFO = '/proc/meminfo';
+my $LOADAVG = '/proc/loadavg';
 my @VMSTAT_FIELDS;
 my @MEMINFO_FIELDS;
 
@@ -72,7 +73,7 @@ sub getHeading() {
         push(@MEMINFO_FIELDS, $fields[0]);
     }
     close(MEMINFO_H);
-    return join(', ', 'timestamp', @VMSTAT_FIELDS, @MEMINFO_FIELDS);
+    return join(', ', 'timestamp', @VMSTAT_FIELDS, @MEMINFO_FIELDS, "loadavg");
 }
 
 sub getMeminfo() {
@@ -92,6 +93,18 @@ sub getMeminfo() {
         push(@vals, $meminfo{$key} || 0);
     }
     return join(', ', @vals);
+}
+sub getLoadInfo() {
+    if ($isMac) {
+        return '';
+    }
+    my %meminfo;
+    open(LOADAVG, "< $LOADAVG") or die "Can't open $LOADAVG: $!";
+    my $line = <LOADAVG>;
+    $line =~ /^(\S+)\s+/;
+    my $load = $1;
+    close(LOADAVG);
+    return $load;
 }
 
 sub runVMSTAT($) {
@@ -189,6 +202,7 @@ while (1) {
     if (!$isMac) {
         $line =~ s/\s+/, /g;  # space separated --> comma separated
         $line .= ', ' . getMeminfo();
+        $line .= ', ' . getLoadInfo();
     } else {
         my @vals = split(/\s+/, $line);
         my $len = scalar(@vals);

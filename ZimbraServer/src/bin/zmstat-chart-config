@@ -352,7 +352,7 @@ _HERE_
     <plot data="cs" legend="context switches"/>
   </chart>
 
-  <chart title="Host $ZIMBRA_HOSTNAME: Run Queue Size"
+  <chart title="Host $ZIMBRA_HOSTNAME: Run/Blocked Process Queue Size, Load Average"
          category="CPU"
          infile="$vmstatCsv"
          outfile="${ZIMBRA_HOSTNAME}_vm_runqueue.png"
@@ -360,6 +360,8 @@ _HERE_
          showRaw="false"
          showMovingAvg="true">
     <plot data="r" legend="processes waiting for run time"/>
+    <plot data="b" legend="processes waiting for io time"/>
+    <plot data="loadavg" legend="load average (1 min)"/>
   </chart>
 
 _HERE_
