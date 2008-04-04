@@ -76,7 +76,7 @@ function() {
 
 ZmCsfeCommand.setSessionId =
 function(sessionId) {
-	var id = (sessionId instanceof Array) ? sessionId[0].id : sessionId;
+	var id = (sessionId instanceof Array) ? sessionId[0].id : sessionId.id;
 	ZmCsfeCommand._sessionId = parseInt(id);
 };
 
@@ -197,10 +197,13 @@ function(params) {
 	}
 	if (params.noSession) {
 		context.nosession = {};
-	}
-	var sessionId = ZmCsfeCommand.getSessionId();
-	if (sessionId) {
-		context.sessionId = {_content:sessionId, id:sessionId};
+	} else {
+		var sessionId = ZmCsfeCommand.getSessionId();
+		if (sessionId) {
+			context.session = {_content:sessionId, id:sessionId};
+		} else {
+			context.session = {};
+		}
 	}
 	if (params.targetServer) {
 		context.targetServer = {_content:params.targetServer};
@@ -222,8 +225,8 @@ function(params) {
 	}
 	
 	// Tell server what kind of response we want
-	if (!params.useXml) {
-		context.format = {type:"js"};
+	if (params.useXml) {
+		context.format = {type:"xml"};
 	}
 
 	params.methodNameStr = ZmCsfeCommand.getMethodName(params.jsonObj);
@@ -477,8 +480,8 @@ function(response, params) {
 		}
 	}
 
-	if (obj.Header && obj.Header.context && obj.Header.context.sessionId) {
-		ZmCsfeCommand.setSessionId(obj.Header.context.sessionId);
+	if (obj.Header && obj.Header.context && obj.Header.context.session) {
+		ZmCsfeCommand.setSessionId(obj.Header.context.session);
 	}
 
 	return params.asyncMode ? result : obj;
