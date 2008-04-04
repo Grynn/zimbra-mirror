@@ -17,12 +17,9 @@ public class GmailBean extends XmailBean {
 		if (isEmpty(password))
 	    	addInvalid("password");
 		
-		domain = "gmail.com";
-		if (email.indexOf('@') < 0) {
+		domain = "gmail.com"; //this is soly for datasource.properties mapping
+		if (email.indexOf('@') < 0)
 			email += '@' + domain;
-		} else if (email.indexOf('@') == 0 || !email.endsWith('@' + domain)) {
-			addInvalid("email");
-		}
 		username = email;
 		
 		protocol = DataSource.Type.imap.toString();

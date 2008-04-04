@@ -129,10 +129,10 @@ public class XmailBean extends FormBean {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceHost, host);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
-			
-			        if (!isEmpty(domain)) {
-			        	dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
-			        }
+			        
+			        domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
+			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
+			        
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost, smtpHost);
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort, smtpPort);
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType, (isSmtpSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
