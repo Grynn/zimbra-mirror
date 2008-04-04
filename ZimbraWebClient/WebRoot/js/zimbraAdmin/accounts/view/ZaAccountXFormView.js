@@ -656,13 +656,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								val = "0 MB ";
 							else {
 								val = Number(val / 1048576).toFixed(3) + " MB ";
-							}
-							var quotaUsed = "";
-							
-							if(this.getInstance() != null)
-								quotaUsed = this.getInstanceValue(ZaAccount.A2_quota);
-								
-							val += ZaMsg.Of + " " + quotaUsed + " MB";									
+							}									
 							return val;
 						}
 					});
@@ -674,8 +668,15 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							return ZaAccount.getLastLoginTime(val) ;
 						}	
 					 });
+    //assigned quota
+    headerItems.push ({type:_OUTPUT_,ref:ZaAccount.A2_quota, label:ZaMsg.assignedQuota + ":",
+                        getDisplayValue:function() {
+							var val = this.getInstanceValue();
+                            return val + " MB" ;
+						}
+					});
 
-	this.tabChoices = new Array();
+    this.tabChoices = new Array();
 	
 	var _tab1 = ++this.TAB_INDEX;
 	var _tab2 = ++this.TAB_INDEX;	
