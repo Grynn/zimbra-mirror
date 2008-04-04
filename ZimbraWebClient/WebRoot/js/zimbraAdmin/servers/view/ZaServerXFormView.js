@@ -440,7 +440,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 			relevantBehavior:_HIDE_,
 			containerCssStyle: "padding-top:0px",
 			choices:[
-				{value:1, label:ZaMsg.NAD_Tab_General},
+				{value:1, label:ZaMsg.TABT_GeneralPage},
 				{value:2, label:ZaMsg.NAD_Tab_Services},
 				{value:3, label:ZaMsg.NAD_Tab_MTA},
 				{value:4, label:ZaMsg.NAD_Tab_IMAP},					

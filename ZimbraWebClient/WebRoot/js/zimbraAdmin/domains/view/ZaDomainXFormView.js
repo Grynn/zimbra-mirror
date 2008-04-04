@@ -313,7 +313,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 
 		{type:_TAB_BAR_,  ref:ZaModel.currentTab,
 			choices:[
-				{value:1, label:ZaMsg.Domain_Tab_General},
+				{value:1, label:ZaMsg.TABT_GeneralPage},
 				{value:2, label:ZaMsg.Domain_Tab_GAL},
 				{value:3, label:ZaMsg.Domain_Tab_Authentication},
 				{value:4, label:ZaMsg.Domain_Tab_VirtualHost},
