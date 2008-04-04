@@ -28,9 +28,11 @@ use FileHandle;
 my $enabledHTTPProxy;
 my $enabledMailProxy;
 
-if ($> ne 0) {
-  print "$0 must be executed as root.\n";
-  exit 1;
+my $id = `whoami`;
+chomp $id;
+if ($id ne "zimbra") {
+    print STDERR "Error: must be run as zimbra user\n";
+        exit (1);
 }
 
 our %options = ();
@@ -73,7 +75,7 @@ if ($#ARGV == -1) {
 
 my $hostname = $ARGV[0];
 
-open(ZMPROV, "|su - zimbra -c 'zmprov -l'");
+open(ZMPROV, "|zmprov -l");
 
 if ($options{f}) {
   my $zimbraReverseProxyMailHostQuery =
