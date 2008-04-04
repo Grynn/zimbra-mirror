@@ -249,7 +249,8 @@ function() {
 		var html = iframeDoc && iframeDoc.body ? (this._getIframeDoc().body.innerHTML) : "";
 		return this._embedHtmlContent(html);
 	} else {
-		return document.getElementById(this._textAreaId).value;
+		var textArea = document.getElementById(this._textAreaId);
+		return textArea && textArea.value;
 	}
 };
 
