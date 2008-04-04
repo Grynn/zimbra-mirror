@@ -28,8 +28,10 @@ exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
 my $NOW = time();  #timestamp for all processing
 my $zimbra_home = "/opt/zimbra";
 my $state_file = "${zimbra_home}/logger/db/work/zmlogprocess.state";
+my $optimize_state_file = "${zimbra_home}/logger/db/work/zmlogprocess.optimize.state";
 my $pid_file = "${zimbra_home}/log/zmlogprocess.pid";
 my $interval = getLocalConfig("logger_logprocess_interval") || 0;
+my $optimize_interval = getLocalConfig("logger_logprocess_optimize_interval") || 86400;
 my $username = getLocalConfig("zimbra_user") || "zimbra";
 my $password = getLocalConfig("zimbra_logger_mysql_password");
 
@@ -1369,6 +1371,9 @@ sub pruneLogs {
 }
 
 sub optimizeTables {
+
+  return if checkOptimizeState();
+
   my $sth;
   print "Optimizing mta tables\n";
   $sth = sqlExec ("optimize table mta");
@@ -1384,8 +1389,27 @@ sub optimizeTables {
   $sth = sqlExec ("optimize table disk_aggregate");
   print "Optimizing other raw logs table\n";
   $sth = sqlExec ("optimize table raw_logs");
+  updateOptimizeState();
 }
 
+sub checkOptimizeState {
+  if (-f "$optimize_state_file") {
+    open STATE, "<$optimize_state_file";
+    my @STATE=<STATE>;
+    close(STATE);
+    my $state = $STATE[0]; 
+    if ($NOW < $state+$optimize_interval) {
+      return 1;
+    }
+  }
+}
+
+sub updateOptimizeState {
+  open STATE, "> ${optimize_state_file}";
+  print STATE "$NOW\n";
+  close STATE;
+  
+}
 sub checkState {
   if (-f $state_file) {
     open STATE, "<$state_file";
@@ -1399,7 +1423,7 @@ sub checkState {
 }
 
 sub updateState {
-  open STATE, "> ${zimbra_home}/logger/db/work/zmlogprocess.state";
+  open STATE, "> ${state_file}";
   print STATE "$NOW\n";
   close STATE;
   
