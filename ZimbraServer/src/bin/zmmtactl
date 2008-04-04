@@ -41,6 +41,9 @@ case "$1" in
 		done
 	;;
 	reload)
+		if [ x$2 = "x" ]; then
+			/opt/zimbra/libexec/zmmtaconfig antispam antivirus mta sasl
+		fi
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i reload
 		done
