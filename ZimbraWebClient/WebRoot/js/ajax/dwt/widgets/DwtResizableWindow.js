@@ -127,6 +127,10 @@ DwtResizableWindow.prototype.popdown = function() {
 		this.notifyListeners(DwtEvent.POPDOWN, { dwtObj: this });
 };
 
+DwtResizableWindow.prototype.isPoppedUp = function() {
+	return this._visible;
+};
+
 DwtResizableWindow.prototype.focus = function() {
 	DwtComposite.prototype.focus.call(this);
 	if (this.isListenerRegistered("myFOCUS")) {
