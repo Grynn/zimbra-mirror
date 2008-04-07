@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
@@ -216,9 +217,12 @@ public class OfflineDataSource extends DataSource {
 	@Override
 	public void initializedLocalFolder(String localPath) {
 		try {
-			Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(getAccount());
+			DesktopMailbox mbox = (DesktopMailbox)MailboxManager.getInstance().getMailboxByAccount(getAccount());
 			Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
 			if (folder != null) {
+				if (folder.getId() == DesktopMailbox.ID_FOLDER_OUTBOX || folder.getId() == DesktopMailbox.ID_FOLDER_ARCHIVE || folder.getId() == DesktopMailbox.ID_FOLDER_FAILURE)
+					return;
+				
 				OperationContext context = new Mailbox.OperationContext(mbox); 
 				mbox.alterTag(context, folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNCFOLDER, true);
 				mbox.alterTag(context, folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, isSyncEnabledByDefault(localPath));
