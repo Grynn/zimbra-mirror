@@ -609,6 +609,7 @@ function(htmlEl, position) {
 	if (typeof htmlEl == "string") {
 		htmlEl = document.getElementById(htmlEl);
 	}
+	if (!htmlEl) { return; }
 
 	var el = this.getHtmlElement();
 	if (position == null) {
