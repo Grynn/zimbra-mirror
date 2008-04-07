@@ -139,7 +139,7 @@ function(map, keys, mapNames) {
 		if (last == "win" || last == "mac" || last == "linux") {
 			if (last == curPlatform) {
 				var baseKey = parts.slice(0, 2).join(".");
-				keys[baseKey] = keys[propName]
+				keys[baseKey] = keys[propName];
 			}
 			keys[propName] = null;
 		}
