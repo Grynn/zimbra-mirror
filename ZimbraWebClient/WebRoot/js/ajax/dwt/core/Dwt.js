@@ -639,10 +639,14 @@ function(htmlElement) {
 
 Dwt.setVisible =
 function(htmlElement, visible) {
-    var isRow = htmlElement.nodeName.match(/tr/i);
-    var isCell = htmlElement.nodeName.match(/td|th/i);
-    var display = isRow ? Dwt.DISPLAY_TABLE_ROW : (isCell ? Dwt.DISPLAY_TABLE_CELL : Dwt.DISPLAY_BLOCK);
-    htmlElement.style.display = visible ? display : Dwt.DISPLAY_NONE;
+    if(visible){
+        var isRow = htmlElement.nodeName.match(/tr/i);
+        var isCell = htmlElement.nodeName.match(/td|th/i);
+        var display = isRow ? Dwt.DISPLAY_TABLE_ROW : (isCell ? Dwt.DISPLAY_TABLE_CELL : Dwt.DISPLAY_BLOCK);
+        htmlElement.style.display = display;
+    }else{
+        htmlElement.style.display = Dwt.DISPLAY_NONE;
+    }
 };
 
 Dwt.getVisibility =
