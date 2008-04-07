@@ -515,7 +515,8 @@ public class PushChanges {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_SEARCHFOLDER, name, parentId);
             if (create) {
                 // make sure the old item matches the new item...
-                ombx.renumberItem(sContext, id, MailItem.TYPE_SEARCHFOLDER, createData.getFirst(), createData.getSecond());
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_SEARCHFOLDER, createData.getFirst(), createData.getSecond()))
+                	return true;
                 id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
@@ -580,7 +581,8 @@ public class PushChanges {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_FOLDER, name, parentId);
             if (create) {
                 // make sure the old item matches the new item...
-                ombx.renumberItem(sContext, id, MailItem.TYPE_FOLDER, createData.getFirst(), createData.getSecond());
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_FOLDER, createData.getFirst(), createData.getSecond()))
+                	return true;
                 id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
@@ -643,7 +645,8 @@ public class PushChanges {
                         ombx.renumberItem(sContext, newId, MailItem.TYPE_TAG, renumber);
                 }
                 // make sure the old item matches the new item...
-                ombx.renumberItem(sContext, id, MailItem.TYPE_TAG, newId, createData.getSecond());
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_TAG, newId, createData.getSecond()))
+                	return true;
                 id = newId;
             }
         } catch (SoapFaultException sfe) {
@@ -766,7 +769,8 @@ public class PushChanges {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_CONTACT, null, folderId);
             if (create) {
                 // make sure the old item matches the new item...
-                ombx.renumberItem(sContext, id, MailItem.TYPE_CONTACT, createData.getFirst(), createData.getSecond());
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_CONTACT, createData.getFirst(), createData.getSecond()))
+                	return true;
                 id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
@@ -846,7 +850,8 @@ public class PushChanges {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_MESSAGE, null, folderId);
             if (create) {
                 // make sure the old item matches the new item...
-                ombx.renumberItem(sContext, id, MailItem.TYPE_MESSAGE, createData.getFirst(), createData.getSecond());
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_MESSAGE, createData.getFirst(), createData.getSecond()))
+                	return true;
                 id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
@@ -923,7 +928,8 @@ public class PushChanges {
 				//Instead, we just let it bounce back as a calendar update from server.
 				//mod sequence will always be bounced back in the next sync so we'll set there.
 				if (serverItemId != id) { //new item
-					ombx.renumberItem(sContext, id, MailItem.TYPE_APPOINTMENT, serverItemId, -1);
+					if (!ombx.renumberItem(sContext, id, MailItem.TYPE_APPOINTMENT, serverItemId, -1))
+						return true;
 				}
 				id = serverItemId;
         	} else {

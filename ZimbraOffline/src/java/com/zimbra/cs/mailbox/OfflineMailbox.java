@@ -258,13 +258,13 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    synchronized void renumberItem(OperationContext octxt, int id, byte type, int newId) throws ServiceException {
-        renumberItem(octxt, id, type, newId, -1);
+    synchronized boolean renumberItem(OperationContext octxt, int id, byte type, int newId) throws ServiceException {
+        return renumberItem(octxt, id, type, newId, -1);
     }
 
-    synchronized void renumberItem(OperationContext octxt, int id, byte type, int newId, int mod_content) throws ServiceException {
+    synchronized boolean renumberItem(OperationContext octxt, int id, byte type, int newId, int mod_content) throws ServiceException {
         if (id == newId)
-            return;
+            return true;
         else if (id <= 0 || newId <= 0)
             throw ServiceException.FAILURE("invalid item id when renumbering (" + id + " => " + newId + ")", null);
 
@@ -316,11 +316,20 @@ public class OfflineMailbox extends DesktopMailbox {
             }
 
             success = true;
+        } catch (MailServiceException.NoSuchItemException nsie) {
+        	//item deleted from local before sync completes renumbering
+        	OfflineLog.offline.info("item %d deleted from local db before sync completes renumbering to %d", id, newId);
+        	MailItem.TypedIdList tombstones = new MailItem.TypedIdList();
+        	tombstones.add(type, newId);
+        	DbMailItem.writeTombstones(this, tombstones);
+        	success = true;
+            return false;
         } finally {
             endTransaction(success);
         }
 
         mRenumbers.put(id, newId);
+        return true;
     }
 
     synchronized void deleteEmptyFolder(OperationContext octxt, int folderId) throws ServiceException {

@@ -112,7 +112,7 @@ public class DeltaSync {
         for (Element change : response.listElements()) {
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
             String type = change.getName();
-
+            
             if (type.equals(MailConstants.E_TAG)) {
                 syncTag(change);
                 continue;
@@ -128,6 +128,9 @@ public class DeltaSync {
                 	OfflineLog.offline.warn("Skipped message id=%d per zdesktop_sync_skip_idlist", id);
                 	continue;
                 }
+                
+                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_MESSAGE))
+                	continue;
             	
                 if (create && canDeltaSyncMessage(id, change))
                     (deltamsgs == null ? deltamsgs = new HashMap<Integer, Integer>() : deltamsgs).put(id, folderId);
@@ -148,6 +151,9 @@ public class DeltaSync {
                 	continue;
                 }
             	
+                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_CHAT))
+                	continue;
+                
                 if (create && canDeltaSyncMessage(id, change))
                     (deltachats == null ? deltachats = new HashMap<Integer,Integer>() : deltachats).put(id, folderId);
                 else if (create) {
@@ -167,6 +173,9 @@ public class DeltaSync {
                 	continue;
                 }
             	
+                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_CONTACT))
+                	continue;
+                
                 if (create)
                     (contacts == null ? contacts = new HashMap<Integer,Integer>() : contacts).put(id, folderId);
                 else
@@ -178,6 +187,9 @@ public class DeltaSync {
                 	OfflineLog.offline.warn("Skipped appointment id=%d per zdesktop_sync_skip_idlist", id);
                 	continue;
                 }
+                
+                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_APPOINTMENT))
+                	continue;
             	
             	(appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
             } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
