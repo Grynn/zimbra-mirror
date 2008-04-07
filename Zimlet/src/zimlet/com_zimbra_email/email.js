@@ -37,8 +37,9 @@ function() {
 
 Com_Zimbra_Email.prototype._getRoster =
 function() {
-	if (!this._roster && appCtxt.get(ZmSetting.IM_ENABLED) && ZmImApp.loggedIn()) {
-		this._roster = AjxDispatcher.run("GetRoster");
+	if (!this._roster && appCtxt.get(ZmSetting.IM_ENABLED) && !(!appCtxt.get(ZmSetting.IM_PREF_AUTO_LOGIN) && !appCtxt.getApp(ZmApp.IM).hasRoster())/*If not AUTO_LOGIN enabled, don't LOGIN */) {
+
+        this._roster = AjxDispatcher.run("GetRoster");
 		var list = this._roster.getRosterItemList();
 		list.addChangeListener(new AjxListener(this, this._rosterChangeListener));
 	}
@@ -91,8 +92,9 @@ function(address) {
 	if (contactList && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		result.contact = contactList.getContactByEmail(address);
 	}
-	if (!result.buddy && appCtxt.get(ZmSetting.IM_ENABLED)) {
-		if (result.contact) {
+	if (!result.buddy && appCtxt.get(ZmSetting.IM_ENABLED) && !(!appCtxt.get(ZmSetting.IM_PREF_AUTO_LOGIN) && !appCtxt.getApp(ZmApp.IM).hasRoster())/*If not AUTO_LOGIN enabled, don't LOGIN */) {
+
+        if (result.contact) {
 			result.buddy = result.contact.getBuddy();
 		}
 		if (!result.buddy) {
