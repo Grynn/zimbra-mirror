@@ -113,7 +113,7 @@ unless ( getopts( 'vhH:', \%GlobalOpts ) ) { usage(); }
 if ( ! $GlobalOpts{H} ) { $GlobalOpts{H} = $localHostName; chomp $GlobalOpts{H}; }
 
 if ( $GlobalOpts{h} ) { usage(); }
-if ( $GlobalOpts{v} ) { displayVersion(); exit 1;}
+if ( $GlobalOpts{v} ) { displayVersion(); exit 0;}
 
 # Commands: start, stop, maintenance and status
 my $command = $ARGV[0];
