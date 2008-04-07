@@ -61,7 +61,7 @@ const STATE_FAILED          = "failed";
 const WRITE_ERROR = 7;
 
 const DOWNLOAD_CHUNK_SIZE           = 300000; // bytes
-const DOWNLOAD_BACKGROUND_INTERVAL  = 60;    // seconds
+const DOWNLOAD_BACKGROUND_INTERVAL  = 20;    // seconds
 const DOWNLOAD_FOREGROUND_INTERVAL  = 0;
 
 const TOOLKIT_ID              = "toolkit@mozilla.org";
