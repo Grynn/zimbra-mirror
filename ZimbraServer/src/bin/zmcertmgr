@@ -41,6 +41,13 @@ zmsetvars \
   
 export JAVA_HOME=${zimbra_java_home}
 
+java_version=$(${zimbra_java_home}/bin/java -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
+if [ x"$java_version" = "x1.6.0" ]; then
+  java_options="-XX:ErrorFile=${zimbra_home}/log"
+else
+  java_options=""
+fi
+
 zimbra_home=${zimbra_home:=/opt/zimbra}
 zimbra_conf_directory=${zimbra_home}/conf
 
@@ -337,9 +344,7 @@ createKeystore () {
   fi
   
   echo -n "** Creating keystore file ${mailboxd_keystore}..."
-  #5. Load the resulting PKCS12 file into a JSSE keystore
-  #${zimbra_home}/bin/zmjava com.zimbra.cert.MyPKCS12Import ${mailboxd_server}.pkcs12 ${mailboxd_keystore} ${mailboxd_keystore_password} ${mailboxd_keystore_password}
-  ${zimbra_java_home}/bin/java -classpath ${zimbra_home}/lib/ext/com_zimbra_cert_manager/com_zimbra_cert_manager.jar com.zimbra.cert.MyPKCS12Import ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12 ${mailboxd_keystore} ${mailboxd_keystore_password} ${mailboxd_keystore_password} > ${tmpfile} 2>&1
+  ${zimbra_java_home}/bin/java ${java_options} -classpath ${zimbra_home}/lib/ext/com_zimbra_cert_manager/com_zimbra_cert_manager.jar com.zimbra.cert.MyPKCS12Import ${zimbra_ssl_directory}/${mailboxd_server}.pkcs12 ${mailboxd_keystore} ${mailboxd_keystore_password} ${mailboxd_keystore_password} > ${tmpfile} 2>&1
   if [ $? != 0 ]; then
     echo "failed."
     echo
