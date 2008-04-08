@@ -840,6 +840,7 @@ public class InitialSync {
             try {
             	saveMessage(response.getSecond(), headers, id, folderId, type);
             } catch (ServiceException x) {
+            	SyncExceptionHandler.checkRecoverableException(x);
 	        	SyncExceptionHandler.syncMessageFailed(ombx, id, x);
 	        }
         } catch (MailServiceException.NoSuchItemException nsie) {
