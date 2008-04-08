@@ -94,8 +94,9 @@ Q_MSGS_QUESTION_RADIO_XFormItem.prototype.items = [
 			if(itemVal) {
 				cnt = itemVal.length;
 			}
-			retVal = String(ZaMsg.PQ_SelectedMessages).replace("{0}",cnt);
-			return retVal;
+			//retVal = String(ZaMsg.PQ_SelectedMessages).replace("{0}",cnt);
+			retVal = AjxMessageFormat.format (ZaMsg.PQ_SelectedMessages, [cnt])  ;
+            return retVal;
 		}
 	}
 ];
