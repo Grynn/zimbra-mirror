@@ -354,7 +354,7 @@ public class DbOfflineMailbox {
             	List<Pair<Integer, Integer>> batch = changes.get(folderId);
             	if (batch == null) {
             		batch = new ArrayList<Pair<Integer, Integer>>();
-            		changes.put(modSequence, batch);
+            		changes.put(folderId, batch);
             	}
             	batch.add(new Pair<Integer, Integer>(id, modSequence));
             }
