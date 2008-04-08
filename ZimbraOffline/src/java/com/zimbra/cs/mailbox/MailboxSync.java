@@ -105,13 +105,15 @@ public class MailboxSync {
                     ombx = (OfflineMailbox) mbox;
                 }
                 
-                if (mStage == SyncStage.SYNC)
-                	PushChanges.sendPendingMessages(ombx, isOnRequest);
-            	
             	if (!isOnRequest) {
         	    	if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()) || !syncMan.retryOK(ombx.getAccount()))
         	    		return;
+            	}
+            	
+                if (mStage == SyncStage.SYNC)
+                	PushChanges.sendPendingMessages(ombx, isOnRequest);
         	    	
+        	    if (!isOnRequest) {	
         	    	if (mStage == SyncStage.SYNC && !isPushReady(ombx) &&
         	    			System.currentTimeMillis() - syncMan.getLastSyncTime(user) < ombx.getSyncFrequency())
         	    		return;
