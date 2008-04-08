@@ -26,10 +26,12 @@ import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.CustomSSLSocketFactory;
+import com.zimbra.common.util.DummySSLSocketFactory;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.datasource.TlsSocketFactory;
 
 
 /**
@@ -78,19 +80,21 @@ public class LocalJMSession {
         props.setProperty("mail.mime.address.strict", "false");
     	
     	if (useProxy) {
-    	  	 props.setProperty("proxySet", "true");
+    	     props.setProperty("proxySet", "true");
              props.setProperty("socksProxyHost", proxyHost);
              props.setProperty("socksProxyPort", proxyPort + "");
     	}
-    	
-    	if (useSSL) {
-    		props.setProperty("mail.transport.protocol", "smtps");
+
+        if (useSSL) {
+            props.setProperty("mail.transport.protocol", "smtps");
             props.setProperty("mail.smtps.connectiontimeout", Long.toString(timeout));
             props.setProperty("mail.smtps.timeout", Long.toString(timeout));
             props.setProperty("mail.smtps.localhost", localhost);
             props.setProperty("mail.smtps.sendpartial", "true");
-    		props.put("mail.smtps.socketFactory.class", CustomSSLSocketFactory.class.getName());
-    		props.put("mail.smtps.socketFactory.fallback", "false");
+            props.put("mail.smtps.socketFactory.class",
+                LC.data_source_trust_self_signed_certs.booleanValue() ?
+                    DummySSLSocketFactory.class.getName() : CustomSSLSocketFactory.class.getName());
+            props.put("mail.smtps.socketFactory.fallback", "false");
     		
             props.setProperty("mail.smtps.host", smtpHost);
             props.setProperty("mail.smtps.port",  smtpPort + "");
@@ -102,11 +106,9 @@ public class LocalJMSession {
             } else {
             	session = Session.getInstance(props);
             }
-            if (LC.javamail_smtp_enable_starttls.booleanValue())
-            	props.put("mail.smtps.starttls.enable","true");
             session.setProtocolForAddress("rfc822", "smtps");
     	} else {
-    		props.setProperty("mail.transport.protocol", "smtp");
+            props.setProperty("mail.transport.protocol", "smtp");
             props.setProperty("mail.smtp.connectiontimeout", Long.toString(timeout));
             props.setProperty("mail.smtp.timeout", Long.toString(timeout));
             props.setProperty("mail.smtp.localhost", localhost);
@@ -114,6 +116,10 @@ public class LocalJMSession {
     		
             props.setProperty("mail.smtp.host", smtpHost);
             props.setProperty("mail.smtp.port",  smtpPort + "");
+            if (LC.javamail_smtp_enable_starttls.booleanValue()) {
+            	props.put("mail.smtp.starttls.enable","true");
+                props.put("mail.smtp.socketFactory.class", TlsSocketFactory.class.getName());
+            }
             if (isAuthRequired) {
                 props.setProperty("mail.smtp.auth", "true");
                 props.setProperty("mail.smtp.user", smtpUser);
@@ -122,13 +128,11 @@ public class LocalJMSession {
             } else {
             	session = Session.getInstance(props);
             }
-            if (LC.javamail_smtp_enable_starttls.booleanValue())
-            	props.put("mail.smtp.starttls.enable","true");
             session.setProtocolForAddress("rfc822", "smtp");
     	}
-        
-    	if (LC.javamail_smtp_debug.booleanValue())
-    		session.setDebug(true);
+
+        if (LC.javamail_smtp_debug.booleanValue())
+            session.setDebug(true);
         
         return session;
     }
