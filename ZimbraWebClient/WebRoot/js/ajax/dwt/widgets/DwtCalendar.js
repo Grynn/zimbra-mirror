@@ -998,7 +998,7 @@ DwtCalendar.getMonthFormatter = function() {
 
 DwtCalendar.getShortMonthFormatter = function() {
 	if(!DwtCalendar._shortMonthFormatter) {
-		DwtCalendar._shortMonthFormatter = new AjxDateFormat("MMM yyyy" /*AjxMsg.formatShortCalMonth*/);
+		DwtCalendar._shortMonthFormatter = new AjxDateFormat(AjxMsg.formatShortCalMonth);
 	}
 	return DwtCalendar._shortMonthFormatter;
 };
