@@ -46,7 +46,6 @@ DwtResizableWindow = function(parent, className) {
 	this._active = null;
 	DwtComposite.call(this, {parent:parent, className:className, posStyle:DwtControl.ABSOLUTE_STYLE});
 
-	this.addControlListener(new AjxListener(this, this.__onControlEvent));
 	this.addDisposeListener(new AjxListener(this, this.__onDispose));
 };
 
@@ -432,26 +431,36 @@ DwtResizableWindow.prototype.__resizeMouseUp = function(ev) {
 	Dwt.delClass(this.getHtmlElement(), "DwtResizableWindow-resizing");
 };
 
-DwtResizableWindow.prototype.__onControlEvent = function(ev) {
-	if (ev.type & DwtControlEvent.RESIZE) {
-                this._gotSize = { x: ev.newWidth,
-                                  y: ev.newHeight };
-		var div = this._getContentDiv();
-		if (AjxEnv.isIE) {
-			try {
-				// for other browsers this is not necessary (see dwt.css)
-				var w = ev.newWidth - 2 * div.offsetLeft - 2;
-				var h = ev.newHeight - 2 * div.offsetTop - 1;
-				div.style.width = w + "px";
-				div.style.height = h + "px";
-				var el = div.firstChild;
-				el.style.width = w + "px";
-				el.style.height = h + "px";
-			} catch(ex) {}
-		}
-		if (this._view) {
-			this._view.setSize(div.offsetWidth, div.offsetHeight);
-		}
+DwtResizableWindow.prototype.setBounds =
+function(x, y, width, height) {
+	DwtComposite.prototype.setBounds.call(this, x, y, width, height);
+	this._doResize();
+};
+
+DwtResizableWindow.prototype.setSize =
+function(width, height) {
+	DwtComposite.prototype.setSize.call(this, width, height);
+	this._doResize();
+};
+
+DwtResizableWindow.prototype._doResize =
+function() {
+	var div = this._getContentDiv();
+	if (AjxEnv.isIE) {
+		this._gotSize = DwtComposite.prototype.getSize.call(this);
+		try {
+			// for other browsers this is not necessary (see dwt.css)
+			var w = this._gotSize.x - 2 * div.offsetLeft - 2;
+			var h = this._gotSize.y - 2 * div.offsetTop - 1;
+			div.style.width = w + "px";
+			div.style.height = h + "px";
+			var el = div.firstChild;
+			el.style.width = w + "px";
+			el.style.height = h + "px";
+		} catch(ex) {}
+	}
+	if (this._view) {
+		this._view.setSize(div.offsetWidth, div.offsetHeight);
 	}
 };
 
