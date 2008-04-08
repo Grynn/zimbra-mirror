@@ -419,7 +419,7 @@ function() {
 	helpLabel.setCursor ("pointer") ;
 	
 	helpLabel.getHtmlElement().innerHTML = 
-		this._getAppLink(null, "Help",  ZaMsg.helpDesk);
+		this._getAppLink(null, "Help",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
 	
 	helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
 }
@@ -435,7 +435,7 @@ function() {
 	dwLabel.setCursor ("pointer") ;
 	
 	dwLabel.getHtmlElement().innerHTML = 
-		this._getAppLink(null, "MigrationWiz",  ZaMsg.goToMigrationWiz);
+		this._getAppLink(null, "MigrationWiz",  ZaMsg.goToMigrationWiz, skin.skin_container_dw_max_str_length);
 	
 	dwLabel.reparentHtmlElement (ZaSettings.SKIN_DW_DOM_ID) ;
 }
@@ -487,8 +487,10 @@ function () {
 }
 
 //set the html content for logoff, help and download
+//max_lbl_length is used to constrict the maximum length of the label
+//which is different in different languages.
 ZaZimbraAdmin.prototype._getAppLink =
-function(staticFunc, icon, lbl) {
+function(staticFunc, icon, lbl, max_lbl_length) {
 	var html = [];
 	var i = 0;
 	html[i++] = "<table border=0 cellpadding=1 cellspacing=1 align=right><tr>";
@@ -507,7 +509,19 @@ function(staticFunc, icon, lbl) {
 	if (staticFunc) {
 		html[i++] = " onclick='" + staticFunc + "' " ;
 	}
-	html[i++] = ">";
+
+    //if the label is too long, it will be replaced by the
+    //label.substr(0, max_length -3) + "..."
+    //And a title will also be added, so user will have the chance
+    //to view the whole length
+    if ((max_lbl_length != null) && max_lbl_length > 0) {
+         if (lbl != null && lbl.length > max_lbl_length) {
+             var title = lbl ;
+             lbl = lbl.substring(0, max_lbl_length -3) + "..." ;
+             html[i++] = "title='" + title +"'" ;
+         }
+    }
+    html[i++] = ">";
 	html[i++] = lbl;
 	html[i++] = "</span></td></tr></table>";
 	

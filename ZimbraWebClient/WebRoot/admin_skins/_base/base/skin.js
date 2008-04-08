@@ -102,3 +102,5 @@ skin._showEl = function(id, state) {
 }
 
 skin.maxAdminName = 21;
+skin.skin_container_help_max_str_length = 9 ;
+skin.skin_container_dw_max_str_length = 9 ;
