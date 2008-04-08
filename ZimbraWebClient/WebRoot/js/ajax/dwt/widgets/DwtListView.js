@@ -366,14 +366,14 @@ function(headerId) {
 */
 DwtListView.prototype.set =
 function(list, defaultColumnSort) {
-	this._selectedItems.removeAll();
+    if (this._selectedItems)  this._selectedItems.removeAll();
 	this.enableSorting(true);
 	this._resetList();
 	this._list = list;
 	this._now = new Date();
 	this.setUI(defaultColumnSort);
 }
-
+                                       
 /**
 * Renders the list view using the current list of items.
 *
@@ -580,7 +580,7 @@ function() {
 
 DwtListView.prototype._addRow =
 function(row, index) {
-	if (!row) { return; }
+	if (!row || !this._parentEl) { return; }
 
 	// bug fix #1894 - check for childNodes length otherwise IE barfs
 	var len = this._parentEl.childNodes.length;
@@ -1064,14 +1064,14 @@ function(listener) {
 
 DwtListView.prototype.removeAll =
 function(skipNotify) {
-	this._parentEl.innerHTML = "";
-	this._selectedItems.removeAll();
+	if (this._parentEl) this._parentEl.innerHTML = "";
+	if (this._selectedItems) this._selectedItems.removeAll();
 	this._selAnchor = this._kbAnchor = null;
 
 	if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
 	}
-};
+} 
 
 DwtListView.prototype.deselectAll =
 function() {
@@ -1102,8 +1102,8 @@ function() {
 	var a = [];
 	if (this._rightSelItem) {
 		a.push(this.getItemFromElement(this._rightSelItem));
-	} else {
-		var sa = this._selectedItems.getArray();
+	} else if (this._selectedItems) {
+        var sa = this._selectedItems.getArray();
 		var saLen = this._selectedItems.size();
 		for (var i = 0; i < saLen; i++) {
 			a[i] = this.getItemFromElement(sa[i]);
@@ -1930,11 +1930,11 @@ DwtListView.prototype._resetListView =
 function() {
 	// explicitly remove each child (setting innerHTML causes mem leak)
 	var cDiv;
-	while (this._parentEl.hasChildNodes()) {
+	while (this._parentEl && this._parentEl.hasChildNodes()) {
 		var cDiv = this._parentEl.removeChild(this._parentEl.firstChild);
 		this._data[cDiv.id] = null;
 	}
-	this._selectedItems.removeAll();
+	if (this._selectedItems) this._selectedItems.removeAll();
 	this._rightSelItem = null;
 };
 
