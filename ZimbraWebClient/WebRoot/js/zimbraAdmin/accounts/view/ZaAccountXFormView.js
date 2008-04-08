@@ -1642,7 +1642,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						{type:_ZA_PLAIN_GROUPER_, id:"account_form_forwarding_group",
 							 numCols:2,label:null,colSizes:["275px","425px"],
 							items :[
-								{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"200", width:"350px", 
+                               {type: _DWT_ALERT_, colSpan: 2,
+                                            containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
+                                            style: DwtAlert.WARNING,
+                                            iconVisible: true,
+                                            content: ZaMsg.Alert_Bouncing_Reveal_Hidden_Adds
+                                        },
+                                {ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"200", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup
 								},
@@ -1660,7 +1666,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 											relevant:"ZaAccountXFormView.isEditFwdAddrEnabled.call(this)", relevantBehavior:_DISABLE_
 										},
 										{type:_CELLSPACER_},
-										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+                                        {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
 											onActivate:"ZaAccountXFormView.addFwdAddrButtonListener.call(this);"
 										}
 									]

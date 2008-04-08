@@ -571,8 +571,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							nowrap:false,labelWrap:true, 
 							relevant:"this.getModel().getInstanceValue(this.getInstance(),ZaAccount.A_zimbraFeatureMailForwardingEnabled) == \"TRUE\""
 						},		
-						{type:_SEPARATOR_,colSpan:2},											
-						{ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_, 
+						{type:_SEPARATOR_,colSpan:2},
+                        {type: _DWT_ALERT_, colSpan: 2,
+                                            containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
+                                            style: DwtAlert.WARNING,
+                                            iconVisible: true,
+                                            content: ZaMsg.Alert_Bouncing_Reveal_Hidden_Adds
+                                        },    
+                        {ref:ZaAccount.A_zimbraMailForwardingAddress, type:_REPEAT_,
 							label:ZaMsg.NAD_EditFwdGroup, labelLocation:_LEFT_,labelCssClass:"xform_label",
 							repeatInstance:emptyAlias, 
 							showAddButton:true, showRemoveButton:true, 
