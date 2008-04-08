@@ -564,13 +564,15 @@ ZaSearchField.prototype._getMyXForm = function() {
 					cssClass:"DwtToolbarButton"},
 			
 			{type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
-					onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"},		
+				cssStyle:"overflow: hidden" ,	
+                onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"},
 			//Save button
 			{type:_DWT_BUTTON_, label: null , toolTipContent:ZaMsg.tt_save_search, icon:"Save", name: "saveSearchButton",
 					onActivate:ZaSearchField.saveSrchButtonHndlr, cssClass:"DwtToolbarButton"},		
 			{type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml() },
 			{type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
-					onActivate:ZaSearchField.advancedButtonHndlr, 
+				cssStyle:"overflow: hidden" ,	
+                onActivate:ZaSearchField.advancedButtonHndlr,
 					cssClass: "DwtToolbarButton ZaAdvancedSearchButton" }
 			/*{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
 			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					
