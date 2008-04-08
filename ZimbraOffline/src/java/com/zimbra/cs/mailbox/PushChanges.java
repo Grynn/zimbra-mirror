@@ -244,7 +244,7 @@ public class PushChanges {
 	                        case MailItem.TYPE_APPOINTMENT: syncCalendarItem(id); break;
 	                    }
                 	} catch (ServiceException x) {
-                		SyncExceptionHandler.checkReceiversFault(x);
+                		SyncExceptionHandler.checkRecoverableException(x);
                 		SyncExceptionHandler.pushItemFailed(ombx, id, x);
                 	}
                 }

@@ -559,7 +559,7 @@ public class InitialSync {
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.info("initial: appointment " + id + " has been deleted; skipping");
         } catch (ServiceException x) {
-        	SyncExceptionHandler.checkReceiversFault(x);
+        	SyncExceptionHandler.checkRecoverableException(x);
         	SyncExceptionHandler.syncCalendarFailed(ombx, id, x);
         }
     }

@@ -12,12 +12,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.util.JMSession;
 
 class SyncExceptionHandler {
@@ -28,14 +28,8 @@ class SyncExceptionHandler {
 	private static final String PUSH_ITEM_FAILED = "push item failed";
 	
 	
-	static void checkReceiversFault(ServiceException exception) throws ServiceException {
-		SoapFaultException fault = null;
-		if (exception instanceof SoapFaultException) {
-			fault = (SoapFaultException)exception;
-		} else if (exception.getCause() instanceof SoapFaultException) {
-			fault = (SoapFaultException)(exception.getCause());
-		}
-		if (fault != null && fault.isReceiversFault())
+	static void checkRecoverableException(ServiceException exception) throws ServiceException {
+		if (OfflineSyncManager.isConnectionDown(exception) || OfflineSyncManager.isAuthEerror(exception) || OfflineSyncManager.isReceiverFault(exception))
 			throw exception; // let it bubble in case it's server issue so we interrupt sync to retry later
 	}
 	

@@ -305,10 +305,46 @@ public class OfflineSyncManager {
 	// process failure
 	//
 	
-	private boolean isAuthEerror(Exception exception) {
+	public static boolean isReceiverFault(Exception exception) {
+		SoapFaultException fault = null;
+		if (exception instanceof SoapFaultException) {
+			fault = (SoapFaultException)exception;
+		} else if (exception.getCause() instanceof SoapFaultException) {
+			fault = (SoapFaultException)(exception.getCause());
+		}
+		if (fault != null && fault.isReceiversFault())
+			return true;
+		return false;
+	}
+	
+	public static boolean isAuthEerror(Exception exception) {
 		return exception instanceof SoapFaultException &&
 					((SoapFaultException)exception).getCode().equals(AccountServiceException.AUTH_FAILED) ||
 			   exception instanceof ServiceException && exception.getCause() instanceof AuthenticationFailedException;
+	}
+	
+	public static boolean isConnectionDown(Exception exception) {
+        if (exception instanceof ServiceException) {
+			Throwable cause = exception.getCause();
+	        for (int i = 0; i < 10; ++i) {
+	        	if (cause instanceof MessagingException) {
+	        		MessagingException me = (MessagingException)cause;
+	        		if (me.getNextException() != null)
+	        			cause = me.getNextException();
+	        		else
+	        			break;
+	        	} else
+	        		break;
+	        }
+	        if (cause instanceof java.net.UnknownHostException ||
+		            cause instanceof java.net.NoRouteToHostException ||
+		            cause instanceof java.net.SocketException ||
+		        	cause instanceof java.net.SocketTimeoutException ||
+		        	cause instanceof java.net.ConnectException ||
+		        	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException)
+	        	return true;
+        }
+        return false;
 	}
 	
     public void processSyncException(Account account, Exception exception) {
@@ -326,41 +362,20 @@ public class OfflineSyncManager {
     }
     
 	private void processSyncException(String targetName, String password, Exception exception) {
-		if (exception instanceof ServiceException) {
-	        Throwable cause = exception.getCause();
-	        for (int i = 0; i < 10; ++i) {
-	        	if (cause instanceof MessagingException) {
-	        		MessagingException me = (MessagingException)cause;
-	        		if (me.getNextException() != null)
-	        			cause = me.getNextException();
-	        		else
-	        			break;
-	        	} else
-	        		break;
-	        }
-	        if (cause instanceof java.net.UnknownHostException ||
-		            cause instanceof java.net.NoRouteToHostException ||
-		            cause instanceof java.net.SocketException ||
-		        	cause instanceof java.net.SocketTimeoutException ||
-		        	cause instanceof java.net.ConnectException ||
-		        	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException) {
-	        	connecitonDown(targetName);
-	        	OfflineLog.offline.info("sync connection down: " + targetName);
-	        } else if (isAuthEerror(exception)) {
-	        	authFailed(targetName, password);
-	    		OfflineLog.offline.warn("sync remote auth failure: " + targetName);
-	        } else {
-	        	syncFailed(targetName, exception);
-	        	OfflineLog.offline.error("sync failure: " + targetName, exception);
-	        	if (exception instanceof SoapFaultException) {
-	        		SoapFaultException x = (SoapFaultException)exception;
-	        	    OfflineLog.offline.warn("SoapFaultException: " + x.getReason() + "\nFaultRequest:\n" + x.getFaultRequest() + "\nFaultResponse:\n" + x.getFaultResponse());
-	        	}
-	        }
-		} else {
-	        syncFailed(targetName, exception);
-	        OfflineLog.offline.error("sync exception: " + targetName, exception);
-		}
+		if (isConnectionDown(exception)) {
+        	connecitonDown(targetName);
+        	OfflineLog.offline.info("sync connection down: " + targetName);
+        } else if (isAuthEerror(exception)) {
+        	authFailed(targetName, password);
+    		OfflineLog.offline.warn("sync remote auth failure: " + targetName);
+        } else {
+        	syncFailed(targetName, exception);
+        	OfflineLog.offline.error("sync failure: " + targetName, exception);
+        	if (exception instanceof SoapFaultException) {
+        		SoapFaultException x = (SoapFaultException)exception;
+        	    OfflineLog.offline.warn("SoapFaultException: " + x.getReason() + "\nFaultRequest:\n" + x.getFaultRequest() + "\nFaultResponse:\n" + x.getFaultResponse());
+        	}
+        }
 	}
 	
 	public SyncStatus getSyncStatus(String targetName) {
