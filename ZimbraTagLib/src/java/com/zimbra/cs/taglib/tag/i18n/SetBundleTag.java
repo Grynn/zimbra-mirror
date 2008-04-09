@@ -62,6 +62,9 @@ public class SetBundleTag extends SimpleTagSupport  {
 	public void doTag() throws JspException, IOException {
 		PageContext pageContext = (PageContext)getJspContext();
 		String basename = I18nUtil.makeBasename(pageContext, this.basename);
+		if (this.force) {
+			I18nUtil.clearBundle(pageContext, this.var, this.scope, basename);
+		}
 		ResourceBundle bundle = I18nUtil.findBundle(pageContext, this.var, this.scope, basename);
 		pageContext.setAttribute(this.var, bundle, this.scope);
 

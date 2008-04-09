@@ -162,11 +162,15 @@ public class I18nUtil {
 
 	// object query
 
+	public static Object findObject(PageContext pageContext, String var) {
+		return findObject(pageContext, var, PageContext.PAGE_SCOPE);
+	}
+
 	public static Object findObject(PageContext pageContext, String var, int scope) {
 		// NOTE: This assumes that the scope levels are defined as contiguously
 		//       increasing values in the following order (from lowest to highest):
 		//
-		//         page, request, session, application 
+		//         page, request, session, application
 		//
 		//       This works fine in with the JSTL implementation but if we can't
 		//       make this assumption in the future, we'll have to change this!
@@ -235,7 +239,7 @@ public class I18nUtil {
 	// bundle query
 
 	public static String makeBasename(PageContext pageContext, String basename) {
-		String skin = (String)pageContext.getRequest().getAttribute(A_SKIN);
+		String skin = (String)findObject(pageContext, A_SKIN);
 		return skin != null ? "/skins/"+skin+basename : basename;
 	}
 
@@ -243,7 +247,7 @@ public class I18nUtil {
 		return makeBundleKey(pageContext, basename, findLocale(pageContext));
 	}
 	public static String makeBundleKey(PageContext pageContext, String basename, Locale locale) {
-		String skin = (String)pageContext.getRequest().getAttribute(A_SKIN);
+		String skin = (String)findObject(pageContext, A_SKIN);
 		if (skin == null) skin = "[unknown]";
 		return skin+":"+basename+":"+locale+":"+DEFAULT_BUNDLE_KEY;
 	}
@@ -294,6 +298,25 @@ public class I18nUtil {
 
 		// return bundle
 		return bundle;
+	}
+
+	public static void clearBundle(PageContext pageContext,
+								   String var, int scope, String basename) {
+		if (basename != null) {
+			String bundleKey = makeBundleKey(pageContext, basename);
+			pageContext.removeAttribute(bundleKey, PageContext.APPLICATION_SCOPE);
+		}
+		if (var != null) {
+			// Remove the var, if it exists, from the specified scope
+			// down to the page scope. This is done so that a reference
+			// in an EL expression (which in turn does a findAttribute)
+			// will not find some other variable with the same name at
+			// a lower scope. So this is just defensive programming.
+			// NOTE: Assumes that the scope constants are contiguous.
+			for (int i = scope; i >= PageContext.PAGE_SCOPE; i--) {
+				pageContext.removeAttribute(var, i);
+			}
+		}
 	}
 
 	//
