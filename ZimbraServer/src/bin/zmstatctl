@@ -152,7 +152,7 @@ if (defined($cmd)) {
         my @pids = getPidFiles();
         if (scalar(@pids) == 0) {
             # zmstat must not be running if there is no pid file
-            exit(1);
+            exit(-1);
         }
         my $numDeadProcs = 0;
         foreach my $pidFile (@pids) {
@@ -161,6 +161,9 @@ if (defined($cmd)) {
                 if (!kill(0, $pid)) {
                     print STDERR "process $pid in $pidFile not running\n";
                     $numDeadProcs++;
+                } else {
+                    $pidFile =~ m#/.*/(.*?)\.pid#;
+                    print STDERR "Running: $1\n";
                 }
             }
         }
