@@ -100,7 +100,7 @@ function(listener) {
 
 DwtTree.prototype.removeTreeListener = 
 function(listener) {
-	this.removeListener(DwtEvent.TREE, listener);    		
+	this.removeListener(DwtEvent.TREE, listener);
 }
 
 DwtTree.prototype.getItemCount =
@@ -304,15 +304,18 @@ function(item, ev) {
 }
 
 DwtTree.prototype._itemExpanded =
-function(item, ev) {
-	this._notifyListeners(DwtEvent.TREE, [item], DwtTree.ITEM_EXPANDED, ev, DwtShell.treeEvent);
+function(item, ev, skipNotify) {
+	if (ev && !skipNotify) {
+		this._notifyListeners(DwtEvent.TREE, [item], DwtTree.ITEM_EXPANDED, ev, DwtShell.treeEvent);
+	}
 }
 
 DwtTree.prototype._itemCollapsed =
-function(item, ev) {
+function(item, ev, skipNotify) {
 	var i;
-	if (ev)
+	if (ev && !skipNotify) {
 		this._notifyListeners(DwtEvent.TREE, [item], DwtTree.ITEM_COLLAPSED, ev, DwtShell.treeEvent);
+	}
 	var setSelection = false;
 	var a = this._selectedItems.getArray();
 	var numSelectedItems = this._selectedItems.size();
@@ -321,32 +324,37 @@ function(item, ev) {
 	for (i = 0; i < numSelectedItems; i++) {
 		if (a[i]._isChildOf(item)) {
 			setSelection = true;
-			if (da == null)
+			if (da == null) {
 				da = new Array();
+			}
 			da[j++] = a[i];
 			a[i]._setSelected(false);
 			this._selectedItems.remove(a[i]);
 		}		
 	}
 
-	if (da)
+	if (da) {
 		this._notifyListeners(DwtEvent.SELECTION, da, DwtTree.ITEM_DESELECTED, ev, this._selEv);
+	}
 
 	if (setSelection && !this._selectedItems.contains(item)) {
 		this._selectedItems.add(item);
-		if (item._setSelected(true))
+		if (item._setSelected(true)) {
 			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
+		}
 	}
 }
 
 DwtTree.prototype._notifyListeners =
 function(listener, items, detail, srcEv, destEv) {
 	if (this.isListenerRegistered(listener)) {
-		if (srcEv)
+		if (srcEv) {
 			DwtUiEvent.copy(destEv, srcEv);
+		}
 		destEv.items = items;
-		if (items.length == 1)
+		if (items.length == 1) {
 			destEv.item = items[0];
+		}
 		destEv.detail = detail;
 		this.notifyListeners(listener, destEv);
 	}

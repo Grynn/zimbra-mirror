@@ -163,7 +163,7 @@ function() {
 * @param recurse		expand children recursively (doesn't apply to collapsing)
 */
 DwtTreeItem.prototype.setExpanded =
-function(expanded, recurse) {
+function(expanded, recurse, skipNotify) {
 	// Go up the chain, ensuring that parents are expanded/initialized
 	if (expanded) {
 		var p = this.parent;
@@ -178,14 +178,17 @@ function(expanded, recurse) {
 	// If we have children, then allow for expanding/collapsing
 	if (this.getNumChildren()) {
 		if (expanded && recurse) {
-			if (!this._expanded)
-				this._expand(expanded);
+			if (!this._expanded) {
+				this._expand(expanded, null, skipNotify);
+			}
 			var a = this.getChildren();
-			for (var i = 0; i < a.length; i++)
-				if (a[i] instanceof DwtTreeItem)
-					a[i].setExpanded(expanded, recurse);
+			for (var i = 0; i < a.length; i++) {
+				if (a[i] instanceof DwtTreeItem) {
+					a[i].setExpanded(expanded, recurse, skipNotify);
+				}
+			}
 		} else if (this._expanded != expanded) {
-			this._expand(expanded);
+			this._expand(expanded, null, skipNotify);
 		}
 	}
 };
@@ -587,12 +590,12 @@ function(ev) {
 };
 
 DwtTreeItem.prototype._expand =
-function(expand, ev) {
+function(expand, ev, skipNotify) {
 	if (!expand) {
 		this._expanded = false;
 		this._childDiv.style.display = "none";
 		AjxImg.setImage(this._nodeCell, "NodeCollapsed");
-		this._tree._itemCollapsed(this, ev);
+		this._tree._itemCollapsed(this, ev, skipNotify);
 	} else {
 		// The first thing we need to do is initialize any deferred children so that they
 		// actually have content
@@ -600,7 +603,7 @@ function(expand, ev) {
 		this._expanded = true;
 		this._childDiv.style.display = "block";
 		AjxImg.setImage(this._nodeCell, "NodeExpanded");
-		this._tree._itemExpanded(this, ev);
+		this._tree._itemExpanded(this, ev, skipNotify);
 	}	
 };
 
