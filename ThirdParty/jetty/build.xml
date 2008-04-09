@@ -29,6 +29,7 @@
 		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/servlet-api-2.5-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/ext" file="${src.dir}/lib/ext/jetty-sslengine-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/ext" file="${src.dir}/lib/ext/jetty-setuid-${jetty.version}.jar" />
+		<copy todir="${jetty.dir}/lib/ext" file="${src.dir}/lib/ext/jetty-rewrite-handler-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/naming" file="${src.dir}/lib/naming/jetty-naming-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/jetty-plus-${jetty.version}.jar" />
 		<!--copy todir="${jetty.dir}/lib/plus" file="${src.dir}/lib/plus/activation-1.1.jar" />
