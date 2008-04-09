@@ -34,6 +34,7 @@ my $iostatxCsv = 'io-x.csv';
 my $iostatCsv = 'io.csv';
 my $mailboxdCsv = 'mailboxd.csv';
 my $mysqlCsv = 'mysql.csv';
+my $soapCsv = 'soap.csv';
 
 my @DEVICE_LIST;        # list of device names (e.g. "sda", "sdb")
 my %DEVICE_PARTITIONS;  # $DEVICE_PARTITIONS{device} = arrayref of partitions
@@ -487,6 +488,40 @@ _HERE_
 
 sub mailboxdConfig() {
     print <<_HERE_;
+  <!-- SOAP Stats -->
+  <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Invocation Count: Summary"
+         category="soap"
+         infile="$soapCsv"
+         outfile="${ZIMBRA_HOSTNAME}_soap_call_count.png"
+         yAxis="calls/min">
+    <groupplot data="exec_count" groupBy="command"/>
+  </chart>
+  
+  <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Average Call Duration: Summary"
+         category="soap"
+         infile="$soapCsv"
+         outfile="${ZIMBRA_HOSTNAME}_soap_avg_duration.png"
+         yAxis="ms avg">
+    <groupplot data="exec_ms_avg" groupBy="command"/>
+  </chart>
+  <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Invocation Count: %s"
+         category="soap"
+         outDocument="soap.html"
+         infile="$soapCsv"
+         outfile="${ZIMBRA_HOSTNAME}_soap_call_count_%s.png"
+         yAxis="calls/min">
+    <groupplot data="exec_count" groupBy="command"/>
+  </chart>
+  
+  <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Average Call Duration: %s"
+         category="soap"
+         outDocument="soap.html"
+         infile="$soapCsv"
+         outfile="${ZIMBRA_HOSTNAME}_soap_avg_duration_%s.png"
+         yAxis="ms avg">
+    <groupplot data="exec_ms_avg" groupBy="command"/>
+  </chart>
+  
   <!-- MySQL Stats -->
 
   <chart title="Host $ZIMBRA_HOSTNAME: MySQL: InnoDB Buffer Pool Pages"
