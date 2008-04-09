@@ -45,11 +45,10 @@ case "$#" in
     ;;
 esac
     
-num=`expr match "$ldap_url" 'ldaps*'`
-if [ "$num" == 5 ]; then
-   STARTTLS="no"
-else
+if [ "$ldap_starttls_supported" == 1 ]; then
    STARTTLS="yes"
+else
+   STARTTLS="no"
 fi
 
 confdir=/opt/zimbra/conf
