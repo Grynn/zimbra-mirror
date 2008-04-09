@@ -668,6 +668,7 @@ public class OfflineMailbox extends DesktopMailbox {
     void pollForUpdates() throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.NO_OP_REQUEST);
         request.addAttribute("wait", "1");
+        request.addAttribute("delegate", "0");
         sendRequest(request, true, false, 15 * Constants.SECONDS_PER_MINUTE * 1000); //will block
     }
 }
