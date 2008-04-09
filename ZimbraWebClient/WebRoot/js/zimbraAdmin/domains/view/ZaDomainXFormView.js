@@ -544,7 +544,16 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						  	{ ref: ZaDomain.A_zimbraFreebusyExchangeAuthPassword, type: _PASSWORD_,
 						  	  label: ZaMsg.NAD_Exchange_Auth_Password, width: "20em",
 							  onChange: ZaDomainXFormView.onFormFieldChanged
-						  	}
+						  	},
+                              {type: _GROUP_, colSpan:2, numCols:3, colSizes: ["150px", "*", "auto" ], items :[
+                                  {   type:_CELLSPACER_ },
+                                  {
+                                      type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.Check_Settings, width: "15em",
+                                      onActivate: ZaItem.checkInteropSettings
+                                  } ,
+                                  {   type:_CELLSPACER_ }
+                                 ]
+                              }
 						  ]
 						}
 					]

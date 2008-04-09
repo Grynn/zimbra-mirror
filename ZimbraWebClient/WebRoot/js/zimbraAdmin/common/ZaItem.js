@@ -388,7 +388,7 @@ function (aliasToRemove) {
 		case ZaItem.DL: soapCmd = "RemoveDistributionListAliasRequest" ; break ;
 		default: throw new Error("Can't add alias for account type: " + account.type) ;				
 	}
-	
+
 	var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	soapDoc.set("alias", aliasToRemove);	
@@ -401,3 +401,28 @@ function (aliasToRemove) {
 	}
 	ZaRequestMgr.invoke(params, reqMgrParams);	
 }
+
+ZaItem.checkInteropSettings  =
+function () {
+    var app =  this.getForm().parent._app ;
+    var controller =  app.getCurrentController() ;
+
+    try {
+        if (AjxEnv.hasFirebug) console.log("Checking the interop settings ...") ;
+        var soapCmd  = "CheckExchangeAuthRequest";
+
+        var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
+        var params = new Object();
+        params.soapDoc = soapDoc;
+        var reqMgrParams = {
+            controller : controller ,
+            busyMsg : ZaMsg.BUSY_CHECKING_INTEROP_SETTINGS
+        }
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.CheckExchangeAuthResponse;
+        
+        controller.popupMsgDialog(resp.code[0]._content + "<br />" + resp.message[0]._content) ;
+    }catch (e) {
+        controller._handleException(e)  ;
+    }
+}
+
