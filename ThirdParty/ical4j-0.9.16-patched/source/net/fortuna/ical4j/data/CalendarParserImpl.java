@@ -93,6 +93,10 @@ public class CalendarParserImpl implements CalendarParser {
             tokeniser.whitespaceChars(0, 0);
             tokeniser.quoteChar('"');
 
+            // Skip leading empty lines.
+            absorbWhitespace(tokeniser);
+            tokeniser.pushBack();
+
             parseCalendarList(tokeniser, handler);
         } catch (Exception e) {
 
