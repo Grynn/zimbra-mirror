@@ -77,7 +77,7 @@ class SyncExceptionHandler {
 
 			//TODO: need to i18n the entire block here
 			StringBuilder sb = new StringBuilder();
-			sb.append("PLEASE FORWARD THIS ERROR REPORT TO ").append(OfflineLC.zdesktop_support_email.value()).append(".\n\n");
+			sb.append("Please post this error report to Zimbra Desktop Support Forums at http://www.zimbra.com/forums/zimbra-desktop/.\n\n");
 			sb.append("Product name:    Zimbra Desktop\n");
 			sb.append("Product version: ").append(OfflineLC.zdesktop_version.value()).append("\n");
 			sb.append("Build ID:        ").append(OfflineLC.zdesktop_buildid.value()).append("\n");

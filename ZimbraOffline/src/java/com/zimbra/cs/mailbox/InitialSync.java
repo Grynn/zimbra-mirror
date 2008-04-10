@@ -811,6 +811,7 @@ public class InitialSync {
 		        	try {
 		        		saveMessage(fin, headers, id, folderId, type);
 		        	} catch (ServiceException x) {
+		        		SyncExceptionHandler.checkRecoverableException(x);
 			        	SyncExceptionHandler.syncMessageFailed(ombx, id, x);
 			        }
 		        }
