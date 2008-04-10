@@ -7,7 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:if test="${!empty param.cancel}">
 	<%-- TODO: forward back to original page we came from --%>
-	<jsp:forward page="clv"/>"
+	<jsp:forward page="mail/clv"/>"
 </c:if>
 <c:if test="${!empty param.send}">
 	<zm:sendMessage var="sendResult"
@@ -18,7 +18,7 @@
 					content="${param.body}"
 	/>
 	<%-- TODO: check for errors, etc, set success message var and forward to prev page, or set error message and continue --%>
-	<jsp:forward page="clv"/>"
+	<jsp:forward page="mail/clv"/>"
 </c:if>
 <c:if test="${!empty param.draft}">
 	<%-- TODO: zm:saveDraft --%>
@@ -85,8 +85,8 @@
 		<tr>
 			<td></td>
 			<td colspan=100>
-				<table border=0 cellpadding=2 cellspacing=2>
-				<tr><td style="width:80ex;">
+				<table border=0 cellpadding=2 cellspacing=2 width=99%>
+				<tr><td>
 					<textarea name="body" class="composeBody" wrap=soft rows=18></textarea>
 				</td></tr>
 				</table>
