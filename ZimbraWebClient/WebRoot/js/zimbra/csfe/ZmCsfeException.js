@@ -135,6 +135,7 @@ ZmCsfeException.MAIL_MESSAGE_TOO_BIG				= "mail.MESSAGE_TOO_BIG";
 ZmCsfeException.MAIL_NO_SUCH_CONV					= "mail.NO_SUCH_CONV";
 ZmCsfeException.MAIL_NO_SUCH_FOLDER					= "mail.NO_SUCH_FOLDER";
 ZmCsfeException.MAIL_NO_SUCH_ITEM					= "mail.NO_SUCH_ITEM";
+ZmCsfeException.MAIL_NO_SUCH_MOUNTPOINT				= "mail.NO_SUCH_MOUNTPOINT";
 ZmCsfeException.MAIL_NO_SUCH_MSG					= "mail.NO_SUCH_MSG";
 ZmCsfeException.MAIL_NO_SUCH_PART					= "mail.NO_SUCH_PART";
 ZmCsfeException.MAIL_NO_SUCH_TAG					= "mail.NO_SUCH_TAG";
