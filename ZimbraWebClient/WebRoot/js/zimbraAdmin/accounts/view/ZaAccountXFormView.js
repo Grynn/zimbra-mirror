@@ -1973,7 +1973,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
                                     relevant:"ZaAccount.isEmailRetentionPolicyEnabled.call (this) == true",
 						            relevantBehavior: _DISABLE_ ,
                                     items: [
-                                        {ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME1_,
+                                        {ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPER_LIFETIME2_,
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                             msgName:ZaMsg.NAD_MailMessageLifetime,
                                             txtBoxLabel:ZaMsg.NAD_MailMessageLifetime+":",

@@ -1177,7 +1177,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									type:_SUPERWIZ_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_MailIdleSessionTimeout,
 									txtBoxLabel:ZaMsg.NAD_MailIdleSessionTimeout+":"},																
-								{ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPERWIZ_LIFETIME1_, 
+								{ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPERWIZ_LIFETIME2_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_MailMessageLifetime,
 									txtBoxLabel:ZaMsg.NAD_MailMessageLifetime+":"},

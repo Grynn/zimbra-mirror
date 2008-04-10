@@ -1199,10 +1199,10 @@ Super_Lifetime_XFormItem.prototype.colSpan = 4;
 Super_Lifetime_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
 Super_Lifetime_XFormItem.prototype.useParenttable = false;
 Super_Lifetime_XFormItem.prototype.TIME_CHOICES = [
- 				{value:"d", label:"Days"},
-				{value:"h", label:"Hours"},
-				{value:"m", label:"Minutes"},
-				{value:"s", label:"Seconds"}
+ 				{value:"d", label:AjxMsg.days},
+				{value:"h", label:AjxMsg.hours},
+				{value:"m", label:AjxMsg.minutes},
+				{value:"s", label:AjxMsg.seconds}
 ];
 
 Super_Lifetime_XFormItem.prototype.initializeItems = function() {
@@ -1301,7 +1301,7 @@ XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME_", "superwiz_lifetime", Supe
 SuperWiz_Lifetime_XFormItem.prototype.colSizes =["200px","80px","120px","150px"];
 
 /**
-* _SUPER_LIFETIME1_ XForm item type
+* _SUPER_LIFETIME1_ XForm item type for displaying trash message retention and spam message retention settings
 **/
 Super_Lifetime1_XFormItem = function() {}
 XFormItemFactory.createItemType("_SUPER_LIFETIME1_", "super_lifetime1", Super_Lifetime1_XFormItem, Super_XFormItem);
@@ -1312,8 +1312,8 @@ Super_Lifetime1_XFormItem.prototype.colSpan = 4;
 Super_Lifetime1_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
 Super_Lifetime1_XFormItem.prototype.useParenttable = false;
 Super_Lifetime1_XFormItem.prototype.TIME_CHOICES = [
- 				{value:"d", label:"Days"},
-				{value:"h", label:"Hours"}
+ 				{value:"d", label:AjxMsg.days},
+				{value:"h", label:AjxMsg.hours}
 ];
 
 SuperWiz_Lifetime1_XFormItem = function() {}
@@ -1361,7 +1361,7 @@ Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 	
 	var selectField = 	{
 		type:_OSELECT1_, ref:".", relevantBehavior:_PARENT_, 
-		choices:Super_Lifetime_XFormItem.prototype.TIME_CHOICES,
+		choices:Super_Lifetime1_XFormItem.prototype.TIME_CHOICES,
 		getDisplayValue:function (itemVal){
 			var val = "d";
 			if(itemVal != null && itemVal.length >0) {
@@ -1401,6 +1401,90 @@ Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 
 Super_Lifetime1_XFormItem.prototype.items = [ ];
 
+/**
+* _SUPER_LIFETIME1_ XForm item type for displaying Email message retention time
+**/
+
+Super_Lifetime2_XFormItem = function() {}
+XFormItemFactory.createItemType("_SUPER_LIFETIME2_", "super_lifetime2", Super_Lifetime2_XFormItem, Super_Lifetime1_XFormItem);
+Super_Lifetime2_XFormItem.prototype.nowrap = false;
+Super_Lifetime2_XFormItem.prototype.labelWrap = true;
+Super_Lifetime2_XFormItem.prototype.numCols = 4;
+Super_Lifetime2_XFormItem.prototype.colSpan = 4;
+Super_Lifetime2_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
+Super_Lifetime2_XFormItem.prototype.useParenttable = false;
+Super_Lifetime2_XFormItem.prototype._stringPart = "d";
+
+SuperWiz_Lifetime2_XFormItem = function() {}
+XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME2_", "superwiz_lifetime2", SuperWiz_Lifetime2_XFormItem, Super_Lifetime2_XFormItem);
+SuperWiz_Lifetime2_XFormItem.prototype.colSizes =["200px","80px","120px","150px"];
+
+Super_Lifetime2_XFormItem.prototype.initializeItems = function() {
+	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+	var toolTip = this.getInheritedProperty("toolTipContent");
+	
+	var txtField =	{
+		type:_TEXTFIELD_, ref:".", 
+		label:txtBoxLabel,	
+		toolTipContent: toolTip,
+		nowrap:this.getInheritedProperty("nowrap"),
+		labelWrap:this.getInheritedProperty("labelWrap"),		
+		labelCssStyle:this.getLabelCssStyle(),
+		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
+		relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+		getDisplayValue:function (itemVal) {
+			var val = "1";
+			if(itemVal != null && itemVal.length >0) {
+				if(itemVal.length > 1) {
+					val = itemVal.substr(0, itemVal.length-1);				
+				} else {
+					if(itemVal == "0") {
+						val = "0";
+					} else {
+						val = "1";
+					}
+				}
+			}
+			this.getParentItem()._numericPart = val;
+			this.getParentItem()._stringPart="d";
+			return val;	
+		},
+		elementChanged:function(numericPart, instanceValue, event) {
+			var val = numericPart + "d";
+			this.getForm().itemChanged(this, val, event);
+		},onChange:Composite_XFormItem.onFieldChange,
+		updateElement:function(value) {
+			Super_XFormItem.updateCss.call(this,5);
+			Textfield_XFormItem.prototype.updateElement.call(this, value);
+		}
+	};
+	
+	var selectField = 	{
+		type:_OUTPUT_, relevantBehavior:_PARENT_, 
+		ref:null,
+		label:null,
+		labelLocation:_NONE_,
+		value:"d",
+		getDisplayValue:function (itemVal){ return AjxMsg.days; }	
+	};
+	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
+	
+	var anchorHlpr = {	
+		type:_SUPER_ANCHOR_HELPER_, ref:".",
+		relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
+		relevantBehavior:_BLOCK_HIDE_,
+		onChange:Composite_XFormItem.onFieldChange,
+		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:150px")
+	};
+	this.items = [txtField,selectField,anchorHlpr];
+	Composite_XFormItem.prototype.initializeItems.call(this);	
+}
+
+Super_Lifetime2_XFormItem.prototype.items = [ ];
+
+/**
+ * Groupers
+ */
 TopGrouper_XFormItem.prototype.colSizes = ["275px","275px"];
 TopGrouper_XFormItem.prototype.numCols = 2;
 
