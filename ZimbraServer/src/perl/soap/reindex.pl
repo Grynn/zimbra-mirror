@@ -43,7 +43,7 @@ my ($mbox, $action, $types, $ids);
 #standard options
 my ($user, $pw, $host, $help);  #standard
 GetOptions("u|user=s" => \$user,
-           "p|port=s" => \$pw,
+           "pw=s" => \$pw,
            "h|host=s" => \$host,
            "m|mbox=s" => \$mbox,
            "a|action=s" => \$action,
@@ -52,7 +52,7 @@ GetOptions("u|user=s" => \$user,
            "help|?" => \$help);
 
 if (!defined($user)) {
-  die "USAGE: $0 -u USER -m MAILBOXID -a ACTION [-p PASSWD] [-h HOST] [-t TYPES] [-ids IDS]";
+  die "USAGE: $0 -u USER -m MAILBOXID -a ACTION [-pw PASSWD] [-h HOST] [-t TYPES] [-ids IDS]";
 }
 
 my $z = ZimbraSoapTest->new($user, $host, $pw);
