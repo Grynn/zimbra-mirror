@@ -71,7 +71,9 @@ public class MyExportPrivKey {
         /**
          * See http://www.anandsekar.com/2006/01/19/exporting-the-private-key-from-a-jks-keystore/
          * java -jar ExportPrivateKey.zip {keystore_path} JKS {keystore_password} {alias} {target_file}
-         * May need to run "openssl pkcs8 -inform PEM -nocrypt -in exported-pkcs8.key -out exported.key" afterwards
+         * This would export the key to PKCS #8 PEM format.
+         * Then you need to run "openssl pkcs8 -inform PEM -nocrypt -in exported-pkcs8.key -out exported.key" afterwards
+         * to convert it to the format of zimbra server.key (it is also apache modssl expects)
          * @param args
          * @throws Exception
          * 

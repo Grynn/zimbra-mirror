@@ -1,6 +1,10 @@
 //ZaCertWizard
 function ZaCertWizard (parent, app) {
-	ZaXWizardDialog.call(this, parent, app, null, com_zimbra_cert_manager.CERT_WIZARD_title, "500px", "300px","ZaCertWizard");
+    var w = "500px" ;
+    if (AjxEnv.isIE) {
+        w = "550px" ;
+    }
+    ZaXWizardDialog.call(this, parent, app, null, com_zimbra_cert_manager.CERT_WIZARD_title, w, "300px","ZaCertWizard");
 
 	this.stepChoices = [
 		{label:com_zimbra_cert_manager.CERT_WIZARD_TABT_selectServer, value:ZaCertWizard.STEP_SELECT_SERVER},
@@ -760,8 +764,10 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					align:_LEFT_,
 					repeatInstance:"", 
 					showAddButton:true, 
-					showRemoveButton:true, 
-					//showAddOnNextRow:true, 
+					showRemoveButton:true,
+                    addButtonWidth: 50,
+                    removeButtonWidth: 50,
+                    //showAddOnNextRow:true,
 					alwaysShowAddButton:true,
 					removeButtonLabel:com_zimbra_cert_manager.NAD_Remove,								
 					items: [
@@ -896,8 +902,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 							align:_LEFT_,
 							repeatInstance:"", 
 							showAddButton:false, 
-							showRemoveButton:false,
-							items: [
+							showRemoveButton:false,             
+                            items: [
 								{ref:".", type:_OUTPUT_, width:"150px"}
 							]
 						}	
@@ -920,12 +926,16 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 		}
 	
 		cases.push (case_csr_confirm) ;
-		
-	xFormObject.items = [
+
+    var contentW = 450 ;
+    if (AjxEnv.isIE) {
+        var contentW = 500 ;
+    }
+    xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
-			{type:_SWITCH_, width:450, align:_LEFT_, valign:_TOP_, items:cases}
+			{type:_SWITCH_, width:contentW, align:_LEFT_, valign:_TOP_, items:cases}
 		];
 };
 ZaXDialog.XFormModifiers["ZaCertWizard"].push(ZaCertWizard.myXFormModifier);
