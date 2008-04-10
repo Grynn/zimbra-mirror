@@ -70,6 +70,7 @@ class SyncExceptionHandler {
     private static void saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, ServiceException exception) {
 		try {
 			Date now = new Date();
+			String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
 			
 			OfflineLog.offline.warn("sync failure for id=" + id + "; generating failure report", exception);
 			
@@ -77,14 +78,14 @@ class SyncExceptionHandler {
 
 			//TODO: need to i18n the entire block here
 			StringBuilder sb = new StringBuilder();
-			sb.append("Please post this error report to Zimbra Desktop Support Forums at http://www.zimbra.com/forums/zimbra-desktop/.\n\n");
+			sb.append("Please post this issue report to Zimbra Desktop Support Forums at http://www.zimbra.com/forums/zimbra-desktop/.\n\n");
 			sb.append("Product name:    Zimbra Desktop\n");
 			sb.append("Product version: ").append(OfflineLC.zdesktop_version.value()).append("\n");
 			sb.append("Build ID:        ").append(OfflineLC.zdesktop_buildid.value()).append("\n");
 			sb.append("Release type:    ").append(OfflineLC.zdesktop_relabel.value()).append("\n");
 			sb.append("OS Platform:     ").append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.arch")).append(" ").append(System.getProperty("os.version")).append("\n");
-			sb.append("Time of failure: ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now)).append("\n");
-			sb.append("Failure summary: ").append(error).append("\n\n");
+			sb.append("Time of event: ").append(timestamp).append("\n");
+			sb.append("Issue summary: ").append(error).append("\n\n");
 
 			if (data != null) {
 				sb.append("----------------------------------------------------------------------------\n");
@@ -129,7 +130,7 @@ class SyncExceptionHandler {
 			mm.setSentDate(now);
 			mm.setFrom(new InternetAddress(dmbx.getAccount().getName()));
     		mm.setRecipient(RecipientType.TO, new InternetAddress(dmbx.getAccount().getName()));
-    		mm.setSubject("zdesktop error report: " + exception.getCode());
+    		mm.setSubject("zdesktop issue report (" + timestamp + "): " + exception.getCode());
     		mm.setText(sb.toString());
     		mm.saveChanges(); //must call this to update the headers
 		
