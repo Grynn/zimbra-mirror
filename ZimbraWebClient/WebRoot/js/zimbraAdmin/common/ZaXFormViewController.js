@@ -94,8 +94,8 @@ function(ev, noPopView, func, obj, params) {
 		}
 		//ask if the user wants to save changes		
 		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
+		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.OK_BUTTON, this.saveAndGoAway, this, args);		
+		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.CANCEL_BUTTON, this.discardAndGoAway, this, args);		
 		this._app.dialogs["confirmMessageDialog"].popup();
 	} else if (noPopView){
 		func.call(obj, params) ;
@@ -114,8 +114,8 @@ ZaXFormViewController.prototype.deleteButtonListener =
 function(ev) {
 	if(this._currentObject.id) {
 		this._app.dialogs["confirmMessageDialog"].setMessage(this.deleteMsg, DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.deleteAndGoAway, this, null);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
+		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.OK_BUTTON, this.deleteAndGoAway, this, null);		
+		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.CANCEL_BUTTON, this.closeCnfrmDlg, this, null);				
 		this._app.dialogs["confirmMessageDialog"].popup();
 	} else {
 		this._app.popView();

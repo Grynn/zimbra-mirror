@@ -52,7 +52,7 @@ ZaController = function(appCtxt, container, app, iKeyName) {
 		this._msgDialog = this._app.dialogs["msgDialog"] = appCtxt.getMsgDialog();
 		this._msgDialog.setApp(app);
 		this._errorDialog = this._app.dialogs["errorDialog"] = appCtxt.getErrorDialog();
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
+		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
 	    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
     	this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);    
 	}
