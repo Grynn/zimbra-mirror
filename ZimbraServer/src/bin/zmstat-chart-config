@@ -586,6 +586,16 @@ sub mailboxdConfig() {
     <plot data="idx_wrt_avg" legend="dirty index writers"/>
   </chart>
 
+  <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Lucene IndexWriterCache Hitrate"
+         category="mailboxd"
+         infile="$mailboxdCsv"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-idxwrtrcache-hitrate.png"
+         yAxis="hitrate %">
+    <plot ratioTop="idx_wrt_opened_cache_hit"
+          ratioBottom="idx_wrt_opened+idx_wrt_opened_cache_hit"
+          legend="cache hitrate" multiplier="100"/>
+  </chart>
+
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: LMTP Delivery Throughput"
          category="mailboxd"
          infile="$mailboxdCsv"
