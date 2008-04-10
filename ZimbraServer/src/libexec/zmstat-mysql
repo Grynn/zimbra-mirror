@@ -130,8 +130,13 @@ while (1) {
 
     # Don't allow rotation in signal handler while we're writing.
     $ROTATE_DEFER = 1;
-    $LOGFH->print(getValues($tstamp) . "\n");
-    $LOGFH->flush();
+    eval {
+        $LOGFH->print(getValues($tstamp) . "\n");
+        $LOGFH->flush();
+    };
+    if ($@) {
+        print STDERR "$tstamp: $@\n";
+    }
     $ROTATE_DEFER = 0;
     if ($ROTATE_NOW) {
         # Signal handler delegated rotation to main.
