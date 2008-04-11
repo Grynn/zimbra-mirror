@@ -749,7 +749,7 @@ public class ZMessageComposeBean {
         if (!signatureTop && signature != null && signature.length() > 0) {
             if (content.length() == 0)
                 content.append("\n\n\n");
-            content.append(signature);
+            content.append("-- \n").append(signature);
         }
 
         setContent(content.toString());
