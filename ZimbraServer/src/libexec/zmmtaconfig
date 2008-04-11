@@ -248,8 +248,10 @@ sub doStats {
         print "KEY=$key\n";
         print Dumper $state->{current}->{$key};
       }
-      print "KEY=serviceconfig\n";
-      print Dumper $state->{serviceconfig};
+      #print "KEY=serviceconfig\n";
+      #print Dumper $state->{serviceconfig};
+      print "KEY=serverconfig\n";
+      print Dumper $state->{serverconfig};
       #print Dumper $state->{current};
     }
     #print "$state->{sections}->{$_}->{name}\n";
@@ -393,6 +395,13 @@ sub getGlobalConfig {
     } else {
       $state->{globalconfig}->{$k} = $v;
     }
+    if ($k eq "zimbraSSLExcludeCipherSuites") {
+      if (exists ($state->{globalconfig}->{zimbraSSLExcludeCipherSuitesXML})) {
+        $state->{globalconfig}->{zimbraSSLExcludeCipherSuitesXML} = "$state->{globalconfig}->{zimbraSSLExcludeCipherSuitesXML}\n<Item>$v</Item>"; 
+      } else {
+        $state->{globalconfig}->{zimbraSSLExcludeCipherSuitesXML} = "<Item>$v</Item>"; 
+      }
+    }
   }
   $state->{configSet}->{globalconfig}=1;
   logMsg(4, "Leaving Function");
@@ -488,6 +497,10 @@ sub getServerConfig {
       } elsif ($v eq "mta") {
         $state->{serviceconfig}->{'sasl'} = $k;
       } 
+    } elsif ($k eq "zimbraSSLExcludeCipherSuites") {
+      $state->{serverconfig}->{zimbraSSLExcludeCipherSuitesList} .= " $v";
+      $state->{serverconfig}->{zimbraSSLExcludeCipherSuitesXML} .= "<Item>$v</Item>\n";
+
     }
   }
   $state->{configSet}->{serverconfig}=1;
