@@ -95,7 +95,7 @@ public class GenerateCSR extends AdminDocumentHandler {
         return response;  
     }
 
-    String getSubject (Element req) {
+    public static String  getSubject (Element req) {
         Element e = null ;
         String value = null ;
         String subject = "" ;

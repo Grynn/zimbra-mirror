@@ -297,7 +297,8 @@ ZaCert.installCert = function (app, params, serverId) {
 	var comm_cert = params.comm_cert ;
 	var validation_days = params.validation_days ;
 	var callback = params.callback ;
-	//var allserver = 0 || params.allserver ;
+    var subject = params.subject ;
+    //var allserver = 0 || params.allserver ;
 	//if (AjxEnv.hasFirebug) console.log("allserver = " + allserver) ;
 	
 	var controller = app.getCurrentController();
@@ -322,7 +323,19 @@ ZaCert.installCert = function (app, params, serverId) {
 			//set the comm_cert element
 			soapDoc.set("comm_cert", comm_cert);	
 		}
-	}else {
+        //add the subject element for the allserver install
+        if (subject != null) {
+            var subject_attrs = {} ;
+            for (var n in subject) {
+                if (n == ZaCert.A_subject_alt) {
+                   //ignore subject_alt_names
+                }else{
+                    subject_attrs [n] = subject[n] ;
+                }
+            }
+            soapDoc.set("subject", subject);
+        }
+    }else {
 		throw new AjxException (com_zimbra_cert_manager.UNKNOW_INSTALL_TYPE_ERROR, "ZaCert.installCert") ;		
 	}
 	

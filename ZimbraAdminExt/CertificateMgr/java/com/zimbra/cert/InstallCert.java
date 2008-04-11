@@ -44,6 +44,7 @@ import com.zimbra.soap.ZimbraSoapContext;
 
 public class InstallCert extends AdminDocumentHandler {           
     private final static String TYPE = "type" ;
+    private final static String SUBJECT = "subject" ;
     final static String CERT_TYPE_SELF= "self" ;
     final static String CERT_TYPE_COMM = "comm" ;
     private final static String COMM_CERT = "comm_cert" ;
@@ -102,6 +103,13 @@ public class InstallCert extends AdminDocumentHandler {
         
        
         if (isTargetAllServer) {
+           if (certType.equals("self")) { //self -allserver install - need to pass the subject to the createcrt cmd
+                Element el = request.getElement(SUBJECT)  ;
+                String subject = GenerateCSR.getSubject(el) ;
+                ZimbraLog.security.debug("Subject for allserver: " + subject);
+                cmd += " -subject " + " \"" + subject +"\"";
+            }
+
             cmd += " " + ALLSERVER_FLAG;
             deploycrt_cmd += " " + ALLSERVER_FLAG;
         }

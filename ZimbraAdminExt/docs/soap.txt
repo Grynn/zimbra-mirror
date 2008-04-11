@@ -54,6 +54,9 @@ SubjectAltName: 0|*, it is used to add the Subject Alt Name extension in the cer
 
 -----------------------------
 <InstallCertRequest type="self|comm" server="server-id">
+  	<subject>
+  	    <{name}>{value}</{name}>*
+  	</subject>
   	<validation_days>{value}</validation_days>
   	<comm_cert>
   		<cert>
