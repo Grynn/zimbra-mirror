@@ -76,8 +76,10 @@ function() {
 
 ZmCsfeCommand.setSessionId =
 function(sessionId) {
-	var id = (sessionId instanceof Array) ? sessionId[0].id : sessionId.id;
-	ZmCsfeCommand._sessionId = parseInt(id);
+	var id = (sessionId != null)
+		? ((sessionId instanceof Array) ? sessionId[0].id : sessionId.id)
+		: null;
+	ZmCsfeCommand._sessionId = id ? parseInt(id) : null;
 };
 
 ZmCsfeCommand.faultToEx =
