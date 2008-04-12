@@ -20,6 +20,10 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(LIBXML2_VERSION)\/lib\/libxml2.a/g' Makefile
 endif
 
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
+	ACEXE := ac_cv_exeext=
+endif
+
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	SED := sed -i .bak -e 's/-lxml2/\/opt\/zimbra\/libxml2-$(LIBXML2_VERSION)\/lib\/libxml2.a/g' Makefile
 endif
@@ -33,7 +37,7 @@ all: build tar
 
 build:
 	tar xzf src/php-$(PHP_VERSION).tar.gz
-	(cd php-$(PHP_VERSION); patch -g0 -N -p1 < ../patches/leopard.fix; CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file=/opt/zimbra/conf/php.ini --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION); $(SED); $(MAKE) $(MAKEARGS); $(MAKE) install)
+	(cd php-$(PHP_VERSION); $(ACEXE) CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file=/opt/zimbra/conf/php.ini --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(LIBXML2_VERSION); $(SED); $(MAKE) $(MAKEARGS); $(MAKE) install)
 
 clean:
 	rm -rf php-$(PHP_VERSION)
