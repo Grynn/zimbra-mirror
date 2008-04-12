@@ -20,6 +20,7 @@ import com.sun.mail.smtp.SMTPTransport;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
@@ -149,6 +150,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     private ZMailbox newZMailbox(ZMailbox.Options options, String proxyHost, int proxyPort, String proxyUser, String proxyPass) throws ServiceException {
+    	options.setRequestProtocol(SoapProtocol.Soap12);
+    	options.setResponseProtocol(SoapProtocol.Soap12);
         options.setProxy(proxyHost, proxyPort, proxyUser, proxyPass);
         options.setNoSession(true);
         options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());

@@ -184,7 +184,7 @@ It must be uninstalled before proceeding with new installation.</string>
         <condition>context.getBooleanVariable("needToUninstall")</condition>
         <validation />
         <actions>
-          <action name="" id="271582" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="Can't stop the background service">
+          <action name="" id="271582" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.services.StopServiceAction">
@@ -196,7 +196,7 @@ It must be uninstalled before proceeding with new installation.</string>
             </serializedBean>
             <condition>!Util.isMacOS()</condition>
           </action>
-          <action name="launchctl stop" id="271581" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="Can't stop the background service">
+          <action name="launchctl stop" id="271581" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
@@ -240,10 +240,11 @@ It must be uninstalled before proceeding with new installation.</string>
 String errorMsg = null;
 
 try {
+    Thread.sleep(1000);
     new com.zimbra.cs.db.DbOfflineMigration().testRun();
     return true;
 } catch (com.zimbra.cs.db.DbExclusiveAccessException x) {
-    Thread.sleep(5000);
+    Thread.sleep(6000);
     try {
         new com.zimbra.cs.db.DbOfflineMigration().testRun();
         return true;

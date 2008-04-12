@@ -39,6 +39,7 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
 import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
@@ -130,6 +131,8 @@ public class PushChanges {
     private ZMailbox getZMailbox() throws ServiceException {
         if (mZMailbox == null) {
             ZMailbox.Options options = new ZMailbox.Options(ombx.getAuthToken(), ombx.getSoapUri());
+        	options.setRequestProtocol(SoapProtocol.Soap12);
+        	options.setResponseProtocol(SoapProtocol.Soap12);
             options.setNoSession(true);
             mZMailbox = ZMailbox.getMailbox(options);
         }

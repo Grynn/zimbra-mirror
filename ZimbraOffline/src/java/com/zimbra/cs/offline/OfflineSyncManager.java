@@ -341,7 +341,8 @@ public class OfflineSyncManager {
 		            cause instanceof java.net.SocketException ||
 		        	cause instanceof java.net.SocketTimeoutException ||
 		        	cause instanceof java.net.ConnectException ||
-		        	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException)
+		        	cause instanceof org.apache.commons.httpclient.ConnectTimeoutException ||
+		        	cause instanceof org.apache.commons.httpclient.NoHttpResponseException)
 	        	return true;
         }
         return false;
