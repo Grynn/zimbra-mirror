@@ -88,5 +88,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.6-zimbra.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.6.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.3.1.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-1.7.0-ziputil-patched.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
