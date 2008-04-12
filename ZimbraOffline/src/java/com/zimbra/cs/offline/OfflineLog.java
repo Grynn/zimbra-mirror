@@ -29,4 +29,7 @@ public class OfflineLog {
     /** The "zimbra.offline.response" logger. For recording SOAP traffic
      *  received from the remote server. */
     public static final com.zimbra.common.util.Log response = LogFactory.getLog("zimbra.offline.response");
+
+    /** The "zimbra.offline.yab" logger. For recording Yahoo Address Book sync events */
+    public static final com.zimbra.common.util.Log yab = LogFactory.getLog("zimbra.offline.yab");
 }

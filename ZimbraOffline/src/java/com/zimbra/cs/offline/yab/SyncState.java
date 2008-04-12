@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class SyncState {
     private int revision;  // YAB revision number
@@ -56,30 +57,69 @@ public class SyncState {
     }
 
     public int getRevision() { return revision; }
+    
     public int getSequence() { return sequence; }
 
+    public void setRevision(int revision) {
+        this.revision = revision;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+    
     public int getCid(int contactId) {
-        return localRemoteCidMap.get(contactId);
+        return getInt(localRemoteCidMap, contactId);
     }
 
     public int getContactId(int cid) {
-        return remoteLocalCidMap.get(cid);
+        return getInt(remoteLocalCidMap, cid);
     }
 
     public int getCatid(int categoryId) {
-        return localRemoteCatidMap.get(categoryId);
+        return getInt(localRemoteCatidMap, categoryId);
     }
 
     public int getCategoryId(int catid) {
-        return remoteLocalCatidMap.get(catid);
+        return getInt(remoteLocalCatidMap, catid);
     }
 
-    public int[] getCids(int[] contactIds) {
-        int[] cids = new int[contactIds.length];
-        for (int i = 0; i < contactIds.length; i++) {
-            cids[i] = getCid(contactIds[i]);
+    private static int getInt(Map<Integer, Integer> map, int key) {
+        Integer value = map.get(key);
+        return value != null ? value : -1;
+    }
+
+    public List<Integer> getCids(Collection<Integer> contactIds) {
+        List<Integer> cids = new ArrayList<Integer>(contactIds.size());
+        for (int contactId : contactIds) {
+            int cid = getCid(contactId);
+            if (cid != -1) cids.add(cid);
         }
         return cids;
+    }
+    
+    public void addContact(int contactId, int cid) {
+        localRemoteCidMap.put(contactId, cid);
+        remoteLocalCidMap.put(cid, contactId);
+    }
+
+    public void addCategory(int categoryId, int catid) throws SyncException {
+        localRemoteCatidMap.put(categoryId, catid);
+        remoteLocalCatidMap.put(catid, categoryId);
+    }
+
+    public void removeContact(int contactId) {
+        Integer cid = localRemoteCidMap.remove(contactId);
+        if (cid != null) {
+            remoteLocalCidMap.remove(cid);
+        }
+    }
+
+    public void remoteCategory(int categoryId) {
+        Integer catid = localRemoteCatidMap.remove(categoryId);
+        if (catid != null) {
+            remoteLocalCatidMap.remove(catid);
+        }
     }
     
     public void save() throws ServiceException {

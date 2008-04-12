@@ -81,7 +81,7 @@ public class ContactData {
         return result.toArray(new String[result.size()]);
     }
     
-    public static ParsedContact importChanges(Contact yabContact)
+    public static ParsedContact importChanged(Contact yabContact)
             throws ServiceException {
         ContactData cd = new ContactData(yabContact.getFields());
         Map<String, String> fields = cd.getFields();
