@@ -252,7 +252,7 @@ public class LocalMailbox extends DesktopMailbox {
 			
 			try {
 				syncMan.syncStart(ds.getName());
-				DataSourceManager.importData(getAccount(), ds, isOnRequest);
+				DataSourceManager.importData(ds, isOnRequest);
 				syncMan.syncComplete(ds.getName());
                 OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(System.currentTimeMillis()));
 			} catch (Exception x) {
