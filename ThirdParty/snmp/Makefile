@@ -38,8 +38,21 @@ endif
 all: build tar
 
 build: $(APP_NAME)-$(APP_VERSION)
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	(cd $(APP_NAME)-$(APP_VERSION); \
-	patch -g0 -N -p1 < ../patches/leopard.configure.fix; \
+	patch -g0 -N -p1 < ../patches/patch-leopard-inpcb.patch; \
+	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
+	--with-default-snmp-version=3 --with-sys-contact="admin" \
+	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
+	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
+	sed -i .bak -e 's/-arch ppc//g' config.status; \
+	./config.status; \
+	$(MAKE) ; $(MAKE) install)
+	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
+	(mkdir -p $(INSTALL_PREFIX)/var)
+	(cd $(ZIMBRA_HOME); ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
+else
+	(cd $(APP_NAME)-$(APP_VERSION); \
 	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
 	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
@@ -48,6 +61,7 @@ build: $(APP_NAME)-$(APP_VERSION)
 	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(mkdir -p $(INSTALL_PREFIX)/var)
 	(cd $(ZIMBRA_HOME); ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
+endif
 
 $(APP_NAME)-$(APP_VERSION): 
 	tar xzf src/$(APP_NAME)-$(APP_VERSION).tar.gz
