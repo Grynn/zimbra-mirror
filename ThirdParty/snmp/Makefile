@@ -13,9 +13,11 @@ INSTALL_PREFIX := $(ZIMBRA_HOME)/$(APP_NAME)-$(APP_VERSION)
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
-
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	ENVMOD := env LIBS="-lresolv" 
+endif
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
+	ENVMOD := env LIBS="-lresolv" CPPFLAGS="-DHAVE_SSIZE_T"
 endif
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	ENVMOD := env LIBS="-lresolv" 
