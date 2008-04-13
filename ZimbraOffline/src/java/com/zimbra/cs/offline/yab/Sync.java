@@ -1,32 +1,21 @@
 package com.zimbra.cs.offline.yab;
 
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
-import com.zimbra.cs.offline.util.yauth.Auth;
 import com.zimbra.cs.offline.util.yab.Session;
 import com.zimbra.cs.offline.util.yab.Contact;
 import com.zimbra.cs.offline.util.yab.SyncResponse;
 import com.zimbra.cs.offline.util.yab.SyncResponseEvent;
 import com.zimbra.cs.offline.util.yab.SyncRequest;
 import com.zimbra.cs.offline.util.yab.SyncRequestEvent;
-import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ArrayUtil;
 
 import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Collections;
 import java.io.IOException;
-
-import org.apache.log4j.Logger;
 
 /*
  * Sync overview:
