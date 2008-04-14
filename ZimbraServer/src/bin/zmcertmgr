@@ -201,7 +201,7 @@ saveConfigKey() {
     return
   fi
   echo -n "** Saving $location config key $key..."
-  su - zimbra -c "zmprov -l -- ${zmprov_opts} ${key} \"$content\" 2> /dev/null"
+  su - zimbra -c "${zimbra_home}/bin/zmprov -l -- ${zmprov_opts} ${key} \"$content\" 2> /dev/null"
   if [ $? = 0 ]; then
     echo "done."
   else
@@ -225,7 +225,7 @@ loadConfigKey() {
   chown zimbra ${tmpfile}
   if [ ! -s ${file} ]; then
     echo -n "** Retrieving $location config key $key..."
-    su - zimbra -c "zmprov -l -- ${zmprov_opts} ${key} | sed  -e 's/^${key}: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${file} 2> /dev/null
+    su - zimbra -c "${zimbra_home}/bin/zmprov -l -- ${zmprov_opts} ${key} | sed  -e 's/^${key}: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${file} 2> /dev/null
     if [ $? = 0 -a -s "${file}" ]; then
       echo "done."
     else
@@ -398,7 +398,7 @@ createCA() {
   chown zimbra ${tmpfile}
   if [ ! -f ${zimbra_ca_key} -a x"$IS_NEW_CA" = "x" ]; then
     echo -n "** Retrieving CA private key from ldap..."
-    su - zimbra -c "zmprov -l -- gacf zimbraCertAuthorityKeySelfSigned | sed  -e 's/^zimbraCertAuthorityKeySelfSigned: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${zimbra_ca_key} 2> /dev/null
+    su - zimbra -c "${zimbra_home}/bin/zmprov -l -- gacf zimbraCertAuthorityKeySelfSigned | sed  -e 's/^zimbraCertAuthorityKeySelfSigned: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${zimbra_ca_key} 2> /dev/null
     if [ $? = 0 -a -s "${zimbra_ca_key}" ]; then
       echo "done."
     else
@@ -411,7 +411,7 @@ createCA() {
   chown zimbra ${tmpfile}
   if [ ! -f ${zimbra_ca_crt} -a x"$IS_NEW_CA" = "x" ]; then
     echo -n "** Retrieving CA cert from ldap..."
-    su - zimbra -c "zmprov -l -- gacf zimbraCertAuthorityCertSelfSigned | sed  -e 's/^zimbraCertAuthorityCertSelfSigned: //' > ${tmpfile} 2> /dev/null" 2> /dev/null && mv -f ${tmpfile} ${zimbra_ca_crt} 2> /dev/null
+    su - zimbra -c "${zimbra_home}/bin/zmprov -l -- gacf zimbraCertAuthorityCertSelfSigned | sed  -e 's/^zimbraCertAuthorityCertSelfSigned: //' > ${tmpfile} 2> /dev/null" 2> /dev/null && mv -f ${tmpfile} ${zimbra_ca_crt} 2> /dev/null
     if [ $? = 0 -a -s "${zimbra_ca_crt}" ]; then
       echo "done."
     else
@@ -630,7 +630,7 @@ deployCert() {
   echo "done."
 
   if [ x"$ALLSERVERS" = "x-allserver" ]; then
-    for host in `zmprov -l gas`; do
+    for host in `${zimbra_home}/bin/zmprov -l gas`; do
       if [ x"$host" = "x${zimbra_server_hostname}" ]; then
         continue
       fi
@@ -842,7 +842,7 @@ createCert() {
   fi
 
   if [ x"${ALLSERVERS}" = "x-allserver" ]; then
-    subject_alt_names=`su - zimbra -c "zmprov -l gas | xargs "`
+    subject_alt_names=`su - zimbra -c "${zimbra_home}/bin/zmprov -l gas | xargs "`
     createCSR self -new 
     shift
   elif [ ! -s "${server_csr}" ]; then
