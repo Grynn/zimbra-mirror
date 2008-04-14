@@ -102,18 +102,18 @@ function(fault, method) {
  */
 ZmCsfeCommand.getMethodName =
 function(request) {
-	if (request instanceof AjxSoapDoc) {
-		return request._methodEl.tagName
-	} else {
-		var methodName = "[unknown]";
+	var methodName = (request && request._methodEl && request._methodEl.tagName)
+		? request._methodEl.tagName : null;
+
+	if (!methodName) {
 		for (var prop in request) {
 			if (prop.indexOf("Request") != -1) {
 				methodName = prop;
 				break;
 			}
 		}
-		return methodName;
 	}
+	return (methodName || "[unknown]");
 };
 
 ZmCsfeCommand.prototype.toString =
