@@ -85,6 +85,7 @@ DwtTreeItem.prototype.constructor = DwtTreeItem;
 
 DwtTreeItem.prototype.TEMPLATE = "dwt.Widgets#ZTreeItem";
 
+DwtTreeItem.prototype._checkBoxVisible = true; // Assume it's shown, if check style
 
 // Consts
 
@@ -256,6 +257,7 @@ function(text) {
 
 DwtTreeItem.prototype.showCheckBox =
 function(show) {
+	this._checkBoxVisible = show;
 	if (this._checkBoxCell) {
 		Dwt.setVisible(this._checkBoxCell, show);
 	}
@@ -381,6 +383,7 @@ function(index, realizeDeferred) {
 
 	// initialize checkbox
 	if (this._tree._isCheckedStyle() && this._checkBox) {
+		this.showCheckBox(this._checkBoxVisible);
 		if (AjxEnv.isIE) {
 			// HACK: See setChecked method for explanation
 			this._checkBox._ieHack = true;
