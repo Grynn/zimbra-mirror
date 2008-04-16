@@ -407,10 +407,10 @@ function(which) {
 	var mev = DwtShell.mouseEvent;
 	if (this.__currentItem) {
 		this._setMouseEvent(mev, {dwtObj:this.__currentItem});
-		this.notifyListeners(DwtEvent.ONMOUSEOUT, mev);
+		this.__currentItem.notifyListeners(DwtEvent.ONMOUSEOUT, mev);
 	}
 	this._setMouseEvent(mev, {dwtObj:currItem});
-	this.notifyListeners(DwtEvent.ONMOUSEOVER, mev);	// mouseover selects a menu item
+	currItem.notifyListeners(DwtEvent.ONMOUSEOVER, mev);	// mouseover selects a menu item
 	this.__currentItem = currItem;
 };
 
