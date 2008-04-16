@@ -74,53 +74,39 @@ DwtKeyMapMgr.prototype.getActionCode =
 function(keySeq, mappingName, forceActionCode) {
 	//DBG.println(AjxDebug.DBG3, "Getting action code for: " + keySeq + " in map: " + mappingName);
 	var mapping =  this._fsas[mappingName];
-	
+
 	if (!mapping) {
 		DBG.println(AjxDebug.DBG3, "No keymap for: " + mappingName);
 		return null;
 	}
-					
+
 	var keySeqLen = keySeq.length;
 	var tmpFsa = mapping;
 	var key;
 	for (var j = 0; j < keySeqLen && tmpFsa; j++) {
 		key = keySeq[j];
 
-		if (!tmpFsa[key]) break;
-		
+		if (!tmpFsa || !tmpFsa[key]) break;
+
 		if (j < keySeqLen - 1) {
 			tmpFsa = tmpFsa[key].subMap;
 		}
 	}
-	
-	if (!tmpFsa) {
-		// This is essentially an illegal condition.
-		DBG.println(AjxDebug.DBG1, "***** tmpFsa is null! mapping name: " + mappingName + ", key: " + key + " - keyseq: " + keySeq);
-		return null;
-	} else if (tmpFsa[key]) {
+
+	if (tmpFsa && tmpFsa[key]) {
 		var binding = tmpFsa[key];
 		/* If the binding does not have a submap, then it must have an action code
 		 * so return it. Else if the binding does not have an action code (i.e. it
 		 * has a submap only) or if forceActionCode is false, then return DwtKeyMapMgr.NOT_A_TERMINAL
 		 * since we are to behave like an intermediate node. Else return the action code. */
 		if (!binding.subMap || forceActionCode) {
-			return binding.actionCode;
+			var inherited = this.__getInheritedActionCode(keySeq, mapping, forceActionCode);
+			return inherited == DwtKeyMapMgr.NOT_A_TERMINAL ? DwtKeyMapMgr.NOT_A_TERMINAL : binding.actionCode;
 		} else {
 			return DwtKeyMapMgr.NOT_A_TERMINAL;
 		}
-	} else if (mapping.inherit && mapping.inherit.length) {
-		var actionCode = null;
-		var len = mapping.inherit.length;
-		for (var i = 0; i < len; i++) {
-			DBG.println(AjxDebug.DBG3, "checking inherited map: " + mapping.inherit[i]);
-			actionCode = this.getActionCode(keySeq, mapping.inherit[i], forceActionCode);
-			if (actionCode != null) {
-				return actionCode;
-			}
-		}
-		return null;
 	} else {
-		return null;	// no match
+		return this.__getInheritedActionCode(keySeq, mapping, forceActionCode);
 	}
 };
 
@@ -344,6 +330,22 @@ function(fsa, mapping, mapName) {
 		}
 	}
 	return fsa;
+};
+
+DwtKeyMapMgr.prototype.__getInheritedActionCode =
+function(keySeq, mapping, forceActionCode) {
+	if (mapping.inherit && mapping.inherit.length) {
+		var actionCode = null;
+		var len = mapping.inherit.length;
+		for (var i = 0; i < len; i++) {
+			DBG.println(AjxDebug.DBG3, "checking inherited map: " + mapping.inherit[i]);
+			actionCode = this.getActionCode(keySeq, mapping.inherit[i], forceActionCode);
+			if (actionCode != null) {
+				return actionCode;
+			}
+		}
+	}
+	return null;
 };
 
 (function() {
