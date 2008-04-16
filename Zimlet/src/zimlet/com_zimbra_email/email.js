@@ -448,7 +448,7 @@ function() {
 
 Com_Zimbra_Email.prototype._handleLoadFilter =
 function() {
-	appCtxt.getAppViewMgr().popView(true, ZmController.LOADING_VIEW);	// pop "Loading..." page
+	appCtxt.getAppViewMgr().popView(true, ZmId.VIEW_LOADING);	// pop "Loading..." page
 	var rule = new ZmFilterRule();
 
 	var addr = this._getAddress(this._actionObject);

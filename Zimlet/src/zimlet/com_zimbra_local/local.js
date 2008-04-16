@@ -300,7 +300,7 @@ function() {
 };
 
 // View
-ZmController.YMAPS_VIEW = "YAHOOMAPS";
+ZmId.VIEW_YMAPS = "YAHOOMAPS";
 
 YahooLocalController.prototype.getMapsView =
 function() {
@@ -321,14 +321,14 @@ function(params) {
 YahooLocalController.prototype.showView =
 function(params) {
 	this._mapsView.prepareMap(params);
-	appCtxt.getAppViewMgr().pushView(ZmController.YMAPS_VIEW);
+	appCtxt.getAppViewMgr().pushView(ZmId.VIEW_YMAPS);
 	// fit to container, since the height and width needs to be set for this view
 	appCtxt.getAppViewMgr()._fitToContainer([ZmAppViewMgr.C_APP_CONTENT]);
 };
 
 YahooLocalController.prototype.hideView =
 function() {
-	appCtxt.getAppViewMgr().popView(true, ZmController.YMAPS_VIEW);
+	appCtxt.getAppViewMgr().popView(true, ZmId.VIEW_YMAPS);
 };
 
 YahooLocalController.prototype._createView =
@@ -336,7 +336,7 @@ function() {
 	var elements = {};
 	elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
 	elements[ZmAppViewMgr.C_APP_CONTENT] = this._mapsView;
-	appCtxt.getAppViewMgr().createView(ZmController.YMAPS_VIEW, null, elements);
+	appCtxt.getAppViewMgr().createView(ZmId.VIEW_YMAPS, null, elements);
 };
 
 YahooLocalController.prototype._createMapView =

@@ -68,7 +68,7 @@ function(calStr, calcId) {
 	if(!this._calcView){		
 		this._calcView = this._createCalcView(calcId);
 	}else{
-		appViewMgr.pushView(ZmController.CALC_VIEW);
+		appViewMgr.pushView(ZmId.VIEW_CALC);
 		CalcEngine._iframeOnLoad(this._iframe);
 	}
 };
@@ -77,10 +77,10 @@ CalcEngine.prototype._createCalcView =
 function(calcId){
 	this._calcId = calcId;
 	var appViewMgr = this._appViewMgr;	
-	ZmController.CALC_VIEW = "CALC";
+	ZmId.VIEW_CALC = "CALC";
 	
 	var buttons = this._getToolbarOps();
-	this._toolbar[ZmController.CALC_VIEW] = new ZmButtonToolBar({parent: appViewMgr._shell, buttons: buttons});
+	this._toolbar[ZmId.VIEW_CALC] = new ZmButtonToolBar({parent: appViewMgr._shell, buttons: buttons});
 	var calcView = this._calcView = new DwtControl({parent:appViewMgr._shell, className:"DwtListView", posStyle:Dwt.ABSOLUTE_STYLE});
 	var el = calcView.getHtmlElement();
 	var htmlArr = [];
@@ -93,12 +93,12 @@ function(calcId){
 
 	var elements = {};
 	elements[ZmAppViewMgr.C_APP_CONTENT] = calcView;
-	elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar[ZmController.CALC_VIEW];
-	appViewMgr.createView(ZmController.CALC_VIEW, null, elements);
-	this._addSelectionListeners(this._toolbar[ZmController.CALC_VIEW]);
+	elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar[ZmId.VIEW_CALC];
+	appViewMgr.createView(ZmId.VIEW_CALC, null, elements);
+	this._addSelectionListeners(this._toolbar[ZmId.VIEW_CALC]);
 	this._iframe = document.getElementById(iframeId);
 	Dwt.associateElementWithObject(this._iframe, this);
-	appViewMgr.pushView(ZmController.CALC_VIEW);
+	appViewMgr.pushView(ZmId.VIEW_CALC);
 	this._setupCalcMenuItems();
 	return calcView;
 };
@@ -283,7 +283,7 @@ function() {
 		var content = this._resultView ? this._resultView.getHtmlElement().firstChild.innerHTML : "" ;	
 		content = [content , "<span class='ZimbraCalculatorData' calcId='", this._calcId, "'><!--ACE[ZmSpreadSheet]:",this._sheetData, "--></span><br>"].join("");
 		updateInfo.containerElement.innerHTML = content;
-		this._appViewMgr.pushView(ZmController.NOTEBOOK_PAGE_EDIT_VIEW);	
+		this._appViewMgr.pushView(ZmId.VIEW_NOTEBOOK_PAGE_EDIT);	
 	}else{	
 		var copyToDialog = this._copyToDialog = appCtxt.getChooseFolderDialog();
 		var _chooseCb = new AjxCallback(this, this._chooserCallback, [content]);
@@ -359,10 +359,10 @@ function(content) {
 		el.style.overflow = "auto";
 		el.innerHTML = htmlArr.join("");		
 	}
-	appViewMgr.pushView(ZmController.CALC_RESULT_VIEW);
+	appViewMgr.pushView(ZmId.VIEW_CALC_RESULT);
 	this._addTableStyles();
 
-	var button = this._toolbar[ZmController.CALC_RESULT_VIEW].getButton(ZmOperation.CALC_IMPORT);
+	var button = this._toolbar[ZmId.VIEW_CALC_RESULT].getButton(ZmOperation.CALC_IMPORT);
 	if(button){
 		button.setText(this._updateInfo ? "Update" : "Import");
 	}
@@ -423,11 +423,11 @@ function(table) {
 CalcEngine.prototype._createResultView = 
 function(content) {
 	var appViewMgr = this._appViewMgr;
-	ZmController.CALC_RESULT_VIEW = "CALCR";
+	ZmId.VIEW_CALC_RESULT = "CALCR";
 	
 	var buttons = [ZmOperation.CALC_IMPORT, ZmOperation.SEP, ZmOperation.CLOSE];
 	
-	this._toolbar[ZmController.CALC_RESULT_VIEW] = new ZmButtonToolBar({parent: appViewMgr._shell, buttons: buttons});
+	this._toolbar[ZmId.VIEW_CALC_RESULT] = new ZmButtonToolBar({parent: appViewMgr._shell, buttons: buttons});
 	var resultView  = new DwtControl({parent:appViewMgr._shell, className:"CalcResultView", posStyle:Dwt.ABSOLUTE_STYLE});
 	var el = resultView.getHtmlElement();
 
@@ -440,10 +440,10 @@ function(content) {
 
 	var elements = {};
 	elements[ZmAppViewMgr.C_APP_CONTENT] = resultView;
-	elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar[ZmController.CALC_RESULT_VIEW];
+	elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar[ZmId.VIEW_CALC_RESULT];
 
-	appViewMgr.createView(ZmController.CALC_RESULT_VIEW, null, elements);
-	this._addSelectionListeners(this._toolbar[ZmController.CALC_RESULT_VIEW]);
+	appViewMgr.createView(ZmId.VIEW_CALC_RESULT, null, elements);
+	this._addSelectionListeners(this._toolbar[ZmId.VIEW_CALC_RESULT]);
 
 	return resultView;
 };
@@ -576,7 +576,7 @@ function(callback, folder, filenames) {
 CalcEngine.prototype._setupCalcMenuItems =
 function(view) {
 	var calcId = this._calcId;
-	var viewBtn = this._toolbar[ZmController.CALC_VIEW].getButton(ZmOperation.CALC_MENU);
+	var viewBtn = this._toolbar[ZmId.VIEW_CALC].getButton(ZmOperation.CALC_MENU);
 	var menu = viewBtn ? viewBtn.getMenu() : null;
 	if (!menu) {
 		menu = new ZmPopupMenu(viewBtn);

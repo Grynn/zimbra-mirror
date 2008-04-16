@@ -138,7 +138,7 @@ function() {
 Com_Zimbra_Date.prototype._handleLoadDayView =
 function() {
 	var calApp = appCtxt.getApp(ZmApp.CALENDAR);
-	calApp.activate(true, ZmController.CAL_DAY_VIEW, Com_Zimbra_Date._actionContext.date);
+	calApp.activate(true, ZmId.VIEW_CAL_DAY, Com_Zimbra_Date._actionContext.date);
 };
 
 Com_Zimbra_Date.prototype._newApptListener =
@@ -150,7 +150,7 @@ function() {
 Com_Zimbra_Date.prototype._handleLoadNewAppt =
 function() {
 	// TODO support ev.shiftKey
-	appCtxt.getAppViewMgr().popView(true, ZmController.LOADING_VIEW);	// pop "Loading..." page
+	appCtxt.getAppViewMgr().popView(true, ZmId.VIEW_LOADING);	// pop "Loading..." page
 	AjxDispatcher.run("GetCalController").newAppointmentHelper(Com_Zimbra_Date._actionContext.date);
 };
 
@@ -165,7 +165,7 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	var miniCalendar = calController.getMiniCalendar();
 	calController.setDate(matchContext.date, 0, miniCalendar.getForceRollOver());
 	if (!calController._viewVisible) {
-		calController.show(ZmController.CAL_DAY_VIEW);
+		calController.show(ZmId.VIEW_CAL_DAY);
 	}
 };
 

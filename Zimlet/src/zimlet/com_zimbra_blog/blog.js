@@ -32,7 +32,7 @@ Com_Zimbra_Blog.prototype.init = function(){
 };
 
 Com_Zimbra_Blog.prototype.onShowView = function(viewId, isNewView) {
-    if (viewId == ZmController.NOTEBOOK_PAGE_EDIT_VIEW && !this._toolbar){
+    if (viewId == ZmId.VIEW_NOTEBOOK_PAGE_EDIT && !this._toolbar){
         this._initPageEditToolbar();
     }
 };
@@ -48,12 +48,12 @@ function() {
         this._composerCtrl = AjxDispatcher.run("GetPageEditController");
 		if (!this._composerCtrl) { return; }
 	    this._composerCtrl._blogPost = this;
-    	if(!this._composerCtrl._toolbar[ZmController.NOTEBOOK_PAGE_EDIT_VIEW]) {
+    	if(!this._composerCtrl._toolbar[ZmId.VIEW_NOTEBOOK_PAGE_EDIT]) {
 	      // initialize the compose controller's toolbar
-	      this._composerCtrl._initializeToolBar(ZmController.NOTEBOOK_PAGE_EDIT_VIEW);
+	      this._composerCtrl._initializeToolBar(ZmId.VIEW_NOTEBOOK_PAGE_EDIT);
     	}
 
-    	this._toolbar = this._composerCtrl._toolbar[ZmController.NOTEBOOK_PAGE_EDIT_VIEW];	
+    	this._toolbar = this._composerCtrl._toolbar[ZmId.VIEW_NOTEBOOK_PAGE_EDIT];	
 
 		ZmMsg.blogPost = "Post to Blog";
     	ZmMsg.blogPostTooltip = "Post this content to blog";

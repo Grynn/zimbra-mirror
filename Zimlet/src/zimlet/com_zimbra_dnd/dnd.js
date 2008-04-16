@@ -41,7 +41,7 @@ Com_Zimbra_DnD.prototype.init = function () {
 
 Com_Zimbra_DnD.prototype.onShowView = function(viewId, isNewView) {
   if("createEvent" in document && document.getElementById("zdnd_files")) {
-      if(viewId == ZmController.COMPOSE_VIEW || viewId == ZmController.BRIEFCASE_COLUMN_VIEW || viewId == ZmController.BRIEFCASE_VIEW || viewId ==  ZmController.BRIEFCASE_DETAIL_VIEW) {
+      if(viewId == ZmId.VIEW_COMPOSE || viewId == ZmId.VIEW_BRIEFCASE_COLUMN || viewId == ZmId.VIEW_BRIEFCASE || viewId == ZmId.VIEW_BRIEFCASE_DETAIL) {
           var curView = appCtxt.getAppViewMgr().getCurrentView();
           var el = curView.getHtmlElement();
           var ev = document.createEvent("Events");
@@ -53,7 +53,7 @@ Com_Zimbra_DnD.prototype.onShowView = function(viewId, isNewView) {
 
 Com_Zimbra_DnD.uploadDnDFiles = function() {
     var viewId = appCtxt.getAppViewMgr().getCurrentViewId();
-    if(viewId == ZmController.COMPOSE_VIEW || viewId == ZmController.BRIEFCASE_COLUMN_VIEW || viewId == ZmController.BRIEFCASE_VIEW || viewId ==  ZmController.BRIEFCASE_DETAIL_VIEW) {
+    if(viewId == ZmId.VIEW_COMPOSE || viewId == ZmId.VIEW_BRIEFCASE_COLUMN || viewId == ZmId.VIEW_BRIEFCASE || viewId == ZmId.VIEW_.BRIEFCASE_DETAIL) {
         var curView = appCtxt.getAppViewMgr().getCurrentView();
         if(curView) {
             curView.uploadFiles();

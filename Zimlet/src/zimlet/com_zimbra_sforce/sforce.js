@@ -50,7 +50,7 @@ Com_Zimbra_SForce.prototype.init = function() {
 };
 
 Com_Zimbra_SForce.prototype.onShowView = function(viewId, isNewView) {
-	 if (viewId == ZmController.COMPOSE_VIEW && !this._toolbar){ 
+	 if (viewId == ZmId.VIEW_COMPOSE && !this._toolbar){ 
         this._initComposeSFToolbar();
      }
 };

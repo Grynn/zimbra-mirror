@@ -821,8 +821,8 @@ Com_Zimbra_Yflickr.prototype.doneAttachPhoto = function (callback, result)
 Com_Zimbra_Yflickr.prototype.addAttachmentHandler = function()
 {
     this._msgController = AjxDispatcher.run("GetMsgController");
-    this._msgController._initializeListView(ZmController.MSG_VIEW);
-    this._msgController._listView[ZmController.MSG_VIEW].addAttachmentLinkHandler (ZmMimeTable.IMG_JPEG,"flickr",this.addSaveToFlickrLink);
+    this._msgController._initializeListView(ZmId.VIEW_MSG);
+    this._msgController._listView[ZmId.VIEW_MSG].addAttachmentLinkHandler (ZmMimeTable.IMG_JPEG,"flickr",this.addSaveToFlickrLink);
 }
 
 Com_Zimbra_Yflickr.prototype.addSaveToFlickrLink = function (attachment)

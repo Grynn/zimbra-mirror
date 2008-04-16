@@ -89,7 +89,7 @@ function() {
 Com_Zimbra_YFinance.INIT_DELAY = 15000;
 
 Com_Zimbra_YFinance.prototype.onShowView = function(viewId, isNewView) {
-	 if (viewId == ZmController.NOTEBOOK_PAGE_EDIT_VIEW){
+	 if (viewId == ZmId.VIEW_NOTEBOOK_PAGE_EDIT){
 	 	this._initPageEditToolbar();
 	 }	
 };
@@ -106,12 +106,12 @@ function() {
 	
 	this._composerCtrl._calcEngine = this;
     
-    if(!this._composerCtrl._toolbar[ZmController.NOTEBOOK_PAGE_EDIT_VIEW]) {
+    if(!this._composerCtrl._toolbar[ZmId.VIEW_NOTEBOOK_PAGE_EDIT]) {
 	      // initialize the compose controller's toolbar
-	      this._composerCtrl._initializeToolBar(ZmController.NOTEBOOK_PAGE_EDIT_VIEW);
+	      this._composerCtrl._initializeToolBar(ZmId.VIEW_NOTEBOOK_PAGE_EDIT);
    	}    
     
-    this._pageToolbar = this._composerCtrl._toolbar[ZmController.NOTEBOOK_PAGE_EDIT_VIEW];	
+    this._pageToolbar = this._composerCtrl._toolbar[ZmId.VIEW_NOTEBOOK_PAGE_EDIT];	
     	
 	ZmMsg.editReport = "Edit Report";
     var op = {textKey: "editReport", tooltipKey: "editReport", image: "MonthView"};
@@ -167,17 +167,17 @@ function(symbol, result) {
 	
 	if(!this._searchResultView){
 	
-		ZmController.YF_RESULT_VIEW = "YFRV";	
+		ZmId.VIEW_YF_RESULT = "YFRV";	
 		var buttons = [ZmOperation.CLOSE];	
-		this._toolbar[ZmController.YF_RESULT_VIEW] = new ZmButtonToolBar({parent: appViewMgr._shell, buttons: buttons});
+		this._toolbar[ZmId.VIEW_YF_RESULT] = new ZmButtonToolBar({parent: appViewMgr._shell, buttons: buttons});
 		resultView  = this._searchResultView = new DwtControl({parent:appViewMgr._shell, className:"DwtListView", posStyle:Dwt.ABSOLUTE_STYLE});
 
-		this._addSelectionListeners(this._toolbar[ZmController.YF_RESULT_VIEW]);	
+		this._addSelectionListeners(this._toolbar[ZmId.VIEW_YF_RESULT]);	
 
 		var elements = {};
 		elements[ZmAppViewMgr.C_APP_CONTENT] = resultView;
-		elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar[ZmController.YF_RESULT_VIEW];
-		appViewMgr.createView(ZmController.YF_RESULT_VIEW, null, elements);
+		elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar[ZmId.VIEW_YF_RESULT];
+		appViewMgr.createView(ZmId.VIEW_YF_RESULT, null, elements);
 	}
 
 	var adContent = this.getConfig("ziya_ads");
@@ -195,7 +195,7 @@ function(symbol, result) {
 	el.innerHTML = AjxTemplate.expand("com_zimbra_yfinance.templates.YFinance#SearchResult", subs);
 
 
-	appViewMgr.pushView(ZmController.YF_RESULT_VIEW);
+	appViewMgr.pushView(ZmId.VIEW_YF_RESULT);
 	return resultView;
 };
 
