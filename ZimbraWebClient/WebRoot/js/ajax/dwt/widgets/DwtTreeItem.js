@@ -32,6 +32,8 @@
  *        deferred		[boolean]*			If true, postpone initialization until needed.
  *        className		[string]*			CSS class
  *        posStyle		[constant]*			positioning style
+ *        forceNotifySelection	[boolean]*	force notify selection even if checked style
+ *        forceNotifyAction		[boolean]*	force notify action even if checked style
  */
 DwtTreeItem = function(params) {
 	params = Dwt.getParams(arguments, DwtTreeItem.PARAMS);
@@ -60,7 +62,9 @@ DwtTreeItem = function(params) {
 	this._itemChecked = false;
 	this._initialized = false;
 	this._selectionEnabled = true;
+	this._forceNotifySelection = Boolean(params.forceNotifySelection);
 	this._actionEnabled = true;
+	this._forceNotifyAction = Boolean(params.forceNotifyAction);
 
 	// disable selection if checkbox style
 	if (this._tree._isCheckedStyle()) {
@@ -644,7 +648,7 @@ function(selected) {
 		this._selected = selected;
 		if (!this._initialized)
 			this._initialize();
-		if (selected && this._selectionEnabled) {
+		if (selected && (this._selectionEnabled || this._forceNotifySelection)) {
             if (this._textCell) {
                 this._textCell.className = this._selectedClassName;
             }
@@ -664,7 +668,7 @@ function(actioned) {
 		this._actioned = actioned;
 		if (!this._initialized)
 			this._initialize();
-		if (actioned && this._actionEnabled && !this._selected) {
+		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected) {
 			this._textCell.className = this._actionedClassName;
 			return true;
 		} else if (!actioned) {
@@ -711,9 +715,9 @@ function(ev) {
 	if (!treeItem) { return false; }
 	if (ev.target == treeItem._childDiv) { return; }
 
-	if (ev.button == DwtMouseEvent.LEFT && treeItem._selectionEnabled) {
+	if (ev.button == DwtMouseEvent.LEFT && (treeItem._selectionEnabled || treeItem._forceNotifySelection)) {
 		treeItem._gotMouseDownLeft = true;
-	} else if (ev.button == DwtMouseEvent.RIGHT && treeItem._actionEnabled) {
+	} else if (ev.button == DwtMouseEvent.RIGHT && (treeItem._actionEnabled || treeItem._forceNotifyAction)) {
 		treeItem._gotMouseDownRight = true;
 	}
 };
