@@ -46,19 +46,24 @@ ZaController = function(appCtxt, container, app, iKeyName) {
 	this._loginDialog = appCtxt.getLoginDialog();
 
 	this._loginDialog.registerCallback(this.loginCallback, this);
-	this._errorDialog = appCtxt.getErrorDialog();
-	this._msgDialog = appCtxt.getMsgDialog();
-	if(this._app) {
-		this._msgDialog = this._app.dialogs["msgDialog"] = appCtxt.getMsgDialog();
-		this._msgDialog.setApp(app);
-		this._errorDialog = this._app.dialogs["errorDialog"] = appCtxt.getErrorDialog();
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-	    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
-    	this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);    
-	}
 
+    this.initDialogs ();
+    
     this.objType = ZaEvent.S_ACCOUNT;
     this._helpURL = ZaController.helpURL;
+}
+
+ZaController.prototype.initDialogs = function (refresh) {
+    this._errorDialog = this._appCtxt.getErrorDialog(refresh);
+	this._msgDialog = this._appCtxt.getMsgDialog(refresh);
+	if(this._app) {
+		this._msgDialog = this._app.dialogs["msgDialog"] = this._appCtxt.getMsgDialog(refresh);
+		this._msgDialog.setApp(this._app);
+		this._errorDialog = this._app.dialogs["errorDialog"] = this._appCtxt.getErrorDialog(refresh);
+		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);
+	    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
+    	this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);
+	}
 }
 
 /**

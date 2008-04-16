@@ -28,16 +28,12 @@ ZaZimbraAdmin = function(appCtxt) {
 	ZaController.call(this, appCtxt, null, null,"ZaZimbraAdmin");
 
 	ZaZimbraAdmin.showSplash(this._shell);
-	
 	appCtxt.setAppController(this);
-
-		
-	// handles to various apps
+    
+    // handles to various apps
 	this._appFactory = new Object();
 	this._appFactory[ZaZimbraAdmin.ADMIN_APP] = ZaApp;
- 
- 	this.startup();
-
+    this.startup();
     this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
 }
 
@@ -296,7 +292,23 @@ function() {
 		var resp = command.invoke(params);
 		//initialize my rights
 		ZaZimbraAdmin.initInfo (resp);
-		if(!ZaSettings.initialized)
+
+        //check the user locale settings and reload the message is needed.
+        ZaZimbraAdmin.LOCALE_QS = "" ;
+        if (ZaZimbraAdmin.LOCALE && (ZaZimbraAdmin.LOCALE != AjxEnv.DEFAULT_LOCALE)) {
+            if (ZaZimbraAdmin.LOCALE != null) {
+                var index = ZaZimbraAdmin.LOCALE.indexOf("_");
+                if (index == -1) {
+                    ZaZimbraAdmin.LOCALE_QS = "&language=" + ZaZimbraAdmin.LOCALE;
+                } else {
+                    ZaZimbraAdmin.LOCALE_QS = "&language=" + ZaZimbraAdmin.LOCALE.substring(0, index) +
+                               "&country=" + ZaZimbraAdmin.LOCALE.substring(ZaZimbraAdmin.LOCALE.length - 2);
+                }
+            }
+            ZaZimbraAdmin.reload_msg ();
+            this.initDialogs(true) ;  //make sure all the precreated dialogs are also recreated.
+        }
+        if(!ZaSettings.initialized)
 			ZaSettings.init();
 		else
 			ZaZimbraAdmin._killSplash();
@@ -310,6 +322,17 @@ function() {
 		}					
 		this._handleException(ex, "ZaZimbraAdmin.prototype.startup", null, true);
 	}
+}
+
+ZaZimbraAdmin.reload_msg = function () {
+    var includes = [] ;
+    includes.push ( [appContextPath , "/res/" , "I18nMsg,AjxMsg,ZMsg,ZaMsg,AjxKeys" , ".js?v=" ,
+                        appVers , ZaZimbraAdmin.LOCALE_QS].join("") );
+
+    //the dynamic script load is asynchronous, may need a callback to make sure all the messages are actually loaded
+    if (AjxEnv.hasFirebug) console.log("Reload the message file: " + includes.toString()) ;
+    AjxInclude(includes);
+    ZaZimbraAdmin._LOCALE_MSG_RELOADED = true ;
 }
 
 //process the GetInfoRequest response to set the domainAdminMaxMailQuota value in MB
@@ -331,29 +354,32 @@ function (resp) {
 			var attrsArr = resp.Body.GetInfoResponse.attrs._attrs;
 			if(attrsArr["displayName"] && attrsArr["displayName"].length) 
 				ZaZimbraAdmin.currentUserName = attrsArr["displayName"];
-		}	
+
+        }
 		//fallback to email address	
 		if ((!ZaZimbraAdmin.currentUserName || ZaZimbraAdmin.currentUserName.length <=0) && resp.Body.GetInfoResponse.name){
 			ZaZimbraAdmin.currentUserName = resp.Body.GetInfoResponse.name;
 		}
-	}
+
+        if (resp && resp.Body && resp.Body.GetInfoResponse && resp.Body.GetInfoResponse.prefs) {
+            var prefs = resp.Body.GetInfoResponse.prefs._attrs ;
+            if (prefs && prefs["zimbraPrefLocale"]) {
+                //get the zimbraPrefLocale
+                ZaZimbraAdmin.LOCALE = prefs["zimbraPrefLocale"] ;
+            }
+        }
+    }
 }
 
 ZaZimbraAdmin.prototype._setLicenseStatusMessage = function () {
 	if ((typeof ZaLicense == "function") && (ZaSettings.LICENSE_ENABLED)){
 		ZaLicense.setLicenseStatus(this);
 	}
-};
+}
 
 ZaZimbraAdmin.prototype.setStatusMsg = 
 function(msg, clear) {
 	this._statusBox.setText(msg);
-	
-	//HC: Why it has the ZmZimbraMail reference? Somebody please remove it.
-	if (msg && clear) {
-		var act = new AjxTimedAction(null, ZmZimbraMail._clearStatus, [this._statusBox]);
-		AjxTimedAction.scheduleAction(act, ZmZimbraMail.STATUS_LIFE);
-	}
 }
 
 ZaZimbraAdmin._clearStatus = 
@@ -362,50 +388,11 @@ function(statusBox) {
 	statusBox.getHtmlElement().className = "statusBox";
 }
 
-/*
-ZaZimbraAdmin.prototype._createAppChooser =
-function() {
-	var buttons = new Array();
-	
-	if (ZaSettings.ADDRESSES_ENABLED)
-		buttons.push(ZaAppChooser.B_ADDRESSES);
-	if (ZaSettings.SYSTEM_CONFIG_ENABLED)
-		buttons.push(ZaAppChooser.B_SYSTEM_CONFIG);
-	if (ZaSettings.MONITORING_ENABLED)
-		buttons.push(ZaAppChooser.B_MONITORING);
-
-		
-	buttons.push(ZaAppChooser.SEP, ZaAppChooser.B_HELP,ZaAppChooser.B_MIGRATION_WIZ, ZaAppChooser.B_LOGOUT);
-	var appChooser = new ZaAppChooser(this._shell, null, buttons);
-	
-	var buttonListener = new AjxListener(this, this._appButtonListener);
-	for (var i = 0; i < buttons.length; i++) {
-		var id = buttons[i];
-		if (id == ZaAppChooser.SEP) continue;
-		var b = appChooser.getButton(id);
-		b.addSelectionListener(buttonListener);
-	}
-
-	return appChooser;
-}
-*/
 ZaZimbraAdmin.prototype._createAppTabs =
 function () {
 	var appTabGroup = new ZaAppTabGroup(this._shell, this.getApp());
 	return appTabGroup ;
 }
-
-/*
-ZaZimbraAdmin.prototype._createMainTab =
-function () {
-	var tabGroup = this._app.getTabGroup() ;
-	tabGroup._mainTab = new ZaAppTab (tabGroup , this._app, 
-				//this._app.getViewById(this._tabId)["APP CONTENT"].getTitle(), 
-				//"Status",
-				null, null,  
-				null, null, false, true);
-	
-} */
 
 ZaZimbraAdmin.prototype._createHelpLink =
 function() {
@@ -567,6 +554,9 @@ ZaZimbraAdmin.prototype._launchApp =
 function() {
 	if (!this._app)
 		this._createApp();
+
+    //recreate the error/msg dialogs
+    if (ZaZimbraAdmin._LOCALE_MSG_RELOADED) this.initDialogs(true) ;
 
     this._appCtxt.setClientCmdHdlr(new ZaClientCmdHandler(this._app));
     //draw stuff

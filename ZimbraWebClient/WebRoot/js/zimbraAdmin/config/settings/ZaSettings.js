@@ -90,17 +90,17 @@ ZaSettings.init = function () {
 					var zimlet = zimlets[ix].zimlet[0];
 					var zimletContext = zimlets[ix].zimletContext[0];
 					//load message file first because consequent files may reference it
-					includes.push([appContextPath, "/res/", zimlet.name, ".js?v=",appVers].join(""));
+                    includes.push([appContextPath, "/res/", zimlet.name, ".js?v=",appVers,ZaZimbraAdmin.LOCALE_QS].join(""));
 					if(zimlet.include && zimlet.include.length>0) {
 						var cnt2 = zimlet.include.length;
 						for (var j=0;j<cnt2;j++) {
-							includes.push(zimletContext.baseUrl + zimlet.include[j]._content);
+							includes.push(zimletContext.baseUrl + zimlet.include[j]._content + "?v=" +appVers);
 						}
 					}
 					if(zimlet.includeCSS && zimlet.includeCSS.length>0) {
 						var cnt3 = zimlet.includeCSS.length;
 						for (var j=0;j<cnt3;j++) {
-							cssIncludes.push(zimletContext.baseUrl + zimlet.includeCSS[j]._content);
+							cssIncludes.push(zimletContext.baseUrl + zimlet.includeCSS[j]._content  + "?v=" +appVers);
 						}
 					}
 				} else {

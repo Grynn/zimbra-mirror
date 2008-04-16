@@ -86,15 +86,15 @@ function() {
 }
 
 ZaAppCtxt.prototype.getMsgDialog =
-function() {
-	if (!this._msgDialog)
+function(refresh) {
+	if (!this._msgDialog || refresh)
 		this._msgDialog = new ZaMsgDialog(this.getShell());
 	return this._msgDialog;
 }
 
 ZaAppCtxt.prototype.getErrorDialog = 
-function() {
-	if (!this._errorDialog)
+function(refresh) {
+	if (!this._errorDialog || refresh)
 		this._errorDialog = new ZaErrorDialog(this.getShell());
 	return this._errorDialog;
 }
