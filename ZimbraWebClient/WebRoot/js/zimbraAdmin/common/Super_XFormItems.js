@@ -85,9 +85,14 @@ Cos_Number_XModelItem.prototype.validateType = XModelItem.prototype.validateNumb
 
 Cos_Enum_XModelItem = function (){}
 XModelItemFactory.createItemType("_COS_ENUM_", "cos_enum", Cos_Enum_XModelItem, Cos_String_XModelItem);
-Cos_Enum_XModelItem.prototype.getDefaultValue = function () {	return this.choices[0]; };
+Cos_Enum_XModelItem.prototype.getDefaultValue = function () {	return this.getChoices()[0]; };
 
-Cos_Enum_XModelItem.prototype.getChoices = function()		 {		return this.choices;		}
+Cos_Enum_XModelItem.prototype.getChoices = function()		 {
+    if (typeof this.choices == "function") {  //due to the i18n complexity, we have to define the choices use the function
+        this.choices = this.choices.call (this) ;
+    }
+    return this.choices;
+}
 Cos_Enum_XModelItem.prototype.getSelection = function() 	{		return this.selection;		}
 
 Cos_Enum_XModelItem.prototype.validateType = function (value) {
@@ -1198,12 +1203,6 @@ Super_Lifetime_XFormItem.prototype.numCols = 4;
 Super_Lifetime_XFormItem.prototype.colSpan = 4;
 Super_Lifetime_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
 Super_Lifetime_XFormItem.prototype.useParenttable = false;
-Super_Lifetime_XFormItem.prototype.TIME_CHOICES = [
- 				{value:"d", label:AjxMsg.days},
-				{value:"h", label:AjxMsg.hours},
-				{value:"m", label:AjxMsg.minutes},
-				{value:"s", label:AjxMsg.seconds}
-];
 
 Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
@@ -1248,7 +1247,7 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 	
 	var selectField = 	{
 		type:_OSELECT1_, ref:".", relevantBehavior:_PARENT_, 
-		choices:Super_Lifetime_XFormItem.prototype.TIME_CHOICES,
+		choices:ZaModel.getTimeChoices(),
 		getDisplayValue:function (itemVal){
 			var val = "d";
 			if(itemVal != null && itemVal.length >0) {
@@ -1311,10 +1310,7 @@ Super_Lifetime1_XFormItem.prototype.numCols = 4;
 Super_Lifetime1_XFormItem.prototype.colSpan = 4;
 Super_Lifetime1_XFormItem.prototype.colSizes =["275px","80px","120px","150px"];
 Super_Lifetime1_XFormItem.prototype.useParenttable = false;
-Super_Lifetime1_XFormItem.prototype.TIME_CHOICES = [
- 				{value:"d", label:AjxMsg.days},
-				{value:"h", label:AjxMsg.hours}
-];
+
 
 SuperWiz_Lifetime1_XFormItem = function() {}
 XFormItemFactory.createItemType("_SUPERWIZ_LIFETIME1_", "superwiz_lifetime1", SuperWiz_Lifetime1_XFormItem, Super_Lifetime1_XFormItem);
@@ -1361,7 +1357,7 @@ Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 	
 	var selectField = 	{
 		type:_OSELECT1_, ref:".", relevantBehavior:_PARENT_, 
-		choices:Super_Lifetime1_XFormItem.prototype.TIME_CHOICES,
+		choices:ZaModel.getTimeChoices1(),
 		getDisplayValue:function (itemVal){
 			var val = "d";
 			if(itemVal != null && itemVal.length >0) {

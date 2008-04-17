@@ -67,21 +67,15 @@ ZaSearchOption.A_domainListChecked = "option_domain_list_checked";
 ZaSearchOption.A_serverList = "option_server_list" ;
 ZaSearchOption.A_serverListChecked = "option_server_list_checked";
 
-ZaSearchOption.accountStatusChoices = [
-		{value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_ACTIVE]}, 
-		{value:ZaAccount.ACCOUNT_STATUS_CLOSED, label:ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_CLOSED]},
-		{value:ZaAccount.ACCOUNT_STATUS_LOCKED, label: ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKED]},
-		{value:ZaAccount.ACCOUNT_STATUS_LOCKOUT, label: ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKOUT]},
-		{value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE]}
-	];
+
 	
 ZaSearchOption.getObjectTypeXModel = 
 function (optionId){
 	var xmodel = {
 		items: []
 	}
-	
-	var basicItems = [
+
+    var basicItems = [
 			//{id: ZaSearchOption.A_basic_query, ref: "options/" + ZaSearchOption.A_basic_query, type: _STRING_},
 			{id: ZaSearchOption.A_basic_uid, ref: "options/" + ZaSearchOption.A_basic_uid, type: _STRING_},
 			{id: ZaSearchOption.A_objTypeAccountAdmin, ref: "options/" + ZaSearchOption.A_objTypeAccountAdmin, type: _STRING_},
@@ -155,27 +149,26 @@ function (optionId){
 ZaSearchOption.getObjectTypeXForm = 
 function (optionId, height){
 	var marginTop = ZaSearchOptionView.HEADER_HEIGHT + 8 ;
-	var xform = {
+    var accountStatusChoices = [
+           {value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_ACTIVE)},
+           {value:ZaAccount.ACCOUNT_STATUS_CLOSED, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_CLOSED)},
+           {value:ZaAccount.ACCOUNT_STATUS_LOCKED, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_LOCKED)},
+           {value:ZaAccount.ACCOUNT_STATUS_LOCKOUT, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_LOCKOUT)},
+           {value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_MAINTENANCE)}
+       ];
+	
+    var xform = {
 			numCols:2, width: 150, cssClass: "ZaSearchOptionOverview",
 			cssStyle: "margin-top: " + marginTop + "px", 
 			items: []
 	}
 	
 	var basicItems = [
-		/*{ type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_query,
-			label: ZaMsg.search_option_query, align: _LEFT_, width: 100, 
-			onChange: ZaSearchBuilderController.handleOptions
-		 },*/
 		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_uid,
 			label: ZaMsg.search_option_uid, align: _LEFT_, width: 100, 
 			onChange: ZaSearchBuilderController.handleOptions,
 		  	toolTipContent: ZaMsg.tt_search_option_uid
 		 },
-		 /*
-		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_cn,
-			label: ZaMsg.search_option_cn, align: _LEFT_, width: 100, 
-			onChange: ZaSearchBuilderController.handleOptions
-		 },*/
 		 { type: _TEXTFIELD_, ref:  ZaSearchOption.A_basic_sn,
 			label: ZaMsg.search_option_sn, align: _LEFT_, width: 100, 
 			onChange: ZaSearchBuilderController.handleOptions
@@ -191,7 +184,7 @@ function (optionId, height){
 		 },
 		 { type:_OSELECT1_, ref:ZaSearchOption.A_basic_status, editable:false, 
 		 	msgName:ZaMsg.NAD_AccountStatus,label:ZaMsg.NAD_AccountStatus, 
-		 	labelLocation:_LEFT_, choices:ZaSearchOption.accountStatusChoices,
+		 	labelLocation:_LEFT_, choices:accountStatusChoices,
 		 	onChange: ZaSearchBuilderController.handleOptions
 		 },
 		 {	type: _GROUP_, name:"special search cases",

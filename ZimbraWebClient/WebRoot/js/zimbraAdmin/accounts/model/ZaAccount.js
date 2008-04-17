@@ -1522,17 +1522,27 @@ ZaItem._ATTR[ZaAccount.A_notes] = ZaMsg.attrDesc_notes;
 
 ZaAccount._accountStatus = 
 function(val) {
-	var desc = ZaAccount._ACCOUNT_STATUS[val];
+	var desc = ZaAccount.getAccountStatusMsg (val);
 	return (desc == null) ? val : desc;
 }
 
-/* Translation of Account status values into screen names */
-ZaAccount._ACCOUNT_STATUS = new Object ();
-ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_ACTIVE] = ZaMsg.accountStatus_active;
-ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_CLOSED] = ZaMsg.accountStatus_closed;
-ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKED] = ZaMsg.accountStatus_locked;
-ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_LOCKOUT] = ZaMsg.accountStatus_lockout;
-ZaAccount._ACCOUNT_STATUS[ZaAccount.ACCOUNT_STATUS_MAINTENANCE] = ZaMsg.accountStatus_maintenance;
+/* Translation of Account status values into screen names */     
+
+ZaAccount.getAccountStatusMsg = function (status) {
+    if (status == ZaAccount.ACCOUNT_STATUS_ACTIVE)  {
+        return ZaMsg.accountStatus_active;
+    }else if (status == ZaAccount.ACCOUNT_STATUS_CLOSED) {
+        return ZaMsg.accountStatus_closed;
+    }else if (status == ZaAccount.ACCOUNT_STATUS_LOCKED ) {
+        return  ZaMsg.accountStatus_locked;
+    }else if (ZaAccount.ACCOUNT_STATUS_LOCKOUT){
+        return  ZaMsg.accountStatus_lockout;
+    }else if (ZaAccount.ACCOUNT_STATUS_MAINTENANCE){
+        return  ZaMsg.accountStatus_maintenance;
+    }else {
+        return "";
+    }
+}
 
 ZaAccount.initMethod = function (app) {
 	this.attrs = new Object();

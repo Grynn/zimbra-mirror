@@ -1304,8 +1304,9 @@ XFormItem.prototype.getNormalizedChoices = function () {
 
 	var choices = this.getChoices();
 	if (choices == null) return null;
-
-	var normalizedChoices;
+    if (typeof choices == "function") choices = choices.call(this) ;
+    
+    var normalizedChoices;
 	if (typeof choices.getChoices == "function") {
 		normalizedChoices = choices.getChoices();
 	} else if (AjxUtil.isArray(choices)) {

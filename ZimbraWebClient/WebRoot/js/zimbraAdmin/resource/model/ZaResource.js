@@ -592,18 +592,7 @@ ZaItem._ATTR[ZaResource.A_accountStatus] = ZaMsg.attrDesc_accountStatus;
 ZaItem._ATTR[ZaResource.A_mailHost] =  ZaMsg.attrDesc_mailHost;
 ZaItem._ATTR[ZaResource.A_notes] = ZaMsg.attrDesc_notes;
 
-ZaResource.getAccountStatusLabel = 
-function(val) {
-	var desc = ZaResource._ACCOUNT_STATUS[val];
-	return (desc == null) ? val : desc;
-};
-
-/* Translation of Account status values into screen names */
-ZaResource._ACCOUNT_STATUS = new Object ();
-ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_ACTIVE] = ZaMsg.accountStatus_active;
-ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_CLOSED] = ZaMsg.resourceStatus_closed;
-//ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_LOCKED] = ZaMsg.accountStatus_locked;
-//ZaResource._ACCOUNT_STATUS[ZaResource.ACCOUNT_STATUS_MAINTENANCE] = ZaMsg.accountStatus_maintenance;
+ZaResource.getAccountStatusLabel = ZaAccount.getAccountStatusMsg ;
 
 ZaResource.getResTypeLabel = 
 function(val) {

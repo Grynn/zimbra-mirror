@@ -60,18 +60,22 @@ ZaSearch.A_fResources = "f_resources";
 ZaSearch._currentQuery = null;
 ZaSearch._savedSearchToBeUpdated = true ; //initial value to be true
 
-ZaSearch.PREDEFINED_SAVED_SEARCHES_FOR_ADMIN_ONLY = [
-	{name: "Admin Accounts" , query: "(|(zimbraIsAdminAccount=TRUE)(zimbraIsDomainAdminAccount=TRUE))"}
-];
+ZaSearch.getPredefinedSavedSearchesForAdminOnly = function () {
+    return   [
+        {name: "Admin Accounts" , query: "(|(zimbraIsAdminAccount=TRUE)(zimbraIsDomainAdminAccount=TRUE))"}
+    ];
+}
 
-ZaSearch.PREDEFINED_SAVED_SEARCHES = [
-	{name: "Locked Out Accounts", query: "(zimbraAccountStatus=*lockout*)"},
-	{name: "Closed Accounts", query: "(zimbraAccountStatus=*closed*)"},
-	{name: "Maintenance Accounts", query: "(zimbraAccountStatus=*maintenance*)"},
-	{name: "Non-Active Accounts", query: "(!(zimbraAccountStatus=*active*))" },
-	{name: "Inactive Accounts (30 days)", query: "(zimbraLastLogonTimestamp<=###JSON:{func: ZaSearch.getTimestampByDays, args:[-30]}###)"},
-	{name: "Inactive Accounts (90 days)", query: "(zimbraLastLogonTimestamp<=###JSON:{func: ZaSearch.getTimestampByDays, args:[-90]}###)"}
-];
+ZaSearch.getPredefinedSavedSearches =  function () {
+    return [
+        {name: ZaMsg.ss_locked_out_accounts, query: "(zimbraAccountStatus=*lockout*)"},
+        {name: ZaMsg.ss_closed_accounts, query: "(zimbraAccountStatus=*closed*)"},
+        {name: ZaMsg.ss_maintenance_accounts, query: "(zimbraAccountStatus=*maintenance*)"},
+        {name: ZaMsg.ss_non_active_accounts, query: "(!(zimbraAccountStatus=*active*))" },
+        {name: ZaMsg.ss_inactive_accounts_30, query: "(zimbraLastLogonTimestamp<=###JSON:{func: ZaSearch.getTimestampByDays, args:[-30]}###)"},
+        {name: ZaMsg.ss_inactive_accounts_90, query: "(zimbraLastLogonTimestamp<=###JSON:{func: ZaSearch.getTimestampByDays, args:[-90]}###)"}
+    ];
+}
 
 /**
 * @param app reference to ZaApp
@@ -538,13 +542,13 @@ function () {
 		if (AjxEnv.hasFirebug) console.log("Load the predefined saved searches ...") ;
 		var savedSearchArr = [] ;
 		if (!ZaSettings.isDomainAdmin) { //admin only searches
-			for (var m=0; m < ZaSearch.PREDEFINED_SAVED_SEARCHES_FOR_ADMIN_ONLY.length; m++){
-				savedSearchArr.push (ZaSearch.PREDEFINED_SAVED_SEARCHES_FOR_ADMIN_ONLY[m]) ;
+			for (var m=0; m < ZaSearch.getPredefinedSavedSearchesForAdminOnly().length; m++){
+				savedSearchArr.push (ZaSearch.getPredefinedSavedSearchesForAdminOnly()[m]) ;
 			}
 		}
 		
-		for (var n=0; n < ZaSearch.PREDEFINED_SAVED_SEARCHES.length; n ++) {
-			savedSearchArr.push (ZaSearch.PREDEFINED_SAVED_SEARCHES[n]) ;
+		for (var n=0; n < ZaSearch.getPredefinedSavedSearches().length; n ++) {
+			savedSearchArr.push (ZaSearch.getPredefinedSavedSearches()[n]) ;
 		}
 		
 		ZaSearch.modifySavedSearches (savedSearchArr) ;

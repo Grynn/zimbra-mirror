@@ -691,7 +691,7 @@ XModelItem.prototype.validateDateTime = function (value) {
 //	XModelItem class: "string"
 //
 String_XModelItem = function(){}
-XModelItemFactory.createItemType("_STRING_", "string", String_XModelItem)
+XModelItemFactory.createItemType("_STRING_", "string", String_XModelItem)  ;
 String_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
 String_XModelItem.prototype.getDefaultValue = function () {	return ""; };
 
@@ -789,14 +789,22 @@ List_XModelItem.prototype.validateType = function (value) {
 //
 //	XModelItem class: "enum"
 //
-Enum_XModelItem = function(){}
+Enum_XModelItem = function(){
+    XModel.registerErrorMessage("didNotMatchChoice",	AjxMsg.didNotMatchChoice);
+
+}
 XModelItemFactory.createItemType("_ENUM_", "enum", Enum_XModelItem);
 //XXXX
-Enum_XModelItem.prototype.getDefaultValue = function () {	return this.choices[0]; };
+Enum_XModelItem.prototype.getDefaultValue = function () {	return this.getChoices()[0]; };
 
-Enum_XModelItem.prototype.getChoices = function()		 {		return this.choices;		}
+Enum_XModelItem.prototype.getChoices = function()		 {
+    if (typeof this.choices == "function") {  //due to the i18n complexity, we have to define the choices use the function
+        this.choices = this.choices.call (this) ;
+    }
+    return this.choices;
+}
 Enum_XModelItem.prototype.getSelection = function() 	{		return this.selection;		}
-XModel.registerErrorMessage("didNotMatchChoice",	AjxMsg.didNotMatchChoice);
+
 
 Enum_XModelItem.prototype.validateType = function (value) {
 	// if the selection is open, they can enter any value they want

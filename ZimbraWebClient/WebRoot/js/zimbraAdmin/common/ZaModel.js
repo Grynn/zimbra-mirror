@@ -21,9 +21,16 @@ ZaModel = function(init) {
 	this._evtMgr = new AjxEventMgr();
 }
 
+ZaModel.getBooleanChoices = function () {
+    return [{value:"TRUE", label:ZaMsg.Yes}, {value:"FALSE", label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
+}
+ZaModel.BOOLEAN_CHOICES= ZaModel.getBooleanChoices ; 
 
-ZaModel.BOOLEAN_CHOICES= [{value:"TRUE", label:ZaMsg.Yes}, {value:"FALSE", label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
-ZaModel.BOOLEAN_CHOICES1= [{value:true, label:ZaMsg.Yes}, {value:false, label:ZaMsg.No}, {value:null, label:ZaMsg.No}];
+ZaModel.getBooleanChoices1 = function () {
+    return [{value:true, label:ZaMsg.Yes}, {value:false, label:ZaMsg.No}, {value:null, label:ZaMsg.No}];    
+}
+ZaModel.BOOLEAN_CHOICES1= ZaModel.getBooleanChoices1 ;
+
 ZaModel.FONT_SIZE_CHOICES = [
 	{value:"8pt", label: "8pt"},
 	{value:"10pt", label: "10pt"},
@@ -40,14 +47,47 @@ ZaModel.FONT_FAMILY_CHOICES = [
 	{label:"Verdana",			value:"Verdana, Arial, Helvetica, sans-serif" }
 ];
 
-ZaModel.COMPOSE_FORMAT_CHOICES = [{value:"text", label:ZaMsg.Text}, {value:"html", label:ZaMsg.HTML}];
-ZaModel.GROUP_MAIL_BY_CHOICES = [{value:"conversation", label:ZaMsg.Conversation}, {value:"message", label:ZaMsg.Message}];
-ZaModel.SIGNATURE_STYLE_CHOICES = [{value:"outlook", label:ZaMsg.No}, {value:"internet", label:ZaMsg.Yes}];
-ZaModel.REMINDER_CHOICES = [{value:"0",label:ZaMsg.never},{value:1,label:"1"},{value:5,label:"5"},{value:10,label:"10"},{value:15,label:"15"},{value:20,label:"20"},{value:25,label:"25"},{value:30,label:"30"},{value:45,label:"45"},{value:50,label:"50"},{value:55,label:"55"},{value:60,label:"60"}];
+ZaModel.getComposeFormatChoices =   function () {
+    return [{value:"text", label:ZaMsg.Text}, {value:"html", label:ZaMsg.HTML}];
+}
+
+ZaModel.COMPOSE_FORMAT_CHOICES = ZaModel.getComposeFormatChoices ;
+
+ZaModel.getGroupMailByChoices = function () {
+    return [{value:"conversation", label:ZaMsg.Conversation}, {value:"message", label:ZaMsg.Message}];
+}
+ZaModel.GROUP_MAIL_BY_CHOICES = ZaModel.getGroupMailByChoices ;
+
+ZaModel.getSignatureStyleChoices = function () {
+    return [{value:"outlook", label:ZaMsg.No}, {value:"internet", label:ZaMsg.Yes}];
+}
+ZaModel.SIGNATURE_STYLE_CHOICES = ZaModel.getSignatureStyleChoices ;
+
+ZaModel.getReminderChoices = function () {
+    return [{value:"0",label:ZaMsg.never},{value:1,label:"1"},{value:5,label:"5"},{value:10,label:"10"},{value:15,label:"15"},{value:20,label:"20"},{value:25,label:"25"},{value:30,label:"30"},{value:45,label:"45"},{value:50,label:"50"},{value:55,label:"55"},{value:60,label:"60"}];
+}
+ZaModel.REMINDER_CHOICES = ZaModel.getReminderChoices ;
+
 ZaModel.ErrorCode = "code";
 ZaModel.ErrorMessage = "error_message";
 ZaModel.currentStep = "currentStep";
 ZaModel.currentTab = "currentTab";
+
+ZaModel.getTimeChoices = function () {
+    return [
+            {value:"d", label:AjxMsg.days},
+            {value:"h", label:AjxMsg.hours},
+            {value:"m", label:AjxMsg.minutes},
+            {value:"s", label:AjxMsg.seconds}
+           ];
+}
+
+ZaModel.getTimeChoices1 = function () {
+    return [
+ 				{value:"d", label:AjxMsg.days},
+				{value:"h", label:AjxMsg.hours}
+            ];
+}
 
 ZaModel.prototype.toString = 
 function() {
