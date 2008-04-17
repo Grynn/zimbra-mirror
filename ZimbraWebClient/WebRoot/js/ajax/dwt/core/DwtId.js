@@ -23,6 +23,9 @@
  * allocated only for elements it would be useful to locate: major components of the UI,
  * toolbars, buttons, views, menus, some menu items, and some selects.
  * 
+ * There is a simple naming scheme for the IDs themselves. Each ID starts with a "z" followed
+ * by one to a few letters that indicate the type of object (widget) represented by the element.
+ * 
  * @author Conrad Damon
  */
  
@@ -33,6 +36,7 @@ DwtId.WIDGET_HDR			= "zh_";		// list view header
 DwtId.WIDGET_HDR_TABLE		= "zht_";		// list view header table
 DwtId.WIDGET_HDR_ICON		= "zhi_";		// list view header image
 DwtId.WIDGET_HDR_LABEL		= "zhl_";		// list view header text
+DwtId.WIDGET_HDR_ARROW		= "zha_";		// list view header dropdown arrow
 DwtId.WIDGET_HDR_SASH		= "zhs_";		// sash between list view headers
 
 /**

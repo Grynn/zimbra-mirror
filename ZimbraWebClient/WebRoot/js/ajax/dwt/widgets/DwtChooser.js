@@ -1020,15 +1020,15 @@ function(ev) {
  *        parent		[DwtComposite]	containing widget
  *        type			[constant]		source or target
  *        className		[string]*		CSS class
- *        view			[constant]*		ID of view
+ *        view			[constant]*		context for use in creating IDs
  */
 DwtChooserListView = function(params) {
 	
 	if (arguments.length == 0) return;
 	params = Dwt.getParams(arguments, DwtChooserListView.PARAMS);
-	className = className ? className : "DwtChooserListView";
-	DwtListView.call(this, {parent:parent, className:className, view:view,
-							headerList:this._getHeaderList(parent)});
+	params.className = params.className || "DwtChooserListView";
+	params.headerList = this._getHeaderList(parent);
+	DwtListView.call(this, params);
 
 	this.type = type;
 	this._chooserParent = parent.parent;
