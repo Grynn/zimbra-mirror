@@ -17,26 +17,37 @@
 
 
 /**
-* @class
-* @constructor
-* DwtTabView  - class for the tabbed view
-* DwtTabView manages the z-index of the contained tabs. 
-* @author Greg Solovyev
-**/
-DwtTabView = function(parent, className, posStyle) {
+ * @class
+ * @constructor
+ * DwtTabView  - class for the tabbed view
+ * DwtTabView manages the z-index of the contained tabs. 
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        id			[string]*			an explicit ID to use for the control's HTML element
+ * 
+ * @author Greg Solovyev
+ */
+DwtTabView = function(params) {
 	if (arguments.length == 0) return;
-
-	DwtComposite.call(this, {parent:parent, className:className || "ZTabView", posStyle:posStyle || DwtControl.ABSOLUTE_STYLE});
+	params = Dwt.getParams(arguments, DwtListView.PARAMS);
+	params.className = params.className || "ZTabView";
+	params.posStyle = params.posStyle || DwtControl.ABSOLUTE_STYLE;
+	DwtComposite.call(this, params);
 
 	this._stateChangeEv = new DwtEvent(true);
 	this._tabs = [];
 	this._tabIx = 1;
     this._createHtml();
 
-	var tabGroupId = [this.toString(),this._htmlElId].join("-")
+	var tabGroupId = [this.toString(), this._htmlElId].join("-")
 	this._tabGroup = new DwtTabGroup(tabGroupId);
 	this._tabGroup.addMember(this._tabBar);
 };
+
+DwtTabView.PARAMS = ["parent", "className", "posStyle"];
 
 DwtTabView.prototype = new DwtComposite;
 DwtTabView.prototype.constructor = DwtTabView;
@@ -82,13 +93,13 @@ DwtTabView.prototype.getTabGroupMember = function() {
 * public method addTab. Note that this method does not automatically update the tabs panel.
 **/
 DwtTabView.prototype.addTab =
-function (title, tabViewOrCallback) {
+function (title, tabViewOrCallback, buttonId) {
 	var tabKey = this._tabIx++;	
 
 	// create tab entry
 	this._tabs[tabKey] = {
 		title: title,
-		button: this._tabBar.addButton(tabKey, title)
+		button: this._tabBar.addButton(tabKey, title, buttonId)
 	};
 
 	// add the page
@@ -523,8 +534,8 @@ function(tabKey, listener) {
 * @param tabTitle
 **/
 DwtTabBar.prototype.addButton =
-function(tabKey, tabTitle) {
-	var b = this._buttons[tabKey] = new DwtTabButton(this);
+function(tabKey, tabTitle, id) {
+	var b = this._buttons[tabKey] = new DwtTabButton(this, id);
 	
 	this._buttons[tabKey].addSelectionListener(new AjxListener(this, DwtTabBar._setActiveTab));
 
@@ -625,8 +636,8 @@ function(ev) {
 * @class
 * @constructor
 **/
-DwtTabButton = function(parent) {
-	DwtButton.call(this, {parent:parent, className:"ZTab"});
+DwtTabButton = function(parent, id) {
+	DwtButton.call(this, {parent:parent, className:"ZTab", id:id});
 };
 
 DwtTabButton.prototype = new DwtButton;

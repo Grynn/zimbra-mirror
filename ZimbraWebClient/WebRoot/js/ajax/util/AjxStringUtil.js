@@ -64,7 +64,7 @@ AjxStringUtil.capitalize = function(str) {
  */
 AjxStringUtil.toMixed =
 function(text, sep, camel) {
-	if (!text) { return ""; }
+	if (!text || (typeof text != "string")) { return ""; }
 	sep = sep || /\s+/;
 	var wds = text.split(sep);
 	var newText = [];
