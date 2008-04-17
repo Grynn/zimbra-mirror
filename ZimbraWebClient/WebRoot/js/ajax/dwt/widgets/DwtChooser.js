@@ -1009,27 +1009,33 @@ function(ev) {
 };
 
 /**
-* Creates a chooser list view.
-* @constructor
-* @class
-* This base class represents a list view which contains items that can be transferred from it
-* (source) or to it (target). Subclasses should implement  _getHeaderList(),
-* _sortColumn(), and _createItemHtml().
-*
-* @param parent			[DwtComposite]	containing widget
-* @param type			[constant]		source or target
-* @param className		[string]*		CSS class
-*/
-DwtChooserListView = function(parent, type, className) {
+ * Creates a chooser list view.
+ * @constructor
+ * @class
+ * This base class represents a list view which contains items that can be transferred from it
+ * (source) or to it (target). Subclasses should implement  _getHeaderList(),
+ * _sortColumn(), and _createItemHtml().
+ *
+ * @param params		[hash]			hash of params:
+ *        parent		[DwtComposite]	containing widget
+ *        type			[constant]		source or target
+ *        className		[string]*		CSS class
+ *        view			[constant]*		ID of view
+ */
+DwtChooserListView = function(params) {
 	
 	if (arguments.length == 0) return;
+	params = Dwt.getParams(arguments, DwtChooserListView.PARAMS);
 	className = className ? className : "DwtChooserListView";
-	DwtListView.call(this, {parent:parent, className:className, headerList:this._getHeaderList(parent)});
+	DwtListView.call(this, {parent:parent, className:className, view:view,
+							headerList:this._getHeaderList(parent)});
 
 	this.type = type;
 	this._chooserParent = parent.parent;
 	this._viewPrefix = Dwt.getNextId();
 };
+
+DwtChooserListView.PARAMS = ["parent", "type", "className", "view"];
 
 DwtChooserListView.SOURCE = 1;
 DwtChooserListView.TARGET = 2;
