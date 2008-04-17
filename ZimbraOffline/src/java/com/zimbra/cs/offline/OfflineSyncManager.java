@@ -23,6 +23,7 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.DirectorySync;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
@@ -40,6 +41,7 @@ public class OfflineSyncManager {
     private static final String A_ZDSYNC_STATUS = "status";
     private static final String A_ZDSYNC_LASTSYNC = "lastsync";
     private static final String A_ZDSYNC_MESSAGE = "message";
+    private static final String A_ZDSYNC_UNREAD = "unread";
     
     
     private static class SyncError {
@@ -78,7 +80,7 @@ public class OfflineSyncManager {
 	    long lastAuthFail;
 	    ZAuthToken authToken; //null for data sources
 	    long authExpires; //0 for data sources
-        
+	    
         void syncStart() {
         	mStatus = SyncStatus.running;
         	mError = null;
@@ -427,9 +429,7 @@ public class OfflineSyncManager {
 	
 	/*
 		<zdsync xmlns="urn:zimbraOffline">
-		  <account name="foo@domain1.com" id="1234-5678">
-			  <status>{STATUS}</status>
-			  <lastsync>{LASTSYNC}</lastsync>
+		  <account name="foo@domain1.com" id="1234-5678" status="online" lastsync="1234567" unread="32">
 			  [<error [message="{MESSAGE}"]>
 			    [<exception>{EXCEPTION}</exception>]
 			  </error>]
@@ -455,7 +455,9 @@ public class OfflineSyncManager {
     		else {
         		e.detach();
         		OfflineLog.offline.warn("Invalid account: " + user);
+        		continue;
     		}
+    		e.addAttribute(A_ZDSYNC_UNREAD, MailboxManager.getInstance().getMailboxByAccount(account).getFolderById(null, Mailbox.ID_FOLDER_INBOX).getUnreadCount());
     	}
     }
 }
