@@ -53,15 +53,15 @@ if [ "x$1" = "xstart" -o "x$1" = "xreload" ]; then
   postfix_header_checks=${zimbra_home}/conf/postfix_header_checks
   TEMPFILE=`mktemp ${postfix_header_checks}.XXXXXX` && cp -f ${postfix_header_checks} ${TEMPFILE}
   if [ $? = 0 -a -s "$TEMPFILE" ]; then
-	  ${zimbra_home}/postfix-${postfix_version}/sbin/postmap ${TEMPFILE} && mv -f ${TEMPFILE}.db ${postfix_header_checks}.db
+	  ${zimbra_home}/postfix/sbin/postmap ${TEMPFILE} && mv -f ${TEMPFILE}.db ${postfix_header_checks}.db
     rm -f ${TEMPFILE}
   fi
     
 fi
 
 if [ -f /etc/aliases ]; then
-  sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postalias /etc/aliases
+  sudo ${zimbra_home}/postfix/sbin/postalias /etc/aliases
 fi
 
-sudo ${zimbra_home}/postfix-${postfix_version}/sbin/postfix "$@"
+sudo ${zimbra_home}/postfix/sbin/postfix "$@"
 

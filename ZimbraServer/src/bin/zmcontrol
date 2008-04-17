@@ -273,11 +273,10 @@ sub doShutdown {
 	print "Host $localHostName\n";
 	my $rc = 0;
 	my $rrc = 0;
-  my $postfix_version = getLocalConfig("postfix_version");
 	foreach (sort {$startorder{$b} <=> $startorder{$a}} keys %allservices) {
 		Zimbra::Mon::Logger::Log ("info", "Stopping $_");
 		if ($_ eq "ldap" && !(-d "/opt/zimbra/openldap/libexec") ) { next; }
-		if ($_ eq "mta" && !(-d "/opt/zimbra/postfix-${postfix_version}/libexec") ) { next; }
+		if ($_ eq "mta" && !(-d "/opt/zimbra/postfix/libexec") ) { next; }
 		if ($_ eq "snmp" && !(-f "/opt/zimbra/bin/zmswatchctl") ) { next; }
 		if ($_ eq "mailbox" && !(-d "/opt/zimbra/db/data") ) { next; }
 		print "\tStopping $_...";

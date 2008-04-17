@@ -17,4 +17,4 @@
 # 
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars
-sudo /opt/zimbra/postfix-${postfix_version}/sbin/qshape.pl "$@"
+sudo /opt/zimbra/postfix/sbin/qshape.pl "$@"
