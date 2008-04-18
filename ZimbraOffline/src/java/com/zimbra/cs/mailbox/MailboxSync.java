@@ -44,9 +44,12 @@ public class MailboxSync {
     private int mLastSyncedItem;
     
     private OfflineMailbox ombx;
+    
+    private OfflinePoller poller;
 
     MailboxSync(OfflineMailbox ombx) throws ServiceException {
     	this.ombx = ombx;
+    	poller = new OfflinePoller(ombx);
     	
         Metadata config = ombx.getConfig(null, SN_OFFLINE);
         if (config != null && config.containsKey(FN_PROGRESS)) {
@@ -84,11 +87,6 @@ public class MailboxSync {
     	mSyncRunning = false;
     }
     
-    private boolean isPushReady(OfflineMailbox ombx) throws ServiceException {
-    	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-    	return syncMan.isOnLine(ombx.getRemoteUser()) && ombx.isPushEnabled() && OfflinePoller.getInstance().isSyncCandidate(ombx);
-    }
-    
     void sync(boolean isOnRequest) throws ServiceException {
        	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         if (lockMailboxToSync()) { //don't want to start another sync when one is already in progress
@@ -114,9 +112,14 @@ public class MailboxSync {
                 	PushChanges.sendPendingMessages(ombx, isOnRequest);
         	    	
         	    if (!isOnRequest) {	
-        	    	if (mStage == SyncStage.SYNC && !isPushReady(ombx) &&
-        	    			System.currentTimeMillis() - syncMan.getLastSyncTime(user) < ombx.getSyncFrequency())
-        	    		return;
+        	    	if (mStage == SyncStage.SYNC) {
+        	    		if (syncMan.isOnLine(ombx.getRemoteUser()) && ombx.isPushEnabled()) {
+        	    			if (!poller.hasChanges(mSyncToken))
+        	    				return;
+        	    		} else if (System.currentTimeMillis() - syncMan.getLastSyncTime(user) < ombx.getSyncFrequency()) {
+        	    			return;
+        	    		}
+        	    	}
         	    }
                 
                 syncMan.syncStart(user);

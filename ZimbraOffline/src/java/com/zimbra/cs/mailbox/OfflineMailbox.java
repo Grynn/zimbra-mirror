@@ -625,7 +625,7 @@ public class OfflineMailbox extends DesktopMailbox {
     	return sendRequest(request, requiresAuth, true, OfflineLC.zdesktop_request_timeout.intValue());
     }
 
-    private Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
+    public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
         String uri = getSoapUri();
         OfflineAccount acct = (OfflineAccount) getAccount();
         SoapHttpTransport transport = new SoapHttpTransport(uri, acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());

@@ -16,65 +16,139 @@
  */
 package com.zimbra.cs.mailbox;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.util.Constants;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 
-public class OfflinePoller {
-	private static OfflinePoller instance = new OfflinePoller();
-	private OfflinePoller() {}
-	public static OfflinePoller getInstance() {
-		return instance;
+public class OfflinePoller implements Runnable {
+	
+	private OfflineMailbox ombx;
+	
+	private String setId;
+	private String lastSequence;
+	private String lastKnownToken;
+
+	private boolean isPolling;
+	private boolean hasChanges;
+	
+	OfflinePoller(OfflineMailbox ombx) {
+		this.ombx = ombx;
+		Thread t = new Thread(this, "offline-poller-" + ombx.getAccountName());
+		t.setDaemon(true); //no obvious shutdown hook point
+		t.start();
 	}
 	
-	private class Poller implements Runnable {
-
-		private OfflineMailbox ombx;
-		
-		Poller(OfflineMailbox ombx) {
-			this.ombx = ombx;
+	public synchronized boolean hasChanges(String lastKnownToken) {
+		if (hasChanges) {
+			hasChanges = false;
+			return true;
 		}
-		
-		public void run() {
+		if (!isPolling) {
+			this.lastKnownToken = lastKnownToken;
+			isPolling = true;
+			notify();
+		}
+		return false;
+	}
+	
+	public void run() {
+		while(true) {
+			synchronized (this) {
+				isPolling = false;
+				while(!isPolling)
+					try {
+						wait();
+					} catch (InterruptedException x) {}
+			}
+			runPoll();
+		}
+	}
+	
+	private void runPoll() {
+		try {
+			if (setId == null)
+				createWaitset();
+			waitsetRequest();
+		} catch (Exception x) {
 			try {
-				ombx.pollForUpdates(); //will block until server responds or timeout
-				OfflinePoller.this.done(ombx, true);
-			} catch (Exception x) {
-				try {
-					OfflineSyncManager.getInstance().processSyncException(ombx.getAccount(), x);
-				} catch (ServiceException se) {
-					OfflineLog.offline.error("unexpected exception", se);
-				}
-				OfflinePoller.this.done(ombx, false);
+				OfflineSyncManager.getInstance().processSyncException(ombx.getAccount(), x);
+			} catch (Exception e) {
+				OfflineLog.offline.error("unexpected exception", e);
 			}
 		}
 	}
 	
-	private List<OfflineMailbox> pollQueue = new ArrayList<OfflineMailbox>();
-	private List<OfflineMailbox> doneQueue = new ArrayList<OfflineMailbox>();
-	
-	public synchronized boolean isSyncCandidate(OfflineMailbox ombx) {
-		if (doneQueue.remove(ombx)) {
-			return true;
+	private void createWaitset() throws ServiceException {
+        Element request = new Element.XMLElement(MailConstants.CREATE_WAIT_SET_REQUEST);
+        request.addAttribute(MailConstants.A_DEFTYPES, "all");
+        Element account = request.addElement(MailConstants.E_WAITSET_ADD).addElement(MailConstants.E_A);
+        account.addAttribute(MailConstants.A_ID, ombx.getAccountId());
+        synchronized (this) {
+        	account.addAttribute(MailConstants.A_TOKEN, "" + lastKnownToken);
+        }
+        
+        Element response = ombx.sendRequest(request, true);
+        
+        synchronized (this) {
+            if (hasError(response)) {
+            	hasChanges = true; //when there's error force a sync
+            	return;
+            }
 		}
-		if (pollQueue.contains(ombx)) {
-			return false;
-		}
-		
-		//TODO: may need a pool to avoid creating new thread every time
-		new Thread(new Poller(ombx)).start();
-		pollQueue.add(ombx);
-		return false;
+        
+        setId = response.getAttribute(MailConstants.A_WAITSET_ID);
+        lastSequence = response.getAttribute(MailConstants.A_SEQ);
 	}
 	
-	private synchronized void done(OfflineMailbox ombx, boolean success) {
-		pollQueue.remove(ombx);
-		if (success) {
-			doneQueue.add(ombx);
-			ombx.syncNow();
+	private void waitsetRequest() throws ServiceException {
+        Element request = new Element.XMLElement(MailConstants.WAIT_SET_REQUEST);
+        request.addAttribute(MailConstants.A_WAITSET_ID, setId);
+        request.addAttribute(MailConstants.A_DEFTYPES, "all");
+        request.addAttribute(MailConstants.A_SEQ, lastSequence);
+        request.addAttribute(MailConstants.A_BLOCK, "1");
+        request.addAttribute(MailConstants.A_TIMEOUT, "30");
+        
+        Element account = request.addElement(MailConstants.E_WAITSET_UPDATE).addElement(MailConstants.E_A);
+        account.addAttribute(MailConstants.A_ID, ombx.getAccountId());
+        synchronized (this) {
+        	account.addAttribute(MailConstants.A_TOKEN, "" + lastKnownToken);
+        }
+
+        Element response = null;
+        try {
+        	response = ombx.sendRequest(request, true, true, 1 * Constants.SECONDS_PER_MINUTE * 1000); //will block
+        } catch (ServiceException x) {
+        	if (x.getCode().equals("admin.NO_SUCH_WAITSET")) {
+        		setId = null;
+        		lastSequence = null;
+        		return;
+        	} else
+        		throw x;
+        }
+        
+        lastSequence = response.getAttribute(MailConstants.A_SEQ, lastSequence);
+        
+        synchronized (this) {
+            if (hasError(response)) {
+            	hasChanges = true; //when there's error force a sync
+            	return;
+            }
+            
+            account = response.getOptionalElement(MailConstants.E_A);
+            if (account != null && account.getAttribute(MailConstants.A_ID).equals(ombx.getAccountId()))
+            	hasChanges = true;
 		}
+	}
+	
+	private boolean hasError(Element response) throws ServiceException {
+        Element error = response.getOptionalElement(MailConstants.E_ERROR);
+        if (error != null) {
+        	OfflineLog.offline.warn("waitset error account=%s type=%s", error.getAttribute(MailConstants.A_ID), error.getAttribute(MailConstants.A_TYPE));
+        	return true;
+        }
+		return false;
 	}
 }
