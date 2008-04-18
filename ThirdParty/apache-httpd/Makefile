@@ -20,7 +20,7 @@ all: build
 
 build:
 	tar xzf src/httpd-$(HTTPD_VERSION).tar.gz
-	(cd httpd-$(HTTPD_VERSION); CFLAGS="-g -O2" $(ENVMOD) ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so; $(MAKE) $(MAKEARGS); $(MAKE) install)
+	(cd httpd-$(HTTPD_VERSION); LD_RUN_PATH="/opt/zimbra/stellent/lib" CFLAGS="-g -O2" $(ENVMOD) ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so; LD_RUN_PATH="/opt/zimbra/stellent/lib" $(MAKE) $(MAKEARGS); LD_RUN_PATH="/opt/zimbra/stellent/lib" $(MAKE) install)
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/apache-httpd
