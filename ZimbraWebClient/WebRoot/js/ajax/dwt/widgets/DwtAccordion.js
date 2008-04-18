@@ -413,3 +413,11 @@ function(icon) {
 		iconCell.className = icon;
 	}
 };
+
+DwtAccordionItem.prototype.setTitle =
+function(title) {
+	var titleCell = document.getElementById(this.accordion._htmlElId + "_title_" + this.id);
+	if (titleCell) {
+		titleCell.innerHTML = title;
+	}
+};
