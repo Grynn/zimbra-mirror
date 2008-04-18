@@ -30,14 +30,27 @@
  */
  
 DwtId = function() {}
- 
+
 // widget types (used to prefix IDs)
+DwtId.WIDGET_LIST_VIEW		= "zlv_";		// list view
 DwtId.WIDGET_HDR			= "zh_";		// list view header
 DwtId.WIDGET_HDR_TABLE		= "zht_";		// list view header table
 DwtId.WIDGET_HDR_ICON		= "zhi_";		// list view header image
 DwtId.WIDGET_HDR_LABEL		= "zhl_";		// list view header text
 DwtId.WIDGET_HDR_ARROW		= "zha_";		// list view header dropdown arrow
 DwtId.WIDGET_HDR_SASH		= "zhs_";		// sash between list view headers
+
+/**
+ * Returns an ID for a list view.
+ * 
+ * @param context	[const]		owning view identifier
+ * @param modifier	[const]		indicates element within list view (DwtId.LIST_VIEW_*)	
+ */
+DwtId.getListViewId =
+function(context, modifier) {
+	var base = [DwtId.WIDGET_LIST_VIEW, context.toLowerCase()].join("");
+	return modifier ? [base, modifier].join("_") : base;
+};
 
 /**
  * Returns an ID for an element within a list view header.
@@ -52,3 +65,6 @@ function(type, view, hdr) {
 	return hdr ? [prefix, hdr].join("_") : prefix;
 };
 
+// list view modifiers
+DwtId.LIST_VIEW_HEADERS	= "headers";
+DwtId.LIST_VIEW_ROWS	= "rows";

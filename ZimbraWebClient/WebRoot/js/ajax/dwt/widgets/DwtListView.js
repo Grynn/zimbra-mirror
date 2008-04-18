@@ -43,12 +43,12 @@ DwtListView = function(params) {
 		var htmlElement = this.getHtmlElement();
 
 		this._listColDiv = document.createElement("div");
-		this._listColDiv.id = Dwt.getNextId();
+		this._listColDiv.id = DwtId.getListViewId(params.view, DwtId.LIST_VIEW_HEADERS);
 		this._listColDiv.className = "DwtListView-ColHeader";
 		htmlElement.appendChild(this._listColDiv);
 
 		this._listDiv = document.createElement("div");
-		this._listDiv.id = Dwt.getNextId();
+		this._listDiv.id = DwtId.getListViewId(params.view, DwtId.LIST_VIEW_ROWS);
 		this._listDiv.className = "DwtListView-Rows";
 		htmlElement.appendChild(this._listDiv);
 
