@@ -233,7 +233,7 @@ function(obj, span, context) {
     if (!appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		// make sure to remove adding new contact menu item if contacts are disabled
 		if (actionMenu.getOp("NEWCONTACT")) {
-			ZmOperation.removeOperation(actionMenu, "NEWCONTACT", actionMenu._menuItems);
+			actionMenu.removeOp("NEWCONTACT");
 		}
 	} else {
 		// bug fix #5262 - Change action menu item for contact depending on
@@ -246,9 +246,12 @@ function(obj, span, context) {
 
 		}
 	}
-	if (actionMenu.getOp("NEWIM")) {
-		actionMenu.getOp("NEWIM").setEnabled(person.buddy != null);
-	}
+
+    if(!appCtxt.get(ZmSetting.IM_ENABLED)){
+        if(actionMenu.getOp("NEWIM")) actionMenu.removeOp("NEWIM");
+    }else{
+        actionMenu.getOp("NEWIM").setEnabled(person.buddy != null);
+    }
 
 	if (actionMenu.getOp("SEARCH") && !appCtxt.get(ZmSetting.SEARCH_ENABLED)) {
 		ZmOperation.removeOperation(actionMenu, "SEARCH", actionMenu._menuItems);
