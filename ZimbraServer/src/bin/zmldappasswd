@@ -103,7 +103,7 @@ if ( $options{r}) {
         print OUT $_;
       }
     }
-    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+    rename($outfile, $infile) or system("mv", "-f", $outfile, $infile);
 
 } elsif ( $options{l} ) {
     setLocalConfig("ldap_replication_password", "$password");
@@ -131,7 +131,7 @@ if ( $options{r}) {
     }
     $ldifin->done ( ); 
     $ldifout->done ( );
-    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+    rename($outfile, $infile) or system("mv", "-f", $outfile, $infile);
 } elsif ( $options{p} ) {
     setLocalConfig("ldap_postfix_password", "$password");
     my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
@@ -158,7 +158,7 @@ if ( $options{r}) {
     }
     $ldifin->done ( ); 
     $ldifout->done ( );
-    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+    rename($outfile, $infile) or system("mv", "-f", $outfile, $infile);
 } elsif ( $options{a} ) {
     setLocalConfig("ldap_amavis_password", "$password");
     my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
@@ -185,7 +185,7 @@ if ( $options{r}) {
     }
     $ldifin->done ( ); 
     $ldifout->done ( );
-    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+    rename($outfile, $infile) or system("mv", "-f", $outfile, $infile);
 } else {
     my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
     setLocalConfig("zimbra_ldap_password", "$password");
@@ -213,7 +213,7 @@ if ( $options{r}) {
     }
     $ldifin->done ( ); 
     $ldifout->done ( );
-    rename($outfile, $infile) or system("mv -f", $outfile, $infile);
+    rename($outfile, $infile) or system("mv", "-f", $outfile, $infile);
 }
 $ldap->unbind();
 $ldap->disconnect();
