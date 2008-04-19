@@ -43,12 +43,12 @@ DwtListView = function(params) {
 		var htmlElement = this.getHtmlElement();
 
 		this._listColDiv = document.createElement("div");
-		this._listColDiv.id = DwtId.getListViewId(params.view, DwtId.LIST_VIEW_HEADERS);
+		this._listColDiv.id = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_HEADERS);
 		this._listColDiv.className = "DwtListView-ColHeader";
 		htmlElement.appendChild(this._listColDiv);
 
 		this._listDiv = document.createElement("div");
-		this._listDiv.id = DwtId.getListViewId(params.view, DwtId.LIST_VIEW_ROWS);
+		this._listDiv.id = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_ROWS);
 		this._listDiv.className = "DwtListView-Rows";
 		htmlElement.appendChild(this._listDiv);
 
@@ -786,9 +786,9 @@ function(htmlArr, idx, params) {
  */
 DwtListView.prototype._getRow =
 function(htmlArr, idx, item, params) {
-	var className = this._getRowClass(item, params);
 	var rowId = this._getRowId(item, params) || Dwt.getNextId();
-	htmlArr[idx++] = ["<tr id='", rowId, "'"].join("");
+	var className = this._getRowClass(item, params);
+	htmlArr[idx++] = rowId ? "<tr" : ["<tr id='", rowId, "'"].join("");
 	htmlArr[idx++] = className ? ([" class='", className, "'>"].join("")) : ">";
 	return idx;
 };
