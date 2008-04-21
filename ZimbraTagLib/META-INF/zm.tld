@@ -5151,6 +5151,51 @@
 		</attribute>
 	</tag>
 
+	<tag>
+		<description>
+			Moves voice mail messages from the trash to the voice mail inbox
+		</description>
+
+		<name>untrashVoiceMail</name>
+
+		<tag-class>com.zimbra.cs.taglib.tag.voice.UntrashVoiceMailTag</tag-class>
+
+		<body-content>empty</body-content>
+
+		<variable>
+			<name-from-attribute>var</name-from-attribute>
+			<variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+			<scope>AT_END</scope>
+		</variable>
+
+		<attribute>
+			<description>
+				Name of the exported scoped variable to store the ZActionResultBean in.
+			</description>
+			<name>var</name>
+			<required>true</required>
+		</attribute>
+
+		<attribute>
+			<description>
+				comma-separated ids of messages to undelete.
+			</description>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description>
+				Name of phone account
+			</description>
+			<name>phone</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+
     <tag>
         <description>
             Empties a voice mail trash folder
