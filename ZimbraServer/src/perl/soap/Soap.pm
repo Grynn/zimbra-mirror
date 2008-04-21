@@ -296,11 +296,11 @@ sub zimbraContext {
 	$auth->content($authtoken);
 	$context->add_child($auth);
     if (defined($sessionId) && $sessionId ne "") {
-        my $sessionElt = new XmlElement("sessionId");
+        my $sessionElt = new XmlElement("session");
         if (defined ($wantcontext) && $wantcontext) {
           $sessionElt->attrs({'notify' => '1' });
         }
-        $sessionElt->content($sessionId);
+        $sessionElt->attrs({'id' => $sessionId});
         $context->add_child($sessionElt);
     }
 	if (! defined ($wantcontext) ) {
