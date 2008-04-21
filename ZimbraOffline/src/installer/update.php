@@ -1,0 +1,55 @@
+<?php
+// this file must be located at @aushost@/aus/zdesktop/update.php
+
+$download_url_prefix = "http://files.zimbra.com/downloads/zdesktop/beta";
+$details_url = "http://wiki.zimbra.com/index.php?title=Zimbra_Desktop";
+$version = @version@;
+$buildid = @buildid@;
+
+$size_win32 = @size_win32@;
+$size_macos = @size_macos@;
+$size_linux = @size_linux@;
+
+$hash_win32 = "@hash_win32@";
+$hash_macos = "@hash_macos@";
+$hash_linux = "@hash_linux@";
+
+$file_prefix = "zdesktop_" . str_replace(".", "_", $version) . "_build_" . $buildid;
+
+$oldchn = $_REQUEST['chn'];
+$oldver = $_REQUEST['ver'];
+$oldbid = $_REQUEST['bid'];
+$target = $_REQUEST['bos'];
+$locale = $_REQUEST['loc'];
+
+$file_suffix;
+$size;
+$hash;
+if ($target == "macos") {
+  $file_suffix = "@suffix_macos@";
+  $size = $size_macos;
+  $hash = $hash_macos;
+} else if ($target == "linux") {
+  $file_suffix = "@suffix_linux@";
+  $size = $size_linux;
+  $hash = $hash_linux;
+} else {
+  $file_suffix = "@suffix_win32@";
+  $size = $size_win32;
+  $hash = $hash_win32;
+}
+
+$download_url = $download_url_prefix . "/" . $buildid . "/" . $file_prefix . "_" . $file_suffix;
+
+header('Content-Type: text/xml');
+header('Cache-Control: no-cache');
+
+echo "<?xml version=\"1.0\"?>\n";
+?>
+<updates>
+<? if ($buildid > $oldbid) { ?>
+  <update type="minor" version="<?=$verison?>" detailsURL="<?=$details_url?>">
+    <patch type="complete" URL="<?=$download_url?>" hashFunction="md5" hashValue="<?=$hash?>" size="<?=$size?>"/>
+  </update>
+<?php } ?>
+</updates>
