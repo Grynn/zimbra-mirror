@@ -44,7 +44,7 @@ GetOptions("u|user=s" => \$user,
            "help|?" => \$help,
            # add specific params below:
            "t|types=s" => \$types,
-           "conv=i" => \$convId,
+           "conv=s" => \$convId,
            "query=s" => \$searchString,
            "sort=s" => \$sortBy,
            "offset=i" => \$offset,
