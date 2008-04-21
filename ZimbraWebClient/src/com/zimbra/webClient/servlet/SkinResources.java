@@ -682,6 +682,7 @@ public class SkinResources
         boolean isIPhone = false;
 
         // parse user agent
+		if (agent == null) agent = "";
         String agt = agent.toLowerCase();
         StringTokenizer agtArr = new StringTokenizer(agt, " ;()");
         int index = -1;
