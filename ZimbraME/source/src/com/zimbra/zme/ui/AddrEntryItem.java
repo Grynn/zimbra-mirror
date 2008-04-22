@@ -92,6 +92,8 @@ public class AddrEntryItem extends CustomItem implements ZmeListener, CommandLis
 	}
 	
 	public void setAddresses(String[] addrs) {
+		if (addrs == null)
+			return;
 		for (int i = 0; i < addrs.length; i++) {
 			Contact c = null;
 			if (mMidlet.mMbox.mContacts != null) {

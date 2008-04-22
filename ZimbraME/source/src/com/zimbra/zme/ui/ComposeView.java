@@ -171,6 +171,7 @@ public class ComposeView extends View implements ResponseHdlr, ItemStateListener
 		mBccField.setAddresses(bccAddrs);
 		mSubjField.setString(subj);
 		mBodyField.setString(body);
+		UiAccess.setCaretPosition(mBodyField, 0);
 		mToField.setMode(AddrEntryItem.NEW_MODE);
 		mCcField.setMode(AddrEntryItem.NEW_MODE);
 		mBccField.setMode(AddrEntryItem.NEW_MODE);
