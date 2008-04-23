@@ -68,13 +68,13 @@ function(server, now, isDragProxy) {
 	html[idx++] = "<tr>";
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
-		var id = this._headerList[i]._id;
-		if(id.indexOf(ZaServer.A_ServiceHostname)==0) {	
+		var field = this._headerList[i]._field;
+		if(field == ZaServer.A_ServiceHostname) {	
 			// name
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(server.attrs[ZaServer.A_ServiceHostname]);
 			html[idx++] = "</nobr></td>";
-		} else if(id.indexOf(ZaServer.A_description)==0) {	
+		} else if(field == ZaServer.A_description) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(server.attrs[ZaServer.A_description]);

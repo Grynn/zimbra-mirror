@@ -36,6 +36,7 @@ AjxPackage.require("ajax.util.AjxHistoryMgr");
 // DWT files
 
 AjxPackage.require("ajax.dwt.core.Dwt");
+AjxPackage.require("ajax.dwt.core.DwtId");
 AjxPackage.require("ajax.dwt.core.DwtException");
 AjxPackage.require("ajax.dwt.core.DwtDraggable");
 AjxPackage.require("ajax.dwt.core.DwtDragTracker");

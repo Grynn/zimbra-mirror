@@ -46,8 +46,8 @@ function(item) {
 	if(this._headerList) {
 		var cnt = this._headerList.length;
 		for(var i = 0; i < cnt; i++) {
-			var id = this._headerList[i]._id;
-			if(id.indexOf("gt")==0) {
+			var field = this._headerList[i]._field;
+			if(field == "gt") {
 				// type
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + "><nobr>";
 				switch(item.gt) {
@@ -72,12 +72,12 @@ function(item) {
 				}
 				
 				html[idx++] = "</nobr></td>";
-			} else if(id.indexOf("name")==0) {
+			} else if(field == "name") {
 				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = item.name;
 				html[idx++] = "</nobr></td>";
-			} else if(id.indexOf("acl")==0) {
+			} else if(field == "acl") {
 				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + "><nobr>";
 				var aclsList = [];

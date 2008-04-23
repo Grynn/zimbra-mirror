@@ -46,13 +46,13 @@ function(item) {
 	if(this._headerList) {
 		var cnt = this._headerList.length;
 		for(var i = 0; i < cnt; i++) {
-			var id = this._headerList[i]._id;
-			if(id.indexOf(ZaMTAQSummaryItem.A_text_col)==0) {
+			var field = this._headerList[i]._field;
+			if(field == ZaMTAQSummaryItem.A_text_col) {
 
 				html[idx++] = "<td width='" + this._headerList[i]._width + "' align=left>";
 				html[idx++] = AjxStringUtil.htmlEncode(item[ZaMTAQSummaryItem.A_text]);
 				html[idx++] = "</td>";
-			} else if(id.indexOf(ZaMTAQSummaryItem.A_count_col)==0) {
+			} else if(field == ZaMTAQSummaryItem.A_count_col) {
 
 				html[idx++] = "<td width='" + this._headerList[i]._width + "' align=left>";
 				html[idx++] = item[ZaMTAQSummaryItem.A_count];

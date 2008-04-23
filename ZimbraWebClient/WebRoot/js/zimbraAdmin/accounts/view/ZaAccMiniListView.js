@@ -58,8 +58,8 @@ function(account, now, isDragProxy) {
 	} else if(this._headerList) {
 		var cnt = this._headerList.length;
 		for(var i = 0; i < cnt; i++) {
-			var id = this._headerList[i]._id;
-			if(id.indexOf("type")==0) {
+			var field = this._headerList[i]._field;
+			if(field == "type") {
 				// type
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 				switch(account.type) {
@@ -89,12 +89,12 @@ function(account, now, isDragProxy) {
 					break;
 				}
 				html[idx++] = "</td>";
-			} else if(id.indexOf(ZaAccount.A_name)==0) {
+			} else if(field == ZaAccount.A_name) {
 				// name
 				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(account.name);
 				html[idx++] = "</nobr></td>";
-			} else if (id.indexOf(ZaAccount.A_displayname)==0) {
+			} else if (field == ZaAccount.A_displayname) {
 				// display name
 				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);

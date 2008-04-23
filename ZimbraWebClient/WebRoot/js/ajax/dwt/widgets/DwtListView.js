@@ -75,7 +75,6 @@ DwtListView = function(params) {
 	this.addListener(DwtEvent.ONMOUSEMOVE, this._listenerMouseMove);
 	this.addListener(DwtEvent.ONDBLCLICK, this._listenerDoubleClick);
 
-	this._viewPrefix = "";
 	this._evtMgr = new AjxEventMgr();
 	this._selectedItems = new AjxVector();
 	this._selAnchor = null; 
@@ -196,6 +195,8 @@ function(defaultColumnSort) {
 
 	// does this list view have headers or have they already been created?
 	if (!this._headerList || this._headerColCreated) { return; }
+	this._headerHash = {};
+	this._headerIdHash = {};
 
 	var idx = 0;
 	var htmlArr = [];
@@ -212,7 +213,12 @@ function(defaultColumnSort) {
 		if (!headerCol._visible) { continue; }
 
 		var field = headerCol._field;
+		headerCol._index = i;
 		var id = headerCol._id = DwtId.getListViewHdrId(DwtId.WIDGET_HDR, this._view, field);
+
+		this._headerHash[field] = headerCol;
+		this._headerIdHash[id] = headerCol;
+
 		htmlArr[idx++] = "<td id='";
 		htmlArr[idx++] = id;
 		htmlArr[idx++] = "' class='";
@@ -267,14 +273,12 @@ function(defaultColumnSort) {
 			htmlArr[idx++] = "<td width=10 id='";
 			htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
 			htmlArr[idx++] = "'>";
-			htmlArr[idx++] = headerCol._sortable == defaultColumnSort
-				? AjxImg.getImageHtml(arrowIcon)
-				: AjxImg.getImageHtml(arrowIcon, "visibility:hidden");
+			var isDefault = (field == defaultColumnSort);
+			htmlArr[idx++] = AjxImg.getImageHtml(arrowIcon, isDefault ? null : "visibility:hidden");
 			htmlArr[idx++] = "</td>";
-			if (headerCol._sortable == defaultColumnSort) {
+			if (isDefault) {
 				this._currentColId = id;
 			}
-				
 		}
 
 		// ALWAYS add "sash" separators
@@ -309,8 +313,7 @@ function(defaultColumnSort) {
 		var cell = document.getElementById(id);
 		if (!cell) { continue; }
 
-		var sortable = headerCol._sortable;
-		if (sortable && sortable == defaultColumnSort) {
+		if (headerCol._sortable && field == defaultColumnSort) {
 			cell.className = "DwtListView-Column DwtListView-ColumnActive";
 		}
 
@@ -342,27 +345,6 @@ function(item) {
 		}
 	}
 	return null;
-};
-
-/**
- * Returns the index into the header list array for the given ID. The ID
- * provided can either be a column ID (such as "zh_tv_fg"), or just a field
- * ID (such as "fg").
- * 
- * @param headerId	[string]	column or field ID
- */
-DwtListView.prototype.getColIndexForId =
-function(headerId) {
-	var idx = headerId.lastIndexOf("_");
-	var field = (idx != -1) ? headerId.substring(idx + 1) : headerId;
-	if (this._headerList) {
-		for (var i = 0; i < this._headerList.length; i++) {
-			if (this._headerList[i]._field == field) {
-				return i;
-			}
-		}
-	}
-	return -1;
 };
 
 /**
@@ -937,7 +919,7 @@ function(htmlArr, idx, item, field, colIdx, params) {
  */
 DwtListView.prototype._getFieldId =
 function(item, field) {
-	return [this.getViewPrefix(), field, "_", item.id].join("");
+	return DwtId.getListViewItemId(DwtId.WIDGET_ITEM_FIELD, this._view, item.id, field);
 };
 
 /**
@@ -1226,13 +1208,8 @@ function() {
 
 DwtListView.prototype._getItemId =
 function(item) {
-	var id = item ? ([this.getViewPrefix(), (item.id ? item.id : Dwt.getNextId())].join("")) : null;
-	if (AjxEnv.isIE && !this._viewPrefix && AjxUtil.isNumeric(id)) {
-		// numeric ID causes problem for AjxHistoryMgr in IE
-		id = "_" + id;
-	}
-	return id;
-}
+	return DwtId.getListViewItemId(DwtId.WIDGET_ITEM, this._view, item ? item.id : Dwt.getNextId());
+};
 
 DwtListView.prototype._getHeaderTableId =
 function() {
@@ -1342,16 +1319,6 @@ function(ev)  {
 DwtListView.prototype.getTargetItemDiv =
 function(ev)  {
 	return this.findItemDiv(DwtUiEvent.getTarget(ev));
-};
-
-DwtListView.prototype.getViewPrefix =
-function() {
-	return this._viewPrefix;
-};
-
-DwtListView.prototype.setViewPrefix =
-function(viewPrefix) {
-	this._viewPrefix = viewPrefix;
 };
 
 /**
@@ -1843,9 +1810,7 @@ function(clickedCol, ev) {
 	if (!size) { return; }
 
 	// reset order by sorting preference
-	this._bSortAsc = (hdr._id == this._currentColId)
-		? !this._bSortAsc
-		: this._getDefaultSortbyForCol(hdr);
+	this._bSortAsc = (hdr._id == this._currentColId) ? !this._bSortAsc : this._getDefaultSortbyForCol(hdr);
 
 	// reset arrows as necessary
 	this._setSortedColStyle(hdr._id);
@@ -1884,8 +1849,8 @@ function(columnId) {
 	
 	if (this._currentColId && (columnId != this._currentColId)) {
 		// unset current column arrow
-		var idx = this.getColIndexForId(this._currentColId);
-		var field = this._headerList[idx]._field;
+		var headerCol = this._headerIdHash[this._currentColId];
+		var field = headerCol._field;
 		oldArrowId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
 		oldArrowCell = document.getElementById(oldArrowId);
 		if (oldArrowCell && oldArrowCell.firstChild) {
@@ -1902,8 +1867,8 @@ function(columnId) {
 		}
 	}
 	this._currentColId = columnId;
-	var idx = this.getColIndexForId(this._currentColId);
-	var field = this._headerList[idx]._field;
+	var headerCol = this._headerIdHash[this._currentColId];
+	var field = headerCol._field;
 
 	// set new column arrow
 	var newArrowId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
@@ -1983,8 +1948,8 @@ function(ev) {
 		// XXX: style hacks - improve this later
 		this._headerClone.style.borderTop = "1px solid #777777";
 
-		var idx = this.getColIndexForId(this._clickDiv.id);
-		var field = this._headerList[idx]._field;
+		var headerCol = this._headerIdHash[this._clickDiv.id];
+		var field = headerCol._field;
 		var hdrLabelId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_LABEL, this._view, field);
 		var labelCell = document.getElementById(hdrLabelId);
 		if (labelCell) {
@@ -2064,13 +2029,14 @@ function(ev) {
 	
 	if (data.type != DwtListView.TYPE_HEADER_ITEM) {
 		// something is messed up! redraw the header
-		var sortable = this._getSortableFromColId(this._currentColId);
+		var headerCol = this._headerIdHash[this._currentColId];
+		var sortField = headerCol._sortable ? headerCol._field : null;
 		this._headerColCreated = false;
-		this.createHeaderHtml(sortable);
+		this.createHeaderHtml(sortField);
 	} else {
 		// reset styles as necessary
-		var idx = this.getColIndexForId(this._clickDiv.id);
-		var field = this._headerList[idx]._field;
+		var headerCol = this._headerIdHash[this._clickDiv.id];
+		var field = headerCol._field;
 		var hdrLabelId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_LABEL, this._view, field);
 		var labelCell = document.getElementById(hdrLabelId);
 		if (labelCell) {
@@ -2150,24 +2116,11 @@ DwtListView.prototype._relayout =
 function() {
 	// force relayout of header column
 	this._headerColCreated = false;
-	var sortable = this._getSortableFromColId(this._currentColId);
+	var headerCol = this._headerIdHash[this._currentColId];
+	var sortField = headerCol._sortable ? headerCol._field : null;
 	var sel = this.getSelection()[0];
-	this.setUI(sortable);
+	this.setUI(sortField);
 	this.setSelection(sel, true);
-};
-
-// XXX: this could be optimized by saving the sortable everytime the sort column changes
-DwtListView.prototype._getSortableFromColId = 
-function(colId) {
-	// helper function to find column that was last sorted
-	var sortable = null;
-	for (var i = 0; i < this._headerList.length; i++) {
-		if (this._headerList[i]._id == colId) {
-			sortable = this._headerList[i]._sortable;
-			break;
-		}
-	}
-	return sortable;
 };
 
 DwtListView.prototype._getParentForColResize = 
@@ -2217,8 +2170,8 @@ function(column, bSortByAsc) {
 	this._bSortAsc = bSortByAsc;
 	var columnId = null;
 	for (var i = 0; i < this._headerList.length; i++) {
-		if (this._headerList[i]._sortable && this._headerList[i]._sortable == column) {
-			columnId = this._headerList[i]._id;
+		if (this._headerList[i]._sortable && this._headerList[i]._field == column) {
+			columnId = this._headerList[i]._field;
 			break;
 		}
 	}
@@ -2395,15 +2348,15 @@ function(actionCode, ev) {
  * default)
  *
  * @param params		[hash]		hash of params:
- *        id 			[int]		Some ID used internally (a GUID gets appended to ensure uniqueness)
- *        text	 		[string]*	The text shown for the column
- *        icon	 		[string]*	The icon shown for the column
- *        width 		[int]*		The width of the column
- *        sortable 		[int]*		Flag indicating whether column is sortable
- *        resizeable 	[boolean]*	Flag indicating whether column can be resized
- *        visible 		[boolean]*	Flag indicating whether column is initially visible
- *        name 			[string]*	Description of column used if column headers have action menu
- * 									- If not supplied, uses label value. This param is
+ *        field			[int]		identifier for this column
+ *        text	 		[string]*	text shown for the column
+ *        icon	 		[string]*	icon shown for the column
+ *        width 		[int]*		width of the column
+ *        sortable 		[boolean]*	flag indicating whether column is sortable
+ *        resizeable 	[boolean]*	flag indicating whether column can be resized
+ *        visible 		[boolean]*	flag indicating whether column is initially visible
+ *        name 			[string]*	description of column used if column headers have action menu
+ * 									- if not supplied, uses label value. This param is
  *									primarily used for columns w/ only an icon (no label).
  *        align			[int]		alignment style of label
  *        noRemove		[boolean]*	flag indicating whether this column can be removed (overrides visible flag)
@@ -2411,9 +2364,10 @@ function(actionCode, ev) {
  */
 DwtListHeaderItem = function(params) {
 
+	if (arguments.length == 0) { return; }
 	params = Dwt.getParams(arguments, DwtListView.PARAMS);
 
-	this._field = params.id;
+	this._field = params.field;
 	this._label = params.text;
 	this._iconInfo = params.icon;
 	this._sortable = params.sortable;

@@ -46,38 +46,38 @@ function(item) {
 	if(this._headerList) {
 		var cnt = this._headerList.length;
 		for(var i = 0; i < cnt; i++) {
-			var id = this._headerList[i]._id;
-			if(id.indexOf(ZaMTAQMsgItem.A_id )==0) {
+			var field = this._headerList[i]._field;
+			if(field == ZaMTAQMsgItem.A_id) {
 				// type
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(String(item[ZaMTAQMsgItem.A_id]));
 				html[idx++] = "</td>";
-			} else if(id.indexOf(ZaMTAQMsgItem.A_recipients)==0) {
+			} else if(field == ZaMTAQMsgItem.A_recipients) {
 				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = item[ZaMTAQMsgItem.A_recipients];
 				html[idx++] = "</td>";
-			} else if(id.indexOf(ZaMTAQMsgItem.A_content_filter)==0) {
+			} else if(field == ZaMTAQMsgItem.A_content_filter) {
 				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = item[ZaMTAQMsgItem.A_content_filter];
 				html[idx++] = "</td>";
-			} else if(id.indexOf(ZaMTAQMsgItem.A_time)==0) {
+			} else if(field == ZaMTAQMsgItem.A_time) {
 				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxDateUtil.computeDateStr(new Date(), parseInt(item[ZaMTAQMsgItem.A_time]));
 				html[idx++] = "</td>";
-			} else if(id.indexOf(ZaMTAQMsgItem.A_origin_host)==0) {
+			} else if(field == ZaMTAQMsgItem.A_origin_host) {
 				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(item[ZaMTAQMsgItem.A_origin_host]);
 				html[idx++] = "</td>";
-			} else if(id.indexOf(ZaMTAQMsgItem.A_sender)==0) {
+			} else if(field == ZaMTAQMsgItem.A_sender) {
 				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] =item[ZaMTAQMsgItem.A_sender];
 				html[idx++] = "</td>";
-			} else if(id.indexOf(ZaMTAQMsgItem.A_origin_ip)==0) {
+			} else if(field == ZaMTAQMsgItem.A_origin_ip) {
 				// name
 				html[idx++] = "<td align=left height=20px width=" + this._headerList[i]._width + ">";
 				html[idx++] =item[ZaMTAQMsgItem.A_origin_ip];

@@ -1075,8 +1075,11 @@ function(obj, className) {
  */
 Dwt.getParams =
 function(args, paramNames) {
+	
+	if (!(args && args.length)) { return; }
+	
 	// Check for arg-list style of passing params. There will almost always
-	// be more than on arg, and the first one is the parent DwtControl.
+	// be more than one arg, and the first one is the parent DwtControl.
 	if (args.length > 1 || args[0]._eventMgr) {
 		var params = {};
 		for (var i = 0; i < args.length; i++) {

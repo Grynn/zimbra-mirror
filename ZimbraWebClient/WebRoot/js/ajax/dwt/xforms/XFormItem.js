@@ -4187,9 +4187,6 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 	var hideHeader = this.getInheritedProperty("hideHeader");
 
 	var widget = new listClass(this.getForm(), this.getCssClass(), null, ((hideHeader!=undefined && hideHeader==true ) ? null : headerList));
-	if(widget.getViewPrefix && widget.setViewPrefix && !widget.getViewPrefix() && widget.getHTMLElId) {
-		widget.setViewPrefix(widget.getHTMLElId());
-	}
 	if(hideHeader != undefined) {
 		widget.hideHeader = hideHeader;
 		if(hideHeader && headerList) {

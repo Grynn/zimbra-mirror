@@ -91,10 +91,10 @@ function(account, now, isDragProxy) {
 	
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
-		var id = this._headerList[i]._id;
+		var field = this._headerList[i]._field;
 		var IEWidth = this._headerList[i]._width + 4 ;
 		
-		if(id.indexOf("type")==0) {
+		if(field == "type") {
 			// type
 			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 			switch(account.type) {
@@ -123,7 +123,7 @@ function(account, now, isDragProxy) {
 				break;
 			}
 			html[idx++] = "</td>";
-		} else if(id.indexOf(ZaAccount.A_name)==0) {
+		} else if(field == ZaAccount.A_name) {
 			// name
 			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			if(account.type == ZaItem.DOMAIN) {
@@ -132,12 +132,12 @@ function(account, now, isDragProxy) {
 				html[idx++] = AjxStringUtil.htmlEncode(account.name);
 			}
 			html[idx++] = "</nobr></td>";
-		} else if (id.indexOf(ZaAccount.A_displayname)==0) {
+		} else if (field == ZaAccount.A_displayname) {
 			// display name
 			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);
 			html[idx++] = "</nobr></td>";	
-		} else if(id.indexOf(ZaAccount.A_accountStatus)==0) {
+		} else if(field == ZaAccount.A_accountStatus) {
 			// status
 			html[idx++] = "<td width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			var status = "";
@@ -150,12 +150,12 @@ function(account, now, isDragProxy) {
 			} 
 			html[idx++] = status;
 			html[idx++] = "</nobr></td>";		
-		}else if (id.indexOf(ZaAccount.A_zimbraLastLogonTimestamp)==0 ) {
+		}else if (field == ZaAccount.A_zimbraLastLogonTimestamp) {
 			// display last login time for accounts only
 			html[idx++] = "<td width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(ZaAccount.getLastLoginTime(account.attrs[ZaAccount.A_zimbraLastLogonTimestamp]));
 			html[idx++] = "</nobr></td>";	
-		} else if (id.indexOf(ZaAccount.A_description)==0) {		
+		} else if (field == ZaAccount.A_description) {		
 			// description
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_description]);

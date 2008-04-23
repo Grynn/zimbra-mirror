@@ -69,18 +69,18 @@ function(zimlet, now, isDragProxy) {
 	html[idx++] = "<tr>";
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
-		var id = this._headerList[i]._id;
-		if(id.indexOf(ZaZimlet.A_name)==0) {	
+		var field = this._headerList[i]._field;
+		if(field == ZaZimlet.A_name) {	
 			// name
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(zimlet[ZaZimlet.A_name]);
 			html[idx++] = "</td>";
-		} else if(id.indexOf(ZaZimlet.A_zimbraZimletDescription )==0) {	
+		} else if(field == ZaZimlet.A_zimbraZimletDescription) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(zimlet.attrs[ZaZimlet.A_zimbraZimletDescription ]);
 			html[idx++] = "</td>";
-		} else if(id.indexOf(ZaZimlet.A_zimbraZimletEnabled )==0) {	
+		} else if(field == ZaZimlet.A_zimbraZimletEnabled) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
 			html[idx++] = (zimlet.attrs[ZaZimlet.A_zimbraZimletEnabled] == "TRUE") ?  AjxStringUtil.htmlEncode(ZaMsg.NAD_Enabled) :AjxStringUtil.htmlEncode(ZaMsg.NAD_Disabled) ;

@@ -96,8 +96,8 @@ function(html, idx, item, onlyServiceInfo, serviceName) {
 	html[idx++] = "<tr>";
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
-		var id = this._headerList[i]._id;
-		if(id.indexOf(ZaStatus.PRFX_Server)==0) {
+		var field = this._headerList[i]._field;
+		if(field == ZaStatus.PRFX_Server) {
 			if (!onlyServiceInfo) {
 				html[idx++] = "<td width=";
 				html[idx++] = (this._headerList[i]._width);
@@ -130,7 +130,7 @@ function(html, idx, item, onlyServiceInfo, serviceName) {
 				html[idx++] = "</td>";
 			}
 
-		} else if(id.indexOf(ZaStatus.PRFX_Service)==0) {
+		} else if(field == ZaStatus.PRFX_Service) {
 			if (onlyServiceInfo) {
 				html[idx++] = "<td width=";
 				html[idx++] = this._headerList[i]._width;
@@ -152,7 +152,7 @@ function(html, idx, item, onlyServiceInfo, serviceName) {
 				html[idx++] = "</td>";
 			}
 
-		} else if(id.indexOf(ZaStatus.PRFX_Time)==0) {
+		} else if(field == ZaStatus.PRFX_Time) {
 			html[idx++] = "<td width=";
 			html[idx++] = this._headerList[i]._width;
 			html[idx++] = " aligh=left>";

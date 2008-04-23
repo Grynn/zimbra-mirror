@@ -571,30 +571,30 @@ function (sess) {
 		var cnt = this._headerList.length;
 		
 		for(var i = 0; i < cnt; i++) {
-			var id = this._headerList[i]._id;
-			if(id.indexOf("name") == 0) {
+			var field = this._headerList[i]._field;
+			if(field == "name") {
 				// account id
 				html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(sess["name"]);				
 				html[idx++] = "</nobr></td>";
 			}
-			/*else if(id.indexOf("zid") == 0) {
+			/*else if(field == "zid") {
 				// account id
 				html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 				html[idx++] = AjxStringUtil.htmlEncode(sess["zid"]);				
 				html[idx++] = "</nobr></td>";
-			}*/ else if (id.indexOf("sid") == 0){
+			}*/ else if (field == "sid"){
 				// sid
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(sess["sid"]);	
 				html[idx++] = "</td>";	
-			} else if (id.indexOf("cd") == 0){
+			} else if (field == "cd"){
 				// cd
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(
 							ZaServerSession.getDate(sess["cd"].toString()));	
 				html[idx++] = "</td>";	
-			} else if (id.indexOf("ld") == 0){
+			} else if (field == "ld"){
 				// ld
 				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
 				html[idx++] = AjxStringUtil.htmlEncode(
