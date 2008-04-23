@@ -262,10 +262,6 @@ public class SkinResources
             OutputStream out = resp.getOutputStream();
             byte[] bytes = buffer.getBytes("UTF-8");
             out.write(bytes);
-			Boolean included = this.included.get(cacheId);
-			if (included != null) {
-				req.setAttribute(A_TEMPLATES_INCLUDED, included.toString());
-			}
 		}
         catch (IllegalStateException e) {
             // use writer if called from including JSP
@@ -273,6 +269,10 @@ public class SkinResources
             out.print(buffer);
         }
 
+		Boolean included = this.included.get(cacheId);
+		if (included != null) {
+			req.setAttribute(A_TEMPLATES_INCLUDED, included);
+		}
     } // doGet(HttpServletRequest,HttpServletResponse)
 
     //
@@ -408,8 +408,8 @@ public class SkinResources
 								String templateFilename = file.getName().replaceAll("\\.template$", ""); 
 								addLocaleFiles(files, requestedLocale, file.getParentFile(), templateFilename, ".template.js");
 							}
-							this.included.put(cacheId, true);
 						}
+						this.included.put(cacheId, included);
 					}
 				}
 				else {
