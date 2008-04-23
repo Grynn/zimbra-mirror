@@ -38,6 +38,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.*;
 import com.zimbra.common.util.ZimbraLog;
 
 import java.awt.Color;
@@ -63,6 +64,7 @@ public class SkinResources
 	private static final String P_VARIANT = "variant";
 	private static final String P_SERVLET_PATH = "servlet-path";
 	private static final String P_TEMPLATES = "templates";
+	private static final String P_COMPRESS = "compress";
 
 	private static final String V_TRUE = "true";
 	private static final String V_FALSE = "false";
@@ -258,16 +260,35 @@ public class SkinResources
             // ignore -- thrown if called from including JSP
         }
 
-        try {
+		String compressStr = req.getParameter(P_COMPRESS);
+		boolean compress = compressStr != null && (compressStr.equals("true") || compressStr.equals("1"));
+		if (compress) {
+			try {
+				resp.setHeader("Content-Encoding", "gzip");
+			}
+			catch (IllegalStateException e) {
+				compress = false;
+			}
+		}
+		try {
             OutputStream out = resp.getOutputStream();
             byte[] bytes = buffer.getBytes("UTF-8");
-            out.write(bytes);
+			if (compress) {
+				ByteArrayOutputStream bos = new ByteArrayOutputStream(bytes.length);
+				OutputStream gzos = new GZIPOutputStream(bos);
+				gzos.write(bytes);
+				gzos.close();
+				bytes = bos.toByteArray();
+			}
+			out.write(bytes);
+			out.flush();
 		}
         catch (IllegalStateException e) {
             // use writer if called from including JSP
             PrintWriter out = resp.getWriter();
             out.print(buffer);
-        }
+			out.flush();
+		}
 
 		Boolean included = this.included.get(cacheId);
 		if (included != null) {
