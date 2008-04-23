@@ -100,11 +100,6 @@ StripEnv()
     environ = newEnv;
 }
 
-// TODO - allow most options with restricted
-// TODO - write pid of jetty file somewhere
-// TODO - make sure error on JVM death is more friendly
-// TODO - make sure debugging options are present when starting JVM
-
 #ifndef UNRESTRICTED_JVM_ARGS
 /* Mailbox server JVM starts as root and then drops priveleges to run
  * as the zimbra Unix user.  Zimbra Unix user is allowed to modify JVM
