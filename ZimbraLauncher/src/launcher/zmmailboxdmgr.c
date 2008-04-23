@@ -100,81 +100,30 @@ StripEnv()
     environ = newEnv;
 }
 
-#ifndef UNRESTRICTED_JVM_ARGS
-/* Allow only known safe VM options.  This might to too conservative -
- * we could just disallow the potentially harmful ones such as
- * -classpath and -Xrun, ie anything that causes code to be loaded
- * from specified path.  For now maintain an allowed list, which is
- * the safer choice.
- */
-static const char *AllowedJVMArgs[] = {
+// TODO - allow most options with restricted
+// TODO - write pid of jetty file somewhere
+// TODO - make sure error on JVM death is more friendly
+// TODO - make sure debugging options are present when starting JVM
 
-    "-XX:SoftRefLRUPolicyMSPerMB",
-    "-XX:+AggressiveOpts",
-    "-XX:+AggressiveHeap",
-    "-XX:+AllowUserSignalHandlers",
-    "-XX:+Print",
-    "-XX:+HeapDumpOnOutOfMemoryError",
-    "-XX:+TraceClassLoading",
-    "-XX:+TraceClassUnloading",
-    "-XX:+DisableExplicitGC",
-    "-XX:+UseParallelGC",
-    "-XX:+UseParallelOldGC",
-    "-XX:ParallelGCThreads",
-    "-XX:+UseAdaptiveSizePolicy",
-    "-XX:+UseConcMarkSweepGC",
-    "-XX:+UseParNewGC",
-    "-XX:+UseCMSCompactAtFullCollection",
-    "-XX:+CMSParallelRemarkEnabled",
-    "-XX:CMSInitiatingOccupancyFraction",
-    "-XX:+UseCMSInitiatingOccupancyOnly",
-    "-XX:CMSFullGCsBeforeCompaction",
-    "-XX:MinHeapFreeRatio",
-    "-XX:MaxHeapFreeRatio",
-    "-XX:NewRatio",
-    "-XX:NewSize",
-    "-XX:MaxNewSize",
-    "-XX:PermSize",
-    "-XX:MaxPermSize",
-    "-XX:SurvivorRatio",
-    "-XX:TargetSurvivorRatio",
-    "-XX:MaxTenuringThreshold",
-    "-XX:PretenureSizeThreshold",
-    "-XX:+UseSpinning",
-    "-XX:PreBlockSpin",
-    "-XX:+UseBiasedLocking",
-    "-XX:+UseThreadPriorities",
-    "-XX:+UseTLAB",
-    "-XX:+ResizeTLAB",
-    "-XX:+UseISM",
-    "-XX:+UseLargePages",
-    "-XX:LargePageSizeInBytes",
-    "-XX:CompileThreshold",
-    "-XX:ReservedCodeCacheSize",
-    "-Xcomp",
-    "-Xconcgc",
-    "-Xincgc",
-    "-Xnoincgc",
-    "-Xloggc",
-    "-Xmn",
-    "-Xms",
-    "-Xmx",
-    "-Xrs",
-    "-Xrunhprof",
-    "-Xss",
-    "-client",
-    "-d32",
-    "-d64",
-    "-da",
-    "-dsa",
-    "-ea",
-    "-esa",
-    "-fullversion",
-    "-server",
-    "-showversion",
-    "-verbose",
-    "-version",
-    "-Djava.awt.headless"
+#ifndef UNRESTRICTED_JVM_ARGS
+/* Mailbox server JVM starts as root and then drops priveleges to run
+ * as the zimbra Unix user.  Zimbra Unix user is allowed to modify JVM
+ * options.  We preclude the Zimbra Unix user from specifying certain
+ * options - code that runs when root must be from files owned by root.
+ */
+static const char *DisallowedJVMArgs[] = {
+    "-Djava.class.path",
+    "-Djava.endorsed.dirs",
+    "-Djava.ext.dirs"
+    "-Djava.library.path",
+    "-Dsun.boot.class.path",
+    "-Dsun.boot.library.path",
+    "-Xbootclasspath",
+    "-Xrun",
+    "-agentlib",
+    "-agentpath",
+    "-classpath",
+    "-javaagent",
 };
 #endif
 
@@ -186,15 +135,15 @@ static int
 IsAllowedJVMArg(const char *arg)
 {
 #ifndef UNRESTRICTED_JVM_ARGS
-    int alsize =  sizeof(AllowedJVMArgs) / sizeof(char *);
+    int alsize =  sizeof(DisallowedJVMArgs) / sizeof(char *);
     int i;
     for (i = 0; i < alsize; i++) {
-        int compareLen = strlen(AllowedJVMArgs[i]);
-        if (strncmp(arg, AllowedJVMArgs[i], compareLen) == 0) {
-            return 1;
+        int compareLen = strlen(DisallowedJVMArgs[i]);
+        if (strncmp(arg, DisallowedJVMArgs[i], compareLen) == 0) {
+            return 0;
         }
     }
-    return 0;
+    return 1;
 #else
     return 1;
 #endif
@@ -216,7 +165,7 @@ NewArgEnsureCapacity(int thisManyMore)
 }
 
 static void 
-AddArgInternal(char *arg)
+AddArg(char *arg)
 {
     NewArgEnsureCapacity(1);
     newArgv[newArgCount++] = arg;
@@ -224,7 +173,7 @@ AddArgInternal(char *arg)
 }
 
 static void
-AddArg(const char *fmt, ...)
+AddArgFmt(const char *fmt, ...)
 #ifdef __GNUC__
     __attribute__((format(printf, 1, 2)))
 #endif
@@ -238,14 +187,14 @@ syslog(int priority, const char *message, ...)
     ;
 
 static void
-AddArg(const char *fmt, ...)
+AddArgFmt(const char *fmt, ...)
 {
     char buf[1024];
     va_list ap;
     va_start(ap, fmt);
     vsnprintf(buf, sizeof(buf), fmt, ap);
     va_end(ap);
-    AddArgInternal(strdup(buf));
+    AddArg(strdup(buf));
 }
 
 static void
@@ -254,7 +203,7 @@ ShowNewArgs()
     char **e = newArgv;
     int i = 0;
     while (*e != NULL) {
-	syslog(LOG_DEBUG, "mailboxd/JVM arg: [%2d] %s", i, *e);
+	syslog(LOG_INFO, "mailboxd/JVM arg: [%2d] %s", i, *e);
 	i++;
 	e++;
     }
@@ -265,7 +214,7 @@ ShowNewEnv()
 {
     char **e = environ;
     while (*e != NULL) {
-	syslog(LOG_DEBUG, "mailboxd/JVM env: %s", *e);
+	syslog(LOG_INFO, "mailboxd/JVM env: %s", *e);
 	e++;
     }
 }
@@ -308,41 +257,41 @@ static int BounceRequested = 0;
 static pid_t MailboxdPid = 0;
 
 static pid_t
-GetPidOfRunningManagerInstance()
+GetPidFromFile(const char *pidFile)
 {
     FILE *fp = NULL;
     struct stat sb;
     pid_t pid;
 
-    if (stat(MANAGER_PIDFILE, &sb) < 0) {
+    if (stat(pidFile, &sb) < 0) {
 	if (errno == ENOENT) {
-	    syslog(LOG_INFO, "file %s does not exist", MANAGER_PIDFILE);
+	    syslog(LOG_INFO, "file %s does not exist", pidFile);
 	    goto NO_INSTANCE;
 	}
 
 	/* Failed for some other reason: perm denied, etc */
-	syslog(LOG_ERR, "stat(%s) failed: %s", MANAGER_PIDFILE, strerror(errno));
+	syslog(LOG_ERR, "stat(%s) failed: %s", pidFile, strerror(errno));
 	exit(1);
     }
 
     if (!S_ISREG(sb.st_mode)) {
-	syslog(LOG_ERR, "%s is not a regular file: %s", MANAGER_PIDFILE, strerror(errno));
+	syslog(LOG_ERR, "%s is not a regular file: %s", pidFile, strerror(errno));
 	exit(1);
     }
     
-    fp = fopen(MANAGER_PIDFILE, "r");
+    fp = fopen(pidFile, "r");
     if (fp == NULL) {
-	syslog(LOG_WARNING, "fopen(%s) failed: %s", MANAGER_PIDFILE, strerror(errno));
+	syslog(LOG_WARNING, "fopen(%s) failed: %s", pidFile, strerror(errno));
 	goto NO_INSTANCE;
     }
 
     if (fscanf(fp, "%d", &pid) < 0) {
-	syslog(LOG_WARNING, "did not find a number in %s", MANAGER_PIDFILE);
+	syslog(LOG_WARNING, "did not find a number in %s", pidFile);
 	goto NO_INSTANCE;
     }
 
     if (kill(pid, 0) < 0) {
-	syslog(LOG_INFO, "stale pid %d found in %s: %s", pid, MANAGER_PIDFILE, strerror(errno));
+	syslog(LOG_INFO, "stale pid %d found in %s: %s", pid, pidFile, strerror(errno));
 	goto NO_INSTANCE;
     }
 
@@ -360,35 +309,54 @@ GetPidOfRunningManagerInstance()
     return -1;
 }
 
-/* Note that the PID that is written is the PID of the launcher
- * process, not that of the JVM. */
-static void
-RecordManagerPid()
+static pid_t
+GetPidOfRunningManagerInstance()
 {
-    int pidfd = -1;
+    pid_t managerPid;
+
+    managerPid = GetPidFromFile(MAILBOXD_MANAGER_PIDFILE);
+    if (managerPid != -1) {
+	return managerPid;
+    }
+
+    /* We used to record manager's pid in zmmailboxd.pid.  This was
+       unfortunate because the name seems to imply that the pid in
+       that file is the pid of the mailbox/java process.  Some
+       customers were tripping over this.  We now record the manager's
+       pid in zmmailboxd_manager.pid.  While we transition across this
+       file name change, we read the old file name to make sure there
+       are no stale manager processes running.  Shouldn't be if there
+       was a proper shutdown at before upgrade.  The following lines
+       of code below should eventually be removed */
+    managerPid = GetPidFromFile(MAILBOXD_MANAGER_DEPRECATED_PIDFILE);
+    return managerPid;
+}
+
+static void
+RecordPid(const char *which, const char *pidFile, int pidToWrite)
+{
     char buf[64];
+    int pidfd = -1;
     int len, wrote;
-    pid_t pid;
 
     /* Reset the mask so the pid file has the exact permissions we say
      * it should have. */
     umask(0);
   
-    pidfd = creat(MANAGER_PIDFILE, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    pidfd = creat(pidFile, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     if (pidfd < 0) {
-	syslog(LOG_ERR, "could not create %s: %s", MANAGER_PIDFILE, strerror(errno));
+	syslog(LOG_ERR, "could not create %s: %s", pidFile, strerror(errno));
 	exit(1);
     }
 
-    pid = getpid();
-    len = snprintf(buf, sizeof(buf), "%d\n", pid);
+    len = snprintf(buf, sizeof(buf), "%d\n", pidToWrite);
     wrote = write(pidfd, buf, len);
     if (wrote != len) {
-	syslog(LOG_ERR, "wrote only %d of %d to %s: %s", wrote, len, MANAGER_PIDFILE, strerror(errno));
+	syslog(LOG_ERR, "wrote only %d of %d to %s: %s", wrote, len, pidFile, strerror(errno));
 	exit(1);
     }
 
-    syslog(LOG_INFO, "wrote manager pid %d to %s", pid, MANAGER_PIDFILE);
+    syslog(LOG_INFO, "wrote %s pid %d to %s", which, pidToWrite, pidFile);
     close(pidfd);
 }
 
@@ -404,7 +372,13 @@ StartMailboxd()
     }
 
     /* In child process (mailboxd/JVM) */
-    
+
+    /* For informational purposes only, write the the server pid to a
+       file.  Note that this is not authoritative because only the
+       running nanny/manager process knows the true pid of the
+       mailboxd/JVM that is running right now. */
+    RecordPid("java", MAILBOXD_JAVA_PIDFILE, getpid());
+       
     /* It is customary to not inherit umask and to clear the umask
        completely so applications can set whatever exact permissions it
        is that they want. However, Java programs can not set permissions
@@ -586,19 +560,19 @@ Start(int nextArg, int argc, char *argv[])
      * AddArg("-jre-no-restrict-search");
      */
    
-    AddArg("-Djava.io.tmpdir=%s/work", MAILBOXD_HOME); 
-    AddArg("-Djava.library.path=%s", ZIMBRA_LIB);
-    AddArg("-Djava.endorsed.dirs=%s/common/endorsed", MAILBOXD_HOME);
-    AddArg("-Dzimbra.config=%s", ZIMBRA_CONFIG);
+    AddArgFmt("-Djava.io.tmpdir=%s/work", MAILBOXD_HOME); 
+    AddArgFmt("-Djava.library.path=%s", ZIMBRA_LIB);
+    AddArgFmt("-Djava.endorsed.dirs=%s/common/endorsed", MAILBOXD_HOME);
+    AddArgFmt("-Dzimbra.config=%s", ZIMBRA_CONFIG);
 
     /* We don't want these things being passed in from command line */
-    AddArg("-Djetty.home=%s", MAILBOXD_HOME);
-    AddArg("-DSTART=%s/etc/start.config", MAILBOXD_HOME);
+    AddArgFmt("-Djetty.home=%s", MAILBOXD_HOME);
+    AddArgFmt("-DSTART=%s/etc/start.config", MAILBOXD_HOME);
     AddArg("-jar");
-    AddArg("%s/start.jar", MAILBOXD_HOME);
-    AddArg("%s/etc/jetty.properties", MAILBOXD_HOME);
-    AddArg("%s/etc/jetty-setuid.xml", MAILBOXD_HOME);
-    AddArg("%s/etc/jetty.xml", MAILBOXD_HOME);
+    AddArgFmt("%s/start.jar", MAILBOXD_HOME);
+    AddArgFmt("%s/etc/jetty.properties", MAILBOXD_HOME);
+    AddArgFmt("%s/etc/jetty-setuid.xml", MAILBOXD_HOME);
+    AddArgFmt("%s/etc/jetty.xml", MAILBOXD_HOME);
 
     if (Verbose) {
 	ShowNewEnv();
@@ -616,7 +590,9 @@ Start(int nextArg, int argc, char *argv[])
 
     chdir(MAILBOXD_CWD);
   
-    RecordManagerPid();
+    /* Note that the PID that is written is the PID of the launcher
+     * process, not that of the JVM. */
+    RecordPid("manager", MAILBOXD_MANAGER_PIDFILE, getpid());
     
     /* On SIGTERM, we set ShutdownRequested to true. */
     signal(SIGTERM, StopHandler);
@@ -636,7 +612,9 @@ Start(int nextArg, int argc, char *argv[])
 	wait(NULL);
 	syslog(LOG_INFO, "manager woke up from wait on mailboxd/JVM with pid %d", MailboxdPid);
 	if (ShutdownRequested) {
-	    unlink(MANAGER_PIDFILE);
+	    unlink(MAILBOXD_MANAGER_PIDFILE);
+	    unlink(MAILBOXD_JAVA_PIDFILE);
+	    unlink(MAILBOXD_MANAGER_DEPRECATED_PIDFILE);
 	    break;
 	}
 	
@@ -788,6 +766,10 @@ main(int argc, char *argv[])
     }
     if (action == NULL) { 
 	Usage(progname);
+    }
+
+    if (access("zmmailboxdmgr.verbose", F_OK) == 0) {
+	Verbose = 1;
     }
 
     if (strcmp(action, "start") == 0) {
