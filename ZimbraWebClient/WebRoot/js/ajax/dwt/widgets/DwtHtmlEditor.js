@@ -286,9 +286,9 @@ function(element) {
 };
 
 DwtHtmlEditor.prototype.insertText =
-function(text) {
+function(text, select) {
 	var node = this._getIframeDoc().createTextNode(text);
-	this._insertNodeAtSelection(node);
+	this._insertNodeAtSelection(node, select);
 };
 
 DwtHtmlEditor.prototype.insertImage =
@@ -563,15 +563,19 @@ function(html) {
 };
 
 DwtHtmlEditor.prototype._insertNodeAtSelection =
-function(node) {
+function(node, select) {
 	this.focus();
 	if (!AjxEnv.isIE) {
 		var range = this._getRange();
-		this._getIframeWin().getSelection().removeAllRanges();
+                var sel = this._getIframeWin().getSelection();
+		sel.removeAllRanges();
 		try {
 			range.deleteContents();
 			range.insertNode(node);
-			range.selectNodeContents(node);
+			range.selectNode(node);
+                        if (select) {
+                                sel.addRange(range);
+                        }
 		}
 		catch (e) {
 			DBG.println("DwtHtmlEditor#_insertNodeAtSelect");
@@ -1600,6 +1604,45 @@ function() {
 	var iFrameDoc = this._getIframeDoc();
 	return (iFrameDoc && iFrameDoc.body)
 		? AjxStringUtil.convertHtml2Text(iFrameDoc.body) : "";
+};
+
+// params must contain:
+//    - url
+// optional:
+//    - text
+//    - title
+DwtHtmlEditor.prototype.insertLink = function(params) {
+        if (params.text)
+                this.insertText(params.text, true);
+        var url = "javascript:" + Dwt.getNextId();
+        this._execCommand("createlink", url);
+        var a = this._getIframeDoc().getElementsByTagName("a");
+        var link;
+        for (var i = a.length; --i >= 0;) {
+                if (a[i].href == url) {
+                        link = a[i];
+                        break;
+                }
+        }
+        link.href = params.url;
+        if (params.title)
+                link.title = params.title;
+        return link;
+};
+
+// if the caret/selection is currently a link, select it and return its properties
+// otherwise, at least return the selected text, if any.
+DwtHtmlEditor.prototype.getLinkProps = function() {
+        var a = this.getNearestElement("a");
+        if (a)
+                this.selectNodeContents(a);
+        var range = this._getRange();
+        var props = { text: AjxEnv.isIE ? range.text : range.toString() };
+        if (a) {
+                props.url = a.href;
+                props.title = a.title;
+        }
+        return props;
 };
 
 /** Table Helper Functions **/
