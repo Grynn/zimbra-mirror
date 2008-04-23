@@ -147,12 +147,8 @@ function(child, index) {
 	 	// are actually parented to the body
 		document.body.appendChild(childHtmlEl);
 	} else {
-		var htmlEl = this.getHtmlElement();
-		if ((index != null) && (index < htmlEl.childNodes.length)) {
-			htmlEl.insertBefore(childHtmlEl, htmlEl.childNodes[index]);	
-		} else {
-			htmlEl.appendChild(childHtmlEl);
-		}
+                child.reparentHtmlElement(child.__parentElement || this.getHtmlElement(), index);
+                child.__parentElement = null; // don't keep the reference to element, if any
 	}
 }
 

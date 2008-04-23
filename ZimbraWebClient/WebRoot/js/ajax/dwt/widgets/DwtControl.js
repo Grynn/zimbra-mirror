@@ -66,7 +66,8 @@
  *        deferred		[boolean]*			if true, postpone initialization until needed
  *        id			[string]*			An explicit ID to use for the control's HTML element. If not
  * 											provided, defaults to an auto-generated ID.
- *        index 		[int]*				index at which to add this control among parent's children 
+ *        parentElement         [string|HTMLElement]*           parent element
+ *        index 		[int]*				index at which to add this control among parent's children
  */
 DwtControl = function(params) {
 
@@ -114,6 +115,8 @@ DwtControl = function(params) {
 
 	/** @private */
 	this.__index = params.index;
+
+        this.__parentElement = params.parentElement;
 
 	/** enabled state of this control. Public APIs to this member are
 	 * <code>getEnabled</code> and <code>setEnabled</code>

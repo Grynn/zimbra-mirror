@@ -55,7 +55,11 @@
  */
 DwtSpinner = function(params) {
 	if (arguments.length == 0) return;
-	DwtControl.call(this, {parent:params.parent, className:params.className, posStyle:params.posStyle});
+	DwtControl.call(this, { parent        : params.parent,
+                                className     : params.className,
+                                posStyle      : params.posStyle,
+                                parentElement : params.parentElement,
+                              });
 
 	// setup arguments
 	this._maxValue      = params.max  != null ? params.max  : null;
