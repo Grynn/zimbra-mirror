@@ -129,6 +129,20 @@ public class SkinResources
     private Map<String, Map<String, String>> cache =
             new HashMap<String, Map<String, String>>();
 
+	/**
+	 * <strong>Note:</strong>
+	 * This is needed because only the generate method knows if the
+	 * templates were included. But we need that information on
+	 * subsequent requests so that we can tell the callee if the
+	 * templates were included.
+	 * <p>
+	 * Not knowing on subsequent requests whether templates were
+	 * included caused bug 26563 and a 0-byte skin.js file to be
+	 * requested even though everything had been inlined into
+	 * launchZCS.jsp. 
+	 */
+	private Map<String,Boolean> included = new HashMap<String,Boolean>();
+
     //
     // HttpServlet methods
     //
@@ -182,7 +196,7 @@ public class SkinResources
         String buffer = buffers != null && !debug ? buffers.get(uri) : null;
         if (buffer == null) {
             if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: generating buffer");
-            buffer = generate(req, resp, macros, type, client, locale, templates);
+            buffer = generate(req, resp, cacheId, macros, type, client, locale, templates);
             if (!debug) {
                 if (type.equals(T_CSS)) {
                     CssCompressor compressor = new CssCompressor(new StringReader(buffer));
@@ -248,7 +262,11 @@ public class SkinResources
             OutputStream out = resp.getOutputStream();
             byte[] bytes = buffer.getBytes("UTF-8");
             out.write(bytes);
-        }
+			Boolean included = this.included.get(cacheId);
+			if (included != null) {
+				req.setAttribute(A_TEMPLATES_INCLUDED, included.toString());
+			}
+		}
         catch (IllegalStateException e) {
             // use writer if called from including JSP
             PrintWriter out = resp.getWriter();
@@ -288,7 +306,7 @@ public class SkinResources
     } // getLocale(HttpServletRequest):Locale
 
     private String generate(HttpServletRequest req, HttpServletResponse resp,
-                            Map<String, String> macros,
+                            String cacheId, Map<String, String> macros,
                             String type, String client, Locale requestedLocale,
 							String templatesParam)
             throws IOException {
@@ -390,8 +408,8 @@ public class SkinResources
 								String templateFilename = file.getName().replaceAll("\\.template$", ""); 
 								addLocaleFiles(files, requestedLocale, file.getParentFile(), templateFilename, ".template.js");
 							}
+							this.included.put(cacheId, true);
 						}
-						req.setAttribute(A_TEMPLATES_INCLUDED, included);
 					}
 				}
 				else {
