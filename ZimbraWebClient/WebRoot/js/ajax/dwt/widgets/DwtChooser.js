@@ -1030,8 +1030,8 @@ DwtChooserListView = function(params) {
 	params.headerList = this._getHeaderList(parent);
 	DwtListView.call(this, params);
 
-	this.type = type;
-	this._chooserParent = parent.parent;
+	this.type = params.type;
+	this._chooserParent = params.parent.parent;
 	this._viewPrefix = Dwt.getNextId();
 };
 
