@@ -121,7 +121,11 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 		}
 		var tempThis = this;
 		//DBG.println(AjxDebug.DBG3, "Async RPC request");
-		this.__httpReq.onreadystatechange = function(ev) {AjxRpcRequest.__handleResponse(tempThis, callback);};
+		this.__httpReq.onreadystatechange = function(ev) {
+				if (window.AjxRpcRequest) {
+					AjxRpcRequest.__handleResponse(tempThis, callback);
+				}
+			}
 	} else {
 		// IE appears to run handler even on sync requests, so we need to clear it
 		this.__httpReq.onreadystatechange = function(ev) {};
