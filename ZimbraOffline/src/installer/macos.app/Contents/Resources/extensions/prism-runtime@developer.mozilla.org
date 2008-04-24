@@ -1,0 +1,1 @@
+@install@/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org

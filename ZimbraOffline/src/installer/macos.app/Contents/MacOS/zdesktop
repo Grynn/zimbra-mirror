@@ -1,2 +1,3 @@
 #!/bin/sh
-exec @install@/macos/prism/Prism.app/Contents/MacOS/prism -webapp @install@/zdesktop.webapp -profile @install@/profile
+export GRE_HOME="@install@/macos/prism/Prism.app/Contents/Frameworks/XUL.framework"
+exec "`dirname "$0"`/prism" -webapp @install@/zdesktop.webapp -profile @install@/profile

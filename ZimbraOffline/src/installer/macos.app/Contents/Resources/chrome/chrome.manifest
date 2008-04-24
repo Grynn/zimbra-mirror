@@ -1,0 +1,2 @@
+override chrome://branding/locale/brand.dtd resource://app/branding/brand.dtd
+override chrome://branding/locale/brand.properties resource://app/branding/brand.properties
