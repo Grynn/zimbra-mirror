@@ -58,7 +58,7 @@ DwtSpinner = function(params) {
 	DwtControl.call(this, { parent        : params.parent,
                                 className     : params.className,
                                 posStyle      : params.posStyle,
-                                parentElement : params.parentElement,
+                                parentElement : params.parentElement
                               });
 
 	// setup arguments
