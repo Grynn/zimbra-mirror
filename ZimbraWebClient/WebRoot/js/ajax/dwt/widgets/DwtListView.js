@@ -770,7 +770,7 @@ DwtListView.prototype._getRow =
 function(htmlArr, idx, item, params) {
 	var rowId = this._getRowId(item, params) || Dwt.getNextId();
 	var className = this._getRowClass(item, params);
-	htmlArr[idx++] = rowId ? "<tr" : ["<tr id='", rowId, "'"].join("");
+	htmlArr[idx++] = rowId ? ["<tr id='", rowId, "'"].join("") : "<tr";
 	htmlArr[idx++] = className ? ([" class='", className, "'>"].join("")) : ">";
 	return idx;
 };
