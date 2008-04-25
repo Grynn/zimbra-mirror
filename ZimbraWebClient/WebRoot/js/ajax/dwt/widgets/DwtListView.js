@@ -2171,7 +2171,7 @@ function(column, bSortByAsc) {
 	var columnId = null;
 	for (var i = 0; i < this._headerList.length; i++) {
 		if (this._headerList[i]._sortable && this._headerList[i]._field == column) {
-			columnId = this._headerList[i]._field;
+			columnId = this._headerList[i]._id;
 			break;
 		}
 	}
