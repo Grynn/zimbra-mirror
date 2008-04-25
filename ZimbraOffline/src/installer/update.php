@@ -47,9 +47,9 @@ header('Cache-Control: no-cache');
 echo "<?xml version=\"1.0\"?>\n";
 ?>
 <updates>
-<? if ($buildid > $oldbid) { ?>
-  <update type="minor" version="<?=$verison?>" detailsURL="<?=$details_url?>">
-    <patch type="complete" URL="<?=$download_url?>" hashFunction="md5" hashValue="<?=$hash?>" size="<?=$size?>"/>
+<?php if ($buildid > $oldbid) { ?>
+  <update type="minor" version="<?php echo $verison?>" detailsURL="<?php echo $details_url?>">
+    <patch type="complete" URL="<?php echo $download_url?>" hashFunction="md5" hashValue="<?php echo $hash?>" size="<?php echo $size?>"/>
   </update>
 <?php } ?>
 </updates>
