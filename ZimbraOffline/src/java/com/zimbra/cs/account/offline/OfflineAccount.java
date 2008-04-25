@@ -35,7 +35,7 @@ public class OfflineAccount extends Account {
 		private int minor;
 		private int maintenance;
 
-		Version(String version) {
+		public Version(String version) {
 			versionStr = version;
 			
 			for (int i = 0; i < version.length(); ++i) {
@@ -64,6 +64,11 @@ public class OfflineAccount extends Account {
 		public int getMinor()        { return minor; }
 		public int getMaintenance()  { return maintenance; }
 
+		public boolean isAtLeast(Version required) {
+			return major > required.major || major == required.major && minor > required.minor ||
+			       major == required.major && minor == required.minor && maintenance >= required.maintenance;
+		}
+		
 		public String toString() { return versionStr; }
 	}
 
@@ -198,5 +203,18 @@ public class OfflineAccount extends Account {
     		DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(this);
     		OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(time));
     	}
+    }
+    
+    public static void main(String[] args) {
+    	assert new Version("4.5.9").isAtLeast(new Version("4.5"));
+    	assert !new Version("4.5.9").isAtLeast(new Version("4.5.11"));
+    	assert new Version("5.0.5").isAtLeast(new Version("5"));
+    	assert new Version("5.0.5").isAtLeast(new Version("5.0"));
+    	assert new Version("5.0.5").isAtLeast(new Version("5.0.5"));
+    	assert !new Version("5.0.5").isAtLeast(new Version("5.0.6"));
+    	assert !new Version("5.0.5").isAtLeast(new Version("6"));
+    	assert !new Version("5.0.5").isAtLeast(new Version("6.0"));
+    	assert new Version("5.0.6").isAtLeast(new Version("4.5.9"));
+    	assert new Version("6.0.5").isAtLeast(new Version("5.0.6"));
     }
 }
