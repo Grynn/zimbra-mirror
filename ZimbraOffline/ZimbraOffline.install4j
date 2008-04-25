@@ -175,115 +175,14 @@ License Terms for this Zimbra Collaboration Suite Software:&lt;br&gt;
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.screens.DefaultInfoScreen">
               <void property="displayedText">
-                <string>A previous installation of Zimbra Desktop has been detected.
-It must be uninstalled before proceeding with new installation.</string>
+                <string>A previous version of Zimbra Desktop has been detected. It must be uninstalled before proceeding with new installation.  User data will be preserved.</string>
               </void>
             </object>
           </java>
         </serializedBean>
         <condition>context.getBooleanVariable("needToUninstall")</condition>
         <validation />
-        <actions>
-          <action name="" id="271582" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.services.StopServiceAction">
-                  <void property="launcherId">
-                    <string>32</string>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition>!Util.isMacOS()</condition>
-          </action>
-          <action name="launchctl stop" id="271581" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                  <void property="arguments">
-                    <array class="java.lang.String" length="2">
-                      <void index="0">
-                        <string>stop</string>
-                      </void>
-                      <void index="1">
-                        <string>com.zimbra.zdesktop</string>
-                      </void>
-                    </array>
-                  </void>
-                  <void property="executable">
-                    <object class="java.io.File">
-                      <string>/bin/launchctl</string>
-                    </object>
-                  </void>
-                  <void property="wait">
-                    <boolean>true</boolean>
-                  </void>
-                  <void property="workingDirectory">
-                    <object class="java.io.File">
-                      <string>.</string>
-                    </object>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition>Util.isMacOS()</condition>
-          </action>
-          <action name="migration test run" id="271585" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
-                  <void property="script">
-                    <object class="com.install4j.api.beans.ScriptProperty">
-                      <void property="value">
-                        <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
-
-String errorMsg = null;
-
-try {
-    Thread.sleep(1000);
-    new com.zimbra.cs.db.DbOfflineMigration().testRun();
-    return true;
-} catch (com.zimbra.cs.db.DbExclusiveAccessException x) {
-    Thread.sleep(6000);
-    try {
-        new com.zimbra.cs.db.DbOfflineMigration().testRun();
-        return true;
-    } catch (com.zimbra.cs.db.DbExclusiveAccessException e) {
-        Util.showMessage("Background service of previous version not shutdown.  Please rerun this installer after it's completely shutdown.",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
-        return false;
-    }
-} catch (com.zimbra.cs.db.DbNotFoundException x) {
-    errorMsg = "Some parts of your existing dataset is missing.";
-} catch (com.zimbra.cs.db.DbDataCorruptedException x) {
-    errorMsg = "Your existing dataset is corrupted and can't be recovered.";
-} catch (com.zimbra.cs.db.DbUnsupportedVersionException x) {
-    errorMsg = "Your existing dataset version is too old and can't be converted.";
-} catch (com.zimbra.cs.db.DbUpdateException x) {
-    errorMsg = "Your existing dataset is not compatible and can't be converted.";
-} catch (Exception x) {
-    errorMsg = "Your existing dataset can't be reused.";
-}
-
-int choice = Util.showOptionDialog(errorMsg, new String[] {"Quit", "Delete old dataset and continue with install"},
-        javax.swing.JOptionPane.WARNING_MESSAGE);
-
-switch (choice) {
-case 1:
-    context.setVariable("keepUserData", Boolean.FALSE);
-    return true;
-default:
-    return false;
-}</string>
-                      </void>
-                    </object>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition>context.getBooleanVariable("keepUserData")</condition>
-          </action>
-        </actions>
+        <actions />
         <formComponents />
       </screen>
       <screen name="uninstall" id="275891" beanClass="com.install4j.runtime.beans.screens.CustomizableProgressScreen" rollbackBarrier="false" backButton="2" finishScreen="false">
@@ -331,6 +230,105 @@ default:
               </java>
             </serializedBean>
             <condition />
+          </action>
+          <action name="" id="284552" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.services.StopServiceAction">
+                  <void property="launcherId">
+                    <string>32</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>!Util.isMacOS()</condition>
+          </action>
+          <action name="launchctl stop" id="284553" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                  <void property="arguments">
+                    <array class="java.lang.String" length="2">
+                      <void index="0">
+                        <string>stop</string>
+                      </void>
+                      <void index="1">
+                        <string>com.zimbra.zdesktop</string>
+                      </void>
+                    </array>
+                  </void>
+                  <void property="executable">
+                    <object class="java.io.File">
+                      <string>/bin/launchctl</string>
+                    </object>
+                  </void>
+                  <void property="wait">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="workingDirectory">
+                    <object class="java.io.File">
+                      <string>.</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>Util.isMacOS()</condition>
+          </action>
+          <action name="migration test run" id="284554" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                  <void property="script">
+                    <object class="com.install4j.api.beans.ScriptProperty">
+                      <void property="value">
+                        <string>System.setProperty("zimbra.config", context.getDestinationFile("conf/localconfig.xml").getAbsolutePath());
+
+String errorMsg = null;
+
+try {
+    Thread.sleep(2000);
+    new com.zimbra.cs.db.DbOfflineMigration().testRun();
+    return true;
+} catch (com.zimbra.cs.db.DbExclusiveAccessException x) {
+    Thread.sleep(5000);
+    try {
+        new com.zimbra.cs.db.DbOfflineMigration().testRun();
+        return true;
+    } catch (com.zimbra.cs.db.DbExclusiveAccessException e) {
+        Util.showMessage("Background service of previous version not shutdown.  Please rerun this installer after it's completely shutdown.",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
+} catch (com.zimbra.cs.db.DbNotFoundException x) {
+    errorMsg = "Some parts of your existing dataset is missing.";
+} catch (com.zimbra.cs.db.DbDataCorruptedException x) {
+    errorMsg = "Your existing dataset is corrupted and can't be recovered.";
+} catch (com.zimbra.cs.db.DbUnsupportedVersionException x) {
+    errorMsg = "Your existing dataset version is too old and can't be converted.";
+} catch (com.zimbra.cs.db.DbUpdateException x) {
+    errorMsg = "Your existing dataset is not compatible and can't be converted.";
+} catch (Exception x) {
+    errorMsg = "Your existing dataset can't be reused.";
+}
+
+int choice = Util.showOptionDialog(errorMsg, new String[] {"Quit", "Delete old dataset and continue with install"},
+        javax.swing.JOptionPane.WARNING_MESSAGE);
+
+switch (choice) {
+case 1:
+    context.setVariable("keepUserData", Boolean.FALSE);
+    return true;
+default:
+    return false;
+}</string>
+                      </void>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>context.getBooleanVariable("keepUserData")</condition>
           </action>
           <action name="launchctl remove" id="275894" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
             <serializedBean>
@@ -2912,7 +2910,7 @@ return Boolean.FALSE;</string>
     </uninstallerStartup>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="198394" mediaFileName="${compiler:sys.shortName}_${compiler:offline_version}_build_${compiler:offline_buildid}_win32" installDir="." overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.5.0_10_us_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="C:\zimbra\zdesktop" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows" id="198394" mediaFileName="${compiler:sys.shortName}_${compiler:offline_version}_build_${compiler:offline_buildid}_win32" installDir="." overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.5.0_15" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="C:\zimbra\zdesktop" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -2924,7 +2922,7 @@ return Boolean.FALSE;</string>
       <excludedInstallerScreens />
       <excludedUninstallerScreens />
     </win32>
-    <unixInstaller name="Unix" id="59040" mediaFileName="${compiler:sys.shortName}_${compiler:offline_version}_build_${compiler:offline_buildid}_linux_i686" installDir="." overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.5.0_11" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="~/zimbra/zdesktop" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Unix" id="59040" mediaFileName="${compiler:sys.shortName}_${compiler:offline_version}_build_${compiler:offline_buildid}_linux_i686" installDir="." overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.5.0_15" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="~/zimbra/zdesktop" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
