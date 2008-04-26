@@ -141,16 +141,16 @@ function(child, index) {
 	
 	// check for a previously removed element
 	var childHtmlEl = child.getHtmlElement();
-        childHtmlEl.setAttribute("parentId", this._htmlElId);
-        if (this instanceof DwtShell && this.isVirtual()) {
+	childHtmlEl.setAttribute("parentId", this._htmlElId);
+	if (this instanceof DwtShell && this.isVirtual()) {
 		// If we are operating in "virtual shell" mode, then children of the shell's html elements
-	 	// are actually parented to the body
+		// are actually parented to the body
 		document.body.appendChild(childHtmlEl);
 	} else {
-                child.reparentHtmlElement(child.__parentElement || this.getHtmlElement(), index);
-                child.__parentElement = null; // don't keep the reference to element, if any
+		child.reparentHtmlElement(child.__parentElement || this.getHtmlElement(), index);
+		child.__parentElement = null; // don't keep the reference to element, if any
 	}
-}
+};
 
 /**
 * Removes the given child control from this control. A removed child is no longer retrievable via

@@ -596,8 +596,8 @@ function(newParent, index) {
 /**
  * Reparents the HTML element of the control to the html element supplied as the
  * parameter to this method. Note this method only reparents the control's <i>div</i>
- * element and does not effect the component hierarchy. To reparent the control within
- * the component hierarchy, use the <i>reparent</i> method
+ * element and does not affect the component hierarchy. To reparent the control within
+ * the component hierarchy, use the <i>reparent</i> method.
  *
  * @param {String|HTMLElement} htmlEl Either a string representing an ID, or an html element
  * @param {Number|HTMLElement} position (optional) Specify where to insert the element
@@ -620,7 +620,11 @@ function(htmlEl, position) {
 	} else if (typeof position == "object") {
 		htmlEl.insertBefore(el, position);
 	} else {
-		htmlEl.insertBefore(el, htmlEl.childNodes[position]);
+		if (htmlEl.childNodes[position]) {
+			htmlEl.insertBefore(el, htmlEl.childNodes[position]);
+		} else {
+			htmlEl.appendChild(el);
+		}
 	}
 };
 
