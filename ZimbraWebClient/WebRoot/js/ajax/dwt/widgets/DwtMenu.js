@@ -311,7 +311,7 @@ function(actionCode, ev) {
 			
 		case DwtKeyMap.CANCEL:
 			if (this.__currentItem) {
-				var mev = DwtShell.mouseEvent;
+				var mev = new DwtMouseEvent();
 				this._setMouseEvent(mev, {dwtObj:this.__currentItem});
 				this.notifyListeners(DwtEvent.ONMOUSEOUT, mev);
 				this.__currentItem = null;
@@ -404,7 +404,7 @@ function(which) {
 
 	// if we have a current item then we need to make sure we simulate a
 	// mouseout event so that the UI can behave correctly
-	var mev = DwtShell.mouseEvent;
+	var mev = new DwtMouseEvent();
 	if (this.__currentItem) {
 		this._setMouseEvent(mev, {dwtObj:this.__currentItem});
 		this.__currentItem.notifyListeners(DwtEvent.ONMOUSEOUT, mev);

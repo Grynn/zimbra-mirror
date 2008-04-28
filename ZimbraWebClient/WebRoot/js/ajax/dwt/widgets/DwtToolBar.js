@@ -15,7 +15,24 @@
  * ***** END LICENSE BLOCK *****
  */
 
-
+/**
+ * Creates a toolbar. Components must be added via the add*() functions.
+ * @constructor
+ * @class
+ * A toolbar is a horizontal or vertical strip of widgets (usually buttons).
+ *
+ * DwtToolBar.HORIZ_STYLE		horizontal toolbar
+ * DwtToolBar.VERT_STYLE		vertical toolbar
+ *
+ * @author Ross Dargahi
+ * 
+ * @param params		[hash]				hash of params:
+ *        parent		[DwtComposite] 		parent widget
+ *        className		[string]*			CSS class
+ *        posStyle		[constant]*			positioning style
+ *        style			[constant]*			menu style
+ *        index 		[int]*				index at which to add this control among parent's children 
+ */
 DwtToolBar = function(params) {
 	if (arguments.length == 0) { return; }
 	params = Dwt.getParams(arguments, DwtToolBar.PARAMS);
@@ -23,7 +40,12 @@ DwtToolBar = function(params) {
 	params.className = params.className || "ZToolbar";
 	DwtComposite.call(this, params);
 
-	if (params.handleMouse !== false) {
+	// since we attach event handlers at the toolbar level, make sure we don't double up on
+	// handlers when we have a toolbar within a toolbar
+	if (params.parent instanceof DwtToolBar) {
+		this._hasSetMouseEvents = params.parent._hasSetMouseEvents;
+	}
+	if (params.handleMouse !== false && !this._hasSetMouseEvents) {
 		var events = AjxEnv.isIE ? [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP] :
 								   [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT];
 		this._setEventHdlrs(events);
@@ -41,8 +63,7 @@ DwtToolBar = function(params) {
 	this._keyMapName = ["DwtToolBar", suffix].join("-");
 };
 
-DwtToolBar.PARAMS = ["parent", "className", "posStyle", "cellSpacing",
-					 "cellPadding", "width", "style", "index"];
+DwtToolBar.PARAMS = ["parent", "className", "posStyle", "style", "index"];
 
 DwtToolBar.prototype = new DwtComposite;
 DwtToolBar.prototype.constructor = DwtToolBar;

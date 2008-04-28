@@ -486,7 +486,7 @@ function() {
 	this.trigger();
 	var htmlEl = this.getHtmlElement();
 	var p = Dwt.toWindow(htmlEl);
-	var mev = DwtShell.mouseEvent;
+	var mev = new DwtMouseEvent();
 	this._setMouseEvent(mev, {dwtObj:this, target:htmlEl, button:DwtMouseEvent.LEFT, docX:p.x, docY:p.y});
 	if (this._actionTiming == DwtButton.ACTION_MOUSEDOWN) {
 		this.notifyListeners(DwtEvent.ONMOUSEDOWN, mev);
@@ -501,7 +501,7 @@ function() {
     if (!htmlEl) { return; }
 
 	var p = Dwt.toWindow(htmlEl);
-	var mev = DwtShell.mouseEvent;
+	var mev = new DwtMouseEvent();
 	this._setMouseEvent(mev, {dwtObj:this, target:htmlEl, button:DwtMouseEvent.LEFT, docX:p.x, docY:p.y});
 	DwtButton._dropDownCellMouseDownHdlr(mev);
 };

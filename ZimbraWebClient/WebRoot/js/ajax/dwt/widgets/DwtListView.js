@@ -1565,7 +1565,7 @@ function(item) {
 
 DwtListView.prototype._emulateDblClick =
 function(target) {
-	var mev = DwtShell.mouseEvent;
+	var mev = new DwtMouseEvent();
 	this._setMouseEvent(mev, {target:target, button:DwtMouseEvent.LEFT});
 	this._itemClicked(target, mev);
 	this._doubleClickListener(mev);
@@ -1626,7 +1626,7 @@ function(itemDiv) {
 DwtListView.prototype._emulateSingleClick =
 function(params) {
 	this._clickDiv = this.findItemDiv(params.target);
-	var mev = DwtShell.mouseEvent;
+	var mev = new DwtMouseEvent();
 	this._setMouseEvent(mev, params);
 	mev.kbNavEvent = params.kbNavEvent;
 	this.notifyListeners(DwtEvent.ONMOUSEUP, mev);
