@@ -2628,6 +2628,10 @@ function() {
 	var htmlElement = this._elRef = document.createElement("div");
 	// __internalId is for back-compatibility (was side effect of Dwt.associateElementWithObject)
 	this._htmlElId = htmlElement.id = this.__internalId = this._htmlElId || Dwt.getNextId();
+	if (DwtControl.ALL_BY_ID[this._htmlElId]) {
+		DBG.println(AjxDebug.DBG1, "Duplicate ID for " + this.toString() + ": " + this._htmlElId);
+		this._htmlElId = htmlElement.id = this.__internalId = DwtId._makeId(this._htmlElId, Dwt.getNextId());
+	}
 	DwtControl.ALL_BY_ID[this._htmlElId] = this;
 	DwtComposite._pendingElements[this._htmlElId] = htmlElement;
 	if (this.__posStyle == null || this.__posStyle == DwtControl.STATIC_STYLE) {
