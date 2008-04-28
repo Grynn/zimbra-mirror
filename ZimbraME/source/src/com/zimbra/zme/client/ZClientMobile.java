@@ -95,6 +95,8 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String EL_AUTH_RESP = "AuthResponse";
 	private static final String EL_BATCH_REQ = "BatchRequest";
 	private static final String EL_BATCH_RESP = "BatchResponse";
+	private static final String EL_CANCELAPPT_REQ = "CancelAppointmentRequest";
+	private static final String EL_CANCELAPPT_RESP = "CancelAppointmentResponse";
     private static final String EL_CREATEAPPT_REQ = "CreateAppointmentRequest";
     private static final String EL_CREATEAPPT_RESP = "CreateAppointmentResponse";
 	private static final String EL_CREATESEARCHFOLDER_REQ = "CreateSearchFolderRequest";
@@ -1001,6 +1003,27 @@ import de.enough.polish.util.StringTokenizer;
         }
     }
     
+    public void cancelAppt(String itemId, String compNum, String exceptionDate) throws ZmeException {
+    	try {
+    		putClientData(null);
+    		mSerializer.setPrefix("", NS_ZIMBRA_MAIL);
+    		mSerializer.startTag(NS_ZIMBRA_MAIL, EL_CANCELAPPT_REQ);
+    		mSerializer.attribute(null, AT_ID, itemId);
+    		if (compNum != null)
+    			mSerializer.attribute(null, EL_COMP, compNum);
+    		if (exceptionDate != null) {
+    			mSerializer.startTag(null, EL_INST);
+    			mSerializer.attribute(null, AT_DATE, exceptionDate);
+    			mSerializer.endTag(null, EL_INST);
+    		}
+    		mSerializer.endTag(NS_ZIMBRA_MAIL, EL_CANCELAPPT_REQ);
+    	} catch (IOException ioe) {
+    		//#debug
+    		System.out.println("ZClientMobile.cancelAppt: IOException " + ioe);
+    		throw new ZmeException(ZmeException.IO_ERROR, ioe.getMessage());
+    	}
+    }
+    
 	/***************************************************************************
 	 * RESPONSE HANDLING METHODS
 	 **************************************************************************/
@@ -1622,6 +1645,12 @@ import de.enough.polish.util.StringTokenizer;
         skipToEnd(EL_GETINFO_RESP);
     }
 
+	private void handleCancelApptResp() 
+	throws IOException,
+		   XmlPullParserException {
+		skipToEnd(EL_ITEMACTION_RESP);
+	}
+
 
 	private void getContentFromMime(MsgItem m, 
 									int level, 
@@ -2002,6 +2031,8 @@ import de.enough.polish.util.StringTokenizer;
             handleGetApptResp((Appointment)clientData);
         } else if (elName.compareTo(EL_GETINFO_RESP) == 0) {
             handleGetInfoResp();
+        } else if (elName.compareTo(EL_CANCELAPPT_RESP) == 0) {
+            handleCancelApptResp();
         }
 	}
 

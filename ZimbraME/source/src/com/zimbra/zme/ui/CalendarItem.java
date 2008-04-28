@@ -89,6 +89,7 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 	private String mStatus;
 	private boolean mSelected;
     private boolean mModified;
+    private boolean mDeleteSeries;
 	
 	//#ifdef polish.usePolishGui
 		public CalendarItem(ZimbraME m,
@@ -287,18 +288,22 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
 		mTimeStrLen = mFont.stringWidth((Util.TIME_FMT == 24) ? "00:00 -" : "00:00MM -") + SPACING;
 	}
 	
-    public void deleteItem() {
-        mMidlet.mMbox.deleteItem(mAppt.mId, this);    
+    public void deleteItem(boolean series) {
+		String exceptionDate = null;
+		if (!series)
+			exceptionDate = mAppt.getStartDateTime();
+		mDeleteSeries = series;
+        mMidlet.mMbox.cancelAppt(mAppt.mInvId, null, exceptionDate, this);
     }
 
     public void handleResponse(Object op, 
                Object resp) {
         //#debug
         System.out.println("CalendarItem.handleResponse");
-        if (op == Mailbox.DELETEITEM) {
+        if (op == Mailbox.CANCELAPPT) {
             if (resp instanceof Mailbox) {
                 //#debug
-                System.out.println("CalendarItem.handleResponse: Item deleted");
+                System.out.println("CalendarItem.handleResponse: Appt Cancelled");
                 mParentView.itemStateChanged(this, CalendarView.DELETED);
             } else {
                 mMidlet.handleResponseError(resp, mParentView);
@@ -341,5 +346,9 @@ public class CalendarItem extends ZmeCustomItem implements ResponseHdlr {
         if (!series)
             exceptionDate = mAppt.getStartDateTime();
         mMidlet.mMbox.sendInviteReply(mAppt.mInvId, null, exceptionDate, status, this);
+    }
+    
+    public boolean deleteSeries() {
+    	return mDeleteSeries;
     }
 }

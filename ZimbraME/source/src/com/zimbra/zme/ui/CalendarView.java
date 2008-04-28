@@ -339,6 +339,20 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
         ResultSet rs = getCachedResultSetForDate(c.getTime());
         if (rs != null)
             rs.mResults.removeElement(ci.mAppt);
+        if (ci.deleteSeries()) {
+        	String id = ci.mAppt.mId;
+    		int sz = mView.size();
+    		for (int i = 0; i < sz; i++) {
+    			Item item;
+    			item = mView.get(i);
+    			if (item instanceof CalendarItem) {
+    				CalendarItem currentItem = (CalendarItem) item;
+    				if (currentItem.mAppt.mId.equals(id))
+    					mView.delete(i);
+    			}
+    		}
+    		mApptSummaries.clear();
+        }
         mMidlet.mDisplay.setCurrent(mView);
     }
     
@@ -508,7 +522,7 @@ public class CalendarView extends View implements ResponseHdlr, ZmeListener {
 		System.out.println("Deleting: " + series);	
 		Dialogs.popupWipDialog(mMidlet, this, Locale.get("calendar.Deleting"));
 		//TODO IF SERIES MAKE SURE TO DELETE ALL INSTANCES IN CACHED VIEWS
-		c.deleteItem();     
+		c.deleteItem(series);     
 	}
 
 	private void init() {

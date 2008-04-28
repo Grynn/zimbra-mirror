@@ -67,6 +67,7 @@ public class Mailbox implements Runnable {
     public static final Object INVITEREPLY = new Object();
     public static final Object GETAPPT = new Object();
     public static final Object GETINFO = new Object();
+    public static final Object CANCELAPPT = new Object();
 
     // No parameter for Item action
     //private static final String NOPARAM = "";
@@ -576,6 +577,21 @@ public class Mailbox implements Runnable {
         }
     }
     
+    public void cancelAppt(String itemId, String compNum, String exDate, ResponseHdlr respHdlr) {
+        Stack s = new Stack();
+        s.push((exDate == null ? NULL_ARG : exDate));
+        s.push((compNum == null) ? "0" : compNum);
+        s.push(itemId);
+        s.push(mAuthToken);
+        s.push(CANCELAPPT);
+        s.push(respHdlr);
+        s.push(P1);
+        synchronized (mQueue) {
+            mQueue.addElement(s);
+            mQueue.notify();
+        }
+    }
+    
     /**
      * Cancels any outstanding operation
      * @throws IOException
@@ -889,6 +905,17 @@ public class Mailbox implements Runnable {
             client.endRequest();
             //#debug
             System.out.println("Mailbox.run(" + threadName + "): GetInfo done");
+        } else if (op == CANCELAPPT) {
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): CancelAppt");
+            client.beginRequest((String)s.pop(), false);
+            Object obj;
+            client.cancelAppt((String)s.pop(),
+            				  ((obj = s.pop()) == NULL_ARG) ? null : (String)obj,
+            				  ((obj = s.pop()) == NULL_ARG) ? null : (String)obj);
+            client.endRequest();
+            //#debug
+            System.out.println("Mailbox.run(" + threadName + "): CancelAppt done");
 		}
     }
     
