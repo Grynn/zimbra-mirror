@@ -26,6 +26,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -41,11 +42,11 @@ public class RenameLDAPEntry extends AdminDocumentHandler {
 		String dn = request.getAttribute(ZimbraLDAPUtilsService.E_DN);
 		String new_dn = request.getAttribute(ZimbraLDAPUtilsService.E_NEW_DN);
 
-		DirContext ctxt = null;
+		ZimbraLdapContext zlc = null;
 		try {
-            ctxt = LdapUtil.getDirContext(true);
-            ctxt.rename(dn, new_dn);
-    		NamedEntry ne = GetLDAPEntries.getObjectByDN(new_dn, ctxt);
+		    zlc = new ZimbraLdapContext(true);
+		    zlc.renameEntry(dn, new_dn);
+    		NamedEntry ne = GetLDAPEntries.getObjectByDN(new_dn, zlc);
     		ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] { "cmd",
     				"RenameLDAPEntry", "dn", dn,"new_dn",new_dn }, null));
     		
@@ -61,7 +62,7 @@ public class RenameLDAPEntry extends AdminDocumentHandler {
         } catch (NamingException e) {
             throw ServiceException.FAILURE("unable to rename dn: "+dn+ "to " +new_dn, e);
         } finally {
-            LdapUtil.closeContext(ctxt);
+            ZimbraLdapContext.closeContext(zlc);
         }
 	}
 

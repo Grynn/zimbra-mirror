@@ -37,6 +37,7 @@ import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AttributeManager;
 
 import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminService;
@@ -75,50 +76,24 @@ public class CreateLDAPEntry extends AdminDocumentHandler {
         HashMap attrManagerContext = new HashMap();
         AttributeManager.getInstance().preModify(entryAttrs, null, attrManagerContext, true, true);
 
-        DirContext ctxt = null;
+        ZimbraLdapContext zlc = null;
         try {
-            ctxt = LdapUtil.getDirContext(true);
+            zlc = new ZimbraLdapContext(true);
 
             Attributes attrs = new BasicAttributes(true);
             LdapUtil.mapToAttrs(entryAttrs, attrs);
 
-            createSubcontext(ctxt, dn, attrs, "createLDAPEntry");
+            zlc.createEntry(dn, attrs, "createLDAPEntry");
 
-            NamedEntry entry = GetLDAPEntries.getObjectByDN(dn, ctxt);
+            NamedEntry entry = GetLDAPEntries.getObjectByDN(dn, zlc);
             AttributeManager.getInstance().postModify(entryAttrs, entry, attrManagerContext, true);
             return entry;
 
         } catch (NameAlreadyBoundException nabe) {
             throw ZimbraLDAPUtilsServiceException.DN_EXISTS(dn);
         } finally {
-            LdapUtil.closeContext(ctxt);
+            ZimbraLdapContext.closeContext(zlc);
         }
     }
-    /** 
-     * @see com.zimbra.cs.account.Provisioning#createSubcontext(javax.naming.directory.Dircontext,java.lang.String,javax.naming.directory.Attributes,java.lang.String)
-     **/
     
-    private void createSubcontext(DirContext ctxt, String dn, Attributes attrs, String method)
-    throws NameAlreadyBoundException, ServiceException {
-        Context newCtxt = null;
-        try {
-            newCtxt = ctxt.createSubcontext(dn, attrs);
-        } catch (NameAlreadyBoundException e) {            
-            throw e;
-        } catch (InvalidAttributeIdentifierException e) {
-            throw AccountServiceException.INVALID_ATTR_NAME(method+" invalid attr name: "+e.getMessage(), e);
-        } catch (InvalidAttributeValueException e) {
-            throw AccountServiceException.INVALID_ATTR_VALUE(method+" invalid attr value: "+e.getMessage(), e);
-        } catch (InvalidAttributesException e) {
-            throw ServiceException.INVALID_REQUEST(method+" invalid set of attributes: "+e.getMessage(), e);
-        } catch (InvalidNameException e) {
-            throw ServiceException.INVALID_REQUEST(method+" invalid name: "+e.getMessage(), e);
-        } catch (SchemaViolationException e) {
-            throw ServiceException.INVALID_REQUEST(method+" invalid schema change: "+e.getMessage(), e);            
-        } catch (NamingException e) {
-            throw ServiceException.FAILURE(method, e);
-        } finally {
-            LdapUtil.closeContext(newCtxt);
-        }
-    }
 }

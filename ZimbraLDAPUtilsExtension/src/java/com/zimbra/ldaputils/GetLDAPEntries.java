@@ -47,6 +47,7 @@ import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
 
 import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.ldap.LdapDomain;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.AdminConstants;
@@ -102,13 +103,13 @@ public class GetLDAPEntries extends AdminDocumentHandler {
         return true; 
     }
     
-    public static LDAPUtilEntry getObjectByDN(String dn, DirContext initCtxt) throws ServiceException {
-        DirContext ctxt = initCtxt;
+    public static LDAPUtilEntry getObjectByDN(String dn, ZimbraLdapContext initZlc) throws ServiceException {
+        ZimbraLdapContext zlc = initZlc;
         try {
-            if (ctxt == null)
-                ctxt = LdapUtil.getDirContext();
+            if (zlc == null)
+                zlc = new ZimbraLdapContext();
                
-            Attributes attrs = ctxt.getAttributes(dn);
+            Attributes attrs = zlc.getAttributes(dn);
             LDAPUtilEntry ne = new LDAPUtilEntry(dn, attrs,null);
             return ne;
             
@@ -119,8 +120,8 @@ public class GetLDAPEntries extends AdminDocumentHandler {
         } catch (NamingException e) {
             throw ServiceException.FAILURE("unable to find dn: "+dn+" message: "+e.getMessage(), e);
         } finally {
-            if (initCtxt == null)
-                LdapUtil.closeContext(ctxt);
+            if (initZlc == null)
+                ZimbraLdapContext.closeContext(zlc);
         }
     }
     
