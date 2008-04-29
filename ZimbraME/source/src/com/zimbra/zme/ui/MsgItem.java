@@ -307,6 +307,8 @@ public class MsgItem extends MailItem implements ResponseHdlr {
                 mParentView.itemStateChanged(this, MailListView.INVITE_REPLIED);
 		    else
 		        mMidlet.handleResponseError(resp, mParentView);
+        } else {
+        	super.handleResponse(op, resp);
         }
 	}
 	
