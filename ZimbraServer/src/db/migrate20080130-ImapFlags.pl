@@ -44,6 +44,7 @@ SET flags = (
   SELECT flags
   FROM $group.mail_item
   WHERE $group.imap_message.item_id = $group.mail_item.id
+  AND $group.imap_message.mailbox_id = $group.mail_item.mailbox_id
 );
 
 ALTER_TABLE_EOF
