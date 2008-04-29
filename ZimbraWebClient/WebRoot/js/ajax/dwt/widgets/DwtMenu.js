@@ -397,10 +397,10 @@ function(which) {
 		currItem = this._children.get(which);
 	}
 	// While the current item is not enabled or is a separator, try another
-	while (currItem && (currItem.isStyle(DwtMenuItem.SEPARATOR_STYLE) || !currItem.getEnabled())) {
+	while (currItem && (currItem.isStyle(DwtMenuItem.SEPARATOR_STYLE) || !currItem.getEnabled() || !currItem.getVisible())) {
 		currItem = (which === false) ? this._children.getPrev(currItem) : this._children.getNext(currItem);
 	}
-	if (!currItem) return;
+	if (!currItem) { return; }
 
 	// if we have a current item then we need to make sure we simulate a
 	// mouseout event so that the UI can behave correctly

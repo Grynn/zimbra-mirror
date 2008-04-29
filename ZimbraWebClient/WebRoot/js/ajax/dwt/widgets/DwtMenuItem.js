@@ -338,7 +338,7 @@ function(ev) {
 	if (menuItem._style & DwtMenuItem.SEPARATOR_STYLE) { return false; }
     DwtButton._mouseOverListener(ev, menuItem);
     menuItem.parent._popdownSubmenus();
-    if (menuItem._menu) {
+    if (menuItem._menu && !ev.ersatz) {
         menuItem._popupMenu(menuItem._hoverDelay);
     }
 };
