@@ -21,13 +21,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.servlet.ServletException;
@@ -45,6 +42,7 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionHttpHandler;
 import com.zimbra.cs.extension.ZimbraExtension;
@@ -258,21 +256,21 @@ public class NginxLookupExtension implements ZimbraExtension {
                 throw new NginxLookupException("unsupported protocol: "+proto);
         }
         
-        private String searchDirectory(DirContext ctxt, SearchControls sc, Config config, 
+        private String searchDirectory(ZimbraLdapContext zlc, SearchControls sc, Config config, 
                                        String queryTemplate, String searchBase, String templateKey, String templateVal,
                                        String attr) throws NginxLookupException, NamingException {
-            Object result = searchDir(ctxt, sc, config, queryTemplate,  searchBase,  templateKey,  templateVal, attr);
+            Object result = searchDir(zlc, sc, config, queryTemplate,  searchBase,  templateKey,  templateVal, attr);
             return (String)result;
         }
         
-        private Map<String, String> searchDirectory(DirContext ctxt, SearchControls sc, Config config, 
+        private Map<String, String> searchDirectory(ZimbraLdapContext zlc, SearchControls sc, Config config, 
                 String queryTemplate, String searchBase, String templateKey, String templateVal,
                 Map<String, Boolean> attrs) throws NginxLookupException, NamingException {
-            Object result = searchDir(ctxt, sc, config, queryTemplate,  searchBase,  templateKey,  templateVal, attrs);
+            Object result = searchDir(zlc, sc, config, queryTemplate,  searchBase,  templateKey,  templateVal, attrs);
             return (Map<String, String>)result;
         }
         
-        private Object searchDir(DirContext ctxt, SearchControls sc, Config config, 
+        private Object searchDir(ZimbraLdapContext zlc, SearchControls sc, Config config, 
                                  String queryTemplate, String searchBase, String templateKey, String templateVal,
                                  Object attrs) throws NginxLookupException, NamingException {
             HashMap<String, String> kv = new HashMap<String,String>();
@@ -289,7 +287,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             if (base == null)
             base = "";
             
-            NamingEnumeration ne = LdapUtil.searchDir(ctxt, base, query, sc);
+            NamingEnumeration ne = zlc.searchDir(base, query, sc);
             try {
                 if (!ne.hasMore())
                     throw new NginxLookupException("query returned empty result: "+query);
@@ -304,7 +302,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             }
         }
         
-        private String userByVirtualIP(DirContext ctxt, Config config, NginxLookupRequest req) {
+        private String userByVirtualIP(ZimbraLdapContext zlc, Config config, NginxLookupRequest req) {
                 
             boolean hasDomain = (req.user.indexOf('@') != -1);
                 
@@ -316,7 +314,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             if (req.serverIp != null) {
                 try {
                     domainName = searchDirectory(
-                                            ctxt, 
+                                            zlc, 
                                             DOMAIN_SC, 
                                             config, 
                                             Provisioning.A_zimbraReverseProxyDomainNameQuery,
@@ -347,16 +345,16 @@ public class NginxLookupExtension implements ZimbraExtension {
         }
         
         private void search(NginxLookupRequest req) throws NginxLookupException {
-            DirContext ctxt = null;
+            ZimbraLdapContext zlc = null;
             try {
-                ctxt = LdapUtil.getDirContext();
+                zlc = new ZimbraLdapContext();
                 Config config = Provisioning.getInstance().getConfig();
-                String authUser = userByVirtualIP(ctxt, config, req);
+                String authUser = userByVirtualIP(zlc, config, req);
                 
                 Map<String, Boolean> attrs = new HashMap<String, Boolean>();
                 attrs.put(Provisioning.A_zimbraReverseProxyMailHostAttribute, true);
                 attrs.put(Provisioning.A_zimbraReverseProxyUserNameAttribute, false);
-                Map<String, String> vals = searchDirectory(ctxt, 
+                Map<String, String> vals = searchDirectory(zlc, 
                                                            USER_SC, 
                                                            config, 
                                                            Provisioning.A_zimbraReverseProxyMailHostQuery,
@@ -376,7 +374,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 logger.debug("mailhost="+mailhost+" ("+addr+")");
                 String port = null;
                 try {
-                    port = searchDirectory(ctxt, 
+                    port = searchDirectory(zlc, 
                                            SERVER_SC, 
                                            config, 
                                            Provisioning.A_zimbraReverseProxyPortQuery,
@@ -405,8 +403,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             } catch (UnknownHostException e) {
                 throw new NginxLookupException("naming exception: "+e.getMessage());
             } finally {
-                if (ctxt != null)
-                    LdapUtil.closeContext(ctxt);
+                ZimbraLdapContext.closeContext(zlc);
             }
         }
 

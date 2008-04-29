@@ -164,9 +164,9 @@ public class GetLDAPEntries extends AdminDocumentHandler {
     void searchObjects(String query,  String base, NamedEntry.Visitor visitor)
         throws ServiceException
     {
-        DirContext ctxt = null;
+        ZimbraLdapContext zlc = null;
         try {
-            ctxt = LdapUtil.getDirContext();
+            zlc = new ZimbraLdapContext();
             
             SearchControls searchControls = 
                 new SearchControls(SearchControls.SUBTREE_SCOPE, 0, 0, null, false, false);
@@ -176,8 +176,6 @@ public class GetLDAPEntries extends AdminDocumentHandler {
             int pageSize = 1000;
             byte[] cookie = null;
  
-            LdapContext lctxt = (LdapContext)ctxt; 
- 
             // we don't want to ever cache any of these, since they might not
 			// have all their attributes
 
@@ -185,9 +183,9 @@ public class GetLDAPEntries extends AdminDocumentHandler {
 
             try {
                 do {
-                    lctxt.setRequestControls(new Control[]{new PagedResultsControl(pageSize, cookie, Control.CRITICAL)});
+                    zlc.setPagedControl(pageSize, cookie, true);
                     
-                    ne = ctxt.search(base, query, searchControls);
+                    ne = zlc.searchDir(base, query, searchControls);
                     while (ne != null && ne.hasMore()) {
                         SearchResult sr = (SearchResult) ne.nextElement();
                         String dn = sr.getNameInNamespace();
@@ -205,7 +203,7 @@ public class GetLDAPEntries extends AdminDocumentHandler {
                         	visitor.visit(new LDAPUtilEntry(dn, attrs,null));
                         }
                     }
-                    cookie = getCookie(lctxt);
+                    cookie = zlc.getCookie();
                 } while (cookie != null);
             } finally {
                 if (ne != null) ne.close();
@@ -222,7 +220,7 @@ public class GetLDAPEntries extends AdminDocumentHandler {
         } catch (IOException e) {
             throw ServiceException.FAILURE("unable to list all objects", e);            
         } finally {
-            LdapUtil.closeContext(ctxt);
+            ZimbraLdapContext.closeContext(zlc);
         }   
     }
     
