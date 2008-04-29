@@ -236,6 +236,7 @@ DwtAccordion.prototype.setItemContent =
 function(id, contentObject) {
 	var aiBody = this.getBody(id);
 	if (aiBody) {
+		this._items[id].control = contentObject;
 		contentObject.reparentHtmlElement(aiBody);
 		var size = contentObject.getSize();
 		this.resize(size.x, size.y);
