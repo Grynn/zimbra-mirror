@@ -508,7 +508,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 	
 	var xFormObject = {
 		tableCssStyle:"width:100%;padding:2px;",numCols:7,width:"100%",
-		colSizes:["53px", "*", "75px", "95px", "30px", "10px", "100px"],
+		colSizes:["53px", "*", "75px", "108px", "30px", "10px", "100px"],
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
