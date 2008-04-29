@@ -646,8 +646,9 @@ DwtTreeItem.prototype._setSelected =
 function(selected) {
 	if (this._selected != selected) {
 		this._selected = selected;
-		if (!this._initialized)
+		if (!this._initialized) {
 			this._initialize();
+		}
 		if (selected && (this._selectionEnabled || this._forceNotifySelection)) {
             if (this._textCell) {
                 this._textCell.className = this._selectedClassName;
@@ -666,13 +667,14 @@ DwtTreeItem.prototype._setActioned =
 function(actioned) {
 	if (this._actioned != actioned) {
 		this._actioned = actioned;
-		if (!this._initialized)
+		if (!this._initialized) {
 			this._initialize();
+		}
 		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected) {
 			this._textCell.className = this._actionedClassName;
 			return true;
 		} else if (!actioned) {
-			if (this._textCell) {
+			if (this._textCell && !this._selected) {
 				this._textCell.className = this._textClassName;
 			}
 			return false;
