@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = 1.8;
+my $version = 1.9;
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -229,6 +229,7 @@ sub processfile
   my $gen_evenstpos=0;
   my $gen_CFsteventpos=0;
   my $wasrulecreated=0;
+  my @attendeearr=();
   &log_message("processing file...");
   while (<CFHANDLE>)
   {
@@ -247,6 +248,7 @@ sub processfile
       $rec={};
 
       @recdata=();#initialize array
+      @attendeearr=();
       push (@recdata,$_);
       
       #set to default value
@@ -319,6 +321,24 @@ sub processfile
     elsif ($_=~/^DTEND[:;]/)             #store DTEND
     {
       $rec->{'DTEND'} = $_;
+    }
+    elsif ($_=~/^LOCATION:/)              #store LOCATION
+    {
+      my $loc=$_;
+      $loc =~ s/^LOCATION://;
+      $rec->{'LOCATION'} =$loc;
+    }
+    elsif ($_=~/^SUMMARY:/)              #store LOCATION
+    {
+      my $summary=$_;
+      $summary =~ s/^SUMMARY://;
+      $rec->{'SUMMARY'} =$summary;
+    }
+    elsif ($_=~/^DESCRIPTION:/)          #store DESCRIPTION
+    {
+      my $desc=$_;
+      $desc =~ s/^DESCRIPTION://;
+      $rec->{'DESCRIPTION'} =$desc;
     }
     elsif ($_=~/^RECURRENCE-ID[:;]/)  #store RECURRENCE-ID
     {
@@ -397,6 +417,24 @@ sub processfile
           }
           else
           {
+            #check if some part of mailto: is left,
+            #if yes, add it before exiting.
+            #It will be used to create attendee list (exception creation!)
+            my $iline;
+            $npos= tell CFHANDLE;
+            $iline = readline(*CFHANDLE);
+            if ($iline =~/ATTENDEE|END/)
+            {
+              #nothing to do here...
+            }
+            else
+            {
+              #trim to avoid any start/end spaces
+              $iline = trim($iline);
+              $cmptline = $cmptline.$iline;
+            }
+            #create attendee list
+            push(@attendeearr,$cmptline);
             #set to startpos
             seek CFHANDLE,$curpos,0;
           }
@@ -407,7 +445,7 @@ sub processfile
           $tline = readline(*CFHANDLE);
           #trim to avoid any start/end spaces
           $tline = trim($tline);
-          #form complete ATTENDEE line as 'mailto' can be divided into more than one line
+          #form complete ATTENDEE line as 'mailto' may be divided into more than one line
           $cmptline = $cmptline.$tline;
           #globally replace all line-feeds with nothing
           $cmptline =~ s/\n//g;
@@ -429,6 +467,7 @@ sub processfile
       }
       $rec->{'RDATE'}= {%hrdate};
       $rec->{'RECDATA'} = [@recdata];
+      $rec->{'ATTENDEES'} = [@attendeearr];
       push @{$hlist{$rec->{'UID'}}}, $rec;
       %hrdate=();
       $enveventpos=tell CFHANDLE;#remember last vevent end pos
@@ -580,9 +619,28 @@ sub processfile
                 #on base of master event
                 my $msttime=$mdt;
                 
+                #store masterrect location to check with occurence's location,
+                #if changed, exception should be cerated
+                my $mlocation= $masterrec->{'LOCATION'};
+                
+                #store masterrec summary to check with occurence's summary,
+                #if changed, exception should be cerated
+                my $msummary= $masterrec->{'SUMMARY'};
+                
+                #store attendee to check with occurrence's attendee list,
+                #if changed, exception should be created
+                my @mattendeearr= @{$masterrec->{'ATTENDEES'}};
+                
+                #store description to check with occurrence's description,
+                #if changed, exception should be created
+                my $mdescription= $masterrec->{'DESCRIPTION'};
+                
                 my $k1;my $k2;my $v1; my $v2;
                 my $rweekday; my $isweekdayok=1; my $isrdtimeok=1;
+                my $islocchanged=0; my $issmrychanged=0; my $isattndchanged=0; my $isdescchanged=0;
+                my $ioccurrec; my $ilocation;my $isummary;my @iattenarr;my $idescription;
                 my $floop=1;
+                my $sdt;my $ndt;
                 for my $k1 ( sort keys %$rdarray )
                 {
                   if ($floop)
@@ -594,8 +652,15 @@ sub processfile
                   }
                   else
                   {
-                    my $sdt= $k2;
-                    my $ndt=$k1;
+                    $sdt= $k2;
+                    $ndt=$k1;
+                    my $rsdt= $sdt;
+                    $rsdt=~ s/RDATE/DTSTART/;
+                    $ioccurrec=$srtd_newrecarr{$rsdt}[0];
+                    $ilocation= $ioccurrec->{'LOCATION'};
+                    $isummary = $ioccurrec->{'SUMMARY'};
+                    @iattenarr = @{$ioccurrec->{'ATTENDEES'}};
+                    $idescription= $ioccurrec->{'DESCRIPTION'};
                     my $tidx= rindex($sdt,':');
                     $sdt= substr($sdt,$tidx+1);
                     $ndt = substr($ndt,$tidx+1);
@@ -608,13 +673,48 @@ sub processfile
                     }
                     
                     #check for if master date time is equal to rdate time component
-
                     my $rsttime= $sdt;
-
                     if (!istime_equal($msttime,$rsttime))
                     {
                       $isrdtimeok = 0;
+                      &log_message("occurrence time changed->master-time:$msttime recur-time:$rsttime");
                     }
+                    #if location changed, create exceptions
+                    if ($mlocation ne $ilocation)
+                    {
+                      $islocchanged=1;
+                      &log_message("occurrence location changed->master-location:$mlocation recur-location:$ilocation");
+                    }
+                    #if summary changed, create exceptions
+                    if ($msummary ne $isummary)
+                    {
+                      $issmrychanged=1;
+                      &log_message("occurrence summary changed->master-summary:$msummary recur-summary:$isummary");
+                    }
+                    #if attendees changed, create exception
+                    if ($#iattenarr eq $#mattendeearr)
+                    {
+                      for(my $j=0; $j<$#iattenarr+1; $j++)
+                      {
+                        if ($iattenarr[$j] ne $mattendeearr[$j])
+                        {
+                          $isattndchanged=1;
+                          &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \nrecur-attendee:@iattenarr");
+                        }
+                      }
+                    }
+                    else
+                    {
+                      $isattndchanged=1;
+                      &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \nrecur-attendee:@iattenarr");
+                    }
+                    #if description changed, create exceptions
+                    if ($mdescription ne $idescription)
+                    {
+                      $isdescchanged=1;
+                      &log_message("occurrence description changed->master-summary:$mdescription recur-summary:$idescription");
+                    }
+                    
                     #delta days
                     $delta_days=get_date_diff($sdt, $ndt);
                     if ($delta_days==$DAILY)
@@ -636,7 +736,65 @@ sub processfile
                     $lastrdate=$k1;
                     print "$delta_days";
                   }
-                } #end while(my $rdctr..)
+                } #end for my $k1...
+                
+                #check for last occurrence
+                #***************************
+                $rweekday= get_weekday($ndt);
+                #if master weekday is not same as ndt weekday
+                if ($masterweekday != $rweekday)
+                {
+                  $isweekdayok=0;
+                }
+                #check for if master date time is equal to rdate time component
+                if (!istime_equal($msttime,$ndt))
+                {
+                  $isrdtimeok = 0;
+                  log_message("occurrence time changed->master-time:$msttime recur-time:$ndt");
+                }
+                #Get summary and location information
+                my $rndt= 'DTSTART:'.$ndt;
+                $ioccurrec=$srtd_newrecarr{$rndt}[0];
+                $ilocation= $ioccurrec->{'LOCATION'};
+                $isummary = $ioccurrec->{'SUMMARY'};
+                @iattenarr = @{$ioccurrec->{'ATTENDEES'}};
+                $idescription= $ioccurrec->{'DESCRIPTION'};
+                #if location changed, create exceptions
+                if ($mlocation ne $ilocation)
+                {
+                  $islocchanged=1;
+                  &log_message("occurrence location changed->master-location:$mlocation recur-location:$ilocation");
+                }
+                #if summary changed, create exceptions
+                if ($msummary ne $isummary)
+                {
+                  $issmrychanged=1;
+                  &log_message("occurrence summary changed->master-summary:$msummary recur-summary:$isummary");
+                }
+                #if attendees changed, create exception
+                if ($#iattenarr eq $#mattendeearr)
+                {
+                  for(my $j=0; $j<$#iattenarr+1; $j++)
+                  {
+                    if ($iattenarr[$j] ne $mattendeearr[$j])
+                    {
+                      $isattndchanged=1;
+                      &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \n recur-attendee:@iattenarr");
+                    }
+                  }
+                }
+                else
+                {
+                  $isattndchanged=1;
+                  &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \n recur-attendee:@iattenarr");
+                }
+                #if description changed, create exceptions
+                if ($mdescription ne $idescription)
+                {
+                  $isdescchanged=1;
+                  &log_message("occurrence description changed->master-summary:$mdescription recur-summary:$idescription");
+                }
+                #***************************
                 my $rdpattern=0; my $freq; my $interval; my $rdcnt;
                 $rdcnt= keys (%$rdarray)-1;
                 if (!$rdcnt)
@@ -678,11 +836,18 @@ sub processfile
                 }
                 &log_message("Match Percentage: $pmatch");
                 &log_message("Total RDATEs: $rdcnt DailyCtr: $dlctr WeeklyCtr: $wkctr");
+                #### Exception/RRULE creation criteria ####
                 #1. if recurrence pattern found, No need to create exceptions
                 #2. if weekdays has changed due to meeting has moved to another day,
-                # dont create RRULE.
-                #3. if time has changed for RDATE occurences, dont create RRULE
-                if (($rdpattern) && ($isweekdayok)&&($isrdtimeok))
+                #   create exception.
+                #3. if time has changed for RDATE occurences, create exception
+                #4. if LOCATION changed for any occurrence, create exception
+                #5. if SUMMARY changed for any occurences, create exception
+                #6. if ATTENDEE list changed for any occurrence, create exception
+                #7. if DESCRIPTION changed for any occurrence, create exception
+                if (($rdpattern) && ($isweekdayok) && ($isrdtimeok)
+                    && (!$islocchanged) &&(!$issmrychanged) &&(!$isattndchanged)
+                    && (!$isdescchanged))
                 {
                   if ($freq eq "DAILY")
                   {
