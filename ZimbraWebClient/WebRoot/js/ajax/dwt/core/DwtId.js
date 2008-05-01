@@ -52,6 +52,8 @@ DwtId.WIDGET_ITEM_FIELD		= "zlif";		// list view item field
 DwtId.LIST_VIEW_HEADERS	= "headers";
 DwtId.LIST_VIEW_ROWS	= "rows";
 
+DwtId.IFRAME = "iframe";
+
 /**
  * Joins the given arguments into an ID, excluding empty ones.
  */
@@ -65,6 +67,14 @@ function() {
 		}
 	}
 	return list.join(DwtId.SEP);
+};
+
+/**
+ * Creates a context out of one or more parts.
+ */
+DwtId.getContext =
+function() {
+	return DwtId._makeId(arguments);
 };
 
 /**
@@ -101,4 +111,14 @@ function(type, context, hdr) {
 DwtId.getListViewItemId =
 function(type, context, itemId, field) {
 	return DwtId._makeId(type, context, itemId, field);
+};
+
+/**
+ * Returns an ID for an IFRAME.
+ * 
+ * @param context	[const]		ID of owning DwtIframe
+ */
+DwtId.getIframeId =
+function(context) {
+	return DwtId._makeId(context, DwtId.IFRAME);
 };

@@ -1851,8 +1851,8 @@ function(columnId) {
 		// unset current column arrow
 		var headerCol = this._headerIdHash[this._currentColId];
 		var field = headerCol._field;
-		oldArrowId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
-		oldArrowCell = document.getElementById(oldArrowId);
+		var oldArrowId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
+		var oldArrowCell = document.getElementById(oldArrowId);
 		if (oldArrowCell && oldArrowCell.firstChild) {
 			var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? oldArrowCell.firstChild : oldArrowCell.firstChild.firstChild;
 			if (imgEl) {

@@ -35,11 +35,12 @@
  * @param useKbMgmt	[boolean]*		if true, participate in keyboard mgmt
  */
 DwtIframe = function(params) {
-	var posStyle = params.posStyle ? params.posStyle : DwtControl.STATIC_STYLE;
-	DwtControl.call(this, {parent:params.parent, className:params.className || "DwtIframe", posStyle:posStyle});
+	params.posStyle = params.posStyle || DwtControl.STATIC_STYLE;
+	params.className = params.className || "DwtIframe";
+	DwtControl.call(this, params);
 	this._styles = params.styles;
 	this._noscroll = params.noscroll;
-	this._iframeID = Dwt.getNextId();
+	this._iframeID = params.id ? DwtId.getIframeId(params.id) : Dwt.getNextId();
 	this._onLoadHandler = params.onload;	
 	this._processHtmlCallback = params.processHtmlCallback;
 	this._hidden = params.hidden;
