@@ -6293,6 +6293,14 @@
     </function>
 
     <function>
+        <name>deserializeVoiceMailItemHit</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>com.zimbra.cs.taglib.bean.ZVoiceMailItemHitBean
+            deserializeVoiceMailItemHit(java.lang.String,java.lang.String)
+        </function-signature>
+    </function>
+
+    <function>
         <name>deserializeVoiceMailItemHits</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>com.zimbra.cs.taglib.bean.ZVoiceMailItemHitBean[]

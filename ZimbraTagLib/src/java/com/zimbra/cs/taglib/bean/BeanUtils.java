@@ -1088,13 +1088,17 @@ public class BeanUtils {
         return "";
     }
 
-    public static ZVoiceMailItemHitBean[] deserializeVoiceMailItemHits(String[] values, String phone) throws ServiceException {
+    public static ZVoiceMailItemHitBean deserializeVoiceMailItemHit(String value, String phone) throws ServiceException {
+		return ZVoiceMailItemHitBean.deserialize(value, phone);
+	}
+	
+	public static ZVoiceMailItemHitBean[] deserializeVoiceMailItemHits(String[] values, String phone) throws ServiceException {
         if (values == null) {
             return new ZVoiceMailItemHitBean[0]; 
         }
         ZVoiceMailItemHitBean[] result = new ZVoiceMailItemHitBean[values.length];
         for (int i = 0, count = values.length; i < count; i++) {
-            result[i] = ZVoiceMailItemHitBean.deserialize(values[i], phone);
+            result[i] = deserializeVoiceMailItemHit(values[i], phone);
         }
         return result;
     }
