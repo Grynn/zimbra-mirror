@@ -114,7 +114,12 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                 sContext.setParams(determineParams(sContext, req, so, mailbox));
                 mUseCache = false; // always ignore cache on new search context. TODO: optimize?
             }
-            sContext.doSearch(mailbox, mUseCache, !ZJspSession.getSearchUseOffset(pageContext));
+			String st = sContext.getSt();
+			boolean useOffset =
+					ZSearchParams.TYPE_VOICE_MAIL.equals(st) ||
+            		ZSearchParams.TYPE_CALL.equals(st) ||
+					ZJspSession.getSearchUseOffset(pageContext);
+			sContext.doSearch(mailbox, mUseCache, !useOffset);
             if (sContext.getCurrentItemIndex() != si) sContext.setCurrentItemIndex(si);
         } catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);
