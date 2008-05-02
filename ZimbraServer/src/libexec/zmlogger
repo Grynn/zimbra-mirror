@@ -165,7 +165,7 @@ sub dbConnect($$$) {
   my ($db_src,$db_user,$db_pass) = @_;
   my $timeout=0;
 
-  while (! isSqlRunning() && ($timeout <= 3600) ) {
+  while (! isSqlRunning() && ($timeout <= 600) ) {
     quit(1, "No parent process. logswatch stopped?\n") if (getppid() == 1);
     logMsg("INFO", "database not running.  retrying connection");
     $timeout += sleep 5;
