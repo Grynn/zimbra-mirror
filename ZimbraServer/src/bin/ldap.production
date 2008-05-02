@@ -35,7 +35,7 @@ fi
 if [ x$ldap_is_master = "xfalse" ]; then
 	COOKIE="-c rid=$ldap_replica_rid"
 
-  if [ "x$ldap_url" = "x$ldap_master_url" ]; then
+  if [ "x$ldap_url" = "x$ldap_master_url" -a "x$1" != "xstop" ]; then
     echo "ldap_url and ldap_master_url cannot be the same on an ldap replica"
     exit 1
   fi
