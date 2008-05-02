@@ -177,7 +177,7 @@ function(mapName, keySeq) {
  */
 DwtKeyMapMgr.prototype.replaceMapping =
 function(mapName, oldKeySeq, newKeySeq) {
-	var action =this._map[mapName][oldKeySeq];
+	var action = this._map[mapName][oldKeySeq];
 	if (!action) return;
 	this.removeMapping(mapName, oldKeySeq);
 	this.setMapping(mapName, newKeySeq, action);
@@ -189,6 +189,11 @@ function(mapName, action, arg) {
 		this._args[mapName] = {};
 	}
 	this._args[mapName][action] = arg;
+};
+
+DwtKeyMapMgr.prototype.removeArg =
+function(mapName, action) {
+	delete this._args[mapName][action];
 };
 
 DwtKeyMapMgr.prototype.getArg =
