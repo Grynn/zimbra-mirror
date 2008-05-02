@@ -70,14 +70,6 @@ function() {
 };
 
 /**
- * Creates a context out of one or more parts.
- */
-DwtId.getContext =
-function() {
-	return DwtId._makeId(arguments);
-};
-
-/**
  * Returns an ID for a list view.
  * 
  * @param context	[const]		owning view identifier
