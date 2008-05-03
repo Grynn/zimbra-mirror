@@ -1827,6 +1827,9 @@ function() {
 			errorCallback: errorCallback
 		};
 		self.sendRequest(args);
+		if (DBG) {
+			DBG._clear();
+		}
 	}
 };
 
