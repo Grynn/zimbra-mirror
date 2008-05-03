@@ -601,8 +601,8 @@ Com_Zimbra_YFinance.prototype._showStockUpdate = function(modifiedList, force){
         newDiv.innerHTML = AjxTemplate.expand("com_zimbra_yfinance.templates.YFinance#StockStatus", subs);
 
 		if(ZmSetting.CALENDAR_ENABLED && appCtxt.get(ZmSetting.CAL_ALWAYS_SHOW_MINI_CAL) && !this._miniCal) {
-			var calController = AjxDispatcher.run("GetCalController");
-    			this._miniCal = calController ? calController.getMiniCalendar().getHtmlElement() : null;
+    	    var calMgr = appCtxt.getCalManager();
+    		this._miniCal =  calMgr && calMgr._miniCalendar ? calMgr._miniCalendar.getHtmlElement() : null;
 		}
 
 
