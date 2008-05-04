@@ -261,7 +261,8 @@ public class OfflineDataSource extends DataSource {
                 throw new IllegalStateException("Concurrent import of same data source: id = " + getId());
             }
         }
-        return folders;
+        // Return copy of cached ImapFolderCollection
+        return new ImapFolderCollection(folders);
     }
 
     @Override
@@ -279,7 +280,7 @@ public class OfflineDataSource extends DataSource {
         ImapFolder folder = super.createImapFolder(itemId, localPath, remotePath, uidValidity);
         ImapFolderCollection folders = imapFolderCache.get(getId());
         folders.add(folder);
-        return folder;
+        return new ImapFolder(folder);
     }
 
 }
