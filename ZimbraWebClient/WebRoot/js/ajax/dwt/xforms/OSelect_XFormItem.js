@@ -408,7 +408,7 @@ OSelect1_XFormItem.prototype.getBounds = function(anElement, containerElement) {
 	var hasScroll = (anElement.scrollLeft !== void 0);
 	var trace = anElement;
 
-	while(trace != containerElement) {
+	while(trace !=null && trace != containerElement) {
 		myBounds.left += trace.offsetLeft;
 		myBounds.top += trace.offsetTop;
 

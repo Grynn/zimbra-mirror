@@ -450,7 +450,7 @@ function (accountName, cosList, app){
 		if (this._domains) {
 			this._domains[domainName] = domain ;
 		}
-	}else{
+	} else if (domainName && domainName.length>1) {
 		domainCosId = this._domains[domainName].attrs[ZaDomain.A_domainDefaultCOSId] ;
 	}	
 		
