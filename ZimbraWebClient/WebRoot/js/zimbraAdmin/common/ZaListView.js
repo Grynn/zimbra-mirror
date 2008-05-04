@@ -76,11 +76,11 @@ function () {
 
 ZaListView.prototype._mouseOverAction =
 function(ev, div) {
-	var _type = Dwt.getAttr(div, "_type");
+	var _type = this._getItemData(div,"type");
 	if (_type == DwtListView.TYPE_HEADER_ITEM) {
-		if(this._headerList[div._itemIndex]._sortable) {
+		if(this._headerList[this._getItemData(div,"index")]._sortable) {
 			div.className = "DwtListView-Column DwtListView-ColumnHover";		
-			this.setToolTipContent(ZaMsg.LST_ClickToSort_tt + " " + this._headerList[div._itemIndex].getLabel());	
+			this.setToolTipContent(AjxMessageFormat.format(ZaMsg.LST_ClickToSort_tt, [this._headerList[this._getItemData(div,"index")].getLabel()]));	
 		} else {
 			this.setToolTipContent(null);
 		}
@@ -98,16 +98,18 @@ function(ev, div) {
 			}
 			this.setToolTipContent(tt_content);
 	}
+	return true;
 }
 
 
 ZaListView.prototype._mouseOutAction = 
 function(mouseEv, div) {
-	if (div._type == DwtListView.TYPE_HEADER_ITEM) {
-		if(this._headerList[div._itemIndex]._sortable) {
+	var _type = this._getItemData(div,"type");
+	if (_type == DwtListView.TYPE_HEADER_ITEM) {
+		if(this._headerList[this._getItemData(div,"index")]._sortable) {
 			div.className = (div.id != this._currentColId) ? "DwtListView-Column" : "DwtListView-Column DwtListView-ColumnActive"
 		}
-	}else if (div._type == DwtListView.TYPE_HEADER_SASH) {
+	}else if (_type == DwtListView.TYPE_HEADER_SASH) {
 		div.style.cursor = "auto";
 	}
 	return true;
@@ -167,5 +169,5 @@ function() {
 
 ZaListHeaderItem.prototype.getLabel = 
 function () {
-	return this._text;
+	return this._label;
 }
