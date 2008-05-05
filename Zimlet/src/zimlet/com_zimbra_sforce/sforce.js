@@ -1,17 +1,17 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * 
+ *
  * Zimbra Collaboration Suite Zimlets
  * Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */
 
@@ -50,43 +50,45 @@ Com_Zimbra_SForce.prototype.init = function() {
 };
 
 Com_Zimbra_SForce.prototype.onShowView = function(viewId, isNewView) {
-	 if (viewId == ZmId.VIEW_COMPOSE && !this._toolbar){ 
+	 if (viewId == ZmId.VIEW_COMPOSE && !this._toolbar){
         this._initComposeSFToolbar();
      }
 };
 
-Com_Zimbra_SForce.prototype._initComposeSFToolbar = function(){
+Com_Zimbra_SForce.prototype._initComposeSFToolbar = function() {
 
-    if(!appCtxt.get(ZmSetting.MAIL_ENABLED)) this._toolbar = true;
+        if (!appCtxt.get(ZmSetting.MAIL_ENABLED))
+                this._toolbar = true;
 
-    if(this._toolbar) return;
+        if (this._toolbar)
+                return;
 
-   // Add the Salesforce Button to the Compose Page
-    this._composerCtrl = AjxDispatcher.run("GetComposeController");
-    this._composerCtrl._sforce = this;
-    if(!this._composerCtrl._toolbar) {
-      // initialize the compose controller's toolbar
-      this._composerCtrl._initializeToolBar();
-    }
+        // Add the Salesforce Button to the Compose Page
+        this._composerCtrl = AjxDispatcher.run("GetComposeController");
+        this._composerCtrl._sforce = this;
+        if(!this._composerCtrl._toolbar) {
+                // initialize the compose controller's toolbar
+                this._composerCtrl._initializeToolBar();
+        }
 
-    this._toolbar = this._composerCtrl._toolbar;
-    // Add button to toolbar
-    if(!this._toolbar.getButton(Com_Zimbra_SForce.SFORCE)){
-	    ZmMsg.sforceAdd = "Send & Add";
-	    ZmMsg.sforceTooltip = "Send and add to Salesforce.";
-	    var op = {
-	    	id: Com_Zimbra_SForce.SFORCE,
-	    	textKey: "sforceAdd",
-	    	text: ZmMsg.sforceAdd,
-	    	tooltipKey: "sforceTooltip",
-	    	tooltip: ZmMsg.sforceTooltip,
-	    	image: "SFORCE-panelIcon"
-	    };
-	    var opDesc = ZmOperation.defineOperation(null, op);
-	    this._toolbar.addOp(opDesc.id, 1);
+        this._toolbar = this._composerCtrl._toolbar;
+        // Add button to toolbar
+        if (!this._toolbar.getButton(Com_Zimbra_SForce.SFORCE)) {
+	        ZmMsg.sforceAdd = "Send & Add";
+	        ZmMsg.sforceTooltip = "Send and add to Salesforce.";
 
-	    this._toolbar.addSelectionListener(opDesc.id, new AjxListener(this._composerCtrl, this._sendAddSForce));
-    }
+                var btn = this._toolbar.createOp(
+                        Com_Zimbra_SForce.SFORCE,
+                        {
+                                text    : ZmMsg.sforceAdd,
+	    	                tooltip : ZmMsg.sforceTooltip,
+                                index   : 1,
+	    	                image   : "SFORCE-panelIcon"
+                        }
+                );
+
+	        btn.addSelectionListener(new AjxListener(this._composerCtrl, this._sendAddSForce));
+        }
 
 };
 
@@ -337,7 +339,7 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 			this.dlg_createAccount(props, contact);
 		}
 	}
-	
+
 	function $search_acct_company(records){
 		if(records.length > 0){
 			$search_acct.call(this,records);
@@ -346,10 +348,10 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 			this.query(q,1,$search_acct_email);
 		}
 	}
-	
+
 	function $search_acct_email(records){
 		if(records.length > 0){
-			$search_acct.call(this,records)		
+			$search_acct.call(this,records)
 		}else{
 			var email = contact.email || contact.email2 || contact.email3;
 			acct_Website = email.replace(/^[^@]+@/, "").replace(/\x27/, "\\'");
@@ -357,7 +359,7 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 			this.query(q,1,$search_acct);
 		}
 	}
-	
+
 	function $search_contact(records){
 		//Search Contact
 		contact._exists = false;
@@ -408,9 +410,9 @@ Com_Zimbra_SForce.prototype.contactDropped = function(contact) {
 Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data) {
 	var view = new DwtComposite(this.getShell());
 
-	///Disable fieldsEditable if contact already exists	
+	///Disable fieldsEditable if contact already exists
 	var fieldsEditable = !(contact_data._exists);
-	
+
 	/// Create a PropertyEditor for the Account data
 	var pe_acct = new DwtPropertyEditor(view, fieldsEditable);
 	var pe_props = [
@@ -431,7 +433,7 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 		  type     : "string",
 		  value    : acct_data.get("Phone") }
 	];
-	
+
 	if (acct_data.Id) {
         var tmp = [
 
@@ -450,20 +452,20 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
             type      : "string",
             visible   : false }
 
-                ];                
+                ];
 		contact_data._exists
 			? pe_props.unshift(tmp[1])
 			:pe_props.unshift(tmp[0], tmp[1]);
 	}
-	
+
 	///Do not display for any contact without a corresponding account.
 	if(!(contact_data._exists && !acct_data.Id)){
 		pe_acct.initProperties(pe_props);
 	}
-	
+
 	var dialogTitle = contact_data._exists
 							?(acct_data.Id?"Account/Contact in Salesforce":"Contact in Salesforce")
-							:"Create Account/Contact in Salesforce";						
+							:"Create Account/Contact in Salesforce";
 	var dialog_args={};
 	///Displaying static content needs only OK button.
 	if(contact_data._exists){
@@ -477,13 +479,13 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 	DBG.println(AjxDebug.DBG3,"Contact Exists-"+contact_data._exists);
 	tmp.innerHTML = contact_data._exists
 						?  "Contact already exists"
-						: "Add to a new account"; 
+						: "Add to a new account";
 	var el = pe_acct.getHtmlElement();
 	el.parentNode.insertBefore(tmp, el);
 
 	/// Create a PropertyEditor for the new contact data
 	pe_contact = new DwtPropertyEditor(view, fieldsEditable);
-				
+
 	pe_props = [
 
 		{ label    : "First name",
@@ -531,7 +533,7 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 		el = pe_contact.getHtmlElement();
 		el.parentNode.insertBefore(tmp, el);
 	}
-	
+
 
 	var dlg = this._createDialog(dialog_args);
  	pe_acct.setFixedLabelWidth();
@@ -579,7 +581,7 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 			dlg.popdown();
 			dlg.dispose();
 		}));
-		
+
 		// We don't really want to mess with things like cache-ing this
 	// dialog...
 	if(!contact_data._exists){
@@ -910,9 +912,9 @@ Com_Zimbra_SForce.prototype.menuItemSelected = function(itemId) {
 };
 
 Com_Zimbra_SForce.prototype._sendAddSForce = function(ev) {
-    var msg = this._composeView.getMsg();
-    this._send();
-    this._sforce.noteDropped(msg);
+        var msg = this._composeView.getMsg();
+        this._send();
+        this._sforce.noteDropped(msg);
 };
 
 // rec - The record to generate checkbox HTML for
