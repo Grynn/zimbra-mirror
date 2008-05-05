@@ -48,8 +48,10 @@ public class GetInfoJSONTag extends ZimbraSimpleTag {
     public void doTag() throws JspException, IOException {
         try {
             JspContext ctxt = getJspContext();
-            String url = ZJspSession.getSoapURL((PageContext) ctxt);
-            Element e = ZMailbox.getBootstrapJSON(url, mAuthToken, mDoSearch, mItemsPerPage, mTypes);
+            PageContext pageContext = (PageContext) ctxt;
+            String url = ZJspSession.getSoapURL(pageContext);
+            String remoteAddr = pageContext.getRequest().getRemoteAddr();
+            Element e = ZMailbox.getBootstrapJSON(url, remoteAddr, mAuthToken, mDoSearch, mItemsPerPage, mTypes);
 
 			// Replace "</script>" with "</scr" + "ipt>" because html parsers recognize the close script tag.
 			String json = e.toString();
