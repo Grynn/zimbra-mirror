@@ -27,7 +27,9 @@ ZaSettings.MAXSEARCHRESULTS = 50;
 * Look for admin name cookies and admin type cookies
 **/
 ZaSettings.postInit = function() {
-	//Instrumentation code start	
+    if (AjxEnv.hasFirebug)
+        console.log("Finishing loading all the zimlets, and ready to initialize the application ...");
+    //Instrumentation code start
 	if(ZaSettings.initMethods) {
 		var cnt = ZaSettings.initMethods.length;
 		for(var i = 0; i < cnt; i++) {
@@ -80,7 +82,9 @@ ZaSettings.init = function () {
 			}
 		} catch (ex) {
 			//go on
-		}
+            if (AjxEnv.hasFirebug)
+                console.log("Error Getting the Zimlets: " + ex.message);
+        }
 		if(zimlets && zimlets.length > 0) {
 			var includes = new Array();	
 			var cssIncludes = new Array();	
@@ -89,7 +93,9 @@ ZaSettings.init = function () {
 				if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletContext && zimlets[ix].zimletContext[0]) {
 					var zimlet = zimlets[ix].zimlet[0];
 					var zimletContext = zimlets[ix].zimletContext[0];
-					//load message file first because consequent files may reference it
+                    if (AjxEnv.hasFirebug)
+                        console.log("Adding zimlet: " + zimlet.name);
+                    //load message file first because consequent files may reference it
                     includes.push([appContextPath, "/res/", zimlet.name, ".js?v=",appVers,ZaZimbraAdmin.LOCALE_QS].join(""));
 					if(zimlet.include && zimlet.include.length>0) {
 						var cnt2 = zimlet.include.length;
@@ -109,14 +115,19 @@ ZaSettings.init = function () {
 			}
 			try {
 	
-				if(cssIncludes.length > 0)
-					ZaSettings.loadStyles(cssIncludes);						
+				if(cssIncludes.length > 0){
+				    if (AjxEnv.hasFirebug)
+                        console.log ("Loading Zimlets CSS: " + cssIncludes.join(", ") );
+                    ZaSettings.loadStyles(cssIncludes);
+                }
 
+				if(includes.length > 0)   {
+                    if (AjxEnv.hasFirebug)
+                        console.log ("Loading Zimlets JS: " + includes.join(", ") );
+                   	AjxInclude(includes, null,new AjxCallback(ZaSettings.postInit ));
+                }
 
-				if(includes.length > 0)
-					AjxInclude(includes, null,new AjxCallback(ZaSettings.postInit ));	
-
-			} catch (ex) {
+            } catch (ex) {
 				//go on
 				throw ex;
 			}

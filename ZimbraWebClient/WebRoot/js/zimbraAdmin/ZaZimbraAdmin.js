@@ -265,8 +265,13 @@ function() {
 	var shell = DwtShell.getShell(window);
 	shell.setBusy(true);
 	
-	var locationStr = location.protocol + "//" + location.hostname + ((location.port == '80') ? "" : ":" +location.port) + location.pathname;
-	var act = new AjxTimedAction(null, ZaZimbraAdmin.redir, [locationStr]);
+	var locationStr = location.protocol + "//" + location.hostname
+            + ((location.port == '80') ? "" : ":" +location.port)
+            + location.pathname
+            //we want to add the query string as well
+            + location.search;
+
+    var act = new AjxTimedAction(null, ZaZimbraAdmin.redir, [locationStr]);
 	AjxTimedAction.scheduleAction(act, 100);
 }
 
@@ -305,6 +310,7 @@ function() {
                                "&country=" + ZaZimbraAdmin.LOCALE.substring(ZaZimbraAdmin.LOCALE.length - 2);
                 }
             }
+
             ZaZimbraAdmin.reload_msg ();
             this.initDialogs(true) ;  //make sure all the precreated dialogs are also recreated.
         }
@@ -325,6 +331,8 @@ function() {
 }
 
 ZaZimbraAdmin.reload_msg = function () {
+    if (AjxEnv.hasFirebug)
+        console.log("Reloading the message ...") ;
     var includes = [] ;
     includes.push ( [appContextPath , "/res/" , "I18nMsg,AjxMsg,ZMsg,ZaMsg,AjxKeys" , ".js?v=" ,
                         appVers , ZaZimbraAdmin.LOCALE_QS].join("") );
@@ -521,7 +529,9 @@ function(staticFunc, icon, lbl, max_lbl_length) {
 
 ZaZimbraAdmin._killSplash =
 function() {
-	if(ZaZimbraAdmin._splashScreen)
+    if (AjxEnv.hasFirebug) 
+        console.log("Killing splash window now ...") ;
+    if(ZaZimbraAdmin._splashScreen)
 		ZaZimbraAdmin._splashScreen.setVisible(false);
 }
 
@@ -552,7 +562,9 @@ function() {
 **/
 ZaZimbraAdmin.prototype._launchApp =
 function() {
-	if (!this._app)
+    if (AjxEnv.hasFirebug)
+        console.log("Launching ZimbraAdmin Application ....") ;
+    if (!this._app)
 		this._createApp();
 
     //recreate the error/msg dialogs
