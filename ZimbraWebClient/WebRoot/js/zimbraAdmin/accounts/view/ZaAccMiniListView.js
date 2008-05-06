@@ -59,47 +59,49 @@ function(account, now, isDragProxy) {
 		var cnt = this._headerList.length;
 		for(var i = 0; i < cnt; i++) {
 			var field = this._headerList[i]._field;
-			if(field == "type") {
-				// type
-				html[idx++] = "<td width=" + this._headerList[i]._width + ">";
-				switch(account.type) {
-					case ZaItem.ACCOUNT:
-						html[idx++] = AjxImg.getImageHtml("Account");
-					break;
-					case ZaItem.DL:
-						html[idx++] = AjxImg.getImageHtml("Group");				
-					break;
-					case ZaItem.ALIAS:
-						html[idx++] = AjxImg.getImageHtml("AccountAlias");				
-					break;	
-					case ZaItem.DOMAIN:
-						html[idx++] = AjxImg.getImageHtml("Domain");				
-					break;					
-					
-					case ZaItem.RESOURCE:
-						if (account.attrs[ZaResource.A_zimbraCalResType] == ZaResource.RESOURCE_TYPE_LOCATION){
-							html[idx++] = AjxImg.getImageHtml("Location");	
-						} else {//equipment or other resource types
-							html[idx++] = AjxImg.getImageHtml("Resource");	
-						}	
-						//html[idx++] = AjxImg.getImageHtml("Resource");				
-					break;												
-					default:
-						html[idx++] = AjxStringUtil.htmlEncode(account.type);
-					break;
-				}
-				html[idx++] = "</td>";
-			} else if(field == ZaAccount.A_name) {
-				// name
-				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-				html[idx++] = AjxStringUtil.htmlEncode(account.name);
-				html[idx++] = "</nobr></td>";
-			} else if (field == ZaAccount.A_displayname) {
-				// display name
-				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-				html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);
-				html[idx++] = "</nobr></td>";	
-			} 
+			if(field!=null) {			
+				if(field == "type") {
+					// type
+					html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+					switch(account.type) {
+						case ZaItem.ACCOUNT:
+							html[idx++] = AjxImg.getImageHtml("Account");
+						break;
+						case ZaItem.DL:
+							html[idx++] = AjxImg.getImageHtml("Group");				
+						break;
+						case ZaItem.ALIAS:
+							html[idx++] = AjxImg.getImageHtml("AccountAlias");				
+						break;	
+						case ZaItem.DOMAIN:
+							html[idx++] = AjxImg.getImageHtml("Domain");				
+						break;					
+						
+						case ZaItem.RESOURCE:
+							if (account.attrs[ZaResource.A_zimbraCalResType] == ZaResource.RESOURCE_TYPE_LOCATION){
+								html[idx++] = AjxImg.getImageHtml("Location");	
+							} else {//equipment or other resource types
+								html[idx++] = AjxImg.getImageHtml("Resource");	
+							}	
+							//html[idx++] = AjxImg.getImageHtml("Resource");				
+						break;												
+						default:
+							html[idx++] = AjxStringUtil.htmlEncode(account.type);
+						break;
+					}
+					html[idx++] = "</td>";
+				} else if(field == ZaAccount.A_name) {
+					// name
+					html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+					html[idx++] = AjxStringUtil.htmlEncode(account.name);
+					html[idx++] = "</nobr></td>";
+				} else if (field == ZaAccount.A_displayname) {
+					// display name
+					html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+					html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);
+					html[idx++] = "</nobr></td>";	
+				} 
+			}
 		}
 	} else if(typeof(account)=="object") {
 		html[idx++] = "<td width=100%>";

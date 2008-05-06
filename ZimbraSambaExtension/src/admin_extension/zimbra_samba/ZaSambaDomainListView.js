@@ -68,16 +68,18 @@ function(object, now, isDndIcon) {
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var id = this._headerList[i]._field;
-		if(id.indexOf(ZaSambaDomain.A_sambaSID)==0) {	
-			// name
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(object.attrs[ZaSambaDomain.A_sambaSID]);
-			html[idx++] = "</nobr></td>";
-		} else if(id.indexOf(ZaSambaDomain.A_sambaDomainName)==0) {	
-			// description
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(object.attrs[ZaSambaDomain.A_sambaDomainName]);
-			html[idx++] = "</nobr></td>";
+		if(id!=null) {		
+			if(id.indexOf(ZaSambaDomain.A_sambaSID)==0) {	
+				// name
+				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+				html[idx++] = AjxStringUtil.htmlEncode(object.attrs[ZaSambaDomain.A_sambaSID]);
+				html[idx++] = "</nobr></td>";
+			} else if(id.indexOf(ZaSambaDomain.A_sambaDomainName)==0) {	
+				// description
+				html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+				html[idx++] = AjxStringUtil.htmlEncode(object.attrs[ZaSambaDomain.A_sambaDomainName]);
+				html[idx++] = "</nobr></td>";
+			}
 		}
 	}
 	html[idx++] = "</tr></table>";
