@@ -702,7 +702,7 @@ function(by, val, withConfig) {
 	}
 }
 
-//ZaItem.loadMethods["ZaServer"].push(ZaServer.loadNIFS);
+ZaItem.loadMethods["ZaServer"].push(ZaServer.loadNIFS);
 
 ZaServer.prototype.initFromJS = function(server) {
 	ZaItem.prototype.initFromJS.call(this, server);
