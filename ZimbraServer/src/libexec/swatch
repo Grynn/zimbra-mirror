@@ -875,7 +875,7 @@ LOOP: while (<SW_PIPE>) {
       $code = qq[
 use File::Tail;
 my \$Filename = '$filename';
-my \$File = File::Tail->new(name=>\$Filename, tail=>1, maxinterval=>0.5, interval=>0.5);
+my \$File = File::Tail->new(name=>\$Filename, tail=>1, maxinterval=>0.5, interval=>0.5, reset_tail=>1);
 if (not defined \$File) {
     die "$0: cannot read input \\"\$Filename\\": \$!\\n";
 }
