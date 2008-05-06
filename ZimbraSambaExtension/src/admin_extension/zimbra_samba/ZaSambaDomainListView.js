@@ -67,7 +67,7 @@ function(object, now, isDndIcon) {
 	html[idx++] = "<tr>";
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
-		var id = this._headerList[i]._id;
+		var id = this._headerList[i]._field;
 		if(id.indexOf(ZaSambaDomain.A_sambaSID)==0) {	
 			// name
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
