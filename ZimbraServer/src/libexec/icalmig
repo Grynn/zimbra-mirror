@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = 1.9;
+my $version = "1.10";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -165,14 +165,9 @@ sub Initialize
   #open Output file
   $outfile="$icalfile"."$newfileext";
   open OTHANDLE, ">$outfile" or die "can not open output file.";
-  
-  #invalid event file.
-  #&log_message("Opening $invalidfile...");
-  #open IVHANDLE, ">$invalidfile" or die "Cannot open $invalidfile:$!";
-  #&log_message("$invalidfile opened successfully.");
-            
   #init TZHeader
   &init_TZHeader if $useTZcomponent;
+  &log_message("icalmig verison: $version");
 }
 
 #unInitialize: close logfile and ical file
@@ -419,7 +414,7 @@ sub processfile
           {
             #check if some part of mailto: is left,
             #if yes, add it before exiting.
-            #It will be used to create attendee list (exception creation!)
+            #It will be used to create attendee list (exception creation, if attendees changed!)
             my $iline;
             $npos= tell CFHANDLE;
             $iline = readline(*CFHANDLE);
@@ -648,6 +643,8 @@ sub processfile
                     $k2=$k1;
                     $firstrdate=$k1;
                     $lastrdate=$k1;
+                    $sdt= $k2;
+                    $ndt=$k1;
                     $floop=0;
                   }
                   else
@@ -740,6 +737,11 @@ sub processfile
                 
                 #check for last occurrence
                 #***************************
+                my $rndt= $lastrdate;
+                $rndt=~ s/RDATE/DTSTART/;
+                $ioccurrec=$srtd_newrecarr{$rndt}[0];
+                my $tidx= rindex($ndt,':');
+                $ndt = substr($ndt,$tidx+1);
                 $rweekday= get_weekday($ndt);
                 #if master weekday is not same as ndt weekday
                 if ($masterweekday != $rweekday)
@@ -753,8 +755,6 @@ sub processfile
                   log_message("occurrence time changed->master-time:$msttime recur-time:$ndt");
                 }
                 #Get summary and location information
-                my $rndt= 'DTSTART:'.$ndt;
-                $ioccurrec=$srtd_newrecarr{$rndt}[0];
                 $ilocation= $ioccurrec->{'LOCATION'};
                 $isummary = $ioccurrec->{'SUMMARY'};
                 @iattenarr = @{$ioccurrec->{'ATTENDEES'}};
