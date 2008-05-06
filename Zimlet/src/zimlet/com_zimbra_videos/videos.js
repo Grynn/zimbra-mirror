@@ -41,9 +41,6 @@ Com_Zimbra_Video.prototype.init = function(){
 
 	this._videoDialog = false;
     
-    var calController = AjxDispatcher.run("GetCalController");
-    this._miniCal = calController ? calController.getMiniCalendar().getHtmlElement() : null;
-    
     this.WIDTH = Com_Zimbra_Video.WIDTH;
     this.HEIGHT = Com_Zimbra_Video.HEIGHT;
     
@@ -118,7 +115,14 @@ Com_Zimbra_Video.prototype.playVideo = function(url,forceAsk){
             newDiv.innerHTML = "<div id='innerVideoDiv' class=\"loading\" style=\"margin: 0px\">loading video ..</div>";
             minicalDIV.appendChild(newDiv);
     }
-    this._miniCal.style.visibility = "hidden";
+
+    if(!this._miniCal && (appCtxt.get(ZmSetting.CAL_ALWAYS_SHOW_MINI_CAL))) {
+        var calMgr = appCtxt.getCalManager();        
+        this._miniCal = calMgr.getMiniCalendar().getHtmlElement();
+    }
+    if(this._miniCal) {
+        this._miniCal.style.visibility = "hidden";
+    }
 
     this._videoActive = true;
     this._addVideo(url); 
@@ -127,7 +131,9 @@ Com_Zimbra_Video.prototype.playVideo = function(url,forceAsk){
 Com_Zimbra_Video.prototype.stopVideo = function(){
 	var minicalDIV = document.getElementById("skin_container_tree_footer");
 	minicalDIV.innerHTML = "";
-	this._miniCal.style.visibility = "visible";
+    if(this._miniCal) {
+        this._miniCal.style.visibility = "visible";
+    }
     this._videoActive = false;
 };
 
