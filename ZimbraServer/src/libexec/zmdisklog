@@ -70,12 +70,24 @@ sub logDiskUsage {
 	close MOUNTS;
 	foreach my $m (@mounts) {
 		chomp $m;
-		my ($dev,undef,$mp) = split(/\s+/,$m);
-		open DF, "$DFCMD \"$dev\" | tail -1 |" or die "Can't open $DFCMD: $!";
+    my ($dev,$mp);
+    if ($platform =~ /MACOSX/) {
+      ($dev,$mp) = $m =~ /(.*)\s+on\s+(.*)\s\(.*\)/;
+		  open DF, "$DFCMD \"$mp\" | tail -1 |" or die "Can't open $DFCMD: $!";
+		  my @df = <DF>;
+		  close DF;
+    } else {
+		  ($dev,undef,$mp) = split(/\s+/,$m);
+		  open DF, "$DFCMD \"$dev\" | tail -1 |" or die "Can't open $DFCMD: $!";
+		  my @df = <DF>;
+		  close DF;
+    }
+		open DF, "$DFCMD \'$mp\' | tail -1 |" or die "Can't open $DFCMD: $!";
 		my @df = <DF>;
 		close DF;
 		my (undef, $total, $used, $avail) = split(/\s+/, $df[0]);
     my $pct=int(($used/$total)*100) if ($total > 0);
+    #print "TOTAL: $total USED: $used AVAIL: $avail PCT: $pct\n";
     my $lvl = "info";
     $lvl = "err" if ($pct > $DISK_WARN_THRESHOLD);
     $lvl = "crit" if ($pct > $DISK_CRIT_THRESHOLD);
