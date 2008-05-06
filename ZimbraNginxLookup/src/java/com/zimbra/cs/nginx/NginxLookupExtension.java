@@ -43,6 +43,8 @@ import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
+import com.zimbra.cs.account.Domain;
+import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionHttpHandler;
 import com.zimbra.cs.extension.ZimbraExtension;
@@ -75,8 +77,10 @@ public class NginxLookupExtension implements ZimbraExtension {
         String suffix;
         String pass;
         String proto;
+        String authMethod;
         String clientIp;
         String serverIp;
+        String serverHost;
         int loginAttempt;
         HttpServletRequest  httpReq;
         HttpServletResponse httpResp;
@@ -91,6 +95,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String AUTH_LOGIN_ATTEMPT = "Auth-Login-Attempt";
         public static final String CLIENT_IP          = "Client-IP";
         public static final String SERVER_IP          = "X-Proxy-IP";
+        public static final String SERVER_HOST        = "X-Proxy-Host";
         
         /* resp headers */
         public static final String AUTH_STATUS = "Auth-Status";
@@ -109,7 +114,12 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String POP3     = "pop3";
         public static final String POP3_SSL = "pop3ssl";
         public static final String HTTP     = "http";
-        
+
+        /* auth methods */
+        public static final String AUTHMETH_PLAIN = "plain";
+        public static final String AUTHMETH_OTHER = "other";
+        public static final String AUTHMETH_ZIMBRAID = "zimbraId";
+
         private static final SearchControls USER_SC   = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
         private static final SearchControls SERVER_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
         private static final SearchControls DOMAIN_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
@@ -186,8 +196,11 @@ public class NginxLookupExtension implements ZimbraExtension {
             // req.user = httpReq.getHeader(AUTH_USER);
             req.pass = httpReq.getHeader(AUTH_PASS);
             req.proto = httpReq.getHeader(AUTH_PROTOCOL);
+            req.authMethod = httpReq.getHeader(AUTH_METHOD);
             if (user == null)
                 throw new NginxLookupException("missing header field "+AUTH_USER);
+            if (req.authMethod == null) 
+                throw new NginxLookupException("missing header field "+AUTH_METHOD);
             
             /* PR 20542 - If the user name ends with any zimbra supported extension (/tb|/wm|/ni)
              * then we need to strip off that extension before proceeding
@@ -205,6 +218,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 throw new NginxLookupException("missing header field "+AUTH_PROTOCOL);
             req.clientIp = httpReq.getHeader(CLIENT_IP);
             req.serverIp = httpReq.getHeader(SERVER_IP);
+            req.serverHost = httpReq.getHeader(SERVER_HOST);
             
             String val = httpReq.getHeader(AUTH_LOGIN_ATTEMPT);
             if (val != null) {
@@ -301,47 +315,82 @@ public class NginxLookupExtension implements ZimbraExtension {
                     ne.close();
             }
         }
-        
-        private String userByVirtualIP(ZimbraLdapContext zlc, Config config, NginxLookupRequest req) {
-                
-            boolean hasDomain = (req.user.indexOf('@') != -1);
-                
-            // get user by virtual domain only if domain is not already present
-            if (hasDomain)
-                return null;
-                
+
+        /** Qualifies the user-name, if necessary, by suffixing "@domain"
+            The domain to be suffixed is the domain object whose zimbraVirtualIPAddress matches the
+            IP address specified by req.serverIP (X-Proxy-IP request header)
+            @return Fully qualified user name, if qualified, else the original user name
+         */
+        private String getQualifiedUsername(ZimbraLdapContext zlc, Config config, NginxLookupRequest req)
+        {
+            String aUser, qUser;
             String domainName = null;
-            if (req.serverIp != null) {
-                try {
-                    domainName = searchDirectory(
-                                            zlc, 
-                                            DOMAIN_SC, 
-                                            config, 
-                                            Provisioning.A_zimbraReverseProxyDomainNameQuery,
-                                            Provisioning.A_zimbraReverseProxyDomainNameSearchBase,
-                                            "IPADDR",
-                                            req.serverIp,
-                                            Provisioning.A_zimbraReverseProxyDomainNameAttribute);
-                } catch (NginxLookupException e) {
-                    logger.warn("domain not found for user " + req.user + ".  error: " + e.getMessage());
-                } catch (NamingException e) {
-                    logger.warn("domain not found for user " + req.user + ".  error: " + e.getMessage());
+
+            aUser = req.user;
+            qUser = aUser;
+
+            if (aUser.indexOf('@') != -1) {
+                // no translation required when username is already qualified
+                return qUser;
+            }
+
+            if (req.authMethod.equalsIgnoreCase(AUTHMETH_ZIMBRAID)) {
+                // no translation required for zimbraId based lookups
+                return qUser;
+            }
+
+            if (HTTP.equalsIgnoreCase(req.proto))
+            {
+                /* For HTTP, we need to qualify user based on virtual-host header */
+                if (req.serverHost != null) {
+                    logger.info("looking up domain by virtualhost name");
+                    Domain d = null;
+                    try {
+                        d = Provisioning.getInstance().get(DomainBy.virtualHostname, req.serverHost);
+                    } catch (ServiceException e) {
+                    }
+                    if (d != null) {
+                        domainName = d.getName();
+                        logger.info("found domain:" + domainName + " for virtualhost:" + req.serverHost);
+                    }
+                }
+            }
+            else
+            {
+                /* For mail, we need to qualify user based on server-ip header */
+                if (req.serverIp != null) {
+                    try {
+                        domainName = searchDirectory(
+                                                zlc, 
+                                                DOMAIN_SC, 
+                                                config, 
+                                                Provisioning.A_zimbraReverseProxyDomainNameQuery,
+                                                Provisioning.A_zimbraReverseProxyDomainNameSearchBase,
+                                                "IPADDR",
+                                                req.serverIp,
+                                                Provisioning.A_zimbraReverseProxyDomainNameAttribute);
+                    } catch (NginxLookupException e) {
+                        logger.warn("domain not found for user " + aUser + ".  error: " + e.getMessage());
+                    } catch (NamingException e) {
+                        logger.warn("domain not found for user " + aUser + ".  error: " + e.getMessage());
+                    }
                 }
             }
                             
             if (domainName == null) {
                 domainName = config.getAttr(Provisioning.A_zimbraDefaultDomainName);
-                logger.debug("domain not found for user " + req.user + ", using default domain: " + (domainName==null?"null":domainName));
+                logger.debug("domain not found for user " + aUser + ", using default domain: " + (domainName==null?"null":domainName));
             }
                 
             if (domainName != null) {
-                String userName = req.user + "@" + domainName;
-                logger.debug(AUTH_USER + " " + req.user + " is replaced by " + userName + " for mailhost lookup");
-                return userName;
+                String userName = aUser + "@" + domainName;
+                logger.debug(AUTH_USER + " " + aUser + " is replaced by " + userName + " for mailhost lookup");
+                qUser = userName;
             } else {
-                logger.warn("domain not found for user " + req.user);
-                return null;
-            }    
+                logger.warn("domain not found for user " + aUser);
+            }
+
+            return qUser;
         }
         
         private void search(NginxLookupRequest req) throws NginxLookupException {
@@ -349,7 +398,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             try {
                 zlc = new ZimbraLdapContext();
                 Config config = Provisioning.getInstance().getConfig();
-                String authUser = userByVirtualIP(zlc, config, req);
+                String authUser = getQualifiedUsername(zlc, config, req);
                 
                 Map<String, Boolean> attrs = new HashMap<String, Boolean>();
                 attrs.put(Provisioning.A_zimbraReverseProxyMailHostAttribute, true);
@@ -360,7 +409,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                                                            Provisioning.A_zimbraReverseProxyMailHostQuery,
                                                            Provisioning.A_zimbraReverseProxyMailHostSearchBase,
                                                            "USER",
-                                                           (authUser==null)? req.user : authUser,
+                                                           authUser,
                                                            attrs);
                 String mailhost = vals.get(Provisioning.A_zimbraReverseProxyMailHostAttribute);
                 String userName = vals.get(Provisioning.A_zimbraReverseProxyUserNameAttribute);
