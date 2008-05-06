@@ -44,6 +44,12 @@ public class ZContactHitBean extends ZSearchHitBean {
 
     public String getEmail3() { return mHit.getEmail3(); }
 
+    public String getWorkEmail1() { return mHit.getWorkEmail1(); }
+
+    public String getWorkEmail2() { return mHit.getWorkEmail2(); }
+
+    public String getWorkEmail3() { return mHit.getWorkEmail3(); }
+
     public String getType() { return mHit.getType(); }
 
     public String getDlist() { return mHit.getDlist(); }
