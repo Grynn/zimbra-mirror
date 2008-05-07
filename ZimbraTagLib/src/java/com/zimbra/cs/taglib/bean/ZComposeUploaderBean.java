@@ -76,6 +76,7 @@ public class ZComposeUploaderBean {
     public static final String F_body = "body";
     public static final String F_bodyText = "bodyText";
     public static final String F_replyto = "replyto";
+    public static final String F_replytype = "replytype";
     public static final String F_from = "from";
     public static final String F_inreplyto = "inreplyto";
     public static final String F_messageid = "messageid";
@@ -263,6 +264,9 @@ public class ZComposeUploaderBean {
         compose.setBcc(getParam(F_bcc));
         compose.setSubject(getParam(F_subject));
         compose.setPriority(getParam(F_priority));
+
+        String replyType = getParam(F_replytype);
+        if (replyType != null) compose.setReplyType(replyType);
         
         if(getParam(F_bodyText)==null || "".equals(getParam(F_bodyText))){
         compose.setContent(getParam(F_body));    
