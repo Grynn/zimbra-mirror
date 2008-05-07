@@ -245,6 +245,7 @@ public class PushChanges {
 	                        case MailItem.TYPE_CONTACT:     syncContact(id);      break;
 	                        case MailItem.TYPE_MESSAGE:     syncMessage(id);      break;
 	                        case MailItem.TYPE_APPOINTMENT: syncCalendarItem(id); break;
+	                        case MailItem.TYPE_DOCUMENT:    syncDocument(id); break;
 	                    }
                 	} catch (ServiceException x) {
                 		SyncExceptionHandler.checkRecoverableException(x);
@@ -799,6 +800,11 @@ public class PushChanges {
         }
     }
 
+    private boolean syncDocument(int id) throws ServiceException {
+    	// push the document to the remote server.
+    	return true;
+    }
+    
     private boolean syncMessage(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.MSG_ACTION_REQUEST);
         Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);

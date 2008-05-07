@@ -109,6 +109,7 @@ public class DeltaSync {
         // sync down metadata changes and note items that need to be downloaded in full
         Map<Integer, List<Integer>> messages = new HashMap<Integer, List<Integer>>(), chats = new HashMap<Integer, List<Integer>>();
         Map<Integer, Integer> deltamsgs = null, deltachats = null, contacts = null, appts = null;
+        List<Integer> documents = null;
         for (Element change : response.listElements()) {
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
             String type = change.getName();
@@ -192,6 +193,18 @@ public class DeltaSync {
                 	continue;
             	
             	(appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
+            } else if (type.equals(MailConstants.E_DOC)) {
+            	if (!OfflineLC.zdesktop_sync_documents.booleanValue())
+            		continue;
+                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                	OfflineLog.offline.warn("Skipped document id=%d per zdesktop_sync_skip_idlist", id);
+                	continue;
+                }
+                
+                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_DOCUMENT))
+                	continue;
+
+                (documents == null ? documents = new ArrayList<Integer>() : documents).add(id);
             } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
                 // can't tell new folders from modified ones, so might as well go through the initial sync process
                 syncContainer(change, id);
@@ -235,6 +248,9 @@ public class DeltaSync {
             for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())))
                 getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
         }
+        
+        if (OfflineLC.zdesktop_sync_documents.booleanValue() && documents != null)
+        	syncDocuments(documents);
 
         // delete any deleted folders, starting from the bottom of the tree
         if (foldersToDelete != null && !foldersToDelete.isEmpty()) {
@@ -797,5 +813,27 @@ public class DeltaSync {
     	} catch (ServiceException x) {
     		SyncExceptionHandler.syncMessageFailed(ombx, id, x);
     	}
+    }
+    
+    void syncDocuments(List<Integer> documents) throws ServiceException {
+    	StringBuilder query = null;
+    	for (int docId : documents) {
+    		if (query == null)
+    			query = new StringBuilder("item:{");
+    		else
+    			query.append(",");
+    		query.append(docId);
+    	}
+    	query.append("}");
+        Element request = new Element.XMLElement(MailConstants.SEARCH_REQUEST);
+        request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024);  // XXX pagination
+        request.addAttribute(MailConstants.A_TYPES, "document");
+        request.addElement(MailConstants.E_QUERY).setText(query.toString());
+        Element response = ombx.sendRequest(request);
+        
+        OfflineLog.offline.debug(response.prettyPrint());
+        
+        for (Element doc : response.listElements(MailConstants.E_DOC))
+        	getInitialSync().syncDocument(doc);
     }
 }

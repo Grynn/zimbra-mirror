@@ -56,6 +56,7 @@ import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mime.ParsedContact;
+import com.zimbra.cs.mime.ParsedDocument;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
@@ -68,6 +69,7 @@ import com.zimbra.cs.redolog.op.CreateMessage;
 import com.zimbra.cs.redolog.op.CreateSavedSearch;
 import com.zimbra.cs.redolog.op.CreateTag;
 import com.zimbra.cs.redolog.op.SaveChat;
+import com.zimbra.cs.redolog.op.SaveDocument;
 import com.zimbra.cs.redolog.op.SaveDraft;
 import com.zimbra.cs.service.ContentServlet;
 import com.zimbra.cs.service.UserServlet;
@@ -76,6 +78,7 @@ import com.zimbra.cs.service.mail.FolderAction;
 import com.zimbra.cs.service.mail.SetCalendarItem;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.SetCalendarItem.SetCalendarItemParseResult;
+import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.StoreManager;
@@ -286,6 +289,14 @@ public class InitialSync {
 	                        syncContact(eContact, folderId);
 	                }
 	                eContactIds.detach();
+	                mMailboxSync.updateInitialSync(syncResponse);
+	            }
+            }
+
+            if (OfflineLC.zdesktop_sync_documents.booleanValue()) {
+	            Element eContactIds = elt.getOptionalElement(MailConstants.E_DOC);
+	            if (eContactIds != null) {
+	            	syncAllDocumentsInFolder(folderId);
 	                mMailboxSync.updateInitialSync(syncResponse);
 	            }
             }
@@ -983,5 +994,78 @@ public class InitialSync {
         sync.addAttribute(MailConstants.A_CHANGE_DATE, timestamp).addAttribute(MailConstants.A_MODIFIED_SEQUENCE, changeId);
         sync.addAttribute(MailConstants.A_DATE, received * 1000L).addAttribute(MailConstants.A_REVISION, mod_content);
         getDeltaSync().syncMessage(sync, folderId, type);
+    }
+    
+    /* sync all the documents in the folder */
+    void syncAllDocumentsInFolder(int folderId) throws ServiceException {
+        Element request = new Element.XMLElement(MailConstants.SEARCH_REQUEST);
+        request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024);  // XXX pagination
+        request.addAttribute(MailConstants.A_TYPES, "document");
+        request.addElement(MailConstants.E_QUERY).setText("inid:"+folderId);
+        Element response = ombx.sendRequest(request);
+        
+        OfflineLog.offline.debug(response.prettyPrint());
+        
+        for (Element doc : response.listElements(MailConstants.E_DOC))
+        	syncDocument(doc);
+    }
+    
+    void syncDocument(Element doc) throws ServiceException {
+    	int folderId = (int) doc.getAttributeLong(MailConstants.A_FOLDER);
+    	long modifiedDate = doc.getAttributeLong(MailConstants.A_MODIFIED_DATE);
+    	String lastEditedBy = doc.getAttribute(MailConstants.A_LAST_EDITED_BY);
+    	String itemIdStr = doc.getAttribute(MailConstants.A_ID);
+    	String name = doc.getAttribute(MailConstants.A_NAME);
+    	String contentType = doc.getAttribute(MailConstants.A_CONTENT_TYPE);
+        int flags = Flag.flagsToBitmask(doc.getAttribute(MailConstants.A_FLAGS, null));
+        //String tags = doc.getAttribute(MailConstants.A_TAGS, null);
+        int changeId = (int) doc.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
+        int mod_content = (int) doc.getAttributeLong(MailConstants.A_REVISION);
+        int timestamp = (int) doc.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        InputStream rs = null;
+        OfflineAccount acct = (OfflineAccount)ombx.getAccount();
+        String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + itemIdStr);
+        OfflineLog.request.debug("GET " + url);
+        try {
+        	String hostname = new URL(url).getHost();
+        	rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), hostname, url,
+        			acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
+        } catch (MailServiceException.NoSuchItemException nsie) {
+        	OfflineLog.offline.warn("initial: no blob available for document " + itemIdStr);
+        } catch (MalformedURLException e) {
+        	OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
+        	throw ServiceException.FAILURE("base URI is invalid: " + url, e);
+        } catch (IOException e) {
+        	OfflineLog.offline.warn("initial: can't download Document:  " + itemIdStr);
+        }
+        try {
+            ItemId itemId = new ItemId(itemIdStr, ombx.getAccountId());
+            int id = itemId.getId();
+            int date = (int) (modifiedDate / 1000);
+            SaveDocument player = new SaveDocument();
+            ParsedDocument pd = new ParsedDocument(rs, name, contentType, modifiedDate, lastEditedBy);
+            player.setDocument(pd);
+            player.setItemType(MailItem.TYPE_DOCUMENT);
+            player.setMessageId(id);
+
+            // XXX sync tags
+            
+            try {
+                ombx.getItemById(sContext, id, MailItem.TYPE_DOCUMENT);
+                ombx.addDocumentRevision(new OfflineContext(player), id, MailItem.TYPE_DOCUMENT, pd);
+            } catch (MailServiceException.NoSuchItemException nsie) {
+                ombx.createDocument(new OfflineContext(player), folderId, pd, MailItem.TYPE_DOCUMENT);
+            }
+            if (flags != 0)
+            	ombx.setTags(sContext, id, MailItem.TYPE_DOCUMENT, flags, MailItem.TAG_UNCHANGED);
+            ombx.syncChangeIds(sContext, id, MailItem.TYPE_DOCUMENT, date, mod_content, timestamp, changeId);
+            OfflineLog.offline.debug("initial: created document (" + itemIdStr + "): " + name);
+        } catch (ServiceException e) {
+        	OfflineLog.offline.warn("initial: error saving a document:  " + itemIdStr, e);
+            if (e.getCode() != MailServiceException.ALREADY_EXISTS)
+                throw e;
+        } catch (IOException e) {
+        	OfflineLog.offline.warn("initial: error saving a document:  " + itemIdStr, e);
+        }
     }
 }

@@ -51,6 +51,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_sync_contacts;
     public static final KnownKey zdesktop_sync_appointments;
     public static final KnownKey zdesktop_sync_chats;
+    public static final KnownKey zdesktop_sync_documents;
     
     public static final KnownKey zdesktop_sync_skip_idlist;
     
@@ -171,6 +172,10 @@ public class OfflineLC {
 	    zdesktop_sync_chats = new KnownKey("zdesktop_sync_chats");
 	    zdesktop_sync_chats.setDefault("true");
 	    zdesktop_sync_chats.setDoc("Whether to sync chats. Default true");
+	    
+	    zdesktop_sync_documents = new KnownKey("zdesktop_sync_documents");
+	    zdesktop_sync_documents.setDefault("true");
+	    zdesktop_sync_documents.setDoc("Whether to sync documents. Default true");
 	    
 	    zdesktop_sync_skip_idlist = new KnownKey("zdesktop_sync_skip_idlist");
 	    zdesktop_sync_skip_idlist.setDefault("");
