@@ -1535,9 +1535,9 @@ ZaAccount.getAccountStatusMsg = function (status) {
         return ZaMsg.accountStatus_closed;
     }else if (status == ZaAccount.ACCOUNT_STATUS_LOCKED ) {
         return  ZaMsg.accountStatus_locked;
-    }else if (ZaAccount.ACCOUNT_STATUS_LOCKOUT){
+    }else if (status == ZaAccount.ACCOUNT_STATUS_LOCKOUT){
         return  ZaMsg.accountStatus_lockout;
-    }else if (ZaAccount.ACCOUNT_STATUS_MAINTENANCE){
+    }else if (status == ZaAccount.ACCOUNT_STATUS_MAINTENANCE){
         return  ZaMsg.accountStatus_maintenance;
     }else {
         return "";
