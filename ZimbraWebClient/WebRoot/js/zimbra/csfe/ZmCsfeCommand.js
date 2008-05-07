@@ -390,6 +390,19 @@ function(response, params) {
 	var result = new ZmCsfeResult();
 	var xmlResponse = false;
 	var respDoc = null;
+
+	// check for un-parseable HTML error response from server
+	if (!response.success && !response.xml && (/<html/i.test(response.text))) {
+		// bad XML or JS response that had no fault
+		var ex = new ZmCsfeException(null, ZmCsfeException.CSFE_SVC_ERROR, params.methodNameStr, "HTTP response status " + response.status);
+		if (params.asyncMode) {
+			result.set(ex, true);
+			return result;
+		} else {
+			throw ex;
+		}
+	}
+
 	if (typeof(response.text) == "string" && response.text.indexOf("{") == 0) {
 		respDoc = response.text;
 	} else {
