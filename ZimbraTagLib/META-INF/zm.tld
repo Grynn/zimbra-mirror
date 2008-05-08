@@ -5785,6 +5785,13 @@
     </function>
 
     <function>
+        <name>displayDate</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            displayDate(javax.servlet.jsp.PageContext,java.util.Date)</function-signature>
+    </function>
+
+    <function>
         <name>getTags</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.List&lt;com.zimbra.cs.taglib.bean.ZTagBean&gt;

@@ -349,13 +349,23 @@ public class BeanUtils {
             df.setTimeZone(tz);
             return df.format(msg);
         } else {
-            DateFormat df = getDateFormat(pc, DateTimeFmt.DTF_DATE_SHORT);
-            df.setTimeZone(tz);
-            return df.format(msg);
+			return displayDate(pc, msg, tz);
         }
     }
 
-    public static String displayDuration(PageContext pc, long duration) throws ServiceException, JspException {
+	public static String displayDate(PageContext pc, Date msg) throws ServiceException, JspException {
+		ZMailbox mbox = ZJspSession.getZMailbox(pc);
+		TimeZone tz = mbox.getPrefs().getTimeZone();
+		return displayDate(pc, msg, tz);
+	}
+
+	private static String displayDate(PageContext pc, Date msg, TimeZone tz) {
+		DateFormat df = getDateFormat(pc, DateTimeFmt.DTF_DATE_SHORT);
+		df.setTimeZone(tz);
+		return df.format(msg);
+	}
+
+	public static String displayDuration(PageContext pc, long duration) throws ServiceException, JspException {
         long totalSeconds = duration / 1000;
         long seconds = totalSeconds % 60;
         long minutes = (totalSeconds - seconds) / 60;
