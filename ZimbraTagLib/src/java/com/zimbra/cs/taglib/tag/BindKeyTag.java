@@ -285,7 +285,10 @@ public class BindKeyTag extends ZimbraSimpleTag {
 
     private String getJavaScriptForKey(String k) throws JspTagException {
         StringBuilder js = new StringBuilder();
-
+        if (k == null) return "";
+        k = k.trim();
+        if (k.length() == 0) return "";
+        
         for (String keySeq: k.split(";")) {
             String keys[] = keySeq.trim().split(",");
             if (keys.length == 0)
