@@ -16,15 +16,16 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-source `dirname $0`/zmshutil || exit 1
-zmsetvars zimbra_home zimbra_java_home
+zimbra_home="`dirname $0`/.."
+zimbra_home=$(cd "${zimbra_home}"; pwd)
+zimbra_java_home=${zimbra_home}/java
 
 if [ -d ${zimbra_java_home}/jre ]; then
     JRE_EXT_DIR=${zimbra_java_home}/jre/lib/ext
 else
-    JRE_EXT_DIR=${zimbra_java_home}/lib/ext
+    JRE_EXT_DIR=/System/Library/Frameworks/JavaVM.framework/Versions/1.5/Home/lib/ext
+    #JRE_EXT_DIR=${zimbra_java_home}/lib/ext
 fi
-zmassert -d ${JRE_EXT_DIR}
 
 if [ -f ".hotspot_compiler" ]; then
   cd $zimbra_home
@@ -35,7 +36,7 @@ CYGWIN*) PATHSEP=";";;
 esac
 
 ZIMBRA_EXTENSIONS="backup clamscanner network zimbra-license zimbrahsm zimbrasync"
-ZIMBRA_EXT_DIR="/opt/zimbra/lib/ext"
+ZIMBRA_EXT_DIR="/opt/zimbra/lib/ext-common"
 for i in $ZIMBRA_EXTENSIONS; do
   if [ -d "/opt/zimbra/lib/ext/$i" ]; then
    ZIMBRA_EXT_DIR="${ZIMBRA_EXT_DIR}${PATHSEP}/opt/zimbra/lib/ext/$i"
