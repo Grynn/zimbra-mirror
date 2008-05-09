@@ -11,7 +11,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-ASPELL_VERSION := 0.60.5
+ASPELL_VERSION := 0.60.6
 
 ASPELL_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell/aspell-$(ASPELL_VERSION).tgz
