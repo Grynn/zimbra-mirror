@@ -7,16 +7,16 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 ZIMBRA_HOME ?= /opt/zimbra
 
 PNG_NAME ?= libpng
-PNG_VERSION ?= 1.2.18
+PNG_VERSION ?= 1.2.28
 
 FREETYPE_NAME ?= freetype
-FREETYPE_VERSION ?= 2.3.4
+FREETYPE_VERSION ?= 2.3.5
 
 LIBART_NAME ?= libart_lgpl
-LIBART_VERSION ?= 2.3.19
+LIBART_VERSION ?= 2.3.20
 
 APP_NAME=rrdtool
-APP_RELEASE ?= 1.2.23
+APP_RELEASE ?= 1.2.27
 APP_VERSION ?= $(APP_RELEASE)
 APP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/rrdtool/$(APP_NAME)-$(APP_VERSION).tar.gz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
