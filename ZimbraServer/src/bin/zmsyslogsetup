@@ -68,6 +68,9 @@ if [ x$platform = "xSuSE10" -o "x$platform" = "xopenSUSE_10.2" -o "x$platform" =
 	echo 'log { source(src); filter(f_auth); destination(zmauth); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	mv -f /tmp/syslog-ng.conf.in /etc/syslog-ng/syslog-ng.conf.in
 	/sbin/SuSEconfig --module syslog-ng
+  if [ -f "/etc/logrotate.d/zimbra" ]; then
+    sed -i -e 's/syslogd/syslog-ng/' /etc/logrotate.d/zimbra
+  fi
 	touch /var/log/zimbra.log
 	exit 0
 fi
