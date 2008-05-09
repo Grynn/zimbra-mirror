@@ -1,0 +1,103 @@
+#!/bin/bash
+#
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2004, 2005, 2006, 2007 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+if [ x`whoami` != xzimbra ]; then
+    echo Error: must be run as zimbra user
+    exit 1
+fi
+
+zimbra_home=/opt/zimbra
+zimbra_java_home=${zimbra_home}/java
+jspc_src_dir=${zimbra_home}/mailboxd/webapps/zimbra
+jspc_build_dir=${zimbra_home}/mailboxd/work/zimbra/jsp
+jspc_class_path="${zimbra_home}/jetty/lib:${zimbra_home}/jetty/lib/jsp-2.1:${zimbra_home}/jetty/lib/ext:${zimbra_home}/jetty/lib/plus:${zimbra_home}/jetty/lib/naming:/opt/zimbra/lib/ext"
+
+extensions="backup clamscanner network zimbra-license zimbrahsm zimbrasync"
+ext_dir="/opt/zimbra/lib/ext-common"
+for i in $extensions; do
+  if [ -d "/opt/zimbra/lib/ext/$i" ]; then
+   jspc_class_path="${jspc_class_path}:${ext_dir}/$i"
+  fi
+done
+
+java_version=$(${zimbra_java_home}/bin/java -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
+if [ x"$java_version" = "x1.6.0" ]; then
+  java_options="-XX:ErrorFile=${zimbra_home}/log"
+else
+  java_options=""
+fi
+
+java_cmd="${zimbra_java_home}/bin/java $java_options \
+  -client -Xmx256m \
+  -Dzimbra.home=${zimbra_home} \
+  -Djava.library.path=${zimbra_home}/lib \
+  -Djava.ext.dirs=${jspc_class_path}"
+
+if [ -d "${jspc_build_dir}" ]; then
+  rm -rf ${jspc_build_dir}
+fi
+mkdir ${jspc_build_dir}
+
+compile_jsp() {
+  file=shift
+  ${java_cmd} org.apache.jasper.JspC -v -s -l -d ${jspc_build_dir} -uriroot ${jspc_src_dir} ${param_jspfile}  2> /dev/null
+  return $?
+}
+
+for param_jspfile in `cd ${jspc_src_dir}; find h m -type f | sed 's/\.\///g'`; do
+  echo -n "Compiling ${param_jspfile}..."
+  compile_jsp ${param_jspfile}
+  if [ $? = 0 ]; then
+    echo "done."
+  else
+    jspc_retry_list="${jspc_retry_list} ${param_jspfile}"
+    echo "failed."
+  fi
+done
+for param_jspfile in `cd ${jspc_src_dir}; find public -type f -name '*.jsp' -depth 1 | sed 's/\.\///g'`; do
+  echo -n "Compiling ${param_jspfile}..."
+  compile_jsp ${param_jspfile}
+  if [ $? = 0 ]; then
+    echo "done."
+  else
+    jspc_retry_list="${jspc_retry_list} ${param_jspfile}"
+    echo "failed."
+  fi
+done
+
+retries=0
+while [ "x${jspc_retry_list}" != "x" ];  do
+  if [ "$retries" -gt 5 ]; then
+    break
+  else
+    retries=$((retries+1))
+  fi
+
+  jspc_list=${jspc_retry_list}
+  jspc_retry_list=""
+  for param_jspfile in ${jspc_list}; do
+    echo -n "Re-compiling ${param_jspfile}..."
+    compile_jsp ${param_jspfile}
+    if [ $? = 0 ]; then
+      echo "done."
+    else
+      jspc_retry_list="${jspc_retry_list} ${param_jspfile}"
+      echo "failed."
+    fi
+  done
+done
