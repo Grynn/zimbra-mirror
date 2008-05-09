@@ -262,6 +262,7 @@ public class SkinResources
 
 		String compressStr = req.getParameter(P_COMPRESS);
 		boolean compress = compressStr != null && (compressStr.equals("true") || compressStr.equals("1"));
+		compress = compress && macros.get("MSIE_6") == null;
 		if (compress) {
 			try {
 				resp.setHeader("Content-Encoding", "gzip");
