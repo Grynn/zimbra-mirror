@@ -93,6 +93,8 @@ else
 	shift
 fi
 
+echo "Setting tls mode to $MODE"
+
 updateTomcatConfig() {
 
 	if [ $MODE = "http" ]; then
@@ -130,123 +132,328 @@ updateTomcatConfig() {
 
 updateJettyConfig() {
 	if [ $MODE = "http" ]; then
-    echo "Creating tmp file ${zimbra_tmp_directory}/jetty.xml.$$ for mode $MODE"
-		sed -e 's/\(.*HTTPSBEGIN\).*/\1/' -e 's/.*\(HTTPSEND.*\)/\1/' \
-			-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
-			${mailboxd_conf_directory}/jetty.xml.in > \
-			${zimbra_tmp_directory}/jetty.xml.$$
-    echo "Creating tmp file ${zimbra_tmp_directory}/zimbra.web.xml.in for mode $MODE"
-		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
-			${jetty_web_xml}/zimbra.web.xml.in > \
-			${zimbra_tmp_directory}/zimbra.web.xml.in
-    echo "Creating tmp file ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in for mode $MODE"
-		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
-			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
-			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in
+    origfile=${mailboxd_conf_directory}/jetty.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*HTTPSBEGIN\).*/\1/' -e 's/.*\(HTTPSEND.*\)/\1/' \
+			  -e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${jetty_web_xml}/zimbra.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${jetty_web_xml}/zimbraAdmin.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+
 	elif [ $MODE = "https" ]; then
-    echo "Creating tmp file ${zimbra_tmp_directory}/jetty.xml.$$ for mode $MODE"
-		sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
-			-e 's/\(.*HTTPBEGIN\).*/\1/' -e 's/.*\(HTTPEND.*\)/\1/' \
-			${mailboxd_conf_directory}/jetty.xml.in > \
-			${zimbra_tmp_directory}/jetty.xml.$$
-    echo "Creating tmp file ${zimbra_tmp_directory}/zimbra.web.xml.in for mode $MODE"
-		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
-			${jetty_web_xml}/zimbra.web.xml.in > \
-			${zimbra_tmp_directory}/zimbra.web.xml.in
-    echo "Creating tmp file ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in for mode $MODE"
-		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
-			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
-			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in
+    origfile=${mailboxd_conf_directory}/jetty.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
+			  -e 's/\(.*HTTPBEGIN\).*/\1/' -e 's/.*\(HTTPEND.*\)/\1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${jetty_web_xml}/zimbra.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${jetty_web_xml}/zimbraAdmin.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+
 	elif [ $MODE = "redirect" ]; then
 		# redirect - enable both
 		# Then enable the redirect block in web.xml
-    echo "Creating tmp file ${zimbra_tmp_directory}/jetty.xml.$$ for mode $MODE"
-		sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
-			-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
-			${mailboxd_conf_directory}/jetty.xml.in > \
-			${zimbra_tmp_directory}/jetty.xml.$$
-    echo "Creating tmp file ${zimbra_tmp_directory}/zimbra.web.xml.in for mode $MODE"
-		sed -e 's/\(.*REDIRECTBEGIN\).*/\1 -->/' -e 's/.*\(REDIRECTEND.*\)/<!-- \1/' \
-			${jetty_web_xml}/zimbra.web.xml.in > \
-			${zimbra_tmp_directory}/zimbra.web.xml.in
-    echo "Creating tmp file ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in for mode $MODE"
-		sed -e 's/\(.*REDIRECTBEGIN\).*/\1 -->/' -e 's/.*\(REDIRECTEND.*\)/<!-- \1/' \
-			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
-			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$
+    origfile=${mailboxd_conf_directory}/jetty.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
+			  -e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${jetty_web_xml}/zimbra.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1 -->/' -e 's/.*\(REDIRECTEND.*\)/<!-- \1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${jetty_web_xml}/zimbraAdmin.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1 -->/' -e 's/.*\(REDIRECTEND.*\)/<!-- \1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
 	else
 		# MIXED - enable both
-    echo "Creating tmp file ${zimbra_tmp_directory}/jetty.xml.$$ for mode $MODE"
-		sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
-			-e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
-			${mailboxd_conf_directory}/jetty.xml.in > \
-			${zimbra_tmp_directory}/jetty.xml.$$
-    echo "Creating tmp file ${zimbra_tmp_directory}/zimbra.web.xml.in for mode $MODE"
-		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
-			${jetty_web_xml}/zimbra.web.xml.in > \
-			${zimbra_tmp_directory}/zimbra.web.xml.in
-    echo "Creating tmp file ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in for mode $MODE"
-		sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
-			${jetty_web_xml}/zimbraAdmin.web.xml.in > \
-			${zimbra_tmp_directory}/zimbraAdmin.web.xml.in
+    origfile=${mailboxd_conf_directory}/jetty.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*HTTPSBEGIN\).*/\1 -->/' -e 's/.*\(HTTPSEND.*\)/<!-- \1/' \
+			  -e 's/\(.*HTTPBEGIN\).*/\1 -->/' -e 's/.*\(HTTPEND.*\)/<!-- \1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${jetty_web_xml}/zimbra.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
+
+    origfile=${jetty_web_xml}/zimbraAdmin.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating ${origfile}..."
+		  sed -e 's/\(.*REDIRECTBEGIN\).*/\1/' -e 's/.*\(REDIRECTEND.*\)/\1/' \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
 	fi
 
-	if [ -s ${zimbra_tmp_directory}/jetty.xml.$$ ]; then
-    echo "Updating ${mailboxd_conf_directory}/jetty.xml.in"
-		mv -f ${zimbra_tmp_directory}/jetty.xml.$$ \
-      			${mailboxd_conf_directory}/jetty.xml.in
-	fi
-
-	if [ -s ${zimbra_tmp_directory}/zimbra.web.xml.in ]; then
-    echo "Updating REDIRECT Blocks in ${mailboxd_conf_directory}/zimbra.web.xml.in"
-		mv -f ${zimbra_tmp_directory}/zimbra.web.xml.in \
-			${jetty_web_xml}/zimbra.web.xml.in
-  else
-    echo "${zimbra_tmp_directory}/zimbra.web.xml.in didn't exist?"
-    ls -ld ${zimbra_tmp_directory}/zimbra.web.xml.in
-	fi
-	if [ -s ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$ ]; then
-    echo "Updating ${mailboxd_conf_directory}/zimbraAdmin.web.xml.in"
-		mv -f ${zimbra_tmp_directory}/zimbraAdmin.web.xml.in.$$ \
-			${jetty_web_xml}/zimbraAdmin.web.xml.in
-	fi
 	if [ $MODE = "redirect" ]; then
-		sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>https<\/env-entry-value><!-- PROTOCOL MODE -->/" \
-			${mailboxd_conf_directory}/zimbra.web.xml.in > ${zimbra_tmp_directory}/web.xml.$$
+    origfile=${mailboxd_conf_directory}/zimbra.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating PROTOCOL MODE in ${origfile}..."
+		  sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>https<\/env-entry-value><!-- PROTOCOL MODE -->/" \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
   else
-		sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
-			${mailboxd_conf_directory}/zimbra.web.xml.in > ${zimbra_tmp_directory}/web.xml.$$
+    origfile=${mailboxd_conf_directory}/zimbra.web.xml.in
+    tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+    if [ $? = 0 -a -s "${tempfile}" ]; then
+      echo -n "Updating PROTOCOL MODE in ${origfile}..."
+		  sed -e "s/.*PROTOCOL MODE.*/<env-entry-value>$MODE<\/env-entry-value><!-- PROTOCOL MODE -->/" \
+			  ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+        exit 1
+      fi
+    else
+      echo "Couldn't create tempfile for ${origfile}"
+      exit 1
+    fi
 	fi
-  if [ -s ${zimbra_tmp_directory}/web.xml.$$ ]; then
-    echo "Updating PROTOCOL MODE in ${mailboxd_conf_directory}/zimbra.web.xml.in"
-	  mv -f ${zimbra_tmp_directory}/web.xml.$$ ${mailboxd_conf_directory}/zimbra.web.xml.in
+
+  echo -n "Rewriting config files for webxml and mailboxd..."
+  ${zimbra_home}/libexec/zmmtaconfig webxml mailbox  > /dev/null 2>&1
+  if [ $? = 0 ]; then
+    echo "done."
+  else
+    echo "failed."
+    exit 1
   fi
-  ${zimbra_home}/libexec/zmmtaconfig webxml mailbox
 }
 
 updateSASLConfig() {
 	if [ $MODE = "http" ]; then
 		if [ -f ${sasl_conf_directory}/saslauthd.conf.in ]; then
-			sed -e 's/^zimbra_url: https:/zimbra_url: http:/' \
-				${sasl_conf_directory}/saslauthd.conf.in > \
-				${zimbra_tmp_directory}/saslauthd.conf.in.$$
+      origfile=${sasl_conf_directory}/saslauthd.conf.in
+      tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+      if [ $? = 0 -a -s "${tempfile}" ]; then
+        echo -n "Updating ${origfile}..."
+			  sed -e 's/^zimbra_url: https:/zimbra_url: http:/' \
+			    ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+        if [ $? = 0 ]; then
+          echo "done."
+        else 
+          echo "failed."
+          exit 1
+        fi
+      else
+        echo "Couldn't create tempfile for ${origfile}"
+        exit 1
+      fi
 		fi
 	else
 		if [ -f ${sasl_conf_directory}/saslauthd.conf.in ]; then
-			sed -e 's/^zimbra_url: http:/zimbra_url: https:/' \
-				${sasl_conf_directory}/saslauthd.conf.in > \
-				${zimbra_tmp_directory}/saslauthd.conf.in.$$
+      origfile=${sasl_conf_directory}/saslauthd.conf.in
+      tempfile=$(mktemp ${origfile}.XXXXXX) && cp -f ${origfile} ${tempfile}
+      if [ $? = 0 -a -s "${tempfile}" ]; then
+        echo -n "Updating ${origfile}..."
+			  sed -e 's/^zimbra_url: http:/zimbra_url: https:/' \
+			    ${origfile} > ${tempfile} && mv -f ${tempfile} ${origfile}
+        if [ $? = 0 ]; then
+          echo "done."
+        else 
+          echo "failed."
+          exit 1
+        fi
+      else
+        echo "Couldn't create tempfile for ${origfile}"
+        exit 1
+      fi
 		fi
 	fi
-	if [ -s ${zimbra_tmp_directory}/saslauthd.conf.in.$$ ]; then
-    echo "Updating ${sasl_conf_directory}/saslauthd.conf.in"
-		mv -f ${zimbra_tmp_directory}/saslauthd.conf.in.$$ \
-      ${sasl_conf_directory}/saslauthd.conf.in
-	fi
-  ${zimbra_home}/libexec/zmmtaconfig sasl
+  echo -n "Rewriting config files for cyrus-sasl..."
+  ${zimbra_home}/libexec/zmmtaconfig sasl > /dev/null 2>&1
+  if [ $? = 0 ]; then
+    echo "done."
+  else
+    echo "failed."
+    exit 1
+  fi
 }
 
 updateLdap() {
-	${zimbra_home}/bin/zmprov -l ms ${zimbra_server_hostname} zimbraMailMode $MODE
+  echo -n "Setting ldap config zimbraMailMode $MODE for ${zimbra_server_hostname}..."
+	${zimbra_home}/bin/zmprov -l ms ${zimbra_server_hostname} zimbraMailMode $MODE > /dev/null 2>&1
+  if [ $? = 0 ]; then
+    echo "done."
+  else 
+    echo "failed."
+    exit 1
+  fi
 }
 
 if [ x"${mailboxd_server}" = "xtomcat" ]; then
