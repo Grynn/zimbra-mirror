@@ -30,6 +30,7 @@ else
 fi
 
 if [ "X$PLAT" = "XMACOSXx86_10.5" ]; then
+	root_group=wheel
   postfix_owner=_postfix
   postfix_suid_group=_postdrop
 else
