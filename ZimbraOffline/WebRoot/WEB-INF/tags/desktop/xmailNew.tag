@@ -7,13 +7,30 @@
 <script type="text/javascript">
 <!--
 function InitScreen() {
-    if (!zd.isChecked("protocol_pop")) {
-        zd.hide("popSettingsRow");
+    zd.hide("imapSettingsRow");
+    zd.hide("popSettingsRow");
+    if (zd.isChecked("protocol_pop")) {
+        zd.show("popSettingsRow");
+    } else if (zd.isChecked("protocol_imap")) {
+        zd.show("imapSettingsRow");
     }
+    
     if (!zd.isChecked("smtpAuth")) {
         zd.hide("smtpAuthSettingsRow");
     }
     SetSmtpPort();
+}
+
+function onSelectPop() {
+    zd.show("popSettingsRow");
+    zd.hide("imapSettingsRow");
+    SetPort();
+}
+
+function onSelectImap() {
+    zd.hide("popSettingsRow");
+    zd.show("imapSettingsRow");
+    SetPort();
 }
 
 function SetPort() {
@@ -120,12 +137,12 @@ function disableButtons() {
 				<td>
 					<table cellspacing=0 cellpadding=0><tr>
 						<td class='ZRadioCell'>
-							<input type=radio id='protocol_imap' name="protocol" value="imap" ${bean.imap ? 'checked' : ''} onclick='zd.hide("popSettingsRow");SetPort()'>
+							<input type=radio id='protocol_imap' name="protocol" value="imap" ${bean.imap ? 'checked' : ''} onclick='onSelectImap()'>
 						</td>
 						<td class="ZFieldLabel"><label class="ZRadioLabel" for='protocol_imap'>IMAP4</label></td>
 						<td>&nbsp;&nbsp;&nbsp;</td>
 						<td class='ZRadioCell'>
-							<input type=radio id='protocol_pop' name="protocol" value="pop3" ${bean.pop ? 'checked' : ''} onclick='zd.show("popSettingsRow");SetPort()'>
+							<input type=radio id='protocol_pop' name="protocol" value="pop3" ${bean.pop ? 'checked' : ''} onclick='onSelectPop()'>
 						</td>
 						<td class="ZFieldLabel"><label class="ZRadioLabel" for='protocol_pop'>POP3</label></td>
 					</tr></table>
@@ -237,6 +254,11 @@ function disableButtons() {
 					</select>
 				</td>
 			</tr>
+
+            <tr id='imapSettingsRow'>
+                <td style='text-align:right'><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td>
+                <td class="ZCheckboxLabel">Sync all server folders (slow with large mailbox)</td>
+            </tr>
 
 			<tr id='popSettingsRow'>
 				<td style='text-align:right'><input type="checkbox" id="leave_on_server" name="leave_on_server" disabled></td>

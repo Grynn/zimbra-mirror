@@ -114,4 +114,8 @@
   <desc>the last time (milli since epoch) this data source was successfully synced</desc>
 </attr>
 
+<attr name="zimbraDataSourceSyncAllServerFolders" type="boolean" cardinality="single" optionalIn="dataSource">
+  <desc>whether to auto-enable sync on all server folders</desc>
+</attr>
+
 </attrs>

@@ -525,9 +525,9 @@
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.request=INFO" value="log4j.logger.zimbra.offline.request=DEBUG"/>
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.response=INFO" value="log4j.logger.zimbra.offline.response=DEBUG"/>
 
-		<move todir="${zimbra.home.dir}" overwrite="true">
+		<copy todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}"/>
-		</move>
+		</copy>
 
 		<!--touch>
     			<fileset dir="${zimbra.home.dir}/jetty/work/zimbra/jsp"/>
@@ -783,12 +783,6 @@
                 </copy>
                 <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
                         <fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld"/>
-                </copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/test" overwrite="true">
-                        <fileset dir="WebRoot/test" />
-                </copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/test" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/tags/test" />
                 </copy>
 	</target>
 

@@ -199,7 +199,7 @@ public class OfflineDataSource extends DataSource {
 		if (localPath.equalsIgnoreCase("/Inbox"))
 			return true;
 		KnownFolder kf = getKnownFolderByLocalPath(localPath);
-		return kf == null ? isSyncAllFoldersByDefault : kf.isSyncEnabled;
+		return kf == null ? isSyncAllFoldersByDefault || getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false) : kf.isSyncEnabled;
 	}
     
 	@Override
@@ -215,7 +215,7 @@ public class OfflineDataSource extends DataSource {
 	}
 	
 	@Override
-	public void initializedLocalFolder(String localPath) {
+	public void initializedLocalFolder(String localPath, boolean isLocallyCreated) {
 		try {
 			DesktopMailbox mbox = (DesktopMailbox)MailboxManager.getInstance().getMailboxByAccount(getAccount());
 			Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
@@ -225,7 +225,7 @@ public class OfflineDataSource extends DataSource {
 				
 				OperationContext context = new Mailbox.OperationContext(mbox); 
 				mbox.alterTag(context, folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNCFOLDER, true);
-				mbox.alterTag(context, folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, isSyncEnabledByDefault(localPath));
+				mbox.alterTag(context, folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, isLocallyCreated ? false : isSyncEnabledByDefault(localPath));
 			} else
 				OfflineLog.offline.warn("local path " + localPath + " not found");
 		} catch (ServiceException x) {

@@ -7,9 +7,17 @@
 <script type="text/javascript">
 <!--
 function InitScreen() {
-    <c:if test="${not bean.pop}">
-        zd.hide("popSettingsRow");
-    </c:if>
+    zd.hide("imapSettingsRow");
+    zd.hide("popSettingsRow");
+
+	<c:choose>
+	    <c:when test="${bean.pop}" >
+	        zd.show("popSettingsRow");
+	    </c:when>
+	    <c:when test="${bean.syncAllServerFolders}">
+	        zd.show("imapSettingsRow");
+	    </c:when>
+	</c:choose>
 
     if (!zd.isChecked("smtpAuth")) {
         zd.hide("smtpAuthSettingsRow");
@@ -225,6 +233,11 @@ function disableButtons() {
                     <option value="43200" ${bean.syncFreqSecs == 43200 ? 'selected' : ''}>every 12 hours</option>
                 </select>
             </td>
+        </tr>
+        
+        <tr id='imapSettingsRow'>
+            <td style='text-align:right'><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''} disabled></td>
+            <td class="ZCheckboxLabel">Sync all server folders</td>
         </tr>
         
         <tr id='popSettingsRow'>

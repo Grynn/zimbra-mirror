@@ -40,6 +40,8 @@ public class XmailBean extends FormBean {
 	
 	protected long syncFreqSecs = OfflineConstants.DEFAULT_SYNC_FREQ / 1000;
 	
+	protected boolean syncAllServerFolders;
+	
 	
 	@Override
 	protected void reload() {
@@ -77,6 +79,7 @@ public class XmailBean extends FormBean {
 		}
 
 		syncFreqSecs = ds.getTimeIntervalSecs(OfflineConstants.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
+		syncAllServerFolders = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
 	}
 	
 	@Override
@@ -183,6 +186,9 @@ public class XmailBean extends FormBean {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, adomain);
 					}
 				}
+				
+				if (dsType == DataSource.Type.imap)
+					dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, syncAllServerFolders ? Provisioning.TRUE : Provisioning.FALSE);
 			}
 			
 			if (isAllOK()) {                
@@ -377,5 +383,13 @@ public class XmailBean extends FormBean {
 	
 	public long getSyncFreqSecs() {
 		return syncFreqSecs;
+	}
+	
+	public void setSyncAllServerFolders(boolean syncAllServerFolders) {
+		this.syncAllServerFolders = syncAllServerFolders;
+	}
+	
+	public boolean isSyncAllServerFolders() {
+		return syncAllServerFolders;
 	}
 }
