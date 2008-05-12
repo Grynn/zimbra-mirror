@@ -102,7 +102,9 @@ ZaServerMBXStatsPage.prototype.getMbxes = function ( targetServer, offset, sortB
 		sortBy = "percentUsed" ;
 	}else if (sortBy == ZaServerMBXStatsPage.XFORM_ITEM_QUOTA ){
 		sortBy = "quotaLimit";
-	}else {
+	}else if (sortBy == ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT ){
+		sortBy = "account";
+	} else {
 		sortBy = "totalUsed";
 	}	
 	soapDoc.getMethod().setAttribute("sortBy", sortBy );
@@ -175,7 +177,7 @@ ZaServerMBXStatsPage.prototype._getXForm = function () {
 											//idPrefix, label, 
 											//iconInfo, width, sortable, sortField, resizeable, visible
 	sourceHeaderList[0] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, 	ZaMsg.MBXStats_ACCOUNT, 	
-												null, 300, null, null, true, true);
+												null, 300, sortable++, ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, true, true);
 	sourceHeaderList[1] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTA,   	ZaMsg.MBXStats_QUOTA,   	
 												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_QUOTA, true, true);												
 	defaultColumnSortable = sortable ;
