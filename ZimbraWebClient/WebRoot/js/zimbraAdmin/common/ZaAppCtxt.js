@@ -160,3 +160,12 @@ function() {
 		this._rootTabGrp = new DwtTabGroup("ROOT");
 	return this._rootTabGrp;
 }
+
+ZaAppCtxt.getLogoURI =
+function () {
+    if (skin && skin.hints && skin.hints.logo) {
+        return skin.hints.logo.url ;
+    } else {
+        return ZaSettings.LOGO_URI ;
+    }
+}

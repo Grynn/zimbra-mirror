@@ -34,7 +34,8 @@ ZaLoginDialog = function(parent, zIndex, className, appCtxt) {
 	params.logOffAction = "ZaLoginDialog._loginDiffListener()";
 	params.loginAction = "ZaLoginDialog._loginListener(this)";
 	params.showButton = true;
-	var html = ZLoginFactory.getLoginDialogHTML(params);
+    params.companyURL = ZaAppCtxt.getLogoURI () ;
+    var html = ZLoginFactory.getLoginDialogHTML(params);
 	this.setContent(html);
 }
 

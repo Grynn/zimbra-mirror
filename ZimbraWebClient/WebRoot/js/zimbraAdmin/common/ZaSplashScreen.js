@@ -29,5 +29,6 @@ function() {
 	params.showForm = false;
 	params.showLicenseMsg = true;
 	params.showLoading = true;
-	return ZLoginFactory.getLoginDialogHTML(params);
+    params.companyURL = ZaAppCtxt.getLogoURI () ;
+    return ZLoginFactory.getLoginDialogHTML(params);
 };

@@ -468,7 +468,7 @@ function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<a href='";
-	html[i++] = ZaSettings.LOGO_URI;
+	html[i++] = ZaAppCtxt.getLogoURI ();
 	html[i++] = "' target='_blank'><div class='"+AjxImg.getClassForImage("AppBanner")+"'></div></a>";
 	banner.getHtmlElement().innerHTML = html.join("");
 	return banner;
@@ -670,7 +670,8 @@ ZaAboutDialog.prototype.popup = function () {
     var params = ZLoginFactory.copyDefaultParams(ZaMsg);
 	params.showAbout = true,
 	params.showPanelBorder = false;
-	params.longVersion = AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " , date);
+    params.companyURL = ZaAppCtxt.getLogoURI () ;
+    params.longVersion = AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " , date);
     var html = ZLoginFactory.getLoginDialogHTML(params);
     this.setContent(html);
 
