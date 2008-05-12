@@ -1,0 +1,65 @@
+There are different types of packets that flow through NGINX, the routing decisions are made based on the nature of these packets:
+
+1. If the request URI/Query String/HTTP headers contain information about the user.
+   In this case, the user is used by NGINX to determine which backend server to route to.
+   The backend server is the mailhost of the specified user.
+   These types of URIs are used by:
+    a) REST - For example:
+        http://proxy.server/~user1@domain.com/{folder-path}
+        http://proxy.server/home/user2/{folder-path}
+        http://proxy.server/home/~user3/{folder-path}
+        http://proxy.server/service/home/~user4/{folder-path}
+       See ZimbraServer/docs/rest.txt for details
+
+    b) CALDAV - For example:
+        http://proxy.server/dav/userN/...
+        http://proxy.server/principals/users/userN/...
+
+    c) Windows Mobile (ActiveSync)
+        http://proxy.server/Microsoft-Server-ActiveSync?User=userN&DeviceId=...&...
+        
+       ActiveSync traffic may also include a RFC 2617 style HTTP Authentication header.
+       If present, this takes precedence over the User= query-string argument
+
+   For all cases above, the mailhost of the user is discovered using the HTTP lookup servlet
+   (port 7072, //depot/main/ZimbraNginxLookup/), and the request is proxied to that mailhost
+
+2. If the request URI or query-string or http-headers to not contain any information about any user
+    In this case, the ZM_AUTH_TOKEN is examined, either in the ZM_AUTH_TOKEN HTTP request cookie,
+    or in the zauthtoken= query string argument (support for the latter is still pending).
+
+    An auth token typically looks like:
+    0_5348091d5a42e658b625e3eb369966e6c96c5310_69643d33363a37343764396363382d326435372d346633662d613162362d3839393434613532616230373b6578703d31333a313230383239333739383337383b747970653d363a7a696d6272613b6d61696c686f73743d32303a3139322e3136382e3135392e3132383a373037303b
+
+    There are three parts of the auth-token, separated by underscore (_)
+
+    The third portion is examined by NGINX (in the above case, 69643d33363a37343764396363382d326435372d346633662d613162362d3839393434613532616230373b6578703d31333a313230383239333739383337383b747970653d363a7a696d6272613b6d61696c686f73743d32303a3139322e3136382e3135392e3132383a373037303b)  
+
+    And this 3rd part is hex-decoded (in this case) to:
+    id=36:747d9cc8-2d57-4f3f-a1b6-89944a52ab07;exp=13:1208293798378;type=6:zimbra;mailhost=20:192.168.159.128:7070;
+
+    The format of the decoded portion is:
+    <field>=<value-len>:<value>;<field>=<value-len>:<value>;...
+
+    From this portion, NGINX extracts the 'id=' field (previously was mailhost= field), and looks up (via an http lookup servlet running on port 7072), the mailhost of that user.
+
+    It discovers this mailhost and then proxies to that server.
+
+3. If there is no HTTP information in the request URI or http-headers or query-string, nor is there any auth-token, then NGINX falls back to what is known as IPHASH.
+
+    In this case, NGINX takes the client (browser's) IP address + port, hashes it onto one of the servers specified in the upstream{} block,
+    and then proxies all the requests to that server.
+
+    This traffic is usually the pre-logon traffic. That is, all the welcome HTML pages + stylesheets + images that you get before you log in.
+
+    We use IPHASH instead of round-robin so that all the traffic pre-login comes from a single backend server.
+
+    When the login credentials are posted by the client (usually in the form of an HTTP POST),
+    then this HTTP post is usually the last packet that will be elected by IPHASH.
+    The current zimbra architecture is such that any of the backend mailhost servers can authenticate any user,
+    even if that user resides on a different mailhost within the same setup.
+
+    However, once the user is authenticated successfully, he must be redirected to his own mailhost, so that he can access his mailbox.
+    To facilitate this, the response to a log in (HTTP POST as described above), is that the mailhost that authenticated the user,
+    sets the ZM_AUTH_TOKEN (depending on the access type), and then NGINX switches over to the mailhost as identified by the user whose id is in the auth-token as described above.
+
