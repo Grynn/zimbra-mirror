@@ -510,13 +510,12 @@ deployCert() {
     cli_ca_chain=$1
     shift
   
-    if [ x"${cli_comm_crt}" = "x" -a ! -f "${crt_download_file}" ]; then
-      echo "${ERROR_PREFIX} ${crt_download_file} does not exist."
-      usage
+    if [ x"${cli_comm_crt}" = "x" ]; then
+      getCertFromLdap $type
+      cli_comm_crt=${commercial_crt}
     fi
   
     if [ x"$cli_comm_crt" != "x" ]; then
-      #$0 verifycrt comm ${commercial_key} ${cli_comm_crt} > /dev/null 2>&1
       $0 verifycrt comm ${commercial_key} ${cli_comm_crt} ${cli_ca_chain}
       if [ $? != 0 ]; then
         echo "${ERROR_PREFIX} provided cert isn't valid."
