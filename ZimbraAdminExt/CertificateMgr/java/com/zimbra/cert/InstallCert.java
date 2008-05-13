@@ -16,10 +16,7 @@
  */
 package com.zimbra.cert;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +26,7 @@ import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.Provisioning.ServerBy;
@@ -52,12 +50,14 @@ public class InstallCert extends AdminDocumentHandler {
     //private final static String ALLSERVER = "allserver" ;
     private final static String ALLSERVER_FLAG = "-allserver" ;
     private final static String VALIDATION_DAYS = "validation_days" ;
+    private Server server = null;
+    
+    private Provisioning prov = null;
      
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
-        Provisioning prov = Provisioning.getInstance();
+        prov = Provisioning.getInstance();
         
-        Server server = null;
         String serverId = request.getAttribute("server") ;
         boolean isTargetAllServer = false ;
         if (serverId != null && serverId.equals(ZimbraCertMgrExt.ALL_SERVERS)) {
@@ -70,7 +70,8 @@ public class InstallCert extends AdminDocumentHandler {
         if (server == null) {
             throw ServiceException.INVALID_REQUEST("Server with id " + serverId + " could not be found", null);
         }
-        ZimbraLog.security.debug("Generate the CSR info from server:  " + server.getName()) ;
+        ZimbraLog.security.debug("Install the certificateion for server:  " + server.getName()) ;
+        //the deployment of certs should happen on the target server
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
         String cmd = ZimbraCertMgrExt.CREATE_CRT_CMD ;
         String deploycrt_cmd = ZimbraCertMgrExt.DEPLOY_CERT_CMD ;         
@@ -85,7 +86,7 @@ public class InstallCert extends AdminDocumentHandler {
         }
         
         if (certType.equals("comm")) {
-            checkUploadedCommCert(request, rmgr, lc) ;
+            checkUploadedCommCert(request, lc, isTargetAllServer) ;
         }
         
         //always set the -new flag for the cmd since the ac requests for a new cert always
@@ -108,7 +109,9 @@ public class InstallCert extends AdminDocumentHandler {
                 String subject = GenerateCSR.getSubject(el) ;
                 ZimbraLog.security.debug("Subject for allserver: " + subject);
                 cmd += " -subject " + " \"" + subject +"\"";
-            }
+            }else{
+               deploycrt_cmd += " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE +  " "  + ZimbraCertMgrExt.UPLOADED_CRT_CHAIN_FILE ;
+           }
 
             cmd += " " + ALLSERVER_FLAG;
             deploycrt_cmd += " " + ALLSERVER_FLAG;
@@ -139,13 +142,25 @@ public class InstallCert extends AdminDocumentHandler {
         response.addAttribute("server", server.getName());
         return response;    
     }
+
+
+    private void saveConfig() throws ServiceException {
+        if (prov == null ) prov = Provisioning.getInstance();
+        String [] zimbraSSLPrivateKey = {"zimbraSSLPrivateKey", "abcd" };
+        prov.modifyAttrs(server,
+                StringUtil.keyValueArrayToMultiMap(zimbraSSLPrivateKey, 2), true);
+    }
+
     
-    private boolean checkUploadedCommCert (Element request, RemoteManager rmgr, ZimbraSoapContext lc) throws ServiceException {
+    private boolean checkUploadedCommCert (Element request, ZimbraSoapContext lc, boolean isAllServer) throws ServiceException {
         Upload up = null ;
         InputStream is = null ;
+        //the verification commands are all executed on the local server
+        RemoteManager rmgr = RemoteManager.getRemoteManager(prov.getLocalServer());
         
         try {
             //read the cert file
+            ByteArrayOutputStream completeCertChain = new ByteArrayOutputStream(8192);
             Element certEl = request.getPathElement(new String [] {"comm_cert", "cert"});
             String attachId = certEl.getAttribute(AID) ;
             String filename = certEl.getAttribute("filename") ;
@@ -160,10 +175,13 @@ public class InstallCert extends AdminDocumentHandler {
             ZimbraLog.security.debug ("Put the uploaded commercial crt  to " + ZimbraCertMgrExt.UPLOADED_CRT_FILE) ;
             ByteUtil.putContent(ZimbraCertMgrExt.UPLOADED_CRT_FILE, cert) ;
             is.close();
-            
+            completeCertChain.write(cert);
+            completeCertChain.write('\n') ;
+                    
             //read the CA
             ByteArrayOutputStream baos = new ByteArrayOutputStream(8192);
-            
+
+
             Element rootCAEl = request.getPathElement(new String [] {"comm_cert", "rootCA"});
             attachId = rootCAEl.getAttribute(AID) ;
             filename = rootCAEl.getAttribute("filename") ;
@@ -198,21 +216,60 @@ public class InstallCert extends AdminDocumentHandler {
                         
                         baos.write(intermediateCA);
                         baos.write('\n');
+
+                        completeCertChain.write(intermediateCA);
+                        completeCertChain.write('\n');
                     }
                 }
             }
             
             baos.write(rootCA);
+            baos.write('\n');
+
+
             byte [] chain = baos.toByteArray() ;
             baos.close();
+
+            completeCertChain.write(rootCA);
+            completeCertChain.write('\n');
+            completeCertChain.close();
             
             ZimbraLog.security.debug ("Put the uploaded crt chain  to " + ZimbraCertMgrExt.UPLOADED_CRT_CHAIN_FILE) ;
             ByteUtil.putContent(ZimbraCertMgrExt.UPLOADED_CRT_CHAIN_FILE, chain) ;
-           
+
+            String privateKey = null;
+            if (isAllServer) {
+                ZimbraLog.security.debug ("Retrieving zimbraSSLPrivateKey from Global Config.");
+                privateKey = prov.getConfig().getAttr(ZimbraCertMgrExt.A_zimbraSSLPrivateKey);
+                //Note: We do this because zmcertmgr don't save the private key to global config
+                //since -allserver is not supported by createcsr
+                // and deploycrt has to take the hard path of cert and CA chain
+                if (privateKey == null || privateKey.length() <= 0) {
+                    //permission is denied for the  COMM_CRT_KEY_FILE which is readable to root only
+                    //ZimbraLog.security.debug ("Retrieving commercial private key from " + ZimbraCertMgrExt.COMM_CRT_KEY_FILE);
+                    //privateKey = new String (ByteUtil.getContent(new File(ZimbraCertMgrExt.COMM_CRT_KEY_FILE))) ;
+
+                    //retrieve the key from the local server  since the key is always saved in the local server when createcsr is called
+                    ZimbraLog.security.debug ("Retrieving zimbraSSLPrivateKey from server: " + server.getName());
+                    privateKey = server.getAttr(ZimbraCertMgrExt.A_zimbraSSLPrivateKey) ;
+                }
+            } else {
+                ZimbraLog.security.debug ("Retrieving zimbraSSLPrivateKey from server: " + server.getName());
+                privateKey = server.getAttr(ZimbraCertMgrExt.A_zimbraSSLPrivateKey) ;
+            }
+
+            if (privateKey != null && privateKey.length() > 0) {
+                ZimbraLog.security.debug ("Saving zimbraSSLPrivateKey to  " + ZimbraCertMgrExt.SAVED_COMM_KEY_FROM_LDAP) ;
+            }   else {
+                 throw ServiceException.FAILURE("zimbraSSLPrivateKey is not present.", new Exception());
+            }
+            ByteUtil.putContent(ZimbraCertMgrExt.SAVED_COMM_KEY_FROM_LDAP, privateKey.getBytes());
+            
             try {
                 //run zmcertmgr verifycrt to validate the cert and key
                 String cmd = ZimbraCertMgrExt.VERIFY_CRTKEY_CMD + " comm "
-                            + " " + ZimbraCertMgrExt.COMM_CRT_KEY_FILE
+                            //+ " " + ZimbraCertMgrExt.COMM_CRT_KEY_FILE
+                            + " " + ZimbraCertMgrExt.SAVED_COMM_KEY_FROM_LDAP
                             + " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE ;
               
                 String verifychaincmd = ZimbraCertMgrExt.VERIFY_CRTCHAIN_CMD
@@ -229,7 +286,21 @@ public class InstallCert extends AdminDocumentHandler {
                 ZimbraLog.security.debug("*****  Executing the cmd: " + verifychaincmd);
                 rr = rmgr.execute(verifychaincmd) ;
                 OutputParser.parseOuput(rr.getMStdout()) ;
-                
+
+                //Certs are validated and Save the uploaded certificate to the LDAP
+                String [] zimbraSSLCertificate =  {
+                        ZimbraCertMgrExt.A_zimbraSSLCertificate, completeCertChain.toString()};
+
+                ZimbraLog.security.debug("Save complete cert chain to " +  ZimbraCertMgrExt.A_zimbraSSLCertificate +
+                    completeCertChain.toString()) ;
+
+                if (isAllServer) {
+                    prov.modifyAttrs(prov.getConfig(),
+                        StringUtil.keyValueArrayToMultiMap(zimbraSSLCertificate, 0), true);
+                }   else {
+                    prov.modifyAttrs(server,
+                        StringUtil.keyValueArrayToMultiMap(zimbraSSLCertificate, 0), true);
+                }
             }catch (IOException ioe) {
                 throw ServiceException.FAILURE("IOException occurred while running cert verification command", ioe);
             }
@@ -244,6 +315,7 @@ public class InstallCert extends AdminDocumentHandler {
                 }
             }
         }
+
 
         return true ;
     }

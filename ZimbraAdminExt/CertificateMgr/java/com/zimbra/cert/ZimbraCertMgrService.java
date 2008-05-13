@@ -46,5 +46,4 @@ public class ZimbraCertMgrService implements DocumentService {
         dispatcher.registerHandler(GEN_CSR_REQUEST, new GenerateCSR());
         dispatcher.registerHandler(GET_CSR_REQUEST, new GetCSR());
     }
-  
 }

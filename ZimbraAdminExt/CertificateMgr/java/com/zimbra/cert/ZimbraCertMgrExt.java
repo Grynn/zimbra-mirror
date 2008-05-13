@@ -28,7 +28,10 @@ import java.util.regex.Pattern;
 
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.soap.SoapServlet;
 
@@ -47,8 +50,11 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     public static final String VERIFY_CRTCHAIN_CMD = "zmcertmgr verifycrtchain" ;
     public static final String UPLOADED_CRT_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/current.crt" ;
     public static final String UPLOADED_CRT_CHAIN_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/current_chain.crt" ;
-    public static final String COMM_CRT_KEY_FILE = LC.zimbra_home.value() + "/ssl/zimbra/commercial/commercial.key" ;
+    public static final String SAVED_COMM_KEY_FROM_LDAP = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/current_comm.key" ;
+   // public static final String COMM_CRT_KEY_FILE = LC.zimbra_home.value() + "/ssl/zimbra/commercial/commercial.key" ;
     public static final String ALL_SERVERS = "--- All Servers ---" ;
+    public static final String A_zimbraSSLPrivateKey = "zimbraSSLPrivateKey" ;
+    public static final String A_zimbraSSLCertificate = "zimbraSSLCertificate" ;
     public void destroy() {
     }
 
