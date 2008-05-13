@@ -292,8 +292,19 @@ function(text, select) {
 };
 
 DwtHtmlEditor.prototype.insertImage =
-function(src) {
-	this._execCommand(DwtHtmlEditor.IMAGE, src);
+function(src, dontExecCommand, width, height) {
+    if(dontExecCommand){
+        var doc = this._getIframeDoc();
+	    var img = doc.createElement("img");
+        img.src = src;
+        if(width) img.width = width;
+        if(height) img.height = height;
+        var df = doc.createDocumentFragment();
+	    df.appendChild(img);
+	    this._insertNodeAtSelection(df);        
+    }else{
+        this._execCommand(DwtHtmlEditor.IMAGE, src);
+    }
 };
 
 /** Inserts a table at the current cursor position
