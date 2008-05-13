@@ -935,9 +935,11 @@ sub rewriteConfig {
     #    for MV attribs, set to string if string is in the attrib
     #   contains (var string, replacement) - 
     #    for MV attribs, set to replacement if string is in the attrib
-    #  list (var separator)
+    #   list (var separator)
     #    Works like perl join, for multivalued attrib, joins with join value
     #    used to create csv or regexes
+    #   truefalse
+    #   explode
     #
     # args supported:
     #  SERVER:key - use command gs with zimbra_server_hostname, get value of key
@@ -1016,6 +1018,26 @@ sub rewriteConfig {
         } else {
           $rep = $total;
         }
+      } elsif ($sr =~ m/^explode/) {
+        my ($cmd, $key) = ($sr =~ m/explode .* ([^:]+):(\w+)/);
+        $val = lookUpConfig($cmd, $key);
+        foreach my $v (split(/\s+/, $val)) {
+          my $qr = quotemeta("$cmd:$key");
+          my $mr = $sr;
+          my $mline= $sline;
+          logMsg(5, "Substituting $qr in $sr with $v");
+          logMsg(5, "Quoted string=$qr");
+          logMsg(5, "sline=$mline");
+          $mr =~ s/$qr/$v/;
+          $mline =~ s/$sr/$mr/;
+          $mline =~ s/%%//g;
+          $mline =~ s/explode\s+//;
+          logMsg(5, "Final string=$mline");
+          print DEST "$mline";
+          print "\n\n";
+        }
+        $sline="";
+        next;
       } else {
         $rep=lookUpConfig("VAR", $sr);
         $rep=lookUpConfig("LOCAL", $sr)
