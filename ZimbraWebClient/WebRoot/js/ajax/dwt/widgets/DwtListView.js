@@ -1208,7 +1208,7 @@ function() {
 
 DwtListView.prototype._getItemId =
 function(item) {
-	return DwtId.getListViewItemId(DwtId.WIDGET_ITEM, this._view, item ? item.id : Dwt.getNextId());
+	return DwtId.getListViewItemId(DwtId.WIDGET_ITEM, this._view, (item && item.id) ? item.id : Dwt.getNextId());
 };
 
 DwtListView.prototype._getHeaderTableId =
