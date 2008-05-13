@@ -1210,7 +1210,7 @@ sub executeCommand($) {
     return;
   }
   close $wfh;
-  @output = <$rfh>;
+  @output = grep((!/^\[\] WARN|INFO|ERROR/, <$rfh>));
   @error = <$efh>;
   waitpid($pid,0);
   if ($? == -1) {
