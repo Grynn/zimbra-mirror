@@ -262,13 +262,26 @@ function (ev) {
 		instance.alias_selection_cache = arr;
 	} else 
 		instance.alias_selection_cache = null;
-		
-	this.getForm().refresh();
+	ZaAccountXFormView.changeAliasListBtnStates.call(this);	
+	//this.getForm().refresh();
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		ZaAccountXFormView.editAliasButtonListener.call(this);
 	}	
 }
 
+ZaAccountXFormView.changeAliasListBtnStates = function () {
+	var form=this.getForm();
+	var instance = this.getInstance();
+	var editAliasBtn = form.getItemById(form.getId()+"_editAliasButton");
+	if(editAliasBtn && editAliasBtn.getWidget()) {
+		editAliasBtn.getWidget().setEnabled((instance.alias_selection_cache != null && instance.alias_selection_cache.length==1));
+	}	
+
+	var deleteAliasBtn = form.getItemById(form.getId()+"_deleteAliasButton");
+	if(deleteAliasBtn && deleteAliasBtn.getWidget()) {
+		deleteAliasBtn.getWidget().setEnabled((instance.alias_selection_cache != null && instance.alias_selection_cache.length>0));
+	}
+}
 ZaAccountXFormView.isEditAliasEnabled = function () {
 	return (this.instance.alias_selection_cache != null && this.instance.alias_selection_cache.length==1);
 }
@@ -1572,12 +1585,12 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
-											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",
+											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
 											relevant:"ZaAccountXFormView.isDeleteAliasEnabled.call(this)", relevantBehavior:_DISABLE_
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
-											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",
+											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",id:"editAliasButton",
 											relevant:"ZaAccountXFormView.isEditAliasEnabled.call(this)", relevantBehavior:_DISABLE_
 										},
 										{type:_CELLSPACER_},

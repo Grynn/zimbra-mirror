@@ -4222,10 +4222,10 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 	var selMethod = this.getOnSelectionMethod();
 	if (selMethod) {
 		widget.addSelectionListener(new AjxListener(this, selMethod));
+	} else {
+		var localLs = new AjxListener(this, this._handleSelection);
+		widget.addSelectionListener(localLs);
 	}
-
-	var localLs = new AjxListener(this, this._handleSelection);
-	widget.addSelectionListener(localLs);
 	//check if createPopupMenu method is defined
 	var createPopupMenumethod = this.cacheInheritedMethod("createPopupMenu","$createPopupMenu","parent");
 	if(createPopupMenumethod != null) {
