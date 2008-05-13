@@ -353,7 +353,11 @@ public class NginxLookupExtension implements ZimbraExtension {
                     throw new NginxLookupException("Cannot look up account by kerberos principal:" + aUser);
                 }
 
-                if (req.cuser != null) {
+                if (req.cuser != null)
+                {
+                    // if authc is present and is different from authz, then we need to also check 
+                    // whether the authenticator principal is allowed to access the account of authz
+
                     try {
                         ac = Provisioning.getInstance().get(AccountBy.krb5Principal,req.cuser);
                     } catch (ServiceException e) {
@@ -385,9 +389,6 @@ public class NginxLookupExtension implements ZimbraExtension {
 
                 logger.info("resolved kerberos principal:" + aUser + " to email:" + email);
                 qUser = email;
-
-                // if authc is present and is different from authz, then we need to also check 
-                // whether the authenticator principal is allowed to access the account of 
 
                 return qUser;
             }
