@@ -45,6 +45,9 @@ import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning.DomainBy;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.Provisioning.AccountBy;
+import com.zimbra.cs.account.AccessManager;
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionHttpHandler;
 import com.zimbra.cs.extension.ZimbraExtension;
@@ -74,6 +77,7 @@ public class NginxLookupExtension implements ZimbraExtension {
     
     private static class NginxLookupRequest {
         String user;
+        String cuser;
         String suffix;
         String pass;
         String proto;
@@ -81,6 +85,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         String clientIp;
         String serverIp;
         String serverHost;
+        String principal;
         int loginAttempt;
         HttpServletRequest  httpReq;
         HttpServletResponse httpResp;
@@ -96,6 +101,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String CLIENT_IP          = "Client-IP";
         public static final String SERVER_IP          = "X-Proxy-IP";
         public static final String SERVER_HOST        = "X-Proxy-Host";
+        public static final String AUTH_ID            = "Auth-Id";
         
         /* resp headers */
         public static final String AUTH_STATUS = "Auth-Status";
@@ -119,6 +125,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String AUTHMETH_PLAIN = "plain";
         public static final String AUTHMETH_OTHER = "other";
         public static final String AUTHMETH_ZIMBRAID = "zimbraId";
+        public static final String AUTHMETH_GSSAPI = "gssapi";
 
         private static final SearchControls USER_SC   = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
         private static final SearchControls SERVER_SC = new SearchControls(SearchControls.SUBTREE_SCOPE, 1, 0, null, false, false);
@@ -201,7 +208,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 throw new NginxLookupException("missing header field "+AUTH_USER);
             if (req.authMethod == null) 
                 throw new NginxLookupException("missing header field "+AUTH_METHOD);
-            
+
             /* PR 20542 - If the user name ends with any zimbra supported extension (/tb|/wm|/ni)
              * then we need to strip off that extension before proceeding
              */
@@ -212,6 +219,8 @@ public class NginxLookupExtension implements ZimbraExtension {
                 req.user = user;
                 req.suffix = null;
             }
+
+            req.cuser = httpReq.getHeader(AUTH_ID);
             if (req.pass == null)
                 throw new NginxLookupException("missing header field "+AUTH_PASS);
             if (req.proto == null)
@@ -322,12 +331,66 @@ public class NginxLookupExtension implements ZimbraExtension {
             @return Fully qualified user name, if qualified, else the original user name
          */
         private String getQualifiedUsername(ZimbraLdapContext zlc, Config config, NginxLookupRequest req)
+            throws NginxLookupException
         {
             String aUser, qUser;
             String domainName = null;
 
             aUser = req.user;
             qUser = aUser;
+
+            if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI))
+            {
+                // logger.info("resolving kerberos principal:" + aUser);
+                Account az = null, ac = null;
+
+                try {
+                    az = Provisioning.getInstance().get(AccountBy.krb5Principal,aUser);
+                } catch (ServiceException e) {
+                }
+
+                if (az == null) {
+                    throw new NginxLookupException("Cannot look up account by kerberos principal:" + aUser);
+                }
+
+                if (req.cuser != null) {
+                    try {
+                        ac = Provisioning.getInstance().get(AccountBy.krb5Principal,req.cuser);
+                    } catch (ServiceException e) {
+                    }
+
+                    if (ac == null) {
+                        throw new NginxLookupException("Cannot look up account by kerberos principal:" + req.cuser);
+                    }
+
+                    // now see if ac is allowed to act as az
+                    if (!ac.getUid().equals(az.getUid()))
+                    {
+                        try {
+                            if (!AccessManager.getInstance().canAccessAccount(ac,az,true)) {
+                                throw new NginxLookupException("Authenticating principal " + ac.getName() + " cannot access account " + az.getName());
+                            }
+                        } catch (ServiceException e) {
+                            throw new NginxLookupException(e.getMessage());
+                        }
+                    }
+                }
+
+                String email = az.getAttr(Provisioning.A_zimbraMailDeliveryAddress);
+
+                if (email == null) {
+                    throw new NginxLookupException("Cannot get email address for account:" + az.getName());
+                }
+
+
+                logger.info("resolved kerberos principal:" + aUser + " to email:" + email);
+                qUser = email;
+
+                // if authc is present and is different from authz, then we need to also check 
+                // whether the authenticator principal is allowed to access the account of 
+
+                return qUser;
+            }
 
             if (aUser.indexOf('@') != -1) {
                 // no translation required when username is already qualified
@@ -445,6 +508,8 @@ public class NginxLookupExtension implements ZimbraExtension {
 
                 logger.debug("port="+port);
                 sendResult(req, addr, port, authUser);
+            } catch (NginxLookupException e) {
+                throw e;
             } catch (ServiceException e) {
                 throw new NginxLookupException("service exception: "+e.getMessage());
             } catch (NamingException e) {
