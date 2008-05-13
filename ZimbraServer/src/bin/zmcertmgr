@@ -24,7 +24,7 @@ umask 027
 
 platform=$(/opt/zimbra/libexec/get_plat_tag.sh 2> /dev/null := UNKNOWN)
 source `dirname $0`/zmshutil || exit 1
-zmsetvars \
+zmsetvars -f \
   zimbra_home \
   zimbra_log_directory \
   zimbra_server_hostname \
@@ -702,6 +702,11 @@ getCertFromLdap() {
     loadConfigKey "zimbraSSLCertificate" ${current_crt} "server"
     loadConfigKey "zimbraSSLPrivateKey" ${current_key} "server"
   fi
+  if [ "x${type}" = "xcomm" -a ! -f "${commercial_ca_crt}" ]; then
+    # recreate the commercail_ca_crt from the concatenated commercial cert stored in ldap.
+    perl -e ' while (<>) { open(N, ">>${commercial_ca_crt}") if (/BEGIN CERTIFICATE/); print N if ($f>0); if (/END CERTIFICATE/) { close(N); $f++; } }' ${current_crt}
+  fi
+
 }
 
 createConf() {
