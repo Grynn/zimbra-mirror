@@ -20,10 +20,6 @@ all: build tar
 build:
 	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \
 	cd clamav-$(CLAMAV_VERSION); \
-	patch -N -g0 -p1 < ../patches/fix-configure; \
-	aclocal; \
-	autoconf; \
-	automake; \
 	CFLAGS="-g -O2" \
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) --mandir=/opt/zimbra/clamav-$(CLAMAV_VERSION)/man \
 	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck --disable-gcc-vcheck; \
