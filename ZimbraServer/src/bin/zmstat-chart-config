@@ -491,6 +491,7 @@ sub mailboxdConfig() {
   <!-- SOAP Stats -->
   <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Invocation Count: Summary"
          category="soap"
+         height="600"
          infile="$soapCsv"
          outfile="${ZIMBRA_HOSTNAME}_soap_call_count.png"
          yAxis="calls/min">
@@ -499,6 +500,7 @@ sub mailboxdConfig() {
   
   <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Average Call Duration: Summary"
          category="soap"
+         height="600"
          infile="$soapCsv"
          outfile="${ZIMBRA_HOSTNAME}_soap_avg_duration.png"
          yAxis="ms avg">
