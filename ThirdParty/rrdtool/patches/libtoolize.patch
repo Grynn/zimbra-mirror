@@ -5,7 +5,7 @@
  {
  	echo "running libtoolize" >&2
 -	libtoolize --copy --automake
-+	platform=`platform -s`
++	platform=`uname -s`
 +	if [ $platform = "Darwin" ]; then
 +		glibtoolize --copy --automake
 +	else
