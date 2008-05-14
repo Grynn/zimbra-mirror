@@ -194,7 +194,8 @@ public class DeltaSync {
             	
             	(appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
             } else if (type.equals(MailConstants.E_DOC)) {
-            	if (!OfflineLC.zdesktop_sync_documents.booleanValue())
+                if (!OfflineLC.zdesktop_sync_documents.booleanValue() ||
+                		!ombx.getRemoteServerVersion().isAtLeast(InitialSync.sMinDocumentSyncVersion))
             		continue;
                 if (OfflineSyncManager.getInstance().isInSkipList(id)) {
                 	OfflineLog.offline.warn("Skipped document id=%d per zdesktop_sync_skip_idlist", id);

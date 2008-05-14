@@ -32,6 +32,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.commons.httpclient.Header;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
@@ -48,6 +50,7 @@ import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.service.UserServlet.HttpInputStream;
 import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.ToXML;
@@ -106,16 +109,31 @@ public class PushChanges {
     static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
                                            Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT | Change.MODIFIED_INVITE;
 
+    /** The bitmask of all document changes that we propagate to the server. */
+    static final int DOCUMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
+                                        Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT | Change.MODIFIED_NAME;
+
     /** A list of all the "leaf types" (i.e. non-folder types) that we
      *  synchronize with the server. */
     private static final byte[] PUSH_LEAF_TYPES = new byte[] {
-        MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE, MailItem.TYPE_CHAT, MailItem.TYPE_APPOINTMENT
+        MailItem.TYPE_TAG, 
+        MailItem.TYPE_CONTACT, 
+        MailItem.TYPE_MESSAGE, 
+        MailItem.TYPE_CHAT, 
+        MailItem.TYPE_APPOINTMENT,
+        MailItem.TYPE_DOCUMENT
     };
 
     /** The set of all the MailItem types that we synchronize with the server. */
     static final Set<Byte> PUSH_TYPES_SET = new HashSet<Byte>(Arrays.asList(
-        MailItem.TYPE_FOLDER, MailItem.TYPE_SEARCHFOLDER,
-        MailItem.TYPE_TAG, MailItem.TYPE_CONTACT, MailItem.TYPE_MESSAGE, MailItem.TYPE_CHAT, MailItem.TYPE_APPOINTMENT
+        MailItem.TYPE_FOLDER, 
+        MailItem.TYPE_SEARCHFOLDER,
+        MailItem.TYPE_TAG, 
+        MailItem.TYPE_CONTACT, 
+        MailItem.TYPE_MESSAGE, 
+        MailItem.TYPE_CHAT, 
+        MailItem.TYPE_APPOINTMENT,
+        MailItem.TYPE_DOCUMENT
     ));
 
 
@@ -245,7 +263,7 @@ public class PushChanges {
 	                        case MailItem.TYPE_CONTACT:     syncContact(id);      break;
 	                        case MailItem.TYPE_MESSAGE:     syncMessage(id);      break;
 	                        case MailItem.TYPE_APPOINTMENT: syncCalendarItem(id); break;
-	                        case MailItem.TYPE_DOCUMENT:    syncDocument(id); break;
+	                        case MailItem.TYPE_DOCUMENT:    syncDocument(id);     break;
 	                    }
                 	} catch (ServiceException x) {
                 		SyncExceptionHandler.checkRecoverableException(x);
@@ -801,8 +819,34 @@ public class PushChanges {
     }
 
     private boolean syncDocument(int id) throws ServiceException {
-    	// push the document to the remote server.
-    	return true;
+    	MailItem item = null;
+    	boolean create = false;
+    	synchronized (ombx) {
+            int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_CONTACT);
+            if ((mask & Change.MODIFIED_CONFLICT) != 0) {
+            	create = true;
+            }
+        	item = ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
+    	}
+
+    	String digest = item.getDigest();
+    	String name = item.getName();
+    	if (item instanceof Document) {
+    		Pair<Integer,Integer> resp = ombx.sendMailItem(item);
+            if (create) {
+                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_DOCUMENT, resp.getFirst(), resp.getSecond()))
+                	return true;
+    		}
+    	}
+    	
+        synchronized (ombx) {
+        	item = ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
+            int mask = 0;
+            if (!StringUtil.equal(digest, item.getDigest()))  mask |= Change.MODIFIED_CONTENT;
+            if (!StringUtil.equal(name, item.getName()))      mask |= Change.MODIFIED_NAME;
+            ombx.setChangeMask(sContext, id, MailItem.TYPE_DOCUMENT, mask);
+            return (mask == 0);
+        }
     }
     
     private boolean syncMessage(int id) throws ServiceException {

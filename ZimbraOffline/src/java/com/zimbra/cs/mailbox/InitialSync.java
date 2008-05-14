@@ -49,7 +49,6 @@ import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.ZimbraNamespace;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
@@ -111,6 +110,8 @@ public class InitialSync {
 			}
 		}
 	}
+	
+	static final OfflineAccount.Version sMinDocumentSyncVersion = new OfflineAccount.Version("5.0.6");
 	
     static final String A_RELOCATED = "relocated";
 
@@ -294,10 +295,12 @@ public class InitialSync {
 	            }
             }
 
-            if (OfflineLC.zdesktop_sync_documents.booleanValue()) {
-	            Element eContactIds = elt.getOptionalElement(MailConstants.E_DOC);
-	            if (eContactIds != null) {
+            if (OfflineLC.zdesktop_sync_documents.booleanValue() &&
+            		ombx.getRemoteServerVersion().isAtLeast(sMinDocumentSyncVersion)) {
+	            Element eDocIds = elt.getOptionalElement(MailConstants.E_DOC);
+	            if (eDocIds != null) {
 	            	syncAllDocumentsInFolder(folderId);
+	            	eDocIds.detach();
 	                mMailboxSync.updateInitialSync(syncResponse);
 	            }
             }

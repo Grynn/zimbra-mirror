@@ -19,11 +19,14 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
@@ -47,6 +50,8 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.redolog.op.RedoableOp;
+import com.zimbra.cs.service.UserServlet;
+import com.zimbra.cs.service.UserServlet.HttpInputStream;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -606,6 +611,7 @@ public class OfflineMailbox extends DesktopMailbox {
                     case MailItem.TYPE_SEARCHFOLDER:  filter = PushChanges.SEARCH_CHANGES;      break;
                     case MailItem.TYPE_TAG:           filter = PushChanges.TAG_CHANGES;         break;
                     case MailItem.TYPE_APPOINTMENT:   filter = PushChanges.APPOINTMENT_CHANGES; break;
+                    case MailItem.TYPE_DOCUMENT:      filter = PushChanges.DOCUMENT_CHANGES; break;
                 }
 
                 if ((change.why & filter) != 0)
@@ -672,5 +678,37 @@ public class OfflineMailbox extends DesktopMailbox {
         request.addAttribute("wait", "1");
         request.addAttribute("delegate", "0");
         sendRequest(request, true, false, 15 * Constants.SECONDS_PER_MINUTE * 1000); //will block
+    }
+    
+    public Pair<Integer,Integer> sendMailItem(MailItem item) throws ServiceException {
+    	OfflineAccount acct = (OfflineAccount) getAccount();
+    	String url = Offline.getServerURI(getAccount(), UserServlet.SERVLET_PATH) + item.getPath();
+    	ArrayList<Header> headers = new ArrayList<Header>();
+    	if (item instanceof Document) {
+    		Document d = (Document) item;
+        	headers.add(new Header("Content-Type", d.getContentType()));
+    	}
+    	try {
+    		Pair<Header[], HttpInputStream> resp = 
+    			UserServlet.putRemoteResource(getAuthToken(), 
+    											 url, 
+    											 getRemoteHost(), 
+    											 item.getContentStream(), 
+    											 headers.toArray(new Header[0]), 
+    											 acct.getProxyHost(), 
+    											 acct.getProxyPort(), 
+    											 acct.getProxyUser(), 
+    											 acct.getProxyPass());
+    		int id = 0, revision = 0;
+    		for (Header h : resp.getFirst()) {
+    			if (h.getName().equals("X-Zimbra-ItemId"))
+    				id = Integer.parseInt(h.getValue());
+    			else if (h.getName().equals("X-Zimbra-Revision"))
+    				revision = Integer.parseInt(h.getValue());
+    		}
+    		return new Pair<Integer,Integer>(id, revision);
+    	} catch (IOException e) {
+            throw ServiceException.PROXY_ERROR(e, url);
+    	}
     }
 }
