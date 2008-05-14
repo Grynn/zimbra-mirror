@@ -23,7 +23,7 @@ build:
 	patch -N -g0 -p1 < ../patches/fix-configure-93; \
 	CFLAGS="-g -O2" \
 	./configure --prefix=/opt/zimbra/clamav-$(CLAMAV_VERSION) --mandir=/opt/zimbra/clamav-$(CLAMAV_VERSION)/man \
-	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck --disable-gcc-vcheck; \
+	--with-user=zimbra --with-group=zimbra --disable-zlib-vcheck --disable-gcc-vcheck --disable-clamav; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install)
 	-(cd $(ZIMBRA_HOME); ln -s clamav-$(CLAMAV_VERSION) clamav)
 
