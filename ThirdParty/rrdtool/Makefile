@@ -52,6 +52,7 @@ all: build tar
 build:
 	(tar xzf src/$(PNG_NAME)-$(PNG_VERSION).tar.gz; \
 	cd $(PNG_NAME)-$(PNG_VERSION); \
+	patch -N -g0 -p1 < ../patches/libtoolize.patch; \
 	./autogen.sh; \
 	./configure --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION) --mandir=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/man --enable-shared=no; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
