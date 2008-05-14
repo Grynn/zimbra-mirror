@@ -87,7 +87,7 @@ LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimb
             --with-libxml2=/opt/zimbra/libxml2-${xml2_version}/bin/xml2-config \
             --enable-login
 else 
-LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
+LIBS="/opt/zimbra/libxml2/lib/libxml2.a" CFLAGS="-D_REENTRANT -g -O2 -I/opt/zimbra/libxml2/include/libxml2" ./configure --enable-zimbra --prefix=/opt/zimbra/${src} \
             --with-saslauthd=/opt/zimbra/${src}/state \
             --with-plugindir=/opt/zimbra/${src}/lib/sasl2 \
             --with-dblib=no \
