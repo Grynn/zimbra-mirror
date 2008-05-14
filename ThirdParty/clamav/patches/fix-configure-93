@@ -1,0 +1,18 @@
+--- clamav-0.93/configure.orig	2008-05-13 20:39:56.000000000 -0700
++++ clamav-0.93/configure	2008-05-13 20:40:22.000000000 -0700
+@@ -11427,6 +11427,7 @@
+ 
+ 
+ 
++if test "$gcc_check" = "yes"; then
+ { echo "$as_me:$LINENO: checking for gcc bug PR28045" >&5
+ echo $ECHO_N "checking for gcc bug PR28045... $ECHO_C" >&6; }
+ if test "$cross_compiling" = yes; then
+@@ -11496,6 +11497,7 @@
+ fi
+ rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+ fi
++fi
+ 
+ 
+ 
