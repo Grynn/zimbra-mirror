@@ -17,15 +17,47 @@
 # 
 
 source `dirname $0`/zmshutil || exit 1
-zmsetvars mysql_directory mysql_pidfile mysql_mycnf
+zmsetvars mysql_directory mysql_pidfile mysql_mycnf zimbra_tmp_directory
 
 if [ ! -d ${mysql_directory} ]; then
   exit 0
 fi
 zmassert -d ${mysql_directory}
+zmassert -d ${zimbra_tmp_directory}
 zmassert -x ${mysql_directory}/bin/mysqld_safe
 zmassert -r ${mysql_mycnf}
 zmassert -d `dirname ${mysql_pidfile}`
+
+
+# innodb will open the database before binding and writing out the pid
+# potentially corrupting the files
+# prevent multiple init scripts from running at the same time.
+initlockfile=${zimbra_tmp_directory}/mysql.server.lock
+checkInitLock() {
+  if [ -f "$initlockfile" ]; then
+    initpid=$(cat $initlockfile)
+    if [ x"$initpid" != "x" ]; then
+      kill -0 $initpid 2> /dev/null
+      if [ $? = 0 ]; then
+        echo "$0 already running with pid $initpid"
+        exit 1
+      fi
+    fi
+  fi
+  echo $$ > $initlockfile
+}
+trap "quit 1" SIGINT SIGQUIT
+trap "quit 1" SIGKILL SIGTERM
+quit() {
+  RC=$1
+  rc=${RC:=0}
+  cleanup
+  exit $rc
+}
+cleanup() {
+  [ -f $initlockfile ] && rm -f $initlockfile
+}
+
 
 #
 # Path to my.cnf
@@ -36,12 +68,13 @@ fi
 
 case "$1" in
   'start')
+    checkInitLock
     # --defaults-file must be first argument
     if [ "x$pid" != "x" ]; then
       kill -0 $pid 2> /dev/null
       if [ $? = 0 ]; then
         echo "mysqld_safe already running with pid $pid"
-        exit 0
+        quit 0
       fi
     fi
     cd ${mysql_directory}; \
@@ -52,9 +85,10 @@ case "$1" in
     ;;
     
   'stop')
+    checkInitLock
     if [ "x${pid}" = "x" ]; then
       echo "Error: no pid in '${mysql_pidfile}'"
-      exit 0
+      quit 0
     else
       echo -n "Killing mysqld with pid $pid "
       kill $pid
@@ -71,12 +105,12 @@ case "$1" in
       done 
       if [ -s ${mysql_pidfile} ]; then 
         echo " gave up waiting!"
-        exit 1
+        quit 1
       else
         echo " done."
       fi
     fi
-    exit 0
+    quit 0
     ;;
     
   'restart')
@@ -92,11 +126,11 @@ case "$1" in
     else
       echo "mysql is not running"
     fi
-    exit $mysqlstatus
+    quit $mysqlstatus
     ;;
 
   *)
     echo "Usage: $0 start|stop|restart"
-    exit 1
+    quit 1
     ;;
 esac
