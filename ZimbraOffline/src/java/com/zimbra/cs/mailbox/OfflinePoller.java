@@ -121,7 +121,7 @@ public class OfflinePoller implements Runnable {
         try {
         	response = ombx.sendRequest(request, true, true, 1 * Constants.SECONDS_PER_MINUTE * 1000); //will block
         } catch (ServiceException x) {
-        	if (x.getCode().equals("admin.NO_SUCH_WAITSET")) {
+        	if (x.getCode().equals("admin.NO_SUCH_WAITSET") || x.getCode().equals("service.PERM_DENIED")) {
         		setId = null;
         		lastSequence = null;
         		return;
