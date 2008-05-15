@@ -597,6 +597,17 @@ sub mailboxdConfig() {
           ratioBottom="idx_wrt_opened+idx_wrt_opened_cache_hit"
           legend="cache hitrate" multiplier="100"/>
   </chart>
+  
+  <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Lucene IO"
+      category="mailboxd"
+      infile="$mailboxdCsv"
+      outfile="${ZIMBRA_HOSTNAME}_mboxd-lucene-io.png"
+      yAxis="KB"
+      showRaw="false"
+      showMovingAvg="true">
+    <plot data="idx_bytes_written" legend="Index writes" divisor="1024"/>
+    <plot data="idx_bytes_read" legend="Index reads" divisor="1024"/>
+  </chart>
 
   <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: LMTP Delivery Throughput"
          category="mailboxd"
