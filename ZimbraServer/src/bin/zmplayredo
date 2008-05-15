@@ -1,0 +1,88 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2008 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+	zimbra_home \
+	zimbra_log_directory
+
+u=`id -un`
+if [ $u != ${zimbra_user} ]; then
+    echo "Error: must be run as ${zimbra_user} user"
+    exit 1
+fi
+
+isrunning() {
+    zmmailboxdctl status 2> /dev/null
+    return
+}
+
+opth=0
+for opt in $@; do 
+    if [ $opt = "-h" -o $opt = "--help" ]; then
+        opth=1
+        break
+    fi
+done
+
+ropid=${zimbra_log_directory}/zmplayredo.pid
+
+if [ $opth -eq 0 ]; then
+    if isrunning; then
+        echo "Error: mailboxd still running.  Stop mailboxd before running zmplayredo."
+        exit 1
+    fi
+    if [ -s $ropid ]; then
+        echo "Error: another instance of zmplayredo (pid=`cat $ropid`) is already running"
+        echo "       remove $ropid if this is not the case"
+        exit 1
+    fi
+fi
+
+jardirs=${zimbra_home}/mailboxd/lib:${zimbra_home}/mailboxd/common/lib:${zimbra_home}/lib/jars
+if [ -e ${zimbra_home}/lib/ext-common ]; then
+    jardirs=${jardirs}:${zimbra_home}/lib/ext-common
+fi
+for jd in `find ${zimbra_home}/lib/ext -type d` ; do
+    if [ ${jd} != ${zimbra_home}/lib/ext ]; then
+        jardirs="${jardirs}:${jd}"
+    fi
+done
+
+#
+# Memory for use by JVM
+#
+memkb=$(zmsysmemkb)
+jm=`expr $memkb '*' ${mailboxd_java_heap_memory_percent} / 100 / 1024`
+
+java_version=$(${zimbra_java_home}/bin/java -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
+if [ x"$java_version" = "x1.6.0" ]; then
+  java_options="-XX:ErrorFile=${zimbra_home}/log"
+else
+  java_options=""
+fi
+
+echo $$ > $ropid
+${zimbra_java_home}/bin/java \
+    ${java_options} \
+    -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options} \
+    -Dzimbra.config=${zimbra_home}/conf/localconfig.xml \
+    -Djava.library.path=${zimbra_home}/lib \
+    -Djava.ext.dirs=${jardirs} \
+    com.zimbra.cs.redolog.util.PlaybackUtil "$@"
+rm -f $ropid
