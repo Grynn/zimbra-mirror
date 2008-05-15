@@ -1,5 +1,6 @@
 package com.zimbra.cs.offline;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -327,17 +328,7 @@ public class OfflineSyncManager {
 	
 	public static boolean isConnectionDown(Exception exception) {
         if (exception instanceof ServiceException) {
-			Throwable cause = exception.getCause();
-	        for (int i = 0; i < 10; ++i) {
-	        	if (cause instanceof MessagingException) {
-	        		MessagingException me = (MessagingException)cause;
-	        		if (me.getNextException() != null)
-	        			cause = me.getNextException();
-	        		else
-	        			break;
-	        	} else
-	        		break;
-	        }
+        	Throwable cause = findCause(exception);
 	        if (cause instanceof java.net.UnknownHostException ||
 		            cause instanceof java.net.NoRouteToHostException ||
 		            cause instanceof java.net.SocketException ||
@@ -348,6 +339,26 @@ public class OfflineSyncManager {
 	        	return true;
         }
         return false;
+	}
+	
+	public static boolean isIOException(Exception exception) {
+		Throwable cause = findCause(exception);
+		return cause instanceof IOException;
+	}
+	
+	private static Throwable findCause(Exception exception) {
+		Throwable cause = exception instanceof ServiceException ? exception.getCause() : exception;
+        for (int i = 0; i < 10; ++i) {
+        	if (cause instanceof MessagingException) {
+        		MessagingException me = (MessagingException)cause;
+        		if (me.getNextException() != null)
+        			cause = me.getNextException();
+        		else
+        			break;
+        	} else
+        		break;
+        }
+		return cause;
 	}
 	
     public void processSyncException(Account account, Exception exception) {

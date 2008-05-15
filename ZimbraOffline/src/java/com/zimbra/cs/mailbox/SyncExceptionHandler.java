@@ -29,7 +29,7 @@ class SyncExceptionHandler {
 	
 	
 	static void checkRecoverableException(ServiceException exception) throws ServiceException {
-		if (OfflineSyncManager.isConnectionDown(exception) || OfflineSyncManager.isAuthEerror(exception) || OfflineSyncManager.isReceiverFault(exception))
+		if (OfflineSyncManager.isIOException(exception) || OfflineSyncManager.isConnectionDown(exception) || OfflineSyncManager.isAuthEerror(exception) || OfflineSyncManager.isReceiverFault(exception))
 			throw exception; // let it bubble in case it's server issue so we interrupt sync to retry later
 	}
 	
