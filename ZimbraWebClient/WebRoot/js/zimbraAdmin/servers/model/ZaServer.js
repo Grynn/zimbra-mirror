@@ -689,16 +689,21 @@ function(by, val, withConfig) {
 		controller : this._app.getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_SERVER
 	}
-	resp = ZaRequestMgr.invoke(params, reqMgrParams);
-	if(resp.Body.GetServerNIfsResponse && resp.Body.GetServerNIfsResponse.ni) {
-		var NIs = resp.Body.GetServerNIfsResponse.ni;
-		var cnt = NIs.length;
-		this.nifs = [];
-		for(var i=0;i<cnt;i++) {
-			var ni = {};
-			ZaItem.prototype.initFromJS.call(ni, NIs[i]);
-			this.nifs.push(ni);
+	try {
+		resp = ZaRequestMgr.invoke(params, reqMgrParams);
+		if(resp.Body.GetServerNIfsResponse && resp.Body.GetServerNIfsResponse.ni) {
+			var NIs = resp.Body.GetServerNIfsResponse.ni;
+			var cnt = NIs.length;
+			this.nifs = [];
+			for(var i=0;i<cnt;i++) {
+				var ni = {};
+				ZaItem.prototype.initFromJS.call(ni, NIs[i]);
+				this.nifs.push(ni);
+			}
 		}
+	} catch (ex) {
+		if(this._app)
+			this._app.getCurrentController()._handleException(ex, "ZaServer.loadNIFS");
 	}
 }
 

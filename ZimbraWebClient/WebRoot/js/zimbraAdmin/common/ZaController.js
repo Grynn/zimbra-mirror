@@ -60,7 +60,8 @@ ZaController.prototype.initDialogs = function (refresh) {
 		this._msgDialog = this._app.dialogs["msgDialog"] = this._appCtxt.getMsgDialog(refresh);
 		this._msgDialog.setApp(this._app);
 		this._errorDialog = this._app.dialogs["errorDialog"] = this._appCtxt.getErrorDialog(refresh);
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);
+		this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);
+		this._app.dialogs["confirmDeleteMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);
 	    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
     	this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);
 	}

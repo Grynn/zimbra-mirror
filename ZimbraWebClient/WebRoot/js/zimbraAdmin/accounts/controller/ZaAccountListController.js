@@ -673,10 +673,10 @@ function () {
 		}
 		dlgMsg += ZaAccountListController.getDlMsgFromList (this._removeList);
 		
-		this._app.dialogs["ConfirmMessageDialog"].setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["ConfirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
-		this._app.dialogs["ConfirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		
-		this._app.dialogs["ConfirmMessageDialog"].popup();
+		this._app.dialogs["confirmDeleteMessageDialog"].setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
+		this._app.dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
+		this._app.dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		
+		this._app.dialogs["confirmDeleteMessageDialog"].popup();
 	}
 }
 
@@ -721,7 +721,7 @@ function () {
 	if(!this._app.dialogs["removeProgressDlg"]) {
 		this._app.dialogs["removeProgressDlg"] = new DeleteAcctsPgrsDlg(this._container, this._app,"500px","300px");
 	}
-	this._app.dialogs["ConfirmMessageDialog"].popdown();
+	this._app.dialogs["confirmDeleteMessageDialog"].popdown();
 	this._app.dialogs["removeProgressDlg"].popup();
 	this._app.dialogs["removeProgressDlg"].setObject(this._removeList);
 	this._app.dialogs["removeProgressDlg"].startDeletingAccounts();
@@ -733,7 +733,7 @@ function () {
 ZaAccountListController.prototype._donotDeleteAccountsCallback = 
 function () {
 	this._removeList = new Array();
-	this._app.dialogs["ConfirmMessageDialog"].popdown();
+	this._app.dialogs["confirmDeleteMessageDialog"].popdown();
 }
 
 
