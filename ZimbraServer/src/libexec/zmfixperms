@@ -287,6 +287,12 @@ if [ -f ${zimbra_home}/conf/ZCSLicense.xml ]; then
   chmod 440 ${zimbra_home}/conf/ZCSLicense.xml
 fi
 
+if [ -f ${zimbra_home}/conf/localconfig.xml ]; then
+  printMsg "Fixing ownership and permisions on ${zimbra_home}/conf/localconfig.xml"
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/localconfig.xml
+  chmod 640 ${zimbra_home}/conf/localconfig.xml
+fi
+
 if [ -L ${zimbra_home}/postfix ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/postfix"
 	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix*
