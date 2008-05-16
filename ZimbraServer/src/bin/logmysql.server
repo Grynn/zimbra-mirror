@@ -20,8 +20,10 @@ source `dirname $0`/zmshutil || exit 1
 zmsetvars \
   zimbra_home \
   zimbra_server_hostname \
+  zimbra_tmp_directory \
   logger_mysql_directory \
   logger_mysql_pidfile \
+  logger_mysql_errlogfile \
   logger_mysql_mycnf
 
 if [ x${logger_mysql_directory} = "x" ]; then
@@ -38,44 +40,87 @@ zmassert -d ${logger_mysql_directory}
 zmassert -x ${logger_mysql_directory}/bin/mysqld_safe
 zmassert -r ${logger_mysql_mycnf}
 zmassert -d `dirname ${logger_mysql_pidfile}`
-error_file="`dirname ${logger_mysql_pidfile}`/data/${zimbra_server_hostname}.err"
-#
-# Path to my.cnf
-#
+
+initlockfile=${zimbra_tmp_directory}/mysql.server.lock
+checkInitLock() {
+  if [ -f "$initlockfile" ]; then
+    initpid=$(cat $initlockfile)
+    if [ x"$initpid" != "x" ]; then
+      kill -0 $initpid 2> /dev/null
+      if [ $? = 0 ]; then
+        echo "$0 already running with pid $initpid"
+        exit 1
+      fi
+    fi
+  fi
+  echo $$ > $initlockfile
+}
+trap "quit 1" SIGINT SIGQUIT
+trap "quit 1" SIGKILL SIGTERM
+quit() {
+  RC=$1
+  rc=${RC:=0}
+  cleanup
+  exit $rc
+}
+cleanup() {
+  [ -f $initlockfile ] && rm -f $initlockfile
+}
+
+if [ -f ${logger_mysql_pidfile} ]; then
+  pid=$(cat ${logger_mysql_pidfile})
+fi
 
 case "$1" in
   'start')
-    # --defaults-file must be first argument
-    perl -e "if ((-s \"${error_file}\") >= 512000) { exit 1};"
-    if [ $? = 1 ]; then
-      cp -f /dev/null ${error_file}
+    checkInitLock
+    if [ "x$pid" != "x" ]; then
+      kill -0 $pid 2> /dev/null
+      if [ $? = 0 ]; then
+        echo "mysqld_safe already running with pid $pid"
+        quit 0
+      fi
     fi
+    perl -e "if ((-s \"${logger_mysql_errlogfile}\") >= 512000) { exit 1};"
+    if [ $? = 1 ]; then
+      cp -f /dev/null ${logger_mysql_errlogfile}
+    fi
+    # --defaults-file must be first argument
     cd ${logger_mysql_directory}; \
       ${logger_mysql_directory}/bin/mysqld_safe \
       --defaults-file=${logger_mysql_mycnf} \
       --external-locking \
+      --log-error=${logger_mysql_errlogfile} \
       --ledir=${logger_mysql_directory}/libexec &
     ;;
     
   'stop')
-    if  [ ! -s "${logger_mysql_pidfile}" ]; then 
-      echo "Error: no pid in '${logger_mysql_pidfile}'"
-      exit 1
-    fi
-    pid=`cat ${logger_mysql_pidfile}`
-    echo -n "Killing mysqld with pid $pid "
-    kill $pid
-    # wait for mysqld pid file to be removed
-    for ((i = 0; i < 30; i++)); do
-      sleep 1;
-      if [ ! -s ${logger_mysql_pidfile} ]; then
-        break;
+    checkInitLock
+    if [ "x${pid}" = "x" ]; then
+      echo "Error: no pid in '${mysql_pidfile}'"
+      quit 0
+    else
+      echo -n "Killing mysqld with pid $pid "
+      kill $pid
+      # wait for mysqld pid file to be removed
+      for ((i = 0; i < 30; i++)); do
+        sleep 2;
+        kill -0 $pid 2> /dev/null
+        if [ $? != 0 ]; then
+          rm -f ${logger_mysql_pidfile}
+          break
+        fi
+        kill $pid
+        echo -n "."
+      done 
+      if [ -s ${logger_mysql_pidfile} ]; then 
+        echo " gave up waiting!"
+        quit 1
+      else
+        echo " done."
       fi
-      echo -n "."
-    done 
-    if [ -s ${logger_mysql_pidfile} ]; then 
-      echo " gave up waiting!"
     fi
+    quit 0
     ;;
     
   'restart')
@@ -83,8 +128,19 @@ case "$1" in
     $0 start
     ;;
 
+  'status')
+    kill -0 $pid 2> /dev/null
+    mysqlstatus=$?
+    if [ $mysqlstatus = 0 ]; then
+      echo "mysql is running with pid $pid"
+    else
+      echo "mysql is not running"
+    fi
+    quit $mysqlstatus
+    ;;
+
   *)
-    echo "Usage: $0 start|stop|restart"
-    exit 1
+    echo "Usage: $0 start|stop|status|restart"
+    quit 1
     ;;
 esac
