@@ -27,8 +27,8 @@
   </zimletPanelItem>
 
   <userProperties>
-    <property type="string" name="user" minLength="4" maxLength="32" label="User ID" />
-    <property type="password" name="passwd" minLength="4" maxLength="32" label="Password" />
+    <property type="string" name="user" minLength="4" maxLength="128" label="User ID" />
+    <property type="password" name="passwd" minLength="4" maxLength="255" label="Password" />
     <property type="string" name="ignoreDomain" minLength="4" maxLength="64" label="Ignore Domain" />
   </userProperties>
 </zimlet>

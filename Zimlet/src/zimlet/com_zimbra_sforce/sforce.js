@@ -206,7 +206,7 @@ Com_Zimbra_SForce.prototype.query = function(query, limit, callback) {
 		});
 	} else {
 		this._do_query(query, limit, callback);
-    }
+        }
 };
 
 Com_Zimbra_SForce.prototype._do_query = function(query, limit, callback) {
@@ -521,7 +521,7 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 
 		{ label	   : "Mobile",
 		  name     : "MobilePhone",
-          type	   : "string",
+                  type	   : "string",
 		  value    : contact_data.get("mobilePhone") }
 	];
 	pe_contact.initProperties(pe_props);
@@ -595,41 +595,47 @@ Com_Zimbra_SForce.prototype.dlg_createAccount = function(acct_data, contact_data
 };
 
 Com_Zimbra_SForce.prototype.noteDropped = function(note) {
-    if(!note) {return;}
-    // check out some domains, exclude user's domain
-    var ignoreDomain = this.getUserProperty("ignoreDomain");
-    var emails = [];
-    function addEmails(a) {
-        if (a) {
-            if (typeof a == "string") {
-                if (a.indexOf(ignoreDomain) != -1) {
-                    return;
+        if (!note)
+                return;
+
+        // check out some domains, exclude user's domain
+        var ignoreDomain = this.getUserProperty("ignoreDomain");
+        var emails = [];
+        function addEmails(a) {
+                if (a) {
+                        if (typeof a == "string") {
+                                if (a.indexOf(ignoreDomain) != -1) {
+                                        return;
+                                }
+                                emails.push(a);
+                        } else if (a instanceof Array) {
+                                for (var i = 0; i < a.length; ++i) {
+                                        if(a[i].address && a[i].address.indexOf(ignoreDomain) == -1) {
+                                                emails.push(a[i].address);
+                                        }
+                                }
+                        }
                 }
-                emails.push(a);
-            } else if (a instanceof Array) {
-                for (var i = 0; i < a.length; ++i) {
-                    if(a[i].address && a[i].address.indexOf(ignoreDomain) == -1) {
-                        emails.push(a[i].address);
-                    }
+        };
+        if (note._addrs) {
+                for (var i = 0; i < ZmMailMsg.ADDRS.length; i++) {
+                        var type = ZmMailMsg.ADDRS[i];
+                        var a = note._addrs[type];
+                        if (a) {
+                                addEmails(a._array);
+                        }
                 }
-            }
+        } else {
+                addEmails(note.participants);
+                addEmails(note.from);
+                addEmails(note.to);
+                addEmails(note.cc);
         }
-    }
-    ;
-    if(note._addrs && note._addrs.length > 0) {
-        for(var i=1; i < note._addrs.length; i++) {
-            addEmails(note._addrs[i]._array);
-        }
-    } else {
-        addEmails(note.participants);
-        addEmails(note.from);
-        addEmails(note.to);
-        addEmails(note.cc);
-    }
-    var domains = [], tmp = {};
+
+        var domains = [], tmp = {};
 	for (var i = 0; i < emails.length; ++i) {
-        DBG.println(AjxDebug.DBG3, emails[i]);
-        if (/@([^>]+)>?$/.test(emails[i])) {
+                DBG.println(AjxDebug.DBG3, emails[i]);
+                if (/@([^>]+)>?$/.test(emails[i])) {
 			var d = RegExp.$1;
 			if (!tmp[d]) {
 				tmp[d] = 1;
@@ -639,67 +645,71 @@ Com_Zimbra_SForce.prototype.noteDropped = function(note) {
 			}
 		}
 	}
-    function $search_acct(records) {
-        // Split Opportunities and Contacts into Account groups
-        var acctsSorted = {};
-        var a = Com_Zimbra_SForce._RECENT.Accounts;
-        for (var i = 0; i < a.length; ++i) {
-            acctsSorted[a[i].Id] = a[i];
-            acctsSorted[a[i].Id].TYPE = "A";
-            acctsSorted[a[i].Id].Con = [];
-            acctsSorted[a[i].Id].Opp = [];
-        }
-        var c = Com_Zimbra_SForce._RECENT.Contacts;
-        for (var i = 0; i < c.length; ++i) {
-            c[i].TYPE = "C";
-            if(acctsSorted[c[i].AccountId]) {
-                acctsSorted[c[i].AccountId].Con.push(c[i]);
-            }
-        }
-        var o = records;
-        for (var i = 0; i < o.length; ++i) {
-            o[i].TYPE = "O";
-            acctsSorted[o[i].AccountId].Opp.push(o[i]);
-        }
-        this.dlg_addNoteToAccounts(acctsSorted, note);
-    }
+
+        function $search_acct(records) {
+                // Split Opportunities and Contacts into Account groups
+                var acctsSorted = {};
+                var a = Com_Zimbra_SForce._RECENT.Accounts;
+                for (var i = 0; i < a.length; ++i) {
+                        acctsSorted[a[i].Id] = a[i];
+                        acctsSorted[a[i].Id].TYPE = "A";
+                        acctsSorted[a[i].Id].Con = [];
+                        acctsSorted[a[i].Id].Opp = [];
+                }
+                var c = Com_Zimbra_SForce._RECENT.Contacts;
+                for (var i = 0; i < c.length; ++i) {
+                        c[i].TYPE = "C";
+                        if(acctsSorted[c[i].AccountId]) {
+                                acctsSorted[c[i].AccountId].Con.push(c[i]);
+                        }
+                }
+                var o = records;
+                for (var i = 0; i < o.length; ++i) {
+                        o[i].TYPE = "O";
+                        acctsSorted[o[i].AccountId].Opp.push(o[i]);
+                }
+                this.dlg_addNoteToAccounts(acctsSorted, note);
+        };
+
 	function $search_acctRelated(records) {
 		if (records.length == 0) {
 			this.displayErrorMessage(
 				[ "There are no matching accounts for these email domains:", domains ].join("<br />"));
 		} else {
-            Com_Zimbra_SForce._RECENT.Accounts = records;
-            var ids = [];
-            for (var i = 0; i < records.length; ++i) {
-                ids.push(records[i].Id);
-            }
-            var q = [ "select Id, Name, AccountId from Opportunity where AccountId='", ids.join("' or AccountId='"), "'" ].join("");
-            this.query(q, 10, $search_acct);
+                        Com_Zimbra_SForce._RECENT.Accounts = records;
+                        var ids = [];
+                        for (var i = 0; i < records.length; ++i) {
+                                ids.push(records[i].Id);
+                        }
+                        var q = [ "select Id, Name, AccountId from Opportunity where AccountId='", ids.join("' or AccountId='"), "'" ].join("");
+                        this.query(q, 10, $search_acct);
 		}
-	}
-    function $search_contact(records) {
-        if (records.length == 0) {
-            this.displayErrorMessage(
-                    [ "There are no matching contacts for these email domains:", domains ].join("<br />"));
-        } else {
-            Com_Zimbra_SForce._RECENT.Contacts = records;
-            var ids = [];
-            for (var i = 0; i < records.length; ++i) {
-                ids.push(records[i].AccountId);
-            }
-            var q = [ "select Id, Name, Website, Phone from Account where Id='", ids.join("' or Id='"), "'" ].join("");
-            this.query(q, 10, $search_acctRelated);
-        }
-    }
-    if (domains.length == 0) {
+	};
+
+        function $search_contact(records) {
+                if (records.length == 0) {
+                        this.displayErrorMessage(
+                                [ "There are no matching contacts for these email domains:", domains ].join("<br />"));
+                } else {
+                        Com_Zimbra_SForce._RECENT.Contacts = records;
+                        var ids = [];
+                        for (var i = 0; i < records.length; ++i) {
+                                ids.push(records[i].AccountId);
+                        }
+                        var q = [ "select Id, Name, Website, Phone from Account where Id='", ids.join("' or Id='"), "'" ].join("");
+                        this.query(q, 10, $search_acctRelated);
+                }
+        };
+
+        if (domains.length == 0) {
 		this.displayErrorMessage("No email addresses or domains found.<br />"
 					 + "We can't determine an Account to add this note to.");
 	} else {
+                var q = [ "select Id, FirstName, LastName, Email, AccountId from Contact where Email like '%",
+                          domains.join("%' or Email like '%"),
+                          "%'" ].join("");
 
-        var q = [ "select Id, FirstName, LastName, Email, AccountId from Contact where Email like '%",
-                domains.join("%' or Email like '%"),
-                "%'" ].join("");
-        this.query(q, 10, $search_contact);
+                this.query(q, 10, $search_contact);
 	}
 };
 
