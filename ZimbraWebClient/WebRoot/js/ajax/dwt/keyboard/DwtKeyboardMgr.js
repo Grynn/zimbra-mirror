@@ -670,21 +670,13 @@ function(ev) {
 		kbMgr.__killKeySeqTimedActionId = -1;
 	}
 		
- 	var key = "";
- 	
- 	if (kev.metaKey)
- 		key += DwtKeyMap.META;
-	
-	if (kev.ctrlKey)
-		key += DwtKeyMap.CTRL;
-		
-	if (kev.altKey)
-		key += DwtKeyMap.ALT;
-		
-	if (kev.shiftKey)
-		key += DwtKeyMap.SHIFT;
-	
-	kbMgr.__keySequence[kbMgr.__keySequence.length] = key + kbMgr.__keyMapMgr.keyCode2Char(keyCode);
+ 	var parts = [];
+	if (kev.altKey) 	{ parts.push(DwtKeyMap.ALT); }
+	if (kev.ctrlKey) 	{ parts.push(DwtKeyMap.CTRL); }
+ 	if (kev.metaKey) 	{ parts.push(DwtKeyMap.META); }
+	if (kev.shiftKey) 	{ parts.push(DwtKeyMap.SHIFT); }
+	parts.push(kbMgr.__keyMapMgr.keyCode2Char(keyCode));
+	kbMgr.__keySequence[kbMgr.__keySequence.length] = parts.join(DwtKeyMap.JOIN);
 
 //	DBG.println("kbnav", "KEYCODE: " + keyCode + " - KEY SEQ: " + kbMgr.__keySequence.join(""));
 	
