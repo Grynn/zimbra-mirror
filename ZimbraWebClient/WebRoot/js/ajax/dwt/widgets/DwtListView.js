@@ -98,7 +98,7 @@ DwtListView = function(params) {
 
 	this._clearRightSelAction = new AjxTimedAction(this, this._clearRightSel);
 
-	this.setMultiSelect(true);
+	this.multiSelectEnabled = true;
 
     // item classes
     this._rowClass = [ this._className, DwtListView.ROW_CLASS ].join("");
@@ -112,29 +112,29 @@ DwtListView = function(params) {
     this._styleRe = this._getStyleRegex();
 };
 
-DwtListView.PARAMS = ["parent", "className", "posStyle", "headerList", "noMaximize"];
+DwtListView.prototype = new DwtComposite;
+DwtListView.prototype.constructor = DwtListView;
 
-DwtListView.ITEM_SELECTED 		= 1;
-DwtListView.ITEM_DESELECTED 	= 2;
-DwtListView.ITEM_DBL_CLICKED 	= 3;
-DwtListView._LAST_REASON 		= 3;
 
-DwtListView._TOOLTIP_DELAY 		= 250;
+// Consts
 
-DwtListView.HEADERITEM_HEIGHT 	= 24;
-
-DwtListView.TYPE_HEADER_ITEM 	= "1";
-DwtListView.TYPE_LIST_ITEM 		= "2";
-DwtListView.TYPE_HEADER_SASH 	= "3";
-
-DwtListView.DEFAULT_LIMIT = 25;
-DwtListView.MAX_REPLENISH_THRESHOLD = 10;
-DwtListView.MIN_COLUMN_WIDTH = 10;
-DwtListView.COL_MOVE_THRESHOLD = 3;
-
-DwtListView.ROW_CLASS		= "Row";
-DwtListView.ROW_CLASS_ODD	= "RowEven";
-DwtListView.ROW_CLASS_EVEN	= "RowOdd";
+DwtListView.PARAMS					= ["parent", "className", "posStyle", "headerList", "noMaximize"];
+DwtListView.ITEM_SELECTED 			= 1;
+DwtListView.ITEM_DESELECTED 		= 2;
+DwtListView.ITEM_DBL_CLICKED 		= 3;
+DwtListView._LAST_REASON 			= 3;
+DwtListView._TOOLTIP_DELAY 			= 250;
+DwtListView.HEADERITEM_HEIGHT 		= 24;
+DwtListView.TYPE_HEADER_ITEM 		= "1";
+DwtListView.TYPE_LIST_ITEM 			= "2";
+DwtListView.TYPE_HEADER_SASH 		= "3";
+DwtListView.DEFAULT_LIMIT			= 25;
+DwtListView.MAX_REPLENISH_THRESHOLD	= 10;
+DwtListView.MIN_COLUMN_WIDTH		= 10;
+DwtListView.COL_MOVE_THRESHOLD		= 3;
+DwtListView.ROW_CLASS				= "Row";
+DwtListView.ROW_CLASS_ODD			= "RowEven";
+DwtListView.ROW_CLASS_EVEN			= "RowOdd";
 
 // property names for row DIV to store styles
 // AAA
@@ -143,8 +143,8 @@ DwtListView._SELECTED_STYLE_CLASS		= "_ssc";
 DwtListView._SELECTED_DIS_STYLE_CLASS	= "_sdsc"
 DwtListView._KBFOCUS_CLASS				= "_kfc";
 
-DwtListView.prototype = new DwtComposite;
-DwtListView.prototype.constructor = DwtListView;
+
+// Public methods
 
 DwtListView.prototype.toString =
 function() {
@@ -287,14 +287,11 @@ function(defaultColumnSort) {
 			htmlArr[idx++] = "<table align=right border=0 cellpadding=0 cellspacing=0 width=2 height=100%><tr>";
 			htmlArr[idx++] = "<td class='DwtListView-Sash'><div style='width: 1px; height: ";
 			htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
-			htmlArr[idx++] = "px; background-color: #8A8A8A'></div></td>";
-			var sashId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, field);
-			htmlArr[idx++] = "<td id='";
-			htmlArr[idx++] = sashId;
+			htmlArr[idx++] = "px; background-color: #8A8A8A'></div></td><td id='";
+			htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, field);
 			htmlArr[idx++] = "' class='DwtListView-Sash'><div style='width: 1px; height: ";
 			htmlArr[idx++] = (DwtListView.HEADERITEM_HEIGHT - 2);
-			htmlArr[idx++] = "px; background-color: #FFFFFF'></div></td>";
-			htmlArr[idx++] = "</tr></table>";
+			htmlArr[idx++] = "px; background-color: #FFFFFF'></div></td></tr></table>";
 			htmlArr[idx++] = "</td>";
 		}
 
@@ -308,26 +305,22 @@ function(defaultColumnSort) {
 	// for each sortable column, sets its identifier
 	for (var j = 0; j < this._headerList.length; j++) {
 		var headerCol = this._headerList[j];
-		var id = headerCol._id;
-		var field = headerCol._field;
-		var cell = document.getElementById(id);
+		var cell = document.getElementById(headerCol._id);
 		if (!cell) { continue; }
 
-		if (headerCol._sortable && field == defaultColumnSort) {
+		if (headerCol._sortable && headerCol._field == defaultColumnSort) {
 			cell.className = "DwtListView-Column DwtListView-ColumnActive";
 		}
 
-		var isResizeable = headerCol._resizeable;
-		if (isResizeable) {
+		if (headerCol._resizeable) {
 			// always get the sibling cell to the right
-			var sashId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, field);
+			var sashId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_SASH, this._view, headerCol._field);
 			var sashCell = document.getElementById(sashId);
 			if (sashCell) {
 				this.associateItemWithElement(headerCol, sashCell, DwtListView.TYPE_HEADER_SASH, sashId, {index:j});
 			}
 		}
-
-		this.associateItemWithElement(headerCol, cell, DwtListView.TYPE_HEADER_ITEM, id, {index:j});
+		this.associateItemWithElement(headerCol, cell, DwtListView.TYPE_HEADER_ITEM, headerCol._id, {index:j});
 	}
 
 	this._headerColCreated = true;
@@ -356,14 +349,16 @@ function(item) {
 */
 DwtListView.prototype.set =
 function(list, defaultColumnSort) {
-    if (this._selectedItems)  this._selectedItems.removeAll();
+	if (this._selectedItems) {
+		this._selectedItems.removeAll();
+	}
 	this.enableSorting(true);
 	this._resetList();
 	this._list = list;
 	this._now = new Date();
 	this.setUI(defaultColumnSort);
 }
-                                       
+
 /**
 * Renders the list view using the current list of items.
 *
@@ -416,9 +411,7 @@ function(itemArray) {
 		if (this._list.size() == 0) {
 			this._resetList();
 		}
-		var currentSize = this._list.size();
-		var vec = AjxVector.fromArray(itemArray);
-		this._renderList(vec);
+		this._renderList(AjxVector.fromArray(itemArray));
 		this._list.addList(itemArray);
 	}
 };
@@ -544,16 +537,6 @@ function() {
 DwtListView.prototype.size =
 function() {
 	return this._list ? this._list.size() : 0;
-};
-
-DwtListView.prototype.setMultiSelect =
-function (enabled) {
-	this._multiSelectEnabled = enabled;
-};
-
-DwtListView.prototype.isMultiSelectEnabled =
-function () {
-	return this._multiSelectEnabled;
 };
 
 // normalClass is always present on a list row
@@ -945,17 +928,12 @@ function(dragOp) {
 	this._dndImg = null;
 
 	if (!(dndSelection instanceof Array) || dndSelection.length == 1) {
-		var item = null;
-		if (dndSelection instanceof Array) {
-			item = dndSelection[0];
-		} else {
-			item = dndSelection;
-		}
+		var item = (dndSelection instanceof Array) ? dndSelection[0] : dndSelection;
 		icon = this._createItemHtml(item, {now:new Date(), isDragProxy:true});
 		this._setItemData(icon, "origClassName", icon.className);
 		Dwt.setPosition(icon, Dwt.ABSOLUTE_STYLE);
 
-		roundPlusStyle = "position:absolute; top:18; left:-11;visibility:hidden";
+		roundPlusStyle = "position:absolute;top:18;left:-11;visibility:hidden";
 	} else {
 		// Create multi one
 		icon = document.createElement("div");
@@ -1695,7 +1673,7 @@ function(clickedEl, ev) {
 	var numSelectedItems = this._selectedItems.size();
 	var bContained = this._selectedItems.contains(clickedEl);
 
-	if ((!ev.shiftKey && !ev.ctrlKey) || !this.isMultiSelectEnabled()) {
+	if ((!ev.shiftKey && !ev.ctrlKey) || !this.multiSelectEnabled) {
 		// always reset detail if left/right click
 		if (ev.button == DwtMouseEvent.LEFT || ev.button == DwtMouseEvent.RIGHT) {
 			this._selEv.detail = DwtListView.ITEM_SELECTED;
@@ -1953,7 +1931,7 @@ function(ev) {
 		var hdrLabelId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_LABEL, this._view, field);
 		var labelCell = document.getElementById(hdrLabelId);
 		if (labelCell) {
-			labelCell.style.color = "white";
+			labelCell.style.color = "#FFFFFF";
 		}
 		this.shell.getHtmlElement().appendChild(this._headerClone);
 	} else {
@@ -2018,7 +1996,6 @@ function(ev) {
 		? "DwtListView-Column" 
 		: "DwtListView-Column DwtListView-ColumnActive";
 		
-	wasDraggingCol = true;
 	var parent = this._headerClone.parentNode;
 	if (parent) {
 		parent.removeChild(this._headerClone);
@@ -2105,9 +2082,11 @@ function(ev) {
 
 DwtListView.prototype._reSizeColumn =
 function(headerIdx, newWidth) {
-	// TODO: do some (more?) sanity checks before changing the header width
-	if (newWidth == this._headerList._width || newWidth < DwtListView.MIN_COLUMN_WIDTH) { return; }
-
+	if (newWidth == this._headerList._width ||
+		newWidth < DwtListView.MIN_COLUMN_WIDTH)
+	{
+		return;
+	}
 	this._headerList[headerIdx]._width = newWidth;
 	this._relayout();
 };
@@ -2388,5 +2367,4 @@ DwtListHeaderItem = function(params) {
 	}
 };
 
-DwtListHeaderItem.PARAMS = ["id", "text", "icon", "width", "sortable", "resizeable",
-							"visible", "name", "align", "noRemove", "view"];
+DwtListHeaderItem.PARAMS = ["id", "text", "icon", "width", "sortable", "resizeable", "visible", "name", "align", "noRemove", "view"];

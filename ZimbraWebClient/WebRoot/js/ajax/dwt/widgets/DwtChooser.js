@@ -303,8 +303,8 @@ function(style, noResize) {
 		}
 	}
 	
-	this.sourceListView.setMultiSelect(style == DwtChooser.MULTI_SELECT);
-	this.targetListView.setMultiSelect(style == DwtChooser.MULTI_SELECT);
+	this.sourceListView.multiSelectEnabled = (style == DwtChooser.MULTI_SELECT);
+	this.targetListView.multiSelectEnabled = (style == DwtChooser.MULTI_SELECT);
 };
 
 /**
@@ -597,8 +597,8 @@ function() {
 	}
 
 	if (this._selectStyle == DwtChooser.SINGLE_SELECT) {
-		this.sourceListView.setMultiSelect(false);
-		this.targetListView.setMultiSelect(false);
+		this.sourceListView.multiSelectEnabled = false;
+		this.targetListView.multiSelectEnabled = false;
 	}
 };
 
