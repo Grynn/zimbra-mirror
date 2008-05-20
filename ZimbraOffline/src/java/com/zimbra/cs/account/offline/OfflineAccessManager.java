@@ -4,8 +4,8 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AccessManager;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
-import com.zimbra.cs.account.CalendarResource;
 import com.zimbra.cs.account.Domain;
+import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.accesscontrol.Right;
 
 public class OfflineAccessManager extends AccessManager {
@@ -64,32 +64,17 @@ public class OfflineAccessManager extends AccessManager {
 	}
 	
 	@Override
-	public boolean canPerform(AuthToken grantee, Account target, Right rightNeeded, boolean defaultGrant) {
+	public boolean canPerform(AuthToken grantee, NamedEntry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
 	    return true;
 	}
     
 	@Override
-	public boolean canPerform(Account grantee, Account target, Right rightNeeded, boolean defaultGrant) {
+	public boolean canPerform(Account grantee, NamedEntry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
 	    return true;
 	}
 	
 	@Override
-	public boolean canPerform(String grantee, Account target, Right rightNeeded, boolean defaultGrant) {
-	    return true;
-	}
-    
-	@Override
-	public boolean canPerform(AuthToken grantee, CalendarResource target, Right rightNeeded, boolean defaultGrant) {
-	    return true;
-	}
-    
-	@Override
-	public boolean canPerform(Account grantee, CalendarResource target, Right rightNeeded, boolean defaultGrant) {
-	    return true;
-	}
-	
-	@Override
-	public boolean canPerform(String grantee, CalendarResource target, Right rightNeeded, boolean defaultGrant) {
+	public boolean canPerform(String grantee, NamedEntry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
 	    return true;
 	}
 
