@@ -683,8 +683,8 @@ function(ev) {
 	var handled = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 
 	// First see if the control that currently has focus can handle the key event
-	var obj = (kbMgr.__dwtCtrlHasFocus) ? kbMgr.__focusObj : null;
-	if (obj && (obj instanceof DwtControl)) {
+	var obj = kbMgr.__focusObj;
+	if (obj && (obj.handleKeyAction)) {
 		handled = kbMgr.__dispatchKeyEvent(obj, kev);
 		while ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && obj.parent && obj.parent.getKeyMapName) {
 			obj = obj.parent;

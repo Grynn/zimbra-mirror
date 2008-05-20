@@ -136,13 +136,21 @@ DwtHtmlEditor._BLOCK_ELEMENTS = {
 	thead:1, tr:1, ul:1
 };
 
-DwtHtmlEditor._KEY2CMDS = {
-	"b":DwtHtmlEditor.BOLD_STYLE, "i":DwtHtmlEditor.ITALIC_STYLE, "u":DwtHtmlEditor.UNDERLINE_STYLE,
-	"s":DwtHtmlEditor.STRIKETHRU_STYLE, "l":DwtHtmlEditor.JUSTIFY_LEFT, "e":DwtHtmlEditor.JUSTIFY_CENTER,
-	"r":DwtHtmlEditor.JUSTIFY_RIGHT, "j":DwtHtmlEditor.JUSTIFY_FULL, "1":DwtHtmlEditor._STYLES[1],
-	"2":DwtHtmlEditor._STYLES[1], "3":DwtHtmlEditor._STYLES[3], "4":DwtHtmlEditor._STYLES[4],
-	"5":DwtHtmlEditor._STYLES[5], "6":DwtHtmlEditor._STYLES[6]
-};
+DwtHtmlEditor._ACTION_CODE_TO_CMD = {};
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.TEXT_BOLD]			= DwtHtmlEditor.BOLD_STYLE;
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.TEXT_ITALIC]		= DwtHtmlEditor.ITALIC_STYLE;
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.TEXT_UNDERLINE]		= DwtHtmlEditor.UNDERLINE_STYLE;
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.TEXT_STRIKETHRU]	= DwtHtmlEditor.STRIKETHRU_STYLE;
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.JUSTIFY_LEFT]		= DwtHtmlEditor.JUSTIFY_LEFT;
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.JUSTIFY_CENTER]		= DwtHtmlEditor.JUSTIFY_CENTER;
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.JUSTIFY_RIGHT]		= DwtHtmlEditor.JUSTIFY_RIGHT;
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.JUSTIFY_FULL]		= DwtHtmlEditor.JUSTIFY_FULL;
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER1]			= DwtHtmlEditor._STYLES[1];
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER2]			= DwtHtmlEditor._STYLES[2];
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER3]			= DwtHtmlEditor._STYLES[3];
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER4]			= DwtHtmlEditor._STYLES[4];
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER5]			= DwtHtmlEditor._STYLES[5];
+DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER6]			= DwtHtmlEditor._STYLES[6];
 
 DwtHtmlEditor.prototype.focus =
 function() {
@@ -1242,6 +1250,10 @@ function(ev) {
 	if (ev.type == "mousedown") {
 		DwtMenu._outsideMouseDownListener(ev);
 	}
+	
+	if (ev.type == "mouseup") {
+		DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
+	}
 
 	if (ev.type == "contextmenu") {
 		// context menu event; we want to translate the event
@@ -1267,42 +1279,9 @@ function(ev) {
 	if (DwtKeyEvent.isKeyPressEvent(ev)) {
 		var ke = this._keyEvent;
 		ke.setFromDhtmlEvent(ev);
-		if (ke.ctrlKey) {
-			var key = String.fromCharCode(ke.charCode).toLowerCase();
-			var value = null;
 
-			switch (key) {
-			    case '1':
-			    case '2':
-			    case '3':
-			    case '4':
-			    case '5':
-			    case '6':
-				cmd = DwtHtmlEditor._FORMAT_BLOCK;
-				value = DwtHtmlEditor._KEY2CMDS[key];
-				break;
-
-			    case '0':
-				try {
-					this.setMode((this._mode == DwtHtmlEditor.HTML) ? DwtHtmlEditor.TEXT : DwtHtmlEditor.HTML, true);
-				} catch (e) {
-					DBG.println(AjxDebug.DBG1, "EXCEPTION!: " + e);
-				}
-				ke._stopPropagation = true;
-				ke._returnValue = false;
-				ke.setToDhtmlEvent(ev);
-				retVal = false;
-				break;
-
-			    default:
-				// IE Has full on keyboard shortcuts
-				//if (!AjxEnv.isIE)
-				cmd = DwtHtmlEditor._KEY2CMDS[key];
-				break;
-			}
-		}
-		//on pressing enter the editor losses track of formating
-		//ignore querying command state for this event alone
+		// on Enter the editor loses track of formatting
+		// ignore querying command state for this event alone
 		if (AjxEnv.isGeckoBased && ev.keyCode == 13) {
 			this._stateEvent._ignoreCommandState = true;
 			var r = this._getRange(), start = r.startContainer, hre = /^h[1-6]$/i;
@@ -1326,15 +1305,7 @@ function(ev) {
 		}
 	}
 
-	if (cmd) {
-		DBG.println(AjxDebug.DBG1, "CMD: " + cmd);
-		this._execCommand(cmd, value);
-		DBG.println(AjxDebug.DBG1, "AFTER EXEC");
-		ke._stopPropagation = true;
-		ke._returnValue = false;
-		ke.setToDhtmlEvent(ev);
-		retVal = false;
-	} else if (ev.type == "keydown") {
+	if (ev.type == "keydown") {
 		if (ev.keyCode == 9) {
 			if (AjxEnv.isIE) {
 				this._handleIETabKey(!ev.shiftKey);
@@ -1363,8 +1334,9 @@ function(ev) {
 		}
 	}
 
-	if (this._stateUpdateActionId != null)
+	if (this._stateUpdateActionId != null) {
 		AjxTimedAction.cancelAction(this._stateUpdateActionId);
+	}
 
 	this._stateUpdateActionId = AjxTimedAction.scheduleAction(this._updateStateAction, 100);
 
@@ -1373,7 +1345,39 @@ function(ev) {
 	}
 
 	return retVal;
-}
+};
+
+DwtHtmlEditor.prototype.getKeyMapName = 
+function() {
+	return "DwtHtmlEditor";
+};
+
+DwtHtmlEditor.prototype.handleKeyAction =
+function(actionCode, ev) {
+	DBG.println(AjxDebug.DBG1, "DwtHtmlEditor.prototype.handleKeyAction: " + actionCode);
+
+	var cmd = "", value = "";
+	if (actionCode == DwtKeyMap.SWITCH_MODE) {
+		try {
+			this.setMode((this._mode == DwtHtmlEditor.HTML) ? DwtHtmlEditor.TEXT : DwtHtmlEditor.HTML, true);
+		} catch (e) {
+			DBG.println(AjxDebug.DBG1, "EXCEPTION!: " + e);
+		}
+	} else if (actionCode.indexOf("Header") == 0) {
+		cmd = DwtHtmlEditor._FORMAT_BLOCK;
+		value = DwtHtmlEditor._ACTION_CODE_TO_CMD[actionCode];
+	} else {
+		cmd = DwtHtmlEditor._ACTION_CODE_TO_CMD[actionCode];
+	}
+
+	if (cmd) {
+		this._execCommand(cmd, value);
+		return true;
+	}
+
+	return false;
+};
+
 
 DwtHtmlEditor.prototype._handleIETabKey =function(fwd){
 
