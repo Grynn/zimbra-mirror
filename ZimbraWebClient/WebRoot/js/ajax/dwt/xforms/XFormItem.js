@@ -3867,7 +3867,15 @@ Dwt_Adaptor_XFormItem.prototype._addCssStylesToDwtWidget = function () {
 **/
 Dwt_Button_XFormItem = function() {}
 XFormItemFactory.createItemType("_DWT_BUTTON_", "dwt_button", Dwt_Button_XFormItem, Dwt_Adaptor_XFormItem)
-
+Dwt_Button_XFormItem.estimateMyWidth = function (label,withIcon,extraMargin) {
+	var width = (String(label).length/2)*XForm.FONT_WIDTH1 + (String(label).length/2)*XForm.FONT_WIDTH2 + 14;
+	if(withIcon)
+		width = width + 24;
+	
+	if(extraMargin>0)
+		width = width + extraMargin;	
+	return width;
+}
 //	type defaults
 Dwt_Button_XFormItem.prototype.labelLocation = DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER;
 Dwt_Button_XFormItem.prototype.writeElementDiv = false;

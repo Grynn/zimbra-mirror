@@ -55,7 +55,8 @@ XForm = function(attributes, model, instance, dwtContainer) {
 }
 XForm.prototype = new DwtComposite;
 XForm.prototype.constructor = XForm;
-
+XForm.FONT_WIDTH1 = 7;
+XForm.FONT_WIDTH2 = 8;
 XForm.toString = function() {	return "[Class XForm]";	}
 XForm.prototype.toString = function() {	return "[XForm " + this.__id + "]";	}
 XForm.prototype.getId = function () {	return this.__id;	}

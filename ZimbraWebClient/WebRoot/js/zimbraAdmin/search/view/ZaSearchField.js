@@ -506,29 +506,16 @@ ZaSearchField.prototype._getMyXForm = function() {
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALL, ZaMsg.SearchFilter_All, ZaMsg.searchForAll, "SearchAll", "SearchAll", new AjxListener(this, this.allFilterSelected)));		
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);
 	
+
 	var xFormObject = {
 		tableCssStyle:"width:100%;padding:2px;",numCols:7,width:"100%",
-		colSizes:["53px", "*", "75px", "108px", "30px", "10px", "100px"],
+		colSizes:["59", "*", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.search, true, 0), Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.help_search, true, 0), "28", "12", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.advanced_search, false, 0)],
 		items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
 				name: "searchMenuButton",
 				toolTipContent:ZaMsg.searchToolTip, 
 				icon:"SearchAll", cssClass:"DwtToolbarButton"},
-			
-			/*
-			{type:_TEXTFIELD_, ref:ZaSearch.A_query, containerCssClass:"search_field_container", label:null, 
-					elementChanged: function(elementValue,instanceValue, event) {
-						var charCode = event.charCode;
-						if (charCode == 13 || charCode == 3) {
-						   this.getForm().parent.invokeCallback();
-						} else {
-							this.getForm().itemChanged(this, elementValue, event);
-						}
-					},
-					//cssClass:"search_input", 
-					cssStyle:"overflow: hidden;", width:"100%"
-			},*/
 			
 			{type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
 				cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",
@@ -558,7 +545,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 				]
 			},
 					
-			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:ZaMsg.search, name: "searchButton",
+			{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAll, icon:"Search", name: "searchButton",
 					onActivate:ZaSearchField.srchButtonHndlr, 
 					cssStyle: AjxEnv.isIE ? "marginLeft: 2px;" : "marginLeft: 5px;",
 					cssClass:"DwtToolbarButton"},
@@ -574,13 +561,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 				cssStyle:"overflow: hidden" ,	
                 onActivate:ZaSearchField.advancedButtonHndlr,
 					cssClass: "DwtToolbarButton ZaAdvancedSearchButton" }
-			/*{type:_OUTPUT_, value:ZaMsg.Filter+":", label:null},
-			{type:_CHECKBOX_, ref:ZaSearch.A_fAccounts,label:ZaMsg.Filter_Accounts, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},					
-			{type:_CHECKBOX_, ref:ZaSearch.A_fAliases,label:ZaMsg.Filter_Aliases, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"},
-			{type:_CHECKBOX_, ref:ZaSearch.A_fdistributionlists,label:ZaMsg.Filter_DLs, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
-			//HC:Resource
-			{type:_CHECKBOX_, ref:ZaSearch.A_fResources,label:ZaMsg.Filter_Resources, labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}*/
-
+			
 		]
 	};
 	return xFormObject;
