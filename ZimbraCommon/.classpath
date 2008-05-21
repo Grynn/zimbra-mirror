@@ -88,6 +88,7 @@
 	<classpathentry kind="lib" path="jars/jfreechart-1.0.1.jar"/>
 	<classpathentry kind="lib" path="jars/jcommon-1.0.0.jar"/>
 	<classpathentry kind="lib" path="jars/jsieve-0.1-zimbra.jar" sourcepath="/ThirdParty/jsieve"/>
+	<classpathentry kind="lib" path="jars/json.jar" sourcepath="/ThirdParty/json/src/java"/>
 	<classpathentry kind="lib" path="jars/ant-1.7.0-ziputil-patched.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
