@@ -63,6 +63,26 @@ public class LocalMailbox extends DesktopMailbox {
         }
     }
     
+    private int adjustFlags(int flags) throws ServiceException {
+    	DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
+    	if (ds != null && ds.getType() == DataSource.Type.imap) {
+    		flags |= Flag.BITMASK_SYNCFOLDER;
+    	}
+    	return flags;
+    }
+    
+    @Override
+    public synchronized Folder createFolder(OperationContext octxt, String name, int parentId, byte attrs, byte defaultView, int flags, byte color, String url) throws ServiceException {
+    	flags = adjustFlags(flags);
+    	return super.createFolder(octxt, name, parentId, attrs, defaultView, flags, color, url);
+    }
+    
+    @Override
+    public synchronized Folder createFolder(OperationContext octxt, String path, byte attrs, byte defaultView, int flags, byte color, String url) throws ServiceException {
+    	flags = adjustFlags(flags);
+    	return super.createFolder(octxt, path, attrs, defaultView, flags, color, url);
+    }
+    
     @Override
     void snapshotCounts() throws ServiceException {
         // do the normal persisting of folder/tag counts
