@@ -1039,11 +1039,12 @@ function(htmlElId)  {
 DwtControl.findControl =
 function(htmlEl)  {
 	while (htmlEl) {
-		// tagName ensures this is an HTML element (access of attr of non-HTML
-		// element may throw a "Permission Denied" error)
-		if (htmlEl.tagName && htmlEl.id && DwtControl.ALL_BY_ID[htmlEl.id]) {
-			return DwtControl.ALL_BY_ID[htmlEl.id];
-		}
+		try {
+			// catch Firefox bug that throws "Permission denied" exception
+			if (htmlEl.id && DwtControl.ALL_BY_ID[htmlEl.id]) {
+				return DwtControl.ALL_BY_ID[htmlEl.id];
+			}
+		} catch (ex) { return null; }
 		htmlEl = htmlEl.parentNode;
 	}
 	return null;
