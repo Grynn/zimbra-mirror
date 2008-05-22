@@ -9,9 +9,9 @@
 	<handlerObject>Com_Zimbra_YFinance</handlerObject>
 
 	<contentObject type="companyname">
-		<matchOn>
+		<!--@bug 27511 matchOn>
 	        <regex attrs="ig">(([A-Z][\w-]*\b)\s)?([A-Z][\w-]*\b)\s(inc|Inc|INC|Incorporated|incorporated|INCORPORATED|corp|CORP|Corporate|CORPORATE|Corporation|CORPORATION|LTD|Ltd|LIMITED|Limited)\b</regex>
-		</matchOn>		
+		</matchOn-->		
 	</contentObject>
 
 	<zimletPanelItem label="Finance" icon="YFINANCE-panelIcon">
