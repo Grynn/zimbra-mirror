@@ -59,6 +59,19 @@ public class SSLJiveServerSocketFactory extends SSLServerSocketFactory {
             throw new IOException(e.getMessage());
         }
     }
+    
+    public static SSLServerSocketFactory getInstance(SSLContext sslcontext) throws
+            IOException {
+
+        try {
+            SSLServerSocketFactory factory = sslcontext.getServerSocketFactory();
+            return new SSLJiveServerSocketFactory(factory);
+        }
+        catch (Exception e) {
+            Log.error(e);
+            throw new IOException(e.getMessage());
+        }
+    }
 
     private SSLServerSocketFactory factory;
 

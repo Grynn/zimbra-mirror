@@ -34,7 +34,7 @@ use XmlDoc;
 use Soap;
 
 # specific to this app
-my ($to, $msg, $typing);
+my ($to, $msg, $typing, $html);
 
 #standard options
 my ($user, $pw, $host, $help);  #standard
@@ -47,10 +47,11 @@ GetOptions("u|user=s" => \$user,
            "typing"=>\$typing,
            "t=s"=>\$to,
            "m=s"=>\$msg,
+           "h=s"=>\$html,
           );
 
 if (!defined($user) || !defined($to)) {
-    print "USAGE: imsend -u USER [-typing] -t (ADDRESS|THREAD) [-m MESSAGE]\n";
+    print "USAGE: imsend -u USER [-typing] -t (ADDRESS|THREAD) [-m MESSAGE] [-h HTML]\n";
     exit 1;
 }
 
@@ -67,7 +68,17 @@ if ($to =~ m/.*\@.*/) {
 }
 
 if (defined($msg)) {
-  $d->add("body", undef, undef, $msg);
+  $d->start("body");
+
+  if (defined($msg)) {
+    $d->add("text", undef, undef, $msg);
+  }
+
+  if (defined($html)) {
+    $d->add("html", undef, undef, $html);
+  }
+  
+  $d->end();
 }
 
 if (defined($typing)) {

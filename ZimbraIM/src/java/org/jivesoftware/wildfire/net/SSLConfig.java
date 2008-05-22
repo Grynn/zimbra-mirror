@@ -25,7 +25,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.security.KeyStore;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Configuration of Wildfire's SSL settings.
@@ -34,7 +43,8 @@ import java.security.KeyStore;
  */
 public class SSLConfig {
 
-    private static SSLJiveServerSocketFactory sslFactory;
+    private static SSLJiveServerSocketFactory sslServerSocketFactory;
+    private static SSLSocketFactory sslSocketFactory;
     private static KeyStore keyStore;
     private static String keypass;
     private static KeyStore trustStore;
@@ -44,6 +54,21 @@ public class SSLConfig {
 
     private SSLConfig() {
     }
+    
+    // Create a trust manager that does not validate certificate chains
+    static TrustManager[] trustAllCerts = new TrustManager[]{
+        new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+            public void checkClientTrusted(
+                java.security.cert.X509Certificate[] certs, String authType) {
+            }
+            public void checkServerTrusted(
+                java.security.cert.X509Certificate[] certs, String authType) {
+            }
+        }
+    };    
 
     static {
         String algorithm = JiveGlobals.getProperty("xmpp.socket.ssl.algorithm", "TLS");
@@ -72,8 +97,36 @@ public class SSLConfig {
             trustStore = KeyStore.getInstance(storeType);
             trustStore.load(new FileInputStream(trustStoreLocation), trustpass.toCharArray());
 
-            sslFactory = (SSLJiveServerSocketFactory)SSLJiveServerSocketFactory.getInstance(
-                    algorithm, keyStore, trustStore);
+            {
+                SSLContext sslcontext = SSLContext.getInstance(algorithm);
+                KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                keyFactory.init(keyStore, SSLConfig.getKeyPassword().toCharArray());
+                TrustManagerFactory trustFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                trustFactory.init(trustStore);
+                sslcontext.init(keyFactory.getKeyManagers(),
+                                trustFactory.getTrustManagers(),
+                                new java.security.SecureRandom());
+                
+                sslServerSocketFactory = (SSLJiveServerSocketFactory)SSLJiveServerSocketFactory.getInstance(algorithm, keyStore, trustStore);
+            }
+            {
+                SSLContext sslcontext = SSLContext.getInstance(algorithm);
+                KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                keyFactory.init(keyStore, SSLConfig.getKeyPassword().toCharArray());
+                TrustManagerFactory trustFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                trustFactory.init(trustStore);
+                if (JiveGlobals.getBooleanProperty("xmpp.socket.ssl.allow.untrusted.certs", false)) {
+                    sslcontext.init(keyFactory.getKeyManagers(),
+                                    trustAllCerts,
+                                    new java.security.SecureRandom());
+                } else {
+                    sslcontext.init(keyFactory.getKeyManagers(),
+                                    trustFactory.getTrustManagers(),
+                                    new java.security.SecureRandom());
+                }
+                
+                sslSocketFactory = sslcontext.getSocketFactory();
+            }
         }
         catch (Exception e) {
             Log.error("SSLConfig startup problem.\n" +
@@ -84,7 +137,7 @@ public class SSLConfig {
                     "  trustpass: [" + trustpass + "]", e);
             keyStore = null;
             trustStore = null;
-            sslFactory = null;
+            sslServerSocketFactory = null;
         }
     }
 
@@ -98,22 +151,22 @@ public class SSLConfig {
 
     public static String[] getDefaultCipherSuites() {
         String[] suites;
-        if (sslFactory == null) {
+        if (sslServerSocketFactory == null) {
             suites = new String[]{};
         }
         else {
-            suites = sslFactory.getDefaultCipherSuites();
+            suites = sslServerSocketFactory.getDefaultCipherSuites();
         }
         return suites;
     }
 
     public static String[] getSpportedCipherSuites() {
         String[] suites;
-        if (sslFactory == null) {
+        if (sslServerSocketFactory == null) {
             suites = new String[]{};
         }
         else {
-            suites = sslFactory.getSupportedCipherSuites();
+            suites = sslServerSocketFactory.getSupportedCipherSuites();
         }
         return suites;
     }
@@ -147,11 +200,26 @@ public class SSLConfig {
 
     public static ServerSocket createServerSocket(int port, InetAddress ifAddress) throws
             IOException {
-        if (sslFactory == null) {
+        if (sslServerSocketFactory == null) {
             throw new IOException();
         }
         else {
-            return sslFactory.createServerSocket(port, -1, ifAddress);
+            return sslServerSocketFactory.createServerSocket(port, -1, ifAddress);
         }
     }
+    
+    public static Socket createSSLSocket(int port, InetAddress ifaddress) throws IOException {
+        if (sslSocketFactory == null) {
+            throw new IOException("sslSocketFactory is null");
+        }
+        return sslSocketFactory.createSocket(ifaddress, port);
+    }
+    
+    public static Socket createSSLSocket() throws IOException {
+        if (sslSocketFactory == null) {
+            throw new IOException("sslSocketFactory is null");
+        }
+        return sslSocketFactory.createSocket();
+    }
+    
 }
