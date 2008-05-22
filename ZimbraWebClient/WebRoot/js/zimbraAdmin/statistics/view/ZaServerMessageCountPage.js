@@ -67,7 +67,7 @@ function (item) {
 				imgElement.src = newSrc;
 			}			
 			imgElement = document.getElementById(this._yearImgID);		
-			newSrc = ["/service/statsimg/mta.", item.name, ".year.Message_Count.gif?rand=",Math.random()].join();			
+			newSrc = ["/service/statsimg/mta.", item.name, ".year.Message_Count.gif?rand=",Math.random()].join("");			
 			if(imgElement) {
 				imgElement.src = newSrc;
 			}			
