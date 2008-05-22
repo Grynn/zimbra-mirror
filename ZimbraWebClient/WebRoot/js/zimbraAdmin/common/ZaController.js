@@ -188,6 +188,18 @@ function(msg, noExecReset)  {
 	}
 }
 
+
+ZaController.prototype.popupWarningDialog = 
+function(msg, noExecReset)  {
+	if (!noExecReset)
+		this._execFrame = {func: null, args: null, restartOnError: false};
+	
+	// popup alert
+	this._msgDialog.setMessage(msg, DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
+	if (!this._msgDialog.isPoppedUp()) {
+		this._msgDialog.popup();
+	}
+}
 ZaController.prototype.getControllerForView =
 function(view) {
 //	DBG.println(AjxDebug.DBG1, "*** controller not found for view " + view);

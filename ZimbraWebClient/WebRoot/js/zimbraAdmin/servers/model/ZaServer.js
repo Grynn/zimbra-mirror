@@ -123,7 +123,7 @@ ZaServer.A_VolumeCompressionThreshold = "compressionThreshold";
 ZaServer.A_VolumeType = "type";
 ZaServer.A_CurrentIndexVolumeId = "current_index_volume_id";
 ZaServer.A_CurrentMsgVolumeId = "current_msg_volume_id";
-
+ZaServer.A_isCurrent = "isCurrent";
 //mail proxy
 ZaServer.A_zimbraImapProxyBindPort="zimbraImapProxyBindPort";
 ZaServer.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";

@@ -207,6 +207,9 @@ ZaServerXFormView.updateVolume = function () {
 			if(instance.volume_selection_cache[0][ZaServer.A_VolumeRootPath] != obj[ZaServer.A_VolumeRootPath]) {
 				instance.volume_selection_cache[0][ZaServer.A_VolumeRootPath] = obj[ZaServer.A_VolumeRootPath];
 				dirty=true;
+				if(instance.volume_selection_cache[0][ZaServer.A_isCurrent]) {
+					this.parent._app.getCurrentController().popupWarningDialog(ZaMsg.VM_Warning_Changing_CurVolumePath);
+				}
 			}
 			if(instance.volume_selection_cache[0][ZaServer.A_VolumeCompressBlobs] != obj[ZaServer.A_VolumeCompressBlobs]) {
 				instance.volume_selection_cache[0][ZaServer.A_VolumeCompressBlobs] = obj[ZaServer.A_VolumeCompressBlobs];
