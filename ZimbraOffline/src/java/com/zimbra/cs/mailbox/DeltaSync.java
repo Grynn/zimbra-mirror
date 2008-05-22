@@ -812,6 +812,7 @@ public class DeltaSync {
 	        }
 	        OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
     	} catch (ServiceException x) {
+    		SyncExceptionHandler.checkRecoverableException(x);
     		SyncExceptionHandler.syncMessageFailed(ombx, id, x);
     	}
     }
