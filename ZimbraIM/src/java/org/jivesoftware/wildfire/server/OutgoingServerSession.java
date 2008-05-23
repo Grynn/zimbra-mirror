@@ -261,8 +261,13 @@ public class OutgoingServerSession extends Session {
                 Log.debug("OS - Plain connection to " + hostname + ":" + port + " successful");
             }
             catch (Exception e) {
-                Log.error("Error trying to connect to remote server: " + hostname +
-                        "(DNS lookup: " + realHostname + ":" + realPort + ")", e);
+                if (Log.isDebugEnabled()) {
+                    Log.debug("Error trying to connect to remote server: " + hostname +
+                              "(DNS lookup: " + realHostname + ":" + realPort + ")", e);
+                } else if (Log.isInfoEnabled()) {
+                    Log.info("Error trying to connect to remote server: " + hostname +
+                             "(DNS lookup: " + realHostname + ":" + realPort + ")");
+                }
                 return null;
             }
 
