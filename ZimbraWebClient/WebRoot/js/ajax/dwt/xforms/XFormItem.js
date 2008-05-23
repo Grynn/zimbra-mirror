@@ -1152,6 +1152,15 @@ XFormItem.prototype.showElement = XForm.prototype.showElement;
 XFormItem.prototype.hideElement = XForm.prototype.hideElement;
 XFormItem.prototype.createElement = XForm.prototype.createElement;
 
+XFormItem.estimateMyWidth = function (label,withIcon,extraMargin) {
+	var width = (String(label).length/2)*XForm.FONT_WIDTH1 + (String(label).length/2)*XForm.FONT_WIDTH2 + 14;
+	if(withIcon)
+		width = width + 24;
+	
+	if(extraMargin>0)
+		width = width + extraMargin;	
+	return [width,"px"].join("");
+}
 
 XFormItem.prototype.getWidget = function() {
 	return this.widget;
@@ -3874,7 +3883,7 @@ Dwt_Button_XFormItem.estimateMyWidth = function (label,withIcon,extraMargin) {
 	
 	if(extraMargin>0)
 		width = width + extraMargin;	
-	return width;
+	return [width,"px"].join("");
 }
 //	type defaults
 Dwt_Button_XFormItem.prototype.labelLocation = DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER;

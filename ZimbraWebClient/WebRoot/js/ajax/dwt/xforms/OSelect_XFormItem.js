@@ -654,6 +654,22 @@ OSelect1_XFormItem.prototype.getChoiceElements = function (itemNum) {
 		"</div>\r"
 	);
 }*/
+/*
+OSelect1_XFormItem.prototype.getWidth = function () {
+	var width = XFormItem.prototype.getWidth.call(this);
+	if(width=="auto")
+		return width;
+	else {
+		if(String(parseInt(width)).length == String(width).length) {
+			return parseInt(width)+20;
+		} else {
+			var units = String(width).substring(String(parseInt(width)).length);
+			var newWidth = parseInt(width)+20;
+			return [newWidth,units].join("");
+		}
+	}
+	
+}*/
 
 OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput, updateScript) {
 	var id = this.getId();
