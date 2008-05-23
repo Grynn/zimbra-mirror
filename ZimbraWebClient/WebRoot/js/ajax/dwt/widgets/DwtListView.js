@@ -927,6 +927,15 @@ function(actionCode, ev) {
 	return true;
 };
 
+DwtListView.prototype.setMultiSelect =
+function (enabled) {
+	this.multiSelectEnabled = enabled;
+};
+
+DwtListView.prototype.isMultiSelectEnabled =
+function () {
+	return this.multiSelectEnabled;
+};
 
 // Private methods
 
