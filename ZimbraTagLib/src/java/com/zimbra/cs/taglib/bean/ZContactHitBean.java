@@ -28,6 +28,14 @@ public class ZContactHitBean extends ZSearchHitBean {
         mHit = hit;
     }
 
+    public String getFlags() { return mHit.getFlags(); }
+
+    public boolean getHasFlags() { return mHit.hasFlags(); }
+    
+    public boolean getIsFlagged() { return mHit.isFlagged(); }
+
+    public boolean getHasTags() { return mHit.hasTags(); }
+
     public boolean getIsGroup() { return mHit.isGroup(); }
     
     public String getTagIds() { return mHit.getTagIds(); }    
