@@ -395,23 +395,26 @@ function(attId, isDraft) {
 	if (this._attachDialog && inline && attId) {
 		for (var i = 0; i < attId.length; i++) {
 			var att = attId[i];
-            if( att.s == 0 ){
-                zeroSizedAttachments = true;
-                continue;
-            }
+			if (att.s == 0) {
+				zeroSizedAttachments = true;
+				continue;
+			}
 			var contentType = att.ct;
 			if (contentType && contentType.indexOf("image") != -1) {
 				var cid = Dwt.getNextId();
 				msg.addInlineAttachmentId(cid, att.aid);
-				if(AjxEnv.isIE) this._htmlEditor.insertImage("cid:" + cid, true, 300, 300);
-                else this._htmlEditor.insertImage("cid:" + cid);
+				if (AjxEnv.isIE) {
+					this._htmlEditor.insertImage("cid:" + cid, true, 300, 300);
+				} else {
+					this._htmlEditor.insertImage("cid:" + cid);
+				}
 			} else {
 				msg.addAttachmentId(att.aid);
 			}
 		}
 	} else if (attId && typeof attId != "string") {
 		for (var i = 0; i < attId.length; i++) {
-            if( attId[i].s == 0 ){
+            if (attId[i].s == 0) {
                 zeroSizedAttachments = true;
                 continue;
             }
@@ -421,7 +424,7 @@ function(attId, isDraft) {
 		msg.addAttachmentId(attId);
 	}
 
-    if(zeroSizedAttachments){
+    if (zeroSizedAttachments){
         if (appCtxt.isChildWindow && window.parentController) {
             window.parentController.setStatusMsg(ZmMsg.zeroSizedAtts);
         } else {
@@ -469,7 +472,7 @@ function(attId, isDraft) {
 		var htmlPart = new ZmMimePart();
 		htmlPart.setContentType(ZmMimeTable.TEXT_HTML);
 
-		if (!isDraft) {
+		if (!(isDraft && attId)) {
 			var idoc = this._htmlEditor._getIframeDoc();
 			this._restoreMultipartRelatedImages(idoc);
 		}
@@ -477,7 +480,6 @@ function(attId, isDraft) {
 		var defangedContent = this._htmlEditor.getContent(true);
 		htmlPart.setContent(defangedContent);
 
-		//Support for Inline
 		if (inline) {
 			var relatedPart = new ZmMimePart();
 			relatedPart.setContentType(ZmMimeTable.MULTI_RELATED);
@@ -486,13 +488,11 @@ function(attId, isDraft) {
 		} else {
 			top.children.add(htmlPart);
 		}
-		//top.children.add(htmlPart);
 	} else {
 		var textPart = (this._extraParts || inline) ? new ZmMimePart() : top;
 		textPart.setContentType(ZmMimeTable.TEXT_PLAIN);
 		textPart.setContent(this._htmlEditor.getContent());
 
-		//Support for Inline
 		if (inline) {
 			top.setContentType(ZmMimeTable.MULTI_ALT);
 
@@ -522,8 +522,9 @@ function(attId, isDraft) {
 	msg.setForwardAttIds(forwardAttIds);
 	for (var i = 0; i < ZmMailMsg.COMPOSE_ADDRS.length; i++) {
 		var type = ZmMailMsg.COMPOSE_ADDRS[i];
-		if (addrs[type] && addrs[type].all.size() > 0)
+		if (addrs[type] && addrs[type].all.size() > 0) {
 			msg.setAddresses(type, addrs[type].all);
+		}
 	}
 	msg.identity = this.getIdentity();
 	msg.sendUID = this.sendUID;
@@ -564,16 +565,17 @@ function(attId, isDraft) {
 	}
 
 	if (this._msgAttId) {
-		if(forwardMsgIds.length > 0) {
+		if (forwardMsgIds.length > 0) {
 			//Check if the MsgId is already present in the fwdMsgIds list.
 			var i = 0;
-			while(forwardMsgIds[i] && forwardMsgIds[i] != this._msgAttId){
+			while (forwardMsgIds[i] && forwardMsgIds[i] != this._msgAttId) {
 				i++;
 			}
-			if( i == forwardMsgIds.length) forwardMsgIds.push(this._msgAttId);
+			if (i == forwardMsgIds.length) {
+				forwardMsgIds.push(this._msgAttId);
+			}
 			delete i;
-			//endCheck
-		}else{
+		} else {
 			forwardMsgIds.push(this._msgAttId);
 		}
 	}
@@ -762,7 +764,7 @@ function(msg, idoc) {
 				src = src + "&t=" + (new Date()).getTime();
 				if (src) {
 					images[i].src = src;
-					images[i].setAttribute("dfsrc",dfsrc);
+					images[i].setAttribute("dfsrc", dfsrc);
 				}
 			} else if (dfsrc.indexOf("//") == -1) { // check for content-location verison
 				var src = msg.getContentPartAttachUrl(ZmMailMsg.CONTENT_PART_LOCATION, dfsrc);
@@ -771,7 +773,7 @@ function(msg, idoc) {
 				if (src) {
 					num++;
 					images[i].src = src;
-					images[i].setAttribute("dfsrc",dfsrc);
+					images[i].setAttribute("dfsrc", dfsrc);
 				}
 			}
 		}
