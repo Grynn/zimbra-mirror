@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.0.8" transformSequenceNumber="1">
-  <directoryPresets config="./build/dist" />
+  <directoryPresets config="./build/dist/jetty/common/lib" />
   <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.84" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -112,6 +112,7 @@
       <archive location="./build/dist/jetty/common/lib/commons-collections-3.1.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-dbcp-1.1.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-pool-1.1.jar" />
+      <archive location="./build/dist/jetty/common/lib/json.jar" />
       <archive location="./build/dist/jetty/common/lib/mail.jar" />
       <archive location="./build/dist/jetty/common/lib/zimbracommon.jar" />
       <archive location="./build/dist/jetty/webapps/service/WEB-INF/lib/zimbrastore.jar" />
