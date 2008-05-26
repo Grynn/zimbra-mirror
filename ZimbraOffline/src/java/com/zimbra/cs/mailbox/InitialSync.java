@@ -148,7 +148,7 @@ public class InitialSync {
         return new InitialSync(ombx).sync();
     }
 
-    public String sync() throws ServiceException {
+    private String sync() throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST);
         syncResponse = ombx.sendRequest(request);
         
@@ -157,7 +157,7 @@ public class InitialSync {
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
 
         OfflineLog.offline.debug("starting initial sync");
-        mMailboxSync.updateInitialSync(syncResponse);
+        mMailboxSync.saveSyncTree(syncResponse);
         initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
         mMailboxSync.recordSyncComplete(token);
         OfflineLog.offline.debug("ending initial sync");
@@ -173,7 +173,7 @@ public class InitialSync {
         // do a NOOP before resuming to make sure the link is viable
         ombx.sendRequest(new Element.XMLElement(MailConstants.NO_OP_REQUEST));
 
-        syncResponse = mMailboxSync.getInitialSyncResponse();
+        syncResponse = mMailboxSync.getSyncTree();
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
         interrupted = true;
 
@@ -191,6 +191,8 @@ public class InitialSync {
 
     private void initialFolderSync(Element elt) throws ServiceException {
         int folderId = (int) elt.getAttributeLong(MailConstants.A_ID);
+        if (mMailboxSync.isFolderDone(folderId))
+        	return;
 
         // first, sync the container itself
         syncContainer(elt, folderId);
@@ -200,7 +202,7 @@ public class InitialSync {
             if (folderId == Mailbox.ID_FOLDER_TAGS) {
                 for (Element eTag : elt.listElements(MailConstants.E_TAG)) {
                     syncTag(eTag);
-                    eTag.detach();
+                    //eTag.detach();
                 }
             }
             
@@ -230,14 +232,14 @@ public class InitialSync {
 		                try {
 		                	syncCalendarItem(id, folderId);
 		                    if (++counter % 100 == 0)
-		                        mMailboxSync.updateInitialSync(syncResponse, id);
+		                        mMailboxSync.checkpointItem(id);
 		                } catch (Throwable t) {
 		                	OfflineLog.offline.warn("failed to sync calendar item id=" + id, t);
 		                }
 	                }
 	                
-	                eCals.detach();
-		            mMailboxSync.updateInitialSync(syncResponse);
+	                //eCals.detach();
+		            //mMailboxSync.updateInitialSync(syncResponse);
 	            }
             }
             
@@ -254,8 +256,8 @@ public class InitialSync {
 	            		ids.add(Integer.parseInt(msgId));
 	            	}
 	                syncMessagelikeItems(ids, folderId, MailItem.TYPE_MESSAGE, false);
-	                eMessageIds.detach();
-	                mMailboxSync.updateInitialSync(syncResponse);
+	                //eMessageIds.detach();
+	                //mMailboxSync.updateInitialSync(syncResponse);
 	            }
             }
 
@@ -272,8 +274,8 @@ public class InitialSync {
 	            		ids.add(Integer.parseInt(chatId));
 	            	}
 	                syncMessagelikeItems(ids, folderId, MailItem.TYPE_CHAT, false);
-	                eChatIds.detach();
-	                mMailboxSync.updateInitialSync(syncResponse);
+	                //eChatIds.detach();
+	                //mMailboxSync.updateInitialSync(syncResponse);
 	            }
             }
 
@@ -290,8 +292,8 @@ public class InitialSync {
 	                    if (!isAlreadySynced(contactId, MailItem.TYPE_CONTACT, false))
 	                        syncContact(eContact, folderId);
 	                }
-	                eContactIds.detach();
-	                mMailboxSync.updateInitialSync(syncResponse);
+	                //eContactIds.detach();
+	                //mMailboxSync.updateInitialSync(syncResponse);
 	            }
             }
 
@@ -300,8 +302,8 @@ public class InitialSync {
 	            Element eDocIds = elt.getOptionalElement(MailConstants.E_DOC);
 	            if (eDocIds != null) {
 	            	syncAllDocumentsInFolder(folderId);
-	            	eDocIds.detach();
-	                mMailboxSync.updateInitialSync(syncResponse);
+	            	//eDocIds.detach();
+	                //mMailboxSync.updateInitialSync(syncResponse);
 	            }
             }
         }
@@ -325,8 +327,9 @@ public class InitialSync {
         }
 
         // finally, remove the node from the folder hierarchy to note that it's been processed
-        elt.detach();
-        mMailboxSync.updateInitialSync(syncResponse);
+        //elt.detach();
+        mMailboxSync.checkpointFolder(folderId);
+        //mMailboxSync.updateInitialSync(syncResponse);
     }
     
     private void prioritySync(Element elt, int priorityFolderId) throws ServiceException {
@@ -367,13 +370,13 @@ public class InitialSync {
             if (ombx.getRemoteServerVersion().getMajor() < 5 || batchSize == 1) {
                 syncMessage(id, folderId, type);
                 if (++counter % 100 == 0 && !isDeltaSync)
-                    mMailboxSync.updateInitialSync(syncResponse, id);
+                    mMailboxSync.checkpointItem(id);
             } else {
                 itemList.add(id);
                 if ((++counter % batchSize) == 0) {
                     syncMessages(itemList, type);
                     if (!isDeltaSync)
-                    	mMailboxSync.updateInitialSync(syncResponse, id);
+                    	mMailboxSync.checkpointItem(id);
                     itemList.clear();
                 }
             }

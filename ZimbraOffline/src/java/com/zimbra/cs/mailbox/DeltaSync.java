@@ -77,7 +77,7 @@ public class DeltaSync {
         return new DeltaSync(ombx).sync();
     }
 
-    public String sync() throws ServiceException {
+    private String sync() throws ServiceException {
         String oldToken = mMailboxSync.getSyncToken();
         if (oldToken == null)
             oldToken = InitialSync.sync(ombx);
