@@ -28,6 +28,9 @@ use FileHandle;
 my $enabledHTTPProxy;
 my $enabledMailProxy;
 
+our $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
+chomp $platform;
+
 my $id = `whoami`;
 chomp $id;
 if ($id ne "zimbra") {
@@ -206,4 +209,35 @@ sub getLdapServerValue {
   }
 
   return $val;
+}
+
+sub isInstalled {
+  my $pkg = shift;
+
+  my $pkgQuery;
+
+  my $good = 0;
+  if ($platform eq "DEBIAN3.1" || $platform eq "UBUNTU6" || $platform eq "UBUNTU7" || $platform eq "UBUNTUUNKNOWN" || $platform eq "DEBIAN4.0" || $platform eq "DEBIAN4.0_64" || $platform eq "UBUNTU6_64" || $platform eq "DEBIANUNKNOWN" ) {
+    $pkgQuery = "dpkg -s $pkg";
+  } elsif ($platform =~ /MACOSX/) {
+    my @l = sort glob ("/Library/Receipts/${pkg}*");
+    if ( $#l < 0 ) { return 0; }
+    $pkgQuery = "test -d $l[$#l]";
+  } elsif ($platform =~ /RPL/) {
+    $pkgQuery = "conary q $pkg";
+  } else {
+    $pkgQuery = "rpm -q $pkg";
+  }
+
+  my $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
+  $rc >>= 8;
+  if (($platform eq "DEBIAN3.1" || $platform eq "UBUNTU6" || $platform eq "UBUNTU7" || $platform eq "UBUNTUUNKNOWN" || $platform eq "DEBIAN4.0" || $platform eq "DEBIAN4.0_64" || $platform eq "UBUNTU6_64" || $platform eq "DEBIANUNKNOWN" ) && $rc == 0 ) {
+    $good = 1;
+    $pkgQuery = "dpkg -s $pkg | egrep '^Status: ' | grep 'not-installed'";
+    $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
+    $rc >>= 8;
+    return ($rc == $good);
+  } else {
+    return ($rc == $good);
+  }
 }
