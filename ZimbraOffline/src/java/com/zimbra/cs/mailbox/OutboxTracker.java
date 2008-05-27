@@ -63,7 +63,7 @@ class OutboxTracker {
     }
 
     private static void refresh(Mailbox mbox) throws ServiceException {
-    	int[] pendingSends = mbox.listItemIds(new OperationContext(mbox), MailItem.TYPE_MESSAGE, OfflineMailbox.ID_FOLDER_OUTBOX);
+    	List<Integer> pendingSends = mbox.listItemIds(new OperationContext(mbox), MailItem.TYPE_MESSAGE, OfflineMailbox.ID_FOLDER_OUTBOX);
     	synchronized (sOutboxMessageMap) {
     		Map<Integer, Long> oldMap = sOutboxMessageMap.get(mbox.getId());
     		Map<Integer, Long> newMap = new HashMap<Integer, Long>();
