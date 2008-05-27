@@ -66,10 +66,13 @@ AjxInclude = function(includes, baseurl, callback, proxy) {
 			}
 			var script = document.createElement("script");
 			var handler = AjxCallback.simpleClosure(loadNextScript, null, script);
-			if (AjxEnv.isIE)
+			if (AjxEnv.isIE) {
 				script.attachEvent("onreadystatechange", handler);
-			else
+				script.attachEvent("onerror", handler);
+			} else {
 				script.addEventListener("load", handler, true);
+				script.addEventListener("error", handler, true);
+			}
 			script.type = "text/javascript";
 			script.src = fullurl;
 			window.status = "Loading script: " + orig;
