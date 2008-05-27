@@ -119,8 +119,8 @@ public class SkinResources
 
     /**
      * <ul>
-     * <li>Key: alphabetical list of macro names based on user agent
-     * (e.g. GECKO NAVIGATOR MACINTOSH)
+     * <li>Key: client:skin/templates={true|false|split|only}:browser[:locale]
+     * (e.g. standard:beach/templates=split:GECKO NAVIGATOR MACINTOSH:en_US)
      * <li>Value: Map
      * <ul>
      * <li>Key: request uri
