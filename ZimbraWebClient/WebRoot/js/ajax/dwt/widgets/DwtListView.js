@@ -1415,8 +1415,7 @@ function(item) {
 
 DwtListView.prototype._getElFromItem =
 function(item) {
-	var comparisonId = this._getItemId(item);
-	return Dwt.byId(comparisonId);
+	return Dwt.byId(this._getItemId(item));
 }
 
 // returns the index of the given item based on the position of the row

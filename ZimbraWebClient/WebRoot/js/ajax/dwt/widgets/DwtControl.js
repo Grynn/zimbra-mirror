@@ -57,17 +57,14 @@
  *
  * @author Ross Dargahi
  *
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		Parent widget. Except in the case of <i>DwtShell</i>, the parent
- * 											will be a control that is a subclass of <i>DwtComposite</i>.
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			Positioning style (absolute, static, or relative).
- * 											Defaults to <i>DwtControl.STATIC_STYLE</i>.
- *        deferred		[boolean]*			if true, postpone initialization until needed
- *        id			[string]*			An explicit ID to use for the control's HTML element. If not
- * 											provided, defaults to an auto-generated ID.
- *        parentElement         [string|HTMLElement]*           parent element
- *        index 		[int]*				index at which to add this control among parent's children
+ * @param params		[hash]					hash of params:
+ *        parent		[DwtComposite] 			Parent widget. Except in the case of <i>DwtShell</i>, the parent will be a control that is a subclass of <i>DwtComposite</i>.
+ *        className		[string]*				CSS class
+ *        posStyle		[constant]*				Positioning style (absolute, static, or relative). Defaults to <i>DwtControl.STATIC_STYLE</i>.
+ *        deferred		[boolean]*				if true, postpone initialization until needed
+ *        id			[string]*				An explicit ID to use for the control's HTML element. If not provided, defaults to an auto-generated ID.
+ *        parentElement [string|HTMLElement]*	parent element
+ *        index 		[int]*					index at which to add this control among parent's children
  */
 DwtControl = function(params) {
 
