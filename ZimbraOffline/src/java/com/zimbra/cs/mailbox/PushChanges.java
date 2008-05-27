@@ -172,7 +172,7 @@ public class PushChanges {
 
         synchronized (ombx) {
             limit = ombx.getLastChangeID();
-            tombstones = ombx.getTombstoneSet(0);
+            tombstones = ombx.getTombstones(0);
             changes = ombx.getLocalChanges(sContext);
             if (!changes.isEmpty()) {
             	simpleReadChanges = ombx.getSimpleUnreadChanges(sContext, false);

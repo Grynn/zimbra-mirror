@@ -151,7 +151,7 @@ public class Sync {
             int seq = state.getSequence();
             // TODO Can the following sets overlap?
             deletedContactIds = new HashSet<Integer>(
-                mbox.getTombstoneSet(seq).getIds(MailItem.TYPE_CONTACT));
+                mbox.getTombstones(seq).getIds(MailItem.TYPE_CONTACT));
             modifiedContactIds = new HashSet<Integer>(
                 mbox.getModifiedItems(context, seq, MailItem.TYPE_CONTACT).getFirst());
         }
