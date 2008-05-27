@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_yflickr" version="0.1" description="Yflickr">
+<zimlet name="com_zimbra_yflickr" version="0.1" description="Flickr">
 	<include>com_zimbra_yflickr.js</include>
     <include>photoset.js</include>
     <include>md5.js</include>
@@ -7,7 +7,7 @@
 	<handlerObject>Com_Zimbra_Yflickr</handlerObject>
 
 <zimletPanelItem label="Flickr" icon="FLICKR-panelIcon">
-    <toolTipText>Yflickr Zimlet</toolTipText>
+    <toolTipText>Flickr Zimlet</toolTipText>
     <contextMenu>
     <menuItem label="Authorize" id="YflickrAuthorize" icon="AUTHORIZE-panelIcon" />
     <menuItem label="Credits" id="YflickrCredits" icon="CREDITS-panelIcon"/>

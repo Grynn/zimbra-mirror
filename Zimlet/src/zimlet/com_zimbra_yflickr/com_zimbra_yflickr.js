@@ -652,7 +652,7 @@ Com_Zimbra_Yflickr.prototype.displayFlickrHelp = function() {
 Com_Zimbra_Yflickr.prototype.displayAboutFlickrZimlet = function()
 {
     var view = new DwtComposite (this.getShell());
-    var args = {title: "About Yflickr Zimlet", view: view};
+    var args = {title: "About Flickr Zimlet", view: view};
     var dlg = this._createDialog (args);
     var aboutText = 
         "The Yflickr Zimlet for Zimbra Collaboration Suite 5.0 is brought to you by Zimbra, a Yahoo! company" + "<br/>" +
@@ -667,7 +667,7 @@ Com_Zimbra_Yflickr.prototype.displayAboutFlickrZimlet = function()
 Com_Zimbra_Yflickr.prototype.displayCredits = function()
 {
     var view = new DwtComposite (this.getShell());
-    var args = {title: "About Yflickr Zimlet", view: view};
+    var args = {title: "About Flickr Zimlet", view: view};
     var dlg = this._createDialog (args);
     var credits =
     "<span style=\"text-align: center; display:block; margin-left: auto; margin-right: auto;\">" + 
