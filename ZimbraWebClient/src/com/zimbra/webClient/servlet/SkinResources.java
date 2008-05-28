@@ -82,6 +82,8 @@ public class SkinResources
 	private static final String A_SKIN_BACKGROUND_COLOR = "zimbraSkinBackgroundColor";
 	private static final String A_SKIN_SECONDARY_COLOR = "zimbraSkinSecondaryColor";
 	private static final String A_SKIN_SELECTION_COLOR = "zimbraSkinSelectionColor";
+	private static final String A_SKIN_LOGO_LOGIN_BANNER = "zimbraSkinLogoLoginBanner";
+	private static final String A_SKIN_LOGO_APP_BANNER = "zimbraSkinLogoAppBanner";
 	private static final String A_SKIN_LOGO_URL = "zimbraSkinLogoURL";
 
 	private static final String H_USER_AGENT = "User-Agent";
@@ -392,13 +394,21 @@ public class SkinResources
 		// domain overrides
 		Map<String,String> substOverrides = null;
 		try {
-			Domain domain = Provisioning.getInstance().get(DomainBy.name, req.getServerName());
-			substOverrides = new HashMap<String,String>();
-			substOverrides.put(Manifest.S_SKIN_FOREGROUND_COLOR, domain.getAttr(A_SKIN_FOREGROUND_COLOR));
-			substOverrides.put(Manifest.S_SKIN_BACKGROUND_COLOR, domain.getAttr(A_SKIN_BACKGROUND_COLOR));
-			substOverrides.put(Manifest.S_SKIN_SECONDARY_COLOR, domain.getAttr(A_SKIN_SECONDARY_COLOR));
-			substOverrides.put(Manifest.S_SKIN_SELECTION_COLOR, domain.getAttr(A_SKIN_SELECTION_COLOR));
-			substOverrides.put(Manifest.S_SKIN_LOGO_URL, domain.getAttr(A_SKIN_LOGO_URL));
+			Provisioning provisioning = Provisioning.getInstance();
+			String serverName = req.getServerName();
+			Domain domain = provisioning.get(DomainBy.virtualHostname, serverName);
+			if (domain != null) {
+				substOverrides = new HashMap<String,String>();
+				// colors
+				substOverrides.put(Manifest.S_SKIN_FOREGROUND_COLOR, domain.getAttr(A_SKIN_FOREGROUND_COLOR));
+				substOverrides.put(Manifest.S_SKIN_BACKGROUND_COLOR, domain.getAttr(A_SKIN_BACKGROUND_COLOR));
+				substOverrides.put(Manifest.S_SKIN_SECONDARY_COLOR, domain.getAttr(A_SKIN_SECONDARY_COLOR));
+				substOverrides.put(Manifest.S_SKIN_SELECTION_COLOR, domain.getAttr(A_SKIN_SELECTION_COLOR));
+				// images
+				substOverrides.put(Manifest.S_SKIN_LOGO_LOGIN_BANNER, domain.getAttr(A_SKIN_LOGO_LOGIN_BANNER));
+				substOverrides.put(Manifest.S_SKIN_LOGO_APP_BANNER, domain.getAttr(A_SKIN_LOGO_APP_BANNER));
+				substOverrides.put(Manifest.S_SKIN_LOGO_URL, domain.getAttr(A_SKIN_LOGO_URL));
+			}
 		}
 		catch (Exception e) {
 			if (ZimbraLog.webclient.isDebugEnabled()) {
@@ -936,6 +946,8 @@ public class SkinResources
 		public static final String S_SKIN_BACKGROUND_COLOR = "AppC";
 		public static final String S_SKIN_SECONDARY_COLOR = "AltC";
 		public static final String S_SKIN_SELECTION_COLOR = "SelC";
+		public static final String S_SKIN_LOGO_LOGIN_BANNER = "LoginBannerImg";
+		public static final String S_SKIN_LOGO_APP_BANNER = "AppBannerImg";
 		public static final String S_SKIN_LOGO_URL = "LogoURL";
 
         private static final String E_SKIN = "skin";
