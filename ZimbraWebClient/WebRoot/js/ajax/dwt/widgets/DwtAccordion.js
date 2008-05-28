@@ -276,6 +276,22 @@ function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
 };
 
+/**
+ * Shows or hides an alert (aka orange background) on the accordion header
+ *
+ * @param id	[int]		accordion item ID
+ * @param show	[boolean]	true to show the alert
+ */
+DwtAccordion.prototype.showAlert =
+function(id, show) {
+	var header = document.getElementById(this._htmlElId + "_header_" + id);
+	if (show) {
+		Dwt.delClass(header, null, "ZAlert");
+	} else {
+		Dwt.delClass(header, "ZAlert", null);
+	}
+};
+
 // Private Methods
 
 /**
