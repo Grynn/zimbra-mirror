@@ -32,8 +32,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.httpclient.Header;
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
@@ -42,15 +40,14 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
-import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
-import com.zimbra.cs.service.UserServlet.HttpInputStream;
 import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.ToXML;
@@ -106,11 +103,11 @@ public class PushChanges {
     static final int TAG_CHANGES = Change.MODIFIED_NAME | Change.MODIFIED_COLOR;
     
     /** The bitmask of all appointment changes that we propagate to the server. */
-    static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
+    static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS    | Change.MODIFIED_FOLDER |
                                            Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT | Change.MODIFIED_INVITE;
 
     /** The bitmask of all document changes that we propagate to the server. */
-    static final int DOCUMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
+    static final int DOCUMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS    | Change.MODIFIED_FOLDER |
                                         Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT | Change.MODIFIED_NAME;
 
     /** A list of all the "leaf types" (i.e. non-folder types) that we
@@ -381,7 +378,7 @@ public class PushChanges {
     }
     
     public static void sendPendingMessages(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
-    	new PushChanges(ombx).sendPendingMessages((TypedIdList)null, isOnRequest);
+    	new PushChanges(ombx).sendPendingMessages((TypedIdList) null, isOnRequest);
     }
 
     /** Uploads the given message to the remote server using file upload.
@@ -458,7 +455,7 @@ public class PushChanges {
                 default:                    rename = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);  break;
             }
             rename.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_RENAME).addAttribute(MailConstants.A_ID, conflictId)
-                                                   .addAttribute(MailConstants.A_FOLDER, folderId).addAttribute(MailConstants.A_NAME, conflictRename);
+                                                     .addAttribute(MailConstants.A_FOLDER, folderId).addAttribute(MailConstants.A_NAME, conflictRename);
             ombx.sendRequest(rename);
             OfflineLog.offline.info("push: renamed remote " + MailItem.getNameForType(conflictType) + " (" + conflictId + ") to " + folderId + '/' + conflictRename);
 
@@ -931,7 +928,6 @@ public class PushChanges {
     }
     
     private boolean syncCalendarItem(int id) throws ServiceException {
-
         int flags, folderId;
         long date, tags;
         byte color;

@@ -32,6 +32,7 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.Tag;
+import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.session.PendingModifications.Change;
 
 public class DbOfflineMailbox {
@@ -274,10 +275,10 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static MailItem.TypedIdList getChangedItems(OfflineMailbox ombx) throws ServiceException {
+    public static TypedIdList getChangedItems(OfflineMailbox ombx) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
 
-        MailItem.TypedIdList result = new MailItem.TypedIdList();
+        TypedIdList result = new TypedIdList();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {

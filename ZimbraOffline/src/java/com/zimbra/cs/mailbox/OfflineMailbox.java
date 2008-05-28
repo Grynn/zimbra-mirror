@@ -44,6 +44,7 @@ import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
@@ -213,8 +214,8 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    @Override MailItem.TypedIdList collectPendingTombstones() {
-        MailItem.TypedIdList tombstones = super.collectPendingTombstones();
+    @Override TypedIdList collectPendingTombstones() {
+        TypedIdList tombstones = super.collectPendingTombstones();
         for (Integer tagId : mLocalTagDeletes)
             tombstones.remove(MailItem.TYPE_TAG, tagId);
         return tombstones;
@@ -326,7 +327,7 @@ public class OfflineMailbox extends DesktopMailbox {
         } catch (MailServiceException.NoSuchItemException nsie) {
         	//item deleted from local before sync completes renumbering
         	OfflineLog.offline.info("item %d deleted from local db before sync completes renumbering to %d", id, newId);
-        	MailItem.TypedIdList tombstones = new MailItem.TypedIdList();
+        	TypedIdList tombstones = new TypedIdList();
         	tombstones.add(type, newId);
         	DbMailItem.writeTombstones(this, tombstones);
         	success = true;
@@ -376,12 +377,12 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    synchronized MailItem.TypedIdList getLocalChanges(OperationContext octxt) throws ServiceException {
+    synchronized TypedIdList getLocalChanges(OperationContext octxt) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getLocalChanges", octxt);
 
-            MailItem.TypedIdList result = DbOfflineMailbox.getChangedItems(this);
+            TypedIdList result = DbOfflineMailbox.getChangedItems(this);
             success = true;
             return result;
         } finally {
