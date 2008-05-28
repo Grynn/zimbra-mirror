@@ -46,9 +46,24 @@ case "$1" in
 		exit 0
 	;;
 	status)
-		pid=`cat $PIDFILE`
+    if [ -f $PIDFILE ]; then
+		  pid=$(cat $PIDFILE)
+      if [ x"$pid" = "x" ]; then
+        echo "Apache not running."
+        exit 1
+      fi
+    else
+      echo "Apache not running.  No PID file found."
+      exit 1
+    fi
 		kill -0 $pid
-		exit $?
+    if [ $? = 0 ]; then
+      echo "Apache running with PID $pid"
+      exit 0
+    else 
+      echo "Apache not running."
+		  exit 1
+    fi
 	;;
 	*)
 		echo "$0 start|stop|reload|graceful|status"
