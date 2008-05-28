@@ -45,8 +45,6 @@ class SyncExceptionHandler {
 			saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, bao.toString(), pm.getRawSize(), exception);
 		} catch (IOException x) {
 			saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, null, 0, exception);
-		} catch (MessagingException x) {
-			saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, null, 0, exception);
 		}
 	}
 	
