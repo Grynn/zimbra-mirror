@@ -40,6 +40,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.*;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Domain;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.DomainBy;
 
 import java.awt.Color;
 
@@ -74,6 +77,12 @@ public class SkinResources
 	private static final long MAX_INCLUDED_TEMPLATES_SIZE = 1 << 13; // 8K
 
 	private static final String A_TEMPLATES_INCLUDED = "skin.templates.included";
+
+	private static final String A_SKIN_FOREGROUND_COLOR = "zimbraSkinForegroundColor";
+	private static final String A_SKIN_BACKGROUND_COLOR = "zimbraSkinBackgroundColor";
+	private static final String A_SKIN_SECONDARY_COLOR = "zimbraSkinSecondaryColor";
+	private static final String A_SKIN_SELECTION_COLOR = "zimbraSkinSelectionColor";
+	private static final String A_SKIN_LOGO_URL = "zimbraSkinLogoURL";
 
 	private static final String H_USER_AGENT = "User-Agent";
 
@@ -380,8 +389,25 @@ public class SkinResources
         File skinDir = new File(skinDirname);
         File manifestFile = new File(skinDir, SKIN_MANIFEST);
 
+		// domain overrides
+		Map<String,String> substOverrides = null;
+		try {
+			Domain domain = Provisioning.getInstance().get(DomainBy.name, req.getServerName());
+			substOverrides = new HashMap<String,String>();
+			substOverrides.put(Manifest.S_SKIN_FOREGROUND_COLOR, domain.getAttr(A_SKIN_FOREGROUND_COLOR));
+			substOverrides.put(Manifest.S_SKIN_BACKGROUND_COLOR, domain.getAttr(A_SKIN_BACKGROUND_COLOR));
+			substOverrides.put(Manifest.S_SKIN_SECONDARY_COLOR, domain.getAttr(A_SKIN_SECONDARY_COLOR));
+			substOverrides.put(Manifest.S_SKIN_SELECTION_COLOR, domain.getAttr(A_SKIN_SELECTION_COLOR));
+			substOverrides.put(Manifest.S_SKIN_LOGO_URL, domain.getAttr(A_SKIN_LOGO_URL));
+		}
+		catch (Exception e) {
+			if (ZimbraLog.webclient.isDebugEnabled()) {
+				ZimbraLog.webclient.debug("!!! Unable to get domain config");
+			}
+		}
+
         // load manifest
-        Manifest manifest = new Manifest(manifestFile, macros, client);
+        Manifest manifest = new Manifest(manifestFile, macros, client, substOverrides);
 
         // process input files
         StringTokenizer tokenizer = new StringTokenizer(filenames, ",");
@@ -906,6 +932,12 @@ public class SkinResources
         // Constants
         //
 
+		public static final String S_SKIN_FOREGROUND_COLOR = "TxtC";
+		public static final String S_SKIN_BACKGROUND_COLOR = "AppC";
+		public static final String S_SKIN_SECONDARY_COLOR = "AltC";
+		public static final String S_SKIN_SELECTION_COLOR = "SelC";
+		public static final String S_SKIN_LOGO_URL = "LogoURL";
+
         private static final String E_SKIN = "skin";
         private static final String E_SUBSTITUTIONS = "substitutions";
         private static final String E_CSS = "css";
@@ -941,7 +973,8 @@ public class SkinResources
         // Constructors
         //
 
-        public Manifest(File manifestFile, Map<String, String> macros, String client)
+        public Manifest(File manifestFile, Map<String, String> macros, String client,
+						Map<String,String> substOverrides)
                 throws IOException {
             this.client = client;
             // rememeber the macros passed in (for skin substitution functions)
@@ -985,7 +1018,14 @@ public class SkinResources
                     InputStream in = new ByteArrayInputStream(bytes);
 
                     substitutions.load(in);
-                }
+					if (substOverrides != null) {
+						for (String key : substOverrides.keySet()) {
+							String value = substOverrides.get(key);
+							if (value == null) continue;
+							substitutions.setProperty(key, value);
+						}
+					}
+				}
                 catch (Throwable t) {
                     ZimbraLog.webclient.debug("ERROR loading subst file: " + file);
                 }
@@ -1265,6 +1305,12 @@ public class SkinResources
 			int spaceIndex = colorStr.indexOf(" ");
 			if (spaceIndex > -1) {
 				adjustedColorStr = colorStr.substring(0, spaceIndex);
+			}
+
+			// see if named color exists
+			Color color = Color.getColor(colorStr);
+			if (color != null) {
+				return color;
 			}
 			
 			// strip off hash before the name
