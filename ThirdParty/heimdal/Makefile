@@ -10,7 +10,7 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-HEIMDAL_VERSION ?=  1.0.2
+HEIMDAL_VERSION ?=  1.2
 HEIMDAL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/heimdal/heimdal-$(HEIMDAL_VERSION).tgz
 HEIMDAL_SOURCE := $(HEIMDAL_ROOT)/heimdal-$(HEIMDAL_VERSION)
 

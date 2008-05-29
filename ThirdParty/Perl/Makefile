@@ -72,7 +72,7 @@ PERL_LIBS 	:= \
 	IO::Stringy \
 	MIME::Lite \
 	Mail::Mailer \
-	D/DO/DONEILL/MIME-tools-5.423.tar.gz \
+	D/DO/DONEILL/MIME-tools-5.426.tar.gz \
 	XML::Parser \
 	SOAP::Lite \
 	Net::Telnet \
@@ -88,7 +88,7 @@ PERL_LIBS 	:= \
 	IO::Compress::Base \
 	IO::Compress::Zlib \
 	Compress::Raw::Zlib \
-	P/PM/PMQS/Compress-Zlib-1.42.tar.gz \
+	P/PM/PMQS/Compress-Zlib-2.011.tar.gz \
 	Archive::Tar \
 	Digest::SHA1 \
 	Digest::HMAC \
@@ -117,7 +117,7 @@ DBFILE_PERL_LIBS := \
 	DB_File
 
 BDB_PERL_LIBS := \
-	BerkeleyDB-0.32
+	BerkeleyDB-0.34
 
 SA_PERL_LIBS = \
 	Mail::SpamAssassin

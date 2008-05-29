@@ -6,8 +6,8 @@ MAKEARGS ?= -j2
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
 ZIMBRA_HOME ?= /opt/zimbra
-CURL_VERSION ?= 7.17.0
-HEIMDAL_VERSION ?= 1.0.2
+CURL_VERSION ?= 7.18.1
+HEIMDAL_VERSION ?= 1.2
 OPENSSL_VERSION ?= 0.9.8g
 CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CURL_VERSION).tgz
 
