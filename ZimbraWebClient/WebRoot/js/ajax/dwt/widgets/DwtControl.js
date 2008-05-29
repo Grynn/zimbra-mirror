@@ -2580,7 +2580,7 @@ function(ev, eventType, obj, mouseEv) {
 
 	// By default, we halt event processing. Listeners may override
 	var tn = mouseEv.target.tagName.toLowerCase();
-	if (tn != "input" && tn != "textarea") {
+	if (tn != "input" && tn != "textarea" && tn != "a") {
 		mouseEv._stopPropagation = true;
 		mouseEv._returnValue = false;
 	} else {
