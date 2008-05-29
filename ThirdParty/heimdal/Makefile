@@ -50,7 +50,9 @@ build:
 	cd $(HEIMDAL_SOURCE)/lib/editline; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/sl; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/hcrypto; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/wind; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/hx509; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/sqlite; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/krb5; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/ntlm; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/gssapi; $(MAKE) $(MAKEARGS); \
@@ -61,6 +63,7 @@ build:
 	cd $(HEIMDAL_SOURCE)/lib/editline; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/sl; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/hcrypto; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/wind; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/hx509; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/krb5; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/ntlm; $(MAKE) install STRIP=""; \
