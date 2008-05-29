@@ -39,11 +39,13 @@ build:
 	(tar xzf src/curl-$(CURL_VERSION).tar.gz; \
 	cd curl-$(CURL_VERSION); \
 	patch -p1 < ../patches/heimdal.patch; \
+	make ca-bundle; \
 	LD_RUN_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION):/opt/zimbra/heimdal-$(HEIMDAL_VERSION)/lib \
 	CFLAGS="-g -O2" \
 	./configure --prefix=$(ZIMBRA_HOME)/curl-$(CURL_VERSION) --disable-ldap --disable-ldaps \
 		--with-gssapi=/opt/zimbra/heimdal-$(HEIMDAL_VERSION) \
 		--with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION) \
+		--without-ca-path \
 		--with-zlib=/usr/lib64 \
 		--with-libidn=/usr/lib64;\
 	$(MAKE) $(MAKEARGS) curl_minimal_unittest curl_minimal_large_unittest \
