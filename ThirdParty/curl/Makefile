@@ -45,15 +45,14 @@ build:
 	./configure --prefix=$(ZIMBRA_HOME)/curl-$(CURL_VERSION) --disable-ldap --disable-ldaps \
 		--with-gssapi=/opt/zimbra/heimdal-$(HEIMDAL_VERSION) \
 		--with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION) \
-		--without-ca-path \
+		--with-ca-bundle=/opt/zimbra/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt \
 		--with-zlib=/usr/lib64 \
 		--with-libidn=/usr/lib64;\
-	$(MAKE) $(MAKEARGS) curl_minimal_unittest curl_minimal_large_unittest \
-             addressmap_unittest atomicops_unittest frag_unittest \
-             low_level_alloc_unittest markidle_unittest memalign_unittest \
-             packed_cache_test stacktrace_unittest system_alloc_unittest \
-             thread_dealloc_unittest; \
-	 $(MAKE) $(MAKEARGS) install)
+	$(MAKE) $(MAKEARGS); \
+	$(MAKE) $(MAKEARGS) install; \
+	$(MAKE) ca-bundle; \
+	mkdir -p $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/share/curl; \
+	cp -f lib/ca-bundle.crt $(ZIMBRA_HOME)/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt)
 	(cd $(ZIMBRA_HOME); ln -s curl-$(CURL_VERSION) curl)
 
 tar:
