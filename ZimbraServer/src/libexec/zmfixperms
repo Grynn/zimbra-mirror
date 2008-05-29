@@ -298,7 +298,7 @@ if [ -L ${zimbra_home}/postfix ]; then
 	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix*
 	chown -fR ${root_user}:${postfix_owner} ${zimbra_home}/postfix/conf
 
-	chmod 777 ${zimbra_home}/postfix/conf
+	chmod 775 ${zimbra_home}/postfix/conf
 	chmod -fR 644 ${zimbra_home}/postfix/conf/*
 	chmod -f 755 ${zimbra_home}/postfix/conf/postfix-script
 	chmod -f 755 ${zimbra_home}/postfix/conf/post-install
