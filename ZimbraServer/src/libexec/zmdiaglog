@@ -1,4 +1,20 @@
 #!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# 
+# ***** END LICENSE BLOCK *****
+# 
 use strict;
 use Getopt::Std;
 use POSIX qw(strftime);
@@ -7,10 +23,11 @@ use File::Spec;
 use vars qw(
     $VERSION $PID_FILE $DEFAULT_DEST $JMAP $JAVA $DEFAULT_TIMEOUT
     $HAVE_GCORE $HAVE_PSTACK $HAVE_LSOF $LOG_FILE $ZMSTAT_CONF
+    $ZMDUMPENV $ZMPROV
 );
 
-$DEFAULT_DEST = '/tmp/zmdiaglog.' . $$;
-$DEFAULT_TIMEOUT = 30;
+$DEFAULT_DEST = "/tmp/zmdiaglog-$ENV{HOSTNAME}." . $$;
+$DEFAULT_TIMEOUT = 120;
 $PID_FILE = '/opt/zimbra/log/zmmailboxd_java.pid';
 $JMAP = '/opt/zimbra/java/bin/jmap';
 $JAVA = '/opt/zimbra/java/bin/java';
@@ -21,6 +38,8 @@ $HAVE_PSTACK = has_cmd('pstack');
 $HAVE_LSOF = has_cmd('lsof');
 $LOG_FILE = 'zmdiag.log';
 $ZMSTAT_CONF = '/opt/zimbra/conf/zmstat-chart.xml';
+$ZMDUMPENV = '/opt/zimbra/bin/zmdumpenv';
+$ZMPROV = '/opt/zimbra/bin/zmprov';
 
 my ($login,$pass,$uid,$gid) = getpwnam('zimbra');
 
@@ -35,6 +54,48 @@ sub logmsg($) {
     print LOGFILE $msg;
     close(LOGFILE);
     print $msg;
+}
+
+sub get_java_version() {
+	my $version = "UNKNOWN";
+	open(JAVA, "$JAVA -version 2>&1 |") || die "Cannot determine java version: $!";
+	my $version_line = <JAVA>;
+	if ($version_line =~ /"1\.6/) {
+		$version = "1.6";
+	} elsif ($version_line =~ /"1\.5/) {
+		$version = "1.5";
+	} else {
+		die "Unknown java version: $version_line";
+	}
+	close(JAVA);
+	$version;
+}
+
+sub save_heap_info($$$$) {
+	my ($version,$destination,$pid,$timeout) = @_;
+	my $histo_cmd;
+	my $dump_cmd;
+	my $dump_file;
+	if ($version eq '1.6') {
+		$histo_cmd = "$JMAP -histo:live $pid";
+		$dump_cmd  = "su - zimbra -c '$JMAP -dump:live,file=$destination/heapdump.live $pid'";
+		$dump_file = "$destination/heapdump.live";
+	} elsif ($version eq '1.5') {
+		$histo_cmd = "$JMAP -histo $pid";
+		$dump_cmd  = "$JMAP -heap:format=b $pid";
+		$dump_file = "$destination/heap.bin";
+	}
+    logmsg "Retrieving JVM heap histogram\n";
+    exec_with_timeout("su - zimbra -c '$histo_cmd' > heap.histo 2>&1", $timeout);
+    logmsg "Saving JVM heapdump\n";
+    my $success = exec_with_timeout("$dump_cmd", $timeout);
+    my $dumped = -f "$dump_file";
+    if ((!$dumped || !$success) && $version eq '1.6') {
+        logmsg "Failed to save heapdump, attempting forced dump\n";
+        exec_with_timeout("su - zimbra -c '$JMAP -F -dump:file=$destination/heapdump.snapshot $pid'", $timeout);
+        $dumped = -f 'heapdump.snapshot';
+    }
+    $dumped && $success;
 }
 
 sub has_cmd($) {
@@ -116,11 +177,11 @@ sub exec_with_timeout($$) {
 }
 sub HELP_MESSAGE {
     my $fd = shift;
-    print $fd <<'EOF';
+    print $fd <<"EOF";
 Usage: zmdiaglog [-dth]
 
     -d    - Log destination (Default /tmp/zmdiaglog.PID)
-    -t    - Timeout in seconds for hanging commands (Default 30)
+    -t    - Timeout in seconds for hanging commands (Default $DEFAULT_TIMEOUT)
     -h    - This help message
 EOF
 }
@@ -151,6 +212,16 @@ my $mailboxd_pid = get_pid();
 logmsg "ZCS mailboxd pid: $mailboxd_pid\n";
 logmsg "Saving diagnostic logging output to: $destination\n";
 
+my $JAVA_VERSION = get_java_version();
+logmsg "Java version: $JAVA_VERSION\n";
+
+logmsg "Saving output of zmdumpenv\n";
+exec_with_timeout("su - zimbra -c '$ZMDUMPENV' > zmdumpenv.txt 2>&1", $timeout);
+logmsg "Saving server configuration\n";
+exec_with_timeout("su - zimbra -c '$ZMPROV gs $ENV{HOSTNAME}' > zmprov-gs.txt 2>&1", $timeout);
+exec_with_timeout("su - zimbra -c '$ZMPROV gacf' > zmprov-gacf.txt 2>&1", $timeout);
+system("cp /opt/zimbra/conf/localconfig.xml $destination/");
+
 for (my $i = 1; $i <= 10; $i++) {
     logmsg "Collecting thread stats/stacks: $i of 10\n";
     my $TS = strftime("%H-%M-%S", localtime());
@@ -164,22 +235,13 @@ for (my $i = 1; $i <= 10; $i++) {
 
     sleep(5);
 }
-logmsg "Retrieving JVM heap histogram\n";
-exec_with_timeout("su - zimbra -c '$JMAP -histo:live $mailboxd_pid' > heap.histo.live 2>&1", $timeout);
-logmsg "Saving JVM heapdump\n";
-exec_with_timeout("su - zimbra -c '$JMAP -dump:live,file=$destination/heapdump.live $mailboxd_pid'", $timeout);
-my $dumped = -f 'heapdump.live';
-
-if (!$dumped) {
-    logmsg "Failed to save heapdump, attempting forced dump\n";
-    exec_with_timeout("su - zimbra -c '$JMAP -F -dump:file=$destination/heapdump.snapshot $mailboxd_pid'", $timeout);
-    $dumped = -f 'heapdump.snapshot';
-}
+my $dumped = save_heap_info($JAVA_VERSION, $destination, $mailboxd_pid, $timeout);
 
 if ($HAVE_PSTACK) {
     for (my $i = 1; $i <= 3; $i++) {
         logmsg "Collecting process stack: $i of 3\n";
-        exec_with_timeout("pstack $mailboxd_pid > pstack.$i 2>&1", $timeout);
+        my $TS = strftime("%H-%M-%S", localtime());
+        exec_with_timeout("pstack $mailboxd_pid > pstack.$i.$TS 2>&1", $timeout);
         sleep(5);
     }
 } else {
@@ -189,9 +251,15 @@ if ($HAVE_PSTACK) {
 if ($HAVE_GCORE && !$dumped) {
     logmsg "Failed collecting heapdump.  Collecting JVM coredump\n";
     # longer timeout for gcore because it can take a lot longer
-    exec_with_timeout("gcore $mailboxd_pid", 120);
+    my $got_core = exec_with_timeout("gcore $mailboxd_pid", 300);
     logmsg "Converting coredump to heap snapshot\n";
-    qx($JMAP -dump:file=heapdump.snapshot $JAVA core.$mailboxd_pid);
+    if ($got_core) {
+        if ($JAVA_VERSION eq "1.6") {
+            qx($JMAP -dump:file=heapdump.snapshot $JAVA core.$mailboxd_pid);
+        } else {
+            qx($JMAP -heap:format=b $JAVA core.$mailboxd_pid);
+        }
+    }
 } elsif (!$HAVE_GCORE) {
     logmsg "'gcore' (gdb) is not installed, will not collect JVM coredump\n";
 }
@@ -234,6 +302,12 @@ if (-d "/opt/zimbra/zmstat/$yesterday_stats_dir") {
 logmsg "Copying ld.so configuration\n";
 system("cp /etc/ld.so.conf /etc/ld.so.conf.d/* $destination/ld.so.conf/");
 
-logmsg "Zipping up contents into zmdiaglog.zip\n";
-system("nice -n 19 zip -9r zmdiaglog.zip heap* proc-stats.* pstack.* lsof.out zmdiag.log ld.so.conf/ logs/ stats/");
-logmsg "\n *** Diagnostics collection done, stored in $destination/zmdiaglog.zip\n";
+my $dirname = `pwd`;
+chomp($dirname);
+chomp($dirname = `basename $dirname`);
+logmsg "Zipping up contents into $destination/$dirname.zip\n";
+chdir('..');
+system("nice -n 19 zip -9r $dirname.zip $dirname/");
+rename("$dirname.zip", "$dirname/$dirname.zip");
+chdir($destination);
+logmsg "\n *** Diagnostics collection done, stored in $destination/$dirname.zip\n";
