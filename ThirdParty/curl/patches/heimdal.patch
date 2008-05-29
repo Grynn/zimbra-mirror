@@ -1,0 +1,11 @@
+--- curl-7.18.1/configure.orig	2008-05-28 21:11:42.000000000 -0700
++++ curl-7.18.1/configure	2008-05-28 21:11:51.000000000 -0700
+@@ -25743,7 +25743,7 @@
+ 
+ 
+ cat >>confdefs.h <<\_ACEOF
+-#define HAVE_GSSMIT 1
++#define HAVE_GSSHEIMDAL 1
+ _ACEOF
+ 
+ 
