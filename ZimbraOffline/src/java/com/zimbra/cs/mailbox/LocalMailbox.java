@@ -50,19 +50,6 @@ public class LocalMailbox extends DesktopMailbox {
         return new OfflineMailSender();
     }
 
-    @Override
-    public synchronized void deleteMailbox() throws ServiceException {
-        super.deleteMailbox();
-        DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
-        if (ds != null) {
-            OfflineDataSource.removeCachedImapFolders(ds.getId());
-        } else {
-            OfflineLog.offline.warn(
-                "Cannot remove cached folder tracker data for data source (account " +
-                getAccount().getName() + ") because DataSource is null");
-        }
-    }
-    
     private int adjustFlags(int flags) throws ServiceException {
     	DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
     	if (ds != null && ds.getType() == DataSource.Type.imap) {

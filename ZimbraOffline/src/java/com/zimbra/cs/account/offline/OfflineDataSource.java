@@ -17,13 +17,12 @@
 package com.zimbra.cs.account.offline;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.LinkedHashMap;
+import java.util.Collections;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
@@ -38,8 +37,6 @@ import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.datasource.ImapFolderCollection;
-import com.zimbra.cs.datasource.ImapFolder;
 
 public class OfflineDataSource extends DataSource {
     private KnownFolder[] knownFolders;
@@ -65,20 +62,6 @@ public class OfflineDataSource extends DataSource {
     
     private static Map<String, KnownFolder[]> knownFolderMapping = new HashMap<String, KnownFolder[]>();
     private static boolean isSyncAllFoldersByDefault = false;
-    
-    private static ConcurrentMap<String, ImapFolderCollection> imapFolderCache =
-        new ConcurrentHashMap<String, ImapFolderCollection>();
-
-    /**
-     * Removes ImapFolderCollection from folder cache for specified data
-     * source id.
-     * 
-     * @param dataSourceId the data source id
-     */
-    public static void removeCachedImapFolders(String dataSourceId)  {
-        OfflineLog.offline.debug("Removing cached imap folders: id = " + dataSourceId);
-        imapFolderCache.remove(dataSourceId);
-    }
     
     private static class EProperties extends Properties {
     	
@@ -151,7 +134,7 @@ public class OfflineDataSource extends DataSource {
     private static final String PROP_REMOTE = "remote";
     private static final String PROP_SYNC = "sync";
     
-    public static void init() throws FileNotFoundException, IOException {
+    public static void init() throws IOException {
     	EProperties props = new EProperties();
     	props.load(new FileInputStream(OfflineLC.zdesktop_datasource_properties.value()));
     	
@@ -236,7 +219,7 @@ public class OfflineDataSource extends DataSource {
 	@Override
 	public boolean isSyncEnabled(String localPath) {
 		try {
-			Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(getAccount());
+			Mailbox mbox = getMailbox();
 			Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
 			if (folder != null)
 				return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0 && (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
@@ -248,39 +231,55 @@ public class OfflineDataSource extends DataSource {
 		return isSyncEnabledByDefault(localPath);
 	}
 
+    private static final int MAX_UID_ENTRIES = 32 * 1024;
+
+    private static final Map<Object, Long> sLastSyncUids =
+        Collections.synchronizedMap(new LinkedHashMap<Object, Long>() {
+            protected boolean removeEldestEntry(Map.Entry eldest) {
+                return size() > MAX_UID_ENTRIES;
+            }
+        });
+
     @Override
-    public ImapFolderCollection getImapFolders() throws ServiceException {
-        OfflineLog.offline.debug("getImapFolders: id = %s", getId());
-        ImapFolderCollection folders = imapFolderCache.get(getId());
-        if (folders == null) {
-            // TODO Should it be an assertion error if another thread has
-            // created a folder cache entry for this data source?
-            OfflineLog.offline.debug("getImapFolders: loading folder tracker data: id = %s", getId());
-            folders = super.getImapFolders();
-            if (imapFolderCache.putIfAbsent(getId(), folders) != null) {
-                throw new IllegalStateException("Concurrent import of same data source: id = " + getId());
+    public long getLastSyncUid(int folderId) {
+        Object key = key(folderId);
+        if (key != null) {
+            Long uid = sLastSyncUids.get(key(folderId));
+            return uid != null ? uid : 0;
+        }
+        return 0;
+    }
+    
+    @Override
+    public void updateLastSyncUid(int folderId, long uid) {
+        if (uid <= 0) {
+            throw new IllegalArgumentException("invalid uid");
+        }
+        Object key = key(folderId);
+        if (key != null) {
+            synchronized (sLastSyncUids) {
+                Long prev = sLastSyncUids.get(key);
+                if (prev == null || uid > prev) {
+                    sLastSyncUids.put(key, uid);
+                }
             }
         }
-        // Return copy of cached ImapFolderCollection
-        return new ImapFolderCollection(folders);
     }
 
     @Override
-    public void deleteImapFolder(ImapFolder folder) throws ServiceException {
-        OfflineLog.offline.debug("deleteImapFolder: id = %s, folder = %s", getId(), folder.getLocalPath());
-        super.deleteImapFolder(folder);
-        ImapFolderCollection folders = imapFolderCache.get(getId());
-        folders.remove(folder);
+    public void clearLastSyncUid(int folderId) {
+        Object key = key(folderId);
+        if (key != null) {
+            sLastSyncUids.remove(key);
+        }
     }
 
-    @Override
-    public ImapFolder createImapFolder(int itemId, String localPath,
-                                       String remotePath, long uidValidity) throws ServiceException {
-        OfflineLog.offline.debug("createImapFolder: id = %s, folder = %s", getId(), localPath);
-        ImapFolder folder = super.createImapFolder(itemId, localPath, remotePath, uidValidity);
-        ImapFolderCollection folders = imapFolderCache.get(getId());
-        folders.add(folder);
-        return new ImapFolder(folder);
+    private Object key(int folderId) {
+        try {
+            int mailboxId = getMailbox().getId();
+            return (long) mailboxId << 32 | ((long) folderId & 0xffffffffL);
+        } catch (ServiceException e) {
+            return null;
+        }
     }
-
 }
