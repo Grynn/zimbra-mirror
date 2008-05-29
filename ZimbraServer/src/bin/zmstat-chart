@@ -36,7 +36,7 @@ done
 
 if [ $optConf -eq 1 ]; then
     # If --conf option was given, use it.
-    exec zmjava com.zimbra.perf.chart.ChartUtil "$@"
+    exec zmjava -Djava.awt.headless=true com.zimbra.perf.chart.ChartUtil "$@"
 else
     # If no --conf option, look for /opt/zimbra/conf/zmstat-chart.xml and
     # generated one if necessary.
@@ -54,5 +54,5 @@ else
         fi
         mv -f $confTmp $conf
     fi
-    exec zmjava com.zimbra.perf.chart.ChartUtil --conf $conf "$@"
+    exec zmjava -Djava.awt.headless=true com.zimbra.perf.chart.ChartUtil --conf $conf "$@"
 fi
