@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.10";
+my $version = "1.11";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -124,9 +124,10 @@ my %rhlist= &processfile;
 #help menu
 sub help
 {
-  print "perl icalmig.pl -h\n";
-  print "perl icalmig.pl -v\n";
-  print "-f <ics filename>\n";
+  print "Usage: icalmig -f <ics file> [options]\n";
+  print "[options]\n";
+  print "-h           (Shows help)  \n";
+  print "-v           (Shows Version)\n";
   print "-delrdate    (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-exceptions  (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-patternrule (0-OFF 1-ON ) (DEFAULT: 1)\n";
@@ -545,10 +546,13 @@ sub processfile
       my @newrecarr= @{$hlist{$uidtosrch}};
       my @masterrecdata; my $delta_days; my $rdarray;
       my $masterrec;
-      my $RPrulecreated=0;
+      my $RPrulecreated=0; my $checkforltdex=0;
       my $sEvDate=0; my $eEvDate=0;
       my $orig_mstrsdt=0; my $orig_mstredt=0;
       my %srtd_newrecarr=();
+      my %ltd_exlist=(); my $lmt_listrec={};
+      my $islocchanged=0; my $issmrychanged=0; my $isattndchanged=0;
+      my $isrdtimeok=1;my $isdescchanged=0; my $isweekdayok=1;
       #iterate through all occurences
       my %heventdates=();
       foreach my $newrec (@newrecarr)
@@ -631,8 +635,7 @@ sub processfile
                 my $mdescription= $masterrec->{'DESCRIPTION'};
                 
                 my $k1;my $k2;my $v1; my $v2;
-                my $rweekday; my $isweekdayok=1; my $isrdtimeok=1;
-                my $islocchanged=0; my $issmrychanged=0; my $isattndchanged=0; my $isdescchanged=0;
+                my $rweekday;
                 my $ioccurrec; my $ilocation;my $isummary;my @iattenarr;my $idescription;
                 my $floop=1;
                 my $sdt;my $ndt;
@@ -667,25 +670,29 @@ sub processfile
                     if ($masterweekday != $rweekday)
                     {
                       $isweekdayok=0;
+                      $ltd_exlist{$rsdt}=1;
                     }
                     
                     #check for if master date time is equal to rdate time component
                     my $rsttime= $sdt;
-                    if (!istime_equal($msttime,$rsttime))
+                    if (!istime_equal($msttime,$sdt))
                     {
                       $isrdtimeok = 0;
+                      $ltd_exlist{$rsdt}=0;
                       &log_message("occurrence time changed->master-time:$msttime recur-time:$rsttime");
                     }
                     #if location changed, create exceptions
                     if ($mlocation ne $ilocation)
                     {
                       $islocchanged=1;
+                      $ltd_exlist{$rsdt}=0;
                       &log_message("occurrence location changed->master-location:$mlocation recur-location:$ilocation");
                     }
                     #if summary changed, create exceptions
                     if ($msummary ne $isummary)
                     {
                       $issmrychanged=1;
+                      $ltd_exlist{$rsdt}=0;
                       &log_message("occurrence summary changed->master-summary:$msummary recur-summary:$isummary");
                     }
                     #if attendees changed, create exception
@@ -696,6 +703,7 @@ sub processfile
                         if ($iattenarr[$j] ne $mattendeearr[$j])
                         {
                           $isattndchanged=1;
+                          $ltd_exlist{$rsdt}=0;
                           &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \nrecur-attendee:@iattenarr");
                         }
                       }
@@ -703,12 +711,14 @@ sub processfile
                     else
                     {
                       $isattndchanged=1;
+                      $ltd_exlist{$rsdt}=0;
                       &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \nrecur-attendee:@iattenarr");
                     }
                     #if description changed, create exceptions
                     if ($mdescription ne $idescription)
                     {
                       $isdescchanged=1;
+                      $ltd_exlist{$rsdt}=0;
                       &log_message("occurrence description changed->master-summary:$mdescription recur-summary:$idescription");
                     }
                     
@@ -747,11 +757,13 @@ sub processfile
                 if ($masterweekday != $rweekday)
                 {
                   $isweekdayok=0;
+                  $ltd_exlist{$rndt}=1;
                 }
                 #check for if master date time is equal to rdate time component
                 if (!istime_equal($msttime,$ndt))
                 {
                   $isrdtimeok = 0;
+                  $ltd_exlist{$rndt}=0;
                   log_message("occurrence time changed->master-time:$msttime recur-time:$ndt");
                 }
                 #Get summary and location information
@@ -763,12 +775,14 @@ sub processfile
                 if ($mlocation ne $ilocation)
                 {
                   $islocchanged=1;
+                  $ltd_exlist{$rndt}=0;
                   &log_message("occurrence location changed->master-location:$mlocation recur-location:$ilocation");
                 }
                 #if summary changed, create exceptions
                 if ($msummary ne $isummary)
                 {
                   $issmrychanged=1;
+                  $ltd_exlist{$rndt}=0;
                   &log_message("occurrence summary changed->master-summary:$msummary recur-summary:$isummary");
                 }
                 #if attendees changed, create exception
@@ -779,6 +793,7 @@ sub processfile
                     if ($iattenarr[$j] ne $mattendeearr[$j])
                     {
                       $isattndchanged=1;
+                      $ltd_exlist{$rndt}=0;
                       &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \n recur-attendee:@iattenarr");
                     }
                   }
@@ -786,12 +801,15 @@ sub processfile
                 else
                 {
                   $isattndchanged=1;
+                  $ltd_exlist{$rndt}=0;
                   &log_message("occurrence attendees changed \nmaster-attendees:@mattendeearr \n recur-attendee:@iattenarr");
                 }
                 #if description changed, create exceptions
                 if ($mdescription ne $idescription)
                 {
                   $isdescchanged=1;
+                  #push @{$ltd_exlist{$rndt}},0;
+                  $ltd_exlist{$rndt}=0;
                   &log_message("occurrence description changed->master-summary:$mdescription recur-summary:$idescription");
                 }
                 #***************************
@@ -802,12 +820,15 @@ sub processfile
                   $rdcnt++;
                 }
                 my $pmatch= ($dlctr/$rdcnt)*100; #DAILY
+                &log_message("DAILY Match Percentage: $pmatch");
                 if ($pmatch<$MATCHPC)
                 {
                   $pmatch= ($wkctr/$rdcnt)*100;  #WEEKLY
+                  &log_message("WEEKLY Match Percentage: $pmatch");
                   if($pmatch<$MATCHPC)
                   {
                     $pmatch= ($bwkctr/$rdcnt)*100; #BIWEEKLY
+                    &log_message("BIWEEKLY Match Percentage: $pmatch");
                     if($pmatch<$MATCHPC)
                     {
                     }
@@ -834,20 +855,16 @@ sub processfile
                   #be always different.
                   $isweekdayok=1;
                 }
-                &log_message("Match Percentage: $pmatch");
                 &log_message("Total RDATEs: $rdcnt DailyCtr: $dlctr WeeklyCtr: $wkctr");
                 #### Exception/RRULE creation criteria ####
                 #1. if recurrence pattern found, No need to create exceptions
                 #2. if weekdays has changed due to meeting has moved to another day,
-                #   create exception.
-                #3. if time has changed for RDATE occurences, create exception
-                #4. if LOCATION changed for any occurrence, create exception
-                #5. if SUMMARY changed for any occurences, create exception
-                #6. if ATTENDEE list changed for any occurrence, create exception
-                #7. if DESCRIPTION changed for any occurrence, create exception
-                if (($rdpattern) && ($isweekdayok) && ($isrdtimeok)
-                    && (!$islocchanged) &&(!$issmrychanged) &&(!$isattndchanged)
-                    && (!$isdescchanged))
+                #   create complete series exception.
+                if ($rdpattern)
+                    #&& ($isweekdayok))
+                    #&& ($isrdtimeok)
+                    #&& (!$islocchanged) &&(!$issmrychanged) &&(!$isattndchanged)
+                    #&& (!$isdescchanged))
                 {
                   if ($freq eq "DAILY")
                   {
@@ -871,6 +888,7 @@ sub processfile
                   print_outfile("$newrrule");
                   &log_message("New RRULE: $newrrule.");
                   $RPrulecreated=1;
+                  $checkforltdex=1;
                 }
               }#end_if($createPatternRRULE)
 
@@ -893,6 +911,7 @@ sub processfile
                 my $newrrule= "RRULE:FREQ=YEARLY;COUNT=$reccnt;INTERVAL=1";
                 print_outfile("$newrrule");
                 &log_message("New RRULE: $newrrule.");
+                $checkforltdex=0;
               }
             }#end if (!$isrruledone)
             $isrruledone=1;
@@ -921,6 +940,115 @@ sub processfile
         &log_message("Master event created.");
       }#end ($$masterrec->{'MASTER_VEVENT'})
 
+      #if pattern has found and any of following is changed. Create exception
+      #only for changed occurences else exceptions will be created for complete series.
+      #1. if time has changed for RDATE occurences.
+      #2. if LOCATION changed for any occurrence.
+      #3. if SUMMARY changed for any occurences.
+      #4. if ATTENDEE list changed for any occurrence.
+      #5. if DESCRIPTION changed for any occurrence.
+      if (($checkforltdex)&& ((!$isrdtimeok)
+          || ($islocchanged) ||($issmrychanged)
+          || ($isattndchanged) || ($isdescchanged)
+          || ($isweekdayok)))
+      {
+        &log_message("Checking limited exception occurrences");
+        my $recidfmtstr="";
+        my $recctr=1;
+        my $mstrdtstart = $masterrec->{'DTSTART'};
+        my $ndtstart=$mstrdtstart;
+        my $idx2= index($mstrdtstart,';');
+        my $ridx= rindex($mstrdtstart,':');
+        my $recidfmtstr="";
+        if ($idx2>0)
+        {
+          $recidfmtstr=substr($mstrdtstart,$idx2,($ridx-$idx2)+1);
+        }
+        else
+        {
+          $recidfmtstr=":";
+        }
+        $mstrdtstart = substr($mstrdtstart,$ridx+1);
+        my $ndtstart=$mstrdtstart;
+        my $syear= substr($ndtstart,0,4);
+
+        foreach my $srdtkey (sort keys %ltd_exlist)
+        {
+          my $wdc =$ltd_exlist{$srdtkey};
+          my $ctoccurrence=1;
+          #if only weekday changed and weekdays are OK then skip it.
+          if (($wdc ==1)&&($isweekdayok))
+          {
+            $ctoccurrence=0;
+          }
+          if ($ctoccurrence)
+          {
+            my $occurrec=$srtd_newrecarr{$srdtkey}[0];
+            #only for recurrences
+            if (!$occurrec->{'MASTER_VEVENT'})
+            {
+              &log_message("Creating limited Recurrence:");
+              my @occurrecdata= @{$occurrec->{'RECDATA'}};
+              for(my $i=0; $i<=$#occurrecdata; $i++)
+              {
+                my $str=$occurrecdata[$i];
+
+                if ($str =~/^DTSTART/)
+                {
+                  my $tzdtst= $str;
+                  $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
+                  print_outfile("$tzdtst");
+                  &log_message("New DTSATRT:$tzdtst");
+                }
+                elsif ($str =~/^DTEND/)
+                {
+                  my $tzdten= $str;
+                  $tzdten=~ s/DTEND/DTEND$TZTag/;
+                  print_outfile("$tzdten");
+                  &log_message("New DTEND: $tzdten");
+                }
+                elsif($str =~/^RECURRENCE-ID/)
+                {
+                  my $rndtt; my $rntime;
+                  if(!$isrdtimeok)
+                  {
+                    $rndtt=$occurrec->{'DTSTART'};
+                    $rndtt=~ s/DTSTART$recidfmtstr//;
+                    $rndtt=get_date($rndtt);
+                    $rntime = get_time($ndtstart);
+                    $rndtt= "RECURRENCE-ID$TZTag$recidfmtstr$rndtt"."T$rntime";
+                  }
+                  else
+                  {
+                    $rndtt= $str;
+                    $rndtt=~ s/RECURRENCE-ID/RECURRENCE-ID$TZTag/;
+                  }
+                  print_outfile("$rndtt");
+                }
+                elsif($str =~/^CREATED/)
+                {
+                 #do nothing
+                }
+                elsif ($str =~/^UID/)
+                {
+                  #for log purpose only
+                  &log_message("$str");
+                  print_outfile("$str");
+                }
+                else
+                {
+                  print_outfile("$str");
+                }
+              }# end_for(my $i=0...)
+              &log_message("Limited recurrence Created.");
+            }#end_if (!$occurrec->{'MASTER_VEVENT'})
+          }
+        }#end_foreach my $srdtkey
+        $begreceventpos= tell OTHANDLE;
+        &log_message("Check for limited Recurrences finished.");
+        $RPrulecreated=1;
+      }
+
       #if RRULE for exceptions created, create recurrences
       if(!$RPrulecreated)
       {
@@ -943,10 +1071,9 @@ sub processfile
         $mstrdtstart = substr($mstrdtstart,$ridx+1);
         my $ndtstart=$mstrdtstart;
         my $syear= substr($ndtstart,0,4);
-        #for(my $rrctr=$#srtd_newrecarr;$rrctr>=0;$rrctr--)
+
         foreach my $srdtkey (sort keys %srtd_newrecarr)
         {
-          #my $occurrec= $srtd_newrecarr[$rrctr];
           my $occurrec=$srtd_newrecarr{$srdtkey}[0];
           #only for recurrences
           if (!$occurrec->{'MASTER_VEVENT'})
@@ -1132,6 +1259,27 @@ sub istime_equal
     return 0;
   }
 }
+
+#Input format 20070302T153000Z, 20070406
+#returns DATE part
+sub get_date
+{
+  my $dt=shift;
+  my @darr = split(/T/, $dt);
+  $dt= $darr[0];
+  return $dt;
+}
+
+#Input format 20070302T153000Z, 20070406
+#returns TIME part
+sub get_time
+{
+  my $tm=shift;
+  my @darr = split(/T/, $tm);
+  $tm= $darr[1];
+  return $tm;
+}
+
 
 sub print_outfile
 {
