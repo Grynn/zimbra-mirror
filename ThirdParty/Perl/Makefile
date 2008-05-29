@@ -24,7 +24,7 @@ MAKE    := $(shell which make)
 
 BDB_VERSION ?= 4.2.52.6
 SSL_VERSION ?= 0.9.8g
-LDAP_VERSION ?= 2.3.41.7z
+LDAP_VERSION ?= 2.3.42.6z
 BDB_INC ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
 
@@ -88,7 +88,7 @@ PERL_LIBS 	:= \
 	IO::Compress::Base \
 	IO::Compress::Zlib \
 	Compress::Raw::Zlib \
-	P/PM/PMQS/Compress-Zlib-2.011.tar.gz \
+	P/PM/PMQS/Compress-Zlib-1.42.tar.gz \
 	Archive::Tar \
 	Digest::SHA1 \
 	Digest::HMAC \
