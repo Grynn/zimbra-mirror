@@ -114,11 +114,12 @@ public class LocalMailbox extends DesktopMailbox {
      *         used when the message was previously sent. */
     private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
 
-    private void sendPendingMessages(boolean isOnRequest) throws ServiceException {
+    private int sendPendingMessages(boolean isOnRequest) throws ServiceException {
     	OperationContext context = new OperationContext(this);
 
-    	for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
-        	int id = iterator.next();
+    	int sentCount = 0;
+        for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
+            int id = iterator.next();
         	
             Message msg = null;
             try {
@@ -185,7 +186,9 @@ public class LocalMailbox extends DesktopMailbox {
             		throw x;
             	}
             }
+            sentCount++;
         }
+        return sentCount;
     }
     
     private void bounceToInbox(OperationContext context, int id, Message msg, String error) {
@@ -296,8 +299,8 @@ public class LocalMailbox extends DesktopMailbox {
     public void sync(boolean isOnRequest) {
 		if (lockMailboxToSync()) {
 			try {
-				sendPendingMessages(isOnRequest);
-				syncAllLocalDataSources(isOnRequest);
+				int count = sendPendingMessages(isOnRequest);
+                                syncAllLocalDataSources(count > 0 ? true : isOnRequest);
 			} catch (Exception x) {
 				OfflineLog.offline.error("exception encountered during sync", x);
 			} finally {
