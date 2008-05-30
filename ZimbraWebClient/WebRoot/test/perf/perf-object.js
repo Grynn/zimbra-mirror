@@ -72,6 +72,31 @@ function objectEnumerateProperties(iters, resultsEl) {
 	resultsEl.innerHTML = after - before;
 }
 
+function SomeClass() { }
+
+SomeClass.doSomething = function(x) {
+	return x * 2;
+};
+
+function objectCallStaticMethod(iters, resultsEl) {
+	var before = new Date().getTime();
+	for (var i = 0; i < iters; i++) {
+		SomeClass.doSomething(i);
+	}
+	var after = new Date().getTime();
+	resultsEl.innerHTML = after - before;
+};
+
+function objectCallVarMethod(iters, resultsEl) {
+	var before = new Date().getTime();
+	var doSomething = SomeClass.doSomething;
+	for (var i = 0; i < iters; i++) {
+		doSomething(i);
+	}
+	var after = new Date().getTime();
+	resultsEl.innerHTML = after - before;
+};
+
 var OBJECT_TESTS = {
 	name: "Object Tests", tests: [
 		{ name: "new Object", iters: 100000, func: objectCreate },
@@ -80,6 +105,8 @@ var OBJECT_TESTS = {
 		{ name: "read property (depth = 5)", iters: 100000, func: objectReadProperty, args: [5] },
 		{ name: "read property (depth = 10)", iters: 100000, func: objectReadProperty, args: [10] },
 		{ name: "enumerate properties", iters: 100000, func: objectEnumerateProperties },
-		{ name: "delete property", iters: 100000, func: objectDeleteProperty }
+		{ name: "delete property", iters: 100000, func: objectDeleteProperty },
+		{ name: "call static method", iters: 100000, func: objectCallStaticMethod },
+		{ name: "call var method", iters: 100000, func: objectCallVarMethod }
 	]
 };
