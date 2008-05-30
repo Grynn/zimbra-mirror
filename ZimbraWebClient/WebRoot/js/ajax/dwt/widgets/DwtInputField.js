@@ -68,7 +68,7 @@ DwtInputField = function(params) {
     this._rows = params.rows ? params.rows : 1;
     this._size = params.size;
 
-    this._errorIconStyle = params.errorIconStyle ? params.errorIconStyle :
+	this._errorIconStyle = params.errorIconStyle ? params.errorIconStyle :
 							params.validator ? DwtInputField.ERROR_ICON_RIGHT : DwtInputField.ERROR_ICON_NONE;
 	this._validationStyle = params.validationStyle ? params.validationStyle : DwtInputField.ONEXIT_VALIDATION;
 
@@ -142,8 +142,12 @@ DwtInputField = function(params) {
     else {
         var oinput = document.getElementById(inputFieldId);
         var ninput = this.__createInputEl(params);
-        oinput.parentNode.replaceChild(ninput, oinput);
-    }
+		// bug fix #
+		if (AjxEnv.isCamino) {
+			oinput.parentNode.style.overflow = "hidden";
+		}
+		oinput.parentNode.replaceChild(ninput, oinput);
+	}
 
     this.setValidatorFunction(params.validatorCtxtObj, params.validator);
 	this._setMouseEventHdlrs(false);
@@ -198,7 +202,8 @@ function() {
 	DwtComposite.prototype.dispose.call(this);
 };
 
-DwtInputField.prototype.getTabGroupMember = function() {
+DwtInputField.prototype.getTabGroupMember =
+function() {
 	return this._tabGroup;
 };
 
@@ -722,7 +727,8 @@ function(oel, nel, inheritClass, inheritStyle) {
 // Private methods
 //
 
-DwtInputField.prototype.__createInputEl = function(params) {
+DwtInputField.prototype.__createInputEl =
+function(params) {
 	// clean up old input field if present
 	var oinput = this._inputField;
 	if (oinput) {
