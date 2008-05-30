@@ -9,21 +9,28 @@
 <topic name="Creating recurring appointments" url="Calendar/b_creating_recurring_appointments.htm" />
 <topic name="Scheduling a meeting" url="Calendar/b_Scheduling_a_meeting.htm" />
 <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
-<topic name="Exporting your iCal calendar" url="Calendar/Exporting_your_iCal_calendar.htm" />
-<topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+<topic name="Cleaning up your Calendar" url="Calendar/Cleaning_up_your_Calendar.htm" />
+<topic name="Exporting iCalendars" url="Calendar/Exporting_iCalendars.htm" />
+<topic name="Importing iCalendars" url="Calendar/Importing_iCalendars.htm" />
+<topic name="Link to Shared Calendar" url="Calendar/Link_to_Shared_Calendar.htm" />
 <topic name="Adding new contacts" url="Contacts/b_Adding_new_contacts.htm" />
 <topic name="Your Address Books" url="Contacts/b_Your_Address_Books.htm" />
+<topic name="Exporting a Contact List" url="Contacts/Exporting_a_Contact_List.htm" />
+<topic name="Linking to a Shared Address Book" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
+<topic name="Printing contact names" url="Contacts/Printing_contact_names.htm" />
 <topic name="Attachment File Types Supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 <topic name="Attaching files to your message" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
 <topic name="Composing new email messages" url="Creating_Messages/b_Composing_email_message.htm" />
+<topic name="Check the spelling" url="Creating_Messages/Check_the_spelling.htm" />
 <topic name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
 <topic name="Parts of an Email Message" url="Creating_Messages/parts_of_an_email_message.htm" />
 <topic name="Saving a draft message" url="Creating_Messages/saving_a_draft_message.htm" />
 <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
+<topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+<topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
 <topic name="Filtering your messages" url="filters/bc_Filtering_your_messages.htm" />
 <topic name="Filter Conditions and Actions Supported" url="filters/filter_conditions_and_actions_supported.htm" />
 <topic name="Getting Start with ZCS Basic Web Client" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
-<topic name="Your Junk folder" url="junk_delete/spam_filtering.htm" />
 <topic name="About folders" url="Navigation_folders_and_tips/about_folders.htm" />
 <topic name="How to navigate with Mail" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
 <topic name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -58,7 +65,8 @@
 <topic name="Change a task" url="Tasks/Change_a_task.htm" />
 <topic name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
 <topic name="Automatically adding your signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
-<topic name="Setting your Options" url="Userspecific/b_Setting_your_Options.htm" />
+<topic name="Setting your Preferences" url="Userspecific/b_Setting_your_Options.htm" />
+<topic name="Changing your default timezone" url="Userspecific/Changing_your_default_timezone.htm" />
 <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
 <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
 <topic name="If your session expires" url="Userspecific/if_your_session_expires.htm" />

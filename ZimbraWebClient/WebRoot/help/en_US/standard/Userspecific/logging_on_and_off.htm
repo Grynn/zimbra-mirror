@@ -15,7 +15,10 @@ if (navigator.appName !="Netscape")
 <!--
 ul.whs1 { list-style:disc; }
 ol.whs2 { list-style:decimal; }
-p.whs3 { margin-left:40px; }
+h6.whs3 { x-condition:BasicWC; }
+ol.whs4 { list-style:decimal; x-condition:BasicWC; }
+p.whs5 { margin-left:40px; x-condition:BasicWC; }
+p.whs6 { x-condition:BasicWC; }
 -->
 </style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
 <!--
@@ -65,7 +68,7 @@ addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -97,8 +100,10 @@ else
  can change the default to be the Standard Web Client from your Preferences, 
  General tab after you log in.</p></li>
 </ul>
-<h6>To log in</h6>
-<ol type="1" class="whs2">
+<ol start="4" type="1" class="whs2">
+	</ol>
+<h6 class="whs3">To log in</h6>
+<ol type="1" class="whs4">
 	<li class=p><p>Open a browser window and enter the URL provided by 
  your Zimbra administrator.<span style="margin-left: 40px;"><br>
 	<br>
@@ -109,31 +114,33 @@ else
  your user name. You may be required to type your full email address as 
  the user name and your password. &nbsp;</p></li>
 </ol>
-<p class="whs3"><span style="margin-left: 40px;">Example 
- of a full email address, type:</span><span style="margin-left: 40px; font-weight: bold;"><B><br>
+<p class="whs5">Example of a full email 
+ address, type:<span style="font-weight: bold;"><B><br>
 <br>
 myra@example.com<br>
 myra123</B></span></p>
-<p class="whs3">Your password displays as ****** on-screen, 
- to protect your privacy.</p>
-<ol start="3" type="1" class="whs2">
+<p class="whs5">Your password displays 
+ as ****** on-screen, to protect your privacy.</p>
+<ol start="3" type="1" class="whs4">
 	<li class=p><p>To be remembered on this computer until the session 
  expires or you log out, check <span style="font-weight: bold;"><B>Remember 
  me on this computer</B></span>.</p></li>
 </ol>
-<p class="whs3">If you check this, you will not have to log 
- in every time you restart the browser during a day. &nbsp;When 
- this is checked and you do not log out, your session remains active until 
- the session expires. The system administrator configures how long a session 
- is active.</p>
-<p class="whs3"><span style="font-weight: bold;"><B>Note:</B></span> 
+<p class="whs5">If you check this, 
+ you will not have to log in every time you restart the browser during 
+ a day. &nbsp;When this is checked and you do not log 
+ out, your session remains active until the session expires. The system 
+ administrator configures how long a session is active.</p>
+<p class="whs5"><span style="font-weight: bold;"><B>Note:</B></span> 
  If you leave your web client open in your browser but do not access your 
  mailbox for a period of time, your session may time out and then you will 
  need to log back in.</p>
 <ol start="4" type="1" class="whs2">
-	<li class=p><p>If you do not want the default <a href="../Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm">client 
- type</a>, change the version displayed.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Log In</B></span>.</p></li>
+	<li style=" x-condition: BasicWC; " class=p><p class="whs6">If 
+ you do not want the default <a href="../Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" 
+ style="x-condition: BasicWC;">client type</a>, change the version displayed.</p></li>
+	<li style="x-condition: BasicWC;" class=p><p>Click <span style="font-weight: bold;"><B>Log 
+ In</B></span>.</p></li>
 </ol>
 <h6>To log out:</h6>
 <p>To prevent others from logging in to your email account, you should 

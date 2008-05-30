@@ -545,7 +545,7 @@ function _browserStringToText(sBStr)
 
 function IsInternal(urlName)
 {
-	if(urlName.indexOf("://")==-1 && urlName.indexOf(":\\")==-1 && urlName.indexOf("jscript:")==-1 && urlName.indexOf("javascript:")==-1 && urlName.indexOf("vbscript:")==-1)
+	if(urlName.indexOf(":")==-1 && urlName.indexOf("&#58;")==-1)
 		return true;
 	else
 		return false;

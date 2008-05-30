@@ -64,7 +64,7 @@ addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -93,9 +93,10 @@ else
 <p>More advanced searches can be done by specifying a <b>search operator</b>. 
  A search operator is a special keyword followed by a colon, followed by 
  some other parameter specific to that operator. For example: </p>
-<ul><li class=p><p><b style="font-weight: bold;">in:inbox</b> the operator 
- is &quot;in&quot; and the parameter is &quot;inbox&quot; - this returns 
- messages which are in the folder named &quot;inbox&quot; </p></li>
+<ul><li class=p><p><b style="font-weight: bold;">in:inbox</b> 
+ the operator is &quot;in&quot; and the parameter is &quot;inbox&quot; 
+ - this returns messages which are in the folder named &quot;inbox&quot; 
+ </p></li>
 </ul>
 <ul><li class=p><p><b style="font-weight: bold;">from:someone</b> the operator 
  is &quot;from&quot; and the parameter is &quot;someone&quot; - this returns 
@@ -238,6 +239,9 @@ else
 <p class="whs1">smaller:</p>
 <p class="whs2">Similar to size: except specifies smaller 
  than the specified size.</p>
+<p class="whs1"><span><B>solo:</B></span></p>
+<p class="whs2">Finds email messages that do not have a reply 
+ to them yet.</p>
 <p class="whs1">tag:</p>
 <p class="whs2">Finds messages which have been tagged with 
  a specified tag. For example,<span class=code> tag:amber</span> will find 

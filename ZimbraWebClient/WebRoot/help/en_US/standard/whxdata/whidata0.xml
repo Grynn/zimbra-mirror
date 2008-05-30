@@ -16,6 +16,9 @@
 <key name="address books, creating" >
   <topic name="Your Address Books" url="Contacts/b_Your_Address_Books.htm" />
 </key>
+<key name="address completion in mail" >
+  <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
 <key name="Attachment Blocking" >
   <topic name="Attachment Blocking" url="reading_mail/attachment_blocking.htm" />
   <topic name="Message blocking feature" url="reading_mail/Message_blocking_feature.htm" />
@@ -26,8 +29,17 @@
 <key name="attachments" >
   <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
 </key>
+<key name="auto-complete addresses" >
+  <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
 <key name="blocking attachments" >
   <topic name="Attachment Blocking" url="reading_mail/attachment_blocking.htm" />
+</key>
+<key name="calendar, exclude from free/busy" >
+  <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="calendar, remote" >
+  <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="contacts, adding to address book" >
   <topic name="Adding new contacts" url="Contacts/b_Adding_new_contacts.htm" />
@@ -52,9 +64,6 @@
 <key name="Empty Trash" >
   <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
 </key>
-<key name="export iCal calendars" >
-  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
 <key name="Filter Conditions" >
   <topic name="Filter Conditions and Actions Supported" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
@@ -68,11 +77,20 @@
   <topic name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <topic name="About folders" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
+<key name="fonts" >
+  <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="formatting with HTML" >
+  <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
 <key name="Forwarding" >
   <topic name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
 <key name="forwarding your email" >
   <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="free/busy, exclude calendar" >
+  <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="full mailbox" >
   <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
@@ -80,14 +98,8 @@
 <key name="group contacts, adding" >
   <topic name="Adding new contacts" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
-<key name="iCal Calendars, import or export" >
-  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="import iCal calendars" >
-  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="Junk folder" >
-  <topic name="Your Junk folder " url="junk_delete/spam_filtering.htm" />
+<key name="HTML" >
+  <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="keyboard shortcuts" >
   <topic name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -156,6 +168,9 @@
 <key name="remember me on this computer" >
   <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
 </key>
+<key name="remote calendar" >
+  <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="Replying" >
   <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
   <key name="mail messages" >
@@ -198,8 +213,8 @@
 <key name="sorting tasks" >
   <topic name="Sorting tasks " url="Tasks/Sorting_tasks_.htm" />
 </key>
-<key name="Spam" >
-  <topic name="Spam filtering" url="junk_delete/spam_filtering.htm" />
+<key name="sync to another calendar" >
+  <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="tags" >
   <topic name="Assigning Tags to messages and contacts" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />

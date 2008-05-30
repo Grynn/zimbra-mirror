@@ -64,7 +64,7 @@ addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -124,17 +124,23 @@ else
 </ul>
 <p>Comparison operators include the following:</p>
 <ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>Matches exactly/does 
+ not match exactly</B></span>. Specifies an exact match. For example, specifying 
+ <span style="font-weight: bold;"><B>Subject</B></span> <span style="font-weight: bold;"><B>matches 
+ exactly</B></span> &nbsp;<span style="font-weight: bold;"><B>Banana</B></span> 
+ would only match &quot;Banana&quot; and not &quot;Bananas&quot; or &quot;A 
+ truck full of banana leaves&quot;.</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Contains/does not contain</B></span>. 
  Specifies that the subject line must contain the specified substring. 
  &nbsp;For example, specifying <span style="font-weight: bold;"><B>Subject 
  contains Banana</B></span> would match &quot;I'm going bananas&quot;.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Matches pattern/does 
- not match pattern</B></span>. The wildcard * is a character used in the mail 
- filter comparison field to represent one or more characters in the filter 
- . For example, specifying Subject matches &quot;banana*&quot; 
+	<li class=p><p><span style="font-weight: bold;"><B>Matches wildcard/does 
+ not match wildcard condition</B></span>. The wildcard * is a character used 
+ in the mail filter comparison field to represent one or more characters 
+ in the filter . For example, specifying Subject matches &quot;banana*&quot; 
  would match &quot;bananas&quot; or &quot;banana-leaf casserole&quot; but 
  not &quot;my banana-leaf casserole.&quot;</p></li>
-	</ul>
+</ul>
 <h3>Actions</h3>
 <ul type="disc" class="whs1">
 	<li class=p><p><span style="font-weight: bold;"><B>Keep in Inbox.</B></span> 
@@ -152,10 +158,13 @@ else
  Flagged</B></span>. </p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Tag with.</B></span> You 
  can tag matching messages with a selected tag.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Do not process additional 
+ filters - </B></span>&nbsp;When this is enabled, other filters 
+ are not checked.</p></li>
 </ul>
 <h3>Multiple Actions</h3>
-<p>A filter rule can specify multiple actions. The combinations of actions 
- are interpreted as follows:</p>
+<p>You can create a filter rule made up of multiple actions. The combinations 
+ of actions in your rule are interpreted as follows:</p>
 <ul type="disc" class="whs1">
 	<li class=p><p><span style="font-weight: bold;"><B>Discard.</B></span> If 
  combined with other actions, discard is ignored and the other actions 
@@ -172,8 +181,8 @@ else
 	<li class=p><p><span style="font-weight: bold;"><B>Keep in Inbox.</B></span> 
  Multiple &quot;keep&quot; actions can be specified, but only one copy 
  of the message is saved to the Inbox.</p></li>
-	<li style="x-condition: BasicWC;" class=p><p class="whs2">Forward 
- to address. Mail is forwarded to the address specified.</p></li>
+	<li class=p><p class="whs2">Forward to address. <span 
+ style="font-weight: normal;">Mail is forwarded to the address specified.</span></p></li>
 </ul>
 <p>&nbsp;</p>
 <script type="text/javascript" language="javascript1.2">

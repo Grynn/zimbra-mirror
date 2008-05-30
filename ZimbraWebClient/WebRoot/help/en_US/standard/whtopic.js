@@ -12,7 +12,7 @@ var gnTopicOnly=-1;
 var gnOutmostTopic=-1;
 var gsFtsBreakChars="\t\r\n\"\\ .,!@#$%^&*()~'`:;<>?/{}[]|+-=\x85\x92\x93\x94\x95\x96\x97\x99\xA9\xAE\xB7";
 
-var gsHiliteSearchSetting = "disable,#b2b4bf,#000000";
+var gsHiliteSearchSetting = "enable,#99ccff,black";
 var gsBkgndColor="";
 var gsTextColor="";
 var BTN_TEXT=1;

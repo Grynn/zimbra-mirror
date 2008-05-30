@@ -14,14 +14,15 @@ if (navigator.appName !="Netscape")
 <style type="text/css">
 <!--
 ol.whs1 { list-style:decimal; }
-ul.whs2 { list-style:decimal; }
-p.whs3 { margin-left:0px; }
+p.whs2 { margin-left:0px; }
+p.whs3 { margin-left:0px; x-condition:BasicWC; }
 -->
 </style><script type="text/javascript" language="JavaScript">
 <!--
 if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
 {
   var strNSS = "<style type='text/css'>";
+  strNSS += "p.whs2 {margin-left:1pt; }";
   strNSS += "p.whs3 {margin-left:1pt; }";
   strNSS +="</style>";
   document.write(strNSS);
@@ -76,7 +77,7 @@ addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -97,17 +98,18 @@ else
  The New Appointment page opens.</p></li>
 </ol>
 <ol start="2" type="1" class="whs1">
-	<li class=p><p>Enter the Subject. The subject is required. The subject 
- becomes the description in the calendar.</p></li>
+	<li class=p><p><span>In the </span><span style="font-weight: bold;"><B>Subject</B></span><span> 
+ field, enter a subject</span>. The subject is required and becomes the 
+ description in the calendar.</p></li>
 	<li class=p><p>If you know where the meeting will be held, enter the 
  information in the Location field. </p></li>
 	<li class=p><p>Set the meeting date and time. Enter the <span style="font-weight: bold;"><B>Start</B></span> 
  date and the <span style="font-weight: bold;"><B>End</B></span> date. If this 
- is recurring meeting, click <a href="b_creating_recurring_appointments.htm"><span 
+ is recurring meeting, in the toolbar, click <a href="b_creating_recurring_appointments.htm"><span 
  style="font-weight: bold;"><B>Repeat</B></span> and set the recurring schedule</a>. 
  </p></li>
 </ol>
-<ul start="4" type="1" class="whs2">
+<ol start="4" type="1" class="whs1">
 	<li class=p-note><p class=note>Note: If the time zone is displayed 
  (<span style="font-weight: bold;"><B>Preferences&gt;Calendar</B></span>), it 
  reflects the time zone that you are in. You usually do not need to change 
@@ -116,31 +118,32 @@ else
  For example, if you create a meeting with attendees in California and 
  New York, the invitation displays Pacific time for attendees in California 
  and Eastern time (three hours later) for attendees in New York.</p></li>
-</ul>
+</ol>
 <ol start="5" type="1" class="whs1">
 	<li class=p><p>If you have more than one calendar, select which calendar 
  is setting up the event from the Calendar menu.. </p></li>
 	<li class=p><p>Enter the names of the attendees. You can enter attendee 
  names in any of the following ways:</p></li>
-	<ul><li style="list-style: disc;" type=disc class=p><p class="whs3">In 
- the toolbar, click <span style="font-weight: bold;"><B>All Attendees</B></span>. 
- Type a name and select which list to use, either Contacts or Global Address 
- List. Select the names and press <span style="font-weight: bold;"><B>Add</B></span>. 
- &nbsp;When complete, click <span style="font-weight: bold;"><B>OK</B></span>. 
- </p></li>
+	<ul><li style="list-style: disc;" type=disc class=p><p class="whs2">In 
+ the toolbar, click <span style="font-weight: bold;"><B>Add &nbsp;Attendees</B></span>. 
+ Type a name and select which list to use, either Personal Contacts, which 
+ searches all your address books or Global Address List. Select the names 
+ and press <span style="font-weight: bold;"><B>Add Selected</B></span>. &nbsp;When 
+ complete, click <span style="font-weight: bold;"><B>Done</B></span>. </p></li>
 		<li style="list-style: disc;" type=disc class=p><p>In the <span 
  style="font-weight: bold;"><B>Attendees</B></span> text field, type the email 
  addresses, separating addresses by a semicolon (;). Names in your Contact 
  list matching what you type are displayed as you type.</p></li>
 	</ul>
-	<li class=p><p class="whs3">Use the <span style="font-weight: bold;"><B>Text</B></span> 
+	<li class=p><p class="whs2">Use the <span style="font-weight: bold;"><B>Text</B></span> 
  field to add additional information to include in the email.</p></li>
-	<li class=p><p class="whs3">Click <span style="font-weight: bold;"><B>Save</B></span>. 
+	<li class=p><p class="whs2">Click <span style="font-weight: bold;"><B>Save</B></span>. 
  An email invitation is sent to all attendees and the appointment is displayed 
  in the calendars.</p></li>
 </ol>
-<p class="whs3">If you are adding an appointment to a shared 
- calendar, you may need to refresh the screen to see the appointment.</p>
+<p class="whs3">If you are adding an 
+ appointment to a shared calendar, you may need to refresh the screen to 
+ see the appointment.</p>
 <script type="text/javascript" language="javascript1.2">
 <!--
 highlightSearch();

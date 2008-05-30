@@ -269,7 +269,10 @@ function writeBook(nIdx)
 		if (!isBookEmpty(nIdx))
 		{
 			sHTML+="parent><p><nobr><a id=\""+getBookId(nIdx)+"\" href=\"javascript:void(0);\" onfocus=\"markBook("+nIdx+");\" onclick=\"";
-			sHTML+="markBook("+nIdx+");insertBookItems("+nIdx+", "+getItemContentsNum(nIdx);
+			if(gbSafari3)
+				sHTML+="markBook("+nIdx+");insertBookItems("+nIdx+", "+getItemContentsNum(nIdx);
+			else
+				sHTML+="insertBookItems("+nIdx+", "+getItemContentsNum(nIdx);
 			sHTML+=");return false;\" title=\""+sName+"\"><img alt=\"Book\" name=\""+getBId(nIdx)+"\" src=\""+sIcon+"\" border=0 align=\"absmiddle\">";
 			sHTML+="&nbsp;"+sName+"</a></nobr></p></div>";
 			var sURL=_textToHtml_nonbsp(getItemURL(nIdx));

@@ -19,12 +19,11 @@
   <item name="Managing how email is displayed" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
   <item name="How do I know when I receive new messages" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
   <item name="Categorizing your email messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="Sorting messages in Content Pane" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  <item name="Sorting messages in Content pane" url="Navigation_folders_and_tips/sorting_conversations.htm" />
   <item name="Printing email messages" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Setting a forwarding address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Purging email messages" url="reading_mail/b_Purging_email_messages.htm" />
-  <item name="Using the Junk folder" url="junk_delete/spam_filtering.htm" />
   <book name="Reading Messages" >
     <item name="Reading mail" url="reading_mail/reading_mail.htm" />
     <item name="Marking mail as unread" url="reading_mail/b_Marking_mail_as_unread.htm" />
@@ -38,8 +37,11 @@
   <item name="Composing new email messages" url="Creating_Messages/b_Composing_email_message.htm" />
   <item name="Parts of an email message" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Adding your signature automatically" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+  <item name="Automatic address completion" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Attaching files to your message" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Attachment file types" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Using HTML editor" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Check the spelling" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Saving messages as drafts" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Reply to and Forward Messages" >
@@ -55,9 +57,10 @@
   <item name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
   <item name="Deleting an appointment" url="Calendar/b_Canceling_a_meeting.htm" />
   <item name="Adding color to calendars" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
-  <item name="Exporting your iCal calendar" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="Link to Shared Calendar" url="Calendar/Link_to_Shared_Calendar.htm" />
+  <item name="Importing iCalendars" url="Calendar/Importing_iCalendars.htm" />
   <item name="Calendar view options" url="Calendar/Calendar_Views.htm" />
+  <item name="Cleaning up your Calendar" url="Calendar/Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Scheduling Appointments, Meetings and Events" >
   <item name="Planning a meeting" url="Calendar/About_the_Appointment_Page.htm" />
@@ -91,6 +94,7 @@
   <item name="Creating away messages" url="Userspecific/vacation_message.htm" />
   <item name="Saving messages you send" url="Navigation_folders_and_tips/sent_folder.htm" />
   <item name="Mailbox quota" url="Navigation_folders_and_tips/quotas.htm" />
+  <item name="Changing your default time zone" url="Userspecific/Changing_your_default_timezone.htm" />
   <item name="Subscribing to RSS/ATOM feed" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>
 

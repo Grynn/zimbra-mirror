@@ -15,7 +15,7 @@ else
 }
 var gCSHFileName="whcshdata.htm";
 
-var gHomePage="Zimbra_Basic_User_Help.htm";
+var gHomePage="Zimbra_User_Help.htm";
 var gaProj=new Array();
 gaProj[0]=new Object();
 gaProj[0].sProjPath=_replaceSlash(_getPath(document.location.href));
@@ -288,7 +288,7 @@ function parsePart(sPart)
 	else if(sPart.toLowerCase().indexOf("url=")==0)
 	{
 		if(IsInternal(sPart.substring(4)))
-			gsTopicURL=sPart.substring(4);
+			gsTopicURL=_textToHtml(sPart.substring(4));
 		gbURLReady=true;
 	}
 	else if(sPart.toLowerCase().indexOf("cmd=")==0)
