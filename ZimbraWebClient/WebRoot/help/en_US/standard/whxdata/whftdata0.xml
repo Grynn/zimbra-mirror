@@ -1,0 +1,71 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
+<topic name="Adding_background_color_to_calendars" url="Calendar/Adding_background_color_to_calendars.htm" />
+<topic name="About Calendar" url="Calendar/b_About_Calendar.htm" />
+<topic name="Canceling a meeting" url="Calendar/b_Canceling_a_meeting.htm" />
+<topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
+<topic name="Creating recurring appointments" url="Calendar/b_creating_recurring_appointments.htm" />
+<topic name="Scheduling a meeting" url="Calendar/b_Scheduling_a_meeting.htm" />
+<topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
+<topic name="Exporting your iCal calendar" url="Calendar/Exporting_your_iCal_calendar.htm" />
+<topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+<topic name="Adding new contacts" url="Contacts/b_Adding_new_contacts.htm" />
+<topic name="Your Address Books" url="Contacts/b_Your_Address_Books.htm" />
+<topic name="Attachment File Types Supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+<topic name="Attaching files to your message" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
+<topic name="Composing new email messages" url="Creating_Messages/b_Composing_email_message.htm" />
+<topic name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
+<topic name="Parts of an Email Message" url="Creating_Messages/parts_of_an_email_message.htm" />
+<topic name="Saving a draft message" url="Creating_Messages/saving_a_draft_message.htm" />
+<topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
+<topic name="Filtering your messages" url="filters/bc_Filtering_your_messages.htm" />
+<topic name="Filter Conditions and Actions Supported" url="filters/filter_conditions_and_actions_supported.htm" />
+<topic name="Getting Start with ZCS Basic Web Client" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+<topic name="Your Junk folder" url="junk_delete/spam_filtering.htm" />
+<topic name="About folders" url="Navigation_folders_and_tips/about_folders.htm" />
+<topic name="How to navigate with Mail" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+<topic name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+<topic name="Managing how email is displayed" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+<topic name="Navigating around your mailbox" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
+<topic name="Deleting folders" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+<topic name="Categorizing your mail messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="System Folders" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="quotas" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="Sent folder" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="Sorting Content Pane List Columns" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<topic name="Subscribe to RSS/ATOM feed" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+<topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="Attachment Blocking" url="reading_mail/attachment_blocking.htm" />
+<topic name="How do I know when I receive new messages" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
+<topic name="Marking mail as unread" url="reading_mail/b_Marking_mail_as_unread.htm" />
+<topic name="Printing email messages" url="reading_mail/b_Printing_email_messages.htm" />
+<topic name="Purging email messages" url="reading_mail/b_Purging_email_messages.htm" />
+<topic name="Message blocking feature" url="reading_mail/Message_blocking_feature.htm" />
+<topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
+<topic name="Reading mail" url="reading_mail/reading_mail.htm" />
+<topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
+<topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
+<topic name="Using Search" url="Search/b_Using_Search.htm" />
+<topic name="Query language description" url="Search/query_language_description.htm" />
+<topic name="Assigning Tags to messages and contacts" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+<topic name="Flagging an email message" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+<topic name="About Tasks" url="Tasks/About_Tasks.htm" />
+<topic name="Create task lists" url="Tasks/bc_Create_task_lists.htm" />
+<topic name="Change a task" url="Tasks/Change_a_task.htm" />
+<topic name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
+<topic name="Automatically adding your signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+<topic name="Setting your Options" url="Userspecific/b_Setting_your_Options.htm" />
+<topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
+<topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
+<topic name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
+<topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
+<topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
+<topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<topic name="Vacation message" url="Userspecific/vacation_message.htm" />
+<topic name="version" url="version.htm" />
+
+</ftstdata>  

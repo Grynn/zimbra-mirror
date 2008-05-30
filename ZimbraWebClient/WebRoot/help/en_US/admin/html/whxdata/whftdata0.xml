@@ -1,0 +1,104 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="Enhancing the Zimbra Admin Console User Interface" url="admin_console_misc/enhancing_the_zimbra_admin_console_user_interface.htm" />
+<topic name="Removing Admin Extension Modules" url="admin_console_misc/removing_admin_extension_modules.htm" />
+<topic name="Global Adminisrator's Mailbox" url="basic_administration_tasks/adminisrator_s_mailbox.htm" />
+<topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
+<topic name="Class of Service Managing" url="cos/class_of_service.htm" />
+<topic name="Creating Classes of Service" url="cos/creating_classes_of_service.htm" />
+<topic name="Override COS Settings" url="cos/override_cos_settings.htm" />
+<topic name="About Zimbra Documents" url="documents/about_zimbra_documents.htm" />
+<topic name="Adding Access to Domain Notebook folder" url="documents/adding_access_to_domain_wiki_notebook_folder.htm" />
+<topic name="Changing Access Permission for Documents" url="documents/changing_access_permission_for_documents.htm" />
+<topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
+<topic name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
+<topic name="About Zimbra Collaboration Suite" url="getting_started/about_zcs.htm" />
+<topic name="Management Tasks not available from the Console" url="getting_started/management_tasks_not_available_from_the_console.htm" />
+<topic name="Tasks Performed from Administration Console" url="getting_started/tasks_performed_from_aministration_console.htm" />
+<topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+<topic name="Adding Distribution Lists to an Account" url="managing_accounts/adding_distribution_lists_to_an_account.htm" />
+<topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+<topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+<topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
+<topic name="Create an Account" url="managing_accounts/create_an_account.htm" />
+<topic name="Creating a Mail Aliases" url="managing_accounts/creating_a_mail_aliases.htm" />
+<topic name="Delete Distribution Lists" url="managing_accounts/delete_distribution_lists.htm" />
+<topic name="Creating Distribution Lists" url="managing_accounts/distribution_lists.htm" />
+<topic name="Editing Accounts" url="managing_accounts/editing_accounts.htm" />
+<topic name="Enabling the Calendar Feature" url="managing_accounts/enabling_the_calendar_feature.htm" />
+<topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
+<topic name="Mailbox usage" url="managing_accounts/mailbox_usage.htm" />
+<topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
+<topic name="Preferences" url="managing_accounts/preferences.htm" />
+<topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+<topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
+<topic name="Re-Indexing a Mailbox" url="managing_accounts/re-indexing_a_mailbox.htm" />
+<topic name="Renaming an Account" url="managing_accounts/renaming_an_account.htm" />
+<topic name="Prevent Users from Changing Passwords" url="managing_accounts/restricting_passwords.htm" />
+<topic name="Using Search" url="managing_accounts/search.htm" />
+<topic name="Setting time zones for accounts" url="managing_accounts/setting_time_zones_for_accounts.htm" />
+<topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
+<topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+<topic name="ZCS Communication Features" url="managing_accounts/zcs__communication_features.htm" />
+<topic name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
+<topic name="AutoComplete on GAL" url="managing_domains/autocomplete_on_gal.htm" />
+<topic name="Changing a domain name" url="managing_domains/changing_a_domain_name.htm" />
+<topic name="Changing Domain Status" url="managing_domains/changing_domain_status.htm" />
+<topic name="Configuring Virtual Hosts" url="managing_domains/configuring_virtual_hosts.htm" />
+<topic name="Adding a New Domain" url="managing_domains/creating_a_domain.htm" />
+<topic name="How to Configure Authentication Mode" url="managing_domains/how_to_configure_authentication_mode.htm" />
+<topic name="How to Configure GAL" url="managing_domains/how_to_configure_gal.htm" />
+<topic name="Managing Domains" url="managing_domains/managing_domains.htm" />
+<topic name="Suspending a Domain" url="managing_domains/suspending_a_domain.htm" />
+<topic name="Configure the Global Address List" url="managing_domains/using_the_global_address_list_(gal).htm" />
+<topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
+<topic name="Anti-Virus Protection" url="managing_global_settings/anti-virus_configuration_options.htm" />
+<topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
+<topic name="Blocking messages with specific extensions" url="managing_global_settings/blocking_messages_with_specific_extensions.htm" />
+<topic name="Configuring IMAP" url="managing_global_settings/configuring_imap.htm" />
+<topic name="Configuring POP" url="managing_global_settings/configuring_pop.htm" />
+<topic name="Configuring the MTA Tab for Global Settings" url="managing_global_settings/configuring_the_mta_tab_for_global_settings.htm" />
+<topic name="Global Attachment Settings" url="managing_global_settings/global_attachment_settings.htm" />
+<topic name="Managing Global Settings" url="managing_global_settings/global_settings.htm" />
+<topic name="IMAP and POP Proxy Server" url="managing_global_settings/imap_and_pop_proxy_server.htm" />
+<topic name="MTA SMTP Restrictions" url="managing_global_settings/mta_smtp_restrictions.htm" />
+<topic name="Relay MTA for external delivery" url="managing_global_settings/relay_mta_for_external_delivery.htm" />
+<topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
+<topic name="Managing Servers" url="managing_servers/managing_servers.htm" />
+<topic name="Monitoring Servers" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
+<topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
+<topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
+<topic name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
+<topic name="Volume Management" url="managing_servers/volume_management.htm" />
+<topic name="Import Destination" url="migration_wizard/import_destination_domino.htm" />
+<topic name="Import Source for Domino" url="migration_wizard/import_source_for_dominos.htm" />
+<topic name="Account Provisioning" url="migration_wizard/mw_account_provisioning.htm" />
+<topic name="Destination Domain" url="migration_wizard/mw_destination_domain.htm" />
+<topic name="Domino LDAP server information" url="migration_wizard/mw_domino_ldap_server_information.htm" />
+<topic name="Domino Source and Destination Mailboxes" url="migration_wizard/mw_domino_source_and_destination_mailboxes.htm" />
+<topic name="Import Destination" url="migration_wizard/mw_import_destination.htm" />
+<topic name="Import in Progress" url="migration_wizard/mw_import_in_progress.htm" />
+<topic name="Import Options" url="migration_wizard/mw_import_options.htm" />
+<topic name="MAPI Logon" url="migration_wizard/mw_mapi_logon.htm" />
+<topic name="Source and Destination Mailboxes" url="migration_wizard/mw_source_and_destination_mailboxes.htm" />
+<topic name="Target Account Verification" url="migration_wizard/mw_target_account_verification.htm" />
+<topic name="Using the Migration Wizard for Exchange" url="migration_wizard/mw_using_the_migration_wizard.htm" />
+<topic name="Using the Migration Wizard for Lotus Domino" url="migration_wizard/zimbra_migration_wizard_for_lotus_domino.htm" />
+<topic name="About MTA Queues" url="monitoring/about_mta_queues.htm" />
+<topic name="Checking Usage Statistics" url="monitoring/checking_usage_statistics.htm" />
+<topic name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
+<topic name="Monitoring Zimbra MTA Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
+<topic name="View Server Status" url="monitoring/view_server_status.htm" />
+<topic name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
+<topic name="Changing a Password" url="passwords/changing_a_password.htm" />
+<topic name="Changing Locked Out Status" url="passwords/changing_locked_out_status.htm" />
+<topic name="Password Options" url="passwords/password_options.htm" />
+<topic name="Setting Account Lockout Rules" url="passwords/setting_account_lockout_rules.htm" />
+<topic name="Setting Password Rules" url="passwords/setting_password_rules.htm" />
+<topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
+<topic name="LMTP" url="popup_and_hotspots_/lmtp.htm" />
+<topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
+<topic name="Installing Certificates" url="tools/installing_certificates.htm" />
+
+</ftstdata>  

@@ -1,0 +1,121 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>About MTA Queues</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Monitoring Tools\nAbout MTA Queues");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>About Mail Queues</h1>
+<p>When the Zimbra MTA receives mail it routes it through a series of queues 
+ to manage delivery. The MTA maintains queues where mail is temporarily 
+ placed while being processed: incoming, active, deferred, and hold.</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>The <span style="font-weight: bold;"><B>incoming</B></span> 
+ queue holds a new mail message that has been received. Each message is 
+ identified with a unique file name. Messages in the incoming queue are 
+ moved to the active queue when there is room in the active queue.</p></li>
+	<li class=p><p>The <span style="font-weight: bold;"><B>active</B></span> queue 
+ holds messages that are ready to be sent. The MTA sets a limit to the 
+ number of messages that can be in the active queue at any one time. From 
+ here, messages are moved to and from the anti-virus and anti-spam filters 
+ before being delivered or moved to another queue.</p></li>
+	<li class=p><p>Message that cannot be delivered for some reason are 
+ placed in the <span style="font-weight: bold;"><B>deferred</B></span> queue until 
+ they are either delivered successfully or expire and are bounced back 
+ to the sender. The reasons for the delivery failures is documented in 
+ a file in the defer queue. This queue is scanned frequently to resend 
+ the message. &nbsp;</p></li>
+	<li class=p><p>The <span style="font-weight: bold;"><B>hold</B></span> queue 
+ keeps mail that could not be processed. Messages stay in this queue until 
+ the administrator moves them. No periodic delivery attempts are made for 
+ messages in the hold queue.</p></li>
+</ul>
+<p>The corrupt queue can be viewed. This queue holds unreadable messages. 
+ </p>
+<p>&nbsp;</p>
+<p>See <a href="monitoring_zimbra_mta_mail_queues.htm">Monitoring Zimbra 
+ MTA Mail Queues</a></p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

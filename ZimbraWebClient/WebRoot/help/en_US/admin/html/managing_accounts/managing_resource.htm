@@ -1,0 +1,176 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Creating a Resource</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+ol.whs2 { list-style:decimal; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Resources\nCreating a Resource");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Creating a Resource</h1>
+<p>A resource is a location or piece of equipment that can be scheduled 
+ for a meeting. The resource has its own mailbox and can accept or reject 
+ invitations automatically. &nbsp;The administrator does 
+ not need to monitor these mailboxes on a regular basis. The contents of 
+ the resource mailboxes are deleted according to the restrictions set in 
+ the COS for email message and trash lifetime.</p>
+<p>When you create a resource account, a mailbox is created on the designated 
+ server and a directory account is created on the LDAP server. </p>
+<p>When you initially create a resource, you can configure the following:</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>Resource name. Descriptive name of location or equipment. 
+ </p></li>
+	<li class=p><p>Type of resource: location or equipment.</p></li>
+	<li class=p><p>The email address for the resource. This field is automatically 
+ populated with the resource name. You can change this. </p></li>
+	<li style="x-condition: NET_OS;" class=p><p>Class of service. </p></li>
+	<li class=p><p>Status. Active or unavailable. An active resource can 
+ be scheduled. When a resource status is <a href="taking_a_resource_out_of_service.htm">unavailable</a>, 
+ the resource is not included in resource list. &nbsp;</p></li>
+	<li class=p><p>Scheduling policy. You can select </p></li>
+	<ul type="disc" class="whs1">
+		<li class=p><p><span style="font-weight: bold;"><B>Auto-accept appointments 
+ unless busy </B></span>to automatically accept appointments unless the resource 
+ is already scheduled. The free/busy times can be viewed.</p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Auto-accept all 
+ appointments</B></span> to automatically accept all appointments that are 
+ scheduled. &nbsp;In this case free/busy information is 
+ not maintained, thus more than one meeting could schedule the resource 
+ for the same time. Because the resource always stays free, the suggested 
+ use for this policy would be for a frequently used location off premises 
+ so that the location address can be included in the invite to attendees. 
+ &nbsp;&nbsp;</p></li>
+	</ul>
+	<li class=p><p><span style="font-weight: bold;"><B>Auto-decline recurring</B></span> 
+ appointments can be checked in addition to selecting a scheduling policy. 
+ &nbsp;When this is checked, the resource can be scheduled 
+ for only one meeting at a time (no reoccurring meetings).</p></li>
+	<li style="x-condition: NET_OS;" class=p><p><span style="font-weight: bold;"><B>Mail 
+ Server</B></span>. You can specify the mail server where the resource account 
+ is created. The default is to have the resource created on any of the 
+ servers listed in the <a href="../cos/assigning_accounts_to_different_servers.htm" style="x-condition: NET_OS;">COS server pool</a>. </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Description</B></span> 
+ of the resource. Description can be helpful information about the resource 
+ such as room layout, number of occupants, or type of projector, etc. Details 
+ in Description are shown to users as a note attached to the resource. 
+ </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Notes</B></span>. Notes 
+ can be used to record any type of information. Details in Notes are not 
+ exposed to users.</p></li>
+	<li class=p><p>Resource location includes, site details, capacity and 
+ street, city, state address. The information from Building, Floor, and 
+ Room fields is automatically populated to the Location Display Name field, 
+ if <span style="font-weight: bold;"><B>auto</B></span> is checked. If auto is 
+ not checked, you can enter a location display name. &nbsp;The 
+ content of this field appears as the location information for the resource.</p></li>
+	<li class=p><p>Contact information, including name, email address, 
+ and phone number. This information is not exposed to the user. </p></li>
+</ul>
+<p>To schedule a resource or location, users invite the equipment and/or 
+ location to a meeting. When they select the resource, they can view the 
+ notes about the resource and view free/busy status for the resource, if 
+ available. When the meeting invite is sent, an email is sent to the account, 
+ and if the resource is free, the meeting is automatically entered in the 
+ resource's calendar. </p>
+<h6>To create a resource</h6>
+<ol type="1" class="whs2">
+	<ol class=whs2 style="list-style: decimal;" type=1>
+		<li class=p><p>Click <span style="font-weight: bold;"><B>Resources, 
+ </B></span>in the navigation pane.</p></li>
+		<li class=p><p>In the Resources toolbar, click <span style="font-weight: bold;"><B><b>New</b></B></span>.</p></li>
+		<li class=p><p>The <span style="font-weight: bold;"><B>New Resource 
+ Wizard</B></span> appears. As a minimum, you must enter the resource name 
+ and enter the resource email address. Select the schedule policy and add 
+ useful information about the resource in the <span style="font-weight: bold;"><B>Description</B></span> 
+ field.</p></li>
+		<li class=p><p>Click <span style="font-weight: bold;"><B>Next</B></span> 
+ and add resource location and contact information. If <span style="font-weight: bold;"><B>auto</B></span> 
+ is checked, information added to Building, Floor, and Room fields are 
+ automatically added to the Location Display Name field. If auto is not 
+ checked, you can add a location display name.</p></li>
+		<li class=p><p>Click <span style="font-weight: bold;"><B>Finish</B></span>.</p></li>
+	</ol>
+</ol>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

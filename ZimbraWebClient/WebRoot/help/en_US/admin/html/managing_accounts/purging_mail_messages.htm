@@ -1,0 +1,120 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Purging Mail Messages</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Accounts\nPurging Mail Messages");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Purging Mail Messages</h1>
+<p>You can configure how many days that messages can remain in users' Inbox, 
+ Trash, or Junk folders before they are automatically deleted. Mail aging 
+ is configured as COS attributes and can be overridden for individual accounts. 
+ The date is calculated from the day the message is received for incoming 
+ messages and the day the message was composed for sent messages. </p>
+<p>The attributes are set from the Advanced Features tab for either COS 
+ or Accounts. You can set the number of days for</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span class=attribute>Email Message Lifetime</span>. 
+ The number of days that a mail message can reside in any folder, except 
+ Trash and Junk folders, before being automatically purged. The default 
+ is to not delete mail.</p></li>
+	<li class=p><p><span class=attribute>Trash Message Lifetime</span>. 
+ The number of days that a mail message will remain in the Trash folder 
+ before being automatically purged. The default is to purge mail from the 
+ Trash folder older than 30 days.</p></li>
+	<li class=p><p><span class=attribute>Junk Message Lifetime</span>. 
+ The number of days that a mail message will remain in the spam folder 
+ before being automatically purged. The default is to purge junk mail older 
+ than 30 days.</p></li>
+</ul>
+<p>The server manages the message purge schedule. To enable message purge 
+ schedule, use the CLI command zmprov to set the <span style="font-weight: bold;"><B>zimbraMailPurgeSleepInterval</B></span> 
+ attribute to the duration of time that the server should &quot;rest&quot; 
+ between purging of mailboxes.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Source and Destination Mailboxes</title>
+<link rel="stylesheet" href="default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+p.whs2 { font-weight:bold; }
+ul.whs3 { list-style:url(ocean_arrow_med.gif); }
+p.whs4 { margin-left:80px; }
+ol.whs5 { list-style:decimal; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Source and Destination Mailboxes</h1>
+<p>In this dialog, list the users who should be migrated to the Zimbra 
+ mailbox server. </p>
+<p>You can select users with either of the following applications:</p>
+<ul type="disc" class="whs1">
+	<li class=p><p class="whs2">Object Picker<span style="font-weight: normal;">, 
+ to select individual accounts to migrate to Zimbra.</span></p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Query Builder</B></span><span>, 
+ to select groups of accounts to migrate to Zimbra.</span></p></li>
+</ul>
+<p>When importing accounts, the migration wizard assumes that:</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>Imports are by a single domain. For example, you might 
+ import users from marketing.domain.com on your Exchange 
+ server to zimbra.domain.com on your Zimbra server.<span 
+ class=code> </span></p></li>
+	<li class=p><p>The user&rsquo;s Common Name (CN) 
+ in Exchange will be the first portion of the email address on the Zimbra 
+ server. To continue the above example, a user who has an account for joe@marketing.zimbra.com 
+ on Exchange would become joe@marketing.zimbra.example.com, 
+ on your Zimbra server.</p></li>
+</ul>
+<p>Click <span class=attribute>Object Picker</span> to select specific 
+ accounts to migrate. </p>
+<ul class="whs3">
+	<li class=p-note><p class=note>Note: For Exchange, the Object Picker 
+ is a Windows standard dialog. For more Help to complete these dialogs, 
+ click the <span style="font-weight: bold;"><B>?</B></span>. </p></li>
+</ul>
+<ul><ol><li style="list-style: decimal;" type=1 class=p><p>In the dialog, 
+ the Object Type is pre configured with the object type, <span style="font-weight: bold;"><B>Users</B></span>. 
+ This cannot be changed. </p></li>
+		<li style="list-style: decimal;" type=1 class=p><p>Click <span 
+ style="font-weight: bold;"><B>Locations</B></span>, to select the domain from 
+ which to select the accounts. </p></li>
+		<li style="list-style: decimal;" type=1 class=p><p>In the <span 
+ style="font-weight: bold;"><B>Enter object names</B></span> text box, type a 
+ user name or partial user name and click <span style="font-weight: bold;"><B>Check 
+ Names</B></span>. A dialog appears with a list of names that meet your query. 
+ For example, if you type Jo, all names that begin with Jo are displayed, 
+ i.e., Joe Smith, Joseph Flanders, Joanna Writh. &nbsp;Select 
+ one or more of the names and click <span style="font-weight: bold;"><B>OK</B></span>. 
+ </p></li>
+	</ol>
+</ul>
+<p class="whs4">You can continue to use the Object Picker 
+ to add more names. &nbsp;When complete, click <span style="font-weight: bold;"><B>OK</B></span><span>.</span></p>
+<p class="whs4">If you type the names and email addresses 
+ instead of using Check Names, separate entries with commas. </p>
+<ul><ol start="4" type="1" class="whs5">
+		<li class=p><p>When all the names are displayed in the Source and 
+ Destination Mailboxes dialog, click <span style="font-weight: bold;"><B>Next</B></span>. 
+ </p></li>
+	</ol>
+</ul>
+<p class="whs4">The Wizard now checks to see if the accounts 
+ selected exists on the Zimbra server.</p>
+<p>Click <span class=attribute>Query Builder</span> to select groups of 
+ accounts to migrate. </p>
+<ul type="disc" class="whs1">
+	<ol type="1" class="whs5">
+		<li class=p><p>When the <span style="font-weight: bold;"><B>Select 
+ Users</B></span> dialog appears, click <span style="font-weight: bold;"><B>Locations</B></span>, 
+ to select the domain from which to select the accounts.</p></li>
+		<li class=p><p>Type the user names or partial user names, separate 
+ names with a comma. &nbsp;Click <span style="font-weight: bold;"><B>Check 
+ Names</B></span>.</p></li>
+		<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>, 
+ when the names are listed.</p></li>
+	</ol>
+</ul>
+<p class="whs4">In the <span style="font-weight: bold;"><B>Active 
+ Directory Query Builder</B></span> dialog, click <span style="font-weight: bold;"><B>Browse</B></span> 
+ to select the base distinguished name (DN) of the container 
+ to be used as the root for the search. If you want all folders under the 
+ selected DN base to be included in the migration, check 
+ <span style="font-weight: bold;"><B>Subtree</B></span>. </p>
+<p class="whs4">To construct a filter to identify which mailboxes 
+ to import, click <span style="font-weight: bold;"><B>Create</B></span>. A standard 
+ Window&rsquo;s database query is displayed in the Filter box.</p>
+<ol type="1" class="whs5">
+	<ol start="4" type="1" class="whs5">
+		<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. 
+ The Source &amp; Destination Mailboxes dialog now displays the Zimbra 
+ account names, the Exchange Store DN information and 
+ the Exchange server DN information. Review the information. 
+ </p></li>
+		<li class=p><p>To remove accounts that should not be migrated, 
+ click <span style="font-weight: bold;"><B>Remove</B></span>. Click <span style="font-weight: bold;"><B>Next</B></span>, 
+ to continue. </p></li>
+	</ol>
+</ol>
+<p class="whs4">The Wizard now checks to see if the accounts 
+ selected exists on the Zimbra server. </p>
+<ul><li class=p-note><p class=note>The steps above are for the Exchange 
+ 6.0 Query Builder dialog. If you are migrating from Exchange 5.5, the 
+ Query Builder dialog is different. You must enter the search base for 
+ the LDAP query and you must construct the filter to identify which mailboxes 
+ to import. </p></li>
+</ul>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

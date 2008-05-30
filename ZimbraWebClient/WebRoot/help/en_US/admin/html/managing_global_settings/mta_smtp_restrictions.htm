@@ -1,0 +1,116 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>MTA SMTP Restrictions</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Global Settings\nMTA Protocol and DNS Checks");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>MTA Protocol and DNS Checks</h1>
+<p>You can enable restrictions so that the MTA does not accept messages 
+ when non standard or other disapproved behavior is exhibited by an incoming 
+ SMTP client. These restrictions provide some protection against ill-behaved 
+ spam senders. </p>
+<p>By default, the following SMTP protocol violators are restricted:</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>Hostname in greeting violates RFC 
+ </p></li>
+	<li class=p><p>Client must greet with a fully qualified hostname</p></li>
+	<li class=p><p>Sender address must be fully qualified</p></li>
+</ul>
+<p>The following DNS based restrictions can also be enabled:</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>Client's IP address</p></li>
+	<li class=p><p>Hostname in greeting</p></li>
+	<li class=p><p>Sender's domain</p></li>
+</ul>
+<p>&nbsp;</p>
+<p><span class=Important>Important:</span> Before setting these restrictions, 
+ identify what type of mails is received outside of your mail system. If 
+ a mail system you want to receive mail from is poorly implemented, you 
+ may have to compromise your restrictions to accommodate their messages. 
+ </p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

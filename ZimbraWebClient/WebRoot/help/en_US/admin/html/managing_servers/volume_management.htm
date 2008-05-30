@@ -1,0 +1,154 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Volume Management</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+ol.whs2 { list-style:decimal; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Servers\nVolume Management");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Volume Management</h1>
+<p>The Server, Volume Management tab can be used to manage storage volumes 
+ on your Zimbra Mailbox server. When Zimbra Collaboration Suite is installed, 
+ one index volume and one message volume are configured on each mailbox 
+ server.</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>The Index volume is /opt/zimbra/index</p></li>
+	<li class=p><p>The Message volume is /opt/zimbra/store</p></li>
+</ul>
+<h2>Index Volume</h2>
+<p>Each Zimbra mailbox server is configured with one current index volume. 
+ &nbsp;Each mailbox is assigned to a permanent index directory 
+ on the current index volume. When an account is created, the current index 
+ volume is automatically defined for the account. &nbsp;You 
+ cannot change which index volume the account is assigned. &nbsp;</p>
+<p>As volumes become full, you can create a new current index volume for 
+ new accounts. The older index volume is no longer assigned new accounts. 
+ </p>
+<p>Index volumes not marked current are still actively in use as the index 
+ volumes for accounts assigned to them. Any index volume that is referenced 
+ by a mailbox as its index volume cannot be deleted. </p>
+<h2>Message Volume</h2>
+<p>When a new message is delivered or created, the message is saved in 
+ the current message volume. Additional message volumes can be created, 
+ but only one is configured as the current volume where new messages are 
+ stored. When the volume is full, you can configure a new current message 
+ volume. The current message volume receives all new messages. New messages 
+ are never stored in the previous volume.</p>
+<p>A current volume cannot be deleted, and message volumes that have messages 
+ referencing the volume cannot be deleted.</p>
+<h2>About the Volume Tab</h2>
+<p>The volume tab shows the following information</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>Volume Name</B></span>. 
+ The name of the volume. &nbsp;The initial volumes are 
+ named index1 and message1.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Volume Root Path</B></span>. 
+ The location in the file system where volume data is stored.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Volume Type</B></span>. 
+ The volume type is either Index or Primary Message, Secondary Message.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Compress Blobs</B></span>. 
+ When this box is checked, message blobs whose size is above the compression 
+ threshold are compressed.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Status</B></span>. This 
+ displays &quot;current&quot; when the volume is current. </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Compression Threshold</B></span>. 
+ Messages larger than the threshold are compressed. The default threshold 
+ is 4096 bytes. </p></li>
+</ul>
+<h3>Adding a new volume</h3>
+<p>Before adding a new volume, the directory path must already exist. </p>
+<ol start="1" type="1" class="whs2">
+	<li style="list-style: decimal;" type=1 class=p><p>Select the server 
+ from the <span style="font-weight: bold;"><B>Servers</B></span> list.</p></li>
+	<li class=p><p>Go to the <span style="font-weight: bold;"><B>Volumes</B></span> 
+ tab and click <span style="font-weight: bold;"><B>Add New Volume</B></span>. 
+ &nbsp;A new line appears with empty fields.</p></li>
+	<li class=p><p>Enter the volume name, root path for the new volume, 
+ and select whether the volume is Index or Message.</p></li>
+	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>.</p></li>
+</ol>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

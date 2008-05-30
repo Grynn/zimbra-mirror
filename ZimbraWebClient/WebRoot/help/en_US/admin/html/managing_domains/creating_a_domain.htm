@@ -1,0 +1,224 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Adding a New Domain</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ol.whs1 { list-style:decimal; }
+ul.whs2 { list-style:decimal; }
+p.whs3 { margin-left:40px; }
+ol.whs4 { list-style:lower-alpha; }
+ul.whs5 { list-style:disc; }
+p.whs6 { margin-left:0px; }
+-->
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "p.whs6 {margin-left:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Domains\nAdding a New Domain");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
+<script type="text/javascript" language=JavaScript1.2>
+<!-- 
+if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+ //-->
+</script>
+
+
+
+<h1>Adding a New Domain</h1>
+<p>One domain is identified during the installation process and additional 
+ domains can be added. When you add a domain you configure the <a href="using_the_global_address_list_(gal).htm">Global 
+ Address List</a> (GAL) mode and the <a href="authentication_settings.htm">Authentication 
+ mode</a> for the domain. You can also set up virtual hosts, create the 
+ domain Documents account, and limit the number of accounts that can be 
+ created on the domain.</p>
+<p>To add a domain, click <span class=attribute>New</span><span class=attribute 
+ style="font-weight: normal;"> on the Domain toolbar</span>. The Create 
+ New Domain wizard walks you through the steps to add the new domain. </p>
+<ol type="1" class="whs1">
+	<li class=p><p>On the <span style="font-weight: bold;"><B>General Information</B></span> 
+ dialog, enter the complete domain name, description, the default Class 
+ of Service (COS) for the domain, and notes you want to add about the domain. 
+ You can also set the maximum number of accounts that can be configured 
+ for this domain. &nbsp;Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
+	<ul type="1" class="whs2">
+		<li class=p-note><p class=note>If you do not enter a specific COS, 
+ the default COS is used.</p></li>
+	</ul>
+	<li class=p><p>Choose the GAL mode, either <span style="font-weight: bold;"><B>Internal</B></span>, 
+ <span style="font-weight: bold;"><B>External, </B></span>or <span style="font-weight: bold;"><B>Both</B></span>. 
+ The default is Internal.</p></li>
+	<li class=p><p>(Optional) Change the maximum number of search results 
+ returned for a GAL Search. &nbsp;The default is 100 results. 
+ Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
+	<li class=p><p>If you selected <span style="font-weight: bold;"><B>Internal</B></span> 
+ as the GAL mode, the next step is to configure the authentication mode.</p></li>
+</ol>
+<p class="whs3">If you selected <span style="font-weight: bold;"><B>External</B></span> 
+ or <span style="font-weight: bold;"><B>Both</B></span>, the next step is to configure 
+ the <a href="how_to_configure_gal.htm">LDAP server</a></p>
+<ol start="5" type="1" class="whs1">
+	<li class=p><p>If the authentication mechanism is <span style="font-weight: bold;"><B>Internal</B></span>, 
+ no other authentication mode configuration is required. </p></li>
+</ol>
+<p class="whs3">If the authentication mechanism is <span 
+ style="font-weight: bold;"><B>External LDAP</B></span> or <span style="font-weight: bold;"><B>External 
+ Active Directory,</B></span> the next step is to configure the <a href="how_to_configure_authentication_mode.htm">authentication 
+ mechanism</a><a class="dropspot" href="javascript:TextPopup(this)" id="a2">.</a></p>
+<div class="droptext" id="POPUP366268298" style="display: 'none'; " x-ss-type="dropdown">
+ <ol type="1" class="whs1">
+  <li style="list-style: lower-alpha;" type=a class=p>
+  <p>Select either 
+ <span style="font-weight: bold;"><B>External LDAP</B></span> or <span style="font-weight: bold;"><B>External 
+ Active Directory</B></span>.</p></li>
+  <li style="list-style: lower-alpha;" type=a class=p>
+  <p>Enter the external 
+ server name</p></li>
+  <li style="list-style: lower-alpha;" type=a class=p>
+  <p>For External 
+ Active Directory, enter the active directory domain name. The external 
+ server port is 389. </p></li>
+  <li style="list-style: lower-alpha;" type=a class=p>
+  <p>If you will 
+ use SSL, check the box to <span style="font-weight: bold;"><B>Use 
+ SSL to connect to the server.</B></span></p></li>
+  <li style="list-style: lower-alpha;" type=a class=p>
+  <p>For external 
+ LDAP, enter the LDAP Bind Template name.</p></li>
+  <li style="list-style: lower-alpha;" type=a class=p>
+  <p>The Authentication 
+ Settings summary page is displayed with the information you just entered. 
+ Enter a username and password to test the authentication 
+ settings. Click <span style="font-weight: bold;"><B>Test</B></span>. </p></li>
+  <li style="list-style: lower-alpha;" type=a class=p>
+  <p>The Authentication 
+ Test Results page displays the test results. If the results failed, click 
+ <span style="font-weight: bold;"><B>Previous</B></span>, to resolve the issues 
+ described in the <span style="font-weight: bold;"><B>Details</B></span> text 
+ box. Click <span style="font-weight: bold;"><B>Finish</B></span>, if the test 
+ past. </p></li>
+ </ol>
+ <p class="whs3">&nbsp;</p>
+ <p>&nbsp;</p>
+</div>
+<p class="whs3">Click <span style="font-weight: bold;"><B>Next</B></span>. 
+ </p>
+<ol start="6" type="1" class="whs1">
+	<li class=p><p>(Optional) Set up the virtual hosts. Enter the virtual 
+ host addresses. Click <span style="font-weight: bold;"><B>Next</B></span>. </p></li>
+	<li class=p><p>(Optional) Create the domain level Documents wiki account. 
+ </p></li>
+	<ol type="a" class="whs4">
+		<li class=p><p>Check the box to create domain Documents.</p></li>
+		<li class=p><p>Enter the Documents account name and password. The 
+ default account name is &quot;wiki&quot;, but you can change this. &nbsp;Click 
+ <span style="font-weight: bold;"><B>Next</B></span><span>.</span></p></li>
+		<li class=p><p>On the <span style="font-weight: bold;"><B>Documents 
+ Access Control</B></span> dialog, define the global access control privileges. 
+ </p></li>
+		<ul type="disc" class="whs5">
+			<li class=p><p>By default all users in the domain can read, 
+ write, delete, and insert (add) new pages in the Domain Documents wiki. 
+ </p></li>
+			<li class=p><p>Users in all domains can be given read, write, 
+ delete, and insert permissions. </p></li>
+			<li class=p><p>Public can be given read-only access to the 
+ Documents pages. </p></li>
+			<li class=p><p>Members of distribution lists can be given read, 
+ write, delete, and insert permissions. </p></li>
+		</ul>
+	</ol>
+	<li class=p><p class="whs6">When <span style="font-weight: bold;"><B>Finish</B></span> 
+ is clicked, the domain is created.</p></li>
+</ol>
+<p class="whs3">&nbsp;</p>
+<script language="javascript1.2" type="text/javascript"><!--
+TextPopupInit('a2','POPUP366268298');
+//--></script><script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

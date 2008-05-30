@@ -1,0 +1,192 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Configuring the MTA Tab for Global Settings</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+table.whs1 { x-cell-content-align:top; width:80%; border-spacing:4px; }
+col.whs2 { width:37.819%; }
+col.whs3 { width:62.181%; }
+tr.whs4 { x-cell-content-align:top; }
+td.whs5 { width:37.819%; padding-right:10px; padding-left:10px; border-top-color:#000000; border-top-style:Solid; border-right-style:Solid; border-right-color:#000000; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-right-width:1px; border-left-style:none; border-top-width:1px; }
+p.whs6 { font-weight:bold; }
+td.whs7 { width:62.181%; padding-right:10px; padding-left:10px; border-top-color:#000000; border-top-style:Solid; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-top-width:1px; border-right-style:None; }
+td.whs8 { width:37.819%; padding-right:10px; padding-left:10px; border-right-style:Solid; border-right-color:#000000; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-right-width:1px; border-left-style:none; }
+td.whs9 { width:62.181%; padding-right:10px; padding-left:10px; border-bottom-color:#000000; border-bottom-style:Solid; border-bottom-width:1px; border-right-style:None; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Global Settings\nConfiguring the MTA Tab for Global Settings");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Configuring the MTA Tab for Global Settings</h1>
+<p>The following global MTA settings can be configured. </p>
+<table x-use-null-cells cellspacing="4" width="80%" class="whs1">
+<col class="whs2">
+<col class="whs3">
+
+<tr valign="top" class="whs4">
+<td width="37.819%" class="whs5">
+<p class="whs6">Enable authentication</td>
+<td width="62.181%" class="whs7">
+<p>Enables SMTP client authentication so users can authenticate. Only authenticated 
+ users or users from trusted networks are allowed to relay mail. </p>
+<p>&nbsp;</td></tr>
+<tr valign="top" class="whs4">
+<td width="37.819%" class="whs8">
+<p class="whs6">TLS authentication only</td>
+<td width="62.181%" class="whs9">
+<p>When checked, forces all SMTP auth to use Transaction Level Security 
+ (similar to SSL) to avoid passing passwords in the clear.</p>
+<p>&nbsp;</td></tr>
+<tr valign="top" class="whs4">
+<td width="37.819%" class="whs8">
+<p class="whs6">Web mail MTA Hostname</td>
+<td width="62.181%" class="whs9">
+<p>MTA that the web server connects to for sending mail. </p>
+<p>&nbsp;</td></tr>
+<tr valign="top" class="whs4">
+<td width="37.819%" class="whs8">
+<p class="whs6">Web mail MTA port</td>
+<td width="62.181%" class="whs9">
+<p>The default is port 25. This cannot be changed from the administration 
+ console.</p>
+<p>&nbsp;</td></tr>
+<tr valign="top" class="whs4">
+<td colspan="1" rowspan="1" width="37.819%" class="whs8">
+<p class="whs6">MTA Trusted Networks</td>
+<td colspan="1" rowspan="1" width="62.181%" class="whs9">
+<p>This is a network where mail is relayed arbitrarily. In general MTAs 
+ must not relay mail to addresses they do not service. This creates an 
+ exception to that rule.</p>
+<p>&nbsp;</td></tr>
+<tr valign="top" class="whs4">
+<td width="37.819%" class="whs8">
+<p class="whs6">Relay MTA for external delivery</td>
+<td width="62.181%" class="whs9">
+<p>External MTA (e.g., the ISP requires that all mail 
+ originating from your network be relayed through their MTA) to which the 
+ Zimbra Postfix relays non-local email. See <a href="relay_mta_for_external_delivery.htm">Relay 
+ MTA for external delivery</a>.</p>
+<p>&nbsp;</td></tr>
+<tr valign="top" class="whs4">
+<td width="37.819%" class="whs8">
+<p class="whs6">Maximum message size</td>
+<td width="62.181%" class="whs9">
+<p>This is the maximum size of a message and it's attachments that can 
+ be received. &nbsp;The default is 10000 kb. 
+ </p>
+<p>&nbsp;</td></tr>
+<tr valign="top" class="whs4">
+<td colspan="1" rowspan="1" width="37.819%" class="whs8">
+<p class="whs6">Add X-Originating-IP to 
+ messages</td>
+<td colspan="1" rowspan="1" width="62.181%" class="whs9">
+<p>This is enabled by default. Every email sent directly from the server 
+ includes the X-Originating-IP in the message header. 
+ This specifies the original sending IP of the email message the server 
+ is forwarding.</td></tr>
+<tr valign="top" class="whs4">
+<td width="37.819%" class="whs8">
+<p class="whs6">Enable DNS lookups</td>
+<td width="62.181%" class="whs9">
+<p>The Zimbra MTA makes an explicit DNS query for the MX 
+ record of the recipient domain. The default is enabled. &nbsp;If 
+ this option is disabled, set a relay host in the <span style="font-weight: bold;"><B>Relay 
+ MTA for external delivery</B></span> field. </p>
+<p>&nbsp;</td></tr>
+<tr valign="top" class="whs4">
+<td width="37.819%" class="whs8">
+<p class="whs6">Protocol checks</td>
+<td width="62.181%" class="whs9">
+<p>These fields can be checked to reject unsolicited commercial email for 
+ more SPAM control.</p>
+<p>&nbsp;</td></tr>
+<tr valign="top" class="whs4">
+<td width="37.819%" class="whs8">
+<p class="whs6">DNS checks</td>
+<td width="62.181%" class="whs9">
+<p>These fields can be checked to reject mail, if the client's IP address 
+ is unknown, the hostname in the greeting is unknown, 
+ and/or if the sender's domain is unknown.</p>
+<p>&nbsp;</td></tr>
+</table>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<tocdata>
+<book name="Getting Started" >
+  <item name="Getting Start with ZCS Standard Web Client" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="Logging in and out" url="Userspecific/logging_on_and_off.htm" />
+  <item name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+  <item name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+  <item name="Changing your password" url="Userspecific/chaning_your_password.htm" />
+  <item name="Forget your password?" url="Userspecific/if_you_forget_your_password.htm" />
+  <item name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
+</book>
+<book name="Navigating Your Mailbox" >
+  <item name="Navigating around your mailbox" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
+  <item name="Navigating within Mail" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+  <item name="Mail system folders" url="Navigation_folders_and_tips/inbox_folder.htm" />
+</book>
+<book name="Managing Your Email " >
+  <item name="Managing how email is displayed" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+  <item name="How do I know when I receive new messages" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
+  <item name="Categorizing your email messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Sorting messages in Content Pane" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  <item name="Printing email messages" url="reading_mail/b_Printing_email_messages.htm" />
+  <item name="Setting a forwarding address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+  <item name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Purging email messages" url="reading_mail/b_Purging_email_messages.htm" />
+  <item name="Using the Junk folder" url="junk_delete/spam_filtering.htm" />
+  <book name="Reading Messages" >
+    <item name="Reading mail" url="reading_mail/reading_mail.htm" />
+    <item name="Marking mail as unread" url="reading_mail/b_Marking_mail_as_unread.htm" />
+    <item name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
+    <item name="Attachment blocking" url="reading_mail/attachment_blocking.htm" />
+    <item name="Message blocking feature" url="reading_mail/Message_blocking_feature.htm" />
+    <item name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
+  </book>
+</book>
+<book name="Composing Email" >
+  <item name="Composing new email messages" url="Creating_Messages/b_Composing_email_message.htm" />
+  <item name="Parts of an email message" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="Adding your signature automatically" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+  <item name="Attaching files to your message" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
+  <item name="Attachment file types" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Saving messages as drafts" url="Creating_Messages/saving_a_draft_message.htm" />
+</book>
+<book name="Reply to and Forward Messages" >
+  <item name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</book>
+<book name="Managing Your Address Books" >
+  <item name="Your Address Books" url="Contacts/b_Your_Address_Books.htm" />
+  <item name="Adding new contacts" url="Contacts/b_Adding_new_contacts.htm" />
+</book>
+<book name="Managing Your  Calendar" >
+  <item name="About Calendar" url="Calendar/b_About_Calendar.htm" />
+  <item name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Deleting an appointment" url="Calendar/b_Canceling_a_meeting.htm" />
+  <item name="Adding color to calendars" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="Exporting your iCal calendar" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="Calendar view options" url="Calendar/Calendar_Views.htm" />
+</book>
+<book name="Scheduling Appointments, Meetings and Events" >
+  <item name="Planning a meeting" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="Scheduling a meeting" url="Calendar/b_Scheduling_a_meeting.htm" />
+  <item name="Creating recurring appointments" url="Calendar/b_creating_recurring_appointments.htm" />
+</book>
+<book name="Using Task Lists" >
+  <item name="About Tasks" url="Tasks/About_Tasks.htm" />
+  <item name="Create task lists" url="Tasks/bc_Create_task_lists.htm" />
+  <item name="Change a task" url="Tasks/Change_a_task.htm" />
+  <item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
+</book>
+<book name="Searching for Items" >
+  <item name="Using Search" url="Search/b_Using_Search.htm" />
+  <item name="Query language description" url="Search/query_language_description.htm" />
+</book>
+<book name="Using Tags and Folders to Organize Email" >
+  <item name="Assigning Tags to messages and contacts" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+  <item name="Flagging an email message" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+  <item name="Using folders" url="Navigation_folders_and_tips/about_folders.htm" />
+  <item name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <item name="Deleting folders" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+</book>
+<book name="Creating Filters " >
+  <item name="Filtering your messages" url="filters/bc_Filtering_your_messages.htm" />
+  <item name="Filter conditions and actions supported" url="filters/filter_conditions_and_actions_supported.htm" />
+</book>
+<book name="Setting Your Preferences" >
+  <item name="Setting your preferences" url="Userspecific/b_Setting_your_Options.htm" />
+  <item name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Creating away messages" url="Userspecific/vacation_message.htm" />
+  <item name="Saving messages you send" url="Navigation_folders_and_tips/sent_folder.htm" />
+  <item name="Mailbox quota" url="Navigation_folders_and_tips/quotas.htm" />
+  <item name="Subscribing to RSS/ATOM feed" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</book>
+
+</tocdata>

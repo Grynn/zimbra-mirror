@@ -1,0 +1,242 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Configure the Global Address List</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+p.whs2 { margin-left:40px; }
+table.whs3 { x-cell-content-align:top; margin-left:60px; float:alignleft; width:82.842%; border-bottom-style:Solid; border-top-style:Solid; border-top-width:3px; border-bottom-width:3px; border-spacing:0px; }
+col.whs4 { width:36.214%; }
+col.whs5 { width:63.786%; }
+tr.whs6 { x-cell-content-align:top; }
+td.whs7 { width:36.214%; padding-right:10px; padding-left:10px; border-top-style:none; border-right-style:none; border-bottom-style:Solid; border-bottom-width:1px; border-left-style:none; }
+p.whs8 { font-weight:bold; }
+td.whs9 { width:63.786%; padding-right:10px; padding-left:10px; border-top-style:none; border-right-style:none; border-bottom-style:Solid; border-bottom-width:1px; }
+td.whs10 { width:36.214%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:Solid; border-bottom-width:1px; border-left-style:none; }
+td.whs11 { width:63.786%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:Solid; border-bottom-width:1px; }
+td.whs12 { width:36.214%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:none; border-left-style:none; }
+td.whs13 { width:63.786%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:none; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Domains\nConfiguring Global Address List (GAL)");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Configuring the Global Address List</h1>
+<p>The Global Address List (GAL), also known as corporate address book 
+ or company directory, is a listing of all employees within an organization 
+ or department. GAL is a commonly used feature in mail systems so users 
+ can look up another user's information by first or last name, without 
+ having to know the complete email address. </p>
+<p>GAL is configured on a per-domain basis. The GAL mode setting for each 
+ domain determines where the GAL lookup is performed. The GAL Configuration 
+ Wizard is used to configure the attributes. Select one of the following 
+ GAL configurations:</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span class=attribute>Internal</span>. The Zimbra LDAP 
+ server is used for directory lookups.</p></li>
+	<li class=p><p><span class=attribute>External</span>. External directory 
+ servers are used for GAL lookups. &nbsp;You can configure 
+ multiple external LDAP hosts for GAL. All other directory services use 
+ the Zimbra LDAP service (configuration, mail routing, etc.).</p></li>
+	<li class=p><p><span class=attribute>Both</span>. Internal and external 
+ directory servers are used for GAL lookups.</p></li>
+</ul>
+<ul><li class=p-note><p class=note><span style="font-weight: bold;"><B>Note</B></span>: 
+ The maximum results settings can also be set in the Global Settings. The 
+ value entered in Global Settings becomes the default for domains that 
+ do not have this value explicitly set. The default is 100 results. </p></li>
+</ul>
+<h2>About External LDAP Settings</h2>
+<p>You configure the following External LDAP Settings</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>LDAP URL and </B></span>whether 
+ to use <span style="font-weight: bold;"><B>SSL</B></span>. Enter the LDAP address. 
+ The port is 389. If you use SSL, the port is 636. You can configure multiple 
+ external LDAP hosts, so users can access GAL from the next available configured 
+ server when a GAL server is down.</p></li>
+</ul>
+<ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>LDAP filter</B></span>. 
+ The filter defines the search rules used for directory searches. The parameters 
+ in a filter you construct determine the thoroughness of a search. &nbsp;A 
+ search filter must be specified.</p></li>
+</ul>
+<p class="whs2">The following is an example of the filter 
+ string. Syntax &quot;%s&quot; represents the string the user types.</p>
+<p class="whs2"><span class=code style="font-size: 11pt;"><font size=3 style="font-size:11pt;">(&amp;(|(cn=*%s*)(sn=*%s*)(gn=*%s*)(mail=*%s*)(zimbraMailDeliveryAddress=*%s*) 
+ <br>
+(zimbraMailAlias=*%s*)(zimbraMailAddress=*%s*)) 
+ <br>
+(|(objectclass=zimbraAccount)(objectclass=zimbraDistributionList)))</font></span> 
+ &nbsp;&nbsp;</p>
+<p class="whs2">This filter example, combines the basic search 
+ filters using the Boolean operation <span style="font-weight: bold;"><B>OR</B></span> 
+ &nbsp;to first search the various attributes (cn, 
+ gn, etc.), and then verifies that the entry matched 
+ is either a Zimbra account or distribution list.</p>
+<div align=left>
+<table x-use-null-cells cellspacing="0" width="82.842%" class="whs3">
+<col class="whs4">
+<col class="whs5">
+
+<tr valign="top" class="whs6">
+<td width="36.214%" class="whs7">
+<p class="whs8">Filter </td>
+<td width="63.786%" class="whs9">
+<p class="whs8">Matches</td></tr>
+<tr valign="top" class="whs6">
+<td width="36.214%" class="whs10">
+<p>cn=*%s*</td>
+<td width="63.786%" class="whs11">
+<p>Entries with a common name approximately equal to user's input</td></tr>
+<tr valign="top" class="whs6">
+<td width="36.214%" class="whs10">
+<p>sn=*%s*</td>
+<td width="63.786%" class="whs11">
+<p>Entries with a surname approximately equal to user's input</td></tr>
+<tr valign="top" class="whs6">
+<td width="36.214%" class="whs10">
+<p>gn=*%s*</td>
+<td width="63.786%" class="whs11">
+<p>Entries with a given name approximately equal to user's input</td></tr>
+<tr valign="top" class="whs6">
+<td width="36.214%" class="whs10">
+<p>mail=*%s*</td>
+<td width="63.786%" class="whs11">
+<p>Entries with an email address.</td></tr>
+<tr valign="top" class="whs6">
+<td width="36.214%" class="whs10">
+<p>zimbraMailDeliveryAddress=*%s*</td>
+<td width="63.786%" class="whs11">
+<p>Entries with a Zimbra email address</td></tr>
+<tr valign="top" class="whs6">
+<td width="36.214%" class="whs10">
+<p>zimbraMailAlias=*%s*</td>
+<td width="63.786%" class="whs11">
+<p>Entry is a Zimbra alias</td></tr>
+<tr valign="top" class="whs6">
+<td colspan="1" rowspan="1" width="36.214%" class="whs10">
+<p>zimbraMailAddress=*%s*</td>
+<td colspan="1" rowspan="1" width="63.786%" class="whs11">
+<p>Entries with a Zimbra distribution list address</td></tr>
+<tr valign="top" class="whs6">
+<td colspan="1" rowspan="1" width="36.214%" class="whs10">
+<p>objectclass=zimbraAccount</td>
+<td colspan="1" rowspan="1" width="63.786%" class="whs11">
+<p>The matches found exist as a Zimbra account.</td></tr>
+<tr valign="top" class="whs6">
+<td colspan="1" rowspan="1" width="36.214%" class="whs12">
+<p>objectclass=zimbraDistributionList</td>
+<td colspan="1" rowspan="1" width="63.786%" class="whs13">
+<p>The matches found exist as a Zimbra distribution list. </td></tr>
+</table>
+</div>
+<p class="whs2">&nbsp;</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>Autocomplete filter.</B></span> 
+ To enable the ability to let users use the <a href="autocomplete_on_gal.htm">Autocomplete 
+ from GAL</a> feature ,the autocomplete filter must 
+ be configured. For LDAP, the default GAL filter setting is <span style="font-weight: bold;"><B>(|(cn=%s*)(sn=%s*)(gn=%s*)(mail=%s*))</B></span>. 
+ For AD, <span style="font-weight: bold;"><B>adAutoComplete</B></span> 
+ is the default filter. </p></li>
+</ul>
+<p class="whs2"><span style="font-weight: bold;"><B>Note:</B></span> 
+ If your LDAP server performance becomes an issue when the Autocomplete 
+ from GAL feature is configured, you can disable the Domain's GAL autocomplete 
+ feature in the COS and Account settings.</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>LDAP search base</B></span>. 
+ To search within a specific part of your directory, enter a search base. 
+ For example, &nbsp;(<span class=code>dc=server,dc=com)</span>.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Use DN Password to 
+ bind to external server</B></span>. If the filter you entered cannot be run 
+ using an anonymous bind, then enter the DN/password of a service account 
+ on the external LDAP that has been granted access to the attributes required 
+ to do the search. </p></li>
+</ul>
+<p>&nbsp;</p>
+<p class="whs2">&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

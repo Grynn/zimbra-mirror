@@ -1,0 +1,332 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="access control for domain Documents accounts" >
+  <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
+</key>
+<key name="account advanced features" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="account attributes, assigning" >
+  <topic name="Class of Service Managing" url="cos/class_of_service.htm" />
+</key>
+<key name="account ID" >
+  <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="account quota" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="account status" >
+  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="account, create" >
+  <topic name="Create an Account" url="managing_accounts/create_an_account.htm" />
+</key>
+<key name="account, rename" >
+  <topic name="Renaming an Account" url="managing_accounts/renaming_an_account.htm" />
+</key>
+<key name="accounts" >
+  <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
+  <key name="accounts, quota" >
+    <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
+  </key>
+</key>
+<key name="accounts, adding distribution lists" >
+  <topic name="Adding Distribution Lists to an Account" url="managing_accounts/adding_distribution_lists_to_an_account.htm" />
+</key>
+<key name="accounts, adding Zimlets to" >
+  <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
+</key>
+<key name="accounts, last login time" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="accounts, never logged in" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="accounts, number used" >
+  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="Active directory, password rule" >
+  <topic name="Restricting Passwords" url="managing_accounts/restricting_passwords.htm" />
+</key>
+<key name="active mode" >
+  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="adding a domain" >
+  <topic name="Adding a New Domain" url="managing_domains/creating_a_domain.htm" />
+</key>
+<key name="adding Zimlets to COS" >
+  <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
+</key>
+<key name="address book" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="admin console tasks" >
+  <topic name="Tasks Performed from Administration Console" url="getting_started/tasks_performed_from_aministration_console.htm" />
+</key>
+<key name="admin extensions, removing" >
+  <topic name="Removing Admin Extension Modules" url="admin_console_misc/removing_admin_extension_modules.htm" />
+</key>
+<key name="administration console" >
+  <topic name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
+</key>
+<key name="administration tasks" >
+  <topic name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
+</key>
+<key name="administrator account" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="administrator accounts, search for" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="advanced features" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="alias, move" >
+  <topic name="Creating a Mail Aliases" url="managing_accounts/creating_a_mail_aliases.htm" />
+</key>
+<key name="aliases" >
+  <topic name="Creating a Mail Aliases" url="managing_accounts/creating_a_mail_aliases.htm" />
+</key>
+<key name="anti-spam" >
+  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
+</key>
+<key name="anti-virus" >
+  <topic name="Anti-Virus Configuration Options" url="managing_global_settings/anti-virus_configuration_options.htm" />
+</key>
+<key name="anti-virus updates" >
+  <topic name="Anti-Virus Protection" url="managing_global_settings/anti-virus_configuration_options.htm" />
+</key>
+<key name="assigning COS" >
+  <topic name="Class of Service Managing" url="cos/class_of_service.htm" />
+</key>
+<key name="assigning mail server to a new account" >
+  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
+</key>
+<key name="attachment blocking" >
+  <topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
+</key>
+<key name="attachment settings" >
+  <topic name="Global Attachment Settings" url="managing_global_settings/global_attachment_settings.htm" />
+</key>
+<key name="auth token" >
+  <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
+</key>
+<key name="auth token lifetime" >
+  <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
+</key>
+<key name="authentication mode, how to configure" >
+  <topic name="How to Configure Authentication Mode" url="managing_domains/how_to_configure_authentication_mode.htm" />
+</key>
+<key name="authentication settings" >
+  <topic name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
+</key>
+<key name="blocking attachments" >
+  <topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
+  <topic name="Global Attachment Settings" url="managing_global_settings/global_attachment_settings.htm" />
+</key>
+<key name="Calendar" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="certificates" >
+  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
+  <topic name="Creating Certificates" url="tools/creating_certificates.htm" />
+</key>
+<key name="change password" >
+  <topic name="Password Options" url="passwords/password_options.htm" />
+</key>
+<key name="changing domain status" >
+  <topic name="Changing Domain Status" url="managing_domains/changing_domain_status.htm" />
+</key>
+<key name="changing password" >
+  <topic name="Changing a Password" url="passwords/changing_a_password.htm" />
+</key>
+<key name="changing quota settings" >
+  <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
+</key>
+<key name="changing user passwords" >
+  <topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
+</key>
+<key name="class of service, about" >
+  <topic name="Class of Service" url="cos/class_of_service.htm" />
+</key>
+<key name="CLI tool" >
+  <topic name="Management Tasks not available from the Console" url="getting_started/management_tasks_not_available_from_the_console.htm" />
+</key>
+<key name="company directory" >
+  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
+</key>
+<key name="configuring advanced features" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="configuring authentication settings" >
+  <topic name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
+</key>
+<key name="copyright" >
+  <topic name="About Zimbra Collaboration Suite" url="getting_started/about_zcs.htm" />
+</key>
+<key name="COS" >
+  <topic name="Class of Service" url="cos/class_of_service.htm" />
+</key>
+<key name="COS advanced features" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="COS, adding Zimlets to" >
+  <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
+</key>
+<key name="COS, creating" >
+  <topic name="Creating Classes of Service" url="cos/creating_classes_of_service.htm" />
+</key>
+<key name="COS, override" >
+  <topic name="Override COS Settings" url="cos/override_cos_settings.htm" />
+</key>
+<key name="COS, server pool" >
+  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
+</key>
+<key name="create an account" >
+  <topic name="Create an Account" url="managing_accounts/create_an_account.htm" />
+</key>
+<key name="creating a location" >
+  <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
+</key>
+<key name="creating accounts" >
+  <topic name="Provisioning Accounts" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="creating COS" >
+  <topic name="Creating Classes of Service" url="cos/creating_classes_of_service.htm" />
+</key>
+<key name="creating domain Documents account" >
+  <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
+</key>
+<key name="creating equipment resources" >
+  <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
+</key>
+<key name="creating mail aliases" >
+  <topic name="Creating a Mail Aliases" url="managing_accounts/creating_a_mail_aliases.htm" />
+</key>
+<key name="CSR" >
+  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
+  <topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
+</key>
+<key name="data, status" >
+  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
+</key>
+<key name="default account attributes" >
+  <topic name="Class of Service Managing" url="cos/class_of_service.htm" />
+</key>
+<key name="default COS" >
+  <topic name="Class of Service Managing" url="cos/class_of_service.htm" />
+</key>
+<key name="delete COS" >
+  <topic name="Creating Classes of Service" url="cos/creating_classes_of_service.htm" />
+</key>
+<key name="delete distribution list" >
+  <topic name="Delete Distribution Lists" url="managing_accounts/delete_distribution_lists.htm" />
+</key>
+<key name="deleting domain Documents account" >
+  <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
+</key>
+<key name="deleting mail messages" >
+  <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
+</key>
+<key name="deleting messages" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="disk usage" >
+  <topic name="Checking Usage Statistics" url="monitoring/checking_usage_statistics.htm" />
+</key>
+<key name="distribution list, number used" >
+  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="distribution lists" >
+  <topic name="Distribution Lists" url="managing_accounts/distribution_lists.htm" />
+</key>
+<key name="distribution lists, adding to account" >
+  <topic name="Adding Distribution Lists to an Account" url="managing_accounts/adding_distribution_lists_to_an_account.htm" />
+</key>
+<key name="DNS checks" >
+  <topic name="MTA SMTP Restrictions" url="managing_global_settings/mta_smtp_restrictions.htm" />
+</key>
+<key name="Documents" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="domain administrator accounts, search for" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="domain documents account" >
+  <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
+</key>
+<key name="domain name, change" >
+  <topic name="Changing a domain name" url="managing_domains/changing_a_domain_name.htm" />
+</key>
+<key name="domain, adding" >
+  <topic name="Adding a New Domain" url="managing_domains/creating_a_domain.htm" />
+</key>
+<key name="domain, search" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="domains" >
+  <topic name="Managing Domains" url="managing_domains/managing_domains.htm" />
+</key>
+<key name="edit domain" >
+  <topic name="Managing Domains" url="managing_domains/managing_domains.htm" />
+</key>
+<key name="email forwarding" >
+  <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
+</key>
+<key name="enforce password history" >
+  <topic name="Password Options" url="passwords/password_options.htm" />
+</key>
+<key name="equipment resources" >
+  <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
+</key>
+<key name="equipment, remove" >
+  <topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
+</key>
+<key name="Exchange, migrating from" >
+  <topic name="Using the Migration Wizard" url="migration_wizard/mw_using_the_migration_wizard.htm" />
+</key>
+<key name="extensions, rejecting messages by" >
+  <topic name="Blocking messages with specific extensions" url="managing_global_settings/blocking_messages_with_specific_extensions.htm" />
+</key>
+<key name="external active directory" >
+  <topic name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
+</key>
+<key name="features" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="file extensions, rejecting messages with" >
+  <topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
+</key>
+<key name="filter, anti-virus" >
+  <topic name="Anti-Virus Protection" url="managing_global_settings/anti-virus_configuration_options.htm" />
+</key>
+<key name="filters" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="find" >
+  <topic name="Search for Accounts" url="managing_accounts/search.htm" />
+</key>
+<key name="forwarding address, allowing users to" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="forwarding mail" >
+  <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
+</key>
+<key name="forwarding, disable" >
+  <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
+</key>
+<key name="GAL configuration wizard" >
+  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
+</key>
+<key name="GAL, how to configure" >
+  <topic name="How to Configure GAL" url="managing_domains/how_to_configure_gal.htm" />
+</key>
+<key name="GAL, using" >
+  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
+</key>
+<key name="generate CSR" >
+  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
+</key>
+
+</indexdata>

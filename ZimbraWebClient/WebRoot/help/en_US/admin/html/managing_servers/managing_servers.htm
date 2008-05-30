@@ -1,0 +1,190 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Managing Servers</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { font-weight:normal; }
+ul.whs2 { list-style:disc; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Servers\nManaging Servers");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Managing Servers</h1>
+<p>A server is defined as a machine that has one or more of the Zimbra 
+ service packages installed. During the installation, the Zimbra server 
+ is automatically registered on the LDAP server. </p>
+<p>Servers are registered during the installation process. You can edit 
+ a server's records but you cannot add or delete servers. </p>
+<ul><li class=p-note><p class=note><span style="font-weight: bold;"><B>Note</B></span>: 
+ To add server records, use the CLI <span class=code>zmprov</span> 
+ command.<span class=code> </span>&nbsp;See the <span 
+ style="font-style: italic;"><I>Administration Guide</I></span> for details. </p></li>
+</ul>
+<p>The Server tabs display the following information</p>
+<h3>General tab</h3>
+<ul class=whs1 style="list-style: disc;" type=disc>
+	<li class=p><p class="whs1"><b style="font-weight: bold;"><span 
+ class=fieldnames style="font-weight: normal;">Display name</span><span 
+ style="font-weight: normal;"> for the server</span></b></p></li>
+	<li class=p><p class="whs1"><span class=fieldnames 
+ style="font-weight: normal;">Field for </span>a one-line description</p></li>
+	<li class=p><p class="whs1"><b><span class=fieldnames 
+ style="font-weight: normal;">Server Host Name</span></b></p></li>
+	<li class=p-whs2><p class=whs2><span class=fieldnames style="font-weight: normal;">LMTP 
+ Advertised Name</span>. This is the host name to output when LMTP connections 
+ are made to this server</p></li>
+	<li class=p-whs2><p class=whs2><span class=fieldnames style="font-weight: normal;">LMTP 
+ Bind Address</span>. IP address to use when connecting via LMTP</p></li>
+	<li class=p><p class="whs1"><b><span style="font-weight: normal;">Notes.</span></b> 
+ Additional free-form text regarding this server</p></li>
+</ul>
+<h3>Services tab</h3>
+<p>The Services tab shows the Zimbra services. A checkmark identifies the 
+ services that are enabled for the selected server. Possible services include 
+ LDAP, Mailbox, IMAP and POP proxy, MTA, SNMP, Logger, Spell Checker, Anti-Virus, 
+ and Anti-Spam. </p>
+<h3>MTA tab</h3>
+<p>The <a href="configuring_the_mta_tab_for_servers.htm">MTA tab</a> shows 
+ </p>
+<ul class=whs1 style="list-style: disc;" type=disc>
+	<li class=p><p>Whether authentication is enabled, including TLS 
+ authentication </p></li>
+	<li class=p><p>Web mail MTA Hostname</p></li>
+	<li class=p><p>Web mail MTA port as 25</p></li>
+	<li class=p><p>Web mail MTA timeout. The default 
+ is 60 minutes</p></li>
+	<li class=p><p><a href="../managing_global_settings/relay_mta_for_external_delivery.htm">Relay 
+ MTA</a> for external delivery address</p></li>
+	<li class=p><p>Options for DNS lookups can be enabled</p></li>
+</ul>
+<h3>IMAP tab</h3>
+<ul><li class=p-note><p class=note><span class=Important>Important: </span>When 
+ you make changes to IMAP or POP configuration, the server must be restarted 
+ in order for the changes to take effect.</p></li>
+</ul>
+<p>The IMAP tab shows if the following are enabled. If the setting is different 
+ from the global setting, the field is highlighted with a Reset to Global 
+ link. </p>
+<ul type="disc" class="whs2">
+	<li class=p><p>IMAP services</p></li>
+	<li class=p><p>Number of threads</p></li>
+	<li class=p><p>SSL for IMAP services</p></li>
+	<li class=p><p>Option for clear text log in</p></li>
+</ul>
+<h3>POP tab</h3>
+<p>The POP tab shows:</p>
+<ul type="disc" class="whs2">
+	<li class=p><p>POP3 service, address, and advertised name</p></li>
+	<li class=p><p>Number of threads. The default is 10</p></li>
+	<li class=p><p>SSL for POP3 services</p></li>
+	<li class=p><p>Option for clear text login</p></li>
+</ul>
+<h3>Volumes tab</h3>
+<p>Multiple volumes for message store and index store can be defined for 
+ the Zimbra mailbox server </p>
+<ul type="disc" class="whs2">
+	<li class=p><p><span style="font-weight: bold;"><B>Volume Name</B></span>. 
+ The name of the volume. &nbsp;The initial volumes are 
+ named index1 and message1.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Volume Root Path</B></span>. 
+ The location in the file system where volume data is stored.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Volume Type</B></span>. 
+ The volume type is either Index or Message.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Compress Blobs</B></span>. 
+ When this box is checked, message blobs whose size is above the compression 
+ threshold are compressed.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Compression Threshold</B></span>. 
+ Messages larger than the threshold are compressed. The default threshold 
+ is 4096 bytes. </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Status</B></span>. This 
+ displays &quot;current&quot; when the volume is current. </p></li>
+</ul>
+<p>
+<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Stopping Mailbox Service on a Server','stopping_mailbox_service_on_a_server.htm','Volume Management','volume_management.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=20 width=96 alt="Related Topics"></a>
+
+
+ </p>
+<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
+  WritePopupMenuLayer();
+//--></script><script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

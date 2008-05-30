@@ -1,0 +1,14 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="Customizing UI Themes" url="ui_themes/customizing_ui_themes.htm" />
+<topic name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
+<topic name="Making UI Themes Available by Account" url="ui_themes/making_ui_themes_available_by_account.htm" />
+<topic name="Version" url="version_and_trademarks.htm" />
+<topic name="Managing Zimlets" url="zimlets/about_zimlets.htm" />
+<topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
+<topic name="Disable Access to Zimlets" url="zimlets/removing_zimlets.htm" />
+<topic name="Removing Zimlets from the Zimbra Server" url="zimlets/removing_zimlets_from_the_zimbra_server.htm" />
+<topic name="Setting Up Zimlets in ZCS" url="zimlets/setting_up_zimlets_in_zcs.htm" />
+
+</ftstdata>  

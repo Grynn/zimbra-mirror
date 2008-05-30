@@ -1,0 +1,123 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Changing Domain Status</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Domains\nChanging Domain Status");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Changing Domain's Status</h1>
+<p>Domain status is active in the normal state, users can log in and mail 
+ is delivered. You can change the status from the domain General tab. When 
+ you change the status for a domain, in many cases, you affect the status 
+ for accounts on the domain also. </p>
+<p>The domain status can be any of the following:</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>Active</B></span>. Active 
+ is the normal status for a domain. Accounts can be created and mail can 
+ be delivered. If an account has a different status setting , the account 
+ status is overrides the domain status.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Closed</B></span>. When 
+ a domain statu is Closed, account log ins are disabled and messages are 
+ bounced. A domain status of Closed overrides an individual account's status 
+ setting.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Locked</B></span>. When 
+ a domain status is locked, users cannot log in to check their email but 
+ email is still delivered to the accounts. If an account's status setting 
+ is Maintenance or Closed, the account's status overrides the domain status 
+ setting. For example, mail for accounts in the Maintenance status is queued 
+ at the MTA, not delivered. &nbsp;</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Maintenance</B></span>. 
+ When the domain status is Maintenance, users cannot log in and their email 
+ is queued at the MTA. If an account's status is Closed, messages are not 
+ queued.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Suspended</B></span>. When 
+ the domain status is Suspended, users cannot log in, their mail is queued 
+ at the MTA, and accounts and distribution lists cannot be created, deleted, 
+ or modified. If an account's status is Closed, the account's status mail 
+ is not queued at the MTA. </p></li>
+</ul>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

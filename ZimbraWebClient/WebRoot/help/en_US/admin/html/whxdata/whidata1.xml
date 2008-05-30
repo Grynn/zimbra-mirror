@@ -1,0 +1,339 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="Global Access List" >
+  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
+</key>
+<key name="global administrator" >
+  <topic name="Global Administrator Mailbox" url="basic_administration_tasks/adminisrator_s_mailbox.htm" />
+</key>
+<key name="global attachment settings" >
+  <topic name="Global Attachment Settings" url="managing_global_settings/global_attachment_settings.htm" />
+</key>
+<key name="global settings" >
+  <topic name="Global Settings" url="managing_global_settings/global_settings.htm" />
+</key>
+<key name="global settings, configuring MTA" >
+  <topic name="Configuring the MTA Tab for Global Settings" url="managing_global_settings/configuring_the_mta_tab_for_global_settings.htm" />
+</key>
+<key name="group calendar" >
+  <topic name="ZCS Communication Features" url="managing_accounts/zcs__communication_features.htm" />
+</key>
+<key name="group calendars" >
+  <topic name="Enabling the Calendar Feature" url="managing_accounts/enabling_the_calendar_feature.htm" />
+</key>
+<key name="ID number" >
+  <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="IMAP" >
+  <topic name="Configuring IMAP" url="managing_global_settings/configuring_imap.htm" />
+</key>
+<key name="IMAP access" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="IMAP proxy" >
+  <topic name="Configuring IMAP" url="managing_global_settings/configuring_imap.htm" />
+</key>
+<key name="installing certificates" >
+  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
+</key>
+<key name="junk" >
+  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
+</key>
+<key name="keyboard shortcuts" >
+  <topic name="Preferences" url="managing_accounts/preferences.htm" />
+</key>
+<key name="kill percent" >
+  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
+</key>
+<key name="LDAP" >
+  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
+</key>
+<key name="location, creating" >
+  <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
+</key>
+<key name="location, remove" >
+  <topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
+</key>
+<key name="locked account" >
+  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="locked out" >
+  <topic name="Changing Locked Out Status" url="passwords/changing_locked_out_status.htm" />
+</key>
+<key name="locked password" >
+  <topic name="Password Options" url="passwords/password_options.htm" />
+</key>
+<key name="locking passwords" >
+  <topic name="Restricting Passwords" url="managing_accounts/restricting_passwords.htm" />
+</key>
+<key name="lockout" >
+  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="log on access" >
+  <topic name="Mailbox usage" url="managing_accounts/mailbox_usage.htm" />
+</key>
+<key name="Lotus Domino, migration" >
+  <topic name="Zimbra Migration Wizard for Lotus Domino" url="migration_wizard/zimbra_migration_wizard_for_lotus_domino.htm" />
+</key>
+<key name="mail filters" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="mail identities" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="mail queues" >
+  <topic name="Monitoring Zimbra MTA Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
+</key>
+<key name="mail report" >
+  <topic name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
+</key>
+<key name="mail server" >
+  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
+</key>
+<key name="mail, purging" >
+  <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
+</key>
+<key name="mailbox quotas" >
+  <topic name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
+</key>
+<key name="mailbox, re-indexing" >
+  <topic name="Re-Indexing a Mailbox" url="managing_accounts/re-indexing_a_mailbox.htm" />
+</key>
+<key name="maintenance mode" >
+  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="managing accounts" >
+  <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="managing tasks" >
+  <topic name="Management Tasks not available from the Console" url="getting_started/management_tasks_not_available_from_the_console.htm" />
+</key>
+<key name="managing Zimlets" >
+  <topic name="Managing Zimlets" url="zimlets/about_zimlets.htm" />
+</key>
+<key name="message delivery, blocking" >
+  <topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
+</key>
+<key name="message lifetime, deleting" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="migrating from Exchange" >
+  <topic name="Using the Migration Wizard" url="migration_wizard/mw_using_the_migration_wizard.htm" />
+</key>
+<key name="migration from Lotus Domino" >
+  <topic name="Zimbra Migration Wizard for Lotus Domino" url="migration_wizard/zimbra_migration_wizard_for_lotus_domino.htm" />
+</key>
+<key name="migration wizard, outlook types imported" >
+  <topic name="Import Options" url="migration_wizard/mw_import_options.htm" />
+</key>
+<key name="monitoring host" >
+  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
+</key>
+<key name="monitoring queues" >
+  <topic name="Monitoring Zimbra MTA Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
+</key>
+<key name="monitoring the server" >
+  <topic name="Monitoring Zimbra Collaboration Suite" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
+</key>
+<key name="moving aliases" >
+  <topic name="Creating a Mail Aliases" url="managing_accounts/creating_a_mail_aliases.htm" />
+</key>
+<key name="MTA queues" >
+  <topic name="Monitoring Zimbra MTA Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
+</key>
+<key name="MTA, configuring for servers" >
+  <topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
+</key>
+<key name="MTA, configuring global settings" >
+  <topic name="Configuring the MTA Tab for Global Settings" url="managing_global_settings/configuring_the_mta_tab_for_global_settings.htm" />
+</key>
+<key name="navigation" >
+  <topic name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
+</key>
+<key name="number of accounts used" >
+  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="out of office reply" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="Outlook types imported" >
+  <topic name="Import Options" url="migration_wizard/mw_import_options.htm" />
+</key>
+<key name="Outlook types not imported" >
+  <topic name="Import Options" url="migration_wizard/mw_import_options.htm" />
+</key>
+<key name="password aging" >
+  <topic name="Password Options" url="passwords/password_options.htm" />
+</key>
+<key name="password configuration" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="password length" >
+  <topic name="Password Options" url="passwords/password_options.htm" />
+</key>
+<key name="password option" >
+  <topic name="Password Options" url="passwords/password_options.htm" />
+</key>
+<key name="password rules" >
+  <topic name="Setting Password Rules" url="passwords/setting_password_rules.htm" />
+</key>
+<key name="password, changing" >
+  <topic name="Changing a Password" url="passwords/changing_a_password.htm" />
+</key>
+<key name="password, changing locked out status" >
+  <topic name="Changing Locked Out Status" url="passwords/changing_locked_out_status.htm" />
+</key>
+<key name="password, forget" >
+  <topic name="Password Options" url="passwords/password_options.htm" />
+</key>
+<key name="password, locked" >
+  <topic name="Password Options" url="passwords/password_options.htm" />
+</key>
+<key name="password, restricting" >
+  <topic name="Restricting Passwords" url="managing_accounts/restricting_passwords.htm" />
+</key>
+<key name="passwords and Active Directory" >
+  <topic name="Restricting Passwords" url="managing_accounts/restricting_passwords.htm" />
+</key>
+<key name="passwords, changing" >
+  <topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
+</key>
+<key name="passwords, how to changed locked out status" >
+  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="personal calendar" >
+  <topic name="ZCS Communication Features" url="managing_accounts/zcs__communication_features.htm" />
+  <topic name="Enabling the Calendar Feature" url="managing_accounts/enabling_the_calendar_feature.htm" />
+</key>
+<key name="POP" >
+  <topic name="Configuring POP" url="managing_global_settings/configuring_pop.htm" />
+</key>
+<key name="POP access" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="POP account" >
+  <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
+</key>
+<key name="preferences" >
+  <topic name="Configuring Preferences" url="managing_accounts/preferences.htm" />
+</key>
+<key name="primary volume" >
+  <topic name="Volume Management" url="managing_servers/volume_management.htm" />
+</key>
+<key name="protocol checks" >
+  <topic name="MTA SMTP Restrictions" url="managing_global_settings/mta_smtp_restrictions.htm" />
+</key>
+<key name="provision an account" >
+  <topic name="Create an Account" url="managing_accounts/create_an_account.htm" />
+</key>
+<key name="proxy server" >
+  <topic name="IMAP and POP Proxy Server" url="managing_global_settings/imap_and_pop_proxy_server.htm" />
+</key>
+<key name="purging mail" >
+  <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
+</key>
+<key name="queues, description" >
+  <topic name="About MTA Queues" url="monitoring/about_mta_queues.htm" />
+</key>
+<key name="queues, MTA" >
+  <topic name="Monitoring Zimbra MTA Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
+</key>
+<key name="quota" >
+  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
+</key>
+<key name="quota warning" >
+  <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
+</key>
+<key name="quota, view individual account" >
+  <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="quotas" >
+  <topic name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
+</key>
+<key name="quotas, changing" >
+  <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
+</key>
+<key name="re-indexing mailbox" >
+  <topic name="Re-Indexing a Mailbox" url="managing_accounts/re-indexing_a_mailbox.htm" />
+</key>
+<key name="rejecting messages by extension" >
+  <topic name="Blocking messages with specific extensions" url="managing_global_settings/blocking_messages_with_specific_extensions.htm" />
+</key>
+<key name="relay MTA" >
+  <topic name="Relay MTA for external delivery" url="managing_global_settings/relay_mta_for_external_delivery.htm" />
+</key>
+<key name="removing a resource" >
+  <topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
+</key>
+<key name="rename accounts" >
+  <topic name="Renaming an Account" url="managing_accounts/renaming_an_account.htm" />
+</key>
+<key name="reports" >
+  <topic name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
+</key>
+<key name="resource, out of service" >
+  <topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
+</key>
+<key name="resources" >
+  <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
+</key>
+<key name="resources, about" >
+  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="resources, number used" >
+  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="search" >
+  <topic name="Search for Accounts" url="managing_accounts/search.htm" />
+</key>
+<key name="search by login time" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="search for administrators" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="search, advanced" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="secondary volumes" >
+  <topic name="Volume Management" url="managing_servers/volume_management.htm" />
+</key>
+<key name="self-signed certifcates" >
+  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
+</key>
+<key name="self-signed certificates" >
+  <topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
+</key>
+<key name="server pool" >
+  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
+</key>
+<key name="server, monitoring" >
+  <topic name="Monitoring Zimbra Collaboration Suite" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
+</key>
+<key name="server, search" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="server, stopping service" >
+  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
+</key>
+<key name="servers" >
+  <topic name="Managing Servers" url="managing_servers/managing_servers.htm" />
+</key>
+<key name="servers, configuring MTA" >
+  <topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
+</key>
+<key name="service status" >
+  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
+</key>
+<key name="service, stopping" >
+  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
+</key>
+<key name="services, turning off/on" >
+  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
+</key>
+<key name="session timeout" >
+  <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
+</key>
+
+</indexdata>

@@ -1,0 +1,328 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="identities" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="IMAP account" >
+  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="IMAP accounts, adding" >
+  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="IMAP addresses, adding" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="import iCal calendars" >
+  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="importing address books" >
+  <topic name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="importing contacts" >
+  <topic name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="interface features" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="invitation moved to trash" >
+  <topic name="Responding to an invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="invitation, responding" >
+  <topic name="Responding to an invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="Junk folder" >
+  <topic name="Your Junk folder " url="junk_delete/spam_filtering.htm" />
+</key>
+<key name="keyboard navigation" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="keyboard shortcuts" >
+  <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="location, reserving" >
+  <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="logging off" >
+  <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="mail" >
+  <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
+  <key name="Reading" >
+    <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="mail identities" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="mail identity" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="mail identity when composing message" >
+  <topic name="Creating a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="mail notification" >
+  <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="mark appointment as private" >
+  <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="meetings" >
+  <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="menus, right-click" >
+  <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="message view" >
+  <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="messages, vacation" >
+  <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Moving" >
+  <topic name="Moving mail messages between folders" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="mail messages between folders" >
+    <topic name="Moving mail messages between folders" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="Navigating" >
+  <topic name="Navigating through the user interface" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="navigation" >
+  <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="navigation, keyboard" >
+  <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="new messages" >
+  <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="notebook" >
+  <topic name="Working in Notebooks" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="notebook pages" >
+  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="option, vacation message" >
+  <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="options" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="options, changing" >
+  <topic name="Changing Your User Options" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="options, new mail notification" >
+  <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="options, restoring default" >
+  <topic name="Restore Default Options" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="options, view reading pane" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="overview pane" >
+  <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="pages, Documents" >
+  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="password" >
+  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="permissions, changing access to notebooks" >
+  <topic name="Cancelling access to your Documents wiki folder" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="persona" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="Personal Contacts" >
+  <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="personal distribution lists" >
+  <topic name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="planning a meeting" >
+  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="polling for new mail" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="POP account" >
+  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="POP account email, receiving" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="POP accounts, adding" >
+  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="POP addresses, adding" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="preferences" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="preferences, changing" >
+  <topic name="Changing Your User Options" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="preferences, view reading pane" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="preview pane, turning on or off" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Printing" >
+  <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
+  <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="mail message" >
+    <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="printing a calendar" >
+  <topic name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="printing contacts" >
+  <topic name="Printing Contacts" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="private appointments" >
+  <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Query language description" >
+  <topic name="Query language description" url="Search/query_language_description.htm" />
+</key>
+<key name="quick add" >
+  <topic name="Using Quick to Create an Appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="Quick search" >
+  <topic name="Quick search" url="Search/Quick_search.htm" />
+</key>
+<key name="QuickAdd" >
+  <topic name="Using QuickAdd to Create an Appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="Quotas" >
+  <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="reading pane" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="receiving mail" >
+  <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="Recovering" >
+  <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="deleted mail messages" >
+    <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="recurring appointments, changing" >
+  <topic name="Changing recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="remember me on this computer" >
+  <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="Replying" >
+  <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="mail messages" >
+    <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="reserving rooms and equipment" >
+  <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="resource" >
+  <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="Restore Default Options" >
+  <topic name="Restore Default Options" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="restoring default options" >
+  <topic name="Restore Default Options" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="revoke calendar privileges" >
+  <topic name="Delegating Calendar Access" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="revoke shared mail folders access" >
+  <topic name="Revoking a access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="revoking permissions on address book" >
+  <topic name="Sharing your Address Book" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="revoking shared task list" >
+  <topic name="Share your Task list" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="rich text editor for Document pages" >
+  <topic name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="right click" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="Right-click menus" >
+  <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="roles" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="RSS" >
+  <topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="rules, filter" >
+  <topic name="Filtering your messages" url="filters/filtering_your_messages.htm" />
+  <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
+</key>
+<key name="schedule view" >
+  <topic name="Viewing Multiple Calendars" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+</key>
+<key name="scheduling a meeting" >
+  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="scheduling a room or equipment" >
+  <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="Search Builder" >
+  <topic name="Building search queries" url="Search/building_search_queries.htm" />
+</key>
+<key name="Search examples" >
+  <topic name="Search examples" url="Search/search_examples.htm" />
+</key>
+<key name="search feature" >
+  <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
+  <key name="Using" >
+    <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="search queries" >
+  <topic name="Building search queries" url="Search/building_search_queries.htm" />
+  <topic name="Saving search queries" url="Search/saving_search_queries.htm" />
+  <key name="Saving" >
+    <topic name="Saving search queries" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="search with wildcard" >
+  <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="search, and/or" >
+  <topic name="&quot;And&quot; vs. &quot;Or&quot; type searches" url="Search/and_vs_or_searches.htm" />
+</key>
+<key name="searching for a message" >
+  <topic name="Searching for messages" url="Search/_search__vs.__search_for_.htm" />
+</key>
+<key name="Sent folder" >
+  <topic name="Sent folder" url="Navigation_folders_and_tips/sent_folder.htm" />
+</key>
+<key name="session expires" >
+  <topic name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="setting a forwarding address" >
+  <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="share your calendar" >
+  <topic name="Delegating Calendar Access" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+
+</indexdata>

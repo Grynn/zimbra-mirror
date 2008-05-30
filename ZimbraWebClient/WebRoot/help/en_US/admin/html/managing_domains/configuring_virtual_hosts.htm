@@ -1,0 +1,116 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Configuring Virtual Hosts</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Domains\nConfiguring Virtual Hosts");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Configuring Virtual Hosts</h1>
+<p>Virtual hosting allows you to host more than one domain name on a server. 
+ The general domain configuration does not change. When you create a virtual 
+ host, Zimbra Web Client users can log in without having to specify the 
+ domain name as part of their user name. </p>
+<p>Virtual hosts are entered on the <span style="font-weight: bold;"><B>Domains&gt;Virtual 
+ Hosts</B></span> tab. The virtual host requires a valid DNS configuration 
+ with an A record. </p>
+<p>To get to the Zimbra Web Client login, users enter the virtual host 
+ name as the URL address. For example, <span style="font-weight: bold;"><B>https://mail.company.com</B></span>. 
+ </p>
+<p>When the Zimbra Web Client log in screen displays, users enter only 
+ their user name and password. The authentication request searches for 
+ a domain with that virtual host name. When the virtual host is found, 
+ the authentication is completed against that domain. </p>
+<h3>How to add Virtual Hosts</h3>
+<ul><li class=p-note><p class=note>Make sure that the virtual host has 
+ a valid DNS name and an A record.</p></li>
+</ul>
+<ol start=1><li style="list-style: decimal;" type=1 class=p><p>From the 
+ administration console, click <span style="font-weight: bold;"><B>Domains</B></span>, 
+ select the domain name and click <span style="font-weight: bold;"><B>Edit</B></span>.</p></li>
+	<li style="list-style: decimal;" type=1 class=p><p>Click the <span 
+ style="font-weight: bold;"><B>Virtual Hosts</B></span> tab to open the page. 
+ Enter the complete Virtual Host Name in the box on the page. To add more 
+ virtual host names, click <span style="font-weight: bold;"><B>Add virtual 
+ host </B></span>and continue to add a name.</p></li>
+</ol>
+<p>You can also set up virtual hosts when you configure a new domain.</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

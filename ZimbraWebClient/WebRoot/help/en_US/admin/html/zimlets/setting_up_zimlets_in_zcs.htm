@@ -1,0 +1,119 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Setting Up Zimlets in ZCS</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ol.whs1 { list-style:decimal; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Managing Zimlets\nSetting Up Zimlets in ZCS");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Setting Up Zimlets in ZCS</h1>
+<p>Zimlets are delivered as a zip file that includes all the files necessary 
+ to run the Zimlets. The zip file is uploaded and deployed to the Zimbra 
+ server. Deploying Zimlets creates the Zimlet entry 
+ in the LDAP server, installs the Zimlet files on the 
+ server, grants access to the members of the default COS and turns on the 
+ Zimlet. </p>
+<h3>To deploy a Zimlet to the default COS</h3>
+<ol type="1" class="whs1">
+	<li class=p><p>Save the Zimlet zip file on the computer 
+ you use to access the administration console.</p></li>
+	<li class=p><p>Log on to the administration console and in the navigation 
+ pane's Configuration section, click <span style="font-weight: bold;"><B>Zimlets</B></span>. 
+ The Zimlets content page opens. </p></li>
+	<li class=p><p>Click <span style="font-weight: bold;"><B>Deploy new</B></span>. 
+ The <span style="font-weight: bold;"><B>Deploying a Zimlet</B></span> dialog 
+ opens. Browse to the Zimlet zip file to be uploaded. </p></li>
+	<li class=p><p>Click <span style="font-weight: bold;"><B>Deploy</B></span>. 
+ &nbsp;The file is uploaded and the Zimlet is immediately 
+ deployed on the server, an LDAP entry is set up, and members of the default 
+ COS can access to the Zimlet.</p></li>
+</ol>
+<h3>To enable Zimlets on COSs other than default COS</h3>
+<p>When a Zimlet is deployed, the Zimlet automatically becomes available 
+ in the default COS. The Zimlet is listed in all other COSs 
+ as installed, but not available. To enable the Zimlet, you must check 
+ the box next to the Zimlet on the COS Zimlet tab. </p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>
