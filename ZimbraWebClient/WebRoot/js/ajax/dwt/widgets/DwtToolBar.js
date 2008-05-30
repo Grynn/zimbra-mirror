@@ -275,11 +275,11 @@ DwtToolBar.prototype._addItem =
 function(type, element, index) {
 
     // get the reference element for insertion
-    var count = this._items.length;
     var placeEl = this._items[index] || this._suffixEl;
 
     // insert item
-    this._items.splice(index || count, 0, element);
+	var spliceIndex = index || (typeof index == "number") ? index : this._items.length;
+	this._items.splice(spliceIndex, 0, element);
     this._itemsEl.insertBefore(element, placeEl);
 
     // append spacer
@@ -418,9 +418,10 @@ function(index) {
 //
 
 DwtToolBarButton = function(params) {
+	if (arguments.length == 0) { return; }
 	var params = Dwt.getParams(arguments, DwtToolBarButton.PARAMS);
-        params.className = params.className || "ZToolbarButton";
-        DwtButton.call(this, params);
+	params.className = params.className || "ZToolbarButton";
+	DwtButton.call(this, params);
 };
 
 DwtToolBarButton.PARAMS = ["parent", "style", "className", "posStyle", "actionTiming", "id", "index"];

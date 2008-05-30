@@ -15,18 +15,16 @@
  * ***** END LICENSE BLOCK *****
  */
 
-YMEmoticonsPickerButton = function(parent, style, className, posStyle, id, index){
+YMEmoticonsPickerButton = function(params){
 
 	if (arguments.length == 0) return;
-	className = className || "YMEmoticonsPicker";
-	var params = {parent:parent, style:style , className:className, posStyle:posStyle,
-				  actionTiming:DwtButton.ACTION_MOUSEUP, id:id, index:index};
-    DwtButton.call(this, params);
+	params.actionTiming = DwtButton.ACTION_MOUSEUP;
+    DwtToolBarButton.call(this, params);
 	this.setEmoticon();
     this.setMenu(new AjxCallback(this, this._createMenu));
 };
 
-YMEmoticonsPickerButton.prototype = new DwtButton;
+YMEmoticonsPickerButton.prototype = new DwtToolBarButton;
 YMEmoticonsPickerButton.prototype.constructor = YMEmoticonsPickerButton;
 
 YMEmoticonsPickerButton.prototype._createMenu = function() {
@@ -37,13 +35,13 @@ YMEmoticonsPickerButton.prototype._createMenu = function() {
 };
 
 YMEmoticonsPickerButton.prototype.setEmoticon = function(id){
-        var smiley = id
-                ? YMEmoticonsPicker.SMILEYS[id]
-                : YMEmoticonsPicker.getDefaultSmiley();
+	var smiley = id
+			? YMEmoticonsPicker.SMILEYS[id]
+			: YMEmoticonsPicker.getDefaultSmiley();
 
 	if (smiley) {
-	  	this._smileyButtonDiv.src = smiley.src;
-	  	this._smiley = smiley;
+		this._smileyButtonDiv.src = smiley.src;
+		this._smiley = smiley;
 	}
 };
 
