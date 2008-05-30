@@ -1153,7 +1153,9 @@ function(o) {
 	}
 
 	// Array
-	if (AjxUtil.isArray(o)) {
+    //Special check ( t==='object' && o.length && typeof o.push === "function") becoz when objects are passed from child window to parent window they loose their types.
+    //Parent window considers every object/custome object/array as 'object' type. 
+    if (AjxUtil.isArray(o) || (t === 'object' &&  typeof o.push === "function" && o.length) ) {
 		// Check for cyclical references
 		for (i = pstack.length - 1; i >= 0; --i) {
 			if (pstack[i] === o) {
