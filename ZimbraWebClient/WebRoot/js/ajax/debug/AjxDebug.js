@@ -497,7 +497,7 @@ function(force) {
 	this._enabled = true;
 
 	var url  = "";
-	var name = this._dbgName;
+	var name = AjxEnv.isIE ? "_blank" : this._dbgName;
 	var args = "width=600,height=400,resizable=yes,scrollbars=yes";
 
 	this._debugWindow = window.open(url, name, args);

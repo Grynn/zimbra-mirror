@@ -203,7 +203,7 @@ function(defaultColumnSort) {
 	htmlArr[idx++] = this._noMaximize ? ">" : " width=100%>";
 	htmlArr[idx++] = "<tr>";
 	var numCols = this._headerList.length;
-	for (i = 0; i < numCols; i++) {
+	for (var i = 0; i < numCols; i++) {
 		var headerCol = this._headerList[i];
 		if (!headerCol._visible) { continue; }
 
@@ -265,7 +265,7 @@ function(defaultColumnSort) {
 		if (headerCol._sortable) {
 			var arrowIcon = this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow";
 			
-			htmlArr[idx++] = "<td width=10 id='";
+			htmlArr[idx++] = "<td align=right style='padding-right:2px' width=100% id='";
 			htmlArr[idx++] = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
 			htmlArr[idx++] = "'>";
 			var isDefault = (field == defaultColumnSort);
@@ -2073,8 +2073,6 @@ function(ev) {
 
 	if (this._headerClone == null || ev.button == DwtMouseEvent.RIGHT) { return false; }
 	
-	var data = this._data[this._clickDiv.id];
-	
 	// did the user drop the column on a valid target?
 	if (this._headerCloneTarget) {
 		var divItemIdx = this._getItemData(this._clickDiv, "index");
@@ -2083,17 +2081,16 @@ function(ev) {
 	}
 
 	this._clickDiv.className = (this._clickDiv.id != this._currentColId)
-		? "DwtListView-Column" 
-		: "DwtListView-Column DwtListView-ColumnActive";
-		
+		? "DwtListView-Column" : "DwtListView-Column DwtListView-ColumnActive";
+
+	// clean up
 	var parent = this._headerClone.parentNode;
 	if (parent) {
 		parent.removeChild(this._headerClone);
-	} else {
-		DBG.println(AjxDebug.DBG1, "XXX: column header has no parent!");
 	}
 	delete this._headerClone;
-	
+
+	var data = this._data[this._clickDiv.id];
 	if (data.type != DwtListView.TYPE_HEADER_ITEM) {
 		// something is messed up! redraw the header
 		var headerCol = this._headerIdHash[this._currentColId];
@@ -2103,14 +2100,18 @@ function(ev) {
 	} else {
 		// reset styles as necessary
 		var headerCol = this._headerIdHash[this._clickDiv.id];
-		var field = headerCol._field;
-		var hdrLabelId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_LABEL, this._view, field);
+		var hdrLabelId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_LABEL, this._view, headerCol._field);
 		var labelCell = document.getElementById(hdrLabelId);
 		if (labelCell) {
-			labelCell.style.color = "black";
+			labelCell.style.color = "#000000";
 		}
 	}
-		
+
+	// force all relative widths to be static
+	for (var i = 0; i < this._headerList.length; i++) {
+		this._headerList[i]._width = this._calcRelativeWidth(i);
+	}
+
 	this._resetColWidth();
 
 	return true;
@@ -2131,65 +2132,76 @@ function(columnIdx, newIdx) {
 	this._relayout();
 };
 
+/**
+ * Per bug #15853, the change in column width will remove width from the last
+ * column unless the change makes the width of the last column less than
+ * MIN_COLUMN_WIDTH.
+ *
+ * @param ev
+ */
 DwtListView.prototype._handleColSashDrop =
 function(ev) {
 	if (this._headerSash == null || ev.button == DwtMouseEvent.RIGHT) {	return false; }
 		
-	// find out where the user dropped the sash and update column width
-	var delta = ev.docX - this._headerSashX;
-
-	var data = this._data[this._clickDiv.id];
-	var headerIdx = this._getItemData(this._clickDiv, "index");
-	if (headerIdx >= 0 && headerIdx < this._headerList.length) {
-		var newWidth = null;
-		var oldWidth = this._headerList[headerIdx]._width;
-		if (oldWidth && oldWidth != "auto") {
-			newWidth = oldWidth + delta;
-		} else {
-			// lets actually adjust the next column since this one has a relative width
-			var nextCol = this._headerList[headerIdx+1];
-			if (nextCol && nextCol._width && nextCol._resizeable) {
-				var cell = document.getElementById(nextCol._id);
-				newWidth = cell ? Dwt.getSize(cell).x + delta : null;
-			}
-		}
-
-		if (newWidth != this._headerList._width &&
-			newWidth > DwtListView.MIN_COLUMN_WIDTH)
-		{
-			this._headerList[headerIdx]._width = newWidth;
-			this._relayout();
-		}
-	} else {
-		DBG.println("XXX: Bad header ID.");
-	}
-
+	// destroy the sash
 	var parent = this._headerSash.parentNode;
 	if (parent) {
 		parent.removeChild(this._headerSash);
 	}
 	delete this._headerSash;
 
-	this._resetColWidth();
-
-	return true;
-};
-
-// determine if col header needs padding to accomodate for scrollbars
-DwtListView.prototype._resetColWidth =
-function() {
-	if (this._headerList == null) { return; }
-
-	// dynamically get col idx for last column (b/c col may or may not be turned on)
-	var count = this._headerList.length - 1;
-	var lastColIdx = null;
-	while (lastColIdx == null && count >= 0) {
-		if (this._headerList[count]._visible) {
-			lastColIdx = count;
-		}
-		count--;
+	// force all relative widths to be static
+	for (var i = 0; i < this._headerList.length; i++) {
+		this._headerList[i]._width = this._calcRelativeWidth(i);
 	}
 
+	// find out where the user dropped the sash and update column width
+	var headerIdx = this._getItemData(this._clickDiv, "index");
+	if (headerIdx >= 0 && headerIdx < this._headerList.length) {
+		// always add/remove width from the last column
+		var lastColumnIndex = this._getLastColumnIndex();
+		var lastColumnWidth = (lastColumnIndex) ? this._calcRelativeWidth(lastColumnIndex) : null;
+		var columnWidth = this._calcRelativeWidth(headerIdx);
+
+		if (lastColumnWidth && columnWidth) {
+			var delta = ev.docX - this._headerSashX;
+			var newLastColumnWidth = lastColumnWidth - delta;
+			var newColumnWidth = columnWidth + delta;
+
+			if (newLastColumnWidth > DwtListView.MIN_COLUMN_WIDTH &&
+				newColumnWidth  > DwtListView.MIN_COLUMN_WIDTH &&
+				newColumnWidth != columnWidth)
+			{
+				this._headerList[lastColumnIndex]._width = "auto";
+				this._headerList[headerIdx]._width = newColumnWidth;
+
+				this._relayout();
+				this._resetColWidth();
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+};
+
+DwtListView.prototype._calcRelativeWidth =
+function(headerIdx) {
+	var column = this._headerList[headerIdx];
+	if (!column._width || (column._width && column._width == "auto")) {
+		var cell = document.getElementById(column._id);
+		// UGH: clientWidth is 5px more than HTML-width (4px for IE)
+		return (cell) ? (cell.clientWidth - (AjxEnv.isIE ? 4 : 5)) : null;
+	}
+	return column._width;
+};
+
+// This method will add padding to the *last* column depending on whether
+// scrollbars are shown or not.
+DwtListView.prototype._resetColWidth =
+function() {
+	var lastColIdx = this._getLastColumnIndex();
     if (lastColIdx) {
         var lastCol = this._headerList[lastColIdx];
         var lastCell = document.getElementById(lastCol._id);
@@ -2209,6 +2221,25 @@ function() {
     }
 };
 
+/**
+ * Dynamically get column index for last column b/c columns may or may not be
+ * visible.
+ */
+DwtListView.prototype._getLastColumnIndex =
+function() {
+	var lastColIdx = null;
+	if (this._headerList) {
+		var count = this._headerList.length - 1;
+		while (lastColIdx == null && count >= 0) {
+			if (this._headerList[count]._visible) {
+				lastColIdx = count;
+			}
+			count--;
+		}
+	}
+	return lastColIdx;
+};
+
 DwtListView.prototype._relayout =
 function() {
 	// force relayout of header column
@@ -2216,7 +2247,7 @@ function() {
 	var headerCol = this._headerIdHash[this._currentColId];
 	var sortField = headerCol._sortable ? headerCol._field : null;
 	var sel = this.getSelection()[0];
-	this.setUI(sortField	);
+	this.setUI(sortField);
 	this.setSelection(sel, true);
 };
 
