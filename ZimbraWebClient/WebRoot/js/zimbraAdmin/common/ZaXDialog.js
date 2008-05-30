@@ -65,7 +65,7 @@ ZaXDialog = function(parent, app, className, title, w, h,iKeyName) {
 	this._createContentHtml();
 	this._helpURL = ZaXDialog.helpURL;	
 }
-ZaXDialog.helpURL = location.pathname + "adminhelp/html/WebHelp/administration_console_help.htm";
+ZaXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaXDialog.prototype = new DwtDialog;
 ZaXDialog.prototype.constructor = ZaXDialog;
 /**

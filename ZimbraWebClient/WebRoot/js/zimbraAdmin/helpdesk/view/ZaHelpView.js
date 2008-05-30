@@ -86,7 +86,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("Help")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_2, href:(location.pathname + "adminhelp/html/WebHelp/administration_console_help.htm")}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_2, href:(location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm?locid="+AjxEnv.DEFAULT_LOCALE)}
 						]
 					},
 					{type:_GROUP_,numCols:2,

@@ -49,7 +49,7 @@ ZaGALConfigXWizard = function(parent, app) {
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaGALConfigXWizard.prototype.handleXFormChange));	
 	this.lastErrorStep=0;
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_domains/using_the_global_address_list_(gal).htm"
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domains/using_the_global_address_list_(gal).htm?locid="+AjxEnv.DEFAULT_LOCALE
 	
 }
 

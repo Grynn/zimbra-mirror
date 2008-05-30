@@ -18,7 +18,7 @@
 ZaCosListController = function(appCtxt, container, app) {
 	ZaController.call(this, appCtxt, container, app, "ZaCosListController");
 	this.objType = ZaEvent.S_COS;	
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/cos/class_of_service.htm";				
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "cos/class_of_service.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaCosListController.prototype = new ZaController();

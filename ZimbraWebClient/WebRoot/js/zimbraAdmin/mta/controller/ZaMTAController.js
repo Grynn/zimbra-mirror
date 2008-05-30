@@ -27,7 +27,7 @@
 ZaMTAController = function(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app,"ZaMTAController");
 	this._UICreated = false;
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/monitoring/monitoring_zimbra_mta_mail_queues.htm";				
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/monitoring_zimbra_mta_mail_queues.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this._toolbarOperations = new Array();
 	this.objType = ZaEvent.S_MTA;	
 	this.tabConstructor = ZaMTAXFormView;	

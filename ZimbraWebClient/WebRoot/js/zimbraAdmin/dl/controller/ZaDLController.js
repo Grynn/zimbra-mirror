@@ -24,7 +24,7 @@ ZaDLController = function(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaDLController");
 	this._UICreated = false;
 	this._toolbarOperations = new Array();
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/distribution_lists.htm";	
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/distribution_lists.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.deleteMsg = ZaMsg.Q_DELETE_DL;
 	this.objType = ZaEvent.S_ACCOUNT;
 	this.tabConstructor = ZaDLXFormView;

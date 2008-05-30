@@ -37,7 +37,7 @@ ZaAccountViewController = function(appCtxt, container, app) {
 
 ZaAccountViewController.prototype = new ZaXFormViewController();
 ZaAccountViewController.prototype.constructor = ZaAccountViewController;
-ZaAccountViewController.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/editing_accounts.htm";		
+ZaAccountViewController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/editing_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaController.initToolbarMethods["ZaAccountViewController"] = new Array();
 ZaController.setViewMethods["ZaAccountViewController"] = new Array();
 //public methods

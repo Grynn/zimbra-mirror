@@ -26,7 +26,7 @@
 ZaGlobalConfigViewController = function(appCtxt, container, app) {
 	ZaXFormViewController.call(this, appCtxt, container, app,"ZaGlobalConfigViewController");
 	this._UICreated = false;
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_global_settings/global_settings.htm";			
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_global_settings/global_settings.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.objType = ZaEvent.S_GLOBALCONFIG;
 	this.tabConstructor = GlobalConfigXFormView;					
 }

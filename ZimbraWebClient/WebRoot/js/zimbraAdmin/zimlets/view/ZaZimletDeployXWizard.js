@@ -36,7 +36,7 @@ ZaZimletDeployXWizard = function(parent, app) {
 	this.pollAction = new AjxTimedAction(this, this.getDeploymentStatus);
 	this._pollHandler = null;		
 }
-ZaZimletDeployXWizard.helpURL = location.pathname + "adminhelp/html/WebHelp/zimlets/setting_up_zimlets_in_zcs.htm";
+ZaZimletDeployXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "zimlets/setting_up_zimlets_in_zcs.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaZimletDeployXWizard.prototype = new ZaXWizardDialog;
 ZaZimletDeployXWizard.prototype.constructor = ZaZimletDeployXWizard;
 ZaXDialog.XFormModifiers["ZaZimletDeployXWizard"] = new Array();

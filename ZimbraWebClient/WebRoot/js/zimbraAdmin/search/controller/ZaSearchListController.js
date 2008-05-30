@@ -48,7 +48,7 @@ ZaSearchListController = function(appCtxt, container, app) {
 
 ZaSearchListController.prototype = new ZaListViewController();
 ZaSearchListController.prototype.constructor = ZaSearchListController;
-ZaSearchListController.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/provisioning_accounts.htm";
+ZaSearchListController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaController.initToolbarMethods["ZaSearchListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
 ZaListViewController.changeActionsStateMethods["ZaSearchListController"] = new Array();

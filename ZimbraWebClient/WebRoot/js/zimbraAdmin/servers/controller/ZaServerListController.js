@@ -26,7 +26,7 @@ ZaServerListController = function(appCtxt, container, app) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_servers/managing_servers.htm";					
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/managing_servers.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaServerListController.prototype = new ZaListViewController();

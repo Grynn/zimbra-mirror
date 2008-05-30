@@ -33,7 +33,7 @@ ZaAccChangePwdXDlg = function(parent,  app, w, h) {
 
 ZaAccChangePwdXDlg.prototype = new ZaXDialog;
 ZaAccChangePwdXDlg.prototype.constructor = ZaAccChangePwdXDlg;
-ZaAccChangePwdXDlg.helpURL = location.pathname + "adminhelp/html/WebHelp/passwords/setting_passwords.htm";
+ZaAccChangePwdXDlg.helpURL = location.pathname + ZaUtil.HELP_URL + "passwords/setting_passwords.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaAccChangePwdXDlg.prototype.getPassword = 
 function() {

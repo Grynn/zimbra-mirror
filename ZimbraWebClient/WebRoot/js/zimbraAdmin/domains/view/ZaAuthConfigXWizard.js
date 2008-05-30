@@ -57,7 +57,7 @@ ZaAuthConfigXWizard = function(parent, app) {
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaAuthConfigXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaAuthConfigXWizard.prototype.handleXFormChange));	
 	this.lastErrorStep=0;	
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_domains/authentication_settings.htm";
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domains/authentication_settings.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaAuthConfigXWizard.prototype = new ZaXWizardDialog;

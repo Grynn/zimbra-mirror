@@ -95,7 +95,7 @@ ZaNewAccountXWizard.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST
 ZaNewAccountXWizard.prototype = new ZaXWizardDialog;
 ZaNewAccountXWizard.prototype.constructor = ZaNewAccountXWizard;
 ZaXDialog.XFormModifiers["ZaNewAccountXWizard"] = new Array();
-ZaNewAccountXWizard.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/create_an_account.htm";
+ZaNewAccountXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/create_an_account.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaNewAccountXWizard.prototype.handleXFormChange = 
 function () {
 	if(this._localXForm.hasErrors()) {

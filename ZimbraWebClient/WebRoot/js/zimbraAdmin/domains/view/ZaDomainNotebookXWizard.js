@@ -37,7 +37,7 @@ ZaDomainNotebookXWizard = function(parent,  app, w, h) {
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaDomainNotebookXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaDomainNotebookXWizard.prototype.handleXFormChange));	
 	this.lastErrorStep=0;
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_domains/creating_a_domain.htm";			
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domains/creating_a_domain.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaDomainNotebookXWizard.prototype = new ZaXWizardDialog;

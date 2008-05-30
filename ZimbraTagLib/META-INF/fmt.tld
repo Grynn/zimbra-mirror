@@ -29,6 +29,30 @@ decoding request parameters.
     </attribute>
   </tag>
 
+	<tag>
+		<description>
+			Allows the user to query the locale currently used in formatting
+			and store it in a scoped variable.
+		</description>
+		<name>getLocale</name>
+		<tag-class>com.zimbra.cs.taglib.tag.i18n.GetLocaleTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>
+				Name of the exported scoped variable which
+				stores the locale.
+			</description>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Scope of the var.</description>
+			<name>scope</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
   <tag>
     <description>
         Stores the given locale in the locale configuration variable

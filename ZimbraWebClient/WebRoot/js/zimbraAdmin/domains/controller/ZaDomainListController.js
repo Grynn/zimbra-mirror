@@ -32,7 +32,7 @@ ZaDomainListController = function(appCtxt, container, app) {
 
 ZaDomainListController.prototype = new ZaListViewController();
 ZaDomainListController.prototype.constructor = ZaDomainListController;
-ZaDomainListController.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_domains/managing_domains.htm";
+ZaDomainListController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domains/managing_domains.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaController.initToolbarMethods["ZaDomainListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
 ZaListViewController.changeActionsStateMethods["ZaDomainListController"] = new Array(); 

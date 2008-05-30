@@ -63,7 +63,7 @@ ZaNewAliasXDialog = function(parent,  app, w, h, title) {
 
 ZaNewAliasXDialog.prototype = new ZaXDialog;
 ZaNewAliasXDialog.prototype.constructor = ZaNewAliasXDialog;
-ZaNewAliasXDialog.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/creating_a_mail_aliases.htm";
+ZaNewAliasXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/creating_a_mail_aliases.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaNewAliasXDialog.prototype.getMyXForm = 
 function() {	

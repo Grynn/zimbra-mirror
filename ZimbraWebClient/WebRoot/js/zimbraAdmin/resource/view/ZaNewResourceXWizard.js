@@ -47,7 +47,7 @@ ZaNewResourceXWizard = function(parent, app) {
 ZaNewResourceXWizard.prototype = new ZaXWizardDialog;
 ZaNewResourceXWizard.prototype.constructor = ZaNewResourceXWizard;
 ZaXDialog.XFormModifiers["ZaNewResourceXWizard"] = new Array();
-ZaNewResourceXWizard.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";
+ZaNewResourceXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/managing_resource.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaNewResourceXWizard.prototype.handleXFormChange = 
 function () {

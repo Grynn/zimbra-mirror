@@ -38,7 +38,7 @@ ZaResourceXFormView.prototype = new ZaTabView();
 ZaResourceXFormView.prototype.constructor = ZaResourceXFormView;
 ZaTabView.XFormModifiers["ZaResourceXFormView"] = new Array();
 ZaResourceXFormView.TAB_INDEX=0;
-ZaResourceXFormView.helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/managing_resource.htm";
+ZaResourceXFormView.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/managing_resource.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaResourceXFormView.prototype.getTabIcon =
 function () {

@@ -26,7 +26,7 @@
 ZaGlobalStatsController = function(appCtxt, container, app) {
 
 	ZaController.call(this, appCtxt, container, app,"ZaGlobalStatsController");
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/monitoring/checking_usage_statistics.htm";
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.tabConstructor = ZaGlobalStatsView;		
 }
 

@@ -26,7 +26,7 @@ ZaEditFpXDialog = function(parent,  app, w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];
 	ZaXDialog.call(this, parent, app, null, title, w, h);
-    this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_global_settings/making_free_busy_view__available_.htm" ;
+    this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_global_settings/making_free_busy_view__available_.htm?locid="+AjxEnv.DEFAULT_LOCALE ;
     //get the provider first
     ZaFp.getProviders(app);
     this._containedObject = {};

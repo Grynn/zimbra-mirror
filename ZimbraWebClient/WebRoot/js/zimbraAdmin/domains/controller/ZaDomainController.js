@@ -26,7 +26,7 @@
 ZaDomainController = function(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container, app, "ZaDomainController");
 	this._UICreated = false;
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_domains/managing_domains.htm";	
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domains/managing_domains.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this._toolbarOperations = new Array();			
 	this.deleteMsg = ZaMsg.Q_DELETE_DOMAIN;	
 	this.objType = ZaEvent.S_DOMAIN;

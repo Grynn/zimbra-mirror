@@ -26,7 +26,7 @@ ZaZimletListController = function(appCtxt, container, app) {
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	this.objType = ZaEvent.S_ZIMLET;
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/zimlets/about_zimlets.htm";					
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "zimlets/about_zimlets.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaZimletListController.prototype = new ZaListViewController();

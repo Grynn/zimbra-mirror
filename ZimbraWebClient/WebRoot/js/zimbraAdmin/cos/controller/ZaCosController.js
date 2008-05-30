@@ -26,7 +26,7 @@
 ZaCosController = function(appCtxt, container,app) {
 	ZaXFormViewController.call(this, appCtxt, container,app, "ZaCosController");
 	this._UICreated = false;	
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/cos/creating_classes_of_service.htm";		
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "cos/creating_classes_of_service.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.deleteMsg = ZaMsg.Q_DELETE_COS;
 	this.objType = ZaEvent.S_COS;
 	this._toolbarOperations = new Array();	

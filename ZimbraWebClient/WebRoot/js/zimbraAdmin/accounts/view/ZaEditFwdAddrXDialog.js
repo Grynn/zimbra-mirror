@@ -26,7 +26,7 @@ ZaEditFwdAddrXDialog = function(parent,  app, w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
 	ZaXDialog.call(this, parent, app, null, title, w, h);
-    this._helpURL = location.pathname + "adminhelp/html/WebHelp/managing_accounts/forwarding_mail.htm";
+    this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/forwarding_mail.htm?locid="+AjxEnv.DEFAULT_LOCALE;
     this._containedObject = {};
 	this.initForm(ZaAlias.myXModel,this.getMyXForm());
 }
