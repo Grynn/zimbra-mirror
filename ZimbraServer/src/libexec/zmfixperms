@@ -217,6 +217,7 @@ if [ -L ${zimbra_home}/openldap ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/openldap"
   chown ${root_user}:${root_group} ${zimbra_home}/openldap-*
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/openldap-data
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/openldap-data
   chown -R ${root_user}:${root_group} ${zimbra_home}/openldap/*
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/openldap/{etc,var}
 	chmod 755 ${zimbra_home}/openldap/libexec/*
