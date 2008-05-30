@@ -2,6 +2,7 @@ package com.zimbra.cs.mailbox;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,12 +41,16 @@ class SyncExceptionHandler {
 	private static final int MESSAGE_DATA_LIMIT = 4* 1024 * 1024;
 	public static void syncMessageFailed(OfflineMailbox ombx, int itemId, ParsedMessage pm, ServiceException exception) throws ServiceException {
 		ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        InputStream msgStream = null; 
 		try {
-			ByteUtil.copy(pm.getRawInputStream(), true, bao, true, MESSAGE_DATA_LIMIT);
+            msgStream = pm.getRawInputStream();
+			ByteUtil.copy(msgStream, true, bao, true, MESSAGE_DATA_LIMIT);
 			saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, bao.toString(), pm.getRawSize(), exception);
 		} catch (IOException x) {
 			saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, null, 0, exception);
-		}
+		} finally {
+		    ByteUtil.closeStream(msgStream);
+        }
 	}
 	
 	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
