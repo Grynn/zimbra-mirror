@@ -538,7 +538,7 @@ function(account) {
 		
 		for (var i = 0; i < cnt; i++) {
 			if(servers[i].attrs[ZaServer.A_ServiceHostname].toLowerCase() == ms) {
-				if(servers[i].attrs[ZaServer.A_zimbraMailMode] && (servers[i].attrs[ZaServer.A_zimbraMailMode] == "https" || servers[i].attrs[ZaServer.A_zimbraMailMode] == "mixed")) { //if there is SSL, use SSL
+				if(servers[i].attrs[ZaServer.A_zimbraMailMode] && (servers[i].attrs[ZaServer.A_zimbraMailMode] == "https" || servers[i].attrs[ZaServer.A_zimbraMailMode] == "mixed" || servers[i].attrs[ZaServer.A_zimbraMailMode] == "both")) { //if there is SSL, use SSL
 					mailPort = servers[i].attrs[ZaServer.A_zimbraMailSSLPort];
 					mailProtocol = "https";
 				} else if (servers[i].attrs[ZaServer.A_zimbraMailPort] && parseInt(servers[i].attrs[ZaServer.A_zimbraMailPort]) > 0) { //otherwize use HTTP
