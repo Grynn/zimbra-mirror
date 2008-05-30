@@ -1,0 +1,302 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<resource>
+<item name="Prev" value="&lt;&lt;" />
+<item name="Hide" value="Esconder" />
+<item name="SyncTocTooltip" value="Sincronizar Índice" />
+<item name="InTopicSearchBtnText" value="Ir" />
+<item name="JS_alert_appletNotLoad " value=" Impossível carregar o applet. Se você está utilizando uma versão antiga do Netscape, o arquivo prefs.js deve ser editado." />
+<item name="FtsInputPrompt" value="Digitar a(s) palavra(s) para buscar:" />
+<item name="Done" value="Finalizado" />
+<item name="Logo/Author" value="Oferecido por" />
+<item name="MergeError1" value="O sistema de Ajuda mesclado" />
+<item name="JS_alert_cantLoadProject" value="Não é possível carregar o projeto:" />
+<item name="Next" value="&gt;&gt;" />
+<item name="SyncToc" value="SyncToc" />
+<item name="MergeError2" value="está usando um idioma diferente do sistema de Ajuda principal, o que desativará o índice e a funcionalidade de pesquisa de texto completo no sistema de Ajuda mesclado." />
+<item name="nls_body_instruction" value="Digite sua pergunta na caixa de texto e a seguir clique GO." />
+<item name="ToolBarSearchBtnText" value="Ir" />
+<item name="SuggestViewNoFrameMessage" value="Para visualizar o sistema Help sem estruturas clique neste" />
+<item name="MergeError3" value="está a usar uma marca diferente da configuração Web do sistema de Ajuda principal que fará com que a função de união seja desactivada no sistema de Ajuda." />
+<item name="Hide_Navigation_Component" value="Esconder componente de navegação" />
+<item name="FtsBtnText" value="Ir" />
+<item name="TopicsFound" value="Tópicos encontrados" />
+<item name="LoadingContentsData" value="Carregando, clicar aqui para cancelar..." />
+<item name="Definition" value="Definição:" />
+<item name="CompletingContents" value="Completando conteúdo..." />
+<item name="GeneratedBy" value="Gerado por" />
+<item name="PoweredBy" value="Oferecido por" />
+<item name="IndexAlphabetBookmarks" value="ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+<item name="Contents" value="Conteúdo" />
+<item name="IndexSelectTopicLabel" value="Selecione um tópico a seguir e clique em Exibir" />
+<item name="Disabled Prev" value="&lt;&lt;" />
+<item name="Glossary" value="Glossário" />
+<item name="Search" value="Buscar" />
+<item name="CantSearch" value="Não é possível procurar esta frase." />
+<item name="LoadingIndex" value="Carregando índice..." />
+<item name="LoadingData" value="Carregando dados, favor aguardar..." />
+<item name="Show_Navigation_Component" value="Mostrar componente de navegação" />
+<item name="Book" value="Livro" />
+<item name="Disabled Next" value="&gt;&gt;" />
+<item name="nls_body_empty" value="Sinto muito, não foi possível encontrar uma boa resposta a sua pergunta." />
+<item name="nls_button_go_hint" value="Ir a Busca" />
+<item name="FtsHilitePrompt" value="Realçar resultados da procura" />
+<item name="Find" value="Encontrar" />
+<item name="CantOpenURLorFile" value="URL ou arquivo não podem ser abertos" />
+<item name="Print" value="Imprimir" />
+<item name="About" value="Sobre" />
+<item name="Author" value="Autor" />
+<item name="IndexSelectTopicTitle" value="Selecione um tópico" />
+<item name="Blank_topic_text" value="Este tópico foi criado pelo WinHelp Project Conversion Wizard, e é o destino de um tópico inexistente ou de um hyperlink interrompido." />
+<item name="BrowserLimitedMessage" value="Seu navegador não suporta estruturas.  Recomendamos a atualização de seu navegador para uma versão que suporta estruturas." />
+<item name="LoadingTOCItem" value="Carregando conteúdo:" />
+<item name="Display" value="Exibir" />
+<item name="Cancel" value="Cancelar" />
+<item name="IndexSelectTopicError" value="Favor selecionar um tópico." />
+<item name="nls_edit_label" value="Digite a sua pergunta:" />
+<item name="SearchLabel" value="Buscar" />
+<item name="RelateTopicListPrompt" value="Clicar em um tópico e a seguir clicar Exibir." />
+<item name="Seperate " value=" |" />
+<item name="NextTooltip" value="Tópico seguinte" />
+<item name="JS_alert_colorlimitation" value="WebHelp detectou que o seu monitor está configurado para 16 cores.  Para obter apoio completo de WebHelp, configure seu monitor para utilizar 256 cores ou mais." />
+<item name="TopicsNotFound" value="Nenhum tópicos encontrado." />
+<item name="Show" value="Mostrar" />
+<item name="PreTooltip" value="Tópico anterior" />
+<item name="SearchPrompt" value="- Buscar -" />
+<item name="IndexBtnText" value="Ir" />
+<item name="JS_alert_ProjectLoadingFail" value="Não foi possível carregar corretamente, favor clicar em Renovar." />
+<item name="LoadingContents" value="Carregando conteúdo, favor aguardar..." />
+<item name="Term" value="Termo:" />
+<item name="WebSearchButton" value="WebSearch" />
+<item name="Remote_Page" value="Página remota" />
+<item name="WebSearch" value="WebSearch" />
+<item name="LoadingFTS" value="Lendo dados de busca..." />
+<item name="Index" value="Índice" />
+<item name="JS_alert_ErrorInLoading" value="Erro ao carregar o componente de navegação. Favor regenerar o WebHelp." />
+<item name="IndexInputPrompt" value="Digitar a palavra-chave para encontrar:" />
+<item name="Page" value="Página" />
+<item name="SuggestViewNoFrameMsg2" value="hiperlink." />
+<item name="nls_button_go_text" value="Ir" />
+<item name="Searching" value="Buscando..." />
+
+  <item name="English"   value="" />
+  <item name="langorder" value="0,1,2,3,4,5,6,7,8,40,41,42,43,44,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,38,45,46,47,48,49,50,33,51,52,53,88,54,34,55,56,115,119,121,123,125,126,127,128,129,130,57,58,89,90,91,59,60,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,246,252,61,62,63,64,66,67,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,251,252,68,69,70,71,27,114,28,82,170,85,112,109,110,65,113,223,86,213,29,255,30,31,80,81,83,84,111,36,37,79,229,222,87,212,32,254,251,39,72,97,98,99,100,73,101,74,102,133,93,103,35,104,75,105,92,122,124,76,106,107,108,77,120,199,94,116,117,118,78,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,95,197,230,230,230,230,246,227,224,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,96,197,230,230,230,230,246,227,250," />
+
+  <panes show="0">
+    <toc />
+    <index />
+    <fts />
+  </panes>
+
+  <stopwords>
+    <word name="0" />
+    <word name="1" />
+    <word name="2" />
+    <word name="3" />
+    <word name="4" />
+    <word name="5" />
+    <word name="6" />
+    <word name="7" />
+    <word name="8" />
+    <word name="9" />
+    <word name="a" />
+    <word name="ainda" />
+    <word name="algum" />
+    <word name="alguma" />
+    <word name="algumas" />
+    <word name="alguns" />
+    <word name="após" />
+    <word name="aquela" />
+    <word name="aquelas" />
+    <word name="aquele" />
+    <word name="aqueles" />
+    <word name="aqui" />
+    <word name="aquilo" />
+    <word name="as" />
+    <word name="cada" />
+    <word name="caminho" />
+    <word name="cinco " />
+    <word name="com" />
+    <word name="como" />
+    <word name="conseguir" />
+    <word name="de" />
+    <word name="dela" />
+    <word name="dele" />
+    <word name="dentro" />
+    <word name="depois" />
+    <word name="desde" />
+    <word name="deve" />
+    <word name="dois" />
+    <word name="e" />
+    <word name="elas" />
+    <word name="eles" />
+    <word name="em" />
+    <word name="entre" />
+    <word name="então" />
+    <word name="era" />
+    <word name="eram" />
+    <word name="esta" />
+    <word name="estado" />
+    <word name="estamos" />
+    <word name="estar" />
+    <word name="estas" />
+    <word name="estava" />
+    <word name="estavam" />
+    <word name="este" />
+    <word name="estes" />
+    <word name="está" />
+    <word name="estávamos" />
+    <word name="estão" />
+    <word name="Eu" />
+    <word name="faz" />
+    <word name="fazem" />
+    <word name="fazemos" />
+    <word name="faço" />
+    <word name="feito" />
+    <word name="finalizado" />
+    <word name="igual" />
+    <word name="isto" />
+    <word name="já" />
+    <word name="lá" />
+    <word name="mais" />
+    <word name="mas" />
+    <word name="na" />
+    <word name="nenhum" />
+    <word name="nenhuma" />
+    <word name="no" />
+    <word name="nove" />
+    <word name="não" />
+    <word name="nós" />
+    <word name="o" />
+    <word name="oito" />
+    <word name="ok" />
+    <word name="okay" />
+    <word name="onde" />
+    <word name="os" />
+    <word name="ou" />
+    <word name="outra" />
+    <word name="outro" />
+    <word name="para" />
+    <word name="pela" />
+    <word name="pelo" />
+    <word name="pode" />
+    <word name="por" />
+    <word name="porque" />
+    <word name="porém" />
+    <word name="precisar" />
+    <word name="quais" />
+    <word name="qual" />
+    <word name="qualquer " />
+    <word name="quando" />
+    <word name="quatro" />
+    <word name="que" />
+    <word name="querer" />
+    <word name="ref" />
+    <word name="se" />
+    <word name="seis" />
+    <word name="sem" />
+    <word name="ser" />
+    <word name="sete" />
+    <word name="seu" />
+    <word name="seus" />
+    <word name="sido" />
+    <word name="somos" />
+    <word name="sou" />
+    <word name="sua" />
+    <word name="suas" />
+    <word name="são" />
+    <word name="tais" />
+    <word name="tal" />
+    <word name="talvez" />
+    <word name="também" />
+    <word name="tem" />
+    <word name="temos" />
+    <word name="tenho" />
+    <word name="toda" />
+    <word name="todas" />
+    <word name="todo" />
+    <word name="todos" />
+    <word name="três" />
+    <word name="tudo" />
+    <word name="têm" />
+    <word name="um" />
+    <word name="uma" />
+    <word name="usado" />
+    <word name="usado" />
+    <word name="usar" />
+    <word name="ver" />
+    <word name="você" />
+    <word name="vocês" />
+    <word name="zero" />
+    <word name="é" />
+    <word name="éramos" />
+  </stopwords>
+
+
+	<paneskin>
+		<background color="#e8dcc1" img="" />
+		<font name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+		<toc>
+			<background color="#f9f9f9" img="" />
+			<icons>
+				<book open="chr_book_op.gif" close="chr_book_clo.gif" />
+				<item  local="chr_page.gif" remote="chr_webpage.gif" />
+				<newbook open="" close="" />
+				<newitem  local="" remote="" />
+			</icons>
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</toc>
+		<index>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</index>
+		<fts>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<error name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</fts>
+		<glossary>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</glossary>
+	</paneskin>
+</resource>

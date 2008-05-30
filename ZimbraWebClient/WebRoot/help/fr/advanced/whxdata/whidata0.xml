@@ -1,0 +1,313 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="accepter l’accès à des carnets" >
+  <topic name="Accepter l’accès à un carnet" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+</key>
+<key name="accès aux comptes externes" >
+  <topic name="Accéder à vos comptes externes" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="accès partagé, carnet d’adresses" >
+  <topic name="Partage de votre carnet d’adresses" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Activer les drapeaux" >
+  <topic name="Marquer un mail d’un drapeau" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="mail" >
+    <topic name="Marquer un mail d’un drapeau" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="Adresses IMAP, ajouter" >
+  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="Adresses POP, ajouter" >
+  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="affichage de conversation" >
+  <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="affichage des mails" >
+  <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="affichage du calendrier" >
+  <topic name="À propos du calendrier Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="Affichage traditionnel" >
+  <topic name="Affichage traditionnel" url="Navigation_folders_and_tips/Traditional_View.htm" />
+</key>
+<key name="affichage, calendrier" >
+  <topic name="À propos du calendrier Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="afficher au format HTML" >
+  <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="Ajout automatique de contacts" >
+  <topic name="Ajout automatique de contacts" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+</key>
+<key name="ajouter automatiquement une signature" >
+  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="ajouter des comptes existants" >
+  <topic name="Ajouter des comptes POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="ajouter des contacts" >
+  <topic name="Création d’un nouveau contact" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="ajouter une signature" >
+  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="archivage de mails" >
+  <topic name="purge des mails" url="reading_mail/archiving_old_messages.htm" />
+</key>
+<key name="Assistant Zimbra" >
+  <topic name="Assistant Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="Assistant(e)" >
+  <topic name="Assistant Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="autorisations, modifier l’accès aux carnets" >
+  <topic name="Annuler l'accès à votre dossier Carnets (« wiki »)" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="avatar" >
+  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Créer des avatars" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="Blocage des pièces jointes" >
+  <topic name="Blocage des pièces jointes" url="reading_mail/attachment_blocking.htm" />
+  <topic name="Fonction de blocage des mails" url="reading_mail/Message_blocking_feature.htm" />
+</key>
+<key name="boîte aux lettres saturée" >
+  <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="brouillon" >
+  <topic name="Enregistrement d’un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="calendrier, autorisations d’accès" >
+  <topic name="Déléguer l’accès à votre calendrier" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="calendrier, impression" >
+  <topic name="Impression d’un calendrier" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="calendrier, libre/occupé" >
+  <topic name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="calendrier, à propos" >
+  <topic name="À propos du calendrier Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="calendrier, événements" >
+  <topic name="Programmation de journées entières" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="calendriers iCal, importer ou exporter" >
+  <topic name="Importation de votre calendrier iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="caractère de substitution, utiliser dans la recherche" >
+  <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="Caractères de substitution" >
+  <topic name="Caractères de substitution" url="filters/wildcards.htm" />
+</key>
+<key name="carnet" >
+  <topic name="Travailler dans des carnets" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="carnet d’adresses général" >
+  <topic name="Utilisation du carnet d'adresses général" url="Contacts/using_the_corporate_address_book.htm" />
+</key>
+<key name="carnet d’adresses, groupes de contacts" >
+  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="carnet d’adresses, modifier l’accès partagé" >
+  <topic name="Partage de votre carnet d’adresses" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="carnet d’adresses, retirer l’accès" >
+  <topic name="Partage de votre carnet d’adresses" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="carnets d'adresses, importation" >
+  <topic name="Importation de contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="clic droit" >
+  <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="comment configurer l’affichage initial du panneau de contenu" >
+  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="comment créer des rendez-vous" >
+  <topic name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="Compte de messagerie POP, réception" >
+  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Compte IMAP" >
+  <topic name="Gérer vos comptes POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="Compte POP" >
+  <topic name="Gérer vos comptes POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="comptes externes" >
+  <topic name="Gérer vos comptes POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="comptes externes, comment en ajouter" >
+  <topic name="Ajouter des comptes POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="comptes IMAP, ajouter" >
+  <topic name="Ajouter des comptes POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="comptes POP, ajouter" >
+  <topic name="Ajouter des comptes POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="Conditions de filtre" >
+  <topic name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
+</key>
+<key name="configurer une adresse de redirection" >
+  <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="consultation de nouveau mail" >
+  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="contact" >
+  <topic name="Modification d’un contact" url="Contacts/editing_a_contact.htm" />
+  <topic name="Contacts" url="Contacts/contacts.htm" />
+  <topic name="Création d’un nouveau contact" url="Contacts/creating_a_new_contact.htm" />
+  <key name="Modification" >
+    <topic name="Modification d’un contact" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="contact, liste d’impression" >
+  <topic name="Impression des contacts" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="Contacts personnels" >
+  <topic name="Modification d’un contact" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="contacts, importer" >
+  <topic name="Importation de contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="contacts, rajouter à la liste un contact supprimé" >
+  <topic name="Suppression d’un contact" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="Conversations" >
+  <topic name="Dossiers d'intervalles de conversations" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Impression d’une conversation" url="conversations/printing_a_conversation.htm" />
+  <key name="Impression" >
+    <topic name="Impression d’une conversation" url="conversations/printing_a_conversation.htm" />
+  </key>
+  <key name="Trier" >
+    <topic name="Trier les conversations" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  </key>
+</key>
+<key name="Créer" >
+  <topic name="Création d’un mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <key name="nouveau mail" >
+    <topic name="Création d’un mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  </key>
+</key>
+<key name="créer des tags" >
+  <topic name="Utiliser les tags pour classer les mails" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="créer un carnet " >
+  <topic name="Créer un carnet" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="créer un rendez-vous à partir d’un mail" >
+  <topic name="Assistant Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="demandes de recherche" >
+  <topic name="Établir des demandes de recherche" url="Search/building_search_queries.htm" />
+  <topic name="Sauvegarde des recherches" url="Search/saving_search_queries.htm" />
+  <key name="Enregistrement" >
+    <topic name="Enregistrement des recherches" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="Description du langage de demande" >
+  <topic name="Description du langage de demande" url="Search/query_language_description.htm" />
+</key>
+<key name="Documents, ajouter des tableaux" >
+  <topic name="Ajouter un tableau à une page de carnet" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="Documents, créer des pages" >
+  <topic name="Créer une page" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Documents, créer un carnet" >
+  <topic name="Créer un carnet" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="Documents, modifier les autorisations d’accès" >
+  <topic name="Annuler l'accès à votre dossier Carnets (« wiki »)" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="Documents, partager" >
+  <topic name="Partager des dossiers wiki" url="Documents/Sharing_Notebooks.htm" />
+</key>
+<key name="Documents, éditeur de format RTF" >
+  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="Dossier Corbeille" >
+  <topic name="Dossier Corbeille" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="Dossier Envoyés" >
+  <topic name="Dossier Envoyés" url="Navigation_folders_and_tips/sent_folder.htm" />
+</key>
+<key name="dossiers" >
+  <topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
+<key name="dossiers personnalisés" >
+  <topic name="Créer des dossiers personnalisés" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="déconnexion" >
+  <topic name="Connexion et déconnexion" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="déléguer l’accès à votre calendrier" >
+  <topic name="Déléguer l’accès à votre calendrier" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="Déplacer" >
+  <topic name="Déplacer des mails dans des dossiers" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="mails dans des dossiers" >
+    <topic name="Déplacer des mails dans des dossiers" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="emplacement, réserver" >
+  <topic name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="Exemples de recherches" >
+  <topic name="Exemples de recherches" url="Search/search_examples.htm" />
+</key>
+<key name="expiration de la session" >
+  <topic name="Si votre session a expiré" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="faire suivre votre mail" >
+  <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="Fil Atom" >
+  <topic name="S’abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="filtre, son fonctionnement" >
+  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
+</key>
+<key name="filtrer des mails" >
+  <topic name="Filtrer vos messages" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="fonction de recherche" >
+  <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
+  <key name="Utilisation" >
+    <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="fonctions" >
+  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="fonctions de l’interface" >
+  <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="fonctions du client Web de Zimbra" >
+  <topic name="À propos de Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="Fonctions d’interface utilisateur" >
+  <topic name="Fonctions d’interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="formatage avec HTML" >
+  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="glisser-déposer" >
+  <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="groupes de contacts" >
+  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+
+</indexdata>

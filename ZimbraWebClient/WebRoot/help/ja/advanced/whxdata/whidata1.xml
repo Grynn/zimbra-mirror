@@ -1,0 +1,367 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="メールを転送する" >
+  <topic name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="メールフォルダのアクセス許可を編集" >
+  <topic name="共有フォルダへのアクセスを無効にする" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="メールボックスがいっぱい" >
+  <topic name="割り当て容量" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="メールメッセージ" >
+  <topic name="メールメッセージの各部分について" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="メールメッセージビュー" >
+  <topic name="メールメッセージビューを管理する" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="メール通知" >
+  <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="ユーザーインターフェイスの機能" >
+  <topic name="ユーザーインターフェイスの機能とショートカット" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="ユーザー設定" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="ユーザー設定、デフォルトに戻す" >
+  <topic name="ユーザー設定をデフォルトに戻す" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="ユーザー設定をデフォルトに戻す" >
+  <topic name="ユーザー設定をデフォルトに戻す" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="リソース" >
+  <topic name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="ログオフする" >
+  <topic name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="ワイルドカード" >
+  <topic name="ワイルドカード" url="filters/wildcards.htm" />
+</key>
+<key name="ワイルドカード、検索で使用する" >
+  <topic name="検索機能を使用する" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="ワイルドカードを使って検索" >
+  <topic name="検索機能を使用する" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="下書きメッセージ" >
+  <topic name="下書きメッセージを保存する" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="不在メッセージ" >
+  <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="予定なし/予定あり" >
+  <topic name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="予定ビュー" >
+  <topic name="複数のカレンダーを表示する" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+</key>
+<key name="予約" >
+  <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="予約、簡易追加" >
+  <topic name="簡易追加機能を使用して予約を作成する" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="予約にプライベートのマークを付ける" >
+  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="予約の作成方法" >
+  <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="予約を変更する" >
+  <topic name="繰り返し予約を変更する" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="予約リマインダー" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="会議" >
+  <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="会議を予定する" >
+  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="会議を計画する" >
+  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="作成する" >
+  <topic name="新しいメールメッセージを作成する" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <key name="新しいメールメッセージ" >
+    <topic name="新しいメールメッセージを作成する" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  </key>
+</key>
+<key name="個人連絡先" >
+  <topic name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="個人配布リスト" >
+  <topic name="グループ連絡先リストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="全日予約" >
+  <topic name="全日イベントを予定する" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="共有アクセス、アドレスブック" >
+  <topic name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="共有タスクリストを取り消す" >
+  <topic name="自分のタスクリストを共有する" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="共有タスクリストを変更する" >
+  <topic name="自分のタスクリストを共有する" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="共有メールフォルダへのアクセスを取り消す" >
+  <topic name="共有フォルダへのアクセスを無効にする" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="内容ペインの列を並べ替える" >
+  <topic name="スレッドを並べ替える" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+</key>
+<key name="削除する" >
+  <topic name="フォルダを削除する" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="フォルダ" >
+    <topic name="フォルダを削除する" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="割り当て容量" >
+  <topic name="割り当て容量" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="印刷する" >
+  <topic name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
+  <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="メールメッセージ" >
+    <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="右クリック" >
+  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="右クリックメニュー" >
+  <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="場所、確保する" >
+  <topic name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="外部アカウント" >
+  <topic name="POPアカウントを管理する" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="外部アカウント、追加方法" >
+  <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="外部アカウントにアクセスする" >
+  <topic name="外部アカウントにアクセスする" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="役割" >
+  <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="従来のビュー" >
+  <topic name="従来のビュー" url="Navigation_folders_and_tips/Traditional_View.htm" />
+</key>
+<key name="復元する" >
+  <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="削除したメールメッセージ" >
+    <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="招待に応答する" >
+  <topic name="招待に応答する" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="文書、アクセス許可を変更" >
+  <topic name="文書wikiフォルダへのアクセスを取り消す" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="文書、テーブルを追加する" >
+  <topic name="ノートブックページにテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="文書、ノートブックを作成する" >
+  <topic name="新しいノートブックを作成する" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="文書、リッチテキストエディタ" >
+  <topic name="リッチテキストエディタを使用する" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="文書、共有する" >
+  <topic name="wikiフォルダを共有する" url="Documents/Sharing_Notebooks.htm" />
+</key>
+<key name="文書、新しいページを作成する" >
+  <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="文書ノートブックを作成する" >
+  <topic name="新しいノートブックを作成する" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="文書ページ用のリッチテキストエディタ" >
+  <topic name="リッチテキストエディタを使用する" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="新着メッセージ" >
+  <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="新着メールをポーリングする" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="新着メールを確認する" >
+  <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="既存のアカウントを追加する" >
+  <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="最初の内容ペインビューを設定する" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="検索、and/or" >
+  <topic name="「And」型と「Or」型の検索" url="Search/and_vs_or_searches.htm" />
+</key>
+<key name="検索の例" >
+  <topic name="検索の例" url="Search/search_examples.htm" />
+</key>
+<key name="検索クエリ" >
+  <topic name="検索クエリを作成する" url="Search/building_search_queries.htm" />
+  <topic name="検索クエリを保存する" url="Search/saving_search_queries.htm" />
+  <key name="保存する" >
+    <topic name="検索クエリを保存する" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="検索ビルダ" >
+  <topic name="検索クエリを作成する" url="Search/building_search_queries.htm" />
+</key>
+<key name="検索機能" >
+  <topic name="検索機能を使用する" url="Search/using_the_search_feature.htm" />
+  <key name="使用する" >
+    <topic name="検索機能を使用する" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="概要ペイン" >
+  <topic name="[フォルダ]領域" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="添付する" >
+  <topic name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <key name="ファイル" >
+    <topic name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  </key>
+</key>
+<key name="添付ファイル" >
+  <topic name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="添付ファイルのブロック" >
+  <topic name="添付ファイルのブロック" url="reading_mail/attachment_blocking.htm" />
+  <topic name="メッセージブロック機能" url="reading_mail/Message_blocking_feature.htm" />
+</key>
+<key name="添付ファイルをブロックする" >
+  <topic name="添付ファイルのブロック" url="reading_mail/attachment_blocking.htm" />
+</key>
+<key name="社内アドレスブック" >
+  <topic name="社内アドレスブックを使用する" url="Contacts/using_the_corporate_address_book.htm" />
+</key>
+<key name="移動、キーボード" >
+  <topic name="ZWCキーボードショートカットのキー" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="移動する" >
+  <topic name="フォルダ間でメールメッセージを移動する" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <topic name="ユーザーインターフェイス内を移動する" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <key name="フォルダ間でメールメッセージを～" >
+    <topic name="フォルダ間でメールメッセージを移動する" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="簡易検索" >
+  <topic name="簡易検索" url="Search/Quick_search.htm" />
+</key>
+<key name="簡易追加" >
+  <topic name="簡易追加機能を使用して予約を作成する" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="繰り返し予約、変更する" >
+  <topic name="繰り返し予約を変更する" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="繰り返し予約を削除する" >
+  <topic name="繰り返し予約を変更する" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="署名" >
+  <topic name="署名を使用する" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="署名、自動的に追加する" >
+  <topic name="パーソナを作成する" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="署名を自動的に追加する" >
+  <topic name="署名を使用する" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="署名を追加" >
+  <topic name="署名を使用する" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="自動的に連絡先を追加する" >
+  <topic name="連絡先を追加、自動的" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+</key>
+<key name="装置、確保する" >
+  <topic name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="規則、フィルター" >
+  <topic name="メッセージをフィルターする" url="filters/filtering_your_messages.htm" />
+  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
+</key>
+<key name="詳細設定" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="詳細設定、変更する" >
+  <topic name="ユーザーオプションを変更する" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="詳細設定、閲覧ペインを表示" >
+  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="転送する" >
+  <topic name="メールメッセージを転送する" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="転送アドレスを設定する" >
+  <topic name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="転送メールアドレス" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="返信する" >
+  <topic name="メールメッセージに返信する" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="メールメッセージ" >
+    <topic name="メールメッセージに返信する" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="連絡先" >
+  <topic name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
+  <topic name="連絡先" url="Contacts/contacts.htm" />
+  <topic name="新しい連絡先を作成する" url="Contacts/creating_a_new_contact.htm" />
+  <key name="編集する" >
+    <topic name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="連絡先、インポートする" >
+  <topic name="連絡先をインポートする" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="連絡先、リストを印刷する" >
+  <topic name="連絡先を印刷する" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="連絡先、削除した連絡先をリストに戻す" >
+  <topic name="連絡先を削除する" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="連絡先をインポートする" >
+  <topic name="連絡先をインポートする" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="連絡先を削除する" >
+  <topic name="連絡先を削除する" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="連絡先を印刷する" >
+  <topic name="連絡先を印刷する" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="連絡先を編集" >
+  <topic name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="連絡先を追加する" >
+  <topic name="新しい連絡先を作成する" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="連絡先リスト" >
+  <topic name="連絡先" url="Contacts/contacts.htm" />
+</key>
+<key name="部屋や装置を予定する" >
+  <topic name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="部屋や装置を確保する" >
+  <topic name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="配信不能メール" >
+  <topic name="配信不能メール" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="閲覧ペイン" >
+  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+
+</indexdata>

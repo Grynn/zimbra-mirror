@@ -1,0 +1,117 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="Répondre" >
+  <topic name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="mails" >
+    <topic name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="réserver des salles et l’équipement" >
+  <topic name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="réunions" >
+  <topic name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="À propos de la page de Rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="saisie automatique d’adresses" >
+  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="saisie d’adresse" >
+  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="se rappeler de moi sur cet ordinateur" >
+  <topic name="Connexion et déconnexion" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="Search Builder" >
+  <topic name="Établir des demandes de recherche" url="Search/building_search_queries.htm" />
+</key>
+<key name="signature" >
+  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="signatures, ajouter automatiquement" >
+  <topic name="Créer des avatars" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="suppression de contacts" >
+  <topic name="Suppression d’un contact" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="Supprimer" >
+  <topic name="Supprimer des dossiers" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="dossiers" >
+    <topic name="Supprimer des dossiers" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="supprimer des rendez-vous récurrents" >
+  <topic name="Modification de rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="s’abonner à RSS" >
+  <topic name="S’abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="tableaux, ajouter à des pages de documents" >
+  <topic name="Ajouter un tableau à une page de carnet" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="tag, glisser-déposer" >
+  <topic name="Affecter des tags à des mails" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
+<key name="tags" >
+  <topic name="Affecter des tags à des mails" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="Supprimer des tags" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="Affecter" >
+    <topic name="Affecter des tags à des mails" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+  <key name="Supprimer" >
+    <topic name="Supprimer des tags" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+</key>
+<key name="tags, créer" >
+  <topic name="Utiliser les tags pour classer les mails" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="touches de raccourcis" >
+  <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="transfert d’adresse mail" >
+  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="trier des tâches" >
+  <topic name="Trier des tâches " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="trier les colonnes du panneau de contenus" >
+  <topic name="Trier les conversations" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+</key>
+<key name="Types de fichiers de pièces jointes supportés" >
+  <topic name="Types de fichiers de pièces jointes supportés" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="Utilisation des tags" >
+  <topic name="Utiliser les tags pour classer les mails" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="Vider la corbeille" >
+  <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="vue du programme" >
+  <topic name="Affichage de plusieurs calendriers" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+</key>
+<key name="vérifier les nouveaux mails" >
+  <topic name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="vérifier l’arrivée de nouveaux mails" >
+  <topic name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="vérifier l’orthographe" >
+  <topic name="Utilisation du vérificateur orthographique" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
+<key name="Zimlets" >
+  <topic name="À propos des Zimlets" url="Zimlets/About_Zimlets.htm" />
+</key>
+<key name="éditeur de format RTF pour des pages de documents" >
+  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="équipement, réserver" >
+  <topic name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="événements" >
+  <topic name="Programmation de journées entières" url="Calendar/Scheduling_All_Day_events.htm" />
+  <topic name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+
+</indexdata>

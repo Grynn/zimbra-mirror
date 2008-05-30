@@ -1,0 +1,75 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="Unterhaltungen" >
+  <topic name="Unterhaltungen können mehrere Ordner betreffen" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
+  <key name="Drucken" >
+    <topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
+  </key>
+  <key name="Sortieren" >
+    <topic name="Unterhaltungen sortieren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  </key>
+</key>
+<key name="Unterhaltungsansicht" >
+  <topic name="Ihre Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="Unzustellbare Mail" >
+  <topic name="Unzustellbare Mail" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="Verschieben" >
+  <topic name="Mails in Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="Mails in Ordnern" >
+    <topic name="Mails in Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="Vervollständigung der Adresse in Mails" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Vorhandene Accounts hinzufügen" >
+  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="Vorschaufenster, Ein- und Ausschalten" >
+  <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Weiterleiten" >
+  <topic name="Mail weiterleiten" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="Weiterleitungsadresse" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Wiederherstellen" >
+  <topic name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="Gelöschte Mail" >
+    <topic name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="Wiederkehrende Termine löschen" >
+  <topic name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="Wiki-Ordner freigeben" >
+  <topic name="Wiki-Ordner freigeben" url="Documents/Sharing_Notebooks.htm" />
+</key>
+<key name="Zimbra-Assistent" >
+  <topic name="Zimbra-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="Zimlets" >
+  <topic name="Wissenswertes zu Zimlets" url="Zimlets/About_Zimlets.htm" />
+</key>
+<key name="Zugang auf Computer merken" >
+  <topic name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="Zugriff auf Ihren Kalender delegieren" >
+  <topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="Zugriff auf Notizbücher annehmen" >
+  <topic name="Zugriff auf ein Notizbuch annehmen" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+</key>
+<key name="Ändern wiederkehrender Termine" >
+  <topic name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="Übersichtsfenster" >
+  <topic name="Ordnerbereich" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+
+</indexdata>

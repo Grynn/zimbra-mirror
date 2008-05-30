@@ -1,0 +1,116 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>検索機能を使用する</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("項目を検索する\n検索機能を使用する");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>検索機能を使用する</h1>
+<p>検索機能を使用すると、メッセージ、連絡先、予約、文書ページ、およびファイルを検索できます。&nbsp;特定の語句を使って検索することも、日付、時刻、URL、サイズ、タグ、メッセージが既読かどうか、メッセージにファイルが添付されているかどうか、メッセージに特定の種類のファイルが添付されているかどうかなどの条件に基づいて検索することもできます。   </p>
+<p>Zimbraには、以下の2つの検索ツールがあります。</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>検索。</B></span>これは、検索テキストボックスに表示されている検索クエリを実行する簡易検索です。検索ボックスの左側にあるドロップダウン矢印を使用すると、検索する項目の種類を選択できます。メッセージ、社内連絡先リストを含む連絡先、タスク、予約、ページ、およびファイルを選択できます。これは、「<a href="Quick_search.htm">簡易検索</a>」で説明している機能です。   </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>詳細</B></span><span>（高度な検索）。</span>新しいペインを開き、<a href="building_search_queries.htm">より複雑な検索を実行</a>できます。&nbsp;高度な検索のクエリは、後で再び実行できるように保存できます。 </p></li>
+</ul>
+<h2>メッセージを検索する</h2>
+<p>Zimbraウェブクライアントの内容検索機能は、通常のテキスト照合検索やMicrosoft Wordなどのワープロソフトの検索機能とは多少異なります。</p>
+<p>Zimbraの検索構文は、以下の規則に従います。</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>語句の検索も可能ですが、その場合、検索できるのは完全に一致する語句だけです。語尾の変化などは考慮されません。たとえば、「<span style="font-weight: bold;"><B>banana</B></span><span 
+ style="font-weight: bold;  text-decoration: underline; "><U><B>s</B></U></span>」を検索する場合、「<span style="font-weight: bold;"><B>banana</B></span>」を含むメッセージは一致項目とはみなされません。ただし、ドメイン名については、ピリオド（.）を含めて検索できます。</p></li>
+	<li class=p><p>検索では、英文字の大文字と小文字が区別されません。つまり、「South」、「south」、および「SOUTH」は同じ文字列とみなされます。</p></li>
+	<li class=p><p>検索テキストで次の特殊文字を使用することはできません： <span style="font-weight: bold;"><B>~ ' ! @ # $ % ^ &amp; * () _- + 
+ ? / { }[ ] ; : &quot;</B></span></p></li>
+	<li class=p><p>アスタリスク（<span style="font-weight: bold;"><B>*</B></span>）は、先頭の文字として使わない限り、ワイルドカードとして使用できます。つまり、｢テレ*｣と指定すると、テレビやテレフォンといった語句を含む項目が返されます。</p></li>
+	<li class=p><p>内容を検索する機能では、メッセージの本文と、メッセージに添付されている（システムによる読み取りが可能な）ファイル内の文字列を検索できます。システムによる読み取りが可能なファイルとは、HTML形式に変換して表示できる種類のファイルのことです。これには、Microsoft Office文書（Word、PowerPoint、またはExcel）やテキストファイルなどがあります。イメージやオーディオファイルは含まれません。</p></li>
+</ul>
+<h2>クエリの作成方法を学ぶ</h2>
+<p>複雑なクエリの作成方法については、以下のトピックを参照してください。</p>
+<p><a href="query_language_description.htm">クエリ言語の記述</a>－検索で使用できるキーワードのリストを紹介します。</p>
+<p><a href="and_vs_or_searches.htm">AND検索とOR検索</a>－検索内でのAND条件とOR条件の使い方について説明します。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

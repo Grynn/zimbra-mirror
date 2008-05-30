@@ -1,0 +1,124 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>ワイルドカード</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { margin-left:40px; }
+h3.whs2 { margin-left:0px; }
+p.whs3 { margin-left:0px; }
+img_whs4 { border:none; border-style:none; }
+-->
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "h3.whs2 {margin-left:1pt; }";
+  strNSS += "p.whs3 {margin-left:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("フィルターを作成する \nフィルターのワイルドカード");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>フィルターのワイルドカード</h1>
+<p>「次のパターンに一致」比較演算子を用いる比較では、ワイルドカードを使用できます。「<span style="font-weight: bold;"><B>*</B></span>」と「<span style="font-weight: bold;"><B>?</B></span>」の2つのワイルドカードがあります。</p>
+<h3><span style="font-weight: bold;"><B>アスタリスク（*）</B></span></h3>
+<p>アスタリスク（*）は、0文字以上の任意の文字を表すプレースホルダーです。</p>
+<p>件名欄の検索文字列の例：<span style="font-weight: bold;"><B>バナナ*フロート</B></span></p>
+<p class="whs1"><span style="font-style: italic;"><I>一致</I></span>の例：「バナナフロート」、「バナナリーフカセロールフロート」などの件名が一致します。「スーパーバナナフロート」は一致しません。</p>
+<p>件名欄の検索文字列の例：<span style="font-weight: bold;"><B>白*靴</B></span></p>
+<p class="whs1"><span style="font-style: italic;"><I>一致</I></span>の例：「白い靴」や「白っぽい靴」などの件名が一致します。「白い靴を希望」は一致しません。</p>
+<h3>疑問符（?）</h3>
+<p>疑問符は、「1文字」を表すプレースホルダーです。</p>
+<p>件名欄の検索文字列の例：<span style="font-weight: bold;"><B>バナナ?ボート</B></span></p>
+<p class="whs1"><span style="font-style: italic;"><I>一致</I></span>の例：「バナナのボート」、「バナナ-ボート」、「バナナ!ボート」、「バナナ（スペース）ボート」などの件名が一致します。</p>
+<h3 class="whs2">エスケープ文字－スラッシュ： \</h3>
+<p class="whs3">普段ワイルドカードとしてみなされる文字を、ワイルドカードではなくその文字自体として検索文字列を指定したい場合があります。たとえば、次の例のように3つのアスタリスクで囲まれたテキストを検索文字として指定したいとします。</p>
+<p>***MORE MONEY!!!***</p>
+<p>***FREE GIFT***</p>
+<p>ワイルドカードを他の文字の代わりではなく、その文字自体として指定するには、その文字のすぐ後にバックスラッシュ（\）を使用します。たとえば、「\*\*\**\*\*\*」と指定すると、前後が3つのアスタリスクで囲まれた任意の文字列（スペースを含む）が一致します。</p>
+<p><img src="../image19.jpg" border="0" class="img_whs4"></p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

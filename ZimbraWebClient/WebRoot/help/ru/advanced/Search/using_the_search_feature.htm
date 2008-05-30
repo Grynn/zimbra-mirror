@@ -1,0 +1,116 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Использование функции поиска</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Поиск элементов\nИспользование функции поиска");
+addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Использование функции поиска</h1>
+<p>Поиск позволяет находить сообщения, встречи с контактами, страницы документов и файлы. &nbsp;Поиск можно выполнять по определенным словам, датам, времени, URL-адресу, тегу, размеру, по прочитанным и непрочитанным сообщениям, наличию вложений в файле, определенному типу вложений и другим признакам. 
+ </p>
+<p>Zimbra предлагает два инструмента поиска.</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>Поиск.</B></span> Это быстрый поиск выполняемый по запросу поиска, отображаемому в текущий момент в текстовом поле поиска. Стрелка списка слева от поля поиска позволяет выбирать тип элементов для поиска. Поиск можно выполнять в сообщениях, контактах, в том числе в списках контактов организации, задачах, встречах, на страницах и в файлах. Это быстрые профили поиска, описанные в разделе <a href="Quick_search.htm">Настройки быстрого поиска</a>. 
+ </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Расширенный </B></span><span>поиск</span> открывает новую панель и упрощает <a href="building_search_queries.htm">выполнение более сложного поиска</a>. &nbsp;Запросы расширенного поиска можно сохранить и повторно использовать их в будущем. </p></li>
+</ul>
+<h2>Поиск сообщений</h2>
+<p>Если вы знакомы с поиском с условием соответствия тексту или с функцией &laquo;Найти и заменить&raquo; в Microsoft Word, вы должны иметь в виду, что выполнение поиска фактического соответствия тексту в веб-клиенте Zimbra отличается.</p>
+<p>Синтаксис поиска Zimbra следующий</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>Можно выполнять поиск фраз, но каждое слово фразы фактически соответствует только одному слову. Варианты орфографии недопустимы. Например, если выполняется поиск слова <span style="font-weight: bold;"><B>яблок</B></span><span   style="font-weight: bold;  text-decoration: underline; "><U><B>и</B></U></span>, сообщения со словом <span style="font-weight: bold;"><B>яблоко</B></span> не являются соответствием. Можно выполнять поиск по имени домена, включая &laquo;.&raquo; (точку).</p></li>
+	<li class=p><p>В профиле поиска не учитывается регистр букв: &laquo;Север&raquo;, &laquo;север&raquo; и &laquo;СЕВЕР&raquo; равнозначны.</p></li>
+	<li class=p><p>В тексте поиска нельзя использовать следующие специальные знаки. <span style="font-weight: bold;"><B>~ ' ! @ # $ % ^ &amp; * () _- + ? / { }[ ] ; : &quot;</B></span></p></li>
+	<li class=p><p>Используйте звездочку <span style="font-weight: bold;"><B>(*)</B></span> как подстановочный знак после префикса. Т.е. поиск ты* выдаст элементы со словом тыква, тысяча и т.д.</p></li>
+	<li class=p><p>Поиск содержимого выполняется в теле сообщения, а также в любом файловом вложении (читаемом системой), которое оно может иметь. Читаемое системой вложение представляет собой тип файла, который можно преобразовать в формат HTML. В том числе, документы Microsoft Office (Word, PowerPoint или Excel), а также текстовые файлы, исключая изображения и аудиофайлы.</p></li>
+</ul>
+<h2>Как создать запросы</h2>
+<p>В следующих разделах можно узнать, как создать сложные запросы.</p>
+<p><a href="query_language_description.htm">Описание языка запросов</a>. Приводится список ключевых слов, используемых в профилях поиска.</p>
+<p><a href="and_vs_or_searches.htm">Поиск с условием AND и OR</a>. Поясняет, как использовать условия AND и OR в профиле поиска.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

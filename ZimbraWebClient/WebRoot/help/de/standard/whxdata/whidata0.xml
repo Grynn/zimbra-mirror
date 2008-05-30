@@ -1,0 +1,200 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="Abmelden" >
+  <topic name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="Abwesenheitsmeldung" >
+  <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Adressbuch, Neue Kontakte hinzufügen" >
+  <topic name="Neue Kontakte hinzufügen" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="Adressbücher hinzufügen" >
+  <topic name="Ihre Adressbücher" url="Contacts/b_Your_Address_Books.htm" />
+</key>
+<key name="Adresse für Weiterleitung einrichten" >
+  <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="Als Anhänge unterstützte Dateitypen" >
+  <topic name="Als Anhänge unterstützte Dateitypen" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="Als HTML anzeigen" >
+  <topic name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="Anhänge" >
+  <topic name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="Anhänge blockieren" >
+  <topic name="Anhänge blockieren" url="reading_mail/attachment_blocking.htm" />
+  <topic name="Mailblockierung" url="reading_mail/Message_blocking_feature.htm" />
+</key>
+<key name="Anlegen von Adressbüchern" >
+  <topic name="Ihre Adressbücher" url="Contacts/b_Your_Address_Books.htm" />
+</key>
+<key name="Antworten" >
+  <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="Mails" >
+    <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="Aufgaben sortieren" >
+  <topic name="Aufgaben sortieren " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="Automatisch Signatur einfügen" >
+  <topic name="Signatur automatisch einfügen" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+</key>
+<key name="Beschreibung der Sprache für Suchabfragen" >
+  <topic name="Beschreibung der Sprache für Suchabfragen" url="Search/query_language_description.htm" />
+</key>
+<key name="Besprechung planen" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Besprechungen" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Einstellungen" >
+  <topic name="Optionen einrichten" url="Userspecific/b_Setting_your_Options.htm" />
+</key>
+<key name="Filterbedingungen" >
+  <topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="iCal-Kalender importieren" >
+  <topic name="Ihren iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Importieren oder Exportieren des iCal-Kalenders" >
+  <topic name="Ihren iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Kapazitäten" >
+  <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="Kontakte zu Adressbuch hinzufügen" >
+  <topic name="Neue Kontakte hinzufügen" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="Kontaktgruppen hinzufügen" >
+  <topic name="Neue Kontakte hinzufügen" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="Mail" >
+  <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
+  <topic name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <key name="Lesen" >
+    <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="Mail weiterleiten" >
+  <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="Mailbenachrichtigung" >
+  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="Mailbox voll" >
+  <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="Mailentwurf" >
+  <topic name="Mailentwurf speichern" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="Mails anzeigen" >
+  <topic name="Anzeige der Mails einrichten" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+</key>
+<key name="Mails filtern" >
+  <topic name="Mails filtern" url="filters/bc_Filtering_your_messages.htm" />
+</key>
+<key name="Mails, Filterregeln einrichten" >
+  <topic name="Mails filtern" url="filters/bc_Filtering_your_messages.htm" />
+</key>
+<key name="Meldung, Abwesenheit" >
+  <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Neues Fenster, Mails anzeigen in" >
+  <topic name="Anzeige der Mails einrichten" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+</key>
+<key name="Option, Abwesenheitsmeldung" >
+  <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Optionen" >
+  <topic name="Optionen einrichten" url="Userspecific/b_Setting_your_Options.htm" />
+</key>
+<key name="Optionen, Benachrichtigung bei neuen Mails" >
+  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="Ordner" >
+  <topic name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <topic name="Wissenswertes zu Ordnern" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
+<key name="Ordner „Gesendet“" >
+  <topic name="Ordner „Gesendet“" url="Navigation_folders_and_tips/sent_folder.htm" />
+</key>
+<key name="Ordner, RSS-Feed" >
+  <topic name="RSS/ATOM-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</key>
+<key name="Papierkorb" >
+  <topic name="Papierkorb" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="Papierkorb leeren" >
+  <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="Passwort" >
+  <topic name="Passwort vergessen?" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Passwort ändern" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="Private Termine" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="RSS-Feed" >
+  <topic name="RSS/ATOM-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</key>
+<key name="Signaturen einfügen" >
+  <topic name="Signatur automatisch einfügen" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+</key>
+<key name="Sitzung abgelaufen" >
+  <topic name="Sitzung abgelaufen" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="Spalten im Inhaltsfenster sortieren" >
+  <topic name="Unterhaltungen sortieren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+</key>
+<key name="Suchabfrage erstellen" >
+  <topic name="Suche durchführen" url="Search/b_Using_Search.htm" />
+</key>
+<key name="Suche erstellen" >
+  <topic name="Suche durchführen" url="Search/b_Using_Search.htm" />
+</key>
+<key name="Suche speichern" >
+  <topic name="Suche durchführen" url="Search/b_Using_Search.htm" />
+</key>
+<key name="Suchen" >
+  <topic name="Suche durchführen" url="Search/b_Using_Search.htm" />
+</key>
+<key name="Tags" >
+  <topic name="Mails und Kontakte mit Tags versehen" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+</key>
+<key name="Tastenkürzel" >
+  <topic name="Tastenkürzel" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+</key>
+<key name="Termin als privat markieren" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Unterhaltungen" >
+  <key name="Sortieren" >
+    <topic name="Unterhaltungen sortieren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  </key>
+</key>
+<key name="Unterhaltungsansicht" >
+  <topic name="Anzeige der Mails einrichten" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+</key>
+<key name="Unzustellbare Mail" >
+  <topic name="Unzustellbare Mail" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="Weiterleiten" >
+  <topic name="Mail weiterleiten" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="Wiederherstellen" >
+  <topic name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="Gelöschte Mail" >
+    <topic name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="Zugang auf Computer merken" >
+  <topic name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
+</key>
+
+</indexdata>

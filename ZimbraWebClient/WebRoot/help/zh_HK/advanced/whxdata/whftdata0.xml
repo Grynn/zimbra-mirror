@@ -1,0 +1,128 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="關於預約、會議和事件" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<topic name="關於記事簿" url="Calendar/About_Calendar.htm" />
+<topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
+<topic name="接受分享記事簿" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+<topic name="加入記事簿的背景顏色" url="Calendar/Adding_background_color_to_calendars.htm" />
+<topic name="查看所有分享記事簿的最佳視窗" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+<topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
+<topic name="建立記事簿" url="Calendar/Create_Calendars.htm" />
+<topic name="建立定期重複的預約" url="Calendar/Creating_recurring_appointments.htm" />
+<topic name="拒絕記事簿分享請求" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+<topic name="委託記事簿存取權限" url="Calendar/Delegating_Calendar_Access.htm" />
+<topic name="刪除預約" url="Calendar/Deleting_an_appointment.htm" />
+<topic name="刪除記事簿" url="Calendar/Deleting_Calendars.htm" />
+<topic name="刪除定期重複的預約" url="Calendar/Deleting_recurring_appointments.htm" />
+<topic name="匯出 iCal 記事簿" url="Calendar/Exporting_your_iCal_calendar.htm" />
+<topic name="匯入 iCal 記事簿" url="Calendar/Importing_your_iCal_calendar.htm" />
+<topic name="列印記事簿" url="Calendar/Printing_a_calendar.htm" />
+<topic name="回覆邀請函" url="Calendar/Responding_to_an_invitation.htm" />
+<topic name="安排全天活動" url="Calendar/Scheduling_All_Day_events.htm" />
+<topic name="安排會議" url="Calendar/Scheduling_meetings.htm" />
+<topic name="安排資源" url="Calendar/Scheduling_Resources.htm" />
+<topic name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
+<topic name="將郵件轉為會議請求" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<topic name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<topic name="通訊錄" url="Contacts/contacts.htm" />
+<topic name="建立新聯絡人" url="Contacts/creating_a_new_contact.htm" />
+<topic name="建立聯絡人群組清單" url="Contacts/Creating_Group_Contact_Lists.htm" />
+<topic name="刪除聯絡人" url="Contacts/deleting_a_contact.htm" />
+<topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
+<topic name="匯出通訊錄" url="Contacts/Exporting_Address_Books.htm" />
+<topic name="Gal vs「聯絡人」" url="Contacts/gal_vs_contacts.htm" />
+<topic name="自動加入聯絡人" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+<topic name="匯入聯絡人" url="Contacts/Importing_Contacts.htm" />
+<topic name="列印聯絡人資料" url="Contacts/Printing_Contacts.htm" />
+<topic name="分享你的通訊錄" url="Contacts/Sharing_your_Address_Book.htm" />
+<topic name="使用公司通訊錄" url="Contacts/using_the_corporate_address_book.htm" />
+<topic name="電子郵件視窗" url="conversations/conversation_list_view.htm" />
+<topic name="如何使用對話" url="conversations/conversations_can_span_folders.htm" />
+<topic name="列印對話" url="conversations/printing_a_conversation.htm" />
+<topic name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+<topic name="支援的附件類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+<topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+<topic name="轉寄郵件" url="Creating_Messages/forwarding_a_mail_message.htm" />
+<topic name="電子郵件的組成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
+<topic name="儲存郵件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
+<topic name="無法投遞的郵件" url="Creating_Messages/undeliverable_mail.htm" />
+<topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
+<topic name="使用「副本：」和「密件：」地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+<topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
+<topic name="使用拼字檢查" url="Creating_Messages/Using_Spell_Check.htm" />
+<topic name="接受他人的分享郵箱邀請" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+<topic name="分享郵件夾" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
+<topic name="撤銷分享資料夾的存取權" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+<topic name="分享你的郵箱" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+<topic name="在分享郵件夾中工作" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+<topic name="接受分享的文件記事本" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+<topic name="加入表格到記事本頁面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<topic name="取消文件 wiki 資料夾的存取權" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+<topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
+<topic name="建立新記事本" url="Documents/Create_multiple_notebooks.htm" />
+<topic name="連結至分享記事本" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
+<topic name="分享「文件」記事本" url="Documents/Sharing_Notebooks.htm" />
+<topic name="使用 HTML 格式化頁面" url="Documents/Using_HTML_for_format_pages.htm" />
+<topic name="使用 Rich text 編輯器" url="Documents/Using_the_rich_text_editor.htm" />
+<topic name="在 Zimbra 文件中工作" url="Documents/Working_in_Notebooks.htm" />
+<topic name="支援的過濾條件與操作" url="filters/filter_conditions_and_actions_supported.htm" />
+<topic name="過濾郵件" url="filters/filtering_your_messages.htm" />
+<topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
+<topic name="通配字元" url="filters/wildcards.htm" />
+<topic name="關於 Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+<topic name="用戶介面功能和快速鍵" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+<topic name="即時通信基本篇" url="instant_messaging/Instant_Messaging_Basics.htm" />
+<topic name="分享你的公事包" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+<topic name="在「公事包」中工作" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
+<topic name="Zimbra 助手" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+<topic name="關於資料夾" url="Navigation_folders_and_tips/about_folders.htm" />
+<topic name="將操作項套用於多重選擇" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+<topic name="訂閱 RSS/Atom feed" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<topic name="在 Zimbra 中使用瀏覽器" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+<topic name="郵件分類" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="改變登入的預設用戶端類型" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="建立自訂資料夾" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+<topic name="自訂初始電子郵件頁面" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+<topic name="刪除資料夾" url="Navigation_folders_and_tips/deleting_folders.htm" />
+<topic name="資料夾區" url="Navigation_folders_and_tips/Folders_area.htm" />
+<topic name="系統資料夾" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="在資料夾間移動郵件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+<topic name="Zimbra Web Client 工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<topic name="限額" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="重新命名資料夾" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<topic name="寄件箱" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="「內容窗格清單」排序" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<topic name="傳統視窗" url="Navigation_folders_and_tips/Traditional_View.htm" />
+<topic name="垃圾桶" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="ZWC 快速鍵" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+<topic name="清除郵件" url="reading_mail/archiving_old_messages.htm" />
+<topic name="附件阻止" url="reading_mail/attachment_blocking.htm" />
+<topic name="顯示 HTML 格式郵件" url="reading_mail/displaying_html_in_email_messages.htm" />
+<topic name="如何知道有新郵件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+<topic name="將郵件標記為未讀" url="reading_mail/marking_mail_as_unread.htm" />
+<topic name="郵件阻止功能" url="reading_mail/Message_blocking_feature.htm" />
+<topic name="開啟附件" url="reading_mail/opening_file_attachments.htm" />
+<topic name="列印郵件" url="reading_mail/printing_a_mail_message.htm" />
+<topic name="讀取郵件" url="reading_mail/reading_mail.htm" />
+<topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+<topic name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+<topic name="回覆郵件" url="reading_mail/replying_to_mail_messages.htm" />
+<topic name="搜尋郵件" url="Search/_search__vs.__search_for_.htm" />
+<topic name="AND 及 OR 搜尋" url="Search/and_vs_or_searches.htm" />
+<topic name="建立搜尋條件" url="Search/building_search_queries.htm" />
+<topic name="「包含」與「相符」" url="Search/contains_vs_matches.htm" />
+<topic name="查詢語言說明" url="Search/query_language_description.htm" />
+<topic name="快速搜尋" url="Search/Quick_search.htm" />
+<topic name="儲存搜尋條件" url="Search/saving_search_queries.htm" />
+<topic name="搜尋例項" url="Search/search_examples.htm" />
+<topic name="使用搜尋功能" url="Search/using_the_search_feature.htm" />
+<topic name="在「搜尋」中使用 * 作為通配字元" url="Search/Using_Wildcard_in_Search.htm" />
+<topic name="為郵件加標記" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+<topic name="刪除標記" url="Tags_and_flags/deleting_tags.htm" />
+<topic name="為郵件加上旗標" url="Tags_and_flags/Flagging_an_email_message.htm" />
+<topic name="用標記分類郵件" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+<topic name="關於事項" url="Tasks/About_Tasks.htm" />
+
+</ftstdata>  

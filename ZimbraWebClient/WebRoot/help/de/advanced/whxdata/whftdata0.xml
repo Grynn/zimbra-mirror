@@ -1,0 +1,103 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<topic name="Wissenswertes zum Kalender" url="Calendar/About_Calendar.htm" />
+<topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+<topic name="Zugriff auf freigegebenen Kalender annehmen" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+<topic name="Hintergrundfarbe für Kalender einrichten" url="Calendar/Adding_background_color_to_calendars.htm" />
+<topic name="Beste Ansicht für alle freigegebenen Kalender" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+<topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
+<topic name="Kalender anlegen" url="Calendar/Create_Calendars.htm" />
+<topic name="Wiederkehrende Termine anlegen" url="Calendar/Creating_recurring_appointments.htm" />
+<topic name="Kalenderfreigabe ablehnen" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+<topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
+<topic name="Termin löschen" url="Calendar/Deleting_an_appointment.htm" />
+<topic name="Kalender löschen" url="Calendar/Deleting_Calendars.htm" />
+<topic name="Wiederkehrende Termine löschen" url="Calendar/Deleting_recurring_appointments.htm" />
+<topic name="Ihren iCal-Kalender exportieren" url="Calendar/Exporting_your_iCal_calendar.htm" />
+<topic name="Ihren iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+<topic name="Kalender drucken" url="Calendar/Printing_a_calendar.htm" />
+<topic name="Einladung beantworten" url="Calendar/Responding_to_an_invitation.htm" />
+<topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+<topic name="Besprechungen planen" url="Calendar/Scheduling_meetings.htm" />
+<topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
+<topic name="Frei/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
+<topic name="Mail in Terminanfrage umwandeln" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<topic name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<topic name="Ihr Adressbuch" url="Contacts/contacts.htm" />
+<topic name="Neuen Kontakt anlegen" url="Contacts/creating_a_new_contact.htm" />
+<topic name="Kontaktgruppen anlegen" url="Contacts/Creating_Group_Contact_Lists.htm" />
+<topic name="Kontakt löschen" url="Contacts/deleting_a_contact.htm" />
+<topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+<topic name="Adressbücher exportieren" url="Contacts/Exporting_Address_Books.htm" />
+<topic name="GAL und Kontakte" url="Contacts/gal_vs_contacts.htm" />
+<topic name="Kontakt automatisch hinzufügen" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+<topic name="Kontakte importieren" url="Contacts/Importing_Contacts.htm" />
+<topic name="Kontakte drucken" url="Contacts/Printing_Contacts.htm" />
+<topic name="Ihr Adressbuch freigeben" url="Contacts/Sharing_your_Address_Book.htm" />
+<topic name="Mit dem Firmenadressbuch arbeiten" url="Contacts/using_the_corporate_address_book.htm" />
+<topic name="Ihre Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
+<topic name="Funktionsweise von Unterhaltungen" url="conversations/conversations_can_span_folders.htm" />
+<topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
+<topic name="Dateien an eine Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+<topic name="Als Anhänge unterstützte Dateitypen" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+<topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+<topic name="Mail weiterleiten" url="Creating_Messages/forwarding_a_mail_message.htm" />
+<topic name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+<topic name="Mailentwurf speichern" url="Creating_Messages/saving_a_draft_message.htm" />
+<topic name="Unzustellbare Mail" url="Creating_Messages/undeliverable_mail.htm" />
+<topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+<topic name="Adressfelder „CC“ und „BCC“ nutzen" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+<topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
+<topic name="Rechtschreibprüfung nutzen" url="Creating_Messages/Using_Spell_Check.htm" />
+<topic name="Zugriff auf den freigegebenen Mailbox-Ordner annehmen" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+<topic name="Mail-Ordner freigeben" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
+<topic name="Zugriff auf einen freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+<topic name="Ihre Mailbox freigeben" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+<topic name="In einem freigegebenen Mail-Ordner arbeiten" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+<topic name="Zugriff auf ein Notizbuch annehmen" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+<topic name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<topic name="Zugriff für Ihr Notizbuch beenden" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+<topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
+<topic name="Neue Notizbücher anlegen" url="Documents/Create_multiple_notebooks.htm" />
+<topic name="Link zu einem freigegebenen Notizbuch einrichten" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
+<topic name="Notizbücher freigeben" url="Documents/Sharing_Notebooks.htm" />
+<topic name="Seiten in HTML formatieren" url="Documents/Using_HTML_for_format_pages.htm" />
+<topic name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
+<topic name="Mit Zimbra-Notizen arbeiten" url="Documents/Working_in_Notebooks.htm" />
+<topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
+<topic name="Mails filtern" url="filters/filtering_your_messages.htm" />
+<topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
+<topic name="Platzhalter" url="filters/wildcards.htm" />
+<topic name="Wissenswertes zur Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+<topic name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+<topic name="Grundlagen des Instant Messaging" url="instant_messaging/Instant_Messaging_Basics.htm" />
+<topic name="Dateien freigeben" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+<topic name="Im Ordner „Dateien“ arbeiten" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
+<topic name="Zimbra-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+<topic name="Wissenswertes zu Ordnern" url="Navigation_folders_and_tips/about_folders.htm" />
+<topic name="Für mehrere ausgewählte Objekte Aktionen durchführen" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+<topic name="RSS/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<topic name="In Zimbra mit Browsern arbeiten" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+<topic name="Mails nach Kategorien sortieren" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="Voreingestellten Client-Typ für die Anmeldung ändern" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="Benutzerdefinierte Ordner anlegen" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+<topic name="Startseite Ihrer Mail benutzerspezifisch einrichten" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+<topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+<topic name="Ordnerbereich" url="Navigation_folders_and_tips/Folders_area.htm" />
+<topic name="Systemordner" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="Mails in Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+<topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="Kontextmenüs" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<topic name="Ordner „Gesendet“" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="Inhaltsfenster nach Spalten sortieren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<topic name="Herkömmliche Ansicht" url="Navigation_folders_and_tips/Traditional_View.htm" />
+<topic name="Papierkorb" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="Tastenkürzel im ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+<topic name="Mails löschen" url="reading_mail/archiving_old_messages.htm" />
+<topic name="Anhänge blockieren" url="reading_mail/attachment_blocking.htm" />
+
+</ftstdata>  

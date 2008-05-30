@@ -1,0 +1,96 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<tocdata>
+<book name="入门" >
+  <item name="开始使用 ZCS 标准版网络客户端" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="登录和退出" url="Userspecific/logging_on_and_off.htm" />
+  <item name="改变登录的默认客户端类型" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+  <item name="快捷键" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+  <item name="变更您的密码" url="Userspecific/chaning_your_password.htm" />
+  <item name="忘记密码了？" url="Userspecific/if_you_forget_your_password.htm" />
+  <item name="如果会话过期" url="Userspecific/if_your_session_expires.htm" />
+</book>
+<book name="浏览邮箱" >
+  <item name="浏览您的邮箱" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
+  <item name="在邮箱内浏览" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+  <item name="邮件系统文件夹" url="Navigation_folders_and_tips/inbox_folder.htm" />
+</book>
+<book name="管理邮件 " >
+  <item name="管理邮件的显示方式" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+  <item name="我如何知道收到了新邮件" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
+  <item name="邮件分类" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="排序“内容”窗格中的邮件" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  <item name="打印电子邮件" url="reading_mail/b_Printing_email_messages.htm" />
+  <item name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+  <item name="还原删除的邮件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="清除邮件" url="reading_mail/b_Purging_email_messages.htm" />
+  <book name="阅读邮件" >
+    <item name="阅读邮件" url="reading_mail/reading_mail.htm" />
+    <item name="将邮件标记为未读" url="reading_mail/b_Marking_mail_as_unread.htm" />
+    <item name="打开附加文件" url="reading_mail/opening_file_attachments.htm" />
+    <item name="附件阻止" url="reading_mail/attachment_blocking.htm" />
+    <item name="邮件阻止功能" url="reading_mail/Message_blocking_feature.htm" />
+    <item name="无法投递的邮件" url="Creating_Messages/undeliverable_mail.htm" />
+  </book>
+</book>
+<book name="写信" >
+  <item name="编写新邮件" url="Creating_Messages/b_Composing_email_message.htm" />
+  <item name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="自动添加您的签名" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+  <item name="将文件附加到邮件" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
+  <item name="附件文件类型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="把邮件保存为草稿" url="Creating_Messages/saving_a_draft_message.htm" />
+</book>
+<book name="回复和转发邮件" >
+  <item name="回复邮件" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="转发邮件" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</book>
+<book name="管理地址簿" >
+  <item name="地址簿" url="Contacts/b_Your_Address_Books.htm" />
+  <item name="添加新联系人" url="Contacts/b_Adding_new_contacts.htm" />
+</book>
+<book name="管理效率手册" >
+  <item name="关于效率手册" url="Calendar/b_About_Calendar.htm" />
+  <item name="创建新的效率手册" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="删除约会" url="Calendar/b_Canceling_a_meeting.htm" />
+  <item name="为效率手册添加颜色" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="导入 iCal 效率手册" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="导出 iCal 效率手册" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="效率手册视图选项" url="Calendar/Calendar_Views.htm" />
+</book>
+<book name="安排约会、会议和活动事项" >
+  <item name="筹划会议" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="安排会议" url="Calendar/b_Scheduling_a_meeting.htm" />
+  <item name="创建重复约会" url="Calendar/b_creating_recurring_appointments.htm" />
+</book>
+<book name="使用任务列表" >
+  <item name="关于任务" url="Tasks/About_Tasks.htm" />
+  <item name="创建任务列表" url="Tasks/bc_Create_task_lists.htm" />
+  <item name="改变任务" url="Tasks/Change_a_task.htm" />
+  <item name="任务排序" url="Tasks/Sorting_tasks_.htm" />
+</book>
+<book name="搜索功能" >
+  <item name="使用搜索功能" url="Search/b_Using_Search.htm" />
+  <item name="查询语言说明" url="Search/query_language_description.htm" />
+</book>
+<book name="使用标记和文件夹整理邮件" >
+  <item name="为邮件和联系人加标记" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+  <item name="为邮件加上标志" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+  <item name="使用文件夹" url="Navigation_folders_and_tips/about_folders.htm" />
+  <item name="重命名文件夹" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <item name="删除文件夹" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+</book>
+<book name="创建过滤器 " >
+  <item name="过滤邮件" url="filters/bc_Filtering_your_messages.htm" />
+  <item name="支持的过滤条件与操作" url="filters/filter_conditions_and_actions_supported.htm" />
+</book>
+<book name="设置首选项" >
+  <item name="设置首选项" url="Userspecific/b_Setting_your_Options.htm" />
+  <item name="新邮件通知" url="Userspecific/New_mail_notifications.htm" />
+  <item name="创建外出不在讯息" url="Userspecific/vacation_message.htm" />
+  <item name="保存您发送的邮件" url="Navigation_folders_and_tips/sent_folder.htm" />
+  <item name="邮箱容量限额" url="Navigation_folders_and_tips/quotas.htm" />
+  <item name="订阅 RSS/ATOM 源" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</book>
+
+</tocdata>

@@ -1,0 +1,330 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="旗标" >
+  <topic name="为邮件加上标志" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="邮件" >
+    <topic name="为邮件加上标志" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="无法投递的邮件" >
+  <topic name="无法投递的邮件" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="日程安排视图" >
+  <topic name="查看多个效率手册" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+</key>
+<key name="查询新邮件" >
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="查询语言说明" >
+  <topic name="查询语言说明" url="Search/query_language_description.htm" />
+</key>
+<key name="标记" >
+  <topic name="为邮件加标记" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="删除标记" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="删除" >
+    <topic name="删除标记" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+  <key name="指定" >
+    <topic name="为邮件加标记" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+</key>
+<key name="标记，创建" >
+  <topic name="用标记为邮件分类" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="标记，拖放" >
+  <topic name="为邮件加标记" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
+<key name="检查新邮件" >
+  <topic name="如何知道有新邮件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="检查邮件" >
+  <topic name="如何知道有新邮件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="浏览" >
+  <topic name="文件夹区" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <topic name="通过用户界面浏览" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="浏览器" >
+  <topic name="在 Zimbra 中使用浏览器" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+</key>
+<key name="浏览，用键盘" >
+  <topic name="ZWC 快捷键" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="添加现有帐户" >
+  <topic name="添加 POP 帐户" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="添加签名" >
+  <topic name="使用签名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="添加联系人" >
+  <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="清空“已删除邮件”文件夹" >
+  <topic name="限额" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="用 HTML 格式排版" >
+  <topic name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="用户界面功能" >
+  <topic name="用户界面功能和快捷键" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="用户首选项" >
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="用通配符搜索" >
+  <topic name="使用搜索功能" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="用键盘浏览" >
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="电子邮件" >
+  <topic name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="界面功能" >
+  <topic name="Zimbra Web Client 工作空间" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="私人约会" >
+  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="移动 " >
+  <topic name="在文件夹间移动邮件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="在文件夹间移动邮件" >
+    <topic name="在文件夹间移动邮件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="窗格" >
+  <topic name="文件夹区" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="笔记本" >
+  <topic name="笔记本使用方法" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="笔记本页面" >
+  <topic name="创建新页面" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="筹划会议" >
+  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="签名" >
+  <topic name="使用签名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="签名，自动添加" >
+  <topic name="创建身份" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="约会" >
+  <topic name="关于约会、会议和活动事项" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="约会提醒" >
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="约会，quickadd" >
+  <topic name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="编辑联系人资料" >
+  <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="编辑邮件夹共享许可" >
+  <topic name="撤销共享文件夹的访问权" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="联系人" >
+  <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
+  <topic name="联系人" url="Contacts/contacts.htm" />
+  <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
+  <key name="编辑" >
+    <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="联系人列表" >
+  <topic name="联系人" url="Contacts/contacts.htm" />
+</key>
+<key name="联系人组" >
+  <topic name="创建联系人组列表" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="联系人资料，导入" >
+  <topic name="导入联系人" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="联系人，在列表中还原删除的联系人" >
+  <topic name="删除联系人" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="联系人，打印列表" >
+  <topic name="打印联系人资料" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="自动完成地址" >
+  <topic name="使用地址查询" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="自动添加签名" >
+  <topic name="使用签名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="自动添加联系人" >
+  <topic name="添加联系人，自动" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+</key>
+<key name="自定义文件夹" >
+  <topic name="创建自定义文件夹" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="表格，添加到文档页面" >
+  <topic name="添加表格到笔记本页面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="规则，过滤" >
+  <topic name="过滤邮件" url="filters/filtering_your_messages.htm" />
+  <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="视图，效率手册" >
+  <topic name="关于 Zimbra 效率手册" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="角色" >
+  <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="订阅 RSS 源" >
+  <topic name="订阅 RSS/Atom 源" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="许可，改变笔记本的访问权" >
+  <topic name="取消文档 wiki 文件夹的访问权" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="设备，预订" >
+  <topic name="安排资源" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="设定选项" >
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="设置转发地址" >
+  <topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="访问外部帐户" >
+  <topic name="访问您的外部帐户" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="资源" >
+  <topic name="安排资源" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="身份" >
+  <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
+  <topic name="创建身份" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="转发" >
+  <topic name="转发邮件" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="转发电邮地址" >
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="转发邮件" >
+  <topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="过滤功能，使用方法" >
+  <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="过滤条件" >
+  <topic name="支持的过滤条件与操作" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="过滤邮件" >
+  <topic name="过滤邮件" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="还原" >
+  <topic name="还原删除的邮件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="删除的邮件" >
+    <topic name="还原删除的邮件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="退出" >
+  <topic name="登录和退出" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="选单，右键单击" >
+  <topic name="右键选单" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="选项" >
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="选项，“阅读”窗格视图" >
+  <topic name="在“阅读”窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="选项，休假讯息" >
+  <topic name="休假讯息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="选项，恢复默认" >
+  <topic name="恢复默认选项" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="选项，新邮件通知" >
+  <topic name="新邮件通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="选项，设定" >
+  <topic name="变更用户选项" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="通配符" >
+  <topic name="通配符" url="filters/wildcards.htm" />
+</key>
+<key name="通配符，在搜索中使用" >
+  <topic name="使用搜索功能" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="邀请，回应" >
+  <topic name="回应邀请函" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="邮件" >
+  <topic name="阅读邮件" url="reading_mail/reading_mail.htm" />
+  <key name="阅读" >
+    <topic name="阅读邮件" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="邮件归档" >
+  <topic name="清除邮件" url="reading_mail/archiving_old_messages.htm" />
+</key>
+<key name="邮件草稿" >
+  <topic name="保存邮件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="邮件视图" >
+  <topic name="电子邮件管理视图" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="邮件通知" >
+  <topic name="新邮件通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="邮件，休假" >
+  <topic name="休假讯息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="邮箱已满" >
+  <topic name="限额" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="邮箱身份" >
+  <topic name="创建身份" url="Userspecific/Creating_Personas.htm" />
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="阅读窗格" >
+  <topic name="在“阅读”窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="阻止附件" >
+  <topic name="附件阻止" url="reading_mail/attachment_blocking.htm" />
+</key>
+<key name="附件" >
+  <topic name="打开附加文件" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="附件阻止" >
+  <topic name="附件阻止" url="reading_mail/attachment_blocking.htm" />
+  <topic name="邮件阻止功能" url="reading_mail/Message_blocking_feature.htm" />
+</key>
+<key name="附加" >
+  <topic name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <key name="文件" >
+    <topic name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  </key>
+</key>
+<key name="限额" >
+  <topic name="限额" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="页面，文档" >
+  <topic name="创建新页面" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="预览窗格，开关" >
+  <topic name="在“阅读”窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="预订房间和设备" >
+  <topic name="安排资源" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="首选项" >
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="首选项，“阅读”窗格视图" >
+  <topic name="在“阅读”窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="首选项，改变" >
+  <topic name="变更用户选项" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+
+</indexdata>

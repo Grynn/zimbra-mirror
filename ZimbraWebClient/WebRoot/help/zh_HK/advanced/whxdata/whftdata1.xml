@@ -1,0 +1,32 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="加入事項" url="Tasks/Add_a_task.htm" />
+<topic name="改變事項" url="Tasks/Change_a_task.htm" />
+<topic name="建立事項資料夾" url="Tasks/Create_tasks_folders.htm" />
+<topic name="刪除事項" url="Tasks/Delete_a_task.htm" />
+<topic name="移動事項" url="Tasks/Moving_tasks.htm" />
+<topic name="接受對事項清單的存取授權" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+<topic name="分享你的事項清單" url="Tasks/Share_your_Task_folder.htm" />
+<topic name="事項排序" url="Tasks/Sorting_tasks_.htm" />
+<topic name="加入外部帳戶" url="Userspecific/Adding_POP_accounts.htm" />
+<topic name="儲存我的工作" url="Userspecific/browser_session_handling.htm" />
+<topic name="改變預設時區" url="Userspecific/Changing_your_default_timezone.htm" />
+<topic name="變更用戶選項" url="Userspecific/Changing_Your_User_Options.htm" />
+<topic name="變更密碼" url="Userspecific/chaning_your_password.htm" />
+<topic name="建立身份" url="Userspecific/Creating_Personas.htm" />
+<topic name="如果忘記了密碼" url="Userspecific/if_you_forget_your_password.htm" />
+<topic name="如果超過時限" url="Userspecific/if_your_session_expires.htm" />
+<topic name="登入和登出" url="Userspecific/logging_on_and_off.htm" />
+<topic name="管理你的帳戶身份" url="Userspecific/Mail_Identities.htm" />
+<topic name="存取外部帳戶" url="Userspecific/Managing_your_POP_Accounts.htm" />
+<topic name="新郵件通知" url="Userspecific/New_mail_notifications.htm" />
+<topic name="設定轉寄地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+<topic name="恢復預設選項" url="Userspecific/the__restore_defaults__button.htm" />
+<topic name="使用署名" url="Userspecific/using_a_signature.htm" />
+<topic name="休假訊息" url="Userspecific/vacation_message.htm" />
+<topic name="版本" url="version.htm" />
+<topic name="關於 Zimlet" url="Zimlets/About_Zimlets.htm" />
+
+</ftstdata>  

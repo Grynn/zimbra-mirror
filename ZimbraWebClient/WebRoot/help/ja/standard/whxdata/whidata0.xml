@@ -1,0 +1,217 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="[ゴミ箱]フォルダ" >
+  <topic name="[ゴミ箱]フォルダ" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="[送信済み]フォルダ" >
+  <topic name="[送信済み]フォルダ" url="Navigation_folders_and_tips/sent_folder.htm" />
+</key>
+<key name="HTML形式で表示" >
+  <topic name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="iCalカレンダー、インポートまたはエクスポート" >
+  <topic name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="iCalカレンダーをインポート" >
+  <topic name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="iCalカレンダーをエクスポート" >
+  <topic name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="RSSフィード" >
+  <topic name="RSS/ATOMフィードを購読する " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</key>
+<key name="このコンピュータに個人情報を保存する" >
+  <topic name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="アドレスブック、作成する" >
+  <topic name="アドレスブック" url="Contacts/b_Your_Address_Books.htm" />
+</key>
+<key name="アドレスブック、新しい連絡先を追加する" >
+  <topic name="新しい連絡先を追加する" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="アドレスブックを追加する" >
+  <topic name="アドレスブック" url="Contacts/b_Your_Address_Books.htm" />
+</key>
+<key name="オプション" >
+  <topic name="オプションを設定する" url="Userspecific/b_Setting_your_Options.htm" />
+</key>
+<key name="オプション、メール着信通知" >
+  <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="オプション、不在メッセージ" >
+  <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="キーボードショートカット" >
+  <topic name="キーボードショートカット" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+</key>
+<key name="クエリ言語の記述" >
+  <topic name="クエリ言語の記述" url="Search/query_language_description.htm" />
+</key>
+<key name="グループ連絡先、追加する" >
+  <topic name="新しい連絡先を追加する" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="グループ連絡先リストを追加する" >
+  <topic name="新しい連絡先を追加する" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="ゴミ箱を空にする" >
+  <topic name="割り当て容量" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="サポートされている添付ファイルの種類" >
+  <topic name="サポートされている添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="ショートカットキー" >
+  <topic name="キーボードショートカット" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+</key>
+<key name="スレッド" >
+  <key name="並べ替える" >
+    <topic name="スレッドを並べ替える" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  </key>
+</key>
+<key name="スレッドビュー" >
+  <topic name="メールの表示方法を管理する" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+</key>
+<key name="セッションの有効期限" >
+  <topic name="セッションの有効期限が切れた場合" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="タグ" >
+  <topic name="タグをメッセージや連絡先に割り当てる" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+</key>
+<key name="タスクを並べ替える" >
+  <topic name="タスクを並べ替える " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="パスワード" >
+  <topic name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="パスワードを変更する" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="フィルターの条件" >
+  <topic name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="フォルダ" >
+  <topic name="フォルダの名前を変更する" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <topic name="フォルダについて" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
+<key name="フォルダ、RSSフィード" >
+  <topic name="RSS/ATOMフィードを購読する " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</key>
+<key name="プライベート予約" >
+  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="メッセージ、フィルター規則を設定する" >
+  <topic name="メッセージをフィルターする" url="filters/bc_Filtering_your_messages.htm" />
+</key>
+<key name="メッセージ、不在" >
+  <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="メッセージをフィルターする" >
+  <topic name="メッセージをフィルターする" url="filters/bc_Filtering_your_messages.htm" />
+</key>
+<key name="メッセージを表示する" >
+  <topic name="メールの表示方法を管理する" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+</key>
+<key name="メール" >
+  <topic name="メッセージを読む" url="reading_mail/reading_mail.htm" />
+  <key name="読む" >
+    <topic name="メッセージを読む" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="メールを転送する" >
+  <topic name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="メールボックスがいっぱい" >
+  <topic name="割り当て容量" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="メールメッセージ" >
+  <topic name="メールメッセージの各部分について" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="メール通知" >
+  <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="ログオフする" >
+  <topic name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="下書きメッセージ" >
+  <topic name="下書きメッセージを保存する" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="不在メッセージ" >
+  <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="予約にプライベートのマークを付ける" >
+  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="会議" >
+  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="会議を予定する" >
+  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="会議を計画する" >
+  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="内容ペインの列を並べ替える" >
+  <topic name="スレッドを並べ替える" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+</key>
+<key name="割り当て容量" >
+  <topic name="割り当て容量" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="復元する" >
+  <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="削除したメールメッセージ" >
+    <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="新しいウィンドウ、メッセージを表示する" >
+  <topic name="メールの表示方法を管理する" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+</key>
+<key name="検索" >
+  <topic name="検索を使用する" url="Search/b_Using_Search.htm" />
+</key>
+<key name="検索、保存する" >
+  <topic name="検索を使用する" url="Search/b_Using_Search.htm" />
+</key>
+<key name="検索、検索を作成する" >
+  <topic name="検索を使用する" url="Search/b_Using_Search.htm" />
+</key>
+<key name="検索クエリを作成する" >
+  <topic name="検索を使用する" url="Search/b_Using_Search.htm" />
+</key>
+<key name="添付ファイル" >
+  <topic name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="添付ファイルのブロック" >
+  <topic name="添付ファイルのブロック" url="reading_mail/attachment_blocking.htm" />
+  <topic name="メッセージブロック機能" url="reading_mail/Message_blocking_feature.htm" />
+</key>
+<key name="添付ファイルをブロックする" >
+  <topic name="添付ファイルのブロック" url="reading_mail/attachment_blocking.htm" />
+</key>
+<key name="署名、自動的に追加" >
+  <topic name="署名を自動的に追加する" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+</key>
+<key name="署名を追加する" >
+  <topic name="署名を自動的に追加する" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+</key>
+<key name="詳細設定" >
+  <topic name="オプションを設定する" url="Userspecific/b_Setting_your_Options.htm" />
+</key>
+<key name="転送する" >
+  <topic name="メールメッセージを転送する" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="転送アドレスを設定する" >
+  <topic name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="返信する" >
+  <topic name="メールメッセージに返信する" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="メールメッセージ" >
+    <topic name="メールメッセージに返信する" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="連絡先、アドレスブックに追加する" >
+  <topic name="新しい連絡先を追加する" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="配信不能メール" >
+  <topic name="配信不能メール" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+
+</indexdata>

@@ -1,0 +1,101 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="О_встречах,_собраниях_и_событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<topic name="О_ежедневнике" url="Calendar/About_Calendar.htm" />
+<topic name="О встречах" url="Calendar/About_the_Appointment_Page.htm" />
+<topic name="Принятие_доступа_к_общему_ежедневнику" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+<topic name="Добавление цвета фона в ежедневниках" url="Calendar/Adding_background_color_to_calendars.htm" />
+<topic name="Лучший_вид_для_просмотра_всех_своих_общих_ежедневников" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+<topic name="Виды ежедневника" url="Calendar/Calendar_Views.htm" />
+<topic name="Создание ежедневников" url="Calendar/Create_Calendars.htm" />
+<topic name="Создание повторяющихся встреч" url="Calendar/Creating_recurring_appointments.htm" />
+<topic name="Отклонение запроса на общий доступ к ежедневнику" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+<topic name="Предоставление доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
+<topic name="Удаление встречи" url="Calendar/Deleting_an_appointment.htm" />
+<topic name="Удаление ежедневников" url="Calendar/Deleting_Calendars.htm" />
+<topic name="Удаление повторяющихся встреч" url="Calendar/Deleting_recurring_appointments.htm" />
+<topic name="Экспорт ежедневника iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
+<topic name="Импорт ежедневника iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+<topic name="Печать ежедневника" url="Calendar/Printing_a_calendar.htm" />
+<topic name="Ответ на приглашение" url="Calendar/Responding_to_an_invitation.htm" />
+<topic name="Планирование событий на весь день" url="Calendar/Scheduling_All_Day_events.htm" />
+<topic name="Планирование собраний" url="Calendar/Scheduling_meetings.htm" />
+<topic name="Планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
+<topic name="Просмотр сведений о занятости" url="Calendar/Seeing_free_busy_times.htm" />
+<topic name="Преобразование сообщения в приглашение на собрание" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<topic name="Использование функции быстрого добавления для создания встречи" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<topic name="Адресная книга" url="Contacts/contacts.htm" />
+<topic name="Создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
+<topic name="Создание списков групповых контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
+<topic name="Удаление контакта" url="Contacts/deleting_a_contact.htm" />
+<topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
+<topic name="Экспорт адресных книг" url="Contacts/Exporting_Address_Books.htm" />
+<topic name="«Глобальный список адресов» и «Контакты»" url="Contacts/gal_vs_contacts.htm" />
+<topic name="Автоматическое добавление контакта" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+<topic name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
+<topic name="Печать контактов" url="Contacts/Printing_Contacts.htm" />
+<topic name="Предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
+<topic name="Использование адресной книги компании" url="Contacts/using_the_corporate_address_book.htm" />
+<topic name="Управление видом сообщений" url="conversations/conversation_list_view.htm" />
+<topic name="Как работает функция «Разговоры»" url="conversations/conversations_can_span_folders.htm" />
+<topic name="Печать разговора" url="conversations/printing_a_conversation.htm" />
+<topic name="Вложение файлов в сообщения" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+<topic name="Поддерживаемые типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+<topic name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+<topic name="Пересылка сообщения" url="Creating_Messages/forwarding_a_mail_message.htm" />
+<topic name="Элементы сообщения электронной почты" url="Creating_Messages/parts_of_an_email_message.htm" />
+<topic name="Сохранение черновиков сообщений" url="Creating_Messages/saving_a_draft_message.htm" />
+<topic name="Сообщения, доставка которых невозможна" url="Creating_Messages/undeliverable_mail.htm" />
+<topic name="Использование поиска адреса" url="Creating_Messages/Using_address_lookup.htm" />
+<topic name="Использование адресов полей «Копия» и «Скрытая копия»" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+<topic name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
+<topic name="Использование проверки правописания" url="Creating_Messages/Using_Spell_Check.htm" />
+<topic name="Принятие доступа к общей папке почты" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+<topic name="Общий доступ к папкам почты" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
+<topic name="Отказ в доступе к общей папке" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+<topic name="Совместный доступ к почтовому ящику" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+<topic name="Работа в общей папке почты" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+<topic name="Согласие на общий доступ к документам (блокнот)" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+<topic name="Добавление таблицы на страницу блокнота" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<topic name="Отмена доступа к папке вики-документов" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+<topic name="Создание новой страницы" url="Documents/Create_a_new_page.htm" />
+<topic name="Создание новых блокнотов" url="Documents/Create_multiple_notebooks.htm" />
+<topic name="Подключение к общему блокноту" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
+<topic name="Общий доступ к «Документам» (блокнотам)" url="Documents/Sharing_Notebooks.htm" />
+<topic name="Использование кода HTML для форматирования страниц" url="Documents/Using_HTML_for_format_pages.htm" />
+<topic name="Использование форматированного текста" url="Documents/Using_the_rich_text_editor.htm" />
+<topic name="Работа в документах Zimbra" url="Documents/Working_in_Notebooks.htm" />
+<topic name="Поддерживаемые условия и действия фильтров" url="filters/filter_conditions_and_actions_supported.htm" />
+<topic name="Фильтрация сообщений" url="filters/filtering_your_messages.htm" />
+<topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
+<topic name="Подстановочные знаки" url="filters/wildcards.htm" />
+<topic name="О Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+<topic name="Ссылки и функции пользовательского интерфейса" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+<topic name="Мгновенные сообщения. Основные сведения" url="instant_messaging/Instant_Messaging_Basics.htm" />
+<topic name="Общий доступ к портфелю" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+<topic name="Работа в портфеле" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
+<topic name="Помощник Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+<topic name="О папках" url="Navigation_folders_and_tips/about_folders.htm" />
+<topic name="Применение действий к нескольким выбранным элементам" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+<topic name="Подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<topic name="Использование браузера с клиентом Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+<topic name="Систематизация почтовых сообщений" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="Изменение типа клиента по умолчанию для входа" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="Создание специальных папок" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+<topic name="Настройка исходной страницы почты" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+<topic name="Удаление папок" url="Navigation_folders_and_tips/deleting_folders.htm" />
+<topic name="Область «Папки»" url="Navigation_folders_and_tips/Folders_area.htm" />
+<topic name="Системные папки" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="Перемещение почтовых сообщений по папкам" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+<topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<topic name="Лимиты" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="Переименование папок" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="Меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<topic name="Папка «Отправленные»" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="Сортировка столбцов в области содержимого" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<topic name="Вид «Обычный»" url="Navigation_folders_and_tips/Traditional_View.htm" />
+<topic name="Корзина" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="Быстрые клавиши ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+
+</ftstdata>  

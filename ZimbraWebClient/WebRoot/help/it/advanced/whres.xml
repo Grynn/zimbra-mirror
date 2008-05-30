@@ -1,0 +1,274 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<resource>
+<item name="Prev" value="&lt;&lt;" />
+<item name="Hide" value="Nascondi" />
+<item name="SyncTocTooltip" value="Sincronizza Indice" />
+<item name="InTopicSearchBtnText" value="Vai" />
+<item name="JS_alert_appletNotLoad " value=" Impossibile caricare l'applet. Se si sta utilizzando una versione precedente di Netscape, occorre modificare il file prefs.js." />
+<item name="FtsInputPrompt" value="Digitare le parole da cercare:" />
+<item name="Done" value="Fine" />
+<item name="Logo/Author" value="Prodotto da" />
+<item name="MergeError1" value="La Guida in linea secondaria" />
+<item name="JS_alert_cantLoadProject" value="Impossibile caricare il progetto:" />
+<item name="Next" value="&gt;&gt;" />
+<item name="SyncToc" value="SyncToc" />
+<item name="MergeError2" value="и in una lingua diversa rispetto alla Guida in linea principale; l'indice e le ricerche globali nella Guida in linea secondaria verranno disabilitati." />
+<item name="nls_body_instruction" value="Immettete la domanda nella casella di testo di cui sopra e fate clic su GO." />
+<item name="ToolBarSearchBtnText" value="Vai" />
+<item name="SuggestViewNoFrameMessage" value="Per visualizzare la Guida senza fotogrammi, fare clic su questo" />
+<item name="MergeError3" value="utilizza un contrassegno diverso dell'impostazione Web rispetto al sistema principale della Guida che comporterà la disattivazione della funzione di unione nel sistema della Guida." />
+<item name="Hide_Navigation_Component" value="Nascondi il componente di navigazione" />
+<item name="FtsBtnText" value="Vai" />
+<item name="TopicsFound" value="Argomenti trovati" />
+<item name="LoadingContentsData" value="Caricamento in corso... fare clic qui per annullare..." />
+<item name="Definition" value="Definizione:" />
+<item name="CompletingContents" value="Completamento Argomenti in corso..." />
+<item name="GeneratedBy" value="Generato da" />
+<item name="PoweredBy" value="Prodotto da" />
+<item name="IndexAlphabetBookmarks" value="ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+<item name="Contents" value="Argomenti" />
+<item name="IndexSelectTopicLabel" value="Selezionate un argomento e fate clic su Visualizza" />
+<item name="Disabled Prev" value="&lt;&lt;" />
+<item name="Glossary" value="Glossario" />
+<item name="Search" value="Cerca" />
+<item name="CantSearch" value="Impossibile cercare la frase." />
+<item name="LoadingIndex" value="Caricamento indice analitico in corso..." />
+<item name="LoadingData" value="Caricamento dati in corso, attendere..." />
+<item name="Show_Navigation_Component" value="Mostra il componente di navigazione" />
+<item name="Book" value="Libro" />
+<item name="Disabled Next" value="&gt;&gt;" />
+<item name="nls_body_empty" value="Spiacenti, non siamo in grado di trovare una risposta adeguata alla vostra domanda." />
+<item name="nls_button_go_hint" value="Avvia ricerca" />
+<item name="FtsHilitePrompt" value="Evidenzia risultati della ricerca" />
+<item name="Find" value="Trova" />
+<item name="CantOpenURLorFile" value="Impossibile aprire URL o file" />
+<item name="Print" value="Stampa" />
+<item name="About" value="Riguardo" />
+<item name="Author" value="Autore" />
+<item name="IndexSelectTopicTitle" value="Selezionate un argomento" />
+<item name="Blank_topic_text" value="Questo argomento и stato creato dal programma guidato di conversione dei progetti WinHelp e corrisponde al punto di destinazione di un argomento mancante o di un hyperlink interrotto." />
+<item name="BrowserLimitedMessage" value="Il browser non supporta i fotogrammi. Consigliamo di aggiornare il browser ad una versione che li supporta." />
+<item name="LoadingTOCItem" value="Caricamento indice in corso:" />
+<item name="Display" value="Visualizza" />
+<item name="Cancel" value="Annulla" />
+<item name="IndexSelectTopicError" value="Selezionate un argomento." />
+<item name="nls_edit_label" value="Immettete la vostra domanda:" />
+<item name="SearchLabel" value="Cerca" />
+<item name="RelateTopicListPrompt" value="Fare clic su un argomento e quindi su Visualizza." />
+<item name="Seperate " value=" |" />
+<item name="NextTooltip" value="Argomento successivo" />
+<item name="JS_alert_colorlimitation" value="WebHelp ha rilevato che il display и impostato su 16 colori. Per assistenza completa su WebHelp, impostare il display per l'utilizzo di 256 colori o piщ." />
+<item name="TopicsNotFound" value="Non è stato trovato nessun argomento." />
+<item name="Show" value="Mostra" />
+<item name="PreTooltip" value="Argomento precedente" />
+<item name="SearchPrompt" value="- Cerca -" />
+<item name="IndexBtnText" value="Vai" />
+<item name="JS_alert_ProjectLoadingFail" value="Impossibile caricare correttamente, selezionare Aggiorna." />
+<item name="LoadingContents" value="Caricamento argomenti in corso, attendere..." />
+<item name="Term" value="Parola:" />
+<item name="WebSearchButton" value="WebSearch" />
+<item name="Remote_Page" value="Pagina remota" />
+<item name="WebSearch" value="WebSearch" />
+<item name="LoadingFTS" value="Lettura dati della ricerca in corso..." />
+<item name="Index" value="Indice analitico" />
+<item name="JS_alert_ErrorInLoading" value="Errore nel caricamento del componente di navigazione. Rigenerare WebHelp." />
+<item name="IndexInputPrompt" value="Digitare la parola chiave da cercare:" />
+<item name="Page" value="Pagina" />
+<item name="SuggestViewNoFrameMsg2" value="hyperlink." />
+<item name="nls_button_go_text" value="Vai" />
+<item name="Searching" value="Ricerca in corso..." />
+
+  <item name="English"   value="" />
+  <item name="langorder" value="0,1,2,3,4,5,6,7,8,40,41,42,43,44,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,38,45,46,47,48,49,50,33,51,52,53,88,54,34,55,56,115,119,121,123,125,126,127,128,129,130,57,58,89,90,91,59,60,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,246,252,61,62,63,64,66,67,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,251,252,68,69,70,71,27,114,28,82,170,85,112,109,110,65,113,223,86,213,29,255,30,31,80,81,83,84,111,36,37,79,229,222,87,212,32,254,251,39,72,97,98,99,100,73,101,74,102,133,93,103,35,104,75,105,92,122,124,76,106,107,108,77,120,199,94,116,117,118,78,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,95,197,230,230,230,230,246,227,224,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,96,197,230,230,230,230,246,227,250," />
+
+  <panes show="0">
+    <toc />
+    <index />
+    <fts />
+  </panes>
+
+  <stopwords>
+    <word name="0" />
+    <word name="1" />
+    <word name="2" />
+    <word name="3" />
+    <word name="4" />
+    <word name="5" />
+    <word name="6" />
+    <word name="7" />
+    <word name="8" />
+    <word name="9" />
+    <word name="a" />
+    <word name="abbisognare" />
+    <word name="alcuna" />
+    <word name="alcune" />
+    <word name="alcuni" />
+    <word name="alcuno" />
+    <word name="altra" />
+    <word name="altre" />
+    <word name="altri" />
+    <word name="altro" />
+    <word name="anche" />
+    <word name="anziché" />
+    <word name="avere" />
+    <word name="ciascun" />
+    <word name="ciascuna" />
+    <word name="ciascuno" />
+    <word name="come" />
+    <word name="con" />
+    <word name="cosa" />
+    <word name="così" />
+    <word name="da" />
+    <word name="dentro" />
+    <word name="di" />
+    <word name="dopo" />
+    <word name="dove" />
+    <word name="dovere" />
+    <word name="e" />
+    <word name="entrambe" />
+    <word name="entrambi" />
+    <word name="entro" />
+    <word name="eppure" />
+    <word name="era" />
+    <word name="erano" />
+    <word name="eri" />
+    <word name="ero" />
+    <word name="essere" />
+    <word name="essi" />
+    <word name="esso" />
+    <word name="fa" />
+    <word name="fare" />
+    <word name="fatto" />
+    <word name="già" />
+    <word name="ha" />
+    <word name="il" />
+    <word name="in" />
+    <word name="io" />
+    <word name="loro" />
+    <word name="lungo" />
+    <word name="lì" />
+    <word name="ma" />
+    <word name="modo" />
+    <word name="nessuna" />
+    <word name="nessuno" />
+    <word name="noi" />
+    <word name="non" />
+    <word name="o" />
+    <word name="ok" />
+    <word name="okay" />
+    <word name="ottenere" />
+    <word name="per" />
+    <word name="perché" />
+    <word name="più" />
+    <word name="potere" />
+    <word name="potrebbe" />
+    <word name="quale" />
+    <word name="quando" />
+    <word name="quella" />
+    <word name="quelle" />
+    <word name="quelli" />
+    <word name="quello" />
+    <word name="questa" />
+    <word name="queste" />
+    <word name="questi" />
+    <word name="questo" />
+    <word name="qui" />
+    <word name="quindi" />
+    <word name="sarai" />
+    <word name="sarà" />
+    <word name="sarò" />
+    <word name="se" />
+    <word name="senza" />
+    <word name="sono" />
+    <word name="stato" />
+    <word name="stessa" />
+    <word name="stesso" />
+    <word name="su" />
+    <word name="tra" />
+    <word name="troppo" />
+    <word name="tu" />
+    <word name="tuo" />
+    <word name="tutte" />
+    <word name="tutti" />
+    <word name="un" />
+    <word name="una" />
+    <word name="uno" />
+    <word name="usando" />
+    <word name="usare" />
+    <word name="usato" />
+    <word name="vedere" />
+    <word name="voi" />
+    <word name="volere" />
+    <word name="vostro" />
+    <word name="è" />
+  </stopwords>
+
+
+	<paneskin>
+		<background color="#e8dcc1" img="" />
+		<font name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+		<toc>
+			<background color="#f9f9f9" img="" />
+			<icons>
+				<book open="chr_book_op.gif" close="chr_book_clo.gif" />
+				<item  local="chr_page.gif" remote="chr_webpage.gif" />
+				<newbook open="" close="" />
+				<newitem  local="" remote="" />
+			</icons>
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</toc>
+		<index>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</index>
+		<fts>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<error name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</fts>
+		<glossary>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</glossary>
+	</paneskin>
+</resource>

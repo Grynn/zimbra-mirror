@@ -1,0 +1,124 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Caractères de substitution</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { margin-left:40px; }
+h3.whs2 { margin-left:0px; }
+p.whs3 { margin-left:0px; }
+img_whs4 { border:none; border-style:none; }
+-->
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "h3.whs2 {margin-left:1pt; }";
+  strNSS += "p.whs3 {margin-left:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Création de filtres \nSubstitution de filtre");
+addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Substitution de filtre</h1>
+<p>Les substitutions peuvent être utilisées dans les comparaisons qui exécutent l’opérateur de comparaison   &quot;Modèle de correspondance&quot;. Les deux caractères de substitution   sont <span style="font-weight: bold;"><B>*</B></span> et <span style="font-weight: bold;"><B>?</B></span></p>
+<h3><span style="font-weight: bold;"><B>Astérisque (*)</B></span></h3>
+<p>L’astérisque * est un paramètre de substitution pour &quot;aucun ou plusieurs caractères de  n'importe quel type&quot;.</p>
+<p>Exemple de recherche de caractères dans le champ d'objet : <span style="font-weight: bold;"><B>palette*bananes</B></span></p>
+<p class="whs1">avec<span style="font-style: italic;"><I> Correspondances :</I></span>   Lignes d’objet telles que &quot;palettesbananes&quot;, &quot;bananes&quot;,   &quot;palette de casserole de feuilles de bananes&quot; mais non &quot;super-palette-banane&quot;</p>
+<p>Exemple de recherche de caractères dans le champ d'objet : <span style="font-weight: bold;"><B>w*bandana</B></span></p>
+<p class="whs1">avec<span style="font-style: italic;"><I> Correspondances :</I></span>   Lignes d’objet telles que &quot;bandana blanc&quot; ou &quot;dont le bandana&quot;   mais non &quot;à qui appartient ce bandana ?&quot;</p>
+<h3>Point d’interrogation (?)</h3>
+<p>Le point d’interrogation est un paramètre de substitution pour &quot;un caractère (et pas davantage !)&quot;.</p>
+<p>Exemple de recherche de caractères dans le champ d'objet : <span style="font-weight: bold;"><B>banane?bateau</B></span></p>
+<p class="whs1">avec<span style="font-style: italic;"><I> Correspondances :</I></span>   Lignes d'objet telles que &quot;bateauxbananes&quot;, &quot;banane-bateau&quot;,   &quot;banane!bateau&quot;, ou &quot;bateau de bananes&quot;</p>
+<h3 class="whs2">Le caractère d’échappement est le slash (barre oblique) : \</h3>
+<p class="whs3">Il est possible que vous souhaitiez spécifier une correspondance exacte pour une chaîne dont les caractères sont normalement considérés comme des caractères de substitution. Par exemple, si vous voulez spécifier une correspondance pour une ligne d’objet dans laquelle l’en-tête principal est entouré de trois astérisques, comme par exemple</p>
+<p>***MORE MONEY!!!*** ou</p>
+<p>***FREE GIFT***</p>
+<p>Pour spécifier un caractère de substitution en tant que tel plutôt qu'une substitution pour d'autres caractères, utilisez la barre oblique inverse \ juste avant le caractère.   Par exemple, le caractère de comparaison &quot;\*\*\**\*\*\*&quot; spécifie un objet avec trois astérisques placés avant et après une chaîne de caractères (espaces compris).</p>
+<p><img src="../image19.jpg" border="0" class="img_whs4"></p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

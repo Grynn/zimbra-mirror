@@ -1,0 +1,305 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<resource>
+<item name="Prev" value="&lt;&lt;" />
+<item name="Hide" value="Masquer" />
+<item name="SyncTocTooltip" value="Synchronisation de la table des matières" />
+<item name="InTopicSearchBtnText" value="Ok" />
+<item name="JS_alert_appletNotLoad " value=" Incapable de charger la mini-application. Si vous utilisez une ancienne version de Netscape, le fichier prefs.js doit être édité." />
+<item name="FtsInputPrompt" value="Taper le(s) mot(s) pour trouver:" />
+<item name="Done" value="Terminer" />
+<item name="Logo/Author" value="Développé par" />
+<item name="MergeError1" value="Le système d'aide fusionné" />
+<item name="JS_alert_cantLoadProject" value="Chargement impossible du projet:" />
+<item name="Next" value="&gt;&gt;" />
+<item name="SyncToc" value="SyncToc" />
+<item name="MergeError2" value="utilise une langue différente de celle du système d'aide maître. Les fonctionnalités d'index et de recherche sur le texte intégral vont être désactivées dans le système d'aide fusionné." />
+<item name="nls_body_instruction" value="Tapez votre question dans le champ ci-dessus, puis cliquez GO." />
+<item name="ToolBarSearchBtnText" value="Ok" />
+<item name="SuggestViewNoFrameMessage" value="Pour afficher le système d'aide sans cadres, cliquer sur cet" />
+<item name="MergeError3" value="utilise une marque différente pour le paramètre Web par rapport au système d'aide principal, ce qui entraîne la désactivation de la fonctionnalité de fusion dans le système d'aide." />
+<item name="Hide_Navigation_Component" value="Ne pas afficher le composant de navigation" />
+<item name="FtsBtnText" value="Ok" />
+<item name="TopicsFound" value="Matières trouvées" />
+<item name="LoadingContentsData" value="Chargement en cours. Cliquer ici pour annuler..." />
+<item name="Definition" value="Définition:" />
+<item name="CompletingContents" value="Achèvement du contenu..." />
+<item name="GeneratedBy" value="Généré par" />
+<item name="PoweredBy" value="Développé par" />
+<item name="IndexAlphabetBookmarks" value="ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+<item name="Contents" value="Contenu" />
+<item name="IndexSelectTopicLabel" value="Sélectionnez un sujet et cliquez sur Affichage" />
+<item name="Disabled Prev" value="&lt;&lt;" />
+<item name="Glossary" value="Glossaire" />
+<item name="Search" value="Recherche" />
+<item name="CantSearch" value="Ne peut pas rechercher cette phrase." />
+<item name="LoadingIndex" value="Téléchargement de l'index..." />
+<item name="LoadingData" value="Chargement des données en cours. Veuillez patienter..." />
+<item name="Show_Navigation_Component" value="Afficher le composant de navigation" />
+<item name="Book" value="Livre" />
+<item name="Disabled Next" value="&gt;&gt;" />
+<item name="nls_body_empty" value="Désolé.  Nous n’avons pas pu trouver une réponse satisfaisante à votre question." />
+<item name="nls_button_go_hint" value="Lancer recherche" />
+<item name="FtsHilitePrompt" value="Mettre en surbrillance les résultats de la recherche" />
+<item name="Find" value="Rechercher" />
+<item name="CantOpenURLorFile" value="Impossible d'ouvrir l'URL ou le fichier" />
+<item name="Print" value="Imprimer" />
+<item name="About" value="À propos de" />
+<item name="Author" value="Auteur" />
+<item name="IndexSelectTopicTitle" value="Sélectionnez un sujet" />
+<item name="Blank_topic_text" value="Ce sujet a été créé par l'assistant informatique de conversion de projet WinHelp, et représente la destination d'un sujet manquant ou d'un hyperlien rompu." />
+<item name="BrowserLimitedMessage" value="L'explorateur ne supporte pas les cadres. Nous recommandons de le mettre à niveau de façon à ce qu'il supporte les cadres." />
+<item name="LoadingTOCItem" value="Téléchargement de la table des matières :" />
+<item name="Display" value="Afficher" />
+<item name="Cancel" value="Annuler" />
+<item name="IndexSelectTopicError" value="Prière de sélectionner un sujet." />
+<item name="nls_edit_label" value="Tapez votre question:" />
+<item name="SearchLabel" value="Rechercher" />
+<item name="RelateTopicListPrompt" value="Cliquer sur une matière, puis cliquer sur Afficher." />
+<item name="Seperate " value=" |" />
+<item name="NextTooltip" value="Sujet suivant" />
+<item name="JS_alert_colorlimitation" value="WebHelp a détecté que votre écran était réglé sur 16 couleurs. Pour le support WebHelp, veuillez régler votre écran sur 256 couleurs ou plus." />
+<item name="TopicsNotFound" value="Aucune matière trouvée." />
+<item name="Show" value="Montrer" />
+<item name="PreTooltip" value="Sujet précédent" />
+<item name="SearchPrompt" value="- Rechercher -" />
+<item name="IndexBtnText" value="Ok" />
+<item name="JS_alert_ProjectLoadingFail" value="Chargement incorrect. Prière de relancer le chargement." />
+<item name="LoadingContents" value="Téléchargement du contenu, prière d'attendre..." />
+<item name="Term" value="Terme:" />
+<item name="WebSearchButton" value="WebSearch" />
+<item name="Remote_Page" value="Page à distance" />
+<item name="WebSearch" value="WebSearch" />
+<item name="LoadingFTS" value="Lecture des données de consultation..." />
+<item name="Index" value="Index" />
+<item name="JS_alert_ErrorInLoading" value="Erreur dans le chargement de la navigation. Prière de régénérer WebHelp." />
+<item name="IndexInputPrompt" value="Taper le mot clé pour trouver:" />
+<item name="Page" value="Page" />
+<item name="SuggestViewNoFrameMsg2" value="hyperlien." />
+<item name="nls_button_go_text" value="Ok" />
+<item name="Searching" value="Recherche..." />
+
+  <item name="English"   value="" />
+  <item name="langorder" value="0,1,2,3,4,5,6,7,8,40,41,42,43,44,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,38,45,46,47,48,49,50,33,51,52,53,88,54,34,55,56,115,119,121,123,125,126,127,128,129,130,57,58,89,90,91,59,60,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,246,252,61,62,63,64,66,67,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,251,252,68,69,70,71,27,114,28,82,170,85,112,109,110,65,113,223,86,213,29,255,30,31,80,81,83,84,111,36,37,79,229,222,87,212,32,254,251,39,72,97,98,99,100,73,101,74,102,133,93,103,35,104,75,105,92,122,124,76,106,107,108,77,120,199,94,116,117,118,78,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,95,197,230,230,230,230,246,227,224,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,96,197,230,230,230,230,246,227,250," />
+
+  <panes show="0">
+    <toc />
+    <index />
+    <fts />
+  </panes>
+
+  <stopwords>
+    <word name="0" />
+    <word name="1" />
+    <word name="2" />
+    <word name="3" />
+    <word name="4" />
+    <word name="5" />
+    <word name="6" />
+    <word name="7" />
+    <word name="8" />
+    <word name="9" />
+    <word name="a" />
+    <word name="ai" />
+    <word name="ainsi" />
+    <word name="après" />
+    <word name="as" />
+    <word name="aucun" />
+    <word name="aucune" />
+    <word name="aussi" />
+    <word name="autre" />
+    <word name="autre" />
+    <word name="avec" />
+    <word name="avec" />
+    <word name="avez" />
+    <word name="avoir" />
+    <word name="avons" />
+    <word name="besoin" />
+    <word name="ce" />
+    <word name="celle" />
+    <word name="celui" />
+    <word name="certaines" />
+    <word name="certains" />
+    <word name="ces" />
+    <word name="cet" />
+    <word name="cette" />
+    <word name="ceux" />
+    <word name="chaque" />
+    <word name="comment" />
+    <word name="dans" />
+    <word name="davantage" />
+    <word name="de" />
+    <word name="des" />
+    <word name="devez" />
+    <word name="devoir" />
+    <word name="devons" />
+    <word name="dois" />
+    <word name="doit" />
+    <word name="doivent" />
+    <word name="du" />
+    <word name="déjà " />
+    <word name="en" />
+    <word name="ensuite" />
+    <word name="entre" />
+    <word name="est" />
+    <word name="et" />
+    <word name="etc." />
+    <word name="eux" />
+    <word name="faire" />
+    <word name="fait" />
+    <word name="façon" />
+    <word name="ici" />
+    <word name="il" />
+    <word name="ils" />
+    <word name="l'extérieur" />
+    <word name="l'intérieur" />
+    <word name="l'intérieur de" />
+    <word name="la" />
+    <word name="laquelle" />
+    <word name="le" />
+    <word name="lequel" />
+    <word name="les" />
+    <word name="lesquelles" />
+    <word name="lesquels" />
+    <word name="leur" />
+    <word name="ligne" />
+    <word name="maintenant" />
+    <word name="mais" />
+    <word name="moins" />
+    <word name="même" />
+    <word name="n'est" />
+    <word name="n'importe" />
+    <word name="ne" />
+    <word name="nous" />
+    <word name="objet" />
+    <word name="obtenir" />
+    <word name="OK" />
+    <word name="ont" />
+    <word name="ou" />
+    <word name="où" />
+    <word name="par" />
+    <word name="parce" />
+    <word name="parmi" />
+    <word name="pas" />
+    <word name="peut" />
+    <word name="peut-être" />
+    <word name="peuvent" />
+    <word name="peux" />
+    <word name="plus" />
+    <word name="plutôt" />
+    <word name="pour" />
+    <word name="pouvez" />
+    <word name="pouvoir" />
+    <word name="pouvons" />
+    <word name="quand" />
+    <word name="que" />
+    <word name="quoi" />
+    <word name="sans" />
+    <word name="si" />
+    <word name="soit" />
+    <word name="soit" />
+    <word name="sont " />
+    <word name="sur" />
+    <word name="tel" />
+    <word name="telle" />
+    <word name="telles" />
+    <word name="tels" />
+    <word name="ton" />
+    <word name="tous" />
+    <word name="tout" />
+    <word name="toute" />
+    <word name="toutes " />
+    <word name="tu" />
+    <word name="un" />
+    <word name="une" />
+    <word name="usage" />
+    <word name="usagé" />
+    <word name="utilisant" />
+    <word name="utilisation" />
+    <word name="utiliser" />
+    <word name="utilisé" />
+    <word name="veulent" />
+    <word name="veut" />
+    <word name="veux" />
+    <word name="voir" />
+    <word name="voulez" />
+    <word name="vouloir" />
+    <word name="voulons" />
+    <word name="vous" />
+    <word name="vôtre" />
+    <word name="à" />
+    <word name="étaient" />
+    <word name="étais" />
+    <word name="était" />
+    <word name="été" />
+    <word name="être" />
+  </stopwords>
+
+
+	<paneskin>
+		<background color="#e8dcc1" img="" />
+		<font name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+		<toc>
+			<background color="#f9f9f9" img="" />
+			<icons>
+				<book open="chr_book_op.gif" close="chr_book_clo.gif" />
+				<item  local="chr_page.gif" remote="chr_webpage.gif" />
+				<newbook open="" close="" />
+				<newitem  local="" remote="" />
+			</icons>
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</toc>
+		<index>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</index>
+		<fts>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<error name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</fts>
+		<glossary>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</glossary>
+	</paneskin>
+</resource>

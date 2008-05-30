@@ -1,0 +1,124 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>通配字元</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { margin-left:40px; }
+h3.whs2 { margin-left:0px; }
+p.whs3 { margin-left:0px; }
+img_whs4 { border:none; border-style:none; }
+-->
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "h3.whs2 {margin-left:1pt; }";
+  strNSS += "p.whs3 {margin-left:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("建立過濾器 \n過濾器通配字元");
+addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>過濾器通配字元</h1>
+<p>在使用「款式相符」比較運算子的比較中，你可使用通配字元。這兩個通配字元是 <span style="font-weight: bold;"><B>*</B></span> 和 <span style="font-weight: bold;"><B>?</B></span>。</p>
+<h3><span style="font-weight: bold;"><B>星號（*）</B></span></h3>
+<p>星號 * 是「零或任何類型的其它字元」的占位符。</p>
+<p>主題行搜尋字串範例：<span style="font-weight: bold;"><B>banana*float</B></span></p>
+<p class="whs1">與之<span style="font-style: italic;"><I>相符的：</I></span>主題行，如bananafloat、bananas、banana-leaf casserole float，但與 super-banana-float 並不相符。</p>
+<p>主題行搜尋字串範例：<span style="font-weight: bold;"><B>w*bandanna</B></span></p>
+<p class="whs1">與之<span style="font-style: italic;"><I>相符的：</I></span>主題行，如 white bandanna 或 whose bandanna，但 whose bandanna is this? 並不相符。</p>
+<h3>問號（?）</h3>
+<p>問號是「單字」的占位符。</p>
+<p>主題行搜尋字串範例：<span style="font-weight: bold;"><B>banana?boat</B></span></p>
+<p class="whs1">與之<span style="font-style: italic;"><I>相符的：</I></span>主題行，如 bananasboat、banana-boat、banana!boat 或 banana boat 等。</p>
+<h3 class="whs2">換碼符是反斜杠： \</h3>
+<p class="whs3">可能有這樣的時候：你要指定一個針對字串的完全相符項，但其中含有通常被認為是通配的字元。例如，你要指定針對主題行的相符項，其中主標題的兩端各有三個星號，如</p>
+<p>***MORE MONEY!!!*** 或</p>
+<p>***FREE GIFT***</p>
+<p>要將一個通配字元指定為該字元本身，而不是作為其他字元的替代，則應在該字元前放置一個反斜杠 \ 。例如比較字串 \*\*\**\*\*\* 指定一個首尾都有三個星號而中間可以是任意字串（包括空格）的主題行。</p>
+<p><img src="../image19.jpg" border="0" class="img_whs4"></p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

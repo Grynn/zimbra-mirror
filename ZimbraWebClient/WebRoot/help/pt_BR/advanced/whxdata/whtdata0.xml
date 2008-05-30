@@ -1,0 +1,149 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<tocdata>
+<book name="Informações iniciais" >
+  <item name="Bem-vindo ao Cliente Web Zimbra" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="Fazendo login e saindo" url="Userspecific/logging_on_and_off.htm" />
+  <item name="Alterando meu tipo de cliente padrão para login" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+  <item name="Teclas de atalho do teclado" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <item name="Assistente Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="Alterando sua senha" url="Userspecific/chaning_your_password.htm" />
+  <item name="Esqueceu sua senha?" url="Userspecific/if_you_forget_your_password.htm" />
+  <item name="Caso sua sessão expire" url="Userspecific/if_your_session_expires.htm" />
+</book>
+<book name="Navegando em sua caixa de e-mails" >
+  <item name="Navegando no Cliente Zimbra para Web " url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="Recursos e atalhos da interface de usuário" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+  <item name="Menus de botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="Aplicando ações a várias seleções" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+  <item name="Usando navegadores" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+  <item name="Salvando meu trabalho" url="Userspecific/browser_session_handling.htm" />
+  <item name="Visualizando o painel de Visão geral" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <item name="Pastas do sistema de e-mail" url="Navigation_folders_and_tips/inbox_folder.htm" />
+</book>
+<book name="Gerenciando seu e-mail " >
+  <item name="Gerenciando a visualização da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
+  <item name="Categorizando suas mensagens de e-mail" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Classificando mensagens no Painel de conteúdo" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  <item name="Personalizando sua página inicial de e-mails" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+  <item name="Como funciona o recurso Tópicos de conversação" url="conversations/conversations_can_span_folders.htm" />
+  <item name="Imprimindo um tópico de conversação" url="conversations/printing_a_conversation.htm" />
+  <item name="Visualizando no modo tradicional" url="Navigation_folders_and_tips/Traditional_View.htm" />
+  <item name="Movendo mensagens de e-mail entre pastas" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <item name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+  <item name="Assinar conteúdos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+  <item name="Gerenciando várias identidades em sua conta" url="Userspecific/Mail_Identities.htm" />
+  <item name="Recuperando mensagens de e-mail apagadas" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Eliminando mensagens de e-mail" url="reading_mail/archiving_old_messages.htm" />
+  <book name="Lendo mensagens" >
+    <item name="Lendo e-mail" url="reading_mail/reading_mail.htm" />
+    <item name="Lendo e-mails no Painel de Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="Marcando e-mail como não lido" url="reading_mail/marking_mail_as_unread.htm" />
+    <item name="Novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+    <item name="Exibindo HTML em mensagens de e-mail" url="reading_mail/displaying_html_in_email_messages.htm" />
+    <item name="Abrindo arquivos anexos" url="reading_mail/opening_file_attachments.htm" />
+    <item name="Imprimindo uma mensagem de e-mail" url="reading_mail/printing_a_mail_message.htm" />
+    <item name="Bloqueio de anexo" url="reading_mail/attachment_blocking.htm" />
+    <item name="Recurso de bloqueio de mensagens" url="reading_mail/Message_blocking_feature.htm" />
+    <item name="E-mail que não é possível entregar" url="Creating_Messages/undeliverable_mail.htm" />
+  </book>
+  <book name="Recuperando e-mails de outras contas" >
+    <item name="Acessando suas contas externas" url="Userspecific/Managing_your_POP_Accounts.htm" />
+    <item name="Adicionando contas externas" url="Userspecific/Adding_POP_accounts.htm" />
+  </book>
+</book>
+<book name="Criando e-mail" >
+  <item name="Escrevendo uma nova mensagem de e-mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="Partes da mensagem de e-mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="Adicionando sua assinatura automaticamente" url="Userspecific/using_a_signature.htm" />
+  <item name="Preenchimento automático de endereços" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Anexando arquivos à sua mensagem" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Tipos de arquivo anexo" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Adicionando endereços Cc: e Cco:" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Usando o editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Usando o verificador ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
+  <item name="Salvando mensagens como rascunhos" url="Creating_Messages/saving_a_draft_message.htm" />
+</book>
+<book name="Respondendo e encaminhando mensagens" >
+  <item name="Respondendo a mensagens de e-mail" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="Encaminhando uma mensagem de e-mail" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</book>
+<book name="Gerenciando suas listas de endereços" >
+  <item name="Sua lista de endereços" url="Contacts/contacts.htm" />
+  <item name="Tipos de listas de endereços disponíveis" url="Contacts/gal_vs_contacts.htm" />
+  <item name="Adicionando novos contatos" url="Contacts/creating_a_new_contact.htm" />
+  <item name="Usando a lista de endereços da empresa" url="Contacts/using_the_corporate_address_book.htm" />
+  <item name="Adicionando contatos automaticamente" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+  <item name="Criando listas de grupos de contatos" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Compartilhando sua lista de endereços" url="Contacts/Sharing_your_Address_Book.htm" />
+  <item name="Importando listas de endereços" url="Contacts/Importing_Contacts.htm" />
+  <item name="Exportando listas de endereços" url="Contacts/Exporting_Address_Books.htm" />
+  <item name="Imprimindo nomes de contato ou listas de endereços" url="Contacts/Printing_Contacts.htm" />
+  <item name="Editando informações do contato" url="Contacts/editing_a_contact.htm" />
+  <item name="Apagando contatos" url="Contacts/deleting_a_contact.htm" />
+</book>
+<book name="Gerenciando sua agenda" >
+  <item name="Sobre a agenda do Zimbra" url="Calendar/About_Calendar.htm" />
+  <item name="Crie calendários" url="Calendar/Create_Calendars.htm" />
+  <item name="Adicionando cor às agendas" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Visualizando várias agendas" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+  <item name="Compartilhando seu agenda" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="Aceitando acesso à agenda compartilhada" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="Recusando uma solicitação de compartilhamento de agenda" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+  <item name="Apagando agendas" url="Calendar/Deleting_Calendars.htm" />
+  <item name="Importando sua agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="Exportando sua agenda iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="Opções de visualização de agenda" url="Calendar/Calendar_Views.htm" />
+  <item name="Imprimindo uma agenda" url="Calendar/Printing_a_calendar.htm" />
+</book>
+<book name="Agendando compromissos, reuniões e eventos" >
+  <item name="Sobre compromissos, reuniões e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <item name="Planejando uma reunião" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="Criando um compromisso" url="Calendar/Scheduling_meetings.htm" />
+  <item name="Exibindo horas livres/ocupadas" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="Programando recursos" url="Calendar/Scheduling_Resources.htm" />
+  <item name="Transformando uma mensagem em uma solicitação de reunião" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+  <item name="Usando o QuickAdd para criar um compromisso" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="Programando eventos que duram o dia todo" url="Calendar/Scheduling_All_Day_events.htm" />
+  <item name="Criando compromissos recorrentes" url="Calendar/Creating_recurring_appointments.htm" />
+  <item name="Respondendo a um convite de reunião" url="Calendar/Responding_to_an_invitation.htm" />
+  <item name="Apagando um compromisso" url="Calendar/Deleting_an_appointment.htm" />
+  <item name="Apagando compromissos recorrentes" url="Calendar/Deleting_recurring_appointments.htm" />
+</book>
+<book name="Usando listas de tarefas" >
+  <item name="Sobre Tarefas" url="Tasks/About_Tasks.htm" />
+  <item name="Criando listas de tarefas" url="Tasks/Create_tasks_folders.htm" />
+  <item name="Adicionar uma tarefa" url="Tasks/Add_a_task.htm" />
+  <item name="Alterando uma tarefa" url="Tasks/Change_a_task.htm" />
+  <item name="Movendo tarefas" url="Tasks/Moving_tasks.htm" />
+  <item name="Apagando uma tarefa" url="Tasks/Delete_a_task.htm" />
+  <item name="Compartilhando sua lista de tarefas" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="Aceitando acesso a uma lista de tarefas compartilhada" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+  <item name="Classificando tarefas" url="Tasks/Sorting_tasks_.htm" />
+</book>
+<book name="Trabalhando em documentos " >
+<chunk name="Trabalhando em documentos " ref="whtdata1.xml" />
+</book>
+<book name="Usando o Porta-arquivos" >
+<chunk name="Usando o Porta-arquivos" ref="whtdata2.xml" />
+</book>
+<book name="Compartilhando pastas de e-mail" >
+<chunk name="Compartilhando pastas de e-mail" ref="whtdata3.xml" />
+</book>
+<book name="Buscando itens" >
+<chunk name="Buscando itens" ref="whtdata4.xml" />
+</book>
+<book name="Usando marcadores e pastas para organizar e-mail" >
+<chunk name="Usando marcadores e pastas para organizar e-mail" ref="whtdata5.xml" />
+</book>
+<book name="Criando filtros " >
+<chunk name="Criando filtros " ref="whtdata6.xml" />
+</book>
+<book name="Configurando suas preferências" >
+<chunk name="Configurando suas preferências" ref="whtdata7.xml" />
+</book>
+<book name="Usando Zimlets" >
+  <item name="Sobre Zimlets" url="Zimlets/About_Zimlets.htm" />
+</book>
+
+</tocdata>

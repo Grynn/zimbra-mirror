@@ -1,0 +1,124 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Platzhalter</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { margin-left:40px; }
+h3.whs2 { margin-left:0px; }
+p.whs3 { margin-left:0px; }
+img_whs4 { border:none; border-style:none; }
+-->
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "h3.whs2 {margin-left:1pt; }";
+  strNSS += "p.whs3 {margin-left:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Filter erstellen \nPlatzhalter in Filtern");
+addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Platzhalter in Filtern</h1>
+<p>Platzhalter können in Vergleichen mit dem Vergleichsoperator &quot;entspricht der Wildcard-Bedingung&quot; verwendet werden. Die beiden Platzhalterzeichen sind <span style="font-weight: bold;"><B>*</B></span> und <span style="font-weight: bold;"><B>?</B></span>.</p>
+<h3><span style="font-weight: bold;"><B>Sternchen (*)</B></span></h3>
+<p>Das Sternchen * ist ein Platzhalter für &quot;null oder mehr beliebige Zeichen&quot;.</p>
+<p>Beispiel für eine Suchzeichenkette in der Betreffzeile: <span style="font-weight: bold;"><B>Bananen*split</B></span></p>
+<p class="whs1"><span style="font-style: italic;"><I>Entsprechungen:</I></span>   Betreffzeilen wie &quot;Bananensplit&quot;, &quot;Bananen&quot;, &quot;Bananen-Erdbeer-Split&quot;, aber nicht &quot;Super-Bananensplit&quot;</p>
+<p>Beispiel für eine Suchzeichenkette in der Betreffzeile: <span style="font-weight: bold;"><B>w*Buch</B></span></p>
+<p class="whs1"><span style="font-style: italic;"><I>Entsprechungen:</I></span>   Betreffzeilen wie &quot;weißes Buch&quot; oder &quot;wessen Buch&quot;, aber nicht &quot;wessen Buch ist das?&quot;</p>
+<h3>Fragezeichen (?)</h3>
+<p>Das Fragezeichen ist ein Platzhalter für &quot;genau ein Zeichen&quot;.</p>
+<p>Beispiel für eine Suchzeichenkette in der Betreffzeile: <span style="font-weight: bold;"><B>Bananen?split</B></span></p>
+<p class="whs1"><span style="font-style: italic;"><I>Entsprechungen:</I></span>   Betreffzeilen wie &quot;Bananen-Split&quot;, &quot;Bananen!split&quot; oder &quot;Bananen Split&quot;</p>
+<h3 class="whs2">Schrägstrich rückwärts als Escape-Zeichen: \</h3>
+<p class="whs3">Es kann sein, dass Sie eine genaue Entsprechung einer Zeichenkette angeben möchten, die Zeichen enthält, die als Platzhalter gelten. Sie möchten z. B. eine Entsprechung in einer Betreffzeile definieren, in der die eigentliche Überschrift auf beiden Seiten von jeweils drei Sternchen umgeben ist wie in</p>
+<p>***MEHR GELD!!!*** oder</p>
+<p>***GRATISGESCHENK***</p>
+<p>Um das Zeichen eines Platzhalters als das Zeichen selbst und nicht als Platzhalter für andere Zeichen zu definieren, geben Sie direkt vor dem Platzhalter einen Schrägstrich rückwärts \ ein.   Die Vergleichszeichenkette &quot;\*\*\**\*\*\*&quot; definiert z. B. einen Betreff mit drei Sternchen vor und nach einer beliebigen Zeichenkette in der Mitte (einschließlich Leerzeichen).</p>
+<p><img src="../image19.jpg" border="0" class="img_whs4"></p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

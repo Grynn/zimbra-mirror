@@ -1,0 +1,159 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Description du langage de demande</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { font-weight:bold; }
+p.whs2 { margin-left:40px; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Recherche d’objets\nDescription du langage de demande");
+addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Description du langage de demande</h1>
+<p>Cette rubrique avancée décrit en détail la syntaxe de recherche utilisée pour la fonction de recherche de Zimbra. Certains types de demandes s’appliquent toujours pour produire l’affichage que vous voyez dans l’interface de Zimbra. </p>
+<p><b style="font-weight: bold;">Conseil</b> : Vous pouvez configurer vos Préférences,   dans l’onglet Général sur '<i><b>Toujours montrer la chaîne de recherche'</b></i> &nbsp;pour afficher la recherche en cours dans la barre d’outils de Recherche. Par exemple, si cette option est activée, lorsque vous cliquez sur le dossier Boîte de réception il s’affiche alors la recherche '<i><b>dans :boîte de réception'</b></i>.</p>
+<h2>Structure de langage de recherche</h2>
+<p>Les recherches simples peuvent être effectuées en saisissant simplement un mot dans le champ de recherche. Les mots simples (mots sans opérateur de recherche) sont interprétés pour effectuer une recherche dans le « contenu ». Opérateur – ceci correspond à toute zone de texte du mail.   </p>
+<p>Les recherches plus avancées peuvent être effectuées en spécifiant un <b>opérateur de recherche</b>.   Un opérateur de recherche est un mot clé spécial suivi de deux points, puis de tout autre paramètre spécifique à cet opérateur. Par exemple : </p>
+<ul><li class=p><p><b style="font-weight: bold;">in:inbox</b> l’opérateur est &quot;in&quot; et le paramètre est &quot;inbox&quot; - ceci permet d’obtenir une correspondance avec les mails qui sont dans le dossier nommé &quot;boîte de réception&quot; </p></li>
+</ul>
+<ul><li class=p><p><b style="font-weight: bold;">from:someone</b> l’opérateur est &quot;from&quot; et le paramètre est &quot;someone&quot; - ceci permet d’établir une correspondance avec les mails contenant le mot &quot;quelqu’un&quot; dans leur adresse mail   </p></li>
+</ul>
+<p>Vous pouvez faire précéder un mot clé par le mot &quot;not&quot; afin de spécifier les éléments qui n’ont pas ce critère spécifique, par exemple <b>not in:inbox</b>.   La recherche n’est pas affectée par les majuscules, ce qui signifie que &quot;in:inbox&quot; est identique à &quot;in:Inbox&quot;. Le signe moins (<b>-</b>) est synonyme de <b>PAS</b>   Par conséquent : <b>pas dans :boîte de réception</b> est identique à <b>-dans :boîte de réception</b> </p>
+<p>Dans la plupart des cas, il n’est pas nécessaire d’inclure des caractères de ponctuation dans votre caractère de recherche, car ces derniers sont ignorés par le code de recherche. Pour certaines recherches, cela ne s'applique pas (par exemple, rechercher l’heure « 9:30 » dans un mail) et dans ce cas vous devez écrire le paramètre de recherche entre guillemets. Par exemple : <b>subject:&quot;9:30&quot;</b>   renvoie les mails comportant le caractère 9:30 dans la ligne d’objet. </p>
+<p>Caractères autorisés dans les paramètres de recherche : </p>
+<ul><li class=p><p>Les caractères suivants ne peuvent pas être introduits au hasard dans les paramètres de recherche à moins d’être écrits entre guillemets : ~ '&nbsp;! # $ % ^ &amp; * 
+ ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
+	<li class=p><p>Les caractères suivants sont autorisés dans une recherche tant qu’ils ne sont pas placés en tête de la recherche : - + &lt; &gt; </p></li>
+</ul>
+<h2>Recherche de plusieurs termes </h2>
+<p>Si plusieurs termes sont saisis (séparés par des espaces), ils ne sont pas   &quot;Ajoutés&quot; par défaut. <b>in:inbox   tim</b> signifie &quot;rechercher les mails qui sont dans la boîte de réception ET qui contiennent le mot tim&quot;.   Pour effectuer des recherches à l’aide de plusieurs critères, vous pouvez rechercher des éléments correspondant à l’un des critères spécifiés ou à l’ensemble des critères. Vous pouvez effectuer les deux types de recherches à l’aide de la recherche avancée. </p>
+<p>Pour l’ensemble des volets de recherche autres que la recherche basique, les règles sont les suivantes : </p>
+<ul><li class=p><p>La recherche de mails correspondant à l’un des critères spécifiés s’appelle une recherche <b>OR</b>.  En effet, si l’un des mails contient le terme X ou Y, il est alors considéré comme une correspondance. Pour les panneaux de recherche avancée à plusieurs options, cocher plusieurs sélections dans un seul panneau permet de créer une recherche <b>OR </b>pour ces éléments. </p></li>
+	<li class=p><p>La recherche de mails contenant à la fois X et Y s’appelle une recherche '<b>AND'</b>. En effet, le mail doit correspondre à l’ensemble des critères spécifiés afin d'être considéré comme une correspondance. Pour les panneaux de serveur avancé ayant des cases activées, ouvrir plusieurs instances du même panneau et sélectionner plusieurs options dans chacune d'entre elles permet de spécifier les critères comme une recherche '<b>AND'</b>. </p></li>
+</ul>
+<p>Seul &quot;OR&quot; s’affiche dans une demande. Si vous avez sélectionné comme option d'afficher la demande de recherche dans la barre de recherche (lorsque vous effectuez des sélections dans la recherche avancée), la zone de recherche s'actualise pour afficher les résultats de la demande.   Avec le type de recherche '<b>AND'</b>, le mot '<b>AND'</b> ne s’affiche pas.   </p>
+<p><b style="font-weight: bold;">Conseil</b> : En utilisant des parenthèses avec AND et   OR, les mots entre parenthèses sont considérés comme une unité. Par exemple <b>from:   (john thomas)</b> est équivalent à <b>from: john AND   from:thomas</b>. Si vous utilisez OR dans les parenthèses,   <b>from:(john or smith)</b>, la recherche correspond aux résultats <b>from:john OR   from:thomas</b>. </p>
+<h3>Utiliser le caractère <b>*</b> de substitution dans une recherche </h3>
+<p>L’astérisque (<b>*</b>) peut servir de caractère de substitution pour rechercher dans une zone de texte des mots ayant une orthographe similaire. </p>
+<p>Utiliser l’astérisque <b>*</b> en tant que caractère de substitution après un préfixe. Par exemple,   le caractère de recherche <b>ca*</b> renvoie aux éléments tels que   <i>cache</i>, <i>caprice</i>, <i>carotte</i>, etc. </p>
+<h2>Descriptions des mots-clés et exemples</h2>
+<p class="whs1">Contenu :</p>
+<p class="whs2">Spécifie le texte que le message doit contenir.   Par exemple, <span class=code>content:bananes</span> recherche tous les éléments contenant le mot &quot;bananes&quot;.</p>
+<p class="whs1">from:</p>
+<p class="whs2">Spécifie le nom ou l'adresse mail d’un expéditeur qui se trouve dans l’en-tête De. Il peut s’agir de texte, comme pour &quot;John Smith III&quot;,   d’une adresse mail comme &quot;joe@acme.com&quot;,   ou d’un domaine comme par exemple &quot;zimbra.com&quot;.</p>
+<p class="whs1">to:</p>
+<p class="whs2">Identique à from: hormis le fait qu’il spécifie une des personnes à laquelle le mail était adressé dans l’en-tête To:.</p>
+<p class="whs1">cc:</p>
+<p class="whs2">Identique à from: mis à part qu’il spécifie un destinataire dans l’en-tête Cc: du mail.</p>
+<p class="whs1">subject:</p>
+<p class="whs2">Spécifie une zone de texte qui doit apparaître dans l’en-tête d’objet du mail. Exemple : <span class=code>subject:&quot;nouvelle politique de congés&quot;</span>. Utiliser des guillemets pour rechercher une correspondance exacte.</p>
+<p class="whs1">in:</p>
+<p class="whs2">Spécifie un dossier. Par exemple, <span class=code>in:sent</span>   vous permet d’afficher tous les éléments contenus dans votre dossier <span style="font-weight: bold;"><B>Envoyés</B></span>.</p>
+<p class="whs1">has:</p>
+<p class="whs2">Spécifie un attribut que le mail doit posséder. Les types d’objets que vous spécifiez sont : &quot;attachment&quot;,   &quot;téléphone&quot;, ou &quot;url&quot;. Par exemple,   <span class=code>has:attachment</span> vous permet de rechercher tous les mails contenant une ou plusieurs pièces jointes de n'importe quel type.</p>
+<p class="whs1">filename:</p>
+<p class="whs2">Spécifie le nom d’une pièce jointe. Par exemple ,<span 
+ class=code> filename:query.txt</span> permet de rechercher les mails ayant une pièce jointe nommée &quot;query.txt&quot;.</p>
+<p class="whs1">type:</p>
+<p class="whs2">Spécifie une recherche dans les pièces jointes d’un type spécifique. Les types de pièces jointes que vous pouvez spécifier sont : &quot;text&quot;,   &quot;word&quot;, &quot;excel&quot;, et &quot;pdf&quot;.   Par exemple, <span class=code>type: word &quot;salut&quot;</span> permet de rechercher les mails avec des pièces jointes qui sont des documents Microsoft Word. La recherche s'effectue dans ces pièces jointes par rapport au mot &quot;salut&quot;.</p>
+<p class="whs1">attachment:</p>
+<p class="whs2">Spécifie tout élément d’un certain type de pièce jointe. Par exemple, <span class=code>attachment:word</span> vous permet de rechercher tous les mails ayant des pièces jointes Word.</p>
+<p class="whs1">is:</p>
+<p class="whs2">Recherche les mails avec un statut spécifique.   Les valeurs autorisées sont &quot;non lu&quot;, &quot;lu&quot;, &quot;avec drapeau&quot;,   &quot;sans drapeau&quot;, &quot;envoyé&quot;, &quot;brouillon&quot;,   &quot;reçu&quot;, &quot;répondu&quot;, &quot;non répondu&quot;,   &quot;transféré&quot;, non transféré&quot;, &quot;partout&quot;,   &quot;distant&quot; (dans un dossier partagé), &quot;local&quot;, &quot;envoyé&quot;.   Par exemple, <span class=code>is: unread</span> vous permet de rechercher tous les mails non lus.</p>
+<p class="whs1">date:</p>
+<p class="whs2">Utilisez ce mot clé pour spécifier une date, en utilisant le format de date par défaut de votre navigateur (pour le français, le format est jj/mm/aaaa). Par exemple,   <span class=code>date:2/1/2008</span> permet de rechercher les mails datés du 1er février 2008. Les symboles supérieur à (&gt;) ou inférieur à (&lt;) peuvent être utilisés en remplacement de <i>après</i> ou <i>avant</i>. &gt;= et &lt;= sont également autorisés.   </p>
+<p class="whs1">after:</p>
+<p class="whs2">Spécifie un mail envoyé après une certaine date.   Par exemple, <span class=code>after:2/1/2008</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;">  spécifie les mails envoyés après le 1er février 2007</font></span><span class=code style="font-weight: normal;">.</span></p>
+<p class="whs1">before:</p>
+<p class="whs2">Similaire à <span class=code>after:</span> hormis le fait qu’il définit les mails envoyés avant la date spécifiée.</p>
+<p class="whs1">size:</p>
+<p class="whs2">Spécifie les mails dont la taille totale, y compris les pièces jointes, est d’un certain nombre d’octets, de kilo-octets, ou de méga-octets. &nbsp;Par exemple, <span class=code>size:12 ko</span> permet de rechercher les mails dont la taille est exactement de 12 Ko. Les symboles supérieur à (&gt;) ou inférieur à (&lt;) peuvent être utilisés à la place de plus grand ou plus petit.</p>
+<p class="whs1">larger:</p>
+<p class="whs2">Identique à size: hormis le fait qu’il permet de spécifier une taille supérieure à celle indiquée.</p>
+<p class="whs1">smaller:</p>
+<p class="whs2">Identique à size: hormis le fait qu’il permet de spécifier une taille inférieure à celle indiquée.</p>
+<p class="whs1">tag:</p>
+<p class="whs2">Recherche les mails marqués par un tag spécifique. Par exemple,<span class=code> tag :ambre</span> permet de rechercher les mails marqués d’un tag appelé &quot;ambre&quot;.</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

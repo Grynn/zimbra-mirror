@@ -1,0 +1,70 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
+<topic name="添加效率手册的背景颜色" url="Calendar/Adding_background_color_to_calendars.htm" />
+<topic name="关于效率手册" url="Calendar/b_About_Calendar.htm" />
+<topic name="取消会议" url="Calendar/b_Canceling_a_meeting.htm" />
+<topic name="创建新的效率手册" url="Calendar/b_Create_New_Calendar.htm" />
+<topic name="创建定期重复的约会" url="Calendar/b_creating_recurring_appointments.htm" />
+<topic name="安排会议" url="Calendar/b_Scheduling_a_meeting.htm" />
+<topic name="效率手册视图" url="Calendar/Calendar_Views.htm" />
+<topic name="导出 iCal 效率手册" url="Calendar/Exporting_your_iCal_calendar.htm" />
+<topic name="导入 iCal 效率手册" url="Calendar/Importing_your_iCal_calendar.htm" />
+<topic name="添加新联系人" url="Contacts/b_Adding_new_contacts.htm" />
+<topic name="地址簿" url="Contacts/b_Your_Address_Books.htm" />
+<topic name="支持的附件类型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+<topic name="将文件附加到邮件" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
+<topic name="编写新邮件" url="Creating_Messages/b_Composing_email_message.htm" />
+<topic name="转发邮件" url="Creating_Messages/forwarding_a_mail_message.htm" />
+<topic name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
+<topic name="保存邮件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
+<topic name="无法投递的邮件" url="Creating_Messages/undeliverable_mail.htm" />
+<topic name="过滤邮件" url="filters/bc_Filtering_your_messages.htm" />
+<topic name="支持的过滤条件与操作" url="filters/filter_conditions_and_actions_supported.htm" />
+<topic name="开始使用 ZCS 基本版网络客户端" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+<topic name="关于文件夹" url="Navigation_folders_and_tips/about_folders.htm" />
+<topic name="怎样浏览“邮件”" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+<topic name="快捷键" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+<topic name="管理邮件的显示方式" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+<topic name="浏览您的邮箱" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
+<topic name="删除文件夹" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+<topic name="邮件分类" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="改变登录的默认客户端类型" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="系统文件夹" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="限额" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="重命名文件夹" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="“已发送邮件”文件夹" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="对“内容窗格列表”列排序" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<topic name="订阅 RSS/ATOM 源" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+<topic name="“已删除邮件”文件夹" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="附件阻止" url="reading_mail/attachment_blocking.htm" />
+<topic name="我如何知道收到了新邮件" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
+<topic name="将邮件标记为未读" url="reading_mail/b_Marking_mail_as_unread.htm" />
+<topic name="打印电子邮件" url="reading_mail/b_Printing_email_messages.htm" />
+<topic name="清除邮件" url="reading_mail/b_Purging_email_messages.htm" />
+<topic name="邮件阻止功能" url="reading_mail/Message_blocking_feature.htm" />
+<topic name="打开附加文件" url="reading_mail/opening_file_attachments.htm" />
+<topic name="阅读邮件" url="reading_mail/reading_mail.htm" />
+<topic name="还原删除的邮件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+<topic name="回复邮件" url="reading_mail/replying_to_mail_messages.htm" />
+<topic name="使用搜索功能" url="Search/b_Using_Search.htm" />
+<topic name="查询语言说明" url="Search/query_language_description.htm" />
+<topic name="为邮件和联系人加标记" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+<topic name="为邮件加上标志" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+<topic name="关于任务" url="Tasks/About_Tasks.htm" />
+<topic name="创建任务列表" url="Tasks/bc_Create_task_lists.htm" />
+<topic name="改变任务" url="Tasks/Change_a_task.htm" />
+<topic name="任务排序" url="Tasks/Sorting_tasks_.htm" />
+<topic name="自动添加签名" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+<topic name="设置您的选项" url="Userspecific/b_Setting_your_Options.htm" />
+<topic name="变更您的密码" url="Userspecific/chaning_your_password.htm" />
+<topic name="如果忘记了密码" url="Userspecific/if_you_forget_your_password.htm" />
+<topic name="如果会话过期" url="Userspecific/if_your_session_expires.htm" />
+<topic name="登录和退出" url="Userspecific/logging_on_and_off.htm" />
+<topic name="新邮件通知" url="Userspecific/New_mail_notifications.htm" />
+<topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<topic name="休假讯息" url="Userspecific/vacation_message.htm" />
+<topic name="版本" url="version.htm" />
+
+</ftstdata>  

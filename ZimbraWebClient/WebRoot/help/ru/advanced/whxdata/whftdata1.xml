@@ -1,0 +1,59 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="Удаление сообщений" url="reading_mail/archiving_old_messages.htm" />
+<topic name="Блокирование вложений" url="reading_mail/attachment_blocking.htm" />
+<topic name="Отображение HTML-кода в почтовых сообщениях" url="reading_mail/displaying_html_in_email_messages.htm" />
+<topic name="Как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+<topic name="Пометить как непрочитанное" url="reading_mail/marking_mail_as_unread.htm" />
+<topic name="Функция блокирования сообщений" url="reading_mail/Message_blocking_feature.htm" />
+<topic name="Открытие вложений" url="reading_mail/opening_file_attachments.htm" />
+<topic name="Печать сообщений" url="reading_mail/printing_a_mail_message.htm" />
+<topic name="Чтение почты" url="reading_mail/reading_mail.htm" />
+<topic name="Чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+<topic name="Восстановление удаленных почтовых сообщений" url="reading_mail/recovering_deleted_mail_messages.htm" />
+<topic name="Ответ на почтовые сообщения" url="reading_mail/replying_to_mail_messages.htm" />
+<topic name="Поиск сообщений" url="Search/_search__vs.__search_for_.htm" />
+<topic name="Поиск по критериям AND и OR" url="Search/and_vs_or_searches.htm" />
+<topic name="Создание запросов поиска" url="Search/building_search_queries.htm" />
+<topic name="Содержит и соответствует" url="Search/contains_vs_matches.htm" />
+<topic name="Описание языка запросов" url="Search/query_language_description.htm" />
+<topic name="Быстрый поиск" url="Search/Quick_search.htm" />
+<topic name="Сохранение запросов поиска" url="Search/saving_search_queries.htm" />
+<topic name="Примеры поиска" url="Search/search_examples.htm" />
+<topic name="Использование функции поиска" url="Search/using_the_search_feature.htm" />
+<topic name="Использование * (звездочки) в качестве подстановочного знака в профиле поиска" url="Search/Using_Wildcard_in_Search.htm" />
+<topic name="Назначение тегов сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+<topic name="Удаление тегов" url="Tags_and_flags/deleting_tags.htm" />
+<topic name="Установка флагов для почтовых сообщений" url="Tags_and_flags/Flagging_an_email_message.htm" />
+<topic name="Использование тегов для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+<topic name="О задачах" url="Tasks/About_Tasks.htm" />
+<topic name="Добавление задачи" url="Tasks/Add_a_task.htm" />
+<topic name="Изменение задачи" url="Tasks/Change_a_task.htm" />
+<topic name="Создание папок задач" url="Tasks/Create_tasks_folders.htm" />
+<topic name="Удаление задачи" url="Tasks/Delete_a_task.htm" />
+<topic name="Перемещение задач" url="Tasks/Moving_tasks.htm" />
+<topic name="Принятие доступа к списку задач" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+<topic name="Общедоступный список задач" url="Tasks/Share_your_Task_folder.htm" />
+<topic name="Сортировка задач" url="Tasks/Sorting_tasks_.htm" />
+<topic name="Добавление внешних учетных записей" url="Userspecific/Adding_POP_accounts.htm" />
+<topic name="Сохранение работы" url="Userspecific/browser_session_handling.htm" />
+<topic name="Изменение часового пояса по умолчанию" url="Userspecific/Changing_your_default_timezone.htm" />
+<topic name="Изменение параметров пользователя" url="Userspecific/Changing_Your_User_Options.htm" />
+<topic name="Изменение пароля" url="Userspecific/chaning_your_password.htm" />
+<topic name="Создание образов" url="Userspecific/Creating_Personas.htm" />
+<topic name="Если вы забыли пароль" url="Userspecific/if_you_forget_your_password.htm" />
+<topic name="Если истекло время сеанса" url="Userspecific/if_your_session_expires.htm" />
+<topic name="Вход и выход" url="Userspecific/logging_on_and_off.htm" />
+<topic name="Управление личными данными учетной записи" url="Userspecific/Mail_Identities.htm" />
+<topic name="Доступ к внешним учетным записям" url="Userspecific/Managing_your_POP_Accounts.htm" />
+<topic name="Уведомления о новых сообщениях" url="Userspecific/New_mail_notifications.htm" />
+<topic name="Установка адреса для пересылки" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+<topic name="Восстановление параметров по умолчанию" url="Userspecific/the__restore_defaults__button.htm" />
+<topic name="Использование подписи" url="Userspecific/using_a_signature.htm" />
+<topic name="Сообщение об отсутствии" url="Userspecific/vacation_message.htm" />
+<topic name="версия" url="version.htm" />
+<topic name="О модулях Zimlet" url="Zimlets/About_Zimlets.htm" />
+
+</ftstdata>  

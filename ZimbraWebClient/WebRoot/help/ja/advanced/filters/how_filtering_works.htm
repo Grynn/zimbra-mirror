@@ -1,0 +1,138 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>フィルター機能のしくみ</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+p.whs2 { x-condition:Advanced_WC; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("フィルターを作成する \nフィルター規則を設定する");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>フィルター規則を設定する</h1>
+<p>メールフィルター機能を使用すると、規則を定義して受信メールを管理できます。メールフィルターは、[<span style="font-weight: bold;"><B>詳細設定</B></span>]の[<span style="font-weight: bold;"><B>メールフィルター</B></span>]タブで定義します。 </p>
+<p>受信メールメッセージがフィルター規則の条件に一致すると、その規則に関連付けられている操作が適用されます。たとえば、自分の主任から送られてきたメールを識別し、それを「主任からのメール」というフォルダに入れたり、特定のアドレスからのメッセージを[ゴミ箱]フォルダに自動的に振り分けたりできます。</p>
+<p>各フィルター規則は、それぞれ1つ以上の条件と1つ以上の操作で構成されます。</p>
+<h3>フィルターの条件</h3>
+<p>各フィルター規則には、複数の条件を含めることができます。たとえば、主任が2つのアドレス（たとえば、jane.smith@company.comとjane-smith23@yahoo.com）からメールを送信してくる場合は、「主任」というフィルターを1つ作成し、そのフィルターに各メールアドレスに対する2つの条件を含めます。</p>
+<p>条件には以下のものを含めることができます。</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>メールヘッダーの[From:]、[To:]、[Cc:]欄に含まれる特定のアドレス</p></li>
+	<li class=p><p>添付ファイルの有無</p></li>
+	<li class=p><p>メールメッセージの件名または本文に含まれる単語または文字列</p></li>
+	<li class=p><p>どの条件にも否定形があります。たとえば、特定の単語を含まないメールを指定できます。</p></li>
+</ul>
+<p>条件を組み合わせることによって、メールに対する複雑な検索を実行できます。</p>
+<h3>「任意」と「すべて」</h3>
+<p>フィルター規則内の条件は、[<span style="font-weight: bold;"><B>任意</B></span>]と[<span style="font-weight: bold;"><B>すべて</B></span>]を使ってグループ化できます。これらは、検索機能のトピックで説明している検索の種類（<a href="../Search/and_vs_or_searches.htm">「AND」と「OR」 </a>）に似ています。「任意」が「OR」に対応し、「すべて」が「AND」に対応します。</p>
+<p>新しいフィルター規則の条件を定義するときに[<span style="font-weight: bold;"><B>任意</B></span>]を指定すると、それらの条件のうちのいずれかに一致したメッセージが一致とみなされ、そのメッセージに操作が適用されます。しかし、[<span style="font-weight: bold;"><B>すべて</B></span>]を指定した場合は、そのフィルター規則内のすべての条件に一致したメッセージだけが一致とみなされ、操作が適用されます。</p>
+<h3>フィルター規則の操作</h3>
+<p>各フィルター規則には、1つまたは複数の操作を指定できます。操作には、以下のものがあります。</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>メッセージを[受信箱]に残す（操作なし）。</p></li>
+	<li class=p><p>メッセージを指定した別のフォルダに移動する。</p></li>
+	<li class=p><p>メッセージにタグを付ける。</p></li>
+	<li class=p><p>メッセージに既読またはフラグ付きのマークを付ける。</p></li>
+	<li class=p><p>メッセージを破棄する。この操作を指定すると、メールメッセージが破棄されます。メニューから選択できる削除操作とは異なります。削除した項目は[ゴミ箱]フォルダに移動しますが、「破棄」操作が適用されたメッセージはメールボックスに配信されることもありません。</p></li>
+	<li class=p><p>評価を中止する。この操作を指定すると、現在の規則に一致したメールメッセージに、それ以上のフィルター規則が適用されるのを防ぐことができます。</p></li>
+</ul>
+<p>「評価を中止する」操作は、各フィルター規則の最後に配置します。この操作を指定しなかった場合は、現在のフィルターがメールメッセージに一致した場合でも、そのメールメッセージに対して後続のフィルター規則が評価されます。あるメッセージに1つのフィルター規則が一致した後、同じメッセージにそれ以上のフィルター規則を適用するようなケースはほとんどありません（最初の操作と矛盾した操作が適用される可能性があります）。</p>
+<h3>いつフィルターが適用されるか</h3>
+<p>各受信メッセージはメールの配信時にフィルター規則と照合され、一致したメッセージについてはその時点でフィルターの操作が適用されます。 </p>
+<h3>フィルターが適用される順序</h3>
+<p>フィルターは、[メールフィルター]タブに一覧されている順序で適用されます。この順序は変更できます。 </p>
+<p>各フィルター内の条件は、各メールメッセージを評価するために使用されます。（フィルター規則内で指定されている[<span style="font-weight: bold;"><B>任意</B></span>]または[<span style="font-weight: bold;"><B>すべて</B></span>]に応じて）メッセージが条件を満たすと、そのメッセージは一致したとみなされます。各フィルター内の条件の順序は重要ではありません。</p>
+<p>メッセージが条件に一致すると、そのフィルター規則に関連付けられているすべての操作が、フィルター内に一覧されている順序で適用されます。</p>
+<h3>アクティブなフィルターと非アクティブなフィルター</h3>
+<p class="whs2">[オプション]の[メールフィルター]ページには、現在定義されているすべてのフィルターが一覧されます。[<span style="font-weight: bold;"><B>アクティブ</B></span>]チェックボックスを使用すると、フィルター規則を削除することなく、そのフィルターを有効または無効にできます。 </p>
+<p class="whs2">
+
+<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','サポートされているフィルターの条件と操作','filter_conditions_and_actions_supported.htm','メッセージをフィルターする','filtering_your_messages.htm');return false;" title="関連トピック"><img src="../ss_btn_関連トピック.gif" border=0 height=17 width=57 alt="関連トピック"></a>
+
+
+ </p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
+  WritePopupMenuLayer();
+//--></script><script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

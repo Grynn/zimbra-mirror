@@ -1,0 +1,161 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Описание языка запросов</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { font-weight:bold; }
+p.whs2 { margin-left:40px; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Поиск элементов\nОписание языка запросов");
+addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Описание языка запросов</h1>
+<p>Этот расширенный раздел подробно описывает грамматику языка поиска функции поиска веб-клиента Zimbra. Для получения вида, который пользователь видит в интерфейсе Zimbra, применяется определенный тип запроса. </p>
+<p><b style="font-weight: bold;">Совет</b>. На вкладке &laquo;Настройки-&gt;Общие&raquo; можно установить флажок <i><b>Всегда показывать строку поиска</b></i>,&nbsp;чтобы видеть текущий запрос на панели инструментов поиска. Например, если включен этот параметр, щелчок папки &laquo;Входящие&raquo; приведет к отображению строки запроса '<i><b>in:inbox'</b></i>.</p>
+<h2>Структура языка поиска</h2>
+<p>Простой поиск можно выполнить, просто введя слово в поле поиска. Только слова (слова без оператора поиска) используются для поиска в операторе &laquo;content:&raquo;, что соответствует любому тексту в сообщении. 
+ </p>
+<p>Расширенный поиск можно выполнить, указав <b>оператор поиска</b>. Оператор поиска &mdash; это специальное ключевое слово, за которым следует двоеточие, а затем другие параметры, специфические для этого оператора. Например: </p>
+<ul><li class=p><p>оператором в <b style="font-weight: bold;">in:inbox</b> является &laquo;in&raquo;, а параметром &mdash; &laquo;входящие&raquo;, что выдает сообщения, которые содержатся в папке по имени &laquo;входящие&raquo;. </p></li>
+</ul>
+<ul><li class=p><p>оператором в <b style="font-weight: bold;">from:petrov</b> является &laquo;от&raquo;, а параметром &laquo;petrov&raquo;, что выдает сообщение, которые содержат слово &laquo;petrov&raquo; в электронном адресе. 
+ </p></li>
+</ul>
+<p>Перед любым ключевым словом можно поставить префикс &laquo;не&raquo;, чтобы определить элементы, которые не содержат критерий, например <b>not in:inbox</b>. В профиле поиска не учитывается регистр букв, это значит, что &laquo;in:inbox&raquo; равнозначно &laquo;in:Inbox&raquo;. Знак минуса (<b>-</b>) является синонимом <b>NOT</b> Поэтому: <b>not in:inbox</b> равнозначно <b>-in:inbox</b>. </p>
+<p>В большинстве случаев нет необходимости включать знаки пунктуации, строку поиска, поскольку они игнорируются кодом поиска. Но в определенных случаях это не так (например, поиск времени &laquo;9:30&raquo; в сообщении), и в этих случаях параметр поиска следует заключать в кавычки. Например: <b>subject:&laquo;9:30&raquo;</b> выдает сообщения, которые содержат в теме &laquo;9:30&raquo;. </p>
+<p>Допустимые знаки в параметре поиска. </p>
+<ul><li class=p><p>Следующие знаки можно использовать в параметре поиска только заключенными в кавычки: ~ '&nbsp;! # $ % ^ &amp; * ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
+	<li class=p><p>Следующие знаки можно использовать в параметре поиска только, если они не являются первыми знаками: - + &lt; &gt; </p></li>
+</ul>
+<h2>Несколько условий поиска </h2>
+<p>Если вводится несколько условий поиска (разделенных пробелами), по умолчанию они объединяются оператором &laquo;AND&raquo;. <b>in:inbox tim</b> означает &laquo;выдать сообщения, которые находятся в папке &laquo;Входящие&raquo; И содержат слово &laquo;tim&raquo;. Для поиска с использованием нескольких критериев, можно найти элементы соответствующие одному или всем указанным критериям. Можно выполнить оба типа поиска с использованием функции создания расширенного поиска. </p>
+<p>Для всех областей поиска, кроме обычного поиска, правила следующие. </p>
+<ul><li class=p><p>Поиск сообщений, соответствующих любым указанным критериям называется поиском с условием '<b>OR'</b>, потому что, если сообщение содержит X или Y, оно считается соответствующим условиям поиска. Для панелей расширенного поиска с несколькими установленными флажками выбор нескольких вариантов на одной панели создает поиск для этих элементов с условием <b>OR</b>. </p></li>
+	<li class=p><p>Поиск сообщений, которые содержат X и Y называется поиском с условием <b>AND</b>, потому что сообщение должно соответствовать указанным критериям, чтобы считаться соответствием. Для панелей расширенного сервера с установленными флажками, открытие нескольких копий одной и той же панели и установка разных флажков на каждой из них делает необходимым определение критериев поиска как поиска с условием <b>AND</b>. </p></li>
+</ul>
+<p>В запросе появится только &laquo;OR&raquo;. Если задан параметр показывать запрос поиска на панели поиска по мере выбора в поле &laquo;Расширенный поиск&raquo;, текстовое окно поиска будет обновляться и отображать полученный запрос. В профиле поиска типа <b>AND</b> слово <b>AND</b> не отображается. 
+ </p>
+<p><b style="font-weight: bold;">Совет</b>. Использование скобок с операторами AND и OR. Слова в скобках считаются единицей. Например, <b>from: (иван сидоров)</b> эквивалентно <b>from:иван AND from:сидоров.</b> Если использовать OR в скобках, <b>from:(иван or иванов)</b>, результат поиска будет <b>from:иван OR from:сидоров.</b> </p>
+<h3>Использование <b>*</b> в качестве подстановочного знака в поиске </h3>
+<p>Звездочку (<b>*</b>) можно использовать в качестве подстановочного знака при поиске содержимого, которое содержит слова с похожим написанием. </p>
+<p>Используйте звездочку <b>(*)</b> как подстановочный знак после префикса. Например, строка поиска <b>ты*</b> выдает элементы <i>ты</i>, <i>тыква</i>, <i>тысяча</i> и т.д. </p>
+<h2>Примеры и описания ключевых слов</h2>
+<p class="whs1">content:</p>
+<p class="whs2">Определяет текст, который должен содержаться в сообщении. Например, <span class=code>content:яблоки</span> находит все элементы, которые содержат слово &laquo;яблоки&raquo;.</p>
+<p class="whs1">from:</p>
+<p class="whs2">Определяет имя или электронный адрес отправителя, которые содержатся в заголовке &laquo;От:&raquo;. Это может быть текст &laquo;Иван Иванов III&raquo;, электронный адрес &laquo;ivan@kontora.ru&raquo; или домен &laquo;zimbra.com&raquo;.</p>
+<p class="whs1">to:</p>
+<p class="whs2">Аналогично условию &laquo;От:&raquo; за исключением того, что здесь определяются получатели, указанные в заголовке &laquo;Кому:&raquo;.</p>
+<p class="whs1">cc:</p>
+<p class="whs2">Аналогично условию &laquo;От:&raquo; за исключением того, что здесь определяется получатель из заголовка сообщения &laquo;Копия:&raquo;.</p>
+<p class="whs1">subject:</p>
+<p class="whs2">Определяет текст, отображаемый в заголовке сообщения &laquo;Тема&raquo;. Примером может быть <span class=code>subject:&quot;новая политика отпусков&quot;</span>. Для поиска точного соответствия используются кавычки.</p>
+<p class="whs1">in:</p>
+<p class="whs2">Определяет папку. Например, <span class=code>in:отправленные</span> выдаст все элементы в папке <span style="font-weight: bold;"><B>Отправленные</B></span>.</p>
+<p class="whs1">has:</p>
+<p class="whs2">Определяет атрибут, который должен содержаться в сообщении. Типы объектов, которые можно определить: &laquo;attachment&raquo;, &laquo;phone&raquo; или &laquo;url&raquo;. Например, если указать <span class=code>has:attachment</span> будут найдены все сообщения, которые содержат одно или несколько вложений любого типа.</p>
+<p class="whs1">filename:</p>
+<p class="whs2">Определяет имя файла вложения. Например, если указать <span   class=code> filename:query.tx</span>t будут найдены все сообщения с вложением с именем &laquo;query.txt&raquo;.</p>
+<p class="whs1">type:</p>
+<p class="whs2">Определяет поиск во вложениях определенного типа. Типы вложений, которые можно определить: &laquo;текст&raquo;, &laquo;word&raquo;, &laquo;excel&raquo; и &laquo;pdf&raquo;. Например, если указать <span class=code>type:word &laquo;hello&raquo;</span>, будут найдены сообщения с вложениями формата Microsoft Word, содержащие слово &laquo;hello&raquo;.</p>
+<p class="whs1">attachment:</p>
+<p class="whs2">Определяет элемент с определенным типом вложения. Например, если указать <span class=code>attachment:word</span>, будут найдены все сообщения с вложениями формата Word.</p>
+<p class="whs1">is:</p>
+<p class="whs2">Поиск сообщений с определенным статусом. Допустимые значения: &laquo;unread&raquo;, &laquo;read&raquo;, &laquo;flagged&raquo;, &laquo;unflagged&raquo;, &laquo;sent&raquo;, &laquo;draft&raquo;, &laquo;received&raquo;, &laquo;replied&raquo;, &laquo;unreplied&raquo;, &laquo;forwarded&raquo;, &laquo;unforwarded&raquo;, &laquo;anywhere&raquo;, &laquo;remote&raquo; (в общей папке), &laquo;local&raquo;. Например, если указать <span class=code>is: unread</span>, будут найдены все непрочитанные сообщения.</p>
+<p class="whs1">date:</p>
+<p class="whs2">Это ключевое слово используется для определения даты с использованием формата принятого по умолчанию в используемом браузере (для русского языка формат следующий: dd.mm.yyyy). Например, если указать <span class=code>date:1/2/2007</span>, будут найдены сообщения датированные 1 февраля, 2007. Можно использовать знаки больше (&gt;) или меньше (&lt;) вместо <i>после</i> или <i>до</i>. &gt;= и &lt;= также допустимы. 
+ </p>
+<p class="whs1">after:</p>
+<p class="whs2">Определяет сообщения отправленные после определенной даты. Например, <span class=code>after:1/2/2007</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;"> определяет сообщения, отправленные после 1 февраля, 2007</font></span><span class=code style="font-weight: normal;">.</span></p>
+<p class="whs1">before:</p>
+<p class="whs2">Аналогично условию <span class=code>after:</span>, но определяет сообщения, отправленные до определенной даты.</p>
+<p class="whs1">size:</p>
+<p class="whs2">Определяет сообщения, общий размер которых, включая вложения, соответствует определенному объему в байтах, килобайтах или мегабайтах.&nbsp;Например, если указать <span class=code>size:12 kb</span> будут найдены сообщения с точным размером 12 КБ. Вместо слов &laquo;больше&raquo; или &laquo;меньше&raquo; можно использовать знаки больше (&gt;) или меньше (&lt;).</p>
+<p class="whs1">larger:</p>
+<p class="whs2">Аналогично условию размера, но определяет размер больше указанного.</p>
+<p class="whs1">smaller:</p>
+<p class="whs2">Аналогично условию размера, но определяет размер меньше указанного.</p>
+<p class="whs1">tag:</p>
+<p class="whs2">Находит сообщения, помеченные определенным тэгом. Например, если указать <span class=code> tag:amber</span>, будут найдены сообщения с тегом, который называется &laquo;Амбра&raquo;.</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

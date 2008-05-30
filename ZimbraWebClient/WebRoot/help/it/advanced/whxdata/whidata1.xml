@@ -1,0 +1,309 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="Funzioni dell'interfaccia utente" >
+  <topic name="Funzioni dell'interfaccia utente e tasti di scelta rapida" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="funzioni di Zimbra Web Client" >
+  <topic name="Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="GAL e Contatti, differenze" >
+  <topic name="GAL e Contatti, differenze" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="Generatore delle ricerche" >
+  <topic name="Creazione delle query di ricerca" url="Search/building_search_queries.htm" />
+</key>
+<key name="HTML" >
+  <topic name="Visualizzazione HTML dei messaggi email" url="reading_mail/displaying_html_in_email_messages.htm" />
+  <topic name="Uso dell'editor HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="HTML, impostazioni predefinite" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="HTML,visualizzazione dei messaggi come" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="identità di posta" >
+  <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="identità di posta usata nella composizione del messaggio" >
+  <topic name="Composizione di un nuovo messaggio email" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="importazione di Agende iCal" >
+  <topic name="Importazione dell'Agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="importazione di contatti" >
+  <topic name="Importazione di Contatti" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="importazione di Rubriche" >
+  <topic name="Importazione di Contatti" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="impostazione di un indirizzo di inoltro" >
+  <topic name="Impostazione di un indirizzo di inoltro" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="impostazioni delle preferenze" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="indirizzario globale della società" >
+  <topic name="Uso dell'indirizzario globale GAL della società" url="Contacts/using_the_corporate_address_book.htm" />
+</key>
+<key name="indirizzi IMAP, aggiunta" >
+  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="indirizzi POP, aggiunta" >
+  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="indirizzo email di inoltro" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="indirizzo in Mail, completamento" >
+  <topic name="Uso della ricerca degli indirizzi" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Inoltro" >
+  <topic name="Inoltro di un messaggio email" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="inoltro dei messaggi" >
+  <topic name="Impostazione di un indirizzo di inoltro" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="interfaccia, funzioni" >
+  <topic name="Area di lavoro di Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="intervallo di ricezione automatica della posta" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="introduzione ai Blocchi Note" >
+  <topic name="Uso di Blocchi Note" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="invito spostato nel Cestino" >
+  <topic name="Risposta a un invito" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="invito, risposta" >
+  <topic name="Risposta a un invito" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="iscrizione ai feed RSS" >
+  <topic name="Iscrizione ai feed RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="jolly, caratteri" >
+  <topic name="jolly, caratteri" url="filters/wildcards.htm" />
+</key>
+<key name="libero/occupato" >
+  <topic name="Visualizzazione degli orari liberi/occupati" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="luogo, prenotazione" >
+  <topic name="Pianificazione delle risorse" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="mail" >
+  <topic name="Lettura dei messaggi" url="reading_mail/reading_mail.htm" />
+  <key name="Lettura" >
+    <topic name="Lettura dei messaggi" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="Menu del tasto destro del mouse" >
+  <topic name="Menu del tasto destro del mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="messaggi email di account POP, ricezione" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Messaggi non recapitati" >
+  <topic name="Messaggi non recapitati" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="Messaggio di assenza" >
+  <topic name="Messaggio di assenza" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Messaggio email" >
+  <topic name="Parti di un messaggio email" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="Modifica contatto" >
+  <topic name="Modifica di un contatto" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="modifica dell'elenco di impegni condiviso" >
+  <topic name="Condivisione dell'elenco di impegni" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="modifica delle autorizzazioni alle cartelle di posta" >
+  <topic name="Revoca dell'accesso a una cartella condivisa" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="modifica delle opzioni" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="modifica di un appuntamento" >
+  <topic name="Modifica di appuntamenti ricorrenti" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="Navigazione" >
+  <topic name="Area Cartelle" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <topic name="Navigazione nell'interfaccia utente" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="navigazione, tastiera" >
+  <topic name="Tasti di scelta rapida della tastiera di ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="notifica email" >
+  <topic name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="nuovi messaggi" >
+  <topic name="Come ricevere nuovi messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="opzione, messaggio di assenza" >
+  <topic name="Messaggio di assenza" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="opzioni" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="opzioni, modifica" >
+  <topic name="Modifica delle opzioni utente" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="opzioni, nuova notifica email" >
+  <topic name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="opzioni, ripristino predefinite" >
+  <topic name="Ripristino delle opzioni predefinite" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="opzioni, visualizzazione dal riquadro di lettura" >
+  <topic name="Lettura dei messaggi dal riquadro di lettura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="ordinamento degli impegni" >
+  <topic name="Ordinamento degli impegni " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="ordinamento delle colonne del riquadro del contenuto" >
+  <topic name="Ordinamento delle conversazioni" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+</key>
+<key name="organizzazione di una riunione" >
+  <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="pagine, Documenti" >
+  <topic name="Creazione di una nuova pagina" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="password" >
+  <topic name="Se hai dimenticato la password" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Modifica della password" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="personalità" >
+  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="pianificazione di una riunione" >
+  <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="pianificazione di una sala o di un'attrezzatura" >
+  <topic name="Pianificazione delle risorse" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="posta, identità di" >
+  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="posta, ricezione" >
+  <topic name="Ricezione dei messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="preferenze utente" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="preferenze, modifica" >
+  <topic name="Modifica delle opzioni utente" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="preferenze, visualizzazione dal riquadro di lettura" >
+  <topic name="Lettura dei messaggi dal riquadro di lettura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="prenotazione di sale e attrezzature" >
+  <topic name="Pianificazione delle risorse" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="promemoria appuntamenti" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="query di ricerca" >
+  <topic name="Uso della funzione di ricerca avanzata" url="Search/building_search_queries.htm" />
+  <topic name="Salvataggio delle query di ricerca" url="Search/saving_search_queries.htm" />
+  <key name="Salvataggio" >
+    <topic name="Salvataggio delle query di ricerca" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="Recupero" >
+  <topic name="Recupero dei messaggi email eliminati" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="messaggi email eliminati" >
+    <topic name="Recupero dei messaggi email eliminati" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="regole, filtro" >
+  <topic name="Filtro dei messaggi" url="filters/filtering_your_messages.htm" />
+  <topic name="Funzionamento dei filtri" url="filters/how_filtering_works.htm" />
+</key>
+<key name="revoca dei privilegi dell'Agenda" >
+  <topic name="Delega dell'accesso all'Agenda" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="revoca dell'accesso all'elenco di impegni condiviso" >
+  <topic name="Condivisione dell'elenco di impegni" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="revoca dell'accesso alle cartelle di posta condivise" >
+  <topic name="Revoca dell'accesso a una cartella condivisa" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="revoca delle autorizzazioni sulla Rubrica" >
+  <topic name="Condivisione della Rubrica" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="ricerca con caratteri jolly" >
+  <topic name="Uso della funzione di ricerca" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="ricerca di un messaggio" >
+  <topic name="Ricerca di messaggi" url="Search/_search__vs.__search_for_.htm" />
+</key>
+<key name="Ricerca rapida" >
+  <topic name="Ricerca rapida" url="Search/Quick_search.htm" />
+</key>
+<key name="ricerca, and/or" >
+  <topic name="Differenza tra tipi di ricerche &quot;And&quot; e &quot;Or&quot;" url="Search/and_vs_or_searches.htm" />
+</key>
+<key name="ricezione dei messaggi" >
+  <topic name="Ricezione dei messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="ricorda nome utente e password su questo computer" >
+  <topic name="Accesso e uscita" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="rifiuto di una richiesta di condivisione di un'Agenda" >
+  <topic name="Rifiuto di una richiesta di condivisione di un'Agenda" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</key>
+<key name="Ripristino delle opzioni predefinite" >
+  <topic name="Ripristino delle opzioni predefinite" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="riquadro delle cartelle" >
+  <topic name="Area Cartelle" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="riquadro di lettura" >
+  <topic name="Lettura dei messaggi dal riquadro di lettura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="riquadro di navigazione" >
+  <topic name="Area Cartelle" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="risorsa" >
+  <topic name="Pianificazione delle risorse" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="Risposta" >
+  <topic name="Risposta ai messaggi email" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="messaggi email" >
+    <topic name="Risposta ai messaggi email" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="riunioni." >
+  <topic name="Appuntamenti, riunioni ed eventi" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="RSS" >
+  <topic name="Iscrizione ai feed RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="Rubrica, condivisione" >
+  <topic name="Condivisione della Rubrica" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Rubrica, contatti di un gruppo" >
+  <topic name="Creazione di elenchi di contatti di un gruppo" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Rubrica, modifica dell'accesso condiviso" >
+  <topic name="Condivisione della Rubrica" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Rubrica, rimozione dell'accesso" >
+  <topic name="Condivisione della Rubrica" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Rubriche, importazione" >
+  <topic name="Importazione di Contatti" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="ruoli" >
+  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+</key>
+
+</indexdata>

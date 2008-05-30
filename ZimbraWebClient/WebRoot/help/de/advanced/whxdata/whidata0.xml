@@ -1,0 +1,328 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="Abmelden" >
+  <topic name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="Abwesenheitsmeldung" >
+  <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Adressbuch freigeben" >
+  <topic name="Ihr Adressbuch freigeben" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Adressbuch, Freigabe ändern" >
+  <topic name="Ihr Adressbuch freigeben" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Adressbuch, Kontaktgruppen" >
+  <topic name="Kontaktgruppen anlegen" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Adressbuch, Zugriffsrechte entziehen" >
+  <topic name="Ihr Adressbuch freigeben" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Adressbücher freigeben" >
+  <topic name="Ihr Adressbuch freigeben" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Adressbücher importieren" >
+  <topic name="Kontakte importieren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Adresse für Weiterleitung einrichten" >
+  <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="Als Anhänge unterstützte Dateitypen" >
+  <topic name="Als Anhänge unterstützte Dateitypen" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="Als HTML anzeigen" >
+  <topic name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="Anhänge" >
+  <topic name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="Anhänge blockieren" >
+  <topic name="Anhänge blockieren" url="reading_mail/attachment_blocking.htm" />
+  <topic name="Mailblockierung" url="reading_mail/Message_blocking_feature.htm" />
+</key>
+<key name="Anhängen" >
+  <topic name="Dateien an eine Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <key name="Dateien" >
+    <topic name="Dateien an eine Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  </key>
+</key>
+<key name="Ansicht, Kalender" >
+  <topic name="Wissenswertes zum Zimbra-Kalender" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="Antworten" >
+  <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="Mails" >
+    <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="Assistent" >
+  <topic name="Zimbra-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="Atom-Feed" >
+  <topic name="RSS/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="Auf externe Accounts zugreifen" >
+  <topic name="Auf externe Accounts zugreifen" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="Aufgaben sortieren" >
+  <topic name="Aufgaben sortieren " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="Autovervollständigung von Adressen" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Benutzerdefinierte Ordner" >
+  <topic name="Benutzerdefinierte Ordner anlegen" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="Benutzereinstellungen" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Berechtigungen für Adressbuch entziehen" >
+  <topic name="Ihr Adressbuch freigeben" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Beschreibung der Sprache für Suchabfragen" >
+  <topic name="Beschreibung der Sprache für Suchabfragen" url="Search/query_language_description.htm" />
+</key>
+<key name="Besprechung planen" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Besprechungen" >
+  <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Browser" >
+  <topic name="In Zimbra mit Browsern arbeiten" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+</key>
+<key name="Dokumente, Rich-Text-Editor" >
+  <topic name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="Drucken" >
+  <topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
+  <topic name="Mails drucken" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="Mail" >
+    <topic name="Mails drucken" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="Drucken von Kalendern" >
+  <topic name="Kalender drucken" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="Einfügen von Signaturen" >
+  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Einladung beantworten" >
+  <topic name="Einladung beantworten" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="Einladung im Papierkorb" >
+  <topic name="Einladung beantworten" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="Einstellungen" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Einstellungen ändern" >
+  <topic name="Benutzeroptionen ändern" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="Einstellungen, Lesefenster anzeigen" >
+  <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Einstellungen, Standard wiederherstellen" >
+  <topic name="Standardeinstellungen wiederherstellen" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="Einstieg in die Arbeit mit Notizbüchern" >
+  <topic name="In Notizbüchern arbeiten" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="Ereignisse" >
+  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+  <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="Erstellen" >
+  <topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <key name="Neue Mail" >
+    <topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  </key>
+</key>
+<key name="Erstellen von Tags" >
+  <topic name="Mails mit Tags klassifizieren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="Erweiterte Suche" >
+  <topic name="Suchabfragen erstellen" url="Search/building_search_queries.htm" />
+</key>
+<key name="Externe Accounts" >
+  <topic name="POP-Accounts verwalten" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="Externe Accounts hinzufügen" >
+  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="Filter, Funktionsweise" >
+  <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Filterbedingungen" >
+  <topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Firmenadressbuch" >
+  <topic name="Mit dem Firmenadressbuch arbeiten" url="Contacts/using_the_corporate_address_book.htm" />
+</key>
+<key name="Frei/Belegt" >
+  <topic name="Frei/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="Freigabe für Mail-Ordner widerrufen" >
+  <topic name="Zugriff auf einen freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="Freigabe von Aufgabenlisten beenden" >
+  <topic name="Ihre Aufgabenliste freigeben" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="Freigabe, Adressbuch" >
+  <topic name="Ihr Adressbuch freigeben" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Freigegebene Aufgabenliste ändern" >
+  <topic name="Ihre Aufgabenliste freigeben" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="Funktionen der Benutzeroberfläche" >
+  <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="Funktionen des Zimbra-Web-Clients" >
+  <topic name="Wissenswertes zur Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="GAL und Kontakte, Adressbücher" >
+  <topic name="GAL und Kontakte, Adressbücher" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="Ganztägiger Termin" >
+  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="Gerät reservieren" >
+  <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="Herkömmliche Ansicht" >
+  <topic name="Herkömmliche Ansicht" url="Navigation_folders_and_tips/Traditional_View.htm" />
+</key>
+<key name="HTML" >
+  <topic name="Mails im HTML-Format anzeigen" url="reading_mail/displaying_html_in_email_messages.htm" />
+  <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="HTML zur Formatierung nutzen" >
+  <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="HTML, Mails anzeigen als" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="HTML, Standardeinstellungen einrichten" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="iCal-Kalender importieren" >
+  <topic name="Ihren iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Identitäten" >
+  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="Ihren Kalender freigeben" >
+  <topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="IMAP-Account" >
+  <topic name="POP-Accounts verwalten" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="IMAP-Accounts hinzufügen" >
+  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="IMAP-Adressen hinzufügen" >
+  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="Importieren oder Exportieren des iCal-Kalenders" >
+  <topic name="Ihren iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Importieren von Adressbüchern" >
+  <topic name="Kontakte importieren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Importieren von Kontakten" >
+  <topic name="Kontakte importieren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Inhaltsfenster als Startseite einrichten" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Kalender drucken" >
+  <topic name="Kalender drucken" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="Kalender, Ereignisse" >
+  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="Kalender, Frei/Belegt" >
+  <topic name="Frei/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="Kalender, Wissenswertes" >
+  <topic name="Wissenswertes zum Zimbra-Kalender" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="Kalender, Zugriffsberechtigungen" >
+  <topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="Kalenderansicht" >
+  <topic name="Wissenswertes zum Zimbra-Kalender" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="Kalenderfreigabe ablehnen" >
+  <topic name="Kalenderfreigabe ablehnen" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</key>
+<key name="Kalenderrechte entziehen" >
+  <topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="Kapazitäten" >
+  <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="Kontakt" >
+  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+  <topic name="Kontakte" url="Contacts/contacts.htm" />
+  <topic name="Neuen Kontakt anlegen" url="Contacts/creating_a_new_contact.htm" />
+  <key name="Bearbeiten" >
+    <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="Kontakt bearbeiten" >
+  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="Kontakte automatisch hinzufügen" >
+  <topic name="Kontakt hinzufügen, automatisch" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+</key>
+<key name="Kontakte drucken" >
+  <topic name="Kontakte drucken" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="Kontakte hinzufügen" >
+  <topic name="Neuen Kontakt anlegen" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="Kontakte importieren" >
+  <topic name="Kontakte importieren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Kontakte löschen" >
+  <topic name="Kontakt löschen" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="Kontakte, Gelöschten Kontakt wieder in Adressbuch aufnehmen" >
+  <topic name="Kontakt löschen" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="Kontakte, Liste drucken" >
+  <topic name="Kontakte drucken" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="Kontaktgruppen" >
+  <topic name="Kontaktgruppen anlegen" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Kontaktliste" >
+  <topic name="Kontakte" url="Contacts/contacts.htm" />
+</key>
+<key name="Kontextmenüs" >
+  <topic name="Kontextmenüs" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="Lesefenster" >
+  <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Löschen" >
+  <topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="Ordner" >
+    <topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="Mail" >
+  <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
+  <topic name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <key name="Lesen" >
+    <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+
+</indexdata>

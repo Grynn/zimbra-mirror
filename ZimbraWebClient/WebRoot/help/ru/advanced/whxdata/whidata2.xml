@@ -1,0 +1,103 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="страницы, документы" >
+  <topic name="Создание новой страницы" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="таблицы, добавление на страницу «Документы»" >
+  <topic name="Добавление таблицы на страницу блокнота" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="теги" >
+  <topic name="Назначение тегов сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="Удаление тегов" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="Назначение" >
+    <topic name="Назначение тегов сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+  <key name="Удаление" >
+    <topic name="Удаление тегов" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+</key>
+<key name="теги, перетаскивание" >
+  <topic name="Назначение тегов сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
+<key name="теги, создание" >
+  <topic name="Использование тегов для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="уведомления о сообщениях" >
+  <topic name="Уведомления о новых сообщениях" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="Удаление" >
+  <topic name="Удаление папок" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="папки" >
+    <topic name="Удаление папок" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="удаление контактов" >
+  <topic name="Удаление контакта" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="удаление повторяющихся встреч" >
+  <topic name="Изменение повторяющихся встреч" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="Условия фильтра" >
+  <topic name="Поддерживаемые условия и действия фильтров" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
+</key>
+<key name="установка адреса для пересылки" >
+  <topic name="Установка адреса для пересылки" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="Установка флагов" >
+  <topic name="Установка флагов для почтовых сообщений" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="электронное сообщение" >
+    <topic name="Установка флагов для почтовых сообщений" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="Учетная запись IMAP" >
+  <topic name="Управление учетной записью POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="учетная запись IMAP, добавление" >
+  <topic name="Добавление учетных записей POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="Учетная запись POP" >
+  <topic name="Управление учетной записью POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="учетная запись POP, добавление" >
+  <topic name="Добавление учетных записей POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="фильтрация сообщений" >
+  <topic name="Фильтрация сообщений" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="фильтры, как работают" >
+  <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
+</key>
+<key name="форматирование с использованием HTML" >
+  <topic name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="форматированный текст для страниц «Документы»" >
+  <topic name="Использование форматированного текста" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="функции веб-клиента Zimbra" >
+  <topic name="О Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="функции интерфейса" >
+  <topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="функция поиска" >
+  <topic name="Использование функции поиска" url="Search/using_the_search_feature.htm" />
+  <key name="Использование" >
+    <topic name="Использование функции поиска" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="Функция создания поиска" >
+  <topic name="Создание запросов поиска" url="Search/building_search_queries.htm" />
+</key>
+<key name="черновик сообщения" >
+  <topic name="Сохранение черновиков сообщений" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="шрифты" >
+  <topic name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="экспорт ежедневника iCal" >
+  <topic name="Импорт ежедневника iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+
+</indexdata>

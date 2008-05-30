@@ -1,0 +1,108 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="scadenza sessione" >
+  <topic name="Se la sessione scade" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="segnare un appuntamento come privato" >
+  <topic name="Pagina Appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Spazio disponibile" >
+  <topic name="Spazio disponibile" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="Spostamento" >
+  <topic name="Spostamento di messaggi email da una cartella all'altra" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="di messaggi email da una cartella all'altra" >
+    <topic name="Spostamento di messaggi email da una cartella all'altra" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="Stampa" >
+  <topic name="Stampa di una conversazione" url="conversations/printing_a_conversation.htm" />
+  <topic name="Stampa di un messaggio email" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="messaggio email" >
+    <topic name="Stampa di un messaggio email" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="stampa dei contatti" >
+  <topic name="Stampa dei contatti" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="stampa di un'Agenda" >
+  <topic name="Stampa di un'Agenda" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="Svuota Cestino" >
+  <topic name="Spazio disponibile" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="tabelle, aggiunta a pagine di Documenti" >
+  <topic name="Aggiunta di una tabella a una pagina del Blocco Note" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="tag" >
+  <topic name="Assegnazione di tag ai messaggi" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="Eliminazione dei tag" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="Assegnazione" >
+    <topic name="Assegnazione di tag ai messaggi" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+  <key name="Eliminazione" >
+    <topic name="Eliminazione dei tag" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+</key>
+<key name="tag, creazione" >
+  <topic name="Uso dei tag per classificare i messaggi email" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="tag, trascinamento" >
+  <topic name="Assegnazione di tag ai messaggi" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
+<key name="tasti di scelta rapida" >
+  <topic name="Area di lavoro di Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Tasti di scelta rapida della tastiera di ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="tastiera, navigazione tramite" >
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="tasto destro del mouse, menu del" >
+  <topic name=" Menu del tasto destro del mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="Tipi di file allegati supportati" >
+  <topic name="Tipi di file allegati supportati" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="tooltip" >
+  <topic name="Area di lavoro di Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="trascinamento" >
+  <topic name="Area di lavoro di Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="uscita" >
+  <topic name="Accesso e uscita" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="Uso dei tag" >
+  <topic name="Uso dei tag per classificare i messaggi email" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="vista del messaggio email" >
+  <topic name="Gestione della vista del messaggio email" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="vista della conversazione" >
+  <topic name="Gestione della vista del messaggio email" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="vista messaggio" >
+  <topic name="Gestione della vista del messaggio email" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="vista orario" >
+  <topic name="Visualizzazione di più Agende" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+</key>
+<key name="Vista tradizionale" >
+  <topic name="Vista tradizionale" url="Navigation_folders_and_tips/Traditional_View.htm" />
+</key>
+<key name="vista, Agenda" >
+  <topic name="Agenda Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="Visualizzazione come HTML" >
+  <topic name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="Zimbra, assistente" >
+  <topic name="Assistente Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="Zimlet" >
+  <topic name="Zimlet" url="Zimlets/About_Zimlets.htm" />
+</key>
+
+</indexdata>

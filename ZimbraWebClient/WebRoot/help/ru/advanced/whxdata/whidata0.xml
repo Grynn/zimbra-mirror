@@ -1,0 +1,315 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="Atom-ленты" >
+  <topic name="Подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="HTML" >
+  <topic name="Отображение HTML-кода в почтовых сообщениях" url="reading_mail/displaying_html_in_email_messages.htm" />
+  <topic name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="html, показывать почту как" >
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="HTML, установка настроек по умолчанию" >
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="RSS" >
+  <topic name="Подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="Zimlet" >
+  <topic name="О модулях Zimlet" url="Zimlets/About_Zimlets.htm" />
+</key>
+<key name="«Глобальный список адресов» и «Контакты»" >
+  <topic name="«Глобальный список адресов» и «Контакты»" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="автозаполнение адресов" >
+  <topic name="Использование поиска адреса" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Автоматическое добавление контактов" >
+  <topic name="Добавление контактов, автоматически" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+</key>
+<key name="автоматическое добавление подписи" >
+  <topic name="Использование подписи" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="адрес для пересылки сообщения" >
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Адреса IMAP, добавление" >
+  <topic name="Личные данные почты" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="Адреса POP, добавление" >
+  <topic name="Личные данные почты" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="адресная книга компании" >
+  <topic name="Использование адресной книги компании" url="Contacts/using_the_corporate_address_book.htm" />
+</key>
+<key name="адресная книга, групповые контакты" >
+  <topic name="Создание списков групповых контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="адресная книга, изменение прав доступа" >
+  <topic name="Предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="адресная книга, удаление доступа" >
+  <topic name="Предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="адресных книг, импорт" >
+  <topic name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="архивирование сообщений" >
+  <topic name="удаление сообщений" url="reading_mail/archiving_old_messages.htm" />
+</key>
+<key name="блокирование вложений" >
+  <topic name="Блокирование вложений" url="reading_mail/attachment_blocking.htm" />
+  <topic name="Функция блокирования сообщений" url="reading_mail/Message_blocking_feature.htm" />
+</key>
+<key name="блокнот" >
+  <topic name="Работа в блокнотах" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="браузеры" >
+  <topic name="Использование браузера с клиентом Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+</key>
+<key name="Быстрое добавление" >
+  <topic name="Использование функции «Быстрое добавление» для создания встречи" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="быстрые клавиши" >
+  <topic name="Быстрые клавиши ZWC" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Быстрый поиск" >
+  <topic name="Быстрый поиск" url="Search/Quick_search.htm" />
+</key>
+<key name="Вид «Обычный»" >
+  <topic name="Вид «Обычный»" url="Navigation_folders_and_tips/Traditional_View.htm" />
+</key>
+<key name="вид «Разговоры»" >
+  <topic name="Управление видом сообщений" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="вид «Сообщения»" >
+  <topic name="Управление видом сообщений" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="вид ежедневника" >
+  <topic name="О ежедневнике Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="вид расписания" >
+  <topic name="Просмотр нескольких ежедневников" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+</key>
+<key name="вид сообщений" >
+  <topic name="Управление видом сообщений" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="Вложение" >
+  <topic name="Вложение файлов в сообщения" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <key name="файлы" >
+    <topic name="Вложение файлов в сообщения" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  </key>
+</key>
+<key name="вложения" >
+  <topic name="Открытие вложений" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="внешние учетные записи" >
+  <topic name="Управление учетной записью POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="внешние учетные записи, как добавить" >
+  <topic name="Добавление учетных записей POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="Восстановление" >
+  <topic name="Восстановление удаленных почтовых сообщений" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="удаленные почтовые сообщения" >
+    <topic name="Восстановление удаленных почтовых сообщений" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="восстановление параметров по умолчанию" >
+  <topic name="Восстановление параметров по умолчанию" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="встреча на весь день" >
+  <topic name="Планирование событий на весь день" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="встреча, быстрое добавление" >
+  <topic name="Использование функции «Быстрое добавление» для создания встречи" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="встречи" >
+  <topic name="О встречах, собраниях и событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="выход" >
+  <topic name="Вход и выход" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="групповые контакты" >
+  <topic name="Создание списков групповых контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="добавить подпись" >
+  <topic name="Использование подписи" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="добавление контактов" >
+  <topic name="Создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="добавление существующих учетных записей" >
+  <topic name="Добавление учетных записей POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="Документы, добавление таблиц" >
+  <topic name="Добавление таблицы на страницу блокнота" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="Документы, изменение прав доступа" >
+  <topic name="Отмена доступа к папке вики-документов" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="Документы, предоставление доступа" >
+  <topic name="Предоставление доступа к вики-папкам" url="Documents/Sharing_Notebooks.htm" />
+</key>
+<key name="Документы, создание блокнота" >
+  <topic name="Создание новых блокнотов" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="Документы, создание новых страниц" >
+  <topic name="Создание новой страницы" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Документы, форматированный текст" >
+  <topic name="Использование форматированного текста" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="доступ к внешним учетным записям" >
+  <topic name="Доступ к внешним учетным записям" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="ежедневник, занятость" >
+  <topic name="Просмотр сведений о занятости" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="ежедневник, о" >
+  <topic name="О ежедневнике Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="ежедневник, печать" >
+  <topic name="Печать ежедневника" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="ежедневник, события" >
+  <topic name="Планирование событий на весь день" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="ежедневника, вид" >
+  <topic name="О ежедневнике Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="Ежедневники iCal, импорт и экспорт" >
+  <topic name="Импорт ежедневника iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="занятость" >
+  <topic name="Просмотр сведений о занятости" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="заполнение адреса в почте" >
+  <topic name="Использование поиска адреса" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="запомнить меня на этом компьютере" >
+  <topic name="Вход и выход" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="запросы поиска" >
+  <topic name="Создание запросов поиска" url="Search/building_search_queries.htm" />
+  <topic name="Сохранение запросов поиска" url="Search/saving_search_queries.htm" />
+  <key name="Сохранение" >
+    <topic name="Сохранение запросов поиска" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="Изменение встречи" >
+  <topic name="Изменение повторяющихся встреч" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="изменение общедоступного списка задач" >
+  <topic name="Общедоступный список задач" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="изменение параметров" >
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Изменить контакт" >
+  <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="изменить права доступа к папке почты" >
+  <topic name="Отказ в доступе к общей папке" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="импорт адресных книг" >
+  <topic name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="импорт ежедневников iCal" >
+  <topic name="Импорт ежедневника iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="импорт контактов" >
+  <topic name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Использование пользовательского интерфейса" >
+  <topic name="Ссылки и функции пользовательского интерфейса" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="Использование тегов" >
+  <topic name="Использование тегов для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="истекло время сеанса" >
+  <topic name="Если истекло время сеанса" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="как создать встречи" >
+  <topic name="О встречах, собраниях и событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="как установить исходный вид области содержимого" >
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="контакт" >
+  <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
+  <topic name="Контакты" url="Contacts/contacts.htm" />
+  <topic name="Создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
+  <key name="Изменение" >
+    <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="контакт, добавление удаленных контактов обратно в список" >
+  <topic name="Удаление контакта" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="контактов, импорт" >
+  <topic name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="контакты, печать списка" >
+  <topic name="Печать контактов" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="Корзина" >
+  <topic name="Корзина" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="Лимиты" >
+  <topic name="Лимиты" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="личные встречи" >
+  <topic name="О встречах" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="личные данные" >
+  <topic name="Личные данные почты" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Создание образов" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="личные данные почты" >
+  <topic name="Личные данные почты" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Создание образов" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="личные данные почты при создании сообщения" >
+  <topic name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="Личные контакты" >
+  <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="личные списки рассылки" >
+  <topic name="Создание списков групповых контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Меню, открываемые правой кнопкой мыши" >
+  <topic name="Меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="меню, правая кнопка мыши" >
+  <topic name="Меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="место, резервирование" >
+  <topic name="Планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="напоминание о встрече" >
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="настройки" >
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="настройки, изменение" >
+  <topic name="Изменение параметров пользователя" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="настройки, просмотр области чтения" >
+  <topic name="Чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Начало работы в блокнотах" >
+  <topic name="Работа в блокнотах" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="новые сообщения" >
+  <topic name="Как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+
+</indexdata>

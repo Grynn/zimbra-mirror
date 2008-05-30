@@ -1,0 +1,96 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<tocdata>
+<book name="はじめに" >
+  <item name="ZCS標準ウェブクライアントの概要" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
+  <item name="ログイン時のクライアントの種類を変更する" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+  <item name="キーボードショートカット" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+  <item name="パスワードを変更する" url="Userspecific/chaning_your_password.htm" />
+  <item name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
+  <item name="セッションの有効期限が切れた場合" url="Userspecific/if_your_session_expires.htm" />
+</book>
+<book name="メールボックス内を移動する" >
+  <item name="メールボックス内を移動する" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
+  <item name="メール内を移動する" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+  <item name="メールのシステムフォルダ" url="Navigation_folders_and_tips/inbox_folder.htm" />
+</book>
+<book name="メールを管理する " >
+  <item name="メールの表示方法を管理する" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+  <item name="新着メールを確認する" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
+  <item name="メールメッセージを分類する" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="内容ペインのメッセージを並べ替える" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  <item name="メールメッセージを印刷する" url="reading_mail/b_Printing_email_messages.htm" />
+  <item name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+  <item name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="メールメッセージを完全に削除する" url="reading_mail/b_Purging_email_messages.htm" />
+  <book name="メッセージを読む" >
+    <item name="メッセージを読む" url="reading_mail/reading_mail.htm" />
+    <item name="メールを未読にする" url="reading_mail/b_Marking_mail_as_unread.htm" />
+    <item name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
+    <item name="添付ファイルのブロック" url="reading_mail/attachment_blocking.htm" />
+    <item name="メッセージブロック機能" url="reading_mail/Message_blocking_feature.htm" />
+    <item name="配信不能メール" url="Creating_Messages/undeliverable_mail.htm" />
+  </book>
+</book>
+<book name="メールを作成する" >
+  <item name="新しいメールメッセージを作成する" url="Creating_Messages/b_Composing_email_message.htm" />
+  <item name="メールメッセージの各部分について" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="署名を自動的に追加する" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+  <item name="メッセージにファイルを添付する" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
+  <item name="添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="メッセージを下書きとして保存する" url="Creating_Messages/saving_a_draft_message.htm" />
+</book>
+<book name="メッセージに返信する/メッセージを転送する" >
+  <item name="メールメッセージに返信する" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="メールメッセージを転送する" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</book>
+<book name="アドレスブックを管理する" >
+  <item name="アドレスブック" url="Contacts/b_Your_Address_Books.htm" />
+  <item name="新しい連絡先を追加する" url="Contacts/b_Adding_new_contacts.htm" />
+</book>
+<book name="カレンダーを管理する" >
+  <item name="カレンダーについて" url="Calendar/b_About_Calendar.htm" />
+  <item name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="予約を削除する" url="Calendar/b_Canceling_a_meeting.htm" />
+  <item name="カレンダーに色をつける" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="iCalカレンダーをエクスポートする" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="カレンダービューのオプション" url="Calendar/Calendar_Views.htm" />
+</book>
+<book name="予約、会議、イベントを予定する" >
+  <item name="会議を計画する" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="会議を予約する" url="Calendar/b_Scheduling_a_meeting.htm" />
+  <item name="繰り返し予約を作成する" url="Calendar/b_creating_recurring_appointments.htm" />
+</book>
+<book name="タスクリストを使用する" >
+  <item name="タスクについて" url="Tasks/About_Tasks.htm" />
+  <item name="タスクリストを作成する" url="Tasks/bc_Create_task_lists.htm" />
+  <item name="タスクを変更する" url="Tasks/Change_a_task.htm" />
+  <item name="タスクを並べ替える" url="Tasks/Sorting_tasks_.htm" />
+</book>
+<book name="項目を検索する" >
+  <item name="検索を使用する" url="Search/b_Using_Search.htm" />
+  <item name="クエリ言語の記述" url="Search/query_language_description.htm" />
+</book>
+<book name="タグとフォルダを使用してメールを整理する" >
+  <item name="タグをメッセージや連絡先に割り当てる" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+  <item name="メールメッセージにフラグを付ける" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+  <item name="フォルダを使用する" url="Navigation_folders_and_tips/about_folders.htm" />
+  <item name="フォルダの名前を変更する" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <item name="フォルダを削除する" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+</book>
+<book name="フィルターを作成する " >
+  <item name="メッセージをフィルターする" url="filters/bc_Filtering_your_messages.htm" />
+  <item name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
+</book>
+<book name="ユーザー設定を指定する" >
+  <item name="ユーザー設定を指定する" url="Userspecific/b_Setting_your_Options.htm" />
+  <item name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
+  <item name="不在メッセージを作成する" url="Userspecific/vacation_message.htm" />
+  <item name="送信したメッセージを保存する" url="Navigation_folders_and_tips/sent_folder.htm" />
+  <item name="メールボックスの割り当て容量" url="Navigation_folders_and_tips/quotas.htm" />
+  <item name="RSS/ATOMフィードを購読する" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</book>
+
+</tocdata>

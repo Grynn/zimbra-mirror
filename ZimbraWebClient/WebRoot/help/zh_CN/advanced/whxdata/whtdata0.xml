@@ -1,0 +1,178 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<tocdata>
+<book name="入门" >
+  <item name="欢迎使用 Zimbra 网络客户端" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="登录和退出" url="Userspecific/logging_on_and_off.htm" />
+  <item name="改变登录的默认客户端类型" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+  <item name="快捷键" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <item name="Zimbra 助手" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="变更您的密码" url="Userspecific/chaning_your_password.htm" />
+  <item name="忘记密码了？" url="Userspecific/if_you_forget_your_password.htm" />
+  <item name="如果会话过期" url="Userspecific/if_your_session_expires.htm" />
+</book>
+<book name="浏览邮箱" >
+  <item name="浏览 Zimbra 网络客户端" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="用户界面功能和快捷键" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+  <item name="右键选单" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="将操作项应用于多重选择" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+  <item name="使用浏览器" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+  <item name="保存我的工作" url="Userspecific/browser_session_handling.htm" />
+  <item name="查看窗格" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <item name="邮件系统文件夹" url="Navigation_folders_and_tips/inbox_folder.htm" />
+</book>
+<book name="管理邮件 " >
+  <item name="电子邮件管理视图" url="conversations/conversation_list_view.htm" />
+  <item name="邮件分类" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="排序“内容”窗格中的邮件" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  <item name="自定义初始电子邮件页面" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+  <item name="如何使用会话" url="conversations/conversations_can_span_folders.htm" />
+  <item name="打印会话" url="conversations/printing_a_conversation.htm" />
+  <item name="在传统视图中查看邮件" url="Navigation_folders_and_tips/Traditional_View.htm" />
+  <item name="在文件夹间移动邮件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <item name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+  <item name="订阅 RSS/Atom 源" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+  <item name="管理帐户内的不同身份" url="Userspecific/Mail_Identities.htm" />
+  <item name="还原删除的邮件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="清除邮件" url="reading_mail/archiving_old_messages.htm" />
+  <book name="阅读邮件" >
+    <item name="阅读邮件" url="reading_mail/reading_mail.htm" />
+    <item name="在“阅读”窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="将邮件标记为未读" url="reading_mail/marking_mail_as_unread.htm" />
+    <item name="新邮件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+    <item name="显示 HTML 格式邮件" url="reading_mail/displaying_html_in_email_messages.htm" />
+    <item name="打开附加文件" url="reading_mail/opening_file_attachments.htm" />
+    <item name="打印邮件" url="reading_mail/printing_a_mail_message.htm" />
+    <item name="附件阻止" url="reading_mail/attachment_blocking.htm" />
+    <item name="邮件阻止功能" url="reading_mail/Message_blocking_feature.htm" />
+    <item name="无法投递的邮件" url="Creating_Messages/undeliverable_mail.htm" />
+  </book>
+  <book name="收取其它帐户中的邮件" >
+    <item name="访问您的外部帐户" url="Userspecific/Managing_your_POP_Accounts.htm" />
+    <item name="添加外部帐户" url="Userspecific/Adding_POP_accounts.htm" />
+  </book>
+</book>
+<book name="写信" >
+  <item name="编写新邮件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="自动添加签名" url="Userspecific/using_a_signature.htm" />
+  <item name="自动完成地址功能" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="附件文件类型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="添加“抄送：”和“密送：”地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="使用拼写检查" url="Creating_Messages/Using_Spell_Check.htm" />
+  <item name="把邮件保存为草稿" url="Creating_Messages/saving_a_draft_message.htm" />
+</book>
+<book name="回复和转发邮件" >
+  <item name="回复邮件" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="转发邮件" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</book>
+<book name="管理地址簿" >
+  <item name="地址簿" url="Contacts/contacts.htm" />
+  <item name="可用的地址簿类型" url="Contacts/gal_vs_contacts.htm" />
+  <item name="添加新联系人" url="Contacts/creating_a_new_contact.htm" />
+  <item name="使用公司地址簿" url="Contacts/using_the_corporate_address_book.htm" />
+  <item name="自动添加联系人" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+  <item name="创建联系人组列表" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="共享您的地址簿" url="Contacts/Sharing_your_Address_Book.htm" />
+  <item name="导入地址簿" url="Contacts/Importing_Contacts.htm" />
+  <item name="导出地址簿" url="Contacts/Exporting_Address_Books.htm" />
+  <item name="打印联系人姓名或地址簿" url="Contacts/Printing_Contacts.htm" />
+  <item name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
+  <item name="删除联系人" url="Contacts/deleting_a_contact.htm" />
+</book>
+<book name="管理效率手册" >
+  <item name="关于 Zimbra 效率手册" url="Calendar/About_Calendar.htm" />
+  <item name="创建效率手册" url="Calendar/Create_Calendars.htm" />
+  <item name="为效率手册添加颜色" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="查看多个效率手册" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+  <item name="共享效率手册" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="接受对共享效率手册的访问权限" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="拒绝效率手册共享请求" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+  <item name="删除效率手册" url="Calendar/Deleting_Calendars.htm" />
+  <item name="导入 iCal 效率手册" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="导出 iCal 效率手册" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="效率手册视图选项" url="Calendar/Calendar_Views.htm" />
+  <item name="打印效率手册" url="Calendar/Printing_a_calendar.htm" />
+</book>
+<book name="安排约会、会议和活动事项" >
+  <item name="关于约会、会议和活动事项" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <item name="筹划会议" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="创建约会" url="Calendar/Scheduling_meetings.htm" />
+  <item name="查看空闲忙碌时间" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="安排资源" url="Calendar/Scheduling_Resources.htm" />
+  <item name="将邮件转为会议请求" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+  <item name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="安排全天事件" url="Calendar/Scheduling_All_Day_events.htm" />
+  <item name="创建重复约会" url="Calendar/Creating_recurring_appointments.htm" />
+  <item name="回复会议邀请函" url="Calendar/Responding_to_an_invitation.htm" />
+  <item name="删除约会" url="Calendar/Deleting_an_appointment.htm" />
+  <item name="删除定期重复的约会" url="Calendar/Deleting_recurring_appointments.htm" />
+</book>
+<book name="使用任务列表" >
+  <item name="关于任务" url="Tasks/About_Tasks.htm" />
+  <item name="创建任务列表" url="Tasks/Create_tasks_folders.htm" />
+  <item name="添加任务" url="Tasks/Add_a_task.htm" />
+  <item name="改变任务" url="Tasks/Change_a_task.htm" />
+  <item name="移动任务" url="Tasks/Moving_tasks.htm" />
+  <item name="删除任务" url="Tasks/Delete_a_task.htm" />
+  <item name="共享您的“任务”列表" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="接受共享的任务列表" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+  <item name="任务排序" url="Tasks/Sorting_tasks_.htm" />
+</book>
+<book name="“文件”功能 " >
+  <item name="“文件”功能" url="Documents/Working_in_Notebooks.htm" />
+  <item name="创建新笔记本" url="Documents/Create_multiple_notebooks.htm" />
+  <item name="创建新页面" url="Documents/Create_a_new_page.htm" />
+  <item name="使用 rich text 编辑器" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="使用 HTML 格式化文件页面" url="Documents/Using_HTML_for_format_pages.htm" />
+  <item name="添加表格到笔记本页面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="共享“文档”笔记本" url="Documents/Sharing_Notebooks.htm" />
+  <item name="接受对文档笔记本的访问权" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+  <item name="链接到共享笔记本" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
+  <item name="改变或取消对“文档”的访问权" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</book>
+<book name="使用公文包" >
+  <item name="在“公文包”中工作" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
+  <item name="共享您的公文包" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+</book>
+<book name="共享邮件文件夹" >
+  <item name="共享邮件文件夹" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
+  <item name="共享您的邮箱" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="撤销共享文件夹的访问权" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="接受他人的共享邮箱邀请" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="在共享邮件文件夹中工作" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+</book>
+<book name="搜索功能" >
+  <item name="使用搜索功能" url="Search/using_the_search_feature.htm" />
+  <item name="快速搜索" url="Search/Quick_search.htm" />
+  <item name="使用“高级”搜索功能" url="Search/building_search_queries.htm" />
+  <item name="搜索邮件" url="Search/_search__vs.__search_for_.htm" />
+  <item name="在“搜索”中使用 * 作为通配符" url="Search/Using_Wildcard_in_Search.htm" />
+  <item name="保存搜索条件" url="Search/saving_search_queries.htm" />
+  <item name="查询语言说明" url="Search/query_language_description.htm" />
+  <item name="And vs Or 类型搜索功能" url="Search/and_vs_or_searches.htm" />
+  <item name="搜索实例" url="Search/search_examples.htm" />
+</book>
+<book name="使用标记和文件夹整理邮件" >
+  <item name="用标记为邮件和联系人分类" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+  <item name="为邮件加标记" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <item name="删除标记" url="Tags_and_flags/deleting_tags.htm" />
+  <item name="为邮件加上标志" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <item name="使用文件夹" url="Navigation_folders_and_tips/about_folders.htm" />
+  <item name="重命名文件夹" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <item name="删除文件夹" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <item name="创建自定义文件夹" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</book>
+<book name="创建过滤器 " >
+<chunk name="创建过滤器 " ref="whtdata1.xml" />
+</book>
+<book name="设置首选项" >
+<chunk name="设置首选项" ref="whtdata2.xml" />
+</book>
+<book name="使用 Zimlet" >
+  <item name="关于 Zimlet" url="Zimlets/About_Zimlets.htm" />
+</book>
+
+</tocdata>

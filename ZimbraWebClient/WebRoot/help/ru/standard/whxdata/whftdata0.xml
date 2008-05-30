@@ -1,0 +1,70 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="О встречах" url="Calendar/About_the_Appointment_Page.htm" />
+<topic name="Добавление цвета фона в ежедневниках" url="Calendar/Adding_background_color_to_calendars.htm" />
+<topic name="О ежедневнике" url="Calendar/b_About_Calendar.htm" />
+<topic name="Отмена собрания" url="Calendar/b_Canceling_a_meeting.htm" />
+<topic name="Создание нового ежедневника" url="Calendar/b_Create_New_Calendar.htm" />
+<topic name="Создание повторяющихся встреч" url="Calendar/b_creating_recurring_appointments.htm" />
+<topic name="Планирование собрания" url="Calendar/b_Scheduling_a_meeting.htm" />
+<topic name="Виды ежедневника" url="Calendar/Calendar_Views.htm" />
+<topic name="Экспорт ежедневника iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
+<topic name="Импорт ежедневника iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+<topic name="Добавление новых контактов" url="Contacts/b_Adding_new_contacts.htm" />
+<topic name="Адресные книги" url="Contacts/b_Your_Address_Books.htm" />
+<topic name="Поддерживаемые типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+<topic name="Вложение файлов в сообщение" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
+<topic name="Создание новых сообщений" url="Creating_Messages/b_Composing_email_message.htm" />
+<topic name="Пересылка сообщения" url="Creating_Messages/forwarding_a_mail_message.htm" />
+<topic name="Элементы сообщения электронной почты" url="Creating_Messages/parts_of_an_email_message.htm" />
+<topic name="Сохранение черновиков сообщений" url="Creating_Messages/saving_a_draft_message.htm" />
+<topic name="Сообщения, доставка которых невозможна" url="Creating_Messages/undeliverable_mail.htm" />
+<topic name="Фильтрация сообщений" url="filters/bc_Filtering_your_messages.htm" />
+<topic name="Поддерживаемые условия и действия фильтров" url="filters/filter_conditions_and_actions_supported.htm" />
+<topic name="Начало работы с веб-клиентом ZCS основной версии" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+<topic name="О папках" url="Navigation_folders_and_tips/about_folders.htm" />
+<topic name="Перемещение в почте" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+<topic name="Быстрые клавиши" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+<topic name="Управление отображением сообщений" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+<topic name="Перемещение в почтовом ящике" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
+<topic name="Удаление папок" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+<topic name="Систематизация почтовых сообщений" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="Изменение типа клиента по умолчанию для входа" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="Системные папки" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="Лимиты" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="Переименование папок" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="Папка «Отправленные»" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="Сортировка столбцов в области содержимого" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<topic name="Подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+<topic name="Корзина" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="Блокирование вложений" url="reading_mail/attachment_blocking.htm" />
+<topic name="Как узнать, что получены новые сообщения" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
+<topic name="Пометить как непрочитанное" url="reading_mail/b_Marking_mail_as_unread.htm" />
+<topic name="Печать сообщений" url="reading_mail/b_Printing_email_messages.htm" />
+<topic name="Удаление сообщений электронной почты" url="reading_mail/b_Purging_email_messages.htm" />
+<topic name="Функция блокирования сообщений" url="reading_mail/Message_blocking_feature.htm" />
+<topic name="Открытие вложений" url="reading_mail/opening_file_attachments.htm" />
+<topic name="Чтение почты" url="reading_mail/reading_mail.htm" />
+<topic name="Восстановление удаленных почтовых сообщений" url="reading_mail/recovering_deleted_mail_messages.htm" />
+<topic name="Ответ на почтовые сообщения" url="reading_mail/replying_to_mail_messages.htm" />
+<topic name="Использование поиска" url="Search/b_Using_Search.htm" />
+<topic name="Описание языка запросов" url="Search/query_language_description.htm" />
+<topic name="Назначение тегов сообщениям и контактам" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+<topic name="Установка флагов для почтовых сообщений" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+<topic name="О задачах" url="Tasks/About_Tasks.htm" />
+<topic name="Создание списков задач" url="Tasks/bc_Create_task_lists.htm" />
+<topic name="Изменение задачи" url="Tasks/Change_a_task.htm" />
+<topic name="Сортировка задач" url="Tasks/Sorting_tasks_.htm" />
+<topic name="Автоматическое добавление подписи" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+<topic name="Установка параметров пользователя" url="Userspecific/b_Setting_your_Options.htm" />
+<topic name="Изменение пароля" url="Userspecific/chaning_your_password.htm" />
+<topic name="Если вы забыли пароль" url="Userspecific/if_you_forget_your_password.htm" />
+<topic name="Если истекло время сеанса" url="Userspecific/if_your_session_expires.htm" />
+<topic name="Вход и выход" url="Userspecific/logging_on_and_off.htm" />
+<topic name="Уведомления о новых сообщениях" url="Userspecific/New_mail_notifications.htm" />
+<topic name="Установка адреса для пересылки" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<topic name="Сообщение об отсутствии" url="Userspecific/vacation_message.htm" />
+<topic name="версия" url="version.htm" />
+
+</ftstdata>  

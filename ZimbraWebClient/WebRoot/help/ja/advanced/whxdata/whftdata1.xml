@@ -1,0 +1,40 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="検索の例" url="Search/search_examples.htm" />
+<topic name="検索機能を使用する" url="Search/using_the_search_feature.htm" />
+<topic name="検索でアスタリスクワイルドカード（*）を使用する" url="Search/Using_Wildcard_in_Search.htm" />
+<topic name="タグをメッセージに割り当てる" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+<topic name="タグを削除する" url="Tags_and_flags/deleting_tags.htm" />
+<topic name="メールメッセージにフラグを付ける" url="Tags_and_flags/Flagging_an_email_message.htm" />
+<topic name="タグを使用してメールメッセージを分類する" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+<topic name="タスクについて" url="Tasks/About_Tasks.htm" />
+<topic name="タスクを追加する" url="Tasks/Add_a_task.htm" />
+<topic name="タスクを変更する" url="Tasks/Change_a_task.htm" />
+<topic name="タスクフォルダを作成する" url="Tasks/Create_tasks_folders.htm" />
+<topic name="タスクを削除する" url="Tasks/Delete_a_task.htm" />
+<topic name="タスクを移動する" url="Tasks/Moving_tasks.htm" />
+<topic name="タスクリストへのアクセスを受け入れる" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+<topic name="自分のタスクリストを共有する" url="Tasks/Share_your_Task_folder.htm" />
+<topic name="タスクを並べ替える" url="Tasks/Sorting_tasks_.htm" />
+<topic name="外部アカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
+<topic name="作業内容を保存する" url="Userspecific/browser_session_handling.htm" />
+<topic name="デフォルトのタイムゾーンを変更する" url="Userspecific/Changing_your_default_timezone.htm" />
+<topic name="ユーザーオプションを変更する" url="Userspecific/Changing_Your_User_Options.htm" />
+<topic name="パスワードを変更する" url="Userspecific/chaning_your_password.htm" />
+<topic name="パーソナを作成する" url="Userspecific/Creating_Personas.htm" />
+<topic name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
+<topic name="セッションの有効期限が切れた場合" url="Userspecific/if_your_session_expires.htm" />
+<topic name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
+<topic name="アカウント内で複数のIDを管理する" url="Userspecific/Mail_Identities.htm" />
+<topic name="外部アカウントにアクセスする" url="Userspecific/Managing_your_POP_Accounts.htm" />
+<topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
+<topic name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+<topic name="ユーザー設定をデフォルトに戻す" url="Userspecific/the__restore_defaults__button.htm" />
+<topic name="署名を使用する" url="Userspecific/using_a_signature.htm" />
+<topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+<topic name="バージョン" url="version.htm" />
+<topic name="Zimletについて" url="Zimlets/About_Zimlets.htm" />
+
+</ftstdata>  

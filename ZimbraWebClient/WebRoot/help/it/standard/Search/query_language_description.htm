@@ -1,0 +1,159 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Descrizione del linguaggio di query</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { font-weight:bold; }
+p.whs2 { margin-left:40px; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Ricerca di elementi\nDescrizione del linguaggio di query");
+addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Descrizione del linguaggio di query</h1>
+<p>In questa sezione viene descritta dettagliatamente la grammatica di ricerca usata nella funzione di ricerca Zimbra. Alcuni tipi di query vengono sempre applicati per ottenere la vista che appare nell'interfaccia Zimbra. </p>
+<p><b style="font-weight: bold;">SUGGERIMENTO</b>: Per visualizzare la query corrente nella barra degli strumenti della ricerca, seleziona nella scheda Preferenze,   Generali l'opzione '<i><b>Mostra sempre la stringa di ricerca</b></i>'.&nbsp; Ad esempio, quando questa opzione è abilitata, se clicchi sulla cartella In arrivo, viene visualizzata la stringa di query '<i><b>in:In arrivo'</b></i>.</p>
+<h2>Struttura del linguaggio di query</h2>
+<p>Per eseguire ricerche semplici, è sufficiente inserire una parola nel boxino di ricerca. Nel caso di parole senza un operatore di ricerca, la query presume che la ricerca vada effettuata con l'operatore 'content' e restituisce come risultato qualsiasi parte di testo inclusa nel messaggio.   </p>
+<p>Le ricerche più avanzate possono essere eseguite specificando un <b>operatore di ricerca</b>.   L'operatore di ricerca è una parola chiave speciale seguita da due punti, a loro volta seguiti da qualche altro parametro specifico dell'operatore. Ad esempio: </p>
+<ul><li class=p><p><b style="font-weight: bold;">in:In arrivo</b> – L'operatore   è &quot;in&quot; e il parametro è &quot;In arrivo&quot;. Vengono restituiti i messaggi contenuti nella cartella &quot;In arrivo&quot;. </p></li>
+</ul>
+<ul><li class=p><p><b style="font-weight: bold;">from:qualcuno</b> – L'operatore   è &quot;from&quot; e il parametro è &quot;qualcuno&quot;. Vengono restituiti i messaggi che includono la parola &quot;qualcuno&quot; nell'indirizzo email.   </p></li>
+</ul>
+<p>È possibile far precedere le parole chiave dalla parola &quot;not&quot; per specificare   elementi che non includono quel criterio, ad esempio <b>not in:In arrivo</b>.   La ricerca non tiene conto della differenza tra maiuscole e minuscole. Pertanto &quot;in:in arrivo&quot; equivale   a &quot;in:In arrivo&quot;.. Il segno meno (<b>-</b>) è un sinonimo di <b>NOT</b>. <b>not in:inbox</b> equivale quindi a <b>-in:In arrivo</b> </p>
+<p>In genere non è necessario includere caratteri di punteggiatura nella stringa di ricerca dal momento che essi vengono ignorati dalla funzione di ricerca. Tuttavia, in alcuni   casi specifici, ad esempio se si cerca   l'ora '9:30' in un messaggio, è necessario racchiudere tra virgolette il parametro per ottenere i risultati desiderati. Ad esempio, <b>subject:&quot;9:30&quot;</b>   restituirà messaggi che includono nell'oggetto la stringa 9:30. </p>
+<p>Caratteri consentiti nel parametro di ricerca: </p>
+<ul><li class=p><p>I seguenti caratteri non possono essere inseriti in un parametro di ricerca a meno che non siano racchiusi tra virgolette: ~ '&nbsp;! # $ % ^ &amp; * 
+ ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
+	<li class=p><p>I seguenti caratteri sono consentiti in un parametro di ricerca solo se non si trovano in posizione iniziale: - + &lt; &gt; </p></li>
+</ul>
+<h2>Termini di ricerca multipli </h2>
+<p>Se si inseriscono termini di ricerca multipli (separati da spazi), per impostazione predefinita vengono uniti tra loro mediante l'operatore &quot;AND&quot;. <b>in:In arrivo   ora</b> sta a indicare &quot;restituisci messaggi che si trovano nella cartella in arrivo E (AND) che includono al loro interno la parola ora&quot;.   Per le ricerche che usano più criteri, è possibile trovare elementi che soddisfano uno o tutti i criteri specificati. Il generatore di ricerche avanzate consente di eseguire entrambi i tipi di ricerca. </p>
+<p>In tutti i riquadri di ricerca, ad eccezione di Ricerca di base, vengono applicate le regole seguenti: </p>
+<ul><li class=p><p>La ricerca di messaggi che soddisfano uno qualsiasi dei criteri specificati   viene chiamata ricerca <b>'OR'</b>,   in quanto il messaggio viene considerato una corrispondenza   se contiene o X o Y. Per i riquadri di ricerca avanzata con più caselle di controllo,   le selezioni multiple all'interno di un singolo riquadro creano una ricerca di tipo <b>'OR'</b> per gli elementi in questione. </p></li>
+	<li class=p><p>Una ricerca di messaggi contenenti sia X che Y   viene definita ricerca <b>'AND'</b>. Per poter essere considerato una corrispondenza, infatti, il messaggio deve soddisfare tutti i criteri specificati. Nei riquadri di ricerca avanzata che includono caselle di controllo,   se si aprono più istanze dello stesso riquadro e si selezionano caselle di controllo diverse in ciascuna di esse, il criterio viene specificato come una ricerca <b>'AND'</b>. </p></li>
+</ul>
+<p>In una query, l'unico operatore visualizzato è &quot;OR&quot;. Se hai scelto di visualizzare la query nella barra di ricerca   mentre selezioni le opzioni di ricerca avanzata, il boxino di ricerca si aggiorna per mostrare la query risultante.   Nelle ricerche di tipo <b>'AND'</b>, la parola <b>'AND'</b>   non appare.   </p>
+<p><b style="font-weight: bold;">Suggerimento</b>: Uso di parentesi con AND e   OR. Le parole racchiuse tra parentesi vengono considerate un'unità. Ad esempio <b>from:   (giovanni tommasi)</b> equivale a <b>from:giovanni AND   from:tommasi</b>. Se usi OR nella parentesi,   <b>from:(giovanni or tommasi)</b>, viene eseguita una ricerca di risultati di <b>from:giovanni OR   from:tommasi</b>. </p>
+<h3>Uso di <b>*</b> come carattere jolly nelle ricerche </h3>
+<p>L'asterisco (<b>*</b>) può essere usato come carattere jolly nelle   ricerche per trovare contenuto che comprende parole simili fra loro. </p>
+<p>Puoi usare l'asterisco come carattere jolly dopo un prefisso. Ad esempio, la ricerca <b>do*</b> restituisce parole come   <i>donatore</i>, <i>dono</i>, <i>domanda</i>, ecc. </p>
+<h2>Descrizioni ed esempi di parole chiave</h2>
+<p class="whs1">content:</p>
+<p class="whs2">Specifica il testo che il messaggio deve contenere.   Ad esempio, <span class=code>content:banane</span> trova tutti gli elementi contenenti la parola &quot;banane&quot;.</p>
+<p class="whs1">from:</p>
+<p class="whs2">Specifica il nome di un mittente o un indirizzo email   incluso nell'intestazione Da. Può essere testo, come in &quot;Mario Rossi&quot;,   un indirizzo email come &quot;rossi@acme.com&quot;,   o un dominio come &quot;zimbra.com&quot;.</p>
+<p class="whs1">to:</p>
+<p class="whs2">Equivale a from:, ma specifica una   delle persone a cui è indirizzato il messaggio nell'intestazione A:.</p>
+<p class="whs1">cc:</p>
+<p class="whs2">Equivale a from:, ma specifica un   destinatario nell'intestazione Cc: del messaggio.</p>
+<p class="whs1">subject:</p>
+<p class="whs2">Specifica il testo che deve apparire nell'intestazione dell'oggetto del messaggio. Un esempio potrebbe essere <span class=code>subject:&quot;nuovi criteri per le assunzioni&quot;</span>. Per cercare una corrispondenza esatta, usa le virgolette.</p>
+<p class="whs1">in:</p>
+<p class="whs2">Specifica una cartella. Ad esempio, <span class=code>in:Inviati</span>   mostra tutti gli elementi inclusi nella cartella <span style="font-weight: bold;"><B>Inviati</B></span>.</p>
+<p class="whs1">has:</p>
+<p class="whs2">Specifica un attributo che il messaggio deve contenere. I tipi di oggetto che è possibile specificare sono &quot;allegato&quot;,   &quot;telefono&quot; o &quot;url&quot;. Ad esempio,   <span class=code>has:allegato</span> consente di trovare tutti i messaggi contenenti uno o più allegati di qualsiasi tipo.</p>
+<p class="whs1">filename:</p>
+<p class="whs2">Specifica il nome del file allegato. Ad esempio,<span 
+ class=code> filename:query.txt</span> consente di trovare i messaggi che includono un file allegato chiamato &quot;query.txt&quot;.</p>
+<p class="whs1">type:</p>
+<p class="whs2">Specifica una ricerca all'interno di allegati appartenenti al tipo specificato. I tipi di allegati che è possibile specificare sono &quot;testo&quot;,   &quot;word&quot;, &quot;excel&quot; e &quot;pdf&quot;.   Ad esempio, <span class=code>type:word &quot;ciao&quot;</span> consente di trovare   messaggi con allegati rappresentati da documenti Microsoft Word e cerca   all'interno degli allegati la parola &quot;ciao&quot;.</p>
+<p class="whs1">attachment:</p>
+<p class="whs2">Specifica qualsiasi elemento con un determinato tipo di allegato. Ad esempio, <span class=code>attachment:word</span> consente di trovare   tutti i messaggi che includono allegati Word.</p>
+<p class="whs1">is:</p>
+<p class="whs2">Cerca i messaggi con un determinato stato.   I valori consentiti sono &quot;non letto&quot;, &quot;letto&quot;, &quot;contrassegnato&quot;,   &quot;non contrassegnato&quot;, &quot;inviato&quot;, &quot;bozza&quot;,   &quot;ricevuto&quot;, &quot;con risposta&quot;, &quot;senza risposta&quot;,   &quot;inoltrato&quot;, non inoltrato&quot;, &quot;ovunque&quot;,   &quot;remoto&quot; (in una cartella condivisa), &quot;locale&quot;.   Ad esempio, <span class=code>is:non letto</span> consente di trovare tutti i messaggi non letti.</p>
+<p class="whs1">date:</p>
+<p class="whs2">Questa parola chiave consente di specificare una data nel   formato predefinito nelle impostazioni internazionali del browser (per l'italiano il   formato è dd/mm/yyyy). Ad esempio,   <span class=code>date:2/1/2007</span> consente di trovare i messaggi del 2 gennaio 2007. I simboli maggiore di (&gt;) o minore di (&lt;) possono essere usati   al posto di <i>after</i> (dopo) o <i>before</i> (prima di). Sono consentiti anche i simboli &gt;= e &lt;=.   </p>
+<p class="whs1">after:</p>
+<p class="whs2">Specifica i messaggi inviati dopo una determinata data.   Ad esempio, <span class=code>after:2/1/2007</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;">   specifica i messaggi inviati dopo il 2 gennaio 2007</font></span><span class=code style="font-weight: normal;">.</span></p>
+<p class="whs1">before:</p>
+<p class="whs2">Equivale ad <span class=code>after:</span> ma   specifica i messaggi inviati prima della data specificata.</p>
+<p class="whs1">size:</p>
+<p class="whs2">Specifica i messaggi la cui dimensione totale, inclusi gli allegati, è pari a un numero specificato di byte, kilobyte o megabyte &nbsp;Ad   esempio, <span class=code>size:12 kb</span> consente di trovare   messaggi di 12 KB. I simboli maggiore di (&gt;) o minore   di (&lt;) possono essere usati al posto delle parole chiave larger o smaller.</p>
+<p class="whs1">larger:</p>
+<p class="whs2">Simile a size:, ma specifica una dimensione   maggiore di quella specificata.</p>
+<p class="whs1">smaller:</p>
+<p class="whs2">Simile a size:, ma specifica una dimensione   minore di quella specificata.</p>
+<p class="whs1">tag:</p>
+<p class="whs2">Trova i messaggi a cui è stato applicato   il tag specificato. Ad esempio,<span class=code> tag:ambra</span> consente di trovare   un messaggio a cui è stato applicato un tag denominato &quot;ambra&quot;.</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

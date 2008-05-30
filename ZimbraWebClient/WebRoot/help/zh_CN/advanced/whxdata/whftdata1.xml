@@ -1,0 +1,33 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="关于任务" url="Tasks/About_Tasks.htm" />
+<topic name="添加任务" url="Tasks/Add_a_task.htm" />
+<topic name="改变任务" url="Tasks/Change_a_task.htm" />
+<topic name="创建任务文件夹" url="Tasks/Create_tasks_folders.htm" />
+<topic name="删除任务" url="Tasks/Delete_a_task.htm" />
+<topic name="移动任务" url="Tasks/Moving_tasks.htm" />
+<topic name="接受对任务列表的访问授权" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+<topic name="共享您的任务列表" url="Tasks/Share_your_Task_folder.htm" />
+<topic name="任务排序" url="Tasks/Sorting_tasks_.htm" />
+<topic name="添加外部帐户" url="Userspecific/Adding_POP_accounts.htm" />
+<topic name="保存我的工作" url="Userspecific/browser_session_handling.htm" />
+<topic name="改变您的默认时区" url="Userspecific/Changing_your_default_timezone.htm" />
+<topic name="变更用户选项" url="Userspecific/Changing_Your_User_Options.htm" />
+<topic name="变更您的密码" url="Userspecific/chaning_your_password.htm" />
+<topic name="创建身份" url="Userspecific/Creating_Personas.htm" />
+<topic name="如果忘记了密码" url="Userspecific/if_you_forget_your_password.htm" />
+<topic name="如果会话过期" url="Userspecific/if_your_session_expires.htm" />
+<topic name="登录和退出" url="Userspecific/logging_on_and_off.htm" />
+<topic name="管理您的帐户身份" url="Userspecific/Mail_Identities.htm" />
+<topic name="访问您的外部帐户" url="Userspecific/Managing_your_POP_Accounts.htm" />
+<topic name="新邮件通知" url="Userspecific/New_mail_notifications.htm" />
+<topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+<topic name="恢复默认选项" url="Userspecific/the__restore_defaults__button.htm" />
+<topic name="使用签字" url="Userspecific/using_a_signature.htm" />
+<topic name="休假讯息" url="Userspecific/vacation_message.htm" />
+<topic name="版本" url="version.htm" />
+<topic name="关于 Zimlet" url="Zimlets/About_Zimlets.htm" />
+
+</ftstdata>  

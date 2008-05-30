@@ -1,0 +1,96 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<tocdata>
+<book name="Introduzione" >
+  <item name="Introduzione a Zimbra Web Client standard" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="Accesso e uscita" url="Userspecific/logging_on_and_off.htm" />
+  <item name="Impostazione del tipo di client predefinito per l'accesso" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+  <item name="Tasti di scelta rapida della tastiera" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+  <item name="Modifica della password" url="Userspecific/chaning_your_password.htm" />
+  <item name="Hai dimenticato la password?" url="Userspecific/if_you_forget_your_password.htm" />
+  <item name="Se la sessione scade" url="Userspecific/if_your_session_expires.htm" />
+</book>
+<book name="Navigazione nella casella di posta" >
+  <item name="Navigazione nella casella di posta" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
+  <item name="Navigazione in Mail" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+  <item name="Cartelle di sistema di Mail" url="Navigation_folders_and_tips/inbox_folder.htm" />
+</book>
+<book name="Gestione dei messaggi email " >
+  <item name="Gestione della visualizzazione dei messaggi" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+  <item name="Controllo della posta e ricezione di nuovi messaggi" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
+  <item name="Suddivisione in categorie dei messaggi email" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Ordinamento dei messaggi nel riquadro del contenuto" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  <item name="Stampa dei messaggi email" url="reading_mail/b_Printing_email_messages.htm" />
+  <item name="Impostazione di un indirizzo di inoltro" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+  <item name="Recupero dei messaggi email eliminati" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Eliminazione di messaggi email" url="reading_mail/b_Purging_email_messages.htm" />
+  <book name="Lettura dei messaggi" >
+    <item name="Lettura dei messaggi" url="reading_mail/reading_mail.htm" />
+    <item name=" Segnare un messaggio come non letto" url="reading_mail/b_Marking_mail_as_unread.htm" />
+    <item name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
+    <item name="Blocco degli allegati" url="reading_mail/attachment_blocking.htm" />
+    <item name="Blocco dei messaggi" url="reading_mail/Message_blocking_feature.htm" />
+    <item name="Messaggi non recapitati" url="Creating_Messages/undeliverable_mail.htm" />
+  </book>
+</book>
+<book name="Composizione di messaggi email" >
+  <item name="Composizione di nuovi messaggi email" url="Creating_Messages/b_Composing_email_message.htm" />
+  <item name="Parti di un messaggio email" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="Aggiunta automatica della firma" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+  <item name="Allegare file al messaggio" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
+  <item name="Tipi di file allegati" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Salvataggio di messaggi come bozze" url="Creating_Messages/saving_a_draft_message.htm" />
+</book>
+<book name="Risposta e inoltro dei messaggi" >
+  <item name="Risposta ai messaggi email" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="Inoltro di un messaggio email" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</book>
+<book name="Gestione delle Rubriche" >
+  <item name="Rubriche" url="Contacts/b_Your_Address_Books.htm" />
+  <item name="Aggiunta di nuovi contatti" url="Contacts/b_Adding_new_contacts.htm" />
+</book>
+<book name="Gestione dell'Agenda" >
+  <item name="Agenda" url="Calendar/b_About_Calendar.htm" />
+  <item name="Creazione di una nuova Agenda" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Eliminazione di un appuntamento" url="Calendar/b_Canceling_a_meeting.htm" />
+  <item name="Aggiunta di colori alle Agende" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Importazione dell'Agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="Esportazione dell'Agenda iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="Opzioni di visualizzazione dell'Agenda" url="Calendar/Calendar_Views.htm" />
+</book>
+<book name="Pianificazione di appuntamenti, riunioni ed eventi" >
+  <item name="Organizzazione di una riunione" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="Pianificazione di una riunione" url="Calendar/b_Scheduling_a_meeting.htm" />
+  <item name="Creazione di appuntamenti ricorrenti" url="Calendar/b_creating_recurring_appointments.htm" />
+</book>
+<book name="Uso dell'Elenco impegni" >
+  <item name="Impegni" url="Tasks/About_Tasks.htm" />
+  <item name="Creazione di elenchi di impegni" url="Tasks/bc_Create_task_lists.htm" />
+  <item name="Modifica di un impegno" url="Tasks/Change_a_task.htm" />
+  <item name="Ordinamento degli impegni" url="Tasks/Sorting_tasks_.htm" />
+</book>
+<book name="Ricerca di elementi" >
+  <item name="Uso della funzione di ricerca" url="Search/b_Using_Search.htm" />
+  <item name="Descrizione del linguaggio di query" url="Search/query_language_description.htm" />
+</book>
+<book name="Uso di tag e cartelle per l'organizzazione dei messaggi email" >
+  <item name="Assegnazione di tag a messaggi e contatti" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+  <item name="Applicazione di un contrassegno a un messaggio email" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+  <item name="Uso delle cartelle" url="Navigation_folders_and_tips/about_folders.htm" />
+  <item name="Ridenominazione delle cartelle" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <item name="Eliminazione delle cartelle" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+</book>
+<book name="Creazione di filtri " >
+  <item name="Filtro dei messaggi" url="filters/bc_Filtering_your_messages.htm" />
+  <item name="Condizioni dei filtri e azioni supportate" url="filters/filter_conditions_and_actions_supported.htm" />
+</book>
+<book name="Impostazione delle preferenze" >
+  <item name="Impostazione delle preferenze" url="Userspecific/b_Setting_your_Options.htm" />
+  <item name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Creazione di messaggi di assenza" url="Userspecific/vacation_message.htm" />
+  <item name="Salvataggio dei messaggi inviati" url="Navigation_folders_and_tips/sent_folder.htm" />
+  <item name="Spazio disponibile della casella di posta" url="Navigation_folders_and_tips/quotas.htm" />
+  <item name="Iscrizione ai feed RSS/ATOM" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</book>
+
+</tocdata>

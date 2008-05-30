@@ -1,0 +1,159 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>クエリ言語の記述</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { font-weight:bold; }
+p.whs2 { margin-left:40px; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("項目を検索する\nクエリ言語の記述");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>クエリ言語の記述</h1>
+<p>この上級者向けのトピックでは、Zimbraの検索機能で使用される検索文法について詳しく説明します。Zimbraでは、インターフェイスに表示される画面を生成するために、常にある種のクエリが適用されます。 </p>
+<p><b style="font-weight: bold;">ヒント</b>：検索ツールバーに現在適用されているクエリを表示するには、[環境設定]の[全般]タブで[<i><b>常に検索文字列を表示</b></i>]オプションを有効にします。&nbsp;たとえば、このオプションを有効にすると、[受信箱]フォルダをクリックしたときに「<i><b>in:inbox</b></i>」というクエリ文字列が表示されます。</p>
+<h2>検索言語の構造</h2>
+<p>簡単な検索は、検索フィールドに語句を入力するだけで実行できます。語句のみの入力（検索演算子なし）は、「content:」演算子を使った検索として解釈されます。つまり、メッセージ内のすべてのテキストが照合されます。   </p>
+<p>さらに高度な検索は、<b>検索演算子</b>を指定することによって実行できます。検索演算子は特殊なキーワードで、その後に半角コロンとそのキーワードに固有なその他のパラメータが続きます。以下にその例を挙げます。 </p>
+<ul><li class=p><p><b style="font-weight: bold;">in:inbox</b>：演算子は「in」で、パラメータは「inbox」です。この例では、[受信箱]フォルダにあるメッセージが返されます。 </p></li>
+</ul>
+<ul><li class=p><p><b style="font-weight: bold;">from:someone</b>：演算子は「from」で、パラメータは「someone」です。この例では、メールアドレスに「someone」という語句を含むメッセージが返されます。   </p></li>
+</ul>
+<p>キーワードの前には、その条件を持たない項目を指定するための「not」を付けることができます。たとえば、「<b>not in:inbox</b>」のようになります。検索文字列では、英文字の大文字と小文字が区別されません。つまり、「in:Party」と「in:party」は同じです。また、notを表す記号としてマイナス記号（<b>-</b>）を使用できます。つまり、「<b>not in:inbox</b>」は「<b>-in:inbox</b>」と同じです。 </p>
+<p>ほとんどの場合、検索文字列に句読点を含めることはありません。句読点を含めても、それらは検索コードによって無視されます。しかし、例外もあります（メッセージ内の9:30という時間を検索する場合など）。その場合は、検索パラメータを二重引用符で囲みます。たとえば、「<b>subject:&quot;9:30&quot;</b>」と指定すると、件名に9:30という文字列を含むメッセージが返されます。 </p>
+<p>検索パラメータに使用できる文字または使用できない文字は以下のとおりです。 </p>
+<ul><li class=p><p>次の文字は、二重引用符で囲む場合を除き、検索パラメータに使用することはできません： ~ '&nbsp;! # $ % ^ &amp; * 
+ ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
+	<li class=p><p>次の文字は、検索パラメータの先頭に使用しない限り、検索パラメータ内で使用できます： - + &lt; &gt; </p></li>
+</ul>
+<h2>複数の検索条件 </h2>
+<p>複数の検索条件を（スペースで区切って）入力した場合、それらはデフォルトでAND検索として扱われます。たとえば、「<b>in:inbox tim</b>」は、「受信箱内にあり、かつtimという語句を含むメッセージを返してください」という意味になります。複数の条件を使用する検索では、指定した条件のいずれかに一致する項目を探すことも、指定した条件のすべてに一致する項目を探すこともできます。高度な検索の機能を使用すると、両方の種類の検索を実行できます。 </p>
+<p>基本検索以外のすべての検索ペインでは、以下の規則が適用されます。 </p>
+<ul><li class=p><p>指定した条件のいずれかに一致するメッセージを検索する場合、これを<b>OR</b>検索と言います。なぜなら、メッセージがいずれかの項目（つまり、X OR Y）を含んでいる場合、そのメッセージは一致するとみなされるからです。複数のチェックボックスがある高度な検索のペインでは、1つのペイン内で複数の項目を選択することで、それらの項目の<b>OR</b>検索を作成できます。 </p></li>
+	<li class=p><p>XとYの両方を含むメッセージを検索する場合、これを<b>AND</b>検索と言います。指定したすべての条件を満たすメッセージが一致項目とみなされます。複数のチェックボックスがある高度な検索のペインでは、同じペインを複数個開き、それぞれのペインで異なるチェックボックスを選択することで<b>AND</b>検索の条件を指定できます。 </p></li>
+</ul>
+<p>クエリに表示されるのは「OR」だけです。検索バーで検索クエリを表示するオプションを選択した場合は、高度な検索でオプションを選択するごとに[検索]テキストボックスが更新され、新しいクエリが表示されます。<b>AND</b>検索を実行する場合、「<b>AND</b>」という単語は表示されません。   </p>
+<p><b style="font-weight: bold;">ヒント</b>：括弧とともにANDやORを使用できます。括弧内の語句は構成単位とみなされます。たとえば、「<b>from: (tanaka sato)</b>」は「<b>from:tanaka AND from:sato</b>」と同じです。「<b>from:(tanaka or sato)</b>」のように括弧内にORを使用した場合、この検索は「<b>from:tanaka OR from:sato</b>」と同じ結果を返します。 </p>
+<h3>検索でアスタリスクワイルドカード（<b>*</b>）を使用する </h3>
+<p>検索でアスタリスク（<b>*</b>）をワイルドカードとして使用すると、類似した語句を含む内容を検索できます。 </p>
+<p>何らかの文字の後にアスタリスク（<b>*</b>）をワイルドカードとして使用します。たとえば、「<b>テレ*</b>」という検索文字列は、「<i>テレ</i>」、「<i>テレビ</i>」、「<i>テレフォン</i>」などの項目を返します。 </p>
+<h2>キーワードの説明と例</h2>
+<p class="whs1">content:</p>
+<p class="whs2">メッセージに含まれているテキストを指定します。たとえば、「<span class=code>content:bananas</span>」と指定すると、「bananas」という語句を含むすべての項目が検索されます。</p>
+<p class="whs1">from:</p>
+<p class="whs2">From:ヘッダーに含まれている送信者の名前やメールアドレスを指定します。これには、「田中良夫」などの名前、「tanaka@acme.com」などのメールアドレス、「zimbra.com」などのドメインを指定できます。</p>
+<p class="whs1">to:</p>
+<p class="whs2">メッセージのTo:ヘッダーに含まれている人物の1人を指定するという点を除き、from:と同じです。</p>
+<p class="whs1">cc:</p>
+<p class="whs2">メッセージのCc:ヘッダーに含まれている受信者の1人を指定できるという点を除き、from:と同じです。</p>
+<p class="whs1">subject:</p>
+<p class="whs2">メッセージの件名ヘッダーのテキストを指定します。たとえば、「<span class=code>subject:&quot;Meeting in Tokyo&quot;</span>」などの例が挙げられます。完全に一致する件名を検索するには、二重引用符を使用します。</p>
+<p class="whs1">in:</p>
+<p class="whs2">フォルダを指定します。たとえば、「<span class=code>in:sent</span>」と指定すると、[<span style="font-weight: bold;"><B>送信済み</B></span>]フォルダ内のすべての項目が表示されます。</p>
+<p class="whs1">has:</p>
+<p class="whs2">メッセージの属性を指定します。指定できるオブジェクトの種類には、添付ファイル、電話、またはURLがあります。たとえば、「<span class=code>has:attachment</span>」と指定すると、1つまたは複数の任意の種類の添付ファイルを含むメッセージがすべて検索されます。</p>
+<p class="whs1">filename:</p>
+<p class="whs2">添付ファイルの名前を指定します。たとえば、「<span 
+ class=code>filename:query.txt</span>」と指定すると、「query.txt」という名前の添付ファイルを含むメッセージが検索されます。</p>
+<p class="whs1">type:</p>
+<p class="whs2">指定した種類の添付ファイル内における検索を指定します。指定できる添付ファイルの種類には、「text」、「word」、「excel」、および「pdf」があります。たとえば、「<span class=code>type:word &quot;拝啓&quot;</span>」と指定すると、Microsoft Word文書の添付ファイルを含むメッセージのうち、添付ファイル内に「拝啓」という語句を含むものだけが検索されます。</p>
+<p class="whs1">attachment:</p>
+<p class="whs2">特定の種類のファイルを指定します。たとえば、「<span class=code>attachment:word</span>」と指定すると、Wordファイルが添付されたメッセージがすべて検索されます。</p>
+<p class="whs1">is:</p>
+<p class="whs2">特定のステータスのメッセージを検索します。使用可能な値は、「unread」、「read」、「flagged」、「unflagged」、「sent」、「draft」、「received」、「replied」、「unreplied」、「forwarded」、「unforwarded」、「anywhere」、「remote」（共有フォルダ内）、「local」です。たとえば、「<span class=code>is:unread</span>」と指定すると、すべての未読メッセージが検索されます。</p>
+<p class="whs1">date:</p>
+<p class="whs2">ブラウザのデフォルトのロケール（US英語の場合はmm/dd/yyyy）を使用して日付を指定します。たとえば、「<span class=code>date:2/1/2007</span>」と指定すると、2007年2月1日の日付が付いたメッセージが検索されます。「<i>after</i>」や「<i>before</i>」の代わりに、大なり記号（&gt;）や小なり記号（&lt;）も使用できます。また、&gt;=や&lt;=も使用できます。   </p>
+<p class="whs1">after:</p>
+<p class="whs2">特定の日付より後に送信されたメールを検索できます。たとえば、「<span class=code>after:2/1/2007</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;">」と指定すると、2007年2月1日より後に送信されたメールが検索されます。</font></span></p>
+<p class="whs1">before:</p>
+<p class="whs2">特定の日付より前に送信されたメールを検索できるという点を除き、<span class=code>after:</span>と同じです。</p>
+<p class="whs1">size:</p>
+<p class="whs2">添付ファイルを含むメッセージの合計サイズをバイト、キロバイト、またはメガバイトで指定します。&nbsp;たとえば、「<span class=code>size:12 kb</span>」と指定すると、サイズが12キロバイトのメッセージが検索されます。より大きなメッセージまたはより小さなメッセージを検索する場合は、大なり記号（&gt;）または小なり記号（&lt;）を使用できます。</p>
+<p class="whs1">larger:</p>
+<p class="whs2">指定したサイズより大きいメッセージを検索できるという点を除き、size:と同じです。</p>
+<p class="whs1">smaller:</p>
+<p class="whs2">指定したサイズより小さいメッセージを検索できるという点を除き、size:と同じです。</p>
+<p class="whs1">tag:</p>
+<p class="whs2">指定したタグが付いているメッセージを検索します。たとえば、「<span class=code>tag:Project1</span>」と指定すると、「Project1」というタグが付いたメッセージが検索されます。</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

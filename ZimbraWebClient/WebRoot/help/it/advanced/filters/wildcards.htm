@@ -1,0 +1,124 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>caratteri jolly</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { margin-left:40px; }
+h3.whs2 { margin-left:0px; }
+p.whs3 { margin-left:0px; }
+img_whs4 { border:none; border-style:none; }
+-->
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "h3.whs2 {margin-left:1pt; }";
+  strNSS += "p.whs3 {margin-left:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Creazione di filtri \nCaratteri jolly dei filtri");
+addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Caratteri jolly dei filtri</h1>
+<p>I caratteri jolly possono essere usati nelle operazioni di confronto che usano l'operatore   &quot;corrisponde al criterio jolly&quot;. I due caratteri jolly   sono <span style="font-weight: bold;"><B>*</B></span> e <span style="font-weight: bold;"><B>?</B></span></p>
+<h3><span style="font-weight: bold;"><B>Asterisco (*)</B></span></h3>
+<p>L'asterisco * è un segnaposto per &quot;zero o più caratteri di   qualsiasi tipo&quot;.</p>
+<p>Esempio di stringa di ricerca di un oggetto: <span style="font-weight: bold;"><B>banana*cioccolato</B></span></p>
+<p class="whs1">Con<span style="font-style: italic;"><I> Corrisponde a:</I></span>   Oggetti come &quot;banana con cioccolato&quot;, &quot;banana al cioccolato&quot;, ma non &quot;panna-banana-cioccolato&quot;</p>
+<p>Esempio di stringa di ricerca di un oggetto: <span style="font-weight: bold;"><B>p*ombrelli</B></span></p>
+<p class="whs1">Con<span style="font-style: italic;"><I> Corrisponde a:</I></span>   oggetti come &quot;portaombrelli&quot; o &quot;poggiaombrelli&quot;   ma non &quot;portati ombrelli neri&quot;</p>
+<h3>Punto interrogativo (?)</h3>
+<p>Il punto interrogativo è un segnaposto per &quot;un solo carattere&quot;.</p>
+<p>Esempio di stringa di ricerca di un oggetto: <span style="font-weight: bold;"><B>banana?cioccolato</B></span></p>
+<p class="whs1">Con<span style="font-style: italic;"><I> Corrisponde a:</I></span>   Oggetti come &quot;banana-cioccolato&quot;, &quot;banana/cioccolato&quot;,   &quot;banana&cioccolato&quot;</p>
+<h3 class="whs2">Carattere di escape barra rovesciata: \</h3>
+<p class="whs3">Se necessario, puoi specificare   una corrispondenza esatta per una stringa contenente caratteri che in genere   vengono considerati caratteri jolly, ad esempio una parola   in un oggetto preceduta e seguita da tre   asterischi, come nel caso di</p>
+<p>***MORE MONEY!!!*** o</p>
+<p>***FREE GIFT***</p>
+<p>Per indicare che un carattere jolly è un carattere vero e proprio anziché un segnaposto,   è necessario farlo precedere da una barra rovesciata \.   La stringa di confronto &quot;\*\*\**\*\*\*&quot;, ad esempio, specifica  un oggetto composto da una stringa preceduta e seguita da tre asterischi   (spazi inclusi).</p>
+<p><img src="../image19.jpg" border="0" class="img_whs4"></p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

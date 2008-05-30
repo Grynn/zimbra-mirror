@@ -1,0 +1,390 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="Atom feed" >
+  <topic name="訂閱 RSS/Atom feed" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="Gal vs「聯絡人」" >
+  <topic name="Gal vs「聯絡人」" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="HTML" >
+  <topic name="顯示 HTML 格式郵件" url="reading_mail/displaying_html_in_email_messages.htm" />
+  <topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="HTML，查看郵件" >
+  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="HTML，設定預設值" >
+  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="iCal 記事簿，匯入或匯出" >
+  <topic name="匯入 iCal 記事簿" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="IMAP 地址，加入" >
+  <topic name="郵箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="IMAP 帳戶" >
+  <topic name="管理 POP 帳戶" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="IMAP 帳戶，加入" >
+  <topic name="新增 POP 帳戶" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="POP 地址，加入" >
+  <topic name="郵箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="POP 帳戶" >
+  <topic name="管理 POP 帳戶" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="POP 帳戶郵件，接收" >
+  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="POP 帳戶，新增" >
+  <topic name="新增 POP 帳戶" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="QuickAdd" >
+  <topic name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="Rich text 編輯器文件頁" >
+  <topic name="使用 Rich text 編輯器" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="RSS" >
+  <topic name="訂閱 RSS/Atom feed" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="Zimbra 助手" >
+  <topic name="Zimbra 助手" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="Zimbra 網絡用戶端的功能" >
+  <topic name="關於 Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="Zimlet" >
+  <topic name="關於 Zimlet" url="Zimlets/About_Zimlets.htm" />
+</key>
+<key name="事項排序" >
+  <topic name="事項排序 " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="介面功能" >
+  <topic name="Zimbra Web Client 工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="以 HTML 查看" >
+  <topic name="打開附件" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="休假訊息" >
+  <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="使用標記" >
+  <topic name="用標記分類郵件" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="修改分享的事項清單" >
+  <topic name="分享你的「事項」清單" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="修改郵件夾存取許可" >
+  <topic name="撤銷分享資料夾的存取權" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="個人分發清單" >
+  <topic name="建立聯絡人群組清單" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="個人通訊錄" >
+  <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="偏好設定" >
+  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="偏好設定，讀信窗格" >
+  <topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="偏好設定，變更" >
+  <topic name="變更用戶選項" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="傳統視窗" >
+  <topic name="傳統視窗" url="Navigation_folders_and_tips/Traditional_View.htm" />
+</key>
+<key name="內容窗格列排序" >
+  <topic name="排序對話" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+</key>
+<key name="全天預約" >
+  <topic name="安排全天活動" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="公司通訊錄" >
+  <topic name="使用公司通訊錄" url="Contacts/using_the_corporate_address_book.htm" />
+</key>
+<key name="分享 wiki 資料夾" >
+  <topic name="分享 wiki 資料夾" url="Documents/Sharing_Notebooks.htm" />
+</key>
+<key name="分享權限，通訊錄" >
+  <topic name="分享你的通訊錄" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="分享記事簿" >
+  <topic name="記事簿存取權限" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="分享通訊錄" >
+  <topic name="分享你的通訊錄" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="列印" >
+  <topic name="列印對話" url="conversations/printing_a_conversation.htm" />
+  <topic name="列印郵件" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="郵件" >
+    <topic name="列印郵件" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="列印記事簿" >
+  <topic name="列印記事簿" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="列印通訊錄" >
+  <topic name="列印聯絡人資料" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="刪除" >
+  <topic name="刪除資料夾" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="資料夾" >
+    <topic name="刪除資料夾" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="刪除定期重複的預約" >
+  <topic name="改變定期重複的預約" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="刪除聯絡人" >
+  <topic name="刪除聯絡人" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="加入" >
+  <topic name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <key name="檔案" >
+    <topic name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  </key>
+</key>
+<key name="加入現有帳戶" >
+  <topic name="新增 POP 帳戶" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="加入署名" >
+  <topic name="使用署名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="加入聯絡人" >
+  <topic name="建立新聯絡人" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="助手" >
+  <topic name="Zimbra 助手" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="匯入 iCal 記事簿" >
+  <topic name="匯入 iCal 記事簿" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="匯入通訊錄" >
+  <topic name="匯入通訊錄" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="匯出 iCal 記事簿" >
+  <topic name="匯入 iCal 記事簿" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="右鍵選單" >
+  <topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="右鍵點擊" >
+  <topic name="Zimbra Web Client 工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="回覆" >
+  <topic name="回覆郵件" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="郵件" >
+    <topic name="回覆郵件" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="在這台電腦上記住我" >
+  <topic name="登入和登出" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="在郵件中填寫地址" >
+  <topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="地點，預訂" >
+  <topic name="安排資源" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="垃圾桶" >
+  <topic name="垃圾桶" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="外部帳戶" >
+  <topic name="管理 POP 帳戶" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="外部帳戶，如何加入" >
+  <topic name="新增 POP 帳戶" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="如何建立預約" >
+  <topic name="關於預約、會議和活動" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="如何設定內容視窗" >
+  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="字型" >
+  <topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="存取外部帳戶" >
+  <topic name="存取外部帳戶" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="安排房間或設備" >
+  <topic name="安排資源" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="安排會議" >
+  <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="定期重複的預約，改變" >
+  <topic name="改變定期重複的預約" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="寄件箱" >
+  <topic name="寄件箱" url="Navigation_folders_and_tips/sent_folder.htm" />
+</key>
+<key name="密碼" >
+  <topic name="如果忘記了密碼" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="變更密碼" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="寫信時使用的郵箱身份" >
+  <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="將預約註明私人" >
+  <topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="對話" >
+  <topic name="對話可跨越若干資料夾" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="列印對話" url="conversations/printing_a_conversation.htm" />
+  <key name="列印" >
+    <topic name="列印對話" url="conversations/printing_a_conversation.htm" />
+  </key>
+  <key name="排序" >
+    <topic name="排序對話" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  </key>
+</key>
+<key name="對話視窗" >
+  <topic name="電子郵件管理視窗" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="建立" >
+  <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <key name="新郵件" >
+    <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  </key>
+</key>
+<key name="建立標記" >
+  <topic name="用標記分類郵件" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="從郵件建立預約" >
+  <topic name="Zimbra 助手" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="快速加入" >
+  <topic name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="快速搜尋" >
+  <topic name="快速搜尋" url="Search/Quick_search.htm" />
+</key>
+<key name="快速鍵" >
+  <topic name="ZWC 快速鍵" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="恢復預設選項" >
+  <topic name="恢復預設選項" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="拒絕記事簿分享請求" >
+  <topic name="拒絕記事簿分享請求" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</key>
+<key name="拖曳" >
+  <topic name="Zimbra Web Client 工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="拼字檢查" >
+  <topic name="使用拼字檢查" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
+<key name="捷徑" >
+  <topic name="Zimbra Web Client 工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="接受記事本存取權限" >
+  <topic name="接受文件記事本存取權限" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+</key>
+<key name="接收郵件" >
+  <topic name="如何知道有新郵件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="提示工具" >
+  <topic name="Zimbra Web Client 工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="搜尋 Builder" >
+  <topic name="建立搜尋條件" url="Search/building_search_queries.htm" />
+</key>
+<key name="搜尋例項" >
+  <topic name="搜尋例項" url="Search/search_examples.htm" />
+</key>
+<key name="搜尋功能" >
+  <topic name="使用搜尋功能" url="Search/using_the_search_feature.htm" />
+  <key name="使用" >
+    <topic name="使用搜尋功能" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="搜尋條件" >
+  <topic name="建立搜尋條件" url="Search/building_search_queries.htm" />
+  <topic name="儲存搜尋條件" url="Search/saving_search_queries.htm" />
+  <key name="儲存" >
+    <topic name="儲存搜尋條件" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="搜尋郵件" >
+  <topic name="搜尋郵件" url="Search/_search__vs.__search_for_.htm" />
+</key>
+<key name="搜尋，and/or" >
+  <topic name="&quot;And&quot; vs. &quot;Or&quot; 類型搜尋" url="Search/and_vs_or_searches.htm" />
+</key>
+<key name="撤銷分享的事項清單" >
+  <topic name="分享你的「事項」清單" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="撤銷分享的郵件夾" >
+  <topic name="撤銷分享資料夾的存取權" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="撤銷記事簿存取權" >
+  <topic name="記事簿存取權限" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="撤銷通訊錄存取權限" >
+  <topic name="分享你的通訊錄" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="支援的附件類型" >
+  <topic name="支援的附件類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="改變選項" >
+  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="改變預約" >
+  <topic name="改變定期重複的預約" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="文件，Rich text 編輯器" >
+  <topic name="使用 Rich text 編輯器" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="文件，分享" >
+  <topic name="分享 wiki 資料夾" url="Documents/Sharing_Notebooks.htm" />
+</key>
+<key name="文件，加入表格" >
+  <topic name="加入表格到記事本頁面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="文件，建立新頁面" >
+  <topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="文件，改變存取權" >
+  <topic name="取消文件 wiki 資料夾的存取權" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="文件，新建記事本" >
+  <topic name="建立新記事本" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="新建文件記事本" >
+  <topic name="建立新記事本" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="新郵件" >
+  <topic name="如何知道有新郵件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="旗標" >
+  <topic name="為郵件加上旗標" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="郵件" >
+    <topic name="為郵件加上旗標" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="日程安排視窗" >
+  <topic name="查看多個記事簿" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+</key>
+<key name="時限過期" >
+  <topic name="如果超過時限" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="會議" >
+  <topic name="關於預約、會議和活動" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="查詢新郵件" >
+  <topic name="用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="查詢語言說明" >
+  <topic name="查詢語言說明" url="Search/query_language_description.htm" />
+</key>
+
+</indexdata>

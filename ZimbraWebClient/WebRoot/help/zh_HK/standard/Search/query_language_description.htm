@@ -1,0 +1,159 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>查詢語言說明</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { font-weight:bold; }
+p.whs2 { margin-left:40px; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("搜尋項目\n查詢語言說明");
+addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>查詢語言說明</h1>
+<p>此節詳細說明 Zimbra 的搜尋功能中使用的搜尋語法。有些類型的查詢條件須用來産生在 Zimbra 介面中常見的視窗。 </p>
+<p><b style="font-weight: bold;">提示</b>：你可將「偏好設定」的「一般」索引標籤設定為<i><b>總顯示搜尋字串</b></i> &nbsp;，以便在「搜尋」工具列中看見目前的查詢條件。例如，若啟用了此選項，按下「收件箱」會顯示查詢條件字串 <i><b>in:inbox</b></i>。</p>
+<h2>搜尋語言結構</h2>
+<p>只需在搜尋欄位中輸入一個單字即可搜尋。裸詞（不含搜尋運算子的單字）被解釋為在 content: 運算子中搜尋 -- 與郵件中的任何文字相符。   </p>
+<p>更進階的搜尋可透過指定一個<b>搜尋運算子</b>實現。  特殊關鍵字後跟一個冒號即為搜尋運算子，其後是適合於該運算子的其他參數。例如： </p>
+<ul><li class=p><p><b style="font-weight: bold;">in:inbox</b>，運算子為 in，而參數為 inbox，意即回送名為 inbox 的資料夾中的郵件。 </p></li>
+</ul>
+<ul><li class=p><p><b style="font-weight: bold;">from:someone</b> 運算子是 from，而參數是 someone，則會回送寄件人地址中含 someone 的郵件。   </p></li>
+</ul>
+<p>在任何關鍵字前都可加上字首 not，從而指定不符合該條件的項目，例如 <b>not in:inbox</b>。  搜尋不區分大小寫，意即 in:inbox 與 in:Inbox 相同。減號（<b>-</b>）是 <b>NOT</b> 的同意詞，因此：<b>not in:inbox</b> 與 <b>-in:inbox</b>相同 </p>
+<p>大多數情況下無需在搜尋字串中使用標點符號，因為會被搜尋程式代碼所忽略。有些情況下不是這樣（例如，搜尋含有時間 '9:30' 的郵件），在這種情況下你需要為搜尋參數加上引號。例如：<b>subject:&quot;9:30&quot;</b>回送的是主題中含字串 9:30 的郵件。 </p>
+<p>搜尋參數中允許使用的字元： </p>
+<ul><li class=p><p>下列字元如果不加引號就不能用於搜尋參數： ~ '&nbsp;! # $ % ^ &amp; * 
+ ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
+	<li class=p><p>下列字元可以用於搜尋參數，但不能作為首字使用。 - + &lt; &gt; </p></li>
+</ul>
+<h2>多重搜尋字 </h2>
+<p>如果輸入了多個搜尋字（用空格分開），預設情況下它們是AND（與）的關係。<b>in:inbox   tim</b> 表示 &quot;將返回位於收件箱中且（AND）含有 tim &quot; 的郵件。  對於有多種條件的搜尋項，你可以尋找與其中任意條件相符的項目，也可尋找符合全部條件的項目。你可用「進階」搜尋功能進行這兩種類型的搜尋。 </p>
+<p>除「基本」搜尋功能外，所有搜尋窗格的規則為： </p>
+<ul><li class=p><p>與指定條件中任意條件相符的搜尋稱為 '<b>OR'</b>（或）搜尋，意思是如果郵件中包含 X 或 Y，則認為該郵件是相符的。對於有多個核取方格的「進階」搜尋窗格，可在單一窗格中對多個選項進行選擇，為所需項目建立一個 '<b>OR '</b>（或）搜尋。 </p></li>
+	<li class=p><p>同時包含 X 與 Y 的搜尋稱為 '<b>AND'</b>（與）搜尋，郵件必須符合所有指定的條件才是相符的。對於有多個核取方格的「進階」伺服器窗格，在同一窗格中開啟多個例項，並對每個例項中的選項進行不同的剔選，將會使條件被指定為 '<b>AND'</b>搜尋項。 </p></li>
+</ul>
+<p>只有 OR 出現在查詢條件中。在「進階」搜尋中進行選擇時，如果作為選項你選擇了在「搜尋」工具列顯示搜尋結果，則「搜尋」框隨即更新並顯示得到的結果。  對於<b>AND</b> 類型的搜尋，'<b>AND'</b>一詞並不會出現。   </p>
+<p><b style="font-weight: bold;">提示</b>：AND 和 OR 可結合括號使用。括號中的字詞視為一個單位。例如 <b>from:  (john thomas)</b> 等同於 <b>from:john AND from:thomas</b>。如果括號中有 OR，如 <b>from:(john or smith)</b>則等同於 <b>from:john OR from:thomas</b>。 </p>
+<h3>在搜尋中使用 <b>*</b> 作為通配字元 </h3>
+<p>星號（<b>*</b>）可在搜尋中作為通配字元使用，以便找到與單字拼寫相似的內容。 </p>
+<p>請在字首後使用星號 <b>*</b>。例如，搜尋字串 <b>do*</b> 返回的結果是 <i>do</i>、<i>dog</i>、<i>door</i> 等。 </p>
+<h2>關鍵字說明及例項</h2>
+<p class="whs1">content:</p>
+<p class="whs2">用於指定郵件中必須包含的文字。  例如，<span class=code>content:bananas</span> 將找出所有包含 bananas 的條目。</p>
+<p class="whs1">from:</p>
+<p class="whs2">用於指定「寄件人」標題中的寄件人姓名或電郵地址。這可以是文字，如 John Smith III，可以是電郵地址，如joe@acme.com，也可以是網域名稱，如 zimbra.com。</p>
+<p class="whs1">to:</p>
+<p class="whs2">於 from: 相同，只是所指定之人的電郵地址位於「收件人：」標題中。</p>
+<p class="whs1">cc:</p>
+<p class="whs2">於 from: 相同，只是所指定的是郵件「副本：」標題中的收件人。</p>
+<p class="whs1">subject:</p>
+<p class="whs2">指定的文字必須是在郵件標題中的文字。例如 <span class=code>subject:&quot;new   vacation policy&quot;</span>。可用引號搜尋完全相符的內容。</p>
+<p class="whs1">in:</p>
+<p class="whs2">用於指定一個資料夾。例如，<span class=code>in:sent</span> 應該顯示<span style="font-weight: bold;"><B>寄件箱</B></span>中的所有條目。</p>
+<p class="whs1">has:</p>
+<p class="whs2">用於指定郵件必須具備的屬性。可指定目標類型包括 &quot;attachment&quot;、&quot;phone&quot; 或 &quot;url&quot;。例如，<span class=code>has:attachment</span>將找出所有包含一個或多個附件的郵件。</p>
+<p class="whs1">filename:</p>
+<p class="whs2">用於指定附件檔案的名稱。例如，<span 
+ class=code> filename:query.txt</span>將找出附件檔案名稱為 &quot;query.txt&quot; 的郵件。</p>
+<p class="whs1">type:</p>
+<p class="whs2">用於指定在某個類型的附件中進行的搜尋。可指定的附件類型包括 &quot;text&quot;、&quot;word&quot;、&quot;excel&quot; 和 &quot;pdf&quot;。  例如，<span class=code>type:word &quot;hello&quot;</span> 將找出含Microsoft Word 文件附件的郵件，同時在這些文件中搜尋單字 &quot;hello&quot;。</p>
+<p class="whs1">attachment:</p>
+<p class="whs2">用於指定包含特定類型附件的任何條目。例如，<span class=code>attachment:word</span> 將找出所有帶 Word 附件的郵件。</p>
+<p class="whs1">is:</p>
+<p class="whs2">用於搜尋某種特定狀態下的郵件。  可用的值包括 &quot;unread&quot;、&quot;read&quot;、&quot;flagged&quot;、  &quot;unflagged&quot;、&quot;sent&quot;、&quot;draft&quot;、  &quot;received&quot;、&quot;replied&quot;、&quot;unreplied&quot;、  &quot;forwarded&quot;、unforwarded&quot;、&quot;anywhere&quot;、  &quot;remote&quot;（在分享資料夾中）、&quot;local&quot;、&quot;sent&quot;。  例如，<span class=code>is:unread </span>將尋找所有未讀的郵件。</p>
+<p class="whs1">date:</p>
+<p class="whs2">可用此關鍵字指定一個日期，其格式使用瀏覽器本地語言的預設格式（對於美式英文，其格式為 mm/dd/yyyy）。例如，<span class=code>date:2/1/2007 </span>將尋找 2007 年 2 月 1日的郵件。大於 (&gt;) 或小於 (&lt;) 符號可用於替代 <i>after</i> 或 <i>before</i>。&gt;= and &lt;= 也是允許使用的。   </p>
+<p class="whs1">after:</p>
+<p class="whs2">指定某特定日期之後傳送的郵件。  例如，<span class=code>after:2/1/2007</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;">是指 2007 年 2 月 1日之後傳送的郵件</font></span><span class=code style="font-weight: normal;">。</span></p>
+<p class="whs1">before:</p>
+<p class="whs2">與 <span class=code>after: </span>相同只是用於指定某特定日期之前傳送的郵件。</p>
+<p class="whs1">size:</p>
+<p class="whs2">指定郵件的總大小（含附件），以位元組、KB 或 MB 為單位。&nbsp;例如，<span class=code>size:12 kb</span> 將找出大小正好為 12K 的郵件。大於 (&gt;) 或小於 (&lt;) 符號可以用於替代 bigger 或 smaller。</p>
+<p class="whs1">larger:</p>
+<p class="whs2">與 size: 相似：只是指定大於某特定大小的郵件。</p>
+<p class="whs1">smaller:</p>
+<p class="whs2">與 size: 相似：只是指定小於某特定大小的郵件。</p>
+<p class="whs1">tag:</p>
+<p class="whs2">用於尋找被標上指定標記的郵件。例如，<span class=code> tag:amber </span>將找出具有 amber 標記的郵件。</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

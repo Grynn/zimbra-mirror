@@ -1,0 +1,316 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="acceder a cuentas externas" >
+  <topic name="Acceder a tus cuentas externas" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="acceso compartido, libreta de direcciones" >
+  <topic name="Compartir tu libreta de direcciones" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="accesos directos" >
+  <topic name="Área de trabajo del programa en línea de Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="aceptar acceder a los blocs de notas" >
+  <topic name="Aceptar acceder a un Bloc de notas" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+</key>
+<key name="adjuntar archivos" >
+  <topic name="Adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <key name="archivos" >
+    <topic name="Adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  </key>
+</key>
+<key name="agenda, acerca de" >
+  <topic name="Acerca de la Agenda de Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="agenda, disponible/ocupado" >
+  <topic name="Consultar la disponibilidad" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="agenda, eventos" >
+  <topic name="Programar eventos para todo el día" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="agenda, imprimir" >
+  <topic name="Imprimir una agenda" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="agenda, permisos de acceso" >
+  <topic name="Determinar acceso a las agendas" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="agendas iCal, importar o exportar" >
+  <topic name="Importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="archivar mensajes" >
+  <topic name="eliminar los mensajes" url="reading_mail/archiving_old_messages.htm" />
+</key>
+<key name="archivos adjuntos" >
+  <topic name="Abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="arrastrar y colocar" >
+  <topic name="Área de trabajo del programa en línea de Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="asistente" >
+  <topic name="Asistente de Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="Asistente de Zimbra" >
+  <topic name="Asistente de Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="autocompletado de direcciones" >
+  <topic name="Autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="añadido rápido" >
+  <topic name="Utilizar el Añadido rápido para crear una cita" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="añadir contactos" >
+  <topic name="Crear un nuevo contacto" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="añadir cuentas existentes" >
+  <topic name="Añadir cuentas POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="añadir firma (automática)" >
+  <topic name="Usar una firma" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Bloc de notas" >
+  <topic name="Trabajar con los blocs de notas" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="Bloc de notas, añadir tablas" >
+  <topic name="Añadir una tabla a la página del bloc de notas" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="Bloc de notas, cambiar los permisos de acceso" >
+  <topic name="Cancelar el acceso a tu carpeta de Bloc de notas wiki" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="Bloc de notas, crear" >
+  <topic name="Crear nuevos blocs de notas" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="Bloc de notas, crear páginas nuevas" >
+  <topic name="Crear una nueva página" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Bloc de notas, editor de texto enriquecido " >
+  <topic name="Utilizar el editor de texto enriquecido" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="Blocs de notas, compartir" >
+  <topic name="Compartir las carpetas wiki" url="Documents/Sharing_Notebooks.htm" />
+</key>
+<key name="bloquear archivos adjuntos" >
+  <topic name="Bloqueo de archivos adjuntos" url="reading_mail/attachment_blocking.htm" />
+  <topic name="función de bloqueo de mensajes" url="reading_mail/Message_blocking_feature.htm" />
+</key>
+<key name="borradores" >
+  <topic name="Guardar un borrador" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="buscar con comodín" >
+  <topic name="Usar la función de búsqueda" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="buscar un mensaje" >
+  <topic name="Buscar mensajes" url="Search/_search__vs.__search_for_.htm" />
+</key>
+<key name="buscar, and/or" >
+  <topic name="Búsquedas con &quot;AND&quot; frente a &quot;OR&quot;" url="Search/and_vs_or_searches.htm" />
+</key>
+<key name="buzón lleno" >
+  <topic name="espacio de almacenamiento" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="Búsqueda rápida" >
+  <topic name="Búsqueda rápida" url="Search/Quick_search.htm" />
+</key>
+<key name="búsquedas" >
+  <topic name="Crear búsquedas" url="Search/building_search_queries.htm" />
+  <topic name="Guardar tus búsquedas" url="Search/saving_search_queries.htm" />
+  <key name="guardar" >
+    <topic name="Guardar tus búsquedas" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="caduca la sesión" >
+  <topic name="Si caduca tu sesión" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="cambiar la lista de tareas compartida" >
+  <topic name="Compartir tu lista de tareas" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="cambiar opciones" >
+  <topic name="Configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="cambiar una cita" >
+  <topic name="Cambiar las citas recurrentes" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="carpetas" >
+  <topic name="Cambiar el nombre de las carpetas" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <topic name="Acerca de las carpetas" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
+<key name="carpetas personalizadas" >
+  <topic name="Crear carpetas personalizadas" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="cita de todo el día" >
+  <topic name="Programar eventos para todo el día" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="cita, añadido rápido" >
+  <topic name="Utilizar el Añadido rápido para crear una cita" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="citas" >
+  <topic name="Acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="citas privadas" >
+  <topic name="Acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="citas recurrentes, cambiar" >
+  <topic name="Cambiar las citas recurrentes" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="clic con el botón derecho " >
+  <topic name="Área de trabajo del programa en línea de Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="comodines" >
+  <topic name="comodines" url="filters/wildcards.htm" />
+</key>
+<key name="comodín, usar en la búsqueda" >
+  <topic name="Usar la función de búsqueda" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="compartir carpetas wiki" >
+  <topic name="Compartir las carpetas wiki" url="Documents/Sharing_Notebooks.htm" />
+</key>
+<key name="compartir las libretas de direcciones" >
+  <topic name="Compartir tu libreta de direcciones" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="compartir tu agenda" >
+  <topic name="Determinar acceso a las agendas" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="comprobar correo" >
+  <topic name="Cómo saber que tienes mensajes nuevos" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="comprobar si hay nuevos mensajes" >
+  <topic name="Cómo saber que tienes mensajes nuevos" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="condiciones de los filtros" >
+  <topic name="Condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
+</key>
+<key name="configurar una dirección de reenvío" >
+  <topic name="Configurar una dirección de reenvío" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="consejos" >
+  <topic name="Área de trabajo del programa en línea de Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="contacto" >
+  <topic name="Modificar un contacto" url="Contacts/editing_a_contact.htm" />
+  <topic name="Contactos" url="Contacts/contacts.htm" />
+  <topic name="Crear un nuevo contacto" url="Contacts/creating_a_new_contact.htm" />
+  <key name="modificar" >
+    <topic name="Modificar un contacto" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="contacto, imprimir lista" >
+  <topic name="Imprimir tus contactos" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="contactos de forma automática" >
+  <topic name="Añadir contactos, de forma automática" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+</key>
+<key name="contactos personales" >
+  <topic name="Modificar un contacto" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="contactos, importar" >
+  <topic name="Importar contactos" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="contactos, volver a añadir un contacto eliminado a tu lista " >
+  <topic name="Eliminar un contacto" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="contraseña" >
+  <topic name="Si olvidas tu contraseña" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Cambiar tu contraseña" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="conversaciones" >
+  <topic name="Las conversaciones pueden abarcar varias carpetas" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Imprimir una conversación" url="conversations/printing_a_conversation.htm" />
+  <key name="Imprimir" >
+    <topic name="Imprimir una conversación" url="conversations/printing_a_conversation.htm" />
+  </key>
+  <key name="ordenar" >
+    <topic name="Ordenar conversaciones" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  </key>
+</key>
+<key name="corrector ortográfico" >
+  <topic name="Utilizar el corrector ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
+<key name="correo" >
+  <topic name="Leer tus mensajes" url="reading_mail/reading_mail.htm" />
+  <key name="Lectura" >
+    <topic name="Leer tus mensajes" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="correo, autocompletado de direcciones" >
+  <topic name="Autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="creador de búsquedas" >
+  <topic name="Crear búsquedas" url="Search/building_search_queries.htm" />
+</key>
+<key name="crear" >
+  <topic name="Redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <key name="nuevo mensaje de correo" >
+    <topic name="Redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  </key>
+</key>
+<key name="crear Bloc de notas" >
+  <topic name="Crear nuevos blocs de notas" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="crear etiquetas" >
+  <topic name="Usar etiquetas para clasificar los mensajes" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="crear una cita desde un mensaje" >
+  <topic name="Asistente de Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="cuenta IMAP" >
+  <topic name="Gestionar tus cuentas POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="cuenta POP" >
+  <topic name="Gestionar tus cuentas POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="cuentas externas" >
+  <topic name="Gestionar tus cuentas POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="cuentas externas, cómo añadir" >
+  <topic name="Añadir cuentas POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="cuentas IMAP, añadir" >
+  <topic name="Añadir cuentas POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="cuentas POP, añadir" >
+  <topic name="Añadir cuentas POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="cómo configurar el panel de contenido inicial" >
+  <topic name="Configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="cómo crear citas" >
+  <topic name="Acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="descripción del lenguaje de búsquedas" >
+  <topic name="descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
+</key>
+<key name="determinar acceso a tu agenda" >
+  <topic name="Determinar acceso a las agendas" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="direcciones IMAP, añadir" >
+  <topic name="Identidades de correo" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="direcciones POP, añadir" >
+  <topic name="Identidades de correo" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="dirección de reenvío" >
+  <topic name="Configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="disponibilidad" >
+  <topic name="Consultar la disponibilidad" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="editor de texto enriquecido para el bloc de notas" >
+  <topic name="Utilizar el editor de texto enriquecido" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="ejemplos de búsquedas" >
+  <topic name="Ejemplos de búsquedas" url="Search/search_examples.htm" />
+</key>
+<key name="eliminar" >
+  <topic name="eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="carpetas" >
+    <topic name="eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="eliminar contactos" >
+  <topic name="Eliminar un contacto" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="eliminar las citas recurrentes" >
+  <topic name="Cambiar las citas recurrentes" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+
+</indexdata>

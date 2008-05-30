@@ -1,0 +1,159 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Descrição da linguagem de critérios</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { font-weight:bold; }
+p.whs2 { margin-left:40px; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Buscando itens\nDescrição da linguagem de critérios");
+addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Descrição da linguagem de critérios</h1>
+<p>Esse tópico avançado descreve em detalhes a gramática de busca usada no recurso de Busca do Zimbra. Algum tipo de critério é sempre aplicado para produzir a visualização que você tem na interface Zimbra. </p>
+<p><b style="font-weight: bold;">DICA</b>: Você pode definir suas Preferências, na aba Geral para “<i><b>Sempre exibir a string de busca”</b></i> &nbsp;para ver o critério atual na barra de ferramentas de Busca. Por exemplo, quando essa opção está ativada, clicar na pasta Caixa de entrada mostra a string de consulta “<i><b>in:caixa de entrada”</b></i>.</p>
+<h2>Estrutura da linguagem de busca</h2>
+<p>As buscas simples podem ser feitas bastando apenas digitar a palavra no campo de busca. Palavras soltas (sem um operador de busca) são interpretadas como uma busca no operador “content:” - o que corresponde a qualquer texto na mensagem.   </p>
+<p>Buscas mais avançadas podem ser feitas ao especificar um <b>operador de busca</b>.   Um operador de busca é uma palavra-chave especial que é seguida por dois pontos, seguida de outro parâmetro específico para aquele operador. Por exemplo: </p>
+<ul><li class=p><p><b style="font-weight: bold;">in:caixa de entrada</b> o operador é &quot;in&quot; e o parâmetro é &quot;caixa de entrada&quot; - o que retorna mensagens que estiverem na pasta de nome &quot;caixa de entrada&quot; </p></li>
+</ul>
+<ul><li class=p><p><b style="font-weight: bold;">from:alguém</b> o operador  é &quot;from&quot; e o parâmetro é &quot;alguém&quot; - o que retorna mensagens que tenham a palavra &quot;alguém&quot; no seu endereço de e-mail   </p></li>
+</ul>
+<p>Você pode usar como prefixo a palavra &quot;not&quot; (não) para especificar itens que não tenham aqueles critérios, por exemplo <b>not in:caixa de entrada</b>.   A busca não faz diferenciação entre maiúsculas e minúsculas, significando que &quot;in:caixa de entrada&quot; é o mesmo que &quot;in:Caixa de entrada&quot;. O sinal de menos (<b>-</b>) é sinônimo de <b>NOT</b>   Então: <b>not in:caixa de entrada</b> é o mesmo que <b>-in:caixa de entrada</b> </p>
+<p>Na maioria dos casos, não é necessário incluir caracteres de pontuação na sua seqüência de busca, pois são ignorados pelo código de busca. Há vezes em que isso não é verdade (por exemplo, buscar uma hora “9:30” em uma mensagem) e nesses casos você deve incluir o parâmetro de busca entre aspas. Por exemplo: <b>subject:&quot;9:30&quot;</b>  retornará mensagens que tenham a seqüência 9:30 na linha de assunto. </p>
+<p>Caracteres permitidos no parâmetro de busca: </p>
+<ul><li class=p><p>Os seguintes caracteres não podem estar em nenhuma parte da busca a menos que estejam cercados por aspas: ~ '&nbsp;! # $ % ^ &amp; * 
+ ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
+	<li class=p><p>Os seguintes caracteres são permitidos em um parâmetro de busca contanto que sejam o primeiro caractere: - + &lt; &gt; </p></li>
+</ul>
+<h2>Vários termos de busca </h2>
+<p>Se forem inseridos vários termos de busca (separados por espaços), eles terão&quot;AND&quot; por padrão. <b>in:caixa de entrada   duda</b> significa&quot;retorne mensagens que estiverem na caixa de entrada E que tenham a palavraduda&quot;.   Para buscas usando vários critérios, você pode encontrar itens que atendam a um critério especificado ou a todos eles. É possível realizar ambos os tipos de busca usando o construtor de Busca avançada. </p>
+<p>Para todos os painéis de busca, com exceção da Busca básica, as regras são: </p>
+<ul><li class=p><p>A busca por mensagens que correspondam a qualquer um dos critérios especificados é chamada uma busca “<b>OR</b>” (ou), porque se a mensagem contiver X ou Y, é considerada uma correspondência. Para painéis de Busca avançada com várias caixas de seleção, fazer várias seleções em um só painel cria uma busca OR para aqueles itens. </p></li>
+	<li class=p><p>Buscar mensagens que contêm tanto X quanto Y é chamada uma busca “<b>AND</b>” (e), porque a mensagem deve atender a todos os critérios especificados para que seja considerada uma correspondência. Para painéis de Servidor avançado com caixas de seleção, abrir várias instâncias do mesmo painel e fazer várias marcações de caixa de seleção em cada uma faz com que o critério seja especificado como uma busca “<b>AND”</b>. </p></li>
+</ul>
+<p>Apenas &quot;OR&quot; aparece em uma consulta. Se você selecionou mostrar a consulta da busca na barra de Busca enquanto faz seleções na Busca avançada, a caixa de texto Busca é atualizada para mostrar a consulta resultante.   Com o tipo de busca “<b>AND”</b>, a palavra “<b>AND”</b> não é exibida.   </p>
+<p><b style="font-weight: bold;">Dica</b>: Usando parênteses com AND e   OR. As palavras dentro de parênteses são consideradas uma unidade. Por exemplo <b>from:   (joão tomás)</b> é equivalente a <b>from:joão AND   from:tomás</b>. Se você usar OR no parênteses,   <b>from:(joão or josé)</b>, a busca é para resultados <b>from:joão OR   from:tomás</b>. </p>
+<h3>Usando <b>*</b>  como curinga na Busca </h3>
+<p>O asterisco (<b>*</b>) pode ser usado como curinga em uma busca para encontrar conteúdo que contenha palavras com ortografia similar. </p>
+<p>Use o asterisco <b>*</b>  como curinga após um prefixo. Por exemplo,  a string de busca <b>co*</b> retorna itens como <i>cor</i>, <i>cola</i>, <i>comer</i>, etc. </p>
+<h2>Descrições e exemplos de palavras-chave</h2>
+<p class="whs1">content:</p>
+<p class="whs2">Especifica texto que a mensagem deve conter.   Por exemplo, <span class=code>content:bananas</span> localiza todos os itens contendo a palavra &quot;bananas&quot;.</p>
+<p class="whs1">from:</p>
+<p class="whs2">Especifica um nome ou endereço de e-mail de remetente que esteja no cabeçalho De. Isso pode ser texto, como em &quot;João Silva III&quot;, um endereço de e-mail como &quot;joao@acme.com.br&quot;,   ou um domínio como &quot;zimbra.com&quot;.</p>
+<p class="whs1">to:</p>
+<p class="whs2">Mesmo que from: exceto pelo fato de que especifica uma das pessoas para quem o e-mail foi endereçado em Para :.</p>
+<p class="whs1">cc:</p>
+<p class="whs2">Mesmo que from: exceto pelo fato de que especifica um destinatário no cabeçalho Cc: da mensagem.</p>
+<p class="whs1">subject:</p>
+<p class="whs2">Especifica texto que deve aparecer no cabeçalho de assunto da mensagem. Um exemplo pode ser <span class=code>subject:&quot;nova política de férias&quot;</span>. Use aspas para buscar uma correspondência exata.</p>
+<p class="whs1">in:</p>
+<p class="whs2">Especifica uma pasta. Por exemplo, <span class=code>in:enviadas</span> mostraria todos os itens na sua pasta <span style="font-weight: bold;"><B>Enviadas</B></span>.</p>
+<p class="whs1">has:</p>
+<p class="whs2">Especifica um atributo que a mensagem deve ter. Os tipos de objeto que você pode especificar são &quot;anexo&quot;,   &quot;telefone&quot; ou &quot;url&quot;. Por exemplo, <span class=code>has:anexo</span> localizaria todas as mensagens que contenham um ou mais anexos de qualquer tipo.</p>
+<p class="whs1">filename:</p>
+<p class="whs2">Especifica um nome de arquivo anexo. Por exemplo, <span 
+ class=code>filename:query.txt</span> localizaria mensagens com um arquivo anexo de nome &quot;query.txt&quot;.</p>
+<p class="whs1">type:</p>
+<p class="whs2">Especifica uma busca com anexos de um determinado tipo. Os tipos de anexo que você pode especificar são &quot;texto&quot;,   &quot;word&quot;, &quot;excel&quot; e &quot;pdf&quot;.   Por exemplo, <span class=code>type:word &quot;ola&quot;</span> localiza mensagens com anexos que sejam documentos do Microsoft Word e busca nesses anexos a palavra &quot;ola&quot;.</p>
+<p class="whs1">attachment:</p>
+<p class="whs2">Especifica qualquer item dentro de um certo tipo de anexo. Por exemplo, <span class=code>attachment:word</span> localizaria todas as mensagens com anexos de Word.</p>
+<p class="whs1">is:</p>
+<p class="whs2">Busca mensagens de um determinado status.   Os valores permitidos são &quot;não lida&quot;, &quot;lida&quot;, &quot;sinalizada&quot;,   &quot;não sinalizada&quot;, &quot;enviada&quot;, &quot;rascunho&quot;,   &quot;recebida&quot;, &quot;respondida&quot;, &quot;não respondida&quot;,   &quot;encaminhada&quot;, não encaminhada&quot;, &quot;qualquer local&quot;,   &quot;remoto&quot; (em uma pasta compartilhada), &quot;local&quot;.   Por exemplo, <span class=code>is: não lida</span> localizará todas as mensagens não lidas.</p>
+<p class="whs1">date:</p>
+<p class="whs2">Use essa palavra-chave para especificar uma data, usando o formato padrão para a localidade de seu navegador (para português do Brasil, o formato é dd/mm/yyyy). Por exemplo, <span class=code>date:1/2/2007</span> localizaria mensagens datadas de 1 de fevereiro de 2007. Os símbolos maior que (&gt;) ou menor que (&lt;) podem ser usados em vez de <i>após</i> ou <i>antes</i>. &gt;= e &lt;= também são permitidos.   </p>
+<p class="whs1">after:</p>
+<p class="whs2">Especifica e-mails enviados após uma certa data.   Por exemplo, <span class=code>after:1/2/2007</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;"> especifica e-mails enviados após 1 de fevereiro de 2007</font></span><span class=code style="font-weight: normal;">.</span></p>
+<p class="whs1">before:</p>
+<p class="whs2">Mesmo que <span class=code>after:</span> com a diferença de que especifica e-mails enviados antes da data especificada</p>
+<p class="whs1">size:</p>
+<p class="whs2">Especifica mensagens cujo tamanho total, incluindo anexos, seja de um número especificado de bytes, quilobytes ou megabytes &nbsp;Por exemplo, <span class=code>size:12 kb</span> encontraria mensagens que têm exatamente 12K de tamanho. Os símbolos de maior que (&gt;) ou menor que (&lt;) podem ser usados em vez de maior ou menor.</p>
+<p class="whs1">larger:</p>
+<p class="whs2">Semelhante a size: com a diferença de que especifica maior que o tamanho especificado.</p>
+<p class="whs1">smaller:</p>
+<p class="whs2">Semelhante a size: com a diferença de que especifica menor que o tamanho especificado.</p>
+<p class="whs1">tag:</p>
+<p class="whs2">Localiza mensagens que foram marcadas com um determinado marcador. Por exemplo,<span class=code> tag:chefe</span> localizará mensagens que tenham um marcador chamado &quot;chefe&quot;.</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<resource>
+<item name="Prev" value="&lt;&lt;" />
+<item name="Hide" value="Скрыть" />
+<item name="SyncTocTooltip" value="Синхр. содержания" />
+<item name="InTopicSearchBtnText" value="Вперед" />
+<item name="JS_alert_appletNotLoad " value=" Не удалось загрузить приложение. Если используется старая версия Netscape, необходимо изменить файл prefs.js." />
+<item name="FtsInputPrompt" value="Введите слова для поиска:" />
+<item name="Done" value="Готово" />
+<item name="Logo/Author" value="Предоставляется" />
+<item name="MergeError1" value="В объединенной справочной системе" />
+<item name="JS_alert_cantLoadProject" value="Невозможно загрузить проект:" />
+<item name="Next" value="&gt;&gt;" />
+<item name="SyncToc" value="SyncToc" />
+<item name="MergeError2" value="используется другой язык по сравнению с основной справочной системой, поэтому функции указателя и полнотекстового поиска в объединенной системе будут отключены." />
+<item name="nls_body_instruction" value="Введите свой вопрос в текстовом поле выше, затем нажмите 'Вперед'." />
+<item name="ToolBarSearchBtnText" value="Вперед" />
+<item name="SuggestViewNoFrameMessage" value="Для просмотр справочной системы без рамок нажмите эту" />
+<item name="MergeError3" value="использование пометки веб-настройки, отличной от основной справочной системы, которая приведет к тому, что объединенная функциональность в справочной системе будет отключена." />
+<item name="Hide_Navigation_Component" value="Скрыть компонент навигации" />
+<item name="FtsBtnText" value="Вперед" />
+<item name="TopicsFound" value="разделов найдено" />
+<item name="LoadingContentsData" value="Загрузка, нажмите здесь для отмены..." />
+<item name="Definition" value="Определение:" />
+<item name="CompletingContents" value="Заполнение содержания..." />
+<item name="GeneratedBy" value="Создано" />
+<item name="PoweredBy" value="Предоставляется" />
+<item name="IndexAlphabetBookmarks" value="АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ" />
+<item name="Contents" value="Содержание" />
+<item name="IndexSelectTopicLabel" value="Выберите раздел, затем нажмите 'Показать'" />
+<item name="Disabled Prev" value="&lt;&lt;" />
+<item name="Glossary" value="Глоссарий" />
+<item name="Search" value="Поиск" />
+<item name="CantSearch" value="Невозможно выполнить поиск для этой фразы." />
+<item name="LoadingIndex" value="Загрузка указателя..." />
+<item name="LoadingData" value="Загрузка данных, подождите..." />
+<item name="Show_Navigation_Component" value="Показать компонент навигации" />
+<item name="Book" value="Книга" />
+<item name="Disabled Next" value="&gt;&gt;" />
+<item name="nls_body_empty" value="Извините, нам не удалось найти достойный ответ на вопрос." />
+<item name="nls_button_go_hint" value="Начать поиск" />
+<item name="FtsHilitePrompt" value="Выделить результаты поиска" />
+<item name="Find" value="Найти" />
+<item name="CantOpenURLorFile" value="Невозможно открыть URL или файл" />
+<item name="Print" value="Печать" />
+<item name="About" value="О программе" />
+<item name="Author" value="Автор" />
+<item name="IndexSelectTopicTitle" value="Выбор раздела" />
+<item name="Blank_topic_text" value="Этот раздел создан мастером WinHelp Project Conversion и используется для отсутствующего раздела или неработающей гиперссылки." />
+<item name="BrowserLimitedMessage" value="Ваш обозреватель не поддерживает рамки. Рекомендуется обновить обозреватель на версию, поддерживающую рамки." />
+<item name="LoadingTOCItem" value="Загрузка содержания:" />
+<item name="Display" value="Показать" />
+<item name="Cancel" value="Отмена" />
+<item name="IndexSelectTopicError" value="Выберите раздел." />
+<item name="nls_edit_label" value="Введите вопрос:" />
+<item name="SearchLabel" value="Поиск" />
+<item name="RelateTopicListPrompt" value="Выберите раздел, затем нажмите 'Показать'." />
+<item name="Seperate " value=" |" />
+<item name="NextTooltip" value="Следующий раздел" />
+<item name="JS_alert_colorlimitation" value="Система WebHelp обнаружила, что дисплей настроен на 16 цветов. Для полной поддержки WebHelp задайте для дисплея использование 256 или более цветов." />
+<item name="TopicsNotFound" value="Разделов не найдено." />
+<item name="Show" value="Показать" />
+<item name="PreTooltip" value="Предыдущий раздел" />
+<item name="SearchPrompt" value="- Поиск -" />
+<item name="IndexBtnText" value="Вперед" />
+<item name="JS_alert_ProjectLoadingFail" value="Неуспешная загрузка, нажмите 'Обновить'." />
+<item name="LoadingContents" value="Загрузка содержания, подождите..." />
+<item name="Term" value="Термин:" />
+<item name="WebSearchButton" value="WebSearch" />
+<item name="Remote_Page" value="Удаленная страница" />
+<item name="WebSearch" value="WebSearch" />
+<item name="LoadingFTS" value="Чтение данных поиска..." />
+<item name="Index" value="Указатель" />
+<item name="JS_alert_ErrorInLoading" value="Ошибка при загрузке компонента навигации. Выполните регенерацию WebHelp." />
+<item name="IndexInputPrompt" value="Введите ключевое слово для поиска:" />
+<item name="Page" value="Страница" />
+<item name="SuggestViewNoFrameMsg2" value="гиперссылку." />
+<item name="nls_button_go_text" value="Вперед" />
+<item name="Searching" value="Поиск…" />
+
+  <item name="English"   value="" />
+  <item name="langorder" value="0,1,2,3,4,5,6,7,8,40,41,42,43,44,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,38,45,46,47,48,49,50,33,51,52,53,88,54,34,55,56,115,119,121,123,125,126,127,128,129,130,57,58,89,90,91,59,60,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,246,252,61,62,63,64,66,67,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,246,252,68,69,70,71,27,114,28,82,170,85,112,109,110,65,113,223,86,213,29,255,30,31,80,81,83,84,111,36,37,79,229,222,87,212,32,254,251,39,72,97,98,99,100,73,101,74,102,133,93,103,35,104,75,105,92,122,124,76,106,107,108,77,120,199,94,116,117,118,78,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,95,197,230,230,230,230,246,227,224,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,96,197,230,230,230,230,246,227,250," />
+
+  <panes show="0">
+    <toc />
+    <index />
+    <fts />
+  </panes>
+
+  <stopwords>
+  </stopwords>
+
+
+	<paneskin>
+		<background color="#e8dcc1" img="" />
+		<font name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+		<toc>
+			<background color="#f9f9f9" img="" />
+			<icons>
+				<book open="chr_book_op.gif" close="chr_book_clo.gif" />
+				<item  local="chr_page.gif" remote="chr_webpage.gif" />
+				<newbook open="" close="" />
+				<newitem  local="" remote="" />
+			</icons>
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</toc>
+		<index>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</index>
+		<fts>
+			<form>
+				<fonts>
+					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+				</fonts>
+				<button normal="" hover="" />
+				<editwith value="20" />
+			</form>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<error name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</fts>
+		<glossary>
+			<background color="#f9f9f9" img="" />
+			<fonts>
+				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+			</fonts>
+			<activebackgroundcolor attr="#cacaca" />
+			<margin attr="" />
+			<indent attr="" />
+		</glossary>
+	</paneskin>
+</resource>

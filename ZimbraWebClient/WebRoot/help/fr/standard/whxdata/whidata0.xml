@@ -1,0 +1,206 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="affichage de conversation" >
+  <topic name="Choisir comment les mails sont affichés" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+</key>
+<key name="affichage des mails" >
+  <topic name="Choisir comment les mails sont affichés" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+</key>
+<key name="afficher au format HTML" >
+  <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="ajouter des carnets d’adresses" >
+  <topic name="Vos carnets d’adresses" url="Contacts/b_Your_Address_Books.htm" />
+</key>
+<key name="ajouter des signatures" >
+  <topic name="Ajouter automatiquement votre signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+</key>
+<key name="ajouter une liste de groupes de contacts" >
+  <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="blocage des pièces jointes" >
+  <topic name="Blocage des pièces jointes" url="reading_mail/attachment_blocking.htm" />
+  <topic name="Fonction de blocage des mails" url="reading_mail/Message_blocking_feature.htm" />
+</key>
+<key name="boîte aux lettres saturée" >
+  <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="brouillon" >
+  <topic name="Enregistrement d’un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="calendriers iCal, importer ou exporter" >
+  <topic name="Importation de votre calendrier iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="carnet d’adresses, ajouter de nouveaux contacts" >
+  <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="carnets d’adresses, créer" >
+  <topic name="Vos carnets d’adresses" url="Contacts/b_Your_Address_Books.htm" />
+</key>
+<key name="Conditions de filtre" >
+  <topic name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="configurer une adresse de redirection" >
+  <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="contacts, ajouter à un carnet d’adresses" >
+  <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="Conversations" >
+  <key name="Trier" >
+    <topic name="Trier les conversations" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  </key>
+</key>
+<key name="créer une recherche" >
+  <topic name="Utiliser la recherche" url="Search/b_Using_Search.htm" />
+</key>
+<key name="Description du langage de demande" >
+  <topic name="Description du langage de demande" url="Search/query_language_description.htm" />
+</key>
+<key name="Dossier Corbeille" >
+  <topic name="Dossier Corbeille" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="Dossier Envoyés" >
+  <topic name="Dossier Envoyés" url="Navigation_folders_and_tips/sent_folder.htm" />
+</key>
+<key name="dossier, fil RSS " >
+  <topic name="S’abonner au fil RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</key>
+<key name="dossiers" >
+  <topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
+<key name="déconnexion" >
+  <topic name="Connexion et déconnexion" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="expiration de la session" >
+  <topic name="Si votre session a expiré" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="faire suivre votre mail" >
+  <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="Fil RSS" >
+  <topic name="S’abonner au fil RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</key>
+<key name="filtrer des mails" >
+  <topic name="Filtrer vos messages" url="filters/bc_Filtering_your_messages.htm" />
+</key>
+<key name="groupes de contacts, ajouter" >
+  <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="importer des calendriers iCal" >
+  <topic name="Importation de votre calendrier iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Livraison de mail impossible :" >
+  <topic name="Livraison de mail impossible :" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="mail" >
+  <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
+  <topic name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <key name="Lecture" >
+    <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="marquer un rendez-vous comme étant d’ordre privé" >
+  <topic name="À propos de la page de rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Message d'absence" >
+  <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="messages, absence" >
+  <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="messages, configuration de règles de filtre" >
+  <topic name="Filtrer vos messages" url="filters/bc_Filtering_your_messages.htm" />
+</key>
+<key name="mot de passe" >
+  <topic name="Si vous oubliez votre mot de passe" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Modifier votre mot de passe" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="notification de mail" >
+  <topic name="Notification de nouveaux mails" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="nouvelle fenêtre, affichage des mails" >
+  <topic name="Choisir comment les mails sont affichés" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+</key>
+<key name="option, message d’absence" >
+  <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="options" >
+  <topic name="Configuration de vos options" url="Userspecific/b_Setting_your_Options.htm" />
+</key>
+<key name="options, notification de nouveau mail" >
+  <topic name="Notification de nouveaux mails" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="pièces jointes" >
+  <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="planification d’une réunion" >
+  <topic name="À propos de la page de Rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="préférences" >
+  <topic name="Configuration de vos options" url="Userspecific/b_Setting_your_Options.htm" />
+</key>
+<key name="Quotas" >
+  <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="raccourcis clavier" >
+  <topic name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+</key>
+<key name="recherche" >
+  <topic name="Utiliser la recherche" url="Search/b_Using_Search.htm" />
+</key>
+<key name="recherche, créer une recherche" >
+  <topic name="Utiliser la recherche" url="Search/b_Using_Search.htm" />
+</key>
+<key name="recherche, enregistrer" >
+  <topic name="Utiliser la recherche" url="Search/b_Using_Search.htm" />
+</key>
+<key name="Redirection" >
+  <topic name="Faire suivre un mail" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="rendez-vous privés" >
+  <topic name="À propos de la page de rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Récupération" >
+  <topic name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="mails supprimés" >
+    <topic name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="Répondre" >
+  <topic name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="mails" >
+    <topic name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="réunions" >
+  <topic name="À propos de la page de Rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="se rappeler de moi sur cet ordinateur" >
+  <topic name="Connexion et déconnexion" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="signature, ajouter automatiquement" >
+  <topic name="Ajouter automatiquement votre signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+</key>
+<key name="tags" >
+  <topic name="Affecter des tags à des mails et à des contacts" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+</key>
+<key name="touches de raccourcis" >
+  <topic name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+</key>
+<key name="trier des tâches" >
+  <topic name="Trier des tâches " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="trier les colonnes du panneau de contenus" >
+  <topic name="Trier les conversations" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+</key>
+<key name="Types de fichiers de pièces jointes supportés" >
+  <topic name="Types de fichiers de pièces jointes supportés" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="Vider la corbeille" >
+  <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+
+</indexdata>

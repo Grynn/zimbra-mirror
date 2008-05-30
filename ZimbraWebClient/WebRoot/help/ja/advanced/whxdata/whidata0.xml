@@ -1,0 +1,366 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="[ゴミ箱]フォルダ" >
+  <topic name="[ゴミ箱]フォルダ" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="[送信済み]フォルダ" >
+  <topic name="[送信済み]フォルダ" url="Navigation_folders_and_tips/sent_folder.htm" />
+</key>
+<key name="Atomフィード" >
+  <topic name="RSS/Atomフィードを購読する" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="GALと連絡先" >
+  <topic name="GALと連絡先" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="HTML" >
+  <topic name="メールメッセージをHTML形式で表示する" url="reading_mail/displaying_html_in_email_messages.htm" />
+  <topic name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="HTML、デフォルトに設定" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="html、メールを表示" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="HTMLを使って書式設定する" >
+  <topic name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="HTML形式で表示" >
+  <topic name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="iCalカレンダー、インポートまたはエクスポート" >
+  <topic name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="iCalカレンダーをインポート" >
+  <topic name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="iCalカレンダーをエクスポート" >
+  <topic name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="ID" >
+  <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
+  <topic name="パーソナを作成する" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="IMAPアカウント" >
+  <topic name="POPアカウントを管理する" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="IMAPアドレス、追加する" >
+  <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
+  <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="POPアカウント" >
+  <topic name="POPアカウントを管理する" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="POPアカウント、追加する" >
+  <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="POPアカウントのメール、受信する" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="POPアドレス、追加する" >
+  <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="RSS" >
+  <topic name="RSS/Atomフィードを購読する" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="RSSを購読する" >
+  <topic name="RSS/Atomフィードを購読する" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="wikiフォルダを共有する" >
+  <topic name="wikiフォルダを共有する" url="Documents/Sharing_Notebooks.htm" />
+</key>
+<key name="Zimbraアシスタント" >
+  <topic name="Zimbraアシスタント" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="Zimbraウェブクライアントの機能" >
+  <topic name="Zimbra Collaboration Suiteの概要" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="Zimlet" >
+  <topic name="Zimletについて" url="Zimlets/About_Zimlets.htm" />
+</key>
+<key name="このコンピュータに個人情報を保存する" >
+  <topic name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="アクセス許可、ノートブックへのアクセスを変更する" >
+  <topic name="文書wikiフォルダへのアクセスを取り消す" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+</key>
+<key name="アシスタント" >
+  <topic name="Zimbraアシスタント" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="アドレスをオートコンプリートする" >
+  <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="アドレスブック、アクセスを取り消す" >
+  <topic name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="アドレスブック、インポートする" >
+  <topic name="連絡先をインポートする" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="アドレスブック、グループ連絡先" >
+  <topic name="グループ連絡先リストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="アドレスブック、共有アクセスを編集する" >
+  <topic name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="アドレスブックの共有" >
+  <topic name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="アドレスブックへのアクセス許可を取り消す" >
+  <topic name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="アドレスブックをインポートする" >
+  <topic name="連絡先をインポートする" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="アドレスブックを共有する" >
+  <topic name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="イベント" >
+  <topic name="全日イベントを予定する" url="Calendar/Scheduling_All_Day_events.htm" />
+  <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="インターフェイスの機能" >
+  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="オプション" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="オプション、メール着信通知" >
+  <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="オプション、不在メッセージ" >
+  <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="オプション、変更する" >
+  <topic name="ユーザーオプションを変更する" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="オプション、閲覧ペインを表示" >
+  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="オプションを変更する" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="カスタムフォルダ" >
+  <topic name="カスタムフォルダを作成する" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="カレンダー、アクセス許可" >
+  <topic name="カレンダーへのアクセスを委任する" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="カレンダー、イベント" >
+  <topic name="全日イベントを予定する" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="カレンダー、予定なし/予定あり" >
+  <topic name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="カレンダー、印刷する" >
+  <topic name="カレンダーを印刷する" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="カレンダー、概要" >
+  <topic name="Zimbraカレンダーについて" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="カレンダーの共有要求を拒否する" >
+  <topic name="カレンダーの共有要求を拒否する" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</key>
+<key name="カレンダーの特権を取り消す" >
+  <topic name="カレンダーへのアクセスを委任する" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="カレンダーへのアクセスを委任" >
+  <topic name="カレンダーへのアクセスを委任する" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="カレンダーを共有する" >
+  <topic name="カレンダーへのアクセスを委任する" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="カレンダーを印刷する" >
+  <topic name="カレンダーを印刷する" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="カレンダービュー" >
+  <topic name="Zimbraカレンダーについて" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="キーボードによる移動" >
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="キーボードショートカット" >
+  <topic name="ZWCキーボードショートカットのキー" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="クエリ言語の記述" >
+  <topic name="クエリ言語の記述" url="Search/query_language_description.htm" />
+</key>
+<key name="グループ連絡先" >
+  <topic name="グループ連絡先リストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="ゴミ箱に移動した招待" >
+  <topic name="招待に応答する" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="ゴミ箱を空にする" >
+  <topic name="割り当て容量" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="サポートされている添付ファイルの種類" >
+  <topic name="サポートされている添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="ショートカット" >
+  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="ショートカットキー" >
+  <topic name="ZWCキーボードショートカットのキー" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="スペルチェック" >
+  <topic name="スペルチェックを使用する" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
+<key name="スレッド" >
+  <topic name="複数のフォルダに保存されている場合があるスレッドのメッセージ" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
+  <key name="並べ替える" >
+    <topic name="スレッドを並べ替える" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+  </key>
+  <key name="印刷する" >
+    <topic name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
+  </key>
+</key>
+<key name="スレッドビュー" >
+  <topic name="メールメッセージビューを管理する" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="セッションの有効期限" >
+  <topic name="セッションの有効期限が切れた場合" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="タグ" >
+  <topic name="タグをメッセージに割り当てる" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="タグを削除する" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="削除する" >
+    <topic name="タグを削除する" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+  <key name="割り当てる" >
+    <topic name="タグをメッセージに割り当てる" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+</key>
+<key name="タグ、ドラッグアンドドロップ" >
+  <topic name="タグをメッセージに割り当てる" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
+<key name="タグ、作成する" >
+  <topic name="タグを使用してメールメッセージを分類する" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="タグを作成する" >
+  <topic name="タグを使用してメールメッセージを分類する" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="タグを使用する" >
+  <topic name="タグを使用してメールメッセージを分類する" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="タスクを並べ替える" >
+  <topic name="タスクを並べ替える " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="ツールヒント" >
+  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="テーブル、文書ページに追加する" >
+  <topic name="ノートブックページにテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="ドラッグアンドドロップ" >
+  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="ナビゲーション" >
+  <topic name="[フォルダ]領域" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="ノートブック" >
+  <topic name="ノートブックで作業する" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="ノートブックの概要" >
+  <topic name="ノートブックで作業する" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="ノートブックへのアクセスを受け入れる" >
+  <topic name="文書ノートブックへのアクセスを受け入れる" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
+</key>
+<key name="ノートブックページ" >
+  <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="パスワード" >
+  <topic name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="パスワードを変更する" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="パーソナ" >
+  <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
+  <topic name="パーソナを作成する" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="ビュー、カレンダー" >
+  <topic name="Zimbraカレンダーについて" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="フィルター、しくみ" >
+  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
+</key>
+<key name="フィルターの条件" >
+  <topic name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
+</key>
+<key name="フォルダ" >
+  <topic name="フォルダの名前を変更する" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <topic name="フォルダについて" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
+<key name="フォルダペイン" >
+  <topic name="[フォルダ]領域" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="フォント" >
+  <topic name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="フラグを付ける" >
+  <topic name="メールメッセージにフラグを付ける" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="メールメッセージ" >
+    <topic name="メールメッセージにフラグを付ける" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="ブラウザ" >
+  <topic name="ブラウザ内でZimbraを使用する" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+</key>
+<key name="プライベート予約" >
+  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="プレビューペイン、オンとオフを切り替える" >
+  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="ページ、文書" >
+  <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="メッセージ、不在" >
+  <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="メッセージから予約を作成" >
+  <topic name="Zimbraアシスタント" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="メッセージをアーカイブする" >
+  <topic name="メッセージを完全に削除する" url="reading_mail/archiving_old_messages.htm" />
+</key>
+<key name="メッセージをフィルターする" >
+  <topic name="メッセージをフィルターする" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="メッセージを作成するときのメールID" >
+  <topic name="新しいメールメッセージを作成する" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="メッセージを検索する" >
+  <topic name="メッセージを検索する" url="Search/_search__vs.__search_for_.htm" />
+</key>
+<key name="メッセージビュー" >
+  <topic name="メールメッセージビューを管理する" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="メニュー、右クリック" >
+  <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="メール" >
+  <topic name="メッセージを読む" url="reading_mail/reading_mail.htm" />
+  <key name="読む" >
+    <topic name="メッセージを読む" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="メールID" >
+  <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
+  <topic name="パーソナを作成する" url="Userspecific/Creating_Personas.htm" />
+  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="メールのアドレスのオートコンプリート" >
+  <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="メールを受信する" >
+  <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="メールを確認" >
+  <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+
+</indexdata>

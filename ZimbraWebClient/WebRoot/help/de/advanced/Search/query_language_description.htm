@@ -1,0 +1,159 @@
+﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Beschreibung der Sprache für Suchabfragen</title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+p.whs1 { font-weight:bold; }
+p.whs2 { margin-left:40px; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Nach Objekten suchen\nBeschreibung der Sprache für Suchabfragen");
+addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_User_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Beschreibung der Sprache für Suchabfragen</h1>
+<p>In diesem erweiterten Thema wird die Suchgrammatik für die Zimbra-Suchfunktion ausführlich beschrieben. Um die Ansicht zu erzeugen, die Sie in der Zimbra-Oberfläche sehen, ist immer eine Art von Abfrage erforderlich. </p>
+<p><b style="font-weight: bold;">TIPP:</b> Sie können über die Registerkarten „Einstellungen, Allgemein“ die Option <i><b>Suchzeichenfolge immer anzeigen</b></i> aktivieren, um die aktuelle Abfrage in der Symbolleiste der Suche anzuzeigen. Wenn diese Option aktiviert ist und Sie z. B. auf Ihren Posteingang klicken, wird die Abfrage <i><b>in:inbox</b></i> angezeigt.</p>
+<h2>Aufbau der Sprache für Suchabfragen</h2>
+<p>Eine einfache Suche führen Sie durch, indem Sie einfach ein Wort in das Suchfeld eingeben. Reine Wörter (Wörter ohne Suchoperator) werden als Suche über den Operator 'content:' gedeutet, d. h. es wird nach Textentsprechungen in der Mail gesucht.   </p>
+<p>Komplexere Suchabfragen definieren Sie mithilfe eines <b>Suchoperators</b>.   Ein Suchoperator ist ein bestimmtes Schlüsselwort gefolgt von einem Doppelpunkt, darauf folgt ein weiterer Parameter, der sich auf den vorhergehenden Operator bezieht. Beispiel: </p>
+<ul><li class=p><p>Bei <b style="font-weight: bold;">in:inbox</b> ist der Operator &quot;in:&quot;, der Parameter ist &quot;inbox&quot; (Posteingang). Diese Suche findet Mails, die sich im &quot;Posteingang&quot; befinden. </p></li>
+</ul>
+<ul><li class=p><p>Bei <b style="font-weight: bold;">from:Peter</b> ist der Operator &quot;from:&quot; und der Parameter ist &quot;Peter&quot;. Diese Suche findet Mails, bei denen sich das Wort &quot;Peter&quot; in der Absenderadresse befindet.   </p></li>
+</ul>
+<p>Sie können jedem Schlüsselwort das Wort &quot;not&quot; (nicht) voranstellen, um nach Elementen zu suchen, die dem Kriterium nicht entsprechen, z. B. <b>not in:inbox</b>.   Die Suche unterscheidet nicht zwischen Groß- und Kleinschreibung, d. h. &quot;in:inbox&quot; ist identisch mit &quot;in:Inbox&quot;. Das Minuszeichen (<b>-</b>) ist ein Synonym für <b>NOT</b>, d. h. <b>not in:inbox</b> ist identisch mit <b>-in:inbox</b>. </p>
+<p>In den meisten Fällen ist es nicht erforderlich, Satzzeichen in Ihre Suchzeichenfolge einzugeben, weil der Suchcode diese ignoriert. Es gibt bestimmte Fälle, bei denen diese Aussage nicht zutrifft (wenn Sie z. B. nach der Uhrzeit „9:30“ in einer Mail suchen). In einem solchen Fall müssen Sie den Suchparameter in Anführungszeichen eingeben. Beispiel: <b>subject:&quot;9:30&quot;</b> sucht nach Mails, die die Zeichenfolge 9:30 in der Betreffzeile enthalten. </p>
+<p>Zulässige Zeichen im Suchparameter: </p>
+<ul><li class=p><p>Die folgenden Zeichen dürfen in Suchparametern nur in Anführungszeichen angegeben werden: ~ '&nbsp;! # $ % ^ &amp; * 
+ ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
+	<li class=p><p>Die folgenden Zeichen dürfen in Suchparametern nicht als erstes Zeichen angegeben werden: - + &lt; &gt; </p></li>
+</ul>
+<h2>Mehrere Suchbegriffe </h2>
+<p>Wenn Sie mehrere Suchbegriffe eingeben (durch Leerzeichen getrennt), werden sie standardmäßig durch &quot;UND&quot; verknüpft. <b>in:inbox   tim</b> bedeutet, &quot;Mails suchen, die sich im Posteingang befinden UND das Wort tim enthalten&quot;.   Bei Suchabfragen mit mehreren Kriterien können Sie nach Elementen suchen, die einem angegebenen Kriterium oder allen angegebenen Kriterien entsprechen. Für beide Arten von Suchabfragen nutzen Sie die erweiterte Suche. </p>
+<p>In allen Suchfenstern mit Ausnahme der einfachen Suche gelten die folgenden Regeln: </p>
+<ul><li class=p><p>Wenn Sie nach Mails suchen, die einem der angegebenen Kriterien entsprechen, handelt es sich um eine <b>OR</b>-Suche (ODER), weil die Kriterien als erfüllt gelten, wenn die Mail entweder X oder Y enthält. Wenn Sie bei der erweiterten Suche mehrere Kontrollkästchen in einem Suchfenster aktivieren, wird für diese Optionen eine <b>OR</b>-Suche durchgeführt. </p></li>
+	<li class=p><p>Wenn Sie nach Mails suchen, die X und Y enthalten, handelt es sich um eine <b>AND</b>-Suche (UND), weil die Mail alle angegebenen Kriterien erfüllen muss, um als Entsprechung zu gelten. Wenn Sie bei der erweiterten Suche ein Suchfenster mehrmals öffnen und jeweils andere Kontrollkästchen aktivieren, werden die angegebenen Kriterien als <b>AND</b>-Suche durchgeführt. </p></li>
+</ul>
+<p>Nur &quot;OR&quot; wird in der Abfrage angezeigt. Wenn Sie die Option ausgewählt haben, dass die Suchabfrage in der Suchleiste angezeigt werden soll, wenn Sie die Kriterien für die erweiterte Suche festlegen, wird das Suchtextfeld aktualisiert, um die resultierende Abfrage anzuzeigen.   Bei der Suche vom Typ <b>AND</b> wird das Wort <b>AND</b> nicht angezeigt.   </p>
+<p><b style="font-weight: bold;">Tipp</b>: Verwendung von Klammern zusammen mit AND und OR. Wörter in Klammern werden als Einheit betrachtet. Beispiel: <b>from: (johann thomas)</b> ist identisch mit <b>from:johann AND from:thomas</b>. Wenn Sie in der Klammer OR angeben, <b>from:(johann or thomas)</b>, wird nach Mails <b>from:johann OR from:thomas</b> gesucht. </p>
+<h3>Platzhalter <b>*</b> bei der Suche nutzen </h3>
+<p>Das Sternchen (<b>*</b>) kann in einer Suche als Platzhalter eingesetzt werden, um Inhalte mit Wörtern ähnlicher Schreibweise zu finden. </p>
+<p>Nutzen Sie das Sternchen <b>*</b> als Platzhalter im Anschluss an eine bestimmte Zeichenfolge. Beispiel: Die Suche nach <b>Hu*</b> findet Elemente mit den Wörtern <i>Hund</i>, <i>Hut</i>, <i>Husten</i> usw. </p>
+<h2>Beschreibungen der Schlüsselwörter und Beispiele</h2>
+<p class="whs1">content:</p>
+<p class="whs2">Gibt Text an, der im Mailinhalt vorhanden sein muss.   Beispiel: <span class=code>content:bananen</span> sucht alle Elemente mit dem Wort &quot;bananen&quot;.</p>
+<p class="whs1">from:</p>
+<p class="whs2">Sucht einen Absendernamen oder eine Mail-Adresse, der/die sich in der Kopfzeile „Von“ befinden muss. Hierbei kann es sich um Text handeln, z. B. &quot;Johann Schmidt-Schulze&quot;, eine Mail-Adresse wie &quot;johann@beispiel.de&quot; oder eine Domain wie &quot;zimbra.com&quot;.</p>
+<p class="whs1">to:</p>
+<p class="whs2">Entspricht dem Schlüsselwort „from:“, außer dass nach einer der Personen gesucht wird, die in der Kopfzeile „An“ als Empfänger angegeben wurden.</p>
+<p class="whs1">cc:</p>
+<p class="whs2">Entspricht dem Schlüsselwort „from:“, außer dass nach einem Empfänger in der Kopfzeile „CC“ der Mail gesucht wird.</p>
+<p class="whs1">subject:</p>
+<p class="whs2">Sucht Text, der in der Betreffzeile der Mail enthalten sein muss. Beispiel: <span class=code>subject:&quot;Neue Urlaubsregelung&quot;</span>. Die Anführungszeichen dienen dazu, nach einer genauen Entsprechung zu suchen.</p>
+<p class="whs1">in:</p>
+<p class="whs2">Gibt einen Ordner an. Beispiel: <span class=code>in:sent</span> zeigt alle Objekte in Ihrem Ordner <span style="font-weight: bold;"><B>Gesendet</B></span> an, und <span class=code>in:privat</span> zeigt alle Objekte in Ihrem Ordner <span style="font-weight: bold;"><B>Privat</B></span> an.</p>
+<p class="whs1">has:</p>
+<p class="whs2">Sucht nach einem Attribut, das die Mail aufweisen muss. Hier können Sie Parameter wie &quot;attachment&quot; (Anhang), &quot;phone&quot; (Telefon) oder &quot;url&quot; angeben. Beispiel: <span class=code>has:attachment</span> sucht alle Mails, die einen Anhang oder mehrere Anhänge beliebigen Typs enthalten.</p>
+<p class="whs1">filename:</p>
+<p class="whs2">Dient dazu, den Namen eines Dateianhangs anzugeben. Beispiel: <span 
+ class=code> filename:fragen.txt</span> sucht nach Mails mit dem Dateianhang &quot;fragen.txt&quot;.</p>
+<p class="whs1">type:</p>
+<p class="whs2">Sucht innerhalb von Anhängen bestimmten Typs. Für die Typen von Anhängen können Sie &quot;text&quot;, &quot;word&quot;, &quot;excel&quot; und &quot;pdf&quot; angeben.   Beispiel: <span class=code>type:word &quot;hallo&quot;</span> sucht nach Mails mit angehängten Microsoft-Word-Dokumenten, die das Wort &quot;hallo&quot; enthalten.</p>
+<p class="whs1">attachment:</p>
+<p class="whs2">Sucht nach Mails mit bestimmten Typen von Anhängen. Beispiel: <span class=code>attachment:word</span> sucht alle Mails mit Word-Anhängen.</p>
+<p class="whs1">is:</p>
+<p class="whs2">Sucht nach Mails mit einem bestimmten Status.   Folgende Werte sind zulässig: &quot;unread&quot; (ungelesen), &quot;read&quot; (gelesen), &quot;flagged&quot; (markiert),   &quot;unflagged&quot; (nicht markiert), &quot;sent&quot; (gesendet), &quot;draft&quot; (Entwurf),   &quot;received&quot; (erhalten), &quot;replied&quot; (beantwortet), &quot;unreplied&quot; (nicht beantwortet),   &quot;forwarded&quot; (weitergeleitet), unforwarded&quot; (nicht weitergeleitet), &quot;anywhere&quot; (irgendwo),   &quot;remote&quot; (extern, in einem freigegebenen Ordner), &quot;local&quot; (lokal).   Beispiel: <span class=code>is:unread</span> sucht alle ungelesenen Mails.</p>
+<p class="whs1">date:</p>
+<p class="whs2">Mit diesem Schlüsselwort geben Sie ein Datum an. Nutzen Sie das Format, das in den Ländereinstellungen Ihres Browsers als Standard eingerichtet ist (in Deutsch ist das Standardformat tt.mm.jjjj). Beispiel: <span class=code>date:17.03.2007</span> sucht Mails mit dem Datum vom 17. März 2007. Statt <i>after:</i> (nach) und <i>before:</i> (vor) können die Zeichen für „größer als“ (&gt;) und „kleiner als“ (&lt;) verwendet werden. Die Zeichen &gt;= und &lt;= sind ebenfalls zulässig.   </p>
+<p class="whs1">after:</p>
+<p class="whs2">Sucht nach Mails, die nach einem bestimmten Datum gesendet wurden.   Beispiel: <span class=code>after:17.03.2007</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;"> sucht nach Mails, die nach dem 17. März 2007 gesendet wurden.</font></span><span class=code style="font-weight: normal;"></span></p>
+<p class="whs1">before:</p>
+<p class="whs2">Wie <span class=code>after:</span>, außer dass nach Mails gesucht wird, die vor einem bestimmten Datum gesendet wurden.</p>
+<p class="whs1">size:</p>
+<p class="whs2">Gibt die Gesamtgröße einer Mail mit Anhängen in Byte, Kilobyte oder Megabyte an. Beispiel: <span class=code>size:12 kb</span> sucht nach Mails, die genau 12 KB groß sind. Statt „larger:“ (größer) oder „smaller:“ (kleiner) können auch die Zeichen für „größer als“ (&gt;) oder „kleiner als“ (&lt;) eingegeben werden.</p>
+<p class="whs1">larger:</p>
+<p class="whs2">Ähnlich wie „size:“, außer dass nach Mails gesucht wird, die größer sind als die angegebene Größe.</p>
+<p class="whs1">smaller:</p>
+<p class="whs2">Ähnlich wie „size:“, außer dass nach Mails gesucht wird, die kleiner sind als die angegebene Größe.</p>
+<p class="whs1">tag:</p>
+<p class="whs2">Sucht Mails, die mit einem bestimmten Tag markiert wurden. Beispiel: <span class=code> tag:wichtig</span> sucht nach Mails, die mit dem Tag &quot;wichtig&quot; gekennzeichnet wurden.</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

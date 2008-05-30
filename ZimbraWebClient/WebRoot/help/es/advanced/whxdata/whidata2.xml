@@ -1,0 +1,95 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="reglas, filtro" >
+  <topic name="Filtrar tus mensajes" url="filters/filtering_your_messages.htm" />
+  <topic name="Cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
+</key>
+<key name="reservar salas y equipamiento" >
+  <topic name="Programar recursos" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="Responder" >
+  <topic name="Responder a los mensajes" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="mensajes de correo" >
+    <topic name="Responder a los mensajes" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="restablecer las preferencias predeterminadas" >
+  <topic name="Restablecer las preferencias predeterminadas" url="Userspecific/the__restore_defaults__button.htm" />
+</key>
+<key name="reuniones" >
+  <topic name="Acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="revocar acceso a carpetas de correo compartidas" >
+  <topic name="Revocar el acceso a una carpeta compartida" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="revocar la lista de tareas compartida" >
+  <topic name="Compartir tu lista de tareas" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="revocar los permisos de una libreta de direcciones" >
+  <topic name="Compartir tu libreta de direcciones" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="revocar permisos de acceso a las agendas" >
+  <topic name="Determinar acceso a las agendas" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="roles" >
+  <topic name="Identidades de correo" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="RSS" >
+  <topic name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="salir de la cuenta" >
+  <topic name="Iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="suscribirte a fuente RSS" >
+  <topic name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="tablas, añadir a las páginas de los blocs de notas" >
+  <topic name="Añadir una tabla a la página del bloc de notas" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="teclas de acceso directo" >
+  <topic name="Configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Teclas de acceso directo de Zimbra" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="tipos de archivos adjuntos admitidos" >
+  <topic name="tipos de archivos adjuntos admitidos" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="ubicación, reservar" >
+  <topic name="Programar recursos" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="usar etiquetas" >
+  <topic name="Usar etiquetas para clasificar los mensajes" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="vaciar Papelera" >
+  <topic name="espacio de almacenamiento" url="Navigation_folders_and_tips/quotas.htm" />
+</key>
+<key name="ver como HTML" >
+  <topic name="Abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="vista de Agenda" >
+  <topic name="Visualizar varias agendas" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+</key>
+<key name="vista de la agenda" >
+  <topic name="Acerca de la Agenda de Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="vista por conversación" >
+  <topic name="Gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="vista por mensajes de correo" >
+  <topic name="Gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="vista tradicional" >
+  <topic name="vista tradicional" url="Navigation_folders_and_tips/Traditional_View.htm" />
+</key>
+<key name="vista, agenda" >
+  <topic name="Acerca de la Agenda de Zimbra" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="visualización de mensajes" >
+  <topic name="Gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="Zimlets" >
+  <topic name="Acerca de los Zimlets" url="Zimlets/About_Zimlets.htm" />
+</key>
+
+</indexdata>

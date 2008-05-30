@@ -1,0 +1,70 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<ftstdata>
+<topic name="Sobre la página Cita" url="Calendar/About_the_Appointment_Page.htm" />
+<topic name="Añadir un color de fondo a las agendas" url="Calendar/Adding_background_color_to_calendars.htm" />
+<topic name="Acerca de la Agenda" url="Calendar/b_About_Calendar.htm" />
+<topic name="Cancelar una reunión" url="Calendar/b_Canceling_a_meeting.htm" />
+<topic name="Crear nueva agenda" url="Calendar/b_Create_New_Calendar.htm" />
+<topic name="Crear una cita recurrente" url="Calendar/b_creating_recurring_appointments.htm" />
+<topic name="Programar una reunión" url="Calendar/b_Scheduling_a_meeting.htm" />
+<topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
+<topic name="Exportar tu agenda iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
+<topic name="Importar tu agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+<topic name="Añadir nuevos contactos" url="Contacts/b_Adding_new_contacts.htm" />
+<topic name="Tus libretas de direcciones" url="Contacts/b_Your_Address_Books.htm" />
+<topic name="Tipos de archivos adjuntos admitidos" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+<topic name="Adjuntar archivos a un mensaje" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
+<topic name="Redactar nuevos mensajes" url="Creating_Messages/b_Composing_email_message.htm" />
+<topic name="Reenviar un mensaje" url="Creating_Messages/forwarding_a_mail_message.htm" />
+<topic name="Los componentes de un mensaje" url="Creating_Messages/parts_of_an_email_message.htm" />
+<topic name="Guardar un borrador" url="Creating_Messages/saving_a_draft_message.htm" />
+<topic name="Mensajes que no se pueden entregar" url="Creating_Messages/undeliverable_mail.htm" />
+<topic name="Filtrar tus mensajes" url="filters/bc_Filtering_your_messages.htm" />
+<topic name="Condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
+<topic name="Empezar a usar el programa en línea básico de ZCS" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+<topic name="Acerca de las carpetas" url="Navigation_folders_and_tips/about_folders.htm" />
+<topic name="Cómo navegar por el programa de correo" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+<topic name="Teclas de acceso directo" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+<topic name="Gestionar cómo se visualizan los mensajes" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+<topic name="Navegar por el buzón de correo" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
+<topic name="Eliminar carpetas" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+<topic name="Clasificar tus mensajes de correo" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+<topic name="Cambiar la versión predeterminada del programa al iniciar sesión" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
+<topic name="Carpetas del sistema" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="Espacio de almacenamiento" url="Navigation_folders_and_tips/quotas.htm" />
+<topic name="Cambiar el nombre de las carpetas" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<topic name="La carpeta Enviados" url="Navigation_folders_and_tips/sent_folder.htm" />
+<topic name="Organizar las columnas del panel de contenido" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<topic name="Suscribir a una fuente RSS/ATOM" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+<topic name="Papelera" url="Navigation_folders_and_tips/trash_folder.htm" />
+<topic name="Bloqueo de archivos adjuntos" url="reading_mail/attachment_blocking.htm" />
+<topic name="Cómo saber que has recibido un mensaje nuevo" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
+<topic name="Marcar los mensajes como no leídos" url="reading_mail/b_Marking_mail_as_unread.htm" />
+<topic name="Imprimir los mensajes de correo" url="reading_mail/b_Printing_email_messages.htm" />
+<topic name="Eliminar los mensajes" url="reading_mail/b_Purging_email_messages.htm" />
+<topic name="Función de bloqueo de mensajes" url="reading_mail/Message_blocking_feature.htm" />
+<topic name="Abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
+<topic name="Leer tus mensajes" url="reading_mail/reading_mail.htm" />
+<topic name="Recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
+<topic name="Responder a los mensajes" url="reading_mail/replying_to_mail_messages.htm" />
+<topic name="Utilizar la búsqueda" url="Search/b_Using_Search.htm" />
+<topic name="Descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
+<topic name="Aplicar etiquetas a mensajes y contactos" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+<topic name="Marcar un mensaje de correo" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+<topic name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
+<topic name="Crear listas de tareas" url="Tasks/bc_Create_task_lists.htm" />
+<topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
+<topic name="Ordenar las tareas" url="Tasks/Sorting_tasks_.htm" />
+<topic name="Añadir tu firma de forma automática" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+<topic name="Configurar tus preferencias" url="Userspecific/b_Setting_your_Options.htm" />
+<topic name="Cambiar tu contraseña" url="Userspecific/chaning_your_password.htm" />
+<topic name="Si olvidas tu contraseña" url="Userspecific/if_you_forget_your_password.htm" />
+<topic name="Si caduca tu sesión" url="Userspecific/if_your_session_expires.htm" />
+<topic name="Iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
+<topic name="Notificaciones de nuevos mensajes" url="Userspecific/New_mail_notifications.htm" />
+<topic name="Configurar una dirección de reenvío" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<topic name="Mensaje por ausencia" url="Userspecific/vacation_message.htm" />
+<topic name="versión" url="version.htm" />
+
+</ftstdata>  
