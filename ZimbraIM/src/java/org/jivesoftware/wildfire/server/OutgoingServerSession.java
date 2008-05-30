@@ -108,6 +108,7 @@ public class OutgoingServerSession extends Session {
         try {
             // Check if the remote hostname is in the blacklist
             if (!RemoteServerManager.canAccess(hostname)) {
+                Log.debug("Failed to authenticate domain "+hostname+" because hostname is in the server blacklist");
                 return false;
             }
 
@@ -156,6 +157,7 @@ public class OutgoingServerSession extends Session {
                         else {
                             // Ensure that the hostname is not an IP address (i.e. contains chars)
                             if (!pattern.matcher(hostname).find()) {
+                                Log.debug("Failed to authenticate domain "+hostname+" because hostname failed dotted-decimal check (hostname contains no nondigit characters)");
                                 return false;
                             }
                             // Check if hostname is a subdomain of an existing outgoing session
@@ -299,7 +301,7 @@ public class OutgoingServerSession extends Session {
                 }
 
                 String serverVersion = xpp.getAttributeValue("", "version");
-
+                
                 // Check if the remote server is XMPP 1.0 compliant
                 if (serverVersion != null && decodeVersion(serverVersion)[0] >= 1) {
                     // Restore default timeout
@@ -319,12 +321,15 @@ public class OutgoingServerSession extends Session {
                         }
                     }
                     else {
-                        Log.debug("OS - Error, <starttls> was not received");
+                        Log.debug("OS - Error, <starttls> was not received ");
                     }
+                } else {
+                    Log.debug("OS - no server version, or unable to decode server version", xpp == null ? "" : xpp.toString());
                 }
                 // Something went wrong so close the connection and try server dialback over
                 // a plain connection
                 if (connection != null) {
+                    Log.debug("OS - unknown error, giving up on TLS");
                     connection.close();
                 }
             }

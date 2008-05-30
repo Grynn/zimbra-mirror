@@ -156,7 +156,7 @@ class ServerDialback {
             Socket socket = new Socket();
             socket.connect(new InetSocketAddress(realHostname, realPort),
                     RemoteServerManager.getSocketTimeout());
-            Log.debug("OS - Connection to " + hostname + ":" + port + " successful");
+            Log.debug("OS - Server Dialback Connection to " + hostname + ":" + port + " successful");
             connection =
                     new StdSocketConnection(XMPPServer.getInstance().getPacketDeliverer(), socket,
                             false);
@@ -198,6 +198,7 @@ class ServerDialback {
                     return session;
                 }
                 else {
+                    Log.debug("OS - Closing connection, didn't get db:jabber:server:dialback namespace");  
                     // Close the connection
                     connection.close();
                 }
@@ -250,7 +251,7 @@ class ServerDialback {
     public boolean authenticateDomain(OutgoingServerSocketReader socketReader, String domain,
             String hostname, String id) {
         String key = AuthFactory.createDigest(id, secretKey);
-        Log.debug("OS - Sent dialback key to host: " + hostname + " id: " + id + " from domain: " +
+        Log.debug("OS - Sending dialback key ("+key+")to host: " + hostname + " id: " + id + " from domain: " +
                 domain);
 
         synchronized (socketReader) {
@@ -261,11 +262,12 @@ class ServerDialback {
             sb.append(" to=\"").append(hostname).append("\">");
             sb.append(key);
             sb.append("</db:result>");
-            Log.debug("Dialback result: "+sb.toString());
+            Log.debug("Sending dialback result to socket: "+sb.toString());
             connection.deliverRawText(sb.toString());
 
             // Process the answer from the Receiving Server
             try {
+                Log.debug("Waiting "+ RemoteServerManager.getSocketTimeout()+"ms for dialback response from remote server");
                 Element doc = socketReader.getElement(RemoteServerManager.getSocketTimeout(),
                         TimeUnit.MILLISECONDS);
                 if (doc == null) {
@@ -278,6 +280,8 @@ class ServerDialback {
                 }
                 else if ("db".equals(doc.getNamespacePrefix()) && "result".equals(doc.getName())) {
                     boolean success = "valid".equals(doc.attributeValue("type"));
+                    if (!success) 
+                        Log.debug("OS - failure response received: "+doc.asXML());
                     Log.debug("OS - Validation " + (success ? "GRANTED" : "FAILED") + " from: " +
                             hostname +
                             " id: " +

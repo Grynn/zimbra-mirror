@@ -210,7 +210,7 @@ class XMLLightweightParser
         CharBuffer charBuffer = encoder.decode( byteBuffer );
         charBuffer.flip();
         char[] buf = charBuffer.array();
-        System.out.println("XMLLIGHTWEIGHT: READ: "+new String(buf));
+//        System.out.println("XMLLIGHTWEIGHT: READ: "+new String(buf));
 //        for (char c : buf) {
 //            System.out.print(c);
 //        }

@@ -116,7 +116,7 @@ public class DialbackCreatorSession extends Session {
     }
     
     public boolean handleStreamHeader(Element streamElt) {
-        System.out.println(streamElt.asXML());
+        Log.debug("DialbackCreatorSession.handleStreamHeader: "+streamElt.asXML());
         Namespace ns = streamElt.getNamespaceForPrefix("db");
         if (ns != null && ns.getURI().equals("jabber:server:dialback")) {
             StringBuilder sb;

@@ -566,7 +566,7 @@ public abstract class SocketReader implements Runnable {
 //        }
         
         String streamXML = streamElt.asXML();
-        System.out.println(streamXML);
+        Log.debug("SocketReader.createSession: "+streamXML);
         
         String nullNsPrefix = streamElt.getNamespaceForPrefix(null).getURI();
         String streamNsPrefix = streamElt.getNamespaceForPrefix("stream").getURI();

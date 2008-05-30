@@ -134,7 +134,7 @@ class NioAcceptingMode extends SocketAcceptingMode {
     public void run() {
         mAcceptor = new SocketAcceptor();
         DefaultIoFilterChainBuilder chain = mAcceptor.getFilterChain();
-        System.out.println(chain);
+        Log.debug("NioAcceptingMode.run: "+chain);
 
 //        InetSocketAddress addr = new InetSocketAddress( serverPort.getPort() );
         try {
@@ -149,7 +149,7 @@ class NioAcceptingMode extends SocketAcceptingMode {
                         ie);
                 }
             }
-            System.out.println( "Listening on port " + addr );
+            Log.debug("NioAcceptingMode Listening on port " + addr );
         } catch (IOException e) {
             Log.error("Unable to start requested listener port: "+serverPort.toString()+" exception="+e.toString());
         }
