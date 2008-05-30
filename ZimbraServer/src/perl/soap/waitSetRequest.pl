@@ -61,10 +61,17 @@ END_OF_USAGE
 
 my $z = ZimbraSoapTest->new($user, $host, $pw);
 
+my $urn;
+my $requestName;
+
 if (defined($admin)) {
   $z->doAdminAuth();
+  $urn = $Soap::ZIMBRA_ADMIN_NS;
+  $requestName = "AdminWaitSetRequest";
 } else {
   $z->doStdAuth();
+  $urn = $Soap::ZIMBRA_MAIL_NS;
+  $requestName = "WaitSetRequest";
 }
 
 my $d = new XmlDoc;
@@ -81,7 +88,7 @@ if (defined $block && $block ne "0") {
   $args{'block'} = "1";
 }
   
-$d->start("WaitSetRequest", "urn:zimbraMail", \%args);
+$d->start($requestName, $urn, \%args);
 if (defined $accountsAdd) {
   $d->start("add");
   {
@@ -121,8 +128,13 @@ if (defined $accountsRem) {
   
 }
 $d->end(); # 'WaitMultipleAccountsRequest'
-  
-my $response = $z->invokeMail($d->root());
+
+my $response;
+if (defined($admin)) {
+  $response = $z->invokeAdmin($d->root());
+} else {
+  $response = $z->invokeMail($d->root());
+}
 
 print "REQUEST:\n-------------\n".$z->to_string_simple($d);
 print "RESPONSE:\n--------------\n".$z->to_string_simple($response);
