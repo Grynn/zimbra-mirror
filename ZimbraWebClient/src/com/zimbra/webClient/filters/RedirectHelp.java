@@ -87,6 +87,11 @@ public class RedirectHelp implements Filter {
 			country != null ? new Locale(language) : null,
 			Locale.US
 		};
+		if (ZimbraLog.webclient.isDebugEnabled()) {
+			for (Locale locale : locales) {
+				ZimbraLog.webclient.debug("locale: "+locale);
+			}
+		}
 
 		// find out which version of the requested file exists
 		Locale actualLocale = preferredLocale;
@@ -117,6 +122,9 @@ public class RedirectHelp implements Filter {
 			this.outDirName.replaceAll("\\{locale\\}", actualLocale.toString())+"/" +
 			filename
 		;
+		if (ZimbraLog.webclient.isDebugEnabled()) {
+			ZimbraLog.webclient.debug("redirecting to: "+redirectUrl);
+		}
 		httpResponse.sendRedirect(redirectUrl);
 	}
 
