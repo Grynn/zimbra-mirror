@@ -134,12 +134,14 @@ public class LocalMailbox extends DesktopMailbox {
             }
             
             Session session = null;
+            boolean saveToSent = true;
             //the client could send datasourceId as identityId
             DataSource ds = Provisioning.getInstance().get(getAccount(), DataSourceBy.id, msg.getDraftIdentityId());
             if (ds == null)
             	ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
             if (ds != null) {
             	session = LocalJMSession.getSession(ds);
+                saveToSent = ds.isSaveToSent();
             } else {
             	session = LocalJMSession.getSession(getAccount());
             }
@@ -150,7 +152,6 @@ public class LocalMailbox extends DesktopMailbox {
         		continue;
             }
             Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
-
             try {
                 // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
                 Pair<Integer, String> sendRecord = sSendUIDs.get(id);
@@ -159,8 +160,8 @@ public class LocalMailbox extends DesktopMailbox {
 
                 MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
                 String  origId = msg.getDraftOrigId();
-                new MailSender().sendMimeMessage(context, this, true, mm, null, null,
-                								 !StringUtil.isNullOrEmpty(origId) ? new ItemId(msg.getDraftOrigId(), getAccountId()) : null,
+                new MailSender().sendMimeMessage(context, this, saveToSent, mm, null, null,
+                				 !StringUtil.isNullOrEmpty(origId) ? new ItemId(msg.getDraftOrigId(), getAccountId()) : null,
                                                  msg.getDraftReplyType(), identity, false, false);
               	OfflineLog.offline.debug("smtp: sent pending mail (" + id + "): " + msg.getSubject());
                 
