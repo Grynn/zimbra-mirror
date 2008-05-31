@@ -97,7 +97,7 @@ case "$1" in
   'stop')
     checkInitLock
     if [ "x${pid}" = "x" ]; then
-      echo "Error: no pid in '${mysql_pidfile}'"
+      echo "mysqld not running: no pid in '${mysql_pidfile}'"
       quit 0
     else
       echo -n "Killing mysqld with pid $pid "
