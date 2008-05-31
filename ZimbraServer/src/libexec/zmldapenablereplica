@@ -60,7 +60,7 @@ verifyLdapInstalled() {
 verifyLdap() {
 	echo -n "Verifying ldap on ${ldap_master_url}..."
 	LDS="${zimbra_home}/bin/ldapsearch";
-	ARGS="-x -s base -b '' -H ${ldap_master_url} -D ${zimbra_ldap_userdn} -w ${zimbra_ldap_password}"
+	ARGS="-x -s base -b cn=zimbra -H ${ldap_master_url} -D ${zimbra_ldap_userdn} -w ${zimbra_ldap_password}"
 	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
