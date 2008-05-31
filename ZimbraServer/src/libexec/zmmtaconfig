@@ -1130,6 +1130,7 @@ sub controlProcess($$) {
   $action = "reload" if ($action eq "restart" && $process eq "MTA");
   my $rewrite = ($action =~ m/status|stop/ ? "norewrite" : "");
   logMsg($lvl,"CONTROL $process: $exe{$process} $action $rewrite");
+  Zimbra::Mon::Logger::Log("info", "$process $action initiated from zmmtaconfig") if ($action ne "status");
   $rc = 0xffff & system("$exe{$process} $action $rewrite > /dev/null 2>&1");
 
   # update the state information

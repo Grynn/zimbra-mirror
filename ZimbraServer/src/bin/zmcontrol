@@ -204,7 +204,7 @@ sub doRewrite {
 }
 
 sub doStartup {
-	Zimbra::Mon::Logger::Log ("info", "Starting services");
+	Zimbra::Mon::Logger::Log ("info", "Starting services initiated by zmcontrol");
 	print "Host $localHostName\n";
 	my $rc = 0;
 	my $rrc = 0;
@@ -247,7 +247,7 @@ sub doStartup {
 	foreach (sort {$startorder{$a} <=> $startorder{$b}} keys %{$services}) {
 		if ($_ eq "ldap") {next;}
     checkAvailableServiceSpace($_);
-		Zimbra::Mon::Logger::Log ("info", "Starting $_");
+		Zimbra::Mon::Logger::Log ("info", "Starting $_ via zmcontrol");
 		print "\tStarting $_...";
     unless (-x "$allservices{$_}") {
       print "skipped.\n\t\t$allservices{$_} missing or not executable.\n";
@@ -269,12 +269,12 @@ sub doStartup {
 }
 
 sub doShutdown {
-	Zimbra::Mon::Logger::Log ("info", "Stopping services");
+	Zimbra::Mon::Logger::Log ("info", "Stopping services initiated by zmcontrol");
 	print "Host $localHostName\n";
 	my $rc = 0;
 	my $rrc = 0;
 	foreach (sort {$startorder{$b} <=> $startorder{$a}} keys %allservices) {
-		Zimbra::Mon::Logger::Log ("info", "Stopping $_");
+		Zimbra::Mon::Logger::Log ("info", "Stopping $_ via zmcontrol");
 		if ($_ eq "ldap" && !(-d "/opt/zimbra/openldap/libexec") ) { next; }
 		if ($_ eq "mta" && !(-d "/opt/zimbra/postfix/libexec") ) { next; }
 		if ($_ eq "snmp" && !(-f "/opt/zimbra/bin/zmswatchctl") ) { next; }
