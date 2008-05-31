@@ -149,6 +149,16 @@ if [ -L ${zimbra_home}/cyrus-sasl ]; then
   fi
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/{etc,state}
   chmod 755 ${zimbra_home}/cyrus-sasl/state 
+
+  if [ -f ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf.in ]; then
+    chmod 640 ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf.in
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf.in
+  fi
+  if [ -f ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf ]; then
+    chmod 440 ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf
+  fi
+    
 fi
 
 if [ -L ${zimbra_home}/dspam ]; then
@@ -167,6 +177,26 @@ if [ -L ${zimbra_home}/jetty ]; then
   if [ -f ${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr ]; then
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr
     chmod 444 ${zimbra_home}/jetty/webapps/zimbraAdmin/tmp/current.csr
+  fi
+  if [ -f ${zimbra_home}/jetty/etc/jetty.xml.in ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/etc/jetty.xml.in
+    chmod 640 ${zimbra_home}/jetty/etc/jetty.xml.in
+  fi
+  if [ -f ${zimbra_home}/jetty/etc/jetty.xml ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/etc/jetty.xml
+    chmod 640 ${zimbra_home}/jetty/etc/jetty.xml
+  fi
+  if [ -f ${zimbra_home}/jetty/etc/service.web.xml.in ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/etc/service.web.xml.in
+    chmod 640 ${zimbra_home}/jetty/etc/service.web.xml.in
+  fi
+  if [ -f ${zimbra_home}/jetty/etc/zimbra.web.xml.in ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/etc/zimbra.web.xml.in
+    chmod 640 ${zimbra_home}/jetty/etc/zimbra.web.xml.in
+  fi
+  if [ -f ${zimbra_home}/jetty/etc/zimbraAdmin.web.xml.in ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/etc/zimbraAdmin.web.xml.in
+    chmod 640 ${zimbra_home}/jetty/etc/zimbraAdmin.web.xml.in
   fi
 
   if [ ! -d ${zimbra_home}/fbqueue ]; then
