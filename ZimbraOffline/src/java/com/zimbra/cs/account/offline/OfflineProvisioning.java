@@ -154,7 +154,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	options.setResponseProtocol(SoapProtocol.Soap12);
         options.setProxy(proxyHost, proxyPort, proxyUser, proxyPass);
         options.setNoSession(true);
-        options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
+        options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
         options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());
         options.setRetryCount(1);
         options.setDebugListener(new Offline.OfflineDebugListener());

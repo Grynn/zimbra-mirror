@@ -229,4 +229,14 @@ public class OfflineLC {
 	    zdesktop_support_email.setDefault("support@zimbra.com");
 	    zdesktop_support_email.setDoc("support email address");
     }
+    
+    public static String getFullVersion() {
+    	return zdesktop_version.value() + "_" + zdesktop_buildid.value() + "_" + getOSShortName();
+    }
+    
+    private static String getOSShortName() {
+    	String os = System.getProperty("os.name");
+    	int sp = os.indexOf(' ');
+    	return sp > 0 ? os.substring(0, sp) : os;
+    }
 }

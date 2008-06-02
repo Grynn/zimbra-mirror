@@ -639,7 +639,7 @@ public class OfflineMailbox extends DesktopMailbox {
         OfflineAccount acct = (OfflineAccount) getAccount();
         SoapHttpTransport transport = new SoapHttpTransport(uri, acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
         try {
-            transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
+            transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
             transport.setTimeout(timeout);
             transport.setRetryCount(1);
             if (requiresAuth)
