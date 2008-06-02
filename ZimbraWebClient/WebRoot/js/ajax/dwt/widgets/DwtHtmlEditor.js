@@ -1250,10 +1250,11 @@ function(ev) {
 	if (ev.type == "mousedown") {
 		DwtMenu._outsideMouseDownListener(ev);
 	}
-	
-	if (ev.type == "mouseup") {
-		DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
-	}
+
+        // bug 28289: the following makes it hard to focus the editor by clicking on it in IE:
+	// if (ev.type == "mouseup") {
+	// 	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
+	// }
 
 	if (ev.type == "contextmenu") {
 		// context menu event; we want to translate the event
