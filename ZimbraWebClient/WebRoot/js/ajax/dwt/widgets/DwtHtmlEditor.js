@@ -163,8 +163,9 @@ function() {
 			// Hack to fix IE focusing bug
 			if (AjxEnv.isIE) {
 				if (this._currInsPt) {
-					if (this._currInsPt.text.length <= 1)
+					if (this._currInsPt.text.length <= 1) {
 						this._currInsPt.collapse(false);
+					}
 					this._currInsPt.select();
 				}
 			}
@@ -1251,10 +1252,17 @@ function(ev) {
 		DwtMenu._outsideMouseDownListener(ev);
 	}
 
-        // bug 28289: the following makes it hard to focus the editor by clicking on it in IE:
-	// if (ev.type == "mouseup") {
-	// 	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this);
-	// }
+	if (ev.type == "mouseup") {
+		var kbMgr = DwtShell.getShell(window).getKeyboardMgr();
+		if (AjxEnv.isIE) {
+			// hack so that kbMgr can handle editor shortcuts; grabFocus() does not work
+			// for IE here - focus goes back to the previous element
+			kbMgr.__focusObj = this;
+			kbMgr.__dwtCtrlHasFocus = true;
+		} else {
+			kbMgr.grabFocus(this);
+		}
+	}
 
 	if (ev.type == "contextmenu") {
 		// context menu event; we want to translate the event
