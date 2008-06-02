@@ -41,9 +41,10 @@ public class ModifyContactTag extends ContactOpTag {
     public void doTag() throws JspException, IOException {
         try {
             getJspBody().invoke(null);
-            
-            if (mAttrs.isEmpty() || (mReplace && allFieldsEmpty()))
+
+            if (mAttrs.isEmpty() || (mReplace && allFieldsEmpty())){
                 throw ZTagLibException.EMPTY_CONTACT("can't set all fields to blank", null);
+            }
 
             String id = (mId == null || mId.length() == 0) ?
                     getMailbox().createContact(mFolderid, mTagids, mAttrs) :
