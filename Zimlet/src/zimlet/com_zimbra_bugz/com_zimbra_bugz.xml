@@ -5,7 +5,7 @@
 			<regex attrs="ig">(?:(?:\bbug(?:zilla)?:?\s*#?)|(?:show_bug.cgi\?id=))(\d+)\b</regex>
 		</matchOn>
 		<onClick>
-			<canvas type="window"/>
+			<canvas type="window" props=""/>
 			<actionUrl target="http://bugzilla.zimbra.com/show_bug.cgi">
 				<param name="id">${src.$1}</param>
 			</actionUrl>
