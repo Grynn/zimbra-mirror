@@ -18,7 +18,7 @@
 YSymbolsDialog = function(shell, className, parent) {
 	className = className || "YSymbolsDialog";
 	this._zimlet = parent;
-	var title = "Stock polling options"; 
+	var title = "Stock polling options";
 	DwtDialog.call(this, {parent:shell, className:className, title:title});
 	this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._symbolSelected));
 	this._createSearchHtml();
@@ -106,12 +106,11 @@ YSymbolsDialog.prototype.popup = function(name, callback) {
 	
 	this._lookupCallback = callback;
 
-	this.setTitle("Ziya - Stock polling options");
-
+	this.setTitle("Yahoo! Finance - Stock Polling Preferences");
 	
 	// enable buttons
 	this.setButtonEnabled(DwtDialog.OK_BUTTON, true);
-	this.setButtonEnabled(DwtDialog.CANCEL_BUTTON, true);	
+	this.setButtonEnabled(DwtDialog.CANCEL_BUTTON, true);
 	
 	// show
 	DwtDialog.prototype.popup.call(this);

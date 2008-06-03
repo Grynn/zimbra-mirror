@@ -168,7 +168,7 @@ function(){
 	if(items){
 		var sel = items.getArray() ? items.getArray()[0] : null;
 		if(sel){
-			var item = AjxCore.objectWithId(Dwt.getAttr(sel, "_itemIndex"));
+			var item = list.getItemFromElement(sel);
 			selectedItem = item;
 		}
 	}else{
@@ -186,7 +186,7 @@ YSymbolLookupDialog.prototype.popup = function(name, callback) {
 	
 	this._lookupCallback = callback;
 
-	this.setTitle("Ziya - Company Stock Symbol Search");
+	this.setTitle("Yahoo! Finance - Company Stock Symbol Search");
 
 	
 	// enable buttons
