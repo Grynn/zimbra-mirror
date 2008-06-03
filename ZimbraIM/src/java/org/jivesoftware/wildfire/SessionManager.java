@@ -812,7 +812,7 @@ public class SessionManager extends BasicModule {
                 // If sessionMap is null, which is an irregular case, try to clean up the routes to
                 // the user from the routing table
                 if (sessionMap == null) {
-                    JID userJID = new JID(session.getUsername(), session.getServerName(), "");
+                    JID userJID = new JID(session.getUsername());
                     if (routingTable.getRoute(userJID) != null) {
                         // Remove the route for the session's BARE address
                         routingTable.removeRoute(new JID(session.getAddress().getNode(),
