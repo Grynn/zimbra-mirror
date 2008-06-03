@@ -214,7 +214,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
 
         if (etype == EntryType.ACCOUNT)
-            revalidateRemoteLogin((OfflineAccount)e, attrs);
+        	revalidateRemoteLogin((OfflineAccount)e, attrs);
 
         if (etype == EntryType.CONFIG) {
             DbOfflineDirectory.modifyDirectoryEntry(etype, A_offlineDn, "config", attrs, false);
@@ -273,11 +273,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 name = name.substring(1);
 
             if (name.equalsIgnoreCase(A_offlineRemotePassword)) {
-                password = (String)change.getValue();
-                hasChange = true;
+                String newPassword = (String)change.getValue();
+                hasChange |= !password.equals(newPassword);
+                password = newPassword;
             } else if (name.equalsIgnoreCase(A_offlineRemoteServerUri)) {
-                baseUri = (String)change.getValue();
-                hasChange = true;
+                String newBaseUri = (String)change.getValue();
+                hasChange |= !baseUri.equals(newBaseUri);
+                baseUri = newBaseUri;
             } else if (name.equalsIgnoreCase(A_offlineProxyHost)) {
                 proxyHost = (String)change.getValue();
                 hasChange = true;
