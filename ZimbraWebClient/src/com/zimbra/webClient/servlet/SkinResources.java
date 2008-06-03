@@ -1035,6 +1035,19 @@ public class SkinResources
 							String value = substOverrides.get(key);
 							if (value == null) continue;
 							substitutions.setProperty(key, value);
+							if (key.equals(S_SKIN_BACKGROUND_COLOR) || key.equals(S_SKIN_FOREGROUND_COLOR) ||
+								key.equals(S_SKIN_SELECTION_COLOR)) {
+								Color color = getColor(null, value);
+								for (int i = 5; i < 100; i += 5) {
+									float delta = (float)i / (float)100;
+									substitutions.setProperty(
+										key + "-" + (i < 10 ? "0" : "") + i, lightenColor(color, delta)
+									);
+									substitutions.setProperty(
+										key + "+" + (i < 10 ? "0" : "") + i, darkenColor(color, delta)
+									);
+								}
+							}
 						}
 					}
 				}
