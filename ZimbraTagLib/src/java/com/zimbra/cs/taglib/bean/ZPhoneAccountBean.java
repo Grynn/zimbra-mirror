@@ -39,4 +39,8 @@ public class ZPhoneAccountBean {
     public ZCallFeaturesBean getCallFeatures() throws ServiceException {
         return new ZCallFeaturesBean(mAccount.getCallFeatures(), false);
     }
+
+	public boolean getHasVoiceMail() {
+		return mAccount.getHasVoiceMail();
+	}
 }
