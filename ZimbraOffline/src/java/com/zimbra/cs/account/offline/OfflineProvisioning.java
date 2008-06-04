@@ -672,7 +672,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         // create account entry in database
         DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
-        Account acct = new OfflineAccount(emailAddress, accountId, attrs, mDefaultCos.getAccountDefaults());
+
+        Account acct = new OfflineAccount(emailAddress, accountId, attrs, mDefaultCos.getAccountDefaults(), accountId.equals(LOCAL_ACCOUNT_ID) ? null : getLocalAccount());
         mAccountCache.put(acct);
 
         AttributeManager.getInstance().postModify(attrs, acct, context, true);
@@ -895,7 +896,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	if (acct != null) {
     		acct.setAttrs(attrs);
     	} else {
-        	acct = new OfflineAccount(name, (String) attrs.get(A_zimbraId), attrs, mDefaultCos.getAccountDefaults());
+        	acct = new OfflineAccount(name, (String) attrs.get(A_zimbraId), attrs, mDefaultCos.getAccountDefaults(),
+        			keyType == AccountBy.id && key.equals(LOCAL_ACCOUNT_ID) ? null : getLocalAccount());
             mAccountCache.put(acct);
         }
 

@@ -29,6 +29,8 @@ import java.util.*;
 
 public class OfflineAccount extends Account {
 
+	Account localAccount; //the local account that acts as everyone's parent. this will be null if this account itself is the local account
+	
 	public static class Version {
 		private String versionStr;
 		private int major;
@@ -100,8 +102,9 @@ public class OfflineAccount extends Account {
 		return getAttr(OfflineProvisioning.A_offlineProxyPass);
 	}
 
-    public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults) {
+    public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults, Account localAccount) {
         super(name, id, attrs, defaults);
+        this.localAccount = localAccount;
     }
 
     private static final String[] sDisabledFeatures = new String[] {
@@ -114,18 +117,35 @@ public class OfflineAccount extends Account {
     };
 
     private static final Set<String> sDisabledFeaturesSet = new HashSet<String>();
-        static {
-            for (String feature : sDisabledFeatures)
-                sDisabledFeaturesSet.add(feature.toLowerCase());
-        }
+    static {
+        for (String feature : sDisabledFeatures)
+            sDisabledFeaturesSet.add(feature.toLowerCase());
+    }
 
+        
+    private static final String[] sGlobalAttributes = new String[] {
+    	Provisioning.A_zimbraPrefIncludeTrashInSearch,
+    	Provisioning.A_zimbraPrefIncludeSpamInSearch
+    };
+    
+    private static final Set<String> sGlobalAttributesSet = new HashSet<String>();
+    static {
+        for (String attr : sGlobalAttributes)
+        	sGlobalAttributesSet.add(attr.toLowerCase());
+    }
+    
     @Override
     public String getAttr(String name, boolean applyDefaults) {
         // disable certain features here rather than trying to make the cached values and the remote values differ
         if (sDisabledFeaturesSet.contains(name.toLowerCase()))
             return "FALSE";
+        
+        if (localAccount != null && sGlobalAttributesSet.contains(name.toLowerCase()))
+        	return localAccount.getAttr(name, applyDefaults);
+        	
         if (name.equals(Provisioning.A_zimbraPrefMailPollingInterval))
         	return OfflineLC.zdesktop_client_poll_interval.value();
+        
         return super.getAttr(name, applyDefaults);
     }
 
@@ -134,6 +154,10 @@ public class OfflineAccount extends Account {
         Map<String, Object> attrs = new HashMap<String, Object>(super.getRawAttrs());
         for (String feature : sDisabledFeatures)
             attrs.put(feature, "FALSE");
+        if (localAccount != null)
+        	for (String attr : sGlobalAttributes)
+        		attrs.put(attr, localAccount.getAttr(attr));
+        
         attrs.put(Provisioning.A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         return attrs;
     }
@@ -143,6 +167,10 @@ public class OfflineAccount extends Account {
         Map<String, Object> attrs = new HashMap<String, Object>(super.getAttrs(applyDefaults));
         for (String feature : sDisabledFeatures)
             attrs.put(feature, "FALSE");
+        if (localAccount != null)
+        	for (String attr : sGlobalAttributes)
+        		attrs.put(attr, localAccount.getAttr(attr));
+        
         attrs.put(Provisioning.A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         return attrs;
     }
@@ -180,7 +208,7 @@ public class OfflineAccount extends Account {
     }
 
     public boolean isLocalAccount() {
-		return OfflineProvisioning.getOfflineInstance().isLocalAccount(this);
+		return localAccount == null; //the localAccount field will be null if this account is the local account
     }
 
     public boolean isDataSourceAccount() {
