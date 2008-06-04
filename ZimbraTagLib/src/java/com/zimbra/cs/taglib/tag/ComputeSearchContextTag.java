@@ -21,6 +21,7 @@ import com.zimbra.common.soap.VoiceConstants;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
 import com.zimbra.cs.taglib.bean.ZTagBean;
+import com.zimbra.cs.taglib.bean.ZPhoneAccountBean;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSearchFolder;
@@ -115,13 +116,17 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                 mUseCache = false; // always ignore cache on new search context. TODO: optimize?
             }
 			String st = sContext.getSt();
-			boolean useOffset =
-					ZSearchParams.TYPE_VOICE_MAIL.equals(st) ||
-            		ZSearchParams.TYPE_CALL.equals(st) ||
-					ZJspSession.getSearchUseOffset(pageContext);
-			sContext.doSearch(mailbox, mUseCache, !useOffset);
-            if (sContext.getCurrentItemIndex() != si) sContext.setCurrentItemIndex(si);
-        } catch (ServiceException e) {
+			boolean isVoiceMailSearch = ZSearchParams.TYPE_VOICE_MAIL.equals(st);
+			ZPhoneAccountBean account = sContext.getPhoneAccount();
+			if (!isVoiceMailSearch || account == null || account.getHasVoiceMail()) { // Can't do voice mail search for accounts w/out that service.
+				boolean useOffset =
+						isVoiceMailSearch ||
+						ZSearchParams.TYPE_CALL.equals(st) ||
+						ZJspSession.getSearchUseOffset(pageContext);
+				sContext.doSearch(mailbox, mUseCache, !useOffset);
+	            if (sContext.getCurrentItemIndex() != si) sContext.setCurrentItemIndex(si);
+			}
+		} catch (ServiceException e) {
             throw new JspTagException(e.getMessage(), e);
         }
     }
@@ -254,7 +259,8 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
 
     private void determineVoiceQuery(ZMailbox mailbox, String sq, SearchContext result) throws ServiceException {
         ZPhoneAccount account = getAccountFromVoiceQuery(mailbox, sq);
-        String query = sq;
+		result.setPhoneAccount(account);
+		String query = sq;
         if (query == null && account != null) {
             query = "phone:" + account.getPhone().getName();
         }

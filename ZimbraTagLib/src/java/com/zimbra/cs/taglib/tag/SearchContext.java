@@ -17,13 +17,11 @@
 package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.taglib.bean.ZFolderBean;
-import com.zimbra.cs.taglib.bean.ZSearchHitBean;
-import com.zimbra.cs.taglib.bean.ZSearchResultBean;
-import com.zimbra.cs.taglib.bean.ZTagBean;
+import com.zimbra.cs.taglib.bean.*;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSearchParams;
 import com.zimbra.cs.zclient.ZSearchPagerResult;
+import com.zimbra.cs.zclient.ZPhoneAccount;
 import org.apache.commons.collections.map.LRUMap;
 
 import javax.servlet.jsp.JspTagException;
@@ -49,8 +47,9 @@ public class SearchContext {
     
     private ZFolderBean mFolderBean;
     private ZTagBean mTagBean;
+	private ZPhoneAccountBean mPhoneAccount;
 
-    public String getSq() { return mSq; }
+	public String getSq() { return mSq; }
     public void setSq(String sq) { mSq = sq; }
 
     public String getSfi() { return mSfi; }
@@ -77,7 +76,12 @@ public class SearchContext {
     public boolean getIsTaskSearch() { return ZSearchParams.TYPE_TASK.equals(mTypes); }    
 
     public boolean getIsVoiceMailSearch() { return ZSearchParams.TYPE_VOICE_MAIL.equals(mTypes); }    
-    public boolean getIsCallSearch() { return ZSearchParams.TYPE_CALL.equals(mTypes); }    
+    public boolean getIsCallSearch() { return ZSearchParams.TYPE_CALL.equals(mTypes); }
+
+	public ZPhoneAccountBean getPhoneAccount() { return mPhoneAccount; }
+	public void setPhoneAccount(ZPhoneAccount account) {
+		mPhoneAccount = account == null ? null : new ZPhoneAccountBean(account);
+	}
 
     public ZTagBean getTag() { return mTagBean; }
     public void setTag(ZTagBean tag) { mTagBean = tag; }

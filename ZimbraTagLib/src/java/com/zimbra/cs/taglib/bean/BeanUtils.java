@@ -1134,6 +1134,12 @@ public class BeanUtils {
 		return accounts.size() > 0 ? new ZPhoneAccountBean(accounts.get(0)) : null;
 	}
 
+	public static ZPhoneAccountBean getPhoneAccount(PageContext pc, String phone) throws ServiceException, JspException {
+		ZMailbox mbox = ZJspSession.getZMailbox(pc);
+		ZPhoneAccount account = mbox.getPhoneAccount(phone);
+		return account == null ? null : new ZPhoneAccountBean(account);
+	}
+
 	public static boolean getIsMyCard(PageContext pc, String ids) throws ServiceException, JspException {
 		ZMailbox mbox = ZJspSession.getZMailbox(pc);
 		return mbox.getIsMyCard(ids);
