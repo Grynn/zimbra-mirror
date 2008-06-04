@@ -65,17 +65,17 @@ public class OfflineAccessManager extends AccessManager {
 	
 	@Override
 	public boolean canPerform(AuthToken grantee, NamedEntry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
-	    return true;
+	    return defaultGrant;
 	}
     
 	@Override
 	public boolean canPerform(Account grantee, NamedEntry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
-	    return true;
+	    return defaultGrant;
 	}
 	
 	@Override
 	public boolean canPerform(String grantee, NamedEntry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
-	    return true;
+	    return defaultGrant;
 	}
 
 }
