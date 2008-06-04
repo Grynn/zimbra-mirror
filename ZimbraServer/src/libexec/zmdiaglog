@@ -288,6 +288,7 @@ if (! -f $ZMSTAT_CONF) {
 }
 logmsg "Copying current ZCS logs\n";
 system("cp /opt/zimbra/log/my*.log /opt/zimbra/log/mailbox.log /opt/zimbra/log/zmmailboxd.out $destination/logs/");
+system("cp /opt/zimbra/db/data/*.err $destination/logs/");
 logmsg "Copying today's ZCS statistics\n";
 system("cp /opt/zimbra/zmstat/*.csv $destination/stats/");
 
