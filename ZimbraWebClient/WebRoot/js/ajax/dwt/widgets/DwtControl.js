@@ -2667,7 +2667,7 @@ function(m, c, d) {
 	var usingX = (Math.abs(m) <= 1);
 	// Use the bigger delta to control the snap effect
 	var delta = usingX ? this.__dragStartX - this.__dragEndX : this.__dragStartY - this.__dragEndY;
-	if (delta * d > 0) {
+    if (delta * d > 0 && !(this.__dragEndY == this.__dragStartY || this.__dragEndX == this.__dragStartX) ) {
 		if (usingX) {
 			this.__dragEndX += (30 * d);
 			this._dndProxy.style.top = m * this.__dragEndX + c;
