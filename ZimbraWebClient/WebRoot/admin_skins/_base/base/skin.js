@@ -25,7 +25,8 @@ skin.hints = {
 
 skin.hints = {
 	appChooser		: {	style:"tabs", 		direction:"LR"	},
-	helpButton		: {	style:"link", 		container:"quota"	},
+	helpButton		: {	style:"link", 		container:"quota",
+						url: "@HelpAdminURL@", daUrl: "@HelpDelegatedURL@"	},
 	logoutButton	: { style:"link", 		container:"quota"	},
 	logo			: { url: "@LogoURL@" }
 }

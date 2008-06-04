@@ -82,9 +82,15 @@ public class SkinResources
 	private static final String A_SKIN_BACKGROUND_COLOR = "zimbraSkinBackgroundColor";
 	private static final String A_SKIN_SECONDARY_COLOR = "zimbraSkinSecondaryColor";
 	private static final String A_SKIN_SELECTION_COLOR = "zimbraSkinSelectionColor";
+
 	private static final String A_SKIN_LOGO_LOGIN_BANNER = "zimbraSkinLogoLoginBanner";
 	private static final String A_SKIN_LOGO_APP_BANNER = "zimbraSkinLogoAppBanner";
 	private static final String A_SKIN_LOGO_URL = "zimbraSkinLogoURL";
+
+	private static final String A_HELP_ADMIN_URL = "zimbraHelpAdminURL";
+	private static final String A_HELP_ADVANCED_URL = "zimbraHelpAdvancedURL";
+	private static final String A_HELP_DELEGATED_URL = "zimbraHelpDelegatedURL";
+	private static final String A_HELP_STANDARD_URL = "zimbraHelpStandardURL";
 
 	private static final String H_USER_AGENT = "User-Agent";
 
@@ -408,6 +414,11 @@ public class SkinResources
 				substOverrides.put(Manifest.S_SKIN_LOGO_LOGIN_BANNER, domain.getAttr(A_SKIN_LOGO_LOGIN_BANNER));
 				substOverrides.put(Manifest.S_SKIN_LOGO_APP_BANNER, domain.getAttr(A_SKIN_LOGO_APP_BANNER));
 				substOverrides.put(Manifest.S_SKIN_LOGO_URL, domain.getAttr(A_SKIN_LOGO_URL));
+				// help
+				substOverrides.put(Manifest.S_HELP_ADMIN_URL, domain.getAttr(A_HELP_ADMIN_URL));
+				substOverrides.put(Manifest.S_HELP_ADVANCED_URL, domain.getAttr(A_HELP_ADVANCED_URL));
+				substOverrides.put(Manifest.S_HELP_DELEGATED_URL, domain.getAttr(A_HELP_DELEGATED_URL));
+				substOverrides.put(Manifest.S_HELP_STANDARD_URL, domain.getAttr(A_HELP_STANDARD_URL));
 			}
 		}
 		catch (Exception e) {
@@ -946,9 +957,15 @@ public class SkinResources
 		public static final String S_SKIN_BACKGROUND_COLOR = "AppC";
 		public static final String S_SKIN_SECONDARY_COLOR = "AltC";
 		public static final String S_SKIN_SELECTION_COLOR = "SelC";
+
 		public static final String S_SKIN_LOGO_LOGIN_BANNER = "LoginBannerImg";
 		public static final String S_SKIN_LOGO_APP_BANNER = "AppBannerImg";
 		public static final String S_SKIN_LOGO_URL = "LogoURL";
+
+		private static final String S_HELP_ADMIN_URL = "HelpAdminURL";
+		private static final String S_HELP_ADVANCED_URL = "HelpAdvancedURL";
+		private static final String S_HELP_DELEGATED_URL = "HelpDelegatedURL";
+		private static final String S_HELP_STANDARD_URL = "HelpStandardURL";
 
         private static final String E_SKIN = "skin";
         private static final String E_SUBSTITUTIONS = "substitutions";
