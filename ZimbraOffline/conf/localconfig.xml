@@ -56,7 +56,7 @@
     <value>com.zimbra.cs.account.offline.OfflineProvisioning</value>
   </key>
   <key name="javamail_imap_debug">
-    <value>true</value>
+    <value>false</value>
   </key>
   <key name="javamail_pop3_debug">
     <value>false</value>

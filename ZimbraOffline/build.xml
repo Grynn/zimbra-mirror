@@ -509,15 +509,15 @@
 
                 <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
                         <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-                        <arg line="-e javamail_imap_debug=true" />
+                        <arg line="-e javamail_imap_debug=false" />
                 </java>
                 <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
                         <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-                        <arg line="-e javamail_pop3_debug=true" />
+                        <arg line="-e javamail_pop3_debug=false" />
                 </java>
                 <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
                         <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-                        <arg line="-e javamail_smtp_debug=true" />
+                        <arg line="-e javamail_smtp_debug=false" />
                 </java>
 
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.request=INFO" value="log4j.logger.zimbra.offline.request=DEBUG"/>
