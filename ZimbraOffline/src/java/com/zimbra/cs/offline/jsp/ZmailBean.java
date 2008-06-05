@@ -25,6 +25,7 @@ public class ZmailBean extends FormBean {
 	
 	private long syncFreqSecs = OfflineConstants.DEFAULT_SYNC_FREQ / 1000;
 	
+	protected boolean isDebugTraceEnabled;
 	
 	@Override
 	protected void reload() {
@@ -45,6 +46,8 @@ public class ZmailBean extends FormBean {
 		isSsl = account.getBooleanAttr(JspConstants.OFFLINE_REMOTE_SSL, false);
 
 		syncFreqSecs = account.getTimeIntervalSecs(OfflineConstants.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
+		
+		isDebugTraceEnabled = account.getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
 	}
 	
 	@Override
@@ -71,6 +74,7 @@ public class ZmailBean extends FormBean {
 			    	attrs.put(Provisioning.A_zimbraPrefLabel, accountName);
                     attrs.put(OfflineConstants.A_offlineRemoteServerUri, getRemoteServerUri());
                     attrs.put(OfflineConstants.A_offlineSyncFreq, Long.toString(syncFreqSecs));
+                    attrs.put(OfflineConstants.A_offlineEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 			        if (!password.equals(JspConstants.MASKED_PASSWORD)) {
 			            attrs.put(OfflineConstants.A_offlineRemotePassword, password);
 			        }
@@ -180,5 +184,13 @@ public class ZmailBean extends FormBean {
 	
 	public long getSyncFreqSecs() {
 		return syncFreqSecs;
+	}
+	
+	public void setDebugTraceEnabled(boolean isDebugTraceEnabled) {
+		this.isDebugTraceEnabled = isDebugTraceEnabled;
+	}
+	
+	public boolean isDebugTraceEnabled() {
+		return isDebugTraceEnabled;
 	}
 }

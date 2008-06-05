@@ -722,7 +722,8 @@ public class DeltaSync {
         byte[] blob = null;
         if (hasBlob) {
             String url = Offline.getServerURI(ombx.getAccount(), UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + id);
-            OfflineLog.request.debug("GET " + url);
+            if (ombx.getOfflineAccount().isDebugTraceEnabled())
+            	OfflineLog.request.debug("GET " + url);
             try {
                 String hostname = new URL(url).getHost();
                 blob = UserServlet.getRemoteContent(ombx.getAuthToken(), hostname, url);
@@ -831,9 +832,13 @@ public class DeltaSync {
         request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024);  // XXX pagination
         request.addAttribute(MailConstants.A_TYPES, "document");
         request.addElement(MailConstants.E_QUERY).setText(query.toString());
+        if (ombx.getOfflineAccount().isDebugTraceEnabled())
+        	OfflineLog.response.debug(request);
+        
         Element response = ombx.sendRequest(request);
         
-        OfflineLog.offline.debug(response.prettyPrint());
+        if (ombx.getOfflineAccount().isDebugTraceEnabled())
+        	OfflineLog.response.debug(response);
         
         for (Element doc : response.listElements(MailConstants.E_DOC))
         	getInitialSync().syncDocument(doc);

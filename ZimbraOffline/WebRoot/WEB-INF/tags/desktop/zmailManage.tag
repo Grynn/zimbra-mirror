@@ -151,6 +151,11 @@ function disableButtons() {
                 </select>
             </td>
         </tr>
+        
+        <tr>
+            <td style='text-align:right'><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td>
+            <td class="ZCheckboxLabel">Enable debug trace</td>
+        </tr>
 
     </table>
 

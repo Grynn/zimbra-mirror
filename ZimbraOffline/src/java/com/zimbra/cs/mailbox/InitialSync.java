@@ -732,10 +732,11 @@ public class InitialSync {
         int mod_content = (int) elt.getAttributeLong(MailConstants.A_REVISION);
 
         byte[] blob = null;
-        OfflineAccount acct = (OfflineAccount)ombx.getAccount();
+        OfflineAccount acct = ombx.getOfflineAccount();
         if ((flags & Flag.BITMASK_ATTACHED) != 0) {
             String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + id);
-            OfflineLog.request.debug("GET " + url);
+            if (acct.isDebugTraceEnabled())
+            	OfflineLog.request.debug("GET " + url);
             try {
                 String hostname = new URL(url).getHost();
                 blob = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url,
@@ -792,10 +793,11 @@ public class InitialSync {
     	UserServlet.HttpInputStream in = null;
     	
     	String zlv = OfflineLC.zdesktop_sync_zip_level.value();
-    	OfflineAccount acct = (OfflineAccount)ombx.getAccount();
+    	OfflineAccount acct = ombx.getOfflineAccount();
     	try {
 	    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=zip&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
-	    	OfflineLog.request.debug("GET " + url);
+	    	if (acct.isDebugTraceEnabled())
+	    		OfflineLog.request.debug("GET " + url);
 	        try {
 	            String hostname = new URL(url).getHost();
 	            Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), hostname, url,
@@ -845,9 +847,10 @@ public class InitialSync {
     void syncMessage(int id, int folderId, byte type) throws ServiceException {
         Map<String, String> headers = new HashMap<String, String>();
 
-        OfflineAccount acct = (OfflineAccount)ombx.getAccount();
+        OfflineAccount acct =ombx.getOfflineAccount();
         String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=sync&nohdr=1&id=" + id);
-        OfflineLog.request.debug("GET " + url);
+        if (acct.isDebugTraceEnabled())
+        	OfflineLog.request.debug("GET " + url);
         try {
             String hostname = new URL(url).getHost();
             Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(
@@ -1030,9 +1033,10 @@ public class InitialSync {
         int mod_content = (int) doc.getAttributeLong(MailConstants.A_REVISION);
         int timestamp = (int) doc.getAttributeLong(MailConstants.A_CHANGE_DATE);
         InputStream rs = null;
-        OfflineAccount acct = (OfflineAccount)ombx.getAccount();
+        OfflineAccount acct = ombx.getOfflineAccount();
         String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + itemIdStr);
-        OfflineLog.request.debug("GET " + url);
+        if (acct.isDebugTraceEnabled())
+        	OfflineLog.request.debug("GET " + url);
         try {
         	String hostname = new URL(url).getHost();
         	rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), hostname, url,

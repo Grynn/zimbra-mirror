@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.params.HttpConnectionParams;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapTransport;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 
 public class Offline {
@@ -37,8 +38,19 @@ public class Offline {
     }
 
     public static class OfflineDebugListener implements SoapTransport.DebugListener {
-        public void sendSoapMessage(Element envelope)     { OfflineLog.request.debug(getPayload(envelope)); }
-        public void receiveSoapMessage(Element envelope)  { OfflineLog.response.debug(getPayload(envelope)); }
+    	OfflineAccount account;
+    	
+    	public OfflineDebugListener() {}
+    	public OfflineDebugListener(OfflineAccount account) { this.account = account; }
+    	
+        public void sendSoapMessage(Element envelope) {
+        	if (account == null || account.isDebugTraceEnabled())
+        		OfflineLog.request.debug(getPayload(envelope));
+        }
+        public void receiveSoapMessage(Element envelope) {
+        	if (account == null || account.isDebugTraceEnabled())
+        		OfflineLog.response.debug(getPayload(envelope));
+        }
 
         private Element getPayload(Element soap) {
             Element body = soap.getOptionalElement("Body");

@@ -128,6 +128,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	} else {
     		options = new ZMailbox.Options(account.getAttr(Provisioning.A_mail), AccountBy.name, account.getAttr(A_offlineRemotePassword), uri);
     	}
+        options.setDebugListener(new Offline.OfflineDebugListener(account));
     	return newZMailbox(options, account.getProxyHost(), account.getProxyPort(), account.getProxyUser(), account.getProxyPass());
     }
     
@@ -145,6 +146,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	
     	String uri = Offline.getServerURI((String)attrs.get(A_offlineRemoteServerUri), serviceUri);
     	ZMailbox.Options options = new ZMailbox.Options(email, AccountBy.name, password, uri);
+        options.setDebugListener(new Offline.OfflineDebugListener());
     	
     	return newZMailbox(options, proxyHost, proxyPort, proxyUser, proxyPass);
     }
@@ -157,7 +159,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
         options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());
         options.setRetryCount(1);
-        options.setDebugListener(new Offline.OfflineDebugListener());
         ZMailbox zmbox = ZMailbox.getMailbox(options);
         if (options.getAuthToken() == null) //it was auth by password
         	OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken(), zmbox.getAuthResult().getExpires());

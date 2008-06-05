@@ -30,6 +30,18 @@
   <desc>base URI of the remote Zimbra server</desc>
 </attr>
 
+<attr name="offlineRemoteHost" type="string" cardinality="single" requiredIn="account">
+  <desc>host of the remote Zimbra server</desc>
+</attr>
+
+<attr name="offlineRemotePort" type="port" cardinality="single" requiredIn="account">
+  <desc>port of the remote Zimbra server</desc>
+</attr>
+
+<attr name="offlineRemoteSsl" type="boolean" cardinality="single" requiredIn="account">
+  <desc>whether use ssl to access remote Zimbra server</desc>
+</attr>
+
 <attr name="offlineRemoteServerVersion" type="string" cardinality="single" optionalIn="account">
   <desc>version number of remote Zimbra server</desc>
 </attr>
@@ -64,6 +76,10 @@
 
 <attr name="offlineLastSync" type="long" cardinality="single" optionalIn="account">
   <desc>the last time (milli since epoch) this Zimbra account was successfully synced</desc>
+</attr>
+
+<attr name="offlineEnableTrace" type="boolean" cardinality="single" optionalIn="account">
+  <desc>whether enable debug trace of this account</desc>
 </attr>
 
 <attr name="offlineDataSourceType" type="enum" value="pop3,imap" immutable="1" cardinality="single" optionalIn="dataSource">

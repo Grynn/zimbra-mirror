@@ -218,10 +218,10 @@ function disableButtons() {
         </tr>       
 
 
-        <tr><td colspan=2><div class='ZOfflineHeader'>Downloading Mail</div></td></tr>
+        <tr><td colspan=2><div class='ZOfflineHeader'>Send and Receive</div></td></tr>
 
         <tr>
-            <td class="ZFieldLabel">Get new mail:</td>
+            <td class="ZFieldLabel">Send/receive mail:</td>
             <td>
                 <select class="ZSelect" id="syncFreqSecs" name="syncFreqSecs">
                     <option value="-1" ${bean.syncFreqSecs == -1 ? 'selected' : ''}>manually</option>
@@ -243,6 +243,11 @@ function disableButtons() {
         <tr id='popSettingsRow'>
             <td style='text-align:right'><input type="checkbox" id="leave_on_server" name="leave_on_server" disabled></td>
             <td class="ZCheckboxLabel ZHint">Delete messages on the server after downloading them</td>
+        </tr>
+        
+        <tr>
+            <td style='text-align:right'><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td>
+            <td class="ZCheckboxLabel">Enable debug trace</td>
         </tr>
 
     </table>

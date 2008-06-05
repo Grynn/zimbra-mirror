@@ -232,6 +232,10 @@ public class OfflineAccount extends Account {
     	}
     }
     
+    public boolean isDebugTraceEnabled() {
+    	return getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
+    }
+    
     public static void main(String[] args) {
     	assert new Version("4.5.9").isAtLeast(new Version("4.5"));
     	assert !new Version("4.5.9").isAtLeast(new Version("4.5.11"));

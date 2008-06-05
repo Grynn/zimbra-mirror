@@ -42,6 +42,8 @@ public class XmailBean extends FormBean {
 	
 	protected boolean syncAllServerFolders;
 	
+	protected boolean isDebugTraceEnabled;
+	
 	
 	@Override
 	protected void reload() {
@@ -64,6 +66,7 @@ public class XmailBean extends FormBean {
 		host = ds.getHost();
 		port = ds.getPort().toString();
 		isSsl = ds.getConnectionType() == DataSource.ConnectionType.ssl;
+		isDebugTraceEnabled = ds.isDebugTraceEnabled();
 		
 		domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain, null);
 		smtpHost = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpHost, null);
@@ -132,6 +135,7 @@ public class XmailBean extends FormBean {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceHost, host);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
+			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 			        
 			        domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
@@ -327,6 +331,14 @@ public class XmailBean extends FormBean {
 	
 	public boolean isSsl() {
 		return isSsl;
+	}
+	
+	public void setDebugTraceEnabled(boolean isDebugTraceEnabled) {
+		this.isDebugTraceEnabled = isDebugTraceEnabled;
+	}
+	
+	public boolean isDebugTraceEnabled() {
+		return isDebugTraceEnabled;
 	}
 	
 	public void setSmtpHost(String smtpHost) {

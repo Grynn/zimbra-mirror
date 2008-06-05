@@ -636,7 +636,7 @@ public class OfflineMailbox extends DesktopMailbox {
 
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
         String uri = getSoapUri();
-        OfflineAccount acct = (OfflineAccount) getAccount();
+        OfflineAccount acct = getOfflineAccount();
         SoapHttpTransport transport = new SoapHttpTransport(uri, acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
         try {
             transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
@@ -646,7 +646,8 @@ public class OfflineMailbox extends DesktopMailbox {
                 transport.setAuthToken(getAuthToken());
             transport.setRequestProtocol(SoapProtocol.Soap12);
 
-            OfflineLog.request.debug(request);
+            if (acct.isDebugTraceEnabled())
+            	OfflineLog.request.debug(request);
 
             Element response = null;
             if (noSession) {
@@ -656,7 +657,8 @@ public class OfflineMailbox extends DesktopMailbox {
             		transport.setSessionId(mSessionId);
             	response = transport.invoke(request.detach());
             }
-            OfflineLog.response.debug(response);
+            if (acct.isDebugTraceEnabled())
+            	OfflineLog.response.debug(response);
 
             // update sessionId if changed
             if (transport.getSessionId() != null)
@@ -671,7 +673,7 @@ public class OfflineMailbox extends DesktopMailbox {
     }
     
     OfflineAccount.Version getRemoteServerVersion() throws ServiceException {
-    	return ((OfflineAccount) getAccount()).getRemoteServerVersion();
+    	return getOfflineAccount().getRemoteServerVersion();
     }
     
     void pollForUpdates() throws ServiceException {
@@ -682,8 +684,8 @@ public class OfflineMailbox extends DesktopMailbox {
     }
     
     public Pair<Integer,Integer> sendMailItem(MailItem item) throws ServiceException {
-    	OfflineAccount acct = (OfflineAccount) getAccount();
-    	String url = Offline.getServerURI(getAccount(), UserServlet.SERVLET_PATH) + item.getPath();
+    	OfflineAccount acct = getOfflineAccount();
+    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + item.getPath();
     	ArrayList<Header> headers = new ArrayList<Header>();
     	if (item instanceof Document) {
     		Document d = (Document) item;
