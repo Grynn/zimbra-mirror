@@ -139,12 +139,9 @@ public class LocalMailbox extends DesktopMailbox {
             DataSource ds = Provisioning.getInstance().get(getAccount(), DataSourceBy.id, msg.getDraftIdentityId());
             if (ds == null)
             	ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
-            if (ds != null) {
-            	session = LocalJMSession.getSession(ds);
-                saveToSent = ds.isSaveToSent();
-            } else {
-            	session = LocalJMSession.getSession(getAccount());
-            }
+            
+        	session = LocalJMSession.getSession((OfflineDataSource)ds);
+            saveToSent = ds.isSaveToSent();
             if (session == null) { 
         		OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
     			bounceToInbox(context, id, msg, "SMTP configuration not valid");

@@ -28,7 +28,7 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.CustomSSLSocketFactory;
 import com.zimbra.common.util.DummySSLSocketFactory;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.datasource.TlsSocketFactory;
@@ -62,7 +62,7 @@ public class LocalJMSession {
     }
     
     private static Session getSession(String smtpHost, int smtpPort, boolean isAuthRequired, String smtpUser, String smtpPass,
-    		                         boolean useSSL, boolean useProxy, String proxyHost, int proxyPort) throws ServiceException {
+    		                         boolean useSSL, boolean useProxy, String proxyHost, int proxyPort, boolean isDebugTraceEnabled) throws ServiceException {
     	long timeout = LC.javamail_smtp_timeout.longValue() * Constants.MILLIS_PER_SECOND;
     	
     	String localhost = LC.zimbra_server_hostname.value();
@@ -131,27 +131,27 @@ public class LocalJMSession {
             session.setProtocolForAddress("rfc822", "smtp");
     	}
 
-        if (LC.javamail_smtp_debug.booleanValue())
+        if (LC.javamail_smtp_debug.booleanValue() || isDebugTraceEnabled)
             session.setDebug(true);
         
         return session;
     }
     
-    public static Session getSession(NamedEntry e) {
+    public static Session getSession(OfflineDataSource ds) {
     	try {
-	    	String smtpHost = e.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpHost, null);
-	    	int smtpPort = e.getIntAttr(OfflineProvisioning.A_zimbraDataSourceSmtpPort, 0);
-	    	boolean isAuthRequired = e.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthRequired, false);
-	    	String smtpUser = e.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthUsername, null);
+	    	String smtpHost = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpHost, null);
+	    	int smtpPort = ds.getIntAttr(OfflineProvisioning.A_zimbraDataSourceSmtpPort, 0);
+	    	boolean isAuthRequired = ds.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthRequired, false);
+	    	String smtpUser = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthUsername, null);
 	    	
-	    	String smtpPass = e.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthPassword, null);
-	    	smtpPass = smtpPass == null ? null : DataSource.decryptData(e.getId(), smtpPass);
+	    	String smtpPass = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpAuthPassword, null);
+	    	smtpPass = smtpPass == null ? null : DataSource.decryptData(ds.getId(), smtpPass);
 	    	
-	    	boolean useSSL = "ssl".equals(e.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpConnectionType, null));
-	    	boolean useProxy = e.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceUseProxy, false);
-	    	String proxyHost = e.getAttr(OfflineProvisioning.A_zimbraDataSourceProxyHost, null);
-	    	int proxyPort = e.getIntAttr(OfflineProvisioning.A_zimbraDataSourceProxyPort, 0);
-	    	return getSession(smtpHost, smtpPort, isAuthRequired, smtpUser, smtpPass, useSSL, useProxy, proxyHost, proxyPort);
+	    	boolean useSSL = "ssl".equals(ds.getAttr(OfflineProvisioning.A_zimbraDataSourceSmtpConnectionType, null));
+	    	boolean useProxy = ds.getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceUseProxy, false);
+	    	String proxyHost = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceProxyHost, null);
+	    	int proxyPort = ds.getIntAttr(OfflineProvisioning.A_zimbraDataSourceProxyPort, 0);
+	    	return getSession(smtpHost, smtpPort, isAuthRequired, smtpUser, smtpPass, useSSL, useProxy, proxyHost, proxyPort, ds.isDebugTraceEnabled());
     	} catch (ServiceException x) {
     		OfflineLog.offline.warn(x.getMessage());
     		return null;

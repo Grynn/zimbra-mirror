@@ -508,7 +508,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     private void testDataSource(Account account, DataSource.Type type, String name, String dsid, Map<String, Object> attrs) throws ServiceException {
-        DataSource testDs = new OfflineDataSource(account, type, name, dsid, attrs);
+        OfflineDataSource testDs = new OfflineDataSource(account, type, name, dsid, attrs);
         String error = DataSourceManager.test(testDs);
         if (error != null)
         	throw ServiceException.FAILURE(error, null);
