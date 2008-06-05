@@ -18,8 +18,6 @@
 	<condition property="native.so" value="so"><not><os name="Mac OS X"/></not></condition>
 	
 	<!-- src -->
-	<property name="src.java.dir" location="${ext.dir}/java" />	
-	<property name="src.js.dir" location="${ext.dir}/js" />
 	<property name="build.dir" location="build" />
 	<property name="network.dir" location="../ZimbraNetwork/ZimbraServer" />
 	<property name="network.classes.dir" location="${network.dir}/build/classes" />	
@@ -28,9 +26,6 @@
 	<property name="common.jars.dir" location="${common.dir}/jars" />
 
 	<!-- build -->
-	<property name="jar.file" value="${ext.name}.jar" />
-	<property name="zimlet.file" value="${ext.name}.zip" />
-	
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.zimlet.dir" location="${build.dir}/zimlets" />
 	
@@ -38,27 +33,19 @@
 	<property name="dist.dir" location="build/dist"/>
 	<property name="dist.lib.dir" location="${dist.dir}/lib"/>
 	<property name="dist.lib.ext.dir" location="${dist.lib.dir}/ext"/>
-	<property name="extension.dist.dir" location="${dist.lib.ext.dir}/${ext.name}"/>
 	<property name="zimlet.dist.dir" location="${dist.dir}/zimlets"/>
 	
 	
 
 	<!-- deploy -->
 	<property name="zimbra.home.dir" location="/opt/zimbra" />	
-	<property name="extension.deploy.dir" location="${zimbra.home.dir}/lib/ext/${ext.name}"/>	
-
-	
-	<path id="all.java.path">
-		<pathelement location="${src.java.dir}" />
-	</path>
 
 	<target name="build-init">
 	   	<mkdir dir="${build.zimlet.dir}" /> 
 		<mkdir dir="${build.classes.dir}" /> 
 		<mkdir dir="${dist.dir}"/>
 		<mkdir dir="${dist.lib.dir}"/>		
-		<mkdir dir="${dist.lib.ext.dir}"/>				
-		<mkdir dir="${extension.dist.dir}"/>		
+		<mkdir dir="${dist.lib.ext.dir}"/>			
 		<mkdir dir="${zimlet.dist.dir}"/>
 	</target>
 
@@ -105,15 +92,15 @@
 	</path>	
 
 	<target name="package-zimlet" depends='build-init' description="put zimlet files into zip archive for deployment">
-		<mkdir dir="${build.zimlet.dir}" />
-		<zip destfile="${build.zimlet.dir}/${zimlet.file}" update="true">
-			<fileset dir="${src.js.dir}" includes="*"/>
+		<echo>Packing zimlet ${ext.name} to ${build.zimlet.dir}/${ext.name}.zip </echo>
+        <mkdir dir="${build.zimlet.dir}" />
+		<zip destfile="${build.zimlet.dir}/${ext.name}.zip" update="true">
+			<fileset dir="${ext.dir}/js" includes="*"/>
 		</zip>
 	</target>
 	
 	<target name="undeploy-zimlet" description="undeploy zimlet">
 		<echo>Undeploying zimlet: ${ext.name} </echo>
-		<mkdir dir="${build.zimlet.dir}" />
 		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="class.path" failonerror="true">
 			<arg line="undeploy ${ext.name}" />
 		</java>
@@ -125,25 +112,28 @@
 		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="class.path" failonerror="true">
 			<arg line="-q" />
 			<arg line="deploy" />
-			<arg file="${build.zimlet.dir}/${zimlet.file}" />
+			<arg file="${build.zimlet.dir}/${ext.name}.zip" />
 		</java>
 	</target>	
 
 	<target name="compile" depends="build-init" description="Compiles the source code">
-		<ant dir="${common.dir}" target="jar" inheritAll="false" />
+        <path id="all.java.path">
+            <pathelement location="${ext.dir}/java" />
+        </path>
+        <ant dir="${common.dir}" target="jar" inheritAll="false" />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
 			<src refid="all.java.path" />
 		</javac>
 	</target>
 				
 	<target name="jar" depends="compile" description="Creates the jar file">
-		<jar manifest="${ext.dir}/conf/MANIFEST.MF" destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}" />
+		<jar manifest="${ext.dir}/conf/MANIFEST.MF" destfile="${build.dir}/${ext.name}.jar" basedir="${build.classes.dir}" />
 	</target>	
 	
 	<target name="deploy-server-extension" depends="jar">
 		<ant dir="${zimbraServer.dir}" target="stop-webserver" inheritAll="false"/>
-		<copy todir="${extension.deploy.dir}">
-			<fileset dir="${build.dir}" includes="${jar.file}" />
+		<copy todir="${zimbra.home.dir}/lib/ext/${ext.name}">
+			<fileset dir="${build.dir}" includes="${ext.name}.jar" />
 		</copy>
 		<ant dir="${zimbraServer.dir}" target="start-webserver" inheritAll="false"/>
 	 </target>
@@ -173,27 +163,25 @@
 		<!-- PSCP copy the file to the build -->
 		<!-- Copy the jar file -->
 		<antcall target="scp">
-	    	<param name="scp_src" value="${build.dir}/${jar.file}"/>
-			<param name="scp_dest" value="root@${dev_machine}:/opt/zimbra/lib/ext/${ext.name}/${jar.file}" />
+	    	<param name="scp_src" value="${build.dir}/${ext.name}.jar"/>
+			<param name="scp_dest" value="root@${dev_machine}:/opt/zimbra/lib/ext/${ext.name}/${ext.name}.jar" />
 	  	</antcall>
 	  	
 	  	<!-- Copy the zmrcd & zmcertmgr: may need to run dos2unix for zmrcd   -->
-	  	 
+	  	<!--
 	  	<antcall target="scp">
 	    	<param name="scp_src" value="${zimbraServer.dir}/src/libexec/zmrcd"/>
 			<param name="scp_dest" value="root@${dev_machine}:/opt/zimbra/libexec/zmrcd" />
 	  	</antcall>
-	  	   <!--
+         -->
 		<antcall target="scp">
 	    	<param name="scp_src" value="${zimbraServer.dir}/src/bin/zmcertmgr"/>
 			<param name="scp_dest" value="root@${dev_machine}:/opt/zimbra/bin/zmcertmgr" />
 	  	</antcall>
-          	 -->
-	  	
-	  	
-	  	<!-- Copy the zimlet zip file -->
+        
+          <!-- Copy the zimlet zip file -->
 		<antcall target="scp">
-	    	<param name="scp_src" value="${build.zimlet.dir}/${zimlet.file}"/>
+	    	<param name="scp_src" value="${build.zimlet.dir}/${ext.name}.zip"/>
 			<param name="scp_dest" value="zimbra@${dev_machine}:/opt/zimbra/zimlets" />
 	  	</antcall>
 	  	
@@ -208,5 +196,29 @@
 	</target>
 	
 	<!-- deploy the extension for development -->
-	<target name="deploy" depends="package-zimlet, jar, copy-files-to-dev-machine" description="Deploy the extension"/>
+	<target name="deploy-cert" depends="package-zimlet, jar, copy-files-to-dev-machine" description="Deploy the extension"/>
+
+    <target name="deploy-yahoosmb">
+        <!-- Need to undeploy the domain admin first
+        <antcall target="undeploy-zimlet">
+            <param name="ext.name" value="com_zimbra_domainadmin" />
+        </antcall>
+        -->
+        <!-- Deploy the yahoosmb -->
+        <antcall target="deploy-zimlet" >
+            <param name="ext.name" value="com_zimbra_yahoosmb" />
+            <param name="ext.dir" value="com_zimbra_yahoosmb" />
+        </antcall>
+
+         <antcall target="deploy-server-extension" >
+            <param name="ext.name" value="com_zimbra_yahoosmb" />
+            <param name="ext.dir" value="com_zimbra_yahoosmb" />
+        </antcall>
+    </target>
+
+    <target name="undeploy-yahoosmb" >
+        <antcall target="undeploy-zimlet">
+            <param name="ext.name" value="com_zimbra_yahoosmb" />
+        </antcall>
+    </target>
 </project>

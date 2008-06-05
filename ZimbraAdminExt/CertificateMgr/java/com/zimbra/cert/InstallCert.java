@@ -143,14 +143,6 @@ public class InstallCert extends AdminDocumentHandler {
         return response;    
     }
 
-
-    private void saveConfig() throws ServiceException {
-        if (prov == null ) prov = Provisioning.getInstance();
-        String [] zimbraSSLPrivateKey = {"zimbraSSLPrivateKey", "abcd" };
-        prov.modifyAttrs(server,
-                StringUtil.keyValueArrayToMultiMap(zimbraSSLPrivateKey, 2), true);
-    }
-
     
     private boolean checkUploadedCommCert (Element request, ZimbraSoapContext lc, boolean isAllServer) throws ServiceException {
         Upload up = null ;
@@ -301,6 +293,8 @@ public class InstallCert extends AdminDocumentHandler {
                     prov.modifyAttrs(server,
                         StringUtil.keyValueArrayToMultiMap(zimbraSSLCertificate, 0), true);
                 }
+
+                
             }catch (IOException ioe) {
                 throw ServiceException.FAILURE("IOException occurred while running cert verification command", ioe);
             }
@@ -313,6 +307,17 @@ public class InstallCert extends AdminDocumentHandler {
                 } catch (IOException ioe) {
                     ZimbraLog.security.warn("exception closing uploaded certificate:", ioe);
                 }
+            }
+
+            //delete the key file
+
+            try {
+                File comm_priv = new File (ZimbraCertMgrExt.SAVED_COMM_KEY_FROM_LDAP)  ;
+                if (!comm_priv.delete()) {
+                     throw new SecurityException ("Deleting temporary private key file failed.")  ;
+                }
+            }catch (SecurityException se) {
+                ZimbraLog.security.error ("File " + ZimbraCertMgrExt.SAVED_COMM_KEY_FROM_LDAP + " was not deleted", se ) ;
             }
         }
 
