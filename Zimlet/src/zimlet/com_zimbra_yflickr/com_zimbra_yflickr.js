@@ -544,9 +544,6 @@ Com_Zimbra_Yflickr.prototype._getAuthDlg = function(){
         this.authDlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
         this.authDlg.setContent ("<span style=\"text-align:center;\">" +
                                  "A new browser window has been created for you to authorize the Flickr zimlet to access your photo albums." +
-                                 "<br/>" +
-                                 "Please log in using your Yahoo!/Flickr account, complete the authorization process, and then click OK to proceed" +
-                                 "<br/>" +
                                  "</span>"
                 );
     }
@@ -554,7 +551,7 @@ Com_Zimbra_Yflickr.prototype._getAuthDlg = function(){
 };
 
 // set up a window for the user to authorize the frob
-Com_Zimbra_Yflickr.prototype.authorize = function()
+Com_Zimbra_Yflickr.prototype.authorize = function(fromContextMenu)
 {
     if (this.authStage < FLICKR_AUTHSTAGE_GOTFROB)
     {
@@ -573,16 +570,21 @@ Com_Zimbra_Yflickr.prototype.authorize = function()
         dlg.popup();
     }
     else if (this.authStage > FLICKR_AUTHSTAGE_AUTHORIZED) {
-        var dlg = new DwtDialog (appCtxt.getShell(), null, "Already authorized", [DwtDialog.OK_BUTTON]);
-        dlg.setContent ("The Flickr Zimlet is already authorized to access your Flickr Account");
-        dlg.popup();
+        if(fromContextMenu)  {
+            var dlg = new DwtDialog (appCtxt.getShell(), null, "Already authorized", [DwtDialog.OK_BUTTON]);
+            dlg.setContent ("The Flickr Zimlet is already authorized to access your Flickr Account");
+            dlg.popup();
+        }
+        else {
+            var canvasData = {height:600,title:"Flickr Website",type:"window",width:800};
+            this.makeCanvas(canvasData,"http://www.flickr.com");
+        }
     }
     else
     {
         // construct an authorization url and direct a new window there
         var authz_url = flickrapi_getsignedurl (gAuthzEndpoint, this.api_secret, [["api_key", this.api_key], ["perms", "write"], ["frob", this.frob]]);
         this.authWin = window.open (authz_url, "yflickr_authz", "toolbar=no,menubar=no,width=800,height=600");
-
         var authDlg = this._getAuthDlg();
         if (authDlg)
         {
@@ -629,7 +631,7 @@ Com_Zimbra_Yflickr.prototype.menuItemSelected = function(itemId)
 {
 	switch (itemId) {
         case "YflickrAuthorize":
-        this.authorize();
+        this.authorize(true);
         break;
 		case "YflickrHelp":
 		this.displayFlickrHelp();
@@ -655,7 +657,7 @@ Com_Zimbra_Yflickr.prototype.displayAboutFlickrZimlet = function()
     var args = {title: "About Flickr Zimlet", view: view};
     var dlg = this._createDialog (args);
     var aboutText = 
-        "The Yflickr Zimlet for Zimbra Collaboration Suite 5.0 is brought to you by Zimbra, a Yahoo! company" + "<br/>" +
+        "The Flickr Zimlet for Zimbra Collaboration Suite 5.0 is brought to you by Zimbra, a Yahoo! company" + "<br/>" +
         "Copyright (c) 2007. All rights reserved. Flickr, Yahoo! and Zimbra are trademarks owned by Yahoo!, Inc." + "<br/>" +
         "This software is distributed as-is without any warranties whatsoever, either direct or implied.";
     view.getHtmlElement().innerHTML = aboutText;
@@ -1349,4 +1351,9 @@ function YFlickr_getIndexableName (s)
     return "S" + hex_md5 (s);
 }
 
-
+Com_Zimbra_Yflickr.prototype.singleClicked = function() {
+    this.authorize();
+}
+Com_Zimbra_Yflickr.prototype.doubleClicked = function() {
+    this.authorize();
+}
