@@ -49,8 +49,8 @@ Com_Zimbra_YMaps.prototype.singleClicked = function() {
 		{ label 		 : "Address",
 		  name           : "address",
 		  type           : "string",
-		  minLength      : 10,
-		  maxLength      : 200
+		  minLength      : 2,
+		  maxLength      : 200   
 		}
 		];
 	if (!this._dlg_propertyEditor) {
