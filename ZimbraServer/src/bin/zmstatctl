@@ -107,6 +107,7 @@ if (!$isMac) {
     push(@TOOL_ALL, 'zmstat-fd');
 }
 my $TOOL_MYSQL = 'zmstat-mysql';
+my $TOOL_CONVERTD = 'zmstat-convertd';
 my $TOOL_MTAQUEUE = 'zmstat-mtaqueue';
 
 my $cmd = $ARGV[0];
@@ -126,6 +127,11 @@ if (defined($cmd)) {
         }
         if ($doMysql) {
             my $cmd = "$toolpath/$TOOL_MYSQL";
+            print "Invoking: $cmd\n";
+            system("$cmd >> $outfile 2>&1 &");
+            
+            # doMysql implies that convertd is also on the system
+            $cmd = "$toolpath/$TOOL_CONVERTD";
             print "Invoking: $cmd\n";
             system("$cmd >> $outfile 2>&1 &");
         }

@@ -33,6 +33,7 @@ my $vmstatCsv = 'vm.csv';
 my $iostatxCsv = 'io-x.csv';
 my $iostatCsv = 'io.csv';
 my $mailboxdCsv = 'mailboxd.csv';
+my $convertdCsv = 'convertd.csv';
 my $mysqlCsv = 'mysql.csv';
 my $soapCsv = 'soap.csv';
 
@@ -717,6 +718,45 @@ sub mailboxdConfig() {
 _HERE_
 }
 
+sub convertdConfig() {
+    print <<_HERE_;
+  <!-- Convertd Stats -->
+  <chart title="Host $ZIMBRA_HOSTNAME: convertd: CPU time used"
+         category="convertd"
+         infile="$convertdCsv"
+         outfile="${ZIMBRA_HOSTNAME}_convertd_cputime.png"
+         yAxis="cputime (seconds)"
+         showRaw="false"
+         showMovingAvg="true">
+    <plot data="cputime" legend="total cputime" divisor="100"/>
+    <plot data="utime" legend="user time" divisor="100"/>
+    <plot data="stime" legend="system time" divisor="100"/>
+  </chart>
+  
+  <chart title="Host $ZIMBRA_HOSTNAME: convertd: Resident Memory"
+         category="convertd"
+         infile="$convertdCsv"
+         outfile="${ZIMBRA_HOSTNAME}_convertd_rss.png"
+         yAxis="MB"
+         showRaw="false"
+         showMovingAvg="true">
+    <plot data="rss" legend="convertd rss" divisor="1024"/>
+  </chart>
+  
+  <chart title="Host $ZIMBRA_HOSTNAME: convertd: Processes and Threads"
+         category="convertd"
+         infile="$convertdCsv"
+         outfile="${ZIMBRA_HOSTNAME}_convertd_procs_threads.png"
+         yAxis="count"
+         showRaw="false"
+         showMovingAvg="true">
+    <plot data="processes" legend="processes"/>
+    <plot data="threads" legend="threads"/>
+  </chart>
+
+_HERE_
+}
+
 sub gcConfig() {
     print <<_HERE_;
   <!-- Garbage Collection Stats -->
@@ -864,5 +904,6 @@ if ($HAS_MAILBOX) {
     mailboxdConfig();
     gcConfig();
     heapConfig();
+    convertdConfig() if !$isMac;
 }
 print "</charts>\n";
