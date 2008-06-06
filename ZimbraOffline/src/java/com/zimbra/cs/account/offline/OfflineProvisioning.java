@@ -1239,6 +1239,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
+    public synchronized void getAllCalendarResources(Domain d, Server s, Visitor visitor) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public synchronized void getAllCalendarResources(Domain d, Visitor visitor) throws ServiceException {
         throw new UnsupportedOperationException();
     }
