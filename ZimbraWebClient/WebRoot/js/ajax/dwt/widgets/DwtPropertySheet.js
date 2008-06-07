@@ -82,7 +82,7 @@ DwtPropertySheet.prototype.addProperty = function(label, value, required) {
 	var index = this._tableEl.rows.length;
 
 	var row = this._tableEl.insertRow(index);
-	row.vAlign = "top";
+	row.vAlign = this._vAlign ? this._vAlign : "top";
 
 	if (this._labelSide == DwtPropertySheet.LEFT) {
 		this._insertLabel(row, label, required);
