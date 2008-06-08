@@ -25,6 +25,7 @@ import javax.servlet.http.Cookie;
 import java.io.IOException;
 import javax.naming.*;
 
+import com.zimbra.common.auth.AuthTokenCookie;
 import com.zimbra.common.util.ZimbraLog;
 
 public class SetCookieServlet extends ZCServlet
@@ -92,7 +93,7 @@ public class SetCookieServlet extends ZCServlet
                 String authCookieVal = getCookieValue(req, "ZM_AUTH_TOKEN");
                 if (!(authToken.equals(authCookieVal))) {
                     Cookie c = new Cookie("ZM_AUTH_TOKEN", authToken);
-                    c.setPath("/");
+                    AuthTokenCookie.setCookieDomainPath(c, AuthTokenCookie.PATH_ROOT);
                     c.setMaxAge(lifetime);                
                     resp.addCookie(c);
                 }

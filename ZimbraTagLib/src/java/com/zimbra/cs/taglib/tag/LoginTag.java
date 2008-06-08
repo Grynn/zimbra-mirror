@@ -19,6 +19,7 @@ package com.zimbra.cs.taglib.tag;
 import java.util.Map;
 
 import com.zimbra.common.auth.ZAuthToken;
+import com.zimbra.common.auth.AuthTokenCookie;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZAuthResult;
@@ -140,7 +141,7 @@ public class LoginTag extends ZimbraSimpleTag {
                     Cookie authTokenCookie = new Cookie(ck.getKey(), ck.getValue());
                     if (maxAge != null)
                         authTokenCookie.setMaxAge(maxAge.intValue());
-                    authTokenCookie.setPath("/");
+                    AuthTokenCookie.setCookieDomainPath(authTokenCookie, AuthTokenCookie.PATH_ROOT);
                     response.addCookie(authTokenCookie);
                 }
             }
