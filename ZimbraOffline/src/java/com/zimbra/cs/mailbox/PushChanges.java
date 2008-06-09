@@ -819,8 +819,7 @@ public class PushChanges {
     	MailItem item = null;
     	boolean create = false;
     	synchronized (ombx) {
-            int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_CONTACT);
-            if ((mask & Change.MODIFIED_CONFLICT) != 0) {
+            if (id > OfflineMailbox.FIRST_OFFLINE_ITEM_ID) {
             	create = true;
             }
         	item = ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
@@ -829,6 +828,8 @@ public class PushChanges {
     	String digest = item.getDigest();
     	String name = item.getName();
     	if (item instanceof Document) {
+    		if (!create)
+    			checkDocumentSyncConflict(item);
     		Pair<Integer,Integer> resp = ombx.sendMailItem(item);
             if (create) {
                 if (!ombx.renumberItem(sContext, id, MailItem.TYPE_DOCUMENT, resp.getFirst(), resp.getSecond()))
@@ -843,6 +844,33 @@ public class PushChanges {
             if (!StringUtil.equal(name, item.getName()))      mask |= Change.MODIFIED_NAME;
             ombx.setChangeMask(sContext, id, MailItem.TYPE_DOCUMENT, mask);
             return (mask == 0);
+        }
+    }
+    
+    private void checkDocumentSyncConflict(MailItem item) throws ServiceException {
+    	int lastSyncVersion = ombx.getLastSyncedVersionForMailItem(item.getId());
+        Element request = new Element.XMLElement(MailConstants.GET_WIKI_REQUEST);
+        Element wiki = request.addElement(MailConstants.E_WIKIWORD);
+        wiki.addAttribute(MailConstants.A_ID, item.getId());
+        wiki.addAttribute(MailConstants.A_COUNT, 20);
+        Element response = ombx.sendRequest(request);
+        Iterator<Element> iter = response.elementIterator(MailConstants.E_WIKIWORD);
+        StringBuilder buf = new StringBuilder(item.getName() + " : Document sync overwrote following revisions on the server:\n\n");
+        boolean conflict = false;
+        while (iter.hasNext()) {
+        	Element e = iter.next();
+        	int ver = (int)e.getAttributeLong(MailConstants.A_VERSION);
+        	if (lastSyncVersion > 0 && ver > lastSyncVersion) {
+        		conflict = true;
+            	buf.append("revision ").append(e.getAttribute(MailConstants.A_VERSION));
+            	buf.append(" edited by ").append(e.getAttribute(MailConstants.A_CREATOR));
+            	buf.append(" on ").append(e.getAttributeBool(MailConstants.A_MODIFIED_DATE));
+            	buf.append("\n");
+        	}
+        }
+        if (conflict) {
+        	String msg = buf.toString();
+        	OfflineLog.offline.info(msg);
         }
     }
     

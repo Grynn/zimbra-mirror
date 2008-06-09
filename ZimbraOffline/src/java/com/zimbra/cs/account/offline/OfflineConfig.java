@@ -46,6 +46,7 @@ class OfflineConfig extends Config {
             attrs.put(Provisioning.A_zimbraRedoLogEnabled, OfflineLC.zdesktop_redolog_enabled.booleanValue() ? Provisioning.TRUE : Provisioning.FALSE);
             
             attrs.put(Provisioning.A_zimbraSmtpSendAddMailer, Provisioning.FALSE);
+            attrs.put(Provisioning.A_zimbraNotebookAccount, "local@host.local");
             
             return new OfflineConfig(attrs);
         } catch (ServiceException e) {

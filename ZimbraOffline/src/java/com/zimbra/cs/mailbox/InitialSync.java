@@ -1032,6 +1032,7 @@ public class InitialSync {
         int changeId = (int) doc.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
         int mod_content = (int) doc.getAttributeLong(MailConstants.A_REVISION);
         int timestamp = (int) doc.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int version = (int) doc.getAttributeLong(MailConstants.A_VERSION);
         InputStream rs = null;
         OfflineAccount acct = ombx.getOfflineAccount();
         String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + itemIdStr);
@@ -1049,10 +1050,16 @@ public class InitialSync {
         } catch (IOException e) {
         	OfflineLog.offline.warn("initial: can't download Document:  " + itemIdStr);
         }
+
         try {
             ItemId itemId = new ItemId(itemIdStr, ombx.getAccountId());
             int id = itemId.getId();
             int date = (int) (modifiedDate / 1000);
+            int change = ombx.getChangeMask(null, id, MailItem.TYPE_DOCUMENT);
+            if (change > 0) {
+            	OfflineLog.offline.info("skipping locally modified item "+id+" (change "+change+")");
+            	return;
+            }
             SaveDocument player = new SaveDocument();
             ParsedDocument pd = new ParsedDocument(rs, name, contentType, modifiedDate, lastEditedBy);
             player.setDocument(pd);
@@ -1062,7 +1069,7 @@ public class InitialSync {
             // XXX sync tags
             
             try {
-                ombx.getItemById(sContext, id, MailItem.TYPE_DOCUMENT);
+            	ombx.getItemById(sContext, id, MailItem.TYPE_DOCUMENT);
                 ombx.addDocumentRevision(new OfflineContext(player), id, MailItem.TYPE_DOCUMENT, pd);
             } catch (MailServiceException.NoSuchItemException nsie) {
                 ombx.createDocument(new OfflineContext(player), folderId, pd, MailItem.TYPE_DOCUMENT);
@@ -1070,6 +1077,7 @@ public class InitialSync {
             if (flags != 0)
             	ombx.setTags(sContext, id, MailItem.TYPE_DOCUMENT, flags, MailItem.TAG_UNCHANGED);
             ombx.syncChangeIds(sContext, id, MailItem.TYPE_DOCUMENT, date, mod_content, timestamp, changeId);
+            ombx.setSyncedVersionForMailItem(itemIdStr, version);
             OfflineLog.offline.debug("initial: created document (" + itemIdStr + "): " + name);
         } catch (ServiceException e) {
         	OfflineLog.offline.warn("initial: error saving a document:  " + itemIdStr, e);

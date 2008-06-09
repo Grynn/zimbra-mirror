@@ -42,6 +42,7 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
+import com.zimbra.cs.httpclient.URLUtil;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.util.TypedIdList;
@@ -685,7 +686,7 @@ public class OfflineMailbox extends DesktopMailbox {
     
     public Pair<Integer,Integer> sendMailItem(MailItem item) throws ServiceException {
     	OfflineAccount acct = getOfflineAccount();
-    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + item.getPath();
+    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ URLUtil.urlEscape(item.getPath());
     	ArrayList<Header> headers = new ArrayList<Header>();
     	if (item instanceof Document) {
     		Document d = (Document) item;
@@ -713,5 +714,25 @@ public class OfflineMailbox extends DesktopMailbox {
     	} catch (IOException e) {
             throw ServiceException.PROXY_ERROR(e, url);
     	}
+    }
+    
+    static final String VERSIONS_KEY = "VERSIONS";
+    
+    public int getLastSyncedVersionForMailItem(int id) throws ServiceException {
+        Metadata config = getConfig(null, VERSIONS_KEY);
+        if (config == null) {
+        	config = new Metadata();
+        	setConfig(null, VERSIONS_KEY, config);
+        }
+    	return (int)config.getLong("" + id, 0);
+    }
+    
+    public void setSyncedVersionForMailItem(String id, int ver) throws ServiceException {
+        Metadata config = getConfig(null, VERSIONS_KEY);
+        if (config == null)
+        	config = new Metadata();
+
+        config.put(id, ver);
+    	setConfig(null, VERSIONS_KEY, config);
     }
 }
