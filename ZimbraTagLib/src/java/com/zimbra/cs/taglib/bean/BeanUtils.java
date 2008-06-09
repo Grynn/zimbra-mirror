@@ -1140,7 +1140,23 @@ public class BeanUtils {
 		return account == null ? null : new ZPhoneAccountBean(account);
 	}
 
-	public static boolean getIsMyCard(PageContext pc, String ids) throws ServiceException, JspException {
+
+
+	private static Pattern sPHONE_NAME = Pattern.compile("[^\\d]");
+	private static String getPhoneName(String display) {
+		return sPHONE_NAME.matcher(display).replaceAll("");
+	}
+
+	private static final Pattern sPHONE = Pattern.compile("[0-9()\\-\\s\\+]+");
+	public static boolean isValidPhoneNumber(String number) {
+		if (number == null) {
+			return false;
+		}
+		int length = getPhoneName(number).length();
+		return 7 <= length && length <= 20 && sPHONE.matcher(number).matches();
+	}
+
+    public static boolean getIsMyCard(PageContext pc, String ids) throws ServiceException, JspException {
 		ZMailbox mbox = ZJspSession.getZMailbox(pc);
 		return mbox.getIsMyCard(ids);
 	}
