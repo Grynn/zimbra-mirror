@@ -126,6 +126,7 @@ public class ZMessageComposeBean {
     private String mTaskPriority;
     private String mTaskPercentComplete;
 
+    private String mOrigOrganizer;
     private String mRepeatBasicType;
     private String mRepeatType;
     private int mRepeatDailyInterval;
@@ -239,6 +240,9 @@ public class ZMessageComposeBean {
 
     public void setLocation(String location) { mLocation = location; }
     public String getLocation() { return mLocation; }
+
+    public void setOrigOrganizer(String organizer) { mOrigOrganizer = organizer; }
+    public String getOrigOrganizer() { return mOrigOrganizer; }
 
     public void setTimeZone(String timeZone) {
         mTimeZone = timeZone;
@@ -998,6 +1002,7 @@ public class ZMessageComposeBean {
             setTaskPercentComplete(appt.getPercentCompleted());
             setTaskPriority(appt.getPriority());
             setTaskStatus(appt.getStatus().name());
+            setOrigOrganizer(appt.getOrganizer().getAddress());
 
             String tz = appt.getStart() != null ? appt.getStart().getTimeZoneId() : null;
             setTimeZone(tz == null ? mailbox.getPrefs().getTimeZoneId() : TZIDMapper.canonicalize(tz));
@@ -1323,20 +1328,26 @@ public class ZMessageComposeBean {
         if (mLocation != null && mLocation.length() > 0) comp.setLocation(mLocation);
         comp.setName(mSubject);
         
-        List<ZIdentity> identities = mailbox.getIdentities();
+        List<ZIdentity> identities = mailbox.getAccountInfo(false).getIdentities();
         String organizerEmail = null;
         for (ZIdentity i : identities) {
         	if (i.isDefault()) 
         		organizerEmail = i.getFromAddress();
         }
-       
         
         if (organizerEmail == null) {
         	throw ServiceException.FAILURE("Default identity not found", null);
         }
-        
-        
-        comp.setOrganizer(new ZOrganizer(organizerEmail));
+
+        String origOrganizer = getOrigOrganizer();
+        if (origOrganizer == null || origOrganizer.length()==0 || origOrganizer.equalsIgnoreCase(organizerEmail)) {
+            comp.setOrganizer(new ZOrganizer(organizerEmail));
+        } else {
+            ZOrganizer zo = new ZOrganizer(origOrganizer);
+            zo.setSentBy(organizerEmail);
+            comp.setOrganizer(zo);
+        }
+
         comp.setIsAllDay(getAllDay());
 
         if (mAttendees != null && mAttendees.length() > 0) {
