@@ -198,7 +198,7 @@ class ServerDialback {
                     return session;
                 }
                 else {
-                    Log.debug("OS - Closing connection, didn't get db:jabber:server:dialback namespace");  
+                    Log.debug("OS - Closing connection, AuthenticateDomain returned FALSE");  
                     // Close the connection
                     connection.close();
                 }
