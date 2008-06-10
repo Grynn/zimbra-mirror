@@ -18,6 +18,7 @@ package com.zimbra.cs.mailbox;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -718,7 +719,7 @@ public class PushChanges {
         action.addAttribute(MailConstants.A_ID, sb.toString());
 
         try {
-        	Element response = ombx.sendRequest(request);
+        	/* Element response = */ ombx.sendRequest(request);
         	OfflineLog.offline.info("push: batch updated " + sb.toString());
         } catch (SoapFaultException sfe) {
             OfflineLog.offline.warn("push: failed batch update of " + sb.toString() + "; fall back to itemized push", sfe);
@@ -835,6 +836,7 @@ public class PushChanges {
                 if (!ombx.renumberItem(sContext, id, MailItem.TYPE_DOCUMENT, resp.getFirst(), resp.getSecond()))
                 	return true;
     		}
+    		ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
     	}
     	
         synchronized (ombx) {
@@ -848,29 +850,30 @@ public class PushChanges {
     }
     
     private void checkDocumentSyncConflict(MailItem item) throws ServiceException {
-    	int lastSyncVersion = ombx.getLastSyncedVersionForMailItem(item.getId());
-        Element request = new Element.XMLElement(MailConstants.GET_WIKI_REQUEST);
-        Element wiki = request.addElement(MailConstants.E_WIKIWORD);
-        wiki.addAttribute(MailConstants.A_ID, item.getId());
+    	int id = item.getId();
+    	int lastSyncVersion = ombx.getLastSyncedVersionForMailItem(id);
+        Element request = new Element.XMLElement(MailConstants.LIST_DOCUMENT_REVISIONS_REQUEST);
+        Element wiki = request.addElement(MailConstants.E_DOC);
+        wiki.addAttribute(MailConstants.A_ID, id);
         wiki.addAttribute(MailConstants.A_COUNT, 20);
         Element response = ombx.sendRequest(request);
-        Iterator<Element> iter = response.elementIterator(MailConstants.E_WIKIWORD);
-        StringBuilder buf = new StringBuilder(item.getName() + " : Document sync overwrote following revisions on the server:\n\n");
+        Iterator<Element> iter = response.elementIterator(MailConstants.E_DOC);
         boolean conflict = false;
+        ArrayList<SyncExceptionHandler.Revision> revisions = new ArrayList<SyncExceptionHandler.Revision>();
         while (iter.hasNext()) {
         	Element e = iter.next();
         	int ver = (int)e.getAttributeLong(MailConstants.A_VERSION);
         	if (lastSyncVersion > 0 && ver > lastSyncVersion) {
         		conflict = true;
-            	buf.append("revision ").append(e.getAttribute(MailConstants.A_VERSION));
-            	buf.append(" edited by ").append(e.getAttribute(MailConstants.A_CREATOR));
-            	buf.append(" on ").append(e.getAttributeBool(MailConstants.A_MODIFIED_DATE));
-            	buf.append("\n");
+        		SyncExceptionHandler.Revision rev = new SyncExceptionHandler.Revision();
+        		rev.editor = e.getAttribute(MailConstants.A_CREATOR);
+        		rev.version = (int)e.getAttributeLong(MailConstants.A_VERSION);
+        		rev.modifiedDate = e.getAttributeLong(MailConstants.A_MODIFIED_DATE);
+        		revisions.add(rev);
         	}
         }
         if (conflict) {
-        	String msg = buf.toString();
-        	OfflineLog.offline.info(msg);
+        	SyncExceptionHandler.logDocumentEditConflict(ombx, item, revisions);
         }
     }
     

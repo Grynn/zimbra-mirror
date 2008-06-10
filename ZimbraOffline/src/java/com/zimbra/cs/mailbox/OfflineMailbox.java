@@ -703,14 +703,14 @@ public class OfflineMailbox extends DesktopMailbox {
     											 acct.getProxyPort(), 
     											 acct.getProxyUser(), 
     											 acct.getProxyPass());
-    		int id = 0, revision = 0;
+    		int id = 0, version = 0;
     		for (Header h : resp.getFirst()) {
     			if (h.getName().equals("X-Zimbra-ItemId"))
     				id = Integer.parseInt(h.getValue());
-    			else if (h.getName().equals("X-Zimbra-Revision"))
-    				revision = Integer.parseInt(h.getValue());
+    			else if (h.getName().equals("X-Zimbra-Version"))
+    				version = Integer.parseInt(h.getValue());
     		}
-    		return new Pair<Integer,Integer>(id, revision);
+    		return new Pair<Integer,Integer>(id, version);
     	} catch (IOException e) {
             throw ServiceException.PROXY_ERROR(e, url);
     	}

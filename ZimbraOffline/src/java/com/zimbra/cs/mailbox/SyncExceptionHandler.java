@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
-import javax.mail.MessagingException;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -71,70 +71,97 @@ class SyncExceptionHandler {
 	}
 	
     private static void saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, ServiceException exception) {
-		try {
-			Date now = new Date();
-			String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
-			
-			OfflineLog.offline.warn("sync failure for id=" + id + "; generating failure report", exception);
-			
+    	Date now = new Date();
+    	String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
+
+    	OfflineLog.offline.warn("sync failure for id=" + id + "; generating failure report", exception);
+
+    	//TODO: need to i18n the entire block here
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("Please post this issue report to Zimbra Desktop Support Forums at http://www.zimbra.com/forums/zimbra-desktop/.\n\n");
+    	sb.append("Product name:    Zimbra Desktop\n");
+    	sb.append("Product version: ").append(OfflineLC.zdesktop_version.value()).append("\n");
+    	sb.append("Build ID:        ").append(OfflineLC.zdesktop_buildid.value()).append("\n");
+    	sb.append("Release type:    ").append(OfflineLC.zdesktop_relabel.value()).append("\n");
+    	sb.append("OS Platform:     ").append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.arch")).append(" ").append(System.getProperty("os.version")).append("\n");
+    	sb.append("Time of event: ").append(timestamp).append("\n");
+    	sb.append("Issue summary: ").append(error).append("\n\n");
+
+    	if (data != null) {
+    		sb.append("----------------------------------------------------------------------------\n");
+    		sb.append("Affected data - PLEASE REMOVE ANY SENSITIVE INFORMATION");
+    		if (totalSize > data.length())
+    			sb.append(" (truncated, original size of ").append(totalSize).append(")");
+    		else
+    			sb.append(" (size=").append(data.length()).append(")");
+    		sb.append(":\n");
+    		sb.append("----------------------------------------------------------------------------\n\n");
+    		sb.append(data);
+    		sb.append("\n\n----------------------------------------------------------------------------\n");
+    	}
+
+    	ByteArrayOutputStream bao = new ByteArrayOutputStream() {
+    		private static final int STATCK_TRACE_LIMIT = 1024 * 1024;
+
+    		@Override
+    		public synchronized void write(byte[] b, int off, int len) {
+    			len = len > STATCK_TRACE_LIMIT - count ? STATCK_TRACE_LIMIT - count : len;
+    			if (len > 0)
+    				super.write(b, off, len);
+    			//otherwise discard
+    		}
+
+    		@Override
+    		public synchronized void write(int b) {
+    			if (count < STATCK_TRACE_LIMIT)
+    				super.write(b);
+    		}
+    	};
+    	PrintStream ps = new PrintStream(bao);
+    	exception.printStackTrace(ps);
+    	ps.flush();
+
+    	sb.append("Failure details: \n");
+    	sb.append("----------------------------------------------------------------------------\n\n");
+    	sb.append(bao.toString());
+    	sb.append("\n----------------------------------------------------------------------------\n");
+
+    	logSyncErrorMessage(dmbx, id, "zdesktop issue report (" + timestamp + "): " + exception.getCode(), sb.toString());
+    }
+    
+    public static class Revision {
+    	int version;
+    	long modifiedDate;
+    	String editor;
+    }
+    
+    static void logDocumentEditConflict(DesktopMailbox dmbx, MailItem item, ArrayList<Revision> revisions) {
+    	Date now = new Date();
+    	String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
+    	String subject = "Edit conflict on "+item.getName()+" ("+timestamp+")";
+        StringBuilder buf = new StringBuilder();
+        buf.append("During the sync the following revisions for '");
+        buf.append(item.getName());
+        buf.append("' were overwritten on the server:\n\n");
+    	for (Revision rev : revisions) {
+        	buf.append("revision ").append(rev.version);
+        	buf.append(" edited by ").append(rev.editor);
+        	buf.append(" on ").append(new Date(rev.modifiedDate));
+        	buf.append("\n");
+    	}
+    	logSyncErrorMessage(dmbx, item.getId(), subject, buf.toString());
+    }
+    
+    private static void logSyncErrorMessage(DesktopMailbox dmbx, int id, String subject, String message) {
+    	try {
 			dmbx.ensureFailureFolderExists();
-
-			//TODO: need to i18n the entire block here
-			StringBuilder sb = new StringBuilder();
-			sb.append("Please post this issue report to Zimbra Desktop Support Forums at http://www.zimbra.com/forums/zimbra-desktop/.\n\n");
-			sb.append("Product name:    Zimbra Desktop\n");
-			sb.append("Product version: ").append(OfflineLC.zdesktop_version.value()).append("\n");
-			sb.append("Build ID:        ").append(OfflineLC.zdesktop_buildid.value()).append("\n");
-			sb.append("Release type:    ").append(OfflineLC.zdesktop_relabel.value()).append("\n");
-			sb.append("OS Platform:     ").append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.arch")).append(" ").append(System.getProperty("os.version")).append("\n");
-			sb.append("Time of event: ").append(timestamp).append("\n");
-			sb.append("Issue summary: ").append(error).append("\n\n");
-
-			if (data != null) {
-				sb.append("----------------------------------------------------------------------------\n");
-				sb.append("Affected data - PLEASE REMOVE ANY SENSITIVE INFORMATION");
-				if (totalSize > data.length())
-					sb.append(" (truncated, original size of ").append(totalSize).append(")");
-				else
-					sb.append(" (size=").append(data.length()).append(")");
-				sb.append(":\n");
-				sb.append("----------------------------------------------------------------------------\n\n");
-				sb.append(data);
-				sb.append("\n\n----------------------------------------------------------------------------\n");
-			}
-
-			ByteArrayOutputStream bao = new ByteArrayOutputStream() {
-				private static final int STATCK_TRACE_LIMIT = 1024 * 1024;
-				
-				@Override
-				public synchronized void write(byte[] b, int off, int len) {
-					len = len > STATCK_TRACE_LIMIT - count ? STATCK_TRACE_LIMIT - count : len;
-					if (len > 0)
-						super.write(b, off, len);
-					//otherwise discard
-				}
-
-				@Override
-				public synchronized void write(int b) {
-					if (count < STATCK_TRACE_LIMIT)
-						super.write(b);
-				}
-			};
-			PrintStream ps = new PrintStream(bao);
-			exception.printStackTrace(ps);
-			ps.flush();
-			
-			sb.append("Failure details: \n");
-			sb.append("----------------------------------------------------------------------------\n\n");
-			sb.append(bao.toString());
-			sb.append("\n----------------------------------------------------------------------------\n");
-			
+			Date now = new Date();
 			MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
 			mm.setSentDate(now);
 			mm.setFrom(new InternetAddress(dmbx.getAccount().getName()));
     		mm.setRecipient(RecipientType.TO, new InternetAddress(dmbx.getAccount().getName()));
-    		mm.setSubject("zdesktop issue report (" + timestamp + "): " + exception.getCode());
-    		mm.setText(sb.toString());
+    		mm.setSubject(subject);
+    		mm.setText(message);
     		mm.saveChanges(); //must call this to update the headers
 		
     		//save failure alert to "Sync Failures" folder
@@ -142,6 +169,6 @@ class SyncExceptionHandler {
     		dmbx.addMessage(new OfflineMailbox.OfflineContext(), pm, DesktopMailbox.ID_FOLDER_FAILURE, true, Flag.BITMASK_UNREAD, null);
 		} catch (Exception e) {
 			OfflineLog.offline.warn("can't save failure report for id=" + id, e);
-		}
+    	}
     }
 }
