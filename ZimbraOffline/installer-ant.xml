@@ -31,6 +31,7 @@
 
 	<target name="installer-make">
         	<ant dir="." target="offline-make-install-files" inheritAll="false"/>
+		<delete><fileset dir="build/dist/jetty/webapps/zimbra/help" includes="**/webhelp.jar"/></delete>
         	<antcall target="installer-pack-media"/>
         	<antcall target="gen-update-php"/>
 	</target>

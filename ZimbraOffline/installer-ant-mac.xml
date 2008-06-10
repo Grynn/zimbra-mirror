@@ -1,0 +1,86 @@
+<project name="Offline-Installer" default="installer-make">
+
+	<property file="build.properties"/>
+
+	<property name="media_win32" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_win32}"/>
+	<property name="media_macos" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_macos}"/>
+	<property name="media_linux" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_linux}"/>
+
+    	<property name="build.dir" location="../ZimbraBuild/i386" />
+
+	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/Applications/install4j 4/bin/ant.jar"/>
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+                <classpath>
+                        <pathelement location="../ZimbraCommon/jars/ant-contrib-1.0b1.jar" />
+                </classpath>
+        </taskdef>
+
+	<target name="installer-clean">
+		<delete dir="${build.dir}" includes="zdesktop*" />
+	</target>
+
+	<target name="installer-pack-media-mac">
+		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
+		           destination="${build.dir}" buildids="44">
+            <variable name="offline_relabel" value="${offline.relabel}"/>
+            <variable name="offline_version" value="${offline.version}"/>
+            <variable name="offline_buildid" value="${offline.buildid}"/>
+                </install4j>
+        </target>
+
+	<target name="installer-pack-media-other">
+		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
+		           destination="${build.dir}" buildids="198394,59040">
+            <variable name="offline_relabel" value="${offline.relabel}"/>
+            <variable name="offline_version" value="${offline.version}"/>
+            <variable name="offline_buildid" value="${offline.buildid}"/>
+                </install4j>
+        </target>
+
+	<target name="delete-bads">
+	<delete><fileset dir="build/dist/jetty/webapps/zimbra/help" includes="**/webhelp.jar"/></delete>
+	</target>
+
+	<target name="installer-make">
+        <ant dir="." target="offline-make-install-files" inheritAll="false"/>
+	<antcall target="delete-bads"/>
+        <antcall target="installer-pack-media-mac"/>
+
+	<antcall target="gen-update-php"/>
+
+	</target>
+
+	<target name="gen-update-php">
+        	<copy file="src/installer/update.php" todir="${build.dir}" overwrite="true"/>
+		<replace file="${build.dir}/update.php" token="@aushost@" value="${offline.aushost}"/>
+		<replace file="${build.dir}/update.php" token="@version@" value="${offline.version}"/>
+		<replace file="${build.dir}/update.php" token="@buildid@" value="${offline.buildid}"/>
+		<replace file="${build.dir}/update.php" token="@suffix_win32@" value="${offline.suffix_win32}"/>
+		<replace file="${build.dir}/update.php" token="@suffix_macos@" value="${offline.suffix_macos}"/>
+		<replace file="${build.dir}/update.php" token="@suffix_linux@" value="${offline.suffix_linux}"/>
+
+        	<if><available file="${build.dir}/${media_win32}" type="file"/><then>
+			<checksum file="${build.dir}/${media_win32}" property="hash_win32"/>
+			<length file="${build.dir}/${media_win32}" property="size_win32"/>
+			<replace file="${build.dir}/update.php" token="@hash_win32@" value="${hash_win32}"/>
+			<replace file="${build.dir}/update.php" token="@size_win32@" value="${size_win32}"/>
+		</then></if>
+		
+        	<if><available file="${build.dir}/${media_macos}" type="file"/><then>
+			<checksum file="${build.dir}/${media_macos}" property="hash_macos"/>
+			<length file="${build.dir}/${media_macos}" property="size_macos"/>
+			<replace file="${build.dir}/update.php" token="@hash_macos@" value="${hash_macos}"/>
+			<replace file="${build.dir}/update.php" token="@size_macos@" value="${size_macos}"/>
+		</then></if>
+		
+        	<if><available file="${build.dir}/${media_linux}" type="file"/><then>
+			<checksum file="${build.dir}/${media_linux}" property="hash_linux"/>
+			<length file="${build.dir}/${media_linux}" property="size_linux"/>
+			<replace file="${build.dir}/update.php" token="@hash_linux@" value="${hash_linux}"/>
+			<replace file="${build.dir}/update.php" token="@size_linux@" value="${size_linux}"/>
+		</then></if>
+	</target>
+
+</project>
+
