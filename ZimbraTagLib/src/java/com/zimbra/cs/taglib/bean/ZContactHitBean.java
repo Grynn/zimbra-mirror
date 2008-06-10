@@ -108,8 +108,8 @@ public class ZContactHitBean extends ZSearchHitBean {
 
     public String getImageAltKey() {
         if (getIsGroup())
-            return "ALT_CONTACT_CONTACT";
-        else
             return "ALT_CONTACT_GROUP";
+        else
+            return "ALT_CONTACT_CONTACT";
     }
 }
