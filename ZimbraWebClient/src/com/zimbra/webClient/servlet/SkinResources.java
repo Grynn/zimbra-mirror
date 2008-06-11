@@ -1362,7 +1362,7 @@ public class SkinResources
 			int[] rgb = { color.getRed(), color.getGreen(), color.getBlue() };
 			StringBuilder str = new StringBuilder("#");
 			for (int val : rgb) {
-				if (val < 10) str.append("0");
+				if (val < 16) str.append("0");
 				str.append(Integer.toHexString(val));
 			}
 			return str.toString();
