@@ -444,6 +444,12 @@ function () {
 ZaZimbraAdmin.prototype._helpListener =
 function(ev) {
 	//DBG.println(AjxDebug.DBG1, "Help is clicked ...") ;
+	var helpButton = skin && skin.hints && skin.hints.helpButton;
+	if (helpButton && helpButton.url) {
+		window.open(helpButton.url + "?locid=" + AjxEnv.DEFAULT_LOCALE);
+		return;
+	}
+
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getHelpViewController(), ZaHelpViewController.prototype.show, null);
 	} else {					
