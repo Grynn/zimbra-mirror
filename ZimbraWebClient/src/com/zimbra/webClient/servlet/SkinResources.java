@@ -43,6 +43,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.DomainBy;
+import com.zimbra.kabuki.util.Colors;
 
 import java.awt.Color;
 
@@ -1343,56 +1344,28 @@ public class SkinResources
 		private Color getColor(Stack<String> stack, String colorStr) throws IOException {
 			// if there is a space in there, strip everything after it
 			//	(to remove '!important' and stuff like that
-			String adjustedColorStr = colorStr;
-			int spaceIndex = colorStr.indexOf(" ");
-			if (spaceIndex > -1) {
-				adjustedColorStr = colorStr.substring(0, spaceIndex);
-			}
-
-			// see if named color exists
-			Color color = Color.getColor(colorStr);
-			if (color != null) {
-				return color;
-			}
-			
-			// strip off hash before the name
-			if (adjustedColorStr.startsWith("#")) {
-				adjustedColorStr = adjustedColorStr.substring(1);
-			}
-			
-			// if it is exactly 3 chars long -- double each char
-			//	this turns "0ac" into "00aacc", which is what the decode() routine needs
-			if (adjustedColorStr.length() == 3) {
-				adjustedColorStr = adjustedColorStr.substring(0,1)
-								 + adjustedColorStr.substring(0,1)
-								 + adjustedColorStr.substring(1,2)
-								 + adjustedColorStr.substring(1,2)
-								 + adjustedColorStr.substring(2,3)
-								 + adjustedColorStr.substring(2,3);
-			}
-			
-			// try to find the color as  FFFFFF or #FFFFFF
-			try {
-				return Color.decode("#" + adjustedColorStr);
-			} catch (NumberFormatException e) {
-				// that didn't work, try it as a substitution
-				String sub = getProperty(stack, colorStr);
-				try {
-					adjustedColorStr = (sub.startsWith("#") ? sub : "#"+sub);
-					spaceIndex = adjustedColorStr.indexOf(" ");
-					if (spaceIndex > -1) {
-						adjustedColorStr = adjustedColorStr.substring(0, spaceIndex);
-					}
-					return Color.decode(adjustedColorStr);
-				} catch (NumberFormatException e2) {
-					throw new IOException("Unknown color:" + adjustedColorStr+":"+sub+":");
+			Color color = Colors.getColor(colorStr.replaceAll(" .*$", ""));
+			if (color == null) {
+				String prop = getProperty(stack, colorStr);
+				if (prop != null) {
+					color = Colors.getColor(prop);
 				}
 			}
+			if (color == null) {
+				throw new IOException("Unknown color:" + colorStr);
+			}
+			return color;
 		}
 
 		private String colorToColorString(Color color) {
 			if (color == null) return "NULL_COLOR";
-			return "#" + Integer.toHexString(color.getRGB()).substring(2);
+			int[] rgb = { color.getRed(), color.getGreen(), color.getBlue() };
+			StringBuilder str = new StringBuilder("#");
+			for (int val : rgb) {
+				if (val < 10) str.append("0");
+				str.append(Integer.toHexString(val));
+			}
+			return str.toString();
 		}
 
 
