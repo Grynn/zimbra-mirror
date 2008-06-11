@@ -42,7 +42,7 @@ ZaCertWizard.STEP_CSR_CONFIRM = ZaCertWizard.STEP_INDEX ++ ;
 ZaCertWizard.prototype = new ZaXWizardDialog;
 ZaCertWizard.prototype.constructor = ZaCertWizard;
 ZaXDialog.XFormModifiers["ZaCertWizard"] = new Array();
-ZaCertWizard.helpURL = location.pathname + "adminhelp/html/WebHelp/tools/installing_certificates.htm";
+ZaCertWizard.helpURL = location.pathname + "help/admin/html/tools/installing_certificates.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
 ZaCertWizard.prototype.handleXFormChange = 
 function () {
 	var cStep = this._containedObject[ZaModel.currentStep] ;

@@ -27,7 +27,7 @@ ZaCertsServerListController = function(appCtxt, container, app) {
    	this._popupOperations = new Array();			
 	
 	//TODO helpURL needs to be changed
-	this._helpURL = location.pathname + "adminhelp/html/WebHelp/tools/creating_certificates.htm";	
+	this._helpURL = location.pathname + "help/admin/html/tools/creating_certificates.htm?locid=" + AjxEnv.DEFAULT_LOCALE;	
 }
 
 ZaCertsServerListController.prototype = new ZaListViewController();
