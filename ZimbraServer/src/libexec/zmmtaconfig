@@ -349,9 +349,9 @@ sub validProvData {
   if ($cnt != 0 && $foundValid != 0) {
     my $percent = int((1-($foundValid/$cnt))*100);
     logMsg(5, "foundValid:$foundValid cnt:$cnt percent:$percent");
-    $foundValid = 0 if ($percent > 50); 
+    #$foundValid = 0 if ($percent > 50); 
   }
-  logMsg(4, "Validating LC data found $foundValid entries out of $cnt lines.");
+  logMsg(4, "Validating global config data found $foundValid entries out of $cnt lines.");
   return $foundValid;
 }
 
