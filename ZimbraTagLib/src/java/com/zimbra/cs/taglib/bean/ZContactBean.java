@@ -335,11 +335,11 @@ public class ZContactBean implements Comparable {
 
     public String getImageAltKey() {
         if (getIsGroup())
-            return "ALT_CONTACT_CONTACT";
+            return "ALT_CONTACT_GROUP";
         else if (getIsGalContact())
             return "ALT_CONTACT_GAL_CONTACT";
         else
-            return "ALT_CONTACT_GROUP";
+            return "ALT_CONTACT_CONTACT";
     }
 
     public int compareTo(Object obj) {
