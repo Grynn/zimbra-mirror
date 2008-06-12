@@ -211,6 +211,13 @@ sub sighup {
     }
 }
 
+eval {
+	get_convertd_pid();
+};
+if ($@) {
+	print STDERR "apache-convertd not running, not launching zmstat-convertd";
+	exit;
+}
 
 $| = 1;
 
