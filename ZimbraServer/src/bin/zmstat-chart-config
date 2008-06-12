@@ -379,13 +379,15 @@ sub iostatConfig() {
 _HERE_
     if (!$isMac) {
         print <<_HERE_;
-  <chart title="Host $ZIMBRA_HOSTNAME: Disk Utilization"
+  <chart title="Host $ZIMBRA_HOSTNAME: Disk Utilization (Top 10 avg)"
          category="IO"
          infile="$iostatxCsv"
          outfile="${ZIMBRA_HOSTNAME}_disk_util.png"
          yAxis="% util"
          allowLogScale="false"
          height="400"
+         topPlots="10"
+         topPlotsType="avg"
          showRaw="false"
          showMovingAvg="true">
 _HERE_
@@ -490,18 +492,22 @@ _HERE_
 sub mailboxdConfig() {
     print <<_HERE_;
   <!-- SOAP Stats -->
-  <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Invocation Count: Summary"
+  <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Invocation Count: Summary (Top 10 max)"
          category="soap"
-         height="600"
+         height="400"
+         topPlots="10"
+         topPlotsType="max"
          infile="$soapCsv"
          outfile="${ZIMBRA_HOSTNAME}_soap_call_count.png"
          yAxis="calls/min">
     <groupplot data="exec_count" groupBy="command" aggregateFunction="max"/>
   </chart>
   
-  <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Average Call Duration: Summary"
+  <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Average Call Duration: Summary (Top 10 avg)"
          category="soap"
-         height="600"
+         height="400"
+         topPlots="10"
+         topPlotsType="avg"
          infile="$soapCsv"
          outfile="${ZIMBRA_HOSTNAME}_soap_avg_duration.png"
          yAxis="ms avg">
