@@ -22,6 +22,8 @@
  * @param {Object} radios A hash whose keys are the ids of the radio button elements
  * 		and whose values are the values associated with those buttons. (Optional)
  * @param {String} selectedId The id of the button to select initially. (Optional)
+ * 
+ * TODO: this really should be a DwtComposite
  */
 DwtRadioButtonGroup = function(radios, selectedId) {
 	this._radios = {};
@@ -116,6 +118,11 @@ function() {
 DwtRadioButtonGroup.prototype.getSelectedValue =
 function() {
 	return this._values[this._selectedId];
+};
+
+DwtRadioButtonGroup.prototype.getValue =
+function() {
+	return this.getSelectedValue();
 };
 
 //

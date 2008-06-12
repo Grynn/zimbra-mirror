@@ -326,10 +326,22 @@ function(object, level) {
 AjxUtil.collapseList =
 function(list) {
 	var newList = [];
-	for (var i = 0; i < list.length; i++)
-		if (list[i])
+	for (var i = 0; i < list.length; i++) {
+		if (list[i]) {
 			newList.push(list[i]);
+		}
+	}
 	return newList;
+};
+
+AjxUtil.arrayAsHash =
+function(array) {
+	var hash = {};
+	for (var i = 0; i < array.length; i++) {
+		var key = array[i];
+		hash[key] = true;
+	}
+	return hash;
 };
 
 AjxUtil.indexOf =
