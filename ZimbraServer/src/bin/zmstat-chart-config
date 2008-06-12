@@ -711,8 +711,8 @@ sub mailboxdConfig() {
          yAxis="rate (%)"
          showRaw="false"
          showMovingAvg="true">
-    <plot data="mbox_msg_cache" legend="msg blob cache" multiplier="100"/>
-    <plot data="mbox_item_cache" legend="item metadata cache" multiplier="100"/>
+    <plot data="mbox_msg_cache" legend="msg blob cache"/>
+    <plot data="mbox_item_cache" legend="item metadata cache"/>
   </chart>
 
 _HERE_
