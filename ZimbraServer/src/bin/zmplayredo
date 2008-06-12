@@ -54,7 +54,14 @@ if [ $opth -eq 0 ]; then
     fi
 fi
 
-jardirs=${zimbra_home}/mailboxd/lib:${zimbra_home}/mailboxd/common/lib:${zimbra_home}/lib/jars
+if [ -d ${zimbra_java_home}/jre ]; then
+    JRE_EXT_DIR=${zimbra_java_home}/jre/lib/ext
+else
+    JRE_EXT_DIR=/System/Library/Frameworks/JavaVM.framework/Versions/1.5/Home/lib/ext
+    #JRE_EXT_DIR=${zimbra_java_home}/lib/ext
+fi
+
+jardirs=${JRE_EXT_DIR}:${zimbra_home}/mailboxd/lib:${zimbra_home}/mailboxd/common/lib:${zimbra_home}/lib/jars
 if [ -e ${zimbra_home}/lib/ext-common ]; then
     jardirs=${jardirs}:${zimbra_home}/lib/ext-common
 fi
