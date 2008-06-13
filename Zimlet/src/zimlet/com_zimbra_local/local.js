@@ -16,8 +16,8 @@
  */
 
 Com_Zimbra_Local = function() {
-};
 
+};
 Com_Zimbra_Local.prototype = new ZmZimletBase;
 Com_Zimbra_Local.prototype.constructor = Com_Zimbra_Local;
 
@@ -29,7 +29,7 @@ function() {
 Com_Zimbra_Local.prototype.init =
 function() {
 	this._controller = new YahooLocalController(this);
-	//Add "Search Local" to the Search toolbar.
+    //Add "Search Local" to the Search toolbar.
     if(appCtxt.get(ZmSetting.WEB_SEARCH_ENABLED))
         this.addLocalSearchToolBar((new AjxListener(this,this._localSearchListener)));
 };
@@ -281,13 +281,13 @@ function(addr) {
 };
 
 YahooLocalController.prototype.changeLocation =
-function() {
-	this._getGeoIP(new AjxCallback(this, this._handleChangeLocation));
+function(params) {
+    this._getGeoIP(new AjxCallback(this, this._handleChangeLocation,params));
 };
 
 YahooLocalController.prototype._handleChangeLocation =
-function() {
-	var coords = this._setDefaultView();
+function(params) {
+    var coords = this._setDefaultView(45,45);
 
 	if (coords) {
 		this.getMapsView().changeLocation({
@@ -415,22 +415,49 @@ function(title, inputLabel, okListener) {
 };
 
 YahooLocalController.prototype._setDefaultView =
-function() {
-	var coords = this.getLocal();
+function(lati,longi) {
+	if(lati==45 && longi == 45)
+        zoomLevel = 14;
+    else
+        zoomLevel = 8;
+    var coords = this.getLocal();
+    var latitude =   this._zimlet.getUserProperty("latitude");
+    var longitude =  this._zimlet.getUserProperty("longitude");
 
-	if (coords) {
+
+    if((!latitude || !longitude) && (!coords ||(coords && (!coords.latitude || !coords.longitude))) && lati!=45){
+        var messageDlg = this._getMessageDlg();
+        if (messageDlg)
+        {
+            var listener = new AjxListener (this, this.selectLocation);
+            messageDlg.setButtonListener (DwtDialog.OK_BUTTON, listener);
+            messageDlg.popup();
+        }
+    }
+    if(!coords){
+         this._zimlet._ylocal = {
+			countryCode: "",
+			countryName: "",
+			city: "",
+			region: "",
+			latitude:latitude || lati,
+			longitude:longitude || longi
+		};
+        coords = this._zimlet._ylocal;
+    }
+
+    if (coords) {
 		this.setView({
 			clean: true,
 			typeControl:true,
 			panControl:false,
 			zoomControl:"long",
-			zoomLevel: 6,
+			zoomLevel: zoomLevel,
 			defaultLat: coords.latitude,
 			defaultLon: coords.longitude
 		});
 	}
-
-	return coords;
+    return coords;
 };
 
 YahooLocalController.prototype._getGeoIP =
@@ -462,6 +489,38 @@ function() {
 	errorDlg.popup();
 };
 
+YahooLocalController.prototype.selectLocation =
+function(){
+    this.messageDlg.popdown();
+    this._dlg_propertyEditor = new YLocalDialog(appCtxt._shell, null, this._zimlet);
+    this._dlg_propertyEditor.popup();
+}
+
+YahooLocalController.prototype._locateLocation =
+function(){
+
+     var latitude = this._textObj1.getValue();
+     var longitude = this._textObj2.getValue();
+     this._zimlet.setUserProperty("latitude",latitude);
+     this._zimlet.setUserProperty("longitude",longitude);
+     this._zimlet._controller._dlg_propertyEditor.popdown();
+     //if(changebylocation)
+       //this._zimlet._controller.changeLocation({latitude:0,longitude:0});
+     //else
+        this._zimlet._controller._handleSearchLocal();
+}
+
+YahooLocalController.prototype._getMessageDlg =
+function(){
+    this.messageDlg = new DwtDialog (appCtxt.getShell(),null,"Confirmation",[DwtDialog.OK_BUTTON]);
+    this.messageDlg.setContent ("<span style=\"text-align:center;\">" +
+                                 "Maxmind is paid service.You need to pay to know latitude and longitude<br>"+
+                                  "otherwise you have to enter latitude and longitude manually."+
+                                 "</span>"
+                );
+
+    return this.messageDlg;
+};
 
 // Listeners
 

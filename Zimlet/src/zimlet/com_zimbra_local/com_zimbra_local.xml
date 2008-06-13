@@ -2,8 +2,9 @@
 	<include>local.js</include>
     <include>yahoomaps.js</include>
     <include>upcoming.js</include>
+    <include>YLocalDialog.js</include>
 
-	<!-- YUI library -->
+    <!-- YUI library -->
 	<include>ajaxymap.js</include>
 	<include>animation_2.0.1-b2.js</include>
 	<include>dom_2.0.1-b2.js</include>
