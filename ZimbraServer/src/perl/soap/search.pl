@@ -65,7 +65,7 @@ GetOptions("u|user=s" => \$user,
 if (!defined($user) || !defined($searchString) || defined($help)) {
     my $usage = <<END_OF_USAGE;
     
-USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-fetch FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-es END-SORT-VALUE] [-conv CONVID] [-tz TZID] [-l LOCALE] [-calExpandInstStart STARTTIME -calExpandInstEnd ENDTIME]
+USAGE: $0 -u USER -q QUERYSTR [-s SORT] [-t TYPES] [-o OFFSET] [-l LIMIT] [-fetch FETCH] [-pi PREV-ITEM-ID -ps PREV-SORT-VALUE] [-es END-SORT-VALUE] [-conv CONVID] [-tz TZID] [-calExpandInstStart STARTTIME -calExpandInstEnd ENDTIME] [-locale LOCALE_STR]
     SORT = dateDesc|dateAsc|subjDesc|subjAsc|nameDesc|nameAsc|score|none
     TYPES = message|conversation|contact|appointment
 END_OF_USAGE
@@ -117,7 +117,7 @@ $d->start($searchName, $Soap::ZIMBRA_MAIL_NS, \%args);
         $d->add("cursor", undef, { "id" => $prevId, "sortVal" => $prevSortVal });
       }
     }
-    
+
     $d->add('query', undef, undef, $searchString);
 
     if (defined $tz) {
