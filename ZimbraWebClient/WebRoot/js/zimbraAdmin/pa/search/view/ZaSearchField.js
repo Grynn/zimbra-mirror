@@ -120,7 +120,7 @@ function () {
 			if(this._containedObject[ZaSearch.A_fdistributionlists] == "TRUE") {
 				objList.push(ZaSearch.DLS);
 			}
-
+            /** Disabled for PA
             if (ZaSettings.RESOURCES_ENABLED) {
                 if(this._containedObject[ZaSearch.A_fResources] == "TRUE") {
                     objList.push(ZaSearch.RESOURCES);
@@ -130,7 +130,7 @@ function () {
 				if(this._containedObject[ZaSearch.A_fDomains] == "TRUE") {
 					objList.push(ZaSearch.DOMAINS);
 				}	
-			}
+			}                  */
 		}
 		
 		return objList;
@@ -436,8 +436,10 @@ ZaSearchField.prototype.resetSearchFilter = function () {
 	this._containedObject[ZaSearch.A_fAccounts] = "FALSE";
 	this._containedObject[ZaSearch.A_fdistributionlists] = "FALSE";	
 	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
-	this._containedObject[ZaSearch.A_fResources] = "FALSE";
-	this._containedObject[ZaSearch.A_fDomains] = "FALSE";		
+    /*disable for PA
+    this._containedObject[ZaSearch.A_fResources] = "FALSE";
+	this._containedObject[ZaSearch.A_fDomains] = "FALSE";
+		*/
 }
 
 ZaSearchField.prototype.allFilterSelected = function (ev) {
@@ -445,11 +447,12 @@ ZaSearchField.prototype.allFilterSelected = function (ev) {
 	this._containedObject[ZaSearch.A_fAccounts] = "TRUE";
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
 	this._containedObject[ZaSearch.A_fAliases] = "TRUE";
-	this._containedObject[ZaSearch.A_fResources] = "TRUE";
+    /*disable for PA
+    this._containedObject[ZaSearch.A_fResources] = "TRUE";
 	if(ZaSettings.DOMAINS_ENABLED) {
 		this._containedObject[ZaSearch.A_fDomains] = "TRUE";	
 	}
-	this.setTooltipForSearchButton (ZaMsg.searchForAll);	
+	this.setTooltipForSearchButton (ZaMsg.searchForAll);	 */
 }
 
 ZaSearchField.prototype.accFilterSelected = function (ev) {
@@ -501,19 +504,22 @@ ZaSearchField.prototype._getMyXForm = function() {
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ACCOUNTS, ZaMsg.SearchFilter_Accounts, ZaMsg.searchForAccounts, "Account", "AccountDis", new AjxListener(this,this.accFilterSelected)));	
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DLS, ZaMsg.SearchFilter_DLs, ZaMsg.searchForDLs, "Group", "GroupDis", new AjxListener(this,this.dlFilterSelected)));		
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALIASES, ZaMsg.SearchFilter_Aliases, ZaMsg.searchForAliases, "AccountAlias", "AccountAlias", new AjxListener(this, this.aliasFilterSelected)));		
-	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_RESOURCES, ZaMsg.SearchFilter_Resources, ZaMsg.searchForResources, "Resource", "ResourceDis", new AjxListener(this, this.resFilterSelected)));		
-	if(ZaSettings.DOMAINS_ENABLED) {
+	/**disable for PA
+    newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_RESOURCES, ZaMsg.SearchFilter_Resources, ZaMsg.searchForResources, "Resource", "ResourceDis", new AjxListener(this, this.resFilterSelected)));
+    if(ZaSettings.DOMAINS_ENABLED) {
 		newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DOMAINS, ZaMsg.SearchFilter_Domains, ZaMsg.searchForDomains, "Domain", "DomainDis", new AjxListener(this, this.domainFilterSelected)));			
-	}
+	} */
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEP));				
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALL, ZaMsg.SearchFilter_All, ZaMsg.searchForAll, "SearchAll", "SearchAll", new AjxListener(this, this.allFilterSelected)));		
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);
 	
 
 	var xFormObject = {
-		tableCssStyle:"width:100%;padding:2px;",numCols:7,width:"100%",
-		colSizes:["59", "*", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.search, true, 0), Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.help_search, true, 0), "28", "12", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.advanced_search, false, 0)],
-		items: [
+		tableCssStyle:"width:100%;padding:2px;",numCols:6,width:"100%",
+		//colSizes:["59", "*", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.search, true, 0), "28", "12", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.advanced_search, false, 0)],
+
+        colSizes:["59", "*", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.search, true, 0), "28" ],
+        items: [
 //			{type:_OUTPUT_, value:ZaMsg.searchForAccountsLabel, nowrap:true},
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
 				name: "searchMenuButton",
@@ -552,18 +558,20 @@ ZaSearchField.prototype._getMyXForm = function() {
 					onActivate:ZaSearchField.srchButtonHndlr, 
 					cssStyle: AjxEnv.isIE ? "marginLeft: 2px;" : "marginLeft: 5px;",
 					cssClass:"DwtToolbarButton"},
-			
+			/*  Disable for PA
 			{type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
 				cssStyle:"overflow: hidden" ,	
-                onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"},
+                onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"}, */
 			//Save button
 			{type:_DWT_BUTTON_, label: null , toolTipContent:ZaMsg.tt_save_search, icon:"Save", name: "saveSearchButton",
 					onActivate:ZaSearchField.saveSrchButtonHndlr, cssClass:"DwtToolbarButton"},		
-			{type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml() },
+			/**Disable for PA ,
+            {type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml() }
+
 			{type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
 				cssStyle:"overflow: hidden" ,	
                 onActivate:ZaSearchField.advancedButtonHndlr,
-					cssClass: "DwtToolbarButton ZaAdvancedSearchButton" }
+					cssClass: "DwtToolbarButton ZaAdvancedSearchButton" }  */
 			
 		]
 	};

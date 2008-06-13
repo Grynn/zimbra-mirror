@@ -404,19 +404,21 @@ function () {
 
 ZaZimbraAdmin.prototype._createHelpLink =
 function() {
-
-	var helpLabel = new DwtComposite (this._shell, "HelpContainer", Dwt.RELATIVE_STYLE);
-	var listener = new AjxListener(this, this._helpListener);
-	var helpEl = helpLabel.getHtmlElement();
-		
-	var adminObj = this ;
-	helpLabel.getHtmlElement().onclick = function () { ZaZimbraAdmin.prototype._helpListener.call(adminObj) ;};
-	helpLabel.setCursor ("pointer") ;
-	
-	helpLabel.getHtmlElement().innerHTML = 
-		this._getAppLink(null, "Help",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
-	
-	helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
+    var helpLabel = new DwtComposite (this._shell, "HelpContainer", Dwt.RELATIVE_STYLE);
+    var helpEl = helpLabel.getHtmlElement();
+    helpLabel.setCursor ("pointer") ;
+    
+    if (ZaSettings.isYahooSmbPADomainAdmin)   {
+        helpLabel.getHtmlElement().innerHTML =
+            this._getAppLink("SMBAccount.openHelpDesk();", "Help",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
+    } else { //this is the help link for the regular admin
+        var listener = new AjxListener(this, this._helpListener);
+        var adminObj = this ;
+        helpLabel.getHtmlElement().onclick = function () { ZaZimbraAdmin.prototype._helpListener.call(adminObj) ;};
+        helpLabel.getHtmlElement().innerHTML =
+             this._getAppLink(null, "Help",  ZaMsg.helpDesk, skin.skin_container_help_max_str_length);
+    }
+    helpLabel.reparentHtmlElement (ZaSettings.SKIN_HELP_DOM_ID) ;
 }
 
 ZaZimbraAdmin.prototype._createDownloadLink =
@@ -444,13 +446,15 @@ function () {
 ZaZimbraAdmin.prototype._helpListener =
 function(ev) {
 	//DBG.println(AjxDebug.DBG1, "Help is clicked ...") ;
-	var helpButton = skin && skin.hints && skin.hints.helpButton;
-	if (helpButton && helpButton.url) {
+    //skin takes the zimbraHelpAdminURL and put it into the skin hints
+    var helpButton = skin && skin.hints && skin.hints.helpButton;
+	  
+    if (helpButton && helpButton.url) {
 		window.open(helpButton.url + "?locid=" + AjxEnv.DEFAULT_LOCALE);
 		return;
 	}
 
-	if(this._app.getCurrentController()) {
+    if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getHelpViewController(), ZaHelpViewController.prototype.show, null);
 	} else {					
 		this._app.getHelpViewController().show();
@@ -482,8 +486,15 @@ function() {
 
 ZaZimbraAdmin.prototype._createLogOff =
 function () {
-	var logoff = document.getElementById(ZaSettings.SKIN_LOGOFF_DOM_ID);
-	if (logoff) logoff.innerHTML = this._getAppLink("ZaZimbraAdmin.logOff();", "Logoff",  ZaMsg.logOff);
+    var logoffMethod ;
+    if (ZaSettings.isYahooSmbPADomainAdmin)   {
+        logoffMethod = "SMBAccount.logOff();"
+    }   else {
+        logoffMethod = "ZaZimbraAdmin.logOff();" ;
+    }
+    
+    var logoff = document.getElementById(ZaSettings.SKIN_LOGOFF_DOM_ID);
+	if (logoff) logoff.innerHTML = this._getAppLink(logoffMethod, "Logoff",  ZaMsg.logOff);
 	logoff.style.cursor = "pointer" ;
 }
 

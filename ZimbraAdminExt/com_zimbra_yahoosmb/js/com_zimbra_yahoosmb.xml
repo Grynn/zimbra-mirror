@@ -1,0 +1,5 @@
+<!-- com_zimbra_domainadmin ext should not be deployed -->
+<zimlet name="com_zimbra_yahoosmb" version="5.0.7" description="Zimbra Yahoo SMB Extension" extension="true">
+   <include>domainadmin.js</include>  <!-- Must stay as the first file-->
+   <include>com_zimbra_yahoosmb.js</include>
+</zimlet>

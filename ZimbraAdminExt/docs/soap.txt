@@ -1,6 +1,11 @@
 -----------------------------
  urn:zimbraAdmin
 -----------------------------
+
+---------------------------------------------------------------
+//Certification Management Soap Request
+
+
 *** If target Server id is "--- All Servers ---", the soap call will apply to all the servers. A flag will be set for the zmcertmgr
 
 -----------------------------
@@ -80,5 +85,16 @@ Ask server to install the certificates
 validation_days: required, number of the validation days of the self signed license, 
 aid: attachedment ID of the uploaded commercial license
 
+--------------------------------------------------
+//Yahoo SMB Soap Request
+<SendInvitationRequest>
+  <id>zimbraId</id>
+  <name>zimbra account email</name>
+  <sendto>external_email_address</sendto>
+</SendInvitationRequest>
+
+<SendInvitationResponse>
+    <sendto>external_email_address</sendto>
+</SendInvitationResponse>
 
 

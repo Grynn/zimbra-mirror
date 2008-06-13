@@ -121,8 +121,10 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 	} else {	*/
 		var callback = new AjxCallback(this, this.domainSearchCallback);
 		var domainListController = this._app.getDomainListController ();
-		domainListController._currentQuery = "(zimbraDomainType=local)" ;
-		var searchParams = {
+        var q = "(zimbraDomainType=local)" ;
+        domainListController._currentQuery =  q ;
+
+        var searchParams = {
 				query: domainListController._currentQuery, 
 				types:[ZaSearch.DOMAINS],
 				sortBy:ZaDomain.A_domainName,
@@ -331,7 +333,7 @@ function (appCtxt, container) {
 	this._currentDomain = "";	
 	this._app = appCtxt.getAppController().getApp(ZaZimbraAdmin.ADMIN_APP);
 			
-	if(ZaSettings.DOMAINS_ENABLED)
+	if(ZaSettings.DOMAINS_ENABLED && (!ZaSettings.isYahooSmbDomainAdmin))
 		this._domainsMap = new Object();
 	
 	if(ZaSettings.SERVERS_ENABLED)
@@ -354,7 +356,7 @@ ZaOverviewPanelController.prototype._setView =
 function() {
 	this._overviewPanel = new ZaOverviewPanel(this._container, "OverviewPanel", DwtControl.ABSOLUTE_STYLE);
 	this._overviewPanel.setScrollStyle(DwtControl.SCROLL);
-	ZaSearch.loadPredefinedSearch() ;
+	
 	this._buildFolderTree();
 	//this._overviewPanel.getFolderTree().setSelection(this._inboxTreeItem);
 	this._overviewPanel.zShow(true);
@@ -387,8 +389,7 @@ function() {
 		ti.setText(ZaMsg.OVP_distributionLists);
 		ti.setImage("Group");
 		ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW);
-
-        if (ZaSettings.RESOURCES_ENABLED) {
+		if (ZaSettings.RESOURCES_ENABLED) {
             ti = new DwtTreeItem(this._addressesTi);
             ti.setText(ZaMsg.OVP_resources);
             ti.setImage("Resource");
@@ -399,17 +400,20 @@ function() {
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = ZaOverviewPanelController.accountListTreeListener;
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ALIASES_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW] = ZaOverviewPanelController.dlListTreeListener;		
-		if (ZaSettings.RESOURCES_ENABLED) {
+
+        if (ZaSettings.RESOURCES_ENABLED) {
             ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._RESOURCE_VIEW] = ZaOverviewPanelController.resourceListTreeListener;
         }
     }
-		
-	if(ZaSettings.SYSTEM_CONFIG_ENABLED) {	
-		this._configTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
-		this._configTi.enableSelection(false);
-		this._configTi.setText(ZaMsg.OVP_configuration);
-		this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);	
-		
+
+    var cosList = this._app.getCosList();     //cosList must be called in order to load the saved search based on cos
+    //System Configure tree is shown to display the domain informations
+    this._configTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
+    this._configTi.enableSelection(false);
+    this._configTi.setText(ZaMsg.OVP_configuration);
+    this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);
+
+    if(ZaSettings.SYSTEM_CONFIG_ENABLED) {
 		this._cosTi = new DwtTreeItem(this._configTi);
 		this._cosTi.setText(ZaMsg.OVP_cos);
 		this._cosTi.setImage("COS");
@@ -417,7 +421,6 @@ function() {
 			
 		try {
 			//add COS nodes
-			var cosList = this._app.getCosList();
 			if(cosList && cosList.size()) {
 				var idHash = cosList.getIdHash();
 				for(var ix in idHash) {
@@ -440,13 +443,38 @@ function() {
 		this._domainsTi.setText(ZaMsg.OVP_domains);
 		this._domainsTi.setImage("Domain");
 		this._domainsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAINS_LIST_VIEW);
-	
-		try {
+
+
+        try {
 			//add domain nodes
-			this.searchDomains();
-		} catch (ex) {
+			if (ZaSettings.isYahooSmbPADomainAdmin) {
+                this._domainsMap = {};
+                //get the current domain
+                var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);
+				var domainEl = soapDoc.set("domain", ZaSettings.myDomainName);
+				domainEl.setAttribute ("by", "name");
+				var params = new Object();
+				params.soapDoc = soapDoc;
+				var reqMgrParams = {
+                    controller: this._app.getCurrentController()
+                }
+				var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
+
+				var domain = new ZaItem ();
+				domain.initFromJS (resp.domain[0]);
+                var ti1 = new DwtTreeItem(this._domainsTi);
+                ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
+                ti1.setData(ZaOverviewPanelController._OBJ_ID, domain.id);
+                ti1.setText(domain.name);
+				ti1.setImage("Domain");
+                this._domainsMap[domain.id] = ti1;
+            }else{
+                this.searchDomains();
+            }
+        } catch (ex) {
 			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
 		}
+
 			
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;		
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;				
@@ -504,8 +532,42 @@ function() {
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;				
 		this._configTi.addSeparator();	
 		
-	}
-	if(ZaSettings.MONITORING_ENABLED) {
+	}else{  //add the pa domain configuration
+         try {
+            //add domain nodes
+            if (ZaSettings.isYahooSmbPADomainAdmin) {
+                this._domainsMap = {};
+                //get the current domain
+                var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);
+                var domainEl = soapDoc.set("domain", ZaSettings.myDomainName);
+                domainEl.setAttribute ("by", "name");
+                var params = new Object();
+                params.soapDoc = soapDoc;
+                var reqMgrParams = {
+                    controller: this._app.getCurrentController()
+                }
+                var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
+
+                var domain = new ZaItem ();
+                domain.initFromJS (resp.domain[0]);
+                var ti1 = new DwtTreeItem(this._configTi);
+                ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
+                ti1.setData(ZaOverviewPanelController._OBJ_ID, domain.id);
+                ti1.setText(domain.name);
+                ti1.setImage("Domain");
+                this._domainsMap[domain.id] = ti1;
+            }else{
+                this.searchDomains();
+            }
+        } catch (ex) {
+            this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+        }
+
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;
+        this._configTi.setExpanded(true, false);
+    }
+    
+    if(ZaSettings.MONITORING_ENABLED) {
 		this._monitoringTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._monitoringTi.enableSelection(false);	
 		this._monitoringTi.setText(ZaMsg.OVP_monitoring);
@@ -584,7 +646,8 @@ function() {
 		
 	//SavedSearches Tree	
 	if(ZaSettings.SAVE_SEARCH_ENABLED) {
-		this._savedSearchTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
+        ZaSearch.loadPredefinedSearch(this._app) ;
+        this._savedSearchTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._savedSearchTi.enableSelection(false);
 		this._savedSearchTi.setText(ZaMsg.OVP_savedSearches);
 		this._savedSearchTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SEARCHES);
@@ -609,7 +672,7 @@ function() {
 		
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SEARCH_LIST_VIEW] = ZaOverviewPanelController.searchListTreeListener;
 	}
-	
+
 		
 	if(ZaSettings.ADDRESSES_ENABLED)
 		this._addressesTi.setExpanded(true, false);
@@ -682,18 +745,21 @@ ZaOverviewPanelController.cosTreeListener = function (ev) {
 		this._app.getCosController().show(this._app.getCosList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
 	}	
 }
-
+/* Not needed for PA admin
 ZaOverviewPanelController.domainTreeListener = function (ev) {
-	//var domain = new ZaDomain(this._app);
-	//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
-	//domain.attrs[ZaDomain.A_domainName]=ev.item.getData(ZaOverviewPanelController._OBJ_ID);
-	//domain.name = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
-	//domain.load("name",ev.item.getData(ZaOverviewPanelController._OBJ_ID));	
-	if(this._app.getCurrentController()) {
+    if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
 		 ZaDomainController.prototype.show,this._app.getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
-	} else {	
-						
+	} else {			
+		this._app.getDomainController().show(domain);
+	}
+}                         */
+
+ZaOverviewPanelController.domainTreeListener = function (ev) {
+    if(this._app.getCurrentController()) {
+		this._app.getCurrentController().switchToNextView(this._app.getDomainController(),
+		 ZaDomainController.prototype.show,this._app.getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID)));
+	} else {
 		this._app.getDomainController().show(domain);
 	}
 }

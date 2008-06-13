@@ -268,12 +268,12 @@ Cos_Subnet_XModelItem.prototype.pattern =  [AjxUtil.IP_ADDRESS_RE, AjxUtil.SUBNE
 Super_XFormItem = function () { }
 XFormItemFactory.createItemType("_SUPER_FIELD_", "cos_field", Super_XFormItem, Composite_XFormItem);
 Super_XFormItem.checkIfOverWriten = function() {
-	if(this.getModelItem().getLocalValue(this.getInstance())==null)
+	if(this.getModelItem() && this.getModelItem().getLocalValue(this.getInstance())==null)
 		return false;
 	/*else if ( (this.getModelItem().getLocalValue(this.getInstance()) instanceof Array) && 
 	(this.getModelItem().getLocalValue(this.getInstance()).length==0) )	
 		return false;*/
-	else if ( (this.getModelItem().getLocalValue(this.getInstance()) instanceof AjxVector) && 
+	else if (this.getModelItem() &&  (this.getModelItem().getLocalValue(this.getInstance()) instanceof AjxVector) && 
 	(this.getModelItem().getLocalValue(this.getInstance()).size==0) )	
 		return false;
 	else 
