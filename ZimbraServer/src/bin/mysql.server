@@ -27,6 +27,11 @@ zmsetvars \
 if [ ! -d ${mysql_directory} ]; then
   exit 0
 fi
+
+if [ ! -d ${zimbra_tmp_directory} ]; then
+  mkdir -p ${zimbra_tmp_directory} > /dev/null 2>&1
+fi
+
 zmassert -d ${mysql_directory}
 zmassert -d ${zimbra_tmp_directory}
 zmassert -x ${mysql_directory}/bin/mysqld_safe
