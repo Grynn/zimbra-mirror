@@ -670,39 +670,30 @@
 	</target>
 
 	<target name="offline-prep-prism">
-		<!-- branding stuff done with mac but common to mac/win (will be to linux once it catches up) -->
-		<copy todir="${build.dir}/prism-0422/" overwrite="true">
-			<fileset dir="${prism.src.dir}/mac-0422/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
+		<!-- branding stuff done with mac but common to mac/win/linux -->
+		<copy todir="${build.dir}/prism/" overwrite="true">
+			<fileset dir="${prism.src.dir}/mac-0606/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
 		</copy>
-		<replace file="${build.dir}/prism-0422/defaults/preferences/preferences.js" token="@version@" value="${offline.version}"/>
-	    <replace file="${build.dir}/prism-0422/defaults/preferences/preferences.js" token="@aus_url@" value="${offline.aus_url}"/>
-		<replace file="${build.dir}/prism-0422/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
-		<replace file="${build.dir}/prism-0422/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
+		<replace file="${build.dir}/prism/defaults/preferences/preferences.js" token="@version@" value="${offline.version}"/>
+	        <replace file="${build.dir}/prism/defaults/preferences/preferences.js" token="@aus_url@" value="${offline.aus_url}"/>
+		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
+		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
 
-        <!-- linux is still on 0.9 which has different folder structure -->
-		<copy todir="${build.dir}/prism-0.9/" overwrite="true">
-			<fileset dir="${prism.src.dir}/mac-0.9/prism/Prism.app/Contents/Resources" includes="application.ini,chrome/,defaults/,modules/"/>
-		</copy>
-		<replace file="${build.dir}/prism-0.9/application.ini" token="@version@" value="${offline.version}"/>
-		<replace file="${build.dir}/prism-0.9/application.ini" token="@buildid@" value="${offline.buildid}"/>
-		<replace file="${build.dir}/prism-0.9/defaults/preferences/webrunner-prefs.js" token="@version@" value="${offline.version}"/>
-		<replace file="${build.dir}/prism-0.9/defaults/preferences/webrunner-prefs.js" token="@aus_url@" value="${offline.aus_url}"/>
-
-		<unzip src="${prism.src.dir}/prism-0422.macos.zip" dest="${dist.dir}/macos/prism" overwrite="true"/>
-		<unzip src="${prism.src.dir}/prism-0422.win32.zip" dest="${dist.dir}/win32/prism" overwrite="true"/>
-		<unzip src="${prism.src.dir}/prism-0.9.en-US.linux-i686.zip" dest="${dist.dir}/linux" overwrite="true"/>
+		<unzip src="${prism.src.dir}/prism-0606.macos.zip" dest="${dist.dir}/macos/prism" overwrite="true"/>
+		<unzip src="${prism.src.dir}/prism-0609.win32.zip" dest="${dist.dir}/win32/prism" overwrite="true"/>
+		<unzip src="${prism.src.dir}/prism-0606.linux.zip" dest="${dist.dir}/linux/prism" overwrite="true"/>
 
 		<delete>
 			<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework"/>
-            <fileset dir="${dist.dir}/win32/prism/xulrunner"/>
+            		<!--fileset dir="${dist.dir}/win32/prism/xulrunner"/-->
             
-            <fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
-            <fileset dir="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
-			<fileset dir="${dist.dir}/linux/prism" includes="chrome/,defaults/,modules/"/>
+            		<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
+            		<fileset dir="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
+			<fileset dir="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
 		</delete>
 
-        <unzip src="${xulrunner.src.dir}/nightly/xulrunner-1.9pre.en-US.macos.zip" dest="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
-        <unzip src="${xulrunner.src.dir}/nightly/xulrunner-1.9pre.en-US.win32.zip" dest="${dist.dir}/win32/prism"/>
+        	<unzip src="${xulrunner.src.dir}/nightly/xulrunner-1.9pre.en-US.macos.zip" dest="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
+        	<!--unzip src="${xulrunner.src.dir}/nightly/xulrunner-1.9pre.en-US.win32.zip" dest="${dist.dir}/win32/prism"/-->
 
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/components/nsUpdateService.js" file="src/installer/updater/macos/nsUpdateService.js" overwrite="true"/>
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app/Contents/MacOS/updater" file="src/installer/updater/macos/updater" overwrite="true"/>
@@ -718,22 +709,24 @@
 		<chmod file="${dist.dir}/linux/prism/prism" perm="ugo+x"/>
 
 		<copy todir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" overwrite="true">
-			<fileset dir="${build.dir}/prism-0422" includes="*/**"/>
+			<fileset dir="${build.dir}/prism" includes="*/**"/>
 		</copy>
 		<copy todir="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org" overwrite="true">
-			<fileset dir="${build.dir}/prism-0422" includes="*/**"/>
+			<fileset dir="${build.dir}/prism" includes="*/**"/>
 		</copy>
-		<copy todir="${dist.dir}/linux/prism" overwrite="true">
-			<fileset dir="${build.dir}/prism-0.9" includes="*/**"/>
+		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/webrunner.js" file="prism/win32/webrunner.js" overwrite="true"/>
+		<copy todir="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org" overwrite="true">
+			<fileset dir="${build.dir}/prism" includes="*/**"/>
 		</copy>
+		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/webrunner.js" file="prism/linux/webrunner.js" overwrite="true"/>
 
 		<replace file="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js" token="@target@" value="macos"/>
 		<replace file="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js" token="@target@" value="win32"/>
-		<replace file="${dist.dir}/linux/prism/defaults/preferences/webrunner-prefs.js" token="@target@" value="linux"/>
+		<replace file="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js" token="@target@" value="linux"/>
 
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
-		<copy tofile="${dist.dir}/linux/prism/chrome/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 
 		<mkdir dir="${dist.dir}/profile/extensions/zimbradnd@zimbra.com"/>
 		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>

@@ -67,7 +67,7 @@ function serverCheck() {
     
     // Pump events so the UI stays responsive
     threadManager.currentThread.processNextEvent(true);
-  }while(Date.now() - startTime < 5000);
+  } while(Date.now() - startTime < 30000);
 
   // Give up
   // L10N?
@@ -77,4 +77,32 @@ function serverCheck() {
   appStartup.quit(appStartup.eForceQuit);
   
   return false;
+}
+
+function load() {
+  if ("platform" in window) {
+    window.platform.icon().behavior = Ci.nsIApplicationIcon.HIDE_ON_MINIMIZE | Ci.nsIApplicationIcon.HIDE_ON_CLOSE;
+
+    var head = window.document.documentElement.firstChild;
+    var command = window.document.createElement("command");
+    head.appendChild(command);
+    command.id = "checkForUpdates";
+    command.setAttribute("label", "Check for updates...");
+    command.addEventListener("DOMActivate", function(event) {checkForUpdates();}, false);
+    window.platform.icon().menu.addMenuItem("checkForUpdates");
+  }
+}
+
+function checkForUpdates()
+{
+  var um = Cc["@mozilla.org/updates/update-manager;1"].getService(Components.interfaces.nsIUpdateManager);
+  var prompter = Cc["@mozilla.org/updates/update-prompt;1"].createInstance(Components.interfaces.nsIUpdatePrompt);
+
+  // If there's an update ready to be applied, show the "Update Downloaded"
+  // UI instead and let the user know they have to restart the browser for
+  // the changes to be applied. 
+  if (um.activeUpdate && um.activeUpdate.state == "pending")
+    prompter.showUpdateDownloaded(um.activeUpdate);
+  else
+    prompter.checkForUpdates();
 }
