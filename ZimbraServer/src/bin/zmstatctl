@@ -130,10 +130,12 @@ if (defined($cmd)) {
             print "Invoking: $cmd\n";
             system("$cmd >> $outfile 2>&1 &");
             
-            # doMysql implies that convertd is also on the system
-            $cmd = "$toolpath/$TOOL_CONVERTD";
-            print "Invoking: $cmd\n";
-            system("$cmd >> $outfile 2>&1 &");
+            if (!$isMac) {
+            	 # doMysql implies that convertd is also on the system
+            	 $cmd = "$toolpath/$TOOL_CONVERTD";
+            	 print "Invoking: $cmd\n";
+            	 system("$cmd >> $outfile 2>&1 &");
+            }
         }
         if ($doMtaQueue) {
             my $cmd = "$toolpath/$TOOL_MTAQUEUE";
