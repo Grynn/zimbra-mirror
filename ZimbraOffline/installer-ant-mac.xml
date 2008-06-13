@@ -38,13 +38,8 @@
                 </install4j>
         </target>
 
-	<target name="delete-bads">
-	<delete><fileset dir="build/dist/jetty/webapps/zimbra/help" includes="**/webhelp.jar"/></delete>
-	</target>
-
 	<target name="installer-make">
         <ant dir="." target="offline-make-install-files" inheritAll="false"/>
-	<antcall target="delete-bads"/>
         <antcall target="installer-pack-media-mac"/>
 
 	<antcall target="gen-update-php"/>

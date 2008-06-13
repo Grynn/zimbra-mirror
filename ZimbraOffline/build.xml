@@ -201,6 +201,7 @@
 	<target name="offline-zimbra-war">
 		<ant dir="../ZimbraWebClient" target="war" inheritAll="false" />
 		<unzip src="${zimbra.warfile}" dest="${dist.dir}/jetty/webapps/zimbra" overwrite="true"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/help"/>
 		<copy file="${config.dir}/web_zimbra.xml" tofile="${dist.dir}/jetty/webapps/zimbra/WEB-INF/web.xml" overwrite="true"/>
 
 		<tstamp><format property="build.simpleDate" pattern="yyMMddHHmmss" /></tstamp>
