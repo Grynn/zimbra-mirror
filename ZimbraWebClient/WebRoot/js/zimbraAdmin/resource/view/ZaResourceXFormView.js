@@ -237,10 +237,19 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 	setupGroup.items.push({ref:ZaResource.A2_schedulePolicy, type:_OSELECT1_, 
 			msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_SchedulePolicy, 
 			onChange:ZaTabView.onFormFieldChanged,
+			elementChanged: function(elementValue,instanceValue, event) {
+				if(elementValue==ZaResource.SCHEDULE_POLICY_MANUAL) {
+					this.getInstance().attrs[ZaResource.A_zimbraCalResAutoDeclineRecurring]="FALSE";
+				}
+				this.getForm().itemChanged(this, elementValue, event);
+			},
 			labelLocation:_LEFT_, width: "300px", choices:ZaResource.schedulePolicyChoices});	
 			
-	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,relevantBehavior:_HIDE_, 
-					labelCssClass:"xform_label", align:_LEFT_, labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged});
+	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
+		msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,
+		relevantBehavior:_DISABLE_, relevant:"(instance[ZaResource.A2_schedulePolicy]!=ZaResource.SCHEDULE_POLICY_MANUAL)",
+		labelCssClass:"xform_label", align:_LEFT_, labelLocation:_LEFT_,
+		trueValue:"TRUE", falseValue:"FALSE",onChange:ZaTabView.onFormFieldChanged});
 
 	var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper, id:"resource_form_password_group",
 		colSizes:["275px","*"],numCols:2,items:[	

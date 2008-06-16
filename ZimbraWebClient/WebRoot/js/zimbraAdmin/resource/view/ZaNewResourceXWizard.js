@@ -283,9 +283,16 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 		
 	setupGroup.items.push({ref:ZaResource.A2_schedulePolicy, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,
 						label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_, width: "300px", 
+						elementChanged: function(elementValue,instanceValue, event) {
+							if(elementValue==ZaResource.SCHEDULE_POLICY_MANUAL) {
+								this.getInstance().attrs[ZaResource.A_zimbraCalResAutoDeclineRecurring]="FALSE";
+							}
+							this.getForm().itemChanged(this, elementValue, event);
+						},
 						choices:ZaResource.schedulePolicyChoices});	
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
-						msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,relevantBehavior:_HIDE_, 
+						relevant:"(instance[ZaResource.A2_schedulePolicy]!=ZaResource.SCHEDULE_POLICY_MANUAL)",relevantBehavior:_DISABLE_,
+						msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring, 
 						labelCssClass:"xform_label", align:_LEFT_,labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"});
 					
 	
