@@ -36,6 +36,7 @@ import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.datasource.SyncState;
 
 public class OfflineDataSource extends DataSource {
     private KnownService knownService;
@@ -186,44 +187,32 @@ public class OfflineDataSource extends DataSource {
     
     private static final int MAX_UID_ENTRIES = 32 * 1024;
 
-    private static final Map<Object, Long> sLastSyncUids =
-        Collections.synchronizedMap(new LinkedHashMap<Object, Long>() {
+    private static final Map<Object, SyncState> sSyncStateMap =
+        Collections.synchronizedMap(new LinkedHashMap<Object, SyncState>() {
             protected boolean removeEldestEntry(Map.Entry eldest) {
                 return size() > MAX_UID_ENTRIES;
             }
         });
 
     @Override
-    public long getLastSyncUid(int folderId) {
+    public SyncState getSyncState(int folderId) {
         Object key = key(folderId);
-        if (key != null) {
-            Long uid = sLastSyncUids.get(key(folderId));
-            return uid != null ? uid : 0;
-        }
-        return 0;
+        return key != null ? sSyncStateMap.remove(key) : null;
     }
     
     @Override
-    public void updateLastSyncUid(int folderId, long uid) {
-        if (uid <= 0) {
-            throw new IllegalArgumentException("invalid uid");
-        }
+    public void putSyncState(int folderId, SyncState ss) {
         Object key = key(folderId);
         if (key != null) {
-            synchronized (sLastSyncUids) {
-                Long prev = sLastSyncUids.get(key);
-                if (prev == null || uid > prev) {
-                    sLastSyncUids.put(key, uid);
-                }
-            }
+            sSyncStateMap.put(key, ss);
         }
     }
 
     @Override
-    public void clearLastSyncUid(int folderId) {
+    public void clearSyncState(int folderId) {
         Object key = key(folderId);
         if (key != null) {
-            sLastSyncUids.remove(key);
+            sSyncStateMap.remove(key);
         }
     }
 
