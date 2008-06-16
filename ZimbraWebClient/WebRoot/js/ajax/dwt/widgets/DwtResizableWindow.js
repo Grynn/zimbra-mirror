@@ -446,8 +446,8 @@ function(width, height) {
 DwtResizableWindow.prototype._doResize =
 function() {
 	var div = this._getContentDiv();
+	this._gotSize = DwtComposite.prototype.getSize.call(this);
 	if (AjxEnv.isIE) {
-		this._gotSize = DwtComposite.prototype.getSize.call(this);
 		try {
 			// for other browsers this is not necessary (see dwt.css)
 			var w = this._gotSize.x - 2 * div.offsetLeft - 2;
