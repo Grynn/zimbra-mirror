@@ -59,8 +59,8 @@ function() {
 	AjxEnv.useTransparentPNGs = false;
 
 	// screen resolution - ADD MORE RESOLUTION CHECKS AS NEEDED HERE:
-	AjxEnv.is800x600orLower = screen.width <= 800 && screen.height <= 600;
-    AjxEnv.is1024x768orLower = screen.width <= 1024 && screen.height <= 768;
+	AjxEnv.is800x600orLower = screen && (screen.width <= 800 && screen.height <= 600);
+    AjxEnv.is1024x768orLower = screen && (screen.width <= 1024 && screen.height <= 768);
 };
 
 AjxEnv.parseUA = 
