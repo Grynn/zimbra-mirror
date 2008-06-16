@@ -55,7 +55,27 @@ usage() {
 	exit 1
 }
 
-if [ x$platform = "xSuSE10" -o "x$platform" = "xopenSUSE_10.2" -o "x$platform" = "xSLES10_64" -o "x$platform" = "xSuSEES10" ]; then
+if [ "x$platform" = "xopenSUSE_10.2" ]; then
+	cp -f /etc/syslog-ng/syslog-ng.conf /etc/syslog-ng/syslog-ng.conf.bak
+	grep -v zimbra /etc/syslog-ng/syslog-ng.conf > /tmp/syslog-ng.conf
+	echo 'filter f_local0       { facility(local0); }; # zimbra' >> /tmp/syslog-ng.conf
+	echo 'destination zmail { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra ' >> /tmp/syslog-ng.conf
+	echo 'log { source(src); filter(f_mail); destination(zmail); }; # zimbra' >> /tmp/syslog-ng.conf
+	echo 'destination local0 { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> /tmp/syslog-ng.conf
+	echo 'log { source(src); filter(f_local0); destination(local0); }; # zimbra' >> /tmp/syslog-ng.conf
+	echo 'filter f_auth       { facility(auth); }; # zimbra' >> /tmp/syslog-ng.conf
+	echo 'destination zmauth { file("/var/log/zimbra.log" owner("zimbra") ); }; # zimbra' >> /tmp/syslog-ng.conf
+	echo 'log { source(src); filter(f_auth); destination(zmauth); }; # zimbra' >> /tmp/syslog-ng.conf
+	mv -f /tmp/syslog-ng.conf /etc/syslog-ng/syslog-ng.conf
+	/sbin/rcsyslog restart > /dev/null 2>&1
+	if [ -f "/etc/logrotate.d/zimbra" ]; then
+		sed -i -e 's/syslogd/syslog-ng/' /etc/logrotate.d/zimbra
+	fi
+	touch /var/log/zimbra.log
+	exit 0
+fi
+
+if [ x$platform = "xSuSE10" -o "x$platform" = "xSLES10_64" -o "x$platform" = "xSuSEES10" ]; then
 	cp -f /etc/syslog-ng/syslog-ng.conf.in /etc/syslog-ng/syslog-ng.conf.in.bak
 	grep -v zimbra /etc/syslog-ng/syslog-ng.conf.in > /tmp/syslog-ng.conf.in
 	echo 'filter f_local0       { facility(local0); }; # zimbra' >> /tmp/syslog-ng.conf.in
@@ -68,9 +88,9 @@ if [ x$platform = "xSuSE10" -o "x$platform" = "xopenSUSE_10.2" -o "x$platform" =
 	echo 'log { source(src); filter(f_auth); destination(zmauth); }; # zimbra' >> /tmp/syslog-ng.conf.in
 	mv -f /tmp/syslog-ng.conf.in /etc/syslog-ng/syslog-ng.conf.in
 	/sbin/SuSEconfig --module syslog-ng
-  if [ -f "/etc/logrotate.d/zimbra" ]; then
-    sed -i -e 's/syslogd/syslog-ng/' /etc/logrotate.d/zimbra
-  fi
+	if [ -f "/etc/logrotate.d/zimbra" ]; then
+		sed -i -e 's/syslogd/syslog-ng/' /etc/logrotate.d/zimbra
+	fi
 	touch /var/log/zimbra.log
 	exit 0
 fi
