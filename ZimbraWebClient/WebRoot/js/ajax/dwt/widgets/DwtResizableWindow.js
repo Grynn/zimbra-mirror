@@ -296,6 +296,8 @@ DwtResizableWindow.prototype.__dlgMouseDown = function(ev) {
 
 DwtResizableWindow.prototype.__handleMouseDown = function(ev, side) {
 	if (side != null) {
+		DwtShell.getShell(window).getToolTip().popdown();
+		
 		Dwt.addClass(this.getHtmlElement(), "DwtResizableWindow-resizing");
 		this.__resizing = { side  : side,
 				    evpos : { x: ev.docX,
