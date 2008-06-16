@@ -612,7 +612,8 @@ public class OfflineMailbox extends DesktopMailbox {
                     case MailItem.TYPE_FOLDER:        filter = PushChanges.FOLDER_CHANGES;      break;
                     case MailItem.TYPE_SEARCHFOLDER:  filter = PushChanges.SEARCH_CHANGES;      break;
                     case MailItem.TYPE_TAG:           filter = PushChanges.TAG_CHANGES;         break;
-                    case MailItem.TYPE_APPOINTMENT:   filter = PushChanges.APPOINTMENT_CHANGES; break;
+                    case MailItem.TYPE_APPOINTMENT:
+                    case MailItem.TYPE_TASK:          filter = PushChanges.APPOINTMENT_CHANGES; break;
                     case MailItem.TYPE_DOCUMENT:      filter = PushChanges.DOCUMENT_CHANGES; break;
                 }
 

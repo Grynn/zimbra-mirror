@@ -108,7 +108,7 @@ public class DeltaSync {
 
         // sync down metadata changes and note items that need to be downloaded in full
         Map<Integer, List<Integer>> messages = new HashMap<Integer, List<Integer>>(), chats = new HashMap<Integer, List<Integer>>();
-        Map<Integer, Integer> deltamsgs = null, deltachats = null, contacts = null, appts = null;
+        Map<Integer, Integer> deltamsgs = null, deltachats = null, contacts = null, appts = null, tasks = null;
         List<Integer> documents = null;
         for (Element change : response.listElements()) {
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
@@ -193,6 +193,18 @@ public class DeltaSync {
                 	continue;
             	
             	(appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
+            } else if (type.equals(MailConstants.E_TASK)) {
+            	if (!OfflineLC.zdesktop_sync_tasks.booleanValue())
+            		continue;
+                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                	OfflineLog.offline.warn("Skipped task id=%d per zdesktop_sync_skip_idlist", id);
+                	continue;
+                }
+                
+                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_TASK))
+                	continue;
+            	
+            	(tasks == null ? tasks = new HashMap<Integer,Integer>() : tasks).put(id, folderId);
             } else if (type.equals(MailConstants.E_DOC)) {
                 if (!OfflineLC.zdesktop_sync_documents.booleanValue() ||
                 		!ombx.getRemoteServerVersion().isAtLeast(InitialSync.sMinDocumentSyncVersion))
@@ -223,7 +235,12 @@ public class DeltaSync {
         //sync appointments before messages so that new invite messages can be linked to appointments
         if (OfflineLC.zdesktop_sync_appointments.booleanValue() && appts != null) {
         	for (Map.Entry<Integer,Integer> entry : appts.entrySet())
-                getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue());
+                getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue(), true);
+        }
+        
+        if (OfflineLC.zdesktop_sync_tasks.booleanValue() && tasks != null) {
+        	for (Map.Entry<Integer,Integer> entry : tasks.entrySet())
+                getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue(), false);
         }
         
         if (OfflineLC.zdesktop_sync_messages.booleanValue()) {

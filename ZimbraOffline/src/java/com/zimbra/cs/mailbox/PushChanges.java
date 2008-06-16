@@ -75,7 +75,7 @@ public class PushChanges {
 				mm.writeTo(bao);
 				return bao.toByteArray();
 			} catch (Exception x) {
-				throw ServiceException.FAILURE("appt=" + calendarItemId + ";inv=" + inviteId, x);
+				throw ServiceException.FAILURE("calitem=" + calendarItemId + ";inv=" + inviteId, x);
 			}
 		}
 	}
@@ -106,7 +106,7 @@ public class PushChanges {
     /** The bitmask of all appointment changes that we propagate to the server. */
     static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS    | Change.MODIFIED_FOLDER |
                                            Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT | Change.MODIFIED_INVITE;
-
+    
     /** The bitmask of all document changes that we propagate to the server. */
     static final int DOCUMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS    | Change.MODIFIED_FOLDER |
                                         Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT | Change.MODIFIED_NAME;
@@ -119,6 +119,7 @@ public class PushChanges {
         MailItem.TYPE_MESSAGE, 
         MailItem.TYPE_CHAT, 
         MailItem.TYPE_APPOINTMENT,
+        MailItem.TYPE_TASK,
         MailItem.TYPE_DOCUMENT
     };
 
@@ -131,6 +132,7 @@ public class PushChanges {
         MailItem.TYPE_MESSAGE, 
         MailItem.TYPE_CHAT, 
         MailItem.TYPE_APPOINTMENT,
+        MailItem.TYPE_TASK,
         MailItem.TYPE_DOCUMENT
     ));
 
@@ -260,7 +262,8 @@ public class PushChanges {
 	                        case MailItem.TYPE_TAG:         syncTag(id);          break;
 	                        case MailItem.TYPE_CONTACT:     syncContact(id);      break;
 	                        case MailItem.TYPE_MESSAGE:     syncMessage(id);      break;
-	                        case MailItem.TYPE_APPOINTMENT: syncCalendarItem(id); break;
+	                        case MailItem.TYPE_APPOINTMENT: syncCalendarItem(id, true); break;
+	                        case MailItem.TYPE_TASK:        syncCalendarItem(id, false); break;
 	                        case MailItem.TYPE_DOCUMENT:    syncDocument(id);     break;
 	                    }
                 	} catch (ServiceException x) {
@@ -958,7 +961,7 @@ public class PushChanges {
         }
     }
     
-    private boolean syncCalendarItem(int id) throws ServiceException {
+    private boolean syncCalendarItem(int id, boolean isAppointment) throws ServiceException {
         int flags, folderId;
         long date, tags;
         byte color;
@@ -968,6 +971,8 @@ public class PushChanges {
         boolean create = false;
         String name = null;
         
+        byte type = isAppointment ? MailItem.TYPE_APPOINTMENT : MailItem.TYPE_TASK;
+        
         synchronized (ombx) {
             CalendarItem cal = ombx.getCalendarItemById(sContext, id);
             name = cal.getSubject();
@@ -976,12 +981,12 @@ public class PushChanges {
             flags = cal.getFlagBitmask();
             folderId = cal.getFolderId();
             color = cal.getColor();
-            mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT);
+            mask = ombx.getChangeMask(sContext, id, type);
 
 	        if ((mask & Change.MODIFIED_CONFLICT) != 0 || (mask & Change.MODIFIED_CONTENT) != 0 || (mask & Change.MODIFIED_INVITE) != 0) { // need to push to the server
-	        	request = new Element.XMLElement(MailConstants.SET_APPOINTMENT_REQUEST);
+	        	request = new Element.XMLElement(isAppointment ? MailConstants.SET_APPOINTMENT_REQUEST : MailConstants.SET_TASK_REQUEST);
 	            ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter(true), ombx.getOperationContext(), cal, ToXML.NOTIFY_FIELDS, true);
-	            request = InitialSync.makeSetAppointmentRequest(request.getElement(MailConstants.E_APPOINTMENT), new LocalInviteMimeLocator(ombx), ombx.getAccount());
+	            request = InitialSync.makeSetCalRequest(request.getElement(isAppointment ? MailConstants.E_APPOINTMENT : MailConstants.E_TASK), new LocalInviteMimeLocator(ombx), ombx.getAccount(), isAppointment);
 	        	create = true; //content mod is considered same as create since we use SetAppointment for both
 	        } else {
 	        	request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
@@ -995,7 +1000,6 @@ public class PushChanges {
 		        if ((mask & Change.MODIFIED_COLOR) != 0)
 		        	action.addAttribute(MailConstants.A_COLOR, color);
 	        }
-
         }
 
         try {
@@ -1008,12 +1012,12 @@ public class PushChanges {
 				//Instead, we just let it bounce back as a calendar update from server.
 				//mod sequence will always be bounced back in the next sync so we'll set there.
 				if (serverItemId != id) { //new item
-					if (!ombx.renumberItem(sContext, id, MailItem.TYPE_APPOINTMENT, serverItemId, -1))
+					if (!ombx.renumberItem(sContext, id, type, serverItemId, -1))
 						return true;
 				}
 				id = serverItemId;
         	} else {
-        		pushRequest(request, create, id, MailItem.TYPE_APPOINTMENT, name, folderId);
+        		pushRequest(request, create, id, type, name, folderId);
         	}
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_CONTACT))
@@ -1033,7 +1037,7 @@ public class PushChanges {
             if (date != cal.getDate())                  mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask
-            ombx.setChangeMask(sContext, id, MailItem.TYPE_APPOINTMENT, mask);
+            ombx.setChangeMask(sContext, id, type, mask);
             return (mask == 0);
         }
     }
