@@ -49,22 +49,30 @@ SECTION mta
 	VAR zimbraMtaBlockedExtension
 	VAR zimbraMtaRecipientDelimiter
 	VAR zimbraMtaMyNetworks
-  VAR zimbraMtaMyOrigin
-  VAR zimbraMtaMyDestination
-  VAR zimbraMtaMyHostname
+	VAR zimbraMtaMyOrigin
+	VAR zimbraMtaMyDestination
+	VAR zimbraMtaMyHostname
+	VAR zimbraMtaSmtpdMilters
+	VAR zimbraMtaNonSmtpdMilters
 	if VAR zimbraMtaMyNetworks
 		POSTCONF mynetworks VAR zimbraMtaMyNetworks
 	fi
 	LOCAL zimbra_server_hostname
 	REWRITE conf/postfix_header_checks.in conf/postfix_header_checks
 	POSTCONF myhostname		LOCAL zimbra_server_hostname
-  if VAR zimbraMtaMyHostname
-    POSTCONF myhostname VAR zimbraMtaMyHostname
-  fi
-  if VAR zimbraMtaMyOrigin
-    POSTCONF myorigin VAR zimbraMtaMyOrigin
-  fi
-  POSTCONF mydestination VAR zimbraMtaMyDestination
+	if VAR zimbraMtaMyHostname
+		POSTCONF myhostname VAR zimbraMtaMyHostname
+	fi
+	if VAR zimbraMtaMyOrigin
+		POSTCONF myorigin VAR zimbraMtaMyOrigin
+	fi
+	if VAR zimbraMtaSmtpdMilters
+		POSTCONF smtpd_milters VAR zimbraMtaSmtpdMilters
+	fi
+	if VAR zimbraMtaNonSmtpdMilters
+		POSTCONF non_smtpd_milters VAR zimbraMtaNonSmtpdMilters
+	fi
+	POSTCONF mydestination VAR zimbraMtaMyDestination
 	POSTCONF recipient_delimiter	VAR zimbraMtaRecipientDelimiter
 	POSTCONF smtpd_sasl_auth_enable VAR zimbraMtaAuthEnabled
 	POSTCONF smtpd_tls_auth_only	VAR zimbraMtaTlsAuthOnly
@@ -74,7 +82,7 @@ SECTION mta
 	POSTCONF mailbox_size_limit		0
 	POSTCONF relayhost				VAR zimbraMtaRelayHost
 	POSTCONF smtpd_recipient_restrictions FILE postfix_recipient_restrictions.cf
-  POSTCONF local_header_rewrite_clients permit_mynetworks,permit_sasl_authenticated
+	POSTCONF local_header_rewrite_clients permit_mynetworks,permit_sasl_authenticated
 
 	POSTCONF alias_maps 						LOCAL postfix_alias_maps
 	POSTCONF broken_sasl_auth_clients			LOCAL postfix_broken_sasl_auth_clients
