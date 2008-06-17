@@ -44,6 +44,7 @@ ZaServer.A_ServiceHostname = "zimbraServiceHostname";
 ZaServer.A_zimbraMailPort = "zimbraMailPort";
 ZaServer.A_zimbraMailSSLPort = "zimbraMailSSLPort";
 ZaServer.A_zimbraMailMode = "zimbraMailMode";
+ZaServer.A_zimbraMailReferMode = "zimbraMailReferMode";
 // services
 ZaServer.A_zimbraServiceInstalled = "zimbraServiceInstalled";
 ZaServer.A_zimbraLdapServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_ldap";
@@ -56,6 +57,7 @@ ZaServer.A_zimbraSpellServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"
 ZaServer.A_zimbraLoggerServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_logger";
 ZaServer.A_zimbraMailProxyServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_imapproxy";
 
+ZaServer.A_zimbraReverseProxyHttpEnabled = "zimbraReverseProxyHttpEnabled";
 ZaServer.A_zimbraServiceEnabled = "zimbraServiceEnabled";
 ZaServer.A_zimbraLdapServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_ldap";
 ZaServer.A_zimbraMailboxServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_mailbox";
@@ -125,6 +127,8 @@ ZaServer.A_CurrentIndexVolumeId = "current_index_volume_id";
 ZaServer.A_CurrentMsgVolumeId = "current_msg_volume_id";
 ZaServer.A_isCurrent = "isCurrent";
 //mail proxy
+ZaServer.A_zimbraMailProxyPort = "zimbraMailProxyPort";
+ZaServer.A_zimbraMailSSLProxyPort = "zimbraMailSSLProxyPort";
 ZaServer.A_zimbraImapProxyBindPort="zimbraImapProxyBindPort";
 ZaServer.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
 ZaServer.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";

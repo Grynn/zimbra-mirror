@@ -529,15 +529,63 @@ function(account) {
 		} else {
 			return;
 		}
+		var mailHost = "";
+		var myDomain = new ZaDomain(this._app);
+		myDomain.load("name",account.name.substr(account.name.indexOf("@")+1));
+		var publicServiceHostname = myDomain.attrs[ZaDomain.A_zimbraPublicServiceHostname];
 		var ms = account.attrs[ZaAccount.A_mailHost] ? account.attrs[ZaAccount.A_mailHost].toLowerCase() : location.hostname.toLowerCase();
+		if(!publicServiceHostname) {
+			mailHost = ms;
+		} else {
+			mailHost = publicServiceHostname.toLowerCase();
+		}
+		
+		/*
+         * We now have a hostname.  
+         * if server is running in reverse proxied mode and we need to generate the URL to point to the reverse proxy, 
+         * 1. domain.zimbraPublicServiceHostname is set to the hostname on which the reverse proxy is running, and 
+         *      - a server can be found by zimbraPublicServiceHostname: this is the ideal case, use it
+         *      - a server cannot be found by zimbraPublicServiceHostname: no good, throw ServiceException
+         *         
+         * 2. domain is null(really an error, but we've been handling it so keep the current code behavior) or 
+         *    domain.zimbraPublicServiceHostname is not set.  
+         *    This is OK, assuming the reverse proxy is running on the same server.  
+         *    We do the same check (as we would do for 1) if the reverse proxy is indeed running on the configured server
+         */
+         //defaults
+  		var mailPort = 80;
+		var mailProtocol = "http";     
+		var useSSL=true;  		
 		//find my server
 		var servers = this._app.getServerList().getArray();
 		var cnt = servers.length;
-		var mailPort = 80;
-		var mailProtocol = "http";
-		
+		var myServer=null;
+        var publicServiceServer = null; 		
 		for (var i = 0; i < cnt; i++) {
 			if(servers[i].attrs[ZaServer.A_ServiceHostname].toLowerCase() == ms) {
+				//this is the server
+				myServer=servers[i];
+				
+				if(mailHost == ms) {
+					publicServiceServer = servers[i];
+					break;
+				}
+					
+			}
+			
+			if(mailHost != ms && servers[i].attrs[ZaServer.A_ServiceHostname].toLowerCase() == publicServiceHostname) {
+				publicServiceServer = servers[i];
+			}
+			
+			if(myServer && publicServiceServer)
+				break;
+		}
+		
+		
+		if(!myServer)
+			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_CANNOT_FIND_SERVER,[mailHost]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+		
+		/*
 				if(servers[i].attrs[ZaServer.A_zimbraMailMode] && (servers[i].attrs[ZaServer.A_zimbraMailMode] == "https" || servers[i].attrs[ZaServer.A_zimbraMailMode] == "mixed" || servers[i].attrs[ZaServer.A_zimbraMailMode] == "both")) { //if there is SSL, use SSL
 					mailPort = servers[i].attrs[ZaServer.A_zimbraMailSSLPort];
 					mailProtocol = "https";
@@ -547,12 +595,65 @@ function(account) {
 				}
 				break;
 			}
-		}
+		}*/
 
+		var mode = myServer.attrs[ZaServer.A_zimbraMailMode];
+		switch(mode) {
+			case "both":
+        	case "mixed":
+        	case "redirect":
+          	  useSSL = true;
+            break;
+        	case "https":
+          	  useSSL = true;
+            break;
+       		case "http":
+            	useSSL = false;
+            break;
+        	default:
+            	useSSL = true;
+        }
+		
+		var reversedProxiedMode = (myServer.attrs[ZaServer.A_zimbraMailReferMode] == "reverse-proxied");
+		if(reversedProxiedMode && !(publicServiceServer.attrs[ZaServer.A_zimbraReverseProxyHttpEnabled]=="TRUE")) {
+			throw new AjxException(AjxMessageFormat.format(ZaMsg.REVERSED_PROXY_CONFIG_ERROR,[ms,(publicServiceHostname ? publicServiceHostname : ms), ZaDomain.A_zimbraPublicServiceHostname]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+                
+		}
+		if(useSSL && reversedProxiedMode) {
+			mailProtocol = "https";
+			mailPort = publicServiceServer.attrs[ZaServer.A_zimbraMailSSLProxyPort];
+
+			if(!mailPort || mailPort < 1)
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailSSLProxyPort,publicServiceServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+
+		} else if (useSSL) {
+			mailProtocol = "https"; 
+			mailPort = publicServiceServer.attrs[ZaServer.A_zimbraMailSSLPort];
+
+			if(!mailPort || mailPort < 1)
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailSSLPort,publicServiceServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+
+		} else if(!useSSL && reversedProxiedMode) {
+			mailProtocol = "http"; 
+			mailPort = publicServiceServer.attrs[ZaServer.A_zimbraMailProxyPort];
+
+			if(!mailPort || mailPort < 1)
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailProxyPort,publicServiceServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+
+
+		} else {
+			mailProtocol = "http"; 
+			mailPort = publicServiceServer.attrs[ZaServer.A_zimbraMailPort];
+			
+			if(!mailPort || mailPort < 1)
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailPort,publicServiceServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+			
+		}
+		
 		if(!obj.authToken || !obj.lifetime)
 			throw new AjxException(ZaMsg.ERROR_FAILED_TO_GET_CREDENTIALS, AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 
-		var mServer = [mailProtocol, "://", ms, ":", mailPort, "/service/preauth?authtoken=",obj.authToken,"&isredirect=1"].join("");
+		var mServer = [mailProtocol, "://", mailHost, ":", mailPort, "/service/preauth?authtoken=",obj.authToken,"&isredirect=1"].join("");
 		var win = window.open(mServer, "_blank");
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController._viewMailListenerLauncher", null, false);			

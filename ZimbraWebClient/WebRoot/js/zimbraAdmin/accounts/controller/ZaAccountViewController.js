@@ -72,7 +72,7 @@ ZaController.initToolbarMethods["ZaAccountViewController"].push(ZaAccountViewCon
 
 /**
 *	@method setViewMethod 
-*	@param entry - isntance of ZaDomain class
+*	@param entry - isntance of ZaAccount class
 */
 ZaAccountViewController.setViewMethod =
 function(entry) {
