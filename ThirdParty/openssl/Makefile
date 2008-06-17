@@ -61,10 +61,10 @@ build:
 	CXXFLAGS="-g -O2" \
 	PERL=/usr/bin/perl \
 	LDFLAGS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" \
-	$(ENVMOD) ./Configure --prefix=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
+	$(ENVMOD) LD_RUN_PATH=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib ./Configure --prefix=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
 	shared $(PLAT) -g -O2; \
-	$(MAKE) $(MAKEARGS); \
-	$(MAKE) install)
+	LD_RUN_PATH=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib $(MAKE) $(MAKEARGS); \
+	LD_RUN_PATH=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib $(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s openssl-$(OPENSSL_VERSION) openssl)
 
 tar:
