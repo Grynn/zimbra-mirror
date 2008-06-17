@@ -583,8 +583,11 @@ function(account) {
 		
 		
 		if(!myServer)
-			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_CANNOT_FIND_SERVER,[mailHost]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_CANNOT_FIND_SERVER,[ms]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 		
+		if(!publicServiceServer)
+			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_CANNOT_FIND_SERVER,[publicServiceHostname]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+	
 		/*
 				if(servers[i].attrs[ZaServer.A_zimbraMailMode] && (servers[i].attrs[ZaServer.A_zimbraMailMode] == "https" || servers[i].attrs[ZaServer.A_zimbraMailMode] == "mixed" || servers[i].attrs[ZaServer.A_zimbraMailMode] == "both")) { //if there is SSL, use SSL
 					mailPort = servers[i].attrs[ZaServer.A_zimbraMailSSLPort];
