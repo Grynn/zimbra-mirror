@@ -310,6 +310,7 @@ DwtResizableWindow.prototype.__handleMouseDown = function(ev, side) {
 };
 
 DwtResizableWindow.prototype.__resizeMouseMove = function(ev) {
+	DwtShell.getShell(window).getToolTip().popdown();
 	var r = this.__resizing;
 	var dx = ev.docX - r.evpos.x;
 	var dy = ev.docY - r.evpos.y;
