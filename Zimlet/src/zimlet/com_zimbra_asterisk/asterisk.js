@@ -33,7 +33,10 @@ Com_Zimbra_Asterisk.prototype.menuItemSelected = function(itemId) {
 			this._dlg_propertyEditor = null;
 			this.createPropertyEditor();
 			break;
-	}
+        case "SERVERWEBPAGE":
+			this.goToServicewebPage();
+			break;
+    }
 };
 
 // Q&D number canonicalization.
@@ -84,7 +87,7 @@ Com_Zimbra_Asterisk.prototype.clicked = function(myElement, myNumber) {
 		this.createPropertyEditor();
 		return;
 	}
-	var to = this.fixNumber(myNumber);
+	var to = this.fixNumber(myNuzmber);
 	if (this.getUserProperty(this.getUserProperty("defaultNum").toString()) != null) {
 		var uname = AjxStringUtil.urlEncode(this.getUserProperty('pbxUname'));
 		var pass = AjxStringUtil.urlEncode(this.getUserProperty('pbxPass'));
@@ -104,6 +107,13 @@ Com_Zimbra_Asterisk.prototype.clicked = function(myElement, myNumber) {
 	} else {
 		this.setupCall(myNumber);
 	}
+};
+
+Com_Zimbra_Asterisk.prototype.goToServicewebPage = function() {
+    var serviceUrl = this.getUserProperty("targetipaddress");
+    if(!serviceUrl)
+        serviceUrl = "http://192.168.1.254";
+    window.open(serviceUrl + "?referrer=www.zimbra.com","Asterisk home page","toolbar=yes,location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=800,height=600");
 };
 
 Com_Zimbra_Asterisk.prototype.verifyPrefs = function() {
@@ -470,8 +480,9 @@ Com_Zimbra_Asterisk.prototype._placeCall = function () {
 
 	var uname = AjxStringUtil.urlEncode(this.getUserProperty('pbxUname'));
 	var pass = AjxStringUtil.urlEncode(this.getUserProperty('pbxPass'));
+    var sipHost = AjxStringUtil.urlEncode(this.getUserProperty('targetipaddress'));
 
-	var reqHeader = {"Content-Type":"application/x-www-form-urlencoded"};
+    var reqHeader = {"Content-Type":"application/x-www-form-urlencoded"};
 
 	var mynum = AjxStringUtil.urlEncode(properties.myNumber);
 
@@ -507,8 +518,11 @@ Com_Zimbra_Asterisk.prototype._placeCall = function () {
 
 	}
 	finalto = AjxStringUtil.urlEncode(finalto);
-	var reqParam = 'to=' + finalto + '&from=' + from + '&uname=' + uname + '&pass=' + pass;
-	//DBG.println(AjxDebug.DBG2, reqParam);
+	if(sipHost)
+        var reqParam = 'to=' + finalto + '&from=' + from + '&uname=' + uname + '&pass=' + pass + '&sipHost=' + sipHost;
+    else
+        var reqParam = 'to=' + finalto + '&from=' + from + '&uname=' + uname + '&pass=' + pass;
+    //DBG.println(AjxDebug.DBG2, reqParam);
 
 	this.displayStatusMessage('Connecting '+from+' to '+finalto); 
 	AjxRpc.invoke(reqParam, url, reqHeader, new AjxCallback(this, this._resultCallback));

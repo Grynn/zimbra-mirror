@@ -637,7 +637,6 @@
 	}
 
 	Map zConfig = (Map) request.getAttribute("config");
-	String sipHost = (String) ((Map) zConfig.get("global")).get("sipHost");
 	String myAddress = (String) ((Map) zConfig.get("global")).get("myAddress");
 	String debug = (String) ((Map) zConfig.get("global")).get("debug");
 
@@ -645,8 +644,11 @@
 	String from = request.getParameter("from");
 	String user = request.getParameter("uname");
 	String pass = request.getParameter("pass");
+    String sipHost = request.getParameter("sipHost");
+    if(sipHost == null)
+         sipHost = (String) ((Map) zConfig.get("global")).get("sipHost");
 
-	to = java.net.URLDecoder.decode(to, "UTF8");
+    to = java.net.URLDecoder.decode(to, "UTF8");
 	from = java.net.URLDecoder.decode(from, "UTF8");
 	user = java.net.URLDecoder.decode(user, "UTF8");
 	pass = java.net.URLDecoder.decode(pass, "UTF8");

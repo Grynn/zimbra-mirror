@@ -33,16 +33,13 @@
 		<contextMenu>
 			<menuItem label="Preferences..." id="PREFERENCES"/>
 			<menuItem label="Phone Server" id="SERVERWEBPAGE" icon="ASTK-panelIcon">
-				<canvas type="window" width="800" height="600"/>
-				<actionUrl target="http://192.168.1.254">
-					<param name="referrer">www.zimbra.com</param>
-				</actionUrl>
 			</menuItem>
 		</contextMenu>
 	</zimletPanelItem>
 
 	<userProperties>
-		<property type="string" name="pbxUname" minLength="0" maxLength="32" label="PBX Username"/>
+		<property type="string" name="targetipaddress" label="Target IPAddress"/>
+        <property type="string" name="pbxUname" minLength="0" maxLength="32" label="PBX Username"/>
 		<property type="password" name="pbxPass" minLength="0" maxLength="32" label="PBX Password"/>
 		<property type="string" name="myConfBridge" minLength="0" maxLength="32" label="My Conference Bridge"/>
 		<property type="string" name="myMobileNum" minLength="0" maxLength="32" label="My Mobile Number"/>
