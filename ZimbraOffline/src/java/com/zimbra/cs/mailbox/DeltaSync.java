@@ -16,8 +16,6 @@
  */
 package com.zimbra.cs.mailbox;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -742,13 +740,9 @@ public class DeltaSync {
             if (ombx.getOfflineAccount().isDebugTraceEnabled())
             	OfflineLog.request.debug("GET " + url);
             try {
-                String hostname = new URL(url).getHost();
-                blob = UserServlet.getRemoteContent(ombx.getAuthToken(), hostname, url);
+                blob = UserServlet.getRemoteContent(ombx.getAuthToken(), url);
             } catch (MailServiceException.NoSuchItemException nsie) {
                 OfflineLog.offline.warn("delta: no blob available for contact " + id);
-            } catch (MalformedURLException e) {
-                OfflineLog.offline.error("delta: base URI is invalid; aborting: " + url, e);
-                throw ServiceException.FAILURE("base URI is invalid: " + url, e);
             }
         }
         ParsedContact pc = (fields.isEmpty() ? null : new ParsedContact(fields, blob));

@@ -21,8 +21,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -103,11 +101,7 @@ public class InitialSync {
             final String contentUrlPrefix = ContentServlet.SERVLET_PATH + ContentServlet.PREFIX_GET + "?" +
 		    			                    ContentServlet.PARAM_MSGID + "=";
 			String contentUrl = Offline.getServerURI(ombx.getAccount(), contentUrlPrefix + calendarItemId + "-" + inviteId);
-			try {
-				return UserServlet.getRemoteContent(ombx.getAuthToken(), ombx.getRemoteHost(), contentUrl);
-			} catch (MalformedURLException x) {
-				throw ServiceException.FAILURE("MalformedURLException", x);
-			}
+			return UserServlet.getRemoteContent(ombx.getAuthToken(), contentUrl);
 		}
 	}
 	
@@ -759,14 +753,10 @@ public class InitialSync {
             if (acct.isDebugTraceEnabled())
             	OfflineLog.request.debug("GET " + url);
             try {
-                String hostname = new URL(url).getHost();
-                blob = UserServlet.getRemoteResource(ombx.getAuthToken(), hostname, url,
+                blob = UserServlet.getRemoteResource(ombx.getAuthToken(), url,
                 		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
             } catch (MailServiceException.NoSuchItemException nsie) {
                 OfflineLog.offline.warn("initial: no blob available for contact " + id);
-            } catch (MalformedURLException e) {
-                OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
-                throw ServiceException.FAILURE("base URI is invalid: " + url, e);
             }
         }
         ParsedContact pc = new ParsedContact(fields, blob);
@@ -820,16 +810,12 @@ public class InitialSync {
 	    	if (acct.isDebugTraceEnabled())
 	    		OfflineLog.request.debug("GET " + url);
 	        try {
-	            String hostname = new URL(url).getHost();
-	            Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), hostname, url,
+	            Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
 	            		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
 	            in = response.getSecond();
 	        } catch (MailServiceException.NoSuchItemException nsie) {
 	            OfflineLog.offline.info("initial: messages have been deleted; skipping");
 	            return;
-	        } catch (MalformedURLException e) {
-	            OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
-	            throw ServiceException.FAILURE("base URI is invalid: " + url, e);
 	        } catch (IOException x) {
 	        	OfflineLog.offline.error("initial: can't read sync response: " + url, x);
 	        	throw ServiceException.FAILURE("can't read sync response: " + url, x);
@@ -873,9 +859,8 @@ public class InitialSync {
         if (acct.isDebugTraceEnabled())
         	OfflineLog.request.debug("GET " + url);
         try {
-            String hostname = new URL(url).getHost();
             Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(
-            		ombx.getAuthToken(), hostname, url,
+            		ombx.getAuthToken(), url,
             		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
             for (Header hdr : response.getFirst())
                 headers.put(hdr.getName(), hdr.getValue());
@@ -1060,14 +1045,10 @@ public class InitialSync {
         if (acct.isDebugTraceEnabled())
         	OfflineLog.request.debug("GET " + url);
         try {
-        	String hostname = new URL(url).getHost();
-        	rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), hostname, url,
+        	rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
         			acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
         } catch (MailServiceException.NoSuchItemException nsie) {
         	OfflineLog.offline.warn("initial: no blob available for document " + itemIdStr);
-        } catch (MalformedURLException e) {
-        	OfflineLog.offline.error("initial: base URI is invalid; aborting: " + url, e);
-        	throw ServiceException.FAILURE("base URI is invalid: " + url, e);
         } catch (IOException e) {
         	OfflineLog.offline.warn("initial: can't download Document:  " + itemIdStr);
         }

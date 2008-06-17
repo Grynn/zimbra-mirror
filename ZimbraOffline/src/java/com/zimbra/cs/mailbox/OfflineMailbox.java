@@ -697,7 +697,6 @@ public class OfflineMailbox extends DesktopMailbox {
     		Pair<Header[], HttpInputStream> resp = 
     			UserServlet.putRemoteResource(getAuthToken(), 
     											 url, 
-    											 getRemoteHost(), 
     											 item.getContentStream(), 
     											 headers.toArray(new Header[0]), 
     											 acct.getProxyHost(), 
