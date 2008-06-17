@@ -40,6 +40,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.*;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.DomainBy;
@@ -420,6 +421,26 @@ public class SkinResources
 				substOverrides.put(Manifest.S_HELP_ADVANCED_URL, domain.getAttr(A_HELP_ADVANCED_URL));
 				substOverrides.put(Manifest.S_HELP_DELEGATED_URL, domain.getAttr(A_HELP_DELEGATED_URL));
 				substOverrides.put(Manifest.S_HELP_STANDARD_URL, domain.getAttr(A_HELP_STANDARD_URL));
+			}
+			else {
+				Config config = provisioning.getConfig();
+				if (config != null) {
+					substOverrides = new HashMap<String,String>();
+					// colors
+					substOverrides.put(Manifest.S_SKIN_FOREGROUND_COLOR, config.getAttr(A_SKIN_FOREGROUND_COLOR));
+					substOverrides.put(Manifest.S_SKIN_BACKGROUND_COLOR, config.getAttr(A_SKIN_BACKGROUND_COLOR));
+					substOverrides.put(Manifest.S_SKIN_SECONDARY_COLOR, config.getAttr(A_SKIN_SECONDARY_COLOR));
+					substOverrides.put(Manifest.S_SKIN_SELECTION_COLOR, config.getAttr(A_SKIN_SELECTION_COLOR));
+					// images
+					substOverrides.put(Manifest.S_SKIN_LOGO_LOGIN_BANNER, config.getAttr(A_SKIN_LOGO_LOGIN_BANNER));
+					substOverrides.put(Manifest.S_SKIN_LOGO_APP_BANNER, config.getAttr(A_SKIN_LOGO_APP_BANNER));
+					substOverrides.put(Manifest.S_SKIN_LOGO_URL, config.getAttr(A_SKIN_LOGO_URL));
+					// help
+					substOverrides.put(Manifest.S_HELP_ADMIN_URL, config.getAttr(A_HELP_ADMIN_URL));
+					substOverrides.put(Manifest.S_HELP_ADVANCED_URL, config.getAttr(A_HELP_ADVANCED_URL));
+					substOverrides.put(Manifest.S_HELP_DELEGATED_URL, config.getAttr(A_HELP_DELEGATED_URL));
+					substOverrides.put(Manifest.S_HELP_STANDARD_URL, config.getAttr(A_HELP_STANDARD_URL));
+				}
 			}
 		}
 		catch (Exception e) {
