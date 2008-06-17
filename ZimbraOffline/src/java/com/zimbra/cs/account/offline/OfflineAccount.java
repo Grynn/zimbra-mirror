@@ -108,7 +108,6 @@ public class OfflineAccount extends Account {
     }
 
     private static final String[] sDisabledFeatures = new String[] {
-        Provisioning.A_zimbraFeatureTasksEnabled,
         Provisioning.A_zimbraFeatureNotebookEnabled,
         Provisioning.A_zimbraFeatureIMEnabled,
         Provisioning.A_zimbraFeatureGalEnabled,
