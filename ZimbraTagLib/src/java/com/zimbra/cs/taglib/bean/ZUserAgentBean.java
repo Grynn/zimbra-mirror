@@ -227,6 +227,9 @@ public class ZUserAgentBean {
             mRawVersion = v;
             if (v == null || v.length() == 0) return;
 
+            // so parseInt doesn't choke on something like 1.9pre
+            v = v.replaceAll("[^0-9\\.].*", "");
+            
             int d1 = v.indexOf('.');
             if (d1 != -1) {
                 mMajor = parseInt(v.substring(0, d1), -1);
