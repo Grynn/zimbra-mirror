@@ -1125,6 +1125,7 @@ function(action) {
 */
 ZmComposeView.prototype._getAddrString =
 function(addrVec, used) {
+	used = used || {};
 	var a = addrVec.getArray();
 	var addrs = [];
 	for (var i = 0; i < a.length; i++) {
@@ -1132,8 +1133,9 @@ function(addrVec, used) {
 		var email = addr ? addr.getAddress() : null;
 		if (!email) { continue; }
 		email = email.toLowerCase();
-		if (!used[email])
+		if (!used[email]) {
 			addrs.push(addr);
+		}
 		used[email] = true;
 	}
 	return addrs.join(AjxEmailAddress.SEPARATOR); // calls implicit toString() on each addr object
@@ -1279,11 +1281,18 @@ function(action, toOverride) {
 		// When updating address lists, use this._addressesMsg instead of this._msg, because
 		// this._msg changes after a draft is saved.
 		if (!this._addressesMsg.isSent) {
-			var addr = this._getAddrString(this._addressesMsg.getReplyAddresses(action, used), {});
+			var addrVec = this._addressesMsg.getReplyAddresses(action, used);
+			var addr = this._getAddrString(addrVec);
+			if (action == ZmOperation.REPLY_ALL) {
+				for (var i = 0, len = addrVec.size(); i < len; i++) {
+					var a = addrVec.get(i).address;
+					used[a] = true;
+				}
+			}
 			this.setAddress(AjxEmailAddress.TO, addr);
 		} else if (action == ZmOperation.REPLY) {
 			var toAddrs = this._addressesMsg.getAddresses(AjxEmailAddress.TO);
-			this.setAddress(AjxEmailAddress.TO, this._getAddrString(toAddrs, {}));
+			this.setAddress(AjxEmailAddress.TO, this._getAddrString(toAddrs));
 		}
 
 		// reply to all senders if reply all (includes To: and Cc:)
@@ -1301,10 +1310,7 @@ function(action, toOverride) {
 			}
 			this.setAddress(AjxEmailAddress.CC, this._getAddrString(addrs, used));
 		}
-	}
-	else if (action == ZmOperation.DRAFT ||
-			 action == ZmOperation.SHARE)
-	{
+	} else if (action == ZmOperation.DRAFT || action == ZmOperation.SHARE) {
 		for (var i = 0; i < ZmMailMsg.COMPOSE_ADDRS.length; i++) {
 			var addrs = this._msg.getAddresses(ZmMailMsg.COMPOSE_ADDRS[i]);
 			this.setAddress(ZmMailMsg.COMPOSE_ADDRS[i], addrs.getArray().join(AjxEmailAddress.SEPARATOR));
