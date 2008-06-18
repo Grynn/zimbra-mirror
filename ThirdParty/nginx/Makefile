@@ -31,6 +31,8 @@ build:
              --with-http_ssl_module \
              --with-sasl-inc=/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
              --with-mail \
+             --http-log-path=/opt/zimbra/log/nginx.access.log \
+             --error-log-path=/opt/zimbra/log/nginx.log \
              --with-mail_ssl_module; \
 	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
 	ln -s $(NGINX_INSTALL) $(ZIMBRA_HOME)/nginx
