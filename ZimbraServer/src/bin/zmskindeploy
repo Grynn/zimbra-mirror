@@ -51,7 +51,7 @@ SKIN_WORK_BASE="${mailboxd_directory}/webapps${BASE_URL}"
 
 # Make sure source exists, and copy it to working dir
 if [ -d "$SKIN_SRC" ]; then
-    SKIN_SRC_DIR=`cd $SKIN_SRC && pwd`
+    SKIN_SRC_DIR=`cd $SKIN_SRC && pwd -P`
     SKIN_NAME=`basename $SKIN_SRC`
     SKIN_WORK_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
 
