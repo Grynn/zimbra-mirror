@@ -535,7 +535,7 @@ DwtResizableWindow.__static_resizeMouseUp = function(ev) {
  * @author Mihai Bazon / mihai@zimbra.com
  */
 
-DwtWindowManager = function(parent) {
+DwtWindowManager = function(parent, zIndex) {
 	if (arguments.length > 0) {
 		DwtComposite.call(this, {parent:parent, className:"DwtWindowManager", posStyle:Dwt.ABSOLUTE_STYLE});
 
@@ -555,8 +555,7 @@ DwtWindowManager = function(parent) {
 		this._windowFocusListener = new AjxListener(this, this._windowFocusListener);
 		this._windowBlurListener = new AjxListener(this, this._windowBlurListener);
 		this._windowDisposeListener = new AjxListener(this, this._windowDisposeListener);
-
-		this.setZIndex(Dwt.Z_WINDOW_MANAGER);
+		this.setZIndex(zIndex);
 	}
 };
 
@@ -690,7 +689,7 @@ DwtWindowManager.prototype._windowDisposeListener = function(ev) {
 };
 
 DwtWindowManager.prototype._resetZIndexes = function() {
-	var start = Dwt.Z_VIEW + 50; // FIXME: should we actually add anything? not sure..
+	var start = this.getZIndex() + 50;
 	for (var i = this.visible_windows.size(); --i >= 0;) {
 		var win = this.visible_windows.get(i);
 		win.setZIndex(start + i);
