@@ -214,7 +214,7 @@ Dwt.KEY_ID = "_id_";
  * There is an explanation of this hack in Firefox's bug database:
  * https://bugzilla.mozilla.org/show_bug.cgi?id=167801#c6
  */
-Dwt.CARET_HACK_ENABLED = AjxEnv.isFirefox;
+Dwt.CARET_HACK_ENABLED = AjxEnv.isFirefox && !AjxEnv.isFirefox3up;
 if (Dwt.CARET_HACK_ENABLED) {
 	Dwt.CARET_HACK_BEGIN = "<div style='overflow:auto;'>";
 	Dwt.CARET_HACK_END = "</div>";
