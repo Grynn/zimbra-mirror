@@ -582,10 +582,11 @@ function(account) {
 		}
 		
 		
+		var targetServer =  (publicServiceServer == null) ? myServer : publicServiceServer;
 		if(!myServer)
 			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_CANNOT_FIND_SERVER,[ms]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 		
-		if(!publicServiceServer)
+		if(!targetServer)
 			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_CANNOT_FIND_SERVER,[publicServiceHostname]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 	
 		/*
@@ -618,38 +619,38 @@ function(account) {
         }
 		
 		var reversedProxiedMode = (myServer.attrs[ZaServer.A_zimbraMailReferMode] == "reverse-proxied");
-		if(reversedProxiedMode && !(publicServiceServer.attrs[ZaServer.A_zimbraReverseProxyHttpEnabled]=="TRUE")) {
+		if(reversedProxiedMode && !(targetServer.attrs[ZaServer.A_zimbraReverseProxyHttpEnabled]=="TRUE")) {
 			throw new AjxException(AjxMessageFormat.format(ZaMsg.REVERSED_PROXY_CONFIG_ERROR,[ms,(publicServiceHostname ? publicServiceHostname : ms), ZaDomain.A_zimbraPublicServiceHostname]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
                 
 		}
 		if(useSSL && reversedProxiedMode) {
 			mailProtocol = "https";
-			mailPort = publicServiceServer.attrs[ZaServer.A_zimbraMailSSLProxyPort];
+			mailPort = targetServer.attrs[ZaServer.A_zimbraMailSSLProxyPort];
 
 			if(!mailPort || mailPort < 1)
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailSSLProxyPort,publicServiceServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailSSLProxyPort,targetServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 
 		} else if (useSSL) {
 			mailProtocol = "https"; 
-			mailPort = publicServiceServer.attrs[ZaServer.A_zimbraMailSSLPort];
+			mailPort = targetServer.attrs[ZaServer.A_zimbraMailSSLPort];
 
 			if(!mailPort || mailPort < 1)
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailSSLPort,publicServiceServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailSSLPort,targetServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 
 		} else if(!useSSL && reversedProxiedMode) {
 			mailProtocol = "http"; 
-			mailPort = publicServiceServer.attrs[ZaServer.A_zimbraMailProxyPort];
+			mailPort = targetServer.attrs[ZaServer.A_zimbraMailProxyPort];
 
 			if(!mailPort || mailPort < 1)
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailProxyPort,publicServiceServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailProxyPort,targetServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 
 
 		} else {
 			mailProtocol = "http"; 
-			mailPort = publicServiceServer.attrs[ZaServer.A_zimbraMailPort];
+			mailPort = targetServer.attrs[ZaServer.A_zimbraMailPort];
 			
 			if(!mailPort || mailPort < 1)
-				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailPort,publicServiceServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
+				throw new AjxException(AjxMessageFormat.format(ZaMsg.INVALID_MAIL_PORT_ERROR,[ZaServer.A_zimbraMailPort,targetServer.attrs[ZaServer.A_ServiceHostname]]), AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
 			
 		}
 		
