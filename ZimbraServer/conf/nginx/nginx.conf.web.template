@@ -1,0 +1,19 @@
+http
+{
+    # .Define the collection of upstream HTTP servers to which we will proxy
+    #  Define each server:port against a server directive
+    # 
+    upstream ${web.upstream.name}
+    {
+	    ${web.upstream.:servers}
+        zmauth;
+    }
+
+    # HTTP route lookup handlers
+    # 
+    ${web.:routehandlers}
+    zmroute_timeout ${web.routetimeout};
+
+    ${web.enabled} include conf/${core.cprefix}.web.http;
+    ${web.enabled} include conf/${core.cprefix}.web.https;
+}

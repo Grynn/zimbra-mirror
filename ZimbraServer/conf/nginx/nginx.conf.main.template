@@ -1,0 +1,31 @@
+# change UID/GID to zimbra/zimbra upon startup
+# 
+user ${main.user} ${main.group};
+
+# number of worker processes to start 
+# multiply this by worker_connections to get the maximum number of connections 
+# that can be simultaneously handled by nginx (the product should not exceed
+# 65536, since that is the 16-bit limit of the TCP port range)
+# 
+worker_processes  ${main.workers};
+
+pid        ${main.pidfile};
+error_log  ${main.logfile} ${main.loglevel};
+
+
+events {
+    # number of simultaneous connections that each worker process can 
+    # handle simultaneously
+    # note that this number should not exceed the hard limit of the 
+    # RLIMIT_NOFILE resource limit that is set for the zimbra user, because
+    # RLIMIT_NOFILE defines the maximum number of open file descriptors that
+    # a process running as a user can have - by default, limits.conf on a 
+    # zimbra system will ensure that the zimbra user has more than 10k file
+    # descriptors allowed for a zimbra process
+
+    # (note) also see worker_rlimit_nofile at 
+    # http://wiki.codemongers.com/NginxMainModule#worker_rlimit_nofile
+    # 
+    worker_connections  ${main.workers};
+}
+

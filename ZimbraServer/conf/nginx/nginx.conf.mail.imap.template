@@ -1,0 +1,12 @@
+# IMAP proxy configuration
+# 
+server
+{
+    listen                  ${mail.imap.port};
+    protocol                imap;
+    proxy                   on;
+    sasl_service_name       "imap";
+    starttls                ${mail.imap.tls};
+}
+
+

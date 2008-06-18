@@ -1,0 +1,191 @@
+mail
+{
+    # POP/IMAP timeout
+    timeout                     ${mail.timeout};
+
+    # pass error messages from the backend server to the client
+    # if true, the error messages are passed to the client verbatim, else
+    # nginx logs the original error message in its log file and sends back
+    # a generic error message to the client
+    # 
+    proxy_pass_error_message    ${mail.passerrors};
+
+    # HTTP lookup handlers that will return the route information for a
+    # pop3/imap login
+    # 
+
+    ${mail.:auth_http}
+
+	pop3_capabilities        ${mail.pop3capa};
+	imap_capabilities        ${mail.imapcapa};
+
+    # IMAP4 ID Extension support (RFC 2971)
+    # Use the imap_id directive to specify the string that should be sent
+    # back by the proxy server back to the client upon receipt of an 
+    # IMAP ID command as described by RFC 2971
+    # There MUST be an even number of strings specified against 
+    # this directive, because RFC 2971 defines the server response to be 
+    # a list of field-value pairs (refer Formal Syntax, RFC 2971 Section 4)
+    # Each string in this list should be enclosed within double quotes
+    # If not quoted, they will be automatically quoted by nginx, but the 
+    # use of quotes allows the space character to be included within an 
+    # ID field or a value
+    # The odd numbered strings are treated as ID fields, with the following 
+    # even-numbered string considered to be the ID value corresponding to 
+    # the field name
+    # If omitted, the response to the ID command will be nil, which
+    # according to RFC 2971, is permissible in lieu of the field-value list
+    # The imap_id directive may be overridden in a server block
+    # 
+    imap_id         ${mail.imapid};
+
+    # master authenticating user for cases where nginx must authenticate 
+    # on behalf of the end user -- this is required in those sasl auth
+    # mechanisms where the user's plain-text password is not available,
+    # in these cases, after nginx has deemed that the user has authenticated
+    # himself/herself correctly, then nginx will use the master auth user 
+    # name and master auth password, along with the end user's user name, 
+    # in order to log in to the backend server
+    # such authentication will be done as per the PLAIN sasl mechanism as 
+    # defined in RFC 4616
+    # (presently, this will only be used for auth gssapi)
+    # 
+    master_auth_username    "${mail.duser}";
+    master_auth_password    "${mail.dpasswd}";
+
+    # sasl_app_name
+    # This is the application name which nginx will use when initializing
+    # the SASL library using the call to sasl_server_init()
+    # The SASL library is initialized once per process, the application name
+    # provided here is used for where to find the default configuration file
+    # If not specified, sasl_app_name defaults to "nginx"
+    # 
+    sasl_app_name           "${mail.saslapp}";
+
+    # Login rate limiting directives
+    # 
+
+    # mail_login_ip_max 
+    # 
+    # Sets the maximum number of times that any user is allowed to log in from
+    # a particular IP over POP or IMAP to this proxy server before the login is
+    # rejected with an appropriate protocol specific bye response
+    # This counter is cumulative for all users that appear to the proxy to be 
+    # logging in from the same IP address
+    # If multiple users appear to the proxy to be logging in from the same IP 
+    # address (usual with NATing), then each of the different users' login will
+    # contribute to increasing the hit counter for that IP address, and when the
+    # counter eventually exceeds mail_login_ip_max, then the connections from 
+    # that IP address will be throttled
+    # Therefore, all users from the same IP will contribute to
+    # (and be affected by) this counter
+    # Logins using all protocols (POP3/POP3S/IMAP/IMAPS) will affect this 
+    # counter, (the counter is aggregate for all protocols, *not* separate)
+    # See notes accompanying the mail_login_ip_ttl for reasonable values for
+    # this directive
+    # If this value is set to 0, then no throttling will take place for any IP
+    # 
+    mail_login_ip_max               ${mail.ipmax};
+
+    # mail_login_ip_ttl
+    # 
+    # Sets the time-to-live for the hit counter for IP login throttling
+    # Used in conjunction with mail_login_ip_max, this defines the semantics
+    # of the throttling for IP logins. Therfore, if this is set to 3600s, and
+    # if mail_login_ip_max is set to 1000, then it means that NGINX should not
+    # allow more than 1000 users to log in to the proxy from the same IP, 
+    # within the time interval of an hour (=3600s)
+    # The semantics for such a configuration would then be -
+    # "allow maximum 1000 users per hour from any given IP address"
+    #
+    mail_login_ip_ttl               ${mail.ipttl};
+
+    # Define a textual message that should be displayed to the user when
+    # his/her connection is rejected based on IP overusage
+    # This message will be encapsulated in the proper protocol specific 
+    # response to the client ("* BYE" for IMAP, and "-ERR" for POP3)
+    #
+    mail_login_ip_rejectmsg         "${mail.iprej}";
+
+    # Similar semantics for Rate Limiting User Logins
+    # Setting mail_login_user_max to 100 and mail_login_user_ttl to 3600s
+    # implies "allow maximum 100 logins per hour for any user"
+    # As with the ip counterparts, the user hit counter and timeout are 
+    # cumulative for all protocols
+    # Also, for a given user's login, both counters are checked in succession,
+    # with the IP counter being checked first
+    # A login may be rejected (throttled) because the IP is over-usage, or
+    # because the login name itself is over-usage
+    # A value of 0 indicates that no throttling will take place for any user
+    # 
+    mail_login_user_max             ${mail.usermax};
+    mail_login_user_ttl             ${mail.userttl};
+    mail_login_user_rejectmsg       "${mail.userrej}";
+
+    # Issue POP3 XOIP before logging in to upstream (Audit purposes)
+    # 
+    proxy_issue_pop3_xoip   ${mail.upstream.pop3xoip};
+
+    # Issue IMAP ID before logging in to upstream (Audit purposes)
+    #
+    proxy_issue_imap_id     ${mail.upstream.imapid};
+
+    # Supported SASL Authentication mechanisms
+    # 
+    # Use the pop3_auth and imap_auth to specify which SASL mechanisms are 
+    # enabled for POP and IMAP respectively
+    # These directives may be specified at mail{} level, or overridden at
+    # server{} level
+    # Even though an authentication mechanism may be listed against 
+    # pop3_auth and/or imap_auth, it may or may not be available depending
+    # on whether cleartext login is available (see description for starttls)
+    # For example, if starttls is set to only, then SASL PLAIN is not 
+    # available outside of TLS/SSL
+    # SASL mechanisms may be specified all on one line (space separated)
+    # against pop3_auth, or they may be specified on a separate line
+    # Specifying the SASL mechanisms on a separate line has the advantage
+    # that they can be enabled/disabled separately by zmmtaconfig using
+    # different LDAP attributes
+    # Currently, only PLAIN and GSSAPI mechanisms are supported
+    # 
+
+    ${mail.imap.authplain.enabled} imap_auth         plain;
+    ${mail.imap.authgssapi.enabled} imap_auth         gssapi;
+
+    ${mail.pop3.authplain.enabled} pop3_auth         plain;
+    ${mail.pop3.authgssapi.enabled} pop3_auth         gssapi;
+
+    # Specify whether to use literal strings while issuing the LOGIN command
+    # to the upstream server. If set to on, then it means that NGINX will use
+    # literal strings to log in to the upstream server, and so the upstream 
+    # MUST support literal strings
+    # If set to off, then NGINX uses quoted strings to log in to the upstream
+    # server when using the LOGIN command
+    # If not specified, imap_literalauth defaults to on
+    # 
+    imap_literalauth        ${mail.imap.literalauth};
+
+    # Auth Wait Interval
+    # Specifies the time interval that NGINX will wait before rejecting an
+    # authentication attempt with invalid credentials
+    # If not specified, this value defaults to 10 seconds
+    # 
+    auth_wait               ${mail.authwait};
+
+    # TLS configuration
+    # 
+    ssl_prefer_server_ciphers   ${mail.ssl.preferserverciphers};
+    ssl_certificate             ${mail.ssl.cert};
+    ssl_certificate_key         ${mail.ssl.key};
+    
+    # Ciphers configuration
+    # Permitted ciphers. Ciphers are assigned in the formats supported by OpenSSL
+    #
+    ssl_ciphers             ${mail.ssl.ciphers};
+
+    ${mail.enabled} include conf/${core.cprefix}.mail.imap;
+    ${mail.enabled} include conf/${core.cprefix}.mail.imaps;
+
+    ${mail.enabled} include conf/${core.cprefix}.mail.pop3;
+    ${mail.enabled} include conf/${core.cprefix}.mail.pop3s;
+}

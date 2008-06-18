@@ -1,0 +1,11 @@
+# IMAPS proxy configuration
+# 
+server
+{
+    listen              ${mail.imaps.port};
+    protocol            imap;
+    proxy               on;
+    ssl                 on;
+    sasl_service_name   "imap";
+}
+

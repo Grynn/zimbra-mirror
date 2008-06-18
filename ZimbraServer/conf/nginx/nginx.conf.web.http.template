@@ -1,0 +1,50 @@
+# HTTP Proxy Configuration
+# 
+server
+{
+    listen ${web.http.port};
+    client_max_body_size ${web.http.maxbody};
+
+    location /
+    {
+        include             conf/${core.cprefix}.web.http.mode-${web.mailmode};
+
+        # Begin stray redirect hack
+        # 
+        # In some cases, we may get a stray redirect out of the mailhost,
+        # which attempts to send us to $host:$mailhostport, where:
+        # 
+        # $host is the host portion (excluding port) of the proxy URL
+        # $mailhostport is the zimbraMailPort as applies to the mailhost
+        #   server being redirected to
+        # 
+        # This is the case when one mailhost in the upstream cluster is
+        # trying to redirect to another mailhost in the same cluster
+        # In this case, we need to trap and fudge this location header
+        # 
+        # NOTE that this will only work in the cases where each mailhost 
+        # within the cluster has the same mailhostport (Limitation)
+        # 
+
+        set $mailhostport ${web.http.uport};   # replace this with *the* mailhost port
+        set $relhost $host;
+
+        if ($mailhostport != 80) {   # standard HTTP port, do not replace
+            set $relhost $host:$mailhostport;
+        }
+
+        # End stray redirect hack
+
+        # Proxy to Zimbra Upstream
+        proxy_pass http://${web.upstream.name};
+
+        # For audit
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # For Virtual Hosting
+        proxy_set_header Host            $http_host;
+
+        # Fudge inter-mailbox redirects (kludge)
+        proxy_redirect http://$relhost/ http://$http_host/;
+    }
+}

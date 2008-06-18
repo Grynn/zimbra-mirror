@@ -1,0 +1,12 @@
+# Redirect Mode Configuration For HTTP
+
+            set $sslport ${web.https.port};
+            set $sslhost $host;
+            
+            if ($sslport != 443) # Standard SSL Port
+            {
+                set $sslhost $host:$sslport;
+            }
+            
+            rewrite ^/(.*)$ https://$sslhost/$1 redirect;
+

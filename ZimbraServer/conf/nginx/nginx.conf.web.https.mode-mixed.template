@@ -1,0 +1,29 @@
+# Mixed Mode Configuration For HTTPS
+
+            set $has_auth_token 0;
+            set $clearport ${web.http.port};
+            set $clearhost $host;
+            
+            if ($clearport != 80) { # Standard HTTP port 80
+                set $clearhost $host:$clearport;
+            }
+
+            if ($http_cookie ~* "ZM_AUTH_TOKEN=[^;]+(?:;|$)") {
+                set $has_auth_token 1;
+            }
+
+            # For change password, we don't want to redirect back to http:// otherwise
+            # we will get an infinite loop
+            # 
+
+            if ($uri ~* "changepass$") {
+                break;
+            }
+
+            # redirect (back) to http if we have a ZM_AUTH_TOKEN cookie
+            # 
+            if ($has_auth_token = 1) {
+                rewrite ^/(.*)$ http://$clearhost/$1 redirect;
+            }
+ 
+

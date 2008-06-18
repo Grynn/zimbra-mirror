@@ -1,0 +1,47 @@
+memcache
+{
+    # memcached server configuration
+    # configure one or more memcached servers that will cache the route 
+    # information for pop/imap users
+    # 
+    ${memcache.:servers}
+
+    # The time that NGINX will wait for a cached result from a memcached
+    # server, after which the request will be considered timed out,
+    # and NGINX will fall back to an http routing lookup handler
+    # 
+    timeout     ${memcache.timeout};
+
+    # The amount of time that NGINX will wait before attempting to reconnect
+    # to a memcache server that unexpectedly terminated (or shut down) its 
+    # connection with NGINX
+    # 
+    reconnect   ${memcache.reconnect};
+
+    # The time to live (TTL) for an entry added to the memcached server 
+    # This value represents the amount of time that the route information 
+    # that is cached into the memcached servers will be available, before 
+    # the memcached daemon expires it
+    # Memcached expects the TTL for an entry to be specified in seconds, 
+    # therefore any value specified in milliseconds here will be rounded 
+    # up to the next integer value in seconds. If not specified, the TTL
+    # defaults to 0, which indicates an infinite time to live for the 
+    # routing information
+    # 
+    ttl         ${memcache.ttl};
+
+    # Whether or not to cache unqualified login names - this is useful in 
+    # deployments where there is only one domain, but many users, so that a 
+    # user may log in without the @domain suffix to the login name. If this
+    # flag is enabled, then no domain is suffixed to the key of the route
+    # information entry in the cache - If this flag is disabled, then the 
+    # IP address of the network interface of the proxy server is suffixed
+    # to the user's unqualified login name, and that is used as the key 
+    # for the route information - this will make sure that in future, the
+    # same user logging in to the same proxy using an unqualified login 
+    # name will benefit from the previously cached route information, if any
+    # By default, this value is off
+    # 
+    allow_unqualified    ${memcache.unqual};
+}
+

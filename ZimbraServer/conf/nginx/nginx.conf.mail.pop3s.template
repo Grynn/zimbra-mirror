@@ -1,0 +1,11 @@
+# POP3S proxy configuration
+#
+server
+{
+    listen              ${mail.pop3s.port};
+    protocol            pop3;
+    proxy               on;
+    ssl                 on;
+    sasl_service_name   "pop";
+}
+
