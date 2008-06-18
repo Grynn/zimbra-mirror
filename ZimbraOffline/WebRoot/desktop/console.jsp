@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setBundle basename="desktop.messages" />
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.ConsoleBean"/>
 <jsp:setProperty name="bean" property="*"/>
@@ -16,7 +19,8 @@
 <meta http-equiv="refresh" content="15" >
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
-<title>Zimbra Desktop ${bean.appVersion}</title>
+<title><fmt:message key='ZimbraDesktop'/> &#32; ${bean.appVersion} &#40;<c:out value="${pageContext.request.locale.language}" />_<c:out value="${pageContext.request.locale.country}" />&#41; </title>
+
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);
 </style>
@@ -56,6 +60,8 @@ function OnLoginTo(username) {
 </head>
 
 <body>
+<c:set var='moveup' scope='application'><fmt:message key='MoveUp'/></c:set>
+
 <br><br><br><br><br><br>
 <div align="center">
 <c:choose>
@@ -63,18 +69,16 @@ function OnLoginTo(username) {
 
 <div id="welcome" class='ZWizardPage ZWizardPageBig'>
     <div class='ZWizardPageTitle'>
-        Welcome to the Zimbra Desktop setup wizard!
+        <fmt:message key='WizardTitle'/>
     </div>
 <span class="padding">
-    <p>Zimbra Desktop allows you to access your email while your computer 
-        is disconnected from the internet.
+    <p><fmt:message key='WizardDescP1'/>
 
     </p>
 
-    <p>To use Zimbra Desktop, you must first enter settings for an existing mail account.  </p>
+    <p><fmt:message key='WizardDescP2'/></p>
 
-    <p>     You must be online to setup the account -- if you are not online now, 
-        please quit and launch the application again later when you are connected.
+    <p><fmt:message key='WizardDescP3'/>
     </p>
     </span>
     <table class="ZWizardButtonBar" width="100%">
@@ -83,7 +87,7 @@ function OnLoginTo(username) {
                 <div></div>
             </td>
             <td class="ZWizardButton" width="1%">
-                <button class='DwtButton-focused' onclick="OnNew()">Set Up an Account</button>
+                <button class='DwtButton-focused' onclick="OnNew()"><fmt:message key='SetupAnAccount'/></button>
             </td>
     </table>
 
@@ -98,31 +102,43 @@ function OnLoginTo(username) {
     <input type="hidden" name="username">
 </form>
 
-
 <div id="console" class="ZWizardPage">
 
 		<table border=0 cellpadding=0 cellspacing=0 class="ZWizardPageTitle" width="100%">
 			<tr>
 				<td class='ZHeadTitle'>
-					Zimbra Desktop Accounts Setup
+					<fmt:message key='HeadTitle' />
 				</td>
 				<td class='ZHeadHint'>
-					Click <b><img src='/zimbra/img/startup/ImgLogoff.gif' width=16px height=16px align=top> Setup</b> to come back here later.
+					<fmt:message key='HeadHint'>
+						<fmt:param>
+							<b><img src='/zimbra/img/startup/ImgLogoff.gif' width=16px height=16px align=top> <fmt:message key='Setup'/></b>
+						</fmt:param>
+					</fmt:message> 
 				</td>
 			</tr>
 		</table>
 
 <span class="padding">
-	<p>Click an account name below to manage it.</p>
-
-
+	<p><fmt:message key='Instruction' /></p>
+	
     <table class="ZWizardTable" cellpadding=5 border=0 align="center">
-    	<tr><th>Account Name</th><th>Email Address</th><th>Last Sync</th><th>Status</th><th>Order</th></tr>
+    	<tr><th><fmt:message key='AccountName'/></th><th><fmt:message key='EmailAddress'/></th><th><fmt:message key='LastSync'/></th><th><fmt:message key='Status'/></th><th><fmt:message key='Order'/></th></tr>
     	
-    	<c:forEach items="${accounts}" var="account">
+    	<c:forEach items="${accounts}" var="account">			
 	        <tr><td><a href="javascript:OnAccount('${account.id}', ${account.zmail})">${account.name}</a></td>
 	            <td>${account.email}</td>
-	            <td>${account.lastSync}</td>
+				<td>
+					<c:choose>
+						<c:when test='${account.lastSync == "not yet complete"}'>
+							<fmt:message key='SyncNotYetComplete'/>
+						</c:when>
+						<c:otherwise>
+							<fmt:parseDate value="${account.lastSync}" pattern="MM/dd/yyyy 'at' h:mma" var="syncdate"/>
+							<fmt:formatDate value="${syncdate}" type="both" dateStyle="short" timeStyle="short"/>
+						</c:otherwise>
+					</c:choose>
+				</td>
 	            <td><table border="0" cellspacing="0" cellpadding="0"><tr><td class="noborder">
 		            <c:choose>
 	                   <c:when test="${account.statusUnknown}">
@@ -171,7 +187,7 @@ function OnLoginTo(username) {
 	           </td>
 		       <td align="center">
 		           <c:if test="${not account.first}">
-		               <a href="javascript:OnPromote('${account.id}')"><img src="/zimbra/img/arrows/ImgUpArrow.gif" border="0" alt="Move Up"></a>
+		               <a href="javascript:OnPromote('${account.id}')"><img src="/zimbra/img/arrows/ImgUpArrow.gif" border="0" alt="${moveup}"></a>
 		           </c:if>
 		       </td>
 	        </tr>
@@ -183,13 +199,13 @@ function OnLoginTo(username) {
     <table class="ZWizardButtonBar" width="100%" border="0">
         <tr>
             <td class="ZWizardButton">
-                <button class='DwtButton' onclick="OnNew()">Set Up Another Account</button>
+                <button class='DwtButton' onclick="OnNew()"><fmt:message key='SetupAnotherAcct'/></button>
             </td>
             <td class="ZWizardButtonSpacer">
                 <div></div>
             </td>
             <td class="ZWizardButton" width="1%">
-                <button class='DwtButton-focused' onclick="OnLogin()">Go to Zimbra Desktop</button>
+                <button class='DwtButton-focused' onclick="OnLogin()"><fmt:message key='GotoDesktop'/></button>
             </td>
          </tr>
     </table>

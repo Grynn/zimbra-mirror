@@ -1,7 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
-<%@taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
+<%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setBundle basename="desktop.messages" />
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.YmailBean" scope="request"/>
 <jsp:setProperty name="bean" property="*"/>
@@ -43,7 +46,7 @@ ${zdf:doRequest(bean)}
     </c:when>
     
     <c:otherwise>
-        <p class='ZOfflineError'>Unexpected error!</p>
+        <p class='ZOfflineError'><fmt:message key='UnexpectedError'/></p>
     </c:otherwise>
 </c:choose>
 </div>

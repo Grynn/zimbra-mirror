@@ -213,6 +213,9 @@
                 <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
                         <fileset dir="WebRoot/WEB-INF/tags/desktop" />
                 </copy>
+                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/classes/desktop" />
+                </copy>
                 <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
                         <fileset dir="WebRoot/WEB-INF/tlds" />
                 </copy>
@@ -239,6 +242,10 @@
 		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop"/>
 		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tags/desktop" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
+		</copy>
+		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/classes/desktop"/>
+		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/classes/desktop" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties"/>
 		</copy>
                 <copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tlds" overwrite="true">
                         <fileset dir="WebRoot/WEB-INF/tlds" />
@@ -761,6 +768,9 @@
                 <copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
                         <fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag" />
                 </copy>
+                <copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties" />
+                </copy>
                 <copy todir="${jetty.home.dir}/webapps/zimbra/WEB-INF/tlds" overwrite="true">
                         <fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld" />
                 </copy>
@@ -772,6 +782,9 @@
                 </copy>
                 <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
                         <fileset dir="WebRoot/WEB-INF/tags/desktop" includes="*.tag"/>
+                </copy>
+                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
+                        <fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties"/>
                 </copy>
                 <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
                         <fileset dir="WebRoot/WEB-INF/tlds" includes="*.tld"/>

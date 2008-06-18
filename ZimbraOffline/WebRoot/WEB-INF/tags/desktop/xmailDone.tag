@@ -2,7 +2,10 @@
 <%@ attribute name="uri" required="true" %>
 <%@ attribute name="name" required="true" %>
 
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setBundle basename="desktop.messages" />
 
 <script type="text/javascript">
 <!--
@@ -26,29 +29,27 @@ function OnLogin() {
 <c:choose>
     <c:when test="${bean.add}">
 		<div id="serviceCreated" class="ZWizardPage ZWizardPageBig">
-		    <div class="ZWizardPageTitle">Service Created</div>
+		    <div class="ZWizardPageTitle"><fmt:message key='ServiceCreated'/></div>
 		<span class="padding">
-		    <p>Your mail service "${name}" has been successfully set up.
+		    <p><fmt:message key='ServiceAdded'><fmt:param>"${name}"</fmt:param></fmt:message>
 		    </p>
 		
-		    <p>Note that the first synchronization takes a while to run,
-		        possibly hours if you have a lot of messages in the account.
-		        However, you can start using this account right away.
+		    <p><fmt:message key='ServiceAddedNote'/>
 		    </p>
 </span>		
 		    <table class="ZWizardButtonBar" width="100%">
 		        <tr>
 		            <td class="ZWizardButton">
-		                <button class='DwtButton' onclick="OnNew()">Set Up Another Account</button>
+		                <button class='DwtButton' onclick="OnNew()"><fmt:message key='SetupAnotherAcct'/></button>
 		            </td>
 		            <td class="ZWizardButton" width="1%">
-		                <button class='DwtButton' onclick="OnLogin()">Go to Zimbra Desktop</button>
+		                <button class='DwtButton' onclick="OnLogin()"><fmt:message key='GotoDesktop'/></button>
 		            </td>
 		            <td class="ZWizardButtonSpacer">
                         <div></div>
                     </td>
                     <td class="ZWizardButton" width="1%">
-                        <button class='DwtButton' onclick="OnOK()">OK</button>
+                        <button class='DwtButton' onclick="OnOK()"><fmt:message key='OK'/></button>
                     </td>
 		    </table>
 		</div>
@@ -56,9 +57,9 @@ function OnLogin() {
 
     <c:when test="${bean.modify}">
         <div id="serviceDeleted" class="ZWizardPage">
-            <div class="ZWizardPageTitle">Manage Service</div>
+            <div class="ZWizardPageTitle"><fmt:message key='ManageService'/></div>
       		<span class="padding">
-            <p>Service "${name}" has been updated.</p>
+            <p><fmt:message key='ServiceUpdated'><fmt:param>"${name}"</fmt:param></fmt:message></p>
 			</span>        
             <table class="ZWizardButtonBar" width="100%">
                 <tr>
@@ -66,7 +67,7 @@ function OnLogin() {
                         <div></div>
                     </td>
                     <td class="ZWizardButton" width="1%">
-                        <button class='DwtButton' onclick="OnOK()">OK</button>
+                        <button class='DwtButton' onclick="OnOK()"><fmt:message key='OK'/></button>
                     </td>
             </table>
         </div>
@@ -74,9 +75,9 @@ function OnLogin() {
 
     <c:when test="${bean.reset}">
         <div id="serviceDeleted" class="ZWizardPage">
-            <div class="ZWizardPageTitle">Manage Service</div>
+            <div class="ZWizardPageTitle"><fmt:message key='ManageService'/></div>
         		<span class="padding">
-            <p>Service "${name}" has been reset.</p>
+            <p><fmt:message key='ServiceReset'><fmt:param>"${name}"</fmt:param></fmt:message></p>
         </span>
             <table class="ZWizardButtonBar" width="100%">
                 <tr>
@@ -84,7 +85,7 @@ function OnLogin() {
                         <div></div>
                     </td>
                     <td class="ZWizardButton" width="1%">
-                        <button class='DwtButton' onclick="OnOK()">OK</button>
+                        <button class='DwtButton' onclick="OnOK()"><fmt:message key='OK'/></button>
                     </td>
             </table>
         </div>
@@ -92,9 +93,9 @@ function OnLogin() {
 
     <c:when test="${bean.delete}">
 		<div id="serviceDeleted" class="ZWizardPage">
-		    <div class="ZWizardPageTitle">Manage Service</div>
+		    <div class="ZWizardPageTitle"><fmt:message key='ManageService'/></div>
 				<span class="padding">
-		    <p>Service "${name}" has been deleted.</p>
+		    <p><fmt:message key='ServiceDeleted'><fmt:param>"${name}"</fmt:param></fmt:message></p>
 		</span>
 		    <table class="ZWizardButtonBar" width="100%">
 		        <tr>
@@ -102,7 +103,7 @@ function OnLogin() {
 		                <div></div>
 		            </td>
 		            <td class="ZWizardButton" width="1%">
-		                <button class='DwtButton' onclick="OnOK()">OK</button>
+		                <button class='DwtButton' onclick="OnOK()"><fmt:message key='OK'/></button>
 		            </td>
 		    </table>
 		</div>
