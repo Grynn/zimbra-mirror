@@ -1751,7 +1751,7 @@ function(ev) {
 
 	var el = DwtUiEvent.getTarget(ev);
 
-	if(el.className != "sched_grid") {
+	if(el.className != "sched_grid" && el.className != "sched_grid_eod") {
 		return;
 	}
 
@@ -1763,10 +1763,17 @@ function(ev) {
 
 	this._clearFreeSelections();
 
-	this.setDate({s: time, e: time + dur});
-	var newStartDate = this.getSelectedStartDate();
+	var date = new Date(time);
 
-	var newSlot = { s: newStartDate.getTime(), e: newStartDate.getTime() + dur};
+    var newStartDate = null;
+    if((date.getMinutes()==0) && (date.getHours()==0) && (date.getSeconds()==0)) {
+        newStartDate = date;
+    } else {
+        this.setDate({s: time, e: time + dur});
+        newStartDate = this.getSelectedStartDate();
+    }
+
+    var newSlot = { s: newStartDate.getTime(), e: newStartDate.getTime() + dur};
 
 	this._currentFreeSlot = newSlot;
 	this._positionFreeStatusDiv(newSlot, startTime, endTime);
