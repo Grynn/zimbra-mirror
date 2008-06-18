@@ -110,7 +110,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/junit-3.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/junit-4.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
