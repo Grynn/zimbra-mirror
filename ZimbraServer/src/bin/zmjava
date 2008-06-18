@@ -35,7 +35,7 @@ CYGWIN*) PATHSEP=";";;
 *) PATHSEP=":";;
 esac
 
-ZIMBRA_EXTENSIONS="backup clamscanner network zimbra-license zimbrahsm zimbrasync"
+ZIMBRA_EXTENSIONS="backup clamscanner network zimbra-license zimbrahsm zimbrasinglebackup zimbrasync"
 ZIMBRA_EXT_DIR="/opt/zimbra/lib/ext-common"
 for i in $ZIMBRA_EXTENSIONS; do
   if [ -d "/opt/zimbra/lib/ext/$i" ]; then
