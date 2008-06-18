@@ -1,0 +1,120 @@
+
+<template id='CalSchedulerView_Main'>
+	<table border=0 width=100% cellpadding=3><tr>
+        <td width=100%>
+            <table border=0 width="100%">
+            <tr>
+            <td colspan="2" id="${id}_autoPickCell" width="100" valign="top">
+
+            </td>
+            <td rowspan="2">
+            <!-- date/time section -->
+			<table border=0>
+            <$= AjxTemplate.expand("calendar.Appointment#ApptTimeSection", data) $>
+            </table>
+            </td>
+            </tr>
+            <tr>
+                <td class="ZmApptTabViewPageField"><$= ZmMsg.durationLabel $></td>
+                <td id="${id}_durationCell"></td>
+            </tr>
+            </table>
+        </td>
+
+        <td style='text-align:right'>
+			<!-- key/legend section -->
+			<table border=0 cellpadding=0 cellspacing=0 class='ZmGraphKey'>
+				<tr>
+					<td class='ZmGraphKeyHeader'><$= ZmMsg.key $></td>
+				</tr>
+				<tr>
+					<td class='ZmGraphKeyBody'>
+						<table border=0 cellspacing=2>
+							<tr>
+								<td><div class='ZmGraphKeyColorBox ZmScheduler-free'></div></td>
+								<td class='ZmGraphKeyColorText'><$= ZmMsg.free $></td>
+								<td>&nbsp;</td>
+								<td><div class='ZmGraphKeyColorBox ZmScheduler-busy'></div></td>
+								<td class='ZmGraphKeyColorText'><$= ZmMsg.busy $></td>
+								<td>&nbsp;</td>
+								<td><div class='ZmGraphKeyColorBox ZmScheduler-tentative'></div></td>
+								<td class='ZmGraphKeyColorText'><$= ZmMsg.tentative $></td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td><div class='ZmGraphKeyColorBox ZmScheduler-unknown'></div></td>
+								<td class='ZmGraphKeyColorText'><$= ZmMsg.unknown $></td>
+								<td>&nbsp;</td>
+								<td><div class='ZmGraphKeyColorBox ZmScheduler-outOfOffice'></div></td>
+								<td class='ZmGraphKeyColorText'><$= ZmMsg.outOfOffice $></td>
+								<td>&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr></table>
+	<div style='margin-top:25'>
+		<!-- free/busy section -->
+		<table style='padding-left:3px;' border=0 cellpadding=0 cellspacing=0 id='${id}_attendeesTable'>
+			<colgroup>
+				<col style='width:265px' />
+				<col style='width:626px' />
+			</colgroup>
+			<tr>
+				<td align='center' id='${id}_navToolbar'></td>
+				<td>
+					<!--table border=0 cellpadding=0 cellspacing=0 class='ZmSchedulerGridHeaderTable'>
+						<tr>
+						<$
+							for (var j = 0; j <= 24; j++) {
+								var hour = AjxDateUtil.isLocale24Hour() ? j : ((j % 12) || 12);
+						$>
+								<td><div class='ZmSchedulerGridHeaderCell'><$= hour $></div></td>
+						<$	} $>
+						</tr>
+					</table-->
+				</td>
+			</tr>
+		</table>
+	</div>
+</template>
+
+
+<template id='CalScheduler_TimeGrid'>
+<table border=0 cellpadding=0 cellspacing=0 height="100%">
+<tr>
+    <$
+       for (var k = 0; k < data.numDays; k++) {
+	    var titleId = data.columns[k].titleId;
+    $>
+        <td width="<$= data.dayColumnWidth $>" colspan="24" class="calendar_heading" height="<$= data.dayHeadingHeight $>"><div id="<$= titleId $>"></div></td>    
+    <$
+        }
+    $>
+</tr>
+<tr>
+    <$
+       for (var k = 0; k < data.numDays*24; k++) {
+        var dayHr = k % 24;
+        var hour = AjxDateUtil.isLocale24Hour() ? dayHr : ((dayHr % 12) || 12);
+    $>
+        <td width="<$= data.hourWidth $>" class="calendar_heading" height="<$= data.dayHeadingHeight $>"><div style="width:<$= AjxEnv.isIE ? data.hourWidth : (data.hourWidth-1) $>; overflow:hidden;font-size:9px;"><$= hour $></div></td>
+    <$
+        }
+    $>
+</tr>
+    <tr>
+        <$
+           for (var k = 0; k < data.numDays*24; k++) {
+            var gridClass = (k!=0  && ((k%24)==0)) ? "sched_grid_eod" : "sched_grid"; 
+        $>
+            <td width="<$= data.hourWidth $>" height="100%"><div style="width:<$= data.hourWidth-1 $>; overflow:hidden;font-size:9px;" class="<$= gridClass $>">&nbsp;</div></td>
+        <$
+            }
+        $>
+    </tr>
+
+</table>
+</template>        

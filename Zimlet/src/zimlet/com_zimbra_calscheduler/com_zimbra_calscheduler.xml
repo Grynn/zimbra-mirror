@@ -1,0 +1,12 @@
+<zimlet name="com_zimbra_calscheduler" version="1.0" description="Calendar Scheduler">
+	<include>calscheduler.js</include>
+	<includeCSS>calscheduler.css</includeCSS>
+	<include>templates/CalScheduler.template.js</include>	
+	<handlerObject>Com_Zimbra_CalScheduler</handlerObject>
+
+	<zimletPanelItem label="Calendar Scheduler">
+		<toolTipText>Calendar Scheduler</toolTipText>
+        <dragSource type="ZmMailMsg" />
+        <dragSource type="ZmConv" />
+	</zimletPanelItem>
+</zimlet>

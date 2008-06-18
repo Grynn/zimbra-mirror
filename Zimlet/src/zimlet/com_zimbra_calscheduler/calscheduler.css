@@ -1,0 +1,30 @@
+.CalScheduler_TimeGrid {
+	background-color: #ffffff;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.sched_grid {
+    border-right: 1px dashed #9acbfd;
+    height: 100%;
+    font-size: 0pt;
+    cursor: pointer;
+}
+
+.sched_grid_eod {
+    border-right: 1px solid #9acbfd;
+    height: 100%;
+    font-size: 0pt;
+}
+
+.schedule_grid_separator {
+    font-size: 0pt;
+}
+
+.ScheduleView_FreeRange {
+    border-left: 3px solid green;
+    border-right: 3px solid darkred;
+    font-size: 0pt;
+    padding: 0px;
+    margin: 0px;
+}
