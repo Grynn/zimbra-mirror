@@ -27,9 +27,25 @@ use FileHandle;
 
 my $enabledHTTPProxy;
 my $enabledMailProxy;
+my ($i1, $i2, $i3, $i4, $p1, $p2, $p3, $p4, $w1, $w2, $w3, $w4);
+
+my %packageServiceMap = (
+  mailbox   => "zimbra-store",
+  imapproxy => "zimbra-proxy",
+);
+
+my $ImapEnabled="7143:143:7993:993";
+my $ImapDisabled="143:7143:993:7993";
+my $PopEnabled="7110:110:7995:995";
+my $PopDisabled="110:7110:995:7995";
+my $WebEnabled="8080:80:8443:443";
+my $WebDisabled="80:0:443:0";
+my $MailMode="mixed";
 
 our $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
 chomp $platform;
+
+our $ZMPROV = "/opt/zimbra/bin/zmprov -l";
 
 my $id = `whoami`;
 chomp $id;
@@ -41,7 +57,7 @@ if ($id ne "zimbra") {
 our %options = ();
 our %loaded = ();
 
-getopts('defhmsw',\%options) or die "Unable to set options\n";
+getopts('a:defhi:mp:swx:',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
@@ -70,6 +86,28 @@ if (!$options{f}) {
    }
 }
 
+if (!$options{d} && !$options{e} && ($options{i} || $options{p} || $options{a})) {
+    usage();
+    exit 1;
+}
+
+if (($options{d} || $options{e}) && ($options{i} || $options{p}) && !$options{m}) {
+    usage();
+    exit 1;
+}
+if (($options{d} || $options{e}) && $options{a} && !$options{w}) {
+    usage();
+    exit 1;
+}
+if (!$options{d} && $options{x}) {
+    usage();
+    exit 1;
+}
+if ($options{d} && $options{x} && !$options{w}) {
+    usage();
+    exit 1;
+}
+
 if ($#ARGV == -1) {
     usage();
     exit 1;
@@ -78,7 +116,7 @@ if ($#ARGV == -1) {
 
 my $hostname = $ARGV[0];
 
-open(ZMPROV, "|zmprov -l");
+open(ZMPROV, "|$ZMPROV");
 
 if ($options{f}) {
   my $zimbraReverseProxyMailHostQuery =
@@ -106,60 +144,123 @@ if ($options{f}) {
 }
 
 if ($options{e}) {
-  if ($options{m}) {
-     print ZMPROV "ms $hostname ".
-       "zimbraImapBindPort 7143 "."zimbraImapProxyBindPort 143 ".
-       "zimbraImapSSLBindPort 7993 "."zimbraImapSSLProxyBindPort 993 ".
-       "zimbraPop3BindPort 7110 "."zimbraPop3ProxyBindPort 110 ".
-       "zimbraPop3SSLBindPort 7995 "."zimbraPop3SSLProxyBindPort 995 ".
-       "zimbraReverseProxyMailEnabled TRUE ".
-       "zimbraImapCleartextLoginEnabled TRUE ".
-       "zimbraPop3CleartextLoginEnabled TRUE\n"
+  if ($options{i}) {
+       $ImapEnabled = $options{i};
   }
-  if ($options{w}) {
-     print ZMPROV "ms $hostname ".
-     "zimbraMailReferMode reverse-proxied ".
-     "zimbraMailPort 8080 ".
-     "zimbraMailSSLPort 8443 ".
-     "zimbraMailMode http ".
-     "zimbraMailProxyPort 80 ".
-     "zimbraMailSSLProxyPort 443 ".
-     "zimbraReverseProxyHttpEnabled TRUE\n";
+  if ($options{p}) {
+       $PopEnabled = $options{p};
   }
-
-  print ZMPROV "ms $hostname ".
-    "+zimbraServiceEnabled imapproxy\n";
+  if ($options{a}) {
+       $WebEnabled = $options{a};
+  }
+  chomp ($ImapEnabled);
+  chomp ($PopEnabled);
+  chomp ($WebEnabled);
+  ($i1,$i2,$i3,$i4) = split /:/, $ImapEnabled, 4;
+  ($p1,$p2,$p3,$p4) = split /:/, $PopEnabled, 4;
+  ($w1,$w2,$w3,$w4) = split /:/, $WebEnabled, 4;
+  if (isEnabled("zimbra-store")) {
+       if ($options{m}) {
+          print ZMPROV "ms $hostname ".
+            "zimbraImapBindPort $i1 ".
+            "zimbraImapSSLBindPort $i3 ".
+            "zimbraPop3BindPort $p1 ".
+            "zimbraPop3SSLBindPort $p3 ".
+            "zimbraImapCleartextLoginEnabled TRUE ".
+            "zimbraPop3CleartextLoginEnabled TRUE\n"
+       }
+       if ($options{w}) {
+          print ZMPROV "ms $hostname ".
+          "zimbraMailReferMode reverse-proxied ".
+          "zimbraMailPort $w1 ".
+          "zimbraMailSSLPort $w3 ".
+          "zimbraMailMode http\n";
+       }
+  }
+  if (isInstalled("zimbra-proxy")) {
+       if ($options{m}) {
+	        print ZMPROV "ms $hostname ".
+            "zimbraImapProxyBindPort $i2 ".
+            "zimbraImapSSLProxyBindPort $i4 ".
+            "zimbraPop3ProxyBindPort $p2 ".
+            "zimbraPop3SSLProxyBindPort $p4 ".
+            "zimbraReverseProxyMailEnabled TRUE\n";
+	   }
+       if ($options{w}) {
+	        print ZMPROV "ms $hostname ".
+            "zimbraMailProxyPort $w2 ".
+            "zimbraMailSSLProxyPort $w4 ".
+            "zimbraReverseProxyHttpEnabled TRUE\n";
+	   }
+       if (!isEnabled("zimbra-proxy")) {
+            print ZMPROV "ms $hostname ".
+                 "+zimbraServiceEnabled imapproxy\n";
+       }
+  }
 }
 
 if ($options{d}) {
-  if ($options{m}) {
-     print ZMPROV "ms $hostname ".
-       "zimbraImapBindPort 143 "."zimbraImapProxyBindPort 7143 ".
-       "zimbraImapSSLBindPort 993 "."zimbraImapSSLProxyBindPort 7993 ".
-       "zimbraPop3BindPort 110 "."zimbraPop3ProxyBindPort 7110 ".
-       "zimbraPop3SSLBindPort 995 "."zimbraPop3SSLProxyBindPort 7995 ".
-       "zimbraReverseProxyMailEnabled FALSE\n";
-     if ($options{s}) {
-       print ZMPROV "ms $hostname ".
-         "zimbraImapCleartextLoginEnabled FALSE ".
-         "zimbraPop3CleartextLoginEnabled FALSE\n";
-     }
+  if ($options{i}) {
+       $ImapDisabled = $options{i};
   }
-  if ($options{w}) {
-     print ZMPROV "ms $hostname ".
-       "zimbraMailReferMode wronghost ".
-       "zimbraMailPort 80 ".
-       "zimbraMailSSLPort 443 ".
-       "zimbraMailMode mixed ".
-       "zimbraMailProxyPort 0 ".
-       "zimbraMailSSLProxyPort 0 ".
-       "zimbraReverseProxyHttpEnabled FALSE\n";
+  if ($options{p}) {
+       $PopDisabled = $options{p};
   }
-  $enabledHTTPProxy = getLdapServerValue("zimbraReverseProxyHttpEnabled");
-  $enabledMailProxy = getLdapServerValue("zimbraReverseProxyMailEnabled");
-  if ($enabledHTTPProxy eq "FALSE" && $enabledMailProxy eq "FALSE" ) {
-     print ZMPROV "ms $hostname ".
-       "-zimbraServiceEnabled imapproxy\n";
+  if ($options{a}) {
+       $WebDisabled = $options{a};
+  }
+  chomp ($ImapDisabled);
+  chomp ($PopDisabled);
+  chomp ($WebDisabled);
+  ($i1,$i2,$i3,$i4) = split /:/, $ImapDisabled, 4;
+  ($p1,$p2,$p3,$p4) = split /:/, $PopDisabled, 4;
+  ($w1,$w2,$w3,$w4) = split /:/, $WebDisabled, 4;
+  if (isEnabled("zimbra-store")) {
+       if ($options{m}) {
+          print ZMPROV "ms $hostname ".
+            "zimbraImapBindPort $i1 ".
+            "zimbraImapSSLBindPort $i3 ".
+            "zimbraPop3BindPort $p1 ".
+            "zimbraPop3SSLBindPort $p3\n";
+          if ($options{s}) {
+            print ZMPROV "ms $hostname ".
+              "zimbraImapCleartextLoginEnabled FALSE ".
+              "zimbraPop3CleartextLoginEnabled FALSE\n";
+          }
+       }
+       if ($options{w}) {
+		  if ($options{x}) {
+		       $MailMode=$options{x};
+		  }
+		  chomp ($MailMode);
+          print ZMPROV "ms $hostname ".
+            "zimbraMailReferMode wronghost ".
+            "zimbraMailPort $w1 ".
+            "zimbraMailSSLPort $w3 ".
+            "zimbraMailMode $MailMode\n";
+       }
+  }
+  if (isInstalled("zimbra-proxy")) {
+       if ($options{m}) {
+            print ZMPROV "ms $hostname ".
+            "zimbraImapProxyBindPort $i2 ".
+            "zimbraImapSSLProxyBindPort $i4 ".
+            "zimbraPop3ProxyBindPort $p2 ".
+            "zimbraPop3SSLProxyBindPort $p4\n";
+            "zimbraReverseProxyMailEnabled FALSE\n";
+	   }
+	   if ($options{w}) {
+            print ZMPROV "ms $hostname ".
+            "zimbraMailProxyPort $w2 ".
+            "zimbraMailSSLProxyPort $w4 ".
+            "zimbraReverseProxyHttpEnabled FALSE\n";
+	   }
+       $enabledHTTPProxy = getLdapServerValue("zimbraReverseProxyHttpEnabled");
+       $enabledMailProxy = getLdapServerValue("zimbraReverseProxyMailEnabled");
+       if ($enabledHTTPProxy eq "FALSE" && $enabledMailProxy eq "FALSE" && isEnabled("zimbra-proxy")) {
+            print ZMPROV "ms $hostname ".
+               "-zimbraServiceEnabled imapproxy\n";
+       }
   }
 }
 
@@ -167,17 +268,25 @@ close ZMPROV;
 exit 0;
 
 sub usage() {
-  print "Usage: $0 [-h] [-m] [-w] [-d [-s]] [-e] [-f] hostname\n";
+  print "Usage: $0 [-h] [-m] [-w] [-d [-s] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4]] [-e [-i p1:p2:p3:p4] [-p p1:p2:p3:p4]] [-f] hostname\n";
   print "\t-h: display this help message\n";
+  print "\t-a: Colon separated list of Web ports to use. Format: HTTP-STORE:HTTP-PROXY:HTTPS-STORE:HTTPS-PROXY (Ex: 8080:80:8443:443)\n";
   print "\t-d: disable proxy\n";
   print "\t-e: enable proxy\n";
   print "\t-f: Full reset on memcached port and search queries and POP/IMAP throttling.\n";
+  print "\t-i: Colon separated list of IMAP ports to use. Format: IMAP-STORE:IMAP-PROXY:IMAPS-STORE:IMAPS-PROXY (Ex: 7143:143:7993:993)\n";
   print "\t-m: Toggle mail proxy portions\n";
+  print "\t-p: Colon separated list of POP ports to use. Format: POP-STORE:POP-PROXY:POPS-STORE:POPS-PROXY (Ex: 7110:110:7995:995\n";
   print "\t-s: Set cleartext to FALSE (secure mode) on disable\n";
   print "\t-w: Toggle Web proxy portions\n";
+  print "\t-x: zimbraMailMode to use on disable (Default: mixed)\n";
   print "hostname is the value of the zimbra_server_hostname LC key for the server being modified.\n";
   print "Required options are -f by itself, or -f with -d or -e.\n";
   print "Note that -d or -e require one or both of -m and -w.\n"; 
+  print "Note that -i or -p require -m.\n";
+  print "Note that -a requires -w.\n";
+  print "Note that -x requires -w and -d.\n";
+  print "\n\n";
   exit 1;
 }
 
@@ -188,7 +297,7 @@ sub getLdapServerValue {
   $rfh = new FileHandle;
   $wfh = new FileHandle;
   $efh = new FileHandle;
-  $cmd = "/opt/zimbra/bin/zmprov -l gs $hostname $attrib";
+  $cmd = "$ZMPROV gs $hostname $attrib";
   my $pid = open3($wfh,$rfh,$efh, $cmd);
   unless(defined($pid)) {
     return undef;
@@ -212,32 +321,35 @@ sub getLdapServerValue {
 }
 
 sub isInstalled {
-  my $pkg = shift;
+	my $package=shift;
+	my $found=0;
+	open(ZMPROV, "$ZMPROV gs $hostname zimbraServiceInstalled|");
+	while (<ZMPROV>) {
+		chomp;
+		if (/zimbraServiceInstalled:\s(.*)/) {
+			my $service = $1;
+			if ($packageServiceMap{$service} eq $package) {
+				$found = 1;
+			}
+		}
+	}
+	close(ZMPROV);
+	return $found;
+}
 
-  my $pkgQuery;
-
-  my $good = 0;
-  if ($platform eq "DEBIAN3.1" || $platform eq "UBUNTU6" || $platform eq "UBUNTU7" || $platform eq "UBUNTUUNKNOWN" || $platform eq "DEBIAN4.0" || $platform eq "DEBIAN4.0_64" || $platform eq "UBUNTU6_64" || $platform eq "DEBIANUNKNOWN" ) {
-    $pkgQuery = "dpkg -s $pkg";
-  } elsif ($platform =~ /MACOSX/) {
-    my @l = sort glob ("/Library/Receipts/${pkg}*");
-    if ( $#l < 0 ) { return 0; }
-    $pkgQuery = "test -d $l[$#l]";
-  } elsif ($platform =~ /RPL/) {
-    $pkgQuery = "conary q $pkg";
-  } else {
-    $pkgQuery = "rpm -q $pkg";
-  }
-
-  my $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
-  $rc >>= 8;
-  if (($platform eq "DEBIAN3.1" || $platform eq "UBUNTU6" || $platform eq "UBUNTU7" || $platform eq "UBUNTUUNKNOWN" || $platform eq "DEBIAN4.0" || $platform eq "DEBIAN4.0_64" || $platform eq "UBUNTU6_64" || $platform eq "DEBIANUNKNOWN" ) && $rc == 0 ) {
-    $good = 1;
-    $pkgQuery = "dpkg -s $pkg | egrep '^Status: ' | grep 'not-installed'";
-    $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
-    $rc >>= 8;
-    return ($rc == $good);
-  } else {
-    return ($rc == $good);
-  }
+sub isEnabled {
+	my $package=shift;
+	my $found=0;
+	open(ZMPROV, "$ZMPROV gs $hostname zimbraServiceEnabled|");
+	while (<ZMPROV>) {
+		chomp;
+		if (/zimbraServiceEnabled:\s(.*)/) {
+			my $service = $1;
+			if ($packageServiceMap{$service} eq $package) {
+				$found = 1;
+			}
+		}
+	}
+	close(ZMPROV);
+	return $found;
 }
