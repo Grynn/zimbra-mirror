@@ -323,8 +323,8 @@ sub getLdapServerValue {
 sub isInstalled {
 	my $package=shift;
 	my $found=0;
-	open(ZMPROV, "$ZMPROV gs $hostname zimbraServiceInstalled|");
-	while (<ZMPROV>) {
+	open(ZMPROVI, "$ZMPROV gs $hostname zimbraServiceInstalled|");
+	while (<ZMPROVI>) {
 		chomp;
 		if (/zimbraServiceInstalled:\s(.*)/) {
 			my $service = $1;
@@ -333,15 +333,15 @@ sub isInstalled {
 			}
 		}
 	}
-	close(ZMPROV);
+	close(ZMPROVI);
 	return $found;
 }
 
 sub isEnabled {
 	my $package=shift;
 	my $found=0;
-	open(ZMPROV, "$ZMPROV gs $hostname zimbraServiceEnabled|");
-	while (<ZMPROV>) {
+	open(ZMPROVE, "$ZMPROV gs $hostname zimbraServiceEnabled|");
+	while (<ZMPROVE>) {
 		chomp;
 		if (/zimbraServiceEnabled:\s(.*)/) {
 			my $service = $1;
@@ -350,6 +350,6 @@ sub isEnabled {
 			}
 		}
 	}
-	close(ZMPROV);
+	close(ZMPROVE);
 	return $found;
 }
