@@ -9,6 +9,7 @@ my $ZMLOCALCONFIG = 'zmlocalconfig';
 my $ZMPROV = 'zmprov';
 my $ZMMAILBOX = 'zmmailbox';
 my $DEFAULT_REMINDER_MINUTES = 5;
+my $OUTDIR;
 
 sub getETA($) {
     my $totalSeconds = shift;
@@ -41,8 +42,7 @@ sub getETA($) {
 }
 
 sub getOutdir() {
-    my $pwd = getcwd();
-    my $outdir = "$pwd/reminder_fixup_temp";
+    my $outdir = "$OUTDIR/reminder_fixup_temp";
     if (-d $outdir && -w $outdir) {
 	return $outdir;
     }
@@ -365,8 +365,14 @@ sub fixupAllLocalUsers() {
 
 sub usage() {
     my $script = $0;
-    print STDERR "Usage: $0 -a <email> (for single account)\n";
-    print STDERR "       $0 -a all     (for all accounts on this server)\n";
+    print <<_USAGE_;
+Purpose: Fix up appointments without reminders by adding reminders based on user preference.
+Usage: $0 <options>
+    -a <email> - fix the named account
+    -a all     - fix all accounts on this server
+    -o <output directory> - where temp files are created;
+                            default is current working directory
+_USAGE_
     exit(1);
 }
 
@@ -375,10 +381,22 @@ sub usage() {
 #
 
 my $account;
+my $outdir;
 my $opts_good = GetOptions(
     'account=s' => \$account,
+    'outdir=s'  => \$outdir
     );
 if (!$opts_good || !$account) {
+    usage();
+}
+
+$OUTDIR = defined($outdir) ? $outdir : getcwd();
+if (! -d $OUTDIR) {
+    print STDERR "ERROR: Output directory $OUTDIR does not exist\n\n";
+    usage();
+}
+if (! -w $OUTDIR) {
+    print STDERR "ERROR: No write permission on output directory $OUTDIR\n\n";
     usage();
 }
 
