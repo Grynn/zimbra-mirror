@@ -8,7 +8,7 @@
 
     	<property name="build.dir" location="../ZimbraBuild/i386" />
 
-	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/Applications/install4j 4/bin/ant.jar"/>
+	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/Applications/install4j 4.1/bin/ant.jar"/>
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
                 <classpath>
