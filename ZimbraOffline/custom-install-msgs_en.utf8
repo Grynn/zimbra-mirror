@@ -1,0 +1,26 @@
+zd.ErrPrevSvcRunning=Background service of previous version not shutdown.  Please rerun this installer after it's completely shutdown.
+zd.ErrDatasetMissing=Some parts of your existing dataset is missing.
+zd.ErrDatasetCorrupted=Your existing dataset is corrupted and can't be recovered.
+zd.ErrDatasetTooOld=Your existing dataset version is too old and can't be converted.
+zd.ErrDatasetIncompat=Your existing dataset is not compatible and can't be converted.
+zd.ErrDatasetUnreusable=Your existing dataset can't be reused.
+zd.ErrUninstallFailed=Previous version can't be uninstalled.  New install can't continue.
+zd.ErrDBInitFailed=Failed to initialize database
+zd.ErrCoreSvcFailed=Failed to install Zimbra Desktop core service.
+zd.ErrCoreSvcNotStarted=Failed to start Zimbra Desktop core service.
+zd.ErrInjectZimletFailed=Failed to inject zimlets.  Some features may be missing.
+zd.ErrNoneIntelMac=Zimbra Desktop cannot be installed on non-Intel Mac
+zd.ErrNotAdmin=Install can't continue without administrator privilege.
+zd.ErrCannotStopSvc=Can't stop background service
+zd.DelDataCheckbox=Delete ENTIRE local dataset
+zd.LaunchCheckbox=Launch Zimbra Desktop
+zd.License=<html><body>PLEASE READ THIS AGREEMENT CAREFULLY BEFORE USING THE SOFTWARE. ZIMBRA, INC. ("ZIMBRA") WILL ONLY LICENSE THIS SOFTWARE TO YOU IF YOU FIRST ACCEPT THE TERMS OF THIS AGREEMENT. BY DOWNLOADING OR INSTALLING THE SOFTWARE, OR USING THE PRODUCT, YOU ARE CONSENTING TO BE BOUND BY THIS AGREEMENT. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS AGREEMENT, THEN DO NOT DOWNLOAD, INSTALL OR USE THE PRODUCT. <p>License Terms for this Zimbra Collaboration Suite Software:<br><a href="http://www.zimbra.com/license/zimbra_public_eula_2.1.html">http://www.zimbra.com/license/zimbra_public_eula_2.1.html</a></body></html>
+zd.MultilineLabel=NOTE: Select this option ONLY if you want to permanently remove all downloaded data from local computer!
+zd.StartingService=Starting Zimbra Desktop Core Service
+zd.Quit=Quit
+zd.DelDatasetContinue=Delete old dataset and continue with install
+zd.UninstallDisplay=A previous version of Zimbra Desktop has been detected. It must be uninstalled before proceeding with new installation.  User data will be preserved.
+zd.Uninstalling=Uninstalling
+zd.UninstallStatus=Uninstalling Previous Version
+zd.WaitService=Waiting for Core Service to initialize...
+zd.WaitUninstall=Please wait while the previous version is being removed...

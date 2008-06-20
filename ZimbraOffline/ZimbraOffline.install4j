@@ -3,8 +3,23 @@
   <directoryPresets config="./build/dist/jetty/common/lib" />
   <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.85" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
-      <principalLanguage id="en" customLocalizationFile="" />
-      <additionalLanguages />
+      <principalLanguage id="en" customLocalizationFile="./custom-install-msgs_en.utf8" />
+      <additionalLanguages>
+        <language id="sv" customLocalizationFile="" />
+        <language id="es" customLocalizationFile="" />
+        <language id="ru" customLocalizationFile="" />
+        <language id="no" customLocalizationFile="" />
+        <language id="ko" customLocalizationFile="" />
+        <language id="ja" customLocalizationFile="" />
+        <language id="it" customLocalizationFile="" />
+        <language id="de" customLocalizationFile="" />
+        <language id="fr" customLocalizationFile="" />
+        <language id="fi" customLocalizationFile="" />
+        <language id="nl" customLocalizationFile="" />
+        <language id="da" customLocalizationFile="" />
+        <language id="zh_TW" customLocalizationFile="" />
+        <language id="zh_CN" customLocalizationFile="" />
+      </additionalLanguages>
     </languages>
     <searchSequence>
       <registry />
@@ -174,7 +189,7 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="mac intel check" id="284702" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Zimbra Desktop cannot be installed on non-Intel Mac.">
+              <action name="mac intel check" id="284702" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:zd.ErrNoneIntelMac}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -305,19 +320,7 @@ return Boolean.FALSE;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.LicenseScreen">
                   <void property="displayedText">
-                    <string>&lt;html&gt;
-&lt;body&gt;
-PLEASE READ THIS AGREEMENT CAREFULLY BEFORE USING THE SOFTWARE.
-ZIMBRA, INC. ("ZIMBRA") WILL ONLY LICENSE THIS SOFTWARE TO YOU IF YOU
-FIRST ACCEPT THE TERMS OF THIS AGREEMENT. BY DOWNLOADING OR INSTALLING
-THE SOFTWARE, OR USING THE PRODUCT, YOU ARE CONSENTING TO BE BOUND BY
-THIS AGREEMENT. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS
-AGREEMENT, THEN DO NOT DOWNLOAD, INSTALL OR USE THE PRODUCT.
-&lt;p&gt;
-License Terms for this Zimbra Collaboration Suite Software:&lt;br&gt;
-&lt;a href="http://www.zimbra.com/license/zimbra_public_eula_2.1.html"&gt;http://www.zimbra.com/license/zimbra_public_eula_2.1.html&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;</string>
+                    <string>${i18n:zd.License}</string>
                   </void>
                 </object>
               </java>
@@ -327,7 +330,7 @@ License Terms for this Zimbra Collaboration Suite Software:&lt;br&gt;
             <preActivation />
             <postActivation />
             <actions>
-              <action name="" id="284703" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Install can't continue without administrator privilege.">
+              <action name="" id="284703" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:zd.ErrNotAdmin}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RequireAdminAction" />
@@ -343,7 +346,7 @@ License Terms for this Zimbra Collaboration Suite Software:&lt;br&gt;
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.DefaultInfoScreen">
                   <void property="displayedText">
-                    <string>A previous version of Zimbra Desktop has been detected. It must be uninstalled before proceeding with new installation.  User data will be preserved.</string>
+                    <string>${i18n:zd.UninstallDisplay}</string>
                   </void>
                 </object>
               </java>
@@ -360,10 +363,10 @@ License Terms for this Zimbra Collaboration Suite Software:&lt;br&gt;
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.CustomizableProgressScreen">
                   <void property="subTitle">
-                    <string>Please wait while the previous version is being removed...</string>
+                    <string>${i18n:zd.WaitUninstall}</string>
                   </void>
                   <void property="title">
-                    <string>Uninstalling</string>
+                    <string>${i18n:zd.Uninstalling}</string>
                   </void>
                 </object>
               </java>
@@ -378,7 +381,7 @@ License Terms for this Zimbra Collaboration Suite Software:&lt;br&gt;
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.SetMessageAction">
                       <void property="statusMessage">
-                        <string>Uninstalling Previous Version</string>
+                        <string>${i18n:zd.UninstallStatus}</string>
                       </void>
                       <void property="useStatus">
                         <boolean>true</boolean>
@@ -468,23 +471,22 @@ try {
         new com.zimbra.cs.db.DbOfflineMigration().testRun();
         return true;
     } catch (com.zimbra.cs.db.DbExclusiveAccessException e) {
-        Util.showMessage("Background service of previous version not shutdown.  Please rerun this installer after it's completely shutdown.",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
+        Util.showMessage(context.getMessage("zd.ErrPrevSvcRunning"), javax.swing.JOptionPane.WARNING_MESSAGE);
         return false;
     }
 } catch (com.zimbra.cs.db.DbNotFoundException x) {
-    errorMsg = "Some parts of your existing dataset is missing.";
+    errorMsg = context.getMessage("zd.ErrDatasetMissing");
 } catch (com.zimbra.cs.db.DbDataCorruptedException x) {
-    errorMsg = "Your existing dataset is corrupted and can't be recovered.";
+    errorMsg = context.getMessage("zd.ErrDatasetCorrupted");
 } catch (com.zimbra.cs.db.DbUnsupportedVersionException x) {
-    errorMsg = "Your existing dataset version is too old and can't be converted.";
+    errorMsg = context.getMessage("zd.ErrDatasetTooOld");
 } catch (com.zimbra.cs.db.DbUpdateException x) {
-    errorMsg = "Your existing dataset is not compatible and can't be converted.";
+    errorMsg = context.getMessage("zd.ErrDatasetIncompat");
 } catch (Exception x) {
-    errorMsg = "Your existing dataset can't be reused.";
+    errorMsg = context.getMessage("zd.ErrDatasetUnreusable");
 }
 
-int choice = Util.showOptionDialog(errorMsg, new String[] {"Quit", "Delete old dataset and continue with install"},
+int choice = Util.showOptionDialog(errorMsg, new String[] {context.getMessage("zd.Quit"), context.getMessage("zd.DelDatasetContinue")},
         javax.swing.JOptionPane.WARNING_MESSAGE);
 
 switch (choice) {
@@ -621,7 +623,7 @@ default:
                 </serializedBean>
                 <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
               </action>
-              <action name="check uninstall" id="275898" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="Previous version can't be uninstalled.  New install can't continue.">
+              <action name="check uninstall" id="275898" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:zd.ErrUninstallFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -664,23 +666,22 @@ try {
         new com.zimbra.cs.db.DbOfflineMigration().testRun();
         return true;
     } catch (com.zimbra.cs.db.DbExclusiveAccessException e) {
-        Util.showMessage("Background service of previous version not shutdown.  Please rerun this installer after it's completely shutdown.",
-                javax.swing.JOptionPane.WARNING_MESSAGE);
+        Util.showMessage(context.getMessage("zd.ErrPrevSvcRunning"), javax.swing.JOptionPane.WARNING_MESSAGE);
         return false;
     }
 } catch (com.zimbra.cs.db.DbNotFoundException x) {
-    errorMsg = "Some parts of your existing dataset is missing.";
+    errorMsg = context.getMessage("zd.ErrDatasetMissing");
 } catch (com.zimbra.cs.db.DbDataCorruptedException x) {
-    errorMsg = "Your existing dataset is corrupted and can't be recovered.";
+    errorMsg = context.getMessage("zd.ErrDatasetCorrupted");
 } catch (com.zimbra.cs.db.DbUnsupportedVersionException x) {
-    errorMsg = "Your existing dataset version is too old and can't be converted.";
+    errorMsg = context.getMessage("zd.ErrDatasetTooOld");
 } catch (com.zimbra.cs.db.DbUpdateException x) {
-    errorMsg = "Your existing dataset is not compatible and can't be converted.";
+    errorMsg = context.getMessage("zd.ErrDatasetIncompat");
 } catch (Exception x) {
-    errorMsg = "Your existing dataset can't be reused.";
+    errorMsg = context.getMessage("zd.ErrDatasetUnreusable");
 }
 
-int choice = Util.showOptionDialog(errorMsg, new String[] {"Quit", "Delete old dataset and continue with install"},
+int choice = Util.showOptionDialog(errorMsg, new String[] {context.getMessage("zd.Quit"), context.getMessage("zd.DelDatasetContinue")},
         javax.swing.JOptionPane.WARNING_MESSAGE);
 
 switch (choice) {
@@ -1244,7 +1245,7 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="derbyij" id="263089" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to initialize database">
+              <action name="derbyij" id="263089" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:zd.ErrDBInitFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -2073,10 +2074,10 @@ return true;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.CustomizableProgressScreen">
                   <void property="subTitle">
-                    <string>Waiting for Core Service to initialize...</string>
+                    <string>${i18n:zd.WaitService}</string>
                   </void>
                   <void property="title">
-                    <string>Starting Zimbra Desktop Core Service</string>
+                    <string>${i18n:zd.StartingService}</string>
                   </void>
                 </object>
               </java>
@@ -2269,7 +2270,7 @@ return true;</string>
                 </serializedBean>
                 <condition>Util.isMacOS() &amp;&amp; !context.isErrorOccured()</condition>
               </action>
-              <action name="" id="263046" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to install Zimbra Desktop core service.">
+              <action name="" id="263046" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:zd.ErrCoreSvcFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.services.InstallServiceAction">
@@ -2284,7 +2285,7 @@ return true;</string>
                 </serializedBean>
                 <condition>!Util.isMacOS() &amp;&amp; !context.isErrorOccured()</condition>
               </action>
-              <action name="" id="263047" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to start Zimbra Desktop core service.">
+              <action name="" id="263047" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:zd.ErrCoreSvcNotStarted}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.services.StartServiceAction">
@@ -2301,7 +2302,7 @@ return true;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.SetMessageAction">
                       <void property="statusMessage">
-                        <string>Starting Zimbra Desktop Core Service</string>
+                        <string>${i18n:zd.StartingService}</string>
                       </void>
                       <void property="useStatus">
                         <boolean>true</boolean>
@@ -2326,7 +2327,7 @@ return true;</string>
                 </serializedBean>
                 <condition>!context.isErrorOccured()</condition>
               </action>
-              <action name="zimlets" id="4232" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Failed to inject zimlets.  Some features may be missing.">
+              <action name="zimlets" id="4232" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:zd.ErrInjectZimletFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -2557,7 +2558,7 @@ return !hasFailures;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>Launch Zimbra Desktop</string>
+                        <string>${i18n:zd.LaunchCheckbox}</string>
                       </void>
                       <void property="initiallySelected">
                         <boolean>true</boolean>
@@ -2659,7 +2660,7 @@ return !hasFailures;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>Delete ENTIRE local dataset</string>
+                        <string>${i18n:zd.DelDataCheckbox}</string>
                       </void>
                       <void property="variableName">
                         <string>wipeUserData</string>
@@ -2682,7 +2683,7 @@ return !hasFailures;</string>
                         </object>
                       </void>
                       <void property="labelText">
-                        <string>NOTE: Select this option ONLY if you want to permanently remove all downloaded data from local computer!</string>
+                        <string>${i18n:zd.MultilineLabel}</string>
                       </void>
                     </object>
                   </java>
@@ -2702,7 +2703,7 @@ return !hasFailures;</string>
             <preActivation />
             <postActivation />
             <actions>
-              <action name="" id="95843" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="Can't stop background service">
+              <action name="" id="95843" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="${i18n:zd.ErrCannotStopSvc}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.services.StopServiceAction">
@@ -2714,7 +2715,7 @@ return !hasFailures;</string>
                 </serializedBean>
                 <condition>!Util.isMacOS()</condition>
               </action>
-              <action name="launchctl stop" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="Can't stop background service">
+              <action name="launchctl stop" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="${i18n:zd.ErrCannotStopSvc}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
@@ -3152,7 +3153,6 @@ return true;</string>
     </macosFolder>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="198394" />
     <mediaSet refId="44" />
   </buildIds>
 </install4j>
