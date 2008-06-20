@@ -53,7 +53,7 @@ SKIN_WORK_BASE="${mailboxd_directory}/webapps${BASE_URL}"
 if [ -d "$SKIN_SRC" ]; then
     SKIN_SRC_DIR=`cd $SKIN_SRC && pwd -P`
     SKIN_NAME=`basename $SKIN_SRC`
-    SKIN_WORK_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
+    SKIN_WORK_DIR=`cd ${SKIN_WORK_BASE}/skins/${SKIN_NAME} && pwd -P`
 
     if [ "$SKIN_WORK_DIR" != "$SKIN_SRC_DIR" ]; then
         if [ -e "$SKIN_WORK_DIR" ]; then
