@@ -1187,7 +1187,7 @@
         </attribute>
     </tag>
 
-    <tag>p
+    <tag>
         <description>
             logout. clears cookie and JSP session.
         </description>
