@@ -42,9 +42,6 @@ my $WebEnabled="8080:80:8443:443";
 my $WebDisabled="80:0:443:0";
 my $MailMode="mixed";
 
-our $platform=`/opt/zimbra/libexec/get_plat_tag.sh`;
-chomp $platform;
-
 our $ZMPROV = "/opt/zimbra/bin/zmprov -l";
 
 my $id = `whoami`;
@@ -268,7 +265,7 @@ close ZMPROV;
 exit 0;
 
 sub usage() {
-  print "Usage: $0 [-h] [-m] [-w] [-d [-s] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4]] [-e [-i p1:p2:p3:p4] [-p p1:p2:p3:p4]] [-f] hostname\n";
+  print "Usage: $0 [-h] [-m] [-w] [-d [-s] [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4]] [-e [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4]] [-f] hostname\n";
   print "\t-h: display this help message\n";
   print "\t-a: Colon separated list of Web ports to use. Format: HTTP-STORE:HTTP-PROXY:HTTPS-STORE:HTTPS-PROXY (Ex: 8080:80:8443:443)\n";
   print "\t-d: disable proxy\n";
@@ -276,7 +273,7 @@ sub usage() {
   print "\t-f: Full reset on memcached port and search queries and POP/IMAP throttling.\n";
   print "\t-i: Colon separated list of IMAP ports to use. Format: IMAP-STORE:IMAP-PROXY:IMAPS-STORE:IMAPS-PROXY (Ex: 7143:143:7993:993)\n";
   print "\t-m: Toggle mail proxy portions\n";
-  print "\t-p: Colon separated list of POP ports to use. Format: POP-STORE:POP-PROXY:POPS-STORE:POPS-PROXY (Ex: 7110:110:7995:995\n";
+  print "\t-p: Colon separated list of POP ports to use. Format: POP-STORE:POP-PROXY:POPS-STORE:POPS-PROXY (Ex: 7110:110:7995:995)\n";
   print "\t-s: Set cleartext to FALSE (secure mode) on disable\n";
   print "\t-w: Toggle Web proxy portions\n";
   print "\t-x: zimbraMailMode to use on disable (Default: mixed)\n";
@@ -286,6 +283,14 @@ sub usage() {
   print "Note that -i or -p require -m.\n";
   print "Note that -a requires -w.\n";
   print "Note that -x requires -w and -d.\n";
+  print "The following are the defaults for -a, -i, -p, and -x if they are not supplied as options.\n";
+  print "-a default on enable: 8080:80:8443:443\n";
+  print "-a default on disable: 80:0:443:0\n";
+  print "-i default on enable: 7143:143:7993:993\n";
+  print "-i default on disable: 143:7143:993:7993\n";
+  print "-p default on enable: 7110:110:7995:995\n";
+  print "-p default on disable: 110:7110:995:7995\n";
+  print "-x default on disable: mixed\n";
   print "\n\n";
   exit 1;
 }
