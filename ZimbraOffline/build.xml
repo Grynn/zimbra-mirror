@@ -652,6 +652,7 @@
 		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.icns" file="src/installer/resources/launcher_128x128.icns" overwrite="true"/>
 		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.png" file="src/installer/resources/launcher_32x32.png" overwrite="true"/>
 		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.ico" file="src/installer/resources/launcher_32x32.ico" overwrite="true"/>
+		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/newmail.png" file="src/installer/resources/newmail_16x16.png" overwrite="true"/>
 
 		<mkdir dir="${dist.dir}/macos"/>
 		<mkdir dir="${dist.dir}/linux"/>
@@ -679,7 +680,7 @@
 	<target name="offline-prep-prism">
 		<!-- branding stuff done with mac but common to mac/win/linux -->
 		<copy todir="${build.dir}/prism/" overwrite="true">
-			<fileset dir="${prism.src.dir}/mac-0606/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
+			<fileset dir="${prism.src.dir}/mac-0606/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/,modules/"/>
 		</copy>
 		<replace file="${build.dir}/prism/defaults/preferences/preferences.js" token="@version@" value="${offline.version}"/>
 	        <replace file="${build.dir}/prism/defaults/preferences/preferences.js" token="@aus_url@" value="${offline.aus_url}"/>
@@ -694,9 +695,9 @@
 			<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework"/>
             		<!--fileset dir="${dist.dir}/win32/prism/xulrunner"/-->
             
-            		<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
-            		<fileset dir="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
-			<fileset dir="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/"/>
+            		<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/,modules/"/>
+            		<fileset dir="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/,modules/"/>
+			<fileset dir="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/,modules/"/>
 		</delete>
 
         	<unzip src="${xulrunner.src.dir}/nightly/xulrunner-1.9pre.en-US.macos.zip" dest="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks"/>

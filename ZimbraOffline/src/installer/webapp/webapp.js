@@ -86,10 +86,28 @@ function load() {
     var head = window.document.documentElement.firstChild;
     var command = window.document.createElement("command");
     head.appendChild(command);
+    command.id = "about";
+    command.setAttribute("label", "About Zimbra Desktop");
+    command.addEventListener("DOMActivate", function(event) {host.showAbout();}, false);
+    window.platform.icon().menu.addMenuItem("about");
+
+    command = window.document.createElement("command");
+    head.appendChild(command);
     command.id = "checkForUpdates";
     command.setAttribute("label", "Check for updates...");
     command.addEventListener("DOMActivate", function(event) {checkForUpdates();}, false);
     window.platform.icon().menu.addMenuItem("checkForUpdates");
+
+    var xulRuntime = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime);
+    var os = xulRuntime.OS.toLowerCase();
+    if (os == "winnt") {
+      command = window.document.createElement("command");
+      head.appendChild(command);
+      command.id = "quitApp";
+      command.setAttribute("label", "Quit");
+      command.addEventListener("DOMActivate", function(event) {quitApp();}, false);
+      window.platform.icon().menu.addMenuItem("quitApp");
+    }
   }
 }
 
@@ -105,4 +123,9 @@ function checkForUpdates()
     prompter.showUpdateDownloaded(um.activeUpdate);
   else
     prompter.checkForUpdates();
+}
+
+function quitApp() {
+  var appStartup = Cc["@mozilla.org/toolkit/app-startup;1"].getService(Ci.nsIAppStartup);
+  appStartup.quit(appStartup.eAttemptQuit);
 }

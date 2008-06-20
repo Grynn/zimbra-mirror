@@ -434,6 +434,7 @@ var WebRunner = {
     var platform = Cc["@mozilla.org/platform-web-api;1"].createInstance(Ci.nsIPlatformGlue);
   
     HostUI._document = document;
+    HostUI._window = window;
     
     WebAppProperties.script["XMLHttpRequest"] = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1");
     WebAppProperties.script["window"] = this._getBrowser().contentWindow;
