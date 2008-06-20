@@ -2,8 +2,8 @@
 # 
 
 working_directory ${core.workdir};
-include conf/${core.cprefix}.main;
-include conf/${core.cprefix}.memcache;
-${mail.enabled} include conf/${core.cprefix}.mail;
-${web.enabled} include conf/${core.cprefix}.web;
+include conf/${core.includes}/${core.cprefix}.main;
+include conf/${core.includes}/${core.cprefix}.memcache;
+${mail.enabled} include conf/${core.includes}/${core.cprefix}.mail;
+${web.enabled} include conf/${core.includes}/${core.cprefix}.web;
 

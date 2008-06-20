@@ -183,9 +183,9 @@ mail
     #
     ssl_ciphers             ${mail.ssl.ciphers};
 
-    ${mail.enabled} include conf/${core.cprefix}.mail.imap;
-    ${mail.enabled} include conf/${core.cprefix}.mail.imaps;
+    ${mail.enabled} include conf/${core.includes}/${core.cprefix}.mail.imap;
+    ${mail.enabled} include conf/${core.includes}/${core.cprefix}.mail.imaps;
 
-    ${mail.enabled} include conf/${core.cprefix}.mail.pop3;
-    ${mail.enabled} include conf/${core.cprefix}.mail.pop3s;
+    ${mail.enabled} include conf/${core.includes}/${core.cprefix}.mail.pop3;
+    ${mail.enabled} include conf/${core.includes}/${core.cprefix}.mail.pop3s;
 }

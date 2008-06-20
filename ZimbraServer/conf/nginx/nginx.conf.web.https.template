@@ -10,7 +10,7 @@ server
 
     location /
     {
-        include             conf/${core.cprefix}.web.https.mode-${web.mailmode};
+        include             conf/${core.includes}/${core.cprefix}.web.https.mode-${web.mailmode};
 
         # Begin stray redirect hack
         # 

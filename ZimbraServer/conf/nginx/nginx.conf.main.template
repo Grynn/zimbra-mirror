@@ -26,6 +26,6 @@ events {
     # (note) also see worker_rlimit_nofile at 
     # http://wiki.codemongers.com/NginxMainModule#worker_rlimit_nofile
     # 
-    worker_connections  ${main.workers};
+    worker_connections  ${main.connections};
 }
 

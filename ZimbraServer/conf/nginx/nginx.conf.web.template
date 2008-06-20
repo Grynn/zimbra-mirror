@@ -14,6 +14,6 @@ http
     ${web.:routehandlers}
     zmroute_timeout ${web.routetimeout};
 
-    ${web.enabled} include conf/${core.cprefix}.web.http;
-    ${web.enabled} include conf/${core.cprefix}.web.https;
+    ${web.enabled} include conf/${core.includes}/${core.cprefix}.web.http;
+    ${web.enabled} include conf/${core.includes}/${core.cprefix}.web.https;
 }
