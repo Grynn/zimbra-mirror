@@ -105,11 +105,6 @@ DwtHtmlEditor.BORDER_RIGHT  = 5;
 
 // PRIVATE Class Attributes
 
-DwtHtmlEditor._ARIAL_RE = /arial|helvetica|sans-serif/;
-DwtHtmlEditor._TIMES_RE = /times|serif/;
-DwtHtmlEditor._VERDANA_RE = /verdana/;
-DwtHtmlEditor._COURIER_RE = /courier|mono/;
-
 DwtHtmlEditor._H1_RE = /Heading 1|h1/;
 DwtHtmlEditor._H2_RE = /Heading 2|h2/;
 DwtHtmlEditor._H3_RE = /Heading 2|h3/;
@@ -1512,20 +1507,7 @@ function() {
 			ev._ignoreCommandState=null;
 		}
 
-		// Don't futz with the order of the if statements below. They are important due to the
-		// nature of the RegExs
-		var family = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_NAME);
-		if (family) {
-			family = family.toLowerCase();
-			if (family.search(DwtHtmlEditor._VERDANA_RE) != -1)			ev.fontFamily = 3;
-			else if (family.search(DwtHtmlEditor._ARIAL_RE) != -1)		ev.fontFamily = 0;
-			else if (family.search(DwtHtmlEditor._TIMES_RE) != -1)		ev.fontFamily = 1;
-			else if (family.search(DwtHtmlEditor._COURIER_RE) != -1)	ev.fontFamily = 2;
-			else														ev.fontFamily = null;
-		} else {
-			ev.fontFamily = null;
-		}
-
+		ev.fontFamily = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_NAME);
 		ev.fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
 		ev.backgroundColor = iFrameDoc.queryCommandValue((AjxEnv.isIE) ? "backcolor" : "hilitecolor");
 		ev.color = iFrameDoc.queryCommandValue("forecolor");
