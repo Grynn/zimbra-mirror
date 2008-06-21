@@ -57,9 +57,7 @@ public class JspProvStub {
     @SuppressWarnings("unchecked")
     public String getLoginAccountName() throws ServiceException {
         List<Account> accounts = prov.getAllAccounts(null);
-        if (accounts.size() == 1)
-        	return accounts.get(0).getName();
-        else if (accounts.size() > 1)
+        if (accounts.size() > 0)
         	return JspConstants.LOCAL_ACCOUNT;
         return null;
     }
