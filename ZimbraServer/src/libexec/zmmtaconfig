@@ -84,6 +84,7 @@ my $state = {
                         restarts => (),
                         postconf => (),
                         services => (),
+						proxygen => 0, # 0|1
                       },
   sections         => { name   => "",
                         config => { depends    => (),
@@ -113,6 +114,7 @@ my %exe = (
   'SNMP'          => "$config{baseDir}/bin/zmswatchctl",
   'LOGGER'        => "$config{baseDir}/bin/zmloggerctl",
   'MAILBOX'       => "$config{baseDir}/bin/zmstorectl",
+  'PROXYGEN'      => "$config{baseDir}/bin/zmproxyconfgen",
 );
 
 my $commands = {
@@ -680,6 +682,8 @@ sub readConfig {
           } else {
             $section->{config}->{postconf}->{$fields[1]}="$fields[2]";
           }
+		} elsif ($line =~ m/^PROXYGEN/) {
+		  logMsg(5, "Running zmproxyconf.");
         } elsif ($line =~ m/^if/) {
           if (checkConditional($fields[1], $fields[2])) {
             logMsg(4, "checkConditional $fields[1] $fields[2] is true");
@@ -801,6 +805,10 @@ sub compileActions {
         logMsg(5, "Adding postconf $postconf");
         $state->{current}->{postconf}->{$postconf} = $section->{config}->{postconf}->{$postconf};
       }
+	  if ($section->{name} eq "imapproxy") {
+	    logMsg(5, "Section $section->{name} changed compiling proxygen");
+		$state->{current}->{proxygen}=1;
+	  }
       unless ($state->{forced}) {  # no restarts on forced rewrites
         logMsg(5, "Section $section->{name} changed compiling restarts");
         foreach my $restarts (keys %{$section->{config}->{restarts}}) {
@@ -862,6 +870,9 @@ sub doActions() {
   foreach my $postconf (keys %{$state->{current}->{postconf}}) {
     delete($state->{current}->{postconf}->{$postconf}) 
       unless doPostconf($postconf,$state->{current}->{postconf}->{$postconf});
+  }
+  if ($state->{current}->{proxygen} == 1) {
+    $state->{current}->{proxygen}=0 unless doProxyGen();
   }
   foreach my $restart (keys %{$state->{current}->{restarts}}) {
     delete($state->{current}->{restarts}->{$restart})
@@ -1063,6 +1074,16 @@ sub doPostconf($$) {
   my $rc=0;
   my $cmd = $exe{POSTCONF};
   $cmd .= " $key=\'$value\'";
+  logMsg(3,"Executing $cmd");
+  $rc = 0xffff & system($cmd);
+  logMsg(2, "ERROR: $cmd rc=$rc $!") 
+    if ($rc != 0);
+  return $rc;
+}
+
+sub doProxyGen() {
+  my $rc=0;
+  my $cmd = $exe{PROXYGEN};
   logMsg(3,"Executing $cmd");
   $rc = 0xffff & system($cmd);
   logMsg(2, "ERROR: $cmd rc=$rc $!") 
