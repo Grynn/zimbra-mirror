@@ -6,11 +6,11 @@
   <desc>visual order of all accounts in desktop UI</desc>
 </attr>
 
-<attr name="offlineIsMailtoHandler" type="boolean" cardinality="single" optionalIn="account">
+<attr name="offlineIsMailtoHandler" type="boolean" cardinality="single" optionalIn="account" flags="accountInfo">
   <desc>whether to register as mailto link handler</desc>
 </attr>
 
-<attr name="offlineMailtoAccountId" type="string" cardinality="single" optionalIn="account">
+<attr name="offlineMailtoAccountId" type="string" cardinality="single" optionalIn="account" flags="accountInfo">
   <desc>the account ID of the account for mailto handling</desc>
 </attr>
 
