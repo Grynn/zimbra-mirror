@@ -47,7 +47,7 @@ public interface OfflineConstants {
     
     public static final String A_zimbraDataSourceSyncAllServerFolders = "zimbraDataSourceSyncAllServerFolders";
     
-    public static final long DEFAULT_SYNC_FREQ = 5 * Constants.MILLIS_PER_MINUTE;
+    public static final long DEFAULT_SYNC_FREQ = 1 * Constants.MILLIS_PER_MINUTE;
     
     public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
 }
