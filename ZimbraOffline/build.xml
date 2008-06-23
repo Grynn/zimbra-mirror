@@ -693,15 +693,17 @@
 
 		<delete>
 			<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework"/>
-            		<!--fileset dir="${dist.dir}/win32/prism/xulrunner"/-->
+            		<fileset dir="${dist.dir}/win32/prism/xulrunner"/>
+            		<fileset dir="${dist.dir}/linux/prism/xulrunner"/>
             
             		<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/,modules/"/>
             		<fileset dir="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/,modules/"/>
 			<fileset dir="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/,modules/"/>
 		</delete>
 
-        	<unzip src="${xulrunner.src.dir}/nightly/xulrunner-1.9pre.en-US.macos.zip" dest="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
-        	<!--unzip src="${xulrunner.src.dir}/nightly/xulrunner-1.9pre.en-US.win32.zip" dest="${dist.dir}/win32/prism"/-->
+        	<unzip src="${xulrunner.src.dir}/1.9/xulrunner-1.9.en-US.macos.zip" dest="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
+        	<unzip src="${xulrunner.src.dir}/1.9/xulrunner-1.9.en-US.win32.zip" dest="${dist.dir}/win32/prism"/>
+        	<unzip src="${xulrunner.src.dir}/1.9/xulrunner-1.9.en-US.linux.zip" dest="${dist.dir}/linux/prism"/>
 
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/components/nsUpdateService.js" file="src/installer/updater/macos/nsUpdateService.js" overwrite="true"/>
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app/Contents/MacOS/updater" file="src/installer/updater/macos/updater" overwrite="true"/>
