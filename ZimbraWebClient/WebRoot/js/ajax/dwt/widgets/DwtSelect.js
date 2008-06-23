@@ -385,19 +385,6 @@ DwtSelect.prototype._createHtmlFromTemplate = function(templateId, data) {
 //    this.getHtmlElement = new Function("return this._selectEl;"); // avoid closure
 };
 
-DwtSelect.prototype._disableSelectionIE =
-function() {
-	return false;
-};
-
-DwtSelect.prototype._disableSelection = 
-function() {
-	var func = function() {
-		window.getSelection().removeAllRanges();
-	};
-	window.setTimeout(func, 5);
-};
-
 DwtSelect.prototype._createMenu = function() {
     var menu = new DwtSelectMenu(this);
     for (var i = 0, len = this._options.size(); i < len; ++i) {
