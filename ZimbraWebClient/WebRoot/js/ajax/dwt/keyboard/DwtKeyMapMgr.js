@@ -38,7 +38,11 @@ DwtKeyMapMgr = function(keyMap) {
 	this._fsas = {};
 	for (var key in map) {
 		DBG.println(AjxDebug.DBG3, "building FSA for key: " + key);
-		this._fsas[key] = DwtKeyMapMgr.__buildFSA({}, map[key], key);
+		if (key == "keys") {
+			this._processKeyTypeList(map[key]);
+		} else {
+			this._fsas[key] = DwtKeyMapMgr.__buildFSA({}, map[key], key);
+		}
 	}
 	DBG.dumpObj(AjxDebug.DBG3, this._fsas);
 };
@@ -211,87 +215,36 @@ function(mapName) {
 	this._fsas[mapName] = DwtKeyMapMgr.__buildFSA({}, this._map[mapName], mapName);
 };
 
-DwtKeyMapMgr._isAlphaUs = 
-function(keyCode) {
-	return (keyCode > 64 && keyCode < 91);
-};
-
-DwtKeyMapMgr._isNumericUs = 
-function(keyCode) {
-	return (keyCode > 47 && keyCode < 58);
-};
-
-DwtKeyMapMgr._isAlphanumericUs = 
-function(keyCode) {
-	return (DwtKeyMapMgr._isNumericUs(keyCode) || DwtKeyMapMgr._isAlphaUs(keyCode));
-};
-
-DwtKeyMapMgr._isPunctuationUs = 
-function(keyCode) {
-	switch (keyCode) {
-		case 186: // ;
-		case 187: // =
-		case 188: // ,
-		case 189: // -
-		case 190: // .
-		case 191: // /
-		case 192: // `
-		case 219: // [
-		case 220: // \
-		case 221: // ]
-		case 222: // '
-			return true;
-		default:
-			return false;		
+/**
+ * Converts a list of key codes into an IS_ style hash. Key/value are
+ * reversed from how they are in the source properties file, since that's
+ * how shortcuts are parsed.
+ * 
+ * @param obj	[hash]		key type and list of keycodes
+ */
+DwtKeyMapMgr.prototype._processKeyTypeList = 
+function(obj) {
+	for (var key in obj) {
+		var type = obj[key];
+		var typeMap = DwtKeyMap.KEY_TYPE[type];
+		if (!typeMap) { continue; }
+		var list = key.split(/[\s,;]/);
+		for (var i = 0; i < list.length; i++) {
+			typeMap[list[i]] = true;
+		}
 	}
 };
 
-DwtKeyMapMgr._isModifierUs = 
-function(keyCode) {
-	switch (keyCode) {
-		case 16: // Shift
-		case 17: // Ctrl
-		case 18: // Alt
-		case 91: // Meta (Apple)
-			return true;
-			
-		default:
-			return false;
-	}
-};
-
-DwtKeyMapMgr.isUsableTextInputValueUs =
-function(keyCode, element) {
-
-	if (!DwtKeyMapMgr.__isInputElement(element)) return false;
-	
-	if (DwtKeyMapMgr._isAlphanumericUs(keyCode) || DwtKeyMapMgr._isPunctuationUs(keyCode)) return true;
-		
-	switch (keyCode) {
-		case 37:
-		case 39:
-		case 8:
-		case 45:
-		case 46:
-		case 35:
-		case 32:
-			return true;
-
-		case 3:
-		case 13:
-			var tag = element.tagName.toUpperCase();
-			return (tag != "INPUT");
-			
-		default:
-			return false;
-	}	
-};
-
-DwtKeyMapMgr.__isInputElement =
+/**
+ * Returns true if the given element accepts text input.
+ * 
+ * @param element	[Element]		DOM element
+ */
+DwtKeyMapMgr.isInputElement =
 function(element) {
-	// Are we in an HTML editor? If so, target for IE is <body>, for FF is <html>
+	// Check designMode in case we're in an HTML editor iframe
 	var dm = element.ownerDocument ? element.ownerDocument.designMode : null;
-	if (dm && (dm.toLowerCase() == "on")) return true;
+	if (dm && (dm.toLowerCase() == "on")) { return true; }
 
 	var tag = element.tagName.toUpperCase();
 	return (tag == "INPUT" || tag == "TEXTAREA");
@@ -353,6 +306,27 @@ function(keySeq, mapping, forceActionCode) {
 	return null;
 };
 
+/**
+ * Returns true if the given key is a modifier. The list of modifier keys is
+ * taken from the AjxKeys properties file.
+ *
+ * @param key		int		numeric key code
+ */
+DwtKeyMapMgr.isModifier =
+function(key) {
+	return DwtKeyMap.IS_MODIFIER[key];
+};
+
+/**
+ * Returns true if the given key event has a modifier which makes it nonprintable.
+ * 
+ * @param ev	[Event]		key event
+ */
+DwtKeyMapMgr.hasModifier =
+function(ev) {
+	return (ev.altKey || ev.ctrlKey || ev.metaKey);
+};
+
 (function() {
 	DwtKeyMapMgr._KEYCODES[18]  = DwtKeyMap.ALT;
 	DwtKeyMapMgr._KEYCODES[40]  = DwtKeyMap.ARROW_DOWN;
@@ -403,12 +377,4 @@ function(keySeq, mapping, forceActionCode) {
 	DwtKeyMapMgr._KEYCODES[221] = "]";
 	DwtKeyMapMgr._KEYCODES[192] = "`";
 	DwtKeyMapMgr._KEYCODES[187] = "=";	
-	
-	// Setup the "is" methods
-	DwtKeyMapMgr.isAlpha = DwtKeyMapMgr._isAlphaUs;
-	DwtKeyMapMgr.isNumeric = DwtKeyMapMgr._isNumericUs;
-	DwtKeyMapMgr.isAlphanumeric = DwtKeyMapMgr._isAlphanumericUs;
-	DwtKeyMapMgr.isPunctuation = DwtKeyMapMgr._isPunctuationUs;
-	DwtKeyMapMgr.isUsableTextInputValue = DwtKeyMapMgr.isUsableTextInputValueUs;
-	DwtKeyMapMgr.isModifier = DwtKeyMapMgr._isModifierUs;
 })();

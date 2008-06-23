@@ -70,6 +70,9 @@ DwtKeyMap.MOD_ORDER[DwtKeyMap.CTRL]		= 2;
 DwtKeyMap.MOD_ORDER[DwtKeyMap.META]		= 3;
 DwtKeyMap.MOD_ORDER[DwtKeyMap.SHIFT]	= 4;
 
+DwtKeyMap.KEY_TYPE = {};
+DwtKeyMap.KEY_TYPE["modifiers"] = DwtKeyMap.IS_MODIFIER = {};
+
 // Key names
 DwtKeyMap.ARROW_DOWN		= "ArrowDown";
 DwtKeyMap.ARROW_LEFT		= "ArrowLeft";

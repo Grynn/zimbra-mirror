@@ -70,16 +70,19 @@ DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
 
 /**
  * Returns true if the event may be a shortcut from within an input (text input or
- * textarea). Since printable characters are echoed, the shortcut must be nonprintable.
- * We currently use the ALT or CTRL key to create shortcuts from inputs. The ESC key may
- * also be a shortcut.
+ * textarea). Since printable characters are echoed, the shortcut must be nonprintable:
  * 
- * @param ev	[Event]		native key event
+ * 		- Alt or Ctrl or Meta plus another key
+ * 		- Esc
+ * 		- Enter within a text input (but not a textarea)
+ * 
+ * @param ev	[Event]		key event
  */
 DwtKeyboardMgr.isPossibleInputShortcut =
 function(ev) {
-	return (!DwtKeyMapMgr.isModifier(ev.keyCode) && (ev.keyCode == 27 ||
-			(ev.ctrlKey || ev.altKey)));
+	return (!DwtKeyMapMgr.isModifier(ev.keyCode) &&
+			(ev.keyCode == 27 || DwtKeyMapMgr.hasModifier(ev)) ||
+			(ev.target.tagName.toUpperCase() == "INPUT" && (ev.keyCode == 13 || ev.keyCode == 3)));
 };
 
 /**
@@ -616,7 +619,7 @@ function(ev) {
 	 * focus to the current focus object in the tab hierarchy i.e. grab back control
 	 */
 	 if (keyCode == DwtKeyMapMgr.TAB_KEYCODE) {
-	 	if (kbMgr.__currTabGroup && !kev.ctrlKey && !kev.altKey) {
+	 	if (kbMgr.__currTabGroup && !DwtKeyMapMgr.hasModifier(kev)) {
 		 	// If a menu is popped up then don't act on the Tab
 		 	if (!DwtMenu.menuShowing()) {
 			 	DBG.println(AjxDebug.DBG3, "Tab");
@@ -655,12 +658,11 @@ function(ev) {
 		kbMgr._kbFocusField.value = "";
 	}
 	 
-	/* Filter out the following keys: Alt, Shift, Ctrl. Also, if we're in
-	 * an input field, filter out legitimate input. */
-	if (DwtKeyMapMgr.isModifier(keyCode)
-		|| (!kbMgr.__dwtCtrlHasFocus 
-			&& kbMgr.__killKeySeqTimedActionId == -1 && !kev.ctrlKey && !kev.altKey
-			&& DwtKeyMapMgr.isUsableTextInputValue(keyCode, kev.target))) {
+	// Filter out modifier keys. If we're in an input field, filter out legitimate input.
+	// (A shortcut from an input field must use a modifier key.)
+	if (DwtKeyMapMgr.isModifier(keyCode) || (!kbMgr.__dwtCtrlHasFocus && (kbMgr.__killKeySeqTimedActionId == -1) &&
+		DwtKeyMapMgr.isInputElement(ev.target) && !DwtKeyboardMgr.isPossibleInputShortcut(ev))) {
+
 	 	return kbMgr.__processKeyEvent(ev, kev, true, DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED);
 	}
 	 
@@ -732,8 +734,7 @@ function(hdlr, ev, forceActionCode) {
 		this.__hdlr = hdlr;
 		this.__mapName = mapName;
 		this.__ev = ev;
-		this.__killKeySeqTimedActionId = 
-			AjxTimedAction.scheduleAction(this.__killKeySeqTimedAction, this.__keyTimeout);
+		this.__killKeySeqTimedActionId = AjxTimedAction.scheduleAction(this.__killKeySeqTimedAction, this.__keyTimeout);
 		return DwtKeyboardMgr.__KEYSEQ_PENDING;	
 	} else if (actionCode != null) {
 		/* It is possible that the component may not handle a valid action
