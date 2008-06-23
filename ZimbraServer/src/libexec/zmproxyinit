@@ -43,18 +43,25 @@ my $WebDisabled="80:0:443:0";
 my $MailMode="mixed";
 
 our $ZMPROV = "/opt/zimbra/bin/zmprov -l";
+our $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
+chomp ($platform);
 
 my $id = `whoami`;
 chomp $id;
 if ($id ne "zimbra") {
     print STDERR "Error: must be run as zimbra user\n";
-        exit (1);
+    exit (1);
+}
+
+if (!isInstalled("zimbra-store") || !isInstalled("zimbra-proxy")) {
+    print STDERR "Error: The store or proxy package must be installed.\n";
+    exit {1};
 }
 
 our %options = ();
 our %loaded = ();
 
-getopts('a:defhi:mp:swx:',\%options) or die "Unable to set options\n";
+getopts('a:defhi:mop:swx:',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
@@ -156,7 +163,7 @@ if ($options{e}) {
   ($i1,$i2,$i3,$i4) = split /:/, $ImapEnabled, 4;
   ($p1,$p2,$p3,$p4) = split /:/, $PopEnabled, 4;
   ($w1,$w2,$w3,$w4) = split /:/, $WebEnabled, 4;
-  if (isEnabled("zimbra-store")) {
+  if (isEnabled("zimbra-store") || $options{o}) {
        if ($options{m}) {
           print ZMPROV "ms $hostname ".
             "zimbraImapBindPort $i1 ".
@@ -212,7 +219,7 @@ if ($options{d}) {
   ($i1,$i2,$i3,$i4) = split /:/, $ImapDisabled, 4;
   ($p1,$p2,$p3,$p4) = split /:/, $PopDisabled, 4;
   ($w1,$w2,$w3,$w4) = split /:/, $WebDisabled, 4;
-  if (isEnabled("zimbra-store")) {
+  if (isEnabled("zimbra-store") || $options{o}) {
        if ($options{m}) {
           print ZMPROV "ms $hostname ".
             "zimbraImapBindPort $i1 ".
@@ -265,7 +272,7 @@ close ZMPROV;
 exit 0;
 
 sub usage() {
-  print "Usage: $0 [-h] [-m] [-w] [-d [-s] [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4] [-x mailmode]] [-e [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4]] [-f] hostname\n";
+  print "Usage: $0 [-h] [-o] [-m] [-w] [-d [-s] [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4] [-x mailmode]] [-e [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4]] [-f] hostname\n";
   print "\t-h: display this help message\n";
   print "\t-a: Colon separated list of Web ports to use. Format: HTTP-STORE:HTTP-PROXY:HTTPS-STORE:HTTPS-PROXY (Ex: 8080:80:8443:443)\n";
   print "\t-d: disable proxy\n";
@@ -273,6 +280,7 @@ sub usage() {
   print "\t-f: Full reset on memcached port and search queries and POP/IMAP throttling.\n";
   print "\t-i: Colon separated list of IMAP ports to use. Format: IMAP-STORE:IMAP-PROXY:IMAPS-STORE:IMAPS-PROXY (Ex: 7143:143:7993:993)\n";
   print "\t-m: Toggle mail proxy portions\n";
+  print "\t-o: Override enabled checks\n";
   print "\t-p: Colon separated list of POP ports to use. Format: POP-STORE:POP-PROXY:POPS-STORE:POPS-PROXY (Ex: 7110:110:7995:995)\n";
   print "\t-s: Set cleartext to FALSE (secure mode) on disable\n";
   print "\t-w: Toggle Web proxy portions\n";
@@ -325,23 +333,6 @@ sub getLdapServerValue {
   return $val;
 }
 
-sub isInstalled {
-	my $package=shift;
-	my $found=0;
-	open(ZMPROVI, "$ZMPROV gs $hostname zimbraServiceInstalled|");
-	while (<ZMPROVI>) {
-		chomp;
-		if (/zimbraServiceInstalled:\s(.*)/) {
-			my $service = $1;
-			if ($packageServiceMap{$service} eq $package) {
-				$found = 1;
-			}
-		}
-	}
-	close(ZMPROVI);
-	return $found;
-}
-
 sub isEnabled {
 	my $package=shift;
 	my $found=0;
@@ -357,4 +348,35 @@ sub isEnabled {
 	}
 	close(ZMPROVE);
 	return $found;
+}
+
+sub isInstalled {
+  my $pkg = shift;
+
+  my $pkgQuery;
+
+  my $good = 0;
+  if ($platform eq "DEBIAN3.1" || $platform eq "UBUNTU6" || $platform eq "UBUNTU7" || $platform eq "UBUNTUUNKNOWN" || $platform eq "DEBIAN4.0" || $platform eq "DEBIAN4.0_64" || $platform eq "UBUNTU6_64" || $platform eq "DEBIANUNKNOWN" ) {
+    $pkgQuery = "dpkg -s $pkg";
+  } elsif ($platform =~ /MACOSX/) {
+    my @l = sort glob ("/Library/Receipts/${pkg}*");
+    if ( $#l < 0 ) { return 0; }
+    $pkgQuery = "test -d $l[$#l]";
+  } elsif ($platform =~ /RPL/) {
+    $pkgQuery = "conary q $pkg";
+  } else {
+    $pkgQuery = "rpm -q $pkg";
+  }
+
+  my $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
+  $rc >>= 8;
+  if (($platform eq "DEBIAN3.1" || $platform eq "UBUNTU6" || $platform eq "UBUNTU7" || $platform eq "UBUNTUUNKNOWN" || $platform eq "DEBIAN4.0" || $platform eq "DEBIAN4.0_64" || $platform eq "UBUNTU6_64" || $platform eq "DEBIANUNKNOWN" ) && $rc == 0 ) {
+    $good = 1;
+    $pkgQuery = "dpkg -s $pkg | egrep '^Status: ' | grep 'not-installed'";
+    $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
+    $rc >>= 8;
+    return ($rc == $good);
+  } else {
+    return ($rc == $good);
+  }
 }
