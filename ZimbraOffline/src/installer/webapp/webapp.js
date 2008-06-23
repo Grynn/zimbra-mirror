@@ -3,6 +3,14 @@ function preload() {
 }
 
 function startServer() {
+  return startStopServer("start");
+}
+
+function stopServer() {
+  return startStopServer("stop");
+}
+
+function startStopServer(verb) {
   var xulRuntime = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime);
   var os = xulRuntime.OS.toLowerCase();
 
@@ -15,20 +23,20 @@ function startServer() {
       var systemDir = dirSvc.get("SysD", Ci.nsIFile);
       var zdesktopServer = systemDir.clone();
       zdesktopServer.append("net.exe");
-      args = ["start", "Zimbra Desktop Service"];
+      args = [verb, "Zimbra Desktop Service"];
     }
     else if (os == "linux") {
       var appRoot = WebAppProperties.getAppRoot();
       var zdesktopRoot = appRoot.parent;
       zdesktopServer = zdesktopRoot.clone();
       zdesktopServer.append("zdesktop");
-      args = ["start"];
+      args = [verb];
     }
     else if (os == "darwin") {
       zdesktopServer = Cc["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
       zdesktopServer.initWithPath("/bin");
       zdesktopServer.append("launchctl");
-      args = ["start", "com.zimbra.zdesktop"];
+      args = [verb, "com.zimbra.zdesktop"];
     }
 
     var process = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
@@ -98,6 +106,13 @@ function load() {
     command.addEventListener("DOMActivate", function(event) {checkForUpdates();}, false);
     window.platform.icon().menu.addMenuItem("checkForUpdates");
 
+    command = window.document.createElement("command");
+    head.appendChild(command);
+    command.id = "shutdownService";
+    command.setAttribute("label", "Shutdown Service");
+    command.addEventListener("DOMActivate", function(event) {shutdownService();}, false);
+    window.platform.icon().menu.addMenuItem("shutdownService");
+
     var xulRuntime = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime);
     var os = xulRuntime.OS.toLowerCase();
     if (os == "winnt") {
@@ -128,4 +143,13 @@ function checkForUpdates()
 function quitApp() {
   var appStartup = Cc["@mozilla.org/toolkit/app-startup;1"].getService(Ci.nsIAppStartup);
   appStartup.quit(appStartup.eAttemptQuit);
+}
+
+function shutdownService() {
+  if (window.confirm("Mailbox data will not be updated when service is shutdown.  OK to shutdown?")) {
+    if (!stopServer()) {
+      window.alert("Zimbra Desktop service can't be stopped.");
+    }
+    quitApp();
+  }
 }
