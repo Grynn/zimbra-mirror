@@ -508,17 +508,19 @@ public class SkinResources
 					// TODO: Add locale variants? Probably not...
 				}
 			} else {
-                File file = new File(fileDir, filenameExt);
+				File dir = fileDir;
+				File file = new File(dir, filenameExt);
                 if (ZimbraLog.webclient.isDebugEnabled())
                     ZimbraLog.webclient.debug("DEBUG: file " + file.getAbsolutePath());
                 if (!file.exists() && type.equals(T_CSS) && filename.equals(N_IMAGES)) {
                     file = new File(rootDir, IMAGE_CSS);
-                    if (ZimbraLog.webclient.isDebugEnabled())
+					dir = file.getParentFile();
+					if (ZimbraLog.webclient.isDebugEnabled())
                         ZimbraLog.webclient.debug("DEBUG: !file.exists() " + file.getAbsolutePath());
                 }
                 files.add(file);
 				if (type.equals(T_CSS) || type.equals(T_JAVASCRIPT)) {
-					addLocaleFiles(files, requestedLocale, fileDir, filename, ext);
+					addLocaleFiles(files, requestedLocale, dir, filename, ext);
 				}
 			}
 
@@ -548,6 +550,9 @@ public class SkinResources
 		Locale[] locales = defaultLocale.equals(requestedLocale)
 						 ? new Locale[]{ requestedLocale }
 						 : new Locale[]{ defaultLocale, requestedLocale };
+		if (ZimbraLog.webclient.isDebugEnabled()) {
+			ZimbraLog.webclient.debug("addLocaleFiles: files="+files+", reqLoc="+requestedLocale+", dir="+dir+", fname="+filename+", ext="+ext);
+		}
 		for (Locale locale : locales) {
 			// NOTE: Overrides are loaded in backwards order from
 			//       resource bundles because CSS/JS that appears
@@ -557,18 +562,27 @@ public class SkinResources
 			String language = locale.getLanguage();
 			File langFile = new File(dir, filename+"_"+language+ext);
 			if (langFile.exists()) {
+				if (ZimbraLog.webclient.isDebugEnabled()) {
+					ZimbraLog.webclient.debug("  adding file: "+langFile.getAbsolutePath());
+				}
 				files.add(langFile);
 			}
 			String country = locale.getCountry();
 			if (country != null && country.length() > 0) {
 				File langCountryFile = new File(dir, filename+"_"+language+"_"+country+ext);
 				if (langCountryFile.exists()) {
+					if (ZimbraLog.webclient.isDebugEnabled()) {
+						ZimbraLog.webclient.debug("  adding file: "+langCountryFile.getAbsolutePath());
+					}
 					files.add(langCountryFile);
 				}
 				String variant = locale.getVariant();
 				if (variant != null && variant.length() > 0) {
 					File langCountryVariantFile = new File(dir, filename+"_"+language+"_"+country+"_"+variant+ext);
 					if (langCountryVariantFile.exists()) {
+						if (ZimbraLog.webclient.isDebugEnabled()) {
+							ZimbraLog.webclient.debug("  adding file: "+langCountryVariantFile.getAbsolutePath());
+						}
 						files.add(langCountryVariantFile);
 					}
 				}
