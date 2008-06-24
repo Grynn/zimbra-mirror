@@ -329,7 +329,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineSignature) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraSignatureId));
             ((OfflineSignature) e).setName(e.getAttr(A_zimbraSignatureName));
         } else if (etype == EntryType.CONFIG) {
-            attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_offlineDn, "config");
+            //attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_offlineDn, "config");
+        	return; //we don't actually save any config to db
         } else {
             attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId));
         }

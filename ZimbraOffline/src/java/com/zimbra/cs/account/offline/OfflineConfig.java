@@ -35,18 +35,18 @@ class OfflineConfig extends Config {
         try {
             Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.CONFIG, OfflineProvisioning.A_offlineDn, "config");
             if (attrs == null) {
-                attrs = new HashMap<String, Object>();
+                attrs = new HashMap<String, Object>(3);
                 attrs.put(Provisioning.A_cn, "config");
                 attrs.put(Provisioning.A_objectClass, "zimbraGlobalConfig");
-                String[] skins = OfflineLC.zdesktop_skins.value().split("\\s*,\\s*");
-                attrs.put(Provisioning.A_zimbraInstalledSkin, skins);
-
-                attrs.put(Provisioning.A_zimbraRedoLogEnabled, OfflineLC.zdesktop_redolog_enabled.booleanValue() ? Provisioning.TRUE : Provisioning.FALSE);
-
-                attrs.put(Provisioning.A_zimbraSmtpSendAddMailer, Provisioning.FALSE);
-                attrs.put(Provisioning.A_zimbraNotebookAccount, "local@host.local");
                 DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs, false);
             }
+           	String[] skins = OfflineLC.zdesktop_skins.value().split("\\s*,\\s*");
+            attrs.put(Provisioning.A_zimbraInstalledSkin, skins);
+            
+            attrs.put(Provisioning.A_zimbraRedoLogEnabled, OfflineLC.zdesktop_redolog_enabled.booleanValue() ? Provisioning.TRUE : Provisioning.FALSE);
+            
+            attrs.put(Provisioning.A_zimbraSmtpSendAddMailer, Provisioning.FALSE);
+            attrs.put(Provisioning.A_zimbraNotebookAccount, "local@host.local");
             
             return new OfflineConfig(attrs);
         } catch (ServiceException e) {
