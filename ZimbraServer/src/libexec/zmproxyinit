@@ -181,6 +181,9 @@ if ($options{e}) {
                  "zimbraReverseProxyMailEnabled TRUE\n";
             }
             if ($options{w}) {
+               if ($options{x}) {
+                 $proxyMailMode=$options{x};
+               }
                print ZMPROV "ms $hostname ".
                "zimbraMailReferMode reverse-proxied ".
                "zimbraMailPort $w1 ".
@@ -188,6 +191,7 @@ if ($options{e}) {
                "zimbraMailSSLPort $w3 ".
                "zimbraMailSSLProxyPort $w4 ".
                "zimbraMailMode http ".
+               "zimbraReverseProxyMailMode $proxyMailMode ".
                "zimbraReverseProxyHttpEnabled TRUE\n";
             }
             if (!isEnabled("zimbra-proxy")) {
@@ -229,7 +233,7 @@ if ($options{e}) {
      	        print ZMPROV "ms $hostname ".
                  "zimbraMailProxyPort $w2 ".
                  "zimbraMailSSLProxyPort $w4 ".
-                 "zimbraMailMode $proxyMailMode ".
+                 "zimbraReverseProxyMailMode $proxyMailMode ".
                  "zimbraReverseProxyHttpEnabled TRUE\n";
      	   }
             if (!isEnabled("zimbra-proxy")) {
@@ -286,6 +290,7 @@ if ($options{d}) {
             "zimbraMailSSLPort $w3 ".
             "zimbraMailSSLProxyPort $w4 ".
             "zimbraMailMode $storeMailMode ".
+            "zimbraReverseProxyMailMode $storeMailMode ".
             "zimbraReverseProxyHttpEnabled FALSE\n";
        }
        $enabledHTTPProxy = getLdapServerValue("zimbraReverseProxyHttpEnabled");
@@ -336,7 +341,7 @@ if ($options{d}) {
                  print ZMPROV "ms $hostname ".
                  "zimbraMailProxyPort $w2 ".
                  "zimbraMailSSLProxyPort $w4 ".
-                 "zimbraMailMode $proxyMailMode ".
+                 "zimbraReverseProxyMailMode $proxyMailMode ".
                  "zimbraReverseProxyHttpEnabled FALSE\n";
      	   }
             $enabledHTTPProxy = getLdapServerValue("zimbraReverseProxyHttpEnabled");
@@ -372,7 +377,7 @@ sub usage() {
   print "Note that -i or -p require -m.\n";
   print "Note that -a requires -w.\n";
   print "Note that -x requires -w and -d for store.\n";
-  print "Note that on single node install, mailmode for proxy and store is set to \"http\"\n";
+  print "Note that -x requires -w for proxy.\n";
   print "The following are the defaults for -a, -i, -p, and -x if they are not supplied as options.\n";
   print "-a default on enable: 8080:80:8443:443\n";
   print "-a default on disable: 80:0:443:0\n";
