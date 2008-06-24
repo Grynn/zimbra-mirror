@@ -40,7 +40,8 @@ my $PopEnabled="7110:110:7995:995";
 my $PopDisabled="110:7110:995:7995";
 my $WebEnabled="8080:80:8443:443";
 my $WebDisabled="80:0:443:0";
-my $MailMode="mixed";
+my $storeMailMode="mixed";
+my $proxyMailMode="both";
 
 our $ZMPROV = "/opt/zimbra/bin/zmprov -l";
 our $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
@@ -222,9 +223,13 @@ if ($options{e}) {
                  "zimbraReverseProxyMailEnabled TRUE\n";
      	   }
             if ($options{w}) {
+                if ($options{x}) {
+                  $proxyMailMode=$options{x};
+                }
      	        print ZMPROV "ms $hostname ".
                  "zimbraMailProxyPort $w2 ".
                  "zimbraMailSSLProxyPort $w4 ".
+                 "zimbraMailMode $proxyMailMode ".
                  "zimbraReverseProxyHttpEnabled TRUE\n";
      	   }
             if (!isEnabled("zimbra-proxy")) {
@@ -271,16 +276,16 @@ if ($options{d}) {
        }
        if ($options{w}) {
             if ($options{x}) {
-              $MailMode=$options{x};
+              $storeMailMode=$options{x};
             }
-            chomp ($MailMode);
+            chomp ($storeMailMode);
             print ZMPROV "ms $hostname ".
             "zimbraMailReferMode wronghost ".
             "zimbraMailPort $w1 ".
             "zimbraMailProxyPort $w2 ".
             "zimbraMailSSLPort $w3 ".
             "zimbraMailSSLProxyPort $w4 ".
-            "zimbraMailMode $MailMode ".
+            "zimbraMailMode $storeMailMode ".
             "zimbraReverseProxyHttpEnabled FALSE\n";
        }
        $enabledHTTPProxy = getLdapServerValue("zimbraReverseProxyHttpEnabled");
@@ -305,14 +310,14 @@ if ($options{d}) {
             }
             if ($options{w}) {
      		  if ($options{x}) {
-     		       $MailMode=$options{x};
+     		       $storeMailMode=$options{x};
      		  }
-     		  chomp ($MailMode);
+     		  chomp ($storeMailMode);
                print ZMPROV "ms $hostname ".
                  "zimbraMailReferMode wronghost ".
                  "zimbraMailPort $w1 ".
                  "zimbraMailSSLPort $w3 ".
-                 "zimbraMailMode $MailMode\n";
+                 "zimbraMailMode $storeMailMode\n";
             }
        }
        if (isInstalled("zimbra-proxy")) {
@@ -325,9 +330,13 @@ if ($options{d}) {
                  "zimbraReverseProxyMailEnabled FALSE\n";
      	   }
      	   if ($options{w}) {
+                 if ($options{x}) {
+                   $proxyMailMode=$options{x};
+                 }
                  print ZMPROV "ms $hostname ".
                  "zimbraMailProxyPort $w2 ".
                  "zimbraMailSSLProxyPort $w4 ".
+                 "zimbraMailMode $proxyMailMode ".
                  "zimbraReverseProxyHttpEnabled FALSE\n";
      	   }
             $enabledHTTPProxy = getLdapServerValue("zimbraReverseProxyHttpEnabled");
@@ -362,7 +371,8 @@ sub usage() {
   print "Note that -d or -e require one or both of -m and -w.\n"; 
   print "Note that -i or -p require -m.\n";
   print "Note that -a requires -w.\n";
-  print "Note that -x requires -w and -d.\n";
+  print "Note that -x requires -w and -d for store.\n";
+  print "Note that on single node install, mailmode for proxy and store is set to \"http\"\n";
   print "The following are the defaults for -a, -i, -p, and -x if they are not supplied as options.\n";
   print "-a default on enable: 8080:80:8443:443\n";
   print "-a default on disable: 80:0:443:0\n";
@@ -370,7 +380,8 @@ sub usage() {
   print "-i default on disable: 143:7143:993:7993\n";
   print "-p default on enable: 7110:110:7995:995\n";
   print "-p default on disable: 110:7110:995:7995\n";
-  print "-x default on disable: mixed\n";
+  print "-x default on store disable: mixed\n";
+  print "-x default on proxy enable/disable: both\n";
   print "\n\n";
   exit 1;
 }
