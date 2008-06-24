@@ -3,9 +3,9 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 
-<fmt:setBundle basename="desktop.messages" />
+<fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
 <c:set var='onResetWarn'><fmt:message key='OnResetWarn'/></c:set>
 <c:set var='onDeleteWarn'><fmt:message key='OnDeleteWarn'/></c:set>

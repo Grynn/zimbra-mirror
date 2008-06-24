@@ -2,9 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
 <%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 
-<fmt:setBundle basename="desktop.messages" />
+<fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.GmailBean" scope="request"/>
 <jsp:setProperty name="bean" property="*"/>
