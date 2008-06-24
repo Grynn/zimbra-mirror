@@ -540,14 +540,12 @@ function(origString, pixelWidth, className) {
 	return origString;
 };
 
-AjxStringUtil.clipByLength = function(str,clipLen) {
-    var len = str.length;
-    return (len <= clipLen)
-         ?  str
-         : [str.substr(0,clipLen/2),
-            '...',
-            str.substring(len - ((clipLen/2) - 3),len)
-           ].join("");
+AjxStringUtil.clipByLength =
+function(str,clipLen) {
+	var len = str.length;
+	return (len <= clipLen)
+		?  str
+		: [str.substr(0,clipLen/2), '...', str.substring(len - ((clipLen/2) - 3),len)].join("");
 };
 
 /**
@@ -564,8 +562,8 @@ function(origString, pixelWidth, className) {
 
 	var newString = "";
 	var newLine = "";
-	textRows = origString.split("/n");
-	for (var trCount=0; trCount<textRows.length; trCount++) {
+	var textRows = origString.split("/n");
+	for (var trCount = 0; trCount < textRows.length; trCount++) {
 		if (trCount != 0) {
 			newString += newLine + "<br>";
 			newLine = "";
@@ -802,12 +800,12 @@ AjxStringUtil.convertHtml2Text =
 function(domRoot) {
 	if (!domRoot) { return null; }
 
-    if (typeof domRoot == "string") {
-        var domNode = document.createElement("SPAN");
-        domNode.innerHTML = domRoot;
-        domRoot = domNode;
-    }
-    var text = [];
+	if (typeof domRoot == "string") {
+		var domNode = document.createElement("SPAN");
+		domNode.innerHTML = domRoot;
+		domRoot = domNode;
+	}
+	var text = [];
 	var idx = 0;
 	var ctxt = {};
 	this._traverse(domRoot, text, idx, AjxStringUtil._NO_LIST, 0, 0, ctxt);
@@ -1081,30 +1079,30 @@ AjxStringUtil.URL_PARSE_RE = new RegExp("^(?:([^:/?#.]+):)?(?://)?(([^:/?#]*)(?:
 AjxStringUtil.parseURL = 
 function(sourceUri) {
 
-    var names = ["source","protocol","authority","domain","port","path","directoryPath","fileName","query","anchor"];
-    var parts = AjxStringUtil.URL_PARSE_RE.exec(sourceUri);
-    var uri = {};
-    
-    for(var i = 0; i < 10; i++){
-        uri[names[i]] = (parts[i] ? parts[i] : "");
-    }
-    
-    if(uri.directoryPath.length > 0){
-        uri.directoryPath = uri.directoryPath.replace(/\/?$/, "/");
-    }
-    
-    return uri;
+	var names = ["source","protocol","authority","domain","port","path","directoryPath","fileName","query","anchor"];
+	var parts = AjxStringUtil.URL_PARSE_RE.exec(sourceUri);
+	var uri = {};
+
+	for (var i = 0; i < names.length; i++) {
+		uri[names[i]] = (parts[i] ? parts[i] : "");
+	}
+
+	if (uri.directoryPath.length > 0) {
+		uri.directoryPath = uri.directoryPath.replace(/\/?$/, "/");
+	}
+
+	return uri;
 };
 
 AjxStringUtil._SPECIAL_CHARS = /["\\\x00-\x1f]/g;
 AjxStringUtil._CHARS = {
-        '\b': '\\b',
-        '\t': '\\t',
-        '\n': '\\n',
-        '\f': '\\f',
-        '\r': '\\r',
-        '"' : '\\"',
-        '\\': '\\\\'
+	'\b': '\\b',
+	'\t': '\\t',
+	'\n': '\\n',
+	'\f': '\\f',
+	'\r': '\\r',
+	'"' : '\\"',
+	'\\': '\\\\'
 };
 
 /**
@@ -1118,10 +1116,10 @@ AjxStringUtil._CHARS = {
 AjxStringUtil.objToString =
 function(o) {
 	var t = typeof o,
-    i,len,j, // array iteration
-    k,v,     // object iteration
-    vt,      // typeof v during iteration
-    a,       // composition array for performance over string concat
+	i,len,j, // array iteration
+	k,v,     // object iteration
+	vt,      // typeof v during iteration
+	a,       // composition array for performance over string concat
 	pstack = []; // Processing stack used for cyclical ref detection
 
 	// escape encode special characters
@@ -1153,8 +1151,8 @@ function(o) {
 	}
 
 	// Array
-    //Special check ( t==='object' && o.length && typeof o.push === "function") becoz when objects are passed from child window to parent window they loose their types.
-    //Parent window considers every object/custome object/array as 'object' type. 
+	//Special check ( t==='object' && o.length && typeof o.push === "function") becoz when objects are passed from child window to parent window they loose their types.
+	//Parent window considers every object/custome object/array as 'object' type.
     if (AjxUtil.isArray(o) || (t === 'object' &&  o.length) ) {
 		// Check for cyclical references
 		for (i = pstack.length - 1; i >= 0; --i) {

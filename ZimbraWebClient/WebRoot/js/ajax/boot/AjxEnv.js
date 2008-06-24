@@ -116,7 +116,7 @@ function() {
 			} else if ((index = token.indexOf('firefox/')) != -1) {
 				AjxEnv.isFirefox = true;
 				browserVersion = parseFloat(token.substr(index + 8));
-			} else if ((index = token.indexOf('prism/')) != -1) {
+			} else if ((index = token.indexOf('prism')) != -1) {
 				AjxEnv.isPrism = true;
 			} else if ((index = token.indexOf('camino/')) != -1) {
 				AjxEnv.isCamino = true;

@@ -52,7 +52,8 @@ DwtCheckbox.PARAMS = ["parent", "style", "name", "checked", "className", "posSty
 DwtCheckbox.prototype = new DwtControl;
 DwtCheckbox.prototype.constructor = DwtCheckbox;
 
-DwtCheckbox.prototype.toString = function() {
+DwtCheckbox.prototype.toString =
+function() {
 	return "DwtCheckbox";
 };
 
@@ -76,11 +77,13 @@ DwtCheckbox.prototype._textPosition = DwtCheckbox.DEFAULT_POSITION;
 //
 // Public methods
 //
-DwtCheckbox.prototype.getTabGroupMember = function() {
+DwtCheckbox.prototype.getTabGroupMember =
+function() {
 	return this._inputEl;
 };
 
-DwtCheckbox.prototype.focus = function() {
+DwtCheckbox.prototype.focus =
+function() {
 	if (this._inputEl) {
 		this._inputEl.focus();
 		DwtShell.getShell(window).getKeyboardMgr().grabFocus(this.getTabGroupMember());
@@ -100,6 +103,7 @@ DwtCheckbox.prototype.addSelectionListener =
 function(listener) {
 	this.addListener(DwtEvent.SELECTION, listener);
 };
+
 DwtCheckbox.prototype.removeSelectionListener =
 function(listener) {
 	this.removeListener(DwtEvent.SELECTION, listener);
@@ -111,33 +115,40 @@ DwtCheckbox.prototype.setEnabled =
 function(enabled) {
 	if (enabled != this._enabled) {
 		DwtControl.prototype.setEnabled.call(this, enabled);
-        this._inputEl.disabled = !enabled;
-        var className = enabled ? "Text" : "DisabledText";
-        if (this._textElLeft) this._textElLeft.className = className;
-        if (this._textElRight) this._textElRight.className = className;
-    }
+		this._inputEl.disabled = !enabled;
+		var className = enabled ? "Text" : "DisabledText";
+		if (this._textElLeft) this._textElLeft.className = className;
+		if (this._textElRight) this._textElRight.className = className;
+	}
 };
 
-DwtCheckbox.prototype.setSelected = function(selected) {
-    if (this._inputEl && this._inputEl.checked != selected) {
-        this._inputEl.checked = selected;
-    }
-};
-DwtCheckbox.prototype.isSelected = function() {
-    return this._inputEl && this._inputEl.checked;
+DwtCheckbox.prototype.setSelected =
+function(selected) {
+	if (this._inputEl && this._inputEl.checked != selected) {
+		this._inputEl.checked = selected;
+	}
 };
 
-DwtCheckbox.prototype.setText = function(text) {
-    if (this._textEl && this._text != text) {
-        this._text = text;
-        this._textEl.innerHTML = text || "";
-    }
-};
-DwtCheckbox.prototype.getText = function() {
-    return this._text;
+DwtCheckbox.prototype.isSelected =
+function() {
+	return this._inputEl && this._inputEl.checked;
 };
 
-DwtCheckbox.prototype.setTextPosition = function(position) {
+DwtCheckbox.prototype.setText =
+function(text) {
+	if (this._textEl && this._text != text) {
+		this._text = text;
+		this._textEl.innerHTML = text || "";
+	}
+};
+
+DwtCheckbox.prototype.getText =
+function() {
+	return this._text;
+};
+
+DwtCheckbox.prototype.setTextPosition =
+function(position) {
 	this._textEl = position == DwtCheckbox.TEXT_LEFT ? this._textElLeft : this._textElRight;
 	if (this._textPosition != position) {
 		this._textPosition = position;
@@ -146,11 +157,14 @@ DwtCheckbox.prototype.setTextPosition = function(position) {
 		this.setText(this._text);
 	}
 };
-DwtCheckbox.prototype.getTextPosition = function() {
+
+DwtCheckbox.prototype.getTextPosition =
+function() {
 	return this._textPosition;
 };
 
-DwtCheckbox.prototype.setValue = function(value) {
+DwtCheckbox.prototype.setValue =
+function(value) {
 	if (this._value != value) {
 		this._value = value;
 		if (this._inputEl) {
@@ -158,12 +172,15 @@ DwtCheckbox.prototype.setValue = function(value) {
 		}
 	}
 };
-DwtCheckbox.prototype.getValue = function() {
-    return this._value != null ? this._value : this._text;
+
+DwtCheckbox.prototype.getValue =
+function() {
+	return this._value != null ? this._value : this._text;
 };
 
-DwtCheckbox.prototype.getInputElement = function() {
-    return this._inputEl;
+DwtCheckbox.prototype.getInputElement =
+function() {
+	return this._inputEl;
 };
 
 //
@@ -173,26 +190,28 @@ DwtCheckbox.prototype.getInputElement = function() {
 /** The input field inherits the id for accessibility purposes. */
 DwtCheckbox.prototype._replaceElementHook =
 function(oel, nel, inheritClass, inheritStyle) {
-    nel = this.getInputElement();
-    DwtControl.prototype._replaceElementHook.call(this, oel, nel, inheritClass, inheritStyle);
-    if (oel.id) {
-        nel.id = oel.id;
-        if (this._textEl) {
-            this._textEl.setAttribute("for", oel.id);
-        }
-    }
+	nel = this.getInputElement();
+	DwtControl.prototype._replaceElementHook.call(this, oel, nel, inheritClass, inheritStyle);
+	if (oel.id) {
+		nel.id = oel.id;
+		if (this._textEl) {
+			this._textEl.setAttribute("for", oel.id);
+		}
+	}
 };
 
 //
 // Private methods
 //
 
-DwtCheckbox.prototype._createHtml = function(templateId) {
-    var data = { id: this._htmlElId };
-    this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
+DwtCheckbox.prototype._createHtml =
+function(templateId) {
+	var data = { id: this._htmlElId };
+	this._createHtmlFromTemplate(templateId || this.TEMPLATE, data);
 };
 
-DwtCheckbox.prototype._createHtmlFromTemplate = function(templateId, data) {
+DwtCheckbox.prototype._createHtmlFromTemplate =
+function(templateId, data) {
 	// NOTE: If  you don't set the name and checked status when
 	//       creating checkboxes and radio buttons on IE, they will
 	//       not take the first programmatic value. So we pass in
@@ -216,16 +235,17 @@ DwtCheckbox.prototype._createHtmlFromTemplate = function(templateId, data) {
 // Private functions
 //
 
-DwtCheckbox.__handleClick = function(evt) {
-    var event = DwtUiEvent.getEvent(evt);
-    var target = DwtUiEvent.getTarget(event);
+DwtCheckbox.__handleClick =
+function(evt) {
+	var event = DwtUiEvent.getEvent(evt);
+	var target = DwtUiEvent.getTarget(event);
 
-    var selEv = DwtShell.selectionEvent;
-    DwtUiEvent.copy(selEv, event);
-    selEv.item = this;
-    selEv.detail = target.checked;
+	var selEv = DwtShell.selectionEvent;
+	DwtUiEvent.copy(selEv, event);
+	selEv.item = this;
+	selEv.detail = target.checked;
 
-    var checkbox = DwtControl.findControl(target);
-    checkbox.setSelected(target.checked);
-    checkbox.notifyListeners(DwtEvent.SELECTION, selEv);
+	var checkbox = DwtControl.findControl(target);
+	checkbox.setSelected(target.checked);
+	checkbox.notifyListeners(DwtEvent.SELECTION, selEv);
 };
