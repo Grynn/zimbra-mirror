@@ -6,14 +6,6 @@
   <desc>visual order of all accounts in desktop UI</desc>
 </attr>
 
-<attr name="offlineIsMailtoHandler" type="boolean" cardinality="single" optionalIn="account" flags="accountInfo">
-  <desc>whether to register as mailto link handler</desc>
-</attr>
-
-<attr name="offlineMailtoAccountId" type="string" cardinality="single" optionalIn="account" flags="accountInfo">
-  <desc>the account ID of the account for mailto handling</desc>
-</attr>
-
 <attr name="offlineModifiedAttrs" type="string" cardinality="multi" optionalIn="account,dataSource,identity">
   <desc>internal: set of attributes modified since the last synchronization</desc>
 </attr>
@@ -140,6 +132,14 @@
 
 <attr name="zimbraDataSourceSyncAllServerFolders" type="boolean" cardinality="single" optionalIn="dataSource">
   <desc>whether to auto-enable sync on all server folders</desc>
+</attr>
+
+<attr name="zimbraPrefMailtoHandlerEnabled" type="boolean" cardinality="single" optionalIn="account" flags="accountInfo">
+  <desc>whether to register as mailto link handler</desc>
+</attr>
+
+<attr name="zimbraPrefMailtoAccountId" type="string" cardinality="single" optionalIn="account" flags="accountInfo">
+  <desc>the account ID of the account for mailto handling</desc>
 </attr>
 
 </attrs>

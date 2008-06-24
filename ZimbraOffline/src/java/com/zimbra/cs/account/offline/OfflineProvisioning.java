@@ -57,6 +57,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_offlineDeletedIdentity = "offlineDeletedIdentity";
     public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
     public static final String A_offlineDeletedSignature = "offlineDeletedSignature";
+    public static final String A_zimbraPrefMailtoHandlerEnabled = "zimbraPrefMailtoHandlerEnabled";
+    public static final String A_zimbraPrefMailtoAccountId = "zimbraPrefMailtoAccountId";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -410,7 +412,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefLabel,
             A_zimbraPrefMailPollingInterval,
             A_zimbraChildAccount,
-            A_zimbraPrefChildVisibleAccount
+            A_zimbraPrefChildVisibleAccount,
+            A_zimbraPrefMailtoHandlerEnabled,
+            A_zimbraPrefMailtoAccountId
     }));
 
     @Override
