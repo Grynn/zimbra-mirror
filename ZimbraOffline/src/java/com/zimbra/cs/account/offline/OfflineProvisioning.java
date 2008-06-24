@@ -329,8 +329,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineSignature) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraSignatureId));
             ((OfflineSignature) e).setName(e.getAttr(A_zimbraSignatureName));
         } else if (etype == EntryType.CONFIG) {
-            //attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_offlineDn, "config");
-        	return; //we don't actually save any config to db
+        	attrs = OfflineConfig.instantiate().getAttrs();
         } else {
             attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId));
         }
@@ -415,7 +414,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraChildAccount,
             A_zimbraPrefChildVisibleAccount,
             A_zimbraPrefMailtoHandlerEnabled,
-            A_zimbraPrefMailtoAccountId
+            A_zimbraPrefMailtoAccountId,
+            A_zimbraJunkMessagesIndexingEnabled
     }));
 
     @Override
@@ -477,6 +477,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         attrs.remove(A_zimbraChildAccount);
         attrs.remove(A_zimbraPrefChildVisibleAccount);
+        
+        attrs.put(A_zimbraJunkMessagesIndexingEnabled, TRUE);
 
         Account account = createAccountInternal(emailAddress, zgi.getId(), attrs);
         try {
@@ -743,6 +745,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraFeatureViewInHtmlEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureVoiceEnabled, FALSE);
         
+        addToMap(attrs, A_zimbraJunkMessagesIndexingEnabled, TRUE); //always enable junk index
         addToMap(attrs, A_zimbraLocale, "en_US");
         
         addToMap(attrs, A_zimbraMailIdleSessionTimeout, "0"); 

@@ -35,7 +35,7 @@ class OfflineConfig extends Config {
         try {
             Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.CONFIG, OfflineProvisioning.A_offlineDn, "config");
             if (attrs == null) {
-                attrs = new HashMap<String, Object>(3);
+                attrs = new HashMap<String, Object>(2);
                 attrs.put(Provisioning.A_cn, "config");
                 attrs.put(Provisioning.A_objectClass, "zimbraGlobalConfig");
                 DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs, false);
