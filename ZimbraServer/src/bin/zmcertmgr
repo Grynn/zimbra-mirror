@@ -703,8 +703,8 @@ getCertFromLdap() {
     loadConfigKey "zimbraSSLPrivateKey" ${current_key} "server"
   fi
   if [ "x${type}" = "xcomm" -a ! -f "${commercial_ca_crt}" ]; then
-    # recreate the commercail_ca_crt from the concatenated commercial cert stored in ldap.
-    perl -e ' while (<>) { open(N, ">>${commercial_ca_crt}") if (/BEGIN CERTIFICATE/); print N if ($f>0); if (/END CERTIFICATE/) { close(N); $f++; } }' ${current_crt}
+    # recreate the commercial_ca_crt from the concatenated commercial cert stored in ldap.
+     perl -e 'open(C, "$ARGV[0]"); while (<C>) { open(N, ">>$ARGV[1]") if (/BEGIN CERTIFICATE/); print N if ($f>0); if (/END CERTIFICATE/) { close(N); $f++; } }' ${current_crt} ${commercial_ca_crt}
   fi
 
 }
