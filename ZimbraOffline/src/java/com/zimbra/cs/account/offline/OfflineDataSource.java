@@ -185,7 +185,7 @@ public class OfflineDataSource extends DataSource {
         return knownService != null && knownService.saveToSent;
     }
     
-    private static final int MAX_UID_ENTRIES = 32 * 1024;
+    private static final int MAX_UID_ENTRIES = 64 * 1024;
 
     private static final Map<Object, SyncState> sSyncStateMap =
         Collections.synchronizedMap(new LinkedHashMap<Object, SyncState>() {

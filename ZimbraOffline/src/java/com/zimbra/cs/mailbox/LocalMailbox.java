@@ -260,7 +260,9 @@ public class LocalMailbox extends DesktopMailbox {
 			
 			try {
 				syncMan.syncStart(ds.getName());
-				DataSourceManager.importData(ds, isOnRequest);
+                                // Force a full sync if INBOX has not yet been successfully imported
+                                boolean inboxSynced = ds.hasSyncState(Mailbox.ID_FOLDER_INBOX);
+                                DataSourceManager.importData(ds, isOnRequest || !inboxSynced);
 				syncMan.syncComplete(ds.getName());
                 OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(System.currentTimeMillis()));
 			} catch (Exception x) {
