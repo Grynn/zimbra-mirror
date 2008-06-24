@@ -1084,6 +1084,7 @@ sub doPostconf($$) {
 sub doProxyGen() {
   my $rc=0;
   my $cmd = $exe{PROXYGEN};
+  $cmd .= " -s $config{hostname}";  # provide server name while generating nginx conf
   logMsg(3,"Executing $cmd");
   $rc = 0xffff & system($cmd);
   logMsg(2, "ERROR: $cmd rc=$rc $!") 
