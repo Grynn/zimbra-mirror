@@ -192,6 +192,7 @@ if ($options{e}) {
                "zimbraMailSSLProxyPort $w4 ".
                "zimbraMailMode http ".
                "zimbraReverseProxyMailMode $proxyMailMode ".
+               "zimbraReverseProxyLookupTarget TRUE ".
                "zimbraReverseProxyHttpEnabled TRUE\n";
             }
             if (!isEnabled("zimbra-proxy")) {
@@ -220,6 +221,7 @@ if ($options{e}) {
                "zimbraMailProxyPort $w2 ".
                "zimbraMailSSLPort $w3 ".
                "zimbraMailSSLProxyPort $w4 ".
+               "zimbraReverseProxyLookupTarget TRUE ".
                "zimbraMailMode http\n";
             }
        }
@@ -303,6 +305,7 @@ if ($options{d}) {
             "zimbraMailSSLProxyPort $w4 ".
             "zimbraMailMode $storeMailMode ".
             "zimbraReverseProxyMailMode $storeMailMode ".
+            "zimbraReverseProxyLookupTarget FALSE ".
             "zimbraReverseProxyHttpEnabled FALSE\n";
        }
        $enabledHTTPProxy = getLdapServerValue("zimbraReverseProxyHttpEnabled");
@@ -340,6 +343,7 @@ if ($options{d}) {
                  "zimbraMailProxyPort $w2 ".
                  "zimbraMailSSLPort $w3 ".
                  "zimbraMailSSLProxyPort $w4 ".
+                 "zimbraReverseProxyLookupTarget FALSE ".
                  "zimbraMailMode $storeMailMode\n";
             }
        }
