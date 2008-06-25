@@ -322,7 +322,7 @@ if ($options{d}) {
                  "zimbraPop3BindPort $p1 ".
                  "zimbraPop3ProxyBindPort $p2 ".
                  "zimbraPop3SSLBindPort $p3 ".
-                 "zimbraPop3SSLProxyBindPort $p4 ".
+                 "zimbraPop3SSLProxyBindPort $p4\n";
                if ($options{s}) {
                  print ZMPROV "ms $hostname ".
                    "zimbraImapCleartextLoginEnabled FALSE ".
