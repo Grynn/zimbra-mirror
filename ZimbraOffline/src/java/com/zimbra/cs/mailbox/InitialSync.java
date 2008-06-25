@@ -72,6 +72,7 @@ import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.ContentServlet;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.formatter.SyncFormatter;
+import com.zimbra.cs.service.formatter.ZipFormatter;
 import com.zimbra.cs.service.mail.FolderAction;
 import com.zimbra.cs.service.mail.SetCalendarItem;
 import com.zimbra.cs.service.mail.Sync;
@@ -790,8 +791,9 @@ public class InitialSync {
 
     private Map<String, String> recoverHeadersFromBytes(byte[] hdrBytes) {
     	Map<String, String> headers = new HashMap<String, String>();
-    	if (hdrBytes != null && hdrBytes.length > 0) {
-    		String[] keyVals = new String(hdrBytes).split("\r\n");
+    	byte[] bytes = ZipFormatter.parseXZimbraHeadersBytes(hdrBytes);
+    	if (bytes != null && bytes.length > 0) {
+    		String[] keyVals = new String(bytes).split("\r\n");
     		for (String hdr : keyVals) {
     			int delim = hdr.indexOf(": ");
     			headers.put(hdr.substring(0, delim), hdr.substring(delim + 2));
@@ -806,7 +808,7 @@ public class InitialSync {
     	String zlv = OfflineLC.zdesktop_sync_zip_level.value();
     	OfflineAccount acct = ombx.getOfflineAccount();
     	try {
-	    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=zip&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
+	    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=zip&sync=1&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
 	    	if (acct.isDebugTraceEnabled())
 	    		OfflineLog.request.debug("GET " + url);
 	        try {
