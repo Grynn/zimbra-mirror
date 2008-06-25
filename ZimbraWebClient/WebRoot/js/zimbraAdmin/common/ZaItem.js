@@ -408,6 +408,12 @@ function () {
     var controller =  app.getCurrentController() ;
 
     try {
+
+        //bug 29424 - save the settings before the check
+        var oldSettingObj = controller._currentObject  ;
+        var currentSettingObj = this.getForm().getInstance() ;
+        ZaItem.checkFBSettings (oldSettingObj, currentSettingObj, controller) ;
+
         if (AjxEnv.hasFirebug) console.log("Checking the interop settings ...") ;
         var soapCmd  = "CheckExchangeAuthRequest";
 
@@ -423,6 +429,54 @@ function () {
         controller.popupMsgDialog(resp.code[0]._content + "<br />" + resp.message[0]._content) ;
     }catch (e) {
         controller._handleException(e)  ;
+    }
+}
+
+ZaItem.checkFBSettings = function (oldSettingObj, currentSettingObj, controller) {
+    var attrNames = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
+                     ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword   ] ;
+
+    var changedSettings = {} ;
+    var isChanged = false ;
+    for (var i=0; i < attrNames.length; i ++ ) {
+        var n = attrNames [i] ;
+        if (oldSettingObj.attrs[n] != currentSettingObj.attrs[n]) {
+            changedSettings[n] = currentSettingObj.attrs[n];
+            isChanged = true ;
+        }
+    }
+
+    if (isChanged) {
+        var soapCmd ;
+        if (controller instanceof ZaDomainController) {
+            //ModifyDomainRequest
+            soapCmd = "ModifyDomainRequest" ;
+        } else if (controller instanceof ZaGlobalConfigViewController) {
+            //ModifyConfigRequest
+            soapCmd = "ModifyConfigRequest" ;
+        } else {
+            throw new AjxException ("Invalid Controller Object") ;
+        }
+
+        var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
+
+        if (controller instanceof ZaDomainController)    {
+            soapDoc.set("id", currentSettingObj.id);
+        }
+
+        for (var aname in changedSettings) {
+            var attr = soapDoc.set("a", changedSettings[aname]);
+            attr.setAttribute("n", aname);
+        }
+
+
+        var params = new Object();
+        params.soapDoc = soapDoc;
+        var reqMgrParams = {
+            controller : controller ,
+            busyMsg : ZaMsg.BUSY_MODIFY_INTEROP_SETTINGS
+        }
+        ZaRequestMgr.invoke(params, reqMgrParams) ;
     }
 }
 
