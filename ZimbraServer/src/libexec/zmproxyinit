@@ -203,9 +203,13 @@ if ($options{e}) {
             if ($options{m}) {
                print ZMPROV "ms $hostname ".
                  "zimbraImapBindPort $i1 ".
+                 "zimbraImapProxyBindPort $i2 ".
                  "zimbraImapSSLBindPort $i3 ".
+                 "zimbraImapSSLProxyBindPort $i4 ".
                  "zimbraPop3BindPort $p1 ".
+                 "zimbraPop3ProxyBindPort $p2 ".
                  "zimbraPop3SSLBindPort $p3 ".
+                 "zimbraPop3SSLProxyBindPort $p4 ".
                  "zimbraImapCleartextLoginEnabled TRUE ".
                  "zimbraPop3CleartextLoginEnabled TRUE\n";
             }
@@ -213,16 +217,22 @@ if ($options{e}) {
                print ZMPROV "ms $hostname ".
                "zimbraMailReferMode reverse-proxied ".
                "zimbraMailPort $w1 ".
+               "zimbraMailProxyPort $w2 ".
                "zimbraMailSSLPort $w3 ".
+               "zimbraMailSSLProxyPort $w4 ".
                "zimbraMailMode http\n";
             }
        }
        if (isInstalled("zimbra-proxy")) {
             if ($options{m}) {
      	        print ZMPROV "ms $hostname ".
+                 "zimbraImapBindPort $i1 ".
                  "zimbraImapProxyBindPort $i2 ".
+                 "zimbraImapSSLBindPort $i3 ".
                  "zimbraImapSSLProxyBindPort $i4 ".
+                 "zimbraPop3BindPort $p1 ".
                  "zimbraPop3ProxyBindPort $p2 ".
+                 "zimbraPop3SSLBindPort $p3 ".
                  "zimbraPop3SSLProxyBindPort $p4 ".
                  "zimbraReverseProxyMailEnabled TRUE\n";
      	   }
@@ -231,7 +241,9 @@ if ($options{e}) {
                   $proxyMailMode=$options{x};
                 }
      	        print ZMPROV "ms $hostname ".
+                 "zimbraMailPort $w1 ".
                  "zimbraMailProxyPort $w2 ".
+                 "zimbraMailSSLPort $w3 ".
                  "zimbraMailSSLProxyPort $w4 ".
                  "zimbraReverseProxyMailMode $proxyMailMode ".
                  "zimbraReverseProxyHttpEnabled TRUE\n";
@@ -304,9 +316,13 @@ if ($options{d}) {
             if ($options{m}) {
                print ZMPROV "ms $hostname ".
                  "zimbraImapBindPort $i1 ".
+                 "zimbraImapProxyBindPort $i2 ".
                  "zimbraImapSSLBindPort $i3 ".
+                 "zimbraImapSSLProxyBindPort $i4 ".
                  "zimbraPop3BindPort $p1 ".
-                 "zimbraPop3SSLBindPort $p3\n";
+                 "zimbraPop3ProxyBindPort $p2 ".
+                 "zimbraPop3SSLBindPort $p3 ".
+                 "zimbraPop3SSLProxyBindPort $p4 ".
                if ($options{s}) {
                  print ZMPROV "ms $hostname ".
                    "zimbraImapCleartextLoginEnabled FALSE ".
@@ -321,16 +337,22 @@ if ($options{d}) {
                print ZMPROV "ms $hostname ".
                  "zimbraMailReferMode wronghost ".
                  "zimbraMailPort $w1 ".
+                 "zimbraMailProxyPort $w2 ".
                  "zimbraMailSSLPort $w3 ".
+                 "zimbraMailSSLProxyPort $w4 ".
                  "zimbraMailMode $storeMailMode\n";
             }
        }
        if (isInstalled("zimbra-proxy")) {
             if ($options{m}) {
                  print ZMPROV "ms $hostname ".
+                 "zimbraImapBindPort $i1 ".
                  "zimbraImapProxyBindPort $i2 ".
+                 "zimbraImapSSLBindPort $i3 ".
                  "zimbraImapSSLProxyBindPort $i4 ".
+                 "zimbraPop3BindPort $p1 ".
                  "zimbraPop3ProxyBindPort $p2 ".
+                 "zimbraPop3SSLBindPort $p3 ".
                  "zimbraPop3SSLProxyBindPort $p4 ".
                  "zimbraReverseProxyMailEnabled FALSE\n";
      	   }
@@ -339,7 +361,9 @@ if ($options{d}) {
                    $proxyMailMode=$options{x};
                  }
                  print ZMPROV "ms $hostname ".
+                 "zimbraMailPort $w1 ".
                  "zimbraMailProxyPort $w2 ".
+                 "zimbraMailSSLPort $w3 ".
                  "zimbraMailSSLProxyPort $w4 ".
                  "zimbraReverseProxyMailMode $proxyMailMode ".
                  "zimbraReverseProxyHttpEnabled FALSE\n";
