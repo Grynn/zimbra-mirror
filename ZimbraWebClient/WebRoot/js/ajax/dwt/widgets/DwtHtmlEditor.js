@@ -147,6 +147,10 @@ DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER4]			= DwtHtmlEditor._STYLES[4
 DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER5]			= DwtHtmlEditor._STYLES[5];
 DwtHtmlEditor._ACTION_CODE_TO_CMD[DwtKeyMap.HEADER6]			= DwtHtmlEditor._STYLES[6];
 
+DwtHtmlEditor.INIT_HTML = [ "<html><head><title>ZWC</title></head><body><p>",
+                            AjxEnv.isGeckoBased ? "<br type='_moz' />" : "",
+                            "</p></body></html>" ].join("");
+
 DwtHtmlEditor.prototype.focus =
 function() {
 	DBG.println(AjxDebug.DBG1, "DwtHtmlEditor.prototype.focus");
@@ -154,6 +158,10 @@ function() {
 		document.getElementById(this._textAreaId).focus();
 	} else {
 		try {
+                        if (!this._htmlModeInited) {
+                                setTimeout(AjxCallback.simpleClosure(this.focus, this), DwtHtmlEditor._INITDELAY);
+                                return;
+                        }
 			this._getIframeWin().focus();
 			// Hack to fix IE focusing bug
 			if (AjxEnv.isIE) {
@@ -305,7 +313,7 @@ function(src, dontExecCommand, width, height) {
         if(height) img.height = height;
         var df = doc.createDocumentFragment();
 	    df.appendChild(img);
-	    this._insertNodeAtSelection(df);        
+	    this._insertNodeAtSelection(df);
     }else{
         this._execCommand(DwtHtmlEditor.IMAGE, src);
     }
@@ -784,17 +792,14 @@ function() {
 // 	iFrame.setAttribute("marginheight", "0", false);
 
         var cont = AjxCallback.simpleClosure(this._finishHtmlModeInit, this);
-        if (!AjxEnv.isIE)
-                iFrame.onload = cont;
-        else
-                setTimeout(cont, DwtHtmlEditor._INITDELAY);
+        setTimeout(cont, DwtHtmlEditor._INITDELAY);
 
 //	if (AjxEnv.isIE && location.protocol == "https:")
 	iFrame.src = this._blankIframeSrc || "";
 	htmlEl.appendChild(iFrame);
 
 	return iFrame;
-}
+};
 
 DwtHtmlEditor.prototype._finishHtmlModeInit =
 function() {
@@ -802,7 +807,7 @@ function() {
 
 	try {
 		// in case safari3 hasn't init'd BODY tag yet
-		if (AjxEnv.isSafari && doc.body == null) {
+                if (AjxEnv.isSafari && doc.body == null) {
 			doc.open();
 			doc.write("<html><head></head><body></body></html>");
 			doc.close();
@@ -812,7 +817,13 @@ function() {
 		return;
 	}
 
-        function cont() {
+        if (AjxEnv.isGeckoBased) {
+                doc.open();
+                doc.write(DwtHtmlEditor.INIT_HTML);
+                doc.close();
+        }
+
+        function cont(doc) {
                 this._enableDesignMode(doc);
                 this._setContentOnTimer();
 	        this._updateState();
@@ -826,7 +837,7 @@ function() {
                 setTimeout(AjxCallback.simpleClosure(cont, this, doc),
                            DwtHtmlEditor._INITDELAY);
         } else {
-	        cont.call(this);
+	        cont.call(this, doc);
         }
 };
 
@@ -1351,7 +1362,7 @@ function(ev) {
 	return retVal;
 };
 
-DwtHtmlEditor.prototype.getKeyMapName = 
+DwtHtmlEditor.prototype.getKeyMapName =
 function() {
 	return "DwtHtmlEditor";
 };
