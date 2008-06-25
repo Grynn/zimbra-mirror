@@ -104,11 +104,11 @@ if (($options{d} || $options{e}) && $options{a} && !$options{w}) {
     usage();
     exit 1;
 }
-if (!$options{d} && $options{x}) {
+if ($options{d} && $options{x} && !$options{w}) {
     usage();
     exit 1;
 }
-if ($options{d} && $options{x} && !$options{w}) {
+if ($options{e} && $options{x} && !$options{w}) {
     usage();
     exit 1;
 }
