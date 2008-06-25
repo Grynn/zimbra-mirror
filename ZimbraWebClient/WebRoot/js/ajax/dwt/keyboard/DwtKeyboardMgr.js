@@ -677,7 +677,7 @@ function(ev) {
 	if (kev.ctrlKey) 	{ parts.push(DwtKeyMap.CTRL); }
  	if (kev.metaKey) 	{ parts.push(DwtKeyMap.META); }
 	if (kev.shiftKey) 	{ parts.push(DwtKeyMap.SHIFT); }
-	parts.push(kbMgr.__keyMapMgr.keyCode2Char(keyCode));
+	parts.push(keyCode);
 	kbMgr.__keySequence[kbMgr.__keySequence.length] = parts.join(DwtKeyMap.JOIN);
 
 //	DBG.println("kbnav", "KEYCODE: " + keyCode + " - KEY SEQ: " + kbMgr.__keySequence.join(""));

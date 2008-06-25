@@ -50,8 +50,6 @@ DwtKeyMapMgr = function(keyMap) {
 DwtKeyMapMgr.NOT_A_TERMINAL = -999;
 DwtKeyMapMgr.TAB_KEYCODE = 9;
 
-DwtKeyMapMgr._KEYCODES = [];	// Keycode map
-
 DwtKeyMapMgr.prototype.toString =
 function() {
 	return "DwtKeyMapMgr";
@@ -112,19 +110,6 @@ function(keySeq, mappingName, forceActionCode) {
 	} else {
 		return this.__getInheritedActionCode(keySeq, mapping, forceActionCode);
 	}
-};
-
-/**
- * Converts the given keycode to a character
- * 
- * @param {number} keyCode Keycode to convert
- * 
- * @return character representation of the keyCode
- * @type string
- */
-DwtKeyMapMgr.prototype.keyCode2Char =
-function(keyCode) {
-	return DwtKeyMapMgr._KEYCODES[keyCode];
 };
 
 /**
@@ -326,55 +311,3 @@ DwtKeyMapMgr.hasModifier =
 function(ev) {
 	return (ev.altKey || ev.ctrlKey || ev.metaKey);
 };
-
-(function() {
-	DwtKeyMapMgr._KEYCODES[18]  = DwtKeyMap.ALT;
-	DwtKeyMapMgr._KEYCODES[40]  = DwtKeyMap.ARROW_DOWN;
-	DwtKeyMapMgr._KEYCODES[37]  = DwtKeyMap.ARROW_LEFT;
-	DwtKeyMapMgr._KEYCODES[39]  = DwtKeyMap.ARROW_RIGHT;
-	DwtKeyMapMgr._KEYCODES[38]  = DwtKeyMap.ARROW_UP;
-	DwtKeyMapMgr._KEYCODES[8]   = DwtKeyMap.BACKSPACE;
-	DwtKeyMapMgr._KEYCODES[188] = DwtKeyMap.COMMA;
-	DwtKeyMapMgr._KEYCODES[186] = DwtKeyMap.SEMICOLON;
-	DwtKeyMapMgr._KEYCODES[59]  = DwtKeyMap.SEMICOLON;
-	DwtKeyMapMgr._KEYCODES[17]  = DwtKeyMap.CTRL;
-	DwtKeyMapMgr._KEYCODES[46]  = DwtKeyMap.DELETE;
-	DwtKeyMapMgr._KEYCODES[35]  = DwtKeyMap.END;
-	DwtKeyMapMgr._KEYCODES[13]  = DwtKeyMap.ENTER;
-	DwtKeyMapMgr._KEYCODES[27]  = DwtKeyMap.ESC;
-	DwtKeyMapMgr._KEYCODES[36]  = DwtKeyMap.HOME;
-	DwtKeyMapMgr._KEYCODES[91]  = DwtKeyMap.META;
-	DwtKeyMapMgr._KEYCODES[34]  = DwtKeyMap.PAGE_DOWN;
-	DwtKeyMapMgr._KEYCODES[33]  = DwtKeyMap.PAGE_UP;
-	DwtKeyMapMgr._KEYCODES[16]  = DwtKeyMap.SHIFT;
-	DwtKeyMapMgr._KEYCODES[32]  = DwtKeyMap.SPACE;
-	DwtKeyMapMgr._KEYCODES[9]   = DwtKeyMap.TAB;
-	DwtKeyMapMgr._KEYCODES[220] = DwtKeyMap.BACKSLASH;
-	
-	// Function keys
-	for (var i = 112; i < 124; i++) {
-		DwtKeyMapMgr._KEYCODES[i] = "F" + (i - 111);
-	}
-	
-	// Take advantage of the fact that keycode for capital letters are the 
-	// same as the charcode values i.e. ASCII code
-	for (var i = 65; i < 91; i++) {
-		DwtKeyMapMgr._KEYCODES[i] = String.fromCharCode(i);
-	}
-
-	// Numbers 0 - 9
-	for (var i = 48; i < 58; i++) {
-		DwtKeyMapMgr._KEYCODES[i] = String.fromCharCode(i);
-	}
-		
-	// punctuation
-	DwtKeyMapMgr._KEYCODES[222] = "'";
-	DwtKeyMapMgr._KEYCODES[189] = "-";
-	DwtKeyMapMgr._KEYCODES[190] = ".";
-	DwtKeyMapMgr._KEYCODES[191] = "/";
-	DwtKeyMapMgr._KEYCODES[186] = ";";
-	DwtKeyMapMgr._KEYCODES[219] = "[";
-	DwtKeyMapMgr._KEYCODES[221] = "]";
-	DwtKeyMapMgr._KEYCODES[192] = "`";
-	DwtKeyMapMgr._KEYCODES[187] = "=";	
-})();
