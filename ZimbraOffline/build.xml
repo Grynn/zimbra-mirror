@@ -108,7 +108,32 @@
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
 	<property name="jetty.version" value="6.1.5" />
 
-	<path id="all.java.path">
+
+        <!-- JAXWS definitions for YMail SOAP API -->
+
+        <property name="jaxws.dir" value="tools/jaxws" />
+        <property name="ymail.wsdl" value="http://mail.yahooapis.com/ws/mail/v1.1/wsdl"/>
+
+        <fileset id="jaxws.jars" dir="${jaxws.dir}/lib">
+                <include name="*.jar"/>
+                <exclude name="jaxb-xjc.jar"/>
+                <exclude name="jaxws-tools.jar"/>
+        </fileset>
+
+        <property name="jaxws.jars.dir" value="tools/jaxws/lib" />
+
+        <path id="jaxws.classpath">
+                <pathelement location="${java.home}/../lib/tools.jar"/>
+                <fileset dir="${jaxws.dir}/lib">
+                        <include name="*.jar"/>
+                </fileset>
+        </path>
+
+        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+                <classpath refid="jaxws.classpath"/>
+        </taskdef>
+
+        <path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
 	</path>
 
@@ -125,7 +150,8 @@
 		<fileset dir="${tools.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-	</path>
+                <path refid="jaxws.classpath"/>
+        </path>
 
 	<path id="deploy.class.path">
 		<fileset dir="${server.build.dir}/dist/lib/jars">
@@ -160,30 +186,6 @@
     	       </else>
 	</if>
 
-        <!-- JAXWS definitions for YMail SOAP API -->
-
-        <property name="jaxws.dir" value="tools/jaxws" />
-        <property name="ymail.wsdl" value="http://mail.yahooapis.com/ws/mail/v1.1/wsdl"/>
-
-        <fileset id="jaxws.jars" dir="${jaxws.dir}/lib">
-            <include name="*.jar"/>
-            <exclude name="jaxb-xjc.jar"/>
-            <exclude name="jaxws-tools.jar"/>
-        </fileset>
-
-        <property name="jaxws.jars.dir" value="tools/jaxws/lib" />
-
-        <path id="jaxws.classpath">
-                <pathelement location="${java.home}/../lib/tools.jar"/>
-                <fileset dir="${jaxws.dir}/lib">
-                        <include name="*.jar"/>
-                </fileset>
-        </path>
-
-        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
-                <classpath refid="jaxws.classpath"/>
-        </taskdef>
-
         <!-- Targets -->
 	<target name="offline-build-init">
 		<mkdir dir="${build.classes.dir}" />
@@ -192,7 +194,7 @@
 		<mkdir dir="${dist.dir}" />
 	</target>
 
-	<target name="offline-compile" depends="offline-build-init" description="Compiles the source code">
+	<target name="offline-compile" depends="offline-build-init,generate-ymail-client" description="Compiles the source code">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />
 		<ant dir="../ZimbraServer" target="dev-dist" inheritAll="false">
 			<property name="zimbra.buildinfo.version" value="${offline.version}"/>
@@ -213,7 +215,7 @@
 
         </target>
 
-        <target name="offline-jar" depends="offline-compile,generate-ymail-client" description="Creates the jar file">
+        <target name="offline-jar" depends="offline-compile" description="Creates the jar file">
 		<jar destfile="${build.dir}/${jarfile}" basedir="${build.classes.dir}" excludes="com/zimbra/cs/offline/jsp/**"/>
 		<jar destfile="${build.dir}/offlinejsp.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/common/*.class,com/zimbra/cs/offline/jsp/*.class"/>
 		<jar destfile="${build.dir}/zdesktop.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/start/Main.class" />
