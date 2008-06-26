@@ -50,10 +50,11 @@ function() {
 /**
  * Adds an item to the accordion, in the form of a table row.
  *
- * @param params	[hash]			hash of params:
- *        title		[string]		text for accordion header
- *        data		[hash]			item data
- *        icon		[string]*		icon
+ * @param params		[hash]			hash of params:
+ *        title			[string]		text for accordion header
+ *        data			[hash]			item data
+ *        icon			[string]*		icon
+ *        hideHeader	[boolean]*		does not show header (ideal when there's only one visible header item)
  */
 DwtAccordion.prototype.addAccordionItem =
 function(params) {
@@ -80,11 +81,14 @@ function(params) {
 
 	// add onclick event handler to header DIV
 	var headerDiv = document.getElementById(this._htmlElId + "_header_" + itemNum);
-	headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnClickHeader, this, item);
-	headerDiv.oncontextmenu = AjxCallback.simpleClosure(this._handleOnRightClickHeader, this, item);
-	headerDiv.onmouseover = AjxCallback.simpleClosure(this._handleOnMouseoverHeader, this, item);
-	headerDiv.onmouseout = AjxCallback.simpleClosure(this._handleOnMouseoutHeader, this, item);
-
+	if (params.hideHeader) {
+		Dwt.setVisible(headerDiv, false);
+	} else {
+		headerDiv.onclick = AjxCallback.simpleClosure(this._handleOnClickHeader, this, item);
+		headerDiv.oncontextmenu = AjxCallback.simpleClosure(this._handleOnRightClickHeader, this, item);
+		headerDiv.onmouseover = AjxCallback.simpleClosure(this._handleOnMouseoverHeader, this, item);
+		headerDiv.onmouseout = AjxCallback.simpleClosure(this._handleOnMouseoutHeader, this, item);
+	}
 	this._items.push(item);
 
 	return item;
@@ -251,6 +255,11 @@ function(id, contentObject) {
 DwtAccordion.prototype.getBody =
 function(id) {
 	return document.getElementById(this._htmlElId + "_body_" + id);
+};
+
+DwtAccordion.prototype.getHeader =
+function(id) {
+	return document.getElementById(this._htmlElId + "_header_" + id);
 };
 
 /**
