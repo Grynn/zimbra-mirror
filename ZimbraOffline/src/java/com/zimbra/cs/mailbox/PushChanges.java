@@ -17,8 +17,10 @@
 package com.zimbra.cs.mailbox;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,9 +31,7 @@ import java.util.UUID;
 
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
@@ -55,6 +55,7 @@ import com.zimbra.cs.service.mail.ToXML;
 import com.zimbra.cs.service.util.ItemIdFormatter;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.util.JMSession;
+import com.zimbra.cs.zclient.ZClientException;
 import com.zimbra.cs.zclient.ZMailbox;
 
 public class PushChanges {
@@ -162,7 +163,7 @@ public class PushChanges {
         return new PushChanges(ombx).sync(isOnRequest);
     }
 
-    public boolean sync(boolean isOnRequest) throws ServiceException {
+    private boolean sync(boolean isOnRequest) throws ServiceException {
         int limit;
         TypedIdList changes, tombstones;
         // do simple change batch push first
@@ -317,46 +318,55 @@ public class PushChanges {
                 String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ? UUID.randomUUID().toString() : sendRecord.getSecond();
                 sSendUIDs.put(msgKey, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
 
-                // upload and send the message
-                String uploadId = uploadMessage(msg.getContent());
-                Element request = new Element.XMLElement(MailConstants.SEND_MSG_REQUEST).addAttribute(MailConstants.A_SEND_UID, sendUID);
-                Element m = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
-                if (!msg.getDraftOrigId().equals(""))
-                    m.addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId()).addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType());
-                
                 try {
+                    String uploadId = uploadMessage(msg.getContent());
+                    Element request = new Element.XMLElement(MailConstants.SEND_MSG_REQUEST).addAttribute(MailConstants.A_SEND_UID, sendUID);
+                    Element m = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
+                    if (!msg.getDraftOrigId().equals(""))
+                        m.addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId()).addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType());
+                	
+                	
                 	ombx.sendRequest(request);
                 	OfflineLog.offline.debug("push: sent pending mail (" + id + "): " + msg.getSubject());
-                } catch (SoapFaultException x) {
-                	if (!x.isReceiversFault()) { //supposedly this is client fault
+
+                    // remove the draft from the outbox
+                    ombx.delete(sContext, id, MailItem.TYPE_MESSAGE);
+                    OfflineLog.offline.debug("push: deleted pending draft (" + id + ')');
+                } catch (ServiceException x) {
+                	if ((x instanceof ZClientException || x instanceof SoapFaultException) && !x.isReceiversFault()) { //supposedly this is client fault
                 		OfflineLog.offline.debug("push: failed to send mail (" + id + "): " + msg.getSubject(), x);
                 		
+                		ombx.move(sContext, id, MailItem.TYPE_MESSAGE, Mailbox.ID_FOLDER_DRAFTS); //move message back to drafts folder;
+                		
+                		//we need to tell user of the failure
 	                	MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
                 		try {
-                			mm.setFrom(new InternetAddress(ombx.getAccount().getName()));
+                			mm.setSentDate(new Date());
+                			mm.setFrom(new InternetAddress("donotreply@host.local", "Desktop Notifier"));
 	                		mm.setRecipient(RecipientType.TO, new InternetAddress(ombx.getAccount().getName()));
-	                		mm.setSubject("Delivery failed: " + x.getMessage());
 	                		
+	                		String sentDate = new SimpleDateFormat("MMMMM d, yyyy").format(msg.getDate());
+	                		String sentTime = new SimpleDateFormat("h:mm a").format(msg.getDate());
+	                		
+	                		String text = "Your message \"" + msg.getSubject() + "\" sent on " + sentDate + " at " + sentTime + " to \"" + msg.getRecipients() + "\" can't be delievered.  It has been returned to Drafts folder for your review.\n";
+	                		String subject = null;
+	                		if (x instanceof ZClientException && x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED))
+	                			subject = "message size exceeds server limit";
+	                		else if (x.getCode().equals(MailServiceException.SEND_ABORTED_ADDRESS_FAILURE))
+	                			subject = "invalid recipient address";
+	                		else {
+	                			text += "\n----------------------------------------------------------------------------\n\n" +
+	                				    SyncExceptionHandler.sendMailFailed(ombx, id, x);
+	                			subject = x.getCode();
+	                		}
+	                		mm.setSubject("Delivery Failure Notification: " + subject);
+	                		mm.setText(text);
+
 	                		mm.saveChanges(); //must call this to update the headers
-	                		
-	                		MimeMultipart mmp = new MimeMultipart();
-	                		MimeBodyPart mbp = new MimeBodyPart();
-	                		mbp.setText(x.getFault().prettyPrint());
-	               			mmp.addBodyPart(mbp);
-	                		
-	                		mbp = new MimeBodyPart();
-	                		mbp.setContent(msg.getMimeMessage(), "message/rfc822");
-	                		mbp.setHeader("Content-Disposition", "attachment");
-	                		mmp.addBodyPart(mbp, mmp.getCount());
-	                		
-	                		mm.setContent(mmp);
-	                		mm.saveChanges();
-                		
-	                		//directly bounce to local inbox
 	                		ParsedMessage pm = new ParsedMessage(mm, true);
-	                		ombx.addMessage(sContext, pm, OfflineMailbox.ID_FOLDER_INBOX, true, 0, null);
+	                		ombx.addMessage(sContext, pm, OfflineMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
                 		} catch (Exception e) {
-                			OfflineLog.offline.warn("can't bounce failed push (" + id + ")" + msg.getSubject(), e);
+                			OfflineLog.offline.warn("can't save warning of failed push (" + id + ")" + msg.getSubject(), e);
                 		}
                 	} else {
                 		OutboxTracker.recordFailure(ombx, id);
@@ -365,10 +375,7 @@ public class PushChanges {
                 	}
                 }
 
-                // remove the draft from the outbox
-                ombx.delete(sContext, id, MailItem.TYPE_MESSAGE);
                 OutboxTracker.remove(ombx, id);
-                OfflineLog.offline.debug("push: deleted pending draft (" + id + ')');
 
                 // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
                 sSendUIDs.remove(msgKey);

@@ -67,6 +67,8 @@ public class OfflineLC {
     
     public static final KnownKey zdesktop_membuf_limit;
     
+    public static final KnownKey zdesktop_upload_size_limit;
+    
     public static final KnownKey zdesktop_yauth_appid;
     public static final KnownKey zdesktop_yauth_baseuri;
     public static final KnownKey zdesktop_yab_baseuri;
@@ -213,6 +215,10 @@ public class OfflineLC {
 	    zdesktop_membuf_limit = new KnownKey("zdesktop_membuf_limit");
 	    zdesktop_membuf_limit.setDefault("33554432"); //32 * 1024 * 1024
 	    zdesktop_membuf_limit.setDoc("Number of bytes to hold in memory before start disk streaming during message sync.");
+	    
+	    zdesktop_upload_size_limit = new KnownKey("zdesktop_upload_size_limit");
+	    zdesktop_upload_size_limit.setDefault("1073741824"); //1024 * 1024 * 1024
+	    zdesktop_upload_size_limit.setDoc("Message size limit for uploading to server in number of bytes");
 	    
 	    zdesktop_yauth_appid = new KnownKey("zdesktop_yauth_appid");
 	    zdesktop_yauth_appid.setDefault("0YbgbonAkY2iNypMZQOONB8mNDSJkrfBlr3wgxc-");

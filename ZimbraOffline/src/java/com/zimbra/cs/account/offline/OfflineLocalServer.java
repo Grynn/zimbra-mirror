@@ -23,6 +23,7 @@ import java.util.UUID;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
+import com.zimbra.cs.offline.OfflineLC;
 
 class OfflineLocalServer extends Server {
     private OfflineLocalServer(OfflineConfig oconfig, Map<String, Object> attrs) {
@@ -43,6 +44,7 @@ class OfflineLocalServer extends Server {
         attrs.put(Provisioning.A_zimbraMailMode, "http");
         attrs.put(Provisioning.A_zimbraLmtpNumThreads, "1");
         attrs.put(Provisioning.A_zimbraLmtpBindPort, "7635");
+        attrs.put(Provisioning.A_zimbraFileUploadMaxSize, OfflineLC.zdesktop_upload_size_limit.value());
         return new OfflineLocalServer(oconfig, attrs);
     }
 }

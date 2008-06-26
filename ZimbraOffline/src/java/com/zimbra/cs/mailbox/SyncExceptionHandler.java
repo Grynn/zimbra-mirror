@@ -13,6 +13,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
@@ -27,6 +29,7 @@ class SyncExceptionHandler {
 	private static final String CALENDAR_SYNC_FAILED = "calendar sync failed";
 	private static final String DELETE_ITEM_FAILED = "delete item failed";
 	private static final String PUSH_ITEM_FAILED = "push item failed";
+	private static final String SEND_MAIL_FAILED = "send mail failed";
 	
 	
 	static void checkRecoverableException(ServiceException exception) throws ServiceException {
@@ -70,7 +73,11 @@ class SyncExceptionHandler {
 		saveFailureReport(ombx, itemId, PUSH_ITEM_FAILED, null, 0, exception);
 	}
 	
-    private static void saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, ServiceException exception) {
+	static String sendMailFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
+		return saveFailureReport(ombx, itemId, SEND_MAIL_FAILED, null, 0, exception);
+	}
+	
+    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, ServiceException exception) {
     	Date now = new Date();
     	String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
 
@@ -78,14 +85,14 @@ class SyncExceptionHandler {
 
     	//TODO: need to i18n the entire block here
     	StringBuilder sb = new StringBuilder();
-    	sb.append("Please post this issue report to Zimbra Desktop Support Forums at http://www.zimbra.com/forums/zimbra-desktop/.\n\n");
     	sb.append("Product name:    Zimbra Desktop\n");
     	sb.append("Product version: ").append(OfflineLC.zdesktop_version.value()).append("\n");
     	sb.append("Build ID:        ").append(OfflineLC.zdesktop_buildid.value()).append("\n");
     	sb.append("Release type:    ").append(OfflineLC.zdesktop_relabel.value()).append("\n");
     	sb.append("OS Platform:     ").append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.arch")).append(" ").append(System.getProperty("os.version")).append("\n");
-    	sb.append("Time of event: ").append(timestamp).append("\n");
-    	sb.append("Issue summary: ").append(error).append("\n\n");
+    	sb.append("Time of event:   ").append(timestamp).append("\n");
+    	sb.append("Issue type:      ").append(exception.getCode()).append("\n");
+    	sb.append("Issue summary:   ").append(error).append("\n\n");
 
     	if (data != null) {
     		sb.append("----------------------------------------------------------------------------\n");
@@ -123,10 +130,16 @@ class SyncExceptionHandler {
 
     	sb.append("Failure details: \n");
     	sb.append("----------------------------------------------------------------------------\n\n");
+    	if (exception instanceof SoapFaultException) {
+    		Element fault = ((SoapFaultException)exception).getFault();
+    		if (fault != null)
+    			sb.append(fault.prettyPrint()).append("\n\n");
+    	}
     	sb.append(bao.toString());
     	sb.append("\n----------------------------------------------------------------------------\n");
 
     	logSyncErrorMessage(dmbx, id, "zdesktop issue report (" + timestamp + "): " + exception.getCode(), sb.toString());
+    	return sb.toString();
     }
     
     public static class Revision {

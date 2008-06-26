@@ -42,11 +42,10 @@ class OfflineConfig extends Config {
             }
            	String[] skins = OfflineLC.zdesktop_skins.value().split("\\s*,\\s*");
             attrs.put(Provisioning.A_zimbraInstalledSkin, skins);
-            
             attrs.put(Provisioning.A_zimbraRedoLogEnabled, OfflineLC.zdesktop_redolog_enabled.booleanValue() ? Provisioning.TRUE : Provisioning.FALSE);
-            
             attrs.put(Provisioning.A_zimbraSmtpSendAddMailer, Provisioning.FALSE);
             attrs.put(Provisioning.A_zimbraNotebookAccount, "local@host.local");
+            attrs.put(Provisioning.A_zimbraMtaMaxMessageSize, OfflineLC.zdesktop_upload_size_limit.value());
             
             return new OfflineConfig(attrs);
         } catch (ServiceException e) {
