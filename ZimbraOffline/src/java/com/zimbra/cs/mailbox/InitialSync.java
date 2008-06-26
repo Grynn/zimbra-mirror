@@ -808,7 +808,7 @@ public class InitialSync {
     	String zlv = OfflineLC.zdesktop_sync_zip_level.value();
     	OfflineAccount acct = ombx.getOfflineAccount();
     	try {
-	    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=zip&sync=1&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
+	    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=zip&zlv=" + zlv + "&list=" + StringUtil.join(",", ids));
 	    	if (acct.isDebugTraceEnabled())
 	    		OfflineLog.request.debug("GET " + url);
 	        try {
