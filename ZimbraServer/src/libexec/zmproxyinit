@@ -184,6 +184,7 @@ if ($options{e}) {
                if ($options{x}) {
                  $proxyMailMode=$options{x};
                }
+               chomp($proxyMailMode);
                print ZMPROV "ms $hostname ".
                "zimbraMailReferMode reverse-proxied ".
                "zimbraMailPort $w1 ".
@@ -242,6 +243,7 @@ if ($options{e}) {
                 if ($options{x}) {
                   $proxyMailMode=$options{x};
                 }
+                chomp($proxyMailMode);
      	        print ZMPROV "ms $hostname ".
                  "zimbraMailPort $w1 ".
                  "zimbraMailProxyPort $w2 ".
@@ -364,6 +366,7 @@ if ($options{d}) {
                  if ($options{x}) {
                    $proxyMailMode=$options{x};
                  }
+                 chomp($proxyMailMode);
                  print ZMPROV "ms $hostname ".
                  "zimbraMailPort $w1 ".
                  "zimbraMailProxyPort $w2 ".
