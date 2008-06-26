@@ -62,7 +62,7 @@ if (!isInstalled("zimbra-store") && !isInstalled("zimbra-proxy")) {
 our %options = ();
 our %loaded = ();
 
-getopts('a:defhi:mop:swx:',\%options) or die "Unable to set options\n";
+getopts('a:defhi:mop:rswx:',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
@@ -322,7 +322,7 @@ if ($options{d}) {
             print ZMPROV "ms $hostname ".
                "-zimbraServiceEnabled imapproxy\n";
        }
-       if ($enabledHttpProxy eq "FALSE" && $enabledMailProxy eq "FALSE") {
+       if ($enabledHTTPProxy eq "FALSE" && $enabledMailProxy eq "FALSE") {
             print ZMPROV "ms $hostname ".
                "zimbraReverseProxyLookupTarget FALSE\n";
        }
