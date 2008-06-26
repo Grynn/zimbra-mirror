@@ -80,7 +80,7 @@ DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
  */
 DwtKeyboardMgr.isPossibleInputShortcut =
 function(ev) {
-	return (!DwtKeyMapMgr.isModifier(ev.keyCode) &&
+	return (!DwtKeyMap.IS_MODIFIER[ev.keyCode] &&
 			(ev.keyCode == 27 || DwtKeyMapMgr.hasModifier(ev)) ||
 			(ev.target.tagName.toUpperCase() == "INPUT" && (ev.keyCode == 13 || ev.keyCode == 3)));
 };
@@ -660,7 +660,7 @@ function(ev) {
 	 
 	// Filter out modifier keys. If we're in an input field, filter out legitimate input.
 	// (A shortcut from an input field must use a modifier key.)
-	if (DwtKeyMapMgr.isModifier(keyCode) || (!kbMgr.__dwtCtrlHasFocus && (kbMgr.__killKeySeqTimedActionId == -1) &&
+	if (DwtKeyMap.IS_MODIFIER[keyCode] || (!kbMgr.__dwtCtrlHasFocus && (kbMgr.__killKeySeqTimedActionId == -1) &&
 		DwtKeyMapMgr.isInputElement(ev.target) && !DwtKeyboardMgr.isPossibleInputShortcut(ev))) {
 
 	 	return kbMgr.__processKeyEvent(ev, kev, true, DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED);

@@ -38,11 +38,7 @@ DwtKeyMapMgr = function(keyMap) {
 	this._fsas = {};
 	for (var key in map) {
 		DBG.println(AjxDebug.DBG3, "building FSA for key: " + key);
-		if (key == "keys") {
-			this._processKeyTypeList(map[key]);
-		} else {
-			this._fsas[key] = DwtKeyMapMgr.__buildFSA({}, map[key], key);
-		}
+		this._fsas[key] = DwtKeyMapMgr.__buildFSA({}, map[key], key);
 	}
 	DBG.dumpObj(AjxDebug.DBG3, this._fsas);
 };
@@ -201,26 +197,6 @@ function(mapName) {
 };
 
 /**
- * Converts a list of key codes into an IS_ style hash. Key/value are
- * reversed from how they are in the source properties file, since that's
- * how shortcuts are parsed.
- * 
- * @param obj	[hash]		key type and list of keycodes
- */
-DwtKeyMapMgr.prototype._processKeyTypeList = 
-function(obj) {
-	for (var key in obj) {
-		var type = obj[key];
-		var typeMap = DwtKeyMap.KEY_TYPE[type];
-		if (!typeMap) { continue; }
-		var list = key.split(/[\s,;]/);
-		for (var i = 0; i < list.length; i++) {
-			typeMap[list[i]] = true;
-		}
-	}
-};
-
-/**
  * Returns true if the given element accepts text input.
  * 
  * @param element	[Element]		DOM element
@@ -289,17 +265,6 @@ function(keySeq, mapping, forceActionCode) {
 		}
 	}
 	return null;
-};
-
-/**
- * Returns true if the given key is a modifier. The list of modifier keys is
- * taken from the AjxKeys properties file.
- *
- * @param key		int		numeric key code
- */
-DwtKeyMapMgr.isModifier =
-function(key) {
-	return DwtKeyMap.IS_MODIFIER[key];
 };
 
 /**

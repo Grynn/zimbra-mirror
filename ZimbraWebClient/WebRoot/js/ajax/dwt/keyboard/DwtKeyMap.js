@@ -34,6 +34,11 @@ DwtKeyMap = function(subclassInit) {
 	this._args			= {};
 	this._checkedMap	= {};	// cache results of _checkMap()
 	this._load(this._map, AjxKeys, DwtKeyMap.MAP_NAME);
+
+	DwtKeyMap.MOD_ORDER[DwtKeyMap.ALT]		= 1;
+	DwtKeyMap.MOD_ORDER[DwtKeyMap.CTRL]		= 2;
+	DwtKeyMap.MOD_ORDER[DwtKeyMap.META]		= 3;
+	DwtKeyMap.MOD_ORDER[DwtKeyMap.SHIFT]	= 4;
 };
 
 DwtKeyMap.deserialize =
@@ -58,20 +63,12 @@ DwtKeyMap.MAP_NAME["toolbarHorizontal"]	= "DwtToolBar-horiz";
 DwtKeyMap.MAP_NAME["toolbarVertical"]	= "DwtToolBar-vert";
 DwtKeyMap.MAP_NAME["tabView"]			= "DwtTabView";
 
-// Modifiers
-DwtKeyMap.CTRL			= "Ctrl";
-DwtKeyMap.META			= "Meta";
-DwtKeyMap.ALT			= "Alt";
-DwtKeyMap.SHIFT			= "Shift";
+// Returns true if the given key is a modifier. The list of modifier keys is
+// taken from the AjxKeys properties file.
+DwtKeyMap.IS_MODIFIER = {};
 
+// Order filled in by DwtKeyMapMgr._processKeyDefs()
 DwtKeyMap.MOD_ORDER		= {};
-DwtKeyMap.MOD_ORDER[DwtKeyMap.ALT]		= 1;
-DwtKeyMap.MOD_ORDER[DwtKeyMap.CTRL]		= 2;
-DwtKeyMap.MOD_ORDER[DwtKeyMap.META]		= 3;
-DwtKeyMap.MOD_ORDER[DwtKeyMap.SHIFT]	= 4;
-
-DwtKeyMap.KEY_TYPE = {};
-DwtKeyMap.KEY_TYPE["modifiers"] = DwtKeyMap.IS_MODIFIER = {};
 
 // Key names
 DwtKeyMap.ARROW_DOWN		= "ArrowDown";
@@ -165,20 +162,24 @@ function(map, keys, mapNames) {
 		var last = parts[parts.length - 1];
 		if (last == "win" || last == "mac" || last == "linux") {
 			if (last == curPlatform) {
-				var baseKey = parts.slice(0, 2).join(".");
+				var baseKey = parts.slice(0, parts.length - 1).join(".");
 				keys[baseKey] = keys[propName];
 			}
 			keys[propName] = null;
 		}
 	}
-
+	
 	for (var propName in keys) {
-		var propValue = keys[propName];
+		var propValue = AjxStringUtil.trim(keys[propName]);
 		if (typeof keys[propName] != "string") { continue; }
 		var parts = propName.split(".");
 		var last = parts[parts.length - 1];
 		if (DwtKeyMap.IS_DOC_KEY[last]) { continue; }
-		var mapName = mapNames[parts[0]];
+		var mapName = mapNames[parts[0]] || parts[0];
+		if (mapName == "keys") {
+			this._processKeyDef(parts[1], parts[2], propValue);
+			continue;
+		}
 		if ((this._checkedMap[mapName] === false) ||
 			(!this._checkedMap[mapName] && !this._checkMap(mapName))) { continue; }
 		if (!map[mapName]) {
@@ -226,6 +227,23 @@ function(mapName) {
 DwtKeyMap.prototype._checkAction =
 function(mapName, action) {
 	return true;
+};
+
+/**
+ * Sets up constants for a modifier key as described in a properties file.
+ * 
+ * @param key	[string]		ctrl, alt, shift, or meta
+ * @param field	[string]		display or keycode
+ * @param value	[string|int]	property value
+ */
+DwtKeyMap.prototype._processKeyDef = 
+function(key, field, value) {
+	if (!key || !field || !value) { return; }
+	if (field == "display") {
+		DwtKeyMap[key.toUpperCase()] = value;
+	} else if (field == "keycode") {
+		DwtKeyMap.IS_MODIFIER[value] = true;
+	}
 };
 
 /**
