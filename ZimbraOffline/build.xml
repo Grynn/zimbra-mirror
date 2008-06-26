@@ -7,7 +7,7 @@
 	<property name="offline.name" value="Zimbra Desktop"/>
 	<condition property="offline.relabel" value="ALPHA">
 	    <not><isset property="offline.relabel"/></not>
-        </condition>
+        </condition>                                                                           
 	<condition property="offline.version" value="0.1">
 	    <not><isset property="offline.version"/></not>
         </condition>
@@ -82,13 +82,6 @@
 		<isset property="db-derby" />
 	</condition>
 
-	<condition property="unused.driver" value="mysql-connector-java-5.0.3-bin.jar">
-		<isset property="db-derby" />
-	</condition>
-	<condition property="unused.driver" value="derby-debug.jar">
-		<isset property="db-mysql" />
-	</condition>
-
 	<condition property="is-windows">
 		<os family="windows" />
 	</condition>
@@ -113,14 +106,14 @@
 
         <property name="jaxws.dir" value="tools/jaxws" />
         <property name="ymail.wsdl" value="http://mail.yahooapis.com/ws/mail/v1.1/wsdl"/>
+        <property name="ymail.classes.dir" value="${build.dir}/ymail-classes"/>
+        <property name="ymail.jar" value="${jars.dir}/ymail.jar"/>
 
         <fileset id="jaxws.jars" dir="${jaxws.dir}/lib">
                 <include name="*.jar"/>
                 <exclude name="jaxb-xjc.jar"/>
                 <exclude name="jaxws-tools.jar"/>
         </fileset>
-
-        <property name="jaxws.jars.dir" value="tools/jaxws/lib" />
 
         <path id="jaxws.classpath">
                 <pathelement location="${java.home}/../lib/tools.jar"/>
@@ -132,6 +125,18 @@
         <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
                 <classpath refid="jaxws.classpath"/>
         </taskdef>
+    
+        <target name="generate-ymail-client" description="Generate YMail SOAP client jar">
+                <delete dir="${ymail.classes.dir}"/>
+                <mkdir dir="${ymail.classes.dir}"/>
+                <wsimport verbose="true" debug="true" keep="true" extension="true"
+                          wsdl="${ymail.wsdl}"
+                          package="com.yahoo.mail"
+                          destdir="${ymail.classes.dir}"/>
+                <jar destfile="${build.dir}/ymail.jar" basedir="${ymail.classes.dir}"/>
+                <copy todir="${jars.dir}" file="${build.dir}/ymail.jar"/>
+                <delete dir="${ymail.classes.dir}"/>
+        </target>
 
         <path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
@@ -194,7 +199,7 @@
 		<mkdir dir="${dist.dir}" />
 	</target>
 
-	<target name="offline-compile" depends="offline-build-init,generate-ymail-client" description="Compiles the source code">
+	<target name="offline-compile" depends="offline-build-init" description="Compiles the source code">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />
 		<ant dir="../ZimbraServer" target="dev-dist" inheritAll="false">
 			<property name="zimbra.buildinfo.version" value="${offline.version}"/>
@@ -205,15 +210,6 @@
 			<src refid="all.java.path" />
 		</javac>
 	</target>
-
-        <target name="generate-ymail-client" depends="offline-build-init" description="Generate YMail SOAP client classes">
-                <wsimport verbose="true" debug="true" keep="true" extension="true"
-                          wsdl="${ymail.wsdl}"
-                          package="com.yahoo.mail"
-                          destdir="${build.classes.dir}"
-                          sourcedestdir="${build.src.java.dir}"/>
-
-        </target>
 
         <target name="offline-jar" depends="offline-compile" description="Creates the jar file">
 		<jar destfile="${build.dir}/${jarfile}" basedir="${build.classes.dir}" excludes="com/zimbra/cs/offline/jsp/**"/>
@@ -233,6 +229,7 @@
 		<copy file="${config.dir}/web.xml" todir="${dist.dir}/jetty/webapps/service/WEB-INF" overwrite="true"/>
                 <copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib" overwrite="true">
                         <fileset dir="${build.dir}" includes="${jarfile}"/>
+                        <fileset file="${ymail.jar}"/>
                 </copy>
 	</target>
 
@@ -414,8 +411,8 @@
 		<copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
 		<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
 			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="mysql*.jar" />
-			<fileset dir="${jars.dir}" includes="*.jar" excludes="${unused.driver}" />
-                        <fileset refid="jaxws.jars"/>
+                        <fileset file="${jars.dir}/derby.jar"/>
+			<fileset refid="jaxws.jars"/>
                 </copy>
                 <copy tofile="${dist.dir}/jetty/lib/log4j-1.2.8.jar" file="${common.jars.dir}/log4j-1.2.8.jar" overwrite="true" />
 
