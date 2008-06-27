@@ -106,6 +106,7 @@
 
         <property name="jaxws.dir" value="tools/jaxws" />
         <property name="ymail.wsdl" value="http://mail.yahooapis.com/ws/mail/v1.1/wsdl"/>
+	<property name="jaxb.bindings" value="${config.dir}/jaxb-bindings.xml"/>
         <property name="ymail.classes.dir" value="${build.dir}/ymail-classes"/>
         <property name="ymail.jar" value="${jars.dir}/ymail.jar"/>
 
@@ -131,6 +132,7 @@
                 <mkdir dir="${ymail.classes.dir}"/>
                 <wsimport verbose="true" debug="true" keep="true" extension="true"
                           wsdl="${ymail.wsdl}"
+			  binding="${jaxb.bindings}"
                           package="com.yahoo.mail"
                           destdir="${ymail.classes.dir}"/>
                 <jar destfile="${build.dir}/ymail.jar" basedir="${ymail.classes.dir}"/>

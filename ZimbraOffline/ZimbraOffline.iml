@@ -18,7 +18,9 @@
           <root url="file://$MODULE_DIR$/jars" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/jars/ymail.jar!/" />
+        </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/jars" recursive="false" />
       </library>
     </orderEntry>
