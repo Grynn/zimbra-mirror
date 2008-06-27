@@ -43,9 +43,9 @@ import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
-import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
+import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLC;
@@ -206,7 +206,7 @@ public class PushChanges {
         }
 
         // process pending "sent" messages
-        if (ombx.getFolderById(sContext, OfflineMailbox.ID_FOLDER_OUTBOX).getSize() > 0)
+        if (ombx.getFolderById(sContext, DesktopMailbox.ID_FOLDER_OUTBOX).getSize() > 0)
             sendPendingMessages(changes, isOnRequest);
 
         // do folder ops top-down so that we don't get dinged when folders switch places
@@ -316,7 +316,7 @@ public class PushChanges {
         	int id = iterator.next();
             try {
                 Message msg = ombx.getMessageById(sContext, id);
-                if (msg.getFolderId() != OfflineMailbox.ID_FOLDER_OUTBOX) {
+                if (msg.getFolderId() != DesktopMailbox.ID_FOLDER_OUTBOX) {
                 	OutboxTracker.remove(ombx, id);
                 	continue;
                 }
@@ -336,7 +336,7 @@ public class PushChanges {
                 	
                     //run one more time to make sure it's still in outbox after we finished uploading the message
                     msg = ombx.getMessageById(sContext, id);
-                    if (msg.getFolderId() != OfflineMailbox.ID_FOLDER_OUTBOX) {
+                    if (msg.getFolderId() != DesktopMailbox.ID_FOLDER_OUTBOX) {
                     	OutboxTracker.remove(ombx, id);
                     	continue;
                     }
@@ -380,7 +380,7 @@ public class PushChanges {
 
 	                		mm.saveChanges(); //must call this to update the headers
 	                		ParsedMessage pm = new ParsedMessage(mm, true);
-	                		ombx.addMessage(sContext, pm, OfflineMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
+	                		ombx.addMessage(sContext, pm, DesktopMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
                 		} catch (Exception e) {
                 			OfflineLog.offline.warn("can't save warning of failed push (" + id + ")" + msg.getSubject(), e);
                 		}
@@ -927,7 +927,7 @@ public class PushChanges {
             digest = msg.getDigest();  flags = msg.getFlagBitmask();  tags = msg.getTagBitmask();
             color = msg.getColor();    folderId = msg.getFolderId();
             
-        	if (folderId == OfflineMailbox.ID_FOLDER_OUTBOX)
+        	if (folderId == DesktopMailbox.ID_FOLDER_OUTBOX)
         		return false; //don't mind anything left over in Outbox, most likely sending message failed due to server side issues
 
             int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_MESSAGE);
