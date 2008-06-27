@@ -38,5 +38,24 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.3.2.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/FastInfoset.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/http.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/jaxb-xjc.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/jaxws-api.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/jaxws-rt.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/jaxws-tools.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/jsr173_api.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/jsr181-api.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/jsr250-api.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/mimepull.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/resolver.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/saaj-api.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/saaj-impl.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/sjsxp.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/stax-ex.jar"/>
+	<classpathentry kind="lib" path="tools/jaxws/lib/streambuffer.jar"/>
+	<classpathentry kind="lib" path="jars/ymail.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
