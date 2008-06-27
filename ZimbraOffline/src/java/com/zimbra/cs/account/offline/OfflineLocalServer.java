@@ -45,6 +45,7 @@ class OfflineLocalServer extends Server {
         attrs.put(Provisioning.A_zimbraLmtpNumThreads, "1");
         attrs.put(Provisioning.A_zimbraLmtpBindPort, "7635");
         attrs.put(Provisioning.A_zimbraFileUploadMaxSize, OfflineLC.zdesktop_upload_size_limit.value());
+        attrs.put(Provisioning.A_zimbraMailDiskStreamingThreshold, OfflineLC.zdesktop_membuf_limit.value());
         return new OfflineLocalServer(oconfig, attrs);
     }
 }
