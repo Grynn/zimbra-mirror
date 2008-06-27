@@ -107,6 +107,10 @@ public class Derby extends Db {
         return " -- DERBY-PROPERTIES " + (localIndex.startsWith("fk_") ? "constraint=" : "index=") + localIndex + '\n';
     }
 
+    @Override String getIFNULL(String column1, String column2) {
+        return "CASE WHEN " + column1 + " IS NULL THEN " + column1 + " ELSE " + column2 + " END";
+    }
+
     @Override
     DbPool.PoolConfig getPoolConfig() {
         return new DerbyConfig();
