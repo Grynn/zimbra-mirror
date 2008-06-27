@@ -191,7 +191,7 @@ function(map, keys, mapNames) {
 		for (var i = 0; i < keySequences.length; i++) {
 			var ks = this._canonicalize(keySequences[i]);
 			if (action == DwtKeyMap.INHERIT) {
-				var parents = ks.split(/\s*,\s*/);
+				var parents = ks.toLowerCase().split(/\s*,\s*/);
 				var parents1 = [];
 				for (var p = 0; p < parents.length; p++) {
 					parents1[p] = mapNames[parents[p]];
