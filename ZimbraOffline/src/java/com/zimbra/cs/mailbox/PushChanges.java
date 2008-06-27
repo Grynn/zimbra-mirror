@@ -41,12 +41,14 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
-import com.zimbra.cs.mailbox.util.TypedIdList;
+import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
+import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.mail.ItemAction;
@@ -105,11 +107,11 @@ public class PushChanges {
     static final int TAG_CHANGES = Change.MODIFIED_NAME | Change.MODIFIED_COLOR;
     
     /** The bitmask of all appointment changes that we propagate to the server. */
-    static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS    | Change.MODIFIED_FOLDER |
+    static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
                                            Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT | Change.MODIFIED_INVITE;
     
     /** The bitmask of all document changes that we propagate to the server. */
-    static final int DOCUMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS    | Change.MODIFIED_FOLDER |
+    static final int DOCUMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
                                         Change.MODIFIED_COLOR | Change.MODIFIED_CONTENT | Change.MODIFIED_NAME;
 
     /** A list of all the "leaf types" (i.e. non-folder types) that we
@@ -153,6 +155,9 @@ public class PushChanges {
         	options.setRequestProtocol(SoapProtocol.Soap12);
         	options.setResponseProtocol(SoapProtocol.Soap12);
             options.setNoSession(true);
+            options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
+            options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());
+            options.setRetryCount(1);
             mZMailbox = ZMailbox.getMailbox(options);
         }
         return mZMailbox;
@@ -300,7 +305,7 @@ public class PushChanges {
      *  value: a Pair containing the content change ID and the "send UID"
      *         used when the message was previously sent. */
     private static final Map<String, Pair<Integer, String>> sSendUIDs = new HashMap<String, Pair<Integer, String>>();
-
+    
     /** For each message in the Outbox, uploads it to the remote server, calls
      *  SendMsg to dispatch it appropriately, and deletes it from the local
      *  store.  As a side effect, removes the corresponding (now-deleted)
@@ -311,6 +316,10 @@ public class PushChanges {
         	int id = iterator.next();
             try {
                 Message msg = ombx.getMessageById(sContext, id);
+                if (msg.getFolderId() != OfflineMailbox.ID_FOLDER_OUTBOX) {
+                	OutboxTracker.remove(ombx, id);
+                	continue;
+                }
 
                 // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
                 String msgKey = ombx.getAccountId() + ':' + id;
@@ -319,13 +328,19 @@ public class PushChanges {
                 sSendUIDs.put(msgKey, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
 
                 try {
-                    String uploadId = uploadMessage(msg.getContent());
+                	String uploadId = uploadMessage(msg);
                     Element request = new Element.XMLElement(MailConstants.SEND_MSG_REQUEST).addAttribute(MailConstants.A_SEND_UID, sendUID);
                     Element m = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
                     if (!msg.getDraftOrigId().equals(""))
                         m.addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId()).addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType());
                 	
-                	
+                    //run one more time to make sure it's still in outbox after we finished uploading the message
+                    msg = ombx.getMessageById(sContext, id);
+                    if (msg.getFolderId() != OfflineMailbox.ID_FOLDER_OUTBOX) {
+                    	OutboxTracker.remove(ombx, id);
+                    	continue;
+                    }
+                    
                 	ombx.sendRequest(request);
                 	OfflineLog.offline.debug("push: sent pending mail (" + id + "): " + msg.getSubject());
 
@@ -333,7 +348,8 @@ public class PushChanges {
                     ombx.delete(sContext, id, MailItem.TYPE_MESSAGE);
                     OfflineLog.offline.debug("push: deleted pending draft (" + id + ')');
                 } catch (ServiceException x) {
-                	if ((x instanceof ZClientException || x instanceof SoapFaultException) && !x.isReceiversFault()) { //supposedly this is client fault
+                	if ((x instanceof ZClientException || x instanceof SoapFaultException) && !x.isReceiversFault() &&
+                			!x.getCode().equals(ZClientException.IO_ERROR) && !x.getCode().equals(ZClientException.UPLOAD_FAILED)) { //supposedly this is client fault
                 		OfflineLog.offline.debug("push: failed to send mail (" + id + "): " + msg.getSubject(), x);
                 		
                 		ombx.move(sContext, id, MailItem.TYPE_MESSAGE, Mailbox.ID_FOLDER_DRAFTS); //move message back to drafts folder;
@@ -350,7 +366,7 @@ public class PushChanges {
 	                		
 	                		String text = "Your message \"" + msg.getSubject() + "\" sent on " + sentDate + " at " + sentTime + " to \"" + msg.getRecipients() + "\" can't be delievered.  It has been returned to Drafts folder for your review.\n";
 	                		String subject = null;
-	                		if (x instanceof ZClientException && x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED))
+	                		if (x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED))
 	                			subject = "message size exceeds server limit";
 	                		else if (x.getCode().equals(MailServiceException.SEND_ABORTED_ADDRESS_FAILURE))
 	                			subject = "invalid recipient address";
@@ -370,7 +386,7 @@ public class PushChanges {
                 		}
                 	} else {
                 		OutboxTracker.recordFailure(ombx, id);
-                		OfflineLog.offline.info("push: server side error when sending message: " + msg.getSubject());
+                		OfflineLog.offline.info("push: %s when sending message: %s", x.getCode(), msg.getSubject());
                 		continue; //will retry later
                 	}
                 }
@@ -389,15 +405,23 @@ public class PushChanges {
     }
     
     public static void sendPendingMessages(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
-    	new PushChanges(ombx).sendPendingMessages((TypedIdList) null, isOnRequest);
+    	new PushChanges(ombx).sendPendingMessages((TypedIdList)null, isOnRequest);
     }
-
+    
+    /**
+     * Before 5.0.8 there's a bug that makes simply streaming up message content broken
+     */
+    private static final OfflineAccount.Version minServerVersionForUploadStreaming = new OfflineAccount.Version("5.0.8");
+    
     /** Uploads the given message to the remote server using file upload.
      *  We scale the allowed timeout with the size of the message -- a base
      *  of 5 seconds, plus 1 second per 25K of message size. */
-    private String uploadMessage(byte[] content) throws ServiceException {
-        int timeout = (int) ((5 + content.length / 25000) * Constants.MILLIS_PER_SECOND);
-        return getZMailbox().uploadAttachment("message", content, Mime.CT_MESSAGE_RFC822, timeout);
+    private String uploadMessage(Message msg) throws ServiceException {
+        int timeout = (int) ((5 + msg.getSize() / 25000) * Constants.MILLIS_PER_SECOND);
+    	if (ombx.getRemoteServerVersion().isAtLeast(minServerVersionForUploadStreaming))
+    		return getZMailbox().uploadContentAsStream(msg.getContentStream(), Mime.CT_MESSAGE_RFC822 + "; name=msg-" + msg.getId(), timeout);
+    	else
+    		return getZMailbox().uploadAttachment("message", msg.getContent(), Mime.CT_MESSAGE_RFC822, timeout);
     }
 
     /** Turns a List of Integers into a String of the form <tt>1,2,3,4</tt>. */
@@ -466,7 +490,7 @@ public class PushChanges {
                 default:                    rename = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);  break;
             }
             rename.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_RENAME).addAttribute(MailConstants.A_ID, conflictId)
-                                                     .addAttribute(MailConstants.A_FOLDER, folderId).addAttribute(MailConstants.A_NAME, conflictRename);
+                                                   .addAttribute(MailConstants.A_FOLDER, folderId).addAttribute(MailConstants.A_NAME, conflictRename);
             ombx.sendRequest(rename);
             OfflineLog.offline.info("push: renamed remote " + MailItem.getNameForType(conflictType) + " (" + conflictId + ") to " + folderId + '/' + conflictRename);
 
@@ -894,10 +918,12 @@ public class PushChanges {
         int flags, folderId;
         long tags;
         String digest;
-        byte color, newContent[] = null;
+        byte color;
         boolean create = false;
+        boolean upload = false;
+        Message msg = null;
         synchronized (ombx) {
-            Message msg = ombx.getMessageById(sContext, id);
+            msg = ombx.getMessageById(sContext, id);
             digest = msg.getDigest();  flags = msg.getFlagBitmask();  tags = msg.getTagBitmask();
             color = msg.getColor();    folderId = msg.getFolderId();
             
@@ -911,7 +937,7 @@ public class PushChanges {
                 action = request.addElement(MailConstants.E_MSG);
                 if (msg.isDraft() && !msg.getDraftOrigId().equals(""))
                     action.addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType()).addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId());
-                newContent = msg.getContent();
+                upload = true;
                 create = true;
             } else if ((mask & Change.MODIFIED_CONTENT) != 0) {            	
                 // for draft message content changes, need to go through the SaveDraft door instead of the MsgAction door
@@ -919,7 +945,7 @@ public class PushChanges {
                     throw MailServiceException.IMMUTABLE_OBJECT(id);
                 request = new Element.XMLElement(MailConstants.SAVE_DRAFT_REQUEST);
                 action = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ID, id);
-                newContent = msg.getContent();
+                upload = true;
             }
             if (create || (mask & Change.MODIFIED_FLAGS | Change.MODIFIED_UNREAD) != 0)
                 action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
@@ -931,13 +957,13 @@ public class PushChanges {
                 action.addAttribute(MailConstants.A_COLOR, color);
         }
 
-        if (newContent != null) {
-            // upload draft message body to the remote FileUploadServlet, then use the returned attachment id to save draft
-            String attachId = uploadMessage(newContent);
-            action.addAttribute(MailConstants.A_ATTACHMENT_ID, attachId);
-        }
-
         try {
+            if (upload) {
+                // upload draft message body to the remote FileUploadServlet, then use the returned attachment id to save draft
+            	String attachId = uploadMessage(msg);
+                action.addAttribute(MailConstants.A_ATTACHMENT_ID, attachId);
+            }
+        	
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_MESSAGE, null, folderId);
             if (create) {
                 // make sure the old item matches the new item...
@@ -945,6 +971,11 @@ public class PushChanges {
                 	return true;
                 id = createData.getFirst();
             }
+        } catch (ZClientException x) {
+        	if (!x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED))
+        		throw x;
+        	OfflineLog.offline.info("push: draft message %d too large to save to remote Drafts folder", id);
+        	//let it fall through so we clear the dirty bit so we don't try to push it up any more
         } catch (SoapFaultException sfe) {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_MSG))
                 throw sfe;
@@ -953,7 +984,7 @@ public class PushChanges {
         }
 
         synchronized (ombx) {
-            Message msg = ombx.getMessageById(sContext, id);
+            msg = ombx.getMessageById(sContext, id);
             // check to see if the message was changed while we were pushing the update...
             int mask = 0;
             if (flags != msg.getFlagBitmask())    mask |= Change.MODIFIED_FLAGS;
@@ -969,6 +1000,7 @@ public class PushChanges {
     }
     
     private boolean syncCalendarItem(int id, boolean isAppointment) throws ServiceException {
+
         int flags, folderId;
         long date, tags;
         byte color;
