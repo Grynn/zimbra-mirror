@@ -131,12 +131,6 @@ DwtKeyMap.JOIN		= "+";			// Modifier join character
 DwtKeyMap.SEP		= ",";			// Key separator
 DwtKeyMap.INHERIT	= "INHERIT";	// Inherit keyword.
 
-DwtKeyMap.IS_DOC_KEY = {};
-DwtKeyMap.IS_DOC_KEY["description"]	= true;
-DwtKeyMap.IS_DOC_KEY["summary"]		= true;
-DwtKeyMap.IS_DOC_KEY["sort"]		= true;
-DwtKeyMap.IS_DOC_KEY["example"]		= true;
-
 DwtKeyMap.prototype.getMap =
 function() {
 	return this._map;
@@ -171,33 +165,34 @@ function(map, keys, mapNames) {
 	
 	for (var propName in keys) {
 		var propValue = AjxStringUtil.trim(keys[propName]);
-		if (typeof keys[propName] != "string") { continue; }
+		if (!propValue || (typeof keys[propName] != "string")) { continue; }
 		var parts = propName.split(".");
-		var last = parts[parts.length - 1];
-		if (DwtKeyMap.IS_DOC_KEY[last]) { continue; }
-		var mapName = mapNames[parts[0]] || parts[0];
-		if (mapName == "keys") {
-			this._processKeyDef(parts[1], parts[2], propValue);
+		var field = parts[parts.length - 1];
+		var isMap = (parts.length == 2);
+		var action = isMap ? null : parts[1];
+		if (parts[0] == "keys") {
+			this._processKeyDef(action, field, propValue);
 			continue;
 		}
+		if (field != DwtKeyMap.INHERIT && field != "keycode") { continue; }
+		var mapName = mapNames[parts[0]];
 		if ((this._checkedMap[mapName] === false) ||
 			(!this._checkedMap[mapName] && !this._checkMap(mapName))) { continue; }
 		if (!map[mapName]) {
 			map[mapName]= {};
 		}
-		var action = parts[1];
 		if (!this._checkAction(mapName, action)) { continue; }
 		var keySequences = propValue.split(/\s*;\s*/);
 		for (var i = 0; i < keySequences.length; i++) {
 			var ks = this._canonicalize(keySequences[i]);
-			if (action == DwtKeyMap.INHERIT) {
+			if (field == DwtKeyMap.INHERIT) {
 				var parents = ks.toLowerCase().split(/\s*,\s*/);
 				var parents1 = [];
 				for (var p = 0; p < parents.length; p++) {
 					parents1[p] = mapNames[parents[p]];
 				}
-				map[mapName][action] = parents1.join(",");
-			} else if (last == "keycode") {
+				map[mapName][parts[1]] = parents1.join(",");
+			} else if (field == "keycode") {
 				map[mapName][ks] = action;
 			}
 		}
