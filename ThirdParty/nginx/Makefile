@@ -22,7 +22,7 @@ NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 all: build tar
 
 build:
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	CFLAGS=$(CFLAGS) ./configure \
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
