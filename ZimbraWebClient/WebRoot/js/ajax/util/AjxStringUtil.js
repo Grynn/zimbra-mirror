@@ -712,6 +712,7 @@ function(lines, i, htmlMode) {
 	} else if (AjxStringUtil.PREFIX_RE.test(line)) {
 		while (i < lines.length && (AjxStringUtil.PREFIX_RE.test(line) || AjxStringUtil.BLANK_RE.test(line))) {
 			i++;
+			line = htmlMode ? AjxStringUtil.stripTags(lines[i]) : lines[i];
 		}
 		skip = i - start;
 	} else if (AjxStringUtil.COLON_RE.test(line)) {
