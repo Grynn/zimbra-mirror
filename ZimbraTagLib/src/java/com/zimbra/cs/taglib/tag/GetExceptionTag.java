@@ -43,7 +43,7 @@ public class GetExceptionTag extends ZimbraSimpleTag {
         if (e != null) {
             if (
                     (!(e instanceof ServiceException)) ||
-                            ((e instanceof ZTagLibException) && (!(e.getCause() instanceof SkipPageException))) || (e instanceof ZClientException))
+                            ((e instanceof ZTagLibException) && (!(e.getCause() instanceof SkipPageException || e.getCause() instanceof IllegalStateException))) || (e instanceof ZClientException))
                 ZimbraLog.webclient.warn("local exception", e);
         }
         getJspContext().setAttribute(mVar, eb,  PageContext.PAGE_SCOPE);
