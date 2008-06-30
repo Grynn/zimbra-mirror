@@ -180,6 +180,7 @@
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
                             <string>org.apache.log4j.BasicConfigurator.configure();
+context.setVariable("languageId", context.getLanguageId());
 return true;</string>
                           </void>
                         </object>
@@ -189,7 +190,7 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="mac intel check" id="284702" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:zd.ErrNoneIntelMac}">
+              <action name="mac intel check" id="284702" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.ErrNoneIntelMac}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -288,6 +289,65 @@ return Boolean.FALSE;</string>
           </screen>
         </startup>
         <screens>
+          <screen name="Select en region" id="284858" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="3" finishScreen="false">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="fillHorizontally">
+                    <boolean>false</boolean>
+                  </void>
+                  <void property="fillVertically">
+                    <boolean>false</boolean>
+                  </void>
+                  <void property="scrollable">
+                    <boolean>false</boolean>
+                  </void>
+                  <void property="subTitle">
+                    <string>Please select the English speaking country:</string>
+                  </void>
+                  <void property="title">
+                    <string>Language Selection</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>return context.getLanguageId().equals("en");
+</condition>
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="" id="284859" beanClass="com.install4j.runtime.beans.formcomponents.DropdownListComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.DropdownListComponent">
+                      <void property="initiallySelectedIndex">
+                        <int>2</int>
+                      </void>
+                      <void property="listEntries">
+                        <array class="java.lang.String" length="3">
+                          <void index="0">
+                            <string>Australia</string>
+                          </void>
+                          <void index="1">
+                            <string>United Kingdom</string>
+                          </void>
+                          <void index="2">
+                            <string>United States</string>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="variableName">
+                        <string>engRegion</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+              </formComponent>
+            </formComponents>
+          </screen>
           <screen name="" id="1" beanClass="com.install4j.runtime.beans.screens.WelcomeScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -310,7 +370,15 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition />
             <validation />
-            <preActivation />
+            <preActivation>if (context.getVariable("engRegion") == null)
+    return;
+if ((java.lang.Integer)context.getVariable("engRegion") == 0) {
+    context.setVariable("languageId", "en_AU");    
+} else if ((java.lang.Integer)context.getVariable("engRegion") == 1) {
+    context.setVariable("languageId", "en_GB"); 
+} else {
+    context.setVariable("languageId", "en_US"); 
+}</preActivation>
             <postActivation />
             <actions />
             <formComponents />
@@ -320,7 +388,7 @@ return Boolean.FALSE;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.LicenseScreen">
                   <void property="displayedText">
-                    <string>${i18n:zd.License}</string>
+                    <string>${i18n:installer.License}</string>
                   </void>
                 </object>
               </java>
@@ -330,7 +398,7 @@ return Boolean.FALSE;</string>
             <preActivation />
             <postActivation />
             <actions>
-              <action name="" id="284703" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:zd.ErrNotAdmin}">
+              <action name="" id="284703" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.ErrNotAdmin}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RequireAdminAction" />
@@ -346,7 +414,7 @@ return Boolean.FALSE;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.DefaultInfoScreen">
                   <void property="displayedText">
-                    <string>${i18n:zd.UninstallDisplay}</string>
+                    <string>${i18n:installer.UninstallDisplay}</string>
                   </void>
                 </object>
               </java>
@@ -363,10 +431,10 @@ return Boolean.FALSE;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.CustomizableProgressScreen">
                   <void property="subTitle">
-                    <string>${i18n:zd.WaitUninstall}</string>
+                    <string>${i18n:installer.WaitUninstall}</string>
                   </void>
                   <void property="title">
-                    <string>${i18n:zd.Uninstalling}</string>
+                    <string>${i18n:installer.Uninstalling}</string>
                   </void>
                 </object>
               </java>
@@ -381,7 +449,7 @@ return Boolean.FALSE;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.SetMessageAction">
                       <void property="statusMessage">
-                        <string>${i18n:zd.UninstallStatus}</string>
+                        <string>${i18n:installer.UninstallStatus}</string>
                       </void>
                       <void property="useStatus">
                         <boolean>true</boolean>
@@ -471,22 +539,22 @@ try {
         new com.zimbra.cs.db.DbOfflineMigration().testRun();
         return true;
     } catch (com.zimbra.cs.db.DbExclusiveAccessException e) {
-        Util.showMessage(context.getMessage("zd.ErrPrevSvcRunning"), javax.swing.JOptionPane.WARNING_MESSAGE);
+        Util.showMessage(context.getMessage("installer.ErrPrevSvcRunning"), javax.swing.JOptionPane.WARNING_MESSAGE);
         return false;
     }
 } catch (com.zimbra.cs.db.DbNotFoundException x) {
-    errorMsg = context.getMessage("zd.ErrDatasetMissing");
+    errorMsg = context.getMessage("installer.ErrDatasetMissing");
 } catch (com.zimbra.cs.db.DbDataCorruptedException x) {
-    errorMsg = context.getMessage("zd.ErrDatasetCorrupted");
+    errorMsg = context.getMessage("installer.ErrDatasetCorrupted");
 } catch (com.zimbra.cs.db.DbUnsupportedVersionException x) {
-    errorMsg = context.getMessage("zd.ErrDatasetTooOld");
+    errorMsg = context.getMessage("installer.ErrDatasetTooOld");
 } catch (com.zimbra.cs.db.DbUpdateException x) {
-    errorMsg = context.getMessage("zd.ErrDatasetIncompat");
+    errorMsg = context.getMessage("installer.ErrDatasetIncompat");
 } catch (Exception x) {
-    errorMsg = context.getMessage("zd.ErrDatasetUnreusable");
+    errorMsg = context.getMessage("installer.ErrDatasetUnreusable");
 }
 
-int choice = Util.showOptionDialog(errorMsg, new String[] {context.getMessage("zd.Quit"), context.getMessage("zd.DelDatasetContinue")},
+int choice = Util.showOptionDialog(errorMsg, new String[] {context.getMessage("installer.Quit"), context.getMessage("installer.DelDatasetContinue")},
         javax.swing.JOptionPane.WARNING_MESSAGE);
 
 switch (choice) {
@@ -623,7 +691,7 @@ default:
                 </serializedBean>
                 <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
               </action>
-              <action name="check uninstall" id="275898" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:zd.ErrUninstallFailed}">
+              <action name="check uninstall" id="275898" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.ErrUninstallFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -666,22 +734,22 @@ try {
         new com.zimbra.cs.db.DbOfflineMigration().testRun();
         return true;
     } catch (com.zimbra.cs.db.DbExclusiveAccessException e) {
-        Util.showMessage(context.getMessage("zd.ErrPrevSvcRunning"), javax.swing.JOptionPane.WARNING_MESSAGE);
+        Util.showMessage(context.getMessage("installer.ErrPrevSvcRunning"), javax.swing.JOptionPane.WARNING_MESSAGE);
         return false;
     }
 } catch (com.zimbra.cs.db.DbNotFoundException x) {
-    errorMsg = context.getMessage("zd.ErrDatasetMissing");
+    errorMsg = context.getMessage("installer.ErrDatasetMissing");
 } catch (com.zimbra.cs.db.DbDataCorruptedException x) {
-    errorMsg = context.getMessage("zd.ErrDatasetCorrupted");
+    errorMsg = context.getMessage("installer.ErrDatasetCorrupted");
 } catch (com.zimbra.cs.db.DbUnsupportedVersionException x) {
-    errorMsg = context.getMessage("zd.ErrDatasetTooOld");
+    errorMsg = context.getMessage("installer.ErrDatasetTooOld");
 } catch (com.zimbra.cs.db.DbUpdateException x) {
-    errorMsg = context.getMessage("zd.ErrDatasetIncompat");
+    errorMsg = context.getMessage("installer.ErrDatasetIncompat");
 } catch (Exception x) {
-    errorMsg = context.getMessage("zd.ErrDatasetUnreusable");
+    errorMsg = context.getMessage("installer.ErrDatasetUnreusable");
 }
 
-int choice = Util.showOptionDialog(errorMsg, new String[] {context.getMessage("zd.Quit"), context.getMessage("zd.DelDatasetContinue")},
+int choice = Util.showOptionDialog(errorMsg, new String[] {context.getMessage("installer.Quit"), context.getMessage("installer.DelDatasetContinue")},
         javax.swing.JOptionPane.WARNING_MESSAGE);
 
 switch (choice) {
@@ -1245,7 +1313,7 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="derbyij" id="263089" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:zd.ErrDBInitFailed}">
+              <action name="derbyij" id="263089" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrDBInitFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -2074,10 +2142,10 @@ return true;</string>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.CustomizableProgressScreen">
                   <void property="subTitle">
-                    <string>${i18n:zd.WaitService}</string>
+                    <string>${i18n:installer.WaitService}</string>
                   </void>
                   <void property="title">
-                    <string>${i18n:zd.StartingService}</string>
+                    <string>${i18n:installer.StartingService}</string>
                   </void>
                 </object>
               </java>
@@ -2270,7 +2338,7 @@ return true;</string>
                 </serializedBean>
                 <condition>Util.isMacOS() &amp;&amp; !context.isErrorOccured()</condition>
               </action>
-              <action name="" id="263046" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:zd.ErrCoreSvcFailed}">
+              <action name="" id="263046" beanClass="com.install4j.runtime.beans.actions.services.InstallServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrCoreSvcFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.services.InstallServiceAction">
@@ -2285,7 +2353,7 @@ return true;</string>
                 </serializedBean>
                 <condition>!Util.isMacOS() &amp;&amp; !context.isErrorOccured()</condition>
               </action>
-              <action name="" id="263047" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:zd.ErrCoreSvcNotStarted}">
+              <action name="" id="263047" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrCoreSvcNotStarted}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.services.StartServiceAction">
@@ -2302,7 +2370,7 @@ return true;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.SetMessageAction">
                       <void property="statusMessage">
-                        <string>${i18n:zd.StartingService}</string>
+                        <string>${i18n:installer.StartingService}</string>
                       </void>
                       <void property="useStatus">
                         <boolean>true</boolean>
@@ -2327,7 +2395,7 @@ return true;</string>
                 </serializedBean>
                 <condition>!context.isErrorOccured()</condition>
               </action>
-              <action name="zimlets" id="4232" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:zd.ErrInjectZimletFailed}">
+              <action name="zimlets" id="4232" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrInjectZimletFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -2558,7 +2626,7 @@ return !hasFailures;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>${i18n:zd.LaunchCheckbox}</string>
+                        <string>${i18n:installer.LaunchCheckbox}</string>
                       </void>
                       <void property="initiallySelected">
                         <boolean>true</boolean>
@@ -2660,7 +2728,7 @@ return !hasFailures;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>${i18n:zd.DelDataCheckbox}</string>
+                        <string>${i18n:installer.DelDataCheckbox}</string>
                       </void>
                       <void property="variableName">
                         <string>wipeUserData</string>
@@ -2683,7 +2751,7 @@ return !hasFailures;</string>
                         </object>
                       </void>
                       <void property="labelText">
-                        <string>${i18n:zd.MultilineLabel}</string>
+                        <string>${i18n:installer.MultilineLabel}</string>
                       </void>
                     </object>
                   </java>
@@ -2703,7 +2771,7 @@ return !hasFailures;</string>
             <preActivation />
             <postActivation />
             <actions>
-              <action name="" id="95843" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="${i18n:zd.ErrCannotStopSvc}">
+              <action name="" id="95843" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="${i18n:installer.ErrCannotStopSvc}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.services.StopServiceAction">
@@ -2715,7 +2783,7 @@ return !hasFailures;</string>
                 </serializedBean>
                 <condition>!Util.isMacOS()</condition>
               </action>
-              <action name="launchctl stop" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="${i18n:zd.ErrCannotStopSvc}">
+              <action name="launchctl stop" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="${i18n:installer.ErrCannotStopSvc}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
