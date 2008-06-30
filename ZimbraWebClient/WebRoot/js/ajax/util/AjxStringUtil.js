@@ -621,6 +621,7 @@ AjxStringUtil.PREFIX_RE = /^\s*(>|\|)/;
 AjxStringUtil.BRACKET_RE = /^\s*\[.+\]\s*$/;
 AjxStringUtil.LINE_RE = /^\s*_{30,}\s*$/;
 AjxStringUtil.BLANK_RE = /^\s*$/;
+AjxStringUtil.SPLIT_RE = /\r|\n|\r\n/;
 AjxStringUtil.HTML_BLANK_RE = /^\s*<br>\s*$/i;
 AjxStringUtil.HDR_RE = /^\s*\w+:/;
 AjxStringUtil.HTML_BR_RE = /<br\s*\/?>/gi;
@@ -662,7 +663,7 @@ AjxStringUtil.HTML_BODY_RE = /<body(\s|>)/i;
 AjxStringUtil.getTopLevel =
 function(text, eol, htmlMode) {
 	var isHtml = /<br|<div/i.test(text);
-	var split = isHtml ? AjxStringUtil.HTML_BR_RE : '\n';
+	var split = isHtml ? AjxStringUtil.HTML_BR_RE : AjxStringUtil.SPLIT_RE;
 	var eol = isHtml ? '<br>' : '\n';
 	text = AjxStringUtil._trimBlankLines(text, split, eol, isHtml);
 	var lines = text.split(split);
@@ -707,8 +708,6 @@ function(lines, i, htmlMode) {
 	
 	if (AjxStringUtil.MSG_SEP_RE.test(line)) {
 		skip = len - i;
-	} else if (AjxStringUtil.SIG_RE.test(line)) {
-		skip = len - i;
 	} else if (AjxStringUtil.PREFIX_RE.test(line)) {
 		while (i < lines.length && (AjxStringUtil.PREFIX_RE.test(line) || AjxStringUtil.BLANK_RE.test(line))) {
 			i++;
@@ -735,6 +734,8 @@ function(lines, i, htmlMode) {
 		if (line1 && AjxStringUtil.HDR_RE.test(line1)) {
 			skip = len - i;
 		}
+	} else if (AjxStringUtil.SIG_RE.test(line)) {
+		skip = len - i;
 	}
 	return skip;
 };
