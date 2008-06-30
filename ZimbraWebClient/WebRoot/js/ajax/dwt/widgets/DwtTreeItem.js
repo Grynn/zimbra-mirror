@@ -36,6 +36,7 @@
  *        forceNotifyAction		[boolean]*	force notify action even if checked style
  */
 DwtTreeItem = function(params) {
+	if (arguments.length == 0) { return; }
 	params = Dwt.getParams(arguments, DwtTreeItem.PARAMS);
 	var parent = params.parent;
 	if (parent instanceof DwtTree) {
