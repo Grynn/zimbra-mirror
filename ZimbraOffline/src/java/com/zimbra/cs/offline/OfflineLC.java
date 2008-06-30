@@ -237,7 +237,7 @@ public class OfflineLC {
 	    zdesktop_ymail_baseuri.setDoc("base uri for ymail");
 	    
 	    zdesktop_support_email = new KnownKey("zdesktop_support_email");
-	    zdesktop_support_email.setDefault("support@zimbra.com");
+	    zdesktop_support_email.setDefault("zdesktop-report@zimbra.com");
 	    zdesktop_support_email.setDoc("support email address");
     }
     

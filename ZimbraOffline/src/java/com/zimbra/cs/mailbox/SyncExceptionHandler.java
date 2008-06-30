@@ -172,7 +172,7 @@ class SyncExceptionHandler {
 			MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
 			mm.setSentDate(now);
 			mm.setFrom(new InternetAddress(dmbx.getAccount().getName()));
-    		mm.setRecipient(RecipientType.TO, new InternetAddress(dmbx.getAccount().getName()));
+    		mm.setRecipient(RecipientType.TO, new InternetAddress(OfflineLC.zdesktop_support_email.value()));
     		mm.setSubject(subject);
     		mm.setText(message);
     		mm.saveChanges(); //must call this to update the headers

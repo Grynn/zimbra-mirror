@@ -42,11 +42,13 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.cs.account.offline.OfflineAccount;
+import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.mime.Mime;
+import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
@@ -782,15 +784,16 @@ public class PushChanges {
     }
     
     private boolean syncContact(int id) throws ServiceException {
-        Element request = new Element.XMLElement(MailConstants.CONTACT_ACTION_REQUEST);
-        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
-
+        Element request = new Element.XMLElement(MailConstants.MODIFY_CONTACT_REQUEST).addAttribute(MailConstants.A_REPLACE, "1");
+        Element cnElem = request.addElement(MailConstants.E_CONTACT).addAttribute(MailConstants.A_ID, id);
+    	
         int flags, folderId;
         long date, tags;
         byte color;
         boolean create = false;
+        Contact cn = null;
         synchronized (ombx) {
-            Contact cn = ombx.getContactById(sContext, id);
+            cn = ombx.getContactById(sContext, id);
             date = cn.getDate();    flags = cn.getFlagBitmask();  tags = cn.getTagBitmask();
             color = cn.getColor();  folderId = cn.getFolderId();
 
@@ -798,28 +801,37 @@ public class PushChanges {
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new contact; need to push to the server
                 request = new Element.XMLElement(MailConstants.CREATE_CONTACT_REQUEST);
-                action = request.addElement(MailConstants.E_CONTACT);
+                cnElem = request.addElement(MailConstants.E_CONTACT);
                 create = true;
             }
             if (create || (mask & Change.MODIFIED_FLAGS) != 0)
-                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
+            	cnElem.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
             if (create || (mask & Change.MODIFIED_TAGS) != 0)
-                action.addAttribute(MailConstants.A_TAGS, cn.getTagString());
+            	cnElem.addAttribute(MailConstants.A_TAGS, cn.getTagString());
             if (create || (mask & Change.MODIFIED_FOLDER) != 0)
-                action.addAttribute(MailConstants.A_FOLDER, folderId);
+            	cnElem.addAttribute(MailConstants.A_FOLDER, folderId);
             if (create || (mask & Change.MODIFIED_COLOR) != 0)
-                action.addAttribute(MailConstants.A_COLOR, color);
+            	cnElem.addAttribute(MailConstants.A_COLOR, color);
             if (create || (mask & Change.MODIFIED_CONTENT) != 0) {
                 for (Map.Entry<String, String> field : cn.getFields().entrySet()) {
                     String name = field.getKey(), value = field.getValue();
                     if (name == null || name.trim().equals("") || value == null || value.equals(""))
                         continue;
-                    action.addKeyValuePair(name, value);
+                    cnElem.addKeyValuePair(name, value);
                 }
             }
         }
 
         try {
+        	if (cn.hasAttachment()) {
+        		ParsedContact pc = new ParsedContact(cn);
+        		for (Attachment attach : pc.getAttachments()) {
+        			String aid = getZMailbox().uploadAttachment(attach.getName(), attach.getContent(), attach.getContentType(),
+        					(int) ((5 + attach.getSize() / 25000) * Constants.MILLIS_PER_SECOND));
+        			cnElem.addKeyValuePair(attach.getName(), null).addAttribute(MailConstants.A_ATTACHMENT_ID, aid);
+        		}
+        	}
+        	
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.TYPE_CONTACT, null, folderId);
             if (create) {
                 // make sure the old item matches the new item...
@@ -835,7 +847,7 @@ public class PushChanges {
         }
 
         synchronized (ombx) {
-            Contact cn = ombx.getContactById(sContext, id);
+            cn = ombx.getContactById(sContext, id);
             // check to see if the contact was changed while we were pushing the update...
             int mask = 0;
             if (flags != cn.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
