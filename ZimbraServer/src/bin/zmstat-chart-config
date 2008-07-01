@@ -768,26 +768,40 @@ sub gcConfig() {
     print <<_HERE_;
   <!-- Garbage Collection Stats -->
 
-  <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Garbage Collection Time"
+  <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Minor Garbage Collection Time"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mboxd-gc-time.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-min-gc-time.png"
          plotZero="true"
          yAxis="% time">
     <plot data="gc_minor_ms" legend="minor GC time"
           dataFunction="diff" percentTime="true"/>
+  </chart>
+  <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Major Garbage Collection Time"
+         category="mailboxd"
+         infile="$mailboxdCsv"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-maj-gc-time.png"
+         plotZero="true"
+         yAxis="% time">
     <plot data="gc_major_ms" legend="major GC time"
           dataFunction="diff" percentTime="true"/>
   </chart>
 
-  <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Garbage Collection Count"
+  <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Minor Garbage Collection Count"
          category="mailboxd"
          infile="$mailboxdCsv"
-         outfile="${ZIMBRA_HOSTNAME}_mboxd-gc-count.png"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-min-gc-count.png"
          plotZero="true"
          yAxis="times">
     <plot data="gc_minor_count" legend="minor GC count"
           dataFunction="diff" nonNegative="true"/>
+  </chart>
+  <chart title="Host $ZIMBRA_HOSTNAME: Mailboxd: Major Garbage Collection Count"
+         category="mailboxd"
+         infile="$mailboxdCsv"
+         outfile="${ZIMBRA_HOSTNAME}_mboxd-maj-gc-count.png"
+         plotZero="true"
+         yAxis="times">
     <plot data="gc_major_count" legend="major GC count"
           dataFunction="diff" nonNegative="true"/>
   </chart>
