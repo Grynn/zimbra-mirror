@@ -17,12 +17,14 @@
 package com.zimbra.cs.offline.util.yauth;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 
 /**
@@ -35,6 +37,7 @@ public class RawAuth implements Auth {
     private String wssId;
     private long expiration;
 
+    private static final String BASE_URI = "https://login.yahoo.com/WSLogin/V1";
     private static final String GET_AUTH_TOKEN = "get_auth_token";
     private static final String GET_AUTH = "get_auth";
 
@@ -50,7 +53,7 @@ public class RawAuth implements Auth {
     private static final String ERROR = "Error";
     private static final String ERROR_DESCRIPTION = "ErrorDescription";
     
-    private static String baseUri = "https://login.yahoo.com/WSLogin/V1";
+    private static String baseUri = BASE_URI;
 
     public static void setBaseUri(String uri) {
         baseUri = uri;
@@ -58,8 +61,10 @@ public class RawAuth implements Auth {
     
     public static String getToken(String appId, String user, String pass)
             throws AuthenticationException, IOException {
-        Response res = doGet(GET_AUTH_TOKEN, new NameValuePair(APPID, appId),
-            new NameValuePair(LOGIN, user), new NameValuePair(PASSWD, pass));
+        Response res = doGet(GET_AUTH_TOKEN,
+            new NameValuePair(APPID, appId),
+            new NameValuePair(LOGIN, user),
+            new NameValuePair(PASSWD, pass));
         return res.getRequiredValue(AUTH_TOKEN);
     }
 
@@ -134,10 +139,13 @@ public class RawAuth implements Auth {
         final List<String> names = new ArrayList<String>(5);
         final List<String> values = new ArrayList<String>(5);
 
-        Response(String action, HttpMethod method) throws IOException {
+        Response(String action, GetMethod get) throws IOException {
             this.action = action;
-            String body = method.getResponseBodyAsString();
-            for (String line : body.split("\\r?\\n")) {
+            InputStream is = get.getResponseBodyAsStream();
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(is, get.getResponseCharSet()));
+            String line;
+            while ((line = br.readLine()) != null) {
                 int i = line.indexOf('=');
                 if (i != -1) {
                     names.add(line.substring(0, i));

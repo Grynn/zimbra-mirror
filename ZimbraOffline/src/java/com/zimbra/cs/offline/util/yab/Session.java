@@ -19,25 +19,20 @@ package com.zimbra.cs.offline.util.yab;
 import com.zimbra.cs.offline.util.yauth.RawAuth;
 import com.zimbra.cs.offline.util.yauth.AuthenticationException;
 import com.zimbra.cs.offline.util.yauth.Auth;
+import com.zimbra.cs.offline.util.Xml;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.List;
-import java.util.Collection;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -65,7 +60,7 @@ public class Session {
         this.appId = appId;
         this.format = format;
         httpClient = new HttpClient();
-        docBuilder = createDocumentBuilder();
+        docBuilder = Xml.newDocumentBuilder();
         transformer = createTransformer();
         baos = new ByteArrayOutputStream(4096);
     }
@@ -156,22 +151,6 @@ public class Session {
     private void checkAuthenticated() {
         if (auth == null) {
             throw new IllegalStateException("Not authenticated");
-        }
-    }
-
-    private static DocumentBuilder createDocumentBuilder() {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setValidating(false);
-        try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            db.setEntityResolver(new EntityResolver() {
-                public InputSource resolveEntity(String pid, String sid) {
-                    return new InputSource(new StringReader(""));
-                }
-            });
-            return db;
-        } catch (ParserConfigurationException e) {
-            throw new IllegalStateException("Unable to create DocumentBuilder", e);
         }
     }
 

@@ -21,6 +21,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -37,6 +39,7 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 
 /**
  * Various XML utility methods.
@@ -97,11 +100,19 @@ public final class Xml {
         return nodes;
     }
 
-    public static DocumentBuilder createDocumentBuilder() {
+    public static DocumentBuilder newDocumentBuilder() {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setValidating(false);
         try {
-            return DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            db.setEntityResolver(new EntityResolver() {
+                public InputSource resolveEntity(String pid, String sid) {
+                    return new InputSource(new StringReader(""));
+                }
+            });
+            return db;
         } catch (ParserConfigurationException e) {
-            throw new IllegalStateException("Unable to create document builder", e);
+            throw new IllegalStateException("Unable to create DocumentBuilder", e);
         }
     }
 

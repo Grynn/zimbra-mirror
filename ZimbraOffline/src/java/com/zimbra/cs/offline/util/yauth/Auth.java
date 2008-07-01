@@ -20,4 +20,5 @@ public interface Auth {
     String getAppId();
     String getWSSID();
     String getCookie();
+    long getExpiration();
 }
