@@ -20,7 +20,6 @@ use strict;
 use Zimbra::Mon::Zmstat;
 
 zmstatInit();
-Zimbra::Mon::Zmstat::getLocalConfig('convertd_version');
 
 my $isLinux = isLinux();
 my $isMac = isMac();
@@ -146,7 +145,6 @@ sub getHostAndProcsInfo() {
         if ($svc =~ /mailbox/) {
             push(@ENABLED_PROCS, 'mailbox');
             push(@ENABLED_PROCS, 'mysql');
-            push(@ENABLED_PROCS, 'convertd') if $Zimbra::Mon::Zmstat::LC{'convertd_version'} ne '2';
             $HAS_MAILBOX = 1;
             last;
         }
@@ -925,6 +923,6 @@ if ($HAS_MAILBOX) {
     mailboxdConfig();
     gcConfig();
     heapConfig();
-    convertdConfig() if !$isMac && $Zimbra::Mon::Zmstat::LC{'convertd_version'} eq '2';
+    convertdConfig() if !$isMac;
 }
 print "</charts>\n";
