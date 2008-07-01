@@ -41,6 +41,10 @@ ifeq ($(BUILD_PLATFORM), UBUNTU6_64)
 	PLAT := linux-x86_64
 endif
 
+ifeq ($(BUILD_PLATFORM), UBUNTU8_64)
+	PLAT := linux-x86_64
+endif
+
 ifeq ($(PLAT), )
 	PLAT := linux-elf
 endif
