@@ -468,7 +468,7 @@ YahooLocalController.prototype._getGeoIP =
 function(callback) {
 	geoip_country_code = null;
 
-	var url = "http://j.aaaamaxmind.com/app/geoip.js";
+	var url = "http://j.maxmind.com/app/geoip.js";
 	var respCallback = new AjxCallback(this, this._handleGetIP, callback);
 	var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 
