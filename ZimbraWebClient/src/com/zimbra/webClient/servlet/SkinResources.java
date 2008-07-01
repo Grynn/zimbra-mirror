@@ -465,12 +465,16 @@ public class SkinResources
                 if (type.equals(T_CSS)) {
 					for (File file : manifest.getFiles(type)) {
 						files.add(file);
-						addLocaleFiles(files, requestedLocale, file.getParentFile(), file.getName(), "");
+						String cssFilename = file.getName().replaceAll("\\.css$", "");
+						String cssExt = file.getName().replaceAll("^.*\\.", ".");
+						addLocaleFiles(files, requestedLocale, file.getParentFile(), cssFilename, cssExt);
 					}
 
 					File file = new File(skinDir, IMAGE_CSS);
 					files.add(file);
-					addLocaleFiles(files, requestedLocale, file.getParentFile(), file.getName(), "");
+					String cssFilename = file.getName().replaceAll("\\.css$", "");
+					String cssExt = file.getName().replaceAll("^.*\\.", ".");
+					addLocaleFiles(files, requestedLocale, file.getParentFile(), cssFilename, cssExt);
 				}
 				else if (type.equals(T_JAVASCRIPT)) {
 					// decide whether to include templates
@@ -484,7 +488,9 @@ public class SkinResources
 							files.add(file);
 							// TODO: Not sure if we want to allow different skin JS files
 							//       (aside from templates) based on locale.
-//							addLocaleFiles(files, requestedLocale, file.getParentFile(), file.getName(), "");
+//							String jsFilename = file.getName().replaceAll("\\.js$", "");
+//							String jsExt = file.getName().replaceAll("^.*\\.", ".");
+//							addLocaleFiles(files, requestedLocale, file.getParentFile(), jsFilename, jsExt);
 						}
 					}
 
@@ -497,7 +503,8 @@ public class SkinResources
 								// TODO: optimize
 								files.add(new File(file.getParentFile(), file.getName() + ".js"));
 								String templateFilename = file.getName().replaceAll("\\.template$", ""); 
-								addLocaleFiles(files, requestedLocale, file.getParentFile(), templateFilename, ".template.js");
+								String templateExt = ".template.js";
+								addLocaleFiles(files, requestedLocale, file.getParentFile(), templateFilename, templateExt);
 							}
 						}
 						this.included.put(cacheId, included);

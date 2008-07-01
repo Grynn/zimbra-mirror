@@ -90,26 +90,51 @@ SKIN_DEST_DIR="${SKIN_WORK_BASE}/skins/${SKIN_NAME}"
 pushd $SKIN_WORK_DIR > /dev/null
 
 TEMPLATES=`find . -type f -name \*.template`
-if [ ${TEMPLATES} ]; then
+if [ -n "${TEMPLATES}" ]; then
     echo "Processing templates..."
-    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.templates.Template --prefix "${SKIN_NAME}" --authoritative  --inputdir ${SKIN_WORK_DIR} --outputdir ${SKIN_WORK_DIR} -- ${TEMPLATES} > /dev/null
+    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.templates.Template \
+    	--prefix "${SKIN_NAME}" \
+    	--authoritative \
+    	--inputdir "${SKIN_WORK_DIR}" \
+    	--outputdir "${SKIN_WORK_DIR}" \
+    	-- \
+    	${TEMPLATES} > /dev/null
 fi
 
 IMAGE_SUBDIRS=
-for E in `find img -type d`; do
-    if [ ${IMAGE_SUBDIRS} ]; then
+for E in `find img -type d -mindepth 1 -maxdepth 1 | grep -v _`; do
+    if [ -n "${IMAGE_SUBDIRS}" ]; then
         IMAGE_SUBDIRS="${IMAGE_SUBDIRS};"
     fi
     IMAGE_SUBDIRS="${IMAGE_SUBDIRS}${E}"
 done
 
-
-if [ ${IMAGE_SUBDIRS} ]; then
+if [ -n "${IMAGE_SUBDIRS}" ]; then
     echo "Processing images..."
-    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge --css-path "${BASE_URL}/skins/${SKIN_NAME}/" --css-file "img/images.css" --output ${SKIN_DEST_DIR} --input ${IMAGE_SUBDIRS} > /dev/null
-
+    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge \
+    	--css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
+    	--css-file "images.css" \
+    	--output "${SKIN_DEST_DIR}/img" \
+    	--input "${IMAGE_SUBDIRS}" > /dev/null
     perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images.css"
 fi
+
+for LOCID in `find img -type d -mindepth 1 -maxdepth 1 | perl -ne 'print "$1\n" if /_(..(_..)?)$/;' | sort | uniq`; do
+    echo "Processing images for locale ${LOCID}..."
+	IMAGE_SUBDIRS=
+	for E in `ls -d img/*_${LOCID}`; do
+		if [ -n "${IMAGE_SUBDIRS}" ]; then
+			IMAGE_SUBDIRS="${IMAGE_SUBDIRS};"
+		fi
+		IMAGE_SUBDIRS="${IMAGE_SUBDIRS}${E}"
+	done
+	sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge \
+		--css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
+		--css-file "images_${LOCID}.css" \
+		--output "${SKIN_DEST_DIR}/img" \
+    	--input "${IMAGE_SUBDIRS}" > /dev/null
+	perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images_${LOCID}.css"
+done
 
 popd > /dev/null
 
