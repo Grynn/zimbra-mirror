@@ -15,13 +15,16 @@
  * ***** END LICENSE BLOCK *****
  */
 
-YLocalDialog = function(shell, className, parent) {
+YLocalDialog = function(shell, className, parent,isZip) {
 	className = className || "YSymbolsDialog";
 	this._zimlet = parent;
 	var title = "Select Option";
 	DwtDialog.call(this, {parent:shell, className:className, title:title});
-	this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, parent._controller._locateLocation));
-	this._createSearchHtml();
+	if(!isZip)
+        this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, parent._controller._locateLocation));
+    else
+        this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, parent._controller.setLanLongAndChangeLocation));
+    this._createSearchHtml();
 	//DBG.println("user prop:"+this._zimlet.getUserProperty("Yahoo Local"));
 };
 
@@ -82,6 +85,36 @@ function(){
     gInstance.popdown();
     gInstance._zimlet._controller.changeLocation({latitude:45,longitude:45});
 }
+
+
+YLocalDialog.prototype.changeLocationByZip =
+function(){
+    var lat = AjxStringUtil.trim((result.text.match(/<td><b>Latitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Latitude/gi, ''));
+	var lon = AjxStringUtil.trim((result.text.match(/<td><b>Longitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Longitude/gi, ''));
+	if (!(lat && lon)) {
+		appCtxt.setStatusMsg(this._zimlet.getMessage("coordsNotFound"), ZmStatusView.LEVEL_CRITICAL);
+		return;
+	}
+
+	var cord = this.getLocal();
+	this.setView({
+		clean: true,
+		typeControl:true,
+		panControl:false,
+		zoomControl:"long",
+		zoomLevel: 3,
+		defaultLat: lat,
+		defaultLon: lon
+	});
+
+	this.getMapsView().changeLocation({
+		latitude:   cord.latitude,
+		longitude:  cord.longitude,
+		newLatitude: lat,
+		newLongitude: lon
+	});
+};
+
 
 YLocalDialog.prototype.popup = function(name, callback) {
 
