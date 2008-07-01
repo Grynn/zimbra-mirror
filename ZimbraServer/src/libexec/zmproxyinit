@@ -43,6 +43,11 @@ my $WebDisabled="80:0:443:0";
 my $storeMailMode="mixed";
 my $proxyMailMode="both";
 
+our %options = ();
+our %loaded = ();
+
+getopts('a:defhH:i:mop:rswx:',\%options) or die "Unable to set options\n";
+
 our $ZMPROV = "/opt/zimbra/bin/zmprov -l";
 our $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
 chomp ($platform);
@@ -59,14 +64,14 @@ if (!isInstalled("zimbra-store") && !isInstalled("zimbra-proxy")) {
     exit {1};
 }
 
-our %options = ();
-our %loaded = ();
-
-getopts('a:defhi:mop:rswx:',\%options) or die "Unable to set options\n";
-
 if ($options{h})  {
    usage();
    exit 1;
+}
+
+if ( !$options{H} ) {
+    usage();
+    exit 1;
 }
 
 if ( $options{d} + $options{e} > 1) {
@@ -118,13 +123,13 @@ if ($options{r} && !$options{d}) {
     exit 1;
 }
 
-if ($#ARGV == -1) {
+if ($#ARGV != -1) {
     usage();
     exit 1;
 
 }
 
-my $hostname = $ARGV[0];
+my $hostname = $options{H};
 
 open(ZMPROV, "|$ZMPROV");
 
@@ -402,8 +407,9 @@ close ZMPROV;
 exit 0;
 
 sub usage() {
-  print "Usage: $0 [-h] [-o] [-m] [-w] [-d [-r] [-s] [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4] [-x mailmode]] [-e [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4] [-x mailmode]] [-f] hostname\n";
+  print "Usage: $0 [-h] [-o] [-m] [-w] [-d [-r] [-s] [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4] [-x mailmode]] [-e [-a w1:w2:w3:w4] [-i p1:p2:p3:p4] [-p p1:p2:p3:p4] [-x mailmode]] [-f] -H hostname\n";
   print "\t-h: display this help message\n";
+  print "\t-H: Hostname of server on which enable/disable proxy functionality.\n";
   print "\t-a: Colon separated list of Web ports to use. Format: HTTP-STORE:HTTP-PROXY:HTTPS-STORE:HTTPS-PROXY (Ex: 8080:80:8443:443)\n";
   print "\t-d: disable proxy\n";
   print "\t-e: enable proxy\n";
