@@ -72,8 +72,7 @@ public class Derby extends Db {
         mIndexNames.put("i_name_folder_id", "i_mail_item_name_folder_id");
     }
 
-    @Override
-    boolean supportsCapability(Db.Capability capability) {
+    @Override boolean supportsCapability(Db.Capability capability) {
         switch (capability) {
             case BITWISE_OPERATIONS:         return false;
             case BOOLEAN_DATATYPE:           return false;
@@ -82,23 +81,24 @@ public class Derby extends Db {
             case CAST_AS_BIGINT:             return true;
             case CLOB_COMPARISON:            return false;
             case DISABLE_CONSTRAINT_CHECK:   return false;
+            case FILE_PER_DATABASE:          return false;
             case LIMIT_CLAUSE:               return false;
             case MULTITABLE_UPDATE:          return false;
             case ON_DUPLICATE_KEY:           return false;
             case ON_UPDATE_CASCADE:          return false;
+            case READ_COMMITTED_ISOLATION:   return true;
+            case REPLACE_INTO:               return false;
             case UNIQUE_NAME_INDEX:          return false;
         }
         return false;
     }
 
-    @Override
-    boolean compareError(SQLException e, Db.Error error) {
+    @Override boolean compareError(SQLException e, Db.Error error) {
         String code = mErrorCodes.get(error);
         return (code != null && e.getSQLState().equals(code));
     }
 
-    @Override
-    String forceIndexClause(String index) {
+    @Override String forceIndexClause(String index) {
         String localIndex = mIndexNames.get(index);
         if (localIndex == null) {
             ZimbraLog.misc.warn("could not find derby equivalent from index " + index);
@@ -107,17 +107,15 @@ public class Derby extends Db {
         return " -- DERBY-PROPERTIES " + (localIndex.startsWith("fk_") ? "constraint=" : "index=") + localIndex + '\n';
     }
 
-    @Override String getIFNULL(String column1, String column2) {
-        return "CASE WHEN " + column1 + " IS NULL THEN " + column1 + " ELSE " + column2 + " END";
+    @Override String getIFNULLClause(String expr1, String expr2) {
+        return "CASE WHEN " + expr1 + " IS NULL THEN " + expr1 + " ELSE " + expr2 + " END";
     }
 
-    @Override
-    DbPool.PoolConfig getPoolConfig() {
+    @Override DbPool.PoolConfig getPoolConfig() {
         return new DerbyConfig();
     }
     
-    @Override
-    public boolean databaseExists(Connection conn, String databaseName)
+    @Override public boolean databaseExists(Connection conn, String databaseName)
     throws ServiceException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -141,8 +139,7 @@ public class Derby extends Db {
         return (numSchemas > 0);
     }
 
-    @Override
-    void shutdown() {
+    @Override void shutdown() {
     	try {
     		DriverManager.getConnection("jdbc:derby:" + System.getProperty("derby.system.home", LC.zimbra_home.value() + File.separator + "derby") + ";shutdown=true");
     	} catch (Exception x) {
@@ -199,6 +196,10 @@ public class Derby extends Db {
 
             return props;
         }
+    }
+
+    @Override public String toString() {
+        return "derby";
     }
 
     public static void main(String args[]) {

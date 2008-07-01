@@ -283,7 +283,7 @@ public class DbOfflineMailbox {
         ResultSet rs = null;
         try {
             stmt = conn.prepareStatement("SELECT id, type" +
-                    " FROM " + DbMailItem.getMailItemTableName(ombx) + Derby.forceIndex("i_change_mask") +
+                    " FROM " + DbMailItem.getMailItemTableName(ombx) + Db.forceIndex("i_change_mask") +
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
             int pos = 1;
             stmt.setInt(pos++, ombx.getId());
