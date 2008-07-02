@@ -19,7 +19,7 @@
 <meta http-equiv="refresh" content="15" >
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
-<title><fmt:message key='ZimbraDesktop'/> &#32; ${bean.appVersion} &#40;<c:out value="${pageContext.request.locale.language}" />_<c:out value="${pageContext.request.locale.country}" />&#41; </title>
+<title>Zimbra Desktop</title>
 
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);

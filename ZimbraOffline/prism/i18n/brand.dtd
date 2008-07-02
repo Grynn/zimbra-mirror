@@ -1,0 +1,31 @@
+<!ENTITY  brandShortName  "Zimbra Desktop">
+<!ENTITY  brandFullName   "Zimbra Desktop">
+
+<!-- required for download dialog (unknownContentType.xul) -->
+
+<!ENTITY  intro.label                 "@prism.exts.ChosenToOpen@">
+<!ENTITY  from.label                  "@prism.exts.FromLabel@">
+<!ENTITY  actionQuestion.label        "@prism.exts.FileWhatToDo@">
+
+<!ENTITY  openWith.label              "@prism.exts.OpenWith@">
+<!ENTITY  openWith.accesskey          "o">
+<!ENTITY  other.label                 "@prism.exts.Other@">
+
+<!ENTITY  save.label                  "@prism.exts.SaveToDisk@">
+<!ENTITY  save.accesskey              "s">
+
+<!ENTITY  rememberChoice.label        "@prism.exts.DoThisToAll@">
+<!ENTITY  rememberChoice.accesskey    "a">
+
+<!ENTITY  settingsChange.label        "@prism.exts.ChangeInToolsOpts@">
+<!ENTITY  settingsChangeMac.label     "@prism.exts.ChangeInPrefs@">
+<!ENTITY  settingsChangeUnix.label    "@prism.exts.ChangeInEditPrefs@">
+
+<!ENTITY  whichIsA.label              "@prism.exts.WhichIsA@">
+
+<!ENTITY  chooseHandlerMac.label      "@prism.exts.Choose@">
+<!ENTITY  chooseHandlerMac.accesskey  "C">
+<!ENTITY  chooseHandler.label         "@prism.exts.Browse@">
+<!ENTITY  chooseHandler.accesskey     "B">
+
+<!ENTITY  unknownPromptText.label     "@prism.exts.WantToSave@">

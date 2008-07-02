@@ -1,0 +1,56 @@
+content branding chrome/webrunner/branding/
+resource prism-runtime .
+content webrunner chrome/webrunner/content/ xpcnativewrappers=no
+skin webrunner classic/1.0 chrome/classic/
+
+locale webrunner en-US chrome/en-US/
+locale branding en-US chrome/en-US/branding/
+
+locale webrunner fr chrome/fr/
+locale branding fr chrome/fr/branding/
+
+locale webrunner da chrome/da/
+locale branding da chrome/da/branding/
+
+locale webrunner de chrome/de/
+locale branding de chrome/de/branding/
+
+locale webrunner en-AU chrome/en-AU/
+locale branding en-AU chrome/en-AU/branding/
+
+locale webrunner en-GB chrome/en-GB/
+locale branding en-GB chrome/en-GB/branding/
+
+locale webrunner es chrome/es/
+locale branding es chrome/es/branding/
+
+locale webrunner it chrome/it/
+locale branding it chrome/it/branding/
+
+locale webrunner ja chrome/ja/
+locale branding ja chrome/ja/branding/
+
+locale webrunner ko chrome/ko/
+locale branding ko chrome/ko/branding/
+
+locale webrunner nl chrome/nl/
+locale branding nl chrome/nl/branding/
+
+locale webrunner pl chrome/pl/
+locale branding pl chrome/pl/branding/
+
+locale webrunner pt-BR chrome/pt-BR/
+locale branding pt-BR chrome/pt-BR/branding/
+
+locale webrunner ru chrome/ru/
+locale branding ru chrome/ru/branding/
+
+locale webrunner sv chrome/sv/
+locale branding sv chrome/sv/branding/
+
+locale webrunner zh-CN chrome/zh-CN/
+locale branding zh-CN chrome/zh-CN/branding/
+
+locale webrunner zh-HK chrome/zh-HK/
+locale branding zh-HK chrome/zh-HK/branding/
+

@@ -673,7 +673,70 @@
 		<mkdir dir="${dist.dir}/redolog"/>
 	</target>
 
-	<target name="offline-prep-launcher">
+	<macrodef name="translate-prism-webapp">
+		<attribute name="bndllang"/> <attribute name="destlang" default="@{bndllang}"/>
+		<sequential>
+			<translate toDir="src/installer/webapp/locales" starttoken="@" endtoken="@"
+				bundle="src/installer/messages/ZiMsg" bundlelanguage="@{bndllang}" forceoverwrite="yes" srcencoding="ISO8859_1">
+				<fileset file="src/installer/webapp/webapp.js"/>
+			</translate>
+			<move file="src/installer/webapp/locales/webapp.js" tofile="src/installer/webapp/locales/webapp_@{destlang}.js"/>
+		</sequential>
+	</macrodef>
+   
+	<target name="offline-prism-webapp-i18n">
+		<translate-prism-webapp bndllang="" destlang="en-US"/>
+		<translate-prism-webapp bndllang="fr"/>
+		<translate-prism-webapp bndllang="da"/>
+		<translate-prism-webapp bndllang="de"/>
+		<translate-prism-webapp bndllang="en-AU"/>
+		<translate-prism-webapp bndllang="en-GB"/>
+		<translate-prism-webapp bndllang="es"/>
+		<translate-prism-webapp bndllang="it"/>
+		<translate-prism-webapp bndllang="ja"/>
+		<translate-prism-webapp bndllang="ko"/>
+		<translate-prism-webapp bndllang="nl"/>
+		<translate-prism-webapp bndllang="pl"/>
+		<translate-prism-webapp bndllang="pt-BR"/>
+		<translate-prism-webapp bndllang="ru"/>
+		<translate-prism-webapp bndllang="sv"/>
+		<translate-prism-webapp bndllang="zh-CN"/>
+		<translate-prism-webapp bndllang="zh-HK"/>		
+	</target>
+	
+	<macrodef name="translate-prism-exts">
+		<attribute name="bndllang"/> <attribute name="destlang" default="@{bndllang}"/>
+		<sequential>
+			<translate toDir="${build.dir}/prism/chrome/@{destlang}/branding" starttoken="@" endtoken="@"
+				bundle="src/installer/messages/ZiMsg" bundlelanguage="@{bndllang}" forceoverwrite="yes" srcencoding="ISO8859_1" destencoding="UTF8">
+				<fileset dir="prism/i18n" includes="*.dtd"/>
+			</translate>
+			<move file="${build.dir}/prism/chrome/@{destlang}/branding/webrunner.dtd" todir="${build.dir}/prism/chrome/@{destlang}"/>
+			<move file="${build.dir}/prism/chrome/@{destlang}/branding/about.dtd" todir="${build.dir}/prism/chrome/@{destlang}"/>			
+		</sequential>	
+	</macrodef>
+
+	<target name="offline-prism-exts-i18n">
+		<translate-prism-exts bndllang="" destlang="en-US"/>
+		<translate-prism-exts bndllang="fr"/>
+		<translate-prism-exts bndllang="da"/>
+		<translate-prism-exts bndllang="de"/>
+		<translate-prism-exts bndllang="en_AU" destlang="en-AU"/>
+		<translate-prism-exts bndllang="en_GB" destlang="en-GB"/>
+		<translate-prism-exts bndllang="es"/>
+		<translate-prism-exts bndllang="it"/>
+		<translate-prism-exts bndllang="ja"/>
+		<translate-prism-exts bndllang="ko"/>
+		<translate-prism-exts bndllang="nl"/>
+		<translate-prism-exts bndllang="pl"/>
+		<translate-prism-exts bndllang="pt_BR" destlang="pt-BR"/>
+		<translate-prism-exts bndllang="ru"/>
+		<translate-prism-exts bndllang="sv"/>
+		<translate-prism-exts bndllang="zh_CN" destlang="zh-CN"/>
+		<translate-prism-exts bndllang="zh_HK" destlang="zh-HK"/>		
+	</target>
+
+	<target name="offline-prep-launcher" depends="offline-prism-webapp-i18n">
 		<copy tofile="${dist.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX.i386" overwrite="true"/>
 		<copy tofile="${dist.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 
@@ -722,6 +785,8 @@
 	        <replace file="${build.dir}/prism/defaults/preferences/preferences.js" token="@aus_url@" value="${offline.aus_url}"/>
 		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
 		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
+
+		<antcall target="offline-prism-exts-i18n"/>
 
 		<unzip src="${prism.src.dir}/prism-0606.macos.zip" dest="${dist.dir}/macos/prism" overwrite="true"/>
 		<unzip src="${prism.src.dir}/prism-0609.win32.zip" dest="${dist.dir}/win32/prism" overwrite="true"/>
@@ -774,6 +839,10 @@
 		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 
+		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
+		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
+		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
+		
 		<mkdir dir="${dist.dir}/profile/extensions/zimbradnd@zimbra.com"/>
 		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 	</target>

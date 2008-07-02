@@ -746,7 +746,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraFeatureVoiceEnabled, FALSE);
         
         addToMap(attrs, A_zimbraJunkMessagesIndexingEnabled, TRUE); //always enable junk index
-        addToMap(attrs, A_zimbraLocale, "en_US");
         
         addToMap(attrs, A_zimbraMailIdleSessionTimeout, "0"); 
         addToMap(attrs, A_zimbraMailMessageLifetime, "0"); 
@@ -789,7 +788,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraPrefInboxUnreadLifetime, "0");
         addToMap(attrs, A_zimbraPrefIncludeSpamInSearch, FALSE);
         addToMap(attrs, A_zimbraPrefIncludeTrashInSearch, FALSE);
-        addToMap(attrs, A_zimbraPrefLocale, "en_US");
         addToMap(attrs, A_zimbraPrefMailInitialSearch, "in:inbox");
         addToMap(attrs, A_zimbraPrefMailItemsPerPage, "50");
         addToMap(attrs, A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());

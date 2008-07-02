@@ -78,8 +78,7 @@ function serverCheck() {
   } while(Date.now() - startTime < 30000);
 
   // Give up
-  // L10N?
-  window.alert("Couldn't start Zimbra Desktop server, giving up.");
+  window.alert("@prism.webapp.StartServerFailed@");
   
   var appStartup = Cc["@mozilla.org/toolkit/app-startup;1"].getService(Ci.nsIAppStartup);
   appStartup.quit(appStartup.eForceQuit);
@@ -95,21 +94,21 @@ function load() {
     var command = window.document.createElement("command");
     head.appendChild(command);
     command.id = "about";
-    command.setAttribute("label", "About Zimbra Desktop");
+    command.setAttribute("label", "@prism.webapp.AboutDesktop@");
     command.addEventListener("DOMActivate", function(event) {host.showAbout();}, false);
     window.platform.icon().menu.addMenuItem("about");
 
     command = window.document.createElement("command");
     head.appendChild(command);
     command.id = "checkForUpdates";
-    command.setAttribute("label", "Check for updates...");
+    command.setAttribute("label", "@prism.webapp.CheckUpdates@");
     command.addEventListener("DOMActivate", function(event) {checkForUpdates();}, false);
     window.platform.icon().menu.addMenuItem("checkForUpdates");
 
     command = window.document.createElement("command");
     head.appendChild(command);
     command.id = "shutdownService";
-    command.setAttribute("label", "Shutdown Service");
+    command.setAttribute("label", "@prism.webapp.ShutdownService@");
     command.addEventListener("DOMActivate", function(event) {shutdownService();}, false);
     window.platform.icon().menu.addMenuItem("shutdownService");
 
@@ -119,7 +118,7 @@ function load() {
       command = window.document.createElement("command");
       head.appendChild(command);
       command.id = "quitApp";
-      command.setAttribute("label", "Quit");
+      command.setAttribute("label", "@prism.webapp.Quit@");
       command.addEventListener("DOMActivate", function(event) {quitApp();}, false);
       window.platform.icon().menu.addMenuItem("quitApp");
     }
@@ -146,9 +145,9 @@ function quitApp() {
 }
 
 function shutdownService() {
-  if (window.confirm("Mailbox data will not be updated when service is shutdown.  OK to shutdown?")) {
+  if (window.confirm("@prism.webapp.ShutdownConfirm@")) {
     if (!stopServer()) {
-      window.alert("Zimbra Desktop service can't be stopped.");
+      window.alert("@prism.webapp.StopServerFailed@");
     }
     quitApp();
   }

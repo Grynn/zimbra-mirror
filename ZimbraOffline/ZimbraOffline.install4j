@@ -303,10 +303,10 @@ return Boolean.FALSE;</string>
                     <boolean>false</boolean>
                   </void>
                   <void property="subTitle">
-                    <string>Please select the English speaking country:</string>
+                    <string>${i18n:installer.PlsSelLang}</string>
                   </void>
                   <void property="title">
-                    <string>Language Selection</string>
+                    <string>${i18n:installer.CountrySelect}</string>
                   </void>
                 </object>
               </java>
@@ -370,15 +370,26 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition />
             <validation />
-            <preActivation>if (context.getVariable("engRegion") == null)
-    return;
-if ((java.lang.Integer)context.getVariable("engRegion") == 0) {
-    context.setVariable("languageId", "en_AU");    
-} else if ((java.lang.Integer)context.getVariable("engRegion") == 1) {
-    context.setVariable("languageId", "en_GB"); 
+            <preActivation>if (context.getVariable("engRegion") != null) {
+    if ((java.lang.Integer)context.getVariable("engRegion") == 0) {
+        context.setVariable("languageId", "en-AU");    
+    } else if ((java.lang.Integer)context.getVariable("engRegion") == 1) {
+        context.setVariable("languageId", "en-GB"); 
+    } else {
+        context.setVariable("languageId", "en-US"); 
+    }
 } else {
-    context.setVariable("languageId", "en_US"); 
-}</preActivation>
+    String langid = (String)context.getVariable("languageId");
+    langid.replace('_', '-');
+    context.setVariable("languageId", langid);
+}
+context.setVariable("srcWebappJs", "zdesktop.webapp/locales/webapp_" + 
+    (String)context.getVariable("languageId") + ".js");
+
+String uninstMenuEnt = context.getMessage("UninstallerMenuEntry").replaceFirst("\\{0\\}", "Zimbra Desktop");
+context.setVariable("macUninstaller", uninstMenuEnt + ".app");
+
+</preActivation>
             <postActivation />
             <actions />
             <formComponents />
@@ -617,7 +628,7 @@ default:
                       </void>
                       <void property="executable">
                         <object class="java.io.File">
-                          <string>${installer:sys.installationDir}/Zimbra Desktop Uninstaller.app/Contents/MacOS/JavaApplicationStub</string>
+                          <string>${installer:sys.installationDir}/uninstall</string>
                         </object>
                       </void>
                       <void property="wait">
@@ -2455,6 +2466,88 @@ return !hasFailures;</string>
                   </java>
                 </serializedBean>
                 <condition>!context.isErrorOccured()</condition>
+              </action>
+              <action name="Create macos uninstall link" id="285070" beanClass="com.install4j.runtime.beans.actions.files.CreateSymlinkAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.CreateSymlinkAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>${installer:sys.installationDir}/${installer:macUninstaller}/Contents/MacOS/JavaApplicationStub</string>
+                        </object>
+                      </void>
+                      <void property="linkFile">
+                        <object class="java.io.File">
+                          <string>${installer:sys.installationDir}/uninstall</string>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
+              </action>
+              <action name="Copy webapp.js" id="285014" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                      <void property="destinationFile">
+                        <object class="java.io.File">
+                          <string>zdesktop.webapp/webapp.js</string>
+                        </object>
+                      </void>
+                      <void property="overwriteMode">
+                        <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                      </void>
+                      <void property="sourceFile">
+                        <object class="java.io.File">
+                          <string>${installer:srcWebappJs}</string>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Create user.js" id="285015" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.AppendToFileAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>profile/user.js</string>
+                        </object>
+                      </void>
+                      <void property="text">
+                        <string>user_pref("intl.accept_languages", "@languageId@");
+user_pref("general.useragent.locale", "@languageId@");</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Modify user.js" id="285016" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="escapeForPropertyFile">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>profile/user.js</string>
+                        </object>
+                      </void>
+                      <void property="replaceValue">
+                        <string>${installer:languageId}</string>
+                      </void>
+                      <void property="searchValue">
+                        <string>@languageId@</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
               </action>
             </actions>
             <formComponents />

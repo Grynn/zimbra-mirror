@@ -1,0 +1,34 @@
+<!ENTITY app.title                  "Zimbra Desktop">
+
+<!ENTITY commands.tooltip           "@prism.exts.Commands@">
+<!ENTITY file.label                 "@prism.exts.File@">
+<!ENTITY cut.label                  "@prism.exts.Cut@">
+<!ENTITY copy.label                 "@prism.exts.Copy@">
+<!ENTITY copylink.label             "@prism.exts.CopyLinkLoc@">
+<!ENTITY paste.label                "@prism.exts.Paste@">
+<!ENTITY delete.label               "@prism.exts.Delete@">
+<!ENTITY selectAll.label            "@prism.exts.SelectAll@">
+<!ENTITY noSuggestions.label        "@prism.exts.NoSuggest@">
+<!ENTITY addToDictionary.label      "@prism.exts.AddToDict@">
+<!ENTITY print.label                "@prism.exts.Print@">
+<!ENTITY pageSetup.label            "@prism.exts.PageSetup@">
+<!ENTITY back.label                 "@prism.exts.Back@">
+<!ENTITY forward.label              "@prism.exts.Forward@">
+<!ENTITY home.label                 "@prism.exts.Home@">
+<!ENTITY reload.label               "@prism.exts.Reload@">
+<!ENTITY close.label                "@prism.exts.Close@">
+<!ENTITY quit.label                 "@prism.exts.QuitZD@">
+<!ENTITY about.label                "@prism.exts.AboutZD@">
+<!ENTITY console.label              "@prism.exts.ErrConsole@">
+<!ENTITY install.label              "@prism.exts.InstallShortcut@">
+<!ENTITY tools.label                "@prism.exts.Tools@">
+<!ENTITY addons.label               "@prism.exts.AddOns@">
+
+<!ENTITY servicesMenu.label         "@prism.exts.Services@">
+<!ENTITY hideThisApp.label          "@prism.exts.HideZD@">
+<!ENTITY hideThisApp.commandkey     "H">
+<!ENTITY hideThisApp.modifiers      "accel">
+<!ENTITY hideOtherApps.label        "@prism.exts.HideOthers@">
+<!ENTITY hideOtherApps.commandkey   "H">
+<!ENTITY hideOtherApps.modifiers    "accel,alt">
+<!ENTITY showAllApps.label          "@prism.exts.ShowAll@">
