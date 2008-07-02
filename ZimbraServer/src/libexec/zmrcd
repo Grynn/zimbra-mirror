@@ -62,12 +62,20 @@ my %REGEX_CHECKED_COMMANDS = (
     program => "/opt/zimbra/libexec/zmqaction"},
   "zmbackupldap" => {
     regex => '[a-zA-Z0-9\\/\\.\\-_:@ ]*',
-    # typcial back destination path:
+    # typcial backup destination path:
     # alphanumeric, slash, dot, dash, underscore, colon, at, space
     program => "/opt/zimbra/libexec/zmbackupldap"},
   "zmcertmgr" => {
     regex => '(viewdeployedcrt|viewstagedcrt|createcsr|createcrt|getcrt|deploycrt|viewcsr|verifycrt|verifycrtkey|verifycrtchain)\s*(self|comm)?\s*.*',
-    program => "sudo /opt/zimbra/bin/zmcertmgr"},                
+    program => "sudo /opt/zimbra/bin/zmcertmgr"},
+  "clusvcadm" => {
+    regex => '[a-zA-Z0-9\\/\\.\\-_:@ ]*',
+    # alphanumeric, slash, dot, dash, underscore, colon, at, space
+    program => "sudo /usr/sbin/clusvcadm"},
+  "zmclustat" => {
+    regex => '[a-zA-Z0-9\\/\\.\\-_:@ ]*',
+    # alphanumeric, slash, dot, dash, underscore, colon, at, space
+    program => "sudo /opt/zimbra-cluster/bin/zmclustat"},
 );
 
 my %allhosts = ();
