@@ -204,13 +204,19 @@ function(params) {
 	var len = params.len || 80;
 	var pre = params.pre || '';
 	len -= pre.length;
-	var eol = params.htmlMode ? '<br>' : '\n';
+	var eol = params.eol || (params.htmlMode ? '<br>' : '\n');
 
 	// For HTML, just insert the prefix. The browser should handle wrapping.
 	if (params.htmlMode) {
 		var lines = text.split(AjxStringUtil.HTML_BR_RE);
+		var lines1 = [];
 		if (lines.length > 0) {
-			text = pre + lines.join(eol + pre)
+			for (var i = 0; i < lines.length; i++) {
+				// bug 29491 - prefix block-level elements; should probably look for others,
+				// but <div> is by far the most common one
+				lines1.push(lines[i].replace(/(<div\s+[^>]*>)/gi, "$1" + pre));
+			}
+			text = pre + lines1.join(eol + pre)
 		}
 		return text;
 	}
