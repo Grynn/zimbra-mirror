@@ -108,7 +108,7 @@
     <tr>
         <$
            for (var k = 0; k < data.numDays*24; k++) {
-            var gridClass = (k!=0  && ((k%23)==0)) ? "sched_grid_eod" : "sched_grid"; 
+            var gridClass = (k!=0  && (((k+1)%24)==0)) ? "sched_grid_eod" : "sched_grid"; 
         $>
             <td width="<$= data.hourWidth $>" height="100%"><div style="width:<$= data.hourWidth-1 $>; overflow:hidden;font-size:9px;" class="<$= gridClass $>">&nbsp;</div></td>
         <$
