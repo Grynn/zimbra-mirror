@@ -200,9 +200,9 @@ public class SASLAuthentication {
                                     new XMPPCallbackHandler());
                             // evaluateResponse doesn't like null parameter
                             byte[] token = new byte[0];
-                            if (doc.isTextOnly()) {
+                            if (doc.getText().length() > 0) {
                                 // If auth request includes a value then validate it
-                                token = StringUtils.decodeBase64(doc.getTextTrim());
+                                token = StringUtils.decodeBase64(doc.getText().trim());
                                 if (token == null) {
                                     token = new byte[0];
                                 }

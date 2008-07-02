@@ -27,6 +27,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.QName;
 import org.xmpp.packet.IQ;
+import org.xmpp.packet.PacketError;
 
 /**
  * Implements the TYPE_IQ jabber:iq:version protocol (version info). Allows
@@ -46,19 +47,29 @@ public class IQVersionHandler extends IQHandler implements ServerFeaturesProvide
         if (bodyElement == null) {
             bodyElement = DocumentHelper.createElement(QName.get("query", "jabber:iq:version"));
 //            bodyElement.addElement("name").setText(AdminConsole.getAppName());
-            bodyElement.addElement("os").setText("Java 5");
+            bodyElement.addElement("os").setText("Java " + System.getProperty("java.version"));
             bodyElement.addElement("version");
         }
     }
 
     public IQ handleIQ(IQ packet) throws PacketException {
-        // Could cache this information for every server we see
-        Element answerElement = bodyElement.createCopy();
-//        answerElement.element("name").setText(AdminConsole.getAppName());
-//        answerElement.element("version").setText(AdminConsole.getVersionString());
-        IQ result = IQ.createResultIQ(packet);
-        result.setChildElement(answerElement);
-        return result;
+        if (IQ.Type.get == packet.getType()) {        
+            // Could cache this information for every server we see
+            Element answerElement = bodyElement.createCopy();
+//          answerElement.element("name").setText(AdminConsole.getAppName());
+//          answerElement.element("version").setText(AdminConsole.getVersionString());
+            IQ result = IQ.createResultIQ(packet);
+            result.setChildElement(answerElement);
+            return result;
+        } else if (IQ.Type.set == packet.getType()) {
+            // Answer an not-acceptable error since IQ should be of type GET
+            IQ result = IQ.createResultIQ(packet);
+            result.setError(PacketError.Condition.not_acceptable);
+            return result;
+        }
+        // Ignore any other type of packet
+        return null;
+        
     }
 
     public IQHandlerInfo getInfo() {

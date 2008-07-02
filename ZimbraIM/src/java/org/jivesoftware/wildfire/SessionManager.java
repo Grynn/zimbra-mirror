@@ -57,7 +57,7 @@ public class SessionManager extends BasicModule {
 
     public static final int NEVER_KICK = -1;
 
-    private PresenceUpdateHandler presenceHandler;
+    //private PresenceUpdateHandler presenceHandler;
     private PacketRouter router;
     private UserManager userManager;
     private int conflictLimit;
@@ -412,14 +412,22 @@ public class SessionManager extends BasicModule {
             }
 
             if (!filterAvailable) {
-                return resources.get(priorityList.getFirst());
+                ClientSession session = resources.get(priorityList.getFirst());
+                // Only consider sessions with positive presence priorities 
+                if (session.getPresence().getPriority() >= 0) {
+                    return session;
+                }
+                return null;
             }
             else {
                 synchronized (priorityList) {
                     for (int i=0; i < priorityList.size(); i++) {
                         ClientSession s = resources.get(priorityList.get(i));
                         if (s != null && s.getPresence().isAvailable()) {
-                            return s;
+                            // Only consider sessions with positive presence priorities
+                            if (s.getPresence().getPriority() >= 0) {
+                                return s;
+                            }
                         }
                     }
                 }
@@ -427,6 +435,33 @@ public class SessionManager extends BasicModule {
             }
         }
 
+        /**
+         * Returns client sessions of the user that have the same highest priority.
+         *
+         * @return client sessions of the user that have the same highest priority.
+         */
+        List<ClientSession> getHighestPrioritySessions() {
+            if (priorityList.isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            List<ClientSession> answer = new ArrayList<ClientSession>();
+            int highest = -1;
+            synchronized (priorityList) {
+                for (String resource : priorityList) {
+                    ClientSession s = resources.get(resource);
+                    if (s != null && s.getPresence().isAvailable()) {
+                        // Only consider sessions with positive presence priorities
+                        if (s.getPresence().getPriority() >= 0 && s.getPresence().getPriority() >= highest) {
+                            highest = s.getPresence().getPriority();
+                            answer.add(s);
+                        }
+                    }
+                }
+            }
+            return answer;
+        }
+        
         /**
          * Determines if this map is empty or not.
          *
@@ -730,10 +765,13 @@ public class SessionManager extends BasicModule {
                 // Update the order of the sessions based on the new presence of this session
                 sessionMap.sessionAvailable(session);
                 defaultSession = sessionMap.getDefaultSession(true);
-                JID node = new JID(defaultSession.getAddress().getNode(),
-                        defaultSession.getAddress().getDomain(), null);
-                // Add route to default session (used when no resource is specified)
-                routingTable.addRoute(node, defaultSession);
+                if (defaultSession != null) {
+                    // Add route to default session (used when no resource is specified)
+                    JID node = new JID(session.getAddress().getNode(),
+                                       session.getAddress().getDomain(), null);
+                    // Add route to default session (used when no resource is specified)
+                    routingTable.addRoute(node, defaultSession);
+                }
                 // Add route to the new session
                 routingTable.addRoute(session.getAddress(), session);
                 // Broadcast presence between the user's resources
@@ -830,9 +868,15 @@ public class SessionManager extends BasicModule {
                     sessionMap.sessionUnavailable(session);
                     // Update the route for the session's BARE address
                     Session defaultSession = sessionMap.getDefaultSession(true);
-                    routingTable.addRoute(new JID(defaultSession.getAddress().getNode(),
-                            defaultSession.getAddress().getDomain(), ""),
-                            defaultSession);
+                    JID jid = new JID(session.getAddress().getNode(), session.getAddress().getDomain(), "");
+                    if (defaultSession != null) {
+                        // Set the route to the bare JID to the session with highest priority
+                        routingTable.addRoute(jid, defaultSession);
+                    }
+                    else {
+                        // All sessions have a negative priority presence so delete the route to the bare JID
+                        routingTable.removeRoute(jid);
+                    }
                 }
             }
             catch (UserNotFoundException e) {
@@ -865,11 +909,30 @@ public class SessionManager extends BasicModule {
             defaultSession = resources.getDefaultSession(true);
         }
         // Update the route to the bareJID with the session with highest priority
-        routingTable.addRoute(new JID(defaultSession.getAddress().getNode(),
-                defaultSession.getAddress().getDomain(), ""),
-                defaultSession);
+        JID defaultAddress = new JID(sender.getNode(), sender.getDomain(), "");
+        // Update the route to the bare JID
+        if (defaultSession != null) {
+            boolean hadDefault = routingTable.getRoute(defaultAddress) != null;
+            // Set the route to the bare JID to the session with highest priority
+            routingTable.addRoute(defaultAddress, defaultSession);
+            // Check if we need to deliver offline messages
+            if (!hadDefault) {
+                // User sessions had negative presence before this change so deliver messages
+                ClientSession session = resources.getSession(sender.getResource());
+                if (session != null && session.canFloodOfflineMessages()) {
+                    OfflineMessageStore messageStore = XMPPServer.getInstance().getOfflineMessageStore();
+                    Collection<OfflineMessage> messages = messageStore.getMessages(username, true);
+                    for (Message message : messages) {
+                        session.process(message);
+                    }
+                }
+            }
+        }
+        else {
+            // All sessions have a negative priority presence so delete the route to the bare JID
+            routingTable.removeRoute(defaultAddress);
+        }
     }
-
 
     /**
      * Retrieve the best route to deliver packets to this session given the recipient jid. If the
@@ -1237,6 +1300,20 @@ public class SessionManager extends BasicModule {
         }
         return sessionList;
     }
+    
+    /**
+     * Returns client sessions of the user that have the same highest priority.
+     *
+     * @param username the user.
+     * @return client sessions of the user that have the same highest priority.
+     */
+    public List<ClientSession> getHighestPrioritySessions(String username) {
+        SessionMap sessionMap = sessions.get(username);
+        if (sessionMap != null) {
+            return sessionMap.getHighestPrioritySessions();
+        }
+        return Collections.emptyList();
+    }
 
     /**
      * Returns number of client sessions that are connected to the server. Anonymous users
@@ -1459,14 +1536,16 @@ public class SessionManager extends BasicModule {
             try {
                 ClientSession session = (ClientSession) handback;
                 try {
-                    if (session.isInitialized() && (session.getPresence().isAvailable() || !session.wasAvailable())) {
+                    if ((session.getPresence().isAvailable() || !session.wasAvailable()) &&
+                                    getSession(session.getAddress()) != null) {
+                        
                         // Send an unavailable presence to the user's subscribers
                         // Note: This gives us a chance to send an unavailable presence to the
                         // entities that the user sent directed presences
                         Presence presence = new Presence();
                         presence.setType(Presence.Type.unavailable);
                         presence.setFrom(session.getAddress());
-                        presenceHandler.process(presence);
+                        router.route(presence);
                     }
                 }
                 finally {
@@ -1562,7 +1641,6 @@ public class SessionManager extends BasicModule {
 
     public void initialize(XMPPServer server) {
         super.initialize(server);
-        presenceHandler = server.getPresenceUpdateHandler();
         router = server.getPacketRouter();
         userManager = server.getUserManager();
         routingTable = server.getRoutingTable();

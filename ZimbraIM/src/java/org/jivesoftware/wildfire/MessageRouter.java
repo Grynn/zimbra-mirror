@@ -25,6 +25,9 @@ import org.xmpp.packet.Message;
 import org.xmpp.packet.PacketError;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -95,8 +98,17 @@ public class MessageRouter extends BasicModule {
             }
 
             try {
-                ChannelHandler route = routingTable.getBestRoute(recipientJID);
-                route.process(packet);
+//                ChannelHandler route = routingTable.getBestRoute(recipientJID);
+//                route.process(packet);
+                // Check if message was sent to a bare JID of a local user
+                if (recipientJID != null && recipientJID.getResource() == null &&
+                                XMPPServer.getInstance().isLocalDomain(recipientJID.getDomain())) {
+                    routeToBareJID(recipientJID, packet);
+                }
+                else {
+                    // Deliver stanza to best route
+                    routingTable.getBestRoute(recipientJID).process(packet);
+                }
             }
             catch (Exception e) {
                 try {
@@ -121,6 +133,56 @@ public class MessageRouter extends BasicModule {
         }
     }
 
+    /**
+     * Deliver the message sent to the bare JID of a local user to the best connected resource. If the
+     * target user is not online then messages will be stored offline according to the offline strategy.
+     * However, if the user is connected from only one resource then the message will be delivered to
+     * that resource. In the case that the user is connected from many resources the logic will be the
+     * following:
+     * <ol>
+     *  <li>Select resources with highest priority</li>
+     *  <li>Select resources with highest show value (chat, available, away, xa, dnd)</li>
+     *  <li>Select resource with most recent activity</li>
+     * </ol>
+     *
+     * Admins can override the above logic and just send the message to all connected resources
+     * with highest priority by setting the system property <tt>route.all-resources</tt> to
+     * <tt>true</tt>.
+     *
+     * @param recipientJID the bare JID of the target local user.
+     * @param packet the message to send.
+     */
+    private void routeToBareJID(JID recipientJID, Message packet) {
+        List<ClientSession> sessions = sessionManager.getHighestPrioritySessions(recipientJID.getNode());
+        if (sessions.isEmpty()) {
+            try {
+                // Just fall back to the routing table...(cloud routing)
+                routingTable.getBestRoute(recipientJID).process(packet);
+            } catch (Exception e) {
+                try {
+                    messageStrategy.storeOffline(packet);
+                }
+                catch (Exception e1) {
+                    Log.error(e1);
+                }
+            }
+        }
+        else if (sessions.size() == 1) {
+            // Found only one session so deliver message
+            sessions.get(0).process(packet);
+        }
+        else {
+            // Many sessions have the highest priority (be smart now) :)
+            if (!JiveGlobals.getBooleanProperty("route.all-resources", false)) {
+//              Deliver stanza to all connected resources with highest priority
+                for (ClientSession session : sessions) {
+                    session.process(packet);
+                }
+            }
+        }
+    }
+    
+    
     /**
      * Forwards the received message to the list of users defined in the property
      * <b>xmpp.forward.admins</b>. The property may include bare JIDs or just usernames separated

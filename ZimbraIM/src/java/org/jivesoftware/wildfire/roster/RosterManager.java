@@ -886,6 +886,17 @@ public class RosterManager extends BasicModule implements GroupEventListener, Us
                 if ("everybody".equals(showInRoster) && "everybody".equals(otherShowInRoster)) {
                     return true;
                 }
+//                else if ("onlyGroup".equals(showInRoster) && "onlyGroup".equals(otherShowInRoster)) {
+//                    String groupNames = group.getProperties().get("sharedRoster.groupList");
+//                    String otherGroupNames = otherGroup.getProperties().get("sharedRoster.groupList");
+//                    // Return true if each group may see the other group
+//                    if (groupNames != null && otherGroupNames != null) {
+//                        if (groupNames.contains(otherGroup.getName()) &&
+//                                otherGroupNames.contains(group.getName())) {
+//                            return true;
+//                        }
+//                    }
+//                }
                 else if ("onlyGroup".equals(showInRoster) && "onlyGroup".equals(otherShowInRoster)) {
                     String groupNames = group.getProperties().get("sharedRoster.groupList");
                     String otherGroupNames = otherGroup.getProperties().get("sharedRoster.groupList");
@@ -895,8 +906,21 @@ public class RosterManager extends BasicModule implements GroupEventListener, Us
                                 otherGroupNames.contains(group.getName())) {
                             return true;
                         }
+                        // Check if each shared group can be seen by a group where each user belongs
+                        Collection<Group> groupList = parseGroups(groupNames);
+                        Collection<Group> otherGroupList = parseGroups(otherGroupNames);
+                        for (Group groupName : groupList) {
+                            if (groupName.isUser(otherUser)) {
+                                for (Group otherGroupName : otherGroupList) {
+                                    if (otherGroupName.isUser(user)) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+                
                 else if ("everybody".equals(showInRoster) && "onlyGroup".equals(otherShowInRoster)) {
                     // Return true if one group is public and the other group allowed the public
                     // group to see him

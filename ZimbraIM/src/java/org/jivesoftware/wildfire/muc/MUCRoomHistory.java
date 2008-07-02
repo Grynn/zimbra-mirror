@@ -64,6 +64,12 @@ public final class MUCRoomHistory {
                 return;
             }
         }
+        
+        // Ignore messages with no subject AND no body
+        if ((packet.getSubject() == null || "".equals(packet.getSubject().trim())) &&
+                (packet.getBody() == null || "".equals(packet.getBody().trim()))) {
+            return;
+        }
 
         Message packetToAdd = (Message) packet.createCopy();
 

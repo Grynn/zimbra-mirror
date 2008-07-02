@@ -285,7 +285,8 @@ public class IQRouter extends BasicModule {
                 // So if the target address belongs to this server then use the sessionManager
                 // instead of the routingTable since unavailable clients won't have a route to them
                 if (XMPPServer.getInstance().isLocal(recipientJID)) {
-                    ClientSession session = sessionManager.getBestRoute(recipientJID);
+//                    ClientSession session = sessionManager.getBestRoute(recipientJID);
+                    ClientSession session = sessionManager.getSession(recipientJID);
                     if (session != null) {
                         if (!session.shouldBlockPacket(packet)) {
                             session.process(packet);

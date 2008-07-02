@@ -101,8 +101,10 @@ public class OutgoingServerSession extends Session {
      * @return True if the domain was authenticated by the remote server.
      */
     public static boolean authenticateDomain(String domain, String hostname) {
+        Log.debug("OutgoingServerSession.authenticateDomain domain="+domain+" hostname="+hostname); 
         if (hostname == null || hostname.length() == 0 || hostname.trim().indexOf(' ') > -1) {
             // Do nothing if the target hostname is empty, null or contains whitespaces
+            Log.debug("Could not authenticate domain: "+domain+" invalid or blank hostname::"+hostname);
             return false;
         }
         try {
@@ -185,6 +187,7 @@ public class OutgoingServerSession extends Session {
                                         "gov".equals(newHostname) ||
                                         "edu".equals(newHostname) ||
                                         localNames.contains(newHostname)) {
+                                    Log.debug("Unable to find subdomain to try.  Giving up: "+newHostname);
                                     return false;
                                 }
                                 session = createOutgoingSession(domain, newHostname, port);
@@ -203,6 +206,7 @@ public class OutgoingServerSession extends Session {
                                     index = hostname.indexOf('.', index + 1);
                                 }
                             }
+                            Log.debug("exhausted all likely subdomains.  Giving up");
                             return false;
                         }
                     }
@@ -214,11 +218,16 @@ public class OutgoingServerSession extends Session {
                 // Do nothing since the domain has already been authenticated
                 return true;
             }
+            Log.debug("Domain "+domain+" not in authenticated list for session "+session);
             // A session already exists so authenticate the domain using that session
-            return session.authenticateSubdomain(domain, hostname);
+            boolean toRet = session.authenticateSubdomain(domain, hostname);
+            if (!toRet) {
+                Log.debug("Session.authenticateSubdomain failed: domain="+domain+" hostname="+hostname); 
+            }
+            return toRet;
         }
         catch (Exception e) {
-            Log.error("Error authenticating domain with remote server: " + hostname, e);
+            Log.info("Error authenticating domain with remote server: " + hostname, e);
         }
         return false;
     }
@@ -334,7 +343,7 @@ public class OutgoingServerSession extends Session {
                 }
             }
             catch (SSLHandshakeException e) {
-                Log.debug("Handshake error while creating secured outgoing session to remote " +
+                Log.info("Handshake error while creating secured outgoing session to remote " +
                         "server: " + hostname + "(DNS lookup: " + realHostname + ":" + realPort +
                         ")", e);
                 // Close the connection
@@ -343,7 +352,7 @@ public class OutgoingServerSession extends Session {
                 }
             }
             catch (XmlPullParserException e) {
-                Log.warn("Error creating secured outgoing session to remote server: " + hostname +
+                Log.info("Error creating secured outgoing session to remote server: " + hostname +
                         "(DNS lookup: " + realHostname + ":" + realPort + ")", e);
                 // Close the connection
                 if (connection != null) {
@@ -351,7 +360,7 @@ public class OutgoingServerSession extends Session {
                 }
             }
             catch (Exception e) {
-                Log.error("Error creating secured outgoing session to remote server: " + hostname +
+                Log.info("Error creating secured outgoing session to remote server: " + hostname +
                         "(DNS lookup: " + realHostname + ":" + realPort + ")", e);
                 // Close the connection
                 if (connection != null) {

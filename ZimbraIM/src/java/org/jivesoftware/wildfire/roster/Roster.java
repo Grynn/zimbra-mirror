@@ -34,7 +34,14 @@ import org.xmpp.packet.IQ;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.Presence;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -265,9 +272,7 @@ public class Roster implements Cacheable {
     public RosterItem createRosterItem(JID user, String nickname, List<String> groups, boolean push,
                                        boolean persistent)
             throws UserAlreadyExistsException, SharedGroupException {
-        RosterItem item = provideRosterItem(user, nickname, groups, push, persistent);
-        rosterItems.put(item.getJid().toBareJID(), item);
-        return item;
+        return provideRosterItem(user, nickname, groups, push, persistent);
     }
 
     /**
@@ -279,23 +284,7 @@ public class Roster implements Cacheable {
      */
     public void createRosterItem(org.xmpp.packet.Roster.Item item)
             throws UserAlreadyExistsException, SharedGroupException {
-        RosterItem rosterItem = provideRosterItem(item, true, true);
-        rosterItems.put(item.getJID().toBareJID(), rosterItem);
-    }
-
-    /**
-     * <p>Generate a new RosterItem for use with createRosterItem.<p>
-     *
-     * @param item       The item to copy settings for the new item in this roster.
-     * @param push       True if the new item must be push to the user.
-     * @param persistent True if the new roster item should be persisted to the DB.
-     * @return The newly created roster items ready to be stored by the Roster item's hash table.
-     */
-    protected RosterItem provideRosterItem(org.xmpp.packet.Roster.Item item, boolean push,
-                                           boolean persistent)
-            throws UserAlreadyExistsException, SharedGroupException {
-        return provideRosterItem(item.getJID(), item.getName(),
-                new ArrayList<String>(item.getGroups()), push, persistent);
+        provideRosterItem(item.getJID(), item.getName(), new ArrayList<String>(item.getGroups()), true, true);
     }
 
     /**
@@ -340,6 +329,8 @@ public class Roster implements Cacheable {
             // Broadcast the roster push to the user
             broadcast(roster);
         }
+        
+        rosterItems.put(user.toBareJID(), rosterItem);
 
         // Fire event indicating that a roster item has been added
         RosterEventDispatcher.contactAdded(this, rosterItem);
@@ -358,6 +349,8 @@ public class Roster implements Cacheable {
         if (implicitFrom.remove(item.getJid().toBareJID()) != null) {
             // Ensure that the item is an explicit roster item
             rosterItems.put(item.getJid().toBareJID(), item);
+            // Fire event indicating that a roster item has been updated
+            RosterEventDispatcher.contactUpdated(this, item);
         }
         if (rosterItems.putIfAbsent(item.getJid().toBareJID(), item) == null) {
             rosterItems.remove(item.getJid().toBareJID());
@@ -473,7 +466,9 @@ public class Roster implements Cacheable {
         else {
             // Verify if the item being removed is an implicit roster item
             // that only exists due to some shared group
-            if (implicitFrom.remove(user.toBareJID()) != null) {
+            RosterItem item = getImplicitRosterItem(user);
+            if (item != null) {
+                implicitFrom.remove(user.toBareJID());
                 // If the contact being removed is not a local user then ACK unsubscription
                 if (!server.isLocal(user)) {
                     Presence presence = new Presence();
@@ -482,6 +477,8 @@ public class Roster implements Cacheable {
                     presence.setType(Presence.Type.unsubscribed);
                     server.getPacketRouter().route(presence);
                 }
+                // Fire event indicating that a roster item has been deleted
+                RosterEventDispatcher.contactDeleted(this, item);
             }
         }
 
@@ -825,6 +822,14 @@ public class Roster implements Cacheable {
                 probePresence(item.getJid());
             }
         }
+        if (newItem) {
+            // Fire event indicating that a roster item has been added
+            RosterEventDispatcher.contactAdded(this, item);
+        }
+        else {
+            // Fire event indicating that a roster item has been updated
+            RosterEventDispatcher.contactUpdated(this, item);
+        }
     }
 
     /**
@@ -935,6 +940,14 @@ public class Roster implements Cacheable {
                     item.getSubStatus() == RosterItem.SUB_TO) {
                 probePresence(item.getJid());
             }
+        }
+        if (newItem) {
+            // Fire event indicating that a roster item has been added
+            RosterEventDispatcher.contactAdded(this, item);
+        }
+        else {
+            // Fire event indicating that a roster item has been updated
+            RosterEventDispatcher.contactUpdated(this, item);
         }
     }
 

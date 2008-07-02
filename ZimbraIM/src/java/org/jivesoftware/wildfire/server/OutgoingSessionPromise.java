@@ -25,6 +25,8 @@ import org.jivesoftware.wildfire.XMPPServer;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.xmpp.packet.*;
 
+import com.zimbra.common.util.LogFactory;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -45,6 +47,8 @@ import java.util.concurrent.TimeUnit;
 public class OutgoingSessionPromise implements RoutableChannelHandler {
 
     private static OutgoingSessionPromise instance = new OutgoingSessionPromise();
+    
+    private static com.zimbra.common.util.Log sLog = LogFactory.getLog(OutgoingSessionPromise.class);
 
     /**
      * Queue that holds the packets pending to be sent to remote servers.
