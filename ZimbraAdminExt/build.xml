@@ -1,4 +1,6 @@
 <project name="ZimbraAdminExt">
+
+    <import file="../ZimbraCustomerServices/hosted/YahooSmb/ZimbraAdminExt/build.xml" optional="true" />
     <property file="build.properties"/>
     <property environment="env"/>
 	
@@ -182,7 +184,7 @@
           <!-- Copy the zimlet zip file -->
 		<antcall target="scp">
 	    	<param name="scp_src" value="${build.zimlet.dir}/${ext.name}.zip"/>
-			<param name="scp_dest" value="zimbra@${dev_machine}:/opt/zimbra/zimlets" />
+			<param name="scp_dest" value="zimbra@${dev_machine}:/opt/zimbra/zimlets-admin-extra" />
 	  	</antcall>
 	  	
 	  	<!-- May need to copy the zimbraAdmin: generate the productioin zimbraAdmin.war - ant admin-war 
@@ -198,78 +200,5 @@
 	<!-- deploy the extension for development -->
 	<target name="deploy-cert" depends="package-zimlet, jar, copy-files-to-dev-machine" description="Deploy the extension"/>
 
-    <target name="deploy-yahoosmb">
-        <!-- Need to undeploy the domain admin first
-        <antcall target="undeploy-zimlet">
-            <param name="ext.name" value="com_zimbra_domainadmin" />
-        </antcall>
-        -->
-        <!-- Deploy the yahoosmb -->
-        <antcall target="deploy-zimlet" >
-            <param name="ext.name" value="com_zimbra_yahoosmb" />
-            <param name="ext.dir" value="com_zimbra_yahoosmb" />
-        </antcall>
-
-         <antcall target="deploy-server-extension" >
-            <param name="ext.name" value="com_zimbra_yahoosmb" />
-            <param name="ext.dir" value="com_zimbra_yahoosmb" />
-        </antcall>
-    </target>
-
-    <target name="undeploy-yahoosmb" >
-        <antcall target="undeploy-zimlet">
-            <param name="ext.name" value="com_zimbra_yahoosmb" />
-        </antcall>
-    </target>
-
-    <!-- Need to be run one time before deploy-yahoosmb -->
-    <target name="init-yahoosmb" depends="clean-yahoosmb" description="Initialize the yahoo smb environment">
-        <!-- Create three coses, pro, stardard, starter -->
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="true">
-            <arg line="cc starter"/>
-        </java>
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="true">
-            <arg line="cc standard"/>
-        </java>
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="true">
-            <arg line="cc pro"/>
-        </java>
-        <!-- Set zimbraDomainMaxAccounts -->
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="true">
-            <arg line="cd starter.com zimbraDomainMaxAccounts 20"/>
-        </java>
-        <!-- Create the starter domain admin -->
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="true">
-            <arg line="ca starter@starter.com test123 zimbraIsDomainAdminAccount TRUE"/>
-        </java>
-        <!-- Set cos -->
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="true">
-            <arg line="sac starter@starter.com test123 starter"/>
-        </java>
-    </target>
-
-    <target name="clean-yahoosmb" description="Clean the yahoo smb environment">
-        <!-- Create three coses, pro, stardard, starter -->
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="false">
-            <arg line="dc starter"/>
-        </java>
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="false">
-            <arg line="dc standard"/>
-        </java>
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="false">
-            <arg line="dc pro"/>
-        </java>
-
-        <!-- Create the starter domain admin   -->
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="true">
-            <arg line="da starter@starter.com"/>
-        </java>
-
-        <!-- Set zimbraDomainMaxAccounts -->
-        <java classname="com.zimbra.cs.account.ProvUtil" fork="true" classpathref="class.path" failonerror="false">
-            <arg line="dd starter.com"/>
-        </java>
-
-
-    </target>
+   
 </project>

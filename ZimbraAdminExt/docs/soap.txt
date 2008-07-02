@@ -90,11 +90,19 @@ aid: attachedment ID of the uploaded commercial license
 <SendInvitationRequest>
   <id>zimbraId</id>
   <name>zimbra account email</name>
+  <admin>admin account email</admin>
   <sendto>external_email_address</sendto>
 </SendInvitationRequest>
 
 <SendInvitationResponse>
     <sendto>external_email_address</sendto>
 </SendInvitationResponse>
+
+<GetSmbSettings />
+
+<GetSmbSettingsResponse>
+    <activation_url>http://yis/reg.php?id=</activation_url>
+</GetSmbSettingsResponse>
+
 
 
