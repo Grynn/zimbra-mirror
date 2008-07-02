@@ -450,7 +450,9 @@ function(ev) {
     var helpButton = skin && skin.hints && skin.hints.helpButton;
 	  
     if (helpButton && helpButton.url) {
-		window.open(helpButton.url + "?locid=" + AjxEnv.DEFAULT_LOCALE);
+		var sep = helpButton.url.match(/\?/) ? "&" : "?";
+		var url = [ helpButton.url, sep, "locid=", AjxEnv.DEFAULT_LOCALE ].join("");
+		window.open(url);
 		return;
 	}
 
