@@ -38,7 +38,6 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.offline.util.ymail.YmailUserData;
 import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZGetInfoResult;
@@ -122,7 +121,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     public ZMailbox newZMailbox(OfflineAccount account, String serviceUri) throws ServiceException {
-    	ZMailbox.Options options = null;
+    	ZMailbox.Options options;
     	String uri = Offline.getServerURI(account, serviceUri);
     	ZAuthToken authToken = OfflineSyncManager.getInstance().lookupAuthToken(account);
     	if (authToken != null) {
@@ -230,13 +229,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
     }
     
-    /**
+    /*
      * Special way to set a single Account attribute that doesn't mark the account dirty.
-     * 
-     * @param e
-     * @param key
-     * @param value
-     * @throws ServiceException
      */
     public void setAccountAttribute(Account account, String key, Object value) throws ServiceException {
     	Map<String, Object> attrs = new HashMap<String, Object>(1);
@@ -244,13 +238,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	modifyAttrs(account, attrs, false, true, false);
     }
     
-    /**
+    /*
      * Special way to set a single attribute of a DataSource that doesn't mark the account dirty.
-     * 
-     * @param e
-     * @param key
-     * @param value
-     * @throws ServiceException
      */
     public void setDataSourceAttribute(DataSource ds, String key, Object value) throws ServiceException {
     	Map<String, Object> attrs = new HashMap<String, Object>(1);
@@ -317,7 +306,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (etype == null)
             throw OfflineServiceException.UNSUPPORTED("reload(" + e.getClass().getSimpleName() + ")");
 
-        Map<String,Object> attrs = null;
+        Map<String,Object> attrs;
         if (etype == EntryType.IDENTITY && e instanceof OfflineIdentity) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineIdentity) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraPrefIdentityId));
             ((OfflineIdentity) e).setName(e.getAttr(A_zimbraPrefIdentityName));
@@ -396,7 +385,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return listAllZimlets();
     }
 
-    static final Set<String> sOfflineAttributes = new HashSet<String>(Arrays.asList(new String[] { 
+    static final Set<String> sOfflineAttributes = new HashSet<String>(Arrays.asList( 
             A_zimbraId,
             A_mail,
             A_uid,
@@ -416,12 +405,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefMailtoHandlerEnabled,
             A_zimbraPrefMailtoAccountId,
             A_zimbraJunkMessagesIndexingEnabled
-    }));
+    ));
 
     @Override
     public synchronized Account createAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
     	String dsName = (String)attrs.get(A_offlineDataSourceName);
-    	Account account = null;
+    	Account account;
     	if (dsName != null) {
     		account = createDataSourceAccount(dsName, emailAddress, password, attrs);
     	} else {
@@ -511,32 +500,36 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     public boolean isSyncAccount(Account account) {
-        return account.getAttr(A_offlineRemoteServerUri, null) instanceof String;
+        return account.getAttr(A_offlineRemoteServerUri, null) != null;
     }
 
-    private void testDataSource(Account account, DataSource.Type type, String name, String dsid, Map<String, Object> attrs) throws ServiceException {
-        OfflineDataSource testDs = new OfflineDataSource(account, type, name, dsid, attrs);
-        String error = DataSourceManager.test(testDs);
+    private void testDataSource(OfflineDataSource ds) throws ServiceException {
+        String error = DataSourceManager.test(ds);
         if (error != null)
         	throw ServiceException.FAILURE(error, null);
-        
-        //now try smtp
-        try {
-	        SMTPTransport smtp = (SMTPTransport)(LocalJMSession.getSession(testDs).getTransport());
-	        smtp.connect();
-	        smtp.issueCommand("MAIL FROM:<" + testDs.getEmailAddress() + ">", 250);
-	        smtp.issueCommand("RSET", 250);
-	        smtp.close();
-        } catch (Exception x) {
-        	if (x instanceof AuthenticationFailedException)
-        		throw ServiceException.FAILURE("SMTP authentication failure. Invalid username or password, or invalid access", x);
-        	else if (x instanceof MessagingException && x.getMessage() != null && x.getMessage().startsWith("530"))
-        		throw ServiceException.FAILURE("SMTP authentication required", x);
-        	else
-        		throw ServiceException.FAILURE("SMTP connect failure", x);
+
+        // No need to test YMail SOAP access, since successful IMAP/POP3
+        // connection implies that SOAP access will succeed with same auth
+        // credentials.
+        if (!ds.isYahoo()) {
+            try {
+                SMTPTransport smtp = (SMTPTransport)(LocalJMSession.getSession(ds).getTransport());
+                smtp.connect();
+                smtp.issueCommand("MAIL FROM:<" + ds.getEmailAddress() + ">", 250);
+                smtp.issueCommand("RSET", 250);
+                smtp.close();
+            } catch (Exception e) {
+                if (e instanceof AuthenticationFailedException)
+                    throw ServiceException.FAILURE("SMTP authentication failure. Invalid username or password, or invalid access", e);
+                else if (e instanceof MessagingException && e.getMessage() != null && e.getMessage().startsWith("530"))
+                    throw ServiceException.FAILURE("SMTP authentication required", e);
+                else
+                    throw ServiceException.FAILURE("SMTP connect failure", e);
+            }
+
         }
     }
-    
+
     private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String password, Map<String, Object> dsAttrs) throws ServiceException {
         validEmailAddress(emailAddress);
         emailAddress = emailAddress.toLowerCase().trim();
@@ -548,11 +541,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String domain = parts[1];
         domain = IDNUtil.toAsciiDomainName(domain);
         emailAddress = localPart + "@" + domain;
-  
-        if (domain.equals("yahoo.com"))
-        	YmailUserData.checkYmailPlusStatus((String)dsAttrs.get(A_zimbraDataSourceUsername), (String)dsAttrs.get(A_zimbraDataSourcePassword));
-        
-    	//first we need to verify datasource
+
+        //first we need to verify datasource
     	String accountLabel = (String)dsAttrs.remove(A_zimbraPrefLabel);
     	dsAttrs.remove(A_offlineDataSourceName);
     	String dsType = (String)dsAttrs.remove(A_offlineDataSourceType);
@@ -564,8 +554,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	String smtpPassword = (String) dsAttrs.get(A_zimbraDataSourceSmtpAuthPassword);
     	if (smtpPassword != null)
     		dsAttrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dsid, smtpPassword));
-    	
-    	testDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs);
+
+        OfflineDataSource testDs = new OfflineDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs);
+        testDataSource(testDs);
 
     	String accountId = UUID.randomUUID().toString();
 
@@ -588,7 +579,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         setDefaultAccountAttributes(attrs);
         
-        if (domain.equals("yahoo.com")) {
+        if (testDs.isYahoo()) {
         	attrs.put(A_zimbraPrefSkin, "yahoo");
         }
 
@@ -918,7 +909,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     public List<Account> getAllAccounts() throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
-        List<String> accountIds = null;
+        List<String> accountIds;
         synchronized (this) {
         	accountIds = DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
         }
@@ -1766,16 +1757,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	} else if (!isTestNeeded && !smtpPassword.equals(ds.getAttr(A_zimbraDataSourceSmtpAuthPassword, null)))
         		isTestNeeded = true;
         	
-        	String email = ds.getAttr(A_zimbraDataSourceEmailAddress);
-        	if (isTestNeeded && email.endsWith("@yahoo.com")) { //only if isTestNeeded is already on
-        		String clearPassword = DataSource.decryptData(dataSourceId, password);
-        		YmailUserData.checkYmailPlusStatus(ds.getAttr(A_zimbraDataSourceUsername), clearPassword);
-        	}
+                if (isTestNeeded) {
+                    testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs));
+                }
         	
-        	if (isTestNeeded)
-        		testDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs);
-        	
-	        attrs.put(A_zimbraDataSourceEnabled, TRUE);	        
+                attrs.put(A_zimbraDataSourceEnabled, TRUE);
         }
         
         Map<String, Object> context = new HashMap<String, Object>();

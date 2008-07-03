@@ -21,6 +21,7 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning.DataSourceBy;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -33,6 +34,7 @@ import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.YMailSender;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications;
@@ -134,59 +136,93 @@ public class LocalMailbox extends DesktopMailbox {
             }
             
             Session session = null;
-            boolean saveToSent = true;
             //the client could send datasourceId as identityId
-            DataSource ds = Provisioning.getInstance().get(getAccount(), DataSourceBy.id, msg.getDraftIdentityId());
-            if (ds == null)
-            	ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
-            
-        	session = LocalJMSession.getSession((OfflineDataSource)ds);
-            saveToSent = ds.isSaveToSent();
-            if (session == null) { 
-        		OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
-    			bounceToInbox(context, id, msg, "SMTP configuration not valid");
-    			OutboxTracker.remove(this, id);
-        		continue;
+            OfflineDataSource ds = getDataSource(msg);
+            if (!ds.isYahoo()) {
+                session = LocalJMSession.getSession(ds);
+                if (session == null) {
+                    OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
+                    bounceToInbox(context, id, msg, "SMTP configuration not valid");
+                    OutboxTracker.remove(this, id);
+                    continue;
+                }
             }
             Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
-            try {
-                // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
-                Pair<Integer, String> sendRecord = sSendUIDs.get(id);
-                String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ? UUID.randomUUID().toString() : sendRecord.getSecond();
-                sSendUIDs.put(id, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
+            // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
+            Pair<Integer, String> sendRecord = sSendUIDs.get(id);
+            String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ?
+                UUID.randomUUID().toString() : sendRecord.getSecond();
+            sSendUIDs.put(id, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
 
-                MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
-                String  origId = msg.getDraftOrigId();
-                new MailSender().sendMimeMessage(context, this, saveToSent, mm, null, null,
-                				 !StringUtil.isNullOrEmpty(origId) ? new ItemId(msg.getDraftOrigId(), getAccountId()) : null,
-                                                 msg.getDraftReplyType(), identity, false, false);
-              	OfflineLog.offline.debug("smtp: sent pending mail (" + id + "): " + msg.getSubject());
-                
-                // remove the draft from the outbox
-                delete(context, id, MailItem.TYPE_MESSAGE);
-                OutboxTracker.remove(this, id);
-                OfflineLog.offline.debug("smtp: deleted pending draft (" + id + ')');
+            MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
+            ItemId origMsgId = getOrigMsgId(msg);
 
-                // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
-                sSendUIDs.remove(id);
-            } catch (ServiceException x) {
-            	if (x.getCause() instanceof MessagingException) {
-            		OfflineLog.offline.debug("smtp: failed to send mail (" + id + "): " + msg.getSubject(), x);
-	        		OfflineLog.offline.info("SMTP send failure: " + msg.getSubject());
-            		if (x.getCause() instanceof SafeSendFailedException) {
-            			bounceToInbox(context, id, msg, x.getCause().getMessage());
-            			OutboxTracker.remove(this, id);
-            		} else {
-            			OutboxTracker.recordFailure(this, id);
-            		}
-            		continue;
-            	} else {
-            		throw x;
-            	}
+            if (ds.isYahoo()) {
+                YMailSender ms = YMailSender.getInstance(ds);
+                try {
+                    ms.sendMimeMessage(context, this, false, mm, null, null, origMsgId,
+                                       msg.getDraftReplyType(), identity, false, false);
+                } catch (ServiceException e) {
+                    if (ms.sendFailed()) {
+                        // Let YMail handle bounce to inbox...
+                        OfflineLog.offline.info("YMail send failure: " + msg.getSubject(), ms.getError());
+                        continue;
+                    } else {
+                        throw e;
+                    }
+                }
+            } else {
+                MailSender ms = new MailSender();
+                try {
+                    ms.sendMimeMessage(context, this, ds.isSaveToSent(), mm, null, null,
+                        origMsgId, msg.getDraftReplyType(), identity, false, false);
+                } catch (ServiceException e) {
+                    Throwable cause = e.getCause();
+                    if (cause instanceof MessagingException) {
+                        OfflineLog.offline.debug("smtp: failed to send mail (" + id + "): " + msg.getSubject(), e);
+                        OfflineLog.offline.info("SMTP send failure: " + msg.getSubject());
+                        if (cause instanceof SafeSendFailedException) {
+                            bounceToInbox(context, id, msg, cause.getMessage());
+                            OutboxTracker.remove(this, id);
+                        } else {
+                            OutboxTracker.recordFailure(this, id);
+                        }
+                        continue;
+                    } else {
+                        throw e;
+                    }
+                }
             }
+            
+            OfflineLog.offline.debug("sent pending mail (" + id + "): " + msg.getSubject());
+
+            // remove the draft from the outbox
+            delete(context, id, MailItem.TYPE_MESSAGE);
+            OutboxTracker.remove(this, id);
+            OfflineLog.offline.debug("deleted pending draft (" + id + ')');
+
+            // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
+            sSendUIDs.remove(id);
             sentCount++;
         }
+        
         return sentCount;
+    }
+
+    private ItemId getOrigMsgId(Message msg) throws ServiceException {
+        String origId = msg.getDraftOrigId();
+        return StringUtil.isNullOrEmpty(origId) ? null : new ItemId(origId, getAccountId());
+    }
+
+    private OfflineDataSource getDataSource(Message msg) throws ServiceException {
+        //the client could send datasourceId as identityId
+        Account acct = getAccount();
+        DataSource ds = Provisioning.getInstance().get(
+            acct, DataSourceBy.id, msg.getDraftIdentityId());
+        if (ds == null) {
+            ds = OfflineProvisioning.getOfflineInstance().getDataSource(acct);
+        }
+        return (OfflineDataSource) ds;
     }
     
     private void bounceToInbox(OperationContext context, int id, Message msg, String error) {

@@ -80,6 +80,8 @@ public class OfflineDataSource extends DataSource {
     private static final String PROP_REMOTE = "remote";
     private static final String PROP_SYNC = "sync";
 
+    private static final String SERVICE_NAME_YAHOO = "yahoo.com";
+
     public static void init() throws IOException {
         EProperties props = new EProperties();
         props.load(new FileInputStream(OfflineLC.zdesktop_datasource_properties.value()));
@@ -183,6 +185,10 @@ public class OfflineDataSource extends DataSource {
 
     public boolean isSaveToSent() {
         return knownService != null && knownService.saveToSent;
+    }
+
+    public boolean isYahoo() {
+        return knownService != null && knownService.name.equals(SERVICE_NAME_YAHOO);
     }
     
     private static final int MAX_UID_ENTRIES = 64 * 1024;

@@ -21,12 +21,21 @@ import org.apache.commons.httpclient.params.HttpConnectionParams;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapTransport;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AccountServiceException;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.offline.util.yauth.Auth;
+import com.zimbra.cs.offline.util.yauth.RawAuthManager;
+import com.zimbra.cs.offline.util.yauth.AuthenticationException;
+import com.zimbra.cs.offline.util.ymail.YMailClient;
+import com.yahoo.mail.YmwsPortType;
+
+import java.io.IOException;
 
 public class Offline {
-
     static {
     	//If we don't set this, DNS resolution is by default cached forever.  If one starts the offline server from one
     	//location and then moves to another network, the sync target address may change due to different route.
