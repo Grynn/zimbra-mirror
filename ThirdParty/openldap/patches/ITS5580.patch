@@ -1,21 +1,94 @@
---- openldap-2.3.42/libraries/liblber/io.c.orig	2008-02-11 15:24:11.000000000 -0800
-+++ openldap-2.3.42/libraries/liblber/io.c	2008-06-30 10:31:46.000000000 -0700
-@@ -557,13 +557,11 @@
+Index: io.c
+===================================================================
+RCS file: /repo/OpenLDAP/pkg/ldap/libraries/liblber/io.c,v
+retrieving revision 1.120
+retrieving revision 1.122
+diff -u -p -r1.120 -r1.122
+--- openldap-2.3.42/libraries/liblber/io.c	7 Jan 2008 23:20:03 -0000	1.120
++++ openldap-2.3.42/libraries/liblber/io.c	1 Jul 2008 23:33:15 -0000	1.122
+@@ -522,14 +522,18 @@ ber_get_next(
+ 	}
+ 
+ 	while (ber->ber_rwptr > (char *)&ber->ber_tag && ber->ber_rwptr <
+-		(char *)&ber->ber_len + LENSIZE*2 -1) {
++		(char *)&ber->ber_len + LENSIZE*2) {
+ 		ber_slen_t sblen;
+ 		char buf[sizeof(ber->ber_len)-1];
+ 		ber_len_t tlen = 0;
+ 
++		/* The tag & len can be at most 9 bytes; we try to read up to 8 here */
+ 		sock_errset(0);
+-		sblen=ber_int_sb_read( sb, ber->ber_rwptr,
+-			((char *)&ber->ber_len + LENSIZE*2 - 1)-ber->ber_rwptr);
++		sblen=((char *)&ber->ber_len + LENSIZE*2 - 1)-ber->ber_rwptr;
++		/* Trying to read the last len byte of a 9 byte tag+len */
++		if (sblen<1)
++			sblen = 1;
++		sblen=ber_int_sb_read( sb, ber->ber_rwptr, sblen );
+ 		if (sblen<=0) return LBER_DEFAULT;
+ 		ber->ber_rwptr += sblen;
+ 
+@@ -579,7 +583,7 @@ ber_get_next(
+ 			int i;
+ 			unsigned char *p = (unsigned char *)ber->ber_ptr;
+ 			int llen = *p++ & 0x7f;
+-			if (llen > (int)sizeof(ber_len_t)) {
++			if (llen > LENSIZE) {
+ 				sock_errset(ERANGE);
  				return LBER_DEFAULT;
  			}
- 			/* Not enough bytes? */
--			if (ber->ber_rwptr - (char *)p < llen) {
--#if defined( EWOULDBLOCK )
--				sock_errset(EWOULDBLOCK);
--#elif defined( EAGAIN )
--				sock_errset(EAGAIN);
--#endif			
--				return LBER_DEFAULT;
-+			i = ber->ber_rwptr - (char *)p;
-+			if (i < llen) {
-+				sblen=ber_int_sb_read( sb, ber->ber_rwptr, i );
-+				if (sblen<i) return LBER_DEFAULT;
-+				ber->ber_rwptr += sblen;
- 			}
- 			for (i=0; i<llen; i++) {
- 				tlen <<=8;
+--- openldap-2.3.42/libraries/libldap/result.c.orig	2008-07-03 12:46:08.000000000 -0700
++++ openldap-2.3.42/libraries/libldap/result.c	2008-07-03 14:19:16.000000000 -0700
+@@ -296,18 +296,19 @@
+ #endif
+ 
+ 		    	if ( !lc_ready ) {
++				int err;
+ 				rc = ldap_int_select( ld, tvp );
+-#ifdef LDAP_DEBUG
+ 				if ( rc == -1 ) {
++#ifdef LDAP_DEBUG
+ 					Debug( LDAP_DEBUG_TRACE,
+ 						"ldap_int_select returned -1: errno %d\n",
+-						sock_errno(), 0, 0 );
+-				}
++						err, 0, 0 );
+ #endif
++				}
+ 
+ 				if ( rc == 0 || ( rc == -1 && (
+ 					!LDAP_BOOL_GET(&ld->ld_options, LDAP_BOOL_RESTART)
+-						|| sock_errno() != EINTR )))
++						|| err != EINTR )))
+ 				{
+ 					ld->ld_errno = (rc == -1 ? LDAP_SERVER_DOWN :
+ 						LDAP_TIMEOUT);
+@@ -410,7 +411,7 @@
+ 	LDAPRequest	*lr, *tmplr;
+ 	LDAPConn	*lc;
+ 	BerElement	tmpber;
+-	int		rc, refer_cnt, hadref, simple_request;
++	int		rc, refer_cnt, hadref, simple_request, err;
+ 	ber_int_t	lderr;
+ 
+ #ifdef LDAP_CONNECTIONLESS
+@@ -469,15 +470,16 @@
+ 	}
+ 	if ( tag != LDAP_TAG_MESSAGE ) {
+ 		if ( tag == LBER_DEFAULT) {
++			err = sock_errno();
+ #ifdef LDAP_DEBUG		   
+ 			Debug( LDAP_DEBUG_CONNS,
+ 				"ber_get_next failed.\n", 0, 0, 0 );
+-#endif		   
++#endif
+ #ifdef EWOULDBLOCK			
+-			if ( sock_errno() == EWOULDBLOCK ) return LDAP_MSG_X_KEEP_LOOKING;
++			if ( err == EWOULDBLOCK ) return LDAP_MSG_X_KEEP_LOOKING;
+ #endif
+ #ifdef EAGAIN
+-			if ( sock_errno() == EAGAIN ) return LDAP_MSG_X_KEEP_LOOKING;
++			if ( err == EAGAIN ) return LDAP_MSG_X_KEEP_LOOKING;
+ #endif
+ 			ld->ld_errno = LDAP_SERVER_DOWN;
+ 			return -1;
