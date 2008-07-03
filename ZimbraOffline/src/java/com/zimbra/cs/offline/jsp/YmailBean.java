@@ -12,28 +12,24 @@ public class YmailBean extends XmailBean {
 		
 		if (isEmpty(dsName))
 			addInvalid("dataSourceName");
+		if (isEmpty(email))
+			addInvalid("email");
 		if (isEmpty(password))
 	    	addInvalid("password");
 		
-		domain = "yahoo.com";
-		if (username.endsWith("@" + domain)) {
-			username = username.substring(0, username.length() - 1 -  domain.length());
-		} else if (username.indexOf('@') >= 0 || isEmpty(username)) {
-			addInvalid("username");
-		}
-		email = username + '@' + domain;
+		domain = "yahoo.com";  //this is solely for datasource.properties mapping
+		if (email.indexOf('@') < 0)
+			email += '@' + domain;
+		
+		if (email.endsWith("@" + domain)) //username of yahoo.com email is without @domain
+			username = email.substring(0, email.length() - 1 -  domain.length());
+		else
+			username = email;
 		
 		protocol = DataSource.Type.imap.toString();
 		host = "imap.mail.yahoo.com";
 		port = "143";
 		isSsl = false;
-		
-		smtpHost = "plus.smtp.mail.yahoo.com";
-		smtpPort = "465";
-		isSmtpSsl = true;
-		isSmtpAuth = true;
-		smtpUsername = username;
-		smtpPassword = password;
 	}
 	
 	@Override

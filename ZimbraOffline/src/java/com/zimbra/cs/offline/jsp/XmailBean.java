@@ -109,16 +109,19 @@ public class XmailBean extends FormBean {
 			    	addInvalid("port");
 				if (!isValidEmail(email))
 			    	addInvalid("email");
-				if (!isValidHost(smtpHost))
-			    	addInvalid("smtpHost");
-				if (!isValidPort(smtpPort))
-			    	addInvalid("smtpPort");
-				if (isSmtpAuth) {
-			    	if (isEmpty(smtpUsername))
-			    		addInvalid("smtpUsername");
-			    	if (isEmpty(smtpPassword))
-			    		addInvalid("smtpPassword");
-			    }
+				
+				if (!isYmail()) {
+					if (!isValidHost(smtpHost))
+				    	addInvalid("smtpHost");
+					if (!isValidPort(smtpPort))
+				    	addInvalid("smtpPort");
+					if (isSmtpAuth) {
+				    	if (isEmpty(smtpUsername))
+				    		addInvalid("smtpUsername");
+				    	if (isEmpty(smtpPassword))
+				    		addInvalid("smtpPassword");
+				    }
+				}
                     
 			    if (isAllOK()) {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, Provisioning.TRUE);
@@ -140,15 +143,17 @@ public class XmailBean extends FormBean {
 			        domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
 			        
-			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost, smtpHost);
-			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort, smtpPort);
-			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType, (isSmtpSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
-			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, isSmtpAuth ? Provisioning.TRUE : Provisioning.FALSE);
-			        
-			        if (isSmtpAuth) {
-			        	dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername, smtpUsername);
-				        if (!smtpPassword.equals(JspConstants.MASKED_PASSWORD)) {
-				            dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword, smtpPassword);
+			        if (!isYmail()) {
+				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost, smtpHost);
+				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort, smtpPort);
+				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType, (isSmtpSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
+				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, isSmtpAuth ? Provisioning.TRUE : Provisioning.FALSE);
+				        
+				        if (isSmtpAuth) {
+				        	dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername, smtpUsername);
+					        if (!smtpPassword.equals(JspConstants.MASKED_PASSWORD)) {
+					            dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword, smtpPassword);
+					        }
 				        }
 			        }
 			        
@@ -168,21 +173,21 @@ public class XmailBean extends FormBean {
 			String adomain = "aol.com";
 			
 			if (verb.isAdd()) {
-				if (email.endsWith(ydomain) || host.endsWith(ydomain) || smtpHost.endsWith(ydomain)) {
+				if (email.endsWith(ydomain) || host.endsWith(ydomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
-						setError("Yahoo! Mail Plus access must use IMAP");
+						setError("Yahoo! Mail access must use IMAP");
 					} else {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, ydomain);
 					}
-				} else if (email.endsWith(gdomain) || host.endsWith(gdomain) || smtpHost.endsWith(gdomain)) {
+				} else if (email.endsWith(gdomain) || host.endsWith(gdomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
 						setError("Gmail access must use IMAP");
 					} else {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, gdomain);
 					}
-				} else if (email.endsWith(adomain) || host.endsWith(adomain) || smtpHost.endsWith(adomain)) {
+				} else if (email.endsWith(adomain) || host.endsWith(adomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
 						setError("AOL Mail access must use IMAP");
@@ -403,5 +408,9 @@ public class XmailBean extends FormBean {
 	
 	public boolean isSyncAllServerFolders() {
 		return syncAllServerFolders;
+	}
+	
+	public boolean isYmail() {
+		return domain.equals("yahoo.com");
 	}
 }

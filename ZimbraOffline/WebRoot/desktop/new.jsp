@@ -97,7 +97,7 @@ function OnXmail() {
                 <div class='infoBox' style='margin:0px 30px 0px 30px;'>
                     <div class='infoTitle'><fmt:message key='YMPAbout'/></div>
                     <p><fmt:message key='YMPToSignup'>
-						 <fmt:param><a href=http://mailplus.mail.yahoo.com target=_blank><fmt:message key='YMPLink'/></a></fmt:param>
+						 <fmt:param><a href=http://mail.yahoo.com target=_blank><fmt:message key='YMPLink'/></a></fmt:param>
 					   </fmt:message>
 					</p>
                     <a href="javascript:zd.toggle('YahooMailPlus')"><fmt:message key='Close'/></a>

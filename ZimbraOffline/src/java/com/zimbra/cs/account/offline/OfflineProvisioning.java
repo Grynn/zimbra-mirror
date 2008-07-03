@@ -1739,29 +1739,32 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	} else if (!isTestNeeded && !password.equals(ds.getAttr(A_zimbraDataSourcePassword)))
         		isTestNeeded = true;
         	
-        	if (!isTestNeeded && (!ds.getAttr(A_zimbraDataSourceSmtpHost).equals(attrs.get(A_zimbraDataSourceSmtpHost)) ||
-        			!ds.getAttr(A_zimbraDataSourceSmtpPort).equals(attrs.get(A_zimbraDataSourceSmtpPort)) ||
-        			!ds.getAttr(A_zimbraDataSourceSmtpConnectionType).equals(attrs.get(A_zimbraDataSourceSmtpConnectionType)) ||
-        			!ds.getAttr(A_zimbraDataSourceSmtpAuthRequired).equals(attrs.get(A_zimbraDataSourceSmtpAuthRequired))))
-        		isTestNeeded = true;
+        	String domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain);
+        	if (!"yahoo.com".equals(domain)) {
+	        	if (!isTestNeeded && (!ds.getAttr(A_zimbraDataSourceSmtpHost).equals(attrs.get(A_zimbraDataSourceSmtpHost)) ||
+	        			!ds.getAttr(A_zimbraDataSourceSmtpPort).equals(attrs.get(A_zimbraDataSourceSmtpPort)) ||
+	        			!ds.getAttr(A_zimbraDataSourceSmtpConnectionType).equals(attrs.get(A_zimbraDataSourceSmtpConnectionType)) ||
+	        			!ds.getAttr(A_zimbraDataSourceSmtpAuthRequired).equals(attrs.get(A_zimbraDataSourceSmtpAuthRequired))))
+	        		isTestNeeded = true;
+	        	
+	        	if (!isTestNeeded && ds.getBooleanAttr(A_zimbraDataSourceSmtpAuthRequired, false) &&
+	        			!ds.getAttr(A_zimbraDataSourceSmtpAuthUsername).equals(attrs.get(A_zimbraDataSourceSmtpAuthUsername)))
+	        		isTestNeeded = true;
+	        	
+	        	String smtpPassword = (String)attrs.get(A_zimbraDataSourceSmtpAuthPassword);
+	        	if (smtpPassword == null) {
+	        		smtpPassword = ds.getAttr(A_zimbraDataSourceSmtpAuthPassword, null);
+	        		if (smtpPassword != null)
+	        			attrs.put(A_zimbraDataSourceSmtpAuthPassword, smtpPassword);
+	        	} else if (!isTestNeeded && !smtpPassword.equals(ds.getAttr(A_zimbraDataSourceSmtpAuthPassword, null)))
+	        		isTestNeeded = true;
+        	}
         	
-        	if (!isTestNeeded && ds.getBooleanAttr(A_zimbraDataSourceSmtpAuthRequired, false) &&
-        			!ds.getAttr(A_zimbraDataSourceSmtpAuthUsername).equals(attrs.get(A_zimbraDataSourceSmtpAuthUsername)))
-        		isTestNeeded = true;
-        	
-        	String smtpPassword = (String)attrs.get(A_zimbraDataSourceSmtpAuthPassword);
-        	if (smtpPassword == null) {
-        		smtpPassword = ds.getAttr(A_zimbraDataSourceSmtpAuthPassword, null);
-        		if (smtpPassword != null)
-        			attrs.put(A_zimbraDataSourceSmtpAuthPassword, smtpPassword);
-        	} else if (!isTestNeeded && !smtpPassword.equals(ds.getAttr(A_zimbraDataSourceSmtpAuthPassword, null)))
-        		isTestNeeded = true;
-        	
-                if (isTestNeeded) {
-                    testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs));
-                }
-        	
-                attrs.put(A_zimbraDataSourceEnabled, TRUE);
+            if (isTestNeeded) {
+                testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs));
+            }
+    	
+            attrs.put(A_zimbraDataSourceEnabled, TRUE);
         }
         
         Map<String, Object> context = new HashMap<String, Object>();

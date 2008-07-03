@@ -74,8 +74,9 @@ function disableButtons() {
             <td><input style='width:200px' class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
         </tr>
         <tr id='emailRow'>
-           <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='EmailAddr'/>:</td>
-            <td><input style='width:100px' class="ZField" type="text" id="username" name="username" value="${bean.username}"><span class="ZFieldLabel">@yahoo.com</span></td>
+           <td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='EmailAddr'/>:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="email" name="email" value="${bean.email}">
+            </td>
         </tr>
         <tr id='passwordRow'>
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Password'/>:</td>

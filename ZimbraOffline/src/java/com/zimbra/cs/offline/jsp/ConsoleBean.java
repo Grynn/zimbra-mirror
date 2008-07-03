@@ -1,6 +1,5 @@
 package com.zimbra.cs.offline.jsp;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
