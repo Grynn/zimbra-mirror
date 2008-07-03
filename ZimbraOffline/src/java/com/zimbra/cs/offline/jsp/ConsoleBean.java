@@ -18,8 +18,6 @@ public class ConsoleBean extends PageBean {
 	
 	public static class AccountSummary {
 		
-		private static final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy 'at' h:mma");
-		
 		private boolean isZmail;
 		private String id;
 		private String name;
@@ -45,8 +43,8 @@ public class ConsoleBean extends PageBean {
 			return email;
 		}
 		
-		public String getLastSync() {
-			return lastSync == 0 ? "not yet complete" : sdf.format(new Date(lastSync));
+		public Date getLastSync() {
+			return lastSync == 0 ? null : new Date(lastSync);
 		}
 		
 		public SyncStatus getSyncStatus() {

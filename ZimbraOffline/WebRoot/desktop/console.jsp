@@ -130,12 +130,11 @@ function OnLoginTo(username) {
 	            <td>${account.email}</td>
 				<td>
 					<c:choose>
-						<c:when test='${account.lastSync == "not yet complete"}'>
+						<c:when test='${account.lastSync == null}'>
 							<fmt:message key='SyncNotYetComplete'/>
 						</c:when>
 						<c:otherwise>
-							<fmt:parseDate value="${account.lastSync}" pattern="MM/dd/yyyy 'at' h:mma" var="syncdate"/>
-							<fmt:formatDate value="${syncdate}" type="both" dateStyle="short" timeStyle="short"/>
+							<fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/>
 						</c:otherwise>
 					</c:choose>
 				</td>
@@ -165,22 +164,22 @@ function OnLoginTo(username) {
 		       <td class="noborder">     
 		           <c:choose>
                        <c:when test="${account.statusUnknown}">
-                           unknown
+                           <fmt:message key='StatusUnknown'/>
                        </c:when>
                        <c:when test="${account.statusOffline}">
-                           offline
+                           <fmt:message key='StatusOffline'/>
                        </c:when>
                        <c:when test="${account.statusOnline}">
-                           online
+                           <fmt:message key='StatusOnline'/>
                        </c:when>
                        <c:when test="${account.statusRunning}">
-                           in progress
+                           <fmt:message key='StatusInProg'/>
                        </c:when>
                        <c:when test="${account.statusAuthFailed}">
-                           can't login
+                           <fmt:message key='StatusCantLogin'/>
                        </c:when>
                        <c:when test="${account.statusError}">
-                           error
+                           <fmt:message key='StatusErr'/>
                        </c:when>
                    </c:choose>
 		       </td></tr></table>
