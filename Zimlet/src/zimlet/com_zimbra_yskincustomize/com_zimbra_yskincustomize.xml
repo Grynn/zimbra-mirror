@@ -1,4 +1,0 @@
-<zimlet name="com_zimbra_yskincustomize" version="1.0" description="Yahoo Skin Customizations">
-  <include>yskincustomize.js</include>
-  <handlerObject>Com_Zimbra_YSkinCustomize</handlerObject>
-</zimlet>
