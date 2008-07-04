@@ -8,6 +8,7 @@
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.YmailBean" scope="request"/>
 <jsp:setProperty name="bean" property="*"/>
+<jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
 <c:set var="uri" value="/zimbra/desktop/ymail.jsp"/>
 

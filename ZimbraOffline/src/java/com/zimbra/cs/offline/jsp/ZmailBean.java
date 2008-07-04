@@ -91,7 +91,7 @@ public class ZmailBean extends FormBean {
 			        stub.createOfflineAccount(accountName, email, attrs);
 			    } else {
 			        if (isEmpty(accountId)) {
-			            setError("Account ID missing");
+			            setError(getMessage("AccountIdMissing"));
 			        } else if (verb.isModify()) {
 			            stub.modifyOfflineAccount(accountId, attrs);
 			        } else if (verb.isReset()) {
@@ -99,7 +99,7 @@ public class ZmailBean extends FormBean {
 					} else if (verb.isDelete()) {
 					    stub.deleteOfflineAccount(accountId);
 					} else {
-					    setError("Unknown action");
+					    setError(getMessage("UnknownAct"));
 	                }
 	            }
 			}

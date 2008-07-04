@@ -7,6 +7,7 @@
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.ConsoleBean"/>
 <jsp:setProperty name="bean" property="*"/>
+<jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
 <c:set var="accounts" value="${bean.accounts}"/>
 

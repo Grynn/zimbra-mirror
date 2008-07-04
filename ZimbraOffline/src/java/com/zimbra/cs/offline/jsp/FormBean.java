@@ -40,8 +40,8 @@ public abstract class FormBean extends PageBean {
 	}	
 	
 	protected void setError(String error) {
-		String failprefix = "system failure: ";
-		this.error = this.error == null ? (error == null ? "Unknown error" : (error.startsWith(failprefix) ? error.substring(failprefix.length()) : error)) : this.error;
+		String failprefix = getMessage("SystemFailure");
+		this.error = this.error == null ? (error == null ? getMessage("UnknownError") : (error.startsWith(failprefix) ? error.substring(failprefix.length()) : error)) : this.error;
 	}
 	
 	public String getError() {
@@ -83,7 +83,7 @@ public abstract class FormBean extends PageBean {
 	protected String require(String input) {
 		input = input == null ? null : input.trim();
 		if (isEmpty(input))
-			error = "missing required field";
+			error = getMessage("MissingRequired");
 		return input;
 	}
 	

@@ -8,6 +8,7 @@
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.AmailBean" scope="request"/>
 <jsp:setProperty name="bean" property="*"/>
+<jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
 <c:set var="uri" value="/zimbra/desktop/amail.jsp"/>
 

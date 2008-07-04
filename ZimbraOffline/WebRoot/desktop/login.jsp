@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.PageBean"/>
+<jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
 <c:if test="${empty bean.loginUsername}">
     <c:redirect url="/desktop/console.jsp"/>

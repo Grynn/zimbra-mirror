@@ -5,6 +5,7 @@
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.ConsoleBean"/>
+<jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
 <html>
 <head>

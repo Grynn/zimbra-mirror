@@ -176,21 +176,21 @@ public class XmailBean extends FormBean {
 				if (email.endsWith(ydomain) || host.endsWith(ydomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
-						setError("Yahoo! Mail access must use IMAP");
+						setError(getMessage("YMPMustUseImap"));
 					} else {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, ydomain);
 					}
 				} else if (email.endsWith(gdomain) || host.endsWith(gdomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
-						setError("Gmail access must use IMAP");
+						setError(getMessage("GmailMustUseImap"));
 					} else {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, gdomain);
 					}
 				} else if (email.endsWith(adomain) || host.endsWith(adomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
-						setError("AOL Mail access must use IMAP");
+						setError(getMessage("AOLMustUseImap"));
 					} else {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, adomain);
 					}
@@ -206,7 +206,7 @@ public class XmailBean extends FormBean {
 			        stub.createOfflineDataSource(dsName, email, dsType, dsAttrs);
 			    } else {
 			        if (isEmpty(accountId)) {
-			            setError("Account ID missing");
+			            setError(getMessage("AccountIdMissing"));
 			        } else if (verb.isModify()) {
 			            stub.modifyOfflineDataSource(accountId, dsName, dsAttrs);
 			        } else if (verb.isReset()) {
@@ -214,15 +214,15 @@ public class XmailBean extends FormBean {
 					} else if (verb.isDelete()) {
 					    stub.deleteOfflineDataSource(accountId);
 					} else {
-					    setError("Unknown action");
+					    setError(getMessage("UnknownAct"));
 	                }
 	            }
 			}
 	    } catch (SoapFaultException x) {
 	    	if (x.getCode().equals("account.AUTH_FAILED")) {
-	    		setError("Invalid username or password");
+	    		setError(getMessage("InvalidUserOrPass"));
 	    	} else if (x.getCode().equals("account.ACCOUNT_INACTIVE")) {
-	    		setError("Yahoo! Mail Plus account required");
+	    		setError(getMessage("YMPPlusRequired"));
 	    	} else if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT")))
 	    		setError(x.getMessage());
         } catch (Throwable t) {
