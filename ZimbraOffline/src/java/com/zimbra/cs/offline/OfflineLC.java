@@ -28,7 +28,6 @@ public class OfflineLC {
 	public static final KnownKey zdesktop_relabel;
 	public static final KnownKey zdesktop_buildid;
     public static final KnownKey zdesktop_skins;
-    public static final KnownKey zdesktop_derby_properties;
     public static final KnownKey zdesktop_redolog_enabled;
     
     public static final KnownKey zdesktop_sync_timer_frequency;
@@ -103,10 +102,6 @@ public class OfflineLC {
 	    zdesktop_skins = new KnownKey("zdesktop_skins");
 	    zdesktop_skins.setDefault("beach");
 	    zdesktop_skins.setDoc("Comma delimited list of installed skins.");
-	    
-	    zdesktop_derby_properties = new KnownKey("zdesktop_derby_properties");
-	    zdesktop_derby_properties.setDefault("${zimbra_home}" + File.separator + "conf" + File.separator + "derby.properties");
-	    zdesktop_derby_properties.setDoc("Path to derby configuration properties file.");
 	    
 	    zdesktop_redolog_enabled = new KnownKey("zdesktop_redolog_enabled");
 	    zdesktop_redolog_enabled.setDefault("true");

@@ -96,5 +96,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.3.2.jar"/>
 	<classpathentry sourcepath="/ThirdParty/sqlite/sqlitejdbc-v052/src" kind="lib" path="/ZimbraCommon/jars/sqlitejdbc-v052.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/derby.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

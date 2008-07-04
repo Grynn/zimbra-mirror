@@ -69,7 +69,7 @@
 
 	<property name="ical4j.jar" value="ical4j-0.9.16-patched.jar" />
 
-        <condition property="db-mysql">
+    <condition property="db-mysql">
 		<isset property="env.ZIMBRA_OFFLINE_USE_MYSQL" />
 	</condition>
 	<condition property="db-derby">
@@ -78,7 +78,10 @@
 		</not>
 	</condition>
 
-	<condition property="src.db.dir" value="${src.dir}/db/derby" else="${src.dir}/db">
+	<condition property="src.db.dir" value="${src.dir}/db/derby" else="${src.dir}/db/mysql">
+		<isset property="db-derby" />
+	</condition>
+	<condition property="server.db.dir" value="${server.src.dir}/db/derby" else="${server.src.dir}/db/mysql">
 		<isset property="db-derby" />
 	</condition>
 
@@ -102,45 +105,45 @@
 	<property name="jetty.version" value="6.1.5" />
 
 
-        <!-- JAXWS definitions for YMail SOAP API -->
+	<!-- JAXWS definitions for YMail SOAP API -->
 
-        <property name="jaxws.dir" value="tools/jaxws" />
-        <property name="ymail.wsdl" value="http://mail.yahooapis.com/ws/mail/v1.1/wsdl"/>
+	<property name="jaxws.dir" value="tools/jaxws" />
+	<property name="ymail.wsdl" value="http://mail.yahooapis.com/ws/mail/v1.1/wsdl"/>
 	<property name="jaxb.bindings" value="${config.dir}/jaxb-bindings.xml"/>
-        <property name="ymail.classes.dir" value="${build.dir}/ymail-classes"/>
-        <property name="ymail.jar" value="${jars.dir}/ymail.jar"/>
+	<property name="ymail.classes.dir" value="${build.dir}/ymail-classes"/>
+	<property name="ymail.jar" value="${jars.dir}/ymail.jar"/>
 
-        <fileset id="jaxws.jars" dir="${jaxws.dir}/lib">
-                <include name="*.jar"/>
-                <exclude name="jaxb-xjc.jar"/>
-                <exclude name="jaxws-tools.jar"/>
-        </fileset>
+	<fileset id="jaxws.jars" dir="${jaxws.dir}/lib">
+		<include name="*.jar"/>
+		<exclude name="jaxb-xjc.jar"/>
+		<exclude name="jaxws-tools.jar"/>
+	</fileset>
 
-        <path id="jaxws.classpath">
-                <pathelement location="${java.home}/../lib/tools.jar"/>
-                <fileset dir="${jaxws.dir}/lib">
-                        <include name="*.jar"/>
-                </fileset>
-        </path>
+	<path id="jaxws.classpath">
+		<pathelement location="${java.home}/../lib/tools.jar"/>
+		<fileset dir="${jaxws.dir}/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
 
-        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
-                <classpath refid="jaxws.classpath"/>
-        </taskdef>
-    
-        <target name="generate-ymail-client" description="Generate YMail SOAP client jar">
-                <delete dir="${ymail.classes.dir}"/>
-                <mkdir dir="${ymail.classes.dir}"/>
-                <wsimport verbose="true" debug="true" keep="true" extension="true"
-                          wsdl="${ymail.wsdl}"
-			  binding="${jaxb.bindings}"
-                          package="com.yahoo.mail"
-                          destdir="${ymail.classes.dir}"/>
-                <jar destfile="${build.dir}/ymail.jar" basedir="${ymail.classes.dir}"/>
-                <copy todir="${jars.dir}" file="${build.dir}/ymail.jar"/>
-                <delete dir="${ymail.classes.dir}"/>
-        </target>
+	<taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+		<classpath refid="jaxws.classpath"/>
+	</taskdef>
 
-        <path id="all.java.path">
+	<target name="generate-ymail-client" description="Generate YMail SOAP client jar">
+		<delete dir="${ymail.classes.dir}"/>
+		<mkdir dir="${ymail.classes.dir}"/>
+		<wsimport verbose="true" debug="true" keep="true" extension="true"
+				  wsdl="${ymail.wsdl}"
+				  binding="${jaxb.bindings}"
+				  package="com.yahoo.mail"
+				  destdir="${ymail.classes.dir}"/>
+		<jar destfile="${build.dir}/ymail.jar" basedir="${ymail.classes.dir}"/>
+		<copy todir="${jars.dir}" file="${build.dir}/ymail.jar"/>
+		<delete dir="${ymail.classes.dir}"/>
+	</target>
+
+	<path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
 	</path>
 
@@ -157,8 +160,8 @@
 		<fileset dir="${tools.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-                <path refid="jaxws.classpath"/>
-        </path>
+		<path refid="jaxws.classpath"/>
+	</path>
 
 	<path id="deploy.class.path">
 		<fileset dir="${server.build.dir}/dist/lib/jars">
@@ -190,14 +193,14 @@
 		<else>
 			<property name="zimbra.index.dir" location="${zimbra.home.dir}/index" />
 			<property name="zimbra.store.dir" location="${zimbra.home.dir}/store" />
-    	       </else>
+		</else>
 	</if>
 
-        <!-- Targets -->
+	<!-- Targets -->
 	<target name="offline-build-init">
 		<mkdir dir="${build.classes.dir}" />
-                <mkdir dir="${build.src.java.dir}" />
-                <mkdir dir="${build.dir}/data" />
+		<mkdir dir="${build.src.java.dir}" />
+		<mkdir dir="${build.dir}/data" />
 		<mkdir dir="${dist.dir}" />
 	</target>
 
@@ -213,7 +216,7 @@
 		</javac>
 	</target>
 
-        <target name="offline-jar" depends="offline-compile" description="Creates the jar file">
+	<target name="offline-jar" depends="offline-compile" description="Creates the jar file">
 		<jar destfile="${build.dir}/${jarfile}" basedir="${build.classes.dir}" excludes="com/zimbra/cs/offline/jsp/**"/>
 		<jar destfile="${build.dir}/offlinejsp.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/common/*.class,com/zimbra/cs/offline/jsp/*.class"/>
 		<jar destfile="${build.dir}/zdesktop.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/start/Main.class" />
@@ -229,10 +232,10 @@
 	<target name="offline-war" depends="offline-jar">
 		<unzip src="${server.warfile}" dest="${dist.dir}/jetty/webapps/service" overwrite="true"/>
 		<copy file="${config.dir}/web.xml" todir="${dist.dir}/jetty/webapps/service/WEB-INF" overwrite="true"/>
-                <copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib" overwrite="true">
-                        <fileset dir="${build.dir}" includes="${jarfile}"/>
-                        <fileset file="${ymail.jar}"/>
-                </copy>
+		<copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib" overwrite="true">
+			<fileset dir="${build.dir}" includes="${jarfile}"/>
+			<fileset file="${ymail.jar}"/>
+		</copy>
 	</target>
 
 	<target name="offline-zimbra-war">
@@ -244,21 +247,21 @@
 		<tstamp><format property="build.simpleDate" pattern="yyMMddHHmmss" /></tstamp>
 		<replace file="${dist.dir}/jetty/webapps/zimbra/WEB-INF/web.xml" token="@jsVersion@" value="${build.simpleDate}"/>
 
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
-                        <fileset dir="WebRoot/desktop" />
-                </copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/tags/desktop" />
-                </copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/classes/desktop" />
-                </copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/tlds" />
-                </copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/lib" overwrite="true">
-                        <fileset dir="${build.dir}" includes="offlinejsp.jar"/>
-                </copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/desktop" overwrite="true">
+			<fileset dir="WebRoot/desktop" />
+		</copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tags/desktop" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/tags/desktop" />
+		</copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/classes/desktop" />
+		</copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/tlds" />
+		</copy>
+		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/lib" overwrite="true">
+			<fileset dir="${build.dir}" includes="offlinejsp.jar"/>
+		</copy>
 
 		<!--<unzip src="../ZimbraWebClient/WebRoot/help/WebHelp.zip" dest="${dist.dir}/jetty/webapps/zimbra" overwrite="true"/>-->
 		<!--<move file="${dist.dir}/jetty/webapps/zimbra/WebHelp" tofile="${dist.dir}/jetty/webapps/zimbra/help" />-->
@@ -284,26 +287,26 @@
 		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/classes/desktop" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/classes/desktop" includes="*.properties"/>
 		</copy>
-                <copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tlds" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/tlds" />
-                </copy>
+		<copy todir="../ZimbraWebClient/build/WebRoot/WEB-INF/tlds" overwrite="true">
+			<fileset dir="WebRoot/WEB-INF/tlds" />
+		</copy>
 		<mkdir dir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib"/>
 		<copy file="${build.dir}/offlinejsp.jar" todir="../ZimbraWebClient/build/WebRoot/WEB-INF/lib" overwrite="true"/>
 
 		<ant dir="../ZimbraWebClient" target="jspc.offline_build" inheritAll="false" />
-        	<mkdir dir="${dist.dir}/jetty/work/zimbra/jsp"/>
-        	<copy todir="${dist.dir}/jetty/work/zimbra/jsp" overwrite="true">
-            		<fileset dir="../ZimbraWebClient/build/dist/jetty/work/zimbra/jsp"/>
-        	</copy>
+		<mkdir dir="${dist.dir}/jetty/work/zimbra/jsp"/>
+		<copy todir="${dist.dir}/jetty/work/zimbra/jsp" overwrite="true">
+			<fileset dir="../ZimbraWebClient/build/dist/jetty/work/zimbra/jsp"/>
+		</copy>
 	</target>
 
-        <target name="offline-db-init" depends="offline-mysql-init,offline-derby-init" />
+	<target name="offline-db-init" depends="offline-mysql-init,offline-derby-init" />
 
 	<target name="offline-mysql-init" if="db-mysql">
 		<echo>Setting store and index directories to '${zimbra.store.dir}' and '${zimbra.index.dir}'</echo>
-		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra" classpathref="offline.class.path" onerror="continue" keepformat="true" src="${server.src.dir}/db/dropdb.sql" />
+		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra" classpathref="offline.class.path" onerror="continue" keepformat="true" src="${server.db.dir}/dropdb.sql" />
 		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra" classpathref="offline.class.path" onerror="abort" keepformat="true">
-			<transaction src="${src.db.dir}/db.sql" />
+			<transaction src="${server.db.dir}/db.sql" />
 			<transaction src="${src.db.dir}/directory.sql" />
 			<transaction src="${server.build.dir}/versions-init.sql" />
 			<transaction>
@@ -413,12 +416,13 @@
 		<copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
 		<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
 			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="mysql*.jar" />
-                        <fileset file="${jars.dir}/derby.jar"/>
+			<fileset file="${jars.dir}/derby.jar"/>
 			<fileset refid="jaxws.jars"/>
-                </copy>
-                <copy tofile="${dist.dir}/jetty/lib/log4j-1.2.8.jar" file="${common.jars.dir}/log4j-1.2.8.jar" overwrite="true" />
+		</copy>
+		<copy tofile="${dist.dir}/jetty/lib/log4j-1.2.8.jar" file="${common.jars.dir}/log4j-1.2.8.jar" overwrite="true" />
 
 		<copy todir="${dist.dir}/db" overwrite="true">
+			<fileset dir="${server.db.dir}" includes="*.sql" />
 			<fileset dir="${src.db.dir}" includes="*.sql" />
 		</copy>
 
