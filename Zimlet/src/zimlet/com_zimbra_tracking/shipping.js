@@ -60,7 +60,7 @@ function(html, idx, tracking, context) {
 	if (context == 'ups') {
 		url = "http://wwwapps.ups.com/WebTracking/processInputRequest?" + "sort_by=status&tracknums_displayed=1&TypeOfInquiryNumber=T&loc=en_US&InquiryNumber1=" + t + "&track.x=0&track.y=0";
 	} else if (context == 'fedex') {
-		url = "http://www.fedex.com/cgi-bin/tracking?" + "action=track&language=english&last_action=alttrack&ascend_header=1&cntry_code=&initial=x&mps=y&tracknumbers=" + t;
+		url = "http://www.fedex.com/Tracking?tracknumbers=" + t;
 	}
 
 	if (url) {
