@@ -31,7 +31,6 @@
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="${src.dir}/java" />
 	<property name="jars.dir" location="jars" />
-	<property name="tools.lib.dir" location="tools/lib" />
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
         <property name="build.src.java.dir" location="${build.dir}/src/java" />
@@ -43,6 +42,7 @@
 	<property name="server.src.dir" location="../ZimbraServer/src" />
 	<property name="server.build.dir" location="../ZimbraServer/build" />
 	<property name="server.lib.dir" location="../ZimbraServer/lib" />
+	<property name="server.tools.lib.dir" location="../ZimbraServer/tools/lib" />
 	<property name="server.classes.dir" location="${server.build.dir}/classes" />
 
 	<property name="common.dir" location="../ZimbraCommon" />
@@ -157,7 +157,7 @@
 		<fileset dir="${jars.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${tools.lib.dir}">
+		<fileset dir="${server.tools.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<path refid="jaxws.classpath"/>

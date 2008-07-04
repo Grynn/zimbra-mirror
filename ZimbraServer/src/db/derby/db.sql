@@ -60,10 +60,6 @@ CREATE TABLE current_volumes (
    CONSTRAINT fk_current_volumes_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
 );
 
-CREATE INDEX i_message_volume_id ON current_volumes(message_volume_id);
-CREATE INDEX i_secondary_message_volume_id ON current_volumes(secondary_message_volume_id);
-CREATE INDEX i_index_volume_id ON current_volumes(index_volume_id);
-
 
 -- -----------------------------------------------------------------------
 -- mailbox info
@@ -72,7 +68,7 @@ CREATE INDEX i_index_volume_id ON current_volumes(index_volume_id);
 CREATE TABLE mailbox (
    id                 INTEGER NOT NULL,
    group_id           INTEGER NOT NULL,           -- mailbox group
-   account_id         VARCHAR(127) NOT NULL,          -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
+   account_id         VARCHAR(127) NOT NULL,      -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
    index_volume_id    SMALLINT NOT NULL,
    item_id_checkpoint INTEGER NOT NULL DEFAULT 0,
    contact_count      INTEGER DEFAULT 0,
@@ -91,7 +87,6 @@ CREATE TABLE mailbox (
    CONSTRAINT fk_mailbox_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
 );
 
-CREATE INDEX i_mailbox_index_volume_id ON mailbox(index_volume_id);
 CREATE INDEX i_last_backup_at ON mailbox(last_backup_at, id);
 
 -- -----------------------------------------------------------------------
@@ -143,26 +138,43 @@ CREATE INDEX i_out_of_office_sent_on ON out_of_office(sent_on);
 
 -- table for global config params
 CREATE TABLE config (
-  name         VARCHAR(255) NOT NULL,
-  value        CLOB,
-  description  CLOB,
-  modified     TIMESTAMP,
+   name         VARCHAR(255) NOT NULL,
+   value        CLOB,
+   description  CLOB,
+   modified     TIMESTAMP,
 
-  CONSTRAINT pk_config PRIMARY KEY (name)
+   CONSTRAINT pk_config PRIMARY KEY (name)
 );
 
--- Tracks scheduled tasks
+-- table for tracking database table maintenance
+CREATE TABLE table_maintenance (
+   database_name       VARCHAR(64) NOT NULL,
+   table_name          VARCHAR(64) NOT NULL,
+   maintenance_date    TIMESTAMP NOT NULL,
+   last_optimize_date  TIMESTAMP,
+   num_rows            INTEGER NOT NULL,
+  
+   CONSTRAINT pk_table_maintenance PRIMARY KEY (table_name, database_name)
+);
+
+CREATE TABLE service_status (
+   server   VARCHAR(255) NOT NULL,
+   service  VARCHAR(255) NOT NULL,
+   time     TIMESTAMP,
+   status   SMALLINT,
+  
+   CONSTRAINT ui_service_status UNIQUE (server, service)
+);
+
+-- tracks scheduled tasks
 CREATE TABLE scheduled_task (
-   class_name      VARCHAR(255) NOT NULL,
-   name            VARCHAR(255) NOT NULL,
-   mailbox_id      INTEGER NOT NULL,
-   exec_time       TIMESTAMP,
-   interval_millis INTEGER,
-   metadata        CLOB,
+   class_name       VARCHAR(255) NOT NULL,
+   name             VARCHAR(255) NOT NULL,
+   mailbox_id       INTEGER NOT NULL,
+   exec_time        TIMESTAMP,
+   interval_millis  INTEGER,
+   metadata         CLOB,
 
    CONSTRAINT pk_scheduled_task PRIMARY KEY (name, mailbox_id, class_name),
-   CONSTRAINT fk_st_mailbox_id FOREIGN KEY (mailbox_id)
-      REFERENCES mailbox(id) ON DELETE CASCADE
+   CONSTRAINT fk_st_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
 );
-
-CREATE INDEX i_scheduled_task_mailbox_id ON scheduled_task(mailbox_id);
