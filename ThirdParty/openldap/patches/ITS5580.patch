@@ -37,9 +37,9 @@ diff -u -p -r1.120 -r1.122
  				sock_errset(ERANGE);
  				return LBER_DEFAULT;
  			}
---- openldap-2.3.42/libraries/libldap/result.c.orig	2008-07-03 12:46:08.000000000 -0700
-+++ openldap-2.3.42/libraries/libldap/result.c	2008-07-03 14:19:16.000000000 -0700
-@@ -296,18 +296,19 @@
+--- openldap-2.3.42/libraries/libldap/result.c.orig	2008-02-11 15:24:12.000000000 -0800
++++ openldap-2.3.42/libraries/libldap/result.c	2008-07-04 12:33:44.000000000 -0700
+@@ -296,18 +296,20 @@
  #endif
  
  		    	if ( !lc_ready ) {
@@ -47,6 +47,7 @@ diff -u -p -r1.120 -r1.122
  				rc = ldap_int_select( ld, tvp );
 -#ifdef LDAP_DEBUG
  				if ( rc == -1 ) {
++					err = sock_errno();
 +#ifdef LDAP_DEBUG
  					Debug( LDAP_DEBUG_TRACE,
  						"ldap_int_select returned -1: errno %d\n",
@@ -63,7 +64,7 @@ diff -u -p -r1.120 -r1.122
  				{
  					ld->ld_errno = (rc == -1 ? LDAP_SERVER_DOWN :
  						LDAP_TIMEOUT);
-@@ -410,7 +411,7 @@
+@@ -410,7 +412,7 @@
  	LDAPRequest	*lr, *tmplr;
  	LDAPConn	*lc;
  	BerElement	tmpber;
@@ -72,7 +73,7 @@ diff -u -p -r1.120 -r1.122
  	ber_int_t	lderr;
  
  #ifdef LDAP_CONNECTIONLESS
-@@ -469,15 +470,16 @@
+@@ -469,15 +471,16 @@
  	}
  	if ( tag != LDAP_TAG_MESSAGE ) {
  		if ( tag == LBER_DEFAULT) {
