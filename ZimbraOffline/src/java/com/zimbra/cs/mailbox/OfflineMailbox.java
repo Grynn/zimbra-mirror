@@ -75,7 +75,7 @@ public class OfflineMailbox extends DesktopMailbox {
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
     private Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
 
-    private OfflineAccount.Version minServerVersionForPush = new OfflineAccount.Version(OfflineLC.zdesktop_min_server_version_for_push.value());
+    private static final OfflineAccount.Version MIN_ZCS_VER_PUSH = new OfflineAccount.Version("5.0.6");
     
     OfflineMailbox(MailboxData data) throws ServiceException {
         super(data);
@@ -104,7 +104,7 @@ public class OfflineMailbox extends DesktopMailbox {
     }
     
     public boolean isPushEnabled() throws ServiceException {
-    	return getRemoteServerVersion().isAtLeast(minServerVersionForPush) && getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) == 0;
+    	return getRemoteServerVersion().isAtLeast(MIN_ZCS_VER_PUSH) && getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) == 0;
     }
     
 	public void sync(boolean isOnRequest) {

@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
@@ -59,13 +58,6 @@ public class OfflineServlet extends HttpServlet {
         zmapps.setMaxAge(31536000);
         response.addCookie(zmapps);
     }
-
-    private void clearAuthCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("ZM_AUTH_TOKEN", null);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-    }
     
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -94,6 +86,4 @@ public class OfflineServlet extends HttpServlet {
 			throw new RuntimeException(x);
 		}
     }
-	
-	
 }

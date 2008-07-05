@@ -61,6 +61,7 @@
 			<attribute value="http://logging.apache.org/log4j/docs/api/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/derby.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

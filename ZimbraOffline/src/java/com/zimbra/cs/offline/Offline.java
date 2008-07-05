@@ -21,19 +21,9 @@ import org.apache.commons.httpclient.params.HttpConnectionParams;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapTransport;
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.AccountServiceException;
-import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.offline.util.yauth.Auth;
-import com.zimbra.cs.offline.util.yauth.RawAuthManager;
-import com.zimbra.cs.offline.util.yauth.AuthenticationException;
-import com.zimbra.cs.offline.util.ymail.YMailClient;
-import com.yahoo.mail.YmwsPortType;
-
-import java.io.IOException;
 
 public class Offline {
     static {
@@ -44,6 +34,8 @@ public class Offline {
     	//Set a couple of HttpClient connection/socket parameters for offline specific tuning
     	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.SO_TIMEOUT, OfflineLC.http_so_timeout.intValue());
     	DefaultHttpParams.getDefaultParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, OfflineLC.http_connection_timeout.intValue());
+    	
+    	System.setProperty("http.agent", OfflineLC.zdesktop_name.value() + " " + OfflineLC.getFullVersion()); //for httpclient
     }
 
     public static class OfflineDebugListener implements SoapTransport.DebugListener {

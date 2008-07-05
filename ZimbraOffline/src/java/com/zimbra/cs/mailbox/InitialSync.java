@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -41,6 +42,8 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.util.tar.TarEntry;
+import com.zimbra.common.util.tar.TarInputStream;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
@@ -48,6 +51,8 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.ZimbraNamespace;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.offline.OfflineAccount;
+import com.zimbra.cs.account.offline.OfflineAccount.Version;
+import com.zimbra.cs.mailbox.MailItem.UnderlyingData;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
@@ -72,11 +77,13 @@ import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.ContentServlet;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.formatter.SyncFormatter;
+import com.zimbra.cs.service.formatter.TarFormatter;
 import com.zimbra.cs.service.formatter.ZipFormatter;
 import com.zimbra.cs.service.mail.FolderAction;
 import com.zimbra.cs.service.mail.SetCalendarItem;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.SetCalendarItem.SetCalendarItemParseResult;
+import com.zimbra.cs.service.util.ItemData;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
@@ -802,7 +809,72 @@ public class InitialSync {
     	return headers;
     }
     
+    private static final Version MIN_ZCS_VER_SYNC_TGZ = new Version("5.0.8");
+    
     private void syncMessages(List<Integer> ids, byte type) throws ServiceException {
+    	if (ombx.getRemoteServerVersion().isAtLeast(MIN_ZCS_VER_SYNC_TGZ))
+    		syncMessagesAsTgz(ids, type);
+    	else
+    		syncMessagesAsZip(ids, type);
+    }
+    
+    private void syncMessagesAsTgz(List<Integer> ids, byte type) throws ServiceException {
+    	UserServlet.HttpInputStream in = null;
+    	
+    	OfflineAccount acct = ombx.getOfflineAccount();
+    	try {
+	    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=tgz&list=" + StringUtil.join(",", ids));
+	    	if (acct.isDebugTraceEnabled())
+	    		OfflineLog.request.debug("GET " + url);
+	        try {
+	            Pair<Header[], UserServlet.HttpInputStream> response = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
+	            		acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
+	            in = response.getSecond();
+	        } catch (MailServiceException.NoSuchItemException nsie) {
+	            OfflineLog.offline.info("initial: messages have been deleted; skipping");
+	            return;
+	        } catch (IOException x) {
+	        	OfflineLog.offline.error("initial: can't read sync response: " + url, x);
+	        	throw ServiceException.FAILURE("can't read sync response: " + url, x);
+	        }
+	        
+	        TarInputStream tis = null;
+	        TarEntry te = null;
+	        try {
+	        	tis = new TarInputStream(new GZIPInputStream(in), "UTF-8");
+		        while ((te = tis.getNextEntry()) != null) {
+		        	if (te.getName().endsWith(".meta")) {
+		        		ItemData itemData = new ItemData(TarFormatter.readTarEntry(tis, te));
+		        		UnderlyingData ud = itemData.ud;
+		        		assert (ud.type == type);
+		        		assert (ud.getBlobDigest() != null);
+
+		        		te = tis.getNextEntry(); //message always has a blob
+		        		if (te != null) {
+				        	try {
+				        		saveMessage(tis, ud.id, ud.folderId, type, ud.date, ud.dateChanged, ud.modContent, ud.modMetadata,
+				        				Flag.flagsToBitmask(itemData.flags), itemData.tags, ud.parentId);
+				        	} catch (ServiceException x) {
+				        		SyncExceptionHandler.checkRecoverableException(x);
+					        	SyncExceptionHandler.syncMessageFailed(ombx, ud.id, x);
+					        }
+		        		} else {
+		        			throw new RuntimeException("missing blob entry reading tgz stream");
+		        		}
+	                } else {
+	                	throw new RuntimeException("missing meta entry reading tgz stream");
+	                }
+		        }
+	        } catch (IOException x) {
+	        	OfflineLog.offline.error("Invalid sync format", x);
+	        }
+    	} finally {
+    		if (in != null)
+    			in.close();
+    	}
+    }
+    
+    private void syncMessagesAsZip(List<Integer> ids, byte type) throws ServiceException {
     	UserServlet.HttpInputStream in = null;
     	
     	String zlv = OfflineLC.zdesktop_sync_zip_level.value();
@@ -850,8 +922,8 @@ public class InitialSync {
     	} finally {
     		if (in != null)
     			in.close();
-    		}
     	}
+    }
         
     void syncMessage(int id, int folderId, byte type) throws ServiceException {
         Map<String, String> headers = new HashMap<String, String>();
@@ -882,9 +954,6 @@ public class InitialSync {
     }
     
     private void saveMessage(InputStream in, Map<String, String> headers, int id, int folderId, byte type) throws ServiceException {
-        final int DISK_STREAM_THRESHOLD = OfflineLC.zdesktop_membuf_limit.intValue();
-        final int READ_BUFFER_SIZE = 8 * 1024;
-    	
     	int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
         int timestamp = (int) (Long.parseLong(headers.get("X-Zimbra-Modified")) / 1000);
         int mod_content = Integer.parseInt(headers.get("X-Zimbra-Revision"));
@@ -892,6 +961,15 @@ public class InitialSync {
         int flags = Flag.flagsToBitmask(headers.get("X-Zimbra-Flags"));
         String tags = headers.get("X-Zimbra-Tags");
         int convId = Integer.parseInt(headers.get("X-Zimbra-Conv"));
+
+    	saveMessage(in, id, folderId, type, received, timestamp, mod_content, changeId, flags, tags, convId);
+    }
+    
+    private void saveMessage(InputStream in, int id, int folderId, byte type,
+    		int received, int timestamp, int mod_content, int changeId, int flags, String tags, int convId) throws ServiceException {
+        final int DISK_STREAM_THRESHOLD = OfflineLC.zdesktop_membuf_limit.intValue();
+        final int READ_BUFFER_SIZE = 8 * 1024;
+    	
         if (convId < 0)
             convId = Mailbox.ID_AUTO_INCREMENT;
         

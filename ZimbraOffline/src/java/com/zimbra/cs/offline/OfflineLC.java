@@ -41,7 +41,6 @@ public class OfflineLC {
     public static final KnownKey zdesktop_client_poll_interval;
     
     public static final KnownKey zdesktop_retry_limit;
-    public static final KnownKey zdesktop_min_server_version_for_push;
     
     public static final KnownKey zdesktop_sync_batch_size;
     public static final KnownKey zdesktop_sync_zip_level;
@@ -142,10 +141,6 @@ public class OfflineLC {
 	    zdesktop_retry_limit = new KnownKey("zdesktop_retry_limit");
 	    zdesktop_retry_limit.setDefault("2");
 	    zdesktop_retry_limit.setDoc("Number of times to retry if sync fails. Default 2.");
-	    
-	    zdesktop_min_server_version_for_push = new KnownKey("zdesktop_min_server_version_for_push");
-	    zdesktop_min_server_version_for_push.setDefault("5.0.6");
-	    zdesktop_min_server_version_for_push.setDoc("Lowest ZCS server version required to use push");
 	    
 	    zdesktop_sync_batch_size = new KnownKey("zdesktop_sync_batch_size");
 	    zdesktop_sync_batch_size.setDefault("100");
