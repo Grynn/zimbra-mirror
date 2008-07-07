@@ -158,10 +158,12 @@ public class InitialSync {
         
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
 
+        lastPeek = System.currentTimeMillis();
+        
         OfflineLog.offline.debug("starting initial sync");
-        mMailboxSync.saveSyncTree(syncResponse);
+        mMailboxSync.saveSyncTree(syncResponse, token);
         initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
-        mMailboxSync.recordSyncComplete(token);
+        mMailboxSync.recordInitialSyncComplete(token);
         OfflineLog.offline.debug("ending initial sync");
 
         return token;
@@ -179,18 +181,37 @@ public class InitialSync {
         String token = syncResponse.getAttribute(MailConstants.A_TOKEN);
         interrupted = true;
 
+        lastPeek = System.currentTimeMillis();
+        
         OfflineLog.offline.debug("resuming initial sync");
         initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
-        mMailboxSync.recordSyncComplete(token);
+        mMailboxSync.recordInitialSyncComplete(token);
         OfflineLog.offline.debug("ending initial sync");
 
         return token;
+    }
+    
+    private long lastPeek;
+    private void peekForward() throws ServiceException {
+    	assert (!mMailboxSync.isInitialSyncComplete());
+    	
+    	PushChanges.sendPendingMessages(ombx, false);
+    	
+    	if (System.currentTimeMillis() - lastPeek > ombx.getSyncFrequency()) {
+    		getDeltaSync().sync();
+    		lastPeek = System.currentTimeMillis();
+    	}
+    }
+    
+    private void checkpoint(int id) throws ServiceException {
+    	mMailboxSync.checkpointItem(id);
+    	peekForward();
     }
 
     static final Set<String> KNOWN_FOLDER_TYPES = new HashSet<String>(Arrays.asList(
             MailConstants.E_FOLDER, MailConstants.E_SEARCH
     ));
-
+    
     private void initialFolderSync(Element elt) throws ServiceException {
         int folderId = (int) elt.getAttributeLong(MailConstants.A_ID);
         if (mMailboxSync.isFolderDone(folderId))
@@ -234,7 +255,7 @@ public class InitialSync {
 		                try {
 		                	syncCalendarItem(id, folderId, true);
 		                    if (++counter % 100 == 0)
-		                        mMailboxSync.checkpointItem(id);
+		                    	checkpoint(id);
 		                } catch (Throwable t) {
 		                	OfflineLog.offline.warn("failed to sync appointment id=" + id, t);
 		                }
@@ -268,7 +289,7 @@ public class InitialSync {
 		                try {
 		                	syncCalendarItem(id, folderId, false);
 		                    if (++counter % 100 == 0)
-		                        mMailboxSync.checkpointItem(id);
+		                    	checkpoint(id);
 		                } catch (Throwable t) {
 		                	OfflineLog.offline.warn("failed to sync task id=" + id, t);
 		                }
@@ -352,6 +373,7 @@ public class InitialSync {
         }
 
         mMailboxSync.checkpointFolder(folderId);
+        peekForward();
     }
     
     private void prioritySync(Element elt, int priorityFolderId) throws ServiceException {
@@ -363,9 +385,6 @@ public class InitialSync {
     }
 
     private boolean isAlreadySynced(int id, byte type, boolean isDeltaSync) throws ServiceException {
-        if (!isDeltaSync && !interrupted)
-            return false;
-
         try {
             ombx.getItemById(sContext, id, type);
             return true;
@@ -392,13 +411,13 @@ public class InitialSync {
             if (ombx.getRemoteServerVersion().getMajor() < 5 || batchSize == 1) {
                 syncMessage(id, folderId, type);
                 if (++counter % 100 == 0 && !isDeltaSync)
-                    mMailboxSync.checkpointItem(id);
+                    checkpoint(id);
             } else {
                 itemList.add(id);
                 if ((++counter % batchSize) == 0) {
                     syncMessages(itemList, type);
                     if (!isDeltaSync)
-                    	mMailboxSync.checkpointItem(id);
+                    	checkpoint(id);
                     itemList.clear();
                 }
             }

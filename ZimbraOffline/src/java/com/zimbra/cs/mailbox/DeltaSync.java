@@ -75,10 +75,9 @@ public class DeltaSync {
         return new DeltaSync(ombx).sync();
     }
 
-    private String sync() throws ServiceException {
+    String sync() throws ServiceException {
         String oldToken = mMailboxSync.getSyncToken();
-        if (oldToken == null)
-            oldToken = InitialSync.sync(ombx);
+        assert (oldToken != null);
 
         Element response;
         String newToken;
@@ -101,8 +100,16 @@ public class DeltaSync {
     }
 
     private void deltaSync(Element response) throws ServiceException {
+    	boolean isInitSyncDone = mMailboxSync.isInitialSyncComplete();
+    	
         // make sure to handle deletes first, as tags can reuse ids
-        Set<Integer> foldersToDelete = processLeafDeletes(response);
+    	Set<Integer> foldersToDelete = null;
+        Element delement = response.getOptionalElement(MailConstants.E_DELETED);
+        if (delement != null) {
+        	delement.detach();
+        	if (isInitSyncDone)
+        		foldersToDelete = processLeafDeletes(delement);
+        }
 
         // sync down metadata changes and note items that need to be downloaded in full
         Map<Integer, List<Integer>> messages = new HashMap<Integer, List<Integer>>(), chats = new HashMap<Integer, List<Integer>>();
@@ -118,6 +125,8 @@ public class DeltaSync {
             }
 
             int folderId = (id == Mailbox.ID_FOLDER_ROOT ? Mailbox.ID_FOLDER_ROOT : (int) change.getAttributeLong(MailConstants.A_FOLDER));
+            if (!isInitSyncDone && getFolder(folderId) == null)
+            	continue;
             boolean create = (change.getAttribute(MailConstants.A_FLAGS, null) == null);
 
             if (type.equals(MailConstants.E_MSG)) {
@@ -265,11 +274,11 @@ public class DeltaSync {
                 getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
         }
         
-        if (OfflineLC.zdesktop_sync_documents.booleanValue() && documents != null)
+        if (isInitSyncDone && OfflineLC.zdesktop_sync_documents.booleanValue() && documents != null)
         	syncDocuments(documents);
 
         // delete any deleted folders, starting from the bottom of the tree
-        if (foldersToDelete != null && !foldersToDelete.isEmpty()) {
+        if (isInitSyncDone && foldersToDelete != null && !foldersToDelete.isEmpty()) {
             synchronized (ombx) {
                 List<Folder> folders = ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy();
                 Collections.reverse(folders);
@@ -294,12 +303,7 @@ public class DeltaSync {
         }
     }
 
-    private Set<Integer> processLeafDeletes(Element response) throws ServiceException {
-        Element delement = response.getOptionalElement(MailConstants.E_DELETED);
-        if (delement == null)
-            return null;
-        delement.detach();
-
+    private Set<Integer> processLeafDeletes(Element delement) throws ServiceException {
         // sort the deleted items into a bucket of leaf nodes to delete now and a set of folders to delete later
         List<Integer> leafIds = new ArrayList<Integer>(), tagIds = new ArrayList<Integer>();
         Set<Integer> foldersToDelete = new HashSet<Integer>();
@@ -757,35 +761,6 @@ public class DeltaSync {
         OfflineLog.offline.debug("delta: updated contact (" + id + "): " + cn.getFileAsString());
     }
 
-//    void syncCalendarItem(Element elt, int folderId) throws ServiceException {
-//        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
-//        CalendarItem cal = null;
-//        try {
-//            // make sure that the item we're delta-syncing actually exists
-//            cal = ombx.getCalendarItemById(sContext, id);
-//        } catch (MailServiceException.NoSuchItemException nsie) {
-//            // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
-//            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_APPOINTMENT))
-//                return;
-//            getInitialSync().syncCalendarItem(id, folderId);
-//            return;
-//        }
-//
-//        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-//        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-//        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
-//
-//        int timestamp = (int) elt.getAttributeLong(MailConstants.A_CHANGE_DATE);
-//        int changeId = (int) elt.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
-//        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
-//        
-//        synchronized (ombx) {
-//            ombx.syncMetadata(sContext, id, MailItem.TYPE_APPOINTMENT, folderId, flags, tags, color);
-//            ombx.syncChangeIds(sContext, id, MailItem.TYPE_APPOINTMENT, date, -1, timestamp, changeId);
-//        }
-//        OfflineLog.offline.debug("delta: updated appointment (" + id + "): " + cal.getSubject());
-//    }
-    
     void syncMessage(Element elt, int folderId, byte type) throws ServiceException {
    		int id = (int) elt.getAttributeLong(MailConstants.A_ID);
     	try {

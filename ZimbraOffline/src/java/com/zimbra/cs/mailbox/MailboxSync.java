@@ -22,6 +22,7 @@ import java.util.Set;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
@@ -60,7 +61,7 @@ public class MailboxSync {
     private SyncStage mStage = SyncStage.BLANK;
     private Set<Long> mDoneFolders = new HashSet<Long>();
     private int mLastSyncedItem;
-    private String mSyncToken;
+    private String mSyncToken; //during initial sync, this token is set to the peek-forward delta token.  it's reset to initial token at the end of initial sync
     
     private OfflineMailbox ombx;
     
@@ -83,7 +84,7 @@ public class MailboxSync {
                     	
                         Metadata syncTree =ombx.getConfig(null, CONF_SYNCTREE);
                     	mSyncTree = Element.parseXML(syncTree.get(CKEY_SYNCRESP));
-                    	break;
+                    	//fall-thru
                     }
                     case SYNC: {
                     	mSyncToken = syncState.get(CKEY_TOKEN, null);
@@ -103,13 +104,13 @@ public class MailboxSync {
 	                    case INITIAL: {
 	                    	Element syncTree = Element.parseXML(config.get(FN_INITIAL));
                             int lastId = (int) config.getLong(FN_LAST_ID, 0);
-	                    	saveSyncTree(syncTree);
+	                    	saveSyncTree(syncTree, syncTree.getAttribute(MailConstants.A_TOKEN));
 	                    	checkpointItem(lastId);
 	                    	break;
 	                    }
 	                    case SYNC: {
 	                    	String token = config.get(FN_TOKEN, null);
-	                    	recordSyncComplete(token);
+	                    	recordInitialSyncComplete(token);
 	                    	break;
 	                    }
 	                }
@@ -150,7 +151,7 @@ public class MailboxSync {
                 if (mStage == SyncStage.RESET) {
                     String acctId = ombx.getAccountId();
                     ombx.deleteMailbox();
-                    Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(acctId);
+                    MailboxManager.getInstance().getMailboxByAccountId(acctId);
                     return; //new instance will kick off sync on its own schedule
                 }
                 
@@ -229,23 +230,26 @@ public class MailboxSync {
         return mLastSyncedItem;
     }
     
+    boolean isInitialSyncComplete() {
+    	return mStage == SyncStage.SYNC;
+    }
+    
     /**
      * Store initial sync response, only ever called once
      * @param syncResponse
+     * @param token token from initial sync response, which is the base for peek-forward delta
      * @throws ServiceException
      */
-    void saveSyncTree(Element syncResponse) throws ServiceException {
+    void saveSyncTree(Element syncResponse, String token) throws ServiceException {
     	Metadata syncTree = new Metadata().put(CKEY_SYNCRESP, syncResponse);
     	ombx.setConfig(null, CONF_SYNCTREE, syncTree);
-    	
-    	Metadata syncState = new Metadata().put(CKEY_STAGE, SyncStage.INITIAL);
-    	ombx.setConfig(null, CONF_SYNCSTATE, syncState);
     	
     	setStage(SyncStage.INITIAL);
     	mSyncTree = syncResponse;
     	mDoneFolders = new HashSet<Long>();
     	mLastSyncedItem = 0;
-    	mSyncToken = null;
+    	mSyncToken = token;
+    	checkpoint();
     }
     
     /**
@@ -255,12 +259,7 @@ public class MailboxSync {
      */
     void checkpointItem(int itemId) throws ServiceException {
     	mLastSyncedItem = itemId;
-
-    	Metadata syncState = new Metadata().put(CKEY_STAGE, SyncStage.INITIAL);
-    	if (mDoneFolders.size() > 0)
-	    	syncState.put(CKEY_DONE_FOLDERS, new MetadataList(new ArrayList<Long>(mDoneFolders)));
-    	syncState.put(CKEY_LASTID, itemId);
-    	ombx.setConfig(null, CONF_SYNCSTATE, syncState);
+    	checkpoint();
     }
     
     /**
@@ -271,21 +270,28 @@ public class MailboxSync {
     void checkpointFolder(int folderId) throws ServiceException {
     	mDoneFolders.add((long)folderId);
     	mLastSyncedItem = 0;
-    	
+    	checkpoint();
+    }
+    
+    private void checkpoint() throws ServiceException {
     	Metadata syncState = new Metadata().put(CKEY_STAGE, SyncStage.INITIAL);
-	   	syncState.put(CKEY_DONE_FOLDERS, new MetadataList(new ArrayList<Long>(mDoneFolders)));
-    	syncState.put(CKEY_LASTID, 0);
+    	if (mSyncToken != null)
+    		syncState.put(CKEY_TOKEN, mSyncToken);
+    	if (mDoneFolders.size() > 0)
+	    	syncState.put(CKEY_DONE_FOLDERS, new MetadataList(new ArrayList<Long>(mDoneFolders)));
+    	if (mLastSyncedItem > 0)
+    		syncState.put(CKEY_LASTID, mLastSyncedItem);
     	ombx.setConfig(null, CONF_SYNCSTATE, syncState);
     }
     
-
-    /** Stores the sync token from the last completed sync (initial or
-     *  delta).  As a side effect, sets the mailbox's {@link SyncStage}
-     *  to <tt>SYNC</tt>. */
-    void recordSyncComplete(String token) throws ServiceException {
-        if (token == null)
-            throw ServiceException.FAILURE("null sync token passed to recordSyncComplete", null);
-
+    
+    /** Stores the sync token from initial sync.
+     *  As a side effect, sets the mailbox's {@link SyncStage}
+     *  to <tt>SYNC</tt>.
+     */
+    void recordInitialSyncComplete(String token) throws ServiceException {
+        setStage(SyncStage.SYNC);
+    	
         if (mSyncTree != null) {
             mSyncTree = null;
             ombx.setConfig(null, CONF_SYNCTREE, null);
@@ -293,10 +299,25 @@ public class MailboxSync {
         
         mDoneFolders.clear();
         mLastSyncedItem = 0;
+    	
+        recordSyncComplete(token);
+    }
+
+    /**
+     * Stores the sync token from delta sync.
+     * @param token
+     * @throws ServiceException
+     */
+    void recordSyncComplete(String token) throws ServiceException {
+        if (token == null)
+            throw ServiceException.FAILURE("null sync token passed to recordSyncComplete", null);
+
         mSyncToken = token;
-        Metadata syncState = new Metadata().put(CKEY_STAGE, SyncStage.SYNC).put(CKEY_TOKEN, token);
-        ombx.setConfig(null, CONF_SYNCSTATE, syncState);
-        setStage(SyncStage.SYNC);
+        
+        if (mStage == SyncStage.SYNC)
+        	ombx.setConfig(null, CONF_SYNCSTATE, new Metadata().put(CKEY_STAGE, SyncStage.SYNC).put(CKEY_TOKEN, token));
+        else
+        	checkpoint(); //called by completion of peek-forward delta
     }
     
     private void setStage(SyncStage stage) throws ServiceException {

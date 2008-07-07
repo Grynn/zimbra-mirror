@@ -100,7 +100,12 @@ public class OfflineMailbox extends DesktopMailbox {
 	
     public long getSyncFrequency() throws ServiceException {
         long syncFreq = getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
-        return syncFreq > 0 ? syncFreq : OfflineConstants.DEFAULT_SYNC_FREQ;
+        if (syncFreq > 0)
+        	return syncFreq;
+        else if (syncFreq == 0)
+        	return OfflineConstants.MIN_SYNC_FREQ;
+        else
+        	return OfflineConstants.DEFAULT_SYNC_FREQ;
     }
     
     public boolean isPushEnabled() throws ServiceException {
