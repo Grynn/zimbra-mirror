@@ -416,7 +416,7 @@
 		<copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
 		<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
 			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="mysql*.jar" />
-			<fileset file="${jars.dir}/derby.jar"/>
+			<fileset file="${common.jars.dir}/derby.jar"/>
 			<fileset refid="jaxws.jars"/>
 		</copy>
 		<copy tofile="${dist.dir}/jetty/lib/log4j-1.2.8.jar" file="${common.jars.dir}/log4j-1.2.8.jar" overwrite="true" />
@@ -426,7 +426,7 @@
 			<fileset dir="${src.db.dir}" includes="*.sql" />
 		</copy>
 
-		<copy tofile="${dist.dir}/lib/derbytools.jar" file="tools/lib/derbytools.jar" overwrite="true" />
+		<copy tofile="${dist.dir}/lib/derbytools.jar" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true" />
 		<copy tofile="${dist.dir}/lib/zdesktop.jar" file="${build.dir}/zdesktop.jar" overwrite="true" />
 	</target>
 
