@@ -37,6 +37,8 @@ public class ZCallHitBean extends ZSearchHitBean {
 
     public String getDisplayCaller() { return mHit.getDisplayCaller(); }
 
+	public String getDisplayRecipient() { return mHit.getDisplayRecipient(); }
+
     public Date getDate() { return new Date(mHit.getDate()); }
 
     public long getDuration() { return mHit.getDuration(); }
