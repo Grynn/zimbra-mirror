@@ -133,7 +133,35 @@ public class ZJspSession {
 
         return query.length() > 0 ? "?" + query.toString()  : "";
     }
+    
+    private static String getRedirect(HttpServletRequest request,
+                                      String protoHostPort,
+                                      String path,
+                                      Map<String,String> paramsToAdd,
+                                      Set<String> paramsToRemove)
+    {
+        if (path == null || path.equals(""))
+            path = "/";
+        
+        String contextPath = request.getContextPath();
+        if(contextPath.equals("/")) contextPath = "";
+        
+        String qs = generateQueryString(request, paramsToAdd, paramsToRemove);
+        
+        return protoHostPort + contextPath + path + qs;
+    }
 
+    private static String getRedirectToHostHeader(HttpServletRequest request,
+                                                  String proto,
+                                                  String path,
+                                                  Map<String,String> paramsToAdd,
+                                                  Set<String> paramsToRemove)
+    {
+        String protoHostPort = proto + "://" + request.getHeader("Host");
+        return getRedirect(request, protoHostPort, path, paramsToAdd, paramsToRemove);
+    }
+
+    
     private static String getRedirect(HttpServletRequest request,
                                       String proto,
                                       String host,
@@ -141,23 +169,17 @@ public class ZJspSession {
                                       Map<String,String> paramsToAdd,
                                       Set<String> paramsToRemove)
     {
-        if (path == null || path.equals(""))
-            path = "/";
-
-        String contextPath = request.getContextPath();
-        if(contextPath.equals("/")) contextPath = "";
-
-        String qs = generateQueryString(request, paramsToAdd, paramsToRemove);
-
+        String port;
         if (proto.equals(PROTO_HTTPS)) {
-            String httpsPort = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
-            return PROTO_HTTPS + "://" + host + httpsPort + contextPath + path + qs;
+            port = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
         } else if (proto.equals(PROTO_HTTP)) {
-            String httpPort = (sHttpPort != null && sHttpPort.equals(DEFAULT_HTTP_PORT)) ? "" : ":" + sHttpPort;
-            return PROTO_HTTP + "://" + host + httpPort + contextPath + path + qs;
+            port = (sHttpPort != null && sHttpPort.equals(DEFAULT_HTTP_PORT)) ? "" : ":" + sHttpPort;
         } else {
             return null;
         }
+        
+        String protoHostPort = proto + "://" + host + port;
+        return getRedirect(request, protoHostPort, path, paramsToAdd, paramsToRemove);
     }
     
     public static String getPostLoginRedirectUrl(PageContext context, String path, ZAuthResult authResult, boolean rememberMe, boolean needRefer) {
@@ -214,7 +236,10 @@ public class ZJspSession {
             toRemove.add(Q_ZREMBERME);
         }
 
-        return getRedirect(request, proto, host, path, toAdd, toRemove);
+        if (needsAuthtokenRemoved && !hasIniitMode && !needRefer)
+            return getRedirectToHostHeader(request, proto, path, toAdd, toRemove);
+        else
+            return getRedirect(request, proto, host, path, toAdd, toRemove);
     }
 
     public static String getChangePasswordUrl(PageContext context, String path) {
