@@ -59,7 +59,7 @@ public class VoiceMailComposeTag extends ZimbraSimpleTag {
             Object[] bodyArgs = {
                     hit.getDisplayCaller(),
                     BeanUtils.displayDuration(pageContext, hit.getDuration()),
-                    BeanUtils.displayMsgDate(pageContext, new Date(hit.getDate())),
+                    BeanUtils.displayVoiceDate(pageContext, new Date(hit.getDate())),
             };
             String body = I18nUtil.getLocalizedMessage(pageContext, "voiceMailBody", bodyArgs);
             mCompose.setContent(body);

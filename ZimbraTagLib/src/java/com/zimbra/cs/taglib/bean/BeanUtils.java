@@ -376,6 +376,32 @@ public class BeanUtils {
         }
     }
 
+	public static String displayVoiceDate(PageContext pc, Date msg) throws ServiceException, JspException {
+		ZMailbox mbox = ZJspSession.getZMailbox(pc);
+		TimeZone tz = mbox.getPrefs().getTimeZone();
+		Calendar cal = Calendar.getInstance(tz);
+
+		long nowTime = cal.getTimeInMillis();
+		long msgTime = msg.getTime();
+
+		final int ONE_DAY = 24 * 3600000;
+		String resource;
+		if (nowTime - msgTime < ONE_DAY && cal.getTime().getDay() == msg.getDay()) {
+			resource = "ZM_formatVoiceDateToday";
+		} else if ((nowTime - msgTime) < (2 * ONE_DAY) && (new Date(nowTime - ONE_DAY).getDay()) == msg.getDay()) {
+			resource = "ZM_formatVoiceDateYesterday";
+		} else {
+			resource = "ZM_formatVoiceDate";
+		}
+
+		DateFormat df = (DateFormat) pc.getAttribute(resource, PageContext.REQUEST_SCOPE);
+		if (df == null) {
+			df = new SimpleDateFormat(I18nUtil.getLocalizedMessage(pc, resource));
+			pc.setAttribute(resource, df, PageContext.REQUEST_SCOPE);
+		}
+		return df.format(msg);
+	}
+
     public static String getAttr(PageContext pc, String attr) throws JspException, ServiceException {
         ZMailbox mbox = ZJspSession.getZMailbox(pc);
         List<String> val = mbox.getAccountInfo(false).getAttrs().get(attr);

@@ -5785,6 +5785,13 @@
     </function>
 
     <function>
+        <name>displayVoiceDate</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String
+            displayVoiceDate(javax.servlet.jsp.PageContext,java.util.Date)</function-signature>
+    </function>
+
+    <function>
         <name>displayDate</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String
