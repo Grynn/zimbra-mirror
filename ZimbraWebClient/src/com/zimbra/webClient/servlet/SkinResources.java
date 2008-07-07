@@ -192,9 +192,10 @@ public class SkinResources
 		String skin = getSkin(req);
 		String templates = req.getParameter(P_TEMPLATES);
 		if (templates == null) templates = V_TRUE;
+		String serverName = getServerName(req);
 
-        Locale locale = getLocale(req);
-        String cacheId = client + ":" + skin + "/templates=" + templates + ":" + browserType;
+		Locale locale = getLocale(req);
+        String cacheId = serverName + ":" + client + ":" + skin + "/templates=" + templates + ":" + browserType;
         if (type.equals(T_JAVASCRIPT) || type.equals(T_CSS)) {
             cacheId += ":" + locale;
         }
@@ -403,7 +404,7 @@ public class SkinResources
 		Map<String,String> substOverrides = null;
 		try {
 			Provisioning provisioning = Provisioning.getInstance();
-			String serverName = req.getServerName();
+			String serverName = getServerName(req);
 			Domain domain = provisioning.get(DomainBy.virtualHostname, serverName);
 			if (domain != null) {
 				substOverrides = new HashMap<String,String>();
@@ -682,6 +683,10 @@ public class SkinResources
     //
     // Private static functions
     //
+
+	private static String getServerName(HttpServletRequest req) {
+		return req.getServerName();
+	}
 
     /**
      * Return the request URI without any path parameters.
