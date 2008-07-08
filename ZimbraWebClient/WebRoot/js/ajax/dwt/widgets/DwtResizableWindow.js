@@ -38,6 +38,7 @@ DwtResizableWindow = function(parent, className) {
 	if (!className)
 		className = "DwtResizableWindow";
 
+	this._minimized = false;
 	this._minPos = null;
 	this._minSize = null;
 	this._maxPos = true;	// "true" means restrict to parent size
@@ -246,9 +247,38 @@ DwtResizableWindow.prototype.setMinSize = function(w, h) {
 	this._minSize = { x: w, y: h }; // let's keep using x and y for uniformity
 };
 
+DwtResizableWindow.prototype.minimize =
+function(minimize) {
+	if (minimize == this._minimized) {
+		return;
+	}
+	this._minimized = minimize;
+	if (minimize) {
+		this.delClassName(null, "Minimize");
+		var size = this._getMinimizedSize();
+		this._windowManager._onMinimize(this, size);
+	} else {
+		this.delClassName("Minimize", null);
+		this._windowManager._onRestore(this);
+	}
+};
 
+DwtResizableWindow.prototype.toggleMinimized =
+function() {
+	this.minimize(!this._minimized);
+};
+
+DwtResizableWindow.prototype.isMinimized =
+function() {
+	return this._minimized;
+};
 
 // Protected
+
+DwtResizableWindow.prototype._getMinimizedSize =
+function() {
+	return { x: 25, y: 150 };
+};
 
 DwtResizableWindow.prototype._getContentDiv = function() {
 	// BEWARE: don't mess with the HTML code above or this might not work correctly
@@ -295,7 +325,7 @@ DwtResizableWindow.prototype.__dlgMouseDown = function(ev) {
 };
 
 DwtResizableWindow.prototype.__handleMouseDown = function(ev, side) {
-	if (side != null) {
+	if (!this._minimized && (side != null)) {
 		DwtShell.getShell(window).getToolTip().popdown();
 		
 		Dwt.addClass(this.getHtmlElement(), "DwtResizableWindow-resizing");
@@ -468,6 +498,9 @@ function() {
 };
 
 DwtResizableWindow.prototype.__onDispose = function(ev) {
+	if (this._minimized) {
+		this._windowManager._onRestore(this, true);
+	}
 	this.popdown();
 };
 
@@ -491,11 +524,11 @@ DwtResizableWindow.__static_handleMouseDown = function(side, obj, ev) {
 		}
 		obj.__dlgMouseDown(ev);
 		obj.__handleMouseDown(mouseEv, side);
-        }
+	}
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
-        return false;
+	return false;
 };
 
 DwtResizableWindow.__static_dlgMouseDown = function(ev) {
@@ -561,6 +594,11 @@ DwtWindowManager = function(parent, zIndex) {
 
 DwtWindowManager.prototype = new DwtComposite;
 DwtWindowManager.prototype.constructor = DwtWindowManager;
+
+DwtWindowManager.prototype.toString =
+function() {
+    return "DwtWindowManager";
+};
 
 DwtWindowManager.prototype.getActiveWindow = function() {
 	return this.visible_windows.get(this.active_index);
@@ -709,3 +747,88 @@ DwtWindowManager.prototype.getSize = function() {
 DwtWindowManager.prototype.getBounds = function() {
 	return this.parent.getBounds();
 };
+
+DwtWindowManager.MINIMIZE_PADDING = 10;
+
+DwtWindowManager.prototype._onMinimize =
+function(drw, size) {
+	if (!this._minimized) {
+		this._minimized = [];
+		this._minimizedRight = 20;
+	}
+
+	var right = this._minimizedRight + DwtWindowManager.MINIMIZE_PADDING;
+	this._minimizedRight = right + size.x;
+
+	var minimizedData = {
+		window: drw,
+		minimizedSize: size,
+		minimizedRight: right,
+		position: this._getPosition(drw)
+	};
+	this._minimized.push(minimizedData);
+
+	var minimizePosition = {
+		size: size,
+		css: {
+			left: "auto",
+			top: "auto",
+			right: right,
+			bottom: "20px",
+			position: "fixed"
+		}
+	};
+	this._setPosition(drw, minimizePosition);
+};
+
+DwtWindowManager.prototype._onRestore =
+function(drw, disposing) {
+	var restoreData = null;
+	var restoreIndex = -1;
+	var shiftSize;
+	for (var i = 0, count = this._minimized.length; i < count; i++) {
+		var data = this._minimized[i];
+		if (!restoreData) {
+			if (data.window == drw) {
+				restoreData = data;
+				restoreIndex = i;
+				if (!disposing) {
+					this._setPosition(drw, restoreData.position);
+				}
+				shiftSize = restoreData.minimizedSize.x + DwtWindowManager.MINIMIZE_PADDING;
+				this._minimizedRight -= shiftSize;
+			}
+		} else {
+			data.minimizedRight -= shiftSize;
+			data.window.getHtmlElement().style.right = data.minimizedRight;
+		}
+	}
+	if (restoreIndex != -1) {
+		this._minimized.splice(restoreIndex, 1);
+	}
+};
+
+DwtWindowManager.prototype._setPosition =
+function(drw, position) {
+	drw.setSize(position.size.x, position.size.y);
+	var element = drw.getHtmlElement();
+	for (var name in position.css) {
+		element.style[name] = position.css[name];
+	}
+};
+
+DwtWindowManager.prototype._getPosition =
+function(drw) {
+	var result = {
+		size: drw.getSize(),
+		css: {}
+	};
+	var element = drw.getHtmlElement();
+	DwtResizableWindow._CSS_FIELDS = DwtResizableWindow._CSS_FIELDS || ["left", "top", "bottom", "right", "position"];
+	for (var i = 0, count = DwtResizableWindow._CSS_FIELDS.length; i < count; i++) {
+		var name = DwtResizableWindow._CSS_FIELDS[i];
+		result.css[name] = element.style[name];
+	}
+	return result;
+};
+
