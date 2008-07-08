@@ -360,7 +360,10 @@ public class XMPPPacketReader {
                     if ("jabber:client".equals(qname.getNamespaceURI()) ||
                             "jabber:server".equals(qname.getNamespaceURI()) ||
                             "jabber:connectionmanager".equals(qname.getNamespaceURI()) ||
-                            "jabber:component:accept".equals(qname.getNamespaceURI())) {
+                            "jabber:component:accept".equals(qname.getNamespaceURI()) ||
+                            "jabber:cloudrouting".equals(qname.getNamespaceURI())
+                    )
+                    {
                         newElement = df.createElement(pp.getName());
                     }
                     else {
@@ -437,9 +440,11 @@ public class XMPPPacketReader {
         // This avoids including "jabber:client", "jabber:server" or
         // "jabber:component:accept"
         if ("jabber:client".equals(qname.getNamespaceURI()) ||
-                "jabber:server".equals(qname.getNamespaceURI()) ||
-                "jabber:connectionmanager".equals(qname.getNamespaceURI()) ||
-                "jabber:component:accept".equals(qname.getNamespaceURI())) {
+                        "jabber:server".equals(qname.getNamespaceURI()) ||
+                        "jabber:connectionmanager".equals(qname.getNamespaceURI()) ||
+                        "jabber:component:accept".equals(qname.getNamespaceURI()) ||
+                        "jabber:cloudrouting".equals(qname.getNamespaceURI())
+        ) {
             newElement = df.createElement(pp.getName());
         }
         else {

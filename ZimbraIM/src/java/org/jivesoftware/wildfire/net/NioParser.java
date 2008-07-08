@@ -203,8 +203,14 @@ public class NioParser implements Application {
             if (n != null)
                 ns = n.getURI();
         }
-        if (!includeJabberNS && (ns == null || ns.equals("jabber:client") || ns.equals("jabber:server") ||
-                    ns.equals("jabber.connectionmanager") || ns.equals("jabber:component:accept"))) {
+        if (!includeJabberNS && (
+                        ns == null || 
+                        ns.equals("jabber:client") || 
+                        ns.equals("jabber:server") ||
+                        ns.equals("jabber.connectionmanager") || 
+                        ns.equals("jabber:component:accept")) ||
+                        ns.equals("jabber:cloudrouting")
+        ) {
             newElement = mDf.createElement(fullname);
         } else {
             QName qname;
