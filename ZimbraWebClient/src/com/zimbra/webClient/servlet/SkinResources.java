@@ -39,11 +39,14 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.*;
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.DomainBy;
+import com.zimbra.cs.account.soap.SoapProvisioning;
+import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.kabuki.util.Colors;
 
 import java.awt.Color;
@@ -403,9 +406,17 @@ public class SkinResources
 		// domain overrides
 		Map<String,String> substOverrides = null;
 		try {
-			Provisioning provisioning = Provisioning.getInstance();
+			SoapProvisioning provisioning = new SoapProvisioning();
+			String soapUri =
+				LC.zimbra_admin_service_scheme.value() +
+				LC.zimbra_zmprov_default_soap_server.value() +
+				':' +
+				LC.zimbra_admin_service_port.intValue() +
+				ZimbraServlet.ADMIN_SERVICE_URI
+			;
+			provisioning.soapSetURI(soapUri);
 			String serverName = getServerName(req);
-			Domain domain = provisioning.get(DomainBy.virtualHostname, serverName);
+			Domain domain = provisioning.getDomainInfo(DomainBy.virtualHostname, serverName);
 			if (domain != null) {
 				substOverrides = new HashMap<String,String>();
 				// colors
