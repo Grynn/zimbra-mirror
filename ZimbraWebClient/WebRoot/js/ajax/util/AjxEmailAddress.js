@@ -317,7 +317,8 @@ function(str) {
 AjxEmailAddress.prototype.toString =
 function() {
 	if (this.name && !this.isGroup) {
-		var name = this.name.replace(/"/g, '\\"', this.name);	// escape double quotes
+		var name = this.name.replace(/\\+"/g, '"');	// unescape double quotes (avoid double-escaping)
+		name = name.replace(/"/g, '\\"');			// escape double quotes
 		return ['"', name, '" <', this.address, ">"].join("");	// quote friendly part
 	} else {
 		return this.address;
