@@ -87,7 +87,7 @@ DwtResizableWindow.prototype.setView = function(newView) {
 		this._getContentDiv().appendChild(newView.getHtmlElement());
 };
 
-DwtResizableWindow.prototype.popup = function(pos) {
+DwtResizableWindow.prototype.popup = function(pos, inactive) {
 	if (!pos)
 		pos = this._loc;
 	if (!pos)
@@ -116,7 +116,9 @@ DwtResizableWindow.prototype.popup = function(pos) {
 	this.setLocation(pos.x, pos.y);
 	if (!wasVisible && this.isListenerRegistered(DwtEvent.POPUP))
 		this.notifyListeners(DwtEvent.POPUP, { dwtObj: this });
-	this.setActive(true);
+	if (!inactive) {
+		this.setActive(true);
+	}
 };
 
 DwtResizableWindow.prototype.popdown = function() {
@@ -622,7 +624,7 @@ DwtWindowManager.prototype.computeNewLoc = function() {
 };
 
 // call this BEFORE calling drw.popup() in order for the new window to be properly managed
-DwtWindowManager.prototype.manageWindow = function(drw, pos) {
+DwtWindowManager.prototype.manageWindow = function(drw, pos, inactive) {
 	if (!this.all_windows.contains(drw)) {
 		if (drw._windowManager)
 			drw._windowManager.unmanageWindow(drw);
@@ -637,7 +639,7 @@ DwtWindowManager.prototype.manageWindow = function(drw, pos) {
 		drw._windowManager = this;
 		if (pos == null)
 			pos = this.computeNewLoc(drw);
-		drw.popup(pos);
+		drw.popup(pos, inactive);
 	}
 };
 
