@@ -1432,7 +1432,7 @@ DwtControl.prototype.getToolTipContent =
 function() {
 	if (this._disposed) { return; }
 
-	return this.__toolTipContent;
+	return this.__toolTipCallback ? this.__toolTipCallback.run() : this.__toolTipContent;
 };
 
 /**
@@ -1444,6 +1444,18 @@ DwtControl.prototype.setToolTipContent =
 function(text) {
 	if (this._disposed) { return; }
 	this.__toolTipContent = text;
+};
+
+/**
+ * Sets a callback that will return the tooltip content for the control.
+ * The content may be plain text of HTML
+ *
+ * @param {AjxCallback} callback
+ */
+DwtControl.prototype.setToolTipCallback =
+function(callback) {
+	if (this._disposed) { return; }
+	this.__toolTipCallback = callback;
 };
 
 /**
@@ -2099,13 +2111,26 @@ function(ev) {
 	var obj = obj ? obj : DwtControl.getTargetControl(ev);
 	if (!obj) return false;
 
-	if (obj.__toolTipContent != null) {
+	if (obj.__hasToolTipContent()) {
 		var shell = DwtShell.getShell(window);
 		var manager = shell.getHoverMgr();
 		manager.setHoverOutListener(obj._hoverOutListener);
 		manager.hoverOut();
 		obj.__tooltipClosed = false;
 	}
+};
+
+/**
+ * @return true if the control does have tooltip content.
+ * @type Boolean
+ *
+ * @private
+ */
+DwtControl.prototype.__hasToolTipContent =
+function() {
+	if (this._disposed) { return false; }
+
+	return this.__toolTipCallback || this.__toolTipContent;
 };
 
 /**
@@ -2191,7 +2216,7 @@ function(ev, evType) {
 		}
 		// Call the tooltip after the listeners to give them a
 		// chance to change the tooltip text.
-		if (obj.__toolTipContent != null) {
+		if (obj.__hasToolTipContent()) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
 			if ((manager.getHoverObject() != this || !manager.isHovering()) && !DwtMenu.menuShowing()) {
@@ -2228,7 +2253,7 @@ function(ev) {
 
 	obj._focusByMouseDownEvent();
 
-	if (obj.__toolTipContent != null) {
+	if (obj.__hasToolTipContent()) {
 		var shell = DwtShell.getShell(window);
 		var manager = shell.getHoverMgr();
 		manager.setHoverOutListener(obj._hoverOutListener);
@@ -2290,7 +2315,7 @@ function(ev) {
 			   DwtControl.__DRAG_THRESHOLD
 			&& Math.abs(obj.__dragStartY - mouseEv.docY) <
 			   DwtControl.__DRAG_THRESHOLD)) {
-		if (obj.__toolTipContent != null) {
+		if (obj.__hasToolTipContent()) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
 			if (!manager.isHovering() && !obj.__tooltipClosed && !DwtMenu.menuShowing()) {
@@ -2512,7 +2537,7 @@ function(ev, evType) {
 		}
 	}
 
-	if (obj.__toolTipContent != null) {
+	if (obj.__hasToolTipContent()) {
 		var shell = DwtShell.getShell(window);
 		var manager = shell.getHoverMgr();
 		manager.setHoverOutListener(obj._hoverOutListener);
@@ -2692,7 +2717,7 @@ function(event) {
 	if (this._eventMgr.isListenerRegistered(DwtEvent.HOVEROVER)) {
 		this._eventMgr.notifyListeners(DwtEvent.HOVEROVER, event);
 	}
-	if (this.__toolTipContent != null) {
+	if (this.__hasToolTipContent()) {
 		var shell = DwtShell.getShell(window);
 		var tooltip = shell.getToolTip();
 		tooltip.setContent(this.getToolTipContent());
