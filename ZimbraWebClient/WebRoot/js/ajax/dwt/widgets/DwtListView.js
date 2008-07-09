@@ -2351,3 +2351,13 @@ DwtListHeaderItem = function(params) {
 };
 
 DwtListHeaderItem.PARAMS = ["id", "text", "icon", "width", "sortable", "resizeable", "visible", "name", "align", "noRemove", "view"];
+
+DwtListHeaderItem.sortCompare =
+function(a, b) {
+	return a._index < b._index ? -1 : (a._index > b._index ? 1 : 0);
+};
+
+DwtListHeaderItem.prototype.toString =
+function() {
+	return "DwtListHeaderItem";
+};
