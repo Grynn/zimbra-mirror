@@ -70,7 +70,7 @@ class ServerDialback {
     /**
      * Secret key to be used for encoding and decoding keys used for authentication.
      */
-    private static final String secretKey = StringUtils.randomString(10);
+//    private static final String secretKey = StringUtils.randomString(10);
 
     private static XmlPullParserFactory FACTORY = null;
 
@@ -250,7 +250,13 @@ class ServerDialback {
      */
     public boolean authenticateDomain(OutgoingServerSocketReader socketReader, String domain,
             String hostname, String id) {
-        String key = AuthFactory.createDigest(id, secretKey);
+//        String key = AuthFactory.createDigest(id, secretKey);
+        String key = "ERROR";
+        try {
+            key = AuthFactory.getServerDialbackHmac(id);
+        } catch (Exception e) {
+            Log.error("OS - Caught exception trying to generate server dialback key for "+id, e);
+        }
         Log.debug("OS - Sending dialback key ("+key+")to host: " + hostname + " id: " + id + " from domain: " +
                 domain);
 
@@ -705,7 +711,14 @@ class ServerDialback {
 
         // Verify the received key
         // Created the expected key based on the received ID value and the shared secret
-        String expectedKey = AuthFactory.createDigest(id, secretKey);
+//        String expectedKey = AuthFactory.createDigest(id, secretKey);
+        String expectedKey = "notset";
+        try {
+            expectedKey= AuthFactory.getServerDialbackHmac(id);
+        } catch (Exception e) {
+            Log.error("AS - Caught exception trying to generate expected server dialback key for "+id, e);
+        }
+        
        boolean verified = expectedKey.equals(key);
 //        boolean verified = true;
 

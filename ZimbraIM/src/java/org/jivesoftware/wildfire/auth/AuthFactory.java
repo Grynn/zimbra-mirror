@@ -65,6 +65,10 @@ public class AuthFactory {
             Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
         }
     }
+    
+    public static String getServerDialbackHmac(String data) throws Exception {
+        return authProvider.getServerDialbackHmac(data);
+    }
 
     /**
      * Returns the currently-installed AuthProvider. <b>Warning:</b> in virtually all

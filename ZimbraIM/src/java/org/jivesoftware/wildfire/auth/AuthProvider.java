@@ -36,6 +36,15 @@ import org.jivesoftware.wildfire.user.UserNotFoundException;
 public interface AuthProvider {
 
     /**
+     * Calculates the HMAC of the passed-in data for the Server Dialback protocol 
+     * using the current system-wide AuthTokenKey
+     * 
+     * @param data
+     * @return
+     */
+    String getServerDialbackHmac(String data) throws Exception; 
+    
+    /**
      * Returns true if this AuthProvider supports authentication using plain-text
      * passwords according to JEP--0078. Plain text authentication is not secure
      * and should generally only be used for a TLS/SSL connection.
