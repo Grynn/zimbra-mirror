@@ -33,7 +33,7 @@ DwtId = function() {}
 
 // separator for parts used in constructing IDs - need to pick one that
 // doesn't show up in any of the parts
-DwtId.SEP = "|";
+DwtId.SEP = "__";
 
 // widget types (used to prefix IDs)
 DwtId.WIDGET_LIST_VIEW		= "zl";			// list view
