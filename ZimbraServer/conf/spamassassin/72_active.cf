@@ -31,23 +31,23 @@ describe	APOSTROPHE_FROM	From address contains an apostrophe
 ##} APOSTROPHE_FROM
 
 ##{ AXB_XMID_1212
-header    	AXB_XMID_1212   		Message-Id =~ /^<[0-9]{12}\.[0-9]{12}\@/
-describe	AXB_XMID_1212			Barbera Fingerprint
+header          AXB_XMID_1212                   Message-Id =~ /^<[0-9]{12}\.[0-9]{12}\@/
+describe        AXB_XMID_1212                   Barbera Fingerprint
 ##} AXB_XMID_1212
 
 ##{ AXB_XMID_1510
-header     	AXB_XMID_1510    		Message-Id =~ /<[0-9A-F]{15}\.[0-9A-F]{10}\@/
-describe	AXB_XMID_1510			Brunello Fingerprint
+header          AXB_XMID_1510                   Message-Id =~ /<[0-9A-F]{15}\.[0-9A-F]{10}\@/
+describe        AXB_XMID_1510                   Brunello Fingerprint
 ##} AXB_XMID_1510
 
 ##{ AXB_XMID_OEGOESNULL
-header    	AXB_XMID_OEGOESNULL     	Message-ID =~ /^<[0-9-a-f]{12}\$[0-9-a-f]{8}\$[0]{8}\@/
-describe	AXB_XMID_OEGOESNULL		Amarone Fingerprint		
+header          AXB_XMID_OEGOESNULL             Message-ID =~ /^<[0-9-a-f]{12}\$[0-9-a-f]{8}\$[0]{8}\@/
+describe        AXB_XMID_OEGOESNULL             Amarone Fingerprint
 ##} AXB_XMID_OEGOESNULL
 
 ##{ AXB_XM_SENDMAIL_NOT
-header  	AXB_XM_SENDMAIL_NOT    		Received =~ /\([123456790]{1,2}\.[0-9]{1,2}\.[0-9]{1}\/[0-9]{1,2}\.[0-9]{2}\.[0-9]{1}\)/
-describe	AXB_XM_SENDMAIL_NOT		Nebbiolo fingerprint
+header          AXB_XM_SENDMAIL_NOT             Received =~ /\([123456790]{1,2}\.[0-9]{1,2}\.[0-9]{1}\/[0-9]{1,2}\.[0-9]{2}\.[0-9]{1}\)/
+describe        AXB_XM_SENDMAIL_NOT             Nebbiolo fingerprint
 ##} AXB_XM_SENDMAIL_NOT
 
 ##{ AXB_XR_STULDAP
@@ -55,8 +55,8 @@ header  AXB_XR_STULDAP     Received =~ /\(8\.12\.3 da nor stuldap\/8\.12\.3\)/
 ##} AXB_XR_STULDAP
 
 ##{ AXB_XTIDX_CHAIN
-header    	AXB_XTIDX_CHAIN     		Thread-Index =~ /(?:\*|\<\>|\)|\()/
-describe	AXB_XTIDX_CHAIN			Montepulciano Fingerprint
+header          AXB_XTIDX_CHAIN                 Thread-Index =~ /(?:\*|\<\>|\)|\()/
+describe        AXB_XTIDX_CHAIN                 Montepulciano Fingerprint
 ##} AXB_XTIDX_CHAIN
 
 ##{ BANKING_LAWS
@@ -109,19 +109,13 @@ body CURR_PRICE         /\bCurrent Price:/
 body DEAR_WINNER /\bdear.{1,20}winner/i
 ##} DEAR_WINNER
 
-##{ DNS_FROM_DOB
+##{ DNS_FROM_OPENWHOIS
 
 ifplugin Mail::SpamAssassin::Plugin::DNSEval
-header DNS_FROM_DOB             eval:check_rbl_envfrom('dob','dob.sibl.support-intelligence.net.')
-describe DNS_FROM_DOB           Sender from new domain (Day Old Bread)
-tflags DNS_FROM_DOB             net
-endif
-##} DNS_FROM_DOB
-
-##{ DNS_FROM_OPENWHOIS
 header          DNS_FROM_OPENWHOIS  eval:check_rbl_envfrom('openwhois', 'bl.open-whois.org.')
 describe        DNS_FROM_OPENWHOIS  Envelope sender listed in bl.open-whois.org.
 tflags          DNS_FROM_OPENWHOIS  net publish
+endif
 ##} DNS_FROM_OPENWHOIS
 
 ##{ DOS_FIX_MY_URI
@@ -241,7 +235,7 @@ describe FB_CAN_LONGER		Phrase: can last longer
 ##} FB_CAN_LONGER
 
 ##{ FB_CIALIS_LEO3
-body     FB_CIALIS_LEO3		/(?!CIALIS)C\s?[a-z]?\s?[Iitl1\\\/]\s?[a-z]?\s?[Aa]\s?[a-z]?\s?[LIl1\\\/]\s?[a-z]?\s?[ilIt1\\\/]\s?[a-z]?\s?[Ss]/
+body     FB_CIALIS_LEO3		/(?!CIALIS)\bC\s?[a-z]?\s?[Iitl1\\\/]\s?[a-z]?\s?[Aa]\s?[a-z]?\s?[LIl1\\\/]\s?[a-z]?\s?[ilIt1\\\/]\s?[a-z]?\s?[Ss]\b/
 describe FB_CIALIS_LEO3		Uses a mis-spelled version of cialis.
 ##} FB_CIALIS_LEO3
 
@@ -680,11 +674,6 @@ header   FH_XMAIL_RND_833	X-Mailer =~ /^[a-z]{3}\sv8\.3\.3\./
 describe FH_XMAIL_RND_833	Special X-Mailer Version
 ##} FH_XMAIL_RND_833
 
-##{ FM_DDDD_TIMES_2
-meta     FM_DDDD_TIMES_2	(FH_HELO_EQ_D_D_D_D && FH_HOST_EQ_D_D_D_D)
-describe FM_DDDD_TIMES_2	Dual helo + host eq d_d_d_d
-##} FM_DDDD_TIMES_2
-
 ##{ FM_DOESNT_SAY_STOCK
 meta     FM_DOESNT_SAY_STOCK	(__FB_S_SYMBOL && __FM_MY_PRICE && !__FB_S_STOCK && !__FS_S_TRADE)
 describe FM_DOESNT_SAY_STOCK	It's a stock spam but doesn't say stock
@@ -789,11 +778,6 @@ describe FM_SCHOOL_TYPES	Meta Combo Phrase for Schooling
 meta     FM_SEX_HELODDDD	(__SEX_WRDS && FH_HELO_EQ_D_D_D_D)
 describe FM_SEX_HELODDDD	Sex words + helo = dddd
 ##} FM_SEX_HELODDDD
-
-##{ FM_SEX_HOSTDDDD
-meta     FM_SEX_HOSTDDDD	(__SEX_WRDS && FH_HOST_EQ_D_D_D_D)
-describe FM_SEX_HOSTDDDD	Sex words + host = dddd
-##} FM_SEX_HOSTDDDD
 
 ##{ FM_SUBJ_APPROVE
 meta     FM_SUBJ_APPROVE	(__EXCLAIM_SUBJ && __SUBJ_APPROVE)
@@ -1198,6 +1182,7 @@ describe FS_TIP_DDD		Phrase: subject = tip ddd
 ##{ FS_WEIGHT_LOSS
 header   FS_WEIGHT_LOSS		Subject =~ /weight loss/i
 describe FS_WEIGHT_LOSS		Subject says Weight Loss
+score FS_WEIGHT_LOSS                 0.942 0.458 0.000 0.000
 ##} FS_WEIGHT_LOSS
 
 ##{ FS_WILL_HELP
@@ -1373,14 +1358,12 @@ meta JM_TORA_XM     (__MAILER_OL_6626 && __MOLE_2962 && __NAKED_TO)
 meta            KAM_LOTTO1      (__KAM_LOTTO1 + __KAM_LOTTO2 + __KAM_LOTTO3 + __KAM_LOTTO4 + __KAM_LOTTO5 + __KAM_LOTTO6 + __KAM_LOTTO7 >= 3)
 describe        KAM_LOTTO1      Likely to be a e-Lotto Scam Email
 #score           KAM_LOTTO1      0.5
-score KAM_LOTTO1                     1.000 1.569 0.000 0.000
 ##} KAM_LOTTO1
 
 ##{ KAM_LOTTO2
 meta            KAM_LOTTO2      (__KAM_LOTTO1 + __KAM_LOTTO2 + __KAM_LOTTO3 + __KAM_LOTTO4 + __KAM_LOTTO5 + __KAM_LOTTO6 + __KAM_LOTTO7 >= 4)
 describe        KAM_LOTTO2      Highly Likely to be a e-Lotto Scam Email
 #score           KAM_LOTTO2      1.0
-score KAM_LOTTO2                     1.000 1.190 0.000 0.000
 ##} KAM_LOTTO2
 
 ##{ KAM_LOTTO3
@@ -1453,11 +1436,6 @@ full NULL_IN_BODY	/\x00/
 describe NULL_IN_BODY   Message has NUL (ASCII 0) byte in message
 ##} NULL_IN_BODY
 
-##{ OUTLOOK_3416
-header OUTLOOK_3416     X-Mailer =~ /^Microsoft Outlook, Build 10\.0\.3416$/
-describe OUTLOOK_3416   Claims to be sent by an unusual build of Outlook (3416)
-##} OUTLOOK_3416
-
 ##{ PART_CID_STOCK
 
 ifplugin Mail::SpamAssassin::Plugin::MIMEHeader
@@ -1513,15 +1491,6 @@ describe RCVD_IN_DNSWL_MED	Sender listed at http://www.dnswl.org/, medium trust
 tflags RCVD_IN_DNSWL_MED	nice net
 endif
 ##} RCVD_IN_DNSWL_MED
-
-##{ RCVD_IN_DOB
-
-ifplugin Mail::SpamAssassin::Plugin::DNSEval
-header RCVD_IN_DOB              eval:check_rbl_sub('dob', '127.0.0.2')
-describe RCVD_IN_DOB            Received via relay in new domain (Day Old Bread)
-tflags RCVD_IN_DOB              net
-endif
-##} RCVD_IN_DOB
 
 ##{ RCVD_IN_IADB_DK
 
@@ -2061,10 +2030,7 @@ endif
 ##{ URIBL_RHS_AHBL
 
 ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-body            URIBL_RHS_AHBL  eval:check_uridnsbl('URIBL_RHS_AHBL')
-describe        URIBL_RHS_AHBL  Contains an URI listed in rhsbl.ahbl.org.
-tflags          URIBL_RHS_AHBL  net
-#score URIBL_RHS_AHBL                 0.000 0.001 0.000 0.000
+#reuse          URIBL_RHS_AHBL T_URIBL_RHS_AHBL
 endif
 ##} URIBL_RHS_AHBL
 
@@ -2608,10 +2574,6 @@ meta XMAILER_MIMEOLE_OL_BC7E6  (__XM_OL_BC7E6 && __MO_OL_BC7E6)
 meta XMAILER_MIMEOLE_OL_C65FA  (__XM_OL_C65FA && __MO_OL_C65FA)
 ##} XMAILER_MIMEOLE_OL_C65FA
 
-##{ XMAILER_MIMEOLE_OL_C9068
-meta XMAILER_MIMEOLE_OL_C9068  (__XM_OL_C9068 && __MO_OL_C9068)
-##} XMAILER_MIMEOLE_OL_C9068
-
 ##{ XMAILER_MIMEOLE_OL_CAC8F
 meta XMAILER_MIMEOLE_OL_CAC8F  (__XM_OL_CAC8F && __MO_OL_CAC8F)
 ##} XMAILER_MIMEOLE_OL_CAC8F
@@ -2643,6 +2605,37 @@ meta XMAILER_MIMEOLE_OL_F6D01  (__XM_OL_F6D01 && __MO_OL_F6D01)
 ##{ XMAILER_MIMEOLE_OL_FF5C8
 meta XMAILER_MIMEOLE_OL_FF5C8  (__XM_OL_FF5C8 && __MO_OL_FF5C8)
 ##} XMAILER_MIMEOLE_OL_FF5C8
+
+##{ if version >= 3.002004 ifplugin Mail::SpamAssassin::Plugin::DKIM _sandbox
+
+if version >= 3.002004
+ifplugin Mail::SpamAssassin::Plugin::DKIM
+priority T_NOTVALID_YAHOO	500
+priority T_NOTVALID_GMAIL	500
+priority T_NOTVALID_PAY	500
+def_whitelist_from_dkim  *@ebay.com
+def_whitelist_from_dkim  *@*.ebay.com
+def_whitelist_from_dkim  *@ebay.co.uk
+def_whitelist_from_dkim  *@*.ebay.co.uk
+def_whitelist_from_dkim  *@ebay.at
+def_whitelist_from_dkim  *@ebay.ca
+def_whitelist_from_dkim  *@ebay.de
+def_whitelist_from_dkim  *@ebay.fr
+def_whitelist_from_dkim  *@*.paypal.com
+def_whitelist_from_dkim  *@*.paypal.com	paypal.com
+def_whitelist_from_dkim  *@paypal.com
+def_whitelist_from_dkim  *@amazon.com
+def_whitelist_from_dkim  *@cisco.com
+def_whitelist_from_dkim  *@alert.bankofamerica.com
+def_whitelist_from_dkim  *@cnn.com
+def_whitelist_from_dkim  *@*.cnn.com
+def_whitelist_from_dkim  *@skype.net
+def_whitelist_from_dkim  *@welcome.skype.com
+def_whitelist_from_dkim  *@cc.yahoo-inc.com  yahoo-inc.com
+def_whitelist_from_dkim  *@cc.yahoo-inc.com
+endif
+endif
+##} if version >= 3.002004 ifplugin Mail::SpamAssassin::Plugin::DKIM _sandbox
 
 ##{ ifplugin Mail::SpamAssassin::Plugin::DNSEval _sandbox
 
@@ -2784,18 +2777,27 @@ endif
 ##{ ifplugin Mail::SpamAssassin::Plugin::URIDNSBL _sandbox
 
 ifplugin Mail::SpamAssassin::Plugin::URIDNSBL
-urirhsbl        URIBL_RHS_AHBL  rhsbl.ahbl.org. A
+#reuse URIBL_RHS_DOB
+urirhsbl        T_URIBL_RHS_AHBL  rhsbl.ahbl.org. A
 endif
 ##} ifplugin Mail::SpamAssassin::Plugin::URIDNSBL _sandbox
+
+##{ ifplugin Mail::SpamAssassin::Plugin::WLBLEval _sandbox
+
+ifplugin Mail::SpamAssassin::Plugin::WLBLEval
+def_whitelist_from_rcvd abuse@yahoo.com		 yahoo.com
+def_whitelist_from_rcvd MAILER-DAEMON@yahoo.com  yahoo.com
+endif
+##} ifplugin Mail::SpamAssassin::Plugin::WLBLEval _sandbox
 
 ##{ redirector_pattern_sandbox
 redirector_pattern m'/(?:index.php)?\?.*(?<=[?&])URL=(.*?)(?:$|[&\#])'i
 redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/url\?.*?(?<=[?&])q=(.*?)(?:$|[&\#])'i
-redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/search\?.*?(?<=[?&])q=[^&]*?(?<=%20|..[=+\s])site:(.*?)(?:$|%20|[\s+&\#])'i
+redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/search\?.*?(?<=[?&])q=[^&]*?(?<=%20|..[=+\s])(?:site|inurl):(.*?)(?:$|%20|[\s+&\#])'i
 redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/search\?.*?(?<=[?&])q=[^&]*?(?<=%20|..[=+\s])(?:"|%22)(.*?)(?:$|%22|["\s+&\#])'i
 redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/translate\?.*?(?<=[?&])u=(.*?)(?:$|[&\#])'i
+redirector_pattern m'^http:/*(?:\w+\.)?google(?:\.\w{2,3}){1,2}/pagead/iclk\?.*?(?<=[?&])adurl=(.*?)(?:$|[&\#])'i
 redirector_pattern m'^http:/*(?:\w+\.)?aol\.com/redir\.adp\?.*(?<=[?&])_url=(.*?)(?:$|[&\#])'i
-redirector_pattern m'^http:/*rd\.yahoo\.co\.jp/\*(.*)'i
 ##} redirector_pattern_sandbox
 
 
@@ -2973,7 +2975,6 @@ header __MO_OL_B4B40  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.41
 header __MO_OL_B9B11  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2462\.0000/
 header __MO_OL_BC7E6  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4927\.1200/
 header __MO_OL_C65FA  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.1700/
-header __MO_OL_C9068  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2800\.1807/
 header __MO_OL_CAC8F  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V4\.71\.1712\.3/
 header __MO_OL_CF0C0  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V5\.50\.4807\.2300/
 header __MO_OL_EF20B  X-MimeOLE =~ /Produced\ By\ Microsoft\ MimeOLE\ V6\.00\.2900\.2180/
@@ -3008,12 +3009,6 @@ body     __PREAPPROVEDFVGT	/pre-approved/i
 ifplugin Mail::SpamAssassin::Plugin::DNSEval
 header	__RCVD_IN_DNSWL		eval:check_rbl('dnswl-firsttrusted', 'list.dnswl.org.')
 tflags	__RCVD_IN_DNSWL		nice net
-endif
-
-ifplugin Mail::SpamAssassin::Plugin::DNSEval
-header __RCVD_IN_DOB            eval:check_rbl('dob', 'dob.sibl.support-intelligence.net.', '255')
-describe __RCVD_IN_DOB          Received via relay in new domain (Day Old Bread)
-tflags __RCVD_IN_DOB            net
 endif
 meta     __SEX_WRDS		(__WORD_SEX || __WORD_CUM || __WORD_SPERM || __WORD_SLUTS || __WORD_RAPED)
 header   __SUBJ_3DIGIT		Subject =~ /\b\d{3}[^0-9]/
@@ -3104,7 +3099,6 @@ header __XM_OL_B4B40  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5
 header __XM_OL_B9B11  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2462\.0000/
 header __XM_OL_BC7E6  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.5510/
 header __XM_OL_C65FA  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
-header __XM_OL_C9068  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1478/
 header __XM_OL_CAC8F  X-Mailer =~ /Microsoft\ Outlook\ Express\ 4\.71\.1712\.3/
 header __XM_OL_CF0C0  X-Mailer =~ /Microsoft\ Office\ Outlook\,\ Build\ 11\.0\.6353/
 header __XM_OL_EF20B  X-Mailer =~ /Microsoft\ Outlook\ Express\ 6\.00\.2800\.1478/
