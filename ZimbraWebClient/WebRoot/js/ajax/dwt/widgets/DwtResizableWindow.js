@@ -275,6 +275,15 @@ function() {
 	return this._minimized;
 };
 
+DwtResizableWindow.prototype.showAlert =
+function(alert) {
+	if (alert) {
+		this.delClassName(null, "ZAlert");
+	} else {
+		this.delClassName("ZAlert", null);
+	}
+};
+
 // Protected
 
 DwtResizableWindow.prototype._getMinimizedSize =
