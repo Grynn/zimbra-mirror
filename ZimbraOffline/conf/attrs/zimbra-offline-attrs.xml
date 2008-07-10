@@ -142,4 +142,12 @@
   <desc>the account ID of the account for mailto handling</desc>
 </attr>
 
+<attr name="zimbraPrefMailToasterEnabled" type="boolean" cardinality="single" optionalIn="account" flags="accountInfo">
+  <desc>whether to enable toaster notification for new mail</desc>
+</attr>
+
+<attr name="zimbraPrefCalendarToasterEnabled" type="boolean" cardinality="single" optionalIn="account" flags="accountInfo">
+  <desc>whether to enable toaster notification for meeting reminders</desc>
+</attr>
+
 </attrs>
