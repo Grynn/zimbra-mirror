@@ -118,7 +118,9 @@ DwtPropertySheet.prototype._insertLabel = function(row, label, required) {
 DwtPropertySheet.prototype._insertValue = function(row, value, required) {
 	var valueCell = row.insertCell(-1);
 	valueCell.className = this._valueCssClass;
-	if (value instanceof DwtControl) {
+	if (!value) {
+		valueCell.innerHTML = "&nbsp;";
+	} else if (value instanceof DwtControl) {
 		valueCell.appendChild(value.getHtmlElement());
 	}
 	/**** NOTE: IE says Element is undefined
@@ -127,8 +129,7 @@ DwtPropertySheet.prototype._insertValue = function(row, value, required) {
 	else if (value.nodeType == AjxUtil.ELEMENT_NODE) {
 	/***/
 		valueCell.appendChild(value);
-	}
-	else {
+	} else {
 		valueCell.innerHTML = String(value);
 	}
 };
