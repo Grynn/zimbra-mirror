@@ -829,19 +829,17 @@
 		<copy todir="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org" overwrite="true">
 			<fileset dir="${build.dir}/prism" includes="*/**"/>
 		</copy>
-		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/webrunner.js" file="prism/win32/webrunner.js" overwrite="true"/>
 		<copy todir="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org" overwrite="true">
 			<fileset dir="${build.dir}/prism" includes="*/**"/>
 		</copy>
-		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/webrunner.js" file="prism/linux/webrunner.js" overwrite="true"/>
 
 		<replace file="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js" token="@target@" value="macos"/>
 		<replace file="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js" token="@target@" value="win32"/>
 		<replace file="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js" token="@target@" value="linux"/>
 
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
-		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
-		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/branding/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
+		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
 		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
