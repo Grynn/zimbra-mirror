@@ -91,8 +91,8 @@ class SyncExceptionHandler {
     	sb.append("Release type:    ").append(OfflineLC.zdesktop_relabel.value()).append("\n");
     	sb.append("OS Platform:     ").append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.arch")).append(" ").append(System.getProperty("os.version")).append("\n");
     	sb.append("Time of event:   ").append(timestamp).append("\n");
-    	sb.append("Issue type:      ").append(exception.getCode()).append("\n");
-    	sb.append("Issue summary:   ").append(error).append("\n\n");
+    	sb.append("Error type:      ").append(exception.getCode()).append("\n");
+    	sb.append("Error summary:   ").append(error).append("\n\n");
 
     	if (data != null) {
     		sb.append("----------------------------------------------------------------------------\n");
@@ -138,7 +138,7 @@ class SyncExceptionHandler {
     	sb.append(bao.toString());
     	sb.append("\n----------------------------------------------------------------------------\n");
 
-    	logSyncErrorMessage(dmbx, id, "zdesktop issue report (" + timestamp + "): " + exception.getCode(), sb.toString());
+    	logSyncErrorMessage(dmbx, id, "zdesktop error report (" + timestamp + "): " + exception.getCode(), sb.toString());
     	return sb.toString();
     }
     

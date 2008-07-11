@@ -16,7 +16,7 @@ import com.zimbra.cs.util.Zimbra;
 public abstract class DesktopMailbox extends Mailbox {
 
 	public static final String OUTBOX_PATH = "Outbox";
-	public static final String FAILURE_PATH = "Sync Failures";
+	public static final String FAILURE_PATH = "Error Reports";
 	public static final int ID_FOLDER_FAILURE = 252;
     public static final int ID_FOLDER_ARCHIVE = 253;
     public static final int ID_FOLDER_OUTBOX = 254;
