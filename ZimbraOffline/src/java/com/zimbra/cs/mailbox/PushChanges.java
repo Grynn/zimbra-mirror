@@ -414,7 +414,7 @@ public class PushChanges {
     /**
      * Before 5.0.8 there's a bug that makes simply streaming up message content broken
      */
-    private static final OfflineAccount.Version minServerVersionForUploadStreaming = new OfflineAccount.Version("5.0.8");
+    private static final OfflineAccount.Version minServerVersionForUploadStreaming = new OfflineAccount.Version("5.0.9");
     
     /** Uploads the given message to the remote server using file upload.
      *  We scale the allowed timeout with the size of the message -- a base
