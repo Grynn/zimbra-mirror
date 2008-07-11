@@ -18,6 +18,21 @@
 PRAGMA encoding = "UTF-8"%
 
 -- -----------------------------------------------------------------------
+-- mailbox statistics
+-- -----------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mailbox (
+   id                  INTEGER UNSIGNED NOT NULL PRIMARY KEY,
+   item_id_checkpoint  INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   contact_count       INTEGER UNSIGNED DEFAULT 0,
+   size_checkpoint     BIGINT UNSIGNED NOT NULL DEFAULT 0,
+   change_checkpoint   INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   last_soap_access    INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   new_messages        INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   idx_deferred_count  INTEGER UNSIGNED NOT NULL DEFAULT 0
+)%
+
+-- -----------------------------------------------------------------------
 -- items in mailboxes
 -- -----------------------------------------------------------------------
 
