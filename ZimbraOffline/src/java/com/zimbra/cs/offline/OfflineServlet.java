@@ -17,6 +17,7 @@
 
 package com.zimbra.cs.offline;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -31,6 +32,7 @@ import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.servlet.ZimbraServlet;
+import com.zimbra.cs.wiki.WikiUtil;
 import com.zimbra.cs.zclient.ZMailbox;
 
 
@@ -82,6 +84,9 @@ public class OfflineServlet extends HttpServlet {
 			OfflineDataSource.init();
 			OfflineProvisioning.getOfflineInstance().getLocalAccount();
 			OfflineSyncManager.getInstance().init();
+			WikiUtil wu = WikiUtil.getInstance();
+			wu.initDefaultWiki("local@host.local");
+			wu.startImport("local@host.local", "Template", new File("/opt/zimbra/zdesktop/wiki/Templates"));
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}

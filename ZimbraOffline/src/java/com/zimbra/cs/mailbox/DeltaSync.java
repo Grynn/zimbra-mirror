@@ -212,7 +212,7 @@ public class DeltaSync {
                 	continue;
             	
             	(tasks == null ? tasks = new HashMap<Integer,Integer>() : tasks).put(id, folderId);
-            } else if (type.equals(MailConstants.E_DOC)) {
+            } else if (type.equals(MailConstants.E_DOC) || type.equals(MailConstants.E_WIKIWORD)) {
                 if (!OfflineLC.zdesktop_sync_documents.booleanValue() ||
                 		!ombx.getRemoteServerVersion().isAtLeast(InitialSync.sMinDocumentSyncVersion))
             		continue;
@@ -221,7 +221,7 @@ public class DeltaSync {
                 	continue;
                 }
                 
-                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_DOCUMENT))
+                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_UNKNOWN))
                 	continue;
 
                 (documents == null ? documents = new ArrayList<Integer>() : documents).add(id);
@@ -808,25 +808,11 @@ public class DeltaSync {
     	StringBuilder query = null;
     	for (int docId : documents) {
     		if (query == null)
-    			query = new StringBuilder("item:{");
+    			query = new StringBuilder("list=");
     		else
     			query.append(",");
     		query.append(docId);
     	}
-    	query.append("}");
-        Element request = new Element.XMLElement(MailConstants.SEARCH_REQUEST);
-        request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024);  // XXX pagination
-        request.addAttribute(MailConstants.A_TYPES, "document");
-        request.addElement(MailConstants.E_QUERY).setText(query.toString());
-        if (ombx.getOfflineAccount().isDebugTraceEnabled())
-        	OfflineLog.response.debug(request);
-        
-        Element response = ombx.sendRequest(request);
-        
-        if (ombx.getOfflineAccount().isDebugTraceEnabled())
-        	OfflineLog.response.debug(response);
-        
-        for (Element doc : response.listElements(MailConstants.E_DOC))
-        	getInitialSync().syncDocument(doc);
+    	getInitialSync().syncDocument(query.toString());
     }
 }

@@ -272,6 +272,7 @@ public class PushChanges {
 	                        case MailItem.TYPE_MESSAGE:     syncMessage(id);      break;
 	                        case MailItem.TYPE_APPOINTMENT: syncCalendarItem(id, true); break;
 	                        case MailItem.TYPE_TASK:        syncCalendarItem(id, false); break;
+	                        case MailItem.TYPE_WIKI:
 	                        case MailItem.TYPE_DOCUMENT:    syncDocument(id);     break;
 	                    }
                 	} catch (ServiceException x) {
@@ -874,12 +875,13 @@ public class PushChanges {
 
     	String digest = item.getDigest();
     	String name = item.getName();
+    	byte type = item.getType();
     	if (item instanceof Document) {
     		if (!create)
     			checkDocumentSyncConflict(item);
     		Pair<Integer,Integer> resp = ombx.sendMailItem(item);
             if (create) {
-                if (!ombx.renumberItem(sContext, id, MailItem.TYPE_DOCUMENT, resp.getFirst(), resp.getSecond()))
+                if (!ombx.renumberItem(sContext, id, type, resp.getFirst(), resp.getSecond()))
                 	return true;
     		}
     		ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
