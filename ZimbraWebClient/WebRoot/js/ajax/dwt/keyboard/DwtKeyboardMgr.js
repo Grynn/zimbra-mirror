@@ -76,7 +76,7 @@ DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
  * 		- Esc
  * 		- Enter within a text input (but not a textarea)
  * 
- * @param ev	[Event]		key event
+ * @param ev	[DwtKeyEvent]		key event
  */
 DwtKeyboardMgr.isPossibleInputShortcut =
 function(ev) {
@@ -663,7 +663,7 @@ function(ev) {
 	// Filter out modifier keys. If we're in an input field, filter out legitimate input.
 	// (A shortcut from an input field must use a modifier key.)
 	if (DwtKeyMap.IS_MODIFIER[keyCode] || (!kbMgr.__dwtCtrlHasFocus && (kbMgr.__killKeySeqTimedActionId == -1) &&
-		DwtKeyMapMgr.isInputElement(ev.target) && !DwtKeyboardMgr.isPossibleInputShortcut(ev))) {
+		DwtKeyMapMgr.isInputElement(kev.target) && !DwtKeyboardMgr.isPossibleInputShortcut(kev))) {
 
 	 	return kbMgr.__processKeyEvent(ev, kev, true, DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED);
 	}
