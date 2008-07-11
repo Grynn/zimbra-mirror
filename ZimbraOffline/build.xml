@@ -713,7 +713,7 @@
 		<sequential>
 			<translate toDir="${build.dir}/prism/chrome/@{destlang}/branding" starttoken="@" endtoken="@"
 				bundle="src/installer/messages/ZiMsg" bundlelanguage="@{bndllang}" forceoverwrite="yes" srcencoding="ISO8859_1" destencoding="UTF8">
-				<fileset dir="prism/i18n" includes="*.dtd"/>
+				<fileset dir="prism/i18n" includes="*.dtd *.properties"/>
 			</translate>
 			<move file="${build.dir}/prism/chrome/@{destlang}/branding/webrunner.dtd" todir="${build.dir}/prism/chrome/@{destlang}"/>
 			<move file="${build.dir}/prism/chrome/@{destlang}/branding/about.dtd" todir="${build.dir}/prism/chrome/@{destlang}"/>			
