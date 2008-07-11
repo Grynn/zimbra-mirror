@@ -479,7 +479,7 @@ function() {
 	}
 
 	if (this._actionUrl) {
-		window.open(this._actionUrl, "_blank", "menubar=yes,resizable=yes,scrollbars=yes");
+		window.open(this._actionUrl, "_blank");
 	} else {
 		this.displayStatusMessage(ZmMsg.errorCreateUrl);
 	}
