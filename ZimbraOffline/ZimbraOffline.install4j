@@ -51,6 +51,7 @@
       <mountPoint id="235368" root="" location="zdesktop.webapp" mode="755" />
       <mountPoint id="271586" root="" location="profile" mode="755" />
       <mountPoint id="4668" root="" location="" mode="755" />
+      <mountPoint id="285127" root="" location="wiki" mode="755" />
     </mountPoints>
     <entries>
       <dirEntry mountPoint="66" file="./build/dist/jetty" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="*.zgz" dirMode="755">
@@ -87,6 +88,9 @@
         <exclude />
       </dirEntry>
       <fileEntry mountPoint="4668" file="./build/dist/README.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <dirEntry mountPoint="285127" file="./build/dist/wiki" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
+        <exclude />
+      </dirEntry>
     </entries>
     <components />
   </files>

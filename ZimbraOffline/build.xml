@@ -67,6 +67,8 @@
 	<property name="server.jarfile" location="${server.build.dir}/zimbrastore.jar" />
 	<property name="common.jarfile" location="${common.dir}/build/zimbracommon.jar" />
 
+	<property name="server.wiki.dir" location="${server.build.dir}/dist/wiki" />
+
 	<property name="ical4j.jar" value="ical4j-0.9.16-patched.jar" />
 
     <condition property="db-mysql">
@@ -428,6 +430,11 @@
 
 		<copy tofile="${dist.dir}/lib/derbytools.jar" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true" />
 		<copy tofile="${dist.dir}/lib/zdesktop.jar" file="${build.dir}/zdesktop.jar" overwrite="true" />
+
+		<mkdir dir="${dist.dir}/wiki/Template" />
+		<copy todir="${dist.dir}/wiki/Template" overwrite="true">
+			<fileset dir="${server.wiki.dir}/Template" />
+		</copy> 
 	</target>
 
 	<target name="offline-deploy-zimlets">
