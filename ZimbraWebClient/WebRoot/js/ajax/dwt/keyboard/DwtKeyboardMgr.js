@@ -451,6 +451,7 @@ function(ev) {
 	if (focusObj && focusObj.__doFocus && (typeof focusObj.__doFocus == "function")) {
 		focusObj.__doFocus();
 	}
+//	DBG.println("kbnav", "focus object: " + kbMgr.__focusObj);
 };
 
 /**
@@ -476,9 +477,10 @@ function(ev) {
 	 * broke the fact that when focus leaves the browser window, then returns, then
 	 * if a DwtControl had focus it will not get the appropriate highlight.
 	 */	
-	//kbMgr.__oldFocusObj = kbMgr.__focusObj = null;
+//	kbMgr.__oldFocusObj = kbMgr.__focusObj = null;
 	kbMgr.__oldFocusObj = null;
 	kbMgr.__dwtCtrlHasFocus = false;	
+//	DBG.println("kbnav", "focus object (blur): " + kbMgr.__focusObj);
 };
 
 
@@ -686,7 +688,8 @@ function(ev) {
 
 	// First see if the control that currently has focus can handle the key event
 	var obj = kbMgr.__focusObj;
-	if (obj && (obj.handleKeyAction)) {
+	if (obj && (obj.handleKeyAction) && (kbMgr.__dwtCtrlHasFocus || (obj.hasFocus && obj.hasFocus()))) {
+//		DBG.println("kbnav", obj + " has focus: " + obj.hasFocus());
 		handled = kbMgr.__dispatchKeyEvent(obj, kev);
 		while ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && obj.parent && obj.parent.getKeyMapName) {
 			obj = obj.parent;
@@ -784,5 +787,6 @@ function(ev, kev, propagate, status) {
 	kev._stopPropagation = !propagate;
 	kev._returnValue = propagate;
 	kev.setToDhtmlEvent(ev);
+//	DBG.println("kbnav", "key event returning: " + propagate);
 	return propagate;
 };

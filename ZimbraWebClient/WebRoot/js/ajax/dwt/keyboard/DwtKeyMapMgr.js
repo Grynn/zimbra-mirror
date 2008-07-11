@@ -203,6 +203,7 @@ function(mapName) {
  */
 DwtKeyMapMgr.isInputElement =
 function(element) {
+	if (!element) { return false; }
 	// Check designMode in case we're in an HTML editor iframe
 	var dm = element.ownerDocument ? element.ownerDocument.designMode : null;
 	if (dm && (dm.toLowerCase() == "on")) { return true; }
