@@ -793,7 +793,7 @@
 		<antcall target="offline-prism-exts-i18n"/>
 
 		<unzip src="${prism.src.dir}/prism-0708.macos.zip" dest="${dist.dir}/macos/prism" overwrite="true"/>
-		<unzip src="${prism.src.dir}/prism-0708.win32.zip" dest="${dist.dir}/win32/prism" overwrite="true"/>
+		<unzip src="${prism.src.dir}/prism-0710.win32.zip" dest="${dist.dir}/win32/prism" overwrite="true"/>
 		<unzip src="${prism.src.dir}/prism-0708.linux.zip" dest="${dist.dir}/linux/prism" overwrite="true"/>
 
 		<delete>
