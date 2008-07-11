@@ -367,7 +367,6 @@ function(list, defaultColumnSort) {
 	this.sortingEnabled = true;
 	this._resetList();
 	this._list = list;
-	this._now = new Date();
 	this.setUI(defaultColumnSort);
 }
 
@@ -387,11 +386,12 @@ function(defaultColumnSort, noResultsOk) {
 DwtListView.prototype._renderList =
 function(list, noResultsOk) {
 	if (list instanceof AjxVector && list.size()) {
+		var now = new Date();
 		var size = list.size();
 		var htmlArr = [];
 		for (var i = 0; i < size; i++) {
 			var item = list.get(i);
-			var div = this._createItemHtml(item, {now:this._now}, true, i);
+			var div = this._createItemHtml(item, {now:now}, true, i);
 			if (div) {
 				if (div instanceof Array) {
 					for (var j = 0; j < div.length; j++){
@@ -440,7 +440,7 @@ function(item, index, skipNotify) {
 	}
 
 	this._list.add(item, index);
-	var div = this._createItemHtml(item, {now:this._now});
+	var div = this._createItemHtml(item);
 	if (div) {
 		if (div instanceof Array) {
 			for (var j = 0; j < div.length; j++) {
@@ -863,7 +863,7 @@ function(list) {
 	var size = list.size();
 	for (var i = 0; i < size; i++) {
 		var item = list.get(i);
-		var div = this._createItemHtml(item, {now:this._now});
+		var div = this._createItemHtml(item);
 		if (div) {
 			this._addRow(div);
 		}
