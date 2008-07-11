@@ -1055,6 +1055,10 @@ public class ZMessageComposeBean {
             Date endDate = getUseInstance() ? new Date(getInstanceStartTime() + getInstanceDuration()) : appt.getComputedEndDate();
             Calendar endCalendar = Calendar.getInstance(apptTz);
             endCalendar.setTime(endDate);
+            if (getUseInstance() && appt.isAllDay()) {
+              endCalendar.add(Calendar.DATE, -1);
+              endDate = endCalendar.getTime();
+            }
 
             setEndDate(paramInit(req, ZComposeUploaderBean.F_endDate, df.format(endDate)));
 
