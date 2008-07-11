@@ -217,7 +217,9 @@ function() {
 DwtTreeItem.prototype.setImage =
 function(imageInfo) {
 	if (this._initialized) {
-		AjxImg.setImage(this._imageCell, imageInfo);
+		if (this._imageCell) {
+			AjxImg.setImage(this._imageCell, imageInfo);
+		}
 		this._imageInfo = imageInfo;
 	} else {
 		this._imageInfoParam = imageInfo;
