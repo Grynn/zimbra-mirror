@@ -19,7 +19,6 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -693,17 +692,11 @@ public class OfflineMailbox extends DesktopMailbox {
     public Pair<Integer,Integer> sendMailItem(MailItem item) throws ServiceException {
     	OfflineAccount acct = getOfflineAccount();
     	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ URLUtil.urlEscape(item.getPath());
-    	ArrayList<Header> headers = new ArrayList<Header>();
-    	if (item instanceof Document) {
-    		Document d = (Document) item;
-        	headers.add(new Header("Content-Type", d.getContentType()));
-    	}
     	try {
     		Pair<Header[], HttpInputStream> resp = 
-    			UserServlet.putRemoteResource(getAuthToken(), 
+    			UserServlet.putMailItem(getAuthToken(), 
     											 url, 
-    											 item.getContentStream(), 
-    											 headers.toArray(new Header[0]), 
+    											 item, 
     											 acct.getProxyHost(), 
     											 acct.getProxyPort(), 
     											 acct.getProxyUser(), 
