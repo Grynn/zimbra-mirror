@@ -112,7 +112,7 @@ public class InitialSync {
 		}
 	}
 	
-	static final OfflineAccount.Version sMinDocumentSyncVersion = new OfflineAccount.Version("5.0.6");
+	static final OfflineAccount.Version sMinDocumentSyncVersion = new OfflineAccount.Version("5.0.9");
 	
     static final String A_RELOCATED = "relocated";
 

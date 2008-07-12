@@ -125,6 +125,7 @@ public class PushChanges {
         MailItem.TYPE_CHAT, 
         MailItem.TYPE_APPOINTMENT,
         MailItem.TYPE_TASK,
+        MailItem.TYPE_WIKI,
         MailItem.TYPE_DOCUMENT
     };
 
@@ -138,6 +139,7 @@ public class PushChanges {
         MailItem.TYPE_CHAT, 
         MailItem.TYPE_APPOINTMENT,
         MailItem.TYPE_TASK,
+        MailItem.TYPE_WIKI,
         MailItem.TYPE_DOCUMENT
     ));
 

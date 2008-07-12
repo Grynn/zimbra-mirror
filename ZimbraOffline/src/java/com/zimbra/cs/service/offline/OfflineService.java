@@ -44,6 +44,13 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(MailConstants.IMPORT_DATA_REQUEST, new OfflineImportData());
         dispatcher.registerHandler(AccountConstants.GET_INFO_REQUEST, new OfflineGetInfo());
         
+        dispatcher.registerHandler(MailConstants.DIFF_DOCUMENT_REQUEST, new OfflineDocumentHandlers.DiffDocument());
+        dispatcher.registerHandler(MailConstants.LIST_DOCUMENT_REVISIONS_REQUEST, new OfflineDocumentHandlers.ListDocumentRevisions());
+        dispatcher.registerHandler(MailConstants.GET_WIKI_REQUEST, new OfflineDocumentHandlers.GetWiki());
+        dispatcher.registerHandler(MailConstants.SAVE_DOCUMENT_REQUEST, new OfflineDocumentHandlers.SaveDocument());
+        dispatcher.registerHandler(MailConstants.SAVE_WIKI_REQUEST, new OfflineDocumentHandlers.SaveWiki());
+        dispatcher.registerHandler(MailConstants.WIKI_ACTION_REQUEST, new OfflineDocumentHandlers.WikiAction());
+        
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());
     }
