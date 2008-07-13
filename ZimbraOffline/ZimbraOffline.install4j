@@ -50,8 +50,8 @@
       <mountPoint id="181404" root="" location="linux" mode="755" />
       <mountPoint id="235368" root="" location="zdesktop.webapp" mode="755" />
       <mountPoint id="271586" root="" location="profile" mode="755" />
-      <mountPoint id="4668" root="" location="" mode="755" />
       <mountPoint id="285127" root="" location="wiki" mode="755" />
+      <mountPoint id="4668" root="" location="" mode="755" />
     </mountPoints>
     <entries>
       <dirEntry mountPoint="66" file="./build/dist/jetty" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="*.zgz" dirMode="755">
@@ -87,10 +87,10 @@
       <dirEntry mountPoint="271586" file="./build/dist/profile" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="4668" file="./build/dist/README.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <dirEntry mountPoint="285127" file="./build/dist/wiki" overwrite="1" shared="false" mode="644" uninstallMode="2" excludeSuffixes="" dirMode="755">
         <exclude />
       </dirEntry>
+      <fileEntry mountPoint="4668" file="./build/dist/README.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
     </entries>
     <components />
   </files>
@@ -618,6 +618,31 @@ default:
                   </java>
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
+              </action>
+              <action name="macos uninstall symlink for older version" id="285294" beanClass="com.install4j.runtime.beans.actions.files.CreateSymlinkAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.CreateSymlinkAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>${installer:sys.installationDir}/Zimbra Desktop Uninstaller.app/Contents/MacOS/JavaApplicationStub</string>
+                        </object>
+                      </void>
+                      <void property="linkFile">
+                        <object class="java.io.File">
+                          <string>${installer:sys.installationDir}/uninstall</string>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>if (Util.isMacOS()) {
+    String installDir = context.getVariable("sys.installationDir").toString();
+    java.io.File uninstFile = new java.io.File(installDir + "/uninstall");
+    return !uninstFile.exists();
+} else {
+    return false;
+}</condition>
               </action>
               <action name="macos uninstaller" id="275895" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
                 <serializedBean>
