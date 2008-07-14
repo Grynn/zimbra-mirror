@@ -1182,6 +1182,17 @@ public class BeanUtils {
 		return 7 <= length && length <= 20 && sPHONE.matcher(number).matches();
 	}
 
+    private static Pattern sEMAIL_ADDRESS = Pattern.compile(".+@.+\\.[a-z]+");
+    public static boolean isValidEmailAddress(String email) {
+        Matcher m = sEMAIL_ADDRESS.matcher(email);                          
+        boolean matchFound = m.matches();
+        if(matchFound)
+           return true;
+        else
+            return false;
+
+    }
+
     public static boolean getIsMyCard(PageContext pc, String ids) throws ServiceException, JspException {
 		ZMailbox mbox = ZJspSession.getZMailbox(pc);
 		return mbox.getIsMyCard(ids);
