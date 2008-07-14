@@ -109,6 +109,8 @@ public class XmailBean extends FormBean {
 			    	addInvalid("port");
 				if (!isValidEmail(email))
 			    	addInvalid("email");
+
+				domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
 				
 				if (!isYmail()) {
 					if (!isValidHost(smtpHost))
@@ -140,7 +142,6 @@ public class XmailBean extends FormBean {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 			        
-			        domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
 			        
 			        if (!isYmail()) {
@@ -411,6 +412,6 @@ public class XmailBean extends FormBean {
 	}
 	
 	public boolean isYmail() {
-		return domain.equals("yahoo.com");
+		return domain != null && domain.equals("yahoo.com");
 	}
 }
