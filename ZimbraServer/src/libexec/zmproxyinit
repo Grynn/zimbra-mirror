@@ -40,8 +40,8 @@ my $PopEnabled="7110:110:7995:995";
 my $PopDisabled="110:7110:995:7995";
 my $WebEnabled="8080:80:8443:443";
 my $WebDisabled="80:0:443:0";
-my $storeMailMode="mixed";
-my $proxyMailMode="both";
+my $storeMailMode="http";
+my $proxyMailMode="http";
 
 our %options = ();
 our %loaded = ();
@@ -421,7 +421,7 @@ sub usage() {
   print "\t-r: Disable reverse proxy lookup target for store server.  Only valid with -d.  Be sure that you intend for all proxy function for the server to be disabled\n";
   print "\t-s: Set cleartext to FALSE (secure mode) on disable\n";
   print "\t-w: Toggle Web proxy portions\n";
-  print "\t-x: zimbraMailMode to use on disable (Default: mixed)\n";
+  print "\t-x: zimbraMailMode to use on disable (Default: http)\n";
   print "hostname is the value of the zimbra_server_hostname LC key for the server being modified.\n";
   print "Required options are -f by itself, or -f with -d or -e.\n";
   print "Note that -d or -e require one or both of -m and -w.\n"; 
@@ -436,8 +436,8 @@ sub usage() {
   print "-i default on disable: 143:7143:993:7993\n";
   print "-p default on enable: 7110:110:7995:995\n";
   print "-p default on disable: 110:7110:995:7995\n";
-  print "-x default on store disable: mixed\n";
-  print "-x default on proxy enable/disable: both\n";
+  print "-x default on store disable: http\n";
+  print "-x default on proxy enable/disable: http\n";
   print "\n\n";
   exit 1;
 }
