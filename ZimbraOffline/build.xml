@@ -413,9 +413,16 @@
 		<copy tofile="${dist.dir}/lib/derbytools.jar" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true" />
 		<copy tofile="${dist.dir}/lib/zdesktop.jar" file="${build.dir}/zdesktop.jar" overwrite="true" />
 
-		<mkdir dir="${dist.dir}/wiki/Template" />
-		<copy todir="${dist.dir}/wiki/Template" overwrite="true">
+	</target>
+
+	<target name="offline-deploy-templates">
+		<mkdir dir="${dist.dir}/wiki/Templates" />
+		<copy todir="${dist.dir}/wiki/Templates" overwrite="true">
 			<fileset dir="${server.wiki.dir}/Template" />
+		</copy> 
+		<mkdir dir="${zimbra.home.dir}/wiki/Templates" />
+		<copy todir="${zimbra.home.dir}/wiki/Templates" overwrite="true">
+			<fileset dir="${dist.dir}/wiki/Templates" />
 		</copy> 
 	</target>
 
@@ -587,6 +594,7 @@
 		</if>
 
 		<antcall target="offline-db-init" />
+		<antcall target="offline-deploy-templates" />
 
 	</target>
 
