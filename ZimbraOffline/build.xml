@@ -7,22 +7,22 @@
 	<property name="offline.name" value="Zimbra Desktop"/>
 	<condition property="offline.relabel" value="ALPHA">
 	    <not><isset property="offline.relabel"/></not>
-        </condition>                                                                           
+	</condition>                                                                           
 	<condition property="offline.version" value="0.1">
 	    <not><isset property="offline.version"/></not>
-        </condition>
+	</condition>
 	<condition property="offline.buildid" value="1">
 	    <not><isset property="offline.buildid"/></not>
-        </condition>
+	</condition>
 	<condition property="offline.aushost" value="http://localhost:7070">
 	    <not><isset property="offline.aushost"/></not>
-        </condition>
+	</condition>
 	<condition property="offline.auspath" value="/aus/zdesktop/update.php?chn=${offline.channel}&amp;ver=${offline.version}&amp;bid=${offline.buildid}&amp;bos=@target@&amp;loc=en-US">
 	    <not><isset property="offline.auspath"/></not>
-        </condition>
+	</condition>
 	<condition property="offline.aus_url" value="${offline.aushost}${offline.auspath}">
 	    <not><isset property="offline.aus_url"/></not>
-        </condition>
+	</condition>
 
 	<!-- Properties -->
 
@@ -33,8 +33,8 @@
 	<property name="jars.dir" location="jars" />
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
-        <property name="build.src.java.dir" location="${build.dir}/src/java" />
-        <property name="dist.dir" location="${build.dir}/dist" />
+	<property name="build.src.java.dir" location="${build.dir}/src/java" />
+	<property name="dist.dir" location="${build.dir}/dist" />
 	<property name="jetty.dir" location="${dist.dir}/jetty" />
 	<property name="zimlet.dir" location="../Zimlet/build/dist" />
 
@@ -71,19 +71,17 @@
 
 	<property name="ical4j.jar" value="ical4j-0.9.16-patched.jar" />
 
-    <condition property="db-mysql">
-		<isset property="env.ZIMBRA_OFFLINE_USE_MYSQL" />
+    <condition property="db-sqlite">
+		<isset property="env.ZIMBRA_OFFLINE_USE_SQLITE" />
 	</condition>
 	<condition property="db-derby">
-		<not>
-			<isset property="db-mysql" />
-		</not>
+		<not><isset property="db-sqlite"/></not>
 	</condition>
 
-	<condition property="src.db.dir" value="${src.dir}/db/derby" else="${src.dir}/db/mysql">
+	<condition property="src.db.dir" value="${src.dir}/db/derby" else="${src.dir}/db/sqlite">
 		<isset property="db-derby" />
 	</condition>
-	<condition property="server.db.dir" value="${server.src.dir}/db/derby" else="${server.src.dir}/db/mysql">
+	<condition property="server.db.dir" value="${server.src.dir}/db/derby" else="${server.src.dir}/db/sqlite">
 		<isset property="db-derby" />
 	</condition>
 
@@ -179,24 +177,8 @@
 		</classpath>
 	</taskdef>
 
-	<if>
-		<and>
-			<isset property="is-windows" />
-			<isset property="db-mysql" />
-		</and>
-		<then>
-			<pathconvert property="zimbra.index.dir" dirsep="\\">
-				<path location="${zimbra.home.dir}/index" />
-			</pathconvert>
-			<pathconvert property="zimbra.store.dir" dirsep="\\">
-				<path location="${zimbra.home.dir}/store" />
-			</pathconvert>
-		</then>
-		<else>
-			<property name="zimbra.index.dir" location="${zimbra.home.dir}/index" />
-			<property name="zimbra.store.dir" location="${zimbra.home.dir}/store" />
-		</else>
-	</if>
+	<property name="zimbra.index.dir" location="${zimbra.home.dir}/index" />
+	<property name="zimbra.store.dir" location="${zimbra.home.dir}/store" />
 
 	<!-- Targets -->
 	<target name="offline-build-init">
@@ -302,12 +284,12 @@
 		</copy>
 	</target>
 
-	<target name="offline-db-init" depends="offline-mysql-init,offline-derby-init" />
+	<target name="offline-db-init" depends="offline-sqlite-init,offline-derby-init" />
 
-	<target name="offline-mysql-init" if="db-mysql">
+	<target name="offline-sqlite-init" if="db-sqlite">
 		<echo>Setting store and index directories to '${zimbra.store.dir}' and '${zimbra.index.dir}'</echo>
-		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra" classpathref="offline.class.path" onerror="continue" keepformat="true" src="${server.db.dir}/dropdb.sql" />
-		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:7306/" userid="root" password="zimbra" classpathref="offline.class.path" onerror="abort" keepformat="true">
+		<sql driver="com.sqlite.jdbc.Driver" url="jdbc:sqlite://localhost:7306/" userid="root" password="zimbra" classpathref="offline.class.path" onerror="continue" keepformat="true" src="${server.db.dir}/dropdb.sql" />
+		<sql driver="com.sqlite.jdbc.Driver" url="jdbc:sqlite://localhost:7306/" userid="root" password="zimbra" classpathref="offline.class.path" onerror="abort" keepformat="true">
 			<transaction src="${server.db.dir}/db.sql" />
 			<transaction src="${src.db.dir}/directory.sql" />
 			<transaction src="${server.build.dir}/versions-init.sql" />
@@ -417,7 +399,7 @@
 
 		<copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
 		<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
-			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="mysql*.jar" />
+			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="sqlite*.jar,mysql*.jar" />
 			<fileset file="${common.jars.dir}/derby.jar"/>
 			<fileset refid="jaxws.jars"/>
 		</copy>
