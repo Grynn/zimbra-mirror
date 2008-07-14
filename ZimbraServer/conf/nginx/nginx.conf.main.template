@@ -29,3 +29,7 @@ events {
     worker_connections  ${main.connections};
 }
 
+# environment variables for worker processes
+# 
+env KRB5_CONFIG=${main.krb5conf};
+

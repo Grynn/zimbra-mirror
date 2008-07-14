@@ -53,6 +53,16 @@ mail
     master_auth_username    "${mail.duser}";
     master_auth_password    "${mail.dpasswd}";
 
+    # Default realm (kerberos)
+    # For GSSAPI authentication, when the server's realm is the same as 
+    # the default realm as defined in the default_realm variable in the 
+    # [libdefaults] section of krb5.conf, then in this case, the SASL 
+    # GSSAPI library strips off the realm portion from the authenticating
+    # principal. Therefore, the default realm name must be specified here
+    # so that NGINX can append it to the authenticating principal for GSSAPI
+    # 
+    default_realm           "${mail.defaultrealm}";
+
     # sasl_app_name
     # This is the application name which nginx will use when initializing
     # the SASL library using the call to sasl_server_init()
