@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -107,13 +109,15 @@ public class LocalMailbox extends DesktopMailbox {
         }
     }
     
-    /** Tracks messages that we've called SendMsg on but never got back a
+    /*
+     * Tracks messages that we've called SendMsg on but never got back a
      *  response.  This should help avoid duplicate sends when the connection
      *  goes away in the process of a SendMsg.<p>
      *  
      *  key: a String of the form <tt>account-id:message-id</tt><p>
      *  value: a Pair containing the content change ID and the "send UID"
-     *         used when the message was previously sent. */
+     *         used when the message was previously sent.
+     */
     private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
 
     private int sendPendingMessages(boolean isOnRequest) throws ServiceException {
@@ -123,7 +127,7 @@ public class LocalMailbox extends DesktopMailbox {
         for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
             int id = iterator.next();
         	
-            Message msg = null;
+            Message msg;
             try {
             	msg = getMessageById(context, id);
             } catch (NoSuchItemException x) { //message deleted
@@ -273,45 +277,61 @@ public class LocalMailbox extends DesktopMailbox {
     	}
     	return true;
     }
-    
-    @Override
-	protected void syncOnTimer() {
-    	sync(false);
-	}
 
-	private void syncAllLocalDataSources(boolean isOnRequest) throws ServiceException {
-    	OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-		List<DataSource> dataSources = prov.getAllDataSources(getAccount());
-		OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-		for (DataSource ds : dataSources) {
-	    	if (!isOnRequest) {
-		    	if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds) || !syncMan.retryOK(ds))
-		    		continue;
-		    	
-		    	long now = System.currentTimeMillis();
-		    	long syncFreq = ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
-		    	if (now - syncMan.getLastSyncTime(ds.getName()) < syncFreq)
-		    		continue;
-		    }
-			
-			try {
-				syncMan.syncStart(ds.getName());
-                                // Force a full sync if INBOX has not yet been successfully imported
-                                boolean inboxSynced = ds.hasSyncState(Mailbox.ID_FOLDER_INBOX);
-                                DataSourceManager.importData(ds, isOnRequest || !inboxSynced);
-				syncMan.syncComplete(ds.getName());
-                OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(System.currentTimeMillis()));
-			} catch (Exception x) {
-            	if (isDeleting())
-            		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", getAccountName());
-            	else
-            		syncMan.processSyncException(ds, x);
-			}
-		}
+    @Override
+    protected void syncOnTimer() {
+        sync(false);
     }
-	
-	private boolean mSyncRunning;
-	
+
+    private void syncAllLocalDataSources(boolean force, boolean isOnRequest) throws ServiceException {
+        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+        List<DataSource> dataSources = prov.getAllDataSources(getAccount());
+        OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
+        for (DataSource ds : dataSources) {
+            if (!force && !isOnRequest) {
+                if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds) || !syncMan.retryOK(ds))
+                    continue;
+
+                long now = System.currentTimeMillis();
+                long syncFreq = ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
+                if (now - syncMan.getLastSyncTime(ds.getName()) < syncFreq)
+                    continue;
+            }
+            try {
+                syncMan.syncStart(ds.getName());
+                importData(ds, isOnRequest);
+                syncMan.syncComplete(ds.getName());
+                OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(System.currentTimeMillis()));
+            } catch (Exception x) {
+                if (isDeleting())
+                    OfflineLog.offline.info("Mailbox \"%s\" is being deleted", getAccountName());
+                else
+                    syncMan.processSyncException(ds, x);
+            }
+        }
+    }
+
+    private static void importData(DataSource ds, boolean isOnRequest)
+        throws ServiceException {
+        // Force a full sync if INBOX has not yet been successfully imported
+        boolean inboxSynced = ds.hasSyncState(Mailbox.ID_FOLDER_INBOX);
+        boolean fullSync = isOnRequest || !inboxSynced;
+        if (fullSync) {
+            // Import all folders if full sync requested
+            DataSourceManager.importData(ds, null, true);
+        } else {
+            // Import only INBOX and SENT (if not save-to-sent) folders
+            List<Integer> folderIds = new ArrayList<Integer>(2);
+            folderIds.add(Mailbox.ID_FOLDER_INBOX);
+            if (!ds.isSaveToSent()) {
+                folderIds.add(Mailbox.ID_FOLDER_SENT);
+            }
+            DataSourceManager.importData(ds, folderIds, false);
+        }
+    }
+
+    private boolean mSyncRunning;
+
     private boolean lockMailboxToSync() {
     	if (isDeleting())
     		return false;
@@ -331,19 +351,19 @@ public class LocalMailbox extends DesktopMailbox {
     	assert mSyncRunning == true;
     	mSyncRunning = false;
     }
-    
+
     public void sync(boolean isOnRequest) {
-		if (lockMailboxToSync()) {
-			try {
-				int count = sendPendingMessages(isOnRequest);
-                                syncAllLocalDataSources(count > 0 ? true : isOnRequest);
-			} catch (Exception x) {
-				OfflineLog.offline.error("exception encountered during sync", x);
-			} finally {
-				unlockMailbox();
-			}
+        if (lockMailboxToSync()) {
+            try {
+                int count = sendPendingMessages(isOnRequest);
+                syncAllLocalDataSources(count > 0, isOnRequest);
+            } catch (Exception x) {
+                OfflineLog.offline.error("exception encountered during sync", x);
+            } finally {
+                unlockMailbox();
+            }
         } else if (isOnRequest) {
-        	OfflineLog.offline.debug("sync already in progress");
+            OfflineLog.offline.debug("sync already in progress");
         }
     }
 }

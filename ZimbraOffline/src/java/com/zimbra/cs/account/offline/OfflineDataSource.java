@@ -230,4 +230,9 @@ public class OfflineDataSource extends DataSource {
             return null;
         }
     }
+
+    @Override
+    public boolean isOffline() {
+        return true;
+    }
 }
