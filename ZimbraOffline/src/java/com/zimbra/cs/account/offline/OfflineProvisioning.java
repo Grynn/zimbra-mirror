@@ -1427,7 +1427,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 return getDefaultIdentity(account);
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.IDENTITY, account, A_offlineDn, key);
         } else if (keyType == IdentityBy.id) {
-            if (key.equalsIgnoreCase(account.getAttr(A_zimbraPrefIdentityId)))
+            if (key.equalsIgnoreCase(account.getId()))
                 return getDefaultIdentity(account);
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.IDENTITY, account, A_zimbraId, key);
         }
