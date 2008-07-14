@@ -12,6 +12,7 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.redolog.op.CreateFolder;
 import com.zimbra.cs.util.Zimbra;
+import com.zimbra.cs.util.ZimbraApplication;
 
 public abstract class DesktopMailbox extends Mailbox {
 
@@ -110,6 +111,8 @@ public abstract class DesktopMailbox extends Mailbox {
 		
 		currentTask = new TimerTask() {
 				public void run() {
+					if (ZimbraApplication.getInstance().isShutdown())
+						return;
 					try {
 						syncOnTimer();
 					} catch (Throwable e) { //don't let exceptions kill the timer

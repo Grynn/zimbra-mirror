@@ -44,6 +44,7 @@ import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.account.ModifyPrefs;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.Zimbra;
+import com.zimbra.cs.util.ZimbraApplication;
 import com.zimbra.cs.zclient.ZFilterRules;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
@@ -62,6 +63,8 @@ public class DirectorySync {
 	private DirectorySync() {
 		timer.schedule(new TimerTask() {
 				public void run() {
+					if (ZimbraApplication.getInstance().isShutdown())
+						return;
 					try {
 						syncAllAccounts(false);
 					} catch (Throwable e) { //don't let exceptions kill the timer
