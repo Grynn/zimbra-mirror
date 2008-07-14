@@ -682,8 +682,8 @@ sub readConfig {
           } else {
             $section->{config}->{postconf}->{$fields[1]}="$fields[2]";
           }
-		} elsif ($line =~ m/^PROXYGEN/) {
-		  logMsg(5, "Running zmproxyconf.");
+        } elsif ($line =~ m/^PROXYGEN/) {
+          logMsg(5, "Running zmproxyconfgen.");
         } elsif ($line =~ m/^if/) {
           if (checkConditional($fields[1], $fields[2])) {
             logMsg(4, "checkConditional $fields[1] $fields[2] is true");
