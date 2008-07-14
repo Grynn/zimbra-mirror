@@ -31,5 +31,7 @@ events {
 
 # environment variables for worker processes
 # 
-env KRB5_CONFIG=${main.krb5conf};
+
+# Kerberos 5 keytab location
+env KRB5_KTNAME=${main.krb5keytab};
 
