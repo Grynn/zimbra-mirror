@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.11";
+my $version = "1.12";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -32,7 +32,15 @@ my $TZTag="";
 #get script directory
 my $progdir = cwd;
 #keep log file in script directory
-my $logfilepath="/opt/zimbra/log";
+my $logfilepath;
+if ($DEBUG)
+{
+  $logfilepath="c:\\opt\\zimbra\\log";
+}
+else
+{
+  $logfilepath="/opt/zimbra/log";
+}
 my $logfilename = "icalmig.log";
 my $logfile;
 my $icalfile;
@@ -60,6 +68,10 @@ my $createPatternRRULE =1;
 my $useTZcomponent =0;
 #over write original file
 my $oworginalfile=0;
+#for non standard DTSTART (29805)
+my $nonStandardDTSTART=0;
+# for standard DTSTART(29743)
+my $StandardDTSTART=0;
 
 if ($#ARGV<0)
 {
@@ -109,10 +121,19 @@ while ($ARGV[0] =~ /^-(.+)/)
   {
     $logfilepath= shift;
   }
+  elsif (lc($switch) eq lc("nonStandardDTSTART"))
+  {
+    $nonStandardDTSTART=1;
+  }
+  elsif (lc($switch) eq lc("StandardDTSTART"))
+  {
+    $StandardDTSTART=1;
+  }
   else
   {
     print "\nNo such option '$switch'.\n\n";
     help();
+    exit;
   }
 }
 #call functions
@@ -132,6 +153,7 @@ sub help
   print "-exceptions  (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-patternrule (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-tz          (0-OFF 1-ON ) (DEFAULT: 0)\n";
+  print "-nonStandardDTSTART        (Default: 0)\n";
   print "-logpath <path>            (Default /opt/zimbra/log)\n";
   print "\n";
   
@@ -553,6 +575,7 @@ sub processfile
       my %ltd_exlist=(); my $lmt_listrec={};
       my $islocchanged=0; my $issmrychanged=0; my $isattndchanged=0;
       my $isrdtimeok=1;my $isdescchanged=0; my $isweekdayok=1;
+      my $isrdtdeleted=0;
       #iterate through all occurences
       my %heventdates=();
       foreach my $newrec (@newrecarr)
@@ -568,7 +591,87 @@ sub processfile
         #create sorted hash for recurrences else exceptions are created in random way and cannot be shown in UI
         push @{$srtd_newrecarr{$newrec->{'DTSTART'}}},$newrec;
       }#end foreach my $newrec
+      
       &print_srtdnewrecarr(%srtd_newrecarr);
+      
+      #get first event dates
+      my $key;
+      foreach $key (sort keys %heventdates)
+      {
+        $sEvDate = $key;
+        $eEvDate= $heventdates{$key}[0];
+        last;
+      }
+        
+      #check for nonStandardDTSTART
+      if ($nonStandardDTSTART)
+      {
+        #check if masterrec DTSTART is not equal to oldest RDATE.
+        #(29805)if so make oldest RDATE event as master and add master's DTSTART to rdate array.
+        if ($masterrec->{'DTSTART'} ne $sEvDate)
+        {
+          &log_message("WARNING:Masterrec DTSTART is not same as oldest RDATE.icalmig will adopt nonStandardDTSTART.");
+          my $mstrdtstart=$masterrec->{'DTSTART'};
+          my $mstrdtend=$masterrec->{'DTEND'};
+
+          #srdt_array modifications----->
+          #put old masterrec date in least DTSTART containing object
+          my $firstrec=$srtd_newrecarr{$sEvDate}[0];
+          my $frstrectstartdt= $firstrec->{'DTSTART'};
+          my $frstrecenddt=  $firstrec->{'DTEND'};
+          #delete it
+          delete ($srtd_newrecarr{$firstrec->{'DTSTART'}});
+          $firstrec->{'DTSTART'}=$mstrdtstart;
+          $firstrec->{'DTEND'}=$mstrdtend;
+          
+          #put least DTSTART/DTEND in masterrec
+          my $newmstrrec= $srtd_newrecarr{$mstrdtstart}[0];
+          #delete it
+          delete($srtd_newrecarr{$newmstrrec->{'DTSTART'}});
+          $newmstrrec->{'DTSTART'}=$frstrectstartdt;
+          $newmstrrec->{'DTEND'}=$frstrecenddt;
+          
+          #push modified instances
+          push @{$srtd_newrecarr{$firstrec->{'DTSTART'}}},$firstrec;
+          push @{$srtd_newrecarr{$newmstrrec->{'DTSTART'}}},$newmstrrec;
+          #srdt_modifications end--------<
+          
+          #rdarray modifications------->
+          my $rdarr;
+          $rdarr = ($masterrec->{'RDATE'});
+          #delete RDATE
+          $frstrectstartdt=~ s/DTSTART/RDATE/;
+          delete ($rdarr->{$frstrectstartdt});
+          #Add old masterrec date
+          $mstrdtstart=~ s/DTSTART/RDATE/;
+          push @{$rdarr->{$mstrdtstart}},$mstrdtstart;
+          &print_srtdnewrecarr(%srtd_newrecarr);
+        }
+      }
+      #will remove any RDATE occurences which are before master even DTSTART
+      elsif($StandardDTSTART)
+      {
+        #(29743)for making it RFC compliant, make masterrec as start event and delete older rdates from rdate array.
+        if ($masterrec->{'DTSTART'} ne $sEvDate)
+        {
+          my $mstrdtstart=$masterrec->{'DTSTART'};
+          $mstrdtstart=~ s/DTSTART/RDATE/;
+          my $rdarr;
+          $rdarr = ($masterrec->{'RDATE'});
+          for my $key ( sort keys %$rdarr)
+          {
+            if($key lt $mstrdtstart)
+            {
+              delete ($rdarr->{$key});
+              my $tdtdst= $key;
+              $tdtdst=~ s/RDATE/DTSTART/;
+              delete($srtd_newrecarr{$tdtdst});
+              $isrdtdeleted=1;
+            }
+          }#end for
+        }#end if
+      }#end else
+
 
       #Create master event
       if ($masterrec->{'MASTER_VEVENT'})
@@ -579,15 +682,7 @@ sub processfile
         @masterrecdata= @{$masterrec->{'RECDATA'}};
         my $isrruledone=0;
         my $IsfirstRdate=1; my $firstrdate=0; my $lastrdate=0;
-        my $key; my $val;
-        #get first event dates
-        foreach $key (sort keys %heventdates)
-        {
-          $sEvDate = $key;
-          $eEvDate= $heventdates{$key}[0];
-          last;
-        }
-
+        my $val;
         #write MasterEvent properties and modify needed values
         for(my $i=0; $i<$#masterrecdata+1; $i++)
         {
@@ -918,7 +1013,15 @@ sub processfile
           }
           elsif ($str =~/^DTSTART/)
           {
-            my $tzdtst= $sEvDate;
+            my $tzdtst;
+            if($isrdtdeleted)
+            {
+              $tzdtst=$str;
+            }
+            else
+            {
+              $tzdtst= $sEvDate;
+            }
             $orig_mstrsdt=$str;
             $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
             print_outfile("$tzdtst");
@@ -926,7 +1029,15 @@ sub processfile
           }
           elsif ($str =~/^DTEND/)
           {
-            my $tzdten= $eEvDate;#$str;
+            my $tzdten;
+            if($isrdtdeleted)
+            {
+              $tzdten=$str;
+            }
+            else
+            {
+              $tzdten= $eEvDate;#$str;
+            }
             $orig_mstredt=$str;
             $tzdten=~ s/DTEND/DTEND$TZTag/;
             print_outfile("$tzdten");
