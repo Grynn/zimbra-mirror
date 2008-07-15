@@ -3,9 +3,13 @@
   <directoryPresets config="./build/dist/jetty/common/lib" />
   <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.85" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
-      <principalLanguage id="en" customLocalizationFile="./src/installer/messages/ZiMsg.properties" />
+      <principalLanguage id="en_US" customLocalizationFile="./src/installer/messages/ZiMsg.properties" />
       <additionalLanguages>
         <language id="sv" customLocalizationFile="./src/installer/messages/ZiMsg_sv.properties" />
+        <language id="zh_CN" customLocalizationFile="./src/installer/messages/ZiMsg_zh_CN.properties" />
+        <language id="zh_HK" customLocalizationFile="./src/installer/messages/ZiMsg_zh_HK.properties" />
+        <language id="en_GB" customLocalizationFile="./src/installer/messages/ZiMsg_en_GB.properties" />
+        <language id="en_AU" customLocalizationFile="./src/installer/messages/ZiMsg_en_AU.properties" />
         <language id="pt_BR" customLocalizationFile="./src/installer/messages/ZiMsg_pt_BR.properties" />
         <language id="pl" customLocalizationFile="./src/installer/messages/ZiMsg_pl.properties" />
         <language id="es" customLocalizationFile="./src/installer/messages/ZiMsg_es.properties" />
@@ -17,8 +21,6 @@
         <language id="fr" customLocalizationFile="./src/installer/messages/ZiMsg_fr.properties" />
         <language id="nl" customLocalizationFile="./src/installer/messages/ZiMsg_nl.properties" />
         <language id="da" customLocalizationFile="./src/installer/messages/ZiMsg_da.properties" />
-        <language id="zh_TW" customLocalizationFile="./src/installer/messages/ZiMsg_zh_HK.properties" />
-        <language id="zh_CN" customLocalizationFile="./src/installer/messages/ZiMsg_zh_CN.properties" />
       </additionalLanguages>
     </languages>
     <searchSequence>
@@ -184,7 +186,6 @@
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
                             <string>org.apache.log4j.BasicConfigurator.configure();
-context.setVariable("languageId", context.getLanguageId());
 return true;</string>
                           </void>
                         </object>
@@ -293,65 +294,6 @@ return Boolean.FALSE;</string>
           </screen>
         </startup>
         <screens>
-          <screen name="Select en region" id="284858" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="3" finishScreen="false">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.screens.FormScreen">
-                  <void property="fillHorizontally">
-                    <boolean>false</boolean>
-                  </void>
-                  <void property="fillVertically">
-                    <boolean>false</boolean>
-                  </void>
-                  <void property="scrollable">
-                    <boolean>false</boolean>
-                  </void>
-                  <void property="subTitle">
-                    <string>${i18n:installer.PlsSelLang}</string>
-                  </void>
-                  <void property="title">
-                    <string>${i18n:installer.CountrySelect}</string>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition>return context.getLanguageId().equals("en");
-</condition>
-            <validation />
-            <preActivation />
-            <postActivation />
-            <actions />
-            <formComponents>
-              <formComponent name="" id="284859" beanClass="com.install4j.runtime.beans.formcomponents.DropdownListComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.DropdownListComponent">
-                      <void property="initiallySelectedIndex">
-                        <int>2</int>
-                      </void>
-                      <void property="listEntries">
-                        <array class="java.lang.String" length="3">
-                          <void index="0">
-                            <string>Australia</string>
-                          </void>
-                          <void index="1">
-                            <string>United Kingdom</string>
-                          </void>
-                          <void index="2">
-                            <string>United States</string>
-                          </void>
-                        </array>
-                      </void>
-                      <void property="variableName">
-                        <string>engRegion</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-              </formComponent>
-            </formComponents>
-          </screen>
           <screen name="" id="1" beanClass="com.install4j.runtime.beans.screens.WelcomeScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -374,21 +316,10 @@ return Boolean.FALSE;</string>
             </serializedBean>
             <condition />
             <validation />
-            <preActivation>if (context.getVariable("engRegion") != null) {
-    if ((java.lang.Integer)context.getVariable("engRegion") == 0) {
-        context.setVariable("languageId", "en-AU");    
-    } else if ((java.lang.Integer)context.getVariable("engRegion") == 1) {
-        context.setVariable("languageId", "en-GB"); 
-    } else {
-        context.setVariable("languageId", "en-US"); 
-    }
-} else {
-    String langid = (String)context.getVariable("languageId");
-    langid.replace('_', '-');
-    context.setVariable("languageId", langid);
-}
-context.setVariable("srcWebappJs", "zdesktop.webapp/locales/webapp_" + 
-    (String)context.getVariable("languageId") + ".js");
+            <preActivation>String langId = context.getLanguageId().replace('_', '-');
+context.setVariable("languageId", langId);
+
+context.setVariable("srcWebappJs", "zdesktop.webapp/locales/webapp_" + langId + ".js");
 
 String uninstMenuEnt = context.getMessage("UninstallerMenuEntry").replaceFirst("\\{0\\}", "Zimbra Desktop");
 context.setVariable("macUninstaller", uninstMenuEnt + ".app");

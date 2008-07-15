@@ -682,26 +682,26 @@
 		<translate-prism-webapp bndllang="fr"/>
 		<translate-prism-webapp bndllang="da"/>
 		<translate-prism-webapp bndllang="de"/>
-		<translate-prism-webapp bndllang="en-AU"/>
-		<translate-prism-webapp bndllang="en-GB"/>
+		<translate-prism-webapp bndllang="en_AU" destlang="en-AU"/>
+		<translate-prism-webapp bndllang="en_GB" destlang="en-GB"/>
 		<translate-prism-webapp bndllang="es"/>
 		<translate-prism-webapp bndllang="it"/>
 		<translate-prism-webapp bndllang="ja"/>
 		<translate-prism-webapp bndllang="ko"/>
 		<translate-prism-webapp bndllang="nl"/>
 		<translate-prism-webapp bndllang="pl"/>
-		<translate-prism-webapp bndllang="pt-BR"/>
+		<translate-prism-webapp bndllang="pt_BR" destlang="pt-BR"/>
 		<translate-prism-webapp bndllang="ru"/>
 		<translate-prism-webapp bndllang="sv"/>
-		<translate-prism-webapp bndllang="zh-CN"/>
-		<translate-prism-webapp bndllang="zh-HK"/>		
+		<translate-prism-webapp bndllang="zh_CN" destlang="zh-CN"/>
+		<translate-prism-webapp bndllang="zh_HK" destlang="zh-HK"/>		
 	</target>
 	
 	<macrodef name="translate-prism-exts">
 		<attribute name="bndllang"/> <attribute name="destlang" default="@{bndllang}"/>
 		<sequential>
 			<translate toDir="${build.dir}/prism/chrome/@{destlang}/branding" starttoken="@" endtoken="@"
-				bundle="src/installer/messages/ZiMsg" bundlelanguage="@{bndllang}" forceoverwrite="yes" srcencoding="ISO8859_1" destencoding="UTF8">
+				bundle="src/installer/messages_utf8/ZiMsg" bundlelanguage="@{bndllang}" forceoverwrite="yes" srcencoding="UTF8" destencoding="UTF8">
 				<fileset dir="prism/i18n" includes="*.dtd *.properties"/>
 			</translate>
 			<move file="${build.dir}/prism/chrome/@{destlang}/branding/webrunner.dtd" todir="${build.dir}/prism/chrome/@{destlang}"/>
@@ -710,6 +710,8 @@
 	</macrodef>
 
 	<target name="offline-prism-exts-i18n">
+		<native2ascii reverse="true" encoding="UTF8" src="src/installer/messages" dest="src/installer/messages_utf8" includes="*.properties" />
+
 		<translate-prism-exts bndllang="" destlang="en-US"/>
 		<translate-prism-exts bndllang="fr"/>
 		<translate-prism-exts bndllang="da"/>

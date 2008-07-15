@@ -6,15 +6,22 @@
 	<property name="media_macos" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_macos}"/>
 	<property name="media_linux" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_linux}"/>
 
-    	<property name="build.dir" location="../ZimbraBuild/i386" />
+	<property name="install4j.dir" value="/Applications/install4j 4.1"/>
+  	<property name="build.dir" location="../ZimbraBuild/i386" />
 
-	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="/Applications/install4j 4.1/bin/ant.jar"/>
+	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="${install4j.dir}/bin/ant.jar"/>
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
-                <classpath>
-                        <pathelement location="../ZimbraCommon/jars/ant-contrib-1.0b1.jar" />
-                </classpath>
-        </taskdef>
+		<classpath>
+			<pathelement location="../ZimbraCommon/jars/ant-contrib-1.0b1.jar" />
+		</classpath>
+	</taskdef>
+
+	<target name="installer-patch">
+		<copy todir="${install4j.dir}/resource/messages" overwrite="true">
+			<fileset dir="src/installer/install4j.patch" includes="*.utf8 languages"/>
+		</copy>	
+	</target>
 
 	<target name="installer-clean">
 		<delete dir="${build.dir}" includes="zdesktop*" />
@@ -39,6 +46,7 @@
         </target>
 
 	<target name="installer-make">
+		<antcall target="installer-patch"/>
         <ant dir="." target="offline-make-install-files" inheritAll="false"/>
         <antcall target="installer-pack-media-mac"/>
 
