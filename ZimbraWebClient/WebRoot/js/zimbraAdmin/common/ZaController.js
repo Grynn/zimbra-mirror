@@ -392,7 +392,10 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.NO_SUCH_DISTRIBUTION_LIST, ex, true);
 		} else if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 			this.popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS, ex, true);
-		} else if(ex.code == ZmCsfeException.VOLUME_NO_SUCH_PATH) {
+        }else if(ex.code == ZmCsfeException.ACCT_TOO_MANY_ACCOUNTS) {
+			this.popupErrorDialog(ZaMsg.ERROR_TOO_MANY_ACCOUNTS,
+                    ex, true);
+        } else if(ex.code == ZmCsfeException.VOLUME_NO_SUCH_PATH) {
 			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VOLUME_PATH, ex, true);
 		} else if(ex.code == ZmCsfeException.LICENSE_ERROR) {
 			this.popupErrorDialog(ZaMsg.ERROR_LICENSE, ex, true);
