@@ -85,7 +85,7 @@ DwtButton = function(params) {
 	if (events && events.length) {
 		this._setEventHdlrs(events);
 	}
-	this._listeners = params.listeners || DwtButton._listeners
+	this._listeners = params.listeners || DwtButton._listeners;
 	this._addMouseListeners();
 	this._ignoreInternalOverOut = true;
 	
