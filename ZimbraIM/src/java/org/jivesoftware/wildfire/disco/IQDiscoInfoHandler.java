@@ -19,7 +19,7 @@ package org.jivesoftware.wildfire.disco;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.wildfire.IQHandlerInfo;
 import org.jivesoftware.wildfire.SessionManager;
 import org.jivesoftware.wildfire.XMPPServer;
@@ -277,10 +277,8 @@ public class IQDiscoInfoHandler extends IQHandler {
                         if (identities.isEmpty()) {
                             Element identity = DocumentHelper.createElement("identity");
                             identity.addAttribute("category", "server");
-                            identity.addAttribute("name", JiveGlobals.getProperty(
-                                    "xmpp.server.name", "Wildfire Server"));
+                            identity.addAttribute("name", IMConfig.XMPP_SERVER_NAME.getString()); 
                             identity.addAttribute("type", "im");
-
                             identities.add(identity);
                         }
                     }

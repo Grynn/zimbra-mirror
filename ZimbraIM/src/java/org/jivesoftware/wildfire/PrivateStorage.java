@@ -24,7 +24,7 @@ import org.jivesoftware.wildfire.container.BasicModule;
 import org.jivesoftware.wildfire.event.UserEventListener;
 import org.jivesoftware.wildfire.event.UserEventDispatcher;
 import org.jivesoftware.wildfire.user.User;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 
@@ -58,8 +58,7 @@ public class PrivateStorage extends BasicModule implements UserEventListener {
     // use that to signal a delete but that optimization doesn't seem necessary.
     // private static final String DELETE_PRIVATE =
     //     "DELETE FROM jivePrivate WHERE userID=? AND name=? AND namespace=?";
-
-    private boolean enabled = JiveGlobals.getBooleanProperty("xmpp.privateStorageEnabled", true);
+    private boolean enabled = IMConfig.XMPP_PRIVATE_STORAGE_ENABLED.getBoolean();
 
     /**
      * Pool of SAX Readers. SAXReader is not thread safe so we need to have a pool of readers.
@@ -80,16 +79,6 @@ public class PrivateStorage extends BasicModule implements UserEventListener {
      */
     public boolean isEnabled() {
         return enabled;
-    }
-
-    /**
-     * Sets whether private storage is enabled.
-     *
-     * @param enabled true if this private store is enabled.
-     */
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-        JiveGlobals.setProperty("xmpp.privateStorageEnabled", Boolean.toString(enabled));
     }
 
     /**

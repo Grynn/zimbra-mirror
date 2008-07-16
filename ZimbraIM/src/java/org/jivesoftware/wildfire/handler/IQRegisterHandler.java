@@ -19,7 +19,7 @@ package org.jivesoftware.wildfire.handler;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.*;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
@@ -68,8 +68,6 @@ import java.util.Iterator;
  */
 public class IQRegisterHandler extends IQHandler implements ServerFeaturesProvider {
 
-    private static boolean registrationEnabled;
-    private static boolean canChangePassword;
     private static Element probeResult;
 
     private UserManager userManager;
@@ -138,10 +136,6 @@ public class IQRegisterHandler extends IQHandler implements ServerFeaturesProvid
             // Add the registration form to the probe result.
             probeResult.add(registrationForm.asXMLElement());
         }
-        // See if in-band registration should be enabled (default is true).
-        registrationEnabled = JiveGlobals.getBooleanProperty("register.inband", true);
-        // See if users can change their passwords (default is true).
-        canChangePassword = JiveGlobals.getBooleanProperty("register.password", true);
     }
 
     public IQ handleIQ(IQ packet) throws PacketException, UnauthorizedException {
@@ -161,7 +155,7 @@ public class IQRegisterHandler extends IQHandler implements ServerFeaturesProvid
         }
         if (IQ.Type.get.equals(packet.getType())) {
             // If inband registration is not allowed, return an error.
-            if (!registrationEnabled) {
+            if (!isInbandRegEnabled()) {
                 reply = IQ.createResultIQ(packet);
                 reply.setChildElement(packet.getChildElement().createCopy());
                 reply.setError(PacketError.Condition.forbidden);
@@ -216,7 +210,7 @@ public class IQRegisterHandler extends IQHandler implements ServerFeaturesProvid
                 Element iqElement = packet.getChildElement();
                 if (iqElement.element("remove") != null) {
                     // If inband registration is not allowed, return an error.
-                    if (!registrationEnabled) {
+                    if (!isInbandRegEnabled()) {
                         reply = IQ.createResultIQ(packet);
                         reply.setChildElement(packet.getChildElement().createCopy());
                         reply.setError(PacketError.Condition.forbidden);
@@ -300,14 +294,14 @@ public class IQRegisterHandler extends IQHandler implements ServerFeaturesProvid
                             onlyPassword = true;
                         }
                         // If users are not allowed to change their password, return an error.
-                        if (password != null && !canChangePassword) {
+                        if (password != null && !canChangePassword()) {
                             reply = IQ.createResultIQ(packet);
                             reply.setChildElement(packet.getChildElement().createCopy());
                             reply.setError(PacketError.Condition.forbidden);
                             return reply;
                         }
                         // If inband registration is not allowed, return an error.
-                        else if (!onlyPassword && !registrationEnabled) {
+                        else if (!onlyPassword && !isInbandRegEnabled()) {
                             reply = IQ.createResultIQ(packet);
                             reply.setChildElement(packet.getChildElement().createCopy());
                             reply.setError(PacketError.Condition.forbidden);
@@ -339,7 +333,7 @@ public class IQRegisterHandler extends IQHandler implements ServerFeaturesProvid
                     }
                     else {
                         // If inband registration is not allowed, return an error.
-                        if (!registrationEnabled) {
+                        if (!isInbandRegEnabled()) {
                             reply = IQ.createResultIQ(packet);
                             reply.setChildElement(packet.getChildElement().createCopy());
                             reply.setError(PacketError.Condition.forbidden);
@@ -404,21 +398,11 @@ public class IQRegisterHandler extends IQHandler implements ServerFeaturesProvid
     }
 
     public boolean isInbandRegEnabled() {
-        return registrationEnabled;
-    }
-
-    public void setInbandRegEnabled(boolean allowed) {
-        registrationEnabled = allowed;
-        JiveGlobals.setProperty("register.inband", registrationEnabled ? "true" : "false");
+        return IMConfig.REGISTER_INBAND.getBoolean();
     }
 
     public boolean canChangePassword() {
-        return canChangePassword;
-    }
-
-    public void setCanChangePassword(boolean allowed) {
-        canChangePassword = allowed;
-        JiveGlobals.setProperty("register.password", canChangePassword ? "true" : "false");
+        return IMConfig.REGISTER_PASSWORD.getBoolean();
     }
 
     public IQHandlerInfo getInfo() {

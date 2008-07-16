@@ -52,23 +52,6 @@ public interface XMPPServerInfo {
     public String getDefaultName();
 
     /**
-     * Set the server name (ip address or hostname). The server
-     * must be restarted for this change to take effect.
-     *
-     * @param serverName the server's name as an ip address or host name.
-     */
-    public void addName(String serverName);
-    
-    /**
-     * Set the server name (ip address or hostname). The server
-     * must be restarted for this change to take effect.
-     *
-     * @param serverName the server's name as an ip address or host name.
-     */
-    public void removeName(String serverName);
-    
-
-    /**
      * Obtain the date when the server was last started.
      *
      * @return the date the server was started or null if server has not been started.

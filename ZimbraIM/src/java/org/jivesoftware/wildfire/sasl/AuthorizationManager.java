@@ -17,7 +17,7 @@
 package org.jivesoftware.wildfire.sasl;
 
 import org.jivesoftware.util.ClassUtils;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class AuthorizationManager {
     private static AuthorizationManager instance = new AuthorizationManager();
 
     static {
-        String classList = JiveGlobals.getXMLProperty("provider.authorization.classList");
+        String classList = IMConfig.XMPP_AUTHPROVIDER_CLASSLIST.getString();
         if (classList != null) {
             StringTokenizer st = new StringTokenizer(classList, " ,\t\n\r\f");
             while (st.hasMoreTokens()) {

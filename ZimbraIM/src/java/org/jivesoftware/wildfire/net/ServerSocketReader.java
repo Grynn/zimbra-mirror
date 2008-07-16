@@ -18,11 +18,10 @@ package org.jivesoftware.wildfire.net;
 
 import org.apache.mina.common.IoSession;
 import org.dom4j.Element;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.PacketRouter;
 import org.jivesoftware.wildfire.RoutingTable;
-import org.jivesoftware.wildfire.XMPPServer;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.interceptor.PacketRejectedException;
 import org.jivesoftware.wildfire.server.DialbackCreatorSession;
@@ -47,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  * could be routed at the same time. To avoid creating new threads every time a packet is received
  * each <tt>ServerSocketReader</tt> instance uses a {@link ThreadPoolExecutor}. By default the
  * maximum number of threads that the executor may have is 50. However, this value may be modified
- * by changing the property <b>xmpp.server.processing.max.threads</b>.
+ * by changing the property <b>XMPP_SERVER_PROCESSING_MAX_THREADS</b>.
  *
  * @author Gaston Dombiak
  */
@@ -64,9 +63,9 @@ public class ServerSocketReader extends SocketReader {
         super(router, routingTable, socket, connection);
         // Create a pool of threads that will process received packets. If more threads are
         // required then the command will be executed on the SocketReader process
-        int coreThreads = JiveGlobals.getIntProperty("xmpp.server.processing.core.threads", 2);
-        int maxThreads = JiveGlobals.getIntProperty("xmpp.server.processing.max.threads", 50);
-        int queueSize = JiveGlobals.getIntProperty("xmpp.server.processing.queue", 50);
+        int coreThreads = IMConfig.XMPP_SERVER_PROCESSING_CORE_THREADS.getInt();
+        int maxThreads = IMConfig.XMPP_SERVER_PROCESSING_MAX_THREADS.getInt();
+        int queueSize = IMConfig.XMPP_SERVER_PROCESSING_QUEUE.getInt();
         threadPool =
             new ThreadPoolExecutor(coreThreads, maxThreads, 60, TimeUnit.SECONDS,
                         new LinkedBlockingQueue<Runnable>(queueSize),
@@ -78,9 +77,9 @@ public class ServerSocketReader extends SocketReader {
         super(router, routingTable, nioSocket, connection);
         // Create a pool of threads that will process received packets. If more threads are
         // required then the command will be executed on the SocketReader process
-        int coreThreads = JiveGlobals.getIntProperty("xmpp.server.processing.core.threads", 2);
-        int maxThreads = JiveGlobals.getIntProperty("xmpp.server.processing.max.threads", 50);
-        int queueSize = JiveGlobals.getIntProperty("xmpp.server.processing.queue", 50);
+        int coreThreads = IMConfig.XMPP_SERVER_PROCESSING_CORE_THREADS.getInt();
+        int maxThreads = IMConfig.XMPP_SERVER_PROCESSING_MAX_THREADS.getInt();
+        int queueSize = IMConfig.XMPP_SERVER_PROCESSING_QUEUE.getInt();
         threadPool =
             new ThreadPoolExecutor(coreThreads, maxThreads, 60, TimeUnit.SECONDS,
                         new LinkedBlockingQueue<Runnable>(queueSize),

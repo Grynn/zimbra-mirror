@@ -45,13 +45,6 @@ public interface AuditManager {
     boolean isEnabled();
 
     /**
-     * Turns auditing off or on for the manager as a whole.
-     *
-     * @param enabled true if auditing is enabled, false indicates no auditing will occur.
-     */
-    void setEnabled(boolean enabled);
-
-    /**
      * Factory method for creating auditors that are configured by this
      * audit manager.
      *
@@ -69,15 +62,6 @@ public interface AuditManager {
     int getMaxTotalSize();
 
     /**
-     * Sets the maximum size in megabytes that all audit log files may have. When the
-     * limit is reached oldest audit log files will be removed until total size is under
-     * the limit.
-     *
-     * @param size the maximum size of all audit logs in megabytes.
-     */
-    void setMaxTotalSize(int size);
-
-    /**
      * Obtain the maximum size of audit log files in megabytes.
      * Logs that exceed the max size will be rolled over to another
      * file.
@@ -85,13 +69,6 @@ public interface AuditManager {
      * @return the maximum size of an audit log in megabytes.
      */
     int getMaxFileSize();
-
-    /**
-     * Set the maximum size of audit log files in megabytes.
-     *
-     * @param size the maximum audit log file size in megabytes.
-     */
-    void setMaxFileSize(int size);
 
     /**
      * Returns the maximum number of days to keep audit information. Once the limit
@@ -104,14 +81,6 @@ public interface AuditManager {
     int getMaxDays();
 
     /**
-     * Set the the maximum number of days to keep audit information.
-     *
-     * @param count the maximum number of days to keep audit information
-     *        or -1 for unlimited
-     */
-    void setMaxDays(int count);
-
-    /**
      * Returns the time in milliseconds between successive executions of the task that will save
      * the queued audited packets to a permanent store.
      *
@@ -121,27 +90,11 @@ public interface AuditManager {
     int getLogTimeout();
 
     /**
-     * Sets the time in milliseconds between successive executions of the task that will save
-     * the queued audited packets to a permanent store.
-     *
-     * @param logTimeout the time in milliseconds between successive executions of the task that will save
-     *        the queued audited packets to a permanent store. 
-     */
-    void setLogTimeout(int logTimeout);
-
-    /**
      * Returns the absolute path to the directory where the audit log files will be saved.
      *
      * @return the absolute path to the directory where the audit log files will be saved.
      */
     String getLogDir();
-
-    /**
-     * Sets the absolute path to the directory where the audit log files will be saved.
-     *
-     * @param logDir the absolute path to the directory where the audit log files will be saved.
-     */
-    void setLogDir(String logDir);
 
     /**
      * <p>Determines if the server will audit all message packets.</p>
@@ -153,15 +106,6 @@ public interface AuditManager {
     boolean isAuditMessage();
 
     /**
-     * <p>Enables or disables the server auditing of all message packets.</p>
-     * <p>This is a speed optimization and convenience for logging all message packets
-     * rather than using an XPath expression.</p>
-     *
-     * @param enabled True if all messages are to be audited
-     */
-    void setAuditMessage(boolean enabled);
-
-    /**
      * <p>Determines if the server will audit all presence packets.</p>
      * <p>This is a speed optimization and convenience for logging all presence packets
      * rather than using an XPath expression.</p>
@@ -169,15 +113,6 @@ public interface AuditManager {
      * @return True if all presence are to be audited
      */
     boolean isAuditPresence();
-
-    /**
-     * <p>Enables or disables the server auditing of all presence packets.</p>
-     * <p>This is a speed optimization and convenience for logging all presence packets
-     * rather than using an XPath expression.</p>
-     *
-     * @param enabled True if all presence are to be audited
-     */
-    void setAuditPresence(boolean enabled);
 
     /**
      * <p>Determines if the server will audit all iq packets.</p>
@@ -189,15 +124,6 @@ public interface AuditManager {
     boolean isAuditIQ();
 
     /**
-     * Enables or disables the server auditing of all iq packets.
-     * This is a speed optimization and convenience for logging all iq packets
-     * rather than using an XPath expression.
-     *
-     * @param enabled true if all iq are to be audited.
-     */
-    void setAuditIQ(boolean enabled);
-
-    /**
      * Determines if the server will audit packets using XPath expressions.
      * XPath expressions provide a lot of power in specifying what is logged.
      * However, it is much more compute intensive than other techniques and requires
@@ -206,16 +132,6 @@ public interface AuditManager {
      * @return true if XPath expressions should be audited.
      */
     boolean isAuditXPath();
-
-    /**
-     * <p>Enables/disables server auditing of packets using XPath expressions.</p>
-     * <p>XPath expressions provide a lot of power in specifying what is logged.
-     * However, it is much more compute intensive than other techniques and requires
-     * all packets be transformed into DOM objects (which can be computationally expensive).</p>
-     *
-     * @param enabled true if XPath expressions should be audited
-     */
-    void setAuditXPath(boolean enabled);
 
     /**
      * Adds an XPath expression to be used for filtering packets to be audited.
@@ -244,14 +160,6 @@ public interface AuditManager {
      * @return An iterator of all XPath expressions the audit manager is using
      */
     Iterator getXPathFilters();
-
-    /**
-     * Sets the list of usernames that won't be audited. Packets sent or received by any of
-     * these users will be ignored by the auditor.
-     *
-     * @param usernames the list of usernames that won't be audited.
-     */
-    void setIgnoreList(Collection<String> usernames);
 
     /**
      * Returns the list of usernames that won't be audited. Packets sent or received by any of

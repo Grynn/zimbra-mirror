@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.database;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.XMPPServer;
@@ -72,7 +72,7 @@ public class SchemaManager {
             return checkSchema(con, "wildfire", DATABASE_VERSION,
                     new ResourceLoader() {
                         public InputStream loadResource(String resourceName) {
-                            File file = new File(JiveGlobals.getHomeDirectory() + File.separator +
+                            File file = new File(IMConfig.getHomeDirectory() + File.separator +
                                     "resources" + File.separator + "database", resourceName);
                             try {
                                 return new FileInputStream(file);
@@ -276,7 +276,7 @@ public class SchemaManager {
         InputStream resource = null;
         if ("wildfire".equals(schemaKey)) {
             // Resource will be like "/database/upgrade/6/wildfire_hsqldb.sql"
-            String path = JiveGlobals.getHomeDirectory() + File.separator + "resources" +
+            String path = IMConfig.getHomeDirectory() + File.separator + "resources" +
                     File.separator + "database" + File.separator + "upgrade" + File.separator +
                     upgradeVersion;
             String filename = schemaKey + "_" + DbConnectionManager.getDatabaseType() + ".sql";

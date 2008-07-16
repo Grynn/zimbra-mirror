@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.wildfire.server;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.ChannelHandler;
 import org.jivesoftware.wildfire.RoutableChannelHandler;
@@ -75,8 +75,8 @@ public class OutgoingSessionPromise implements RoutableChannelHandler {
     private void init() {
         routingTable = XMPPServer.getInstance().getRoutingTable();
         // Create a pool of threads that will process queued packets.
-        int maxThreads = JiveGlobals.getIntProperty("xmpp.server.outgoing.max.threads", 20);
-        int queueSize = JiveGlobals.getIntProperty("xmpp.server.outgoing.queue", 50);
+        int maxThreads = IMConfig.XMPP_SERVER_OUTGOING_MAX_THREADS.getInt();
+        int queueSize = IMConfig.XMPP_SERVER_OUTGOING_QUEUE.getInt();
         if (maxThreads < 10) {
             // Ensure that the max number of threads in the pool is at least 10
             maxThreads = 10;

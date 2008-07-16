@@ -19,7 +19,7 @@ package org.jivesoftware.wildfire.muc.spi;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.jivesoftware.util.FastDateFormat;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.*;
@@ -39,6 +39,9 @@ import org.jivesoftware.wildfire.stats.StatisticsManager;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.component.ComponentManager;
 import org.xmpp.packet.*;
+
+import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.StringUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -92,10 +95,7 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
      * Task that kicks idle users from the rooms.
      */
     private UserTimeoutTask userTimeoutTask;
-    /**
-     * The time to elapse between logging the room conversations.
-     */
-    private int log_timeout = 300000;
+    
     /**
      * The number of messages to log on each run of the logging process.
      */
@@ -141,21 +141,6 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
     private Timer timer = new Timer("MUC cleanup");
 
     /**
-     * Flag that indicates if the service should provide information about locked rooms when
-     * handling service discovery requests.
-     * Note: Setting this flag in false is not compliant with the spec. A user may try to join a
-     * locked room thinking that the room doesn't exist because the user didn't discover it before.
-     */
-    private boolean allowToDiscoverLockedRooms = true;
-
-    /**
-     * Returns the permission policy for creating rooms. A true value means that not anyone can
-     * create a room, only the JIDs listed in <code>allowedToCreate</code> are allowed to create
-     * rooms.
-     */
-    private boolean roomCreationRestricted = false;
-
-    /**
      * Bare jids of users that are allowed to create MUC rooms. An empty list means that anyone can 
      * create a room. 
      */
@@ -172,12 +157,6 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
      */
     private Queue<ConversationLogEntry> logQueue = new LinkedBlockingQueue<ConversationLogEntry>();
 
-    /**
-     * Max number of hours that a persistent room may be empty before the service removes the
-     * room from memory. Unloaded rooms will exist in the database and may be loaded by a user
-     * request. Default time limit is: 30 days.
-     */
-    private long emptyLimit = 30 * 24;
     /**
      * Task that removes rooms from memory that have been without activity for a period of time. A
      * room is considered without activity when no occupants are present in the room for a while.
@@ -198,11 +177,6 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
      * is reset each time the Statistic makes a sampling.
      */
     private AtomicLong outMessages = new AtomicLong(0);
-
-    /**
-     * Flag that indicates if MUC service is enabled.
-     */
-    private boolean serviceEnabled = true;
 
     /**
      * Create a new group chat server.
@@ -327,7 +301,7 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
 
     private void checkForTimedOutUsers() {
         // Do nothing if this feature is disabled (i.e USER_IDLE equals -1)
-        if (user_idle == -1) {
+        if (user_idle <= 0) {
             return;
         }
         final long deadline = System.currentTimeMillis() - user_idle;
@@ -430,7 +404,7 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
             }
         }
     }
-
+    
     public MUCRoom getChatRoom(String roomName, JID userjid) throws NotAllowedException {
         MUCRoom room;
         synchronized (roomName.intern()) {
@@ -450,7 +424,7 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
                     if (isRoomCreationRestricted() &&
                             !sysadmins.contains(userjid.toBareJID())) {
                         // The room creation is only allowed for certain JIDs
-                        if (!allowedToCreate.contains(userjid.toBareJID())) {
+                        if (!isUserAllowedToCreate(userjid.toBareJID())) {
                             // The user is not in the list of allowed JIDs to create a room so raise
                             // an exception
                             throw new NotAllowedException();
@@ -550,180 +524,64 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
         }
     }
 
-    public void setServiceName(String name) {
-        JiveGlobals.setProperty("xmpp.muc.service", name);
-    }
-
     /**
      * Returns the limit date after which rooms whithout activity will be removed from memory.
      *
      * @return the limit date after which rooms whithout activity will be removed from memory.
      */
     private Date getCleanupDate() {
-        return new Date(System.currentTimeMillis() - (emptyLimit * 3600000));
+        /**
+         * Max number of hours that a persistent room may be empty before the service removes the
+         * room from memory. Unloaded rooms will exist in the database and may be loaded by a user
+         * request. Default time limit is: 30 days.
+         */
+        long emptyMs = ((long)IMConfig.XMPP_MUC_UNLOAD_EMPTY_HOURS.getInt())*(Constants.MILLIS_PER_HOUR);
+        return new Date(System.currentTimeMillis() - emptyMs);
     }
 
-    public void setKickIdleUsersTimeout(int timeout) {
-        if (this.user_timeout == timeout) {
-            return;
-        }
-        // Cancel the existing task because the timeout has changed
-        if (userTimeoutTask != null) {
-            userTimeoutTask.cancel();
-        }
-        this.user_timeout = timeout;
-        // Create a new task and schedule it with the new timeout
-        userTimeoutTask = new UserTimeoutTask();
-        timer.schedule(userTimeoutTask, user_timeout, user_timeout);
-        // Set the new property value
-        JiveGlobals.setProperty("xmpp.muc.tasks.user.timeout", Integer.toString(timeout));
+    public boolean isSysadmin(String userJID) {
+        return sysadmins.contains(userJID.toLowerCase());
     }
 
-    public int getKickIdleUsersTimeout() {
-        return user_timeout;
+    public boolean isUserAllowedToCreate(String userJID) {
+        if (this.isRoomCreationRestricted())
+            return allowedToCreate.contains(userJID.toLowerCase());
+        else
+            return true;
     }
-
-    public void setUserIdleTime(int idleTime) {
-        if (this.user_idle == idleTime) {
-            return;
-        }
-        this.user_idle = idleTime;
-        // Set the new property value
-        JiveGlobals.setProperty("xmpp.muc.tasks.user.idle", Integer.toString(idleTime));
-    }
-
-    public int getUserIdleTime() {
-        return user_idle;
-    }
-
-    public void setLogConversationsTimeout(int timeout) {
-        if (this.log_timeout == timeout) {
-            return;
-        }
-        // Cancel the existing task because the timeout has changed
-        if (logConversationTask != null) {
-            logConversationTask.cancel();
-        }
-        this.log_timeout = timeout;
-        // Create a new task and schedule it with the new timeout
-        logConversationTask = new LogConversationTask();
-        timer.schedule(logConversationTask, log_timeout, log_timeout);
-        // Set the new property value
-        JiveGlobals.setProperty("xmpp.muc.tasks.log.timeout", Integer.toString(timeout));
-    }
-
-    public int getLogConversationsTimeout() {
-        return log_timeout;
-    }
-
-    public void setLogConversationBatchSize(int size) {
-        if (this.log_batch_size == size) {
-            return;
-        }
-        this.log_batch_size = size;
-        // Set the new property value
-        JiveGlobals.setProperty("xmpp.muc.tasks.log.batchsize", Integer.toString(size));
-    }
-
-    public int getLogConversationBatchSize() {
-        return log_batch_size;
-    }
-
-    public Collection<String> getUsersAllowedToCreate() {
-        return allowedToCreate;
-    }
-
-    public Collection<String> getSysadmins() {
-        return sysadmins;
-    }
-
-    public void addSysadmin(String userJID) {
-        sysadmins.add(userJID.trim().toLowerCase());
-        // CopyOnWriteArray does not allow sorting, so do sorting in temp list.
-        ArrayList<String> tempList = new ArrayList<String>(sysadmins);
-        Collections.sort(tempList);
-        sysadmins = new CopyOnWriteArrayList<String>(tempList);
-        // Update the config.
-        String[] jids = new String[sysadmins.size()];
-        jids = sysadmins.toArray(jids);
-        JiveGlobals.setProperty("xmpp.muc.sysadmin.jid", fromArray(jids));
-    }
-
-    public void removeSysadmin(String userJID) {
-        sysadmins.remove(userJID.trim().toLowerCase());
-        // Update the config.
-        String[] jids = new String[sysadmins.size()];
-        jids = sysadmins.toArray(jids);
-        JiveGlobals.setProperty("xmpp.muc.sysadmin.jid", fromArray(jids));
-    }
-
+    
     /**
      * Returns the flag that indicates if the service should provide information about locked rooms
      * when handling service discovery requests.
      *
      * @return true if the service should provide information about locked rooms.
      */
-    public boolean isAllowToDiscoverLockedRooms() {
-        return allowToDiscoverLockedRooms;
+    private boolean isAllowToDiscoverLockedRooms() {
+        /**
+         * Flag that indicates if the service should provide information about locked rooms when
+         * handling service discovery requests.
+         * Note: Setting this flag in false is not compliant with the spec. A user may try to join a
+         * locked room thinking that the room doesn't exist because the user didn't discover it before.
+         */
+        return IMConfig.XMPP_MUC_DISCOVER_LOCKED.getBoolean();
     }
 
-    /**
-     * Sets the flag that indicates if the service should provide information about locked rooms
-     * when handling service discovery requests.
-     * Note: Setting this flag in false is not compliant with the spec. A user may try to join a
-     * locked room thinking that the room doesn't exist because the user didn't discover it before.
-     *
-     * @param allowToDiscoverLockedRooms if the service should provide information about locked
-     *        rooms.
-     */
-    public void setAllowToDiscoverLockedRooms(boolean allowToDiscoverLockedRooms) {
-        this.allowToDiscoverLockedRooms = allowToDiscoverLockedRooms;
-        JiveGlobals.setProperty("xmpp.muc.discover.locked",
-                Boolean.toString(allowToDiscoverLockedRooms));
+    private boolean isRoomCreationRestricted() {
+        /**
+         * Returns the permission policy for creating rooms. A true value means that not anyone can
+         * create a room, only the JIDs listed in <code>allowedToCreate</code> are allowed to create
+         * rooms.
+         */
+        return IMConfig.XMPP_MUC_RESTRCIT_ROOM_CREATION.getBoolean();
     }
-
-    public boolean isRoomCreationRestricted() {
-        return roomCreationRestricted;
-    }
-
-    public void setRoomCreationRestricted(boolean roomCreationRestricted) {
-        this.roomCreationRestricted = roomCreationRestricted;
-        JiveGlobals.setProperty("xmpp.muc.create.anyone", Boolean.toString(roomCreationRestricted));
-    }
-
-    public void addUserAllowedToCreate(String userJID) {
-        // Update the list of allowed JIDs to create MUC rooms. Since we are updating the instance
-        // variable there is no need to restart the service
-        allowedToCreate.add(userJID.trim().toLowerCase());
-        // CopyOnWriteArray does not allow sorting, so do sorting in temp list.
-        ArrayList<String> tempList = new ArrayList<String>(allowedToCreate);
-        Collections.sort(tempList);
-        allowedToCreate = new CopyOnWriteArrayList<String>(tempList);
-        // Update the config.
-        String[] jids = new String[allowedToCreate.size()];
-        jids = allowedToCreate.toArray(jids);
-        JiveGlobals.setProperty("xmpp.muc.create.jid", fromArray(jids));
-    }
-
-    public void removeUserAllowedToCreate(String userJID) {
-        // Update the list of allowed JIDs to create MUC rooms. Since we are updating the instance
-        // variable there is no need to restart the service
-        allowedToCreate.remove(userJID.trim().toLowerCase());
-        // Update the config.
-        String[] jids = new String[allowedToCreate.size()];
-        jids = allowedToCreate.toArray(jids);
-        JiveGlobals.setProperty("xmpp.muc.create.jid", fromArray(jids));
-    }
-
+    
     public void initialize(XMPPServer server) {
         super.initialize(server);
 
-        serviceEnabled = JiveGlobals.getBooleanProperty("xmpp.muc.enabled", true);
-        chatServiceName = JiveGlobals.getProperty("xmpp.muc.service");
-        // Trigger the strategy to load itself from the context
-        historyStrategy.setContext("xmpp.muc.history");
+        chatServiceName = IMConfig.XMPP_MUC_SERVICE_NAME.getString();
+        
         // Load the list of JIDs that are sysadmins of the MUC service
-        String property = JiveGlobals.getProperty("xmpp.muc.sysadmin.jid");
+        String property = IMConfig.XMPP_MUC_SYSADMIN_JID.getString();
         String[] jids;
         if (property != null) {
             jids = property.split(",");
@@ -731,64 +589,24 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
                 sysadmins.add(jid.trim().toLowerCase());
             }
         }
-        allowToDiscoverLockedRooms =
-                Boolean.parseBoolean(JiveGlobals.getProperty("xmpp.muc.discover.locked", "true"));
-        roomCreationRestricted =
-                Boolean.parseBoolean(JiveGlobals.getProperty("xmpp.muc.create.anyone", "false"));
-        // Load the list of JIDs that are allowed to create a MUC room
-        property = JiveGlobals.getProperty("xmpp.muc.create.jid");
+        
+        // load the list of JIDs that are allowed to create rooms
+        property = IMConfig.XMPP_MUC_CREATE_JID.getString();
         if (property != null) {
             jids = property.split(",");
             for (String jid : jids) {
                 allowedToCreate.add(jid.trim().toLowerCase());
             }
         }
-        String value = JiveGlobals.getProperty("xmpp.muc.tasks.user.timeout");
-        if (value != null) {
-            try {
-                user_timeout = Integer.parseInt(value);
-            }
-            catch (NumberFormatException e) {
-                Log.error("Wrong number format of property xmpp.muc.tasks.user.timeout", e);
-            }
-        }
-        value = JiveGlobals.getProperty("xmpp.muc.tasks.user.idle");
-        if (value != null) {
-            try {
-                user_idle = Integer.parseInt(value);
-            }
-            catch (NumberFormatException e) {
-                Log.error("Wrong number format of property xmpp.muc.tasks.user.idle", e);
-            }
-        }
-        value = JiveGlobals.getProperty("xmpp.muc.tasks.log.timeout");
-        if (value != null) {
-            try {
-                log_timeout = Integer.parseInt(value);
-            }
-            catch (NumberFormatException e) {
-                Log.error("Wrong number format of property xmpp.muc.tasks.log.timeout", e);
-            }
-        }
-        value = JiveGlobals.getProperty("xmpp.muc.tasks.log.batchsize");
-        if (value != null) {
-            try {
-                log_batch_size = Integer.parseInt(value);
-            }
-            catch (NumberFormatException e) {
-                Log.error("Wrong number format of property xmpp.muc.tasks.log.batchsize", e);
-            }
-        }
-        value = JiveGlobals.getProperty("xmpp.muc.unload.empty_days");
-        if (value != null) {
-            try {
-                emptyLimit = Integer.parseInt(value) * 24;
-            }
-            catch (NumberFormatException e) {
-                Log.error("Wrong number format of property xmpp.muc.unload.empty_days", e);
-            }
-        }
-        if (chatServiceName == null) {
+        user_timeout = IMConfig.XMPP_MUC_TASKS_IDLE_USER_SWEEP.getInt();
+        user_idle = IMConfig.XMPP_MUC_TASKS_IDLE_USER_TIMEOUT.getInt();
+        
+        // The time to elapse between logging the room conversations.
+        long log_timeout = IMConfig.XMPP_MUC_TASKS_LOG_TIMEOUT.getInt();
+        
+        log_batch_size = IMConfig.XMPP_MUC_TASKS_LOG_BATCHSIZE.getInt();
+        
+        if (StringUtil.isNullOrEmpty(getServiceName())) {
             chatServiceName = "conference";
         }
         // Run through the users every 5 minutes after a 5 minutes server startup delay (default
@@ -845,30 +663,8 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
 
     }
 
-    public void enableService(boolean enabled) {
-        if (isServiceEnabled() == enabled) {
-            // Do nothing if the service status has not changed
-            return;
-        }
-        XMPPServer server = XMPPServer.getInstance();
-        if (!enabled) {
-            // Disable disco information
-            server.getIQDiscoItemsHandler().removeServerItemsProvider(this);
-            // Stop the service/module
-            stop();
-        }
-        JiveGlobals.setProperty("xmpp.muc.enabled", Boolean.toString(enabled));
-        serviceEnabled = enabled;
-        if (enabled) {
-            // Start the service/module
-            start();
-            // Enable disco information
-            server.getIQDiscoItemsHandler().addServerItemsProvider(this);
-        }
-    }
-
     public boolean isServiceEnabled() {
-        return serviceEnabled;
+        return IMConfig.XMPP_MUC_ENABLED.getBoolean();
     }
 
     public long getTotalChatTime() {
@@ -940,13 +736,7 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
             }
 
             public String getName() {
-                // Check if there is a system property that overrides the default value
-                String serviceName = JiveGlobals.getProperty("muc.service-name");
-                if (serviceName != null && serviceName.trim().length() > 0) {
-                    return serviceName;
-                }
-                // Return the default service name based on the current locale
-                return LocaleUtils.getLocalizedString("muc.service-name");
+                return getServiceName();
             }
 
             public String getAction() {
@@ -1162,27 +952,10 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
 
     private boolean canDiscoverRoom(MUCRoom room) {
         // Check if locked rooms may be discovered
-        if (!allowToDiscoverLockedRooms && room.isLocked()) {
+        if (!isAllowToDiscoverLockedRooms() && room.isLocked()) {
             return false;
         }
         return room.isPublicRoom();
-    }
-
-    /**
-     * Converts an array to a comma-delimitted String.
-     *
-     * @param array the array.
-     * @return a comma delimtted String of the array values.
-     */
-    private static String fromArray(String [] array) {
-        StringBuilder buf = new StringBuilder();
-        for (int i=0; i<array.length; i++) {
-            buf.append(array[i]);
-            if (i != array.length-1) {
-                buf.append(",");
-            }
-        }
-        return buf.toString();
     }
 
     /****************** Statistics code ************************/

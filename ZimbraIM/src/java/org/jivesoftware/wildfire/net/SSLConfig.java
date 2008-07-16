@@ -16,10 +16,9 @@
  */
 package org.jivesoftware.wildfire.net;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,7 +29,6 @@ import java.security.KeyStore;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -71,23 +69,21 @@ public class SSLConfig {
     };    
 
     static {
-        String algorithm = JiveGlobals.getProperty("xmpp.socket.ssl.algorithm", "TLS");
-        String storeType = JiveGlobals.getProperty("xmpp.socket.ssl.storeType", "jks");
+        String algorithm = IMConfig.XMPP_SOCKET_SSL_ALGORITHM.getString();
+        String storeType = IMConfig.XMPP_SOCKET_SSL_STORETYPE.getString();
 
         // Get the keystore location. The default location is security/keystore
-        keyStoreLocation = JiveGlobals.getProperty("xmpp.socket.ssl.keystore",
-                "resources" + File.separator + "security" + File.separator + "keystore");
+        keyStoreLocation = IMConfig.XMPP_SOCKET_SSL_KEYSTORE.getString();
 
         // Get the keystore password. The default password is "changeit".
-        keypass = JiveGlobals.getProperty("xmpp.socket.ssl.keypass", "changeit");
+        keypass = IMConfig.XMPP_SOCKET_SSL_KEYPASS.getString();
         keypass = keypass.trim();
 
         // Get the truststore location; default at security/truststore
-        trustStoreLocation = JiveGlobals.getProperty("xmpp.socket.ssl.truststore",
-                "resources" + File.separator + "security" + File.separator + "truststore");
+        trustStoreLocation = IMConfig.XMPP_SOCKET_SSL_TRUSTSTORE.getString();
 
         // Get the truststore passwprd; default is "changeit".
-        trustpass = JiveGlobals.getProperty("xmpp.socket.ssl.trustpass", "changeit");
+        trustpass = IMConfig.XMPP_SOCKET_SSL_TRUSTPASS.getString();
         trustpass = trustpass.trim();
 
         try {
@@ -115,7 +111,7 @@ public class SSLConfig {
                 keyFactory.init(keyStore, SSLConfig.getKeyPassword().toCharArray());
                 TrustManagerFactory trustFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
                 trustFactory.init(trustStore);
-                if (JiveGlobals.getBooleanProperty("xmpp.socket.ssl.allow.untrusted.certs", false)) {
+                if (IMConfig.XMPP_SOCKET_SSL_ALLOW_UNTRUSTED_CERTS.getBoolean()) {
                     sslcontext.init(keyFactory.getKeyManagers(),
                                     trustAllCerts,
                                     new java.security.SecureRandom());

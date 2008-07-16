@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.wildfire;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.container.BasicModule;
 import org.jivesoftware.wildfire.privacy.PrivacyList;
@@ -34,7 +34,7 @@ import org.xmpp.packet.PacketError;
 public class OfflineMessageStrategy extends BasicModule {
 
     private static int quota = 100*1024; // Default to 100 K.
-    private static Type type = Type.store_and_bounce;
+    private static Type type = Type.drop;
 
     private OfflineMessageStore messageStore;
     private PacketRouter router;
@@ -47,21 +47,8 @@ public class OfflineMessageStrategy extends BasicModule {
         return quota;
     }
 
-    public void setQuota(int quota) {
-        OfflineMessageStrategy.quota = quota;
-        JiveGlobals.setProperty("xmpp.offline.quota", Integer.toString(quota));
-    }
-
     public OfflineMessageStrategy.Type getType() {
         return type;
-    }
-
-    public void setType(OfflineMessageStrategy.Type type) {
-        if (type == null) {
-            throw new IllegalArgumentException();
-        }
-        OfflineMessageStrategy.type = type;
-        JiveGlobals.setProperty("xmpp.offline.type", type.toString());
     }
 
     public void storeOffline(Message message) {
@@ -142,11 +129,11 @@ public class OfflineMessageStrategy extends BasicModule {
         messageStore = server.getOfflineMessageStore();
         router = server.getPacketRouter();
 
-        String quota = JiveGlobals.getProperty("xmpp.offline.quota");
-        if (quota != null && quota.length() > 0) {
-            OfflineMessageStrategy.quota = Integer.parseInt(quota);
+        int quota = IMConfig.XMPP_OFFLINE_QUOTA.getInt();
+        if (quota >= 0) {
+            OfflineMessageStrategy.quota = quota;
         }
-        String type = JiveGlobals.getProperty("xmpp.offline.type");
+        String type = IMConfig.XMPP_OFFLINE_TYPE.getString();
         if (type != null && type.length() > 0) {
             OfflineMessageStrategy.type = Type.valueOf(type);
         }

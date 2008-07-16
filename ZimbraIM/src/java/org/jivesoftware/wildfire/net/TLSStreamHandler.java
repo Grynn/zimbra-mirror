@@ -17,7 +17,7 @@
 package org.jivesoftware.wildfire.net;
 
 import org.bouncycastle.asn1.*;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 
 import javax.net.ssl.SSLEngine;
@@ -223,13 +223,13 @@ public class TLSStreamHandler {
             socket.setKeepAlive(true);
             initialHSStatus = HandshakeStatus.NEED_WRAP;
             tlsEngine.beginHandshake();
-        }
-        else if (needClientAuth) {
+        } else if (needClientAuth) {
             // Only REQUIRE client authentication if we are fully verifying certificates
-            if (JiveGlobals.getBooleanProperty("xmpp.server.certificate.verify", true) &&
-                    JiveGlobals.getBooleanProperty("xmpp.server.certificate.verify.chain", true) &&
-                    !JiveGlobals
-                            .getBooleanProperty("xmpp.server.certificate.accept-selfsigned", false))
+            if (IMConfig.XMPP_SERVER_CERTIFICATE_VERIFY.getBoolean() &&
+                            IMConfig.XMPP_SERVER_CERTIFICATE_VERIFY_CHAIN.getBoolean() &&
+                            !IMConfig.XMPP_SERVER_CERTIFICATE_ACCEPT_SELFSIGNED.getBoolean()
+            )
+                
             {
                 tlsEngine.setNeedClientAuth(true);
             }

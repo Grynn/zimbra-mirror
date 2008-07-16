@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.wildfire.filetransfer;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Cache;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.container.BasicModule;
@@ -61,9 +61,8 @@ public class DefaultFileTransferManager extends BasicModule implements FileTrans
     private Cache<String, FileTransfer> createCache(String name, String propertiesName, int size,
                                                     long expirationTime)
     {
-        size = JiveGlobals.getIntProperty("cache." + propertiesName + ".size", size);
-        expirationTime = (long) JiveGlobals.getIntProperty(
-                "cache." + propertiesName + ".expirationTime", (int) expirationTime);
+        size = IMConfig.getCacheSize(propertiesName, size);
+        expirationTime = IMConfig.getCacheExpirationTime(propertiesName, (int)expirationTime);
         return new Cache<String, FileTransfer>(name, size, expirationTime);
     }
 
@@ -75,7 +74,7 @@ public class DefaultFileTransferManager extends BasicModule implements FileTrans
      * transfer in the system.
      */
     public boolean isMatchProxyTransfer() {
-        return JiveGlobals.getBooleanProperty("xmpp.proxy.transfer.required", true);
+        return IMConfig.XMPP_PROXY_TRANSFER_REQUIRED.getBoolean();
     }
 
     protected void cacheFileTransfer(String key, FileTransfer transfer) {

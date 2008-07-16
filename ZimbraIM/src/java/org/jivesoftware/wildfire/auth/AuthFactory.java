@@ -48,8 +48,7 @@ public class AuthFactory {
 
     static {
         // Load an auth provider.
-        String className = JiveGlobals.getXMLProperty("provider.auth.className",
-                "org.jivesoftware.wildfire.auth.DefaultAuthProvider");
+        String className = IMConfig.AUTH_PROVIDER_CLASSNAME.getString(); 
         try {
             Class c = ClassUtils.forName(className);
             authProvider = (AuthProvider)c.newInstance();
@@ -232,17 +231,19 @@ public class AuthFactory {
         // encryption fully secure.
         String keyString;
         try {
-            keyString = JiveGlobals.getProperty("passwordKey");
-            if (keyString == null) {
-                keyString = StringUtils.randomString(15);
-                JiveGlobals.setProperty("passwordKey", keyString);
-                // Check to make sure that setting the property worked. It won't work,
-                // for example, when in setup mode.
-                if (!keyString.equals(JiveGlobals.getProperty("passwordKey"))) {
-                    return null;
-                }
-            }
-            cipher = new Blowfish(keyString);
+            Log.error("Blowfish cipher unsupported");
+            return null;
+//            keyString = JiveGlobals.getProperty("passwordKey");
+//            if (keyString == null) {
+//                keyString = StringUtils.randomString(15);
+//                JiveGlobals.setProperty("passwordKey", keyString);
+//                // Check to make sure that setting the property worked. It won't work,
+//                // for example, when in setup mode.
+//                if (!keyString.equals(JiveGlobals.getProperty("passwordKey"))) {
+//                    return null;
+//                }
+//            }
+//            cipher = new Blowfish(keyString);
         }
         catch (Exception e) {
             Log.error(e);

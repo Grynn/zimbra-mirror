@@ -27,7 +27,7 @@ import org.jivesoftware.database.DbConnectionManager;
  *
  * @author Matt Tucker
  */
-public class JiveProperties {
+class JiveProperties implements PropertyProvider {
 
     private static final String LOAD_PROPERTIES = "SELECT name, propValue FROM jiveProperty";
     private static final String INSERT_PROPERTY = "INSERT INTO jiveProperty(name, propValue) VALUES(?,?)";
@@ -153,6 +153,10 @@ public class JiveProperties {
      */
     private Collection<String> getPropertyNames() {
         return properties.keySet();
+    }
+    
+    public synchronized String remove(String key) {
+        return remove(key); 
     }
 
     public synchronized String remove(Object key) {

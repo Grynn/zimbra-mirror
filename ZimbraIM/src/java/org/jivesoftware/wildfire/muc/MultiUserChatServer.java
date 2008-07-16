@@ -51,145 +51,10 @@ public interface MultiUserChatServer extends Component {
     String getServiceName();
 
     /**
-     * Set the name of this chat service. The new name won't go into effect until the server is
-     * restarted.
-     * 
-     * @param name The chat service name (host name).
+     * @param userJID
+     * @return TRUE if the passed-in JID has sysadmin access
      */
-    void setServiceName(String name);
-
-    /**
-     * Returns the collection of JIDs that are system administrators of the MUC service. A sysadmin has
-     * the same permissions as a room owner. 
-     * 
-     * @return a list of bare JIDs.
-     */
-    Collection<String> getSysadmins();
-
-    /**
-     * Adds a new system administrator of the MUC service. A sysadmin has the same permissions as 
-     * a room owner. 
-     * 
-     * @param userJID the bare JID of the new user to add as a system administrator.
-     */
-    void addSysadmin(String userJID);
-
-    /**
-     * Removes a system administrator of the MUC service.
-     * 
-     * @param userJID the bare JID of the user to remove from the list.
-     */
-    void removeSysadmin(String userJID);
-
-    /**
-     * Returns false if anyone can create rooms or true if only the returned JIDs in
-     * <code>getUsersAllowedToCreate</code> are allowed to create rooms.
-     *
-     * @return true if only some JIDs are allowed to create rooms.
-     */
-    boolean isRoomCreationRestricted();
-
-    /**
-     * Sets if anyone can create rooms or if only the returned JIDs in
-     * <code>getUsersAllowedToCreate</code> are allowed to create rooms.
-     *
-     * @param roomCreationRestricted whether anyone can create rooms or not.
-     */
-    void setRoomCreationRestricted(boolean roomCreationRestricted);
-
-    /**
-     * Returns the collection of JIDs that are allowed to create MUC rooms. An empty list means that
-     * anyone can create a room. 
-     * 
-     * @return a list of bare JIDs.
-     */
-    Collection<String> getUsersAllowedToCreate();
-
-    /**
-     * Adds a new user to the list of JIDs that are allowed to create MUC rooms.
-     * 
-     * @param userJID the bare JID of the new user to add to list.
-     */
-    void addUserAllowedToCreate(String userJID);
-
-    /**
-     * Removes a user from list of JIDs that are allowed to create MUC rooms.
-     * 
-     * @param userJID the bare JID of the user to remove from the list.
-     */
-    void removeUserAllowedToCreate(String userJID);
-
-    /**
-     * Sets the time to elapse between clearing of idle chat users. A <code>TimerTask</code> will be
-     * added to a <code>Timer</code> scheduled for repeated fixed-delay execution whose main
-     * responsibility is to kick users that have been idle for a certain time. A user is considered
-     * idle if he/she didn't send any message to any group chat room for a certain amount of time.
-     * See {@link #setUserIdleTime(int)}.
-     *
-     * @param timeout the time to elapse between clearing of idle chat users.
-     */
-    void setKickIdleUsersTimeout(int timeout);
-
-    /**
-     * Returns the time to elapse between clearing of idle chat users. A user is considered
-     * idle if he/she didn't send any message to any group chat room for a certain amount of time.
-     * See {@link #getUserIdleTime()}.
-     *
-     * @return the time to elapse between clearing of idle chat users.
-     */
-    int getKickIdleUsersTimeout();
-
-    /**
-     * Sets the number of milliseconds a user must be idle before he/she gets kicked from all
-     * the rooms. By idle we mean that the user didn't send any message to any group chat room.
-     *
-     * @param idle the amount of time to wait before considering a user idle.
-     */
-    void setUserIdleTime(int idle);
-
-    /**
-     * Returns the number of milliseconds a user must be idle before he/she gets kicked from all
-     * the rooms. By idle we mean that the user didn't send any message to any group chat room.
-     *
-     * @return the amount of time to wait before considering a user idle.
-     */
-    int getUserIdleTime();
-
-    /**
-     * Sets the time to elapse between logging the room conversations. A <code>TimerTask</code> will
-     * be added to a <code>Timer</code> scheduled for repeated fixed-delay execution whose main
-     * responsibility is to log queued rooms conversations. The number of queued conversations to
-     * save on each run can be configured. See {@link #setLogConversationBatchSize(int)}.
-     *
-     * @param timeout the time to elapse between logging the room conversations.
-     */
-    void setLogConversationsTimeout(int timeout);
-
-    /**
-     * Returns the time to elapse between logging the room conversations. A <code>TimerTask</code>
-     * will be added to a <code>Timer</code> scheduled for repeated fixed-delay execution whose main
-     * responsibility is to log queued rooms conversations. The number of queued conversations to
-     * save on each run can be configured. See {@link #getLogConversationBatchSize()}.
-     *
-     * @return the time to elapse between logging the room conversations.
-     */
-    int getLogConversationsTimeout();
-
-    /**
-     * Sets the number of messages to save to the database on each run of the logging process.
-     * Even though the saving of queued conversations takes place in another thread it is not
-     * recommended specifying a big number.
-     *
-     * @param size the number of messages to save to the database on each run of the logging process.
-     */
-    void setLogConversationBatchSize(int size);
-
-    /**
-     * Returns the number of messages to save to the database on each run of the logging process.
-     *
-     * @return the number of messages to save to the database on each run of the logging process.
-     */
-    int getLogConversationBatchSize();
+    boolean isSysadmin(String userJID);
 
     /**
      * Obtain the server-wide default message history settings.
@@ -298,17 +163,6 @@ public interface MultiUserChatServer extends Component {
     void messageBroadcastedTo(int numOccupants);
 
     /**
-     * Enables or disables the MUC service. When disabled the MUC service will disappear from
-     * the disco#items list. Moreover, service discovery features will be disabled. 
-     *
-     * @param enabled true if the service is enabled.
-     */
-    void enableService(boolean enabled);
-
-    /**
-     * Returns true if the MUC service is available. Use {@link #enableService(boolean)} to
-     * enable or disable the service.
-     *
      * @return true if the MUC service is available.
      */
     boolean isServiceEnabled();

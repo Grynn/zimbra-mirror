@@ -17,7 +17,7 @@
 package org.jivesoftware.wildfire.net;
 
 import org.dom4j.Element;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.util.StringUtils;
 import org.jivesoftware.wildfire.ClientSession;
@@ -372,8 +372,7 @@ public class SASLAuthentication {
         // Check if cerificate validation is disabled for s2s
         // Flag that indicates if certificates of the remote server should be validated.
         // Disabling certificate validation is not recommended for production environments.
-        boolean verify =
-                JiveGlobals.getBooleanProperty("xmpp.server.certificate.verify", true);
+        boolean verify = IMConfig.XMPP_SERVER_CERTIFICATE_VERIFY.getBoolean();
         if (!verify) {
             authenticationSuccessful(session, hostname, null);
             return Status.authenticated;
@@ -457,8 +456,7 @@ public class SASLAuthentication {
         else {
             retries = retries + 1;
         }
-        session.setSessionData("authRetries", retries);
-        if (retries >= JiveGlobals.getIntProperty("xmpp.auth.retries", 3) ) {
+        if (retries >= IMConfig.XMPP_AUTH_RETRIES.getInt()) {
             // Close the connection
             session.getConnection().close();
         }
@@ -497,7 +495,7 @@ public class SASLAuthentication {
 
     private static void initMechanisms() {
         mechanisms = new HashSet<String>();
-        String available = JiveGlobals.getXMLProperty("sasl.mechs");
+        String available = IMConfig.SASL_MECHS.getString();
         if (available == null) {
             mechanisms.add("ANONYMOUS");
             mechanisms.add("PLAIN");
@@ -518,20 +516,20 @@ public class SASLAuthentication {
                 }
             }
 
-            if (mechanisms.contains("GSSAPI")) {
-                if (JiveGlobals.getXMLProperty("sasl.gssapi.config") != null) {
-                    System.setProperty("java.security.krb5.debug",
-                            JiveGlobals.getXMLProperty("sasl.gssapi.debug", "false"));
-                    System.setProperty("java.security.auth.login.config",
-                            JiveGlobals.getXMLProperty("sasl.gssapi.config"));
-                    System.setProperty("javax.security.auth.useSubjectCredsOnly",
-                            JiveGlobals.getXMLProperty("sasl.gssapi.useSubjectCredsOnly", "false"));
-                } else {
-                    //Not configured, remove the option.
-                    Log.debug("SASLAuthentication: Removed GSSAPI from mech list");
-                    mechanisms.remove("GSSAPI");
-                }
-            }
+//            if (mechanisms.contains("GSSAPI")) {
+//                if (JiveGlobals.getXMLProperty("sasl.gssapi.config") != null) {
+//                    System.setProperty("java.security.krb5.debug",
+//                            JiveGlobals.getXMLProperty("sasl.gssapi.debug", "false"));
+//                    System.setProperty("java.security.auth.login.config",
+//                            JiveGlobals.getXMLProperty("sasl.gssapi.config"));
+//                    System.setProperty("javax.security.auth.useSubjectCredsOnly",
+//                            JiveGlobals.getXMLProperty("sasl.gssapi.useSubjectCredsOnly", "false"));
+//                } else {
+//                    //Not configured, remove the option.
+//                    Log.debug("SASLAuthentication: Removed GSSAPI from mech list");
+//                    mechanisms.remove("GSSAPI");
+//                }
+//            }
         }
     }
 }

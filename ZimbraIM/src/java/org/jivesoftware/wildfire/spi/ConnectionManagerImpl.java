@@ -17,12 +17,12 @@
 package org.jivesoftware.wildfire.spi;
 
 import org.apache.mina.common.IoSession;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
+//import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.*;
 import org.jivesoftware.wildfire.container.BasicModule;
-import org.jivesoftware.wildfire.multiplex.MultiplexerPacketDeliverer;
 import org.jivesoftware.wildfire.net.*;
 
 import java.io.IOException;
@@ -122,8 +122,8 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             String algorithm = null;
             if (port > 0) {
                 try {
-                    if (JiveGlobals.getBooleanProperty("xmpp.cloudrouting.ssl", false)) {
-                        algorithm = JiveGlobals.getProperty("xmpp.socket.ssl.algorithm", "TLS");
+                    if (IMConfig.XMPP_CLOUDROUTING_SSL.getBoolean()) {
+                        algorithm = IMConfig.XMPP_SOCKET_SSL_ALGORITHM.getString();
                     }
                     
                     if (algorithm == null || algorithm.length() == 0) {
@@ -275,7 +275,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         // Start clients SSL unless it's been disabled.
         if (isClientSSLListenerEnabled()) {
             int port = getClientSSLListenerPort();
-            String algorithm = JiveGlobals.getProperty("xmpp.socket.ssl.algorithm");
+            String algorithm = IMConfig.XMPP_SOCKET_SSL_ALGORITHM.getString();
             if ("".equals(algorithm) || algorithm == null) {
                 algorithm = "TLS";
             }
@@ -328,8 +328,9 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             // Use the appropriate packeet deliverer for connection managers. The packet
             // deliverer will be configured with the domain of the connection manager once
             // the connection manager has finished the handshake.
-            SocketConnection conn = new StdSocketConnection(new MultiplexerPacketDeliverer(), sock, isSecure);
-            return new ConnectionMultiplexerSocketReader(router, routingTable, sock, conn);
+            //SocketConnection conn = new StdSocketConnection(new MultiplexerPacketDeliverer(), sock, isSecure);
+            //return new ConnectionMultiplexerSocketReader(router, routingTable, sock, conn);
+            return null;
         }
     }
     
@@ -352,8 +353,9 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             // Use the appropriate packeet deliverer for connection managers. The packet
             // deliverer will be configured with the domain of the connection manager once
             // the connection manager has finished the handshake. 
-            SocketConnection conn = new NioSocketConnection(new MultiplexerPacketDeliverer(), nioSocket, isSecure);
-            return new ConnectionMultiplexerSocketReader(router, routingTable, nioSocket, conn);
+            //SocketConnection conn = new NioSocketConnection(new MultiplexerPacketDeliverer(), nioSocket, isSecure);
+            //return new ConnectionMultiplexerSocketReader(router, routingTable, nioSocket, conn);
+            return null;
         }
     }
     
@@ -366,243 +368,77 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     }
 
     private boolean isClientListenerEnabled() {
-        return JiveGlobals.getBooleanProperty("xmpp.socket.plain.active", true);
+        return IMConfig.XMPP_SOCKET_PLAIN_ACTIVE.getBoolean();
     }
 
     private boolean isClientSSLListenerEnabled() {
-        return JiveGlobals.getBooleanProperty("xmpp.socket.ssl.active", true);
+        return IMConfig.XMPP_SOCKET_SSL_ACTIVE.getBoolean();
     }
 
     private boolean isComponentListenerEnabled() {
-        return JiveGlobals.getBooleanProperty("xmpp.component.socket.active", false);
+        return IMConfig.XMPP_COMPONENT_SOCKET_ACTIVE.getBoolean();
     }
 
     private boolean isServerListenerEnabled() {
-        return JiveGlobals.getBooleanProperty("xmpp.server.socket.active", true);
+        return IMConfig.XMPP_SERVER_SOCKET_ACTIVE.getBoolean();
     }
     
     private boolean isCloudRoutingListenerEnabled() {
-        return JiveGlobals.getBooleanProperty("xmpp.cloudrouting.active", false);
+        return IMConfig.XMPP_CLOUDROUTING_ACTIVE.getBoolean();
     }
     
     private boolean isConnectionManagerListenerEnabled() {
-        return JiveGlobals.getBooleanProperty("xmpp.multiplex.socket.active", false);
+        return false;
     }
-
-    
     
     private String getClientPlainListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.socket.plain.address", null); 
+        return IMConfig.XMPP_SOCKET_PLAIN_ADDRESS.getString(); 
     }
     
     private String getClientSSLListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.socket.ssl.address", null); 
+        return IMConfig.XMPP_SOCKET_SSL_ADDRESS.getString();
     }
 
     private String getComponentListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.component.address", null); 
+        return IMConfig.XMPP_COMPONENT_ADDRESS.getString();
     }
     
     private String getServerListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.server.address", null); 
+        return IMConfig.XMPP_SERVER_SOCKET_ADDRESS.getString();
     }
     
     private String getCloudroutingListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.cloudrouting.address", null); 
+        return IMConfig.XMPP_CLOUDROUTING_ADDRESS.getString();
     }
 
     private String getConnectionManagerListenerAddress() {
-        return JiveGlobals.getProperty("xmpp.multiplex.address", null); 
+        return null;
     }
-
     
     private int getClientListenerPort() {
-        return JiveGlobals.getIntProperty("xmpp.socket.plain.port",
-            SocketAcceptThread.DEFAULT_PORT);
+        return IMConfig.XMPP_SOCKET_PLAIN_PORT.getInt();
     }
     
     private int getClientSSLListenerPort() {
-        return JiveGlobals.getIntProperty("xmpp.socket.ssl.port",
-                SSLSocketAcceptThread.DEFAULT_PORT);
+        return IMConfig.XMPP_SOCKET_SSL_PORT.getInt();
     }
     
     private int getComponentListenerPort() {
-        return JiveGlobals.getIntProperty("xmpp.component.socket.port",
-                SocketAcceptThread.DEFAULT_COMPONENT_PORT);
+        return IMConfig.XMPP_COMPONENT_SOCKET_PORT.getInt();
     }
 
     private int getServerListenerPort() {
-        return JiveGlobals.getIntProperty("xmpp.server.socket.port",
-                SocketAcceptThread.DEFAULT_SERVER_PORT);
+        return IMConfig.XMPP_SERVER_SOCKET_PORT.getInt();
     }
     
     private int getCloudRoutingPort() {
-        return JiveGlobals.getIntProperty("xmpp.cloudrouting.port", 0);
+        return IMConfig.XMPP_CLOUDROUTING_PORT.getInt();
     }
 
     public int getConnectionManagerListenerPort() {
-        return JiveGlobals.getIntProperty("xmpp.multiplex.socket.port",
-            SocketAcceptThread.DEFAULT_MULTIPLEX_PORT);
+        return 0; 
     }
     
-
-    
-//    public void enableClientListener(boolean enabled) {
-//        if (enabled == isClientListenerEnabled()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        if (enabled) {
-//            JiveGlobals.setProperty("xmpp.socket.plain.active", "true");
-//            // Start the port listener for clients
-//            startClientListeners(localIPAddress);
-//        }
-//        else {
-//            JiveGlobals.setProperty("xmpp.socket.plain.active", "false");
-//            // Stop the port listener for clients
-//            stopClientListeners();
-//        }
-//    }
-//
-//    public void enableClientSSLListener(boolean enabled) {
-//        if (enabled == isClientSSLListenerEnabled()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        if (enabled) {
-//            JiveGlobals.setProperty("xmpp.socket.ssl.active", "true");
-//            // Start the port listener for secured clients
-//            startClientSSLListeners(localIPAddress);
-//        }
-//        else {
-//            JiveGlobals.setProperty("xmpp.socket.ssl.active", "false");
-//            // Stop the port listener for secured clients
-//            stopClientSSLListeners();
-//        }
-//    }
-//
-//    public void enableComponentListener(boolean enabled) {
-//        if (enabled == isComponentListenerEnabled()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        if (enabled) {
-//            JiveGlobals.setProperty("xmpp.component.socket.active", "true");
-//            // Start the port listener for external components
-//            startComponentListener(localIPAddress);
-//        }
-//        else {
-//            JiveGlobals.setProperty("xmpp.component.socket.active", "false");
-//            // Stop the port listener for external components
-//            stopComponentListener();
-//        }
-//    }
-//
-//    public void enableServerListener(boolean enabled) {
-//        if (enabled == isServerListenerEnabled()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        if (enabled) {
-//            JiveGlobals.setProperty("xmpp.server.socket.active", "true");
-//            // Start the port listener for s2s communication
-//            startServerListener(localIPAddress);
-//        }
-//        else {
-//            JiveGlobals.setProperty("xmpp.server.socket.active", "false");
-//            // Stop the port listener for s2s communication
-//            stopServerListener();
-//        }
-//    }
-//
-//    public void enableConnectionManagerListener(boolean enabled) {
-//        if (enabled == isConnectionManagerListenerEnabled()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        if (enabled) {
-//            JiveGlobals.setProperty("xmpp.multiplex.socket.active", "true");
-//            // Start the port listener for s2s communication
-//            startConnectionManagerListener(localIPAddress);
-//        }
-//        else {
-//            JiveGlobals.setProperty("xmpp.multiplex.socket.active", "false");
-//            // Stop the port listener for s2s communication
-//            stopConnectionManagerListener();
-//        }
-//    }
-    
-    
-//    public void setClientListenerPort(int port) {
-//        if (port == getClientListenerPort()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        JiveGlobals.setProperty("xmpp.socket.plain.port", String.valueOf(port));
-//        // Stop the port listener for clients
-//        stopClientListeners();
-//        if (isClientListenerEnabled()) {
-//            // Start the port listener for clients
-//            startClientListeners(localIPAddress);
-//        }
-//    }
-//
-//    public void setClientSSLListenerPort(int port) {
-//        if (port == getClientSSLListenerPort()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        JiveGlobals.setProperty("xmpp.socket.ssl.port", String.valueOf(port));
-//        // Stop the port listener for secured clients
-//        stopClientSSLListeners();
-//        if (isClientSSLListenerEnabled()) {
-//            // Start the port listener for secured clients
-//            startClientSSLListeners(localIPAddress);
-//        }
-//    }
-//
-//    public void setServerListenerPort(int port) {
-//        if (port == getServerListenerPort()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        JiveGlobals.setProperty("xmpp.server.socket.port", String.valueOf(port));
-//        // Stop the port listener for s2s communication
-//        stopServerListener();
-//        if (isServerListenerEnabled()) {
-//            // Start the port listener for s2s communication
-//            startServerListener(localIPAddress);
-//        }
-//    }
-//
-//    public void setComponentListenerPort(int port) {
-//        if (port == getComponentListenerPort()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        JiveGlobals.setProperty("xmpp.component.socket.port", String.valueOf(port));
-//        // Stop the port listener for external components
-//        stopComponentListener();
-//        if (isComponentListenerEnabled()) {
-//            // Start the port listener for external components
-//            startComponentListener(localIPAddress);
-//        }
-//    }
-//    
-//    public void setConnectionManagerListenerPort(int port) {
-//        if (port == getConnectionManagerListenerPort()) {
-//            // Ignore new setting
-//            return;
-//        }
-//        JiveGlobals.setProperty("xmpp.multiplex.socket.port", String.valueOf(port));
-//        // Stop the port listener for connection managers
-//        stopConnectionManagerListener();
-//        if (isConnectionManagerListenerEnabled()) {
-//            // Start the port listener for connection managers
-//            startConnectionManagerListener(localIPAddress);
-//        }
-//    }
-//    
 
     // #####################################################################
     // Module management

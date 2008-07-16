@@ -19,9 +19,8 @@ package org.jivesoftware.wildfire.server;
 import org.jivesoftware.database.DbConnectionManager;
 import org.jivesoftware.wildfire.Session;
 import org.jivesoftware.wildfire.SessionManager;
-import org.jivesoftware.wildfire.net.SocketAcceptThread;
 import org.jivesoftware.wildfire.server.RemoteServerConfiguration.Permission;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 
 import java.sql.PreparedStatement;
@@ -95,7 +94,7 @@ public class RemoteServerManager {
     public static boolean canAccess(String domain) {
         // If s2s is disabled then it is not possible to send packets to remote servers or
         // receive packets from remote servers
-        if (!JiveGlobals.getBooleanProperty("xmpp.server.socket.active", true)) {
+        if (!IMConfig.XMPP_SERVER_SOCKET_ACTIVE.getBoolean()) {
             return false;
         }
 
@@ -152,13 +151,13 @@ public class RemoteServerManager {
     /**
      * Returns the number of milliseconds to wait to connect to a remote server or read
      * data from a remote server. Default timeout value is 180 seconds. Configure the
-     * <tt>xmpp.server.read.timeout</tt> global property to override the default value.
+     * <tt>XMPP_SERVER_READ_TIMEOUT</tt> global property to override the default value.
      *
      * @return the number of milliseconds to wait to connect to a remote server or read
      *         data from a remote server.
      */
     public static int getSocketTimeout() {
-        int toRet = JiveGlobals.getIntProperty("xmpp.server.read.timeout", 180000);
+        int toRet = IMConfig.XMPP_SERVER_READ_TIMEOUT.getInt();
         return toRet;
     }
 
@@ -290,17 +289,12 @@ public class RemoteServerManager {
      * @return the remote port to connect for the specified remote server.
      */
     public static int getPortForServer(String domain) {
-        int port = JiveGlobals.getIntProperty("xmpp.server.socket.remotePort",
-                SocketAcceptThread.DEFAULT_SERVER_PORT);
+        int port = 0;
         RemoteServerConfiguration config = getConfiguration(domain);
-        if (config != null) {
+        if (config != null)
             port = config.getRemotePort();
-            if (port == 0) {
-                port =
-                        JiveGlobals.getIntProperty("xmpp.server.socket.remotePort",
-                                SocketAcceptThread.DEFAULT_SERVER_PORT);
-            }
-        }
+        if (port == 0)
+            port = IMConfig.XMPP_SERVER_SOCKET_REMOTEPORT.getInt();
         return port;
     }
 
@@ -316,54 +310,13 @@ public class RemoteServerManager {
      */
     public static PermissionPolicy getPermissionPolicy() {
         try {
-            return PermissionPolicy.valueOf(JiveGlobals.getProperty("xmpp.server.permission",
-                    PermissionPolicy.blacklist.toString()));
+            String policy = IMConfig.XMPP_SERVER_PERMISSION.getString();
+            return PermissionPolicy.valueOf(policy);
         }
         catch (Exception e) {
             Log.error(e);
             return PermissionPolicy.blacklist;
         }
-    }
-
-    /**
-     * Sets the permission policy being used for new XMPP entities that are trying to
-     * connect to the server. There are two types of policies: 1) blacklist: where any entity
-     * is allowed to connect to the server except for those listed in the black list and
-     * 2) whitelist: where only the entities listed in the white list are allowed to connect to
-     * the server.
-     *
-     * @param policy the new PermissionPolicy to use.
-     */
-    public static void setPermissionPolicy(PermissionPolicy policy) {
-        JiveGlobals.setProperty("xmpp.server.permission", policy.toString());
-        // Check if the connected servers can remain connected to the server
-        for (String hostname : SessionManager.getInstance().getIncomingServers()) {
-            if (!canAccess(hostname)) {
-                for (Session session : SessionManager.getInstance()
-                        .getIncomingServerSessions(hostname)) {
-                    session.getConnection().close();
-                }
-            }
-        }
-        for (String hostname : SessionManager.getInstance().getOutgoingServers()) {
-            if (!canAccess(hostname)) {
-                Session session = SessionManager.getInstance().getOutgoingServerSession(hostname);
-                session.getConnection().close();
-            }
-        }
-    }
-
-    /**
-     * Sets the permission policy being used for new XMPP entities that are trying to
-     * connect to the server. There are two types of policies: 1) blacklist: where any entity
-     * is allowed to connect to the server except for those listed in the black list and
-     * 2) whitelist: where only the entities listed in the white list are allowed to connect to
-     * the server.
-     *
-     * @param policy the new policy to use.
-     */
-    public static void setPermissionPolicy(String policy) {
-        setPermissionPolicy(PermissionPolicy.valueOf(policy));
     }
 
     public enum PermissionPolicy {

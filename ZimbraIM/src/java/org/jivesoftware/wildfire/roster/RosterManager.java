@@ -18,7 +18,7 @@ package org.jivesoftware.wildfire.roster;
 
 import org.jivesoftware.util.Cache;
 import org.jivesoftware.util.CacheManager;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.wildfire.ChannelHandler;
 import org.jivesoftware.wildfire.RoutingTable;
 import org.jivesoftware.wildfire.SharedGroupException;
@@ -64,7 +64,7 @@ public class RosterManager extends BasicModule implements GroupEventListener, Us
      * @return true if the roster service is enabled.
      */
     public static boolean isRosterServiceEnabled() {
-        return JiveGlobals.getBooleanProperty("xmpp.client.roster.active", true);
+        return IMConfig.XMPP_CLIENT_ROSTER_ACTIVE.getBoolean();
     }
 
     public RosterManager() {

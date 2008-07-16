@@ -697,7 +697,7 @@ public class StringUtils {
 
         // default locale
         if (locale == null) {
-            locale = JiveGlobals.getLocale();
+            locale = IMConfig.getLocale();
         }
 
         StringBuilder buf = new StringBuilder(input);

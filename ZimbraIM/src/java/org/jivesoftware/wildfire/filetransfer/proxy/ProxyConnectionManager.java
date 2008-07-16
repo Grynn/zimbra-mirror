@@ -66,8 +66,7 @@ public class ProxyConnectionManager {
         String cacheName = "File Transfer";
         connectionMap = new Cache<String, ProxyTransfer>(cacheName, -1, 1000 * 60 * 10);
 
-        className = JiveGlobals.getProperty("provider.transfer.proxy",
-                "org.jivesoftware.wildfire.filetransfer.proxy.DefaultProxyTransfer");
+        className = IMConfig.PROXY_TRANSFER_PROVIDER_CLASSNAME.getString();
 
         transferManager = manager;
         StatisticsManager.getInstance().addStatistic(proxyTransferRate, new ProxyTracker());

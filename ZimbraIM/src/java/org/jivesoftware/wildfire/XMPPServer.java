@@ -17,7 +17,7 @@
 package org.jivesoftware.wildfire;
 
 import org.jivesoftware.database.DbConnectionManager;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.util.PropertyProvider;
@@ -49,7 +49,6 @@ import org.xmpp.packet.JID;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -144,14 +143,13 @@ public class XMPPServer {
     /**
      * Creates a server and starts it.
      */
-    public XMPPServer(LocationManager locMgr, List<String> domainNames, PropertyProvider localConfig, PropertyProvider globalProperties) {
+    public XMPPServer(LocationManager locMgr, List<String> domainNames /*, PropertyProvider localConfig, PropertyProvider globalProperties*/) {
         // We may only have one instance of the server running on the JVM
         if (instance != null) {
             throw new IllegalStateException("A server is already running");
         }
         mLocationManager = locMgr;
         
-        JiveGlobals.setProviders(localConfig, globalProperties);
         instance = this;
         start(domainNames);
     }
@@ -233,6 +231,16 @@ public class XMPPServer {
         return true;
     }
     
+    public boolean isAdmin(String jid) {
+        if (jid != null && jid.length() > 0) {
+            for (JID admin : getAdmins()) {
+                if (jid.equals(admin.toBareJID()))
+                    return true;
+            }
+        }
+        return false;
+    }
+    
     /**
      * Returns a collection with the JIDs of the server's admins. The collection may include
      * JIDs of local users and users of remote servers.
@@ -242,11 +250,7 @@ public class XMPPServer {
     public Collection<JID> getAdmins() {
         Collection<JID> admins = new ArrayList<JID>();
         // Add the JIDs of the local users that are admins
-        String usernames = JiveGlobals.getXMLProperty("admin.authorizedUsernames");
-        if (usernames == null) {
-            // Fall back to old method for defining admins (i.e. using adminConsole prefix
-            usernames = JiveGlobals.getXMLProperty("adminConsole.authorizedUsernames");
-        }
+        String usernames = IMConfig.ADMIN_USERNAMES.getString();
         usernames = (usernames == null || usernames.trim().length() == 0) ? "admin" : usernames;
         StringTokenizer tokenizer = new StringTokenizer(usernames, ",");
         while (tokenizer.hasMoreTokens()) {
@@ -257,21 +261,7 @@ public class XMPPServer {
             catch (IllegalArgumentException e) {
                 // Ignore usernames that when appended @server.com result in an invalid JID
                 Log.warn("Invalid username found in authorizedUsernames at wildfire.xml: " +
-                        username, e);
-            }
-        }
-
-        // Add bare JIDs of users that are admins (may include remote users)
-        String jids = JiveGlobals.getXMLProperty("admin.authorizedJIDs");
-        jids = (jids == null || jids.trim().length() == 0) ? "" : jids;
-        tokenizer = new StringTokenizer(jids, ",");
-        while (tokenizer.hasMoreTokens()) {
-            String jid = tokenizer.nextToken().toLowerCase().trim();
-            try {
-                admins.add(new JID(jid));
-            }
-            catch (IllegalArgumentException e) {
-                Log.warn("Invalid JID found in authorizedJIDs at wildfire.xml: " + jid, e);
+                         username, e);
             }
         }
 
@@ -345,7 +335,7 @@ public class XMPPServer {
             // Log that the server has been started
             List<String> params = new ArrayList<String>();
             params.add(version.getVersionString());
-            params.add(JiveGlobals.formatDateTime(new Date()));
+            params.add(IMConfig.formatDateTime(new Date()));
             String startupBanner = LocaleUtils.getLocalizedString("startup.name", params);
             Log.info(startupBanner);
             System.out.println(startupBanner);
@@ -367,7 +357,7 @@ public class XMPPServer {
 
     private void loadModules() {
         // Load boot modules
-        mRoutingTable = (RoutingTable)loadModule(JiveGlobals.getXMLProperty("routingTableImpl.className"));
+        mRoutingTable = (RoutingTable)loadModule(IMConfig.ROUTING_TABLE_CLASSNAME.getString());
         loadModule(AuditManagerImpl.class.getName());
         loadModule(RosterManager.class.getName());
         loadModule(PrivateStorage.class.getName());

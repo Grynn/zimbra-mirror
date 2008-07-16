@@ -18,15 +18,13 @@ package org.jivesoftware.wildfire;
 
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.container.BasicModule;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.Message;
 import org.xmpp.packet.PacketError;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -145,10 +143,6 @@ public class MessageRouter extends BasicModule {
      *  <li>Select resource with most recent activity</li>
      * </ol>
      *
-     * Admins can override the above logic and just send the message to all connected resources
-     * with highest priority by setting the system property <tt>route.all-resources</tt> to
-     * <tt>true</tt>.
-     *
      * @param recipientJID the bare JID of the target local user.
      * @param packet the message to send.
      */
@@ -170,14 +164,11 @@ public class MessageRouter extends BasicModule {
         else if (sessions.size() == 1) {
             // Found only one session so deliver message
             sessions.get(0).process(packet);
-        }
+        } 
         else {
-            // Many sessions have the highest priority (be smart now) :)
-            if (!JiveGlobals.getBooleanProperty("route.all-resources", false)) {
-//              Deliver stanza to all connected resources with highest priority
-                for (ClientSession session : sessions) {
-                    session.process(packet);
-                }
+            // Deliver stanza to all connected resources with highest priority
+            for (ClientSession session : sessions) {
+                session.process(packet);
             }
         }
     }
@@ -185,19 +176,19 @@ public class MessageRouter extends BasicModule {
     
     /**
      * Forwards the received message to the list of users defined in the property
-     * <b>xmpp.forward.admins</b>. The property may include bare JIDs or just usernames separated
+     * <b>XMPP_FORWARD_ADMINS</b>. The property may include bare JIDs or just usernames separated
      * by commas or white spaces. When using bare JIDs the target user may belong to a remote
      * server.<p>
      *
-     * If the property <b>xmpp.forward.admins</b> was not defined then the message will be sent
+     * If the property <b>XMPP_FORWARD_ADMINS</b> was not defined then the message will be sent
      * to all the users allowed to enter the admin console.
      *
      * @param packet the message to forward.
      */
     private void sendMessageToAdmins(Message packet) {
-        String jids = JiveGlobals.getProperty("xmpp.forward.admins");
+        String jids = IMConfig.XMPP_FORWARD_ADMINS.getString();
         if (jids != null && jids.trim().length() > 0) {
-            // Forward the message to the users specified in the "xmpp.forward.admins" property
+            // Forward the message to the users specified in the "XMPP_FORWARD_ADMINS" property
             StringTokenizer tokenizer = new StringTokenizer(jids, ", ");
             while (tokenizer.hasMoreTokens()) {
                 String username = tokenizer.nextToken();
@@ -207,7 +198,7 @@ public class MessageRouter extends BasicModule {
                     forward.setTo(username);
                 } else {
                     Log.error("Could not forward packet to admin '"+username+
-                    "' because bare JIDs are not allowed in xmpp.forward.admins");
+                    "' because bare JIDs are not allowed in XMPP_FORWARD_ADMINS");
                 }
                 route(forward);
             }

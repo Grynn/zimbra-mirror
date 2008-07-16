@@ -17,12 +17,9 @@
 package org.jivesoftware.wildfire.group;
 
 import org.jivesoftware.util.*;
-import org.jivesoftware.wildfire.XMPPServer;
 import org.jivesoftware.wildfire.event.GroupEventDispatcher;
 import org.jivesoftware.wildfire.event.GroupEventListener;
 import org.jivesoftware.wildfire.user.User;
-import org.jivesoftware.wildfire.user.UserManager;
-import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.packet.JID;
 
 import java.util.Collection;
@@ -67,8 +64,7 @@ public class GroupManager {
                 512 * 1024, JiveConstants.MINUTE*15);
 
         // Load a group provider.
-        String className = JiveGlobals.getXMLProperty("provider.group.className",
-                "org.jivesoftware.wildfire.group.DefaultGroupProvider");
+        String className = IMConfig.GROUP_PROVIDER_CLASSNAME.getString();
         try {
             Class c = ClassUtils.forName(className);
             provider = (GroupProvider) c.newInstance();

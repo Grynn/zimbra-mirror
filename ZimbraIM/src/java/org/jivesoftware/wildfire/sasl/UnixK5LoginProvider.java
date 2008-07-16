@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.wildfire.sasl;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -64,7 +64,7 @@ public class UnixK5LoginProvider extends AbstractAuthorizationProvider implement
     public Collection<String> getAuthorized(String username) {
         Collection<String> authorized = new ArrayList<String>();
         try {
-            String filename = JiveGlobals.getXMLProperty("unix.k5login","/home/{0}/.k5login");
+            String filename = IMConfig.XMPP_AUTHPROVIDER_K5LOGIN_FILENAME.getString();
             filename = filename.replace("{0}",username);
             File k5login = new File(filename);
             FileInputStream fis = new FileInputStream(k5login);

@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.wildfire.net;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 
 import javax.net.ssl.X509TrustManager;
@@ -85,13 +85,14 @@ class ServerTrustManager implements X509TrustManager {
 
         // Flag that indicates if certificates of the remote server should be validated. Disabling
         // certificate validation is not recommended for production environments.
-        boolean verify = JiveGlobals.getBooleanProperty("xmpp.server.certificate.verify", true);
+        boolean verify = IMConfig.XMPP_SERVER_CERTIFICATE_VERIFY.getBoolean();
+        
         if (verify) {
             int nSize = x509Certificates.length;
 
             List<String> peerIdentities = TLSStreamHandler.getPeerIdentities(x509Certificates[0]);
 
-            if (JiveGlobals.getBooleanProperty("xmpp.server.certificate.verify.chain", true)) {
+            if (IMConfig.XMPP_SERVER_CERTIFICATE_VERIFY_CHAIN.getBoolean()) {
                 // Working down the chain, for every certificate in the chain,
                 // verify that the subject of the certificate is the issuer of the
                 // next certificate in the chain.
@@ -121,14 +122,15 @@ class ServerTrustManager implements X509TrustManager {
                 }
             }
 
-            if (JiveGlobals.getBooleanProperty("xmpp.server.certificate.verify.root", true)) {
+            if (IMConfig.XMPP_SERVER_CERTIFICATE_VERIFY_ROOT.getBoolean()) {
                 // Verify that the the last certificate in the chain was issued
                 // by a third-party that the client trusts.
                 boolean trusted = false;
                 try {
                     trusted = trustStore.getCertificateAlias(x509Certificates[nSize - 1]) != null;
-                    if (!trusted && nSize == 1 && JiveGlobals
-                            .getBooleanProperty("xmpp.server.certificate.accept-selfsigned", false))
+                    if (!trusted && nSize == 1 && 
+                        IMConfig.XMPP_SERVER_CERTIFICATE_ACCEPT_SELFSIGNED.getBoolean()                                     
+                        )
                     {
                         Log.warn("Accepting self-signed certificate of remote server: " +
                                 peerIdentities);
@@ -158,7 +160,7 @@ class ServerTrustManager implements X509TrustManager {
                 throw new CertificateException("target verification failed of " + peerIdentities);
             }
 
-            if (JiveGlobals.getBooleanProperty("xmpp.server.certificate.verify.validity", true)) {
+            if (IMConfig.XMPP_SERVER_CERTIFICATE_VERIFY_VALIDITY.getBoolean()) {
                 // For every certificate in the chain, verify that the certificate
                 // is valid at the current time.
                 Date date = new Date();
@@ -194,7 +196,7 @@ class ServerTrustManager implements X509TrustManager {
     }
 
     public X509Certificate[] getAcceptedIssuers() {
-        if (JiveGlobals.getBooleanProperty("xmpp.server.certificate.accept-selfsigned", false)) {
+        if (IMConfig.XMPP_SERVER_CERTIFICATE_ACCEPT_SELFSIGNED.getBoolean()) {
             // Answer an empty list since we accept any issuer
             return new X509Certificate[0];
         }

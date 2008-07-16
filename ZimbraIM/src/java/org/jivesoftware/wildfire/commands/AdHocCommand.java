@@ -71,12 +71,7 @@ public abstract class AdHocCommand {
      */
     public boolean hasPermission(JID requester) {
         String requesterBareJID = requester.toBareJID();
-        for (JID adminJID : XMPPServer.getInstance().getAdmins()) {
-            if (adminJID.toBareJID().equals(requesterBareJID)) {
-                return true;
-            }
-        }
-        return false;
+        return XMPPServer.getInstance().isAdmin(requesterBareJID);
     }
 
     /**

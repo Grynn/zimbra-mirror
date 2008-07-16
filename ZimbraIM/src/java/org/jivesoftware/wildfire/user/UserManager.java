@@ -58,8 +58,7 @@ public class UserManager implements IQResultListener {
                 512 * 1024, JiveConstants.MINUTE*30);
         CacheManager.initializeCache("Roster", "username2roster", 512 * 1024);
         // Load a user provider.
-        String className = JiveGlobals.getXMLProperty("provider.user.className",
-                "org.jivesoftware.wildfire.user.DefaultUserProvider");
+        String className = IMConfig.USER_PROVIDER_CLASSNAME.getString();
         try {
             Class c = ClassUtils.forName(className);
             provider = (UserProvider)c.newInstance();
@@ -110,7 +109,9 @@ public class UserManager implements IQResultListener {
     public User createUser(String username, String password, String name, String email)
             throws UserAlreadyExistsException
     {
-        assert(username.indexOf('@') > 0);
+        if (username.indexOf('@')<=0) {
+            throw new IllegalArgumentException("Invalid username (must contain @ sign): "+username);
+        }
         if (provider.isReadOnly()) {
             throw new UnsupportedOperationException("User provider is read-only.");
         }

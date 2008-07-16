@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.wildfire.net;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.*;
@@ -389,8 +389,7 @@ public abstract class SocketConnection implements Connection {
     boolean checkHealth() {
         // Check that the sending operation is still active
         long writeTimestamp = writeStarted;
-        if (writeTimestamp > -1 && System.currentTimeMillis() - writeTimestamp >
-                JiveGlobals.getIntProperty("xmpp.session.sending-limit", 60000)) {
+        if (writeTimestamp > -1 && System.currentTimeMillis() - writeTimestamp > IMConfig.XMPP_SESSION_SENDING_TIMEOUT.getInt()) {
             // Close the socket
             if (Log.isDebugEnabled()) {
                 Log.debug("Closing connection: " + this + " that started sending data at: " +

@@ -19,15 +19,13 @@ package org.jivesoftware.wildfire.server;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.XMPPPacketReader;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
-import org.jivesoftware.util.StringUtils;
 import org.jivesoftware.wildfire.*;
 import org.jivesoftware.wildfire.auth.AuthFactory;
 import org.jivesoftware.wildfire.net.DNSUtil;
 import org.jivesoftware.wildfire.net.MXParser;
 import org.jivesoftware.wildfire.net.ServerTrafficCounter;
-import org.jivesoftware.wildfire.net.SocketConnection;
 import org.jivesoftware.wildfire.net.StdSocketConnection;
 import org.jivesoftware.wildfire.spi.BasicStreamIDFactory;
 import org.xmlpull.v1.XmlPullParser;
@@ -57,7 +55,7 @@ import java.util.concurrent.TimeUnit;
  * </ol>
  *
  * By default a timeout of 20 seconds will be used for reading packets from remote servers. Use
- * the property <b>xmpp.server.read.timeout</b> to change that value. The value should be in
+ * the property <b>XMPP_SERVER_READ_TIMEOUT</b> to change that value. The value should be in
  * milliseconds.
  *
  * @author Gaston Dombiak
@@ -84,7 +82,6 @@ class ServerDialback {
     }
 
     private Connection connection;
-    private String serverName;
     private SessionManager sessionManager = SessionManager.getInstance();
     private RoutingTable routingTable = XMPPServer.getInstance().getRoutingTable();
 
@@ -100,7 +97,7 @@ class ServerDialback {
      * @return true if server dialback is enabled.
      */
     public static boolean isEnabled() {
-        return JiveGlobals.getBooleanProperty("xmpp.server.dialback.enabled", true);
+        return IMConfig.XMPP_SERVER_DIALBACK_ENABLED.getBoolean();
     }
 
     /**
@@ -126,7 +123,6 @@ class ServerDialback {
      */
     ServerDialback(Connection connection, String serverName) {
         this.connection = connection;
-        this.serverName = serverName;
     }
 
     ServerDialback() {

@@ -253,7 +253,7 @@ public class LocaleUtils {
      *         display name.
      */
     public static String[][] getTimeZoneList() {
-        Locale jiveLocale = JiveGlobals.getLocale();
+        Locale jiveLocale = IMConfig.getLocale();
 
         String[][] timeZoneList = timeZoneLists.get(jiveLocale);
         if (timeZoneList == null) {
@@ -346,14 +346,14 @@ public class LocaleUtils {
 
     /**
      * Returns an internationalized string loaded from a resource bundle.
-     * The locale used will be the locale specified by JiveGlobals.getLocale().
+     * The locale used will be the locale specified by IMConfig.getLocale().
      *
      * @param key the key to use for retrieving the string from the
      *      appropriate resource bundle.
      * @return the localized string.
      */
     public static String getLocalizedString(String key) {
-        Locale locale = JiveGlobals.getLocale();
+        Locale locale = IMConfig.getLocale();
 
         ResourceBundle bundle = ResourceBundle.getBundle(resourceBaseName, locale, sMsgsClassLoader);
 
@@ -378,7 +378,7 @@ public class LocaleUtils {
 
     /**
      * Returns an internationalized string loaded from a resource bundle using
-     * the locale specified by JiveGlobals.getLocale() substituting the passed
+     * the locale specified by IMConfig.getLocale() substituting the passed
      * in arguments. Substitution is handled using the
      * {@link java.text.MessageFormat} class.
      *
@@ -389,7 +389,7 @@ public class LocaleUtils {
      * @return the localized string.
      */
     public static String getLocalizedString(String key, List arguments) {
-        Locale locale = JiveGlobals.getLocale();
+        Locale locale = IMConfig.getLocale();
 
         ResourceBundle bundle = ResourceBundle.getBundle(resourceBaseName, locale, sMsgsClassLoader);
         return getLocalizedString(key, locale, arguments, bundle);
@@ -426,7 +426,7 @@ public class LocaleUtils {
             return getLocalizedString(key, arguments);
         }
 
-        Locale locale = JiveGlobals.getLocale();
+        Locale locale = IMConfig.getLocale();
         String i18nFile = pluginName + "_i18n";
 
         // Retrieve classloader from pluginName.
@@ -456,7 +456,7 @@ public class LocaleUtils {
      * @throws Exception thrown if an exception occurs.
      */
     public static ResourceBundle getPluginResourceBundle(String pluginName) throws Exception {
-        final Locale locale = JiveGlobals.getLocale();
+        final Locale locale = IMConfig.getLocale();
 
         String i18nFile = pluginName + "_i18n";
 
@@ -492,7 +492,7 @@ public class LocaleUtils {
             throw new NullPointerException("Key cannot be null");
         }
         if (locale == null) {
-            locale = JiveGlobals.getLocale();
+            locale = IMConfig.getLocale();
         }
 
         String value;

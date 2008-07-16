@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.wildfire;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.audit.AuditStreamIDFactory;
@@ -25,10 +25,6 @@ import org.jivesoftware.wildfire.component.ComponentSession;
 import org.jivesoftware.wildfire.component.InternalComponentManager;
 import org.jivesoftware.wildfire.container.BasicModule;
 import org.jivesoftware.wildfire.event.SessionEventDispatcher;
-import org.jivesoftware.wildfire.handler.PresenceUpdateHandler;
-import org.jivesoftware.wildfire.multiplex.ConnectionMultiplexerManager;
-import org.jivesoftware.wildfire.multiplex.ConnectionMultiplexerSession;
-import org.jivesoftware.wildfire.net.SocketConnection;
 import org.jivesoftware.wildfire.server.IncomingServerSession;
 import org.jivesoftware.wildfire.server.OutgoingServerSession;
 import org.jivesoftware.wildfire.server.OutgoingSessionPromise;
@@ -40,7 +36,6 @@ import org.xmpp.packet.Message;
 import org.xmpp.packet.Packet;
 import org.xmpp.packet.Presence;
 
-import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -57,7 +52,6 @@ public class SessionManager extends BasicModule {
 
     public static final int NEVER_KICK = -1;
 
-    //private PresenceUpdateHandler presenceHandler;
     private PacketRouter router;
     private UserManager userManager;
     private int conflictLimit;
@@ -73,7 +67,6 @@ public class SessionManager extends BasicModule {
     private ComponentSessionListener componentSessionListener = new ComponentSessionListener();
     private IncomingServerSessionListener incomingServerListener = new IncomingServerSessionListener();
     private OutgoingServerSessionListener outgoingServerListener = new OutgoingServerSessionListener();
-    private ConnectionMultiplexerSessionListener multiplexerSessionListener = new ConnectionMultiplexerSessionListener();
 
     /**
      * Map that holds sessions that has been created but haven't been authenticated yet. The Map
@@ -100,16 +93,6 @@ public class SessionManager extends BasicModule {
      * this Map will keep the component's session.
      */
     private List<ComponentSession> componentsSessions = new CopyOnWriteArrayList<ComponentSession>();
-
-    /**
-     * Map of connection multiplexer sessions grouped by connection managers. Each connection
-     * manager may have many connections to the server (i.e. connection pool). All connections
-     * originated from the same connection manager are grouped as a single entry in the map.
-     * Once all connections have been closed users that were logged using the connection manager
-     * will become unavailable.
-     */
-    private Map<String, List<ConnectionMultiplexerSession>> connnectionManagerSessions =
-            new ConcurrentHashMap<String, List<ConnectionMultiplexerSession>>();
 
     /**
      * The sessions contained in this Map are server sessions originated by a remote server. These
@@ -161,144 +144,14 @@ public class SessionManager extends BasicModule {
     public SessionManager() {
         super("Session Manager");
         mShuttingDown = false;
-        if (JiveGlobals.getBooleanProperty("xmpp.audit.active")) {
+        if (IMConfig.XMPP_AUDIT_ACTIVE.getBoolean()) {
             streamIDFactory = new AuditStreamIDFactory();
         }
         else {
             streamIDFactory = new BasicStreamIDFactory();
         }
 
-        String conflictLimitProp = JiveGlobals.getProperty("xmpp.session.conflict-limit");
-        if (conflictLimitProp == null) {
-            conflictLimit = 0;
-            JiveGlobals.setProperty("xmpp.session.conflict-limit", Integer.toString(conflictLimit));
-        }
-        else {
-            try {
-                conflictLimit = Integer.parseInt(conflictLimitProp);
-            }
-            catch (NumberFormatException e) {
-                conflictLimit = 0;
-                JiveGlobals.setProperty("xmpp.session.conflict-limit", Integer.toString(conflictLimit));
-            }
-        }
-    }
-
-    /**
-     * Returns the session originated from the specified address. If the address contains
-     * a resource then the exact session is going to be looked for and if none is found then
-     * <tt>null</tt> is going to be returned. On the other hand, if the address is just a domain
-     * then any session originated from the connection manager is going to be returned and if
-     * the connection manager has no sessions then <tt>null</tt> is going to be returned.
-     *
-     * @param address the address of the connection manager (no resource included) or a specific
-     *        session of the connection manager (resource included).
-     * @return the session originated from the specified address.
-     */
-    public ConnectionMultiplexerSession getConnectionMultiplexerSession(JID address) {
-        List<ConnectionMultiplexerSession> sessions =
-                connnectionManagerSessions.get(address.getDomain());
-        if (sessions == null || sessions.isEmpty()) {
-            return null;
-        }
-        if (address.getResource() != null) {
-            // Look for the exact session
-            for (ConnectionMultiplexerSession session : sessions) {
-                if (session.getAddress().equals(address)) {
-                    return session;
-                }
-            }
-            return null;
-        }
-        else {
-            // Look for any session of the connection manager
-            return sessions.get(0);
-        }
-    }
-
-    /**
-     * Returns all sessions originated from connection managers.
-     *
-     * @return all sessions originated from connection managers.
-     */
-    public List<ConnectionMultiplexerSession> getConnectionMultiplexerSessions() {
-        if (connnectionManagerSessions.isEmpty()) {
-            return Collections.emptyList();
-        }
-        List<ConnectionMultiplexerSession> answer = new ArrayList<ConnectionMultiplexerSession>();
-        for (List<ConnectionMultiplexerSession> sessions : connnectionManagerSessions.values()) {
-            answer.addAll(sessions);
-        }
-        return answer;
-    }
-
-    /**
-     * Returns a collection with all the sessions originated from the connection manager
-     * whose domain matches the specified domain. If there is no connection manager with
-     * the specified domain then an empty list is going to be returned.
-     *
-     * @param domain the domain of the connection manager.
-     * @return a collection with all the sessions originated from the connection manager
-     *         whose domain matches the specified domain.
-     */
-    public List<ConnectionMultiplexerSession> getConnectionMultiplexerSessions(String domain) {
-        List<ConnectionMultiplexerSession> sessions = connnectionManagerSessions.get(domain);
-        if (sessions == null || sessions.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return new ArrayList<ConnectionMultiplexerSession>(sessions);
-    }
-
-    /**
-     * Returns the IP address of the connection manager whose domain matches the
-     * specified domain.
-     *
-     * @param domain the domain of the connection manager.
-     * @return the IP address of the connection manager.
-     */
-    public InetAddress getConnectionMultiplexerInetAddress(String domain) {
-        List<ConnectionMultiplexerSession> sessions = connnectionManagerSessions.get(domain);
-        if (sessions == null || sessions.isEmpty()) {
-            return null;
-        }
-        return sessions.get(0).getConnection().getInetAddress();
-    }
-
-    /**
-     * Creates a new <tt>ConnectionMultiplexerSession</tt>.
-     *
-     * @param conn the connection to create the session from.
-     * @param address the JID (may include a resource) of the connection manager's session. 
-     * @return a newly created session.
-     * @throws UnauthorizedException
-     */
-    public ConnectionMultiplexerSession createMultiplexerSession(SocketConnection conn, JID address)
-            throws UnauthorizedException {
-        StreamID id = nextStreamID();
-        ConnectionMultiplexerSession session = new ConnectionMultiplexerSession(address.getDomain(), conn, id);
-        conn.init(session);
-        // Register to receive close notification on this session so we can
-        // figure out when users that were using this connection manager may become unavailable
-        conn.registerCloseListener(multiplexerSessionListener, session);
-
-        // Add to connection multiplexer session.
-        List<ConnectionMultiplexerSession> sessions =
-                connnectionManagerSessions.get(address.getDomain());
-        if (sessions == null) {
-            synchronized (address.getDomain().intern()) {
-                sessions = connnectionManagerSessions.get(address.getDomain());
-                if (sessions == null) {
-                    sessions = new CopyOnWriteArrayList<ConnectionMultiplexerSession>();
-                    connnectionManagerSessions.put(address.getDomain(), sessions);
-                    // Notify ConnectionMultiplexerManager that a new connection manager
-                    // is available
-                    ConnectionMultiplexerManager.getInstance()
-                            .multiplexerAvailable(address.getDomain());
-                }
-            }
-        }
-        sessions.add(session);
-        return session;
+        conflictLimit = IMConfig.XMPP_SESSION_CONFLICT_LIMIT.getInt();
     }
 
     /**
@@ -1521,11 +1374,6 @@ public class SessionManager extends BasicModule {
         return preAuthenticatedSessions.keySet();
     }
 
-    public void setConflictKickLimit(int limit) {
-        conflictLimit = limit;
-        JiveGlobals.setProperty("xmpp.session.conflict-limit", Integer.toString(conflictLimit));
-    }
-
     private class ClientSessionListener implements ConnectionCloseListener {
         /**
          * Handle a session that just closed.
@@ -1618,54 +1466,21 @@ public class SessionManager extends BasicModule {
         }
     }
 
-    private class ConnectionMultiplexerSessionListener implements ConnectionCloseListener {
-        /**
-         * Handle a session that just closed.
-         *
-         * @param handback The session that just closed
-         */
-        public void onConnectionClose(Object handback) {
-            ConnectionMultiplexerSession session = (ConnectionMultiplexerSession)handback;
-            // Remove all the hostnames that were registered for this server session
-            String domain = session.getAddress().getDomain();
-            List<ConnectionMultiplexerSession> sessions = connnectionManagerSessions.get(domain);
-            sessions.remove(session);
-            if (sessions.isEmpty()) {
-                connnectionManagerSessions.remove(domain);
-                // Terminate ClientSessions originated from this connection manager
-                // that are still active since the connection manager has gone down
-                ConnectionMultiplexerManager.getInstance().multiplexerUnavailable(domain);
-            }
-        }
-    }
-
     public void initialize(XMPPServer server) {
         super.initialize(server);
         router = server.getPacketRouter();
         userManager = server.getUserManager();
         routingTable = server.getRoutingTable();
 
-        if (JiveGlobals.getBooleanProperty("xmpp.audit.active")) {
+        if (IMConfig.XMPP_AUDIT_ACTIVE.getBoolean()) {
             streamIDFactory = new AuditStreamIDFactory();
         }
         else {
             streamIDFactory = new BasicStreamIDFactory();
         }
 
-        String conflictLimitProp = JiveGlobals.getProperty("xmpp.session.conflict-limit");
-        if (conflictLimitProp == null) {
-            conflictLimit = 0;
-            JiveGlobals.setProperty("xmpp.session.conflict-limit", Integer.toString(conflictLimit));
-        }
-        else {
-            try {
-                conflictLimit = Integer.parseInt(conflictLimitProp);
-            }
-            catch (NumberFormatException e) {
-                conflictLimit = 0;
-                JiveGlobals.setProperty("xmpp.session.conflict-limit", Integer.toString(conflictLimit));
-            }
-        }
+        conflictLimit = IMConfig.XMPP_SESSION_CONFLICT_LIMIT.getInt();
+        
         // Run through the server sessions every 5 minutes after a 5 minutes server
         // startup delay (default values)
         serverCleanupTask = new ServerCleanupTask();
@@ -1732,7 +1547,7 @@ public class SessionManager extends BasicModule {
         // Stop threads that are sending packets to remote servers
         OutgoingSessionPromise.getInstance().shutdown();
         timer.cancel();
-        if (JiveGlobals.getBooleanProperty("shutdownMessage.enabled")) {
+        if (IMConfig.SHUTDOWN_MESSAGE_ENABLED.getBoolean()) {
             sendServerMessage(null, LocaleUtils.getLocalizedString("admin.shutdown.now"));
         }
         try {
@@ -1743,10 +1558,6 @@ public class SessionManager extends BasicModule {
             sessions.addAll(outgoingServerSessions.values());
             for (List<IncomingServerSession> incomingSessions : incomingServerSessions.values()) {
                 sessions.addAll(incomingSessions);
-            }
-            for (List<ConnectionMultiplexerSession> multiplexers : connnectionManagerSessions
-                    .values()) {
-                sessions.addAll(multiplexers);
             }
 
             for (Session session : sessions) {
@@ -1778,52 +1589,7 @@ public class SessionManager extends BasicModule {
      *         server.
      */
     public boolean isMultipleServerConnectionsAllowed() {
-        return JiveGlobals.getBooleanProperty("xmpp.server.session.allowmultiple", true);
-    }
-
-    /**
-     * Sets if remote servers are allowed to have more than one connection to this
-     * server. Having more than one connection may improve number of packets that can be
-     * transfered per second. This setting only used by the server dialback mehod.<p>
-     *
-     * It is highly recommended that {@link #getServerSessionTimeout()} is enabled so that
-     * dead connections to this server can be easily discarded.
-     *
-     * @param allowed true if remote servers are allowed to have more than one connection to this
-     *        server.
-     */
-    public void setMultipleServerConnectionsAllowed(boolean allowed) {
-        JiveGlobals.setProperty("xmpp.server.session.allowmultiple", Boolean.toString(allowed));
-        if (allowed && JiveGlobals.getIntProperty("xmpp.server.session.idle", 10 * 60 * 1000) <= 0)
-        {
-            Log.warn("Allowing multiple S2S connections for each domain, without setting a " +
-                    "maximum idle timeout for these connections, is unrecommended! Either " +
-                    "set xmpp.server.session.allowmultiple to 'false' or change " +
-                    "xmpp.server.session.idle to a (large) positive value.");
-        }
-    }
-
-    /******************************************************
-     * Clean up code
-     *****************************************************/
-    /**
-     * Sets the number of milliseconds to elapse between clearing of idle server sessions.
-     *
-     * @param timeout the number of milliseconds to elapse between clearings.
-     */
-    public void setServerSessionTimeout(int timeout) {
-        if (getServerSessionTimeout() == timeout) {
-            return;
-        }
-        // Cancel the existing task because the timeout has changed
-        if (serverCleanupTask != null) {
-            serverCleanupTask.cancel();
-        }
-        // Create a new task and schedule it with the new timeout
-        serverCleanupTask = new ServerCleanupTask();
-        timer.schedule(serverCleanupTask, getServerSessionTimeout(), getServerSessionTimeout());
-        // Set the new property value
-        JiveGlobals.setProperty("xmpp.server.session.timeout", Integer.toString(timeout));
+        return IMConfig.XMPP_SERVER_SESSION_ALLOWMULTIPLE.getBoolean();
     }
 
     /**
@@ -1832,27 +1598,14 @@ public class SessionManager extends BasicModule {
      * @return the number of milliseconds to elapse between clearing of idle server sessions.
      */
     public int getServerSessionTimeout() {
-        return JiveGlobals.getIntProperty("xmpp.server.session.timeout", 5 * 60 * 1000);
+        return IMConfig.XMPP_SERVER_SESSION_IDLE_CHECK_TIME.getInt();
     }
 
-    public void setServerSessionIdleTime(int idleTime) {
-        if (getServerSessionIdleTime() == idleTime) {
-            return;
-        }
-        // Set the new property value
-        JiveGlobals.setProperty("xmpp.server.session.idle", Integer.toString(idleTime));
-
-        if (idleTime <= 0 && isMultipleServerConnectionsAllowed() )
-        {
-            Log.warn("Allowing multiple S2S connections for each domain, without setting a " +
-                "maximum idle timeout for these connections, is unrecommended! Either " +
-                "set xmpp.server.session.allowmultiple to 'false' or change " +
-                "xmpp.server.session.idle to a (large) positive value.");
-        }
-    }
-
+    /**
+     * @return
+     */
     public int getServerSessionIdleTime() {
-        return JiveGlobals.getIntProperty("xmpp.server.session.idle", 10 * 60 * 1000);
+        return IMConfig.XMPP_SERVER_SESSION_IDLE.getInt();
     }
 
     /**

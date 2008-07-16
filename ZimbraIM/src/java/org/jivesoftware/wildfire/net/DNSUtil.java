@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.wildfire.net;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 
 import javax.naming.directory.Attributes;
@@ -48,7 +48,7 @@ public class DNSUtil {
             env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
             context = new InitialDirContext(env);
 
-            String property = JiveGlobals.getProperty("dnsutil.dnsOverride");
+            String property = IMConfig.DNSUTIL_DNSOVERRIDE.getString();
             if (property != null) {
                 dnsOverride = decode(property);
             }
@@ -127,19 +127,6 @@ public class DNSUtil {
      */
     public static Map<String, HostAddress> getDnsOverride() {
         return dnsOverride;
-    }
-
-    /**
-     * Sets the internal DNS that allows to specify target IP addresses and ports
-     * to use for domains. The internal DNS will be checked up before performing an
-     * actual DNS SRV lookup.
-     *
-     * @param dnsOverride the internal DNS that allows to specify target IP addresses and ports
-     *        to use for domains.
-     */
-    public static void setDnsOverride(Map<String, HostAddress> dnsOverride) {
-        DNSUtil.dnsOverride = dnsOverride;
-        JiveGlobals.setProperty("dnsutil.dnsOverride", encode(dnsOverride));
     }
 
     private static String encode(Map<String, HostAddress> internalDNS) {

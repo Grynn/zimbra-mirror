@@ -18,10 +18,8 @@ package org.jivesoftware.wildfire.filetransfer.proxy;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
-import org.jivesoftware.util.PropertyEventDispatcher;
-import org.jivesoftware.util.PropertyEventListener;
 import org.jivesoftware.wildfire.*;
 import org.jivesoftware.wildfire.filetransfer.FileTransferManager;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
@@ -47,17 +45,7 @@ import java.util.*;
 public class FileTransferProxy extends BasicModule
         implements ServerItemsProvider, DiscoInfoProvider, DiscoItemsProvider,
         RoutableChannelHandler {
-    /**
-     * The JiveProperty relating to whether or not the file treansfer proxy is enabled.
-     */
-    public static final String JIVEPROPERTY_PROXY_ENABLED = "xmpp.proxy.enabled";
-
-    /**
-     * The JiveProperty relating to the port the proxy is operating on. Changing this value requires a restart of the
-     * proxy.
-     */
-    public static final String JIVEPROPERTY_PORT = "xmpp.proxy.port";
-
+    
     /**
      * Whether or not the file transfer proxy is enabled by default.
      */
@@ -83,8 +71,6 @@ public class FileTransferProxy extends BasicModule
         super("SOCKS5 file transfer proxy");
 
         info = new IQHandlerInfo("query", FileTransferManager.NAMESPACE_BYTESTREAMS);
-
-        PropertyEventDispatcher.addListener(new FileTransferPropertyListener());
     }
 
     public boolean handleIQ(IQ packet) throws UnauthorizedException {
@@ -161,28 +147,28 @@ public class FileTransferProxy extends BasicModule
     public void initialize(XMPPServer server) {
         super.initialize(server);
 
-        proxyServiceName = JiveGlobals.getProperty("xmpp.proxy.service", "proxy");
+        proxyServiceName = IMConfig.XMPP_PROXY_SERVICE_NAME.getString();
         routingTable = server.getRoutingTable();
         router = server.getPacketRouter();
 
-        // Load the external IP and port information
-        String interfaceName = JiveGlobals.getXMLProperty("network.interface");
-        bindInterface = null;
-        if (interfaceName != null) {
-            if (interfaceName.trim().length() > 0) {
-                try {
-                    bindInterface = InetAddress.getByName(interfaceName);
-                }
-                catch (UnknownHostException e) {
-                    Log.error("Error binding to network.interface", e);
-                }
-            }
-        }
+//        // Load the external IP and port information
+//        String interfaceName = JiveGlobals.getXMLProperty("network.interface");
+//        bindInterface = null;
+//        if (interfaceName != null) {
+//            if (interfaceName.trim().length() > 0) {
+//                try {
+//                    bindInterface = InetAddress.getByName(interfaceName);
+//                }
+//                catch (UnknownHostException e) {
+//                    Log.error("Error binding to network.interface", e);
+//                }
+//            }
+//        }
 
         try {
-            proxyIP = JiveGlobals.getProperty("xmpp.proxy.externalip",
-                    (bindInterface != null ? bindInterface.getHostAddress()
-                            : InetAddress.getLocalHost().getHostAddress()));
+            proxyIP = IMConfig.XMPP_PROXY_EXTERNALIP.getString();
+            if (proxyIP == null || proxyIP.length() == 0)
+                proxyIP = InetAddress.getLocalHost().getHostAddress();
         }
         catch (UnknownHostException e) {
             Log.error("Couldn't discover local host", e);
@@ -229,41 +215,17 @@ public class FileTransferProxy extends BasicModule
         connectionManager.shutdown();
     }
 
-    public void enableFileTransferProxy(boolean isEnabled) {
-        JiveGlobals.setProperty(FileTransferProxy.JIVEPROPERTY_PROXY_ENABLED,
-                Boolean.toString(isEnabled));
-    }
-
-    private void setEnabled(boolean isEnabled) {
-        if (isEnabled) {
-            startProxy();
-        }
-        else {
-            stop();
-        }
-    }
-
     /**
      * Returns true if the file transfer proxy is currently enabled and false if it is not.
      *
      * @return Returns true if the file transfer proxy is currently enabled and false if it is not.
      */
     public boolean isProxyEnabled() {
-        return connectionManager.isRunning() &&
-                JiveGlobals.getBooleanProperty(JIVEPROPERTY_PROXY_ENABLED, DEFAULT_IS_PROXY_ENABLED);
+        return (connectionManager.isRunning() && isEnabled());
     }
 
     private boolean isEnabled() {
-        return JiveGlobals.getBooleanProperty(JIVEPROPERTY_PROXY_ENABLED, DEFAULT_IS_PROXY_ENABLED);
-    }
-
-    /**
-     * Sets the port that the proxy operates on. This requires a restart of the file transfer proxy.
-     *
-     * @param port The port.
-     */
-    public void setProxyPort(int port) {
-        JiveGlobals.setProperty(JIVEPROPERTY_PORT, Integer.toString(port));
+        return IMConfig.XMPP_PROXY_ENABLED.getBoolean();        
     }
 
     /**
@@ -272,7 +234,8 @@ public class FileTransferProxy extends BasicModule
      * @return Returns the port that the file transfer proxy is opertating on.
      */
     public int getProxyPort() {
-        return JiveGlobals.getIntProperty(JIVEPROPERTY_PORT, DEFAULT_PORT);
+//        return JiveGlobals.getIntProperty(JIVEPROPERTY_PORT, DEFAULT_PORT);
+        return IMConfig.XMPP_PROXY_PORT.getInt();
     }
 
     /**
@@ -367,29 +330,6 @@ public class FileTransferProxy extends BasicModule
                 reply.setError(PacketError.Condition.feature_not_implemented);
                 router.route(reply);
             }
-        }
-    }
-
-    private class FileTransferPropertyListener implements PropertyEventListener {
-        public void propertySet(String property, Map params) {
-            if(JIVEPROPERTY_PROXY_ENABLED.equalsIgnoreCase(property)) {
-                Object value = params.get("value");
-                boolean isEnabled = (value != null ? Boolean.parseBoolean(value.toString()) :
-                        DEFAULT_IS_PROXY_ENABLED);
-                setEnabled(isEnabled);
-            }
-        }
-
-        public void propertyDeleted(String property, Map params) {
-            if(JIVEPROPERTY_PROXY_ENABLED.equalsIgnoreCase(property)) {
-                setEnabled(DEFAULT_IS_PROXY_ENABLED);
-            }
-        }
-
-        public void xmlPropertySet(String property, Map params) {
-        }
-
-        public void xmlPropertyDeleted(String property, Map params) {
         }
     }
 }

@@ -16,8 +16,7 @@
  */
 package org.jivesoftware.wildfire.muc;
 
-import org.jivesoftware.util.JiveGlobals;
-import org.jivesoftware.util.Log;
+import org.jivesoftware.util.IMConfig;
 import org.xmpp.packet.Message;
 
 import java.util.Iterator;
@@ -47,10 +46,6 @@ public class HistoryStrategy {
      */
     private ConcurrentLinkedQueue<Message> history = new ConcurrentLinkedQueue<Message>();
     /**
-     * Default max number.
-     */
-    private static final int DEFAULT_MAX_NUMBER = 25;
-    /**
      * The maximum number of chat history messages stored for the room.
      */
     private int maxNumber;
@@ -63,12 +58,7 @@ public class HistoryStrategy {
      * Track the latest room subject change or null if none exists yet.
      */
     private Message roomSubject = null;
-    /**
-     * The string prefix to be used on the context property names
-     * (do not include trailing dot).
-     */
-    private String contextPrefix = null;
-
+    
     /**
      * Create a history strategy with the given parent strategy (for defaults) or null if no 
      * parent exists.
@@ -78,12 +68,23 @@ public class HistoryStrategy {
     public HistoryStrategy(HistoryStrategy parentStrategy) {
         this.parent = parentStrategy;
         if (parent == null) {
-            maxNumber = DEFAULT_MAX_NUMBER;
-        }
-        else {
+            try {
+                type = Type.valueOf(IMConfig.XMPP_MUC_HISTORY_TYPE.getString());
+            } catch (Exception e) {
+                type = Type.number;
+            }
+            maxNumber = IMConfig.XMPP_MUC_HISTORY_MAXNUMBER.getInt();
+        } else {
             type = Type.defaulType;
             maxNumber = parent.getMaxNumber();
         }
+    }
+
+    /**
+     * Strategy type.
+     */
+    public enum Type {
+        defaulType, none, all, number;
     }
 
     /**
@@ -93,33 +94,6 @@ public class HistoryStrategy {
      */
     public int getMaxNumber() {
         return maxNumber;
-    }
-
-    /**
-     * Set the maximum number of messages for strategies using message number limitations.
-     *
-     * @param max The maximum number of messages to store in applicable strategies.
-     */
-    public void setMaxNumber(int max) {
-        this.maxNumber = max;
-        if (contextPrefix != null){
-            JiveGlobals.setProperty(contextPrefix + ".maxNumber",
-                                    Integer.toString(maxNumber));
-        }
-    }
-
-    /**
-     * Set the type of history strategy being used.
-     *
-     * @param newType The new type of chat history to use.
-     */
-    public void setType(Type newType){
-        if (newType != null){
-            type = newType;
-        }
-        if (contextPrefix != null){
-            JiveGlobals.setProperty(contextPrefix + ".type", type.toString());
-        }
     }
 
     /**
@@ -215,55 +189,7 @@ public class HistoryStrategy {
         LinkedList<Message> list = new LinkedList<Message>(history);
         return list.listIterator(list.size());
     }
-
-    /**
-     * Strategy type.
-     */
-    public enum Type {
-        defaulType, none, all, number;
-    }
-
-    /**
-     * Obtain the strategy type from string name. See the Type enumeration name
-     * strings for the names strings supported. If nothing matches
-     * and parent != null DEFAULT is used, otherwise, NUMBER is used.
-     *
-     * @param typeName The text name of the strategy type
-     */
-    public void setTypeFromString(String typeName) {
-        try {
-            setType(Type.valueOf(typeName));
-        }
-        catch (Exception e) {
-            if (parent != null) {
-                setType(Type.defaulType);
-            }
-            else {
-                setType(Type.number);
-            }
-        }
-    }
-
-    /**
-     * Sets the prefix to use for retrieving and saving settings (and also
-     * triggers an immediate loading of properties).
-     *
-     * @param prefix the prefix to use (without trailing dot) on property names.
-     */
-    public void setContext(String prefix) {
-        this.contextPrefix = prefix;
-        setTypeFromString(JiveGlobals.getProperty(prefix + ".type"));
-        String maxNumberString = JiveGlobals.getProperty(prefix + ".maxNumber");
-        if (maxNumberString != null && maxNumberString.trim().length() > 0){
-            try {
-                setMaxNumber(Integer.parseInt(maxNumberString));
-            }catch (Exception e){
-                Log.info("Jive property "
-                        + prefix + ".maxNumber not a valid number.");
-            }
-        }
-    }
-
+    
     /**
      * Returns true if there is a message within the history of the room that has changed the
      * room's subject.

@@ -17,7 +17,7 @@
 package org.jivesoftware.database;
 
 import org.jivesoftware.util.ClassUtils;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 
 import java.io.*;
@@ -71,7 +71,7 @@ public class DbConnectionManager {
                 if (connectionProvider == null) {
                     // Attempt to load the connection provider classname as
                     // a Jive property.
-                    String className = JiveGlobals.getXMLProperty("connectionProvider.className");
+                    String className = IMConfig.CONNECTION_PROVIDER_CLASSNAME.getString(); 
                     if (className != null) {
                         // Attempt to load the class.
                         try {

@@ -17,7 +17,7 @@
 package org.jivesoftware.wildfire.component;
 
 import org.jivesoftware.database.DbConnectionManager;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.Session;
 import org.jivesoftware.wildfire.SessionManager;
@@ -270,18 +270,7 @@ public class ExternalComponentManager {
      *         individual configuration.
      */
     public static String getDefaultSecret() {
-        return JiveGlobals.getProperty("xmpp.component.defaultSecret");
-    }
-
-    /**
-     * Sets the default secret key to use for those external components that don't have an
-     * individual configuration.
-     *
-     * @param defaultSecret the default secret key to use for those external components that
-     *         don't have an individual configuration.
-     */
-    public static void setDefaultSecret(String defaultSecret) {
-        JiveGlobals.setProperty("xmpp.component.defaultSecret", defaultSecret);
+        return IMConfig.XMPP_COMPONENT_DEFAULT_SECRET.getString();
     }
 
     /**
@@ -321,48 +310,12 @@ public class ExternalComponentManager {
      */
     public static PermissionPolicy getPermissionPolicy() {
         try {
-            return PermissionPolicy.valueOf(JiveGlobals.getProperty("xmpp.component.permission",
-                    PermissionPolicy.blacklist.toString()));
+            return PermissionPolicy.valueOf(IMConfig.XMPP_COMPONENT_PERMISSION_POLICY.getString());
         }
         catch (Exception e) {
             Log.error(e);
             return PermissionPolicy.blacklist;
         }
-    }
-
-    /**
-     * Sets the permission policy being used for new XMPP entities that are trying to
-     * connect to the server. There are two types of policies: 1) blacklist: where any entity
-     * is allowed to connect to the server except for those listed in the black list and
-     * 2) whitelist: where only the entities listed in the white list are allowed to connect to
-     * the server.
-     *
-     * @param policy the new PermissionPolicy to use.
-     */
-    public static void setPermissionPolicy(PermissionPolicy policy) {
-        JiveGlobals.setProperty("xmpp.component.permission", policy.toString());
-        // Check if connected components can remain connected to the server
-        for (ComponentSession session : SessionManager.getInstance().getComponentSessions()) {
-            for (String domain : session.getExternalComponent().getSubdomains()) {
-                if (!canAccess(domain)) {
-                    session.getConnection().close();
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
-     * Sets the permission policy being used for new XMPP entities that are trying to
-     * connect to the server. There are two types of policies: 1) blacklist: where any entity
-     * is allowed to connect to the server except for those listed in the black list and
-     * 2) whitelist: where only the entities listed in the white list are allowed to connect to
-     * the server.
-     *
-     * @param policy the new policy to use.
-     */
-    public static void setPermissionPolicy(String policy) {
-        setPermissionPolicy(PermissionPolicy.valueOf(policy));
     }
 
     public enum PermissionPolicy {

@@ -21,7 +21,7 @@ import org.dom4j.Element;
 import org.dom4j.QName;
 import org.jivesoftware.stringprep.Stringprep;
 import org.jivesoftware.stringprep.StringprepException;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.*;
@@ -84,7 +84,7 @@ public class IQAuthHandler extends IQHandler implements IQAuthInfo {
             probeResponse.addElement("digest");
         }
         probeResponse.addElement("resource");
-        anonymousAllowed = "true".equals(JiveGlobals.getProperty("xmpp.auth.anonymous"));
+        anonymousAllowed = IMConfig.XMPP_AUTH_ANONYMOUS.getBoolean();
     }
 
     public IQ handleIQ(IQ packet) throws UnauthorizedException, PacketException {
@@ -281,11 +281,6 @@ public class IQAuthHandler extends IQHandler implements IQAuthInfo {
 
     public boolean isAnonymousAllowed() {
         return anonymousAllowed;
-    }
-
-    public void setAllowAnonymous(boolean isAnonymous) throws UnauthorizedException {
-        anonymousAllowed = isAnonymous;
-        JiveGlobals.setProperty("xmpp.auth.anonymous", anonymousAllowed ? "true" : "false");
     }
 
     public void initialize(XMPPServer server) {

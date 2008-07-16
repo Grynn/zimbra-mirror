@@ -16,7 +16,6 @@
  */
 package org.jivesoftware.wildfire.net;
 
-import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.ConnectionManager;

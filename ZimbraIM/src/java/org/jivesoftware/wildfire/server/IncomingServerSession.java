@@ -22,8 +22,8 @@ import org.jivesoftware.wildfire.*;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.net.SASLAuthentication;
 import org.jivesoftware.wildfire.net.SocketConnection;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
-import org.jivesoftware.util.JiveGlobals;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmpp.packet.Packet;
@@ -102,15 +102,6 @@ public class IncomingServerSession extends Session {
             if (ServerDialback.isEnabled()) {
                 ServerDialback method = new ServerDialback(connection, serverName);
                 return method.getDialbackCreatorSession(streamElt);
-//                throw new IOException("Server Session Handshaking UNIMPLEMENTED (pass 2nd Element) method="+method);
-//                return method.createIncomingSession(streamElt, null);
-//                
-//                if (!method.sendIncomingReplyStreamHeader(streamElt)) { 
-//                    method.sendFailedIncomingReplyStreamHeader();
-//                    return null;
-//                } else {
-//                    mDialback = method;
-//            }
             } else {
                 Log.debug("Server dialback is disabled. Rejecting connection: " + connection);
             }
@@ -119,7 +110,7 @@ public class IncomingServerSession extends Session {
         int[] serverVersion = version != null ? decodeVersion(version) : new int[] {0,0};
         if (serverVersion[0] >= 1) {
             // Remote server is XMPP 1.0 compliant so offer TLS and SASL to establish the connection
-            if (JiveGlobals.getBooleanProperty("xmpp.server.tls.enabled", true)) {
+            if (IMConfig.XMPP_SERVER_TLS_ENABLED.getBoolean()) {
                 try {
                     return createIncomingSession(connection, serverName);
                 }
@@ -172,8 +163,7 @@ public class IncomingServerSession extends Session {
                 Connection.TLSPolicy.required);
 
         // Indicate the compression policy to use for this connection
-        String policyName = JiveGlobals.getProperty("xmpp.server.compression.policy",
-                Connection.CompressionPolicy.disabled.toString());
+        String policyName = IMConfig.XMPP_SERVER_COMPRESSION_POLICY.getString();
         Connection.CompressionPolicy compressionPolicy =
                 Connection.CompressionPolicy.valueOf(policyName);
         connection.setCompressionPolicy(compressionPolicy);

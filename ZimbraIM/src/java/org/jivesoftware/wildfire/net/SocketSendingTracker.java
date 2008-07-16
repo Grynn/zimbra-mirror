@@ -26,7 +26,7 @@ package org.jivesoftware.wildfire.net;
  * may occur.<p>
  *
  * The time limit to wait before considering a connection dead can be configured changing the
- * property <b>xmpp.session.sending-limit</b>. If the property was not defined then a default
+ * property <b>XMPP_SESSION_SENDING_TIMEOUT</b>. If the property was not defined then a default
  * time limit of 60 seconds will be assumed. This means that by default if a sending operation
  * takes longer than 60 seconds then the connection will be closed and the client disconnected.
  * Therefore, it is important to not set a very low time limit since active clients may be

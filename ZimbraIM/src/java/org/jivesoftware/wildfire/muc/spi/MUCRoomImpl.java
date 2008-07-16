@@ -465,7 +465,7 @@ public class MUCRoomImpl implements MUCRoom {
                 role = MUCRole.Role.moderator;
                 affiliation = MUCRole.Affiliation.owner;
             }
-            else if (server.getSysadmins().contains(user.getAddress().toBareJID())) {
+            else if (server.isSysadmin(user.getAddress().toBareJID())) {
                 // The user is a system administrator of the MUC service. Treat him as an owner 
                 // although he won't appear in the list of owners
                 role = MUCRole.Role.moderator;

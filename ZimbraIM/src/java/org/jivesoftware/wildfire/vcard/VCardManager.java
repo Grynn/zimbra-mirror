@@ -266,8 +266,7 @@ public class VCardManager extends BasicModule implements ServerFeaturesProvider 
         instance = this;
 
         // Load a VCard provider.
-        String className = JiveGlobals.getXMLProperty("provider.vcard.className",
-                DefaultVCardProvider.class.getName());
+        String className = IMConfig.VCARD_PROVIDER_CLASSNAME.getString();
         try {
             Class c = ClassUtils.forName(className);
             provider = (VCardProvider) c.newInstance();

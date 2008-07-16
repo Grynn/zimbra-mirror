@@ -16,7 +16,7 @@
  */
 package org.jivesoftware.wildfire.net;
 
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.wildfire.ConnectionManager;
 import org.jivesoftware.wildfire.ServerPort;
 
@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * Implements a network front end with a dedicated thread reading
  * each incoming socket. Blocking and non-blocking modes are supported.
- * By default blocking mode is used. Use the <i>xmpp.socket.blocking</i>
+ * By default non-blocking mode is used. Use the <i>XMPP_SOCKET_BLOCKING</i>
  * system property to change the blocking mode. Restart the server after making
  * changes to the system property.
  *
@@ -77,7 +77,7 @@ public class SocketAcceptThread extends Thread {
 //        }
         this.serverPort = serverPort;
         // Set the blocking reading mode to use
-        boolean useBlockingMode = JiveGlobals.getBooleanProperty("xmpp.socket.blocking", true);
+        boolean useBlockingMode = IMConfig.XMPP_SOCKET_BLOCKING.getBoolean();
         if (useBlockingMode) {
             acceptingMode = new BlockingAcceptingMode(connManager, serverPort);
         }

@@ -19,7 +19,6 @@ package org.jivesoftware.wildfire.spi;
 import org.jivesoftware.util.Version;
 import org.jivesoftware.wildfire.XMPPServerInfo;
 import org.jivesoftware.wildfire.ConnectionManager;
-import org.jivesoftware.util.JiveGlobals;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -104,30 +103,6 @@ public class XMPPServerInfoImpl implements XMPPServerInfo {
             }
         }
         return toRet;
-    }
-
-    public void addName(String serverName) {
-        if (!names.contains(serverName)) {
-            names.add(serverName);
-            if (serverName == null) {
-                JiveGlobals.deleteProperty("xmpp.domain");
-            }
-            else {
-                JiveGlobals.setProperty("xmpp.domain", packNamesStr());
-            }
-        }
-    }
-    
-    public void removeName(String serverName) {
-        if (names.contains(serverName)) {
-            names.remove(serverName);
-            if (serverName == null) {
-                JiveGlobals.deleteProperty("xmpp.domain");
-            }
-            else {
-                JiveGlobals.setProperty("xmpp.domain", packNamesStr());
-            }
-        }
     }
 
     public Date getLastStarted() {

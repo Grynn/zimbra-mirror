@@ -17,7 +17,7 @@
 package org.jivesoftware.wildfire.component;
 
 import org.dom4j.Element;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.PacketException;
 import org.jivesoftware.wildfire.PacketRouter;
@@ -201,7 +201,7 @@ public class InternalComponentManager implements ComponentManager, RoutableChann
     }
 
     public String getProperty(String name) {
-        return JiveGlobals.getProperty(name);
+        return IMConfig.getStrProperty(name);
     }
 
     public void setProperty(String name, String value) {
@@ -213,7 +213,7 @@ public class InternalComponentManager implements ComponentManager, RoutableChann
     }
 
     public String getHomeDirectory() {
-        return JiveGlobals.getHomeDirectory();
+        return IMConfig.getHomeDirectory();
     }
 
     public boolean isExternalMode() {

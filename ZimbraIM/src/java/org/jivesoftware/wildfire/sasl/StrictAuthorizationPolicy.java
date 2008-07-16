@@ -16,8 +16,6 @@
  */
 package org.jivesoftware.wildfire.sasl;
 
-import org.jivesoftware.util.JiveGlobals;
-
 /**
  * This policy will authorize any principal who:
  *
@@ -42,7 +40,8 @@ public class StrictAuthorizationPolicy extends AbstractAuthorizationPolicy imple
      * @return true is the user is authorized to be principal
      */
     public boolean authorize(String username, String principal) {
-        return (principal.equals(username+"@"+JiveGlobals.getXMLProperty("sasl.realm")));
+//        return (principal.equals(username+"@"+JiveGlobals.getXMLProperty("sasl.realm")));
+        return false; //FIXME unsupported
     }
     
     /**
@@ -60,6 +59,6 @@ public class StrictAuthorizationPolicy extends AbstractAuthorizationPolicy imple
      * @return The description of the Policy.
      */
     public String description() {
-        return "This policy will authorize any principal whos username matches exactly the username of the JID and whos realm matches exactly the realm of the server.";
+        return "This policy will authorize any principal who's username matches exactly the username of the JID and who's realm matches exactly the realm of the server.";
     }
 }

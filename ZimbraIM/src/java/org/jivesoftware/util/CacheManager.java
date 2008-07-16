@@ -77,9 +77,9 @@ public class CacheManager {
             long expirationTime) {
         Cache<K,V> cache = caches.get(name);
         if (cache == null) {
-            size = JiveGlobals.getIntProperty("cache." + propertiesName + ".size", size);
-            expirationTime = (long) JiveGlobals.getIntProperty(
-                    "cache." + propertiesName + ".expirationTime", (int) expirationTime);
+            size = IMConfig.getCacheSize(propertiesName, size);
+            expirationTime = IMConfig.getCacheExpirationTime(propertiesName, (int)expirationTime);
+            
             cache = new Cache<K,V>(name, size, expirationTime);
             caches.put(name, cache);
         }

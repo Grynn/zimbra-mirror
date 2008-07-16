@@ -18,7 +18,7 @@ package org.jivesoftware.wildfire.commands;
 
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.StringUtils;
 import org.xmpp.forms.DataForm;
 import org.xmpp.forms.FormField;
@@ -162,7 +162,7 @@ public class AdHocCommandManager {
                             }
                         }
                     }
-                    int limit = JiveGlobals.getIntProperty("xmpp.command.limit", 100);
+                    int limit = IMConfig.XMPP_COMMAND_LIMIT.getInt();
                     if (counter.incrementAndGet() > limit) {
                         counter.decrementAndGet();
                         // Answer a not_allowed error since the user has exceeded limit. This
@@ -201,7 +201,7 @@ public class AdHocCommandManager {
             }
 
             // Check if the Session data has expired (default is 10 minutes)
-            int timeout = JiveGlobals.getIntProperty("xmpp.command.timeout", 10 * 60 * 1000);
+            int timeout = IMConfig.XMPP_COMMAND_TIMEOUT_MS.getInt();
             if (System.currentTimeMillis() - session.getCreationStamp() > timeout) {
                 // TODO Check all sessions that might have timed out (use another thread?)
                 // Remove the old session

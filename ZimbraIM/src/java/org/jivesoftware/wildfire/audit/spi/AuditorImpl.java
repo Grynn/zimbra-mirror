@@ -18,7 +18,11 @@ package org.jivesoftware.wildfire.audit.spi;
 
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
-import org.jivesoftware.util.*;
+import org.jivesoftware.util.FastDateFormat;
+import org.jivesoftware.util.IMConfig;
+import org.jivesoftware.util.LocaleUtils;
+import org.jivesoftware.util.Log;
+import org.jivesoftware.util.StringUtils;
 import org.jivesoftware.wildfire.Session;
 import org.jivesoftware.wildfire.audit.AuditManager;
 import org.jivesoftware.wildfire.audit.Auditor;
@@ -226,7 +230,7 @@ public class AuditorImpl implements Auditor {
      * Deletes old audit files that exceeded the max number of days limit.
      */
     private void ensureMaxDays() {
-        if (maxDays == -1) {
+        if (maxDays <= 0) {
             // Do nothing since we don't have any limit
             return;
         }
@@ -411,7 +415,7 @@ public class AuditorImpl implements Auditor {
                     element.addAttribute("status", "unknown");
                     break;
             }
-            element.addAttribute("timestamp", JiveGlobals.formatDateTime(creationDate));
+            element.addAttribute("timestamp", IMConfig.formatDateTime(creationDate));
             element.add(packet.getElement());
         }
 

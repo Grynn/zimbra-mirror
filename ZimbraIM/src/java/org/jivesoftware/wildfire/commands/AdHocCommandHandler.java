@@ -40,7 +40,7 @@ import java.util.*;
  * user will complete a data form and send it back to the server. The data entered by the user is
  * kept in a SessionData. Instances of {@link AdHocCommand} are stateless. In order to prevent
  * "bad" users from consuming all system memory there exists a limit of simultaneous commands that
- * a user might perform. Configure the system property <tt>"xmpp.command.limit"</tt> to control
+ * a user might perform. Configure the system property <tt>XMPP_COMMAND_LIMIT</tt> to control
  * this limit. User sessions will also timeout and their data destroyed if they have not been
  * executed within a time limit since the session was created. The default timeout value is 10
  * minutes. The timeout value can be modified by setting the system property

@@ -18,7 +18,7 @@ package org.jivesoftware.wildfire.net;
 
 import org.apache.mina.common.IoSession;
 import org.dom4j.Element;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.wildfire.ClientSession;
 import org.jivesoftware.wildfire.PacketRouter;
 import org.jivesoftware.wildfire.RoutingTable;
@@ -40,7 +40,7 @@ import java.net.Socket;
  * When validated the TO attribute of the stream header has to match the server name or a valid
  * subdomain. If the value of the 'to' attribute is not valid then a host-unknown error
  * will be returned. To enable the validation set the system property
- * <b>xmpp.client.validate.host</b> to true.
+ * <b>XMPP_CLIENT_VALIDATE_HOST</b> to true.
  *
  * @author Gaston Dombiak
  */
@@ -103,6 +103,6 @@ public class ClientSocketReader extends SocketReader {
     }
 
     boolean validateHost() {
-        return JiveGlobals.getBooleanProperty("xmpp.client.validate.host",false);
+        return IMConfig.XMPP_CLIENT_VALIDATE_HOST.getBoolean();
     }
 }

@@ -21,7 +21,7 @@ import com.jcraft.jzlib.ZInputStream;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.XMPPPacketReader;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.util.StringUtils;
@@ -85,7 +85,7 @@ public class OutgoingServerSession extends Session {
 
     /**
      * Creates a new outgoing connection to the specified hostname if no one exists. The port of
-     * the remote server could be configured by setting the <b>xmpp.server.socket.remotePort</b> 
+     * the remote server could be configured by setting the <b>XMPP_SERVER_SOCKET_REMOTEPORT</b> 
      * property or otherwise the standard port 5269 will be used. Either a new connection was
      * created or already existed the specified hostname will be authenticated with the remote
      * server. Once authenticated the remote server will start accepting packets from the specified
@@ -246,7 +246,7 @@ public class OutgoingServerSession extends Session {
      */
     private static OutgoingServerSession createOutgoingSession(String domain, String hostname,
             int port) {
-        boolean useTLS = JiveGlobals.getBooleanProperty("xmpp.server.tls.enabled", true);
+        boolean useTLS = IMConfig.XMPP_SERVER_TLS_ENABLED.getBoolean();
         RemoteServerConfiguration configuration = RemoteServerManager.getConfiguration(hostname);
         if (configuration != null) {
             // TODO Use the specific TLS configuration for this remote server
@@ -405,8 +405,7 @@ public class OutgoingServerSession extends Session {
             features = reader.parseDocument().getRootElement();
             if (features != null && features.element("mechanisms") != null) {
                 // Check if we can use stream compression
-                String policyName = JiveGlobals.getProperty("xmpp.server.compression.policy",
-                        Connection.CompressionPolicy.disabled.toString());
+                String policyName = IMConfig.XMPP_SERVER_COMPRESSION_POLICY.getString();
                 Connection.CompressionPolicy compressionPolicy =
                         Connection.CompressionPolicy.valueOf(policyName);
                 if (Connection.CompressionPolicy.optional == compressionPolicy) {

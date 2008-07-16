@@ -19,8 +19,7 @@ package org.jivesoftware.wildfire;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.dom4j.io.XMPPPacketReader;
-import org.jivesoftware.util.JiveGlobals;
+import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.auth.AuthToken;
@@ -33,7 +32,6 @@ import org.jivesoftware.wildfire.user.PresenceEventDispatcher;
 import org.jivesoftware.wildfire.user.User;
 import org.jivesoftware.wildfire.user.UserManager;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
-import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.Packet;
@@ -43,9 +41,7 @@ import org.xmpp.packet.StreamError;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * Represents a session between the server and a client.
@@ -68,16 +64,6 @@ public class ClientSession extends Session {
 
     private static Connection.TLSPolicy tlsPolicy;
 	private static Connection.CompressionPolicy compressionPolicy;
-
-    /**
-     * Milliseconds a connection has to be idle to be closed. Default is 30 minutes. Sending
-     * stanzas to the client is not considered as activity. We are only considering the connection
-     * active when the client sends some data or hearbeats (i.e. whitespaces) to the server.
-     * The reason for this is that sending data will fail if the connection is closed. And if
-     * the thread is blocked while sending data (because the socket is closed) then the clean up
-     * thread will close the socket anyway.
-     */
-    private static long idleTimeout;
 
     /**
      * The authentication token for this session.
@@ -119,25 +105,21 @@ public class ClientSession extends Session {
     private PrivacyList defaultList;
 
     static {
-        // Fill out the allowedIPs with the system property
-        String allowed = JiveGlobals.getProperty("xmpp.client.login.allowed", "");
-        StringTokenizer tokens = new StringTokenizer(allowed, ", ");
-        while (tokens.hasMoreTokens()) {
-            String address = tokens.nextToken().trim();
-            allowedIPs.put(address, "");
-        }
+//        // Fill out the allowedIPs with the system property
+//        String allowed = JiveGlobals.getProperty("xmpp.client.login.allowed", "");
+//        StringTokenizer tokens = new StringTokenizer(allowed, ", ");
+//        while (tokens.hasMoreTokens()) {
+//            String address = tokens.nextToken().trim();
+//            allowedIPs.put(address, "");
+//        }
+        
         // Set the TLS policy stored as a system property
-        String policyName = JiveGlobals.getProperty("xmpp.client.tls.policy",
-                Connection.TLSPolicy.optional.toString());
+        String policyName = IMConfig.XMPP_CLIENT_TLS_POLICY.getString();
         tlsPolicy = Connection.TLSPolicy.valueOf(policyName);
 
         // Set the Compression policy stored as a system property
-        policyName = JiveGlobals.getProperty("xmpp.client.compression.policy",
-                Connection.CompressionPolicy.optional.toString());
+        policyName = IMConfig.XMPP_CLIENT_COMPRESSION_POLICY.getString();
         compressionPolicy = Connection.CompressionPolicy.valueOf(policyName);
-
-        // Set the default read idle timeout. If none was set then assume 30 minutes
-        idleTimeout = JiveGlobals.getIntProperty("xmpp.client.idle", 30 * 60 * 1000);
     }
 
     /**
@@ -166,15 +148,9 @@ public class ClientSession extends Session {
                     LocaleUtils.getLocalizedString("admin.error.bad-stream"));
         }
 
-//        if (!xpp.getNamespace(xpp.getPrefix()).equals(ETHERX_NAMESPACE) &&
-//                    !(isFlashClient && xpp.getNamespace(xpp.getPrefix()).equals(FLASH_NAMESPACE)))
-        
         if (!ETHERX_NAMESPACE.equals(qname.getNamespaceURI()) &&
                     (!isFlashClient && FLASH_NAMESPACE.equals(qname.getNamespaceURI()))) {
                 
-//        if (!streamElt.getNamespaceForPrefix(qname.getNamespacePrefix()).equals(ETHERX_NAMESPACE) &&
-//                    !(isFlashClient && streamElt.getNamespaceForPrefix(qname.getNamespacePrefix()).equals(FLASH_NAMESPACE)))
-//        {
             throw new XmlPullParserException(LocaleUtils.getLocalizedString(
                     "admin.error.bad-namespace"));
         }
@@ -262,7 +238,7 @@ public class ClientSession extends Session {
 
         // Set the max number of milliseconds the connection may not receive data from the
         // client before closing the connection
-        connection.setIdleTimeout(idleTimeout);
+        connection.setIdleTimeout(getIdleTimeout());
 
         // Create a ClientSession for this user.
         Session session = SessionManager.getInstance().createClientSession(connection, serverName);
@@ -345,31 +321,6 @@ public class ClientSession extends Session {
     }
 
     /**
-     * Sets the list of IP address that are allowed to connect to the server. If the list is
-     * empty then anyone is allowed to connect to the server.
-     *
-     * @param allowed the list of IP address that are allowed to connect to the server.
-     */
-    public static void setAllowedIPs(Map<String, String> allowed) {
-        allowedIPs = allowed;
-        if (allowedIPs.isEmpty()) {
-            JiveGlobals.deleteProperty("xmpp.client.login.allowed");
-        }
-        else {
-            // Iterate through the elements in the map.
-            StringBuilder buf = new StringBuilder();
-            Iterator<String> iter = allowedIPs.keySet().iterator();
-            if (iter.hasNext()) {
-                buf.append(iter.next());
-            }
-            while (iter.hasNext()) {
-                buf.append(", ").append(iter.next());
-            }
-            JiveGlobals.setProperty("xmpp.client.login.allowed", buf.toString());
-        }
-    }
-
-    /**
      * Returns whether TLS is mandatory, optional or is disabled for clients. When TLS is
      * mandatory clients are required to secure their connections or otherwise their connections
      * will be closed. On the other hand, when TLS is disabled clients are not allowed to secure
@@ -383,36 +334,12 @@ public class ClientSession extends Session {
     }
 
     /**
-     * Sets whether TLS is mandatory, optional or is disabled for clients. When TLS is
-     * mandatory clients are required to secure their connections or otherwise their connections
-     * will be closed. On the other hand, when TLS is disabled clients are not allowed to secure
-     * their connections using TLS. Their connections will be closed if they try to secure the
-     * connection. in this last case.
-     *
-     * @param policy whether TLS is mandatory, optional or is disabled.
-     */
-    public static void setTLSPolicy(SocketConnection.TLSPolicy policy) {
-        tlsPolicy = policy;
-        JiveGlobals.setProperty("xmpp.client.tls.policy", tlsPolicy.toString());
-    }
-
-    /**
      * Returns whether compression is optional or is disabled for clients.
      *
      * @return whether compression is optional or is disabled.
      */
     public static SocketConnection.CompressionPolicy getCompressionPolicy() {
         return compressionPolicy;
-    }
-
-    /**
-     * Sets whether compression is optional or is disabled for clients.
-     *
-     * @param policy whether compression is optional or is disabled.
-     */
-    public static void setCompressionPolicy(SocketConnection.CompressionPolicy policy) {
-        compressionPolicy = policy;
-        JiveGlobals.setProperty("xmpp.client.compression.policy", compressionPolicy.toString());
     }
 
     /**
@@ -465,20 +392,15 @@ public class ClientSession extends Session {
      * @return the number of milliseconds a connection has to be idle to be closed.
      */
     public static long getIdleTimeout() {
-        return idleTimeout;
-    }
-
-    /**
-     * Sets the number of milliseconds a connection has to be idle to be closed. Default is
-     * 30 minutes. Sending stanzas to the client is not considered as activity. We are only
-     * considering the connection active when the client sends some data or hearbeats
-     * (i.e. whitespaces) to the server.
-     *
-     * @param timeout the number of milliseconds a connection has to be idle to be closed.
-     */
-    public static void setIdleTimeout(long timeout) {
-        idleTimeout = timeout;
-        JiveGlobals.setProperty("xmpp.client.idle", Long.toString(idleTimeout));
+        /**
+         * Milliseconds a connection has to be idle to be closed. Default is 30 minutes. Sending
+         * stanzas to the client is not considered as activity. We are only considering the connection
+         * active when the client sends some data or hearbeats (i.e. whitespaces) to the server.
+         * The reason for this is that sending data will fail if the connection is closed. And if
+         * the thread is blocked while sending data (because the socket is closed) then the clean up
+         * thread will close the socket anyway.
+         */
+        return IMConfig.XMPP_CLIENT_IDLE.getInt();
     }
 
     /**
