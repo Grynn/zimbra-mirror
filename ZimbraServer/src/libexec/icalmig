@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.12";
+my $version = "1.13";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -71,7 +71,7 @@ my $oworginalfile=0;
 #for non standard DTSTART (29805)
 my $nonStandardDTSTART=0;
 # for standard DTSTART(29743)
-my $StandardDTSTART=0;
+my $StandardDTSTART=1;
 
 if ($#ARGV<0)
 {
@@ -699,6 +699,11 @@ sub processfile
               {
                 my $dlctr=0;my $wkctr=0; my $bwkctr=0;
                 $rdarray= ($masterrec->{'RDATE'});
+                #Add master date too in rdarray for pattern calculation.
+                #It WILL be removed after pattern calculation
+                my $tmdts= $masterrec->{'DTSTART'};
+                $tmdts=~ s/DTSTART/RDATE/;
+                push @{$rdarray->{$tmdts}},$tmdts;
 
                 #get master weekday;Will be used to check for RDATE weekdays.
                 #if master weekday is not same as RDATE weekdays, create exceptions.
@@ -908,8 +913,12 @@ sub processfile
                   &log_message("occurrence description changed->master-summary:$mdescription recur-summary:$idescription");
                 }
                 #***************************
+                #delete master dtstart from rdarray which was added for pattern
+                #calculation before
+                delete($rdarray->{$tmdts});
+                
                 my $rdpattern=0; my $freq; my $interval; my $rdcnt;
-                $rdcnt= keys (%$rdarray)-1;
+                $rdcnt= keys (%$rdarray);#-1;
                 if (!$rdcnt)
                 {
                   $rdcnt++;
@@ -951,6 +960,7 @@ sub processfile
                   $isweekdayok=1;
                 }
                 &log_message("Total RDATEs: $rdcnt DailyCtr: $dlctr WeeklyCtr: $wkctr");
+
                 #### Exception/RRULE creation criteria ####
                 #1. if recurrence pattern found, No need to create exceptions
                 #2. if weekdays has changed due to meeting has moved to another day,
@@ -977,7 +987,7 @@ sub processfile
                   }
                   else
                   {
-                    $delta_days=$rdcnt+2;
+                    $delta_days=$rdcnt+1;#+2;
                   }
                   my $newrrule= "RRULE:FREQ=$freq;COUNT=$delta_days;INTERVAL=$interval";
                   print_outfile("$newrrule");
