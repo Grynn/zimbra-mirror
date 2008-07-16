@@ -191,24 +191,35 @@ public class OfflineDataSource extends DataSource {
         return knownService != null && knownService.name.equals(SERVICE_NAME_YAHOO);
     }
     
-    private static final int MAX_UID_ENTRIES = 64 * 1024;
+    private static final int MAX_ENTRIES = 64 * 1024;
 
     private static final Map<Object, SyncState> sSyncStateMap =
         Collections.synchronizedMap(new LinkedHashMap<Object, SyncState>() {
             protected boolean removeEldestEntry(Map.Entry eldest) {
-                return size() > MAX_UID_ENTRIES;
+                return size() > MAX_ENTRIES;
             }
         });
 
     @Override
+    public boolean hasSyncState(int folderId) {
+        Object key = key(folderId);
+        return key != null && sSyncStateMap.containsKey(key);
+    }
+    
+    @Override
     public SyncState getSyncState(int folderId) {
         Object key = key(folderId);
-        return key != null ? sSyncStateMap.remove(key) : null;
+        SyncState ss = key != null ? sSyncStateMap.remove(key) : null;
+        OfflineLog.offline.debug("getSyncState: folder = %d, key = %s, state = %s",
+                                 folderId, key, ss);
+        return ss;
     }
     
     @Override
     public void putSyncState(int folderId, SyncState ss) {
         Object key = key(folderId);
+        OfflineLog.offline.debug("putSyncState: folder %d, key = %s, state = %s",
+                                 folderId, key, ss);
         if (key != null) {
             sSyncStateMap.put(key, ss);
         }
@@ -217,6 +228,7 @@ public class OfflineDataSource extends DataSource {
     @Override
     public void clearSyncState(int folderId) {
         Object key = key(folderId);
+        OfflineLog.offline.debug("clearSyncState: folder %d, key = %s", folderId, key);
         if (key != null) {
             sSyncStateMap.remove(key);
         }
