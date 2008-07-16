@@ -101,6 +101,8 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String SERVER_IP          = "X-Proxy-IP";
         public static final String SERVER_HOST        = "X-Proxy-Host";
         public static final String AUTH_ID            = "Auth-Id";
+        public static final String AUTH_ADMIN_USER    = "Auth-Admin-User";
+        public static final String AUTH_ADMIN_PASS    = "Auth-Admin-Pass";
         
         /* resp headers */
         public static final String AUTH_STATUS = "Auth-Status";
