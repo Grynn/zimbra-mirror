@@ -63,6 +63,19 @@ mail
     # 
     default_realm           "${mail.defaultrealm}";
 
+    # Resolve IP address to SASL server name (kerberos)
+    # For GSSAPI, in cases of multi-homed hosts, it may be that the proxy
+    # server has multiple network interfaces, and we wish to reverse map 
+    # the incoming interface IP address (via DNS) to a host name, which will
+    # be used as the service principal
+    # Set this to on if gssapi clients will connect to a proxy server using
+    # different FQDNs. Otherwise, set it to off, and the fully qualified 
+    # host name of the proxy (as returned by hostname), will be used as the
+    # service principal
+    # If not specified, this configuration defaults to off
+    # 
+    sasl_host_from_ip       ${mail.sasl_host_from_ip};
+
     # sasl_app_name
     # This is the application name which nginx will use when initializing
     # the SASL library using the call to sasl_server_init()
