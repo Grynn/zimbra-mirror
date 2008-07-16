@@ -823,7 +823,7 @@ default:
                 </serializedBean>
                 <condition>!context.getBooleanVariable("keepUserData")</condition>
               </action>
-              <action name="win32" id="275908" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="win32" id="275908" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -840,7 +840,7 @@ default:
                 </serializedBean>
                 <condition />
               </action>
-              <action name="linux" id="275909" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="linux" id="275909" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -857,7 +857,7 @@ default:
                 </serializedBean>
                 <condition />
               </action>
-              <action name="macos" id="275910" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="macos" id="275910" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -1351,9 +1351,10 @@ try {
 File icon = context.getDestinationFile("win32/launcher_32x32.ico");
 
 File webapp = context.getDestinationFile("zdesktop.webapp");
+File override = context.getDestinationFile("zdesktop.webapp/override.ini");
 File profile = context.getDestinationFile("profile");
 
-String argument = "-webapp " + webapp.getCanonicalPath() + " -profile " + profile.getCanonicalPath();
+String argument = "-webapp " + webapp.getCanonicalPath() + " -override " + override.getCanonicalPath() + " -profile " + profile.getCanonicalPath();
 
 File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Zimbra Desktop.lnk");
 File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Zimbra Desktop.lnk");
@@ -2542,7 +2543,7 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                       <void property="arguments">
-                        <array class="java.lang.String" length="4">
+                        <array class="java.lang.String" length="6">
                           <void index="0">
                             <string>-webapp</string>
                           </void>
@@ -2550,9 +2551,15 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                             <string>${installer:sys.installationDir}\zdesktop.webapp</string>
                           </void>
                           <void index="2">
-                            <string>-profile</string>
+                            <string>-override</string>
                           </void>
                           <void index="3">
+                            <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
+                          </void>
+                          <void index="4">
+                            <string>-profile</string>
+                          </void>
+                          <void index="5">
                             <string>${installer:sys.installationDir}\profile</string>
                           </void>
                         </array>
@@ -2629,7 +2636,7 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                       <void property="arguments">
-                        <array class="java.lang.String" length="4">
+                        <array class="java.lang.String" length="6">
                           <void index="0">
                             <string>-webapp</string>
                           </void>
@@ -2637,9 +2644,15 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                             <string>${installer:sys.installationDir}/zdesktop.webapp</string>
                           </void>
                           <void index="2">
-                            <string>-profile</string>
+                            <string>-override</string>
                           </void>
                           <void index="3">
+                            <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                          </void>
+                          <void index="4">
+                            <string>-profile</string>
+                          </void>
+                          <void index="5">
                             <string>${installer:sys.installationDir}/profile</string>
                           </void>
                         </array>
@@ -3019,7 +3032,7 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="macos" id="271565" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="macos" id="271565" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -3036,7 +3049,7 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="linux" id="271566" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="linux" id="271566" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -3053,7 +3066,7 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="win32" id="271567" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="win32" id="271567" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
