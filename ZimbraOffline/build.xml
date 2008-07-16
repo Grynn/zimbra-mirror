@@ -583,6 +583,7 @@
 		            		<fileset dir="${zimbra.home.dir}/bin"/>
 		        	</chmod>
 				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX.i386" overwrite="true"/>
+				<copy tofile="${zimbra.home.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 			</then>
 		</if>
 
