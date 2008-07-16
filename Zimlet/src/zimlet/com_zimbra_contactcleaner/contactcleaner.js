@@ -823,8 +823,7 @@ function(ev) {
 		//======================================================================
 		//Delete duplicates...
 		//======================================================================
-		var contactActionReq = soapDoc.set("ContactActionRequest");
-		contactActionReq.setAttribute("xmlns", "urn:zimbraMail");
+		var contactActionReq = soapDoc.set("ContactActionRequest", null, null, "urn:zimbraMail");
 		var doc1 = soapDoc.getDoc();
 		var action = soapDoc.set("action");
 		action.setAttribute("op", "move");
@@ -931,8 +930,7 @@ function(ev) {
 		}
 		//----------------------------------------------------------------------------------------------------
 
-		var modifyContactReq = soapDoc.set("ModifyContactRequest");
-		modifyContactReq.setAttribute("xmlns", "urn:zimbraMail");
+		var modifyContactReq = soapDoc.set("ModifyContactRequest", null, null, "urn:zimbraMail");
 		modifyContactReq.setAttribute("replace", "0");
 		modifyContactReq.setAttribute("force", "1");
 		var doc = soapDoc.getDoc();
@@ -954,8 +952,7 @@ function(ev) {
 			tagsArry = cc_unique(tagsArry);
 
 		for (var n = 0; n < tagsArry.length; n++) {
-			var contactActionReq2 = soapDoc.set("ContactActionRequest");
-			contactActionReq2.setAttribute("xmlns", "urn:zimbraMail");
+			var contactActionReq2 = soapDoc.set("ContactActionRequest", null, null, "urn:zimbraMail");
 			var doc2 = soapDoc.getDoc();
 			var action2 = soapDoc.set("action");
 			action2.setAttribute("op", "tag");
