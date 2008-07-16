@@ -37,6 +37,11 @@
 			<attribute value="http://www.junit.org/junit/javadoc/4.4/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry sourcepath="/ThirdParty/testng-5.8/src/main" kind="lib" path="/ZimbraCommon/jars/testng-5.8-jdk15.jar">
+		<attributes>
+			<attribute value="http://testng.org/javadoc/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-beanutils-1.6.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-digester-1.5.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jakarta-oro-2.0.7.jar"/>

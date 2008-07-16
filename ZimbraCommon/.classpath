@@ -90,5 +90,6 @@
 	<classpathentry kind="lib" path="jars/jsieve-0.1-zimbra.jar" sourcepath="/ThirdParty/jsieve"/>
 	<classpathentry kind="lib" path="jars/json.jar" sourcepath="/ThirdParty/json/src/java"/>
 	<classpathentry kind="lib" path="jars/ant-1.7.0-ziputil-patched.jar"/>
+	<classpathentry kind="lib" path="jars/testng-5.8-jdk15.jar" sourcepath="/ThirdParty/testng-5.8/src/main"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
