@@ -111,7 +111,9 @@ public class OfflineAccount extends Account {
         Provisioning.A_zimbraFeatureIMEnabled,
         Provisioning.A_zimbraFeatureGalEnabled,
         Provisioning.A_zimbraFeatureGalAutoCompleteEnabled,
-        Provisioning.A_zimbraFeatureViewInHtmlEnabled
+        Provisioning.A_zimbraFeatureViewInHtmlEnabled,
+        Provisioning.A_zimbraFeatureNotebookEnabled,
+        Provisioning.A_zimbraFeatureBriefcasesEnabled
     };
 
     private static final Set<String> sDisabledFeaturesSet = new HashSet<String>();
