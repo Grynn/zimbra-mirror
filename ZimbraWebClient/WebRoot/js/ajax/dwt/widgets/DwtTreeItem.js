@@ -591,7 +591,7 @@ function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev, obj);
 	if (mouseEv.button == DwtMouseEvent.LEFT) {
-		obj._expand(!obj._expanded, ev);
+		obj._expand(!obj._expanded, mouseEv);
 	} else if (mouseEv.button == DwtMouseEvent.RIGHT) {
 		mouseEv.dwtObj._tree._itemActioned(mouseEv.dwtObj, mouseEv);
 	}
