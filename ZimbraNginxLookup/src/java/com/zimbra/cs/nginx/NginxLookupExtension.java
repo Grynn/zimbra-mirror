@@ -78,7 +78,6 @@ public class NginxLookupExtension implements ZimbraExtension {
     private static class NginxLookupRequest {
         String user;
         String cuser;
-        String suffix;
         String pass;
         String proto;
         String authMethod;
@@ -197,38 +196,40 @@ public class NginxLookupExtension implements ZimbraExtension {
          * @return    NginxLookupRequest object containing details of the lookup request
          * @throws NginxLookupException
          */
-        private NginxLookupRequest checkRequest(HttpServletRequest httpReq) throws NginxLookupException {
-            NginxLookupRequest req = new NginxLookupRequest();
-            String user = httpReq.getHeader(AUTH_USER);
-            // req.user = httpReq.getHeader(AUTH_USER);
-            req.pass = httpReq.getHeader(AUTH_PASS);
-            req.proto = httpReq.getHeader(AUTH_PROTOCOL);
-            req.authMethod = httpReq.getHeader(AUTH_METHOD);
-            if (user == null)
-                throw new NginxLookupException("missing header field "+AUTH_USER);
-            if (req.authMethod == null) 
-                throw new NginxLookupException("missing header field "+AUTH_METHOD);
+        private NginxLookupRequest checkRequest(HttpServletRequest httpReq) throws NginxLookupException
+        {
+            /* Build the request object and extract the various request headers */
 
-            /* PR 20542 - If the user name ends with any zimbra supported extension (/tb|/wm|/ni)
-             * then we need to strip off that extension before proceeding
+            NginxLookupRequest req = new NginxLookupRequest();
+
+            /* NGINX will never pass any suffixes to the lookup servlet
+               So no need to look for /tb|/wm|/ni in req.user
              */
-            if (user.endsWith ("/tb") || user.endsWith("/wm") || user.endsWith("/ni")) {
-                req.suffix = user.substring (user.length() - 3);
-                req.user = user.substring (0, user.length() - 3);
-            } else {
-                req.user = user;
-                req.suffix = null;
+
+            req.user        = httpReq.getHeader(AUTH_USER);             /* User whose route is to be looked up */
+            req.pass        = httpReq.getHeader(AUTH_PASS);             /* Password */
+            req.proto       = httpReq.getHeader(AUTH_PROTOCOL);         /* Protocol {imap|imaps|pop3|pop3s|http} */
+            req.authMethod  = httpReq.getHeader(AUTH_METHOD);           /* Auth Method {passwd|plain|gssapi|other|zimbraId} */
+            req.cuser       = httpReq.getHeader(AUTH_ID);               /* (GSSAPI) Authenticating Principal */
+            req.clientIp    = httpReq.getHeader(CLIENT_IP);             /* Upstream Client IP */
+            req.serverIp    = httpReq.getHeader(SERVER_IP);             /* Incoming Proxy Interface IP */
+            req.serverHost  = httpReq.getHeader(SERVER_HOST);           /* (HTTP) Host header */
+
+            /* Complain if any required fields are missing */
+
+            if (req.user == null)
+                throw new NginxLookupException("missing header field " + AUTH_USER);
+            if (req.authMethod == null) 
+                throw new NginxLookupException("missing header field " + AUTH_METHOD);
+            if (req.proto == null)
+                throw new NginxLookupException("missing header field " + AUTH_PROTOCOL);
+            if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI) && (req.cuser == null)) {
+                throw new NginxLookupException("(GSSAPI) missing header field " + AUTH_ID);
             }
 
-            req.cuser = httpReq.getHeader(AUTH_ID);
-            if (req.pass == null)
-                throw new NginxLookupException("missing header field "+AUTH_PASS);
-            if (req.proto == null)
-                throw new NginxLookupException("missing header field "+AUTH_PROTOCOL);
-            req.clientIp = httpReq.getHeader(CLIENT_IP);
-            req.serverIp = httpReq.getHeader(SERVER_IP);
-            req.serverHost = httpReq.getHeader(SERVER_HOST);
-            
+            if (req.pass == null)   /* We should not complain on null password */
+                req.pass = "";
+
             String val = httpReq.getHeader(AUTH_LOGIN_ATTEMPT);
             if (val != null) {
                 try {
@@ -328,80 +329,83 @@ public class NginxLookupExtension implements ZimbraExtension {
         /** Qualifies the user-name, if necessary, by suffixing "@domain"
             The domain to be suffixed is the domain object whose zimbraVirtualIPAddress matches the
             IP address specified by req.serverIP (X-Proxy-IP request header)
-            @return Fully qualified user name, if qualified, else the original user name
+            @return Fully qualified user name (or user-id), else the original user name
          */
         private String getQualifiedUsername(ZimbraLdapContext zlc, Config config, NginxLookupRequest req)
             throws NginxLookupException
         {
-            String aUser, qUser;
+            String aUser, cUser, qUser;
             String domainName = null;
 
-            aUser = req.user;
-            qUser = aUser;
+            aUser = req.user;               /* AUTHZ (whose route is being discovered) */
+            cUser = req.cuser;              /* AUTHC (if GSSAPI) */
+            qUser = aUser;                  /* Qualified AUTHZ (defaults to AUTHZ) */
 
-            if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI))
+            if (req.authMethod.equalsIgnoreCase(AUTHMETH_ZIMBRAID))
             {
-                // logger.info("resolving kerberos principal:" + aUser);
-                Account az = null, ac = null;
+                /* For auth-token based routing, aUser contains the zimbraId of the user
+                   No qualification is performed in this case, because the ldap query
+                   can handle route lookup by ID also
+                 */
+                return qUser;
+            }
+            else if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI))
+            {
+                /* For GSSAPI, cUser specifies the authenticating kerberos principal
+                   When no separate authorization ID was specified, then in this case, 
+                   aUser is equal to cUser, and therefore, by transition, aUser is also
+                   interpreted as a kerberos principal
+
+                   If a separate authorization ID has been specified, then in this case, 
+                   the authorization ID is treated in its own right as a fully qualified
+                   or a partially qualified user name, and must be qualified according to 
+                   the regular qualification logic (See bug 24792)
+
+                 */
+
+                boolean authzIsPrincipal;
+                Account authc = null;
+
+                authzIsPrincipal = aUser.equalsIgnoreCase(cUser);
 
                 try {
-                    az = Provisioning.getInstance().get(AccountBy.krb5Principal,aUser);
+                    authc = Provisioning.getInstance().get(AccountBy.krb5Principal,cUser);
                 } catch (ServiceException e) {
                 }
 
-                if (az == null) {
-                    throw new NginxLookupException("Cannot look up account by kerberos principal:" + aUser);
+                if (authc == null) {
+                    throw new NginxLookupException("No account was found which has kerberos principal " + cUser);
                 }
 
-                if (req.cuser != null)
-                {
-                    // if authc is present and is different from authz, then we need to also check 
-                    // whether the authenticator principal is allowed to access the account of authz
+                /* overwrite request::cuser (authenticating identity for gssapi) */
+                req.cuser = authc.getAttr(Provisioning.A_zimbraMailDeliveryAddress);
 
-                    try {
-                        ac = Provisioning.getInstance().get(AccountBy.krb5Principal,req.cuser);
-                    } catch (ServiceException e) {
-                    }
+                /* Placeholder (send back an auth-token as a password) */
+                // req.pass = "0_7e6c9784e1e3d27c311282220c2bc61e4db1bd48_69643d33363a66653664656239372d303162362d346463362d623662312d3265393634333238383931623b6578703d31333a313231353335393937333231333b747970653d363a7a696d6272613b";
+                req.pass = "";
 
-                    if (ac == null) {
-                        throw new NginxLookupException("Cannot look up account by kerberos principal:" + req.cuser);
-                    }
-
-                    // now see if ac is allowed to act as az
-                    if (!ac.getUid().equals(az.getUid()))
-                    {
-                        try {
-                            if (!AccessManager.getInstance().canAccessAccount(ac,az,true)) {
-                                throw new NginxLookupException("Authenticating principal " + ac.getName() + " cannot access account " + az.getName());
-                            }
-                        } catch (ServiceException e) {
-                            throw new NginxLookupException(e.getMessage());
-                        }
-                    }
+                if (authzIsPrincipal) {
+                    qUser = authc.getAttr(Provisioning.A_zimbraMailDeliveryAddress);
                 }
 
-                String email = az.getAttr(Provisioning.A_zimbraMailDeliveryAddress);
+                /* TODO 
+                   - Perform access checks to see whether req.cuser is allowed to act as qUser
+                   - However, since qUser may not be fully qualified at this point, we may wish to wait till later, in order to perform the checks
+                 */
+            }
 
-                if (email == null) {
-                    throw new NginxLookupException("Cannot get email address for account:" + az.getName());
-                }
-
-
-                logger.info("resolved kerberos principal:" + aUser + " to email:" + email);
-                qUser = email;
-
+            /* If qUser is already qualified, then nothing more needs to be done */
+            if (qUser.indexOf('@') != -1) {
                 return qUser;
             }
 
-            if (aUser.indexOf('@') != -1) {
-                // no translation required when username is already qualified
-                return qUser;
-            }
 
-            if (req.authMethod.equalsIgnoreCase(AUTHMETH_ZIMBRAID)) {
-                // no translation required for zimbraId based lookups
-                return qUser;
-            }
+            /* At this point, qUser is not fully qualified, and so the domain must be looked up
+               depending upon which protocol is being used
+
+               For HTTP, the host header must be used in order to lookup the domain by zimbraVirtualHostname
+               For MAIL, the proxy ip must be used in order to lookup the domain by zimbraVirtualIPAddress
+             */
 
             if (HTTP.equalsIgnoreCase(req.proto))
             {
@@ -447,12 +451,17 @@ public class NginxLookupExtension implements ZimbraExtension {
             }
                 
             if (domainName != null) {
-                String userName = aUser + "@" + domainName;
-                logger.debug(AUTH_USER + " " + aUser + " is replaced by " + userName + " for mailhost lookup");
-                qUser = userName;
+                qUser = aUser + "@" + domainName;
+                logger.debug(AUTH_USER + " " + aUser + " is replaced by " + qUser + " for mailhost lookup");
             } else {
                 logger.warn("domain not found for user " + aUser);
             }
+
+            /* TODO
+               At this point, qUser is as qualified as it is ever going to get
+               If any policy checks are pending for gssapi authentication (ie authc/authz checks), then this is a good time to do that
+               The overridden authenticating id is in req.cuser at this point
+             */
 
             return qUser;
         }
@@ -538,12 +547,15 @@ public class NginxLookupExtension implements ZimbraExtension {
             resp.addHeader(AUTH_PORT, port);
             
             if (authUser != null) {
-                /* Append any login extension if necessary */
-                if (req.suffix != null) {
-                    authUser = authUser + req.suffix;
-                }
                 logger.debug("rewrite " + AUTH_USER + " to: " + authUser);
                 resp.addHeader(AUTH_USER, authUser);
+            }
+
+            /* For GSSAPI, we also need to send back the overriden authenticating ID and the auth-token as password */
+
+            if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI)) {
+                resp.addHeader(AUTH_ID, req.cuser);
+                resp.addHeader(AUTH_PASS, req.pass);
             }
         }
 
