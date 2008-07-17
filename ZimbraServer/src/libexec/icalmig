@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.13";
+my $version = "1.14";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -55,7 +55,7 @@ my $DAILY = 1,
 my $WEEKLY = 7,
 my $BIWEEKLY=14,
 my $MONTHLY=28,
-my $MATCHPC=80,
+my $MATCHPC=90,
 
 #default values
 #set 1 to delete RDATEs else 0 for no delete
@@ -739,9 +739,24 @@ sub processfile
                 my $ioccurrec; my $ilocation;my $isummary;my @iattenarr;my $idescription;
                 my $floop=1;
                 my $sdt;my $ndt;
+                my $isweekendpresent=0; my $wkday; my $weekendcount=0;my $prvwkday=-1;
                 for my $k1 ( sort keys %$rdarray )
                 {
-                  if ($floop)
+                  my $twdidx= rindex($k1,':');
+                  my $tk1= substr($k1,$twdidx+1);
+                  $wkday= get_weekday($tk1);
+                  #check if weekend present
+                  if ($wkday>5)
+                  {
+                    #yes it is there!
+                    $isweekendpresent=1;
+                  }
+                  if ($prvwkday>$wkday)
+                  {
+                    $weekendcount++;
+                  }
+                  $prvwkday=$wkday;
+                  if ($floop)  #first loop
                   {
                     $k2=$k1;
                     $firstrdate=$k1;
@@ -983,13 +998,27 @@ sub processfile
                     my $fdt= substr($firstrdate,$ridx+1);
                     my $ldt = substr($lastrdate,$ridx+1);
                     #delta days
-                    $delta_days=get_date_diff($fdt, $ldt)+2;
+                    #if weekdays present, take complete day difference
+                    if($isweekendpresent)
+                    {
+                      $delta_days=get_date_diff($fdt, $ldt)+1;
+                    }
+                    else#else deduct weekends
+                    {
+                      $delta_days=get_date_diff($fdt, $ldt)+1;
+                      $delta_days = $delta_days - ($weekendcount*2);
+                    }
                   }
                   else
                   {
-                    $delta_days=$rdcnt+1;#+2;
+                    $delta_days=$rdcnt+1;
                   }
+                  my $bywkday=";BYDAY=MO,TU,WE,TH,FR";
                   my $newrrule= "RRULE:FREQ=$freq;COUNT=$delta_days;INTERVAL=$interval";
+                  if(($freq eq "DAILY")&&(!$isweekendpresent))
+                  {
+                    $newrrule= $newrrule.$bywkday;
+                  }
                   print_outfile("$newrrule");
                   &log_message("New RRULE: $newrrule.");
                   $RPrulecreated=1;
@@ -1011,7 +1040,7 @@ sub processfile
                 my $fdt= substr($firstrdate,$ridx+1);
                 my $ldt = substr($lastrdate,$ridx+1);
                 #delta days
-                $delta_days=get_date_diff($fdt, $ldt)+2;
+                $delta_days=get_date_diff($fdt, $ldt)+1;#+2
                 my $reccnt=keys(%$rdarray)+1;
                 my $newrrule= "RRULE:FREQ=YEARLY;COUNT=$reccnt;INTERVAL=1";
                 print_outfile("$newrrule");
