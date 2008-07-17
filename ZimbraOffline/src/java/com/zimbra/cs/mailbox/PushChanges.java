@@ -17,6 +17,7 @@
 package com.zimbra.cs.mailbox;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -865,6 +866,48 @@ public class PushChanges {
         }
     }
 
+    private boolean syncWikiItem(WikiItem item, boolean create) throws ServiceException {
+    	int id = item.getId();
+        Element request = new Element.XMLElement(MailConstants.SAVE_WIKI_REQUEST);
+        Element w = request.addElement(MailConstants.E_WIKIWORD);
+        w.addAttribute(MailConstants.A_NAME, item.getName());
+        if (!create) {
+        	w.addAttribute(MailConstants.A_ID, id);
+        	w.addAttribute(MailConstants.A_VERSION, ombx.getLastSyncedVersionForMailItem(id));
+        }
+        w.addAttribute(MailConstants.A_FOLDER, item.getFolderId());
+        try {
+            w.setText(new String(((WikiItem)item).getContent(), "UTF-8"));
+        } catch (IOException e) {}
+        Element response = null;
+        boolean retry = false;
+        while (response == null) {
+            try {
+            	response = ombx.sendRequest(request);
+            } catch (SoapFaultException e) {
+            	if (e.getCode().equals(MailServiceException.ALREADY_EXISTS) ||
+            			e.getCode().equals(MailServiceException.MODIFY_CONFLICT)) {
+            		String iid = e.getArgumentValue("id");
+            		String v = e.getArgumentValue("ver");
+            		w.addAttribute(MailConstants.A_ID, iid);
+            		w.addAttribute(MailConstants.A_VERSION, v);
+            		if (!retry)
+            			response = null;
+            		retry = true;
+            	}
+            }
+        }
+		w = response.getElement(MailConstants.E_WIKIWORD);
+		int newid = (int)w.getAttributeLong(MailConstants.A_ID);
+		int ver = (int)w.getAttributeLong(MailConstants.A_VERSION);
+		if (create) {
+            if (!ombx.renumberItem(sContext, id, MailItem.TYPE_WIKI, newid, ver))
+            	return true;
+		}
+		ombx.setSyncedVersionForMailItem("" + id, ver);
+		return true;
+    }
+    
     private boolean syncDocument(int id) throws ServiceException {
     	MailItem item = null;
     	boolean create = false;
@@ -878,8 +921,13 @@ public class PushChanges {
     	String digest = item.getDigest();
     	String name = item.getName();
     	byte type = item.getType();
-    	if (item instanceof Document) {
-    		if (!create)
+    	
+    	if (!ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion) &&
+    			type == MailItem.TYPE_WIKI) {
+    		syncWikiItem((WikiItem)item, create);
+    	} else {
+    		if (ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion) && 
+    				!create)
     			checkDocumentSyncConflict(item);
     		Pair<Integer,Integer> resp = ombx.sendMailItem(item);
             if (create) {

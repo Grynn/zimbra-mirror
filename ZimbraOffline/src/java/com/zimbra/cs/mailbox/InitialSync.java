@@ -84,6 +84,7 @@ import com.zimbra.cs.service.mail.SetCalendarItem;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.SetCalendarItem.SetCalendarItemParseResult;
 import com.zimbra.cs.service.util.ItemData;
+import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.StoreManager;
@@ -112,7 +113,8 @@ public class InitialSync {
 		}
 	}
 	
-	static final OfflineAccount.Version sMinDocumentSyncVersion = new OfflineAccount.Version("5.0.9");
+	static final OfflineAccount.Version sMinDocumentSyncVersion     = new OfflineAccount.Version("5.0.6");
+	static final OfflineAccount.Version sDocumentSyncHistoryVersion = new OfflineAccount.Version("5.0.9");
 	
     static final String A_RELOCATED = "relocated";
 
@@ -1116,9 +1118,92 @@ public class InitialSync {
     
     /* sync all the documents in the folder */
     void syncAllDocumentsInFolder(int folderId) throws ServiceException {
-    	syncDocument("query=inid:"+folderId);
+    	if (ombx.getRemoteServerVersion().isAtLeast(sDocumentSyncHistoryVersion)) {
+    		syncDocument("query=inid:"+folderId);
+    		return;
+    	}
+
+        Element request = new Element.XMLElement(MailConstants.SEARCH_REQUEST);
+        request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024);  // XXX pagination
+        request.addAttribute(MailConstants.A_TYPES, "document,wiki");
+        request.addElement(MailConstants.E_QUERY).setText("inid:"+folderId);
+        Element response = ombx.sendRequest(request);
+        
+        OfflineLog.offline.debug(response.prettyPrint());
+        
+        for (Element doc : response.listElements(MailConstants.E_DOC))
+        	syncDocument(doc);
+        for (Element doc : response.listElements(MailConstants.E_WIKIWORD))
+        	syncDocument(doc);
     }
     
+    // for 5.0.6 without tar formatter
+    void syncDocument(Element doc) throws ServiceException {
+    	byte type = doc.getName().equals(MailConstants.E_WIKIWORD) ? MailItem.TYPE_WIKI : MailItem.TYPE_DOCUMENT; 
+    	int folderId = (int) doc.getAttributeLong(MailConstants.A_FOLDER);
+    	long modifiedDate = doc.getAttributeLong(MailConstants.A_MODIFIED_DATE);
+    	String lastEditedBy = doc.getAttribute(MailConstants.A_LAST_EDITED_BY);
+    	String itemIdStr = doc.getAttribute(MailConstants.A_ID);
+    	String name = doc.getAttribute(MailConstants.A_NAME);
+    	String contentType = doc.getAttribute(MailConstants.A_CONTENT_TYPE, "text/html");
+        int flags = Flag.flagsToBitmask(doc.getAttribute(MailConstants.A_FLAGS, null));
+        //String tags = doc.getAttribute(MailConstants.A_TAGS, null);
+        int changeId = (int) doc.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE, 0);
+        int mod_content = (int) doc.getAttributeLong(MailConstants.A_REVISION, 0);
+        int timestamp = (int) doc.getAttributeLong(MailConstants.A_CHANGE_DATE);
+        int version = (int) doc.getAttributeLong(MailConstants.A_VERSION);
+        InputStream rs = null;
+        OfflineAccount acct = ombx.getOfflineAccount();
+        String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=native&id=" + itemIdStr);
+        if (acct.isDebugTraceEnabled())
+        	OfflineLog.request.debug("GET " + url);
+        try {
+        	rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
+        			acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
+        } catch (MailServiceException.NoSuchItemException nsie) {
+        	OfflineLog.offline.warn("initial: no blob available for document " + itemIdStr);
+        } catch (IOException e) {
+        	OfflineLog.offline.warn("initial: can't download Document:  " + itemIdStr);
+        }
+
+        try {
+            ItemId itemId = new ItemId(itemIdStr, ombx.getAccountId());
+            int id = itemId.getId();
+            int date = (int) (modifiedDate / 1000);
+            int change = ombx.getChangeMask(null, id, type);
+            if (change > 0) {
+            	OfflineLog.offline.info("skipping locally modified item "+id+" (change "+change+")");
+            	return;
+            }
+            SaveDocument player = new SaveDocument();
+            ParsedDocument pd = new ParsedDocument(rs, name, contentType, modifiedDate, lastEditedBy);
+            player.setDocument(pd);
+            player.setItemType(type);
+            player.setMessageId(id);
+
+            // XXX sync tags
+            
+            try {
+            	ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
+                ombx.addDocumentRevision(new OfflineContext(player), id, type, pd);
+            } catch (MailServiceException.NoSuchItemException nsie) {
+                ombx.createDocument(new OfflineContext(player), folderId, pd, type);
+            }
+            if (flags != 0)
+            	ombx.setTags(sContext, id, type, flags, MailItem.TAG_UNCHANGED);
+            ombx.syncChangeIds(sContext, id, type, date, mod_content, timestamp, changeId);
+            ombx.setSyncedVersionForMailItem(itemIdStr, version);
+            OfflineLog.offline.debug("initial: created document (" + itemIdStr + "): " + name);
+        } catch (ServiceException e) {
+        	OfflineLog.offline.warn("initial: error saving a document:  " + itemIdStr, e);
+            if (e.getCode() != MailServiceException.ALREADY_EXISTS)
+                throw e;
+        } catch (IOException e) {
+        	OfflineLog.offline.warn("initial: error saving a document:  " + itemIdStr, e);
+        }
+    }
+    
+    // tar formatter
     void syncDocument(String query) throws ServiceException {
         OfflineAccount acct = ombx.getOfflineAccount();
         String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=tgz&" + query);
@@ -1126,6 +1211,7 @@ public class InitialSync {
         	OfflineLog.request.debug("GET " + url);
         InputStream rs = null;
         int lastId = 0;
+        int id = 0;
         try {
         	rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
         			acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
@@ -1143,8 +1229,7 @@ public class InitialSync {
         		if (item.getType() != MailItem.TYPE_DOCUMENT && item.getType() != MailItem.TYPE_WIKI)
         			continue;
 
-            	int id = item.getId();
-        		
+            	id = item.getId();
             	te = tis.getNextEntry();
             	if (te == null)
             		throw new RuntimeException("missing blob entry reading tgz stream");
@@ -1162,43 +1247,37 @@ public class InitialSync {
                     ombx.delete(sContext, ids, MailItem.TYPE_UNKNOWN, null);
             		lastId = id;
             	}
+            	InputStream eofIn = new EofInputStream(tis, te.getSize());
+
+            	Document doc = (Document)item;
+            	SaveDocument player = new SaveDocument();
+            	ParsedDocument pd = new ParsedDocument(eofIn, doc.getName(), doc.getContentType(), doc.getDate(), doc.getCreator());
+            	player.setDocument(pd);
+            	player.setItemType(doc.getType());
+            	player.setMessageId(doc.getId());
+
+            	// XXX sync tags
+
             	try {
-            		InputStream eofIn = new EofInputStream(tis, te.getSize());
-
-            		Document doc = (Document)item;
-            		SaveDocument player = new SaveDocument();
-            		ParsedDocument pd = new ParsedDocument(eofIn, doc.getName(), doc.getContentType(), doc.getDate(), doc.getCreator());
-            		player.setDocument(pd);
-            		player.setItemType(doc.getType());
-            		player.setMessageId(doc.getId());
-
-            		// XXX sync tags
-
-            		try {
-            			ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
-            			ombx.addDocumentRevision(new OfflineContext(player), id, doc.getType(), pd);
-            		} catch (MailServiceException.NoSuchItemException nsie) {
-            			ombx.createDocument(new OfflineContext(player), doc.getFolderId(), pd, doc.getType());
-            		}
-            		int flags = doc.getFlagBitmask();
-            		if (flags != 0)
-            			ombx.setTags(sContext, id, doc.getType(), flags, MailItem.TAG_UNCHANGED);
-            		ombx.syncChangeIds(sContext, id, doc.getType(), 
-            				(int)(doc.getDate() / 1000L), 
-            				doc.getSavedSequence(), 
-            				(int)(doc.getChangeDate() / 1000L), 
-            				doc.getModifiedSequence());
-            		//ombx.setSyncedVersionForMailItem(itemIdStr, version);
-            		OfflineLog.offline.debug("initial: created document (" + id + "): " + doc.getName());
-            	} catch (ServiceException x) {
-            		SyncExceptionHandler.checkRecoverableException(x);
-            		SyncExceptionHandler.syncMessageFailed(ombx, ud.id, x);
+            		ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
+            		ombx.addDocumentRevision(new OfflineContext(player), id, doc.getType(), pd);
+            	} catch (MailServiceException.NoSuchItemException nsie) {
+            		ombx.createDocument(new OfflineContext(player), doc.getFolderId(), pd, doc.getType());
             	}
+            	int flags = doc.getFlagBitmask();
+            	if (flags != 0)
+            		ombx.setTags(sContext, id, doc.getType(), flags, MailItem.TAG_UNCHANGED);
+            	ombx.syncChangeIds(sContext, id, doc.getType(), 
+            			(int)(doc.getDate() / 1000L), 
+            			doc.getSavedSequence(), 
+            			(int)(doc.getChangeDate() / 1000L), 
+            			doc.getModifiedSequence());
+            	//ombx.setSyncedVersionForMailItem(itemIdStr, version);
+            	OfflineLog.offline.debug("initial: created document (" + id + "): " + doc.getName());
             }
-        } catch (ServiceException e) {
-        	OfflineLog.offline.warn("initial: error syncing documents:  " + query, e);
-            if (e.getCode() != MailServiceException.ALREADY_EXISTS)
-                throw e;
+    	} catch (ServiceException x) {
+    		SyncExceptionHandler.checkRecoverableException(x);
+    		SyncExceptionHandler.syncDocumentFailed(ombx, id, x);
         } catch (IOException e) {
         	OfflineLog.offline.warn("initial: error syncing documents:  " + query, e);
             throw ServiceException.FAILURE("document sync "+query, e);

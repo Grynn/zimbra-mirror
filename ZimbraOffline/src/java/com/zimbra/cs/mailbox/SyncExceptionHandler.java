@@ -30,6 +30,7 @@ class SyncExceptionHandler {
 	private static final String DELETE_ITEM_FAILED = "delete item failed";
 	private static final String PUSH_ITEM_FAILED = "push item failed";
 	private static final String SEND_MAIL_FAILED = "send mail failed";
+	private static final String DOCUMENT_SYNC_FAILED = "document sync failed";
 	
 	
 	static void checkRecoverableException(ServiceException exception) throws ServiceException {
@@ -75,6 +76,10 @@ class SyncExceptionHandler {
 	
 	static String sendMailFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
 		return saveFailureReport(ombx, itemId, SEND_MAIL_FAILED, null, 0, exception);
+	}
+	
+	static void syncDocumentFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
+		saveFailureReport(ombx, itemId, DOCUMENT_SYNC_FAILED, null, 0, exception);
 	}
 	
     private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, ServiceException exception) {

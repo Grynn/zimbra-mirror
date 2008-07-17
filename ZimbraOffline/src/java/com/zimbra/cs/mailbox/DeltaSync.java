@@ -806,13 +806,38 @@ public class DeltaSync {
     
     void syncDocuments(List<Integer> documents) throws ServiceException {
     	StringBuilder query = null;
-    	for (int docId : documents) {
-    		if (query == null)
-    			query = new StringBuilder("list=");
-    		else
-    			query.append(",");
-    		query.append(docId);
+    	if (ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion)) {
+        	for (int docId : documents) {
+        		if (query == null)
+        			query = new StringBuilder("list=");
+        		else
+        			query.append(",");
+        		query.append(docId);
+        	}
+        	getInitialSync().syncDocument(query.toString());
+    	} else {
+        	for (int docId : documents) {
+        		if (query == null)
+        			query = new StringBuilder("item:{");
+        		else
+        			query.append(",");
+        		query.append(docId);
+        	}
+        	query.append("}");
+            Element request = new Element.XMLElement(MailConstants.SEARCH_REQUEST);
+            request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024);  // XXX pagination
+            request.addAttribute(MailConstants.A_TYPES, "document");
+            request.addElement(MailConstants.E_QUERY).setText(query.toString());
+            if (ombx.getOfflineAccount().isDebugTraceEnabled())
+            	OfflineLog.response.debug(request);
+            
+            Element response = ombx.sendRequest(request);
+            
+            if (ombx.getOfflineAccount().isDebugTraceEnabled())
+            	OfflineLog.response.debug(response);
+            
+            for (Element doc : response.listElements(MailConstants.E_DOC))
+            	getInitialSync().syncDocument(doc);
     	}
-    	getInitialSync().syncDocument(query.toString());
     }
 }
