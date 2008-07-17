@@ -1,0 +1,342 @@
+<html>
+
+<head>
+<style type="text/css">
+TR { vertical-align: top; }
+TD { font-size: smaller; }
+TD.header { font-weight: bold; background-color: silver; }
+UL.formats LI { font-family: courier; }
+</style>
+<script type="text/javascript" src="/zimbra/res/I18nMsg,AjxMsg.js?debug=1"></script>
+<script type="text/javascript" src="/zimbra/js/ajax/util/AjxText.js"></script>
+<script type="text/javascript" src="/zimbra/js/ajax/util/AjxDateUtil.js"></script>
+</head>
+
+<body>
+<h1>Date Calculation</h1>
+<p>
+	This page documents and tests the date calculation rules that can
+	be used with the <code>AjxDateUtil.calculate</code> function. This
+	function is called with a rule string (as documented below) and,
+	optionally, a context date object. If a context date is not given,
+	the current time (i.e. <code>new Date</code>) is used as the
+	context date.
+</p>
+
+<h2>Rule Patterns</h2>
+<p>
+	Each date calculator rule is a string that specifies the base
+	date/time, optionally followed by a sequence of adjustments to that
+	date/time. The base date/time can be specified in two ways. It can
+	be specified as the context date/time object using the following
+	keyword:
+</p>
+<ul class="formats">
+	<li>now</li>
+</ul>
+<p>And you can specify a specific date/time using any of the following
+	formats: [Note: these patterns follow the formats documented in
+	<a href="http://java.sun.com/j2se/1.4.2/docs/api/java/text/SimpleDateFormat.html">java.util.SimpleDateFormat</a>.]
+</p>
+<ul class="formats">
+	<li>yyyy-MM-dd</li>
+	<li>yyyy-MM-dd'T'HH:mm:ss</li>
+	<li>yyyy-MM-dd'T'HH:mm:ss'Z'</li>
+</ul>
+<p>
+	The following adjustments can be made after specifying the base
+	date/time:
+</p>
+<ul class="formats">
+	<li>+{number} (second[s]|minute[s]|hour[s]|day[s]|week[s]|month[s]|year[s])</li>
+	<li>+{number} {month_name}</li>
+	<li>+{number} {day_name}</li>
+	<li>-{number} (second[s]|minute[s]|hour[s]|day[s]|week[s]|month[s]|year[s])</li>
+	<li>-{number} {month_name}</li>
+	<li>-{number} {day_name}</li>
+	<li>milliseconds={milliseconds}</li>
+	<li>seconds={seconds}[,{milliseconds}]</li>
+	<li>minutes={minutes}[,{seconds}[,{milliseconds}]]</li>
+	<li>hours={hours}[,{minutes}[,{seconds}[,{milliseconds}]]]</li>
+	<li>date={date}</li>
+	<li>month={month}[,{date}]</li>
+	<li>year={year}[,{month}[,{date}]]</li>
+</ul>
+<p>
+	Common abbreviations can also be used. For example "milli" and
+	"millis" instead of "millisecond" and "milliseconds"; "sec" and
+	"secs" instead of "second" and "seconds"; and "min" and "mins"
+	instead of "minute" and "minutes". This is possible because the
+	keywords used by the calculator are defined in the AjxMsg
+	message catalog and each entry can have multiple options.
+</p>
+
+<h2>Tests</h2>
+<script type="text/javascript">
+var NOW = new Date(2008, 6, 14, 12, 0, 0);
+document.write("<h3>NOW = ",NOW,"</h3>");
+</script>
+<table border="1">
+	<thead>
+		<th>Rule</th><th>Expected</th><th>Actual</th>
+	</thead>
+	<tbody>
+<script type="text/javascript">
+function test(rule, expected) {
+	if (!rule) {
+		document.write("<tr><td class='header' colspan=3>",expected,"</td></tr>");
+		return;
+	}
+
+	var actual;
+	try {
+		actual = AjxDateUtil.calculate(rule, NOW);
+	}
+	catch (e) {
+		actual = e;
+	}
+	var correct = actual instanceof Date && actual.getTime() == expected.getTime();
+	document.write(
+		"<tr>",
+			"<td>",rule,"</td>",
+			"<td>",expected,"</td>",
+			"<td bgcolor=",(correct?"lightgreen":"pink"),">",actual,"</td>",
+		"</tr>"
+	);
+}
+
+function date_add(date, set_func, get_func, amount) {
+	var d = new Date(date.getTime());
+	set_func.call(d, get_func.call(d) + amount);
+	return d;
+}
+function date_set(date, func, value1 /* ..., valueN */) {
+	var d = new Date(date.getTime());
+	var args = [];
+	for (var i = 2; i < arguments.length; i++) {
+		args.push(arguments[i]);
+	}
+	func.apply(d, args);
+	return d;
+}
+
+var DATE = new Date(1973, 0, 16, 12, 13, 14);
+var DATE_UTC = new Date(DATE.getTime());
+DATE_UTC.setMinutes(DATE_UTC.getMinutes() - DATE_UTC.getTimezoneOffset());
+
+var formatter = new AjxDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+var RULES = [
+	null, // context date
+	"now",
+	null, // specific dates
+	"1973-01-16",
+	formatter.format(DATE),
+	formatter.format(DATE_UTC)+"Z",
+	null, // (+|-){number} (milli|millis|millisecond|milliseconds)
+	"now +1230 milli",
+	"now +1230 millis",
+	"now +1230 millisecond",
+	"now +1230 milliseconds",
+	"now -1230 milliseconds",
+	null, // (+|-){number} (sec|second|secs|seconds)
+	"now +1 sec",
+	"now +1 second",
+	"now +2 secs",
+	"now +2 seconds",
+	"now -1 sec",
+	null, // (+|-){number} (min|mins|minute|minutes)
+	"now +1 min",
+	"now +1 minute",
+	"now +2 mins",
+	"now +2 minutes",
+	"now -1 min",
+	null, // (+|-){number} (hour|hours)
+	"now +1 hour",
+	"now +2 hours",
+	"now -1 hour",
+	null, // (+|-){number} (day|days)
+	"now +1 day",
+	"now +2 days",
+	"now -1 day",
+	null, // (+|-){number} (week|weeks)
+	"now +1 week",
+	"now +2 weeks",
+	"now -1 week",
+	"now +1 week -7 days",
+	null, // (+|-){number} (year|years)
+	"now +1 year",
+	"now +2 years",
+	"now -1 year",
+	null, // (+|-){number} {month}
+	"now +1 Feb",
+	"now +1 July",
+	"now +1 September",
+	"now +2 September",
+	"now -1 Feb",
+	"now -1 July",
+	"now -1 September",
+	null, // (+|-){number} {day}
+	"now +1 Sun",
+	"now +1 Thu",
+	"now +1 Thur",
+	"now +1 Thurs",
+	"now +1 Thursday",
+	"now -1 Sunday",
+	"now -1 Thursday",
+	null, // check rollover safety
+	"2008-01-30 +1 month",
+	"2008-01-30 +2 months",
+	null, // (millis|milliseconds)={milliseconds}
+	"now millis=1230",
+	"now milliseconds=1230",
+	null, // (secs|seconds)={seconds}[,{milliseconds}]
+	"now secs=34",
+	"now secs=34,1230",
+	"now seconds=34",
+	"now seconds=34,1230",
+	null, // (mins|minutes)={minutes}[,{seconds}[,{milliseconds}]]
+	"now mins=16",
+	"now mins=16,34",
+	"now mins=16,34,1230",
+	"now minutes=16",
+	"now minutes=16,34",
+	"now minutes=16,34,1230",
+	null, // hours={hours}[,{minutes}[,{seconds}[,{milliseconds}]]]
+	"now hours=6",
+	"now hours=6,16",
+	"now hours=6,16,34",
+	"now hours=6,16,34,1230",
+	null, // date={date}</li>
+	"now date=-6",
+	"now date=0",
+	"now date=21",
+	"now date=38",
+	null, // month={month}[,{date}]</li>
+	"now month=1",
+	"now month=Jan",
+	"now month=January",
+	"now month=1,12",
+	"now month=Jan,12",
+	"now month=January,12",
+	null, // year={year}[,{month}[,{date}]]</li>
+	"now year=2010",
+	"now year=2010,3",
+	"now year=2010,Mar",
+	"now year=2010,March",
+	"now year=2010,3,18",
+	"now year=2010,Mar,18",
+	"now year=2010,March,18"
+];
+
+var EXPECTED = [
+	"context date",
+	NOW,
+	"specific dates",
+	new Date(1973, 0, 16),
+	DATE,
+	DATE,
+	"(+|-){number} (milli|millis|millisecond|milliseconds)",
+	date_add(NOW, NOW.setMilliseconds, NOW.getMilliseconds, 1230),
+	date_add(NOW, NOW.setMilliseconds, NOW.getMilliseconds, 1230),
+	date_add(NOW, NOW.setMilliseconds, NOW.getMilliseconds, 1230),
+	date_add(NOW, NOW.setMilliseconds, NOW.getMilliseconds, 1230),
+	date_add(NOW, NOW.setMilliseconds, NOW.getMilliseconds, -1230),
+	"(+|-){number} (sec|second|secs|seconds)",
+	date_add(NOW, NOW.setSeconds, NOW.getSeconds, 1),
+	date_add(NOW, NOW.setSeconds, NOW.getSeconds, 1),
+	date_add(NOW, NOW.setSeconds, NOW.getSeconds, 2),
+	date_add(NOW, NOW.setSeconds, NOW.getSeconds, 2),
+	date_add(NOW, NOW.setSeconds, NOW.getSeconds, -1),
+	"(+|-){number} (min|mins|minute|minutes)",
+	date_add(NOW, NOW.setMinutes, NOW.getMinutes, 1),
+	date_add(NOW, NOW.setMinutes, NOW.getMinutes, 1),
+	date_add(NOW, NOW.setMinutes, NOW.getMinutes, 2),
+	date_add(NOW, NOW.setMinutes, NOW.getMinutes, 2),
+	date_add(NOW, NOW.setMinutes, NOW.getMinutes, -1),
+	"(+|-){number} (hour|hours)",
+	date_add(NOW, NOW.setHours, NOW.getHours, 1),
+	date_add(NOW, NOW.setHours, NOW.getHours, 2),
+	date_add(NOW, NOW.setHours, NOW.getHours, -1),
+	"(+|-){number} (day|days)",
+	date_add(NOW, NOW.setDate, NOW.getDate, 1),
+	date_add(NOW, NOW.setDate, NOW.getDate, 2),
+	date_add(NOW, NOW.setDate, NOW.getDate, -1),
+	"(+|-){number} (week|weeks)",
+	date_add(NOW, NOW.setDate, NOW.getDate, 1*7),
+	date_add(NOW, NOW.setDate, NOW.getDate, 2*7),
+	date_add(NOW, NOW.setDate, NOW.getDate, -1*7),
+	NOW, // +1 week -7 days == +0 days == NOW
+	"(+|-){number} (year|years)",
+	date_add(NOW, NOW.setFullYear, NOW.getFullYear, 1),
+	date_add(NOW, NOW.setFullYear, NOW.getFullYear, 2),
+	date_add(NOW, NOW.setFullYear, NOW.getFullYear, -1),
+	"(+|-){number} {month}",
+	new Date(2009, 1, 1, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2009, 6, 1, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2008, 8, 1, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2009, 8, 1, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2008, 1, 1, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2007, 6, 1, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2007, 8, 1, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	"(+|-){number} {day}",
+	new Date(2008, 6, 20, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2008, 6, 17, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2008, 6, 17, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2008, 6, 17, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2008, 6, 17, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2008, 6, 13, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	new Date(2008, 6, 10, NOW.getHours(), NOW.getMinutes(), NOW.getSeconds()),
+	"check rollover safety",
+	new Date(2008, 1, 29), // NOTE: leap year
+	new Date(2008, 2, 30),
+	"(millis|milliseconds)={milliseconds}",
+	date_set(NOW, NOW.setMilliseconds, 1230),
+	date_set(NOW, NOW.setMilliseconds, 1230),
+	"(secs|seconds)={seconds}[,{milliseconds}]",
+	date_set(NOW, NOW.setSeconds, 34),
+	date_set(NOW, NOW.setSeconds, 34, 1230),
+	date_set(NOW, NOW.setSeconds, 34),
+	date_set(NOW, NOW.setSeconds, 34, 1230),
+	"(mins|minutes)={minutes}[,{seconds}[,{milliseconds}]]",
+	date_set(NOW, NOW.setMinutes, 16),
+	date_set(NOW, NOW.setMinutes, 16, 34),
+	date_set(NOW, NOW.setMinutes, 16, 34, 1230),
+	date_set(NOW, NOW.setMinutes, 16),
+	date_set(NOW, NOW.setMinutes, 16, 34),
+	date_set(NOW, NOW.setMinutes, 16, 34, 1230),
+	"hours={hours}[,{minutes}[,{seconds}[,{milliseconds}]]]",
+	date_set(NOW, NOW.setHours, 6),
+	date_set(NOW, NOW.setHours, 6, 16),
+	date_set(NOW, NOW.setHours, 6, 16, 34),
+	date_set(NOW, NOW.setHours, 6, 16, 34, 1230),
+	"date={date}</li>",
+	date_set(NOW, NOW.setDate, -6),
+	date_set(NOW, NOW.setDate, 0),
+	date_set(NOW, NOW.setDate, 21),
+	date_set(NOW, NOW.setDate, 38),
+	"month={month}[,{date}]",
+	date_set(NOW, NOW.setMonth, 0),
+	date_set(NOW, NOW.setMonth, 0),
+	date_set(NOW, NOW.setMonth, 0),
+	date_set(NOW, NOW.setMonth, 0, 12),
+	date_set(NOW, NOW.setMonth, 0, 12),
+	date_set(NOW, NOW.setMonth, 0, 12),
+	"year={year}[,{month}[,{date}]]",
+	date_set(NOW, NOW.setFullYear, 2010),
+	date_set(NOW, NOW.setFullYear, 2010, 2),
+	date_set(NOW, NOW.setFullYear, 2010, 2),
+	date_set(NOW, NOW.setFullYear, 2010, 2),
+	date_set(NOW, NOW.setFullYear, 2010, 2, 18),
+	date_set(NOW, NOW.setFullYear, 2010, 2, 18),
+	date_set(NOW, NOW.setFullYear, 2010, 2, 18)
+];
+
+for (var i = 0; i < RULES.length; i++) {
+	test(RULES[i], EXPECTED[i]);
+}
+</script>
+	</tbody>
+</table>
+</body>
+</html>

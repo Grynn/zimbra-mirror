@@ -669,3 +669,309 @@ function(fromThisDate,thisWeekday) {
     return newDate;
 }
 
+//
+// Date calculator functions
+//
+
+AjxDateUtil.calculate = function(rule, date) {
+	// initialize
+	if (!AjxDateUtil.__calculate_initialized) {
+		AjxDateUtil.__calculate_initialized = true;
+		AjxDateUtil.__calculate_init();
+	}
+
+	var now = date || new Date;
+	rule = rule.replace(/^\s*|\s*$/, "").replace(/\s*=\s*/g,"=").replace(/\s*,\s*/g,",");
+	var a = rule.split(/\s+/g);
+	var s, m, plusminus, number, type, amount, weekord, daynum;
+	for (var i = 0; i < a.length; i++) {
+		s = a[i];
+		// comment
+		if (s.match(AjxDateUtil.RE_COMMENT)) {
+			break;
+		}
+		// context date
+		if (s.match(AjxDateUtil.RE_NOW)) {
+			date = new Date(now.getTime());
+			continue;
+		}
+		// add
+		if (m = s.match(AjxDateUtil.RE_ADD_NUMBER)) {
+			plusminus = m[1];
+			number = AjxDateUtil.__calculate_parseInt(m[2]);
+			type = a[++i];
+			amount = plusminus == '+' ? number : number * -1;
+			AjxDateUtil.__calculate_add(date, type, amount);
+			continue;
+		}
+		// add ordinal
+		if (m = s.match(AjxDateUtil.RE_ADD_WEEKORD)) {
+			plusminus = m[1];
+			weekord = m[2];
+			daynum = a[++i];
+			amount = plusminus == '+' ? number : number * -1;
+			AjxDateUtil.__calculate_add_ordinal(date, type, amount);
+			continue;
+		}
+		// set
+		if (m = s.match(AjxDateUtil.RE_SET)) {
+			AjxDateUtil.__calculate_set(date, m[1], m[2]);
+			continue;
+		}
+		// try to parse as a date
+		date = AjxDateFormat.parse("yyyyy-MM-dd", s);
+		if (!date && (date = AjxDateFormat.parse("yyyy-MM-dd'T'hh:mm:ss'Z'", s))) {
+			date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+		}
+		if (!date) date = AjxDateFormat.parse("yyyy-MM-dd'T'HH:mm:ss", s);
+		if (!date) throw "invalid date pattern: \""+s+"\"";
+	}
+	return date;
+};
+
+//
+// Date calculator constants
+//
+
+AjxDateUtil.S_DAYNAME = [
+	AjxMsg["calc.dayname.sunday"],
+	AjxMsg["calc.dayname.monday"],
+	AjxMsg["calc.dayname.tuesday"],
+	AjxMsg["calc.dayname.wednesday"],
+	AjxMsg["calc.dayname.thursday"],
+	AjxMsg["calc.dayname.friday"],
+	AjxMsg["calc.dayname.saturday"]
+].join("|");
+
+AjxDateUtil.S_MONTHNAME = [
+	AjxMsg["calc.monthname.january"],
+	AjxMsg["calc.monthname.february"],
+	AjxMsg["calc.monthname.march"],
+	AjxMsg["calc.monthname.april"],
+	AjxMsg["calc.monthname.may"],
+	AjxMsg["calc.monthname.june"],
+	AjxMsg["calc.monthname.july"],
+	AjxMsg["calc.monthname.august"],
+	AjxMsg["calc.monthname.september"],
+	AjxMsg["calc.monthname.october"],
+	AjxMsg["calc.monthname.november"],
+	AjxMsg["calc.monthname.december"]
+].join("|");
+
+AjxDateUtil.S_WEEKORD = [
+	AjxMsg["calc.ordinal.first"],
+	AjxMsg["calc.ordinal.second"],
+	AjxMsg["calc.ordinal.third"],
+	AjxMsg["calc.ordinal.fourth"],
+	AjxMsg["calc.ordinal.fifth"],
+	AjxMsg["calc.ordinal.last"]
+].join("|");
+
+AjxDateUtil.S_DURATION = [
+	AjxMsg["calc.duration.year"],
+	AjxMsg["calc.duration.month"],
+	AjxMsg["calc.duration.day"],
+	AjxMsg["calc.duration.hour"],
+	AjxMsg["calc.duration.minute"],
+	AjxMsg["calc.duration.second"],
+	AjxMsg["calc.duration.millisecond"]
+].join("|");
+
+//
+// Date calculator private functions
+//
+
+AjxDateUtil.__calculate_init = function() {
+	AjxDateUtil.WEEKDAYS = {};
+	var weekdays = [
+		"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"
+	];
+	for (var i = 0; i < weekdays.length; i++) {
+		var weekday = AjxMsg["calc.dayname."+weekdays[i]].split("|");
+		for (var j = 0; j < weekday.length; j++) {
+			AjxDateUtil.WEEKDAYS[weekday[j].toLowerCase()] = i;
+		}
+	}
+
+	AjxDateUtil.MONTHNAME2MONTHNUM = {};
+	var months = [
+		"january", "february", "march", "april", "may", "june",
+		"july", "august", "september", "october", "november", "december"
+	];
+	for (var i = 0; i < months.length; i++) {
+		var month = AjxMsg["calc.monthname."+months[i]].split("|");
+		for (var j = 0; j < month.length; j++) {
+			AjxDateUtil.MONTHNAME2MONTHNUM[month[j].toLowerCase()] = i;
+		}
+	}
+
+	AjxDateUtil.RE_YEAR = new RegExp("^("+AjxMsg["calc.duration.year"]+")$", "i");
+	AjxDateUtil.RE_MONTH = new RegExp("^("+AjxMsg["calc.duration.month"]+")$", "i");
+	AjxDateUtil.RE_WEEK = new RegExp("^("+AjxMsg["calc.duration.week"]+")$", "i");
+	AjxDateUtil.RE_DAY = new RegExp("^("+AjxMsg["calc.duration.day"]+")$", "i");
+	AjxDateUtil.RE_HOUR = new RegExp("^("+AjxMsg["calc.duration.hour"]+")$", "i");
+	AjxDateUtil.RE_MINUTE = new RegExp("^("+AjxMsg["calc.duration.minute"]+")$", "i");
+	AjxDateUtil.RE_SECOND = new RegExp("^("+AjxMsg["calc.duration.second"]+")$", "i");
+	AjxDateUtil.RE_MILLISECOND = new RegExp("^("+AjxMsg["calc.duration.millisecond"]+")$", "i");
+
+	AjxDateUtil.RE_DATE = new RegExp("^("+AjxMsg["calc.date"]+")$", "i");
+	
+	AjxDateUtil.RE_DAYNAME = new RegExp("^("+AjxDateUtil.S_DAYNAME+")$", "i");
+	AjxDateUtil.RE_MONTHNAME = new RegExp("^("+AjxDateUtil.S_MONTHNAME+")$", "i");
+	AjxDateUtil.RE_WEEKORD = new RegExp("^("+AjxDateUtil.S_WEEKORD+")$", "i");
+
+	AjxDateUtil.RE_COMMENT = /^#/;
+	AjxDateUtil.RE_NOW = new RegExp("^("+AjxMsg["calc.now"]+")$", "i");
+	AjxDateUtil.RE_ADD_NUMBER = new RegExp("^([+\\-])(\\d+)$", "i");
+	AjxDateUtil.RE_ADD_WEEKORD = new RegExp("^([+\\-])("+AjxDateUtil.S_WEEKORD+")$", "i");
+	AjxDateUtil.RE_SET = new RegExp("^("+AjxDateUtil.S_DURATION+"|"+AjxMsg["calc.date"]+")=(.*)$", "i");
+};
+
+AjxDateUtil.__calculate_normalizeFullWidthDigit = function(digit) {
+	var charCode = "0".charCodeAt(0) + digit.charCodeAt(0) - "\uff10".charCodeAt(0);
+	return String.fromCharCode(charCode);
+};
+
+/** This is needed to handle asian full-width digits. */
+AjxDateUtil.__calculate_replaceFullWidthDigit = function($0, digit) {
+	return AjxDateUtil.__calculate_normalizeFullWidthDigit(digit);
+};
+
+AjxDateUtil.__calculate_parseInt = function(s) {
+	s = s.replace(/([\uFF10-\uFF19])/g, AjxDateUtil.__calculate_normalizeFullWidthDigit);
+	return parseInt(s, 10);
+};
+
+AjxDateUtil.__calculate_add = function(date, type, amount) {
+	if (type.match(AjxDateUtil.RE_YEAR)) {
+		date.setFullYear(date.getFullYear() + amount);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_MONTH)) {
+		var month = date.getMonth();
+		date.setMonth(month + amount);
+		// avoid roll
+		if (Math.abs(month + amount) % 12 != date.getMonth()) {
+			date.setDate(0);
+		}
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_WEEK)) {
+		date.setDate(date.getDate() + amount * 7);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_DAY)) {
+		date.setDate(date.getDate() + amount);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_HOUR)) {
+		date.setHours(date.getHours() + amount);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_MINUTE)) {
+		date.setMinutes(date.getMinutes() + amount);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_SECOND)) {
+		date.setSeconds(date.getSeconds() + amount);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_MILLISECOND)) {
+		date.setMilliseconds(date.getMilliseconds() + amount);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_MONTHNAME)) {
+		var monthnum = AjxDateUtil.MONTHNAME2MONTHNUM[type.toLowerCase()];
+		if (monthnum < date.getMonth()) {
+			amount += amount > 0 ? 0 : 1;
+		}
+		else if (monthnum > date.getMonth()) {
+			amount += amount > 0 ? -1 : 0;
+		}
+		date.setFullYear(date.getFullYear() + amount, monthnum, 1);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_DAYNAME)) {
+		var daynum = AjxDateUtil.WEEKDAYS[type.toLowerCase()];
+		if (daynum < date.getDay()) {
+			amount += amount > 0 ? 0 : 1;
+		}
+		else if (daynum > date.getDay()) {
+			amount += amount > 0 ? -1 : 0;
+		}
+		date.setDate(date.getDate() + (daynum - date.getDay()) + 7 * amount);
+		return;
+	}
+	throw "unknown type: "+type;
+};
+
+AjxDateUtil.__calculate_add_ordinal = function() {
+	throw "TODO: not implemented";
+};
+
+AjxDateUtil.__calculate_set = function(date, type, value) {
+	var args = value.split(/,/);
+	if (type.match(AjxDateUtil.RE_YEAR)) {
+		args[0] = AjxDateUtil.__calculate_fullYear(args[0]); // year
+		if (args[1] != null) args[1] = AjxDateUtil.__calculate_month(args[1]); // month
+		if (args[2] != null) args[2] = parseInt(args[2], 10); // date
+		date.setFullYear.apply(date, args);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_MONTH)) {
+		args[0] = AjxDateUtil.__calculate_month(args[0]); // month
+		if (args[1] != null) args[1] = parseInt(args[1], 10); // date
+		date.setMonth.apply(date, args);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_DATE)) {
+		args[0] = parseInt(args[0], 10); // date
+		date.setDate.apply(date, args);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_HOUR)) {
+		args[0] = parseInt(args[0], 10); // hour
+		if (args[1] != null) args[1] = parseInt(args[1], 10); // minutes
+		if (args[2] != null) args[2] = parseInt(args[2], 10); // seconds
+		if (args[3] != null) args[3] = parseInt(args[3], 10); // milliseconds
+		date.setHours.apply(date, args);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_MINUTE)) {
+		args[0] = parseInt(args[0], 10); // minutes
+		if (args[1] != null) args[1] = parseInt(args[1], 10); // seconds
+		if (args[2] != null) args[2] = parseInt(args[2], 10); // milliseconds
+		date.setMinutes.apply(date, args);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_SECOND)) {
+		args[0] = parseInt(args[0], 10); // seconds
+		if (args[1] != null) args[1] = parseInt(args[1], 10); // milliseconds
+		date.setSeconds.apply(date, args);
+		return;
+	}
+	if (type.match(AjxDateUtil.RE_MILLISECOND)) {
+		date.setMilliseconds.apply(date, args); // milliseconds
+		return;
+	}
+	throw "unknown type: "+type;
+};
+
+AjxDateUtil.__calculate_fullYear = function(value) {
+	if (value.length == 2) {
+		var d = new Date;
+		d.setYear(parseInt(value, 10));
+		value = String(d.getFullYear()).substr(0,2) + value;
+	}
+	return parseInt(value, 10);
+};
+
+AjxDateUtil.__calculate_month = function(value) {
+	var monthnum = AjxDateUtil.MONTHNAME2MONTHNUM[value.toLowerCase()];
+	return monthnum != null ? monthnum : parseInt(value, 10) - 1;
+};
+
+AjxDateUtil.__calculate_day = function(value) {
+	var daynum = AjxDateUtil.WEEKDAYS[value.toLowerCase()];
+	return daynum != null ? daynum : parseInt(value, 10);
+};

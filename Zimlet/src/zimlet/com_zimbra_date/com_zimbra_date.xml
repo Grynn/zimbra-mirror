@@ -1,5 +1,6 @@
 <zimlet name="com_zimbra_date" version="1.0" description="Date">
 	<include>date.js</include>
+	<include>formats.js</include>
 	<handlerObject>Com_Zimbra_Date</handlerObject>
 	<contentObject type="date">
 		<contextMenu>
