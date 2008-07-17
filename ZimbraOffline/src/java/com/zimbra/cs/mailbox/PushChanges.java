@@ -583,7 +583,6 @@ public class PushChanges {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER))
                 throw sfe;
             OfflineLog.offline.info("push: remote search folder " + id + " has been deleted; skipping");
-            return true;
         }
 
         synchronized (ombx) {
@@ -649,7 +648,6 @@ public class PushChanges {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER))
                 throw sfe;
             OfflineLog.offline.info("push: remote folder " + id + " has been deleted; skipping");
-            return true;
         }
 
         synchronized (ombx) {
@@ -713,7 +711,6 @@ public class PushChanges {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_TAG))
                 throw sfe;
             OfflineLog.offline.info("push: remote tag " + id + " has been deleted; skipping");
-            return true;
         }
 
         synchronized (ombx) {
@@ -847,7 +844,6 @@ public class PushChanges {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_CONTACT))
                 throw sfe;
             OfflineLog.offline.info("push: remote contact " + id + " has been deleted; skipping");
-            return true;
         }
 
         synchronized (ombx) {
@@ -1044,7 +1040,6 @@ public class PushChanges {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_MSG))
                 throw sfe;
             OfflineLog.offline.info("push: remote message " + id + " has been deleted; skipping");
-            return true;
         }
 
         synchronized (ombx) {
@@ -1126,7 +1121,6 @@ public class PushChanges {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_CONTACT))
                 throw sfe;
             OfflineLog.offline.info("push: remote calendar item " + id + " has been deleted; skipping");
-            return true;
         }
 
         synchronized (ombx) {
