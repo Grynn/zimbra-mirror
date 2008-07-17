@@ -89,9 +89,13 @@ function() {
 Com_Zimbra_YFinance.INIT_DELAY = 15000;
 
 Com_Zimbra_YFinance.prototype.onShowView = function(viewId, isNewView) {
-	 if (viewId == ZmId.VIEW_NOTEBOOK_PAGE_EDIT){
+    //bug: 29933 disabled to avoid confusion on offline client
+    //enable it later with polished UI
+    /*
+     if (viewId == ZmId.VIEW_NOTEBOOK_PAGE_EDIT){
 	 	this._initPageEditToolbar();
-	 }	
+	 }
+	*/
 };
 
 Com_Zimbra_YFinance.prototype._initPageEditToolbar =
