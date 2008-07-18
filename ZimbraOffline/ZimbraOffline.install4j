@@ -516,7 +516,7 @@ default:
                     </object>
                   </java>
                 </serializedBean>
-                <condition>context.getBooleanVariable("keepUserData")</condition>
+                <condition>(!Util.isWindows() || context.getLanguageId().equals("en_US")) &amp;&amp; context.getBooleanVariable("keepUserData")</condition>
               </action>
               <action name="launchctl remove" id="275894" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
                 <serializedBean>
@@ -736,7 +736,7 @@ default:
                     </object>
                   </java>
                 </serializedBean>
-                <condition>context.getBooleanVariable("keepUserData")</condition>
+                <condition>(!Util.isWindows() || context.getLanguageId().equals("en_US")) &amp;&amp; context.getBooleanVariable("keepUserData")</condition>
               </action>
               <action name="derby" id="275903" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
@@ -1284,7 +1284,7 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="derbyij" id="263089" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrDBInitFailed}">
+              <action name="derbyij non-win32 or en_US" id="263089" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrDBInitFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -1307,7 +1307,58 @@ try {
                     </object>
                   </java>
                 </serializedBean>
-                <condition>!context.getBooleanVariable("keepUserData")</condition>
+                <condition>(!Util.isWindows() || context.getLanguageId().equals("en_US")) &amp;&amp; !context.getBooleanVariable("keepUserData")</condition>
+              </action>
+              <action name="derbyij win32 and non en_US" id="285439" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrDBInitFailed}">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                      <void property="arguments">
+                        <array class="java.lang.String" length="4">
+                          <void index="0">
+                            <string>-cp</string>
+                          </void>
+                          <void index="1">
+                            <string>"lib/derbytools.jar;jetty/common/lib/derby.jar"</string>
+                          </void>
+                          <void index="2">
+                            <string>org.apache.derby.tools.ij</string>
+                          </void>
+                          <void index="3">
+                            <string>db/derbyij.sql</string>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="executable">
+                        <object class="java.io.File">
+                          <string>jre/bin/java.exe</string>
+                        </object>
+                      </void>
+                      <void property="logArguments">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="stderrFile">
+                        <object class="java.io.File">
+                          <string>${installer:sys.installationDir}/log/derbyinit.err</string>
+                        </object>
+                      </void>
+                      <void property="stdoutFile">
+                        <object class="java.io.File">
+                          <string>${installer:sys.installationDir}/log/derbyinit.out</string>
+                        </object>
+                      </void>
+                      <void property="wait">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="workingDirectory">
+                        <object class="java.io.File">
+                          <string>${installer:sys.installationDir}</string>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isWindows() &amp;&amp; !context.getLanguageId().equals("en_US") &amp;&amp; !context.getBooleanVariable("keepUserData")</condition>
               </action>
               <action name="" id="8" beanClass="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
