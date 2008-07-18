@@ -22,6 +22,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -39,8 +40,14 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.util.LogFactory;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.AuthContext;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.account.AuthTokenException;
+import com.zimbra.cs.account.auth.AuthMechanism;
+import com.zimbra.cs.account.ldap.LdapProvisioning;
 import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.Domain;
@@ -51,6 +58,7 @@ import com.zimbra.cs.account.AccessManager;
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionHttpHandler;
 import com.zimbra.cs.extension.ZimbraExtension;
+import com.zimbra.cs.service.AuthProvider;
 
 public class NginxLookupExtension implements ZimbraExtension {
 
@@ -73,6 +81,10 @@ public class NginxLookupExtension implements ZimbraExtension {
         public NginxLookupException(String msg) {
             super(msg);
         }
+        
+        public NginxLookupException(String msg, Throwable cause) {
+            super(msg, cause);
+        }
     }
     
     private static class NginxLookupRequest {
@@ -86,6 +98,8 @@ public class NginxLookupExtension implements ZimbraExtension {
         String serverHost;
         String principal;
         int loginAttempt;
+        String adminUser;
+        String adminPass;
         HttpServletRequest  httpReq;
         HttpServletResponse httpResp;
     }
@@ -213,9 +227,12 @@ public class NginxLookupExtension implements ZimbraExtension {
             req.proto       = httpReq.getHeader(AUTH_PROTOCOL);         /* Protocol {imap|imaps|pop3|pop3s|http} */
             req.authMethod  = httpReq.getHeader(AUTH_METHOD);           /* Auth Method {passwd|plain|gssapi|other|zimbraId} */
             req.cuser       = httpReq.getHeader(AUTH_ID);               /* (GSSAPI) Authenticating Principal */
+            req.adminUser   = httpReq.getHeader(AUTH_ADMIN_USER);       /* auth admin user, required for GSSAPI */
+            req.adminPass   = httpReq.getHeader(AUTH_ADMIN_PASS);       /* auth admin password, , required for GSSAPI */
             req.clientIp    = httpReq.getHeader(CLIENT_IP);             /* Upstream Client IP */
             req.serverIp    = httpReq.getHeader(SERVER_IP);             /* Incoming Proxy Interface IP */
             req.serverHost  = httpReq.getHeader(SERVER_HOST);           /* (HTTP) Host header */
+             
 
             /* Complain if any required fields are missing */
 
@@ -225,8 +242,18 @@ public class NginxLookupExtension implements ZimbraExtension {
                 throw new NginxLookupException("missing header field " + AUTH_METHOD);
             if (req.proto == null)
                 throw new NginxLookupException("missing header field " + AUTH_PROTOCOL);
-            if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI) && (req.cuser == null)) {
-                throw new NginxLookupException("(GSSAPI) missing header field " + AUTH_ID);
+            if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI)) {
+                if (req.cuser == null)
+                    throw new NginxLookupException("(GSSAPI) missing header field " + AUTH_ID);
+                
+                if (req.adminUser == null)
+                    throw new NginxLookupException("(GSSAPI) missing header field " + AUTH_ADMIN_USER);
+                
+                if (req.adminPass == null)
+                    throw new NginxLookupException("(GSSAPI) missing header field " + AUTH_ADMIN_PASS);
+                
+                if (req.serverIp == null)
+                    throw new NginxLookupException("(GSSAPI) missing header field " + SERVER_IP);
             }
 
             if (req.pass == null)   /* We should not complain on null password */
@@ -327,21 +354,114 @@ public class NginxLookupExtension implements ZimbraExtension {
                     ne.close();
             }
         }
+        
+        /**
+         * verify that the request is from the legitimate nginx admin 
+         * @throws NginxLookupException
+         */
+        private void verifyNginxAdmin(Provisioning prov, Config config, NginxLookupRequest req) throws ServiceException, NginxLookupException {
+            Set<String> allowedServerIPs = config.getMultiAttrSet(Provisioning.A_zimbraReverseProxyAdminIPAddress);
+            if (!allowedServerIPs.contains(req.serverIp))
+                throw new NginxLookupException(SERVER_IP + " " + req.serverIp + " is not allowed");
+                
+            Account adminAcct = prov.get(AccountBy.name, req.adminUser);
+            if (adminAcct == null)
+                throw new NginxLookupException("admin account " + req.adminUser + " not found");
+                
+            // must be global admin
+            boolean isAdmin= adminAcct.getBooleanAttr(Provisioning.A_zimbraIsAdminAccount, false);
+            if (!isAdmin)
+                throw new NginxLookupException("not an admin account");
+                    
+            Map<String, Object> authCtxt = new HashMap<String, Object>();
+            authCtxt.put(AuthContext.AC_ORIGINATING_CLIENT_IP, req.clientIp);
+            authCtxt.put(AuthContext.AC_ACCOUNT_NAME_PASSEDIN, req.adminUser);
+            AuthMechanism.doZimbraAuth((LdapProvisioning)prov, null, adminAcct, req.adminPass, authCtxt);  
+        }
+        
+        private String genAuthToken(Account authc, Config config, NginxLookupRequest req) throws ServiceException, NginxLookupException {
+            Provisioning prov = Provisioning.getInstance();
+            verifyNginxAdmin(prov, config, req);
+            
+            try {
+                return AuthProvider.getAuthToken(authc).getEncoded();
+            } catch (AuthTokenException e) {
+                throw new NginxLookupException("failed to geenrate auth token for " + authc.getName(), e);
+            }
+        }
+        
+        private String qualifyUserName(ZimbraLdapContext zlc, Config config, NginxLookupRequest req, Provisioning prov, String unqualifiedName) {
+            String domainName = null;
+            
+            if (HTTP.equalsIgnoreCase(req.proto))
+            {
+                /* For HTTP, we need to qualify user based on virtual-host header */
+                if (req.serverHost != null) {
+                    logger.info("looking up domain by virtualhost name");
+                    Domain d = null;
+                    try {
+                        d = prov.get(DomainBy.virtualHostname, req.serverHost);
+                    } catch (ServiceException e) {
+                    }
+                    if (d != null) {
+                        domainName = d.getName();
+                        logger.info("found domain:" + domainName + " for virtualhost:" + req.serverHost);
+                    }
+                }
+            }
+            else
+            {
+                /* For mail, we need to qualify user based on server-ip header */
+                if (req.serverIp != null) {
+                    try {
+                        domainName = searchDirectory(
+                                                zlc, 
+                                                DOMAIN_SC, 
+                                                config, 
+                                                Provisioning.A_zimbraReverseProxyDomainNameQuery,
+                                                Provisioning.A_zimbraReverseProxyDomainNameSearchBase,
+                                                "IPADDR",
+                                                req.serverIp,
+                                                Provisioning.A_zimbraReverseProxyDomainNameAttribute);
+                    } catch (NginxLookupException e) {
+                        logger.warn("domain not found for user " + unqualifiedName + ".  error: " + e.getMessage());
+                    } catch (NamingException e) {
+                        logger.warn("domain not found for user " + unqualifiedName + ".  error: " + e.getMessage());
+                    }
+                }
+            }
+                            
+            if (domainName == null) {
+                domainName = config.getAttr(Provisioning.A_zimbraDefaultDomainName);
+                logger.debug("domain not found for user " + unqualifiedName + ", using default domain: " + (domainName==null?"null":domainName));
+            }
+                
+            String qualifiedName = unqualifiedName;
+            if (domainName != null) {
+                qualifiedName = unqualifiedName + "@" + domainName;
+                logger.debug(AUTH_USER + " " + unqualifiedName + " is replaced by " + qualifiedName + " for mailhost lookup");
+            } else {
+                logger.warn("domain not found for user " + unqualifiedName);
+            }
+            
+            return qualifiedName;
+        }
 
         /** Qualifies the user-name, if necessary, by suffixing "@domain"
             The domain to be suffixed is the domain object whose zimbraVirtualIPAddress matches the
             IP address specified by req.serverIP (X-Proxy-IP request header)
             @return Fully qualified user name (or user-id), else the original user name
          */
-        private String getQualifiedUsername(ZimbraLdapContext zlc, Config config, NginxLookupRequest req)
-            throws NginxLookupException
+        private String getQualifiedUsername(ZimbraLdapContext zlc, Config config, NginxLookupRequest req) throws ServiceException, NginxLookupException
         {
             String aUser, cUser, qUser;
-            String domainName = null;
 
             aUser = req.user;               /* AUTHZ (whose route is being discovered) */
             cUser = req.cuser;              /* AUTHC (if GSSAPI) */
             qUser = aUser;                  /* Qualified AUTHZ (defaults to AUTHZ) */
+
+            Provisioning prov = Provisioning.getInstance();
+            Account gssapiAuthC = null;
 
             if (req.authMethod.equalsIgnoreCase(AUTHMETH_ZIMBRAID))
             {
@@ -366,105 +486,49 @@ public class NginxLookupExtension implements ZimbraExtension {
                  */
 
                 boolean authzIsPrincipal;
-                Account authc = null;
 
                 authzIsPrincipal = aUser.equalsIgnoreCase(cUser);
 
-                try {
-                    authc = Provisioning.getInstance().get(AccountBy.krb5Principal,cUser);
-                } catch (ServiceException e) {
-                }
-
-                if (authc == null) {
+                gssapiAuthC = prov.get(AccountBy.krb5Principal,cUser);
+                if (gssapiAuthC == null) {
                     throw new NginxLookupException("No account was found which has kerberos principal " + cUser);
                 }
 
                 /* overwrite request::cuser (authenticating identity for gssapi) */
-                req.cuser = authc.getAttr(Provisioning.A_zimbraMailDeliveryAddress);
-
-                /* Placeholder (send back an auth-token as a password) */
-                // req.pass = "0_7e6c9784e1e3d27c311282220c2bc61e4db1bd48_69643d33363a66653664656239372d303162362d346463362d623662312d3265393634333238383931623b6578703d31333a313231353335393937333231333b747970653d363a7a696d6272613b";
-                req.pass = "";
+                req.cuser = gssapiAuthC.getAttr(Provisioning.A_zimbraMailDeliveryAddress);
 
                 if (authzIsPrincipal) {
-                    qUser = authc.getAttr(Provisioning.A_zimbraMailDeliveryAddress);
+                    qUser = gssapiAuthC.getAttr(Provisioning.A_zimbraMailDeliveryAddress);
                 }
 
-                /* TODO 
-                   - Perform access checks to see whether req.cuser is allowed to act as qUser
-                   - However, since qUser may not be fully qualified at this point, we may wish to wait till later, in order to perform the checks
-                 */
             }
 
-            /* If qUser is already qualified, then nothing more needs to be done */
-            if (qUser.indexOf('@') != -1) {
-                return qUser;
-            }
-
-
-            /* At this point, qUser is not fully qualified, and so the domain must be looked up
+            /* At this point, qUser is may not be fully qualified, and so the domain must be looked up
                depending upon which protocol is being used
 
                For HTTP, the host header must be used in order to lookup the domain by zimbraVirtualHostname
                For MAIL, the proxy ip must be used in order to lookup the domain by zimbraVirtualIPAddress
-             */
-
-            if (HTTP.equalsIgnoreCase(req.proto))
-            {
-                /* For HTTP, we need to qualify user based on virtual-host header */
-                if (req.serverHost != null) {
-                    logger.info("looking up domain by virtualhost name");
-                    Domain d = null;
-                    try {
-                        d = Provisioning.getInstance().get(DomainBy.virtualHostname, req.serverHost);
-                    } catch (ServiceException e) {
-                    }
-                    if (d != null) {
-                        domainName = d.getName();
-                        logger.info("found domain:" + domainName + " for virtualhost:" + req.serverHost);
-                    }
-                }
-            }
-            else
-            {
-                /* For mail, we need to qualify user based on server-ip header */
-                if (req.serverIp != null) {
-                    try {
-                        domainName = searchDirectory(
-                                                zlc, 
-                                                DOMAIN_SC, 
-                                                config, 
-                                                Provisioning.A_zimbraReverseProxyDomainNameQuery,
-                                                Provisioning.A_zimbraReverseProxyDomainNameSearchBase,
-                                                "IPADDR",
-                                                req.serverIp,
-                                                Provisioning.A_zimbraReverseProxyDomainNameAttribute);
-                    } catch (NginxLookupException e) {
-                        logger.warn("domain not found for user " + aUser + ".  error: " + e.getMessage());
-                    } catch (NamingException e) {
-                        logger.warn("domain not found for user " + aUser + ".  error: " + e.getMessage());
-                    }
-                }
-            }
-                            
-            if (domainName == null) {
-                domainName = config.getAttr(Provisioning.A_zimbraDefaultDomainName);
-                logger.debug("domain not found for user " + aUser + ", using default domain: " + (domainName==null?"null":domainName));
-            }
+            */
+            if (qUser.indexOf('@') == -1)
+                qUser = qualifyUserName(zlc, config, req, prov, aUser);
+            
+            if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI)) {
+                /* Now, qUser is as qualified as it is ever going to get.
+                   Perform access checks to see whether req.cuser is allowed to act as qUser.
+                 */
+                Account gssapiAuthZ = prov.get(AccountBy.name, qUser);
+                if (gssapiAuthZ == null)
+                    throw new NginxLookupException("account not found: " + qUser);
                 
-            if (domainName != null) {
-                qUser = aUser + "@" + domainName;
-                logger.debug(AUTH_USER + " " + aUser + " is replaced by " + qUser + " for mailhost lookup");
-            } else {
-                logger.warn("domain not found for user " + aUser);
+                if (!gssapiAuthC.getId().equals(gssapiAuthZ.getId()) && 
+                    !AccessManager.getInstance().canAccessAccount(gssapiAuthC, gssapiAuthZ, true))
+                    throw new NginxLookupException("authorization failed for " + gssapiAuthZ.getName() + " (authenticated user " + gssapiAuthC.getName() + " has insufficient rights)");
+                    
+                /* finally, all is well, send back an auth-token as a password
+                   req.pass = "0_7e6c9784e1e3d27c311282220c2bc61e4db1bd48_69643d33363a66653664656239372d303162362d346463362d623662312d3265393634333238383931623b6578703d31333a313231353335393937333231333b747970653d363a7a696d6272613b";
+                 */
+                req.pass = genAuthToken(gssapiAuthC, config, req);
             }
-
-            /* TODO
-               At this point, qUser is as qualified as it is ever going to get
-               If any policy checks are pending for gssapi authentication (ie authc/authz checks), then this is a good time to do that
-               The overridden authenticating id is in req.cuser at this point
-             */
-
             return qUser;
         }
         
@@ -625,11 +689,116 @@ public class NginxLookupExtension implements ZimbraExtension {
         }
     }
     
+    private static void doTest(String h_AUTH_METHOD,
+                               String h_AUTH_USER,
+                               String h_AUTH_PASS,
+                               String h_AUTH_PROTOCOL,
+                               String h_AUTH_LOGIN_ATTEMPT,
+                               String h_CLIENT_IP,
+                               String h_SERVER_IP,
+                               String h_SERVER_HOST,
+                               String h_AUTH_ID,
+                               String h_AUTH_ADMIN_USER,
+                               String h_AUTH_ADMIN_PASS,
+                               boolean expectedOK) {
+        String url = "http://localhost:7072/service/extension/nginx-lookup";
+        
+        HttpClient client = new HttpClient();
+        GetMethod method = new GetMethod(url);
+        
+        method.setRequestHeader("Host", "localhost");
+        if (h_AUTH_METHOD != null)
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_METHOD, h_AUTH_METHOD);
+        if (h_AUTH_USER != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_USER, h_AUTH_USER);
+        if (h_AUTH_PASS != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PASS, h_AUTH_PASS);
+        if (h_AUTH_PROTOCOL != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PROTOCOL, h_AUTH_PROTOCOL);
+        if (h_AUTH_LOGIN_ATTEMPT != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_LOGIN_ATTEMPT, h_AUTH_LOGIN_ATTEMPT);
+        if (h_CLIENT_IP != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.CLIENT_IP, h_CLIENT_IP);
+        if (h_SERVER_IP != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.SERVER_IP, h_SERVER_IP);
+        if (h_SERVER_HOST != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.SERVER_HOST, h_SERVER_HOST);
+        if (h_AUTH_ID != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_ID, h_AUTH_ID);
+        if (h_AUTH_ADMIN_USER != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_ADMIN_USER, h_AUTH_ADMIN_USER);
+        if (h_AUTH_ADMIN_PASS != null) 
+            method.setRequestHeader(NginxLookupExtension.NginxLookupHandler.AUTH_ADMIN_PASS, h_AUTH_ADMIN_PASS);
+        
+       
+        System.out.println("Request headers:");
+        for (Header header : method.getRequestHeaders()) {
+            System.out.print("    " + header.toString());
+        }
+        System.out.println();
+        
+        boolean isOK = false;
+        try {
+            int statusCode = client.executeMethod(method);
+            
+            System.out.println("Response headers:");
+            for (Header header : method.getResponseHeaders()) {
+                if (header.getName().equals(NginxLookupExtension.NginxLookupHandler.AUTH_STATUS) && 
+                    "OK".equals(header.getValue()))
+                    isOK = true;
+                    
+                System.out.print("    " + header.toString());
+                
+                if (header.getName().equals(NginxLookupExtension.NginxLookupHandler.AUTH_PASS)) {
+                    try {
+                        AuthToken at = AuthToken.getAuthToken(header.getValue());
+                        String acctId = at.getAccountId();
+                        String acctName = Provisioning.getInstance().get(AccountBy.id, acctId).getName();
+                        System.out.println("        (Authed account: id=" + at.getAccountId() + ", name=" + acctName);
+                    } catch (ServiceException e) {
+                        System.out.println("        (Not a valid auth token)");
+                    } catch (AuthTokenException e)  {
+                        System.out.println("        (Not a valid auth token)");
+                    }
+                }
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        System.out.println();
+        if (expectedOK == isOK)
+            System.out.println("succeeded");
+        else
+            System.out.println("failed");
+        
+        System.out.println("\n=========================================\n");
+    }
+    
     public static void main(String args[]) {
+        /*
         test("user1@phoebe.local", "test123", null);
         test("imapappendthunderbird1190418967@qa07.liquidsys.com/kk", "test123", null);
         test("user1", "test123", null);
         test("user2", "test123", "127.0.0.1");
         test("user3", "test123", "127.0.0.2");
-    }
+        */
+        
+        /*
+         * zmprov md phoebe.mac zimbraAuthKerberos5Realm ZIMBRA.COM
+         * zmprov ca nginx-admin@phoebe.mac test123 zimbraIsAdminAccount TRUE
+         *
+         * zmprov mcf zimbraReverseProxyAdminIPAddress 13.12.11.10 zimbraReverseProxyAdminAccount nginx-admin@phoebe.mac zimbraReverseProxyAdminAccountPassword test123
+         * 
+         */ 
+        
+        //     AUTH_METHOD  AUTH_USER                  AUTH_PASS  AUTH_PROTOCOL  AUTH_LOGIN_ATTEMPT  CLIENT_IP      SERVER_IP      SERVER_HOST  AUTH_ID                      AUTH_ADMIN_USER            AUTH_ADMIN_PASS
+    //  doTest("plain",     "user1",                  "test123",  "imap",        "1",                "10.11.12.13", "127.0.0.1",   null,        null,                        null,                      null,            true);
+        doTest("gssapi",    "user1",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       true);
+        doTest("gssapi",    "user1@phoebe.mac",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       true);
+        doTest("gssapi",    "user1@ZIMBRA.COM",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       true);
+        doTest("gssapi",    "user2",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       false);
+        doTest("gssapi",    "family-child1-visible",   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "family-parent@ZIMBRA.COM",  "nginx-admin@phoebe.mac",  "test123",       true);
+   }
 }
