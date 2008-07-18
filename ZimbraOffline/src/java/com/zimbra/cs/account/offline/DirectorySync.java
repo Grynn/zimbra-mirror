@@ -309,10 +309,11 @@ public class DirectorySync {
     }
 
     void syncIdentity(OfflineProvisioning prov, Account acct, ZIdentity zident) throws ServiceException {
+    	if (zident.isDefault())
+    		return;
+    	
         String identityId = zident.getId();
         String name = zident.getName();
-        if (name.equalsIgnoreCase(Provisioning.DEFAULT_IDENTITY_NAME))
-            return;
 
         Map<String, Object> attrs = zident.getAttrs();
 
