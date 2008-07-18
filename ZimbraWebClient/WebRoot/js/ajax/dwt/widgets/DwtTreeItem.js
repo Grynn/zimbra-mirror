@@ -408,21 +408,7 @@ function(index, realizeDeferred) {
 
 	// initialize text
 	if (this._textCell && this._textParam){
-        if(this.parent._text=="Zimlets"){
-              if(this._textParam.indexOf('$') >= 0){
-                    var replaceLabel = this._textParam.substring(6,this._textParam.length-1);
-                    var zimletName = this._data._object_._zimletContext.name;
-                    var str = "window['"+zimletName+"']."+ replaceLabel;
-                    if(eval("window['"+zimletName+"']"))
-                        this._textCell.innerHTML = this._text =  eval(str);
-                    else
-                        this._textCell.innerHTML = this._text = this._textParam;
-                }
-                else
-                    this._textCell.innerHTML = this._text = this._textParam;
-            }
-            else
-                this._textCell.innerHTML = this._text = this._textParam;
+       this._textCell.innerHTML = this._text = this._textParam;
     }
 	this._expanded = this._selected = this._actioned = false;
 	this._gotMouseDownLeft = this._gotMouseDownRight = false;
