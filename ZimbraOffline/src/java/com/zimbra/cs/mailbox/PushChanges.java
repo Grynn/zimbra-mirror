@@ -887,8 +887,20 @@ public class PushChanges {
             		String v = e.getArgumentValue("ver");
             		w.addAttribute(MailConstants.A_ID, iid);
             		w.addAttribute(MailConstants.A_VERSION, v);
-            		if (!retry)
+            		if (!retry) {
             			response = null;
+            	        ArrayList<SyncExceptionHandler.Revision> revisions = new ArrayList<SyncExceptionHandler.Revision>();
+            	        int firstV = ombx.getLastSyncedVersionForMailItem(id);
+            	        int lastV = Integer.parseInt(v);
+            	        for (int i = firstV+1; i <= lastV; i++) {
+                    		SyncExceptionHandler.Revision rev = new SyncExceptionHandler.Revision();
+                    		rev.editor = "";
+                    		rev.version = i;
+                    		rev.modifiedDate = 0;
+            	        	revisions.add(rev);
+            	        }
+                    	SyncExceptionHandler.logDocumentEditConflict(ombx, item, revisions);
+            		}
             		retry = true;
             	}
             }

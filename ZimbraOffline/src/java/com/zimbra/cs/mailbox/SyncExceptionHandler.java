@@ -165,11 +165,28 @@ class SyncExceptionHandler {
         buf.append("' were overwritten on the server:\n\n");
     	for (Revision rev : revisions) {
         	buf.append("revision ").append(rev.version);
-        	buf.append(" edited by ").append(rev.editor);
-        	buf.append(" on ").append(new Date(rev.modifiedDate));
+        	if (rev.modifiedDate > 0) {
+            	buf.append(" edited by ").append(rev.editor);
+            	buf.append(" on ").append(new Date(rev.modifiedDate));
+        	}
         	buf.append("\n");
     	}
-    	logSyncErrorMessage(dmbx, item.getId(), subject, buf.toString());
+    	try {
+			dmbx.ensureFailureFolderExists();
+			MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
+			mm.setSentDate(now);
+			mm.setFrom(new InternetAddress(dmbx.getAccount().getName()));
+    		mm.setRecipient(RecipientType.TO, new InternetAddress(dmbx.getAccountName()));
+    		mm.setSubject(subject);
+    		mm.setText(buf.toString());
+    		mm.saveChanges(); //must call this to update the headers
+		
+    		//save failure alert to "Sync Failures" folder
+    		ParsedMessage pm = new ParsedMessage(mm, true);
+    		dmbx.addMessage(new OfflineMailbox.OfflineContext(), pm, DesktopMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
+		} catch (Exception e) {
+			OfflineLog.offline.warn("can't save failure report", e);
+    	}
     }
     
     private static void logSyncErrorMessage(DesktopMailbox dmbx, int id, String subject, String message) {
