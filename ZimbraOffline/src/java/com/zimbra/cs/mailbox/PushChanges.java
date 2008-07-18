@@ -278,8 +278,8 @@ public class PushChanges {
 	                        case MailItem.TYPE_WIKI:
 	                        case MailItem.TYPE_DOCUMENT:    syncDocument(id);     break;
 	                    }
-                	} catch (ServiceException x) {
-                		SyncExceptionHandler.checkRecoverableException(x);
+                	} catch (Exception x) {
+                		SyncExceptionHandler.checkRecoverableException("PushChanges.sync", x);
                 		SyncExceptionHandler.pushItemFailed(ombx, id, x);
                 	}
                 }

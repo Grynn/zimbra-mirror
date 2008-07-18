@@ -212,7 +212,7 @@ public class OfflineMailbox extends DesktopMailbox {
             
             try {
             	super.delete(octxt, new int[] {id}, type, tcon); //NOTE: don't call the one with single id as it will dead loop
-            } catch (ServiceException x) {
+            } catch (Exception x) {
             	SyncExceptionHandler.localDeleteFailed(this, id, x);
             	//something is wrong, but we'll just skip since failed deleting a local item is not immediately fatal (not too good either)
             }

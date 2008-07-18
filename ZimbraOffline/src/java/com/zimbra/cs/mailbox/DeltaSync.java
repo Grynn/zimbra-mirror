@@ -798,8 +798,8 @@ public class DeltaSync {
 	            ombx.syncChangeIds(sContext, id, type, date, mod_content, timestamp, changeId);
 	        }
 	        OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
-    	} catch (ServiceException x) {
-    		SyncExceptionHandler.checkRecoverableException(x);
+    	} catch (Exception x) {
+    		SyncExceptionHandler.checkRecoverableException("DeltaSync.syncMessage", x);
     		SyncExceptionHandler.syncMessageFailed(ombx, id, x);
     	}
     }

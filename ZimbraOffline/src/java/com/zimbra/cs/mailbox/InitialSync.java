@@ -617,13 +617,13 @@ public class InitialSync {
             
             try {
             	setCalendarItem(setCalRequest, id, folderId, date, mod_content, change_date, mod_metadata, flags, tags, isAppointment);
-            } catch (ServiceException x) {
+            } catch (Exception x) {
             	SyncExceptionHandler.syncCalendarFailed(ombx, id, setCalRequest.prettyPrint(), x);
             }
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.info("initial: %s %d has been deleted; skipping", isAppointment ? "appoitment" : "task", id);
-        } catch (ServiceException x) {
-        	SyncExceptionHandler.checkRecoverableException(x);
+        } catch (Exception x) {
+        	SyncExceptionHandler.checkRecoverableException("InitialSync.syncCalendarItem", x);
         	SyncExceptionHandler.syncCalendarFailed(ombx, id, x);
         }
     }
@@ -878,8 +878,8 @@ public class InitialSync {
 				        	try {
 				        		saveMessage(tis, ud.id, ud.folderId, type, ud.date, ud.dateChanged, ud.modContent, ud.modMetadata,
 				        				Flag.flagsToBitmask(itemData.flags), itemData.tags, ud.parentId);
-				        	} catch (ServiceException x) {
-				        		SyncExceptionHandler.checkRecoverableException(x);
+				        	} catch (Exception x) {
+				        		SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessagesAsTgz", x);
 					        	SyncExceptionHandler.syncMessageFailed(ombx, ud.id, x);
 					        }
 		        		} else {
@@ -935,8 +935,8 @@ public class InitialSync {
 		        	};
 		        	try {
 		        		saveMessage(fin, headers, id, folderId, type);
-		        	} catch (ServiceException x) {
-		        		SyncExceptionHandler.checkRecoverableException(x);
+		        	} catch (Exception x) {
+		        		SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessagesAsZip", x);
 			        	SyncExceptionHandler.syncMessageFailed(ombx, id, x);
 			        }
 		        }
@@ -965,8 +965,8 @@ public class InitialSync {
             
             try {
             	saveMessage(response.getSecond(), headers, id, folderId, type);
-            } catch (ServiceException x) {
-            	SyncExceptionHandler.checkRecoverableException(x);
+            } catch (Exception x) {
+            	SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessage", x);
 	        	SyncExceptionHandler.syncMessageFailed(ombx, id, x);
 	        }
         } catch (MailServiceException.NoSuchItemException nsie) {
@@ -1068,8 +1068,8 @@ public class InitialSync {
             return;
         } catch (IOException e) {
             throw ServiceException.FAILURE("storing " + MailItem.getNameForType(type) + " " + id, e);
-        } catch (ServiceException e) {
-            if (e.getCode() != MailServiceException.ALREADY_EXISTS) {
+        } catch (Exception e) {
+            if (e instanceof ServiceException && ((ServiceException)e).getCode() != MailServiceException.ALREADY_EXISTS) {
             	SyncExceptionHandler.syncMessageFailed(ombx, id, pm, e);
             	return;
             }
@@ -1275,12 +1275,9 @@ public class InitialSync {
             	//ombx.setSyncedVersionForMailItem(itemIdStr, version);
             	OfflineLog.offline.debug("initial: created document (" + id + "): " + doc.getName());
             }
-    	} catch (ServiceException x) {
-    		SyncExceptionHandler.checkRecoverableException(x);
+    	} catch (Exception x) {
+    		SyncExceptionHandler.checkRecoverableException("InitialSync.syncDocument", x);
     		SyncExceptionHandler.syncDocumentFailed(ombx, id, x);
-        } catch (IOException e) {
-        	OfflineLog.offline.warn("initial: error syncing documents:  " + query, e);
-            throw ServiceException.FAILURE("document sync "+query, e);
         } finally {
         	if (rs != null)
         		try { rs.close(); } catch (IOException e) {}

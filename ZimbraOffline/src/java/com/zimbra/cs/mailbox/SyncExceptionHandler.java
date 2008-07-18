@@ -33,17 +33,17 @@ class SyncExceptionHandler {
 	private static final String DOCUMENT_SYNC_FAILED = "document sync failed";
 	
 	
-	static void checkRecoverableException(ServiceException exception) throws ServiceException {
+	static void checkRecoverableException(String message, Exception exception) throws ServiceException {
 		if (OfflineSyncManager.isIOException(exception) || OfflineSyncManager.isConnectionDown(exception) || OfflineSyncManager.isAuthEerror(exception) || OfflineSyncManager.isReceiverFault(exception))
-			throw exception; // let it bubble in case it's server issue so we interrupt sync to retry later
+			throw ServiceException.FAILURE(message, exception); // let it bubble in case it's server issue so we interrupt sync to retry later
 	}
 	
-	static void syncMessageFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
+	static void syncMessageFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, null, 0, exception);
 	}
 	
 	private static final int MESSAGE_DATA_LIMIT = 4* 1024 * 1024;
-	public static void syncMessageFailed(OfflineMailbox ombx, int itemId, ParsedMessage pm, ServiceException exception) throws ServiceException {
+	public static void syncMessageFailed(OfflineMailbox ombx, int itemId, ParsedMessage pm, Exception exception) throws ServiceException {
 		ByteArrayOutputStream bao = new ByteArrayOutputStream();
         InputStream msgStream = null; 
 		try {
@@ -57,37 +57,39 @@ class SyncExceptionHandler {
         }
 	}
 	
-	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
+	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, CALENDAR_SYNC_FAILED, null, 0, exception);
 		
 	}
 	
-	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, String xml, ServiceException exception) throws ServiceException {
+	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, String xml, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, CALENDAR_SYNC_FAILED, xml, xml.length(), exception);
 	}
 	
-	static void localDeleteFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
+	static void localDeleteFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, DELETE_ITEM_FAILED, null, 0, exception);
 	}
 	
-	static void pushItemFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
+	static void pushItemFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, PUSH_ITEM_FAILED, null, 0, exception);
 	}
 	
-	static String sendMailFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
+	static String sendMailFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		return saveFailureReport(ombx, itemId, SEND_MAIL_FAILED, null, 0, exception);
 	}
 	
-	static void syncDocumentFailed(OfflineMailbox ombx, int itemId, ServiceException exception) throws ServiceException {
+	static void syncDocumentFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, DOCUMENT_SYNC_FAILED, null, 0, exception);
 	}
 	
-    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, ServiceException exception) {
+    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, Exception exception) {
     	Date now = new Date();
     	String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
 
     	OfflineLog.offline.warn("sync failure for id=" + id + "; generating failure report", exception);
 
+    	String code = exception instanceof ServiceException ? ((ServiceException)exception).getCode() : exception.getMessage();
+    	
     	//TODO: need to i18n the entire block here
     	StringBuilder sb = new StringBuilder();
     	sb.append("Product name:    Zimbra Desktop\n");
@@ -96,7 +98,7 @@ class SyncExceptionHandler {
     	sb.append("Release type:    ").append(OfflineLC.zdesktop_relabel.value()).append("\n");
     	sb.append("OS Platform:     ").append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.arch")).append(" ").append(System.getProperty("os.version")).append("\n");
     	sb.append("Time of event:   ").append(timestamp).append("\n");
-    	sb.append("Error type:      ").append(exception.getCode()).append("\n");
+    	sb.append("Error type:      ").append(code).append("\n");
     	sb.append("Error summary:   ").append(error).append("\n\n");
 
     	if (data != null) {
@@ -143,7 +145,7 @@ class SyncExceptionHandler {
     	sb.append(bao.toString());
     	sb.append("\n----------------------------------------------------------------------------\n");
 
-    	logSyncErrorMessage(dmbx, id, "zdesktop error report (" + timestamp + "): " + exception.getCode(), sb.toString());
+    	logSyncErrorMessage(dmbx, id, "zdesktop error report (" + timestamp + "): " + code, sb.toString());
     	return sb.toString();
     }
     
