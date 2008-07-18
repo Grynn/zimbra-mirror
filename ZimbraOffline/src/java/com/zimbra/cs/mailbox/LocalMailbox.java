@@ -120,7 +120,7 @@ public class LocalMailbox extends DesktopMailbox {
      */
     private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
 
-    private int sendPendingMessages(boolean isOnRequest) throws ServiceException {
+    public int sendPendingMessages(boolean isOnRequest) throws ServiceException {
     	OperationContext context = new OperationContext(this);
 
     	int sentCount = 0;
@@ -261,7 +261,7 @@ public class LocalMailbox extends DesktopMailbox {
     }
     
     private boolean isAutoSyncDisabled(DataSource ds) {
-    	return ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) <= 0;
+        return ds.getSyncFrequency() <= 0;
     }
     
     @Override
@@ -293,8 +293,7 @@ public class LocalMailbox extends DesktopMailbox {
                     continue;
 
                 long now = System.currentTimeMillis();
-                long syncFreq = ds.getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ);
-                if (now - syncMan.getLastSyncTime(ds.getName()) < syncFreq)
+                if (now - syncMan.getLastSyncTime(ds.getName()) < ds.getSyncFrequency())
                     continue;
             }
             try {

@@ -32,6 +32,7 @@ import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
+import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
@@ -247,4 +248,18 @@ public class OfflineDataSource extends DataSource {
     public boolean isOffline() {
         return true;
     }
+
+    @Override
+    public boolean checkPendingMessages() throws ServiceException {
+        LocalMailbox mbox = (LocalMailbox) getMailbox();
+        return mbox.getFolderById(null, LocalMailbox.ID_FOLDER_OUTBOX).getSize() > 0 &&
+               mbox.sendPendingMessages(true) > 0;
+    }
+
+    @Override
+    public long getSyncFrequency() {
+        return getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq,
+                               OfflineConstants.DEFAULT_SYNC_FREQ);
+    }
 }
+
