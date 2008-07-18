@@ -50,6 +50,7 @@ public class TestYMailClient {
         Logger.getLogger(YMailClient.class).setLevel(Level.DEBUG);
         RawAuthManager ram = new RawAuthManager(TOKENS_FILE);
         ymc = new YMailClient(ram.authenticate(APPID, USER, PASS));
+        ymc.enableTrace(System.out);
     }
 
     @Test

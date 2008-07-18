@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -162,7 +161,7 @@ public class LocalMailbox extends DesktopMailbox {
             ItemId origMsgId = getOrigMsgId(msg);
 
             if (ds.isYahoo()) {
-                YMailSender ms = YMailSender.getInstance(ds);
+                YMailSender ms = YMailSender.newInstance(ds);
                 try {
                     ms.sendMimeMessage(context, this, false, mm, null, null, origMsgId,
                                        msg.getDraftReplyType(), identity, false, false);

@@ -27,10 +27,15 @@ import com.zimbra.cs.offline.util.yauth.Auth;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
+import javax.xml.ws.Binding;
 import javax.xml.ws.handler.MessageContext;
+import javax.xml.ws.handler.Handler;
+import javax.xml.ws.handler.soap.SOAPHandler;
+import javax.xml.ws.handler.soap.SOAPMessageContext;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.namespace.QName;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.InternetAddress;
@@ -48,12 +53,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
+import java.io.PrintStream;
 
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
@@ -68,6 +75,7 @@ public final class YMailClient {
     private final Auth auth;
     private final YmwsPortType stub;
     private int maxInlineDataSize = MAX_INLINE_DATA_SIZE;
+    private PrintStream traceOut;
 
     private static DatatypeFactory dataTypeFactory;
 
@@ -110,6 +118,14 @@ public final class YMailClient {
         } catch (Exception e) {
             throw requestFailed(e);
         }
+    }
+
+    public void enableTrace(PrintStream out) {
+        traceOut = out;
+        Binding binding = ((BindingProvider) stub).getBinding();
+        List<Handler> handlers = binding.getHandlerChain();
+        handlers.add(new LoggingHandler());
+        binding.setHandlerChain(handlers);
     }
 
     private ComposeMessage getComposeMessage(MimeMessage mm)
@@ -269,6 +285,11 @@ public final class YMailClient {
             }
             throw new IOException("Upload failed (unknown error)");
         }
+        if (traceOut != null) {
+            traceOut.println(String.format(
+                "Uploaded YMail attachment: id = %s, filesize = %s, mimetype = %s",
+                id, params.get("filesize"), params.get("mimetype")));
+        }
         return id;
     }
 
@@ -354,5 +375,38 @@ public final class YMailClient {
         IOException ioe = new IOException("Request failed");
         ioe.initCause(cause);
         return ioe;
+    }
+
+    private class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
+        public boolean handleMessage(SOAPMessageContext smc) {
+            return logMessage(smc);
+        }
+
+        public boolean handleFault(SOAPMessageContext smc) {
+            return logMessage(smc);
+        }
+
+        public void close(MessageContext mc) {}
+
+        public Set<QName> getHeaders() { return null; }
+
+        private boolean logMessage(SOAPMessageContext smc) {
+            if (traceOut != null) {
+                boolean outbound = (Boolean)
+                    smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+                if (outbound) {
+                    traceOut.println("YMail SOAP Request:");
+                } else {
+                    traceOut.println("YMail SOAP Response:");
+                }
+                try {
+                    smc.getMessage().writeTo(traceOut);
+                    traceOut.println();
+                } catch (Exception e) {
+                    traceOut.println("Exception in handler: " + e);
+                }
+            }
+            return true;
+        }
     }
 }

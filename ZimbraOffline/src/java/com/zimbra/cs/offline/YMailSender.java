@@ -31,7 +31,7 @@ public class YMailSender extends MailSender {
     private final YMailClient ymc;
     private IOException error;
 
-    public static YMailSender getInstance(OfflineDataSource ds)
+    public static YMailSender newInstance(OfflineDataSource ds)
         throws ServiceException {
         if (ds.isSaveToSent() || !ds.isYahoo()) {
             throw new IllegalArgumentException("Must be yahoo data source");
@@ -40,7 +40,11 @@ public class YMailSender extends MailSender {
         String pass = DataSource.decryptData(ds.getId(),
             ds.getAttr(OfflineProvisioning.A_zimbraDataSourcePassword));
         OfflineYAuth ya = OfflineYAuth.getInstance(ds.getMailbox());
-        return new YMailSender(new YMailClient(ya.authenticate(user, pass)));
+        YMailClient ymc = new YMailClient(ya.authenticate(user, pass));
+        if (ds.isDebugTraceEnabled()) {
+            ymc.enableTrace(System.out);
+        }
+        return new YMailSender(ymc);
     }
     
     private YMailSender(YMailClient ymc) throws ServiceException {
