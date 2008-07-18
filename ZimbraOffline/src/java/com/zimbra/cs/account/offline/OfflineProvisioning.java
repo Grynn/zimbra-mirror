@@ -60,7 +60,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_zimbraPrefMailtoAccountId = "zimbraPrefMailtoAccountId";
     public static final String A_zimbraPrefMailToasterEnabled = "zimbraPrefMailToasterEnabled";
     public static final String A_zimbraPrefCalendarToasterEnabled = "zimbraPrefCalendarToasterEnabled";
-    public static final String A_zimbraPrefTagTreeOpen = "zimbraPrefTagTreeOpen";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -409,8 +408,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefMailtoAccountId,
             A_zimbraJunkMessagesIndexingEnabled,
             A_zimbraPrefMailToasterEnabled,
-            A_zimbraPrefCalendarToasterEnabled,
-            A_zimbraPrefTagTreeOpen
+            A_zimbraPrefCalendarToasterEnabled
     ));
 
     @Override
