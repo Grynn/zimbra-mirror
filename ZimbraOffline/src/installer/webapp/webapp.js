@@ -23,7 +23,7 @@ function startStopServer(verb) {
       var systemDir = dirSvc.get("SysD", Ci.nsIFile);
       var zdesktopServer = systemDir.clone();
       zdesktopServer.append("net.exe");
-      args = [verb, "Zimbra Desktop Service"];
+      args = [verb, "Yahoo! Zimbra Desktop Service"];
     }
     else if (os == "linux") {
       var appRoot = WebAppProperties.getAppRoot();

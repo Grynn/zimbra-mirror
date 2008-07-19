@@ -1,2 +1,0 @@
-#!/bin/sh
-exec open http://localhost:7633/desktop/login.jsp

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.1.3" transformSequenceNumber="2">
   <directoryPresets config="./build/dist/jetty/common/lib" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.85" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
+  <application name="Yahoo! Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.85" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en_US" customLocalizationFile="./src/installer/messages/ZiMsg.properties" />
       <additionalLanguages>
@@ -97,8 +97,8 @@
     <components />
   </files>
   <launchers>
-    <launcher name="Zimbra Desktop Service" id="32" external="false" excludeFromMenu="true" menuName="" icnsFile="" pngIcon16File="./src/installer/resources/launcher_16x16.png" pngIcon32File="./src/installer/resources/launcher_32x32.png" macServiceDependencies="" swtApp="false" fileset="">
-      <executable name="zdesktop" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/zdesktop.err" redirectStdout="true" stdoutFile="log/zdesktop.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="log" singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Zimbra Desktop Service" jreLocation="" executionLevel="asInvoker">
+    <launcher name="Yahoo! Zimbra Desktop Service" id="32" external="false" excludeFromMenu="true" menuName="" icnsFile="" pngIcon16File="./src/installer/resources/launcher_16x16.png" pngIcon32File="./src/installer/resources/launcher_32x32.png" macServiceDependencies="" swtApp="false" fileset="">
+      <executable name="zdesktop" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/zdesktop.err" redirectStdout="true" stdoutFile="log/zdesktop.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="log" singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Yahoo! Zimbra Desktop Service" jreLocation="" executionLevel="asInvoker">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
       <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
@@ -1407,12 +1407,12 @@ File profile = context.getDestinationFile("profile");
 
 String argument = "-webapp " + webapp.getCanonicalPath() + " -override " + override.getCanonicalPath() + " -profile " + profile.getCanonicalPath();
 
-File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Zimbra Desktop.lnk");
-File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Zimbra Desktop.lnk");
+File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Yahoo! Zimbra Desktop.lnk");
+File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Yahoo! Zimbra Desktop.lnk");
 
-WinFileSystem.createShellLink(startmenu, prism, icon, argument, "Zimbra Desktop");
+WinFileSystem.createShellLink(startmenu, prism, icon, argument, "Yahoo! Zimbra Desktop");
 if (context.getBooleanVariable("createDesktopLinkAction"))
-  WinFileSystem.createShellLink(desktop, prism, icon, argument, "Zimbra Desktop");
+  WinFileSystem.createShellLink(desktop, prism, icon, argument, "Yahoo! Zimbra Desktop");
 
 return true;</string>
                           </void>
@@ -1550,7 +1550,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app/Contents/Info.plist</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1575,7 +1575,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1600,7 +1600,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
                                 </object>
                               </void>
                               <void property="mode">
@@ -1628,7 +1628,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app/Contents/MacOS/prism</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
                                 </object>
                               </void>
                               <void property="mode">
@@ -1656,7 +1656,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app/Contents/Resources/application.ini</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1681,7 +1681,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1706,7 +1706,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1731,7 +1731,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1756,7 +1756,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1781,7 +1781,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
                               <void property="file">
                                 <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Zimbra Desktop.app</string>
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app</string>
                                 </object>
                               </void>
                               <void property="mode">
@@ -1818,7 +1818,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app/Contents/Info.plist</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1843,7 +1843,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1868,7 +1868,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
                                 </object>
                               </void>
                               <void property="mode">
@@ -1896,7 +1896,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app/Contents/MacOS/prism</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
                                 </object>
                               </void>
                               <void property="mode">
@@ -1924,7 +1924,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app/Contents/Resources/application.ini</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1949,7 +1949,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1974,7 +1974,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -1999,7 +1999,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -2024,7 +2024,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
                               <void property="destinationFile">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
                                 </object>
                               </void>
                               <void property="overwriteMode">
@@ -2049,7 +2049,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
                               <void property="file">
                                 <object class="java.io.File">
-                                  <string>/Applications/Zimbra Desktop.app</string>
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app</string>
                                 </object>
                               </void>
                               <void property="mode">
@@ -3234,8 +3234,8 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                       <void property="script">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Zimbra Desktop.lnk");
-File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Zimbra Desktop.lnk");
+                            <string>File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Yahoo! Zimbra Desktop.lnk");
+File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Yahoo! Zimbra Desktop.lnk");
 
 if (desktop.exists())
     desktop.delete();

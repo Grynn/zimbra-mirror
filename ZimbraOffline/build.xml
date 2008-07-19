@@ -774,7 +774,6 @@
 
 		<copy todir="${dist.dir}/linux" overwrite="true">
                         <fileset dir="src/installer" includes="linux.desktop" />
-                        <fileset dir="src/installer/resources" includes="launcher_32x32.xpm" />
 		</copy>
 
 		<copy todir="${dist.dir}/win32" overwrite="true">

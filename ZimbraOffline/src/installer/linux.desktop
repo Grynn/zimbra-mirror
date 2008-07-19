@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Zimbra Desktop
+Name=Yahoo! Zimbra Desktop
 Type=Application
 Comment=Web Application
 Exec=@install@/linux/prism/prism -webapp @install@/zdesktop.webapp -override @install@/zdesktop.webapp/override.ini -profile @install@/profile
-Icon=@install@/linux/launcher_32x32.xpm
+Icon=@install@/zdesktop.webapp/icons/default/launcher.png
