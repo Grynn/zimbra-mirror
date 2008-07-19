@@ -83,7 +83,7 @@ public class OfflineLC {
     	zdesktop_app_id = new KnownKey("zdesktop_app_id");
 
         zdesktop_name = new KnownKey("zdesktop_name");
-        zdesktop_name.setDefault("Zimbra Desktop");
+        zdesktop_name.setDefault("Yahoo! Zimbra Desktop");
         zdesktop_name.setDoc("UserAgent name of the Zimbra Desktop software.");
     	
         zdesktop_relabel = new KnownKey("zdesktop_relabel");
