@@ -424,6 +424,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	return account;
     }
     
+    private OfflineAccount.Version MIN_ZCS_VER = new OfflineAccount.Version("5.0");
     
     private synchronized Account createSyncAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {    
         if (attrs == null || !(attrs.get(A_offlineRemoteServerUri) instanceof String))
@@ -435,9 +436,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String uid = parts[0];
 
         ZGetInfoResult zgi = newZMailbox(emailAddress, (String)attrs.get(A_offlineRemotePassword), attrs, ZimbraServlet.USER_SERVICE_URI).getAccountInfo(false);
+        OfflineLog.offline.info("Remote Zimbra Server Version: " + zgi.getVersion());
+        OfflineAccount.Version remoteVersion = new OfflineAccount.Version(zgi.getVersion());
+        if (!remoteVersion.isAtLeast(MIN_ZCS_VER))
+        	throw ServiceException.FAILURE("Remote server version " + remoteVersion + ", ZCS 5.0 or later required", null);
         
         attrs.put(A_offlineRemoteServerVersion, zgi.getVersion());
-        OfflineLog.offline.info("Remote Zimbra Server Version: " + zgi.getVersion());
 
         for (Map.Entry<String,List<String>> zattr : zgi.getAttrs().entrySet())
             for (String value : zattr.getValue())

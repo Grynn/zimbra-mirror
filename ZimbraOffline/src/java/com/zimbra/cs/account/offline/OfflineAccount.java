@@ -32,14 +32,11 @@ public class OfflineAccount extends Account {
 	Account localAccount; //the local account that acts as everyone's parent. this will be null if this account itself is the local account
 	
 	public static class Version {
-		private String versionStr;
 		private int major;
 		private int minor;
 		private int maintenance;
 
 		public Version(String version) {
-			versionStr = version;
-			
 			for (int i = 0; i < version.length(); ++i) {
 				char c = version.charAt(i);
 				if (!Character.isDigit(c) && c != '.') {
@@ -71,7 +68,7 @@ public class OfflineAccount extends Account {
 			       major == required.major && minor == required.minor && maintenance >= required.maintenance;
 		}
 		
-		public String toString() { return versionStr; }
+		public String toString() { return "" + major + "." + minor + "." + maintenance; }
 	}
 
 	private Version mRemoteServerVersion;
