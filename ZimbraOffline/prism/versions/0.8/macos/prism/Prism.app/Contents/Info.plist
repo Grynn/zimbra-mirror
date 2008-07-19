@@ -11,9 +11,9 @@
   <key>NSAppleScriptEnabled</key>
   <true/>
   <key>CFBundleGetInfoString</key>
-  <string>Zimbra Desktop @version@</string>
+  <string>Yahoo! Zimbra Desktop @version@</string>
   <key>CFBundleName</key>
-  <string>Zimbra Desktop</string>
+  <string>Yahoo! Zimbra Desktop</string>
   <key>CFBundleShortVersionString</key>
   <string>@version@</string>
   <key>CFBundleVersion</key>

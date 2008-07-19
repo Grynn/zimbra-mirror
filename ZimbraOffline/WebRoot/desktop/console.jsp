@@ -20,7 +20,7 @@
 <meta http-equiv="refresh" content="15" >
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
-<title>Zimbra Desktop</title>
+<title>Yahoo! Zimbra Desktop</title>
 
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);
