@@ -14,7 +14,7 @@
     <value>4062-5711-9195-4050</value>
   </key>
   <key name="zdesktop_skins">
-    <value>beach,bones,hotrod,lavender,lemongrass,sand,sky,steel,waves,yahoo</value>
+    <value>yahoo,bare,beach,bones,google,hotrod,lavender,lemongrass,sand,sky,steel,waves</value>
   </key>
   <key name="http_connection_timeout">
     <value>15000</value>

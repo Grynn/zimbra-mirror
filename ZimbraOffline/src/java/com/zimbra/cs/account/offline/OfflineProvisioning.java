@@ -465,7 +465,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.remove(A_zimbraIsDomainAdminAccount);
         
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
-        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "beach" : skins[0]);
+        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "yahoo" : skins[0]);
         
         attrs.put(A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         
@@ -805,7 +805,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraPrefUseTimeZoneListInCalendar, FALSE);
 
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
-        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "beach" : skins[0]);
+        attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "yahoo" : skins[0]);
         
         attrs.put(A_zimbraPrefClientType, "advanced");
         attrs.put(A_zimbraFeatureSharingEnabled, FALSE);
