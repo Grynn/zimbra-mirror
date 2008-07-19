@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.14";
+my $version = "1.17";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -739,7 +739,8 @@ sub processfile
                 my $ioccurrec; my $ilocation;my $isummary;my @iattenarr;my $idescription;
                 my $floop=1;
                 my $sdt;my $ndt;
-                my $isweekendpresent=0; my $wkday; my $weekendcount=0;my $prvwkday=-1;
+                my $isweekendpresent=0; my $wkday; my $weekendcount=0;
+                my $prvwkday=0;my $jstcrosswend=0;
                 for my $k1 ( sort keys %$rdarray )
                 {
                   my $twdidx= rindex($k1,':');
@@ -754,6 +755,7 @@ sub processfile
                   if ($prvwkday>$wkday)
                   {
                     $weekendcount++;
+                    $jstcrosswend=1;
                   }
                   $prvwkday=$wkday;
                   if ($floop)  #first loop
@@ -839,7 +841,7 @@ sub processfile
                     
                     #delta days
                     $delta_days=get_date_diff($sdt, $ndt);
-                    if ($delta_days==$DAILY)
+                    if (($delta_days==$DAILY)||(($jstcrosswend)&&($delta_days eq 3)))
                     {
                       $dlctr++;
                       &log_message("Delta: DAILY");
@@ -857,6 +859,7 @@ sub processfile
                     $k2=$k1;
                     $lastrdate=$k1;
                     print "$delta_days";
+                    $jstcrosswend=0;
                   }
                 } #end for my $k1...
                 
@@ -1017,7 +1020,8 @@ sub processfile
                   my $newrrule= "RRULE:FREQ=$freq;COUNT=$delta_days;INTERVAL=$interval";
                   if(($freq eq "DAILY")&&(!$isweekendpresent))
                   {
-                    $newrrule= $newrrule.$bywkday;
+                    #set it to weekly to avoid server side bug#30094
+                    $newrrule= "RRULE:FREQ=WEEKLY;COUNT=$delta_days;INTERVAL=$interval".$bywkday;
                   }
                   print_outfile("$newrrule");
                   &log_message("New RRULE: $newrrule.");
@@ -1040,7 +1044,7 @@ sub processfile
                 my $fdt= substr($firstrdate,$ridx+1);
                 my $ldt = substr($lastrdate,$ridx+1);
                 #delta days
-                $delta_days=get_date_diff($fdt, $ldt)+1;#+2
+                $delta_days=get_date_diff($fdt, $ldt)+1;
                 my $reccnt=keys(%$rdarray)+1;
                 my $newrrule= "RRULE:FREQ=YEARLY;COUNT=$reccnt;INTERVAL=1";
                 print_outfile("$newrrule");
