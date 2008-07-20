@@ -321,7 +321,8 @@ context.setVariable("languageId", langId);
 
 context.setVariable("srcWebappJs", "zdesktop.webapp/locales/webapp_" + langId + ".js");
 
-String uninstMenuEnt = context.getMessage("UninstallerMenuEntry").replaceFirst("\\{0\\}", "Yahoo! Zimbra Desktop");
+String fullname = (String)context.getCompilerVariable("sys.fullName");
+String uninstMenuEnt = context.getMessage("UninstallerMenuEntry").replaceFirst("\\{0\\}", fullname);
 context.setVariable("macUninstaller", uninstMenuEnt + ".app");
 
 </preActivation>
