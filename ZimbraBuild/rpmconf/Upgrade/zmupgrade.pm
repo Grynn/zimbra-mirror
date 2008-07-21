@@ -2311,6 +2311,9 @@ sub upgrade508GA {
 sub upgrade509GA {
 	my ($startBuild, $targetVersion, $targetBuild) = (@_);
 	main::progress("Updating from 5.0.9_GA\n");
+  if (main::isInstalled("zimbra-ldap")) {
+    upgradeLdapConfigValue("zimbraImapExposeVersionOnBanner", "FALSE", "");
+  }
 	return 0;
 }
 
