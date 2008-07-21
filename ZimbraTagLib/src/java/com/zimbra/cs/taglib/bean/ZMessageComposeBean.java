@@ -1840,22 +1840,30 @@ da body
         }
 
 
+        //bug:25270 checked of 0kb file attachment and discarded
         String attachmentUploadId = null;
         if (getHasFileItems()) {
-            Part[] parts = new Part[mFileItems.size()];
+            int num = 0;
+            for (FileItem item : mFileItems) {
+                if (item.getSize() > 0) num++;
+            }
+            Part[] parts = new Part[num];
             int i=0;
             for (FileItem item : mFileItems) {
-                parts[i++] = new FilePart(item.getFieldName(), new UploadPartSource(item), item.getContentType(), "utf-8");
+                if (item.getSize() > 0 )
+                    parts[i++] = new FilePart(item.getFieldName(), new UploadPartSource(item), item.getContentType(), "utf-8");
             }
             try {
-                attachmentUploadId = mailbox.uploadAttachments(parts, 1000 * 60);  //TODO get timeout from config
+                if(parts.length > 0) {
+                    attachmentUploadId = mailbox.uploadAttachments(parts, 1000 * 60);  //TODO get timeout from config
+                }
             } finally {
                 for (FileItem item : mFileItems) {
                     try { item.delete(); } catch (Exception e) { /* TODO: need logging infra */ }
                 }
             }
         }
-
+        
         if (mUploadedAttachmentId != null) {
             if (attachmentUploadId != null) {
                 attachmentUploadId += "," + mUploadedAttachmentId;
