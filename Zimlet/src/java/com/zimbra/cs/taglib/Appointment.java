@@ -17,6 +17,7 @@
 package com.zimbra.cs.taglib;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
@@ -104,7 +105,11 @@ public class Appointment extends ZimbraTag {
         	val = invite.getName();
         	break;
         case C_COMMENT:
-        	val = invite.getComment();
+            List<String> comments = invite.getComments();
+            if (comments != null && !comments.isEmpty())
+                val = comments.get(0);
+            else
+                val = "";
         	break;
         case C_STATUS:
         	val = invite.getStatus();
