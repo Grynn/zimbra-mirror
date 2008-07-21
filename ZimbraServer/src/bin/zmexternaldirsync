@@ -63,6 +63,7 @@ use Net::LDAP;
 use List::Compare;
 use XML::Parser;
 use Getopt::Easy;
+use File::Temp qw/ tempfile /;
 
 
 # Defining constants
@@ -1987,14 +1988,16 @@ if( $NOOP != $Op_Mod ) {
 
             # if log level is not 0 log the command
             if($LOGNON  != $Log_Level) {
+		my ($userFH, $userFile) = tempfile("add_user.out.XXXXX", DIR=>"/tmp",  OPEN=>1);
+		print $userFH "$str";
 				if ( $z_server ne $NULLSTR ) {
 				# use the -s option
                 	::write_log( 'add_user', 'Info',
-                	"zmprov -s $z_server ca $str\n" );
+                	"zmprov -s $z_server ca -f $userFile\n" );
 				}
 				else {
 					::write_log( 'add_user', 'Info',
-					"zmprov ca $str\n" );
+					"zmprov ca -f $userFile\n" );
 				}
             }
     
