@@ -1,0 +1,12 @@
+<zimlet name="com_zimbra_ybabelfish" version="1.0" description="Babel Fish">
+	<include>ybabelfish.js</include>
+	<includeCSS>ybabelfish.css</includeCSS>
+	<resource>babelfish-icon.gif</resource>
+	<handlerObject>Com_Zimbra_Ybabelfish</handlerObject>
+
+	<zimletPanelItem label="Babel Fish" icon="Babelfish-panelIcon">
+		<toolTipText>Drag a conversation or message to translate it</toolTipText>
+		<dragSource type="ZmConv" />
+		<dragSource type="ZmMailMsg" />
+	</zimletPanelItem>
+</zimlet>
