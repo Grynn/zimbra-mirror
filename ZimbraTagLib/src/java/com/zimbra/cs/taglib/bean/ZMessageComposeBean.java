@@ -180,6 +180,7 @@ public class ZMessageComposeBean {
     private String mReminder1;
     private String mReminder2;
     private String mReminderEmail;
+    private String mReminderMobile;
     private boolean mSendReminderEmail;
     private boolean mSendReminderMobile;
     private boolean mSendReminderYIM;
@@ -462,6 +463,14 @@ public class ZMessageComposeBean {
 
     public void setSendReminderEmail(boolean mSendReminderEmail) {
         this.mSendReminderEmail = mSendReminderEmail;
+    }
+
+    public String getReminderMobile() {
+        return mReminderMobile;
+    }
+
+    public void setReminderMobile(String mReminderMobile) {
+        this.mReminderMobile = mReminderMobile;
     }
 
     public boolean isSendReminderMobile() {
@@ -1083,6 +1092,7 @@ public class ZMessageComposeBean {
             } else if (action.equals(ZAlarm.ZAction.X_YAHOO_CALENDAR_ACTION_IM)){
                 this.mSendReminderYIM = true;
             } else if (action.equals(ZAlarm.ZAction.X_YAHOO_CALENDAR_ACTION_MOBILE)){
+                this.mReminderMobile = alarm.getAttendees().get(0).getAddress();
                 this.mSendReminderMobile = true;
             }
             String duration = alarm.getTriggerRelated().toString();
@@ -1426,6 +1436,9 @@ public class ZMessageComposeBean {
             alarm.setDescription(getContent());
             alarm.setRepeatCount(0);
             alarm.setAction(ZAlarm.ZAction.X_YAHOO_CALENDAR_ACTION_MOBILE);
+            ZAttendee attendee = new ZAttendee();
+            attendee.setAddress(this.getReminderMobile());
+            alarm.addAttendee(attendee);
             comp.getAlarms().add(alarm);
         }
         if (this.isSendReminderYIM()) {
