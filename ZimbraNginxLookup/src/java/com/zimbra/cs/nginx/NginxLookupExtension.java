@@ -98,6 +98,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         String serverHost;
         String principal;
         int loginAttempt;
+        boolean isZimbraAdmin;
         String adminUser;
         String adminPass;
         HttpServletRequest  httpReq;
@@ -110,6 +111,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String AUTH_USER          = "Auth-User";
         public static final String AUTH_PASS          = "Auth-Pass";
         public static final String AUTH_PROTOCOL      = "Auth-Protocol";
+        public static final String AUTH_ZIMBRA_ADMIN  = "Auth-Zimbra-Admin";
         public static final String AUTH_LOGIN_ATTEMPT = "Auth-Login-Attempt";
         public static final String CLIENT_IP          = "Client-IP";
         public static final String SERVER_IP          = "X-Proxy-IP";
@@ -222,16 +224,18 @@ public class NginxLookupExtension implements ZimbraExtension {
                So no need to look for /tb|/wm|/ni in req.user
              */
 
-            req.user        = httpReq.getHeader(AUTH_USER);             /* User whose route is to be looked up */
-            req.pass        = httpReq.getHeader(AUTH_PASS);             /* Password */
-            req.proto       = httpReq.getHeader(AUTH_PROTOCOL);         /* Protocol {imap|imaps|pop3|pop3s|http} */
-            req.authMethod  = httpReq.getHeader(AUTH_METHOD);           /* Auth Method {passwd|plain|gssapi|other|zimbraId} */
-            req.cuser       = httpReq.getHeader(AUTH_ID);               /* (GSSAPI) Authenticating Principal */
-            req.adminUser   = httpReq.getHeader(AUTH_ADMIN_USER);       /* auth admin user, required for GSSAPI */
-            req.adminPass   = httpReq.getHeader(AUTH_ADMIN_PASS);       /* auth admin password, , required for GSSAPI */
-            req.clientIp    = httpReq.getHeader(CLIENT_IP);             /* Upstream Client IP */
-            req.serverIp    = httpReq.getHeader(SERVER_IP);             /* Incoming Proxy Interface IP */
-            req.serverHost  = httpReq.getHeader(SERVER_HOST);           /* (HTTP) Host header */
+            req.user            = httpReq.getHeader(AUTH_USER);             /* User whose route is to be looked up */
+            req.pass            = httpReq.getHeader(AUTH_PASS);             /* Password */
+            req.proto           = httpReq.getHeader(AUTH_PROTOCOL);         /* Protocol {imap|imaps|pop3|pop3s|http} */
+            req.authMethod      = httpReq.getHeader(AUTH_METHOD);           /* Auth Method {passwd|plain|gssapi|other|zimbraId} */
+            req.cuser           = httpReq.getHeader(AUTH_ID);               /* (GSSAPI) Authenticating Principal */
+            req.adminUser       = httpReq.getHeader(AUTH_ADMIN_USER);       /* auth admin user, required for GSSAPI */
+            req.adminPass       = httpReq.getHeader(AUTH_ADMIN_PASS);       /* auth admin password, , required for GSSAPI */
+            req.clientIp        = httpReq.getHeader(CLIENT_IP);             /* Upstream Client IP */
+            req.serverIp        = httpReq.getHeader(SERVER_IP);             /* Incoming Proxy Interface IP */
+            req.serverHost      = httpReq.getHeader(SERVER_HOST);           /* (HTTP) Host header */
+            req.loginAttempt    = 1;
+            req.isZimbraAdmin   = false;
              
 
             /* Complain if any required fields are missing */
@@ -266,6 +270,12 @@ public class NginxLookupExtension implements ZimbraExtension {
                 } catch (NumberFormatException e) {
                 }
             }
+
+            String isZimbraAdmin = httpReq.getHeader(AUTH_ZIMBRA_ADMIN);
+            if (isZimbraAdmin != null) {
+                req.isZimbraAdmin = Boolean.parseBoolean (isZimbraAdmin);
+            }
+
             return req;
         }
         
@@ -294,7 +304,10 @@ public class NginxLookupExtension implements ZimbraExtension {
             return val;
         }
         
-        private String getAttrForProto(String proto) throws NginxLookupException {
+        private String getPortAttribute(NginxLookupRequest req) throws NginxLookupException
+        {
+            String proto = req.proto;
+
             if (IMAP.equalsIgnoreCase(proto))
                 return Provisioning.A_zimbraReverseProxyImapPortAttribute;
             else if (IMAP_SSL.equalsIgnoreCase(proto))
@@ -303,8 +316,13 @@ public class NginxLookupExtension implements ZimbraExtension {
                 return Provisioning.A_zimbraReverseProxyPop3PortAttribute;
             else if (POP3_SSL.equalsIgnoreCase(proto))
                 return Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute;
-            else if (HTTP.equalsIgnoreCase(proto))
-                return Provisioning.A_zimbraReverseProxyHttpPortAttribute;
+            else if (HTTP.equalsIgnoreCase(proto)) {
+                if (req.isZimbraAdmin) {
+                    return Provisioning.A_zimbraReverseProxyAdminPortAttribute;
+                } else {
+                    return Provisioning.A_zimbraReverseProxyHttpPortAttribute;
+                }
+            }
             else
                 throw new NginxLookupException("unsupported protocol: "+proto);
         }
@@ -569,11 +587,11 @@ public class NginxLookupExtension implements ZimbraExtension {
                                            Provisioning.A_zimbraReverseProxyPortSearchBase,
                                            "MAILHOST",
                                            mailhost,
-                                           getAttrForProto(req.proto));
+                                           getPortAttribute(req));
                 } catch (NginxLookupException e) {
                     // the server does not have bind port overrides.
                     logger.debug("using port from globalConfig");
-                    String lookupAttr = getAttrForProto(req.proto);
+                    String lookupAttr = getPortAttribute(req);
                     String bindPortAttr = config.getAttr(lookupAttr);
                     if (bindPortAttr == null)
                         throw new NginxLookupException("missing config attr: "+lookupAttr);
