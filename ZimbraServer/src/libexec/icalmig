@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.17";
+my $version = "1.18";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -983,8 +983,7 @@ sub processfile
                 #1. if recurrence pattern found, No need to create exceptions
                 #2. if weekdays has changed due to meeting has moved to another day,
                 #   create complete series exception.
-                if ($rdpattern)
-                    #&& ($isweekdayok))
+                if (($rdpattern)&& ($isweekdayok))
                     #&& ($isrdtimeok)
                     #&& (!$islocchanged) &&(!$issmrychanged) &&(!$isattndchanged)
                     #&& (!$isdescchanged))
@@ -1034,6 +1033,10 @@ sub processfile
               #Go for RRULE for exceptions
               if(!$RPrulecreated)
               {
+                if (!$isweekdayok)
+                {
+                  &log_message("Weekday changed. Going for Yearly recurrnce");
+                }
                 #create RRULE for exceptions
                 my $ridx= rindex($firstrdate,':');
                 if($ridx<0)
@@ -1101,6 +1104,7 @@ sub processfile
       #3. if SUMMARY changed for any occurences.
       #4. if ATTENDEE list changed for any occurrence.
       #5. if DESCRIPTION changed for any occurrence.
+      #6. WEEKDAY MUST BE OK. ELSE CREATE SERIES EXCEPTION
       if (($checkforltdex)&& ((!$isrdtimeok)
           || ($islocchanged) ||($issmrychanged)
           || ($isattndchanged) || ($isdescchanged)
