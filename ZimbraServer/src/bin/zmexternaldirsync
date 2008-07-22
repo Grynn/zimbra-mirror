@@ -1981,23 +1981,23 @@ if( $NOOP != $Op_Mod ) {
                 }
             }
 
+            my ($userFH, $userFile) = tempfile("add_user.out.XXXXX", DIR=>"/tmp",  OPEN=>1);
+            print $userFH "ca $str";
             # if in normal op mod: print command to be executed in file 
             if( $NOOP != $Op_Mod ) {
-		    	print ZMPROV "ca $str\n";
+		    	print ZMPROV "-f $userFile\n";
             }
 
             # if log level is not 0 log the command
             if($LOGNON  != $Log_Level) {
-		my ($userFH, $userFile) = tempfile("add_user.out.XXXXX", DIR=>"/tmp",  OPEN=>1);
-		print $userFH "$str";
 				if ( $z_server ne $NULLSTR ) {
 				# use the -s option
                 	::write_log( 'add_user', 'Info',
-                	"zmprov -s $z_server ca -f $userFile\n" );
+                	"zmprov -s $z_server -f $userFile\n" );
 				}
 				else {
 					::write_log( 'add_user', 'Info',
-					"zmprov ca -f $userFile\n" );
+					"zmprov -f $userFile\n" );
 				}
             }
     
