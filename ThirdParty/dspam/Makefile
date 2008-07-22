@@ -7,7 +7,7 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 
 BDB_ROOT ?= $(P4_ROOT)/ThirdParty/sleepycat
 
-BDB_VERSION ?= 4.2.52.6
+BDB_VERSION ?= 4.6.21.2
 
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
