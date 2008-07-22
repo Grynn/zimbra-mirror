@@ -99,7 +99,8 @@ function(keySeq, mappingName, forceActionCode) {
 		 * since we are to behave like an intermediate node. Else return the action code. */
 		if (!binding.subMap || forceActionCode) {
 			var inherited = this.__getInheritedActionCode(keySeq, mapping, forceActionCode);
-			return inherited == DwtKeyMapMgr.NOT_A_TERMINAL ? DwtKeyMapMgr.NOT_A_TERMINAL : binding.actionCode;
+            //if keyMap not available then return the inherited keyMap.
+            return inherited == DwtKeyMapMgr.NOT_A_TERMINAL ? DwtKeyMapMgr.NOT_A_TERMINAL : ( binding.actionCode || inherited );
 		} else {
 			return DwtKeyMapMgr.NOT_A_TERMINAL;
 		}
