@@ -29,9 +29,21 @@ function() {
 Com_Zimbra_Local.prototype.init =
 function() {
 	this._controller = new YahooLocalController(this);
-    //Add "Search Local" to the Search toolbar.
-    if(appCtxt.get(ZmSetting.WEB_SEARCH_ENABLED))
-        this.addLocalSearchToolBar((new AjxListener(this,this._localSearchListener)));
+	// add convenience function to skin
+	if (window.skin && !skin.searchLocal) {
+		skin.searchLocal = AjxCallback.simpleClosure(this._controller.searchLocal, this._controller);
+	}
+	//Add "Search Local" to the Search toolbar.
+    if(appCtxt.get(ZmSetting.WEB_SEARCH_ENABLED)) {
+		// only add search toolbar if there isn't already a skin-specific button for it!
+		var localSearchBtnEl = document.getElementById("skin_search_local_button");
+		if (!localSearchBtnEl) {
+			this.addLocalSearchToolBar((new AjxListener(this,this._localSearchListener)));
+		}
+		else {
+			Dwt.setVisible(localSearchBtnEl, true);
+		}
+	}
 };
 
 
