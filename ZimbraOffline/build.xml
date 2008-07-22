@@ -262,7 +262,6 @@
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/LoginBanner.png" overwrite="true"/>
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/ZimbraInside/LoginBanner.png" overwrite="true"/>
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/yahoo/logos/LoginBanner.png" overwrite="true"/>
-		<copy file="src/installer/resources/AppBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/yahoo/logos/AppBanner.png" overwrite="true"/>
 
 	</target>
 
@@ -772,13 +771,16 @@
 		<mkdir dir="${dist.dir}/win32"/>
 
 		<copy todir="${dist.dir}/macos" overwrite="true">
-                        <fileset dir="src/installer" includes="launchd.plist,macos.app/" />
+                        <fileset dir="src/installer" includes="launchd.plist" />
                         <fileset dir="src/installer/resources" includes="launcher_128x128.icns" />
 		</copy>
-		<chmod file="${dist.dir}/macos/macos.app/Contents/MacOS/zdesktop" perm="ugo+x"/>
-		<copy todir="${dist.dir}/macos/macos.app/Contents/MacOS/" file="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism"/>
-		<chmod file="${dist.dir}/macos/macos.app/Contents/MacOS/prism" perm="ugo+x"/>
-		<replace file="${dist.dir}/macos/macos.app/Contents/Info.plist" token="@version@" value="${offline.version}"/>
+		<copy todir="${dist.dir}/macos/Yahoo! Zimbra Desktop.app" overwrite="true">
+                        <fileset dir="src/installer/macos.app" includes="*/**" />
+		</copy>
+		<chmod file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop" perm="ugo+x"/>
+		<copy todir="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/" file="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism"/>
+		<chmod file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism" perm="ugo+x"/>
+		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist" token="@version@" value="${offline.version}"/>
 
 		<copy todir="${dist.dir}/linux" overwrite="true">
                         <fileset dir="src/installer" includes="linux.desktop" />
@@ -859,9 +861,9 @@
 	</target>
 
 	<target name="test-launcher-mac">
-		<replace file="${dist.dir}/macos/macos.app/Contents/MacOS/zdesktop" token="@install@" value="${dist.dir}"/>
-		<replace file="${dist.dir}/macos/macos.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" token="@install@" value="${dist.dir}"/>
-		<chmod file="${dist.dir}/macos/macos.app/Contents/MacOS/zdesktop" perm="ugo+x"/>
+		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop" token="@install@" value="${dist.dir}"/>
+		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" token="@install@" value="${dist.dir}"/>
+		<chmod file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop" perm="ugo+x"/>
 	</target>
 	
 	<target name="offline-install-misc">

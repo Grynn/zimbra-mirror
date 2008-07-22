@@ -1521,7 +1521,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
                               <void property="file">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/MacOS/zdesktop</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
                                 </object>
                               </void>
                               <void property="replaceValue">
@@ -1541,7 +1541,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
                               <void property="file">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
                                 </object>
                               </void>
                               <void property="replaceValue">
@@ -1561,7 +1561,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
                               <void property="file">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/MacOS/zdesktop</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
                                 </object>
                               </void>
                               <void property="mode">
@@ -1578,7 +1578,7 @@ return true;</string>
                             <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
                               <void property="file">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/MacOS/prism</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
                                 </object>
                               </void>
                               <void property="mode">
@@ -1620,7 +1620,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Info.plist</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1645,7 +1645,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/launcher_128x128.icns</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1673,7 +1673,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/MacOS/zdesktop</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1701,7 +1701,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/MacOS/prism</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1726,7 +1726,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/application.ini</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1751,7 +1751,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/branding/brand.dtd</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1776,7 +1776,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/branding/brand.properties</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1801,7 +1801,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/chrome/chrome.manifest</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1826,7 +1826,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1888,7 +1888,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Info.plist</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1913,7 +1913,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/launcher_128x128.icns</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1941,7 +1941,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/MacOS/zdesktop</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1969,7 +1969,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/MacOS/prism</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -1994,7 +1994,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/application.ini</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -2019,7 +2019,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/branding/brand.dtd</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -2044,7 +2044,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/branding/brand.properties</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -2069,7 +2069,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/chrome/chrome.manifest</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -2094,7 +2094,7 @@ return true;</string>
                               </void>
                               <void property="sourceFile">
                                 <object class="java.io.File">
-                                  <string>macos/macos.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -2712,13 +2712,13 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                       <void property="arguments">
                         <array class="java.lang.String" length="1">
                           <void index="0">
-                            <string>${installer:sys.installationDir}/macos/macos.app</string>
+                            <string />
                           </void>
                         </array>
                       </void>
                       <void property="executable">
                         <object class="java.io.File">
-                          <string>/usr/bin/open</string>
+                          <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
                         </object>
                       </void>
                       <void property="logArguments">
