@@ -15,9 +15,9 @@ ZIMBRA_HOME ?= /opt/zimbra
 LDAP_VERSION ?= 2.4.11
 
 BDB_VERSION ?= 4.6.21.2
-BDB_LIB_DIR ?= $(ZIMBRA_HOME)/sleepycat-$(BDB_VERSION)/lib
+BDB_LIB_DIR ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
 
-BDB_ROOT ?= $(P4_ROOT)/ThirdParty/sleepycat
+BDB_ROOT ?= $(P4_ROOT)/ThirdParty/bdb
 
 CYRUS_VERSION ?= 2.1.22.3z
 CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
@@ -54,7 +54,7 @@ POSTFIX_VERSION ?= 2.4.7.5z
 
 DIRS := openssl \
 	mysql \
-	sleepycat \
+	bdb \
 	libxml2 \
 	heimdal \
 	curl \
@@ -110,7 +110,7 @@ allclean:
 mysql: force
 	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
-sleepycat: force
+bdb: force
 	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 openldap: force
