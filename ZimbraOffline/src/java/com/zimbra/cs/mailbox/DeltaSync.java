@@ -826,7 +826,7 @@ public class DeltaSync {
         	query.append("}");
             Element request = new Element.XMLElement(MailConstants.SEARCH_REQUEST);
             request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024);  // XXX pagination
-            request.addAttribute(MailConstants.A_TYPES, "document");
+            request.addAttribute(MailConstants.A_TYPES, "wiki,document");
             request.addElement(MailConstants.E_QUERY).setText(query.toString());
             if (ombx.getOfflineAccount().isDebugTraceEnabled())
             	OfflineLog.response.debug(request);
@@ -837,6 +837,8 @@ public class DeltaSync {
             	OfflineLog.response.debug(response);
             
             for (Element doc : response.listElements(MailConstants.E_DOC))
+            	getInitialSync().syncDocument(doc);
+            for (Element doc : response.listElements(MailConstants.E_WIKIWORD))
             	getInitialSync().syncDocument(doc);
     	}
     }
