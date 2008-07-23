@@ -76,8 +76,6 @@ build:
 	(tar xzf src/postfix-$(POSTFIX_RELEASE).tar.gz; \
 	mv postfix-$(POSTFIX_RELEASE) postfix-$(POSTFIX_VERSION); \
 	cd postfix-$(POSTFIX_VERSION); \
-	patch -g0 -p1 < ../patches/postfix-tls.patch; \
-	patch -g0 -p1 < ../patches/postfix-stress.patch; \
 	patch -g0 -p1 < ../patches/postfix-ldap-sasl.patch; \
 	patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch; \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
