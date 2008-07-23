@@ -59,6 +59,7 @@ DIRS := openssl \
 	heimdal \
 	curl \
 	cyrus-sasl \
+	libtool \
 	openldap \
 	aspell \
 	clamav \
@@ -111,6 +112,9 @@ mysql: force
 	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 bdb: force
+	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
+
+libtool: force
 	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 openldap: force
