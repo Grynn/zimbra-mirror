@@ -1,0 +1,64 @@
+--- postfix-2.4.2-RC1/conf/main.cf.orig	2007-06-08 16:29:01.000000000 -0700
++++ postfix-2.4.2-RC1/conf/main.cf	2007-06-08 16:29:47.000000000 -0700
+@@ -511,7 +511,7 @@
+ #
+ # For details, see "man header_checks".
+ #
+-#header_checks = regexp:/etc/postfix/header_checks
++header_checks = pcre:/opt/zimbra/conf/postfix_header_checks
+ 
+ # FAST ETRN SERVICE
+ #
+@@ -643,3 +643,52 @@
+ # readme_directory: The location of the Postfix README files.
+ #
+ readme_directory =
++
++#
++# Zimbra changes.
++#
++
++virtual_mailbox_maps = ldap:/opt/zimbra/conf/ldap-vmm.cf
++
++virtual_mailbox_domains = ldap:/opt/zimbra/conf/ldap-vmd.cf
++
++virtual_alias_maps = ldap:/opt/zimbra/conf/ldap-vam.cf
++
++virtual_alias_domains = ldap://opt/zimbra/conf/ldap-vad.cf
++
++virtual_transport = error
++
++sender_canonical_maps = ldap:/opt/zimbra/conf/ldap-scm.cf
++
++transport_maps = ldap:/opt/zimbra/conf/ldap-transport.cf
++
++# If (email domain name == host name), we don't want $myhostname in
++# mydestination for testing purposes.
++mydestination = localhost.localdomain localhost
++
++# Disable NIS which is in the default
++alias_maps = hash:/etc/aliases
++
++# for security...
++allow_mail_to_commands =
++allow_mail_to_files =
++
++smtpd_helo_required = yes
++
++smtpd_client_restrictions = reject_unauth_pipelining
++
++smtpd_data_restrictions = reject_unauth_pipelining
++
++smtpd_recipient_restrictions =
++       reject_non_fqdn_recipient,
++       permit_sasl_authenticated,
++       permit_mynetworks,
++       reject_unauth_destination
++
++broken_sasl_auth_clients = yes
++
++smtpd_use_tls = yes
++smtpd_tls_cert_file = /opt/zimbra/conf/smtpd.crt
++smtpd_tls_key_file = /opt/zimbra/conf/smtpd.key
++smtpd_tls_loglevel = 3
++

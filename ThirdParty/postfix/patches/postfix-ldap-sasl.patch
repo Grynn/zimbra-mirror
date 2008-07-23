@@ -1,0 +1,295 @@
+--- postfix-2.4.2-RC1/README_FILES/LDAP_README.orig	2007-06-08 11:39:07.000000000 -0700
++++ postfix-2.4.2-RC1/README_FILES/LDAP_README	2007-06-08 11:55:14.000000000 -0700
+@@ -77,6 +77,10 @@
+ and you may need to use the appropriate linker option (e.g. '-R') so the
+ executables can find it at runtime.
+ 
++If you are using OpenLDAP, and the libraries were built with SASL support, you
++can add -DUSE_LDAP_SASL to the CCARGS to enable SASL support.  For example:
++     CCARGS="-I/usr/local/include -DHAS_LDAP -DUSE_LDAP_SASL" \
++
+ CCoonnffiigguurriinngg LLDDAAPP llooookkuuppss
+ 
+ In order to use LDAP lookups, define an LDAP source as a table lookup in
+@@ -85,7 +89,7 @@
+     alias_maps = hash:/etc/aliases, ldap:/etc/postfix/ldap-aliases.cf
+ 
+ The file /etc/postfix/ldap-aliases.cf can specify a great number of parameters,
+-including parameters that enable LDAP SSL and STARTTLS. For a complete
++including parameters that enable LDAP SSL and STARTTLS, and LDAP SASL. For a complete
+ description, see the ldap_table(5) manual page.
+ 
+ EExxaammppllee:: llooccaall((88)) aalliiaasseess
+@@ -433,6 +437,7 @@
+   * Gunnar Wrobel provided a first implementation of a feature to limit LDAP
+     search results to leaf nodes only. Victor generalized this into the Postfix
+     2.4 "leaf_result_attribute" feature.
++  * Quanah Gibson-Mount provided support for implementing LDAP SASL mechanisms.a
+ 
+ And of course Wietse.
+ 
+--- postfix-2.4.3/proto/ldap_table.orig	2007-12-01 00:30:43.000000000 -0800
++++ postfix-2.4.3/proto/ldap_table	2007-12-01 00:32:05.000000000 -0800
+@@ -466,10 +466,33 @@
+ # .IP "\fBchase_referrals (default: 0)\fR"
+ #	Sets (or clears) LDAP_OPT_REFERRALS (requires LDAP version
+ #	3 support).
+-# .IP "\fBversion (default: 2)\fR"
++# .IP "\fBversion (default: 3)\fR"
+ #	Specifies the LDAP protocol version to use.
+ # .IP "\fBdebuglevel (default: 0)\fR"
+ #	What level to set for debugging in the OpenLDAP libraries.
++# LDAP SASL PARAMETERS
++# .ad
++# .fi
++#       If you're using the OpenLDAP libraries compiled with SASL
++#       support, Postfix can connect to LDAP servers using SASL
++#       mechanisms.
++#
++#       Using SASL mechanisms requires LDAP protocol version 3, which
++#       is the default.
++#
++#	The following parameters are relevant to using LDAP with
++#       SASL
++# .IP "\fBsasl (default: no)\fR"
++#       Whether or not to use SASL binds to the server.  Can be yes or no.
++# .IP "\fBsasl_mechs (No default)\fR"
++#	Space separated list of SASL mechanism(s) to try. 
++# .IP "\fsasl_realm (No default)\fR"
++#       SASL Realm to use, if applicable.
++# .IP "\fsasl_authz_id (No default)\fR"
++#       The SASL authorization identity to assert, if applicable.
++# .IP "\fsasl_minssf (default: 0)\fR"
++#       The minimum required sasl security factor required to
++#       establish a connection.
+ # LDAP SSL AND STARTTLS PARAMETERS
+ # .ad
+ # .fi
+@@ -490,11 +513,8 @@
+ #	    start_tls = yes
+ # .fi
+ #
+-#	Both forms require LDAP protocol version 3, which has to be set
+-#	explicitly with:
++#	Both forms require LDAP protocol version 3, which is the default.
+ #
+-# .nf
+-#	    version = 3
+ # .fi
+ #
+ #	If any of the Postfix programs querying the map is configured in
+--- postfix-2.4.3/src/global/dict_ldap.c.orig	2007-12-01 00:30:22.000000000 -0800
++++ postfix-2.4.3/src/global/dict_ldap.c	2007-12-01 20:42:01.000000000 -0800
+@@ -102,7 +102,17 @@
+ /*	How to handle LDAP aliases. See ldap.h or ldap_open(3) man page.
+ /* .IP version
+ /*	Specifies the LDAP protocol version to use.  Default is version
+-/*	\fI2\fR.
++/*	\fI3\fR.
++/* .IP  sasl
++/*      Whether or not to use SASL binds with the server.  Defaults to no.
++/* .IP sasl_mechs
++/*	Specifies the LDAP SASL Mechanisms to use.  Should be space seperated.
++/* .IP  sasl_realm
++/*	The realm to use for SASL binds.
++/* .IP  sasl_authz_id
++/*	The SASL Authorization Identity to assert.
++/* .IP  sasl_minssf
++/*      The minimum SASL SSF to allow.  Default is 0.
+ /* .IP start_tls
+ /*	Whether or not to issue STARTTLS upon connection to the server.
+ /*	At this time, STARTTLS and LDAP SSL are only available if the
+@@ -210,6 +220,12 @@
+ #include "cfg_parser.h"
+ #include "db_common.h"
+ 
++#if defined(USE_LDAP_SASL) && defined(LDAP_API_FEATURE_X_OPENLDAP)
++/* SASL Library header, for sasl_interact_t */
++/* Both SASL v1 and v2 should be fine */
++#include <sasl.h>
++#endif
++
+ /* Application-specific. */
+ 
+ #include "dict_ldap.h"
+@@ -250,6 +266,13 @@
+     int     debuglevel;
+     int     version;
+ #ifdef LDAP_API_FEATURE_X_OPENLDAP
++#if defined(USE_LDAP_SASL)
++    int     sasl;
++    char    *sasl_mechs;
++    char    *sasl_realm;
++    char    *sasl_authz_id;
++    int     sasl_minssf;
++#endif
+     int     ldap_ssl;
+     int     start_tls;
+     int     tls_require_cert;
+@@ -371,6 +394,54 @@
+     return rc;
+ }
+ 
++#if defined(USE_LDAP_SASL) && defined(LDAP_API_FEATURE_X_OPENLDAP)
++/* We need to set up a structure, and a function to handle the
++ * SASL callbacks
++ */
++
++typedef struct bictx {
++    char *authcid;
++    char *passwd;
++    char *realm;
++    char *authzid;
++} bictx;
++
++static int
++ldap_b2_interact(LDAP *ld, unsigned flags, void *def, void *inter)
++{
++
++    sasl_interact_t *in = inter;
++    const char *p;
++    bictx *ctx = def;
++
++    for (;in->id != SASL_CB_LIST_END;in++)
++    {
++        p = NULL;
++        switch(in->id)
++        {
++                case SASL_CB_GETREALM:
++                        p = ctx->realm;
++                        break;
++                case SASL_CB_AUTHNAME:
++                        p = ctx->authcid;
++                        break;
++                case SASL_CB_USER:
++                        p = ctx->authzid;
++                        break;
++                case SASL_CB_PASS:
++                        p = ctx->passwd;
++                        break;
++        }
++        if (p)
++        {
++                in->len = strlen(p);
++                in->result = p;
++        }
++    }
++    return LDAP_SUCCESS;
++}
++#endif
++
+ /* dict_ldap_result - Read and parse LDAP result */
+ 
+ static int dict_ldap_result(LDAP *ld, int msgid, int timeout, LDAPMessage **res)
+@@ -391,8 +462,41 @@
+     return LDAP_SUCCESS;
+ }
+ 
+-/* dict_ldap_bind_st - Synchronous simple auth with timeout */
++/* Asynchronous SASL auth with timeout if SASL is enabled */
++static int dict_ldap_bind_sasl(DICT_LDAP *dict_ldap)
++{
++    int     rc;
++    bictx ctx;
++    char minssf[2];
++    struct timeval mytimeval;
++
++    mytimeval.tv_sec = dict_ldap->timeout;
++    mytimeval.tv_usec = 0;
++
++    sprintf(minssf,"minssf=%d",dict_ldap->sasl_minssf);
++    if ((rc = ldap_set_option(dict_ldap->ld, LDAP_OPT_X_SASL_SECPROPS,
++                         (char *) minssf)) != LDAP_OPT_SUCCESS)
++    return (rc);
++
++   if (dict_ldap->timeout > 0 ) {
++        if ((rc = ldap_set_option(dict_ldap->ld, LDAP_OPT_NETWORK_TIMEOUT, &mytimeval)) != LDAP_OPT_SUCCESS)
++            return (rc);
++    }
++
++    ctx.authcid = dict_ldap->bind_dn;
++    ctx.passwd = dict_ldap-> bind_pw;
++    ctx.realm = dict_ldap->sasl_realm;
++    ctx.authzid = dict_ldap->sasl_authz_id;
++
++    if ((rc = ldap_sasl_interactive_bind_s(dict_ldap->ld, NULL,
++			     dict_ldap->sasl_mechs, NULL, NULL,
++			     LDAP_SASL_QUIET, ldap_b2_interact, &ctx)) != LDAP_SUCCESS)
++	return (rc);
++
++    return (LDAP_SUCCESS);
++}
+ 
++/* dict_ldap_bind_st - Synchronous simple auth with timeout */
+ static int dict_ldap_bind_st(DICT_LDAP *dict_ldap)
+ {
+     int     rc;
+@@ -683,7 +787,15 @@
+ 	    msg_info("%s: Binding to server %s as dn %s",
+ 		     myname, dict_ldap->server_host, dict_ldap->bind_dn);
+ 
++#if defined(USE_LDAP_SASL) && defined(LDAP_API_FEATURE_X_OPENLDAP)
++	if(dict_ldap->sasl) {
++		rc = dict_ldap_bind_sasl(dict_ldap);
++        } else {
++		rc = dict_ldap_bind_st(dict_ldap);
++        }
++#else
+ 	rc = dict_ldap_bind_st(dict_ldap);
++#endif
+ 
+ 	if (rc != LDAP_SUCCESS) {
+ 	    msg_warn("%s: Unable to bind to server %s as %s: %d (%s)",
+@@ -734,6 +846,13 @@
+     ADDINT(keybuf, dict_ldap->debuglevel);
+     ADDINT(keybuf, dict_ldap->version);
+ #ifdef LDAP_API_FEATURE_X_OPENLDAP
++#if defined(USE_LDAP_SASL)
++    ADDINT(keybuf, dict_ldap->sasl);
++    ADDSTR(keybuf, dict_ldap->sasl ? dict_ldap->sasl_mechs : "");
++    ADDSTR(keybuf, dict_ldap->sasl ? dict_ldap->sasl_realm : "");
++    ADDSTR(keybuf, dict_ldap->sasl ? dict_ldap->sasl_authz_id : "");
++    ADDINT(keybuf, dict_ldap->sasl_minssf);
++#endif
+     ADDINT(keybuf, dict_ldap->ldap_ssl);
+     ADDINT(keybuf, dict_ldap->start_tls);
+     ADDINT(keybuf, sslon ? dict_ldap->tls_require_cert : 0);
+@@ -1251,6 +1370,11 @@
+     if (dict_ldap->ctx)
+ 	db_common_free_ctx(dict_ldap->ctx);
+ #ifdef LDAP_API_FEATURE_X_OPENLDAP
++#if defined(USE_LDAP_SASL)
++    myfree(dict_ldap->sasl_mechs);
++    myfree(dict_ldap->sasl_realm);
++    myfree(dict_ldap->sasl_authz_id);
++#endif
+     myfree(dict_ldap->tls_ca_cert_file);
+     myfree(dict_ldap->tls_ca_cert_dir);
+     myfree(dict_ldap->tls_cert);
+@@ -1301,7 +1425,7 @@
+     /*
+      * Define LDAP Version.
+      */
+-    dict_ldap->version = cfg_get_int(dict_ldap->parser, "version", 2, 2, 0);
++    dict_ldap->version = cfg_get_int(dict_ldap->parser, "version", 3, 2, 0);
+     switch (dict_ldap->version) {
+     case 2:
+ 	dict_ldap->version = LDAP_VERSION2;
+@@ -1536,7 +1660,17 @@
+ 					      "chase_referrals", 0);
+ 
+ #ifdef LDAP_API_FEATURE_X_OPENLDAP
++#if defined(USE_LDAP_SASL)
++    /*
++     *  SASL options
++     */
+ 
++    dict_ldap->sasl = cfg_get_bool(dict_ldap->parser, "sasl", 0);
++    dict_ldap->sasl_mechs = cfg_get_str(dict_ldap->parser, "sasl_mechs", "", 0, 0);
++    dict_ldap->sasl_realm = cfg_get_str(dict_ldap->parser, "sasl_realm", "", 0, 0);
++    dict_ldap->sasl_authz_id = cfg_get_str(dict_ldap->parser, "sasl_authz_id", "", 0, 0);
++    dict_ldap->sasl_minssf= cfg_get_int(dict_ldap->parser, "sasl_minssf", 0, 0, 4096);
++#endif
+     /*
+      * TLS options
+      */

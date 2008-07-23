@@ -67,7 +67,7 @@ DIRS := openssl \
 	pcre \
 	expat \
 	popt \
-	PostFix \
+	postfix \
 	dspam \
 	rrdtool \
 	snmp
@@ -125,9 +125,7 @@ aspell: force
 clamav: force
 	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
-postfix: PostFix
-
-PostFix: force
+postfix: force
 	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
 
 perl:
