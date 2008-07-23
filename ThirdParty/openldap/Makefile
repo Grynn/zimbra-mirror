@@ -18,10 +18,9 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-#LDAP_RELEASE ?= 2.4.11
-#LDAP_PATCH_LEVEL ?= 8z
-#LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
-LDAP_VERSION ?= 2.4.11
+LDAP_RELEASE ?= 2.4.11
+LDAP_PATCH_LEVEL ?= 2z
+LDAP_VERSION ?= $(LDAP_RELEASE).$(LDAP_PATCH_LEVEL)
 LDAP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-$(LDAP_VERSION).tgz
 LDAP_LIB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openldap/openldap-clibs-$(LDAP_VERSION).tgz
 
@@ -39,7 +38,8 @@ LIBTOOL_LIB_DIR ?= $(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/lib
 all: build tar
 
 build:
-	(tar xzf src/openldap-$(LDAP_VERSION).tgz; \
+	(tar xzf src/openldap-$(LDAP_RELEASE).tgz; \
+	mv openldap-$(LDAP_RELEASE) openldap-$(LDAP_VERSION); \
 	cd openldap-$(LDAP_VERSION); \
 	patch -N -p1 < ../patches/ITS5037.patch; \
 	patch -N -p1 < ../patches/leopard.fix; \
