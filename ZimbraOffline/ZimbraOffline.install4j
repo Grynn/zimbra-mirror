@@ -202,7 +202,7 @@ return true;</string>
                       <void property="script">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>System.getProperty("os.arch").equalsIgnoreCase("i386") &amp;&amp; System.getProperty("os.version").startsWith("10.5")</string>
+                            <string>System.getProperty("os.arch").equalsIgnoreCase("i386")</string>
                           </void>
                         </object>
                       </void>

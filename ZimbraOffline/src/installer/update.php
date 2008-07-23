@@ -3,7 +3,7 @@
 
 $download_url_prefix = "http://files.zimbra.com/downloads/zdesktop/beta";
 $details_url = "http://wiki.zimbra.com/index.php?title=Zimbra_Desktop";
-$version = @version@;
+$version = "@version@";
 $buildid = @buildid@;
 
 $size_win32 = @size_win32@;
