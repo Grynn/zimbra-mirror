@@ -151,6 +151,7 @@ public class ZMessageComposeBean {
     private int mRepeatYearlyRelativeMonth;
     private String mRepeatEndType;
     private int mRepeatEndCount;
+    private String mRecurrenceIdZ;
 
     private String mRepeatEndDate;
 
@@ -256,6 +257,9 @@ public class ZMessageComposeBean {
             return mTimeZone;
         }
     }
+
+    public void setRecurrenceIdZ(String ridZ) { mRecurrenceIdZ = ridZ; }
+    public String getRecurrenceIdZ() { return mRecurrenceIdZ; }
 
     public void setFreeBusyStatus(String freeBusyStatus) { mFreeBusyStatus = freeBusyStatus; }
     public String getFreeBusyStatus() { return mFreeBusyStatus; }
@@ -1006,6 +1010,8 @@ public class ZMessageComposeBean {
         setClassProp(appt.getClassProp().name());
 
         DateFormat df = new SimpleDateFormat(I18nUtil.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
+
+        setRecurrenceIdZ(appt.getRecurrenceIdZ());
 
         if (options.isTask()) {
             setTaskPercentComplete(appt.getPercentCompleted());

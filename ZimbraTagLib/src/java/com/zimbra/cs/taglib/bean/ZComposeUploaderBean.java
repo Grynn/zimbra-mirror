@@ -64,7 +64,7 @@ public class ZComposeUploaderBean {
     public static final String F_taskStatus = "taskStatus";
     public static final String F_taskPercentComplete = "taskPercentComplete";
     public static final String F_origOrganizer = "origOrganizer";
-
+    public static final String F_recurrenceIdZ = "recurrenceIdZ";
 
     public static final String F_to = "to";
     public static final String F_cc = "cc";
@@ -311,6 +311,7 @@ public class ZComposeUploaderBean {
         compose.setInstanceDuration(getParamLong(F_instDuration, 0));
         compose.setInstanceStartTime(getParamLong(F_instStartTime, 0));
         compose.setInstanceCompNum(getParam(F_instCompNum));
+        compose.setRecurrenceIdZ(getParam(F_recurrenceIdZ));
 
         compose.setRepeatBasicType(getParam(F_repeatBasicType));
         compose.setRepeatType(getParam(F_repeatType));
