@@ -49,7 +49,7 @@ build:
 	CPPFLAGS="-I$(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include -I$(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/include \
 		  -I$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/include -I$(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/include" \
 	CFLAGS="-g -O0" \
-	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) \
+	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION) --libexecdir=$(ZIMBRA_HOME)/openldap-$(LDAP_VERSION)/sbin \
 	--with-cyrus-sasl \
 	--with-tls \
 	--enable-dynamic \
