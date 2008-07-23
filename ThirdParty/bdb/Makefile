@@ -22,8 +22,8 @@ build:
 	(tar xzf src/db-$(BDB_RELEASE).tar.gz; \
 	mv db-$(BDB_RELEASE) db-$(BDB_VERSION); \
 	cd db-$(BDB_VERSION); \
-	patch -p1 < ../patches/4.6.21-1.patch; \
-	patch -p1 < ../patches/4.6.21-2.patch; \
+	patch -g0 -p1 < ../patches/4.6.21-1.patch; \
+	patch -g0 -p1 < ../patches/4.6.21-2.patch; \
 	cd build_unix; \
 	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) ../dist/configure --prefix=$(ZIMBRA_HOME)/bdb-$(BDB_VERSION) --enable-posixmutexes; \
 	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE) $(MAKEARGS) CFLAGS="-g -O2 -fPIC"; \
