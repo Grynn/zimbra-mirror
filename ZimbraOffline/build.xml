@@ -856,6 +856,8 @@
 		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
 		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
 		
+		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/libprism.dylib" file="${prism.src.dir}/mac-0708/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/libprism.dylib" overwrite="true"/>
+		
 		<mkdir dir="${dist.dir}/profile/extensions/zimbradnd@zimbra.com"/>
 		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 	</target>
