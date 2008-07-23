@@ -79,13 +79,11 @@
  #
  #	If any of the Postfix programs querying the map is configured in
 --- postfix-2.5.1/src/global/dict_ldap.c.orig	2008-01-25 16:50:59.000000000 -0800
-+++ postfix-2.5.1/src/global/dict_ldap.c	2008-07-23 10:55:44.000000000 -0700
-@@ -102,7 +102,17 @@
- /*	How to handle LDAP aliases. See ldap.h or ldap_open(3) man page.
++++ postfix-2.5.1/src/global/dict_ldap.c	2008-07-23 11:18:38.000000000 -0700
+@@ -103,6 +103,16 @@
  /* .IP version
  /*	Specifies the LDAP protocol version to use.  Default is version
--/*	\fI2\fR.
-+/*	\fI3\fR.
+ /*	\fI2\fR.
 +/* .IP  sasl
 +/*      Whether or not to use SASL binds with the server.  Defaults to no.
 +/* .IP sasl_mechs
@@ -268,15 +266,6 @@
      myfree(dict_ldap->tls_ca_cert_file);
      myfree(dict_ldap->tls_ca_cert_dir);
      myfree(dict_ldap->tls_cert);
-@@ -1361,7 +1487,7 @@
-     /*
-      * Define LDAP Protocol Version.
-      */
--    dict_ldap->version = cfg_get_int(dict_ldap->parser, "version", 2, 2, 0);
-+    dict_ldap->version = cfg_get_int(dict_ldap->parser, "version", 3, 2, 0);
-     switch (dict_ldap->version) {
-     case 2:
- 	dict_ldap->version = LDAP_VERSION2;
 @@ -1596,7 +1722,17 @@
  					      "chase_referrals", 0);
  
