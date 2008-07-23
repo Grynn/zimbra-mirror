@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
@@ -86,7 +87,8 @@ public class OfflineServlet extends HttpServlet {
 			OfflineSyncManager.getInstance().init();
 			WikiUtil wu = WikiUtil.getInstance();
 			wu.initDefaultWiki("local@host.local");
-			wu.startImport("local@host.local", "Template", new File("/opt/zimbra/zdesktop/wiki/Templates"));
+			String templatePath = LC.zimbra_home.value() + File.separator + "wiki" + File.separator + "Templates";
+			wu.startImport("local@host.local", "Template", new File(templatePath));
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}
