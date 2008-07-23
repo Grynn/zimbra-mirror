@@ -28,56 +28,6 @@
  
  And of course Wietse.
  
---- postfix-2.4.3/proto/ldap_table.orig	2007-12-01 00:30:43.000000000 -0800
-+++ postfix-2.4.3/proto/ldap_table	2007-12-01 00:32:05.000000000 -0800
-@@ -466,10 +466,33 @@
- # .IP "\fBchase_referrals (default: 0)\fR"
- #	Sets (or clears) LDAP_OPT_REFERRALS (requires LDAP version
- #	3 support).
--# .IP "\fBversion (default: 2)\fR"
-+# .IP "\fBversion (default: 3)\fR"
- #	Specifies the LDAP protocol version to use.
- # .IP "\fBdebuglevel (default: 0)\fR"
- #	What level to set for debugging in the OpenLDAP libraries.
-+# LDAP SASL PARAMETERS
-+# .ad
-+# .fi
-+#       If you're using the OpenLDAP libraries compiled with SASL
-+#       support, Postfix can connect to LDAP servers using SASL
-+#       mechanisms.
-+#
-+#       Using SASL mechanisms requires LDAP protocol version 3, which
-+#       is the default.
-+#
-+#	The following parameters are relevant to using LDAP with
-+#       SASL
-+# .IP "\fBsasl (default: no)\fR"
-+#       Whether or not to use SASL binds to the server.  Can be yes or no.
-+# .IP "\fBsasl_mechs (No default)\fR"
-+#	Space separated list of SASL mechanism(s) to try. 
-+# .IP "\fsasl_realm (No default)\fR"
-+#       SASL Realm to use, if applicable.
-+# .IP "\fsasl_authz_id (No default)\fR"
-+#       The SASL authorization identity to assert, if applicable.
-+# .IP "\fsasl_minssf (default: 0)\fR"
-+#       The minimum required sasl security factor required to
-+#       establish a connection.
- # LDAP SSL AND STARTTLS PARAMETERS
- # .ad
- # .fi
-@@ -490,11 +513,8 @@
- #	    start_tls = yes
- # .fi
- #
--#	Both forms require LDAP protocol version 3, which has to be set
--#	explicitly with:
-+#	Both forms require LDAP protocol version 3, which is the default.
- #
--# .nf
--#	    version = 3
- # .fi
- #
- #	If any of the Postfix programs querying the map is configured in
 --- postfix-2.5.1/src/global/dict_ldap.c.orig	2008-01-25 16:50:59.000000000 -0800
 +++ postfix-2.5.1/src/global/dict_ldap.c	2008-07-23 11:18:38.000000000 -0700
 @@ -103,6 +103,16 @@
@@ -284,3 +234,35 @@
      /*
       * TLS options
       */
+--- postfix-2.5.1/proto/ldap_table.orig	2008-07-23 11:20:19.000000000 -0700
++++ postfix-2.5.1/proto/ldap_table	2008-07-23 11:23:13.000000000 -0700
+@@ -470,6 +470,29 @@
+ #	Specifies the LDAP protocol version to use.
+ # .IP "\fBdebuglevel (default: 0)\fR"
+ #	What level to set for debugging in the OpenLDAP libraries.
++# LDAP SASL PARAMETERS
++# .ad
++# .fi
++#       If you're using the OpenLDAP libraries compiled with SASL
++#       support, Postfix can connect to LDAP servers using SASL
++#       mechanisms.
++#
++#       Using SASL mechanisms requires LDAP protocol version 3, which
++#       is the default.
++#
++#	The following parameters are relevant to using LDAP with
++#       SASL
++# .IP "\fBsasl (default: no)\fR"
++#       Whether or not to use SASL binds to the server.  Can be yes or no.
++# .IP "\fBsasl_mechs (No default)\fR"
++#	Space separated list of SASL mechanism(s) to try. 
++# .IP "\fsasl_realm (No default)\fR"
++#       SASL Realm to use, if applicable.
++# .IP "\fsasl_authz_id (No default)\fR"
++#       The SASL authorization identity to assert, if applicable.
++# .IP "\fsasl_minssf (default: 0)\fR"
++#       The minimum required sasl security factor required to
++#       establish a connection.
+ # LDAP SSL AND STARTTLS PARAMETERS
+ # .ad
+ # .fi
