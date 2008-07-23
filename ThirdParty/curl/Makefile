@@ -38,7 +38,6 @@ all: build tar
 build:
 	(tar xzf src/curl-$(CURL_VERSION).tar.gz; \
 	cd curl-$(CURL_VERSION); \
-	patch -g0 -p1 < ../patches/heimdal.patch; \
 	make ca-bundle; \
 	LD_RUN_PATH=/opt/zimbra/openssl-$(OPENSSL_VERSION):/opt/zimbra/heimdal-$(HEIMDAL_VERSION)/lib \
 	CFLAGS="-g -O2" \
