@@ -78,8 +78,8 @@
  # .fi
  #
  #	If any of the Postfix programs querying the map is configured in
---- postfix-2.4.3/src/global/dict_ldap.c.orig	2007-12-01 00:30:22.000000000 -0800
-+++ postfix-2.4.3/src/global/dict_ldap.c	2007-12-01 20:42:01.000000000 -0800
+--- postfix-2.5.1/src/global/dict_ldap.c.orig	2008-01-25 16:50:59.000000000 -0800
++++ postfix-2.5.1/src/global/dict_ldap.c	2008-07-23 10:55:44.000000000 -0700
 @@ -102,7 +102,17 @@
  /*	How to handle LDAP aliases. See ldap.h or ldap_open(3) man page.
  /* .IP version
@@ -99,7 +99,7 @@
  /* .IP start_tls
  /*	Whether or not to issue STARTTLS upon connection to the server.
  /*	At this time, STARTTLS and LDAP SSL are only available if the
-@@ -210,6 +220,12 @@
+@@ -214,6 +224,12 @@
  #include "cfg_parser.h"
  #include "db_common.h"
  
@@ -112,7 +112,7 @@
  /* Application-specific. */
  
  #include "dict_ldap.h"
-@@ -250,6 +266,13 @@
+@@ -254,6 +270,13 @@
      int     debuglevel;
      int     version;
  #ifdef LDAP_API_FEATURE_X_OPENLDAP
@@ -126,7 +126,7 @@
      int     ldap_ssl;
      int     start_tls;
      int     tls_require_cert;
-@@ -371,6 +394,54 @@
+@@ -407,6 +430,54 @@
      return rc;
  }
  
@@ -181,11 +181,12 @@
  /* dict_ldap_result - Read and parse LDAP result */
  
  static int dict_ldap_result(LDAP *ld, int msgid, int timeout, LDAPMessage **res)
-@@ -391,8 +462,41 @@
+@@ -427,8 +498,43 @@
      return LDAP_SUCCESS;
  }
  
 -/* dict_ldap_bind_st - Synchronous simple auth with timeout */
++#if defined(USE_LDAP_SASL) && defined(LDAP_API_FEATURE_X_OPENLDAP)
 +/* Asynchronous SASL auth with timeout if SASL is enabled */
 +static int dict_ldap_bind_sasl(DICT_LDAP *dict_ldap)
 +{
@@ -193,7 +194,7 @@
 +    bictx ctx;
 +    char minssf[2];
 +    struct timeval mytimeval;
-+
+ 
 +    mytimeval.tv_sec = dict_ldap->timeout;
 +    mytimeval.tv_usec = 0;
 +
@@ -219,12 +220,13 @@
 +
 +    return (LDAP_SUCCESS);
 +}
- 
++#endif
++
 +/* dict_ldap_bind_st - Synchronous simple auth with timeout */
  static int dict_ldap_bind_st(DICT_LDAP *dict_ldap)
  {
      int     rc;
-@@ -683,7 +787,15 @@
+@@ -740,7 +846,15 @@
  	    msg_info("%s: Binding to server %s as dn %s",
  		     myname, dict_ldap->server_host, dict_ldap->bind_dn);
  
@@ -240,7 +242,7 @@
  
  	if (rc != LDAP_SUCCESS) {
  	    msg_warn("%s: Unable to bind to server %s as %s: %d (%s)",
-@@ -734,6 +846,13 @@
+@@ -790,6 +904,13 @@
      ADDINT(keybuf, dict_ldap->debuglevel);
      ADDINT(keybuf, dict_ldap->version);
  #ifdef LDAP_API_FEATURE_X_OPENLDAP
@@ -254,7 +256,7 @@
      ADDINT(keybuf, dict_ldap->ldap_ssl);
      ADDINT(keybuf, dict_ldap->start_tls);
      ADDINT(keybuf, sslon ? dict_ldap->tls_require_cert : 0);
-@@ -1251,6 +1370,11 @@
+@@ -1310,6 +1431,11 @@
      if (dict_ldap->ctx)
  	db_common_free_ctx(dict_ldap->ctx);
  #ifdef LDAP_API_FEATURE_X_OPENLDAP
@@ -266,16 +268,16 @@
      myfree(dict_ldap->tls_ca_cert_file);
      myfree(dict_ldap->tls_ca_cert_dir);
      myfree(dict_ldap->tls_cert);
-@@ -1301,7 +1425,7 @@
+@@ -1361,7 +1487,7 @@
      /*
-      * Define LDAP Version.
+      * Define LDAP Protocol Version.
       */
 -    dict_ldap->version = cfg_get_int(dict_ldap->parser, "version", 2, 2, 0);
 +    dict_ldap->version = cfg_get_int(dict_ldap->parser, "version", 3, 2, 0);
      switch (dict_ldap->version) {
      case 2:
  	dict_ldap->version = LDAP_VERSION2;
-@@ -1536,7 +1660,17 @@
+@@ -1596,7 +1722,17 @@
  					      "chase_referrals", 0);
  
  #ifdef LDAP_API_FEATURE_X_OPENLDAP
