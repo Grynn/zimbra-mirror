@@ -79,6 +79,7 @@ my $state = {
   serverconfig     => (),
   serviceconfig    => (),
   forcedconfig     => (),
+  watchdog         => (),
   current          => { rewrites => (),
                         config   => (),
                         restarts => (),
@@ -231,7 +232,7 @@ while (1) {
     if $state->{forced};;
 
   $state->{firstRun} = 0;
-  logMsg(3, "Sleeping for $config{interval}.");
+  logMsg(4, "Sleeping for $config{interval}.");
   sleep $config{interval};
 }
 logMsg(3, "$config{progname} finished");
@@ -402,6 +403,14 @@ sub getGlobalConfig {
         $state->{globalconfig}->{zimbraSSLExcludeCipherSuitesXML} = "$state->{globalconfig}->{zimbraSSLExcludeCipherSuitesXML}\n<Item>$v</Item>"; 
       } else {
         $state->{globalconfig}->{zimbraSSLExcludeCipherSuitesXML} = "<Item>$v</Item>"; 
+      }
+    } elsif ($k eq "zimbraMtaRestriction" && $v =~ /reject_rbl_client/) {
+        $v =~ s/^reject_rbl_client\s+//;
+        logMsg(5, "MTARESTRICTIONS: $k=$v");
+      if (exists ($state->{globalconfig}->{zimbraMtaRestrictionRBLs})) {
+        $state->{globalconfig}->{zimbraMtaRestrictionRBLs} = "$state->{globalconfig}->{zimbraMtaRestrictionRBLs} $v"; 
+      } else {
+        $state->{globalconfig}->{zimbraMtaRestrictionRBLs} = "$v"; 
       }
     }
   }
@@ -589,7 +598,7 @@ sub lookUpConfig($$) {
     open(TMP, "$tmpfile");
     my @l = <TMP>; 
     close(TMP);
-    unlink($tmpfile);
+    #unlink($tmpfile);
     chomp @l;
     @l = grep !/^$/, @l;
     $value = join ', ',@l;
@@ -643,7 +652,7 @@ sub readConfig {
       $section->{name} = $fields[1];
       my $servicemap = ($sectionMap->{"$section->{name}"} ? $sectionMap->{"$section->{name}"} : $section->{name});;
       unless (checkConditional("SERVICE", $servicemap)) {
-       logMsg(3, "Service $servicemap is not enabled.  Skipping $section->{name}");
+       logMsg(4, "Service $servicemap is not enabled.  Skipping $section->{name}");
        while ($lines[0] !~ m/^SECTION/ && scalar(@lines) > 0) {
         $line = stripWhiteSpace(shift(@lines));
        } 
@@ -822,7 +831,7 @@ sub compileActions {
         }
       }
     } else {
-      logMsg(3, "Section $section->{name} did not change skipping");
+      logMsg(4, "Section $section->{name} did not change skipping");
     }
   }
 }
@@ -841,22 +850,35 @@ sub watchdog() {
     Zimbra::Mon::Logger::Log ("err", "Service status change: $config{hostname} $service changed from $prevStatus to $curStatus")
       if ($curStatus ne $prevStatus && $prevStatus ne "");
     $state->{previous}->{services}->{$service} = $curStatus;
+
+    # services need to be seen running at least once before eligible for watchdog restart
+    if ($curStatus eq "running" && !defined $state->{watchdog}->{$service}) {
+      logMsg(3, "Watchdog: service $service now available for watchdog.");
+      $state->{watchdog}->{$service} = $curStatus;
+    }
   }
 
   if ($config{wd_all}) {
     foreach my $service (keys %{$state->{current}->{services}}) {
+      next unless defined($state->{watchdog}->{$service});
       if (lookUpConfig("SERVICE", $service) && processIsNotRunning($service)) {
-        logMsg(2, "Watchdog adding $service to restart list");
+        logMsg(2, "Watchdog: adding $service to restart list");
         $state->{current}->{restarts}->{$service} = -1;
       }  
     }
   } else {
     foreach my $service (@{$config{wd_list}}) {
-      logMsg(3, "Watchdog checking service $service");
+      logMsg(4, "Watchdog: checking service $service");
+      unless (defined($state->{watchdog}->{$service})) {
+        logMsg(3, "Watchdog: skipping service $service. Service not yet available for restarts.");
+        next;
+      }
       if (lookUpConfig("SERVICE", $service) && processIsNotRunning($service)) {
-        logMsg(2, "Watchdog adding $service to restart list");
+        logMsg(2, "Watchdog: adding $service to restart list");
         $state->{current}->{restarts}->{$service} = -1;
-      }  
+      } else {
+        logMsg(3, "Watchdog: service $service status is OK.");
+      }
     }
   }
 }
@@ -1031,6 +1053,7 @@ sub rewriteConfig {
         }
       } elsif ($sr =~ m/^explode/) {
         my ($cmd, $key) = ($sr =~ m/explode .* ([^:]+):(\w+)/);
+        logMsg(5, "Explode $sr");
         $val = lookUpConfig($cmd, $key);
         foreach my $v (split(/\s+/, $val)) {
           my $qr = quotemeta("$cmd:$key");
@@ -1147,6 +1170,12 @@ sub controlProcess($$) {
     compileDependancyRestarts($processname);
     return 0;
   }
+  
+  # if we initiate a stop/restart remove the service from watchdog
+  # list of services available for restarts.  This avoids a restart
+  # loop if they are slow to startup.
+  delete $state->{watchdog}->{$processname}
+    if ($action eq "stop" || $action eq "restart");
 
   # Postfix, unique to the end.
   $action = "reload" if ($action eq "restart" && $process eq "MTA");
