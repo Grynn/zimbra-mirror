@@ -1,8 +1,8 @@
 POSTFIX_ROOT := $(shell pwd)
 
 ZIMBRA_HOME ?= /opt/zimbra
-POSTFIX_RELEASE ?= 2.4.7
-POSTFIX_PATCH_LEVEL ?= 5z
+POSTFIX_RELEASE ?= 2.5.1
+POSTFIX_PATCH_LEVEL ?= 3z
 POSTFIX_VERSION ?= $(POSTFIX_RELEASE).$(POSTFIX_PATCH_LEVEL)
 
 P4_ROOT ?= $(shell cd $(POSTFIX_ROOT)/../..; pwd)
@@ -113,11 +113,13 @@ build:
 install:
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	(cd postfix-$(POSTFIX_VERSION); \
-	$(SHELL) postfix-install -non-interactive  setgid_group=_postdrop mail_owner=_postfix)
+	$(SHELL) postfix-install -non-interactive  setgid_group=_postdrop mail_owner=_postfix; \
+	cp auxiliary/qshape/qshape.pl $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin;)
 	(cd $(ZIMBRA_HOME); ln -s $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION) postfix)
 else
 	(cd postfix-$(POSTFIX_VERSION); \
-	$(MAKE) upgrade)
+	$(MAKE) upgrade; \
+	cp auxiliary/qshape/qshape.pl $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin;)
 	(cd $(ZIMBRA_HOME); ln -s $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION) postfix)
 endif
 
