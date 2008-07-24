@@ -4,12 +4,12 @@
          touch Makefile.am configure.ac
  {
  	echo "running libtoolize" >&2
--	libtoolize --copy --automake
+-	libtoolize --force --copy --automake
 +	platform=`uname -s`
 +	if [ $platform = "Darwin" ]; then
-+		glibtoolize --copy --automake
++		glibtoolize --force --copy --automake
 +	else
-+		libtoolize --copy --automake
++		libtoolize --force --copy --automake
 +	fi
  } && {
  	echo "running aclocal" >&2
