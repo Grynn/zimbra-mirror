@@ -5,10 +5,6 @@ MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-BDB_ROOT ?= $(P4_ROOT)/ThirdParty/bdb
-
-BDB_VERSION ?= 4.6.21.2
-
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
