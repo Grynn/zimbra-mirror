@@ -65,6 +65,7 @@ build:
 	tar xfz src/$(CAIRO_NAME)-$(CAIRO_VERSION).tar.gz; \
 	cd $(CAIRO_NAME)-$(CAIRO_VERSION); \
 	pixman_CFLAGS=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include pixman_LIBS=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib \
+	png_CFLAGS=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include png_LIBS=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib \
 	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION) \
 		--enable-xlib=no --enable-xlib-xrender=no --enable-xcb=no --enable-quartz=no --enable-quartz-font=no \
 		--enable-quartz-image=no --enable-win32=no --enable-win32-font=no --enable-os2=no --enable-beos=no \
