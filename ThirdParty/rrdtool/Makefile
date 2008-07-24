@@ -7,13 +7,13 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 ZIMBRA_HOME ?= /opt/zimbra
 
 PNG_NAME ?= libpng
-PNG_VERSION ?= 1.2.28
+PNG_VERSION ?= 1.2.29
 
-FREETYPE_NAME ?= freetype
-FREETYPE_VERSION ?= 2.3.5
+PIXMAN_VERSION ?= 0.11.8
+PIXMAN_NAME = pixman
 
-LIBART_NAME ?= libart_lgpl
-LIBART_VERSION ?= 2.3.20
+CAIRO_VERSION ?= 1.6.4
+CAIRO_NAME ?= CAIRO
 
 APP_NAME=rrdtool
 APP_RELEASE ?= 1.3.1
@@ -26,25 +26,25 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
-		 LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
+	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include" \
+		LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
+		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
 endif
 ifeq ($(BUILD_PLATFORM), MACOSX)
-	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
+	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include" \
 		LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
+		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
 endif
 ifeq ($(BUILD_PLATFORM), RHEL5_64)
-	ENVMOD := env CFLAGS="-fPIC -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
+	ENVMOD := env CFLAGS="-fPIC -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include" \
 		LDFLAGS="-fPIC -L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
+		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
 endif
 
 ifeq ($(ENVMOD), )
-ENVMOD := env CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
+ENVMOD := env CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include" \
 	LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-	CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
+	CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
 endif
 
 all: build tar
@@ -57,14 +57,19 @@ build:
 	./configure --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION) --mandir=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/man --enable-shared=no; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(APP_ROOT); \
-	tar xfz src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz; \
-	cd $(FREETYPE_NAME)-$(FREETYPE_VERSION); \
+	tar xfz src/$(PIXMAN_NAME)-$(PIXMAN_VERSION).tar.gz; \
+	cd $(PIXMAN_NAME)-$(PIXMAN_VERSION); \
 	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(APP_ROOT); \
-	tar xfz src/$(LIBART_NAME)-$(LIBART_VERSION).tar.gz; \
-	cd $(LIBART_NAME)-$(LIBART_VERSION); \
-	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
+	tar xfz src/$(CAIRO_NAME)-$(CAIRO_VERSION).tar.gz; \
+	cd $(CAIRO_NAME)-$(CAIRO_VERSION); \
+	pixman_CFLAGS=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include pixman_LIBS=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib \
+	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION) \
+		--enable-xlib=no --enable-xlib-xrender=no --enable-xcb=no --enable-quartz=no --enable-quartz-font=no \
+		--enable-quartz-image=no --enable-win32=no --enable-win32-font=no --enable-os2=no --enable-beos=no \
+		--enable-png=yes --enable-glitz=no --enable-directfb=no --enable-freetype=no --enable-ps=yes \
+		--enable-pdf=yes --enable-svg=yes;
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib/pkgconfig; \
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/share; \
