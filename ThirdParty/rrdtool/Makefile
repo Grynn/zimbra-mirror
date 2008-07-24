@@ -69,7 +69,7 @@ build:
 		--enable-xlib=no --enable-xlib-xrender=no --enable-xcb=no --enable-quartz=no --enable-quartz-font=no \
 		--enable-quartz-image=no --enable-win32=no --enable-win32-font=no --enable-os2=no --enable-beos=no \
 		--enable-png=yes --enable-glitz=no --enable-directfb=no --enable-freetype=no --enable-ps=yes \
-		--enable-pdf=yes --enable-svg=yes;
+		--enable-pdf=yes --enable-svg=yes; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib/pkgconfig; \
 	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/share; \
@@ -97,8 +97,8 @@ p4edit: $(APP_TGZ_TARGET)
 clean:
 	/bin/rm -rf $(APP_NAME)-$(APP_VERSION)
 	/bin/rm -rf $(PNG_NAME)-$(PNG_VERSION)
-	/bin/rm -rf $(FREETYPE_NAME)-$(FREETYPE_VERSION)
-	/bin/rm -rf $(LIBART_NAME)-$(LIBART_VERSION)
+	/bin/rm -rf $(CAIRO_NAME)-$(CAIRO_VERSION)
+	/bin/rm -rf $(PIXMAN_NAME)-$(PIXMAN_VERSION)
 
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
