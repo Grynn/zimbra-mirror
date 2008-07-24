@@ -39,7 +39,6 @@ public class CreateCallFeaturesTag extends CallFeaturesTagBase {
 
             String address = mEmailNotificationActive ? mEmailNotificationAddress : "";
             newFeatures.getVoiceMailPrefs().setEmailNotificationAddress(address);
-			newFeatures.getVoiceMailPrefs().setNumberPerPage(mNumberPerPage);
 
 			ZCallForwardingBean newCallForwarding = newFeatures.getCallForwardingAll();
 			newCallForwarding.setIsActive(mCallForwardingActive);

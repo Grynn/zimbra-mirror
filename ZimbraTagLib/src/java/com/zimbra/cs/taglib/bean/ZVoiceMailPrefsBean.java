@@ -33,14 +33,6 @@ public class ZVoiceMailPrefsBean extends ZCallFeatureBean {
         getFeature().setEmailNotificationAddress(address);
     }
 
-    public long getNumberPerPage() {
-        return getFeature().getNumberPerPage();
-    }
-
-    public void setNumberPerPage(long number) {
-        getFeature().setNumberPerPage(number);
-    }
-
     protected ZVoiceMailPrefs getFeature() {
         return (ZVoiceMailPrefs) super.getFeature();
     }

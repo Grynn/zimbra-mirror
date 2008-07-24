@@ -24,11 +24,14 @@ import com.zimbra.cs.taglib.bean.ZVoiceMailPrefsBean;
 import com.zimbra.cs.zclient.ZCallFeatures;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZPhoneAccount;
+import com.zimbra.cs.account.Provisioning;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ModifyCallFeaturesTag extends CallFeaturesTagBase {
 
@@ -47,12 +50,6 @@ public class ModifyCallFeaturesTag extends CallFeaturesTagBase {
                 newFeatures.getVoiceMailPrefs().setEmailNotificationAddress(address);
             }
 
-			boolean refreshAccount = false;
-			if (voiceMailPrefs.getNumberPerPage() != mNumberPerPage) {
-				newFeatures.getVoiceMailPrefs().setNumberPerPage(mNumberPerPage);
-				refreshAccount = true;
-			}
-
 			ZCallForwardingBean callForwarding = oldFeatures.getCallForwardingAll();
             if (callForwarding.getIsActive() != mCallForwardingActive ||
                 !callForwarding.getForwardTo().equals(mCallForwardingForwardTo))
@@ -62,12 +59,17 @@ public class ModifyCallFeaturesTag extends CallFeaturesTagBase {
                 newCallForwarding.setForwardTo(mCallForwardingForwardTo);
             }
 
-            boolean update = !newFeatures.isEmpty();
-            if (update) {
+            boolean update = false;
+            if (!newFeatures.isEmpty()) {
             	mailbox.saveCallFeatures(newFeatures.getCallFeatures());
+				update = true;
 			}
-			if (refreshAccount) {
-				mailbox.getFeatures(true);	
+			if (mailbox.getPrefs().getVoiceItemsPerPage() != mNumberPerPage) {
+				Map<String, Object> attrs = new HashMap<String,Object>();
+				attrs.put(Provisioning.A_zimbraPrefVoiceItemsPerPage, Long.toString(mNumberPerPage));
+				mailbox.modifyPrefs(attrs);
+				update = true;
+				mailbox.getPrefs(true);
 			}
 			getJspContext().setAttribute(mVar, update, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
