@@ -61,7 +61,7 @@
  # .ad
  # .fi
 --- postfix-2.5.1/src/global/dict_ldap.c.orig	2008-01-25 16:50:59.000000000 -0800
-+++ postfix-2.5.1/src/global/dict_ldap.c	2008-07-23 17:48:49.000000000 -0700
++++ postfix-2.5.1/src/global/dict_ldap.c	2008-07-24 14:44:38.000000000 -0700
 @@ -103,6 +103,16 @@
  /* .IP version
  /*	Specifies the LDAP protocol version to use.  Default is version
@@ -161,7 +161,7 @@
  /* dict_ldap_result - Read and parse LDAP result */
  
  static int dict_ldap_result(LDAP *ld, int msgid, int timeout, LDAPMessage **res)
-@@ -427,8 +498,50 @@
+@@ -427,8 +498,45 @@
      return LDAP_SUCCESS;
  }
  
@@ -173,32 +173,27 @@
 +    int     rc;
 +    bictx ctx;
 +    struct timeval mytimeval;
-+    sasl_security_properties_t sasl_secprops;
-+    sasl_conn_t *sasl_context;
++    char *minssf;
  
 +    mytimeval.tv_sec = dict_ldap->timeout;
 +    mytimeval.tv_usec = 0;
 +
-+   if (dict_ldap->timeout > 0 ) {
++    minssf=(char*)malloc( sizeof(char)*minssf);
++    sprintf(minssf,"minssf=%d",dict_ldap->sasl_minssf);
++
++    if ((rc = ldap_set_option(dict_ldap->ld, LDAP_OPT_X_SASL_SECPROPS,
++                         (char *) minssf)) != LDAP_OPT_SUCCESS)
++        return (rc);
++
++    if (dict_ldap->timeout > 0 ) {
 +        if ((rc = ldap_set_option(dict_ldap->ld, LDAP_OPT_NETWORK_TIMEOUT, &mytimeval)) != LDAP_OPT_SUCCESS)
 +            return (rc);
 +    }
 +
 +    ctx.authcid = dict_ldap->bind_dn;
-+    ctx.passwd = dict_ldap-> bind_pw;
++    ctx.passwd = dict_ldap->bind_pw;
 +    ctx.realm = dict_ldap->sasl_realm;
 +    ctx.authzid = dict_ldap->sasl_authz_id;
-+
-+    sasl_secprops.min_ssf = dict_ldap->sasl_minssf;
-+    sasl_secprops.max_ssf = INT_MAX;
-+    sasl_secprops.maxbufsize = 65536;
-+    sasl_secprops.security_flags = SASL_SEC_NOPLAINTEXT|SASL_SEC_NOANONYMOUS;
-+
-+    sasl_context = dict_ldap->ld->ld_defconn->lconn_sasl_authctx;
-+
-+    rc = sasl_setprop( sasl_context, SASL_SEC_PROPS, &sasl_secprops);
-+    if (rc != SASL_OK)
-+        return -1;
 +
 +    if ((rc = ldap_sasl_interactive_bind_s(dict_ldap->ld, NULL,
 +			     dict_ldap->sasl_mechs, NULL, NULL,
@@ -213,7 +208,7 @@
  static int dict_ldap_bind_st(DICT_LDAP *dict_ldap)
  {
      int     rc;
-@@ -740,7 +853,15 @@
+@@ -740,7 +848,15 @@
  	    msg_info("%s: Binding to server %s as dn %s",
  		     myname, dict_ldap->server_host, dict_ldap->bind_dn);
  
@@ -229,7 +224,7 @@
  
  	if (rc != LDAP_SUCCESS) {
  	    msg_warn("%s: Unable to bind to server %s as %s: %d (%s)",
-@@ -790,6 +911,13 @@
+@@ -790,6 +906,13 @@
      ADDINT(keybuf, dict_ldap->debuglevel);
      ADDINT(keybuf, dict_ldap->version);
  #ifdef LDAP_API_FEATURE_X_OPENLDAP
@@ -243,7 +238,7 @@
      ADDINT(keybuf, dict_ldap->ldap_ssl);
      ADDINT(keybuf, dict_ldap->start_tls);
      ADDINT(keybuf, sslon ? dict_ldap->tls_require_cert : 0);
-@@ -1310,6 +1438,11 @@
+@@ -1310,6 +1433,11 @@
      if (dict_ldap->ctx)
  	db_common_free_ctx(dict_ldap->ctx);
  #ifdef LDAP_API_FEATURE_X_OPENLDAP
@@ -255,7 +250,7 @@
      myfree(dict_ldap->tls_ca_cert_file);
      myfree(dict_ldap->tls_ca_cert_dir);
      myfree(dict_ldap->tls_cert);
-@@ -1596,7 +1729,17 @@
+@@ -1596,7 +1724,17 @@
  					      "chase_referrals", 0);
  
  #ifdef LDAP_API_FEATURE_X_OPENLDAP
