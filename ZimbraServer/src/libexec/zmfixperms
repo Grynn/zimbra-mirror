@@ -345,7 +345,7 @@ if [ -L ${zimbra_home}/postfix ]; then
 fi
 
 if [ -d ${zimbra_home}/data/postfix ]; then
-  printMsg "Fixing ownership and permisions on ${zimbra_home}/data/postfix"
+	printMsg "Fixing ownership and permisions on ${zimbra_home}/data/postfix"
 	if [ ! -d ${zimbra_home}/data/postfix/spool ]; then
 		mkdir -p ${zimbra_home}/data/postfix/spool
 	fi
@@ -361,6 +361,42 @@ if [ -d ${zimbra_home}/data/postfix ]; then
 		chgrp -f ${postfix_suid_group} ${zimbra_home}/data/postfix/spool/maildrop
 		chmod 730 ${zimbra_home}/data/postfix/spool/maildrop
 	fi
+fi
+
+if [ -f ${zimbra_home}/conf/ldap-scm.cf ]; then
+	printMsg "Fixing ownership and permisions on ${zimbra_home}/conf/ldap-scm.cf"
+	chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-scm.cf
+	chmod 640 ${zimbra_home}/conf/ldap-scm.cf
+fi
+
+if [ -f ${zimbra_home}/conf/ldap-transport.cf ]; then
+	printMsg "Fixing ownership and permisions on ${zimbra_home}/conf/ldap-transport.cf"
+	chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-transport.cf
+	chmod 640 ${zimbra_home}/conf/ldap-transport.cf
+fi
+
+if [ -f ${zimbra_home}/conf/ldap-vad.cf ]; then
+	printMsg "Fixing ownership and permisions on ${zimbra_home}/conf/ldap-vad.cf"
+	chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-vad.cf
+	chmod 640 ${zimbra_home}/conf/ldap-vad.cf
+fi
+
+if [ -f ${zimbra_home}/conf/ldap-vam.cf ]; then
+	printMsg "Fixing ownership and permisions on ${zimbra_home}/conf/ldap-vam.cf"
+	chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-vam.cf
+	chmod 640 ${zimbra_home}/conf/ldap-vam.cf
+fi
+
+if [ -f ${zimbra_home}/conf/ldap-vmd.cf ]; then
+	printMsg "Fixing ownership and permisions on ${zimbra_home}/conf/ldap-vmd.cf"
+	chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-vmd.cf
+	chmod 640 ${zimbra_home}/conf/ldap-vmd.cf
+fi
+
+if [ -f ${zimbra_home}/conf/ldap-vmm.cf ]; then
+	printMsg "Fixing ownership and permisions on ${zimbra_home}/conf/ldap-vmm.cf"
+	chgrp -f ${postfix_owner} ${zimbra_home}/conf/ldap-vmm.cf
+	chmod 640 ${zimbra_home}/conf/ldap-vmm.cf
 fi
 
 if [ -d ${zimbra_home}/index -a ${extended} = "yes" ]; then
