@@ -1,2 +1,3 @@
 <!ENTITY dialog.title        "@prism.exts.About@">
 <!ENTITY bundle.credits      "@prism.exts.ExtraCredits@">
+<!ENTITY bundle.chkupdates   "@prism.webapp.CheckUpdates@">
