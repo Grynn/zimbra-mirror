@@ -224,8 +224,9 @@ public class XmailBean extends FormBean {
 	    		setError(getMessage("InvalidUserOrPass"));
 	    	} else if (x.getCode().equals("account.ACCOUNT_INACTIVE")) {
 	    		setError(getMessage("YMPPlusRequired"));
-	    	} else if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT")))
-	    		setError(x.getMessage());
+	    	} else if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT"))) {
+	    		setExceptionError(x);
+	    	}
         } catch (Throwable t) {
             setError(t.getMessage());
         }

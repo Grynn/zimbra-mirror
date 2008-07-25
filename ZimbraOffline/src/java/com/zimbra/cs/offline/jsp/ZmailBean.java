@@ -105,7 +105,7 @@ public class ZmailBean extends FormBean {
 			}
 	    } catch (SoapFaultException x) {
 	    	if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT")))
-	    		setError(x.getMessage());
+	    		setExceptionError(x);
         } catch (Throwable t) {
             setError(t.getMessage());
         }

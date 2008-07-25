@@ -3,6 +3,7 @@ package com.zimbra.cs.offline.jsp;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
 
 public abstract class FormBean extends PageBean {
@@ -40,8 +41,16 @@ public abstract class FormBean extends PageBean {
 	}	
 	
 	protected void setError(String error) {
-		String failprefix = getMessage("SystemFailure");
+		String failprefix = "system failure:";
 		this.error = this.error == null ? (error == null ? getMessage("UnknownError") : (error.startsWith(failprefix) ? error.substring(failprefix.length()) : error)) : this.error;
+	}
+	
+	protected void setExceptionError(ServiceException ex) {
+	    String exMsg, exCode;	    
+	    if (this.error != null || (exMsg = ex.getMessage()) == null || (exCode = ex.getCode()) == null)
+	        return;	    
+	    String msg = getMessage("exception." + exCode, false);
+	    this.error = msg == null ? exCode + ": " + exMsg : msg;
 	}
 	
 	public String getError() {

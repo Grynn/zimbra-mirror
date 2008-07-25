@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 import java.text.MessageFormat;
 
 import com.zimbra.common.localconfig.LC;
@@ -18,14 +19,35 @@ public class PageBean {
 	private Locale clientLocale = new Locale("en");
 	private static Locale serverLocale = null; 
 	
+	private String getMsgFromBundle(String key) {
+        ResourceBundle bundle = ResourceBundle.getBundle("/desktop/ZdMsg", clientLocale);
+        String msg;
+        try {
+            msg = bundle.getString(key);
+        } catch (MissingResourceException x) {
+            msg = null;
+        }
+        return msg;
+	}
+	
 	protected String getMessage(String key) {
-		ResourceBundle bundle = ResourceBundle.getBundle("/desktop/ZdMsg", clientLocale);
-		String msg =  bundle.getString(key);
+	    String msg = getMsgFromBundle(key);
 		return msg == null ? "??" + key + "??" : msg; 
+	}
+	
+	protected String getMessage(String key, boolean keyAsDefault) {
+	    return keyAsDefault ? getMessage(key) : getMsgFromBundle(key);
 	}
 	
 	protected String getMessage(String key, Object[] params) {
 		return MessageFormat.format(getMessage(key), params);
+	}
+	
+	protected String getMessage(String key, Object[] params, boolean keyAsDefault) {
+	    if (keyAsDefault)
+	        return getMessage(key, params);
+	    String msg = getMsgFromBundle(key);
+	    return msg == null ? null : MessageFormat.format(msg, params);
 	}
 	
 	public PageBean() {}
