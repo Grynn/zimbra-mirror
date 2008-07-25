@@ -2642,8 +2642,8 @@ sub updateLoggerMySQLcnf {
         next;
       } elsif (/^thread_cache/) {
         # 29475 fix thread_cache_size
-        my $fix = 's/^thread_cache/thread_cache_size/g';
-        print TMP $fix;
+        s/^thread_cache/thread_cache_size/g;
+        print TMP;
         $mycnfChanged=1;
         next;
       } elsif (/^skip-external-locking/) {
@@ -2693,8 +2693,8 @@ sub updateMySQLcnf {
         next;
       } elsif (/^thread_cache/) {
         # 29475 fix thread_cache_size
-        my $fix = 's/^thread_cache/thread_cache_size/g';
-        print TMP $fix;
+        s/^thread_cache/thread_cache_size/g;
+        print TMP;
         $mycnfChanged=1;
         next;
       } elsif (/^skip-external-locking/) {
