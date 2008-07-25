@@ -18,19 +18,19 @@
 +# Zimbra changes.
 +#
 +
-+virtual_mailbox_maps = ldap:/opt/zimbra/conf/ldap-vmm.cf
++virtual_mailbox_maps = proxy:ldap:/opt/zimbra/conf/ldap-vmm.cf
 +
-+virtual_mailbox_domains = ldap:/opt/zimbra/conf/ldap-vmd.cf
++virtual_mailbox_domains = proxy:ldap:/opt/zimbra/conf/ldap-vmd.cf
 +
-+virtual_alias_maps = ldap:/opt/zimbra/conf/ldap-vam.cf
++virtual_alias_maps = proxy:ldap:/opt/zimbra/conf/ldap-vam.cf
 +
-+virtual_alias_domains = ldap://opt/zimbra/conf/ldap-vad.cf
++virtual_alias_domains = proxy:ldap:/opt/zimbra/conf/ldap-vad.cf
 +
 +virtual_transport = error
 +
-+sender_canonical_maps = ldap:/opt/zimbra/conf/ldap-scm.cf
++sender_canonical_maps = proxy:ldap:/opt/zimbra/conf/ldap-scm.cf
 +
-+transport_maps = ldap:/opt/zimbra/conf/ldap-transport.cf
++transport_maps = proxy:ldap:/opt/zimbra/conf/ldap-transport.cf
 +
 +# If (email domain name == host name), we don't want $myhostname in
 +# mydestination for testing purposes.
