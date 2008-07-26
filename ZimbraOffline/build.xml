@@ -819,9 +819,19 @@
 			<fileset dir="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org" includes="chrome/,defaults/,modules/"/>
 		</delete>
 
-        	<unzip src="${xulrunner.src.dir}/1.9/xulrunner-1.9.en-US.macos.zip" dest="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
-        	<unzip src="${xulrunner.src.dir}/1.9/xulrunner-1.9.en-US.win32.zip" dest="${dist.dir}/win32/prism"/>
-        	<unzip src="${xulrunner.src.dir}/1.9/xulrunner-1.9.en-US.linux.zip" dest="${dist.dir}/linux/prism"/>
+       	<unzip src="${xulrunner.src.dir}/1.9/xulrunner-1.9.en-US.macos.zip" dest="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks"/>
+       	<unzip src="${xulrunner.src.dir}/1.9/xulrunner-1.9.en-US.win32.zip" dest="${dist.dir}/win32/prism"/>
+       	<unzip src="${xulrunner.src.dir}/1.9/xulrunner-1.9.en-US.linux.zip" dest="${dist.dir}/linux/prism"/>
+
+		<copy todir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/chrome" overwrite="true">
+			<fileset dir="${xulrunner.src.dir}/locales" includes="*.manifest *.jar"/>
+		</copy>
+		<copy todir="${dist.dir}/win32/prism/xulrunner/chrome" overwrite="true">
+			<fileset dir="${xulrunner.src.dir}/locales" includes="*.manifest *.jar"/>
+		</copy>
+		<copy todir="${dist.dir}/linux/prism/xulrunner/chrome" overwrite="true">
+			<fileset dir="${xulrunner.src.dir}/locales" includes="*.manifest *.jar"/>
+		</copy>
 
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/components/nsUpdateService.js" file="src/installer/updater/macos/nsUpdateService.js" overwrite="true"/>
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app/Contents/MacOS/updater" file="src/installer/updater/macos/updater" overwrite="true"/>
