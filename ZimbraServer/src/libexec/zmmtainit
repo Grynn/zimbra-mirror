@@ -51,6 +51,14 @@ else
    STARTTLS="no"
 fi
 
+PLAT=`/bin/bash ${zimbra_home}/libexec/get_plat_tag.sh`
+if [ "X$PLAT" = "XMACOSXx86_10.5" ]; then
+  postfix_owner=_postfix
+else
+  postfix_owner=postfix
+fi
+
+
 confdir=/opt/zimbra/conf
 mkdir -p ${confdir}
 
@@ -143,3 +151,5 @@ bind_dn = uid=zmpostfix,cn=appaccts,cn=zimbra
 bind_pw = ${ldap_postfix_password}
 timeout = 30
 EOF
+
+chgrp ${postfix_owner} ${confdir}/ldap-*.cf
