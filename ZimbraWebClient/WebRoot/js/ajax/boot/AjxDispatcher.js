@@ -46,44 +46,58 @@ AjxDispatcher._registry = {};
 // Table of package names and callbacks to run after loading (optional)
 AjxDispatcher._package = {};
 
-AjxDispatcher._preLoad	= null;
-AjxDispatcher._postLoad	= null;
+AjxDispatcher._preLoad	= [];
+AjxDispatcher._postLoad	= [];
 AjxDispatcher._loadFunctionsEnabled	= false;
 AjxDispatcher._timedAction = null;
 
 /**
- * Sets a function to be called after the given package has been loaded.
+ * Adds a function to be called after the given package has been loaded.
  * 
  * @param pkg		[string]			name of package
  * @param callback	[AjxCallback]		callback to run after package has loaded
  */
-AjxDispatcher.setPackageLoadFunction =
+AjxDispatcher.addPackageLoadFunction =
 function(pkg, callback) {
-	AjxDispatcher._package[pkg] = AjxDispatcher._package[pkg] || {};
-	AjxDispatcher._package[pkg].callback = callback;
+	var pkgData = AjxDispatcher._getPackageData(pkg);
+	if (!pkgData._loaded && !AjxPackage.isDefined(pkg)) {
+		pkgData.callback.push(callback);
+	}
+	else {
+		callback.run();
+	}
 };
 
 /**
- * Sets a function to be called while a package is being loaded. A typical use
+ * Adds a function to be called while a package is being loaded. A typical use
  * is to display a "Loading..." screen.
  * 
  * @param callback	[AjxCallback]		callback to run after package has loaded
  */
-AjxDispatcher.setPreLoadFunction =
+AjxDispatcher.addPreLoadFunction =
 function(callback) {
-	AjxDispatcher._preLoad = callback;
+	AjxDispatcher._preLoad.push(callback);
 };
 
 /**
- * Sets a function to be called after a package has been loaded. A typical use
+ * Adds a function to be called after a package has been loaded. A typical use
  * is to clear a "Loading..." screen.
  * 
  * @param callback	[AjxCallback]		callback to run after package has loaded
  */
-AjxDispatcher.setPostLoadFunction =
+AjxDispatcher.addPostLoadFunction =
 function(callback) {
-	AjxDispatcher._postLoad = callback;
+	AjxDispatcher._postLoad.push(callback);
 };
+
+/** @deprecated Use addPackageLoadFunction instead. */
+AjxDispatcher.setPackageLoadFunction = AjxDispatcher.addPackageLoadFunction;
+
+/** @deprecated Use addPreLoadFunction instead. */
+AjxDispatcher.setPreLoadFunction = AjxDispatcher.addPreLoadFunction;
+
+/** @deprecated Use addPostLoadFunction instead. */
+AjxDispatcher.setPostLoadFunction = AjxDispatcher.addPostLoadFunction;
 
 /**
  * Enables/disables the running of the pre/post load functions.
@@ -100,7 +114,7 @@ function(enable) {
  */
 AjxDispatcher.loaded =
 function(pkg) {
-	return (AjxDispatcher._package[pkg] && AjxDispatcher._package[pkg]._loaded);
+	return AjxDispatcher._getPackageData(pkg)._loaded;
 };
 
 /**
@@ -111,8 +125,7 @@ function(pkg) {
  */
 AjxDispatcher.setLoaded =
 function(pkg, loaded) {
-	AjxDispatcher._package[pkg] = AjxDispatcher._package[pkg] || {};
-	AjxDispatcher._package[pkg]._loaded = loaded;
+	AjxDispatcher._getPackageData(pkg)._loaded = loaded;
 };
 
 /**
@@ -195,8 +208,7 @@ function(pkg, async, callback, args, preLoadOk) {
 	var unloaded = [];
 	for (var i = 0; i < pkg.length; i++) {
 		var p = pkg[i];
-		AjxDispatcher._package[p] = AjxDispatcher._package[p] || {};
-		if (!AjxDispatcher._package[p]._loaded) {
+		if (!AjxDispatcher._getPackageData(p)._loaded) {
 			unloaded.push(p);
 		}
 	}
@@ -204,10 +216,13 @@ function(pkg, async, callback, args, preLoadOk) {
 		return AjxDispatcher._postLoadCallback(pkg, false, callback, args);
 	} else {
 		// need callback in order to run pre-load function
-		if (preLoadOk && AjxDispatcher._loadFunctionsEnabled && AjxDispatcher._preLoad) {
+		var preLoad = AjxDispatcher._preLoad;
+		if (preLoadOk && AjxDispatcher._loadFunctionsEnabled && preLoad.length) {
 			AjxPackage.__log("pre-load function");
 			AjxDispatcher._timedAction = new AjxCallback(null, AjxDispatcher._continueRequire, [unloaded, async, callback, args]);
-			AjxDispatcher._preLoad.run();
+			for (var i = 0; i < preLoad.length; i++) {
+				preLoad[i].run();
+			}
 			window.setTimeout('AjxDispatcher._timedAction.run()', 0);
 		} else {
 			return AjxDispatcher._continueRequire(unloaded, async, callback, args);
@@ -239,24 +254,37 @@ function(pkg, async, callback, args) {
 AjxDispatcher._postLoadCallback =
 function(pkg, pkgWasLoaded, callback, args) {
     for (var i = 0; i < pkg.length; i++) {
-        var pkgData = AjxDispatcher._package[pkg[i]];
-        pkgData._loaded = true;
+        AjxDispatcher._getPackageData(pkg[i])._loaded = true;
     }
     for (var i = 0; i < pkg.length; i++) {
-		var pkgData = AjxDispatcher._package[pkg[i]];
-		if (pkgWasLoaded && pkgData.callback && !pkgData.callbackDone) {
+		var pkgData = AjxDispatcher._getPackageData(pkg[i]);
+		if (pkgWasLoaded && pkgData.callback.length && !pkgData.callbackDone) {
 			pkgData.callbackDone = true;
 			AjxPackage.__log("Running post-load package function for " + pkg[i]);
-			pkgData.callback.run();
+			var callbacks = pkgData.callback;
+			for (var j = 0; j < callbacks.length; j++) {
+				callbacks[j].run();
+			}
+			pkgData.callback.length = 0;
 		}
 	}
 	if (pkgWasLoaded) {
-		if (AjxDispatcher._loadFunctionsEnabled && AjxDispatcher._postLoad) {
-			AjxDispatcher._postLoad.run();
+		var postLoad = AjxDispatcher._postLoad;
+		if (AjxDispatcher._loadFunctionsEnabled && postLoad.length) {
+			for (var i = 0; i < postLoad.length; i++) {
+				postLoad[i].run();
+			}
 		}
 	}
 	
 	if (callback) {
  		return callback.run1(args);
 	}
+};
+
+AjxDispatcher._getPackageData = function(pkg) {
+	if (!AjxDispatcher._package[pkg]) {
+		AjxDispatcher._package[pkg] = { callback: [] };
+	}
+	return AjxDispatcher._package[pkg];
 };

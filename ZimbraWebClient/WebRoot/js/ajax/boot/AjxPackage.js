@@ -58,6 +58,11 @@ AjxPackage.setQueryString = function(queryString) {
     AjxPackage._queryString = queryString;
 };
 
+/** Returns true if the specified package has been defined. */
+AjxPackage.isDefined = function(name) {
+	return Boolean(AjxPackage._packages[name]);
+};
+
 /** Defines a package and returns true if this is the first definition. */
 AjxPackage.define = function(name) {
     AjxPackage.__log("DEFINE "+name, "font-weight:bold;font-style:italic");
