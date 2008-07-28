@@ -351,6 +351,7 @@ XModelItem.prototype.validateString = function(value) {
     return value;
 }
 
+XModel.registerErrorMessage("invalidEmailAddr",   AjxMsg.invalidEmailAddr);
 XModelItem.prototype.validateEmailAddress = function(value) {
 	if (value == null) return;
 	
