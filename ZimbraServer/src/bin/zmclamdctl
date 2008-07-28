@@ -132,13 +132,16 @@ case "$1" in
       cpid=`cat /opt/zimbra/log/clamd.pid`
       kill -TERM "$cpid" 2> /dev/null
     fi
-    if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
-      killall -TERM freshclam > /dev/null 2>&1
-      killall -TERM clamd > /dev/null 2>&1
-    else
-      killall -TERM ${zimbra_home}/clamav/bin/freshclam > /dev/null 2>&1
-      killall -TERM ${zimbra_home}/clamav/sbin/clamd > /dev/null 2>&1
-    fi
+    for ((i = 0; i < 30; i++)); do
+      sleep 2
+      kill -0 $cpid 2> /dev/null
+      if [ $? != 0 ]; then
+        rm -f ${pidfile}
+        break
+      fi
+      kill $cpid
+      echo -n "."
+    done
     exit 0
   ;;
   
