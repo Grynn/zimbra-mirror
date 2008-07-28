@@ -25,6 +25,7 @@
 			<attribute value="http://jakarta.apache.org/commons/cli/apidocs/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/derby.jar"/>
 	<classpathentry sourcepath="/ThirdParty/junit-4.4" kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar">
 		<attributes>
 			<attribute value="http://junit.sourceforge.net/javadoc/" name="javadoc_location"/>
@@ -62,6 +63,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/derby.jar"/>
+	<classpathentry kind="lib" path="/ZimbraTagLib/jars/jstl.jar"/>
+	<classpathentry kind="lib" path="/ZimbraTagLib/jars/standard.jar"/>
+	<classpathentry kind="lib" path="/ZimbraTagLib/build/zimbrataglib.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

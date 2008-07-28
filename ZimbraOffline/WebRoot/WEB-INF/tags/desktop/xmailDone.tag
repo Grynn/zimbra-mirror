@@ -54,12 +54,29 @@ function OnLogin() {
 		    </table>
 		</div>
     </c:when>
+    <c:otherwise>
+        <c:choose>
+            <c:when test="${bean.delete}">
+                <c:set var="key" value="ServiceDeleted"/>
+            </c:when>
+            <c:when test="${bean.export}">
+                <c:set var="key" value="ServiceExported"/>
+            </c:when>
+            <c:when test="${bean.import}">
+                <c:set var="key" value="ServiceImported"/>
+            </c:when>
+            <c:when test="${bean.modify}">
+                <c:set var="key" value="ServiceUpdated"/>
+            </c:when>
+            <c:when test="${bean.reset}">
+                <c:set var="key" value="ServiceReset"/>
+            </c:when>
+        </c:choose>
 
-    <c:when test="${bean.modify}">
         <div id="serviceDeleted" class="ZWizardPage">
             <div class="ZWizardPageTitle"><fmt:message key='ManageService'/></div>
       		<span class="padding">
-            <p><fmt:message key='ServiceUpdated'><fmt:param>"${name}"</fmt:param></fmt:message></p>
+            <p><fmt:message key="${key}"><fmt:param>"${name}"</fmt:param></fmt:message></p>
 			</span>        
             <table class="ZWizardButtonBar" width="100%">
                 <tr>
@@ -71,42 +88,6 @@ function OnLogin() {
                     </td>
             </table>
         </div>
-    </c:when>
-
-    <c:when test="${bean.reset}">
-        <div id="serviceDeleted" class="ZWizardPage">
-            <div class="ZWizardPageTitle"><fmt:message key='ManageService'/></div>
-        		<span class="padding">
-            <p><fmt:message key='ServiceReset'><fmt:param>"${name}"</fmt:param></fmt:message></p>
-        </span>
-            <table class="ZWizardButtonBar" width="100%">
-                <tr>
-                    <td class="ZWizardButtonSpacer">
-                        <div></div>
-                    </td>
-                    <td class="ZWizardButton" width="1%">
-                        <button class='DwtButton' onclick="OnOK()"><fmt:message key='OK'/></button>
-                    </td>
-            </table>
-        </div>
-    </c:when>
-
-    <c:when test="${bean.delete}">
-		<div id="serviceDeleted" class="ZWizardPage">
-		    <div class="ZWizardPageTitle"><fmt:message key='ManageService'/></div>
-				<span class="padding">
-		    <p><fmt:message key='ServiceDeleted'><fmt:param>"${name}"</fmt:param></fmt:message></p>
-		</span>
-		    <table class="ZWizardButtonBar" width="100%">
-		        <tr>
-		            <td class="ZWizardButtonSpacer">
-		                <div></div>
-		            </td>
-		            <td class="ZWizardButton" width="1%">
-		                <button class='DwtButton' onclick="OnOK()"><fmt:message key='OK'/></button>
-		            </td>
-		    </table>
-		</div>
-    </c:when>
+    </c:otherwise>
 </c:choose>
 

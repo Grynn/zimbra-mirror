@@ -34,11 +34,11 @@
   <servlet>
     <servlet-name>ExtensionDispatcherServlet</servlet-name>
     <servlet-class>com.zimbra.cs.extension.ExtensionDispatcherServlet</servlet-class>
-    <load-on-startup>2</load-on-startup>
     <init-param>
       <param-name>allowed.ports</param-name>
       <param-value>7633, 7634</param-value>
     </init-param>
+    <load-on-startup>2</load-on-startup>
   </servlet>
   
   <servlet>

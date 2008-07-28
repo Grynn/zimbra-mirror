@@ -109,8 +109,6 @@ public class XmailBean extends FormBean {
 			    	addInvalid("port");
 				if (!isValidEmail(email))
 			    	addInvalid("email");
-
-				domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
 				
 				if (!isYmail()) {
 					if (!isValidHost(smtpHost))
@@ -142,6 +140,7 @@ public class XmailBean extends FormBean {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 			        
+			        domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
 			        
 			        if (!isYmail()) {
@@ -203,21 +202,21 @@ public class XmailBean extends FormBean {
 			
 			if (isAllOK()) {                
 				JspProvStub stub = JspProvStub.getInstance();
-			    if (verb.isAdd()) {
-			        stub.createOfflineDataSource(dsName, email, dsType, dsAttrs);
-			    } else {
-			        if (isEmpty(accountId)) {
-			            setError(getMessage("AccountIdMissing"));
-			        } else if (verb.isModify()) {
-			            stub.modifyOfflineDataSource(accountId, dsName, dsAttrs);
-			        } else if (verb.isReset()) {
-					    stub.resetOfflineDataSource(accountId);
-					} else if (verb.isDelete()) {
-					    stub.deleteOfflineDataSource(accountId);
-					} else {
-					    setError(getMessage("UnknownAct"));
-	                }
-	            }
+				if (verb.isAdd()) {
+					stub.createOfflineDataSource(dsName, email, dsType, dsAttrs);
+				} else if (isEmpty(accountId)) {
+					setError(getMessage("AccountIdMissing"));
+				} else if (verb.isDelete()) {
+					stub.deleteOfflineDataSource(accountId);
+                                } else if (verb.isExport()) {
+                                } else if (verb.isImport()) {
+				} else if (verb.isModify()) {
+					stub.modifyOfflineDataSource(accountId, dsName, dsAttrs);
+				} else if (verb.isReset()) {
+					stub.resetOfflineDataSource(accountId);
+				} else {
+					setError(getMessage("UnknownAct"));
+				}
 			}
 	    } catch (SoapFaultException x) {
 	    	if (x.getCode().equals("account.AUTH_FAILED")) {
@@ -413,6 +412,8 @@ public class XmailBean extends FormBean {
 	}
 	
 	public boolean isYmail() {
-		return domain != null && domain.equals("yahoo.com");
+		return domain != null && (domain.equals("yahoo.com") ||
+			domain.equals("ymail.com") ||
+			domain.equals("rockmail.com"));
 	}
 }

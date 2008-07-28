@@ -7,7 +7,6 @@
 
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
-<c:set var='onResetWarn'><fmt:message key='OnResetWarn'/></c:set>
 <c:set var='onDeleteWarn'><fmt:message key='OnDeleteWarn'/></c:set>
 
 <script type="text/javascript">
@@ -36,20 +35,17 @@ function OnSubmit() {
     zmailManage.submit();
 }
 
-function OnReset() {
-    if (confirm("${onResetWarn}")) {
-        beforeSubmit();
-        hidden_form.verb.value = "rst";
-        hidden_form.submit();
-    }
-}
-
 function OnDelete() {
     if (confirm("${onDeleteWarn}")) {
         beforeSubmit();
         hidden_form.verb.value = "del";
         hidden_form.submit();
     }
+}
+
+function OnManage() {
+    document.hidden_form.action = '/zimbra/desktop/manageData.jsp';
+    document.hidden_form.submit();
 }
 
 function beforeSubmit() {
@@ -172,7 +168,7 @@ function disableButtons() {
 <table class="ZWizardButtonBar" width="100%">
     <tr>
         <td class="ZWizardButton">
-            <button id='resetButton' class='DwtButton' onclick="OnReset()"><fmt:message key='ResetData'/></button>
+            <button id="manageButton" class='DwtButton' onclick="OnManage()"><fmt:message key='ManageData'/></button>
         </td>
         <td class="ZWizardButton" width="1%">
             <button id='deleteButton' class='DwtButton' onclick="OnDelete()"><fmt:message key='RemoveAccount'/></button>

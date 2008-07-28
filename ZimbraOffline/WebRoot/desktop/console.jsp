@@ -20,7 +20,7 @@
 <meta http-equiv="refresh" content="15" >
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
-<title>Yahoo! Zimbra Desktop</title>
+<title><fmt:message key="ZimbraDesktop"/></title>
 
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);
@@ -29,18 +29,18 @@
 <script type="text/javascript">
 
 function OnAccount(id, zmail) {
-    hidden_form.accountId.value = id;
+    document.hidden_form.accountId.value = id;
     if (zmail)
-        hidden_form.action = "/zimbra/desktop/zmail.jsp";
+    	document.hidden_form.action = "/zimbra/desktop/zmail.jsp";
     else
-        hidden_form.action = "/zimbra/desktop/xmail.jsp";
-    hidden_form.submit();
+    	document.hidden_form.action = "/zimbra/desktop/xmail.jsp";
+    document.hidden_form.submit();
 }
 
 function OnPromote(id) {
-    hidden_form.accountId.value = id;
-    hidden_form.action = "/zimbra/desktop/console.jsp";
-    hidden_form.submit();
+    document.hidden_form.accountId.value = id;
+    document.hidden_form.action = "/zimbra/desktop/console.jsp";
+    document.hidden_form.submit();
 }
 
 function OnNew() {
@@ -52,9 +52,9 @@ function OnLogin() {
 }
 
 function OnLoginTo(username) {
-    hidden_form.username.value = username;
-    hidden_form.action = "/zimbra/desktop/login.jsp";
-    hidden_form.submit();
+    document.hidden_form.username.value = username;
+    document.hidden_form.action = "/zimbra/desktop/login.jsp";
+    document.hidden_form.submit();
 }
 
 </script>

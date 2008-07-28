@@ -28,16 +28,24 @@ public abstract class FormBean extends PageBean {
 		return verb != null && verb.isAdd();
 	}
 	
+	public boolean isDelete() {
+		return verb != null && verb.isDelete();
+	}       
+    
+	public boolean isExport() {
+		return verb != null && verb.isExport();
+	}       
+    
+	public boolean isImport() {
+		return verb != null && verb.isImport();
+	}
+	
 	public boolean isModify() {
 		return verb != null && verb.isModify();
 	}
 	
 	public boolean isReset() {
 		return verb != null && verb.isReset();
-	}
-	
-	public boolean isDelete() {
-		return verb != null && verb.isDelete();
 	}	
 	
 	protected void setError(String error) {
@@ -56,7 +64,11 @@ public abstract class FormBean extends PageBean {
 	public String getError() {
 		return error;
 	}
-	
+        
+	public String getVerb() {
+		return verb == null ? "" : verb.toString();
+	}
+    	
 	protected void addInvalid(String name) {
 		invalids.add(name);
 	}

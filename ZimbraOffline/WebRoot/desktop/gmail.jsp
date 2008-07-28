@@ -18,7 +18,7 @@ ${zdf:doRequest(bean)}
 <head>
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <link rel="shortcut icon" href="/zimbra/favicon.ico" type="image/vnd.microsoft.icon">
-<title>Yahoo! Zimbra Desktop</title>
+<title><fmt:message key="ZimbraDesktop"/></title>
 <style type="text/css">
     @import url(/zimbra/desktop/css/offline.css);
 </style>

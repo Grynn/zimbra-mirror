@@ -5,12 +5,14 @@ import java.util.Arrays;
 public interface JspConstants {
 	
 	public enum JspVerb {
-		add, mod, rst, del;
+		add, del, exp, imp, mod, rst;
 		
 		public boolean isAdd() { return this == add; }
+                public boolean isDelete() { return this == del; }
+                public boolean isExport() { return this == exp; }
+                public boolean isImport() { return this == imp; }
 		public boolean isModify() { return this == mod; }
-		public boolean isReset() { return this == rst; }
-		public boolean isDelete() { return this == del; }
+                public boolean isReset() { return this == rst; }
 		
         public static JspVerb fromString(String s) {
             try {
