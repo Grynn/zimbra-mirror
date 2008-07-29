@@ -2340,7 +2340,7 @@ sub upgrade509GA {
 '");
 	  # bug 29978
 	  main::progress("Running zmjava com.zimbra.cs.account.ldap.upgrade.LdapUpgrade -b 29978 -v");
-          `$su "zmjava com.zimbra.cs.account.ldap.upgrade.LdapUpgrade -b 29978 -v`;
+    main::runAsZimbra("zmjava com.zimbra.cs.account.ldap.upgrade.LdapUpgrade -b 29978 -v");
 	}
   }
 
@@ -2660,7 +2660,7 @@ sub updateLoggerMySQLcnf {
         print TMP "pid-file = ${mysql_pidfile}\n";
         $mycnfChanged=1;
         next;
-      } elsif (/^thread_cache/) {
+      } elsif (/^thread_cache\s/) {
         # 29475 fix thread_cache_size
         s/^thread_cache/thread_cache_size/g;
         print TMP;
@@ -2711,7 +2711,7 @@ sub updateMySQLcnf {
         print TMP "pid-file = ${mysql_pidfile}\n";
         $mycnfChanged=1;
         next;
-      } elsif (/^thread_cache/) {
+      } elsif (/^thread_cache\s/) {
         # 29475 fix thread_cache_size
         s/^thread_cache/thread_cache_size/g;
         print TMP;
