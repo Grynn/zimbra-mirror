@@ -21,6 +21,10 @@ function Com_Zimbra_Email() {
 Com_Zimbra_Email.prototype = new ZmZimletBase();
 Com_Zimbra_Email.prototype.constructor = Com_Zimbra_Email;
 
+//
+Com_Zimbra_Email.IM_NEW_IM = "im new im";
+Com_Zimbra_Email.IM_NEW_BUDDY = "im new buddy";
+
 Com_Zimbra_Email.prototype.init =
 function() {
 	if (appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
@@ -92,7 +96,7 @@ function(address) {
 	if (contactList && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		result.contact = contactList.getContactByEmail(address);
 	}
-	if (!result.buddy && appCtxt.get(ZmSetting.IM_ENABLED) && !(!appCtxt.get(ZmSetting.IM_PREF_AUTO_LOGIN) && !appCtxt.getApp(ZmApp.IM).hasRoster())/*If not AUTO_LOGIN enabled, don't LOGIN */) {
+	if (appCtxt.get(ZmSetting.IM_ENABLED) && !(!appCtxt.get(ZmSetting.IM_PREF_AUTO_LOGIN) && !appCtxt.getApp(ZmApp.IM).hasRoster())/*If not AUTO_LOGIN enabled, don't LOGIN */) {
 
         if (result.contact) {
 			result.buddy = result.contact.getBuddy();
@@ -198,38 +202,7 @@ function(obj, span, context) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
 	var person = this._lookup(addr);
-    /* Not needed, refering those from zimlet specific props file 
 
-    // start hack for bug 23917
-    var op = actionMenu.getOp("NEWCONTACT");
-    if (op) {
-        op.setText(ZmMsg.newContact);
-    }
-    op = actionMenu.getOp("SEARCH");
-    if (op) {
-        op.setText(ZmMsg.search);
-    }
-    op = actionMenu.getOp("SEARCHBUILDER");
-    if (op) {
-        op.setText(ZmMsg.advancedSearch);
-    }
-    op = actionMenu.getOp("NEWIM");
-    if (op) {
-        op.setText(ZmMsg.newIM);
-    }
-    op = actionMenu.getOp("NEWFILTER");
-    if (op) {
-        op.setText(ZmMsg.newFilter);
-    }
-    op = actionMenu.getOp("NEWEMAIL");
-    if (op) {
-        op.setText(ZmMsg.newEmail);
-    }
-    op = actionMenu.getOp("GOTOURL");
-    if (op) {
-        op.setText(ZmMsg.goToUrl.replace("{0}",ZmMsg.url));
-    }
-    // ends*/
     if (!appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		// make sure to remove adding new contact menu item if contacts are disabled
 		if (actionMenu.getOp("NEWCONTACT")) {
@@ -247,11 +220,15 @@ function(obj, span, context) {
 		}
 	}
 
-    if(!appCtxt.get(ZmSetting.IM_ENABLED)){
-        if(actionMenu.getOp("NEWIM")) actionMenu.removeOp("NEWIM");
-    }else{
-        actionMenu.getOp("NEWIM").setEnabled(person.buddy != null);
-    }
+	var imItem = actionMenu.getOp("NEWIM");
+	if (imItem) {
+		if (!appCtxt.get(ZmSetting.IM_ENABLED)) {
+			actionMenu.removeOp("NEWIM");
+		} else {
+			var addrObj = obj instanceof AjxEmailAddress ? addrObj : new AjxEmailAddress(obj);
+			ZmImApp.updateImMenuItemByAddress(imItem, addrObj);
+		}
+	}
 
 	if (actionMenu.getOp("SEARCH") && !appCtxt.get(ZmSetting.SEARCH_ENABLED)) {
 		ZmOperation.removeOperation(actionMenu, "SEARCH", actionMenu._menuItems);
@@ -327,7 +304,7 @@ function(itemId, item, ev) {
 	    case "SEARCH":			this._searchListener();		break;
 	    case "SEARCHBUILDER":	this._browseListener();		break;
 	    case "NEWEMAIL":		this._composeListener(ev);	break;
-		case "NEWIM":			this._newImListener();		break;
+		case "NEWIM":			this._newImListener(ev);	break;
 		case "NEWCONTACT":		this._contactListener();	break;
 		case "NEWFILTER":		this._filterListener();		break;
 		case "GOTOURL":			this._goToUrlListener();	break;
@@ -360,11 +337,8 @@ function() {
 };
 
 Com_Zimbra_Email.prototype._newImListener =
-function() {
-	var person = this._lookup(this._getAddress(this._actionObject));
-	if (person.buddy) {
-		AjxDispatcher.run("GetChatListController").chatWithRosterItem(person.buddy);
-	}
+function(ev) {
+	ZmImApp.getImMenuItemListener().handleEvent(ev);
 };
 
 Com_Zimbra_Email.prototype._getActionedContact =
