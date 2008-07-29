@@ -1,14 +1,19 @@
 package com.zimbra.cs.offline.jsp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class XmailBean extends FormBean {
@@ -415,5 +420,35 @@ public class XmailBean extends FormBean {
 		return domain != null && (domain.equals("yahoo.com") ||
 			domain.equals("ymail.com") ||
 			domain.equals("rockmail.com"));
+	}
+	
+        public String[] getExportList() throws ServiceException {
+            return getFolderList(true);
+        }
+        
+        public String[] getImportList() throws ServiceException {
+            return getFolderList(false);
+        }
+        
+	String[] getFolderList(boolean export) throws ServiceException {
+	    List<ZFolder> fldrs;
+            ArrayList<String> list = new ArrayList<String>();
+	    ZMailbox.Options options = new ZMailbox.Options();
+
+            options.setAccountBy(AccountBy.id);
+            options.setAccount(accountId);
+            options.setPassword(password);
+	    options.setUri(JspConstants.LOCALHOST_SOAP_URL);
+	    ZMailbox mbox = ZMailbox.getMailbox(options);
+	    fldrs = mbox.getAllFolders();
+	    for (ZFolder f : fldrs) {
+                if (f.getPath().equals("/") || f.getParentId() == null ||
+                    f.getId().equals(ZFolder.ID_AUTO_CONTACTS))
+                    continue;
+                else if (!export && f.getClass() != ZFolder.class)
+                    continue;
+	        list.add(f.getRootRelativePath());
+	    }
+	    return list.toArray(new String[0]);
 	}
 }

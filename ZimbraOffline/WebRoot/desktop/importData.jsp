@@ -53,6 +53,8 @@ function onSubmit() {
     } if (submitForm.file.value == "") {
         alert("<fmt:message key="ImportNoFile"/>");
         return;
+    } else if (resolve == "replace" && !confirm("<fmt:message key="OnReplaceWarn"/>")) {
+        return;
     } else if (resolve == "reset" && !confirm("<fmt:message key="OnResetWarn"/>")) {
         return;
     }
@@ -105,7 +107,7 @@ function done(errstr) {
     </tr>
     <tr><td><hr></td></tr>
     <tr><td><zd:dataTypes/></td></tr>
-    <tr><td><zd:folderList label="ImportFolder"/></td></tr>
+    <tr><td><zd:folderList export="false"/></td></tr>
     <tr>
         <td>
             <table width="100%">

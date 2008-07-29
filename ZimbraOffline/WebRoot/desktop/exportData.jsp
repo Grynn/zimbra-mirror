@@ -82,7 +82,7 @@ function done() {
     </tr>
     <tr><td><hr></td></tr>
     <tr><td><zd:dataTypes/></td></tr>
-    <tr><td><zd:folderList label="ExportFolder"/></td></tr>
+    <tr><td><zd:folderList export="true"/></td></tr>
     <tr>
         <td>
             <table width="100%">
