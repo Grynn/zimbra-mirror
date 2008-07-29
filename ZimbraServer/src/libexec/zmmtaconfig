@@ -598,7 +598,7 @@ sub lookUpConfig($$) {
     open(TMP, "$tmpfile");
     my @l = <TMP>; 
     close(TMP);
-    #unlink($tmpfile);
+    unlink($tmpfile);
     chomp @l;
     @l = grep !/^$/, @l;
     $value = join ', ',@l;
