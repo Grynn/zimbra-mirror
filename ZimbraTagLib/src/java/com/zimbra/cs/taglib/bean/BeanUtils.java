@@ -399,6 +399,7 @@ public class BeanUtils {
 			df = new SimpleDateFormat(I18nUtil.getLocalizedMessage(pc, resource));
 			pc.setAttribute(resource, df, PageContext.REQUEST_SCOPE);
 		}
+		df.setTimeZone(tz);
 		return df.format(msg);
 	}
 
