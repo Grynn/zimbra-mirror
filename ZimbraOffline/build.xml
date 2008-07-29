@@ -676,43 +676,7 @@
 		<mkdir dir="${dist.dir}/redolog"/>
 	</target>
 
-	<macrodef name="translate-prism-webapp">
-		<attribute name="language"/> <attribute name="country" default=""/>
-		<sequential>
-			<if> <equals arg1="@{country}" arg2=""/>
-				<then><var name="locale" value="@{language}"/></then>
-				<else><var name="locale" value="@{language}-@{country}"/></else>
-			</if>
-			<translate toDir="src/installer/webapp/locales" starttoken="@" endtoken="@"
-				bundle="src/installer/messages/ZiMsg" bundlelanguage="@{language}" bundlecountry="@{country}"
-					forceoverwrite="yes" srcencoding="ISO8859_1">
-				<fileset file="src/installer/webapp/webapp.js"/>
-			</translate>
-			<move file="src/installer/webapp/locales/webapp.js" tofile="src/installer/webapp/locales/webapp_${locale}.js"/>
-		</sequential>
-	</macrodef>
-   
-	<target name="offline-prism-webapp-i18n">
-		<translate-prism-webapp language="en" country="US"/>
-		<translate-prism-webapp language="fr"/>
-		<translate-prism-webapp language="da"/>
-		<translate-prism-webapp language="de"/>
-		<translate-prism-webapp language="en" country="AU"/>
-		<translate-prism-webapp language="en" country="GB"/>
-		<translate-prism-webapp language="es"/>
-		<translate-prism-webapp language="it"/>
-		<translate-prism-webapp language="ja"/>
-		<translate-prism-webapp language="ko"/>
-		<translate-prism-webapp language="nl"/>
-		<translate-prism-webapp language="pl"/>
-		<translate-prism-webapp language="pt" country="BR"/>
-		<translate-prism-webapp language="ru"/>
-		<translate-prism-webapp language="sv"/>
-		<translate-prism-webapp language="zh" country="CN"/>
-		<translate-prism-webapp language="zh" country="HK"/>		
-	</target>
-	
-	<macrodef name="translate-prism-exts">
+	<macrodef name="translate-prism-files">
 		<attribute name="language"/> <attribute name="country" default=""/>
 		<sequential>
 			<if> <equals arg1="@{country}" arg2=""/>
@@ -725,33 +689,35 @@
 				<fileset dir="prism/i18n" includes="*.dtd *.properties"/>
 			</translate>
 			<move file="${build.dir}/prism/chrome/${locale}/branding/webrunner.dtd" todir="${build.dir}/prism/chrome/${locale}"/>
-			<move file="${build.dir}/prism/chrome/${locale}/branding/about.dtd" todir="${build.dir}/prism/chrome/${locale}"/>			
+			<move file="${build.dir}/prism/chrome/${locale}/branding/about.dtd" todir="${build.dir}/prism/chrome/${locale}"/>
+			<mkdir dir="${build.dir}/prism/chrome/${locale}/webapp"/>
+			<move file="${build.dir}/prism/chrome/${locale}/branding/webapp.properties" todir="${build.dir}/prism/chrome/${locale}/webapp"/>				
 		</sequential>	
 	</macrodef>
 
-	<target name="offline-prism-exts-i18n">
+	<target name="offline-prism-i18n">
 		<native2ascii reverse="true" encoding="UTF8" src="src/installer/messages" dest="src/installer/messages_utf8" includes="*.properties" />
 
-		<translate-prism-exts language="en" country="US"/>
-		<translate-prism-exts language="fr"/>
-		<translate-prism-exts language="da"/>
-		<translate-prism-exts language="de"/>
-		<translate-prism-exts language="en" country="AU"/>
-		<translate-prism-exts language="en" country="GB"/>
-		<translate-prism-exts language="es"/>
-		<translate-prism-exts language="it"/>
-		<translate-prism-exts language="ja"/>
-		<translate-prism-exts language="ko"/>
-		<translate-prism-exts language="nl"/>
-		<translate-prism-exts language="pl"/>
-		<translate-prism-exts language="pt" country="BR"/>
-		<translate-prism-exts language="ru"/>
-		<translate-prism-exts language="sv"/>
-		<translate-prism-exts language="zh" country="CN"/>
-		<translate-prism-exts language="zh" country="HK"/>		
+		<translate-prism-files language="en" country="US"/>
+		<translate-prism-files language="fr"/>
+		<translate-prism-files language="da"/>
+		<translate-prism-files language="de"/>
+		<translate-prism-files language="en" country="AU"/>
+		<translate-prism-files language="en" country="GB"/>
+		<translate-prism-files language="es"/>
+		<translate-prism-files language="it"/>
+		<translate-prism-files language="ja"/>
+		<translate-prism-files language="ko"/>
+		<translate-prism-files language="nl"/>
+		<translate-prism-files language="pl"/>
+		<translate-prism-files language="pt" country="BR"/>
+		<translate-prism-files language="ru"/>
+		<translate-prism-files language="sv"/>
+		<translate-prism-files language="zh" country="CN"/>
+		<translate-prism-files language="zh" country="HK"/>		
 	</target>
 
-	<target name="offline-prep-launcher" depends="offline-prism-webapp-i18n">
+	<target name="offline-prep-launcher">
 		<copy tofile="${dist.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX.i386" overwrite="true"/>
 		<copy tofile="${dist.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 
@@ -803,7 +769,7 @@
 		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
 		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
 
-		<antcall target="offline-prism-exts-i18n"/>
+		<antcall target="offline-prism-i18n"/>
 
 		<unzip src="${prism.src.dir}/prism-0708.macos.zip" dest="${dist.dir}/macos/prism" overwrite="true"/>
 		<unzip src="${prism.src.dir}/prism-0710.win32.zip" dest="${dist.dir}/win32/prism" overwrite="true"/>

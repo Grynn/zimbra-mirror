@@ -319,8 +319,6 @@ return Boolean.FALSE;</string>
             <preActivation>String langId = context.getLanguageId().replace('_', '-');
 context.setVariable("languageId", langId);
 
-context.setVariable("srcWebappJs", "zdesktop.webapp/locales/webapp_" + langId + ".js");
-
 String fullname = (String)context.getCompilerVariable("sys.fullName");
 String uninstMenuEnt = context.getMessage("UninstallerMenuEntry").replaceFirst("\\{0\\}", fullname);
 context.setVariable("macUninstaller", uninstMenuEnt + ".app");
@@ -2559,28 +2557,6 @@ return !hasFailures;</string>
                   </java>
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
-              </action>
-              <action name="Copy webapp.js" id="285014" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                      <void property="destinationFile">
-                        <object class="java.io.File">
-                          <string>zdesktop.webapp/webapp.js</string>
-                        </object>
-                      </void>
-                      <void property="overwriteMode">
-                        <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                      </void>
-                      <void property="sourceFile">
-                        <object class="java.io.File">
-                          <string>${installer:srcWebappJs}</string>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition />
               </action>
               <action name="Create user.js" id="285015" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>

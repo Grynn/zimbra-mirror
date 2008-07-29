@@ -5,52 +5,69 @@ skin webrunner classic/1.0 chrome/classic/
 
 locale webrunner en-US chrome/en-US/
 locale branding en-US chrome/en-US/branding/
+locale webapp en-US chrome/en-US/webapp/
 
 locale webrunner fr chrome/fr/
 locale branding fr chrome/fr/branding/
+locale webapp fr chrome/fr/webapp/
 
 locale webrunner da chrome/da/
 locale branding da chrome/da/branding/
+locale webapp da chrome/da/webapp/
 
 locale webrunner de chrome/de/
 locale branding de chrome/de/branding/
+locale webapp de chrome/de/webapp/
 
 locale webrunner en-AU chrome/en-AU/
 locale branding en-AU chrome/en-AU/branding/
+locale webapp en-AU chrome/en-AU/webapp/
 
 locale webrunner en-GB chrome/en-GB/
 locale branding en-GB chrome/en-GB/branding/
+locale webapp en-GB chrome/en-GB/webapp/
 
 locale webrunner es chrome/es/
 locale branding es chrome/es/branding/
+locale webapp es chrome/es/webapp/
 
 locale webrunner it chrome/it/
 locale branding it chrome/it/branding/
+locale webapp it chrome/it/webapp/
 
 locale webrunner ja chrome/ja/
 locale branding ja chrome/ja/branding/
+locale webapp ja chrome/ja/webapp/
 
 locale webrunner ko chrome/ko/
 locale branding ko chrome/ko/branding/
+locale webapp ko chrome/ko/webapp/
 
 locale webrunner nl chrome/nl/
 locale branding nl chrome/nl/branding/
+locale webapp nl chrome/nl/webapp/
 
 locale webrunner pl chrome/pl/
 locale branding pl chrome/pl/branding/
+locale webapp pl chrome/pl/webapp/
 
 locale webrunner pt-BR chrome/pt-BR/
 locale branding pt-BR chrome/pt-BR/branding/
+locale webapp pt-BR chrome/pt-BR/webapp/
 
 locale webrunner ru chrome/ru/
 locale branding ru chrome/ru/branding/
+locale webapp ru chrome/ru/webapp/
 
 locale webrunner sv chrome/sv/
 locale branding sv chrome/sv/branding/
+locale webapp sv chrome/sv/webapp/
 
 locale webrunner zh-CN chrome/zh-CN/
 locale branding zh-CN chrome/zh-CN/branding/
+locale webapp zh-CN chrome/zh-CN/webapp/
 
 locale webrunner zh-HK chrome/zh-HK/
 locale branding zh-HK chrome/zh-HK/branding/
+locale webapp zh-HK chrome/zh-HK/webapp/
 

@@ -1,3 +1,6 @@
+var bundle = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService);
+bundle = bundle.createBundle("chrome://webapp/locale/webapp.properties");
+
 function preload() {
   return serverCheck();
 }
@@ -78,7 +81,7 @@ function serverCheck() {
   } while(Date.now() - startTime < 30000);
 
   // Give up
-  window.alert("@prism.webapp.StartServerFailed@");
+  window.alert(bundle.GetStringFromName("StartServerFailed"));
   
   var appStartup = Cc["@mozilla.org/toolkit/app-startup;1"].getService(Ci.nsIAppStartup);
   appStartup.quit(appStartup.eForceQuit);
@@ -94,21 +97,21 @@ function load() {
     var command = window.document.createElement("command");
     head.appendChild(command);
     command.id = "about";
-    command.setAttribute("label", "@prism.webapp.AboutDesktop@");
+    command.setAttribute("label", bundle.GetStringFromName("AboutDesktop"));
     command.addEventListener("DOMActivate", function(event) {host.showAbout();}, false);
     window.platform.icon().menu.addMenuItem("about");
 
     command = window.document.createElement("command");
     head.appendChild(command);
     command.id = "checkForUpdates";
-    command.setAttribute("label", "@prism.webapp.CheckUpdates@");
+    command.setAttribute("label", bundle.GetStringFromName("CheckUpdates"));
     command.addEventListener("DOMActivate", function(event) {checkForUpdates();}, false);
     window.platform.icon().menu.addMenuItem("checkForUpdates");
 
     command = window.document.createElement("command");
     head.appendChild(command);
     command.id = "shutdownService";
-    command.setAttribute("label", "@prism.webapp.ShutdownService@");
+    command.setAttribute("label", bundle.GetStringFromName("ShutdownService"));
     command.addEventListener("DOMActivate", function(event) {shutdownService();}, false);
     window.platform.icon().menu.addMenuItem("shutdownService");
 
@@ -118,7 +121,7 @@ function load() {
       command = window.document.createElement("command");
       head.appendChild(command);
       command.id = "quitApp";
-      command.setAttribute("label", "@prism.webapp.Quit@");
+      command.setAttribute("label", bundle.GetStringFromName("Quit"));
       command.addEventListener("DOMActivate", function(event) {quitApp();}, false);
       window.platform.icon().menu.addMenuItem("quitApp");
     }
@@ -145,9 +148,9 @@ function quitApp() {
 }
 
 function shutdownService() {
-  if (window.confirm("@prism.webapp.ShutdownConfirm@")) {
+  if (window.confirm(bundle.GetStringFromName("ShutdownConfirm"))) {
     if (!stopServer()) {
-      window.alert("@prism.webapp.StopServerFailed@");
+      window.alert(bundle.GetStringFromName("StopServerFailed"));
     }
     quitApp();
   }
