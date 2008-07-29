@@ -36,7 +36,9 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.util.LogFactory;
 import com.zimbra.common.util.StringUtil;
@@ -63,6 +65,17 @@ import com.zimbra.cs.service.AuthProvider;
 public class NginxLookupExtension implements ZimbraExtension {
 
     public static final String NAME = "nginx-lookup";
+    
+    private static NginxLookupCache<DomainInfo> sDomainCache =
+        new NginxLookupCache<DomainInfo>(
+                LC.ldap_cache_reverseproxylookup_domain_maxsize.intValue(),
+                LC.ldap_cache_reverseproxylookup_domain_maxage.intValue() * Constants.MILLIS_PER_MINUTE); 
+
+    private static NginxLookupCache<ServerInfo> sServerCache =
+        new NginxLookupCache<ServerInfo>(
+                LC.ldap_cache_reverseproxylookup_server_maxsize.intValue(),
+                LC.ldap_cache_reverseproxylookup_server_maxage.intValue() * Constants.MILLIS_PER_MINUTE); 
+
     
     public String getName() {
         return NAME;
@@ -298,7 +311,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 throw new NginxLookupException("missing attr in config: "+key);
             if (attr != null) {
                 val = LdapUtil.getAttrString(sr.getAttributes(), attr);
-                if (val == null)
+                if (val == null && required)
                     throw new NginxLookupException("missing attr in search result: "+attr);
             }
             return val;
@@ -335,8 +348,8 @@ public class NginxLookupExtension implements ZimbraExtension {
         }
         
         private Map<String, String> searchDirectory(ZimbraLdapContext zlc, SearchControls sc, Config config, 
-                String queryTemplate, String searchBase, String templateKey, String templateVal,
-                Map<String, Boolean> attrs) throws NginxLookupException, NamingException {
+                                                    String queryTemplate, String searchBase, String templateKey, String templateVal,
+                                                    Map<String, Boolean> attrs) throws NginxLookupException, NamingException {
             Object result = searchDir(zlc, sc, config, queryTemplate,  searchBase,  templateKey,  templateVal, attrs);
             return (Map<String, String>)result;
         }
@@ -408,6 +421,98 @@ public class NginxLookupExtension implements ZimbraExtension {
             }
         }
         
+        private String getDomainNameByServerIp(ZimbraLdapContext zlc, Config config, String serverIp, String unqualifiedName) {
+            String domainName = null;
+            
+            DomainInfo domainInfo = sDomainCache.get(serverIp);
+            
+            if (domainInfo == null) {
+                try {
+                    domainName = searchDirectory(
+                                            zlc, 
+                                            DOMAIN_SC, 
+                                            config, 
+                                            Provisioning.A_zimbraReverseProxyDomainNameQuery,
+                                            Provisioning.A_zimbraReverseProxyDomainNameSearchBase,
+                                            "IPADDR",
+                                            serverIp,
+                                            Provisioning.A_zimbraReverseProxyDomainNameAttribute);
+                } catch (NginxLookupException e) {
+                    logger.warn("domain not found for user " + unqualifiedName + ".  error: " + e.getMessage());
+                } catch (NamingException e) {
+                    logger.warn("domain not found for user " + unqualifiedName + ".  error: " + e.getMessage());
+                }
+                
+                if (domainName != null)
+                    sDomainCache.put(new DomainInfo(serverIp, domainName));
+            } else 
+                domainName = domainInfo.getDomainName();
+            
+            return domainName;
+        }
+        
+        private String getPort(Map<String, String> vals, String lookupAttr, Config config) {
+            String port = vals.get(lookupAttr);
+            if (port == null) {
+                logger.debug("using port from globalConfig");
+                String bindPortAttr = config.getAttr(lookupAttr);
+                if (bindPortAttr == null)
+                    logger.warn("missing config attr: "+lookupAttr);
+                else {
+                    port = config.getAttr(bindPortAttr);
+                    if (port == null)
+                        logger.warn("missing config attr: "+bindPortAttr);
+                }
+            }
+            return port;
+        }
+        
+        private String getPortByMailhostAndProto(ZimbraLdapContext zlc, Config config, NginxLookupRequest req, String mailhost) throws NginxLookupException {
+            String port = null;
+            
+            ServerInfo serverInfo = sServerCache.get(mailhost);
+            if (serverInfo == null) {
+                try {
+                    // get all the ports and cache them
+                    Map<String, Boolean> attrs = new HashMap<String, Boolean>();
+                    attrs.put(Provisioning.A_zimbraReverseProxyHttpPortAttribute, false);
+                    attrs.put(Provisioning.A_zimbraReverseProxyAdminPortAttribute, false);
+                    attrs.put(Provisioning.A_zimbraReverseProxyPop3PortAttribute, false);
+                    attrs.put(Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute, false);
+                    attrs.put(Provisioning.A_zimbraReverseProxyImapPortAttribute, false);
+                    attrs.put(Provisioning.A_zimbraReverseProxyImapSSLPortAttribute, false);
+                    
+                    Map<String, String> vals = searchDirectory(zlc, 
+                                                               SERVER_SC, 
+                                                               config, 
+                                                               Provisioning.A_zimbraReverseProxyPortQuery,
+                                                               Provisioning.A_zimbraReverseProxyPortSearchBase,
+                                                               "MAILHOST",
+                                                               mailhost,
+                                                               attrs);
+                    
+                    serverInfo = new ServerInfo(mailhost); 
+                    serverInfo.setHttpPort(getPort(vals, Provisioning.A_zimbraReverseProxyHttpPortAttribute, config));
+                    serverInfo.setHttpAdminPort(getPort(vals, Provisioning.A_zimbraReverseProxyAdminPortAttribute, config));
+                    serverInfo.setPop3Port(getPort(vals, Provisioning.A_zimbraReverseProxyPop3PortAttribute, config));
+                    serverInfo.setPop3SSLPort(getPort(vals, Provisioning.A_zimbraReverseProxyPop3SSLPortAttribute, config));
+                    serverInfo.setImapPort(getPort(vals, Provisioning.A_zimbraReverseProxyImapPortAttribute, config));
+                    serverInfo.setImapSSLPort(getPort(vals, Provisioning.A_zimbraReverseProxyImapSSLPortAttribute, config));
+                    
+                    sServerCache.put(serverInfo);
+                    
+                } catch (NamingException e) {
+                    throw new NginxLookupException("naming exception: "+e.getMessage());
+                }
+            } 
+
+            port = serverInfo.getPortForProto(req.proto, req.isZimbraAdmin);
+            if (port == null)
+                throw new NginxLookupException("missing port for protocol " + req.proto + " on server " + mailhost);
+            
+            return port;
+        }
+        
         private String qualifyUserName(ZimbraLdapContext zlc, Config config, NginxLookupRequest req, Provisioning prov, String unqualifiedName) {
             String domainName = null;
             
@@ -431,21 +536,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             {
                 /* For mail, we need to qualify user based on server-ip header */
                 if (req.serverIp != null) {
-                    try {
-                        domainName = searchDirectory(
-                                                zlc, 
-                                                DOMAIN_SC, 
-                                                config, 
-                                                Provisioning.A_zimbraReverseProxyDomainNameQuery,
-                                                Provisioning.A_zimbraReverseProxyDomainNameSearchBase,
-                                                "IPADDR",
-                                                req.serverIp,
-                                                Provisioning.A_zimbraReverseProxyDomainNameAttribute);
-                    } catch (NginxLookupException e) {
-                        logger.warn("domain not found for user " + unqualifiedName + ".  error: " + e.getMessage());
-                    } catch (NamingException e) {
-                        logger.warn("domain not found for user " + unqualifiedName + ".  error: " + e.getMessage());
-                    }
+                    domainName = getDomainNameByServerIp(zlc,config, req.serverIp, unqualifiedName);
                 }
             }
                             
@@ -579,27 +670,8 @@ public class NginxLookupExtension implements ZimbraExtension {
                 String addr = InetAddress.getByName(mailhost).getHostAddress();
                 logger.debug("mailhost="+mailhost+" ("+addr+")");
                 String port = null;
-                try {
-                    port = searchDirectory(zlc, 
-                                           SERVER_SC, 
-                                           config, 
-                                           Provisioning.A_zimbraReverseProxyPortQuery,
-                                           Provisioning.A_zimbraReverseProxyPortSearchBase,
-                                           "MAILHOST",
-                                           mailhost,
-                                           getPortAttribute(req));
-                } catch (NginxLookupException e) {
-                    // the server does not have bind port overrides.
-                    logger.debug("using port from globalConfig");
-                    String lookupAttr = getPortAttribute(req);
-                    String bindPortAttr = config.getAttr(lookupAttr);
-                    if (bindPortAttr == null)
-                        throw new NginxLookupException("missing config attr: "+lookupAttr);
-                    port = config.getAttr(bindPortAttr);
-                    if (bindPortAttr == null)
-                        throw new NginxLookupException("missing config attr: "+bindPortAttr);
-                }
-
+                port = getPortByMailhostAndProto(zlc, config, req, mailhost);
+                
                 logger.debug("port="+port);
                 sendResult(req, addr, port, authUser);
             } catch (NginxLookupException e) {
@@ -804,7 +876,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         */
         
         /*
-         * zmprov md phoebe.mac zimbraAuthKerberos5Realm ZIMBRA.COM
+         * zmprov md phoebe.mac zimbraAuthKerberos5Realm ZIMBRA.COM zimbraVirtualIPAddress 13.12.11.10
          * zmprov ca nginx-admin@phoebe.mac test123 zimbraIsAdminAccount TRUE
          *
          * zmprov mcf zimbraReverseProxyAdminIPAddress 13.12.11.10 zimbraReverseProxyAdminAccount nginx-admin@phoebe.mac zimbraReverseProxyAdminAccountPassword test123
@@ -813,10 +885,19 @@ public class NginxLookupExtension implements ZimbraExtension {
         
         //     AUTH_METHOD  AUTH_USER                  AUTH_PASS  AUTH_PROTOCOL  AUTH_LOGIN_ATTEMPT  CLIENT_IP      SERVER_IP      SERVER_HOST  AUTH_ID                      AUTH_ADMIN_USER            AUTH_ADMIN_PASS
     //  doTest("plain",     "user1",                  "test123",  "imap",        "1",                "10.11.12.13", "127.0.0.1",   null,        null,                        null,                      null,            true);
+        /*
         doTest("gssapi",    "user1",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       true);
         doTest("gssapi",    "user1@phoebe.mac",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       true);
         doTest("gssapi",    "user1@ZIMBRA.COM",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       true);
         doTest("gssapi",    "user2",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       false);
         doTest("gssapi",    "family-child1-visible",   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "family-parent@ZIMBRA.COM",  "nginx-admin@phoebe.mac",  "test123",       true);
+        */
+        
+        doTest("plain",     "user1",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        null,                        null,                      null,            true);
+        doTest("plain",     "user1",                   null,      "imapssl",     "1",                "10.11.12.13", "13.12.11.10", null,        null,                        null,                      null,            true);
+        doTest("plain",     "user1",                   null,      "pop3",        "1",                "10.11.12.13", "13.12.11.10", null,        null,                        null,                      null,            true);
+        doTest("plain",     "user1",                   null,      "pop3ssl",     "1",                "10.11.12.13", "13.12.11.10", null,        null,                        null,                      null,            true);
+
+        
    }
 }
