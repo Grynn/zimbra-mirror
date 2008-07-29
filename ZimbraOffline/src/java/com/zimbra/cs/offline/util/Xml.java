@@ -118,7 +118,7 @@ public final class Xml {
 
     public static void print(Node node, OutputStream os) throws IOException {
         TransformerFactory tf = TransformerFactory.newInstance();
-        tf.setAttribute("indent-number", 4);
+        tf.setAttribute("indent-number", 2);
         Writer w = new OutputStreamWriter(os, "utf-8");
         try {
             Transformer t = tf.newTransformer();

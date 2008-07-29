@@ -23,11 +23,16 @@ import com.yahoo.mail.ComposeAddress;
 import com.yahoo.mail.UserData;
 import com.yahoo.mail.Address;
 import com.yahoo.mail.ComposeMessagePart;
+import com.yahoo.mail.MidRequest;
+import com.yahoo.mail.Message;
+import com.yahoo.mail.ErrorCode;
 import com.zimbra.cs.offline.util.yauth.Auth;
+import com.zimbra.cs.offline.util.Xml;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.Binding;
+import javax.xml.ws.Holder;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.Handler;
 import javax.xml.ws.handler.soap.SOAPHandler;
@@ -36,6 +41,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.InternetAddress;
@@ -61,6 +67,7 @@ import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.PrintStream;
+import java.io.ByteArrayOutputStream;
 
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
@@ -70,6 +77,7 @@ import org.apache.commons.httpclient.methods.multipart.PartSource;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.Header;
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 
 public final class YMailClient {
     private final Auth auth;
@@ -111,13 +119,48 @@ public final class YMailClient {
         }
     }
     
-    public void sendMessage(MimeMessage mm) throws IOException {
+    public String sendMessage(MimeMessage mm) throws IOException {
         try {
             ComposeMessage cm = getComposeMessage(mm);
-            stub.sendMessage(cm, true);
+            return stub.sendMessage(cm, true);
         } catch (Exception e) {
             throw requestFailed(e);
         }
+    }
+
+    public Message getMessage(String fid, String... mids)
+        throws IOException {
+        List<MidRequest> mrs = new ArrayList<MidRequest>(mids.length);
+        for (String mid : mids) {
+            MidRequest mr = new MidRequest();
+            mr.setMid(mid);
+            mrs.add(mr);
+        }
+        Holder<List<Message>> msgs = new Holder<List<Message>>();
+        Holder<List<ErrorCode>> codes = new Holder<List<ErrorCode>>();
+        try {
+            stub.getMessage(
+                null,       // Long truncateAt
+                fid,        // String fid
+                null,       // List<String> mid
+                mrs,        // List<MidRequest> message
+                null,       // String charsetHint
+                null,       // Holder<BigInteger> total
+                null,       // Holder<FolderData> folder
+                msgs,       // Holder<List<Message>> message0
+                null,       // Holder<List<Header>> header
+                codes);     // Holder<List<ErrorCode>> code
+        } catch (Exception e) {
+            throw requestFailed(e);
+        }
+        if (codes.value != null) {
+            throw new IOException(
+                "getMessage failed: " + codes.value.get(0).getCode());    
+        }
+        if (msgs.value == null || msgs.value.isEmpty()) {
+            return null;
+        }
+        return msgs.value.get(0);
     }
 
     public void enableTrace(PrintStream out) {
@@ -179,9 +222,11 @@ public final class YMailClient {
         throws MessagingException, IOException {
         ComposeMessagePart cmp = new ComposeMessagePart();
         setAttributes(cmp, mbp);
-        if (isInlineText(mbp)) {
+        ContentType ct = new ContentType(mbp.getContentType());
+        String ptype = ct.getPrimaryType();
+        if (ptype.equals("text") && !mustAttach(mbp)) {
             cmp.setData((String) mbp.getContent());
-        } else if (mbp.getContentType().startsWith("multipart/")) {
+        } else if (ptype.equals("multipart")) {
             addSubparts(cmp, (Multipart) mbp.getContent());
         } else {
             cmp.setAttachment("upload://" + uploadAttachment(mbp));
@@ -189,13 +234,10 @@ public final class YMailClient {
         return cmp;
     }
 
-    private boolean isInlineText(MimeBodyPart mbp)
+    private boolean mustAttach(MimeBodyPart mbp)
         throws MessagingException, IOException {
-        if (mbp.getContentType().startsWith("text/")) {
-            int size = getContentSize(mbp);
-            return size > 0 && size < maxInlineDataSize;
-        }
-        return false;
+        int size = getContentSize(mbp);
+        return size < 0 || size > maxInlineDataSize;
     }
     
     private static int getContentSize(MimeBodyPart mbp)
@@ -395,12 +437,16 @@ public final class YMailClient {
                 boolean outbound = (Boolean)
                     smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
                 if (outbound) {
-                    traceOut.println("YMail SOAP Request:");
+                    traceOut.println("*** YMail SOAP Request ***");
                 } else {
-                    traceOut.println("YMail SOAP Response:");
+                    traceOut.println("*** YMail SOAP Response ***");
                 }
                 try {
-                    smc.getMessage().writeTo(traceOut);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    smc.getMessage().writeTo(baos);
+                    DocumentBuilder db = Xml.newDocumentBuilder();
+                    Document doc = db.parse(new ByteArrayInputStream(baos.toByteArray()));
+                    Xml.print(doc, traceOut);
                     traceOut.println();
                 } catch (Exception e) {
                     traceOut.println("Exception in handler: " + e);
