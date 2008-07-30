@@ -1267,23 +1267,31 @@ public class ZMessageComposeBean {
     private static String getToAddress(List<ZEmailAddress> emailAddresses, List<ZEmailAddress> toAddressList, Set<String> toAddresses, Set<String> aliases) {
         for (ZEmailAddress address : emailAddresses) {
             if (ZEmailAddress.EMAIL_TYPE_REPLY_TO.equals(address.getType())) {
-              //  if (aliases.contains(address.getAddress().toLowerCase()))
-               //     return "";
+               if (aliases.contains(address.getAddress().toLowerCase()))
+                    return "";
                 toAddresses.add(address.getAddress());
                 toAddressList.add(address);
                 return address.getFullAddress();
             }
         }
         StringBuilder sb = new StringBuilder();
+        ZEmailAddress selfAddress = null;
         for (ZEmailAddress address : emailAddresses) {
             if (ZEmailAddress.EMAIL_TYPE_FROM.equals(address.getType())) {
-              //  if (!aliases.contains(address.getAddress().toLowerCase())) {
+                if (!aliases.contains(address.getAddress().toLowerCase())) {
                     if (sb.length() > 0) sb.append(", ");
                     sb.append(address.getFullAddress());
-                    toAddressList.add(address);                
+                    toAddressList.add(address);
                     toAddresses.add(address.getAddress());
-               // }
+                }else{
+                selfAddress = address;
+                }
             }
+        }
+        if(sb.length() == 0 && selfAddress != null){
+            sb.append(selfAddress.getFullAddress());
+            toAddressList.add(selfAddress);
+            toAddresses.add(selfAddress.getAddress());
         }
         return sb.toString();
     }
@@ -1294,7 +1302,7 @@ public class ZMessageComposeBean {
             if (ZEmailAddress.EMAIL_TYPE_TO.equals(address.getType()) ||
                     ZEmailAddress.EMAIL_TYPE_CC.equals(address.getType())) {
                 String a = address.getAddress().toLowerCase();
-                if (!toAddresses.contains(a) ) {
+                if (!toAddresses.contains(a) && !aliases.contains(a) ) {
                     if (sb.length() > 0) sb.append(", ");
                     sb.append(address.getFullAddress());
                 }
