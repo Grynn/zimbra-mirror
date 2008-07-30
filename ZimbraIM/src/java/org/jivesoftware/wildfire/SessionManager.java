@@ -112,7 +112,16 @@ public class SessionManager extends BasicModule {
      * after they were authenticated. The key of the Map is the hostname of the remote server.
      */
     private Map<String, OutgoingServerSession> outgoingServerSessions = new ConcurrentHashMap<String, OutgoingServerSession>();
-
+    
+    private Map<Session, Session> cloudRoutingSessions = new ConcurrentHashMap<Session, Session>();
+    
+    public void registerCloudRoutingSession(Session session) {
+        cloudRoutingSessions.put(session, session);
+    }
+    public void unregisterCloudRoutingSession(Session session) {
+        cloudRoutingSessions.remove(session);
+    }
+    
     /**
      * <p>Session manager must maintain the routing table as sessions are added and
      * removed.</p>
@@ -568,7 +577,7 @@ public class SessionManager extends BasicModule {
     public void unregisterOutgoingServerSession(String hostname) {
         outgoingServerSessions.remove(hostname);
     }
-
+    
     /**
      * Add a new session to be managed.
      */
@@ -1621,6 +1630,17 @@ public class SessionManager extends BasicModule {
                 return;
             }
             final long deadline = System.currentTimeMillis() - getServerSessionIdleTime();
+            final long crdeadline = System.currentTimeMillis() - IMConfig.XMPP_CLOUDROUTING_TIMEOUT.getInt();
+            for (Session session : cloudRoutingSessions.values()) {
+                try {
+                    if (session.getLastActiveDate().getTime() < crdeadline) {
+                        session.getConnection().close();
+                    }
+                }
+                catch (Throwable e) {
+                    Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
+                }
+            }
             // Check outgoing server sessions
             for (OutgoingServerSession session : outgoingServerSessions.values()) {
                 try {

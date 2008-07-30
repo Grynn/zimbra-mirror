@@ -149,6 +149,7 @@ public enum IMConfig {
     XMPP_CLOUDROUTING_ADDRESS(new ConstantStr(null, "Bind address for intra-cloud XMPP routing listener")),
     XMPP_CLOUDROUTING_PORT(new ConstantInt(7335, "Port for intra-cloud XMPP routing listener")),
     XMPP_CLOUDROUTING_SSL(new ConstantBoolean(true, "Use SSL for intra-cloud XMPP routing")),
+    XMPP_CLOUDROUTING_TIMEOUT(new LCInt(LC.xmpp_cloudrouting_idle_timeout)),
     
     // Offline Messages
     XMPP_OFFLINE_TYPE(new LCStr(LC.xmpp_offline_type)),
@@ -267,18 +268,12 @@ public enum IMConfig {
     }
     
     public static int getCacheSize(String cacheName, int defaultSize) { 
-//        return JiveGlobals.getIntProperty("cache." + cacheName + ".size", defaultSize);
         return getIntProperty("cache." + cacheName + ".size", defaultSize);
     }
     
     public static long getCacheExpirationTime(String cacheName, int defaultTime) { 
-//        return (long)JiveGlobals.getIntProperty("cache." + cacheName + ".expirationTime", defaultTime);
         return (long)getIntProperty("cache." + cacheName + ".expirationTime", defaultTime);        
     }
-    
-//    public static void setProviders(PropertyProvider localConfig, PropertyProvider globalProperties) {
-//        JiveGlobals.setProviders(localConfig, globalProperties);
-//    }
     
     private static int getIntProperty(String key, int defaultValue) {
         String propValue = JiveProperties.getInstance().get(key);

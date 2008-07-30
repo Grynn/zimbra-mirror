@@ -56,6 +56,7 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
 
     private NioParser mParser = null;
     private State mState = State.NO_SESSION;
+    private volatile long mLastReceiveTime = System.currentTimeMillis();
     
     /**
      * @param sock
@@ -78,7 +79,7 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
      * @return
      */
     long getLastActive() {
-        return new Date().getTime();
+        return mLastReceiveTime;
     }
     
     /**
@@ -87,6 +88,7 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
      */
     private void process(Element e) throws Exception {
         Log.debug("NioReadingMode: Processing Element: "+e.asXML());
+        mLastReceiveTime = System.currentTimeMillis();
         
         switch (mState) {
             case NO_SESSION:
@@ -223,7 +225,7 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
             }
         }
     }
-
+    
     protected boolean compressClient(Element doc) throws IOException, XmlPullParserException {
         return false;
     }

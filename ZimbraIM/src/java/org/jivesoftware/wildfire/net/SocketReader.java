@@ -455,11 +455,11 @@ public abstract class SocketReader implements Runnable {
                     false);
             }
             router.route(packet);
+            session.incrementClientPacketCount();
             if (shouldInvokeInterceptor()) {
                 // Invoke the interceptors after we have processed the read packet
                 InterceptorManager.getInstance().invokeInterceptors(packet, session, true,
                     true);
-                session.incrementClientPacketCount();
             }
         }
         catch (PacketRejectedException e) {

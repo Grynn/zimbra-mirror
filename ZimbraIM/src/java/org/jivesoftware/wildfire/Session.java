@@ -82,7 +82,7 @@ public abstract class Session implements RoutableChannelHandler {
 
     private Date startDate = new Date();
 
-    private long lastActiveDate;
+    private long lastActiveDate = System.currentTimeMillis();
     private long clientPacketCount = 0;
     private long serverPacketCount = 0;
 
