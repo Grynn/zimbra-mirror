@@ -15,7 +15,7 @@ long-query-time  = 1
 log-long-format
 log-queries-not-using-indexes
 
-thread_cache      = 10
+thread_cache_size = 10
 max_connections   = 10
 
 # We do a lot of writes, query cache turns out to be not useful.
