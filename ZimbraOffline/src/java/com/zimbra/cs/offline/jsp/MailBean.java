@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -98,6 +99,18 @@ public class MailBean extends FormBean {
 	
 	public void setSyncFreqSecs(long syncFreqSecs) {
 		this.syncFreqSecs = syncFreqSecs;
+	}
+	
+	public boolean getZmail() {
+	    try {
+                JspProvStub stub = JspProvStub.getInstance();
+                Account account = stub.getOfflineAccount(accountId);
+                
+                return account.getAttr(OfflineConstants.A_offlineRemoteServerUri,
+                    null) != null;
+	    } catch (Exception e) {
+	    }
+	    return false;
 	}
 	
 	public String[] getExportList() throws ServiceException {

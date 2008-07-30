@@ -185,7 +185,7 @@ function done(errstr) {
 <div>
     <iframe name="iframe" id="iframe" frameborder="0" scrolling="no" style="width:0px;height:0px;border:0px"></iframe>
 </div>
-<form name="doneForm" action="/zimbra/desktop/${account.zmail ? "z" : "x"}mail.jsp" method="POST">
+<form name="doneForm" action="/zimbra/desktop/${bean.zmail ? "z" : "x"}mail.jsp" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
     <input type="hidden" name="accountName" value="${bean.accountName}">
     <input type="hidden" name="verb">
