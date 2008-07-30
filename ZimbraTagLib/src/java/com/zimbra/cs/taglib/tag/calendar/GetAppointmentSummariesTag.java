@@ -69,6 +69,9 @@ public class GetAppointmentSummariesTag extends ZimbraSimpleTag {
                 //appts = mbox.getApptSummaries(mStart, mEnd, mFolderId);
                 if (result.size() != 1) {
                     appts = new ArrayList<ZAppointmentHit>();
+                    for (ZApptSummaryResult r : result) {
+                        appts.addAll(r.getAppointments());
+                    }
                 } else {
                     ZApptSummaryResult asr = result.get(0);
                     appts = asr.getAppointments();
