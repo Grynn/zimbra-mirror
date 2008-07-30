@@ -185,9 +185,7 @@ public class OfflineDataSource extends DataSource {
     }
 
     public boolean isSaveToSent() {
-        // Always true for POP3 since we only import INBOX messages
-        return getType() == Type.pop3 ||
-               knownService != null && knownService.saveToSent;
+        return getType() == Type.pop3 || knownService == null || knownService.saveToSent;
     }
 
     public boolean isYahoo() {
