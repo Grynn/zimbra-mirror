@@ -239,8 +239,12 @@ function() {
 
 Com_Zimbra_Date.prototype._handleLoadDayView =
 function() {
-	var calApp = appCtxt.getApp(ZmApp.CALENDAR);
-	calApp.activate(true, ZmId.VIEW_CAL_DAY, Com_Zimbra_Date._actionContext.date);
+	var app = appCtxt.getApp(ZmApp.CALENDAR);
+	app.activate(true);
+
+	var controller = app.getCalController();
+	controller.show(ZmId.VIEW_CAL_DAY);
+	controller.setDate(Com_Zimbra_Date._actionContext.date);
 };
 
 Com_Zimbra_Date.prototype._newApptListener =
