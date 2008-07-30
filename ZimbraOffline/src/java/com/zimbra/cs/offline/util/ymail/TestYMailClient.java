@@ -33,7 +33,6 @@ import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.MessagingException;
-import javax.activation.MimeType;
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
