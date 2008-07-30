@@ -44,6 +44,7 @@ import com.zimbra.common.util.LogFactory;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AuthContext;
+import com.zimbra.cs.account.CacheExtension;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.AuthToken;
@@ -82,7 +83,8 @@ public class NginxLookupExtension implements ZimbraExtension {
     }
     
     public void init() throws ServiceException {
-        ExtensionDispatcherServlet.register(this, new NginxLookupHandler());
+        ExtensionDispatcherServlet.register(this, new NginxLookupHandler());        
+        CacheExtension.register("reverseproxylookup", new ReverseProxyCache());        
     }
     
     public void destroy() {
@@ -97,6 +99,14 @@ public class NginxLookupExtension implements ZimbraExtension {
         
         public NginxLookupException(String msg, Throwable cause) {
             super(msg, cause);
+        }
+    }
+    
+    static class ReverseProxyCache extends CacheExtension {
+        
+        public void flushCache() throws ServiceException {
+            sDomainCache.clear();
+            sServerCache.clear();
         }
     }
     
