@@ -16,11 +16,13 @@
  */
 
 ZaLoginDialog = function(parent, zIndex, className, appCtxt) {
-
     className = className || "ZaLoginDialog";
     DwtBaseDialog.call(this, parent, className, ZaMsg.login, zIndex);
 
-	//license expiration warning won't show before login.
+    //check the zimbraAdminConsoleLoginURL
+    this._zimbraAdminLoginURL = this.getLoginURL();
+    
+    //license expiration warning won't show before login.
 	//var licenseStatus = ZaZimbraAdmin.getLicenseStatus();
 	var params = ZLoginFactory.copyDefaultParams(ZaMsg);
 	params.showPanelBorder = false;
@@ -45,6 +47,24 @@ ZaLoginDialog.prototype.constructor = ZaLoginDialog;
 ZaLoginDialog.prototype.toString = 
 function() {
 	return "ZaLoginDialog";
+}
+
+ZaLoginDialog.prototype.getLoginURL = function () {
+    var soapDoc = AjxSoapDoc.create("GetDomainInfoRequest", ZaZimbraAdmin.URN, null);
+	var elBy = soapDoc.set("domain", location.hostname);
+	elBy.setAttribute("by", "virtualHostname");
+
+	//var getAccCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;
+    params.noAuthToken = true ;
+    var reqMgrParams = {
+		//controller: this._app.getCurrentController()
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainInfoResponse;
+    var obj = {};
+    ZaItem.prototype.initFromJS.call(obj, resp.domain[0]);
+    return obj.attrs["zimbraAdminConsoleLoginURL"] ;
 }
 
 ZaLoginDialog.prototype.registerCallback =
@@ -116,7 +136,18 @@ function(loc,bReloginMode) {
 
 ZaLoginDialog.prototype.setVisible = 
 function(visible, transparentBg,bReloginMode) {
-	if (!!visible == this.isPoppedUp()) {
+
+    //redirect to zimbraAdminConsoleLoginURL
+    if (visible && this._zimbraAdminLoginURL != null && this._zimbraAdminLoginURL.length > 0) {
+        if (window.onbeforeunload != null) {
+            ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmAuthInvalidExitMethod);
+        }
+        
+        location.replace(this._zimbraAdminLoginURL);
+        return ;
+    }
+
+    if (!!visible == this.isPoppedUp()) {
 		return;
 	}
 	

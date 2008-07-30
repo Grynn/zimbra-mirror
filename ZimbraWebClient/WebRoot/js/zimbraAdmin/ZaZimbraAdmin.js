@@ -34,7 +34,7 @@ ZaZimbraAdmin = function(appCtxt) {
 	this._appFactory = new Object();
 	this._appFactory[ZaZimbraAdmin.ADMIN_APP] = ZaApp;
     this.startup();
-    this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
+    //this.aboutDialog = new ZaAboutDialog(this._shell,null,ZaMsg.about_title);
 }
 
 ZaZimbraAdmin.prototype = new ZaController;
@@ -651,6 +651,12 @@ function() {
 		msg = ZaMsg.appExitWarningWithDirtyTab + "\n" + tabTitles.join("\n");
 	}
 	return msg;
+}
+
+ZaZimbraAdmin._confirmAuthInvalidExitMethod =
+function () {
+    var msg = ZaMsg.authInvalidExitWarning ;
+    return msg ;
 }
 
 

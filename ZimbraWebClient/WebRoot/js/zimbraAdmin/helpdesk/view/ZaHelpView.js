@@ -70,7 +70,11 @@ function (xModelMetaData, xFormMetaData) {
 }
 
 ZaHelpView.prototype.showAboutDialog = function () {
-	this._appCtxt.getAppController().aboutDialog.popup();
+    var appCtrl = this._appCtxt.getAppController() ;
+    if (!appCtrl.aboutDialog) {
+        appCtrl.aboutDialog = new ZaAboutDialog(this.shell,null,ZaMsg.about_title);
+    }
+    appCtrl.aboutDialog.popup();
 };
 
 ZaHelpView.myXFormModifier = function(xFormObject) {	
