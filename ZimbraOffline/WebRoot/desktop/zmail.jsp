@@ -43,7 +43,7 @@ ${zdf:doRequest(bean)}
     </c:when>
     
     <c:when test="${not bean.noVerb && bean.allOK}">
-        <zd:zmailDone uri="${uri}" name="${bean.accountName}"/>
+        <zd:xmailDone uri="${uri}" name="${bean.accountName}"/>
     </c:when>
     
     <c:otherwise>

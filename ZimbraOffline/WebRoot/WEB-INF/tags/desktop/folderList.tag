@@ -2,8 +2,6 @@
 <%@ attribute name="export" required="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
-<%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
-<%@ taglib prefix="zm" uri="com.zimbra.zm" %>
 
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 

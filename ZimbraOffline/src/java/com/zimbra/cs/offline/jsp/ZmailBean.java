@@ -9,23 +9,9 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.common.OfflineConstants;
 
-public class ZmailBean extends FormBean {
+public class ZmailBean extends MailBean {
 	
 	public ZmailBean() {}
-	
-	private String accountId;
-	private String accountName;
-	
-	private String email = "";
-	private String password = "";
-
-	private String host = "";
-	private String port = "";
-	private boolean isSsl;
-	
-	private long syncFreqSecs = OfflineConstants.DEFAULT_SYNC_FREQ / 1000;
-	
-	protected boolean isDebugTraceEnabled;
 	
 	@Override
 	protected void reload() {
@@ -44,9 +30,7 @@ public class ZmailBean extends FormBean {
 		host = account.getAttr(JspConstants.OFFLINE_REMOTE_HOST);
 		port = account.getAttr(JspConstants.OFFLINE_REMOTE_PORT);
 		isSsl = account.getBooleanAttr(JspConstants.OFFLINE_REMOTE_SSL, false);
-
 		syncFreqSecs = account.getTimeIntervalSecs(OfflineConstants.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
-		
 		isDebugTraceEnabled = account.getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
 	}
 	
@@ -92,6 +76,8 @@ public class ZmailBean extends FormBean {
 			    } else {
 			        if (isEmpty(accountId)) {
 			            setError(getMessage("AccountIdMissing"));
+					} else if (verb.isExport()) {
+					} else if (verb.isImport()) {
 			        } else if (verb.isModify()) {
 			            stub.modifyOfflineAccount(accountId, attrs);
 			        } else if (verb.isReset()) {
@@ -111,62 +97,6 @@ public class ZmailBean extends FormBean {
         }
 	}
 
-	public void setAccountId(String accountId) {
-		this.accountId =  accountId;
-	}
-	
-	public String getAccountId() {
-		return accountId;
-	}
-	
-	public void setAccountName(String accountName) {
-		this.accountName = require(accountName);
-	}
-	
-	public String getAccountName() {
-		return accountName;
-	}
-	
-	public void setEmail(String email) {
-		this.email = require(email);
-	}
-	
-	public String getEmail() {
-		return email;
-	}
-	
-	public void setPassword(String password) {
-		this.password = require(password);
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-	
-	public void setHost(String host) {
-		this.host = require(host);
-	}
-	
-	public String getHost() {
-		return host;
-	}
-	
-	public void setPort(String port) {
-		this.port = require(port);
-	}
-	
-	public String getPort() {
-		return port;
-	}
-	
-	public void setSsl(boolean isSsl) {
-		this.isSsl = isSsl;
-	}
-	
-	public boolean isSsl() {
-		return isSsl;
-	}
-	
 	public boolean isDefaultPort() {
 		if (isEmpty(port))
 			return true;
@@ -177,20 +107,5 @@ public class ZmailBean extends FormBean {
 	private String getRemoteServerUri() {
 		return (isSsl ? "https://" : "http://") + host + (isDefaultPort() ? "" : ":" + port);
 	}
-	
-	public void setSyncFreqSecs(long syncFreqSecs) {
-		this.syncFreqSecs = syncFreqSecs;
-	}
-	
-	public long getSyncFreqSecs() {
-		return syncFreqSecs;
-	}
-	
-	public void setDebugTraceEnabled(boolean isDebugTraceEnabled) {
-		this.isDebugTraceEnabled = isDebugTraceEnabled;
-	}
-	
-	public boolean isDebugTraceEnabled() {
-		return isDebugTraceEnabled;
-	}
 }
+

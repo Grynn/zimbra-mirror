@@ -10,8 +10,8 @@ public class AmailBean extends XmailBean {
 		if (verb == null)
 			return;
 		
-		if (isEmpty(dsName))
-			addInvalid("dataSourceName");
+		if (isEmpty(accountName))
+			addInvalid("accountName");
 		if (isEmpty(password))
 	    	addInvalid("password");
 		

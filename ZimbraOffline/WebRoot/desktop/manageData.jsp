@@ -7,7 +7,7 @@
 
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
-<jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.XmailBean" scope="request"/>
+<jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.MailBean" scope="request"/>
 <jsp:setProperty name="bean" property="*"/>
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
@@ -70,7 +70,7 @@ function OnReset() {
 <div class="ZWizardPageTitle">
 <div id='settings_hint' class='ZFloatInHead'></div>
     <span id='pageTitle'>
-        <fmt:message key='ManageDataTitle'><fmt:param>${bean.dataSourceName}</fmt:param></fmt:message>
+        <fmt:message key='ManageDataTitle'><fmt:param>${bean.accountName}</fmt:param></fmt:message>
     </span>
 </div>
 <table cellpadding=10 style='margin-left: 20px;'>
@@ -111,12 +111,13 @@ function OnReset() {
 </div>
 <form name="submitForm" action="/zimbra/desktop/manageData.jsp" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
-    <input type="hidden" name="dataSourceName" value="${bean.dataSourceName}">
+    <input type="hidden" name="accountName" value="${bean.accountName}">
+    <input type="hidden" name="email" value="${bean.email}">
     <input type="hidden" name="verb">
 </form>
     </c:when>
     <c:otherwise>
-        <zd:xmailDone uri="/zimbra/desktop/console.jsp" name="${bean.dataSourceName}"/>
+        <zd:xmailDone uri="/zimbra/desktop/console.jsp" name="${bean.accountName}"/>
     </c:otherwise>
 </c:choose>
 </div>

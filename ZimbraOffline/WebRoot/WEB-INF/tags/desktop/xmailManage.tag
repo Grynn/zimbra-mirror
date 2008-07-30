@@ -85,9 +85,10 @@ function disableButtons() {
 </div>
 
 <form name="hidden_form" action="${uri}" method="POST">
-    <input type="hidden" name="verb">
     <input type="hidden" name="accountId" value="${bean.accountId}">
-    <input type="hidden" name="dataSourceName" value="${bean.dataSourceName}">
+    <input type="hidden" name="accountName" value="${bean.accountName}">
+    <input type="hidden" name="email" value="${bean.email}">
+    <input type="hidden" name="verb">
 </form>
 		<span class="padding">
 <c:choose>
@@ -103,17 +104,16 @@ function disableButtons() {
 </c:choose>
 
 <form name="xmailManage" action="${uri}" method="POST">
-
-    <input type="hidden" name="verb" value="mod">
     <input type="hidden" name="accountId" value="${bean.accountId}">
+    <input type="hidden" name="accountName" value="${bean.accountName}">
+    <input type="hidden" name="email" value="${bean.email}">
+    <input type="hidden" name="verb" value="mod">
     <c:if test="${not empty bean.domain}">
         <input type="hidden" name="domain" value="${bean.domain}">
     </c:if>
     
     <input type="hidden" name="protocol" value="${bean.pop ? 'pop3' : 'imap'}">
-    <input type="hidden" name="dataSourceName" value="${bean.dataSourceName}">
     <input type="hidden" name="username" value="${bean.username}">
-    <input type="hidden" name="email" value="${bean.email}">
 
     <table class="ZWizardForm" style='width:90%'>
         <c:if test="${not bean.ymail}">    
@@ -125,7 +125,7 @@ function disableButtons() {
 	    
         <tr>
             <td class="ZFieldLabel">*<fmt:message key='Description'/>:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="dataSourceName" value="${bean.dataSourceName}" disabled></td>
+            <td><input style='width:200px' class="ZField" type="text" id="accountName" value="${bean.accountName}" disabled></td>
         </tr>
         <tr id='usernameRow'>
             <td class="ZFieldLabel">*<fmt:message key='UserName'/>:</td>
@@ -280,7 +280,7 @@ function disableButtons() {
 
 </form>
 
-<p><span id="whattodo"><fmt:message key='PressToVerify'><fmt:param><span class="ZWizardButtonRef"><fmt:message key='SaveSettings'/></span></fmt:param></fmt:message></p>
+<p><span id="whattodo"><fmt:message key='PressToVerify'><fmt:param><span class="ZWizardButtonRef"><fmt:message key='SaveSettings'/></span></fmt:param></fmt:message></span></p>
 </span>
 <table class="ZWizardButtonBar" width="100%">
     <tr>

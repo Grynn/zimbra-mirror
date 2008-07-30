@@ -54,9 +54,9 @@ function beforeSubmit() {
 }
 
 function disableButtons() {
-    zd.disable("resetButton");
-    zd.disable("deleteButton");
     zd.disable("cancelButton");
+    zd.disable("deleteButton");
+    zd.disable("manageButton");
     zd.disable("saveButton");
 }
 //-->
@@ -71,9 +71,10 @@ function disableButtons() {
 </div>
 
 <form name="hidden_form" action="${uri}" method="POST">
-    <input type="hidden" name="verb">
     <input type="hidden" name="accountId" value="${bean.accountId}">
     <input type="hidden" name="accountName" value="${bean.accountName}">
+    <input type="hidden" name="email" value="${bean.email}">
+    <input type="hidden" name="verb">
 </form>
 <span class="padding">
 <c:choose>
@@ -90,12 +91,10 @@ function disableButtons() {
 </c:choose>
 
 <form name="zmailManage" action="${uri}" method="POST">
-
-    <input type="hidden" name="verb" value="mod">
     <input type="hidden" name="accountId" value="${bean.accountId}">
-    
     <input type="hidden" name="accountName" value="${bean.accountName}">
     <input type="hidden" name="email" value="${bean.email}">
+    <input type="hidden" name="verb" value="mod">
 
     <table class="ZWizardForm" style='width:90%'>
         <tr>

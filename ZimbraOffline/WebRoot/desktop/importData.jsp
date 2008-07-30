@@ -6,7 +6,7 @@
 
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
-<jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.XmailBean" scope="request"/>
+<jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.MailBean" scope="request"/>
 <jsp:setProperty name="bean" property="*"/>
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
@@ -75,6 +75,7 @@ function done(errstr) {
         zd.toggle("submitButton");
         history.go(-1);
     } else {
+        document.doneForm.verb = "imp";
         document.doneForm.submit();
     }
 }
@@ -89,7 +90,7 @@ function done(errstr) {
 <div class="ZWizardPageTitle">
 <div id="settings_hint" class="ZFloatInHead"></div>
     <span id="pageTitle">
-        <fmt:message key='ImportDataTitle'><fmt:param>${bean.dataSourceName}</fmt:param></fmt:message>
+        <fmt:message key='ImportDataTitle'><fmt:param>${bean.accountName}</fmt:param></fmt:message>
     </span>
 </div>
 <br>
@@ -174,7 +175,7 @@ function done(errstr) {
             <p><span id="status"></span></p>
         </td>
         <td class="ZWizardButton" width="1%">
-            <button class='DwtButton' id="cancelButton" onclick="document.cancelForm.submit()">
+            <button class='DwtButton' id="cancelButton" onclick="document.doneForm.submit()">
                 <fmt:message key="Cancel"/>
             </button>
         </td>
@@ -182,15 +183,12 @@ function done(errstr) {
 </table>
 </div>
 <div>
-    <iframe name="iframe" id="iframe" frameborder="1" scrolling="no" style="width:800px;height:500px;border:1px"></iframe>
+    <iframe name="iframe" id="iframe" frameborder="0" scrolling="no" style="width:0px;height:0px;border:0px"></iframe>
 </div>
-<form name="cancelForm" action="/zimbra/desktop/${account.zmail ? "z" : "x"}mail.jsp" method="POST">
-    <input type="hidden" name="accountId" value="${bean.accountId}">
-</form>
 <form name="doneForm" action="/zimbra/desktop/${account.zmail ? "z" : "x"}mail.jsp" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
-    <input type="hidden" name="dataSourceName" value="${bean.dataSourceName}">
-    <input type="hidden" name="verb" value="imp"}>
+    <input type="hidden" name="accountName" value="${bean.accountName}">
+    <input type="hidden" name="verb">
 </form>
 </div>
 </body>

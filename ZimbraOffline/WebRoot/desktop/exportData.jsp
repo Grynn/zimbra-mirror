@@ -6,7 +6,7 @@
 
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
-<jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.XmailBean" scope="request"/>
+<jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.MailBean" scope="request"/>
 <jsp:setProperty name="bean" property="*"/>
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
@@ -64,7 +64,7 @@ function done() {
 <div class="ZWizardPageTitle">
 <div id="settings_hint" class="ZFloatInHead"></div>
     <span id="pageTitle">
-        <fmt:message key='ExportDataTitle'><fmt:param>${bean.dataSourceName}</fmt:param></fmt:message>
+        <fmt:message key='ExportDataTitle'><fmt:param>${bean.accountName}</fmt:param></fmt:message>
     </span>
 </div>
 <br>
@@ -75,7 +75,7 @@ function done() {
             <table width="100%">
                 <tr>
                     <td><nobr><fmt:message key="ExportName"/></nobr></td>
-                    <td align="right"><input name="name" size="30" value="${bean.dataSourceName}"></td>
+                    <td align="right"><input name="name" size="30" value="${bean.accountName}"></td>
                 </tr>
             </table>
         </td>
@@ -123,7 +123,7 @@ function done() {
 </table>
 </div>
 <div>
-    <iframe name="iframe" id="iframe" frameborder="0" scrolling="no" style="width:0px; height:0px; border:0px"></iframe>
+    <iframe name="iframe" id="iframe" frameborder="0" scrolling="no" style="width:0px;height:0px;border:0px"></iframe>
 </div>
 <form name="submitForm" method="GET" target="iframe">
     <input type="hidden" name="fmt" value="tgz">
@@ -133,7 +133,7 @@ function done() {
 </form>
 <form name="doneForm" action="/zimbra/desktop/${account.zmail ? "z" : "x"}mail.jsp" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
-    <input type="hidden" name="dataSourceName" value="${bean.dataSourceName}">
+    <input type="hidden" name="accountName" value="${bean.accountName}">
     <input type="hidden" name="verb" value="exp"}>
 </form>
 </div>

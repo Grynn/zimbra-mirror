@@ -66,8 +66,8 @@ function disableButtons() {
 
     <table class="ZWizardForm" style='width:90%'>
         <tr>
-            <td class="${zdf:isValid(bean, 'dataSourceName') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Description'/>:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="dataSourceName" name="dataSourceName" value="${bean.dataSourceName}">
+            <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Description'/>:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}">
                         <span id='service_hint' class='ZHint'><fmt:message key='DescHint'/></span></td>
         </tr>
         <tr><td class="ZFieldLabel"><fmt:message key='FullName'/>:</td>

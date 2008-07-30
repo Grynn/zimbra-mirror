@@ -1,40 +1,28 @@
 package com.zimbra.cs.offline.jsp;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.DataSource.ConnectionType;
-import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.zclient.ZFolder;
 
-public class XmailBean extends FormBean {
+public class XmailBean extends MailBean {
 	
 	public XmailBean() {}
 	
-	protected String accountId;
-	protected String dsName;
 	protected String domain;
 	
 	protected String username = "";
-	protected String password = "";
-	protected String email = "";
 	protected String fromDisplay = "";
 	protected String replyTo = "";
 	protected String replyToDisplay = "";
 
 	protected String protocol = "";
-	protected String host = "";
-	protected String port = "";
-	protected boolean isSsl;
 	
 	protected String smtpHost = "";
 	protected String smtpPort = "";
@@ -43,12 +31,11 @@ public class XmailBean extends FormBean {
 	protected String smtpUsername = "";
 	protected String smtpPassword = "";
 	
-	protected long syncFreqSecs = OfflineConstants.DEFAULT_SYNC_FREQ / 1000;
-	
 	protected boolean syncAllServerFolders;
 	
-	protected boolean isDebugTraceEnabled;
-	
+	private final String ydomain = "yahoo.com";
+	private final String ymdomain = "ymail.com";
+	private final String yrmdomain = "rocketmail.com";
 	
 	@Override
 	protected void reload() {
@@ -60,7 +47,7 @@ public class XmailBean extends FormBean {
 			return;
 		}
 		
-		dsName = ds.getName();
+		accountName = ds.getName();
 		username = ds.getUsername();
 		password = JspConstants.MASKED_PASSWORD;
 		email = ds.getEmailAddress();
@@ -102,8 +89,8 @@ public class XmailBean extends FormBean {
 			if (verb.isAdd() || verb.isModify()) {
 				if (dsType == null)
 					addInvalid("protocol");
-				if (isEmpty(dsName))
-					addInvalid("dataSourceName");
+				if (isEmpty(accountName))
+					addInvalid("accountName");
 				if (isEmpty(username))
 			    	addInvalid("username");
 				if (isEmpty(password))
@@ -165,20 +152,21 @@ public class XmailBean extends FormBean {
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
 			        if (dsType == DataSource.Type.pop3) {
 			            dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Provisioning.TRUE);
-		                dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_INBOX));
+		                dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_INBOX);
 			        } else {
 			        	assert dsType == DataSource.Type.imap;
-			        	dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, Integer.toString(Mailbox.ID_FOLDER_USER_ROOT));
+			        	dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_USER_ROOT);
 			        }
 			    }
 			}
 			
-			String ydomain = "yahoo.com";
 			String gdomain = "gmail.com";
 			String adomain = "aol.com";
 			
 			if (verb.isAdd()) {
-				if (email.endsWith(ydomain) || host.endsWith(ydomain)) {
+				if (email.endsWith(ydomain) || host.endsWith(ydomain) ||
+				email.endsWith(ymdomain) || host.endsWith(ymdomain) ||
+				email.endsWith(yrmdomain) || host.endsWith(yrmdomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
 						setError(getMessage("YMPMustUseImap"));
@@ -208,15 +196,15 @@ public class XmailBean extends FormBean {
 			if (isAllOK()) {                
 				JspProvStub stub = JspProvStub.getInstance();
 				if (verb.isAdd()) {
-					stub.createOfflineDataSource(dsName, email, dsType, dsAttrs);
+					stub.createOfflineDataSource(accountName, email, dsType, dsAttrs);
 				} else if (isEmpty(accountId)) {
 					setError(getMessage("AccountIdMissing"));
 				} else if (verb.isDelete()) {
 					stub.deleteOfflineDataSource(accountId);
-                                } else if (verb.isExport()) {
-                                } else if (verb.isImport()) {
+				} else if (verb.isExport()) {
+				} else if (verb.isImport()) {
 				} else if (verb.isModify()) {
-					stub.modifyOfflineDataSource(accountId, dsName, dsAttrs);
+					stub.modifyOfflineDataSource(accountId, accountName, dsAttrs);
 				} else if (verb.isReset()) {
 					stub.resetOfflineDataSource(accountId);
 				} else {
@@ -236,22 +224,6 @@ public class XmailBean extends FormBean {
         }
 	}
 
-	public void setAccountId(String accountId) {
-		this.accountId =  accountId;
-	}
-	
-	public String getAccountId() {
-		return accountId;
-	}
-	
-	public void setDataSourceName(String dsName) {
-		this.dsName = require(dsName);
-	}
-	
-	public String getDataSourceName() {
-		return dsName;
-	}
-	
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}
@@ -266,22 +238,6 @@ public class XmailBean extends FormBean {
 	
 	public String getUsername() {
 		return username;
-	}
-	
-	public void setPassword(String password) {
-		this.password = require(password);
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-	
-	public void setEmail(String email) {
-		this.email = require(email);
-	}
-	
-	public String getEmail() {
-		return email;
 	}
 	
 	public void setFromDisplay(String fromDisplay) {
@@ -318,38 +274,6 @@ public class XmailBean extends FormBean {
 	
 	public boolean isPop() {
 		return "pop3".equals(protocol);
-	}
-	
-	public void setHost(String host) {
-		this.host = require(host);
-	}
-	
-	public String getHost() {
-		return host;
-	}
-	
-	public void setPort(String port) {
-		this.port = require(port);
-	}
-	
-	public String getPort() {
-		return port;
-	}
-	
-	public void setSsl(boolean isSsl) {
-		this.isSsl = isSsl;
-	}
-	
-	public boolean isSsl() {
-		return isSsl;
-	}
-	
-	public void setDebugTraceEnabled(boolean isDebugTraceEnabled) {
-		this.isDebugTraceEnabled = isDebugTraceEnabled;
-	}
-	
-	public boolean isDebugTraceEnabled() {
-		return isDebugTraceEnabled;
 	}
 	
 	public void setSmtpHost(String smtpHost) {
@@ -400,14 +324,6 @@ public class XmailBean extends FormBean {
 		return smtpPassword;
 	}
 	
-	public void setSyncFreqSecs(long syncFreqSecs) {
-		this.syncFreqSecs = syncFreqSecs;
-	}
-	
-	public long getSyncFreqSecs() {
-		return syncFreqSecs;
-	}
-	
 	public void setSyncAllServerFolders(boolean syncAllServerFolders) {
 		this.syncAllServerFolders = syncAllServerFolders;
 	}
@@ -417,38 +333,8 @@ public class XmailBean extends FormBean {
 	}
 	
 	public boolean isYmail() {
-		return domain != null && (domain.equals("yahoo.com") ||
-			domain.equals("ymail.com") ||
-			domain.equals("rockmail.com"));
-	}
-	
-        public String[] getExportList() throws ServiceException {
-            return getFolderList(true);
-        }
-        
-        public String[] getImportList() throws ServiceException {
-            return getFolderList(false);
-        }
-        
-	String[] getFolderList(boolean export) throws ServiceException {
-	    List<ZFolder> fldrs;
-            ArrayList<String> list = new ArrayList<String>();
-	    ZMailbox.Options options = new ZMailbox.Options();
-
-            options.setAccountBy(AccountBy.id);
-            options.setAccount(accountId);
-            options.setPassword(password);
-	    options.setUri(JspConstants.LOCALHOST_SOAP_URL);
-	    ZMailbox mbox = ZMailbox.getMailbox(options);
-	    fldrs = mbox.getAllFolders();
-	    for (ZFolder f : fldrs) {
-                if (f.getPath().equals("/") || f.getParentId() == null ||
-                    f.getId().equals(ZFolder.ID_AUTO_CONTACTS))
-                    continue;
-                else if (!export && f.getClass() != ZFolder.class)
-                    continue;
-	        list.add(f.getRootRelativePath());
-	    }
-	    return list.toArray(new String[0]);
+		return domain != null && (domain.equals(ydomain) ||
+			domain.equals(ymdomain) ||
+			domain.equals(yrmdomain));
 	}
 }

@@ -10,8 +10,8 @@ public class GmailBean extends XmailBean {
 		if (verb == null)
 			return;
 		
-		if (isEmpty(dsName))
-			addInvalid("dataSourceName");
+		if (isEmpty(accountName))
+			addInvalid("accountName");
 		if (isEmpty(email))
 			addInvalid("email");
 		if (isEmpty(password))
