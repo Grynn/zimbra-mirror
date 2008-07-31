@@ -50,14 +50,14 @@ public class UTF7 extends Charset {
 			super(cs, (float) 0.4, 1);
 		}
 
-        protected void implReset() {
+        @Override protected void implReset() {
             shifted = first = false;
             decoder = bits = 0;
         }
 
-		protected CoderResult implFlush(CharBuffer out) {
+        @Override protected CoderResult implFlush(CharBuffer out) {
             if (shifted && decoder != 0)
-                return CoderResult.malformedForLength(0);
+                return CoderResult.malformedForLength(1);
             return CoderResult.UNDERFLOW;
 		}
 
@@ -66,17 +66,23 @@ public class UTF7 extends Charset {
                 if (!out.hasRemaining())
                     return CoderResult.OVERFLOW;
                 byte c = in.get();
-                if (c > MAX_UTF7_CHAR_VALUE)
-                    return CoderResult.malformedForLength(0);
+                if (c < 0 || c > MAX_UTF7_CHAR_VALUE) {
+                    in.position(in.position() - 1);
+                    return CoderResult.malformedForLength(1);
+                }
+
                 if (shifted) {
                     byte decodedChar = INVERSE_BASE_64[c];
                     if (decodedChar == NON_BASE_64) {
+                        boolean malformed = decoder != 0;
                         shifted = false;
+                        bits = decoder = 0;
                         if (first && c == END_SHIFT)
                             out.put(BEGIN_SHIFT);
-                        if (decoder != 0)
-                            return CoderResult.malformedForLength(0);
-                        bits = 0;
+                        if (malformed) {
+                            in.position(Math.max(0, in.position() - 2));
+                            return CoderResult.malformedForLength(1);
+                        }
                         if (c == END_SHIFT)
                             continue;
                     } else {
@@ -84,9 +90,9 @@ public class UTF7 extends Charset {
                         first = false;
                         bits += 6;
                         if (bits >= 16) {
-                            out.put((char) (decoder >> (bits - 16)));
-                            decoder &= ~(0xFFFF << (bits - 16));
                             bits -= 16;
+                            out.put((char) (decoder >> bits));
+                            decoder &= ~(0xFFFF << bits);
                         }
                     }
                 }
@@ -110,12 +116,12 @@ public class UTF7 extends Charset {
 			super(cs, (float) 2.5, 5);
 		}
 
-        protected void implReset() {
+        @Override protected void implReset() {
             shifted = false;
             encoder = bits = 0;
         }
 
-        protected CoderResult implFlush(ByteBuffer out) {
+        @Override protected CoderResult implFlush(ByteBuffer out) {
             if (shifted) {
                 if (out.remaining() < 2)
                     return CoderResult.OVERFLOW;
