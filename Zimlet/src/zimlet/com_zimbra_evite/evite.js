@@ -25,20 +25,20 @@ Com_zimbra_evite.CALENDAR_VIEW = "appointment";
 
 Com_zimbra_evite.prototype.init =
 function() {
-	this.login();
-	this.listFolders();
+	this.login(null, true);
 };
 
 Com_zimbra_evite.prototype.login = 
-function(callback) {
+function(callback, init) {
 	if (callback == null) {
 		callback = false;
 	}
 	var user = this.getUserProperty("user");
 	var passwd = this.getUserProperty("passwd");
 	if (user && passwd) {
-		this.eviteAuth(user, passwd, callback);
-	} else if (callback) {
+		this.listFolders();
+		this.eviteAuth(user, passwd, callback, init);
+	} else if (!init || callback) {
 		this.createPropertyEditor(new AjxCallback(this, this.login, [ callback ]));
 	}
 };
@@ -61,20 +61,20 @@ function() {
 };
 
 Com_zimbra_evite.prototype.eviteAuth =
-function(user, passwd, callback) {
+function(user, passwd, callback, init) {
 	var authUrl = this.getConfig('authUrl')+'?email='+user+'&pass='+passwd+'&src=zimbra&rndm='+this.getRandomNumber();
-	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(authUrl);
-	AjxRpc.invoke(null, url, null, new AjxCallback(this, this.authCallback, [ callback ]), true);
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(authUrl);
+	AjxRpc.invoke(null, url, null, new AjxCallback(this, this.authCallback, [ init, callback ]), true);
 };
 
 Com_zimbra_evite.prototype.myEvite =
 function() {
 	if (!this.userID) {
-		this.login(new AjxCallback(this, this.myEvite));
+		this.login(new AjxCallback(this, this.myEvite), false);
 		return;
 	}
 	var myUrl = this.getConfig('myUrl')+'?userID='+this.userID+'&src=zimbra&rndm='+this.getRandomNumber();
-	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(myUrl);
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(myUrl);
 	AjxRpc.invoke(null, url, null, new AjxCallback(this, this.myCallback), true);
 };
 
@@ -95,7 +95,7 @@ function(elem, nodeName) {
 };
 
 Com_zimbra_evite.prototype.authCallback =
-function(callback, result) {
+function(init, callback, result) {
 	var elem;
 	if (!result.success) {
 		return;
@@ -118,8 +118,13 @@ function(callback, result) {
 		return;
 	}
 	
-	this.userID = elem.firstChild.data;
-	if (callback) callback.run();
+	if (elem.firstChild)
+		this.userID = elem.firstChild.data;
+	if (!init && (!elem.firstChild || !this.userID)) {
+		appCtxt.getAppController().setStatusMsg("Invalid Evite Login", ZmStatusView.LEVEL_CRITICAL);
+		this.createPropertyEditor(new AjxCallback(this, this.login, [ callback ]));
+	}
+	//if (callback) callback.run();
 };
 
 Com_zimbra_evite.prototype.myCallback =
