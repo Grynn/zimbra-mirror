@@ -166,7 +166,7 @@ function() {
 	this._langSelect.reparentHtmlElement(selectId);
 	for (i = 0; i < this._languages.length; i++) {
 		var option = this._languages[i];
-		this._langSelect.addOption(option.label, i==0, option.value);
+		this._langSelect.addOption(option.label, i==15, option.value);
 	}
 
 	// add translate DwtButton
@@ -194,7 +194,7 @@ function() {
 	this._parentView.getHtmlElement().appendChild(this._contentDIV);
 
 	// finally, create dialog holding all these widgets
-	this._yBabelfishDialog = this._createDialog({title:"Babel Fish", view:this._parentView});
+	this._yBabelfishDialog = this._createDialog({title:"Yahoo! Translator: Babel Fish", view:this._parentView});
 	this._yBabelfishDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._yBabelfishDialogOkListener));
 };
 
