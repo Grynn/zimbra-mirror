@@ -6395,4 +6395,16 @@
 		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
 		<function-signature>boolean contains(java.lang.Object,java.lang.Object)</function-signature>
 	</function>
+
+    <function>
+		<name>maskRemoteItemId</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+		<function-signature>java.lang.String maskRemoteItemId(com.zimbra.cs.taglib.bean.ZMailboxBean,java.lang.String,java.lang.String)</function-signature>
+	</function>
+
+    <function>
+		<name>unmaskRemoteItemId</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+		<function-signature>java.lang.String unmaskRemoteItemId(com.zimbra.cs.taglib.bean.ZMailboxBean,java.lang.String)</function-signature>
+	</function>
 </taglib>

@@ -513,6 +513,13 @@ public class BeanUtils {
         }
     }
 
+    public static String maskRemoteItemId(ZMailboxBean mailbox, String folderId, String id) throws JspException, ServiceException {
+        return mailbox.getMailbox().maskRemoteItemId(folderId, id);
+    }
+
+    public static String unmaskRemoteItemId(ZMailboxBean mailbox, String id) throws JspException, ServiceException {
+        return mailbox.getMailbox().unmaskRemoteItemId(id);
+    }
 
     public static ZFolderBean getFolder(PageContext pc, String id) throws JspException, ServiceException {
         ZMailbox mbox = ZJspSession.getZMailbox(pc);
