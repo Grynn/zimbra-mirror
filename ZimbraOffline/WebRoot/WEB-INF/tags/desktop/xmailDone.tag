@@ -31,7 +31,7 @@ function OnLogin() {
 		<div id="serviceCreated" class="ZWizardPage ZWizardPageBig">
 		    <div class="ZWizardPageTitle"><fmt:message key='ServiceCreated'/></div>
 		<span class="padding">
-		    <p><fmt:message key='ServiceAdded'><fmt:param>"${name}"</fmt:param></fmt:message>
+		    <p><fmt:message key='ServiceAdded'><fmt:param>${name}</fmt:param></fmt:message>
 		    </p>
 		
 		    <p><fmt:message key='ServiceAddedNote'/>
@@ -76,7 +76,7 @@ function OnLogin() {
         <div id="serviceDeleted" class="ZWizardPage">
             <div class="ZWizardPageTitle"><fmt:message key='ManageService'/></div>
       		<span class="padding">
-            <p><fmt:message key="${key}"><fmt:param>"${name}"</fmt:param></fmt:message></p>
+            <p><fmt:message key="${key}"><fmt:param>${name}</fmt:param></fmt:message></p>
 			</span>        
             <table class="ZWizardButtonBar" width="100%">
                 <tr>
