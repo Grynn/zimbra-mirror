@@ -126,7 +126,7 @@ public enum IMConfig {
     XMPP_SERVER_OUTGOING_QUEUE(new LCInt(LC.xmpp_server_outgoing_queue)),
     XMPP_SERVER_READ_TIMEOUT(new LCInt(LC.xmpp_server_read_timeout)),
     XMPP_SERVER_SOCKET_REMOTEPORT(new LCInt(LC.xmpp_server_socket_remoteport)),
-    XMPP_SERVER_COMPRESSION_POLICY(new LCInt(LC.xmpp_server_compression_policy)),
+    XMPP_SERVER_COMPRESSION_POLICY(new LCStr(LC.xmpp_server_compression_policy)),
     XMPP_SERVER_PERMISSION(new ConstantStr("blacklist", "Use blacklist or whitelist mode for S2S permissions")),
     
     // 5269 S2S Listener 
