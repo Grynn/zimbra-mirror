@@ -7,8 +7,8 @@ import static org.junit.Assert.*;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
-import com.zimbra.cs.offline.util.yauth.RawAuthManager;
-import com.zimbra.cs.offline.util.yauth.FileTokenStore;
+import com.zimbra.cs.util.yauth.RawAuthManager;
+import com.zimbra.cs.util.yauth.FileTokenStore;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.mailclient.imap.ImapConnection;
 import com.zimbra.cs.mailclient.imap.ImapConfig;
@@ -44,8 +44,6 @@ import java.util.Map;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-
-import junit.framework.TestSuite;
 
 public class TestYMailClient {
     private static YMailClient ymc;

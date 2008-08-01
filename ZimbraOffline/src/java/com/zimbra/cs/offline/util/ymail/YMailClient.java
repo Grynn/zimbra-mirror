@@ -26,7 +26,7 @@ import com.yahoo.mail.ComposeMessagePart;
 import com.yahoo.mail.MidRequest;
 import com.yahoo.mail.Message;
 import com.yahoo.mail.ErrorCode;
-import com.zimbra.cs.offline.util.yauth.Auth;
+import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.offline.util.Xml;
 
 import javax.xml.ws.BindingProvider;

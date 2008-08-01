@@ -14,10 +14,11 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.util.yauth;
+package com.zimbra.cs.util.yauth;
 
-public interface TokenStore {
-    String getToken(String appId, String user);
-    void putToken(String appId, String user, String token);
-    int size();
+public interface Auth {
+    String getAppId();
+    String getWSSID();
+    String getCookie();
+    boolean isExpired();
 }

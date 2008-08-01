@@ -17,7 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import junit.framework.TestCase;
-import com.zimbra.cs.offline.util.yauth.RawAuth;
+import com.zimbra.cs.util.yauth.RawAuth;
 
 public class YabTest extends TestCase {
     private Session session;

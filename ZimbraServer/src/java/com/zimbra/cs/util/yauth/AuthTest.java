@@ -14,7 +14,7 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.util.yauth;
+package com.zimbra.cs.util.yauth;
 
 import junit.framework.TestCase;
 

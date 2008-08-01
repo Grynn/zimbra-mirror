@@ -14,7 +14,7 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.util.yauth;
+package com.zimbra.cs.util.yauth;
 
 public class AuthenticationException extends Exception {
     public AuthenticationException(String msg) {

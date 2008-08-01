@@ -18,9 +18,9 @@ package com.zimbra.cs.offline;
 
 import com.zimbra.cs.mailbox.MailSender;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
-import com.zimbra.cs.offline.util.yauth.RawAuthManager;
-import com.zimbra.cs.offline.util.yauth.MetadataTokenStore;
-import com.zimbra.cs.offline.util.yauth.AuthenticationException;
+import com.zimbra.cs.util.yauth.RawAuthManager;
+import com.zimbra.cs.util.yauth.MetadataTokenStore;
+import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.DataSource;

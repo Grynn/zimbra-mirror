@@ -17,9 +17,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AccountServiceException.AuthFailedServiceException;
 import com.zimbra.cs.offline.OfflineLC;
-import com.zimbra.cs.offline.util.yauth.Auth;
-import com.zimbra.cs.offline.util.yauth.AuthenticationException;
-import com.zimbra.cs.offline.util.yauth.RawAuth;
+import com.zimbra.cs.util.yauth.Auth;
+import com.zimbra.cs.util.yauth.AuthenticationException;
+import com.zimbra.cs.util.yauth.RawAuth;
 
 public class YmailUserData {
 

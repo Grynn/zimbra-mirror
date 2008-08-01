@@ -16,9 +16,9 @@
  */
 package com.zimbra.cs.offline.util.yab;
 
-import com.zimbra.cs.offline.util.yauth.RawAuth;
-import com.zimbra.cs.offline.util.yauth.AuthenticationException;
-import com.zimbra.cs.offline.util.yauth.Auth;
+import com.zimbra.cs.util.yauth.RawAuth;
+import com.zimbra.cs.util.yauth.AuthenticationException;
+import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.offline.util.Xml;
 
 import java.io.IOException;
