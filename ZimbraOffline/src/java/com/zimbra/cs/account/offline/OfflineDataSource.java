@@ -206,9 +206,18 @@ public class OfflineDataSource extends DataSource {
         Object key = key(folderId);
         return key != null && sSyncStateMap.containsKey(key);
     }
-    
+
     @Override
     public SyncState getSyncState(int folderId) {
+        Object key = key(folderId);
+        SyncState ss = key != null ? sSyncStateMap.get(key) : null;
+        OfflineLog.offline.debug("getSyncState: folder = %d, key = %s, state = %s",
+                                 folderId, key, ss);
+        return ss;
+    }
+    
+    @Override
+    public SyncState removeSyncState(int folderId) {
         Object key = key(folderId);
         SyncState ss = key != null ? sSyncStateMap.remove(key) : null;
         OfflineLog.offline.debug("getSyncState: folder = %d, key = %s, state = %s",
