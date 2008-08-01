@@ -16,9 +16,8 @@
  */
 package com.zimbra.cs.offline.util.yauth;
 
-public interface Auth {
-    String getAppId();
-    String getWSSID();
-    String getCookie();
-    boolean isExpired();
+public interface TokenStore {
+    String getToken(String appId, String user);
+    void putToken(String appId, String user, String token);
+    int size();
 }

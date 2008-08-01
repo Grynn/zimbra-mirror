@@ -52,6 +52,10 @@ public class RawAuth implements Auth {
     private static final String EXPIRATION = "Expiration";
     private static final String ERROR = "Error";
     private static final String ERROR_DESCRIPTION = "ErrorDescription";
+
+    // Maximum number of milliseconds between current time and expiration
+    // time before cookie is considered expired.
+    private static final long EXPIRATION_LIMIT = 60 * 60 * 1000;
     
     private static String baseUri = BASE_URI;
 
@@ -91,10 +95,10 @@ public class RawAuth implements Auth {
         return wssId;
     }
 
-    public long getExpiration() {
-        return expiration;
+    public boolean isExpired() {
+        return System.currentTimeMillis() - expiration < EXPIRATION_LIMIT;
     }
-
+    
     public void authenticate(String token) throws AuthenticationException,
                                                   IOException {
         Response res = doGet(GET_AUTH, new NameValuePair(APPID, appId),

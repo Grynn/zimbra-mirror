@@ -8,6 +8,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 import com.zimbra.cs.offline.util.yauth.RawAuthManager;
+import com.zimbra.cs.offline.util.yauth.FileTokenStore;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.mailclient.imap.ImapConnection;
 import com.zimbra.cs.mailclient.imap.ImapConfig;
@@ -18,7 +19,6 @@ import com.zimbra.cs.mailclient.imap.Body;
 import com.zimbra.cs.mailclient.imap.BodyStructure;
 import com.zimbra.cs.util.ZimbraApplication;
 import com.zimbra.cs.util.JMSession;
-import com.zimbra.qa.unittest.TestUtil;
 import com.yahoo.mail.UserData;
 
 import javax.mail.internet.MimeMessage;
@@ -79,7 +79,7 @@ public class TestYMailClient {
         LOG.setLevel(Level.DEBUG);
         // Set up YMail client
         Logger.getLogger(YMailClient.class).setLevel(Level.DEBUG);
-        RawAuthManager ram = new RawAuthManager(TOKENS_FILE);
+        RawAuthManager ram = new RawAuthManager(new FileTokenStore(TOKENS_FILE));
         ymc = new YMailClient(ram.authenticate(APPID, USER, PASS));
         ymc.enableTrace(System.out);
         // Set up IMAP connection

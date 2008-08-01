@@ -18,122 +18,56 @@ package com.zimbra.cs.offline.util.yauth;
 
 import org.apache.log4j.Logger;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.io.IOException;
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
-import java.io.Writer;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 public final class RawAuthManager {
-    private final File file;
-    private Map<String, String> tokens;
+    private final TokenStore store;
+    private final HashMap<String, RawAuth> cookies;
 
     private static final Logger LOG = Logger.getLogger(RawAuthManager.class);
 
-    public RawAuthManager(File file) throws IOException {
-        this.file = file;
-        loadTokens();
+    public RawAuthManager(TokenStore store) {
+        this.store = store;
+        cookies = new HashMap<String, RawAuth>();
     }
 
     public RawAuth authenticate(String appId, String user, String pass)
         throws AuthenticationException, IOException {
-        String token = getToken(appId, user);
-        if (token != null) {
-            try {
-                return RawAuth.authenticate(appId, token);
-            } catch (AuthenticationException e) {
-                // Token possibly expired...
+        RawAuth auth = cookies.get(key(appId, user));
+        if (auth == null || auth.isExpired()) {
+            // Cookie missing or expired, so get a new one
+            String token = store.getToken(appId, user);
+            if (token != null) {
+                try {
+                    auth = RawAuth.authenticate(appId, token);
+                } catch (AuthenticationException e) {
+                    // Token possibly revoked...
+                    auth = null;
+                }
             }
+            if (auth == null) {
+                // Token expired or missing, so get a new one
+                auth = RawAuth.authenticate(appId, newToken(appId, user, pass));
+            }
+            cookies.put(key(appId, user), auth);
         }
-        // Token expired or missing, so authenticate with a new one
-        return RawAuth.authenticate(appId, newToken(appId, user, pass));
-    }
-
-    private String getToken(String appId, String user) {
-        synchronized (this) {
-            return tokens.get(key(appId, user));
-        }
+        return auth;
     }
 
     private String newToken(String appId, String user, String pass)
         throws AuthenticationException, IOException {
         LOG.debug("newToken: appId=" + appId + ", user=" + user);
         String token = RawAuth.getToken(appId, user, pass);
-        synchronized (this) {
-            tokens.put(key(appId, user), token);
-            saveTokens();
-        }
+        store.putToken(appId, user, token);
         return token;
     }
-    
-    private void saveTokens() throws IOException {
-        LOG.debug("Saving tokens to '" + file + "'");
-        Writer w = null;
-        try {
-            w = new FileWriter(file);
-            writeTokens(w);
-        } finally {
-            if (w != null) {
-                w.close();
-            }
-        }
-    }
 
-    private void writeTokens(Writer w) throws IOException {
-        BufferedWriter bw = new BufferedWriter(w);
-        for (Map.Entry<String, String> e : tokens.entrySet()) {
-            bw.write(e.getKey());
-            bw.write(' ');
-            bw.write(e.getValue());
-            bw.newLine();
-        }
-        bw.flush();
-    }
-    
-    private void loadTokens() throws IOException {
-        tokens = new HashMap<String, String>();
-        Reader r = null;
-        try {
-            r = new FileReader(file);
-            LOG.debug("Loading auth tokens from '" + file + "'");
-            readTokens(r);
-        } catch (FileNotFoundException e) {
-            LOG.debug("No previously saved auth tokens in '" + file + "'");
-            // Fall through...
-        } catch (IOException e) {
-            // Invalid token file
-            LOG.info("Deleting invalid tokens file '" + file + "'");
-            e.printStackTrace(); // DEBUG
-            r.close();
-            file.delete();
-        } finally {
-            if (r != null) {
-                r.close();
-            }
-        }
-    }
-
-    private void readTokens(Reader r) throws IOException {
-        BufferedReader br = new BufferedReader(r);
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split(" ");
-            if (parts.length != 3) {
-                throw new IOException("Invalid token file");
-            }
-            LOG.debug(String.format("Read token appId=%s, user=%s, token=%s",
-                                    parts[0], parts[1], parts[2]));
-            tokens.put(key(parts[0], parts[1]), parts[2]);
-        }
-    }
-
-    private static String key(String appId, String user) {
+    private String key(String appId, String user) {
         return appId + " " + user;
+    }
+
+    public String toString() {
+        return String.format("{cookies=%d,tokens=%d}", cookies.size(), store.size());
     }
 }
