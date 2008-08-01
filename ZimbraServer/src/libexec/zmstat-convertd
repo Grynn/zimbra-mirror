@@ -19,6 +19,7 @@ use strict;
 use vars qw($PROCFS @STATLIST $LOGFILE $CONSOLE $interval $LOGFH
             $ROTATE_NOW $ROTATE_DEFER $date $HAS_IO_ACCT);
 use Getopt::Long;
+use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Zmstat;
 use Data::Dumper;
 

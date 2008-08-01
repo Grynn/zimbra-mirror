@@ -19,6 +19,7 @@
 use strict;
 use Carp ();
 use Getopt::Long;
+use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Zmstat;
 
 zmstatInit();

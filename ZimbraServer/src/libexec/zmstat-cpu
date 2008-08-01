@@ -37,6 +37,7 @@
 
 use strict;
 use Getopt::Long;
+use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Zmstat;
 
 zmstatInit();

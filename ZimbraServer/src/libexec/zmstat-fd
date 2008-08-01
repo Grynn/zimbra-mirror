@@ -23,6 +23,7 @@
 
 use strict;
 use Getopt::Long;
+use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Zmstat;
 use vars qw($LOGFH $CONSOLE $LOGFILE $ROTATE_NOW $ROTATE_DEFER);
 
