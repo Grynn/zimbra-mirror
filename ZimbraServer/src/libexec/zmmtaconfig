@@ -116,6 +116,7 @@ my %exe = (
   'LOGGER'        => "$config{baseDir}/bin/zmloggerctl",
   'MAILBOX'       => "$config{baseDir}/bin/zmstorectl",
   'PROXYGEN'      => "$config{baseDir}/bin/zmproxyconfgen",
+  'CONVERTD'      => "$config{baseDir}/bin/zmconvertctl",
 );
 
 my $commands = {
