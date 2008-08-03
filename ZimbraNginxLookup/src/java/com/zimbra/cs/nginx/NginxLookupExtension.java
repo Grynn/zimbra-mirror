@@ -405,7 +405,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             if (!allowedServerIPs.contains(req.serverIp))
                 throw new NginxLookupException(SERVER_IP + " " + req.serverIp + " is not allowed");
                 
-            Account adminAcct = prov.get(AccountBy.name, req.adminUser);
+            Account adminAcct = prov.get(AccountBy.appAdminName, req.adminUser);
             if (adminAcct == null)
                 throw new NginxLookupException("admin account " + req.adminUser + " not found");
                 
@@ -887,27 +887,36 @@ public class NginxLookupExtension implements ZimbraExtension {
         
         /*
          * zmprov md phoebe.mac zimbraAuthKerberos5Realm ZIMBRA.COM zimbraVirtualIPAddress 13.12.11.10
-         * zmprov ca nginx-admin@phoebe.mac test123 zimbraIsAdminAccount TRUE
-         *
-         * zmprov mcf zimbraReverseProxyAdminIPAddress 13.12.11.10 zimbraReverseProxyAdminAccount nginx-admin@phoebe.mac zimbraReverseProxyAdminAccountPassword test123
+         * zmprov mcf zimbraReverseProxyAdminIPAddress 13.12.11.10 
          * 
+         * for Comcast test
+         * zmprov md comcast.net zimbraAuthKerberos5Realm ZIMBRA.COM zimbraVirtualIPAddress 13.12.11.10
          */ 
         
         //     AUTH_METHOD  AUTH_USER                  AUTH_PASS  AUTH_PROTOCOL  AUTH_LOGIN_ATTEMPT  CLIENT_IP      SERVER_IP      SERVER_HOST  AUTH_ID                      AUTH_ADMIN_USER            AUTH_ADMIN_PASS
     //  doTest("plain",     "user1",                  "test123",  "imap",        "1",                "10.11.12.13", "127.0.0.1",   null,        null,                        null,                      null,            true);
+        doTest("gssapi",    "user1",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginx",                 "zimbra",       true);
+        doTest("gssapi",    "user1@phoebe.mac",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginx",                 "zimbra",       true);
+        doTest("gssapi",    "user1@ZIMBRA.COM",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginx",                 "zimbra",       true);
+        doTest("gssapi",    "user2",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginx",                 "zimbra",       false);
+        doTest("gssapi",    "family-child1-visible",   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "family-parent@ZIMBRA.COM",  "zmnginx",                 "zimbra",       true);
+        doTest("gssapi",    "user1",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "zmnginxbogus",            "zimbra",       false);
+        
         /*
-        doTest("gssapi",    "user1",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       true);
-        doTest("gssapi",    "user1@phoebe.mac",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       true);
-        doTest("gssapi",    "user1@ZIMBRA.COM",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       true);
-        doTest("gssapi",    "user2",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "user1@ZIMBRA.COM",          "nginx-admin@phoebe.mac",  "test123",       false);
-        doTest("gssapi",    "family-child1-visible",   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "family-parent@ZIMBRA.COM",  "nginx-admin@phoebe.mac",  "test123",       true);
+        // comcast test
+        doTest("gssapi",    "combo",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "combo@ZIMBRA.COM",          "zmnginx",                 "zimbra",       false);
+        doTest("gssapi",    "combo@comcast.net",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "combo@ZIMBRA.COM",          "zmnginx",                 "zimbra",      false);
+        doTest("gssapi",    "combo@ZIMBRA.COM",        null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "combo@ZIMBRA.COM",          "zmnginx",                 "zimbra",       false);
+        doTest("gssapi",    "user2",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "combo@ZIMBRA.COM",          "zmnginx",                 "zimbra",       false);
+        doTest("gssapi",    "combo",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        "combo@ZIMBRA.COM",          "zmnginxbogus",            "zimbra",       false);
         */
         
+        /*
         doTest("plain",     "user1",                   null,      "imap",        "1",                "10.11.12.13", "13.12.11.10", null,        null,                        null,                      null,            true);
         doTest("plain",     "user1",                   null,      "imapssl",     "1",                "10.11.12.13", "13.12.11.10", null,        null,                        null,                      null,            true);
         doTest("plain",     "user1",                   null,      "pop3",        "1",                "10.11.12.13", "13.12.11.10", null,        null,                        null,                      null,            true);
         doTest("plain",     "user1",                   null,      "pop3ssl",     "1",                "10.11.12.13", "13.12.11.10", null,        null,                        null,                      null,            true);
-
+        */
         
    }
 }
