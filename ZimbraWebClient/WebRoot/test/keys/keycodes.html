@@ -1,0 +1,49 @@
+<style>
+	BODY { margin: 1em; }
+	DIV { margin-bottom: 0.5em; }
+</style>
+<script type="text/javascript">
+	$ = function(id) { return document.getElementById(id); }
+	function onKeyDown(evt) {
+		evt = evt || window.event;
+//		console.info("onKeyDown");
+//		console.dir(evt);
+		$("kd").innerHTML = keyDesc(evt);
+	}
+	function onKeyUp(evt) {
+		evt = evt || window.event;
+//		console.info("onKeyUp");
+//		console.dir(evt);
+		$("ku").innerHTML = keyDesc(evt);
+	}
+	function onKeyPress(evt) {
+		evt = evt || window.event;
+		console.info("onKeyPress");
+		console.dir(evt);
+		$("kp").innerHTML = keyDesc(evt);
+	}
+	function keyDesc(evt) {
+		return [keyMods(evt).join("+"), keyCodes(evt).join(" / ")].join(" ");
+	}
+	function keyMods(evt) {
+		var a = [];
+		if (evt.shiftKey) a.push("Shift");
+		if (evt.ctrlKey) a.push("Ctrl");
+		if (evt.altKey) a.push("Alt");
+		if (evt.metaKey) a.push("Meta");
+		return a;
+	}
+	function keyCodes(evt) {
+		var a = [];
+		a.push(evt.keyCode);
+		a.push(evt.charCode);
+		return a;
+	}
+</script>
+<body onkeydown='onKeyDown(event);return false'
+	  onkeypress="onKeyPress(event);return false"
+	  onkeyup='onKeyUp(event);return false'>
+<div>onkeydown: <span id="kd"></span></div>
+<div>onkeyup: <span id="ku"></span></div>
+<div>onkeypress: <span id="kp"></span></div>
+</body>
