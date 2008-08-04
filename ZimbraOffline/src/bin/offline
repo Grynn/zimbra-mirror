@@ -130,12 +130,16 @@ JETTY_INSTALL_TRACE_FILE="start.jar"
 ##################################################
 # Try to determine JETTY_HOME if not set
 ##################################################
-if [ -z "$JETTY_HOME" ] 
+if [ -z "$ZIMBRA_HOME" ]
 then
-  JETTY_HOME=/opt/zimbra/zdesktop/jetty 
+  ZIMBRA_HOME=/opt/zimbra/zdesktop
 fi
 
-ZIMBRA_HOME=/opt/zimbra/zdesktop
+if [ -z "$JETTY_HOME" ] 
+then
+  JETTY_HOME=$ZIMBRA_HOME/jetty 
+fi
+
 
 ##################################################
 # No JETTY_HOME yet? We're out of luck!
@@ -148,7 +152,7 @@ fi
 #####################################################
 # Check that jetty is where we think it is
 #####################################################
-if [ ! -r $JETTY_HOME/$JETTY_INSTALL_TRACE_FILE ] 
+if [ ! -r "$JETTY_HOME/$JETTY_INSTALL_TRACE_FILE" ] 
 then
    echo "** ERROR: Oops! Jetty doesn't appear to be installed in $JETTY_HOME"
    echo "** ERROR:  $JETTY_HOME/$JETTY_INSTALL_TRACE_FILE is not readable!"
@@ -158,7 +162,7 @@ fi
 #########################################################################
 # Zimbra tweak, because we want to keep jetty.conf under $JETTY_HOME/etc
 #########################################################################
-JAVA_OPTIONS="-DSTART=${JETTY_HOME}/etc/start.config -DSTOP.PORT=7644 -DSTOP.KEY=stop -Dzimbra.config=${ZIMBRA_HOME}/conf/localconfig.xml -Djava.library.path=${ZIMBRA_HOME}/lib -Djava.awt.headless=true"
+JAVA_OPTIONS="-DSTART='${JETTY_HOME}/etc/start.config' -DSTOP.PORT=7644 -DSTOP.KEY=stop -Dzimbra.config='${ZIMBRA_HOME}/conf/localconfig.xml' -Djava.library.path='${ZIMBRA_HOME}/lib' -Djava.awt.headless=true"
 JETTY_CONSOLE=${ZIMBRA_HOME}/log/offline.out
 JETTY_RUN=${ZIMBRA_HOME}/log
 
@@ -284,12 +288,12 @@ fi
 #####################################################
 #MAILBOXD_JAVA_OPTIONS=`/opt/zimbra/bin/zmlocalconfig -m nokey mailboxd_java_options`
 MAILBOXD_JAVA_OPTIONS="-Xms128m -Xmx256m"
-JAVA_OPTIONS="$MAILBOXD_JAVA_OPTIONS $JAVA_OPTIONS -Djetty.home=$JETTY_HOME"
+JAVA_OPTIONS="$MAILBOXD_JAVA_OPTIONS $JAVA_OPTIONS -Djetty.home='$JETTY_HOME'"
 
 #####################################################
 # This is how the Jetty server will be started
 #####################################################
-RUN_CMD="$JAVA -ea $JAVA_OPTIONS -jar $JETTY_HOME/start.jar $JETTY_ARGS $CONFIGS"
+RUN_CMD="$JAVA -ea $JAVA_OPTIONS -jar '$JETTY_HOME/start.jar' $JETTY_ARGS '$CONFIGS'"
 
 #####################################################
 # Comment these out after you're happy with what 
@@ -312,27 +316,27 @@ case "$ACTION" in
   start)
         echo "Starting Jetty: "
 
-        if [ -f $JETTY_PID ]
+        if [ -f "$JETTY_PID" ]
         then
             echo "Already Running!!"
             exit 1
         fi
 
-        echo "STARTED Jetty `date`" >> $JETTY_CONSOLE
+        echo "STARTED Jetty `date`" >> "$JETTY_CONSOLE"
 
-        nohup sh -c "exec $RUN_CMD >>$JETTY_CONSOLE 2>&1" >/dev/null &
-        echo $! > $JETTY_PID
-        echo "Jetty running pid="`cat $JETTY_PID`
+        nohup sh -c "exec $RUN_CMD >> '$JETTY_CONSOLE' 2>&1" >/dev/null &
+        echo $! > "$JETTY_PID"
+        echo "Jetty running pid="`cat "$JETTY_PID"`
         ;;
 
   stop)
-        PID=`cat $JETTY_PID 2>/dev/null`
+        PID=`cat "$JETTY_PID" 2>/dev/null`
         echo "Shutting down Jetty: $PID"
         kill $PID 2>/dev/null
         sleep 2
         kill -9 $PID 2>/dev/null
-        rm -f $JETTY_PID
-        echo "STOPPED `date`" >>$JETTY_CONSOLE
+        rm -f "$JETTY_PID"
+        echo "STOPPED `date`" >> "$JETTY_CONSOLE"
         ;;
 
   restart)
@@ -375,9 +379,9 @@ case "$ACTION" in
         echo "RUN_CMD        =  $RUN_CMD"
         echo
         
-        if [ -f $JETTY_RUN/offline.pid ]
+        if [ -f "$JETTY_RUN/offline.pid" ]
         then
-            echo "Jetty running pid="`cat $JETTY_RUN/offline.pid`
+            echo "Jetty running pid="`cat "$JETTY_RUN/offline.pid"`
             exit 0
         fi
         exit 1

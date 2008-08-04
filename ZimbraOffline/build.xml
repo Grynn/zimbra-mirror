@@ -53,7 +53,10 @@
 	<property name="im.jars.dir" location="${im.dir}/jars" />
 	<property name="im.classes.dir" location="${im.dir}/build/classes" />
 
-	<property name="zimbra.home.dir" location="/opt/zimbra/zdesktop" />
+	<!-- offline must be able to run from a path with spaces. here we have default dev installation -->
+	<!-- path contain space characters so that if this is broken, we can catch it right away.       -->
+	<property name="zimbra.home.dir" location="/opt/zimbra/zdesktop dev" />
+
 	<property name="zimbra.derby.dir" location="${zimbra.home.dir}/derby" />
 
 	<property name="build.zmprov" location="${build.dir}/data/zmprov.txt" />
@@ -495,6 +498,7 @@
     <target name="start-jetty-unix" if="is-unix">
         <exec executable="${zimbra.home.dir}/bin/offline">
             <arg value="start"/>
+            <env key="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
         </exec>
     </target>
 
@@ -510,6 +514,7 @@
             <then>
                 <exec executable="${zimbra.home.dir}/bin/offline">
                     <arg value="stop"/>
+                    <env key="ZIMBRA_HOME" value="${zimbra.home.dir}"/>
                 </exec>
             </then>
             <else>
@@ -568,6 +573,7 @@
 
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.request=INFO" value="log4j.logger.zimbra.offline.request=DEBUG"/>
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.response=INFO" value="log4j.logger.zimbra.offline.response=DEBUG"/>
+		<replace file="${dist.dir}/conf/log4j.properties" token="/opt/zimbra/zdesktop/log" value="${zimbra.home.dir}/log"/>
 
 		<copy todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}"/>
@@ -643,19 +649,19 @@
 
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zimbra_home=${param.install.dir} -f" />
+			<arg line="-e zimbra_home='${param.install.dir}' -f" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e mailboxd_directory=${param.install.dir}/jetty" />
+			<arg line="-e mailboxd_directory='${param.install.dir}/jetty'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e mailboxd_pidfile=${param.install.dir}/log/jetty.pid" />
+			<arg line="-e mailboxd_pidfile='${param.install.dir}/log/jetty.pid'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-			<arg line="-e zimlet_directory=${param.install.dir}/jetty/webapps/service/zimlet" />
+			<arg line="-e zimlet_directory='${param.install.dir}/jetty/webapps/service/zimlet'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
@@ -847,7 +853,7 @@
 	</target>
 	
 	<target name="offline-install-misc">
-		<replace file="${dist.dir}/conf/log4j.properties" token="/opt/zimbra/zdesktop/log/" value=""/>
+		<replace file="${dist.dir}/conf/log4j.properties" token="${zimbra.home.dir}/log" value=""/>
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.rootLogger=INFO,CONSOLE,LOGFILE" value="log4j.rootLogger=INFO,LOGFILE"/>
 		<replace file="${dist.dir}/jetty/resources/log4j.properties" token="/opt/zimbra/log/" value=""/>
 	</target>

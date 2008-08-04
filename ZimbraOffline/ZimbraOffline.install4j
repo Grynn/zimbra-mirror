@@ -107,7 +107,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="com.zimbra.cs.offline.start.Main" vmParameters="-Xms64m -Xmx256m -Dsun.net.inetaddr.ttl=30 -DSTART=${launcher:sys.launcherDirectory}jetty/etc/start.config -Dzimbra.config=${launcher:sys.launcherDirectory}conf/localconfig.xml -Djava.library.path=${launcher:sys.launcherDirectory}lib -Djava.awt.headless=true" arguments="org.mortbay.start.Main" allowVMPassthroughParameters="false" preferredVM="">
+      <java mainClass="com.zimbra.cs.offline.start.Main" vmParameters="-Xms64m -Xmx256m -Dsun.net.inetaddr.ttl=30 -DSTART=&quot;${launcher:sys.launcherDirectory}jetty/etc/start.config&quot; -Dzimbra.config=&quot;${launcher:sys.launcherDirectory}conf/localconfig.xml&quot; -Djava.library.path=&quot;${launcher:sys.launcherDirectory}lib&quot; -Djetty.home=&quot;${launcher:sys.launcherDirectory}jetty&quot; -Djava.awt.headless=true" arguments="org.mortbay.start.Main" allowVMPassthroughParameters="false" preferredVM="">
         <classPath>
           <archive location="lib/zdesktop.jar" failOnError="false" />
           <archive location="jetty/start.jar" failOnError="false" />
@@ -218,14 +218,7 @@ return true;</string>
                       <void property="script">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>String installDir = context.getVariable("sys.installationDir").toString();
-if (installDir.indexOf(" ") &gt;= 0) {
-    if (Util.isWindows())
-        return "C:\\zimbra\\zdesktop";
-    else
-        return context.getVariable("sys.userHome").toString() + "/zdesktop";
-} else
-    return installDir;</string>
+                            <string>return context.getVariable("sys.installationDir").toString();</string>
                           </void>
                         </object>
                       </void>
@@ -603,6 +596,23 @@ default:
                       <void property="workingDirectory">
                         <object class="java.io.File">
                           <string>.</string>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
+              </action>
+              <action name="macos clear error" id="285704" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>context.setErrorOccured(false);
+return true;</string>
+                          </void>
                         </object>
                       </void>
                     </object>
@@ -1093,7 +1103,11 @@ default:
           <screen name="" id="2" beanClass="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="3" finishScreen="false">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" />
+                <object class="com.install4j.runtime.beans.screens.InstallationDirectoryScreen">
+                  <void property="allowSpacesOnUnix">
+                    <boolean>true</boolean>
+                  </void>
+                </object>
               </java>
             </serializedBean>
             <condition>!context.getBooleanVariable("keepUserData")</condition>
@@ -1108,14 +1122,8 @@ default:
                       <void property="script">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>String installDir = context.getVariable("sys.installationDir").toString();
-if (installDir.indexOf(" ") &gt;= 0) {
-    if (Util.isWindows())
-        return "C:\\zimbra\\zdesktop";
-    else
-        return context.getVariable("sys.userHome").toString() + "/zdesktop";
-} else
-    return installDir;</string>
+                            <string>return context.getVariable("sys.installationDir").toString();
+</string>
                           </void>
                         </object>
                       </void>
@@ -2285,7 +2293,7 @@ return true;</string>
                         </object>
                       </void>
                       <void property="replaceValue">
-                        <string>-1  &gt; $prg_dir/log/zdesktop.out &amp;</string>
+                        <string>-1  &gt; "$prg_dir/log/zdesktop.out" &amp;</string>
                       </void>
                       <void property="searchValue">
                         <string>-1  &amp;</string>
@@ -2637,19 +2645,19 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                             <string>-webapp</string>
                           </void>
                           <void index="1">
-                            <string>${installer:sys.installationDir}\zdesktop.webapp</string>
+                            <string>"${installer:sys.installationDir}\zdesktop.webapp"</string>
                           </void>
                           <void index="2">
                             <string>-override</string>
                           </void>
                           <void index="3">
-                            <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
+                            <string>"${installer:sys.installationDir}\zdesktop.webapp\override.ini"</string>
                           </void>
                           <void index="4">
                             <string>-profile</string>
                           </void>
                           <void index="5">
-                            <string>${installer:sys.installationDir}\profile</string>
+                            <string>"${installer:sys.installationDir}\profile"</string>
                           </void>
                         </array>
                       </void>
@@ -2730,19 +2738,19 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                             <string>-webapp</string>
                           </void>
                           <void index="1">
-                            <string>${installer:sys.installationDir}/zdesktop.webapp</string>
+                            <string>"${installer:sys.installationDir}/zdesktop.webapp"</string>
                           </void>
                           <void index="2">
                             <string>-override</string>
                           </void>
                           <void index="3">
-                            <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                            <string>"${installer:sys.installationDir}/zdesktop.webapp/override.ini"</string>
                           </void>
                           <void index="4">
                             <string>-profile</string>
                           </void>
                           <void index="5">
-                            <string>${installer:sys.installationDir}/profile</string>
+                            <string>"${installer:sys.installationDir}/profile"</string>
                           </void>
                         </array>
                       </void>
@@ -2995,6 +3003,23 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                       <void property="workingDirectory">
                         <object class="java.io.File">
                           <string>.</string>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
+              </action>
+              <action name="macos clear error" id="285708" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>context.setErrorOccured(false);
+return true;</string>
+                          </void>
                         </object>
                       </void>
                     </object>
