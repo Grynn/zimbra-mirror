@@ -2334,6 +2334,7 @@ sub upgrade509GA {
 
   if (main::isInstalled("zimbra-ldap")) {
 	if($isLdapMaster) {
+	  upgradeLdapConfigValue("zimbraCalendarCalDavDisableFreebusy", "FALSE", "");
 	  upgradeLdapConfigValue("zimbraImapExposeVersionOnBanner", "FALSE", "");
 	  upgradeLdapConfigValue("zimbraLmtpExposeVersionOnBanner", "FALSE", "");
 	  upgradeLdapConfigValue("zimbraPop3ExposeVersionOnBanner", "FALSE", "");
