@@ -55,6 +55,7 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 	PCRE_DEF := -DHAS_PCRE
 	PCRE_INCLUDE := -I/opt/zimbra/include
 	PCRE_LIB := -L/opt/zimbra/lib -lpcre
+	FD_SIZE := -DFD_SETSIZE=32768
 endif
 
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
@@ -63,6 +64,7 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	PCRE_DEF := -DHAS_PCRE
 	PCRE_INCLUDE := -I/opt/zimbra/include
 	PCRE_LIB := -L/opt/zimbra/lib -lpcre
+	FD_SIZE := -DFD_SETSIZE=32768
 endif
 
 all: prep build install tar
@@ -95,7 +97,7 @@ build:
 	-DDEF_SENDMAIL_PATH=\"/opt/zimbra/postfix-$(POSTFIX_VERSION)/sbin/sendmail\" \
 	-DUSE_SASL_AUTH \
 	-DUSE_CYRUS_SASL \
-	-DHAS_LDAP -DHAS_MYSQL -DUSE_TLS $(DBINC) $(PCRE_DEF) $(PCRE_INCLUDE) \
+	-DHAS_LDAP -DHAS_MYSQL -DUSE_TLS $(DBINC) $(PCRE_DEF) $(PCRE_INCLUDE) $(FD_SIZE) \
 	-DUSE_LDAP_SASL \
 	-I/opt/zimbra/openldap-$(LDAP_VERSION)/include \
 	-I/opt/zimbra/mysql-$(MYSQL_VERSION)/include \
