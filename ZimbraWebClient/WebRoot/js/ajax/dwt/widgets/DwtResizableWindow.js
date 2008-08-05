@@ -35,6 +35,8 @@
  */
 
 DwtResizableWindow = function(parent, className) {
+	if (arguments.length == 0) { return; }
+	
 	if (!className)
 		className = "DwtResizableWindow";
 
@@ -45,7 +47,7 @@ DwtResizableWindow = function(parent, className) {
 	this._loc = { x: 0, y: 0 };
 	this._visible = false;
 	this._active = null;
-	DwtComposite.call(this, {parent:parent, className:className, posStyle:DwtControl.ABSOLUTE_STYLE});
+	DwtComposite.call(this, {parent:parent, className:className, posStyle:DwtControl.FIXED_STYLE});
 
 	this.addDisposeListener(new AjxListener(this, this.__onDispose));
 };
@@ -781,13 +783,10 @@ function(drw, size) {
 
 	var minimizePosition = {
 		size: size,
-		css: {
-			left: "auto",
-			top: "auto",
-			right: right,
-			bottom: "20px",
-			position: "fixed"
-		}
+		left: "auto",
+		top: "auto",
+		right: right,
+		bottom: "20px"
 	};
 	this._setPosition(drw, minimizePosition);
 };
@@ -823,23 +822,22 @@ DwtWindowManager.prototype._setPosition =
 function(drw, position) {
 	drw.setSize(position.size.x, position.size.y);
 	var element = drw.getHtmlElement();
-	for (var name in position.css) {
-		element.style[name] = position.css[name];
-	}
+	element.style.left = position.left;
+	element.style.top = position.top;
+	element.style.right = position.right;
+	element.style.bottom = position.bottom;
 };
 
 DwtWindowManager.prototype._getPosition =
 function(drw) {
 	var result = {
-		size: drw.getSize(),
-		css: {}
+		size: drw.getSize()
 	};
 	var element = drw.getHtmlElement();
-	DwtResizableWindow._CSS_FIELDS = DwtResizableWindow._CSS_FIELDS || ["left", "top", "bottom", "right", "position"];
-	for (var i = 0, count = DwtResizableWindow._CSS_FIELDS.length; i < count; i++) {
-		var name = DwtResizableWindow._CSS_FIELDS[i];
-		result.css[name] = element.style[name];
-	}
+	result.left = element.style.left;
+	result.top = element.style.top;
+	result.right = element.style.right;
+	result.bottom = element.style.bottom;
 	return result;
 };
 

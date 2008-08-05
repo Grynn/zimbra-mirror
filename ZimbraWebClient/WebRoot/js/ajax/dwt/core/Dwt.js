@@ -41,6 +41,10 @@ Dwt.ABSOLUTE_STYLE = "absolute";
  * @type String*/
 Dwt.RELATIVE_STYLE = "relative";
 
+/** Fixed position style
+ * @type String*/
+Dwt.FIXED_STYLE = "fixed";
+
 // Background repeat
 /** Don't repeat background image
  * @type String */
@@ -465,8 +469,8 @@ function(htmlElement, point) {
  */
 Dwt.setLocation =
 function(htmlElement, x, y) {
-	if (htmlElement.style.position != Dwt.ABSOLUTE_STYLE &&
-		htmlElement.style.position != Dwt.RELATIVE_STYLE) {
+	var position = htmlElement.style.position;
+	if (position != Dwt.ABSOLUTE_STYLE && position != Dwt.RELATIVE_STYLE && position != Dwt.FIXED_STYLE) {
 		DBG.println(AjxDebug.DBG1, "Cannot position static widget " + htmlElement.className);
 		throw new DwtException("Static widgets may not be positioned", DwtException.INVALID_OP, "Dwt.setLocation");
 	}

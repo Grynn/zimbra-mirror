@@ -213,6 +213,11 @@ DwtControl.ABSOLUTE_STYLE = Dwt.ABSOLUTE_STYLE;
  * @see Dwt#RELATIVE_STYLE*/
 DwtControl.RELATIVE_STYLE = Dwt.RELATIVE_STYLE;
 
+/** Relative position style
+ * @type String
+ * @see Dwt#RELATIVE_STYLE*/
+DwtControl.FIXED_STYLE = Dwt.FIXED_STYLE;
+
 
 // Overflow style
 /** Clip on overflow
