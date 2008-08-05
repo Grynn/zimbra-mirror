@@ -38,14 +38,14 @@ our %saved = ();
 my $zimbra_home = getLocalConfig("zimbra_home");
 my $cur_rootdn_passwd = getLocalConfig("ldap_root_password");
 
-getopts('arlph',\%options) or die "Unable to set options\n";
+getopts('arlnph',\%options) or die "Unable to set options\n";
 
 if ($options{h})  {
    usage();
    exit 1;
 }
 
-if ( $options{r} + $options{p} + $options{l} + $options{a} > 1) {
+if ( $options{r} + $options{p} + $options{l} + $options{n} + $options{a} > 1) {
     usage();
     exit 1;
 }
@@ -245,6 +245,48 @@ if ( $options{r}) {
         system("/bin/rm -f $infile.bak");
       }
     }
+} elsif ( $options{n} ) {
+    setLocalConfig("ldap_nginx_password", "$password");
+    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    $mesg = $ldap->modify('uid=zmnginx,cn=appaccts,cn=zimbra',
+                           replace  => [ userPassword => $password ] );
+    my $infile = "$zimbra_home/conf/zimbra.ldif";
+    my $outfile = "/tmp/zimbra.ldif.$$";
+    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+    my $entry;
+    while( not $ldifin->eof ( ) ) {
+      $entry = $ldifin->read_entry ( );
+      if ( $ldifin->error ( ) ) {
+        print "Error msg: ", $ldifin->error ( ), "\n";
+        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+      } else {
+          if ($entry->dn() eq "uid=zmnginx,cn=appaccts,cn=zimbra") {
+            $entry->replace (
+              userPassword => "$ssha_password",
+            );
+          }
+        $ldifout->write($entry);
+      }
+    }
+    $ldifin->done ( ); 
+    $ldifout->done ( );
+    if ( -s $outfile ) {
+      my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+      if ($rc != 0) {
+        print "Warning: Failed to backup $infile\n";
+      }
+      $rc=0xffff & system("/bin/mv -f $outfile $infile");
+      if ($rc != 0) {
+        print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+        $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+        if ($rc != 0) {
+          print "Failed to restore backup\n";
+        }
+      } else {
+        system("/bin/rm -f $infile.bak");
+      }
+    }
 } else {
     my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
     setLocalConfig("zimbra_ldap_password", "$password");
@@ -301,9 +343,10 @@ sub usage() {
   print "\t-h: display this help message\n";
   print "\t-a: change ldap_amavis_password\n";
   print "\t-l: change ldap_replication_password\n";
+  print "\t-n: change ldap_nginx_password\n";
   print "\t-p: change ldap_postfix_password\n";
   print "\t-r: change ldap_root_passwd\n";
-  print "\tOnly one of a, l, p, or r may be specified\n";
+  print "\tOnly one of a, l, n, p, or r may be specified\n";
   print "\tWithout options zimbra_ldap_password is changed\n\n";
   exit 1;
 

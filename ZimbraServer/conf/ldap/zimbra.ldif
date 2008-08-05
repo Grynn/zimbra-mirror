@@ -39,6 +39,19 @@ objectclass: organizationalRole
 description: application accounts
 cn: appaccts
 
+# place holder for nginx account
+dn: uid=zmnginx,cn=appaccts,cn=zimbra
+uid: zmnginx
+objectclass: zimbraAccount
+objectclass: organizationalPerson
+cn: zmnginx
+sn: zmnginx
+zimbraAccountStatus: active
+zimbraIsAdminAccount: TRUE
+zimbraId: DA336C18-4F5E-11DC-8514-DCA8E67A905E
+description: The zimbra nginx account
+userPassword: {SSHA}0TiyKd2oSDfY7OISyEmuEf8+iqdFlYk7
+
 # place holder for postfix account
 dn: uid=zmpostfix,cn=appaccts,cn=zimbra
 uid: zmpostfix
