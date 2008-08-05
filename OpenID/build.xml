@@ -1,0 +1,111 @@
+<project name="OpenId" default="war">
+
+    <!-- Properties -->
+
+    <property environment="env"/>
+
+
+    <property name='web.dir' value='web'/>
+    <property name='java.dir' value='src'/>
+    <property name='lib.dir' value='jars'/>
+
+    <property name='webinf.dir' value='${web.dir}/WEB-INF'/>
+    <property name='webinf.lib.dir' value='${webinf.dir}/lib'/>
+
+    <property name='deploy.server' value='jetty'/>
+
+    <property name='build.dir' value='build'/>
+    <property name='build.classes.dir' value='${build.dir}/classes'/>
+    <property name='build.dist.dir' value='${build.dir}/dist'/>
+
+    <property name='war.compress' value='false'/>
+    <property name='sync.verbose' value='true'/>
+
+    <property name='deploy.app' value='openid'/>
+
+    <property name='build.war.dir' value='${build.dist.dir}/${deploy.server}/webapps'/>
+    <property name='build.war.file' value='${build.war.dir}/${deploy.app}.war'/>
+    <property name='deploy.dir' value='/opt/zimbra/${deploy.server}/webapps'/>
+    <property name='webapp.dir' value='${deploy.dir}/${deploy.app}'/>
+    <property name='webapp.file' value='${deploy.dir}/${deploy.app}.war'/>
+
+    <property name='server.dir' value='../ZimbraServer'/>
+    <property name='common.dir' value='../ZimbraCommon'/>
+    <property name='common.jars.dir' value='${common.dir}/jars'/>
+
+
+    <!-- Paths and Filesets -->
+
+    <path id='class.path'>
+        <pathelement location="${build.classes.dir}"/>
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <fileset dir="${common.jars.dir}" includes="servlet-api.jar"/>
+    </path>
+
+
+    <!-- Targets -->
+
+    <target name='war' depends='compile'>
+        <mkdir dir='${build.war.dir}'/>
+        <war warfile="${build.war.file}" webxml='${webinf.dir}/web.xml' compress='${war.compress}'>
+            <!-- <webinf dir='${webinf.dir}' includes='${webinf.includes}' excludes='${webinf.excludes},${customer.webinf.excludes}' /> -->
+            <classes dir='${build.classes.dir}'/>
+            <lib dir='${lib.dir}' includes='**.jar'/>
+            <zipfileset dir='${web.dir}'/>
+        </war>
+    </target>
+
+    <target name='sync' depends='compile'>
+        <copy todir='${webapp.dir}' verbose='${sync.verbose}'>
+            <fileset dir='${web.dir}' />
+        </copy>
+        <copy todir='${webapp.dir}/WEB-INF' verbose='${sync.verbose}'>
+			<fileset dir='${webinf.dir}'/>
+        </copy>
+        <copy todir='${webapp.dir}/WEB-INF/classes' verbose='${sync.verbose}'>
+            <fileset dir='${build.classes.dir}'/>
+        </copy>
+
+        <copy todir='${webapp.dir}/WEB-INF/classes' verbose='${sync.verbose}'>
+            <fileset dir='${web.dir}' includes='messages/**,keys/**'/>
+        </copy>
+        <copy todir='${webapp.dir}/WEB-INF/lib' verbose='${sync.verbose}'>
+            <fileset dir='${lib.dir}'/>
+        </copy>
+		
+    </target>
+
+
+    <target name='compile'>
+        <mkdir dir='${build.classes.dir}'/>
+        <javac destdir="${build.classes.dir}" classpathref="class.path" debug="true">
+            <src location='${java.dir}'/>
+        </javac>
+    </target>
+
+    <target name='deploy' depends='war'>
+        <ant dir="${server.dir}" target="stop-jetty" inheritAll="false"/>
+
+        <echo>Deploy ${build.war.file} to ${deploy.dir}</echo>
+        <delete dir="${webapp.dir}"/>
+        <delete file="${webapp.file}"/>
+
+        <mkdir dir='${webapp.dir}'/>
+        <copy file="${build.war.file}" todir="${deploy.dir}"/>
+        <unzip dest='${webapp.dir}' src="${webapp.file}"/>
+        <ant dir="${server.dir}" target="start-jetty" inheritAll="false"/>
+    </target>
+
+    <target name='clean'>
+        <delete dir='${build.dir}'/>
+    </target>
+
+
+    <!-- LEGACY TARGETS -->
+    <target name='dev-sync' depends='sync'/>
+
+    <target name='restart-webserver'>
+        <ant dir="${server.dir}" target="restart-webserver"/>
+    </target>
+
+</project>

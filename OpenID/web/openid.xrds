@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)"> 
+<XRD> 
+<Service xmlns="xri://$xrd*($v*2.0)"> 
+<Type>http://specs.openid.net/auth/2.0/return_to</Type> 
+<URI>http://localhost:7070/openid/handler</URI> 
+</Service> 
+</XRD> 
+</xrds:XRDS> 
