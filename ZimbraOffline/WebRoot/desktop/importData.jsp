@@ -75,7 +75,7 @@ function done(errstr) {
         zd.toggle("submitButton");
         history.go(-1);
     } else {
-        document.doneForm.verb = "imp";
+        document.doneForm.verb.value = "imp";
         document.doneForm.submit();
     }
 }

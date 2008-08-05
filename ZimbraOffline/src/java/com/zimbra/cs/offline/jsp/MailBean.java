@@ -102,25 +102,25 @@ public class MailBean extends FormBean {
 	}
 	
 	public boolean getZmail() {
-	    try {
-                JspProvStub stub = JspProvStub.getInstance();
-                Account account = stub.getOfflineAccount(accountId);
-                
-                return account.getAttr(OfflineConstants.A_offlineRemoteServerUri,
-                    null) != null;
-	    } catch (Exception e) {
-	    }
-	    return false;
+		try {
+			JspProvStub stub = JspProvStub.getInstance();
+			Account account = stub.getOfflineAccount(accountId);
+
+			return account.getAttr(OfflineConstants.A_offlineRemoteServerUri,
+				null) != null;
+		} catch (Exception e) {
+		}
+		return false;
 	}
 	
 	public String[] getExportList() throws ServiceException {
 		return getFolderList(true);
 	}
-        
+
 	public String[] getImportList() throws ServiceException {
 		return getFolderList(false);
 	}
-        
+
 	String[] getFolderList(boolean export) throws ServiceException {
 		List<ZFolder> fldrs;
 		ArrayList<String> list = new ArrayList<String>();
@@ -148,7 +148,7 @@ public class MailBean extends FormBean {
 	@Override protected void doRequest() {
 		if (verb == null || !isAllOK())
 			return;
-	    if (verb.isReset()) {
+		if (verb.isReset()) {
 			try {
 				JspProvStub stub = JspProvStub.getInstance();
 
