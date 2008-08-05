@@ -50,7 +50,7 @@ mail
     # defined in RFC 4616
     # (presently, this will only be used for auth gssapi)
     # 
-    master_auth_username    "${mail.duser}";
+    master_auth_username    "zmnginx";
     master_auth_password    "${mail.dpasswd}";
 
     # Default realm (kerberos)
