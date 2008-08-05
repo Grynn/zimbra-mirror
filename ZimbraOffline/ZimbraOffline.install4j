@@ -1473,7 +1473,8 @@ File webapp = context.getDestinationFile("zdesktop.webapp");
 File override = context.getDestinationFile("zdesktop.webapp/override.ini");
 File profile = context.getDestinationFile("profile");
 
-String argument = "-webapp " + webapp.getCanonicalPath() + " -override " + override.getCanonicalPath() + " -profile " + profile.getCanonicalPath();
+String argument = "-webapp \"" + webapp.getCanonicalPath() + "\" -override \"" + override.getCanonicalPath() + 
+    "\" -profile \"" + profile.getCanonicalPath() + "\"";
 
 File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Yahoo! Zimbra Desktop.lnk");
 File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Yahoo! Zimbra Desktop.lnk");
@@ -2738,19 +2739,19 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                             <string>-webapp</string>
                           </void>
                           <void index="1">
-                            <string>"${installer:sys.installationDir}/zdesktop.webapp"</string>
+                            <string>${installer:sys.installationDir}/zdesktop.webapp</string>
                           </void>
                           <void index="2">
                             <string>-override</string>
                           </void>
                           <void index="3">
-                            <string>"${installer:sys.installationDir}/zdesktop.webapp/override.ini"</string>
+                            <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
                           </void>
                           <void index="4">
                             <string>-profile</string>
                           </void>
                           <void index="5">
-                            <string>"${installer:sys.installationDir}/profile"</string>
+                            <string>${installer:sys.installationDir}/profile</string>
                           </void>
                         </array>
                       </void>
