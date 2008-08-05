@@ -1,0 +1,118 @@
+                           [NGINX PROXY DEVEL SETUP]
+
+  (0) Prepare system
+
+    ; Read ZimbraServer/docs/INSTALL* and check out necessary p4 directories
+    ; Build ZimbraServer and ZimbraNginxLookup
+
+    $ cd /path/to/ZimbraServer/
+    $ ant reset-all
+    $ cd /path/to/ZimbraNginxLookup/
+    $ ant deploy
+
+  (1) Check out auxiliary modules (OPTIONAL)
+
+    ; Check out the following directories from p4
+      - ThirdParty/cyrus-sasl/...
+      - ThirdParty/openssl/...
+
+    ; Read the build instructions for cyrus-sasl and openssl
+    ; Make sure you have a working copy of these (respectively) under
+      - /opt/zimbra/cyrus-sasl/
+      - /opt/zimbra/openssl/
+
+    ; NOTE - If you omit these steps, then NGINX will be linked to the 
+    ; system libssl.so and libsasl2.so and libcrypto.so instead
+
+  (2) Build NGINX
+
+    ; check out ThirdParty/nginx/...
+    $ cd ThirdParty/nginx/nginx-0.5.30-zimbra/
+    $ ./configure --prefix=/opt/zimbra/nginx/ \
+        --with-debug \
+        --with-mail \
+        --with-mail_ssl_module \
+        --with-http_ssl_module
+    $ make
+    $ killall nginx
+    $ rm /opt/zimbra/nginx/ -rf
+    $ make install
+     
+  (3) Configure system for mail proxy
+
+    ; assume local system is ${develbox} and domain is ${develdomain}
+    ; for each proxy ip, set ${proxyipN} to contain a proxy ip
+
+    ; $ export develbox=devel.local
+    ; $ export develdomain=devel.local
+    ; $ export proxyip1=10.10.10.10
+    ; $ export proxyip2=127.0.0.1
+
+    $ zmprov ms ${develbox} zimbraImapCleartextLoginEnabled TRUE
+    $ zmprov ms ${develbox} zimbraImapBindPort 7143
+    $ zmprov ms ${develbox} zimbraImapSSLBindPort 7993
+    $ zmprov ms ${develbox} zimbraImapProxyBindPort 143
+    $ zmprov ms ${develbox} zimbraImapSSLProxyBindPort 993
+    $ zmprov ms ${develbox} zimbraImapSSLServerEnabled TRUE
+
+    $ zmprov ms ${develbox} zimbraPop3CleartextLoginEnabled TRUE
+    $ zmprov ms ${develbox} zimbraPop3BindPort 7110
+    $ zmprov ms ${develbox} zimbraPop3SSLBindPort 7995
+    $ zmprov ms ${develbox} zimbraPop3ProxyBindPort 110
+    $ zmprov ms ${develbox} zimbraPop3SSLProxyBindPort 995
+    $ zmprov ms ${develbox} zimbraPop3SSLServerEnabled TRUE
+
+    $ zmprov ms ${develbox} zimbraMemcachedBindPort 11211
+    $ zmprov ms ${develbox} zimbraReverseProxyMailEnabled TRUE
+    $ zmprov ms ${develbox} zimbraReverseProxyLookupTarget TRUE
+    $ zmprov ms ${develbox} +zimbraServiceEnabled imapproxy
+
+    $ zmprov ms ${develbox} zimbraReverseProxyImapSaslGssapiEnabled TRUE
+    $ zmprov ms ${develbox} zimbraReverseProxyPop3SaslGssapiEnabled TRUE
+    $ zmprov ms ${develbox} zimbraReverseProxyDefaultRealm EXAMPLE.COM
+
+    $ zmprov ms ${develbox} zimbraReverseProxyImapStartTlsMode on
+    $ zmprov ms ${develbox} zimbraReverseProxyPop3StartTlsMode on
+
+    $ zmprov mcf +zimbraReverseProxyAdminIPAddress ${proxyip1}
+    $ zmprov mcf +zimbraReverseProxyAdminIPAddress ${proxyip2}  # etc ...
+
+    $ zmprov md ${develdomain} +zimbraVirtualIPAddress ${proxyip1}
+    $ zmprov md ${develdomain} +zimbraVirtualIPAddress ${proxyip2}  # etc ...
+
+  (3) configure system for http proxy
+
+    ; backend mail mode is always http when proxy is in force
+    $ zmprov ms ${develbox} zimbraMailMode http
+
+    ; proxy mail mode can be mixed|both|redirect|http|https
+    $ zmprov ms ${develbox} zimbraReverseProxyMailMode mixed
+
+    ; configure backend to not send the usual http/302+location
+    $ zmprov ms ${develbox} zimbraMailReferMode reverse-proxied
+
+    ; set the backend and proxy ports
+    $ zmprov ms ${develbox} zimbraMailPort 7070
+    $ zmprov ms ${develbox} zimbraMailProxyPort 80
+    $ zmprov ms ${develbox} zimbraMailSSLPort 7443
+    $ zmprov ms ${develbox} zimbraMailSSLProxyPort 443
+    $ zmprov ms ${develbox} zimbraReverseProxyHttpEnabled TRUE
+    $ zmprov md ${develdomain} +zimbraVirtualHostname ${proxyname1}
+    $ zmprov md ${develdomain} +zimbraVirtualHostname ${proxyname2}
+    $ zmprov md ${develdomain} +zimbraVirtualHostname ${proxyip1?}
+    $ zmprov md ${develdomain} +zimbraVirtualHostname ${proxyip2?}
+
+  (3) test and apply the proxy config generation
+    $ zmproxyconfgen --help
+    $ zmproxyconfgen -v -D -s ${develbox}
+    $ zmproxyconfgen -v -s ${develbox}
+
+  (4) start nginx (and optionally, memcached)
+    $ killall nginx
+    $ killall memcached
+    $ /opt/zimbra/memcached-1.2.X/bin/memcached -vv
+    $ sudo /opt/zimbra/nginx/sbin/nginx -c /opt/zimbra/conf/nginx.conf 
+    $ tail -f /opt/zimbra/log/nginx.log
+
+                                       *
+
