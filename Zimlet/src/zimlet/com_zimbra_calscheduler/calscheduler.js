@@ -53,6 +53,7 @@ function(symbol, result) {
 
     resultView.showMe();
     resultView._updateDays();
+    resultView.scrollToCurrentDate();
     resultView._setAttendees(resultView._organizer, resultView._attendees);
     return resultView;
 };
@@ -218,7 +219,12 @@ CalSchedulerView = function(parent, controller) {
 
 	DwtComposite.call(this, {parent:parent, className:"CalSchedulerView", posStyle:Dwt.ABSOLUTE_STYLE});
 
-	this.addControlListener(new AjxListener(this, this._controlListener));
+    var el = this.getHtmlElement();
+    el.style.overflowX = "hidden";
+    el.style.overflowY = "auto";
+
+
+    this.addControlListener(new AjxListener(this, this._controlListener));
 
 	var dateInfo = this._dateInfo = {};
 
@@ -283,6 +289,7 @@ CalSchedulerView.FREEBUSY_NUM_CELLS		= 48;
 // Hold on to this one separately because we use it often
 CalSchedulerView.FREE_CLASS = "ZmScheduler-free";
 
+CalSchedulerView.TIME_GRID_MARGIN = 10;
 CalSchedulerView._DAY_HEADING_HEIGHT = 25;
 CalSchedulerView.HOUR_COLUMN_WIDTH = 15;
 CalSchedulerView.DAY_COLUMN_WIDTH = CalSchedulerView.HOUR_COLUMN_WIDTH*24;
@@ -1962,7 +1969,7 @@ function(resize) {
 
 	Dwt.setLocation(this._timeGrid, x, loc.y - 2*CalSchedulerView._DAY_HEADING_HEIGHT+2);
 	//if(resize) {
-	Dwt.setSize(this._timeGrid, this.getSize().x-x, this.getSize().y-loc.y+2*CalSchedulerView._DAY_HEADING_HEIGHT);
+	Dwt.setSize(this._timeGrid, this.getSize().x-x - CalSchedulerView.TIME_GRID_MARGIN, this.getSize().y-loc.y+2*CalSchedulerView._DAY_HEADING_HEIGHT - CalSchedulerView.TIME_GRID_MARGIN);
 	//}
 
 	if(needsTemplateContent) {
@@ -2269,5 +2276,32 @@ function(slot, startTime, endTime) {
         }
     }
 
+};
+
+
+CalSchedulerView.prototype.scrollToCurrentDate =
+function() {
+    var numDays = this.getNumDays();
+    var startTime = this._days[0].date.getTime();
+    var endTime = this._days[numDays-1].endDate.getTime();
+
+    var diffTime = endTime - startTime;
+
+    var gridSize = Dwt.getSize(this._timeGrid);
+
+    var currentDate = this.getSelectedStartDate();
+    var deltaTime = currentDate.getTime() - startTime;
+    var deltaX = (CalSchedulerView.DAY_COLUMN_WIDTH * numDays) * (deltaTime/diffTime);
+
+    if(deltaX > 0 && deltaX < (CalSchedulerView.DAY_COLUMN_WIDTH * numDays)) {
+        this._timeGrid.scrollLeft = deltaX;
+    }
+
+    /*if((this._timeGrid.scrollLeft + gridSize.x) < deltaX){
+        var diffX = deltaX - (gridSize.x) + 100;
+        if(diffX > 0) {
+            this._timeGrid.scrollLeft = diffX;
+        }
+    }*/
 };
 
