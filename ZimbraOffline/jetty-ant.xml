@@ -25,7 +25,7 @@
 
 	<property name="project.outputDirectory" value="build" />
 	<property name="jetty.version" value="6.1.5" />
-	<property name="jetty_run_base" location="/opt/zimbra/zdesktop" />
+	<property name="jetty_run_base" location="/opt/zimbra/zdesktop dev" />
 
 	<path id="jetty.plugin.classpath">
 		<fileset dir="${jetty_run_base}/jetty/lib">

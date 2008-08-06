@@ -132,12 +132,12 @@ JETTY_INSTALL_TRACE_FILE="start.jar"
 ##################################################
 if [ -z "$ZIMBRA_HOME" ]
 then
-  ZIMBRA_HOME=/opt/zimbra/zdesktop
+  ZIMBRA_HOME="/opt/zimbra/zdesktop dev"
 fi
 
 if [ -z "$JETTY_HOME" ] 
 then
-  JETTY_HOME=$ZIMBRA_HOME/jetty 
+  JETTY_HOME="$ZIMBRA_HOME/jetty"
 fi
 
 
@@ -163,8 +163,8 @@ fi
 # Zimbra tweak, because we want to keep jetty.conf under $JETTY_HOME/etc
 #########################################################################
 JAVA_OPTIONS="-DSTART='${JETTY_HOME}/etc/start.config' -DSTOP.PORT=7644 -DSTOP.KEY=stop -Dzimbra.config='${ZIMBRA_HOME}/conf/localconfig.xml' -Djava.library.path='${ZIMBRA_HOME}/lib' -Djava.awt.headless=true"
-JETTY_CONSOLE=${ZIMBRA_HOME}/log/offline.out
-JETTY_RUN=${ZIMBRA_HOME}/log
+JETTY_CONSOLE="${ZIMBRA_HOME}/log/offline.out"
+JETTY_RUN="${ZIMBRA_HOME}/log"
 
 ###########################################################
 # Get the list of config.xml files from the command line.
@@ -176,13 +176,13 @@ then
     if [ -f $A ] 
     then
        CONF="$A" 
-    elif [ -f $JETTY_HOME/etc/$A ] 
+    elif [ -f "$JETTY_HOME/etc/$A" ] 
     then
        CONF="$JETTY_HOME/etc/$A" 
     elif [ -f ${A}.xml ] 
     then
        CONF="${A}.xml" 
-    elif [ -f $JETTY_HOME/etc/${A}.xml ] 
+    elif [ -f "$JETTY_HOME/etc/${A}.xml" ] 
     then
        CONF="$JETTY_HOME/etc/${A}.xml" 
     else
