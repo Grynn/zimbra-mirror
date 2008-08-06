@@ -419,5 +419,10 @@ if [ -f ${zimbra_home}/libexec/ZmSetup.app/Contents/MacOS/ZmSetup ]; then
 	chmod 544 ${zimbra_home}/libexec/ZmSetup.app/Contents/MacOS/ZmSetup
 fi
 
+if [ -f ${zimbra_home}/conf/nginx.conf ]; then
+	chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/nginx.conf
+	chmod 644 ${zimbra_home}/conf/nginx.conf
+fi
+
 exit 0
 
