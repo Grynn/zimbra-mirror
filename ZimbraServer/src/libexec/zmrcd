@@ -145,7 +145,8 @@ sub runCommand {
   }
   if (open(COMMAND, "$cmdstr |")) {
     #logMsg("Running cmd: $cmdstr");
-    if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles") && ($command ne "zmcollectldapzimbra")) {
+    if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles") && ($command ne "zmcollectldapzimbra") &&
+        ($command ne "clusvcadm") && ($command ne "zmclustat")) {
       logMsg("STARTCMD: $host $cmdstr");
     }
 
@@ -155,7 +156,8 @@ sub runCommand {
     }
     close COMMAND;
 
-    if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles")  && ($command ne "zmcollectldapzimbra")) {
+    if (($command ne "zmqstat") && ($command ne "zmcollectconfigfiles") && ($command ne "zmcollectldapzimbra") &&
+        ($command ne "clusvcadm") && ($command ne "zmclustat")) {
       logMsg("ENDCMD: $host $cmdstr");
     }
   } else {
