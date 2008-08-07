@@ -34,7 +34,6 @@
         <jarDirectory url="file://$MODULE_DIR$/tools/jaxws/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntryProperties />
   </component>
 </module>
 
