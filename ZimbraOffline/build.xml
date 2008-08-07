@@ -460,8 +460,8 @@
 
 	<property name="deploy.war" value="${warfile}" />
 	<property name="deploy.host" value="localhost" />
-	<property name="deploy.port" value="7633" />
-	<property name="admin.port" value="7634" />
+	<property name="deploy.port" value="7733" />
+	<property name="admin.port" value="7734" />
 
 	<target name="offline-refresh-war" depends="offline-war">
 		<antcall target="offline-server-stop" />
@@ -556,6 +556,8 @@
 
 		<antcall target="offline-make-dist">
 			<param name="param.install.dir" value="${zimbra.home.dir}" />
+			<param name="param.port" value="7733" />
+			<param name="param.adminport" value="7734" />
 		</antcall>
 
                 <java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
@@ -628,7 +630,14 @@
 		<mkdir dir="${dist.dir}/jetty/webapps" />
 		<mkdir dir="${dist.dir}/jetty/work" />
 
-		<antcall target="offline-dev-dist" />
+		<antcall target="offline-dev-dist"/>
+
+		<replace file="${dist.dir}/jetty/etc/jetty.xml" token="@port@" value="${param.port}"/>
+		<replace file="${dist.dir}/jetty/etc/jetty.xml" token="@adminPort@" value="${param.adminport}"/>
+		<replace file="${dist.dir}/jetty/webapps/service/WEB-INF/web.xml" token="@port@" value="${param.port}"/>
+		<replace file="${dist.dir}/jetty/webapps/service/WEB-INF/web.xml" token="@adminPort@" value="${param.adminport}"/>
+		<replace file="${dist.dir}/jetty/webapps/zimbra/WEB-INF/web.xml" token="@port@" value="${param.port}"/>
+		<replace file="${dist.dir}/jetty/webapps/zimbra/WEB-INF/web.xml" token="@adminPort@" value="${param.adminport}"/>
 
 		<ant dir="../Zimlet" target="clean" inheritAll="false" />
 		<ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
@@ -674,6 +683,10 @@
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
 			<arg line="-e zdesktop_buildid=${offline.buildid}" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e zimbra_admin_service_port=${param.adminport}" />
 		</java>
 		
 		<mkdir dir="${dist.dir}/log"/>
@@ -861,6 +874,8 @@
 	<target name="offline-make-install-files">
 		<antcall target="offline-make-dist">
 			<param name="param.install.dir" value="@install@" />
+			<param name="param.port" value="7633" />
+			<param name="param.adminport" value="7634" />
 		</antcall>
 		<antcall target="offline-install-misc" />
 		<antcall target="offline-prep-prism" />
@@ -906,6 +921,8 @@
 		<copy file="${config.dir}/web_zimbra.xml" tofile="${jetty.home.dir}/webapps/zimbra/WEB-INF/web.xml" overwrite="true"/>
 		<tstamp><format property="build.simpleDate" pattern="yyMMddHHmmss" /></tstamp>
 		<replace file="${jetty.home.dir}/webapps/zimbra/WEB-INF/web.xml" token="@jsVersion@" value="${build.simpleDate}"/>
+		<replace file="${jetty.home.dir}/webapps/zimbra/WEB-INF/web.xml" token="@port@" value="7733"/>
+		<replace file="${jetty.home.dir}/webapps/zimbra/WEB-INF/web.xml" token="@adminPort@" value="7734"/>
 	</target>
 
 	<!--target name="offline-prism-webapp">

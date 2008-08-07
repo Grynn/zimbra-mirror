@@ -129,7 +129,7 @@ public class MailBean extends FormBean {
 		options.setAccountBy(AccountBy.id);
 		options.setAccount(accountId);
 		options.setPassword(password);
-		options.setUri(JspConstants.LOCALHOST_SOAP_URL);
+		options.setUri(ConfigServlet.LOCALHOST_SOAP_URL);
 		ZMailbox mbox = ZMailbox.getMailbox(options);
 		fldrs = mbox.getAllFolders();
 		for (ZFolder f : fldrs) {

@@ -11,13 +11,13 @@
 	</context-param>
 	<context-param>
 		<param-name>admin.allowed.ports</param-name>
-		<param-value>7634</param-value>
+		<param-value>@adminPort@</param-value>
 	</context-param>
 
     <!-- =============
 	<context-param>
 	   <param-name>zimbra.soap.url</param-name>
-	   <param-value>http://localhost:7633/service/soap</param-value>
+	   <param-value>http://localhost:@port@/service/soap</param-value>
 	</context-param>
     -->
 	<context-param>
@@ -185,6 +185,20 @@
 	  <load-on-startup>0</load-on-startup>
 	</servlet>
 
+        <servlet>
+          <servlet-name>ConfigServlet</servlet-name>
+          <servlet-class>com.zimbra.cs.offline.jsp.ConfigServlet</servlet-class>
+          <init-param>
+            <param-name>port</param-name>
+            <param-value>@port@</param-value>
+          </init-param>
+          <init-param>
+            <param-name>adminPort</param-name>
+            <param-value>@adminPort@</param-value>
+          </init-param>
+          <load-on-startup>1</load-on-startup>
+        </servlet>
+
 	<servlet-mapping>
 	  <servlet-name>jsp</servlet-name>
 	  <url-pattern>*.jsp</url-pattern>
@@ -271,7 +285,7 @@
 	<env-entry>
 		<env-entry-name>httpPort</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>7633</env-entry-value>
+        <env-entry-value>@port@</env-entry-value>
 	</env-entry>
 
 	<env-entry>

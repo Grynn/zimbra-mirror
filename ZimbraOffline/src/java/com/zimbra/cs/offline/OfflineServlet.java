@@ -39,12 +39,14 @@ import com.zimbra.cs.zclient.ZMailbox;
 
 public class OfflineServlet extends HttpServlet {
 
-    private final String LOCALHOST_URL = "http://localhost:7633";
-    private final String LOCALHOST_ADMIN_URL = "http://localhost:7634" + ZimbraServlet.ADMIN_SERVICE_URI;
-    private final String LOCALHOST_MAIL_URL = LOCALHOST_URL + "/zimbra/mail";
+    private static final String LOCALHOST_URL_PREFIX = "http://localhost:";
+    
+    private static String LOCALHOST_SOAP_URL;
+    private static String LOCALHOST_ADMIN_URL;
+    private static String LOCALHOST_MAIL_URL;
 	
     private ZMailbox.Options getMailboxOptions(String username, String password) {
-        ZMailbox.Options options = new ZMailbox.Options(username, Provisioning.AccountBy.name, password, LOCALHOST_URL + ZimbraServlet.USER_SERVICE_URI);
+        ZMailbox.Options options = new ZMailbox.Options(username, Provisioning.AccountBy.name, password, LOCALHOST_SOAP_URL);
         options.setNoSession(false);
         return options;
     }
@@ -82,6 +84,14 @@ public class OfflineServlet extends HttpServlet {
 	@Override
 	public void init() {
 		try {
+			int port = Integer.parseInt(getServletConfig().getInitParameter("port"));
+			int adminPort = Integer.parseInt(getServletConfig().getInitParameter("adminPort"));
+			
+			//setting static variables
+			LOCALHOST_SOAP_URL = LOCALHOST_URL_PREFIX + port + ZimbraServlet.USER_SERVICE_URI;
+			LOCALHOST_ADMIN_URL = LOCALHOST_URL_PREFIX + adminPort + ZimbraServlet.ADMIN_SERVICE_URI;
+			LOCALHOST_MAIL_URL = LOCALHOST_URL_PREFIX + port + "/zimbra/mail";
+			
 			OfflineDataSource.init();
 			OfflineProvisioning.getOfflineInstance().getLocalAccount();
 			OfflineSyncManager.getInstance().init();

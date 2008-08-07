@@ -109,7 +109,7 @@ public class OfflinePoller implements Runnable {
         request.addAttribute(MailConstants.A_DEFTYPES, "all");
         request.addAttribute(MailConstants.A_SEQ, lastSequence);
         request.addAttribute(MailConstants.A_BLOCK, "1");
-        request.addAttribute(MailConstants.A_TIMEOUT, "30");
+        request.addAttribute(MailConstants.A_TIMEOUT, "300");
         
         Element account = request.addElement(MailConstants.E_WAITSET_UPDATE).addElement(MailConstants.E_A);
         account.addAttribute(MailConstants.A_ID, ombx.getAccountId());

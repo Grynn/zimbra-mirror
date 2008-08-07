@@ -46,9 +46,6 @@
   <key name="zimbra_mailbox_purgeable">
     <value>false</value>
   </key>
-  <key name="zimbra_admin_service_port">
-    <value>7634</value>
-  </key>
   <key name="zimbra_admin_service_scheme">
     <value>http://</value>
   </key>

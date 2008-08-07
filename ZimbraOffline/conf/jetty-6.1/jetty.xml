@@ -37,7 +37,7 @@
       <Arg>
           <New id="http" class="org.mortbay.jetty.nio.SelectChannelConnector">
             <Set name="host">localhost</Set>
-            <Set name="port"><SystemProperty name="jetty.port" default="7633"/></Set>
+            <Set name="port"><SystemProperty name="jetty.port" default="@port@"/></Set>
             <Set name="maxIdleTime">30000</Set>
             <Set name="Acceptors">2</Set>
           </New>
@@ -48,7 +48,7 @@
       <Arg>
           <New id="admin" class="org.mortbay.jetty.nio.SelectChannelConnector">
             <Set name="host">localhost</Set>
-            <Set name="port">7634</Set>
+            <Set name="port">@adminPort@</Set>
             <Set name="maxIdleTime">30000</Set>
             <Set name="Acceptors">2</Set>
           </New>

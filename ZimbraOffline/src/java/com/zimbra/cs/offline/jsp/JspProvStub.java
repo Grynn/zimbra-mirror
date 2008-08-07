@@ -21,7 +21,7 @@ public class JspProvStub {
 
     private JspProvStub() throws ServiceException {
     	prov = new SoapProvisioning();
-        prov.soapSetURI(JspConstants.LOCALHOST_ADMIN_URL);
+        prov.soapSetURI(ConfigServlet.LOCALHOST_ADMIN_URL);
         prov.soapZimbraAdminAuthenticate();
     }
     
