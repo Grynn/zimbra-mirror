@@ -2532,7 +2532,7 @@ File[] zimlets = zimletsDir.listFiles(fnf);
 boolean hasFailures = false;
 for (int i = 0; i &lt; zimlets.length; ++i) {
     try {
-        com.zimbra.cs.zimlet.ZimletUtil.main(new String[] {"-q", "deploy", zimlets[i].getAbsolutePath()});
+        com.zimbra.cs.zimlet.ZimletUtil.deployZimletBySoap(zimlets[i].getAbsolutePath());
         zimlets[i].delete();
     } catch (Exception x) {
         hasFailures = true;
