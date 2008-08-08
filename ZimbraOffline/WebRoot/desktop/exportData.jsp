@@ -136,7 +136,7 @@ function done(errstr) {
 </table>
 </div>
 <div>
-    <iframe name="iframe" id="iframe" frameborder="1" scrolling="no" style="width:1000px;height:1000px;border:1px"></iframe>
+    <iframe name="iframe" id="iframe" frameborder="0 scrolling="no" style="width:0px;height:0px;border:0px"></iframe>
 </div>
 <form name="submitForm" method="GET" target="iframe">
     <input type="hidden" name="callback" value="done">
