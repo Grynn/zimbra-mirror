@@ -23,6 +23,11 @@ ${zdf:reload(bean)}
 <script type="text/javascript" src="js/desktop.js"></script>
 <script type="text/javascript">
 
+function onCancel() {
+    document.doneForm.verb.value = "";
+    document.doneForm.submit();
+}
+
 function onSearch() {
     zd.toggle("searchQuery");
 }
@@ -41,17 +46,25 @@ function onSubmit() {
     }
     zd.hide("submitButton");
     zd.set("status", "<span class='ZOfflineNotice><fmt:message key="Processing"/></span>");
+    submitForm.action = url;
     submitForm.name.value = optionForm.name.value;
     submitForm.query.value = optionForm.query.value;
     submitForm.types.value = types;
-    submitForm.action = url;
     submitForm.submit();
-    setTimeout('done()', 4000);
+    setTimeout('done()', 5000);
 }
 
-function done() {
+function done(errstr) {
     zd.hide("status");
-    document.doneForm.submit();
+    if (errstr) {
+        clearTimeout();
+        alert(errstr);
+        zd.toggle("submitButton");
+        history.go(-1);
+    } else {
+        document.doneForm.verb.value = "exp";
+        document.doneForm.submit();
+    }
 }
 
 </script>
@@ -115,7 +128,7 @@ function done() {
             <p><span id="status"></span></p>
         </td>
         <td class="ZWizardButton" width="1%">
-            <button class='DwtButton' id="cancelButton" onclick="history.go(-2)">
+            <button class='DwtButton' id="cancelButton" onclick="onCancel()">
                 <fmt:message key="Cancel"/>
             </button>
         </td>
@@ -123,18 +136,19 @@ function done() {
 </table>
 </div>
 <div>
-    <iframe name="iframe" id="iframe" frameborder="0" scrolling="no" style="width:0px;height:0px;border:0px"></iframe>
+    <iframe name="iframe" id="iframe" frameborder="1" scrolling="no" style="width:1000px;height:1000px;border:1px"></iframe>
 </div>
 <form name="submitForm" method="GET" target="iframe">
+    <input type="hidden" name="callback" value="done">
     <input type="hidden" name="fmt" value="tgz">
     <input type="hidden" name="name">
     <input type="hidden" name="query">
     <input type="hidden" name="types">
 </form>
-<form name="doneForm" action="/zimbra/desktop/${account.zmail ? "z" : "x"}mail.jsp" method="POST">
+<form name="doneForm" action="/zimbra/desktop/${bean.zmail ? "z" : "x"}mail.jsp" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
     <input type="hidden" name="accountName" value="${bean.accountName}">
-    <input type="hidden" name="verb" value="exp"}>
+    <input type="hidden" name="verb">
 </form>
 </div>
 </body>

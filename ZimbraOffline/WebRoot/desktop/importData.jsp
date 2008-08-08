@@ -23,6 +23,11 @@ ${zdf:reload(bean)}
 <script type="text/javascript" src="js/desktop.js"></script>
 <script type="text/javascript">
 
+function onCancel() {
+    document.doneForm.verb.value = "";
+    document.doneForm.submit();
+}
+
 function onSubfolder() {
     if (document.submitForm.subfolderName.value == "") {
         var date = new Date();
@@ -175,7 +180,7 @@ function done(errstr) {
             <p><span id="status"></span></p>
         </td>
         <td class="ZWizardButton" width="1%">
-            <button class='DwtButton' id="cancelButton" onclick="document.doneForm.submit()">
+            <button class='DwtButton' id="cancelButton" onclick="onCancel()">
                 <fmt:message key="Cancel"/>
             </button>
         </td>
