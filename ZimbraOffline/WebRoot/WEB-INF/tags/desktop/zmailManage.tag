@@ -59,6 +59,14 @@ function disableButtons() {
     zd.disable("manageButton");
     zd.disable("saveButton");
 }
+
+function passOnEdit(id) {
+    passObj = document.getElementById(id);
+    passObj.value='';
+    passObj.readOnly = false;
+    passObj.focus();
+}
+
 //-->
 </script>
 
@@ -109,7 +117,10 @@ function disableButtons() {
         </tr>
         <tr id='passwordRow'>
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Password'/>:</td>
-            <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
+            <td>
+                <input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}" ${zdf:isValid(bean, 'password') ? 'readonly' : ''}>
+                <c:if test="${zdf:isValid(bean, 'password')}"><a href="#" onclick="passOnEdit('password');this.style.display='none'"><fmt:message key='Edit'/></a></c:if>
+            </td>
         </tr>
 
         <tr id='mailServerRow'>

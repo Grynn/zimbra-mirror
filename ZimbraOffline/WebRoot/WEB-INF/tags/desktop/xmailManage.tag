@@ -64,6 +64,14 @@ function disableButtons() {
     zd.disable("manageButton");
     zd.disable("saveButton");
 }
+
+function passOnEdit(id) {
+    passObj = document.getElementById(id);
+    passObj.value='';
+    passObj.readOnly = false;
+    passObj.focus();
+}
+
 //-->
 </script>
 
@@ -134,7 +142,8 @@ function disableButtons() {
         <tr id='passwordRow'>
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Password'/>:</td>
             <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"
-                    onkeypress='zd.syncIdsOnTimer(this, "smtpPassword")'>
+                    onkeypress='zd.syncIdsOnTimer(this, "smtpPassword")' ${zdf:isValid(bean, 'password') ? 'readonly' : ''}>
+                <c:if test="${zdf:isValid(bean, 'password')}"><a href="#" onclick="passOnEdit('password');this.style.display='none'"><fmt:message key='Edit'/></a></c:if>
             </td>
         </tr>
         
@@ -214,7 +223,13 @@ function disableButtons() {
 	                    </tr>
 	                    <tr>
 	                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Password'/>:</td>
-	                        <td><input style='width:100px' class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}"></td>
+	                        <td>
+                               <input style='width:100px' class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}"
+                                 ${zdf:isValid(bean, 'smtpPassword') ? 'readonly' : ''}>
+                               <c:if test="${zdf:isValid(bean, 'smtpPassword')}">
+                                 <a href="#" onclick="passOnEdit('smtpPassword');this.style.display='none'"><fmt:message key='Edit'/></a>
+                               </c:if>
+	                        </td>
 	                    </tr>
 	                </table>
 	            </td>
