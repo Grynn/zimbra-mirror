@@ -27,7 +27,8 @@ zmsetvars \
   ldap_url \
   ldap_bind_url \
   ldap_master_url \
-  ldap_replica_rid 
+  ldap_replica_rid  \
+  ldap_replication_password
 
 if [ x"$ldap_replica_rid" = "x" ]; then
   ldap_replica_rid=100

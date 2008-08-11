@@ -31,8 +31,7 @@ zmsetvars -f\
 	ldap_port \
 	ldap_root_password \
 	zimbra_ldap_password \
-	zimbra_ldap_userdn \
-	ldap_replication_password
+	zimbra_ldap_userdn
 
 u=`id -un`
 if [ $u != ${zimbra_user} ]; then
@@ -119,7 +118,7 @@ syncrepl rid=${ldap_replica_rid}
 	searchbase=""
 	bindmethod=simple
 	binddn=uid=zmreplica,cn=admins,cn=zimbra
-	credentials=${ldap_replication_password}
+	credentials=@@ldap_replication_password@@
 	logbase="cn=accesslog"
 	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
 	syncdata="accesslog"
@@ -137,7 +136,7 @@ syncrepl rid=${ldap_replica_rid}
 	searchbase=""
 	bindmethod=simple
 	binddn=uid=zmreplica,cn=admins,cn=zimbra
-	credentials=${ldap_replication_password}
+	credentials=@@ldap_replication_password@@
 	starttls=critical
 	logbase="cn=accesslog"
 	logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
