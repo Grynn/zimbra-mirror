@@ -11,7 +11,7 @@ CYRUS_VERSION ?= 2.1.22.3z
 CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 
 SSL_VERSION	?= 0.9.8h
-CFLAGS := "-g -O2 -Wall"
+CFLAGS := "-g -c -O -pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -Werror"
 
 ZIMBRA_HOME ?= /opt/zimbra
 
