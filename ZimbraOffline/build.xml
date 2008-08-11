@@ -575,7 +575,7 @@
 
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.request=INFO" value="log4j.logger.zimbra.offline.request=DEBUG"/>
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.logger.zimbra.offline.response=INFO" value="log4j.logger.zimbra.offline.response=DEBUG"/>
-		<replace file="${dist.dir}/conf/log4j.properties" token="/opt/zimbra/zdesktop/log" value="${zimbra.home.dir}/log"/>
+		<replace file="${dist.dir}/conf/log4j.properties" token="@install@/log" value="${zimbra.home.dir}/log"/>
 
 		<copy todir="${zimbra.home.dir}" overwrite="true">
 			<fileset dir="${dist.dir}"/>
@@ -866,7 +866,7 @@
 	</target>
 	
 	<target name="offline-install-misc">
-		<replace file="${dist.dir}/conf/log4j.properties" token="${zimbra.home.dir}/log" value=""/>
+		<replace file="${dist.dir}/conf/log4j.properties" token="@install@/log/" value=""/>
 		<replace file="${dist.dir}/conf/log4j.properties" token="log4j.rootLogger=INFO,CONSOLE,LOGFILE" value="log4j.rootLogger=INFO,LOGFILE"/>
 		<replace file="${dist.dir}/jetty/resources/log4j.properties" token="/opt/zimbra/log/" value=""/>
 	</target>
