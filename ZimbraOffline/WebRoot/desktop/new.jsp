@@ -42,6 +42,10 @@ function OnXmail() {
     window.location = "/zimbra/desktop/xmail.jsp";
 }
 
+function OnMmail() {
+    window.location = "/zimbra/desktop/mmail.jsp";
+}
+
 </script>
 </head>
 
@@ -141,6 +145,14 @@ function OnXmail() {
             <td valign=top>
                 <button class='DwtButton' onclick="OnAmail()" style='width:100%'>
                     <nobr><fmt:message key='AOLAcct'/></nobr>
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <td valign=top>
+                <button class='DwtButton' onclick="OnMmail()" style='width:100%'>
+                    <nobr><fmt:message key='MSEAcct'/></nobr>
                 </button>
             </td>
         </tr>

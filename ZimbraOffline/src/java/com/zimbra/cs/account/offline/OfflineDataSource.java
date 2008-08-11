@@ -95,6 +95,7 @@ public class OfflineDataSource extends DataSource {
             if (serviceName != null && serviceName.length() > 0) {
                 int folderCount = props.getNumberedPropertyAsInteger(PROP_DATASOURCE, i, PROP_KNOWNFOLDER_COUNT, 0);
                 if (folderCount > 0) {
+                    OfflineLog.offline.debug("Loading %d folder mappings for service '%s'", folderCount, serviceName);
                     KnownService ks = new KnownService();
                     ks.name = serviceName;
                     ks.saveToSent = "true".equalsIgnoreCase(
