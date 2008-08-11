@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.18";
+my $version = "1.19";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -572,10 +572,11 @@ sub processfile
       my $sEvDate=0; my $eEvDate=0;
       my $orig_mstrsdt=0; my $orig_mstredt=0;
       my %srtd_newrecarr=();
-      my %ltd_exlist=(); my $lmt_listrec={};
+      my %ltd_exlist=(); my $lmt_listrec={};  my %weekenddate_list=();
       my $islocchanged=0; my $issmrychanged=0; my $isattndchanged=0;
       my $isrdtimeok=1;my $isdescchanged=0; my $isweekdayok=1;
       my $isrdtdeleted=0;
+      my %week_day_arr_list=();
       #iterate through all occurences
       my %heventdates=();
       foreach my $newrec (@newrecarr)
@@ -741,23 +742,72 @@ sub processfile
                 my $sdt;my $ndt;
                 my $isweekendpresent=0; my $wkday; my $weekendcount=0;
                 my $prvwkday=0;my $jstcrosswend=0;
+                my $weekenddaypassed=0;
+                my @weekday_arr;
+                %week_day_arr_list=();
+                my $startwkday=-1;my $endwkday=-1;
                 for my $k1 ( sort keys %$rdarray )
                 {
+                  #for weekend present check and passed weekend calculations
                   my $twdidx= rindex($k1,':');
                   my $tk1= substr($k1,$twdidx+1);
                   $wkday= get_weekday($tk1);
+                  #store start weekday for weekly pattern calculation
+                  if ($startwkday eq -1)
+                  {
+                    $startwkday= $wkday;
+                  }
                   #check if weekend present
                   if ($wkday>5)
                   {
                     #yes it is there!
                     $isweekendpresent=1;
+                    my $tdt=$k1;
+                    $tdt=~ s/RDATE/DTSTART/;
+                    $weekenddate_list{$tdt}=$wkday;
+                    
+                    #set it to 1 if just saturday has passed. set to 0 when sunday passed
+                    #as weekendcount will increment so no need to keep track of just saturday
+                    $weekenddaypassed=1;
                   }
                   if ($prvwkday>$wkday)
                   {
                     $weekendcount++;
                     $jstcrosswend=1;
+                    #reset it after weekend gone
+                    $weekenddaypassed=0;
                   }
                   $prvwkday=$wkday;
+                  
+                  #Store weekdays date in hash array
+                  if ($wkday eq 1)
+                  {
+                    push @{$week_day_arr_list{"MO"}}, $k1;
+                  }
+                  elsif ($wkday eq 2)
+                  {
+                    push @{$week_day_arr_list{"TU"}}, $k1;
+                  }
+                  elsif ($wkday eq 3)
+                  {
+                    push @{$week_day_arr_list{"WE"}}, $k1;
+                  }
+                  elsif ($wkday eq 4)
+                  {
+                    push @{$week_day_arr_list{"TH"}}, $k1;
+                  }
+                  elsif ($wkday eq 5)
+                  {
+                    push @{$week_day_arr_list{"FR"}}, $k1;
+                  }
+                  elsif ($wkday eq 6)
+                  {
+                    push @{$week_day_arr_list{"SA"}}, $k1;
+                  }
+                  elsif ($wkday eq 7)
+                  {
+                    push @{$week_day_arr_list{"SU"}}, $k1;
+                  }
                   if ($floop)  #first loop
                   {
                     $k2=$k1;
@@ -841,7 +891,7 @@ sub processfile
                     
                     #delta days
                     $delta_days=get_date_diff($sdt, $ndt);
-                    if (($delta_days==$DAILY)||(($jstcrosswend)&&($delta_days eq 3)))
+                    if (($delta_days==$DAILY)||(($jstcrosswend)&&($delta_days<=3)))
                     {
                       $dlctr++;
                       &log_message("Delta: DAILY");
@@ -871,6 +921,10 @@ sub processfile
                 my $tidx= rindex($ndt,':');
                 $ndt = substr($ndt,$tidx+1);
                 $rweekday= get_weekday($ndt);
+                if ($endwkday eq -1)
+                {
+                  $endwkday= $rweekday;
+                }
                 #if master weekday is not same as ndt weekday
                 if ($masterweekday != $rweekday)
                 {
@@ -926,7 +980,6 @@ sub processfile
                 if ($mdescription ne $idescription)
                 {
                   $isdescchanged=1;
-                  #push @{$ltd_exlist{$rndt}},0;
                   $ltd_exlist{$rndt}=0;
                   &log_message("occurrence description changed->master-summary:$mdescription recur-summary:$idescription");
                 }
@@ -941,92 +994,140 @@ sub processfile
                 {
                   $rdcnt++;
                 }
-                my $pmatch= ($dlctr/$rdcnt)*100; #DAILY
-                &log_message("DAILY Match Percentage: $pmatch");
-                if ($pmatch<$MATCHPC)
-                {
-                  $pmatch= ($wkctr/$rdcnt)*100;  #WEEKLY
-                  &log_message("WEEKLY Match Percentage: $pmatch");
-                  if($pmatch<$MATCHPC)
-                  {
-                    $pmatch= ($bwkctr/$rdcnt)*100; #BIWEEKLY
-                    &log_message("BIWEEKLY Match Percentage: $pmatch");
-                    if($pmatch<$MATCHPC)
-                    {
-                    }
-                    else
-                    {
-                      $rdpattern=$BIWEEKLY;
-                      $freq="WEEKLY";
-                      $interval=2;
-                    }
-                  }
-                  else
-                  {
-                    $rdpattern=$WEEKLY;
-                    $freq="WEEKLY";
-                    $interval=1;
-                  }
-                }
-                else
-                {
-                  $rdpattern=$DAILY;
-                  $freq="DAILY";
-                  $interval=1;
-                  #reset isweekok as in case of DAILY frequency, weekdays will
-                  #be always different.
-                  $isweekdayok=1;
-                }
-                &log_message("Total RDATEs: $rdcnt DailyCtr: $dlctr WeeklyCtr: $wkctr");
 
-                #### Exception/RRULE creation criteria ####
-                #1. if recurrence pattern found, No need to create exceptions
-                #2. if weekdays has changed due to meeting has moved to another day,
-                #   create complete series exception.
-                if (($rdpattern)&& ($isweekdayok))
-                    #&& ($isrdtimeok)
-                    #&& (!$islocchanged) &&(!$issmrychanged) &&(!$isattndchanged)
-                    #&& (!$isdescchanged))
+                #check for weekly pattern
+                print_wdarrlist(\%week_day_arr_list);
+                my @wkltd_exlist=();
+                my $wkrrule=&get_weekly_rrule(\%week_day_arr_list,$weekendcount, $startwkday,$endwkday,\@wkltd_exlist);
+                if ($wkrrule ne -1)
                 {
-                  if ($freq eq "DAILY")
-                  {
-                    #create RRULE for exceptions
-                    my $ridx= rindex($firstrdate,':');
-                    if($ridx<0)
-                    {
-                      &log_message("No expected(:) delimiter found.Qutiing!!!") ;
-                      die "No expected(:) delimeter found. Quitting!!!";
-                    }
-                    my $fdt= substr($firstrdate,$ridx+1);
-                    my $ldt = substr($lastrdate,$ridx+1);
-                    #delta days
-                    #if weekdays present, take complete day difference
-                    if($isweekendpresent)
-                    {
-                      $delta_days=get_date_diff($fdt, $ldt)+1;
-                    }
-                    else#else deduct weekends
-                    {
-                      $delta_days=get_date_diff($fdt, $ldt)+1;
-                      $delta_days = $delta_days - ($weekendcount*2);
-                    }
-                  }
-                  else
-                  {
-                    $delta_days=$rdcnt+1;
-                  }
-                  my $bywkday=";BYDAY=MO,TU,WE,TH,FR";
-                  my $newrrule= "RRULE:FREQ=$freq;COUNT=$delta_days;INTERVAL=$interval";
-                  if(($freq eq "DAILY")&&(!$isweekendpresent))
-                  {
-                    #set it to weekly to avoid server side bug#30094
-                    $newrrule= "RRULE:FREQ=WEEKLY;COUNT=$delta_days;INTERVAL=$interval".$bywkday;
-                  }
-                  print_outfile("$newrrule");
-                  &log_message("New RRULE: $newrrule.");
+                  print_outfile("$wkrrule");
+                  &log_message("New RRULE: $wkrrule");
                   $RPrulecreated=1;
+                  &log_message("WEEKLY RRULE CREATED.");
+                  %ltd_exlist=();
+                  for(my $wectr=0;$wectr<$#wkltd_exlist+1;$wectr++)
+                  {
+                    my $twkdt=@wkltd_exlist[$wectr];
+                    $twkdt=~ s/RDATE/DTSTART/;
+                    $ltd_exlist{$twkdt}=0;
+                  }
                   $checkforltdex=1;
+                  $isdescchanged=1;#To push into limited exception creation
                 }
+
+                if (!$RPrulecreated)
+                {
+	                #check for pattern
+	                my $pmatch= ($dlctr/$rdcnt)*100; #DAILY
+	                &log_message("DAILY Match Percentage: $pmatch");
+	                if ($pmatch<$MATCHPC)
+	                {
+	                  $pmatch= ($wkctr/$rdcnt)*100;  #WEEKLY
+	                  &log_message("WEEKLY Match Percentage: $pmatch");
+	                  if($pmatch<$MATCHPC)
+	                  {
+	                    $pmatch= ($bwkctr/$rdcnt)*100; #BIWEEKLY
+	                    &log_message("BIWEEKLY Match Percentage: $pmatch");
+	                    if($pmatch<$MATCHPC)
+	                    {
+	                    }
+	                    else
+	                    {
+	                      $rdpattern=$BIWEEKLY;
+	                      $freq="WEEKLY";
+	                      $interval=2;
+	                    }
+	                  }
+	                  else
+	                  {
+	                    $rdpattern=$WEEKLY;
+	                    $freq="WEEKLY";
+	                    $interval=1;
+	                  }
+	                }
+	                else
+	                {
+	                  $rdpattern=$DAILY;
+	                  $freq="DAILY";
+	                  $interval=1;
+	                  #reset isweekok as in case of DAILY frequency, weekdays will
+	                  #be always different.
+	                  $isweekdayok=1;
+	                }
+	                &log_message("Total RDATEs: $rdcnt DailyCtr: $dlctr WeeklyCtr: $wkctr");
+	
+	                #### Exception/RRULE creation criteria ####
+	                #1. if recurrence pattern found, No need to create exceptions
+	                #2. if weekdays has changed due to meeting has moved to another day,
+	                #   create complete series exception.
+	                if (($rdpattern)&& ($isweekdayok))
+	                    #&& ($isrdtimeok)
+	                    #&& (!$islocchanged) &&(!$issmrychanged) &&(!$isattndchanged)
+	                    #&& (!$isdescchanged))
+	                {
+	                  if ($freq eq "DAILY")
+	                  {
+	                    #create RRULE for exceptions
+	                    my $ridx= rindex($firstrdate,':');
+	                    if($ridx<0)
+	                    {
+	                      &log_message("No expected(:) delimiter found.Qutiing!!!") ;
+	                      die "No expected(:) delimeter found. Quitting!!!";
+	                    }
+	                    my $fdt= substr($firstrdate,$ridx+1);
+	                    my $ldt = substr($lastrdate,$ridx+1);
+	                    #total weekend days present
+	                    my $wkenddayspresent=keys(%weekenddate_list);
+	                    #total weekend days crossed
+	                    my $wkenddaycrossed= ($weekendcount*2);
+	                    #delta days
+	                    #if weekdays present, take complete day difference
+	                    if($wkenddaycrossed eq $wkenddayspresent)#($isweekendpresent)
+	                    {
+	                      $delta_days=get_date_diff($fdt, $ldt)+1;
+	                    }
+	                    else#else deduct weekends and add any weekend exception
+	                    {
+	                      #no addition of exception count in delta_days
+	                      $delta_days=get_date_diff($fdt, $ldt)+1;
+	                      #deduct weekend count*2 and $weekenddaypassed, if just saturday has passed
+	                      $delta_days = $delta_days - ($weekendcount*2)-$weekenddaypassed;
+	                      #add weekend days in limited exception list for exception creation
+	                      if($wkenddayspresent>0)
+	                      {
+	                        for my $wek1 ( sort keys %weekenddate_list )
+	                        {
+	                          $ltd_exlist{$wek1}=0;
+	                        }
+	                      }
+	                    }
+	                  }
+	                  else
+	                  {
+	                    $delta_days=$rdcnt+1;
+	                  }
+	                  my $bywkday=";BYDAY=MO,TU,WE,TH,FR";
+	                  my $newrrule= "RRULE:FREQ=$freq;COUNT=$delta_days;INTERVAL=$interval";
+                    my $teststr="";
+	                  if($freq eq "DAILY")#&&(!$isweekendpresent))
+	                  {
+                      $bywkday=&get_byday(\%week_day_arr_list);
+	                    #set it to weekly instead of DAILY to avoid server side bug#30094
+	                    $newrrule= "RRULE:FREQ=WEEKLY;COUNT=$delta_days;INTERVAL=$interval".$bywkday;
+                      $teststr="DAILY";
+	                  }
+                    elsif($freq eq "WEEKLY")
+	                  {
+                      $bywkday=&get_byday(\%week_day_arr_list);
+                      $newrrule= "RRULE:FREQ=WEEKLY;COUNT=$delta_days;INTERVAL=$interval".$bywkday;
+                    }
+	                  print_outfile("$newrrule");
+	                  &log_message($teststr." New RRULE: $newrrule.");
+	                  $RPrulecreated=1;
+	                  $checkforltdex=1;
+	                }
+		            }
               }#end_if($createPatternRRULE)
 
               #if recurrence pattern based RRULE could NOT be created
@@ -1327,6 +1428,339 @@ sub processfile
   return %hlist;
 }
 
+sub print_wdarrlist
+{
+  my $hashlist= shift;
+  foreach my $wdkey (keys %$hashlist)
+  {
+    my @wdarr =@{$hashlist->{$wdkey}};
+    my $wkdctr=0;
+    for (my $i=0;$i<$#wdarr+1;$i++)
+    {
+      &log_message("$wdkey: $wdarr[$i]");
+    }
+  }
+}
+
+sub get_byday
+{
+  my $week_day_arr_list=shift;
+  my $bywkday=";BYDAY=";
+  my @srtdarr=("","","","","","","");
+  foreach my $pdkey (keys %$week_day_arr_list)
+  {
+    $srtdarr[get_str_weekday($pdkey)]=$pdkey;
+  }
+  my $oneadded=0;
+  for (my $k=0;$k<$#srtdarr+1;$k++)
+  {
+    if($srtdarr[$k] ne "")
+    {
+      if ($oneadded)
+      {
+        $bywkday =  $bywkday.",".$srtdarr[$k];
+      }
+      else
+      {
+        $bywkday =  $bywkday.$srtdarr[$k];
+        $oneadded=1;
+      }
+    }
+  }
+  return $bywkday;
+}
+
+sub get_weekly_rrule
+{
+  my $wkdaylist=shift;
+  my $wkendcnt= shift;
+  my $stwkday= shift;
+  my $enwkday = shift;
+  my $twkltd_exlist=shift;
+  my $strwkday= &get_weekday_str($stwkday);
+  my %weekday_pattern_list=();
+  my $wdctr=0;
+  my $patternfound=1;
+  my @exceptionlist=();
+  my $occur_ctr=0;
+  my $patternclaculated=0;
+  #Create pattern list
+  foreach my $wdkey (keys %$wkdaylist)
+  {
+    my @wdarr =@{$wkdaylist->{$wdkey}};
+    my $wkdctr=0;
+    $patternclaculated=0;
+    for (my $i=0;$i<$#wdarr+1;$i++)
+    {
+      print "$wdkey: $wdarr[$i]\n";
+      $occur_ctr++;
+      if ($i>0)
+      {
+        my $dt1= get_datepart_from_icsdt($wdarr[$i-1]);
+        my $dt2= get_datepart_from_icsdt($wdarr[$i]);
+        my $ddf=get_date_diff($dt1,$dt2);
+        #create pattern list
+        push @{$weekday_pattern_list{$wdkey}}, $ddf;
+        my $wkday=get_weekday($dt1)+1;# +1 to adjsut for weekend calc
+        my $wkdayctr=get_weekdaycount($wdarr[$i-1],$wdarr[$i],$wkday);
+        print "weekday count: $wkdayctr \n";
+        $patternclaculated=1;
+      }#end if (i>0)
+    }#end for loop
+    if (!$patternclaculated)
+    {
+      return -1;
+    }
+    print "\n\n";
+  }#end foreach
+  
+  #check for pattern consistency
+  my %awkdaypattern_list=();
+  foreach my $pkey (keys %weekday_pattern_list)
+  {
+    my $locpattern=0;
+    my $isfailed=0;
+    #pattern arr for each wkday
+    my @parr =@{$weekday_pattern_list{$pkey}};
+    for(my $i=0;$i<$#parr+1;$i++)
+    {
+      if ($i>0)
+      {
+        #if pattern is broken any time, it will not be considered
+        if ($parr[$i] ne $parr[$i-1])
+        {
+          $locpattern=0;
+          $isfailed=1;
+        }#end if ($parr[$i] ne
+        else
+        {
+          if((!$isfailed)&&(($parr[$i] % 7) eq 0))
+          {
+            $locpattern=1;
+          }
+        }
+      }#end if (i>0)
+    }#end for loop
+    #how many weekdays have patterns
+    if ($locpattern)
+    {
+      $awkdaypattern_list{$pkey}=$parr[0];
+    }
+    else
+    {
+      $awkdaypattern_list{$pkey}=-1;
+    }
+  }#end foreach loop
+  
+  #check how many pattern days found
+  my $HasWkendException=0;
+  foreach my $pdkey (keys %awkdaypattern_list)
+  {
+    my $tpattern =0;
+    my $prvpattern =$tpattern;
+    $tpattern = $awkdaypattern_list{$pdkey};
+    #if weekend day has no pattern, we treat it as ok, it should go to exception list
+    if ($tpattern eq -1)
+    {
+      #add weekend dates to exeption list
+      if(IsWeekendDay($pdkey))
+      {
+        my @twdarr =@{$wkdaylist->{$pdkey}};
+        for (my $j=0;$j<$#twdarr+1;$j++)
+        {
+          $twkltd_exlist->[$j]=$twdarr[$j];
+          $HasWkendException=1;
+          $occur_ctr--;
+        }
+        delete $awkdaypattern_list{$pdkey};
+      }
+      else
+      {
+        $patternfound =0;
+      }
+    }
+    print "$tpattern \n";
+  }
+
+  my $wklyRrule="RRULE:FREQ=WEEKLY;COUNT=$occur_ctr";
+  my $byday=";BYDAY=";
+  my $interval=1;
+  #build RRULE
+  if ($patternfound)
+  {
+    my $pkctr=0;
+    my $pkcount = keys %awkdaypattern_list;
+    my @srtwkarr=("","","","","","","");
+    foreach my $pdkey (keys %awkdaypattern_list)
+    {
+      $srtwkarr[get_str_weekday($pdkey)]=$pdkey;
+      $interval = (($awkdaypattern_list{$pdkey})/7);
+    }
+    
+    my $oneadded=0;
+    for (my $k=0;$k<$#srtwkarr+1;$k++)
+    {
+      if($srtwkarr[$k] ne "")
+      {
+        if ($oneadded)
+        {
+          $byday =  $byday.",".$srtwkarr[$k];
+        }
+        else
+        {
+          $byday =  $byday.$srtwkarr[$k];
+          $oneadded=1;
+        }
+      }
+    }
+
+    
+    $wklyRrule= $wklyRrule.";INTERVAL=".$interval.$byday;
+    if ($pkcount eq 0)
+    {
+      $patternfound=0;
+    }
+  }
+
+  if ($patternfound)
+  {
+    return $wklyRrule;
+  }
+  else
+  {
+    return -1;
+  }
+  #my $newrrule= "RRULE:FREQ=$freq;COUNT=$delta_days;INTERVAL=$interval";
+  #create expected day list on base of start and end date for date series.
+  #it wll be used to compare the calcuated weekdays ctr. If same, it weekly recurrence
+  #else.....
+  #check for if weekends are included
+  
+}
+
+#input startdate, enddate, weekday; whose count to be found
+#date format : ICS date with DTSTART or RDATE
+#Weekday representation
+#1...Sunday
+#2...Monday
+#3...Tuesday
+#4...Wednesday
+#5...Thursday
+#6...Friday
+#7...Saturday
+sub get_weekdaycount
+{
+  my $A1=shift;
+  $A1=get_datepart_from_icsdt($A1);
+  my $A2=shift;
+  $A2=get_datepart_from_icsdt($A2);
+  my $wkday=shift;
+  
+  #INT((WEEKDAY($A$1-2)-$A$1+$A2)/7)
+  my $dt= get_date_by_days($A1,-$wkday);
+  my $wkday= get_weekday($dt)+1;
+  my $adjustedA1= get_date_by_days($A1,-$wkday);
+  my $wkdayscount =  abs (int((get_date_diff($A2,$adjustedA1))/7));
+  return $wkdayscount;
+}
+
+#check for only ST and SU string
+sub IsWeekendDay
+{
+  my $wkday=shift;
+  if (($wkday eq "SA")||($wkday eq "SU"))
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+sub get_str_weekday
+{
+  my $stwkday = shift;
+  my $iwkday= "NA";
+  if ($stwkday eq "MO")
+  {
+    $iwkday=1;
+  }
+  elsif ($stwkday eq "TU")
+  {
+    $iwkday=2;
+  }
+  elsif ($stwkday eq "WE")
+  {
+    $iwkday=3;
+  }
+  elsif ($stwkday eq "TH")
+  {
+    $iwkday=4;
+  }
+  elsif ($stwkday eq "FR")
+  {
+    $iwkday=5;
+  }
+  elsif ($stwkday eq "SA")
+  {
+    $iwkday=6;
+  }
+  elsif ($stwkday eq "SU")
+  {
+    $iwkday=7;
+  }
+  return $iwkday;
+
+}
+
+
+sub get_weekday_str
+{
+  my $stwkday = shift;
+  my $strwkday= "NA";
+  if ($stwkday eq 1)
+  {
+    $strwkday="MO";
+  }
+  elsif ($stwkday eq 2)
+  {
+    $strwkday="TU";
+  }
+  elsif ($stwkday eq 3)
+  {
+    $strwkday="WE";
+  }
+  elsif ($stwkday eq 4)
+  {
+    $strwkday="TH";
+  }
+  elsif ($stwkday eq 5)
+  {
+    $strwkday="FR";
+  }
+  elsif ($stwkday eq 6)
+  {
+    $strwkday="SA";
+  }
+  elsif ($stwkday eq 7)
+  {
+    $strwkday="SU";
+  }
+  return $strwkday;
+}
+
+#get date part from RADTE or DTSTART format string
+#input param: ics date
+sub get_datepart_from_icsdt
+{
+  my $icsdate= shift;
+  my $tidx= rindex($icsdate,':');
+  my $ndt = substr($icsdate,$tidx+1);
+  return $ndt;
+}
+
+
 #get date by adding days into date
 sub get_date_by_days
 {
@@ -1377,6 +1811,7 @@ sub get_date_diff
 
 #Input format: 20070302T153000Z, 20070406
 #returns Week Day
+#'1' for Monday, '2' for Tuesday and so on until '7' for Sunday.
 sub get_weekday
 {
   my $dt=shift;
@@ -1387,7 +1822,7 @@ sub get_weekday
   my $dd1= substr($dt,6,2);
   my $dow=Day_of_Week($yr1,$mm1,$dd1);
   my $tdow = Day_of_Week_to_Text($dow);
-  log_message("Weekday: $dow - $tdow");
+  #log_message("Weekday: $dow - $tdow");
   return $dow;
 }
 
