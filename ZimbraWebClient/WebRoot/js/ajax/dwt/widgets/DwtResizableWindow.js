@@ -36,7 +36,7 @@
 
 DwtResizableWindow = function(parent, className) {
 	if (arguments.length == 0) { return; }
-	
+
 	if (!className)
 		className = "DwtResizableWindow";
 
@@ -47,7 +47,7 @@ DwtResizableWindow = function(parent, className) {
 	this._loc = { x: 0, y: 0 };
 	this._visible = false;
 	this._active = null;
-	DwtComposite.call(this, {parent:parent, className:className, posStyle:DwtControl.FIXED_STYLE});
+	DwtComposite.call(this, {parent:parent, className:className, posStyle:DwtControl.ABSOLUTE_STYLE});
 
 	this.addDisposeListener(new AjxListener(this, this.__onDispose));
 };
@@ -327,6 +327,8 @@ DwtResizableWindow.prototype.__initCtrl = function() {
 		mouseUpHdlr:DwtResizableWindow.__static_resizeMouseUp
 	});
 
+	this.setVisibility(true);
+
 	// this._setMouseEventHdlrs();
 	// this.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this.__dlgMouseDown));
 
@@ -340,7 +342,7 @@ DwtResizableWindow.prototype.__dlgMouseDown = function(ev) {
 DwtResizableWindow.prototype.__handleMouseDown = function(ev, side) {
 	if (!this._minimized && (side != null)) {
 		DwtShell.getShell(window).getToolTip().popdown();
-		
+
 		Dwt.addClass(this.getHtmlElement(), "DwtResizableWindow-resizing");
 		this.__resizing = { side  : side,
 				    evpos : { x: ev.docX,
@@ -830,14 +832,13 @@ function(drw, position) {
 
 DwtWindowManager.prototype._getPosition =
 function(drw) {
-	var result = {
-		size: drw.getSize()
-	};
 	var element = drw.getHtmlElement();
-	result.left = element.style.left;
-	result.top = element.style.top;
-	result.right = element.style.right;
-	result.bottom = element.style.bottom;
-	return result;
+	return {
+		size: drw.getSize(),
+		left: element.style.left,
+		top: element.style.top,
+		right: element.style.right,
+		bottom: element.style.bottom
+	};
 };
 
