@@ -392,7 +392,7 @@ public class PushChanges {
                 		}
                 	} else {
                 		OutboxTracker.recordFailure(ombx, id);
-                		OfflineLog.offline.info("push: %s when sending message: %s", x.getCode(), msg.getSubject());
+                		OfflineLog.offline.info("push: %s when sending message: %s", x.getCode(), msg.getSubject(), x);
                 		continue; //will retry later
                 	}
                 }
@@ -421,9 +421,9 @@ public class PushChanges {
     
     /** Uploads the given message to the remote server using file upload.
      *  We scale the allowed timeout with the size of the message -- a base
-     *  of 5 seconds, plus 1 second per 25K of message size. */
+     *  of 5 seconds, plus 1 second per 10K of message size. */
     private String uploadMessage(Message msg) throws ServiceException {
-        int timeout = (int) ((5 + msg.getSize() / 25000) * Constants.MILLIS_PER_SECOND);
+        int timeout = (int) ((5 + msg.getSize() / 10000) * Constants.MILLIS_PER_SECOND);
     	if (ombx.getRemoteServerVersion().isAtLeast(minServerVersionForUploadStreaming))
     		return getZMailbox().uploadContentAsStream(msg.getContentStream(), Mime.CT_MESSAGE_RFC822 + "; name=msg-" + msg.getId(), timeout);
     	else

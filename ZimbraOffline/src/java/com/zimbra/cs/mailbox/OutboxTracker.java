@@ -52,13 +52,17 @@ class OutboxTracker {
     
     static void recordFailure(Mailbox mbox, int itemId) {
     	synchronized (sOutboxMessageMap) {
-			sOutboxMessageMap.get(mbox.getId()).put(itemId, System.currentTimeMillis());
+    		Map<Integer, Long> outboxMap = sOutboxMessageMap.get(mbox.getId());
+    		if (outboxMap != null)
+    			outboxMap.put(itemId, System.currentTimeMillis());
 		}
     }
 	
     static void remove(Mailbox mbox, int itemId) {
     	synchronized (sOutboxMessageMap) {
-    		sOutboxMessageMap.get(mbox.getId()).remove(itemId);
+    		Map<Integer, Long> outboxMap = sOutboxMessageMap.get(mbox.getId());
+    		if (outboxMap != null)
+    			outboxMap.remove(itemId);
 		}
     }
 

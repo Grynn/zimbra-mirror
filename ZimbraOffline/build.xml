@@ -262,7 +262,7 @@
 		<replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base/skin.html" token="&lt;a href='javascript:switchToStandardClient()'&gt;&lt;script&gt;document.write(ZmMsg.switchToStandardClient)&lt;/script&gt;&lt;/a&gt;" value=""/>
 		<!--replace file="${dist.dir}/jetty/webapps/zimbra/skins/_base/base/skin.html" token="ZmMsg.splashScreenAppName" value="ZmMsg.splashScreenOfflineName"/-->
 
-		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/google"/>
+		<delete dir="${dist.dir}/jetty/webapps/zimbra/skins/yahoo2"/>
 
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/LoginBanner.png" overwrite="true"/>
 		<copy file="src/installer/resources/LoginBanner.png" tofile="${dist.dir}/jetty/webapps/zimbra/skins/_base/logos/ZimbraInside/LoginBanner.png" overwrite="true"/>
