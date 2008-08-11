@@ -102,6 +102,7 @@ public class XmailBean extends MailBean {
 				if (!isValidEmail(email))
 			    	addInvalid("email");
 				
+		        domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
 				if (!isYmail()) {
 					if (!isValidHost(smtpHost))
 				    	addInvalid("smtpHost");
@@ -132,7 +133,6 @@ public class XmailBean extends MailBean {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 			        
-			        domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
 			        
 			        if (!isYmail()) {
@@ -164,23 +164,21 @@ public class XmailBean extends MailBean {
 			String adomain = "aol.com";
 			
 			if (verb.isAdd()) {
-				if (email.endsWith(ydomain) || host.endsWith(ydomain) ||
-				email.endsWith(ymdomain) || host.endsWith(ymdomain) ||
-				email.endsWith(yrmdomain) || host.endsWith(yrmdomain)) {
+				if (email.endsWith('@' + ydomain) || email.endsWith('@' + ymdomain) || email.endsWith('@' + yrmdomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
 						setError(getMessage("YMPMustUseImap"));
 					} else {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, ydomain);
 					}
-				} else if (email.endsWith(gdomain) || host.endsWith(gdomain)) {
+				} else if (email.endsWith('@' + gdomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
 						setError(getMessage("GmailMustUseImap"));
 					} else {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, gdomain);
 					}
-				} else if (email.endsWith(adomain) || host.endsWith(adomain)) {
+				} else if (email.endsWith('@' + adomain)) {
 					if (dsType == DataSource.Type.pop3) {
 						addInvalid("protocol");
 						setError(getMessage("AOLMustUseImap"));
