@@ -80,9 +80,10 @@ DwtKeyboardMgr.FOCUS_FIELD_ID = "kbff";
  */
 DwtKeyboardMgr.isPossibleInputShortcut =
 function(ev) {
-	return (!DwtKeyMap.IS_MODIFIER[ev.keyCode] &&
+    var target = DwtUiEvent.getTarget(ev);
+    return (!DwtKeyMap.IS_MODIFIER[ev.keyCode] &&
 			(ev.keyCode == 27 || DwtKeyMapMgr.hasModifier(ev)) ||
-			(ev.target.tagName.toUpperCase() == "INPUT" && (ev.keyCode == 13 || ev.keyCode == 3)));
+			(target && target.nodeName.toUpperCase() == "INPUT" && (ev.keyCode == 13 || ev.keyCode == 3)));
 };
 
 /**
