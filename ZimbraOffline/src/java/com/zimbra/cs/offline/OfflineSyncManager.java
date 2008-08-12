@@ -82,16 +82,22 @@ public class OfflineSyncManager {
 	    ZAuthToken authToken; //null for data sources
 	    long authExpires; //0 for data sources
 	    
-        void syncStart() {
+        boolean syncStart() {
+        	if (mStatus == SyncStatus.running)
+        		return false;
         	mStatus = SyncStatus.running;
         	mError = null;
+        	return true;
         }
         
-        void syncComplete() {
+        boolean syncComplete() {
+        	if (mStatus != SyncStatus.running)
+        		return false;
         	mLastSyncTime = System.currentTimeMillis();
         	mLastFailTime = 0;
         	mStatus = SyncStatus.online;
         	mRetryCount = 0;
+        	return true;
         }
         
         void connecitonDown() {
@@ -194,17 +200,21 @@ public class OfflineSyncManager {
 	}
 	
     public void syncStart(String targetName) {
+    	boolean b = false;
     	synchronized (syncStatusTable) {
-    		getStatus(targetName).syncStart();
+    		b = getStatus(targetName).syncStart();
     	}
-    	notifyStateChange();
+    	if (b)
+    		notifyStateChange();
     }
     
     public void syncComplete(String targetName) {
+    	boolean b = false;
     	synchronized (syncStatusTable) {
-    		getStatus(targetName).syncComplete();
+    		b = getStatus(targetName).syncComplete();
     	}
-    	notifyStateChange();
+    	if (b)
+    		notifyStateChange();
     }
     
     public void connecitonDown(String targetName) {

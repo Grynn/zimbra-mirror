@@ -317,7 +317,9 @@ public class PushChanges {
      *  store.  As a side effect, removes the corresponding (now-deleted)
      *  drafts from the list of pending creates that need to be pushed to the
      *  server. */
-    private void sendPendingMessages(TypedIdList creates, boolean isOnRequest) throws ServiceException {
+    private int sendPendingMessages(TypedIdList creates, boolean isOnRequest) throws ServiceException {
+    	int totalSent = 0;
+    	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         for (Iterator<Integer> iterator = OutboxTracker.iterator(ombx, isOnRequest ? 0L : ombx.getSyncFrequency());	iterator.hasNext();) {
         	int id = iterator.next();
             try {
@@ -326,6 +328,9 @@ public class PushChanges {
                 	OutboxTracker.remove(ombx, id);
                 	continue;
                 }
+                
+                OfflineLog.offline.debug("push: sending mail (" + id + "): " + msg.getSubject());
+                syncMan.syncStart(ombx.getRemoteUser());
 
                 // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
                 String msgKey = ombx.getAccountId() + ':' + id;
@@ -348,7 +353,8 @@ public class PushChanges {
                     }
                     
                 	ombx.sendRequest(request);
-                	OfflineLog.offline.debug("push: sent pending mail (" + id + "): " + msg.getSubject());
+                	OfflineLog.offline.debug("push: sent mail (" + id + "): " + msg.getSubject());
+                	++totalSent;
 
                     // remove the draft from the outbox
                     ombx.delete(sContext, id, MailItem.TYPE_MESSAGE);
@@ -408,10 +414,11 @@ public class PushChanges {
                 OfflineLog.offline.debug("push: ignoring deleted pending mail (" + id + ")");
             }
         }
+        return totalSent;
     }
     
-    public static void sendPendingMessages(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
-    	new PushChanges(ombx).sendPendingMessages((TypedIdList)null, isOnRequest);
+    public static int sendPendingMessages(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
+    	return new PushChanges(ombx).sendPendingMessages((TypedIdList)null, isOnRequest);
     }
     
     /**
@@ -421,9 +428,9 @@ public class PushChanges {
     
     /** Uploads the given message to the remote server using file upload.
      *  We scale the allowed timeout with the size of the message -- a base
-     *  of 5 seconds, plus 1 second per 10K of message size. */
+     *  of 5 seconds, plus 1 second per 25K of message size. */
     private String uploadMessage(Message msg) throws ServiceException {
-        int timeout = (int) ((5 + msg.getSize() / 10000) * Constants.MILLIS_PER_SECOND);
+        int timeout = (int) ((5 + msg.getSize() / 25000) * Constants.MILLIS_PER_SECOND);
     	if (ombx.getRemoteServerVersion().isAtLeast(minServerVersionForUploadStreaming))
     		return getZMailbox().uploadContentAsStream(msg.getContentStream(), Mime.CT_MESSAGE_RFC822 + "; name=msg-" + msg.getId(), timeout);
     	else

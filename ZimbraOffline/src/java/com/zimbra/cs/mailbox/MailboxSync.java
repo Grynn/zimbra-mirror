@@ -160,10 +160,16 @@ public class MailboxSync {
         	    		return;
             	}
             	
-                if (mStage == SyncStage.SYNC)
-                	PushChanges.sendPendingMessages(ombx, isOnRequest);
+            	boolean forceSync = false;
+                if (mStage == SyncStage.SYNC) {
+                	int totalSent = PushChanges.sendPendingMessages(ombx, isOnRequest);
+                	if (totalSent > 0)
+                		forceSync = true;
+                	else
+                		syncMan.syncComplete(user); //sendPendingMessages may have called syncStart but then send fails
+                }
         	    	
-        	    if (!isOnRequest) {	
+        	    if (!forceSync && !isOnRequest) {	
         	    	if (mStage == SyncStage.SYNC) {
         	    		if (syncMan.isOnLine(ombx.getRemoteUser()) && ombx.isPushEnabled()) {
         	    			if (!poller.hasChanges(mSyncToken))
