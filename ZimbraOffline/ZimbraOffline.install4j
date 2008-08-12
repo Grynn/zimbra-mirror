@@ -336,6 +336,24 @@ context.setVariable("macUninstaller", uninstMenuEnt + ".app");
             <preActivation />
             <postActivation />
             <actions>
+              <action name="Disallow root user" id="285851" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.DisallowRoot}">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>com.sun.security.auth.module.UnixSystem unix = new com.sun.security.auth.module.UnixSystem();
+long uid = unix.getUid();
+return (uid != 0);</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>!Util.isWindows()</condition>
+              </action>
               <action name="" id="284703" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.ErrNotAdmin}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
