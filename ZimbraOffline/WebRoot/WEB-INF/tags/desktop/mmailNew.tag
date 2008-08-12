@@ -68,7 +68,7 @@ function disableButtons() {
 
 <div id="newService" class="ZWizardPage">
 	<div class="ZWizardPageTitle">
-		<fmt:message key='OtherSetupTitle'/>
+		<fmt:message key='MSESetupTitle'/>
 	</div>
 <span class="padding">
 <c:choose>
