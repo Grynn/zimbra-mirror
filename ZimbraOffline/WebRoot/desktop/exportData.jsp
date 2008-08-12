@@ -23,6 +23,8 @@ ${zdf:reload(bean)}
 <script type="text/javascript" src="js/desktop.js"></script>
 <script type="text/javascript">
 
+var timeoutId;
+
 function onCancel() {
     document.doneForm.verb.value = "";
     document.doneForm.submit();
@@ -51,13 +53,13 @@ function onSubmit() {
     submitForm.query.value = optionForm.query.value;
     submitForm.types.value = types;
     submitForm.submit();
-    setTimeout('done()', 5000);
+    timeoutId = setTimeout('done()', 5000);
 }
 
 function done(errstr) {
     zd.hide("status");
     if (errstr) {
-        clearTimeout();
+        clearTimeout(timeoutId);
         alert(errstr);
         zd.toggle("submitButton");
         history.go(-1);
