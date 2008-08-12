@@ -134,6 +134,10 @@
   <desc>whether to auto-enable sync on all server folders</desc>
 </attr>
 
+<attr name="zimbraDataSourceLeaveOnServer" type="boolean" cardinality="single" optionalIn="dataSource">
+  <desc>whether to leave POP3 messages on server</desc>
+</attr>
+
 <attr name="zimbraPrefMailtoHandlerEnabled" type="boolean" cardinality="single" optionalIn="account" flags="accountInfo">
   <desc>whether to register as mailto link handler</desc>
 </attr>

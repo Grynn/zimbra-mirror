@@ -12,8 +12,8 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.zclient.ZFolder;
 
 public class XmailBean extends MailBean {
-	
-	public XmailBean() {}
+
+    public XmailBean() {}
 	
 	protected String domain;
 	
@@ -32,7 +32,9 @@ public class XmailBean extends MailBean {
 	protected String smtpPassword = "";
 	
 	protected boolean syncAllServerFolders;
-	
+
+        protected boolean leaveOnServer = false;
+    
 	private final String ydomain = "yahoo.com";
 	private final String ymdomain = "ymail.com";
 	private final String yrmdomain = "rocketmail.com";
@@ -75,6 +77,7 @@ public class XmailBean extends MailBean {
 
 		syncFreqSecs = ds.getTimeIntervalSecs(OfflineConstants.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
 		syncAllServerFolders = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
+                leaveOnServer = ds.getBooleanAttr(Provisioning.A_zimbraDataSourceLeaveOnServer, false);
 	}
 	
 	@Override
@@ -151,8 +154,8 @@ public class XmailBean extends MailBean {
 			        
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
 			        if (dsType == DataSource.Type.pop3) {
-			            dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Provisioning.TRUE);
-		                dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_INBOX);
+			            dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Boolean.toString(leaveOnServer).toUpperCase());
+		                    dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_INBOX);
 			        } else {
 			        	assert dsType == DataSource.Type.imap;
 			        	dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_USER_ROOT);
@@ -329,7 +332,15 @@ public class XmailBean extends MailBean {
 	public boolean isSyncAllServerFolders() {
 		return syncAllServerFolders;
 	}
-	
+
+        public boolean isLeaveOnServer() {
+                return leaveOnServer;
+        }
+
+        public void setLeaveOnServer(boolean leaveOnServer) {
+                this.leaveOnServer = leaveOnServer;
+        }
+
 	public boolean isYmail() {
 		return domain != null && (domain.equals(ydomain) ||
 			domain.equals(ymdomain) ||

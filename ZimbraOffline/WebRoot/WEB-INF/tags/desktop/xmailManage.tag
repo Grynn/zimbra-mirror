@@ -282,8 +282,8 @@ function passOnEdit(id) {
         </tr>
         
         <tr id='popSettingsRow'>
-            <td style='text-align:right'><input type="checkbox" id="leave_on_server" name="leave_on_server" disabled></td>
-            <td class="ZCheckboxLabel ZHint"><fmt:message key='SyncDelAftDownload'/></td>
+            <td style='text-align:right'><input type="checkbox" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? 'checked' : ''}></td>
+            <td class="ZCheckboxLabel"><fmt:message key='LeaveOnServer'/></td>
         </tr>
         
         <tr>
