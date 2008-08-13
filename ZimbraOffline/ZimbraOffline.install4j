@@ -503,23 +503,20 @@ return (uid != 0);</string>
                 </serializedBean>
                 <condition>!Util.isMacOS()</condition>
               </action>
-              <action name="launchctl stop" id="284553" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+              <action name="stop macos service" id="284553" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                       <void property="arguments">
-                        <array class="java.lang.String" length="2">
+                        <array class="java.lang.String" length="1">
                           <void index="0">
                             <string>stop</string>
-                          </void>
-                          <void index="1">
-                            <string>com.zimbra.zdesktop</string>
                           </void>
                         </array>
                       </void>
                       <void property="executable">
                         <object class="java.io.File">
-                          <string>/bin/launchctl</string>
+                          <string>zdesktop</string>
                         </object>
                       </void>
                       <void property="wait">
@@ -2965,23 +2962,20 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                 </serializedBean>
                 <condition>!Util.isMacOS()</condition>
               </action>
-              <action name="launchctl stop" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="${i18n:installer.ErrCannotStopSvc}">
+              <action name="stop macos service" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="${i18n:installer.ErrCannotStopSvc}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                       <void property="arguments">
-                        <array class="java.lang.String" length="2">
+                        <array class="java.lang.String" length="1">
                           <void index="0">
                             <string>stop</string>
-                          </void>
-                          <void index="1">
-                            <string>com.zimbra.zdesktop</string>
                           </void>
                         </array>
                       </void>
                       <void property="executable">
                         <object class="java.io.File">
-                          <string>/bin/launchctl</string>
+                          <string>zdesktop</string>
                         </object>
                       </void>
                       <void property="wait">

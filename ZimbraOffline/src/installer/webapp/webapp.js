@@ -36,10 +36,18 @@ function startStopServer(verb) {
       args = [verb];
     }
     else if (os == "darwin") {
-      zdesktopServer = Cc["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-      zdesktopServer.initWithPath("/bin");
-      zdesktopServer.append("launchctl");
-      args = [verb, "com.zimbra.zdesktop"];
+      if (verb == "start") {
+        zdesktopServer = Cc["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+        zdesktopServer.initWithPath("/bin");
+        zdesktopServer.append("launchctl");
+        args = [verb, "com.zimbra.zdesktop"];
+      } else if (verb == "stop") {
+        var appRoot = WebAppProperties.getAppRoot();
+        var zdesktopRoot = appRoot.parent;
+        zdesktopServer = zdesktopRoot.clone();
+        zdesktopServer.append("zdesktop");
+        args = [verb];
+      }
     }
 
     var process = Cc["@mozilla.org/process/util;1"].createInstance(Ci.nsIProcess);
