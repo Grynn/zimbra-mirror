@@ -754,7 +754,7 @@
 		<mkdir dir="${dist.dir}/win32"/>
 
 		<copy todir="${dist.dir}/macos" overwrite="true">
-                        <fileset dir="src/installer" includes="launchd.plist" />
+                        <fileset dir="src/installer" includes="launchd.plist quit_zdesktop.applescript" />
                         <fileset dir="src/installer/resources" includes="launcher_128x128.icns" />
 		</copy>
 		<copy todir="${dist.dir}/macos/Yahoo! Zimbra Desktop.app" overwrite="true">
@@ -851,6 +851,9 @@
 		
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/libprism.dylib" file="${prism.src.dir}/mac-0708/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/libprism.dylib" overwrite="true"/>
 		
+		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" file="${prism.src.dir}/mac-0708/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" overwrite="true"/>
+		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" file="${prism.src.dir}/mac-0708/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" overwrite="true"/>
+
 		<mkdir dir="${dist.dir}/profile/extensions/zimbradnd@zimbra.com"/>
 		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 	</target>
