@@ -1672,13 +1672,13 @@ return true;</string>
                       </java>
                     </serializedBean>
                     <beans>
-                      <action name="macos.app zdesktop" id="145799" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                      <action name="application.ini" id="145799" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                         <serializedBean>
                           <java class="java.beans.XMLDecoder">
                             <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
                               <void property="file">
                                 <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
                                 </object>
                               </void>
                               <void property="replaceValue">
@@ -1706,23 +1706,6 @@ return true;</string>
                               </void>
                               <void property="searchValue">
                                 <string>@install@</string>
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="macos.app zdesktop" id="212570" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
-                              <void property="file">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
-                                </object>
-                              </void>
-                              <void property="mode">
-                                <string>755</string>
                               </void>
                             </object>
                           </java>
@@ -1803,34 +1786,6 @@ return true;</string>
                               <void property="sourceFile">
                                 <object class="java.io.File">
                                   <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop/zdesktop" id="145814" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
-                                </object>
-                              </void>
-                              <void property="mode">
-                                <string>755</string>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">
@@ -2071,34 +2026,6 @@ return true;</string>
                               <void property="sourceFile">
                                 <object class="java.io.File">
                                   <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications/zdesktop" id="168013" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
-                                </object>
-                              </void>
-                              <void property="mode">
-                                <string>755</string>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
                                 </object>
                               </void>
                               <void property="uninstallMode">

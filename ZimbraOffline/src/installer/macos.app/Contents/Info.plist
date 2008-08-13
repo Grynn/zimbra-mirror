@@ -5,7 +5,7 @@
   <key>CFBundleDevelopmentRegion</key>
   <string>English</string>
   <key>CFBundleExecutable</key>
-  <string>zdesktop</string>
+  <string>prism</string>
   <key>CFBundleGetInfoString</key>
   <string>Yahoo! Zimbra Desktop @version@, (C) 2008 Yahoo!</string>
   <key>CFBundleIconFile</key>

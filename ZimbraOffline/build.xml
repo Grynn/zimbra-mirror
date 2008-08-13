@@ -760,7 +760,6 @@
 		<copy todir="${dist.dir}/macos/Yahoo! Zimbra Desktop.app" overwrite="true">
                         <fileset dir="src/installer/macos.app" includes="*/**" />
 		</copy>
-		<chmod file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop" perm="ugo+x"/>
 		<copy todir="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/" file="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism"/>
 		<chmod file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism" perm="ugo+x"/>
 		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist" token="@version@" value="${offline.version}"/>
@@ -824,6 +823,7 @@
 		<chmod file="${dist.dir}/linux/prism/xulrunner/updater" perm="ugo+x"/>
 
 		<chmod dir="${dist.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/" perm="ugo+x" includes="*/**"/> 
+                <copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism" file="${prism.src.dir}/mac-0708/Prism.app/Contents/MacOS/prism" overwrite="true"/>
 		<chmod file="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism" perm="ugo+x"/> 
 		<chmod file="${dist.dir}/linux/prism/prism" perm="ugo+x"/>
 
@@ -851,6 +851,7 @@
 		
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/libprism.dylib" file="${prism.src.dir}/mac-0708/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/libprism.dylib" overwrite="true"/>
 		
+		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" file="${prism.src.dir}/mac-0708/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" overwrite="true"/>
 		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" file="${prism.src.dir}/mac-0708/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" overwrite="true"/>
 		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" file="${prism.src.dir}/mac-0708/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/components/nsCommandLineHandler.js" overwrite="true"/>
 
@@ -859,9 +860,8 @@
 	</target>
 
 	<target name="test-launcher-mac">
-		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop" token="@install@" value="${dist.dir}"/>
+		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini" token="@install@" value="${dist.dir}"/>
 		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" token="@install@" value="${dist.dir}"/>
-		<chmod file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop" perm="ugo+x"/>
 	</target>
 	
 	<target name="offline-install-misc">

@@ -1,3 +1,0 @@
-#!/bin/sh
-export GRE_HOME="@install@/macos/prism/Prism.app/Contents/Frameworks/XUL.framework"
-exec "`dirname "$0"`/prism" -webapp "@install@/zdesktop.webapp" -override "@install@/zdesktop.webapp/override.ini" -profile "@install@/profile"
