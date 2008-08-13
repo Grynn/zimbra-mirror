@@ -22,7 +22,6 @@
 		<unzip dest="${jetty_webapps}/service" src="${jetty_webapps}/service.war" />
 		<delete file="${jetty_webapps}/service.war" />
                 <replace file="${jetty_webapps}/service/WEB-INF/web.xml" token="@port@" value="7733"/>
-                <replace file="${jetty_webapps}/service/WEB-INF/web.xml" token="@adminPort@" value="7734"/>
 	</target>
 
 	<property name="project.outputDirectory" value="build" />
@@ -49,7 +48,6 @@
 		<jetty tempDirectory="${project.outputDirectory}" jettyXml="jetty-ant-config.xml">
 			<connectors>
 				<selectChannelConnector port="7733" />
-				<selectChannelConnector port="7734" />
 			</connectors>
 
 			<systemProperties>

@@ -2514,7 +2514,7 @@ return true;</string>
 org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
 org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
-String url = "http://localhost:7634/service/admin/soap";
+String url = "http://localhost:7633/service/admin/soap";
 org.apache.commons.httpclient.methods.GetMethod get = new org.apache.commons.httpclient.methods.GetMethod(url);
 
 boolean isServiceUp = false;

@@ -11,7 +11,7 @@
 	</context-param>
 	<context-param>
 		<param-name>admin.allowed.ports</param-name>
-		<param-value>@adminPort@</param-value>
+		<param-value>0</param-value>
 	</context-param>
 
     <!-- =============
@@ -194,7 +194,7 @@
           </init-param>
           <init-param>
             <param-name>adminPort</param-name>
-            <param-value>@adminPort@</param-value>
+            <param-value>@port@</param-value>
           </init-param>
           <load-on-startup>1</load-on-startup>
         </servlet>

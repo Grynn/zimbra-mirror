@@ -44,17 +44,6 @@
       </Arg>
     </Call>
     
-    <Call name="addConnector">
-      <Arg>
-          <New id="admin" class="org.mortbay.jetty.nio.SelectChannelConnector">
-            <Set name="host">localhost</Set>
-            <Set name="port">@adminPort@</Set>
-            <Set name="maxIdleTime">30000</Set>
-            <Set name="Acceptors">2</Set>
-          </New>
-      </Arg>
-    </Call>
-
     <!-- =========================================================== -->
     <!-- Set handler Collection Structure                            --> 
     <!-- =========================================================== -->
@@ -175,9 +164,6 @@
     <!-- start connectors                                            -->
     <!-- =========================================================== -->
     <Ref id="http">
-      <Call name="open"/>
-    </Ref>
-    <Ref id="admin">
       <Call name="open"/>
     </Ref>
 
