@@ -527,7 +527,7 @@ public class InitialSync {
             byte gtype = FolderAction.stringToType(eGrant.getAttribute(MailConstants.A_GRANT_TYPE));
             String zid = eGrant.getAttribute(MailConstants.A_ZIMBRA_ID, null);
             String password = null;
-            if (gtype == ACL.GRANTEE_GUEST) {
+            if (gtype == ACL.GRANTEE_GUEST || gtype == ACL.GRANTEE_KEY) {
             	password = eGrant.getAttribute(MailConstants.A_PASSWORD, null);
             }
             acl.grantAccess(zid, gtype, rights, password);
