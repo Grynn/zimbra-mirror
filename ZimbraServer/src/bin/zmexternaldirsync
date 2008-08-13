@@ -1981,7 +1981,7 @@ if( $NOOP != $Op_Mod ) {
                 }
             }
 
-            my ($userFH, $userFile) = tempfile("add_user.out.XXXXX", DIR=>"/tmp",  OPEN=>1);
+            my ($userFH, $userFile) = File::Temp::tempfile("add_user.out.XXXXX", DIR=>"/tmp",  OPEN=>1);
             print $userFH "ca $str";
             # if in normal op mod: print command to be executed in file 
             if( $NOOP != $Op_Mod ) {
