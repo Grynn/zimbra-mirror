@@ -445,6 +445,7 @@
 		<echo>${action} ${zimlet}</echo>
 		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="deploy.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
+			<arg line="-a http://localhost:7633/service/admin/soap/" />
 			<arg line="${action}" />
 			<arg file="${zimlet}" />
 		</java>
