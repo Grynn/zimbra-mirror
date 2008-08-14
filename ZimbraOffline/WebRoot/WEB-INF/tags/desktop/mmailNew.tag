@@ -13,8 +13,14 @@ function InitScreen() {
     if (!zd.isChecked("smtpAuth")) {
         zd.hide("smtpAuthSettingsRow");
     }
-    SetPort();
-    SetSmtpPort();
+    InitPort();
+    InitSmtpPort();
+}
+
+function InitPort() {
+    if (zd.isValueEqual("port", "")) {
+        SetPort();
+    }
 }
 
 function SetPort() {
@@ -24,6 +30,12 @@ function SetPort() {
         } else {
             zd.set("port", "143");
         }
+    }
+}
+
+function InitSmtpPort() {
+    if (zd.isValueEqual("smtpPort", "")) {
+        SetSmtpPort();
     }
 }
 
