@@ -11,7 +11,6 @@ CYRUS_VERSION ?= 2.1.22.3z
 CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 
 SSL_VERSION	?= 0.9.8h
-CFLAGS := "-g -c -O -pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -Werror"
 
 ZIMBRA_HOME ?= /opt/zimbra
 
@@ -24,7 +23,7 @@ all: build tar
 build:
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
-	CFLAGS=$(CFLAGS) ./configure \
+	./configure \
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
              --with-debug \
              --with-http_ssl_module \
@@ -37,7 +36,7 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
 else
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
-	CFLAGS=$(CFLAGS) ./configure \
+	./configure \
              --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
              --with-debug \
              --with-http_ssl_module \
