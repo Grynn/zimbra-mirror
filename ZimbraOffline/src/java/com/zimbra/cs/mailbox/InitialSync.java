@@ -57,6 +57,7 @@ import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
+import com.zimbra.cs.mime.CompressedBlobReader;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedDocument;
 import com.zimbra.cs.mime.ParsedMessage;
@@ -1006,8 +1007,9 @@ public class InitialSync {
 	                    "Message id=%d exceeded threshold of %d bytes. Streaming message to disk.", id, DISK_STREAM_THRESHOLD);
 	        	
 	        	SequenceInputStream jointStream = new SequenceInputStream(new ByteArrayInputStream(data), in);
-	            blob = StoreManager.getInstance().storeIncoming(jointStream, 0, null, Volume.getCurrentMessageVolume().getId());
-	            data = blob.getInMemoryData();
+	        	CompressedBlobReader reader = new CompressedBlobReader(0);
+	            blob = StoreManager.getInstance().storeIncoming(jointStream, 0, null, Volume.getCurrentMessageVolume().getId(), reader);
+	            data = reader.getData(); // Returns null if the blob was not compressed
 	            OfflineLog.offline.info("Message id=%d streamed to disk file %s.", id, blob.getPath());
 	        }
         } catch (IOException e) {
@@ -1028,9 +1030,6 @@ public class InitialSync {
                 pm.setRawDigest(digest);
                 size = blob.getRawSize();
 	        }
-        } catch (MessagingException e) {
-        	OfflineLog.offline.error("Failed parsing message id=" + id, e);
-        	return;
         } catch (IOException e) {
             throw MailServiceException.MESSAGE_PARSE_ERROR(e);
         }
@@ -1059,7 +1058,6 @@ public class InitialSync {
             		List<Integer> onebox = new ArrayList<Integer>();
             		onebox.add(ombx.getId());
             		sharedDeliveryCtxt = new SharedDeliveryContext(false, onebox);
-            		sharedDeliveryCtxt.setPreexistingBlob(blob);
             	}
                 msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", sharedDeliveryCtxt);
             }
