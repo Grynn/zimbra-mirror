@@ -37,6 +37,8 @@ public class OfflineService implements DocumentService {
     public void registerHandlers(DocumentDispatcher dispatcher) {
         // sync
         dispatcher.registerHandler(SYNC_REQUEST, new OfflineSync());
+        
+        dispatcher.registerHandler(MailConstants.NO_OP_REQUEST, new OfflineNoOp());
 
         // fetching external data
         dispatcher.registerHandler(MailConstants.FOLDER_ACTION_REQUEST, new OfflineFolderAction());

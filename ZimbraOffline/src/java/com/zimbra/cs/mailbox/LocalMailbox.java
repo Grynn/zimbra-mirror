@@ -292,8 +292,10 @@ public class LocalMailbox extends DesktopMailbox {
                 if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds) || !syncMan.retryOK(ds))
                     continue;
 
-                long now = System.currentTimeMillis();
-                if (now - syncMan.getLastSyncTime(ds.getName()) < ds.getSyncFrequency())
+	    		long freqLimit = syncMan.getSyncFrequencyLimit();
+	    		long frequency = ds.getSyncFrequency() < freqLimit ? freqLimit : ds.getSyncFrequency();
+
+                if (System.currentTimeMillis() - syncMan.getLastSyncTime(ds.getName()) < frequency)
                     continue;
             }
             try {

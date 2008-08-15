@@ -17,6 +17,7 @@ import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
@@ -480,5 +481,23 @@ public class OfflineSyncManager {
     		}
     		e.addAttribute(A_ZDSYNC_UNREAD, MailboxManager.getInstance().getMailboxByAccount(account).getFolderById(null, Mailbox.ID_FOLDER_INBOX).getUnreadCount());
     	}
+    }
+    
+    private long lastClientPing;
+    
+    public synchronized void clientPing() {
+    	lastClientPing = System.currentTimeMillis();
+    }
+    
+    public synchronized long getSyncFrequencyLimit() {
+		long quietTime = System.currentTimeMillis() - lastClientPing;
+		
+		long freqLimit = 0;
+		if (quietTime > Constants.MILLIS_PER_HOUR)
+			freqLimit = Constants.MILLIS_PER_HOUR;
+		else if (quietTime > 5 * Constants.MILLIS_PER_MINUTE)
+			freqLimit = 15 * Constants.MILLIS_PER_MINUTE;
+		
+		return freqLimit;
     }
 }

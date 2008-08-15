@@ -23,6 +23,7 @@ import java.util.Set;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
@@ -171,10 +172,13 @@ public class MailboxSync {
         	    	
         	    if (!forceSync && !isOnRequest) {	
         	    	if (mStage == SyncStage.SYNC) {
-        	    		if (syncMan.isOnLine(ombx.getRemoteUser()) && ombx.isPushEnabled()) {
+        	    		long freqLimit = syncMan.getSyncFrequencyLimit();
+        	    		long frequency = ombx.getSyncFrequency() < freqLimit ? freqLimit : ombx.getSyncFrequency();
+        	    		
+        	    		if (freqLimit == 0 && syncMan.isOnLine(ombx.getRemoteUser()) && ombx.isPushEnabled()) {
         	    			if (!poller.hasChanges(mSyncToken))
         	    				return;
-        	    		} else if (System.currentTimeMillis() - syncMan.getLastSyncTime(user) < ombx.getSyncFrequency()) {
+        	    		} else if (System.currentTimeMillis() - syncMan.getLastSyncTime(user) < frequency) {
         	    			return;
         	    		}
         	    	}
