@@ -237,10 +237,47 @@ return true;</string>
                       <void property="script">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>String appId = context.getApplicationId();
+                            <string>import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Element;
+
+String appId = context.getApplicationId();
 
 ApplicationRegistry.ApplicationInfo[] appInfoList = ApplicationRegistry.getApplicationInfoById(appId);
 if (appInfoList != null &amp;&amp; appInfoList.length &gt; 0) {
+    File instDir = appInfoList[0].getInstallationDirectory();
+    File confFile = new File(instDir.getAbsolutePath() + "/conf/localconfig.xml");
+    String ver = "0.0";
+    String build = "0";
+    
+    try {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(confFile);
+        
+        NodeList nodeList = doc.getElementsByTagName("key");
+        int len = nodeList.getLength();
+        for (int i = 0; i &lt; len; i++) {
+            NamedNodeMap nm = nodeList.item(i).getAttributes();           
+            Node name = nm.getNamedItem("name");
+            if (name == null)
+                continue;            
+            if (name.getNodeValue().equals("zdesktop_version")) {
+                ver = ((Element)nodeList.item(i)).getElementsByTagName("value").item(0)
+                    .getChildNodes().item(0).getNodeValue();
+            } else if (name.getNodeValue().equals("zdesktop_buildid")) {
+                build = ((Element)nodeList.item(i)).getElementsByTagName("value").item(0)
+                    .getChildNodes().item(0).getNodeValue();
+            }
+        }
+        context.setVariable("prevVersion", ver);
+        context.setVariable("prevBuild", build);
+    } catch(Exception e) { Util.showMessage(e.getMessage()); }        
+        
     return Boolean.TRUE;
 }
 
@@ -481,7 +518,20 @@ return (uid != 0);</string>
                     </object>
                   </java>
                 </serializedBean>
-                <condition>Util.isWindows()</condition>
+                <condition>if (!Util.isWindows())
+    return false;
+    
+String pver = (String)context.getVariable("prevVersion");
+String pbld = (String)context.getVariable("prevBuild");
+if (pver == null || pbld == null)
+    return false;
+    
+try {
+    return (Float.parseFloat(pver) &gt;= 0.90f &amp;&amp; Integer.parseInt(pbld) &gt;= 1272);
+} catch (Exception e) {
+    return false;
+}
+   </condition>
               </action>
               <action name="linux stop prism" id="285852" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
@@ -519,7 +569,20 @@ return (uid != 0);</string>
                     </object>
                   </java>
                 </serializedBean>
-                <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+                <condition>if (Util.isWindows() || Util.isMacOS())
+    return false;
+        
+String pver = (String)context.getVariable("prevVersion");
+String pbld = (String)context.getVariable("prevBuild");
+if (pver == null || pbld == null)
+    return false;
+
+try {
+    return (Float.parseFloat(pver) &gt;= 0.90f &amp;&amp; Integer.parseInt(pbld) &gt;= 1272);
+} catch (Exception e) {
+    return false;
+}
+</condition>
               </action>
               <action name="macos stop prism" id="286016" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
