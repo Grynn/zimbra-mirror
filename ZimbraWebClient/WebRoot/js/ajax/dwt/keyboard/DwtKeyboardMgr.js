@@ -249,6 +249,16 @@ function(focusObj) {
 };
 
 /**
+ * Returns the object that has focus
+ *
+ * @return {HTMLInputElement|DwtControl} Object with focus
+ */
+DwtKeyboardMgr.prototype.getFocusObj =
+function(focusObj) {
+	return this.__focusObj;
+};
+
+/**
 * Return true if the specified component currently has keyboard focus
 *
 * @param {DwtControl} control Object for which to check focus
