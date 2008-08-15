@@ -210,10 +210,6 @@ public class PushChanges {
             tombstones.remove(MailItem.TYPE_TAG);
         }
 
-        // process pending "sent" messages
-        if (ombx.getFolderById(sContext, DesktopMailbox.ID_FOLDER_OUTBOX).getSize() > 0)
-            sendPendingMessages(changes, isOnRequest);
-
         // do folder ops top-down so that we don't get dinged when folders switch places
         if (!changes.isEmpty()) {
             if (changes.getIds(MailItem.TYPE_FOLDER) != null || changes.getIds(MailItem.TYPE_SEARCHFOLDER) != null) {
@@ -418,7 +414,7 @@ public class PushChanges {
     }
     
     public static int sendPendingMessages(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
-    	return new PushChanges(ombx).sendPendingMessages((TypedIdList)null, isOnRequest);
+    	return new PushChanges(ombx).sendPendingMessages(ombx.getLocalChanges(sContext), isOnRequest);
     }
     
     /**
@@ -430,7 +426,7 @@ public class PushChanges {
      *  We scale the allowed timeout with the size of the message -- a base
      *  of 5 seconds, plus 1 second per 25K of message size. */
     private String uploadMessage(Message msg) throws ServiceException {
-        int timeout = (int) ((5 + msg.getSize() / 25000) * Constants.MILLIS_PER_SECOND);
+        int timeout = (int) (OfflineLC.http_connection_timeout.intValue() + msg.getSize() / 25000 * Constants.MILLIS_PER_SECOND);
     	if (ombx.getRemoteServerVersion().isAtLeast(minServerVersionForUploadStreaming))
     		return getZMailbox().uploadContentAsStream(msg.getContentStream(), Mime.CT_MESSAGE_RFC822 + "; name=msg-" + msg.getId(), timeout);
     	else
