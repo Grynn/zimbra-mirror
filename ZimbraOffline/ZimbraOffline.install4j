@@ -2598,7 +2598,7 @@ boolean hasFailures = false;
 for (int i = 0; i &lt; zimlets.length; ++i) {
     try {
         com.zimbra.cs.zimlet.ZimletUtil.deployZimletBySoap(zimlets[i].getAbsolutePath(),
-            "http://localhost:7633/service/admin/soap/");
+            "http://localhost:7633/service/admin/soap/", "http://localhost:7633/service/upload?fmt=raw");
         zimlets[i].delete();
     } catch (Exception x) {
         hasFailures = true;

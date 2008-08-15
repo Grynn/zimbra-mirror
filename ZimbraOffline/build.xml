@@ -446,6 +446,7 @@
 		<java classname="com.zimbra.cs.zimlet.ZimletUtil" fork="true" classpathref="deploy.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${zimbra.home.dir}/conf/localconfig.xml" />
 			<arg line="-a http://localhost:7733/service/admin/soap/" />
+			<arg line="-u http://localhost:7733/service/upload?fmt=raw" />
 			<arg line="${action}" />
 			<arg file="${zimlet}" />
 		</java>
