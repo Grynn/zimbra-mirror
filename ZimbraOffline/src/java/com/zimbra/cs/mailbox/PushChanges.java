@@ -428,7 +428,7 @@ public class PushChanges {
     private String uploadMessage(Message msg) throws ServiceException {
         int timeout = (int) (OfflineLC.http_connection_timeout.intValue() + msg.getSize() / 25000 * Constants.MILLIS_PER_SECOND);
     	if (ombx.getRemoteServerVersion().isAtLeast(minServerVersionForUploadStreaming))
-    		return getZMailbox().uploadContentAsStream(msg.getContentStream(), Mime.CT_MESSAGE_RFC822 + "; name=msg-" + msg.getId(), timeout);
+    		return getZMailbox().uploadContentAsStream(msg.getContentStream(), Mime.CT_MESSAGE_RFC822 + "; name=msg-" + msg.getId(), msg.getSize(), timeout);
     	else
     		return getZMailbox().uploadAttachment("message", msg.getContent(), Mime.CT_MESSAGE_RFC822, timeout);
     }
