@@ -319,6 +319,25 @@ return Boolean.FALSE;</string>
                 </serializedBean>
                 <condition>context.getBooleanVariable("needToUninstall")</condition>
               </action>
+              <action name="set userHome" id="286395" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>return Util.getUserHome();</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="variableName">
+                        <string>userHome</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
             </actions>
             <formComponents />
           </screen>
@@ -1297,6 +1316,86 @@ default:
                   </java>
                 </serializedBean>
                 <condition>!context.getBooleanVariable("keepUserData")</condition>
+              </action>
+              <action name="delete old mac app dir" id="286264" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                      <void property="backupForRollback">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>/Applications/Zimbra Desktop.app</string>
+                        </object>
+                      </void>
+                      <void property="recurse">
+                        <boolean>true</boolean>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
+              </action>
+              <action name="delete mac app dir" id="286265" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                      <void property="backupForRollback">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>/Applications/Yahoo! Zimbra Desktop.app</string>
+                        </object>
+                      </void>
+                      <void property="recurse">
+                        <boolean>true</boolean>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
+              </action>
+              <action name="delete old mac desktop icon" id="286396" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                      <void property="backupForRollback">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>${installer:userHome}/Desktop/Zimbra Desktop.app</string>
+                        </object>
+                      </void>
+                      <void property="recurse">
+                        <boolean>true</boolean>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
+              </action>
+              <action name="delete mac desktop icon" id="286397" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                      <void property="backupForRollback">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>${installer:userHome}/Desktop/Yahoo! Zimbra Desktop.app</string>
+                        </object>
+                      </void>
+                      <void property="recurse">
+                        <boolean>true</boolean>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
               </action>
             </actions>
             <formComponents />
@@ -2824,15 +2923,30 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                       <void property="arguments">
-                        <array class="java.lang.String" length="1">
+                        <array class="java.lang.String" length="6">
                           <void index="0">
-                            <string />
+                            <string>-webapp</string>
+                          </void>
+                          <void index="1">
+                            <string>${installer:sys.installationDir}/zdesktop.webapp</string>
+                          </void>
+                          <void index="2">
+                            <string>-override</string>
+                          </void>
+                          <void index="3">
+                            <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                          </void>
+                          <void index="4">
+                            <string>-profile</string>
+                          </void>
+                          <void index="5">
+                            <string>${installer:sys.installationDir}/profile</string>
                           </void>
                         </array>
                       </void>
                       <void property="executable">
                         <object class="java.io.File">
-                          <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/zdesktop</string>
+                          <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
                         </object>
                       </void>
                       <void property="logArguments">
@@ -3064,6 +3178,25 @@ user_pref("general.useragent.locale", "@languageId@");</string>
             <preActivation />
             <postActivation />
             <actions>
+              <action name="set userHome" id="286392" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>return Util.getUserHome();</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="variableName">
+                        <string>userHome</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
               <action name="win stop prism" id="286017" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -3576,6 +3709,46 @@ return true;</string>
                   </java>
                 </serializedBean>
                 <condition>Util.isWindows()</condition>
+              </action>
+              <action name="delete mac app dir" id="286266" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                      <void property="backupForRollback">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>/Applications/Yahoo! Zimbra Desktop.app</string>
+                        </object>
+                      </void>
+                      <void property="recurse">
+                        <boolean>true</boolean>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
+              </action>
+              <action name="delete mac desktop icon" id="286394" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                      <void property="backupForRollback">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>${installer:userHome}/Desktop/Yahoo! Zimbra Desktop.app</string>
+                        </object>
+                      </void>
+                      <void property="recurse">
+                        <boolean>true</boolean>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
               </action>
             </actions>
             <formComponents />
