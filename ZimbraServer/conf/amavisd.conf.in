@@ -68,8 +68,8 @@ $interface_policy{'SOCK'}='AM.PDP-SOCK';  # only relevant with $unix_socketname
 $policy_bank{'AM.PDP-SOCK'} = { protocol=>'AM.PDP',log_level=>5 };
 
 # $sa_debug = 1;
-$sa_rules_file = '/opt/zimbra/conf/salocal.cf';
-$sa_site_rules_file = '/opt/zimbra/conf/spamassassin';
+$sa_rules_file = '/opt/zimbra/conf/spamassassin';
+$sa_site_rules_file = '/opt/zimbra/conf/salocal.cf';
 $sa_userprefs_file = '/opt/zimbra/conf/sauser.cf';
 
 $sa_tag_level_deflt  = -10.0;  # add spam info headers if at, or above that level
