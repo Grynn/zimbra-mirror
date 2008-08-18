@@ -527,11 +527,13 @@ public class InitialSync {
             short rights = ACL.stringToRights(eGrant.getAttribute(MailConstants.A_RIGHTS));
             byte gtype = FolderAction.stringToType(eGrant.getAttribute(MailConstants.A_GRANT_TYPE));
             String zid = eGrant.getAttribute(MailConstants.A_ZIMBRA_ID, null);
-            String password = null;
-            if (gtype == ACL.GRANTEE_GUEST || gtype == ACL.GRANTEE_KEY) {
-            	password = eGrant.getAttribute(MailConstants.A_PASSWORD, null);
-            }
-            acl.grantAccess(zid, gtype, rights, password);
+            String secret = null;
+            if (gtype == ACL.GRANTEE_GUEST)
+            	secret = eGrant.getAttribute(MailConstants.A_PASSWORD, null);
+            else if (gtype == ACL.GRANTEE_KEY)
+                secret = eGrant.getAttribute(MailConstants.A_ACCESSKEY, null);
+                
+            acl.grantAccess(zid, gtype, rights, secret);
         }
         return acl;
     }
