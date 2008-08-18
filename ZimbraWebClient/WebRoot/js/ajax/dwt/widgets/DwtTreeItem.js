@@ -684,7 +684,7 @@ function(actioned) {
 		if (!this._initialized) {
 			this._initialize();
 		}
-		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected) {
+		if (this._textCell && actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected) {
 			this._textCell.className = this._actionedClassName;
 			return true;
 		} else if (!actioned) {
