@@ -21,43 +21,58 @@ function Com_Zimbra_DnD() {
 Com_Zimbra_DnD.prototype = new ZmZimletBase();
 Com_Zimbra_DnD.prototype.constructor = Com_Zimbra_DnD;
 
-Com_Zimbra_DnD.prototype.init = function () {
+Com_Zimbra_DnD.prototype.init =
+function () {
+	var outerEl = document.getElementById("skin_outer");
+	var filesEl = document.getElementById("zdnd_files");
+	if (outerEl && !filesEl) {
+		var fileSpan = document.createElement("span");
+		fileSpan.id = "zdnd_files";
+		fileSpan.style.display = "none";
+		fileSpan.innerHTML = this.getConfig("dnd-uploadform");
+		outerEl.appendChild(fileSpan);
+	}
 
-   if(document.getElementById("skin_outer") && !document.getElementById("zdnd_files")) {
-     var fileSpan = document.createElement("span");
-     fileSpan.id = "zdnd_files";
-     fileSpan.style.display = "none";
-     fileSpan.innerHTML = this.getConfig("dnd-uploadform");
-     document.getElementById("skin_outer").appendChild(fileSpan);
-   }
-
-   if(document.getElementById("zdnd_files")) {
-       var uploadUri = appCtxt.get(ZmSetting.CSFE_UPLOAD_URI);
-       var zDnDUploadFrm = document.getElementById("zdnd_form");
-       zDnDUploadFrm.setAttribute("action",uploadUri);
-   }
-    
+	if (document.getElementById("zdnd_files")) {
+		var uploadUri = appCtxt.get(ZmSetting.CSFE_UPLOAD_URI);
+		var zDnDUploadFrm = document.getElementById("zdnd_form");
+		zDnDUploadFrm.setAttribute("action", uploadUri);
+	}
 };
 
-Com_Zimbra_DnD.prototype.onShowView = function(viewId, isNewView) {
-  if("createEvent" in document && document.getElementById("zdnd_files")) {
-      if(viewId == ZmId.VIEW_COMPOSE || viewId == ZmId.VIEW_BRIEFCASE_COLUMN || viewId == ZmId.VIEW_BRIEFCASE || viewId == ZmId.VIEW_BRIEFCASE_DETAIL) {
-          var curView = appCtxt.getAppViewMgr().getCurrentView();
-          var el = curView.getHtmlElement();
-          var ev = document.createEvent("Events");
-          ev.initEvent("ZimbraDnD", true, false);
-          el.dispatchEvent(ev);
-      }
-  }
+Com_Zimbra_DnD.prototype.onShowView =
+function(viewId, isNewView) {
+	if ("createEvent" in document && document.getElementById("zdnd_files")) {
+		if (viewId == ZmId.VIEW_COMPOSE ||
+			viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
+			viewId == ZmId.VIEW_BRIEFCASE ||
+			viewId == ZmId.VIEW_BRIEFCASE_DETAIL)
+		{
+			var ev = document.createEvent("Events");
+			ev.initEvent("ZimbraDnD", true, false);
+
+			var curView = appCtxt.getAppViewMgr().getCurrentView();
+
+			if (viewId == ZmId.VIEW_COMPOSE) {
+				curView._resetBodySize();
+			}
+			var el = curView.getHtmlElement();
+			el.dispatchEvent(ev);
+		}
+	}
 };
 
-Com_Zimbra_DnD.uploadDnDFiles = function() {
-    var viewId = appCtxt.getAppViewMgr().getCurrentViewId();
-    if(viewId == ZmId.VIEW_COMPOSE || viewId == ZmId.VIEW_BRIEFCASE_COLUMN || viewId == ZmId.VIEW_BRIEFCASE || viewId == ZmId.VIEW_.BRIEFCASE_DETAIL) {
-        var curView = appCtxt.getAppViewMgr().getCurrentView();
-        if(curView) {
-            curView.uploadFiles();
-        }
-    }
-
+Com_Zimbra_DnD.uploadDnDFiles =
+function() {
+	var viewId = appCtxt.getAppViewMgr().getCurrentViewId();
+	if (viewId == ZmId.VIEW_COMPOSE ||
+		viewId == ZmId.VIEW_BRIEFCASE_COLUMN ||
+		viewId == ZmId.VIEW_BRIEFCASE ||
+		viewId == ZmId.VIEW_.BRIEFCASE_DETAIL)
+	{
+		var curView = appCtxt.getAppViewMgr().getCurrentView();
+		if (curView) {
+			curView.uploadFiles();
+		}
+	}
 };
