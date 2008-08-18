@@ -638,7 +638,9 @@ function() {
 		}
 	}
 	if (this._needsSort) {
-		this._setChildElOrder();
+		if (a.length) {
+			this._setChildElOrder();
+		}
 		delete this.__needsSort;
 	}
 };
