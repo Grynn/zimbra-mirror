@@ -25,77 +25,47 @@ use strict;
 use lib '.';
 
 use LWP::UserAgent;
-
+use Getopt::Long;
 use XmlElement;
 use XmlDoc;
 use Soap;
+use ZimbraSoapTest;
 
-my $userId;
-my $token;
+#standard options
+my ($admin, $user, $pw, $host, $help, $adminHost); #standard
+my ($token);
+GetOptions("u|user=s" => \$user,
+           "admin" => \$admin,
+           "ah|adminHost=s" => \$adminHost,
+           "pw=s" => \$pw,
+           "h|host=s" => \$host,
+           "help|?" => \$help,
+           "t=s" => \$token,
+          );
 
-if ($ARGV[0] ne "") {
-    $userId = $ARGV[0];
-    $token = $ARGV[1];
-} else {
-    print "USAGE: sync USERID [SYNC-TOKEN]\n";
-    exit 1;
+if (!defined($user) || defined($help)) {
+  my $usage = <<END_OF_USAGE;
+
+USAGE: $0 -u USER -t TOKEN
+END_OF_USAGE
+  die $usage;
 }
 
-my $ACCTNS = "urn:zimbraAccount";
-my $MAILNS = "urn:zimbraMail";
-
-my $url = "http://localhost:7070/service/soap/";
+my $z = ZimbraSoapTest->new($user, $host, $pw, undef, $adminHost);
+$z->doStdAuth();
 
 my $SOAP = $Soap::Soap12;
+
 my $d = new XmlDoc;
-$d->start('AuthRequest', $ACCTNS);
-$d->add('account', undef, { by => "name"}, $userId);
-$d->add('password', undef, undef, "test123");
-$d->end();
-
-{
-    print "\nOUTGOING XML:\n-------------\n";
-    my $out =  $d->to_string("pretty")."\n";
-    $out =~ s/ns0\://g;
-    print $out."\n";
-}
-
-
-my $authResponse = $SOAP->invoke($url, $d->root());
-
-print "AuthResponse = ".$authResponse->to_string("pretty")."\n";
-
-my $authToken = $authResponse->find_child('authToken')->content;
-print "authToken($authToken)\n";
-
-my $sessionId = $authResponse->find_child('sessionId')->content;
-print "sessionId = $sessionId\n";
-
-my $context = $SOAP->zimbraContext($authToken, $sessionId);
-
-my $contextStr = $context->to_string("pretty");
-print("Context = $contextStr\n");
-
-$d = new XmlDoc;
-if ($token ne "") {
-    $d->start('SyncRequest', $MAILNS, { "token" => $token});
+if (defined($token) && ($token ne "")) {
+    $d->start('SyncRequest', $Soap::ZIMBRA_MAIL_NS, { "token" => $token});
 } else {
-    $d->start('SyncRequest', $MAILNS, );
+    $d->start('SyncRequest', $Soap::ZIMBRA_MAIL_NS);
 }
-
 $d->end(); # 'SyncRequest';'
 
-print "\nOUTGOING XML:\n-------------\n";
-my $out =  $d->to_string("pretty")."\n";
-$out =~ s/ns0\://g;
-print $out."\n";
+my $response = $z->invokeMail($d->root());
 
-my $response;
-
-$response = $SOAP->invoke($url, $d->root(), $context);
-
-print "\nRESPONSE:\n--------------\n";
-$out =  $response->to_string("pretty")."\n";
-$out =~ s/ns0\://g;
-print $out."\n";
+print "REQUEST:\n-------------\n".$z->to_string_simple($d);
+print "RESPONSE:\n--------------\n".$z->to_string_simple($response);
 
