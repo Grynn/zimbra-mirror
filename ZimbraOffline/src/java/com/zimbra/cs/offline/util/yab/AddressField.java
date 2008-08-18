@@ -23,7 +23,7 @@ import com.zimbra.cs.offline.util.Xml;
 /**
  * Structured YAB address field.
  */
-public class AddressField extends Field {
+public final class AddressField extends Field {
     private String street;
     private String city;
     private String state;
@@ -42,6 +42,11 @@ public class AddressField extends Field {
         super(ADDRESS);
     }
 
+    @Override
+    public boolean isAddress() {
+        return true;
+    }
+    
     public String getStreet() {
         return street;
     }

@@ -28,18 +28,18 @@ public class Bucket {
     private Contact end;
 
     public static final String TAG = "bucket";
-    
-    public static Bucket fromXml(Element e) {
-        return new Bucket().parseXml(e);
-    }
-    
+
     private Bucket() {}
 
     public int getId() { return id; }
     public int getContactCount() { return count; }
     public Contact getStartContact() { return start; }
     public Contact getEndContact() { return end; }
-    
+
+    public static Bucket fromXml(Element e) {
+        return new Bucket().parseXml(e);
+    }
+
     private Bucket parseXml(Element e) {
         if (!e.getTagName().equals(TAG)) {
             throw new IllegalArgumentException(

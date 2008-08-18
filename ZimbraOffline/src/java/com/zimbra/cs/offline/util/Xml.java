@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.io.ByteArrayOutputStream;
 
 /**
  * Various XML utility methods.
@@ -128,5 +129,11 @@ public final class Xml {
         } catch (TransformerException e) {
             throw new IllegalStateException("Unable to serialize document", e);
         }
+    }
+
+    public static String toString(Node node) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        print(node, baos);
+        return new String(baos.toByteArray(), "UTF8");
     }
 }

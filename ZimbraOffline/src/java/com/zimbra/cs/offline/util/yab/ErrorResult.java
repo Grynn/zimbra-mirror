@@ -26,10 +26,6 @@ public class ErrorResult extends Result {
     private int retryAfter = -1;
 
     public static final String TAG = "error";
-    
-    public static ErrorResult fromXml(Element e) {
-        return new ErrorResult().parseXml(e);
-    }
 
     private ErrorResult() {}
 
@@ -53,8 +49,12 @@ public class ErrorResult extends Result {
     public String getDebugMessage() {
         return debugMessage;
     }
+ 
+    public static ErrorResult fromXml(Element e) {
+        return new ErrorResult().parseXml(e);
+    }
 
-    public ErrorResult parseXml(Element e) {
+    private ErrorResult parseXml(Element e) {
         assert e.getTagName().equals(TAG);
         for (Element child : Xml.getChildren(e)) {
             String name = child.getTagName();

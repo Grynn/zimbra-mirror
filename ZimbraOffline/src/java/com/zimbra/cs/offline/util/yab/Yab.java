@@ -16,38 +16,38 @@
  */
 package com.zimbra.cs.offline.util.yab;
 
+import com.zimbra.cs.util.yauth.Auth;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
 /**
  * Yahoo Address book access.
  */
 public class Yab {
     public static final String DTD = "http://l.yimg.com/us.yimg.com/lib/pim/r/abook/xml/2/pheasant.dtd";
+
+    public static final Logger LOG = Logger.getLogger(Yab.class);
+    
+    public static final String BASE_URI = "http://address.yahooapis.com/v1";
+
     public static final String XML = "xml";
     public static final String JSON = "json";
     
-    public static final Boolean DEBUG = true; // Boolean.getBoolean("zimbra.yab.debug");
-
-    private static String baseUri = "http://address.yahooapis.com/v1";
-
-    public static String getBaseUri() {
-        return baseUri;
+    public static Session createSession(Auth auth) {
+        return new Session(auth);
     }
 
-    public static void setBaseUri(String uri) {
-        baseUri = uri;
+    public static void enableDebug() {
+        LOG.setLevel(Level.DEBUG);
     }
-
-    public static Session createSession(String appId, String format) {
-        return new Session(appId, format);
+    
+    public static boolean isDebug() {
+        return LOG.isDebugEnabled();
     }
-
-    public static Session createSession(String appId) {
-        return new Session(appId, XML);
-    }
-
-    public static void debug(String format, Object... args) {
-        if (DEBUG) {
-            System.out.printf("[DEBUG] " + format, args);
-            System.out.println();
+    
+    public static void debug(String fmt, Object... args) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format(fmt, args));
         }
     }
 }

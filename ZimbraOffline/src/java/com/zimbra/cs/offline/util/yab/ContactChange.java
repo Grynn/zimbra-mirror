@@ -24,21 +24,23 @@ import java.util.ArrayList;
 
 public class ContactChange {
     private int cid;
-    private List<FieldChange> fieldChanges;
-    private List<CategoryChange> categoryChanges;
+    private final List<FieldChange> fieldChanges;
+    private final List<CategoryChange> categoryChanges;
 
-    public ContactChange(int cid) {
-        this.cid = cid;
+    public ContactChange() {
+        fieldChanges = new ArrayList<FieldChange>();
+        categoryChanges = new ArrayList<CategoryChange>();
     }
 
+    public void setId(int cid) {
+        this.cid = cid;
+    }
+    
     public int getId() {
         return cid;
     }
     
     public void addFieldChange(FieldChange change) {
-        if (fieldChanges == null) {
-            fieldChanges = new ArrayList<FieldChange>();
-        }
         fieldChanges.add(change);
     }
 
@@ -47,9 +49,6 @@ public class ContactChange {
     }
 
     public void addCategoryChange(CategoryChange change) {
-        if (categoryChanges == null) {
-            categoryChanges = new ArrayList<CategoryChange>();
-        }
         categoryChanges.add(change);
     }
 
@@ -62,15 +61,11 @@ public class ContactChange {
         if (cid != -1) {
             e.setAttribute(Contact.CID, String.valueOf(cid));
         }
-        if (fieldChanges != null) {
-            for (FieldChange change : fieldChanges) {
-                e.appendChild(change.toXml(doc));
-            }
+        for (FieldChange change : fieldChanges) {
+            e.appendChild(change.toXml(doc));
         }
-        if (categoryChanges != null) {
-            for (CategoryChange change : categoryChanges) {
-                e.appendChild(change.toXml(doc));
-            }
+        for (CategoryChange change : categoryChanges) {
+            e.appendChild(change.toXml(doc));
         }
         return e;
     }

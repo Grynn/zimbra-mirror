@@ -27,15 +27,17 @@ public class SearchResponse extends Response {
     private List<Contact> contacts;
 
     private static final String TAG = "search-response";
-    
-    public static SearchResponse fromXml(Element e) {
-        return new SearchResponse().parseXml(e);
-    }
 
-    private SearchResponse() {}
+    private SearchResponse() {
+        contacts = new ArrayList<Contact>();
+    }
 
     public List<Contact> getContacts() {
         return contacts;
+    }
+    
+    public static SearchResponse fromXml(Element e) {
+        return new SearchResponse().parseXml(e);
     }
 
     private SearchResponse parseXml(Element e) {
@@ -44,7 +46,6 @@ public class SearchResponse extends Response {
                 "Not a '" + TAG + "' element: " + e.getTagName());
         }
         List<Element> children = Xml.getChildren(e);
-        contacts = new ArrayList<Contact>(children.size());
         for (Element child : children) {
             contacts.add(Contact.fromXml(child));
         }

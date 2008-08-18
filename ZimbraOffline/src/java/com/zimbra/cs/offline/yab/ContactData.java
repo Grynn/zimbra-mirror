@@ -191,14 +191,14 @@ public class ContactData {
     private String getKey(Field field) {
         String name = field.getName();
         if (name.equals(SimpleField.PHONE)) {
-            if (field.isFlagSet(Flag.PAGER)) return A_pager;
-            if (field.isFlagSet(Flag.MOBILE)) return A_mobilePhone;
+            if (field.isFlag(Flag.PAGER)) return A_pager;
+            if (field.isFlag(Flag.MOBILE)) return A_mobilePhone;
             if (field.isHome()) {
-                if (field.isFlagSet(Flag.FAX)) return A_homeFax;
+                if (field.isFlag(Flag.FAX)) return A_homeFax;
                 if (unset(A_homePhone)) return A_homePhone;
                 if (unset(A_homePhone2)) return A_homePhone2;
             } else if (field.isWork()) {
-                if (field.isFlagSet(Flag.FAX)) return A_workFax;
+                if (field.isFlag(Flag.FAX)) return A_workFax;
                 if (unset(A_workPhone)) return A_workPhone;
                 if (unset(A_workPhone2)) return A_workPhone2;
             }
@@ -259,7 +259,9 @@ public class ContactData {
         if (address.getStreet() != null && address.getCity() != null &&
             address.getState() != null && address.getZip() != null &&
             address.getCountry() != null) {
-            address.setFlags(flags);
+            for (String flag : flags) {
+                address.setFlag(flag, true);
+            }
             return address;
         }
         return null;
@@ -335,7 +337,8 @@ public class ContactData {
     }
 
     public ContactChange getContactChange(int cid, ContactData newData) {
-        ContactChange cc = new ContactChange(cid);
+        ContactChange cc = new ContactChange();
+        cc.setId(cid);
         add(cc, nameChange(name, newData.name));
         add(cc, addressChange(homeAddress, newData.homeAddress));
         add(cc, addressChange(workAddress, newData.workAddress));

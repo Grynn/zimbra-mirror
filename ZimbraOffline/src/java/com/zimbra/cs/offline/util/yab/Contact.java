@@ -29,20 +29,18 @@ import com.zimbra.cs.offline.util.Xml;
  */
 public class Contact {
     private int id = -1;
-    private List<Field> fields;
-    private List<Category> categories;
+    private final List<Field> fields;
+    private final List<Category> categories;
 
     public static final String CID = "cid";
 
-    public static Contact fromXml(Element e) {
-        Contact contact = new Contact();
-        contact.parseXml(e);
-        return contact;
+    public Contact() {
+        fields = new ArrayList<Field>();
+        categories = new ArrayList<Category>();
     }
-    
-    public Contact() {}
 
     public Contact(int id) {
+        this();
         this.id = id;
     }
 
@@ -55,16 +53,10 @@ public class Contact {
     }
 
     public void addField(Field field) {
-        if (fields == null) {
-            fields = new ArrayList<Field>();
-        }
         fields.add(field);
     }
 
     public void addCategory(Category category) {
-        if (categories == null) {
-            categories = new ArrayList<Category>();
-        }
         categories.add(category);
     }
 
@@ -77,16 +69,13 @@ public class Contact {
     }
 
     public ContactChange asContactChange() {
-        ContactChange change = new ContactChange(id);
-        if (fields != null) {
+        ContactChange change = new ContactChange();
+        change.setId(id);
         for (Field field : fields) {
             change.addFieldChange(FieldChange.add(field));
         }
-        }
-        if (categories != null) {
-            for (Category category : categories) {
-                change.addCategoryChange(CategoryChange.add(category));
-            }
+        for (Category category : categories) {
+            change.addCategoryChange(CategoryChange.add(category));
         }
         return change;
     }
@@ -94,17 +83,19 @@ public class Contact {
     public Element toXml(Document doc, String tag) {
         Element e = doc.createElement(tag);
         if (id != -1) e.setAttribute(CID, String.valueOf(id));
-        if (fields != null) {
-            for (Field field : fields) {
-                e.appendChild(field.toXml(doc, field.getName()));
-            }
+        for (Field field : fields) {
+            e.appendChild(field.toXml(doc, field.getName()));
         }
-        if (categories != null) {
-            for (Category cat : categories) {
-                e.appendChild(cat.toXml(doc, "category"));
-            }
+        for (Category cat : categories) {
+            e.appendChild(cat.toXml(doc, "category"));
         }
         return e;
+    }
+    
+    public static Contact fromXml(Element e) {
+        Contact contact = new Contact();
+        contact.parseXml(e);
+        return contact;
     }
     
     private Contact parseXml(Element e) {
@@ -119,4 +110,5 @@ public class Contact {
         }
         return this;
     }
+
 }

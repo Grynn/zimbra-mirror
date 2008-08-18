@@ -21,8 +21,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Attr;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.zimbra.cs.offline.util.Xml;
 
@@ -32,9 +32,83 @@ import com.zimbra.cs.offline.util.Xml;
 public abstract class Field {
     private String name;
     private int id = -1;
-    private List<Flag> flags;
+    private final Map<String, Boolean> flags;
 
     public static final String FID = "fid";
+
+    public Field() {
+        flags = new HashMap<String, Boolean>();
+    }
+
+    public Field(String name) {
+        this();
+        setName(name);
+    }
+
+    public boolean isName() { return false; }
+    public boolean isDate() { return false; }
+    public boolean isAddress() { return false; }
+    public boolean isSimple() { return false; }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+    
+    public void setFlag(String name, boolean value) {
+        flags.put(name, value);
+    }
+
+    public void setFlag(String name) {
+        setFlag(name, true);
+    }
+
+    public void setFlags(String... names) {
+        for (String name : names) {
+            setFlag(name);
+        }
+    }
+
+    public boolean isFlag(String name) {
+        Boolean b = flags.get(name);
+        return b != null && b;
+    }
+
+    public Map<String, Boolean> getFlags() {
+        return flags;
+    }
+    
+    public boolean isHome() {
+        return isFlag(Flag.HOME);
+    }
+
+    public boolean isWork() {
+        return isFlag(Flag.WORK);
+    }
+
+    public Element toXml(Document doc, String tag) {
+        Element e = doc.createElement(tag);
+        if (id != -1) {
+            e.setAttribute(FID, String.valueOf(id));
+        }
+        if (flags != null) {
+            for (Map.Entry<String, Boolean> flag : flags.entrySet()) {
+                e.setAttribute(flag.getKey(), flag.getValue().toString());
+            }
+        }
+        return e;
+    }
 
     public static Field fromXml(Element e) {
         Field field = newField(e.getTagName());
@@ -55,105 +129,22 @@ public abstract class Field {
         }
     }
     
-    protected Field() {}
-
-    protected Field(String fname) {
-        this.name = fname;
-    }
-
-    public boolean isName() { return this instanceof NameField; }
-    public boolean isDate() { return this instanceof DateField; }
-    public boolean isAddress() { return this instanceof AddressField; }
-    public boolean isSimple() { return this instanceof SimpleField; }
-
-    public void setName(String fname) {
-        this.name = fname;
-    }
-    
-    public String getName() {
-        return name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    public void addFlag(Flag flag) {
-        if (flags == null) {
-            flags = new ArrayList<Flag>();
-        }
-        flags.add(flag);
-    }
-
-    public void setFlags(String... fnames) {
-        for (String fname : fnames) setFlag(fname);
-    }
-
-    public void setFlag(String fname) {
-        addFlag(new Flag(fname, true));
-    }
-
-    public boolean isFlagSet(String fname) {
-        Flag f = getFlag(fname);
-        return f != null && f.getValue();
-    }
-
-    public Flag getFlag(String fname) {
-        if (flags == null) return null;
-        for (Flag flag : flags) {
-            if (flag.getName().equals(fname)) {
-                return flag;
-            }
-        }
-        return null;
-    }
-    
-    public List<Flag> getFlags() {
-        return flags;
-    }
-
-    public boolean isHome() {
-        return isFlagSet(Flag.HOME);
-    }
-
-    public boolean isWork() {
-        return isFlagSet(Flag.WORK);
-    }
-
-    public Element toXml(Document doc, String tag) {
-        Element e = doc.createElement(tag);
-        if (id != -1) {
-            e.setAttribute(FID, String.valueOf(id));
-        }
-        if (flags != null) {
-            for (Flag flag : flags) {
-                e.setAttribute(name, String.valueOf(flag.getValue()));
-            }
-        }
-        return e;
-    }
-
     protected void parseXml(Element e) {
         name = e.getTagName();
         id = Xml.getIntAttribute(e, FID);
-        flags = parseFlags(e);
+        parseFlags(e);
     }
 
-    private static List<Flag> parseFlags(Element e) {
+    private void parseFlags(Element e) {
         NamedNodeMap attrs = e.getAttributes();
-        if (attrs == null) return null;
-        List<Flag> flags = new ArrayList<Flag>();
-        for (int i = 0; i < attrs.getLength(); i++) {
-            Attr attr = (Attr) attrs.item(i);
-            String s = attr.getValue();
-            if ("true".equals(s) || "false".equals(s)) {
-                flags.add(new Flag(attr.getName(), Boolean.parseBoolean(s)));
+        if (attrs != null) {
+            for (int i = 0; i < attrs.getLength(); i++) {
+                Attr attr = (Attr) attrs.item(i);
+                String s = attr.getValue();
+                if ("true".equals(s) || "false".equals(s)) {
+                    flags.put(attr.getName(), Boolean.parseBoolean(s));
+                }
             }
         }
-        return flags;
     }
 }

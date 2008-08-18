@@ -28,10 +28,6 @@ public class SyncResponseEvent {
         ADDRESS_BOOK_RESET, ADD_CONTACT, UPDATE_CONTACT, REMOVE_CONTACT
     }
 
-    public static SyncResponseEvent fromXml(Element e) {
-        return new SyncResponseEvent().parseXml(e);
-    }
-
     private SyncResponseEvent() {}
 
     public Type getType() {
@@ -49,7 +45,11 @@ public class SyncResponseEvent {
     public int getLastModifiedTime() {
         return lastModifiedTime;
     }
-    
+
+    public static SyncResponseEvent fromXml(Element e) {
+        return new SyncResponseEvent().parseXml(e);
+    }
+
     public SyncResponseEvent parseXml(Element e) {
         type = getType(e.getTagName());
         lastModifiedTime = Xml.getIntAttribute(e, "lmt");

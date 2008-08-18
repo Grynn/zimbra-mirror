@@ -17,12 +17,9 @@
 package com.zimbra.cs.offline.util.yab;
 
 /**
- * YAB field flag.
+ * YAB field flag constants.
  */
-public class Flag {
-    private final String name;
-    private final boolean value;
-
+public final class Flag {
     public static final String HOME = "home";
     public static final String WORK = "work";
     public static final String PERSONAL = "personal";
@@ -45,27 +42,4 @@ public class Flag {
     public static final String PHOTO = "photo";
     public static final String BLOG = "blog";
     public static final String IBM = "ibm";
-
-    public Flag(String name, boolean value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean getValue() {
-        return value;
-    }
-
-    public int hashCode() {
-        return name.hashCode() ^ ((Boolean) value).hashCode();
-    }
-
-    public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != Flag.class) return false;
-        Flag flag = (Flag) obj;
-        return name.equals(flag.name) && value == flag.value;
-    }
 }

@@ -16,14 +16,14 @@
  */
 package com.zimbra.cs.offline.util.yab;
 
-import com.zimbra.cs.util.yauth.RawAuth;
-import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.offline.util.Xml;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -31,6 +31,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.TransformerFactory;
@@ -44,32 +45,30 @@ import javax.xml.transform.stream.StreamResult;
  * Yahoo address book session information.
  */
 public class Session {
-    private String appId;
-    private String format;
-    private Auth auth;
-    private HttpClient httpClient;
-    private DocumentBuilder docBuilder;
-    private Transformer transformer;
-    private ByteArrayOutputStream baos;
+    private final String format;
+    private final Auth auth;
+    private final HttpClient httpClient;
+    private final DocumentBuilder docBuilder;
+    private final Transformer transformer;
+    private final ByteArrayOutputStream baos;
 
-    public Session(String appId, String format) {
+    public Session(Auth auth, String format) {
         if (!Yab.XML.equals(format)) {
             throw new IllegalArgumentException(
                 "Unsupported data format: " + format);
         }
-        this.appId = appId;
         this.format = format;
+        this.auth = auth;
         httpClient = new HttpClient();
         docBuilder = Xml.newDocumentBuilder();
         transformer = createTransformer();
         baos = new ByteArrayOutputStream(4096);
     }
-    
-    public void authenticate(String token)
-            throws AuthenticationException, IOException {
-        auth = RawAuth.authenticate(appId, token);
-    }
 
+    public Session(Auth auth) {
+        this(auth, Yab.XML);
+    }
+    
     public List<Contact> getContacts(Iterable<Integer> cids) throws IOException {
         StringBuilder sb = new StringBuilder();
         for (int cid : cids) {
@@ -87,32 +86,30 @@ public class Session {
         return res.getContacts();
     }
     
-    public SearchRequest createSearchRequest(String params) {
-        checkAuthenticated();
+    public SearchRequest createSearchRequest(String... params) {
         SearchRequest req = new SearchRequest(this);
         req.addParams(params);
         return req;
     }
 
     public SearchRequest createSearchRequest() {
-        checkAuthenticated();
         return new SearchRequest(this);
     }
 
     public AddRequest createAddRequest() {
-        checkAuthenticated();
         return new AddRequest(this);
     }
 
     public SyncRequest createSyncRequest(int revision) {
-        checkAuthenticated();
         return new SyncRequest(this, revision);
     }
-    
-    public String getAppId() {
-        return appId;
-    }
 
+    public void encodeParams(Request req) {
+        req.addParam("appid", auth.getAppId());
+        req.addParam("WSSID", auth.getWSSID());
+        req.addParam("format", format);
+    }
+    
     public String getFormat() {
         return format;
     }
@@ -148,9 +145,12 @@ public class Session {
         }
     }
 
-    private void checkAuthenticated() {
-        if (auth == null) {
-            throw new IllegalStateException("Not authenticated");
+    public Document parseDocument(String s) throws IOException {
+        try {
+            return docBuilder.parse(new InputSource(new StringReader(s)));
+        } catch (SAXException e) {
+            throw (IOException)
+                new IOException("Unable to parse XML").initCause(e);
         }
     }
 

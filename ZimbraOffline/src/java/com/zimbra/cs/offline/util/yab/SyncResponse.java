@@ -27,9 +27,9 @@ import com.zimbra.cs.offline.util.Xml;
 public class SyncResponse extends Response {
     private long lastModifiedTime = -1;
     private int revision = -1;
-    private List<Category> categories;
-    private List<Result> results;
-    private List<SyncResponseEvent> events;
+    private final List<Category> categories;
+    private final List<Result> results;
+    private final List<SyncResponseEvent> events;
 
     private static final String TAG = "sync-response";
     
@@ -37,7 +37,11 @@ public class SyncResponse extends Response {
         return new SyncResponse().parseXml(e);
     }
 
-    private SyncResponse() {}
+    private SyncResponse() {
+        categories = new ArrayList<Category>();
+        results = new ArrayList<Result>();
+        events = new ArrayList<SyncResponseEvent>();
+    }
 
     public long getLastModifiedTime() {
         return lastModifiedTime;
@@ -97,19 +101,16 @@ public class SyncResponse extends Response {
         revision = Xml.getIntAttribute(e, "rev");
         ListIterator<Element> it = Xml.getChildren(e).listIterator();
         // Parse categories
-        categories = new ArrayList<Category>();
         Category category;
         while ((category = parseCategory(it)) != null) {
             categories.add(category);
         }
         // Parse success or error results
-        results = new ArrayList<Result>();
         Result result;
         while ((result = parseResult(it)) != null) {
             results.add(result);
         }
         // Parse events
-        events = new ArrayList<SyncResponseEvent>();
         while (it.hasNext()) {
             events.add(SyncResponseEvent.fromXml(it.next()));
         }

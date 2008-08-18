@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class AddRequest extends Request {
-    private List<Contact> contacts;
+    private final List<Contact> contacts;
 
     public static final String ACTION = "addContacts";
     public static final String TAG = "add-request";

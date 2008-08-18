@@ -25,7 +25,7 @@ import java.util.Date;
 /**
  * Structure aniversary or birthday YAB field.
  */
-public class DateField extends Field {
+public final class DateField extends Field {
     private int day;
     private int month;
     private int year;
@@ -56,6 +56,11 @@ public class DateField extends Field {
         this.year = year;
     }
 
+    @Override
+    public boolean isDate() {
+        return true;
+    }
+    
     public boolean isBirthday() {
         return BIRTHDAY.equals(getName());
     }
@@ -95,6 +100,7 @@ public class DateField extends Field {
         year = date.getYear() + 1900;
     }
 
+    @SuppressWarnings("deprecation")
     public Date getDate() {
         return new Date(year - 1900, month, day);
     }

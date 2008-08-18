@@ -21,6 +21,7 @@ import org.w3c.dom.Document;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.IOException;
 
 /**
  * Yahoo address book synchronization request.
@@ -63,5 +64,20 @@ public class SyncRequest extends Request {
     @Override
     protected Response parseResponse(Document doc) {
         return SyncResponse.fromXml(doc.getDocumentElement());
+    }
+
+    @Override
+    public Response send() throws IOException {
+        SyncResponse res = (SyncResponse) super.send();
+        List<Result> results = res.getResults();
+        if (events.size() != results.size()) {
+            throw new IOException(String.format(
+                "Invalid number of results (expected %d but got %d)",
+                events.size(), results.size()));
+        }
+        for (int i = 0; i < results.size(); i++) {
+            events.get(i).setResult(results.get(i));
+        }
+        return res;
     }
 }

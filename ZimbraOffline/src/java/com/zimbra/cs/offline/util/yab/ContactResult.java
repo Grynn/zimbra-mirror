@@ -23,10 +23,6 @@ public class ContactResult extends Result {
     private Contact contact;
 
     public static final String TAG = "contact";
-    
-    public static ContactResult fromXml(Element e) {
-        return new ContactResult().parseXml(e);
-    }
 
     private ContactResult() {}
 
@@ -47,6 +43,10 @@ public class ContactResult extends Result {
         return contact;
     }
     
+    public static ContactResult fromXml(Element e) {
+        return new ContactResult().parseXml(e);
+    }
+
     private ContactResult parseXml(Element e) {
         assert e.getTagName().equals(TAG);
         addAction = AddAction.fromXml(e);

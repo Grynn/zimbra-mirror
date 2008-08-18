@@ -17,5 +17,4 @@
 package com.zimbra.cs.offline.util.yab;
 
 public class Response {
-
 }

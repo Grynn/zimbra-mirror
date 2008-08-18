@@ -23,18 +23,12 @@ import com.zimbra.cs.offline.util.Xml;
 /**
  * Category reference by name or id.
  */
-public class Category {
+public final class Category {
     private String name;
     private int id = -1;
 
     private static final String CATID = "catid";
 
-    public static Category fromXml(Element e) {
-        Category cat = new Category();
-        cat.parseXml(e);
-        return cat;
-    }
-    
     public Category() {}
 
     public Category(String name) {
@@ -61,6 +55,12 @@ public class Category {
         return id;
     }
 
+    public static Category fromXml(Element e) {
+        Category cat = new Category();
+        cat.parseXml(e);
+        return cat;
+    }
+        
     public Element toXml(Document doc, String tag) {
         Element e = doc.createElement(tag);
         if (id != -1) {

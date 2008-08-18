@@ -25,11 +25,7 @@ public class SuccessResult extends Result {
     private int catid = -1;
 
     public static final String TAG = "success";
-    
-    public static SuccessResult fromXml(Element e) {
-        return new SuccessResult().parseXml(e);
-    }
-    
+
     private SuccessResult() {}
 
     @Override
@@ -45,6 +41,10 @@ public class SuccessResult extends Result {
         return addAction == AddAction.MERGE;
     }
 
+    public boolean isRemoved() {
+        return addAction == null;
+    }
+    
     public AddAction getAddAction() {
         return addAction;
     }
@@ -55,6 +55,10 @@ public class SuccessResult extends Result {
 
     public int getCategoryId() {
         return catid;
+    }
+    
+    public static SuccessResult fromXml(Element e) {
+        return new SuccessResult().parseXml(e);
     }
 
     private SuccessResult parseXml(Element e) {

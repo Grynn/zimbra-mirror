@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 public class SyncRequestEvent {
     private final Type type;
     private final Object param;
+    private Result result;
     
     public static enum Type {
         ADD_CONTACT, UPDATE_CONTACT, REMOVE_CONTACT,
@@ -44,9 +45,9 @@ public class SyncRequestEvent {
         return new SyncRequestEvent(Type.ADD_CATEGORY, new Category(name));
     }
 
-    public static SyncRequestEvent renameCategory(Category from, String name) {
+    public static SyncRequestEvent renameCategory(Category category, String toName) {
         return new SyncRequestEvent(Type.RENAME_CATEGORY,
-            new Category[] { from, new Category(name) });
+            new Category[] { category, new Category(toName) });
     }
     
     public static SyncRequestEvent removeCategory(Category category) {
@@ -78,6 +79,14 @@ public class SyncRequestEvent {
         return ((Category[]) param)[1];
     }
 
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
+    
     public Element toXml(Document doc) {
         switch (type) {
         case ADD_CONTACT:

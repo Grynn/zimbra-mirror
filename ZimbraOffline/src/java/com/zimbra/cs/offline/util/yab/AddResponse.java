@@ -24,18 +24,20 @@ import java.util.ArrayList;
 import com.zimbra.cs.offline.util.Xml;
 
 public class AddResponse extends Response {
-    private List<Result> results;
+    private final List<Result> results;
 
     private static final String TAG = "add-response";
-    
-    public static AddResponse fromXml(Element e) {
-        return new AddResponse().parseXml(e);
-    }
 
-    private AddResponse() {}
+    private AddResponse() {
+        results = new ArrayList<Result>();
+    }
 
     public List<Result> getResults() {
         return results;
+    }
+
+    public static AddResponse fromXml(Element e) {
+        return new AddResponse().parseXml(e);
     }
 
     private AddResponse parseXml(Element e) {
@@ -48,7 +50,6 @@ public class AddResponse extends Response {
             throw new IllegalArgumentException(
                 "Expected at least one result element");
         }
-        results = new ArrayList<Result>(children.size());
         for (Element child : children) {
             String tag = child.getTagName();
             if (tag.equals(ContactResult.TAG)) {

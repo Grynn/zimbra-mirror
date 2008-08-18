@@ -24,7 +24,7 @@ import com.zimbra.cs.offline.util.Xml;
 /**
  * Structured YAB name field.
  */
-public class NameField extends Field {
+public final class NameField extends Field {
     private String first;
     private String middle;
     private String last;
@@ -49,8 +49,13 @@ public class NameField extends Field {
 
     public NameField(String first, String last) {
         this();
-        this.first = first;
-        this.last = last;
+        setFirst(first);
+        setLast(last);
+    }
+
+    @Override
+    public boolean isName() {
+        return true;
     }
 
     public String getFirst() {
