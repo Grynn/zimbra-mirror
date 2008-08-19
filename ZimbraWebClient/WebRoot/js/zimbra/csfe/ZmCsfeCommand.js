@@ -48,6 +48,7 @@ function(uri) {
 
 ZmCsfeCommand.setAuthToken =
 function(authToken, lifetimeMs, sessionId) {
+	ZmCsfeCommand._curAuthToken = authToken;
 	if (lifetimeMs != null) {
 		var exp = null;
 		if(lifetimeMs > 0) {
