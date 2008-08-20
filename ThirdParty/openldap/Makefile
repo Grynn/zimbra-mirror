@@ -60,6 +60,7 @@ build:
 	--enable-backends=mod \
 		--disable-shell \
 		--disable-sql \
+		--disable-bdb \
 	--enable-overlays=mod \
 	--enable-debug \
 	--enable-crypt; \
