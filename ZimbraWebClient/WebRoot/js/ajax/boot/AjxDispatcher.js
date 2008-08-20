@@ -64,7 +64,8 @@ function(pkg, callback) {
 		pkgData.callback.push(callback);
 	}
 	else {
-		callback.run();
+		var func = AjxCallback.simpleClosure(callback.run, callback);
+		setTimeout(func, 0);
 	}
 };
 
