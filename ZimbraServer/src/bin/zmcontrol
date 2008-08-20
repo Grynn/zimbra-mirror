@@ -165,7 +165,7 @@ sub doStatus {
 		$rc = $rc >> 8;
 		if ($rc) {
       # this is an any ugly hack for 11266
-			$status = 1 unless (/logger|spell|snmp/);
+			$status = 1 unless (/logger|spell|snmp|stats/);
         
 		}
 		my $stat = sprintf "\t%-20s %10s\n",$_,($rc)?"Stopped":"Running";
