@@ -41,24 +41,34 @@ XFormChoices.prototype.constructor = XFormChoices;
 XFormChoices.normalizeChoices = function (choices, type, valueProperty, labelProperty) {
 	var values;
 	var labels;
-	switch (type) {
+    var visible; //indicate if the menu item choice is visible
+    var totalInvisibleChoices = 0;
+    
+    switch (type) {
 		case XFormChoices.SIMPLE_LIST:
 			values = [].concat(choices)
 			labels = [].concat(choices)
-		
+
 			break;
 
 
 		case XFormChoices.OBJECT_LIST:
-			values = []; labels = [];
+			values = []; labels = []; visible = [];
 			if (valueProperty == null) valueProperty = "value";
 			if (labelProperty == null) labelProperty = "label";
-			var cnt = choices.length;
+
+            var cnt = choices.length;
 			for (var i = 0; i < cnt; i++) {
 				if(choices[i]) {				
 					values.push(choices[i][valueProperty]);
 					labels.push(choices[i][labelProperty]);
-				}
+                    if (choices[i]["visible"] == false) { //by default, the choice should be visible unless specified as false
+                        visible.push(false) ;
+                        totalInvisibleChoices ++ ;
+                    }else{
+                        visible.push(true) ;
+                    }
+                }
 			}
 		
 			break;
@@ -83,7 +93,7 @@ XFormChoices.normalizeChoices = function (choices, type, valueProperty, labelPro
 		
 			break;
 	}
-	return {values:values, labels:labels};
+	return {values:values, labels:labels, visible:visible, totalInvisibleChoices: totalInvisibleChoices };
 }
 
 
@@ -98,6 +108,7 @@ XFormChoices.OBJECT_REFERENCE_LIST = "object_reference_list";
 XFormChoices.prototype._type = XFormChoices.AUTO;
 XFormChoices.prototype._valueProperty = "value";
 XFormChoices.prototype._labelProperty = "label";
+XFormChoices.prototype._visibleProperty = "visible" ;
 
 
 XFormChoices.prototype.getChoiceObject = 

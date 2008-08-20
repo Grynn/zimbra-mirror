@@ -1066,11 +1066,16 @@ XFormItem.prototype.getChoicesHTML = function() {
 	this.outputChoicesHTMLStart(html);
 	var values = choices.values;
 	var labels = choices.labels;
+    var visible = choices.visible ;
 
-	var choiceCssClass = this.getChoiceCssClass();
+    var choiceCssClass = this.getChoiceCssClass();
 	for (var i = 0; i < values.length; i++) {
-		html.append("", this.getChoiceHTML(i, values[i], labels[i], choiceCssClass, ""));
-	}
+        if (visible[i] == false) {
+            //don't display this choice
+        }else {       //by default, the choice should be visible
+            html.append("", this.getChoiceHTML(i, values[i], labels[i], choiceCssClass, ""));
+        }
+    }
 	this.outputChoicesHTMLEnd(html);
 	return html.toString();
 }
