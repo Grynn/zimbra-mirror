@@ -73,6 +73,9 @@ public class OfflineLC {
     public static final KnownKey zdesktop_ymail_baseuri;
     
     public static final KnownKey zdesktop_support_email;
+    
+    public static final KnownKey zdesktop_min_zcs_version_sync_tgz;
+    
 
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -229,6 +232,10 @@ public class OfflineLC {
 	    zdesktop_support_email = new KnownKey("zdesktop_support_email");
 	    zdesktop_support_email.setDefault("zdesktop-report@zimbra.com");
 	    zdesktop_support_email.setDoc("support email address");
+	    
+	    zdesktop_min_zcs_version_sync_tgz = new KnownKey("zdesktop_min_zcs_version_sync_tgz");
+	    zdesktop_min_zcs_version_sync_tgz.setDefault("5.0.9");
+	    zdesktop_min_zcs_version_sync_tgz.setDoc("min zcs server version to support tgz format for sync");
     }
     
     public static String getFullVersion() {

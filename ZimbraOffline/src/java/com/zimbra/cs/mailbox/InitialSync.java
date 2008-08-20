@@ -836,7 +836,7 @@ public class InitialSync {
     	return headers;
     }
     
-    private static final Version MIN_ZCS_VER_SYNC_TGZ = new Version("5.0.9");
+    private static final Version MIN_ZCS_VER_SYNC_TGZ = new Version(OfflineLC.zdesktop_min_zcs_version_sync_tgz.value()); //5.0.9
     
     private void syncMessages(List<Integer> ids, byte type) throws ServiceException {
     	if (ombx.getRemoteServerVersion().isAtLeast(MIN_ZCS_VER_SYNC_TGZ))
