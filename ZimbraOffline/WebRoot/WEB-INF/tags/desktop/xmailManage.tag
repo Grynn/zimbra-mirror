@@ -57,7 +57,9 @@ function beforeSubmit() {
     disableButtons();
     zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
     zd.enable("password");
-    zd.enable("smtpPassword");
+    if (!${bean.ymail}) {
+        zd.enable("smtpPassword");
+    }
 }
 
 function disableButtons() {
