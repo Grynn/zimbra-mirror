@@ -14,7 +14,7 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 LDAP_VERSION ?= 2.4.11.2z
 
-BDB_VERSION ?= 4.6.21.2
+BDB_VERSION ?= 4.6.21.3
 BDB_LIB_DIR ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
 
 BDB_ROOT ?= $(P4_ROOT)/ThirdParty/bdb

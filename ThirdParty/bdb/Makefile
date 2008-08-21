@@ -11,7 +11,7 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 BDB_RELEASE ?= 4.6.21
-BDB_PATCH_LEVEL ?= 2
+BDB_PATCH_LEVEL ?= 3
 BDB_VERSION ?= $(BDB_RELEASE).$(BDB_PATCH_LEVEL)
 BDB_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/bdb/bdb-$(BDB_VERSION).tgz
 BDB_LIB_DIR ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
@@ -24,6 +24,7 @@ build:
 	cd db-$(BDB_VERSION); \
 	patch -g0 -p1 < ../patches/4.6.21-1.patch; \
 	patch -g0 -p1 < ../patches/4.6.21-2.patch; \
+	patch -g0 -p1 < ../patches/4.6.21-3.patch; \
 	cd build_unix; \
 	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) ../dist/configure --prefix=$(ZIMBRA_HOME)/bdb-$(BDB_VERSION) --enable-posixmutexes; \
 	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE) $(MAKEARGS) CFLAGS="-g -O2 -fPIC"; \
