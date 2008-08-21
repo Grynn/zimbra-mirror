@@ -126,7 +126,7 @@ SWATCH = \
 	swatch-3.2.2
 
 LDAPAPI = \
-	Net-LDAPapi-3.0.2
+	Net-LDAPapi-3.0.3
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
