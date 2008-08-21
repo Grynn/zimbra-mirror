@@ -212,7 +212,7 @@ if ($options{e}) {
                       "+zimbraServiceEnabled imapproxy\n";
             }
   } else {
-       if (isEnabled("zimbra-store") || $options{o}) {
+       if (isEnabled("zimbra-store") || (isInstalled("zimbra-store") && $options{o})) {
             if ($options{m}) {
                print ZMPROV "ms $hostname ".
                  "zimbraImapBindPort $i1 ".
