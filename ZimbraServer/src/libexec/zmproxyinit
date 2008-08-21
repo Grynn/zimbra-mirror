@@ -46,7 +46,7 @@ my $proxyMailMode="http";
 our %options = ();
 our %loaded = ();
 
-getopts('a:defhH:i:mop:rswx:',\%options) or die "Unable to set options\n";
+getopts('a:defhH:i:mop:stwx:',\%options) or die "Unable to set options\n";
 
 our $ZMPROV = "/opt/zimbra/bin/zmprov -l";
 our $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
@@ -118,7 +118,7 @@ if ($options{e} && $options{x} && !$options{w}) {
     exit 1;
 }
 
-if ($options{r} && !$options{d}) {
+if ($options{t} && !$options{d}) {
     usage();
     exit 1;
 }
@@ -362,7 +362,7 @@ if ($options{d}) {
                  "zimbraMailSSLProxyPort $w4 ".
                  "zimbraMailMode $storeMailMode\n";
             }
-            if ($options{r}) {
+            if ($options{t}) {
                print ZMPROV "ms $hostname ".
                "zimbraReverseProxyLookupTarget FALSE\n";
             }
@@ -418,8 +418,8 @@ sub usage() {
   print "\t-m: Toggle mail proxy portions\n";
   print "\t-o: Override enabled checks\n";
   print "\t-p: Colon separated list of POP ports to use. Format: POP-STORE:POP-PROXY:POPS-STORE:POPS-PROXY (Ex: 7110:110:7995:995)\n";
-  print "\t-r: Disable reverse proxy lookup target for store server.  Only valid with -d.  Be sure that you intend for all proxy function for the server to be disabled\n";
   print "\t-s: Set cleartext to FALSE (secure mode) on disable\n";
+  print "\t-t: Disable reverse proxy lookup target for store server.  Only valid with -d.  Be sure that you intend for all proxy function for the server to be disabled\n";
   print "\t-w: Toggle Web proxy portions\n";
   print "\t-x: zimbraMailMode to use on disable (Default: http)\n";
   print "hostname is the value of the zimbra_server_hostname LC key for the server being modified.\n";
