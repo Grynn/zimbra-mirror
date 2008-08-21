@@ -114,13 +114,11 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 	this.__httpReq.open((useGet) ? "get" : "post", serverUrl, asyncMode);
 
 	if (asyncMode) {
-		this.__callback = callback;
 		if (timeout) {
-			var action = new AjxTimedAction(this, AjxRpcRequest.__handleTimeout, {callback: callback, req: this});
+			var action = new AjxTimedAction(this, this.__handleTimeout, [callback]);
 			callback._timedActionId = AjxTimedAction.scheduleAction(action, timeout);
 		}
 		var tempThis = this;
-		//DBG.println(AjxDebug.DBG3, "Async RPC request");
 		this.__httpReq.onreadystatechange = function(ev) {
 				if (window.AjxRpcRequest) {
 					AjxRpcRequest.__handleResponse(tempThis, callback);
@@ -134,7 +132,6 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 	if (requestHeaders) {
 		for (var i in requestHeaders) {
 			this.__httpReq.setRequestHeader(i, requestHeaders[i]);
-			//DBG.println(AjxDebug.DBG3, "Async RPC request: Add header " + i + " - " + requestHeaders[i]);
 		}
 	}
 
@@ -155,6 +152,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
  */
 AjxRpcRequest.prototype.cancel =
 function() {
+	AjxRpc.freeRpcCtxt(this);
 	this.__httpReq.abort();
 };
 
@@ -165,10 +163,10 @@ function() {
  * 
  * @private
  */
-AjxRpcRequest.__handleTimeout =
-function(args) {
-	args.req.cancel();
-	args.callback.run({ text:null, xml:null, success:false, status:AjxRpcRequest.TIMEDOUT} );
+AjxRpcRequest.prototype.__handleTimeout =
+function(callback) {
+	this.cancel();
+	callback.run( {text:null, xml:null, success:false, status:AjxRpcRequest.TIMEDOUT} );
 };
 
 /**
@@ -183,12 +181,14 @@ function(args) {
 AjxRpcRequest.__handleResponse =
 function(req, callback) {
 	if (!req || !req.__httpReq) {
+		AjxRpc.freeRpcCtxt(req);
+
 		// If IE receives a 500 error, the object reference can be lost
 		DBG.println(AjxDebug.DBG1, "Async RPC request: Lost request object!!!");
-		callback.run( {text: null, xml: null, success: false, status: 500} );
+		callback.run( {text:null, xml:null, success:false, status:500} );
 		return;
 	}
-	//DBG.println(AjxDebug.DBG3, "Async RPC request: ready state = " + req.__httpReq.readyState);
+
 	if (req.__httpReq.readyState == 4) {
 		if (callback._timedActionId !== null) {
 			AjxTimedAction.cancelAction(callback._timedActionId);
@@ -201,26 +201,14 @@ function(req, callback) {
 			// Use default status of 500 above.
 		}
 
+		AjxRpc.freeRpcCtxt(req);
+
 		if (status == 200 || status == 201) {
 			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:true} );
 		} else {
 			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:false, status:status} );
 		}
-
-		if (req.__ctxt) {
-			req.__ctxt.busy = false;
-		}
 	}
-};
-
-/**
- * This method is called by <i>AjxRpc</i> which can be considered a "friend" class
- * It is used to set the __RpcCtxt associated with this object
- * @private
- */
-AjxRpcRequest.prototype.__setCtxt =
-function(ctxt) {
-	this.__ctxt = ctxt;
 };
 
 /** @private */

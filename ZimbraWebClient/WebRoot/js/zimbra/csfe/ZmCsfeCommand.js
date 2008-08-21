@@ -510,7 +510,7 @@ ZmCsfeCommand.prototype.cancel =
 function() {
 	if (!this._rpcId) { return; }
 
-	var req = AjxRpc.getRpcRequest(this._rpcId);
+	var req = AjxRpc.getRpcRequestById(this._rpcId);
 	if (req) {
 		req.cancel();
 	}

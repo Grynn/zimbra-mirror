@@ -32,9 +32,10 @@
 AjxRpc = function() {
 };
 
-AjxRpc.__rpcCache		= [];		// The pool of RPC contexts
-AjxRpc.__RPC_CACHE_MAX	= 100;		// maximum number of busy contexts we can have
-AjxRpc.__RPC_REAP_COUNT	= 5;		// run reaper when number of busy contexts is multiple of this
+AjxRpc.__rpcCache		= [];		// The pool of RPC contexts available
+AjxRpc.__rpcOutstanding	= {};		// The pool of RPC contexts in use
+AjxRpc.__RPC_CACHE_MAX	= 50;		// maximum number of busy contexts we can have
+AjxRpc.__RPC_COUNT		= 0;
 AjxRpc.__RPC_REAP_AGE	= 300000;	// mark any context older than this (in ms) as free
 
 /**
@@ -89,7 +90,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 	var rpcCtxt = AjxRpc.__getFreeRpcCtxt();
 
 	try {
-		var response = rpcCtxt.req.invoke(requestStr, serverUrl, requestHeaders, callback, useGet, timeout);
+		var response = rpcCtxt.invoke(requestStr, serverUrl, requestHeaders, callback, useGet, timeout);
 	} catch (ex) {
 		var newEx = new AjxException();
 		newEx.method = "AjxRpc.prototype._invoke";
@@ -103,14 +104,25 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 			newEx.msg = "Unknown Error";
 		}
 		if (!asyncMode) {
-			rpcCtxt.busy = false;
+			AjxRpc.freeRpcCtxt(rpcCtxt);
 		}
 		throw newEx;
 	}
 	if (!asyncMode) {
-		rpcCtxt.busy = false;
+		// we're done using this rpcCtxt. Add it back to the pool
+		AjxRpc.freeRpcCtxt(rpcCtxt);
 	}
 	return response;
+};
+
+AjxRpc.freeRpcCtxt =
+function(rpcCtxt) {
+	// we're done using this rpcCtxt. Add it back to the pool
+	if (AjxRpc.__rpcOutstanding[rpcCtxt.id]) {
+		DBG.println("--- freeing rpcCtxt " + rpcCtxt.id);
+		AjxRpc.__rpcCache.push(rpcCtxt);
+		delete AjxRpc.__rpcOutstanding[rpcCtxt.id];
+	}
 };
 
 /**
@@ -122,14 +134,9 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
  * 		if no object exists for the supplied id
  * @type AjxRpcRequest
  */
-AjxRpc.getRpcRequest = 
+AjxRpc.getRpcRequestById = 
 function(id) {
-	for (var i = 0; i < AjxRpc.__rpcCache.length; i++) {
-		var rpcCtxt = AjxRpc.__rpcCache[i];
-		if (rpcCtxt.id == id)
-			return rpcCtxt.req;
-	}
-	return null;
+	return (AjxRpc.__rpcOutstanding[id]);
 };
 
 /**
@@ -140,60 +147,51 @@ AjxRpc.__getFreeRpcCtxt =
 function() {
 	var rpcCtxt;
 
-	// See if we have one in the pool that's now free
-	for (var i = 0; i < AjxRpc.__rpcCache.length; i++) {
-		rpcCtxt = AjxRpc.__rpcCache[i];
-		if (!rpcCtxt.busy) {
-//			AjxUtil.log("rpc", "Found free RPC context: " + rpcCtxt.id);
-			break;
+	if (AjxRpc.__rpcCache.length > 0) {
+		rpcCtxt = AjxRpc.__rpcCache.pop();
+		DBG.println("reusing RPC ID " + rpcCtxt.id);
+	} else {
+		if (AjxRpc.__RPC_COUNT < AjxRpc.__RPC_CACHE_MAX) {
+			// we haven't reached our limit, so create a new AjxRpcRequest
+			var id = "__RpcCtxt_" + AjxRpc.__RPC_COUNT;
+			rpcCtxt = new AjxRpcRequest(id);
+			AjxRpc.__RPC_COUNT++;
+			DBG.println("Created RPC " + id + ", total created: " + AjxRpc.__RPC_COUNT);
+		} else {
+			// yikes, we're out of rpc's! Look for an old one to kill.
+			rpcCtxt = AjxRpc.__reap();
+
+			// if reap didn't find one either, bail.
+			if (!rpcCtxt) {
+				throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "AjxRpc.__getFreeRpcCtxt");
+			}
 		}
 	}
-	
-	// If there's no free context available, create one
-	if (i == AjxRpc.__rpcCache.length) {
-		if (AjxRpc.__rpcCache.length == AjxRpc.__RPC_CACHE_MAX) {
-			AjxUtil.log("rpc", "Out of RPC contexts; cache size = " + AjxRpc.__rpcCache.length);
-			throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "AjxRpc.__getFreeRpcCtxt");
-		} else if (i > 0 && (i % AjxRpc.__RPC_REAP_COUNT == 0)) {
-			AjxUtil.log("rpc", i + " busy RPC contexts; reaping");
-			AjxRpc.__reap();
-		}
-		var id = "__RpcCtxt_" + i;
-		rpcCtxt = new __RpcCtxt(id);
-		AjxUtil.log("rpc", "Created RPC " + id);
-		AjxRpc.__rpcCache.push(rpcCtxt);
-	}
-	rpcCtxt.busy = true;
+
+	AjxRpc.__rpcOutstanding[rpcCtxt.id] = rpcCtxt;
+
+	// always reset timestamp before returning rpcCtxt
 	rpcCtxt.timestamp = (new Date()).getTime();
 	return rpcCtxt;
 };
 
 /**
- * Frees up busy contexts that are older than a certain age.
+ * Searches for an "expired" rpc. If found, cancels it and returns it.
  * @private
  */
 AjxRpc.__reap =
 function() {
+	var rpcCtxt;
 	var time = (new Date()).getTime();
-	for (var i = 0; i < AjxRpc.__rpcCache.length; i++) {
-		var rpcCtxt = AjxRpc.__rpcCache[i];
+
+	for (var i in AjxRpc.__rpcOutstanding) {
+		rpcCtxt = AjxRpc.__rpcOutstanding[i];
 		if (rpcCtxt.timestamp + AjxRpc.__RPC_REAP_AGE < time) {
-			AjxUtil.log("rpc", "AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
-			rpcCtxt.req.cancel();
-			rpcCtxt.busy = false;
+			DBG.println("AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
+			rpcCtxt.cancel();
+			delete AjxRpc.__rpcOutstanding[i];
+			return rpcCtxt;
 		}
 	}
-};
-
-/**
-* Wrapper class for a request context.
-*
-* @param {String|Int} id Unique ID for this context
-* @private
-*/
-__RpcCtxt = function(id) {
-	this.id = id;
-	this.req = new AjxRpcRequest(id);
-	this.req.__setCtxt(this)
-	this.busy = false;
+	return null;
 };
