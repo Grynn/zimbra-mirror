@@ -33,7 +33,8 @@ ${zdf:doRequest(bean)}
 <script type="text/javascript">
 
 function OnCancel() {
-    history.go(-1);
+    document.submitForm.action = "/zimbra/desktop/${bean.zmail ? 'z' : 'x'}mail.jsp";
+    document.submitForm.submit();
 }
 
 function OnExport() {
