@@ -41,7 +41,6 @@ var containers = {
     helpButton: "skin_container_help",
     logoutButton: "skin_container_logoff",
 
-    views: "skin_container_current_app",
     topToolbar: "skin_container_app_top_toolbar",
 
     tree: "skin_container_tree",
