@@ -46,7 +46,7 @@ my $proxyMailMode="http";
 our %options = ();
 our %loaded = ();
 
-getopts('a:defhH:i:mop:stwx:',\%options) or die "Unable to set options\n";
+getopts('a:defhH:i:mop:rstwx:',\%options) or die "Unable to set options\n";
 
 our $ZMPROV = "/opt/zimbra/bin/zmprov -l";
 our $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
@@ -130,6 +130,12 @@ if ($#ARGV != -1) {
 }
 
 my $hostname = $options{H};
+my $zimbra_server_hostname=getLocalConfig("zimbra_server_hostname");
+
+if (lc($hostname) ne lc($zimbra_server_hostname)) {
+   print "Must use -r option to modify a remote host.\n";
+   exit 1;
+}
 
 open(ZMPROV, "|$ZMPROV");
 
@@ -418,6 +424,7 @@ sub usage() {
   print "\t-m: Toggle mail proxy portions\n";
   print "\t-o: Override enabled checks\n";
   print "\t-p: Colon separated list of POP ports to use. Format: POP-STORE:POP-PROXY:POPS-STORE:POPS-PROXY (Ex: 7110:110:7995:995)\n";
+  print "\t-r: Run against a remote host.  Note that this requires the server to be properly configured in the LDAP master.\n";
   print "\t-s: Set cleartext to FALSE (secure mode) on disable\n";
   print "\t-t: Disable reverse proxy lookup target for store server.  Only valid with -d.  Be sure that you intend for all proxy function for the server to be disabled\n";
   print "\t-w: Toggle Web proxy portions\n";
@@ -495,27 +502,54 @@ sub isInstalled {
   my $pkgQuery;
 
   my $good = 0;
-  if ($platform =~ /DEBIAN/ || $platform =~ /UBUNTU/) {
-    $pkgQuery = "dpkg -s $pkg";
-  } elsif ($platform =~ /MACOSX/) {
-    my @l = sort glob ("/Library/Receipts/${pkg}*");
-    if ( $#l < 0 ) { return 0; }
-    $pkgQuery = "test -d $l[$#l]";
-  } elsif ($platform =~ /RPL/) {
-    $pkgQuery = "conary q $pkg";
+  if ($options{r}) {
+	open(ZMPROVI, "$ZMPROV gs $hostname zimbraServiceInstalled|");
+	while (<ZMPROVI>) {
+		chomp;
+		if (/zimbraServiceInstalled:\s(.*)/) {
+			my $service = $1;
+			if ($packageServiceMap{$service} eq $pkg) {
+				$good = 1;
+			}
+		}
+	}
+	close(ZMPROVI);
+        return $good;
   } else {
-    $pkgQuery = "rpm -q $pkg";
+      if ($platform =~ /DEBIAN/ || $platform =~ /UBUNTU/) {
+        $pkgQuery = "dpkg -s $pkg";
+      } elsif ($platform =~ /MACOSX/) {
+        my @l = sort glob ("/Library/Receipts/${pkg}*");
+        if ( $#l < 0 ) { return 0; }
+        $pkgQuery = "test -d $l[$#l]";
+      } elsif ($platform =~ /RPL/) {
+        $pkgQuery = "conary q $pkg";
+      } else {
+        $pkgQuery = "rpm -q $pkg";
+      }
+    
+      my $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
+      $rc >>= 8;
+      if (($platform =~ /DEBIAN/ || $platform =~ /UBUNTU/) && $rc == 0 ) {
+        $good = 1;
+        $pkgQuery = "dpkg -s $pkg | egrep '^Status: ' | grep 'not-installed'";
+        $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
+        $rc >>= 8;
+        return ($rc == $good);
+      } else {
+        return ($rc == $good);
+      }
   }
+}
 
-  my $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
-  $rc >>= 8;
-  if (($platform =~ /DEBIAN/ || $platform =~ /UBUNTU/) && $rc == 0 ) {
-    $good = 1;
-    $pkgQuery = "dpkg -s $pkg | egrep '^Status: ' | grep 'not-installed'";
-    $rc = 0xffff & system ("$pkgQuery > /dev/null 2>&1");
-    $rc >>= 8;
-    return ($rc == $good);
-  } else {
-    return ($rc == $good);
-  }
+sub getLocalConfig {
+  my $key = shift;
+
+  return $main::loaded{lc}{$key}
+    if (exists $main::loaded{lc}{$key});
+
+  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  chomp $val;
+  $main::loaded{lc}{$key} = $val;
+  return $val;
 }
