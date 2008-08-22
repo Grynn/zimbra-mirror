@@ -1266,13 +1266,13 @@ default:
                 </serializedBean>
                 <condition />
               </action>
-              <action name="jetty" id="275917" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="jetty/work" id="275917" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
                       <void property="file">
                         <object class="java.io.File">
-                          <string>jetty</string>
+                          <string>jetty/work</string>
                         </object>
                       </void>
                       <void property="recurse">
@@ -3422,13 +3422,13 @@ return true;</string>
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
               </action>
-              <action name="jetty" id="95844" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="jetty/work" id="95844" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
                       <void property="file">
                         <object class="java.io.File">
-                          <string>jetty</string>
+                          <string>jetty/work</string>
                         </object>
                       </void>
                       <void property="recurse">
