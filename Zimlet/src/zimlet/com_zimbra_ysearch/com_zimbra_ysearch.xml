@@ -1,0 +1,25 @@
+<zimlet name="com_zimbra_ysearch" version="1.0" description="Yahoo Search">
+	<include>yahoo-dom-event.js</include>
+	<include>get-min.js</include>
+	<include>autocomplete-min.js</include>
+	<include>ysearch.js</include>
+	<include>yahoosearch.js</include>
+    <includeCSS>autocomplete.css</includeCSS>
+    <includeCSS>ysearch.css</includeCSS>
+    <includeCSS>yahoosearch.css</includeCSS>
+	<resource>ylogo.gif</resource>
+	<handlerObject>Com_Zimbra_Ysearch</handlerObject>
+
+	<zimletPanelItem label="Yahoo! Search" icon="YLogo">
+		<toolTipText>Click to see search pane</toolTipText>
+		<contextMenu>
+			<menuItem label="Preferences..." id="prefs"/>
+		</contextMenu>
+	</zimletPanelItem>
+
+	<userProperties>
+		<property type="boolean" name="autocomplete" label="Autocomplete Search Results" value="true"/>
+		<property type="boolean" name="pane" label="Display Search Results in Zimbra Window" value="true"/>
+		<property type="boolean" name="tab" label="Display Search Tab (if in Zimbra window)" value="true"/>
+	</userProperties>
+</zimlet>

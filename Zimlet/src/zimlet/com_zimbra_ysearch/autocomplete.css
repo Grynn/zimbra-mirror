@@ -1,0 +1,49 @@
+/* styles for input field */
+.yui-ac-input {
+    width:100%;
+}
+
+/* styles for results container */
+.yui-ac-container {
+    position:absolute;top:25px;width:100%;
+}
+
+/* styles for header/body/footer wrapper within container */
+.yui-ac-content {
+    position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;
+}
+
+/* styles for container shadow */
+.yui-ac-shadow {
+    position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity: 0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;
+}
+
+/* styles for results list */
+.yui-ac-content ul{
+    margin:0;padding:0;width:100%;
+}
+
+/* styles for result item */
+.yui-ac-content li {
+    margin:0;padding:2px 5px;cursor:default;white-space:nowrap;
+}
+
+/* styles for prehighlighted result item */
+.yui-ac-content li.yui-ac-prehighlight {
+    background:#B3D4FF;
+}
+
+/* styles for highlighted result item */
+.yui-ac-content li.yui-ac-highlight {
+    background:#426FD9;color:#FFF;
+}
+
+#search_web_autocomplete_container .yui-ac-bd {
+	font-size:10px; color:#666; text-align:left;
+}
+#search_web_autocomplete_container li {
+	overflow:hidden; text-overflow:ellipsis; cursor:pointer;
+}
+#search_web_autocomplete_container em {
+	font-style:normal; font-weight:bold; color:#000;
+}
