@@ -20,90 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 function Com_Zimbra_Ybabelfish() {
-}
-
-Com_Zimbra_Ybabelfish.prototype = new ZmZimletBase();
-Com_Zimbra_Ybabelfish.prototype.constructor = Com_Zimbra_Ybabelfish;
-
-
-// Consts
-
-Com_Zimbra_Ybabelfish.URL = "http://babelfish.yahoo.com/translate_txt";
-
-
-// Public methods
-
-// This method is called when an item is dropped on the Zimlet item as realized
-// in the UI. At this point the Zimlet should perform the actions it needs to
-// for the drop. This method defines the following formal parameters:
-//
-// - zmObject
-// - canvas
-Com_Zimbra_Ybabelfish.prototype.doDrop =
-function(zmObject) {
-	this._zmObject = zmObject;
-	this._isUserInput = false;
-
-	// create a dialog if one does not already exist
-	if (!this._yBabelfishDialog) {
-		this._initialize();
-	}
-
-	// reset widgets
-	this._contentDIV.innerHTML = AjxStringUtil.nl2br(this._zmObject.body);
-	this._contentTA.style.visibility = "hidden";
-	this._contentDIV.style.visibility = "visible";
-
-	// reset widgets so user can read translated text
-	this._langSelect.setSelected(15);
-
-	this._yBabelfishDialog.popup();
-};
-
-Com_Zimbra_Ybabelfish.prototype.doubleClicked =
-function(canvas) {
-	this._isUserInput = true;
-
-	// create a dialog if one does not already exist
-	if (!this._yBabelfishDialog) {
-		this._initialize();
-	}
-
-	// reset widgets
-	this._contentTA.value = "";
-	this._contentDIV.style.visibility = "hidden";
-	this._contentTA.style.visibility = "visible";
-	this._contentTA.focus();
-
-	this._yBabelfishDialog.popup();
-};
-
-
-// Private methods
-
-Com_Zimbra_Ybabelfish.prototype._makeRequest =
-function(lang, text) {
-	var reqParams = [];
-	var i = 0;
-
-	// params for babelfish
-	reqParams[i++] = "ei=UTF8&doit=done&fr=bf-res&intl=1&tt=urltext&trtext=";
-	reqParams[i++] = AjxStringUtil.urlEncode(text);
-	reqParams[i++] = "&lp=";
-	reqParams[i++] = AjxStringUtil.urlEncode(lang || "en_es");
-	reqParams[i++] = "&btnTrTxt=Translate";
-
-	var reqHeader = { "User-Agent": navigator.userAgent, "Content-Type": "application/x-www-form-urlencoded", "Referer": Com_Zimbra_Ybabelfish.URL };
-	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_Ybabelfish.URL);
-
-	AjxRpc.invoke(reqParams.join(""), url, reqHeader, new AjxCallback(this, this._resultCallback));
-};
-
-Com_Zimbra_Ybabelfish.prototype._initialize =
-function() {
-	this._parentView = new DwtComposite(this.getShell());
-	this._parentView.setSize("440", "175");
-
 	this._languages = [
 		{ value: "zh_en",		label: "Chinese-simp to English" },
 		{ value: "zh_zt",		label: "Chinese-simp to Chinese-trad" },
@@ -144,10 +60,132 @@ function() {
 		{ value: "es_en",		label: "Spanish to English" },
 		{ value: "es_fr",		label: "Spanish to French" }
 	];
+}
 
-	// add header section which will hold language DwtSelect and Translate button
+Com_Zimbra_Ybabelfish.prototype = new ZmZimletBase();
+Com_Zimbra_Ybabelfish.prototype.constructor = Com_Zimbra_Ybabelfish;
+
+
+// Consts
+
+Com_Zimbra_Ybabelfish.URL = "http://babelfish.yahoo.com/translate_txt";
+
+
+// Public methods
+
+// This method is called when an item is dropped on the Zimlet item as realized
+// in the UI. At this point the Zimlet should perform the actions it needs to
+// for the drop. This method defines the following formal parameters:
+//
+// - zmObject
+// - canvas
+Com_Zimbra_Ybabelfish.prototype.doDrop =
+function(zmObject) {
+	this._zmObject = zmObject;
+	this._isUserInput = false;
+
+	// create a dialog if one does not already exist
+	if (!this._yBabelfishDialog) {
+		this._initialize();
+	}
+	
+	// set language according to prefs
+	if (this._lang != this.getUserProperty("trans_language")) {
+		this._resetDefaultLang();
+	}
+
+	// reset widgets
+	this._contentDIV.innerHTML = AjxStringUtil.nl2br(this._zmObject.body);
+	this._contentTA.style.visibility = "hidden";
+	this._contentDIV.style.visibility = "visible";
+
+	this._populated = false;
+
+	// reset widgets so user can read translated text
+	if (this._defaultLang) {
+		this._langSelect.setSelected(this._defaultLang);
+	} else {
+		this._langSelect.setSelected(15);
+	}
+
+	this._yBabelfishDialog.popup();
+};
+
+Com_Zimbra_Ybabelfish.prototype.doubleClicked =
+function(canvas) {
+	this._isUserInput = true;
+
+	// create a dialog if one does not already exist
+	if (!this._yBabelfishDialog) {
+		this._initialize();
+	}
+	
+	// set language according to prefs
+	if (this._lang != this.getUserProperty("trans_language")) {
+		this._resetDefaultLang();
+	}
+
+	// reset widgets
+	this._contentTA.value = "";
+	this._contentDIV.style.visibility = "hidden";
+	this._contentTA.style.visibility = "visible";
+	this._contentTA.focus();
+
+	this._populated = false;
+
+	// reset widgets so user can read translated text
+	if (this._defaultLang) {
+		this._langSelect.setSelected(this._defaultLang);
+	} else {
+		this._langSelect.setSelected(15);
+	}
+
+	this._yBabelfishDialog.popup();
+};
+
+Com_Zimbra_Ybabelfish.prototype.menuItemSelected = 
+function(itemId) {
+	switch (itemId) {
+		case "prefs":
+			this._showPrefs();
+			break;
+	}
+}
+
+Com_Zimbra_Ybabelfish.prototype._showPrefs =
+function() {
+	if(!this._prefsDialog) {
+		this._prefsDialog = new YBabelfishPrefsDialog(appCtxt._shell, null, this);
+	}
+	this._prefsDialog.popup();
+};
+
+
+Com_Zimbra_Ybabelfish.prototype._makeRequest =
+function(lang, text) {
+	var reqParams = [];
+	var i = 0;
+
+	// params for babelfish
+	reqParams[i++] = "ei=UTF8&doit=done&fr=bf-res&intl=1&tt=urltext&trtext=";
+	reqParams[i++] = AjxStringUtil.urlEncode(text);
+	reqParams[i++] = "&lp=";
+	reqParams[i++] = AjxStringUtil.urlEncode(lang || "en_es");
+	reqParams[i++] = "&btnTrTxt=Translate";
+
+	var reqHeader = { "User-Agent": navigator.userAgent, "Content-Type": "application/x-www-form-urlencoded", "Referer": Com_Zimbra_Ybabelfish.URL };
+	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_Ybabelfish.URL);
+
+	AjxRpc.invoke(reqParams.join(""), url, reqHeader, new AjxCallback(this, this._resultCallback));
+};
+
+Com_Zimbra_Ybabelfish.prototype._initialize =
+function() {
+	this._parentView = new DwtComposite(this.getShell());
+	this._parentView.setSize("440", "175");
+
+	// add header section which will hold language DwtSelect
 	var selectId = Dwt.getNextId();
-	var translateId = Dwt.getNextId();
 
 	var div = document.createElement("div");
 	var html = [];
@@ -155,8 +193,6 @@ function() {
 	html[i++] = "<table border=0 width=100%><tr>";
 	html[i++] = "<td width=100% id='";
 	html[i++] = selectId;
-	html[i++] = "'></td><td id='";
-	html[i++] = translateId;
 	html[i++] = "'></td></tr></table>";
 	div.innerHTML = html.join("");
 	this._parentView.getHtmlElement().appendChild(div);
@@ -164,16 +200,13 @@ function() {
 	// add DwtSelect holding language options
 	this._langSelect = new DwtSelect({parent:this._parentView});
 	this._langSelect.reparentHtmlElement(selectId);
+
+	this._resetDefaultLang();
+
 	for (i = 0; i < this._languages.length; i++) {
 		var option = this._languages[i];
-		this._langSelect.addOption(option.label, i==15, option.value);
+		this._langSelect.addOption(option.label, option.value == this._lang, option.value);
 	}
-
-	// add translate DwtButton
-	this._translateButton = new DwtButton({parent:this._parentView});
-	this._translateButton.reparentHtmlElement(translateId);
-	this._translateButton.setText("Translate");
-	this._translateButton.addSelectionListener(new AjxListener(this, this._translateListener));
 
 	// add textarea holding content
 	this._contentTA = document.createElement("TEXTAREA");
@@ -193,25 +226,58 @@ function() {
 	this._contentDIV.style.overflow = "auto";
 	this._parentView.getHtmlElement().appendChild(this._contentDIV);
 
+	// add translate and close DwtButton
+	var translateId = Dwt.getNextId();
+	var mailId = Dwt.getNextId();
+	var closeId = Dwt.getNextId();
+
+	this._translateButton = new DwtDialog_ButtonDescriptor(translateId, this.getMessage("translateButton"), DwtDialog.ALIGN_RIGHT);
+	this._mailButton = new DwtDialog_ButtonDescriptor(mailId, this.getMessage("mailButton"), DwtDialog.ALIGN_RIGHT);
+	this._closeButton = new DwtDialog_ButtonDescriptor(closeId, this.getMessage("closeButton"), DwtDialog.ALIGN_RIGHT);
+
 	// finally, create dialog holding all these widgets
-	this._yBabelfishDialog = this._createDialog({title:"Yahoo! Translator: Babel Fish", view:this._parentView});
-	this._yBabelfishDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._yBabelfishDialogOkListener));
+	this._yBabelfishDialog = this._createDialog({title:this.getMessage("title"), view:this._parentView, standardButtons:[], extraButtons:[this._translateButton, this._mailButton, this._closeButton]});
+	
+	this._yBabelfishDialog.setButtonListener(translateId, new AjxListener(this, this._translateListener));
+	this._yBabelfishDialog.setButtonListener(mailId, new AjxListener(this, this._sendListener));
+	this._yBabelfishDialog.setButtonListener(closeId, new AjxListener(this, this._yBabelfishDialogOkListener));
 };
+
+Com_Zimbra_Ybabelfish.prototype._resetDefaultLang = 
+function() {
+	this._lang = this.getUserProperty("trans_language");
+	var localeSetting = appCtxt.get(ZmSetting.LOCALE_NAME)?appCtxt.get(ZmSetting.LOCALE_NAME):"en";
+
+	if (this._lang == "default") {
+		if (localeSetting.substr(0,2) == "en") {
+			this._lang = "en_es";
+		} else {
+			this._lang = "en_" + localeSetting.substr(0,2);
+		}
+	}
+	for (i = 0; i < this._languages.length; i++) {
+		if (this._languages[i].value == this._lang) {
+			this._defaultLang = i;
+		}
+	}
+}
 
 Com_Zimbra_Ybabelfish.prototype._populate =
 function(resp) {
 	var result = resp.success ? resp.text : null;
 	var divIdx = result ? result.indexOf("<div style=\"padding:0.6em;\"") : null;
-	var div = divIdx ? Dwt.parseHtmlFragment(result.substring(divIdx)) : null;
+	this._originalDIV = divIdx ? Dwt.parseHtmlFragment(result.substring(divIdx)) : null;
 
 	if (this._isUserInput) {
 		this._contentTA.style.visibility = "hidden";
 		this._contentDIV.style.visibility = "visible";
 	}
 
-	this._contentDIV.innerHTML = div
-		? AjxStringUtil.nl2br(div.innerHTML)
-		: "An error occurred attempting to translate this message.";
+	this._populated = true;
+
+	this._contentDIV.innerHTML = this._originalDIV
+		? AjxStringUtil.nl2br(this._originalDIV.innerHTML)
+		: "An error occurred when attempting to translate this message.";
 };
 
 
@@ -226,6 +292,32 @@ Com_Zimbra_Ybabelfish.prototype._translateListener =
 function(ev) {
 	var value = this._isUserInput ? this._contentTA.value : this._zmObject.body;
 	this._makeRequest(this._langSelect.getValue(), value);
+};
+
+Com_Zimbra_Ybabelfish.prototype._sendListener =
+function(ev) {
+
+	if (this._populated) {
+		var body = this._originalDIV.innerHTML;
+	} else {
+		return;
+	}
+
+	if (appCtxt.get(ZmSetting.HTML_COMPOSE_ENABLED) &&
+		appCtxt.get(ZmSetting.COMPOSE_AS_FORMAT) == ZmSetting.COMPOSE_HTML)
+	{
+		body = AjxStringUtil.nl2br(body);
+	}
+
+	var params = {
+		action: ZmOperation.NEW_MESSAGE,
+		extraBodyText: body
+	};
+
+	this._yBabelfishDialog.popdown();
+
+	var cc = AjxDispatcher.run("GetComposeController");
+	cc.doAction(params);
 };
 
 
