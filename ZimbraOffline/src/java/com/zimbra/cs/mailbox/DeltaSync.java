@@ -275,7 +275,11 @@ public class DeltaSync {
         }
         
         if (isInitSyncDone && OfflineLC.zdesktop_sync_documents.booleanValue() && documents != null)
-        	syncDocuments(documents);
+        	try {
+            	syncDocuments(documents);
+        	} catch (Throwable t) {
+    	        OfflineLog.offline.error("delta: error syncing Documents.", t);
+        	}
 
         // delete any deleted folders, starting from the bottom of the tree
         if (isInitSyncDone && foldersToDelete != null && !foldersToDelete.isEmpty()) {

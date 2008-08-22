@@ -34,8 +34,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.mail.MessagingException;
-
 import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.service.ServiceException;
@@ -1231,8 +1229,10 @@ public class InitialSync {
 
             	id = item.getId();
             	te = tis.getNextEntry();
-            	if (te == null)
-            		throw new RuntimeException("missing blob entry reading tgz stream");
+            	if (te == null) {
+            		OfflineLog.offline.warn("unexpected EOF while reading TarInputStream.  current itemId="+id);
+            		break;
+            	}
 
             	int change = ombx.getChangeMask(null, id, item.getType());
             	if (change > 0) {
@@ -1276,7 +1276,7 @@ public class InitialSync {
             	OfflineLog.offline.debug("initial: created document (" + id + "): " + doc.getName());
             }
     	} catch (Exception x) {
-    		SyncExceptionHandler.checkRecoverableException("InitialSync.syncDocument", x);
+    		//SyncExceptionHandler.checkRecoverableException("InitialSync.syncDocument", x);
     		SyncExceptionHandler.syncDocumentFailed(ombx, id, x);
         } finally {
         	if (rs != null)
