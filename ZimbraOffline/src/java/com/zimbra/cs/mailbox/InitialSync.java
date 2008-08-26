@@ -34,6 +34,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.mail.MessagingException;
+
 import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.service.ServiceException;
@@ -248,7 +250,7 @@ public class InitialSync {
 		                    	lastItem = 0;
 		                    }
 		                }
-		                if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT, false)) {
+		                if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT)) {
 		                    continue;
 		                }
 		                
@@ -282,7 +284,7 @@ public class InitialSync {
 		                    	lastItem = 0;
 		                    }
 		                }
-		                if (isAlreadySynced(id, MailItem.TYPE_TASK, false)) {
+		                if (isAlreadySynced(id, MailItem.TYPE_TASK)) {
 		                    continue;
 		                }
 		                
@@ -309,7 +311,7 @@ public class InitialSync {
 		                }
 	            		ids.add(Integer.parseInt(msgId));
 	            	}
-	                syncMessagelikeItems(ids, folderId, MailItem.TYPE_MESSAGE, false);
+	                syncMessagelikeItems(ids, folderId, MailItem.TYPE_MESSAGE, false, false);
 	            }
             }
 
@@ -325,7 +327,7 @@ public class InitialSync {
 		                }
 	            		ids.add(Integer.parseInt(chatId));
 	            	}
-	                syncMessagelikeItems(ids, folderId, MailItem.TYPE_CHAT, false);
+	                syncMessagelikeItems(ids, folderId, MailItem.TYPE_CHAT, false, false);
 	            }
             }
 
@@ -339,7 +341,7 @@ public class InitialSync {
 		                	OfflineLog.offline.warn("Skipped contact id=%d per zdesktop_sync_skip_idlist", contactId);
 		                	continue;
 		                }
-	                    if (!isAlreadySynced(contactId, MailItem.TYPE_CONTACT, false))
+	                    if (!isAlreadySynced(contactId, MailItem.TYPE_CONTACT))
 	                        syncContact(eContact, folderId);
 	                }
 	            }
@@ -388,7 +390,7 @@ public class InitialSync {
         }
     }
 
-    private boolean isAlreadySynced(int id, byte type, boolean isDeltaSync) throws ServiceException {
+    private boolean isAlreadySynced(int id, byte type) throws ServiceException {
         try {
             ombx.getItemById(sContext, id, type);
             return true;
@@ -400,7 +402,7 @@ public class InitialSync {
         }
     }
     
-    public void syncMessagelikeItems(List<Integer> ids, int folderId, byte type, boolean isDeltaSync) throws ServiceException {
+    public void syncMessagelikeItems(List<Integer> ids, int folderId, byte type, boolean isForceSync, boolean isDeltaSync) throws ServiceException {
         int counter = 0, lastItem = mMailboxSync.getLastSyncedItem();
         List<Integer> itemList = new ArrayList<Integer>();
         for (int id : ids) {
@@ -408,7 +410,7 @@ public class InitialSync {
                 if (id != lastItem)  continue;
                 else                 lastItem = 0;
             }
-            if (isAlreadySynced(id, MailItem.TYPE_UNKNOWN, isDeltaSync))
+            if (!isForceSync && isAlreadySynced(id, MailItem.TYPE_UNKNOWN))
                 continue;
 
             int batchSize = OfflineLC.zdesktop_sync_batch_size.intValue();
@@ -980,18 +982,18 @@ public class InitialSync {
     
     private void saveMessage(InputStream in, Map<String, String> headers, int id, int folderId, byte type) throws ServiceException {
     	int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
-        int timestamp = (int) (Long.parseLong(headers.get("X-Zimbra-Modified")) / 1000);
+        int change_date = (int) (Long.parseLong(headers.get("X-Zimbra-Modified")) / 1000);
         int mod_content = Integer.parseInt(headers.get("X-Zimbra-Revision"));
-        int changeId = Integer.parseInt(headers.get("X-Zimbra-Change"));
+        int mod_metadata = Integer.parseInt(headers.get("X-Zimbra-Change"));
         int flags = Flag.flagsToBitmask(headers.get("X-Zimbra-Flags"));
         String tags = headers.get("X-Zimbra-Tags");
         int convId = Integer.parseInt(headers.get("X-Zimbra-Conv"));
 
-    	saveMessage(in, id, folderId, type, received, timestamp, mod_content, changeId, flags, tags, convId);
+    	saveMessage(in, id, folderId, type, received, change_date, mod_content, mod_metadata, flags, tags, convId);
     }
     
     private void saveMessage(InputStream in, int id, int folderId, byte type,
-    		int received, int timestamp, int mod_content, int changeId, int flags, String tags, int convId) throws ServiceException {
+    		int received, int change_date, int mod_content, int mod_metadata, int flags, String tags, int convId) throws ServiceException {
         final int DISK_STREAM_THRESHOLD = OfflineLC.zdesktop_membuf_limit.intValue();
         final int READ_BUFFER_SIZE = 8 * 1024;
     	
@@ -1061,7 +1063,7 @@ public class InitialSync {
             	}
                 msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", sharedDeliveryCtxt);
             }
-            ombx.syncChangeIds(sContext, id, type, received, mod_content, timestamp, changeId);
+            ombx.syncChangeIds(sContext, id, type, received, mod_content, change_date, mod_metadata);
             OfflineLog.offline.debug("initial: created " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
             return;
         } catch (IOException e) {
@@ -1077,27 +1079,34 @@ public class InitialSync {
         // if we're here, the message already exists; save new draft if needed, then update metadata
         try {
             Message msg = ombx.getMessageById(sContext, id);
-            if (!digest.equals(msg.getDigest())) {
-                // FIXME: should check msg.isDraft() before doing this...
-                CreateMessage redo2;
-                if (type == MailItem.TYPE_CHAT)
-                    redo2 = new SaveChat(ombx.getId(), id, digest, size, folderId, flags, tags);
-                else
-                    redo2 = new SaveDraft(ombx.getId(), id, digest, size);
-                redo2.setChangeId(mod_content);
-                redo2.start(received * 1000L);
-
-                synchronized (ombx) {
-                    int change_mask = ombx.getChangeMask(sContext, id, type);
-                    if ((change_mask & Change.MODIFIED_CONTENT) == 0) {
-                        if (type == MailItem.TYPE_CHAT)
-                            ombx.updateChat(new OfflineContext(redo2), pm, id);
-                        else
-                        ombx.saveDraft(new OfflineContext(redo2), pm, id);
-                        ombx.syncChangeIds(sContext, id, type, received, mod_content, timestamp, changeId);
-                    }
+            if (mod_content != msg.getSavedSequence()) {
+            	if (type == MailItem.TYPE_CHAT || msg.isDraft()) {
+	                CreateMessage redo2 = null;
+	                if (type == MailItem.TYPE_CHAT)
+	                    redo2 = new SaveChat(ombx.getId(), id, digest, size, folderId, flags, tags);
+	                else
+	                    redo2 = new SaveDraft(ombx.getId(), id, digest, size);
+	                redo2.setChangeId(mod_content);
+	                redo2.start(received * 1000L);
+	
+	                synchronized (ombx) {
+	                    int change_mask = ombx.getChangeMask(sContext, id, type);
+	                    if ((change_mask & Change.MODIFIED_CONTENT) == 0) {
+	                        if (type == MailItem.TYPE_CHAT)
+	                            ombx.updateChat(new OfflineContext(redo2), pm, id);
+	                        else
+	                        	ombx.saveDraft(new OfflineContext(redo2), pm, id);
+	                        ombx.syncChangeIds(sContext, id, type, received, mod_content, change_date, mod_metadata);
+	                        OfflineLog.offline.debug("initial: updated " + MailItem.getNameForType(type) + " content (" + id + "): " + msg.getSubject());
+	                    } else {
+	                    	OfflineLog.offline.debug("initial: %s %d (%s) content updated locally, will overwrite remote change %d", MailItem.getNameForType(type), id, msg.getSubject(), mod_content);
+	                    }
+	                }
+                } else {
+                	OfflineLog.offline.warn("message %d (%s) content is immutable but updated on server (server=%d, client=%d)", id, msg.getSubject(), mod_content, msg.getSavedSequence());
                 }
-                OfflineLog.offline.debug("initial: re-saved draft " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
+            } else {
+            	OfflineLog.offline.debug("message %d (%s) content already in sync at mod_content=%s", id, msg.getSubject(), mod_content);
             }
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.debug("initial: " + MailItem.getNameForType(type) + " " + id + " has been deleted; no need to sync draft");
@@ -1109,7 +1118,7 @@ public class InitialSync {
         // use this data to generate the XML entry used in message delta sync
         Element sync = new Element.XMLElement(Sync.elementNameForType(type)).addAttribute(MailConstants.A_ID, id);
         sync.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags)).addAttribute(MailConstants.A_TAGS, tags).addAttribute(MailConstants.A_CONV_ID, convId);
-        sync.addAttribute(MailConstants.A_CHANGE_DATE, timestamp).addAttribute(MailConstants.A_MODIFIED_SEQUENCE, changeId);
+        sync.addAttribute(MailConstants.A_CHANGE_DATE, change_date).addAttribute(MailConstants.A_MODIFIED_SEQUENCE, mod_metadata);
         sync.addAttribute(MailConstants.A_DATE, received * 1000L).addAttribute(MailConstants.A_REVISION, mod_content);
         getDeltaSync().syncMessage(sync, folderId, type);
     }

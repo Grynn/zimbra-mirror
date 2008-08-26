@@ -112,8 +112,13 @@ public class DeltaSync {
         }
 
         // sync down metadata changes and note items that need to be downloaded in full
-        Map<Integer, List<Integer>> messages = new HashMap<Integer, List<Integer>>(), chats = new HashMap<Integer, List<Integer>>();
-        Map<Integer, Integer> deltamsgs = null, deltachats = null, contacts = null, appts = null, tasks = null;
+        Map<Integer, List<Integer>> messages = new HashMap<Integer, List<Integer>>(),
+                                    modmsgs =  new HashMap<Integer, List<Integer>>(),
+                                    chats =    new HashMap<Integer, List<Integer>>(),
+                                    modchats = new HashMap<Integer, List<Integer>>();
+        Map<Integer, Integer> deltamsgs =  new HashMap<Integer,Integer>(),
+                              deltachats = new HashMap<Integer,Integer>(),
+                              contacts = null, appts = null, tasks = null;
         List<Integer> documents = null;
         for (Element change : response.listElements()) {
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
@@ -140,16 +145,9 @@ public class DeltaSync {
                 if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_MESSAGE))
                 	continue;
             	
-                if (create && canDeltaSyncMessage(id, change))
-                    (deltamsgs == null ? deltamsgs = new HashMap<Integer, Integer>() : deltamsgs).put(id, folderId);
-                else if (create) {
-                	List<Integer> idList = messages.get(folderId);
-                	if (idList == null) {
-                		idList = new ArrayList<Integer>();
-                		messages.put(folderId, idList);
-                	}
-                	idList.add(id);
-                } else
+                if (create)
+                	triageNewMessage(id, folderId, change, messages, modmsgs, deltamsgs);
+                else
                     syncMessage(change, folderId, MailItem.TYPE_MESSAGE);
             } else if (type.equals(MailConstants.E_CHAT)) {
             	if (!OfflineLC.zdesktop_sync_chats.booleanValue())
@@ -162,17 +160,10 @@ public class DeltaSync {
                 if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_CHAT))
                 	continue;
                 
-                if (create && canDeltaSyncMessage(id, change))
-                    (deltachats == null ? deltachats = new HashMap<Integer,Integer>() : deltachats).put(id, folderId);
-                else if (create) {
-                	List<Integer> idList = chats.get(folderId);
-                	if (idList == null) {
-                		idList = new ArrayList<Integer>();
-                		chats.put(folderId, idList);
-                	}
-                	idList.add(id);
-                } else
-                    syncMessage(change, folderId, MailItem.TYPE_CHAT);
+                if (create)
+                	triageNewMessage(id, folderId, change, chats, modchats, deltachats);
+                else
+                	syncMessage(change, folderId, MailItem.TYPE_CHAT);
             } else if (type.equals(MailConstants.E_CONTACT)) {
             	if (!OfflineLC.zdesktop_sync_contacts.booleanValue())
             		continue;
@@ -232,7 +223,7 @@ public class DeltaSync {
         }
 
         // for messages, chats, and contacts that are created or had their content modified, fetch new content
-        if (OfflineLC.zdesktop_sync_messages.booleanValue() && deltamsgs != null) {
+        if (OfflineLC.zdesktop_sync_messages.booleanValue() && !deltamsgs.isEmpty()) {
             Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
             request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltamsgs.keySet()));
             for (Element elt : ombx.sendRequest(request).listElements())
@@ -251,12 +242,14 @@ public class DeltaSync {
         }
         
         if (OfflineLC.zdesktop_sync_messages.booleanValue()) {
-	        Set<Integer> msgFolders = messages.keySet();
-	        for (int folderId : msgFolders)
-	            getInitialSync().syncMessagelikeItems(messages.get(folderId), folderId, MailItem.TYPE_MESSAGE, true);
+	        for (int folderId : messages.keySet())
+	            getInitialSync().syncMessagelikeItems(messages.get(folderId), folderId, MailItem.TYPE_MESSAGE, false, true);
+	        
+	        for (int folderId: modmsgs.keySet())
+	        	getInitialSync().syncMessagelikeItems(modmsgs.get(folderId), folderId, MailItem.TYPE_MESSAGE, true, true);
         }
         
-        if (OfflineLC.zdesktop_sync_chats.booleanValue() && deltachats != null) {
+        if (OfflineLC.zdesktop_sync_chats.booleanValue() && !deltachats.isEmpty()) {
             Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
             request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltachats.keySet()));
             for (Element elt : ombx.sendRequest(request).listElements())
@@ -264,9 +257,11 @@ public class DeltaSync {
         }
         
         if (OfflineLC.zdesktop_sync_chats.booleanValue()) {
-	        Set<Integer> chatFolders = chats.keySet();
-	        for (int folderId : chatFolders)
-	            getInitialSync().syncMessagelikeItems(chats.get(folderId), folderId, MailItem.TYPE_CHAT, true);
+	        for (int folderId : chats.keySet())
+	            getInitialSync().syncMessagelikeItems(chats.get(folderId), folderId, MailItem.TYPE_CHAT, false, true);
+	        
+	        for (int folderId : modchats.keySet())
+	            getInitialSync().syncMessagelikeItems(modchats.get(folderId), folderId, MailItem.TYPE_CHAT, true, true);
         }
 
         if (OfflineLC.zdesktop_sync_contacts.booleanValue() && contacts != null) {
@@ -294,17 +289,28 @@ public class DeltaSync {
         }
     }
 
-    private boolean canDeltaSyncMessage(int id, Element change) throws ServiceException {
+    private void triageNewMessage(int id, int folderId, Element change, Map<Integer, List<Integer>> messages, Map<Integer, List<Integer>> modmsgs,
+    		Map<Integer, Integer> deltamsgs) throws ServiceException {
         try {
             Message msg = ombx.getMessageById(sContext, id);
             if (msg.getSavedSequence() != change.getAttributeLong(MailConstants.A_REVISION, -1))
-                return false;
-            if (msg.getModifiedSequence() != change.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE))
-                return false;
-            return true;
+            	addToMapByFolderId(id, folderId, modmsgs);
+            else if (msg.getModifiedSequence() != change.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE))
+            	deltamsgs.put(id, folderId);
+            else
+            	OfflineLog.offline.debug("message %d (%s) already in sync", id, msg.getSubject()); //could be because we are rerunning a failed sync
         } catch (MailServiceException.NoSuchItemException e) {
-            return false;
+        	addToMapByFolderId(id, folderId, messages);
         }
+    }
+    
+    private void addToMapByFolderId(int id, int folderId, Map<Integer, List<Integer>> messages) {
+    	List<Integer> idList = messages.get(folderId);
+    	if (idList == null) {
+    		idList = new ArrayList<Integer>();
+    		messages.put(folderId, idList);
+    	}
+    	idList.add(id);
     }
 
     private Set<Integer> processLeafDeletes(Element delement) throws ServiceException {
