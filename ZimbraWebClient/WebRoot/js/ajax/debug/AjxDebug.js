@@ -58,12 +58,10 @@ AjxDebug.DBG3 = 3; // anything goes
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting
 
-AjxDebug._LINK_FRAME_ID		= "AjxDebug_LF";
 AjxDebug._CONTENT_FRAME_ID	= "AjxDebug_CF";
-AjxDebug._BUTTON_FRAME_ID	= "AjxDebug_BF";
-
-AjxDebug._id = 0;
-AjxDebug._openErrors = 0;
+AjxDebug._LINK_FRAME_ID		= "AjxDebug_LF";
+AjxDebug._BOTTOM_FRAME_ID	= "AjxDebug_BFI";
+AjxDebug._BOTTOM_FRAME_NAME	= "AjxDebug_BFN";
 
 AjxDebug.prototype.toString =
 function() {
@@ -106,10 +104,11 @@ function() {
 */
 AjxDebug.prototype.println =
 function(level, msg, linkName) {
+	if (!this._isWriteable()) { return; }
+
 	try {
-		if (!this._isWriteable()) return;
 		var args = this._handleArgs(arguments, linkName);
-		if (!args) return;
+		if (!args) { return; }
 
 		msg = args.join("");
 		this._add(this._timestamp() + msg + "<br>", null, null, null, linkName);
@@ -135,11 +134,14 @@ function () {
 */
 AjxDebug.prototype.dumpObj =
 function(level, obj, showFuncs, linkName) {
-	if (!this._isWriteable()) return;
+	if (!this._isWriteable()) { return; }
+
 	var args = this._handleArgs(arguments, linkName);
-	if (!args) return;
+	if (!args) { return; }
+
 	obj = args[0];
-	if (!obj) return;
+	if (!obj) { return; }
+
 	this._showFuncs = args[1];
 
 	AjxDebug._visited = new AjxVector();
@@ -155,12 +157,12 @@ function(level, obj, showFuncs, linkName) {
 */
 AjxDebug.prototype.printRaw =
 function(level, text, linkName) {
-	if (!this._isWriteable()) return;
-	var args = this._handleArgs(arguments, linkName);
-	if (!args) return;
-	text = args[0];
+	if (!this._isWriteable()) { return; }
 
-	this._add(null, text, false, true);
+	var args = this._handleArgs(arguments, linkName);
+	if (!args) { return; }
+
+	this._add(null, args[0], false, true);
 };
 
 /**
@@ -171,11 +173,13 @@ function(level, text, linkName) {
 */
 AjxDebug.prototype.printXML =
 function(level, text, linkName) {
-	if (!this._isWriteable()) return;
+	if (!this._isWriteable()) { return; }
+
 	var args = this._handleArgs(arguments, linkName);
-	if (!args) return;
+	if (!args) { return; }
+
 	text = args[0];
-	if (!text) return;
+	if (!text) { return; }
 
 	// skip generating pretty xml if theres too much data
 	if (text.length > AjxDebug.MAX_OUT) {
@@ -193,11 +197,12 @@ function(level, text, linkName) {
 */
 AjxDebug.prototype.display =
 function(level, text) {
-	if (!this._isWriteable()) return;
-	var args = this._handleArgs(arguments);
-	if (!args) return;
-	text = args[0];
+	if (!this._isWriteable()) { return; }
 
+	var args = this._handleArgs(arguments);
+	if (!args) { return; }
+
+	text = args[0];
 	text = text.replace(/\r?\n/g, '[crlf]');
 	text = text.replace(/ /g, '[space]');
 	text = text.replace(/\t/g, '[tab]');
@@ -213,17 +218,17 @@ function(level, text) {
 AjxDebug.prototype.showTiming =
 function(on, msg) {
 	this._showTiming = on;
-	if (on)
+	if (on) {
 		this._enable(true);
-
+	}
 	var state = on ? "on" : "off";
 	var text = "Turning timing info " + state;
-	if (msg)
+	if (msg) {
 		text = text + ": " + msg;
+	}
 
 	var debugMsg = new DebugMessage(text);
 	this._addMessage(debugMsg);
-
 	this._startTimePt = this._lastTimePt = new Date().getTime();
 };
 
@@ -235,24 +240,23 @@ function(on, msg) {
 */
 AjxDebug.prototype.timePt =
 function(msg, restart) {
-	if (!this._showTiming || !this._isWriteable()) return;
+	if (!this._showTiming || !this._isWriteable()) { return; }
 
-	if (restart)
+	if (restart) {
 		this._startTimePt = this._lastTimePt = new Date().getTime();
-
+	}
 	var now = new Date().getTime();
 	var elapsed = now - this._startTimePt;
 	var interval = now - this._lastTimePt;
 	this._lastTimePt = now;
+
 	var spacer = restart ? "<br/>" : "";
 	msg = msg ? " " + msg : "";
 	var text = [spacer, "[", elapsed, " / ", interval, "]", msg].join("");
-	html = "<div>" + text + "</div>";
+	var html = "<div>" + text + "</div>";
 
-    var myMsg = new DebugMessage(html);
-
-    // Add the message to our stack
-    this._addMessage(myMsg);
+	// Add the message to our stack
+	this._addMessage(new DebugMessage(html));
 	return interval;
 };
 
@@ -299,12 +303,12 @@ function(enabled) {
 
 AjxDebug.prototype._isWriteable =
 function() {
-	return (!this.isDisabled() && this._debugWindow && !this._debugWindow.closed);
+	return (!this._isPaused && !this.isDisabled() && this._debugWindow && !this._debugWindow.closed);
 };
 
 AjxDebug.prototype._getHtmlForObject =
 function(anObj, isXml, isRaw, timestamp) {
-	var html = new Array();
+	var html = [];
 	var idx = 0;
 
 	if (anObj === undefined) {
@@ -320,26 +324,21 @@ function(anObj, isXml, isRaw, timestamp) {
 			html[idx++] = this._timestamp();
 			html[idx++] = "<textarea rows='25' style='width:100%' readonly='true'>";
 			html[idx++] = anObj;
-			html[idx++] = "</textarea>";
-			html[idx++] = "<p></p>";
+			html[idx++] = "</textarea><p></p>";
 		} else if (isXml) {
 			var xmldoc = new AjxDebugXmlDocument;
 			var doc = xmldoc.create();
 			doc.loadXML(anObj);
-			/***
-			if (timestamp) {
-				html[idx++] = [doc.documentElement.nodeName, this._getTimeStamp(timestamp)].join(" - ");
-			}
-			/***/
+//			if (timestamp) {
+//				html[idx++] = [doc.documentElement.nodeName, this._getTimeStamp(timestamp)].join(" - ");
+//			}
 			html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'>";
 			html[idx++] = this._createXmlTree(doc, 0);
 			html[idx++] = "</div>";
 		} else {
-			html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'>";
-			html[idx++] = "<pre>";
+			html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'><pre>";
 			html[idx++] = this._dump(anObj, true);
-			html[idx++] = "</div>";
-			html[idx++] = "</pre>";
+			html[idx++] = "</div></pre>";
 		}
 	}
 	return html.join("");
@@ -359,13 +358,14 @@ function(obj, recurse) {
 	}
 
 	if (AjxUtil.isObject(obj)) {
-		if (obj.toString() == "ZmAppCtxt"){
+		if (obj.toString() == "ZmAppCtxt") {
 			return "[ZmAppCtxt]";
 		}
-		if (AjxDebug._visited.contains(obj))
+		if (AjxDebug._visited.contains(obj)) {
 			return "[visited object]";
-		else
+		} else {
 			AjxDebug._visited.add(obj);
+		}
 	}
 
 	var indent = AjxStringUtil.repeat(" ", indentLevel);
@@ -381,7 +381,7 @@ function(obj, recurse) {
 	//	obj = obj.replace(/\r/g, "\\r");
 	//	obj = obj.replace(/\n/g, "\\n");
 	//	obj = obj.replace(/\t/g, "\\t");
-		text += '"' + AjxDebug._escapeForHTML(obj) + '"';
+		text += '"' + this._escapeForHTML(obj) + '"';
 	} else if (AjxUtil.isNumber(obj)) {
 		text += obj;
 	} else if (AjxUtil.isObject(obj)) {
@@ -396,7 +396,6 @@ function(obj, recurse) {
 			}
 
 			isArray ? keys.sort(function(a,b) {return a - b;}) : keys.sort();
-
 
 			if (showBraces) {
 				text += isArray ? "[" : "{";
@@ -447,7 +446,7 @@ function(obj, recurse) {
 AjxDebug.prototype._handleArgs =
 function(args, linkNameSpecified) {
 	// don't output anything if debugging is off, or timing is on
-	if (this._level == AjxDebug.NONE || this._showTiming) return;
+	if (this._level == AjxDebug.NONE || this._showTiming) { return; }
 
 	var msgLevel = AjxDebug.DBG1;
 	if (args.length > 1) {
@@ -473,46 +472,19 @@ function(args, linkNameSpecified) {
 	return array;
 };
 
-AjxDebug.prototype._getCookieVal =
-function (cookieName) {
-	var myRE = cookieName  + "=([^;]+)";
-	var myVals = document.cookie.match(new RegExp(myRE));
-	var val = null;
-	// Return the last value defined (if found)
-	if (myVals && (myVals.length > 0)) {
-		var valStr = myVals[myVals.length-1];
-		if (valStr == "true") {
-			val = true;
-		} else if (valStr == "false") {
-			val = false;
-		} else {
-			val = valStr;
-		}
-	}
-	return val;
-};
-
 AjxDebug.prototype._openDebugWindow =
 function(force) {
-	this._enabled = true;
-
-	var url  = "";
 	var name = AjxEnv.isIE ? "_blank" : this._dbgName;
-	var args = "width=600,height=400,resizable=yes,scrollbars=yes";
+	this._debugWindow = window.open("", name, "width=600,height=400,resizable=yes,scrollbars=yes");
 
-	this._debugWindow = window.open(url, name, args);
-	this._isPrevWinOpen = this._debugWindow.debug;
-	this._debugWindow.debug = true;
-	this._initWindow();
-};
-
-
-AjxDebug.prototype._initWindow =
-function() {
 	if (this._debugWindow == null) {
 		this._enabled = false;
 		return;
 	}
+
+	this._enabled = true;
+	this._isPrevWinOpen = this._debugWindow.debug;
+	this._debugWindow.debug = true;
 
 	try {
 		this._document = this._debugWindow.document;
@@ -538,7 +510,7 @@ function() {
 					"<frameset cols='125, *'>",
 						"<frameset rows='*,40'>",
 							"<frame name='", AjxDebug._LINK_FRAME_ID, "' id='", AjxDebug._LINK_FRAME_ID, "' src='javascript:parent.parent.blank();'>",
-							"<frame name='", AjxDebug._BUTTON_FRAME_ID, "' id='", AjxDebug._BUTTON_FRAME_ID, "' src='javascript:parent.parent.blank();'>",
+							"<frame name='", AjxDebug._BOTTOM_FRAME_NAME, "' id='", AjxDebug._BOTTOM_FRAME_ID, "' src='javascript:parent.parent.blank();' scrolling=no frameborder=0>",
 						"</frameset>",
 						"<frame name='", AjxDebug._CONTENT_FRAME_ID, "' id='", AjxDebug._CONTENT_FRAME_ID, "' src='javascript:parent.blank();'>",
 					"</frameset>",
@@ -562,13 +534,10 @@ function() {
 			this._showMessages();
 		}
 	} catch (ex) {
-		if (this._debugWindow) this._debugWindow.close();
-
-		// If we've exceeded a certain # of errors, just close window and bail.
-		if (AjxDebug._openErrors < 5) {
-			AjxDebug._openErrors++;
-			this._openDebugWindow(true);
+		if (this._debugWindow) {
+			this._debugWindow.close();
 		}
+		this._openDebugWindow(true);
 	}
 };
 
@@ -578,21 +547,16 @@ function() {
 		this._contentFrame = this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
 		this._linkFrame = this._debugWindow.document.getElementById(AjxDebug._LINK_FRAME_ID);
 
-		var buttonFrame = this._debugWindow.document.getElementById(AjxDebug._BUTTON_FRAME_ID);
-		var buttonFrameDoc = buttonFrame.contentWindow.document;
-		var buttonFrameBody = buttonFrameDoc.body;
-
-		var clearBtn = buttonFrameDoc.createElement("button");
-		clearBtn._contentFrameId = AjxDebug._CONTENT_FRAME_ID;
-		clearBtn._linkFrameId = AjxDebug._LINK_FRAME_ID;
-		clearBtn.innerHTML = "Clear";
-		clearBtn._dbg = this;
-		clearBtn.onclick = AjxDebug._linkHandler;
-
-		buttonFrameBody.innerHTML = "";
-		buttonFrameBody.appendChild(clearBtn);
-
-		this._clearBtn = clearBtn;
+		var frame = this._debugWindow.document.getElementById(AjxDebug._BOTTOM_FRAME_ID);
+		var doc = frame.contentWindow.document;
+		var html = [];
+		var i = 0;
+		html[i++] = "<table><tr><td><button id='";
+		html[i++] = AjxDebug._BOTTOM_FRAME_ID;
+		html[i++] = "_clear'>Clear</button></td><td><button id='";
+		html[i++] = AjxDebug._BOTTOM_FRAME_ID;
+		html[i++] = "_pause'>Pause</button></td></tr></table>";
+		doc.body.innerHTML = html.join("");
 	}
 	catch (ex) {
 		// IE chokes on the popup window on cold start-up (when IE is started
@@ -600,19 +564,22 @@ function() {
 		// app from running and should not bother the user
 	}
 
-	this._attachHandlers();
+	this._clearBtn = doc.getElementById(AjxDebug._BOTTOM_FRAME_ID + "_clear");
+	this._pauseBtn = doc.getElementById(AjxDebug._BOTTOM_FRAME_ID + "_pause");
 
+	this._attachHandlers();
 	this._dbgWindowInited = true;
 	this._showMessages();
 };
 
-AjxDebug.prototype._attachHandlers = function() {
-	// Firefox allows us to attach an event listener, and runs it even
-	// though the window with the code is gone ... odd, but nice. IE,
-	// though will not run the handler, so we make sure, even if we're
-	// coming back to the window, to attach the onunload handler. In general
-	// reattach all handlers for IE
-	unloadHandler = AjxCallback.simpleClosure(this._unloadHandler, this);
+AjxDebug.prototype._attachHandlers =
+function() {
+	// Firefox allows us to attach an event listener, and runs it even though
+	// the window with the code is gone ... odd, but nice. IE, though will not
+	// run the handler, so we make sure, even if we're  coming back to the
+	// window, to attach the onunload handler. In general reattach all handlers
+	// for IE
+	var unloadHandler = AjxCallback.simpleClosure(this._unloadHandler, this);
 	if (AjxEnv.isIE) {
 		this._unloadHandler = unloadHandler;
 		this._debugWindow.attachEvent('onunload', unloadHandler);
@@ -620,8 +587,12 @@ AjxDebug.prototype._attachHandlers = function() {
 	else {
 		this._debugWindow.onunload = unloadHandler;
 	}
+
 	if (this._clearBtn) {
 		this._clearBtn.onclick = AjxCallback.simpleClosure(this._clear, this);
+	}
+	if (this._pauseBtn) {
+		this._pauseBtn.onclick = AjxCallback.simpleClosure(this._pause, this);
 	}
 };
 
@@ -633,14 +604,14 @@ AjxDebug.prototype._attachHandlers = function() {
 AjxDebug.prototype._scrollToBottom =
 function() {
 	var contentFrame = this.getContentFrame();
-	if (!contentFrame) { return; }
-	var contentBody = contentFrame.contentWindow.document.body;
+	var contentBody = contentFrame ? contentFrame.contentWindow.document.body : null;
 	var linkFrame = this.getLinkFrame();
-	if (!linkFrame) { return; }
-	var linkBody = linkFrame.contentWindow.document.body;
+	var linkBody = linkFrame ? linkFrame.contentWindow.document.body : null;
 
-	contentBody.scrollTop = contentBody.scrollHeight;
-	linkBody.scrollTop = linkBody.scrollHeight;
+	if (contentBody && linkBody) {
+		contentBody.scrollTop = contentBody.scrollHeight;
+		linkBody.scrollTop = linkBody.scrollHeight;
+	}
 };
 
 /**
@@ -662,8 +633,7 @@ function(show) {
 // the html code can create a nice indention
 AjxDebug.prototype._createXmlTree =
 function (node, indent) {
-	if (node == null)
-		return "";
+	if (node == null) { return ""; }
 
 	var str = "";
 	var len;
@@ -673,27 +643,29 @@ function (node, indent) {
 
 			var attrs = node.attributes;
 			len = attrs.length;
-			for (var i = 0; i < len; i++)
+			for (var i = 0; i < len; i++) {
 				str += this._createXmlAttribute(attrs[i]);
+			}
 
-			if (!node.hasChildNodes())
+			if (!node.hasChildNodes()) {
 				return str + "/&gt;</div>";
-
+			}
 			str += "&gt;<br />";
 
 			var cs = node.childNodes;
 			len = cs.length;
-			for (var i = 0; i < len; i++)
+			for (var i = 0; i < len; i++) {
 				str += this._createXmlTree(cs[i], indent + 3);
-
+			}
 			str += "&lt;/<span style='color: DarkRed;'>" + node.nodeName + "</span>&gt;</div>";
 			break;
 
 		case 9:	// Document
 			var cs = node.childNodes;
 			len = cs.length;
-			for (var i = 0; i < len; i++)
+			for (var i = 0; i < len; i++) {
 				str += this._createXmlTree(cs[i], indent);
+			}
 			break;
 
 		case 3:	// Text
@@ -708,22 +680,22 @@ function (node, indent) {
 
 			var attrs = node.attributes;
 			len = attrs.length;
-			for (var i = 0; i < len; i++)
+			for (var i = 0; i < len; i++) {
 				str += this._createXmlAttribute(attrs[i]);
-
+			}
 			str+= "?&gt;<br />"
 			break;
 
 		case 4:	// CDATA
 			str = "<div style=''>&lt;![CDATA[<span style='color: WindowText; font-family: \"Courier New\"; white-space: pre; display: block; border-left: 1px solid Gray; padding-left: 16px;'>" +
-				node.nodeValue +
-			"</span>]" + "]></div>";
+				  node.nodeValue +
+				  "</span>]" + "]></div>";
 			break;
 
 		case 8:	// Comment
 			str = "<div style='color: blue; padding-left: 16px;'>&lt;!--<span style='white-space: pre; font-family: \"Courier New\"; color: Gray; display: block;'>" +
-				node.nodeValue +
-			"</span>--></div>";
+				  node.nodeValue +
+				  "</span>--></div>";
 			break;
 
 		case 10:
@@ -750,19 +722,20 @@ function (node, indent) {
 
 AjxDebug.prototype._createXmlAttribute =
 function(a) {
-	return " <span style='color: red'>" + a.nodeName + "</span><span style='color: blue'>=\"" + a.nodeValue + "\"</span>";
+	return [" <span style='color: red'>", a.nodeName, "</span><span style='color: blue'>=\"", a.nodeValue, "\"</span>"].join("");
 };
 
 AjxDebug.prototype._inspect =
 function(obj) {
 	var str = "";
-	for (var k in obj)
+	for (var k in obj) {
 		str += "obj." + k + " = " + obj[k] + "\n";
+	}
 	window.alert(str);
 };
 
 AjxDebug.prototype._add =
-function (aMsg, extraInfo, isXml, isRaw, linkName){
+function(aMsg, extraInfo, isXml, isRaw, linkName) {
 	var timestamp = new Date();
 	if (extraInfo) {
 		extraInfo = this._getHtmlForObject(extraInfo, isXml, isRaw, timestamp);
@@ -773,13 +746,13 @@ function (aMsg, extraInfo, isXml, isRaw, linkName){
 };
 
 AjxDebug.prototype._addMessage =
-function (aMsg) {
+function(aMsg) {
 	this._msgQueue[this._msgQueue.length] = aMsg;
 	this._showMessages();
 };
 
 AjxDebug.prototype._showMessages =
-function () {
+function() {
 	if (!this._dbgWindowInited) {
 		// For now, don't show the messages-- assuming that this case only
 		// happens at startup, and many messages will be written
@@ -787,12 +760,11 @@ function () {
 	}
 	try {
 		if (this._msgQueue.length > 0) {
-			var msg;
-			var contentDiv;
-			var linkDiv;
 			var contentFrame = this.getContentFrame();
 			var linkFrame = this.getLinkFrame();
 			if (!contentFrame || !linkFrame) { return; }
+
+			var msg;
 			var contentFrameDoc = contentFrame.contentWindow.document;
 			var linkFrameDoc = linkFrame.contentWindow.document;
 			var len = this._msgQueue.length;
@@ -810,33 +782,6 @@ function () {
 	} catch (ex) {
 		//debuggins should not stop execution
 	}
-};
-
-AjxDebug._linkClicked =
-function() {
-	var contentFrame = this._dbg.getContentFrame();
-	var el = contentFrame.contentWindow.document.getElementById(this._targetId);
-	var y = 0;
-	while (el) {
-		y += el.offsetTop;
-		el = el.offsetParent;
-	}
-
-	contentFrame.contentWindow.scrollTo(0, y);
-};
-
-AjxDebug._getNextId =
-function() {
-	return "AjxDebug_" + AjxDebug._id++;
-};
-
-AjxDebug.prototype._parseHtmlFragment = 
-function (htmlStr) {
-	var contentFrame = this.getContentFrame();
-	if (!contentFrame) { return; }
-	var div = contentFrame.contentWindow.document.createElement('DIV');	
-	div.innerHTML = htmlStr;
-	return div;
 };
 
 AjxDebug.prototype._getTimeStamp =
@@ -884,8 +829,18 @@ function(linkClass, linkLabel, contentClass, contentLabel) {
 	this._scrollToBottom();
 };
 
+AjxDebug._linkClicked =
+function() {
+	var contentFrame = this._dbg.getContentFrame();
+	var el = contentFrame.contentWindow.document.getElementById(this._targetId);
+	var y = 0;
+	while (el) {
+		y += el.offsetTop;
+		el = el.offsetParent;
+	}
 
-// Static methods
+	contentFrame.contentWindow.scrollTo(0, y);
+};
 
 AjxDebug.prototype._clear =
 function() {
@@ -893,26 +848,25 @@ function() {
 	this.getLinkFrame().contentWindow.document.body.innerHTML = "";
 };
 
+AjxDebug.prototype._pause =
+function() {
+	this._isPaused = !this._isPaused;
+	this._pauseBtn.innerHTML = this._isPaused ? "Resume" : "Pause";
+};
+
 AjxDebug.prototype._unloadHandler =
 function() {
-	// is there anything to do?
-	if (!this._debugWindow) return;
+	if (!this._debugWindow) { return; } // is there anything to do?
 
 	// detach event handlers
 	if (AjxEnv.isIE) {
 		this._debugWindow.detachEvent('onunload', this._unloadHandler);
-	}
-	else {
+	} else {
 		this._debugWindow.onunload = null;
 	}
 };
 
-AjxDebug._linkHandler = function() {
-	var contentFrame = this._dbg.getContentFrame();
-	contentFrame.contentWindow.location.hash = this.href;
-};
-
-AjxDebug._escapeForHTML =
+AjxDebug.prototype._escapeForHTML =
 function(str){
 	if (typeof(str) != 'string') return str;
 	var s = str;
@@ -920,18 +874,19 @@ function(str){
 	s = s.replace(/\</g, '&lt;');
 	s = s.replace(/\>/g, '&gt;');
 	s = s.replace(/\"/g, '&quot;');
-	s = s.replace(/\xA0/g, '&nbsp;');	
+	s = s.replace(/\xA0/g, '&nbsp;');
 	return s;
 };
+
 
 /**
  * Simple wrapper for log messages
  */
 DebugMessage = function(aMsg, aType, aCategory, aTime, extraHtml, linkName) {
-    this.message = aMsg || "";
-    this.type = aType || null;
-    this.category = aCategory || "";
-    this.time = aTime || (new Date().getTime());
-    this.eHtml = extraHtml || "";
-    this.linkName = linkName;
+	this.message = aMsg || "";
+	this.type = aType || null;
+	this.category = aCategory || "";
+	this.time = aTime || (new Date().getTime());
+	this.eHtml = extraHtml || "";
+	this.linkName = linkName;
 };
