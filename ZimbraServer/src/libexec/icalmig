@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.19";
+my $version = "1.20";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -248,6 +248,8 @@ sub processfile
   my $gen_CFsteventpos=0;
   my $wasrulecreated=0;
   my @attendeearr=();
+  my $firstevchkctr=0;
+  my $IsfrstevStandalone=0; my $frstevdelpos=0; my $uidchangectr=0;
   &log_message("processing file...");
   while (<CFHANDLE>)
   {
@@ -282,6 +284,7 @@ sub processfile
       }
       $gen_evenstpos= tell OTHANDLE;#generic event start pos
       $gen_CFsteventpos = tell CFHANDLE;#CFHANDLEs generic event start pos
+      $firstevchkctr++;
     }
     #RRULE etc will be created on the base of UID change as in some cases, RDATEs
     #are not part of last VEVENT. RDATEs may appear in any VEVENT also. So UID
@@ -300,16 +303,29 @@ sub processfile
       }
       if (($prvuid ne "")&&($prvuid ne $_))
       {
+        $uidchangectr++;
         $IsFirstRecId=0;#reset
         #shift back to previous VEVENT start point as current one is with next UID
         $del_pos=$prvrecevpos;
+
+        if(($IsfrstevStandalone)&&($uidchangectr>2))
+        {
+          $IsfrstevStandalone=0;
+        }
+        #if first event is standalone, it is getting wiped off.
+        #set correct delpos
+        if($firstevchkctr eq 2)
+        {
+          $IsfrstevStandalone=1;
+          $frstevdelpos=$gen_evenstpos;
+        }
+
         if((!$g_isdelrdate)&&($g_isrdate))
         {
           $Iscreaterrule=1;
           #UID for which processing should be done.
           $uidtosrch=$prvuid;
           $g_isrdate=0;
-          $IsFirstRecId=0;#reset
         }
         #if RDATEs should be deleted and current VEVENT has RDATEs
         elsif (($g_isdelrdate)&&($g_isrdate))
@@ -559,6 +575,11 @@ sub processfile
       &log_message("Creating event with RRULE....");
       #deletion start position
       my $delstpos= $del_pos;
+      if($IsfrstevStandalone)
+      {
+        $delstpos = $frstevdelpos;
+        $IsfrstevStandalone=0;
+      }
       #truncate file till delstpos
       seek OTHANDLE, $delstpos, 0;
       truncate OTHANDLE, $delstpos or print "Couldn't truncate: $!\n";
