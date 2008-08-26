@@ -245,8 +245,7 @@ all: setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	@echo -n "Creating $(PERL_BIN_TGZ_DEST)..."; \
 	(cd $(DEST_BIN_DIR); \
-	rm -f c* d* i* m* p* SOAP* stub* swatch X*; \
-	tar cfz $(PERL_BIN_TGZ_DEST) .); \
+	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
@@ -256,8 +255,7 @@ tarball:
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
 	@echo -n "Creating $(PERL_BIN_TGZ_DEST)..."; \
 	(cd $(DEST_BIN_DIR); \
-	rm -f c* d* i* m* p* SOAP* stub* swatch X*; \
-	tar cfz $(PERL_BIN_TGZ_DEST) .; \
+	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
