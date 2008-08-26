@@ -149,6 +149,7 @@ public class CompareKeysTask
 
 				// build key/cmd map
 				Map<String, List<String>> commandMap = new HashMap<String,List<String>>();
+				Map<String, List<String>> errorMap = new HashMap<String,List<String>>();
 				for (Enumeration names = props.propertyNames(); names.hasMoreElements(); ) {
 					String value = (String)names.nextElement();
 					// ignore everything that's not a keycode *and* modifier keys
@@ -157,12 +158,28 @@ public class CompareKeysTask
 					// add each keycode to map separately
 					String[] codes = props.getProperty(value).split(";");
 					for (String code : codes) {
-						code = normalize(code.toLowerCase(), shift, ctrl, alt, meta);
-						List<String> cmds = commandMap.get(code);
-						if (cmds == null) {
-							commandMap.put(code, cmds = new LinkedList<String>());
-						}
-						cmds.add(value);
+                        try {
+                            code = normalize(code, shift, ctrl, alt, meta);
+                            List<String> cmds = commandMap.get(code);
+                            if (cmds == null) {
+                                commandMap.put(code, cmds = new LinkedList<String>());
+                            }
+                            cmds.add(value);
+                        }
+                        catch (UnknownModifierException e) {
+							List<String> errs = errorMap.get(value);
+							if (errs == null) {
+								errorMap.put(value, errs = new LinkedList<String>());
+							}
+							errs.add("unknown modifier \""+e.getModifier()+"\" for \""+value+"\"");
+                        }
+					}
+				}
+
+				// list errors
+				for (String value : new TreeSet<String>(errorMap.keySet())) {
+					for (String err : errorMap.get(value)) {
+						System.out.println("  Error: "+err);
 					}
 				}
 
@@ -209,7 +226,7 @@ public class CompareKeysTask
 
 	static String normalize(String keycode, String shift, String ctrl, String alt, String meta) {
 		StringBuilder str = new StringBuilder();
-		String[] parts = keycode.split(",");
+		String[] parts = keycode.replaceAll("\\s+","").split(",");
 		for (int j = 0; j < parts.length; j++) {
 			if (j > 0) {
 				str.append(",");
@@ -217,11 +234,14 @@ public class CompareKeysTask
 			boolean hasShift = false, hasCtrl = false, hasAlt = false, hasMeta = false;
 			String[] keys = parts[j].split("\\+");
 			for (int i = 0; i < keys.length - 1; i++) {
-				String key = keys[i].trim();
+                String key = keys[i].toLowerCase();
 				if (key.equals(shift)) hasShift = true;
 				else if (key.equals(ctrl)) hasCtrl = true;
 				else if (key.equals(alt)) hasAlt = true;
 				else if (key.equals(meta)) hasMeta = true;
+                else {
+                    throw new UnknownModifierException(keys[i]);
+                }
 			}
 			if (hasShift) str.append("Shift+");
 			if (hasCtrl) str.append("Ctrl+");
@@ -275,5 +295,18 @@ public class CompareKeysTask
 			return o1.toString().compareTo(o2.toString());
 		}
 	}
+
+    static class UnknownModifierException extends RuntimeException {
+        // Data
+        private String modifier;
+        // Constructors
+        public UnknownModifierException(String modifier) {
+            this.modifier = modifier;
+        }
+        // Public methods
+        public String getModifier() {
+            return this.modifier;
+        }
+    }
 
 } // class CompareKeysTask
