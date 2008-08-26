@@ -58,7 +58,7 @@ public abstract class ZSearchHitBean {
 
     public final ZContactHitBean getContactHit() { return getIsContact() ? (ZContactHitBean) this : null; }
 
-    public final ZBriefcaseHitBean getBriefcaseHit() { return getIsBriefcase() ? (ZBriefcaseHitBean) this : null; }
+    public final ZDocumentHitBean getBriefcaseHit() { return getIsBriefcase() ? (ZDocumentHitBean) this : null; }
 
     public final ZTaskHitBean getTaskHit() { return getIsTask() ? (ZTaskHitBean) this : null; }
 

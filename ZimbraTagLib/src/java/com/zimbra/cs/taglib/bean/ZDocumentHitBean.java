@@ -20,16 +20,16 @@ import com.zimbra.cs.zclient.ZDocumentHit;
 import com.zimbra.cs.zclient.ZDocument;
 import java.util.Date;
 
-public class ZBriefcaseHitBean extends ZSearchHitBean {
+public class ZDocumentHitBean extends ZSearchHitBean {
 
     private ZDocumentHit mHit;
 
-    public ZBriefcaseHitBean(ZDocumentHit hit) {
+    public ZDocumentHitBean(ZDocumentHit hit) {
         super(hit, HitType.briefcase);
         mHit = hit;
     }
 
-    public ZDocument getBriefcase() {
+    public ZDocument getDocument() {
     	return mHit.getDocument();
     }
 

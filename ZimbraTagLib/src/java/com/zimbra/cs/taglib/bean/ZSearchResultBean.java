@@ -90,7 +90,7 @@ public class ZSearchResultBean {
                 } else if (hit instanceof ZTaskHit) {
                     mHits.add(new ZTaskHitBean((ZTaskHit)hit));
                 } else if (hit instanceof ZDocumentHit) {
-                    mHits.add(new ZBriefcaseHitBean((ZDocumentHit)hit));
+                    mHits.add(new ZDocumentHitBean((ZDocumentHit)hit));
                 }
 
             }
