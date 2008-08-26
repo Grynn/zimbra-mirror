@@ -149,6 +149,7 @@ function() {
 
 	if (AjxRpc.__rpcCache.length > 0) {
 		rpcCtxt = AjxRpc.__rpcCache.pop();
+		rpcCtxt.cancel(); // cancel the old request just in case (esp. for FF2)
 		DBG.println("reusing RPC ID " + rpcCtxt.id);
 	} else {
 		if (AjxRpc.__RPC_COUNT < AjxRpc.__RPC_CACHE_MAX) {
