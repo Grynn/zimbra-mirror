@@ -46,6 +46,8 @@ ZaDomainXFormView.prototype = new ZaTabView();
 ZaDomainXFormView.prototype.constructor = ZaDomainXFormView;
 ZaTabView.XFormModifiers["ZaDomainXFormView"] = new Array();
 
+ZaDomainXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+
 ZaDomainXFormView.onRepeatRemove = 
 function (index, form) {
 	var list = this.getInstanceValue();
@@ -106,8 +108,40 @@ function(entry) {
 			}					
 			this._containedObject[ZaDomain.A_allNotebookACLS][i] = _newAclObj;
 		}	
-	}	
-	this._localXForm.setInstance(this._containedObject);
+	}
+
+    if(ZaSettings.ZIMLETS_ENABLED) {
+		var zimlets = entry.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets];
+		if(zimlets != null && zimlets != "") {
+			if (AjxUtil.isString(zimlets))	 {
+				zimlets = [zimlets];
+			}
+			this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = zimlets;
+		} else
+			this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = null;
+
+
+		//get sll Zimlets
+		var allZimlets = ZaZimlet.getAll(this._app, "extension");
+		if(allZimlets == null) {
+			allZimlets = [];
+		}
+
+		if(allZimlets instanceof ZaItemList || allZimlets instanceof AjxVector)
+			allZimlets = allZimlets.getArray();
+
+		//convert objects to strings
+		var cnt = allZimlets.length;
+		var _tmpZimlets = [];
+		for(var i=0; i<cnt; i++) {
+			var zimlet = allZimlets[i];
+			_tmpZimlets.push(zimlet.name);
+		}
+		ZaDomainXFormView.zimletChoices.setChoices(_tmpZimlets);
+		ZaDomainXFormView.zimletChoices.dirtyChoices();
+	}
+
+    this._localXForm.setInstance(this._containedObject);
 	this.updateTab();
 }
 
@@ -561,6 +595,39 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
             ]
 		}	
 	];
+
+    var tabBar = xFormObject.items[1] ;
+    var tabs = xFormObject.items[2];
+    
+    if(ZaSettings.ZIMLETS_ENABLED) {
+       var _tabN = tabs.items.length + 1 ;
+
+       tabBar.choices.push({
+         value:_tabN, label:ZaMsg.TABT_Zimlets
+       });
+
+       var domain_zimlets = {
+            type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,
+            relevant:("instance[ZaModel.currentTab] == " + _tabN),
+			items:[
+                {type:_ZAGROUP_, numCols:1,colSizes:["auto"],
+					items: [
+                        {type: _OUTPUT_, value: ZaMsg.NAD_LimitZimletsToDomain, cssStyle:"margin-left: 275px;" },
+                        {type:_ZIMLET_SELECT_,
+                            selectRef:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
+							ref:ZaDomain.A_zimbraZimletDomainAvailableZimlets,
+							choices:ZaDomainXFormView.zimletChoices,
+							onChange: ZaTabView.onFormFieldChanged,
+							relevant:("instance[ZaModel.currentTab] == " + _tabN),
+							relevantBehavior:_HIDE_
+						}
+					]
+				}
+			]
+		}
+
+        tabs.items.push(domain_zimlets) ;
+    }
 }
 
 ZaTabView.XFormModifiers["ZaDomainXFormView"].push(ZaDomainXFormView.myXFormModifier);

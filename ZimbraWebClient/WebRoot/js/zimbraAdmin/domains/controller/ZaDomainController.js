@@ -156,14 +156,15 @@ function () {
 	var tmpObj = this._view.getObject();
 	var mods = new Object();
 	var haveSmth = false; //what is this variable for?
-	var renameNotebookAccount = false;
+    var	isNew = (!tmpObj.id) ? true : false;
+    var renameNotebookAccount = false;
 	for(var a in tmpObj.attrs) {
 		/** ???? This block of code basically will not reflect the change of the array attributes, such as virtualhost 
 		if(tmpObj.attrs[a]!=null && tmpObj.attrs[a] instanceof Array)
 			continue;
 		**/
 		
-		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName)
+		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName || a == ZaDomain.A_zimbraZimletDomainAvailableZimlets)
 			continue;
 		
 		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
@@ -179,7 +180,44 @@ function () {
 			}
 		}
 	}
-	/*
+    
+   	if(ZaSettings.ZIMLETS_ENABLED) {
+		if(tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
+			var tmpMods = [];
+			if(!(tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] instanceof Array)) {
+				tmpMods = [tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets]];
+			} else {
+				var cnt = tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets].length;
+				tmpMods = [];
+				for(var i = 0; i < cnt; i++) {
+					tmpMods.push(tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets][i]);
+				}
+			}
+			if(isNew) {
+				mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = tmpMods;
+            } else {
+				//check if changed
+				if(this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
+					if(this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] instanceof Array) {
+						if(tmpMods.join(",") != this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets].join(",")) {
+							mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = tmpMods;
+                        }
+					} else if (tmpMods.join(",") != [this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets]].join(",")) {
+						mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = tmpMods;
+                    }
+				} else {
+					mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = tmpMods;
+				}
+			}
+		} else if(this._currentObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
+			mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = "";
+		}
+
+        if (mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
+            haveSmth = true ;
+        }
+    }
+    /*
 	if(tmpObj.attrs[ZaDomain.A_notes] != this._currentObject.attrs[ZaDomain.A_notes]) {
 		mods[ZaDomain.A_notes] = tmpObj.attrs[ZaDomain.A_notes] ;
 		haveSmth = true;

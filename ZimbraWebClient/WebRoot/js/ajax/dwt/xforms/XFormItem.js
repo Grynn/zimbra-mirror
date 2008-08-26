@@ -1070,7 +1070,7 @@ XFormItem.prototype.getChoicesHTML = function() {
 
     var choiceCssClass = this.getChoiceCssClass();
 	for (var i = 0; i < values.length; i++) {
-        if (visible[i] == false) {
+        if (visible && (visible[i] == false)) {
             //don't display this choice
         }else {       //by default, the choice should be visible
             html.append("", this.getChoiceHTML(i, values[i], labels[i], choiceCssClass, ""));

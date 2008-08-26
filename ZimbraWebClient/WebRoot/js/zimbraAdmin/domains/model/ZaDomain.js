@@ -199,6 +199,8 @@ ZaDomain.A_zimbraFreebusyExchangeAuthPassword = "zimbraFreebusyExchangeAuthPassw
 ZaDomain.A_zimbraFreebusyExchangeAuthScheme  = "zimbraFreebusyExchangeAuthScheme" ;
 ZaDomain.A_zimbraFreebusyExchangeURL ="zimbraFreebusyExchangeURL";
 
+ZaDomain.A_zimbraZimletDomainAvailableZimlets = "zimbraZimletDomainAvailableZimlets" ;
+
 
 //result codes returned from Check* requests
 ZaDomain.Check_OK = "check.OK";
@@ -1302,6 +1304,9 @@ ZaDomain.myXModel = {
 				]
 			}
 		},
+      {id:ZaDomain.A_zimbraZimletDomainAvailableZimlets, type:_LIST_,
+          ref:"attrs/" + ZaDomain.A_zimbraZimletDomainAvailableZimlets,
+          dataType: _STRING_ ,outputType:_LIST_},
         //interop
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthUsername, type: _STRING_ },
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthPassword, type: _STRING_ },
