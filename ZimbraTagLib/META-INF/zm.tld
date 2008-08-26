@@ -4744,6 +4744,72 @@
     </tag>
 
     <tag>
+        <description>create a briefcase</description>
+        <name>saveBriefcase</name>
+        <tag-class>com.zimbra.cs.taglib.tag.briefcase.SaveBriefcaseTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String[]</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the result.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+              <description>
+                  message compose bean to use.
+              </description>
+              <name>compose</name>
+              <required>false</required>
+              <rtexprvalue>true</rtexprvalue>
+              <type>com.zimbra.cs.taglib.bean.ZMessageComposeBean</type>
+        </attribute>
+        <attribute>
+             <description>destination folder id</description>
+             <name>folderId</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>delete(s) item in briefcase</description>
+
+        <name>deleteBriefcase</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.briefcase.DeleteBriefcaseTag</tag-class>
+
+        <body-content>empty</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZActionResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the ZActionResultBean in.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+         <attribute>
+             <description>briefcase id(s) to delete</description>
+             <name>id</name>
+             <required>true</required>
+             <rtexprvalue>true</rtexprvalue>
+             <type>java.lang.String</type>
+         </attribute>
+    </tag>
+
+    <tag>
         <description>
             Move an item to a folder.
         </description>
