@@ -144,6 +144,7 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 
 PERL_TGZ_DEST_DIR := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/perl
 PERL_TGZ_DEST	:= $(PERL_TGZ_DEST_DIR)/perllib.tgz
+PERL_BIN_TGZ_DEST := $(PERL_TGZ_DEST_DIR)/perlbin.tgz
 
 ifeq ($(BUILD_PLATFORM), )
         BUILD_PLATFORM := "UNKNOWN"
@@ -151,6 +152,7 @@ endif
 
 DEST_DIR		:= $(PERL_LIB_SOURCE)/zimbramon
 DEST_LIB_DIR	:= $(DEST_DIR)/lib
+DEST_BIN_DIR	:= $(DEST_DIR)/bin
 
 # TARGETS
 
@@ -159,7 +161,7 @@ CLEAN_TARGETS	=	\
 		$(DEST_DIR) \
 		$(PERL_TGZ_DEST)
 
-all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
+all: setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)
 	@echo "Logging to $(LOGFILE)"
 
@@ -241,11 +243,21 @@ all: setup $(DEST_LIB_DIR) $(PERL_TGZ_DEST_DIR)
 	(cd $(DEST_LIB_DIR); rm -f i386-linux-thread-multi/goferperf.pl; \
 	tar czf $(PERL_TGZ_DEST) .); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
+	@echo -n "Creating $(PERL_BIN_TGZ_DEST)..."; \
+	(cd $(DEST_BIN_DIR); \
+	rm -f c* d* i* m* p* SOAP* stub* swatch X*; \
+	tar cfz $(PERL_BIN_TGZ_DEST) .); \
+	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
 tarball:
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
 	(cd $(DEST_LIB_DIR); tar czf $(PERL_TGZ_DEST) .; \
+	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
+	@echo -n "Creating $(PERL_BIN_TGZ_DEST)..."; \
+	(cd $(DEST_BIN_DIR); \
+	rm -f c* d* i* m* p* SOAP* stub* swatch X*; \
+	tar cfz $(PERL_BIN_TGZ_DEST) .; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi)
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
 
@@ -253,6 +265,9 @@ $(PERL_TGZ_DEST_DIR):
 	mkdir -p $@
 
 $(DEST_LIB_DIR):
+	mkdir -p $@
+
+$(DEST_BIN_DIR):
 	mkdir -p $@
 
 DBD:
