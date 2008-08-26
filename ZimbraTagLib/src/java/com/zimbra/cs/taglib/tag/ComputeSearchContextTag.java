@@ -195,7 +195,9 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
             if (ZSearchParams.TYPE_CONTACT.equals(mTypes))
                 sfi = ZFolder.ID_CONTACTS;
             else if (ZSearchParams.TYPE_TASK.equals(mTypes))
-                sfi = ZFolder.ID_TASKS;            
+                sfi = ZFolder.ID_TASKS;
+            else if (ZSearchParams.TYPE_BRIEFCASE.equals(mTypes))
+                sfi = ZFolder.ID_BRIEFCASE;
             else if (!ZSearchParams.TYPE_VOICE_MAIL.equals(mTypes)) {
                 if (mailbox.getFeatures().getInitialSearchPreference()) {
                     sq = mailbox.getPrefs().getMailInitialSearch();
