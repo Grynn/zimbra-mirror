@@ -434,7 +434,8 @@ function () {
 
 ZaItem.checkFBSettings = function (oldSettingObj, currentSettingObj, controller) {
     var attrNames = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
-                     ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword   ] ;
+                     ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword,
+                     ZaDomain.A_zimbraFreebusyExchangeUserOrg ] ;
 
     var changedSettings = {} ;
     var isChanged = false ;

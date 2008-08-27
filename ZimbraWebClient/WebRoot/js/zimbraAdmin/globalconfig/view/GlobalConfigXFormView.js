@@ -497,6 +497,11 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  	  label: ZaMsg.NAD_Exchange_Auth_Password, width: "20em",
 							  onChange: ZaTabView.onFormFieldChanged
 						  	},
+                            { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, type: _TEXTFIELD_,
+						  	  label: ZaMsg.NAD_ExchangeUserGroup, width: "20em",
+							  onChange: ZaTabView.onFormFieldChanged
+						  	},
+
                               {type: _GROUP_, colSpan:2, numCols:3, colSizes: ["150px", "*", "auto" ], items :[
                                   {   type:_CELLSPACER_ },
                                   {
