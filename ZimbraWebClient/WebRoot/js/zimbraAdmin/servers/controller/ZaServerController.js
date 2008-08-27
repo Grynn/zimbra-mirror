@@ -278,7 +278,7 @@ function (params) {
 		if(IFCounter>0) {
 			//error! missing local interfaces
 			var missingIfs = [];
-			for(var ix=0;ix<numIFs;ix++) {
+			for(var ix=0;ix<IFCounter;ix++) {
 				missingIfs.push(locals[ix].szAddr);
 			}
 			throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_MISSING_LOCAL,missingIfs.join(",")),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");
