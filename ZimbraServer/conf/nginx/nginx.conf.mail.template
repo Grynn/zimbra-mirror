@@ -16,6 +16,12 @@ mail
 
     ${mail.:auth_http}
 
+    # IMAP/POP3 greeting messages
+    # 
+
+    imap_greeting            "${mail.imap.greeting}";
+    pop3_greeting            "${mail.pop3.greeting}";
+
 	pop3_capabilities        ${mail.pop3capa};
 	imap_capabilities        ${mail.imapcapa};
 
