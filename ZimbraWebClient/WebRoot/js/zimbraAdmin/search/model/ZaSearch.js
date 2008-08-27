@@ -62,10 +62,10 @@ ZaSearch._savedSearchToBeUpdated = true ; //initial value to be true
 
 ZaSearch.getPredefinedSavedSearchesForAdminOnly = function () {
     return   [
-        {name: "Admin Accounts" , query: "(|(zimbraIsAdminAccount=TRUE)(zimbraIsDomainAdminAccount=TRUE))"}
+        {name: ZaMsg.ss_admin_account , query: "(|(zimbraIsAdminAccount=TRUE)(zimbraIsDomainAdminAccount=TRUE))"}
     ];
 }
-
+                  
 ZaSearch.getPredefinedSavedSearches =  function () {
     return [
         {name: ZaMsg.ss_locked_out_accounts, query: "(zimbraAccountStatus=*lockout*)"},
