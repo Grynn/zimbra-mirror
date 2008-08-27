@@ -1,4 +1,20 @@
 #!/usr/bin/perl -w
+#
+# ***** BEGIN LICENSE BLOCK *****
+#
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005 Zimbra, Inc.
+#
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+#
+# ***** END LICENSE BLOCK *****
+#
 use strict;
 use Text::Balanced qw(extract_delimited extract_bracketed);
 use Data::Dumper;
@@ -164,7 +180,8 @@ sub process_simple_json($) {
 
 sub getMailServer($) {
     my $user = shift;
-    open(ZMPROV, "$zmprov ga $user 2> /dev/null | grep zimbraMailHost |") || die $!;
+    print "LOOKUP USER: $zmprov ga $user | grep zimbraMailHost: |\n" if ($debug);
+    open(ZMPROV, "$zmprov ga $user | grep zimbraMailHost: |") || die $!;
     my $line = <ZMPROV>;
     close(ZMPROV);
     die "$user does not exist" if (!defined($line) || $line =~ /^\s*$/);
@@ -176,6 +193,7 @@ sub getCalendarFolders($$) {
     my $host = shift;
     my $login = shift;
     my @appo_folders = ();
+    print "LIST FOLDERS: $zmmailbox -u https://$host:$adminPort/ -z -m $login gaf | grep -w appo |\n" if ($debug);
     open(ZMMAILBOX, "$zmmailbox -u https://$host:$adminPort/ -z -m $login gaf | grep -w appo |") || die $!;
     while (<ZMMAILBOX>) {
         if (m#\s*\d+\s+appo\s+\d+\s+\d+\s+(/.*?)$#) {
@@ -219,10 +237,10 @@ sub findCalendarItem($$) {
     my $calendarItem;
 
     FOLDER: foreach my $folder (@{$userFolderList{$login}}) {
-        print "searching $login for $$item{'uid'} in $folder\n" if ($debug);
 
         $folder =~ s/"/\\"/g;
         $folder =~ s/\$/\\\$/g;
+        print "SEARCHING FOLDER: $zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $start_ms $end_ms \"$folder\" 2>&1 |\n" if ($debug);
         open(ZMMAILBOX, "$zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $start_ms $end_ms \"$folder\" 2>&1 |") || die $!;
         my $json_string;
         my @lines;
@@ -329,7 +347,6 @@ sub main() {
         my $has_atts = $item->{"otherAtt"};
         next if (!defined($has_atts) || $has_atts eq '' || $has_atts eq 'false');
 
-        print "Retrieving item $$item{'id'}\n" if $debug;
         open(ZMSOAP, "$zmsoap -z -m $source_user GetItemRequest/item/\@id=$$item{'id'} |") || die $!;
         my @itemResponse = <ZMSOAP>;
         close(ZMSOAP);
@@ -378,7 +395,12 @@ sub main() {
             }
         }
 
-        foreach my $att (keys %{$item->{'attendeesList'}}) {
+        my @attList = keys %{$item->{'attendeesList'}};
+        if (@attList > 50) {
+            print "$$item{'name'}: more than 50 attendees, skipping check\n";
+            next;
+        }
+        foreach my $att (@attList) {
             eval {
                 findCalendarItem($att, $item);
             };
@@ -398,8 +420,14 @@ sub main() {
                 close(ZMPROV);
             }
         }
-        print "Attendees: [" . join(", ", keys %{$item->{'attendeesList'}}) . "]\n" if ($debug);
-        foreach my $att (keys %{$item->{'attendeesList'}}) {
+
+        @attList = keys %{$item->{'attendeesList'}};
+        if (@attList > 50) {
+            print "$$item{'name'}: more than 50 attendees, skipping check\n";
+            next;
+        }
+        print "Attendees: [" . join(", ", @attList) . "]\n" if ($debug);
+        foreach my $att (@attList) {
             my $attItem;
             eval {
                 # first run above should be cached!
@@ -410,7 +438,7 @@ sub main() {
             }
             if (!defined($attItem)) {
                 my $h = $item->{'attendeesList'}->{$att};
-                push(@errors, "$att is not in [$$item{'name'}]; rsvp=$$h{'rsvp'}, role=$$h{'role'}");
+                push(@errors, "$att: no matching event found; rsvp=$$h{'rsvp'}, role=$$h{'role'}");
             } else {
                 foreach my $instance (@{$item->{'inst'}}) {
                     my $attInst = getInstanceByInstId($attItem, $instance->{'ridZ'});
