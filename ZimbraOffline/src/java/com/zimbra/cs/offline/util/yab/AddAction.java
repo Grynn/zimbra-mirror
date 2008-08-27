@@ -23,7 +23,7 @@ public enum AddAction {
 
     public static AddAction fromXml(Element e) {
         String s = e.getAttribute("add-action");
-        if (s == null) return null;
+        if ("".equals(s)) return null;
         if ("add".equals(s)) return ADD;
         if ("merge".equals(s)) return MERGE;
         throw new IllegalArgumentException("Invalid 'add-action' value: " + s);

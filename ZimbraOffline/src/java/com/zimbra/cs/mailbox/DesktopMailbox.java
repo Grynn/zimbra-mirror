@@ -10,6 +10,7 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.redolog.op.CreateFolder;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
@@ -77,15 +78,16 @@ public abstract class DesktopMailbox extends Mailbox {
 	public String getAccountName() {
 		return accountName;
 	}
-	
+
 	@Override
-    public synchronized void deleteMailbox() throws ServiceException {
+        public synchronized void deleteMailbox() throws ServiceException {
 		isDeleting = true;
 		cancelCurrentTask();
 		super.deleteMailbox();
 		OfflineSyncManager.getInstance().resetStatus(accountName);
 		((OfflineAccount)getAccount()).resetLastSyncTimestamp();
-    }
+                OfflineYAuth.deleteRawAuthManager(this);
+        }
 	
 	@Override
     public synchronized void alterTag(OperationContext octxt, int itemId, byte type, int tagId, boolean addTag) throws ServiceException {

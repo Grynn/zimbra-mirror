@@ -47,7 +47,7 @@ public class Sync {
         // Load sync state         
         loadState();
         // Fetch potentially modified YAB contacts 
-        modifiedContacts = session.getContacts(state.getCids(modifiedContactIds));
+        // modifiedContacts = session.getContacts(state.getCids(modifiedContactIds));
         // Fetch and process YAB contact changes
         SyncResponse res = session.getChanges(state.getRevision());
         process(res);
@@ -92,7 +92,7 @@ public class Sync {
         res = (SyncResponse) req.send();
         process(res);
     }
-
+    
     private void process(SyncResponse res) throws SyncException, ServiceException {
         // TODO Process Results...
         for (SyncResponseEvent event : res.getEvents()) {

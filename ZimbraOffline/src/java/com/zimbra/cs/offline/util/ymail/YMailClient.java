@@ -393,6 +393,8 @@ public final class YMailClient {
         YmwsPortType stub = service.getYmws();
         Map<String, Object> rc = ((BindingProvider) stub).getRequestContext();
         String url = SOAP_URL + "?" + getQueryString(auth);
+        LOG.debug("Endpoint = " + url);
+        LOG.debug("Cookie = " + auth.getCookie());
         rc.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
         rc.put(MessageContext.HTTP_REQUEST_HEADERS, getHeaders(auth));
         return stub;

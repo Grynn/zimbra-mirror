@@ -4,14 +4,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PushbackInputStream;
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import com.zimbra.cs.offline.util.Xml;
+import com.zimbra.cs.util.yauth.Auth;
 import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -21,12 +19,11 @@ import org.w3c.dom.Element;
 
 public abstract class Request {
     protected final Session session;
-    protected final List<NameValuePair> params;
+    protected final List<String> params;
 
     protected Request(Session session) {
         this.session = session;
-        params = new ArrayList<NameValuePair>();
-        session.encodeParams(this);
+        params = new ArrayList<String>();
     }
     
     protected boolean isPOST() {
@@ -36,7 +33,7 @@ public abstract class Request {
     protected abstract String getAction();
 
     public void addParam(String name, String value) {
-        params.add(new NameValuePair(name, value));
+        params.add(name + "=" + encode(value));
     }
     
     public void addParams(String... params) {
@@ -55,9 +52,12 @@ public abstract class Request {
     }
 
     public Response send() throws IOException {
-        HttpMethod method = getHttpMethod();
+        return sendRequest(session.authenticate());
+    }
+
+    private Response sendRequest(Auth auth) throws IOException {
+        HttpMethod method = getHttpMethod(auth);
         if (Yab.isDebug()) {
-            Yab.debug("Auth: %s", session.getAuth());
             if (isPOST()) {
                 Yab.debug("Sending request: POST %s\n%s",
                           method.getURI(), Xml.toString(toXml()));
@@ -95,24 +95,13 @@ public abstract class Request {
         }
     }
 
-    private String readResponse(HttpMethod method, int maxLen) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(Math.min(maxLen, 1024));
-        InputStream is = method.getResponseBodyAsStream();
-        int c;
-        int off = 0;
-        while (off < maxLen && (c = is.read()) != -1) {
-            baos.write((byte) c);
-        }
-        return baos.toString("UTF8");
-    }
-    
     protected abstract Response parseResponse(Document doc);
 
-    private HttpMethod getHttpMethod() {
+    private HttpMethod getHttpMethod(Auth auth) {
         String uri = Yab.BASE_URI + '/' + getAction();
         HttpMethod method = isPOST() ? new PostMethod(uri) : new GetMethod(uri);
-        method.setQueryString(params.toArray(new NameValuePair[params.size()]));
-        method.addRequestHeader("Cookie", session.getAuth().getCookie());
+        method.setQueryString(getQueryString(auth));
+        method.addRequestHeader("Cookie", auth.getCookie());
         method.addRequestHeader("Content-Type", "application/" + session.getFormat());
         if (method instanceof PostMethod) {
             ((PostMethod) method).setRequestEntity(session.getRequestEntity(toXml()));
@@ -120,6 +109,25 @@ public abstract class Request {
         return method;
     }
 
+    private String getQueryString(Auth auth) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("appid=").append(encode(auth.getAppId()));
+        sb.append("&WSSID=").append(auth.getWSSID());
+        sb.append("&format=").append(session.getFormat());
+        for (String param : params) {
+            sb.append('&').append(param);
+        }
+        return sb.toString();
+    }
+
+    private String encode(String s) {
+        try {
+            return URLEncoder.encode(s, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new InternalError("UTF-8 encoding not found");
+        }
+    }
+    
     private Document toXml() {
         Document doc = session.createDocument();
         doc.appendChild(toXml(doc));

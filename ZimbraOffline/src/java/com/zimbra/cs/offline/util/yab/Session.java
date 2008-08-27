@@ -17,12 +17,13 @@
 package com.zimbra.cs.offline.util.yab;
 
 import com.zimbra.cs.util.yauth.Auth;
+import com.zimbra.cs.util.yauth.Authenticator;
+import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.offline.util.Xml;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
 
@@ -46,42 +47,35 @@ import javax.xml.transform.stream.StreamResult;
  */
 public class Session {
     private final String format;
-    private final Auth auth;
+    private final Authenticator authenticator;
     private final HttpClient httpClient;
     private final DocumentBuilder docBuilder;
     private final Transformer transformer;
     private final ByteArrayOutputStream baos;
 
-    public Session(Auth auth, String format) {
+    public Session(String format, Authenticator authenticator) {
         if (!Yab.XML.equals(format)) {
             throw new IllegalArgumentException(
                 "Unsupported data format: " + format);
         }
         this.format = format;
-        this.auth = auth;
+        this.authenticator = authenticator;
         httpClient = new HttpClient();
         docBuilder = Xml.newDocumentBuilder();
         transformer = createTransformer();
         baos = new ByteArrayOutputStream(4096);
     }
 
-    public Session(Auth auth) {
-        this(auth, Yab.XML);
-    }
-    
-    public List<Contact> getContacts(Iterable<Integer> cids) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        for (int cid : cids) {
-            sb.append("cid=").append(cid).append('&');
-        }
-        return search(sb.toString());
+    public Session(Authenticator authenticator) {
+        this(Yab.XML, authenticator);
     }
 
     public SyncResponse getChanges(int revision) throws IOException {
         return (SyncResponse) createSyncRequest(revision).send();
     }
     
-    public List<Contact> search(String params) throws IOException {
+    public List<Contact> search(String params)
+        throws IOException {
         SearchResponse res = (SearchResponse) createSearchRequest(params).send();
         return res.getContacts();
     }
@@ -104,20 +98,15 @@ public class Session {
         return new SyncRequest(this, revision);
     }
 
-    public void encodeParams(Request req) {
-        req.addParam("appid", auth.getAppId());
-        req.addParam("WSSID", auth.getWSSID());
-        req.addParam("format", format);
-    }
     
     public String getFormat() {
         return format;
     }
 
-    public Auth getAuth() {
-        return auth;
+    public Auth authenticate() throws IOException {
+        return authenticator.authenticate();
     }
-
+    
     public HttpClient getHttpClient() {
         return httpClient;
     }

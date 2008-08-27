@@ -17,6 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import com.zimbra.cs.util.yauth.Auth;
+import com.zimbra.cs.util.yauth.Authenticator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 
@@ -33,7 +34,7 @@ public class Yab {
     public static final String XML = "xml";
     public static final String JSON = "json";
     
-    public static Session createSession(Auth auth) {
+    public static Session createSession(Authenticator auth) {
         return new Session(auth);
     }
 

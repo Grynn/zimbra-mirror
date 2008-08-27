@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 import com.zimbra.cs.util.yauth.RawAuthManager;
 import com.zimbra.cs.util.yauth.FileTokenStore;
+import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.mailclient.imap.ImapConnection;
 import com.zimbra.cs.mailclient.imap.ImapConfig;
@@ -33,6 +34,7 @@ import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.MessagingException;
+import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
@@ -48,17 +50,27 @@ import java.util.regex.Matcher;
 public class TestYMailClient {
     private static YMailClient ymc;
     private static ImapConnection imc;
-    private static Mailbox mb;
+
+    static {
+        /*
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
+        System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true");
+        */
+        BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.INFO);
+    }
 
     private static final Logger LOG = Logger.getLogger(TestYMailClient.class);
     
     private static final File TOKENS_FILE = new File("/tmp/tokens");
 
     private static final String APPID = OfflineLC.zdesktop_yauth_appid.value();
-    private static final String USER = "dacztest";
+    private static final String HOST = "imap.beta.mail.yahoo.com";
+    private static final String USER = "jjzhuang@vivazimbra.com";
     private static final String PASS = "test1234";
 
-    private static final String FROM = USER + "@yahoo.com";
+    private static final String FROM = USER; // USER + "@yahoo.com";
     private static final String TO = FROM;
     private static final String SENT = "Sent";
 
@@ -72,16 +84,19 @@ public class TestYMailClient {
 
     @BeforeClass
     public static void setUpOnce() throws Exception {
-        BasicConfigurator.configure();
-        Logger.getRootLogger().setLevel(Level.INFO);
         LOG.setLevel(Level.DEBUG);
         // Set up YMail client
         Logger.getLogger(YMailClient.class).setLevel(Level.DEBUG);
-        RawAuthManager ram = new RawAuthManager(new FileTokenStore(TOKENS_FILE));
-        ymc = new YMailClient(ram.authenticate(APPID, USER, PASS));
+        FileTokenStore ts = new FileTokenStore(TOKENS_FILE);
+        if (!ts.hasToken(APPID, USER)) {
+            ts.newToken(APPID, USER, PASS);
+        }
+        RawAuthManager ram = new RawAuthManager(ts);
+        Auth auth = ram.authenticate(APPID, USER);
+        ymc = new YMailClient(auth);
         ymc.enableTrace(System.out);
         // Set up IMAP connection
-        imc = connect(USER, PASS);
+        imc = connect(auth);
     }
 
     @AfterClass
@@ -89,24 +104,34 @@ public class TestYMailClient {
         imc.logout();
     }
     
-    private static ImapConnection connect(String user, String pass)
-        throws IOException {
+    private static ImapConnection connect(Auth auth)
+        throws LoginException, IOException {
         ImapConfig config = new ImapConfig();
-        config.setHost("imap.mail.yahoo.com");
-        config.setAuthenticationId(user);
+        config.setHost(HOST);
         config.setMaxLiteralMemSize(200);
         config.setDebug(true);
-        // config.setTrace(true);
+        config.setTrace(true);
         config.setTimeout(600);
+        config.setAuthenticationId(USER);
         ImapConnection connection = new ImapConnection(config);
         connection.connect();
-        IDInfo id = new IDInfo();
-        id.put("guid", ZimbraApplication.getInstance().getId());
-        connection.id(id);
-        connection.login(pass);
+        if (connection.hasMechanism(XYMEAuthenticator.MECHANISM)) {
+            // no ID info necessary for XYMECOOKIE authentication
+            connection.authenticate(new XYMEAuthenticator(auth, "zimbra"));
+        } else {
+            IDInfo id = new IDInfo();
+            id.put("guid", ZimbraApplication.getInstance().getId());
+            connection.id(id);
+            connection.login(PASS);
+        }
         return connection;
     }
 
+    @Test
+    public void testConnect() throws Exception {
+        imc.select("INBOX");
+    }
+    
     @Test
     public void testUserData() throws Exception {
         UserData ud = ymc.getUserData();
@@ -129,8 +154,8 @@ public class TestYMailClient {
 
     @Test
     public void testSendSimple() throws Exception {
-        debug("Testing send of simple message %s", MSG_SIMPLE);
-        MimeMessage mm = readMessage(MSG_SIMPLE);
+        debug("Testing send of simple message");
+        MimeMessage mm = simpleMessage("Hello, world."); // readMessage(MSG_SIMPLE);
         ymc.sendMessage(mm);
     }
 
@@ -311,6 +336,15 @@ public class TestYMailClient {
     }
     */
 
+    private static MimeMessage simpleMessage(String text) throws Exception {
+        Session session = Session.getInstance(new Properties());
+        MimeMessage mm = new MimeMessage(session);
+        mm.setFrom(new InternetAddress(FROM));
+        mm.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
+        mm.setContent(text, "plain/text");
+        return mm;
+    }
+    
     private static MimeMessage readMessage(File file) throws Exception {
         Session session = Session.getInstance(new Properties());
         InputStream is = new FileInputStream(file);
@@ -333,7 +367,7 @@ public class TestYMailClient {
     public static void main(String... args) throws Exception {
         setUpOnce();
         try {
-            new TestYMailClient().testSendMultipart();
+            new TestYMailClient().testSendSimple();
         } finally {
             imc.logout();
         }

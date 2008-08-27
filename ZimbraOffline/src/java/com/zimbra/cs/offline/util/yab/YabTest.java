@@ -18,12 +18,11 @@ package com.zimbra.cs.offline.util.yab;
 
 import junit.framework.TestCase;
 import junit.framework.Assert;
-import com.zimbra.cs.util.yauth.RawAuth;
 import com.zimbra.cs.util.yauth.RawAuthManager;
 import com.zimbra.cs.util.yauth.FileTokenStore;
+import com.zimbra.cs.util.yauth.TokenStore;
 
 import java.io.File;
-import java.util.Random;
 import java.util.List;
 
 import org.junit.Test;
@@ -60,9 +59,12 @@ public class YabTest {
     @Before
     public void setUp() throws Exception {
         if (session == null) {
-            RawAuthManager ram = new RawAuthManager(new FileTokenStore(TOKENS));
-            RawAuth auth = ram.authenticate(APPID, USER, PASS);
-            session = Yab.createSession(auth);
+            TokenStore ts = new FileTokenStore(TOKENS);
+            if (!ts.hasToken(APPID, USER)) {
+                ts.newToken(APPID, USER, PASS);
+            }
+            RawAuthManager ram = new RawAuthManager(ts);
+            session = Yab.createSession(ram.newAuthenticator(APPID, USER));
         }
     }                     
 
@@ -89,8 +91,12 @@ public class YabTest {
         req = session.createSyncRequest(res.getRevision());
         Contact contact = new Contact();
         contact.addField(NAME);
-        req.addEvent(SyncRequestEvent.addContact(contact));
+        SyncRequestEvent event = SyncRequestEvent.addContact(contact);
+        req.addEvent(event);
         res = (SyncResponse) req.send();
+        Assert.assertNotNull(event.getResult());
+        Assert.assertTrue(event.getResult().isSuccess());
+        Assert.assertTrue(((SuccessResult) event.getResult()).isAdded());
         Assert.assertEquals(1, res.getAddedContacts().size());
     }
 

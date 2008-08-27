@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 
+import com.zimbra.cs.util.yauth.AuthenticationException;
+
 /**
  * Yahoo address book synchronization request.
  */
