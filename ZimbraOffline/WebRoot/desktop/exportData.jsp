@@ -49,7 +49,7 @@ function onSubmit() {
     zd.hide("submitButton");
     zd.set("status", "<span class='ZOfflineNotice><fmt:message key="Processing"/></span>");
     submitForm.action = url;
-    submitForm.name.value = optionForm.name.value;
+    submitForm.filename.value = optionForm.filename.value;
     submitForm.query.value = optionForm.query.value;
     submitForm.types.value = types;
     submitForm.submit();
@@ -90,7 +90,7 @@ function done(errstr) {
             <table width="100%">
                 <tr>
                     <td><nobr><fmt:message key="ExportName"/></nobr></td>
-                    <td align="right"><input name="name" size="30" value="${bean.accountName}"></td>
+                    <td align="right"><input name="filename" size="30" value="${bean.accountName}"></td>
                 </tr>
             </table>
         </td>
@@ -143,7 +143,7 @@ function done(errstr) {
 <form name="submitForm" method="GET" target="iframe">
     <input type="hidden" name="callback" value="done">
     <input type="hidden" name="fmt" value="tgz">
-    <input type="hidden" name="name">
+    <input type="hidden" name="filename">
     <input type="hidden" name="query">
     <input type="hidden" name="types">
 </form>

@@ -13,22 +13,18 @@ function toggleTypes() {
 
 function dataTypes() {
     var selected = document.getElementsByName("selected");
-    var types = null;
+    var type = document.getElementsByName("type");
+    var types;
 
-    if (selected[0].checked) {
-        var type = document.getElementsByName("type");
-
-        for (var i = 0; i < type.length; i++) {
-            if (type[i].checked) {
-                if (types.length != 0)
-                    types += ",";
-                types += type[i].value;
-            }
+    if (!selected[0].checked)
+        return "";
+    for (var i = 0; i < type.length; i++) {
+        if (type[i].checked) {
+            if (types == null)
+                types = type[i].value;
+            else
+                types += "," + type[i].value;
         }
-        if (types == null)
-            alert("<fmt:message key="TypeEmpty"/>");
-    } else {
-        types = "";
     }
     return types;
 }
