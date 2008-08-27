@@ -153,7 +153,9 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 AjxRpcRequest.prototype.cancel =
 function() {
 	AjxRpc.freeRpcCtxt(this);
-	this.__httpReq.abort();
+	if (AjxEnv.isFirefox) {
+		this.__httpReq = new XMLHttpRequest();
+	}
 };
 
 /**
