@@ -18,12 +18,8 @@ package com.zimbra.cs.offline;
 
 import com.zimbra.cs.mailbox.MailSender;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
-import com.zimbra.cs.util.yauth.RawAuthManager;
-import com.zimbra.cs.util.yauth.MetadataTokenStore;
-import com.zimbra.cs.util.yauth.AuthenticationException;
-import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.account.offline.OfflineDataSource;
-import com.zimbra.cs.account.DataSource;
 import com.zimbra.common.service.ServiceException;
 
 import javax.mail.internet.MimeMessage;
@@ -33,29 +29,16 @@ public class YMailSender extends MailSender {
     private final YMailClient ymc;
     private IOException error;
 
-    private static final String APPID = OfflineLC.zdesktop_yauth_appid.value();
-    
     public static YMailSender newInstance(OfflineDataSource ds)
         throws ServiceException {
         if (ds.isSaveToSent() || !ds.isYahoo()) {
             throw new IllegalArgumentException("Must be yahoo data source");
         }
-        String user = ds.getAttr(OfflineProvisioning.A_zimbraDataSourceUsername);
-        String pass = DataSource.decryptData(ds.getId(),
-            ds.getAttr(OfflineProvisioning.A_zimbraDataSourcePassword));
-        RawAuthManager ram = new RawAuthManager(new MetadataTokenStore(ds.getMailbox()));
-        try {
-            YMailClient ymc = new YMailClient(ram.authenticate(APPID, user, pass));
-            if (ds.isDebugTraceEnabled()) {
-                ymc.enableTrace(System.out);
-            }
-            return new YMailSender(ymc);
-        } catch (IOException e) {
-            throw ServiceException.FAILURE("I/O error", e);
-        } catch (AuthenticationException e) {
-            // TODO FIX THIS
-            throw ServiceException.AUTH_EXPIRED();
+        YMailClient ymc = new YMailClient(OfflineYAuth.authenticate(ds));
+        if (ds.isDebugTraceEnabled()) {
+            ymc.enableTrace(System.out);
         }
+        return new YMailSender(ymc);
     }
     
     private YMailSender(YMailClient ymc) throws ServiceException {
@@ -63,7 +46,8 @@ public class YMailSender extends MailSender {
     }
 
     @Override
-    protected void sendMessage(MimeMessage mm, boolean ignoreFailedAddresses,
+    protected void sendMessage(MimeMessage mm,
+                               boolean ignoreFailedAddresses,
                                RollbackData[] rollback) throws IOException {
         try {
             ymc.sendMessage(mm);
