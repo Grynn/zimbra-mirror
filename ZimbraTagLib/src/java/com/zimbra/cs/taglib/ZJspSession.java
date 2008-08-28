@@ -366,8 +366,7 @@ public class ZJspSession {
         if (authToken != null) return authToken;
         
         HttpServletRequest request= (HttpServletRequest) context.getRequest();
-        Cookie[] cookies = request.getCookies();
-        ZAuthToken zat = new ZAuthToken(cookies, false);
+        ZAuthToken zat = new ZAuthToken(request, false);
         if (zat.isEmpty())
             return null;
         else
