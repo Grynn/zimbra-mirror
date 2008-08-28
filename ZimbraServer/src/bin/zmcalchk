@@ -46,9 +46,11 @@ my $zmprov        = '/opt/zimbra/bin/zmprov';
 my $zmmailbox     = '/opt/zimbra/bin/zmmailbox';
 my $zmlocalconfig = '/opt/zimbra/bin/zmlocalconfig';
 
-my $delegateAuthToken;
-my $sessionId;
-my $authToken;
+my %userHostMap = ();
+my %userFolderList = ();
+my %userEventCache = ();
+my %distributionLists = ();
+
 my $adminPort;
 my @domains;
 
@@ -180,20 +182,30 @@ sub process_simple_json($) {
 
 sub getMailServer($) {
     my $user = shift;
-    print "LOOKUP USER: $zmprov ga $user | grep zimbraMailHost: |\n" if ($debug);
-    open(ZMPROV, "$zmprov ga $user | grep zimbraMailHost: |") || die $!;
-    my $line = <ZMPROV>;
+    my $mailhost;
+
+    return $userHostMap{$user} if (exists($userHostMap{$user}));
+
+    print STDERR "LOOKUP USER: $zmprov ga $user 2>&1 |\n" if ($debug);
+    open(ZMPROV, "$zmprov ga $user 2>&1 |") || die $!;
+    while (<ZMPROV>) {
+        if ($_ =~ /^zimbraMailHost:\s*(\S+)/) {
+            $mailhost = $1;
+            last;
+        }
+        last if ($_ =~ /ERROR: account.NO_SUCH_ACCOUNT/);
+    }
     close(ZMPROV);
-    die "$user does not exist" if (!defined($line) || $line =~ /^\s*$/);
-    chomp($line);
-    (split(/:\s+/, $line))[1];
+    die "$user does not exist" if (!defined($mailhost));
+    $userHostMap{$user} = $mailhost;
+    $mailhost;
 }
 
 sub getCalendarFolders($$) {
     my $host = shift;
     my $login = shift;
     my @appo_folders = ();
-    print "LIST FOLDERS: $zmmailbox -u https://$host:$adminPort/ -z -m $login gaf | grep -w appo |\n" if ($debug);
+    print STDERR "LIST FOLDERS: $zmmailbox -u https://$host:$adminPort/ -z -m $login gaf | grep -w appo |\n" if ($debug);
     open(ZMMAILBOX, "$zmmailbox -u https://$host:$adminPort/ -z -m $login gaf | grep -w appo |") || die $!;
     while (<ZMMAILBOX>) {
         if (m#\s*\d+\s+appo\s+\d+\s+\d+\s+(/.*?)$#) {
@@ -206,30 +218,19 @@ sub getCalendarFolders($$) {
     @appo_folders;
 }
 
-my %userHostMap = ();
-my %userFolderList = ();
-my %userEventCache = ();
-
 # throws a die from getMailServer
 sub findCalendarItem($$) {
     my ($login, $item) = @_;
-    my $start_ms = $item->{'inst'}->[0]->{'s'};
-    my $last_start_ms = $start_ms;
-    foreach my $instance (@{$item->{'inst'}}) {
-        $last_start_ms = $instance->{'s'} if $instance->{'s'} > $last_start_ms;
-    }
-    my $end_ms = $last_start_ms + $item->{'dur'};
 
-    if (!exists($userHostMap{$login})) {
-        $userHostMap{$login} = getMailServer($login);
+
+    if (!exists($userFolderList{$login})) {
         $userFolderList{$login} = [
-                getCalendarFolders($userHostMap{$login}, $login) ];
+                getCalendarFolders(getMailServer($login), $login) ];
         $userEventCache{$login} = {};
     }
-
     # avoid unnecessary searches
     if (exists($userEventCache{$login}->{$item->{'uid'}})) {
-        print "found cached: $login => $$item{'uid'}\n" if ($debug);
+        print STDERR "found cached: $login => $$item{'uid'}\n" if ($debug);
 
         return $userEventCache{$login}->{$item->{'uid'}};
     }
@@ -240,8 +241,8 @@ sub findCalendarItem($$) {
 
         $folder =~ s/"/\\"/g;
         $folder =~ s/\$/\\\$/g;
-        print "SEARCHING FOLDER: $zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $start_ms $end_ms \"$folder\" 2>&1 |\n" if ($debug);
-        open(ZMMAILBOX, "$zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $start_ms $end_ms \"$folder\" 2>&1 |") || die $!;
+        print STDERR "SEARCHING FOLDER: $zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $ts_start $ts_end \"$folder\" 2>&1 |\n" if ($debug);
+        open(ZMMAILBOX, "$zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $ts_start $ts_end \"$folder\" 2>&1 |") || die $!;
         my $json_string;
         my @lines;
         while (<ZMMAILBOX>) {
@@ -250,7 +251,7 @@ sub findCalendarItem($$) {
             } elsif ($_ =~ /================/o) {
                 $json_string = join('', @lines);
             } elsif ($_ =~ /zclient.CLIENT_ERROR (.*$)/) {
-                print "$1\n" if ($debug);
+                print STDERR "$1\n" if ($debug);
                 @lines = ();
                 close(ZMMAILBOX);
                 next FOLDER;
@@ -315,10 +316,53 @@ sub getInstanceByInstId($$) {
     $instance;
 }
 
+sub expandAttendees($) {
+    my ($item) = @_;
+
+    my %seen = ();
+    my $expanded = 0;
+    do {
+        $expanded = 0;
+        foreach my $att (keys %{$item->{'attendeesList'}}) {
+            # skip if already processed; prevent infinite looping
+            next if (exists($seen{$att}));
+            eval {
+                if (!exists($userHostMap{$att}) && !exists($distributionLists{$att})) {
+                    getMailServer($att);
+                }
+            };
+            if ($@) {
+                $distributionLists{$att} = [];
+                print STDERR "Expanding distribution list: $att ($@)\n" if ($debug);
+                open(ZMPROV, "$zmprov gdl $att | grep zimbraMailForwardingAddress: |") || die $!;
+                while (<ZMPROV>) {
+                    next if ($_ !~ /zimbraMailForwardingAddress:\s+(\S+)/);
+                    push(@{$distributionLists{$att}}, $1);
+                }
+                close(ZMPROV);
+            }
+            if (exists($distributionLists{$att})) {
+                delete $item->{'attendeesList'}->{$att};
+                print STDERR "Adding distribution list attendees: $att\n" if ($debug);
+                foreach my $expAtt (@{$distributionLists{$att}}) {
+                    if (!exists($item->{'attendeesList'}->{$expAtt})) {
+                        $item->{'attendeesList'}->{$expAtt} = {
+                            rsvp => 'unknown', role => 'unknown',
+                        };
+                    }
+                }
+                $expanded = 1;
+            }
+            $seen{$att} = 1;
+        }
+    } while ($expanded);
+}
+
 sub getItem($$) {
     my ($user, $item) = @_;
 
-    print "Retrieving item $$item{'id'}\n" if $debug;
+    print STDERR "Retrieving item $$item{'id'} ($user)\n" if $debug;
+    print STDERR "$zmsoap -z -m $user GetItemRequest/item/\@id=$$item{'id'} |\n" if ($debug);
     open(ZMSOAP, "$zmsoap -z -m $user GetItemRequest/item/\@id=$$item{'id'} |") || die $!;
     my @itemResponse = <ZMSOAP>;
     close(ZMSOAP);
@@ -334,8 +378,9 @@ sub main() {
     $adminPort = getAdminServicePort();
     my @folders = getCalendarFolders($host, $source_user);
     my @calendar_items = ();
+    print "Calendars: " . join(", ", @folders) . "\n";
     for (@folders) {
-        print "Retrieving calendar: $_\n" if ($debug);
+        print "Retrieving calendar: $_\n";
         my $results = getCalendarSummary($host, $source_user, $_);
         if (exists($results->{'Body'}->{'SearchResponse'}->{'appt'})) {
             push(@calendar_items,
@@ -343,6 +388,8 @@ sub main() {
         }
     }
     my @items = ();
+    print "Total calendar items: " . scalar(@calendar_items) . "\n";
+    print "Pruning non-local attendees and items without attendees\n";
     foreach my $item (@calendar_items) {
         my $has_atts = $item->{"otherAtt"};
         next if (!defined($has_atts) || $has_atts eq '' || $has_atts eq 'false');
@@ -358,6 +405,8 @@ sub main() {
         push(@items, $item);
     }
 
+    print "Remaining items to check: " . scalar(@items) . "\n";
+    print STDERR Dumper(\@items) if ($debug);
     foreach my $item (@items) {
         my @errors = ();
         my $or = $item->{'or'}->{'a'};
@@ -368,7 +417,7 @@ sub main() {
         # save itemId in case it's another organizer
         my $itemId = $item->{'id'};
 
-        print "Checking event [$$item{'name'}]\n" if ($debug);
+        print "Checking event $itemId [$$item{'name'}]\n";
 
         if ($or ne $src) {
             my $found = 0;
@@ -383,7 +432,9 @@ sub main() {
             my $or_item;
             eval {
                 $or_item = findCalendarItem($or, $item);
-                getItem($or, $or_item);
+                if (defined($or_item)) {
+                    getItem($or, $or_item);
+                }
             };
             if ($@) {
                 push(@errors, "$or: organizer account not found: $@");
@@ -397,40 +448,20 @@ sub main() {
 
         my @attList = keys %{$item->{'attendeesList'}};
         if (@attList > 50) {
-            print "$$item{'name'}: more than 50 attendees, skipping check\n";
+            print "$$item{'name'}: more than 50 attendees, skipping check\n\n";
             next;
         }
-        foreach my $att (@attList) {
-            eval {
-                findCalendarItem($att, $item);
-            };
-            if ($@) {
-                print "Expanding distribution list: $att ($@)\n" if ($debug);
-                delete $item->{'attendeesList'}->{$att};
-                open(ZMPROV, "$zmprov gdl $att | grep zimbraMailForwardingAddress: |") || die $!;
-                while (<ZMPROV>) {
-                    next if ($_ !~ /zimbraMailForwardingAddress:\s+(\S+)/);
-                    my $expAtt = $1;
-                    if (!exists($item->{'attendeesList'}->{$expAtt})) {
-                        $item->{'attendeesList'}->{$expAtt} = {
-                            rsvp => 'unknown', role => 'unknown',
-                        };
-                    }
-                }
-                close(ZMPROV);
-            }
-        }
+        expandAttendees($item);
 
         @attList = keys %{$item->{'attendeesList'}};
         if (@attList > 50) {
-            print "$$item{'name'}: more than 50 attendees, skipping check\n";
+            print "$$item{'name'}: more than 50 attendees, skipping check\n\n";
             next;
         }
-        print "Attendees: [" . join(", ", @attList) . "]\n" if ($debug);
+        print STDERR "Attendees: [" . join(", ", @attList) . "]\n" if ($debug);
         foreach my $att (@attList) {
             my $attItem;
             eval {
-                # first run above should be cached!
                 $attItem = findCalendarItem($att, $item);
             };
             if ($@) {
@@ -459,20 +490,21 @@ sub main() {
             push(@times, scalar localtime($inst->{'s'} / 1000));
         }
 
-        $desc .= ", times=[" . join(' ,', @times) . "]";
+        $desc .= ", times=[" . join(', ', @times) . "]";
+        $desc .= ", attendees[" . join(', ', @attList) . "]";
         if (@errors > 0) {
             print $desc . "\n";
             for (@errors) {
                 print "        $_\n";
             }
             if ($debug) {
-                print Dumper($item);
+                print STDERR Dumper($item);
             }
             print "\n";
         } else {
             if ($debug) {
-                print $desc . "\n";
-                print "        NO INCONSISTENCIES FOUND\n\n";
+                print STDERR $desc . "\n";
+                print STDERR "        NO INCONSISTENCIES FOUND\n\n";
             }
         }
     }
