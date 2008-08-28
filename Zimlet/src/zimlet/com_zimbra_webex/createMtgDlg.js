@@ -206,7 +206,7 @@ Com_Zimbra_WebEx_CreateMtgDlg.getOriginalDlgHtml = function() {
 						"<TD colSpan=\"3\">" +
 							"<TABLE class=\"wx_createmtg\" id=\"Table2\" cellSpacing=\"0\" cellPadding=\"0\" border=\"0\">" +
 								"<TR>" +
-									"<TD><SELECT class=\"wx_createmtg_ctrl\" iname=\"wxCreateMtg_Month\" id=\"wxCreateMtg_Month\">" +
+									"<TD><SELECT class=\"wx_createmtg_ctrl\" name=\"wxCreateMtg_Month\" id=\"wxCreateMtg_Month\">" +
 											"<OPTION value=\"0\">Jan</OPTION>" +
 											"<OPTION value=\"1\">Feb</OPTION>" +
 											"<OPTION value=\"2\">Mar</OPTION>" +
