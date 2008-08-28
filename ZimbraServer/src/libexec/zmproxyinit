@@ -132,7 +132,7 @@ if ($#ARGV != -1) {
 my $hostname = $options{H};
 my $zimbra_server_hostname=getLocalConfig("zimbra_server_hostname");
 
-if (lc($hostname) ne lc($zimbra_server_hostname)) {
+if ((lc($hostname) ne lc($zimbra_server_hostname)) && !$options{r}) {
    print "Must use -r option to modify a remote host.\n";
    exit 1;
 }
