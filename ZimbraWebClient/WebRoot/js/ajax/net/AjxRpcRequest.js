@@ -153,9 +153,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 AjxRpcRequest.prototype.cancel =
 function() {
 	AjxRpc.freeRpcCtxt(this);
-	if (AjxEnv.isFirefox) {
-		this.__httpReq = new XMLHttpRequest();
-	}
+	this.__httpReq.abort();
 };
 
 /**
@@ -183,7 +181,8 @@ function(callback) {
 AjxRpcRequest.__handleResponse =
 function(req, callback) {
 	if (!req || !req.__httpReq) {
-		AjxRpc.freeRpcCtxt(req);
+
+		req.cancel();
 
 		// If IE receives a 500 error, the object reference can be lost
 		DBG.println(AjxDebug.DBG1, "Async RPC request: Lost request object!!!");
@@ -203,13 +202,14 @@ function(req, callback) {
 			// Use default status of 500 above.
 		}
 
-		AjxRpc.freeRpcCtxt(req);
-
 		if (status == 200 || status == 201) {
-			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:true} );
+			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:true, reqId:req.id} );
 		} else {
-			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:false, status:status} );
+			callback.run( {text:req.__httpReq.responseText, xml:req.__httpReq.responseXML, success:false, status:status, reqId:req.id} );
 		}
+
+		// ALWAYS cancel *LAST* otherwise bad things happen.
+		req.cancel();
 	}
 };
 
