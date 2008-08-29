@@ -42,14 +42,19 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar" sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.0-zimbra.jar" sourcepath="/ThirdParty/commons-fileupload-1.0-zimbra/src/java">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-io-1.4.jar" sourcepath="/ThirdParty/commons-io-1.4/src/java">
 		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
+			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/io/apidocs/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-digester-1.5.jar"/>
