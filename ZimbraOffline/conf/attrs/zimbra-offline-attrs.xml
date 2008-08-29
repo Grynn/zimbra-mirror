@@ -90,6 +90,18 @@
   <desc>name of the sole data source in a data source account</desc>
 </attr>
 
+<attr name="offlineGalAccountId" type="string" cardinality="single" optionalIn="account">
+  <desc>account id of the GAL account associated with a sync account</desc>
+</attr>
+
+<attr name="offlineGalAccountSyncToken" type="string" cardinality="single" optionalIn="account">
+  <desc>sync token from last SyncGal response</desc>
+</attr>
+
+<attr name="offlineGalAccountLastFullSync" type="long" cardinality="single" optionalIn="account">
+  <desc>last time (days since epoch) the system did a full sync</desc>
+</attr>
+
 <attr name="zimbraDataSourceDomain" type="string" cardinality="single" optionalIn="dataSource">
   <desc>data source domain, only for well known data sources</desc>
 </attr>

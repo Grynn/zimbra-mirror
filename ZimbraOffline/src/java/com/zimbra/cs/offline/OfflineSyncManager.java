@@ -386,7 +386,7 @@ public class OfflineSyncManager {
     	processSyncException(dataSource.getName(), dataSource.getDecryptedPassword(), exception);
     }
     
-	private void processSyncException(String targetName, String password, Exception exception) {
+	public void processSyncException(String targetName, String password, Exception exception) {
 		if (isConnectionDown(exception)) {
         	connecitonDown(targetName);
         	OfflineLog.offline.info("sync connection down: " + targetName);

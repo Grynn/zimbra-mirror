@@ -36,11 +36,11 @@ public class OfflineLC {
     public static final KnownKey zdesktop_account_poll_interval;
     public static final KnownKey zdesktop_reauth_delay;
     public static final KnownKey zdesktop_retry_delay_min;
-    public static final KnownKey zdesktop_retry_delay_max;
-    
+    public static final KnownKey zdesktop_retry_delay_max;    
     public static final KnownKey zdesktop_client_poll_interval;
-    
     public static final KnownKey zdesktop_retry_limit;
+    public static final KnownKey zdesktop_gal_sync_interval_secs;
+    public static final KnownKey zdesktop_gal_refresh_interval_days;
     
     public static final KnownKey zdesktop_sync_batch_size;
     public static final KnownKey zdesktop_sync_zip_level;
@@ -144,7 +144,15 @@ public class OfflineLC {
 	    zdesktop_retry_limit = new KnownKey("zdesktop_retry_limit");
 	    zdesktop_retry_limit.setDefault("2");
 	    zdesktop_retry_limit.setDoc("Number of times to retry if sync fails. Default 2.");
-	    
+
+        zdesktop_gal_sync_interval_secs = new KnownKey("zdesktop_gal_sync_interval_seconds");
+        zdesktop_gal_sync_interval_secs.setDefault("43200");
+        zdesktop_gal_sync_interval_secs.setDoc("How often offline GAL is delta-sync'ed. Default every 12 hours.");
+
+        zdesktop_gal_refresh_interval_days = new KnownKey("zdesktop_gal_refresh_interval_days");
+        zdesktop_gal_refresh_interval_days.setDefault("30");
+        zdesktop_gal_refresh_interval_days.setDoc("How often offline GAL is full-sync'ed. Default every 30 days.");
+        
 	    zdesktop_sync_batch_size = new KnownKey("zdesktop_sync_batch_size");
 	    zdesktop_sync_batch_size.setDefault("100");
 	    zdesktop_sync_batch_size.setDoc("Max number of messages to download in each transaction. Default 100.");

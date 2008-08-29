@@ -16,6 +16,12 @@
   <key name="zdesktop_skins">
     <value>yahoo,bare,beach,bones,hotrod,lavender,lemongrass,sand,sky,steel,waves</value>
   </key>
+  <key name="zdesktop_gal_sync_interval_seconds">
+    <value>43200</value>
+  </key>
+  <key name="zdesktop_gal_refresh_interval_days">
+    <value>30</value>
+  </key>
   <key name="http_connection_timeout">
     <value>15000</value>
   </key>

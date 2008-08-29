@@ -170,12 +170,14 @@ public class MailboxSync {
                 		syncMan.syncComplete(user); //sendPendingMessages may have called syncStart but then send fails
                 }
         	    	
-        	    if (!forceSync && !isOnRequest) {	
+        	    if (!forceSync && !isOnRequest) {
+        	        GalSync.sync(ombx, syncMan);
+        	        
         	    	if (mStage == SyncStage.SYNC) {
         	    		long freqLimit = syncMan.getSyncFrequencyLimit();
         	    		long frequency = ombx.getSyncFrequency() < freqLimit ? freqLimit : ombx.getSyncFrequency();
         	    		
-        	    		if (freqLimit == 0 && syncMan.isOnLine(ombx.getRemoteUser()) && ombx.isPushEnabled()) {
+        	    		if (freqLimit == 0 && syncMan.isOnLine(user) && ombx.isPushEnabled()) {
         	    			if (!poller.hasChanges(mSyncToken))
         	    				return;
         	    		} else if (System.currentTimeMillis() - syncMan.getLastSyncTime(user) < frequency) {

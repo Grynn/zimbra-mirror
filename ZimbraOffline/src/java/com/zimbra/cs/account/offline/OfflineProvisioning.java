@@ -632,6 +632,30 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return dataSources;
     }
 
+    public synchronized OfflineAccount createGalAccount(OfflineAccount mainAcct) throws ServiceException {
+        Map<String, Object> attrs = new HashMap<String, Object>();
+
+        String id = UUID.randomUUID().toString();
+        String name = mainAcct.getName() + OfflineConstants.GAL_ACCOUNT_SUFFIX;
+        
+        attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
+        attrs.put(A_zimbraMailHost, "localhost");
+        attrs.put(A_uid, id);
+        attrs.put(A_mail, name);
+        attrs.put(A_zimbraId, id);
+        attrs.put(A_cn, id);
+        attrs.put(A_sn, id);
+        attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
+        attrs.put(A_offlineGalAccountSyncToken, "");
+        attrs.put(A_offlineGalAccountLastFullSync, "0");
+
+        setDefaultAccountAttributes(attrs);
+
+        OfflineAccount galAcct = (OfflineAccount)createAccountInternal(name, id, attrs);
+        setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, galAcct.getId());
+        return galAcct;
+    }
+    
     private static final String LOCAL_ACCOUNT_UID = "local";
     private static final String LOCAL_ACCOUNT_NAME = LOCAL_ACCOUNT_UID + "@host.local";
     private static final String LOCAL_ACCOUNT_DISPLAYNAME = "Loading...";
@@ -662,6 +686,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	return createLocalAccount();
     }
 
+    public boolean isGalAccount(Account account) {
+        return account.getAttr(A_offlineGalAccountSyncToken, null) != null;
+    }
+    
     public boolean isLocalAccount(Account account) {
     	return account.getId().equals(LOCAL_ACCOUNT_ID);
     }
@@ -721,6 +749,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         addToMap(attrs, A_zimbraFeatureFiltersEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureFlaggingEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureGalAutoCompleteEnabled, TRUE);
+        addToMap(attrs, A_zimbraFeatureGalSyncEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureGalEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureGroupCalendarEnabled, TRUE);
         addToMap(attrs, A_zimbraFeatureHtmlComposeEnabled, TRUE);
@@ -847,16 +876,41 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized void deleteAccount(String zimbraId) throws ServiceException {
+    public synchronized void deleteAccount(String zimbraId) throws ServiceException {       
+        deleteGalAccount(zimbraId);
+        deleteOfflineAccount(zimbraId);
+    }
+    
+    private synchronized void deleteOfflineAccount(String zimbraId) throws ServiceException {
         DbOfflineDirectory.deleteDirectoryEntry(EntryType.ACCOUNT, zimbraId);
 
         Account acct = mAccountCache.getById(zimbraId);
         if (acct != null)
             mAccountCache.remove(acct);
         
-        fixAccountsOrder(true);
+        fixAccountsOrder(true);        
     }
 
+    public synchronized void deleteGalAccount(String mainAcctId) throws ServiceException {
+        OfflineAccount mainAcct = (OfflineAccount)get(AccountBy.id, mainAcctId);
+        if (mainAcct != null)
+            deleteGalAccount(mainAcct);
+    }
+        
+    public synchronized void deleteGalAccount(OfflineAccount mainAcct) throws ServiceException {
+        String galAcctId = mainAcct.getAttr(OfflineConstants.A_offlineGalAccountId, false);        
+        if (galAcctId == null || galAcctId.length() == 0)
+            return;
+        setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, "");
+
+        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(galAcctId, false);      
+        if (mbox != null)
+            mbox.deleteMailbox(); 
+        OfflineAccount galAcct = (OfflineAccount)get(AccountBy.id, galAcctId);
+        if (galAcct != null)
+            deleteOfflineAccount(galAcctId);
+    }
+    
     @Override
     public synchronized void renameAccount(String zimbraId, String newName) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("renameAccount");
@@ -923,7 +977,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
         for (String zimbraId : accountIds) {
             Account acct = get(AccountBy.id, zimbraId);
-            if (acct != null && !isLocalAccount(acct)) {
+            if (acct != null && !isLocalAccount(acct) && !isGalAccount(acct)) {
             	MailboxManager.getInstance().getMailboxByAccount(acct);
                 accts.add(acct);
             }

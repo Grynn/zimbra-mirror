@@ -23,6 +23,9 @@ public interface OfflineConstants {
     public static final String A_offlineDataSourceType = "offlineDataSourceType";
     public static final String A_offlineDataSourceName = "offlineDataSourceName";
     public static final String A_offlineAccountName = "offlineAccountName";
+    public static final String A_offlineGalAccountId = "offlineGalAccountId";
+    public static final String A_offlineGalAccountSyncToken = "offlineGalAccountSyncToken";
+    public static final String A_offlineGalAccountLastFullSync = "offlineGalAccountLastFullSync";
     
     public static final String A_offlineSyncFreq = "offlineSyncFreq";
     public static final String A_offlineSyncStatus = "offlineSyncStatus";
@@ -50,5 +53,7 @@ public interface OfflineConstants {
     public static final long DEFAULT_SYNC_FREQ = 5 * Constants.MILLIS_PER_MINUTE;
     public static final long MIN_SYNC_FREQ = Constants.MILLIS_PER_MINUTE;
     
-    public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+    public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";    
+    public static final String GAL_ACCOUNT_SUFFIX = "__OFFLINE_GAL__";
+    public static final String GAL_LDAP_DN = "GAL_LDAP_DN";
 }

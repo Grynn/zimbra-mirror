@@ -28,14 +28,13 @@ public class OfflineServiceException extends ServiceException {
     public static final String UNEXPECTED = "offline.UNEXPECTED";
     public static final String AUTH_FAILED = "offline.AUTH_FAILED";
     public static final String OUT_OF_SYNC = "offline.OUT_OF_SYNC";
-
+    public static final String MISSING_GAL_MAILBOX = "offline.MISSING_GAL_MAILBOX";
+    
     public static final String ITEM_ID = "itemId";
-
 
     private OfflineServiceException(String message, String code, boolean isReceiversFault, Argument... args) {
         super(message, code, isReceiversFault, args);
     }
-
 
     public static OfflineServiceException MISCONFIGURED(String error) {
         return new OfflineServiceException("configuration error: " + error, MISCONFIGURED, RECEIVERS_FAULT);
@@ -59,5 +58,9 @@ public class OfflineServiceException extends ServiceException {
     
     public static OfflineServiceException OUT_OF_SYNC() {
     	return new OfflineServiceException("out of sync", OUT_OF_SYNC, RECEIVERS_FAULT);
+    }
+    
+    public static OfflineServiceException MISSING_GAL_MAILBOX(String acctName) {
+        return new OfflineServiceException("unable to access GAL mailbox for " + acctName, MISSING_GAL_MAILBOX, RECEIVERS_FAULT);
     }
 }
