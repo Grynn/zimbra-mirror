@@ -88,7 +88,11 @@ public class OfflineAutoCompleteGal extends DocumentHandler {
         Mailbox.OperationContext context = new Mailbox.OperationContext(galMbox);
         ZimbraQueryResults zqr;
         try {
-            zqr = galMbox.search(context, name, types, SortBy.SCORE_DESCENDING, limit);
+            String query = "#" + Contact.A_firstName + ":" + name + "* OR #" + Contact.A_lastName + ":" + name +
+                "* OR #" + Contact.A_fullName + ":" + name + "* OR #" + Contact.A_email + ":" + name + "*";
+            
+            // set max to be limit + 1 so that we know when to set AccountConstants.A_MORE
+            zqr = galMbox.search(context, query, types, SortBy.SCORE_DESCENDING, limit + 1); 
         } catch (ParseException e) {
             OfflineLog.offline.debug("gal mailbox parse error (" + account.getName() + "): " + e.getMessage());
             return;
@@ -96,8 +100,9 @@ public class OfflineAutoCompleteGal extends DocumentHandler {
             OfflineLog.offline.debug("gal mailbox IO error (" + account.getName() + "): " + e.getMessage());
             return;
         }
-        int c = 1;
-        while (c++ <= limit && zqr.hasNext()) {
+        
+        int c = 0;
+        while (c++ < limit && zqr.hasNext()) {
             int id = zqr.getNext().getItemId();
             
             Contact contact = (Contact) galMbox.getItemById(context, id, MailItem.TYPE_CONTACT);
@@ -113,6 +118,8 @@ public class OfflineAutoCompleteGal extends DocumentHandler {
                 cn.addKeyValuePair(Contact.A_fullName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
             if ((val = contact.get(Contact.A_email)) != null)
                 cn.addKeyValuePair(Contact.A_email, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-        }            
-    }
+        }
+        
+        response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());
+    }    
 }

@@ -160,7 +160,9 @@ public class MailboxSync {
         	    	if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()) || !syncMan.retryOK(ombx.getAccount()))
         	    		return;
             	}
-            	
+            	                
+                GalSync.sync(ombx, syncMan, isOnRequest);
+                
             	boolean forceSync = false;
                 if (mStage == SyncStage.SYNC) {
                 	int totalSent = PushChanges.sendPendingMessages(ombx, isOnRequest);
@@ -170,9 +172,7 @@ public class MailboxSync {
                 		syncMan.syncComplete(user); //sendPendingMessages may have called syncStart but then send fails
                 }
         	    	
-        	    if (!forceSync && !isOnRequest) {
-        	        GalSync.sync(ombx, syncMan);
-        	        
+        	    if (!forceSync && !isOnRequest) {        	        
         	    	if (mStage == SyncStage.SYNC) {
         	    		long freqLimit = syncMan.getSyncFrequencyLimit();
         	    		long frequency = ombx.getSyncFrequency() < freqLimit ? freqLimit : ombx.getSyncFrequency();

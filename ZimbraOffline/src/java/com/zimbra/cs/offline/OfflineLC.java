@@ -55,6 +55,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_sync_skip_idlist;
     
     public static final KnownKey zdesktop_request_timeout;
+    public static final KnownKey zdesktop_galsync_request_timeout;
     public static final KnownKey http_so_timeout;
     public static final KnownKey http_connection_timeout;
     public static final KnownKey dns_cache_ttl;
@@ -200,7 +201,11 @@ public class OfflineLC {
 	    zdesktop_request_timeout = new KnownKey("zdesktop_request_timeout");
 	    zdesktop_request_timeout.setDefault("15000");
 	    zdesktop_request_timeout.setDoc("HTTP request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 15000 (15 seconds).");
-	    
+
+	    zdesktop_galsync_request_timeout = new KnownKey("zdesktop_galsync_request_timeout");
+	    zdesktop_galsync_request_timeout.setDefault("60000");
+	    zdesktop_galsync_request_timeout.setDoc("HTTP GAL sync request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 60 seconds.");
+	        
 	    http_so_timeout = new KnownKey("http_so_timeout");
 	    http_so_timeout.setDefault("15000");
 	    http_so_timeout.setDoc("Socket timeout (SO_TIMEOUT) in milliseconds while waiting for data. A value of zero means no timeout. Default 15000 (15 seconds).");

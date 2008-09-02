@@ -42,13 +42,17 @@ import com.zimbra.cs.index.queryparser.ParseException;
 
 public class GalSync {
     
-    public static void sync(OfflineMailbox ombx, OfflineSyncManager syncMan) throws ServiceException {
+    public static void sync(OfflineMailbox ombx, OfflineSyncManager syncMan, boolean isOnRequest) throws ServiceException {
         String user = ombx.getRemoteUser();
-        String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;        
-        long interval = OfflineLC.zdesktop_gal_sync_interval_secs.longValue();
-        long last = syncMan.getLastSyncTime(target);
-        if (last > 0 && (System.currentTimeMillis() - last) / 1000 < interval)
-            return;
+        String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;
+        if (!isOnRequest) {
+            if (!syncMan.retryOK(target))
+                return;
+            long interval = OfflineLC.zdesktop_gal_sync_interval_secs.longValue();
+            long last = syncMan.getLastSyncTime(target);
+            if (last > 0 && (System.currentTimeMillis() - last) / 1000 < interval)
+                return;
+        }
                 
         syncMan.syncStart(target);
         
@@ -61,23 +65,19 @@ public class GalSync {
             return;
         }
         
-        OfflineAccount galAccount = null;
-        String syncToken = null;
+        boolean success = true;
         try {
-            OfflineLog.offline.info("Offline GAL sync started: " + user);
-            galAccount = ensureGalAccountExists(account);
-            syncToken = syncGal(ombx, galAccount);                            
+            OfflineLog.offline.info("Offline GAL sync started: " + user);            
+            syncGal(ombx, account, isOnRequest);                            
         } catch (Exception e) {
             syncMan.processSyncException(target, "", e);
+            success = false;
         } finally {
             syncMan.syncComplete(target);
-            if (galAccount != null && syncToken != null) {
-                OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
-                prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, syncToken);
-                prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync,
-                    Long.toString(System.currentTimeMillis()));
+            if (success)
                 OfflineLog.offline.info("Offline GAL sync completed successfully: " + user);
-            }
+            else
+                OfflineLog.offline.info("Offline GAL sync failed: " + user);
         }
     }
 
@@ -98,10 +98,15 @@ public class GalSync {
         return galAcct;
     }
     
-    private static String syncGal(OfflineMailbox mbox, OfflineAccount galAccount)
+    private static void syncGal(OfflineMailbox mbox, OfflineAccount account, boolean isOnRequest)
         throws ServiceException, IOException, ParseException {        
-        String syncToken = galAccount.getAttr(OfflineConstants.A_offlineGalAccountSyncToken);        
+        OfflineAccount galAccount = ensureGalAccountExists(account);
+
         long lastFullSync = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
+        if (isOnRequest && lastFullSync > 0)
+            return;
+        
+        String syncToken = galAccount.getAttr(OfflineConstants.A_offlineGalAccountSyncToken);        
         long interval = OfflineLC.zdesktop_gal_refresh_interval_days.longValue();        
         if (lastFullSync > 0 && (System.currentTimeMillis() - lastFullSync) / Constants.MILLIS_PER_DAY >= interval)
             syncToken = "";
@@ -110,15 +115,15 @@ public class GalSync {
         XMLElement req = new XMLElement(AccountConstants.SYNC_GAL_REQUEST);
         if (!fullSync)
             req.addAttribute(AdminConstants.A_TOKEN, syncToken);
-        Element resp = mbox.sendRequest(req);
+        Element resp = mbox.sendRequest(req, true, true, OfflineLC.zdesktop_galsync_request_timeout.intValue());
 
         LocalMailbox galMbox = (LocalMailbox)MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
         Mailbox.OperationContext context = new Mailbox.OperationContext(galMbox);
         if (fullSync) {
             OfflineLog.offline.debug("Offline GAL full sync requested. Clearing current GAL folder: " + galAccount.getName());
-            galMbox.emptyFolder(context, Mailbox.ID_FOLDER_CONTACTS, true);
+            galMbox.emptyFolder(context, Mailbox.ID_FOLDER_CONTACTS, true);            
         }
-        
+                
         SearchGalResult syncResult = new SearchGalResult();
         syncResult.token = resp.getAttribute(AdminConstants.A_TOKEN);
         for (Element e: resp.listElements(AdminConstants.E_CN)) {
@@ -127,7 +132,13 @@ public class GalSync {
             map.put(OfflineConstants.GAL_LDAP_DN, dn);         
             for (Element a : e.listElements(AdminConstants.E_A)) {
                 map.put(a.getAttribute(AdminConstants.A_N), a.getText());
-            }            
+            }
+            
+            String fname, lname;
+            if (map.get(Contact.A_fullName) == null && (fname = map.get(Contact.A_firstName)) != null && 
+                (lname = map.get(Contact.A_lastName)) != null)
+                map.put(Contact.A_fullName, fname + " " + lname);
+            
             ParsedContact contact = new ParsedContact(map);
             
             String ctime, mtime;
@@ -147,7 +158,13 @@ public class GalSync {
                     OfflineLog.offline.debug("Offline GAL contact crearted: dn=" + dn);
                 }
             }
-        }               
-        return syncResult.token;
+        }
+        
+        OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
+        prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, syncResult.token);
+        if (fullSync) {
+            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync,
+                Long.toString(System.currentTimeMillis()));
+        }
     }    
 }

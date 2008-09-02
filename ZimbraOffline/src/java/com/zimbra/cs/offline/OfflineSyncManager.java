@@ -274,9 +274,13 @@ public class OfflineSyncManager {
 	}
 	
 	public boolean retryOK(Account account) {
-		synchronized (syncStatusTable) {
-			return getStatus(account.getName()).retryOK();
-		}
+	    return retryOK(account.getName());
+	}
+	
+	public boolean retryOK(String targetName) {
+        synchronized (syncStatusTable) {
+            return getStatus(targetName).retryOK();
+        }	    
 	}
 	
 	public void authSuccess(Account account, ZAuthToken token, long expires) {
