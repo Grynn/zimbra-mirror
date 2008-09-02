@@ -171,6 +171,8 @@ getLocalConfig();
 $config{loglevel} = $state->{localconfig}->{zmmtaconfig_log_level} || 3;
 $config{interval} = $state->{localconfig}->{zmmtaconfig_interval} || 60;
 $config{debug} = $state->{localconfig}->{zmmtaconfig_debug} || 0;
+$config{restartconfig} =
+  ($state->{localconfig}->{zmmtaconfig_enable_config_restarts} eq "FALSE") ? 0 : 1;
 $config{watchdog} = 
   ($state->{localconfig}->{zmmtaconfig_watchdog} eq "FALSE") ? 0 : 1;
 $config{configFile} = "$config{baseDir}/conf/zmmta.cf";
@@ -304,6 +306,8 @@ sub getLocalConfig {
   $config{loglevel} = $state->{localconfig}->{zmmtaconfig_log_level} || 3;
   $config{interval} = $state->{localconfig}->{zmmtaconfig_interval} || 60;
   $config{debug} = $state->{localconfig}->{zmmtaconfig_debug} || 0;
+  $config{restartconfig} =
+    ($state->{localconfig}->{zmmtaconfig_enable_config_restarts} eq "no") ? 0 : 1;
   $config{watchdog} = 
     ($state->{localconfig}->{zmmtaconfig_watchdog} eq "no") ? 0 : 1;
   if (exists $state->{localconfig}->{zmmtaconfig_watchdog_services}) {
@@ -885,6 +889,7 @@ sub watchdog() {
 }
 
 sub doActions() {
+  return unless $config{restartconfig};
   # do the actions
   foreach my $rewrite (keys %{$state->{current}->{rewrites}}) {
     delete($state->{current}->{rewrites}->{$rewrite})
