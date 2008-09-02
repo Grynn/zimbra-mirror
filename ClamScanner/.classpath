@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/ZimbraServer"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
-	<classpathentry sourcepath="/ThirdParty/commons-fileupload-1.0-zimbra/src/java" kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.0-zimbra.jar">
+	<classpathentry sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java" kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar">
 		<attributes>
 			<attribute value="http://jakarta.apache.org/commons/fileupload/apidocs/" name="javadoc_location"/>
 		</attributes>
