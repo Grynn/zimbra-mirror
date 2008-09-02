@@ -145,7 +145,7 @@ function(viewId) {
 		return this._controllers[viewId];
 	}else{
 		var c  = this._controllers[viewId] = new ZaGlobalConfigViewController(this._appCtxt, this._container, this);
-		c.addSettingsChangeListener(new AjxListener(this, ZaApp.prototype.handleSettingsChange));
+		//c.addSettingsChangeListener(new AjxListener(this, ZaApp.prototype.handleSettingsChange));
 		return c ;
 	}
 }

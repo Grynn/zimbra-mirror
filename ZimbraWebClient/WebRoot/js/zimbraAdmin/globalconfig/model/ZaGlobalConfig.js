@@ -279,12 +279,12 @@ ZaGlobalConfig.modifyMethod = function (mods) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	command.invoke(params);
-	var newConfig = this._app.getGlobalConfig(true);
+	/*var newConfig = this._app.getGlobalConfig(true);
 	if(newConfig.attrs) {
 		for (var aname in newConfig.attrs) {
 			this.attrs[aname] = newConfig.attrs[aname];
 		}
-	}
+	}*/
 }
 ZaItem.modifyMethods["ZaGlobalConfig"].push(ZaGlobalConfig.modifyMethod);
 
