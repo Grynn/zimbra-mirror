@@ -455,7 +455,11 @@ deployCA() {
 
 
   echo -n "** Copying CA to ${zimbra_conf_directory}/ca..." 
-  mkdir -p ${zimbra_conf_directory}/ca
+  if [ -d "${zimbra_conf_directory}/ca" ]; then
+    find ${zimbra_conf_directory}/ca -type f -exec rm {} \;
+  else
+    mkdir -p ${zimbra_conf_directory}/ca
+  fi
   chmod 755 ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
@@ -612,7 +616,11 @@ deployCert() {
   fi
 
   echo -n "** Installing CA to ${zimbra_conf_directory}/ca..." 
-  mkdir -p ${zimbra_conf_directory}/ca
+  if [ -d "${zimbra_conf_directory}/ca" ]; then
+    find ${zimbra_conf_directory}/ca -type f -exec rm {} \;
+  else
+    mkdir -p ${zimbra_conf_directory}/ca
+  fi
   chmod 755 ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
