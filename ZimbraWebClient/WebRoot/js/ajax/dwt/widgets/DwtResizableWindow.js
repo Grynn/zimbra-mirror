@@ -452,30 +452,51 @@ DwtResizableWindow.prototype.__resizeMouseMove = function(ev) {
 		break;
 	}
 
-	var maxPos = this._maxPos;
-	if (maxPos === true) {
-		// restrict to parent
-		maxPos = this.parent.getSize();
-		var tmp = this.getSize() || (new DwtPoint(0,0));
-		if (width != null)
-			tmp.x = width;
-		if (height != null)
-			tmp.y = height;
-		maxPos.x -= tmp.x + 4;
-		maxPos.y -= tmp.y + 4;
+	// If the new size is too small in either direction, don't
+	// make any change in that direction.
+	if (height && this._minSize && this._minSize.y && (height < this._minSize.y)) {
+		height = null;
+		y = null;
+	}
+	if (width && this._minSize && this._minSize.x && (width < this._minSize.x)) {
+		width = null;
+		x = null;
 	}
 
+	// Adjust values for the maximum position.
+	var maxPos = this._maxPos;
 	if (maxPos) {
-		if (x != null && maxPos.x != null)
-			if (x > maxPos.x) {
+		var newSize = this.getSize() || (new DwtPoint(0,0));
+		if (width != null) {
+			newSize.x = width;
+		}
+		if (height != null) {
+			newSize.y = height;
+		}
+
+		if (maxPos === true) {
+			// Restrict to parent size.
+			var padding = this.getPadding();
+			maxPos = this.parent.getSize();
+			maxPos.x -= newSize.x + padding.right;
+			maxPos.y -= newSize.y + padding.bottom;
+		}
+
+		var newX = x ? x : this._loc.x,
+			newY = y ? y : this._loc.y;
+		
+		if (maxPos.x != null && (newX > maxPos.x)) {
+			width = null;
+			if (x) {
 				x = maxPos.x
-				width = null;
 			}
-		if (y != null && maxPos.y != null)
-			if (y > maxPos.y) {
+		}
+		if (maxPos.y != null && (newY > maxPos.y)) {
+			height = null;
+			if (y) {
 				y = maxPos.y;
-				height = null;
 			}
+		}
 	}
 
 	if (this._minPos) {
