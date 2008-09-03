@@ -160,9 +160,7 @@ public class MailboxSync {
         	    	if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()) || !syncMan.retryOK(ombx.getAccount()))
         	    		return;
             	}
-            	                
-                GalSync.sync(ombx, syncMan, isOnRequest);
-                
+            	                                
             	boolean forceSync = false;
                 if (mStage == SyncStage.SYNC) {
                 	int totalSent = PushChanges.sendPendingMessages(ombx, isOnRequest);
@@ -200,6 +198,8 @@ public class MailboxSync {
                 syncMan.syncComplete(user);
                 OfflineProvisioning.getOfflineInstance().setAccountAttribute(ombx.getAccount(), OfflineConstants.A_offlineLastSync,
                 		Long.toString(System.currentTimeMillis()));
+                
+                GalSync.sync(ombx, syncMan, isOnRequest);
             } catch (Exception e) {
             	if (ombx.isDeleting())
             		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccountName());
