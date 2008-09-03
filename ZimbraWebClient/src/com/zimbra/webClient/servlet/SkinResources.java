@@ -795,6 +795,7 @@ public class SkinResources
         double browserVersion = -1.0;
         double geckoDate = 0;
         double mozVersion = -1;
+        double webKitVersion = -1;
         boolean isMac = false;
         boolean isWindows = false;
         boolean isLinux = false;
@@ -822,8 +823,10 @@ public class SkinResources
         boolean isMozilla = false;
         boolean isMozilla1_4up = false;
         boolean isSafari = false;
+        boolean isChrome = false;
         boolean isGeckoBased = false;
 		boolean isGecko1_8up = false;
+        boolean isWebKitBased = false;
 		boolean isOpera = false;
         boolean isIPhone = false;
 
@@ -877,6 +880,9 @@ public class SkinResources
                 } else if ((index = token.indexOf("gecko/")) != -1) {
                     isGeckoBased = true;
                     geckoDate = Float.parseFloat(token.substring(index + 6));
+                } else if ((index = token.indexOf("applewebkit/")) != -1) {
+                    isWebKitBased = true;
+                    webKitVersion = Float.parseFloat(token.substring(index + 12));
                 } else if ((index = token.indexOf("rv:")) != -1) {
                     mozVersion = parseVersion(token.substring(index + 3));
                     browserVersion = mozVersion;
@@ -891,6 +897,9 @@ public class SkinResources
                     browserVersion = parseVersion(token.substring(index + 9));
                 } else if ((index = token.indexOf("safari/")) != -1) {
                     isSafari = true;
+                    browserVersion = parseVersion(token.substring(index + 7));
+                } else if ((index = token.indexOf("chrome/")) != -1) {
+                    isChrome = true;
                     browserVersion = parseVersion(token.substring(index + 7));
                 } else if (token.indexOf("windows") != -1) {
                     isWindows = true;
@@ -917,7 +926,7 @@ public class SkinResources
 			isIE7up = (isIE && (browserVersion >= 7.0));
 
 			// Note: Opera and WebTV spoof Navigator. We do strict client detection.
-			isNav = (beginsWithMozilla && !isSpoofer && !isCompatible && !isOpera && !isWebTv && !isHotJava && !isSafari);
+			isNav = (beginsWithMozilla && !isSpoofer && !isCompatible && !isOpera && !isWebTv && !isHotJava && !isSafari && !isChrome);
             isNav4 = (isNav && (browserVersion == 4) && (!isIE));
             isNav6 = (isNav && trueNs && (browserVersion >= 6.0) && (browserVersion < 7.0));
             isNav6up = (isNav && trueNs && (browserVersion >= 6.0));
@@ -936,6 +945,7 @@ public class SkinResources
 			define(macros, "WINDOWS", isWindows);
 
             // browser variants
+            define(macros, "CHROME", isChrome);
 			define(macros, "FIREFOX", isFirefox);
 			define(macros, "FIREFOX_1_OR_HIGHER", isFirefox1up);
 			define(macros, "FIREFOX_1_5_OR_HIGHER", isFirefox1_5up);
@@ -969,6 +979,7 @@ public class SkinResources
             define(macros, "SAFARI_2", isSafari && browserVersion == 2.0);
             define(macros, "SAFARI_2_OR_HIGHER", isSafari && browserVersion >= 2.0);
             define(macros, "SAFARI_3", isSafari && browserVersion >= 3.0);
+			define(macros, "WEBKIT", isWebKitBased);
             define(macros, "WEBTV", isWebTv);
         }
 

@@ -25,6 +25,7 @@ AjxEnv.reset =
 function() {
 	AjxEnv.geckoDate = 0;
 	AjxEnv.mozVersion = -1;
+	AjxEnv.webKitVersion = -1;
 	AjxEnv.isMac = false;
 	AjxEnv.isWindows = false;
 	AjxEnv.isLinux = false;
@@ -54,7 +55,9 @@ function() {
 	AjxEnv.isMozilla1_4up = false;
 	AjxEnv.isSafari = false;
 	AjxEnv.isCamino = false;
+	AjxEnv.isChrome = false;
 	AjxEnv.isGeckoBased = false;
+	AjxEnv.isWebKitBased = false;
 	AjxEnv.isOpera = false;
 	AjxEnv.useTransparentPNGs = false;
 
@@ -110,6 +113,9 @@ function() {
 			} else if ((index = token.indexOf('gecko/')) != -1) {
 				AjxEnv.isGeckoBased = true;
 				AjxEnv.geckoDate = parseFloat(token.substr(index + 6));
+			} else if ((index = token.indexOf('applewebkit/')) != -1) {
+				AjxEnv.isWebKitBased = true;
+				AjxEnv.webKitVersion = parseFloat(token.substr(index + 12));
 			} else if ((index = token.indexOf('rv:')) != -1) {
 				AjxEnv.mozVersion = parseFloat(token.substr(index + 3));
 				browserVersion = AjxEnv.mozVersion;
@@ -129,6 +135,9 @@ function() {
 				browserVersion = parseFloat(token.substr(index + 9));
 			} else if ((index = token.indexOf('safari/')) != -1) {
 				AjxEnv.isSafari = true;
+			} else if ((index = token.indexOf('chrome/')) != -1) {
+				AjxEnv.isChrome = true;
+				browserVersion = parseFloat(token.substr(index + 7));
 			} else if (index = token.indexOf('version/') != -1) {
 				// this is how safari sets browser version
 				browserVersion = parseFloat(token.substr(index + 7));
@@ -167,7 +176,7 @@ function() {
 		AjxEnv.isFirefox1_5up	= (AjxEnv.isFirefox && browserVersion >= 1.5);
 		AjxEnv.isFirefox2_0up	= (AjxEnv.isFirefox && browserVersion >= 2.0);
 		AjxEnv.isFirefox3up		= (AjxEnv.isFirefox && browserVersion >= 3.0);
-		AjxEnv.isSafari3		= (AjxEnv.isSafari && browserVersion >= 3.0);
+		AjxEnv.isSafari3		= ((AjxEnv.isSafari && browserVersion >= 3.0) || AjxEnv.isChrome);
 
 		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}

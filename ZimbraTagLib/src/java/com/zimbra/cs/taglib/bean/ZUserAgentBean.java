@@ -36,6 +36,7 @@ public class ZUserAgentBean {
     boolean isFirefox = false;
     boolean isMozilla = false;
     boolean isSafari = false;
+    boolean isChrome = false;
     boolean isGeckoBased = false;
     boolean isOpera = false;
     boolean isWebTv = false;
@@ -118,6 +119,9 @@ public class ZUserAgentBean {
                 } else if ((index = token.indexOf("safari/")) != -1){
                     isSafari = true;
                     browserVersion = new Version(token.substring(index + 7));
+                } else if ((index = token.indexOf("chrome/")) != -1){
+                    isChrome = true;
+                    browserVersion = new Version(token.substring(index + 7));
                 } else if (token.indexOf("windows") != -1){
                     isOsWindows = true;
                 } else if ((token.indexOf("macintosh") != -1) ||
@@ -134,7 +138,7 @@ public class ZUserAgentBean {
             // We do strict client detection.
             isNav  = (beginsWithMozilla && !isSpoofer && !isCompatible &&
                     !isOpera && !isWebTv && !isHotJava &&
-                    !isSafari);
+                    !isSafari && !isChrome);
 
             isIE = (isIE && !isOpera);
 
@@ -156,7 +160,9 @@ public class ZUserAgentBean {
     
     public boolean getIsSafari() { return isSafari; }
 
-	public boolean getIsSafari3Up() { return (isSafari && browserVersion.greaterOrEqual(3,0)); }
+    public boolean getIsChrome() { return isChrome; }
+    
+	public boolean getIsSafari3Up() { return ((isSafari && browserVersion.greaterOrEqual(3,0)) || isChrome); }
 
 	public boolean getIsWebTv() { return isWebTv; }
 
