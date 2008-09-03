@@ -24,8 +24,6 @@ import com.zimbra.common.calendar.TZIDMapper;
 
 public class GenerateData {
 
-    private static Calendar NOW = Calendar.getInstance();
-
     public static void main(String[] argv) throws Exception {
         // values
         File fin = null;
@@ -62,53 +60,79 @@ public class GenerateData {
         }
 
         // generate
-        InputStream in = new FileInputStream(fin);
-        OutputStream out = fout != null ? new FileOutputStream(fout) : System.out;
+        InputStream sin = new FileInputStream(fin);
+        OutputStream sout = fout != null ? new FileOutputStream(fout) : System.out;
         try {
-            List<Timezone> timezones = TimezoneParser.parse(in);
-            Collections.sort(timezones, new TimezoneComparator());
-
-            PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, "UTF-8"));
-            printJsonHeader(writer);
-            printJson(writer, timezones);
-            printJsonFooter(writer);
-            writer.flush();
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(sout, "UTF-8"));
+			print(sin, out);
+            out.flush();
         }
         finally {
-            in.close();
+            sin.close();
             if (fout != null) {
-                out.close();
+                sout.close();
             }
         }
     }
 
-    public static void printJsonHeader(PrintWriter out) {
+	public static void print(File fin, File fout) throws IOException {
+		InputStream sin = null;
+		OutputStream sout = null;
+		try {
+			sin = new FileInputStream(fin);
+			sout = new FileOutputStream(fout);
+			PrintWriter out = new PrintWriter(new OutputStreamWriter(sout, "UTF-8"));
+			print(sin, out);
+			out.flush();
+		}
+		finally {
+			try { sin.close(); } catch (Exception e) { /* ignore */ }
+			try { sout.close(); } catch (Exception e) { /* ignore */ }
+		}
+	}
+
+	public static void print(InputStream in, PrintWriter out) throws IOException {
+		Calendar now = Calendar.getInstance();
+
+		List<Timezone> timezones = new TimezoneParser(now).parse(in);
+		Collections.sort(timezones, new TimezoneComparator());
+
+		print(out, now, timezones);
+	}
+
+	public static void print(PrintWriter out, Calendar now, List<Timezone> timezones) {
+		printJsonHeader(out, now);
+		printJson(out, now, timezones);
+		printJsonFooter(out, now);
+	}
+
+    public static void printJsonHeader(PrintWriter out, Calendar now) {
 		out.println("/**");
-		out.println(" * DO NOT EDIT! This file is generated at build-time.");
+		out.println(" * DO NOT EDIT! This file is generated.");
 		out.println(" * <p>");
 		out.println(" * Any copy of this file checked into source control is merely for");
 		out.println(" * convenience and should not be edited in any way.");
 		out.println(" * <p>");
-		out.println(" * Generated at "+NOW.getTime());
+		out.println(" * Generated at "+now.getTime());
 		out.println(" */");
         out.println("AjxTimezoneData = {};");
         out.println();
 
         out.print("AjxTimezoneData.TRANSITION_YEAR = ");
-        out.print(NOW.get(Calendar.YEAR));
+        out.print(now.get(Calendar.YEAR));
         out.println(";");
         out.println();
     }
 
-    public static void printJsonFooter(PrintWriter out) {
+    public static void printJsonFooter(PrintWriter out, Calendar now) {
     }
 
-    public static void printJson(PrintWriter out, List<Timezone> timezones) {
+    public static void printJson(PrintWriter out, Calendar now, List<Timezone> timezones) {
         out.println("AjxTimezoneData.TIMEZONE_RULES = [");
         Iterator<Timezone> iter = timezones.iterator();
         while (iter.hasNext()) {
             Timezone timezone = iter.next();
-            printJson(out, timezone);
+            printJson(out, now, timezone);
             if (iter.hasNext()) {
                 out.print(',');
             }
@@ -117,7 +141,7 @@ public class GenerateData {
         out.println("];");
     }
 
-    public static void printJson(PrintWriter out, Timezone timezone) {
+    public static void printJson(PrintWriter out, Calendar now, Timezone timezone) {
         out.print("\t{ serverId: \"");
         printEscaped(out, timezone.id);
         out.print("\", clientId: \"");
@@ -204,9 +228,13 @@ public class GenerateData {
             "FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=(\\d+);BYDAY=([-]?\\d+)(.{2})"
         );
 
-        private TimezoneParser() {}
+		private Calendar now;
 
-        public static List<Timezone> parse(InputStream is) throws IOException {
+        private TimezoneParser(Calendar now) {
+			this.now = now;
+		}
+
+        public List<Timezone> parse(InputStream is) throws IOException {
             BufferedReader in = new BufferedReader(new InputStreamReader(is,"UTF-8"));
 
             List<Timezone> timezones = new LinkedList<Timezone>();
@@ -265,7 +293,7 @@ public class GenerateData {
                         onset.mon = Integer.parseInt(rRuleDef.group(1));
                         onset.week = Integer.parseInt(rRuleDef.group(2));
                         onset.wkday = dayName2dayNum(rRuleDef.group(3));
-                        calcTransition(onset);
+                        calcTransition(this.now, onset);
                     }
                     else {
                         System.err.println("error: unknown recurrence rule format");
@@ -288,8 +316,7 @@ public class GenerateData {
         }
     }
 
-    private static void calcTransition(Onset onset) {
-        Calendar now = (Calendar)NOW.clone();
+    private static void calcTransition(Calendar now, Onset onset) {
         onset.trans = new int[] { now.get(Calendar.YEAR), onset.mon, onset.mday };
         if (onset.wkday != 0) {
             // init back to first of transition month

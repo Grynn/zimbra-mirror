@@ -26,7 +26,6 @@ AjxPackage.require("ajax.util.AjxSelectionManager");
 AjxPackage.require("ajax.net.AjxPost");
 AjxPackage.require("ajax.util.AjxBuffer");
 AjxPackage.require("ajax.util.AjxCache");
-AjxPackage.require("ajax.util.AjxTimezoneData");
 AjxPackage.require("ajax.util.AjxTimezone");
 AjxPackage.require("ajax.xslt.AjxXslt");
 AjxPackage.require("ajax.util.AjxSHA1");
