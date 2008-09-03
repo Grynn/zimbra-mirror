@@ -1,0 +1,131 @@
+#!/usr/bin/perl -w
+#
+# ***** BEGIN LICENSE BLOCK *****
+#
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005 Zimbra, Inc.
+#
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+#
+# ***** END LICENSE BLOCK *****
+#
+use strict;
+use Getopt::Std;
+
+my $pid_file = '/opt/zimbra/log/zmmailboxd_java.pid';
+my $log_file = '/opt/zimbra/log/zmmailboxd.out';
+my $outhandle = \*STDOUT;
+my $timeout = 30;
+my $pid;
+my $tail;
+
+my %opts = ();
+getopts('hip:f:o:t:', \%opts);
+
+$SIG{'ALRM'} = sub {
+    print STDERR "Timed out (${timeout}s) waiting for thread dump to complete.  Aborting!\n";
+    kill(15, $tail) if (defined $tail);
+    close(TAIL);
+    close($outhandle);
+    # remove the incomplete output file
+    unlink $opts{'o'} if defined $opts{'o'};
+    exit;
+};
+
+sub usage() {
+    print STDERR <<"EOF";
+Usage: zmthrdump [-h] [-i] [-t timeout] [-p pid] [-f file] [-o out-file]
+
+    -h        prints this help message
+    -i        append timestamp to LOGFILE prior to invoking SIGQUIT
+    -p        PID to send SIGQUIT (default:  value in zmmailboxd_java.pid)
+    -f        LOGFILE to tail for thread dump output (default:  zmmailboxd.out)
+    -o        output file of threaddump (default:  stdout)
+    -t        TIMEOUT (seconds) to exit if unresponsive (default: $timeout)
+
+EOF
+    close $outhandle;
+    exit;
+}
+
+my $append_ts = $opts{'i'};
+
+usage() if ($opts{'h'});
+
+$log_file = $opts{'f'} if (exists $opts{'f'} && defined $opts{'f'});
+usage() if (exists $opts{'f'} && !defined $opts{'f'});
+
+die "-f requires a filename argument" if (!defined($log_file));
+die "$log_file: file not found" if (! -f $log_file);
+
+if (exists $opts{'t'} && defined $opts{'t'}) {
+    $timeout = $opts{'t'};
+    usage() if (!defined($timeout) || $timeout !~ /^\d+$/);
+} elsif (exists $opts{'t'}) {
+    usage();
+}
+
+if (exists $opts{'o'} && defined $opts{'o'}) {
+    open(OUTHANDLE, "+>$opts{'o'}") || die "$opts{'o'}: $!";
+    $outhandle = \*OUTHANDLE;
+} elsif (exists $opts{'o'}) {
+    usage();
+}
+
+if (exists $opts{'p'}) {
+    $pid = $opts{'p'};
+    usage() if (!defined($pid) || $pid !~ /^\d+$/);
+} else {
+    open(PID, "<$pid_file") || die "$pid_file: $!";
+    $pid = <PID>;
+    close(PID);
+    chomp($pid);
+}
+
+kill(0, $pid) || die "$pid: no such process";
+
+my $ts = scalar(localtime);
+my $msg = "zmthrdump: Requested thread dump [PID $pid] at $ts\n";
+if ($append_ts) {
+    open(LOG, ">>$log_file") || die "$log_file: unable to append: $!";
+    print LOG "\n$msg";
+    close(LOG);
+}
+
+print $outhandle "$msg";
+my $printing = 0;
+my $done = 0;
+
+my $requested = 0;
+$tail = open(TAIL, "tail -F $log_file |") || die "$log_file: unable to tail: $!";
+alarm($timeout);
+# this will not capture the heap statistics if this is java6
+while (<TAIL>) {
+    if (!$requested) {
+        # there's a race/buffering issue with open(TAIL)
+        # so kill -QUIT during the read loop instead of before.
+        kill(3, $pid) || die "$pid: no such process";
+        $requested = 1;
+    }
+    if ($_ =~ /^Full thread dump Java HotSpot/) {
+        $printing = 1;
+    } elsif ($_ =~ /^"VM Periodic Task Thread"/ && $printing) {
+        # "VM Periodic Task Thread" always appears to be the last thread
+        # printed out during a thread dump, assume that it is the end.
+        $done = 1;
+    } elsif ($_ =~ /^\s*$/ && $printing) {
+        $printing = 0 if ($done);
+    }
+    alarm($timeout);
+    print $outhandle "$_" if ($printing);
+    kill(15, $tail) if ($done && !$printing);
+}
+
+close(TAIL);
+close $outhandle;
