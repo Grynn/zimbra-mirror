@@ -3235,33 +3235,6 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                 </serializedBean>
                 <condition>Util.isWindows()</condition>
               </action>
-              <action name="win" id="286173" beanClass="com.install4j.runtime.beans.actions.control.SetProgressAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.control.SetProgressAction">
-                      <void property="progressChangeType">
-                        <object class="com.install4j.runtime.beans.actions.control.ProgressChangeType" field="SET_TIMER" />
-                      </void>
-                      <void property="timerPeriod">
-                        <int>300</int>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>Util.isWindows()</condition>
-              </action>
-              <action name="win" id="286219" beanClass="com.install4j.runtime.beans.actions.control.SleepAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.control.SleepAction">
-                      <void property="sleepTimeMs">
-                        <int>40000</int>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>Util.isWindows()</condition>
-              </action>
               <action name="linux stop prism" id="286019" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
