@@ -115,7 +115,8 @@ function(enable) {
  */
 AjxDispatcher.loaded =
 function(pkg) {
-	return AjxDispatcher._getPackageData(pkg)._loaded;
+    var pkgData = AjxDispatcher._getPackageData(pkg);
+	return (pkgData && pkgData._loaded) || AjxPackage.isDefined(pkg);
 };
 
 /**
