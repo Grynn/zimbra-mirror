@@ -93,6 +93,7 @@ public class GenerateData {
 
 	public static void print(InputStream in, PrintWriter out) throws IOException {
 		Calendar now = Calendar.getInstance();
+		now.add(Calendar.YEAR, 1);
 
 		List<Timezone> timezones = new TimezoneParser(now).parse(in);
 		Collections.sort(timezones, new TimezoneComparator());
