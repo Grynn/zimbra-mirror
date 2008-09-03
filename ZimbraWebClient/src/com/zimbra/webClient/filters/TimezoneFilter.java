@@ -84,7 +84,7 @@ public class TimezoneFilter implements Filter {
 			GenerateData.print(fin, ftemp);
 
 			// save backup and move generated file
-			fout.renameTo(new File(TIMEZONE_DATA_FILENAME+EXT_BACKUP));
+			fout.renameTo(new File(this.context.getRealPath(TIMEZONE_DATA_FILENAME+EXT_BACKUP)));
 			ftemp.renameTo(fout);
 			ZimbraLog.webclient.debug("%%% done");
 		}
