@@ -88,8 +88,8 @@ public class OfflineAutoCompleteGal extends DocumentHandler {
         Mailbox.OperationContext context = new Mailbox.OperationContext(galMbox);
         ZimbraQueryResults zqr;
         try {
-            String query = "#" + Contact.A_firstName + ":" + name + "* OR #" + Contact.A_lastName + ":" + name +
-                "* OR #" + Contact.A_fullName + ":" + name + "* OR #" + Contact.A_email + ":" + name + "*";
+            String query = "#" + Contact.A_firstName + ":\"" + name + "*\" OR #" + Contact.A_lastName + ":\"" + name +
+                "*\" OR #" + Contact.A_fullName + ":\"" + name + "*\" OR #" + Contact.A_email + ":\"" + name + "*\"";
             
             // set max to be limit + 1 so that we know when to set AccountConstants.A_MORE
             zqr = galMbox.search(context, query, types, SortBy.SCORE_DESCENDING, limit + 1); 
