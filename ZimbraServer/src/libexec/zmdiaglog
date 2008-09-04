@@ -135,7 +135,7 @@ sub get_pid() {
 }
 sub invoke_thread_dump($$) {
     my ($i, $ts) = @_;
-    system("/opt/zimbra/bin/zmthrdump > threaddump.$i.$ts 2>&1");
+    system("/opt/zimbra/bin/zmthrdump -i > threaddump.$i.$ts 2>&1");
 }
 
 sub collect_thread_stats($) {
