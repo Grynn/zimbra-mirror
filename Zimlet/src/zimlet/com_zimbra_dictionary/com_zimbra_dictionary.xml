@@ -1,0 +1,15 @@
+<zimlet name="com_zimbra_dictionary" version="1.0" description="Dictionary">
+	<include>dictionary.js</include>
+	<include>DictionaryPrefsDialog.js</include>
+	<handlerObject>Com_Zimbra_Dictionary</handlerObject>
+	<zimletPanelItem label="Dictionary">
+		<toolTipText>Select a word and press Ctrl-Y to look it up.</toolTipText>
+		<contextMenu>
+	      <menuItem label="Preferences..." id="prefs"/>
+		</contextMenu>
+	</zimletPanelItem>
+
+	<userProperties>
+		<property type="string" name="dict" label="Default Dictionary" value="*"/>
+	</userProperties>
+</zimlet>
