@@ -133,9 +133,9 @@ sub get_pid() {
     }
     return $pid;
 }
-sub invoke_thread_dump($) {
-    my $pid = shift;
-    kill('SIGQUIT', $pid);
+sub invoke_thread_dump($$) {
+    my ($i, $ts) = @_;
+    system("/opt/zimbra/bin/zmthrdump > threaddump.$i.$ts 2>&1");
 }
 
 sub collect_thread_stats($) {
@@ -226,7 +226,7 @@ for (my $i = 1; $i <= 10; $i++) {
     logmsg "Collecting thread stats/stacks: $i of 10\n";
     my $TS = strftime("%H-%M-%S", localtime());
 
-    invoke_thread_dump($mailboxd_pid);
+    invoke_thread_dump($i, $TS);
 
     my $stats = collect_thread_stats($mailboxd_pid);
     open(STATS, ">proc-stats.$i.$TS") || warn $i;
