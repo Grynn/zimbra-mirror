@@ -268,14 +268,18 @@ function(tmpObj, app) {
 	try {
 		//find out what is this account's COS
 		if(ZaSettings.COSES_ENABLED) {
-			myCos = app.getCosList().getItemById(tmpObj.attrs[ZaAccount.A_COSId]);
-			if(!myCos) {
-				var cosList = app.getCosList();
-				if(cosList.size() > 0) {
-					//myCos = cosList[0];
-					myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], cosList, app);
-					tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
+			//myCos = app.getCosList().getItemById(tmpObj.attrs[ZaAccount.A_COSId]);
+			if(tmpObj.attrs[ZaAccount.A_COSId]) {
+				myCos = ZaCos.getCosById(tmpObj.attrs[ZaAccount.A_COSId],app);
+				if(!myCos) {
+					app.getCurrentController().popupErrorDialog(AjxMessageFormat.format (ZaMsg.ERROR_COS_NOT_FOUND,[tmpObj.attrs[ZaAccount.A_COSId]]));
+					return false;
 				}
+			}
+			if(!myCos) {
+				//myCos = cosList[0];
+				myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name], app);
+				tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
 			}		
 		}
 	} catch (ex) {
@@ -1574,15 +1578,14 @@ function (value, event, form){
 				//set the right default cos at the account creation time
 				|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
 		{ //see if the cos needs to be updated accordingly
-			var cosList = form.getController().getCosList();
-			instance.cos = ZaCos.getDefaultCos4Account.call(p, value, cosList, form.parent._app );
+			instance.cos = ZaCos.getDefaultCos4Account.call(p, value, form.parent._app );
 			instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
 			
 			
-		}else if (!ZaSettings.COSES_ENABLED ){
+		} else if (!ZaSettings.COSES_ENABLED ){
 			if ((!p._domains) || (!p._domains[newDomainName])){
 				//send the GetDomainRequest
-				var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);	
+				/*var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);	
 				var domainEl = soapDoc.set("domain", newDomainName);
 				domainEl.setAttribute ("by", "name");
 				//var getDomainCommand = new ZmCsfeCommand();
@@ -1595,7 +1598,8 @@ function (value, event, form){
 				
 				var domain = new ZaItem ();
 				domain.initFromJS (resp.domain[0]);
-				
+				*/
+				var domain = ZaDomain.getDomainByName(newDomainName,form.parent._app)
 				//keep the domain instance, so the future call is not needed.
 				//it is used in new account and edit account
 				if (p._domains) {
@@ -1654,11 +1658,8 @@ function (instance, firstName, lastName, initials) {
 }
 
 ZaAccount.setDefaultCos =
-function (instance, cosList, app) {
-	if (!cosList) {
-	   	throw (new AjxException ("No cos is available.")) ;
-	}
-	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name], cosList, app)
+function (instance, app) {
+	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name], app)
 			
 	if(defaultCos.id) {
 		instance.cos = defaultCos;
@@ -1671,13 +1672,13 @@ function (){
 	try {
 		var cosId = this.attrs[ZaAccount.A_COSId] ;
 		var currentCos ;
-		var cosList = this._app.getCosList();
+		/*var cosList = this._app.getCosList();
 		if (cosId) {
 			currentCos = cosList.getItemById(cosId);
-		}
-		
+		}*/
+		currentCos = ZaCos.getCosById(this.attrs[ZaAccount.A_COSId],this._app);
 		if (!currentCos){
-			currentCos = ZaCos.getDefaultCos4Account( this.name, cosList, this._app );
+			currentCos = ZaCos.getDefaultCos4Account( this.name, this._app );
 		}
 		return currentCos ;
 	} catch (ex) {

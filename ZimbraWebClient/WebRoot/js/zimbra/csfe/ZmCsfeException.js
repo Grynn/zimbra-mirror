@@ -127,6 +127,7 @@ ZmCsfeException.NO_SUCH_DOMAIN				= "account.NO_SUCH_DOMAIN";
 ZmCsfeException.MAINTENANCE_MODE			= "account.MAINTENANCE_MODE";
 ZmCsfeException.TOO_MANY_IDENTITIES			= "account.TOO_MANY_IDENTITIES";
 ZmCsfeException.TOO_MANY_SEARCH_RESULTS		= "account.TOO_MANY_SEARCH_RESULTS";
+ZmCsfeException.NO_SUCH_COS 				= "account.NO_SUCH_COS"; 
 
 ZmCsfeException.MAIL_ALREADY_EXISTS					= "mail.ALREADY_EXISTS";
 ZmCsfeException.MAIL_IMMUTABLE						= "mail.IMMUTABLE_OBJECT";

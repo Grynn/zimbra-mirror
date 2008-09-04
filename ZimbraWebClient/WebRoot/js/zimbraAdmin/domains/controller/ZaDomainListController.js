@@ -23,7 +23,8 @@
 ZaDomainListController = function(appCtxt, container, app) {
 	ZaListViewController.call(this, appCtxt, container, app,"ZaDomainListController");
 	this._helpURL = ZaDomainListController.helpURL;	
-	this._currentQuery = new ZaSearchQuery("", [ZaSearch.DOMAINS], false, "");
+	this._currentQuery = ""
+	this._currentPageNum = 1;
 	this._currentSortField = ZaDomain.A_domainName;
 	this.objType = ZaEvent.S_DOMAIN;	
 	this.RESULTSPERPAGE = ZaDomain.RESULTSPERPAGE; 

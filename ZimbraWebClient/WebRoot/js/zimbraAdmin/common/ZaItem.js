@@ -49,10 +49,11 @@ ZaItem.MAILQ = "mailque";
 ZaItem.A_objectClass = "objectClass";
 ZaItem.A_zimbraId = "zimbraId";
 ZaItem.A_cn = "cn" ;
-
 /* Translation of  the attribute names to the screen names */
 ZaItem._ATTR = new Object();
 ZaItem._ATTR[ZaItem.A_zimbraId] = ZaMsg.attrDesc_zimbraId;
+
+ZaItem.ID_PATTERN = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
 /*
 ZaItem.prototype.getTabToolTip =

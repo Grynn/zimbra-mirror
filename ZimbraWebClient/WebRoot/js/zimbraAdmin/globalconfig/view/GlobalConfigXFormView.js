@@ -108,7 +108,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							{ref:ZaGlobalConfig.A_zimbraDefaultDomainName, type:_DYNSELECT_,
 								label: ZaMsg.NAD_DefaultDomainName, onChange:ZaTabView.onFormFieldChanged,
 								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
-								dataFetcherClass:ZaSearch,choices:EmailAddr_XFormItem.domainChoices,editable:true
+								dataFetcherClass:ZaSearch,editable:true
 							},
 							{ref: ZaGlobalConfig.A_zimbraScheduledTaskNumThreads, type:_INPUT_,
 							  label: ZaMsg.NAD_zimbraScheduledTaskNumThreads, width: "5em",

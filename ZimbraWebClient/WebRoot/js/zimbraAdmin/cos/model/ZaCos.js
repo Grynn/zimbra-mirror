@@ -151,7 +151,22 @@ ZaCos.A_zimbraPasswordLockoutMaxFailures = "zimbraPasswordLockoutMaxFailures";
 ZaCos.A_zimbraPasswordLockoutFailureLifetime = "zimbraPasswordLockoutFailureLifetime";
 
 ZaCos.A_zimbraFreebusyExchangeUserOrg = "zimbraFreebusyExchangeUserOrg" ;
-
+ZaCos.cacheCounter = 0;
+ZaCos.staticCosByNameCacheTable={};
+ZaCos.staticCosByIdCacheTable = {};
+ZaCos.putCosToCache = function(cos) {
+	if(ZaCos.cacheCounter==100) {
+		ZaCos.staticCosByNameCacheTable = {};
+		ZaCos.staticCosByIdCacheTable = {};
+		ZaCos.cacheCounter = 0;
+	}
+		
+	if(!ZaCos.staticCosByNameCacheTable[cos.name] || !ZaCos.staticCosByIdCacheTable[cos.id]) {
+		ZaCos.cacheCounter++;
+		ZaCos.staticCosByNameCacheTable[cos.name] = cos;
+		ZaCos.staticCosByIdCacheTable[cos.id] = cos;
+	}
+}
 //internal attributes - do not send these to the server
 //ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
 //ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";
@@ -343,6 +358,8 @@ function (mods) {
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyCosResponse;
 	this.initFromJS(resp.cos[0]);
+	ZaCos.putCosToCache(this);
+
 }
 ZaItem.modifyMethods["ZaCos"].push(ZaCos.modifyMethod);
 /**
@@ -410,67 +427,84 @@ function(app, container) {
 
 
 ZaCos.getDefaultCos4Account =
-function (accountName, cosList, app){
-	if (!cosList) {
-		throw (new AjxException ("No cos is available.")) ;
-	}
+function (accountName, app){
 	var defaultCos ;
 	var defaultDomainCos ;
-	var idHash = cosList.getIdHash();
-	for(var i in cosList.getIdHash()) {
-		if(idHash[i].name == "default") {
-			defaultCos = idHash[i];
-		}
-	}
+
 		
-	if (!accountName && cosList.size() > 0) {
+	if (!accountName) {
 		return defaultCos; //default cos
 	}
 	
 	var domainName = ZaAccount.getDomain(accountName);
 	var domainCosId ;
-	if (domainName && ((!this._domains) || (!this._domains[domainName]))){
-		//send the GetDomainRequest
-		var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);	
-		var domainEl = soapDoc.set("domain", domainName);
-		domainEl.setAttribute ("by", "name");
-		//var getDomainCommand = new ZmCsfeCommand();
-		var params = new Object();
-		params.soapDoc = soapDoc;	
-		var reqMgrParams = {
-			controller: app.getCurrentController(),
-			busyMsg: ZaMsg.BUSY_GET_DOMAIN
-		}
-		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
-		var domain = new ZaItem ();
-		domain.initFromJS (resp.domain[0]);
+	var domain = ZaDomain.getDomainByName(domainName,app);
+	if(domain) {
 		domainCosId = domain.attrs[ZaDomain.A_domainDefaultCOSId] ;
-		
-		//keep the domain instance, so the future call is not needed.
-		//it is used in new account and edit account
-		if (this._domains) {
-			this._domains[domainName] = domain ;
+		//when domainCosId doesn't exist, we always set default cos
+		if (!domainCosId) {
+			var cos = ZaCos.getCosByName("default",app);
+			return cos ;
+		} else{
+			var cos = ZaCos.getCosById (domainCosId,app);
+		 	return cos ;
+			//return cosList.getItemById(domainCosId);
 		}
-	} else if (domainName && domainName.length>1) {
-		domainCosId = this._domains[domainName].attrs[ZaDomain.A_domainDefaultCOSId] ;
-	}	
-		
-	//when domainCosId doesn't exist, we always set default cos
-	if (!domainCosId) {
-		return defaultCos ;
-	}else{
-		return cosList.getItemById(domainCosId);
+	} else {
+		return null;
 	}
+	
 }
 
+ZaCos.getCosByName = 
+function(cosName, app) {
+	if(!cosName)
+		return null;
+		
+	var cos = ZaCos.staticCosByNameCacheTable[cosName];
+	if(!cos) {
+		cos = new ZaCos(app);
+		try {
+			cos.load("name", cosName);
+		} catch (ex) {
+			if(ex.code == ZmCsfeException.NO_SUCH_COS) {
+				return null;
+			} else {
+				throw (ex);
+			}
+		}
+		ZaCos.putCosToCache(cos);
+	}
+	return cos;	
+} 
+
 ZaCos.getCosById = 
-function (cosListArray, cosId) {
-	var cnt = cosListArray.length;
+function (cosId, app) {
+	if(!cosId)
+		return null;
+		
+	var cos = ZaCos.staticCosByIdCacheTable[cosId];
+	if(!cos) {
+		cos = new ZaCos(app);
+		try {
+			cos.load("id", cosId);
+		} catch (ex) {
+			if(ex.code == ZmCsfeException.NO_SUCH_COS) {
+				return null;
+			} else {
+				throw (ex);
+			}
+		}
+		ZaCos.putCosToCache(cos);
+	}
+	return cos;
+	
+	/*var cnt = cosListArray.length;
 	for(var i = 0; i < cnt; i++) {
 		if(cosListArray[i].id == cosId) {
 			return cosListArray[i];
 		}
-	}
+	}*/
 }
 
 ZaCos.myXModel = {

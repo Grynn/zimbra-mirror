@@ -68,7 +68,7 @@ ZaNewAccountXWizard = function(parent, app) {
 		this.stepChoices.push({value:ZaNewAccountXWizard.ADVANCED_STEP, label:ZaMsg.TABT_Advanced});
 	}
 	this._lastStep = this.stepChoices.length;
-
+	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());	
 //    DBG.timePt(AjxDebug.PERF, "finished initForm");
@@ -136,7 +136,6 @@ function (loc) {
 	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
-	this._isCosChanged = false ;
 }
 
 ZaNewAccountXWizard.prototype.finishWizard = 
@@ -240,15 +239,22 @@ function(entry) {
 
 	this._containedObject.id = null;
 	if(ZaSettings.COSES_ENABLED) {
-		this._containedObject.cos = this._app.getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
+		if(this._containedObject.attrs[ZaAccount.A_COSId]) {
+			this._containedObject.cos = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId], this._app);
+		}
+		//this._containedObject.cos = this._app.getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
+		if(!this._containedObject.cos) {
+			this._containedObject.cos = ZaCos.getCosByName("default", this._app);
+		}
+		//this should never happen, because default cos should always be there. Last resort.
 		if(!this._containedObject.cos) {
 			var cosList = this._app.getCosList().getArray();
 			this._containedObject.cos = cosList[0];
 			this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;
 		}
-	} else {
-		this._containedObject.cos = new ZaCos(this._app);
-	}
+	} 
+	this.cosChoices.setChoices([this._containedObject.cos]);
+	this.cosChoices.dirtyChoices();
 	this._containedObject.attrs[ZaAccount.A_accountStatus] = ZaAccount.ACCOUNT_STATUS_ACTIVE;
 	this._containedObject[ZaAccount.A2_autodisplayname] = "TRUE";
 	this._containedObject[ZaAccount.A2_autoMailServer] = "TRUE";
@@ -330,12 +336,17 @@ function(entry) {
 
 ZaNewAccountXWizard.onCOSChanged = 
 function(value, event, form) {
-	if(!ZaSettings.COSES_ENABLED)
-		return;
-		
-	form.getInstance().cos = form.getController().getCosList().getItemById(value);
+	if(ZaItem.ID_PATTERN.test(value))  {
+		form.getInstance().cos = ZaCos.getCosById(value, form.parent._app);
+		this.setInstanceValue(value);
+	} else {
+		form.getInstance().cos = ZaCos.getCosByName(value, form.parent._app);
+		if(form.getInstance().cos) {
+			//value = form.getInstance().cos.id;
+			value = form.getInstance().cos.id;
+		} 
+	}
 	this.setInstanceValue(value);
-	form.parent._isCosChanged = true ;
 	return value;
 }
 
@@ -427,15 +438,36 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		setupGroup.items.push(
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [
-					{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label: null, 
+					/*{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label: null, 
 						relevant:"instance[ZaAccount.A2_autoCos]==\"FALSE\"", relevantBehavior:_DISABLE_ ,
 						labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged },
+					*/
+					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
+						onChange:ZaNewAccountXWizard.onCOSChanged,
+						relevant:"instance[ZaAccount.A2_autoCos]==\"FALSE\"",relevantBehavior:_DISABLE_ ,
+						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,choices:this.cosChoices,
+						dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
+								// dereference through the choices array, if provided
+								//newValue = this.getChoiceLabel(newValue);
+								if(ZaItem.ID_PATTERN.test(newValue)) {
+									var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
+									if(cos)
+										newValue = cos.name;
+								} 
+								if (newValue == null) {
+									newValue = "";
+								} else {
+									newValue = "" + newValue;
+								}
+								return newValue;
+							}
+					},
 					{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_, 
 						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
 						trueValue:"TRUE", falseValue:"FALSE" ,
 						elementChanged: function(elementValue,instanceValue, event) {
 							if(elementValue=="TRUE") {
-								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app.getCosList(),this.getForm().parent._app);	
+								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app);	
 							}
 							this.getForm().itemChanged(this, elementValue, event);
 						}

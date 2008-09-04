@@ -133,11 +133,18 @@ function(tmpObj, app) {
 	
 	//find out what is this account's COS
 	if(ZaSettings.COSES_ENABLED) {
-		var cosList = app.getCosList();
-		myCos = cosList.getItemById(tmpObj.attrs[ZaResource.A_COSId]);
-		if(!myCos && cosList.size() > 0) {
-			myCos = cosList.getArray()[0];
-			tmpObj.attrs[ZaResource.A_COSId] = cosList.getArray()[0].id;
+		
+		if(tmpObj.attrs[ZaResource.A_COSId]) {
+			myCos = ZaCos.getCosById (tmpObj.attrs[ZaResource.A_COSId],app);
+		}
+		myCos = ZaCos.getCosById(tmpObj.attrs[ZaResource.A_COSId], app);
+		//myCos = cosList.getItemById(tmpObj.attrs[ZaResource.A_COSId]);
+		if(!myCos ) {
+			var cosList = app.getCosList();
+			if(cosList.size()>0) {
+				myCos = cosList.getArray()[0];
+				tmpObj.attrs[ZaResource.A_COSId] = cosList.getArray()[0].id;
+			}
 		}		
 	}
 	//if the account did not have a valid cos id - pick the first COS

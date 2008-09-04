@@ -91,6 +91,7 @@ function(entry) {
 		}	
 		this._view.setDirty(false);
 		entry[ZaModel.currentTab] = "1"
+		entry.load("id", entry.id);
 	  	this._view.setObject(entry);
 
 	} catch (ex) {
@@ -605,8 +606,7 @@ function () {
 ZaCosController.prototype.newCos = 
 function () {
 	var newCos = new ZaCos(this._app);
-	var defCos = new ZaCos(this._app);
-	defCos.load("name", "default");
+	var defCos = ZaCos.getCosByName("default",this._app);
 	//copy values from default cos to the new cos
 	for(var aname in defCos.attrs) {
 		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )

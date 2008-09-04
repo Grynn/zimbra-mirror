@@ -1894,6 +1894,10 @@ XFormItem.prototype.choicesAreDirty = function () {
 	return (this._choiceDisplayIsDirty == true || this.getAlwaysUpdateChoices());
 }
 
+XFormItem.prototype.cleanChoiceDisplay = function () {
+	this._choiceDisplayIsDirty = false;
+}
+
 XFormItem.prototype.showInputTooltip =
 function (event) {
 	var dwtEv = new DwtUiEvent(true);
@@ -1975,6 +1979,24 @@ Output_XFormItem.prototype.updateElement = function (newValue) {
 		this.getElement().innerHTML = newValue;
 }
 
+Output_XFormItem.prototype.initFormItem = function () {
+	
+	XFormItem.prototype.initFormItem.call(this);
+	
+	// if we're dealing with an XFormChoices object...
+	var choices = this.getChoices();
+	if (choices == null || choices.constructor != XFormChoices) return;
+
+	//	...set up to receive notification when its choices change
+	var listener = new AjxListener(this, this.dirtyDisplay);
+	choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);
+}
+
+Output_XFormItem.prototype.dirtyDisplay = function () {
+	XFormItem.prototype.dirtyDisplay.call(this);
+	this._choiceDisplayIsDirty = true;
+	delete this.$normalizedChoices;
+}
 
 // set up how disabling works for this item type
 Output_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEnabledCssClass;
@@ -2660,16 +2682,15 @@ Select1_XFormItem.prototype.dirtyDisplay = function () {
 	delete this.$normalizedChoices;
 }
 
-Select1_XFormItem.prototype.cleanChoiceDisplay = function () {
-	this._choiceDisplayIsDirty = false;
-}
-
-
 Select1_XFormItem.prototype.updateElement = function (newValue) {
 	if (this.choicesAreDirty()) this.updateChoicesHTML();
 	this.updateValueInHTMLSelect1(newValue, this.getElement(), this.getSelectionIsOpen());
 }
 
+
+Select1_XFormItem.prototype.cleanChoiceDisplay = function () {
+	this._choiceDisplayIsDirty = false;
+}
 
 // set up how disabling works for this item type
 Select1_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDisabledProperty;

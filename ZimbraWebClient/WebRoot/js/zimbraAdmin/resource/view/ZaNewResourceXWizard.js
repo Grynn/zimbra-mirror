@@ -159,16 +159,9 @@ function(entry) {
 
 	this._containedObject.id = null;
 	if(ZaSettings.COSES_ENABLED) {
-		var cosList = this._app.getCosList().getArray();
-		for(var ix in cosList) {
-			if(cosList[ix].name == "default") {
-				this._containedObject.attrs[ZaResource.A_COSId] = cosList[ix].id;
-				this._containedObject.cos = cosList[ix];
-				break;
-			}
-		}
-	
+		this._containedObject.cos = ZaCos.getCosByName("default",this._app);
 		if(!this._containedObject.cos) {
+			var cosList = this._app.getCosList().getArray();
 			this._containedObject.cos = cosList[0];
 			this._containedObject.attrs[ZaResource.A_COSId] = cosList[0].id;
 		}
@@ -207,15 +200,17 @@ ZaNewResourceXWizard.onCOSChanged =
 function(value, event, form) {
 	if(!ZaSettings.COSES_ENABLED)
 		return;
-		
-	var cosList = form.getController().getCosList().getArray();
+	
+	form.getInstance().cos = ZaCos.getCosById(value,form.parent._app);
+	
+/*	var cosList = form.getController().getCosList().getArray();
 	var cnt = cosList.length;
 	for(var i = 0; i < cnt; i++) {
 		if(cosList[i].id == value) {
-			form.getInstance().cos = cosList[i];
+			cosList[i];
 			break;
 		}
-	}
+	}*/
 	this.setInstanceValue(value);
 	return value;
 }

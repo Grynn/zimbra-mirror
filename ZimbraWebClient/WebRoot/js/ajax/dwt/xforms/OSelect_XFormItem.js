@@ -808,11 +808,17 @@ OSelect1_XFormItem.prototype.setElementEnabled = function(enabled) {
 		AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrow");
 		this.getForm().getElement(this.getId()).className = this.cssClass;
 		table.className = this.getTableCssClass();
+		if(this.getInheritedProperty("editable")) {
+			this.getDisplayElement().disabled=false;
+		}
 	} else {
 		this.getDisplayElement().className = this.getDisplayCssClass() + "_disabled";
 		AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrowDis");
 		this.getForm().getElement(this.getId()).className = this.cssClass + "_disabled";
 		table.className = this.getTableCssClass()+"_disabled";
+		if(this.getInheritedProperty("editable")) {
+			this.getDisplayElement().disabled=true;
+		}
 	}
 }
 

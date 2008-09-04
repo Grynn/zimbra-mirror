@@ -16,78 +16,116 @@
  */
 
 ZaCosListController = function(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app, "ZaCosListController");
+	ZaListViewController.call(this, appCtxt, container, app, "ZaCosListController");
 	this.objType = ZaEvent.S_COS;	
+	this._currentSortField = ZaCos.A_name;
+	this._currentPageNum = 1;
+	this._currentSortOrder = "1";
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "cos/class_of_service.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._currentQuery = "";
+	this.fetchAttrs = [ZaCos.A_name,ZaCos.A_description].join();
+	this.RESULTSPERPAGE = ZaDomain.RESULTSPERPAGE; 
+	this.MAXSEARCHRESULTS = ZaDomain.MAXSEARCHRESULTS;	
 }
 
-ZaCosListController.prototype = new ZaController();
+ZaCosListController.prototype = new ZaListViewController();
 ZaCosListController.prototype.constructor = ZaCosListController;
+ZaController.initToolbarMethods["ZaCosListController"] = new Array();
+ZaController.initPopupMenuMethods["ZaCosListController"] = new Array();
+ZaListViewController.changeActionsStateMethods["ZaCosListController"] = new Array(); 
 
 //ZaCosListController.COS_VIEW = "ZaCosListController.COS_VIEW";
 
-ZaCosListController.prototype.show = 
-function(list, openInNewTab) {
-    if (!this._contentView) {
-    	this._ops = new Array();
-    	this._ops.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener)));
-   	this._ops.push(new ZaOperation(ZaOperation.DUPLICATE, ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, "DuplicateCOS", "DuplicateCOSDis", new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener)));    	    	
-    	this._ops.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.COSTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaCosListController.prototype._editButtonListener)));    	
-    	this._ops.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaCosListController.prototype._deleteButtonListener)));    	    	
-		this._ops.push(new ZaOperation(ZaOperation.NONE));
-		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
-		this._toolbar = new ZaToolBar(this._container, this._ops);
-    
-		this._contentView = new ZaCosListView(this._container);
-		var elements = new Object();
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		 
-		//this._app.createView(ZaZimbraAdmin._COS_LIST_VIEW, elements);
-		var tabParams = {
-			openInNewTab: false,
-			tabId: this.getContentViewId(),
-			tab: this.getMainTab() 
-		}
-		this._app.createView(this.getContentViewId(), elements, tabParams) ;
-		
-		if (list != null)
-			this._contentView.set(list.getVector());
-
-    	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._ops);		
-		//this._app.pushView(ZaZimbraAdmin._COS_LIST_VIEW);
-		this._app.pushView(this.getContentViewId());
-		
-		//set a selection listener on the account list view
-		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
-		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = this._app.dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);							
-
-		this._UICreated = true;
-		this._app._controllers[this.getContentViewId ()] = this ;
-	} else {
-		if (list != null)
-			this._contentView.set(list.getVector());	
-
-		//this._app.pushView(ZaZimbraAdmin._COS_LIST_VIEW);
-		this._app.pushView(this.getContentViewId());
+ZaCosListController.prototype.show = function (doPush) {
+	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
+	
+	var searchParams = {
+			query:this._currentQuery ,
+			types:[ZaSearch.COSES],
+			sortBy:this._currentSortField,
+			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
+			sortAscending:this._currentSortOrder,
+			limit:this.RESULTSPERPAGE,
+			callback:callback,
+			attrs:this.fetchAttrs,
+			controller: this
 	}
-//	this._app.setCurrentController(this);		
-	this._removeList = new Array();
-	if (list != null)
-		this._list = list;
-		
-	this.changeActionsState();		
-	/*
-	if (openInNewTab) {//when a ctrl shortcut is pressed
-		
-	}else{ //open in the main tab
-		this.updateMainTab ("COS") ;	
-	}*/
+	ZaSearch.searchDirectory(searchParams);
+}
+
+ZaCosListController.prototype._show = 
+function (list, openInNewTab, openInSearchTab) {
+	this._updateUI(list, openInNewTab, openInSearchTab);
+	this._app.pushView(this.getContentViewId (), openInNewTab, openInSearchTab);
+	if (openInSearchTab) {
+		this._app.updateSearchTab();
+	}else{
+		this._app.updateTab(this.getMainTab(), this._app._currentViewId );
+	}
 }
 
 
-ZaCosListController.prototype.refresh = 
-function() {
+ZaCosListController.initPopupMenuMethod =
+function () {
+   	this._popupOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener)));
+   	this._popupOperations.push(new ZaOperation(ZaOperation.DUPLICATE, ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, "DuplicateCOS", "DuplicateCOSDis", new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener)));    	
+   	this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.COSTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaCosListController.prototype._editButtonListener)));    	    	
+	this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaCosListController.prototype._deleteButtonListener)));   		
+}
+ZaController.initPopupMenuMethods["ZaCosListController"].push(ZaCosListController.initPopupMenuMethod);
+
+/**
+* This method is called from {@link ZaController#_initToolbar}
+**/
+ZaCosListController.initToolbarMethod =
+function () {
+	// first button in the toolbar is a menu.
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosListController.prototype._newButtonListener)));
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.DUPLICATE, ZaMsg.TBB_Duplicate, ZaMsg.COSTBB_Duplicate_tt, "DuplicateCOS", "DuplicateCOSDis", new AjxListener(this, ZaCosListController.prototype._duplicateButtonListener)));    	
+   	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.COSTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaCosListController.prototype._editButtonListener)));    	    	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaCosListController.prototype._deleteButtonListener)));   		
+}
+ZaController.initToolbarMethods["ZaCosListController"].push(ZaCosListController.initToolbarMethod);
+
+//private and protected methods
+ZaCosListController.prototype._createUI = 
+function (openInNewTab, openInSearchTab) {
+	this._contentView = new ZaCosListView(this._container);
+	this._app._controllers[this.getContentViewId ()] = this ;
+	// create the menu operations/listeners first	
+    this._initToolbar();
+	//always add Help and navigation buttons at the end of the toolbar    
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.PAGE_BACK, ZaMsg.Previous, ZaMsg.PrevPage_tt, "LeftArrow", "LeftArrowDis",  new AjxListener(this, this._prevPageListener)));
+	
+	//add the acount number counts
+	ZaSearch.searchResultCountsView(this._toolbarOperations);
+	
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.PAGE_FORWARD, ZaMsg.Next, ZaMsg.NextPage_tt, "RightArrow", "RightArrowDis", new AjxListener(this, this._nextPageListener)));
+	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+
+	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);    
+		
+	var elements = new Object();
+	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
+	//this._app.createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
+	var tabParams = {
+			openInNewTab: false,
+			tabId: this.getContentViewId(),
+			tab: openInSearchTab ? this.getSearchTab() : this.getMainTab() 
+		}
+	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	
+	this._initPopupMenu();
+	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
+	
+	//set a selection listener on the account list view
+	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
+	this._removeConfirmMessageDialog = this._app.dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+		
+	this._UICreated = true;
 }
 
 /**
@@ -189,8 +227,7 @@ ZaCosListController.prototype._newButtonListener =
 function(ev) {
 	var newCos = new ZaCos(this._app);
 	//load default COS
-	var defCos = new ZaCos(this._app);
-	defCos.load("name", "default");
+	var defCos = ZaCos.getCosByName("default",this._app);
 	//copy values from default cos to the new cos
 	for(var aname in defCos.attrs) {
 		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
@@ -377,8 +414,11 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaCosListController.prototype.changeActionsState = 
-function () {
+ZaCosListController.changeActionsStateMethod = 
+function (enableArray,disableArray) {
+	if(!this._contentView)
+		return;
+		
 	var cnt = this._contentView.getSelectionCount();
 	var hasDefault = false;
 	if(cnt >= 1) {
@@ -393,35 +433,33 @@ function () {
 			}
 		}
 	}
-		
 	if(cnt == 1) {
-		var opsArray = [ZaOperation.EDIT, ZaOperation.DUPLICATE];
-		if(!hasDefault) {
-        	opsArray.push(ZaOperation.DELETE);
-		} else {
-			var opsArray2 = [ZaOperation.DELETE];
-			this._toolbar.enable(opsArray2, false);
-			this._actionMenu.enable(opsArray2, false);
+		var item = this._contentView.getSelection()[0];
+		if(item) {
+			if(!hasDefault) {
+				enableArray.push(ZaOperation.EDIT);
+				enableArray.push(ZaOperation.DELETE);
+				enableArray.push(ZaOperation.DUPLICATE);							
+			} else {
+				enableArray.push(ZaOperation.EDIT);
+				disableArray.push(ZaOperation.DELETE);
+				enableArray.push(ZaOperation.DUPLICATE);											
+			}
 		}
-
-		this._toolbar.enable(opsArray, true);
-		this._actionMenu.enable(opsArray, true);
 	} else if (cnt > 1){
-		var opsArray1 = [ZaOperation.EDIT, ZaOperation.DUPLICATE];
-		this._toolbar.enable(opsArray1, false);
-		this._actionMenu.enable(opsArray1, false);
-
-		var opsArray2 = [ZaOperation.DELETE];
 		if(!hasDefault) {
-			this._toolbar.enable(opsArray2, true);
-			this._actionMenu.enable(opsArray2, true);
+			enableArray.push(ZaOperation.DELETE);
 		} else {
-			this._toolbar.enable(opsArray2, false);
-			this._actionMenu.enable(opsArray2, false);
+			disableArray.push(ZaOperation.DELETE);
 		}
+		disableArray.push(ZaOperation.DUPLICATE);		
+		disableArray.push(ZaOperation.EDIT);
 	} else {
-		var opsArray = [ZaOperation.EDIT, ZaOperation.DELETE, ZaOperation.DUPLICATE];
-		this._toolbar.enable(opsArray, false);
-		this._actionMenu.enable(opsArray, false);
+		disableArray.push(ZaOperation.EDIT);
+		disableArray.push(ZaOperation.DELETE);
+		disableArray.push(ZaOperation.DUPLICATE);						
 	}
 }
+ZaListViewController.changeActionsStateMethods["ZaCosListController"].push(ZaCosListController.changeActionsStateMethod);
+
+

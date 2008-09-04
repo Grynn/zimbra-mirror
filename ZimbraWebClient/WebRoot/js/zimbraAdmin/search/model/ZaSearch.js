@@ -39,6 +39,7 @@ ZaSearch.DLS = "distributionlists";
 ZaSearch.ACCOUNTS = "accounts";
 ZaSearch.RESOURCES = "resources";
 ZaSearch.DOMAINS = "domains";
+ZaSearch.COSES = "coses";
 
 ZaSearch.TYPES = new Object();
 ZaSearch.TYPES[ZaItem.ALIAS] = ZaSearch.ALIASES;
@@ -46,6 +47,7 @@ ZaSearch.TYPES[ZaItem.DL] = ZaSearch.DLS;
 ZaSearch.TYPES[ZaItem.ACCOUNT] = ZaSearch.ACCOUNTS;
 ZaSearch.TYPES[ZaItem.RESOURCE] = ZaSearch.RESOURCES;
 ZaSearch.TYPES[ZaItem.DOMAIN] = ZaSearch.DOMAINS;
+ZaSearch.TYPES[ZaItem.COS] = ZaSearch.COSES;
 
 
 ZaSearch.A_query = "query";
@@ -208,7 +210,7 @@ ZaSearch.prototype.dynSelectDataCallback = function (callback, resp) {
 		return;
 	try {
 		if(!resp) {
-			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.dynSelectDataCallback"));
 		}
 		if(resp.isException()) {
 			throw(resp.getException());
@@ -221,7 +223,28 @@ ZaSearch.prototype.dynSelectDataCallback = function (callback, resp) {
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataCallback");	
 	}
-	
+}
+
+ZaSearch.prototype.dynSelectSearchCosesCallback = function (callback, resp) {
+	if(!callback)	
+		return;
+	try {
+		if(!resp) {
+			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.dynSelectSearchCosesCallback"));
+		}
+		if(resp.isException()) {
+			throw(resp.getException());
+		} else {
+			var response = resp.getResponse().Body.SearchDirectoryResponse;
+			var list = new ZaItemList(null, this._app);	
+			list.loadFromJS(response);	
+			var choices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
+			choices.setChoices(list.getArray());
+			callback.run(list.getArray(), response.more, response.searchTotal);
+		}
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchCosesCallback");	
+	}
 }
 
 ZaSearch.prototype.dynSelectSearchAccounts = function (value, event, callback) {
@@ -261,11 +284,26 @@ ZaSearch.prototype.dynSelectSearchDomains = function (value, event, callback) {
 		params.types = [ZaSearch.DOMAINS];
 		params.callback = dataCallback;
 		params.sortBy = ZaDomain.A_domainName;
-		params.query = ZaSearch.getSearchByNameQuery(value);
+		params.query = ZaSearch.getSearchDomainByNameQuery(value);
 		params.controller = this._app.getCurrentController();
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchDomains");		
+	}
+}
+
+ZaSearch.prototype.dynSelectSearchCoses = function (value, event, callback) {
+	try {
+		var params = new Object();
+		dataCallback = new AjxCallback(this, this.dynSelectSearchCosesCallback, callback);
+		params.types = [ZaSearch.COSES];
+		params.callback = dataCallback;
+		params.sortBy = ZaCos.A_name;
+		params.query = ZaSearch.getSearchCosByNameQuery(value);
+		params.controller = this._app.getCurrentController();
+		ZaSearch.searchDirectory(params);
+	} catch (ex) {
+		this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchCoses");		
 	}
 }
 
@@ -355,6 +393,25 @@ function (domainName, types, pagenum, orderby, isascending, app, attrs, limit) {
 	return ZaSearch.search("", types, pagenum, orderby, isascending, app, attrs, limit, domainName);
 }
 
+ZaSearch.getSearchCosByNameQuery =
+function(n) {
+	if (n == null || n == "") {
+		return "";
+	} else {
+		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(zimbraId="+n+"))");
+	}
+}
+
+ZaSearch.getSearchDomainByNameQuery =
+function(n) {
+	if (n == null || n == "") {
+		return "";
+	} else {
+		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(zimbraId="+n+")(zimbraDomainName=*"+n+"*))");
+	}
+}
 
 ZaSearch.getSearchByNameQuery =
 function(n) {
@@ -362,7 +419,7 @@ function(n) {
 		return "";
 	} else {
 		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
-		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraId="+n+")(mail=*"+n+"*)(zimbraMailAlias=*"+n+"*)(zimbraMailDeliveryAddress=*"+n+"*)(zimbraDomainName=*"+n+"*))");
+		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraId="+n+")(mail=*"+n+"*)(zimbraMailAlias=*"+n+"*)(zimbraMailDeliveryAddress=*"+n+"*))");
 	}
 }
 

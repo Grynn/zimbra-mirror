@@ -530,8 +530,8 @@ function(account) {
 			return;
 		}
 		var mailHost = "";
-		var myDomain = new ZaDomain(this._app);
-		myDomain.load("name",account.name.substr(account.name.indexOf("@")+1));
+		var myDomain = ZaDomain.getDomainByName(account.name.substr(account.name.indexOf("@")+1),this._app);
+		//myDomain.load("name",account.name.substr(account.name.indexOf("@")+1));
 		var publicServiceHostname = myDomain.attrs[ZaDomain.A_zimbraPublicServiceHostname];
 		var ms = account.attrs[ZaAccount.A_mailHost] ? account.attrs[ZaAccount.A_mailHost].toLowerCase() : location.hostname.toLowerCase();
 		if(!publicServiceHostname) {
@@ -876,8 +876,7 @@ function (item) {
 				
 				if (minPwdLen == null) {
 					if(item.attrs[ZaAccount.A_COSId] && ZaSettings.COSES_ENABLED) {
-						myCos = new ZaCos(this._app);
-						myCos.load("id", item.attrs[ZaAccount.A_COSId]);
+						myCos = ZaCos.getCosById(item.attrs[ZaAccount.A_COSId],this._app);
 						if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
 							minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
 						}
@@ -887,8 +886,7 @@ function (item) {
 				if (maxPwdLen == null) {
 					if(item.attrs[ZaAccount.A_COSId] && ZaSettings.COSES_ENABLED) {
 						if(!myCos) { 
-							myCos = new ZaCos(this._app);
-							myCos.load("id", item.attrs[ZaAccount.A_COSId]);
+							myCos = ZaCos.getCosById(item.attrs[ZaAccount.A_COSId],this._app);
 						}
 						if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
 							maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];

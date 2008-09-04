@@ -358,12 +358,12 @@ function() {
 ZaApp.prototype.getCosController =
 function() {
 	var c = new ZaCosController(this._appCtxt, this._container, this);
-	c.addChangeListener(new AjxListener(this, ZaApp.prototype.handleCosChange));			
+	//c.addChangeListener(new AjxListener(this, ZaApp.prototype.handleCosChange));			
 	c.addChangeListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosChange));
 	c.addChangeListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosChange));						
 
 	c.addCosCreationListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosCreation));	
-	c.addCosCreationListener(new AjxListener(this, ZaApp.prototype.handleCosCreation));			
+	//c.addCosCreationListener(new AjxListener(this, ZaApp.prototype.handleCosCreation));			
 	c.addCosCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosCreation));				
 	
 	c.addCosRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
@@ -629,10 +629,24 @@ function(refresh) {
 ZaApp.prototype.getCosList =
 function(refresh) {
 	if (refresh || !this._cosList) {
-		if(!this._cosList)
+		/*if(!this._cosList)
 			this._cosList = new ZaItemList(ZaCos, this);
-			
-		ZaCos.loadAll(this,this._cosList);
+		*/
+		var searchParams = {
+			query: "" ,
+			types:[ZaSearch.COSES],
+			sortBy:"id",
+			offset:0,
+			sortAscending:"1",
+			limit:ZaDomain.RESULTSPERPAGE,
+			callback:null,
+			attrs:[ZaCos.A_name,ZaCos.A_description].join(),
+			controller: this.getCurrentController()
+		}
+		var response = ZaSearch.searchDirectory(searchParams);	
+		this._cosList = new ZaItemList(ZaCos, this._app);		
+		this._cosList.loadFromJS(response);
+		//ZaCos.loadAll(this,this._cosList);
 	}
 	return this._cosList;	
 }
@@ -640,7 +654,8 @@ function(refresh) {
 ZaApp.prototype.getCosListChoices =
 function(refresh) {
 	if (refresh || this._cosList == null) {
-		this._cosList = ZaCos.getAll(this);
+		
+		//this._cosList = ZaCos.getAll(this);
 	}
 	if(refresh || this._cosListChoices == null) {
 		if(this._cosListChoices == null)
@@ -699,6 +714,7 @@ function (ev) {
 * @param ev
 * This listener is invoked by any controller that can create an ZaCos object
 **/
+/*
 ZaApp.prototype.handleCosCreation = 
 function (ev) {
 	if(ev) {
@@ -717,12 +733,13 @@ function (ev) {
 			}
 		}
 	}
-}
+}*/
 
 /**
 * @param ev
 * This listener is invoked by any controller that can change an ZaCos object
 **/
+/*
 ZaApp.prototype.handleCosChange = 
 function (ev) {
 	if(ev) {
@@ -743,7 +760,7 @@ function (ev) {
 			}
 		}
 	}
-}
+}*/
 /**
 * @param ev
 * This listener is invoked by any controller that can create an ZaAccount object

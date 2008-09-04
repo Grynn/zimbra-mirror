@@ -827,9 +827,9 @@ ZaOverviewPanelController.adminExtListTreeListener = function (ev) {
 
 ZaOverviewPanelController.cosListTreeListener = function (ev) {
 	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, ZaCos.getAll(this._app));
+		this._app.getCurrentController().switchToNextView(this._app.getCosListController(), ZaCosListController.prototype.show, true);
 	} else {
-		this._app.getCosListController().show(ZaCos.getAll(this._app));
+		this._app.getCosListController().show(true);
 	}
 }
 

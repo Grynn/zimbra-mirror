@@ -221,6 +221,23 @@ ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDoma
 
 ZaDomain.LOCAL_DOMAIN_QUERY = "(zimbraDomainType=local)";
 
+ZaDomain.cacheCounter = 0;
+ZaDomain.staticDomainByNameCacheTable = {};
+ZaDomain.staticDomainByIdCacheTable = {};
+ZaDomain.putDomainToCache = function(domain) {
+	if(ZaDomain.cacheCounter==100) {
+		ZaDomain.staticDomainByNameCacheTable = {};
+		ZaDomain.staticDomainByIdCacheTable = {};
+		ZaDomain.cacheCounter = 0;
+	}
+		
+	if(!ZaDomain.staticDomainByNameCacheTable[domain.name] || !ZaDomain.staticDomainByIdCacheTable[domain.id]) {
+		ZaDomain.cacheCounter++;
+		ZaDomain.staticDomainByNameCacheTable[domain.name] = domain;
+		ZaDomain.staticDomainByIdCacheTable[domain.id] = domain;
+	}
+}
+
 //Use ZaSearch.SearchDirectory
 //In order to keep the domain list synchronized with server, we use synchronous call here.
 ZaDomain.getAll =
@@ -880,7 +897,8 @@ function(mods) {
 		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
 	}	
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
-	this.initFromJS(resp.domain[0]);	
+	this.initFromJS(resp.domain[0]);
+	ZaDomain.putDomainToCache(this);	
 }
 ZaItem.modifyMethods["ZaDomain"].push(ZaDomain.modifyMethod);
 
@@ -1056,24 +1074,48 @@ function(callback) {
 	ZaRequestMgr.invoke(params, reqMgrParams);	
 }
 
-/**
- * Sychronorous GetDomainRequest soap call,
- * @param by  : name or id
- * @param val  : value of name or id 
- */
-ZaDomain.getDomainRequest = function (by, val, app) {
-    var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);
-	var elBy = soapDoc.set("domain", val);
-	elBy.setAttribute("by", by);
+ZaDomain.getDomainByName = 
+function(domName, app) {
+	if(!domName)
+		return null;
+		
+	var domain = ZaDomain.staticDomainByNameCacheTable[domName];
+	if(!domain) {
+		domain = new ZaDomain(app);
+		try {
+			domain.load("name", domName);
+		} catch (ex) {
+			if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
+				return null;
+			} else {
+				throw (ex);
+			}
+		}
+		ZaDomain.putDomainToCache(domain);
+	} 
+	return domain;	
+} 
 
-	var params = new Object();
-	params.soapDoc = soapDoc;
-	var reqMgrParams = {
-		controller : app.getCurrentController(),
-		busyMsg : ZaMsg.BUSY_GET_DOMAIN
+ZaDomain.getDomainById = 
+function (domId, app) {
+	if(!domId)
+		return null;
+		
+	var domain = ZaDomain.staticDomainByIdCacheTable[domId];
+	if(!domain) {
+		domain = new ZaDomain(app);
+		try {
+			domain.load("id", domId);
+		} catch (ex) {
+			if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
+				return null;
+			} else {
+				throw (ex);
+			}
+		}
+		ZaDomain.putDomainToCache(domain);
 	}
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
-    return resp ;
+	return domId;
 }
 
 ZaDomain.loadMethod = 
