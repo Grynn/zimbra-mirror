@@ -699,7 +699,7 @@ function(ev) {
 
 	// First see if the control that currently has focus can handle the key event
 	var obj = kbMgr.__focusObj;
-	if (obj && (obj.handleKeyAction) && (kbMgr.__dwtCtrlHasFocus || (obj.hasFocus && obj.hasFocus()))) {
+	if (obj && (obj.handleKeyAction) && (kbMgr.__dwtCtrlHasFocus || kbMgr.__dwtInputCtrl || (obj.hasFocus && obj.hasFocus()))) {
 //		DBG.println("kbnav", obj + " has focus: " + obj.hasFocus());
 		handled = kbMgr.__dispatchKeyEvent(obj, kev);
 		while ((handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED) && obj.parent && obj.parent.getKeyMapName) {
