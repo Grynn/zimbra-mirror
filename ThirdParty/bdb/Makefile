@@ -25,7 +25,7 @@ build:
 	patch -g0 -p1 < ../patches/4.7.25-1.patch; \
 	cd build_unix; \
 	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) ../dist/configure --prefix=$(ZIMBRA_HOME)/bdb-$(BDB_VERSION) --enable-posixmutexes; \
-	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE) $(MAKEARGS) CFLAGS="-g -O2 -fPIC"; \
+	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s bdb-$(BDB_VERSION) bdb)
 
