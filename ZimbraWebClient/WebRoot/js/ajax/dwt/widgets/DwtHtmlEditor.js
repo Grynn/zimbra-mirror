@@ -310,7 +310,9 @@ function(src, dontExecCommand, width, height) {
 	    var img = doc.createElement("img");
         img.src = src;
         if(width) img.width = width;
+        else img.removeAttribute('width');
         if(height) img.height = height;
+        else img.removeAttribute('height');
         var df = doc.createDocumentFragment();
 	    df.appendChild(img);
 	    this._insertNodeAtSelection(df);
@@ -318,47 +320,6 @@ function(src, dontExecCommand, width, height) {
         this._execCommand(DwtHtmlEditor.IMAGE, src);
     }
 };
-
-
-// images { src: url, height: height, width:width}
-DwtHtmlEditor.prototype.insertImages =
-function(images){
-
-    if (!(images instanceof Array)) {
-        images = [images];
-    }
-
-    if (!images.length)
-        return;
-
-    var insertTarget = null;
-    for (var i = 0; i < images.length; i++) {
-        var image = images[i];
-        if (i > 0) {
-            // Put <br> between each image.
-            var br = this._getIframeDoc().createElement("br");
-            insertTarget.parentNode.insertBefore(br, insertTarget.nextSibling);
-            insertTarget = br;
-        }
-        var img = this._getIframeDoc().createElement("img");
-        img.src = image.src;
-        if(image.width){
-            img.width = image.width;
-        }else{
-            img.removeAttribute('width');  //IE seems to get a default width.
-        }
-        if(image.height){
-            img.height = image.height;
-        }else {
-            img.removeAttribute('height'); //IE seems to get a default height.
-        }
-        if(insertTarget)
-            insertTarget.parentNode.insertBefore(img, insertTarget.nextSibling);
-        else
-            this._insertNodeAtSelection(img);
-        insertTarget = img;
-    }
-}
 
 /** Inserts a table at the current cursor position
  *
