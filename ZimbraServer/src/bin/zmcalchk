@@ -503,7 +503,7 @@ sub main() {
                     my $attInst = getInstanceByInstId($attItem, $instance->{'ridZ'});
                     my $iTime = scalar localtime($instance->{'s'} / 1000);
                     if (!defined($attInst)) {
-                        push(@errors, "$att: no instance found for ridZ=$$instance{'ridZ'}, time=$iTime");
+                        push(@errors, "$att:$$attInst{'id'} no instance found for ridZ=$$instance{'ridZ'}, time=$iTime");
                     }
                     elsif ($attInst->{'s'} != $instance->{'s'}) {
                         my $aTime = scalar localtime($attInst->{'s'} / 1000);
