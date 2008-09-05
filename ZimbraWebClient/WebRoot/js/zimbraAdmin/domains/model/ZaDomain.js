@@ -107,6 +107,8 @@ ZaDomain.A_domainType = "zimbraDomainType" ;
 ZaDomain.A_domainDefaultCOSId = "zimbraDomainDefaultCOSId";
 ZaDomain.A_zimbraDomainStatus = "zimbraDomainStatus";
 ZaDomain.A_zimbraPublicServiceHostname = "zimbraPublicServiceHostname";
+ZaDomain.A_zimbraPublicServicePort = "zimbraPublicServicePort";
+ZaDomain.A_zimbraPublicServiceProtocol = "zimbraPublicServiceProtocol";
 //GAL search
 ZaDomain.A_GalMaxResults = "zimbraGalMaxResults";
 ZaDomain.A_GalMode = "zimbraGalMode";

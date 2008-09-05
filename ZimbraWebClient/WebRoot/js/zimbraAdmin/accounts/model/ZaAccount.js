@@ -66,6 +66,7 @@ ZaAccount.A_notes = "zimbraNotes";
 ZaAccount.A_zimbraMailQuota = "zimbraMailQuota";
 ZaAccount.A_mailHost = "zimbraMailHost";
 ZaAccount.A_COSId = "zimbraCOSId";
+
 ZaAccount.A_isAdminAccount = "zimbraIsAdminAccount";
 ZaAccount.A_zimbraMinPwdLength="zimbraPasswordMinLength";
 ZaAccount.A_zimbraMaxPwdLength="zimbraPasswordMaxLength";
@@ -229,7 +230,9 @@ ZaAccount.A2_indirectMemberList = "indirectMemberList";
 ZaAccount.A2_nonMemberList = "nonMemberList" ;
 ZaAccount.A2_showSameDomain = "showSameDomain" ;
 ZaAccount.A2_domainLeftAccounts = "leftDomainAccounts" ;
-
+ZaAccount.A2_publicMailURL = "publicMailURL";
+ZaAccount.A2_adminSoapURL = "adminSoapURL";
+ZaAccount.A2_soapURL = "soapURL";
 ZaAccount.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaAccount.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 
@@ -1253,6 +1256,32 @@ function(by, val, withCos) {
 }
 
 ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadMethod);
+
+ZaAccount.loadInfoMethod = 
+function(by, val, withCos) {
+	var soapDoc = AjxSoapDoc.create("GetAccountInfoRequest", ZaZimbraAdmin.URN, null);
+
+	var elBy = soapDoc.set("account", val);
+	elBy.setAttribute("by", by);
+
+	//var getAccCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var reqMgrParams = {
+		controller: this._app.getCurrentController()
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountInfoResponse;
+	if(resp[ZaAccount.A2_publicMailURL] && resp[ZaAccount.A2_publicMailURL][0])
+		this[ZaAccount.A2_publicMailURL] = resp[ZaAccount.A2_publicMailURL][0]._content;
+	
+	if(resp[ZaAccount.A2_adminSoapURL] && resp[ZaAccount.A2_adminSoapURL][0])
+		this[ZaAccount.A2_adminSoapURL] = resp[ZaAccount.A2_adminSoapURL][0]._content;
+	
+	if(resp[ZaAccount.A2_soapURL] && resp[ZaAccount.A2_soapURL][0])
+		this[ZaAccount.A2_soapURL] = resp[ZaAccount.A2_soapURL][0]._content;
+}
+
+ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadInfoMethod);
 
 ZaAccount.prototype.refresh = 
 function(withCos) {
