@@ -29,11 +29,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.SocketException;
 import java.nio.channels.AsynchronousCloseException;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -88,7 +85,6 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
      */
     private void process(Element e) throws Exception {
         Log.debug("NioReadingMode: Processing Element: "+e.asXML());
-        mLastReceiveTime = System.currentTimeMillis();
         
         switch (mState) {
             case NO_SESSION:
@@ -167,6 +163,9 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
      * @see org.jivesoftware.wildfire.net.NioCompletionHandler#nioReadCompleted(org.apache.mina.common.ByteBuffer)
      */
     public void nioReadCompleted(ByteBuffer bb) {
+
+        mLastReceiveTime = System.currentTimeMillis();
+        
         boolean closeIt = false;
         
         try {
