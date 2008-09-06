@@ -23,10 +23,11 @@ use File::Spec;
 use vars qw(
     $VERSION $PID_FILE $DEFAULT_DEST $JMAP $JAVA $DEFAULT_TIMEOUT
     $HAVE_GCORE $HAVE_PSTACK $HAVE_LSOF $LOG_FILE $ZMSTAT_CONF
-    $ZMDUMPENV $ZMPROV
+    $ZMDUMPENV $ZMPROV $ZMHOSTNAME
 );
 
-$DEFAULT_DEST = "/tmp/zmdiaglog-$ENV{HOSTNAME}." . $$;
+chomp($ZMHOSTNAME = `/opt/zimbra/bin/zmhostname`);
+$DEFAULT_DEST = "/tmp/zmdiaglog-$ZMHOSTNAME." . $$;
 $DEFAULT_TIMEOUT = 120;
 $PID_FILE = '/opt/zimbra/log/zmmailboxd_java.pid';
 $JMAP = '/opt/zimbra/java/bin/jmap';
@@ -218,7 +219,7 @@ logmsg "Java version: $JAVA_VERSION\n";
 logmsg "Saving output of zmdumpenv\n";
 exec_with_timeout("su - zimbra -c '$ZMDUMPENV' > zmdumpenv.txt 2>&1", $timeout);
 logmsg "Saving server configuration\n";
-exec_with_timeout("su - zimbra -c '$ZMPROV gs $ENV{HOSTNAME}' > zmprov-gs.txt 2>&1", $timeout);
+exec_with_timeout("su - zimbra -c '$ZMPROV gs $ZMHOSTNAME' > zmprov-gs.txt 2>&1", $timeout);
 exec_with_timeout("su - zimbra -c '$ZMPROV gacf' > zmprov-gacf.txt 2>&1", $timeout);
 system("cp /opt/zimbra/conf/localconfig.xml $destination/");
 
