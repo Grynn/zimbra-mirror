@@ -44,6 +44,7 @@ import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.httpclient.URLUtil;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
@@ -633,6 +634,25 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
     
+    public Element proxyRequest(Element request, SoapProtocol resProto, boolean quietWhenOffline, String op) throws ServiceException {
+        Element response;
+        try {
+            response = sendRequest(request, true, true, OfflineLC.zdesktop_request_timeout.intValue(), resProto);
+        } catch (ServiceException e) {
+            if (OfflineSyncManager.isConnectionDown(e)) {
+                if (quietWhenOffline) {
+                    OfflineLog.offline.debug(op + "is unavailable when offline");
+                    response = null;
+                } else {
+                    throw OfflineServiceException.ONLINE_ONLY_OP(op);
+                }
+            } else {
+                throw e;
+            }
+        }
+        return response;
+    }
+    
     public Element sendRequest(Element request) throws ServiceException {
         return sendRequest(request, true);
     }
@@ -642,6 +662,10 @@ public class OfflineMailbox extends DesktopMailbox {
     }
 
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
+        return sendRequest(request, requiresAuth, noSession, timeout, null);
+    }
+    
+    public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto) throws ServiceException {
         String uri = getSoapUri();
         OfflineAccount acct = getOfflineAccount();
         SoapHttpTransport transport = new SoapHttpTransport(uri, acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
@@ -652,6 +676,8 @@ public class OfflineMailbox extends DesktopMailbox {
             if (requiresAuth)
                 transport.setAuthToken(getAuthToken());
             transport.setRequestProtocol(SoapProtocol.Soap12);
+            if (resProto != null)
+                transport.setResponseProtocol(resProto);
 
             if (acct.isDebugTraceEnabled())
             	OfflineLog.request.debug(request);

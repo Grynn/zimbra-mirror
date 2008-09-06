@@ -31,7 +31,7 @@ import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 
-public class OfflineAutoCompleteGal extends DocumentHandler {
+public class OfflineSearchGal extends DocumentHandler {
 
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
@@ -39,9 +39,8 @@ public class OfflineAutoCompleteGal extends DocumentHandler {
         if (!(account instanceof OfflineAccount))
             throw OfflineServiceException.MISCONFIGURED("incorrect account class: " + account.getClass().getSimpleName());
         
-        if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) ||
-            !account.getBooleanAttr(Provisioning.A_zimbraFeatureGalAutoCompleteEnabled , false))
-            throw ServiceException.PERM_DENIED("auto complete GAL disabled");
+        if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false))
+            throw ServiceException.PERM_DENIED("GAL disabled");
         
         Mailbox mbox = getRequestedMailbox(ctxt);
         if (!(mbox instanceof OfflineMailbox))
@@ -49,18 +48,17 @@ public class OfflineAutoCompleteGal extends DocumentHandler {
         
         Element response;
         if (account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {
-            response = ctxt.createElement(AccountConstants.AUTO_COMPLETE_GAL_RESPONSE);
+            response = ctxt.createElement(AccountConstants.SEARCH_GAL_RESPONSE);
             
             String name = request.getAttribute(AccountConstants.E_NAME);
             while (name.endsWith("*"))
                 name = name.substring(0, name.length() - 1);            
-            int limit = (int) request.getAttributeLong(AccountConstants.A_LIMIT);
-            
-            (new OfflineGal((OfflineAccount)account)).searchAccounts(response, name, limit);                                   
+
+            (new OfflineGal((OfflineAccount)account)).searchAccounts(response, name);                  
         } else { // proxy mode
-            response = ((OfflineMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), true, "auto-complete GAL");
+            response = ((OfflineMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), true, "search GAL");
             if (response == null) {
-                response = ctxt.createElement(AccountConstants.AUTO_COMPLETE_GAL_RESPONSE);
+                response = ctxt.createElement(AccountConstants.SEARCH_GAL_RESPONSE);
                 response.addAttribute(AccountConstants.A_MORE, false);
             }
         }        

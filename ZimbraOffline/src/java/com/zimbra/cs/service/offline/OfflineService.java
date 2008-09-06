@@ -52,7 +52,11 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(MailConstants.SAVE_DOCUMENT_REQUEST, new OfflineDocumentHandlers.SaveDocument());
         dispatcher.registerHandler(MailConstants.SAVE_WIKI_REQUEST, new OfflineDocumentHandlers.SaveWiki());
         dispatcher.registerHandler(MailConstants.WIKI_ACTION_REQUEST, new OfflineDocumentHandlers.WikiAction());
+        
         dispatcher.registerHandler(AccountConstants.AUTO_COMPLETE_GAL_REQUEST, new OfflineAutoCompleteGal());        
+        dispatcher.registerHandler(AccountConstants.SEARCH_GAL_REQUEST, new OfflineSearchGal());
+        dispatcher.registerHandler(MailConstants.GET_FREE_BUSY_REQUEST, OfflineServiceProxy.GetFreeBusy());
+        dispatcher.registerHandler(AccountConstants.SEARCH_CALENDAR_RESOURCES_REQUEST, OfflineServiceProxy.SearchCalendarResources());
         
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());

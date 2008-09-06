@@ -29,6 +29,7 @@ public class OfflineServiceException extends ServiceException {
     public static final String AUTH_FAILED = "offline.AUTH_FAILED";
     public static final String OUT_OF_SYNC = "offline.OUT_OF_SYNC";
     public static final String MISSING_GAL_MAILBOX = "offline.MISSING_GAL_MAILBOX";
+    public static final String ONLINE_ONLY_OP = "offline.ONLINE_ONLY_OP";
     
     public static final String ITEM_ID = "itemId";
 
@@ -62,5 +63,9 @@ public class OfflineServiceException extends ServiceException {
     
     public static OfflineServiceException MISSING_GAL_MAILBOX(String acctName) {
         return new OfflineServiceException("unable to access GAL mailbox for " + acctName, MISSING_GAL_MAILBOX, RECEIVERS_FAULT);
+    }
+    
+    public static OfflineServiceException ONLINE_ONLY_OP(String op) {
+        return new OfflineServiceException("operation only supported when client is online: " + op, ONLINE_ONLY_OP, RECEIVERS_FAULT);
     }
 }

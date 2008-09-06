@@ -33,6 +33,7 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.Provisioning.SearchGalResult;
@@ -59,7 +60,7 @@ public class GalSync {
         OfflineAccount account = (OfflineAccount)ombx.getAccount();
         if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) ||
             !account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {
-            OfflineLog.offline.debug("Offline GAL sync is disable: " + user);
+            OfflineLog.offline.debug("Offline GAL sync is disabled: " + user);
             syncMan.syncComplete(target);
             ensureGalAccountNotExists(account);
             return;
@@ -137,7 +138,9 @@ public class GalSync {
             String fname, lname;
             if (map.get(Contact.A_fullName) == null && (fname = map.get(Contact.A_firstName)) != null && 
                 (lname = map.get(Contact.A_lastName)) != null)
-                map.put(Contact.A_fullName, fname + " " + lname);
+                map.put(Contact.A_fullName, fname + " " + lname);            
+            map.put(Contact.A_type, map.get(OfflineGal.A_zimbraCalResType) == null ?
+                OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE);
             
             ParsedContact contact = new ParsedContact(map);
             
