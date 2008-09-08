@@ -305,7 +305,10 @@ sub getCalendarSummary($$$) {
     my $login = shift;
     my $folder = shift;
     $folder =~ s/"/\\"/g;
-    open(ZMMAILBOX, "$zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $ts_start $ts_end '$folder' 2> /dev/null |") || die $!;
+    $folder =~ s/!/\\!/g;
+    $folder =~ s/[\$]/\\\$/g;
+    print "$zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $ts_start $ts_end \"$folder\" 2> /dev/null |\n" if ($debug);
+    open(ZMMAILBOX, "$zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $ts_start $ts_end \"$folder\" 2> /dev/null |") || die $!;
     my $json_string;
     my @lines;
     while (<ZMMAILBOX>) {
@@ -313,9 +316,9 @@ sub getCalendarSummary($$$) {
             @lines = ();
         } elsif ($_ =~ /================/o) {
             $json_string = join('', @lines);
-        } elsif ($_ =~ /"calExpandInstEnd"\s*:\s*(\d+),/) {
+        } elsif ($_ =~ /"calExpandInstEnd"\s*:\s*(\d+),/o) {
             $ts_end = $1;
-        } elsif ($_ =~ /"calExpandInstStart"\s*:\s*(\d+),/) {
+        } elsif ($_ =~ /"calExpandInstStart"\s*:\s*(\d+),/o) {
             $ts_start = $1;
         } else {
             push(@lines, $_);
