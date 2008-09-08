@@ -163,20 +163,9 @@ function() {
 
 Com_Zimbra_Ybabelfish.prototype._makeRequest =
 function(lang, text) {
-	var reqParams = [];
-	var i = 0;
+	var reqHeader = { "User-Agent": navigator.userAgent, "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "Referer": Com_Zimbra_Ybabelfish.URL, "Host": "babelfish.yahoo.com" };
 
-	// params for babelfish
-	reqParams[i++] = "ei=UTF8&doit=done&fr=bf-res&intl=1&tt=urltext&trtext=";
-	reqParams[i++] = AjxStringUtil.urlEncode(text);
-	reqParams[i++] = "&lp=";
-	reqParams[i++] = AjxStringUtil.urlEncode(lang || "en_es");
-	reqParams[i++] = "&btnTrTxt=Translate";
-
-	var reqHeader = { "User-Agent": navigator.userAgent, "Content-Type": "application/x-www-form-urlencoded", "Referer": Com_Zimbra_Ybabelfish.URL };
-	var url = ZmZimletBase.PROXY + AjxStringUtil.urlEncode(Com_Zimbra_Ybabelfish.URL);
-
-	AjxRpc.invoke(reqParams.join(""), url, reqHeader, new AjxCallback(this, this._resultCallback));
+	AjxRpc.invoke(null, this.getResource("ybabelfish.jsp")+"?text="+AjxStringUtil.urlEncode(text)+"&lang="+AjxStringUtil.urlEncode(lang || "en_es")+"&userAgent="+AjxStringUtil.urlEncode(navigator.userAgent), reqHeader, new AjxCallback(this, this._resultCallback), true);
 };
 
 Com_Zimbra_Ybabelfish.prototype._initialize =
