@@ -38,6 +38,10 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.3.2.jar"/>
+	<classpathentry kind="lib" path="jars/derby.jar"/>
+	<classpathentry kind="lib" path="jars/jdavmail-0.9.007.jar" sourcepath="/ThirdParty/jdavmail/src"/>
+	<classpathentry kind="lib" path="jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>
+	<classpathentry kind="lib" path="jars/ymail.jar"/>
 	<classpathentry kind="lib" path="tools/jaxws/lib/FastInfoset.jar"/>
 	<classpathentry kind="lib" path="tools/jaxws/lib/http.jar"/>
 	<classpathentry kind="lib" path="tools/jaxws/lib/jaxb-api.jar"/>
@@ -56,7 +60,6 @@
 	<classpathentry kind="lib" path="tools/jaxws/lib/sjsxp.jar"/>
 	<classpathentry kind="lib" path="tools/jaxws/lib/stax-ex.jar"/>
 	<classpathentry kind="lib" path="tools/jaxws/lib/streambuffer.jar"/>
-	<classpathentry kind="lib" path="jars/ymail.jar"/>
 	<classpathentry sourcepath="/ThirdParty/jakarta-log4j-1.2.8" kind="lib" path="/ZimbraCommon/jars/log4j-1.2.8.jar">
 		<attributes>
 			<attribute value="http://logging.apache.org/log4j/docs/api/" name="javadoc_location"/>
