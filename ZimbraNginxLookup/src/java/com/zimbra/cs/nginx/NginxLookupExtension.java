@@ -448,7 +448,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                                             serverIp,
                                             Provisioning.A_zimbraReverseProxyDomainNameAttribute);
                 } catch (NginxLookupException e) {
-                    logger.warn("domain not found for user " + unqualifiedName + ".  error: " + e.getMessage());
+                    logger.debug("domain not found for user " + unqualifiedName + ".  error: " + e.getMessage());
                 } catch (NamingException e) {
                     logger.warn("domain not found for user " + unqualifiedName + ".  error: " + e.getMessage());
                 }
