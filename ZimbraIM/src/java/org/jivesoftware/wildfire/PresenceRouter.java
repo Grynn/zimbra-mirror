@@ -76,7 +76,7 @@ public class PresenceRouter extends BasicModule {
         JID recipientJID = packet.getTo();
         
         boolean recipJIDThisServer = false;
-        if (recipientJID != null && XMPPServer.getInstance().getServerNames().contains(recipientJID.getDomain()))
+        if (recipientJID != null && XMPPServer.getInstance().getLocalDomains().contains(recipientJID.getDomain()))
             recipJIDThisServer = true;
         
         // Check if the packet was sent to the server hostname

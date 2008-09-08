@@ -163,8 +163,6 @@ public enum IMConfig {
     XMPP_COMPONENT_DEFAULT_SECRET(new ConstantStr("changeme", "Default secret for External XMPP Components")), // FIXME
     
     // Multi-User Chat
-    XMPP_MUC_ENABLED(new LCBoolean(LC.xmpp_muc_enabled)),
-    XMPP_MUC_SERVICE_NAME(new LCStr(LC.xmpp_muc_service_name)),
     XMPP_MUC_SYSADMIN_JID(new LCStr(LC.xmpp_muc_sysadmin_jid_list)),// list of JIDs that can sysadmin.  FIXME
     XMPP_MUC_DISCOVER_LOCKED(new LCBoolean(LC.xmpp_muc_discover_locked)),
     XMPP_MUC_RESTRCIT_ROOM_CREATION(new LCBoolean(LC.xmpp_muc_restrict_room_creation)),

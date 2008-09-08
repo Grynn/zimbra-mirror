@@ -1862,6 +1862,26 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     @Override
+    public XMPPComponent createXMPPComponent(String name, Domain domain, Server server, Map<String, Object> attrs) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    public List<XMPPComponent> getAllXMPPComponents() throws ServiceException {
+        throw ServiceException.FAILURE("unsupported", null);
+    }
+    
+    @Override
+    public XMPPComponent get(XMPPComponentBy keyType, String key) throws ServiceException {
+        throw ServiceException.FAILURE("unsupported", null);
+    }
+    
+    @Override
+    public void deleteXMPPComponent(XMPPComponent comp) throws ServiceException {
+        throw ServiceException.FAILURE("unsupported", null);
+    }
+    
+    @Override
     public void flushCache(CacheEntryType type, CacheEntry[] entries) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("flushCache");
     }

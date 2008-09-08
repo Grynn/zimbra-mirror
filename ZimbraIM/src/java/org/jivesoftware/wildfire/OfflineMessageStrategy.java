@@ -56,7 +56,7 @@ public class OfflineMessageStrategy extends BasicModule {
             // Do nothing if the message was sent to the server itself or to an anonymous user
             JID recipientJID = message.getTo();
             if (recipientJID == null
-                        || XMPPServer.getInstance().getServerNames().contains(recipientJID) 
+                        || XMPPServer.getInstance().getLocalDomains().contains(recipientJID) 
                         || recipientJID.toBareJID() == null 
                         || !UserManager.getInstance().isRegisteredUser(recipientJID.toBareJID())) {
                 return;

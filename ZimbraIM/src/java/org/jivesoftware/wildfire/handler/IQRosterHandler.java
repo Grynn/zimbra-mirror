@@ -255,7 +255,7 @@ public class IQRosterHandler extends IQHandler implements ServerFeaturesProvider
         }
         else {
             // Check if the recipient may be hosted by this server
-            if (!localServer.getServerNames().contains(recipient.getDomain())) {
+            if (!localServer.getLocalDomains().contains(recipient.getDomain())) {
                 // TODO Implete when s2s is implemented
             }
             else {

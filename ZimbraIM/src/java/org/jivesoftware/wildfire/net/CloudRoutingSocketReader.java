@@ -27,6 +27,8 @@ import org.jivesoftware.wildfire.Session;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.zimbra.common.util.ZimbraLog;
+
 /**
  * 
  */
@@ -99,5 +101,11 @@ public class CloudRoutingSocketReader extends SocketReader {
     
     @Override
     protected boolean shouldInvokeInterceptor() { return false; }
+    
+    protected void process(Element doc) throws Exception {
+        ZimbraLog.im.debug("CloudRoutingSocketReader received incoming packet: "+doc.asXML());
+        super.process(doc);
+    }
+    
 
 }

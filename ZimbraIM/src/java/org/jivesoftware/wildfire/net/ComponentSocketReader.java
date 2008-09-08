@@ -91,7 +91,7 @@ public class ComponentSocketReader extends SocketReader {
                         // Get the requested subdomain
                         String subdomain = extraDomain;
                         int index = -1;
-                        for (String serverName : XMPPServer.getInstance().getServerNames()) {
+                        for (String serverName : XMPPServer.getInstance().getLocalDomains()) {
                             index = extraDomain.indexOf(serverName);
                             if (index > -1)
                                 break;

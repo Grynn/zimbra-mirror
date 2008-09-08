@@ -100,7 +100,7 @@ public class PresenceSubscribeHandler extends BasicModule implements ChannelHand
             Presence.Type type = presence.getType();
 
             // Reject presence subscription requests sent to the local server itself.
-            if (recipientJID == null || XMPPServer.getInstance().getServerNames().contains(recipientJID.toString())) {
+            if (recipientJID == null || XMPPServer.getInstance().getLocalDomains().contains(recipientJID.toString())) {
                 if (type == Presence.Type.subscribe) {
                     Presence reply = new Presence();
                     reply.setTo(senderJID);

@@ -93,3 +93,10 @@ cn: cos
 dn: cn=servers,cn=zimbra
 objectclass: organizationalRole
 cn: servers
+
+# for storing xmpp component info
+dn: cn=xmppcomponents,cn=zimbra
+objectclass: organizationalRole
+cn: xmppcomponents
+
+

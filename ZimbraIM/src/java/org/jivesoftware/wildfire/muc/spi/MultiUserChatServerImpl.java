@@ -23,6 +23,7 @@ import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.*;
+import org.jivesoftware.wildfire.LocationManager.ComponentIdentifier;
 import org.jivesoftware.wildfire.auth.UnauthorizedException;
 import org.jivesoftware.wildfire.container.BasicModule;
 import org.jivesoftware.wildfire.disco.DiscoInfoProvider;
@@ -40,8 +41,10 @@ import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.xmpp.component.ComponentManager;
 import org.xmpp.packet.*;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.util.ZimbraLog;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -108,6 +111,11 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
      * the chat service's hostname
      */
     private String chatServiceName = null;
+    
+    /**
+     * The XMPP routable JID for this service
+     */
+    private String chatServiceDomain = null;
 
     /**
      * chatrooms managed by this manager, table: key room name (String); value ChatRoom
@@ -280,7 +288,7 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
     }
 
     public String getServiceDomain() {
-        return chatServiceName + "." + XMPPServer.getInstance().getServerInfo().getDefaultName();
+        return chatServiceDomain;
     }
 
     public JID getAddress() {
@@ -578,7 +586,18 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
     public void initialize(XMPPServer server) {
         super.initialize(server);
 
-        chatServiceName = IMConfig.XMPP_MUC_SERVICE_NAME.getString();
+        List<ComponentIdentifier> componentIds = null;         
+        try {
+            componentIds = XMPPServer.getInstance().getThisServerComponents("muc");
+        } catch(ServiceException ex) { // FIXME real error handling!
+            ZimbraLog.im.warn("Caught service exception getting local component list", ex);
+        }
+        
+        // HACK throw NPE here to cancel init if no local component
+        ComponentIdentifier identifier = componentIds.get(0);
+        
+        chatServiceName = identifier.serviceName;
+        chatServiceDomain = identifier.serviceDomain;
         
         // Load the list of JIDs that are sysadmins of the MUC service
         String property = IMConfig.XMPP_MUC_SYSADMIN_JID.getString();
@@ -606,9 +625,6 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
         
         log_batch_size = IMConfig.XMPP_MUC_TASKS_LOG_BATCHSIZE.getInt();
         
-        if (StringUtil.isNullOrEmpty(getServiceName())) {
-            chatServiceName = "conference";
-        }
         // Run through the users every 5 minutes after a 5 minutes server startup delay (default
         // values)
         userTimeoutTask = new UserTimeoutTask();
@@ -664,7 +680,13 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
     }
 
     public boolean isServiceEnabled() {
-        return IMConfig.XMPP_MUC_ENABLED.getBoolean();
+        try {
+            List<ComponentIdentifier> componentIds = XMPPServer.getInstance().getThisServerComponents("muc");
+            return (componentIds != null && !componentIds.isEmpty());
+        } catch (ServiceException ex) {
+            ZimbraLog.im.warn("Unable to get list of local components", ex);
+            return false;
+        }
     }
 
     public long getTotalChatTime() {

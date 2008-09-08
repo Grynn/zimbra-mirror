@@ -22,12 +22,16 @@ import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.util.PropertyProvider;
 import org.jivesoftware.util.Version;
+import org.jivesoftware.wildfire.LocationManager.ComponentIdentifier;
 import org.jivesoftware.wildfire.audit.AuditManager;
 import org.jivesoftware.wildfire.audit.spi.AuditManagerImpl;
 import org.jivesoftware.wildfire.commands.AdHocCommandHandler;
 import org.jivesoftware.wildfire.component.InternalComponentManager;
 import org.jivesoftware.wildfire.container.Module;
 import org.jivesoftware.wildfire.container.PluginManager;
+import org.jivesoftware.wildfire.disco.DiscoInfoProvider;
+import org.jivesoftware.wildfire.disco.DiscoItemsProvider;
+import org.jivesoftware.wildfire.disco.DiscoServerItem;
 import org.jivesoftware.wildfire.disco.IQDiscoInfoHandler;
 import org.jivesoftware.wildfire.disco.IQDiscoItemsHandler;
 import org.jivesoftware.wildfire.disco.ServerFeaturesProvider;
@@ -46,6 +50,9 @@ import org.jivesoftware.wildfire.user.UserManager;
 import org.jivesoftware.wildfire.user.UserNotFoundException;
 import org.jivesoftware.wildfire.vcard.VCardManager;
 import org.xmpp.packet.JID;
+
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -170,7 +177,10 @@ public class XMPPServer {
         return false;
     }
     
-    public Collection<String> getServerNames() {
+    /**
+     * @return a list of the domains that are local to this cloud (ie don't use XMPP S2S to connect)
+     */
+    public Collection<String> getLocalDomains() {
         return mServerNames;
     }
     
@@ -207,7 +217,7 @@ public class XMPPServer {
      */
     public boolean isRemote(JID jid) {
         if (jid != null) {
-            if (!isLocal(jid) && componentManager.getComponent(jid) == null) {
+            if (!isLocal(jid) && !componentManager.isCloudComponent(jid)) {
                 return true;
             }
         }
@@ -222,13 +232,33 @@ public class XMPPServer {
      */
     public boolean matchesComponent(JID jid) {
         if (jid != null) {
-            return !isLocal(jid) && componentManager.getComponent(jid) != null;
+            return !isLocal(jid) && mLocationManager.isCloudComponent(jid.toBareJID());
         }
         return false;
     }
     
-    public boolean isThisCloud(JID jid) {
-        return true;
+    /**
+     * Return TRUE if the specified domain is in this cloud
+     * 
+     * @param domain
+     * @return
+     */
+    public boolean isCloudComponent(String domain) {
+        return mLocationManager.isCloudComponent(domain);
+    }
+    
+    public String getServerForComponent(String domain) {
+        return mLocationManager.getServerForComponent(domain);
+    }
+    
+    /**
+     * Return a list of domains for componentType that are running ON THIS SERVER  
+     * 
+     * @param componentType type of component, e.g. "muc" or "filetransfer"
+     * @return
+     */
+    public List<LocationManager.ComponentIdentifier> getThisServerComponents(String componentType) throws ServiceException {
+        return mLocationManager.getThisServerComponents(componentType);
     }
     
     public boolean isAdmin(String jid) {
@@ -303,6 +333,64 @@ public class XMPPServer {
 
         initialized = true;
     }
+    
+    private List<ServerItemsProvider> mServerItemsProviders = new ArrayList<ServerItemsProvider>();
+    
+    private class MyServerItemsProvider implements ServerItemsProvider {
+        MyServerItemsProvider(ComponentIdentifier comp) {
+            c = comp;
+        }
+        ComponentIdentifier c;
+        public Iterator<DiscoServerItem> getItems() {
+            ArrayList<DiscoServerItem> items = new ArrayList<DiscoServerItem>();
+            items.add(new DiscoServerItem() {
+                public String getJID() {
+                    return c.serviceDomain;
+                }
+
+                public String getName() {
+                    return c.serviceName;
+                }
+
+                public String getAction() {
+                    return null;
+                }
+
+                public String getNode() {
+                    return null;
+                }
+
+                public DiscoInfoProvider getDiscoInfoProvider() {
+                    return null;
+                }
+
+                public DiscoItemsProvider getDiscoItemsProvider() {
+                    return null;
+                }
+            });
+            return items.iterator();
+        }
+    }
+    
+    private void updateRemoteComponentDiscoveryItems() {
+        for (ServerItemsProvider sip : mServerItemsProviders) {
+            getIQDiscoItemsHandler().removeServerItemsProvider(sip);
+        }
+        
+        try {
+            for (ComponentIdentifier c : mLocationManager.getRemoteServerComponents()) {
+                ServerItemsProvider sip = new MyServerItemsProvider(c);
+                mServerItemsProviders.add(sip);
+            }
+        } catch (ServiceException e) {
+            ZimbraLog.im.warn("Caught ServiceExcepton trying to setup remote Disco handlers", e);
+        }
+        
+        for (ServerItemsProvider sip : mServerItemsProviders) {
+            getIQDiscoItemsHandler().addServerItemsProvider(sip);
+        }
+    }
+    
 
     public void start(List<String> domainNames) {
         try {
@@ -320,6 +408,9 @@ public class XMPPServer {
                 startModules();
                 // Initialize component manager (initialize before plugins get loaded)
                 InternalComponentManager.getInstance().start();
+                
+                // Setup Discovery handler for remote components
+                updateRemoteComponentDiscoveryItems();
                 
 //                Interop.getInstance().start(this, componentManager);
                 
@@ -426,7 +517,9 @@ public class XMPPServer {
     }
 
     private void initModules() {
-        for (Module module : modules.values()) {
+//        for (Module module : modules.values()) {
+        for (Iterator<Module> iter = modules.values().iterator(); iter.hasNext();) {
+            Module module = iter.next();
             boolean isInitialized = false;
             try {
                 module.initialize(this);
@@ -435,7 +528,7 @@ public class XMPPServer {
             catch (Exception e) {
                 e.printStackTrace();
                 // Remove the failed initialized module
-                this.modules.remove(module.getClass());
+                iter.remove();
                 if (isInitialized) {
                     module.stop();
                     module.destroy();
@@ -1009,17 +1102,6 @@ public class XMPPServer {
      */
     public PrivateStorage getPrivateStorage() {
         return (PrivateStorage) modules.get(PrivateStorage.class);
-    }
-
-    /**
-     * Returns the <code>MultiUserChatServer</code> registered with this server. The
-     * <code>MultiUserChatServer</code> was registered with the server as a module while starting up
-     * the server.
-     *
-     * @return the <code>MultiUserChatServer</code> registered with this server.
-     */
-    public MultiUserChatServer getMultiUserChatServer() {
-        return (MultiUserChatServer) modules.get(MultiUserChatServerImpl.class);
     }
 
     /**

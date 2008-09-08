@@ -181,7 +181,7 @@ public class OutgoingServerSession extends Session {
                             int index = hostname.indexOf('.');
                             while (index > -1 && index < hostname.length()) {
                                 String newHostname = hostname.substring(index + 1);
-                                Collection<String> localNames = XMPPServer.getInstance().getServerNames();
+                                Collection<String> localNames = XMPPServer.getInstance().getLocalDomains();
                                 if ("com".equals(newHostname) || "net".equals(newHostname) ||
                                         "org".equals(newHostname) ||
                                         "gov".equals(newHostname) ||

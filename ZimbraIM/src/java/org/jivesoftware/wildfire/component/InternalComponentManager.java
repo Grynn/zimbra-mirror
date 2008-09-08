@@ -271,6 +271,14 @@ public class InternalComponentManager implements ComponentManager, RoutableChann
             }
         };
     }
+    
+    /**
+     * @param jid
+     * @return TRUE if this JID matches a component in the local cloud
+     */
+    public boolean isCloudComponent(JID jid) {
+        return getComponent(jid) != null;
+    }
 
     /**
      * Returns the list of components that are currently installed in the server.

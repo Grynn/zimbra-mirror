@@ -97,7 +97,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             int port = getServerListenerPort();
             try {
                 serverSocketThread = new SocketAcceptThread(this, 
-                            new ServerPort(port, XMPPServer.getInstance().getServerNames(),
+                            new ServerPort(port, XMPPServer.getInstance().getLocalDomains(),
                                         bindAddress, false, null, ServerPort.Type.server));
                 ports.add(serverSocketThread.getServerPort());
                 serverSocketThread.setDaemon(true);
@@ -128,14 +128,14 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
                     
                     if (algorithm == null || algorithm.length() == 0) {
                         cloudRoutingSocketThread = new SocketAcceptThread(this, 
-                            new ServerPort(port, XMPPServer.getInstance().getServerNames(),
+                            new ServerPort(port, XMPPServer.getInstance().getLocalDomains(),
                                 bindAddress, (algorithm != null ? true : false), algorithm, ServerPort.Type.cloudRouter));
                         ports.add(cloudRoutingSocketThread.getServerPort());
                         cloudRoutingSocketThread.setDaemon(true);
                         cloudRoutingSocketThread.setPriority(Thread.MAX_PRIORITY);
                         cloudRoutingSocketThread.start();
                     } else {
-                        sslCloudRoutingSocketThread = new SSLSocketAcceptThread(this, new ServerPort(port, XMPPServer.getInstance().getServerNames(),
+                        sslCloudRoutingSocketThread = new SSLSocketAcceptThread(this, new ServerPort(port, XMPPServer.getInstance().getLocalDomains(),
                             bindAddress, true, algorithm, ServerPort.Type.cloudRouter));
                         ports.add(sslCloudRoutingSocketThread.getServerPort());
                         sslCloudRoutingSocketThread.setDaemon(true);
@@ -178,7 +178,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             int port = getConnectionManagerListenerPort();
             try {
                 multiplexerSocketThread = new SocketAcceptThread(this, new ServerPort(port,
-                        XMPPServer.getInstance().getServerNames(), bindAddress, false, null,
+                        XMPPServer.getInstance().getLocalDomains(), bindAddress, false, null,
                         ServerPort.Type.connectionManager));
                 ports.add(multiplexerSocketThread.getServerPort());
                 multiplexerSocketThread.setDaemon(true);
@@ -211,7 +211,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             int port = getComponentListenerPort();
             try {
                 componentSocketThread = new SocketAcceptThread(this, new ServerPort(port,
-                            XMPPServer.getInstance().getServerNames(), bindAddress, false, null, ServerPort.Type.component));
+                            XMPPServer.getInstance().getLocalDomains(), bindAddress, false, null, ServerPort.Type.component));
                 ports.add(componentSocketThread.getServerPort());
                 componentSocketThread.setDaemon(true);
                 componentSocketThread.setPriority(Thread.MAX_PRIORITY);
@@ -244,7 +244,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
 
             try {
                 socketThread = new SocketAcceptThread(this, 
-                    new ServerPort(port, XMPPServer.getInstance().getServerNames(), bindAddress, false, null, ServerPort.Type.client)
+                    new ServerPort(port, XMPPServer.getInstance().getLocalDomains(), bindAddress, false, null, ServerPort.Type.client)
                 );
                 ports.add(socketThread.getServerPort());
                 socketThread.setDaemon(true);
@@ -280,7 +280,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
                 algorithm = "TLS";
             }
             try {
-                sslSocketThread = new SSLSocketAcceptThread(this, new ServerPort(port, XMPPServer.getInstance().getServerNames(),
+                sslSocketThread = new SSLSocketAcceptThread(this, new ServerPort(port, XMPPServer.getInstance().getLocalDomains(),
                         bindAddress, true, algorithm, ServerPort.Type.client));
                 ports.add(sslSocketThread.getServerPort());
                 sslSocketThread.setDaemon(true);

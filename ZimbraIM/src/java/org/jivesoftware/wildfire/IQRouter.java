@@ -62,7 +62,7 @@ public class IQRouter extends BasicModule {
     }
     
     private Collection<String> getServerNames() {
-        return XMPPServer.getInstance().getServerNames();
+        return XMPPServer.getInstance().getLocalDomains();
     }
 
     /**
