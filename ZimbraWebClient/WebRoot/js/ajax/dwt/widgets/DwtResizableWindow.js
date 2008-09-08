@@ -297,8 +297,7 @@ function(minimize) {
 	this._minimized = minimize;
 	if (minimize) {
 		this.delClassName(null, "Minimize");
-		var size = this._getMinimizedSize();
-		this._windowManager._onMinimize(this, size);
+		this._windowManager._onMinimize(this);
 	} else {
 		this.delClassName("Minimize", null);
 		this._windowManager._onRestore(this);
@@ -841,7 +840,7 @@ function(index, managerSize) {
 };
 
 DwtWindowManager.prototype._onMinimize =
-function(drw, size) {
+function(drw) {
 	if (!this._minimized) {
 		this._minimized = [];
 	}
@@ -859,7 +858,7 @@ function(drw, size) {
 	};
 	var minimizedData = {
 		window: drw,
-		minimizedSize: size,
+		minimizedSize: this._minimizedSize,
 		position: this._getPosition(drw)
 	};
 	this._setPosition(drw, minimizePosition);
