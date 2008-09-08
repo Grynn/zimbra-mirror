@@ -38,7 +38,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.3.2.jar"/>
-	<classpathentry kind="lib" path="jars/derby.jar"/>
 	<classpathentry kind="lib" path="jars/jdavmail-0.9.007.jar" sourcepath="/ThirdParty/jdavmail/src"/>
 	<classpathentry kind="lib" path="jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>
 	<classpathentry kind="lib" path="jars/ymail.jar"/>
