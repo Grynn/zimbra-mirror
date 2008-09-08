@@ -882,7 +882,7 @@ public class SkinResources
                     geckoDate = Float.parseFloat(token.substring(index + 6));
                 } else if ((index = token.indexOf("applewebkit/")) != -1) {
                     isWebKitBased = true;
-                    webKitVersion = Float.parseFloat(token.substring(index + 12));
+                    webKitVersion = parseFloat(token.substring(index + 12));
                 } else if ((index = token.indexOf("rv:")) != -1) {
                     mozVersion = parseVersion(token.substring(index + 3));
                     browserVersion = mozVersion;
