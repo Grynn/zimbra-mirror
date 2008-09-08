@@ -828,58 +828,74 @@ DwtWindowManager.prototype.getBounds = function() {
 
 DwtWindowManager.MINIMIZE_PADDING = 10;
 
+DwtWindowManager.prototype._positionMinimized =
+function(index, managerSize) {
+	var padding = 10;
+	var windowsPerRow = parseInt((managerSize.x - padding) / (this._minimizedSize.x + padding));
+	var rowNum = parseInt(index / windowsPerRow);
+	var colNum = index % windowsPerRow;
+	return {
+		bottom: padding + (padding + this._minimizedSize.y) * rowNum,
+		right: padding + (padding + this._minimizedSize.x) * colNum
+	};
+};
+
 DwtWindowManager.prototype._onMinimize =
 function(drw, size) {
 	if (!this._minimized) {
 		this._minimized = [];
-		this._minimizedRight = 20;
 	}
+	this._minimizedSize = this._minimizedSize || drw._getMinimizedSize();
 
-	var right = this._minimizedRight + DwtWindowManager.MINIMIZE_PADDING;
-	this._minimizedRight = right + size.x;
+	var managerSize = this.getSize();
+	var location = this._positionMinimized(this._minimized.length, managerSize);
 
+	var minimizePosition = {
+		size: this._minimizedSize,
+		left: "auto",
+		top: "auto",
+		right: location.right,
+		bottom: location.bottom
+	};
 	var minimizedData = {
 		window: drw,
 		minimizedSize: size,
-		minimizedRight: right,
 		position: this._getPosition(drw)
 	};
+	this._setPosition(drw, minimizePosition);
 	this._minimized.push(minimizedData);
 
-	var minimizePosition = {
-		size: size,
-		left: "auto",
-		top: "auto",
-		right: right,
-		bottom: "20px"
-	};
-	this._setPosition(drw, minimizePosition);
+
+};
+
+DwtWindowManager.prototype._repositionMinimizedWindows =
+function(startIndex) {
+	var count = this._minimized ? this._minimized.length : 0;
+	if (startIndex >= count) {
+		return;
+	}
+	var managerSize = this.getSize();
+	for (var i = startIndex; i < count; i++) {
+		var data = this._minimized[i];
+		var location = this._positionMinimized(i, managerSize);
+		var element = data.window.getHtmlElement();
+		element.style.right = location.right;
+		element.style.bottom = location.bottom;
+	}
 };
 
 DwtWindowManager.prototype._onRestore =
 function(drw, disposing) {
-	var restoreData = null;
-	var restoreIndex = -1;
-	var shiftSize;
 	for (var i = 0, count = this._minimized.length; i < count; i++) {
 		var data = this._minimized[i];
-		if (!restoreData) {
-			if (data.window == drw) {
-				restoreData = data;
-				restoreIndex = i;
-				if (!disposing) {
-					this._setPosition(drw, restoreData.position);
-				}
-				shiftSize = restoreData.minimizedSize.x + DwtWindowManager.MINIMIZE_PADDING;
-				this._minimizedRight -= shiftSize;
+		if (data.window == drw) {
+			this._minimized.splice(i, 1);
+			if (!disposing) {
+				this._setPosition(drw, data.position);
 			}
-		} else {
-			data.minimizedRight -= shiftSize;
-			data.window.getHtmlElement().style.right = data.minimizedRight;
+			this._repositionMinimizedWindows(i);
+			break;
 		}
-	}
-	if (restoreIndex != -1) {
-		this._minimized.splice(restoreIndex, 1);
 	}
 };
 
@@ -907,12 +923,13 @@ function(drw) {
 
 DwtWindowManager.prototype._shellControlListener =
 function(controlEvent) {
-	// Make sure all windows are still on the screen after a shell resize.
-	// (No need to check minimized windows, which are positioned relative to
-	// the bottom of the screen.)
+	// Make sure all non-minimized windows are still on the screen after a shell resize.
 	for (var i = 0, count = this.all_windows.size(); i < count; i++) {
 		var drw = this.all_windows.get(i);
 		drw.ensureVisibleLocation(controlEvent.newWidth, controlEvent.newHeight);
 	}
+
+	// Relayout the minimized windows.
+	this._repositionMinimizedWindows(0);
 };
 
