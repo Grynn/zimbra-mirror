@@ -125,8 +125,8 @@ public class GalSync {
             galMbox.emptyFolder(context, Mailbox.ID_FOLDER_CONTACTS, true);            
         }
                 
-        SearchGalResult syncResult = new SearchGalResult();
-        syncResult.token = resp.getAttribute(AdminConstants.A_TOKEN);
+        SearchGalResult syncResult = SearchGalResult.newSearchGalResult(null);
+        syncResult.setToken(resp.getAttribute(AdminConstants.A_TOKEN));
         for (Element e: resp.listElements(AdminConstants.E_CN)) {
             Map<String, String> map = new HashMap<String, String>();
             String dn = e.getAttribute(AdminConstants.A_ID);
@@ -164,7 +164,7 @@ public class GalSync {
         }
         
         OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
-        prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, syncResult.token);
+        prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, syncResult.getToken());
         if (fullSync) {
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync,
                 Long.toString(System.currentTimeMillis()));
