@@ -161,6 +161,36 @@ public class UserManager implements IQResultListener {
         // Remove the user from cache.
         userCache.remove(user.getUsername());
     }
+    
+    public void deleteUser(String username) {
+        username = username.trim().toLowerCase();
+        User user = userCache.get(username);
+        
+        if (provider.isReadOnly()) {
+            throw new UnsupportedOperationException("User provider is read-only.");
+        }
+
+        assert(username.indexOf('@')>0);
+        
+        // Make sure that the username is valid.
+        try {
+            username = Stringprep.nodeprep(username);
+        }
+        catch (StringprepException se) {
+            throw new IllegalArgumentException("Invalid username: " + username,  se);
+        }
+
+        if (user != null) {
+            // Fire event.
+            UserEventDispatcher.dispatchEvent(user, UserEventDispatcher.EventType.user_deleting,
+                                              Collections.emptyMap());
+        }
+            
+        provider.deleteUser(username);
+        // Remove the user from cache.
+        userCache.remove(username);
+    }
+    
 
     /**
      * Returns the User specified by username.
@@ -170,6 +200,19 @@ public class UserManager implements IQResultListener {
      * @throws UserNotFoundException if the user does not exist.
      */
     public User getUser(String username) throws UserNotFoundException {
+        return getUser(username, false);
+    }
+    
+    /**
+     * Returns the User specified by username.
+     *
+     * @param username the username of the user.
+     * @param ignoreServerCheck if TRUE then don't enfore the check to see if this user is local to this server.  
+     *        Used when we're deleting/migrating users between servers
+     * @return the User that matches <tt>username</tt>.
+     * @throws UserNotFoundException if the user does not exist.
+     */
+    public User getUser(String username, boolean ignoreServerCheck) throws UserNotFoundException {
         if (username == null) {
             throw new UserNotFoundException("Username cannot be null");
         }
@@ -180,7 +223,7 @@ public class UserManager implements IQResultListener {
             synchronized (username.intern()) {
                 user = userCache.get(username);
                 if (user == null) {
-                    user = provider.loadUser(username);
+                    user = provider.loadUser(username, ignoreServerCheck);
                     userCache.put(username, user);
                 }
             }

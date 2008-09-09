@@ -235,6 +235,33 @@ public class GroupManager {
             }
         }
     }
+    
+    /**
+     * Deletes a user from all the groups where he/she belongs. The most probable cause
+     * for this request is that the user has been deleted from the system.
+     *
+     * TODO: remove this method and use events instead.
+     *
+     * @param user the deleted user from the system.
+     */
+    public void deleteUser(String username) {
+        JID userJID = new JID(username);
+        for (Group group : getGroups(userJID)) {
+            if (group.getAdmins().contains(userJID)) {
+                if (group.getAdmins().remove(userJID)) {
+                    // Remove the group from cache.
+                    groupCache.remove(group.getName());
+                }
+            }
+            else {
+                if (group.getMembers().remove(userJID)) {
+                    // Remove the group from cache.
+                    groupCache.remove(group.getName());
+                }
+            }
+        }
+    }
+    
 
     /**
      * Returns the total number of groups in the system.

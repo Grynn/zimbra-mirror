@@ -34,7 +34,7 @@ public interface UserProvider {
      * @return the User.
      * @throws UserNotFoundException if the User could not be loaded.
      */
-    public User loadUser(String username) throws UserNotFoundException;
+    public User loadUser(String username, boolean ignoreServerCheck) throws UserNotFoundException;
 
     /**
      * Creates a new user. This method should throw an
