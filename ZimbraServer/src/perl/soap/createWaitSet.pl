@@ -87,9 +87,9 @@ if (defined $accounts) {
     foreach my $a (@$accounts) {
       (my $aid, my $tok) = split /,/,$a;
       if (!defined $tok) {
-        $d->add("a", undef, { 'id' => $a, }); #'token'=>"608"
+        $d->add("a", undef, { 'name' => $a, }); #'token'=>"608"
       } else {
-        $d->add("a", undef, { 'id' => $aid, 'token'=>$tok}); 
+        $d->add("a", undef, { 'name' => $aid, 'token'=>$tok}); 
       }
     }
   } $d->end(); # add
