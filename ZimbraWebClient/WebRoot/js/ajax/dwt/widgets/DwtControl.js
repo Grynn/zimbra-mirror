@@ -1448,6 +1448,7 @@ function() {
 DwtControl.prototype.setToolTipContent =
 function(text) {
 	if (this._disposed) { return; }
+
 	this.__toolTipContent = text;
 };
 
@@ -2135,7 +2136,7 @@ DwtControl.prototype.__hasToolTipContent =
 function() {
 	if (this._disposed) { return false; }
 
-	return this.__toolTipCallback || this.__toolTipContent;
+	return Boolean(this.__toolTipCallback || this.__toolTipContent);
 };
 
 /**
