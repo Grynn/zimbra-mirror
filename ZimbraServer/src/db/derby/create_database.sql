@@ -223,3 +223,18 @@ CREATE TABLE ${DATABASE_NAME}.imap_message (
 );
 
 CREATE UNIQUE INDEX i_uid_imap_id ON ${DATABASE_NAME}.imap_message (mailbox_id, imap_folder_id, uid);
+
+-- Tracks local MailItem created from remote objects via DataSource
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
+   mailbox_id     INTEGER UNSIGNED NOT NULL,
+   data_source_id CHAR(36) NOT NULL,
+   item_id        INTEGER UNSIGNED NOT NULL,
+   remote_id      VARCHAR(255) BINARY NOT NULL,
+   metadata       MEDIUMTEXT,
+   
+   PRIMARY KEY (mailbox_id, item_id),
+   CONSTRAINT fk_data_source_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
+);
+
+CREATE UNIQUE INDEX i_remote_id 
+ON ${DATABASE_NAME}.data_source_item (mailbox_id, data_source_id, remote_id),   -- for reverse lookup

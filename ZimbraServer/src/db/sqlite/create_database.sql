@@ -280,6 +280,22 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.imap_message (
    CONSTRAINT fk_imap_message_imap_folder_id FOREIGN KEY (imap_folder_id) REFERENCES imap_folder(item_id) ON DELETE CASCADE
 )%
 
+-- Tracks local MailItem created from remote objects via DataSource
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
+   mailbox_id     INTEGER UNSIGNED NOT NULL,
+   data_source_id CHAR(36) NOT NULL,
+   item_id        INTEGER UNSIGNED NOT NULL PRIMARY KEY,
+   remote_id      VARCHAR(255) BINARY NOT NULL,
+   metadata       MEDIUMTEXT,
+   
+   UNIQUE (mailbox_id, item_id)
+   -- CONSTRAINT fk_data_source_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
+)%
+
+-- for reverse lookup
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_remote_id 
+ON data_source_item (mailbox_id, data_source_id, remote_id)%
+
 -- CONSTRAINT fk_imap_message_imap_folder_id FOREIGN KEY (imap_folder_id) REFERENCES imap_folder(item_id) ON DELETE CASCADE
 CREATE TRIGGER IF NOT EXISTS ${DATABASE_NAME}.fki_imap_message_imap_folder_id
 BEFORE INSERT ON [imap_message]
