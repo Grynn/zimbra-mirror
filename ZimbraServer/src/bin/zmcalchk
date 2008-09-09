@@ -139,11 +139,18 @@ sub process_simple_json_object($) {
         if ($section =~ m#^\s*:?\s*(?=(\[|{))#o) {
             my $type = $1;
             if ($type eq '{') {
-                my $subsection = extract_bracketed($section, "{}", qr/\s*:?\s*/);
-                die "no subsection found" if (!defined($subsection) || $subsection eq '');
+                my $subsection = extract_bracketed($section, '{"}', qr/\s*:?\s*/);
+                if (!defined($subsection) || $subsection eq '') {
+                    print STDERR "SECTION: $section\n" if ($debug);
+                    die "unable to extract object text from JSON";
+                }
                 $value = &process_simple_json_object($subsection);
             } elsif ($type eq '[') {
-                my $subsection = extract_bracketed($section, "[]", qr/\s*:?\s*/);
+                my $subsection = extract_bracketed($section, '["]', qr/\s*:?\s*/);
+                if (!defined($subsection) || $subsection eq '') {
+                    print STDERR "SECTION: $section\n" if ($debug);
+                    die "unable to extract list text from JSON";
+                }
                 $value = process_simple_json_list($subsection);
             }
         } else {
