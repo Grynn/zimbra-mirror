@@ -44,7 +44,6 @@ import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.httpclient.URLUtil;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
-import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.util.TypedIdList;
