@@ -21,5 +21,6 @@
 		<property type="boolean" name="autocomplete" label="Autocomplete Search Results" value="true"/>
 		<property type="boolean" name="pane" label="Display Search Results in Zimbra Window" value="true"/>
 		<property type="boolean" name="tab" label="Display Search Tab (if in Zimbra window)" value="true"/>
+		<property type="boolean" name="nav" label="Display Back &amp; Forward Buttons in Search Tab (will not always work correctly)" value="false"/>
 	</userProperties>
 </zimlet>

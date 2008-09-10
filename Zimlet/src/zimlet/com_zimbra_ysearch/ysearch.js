@@ -36,6 +36,7 @@ function() {
 	this._settingAutocomplete = (this.getUserProperty("autocomplete") === true || this.getUserProperty("autocomplete") == "true");
 	this._settingPane = (this.getUserProperty("pane") === true || this.getUserProperty("pane") == "true");
 	this._settingTab = (this.getUserProperty("tab") === true || this.getUserProperty("tab") == "true");
+	this._settingNav = (this.getUserProperty("nav") === true || this.getUserProperty("nav") == "true");
 
 	window.skin._searchWebController = new YahooSearchController(this);
 
@@ -288,13 +289,21 @@ YahooSearchController.prototype._initializeToolBar =
 function() {
 	if (this._toolbar) { return; }
 
-	var buttons = [
-		ZmOperation.PAGE_BACK,
-		ZmOperation.PAGE_FORWARD,
-		ZmOperation.GO_TO_URL,
-		ZmOperation.SEARCH,
-		ZmOperation.CLOSE
-	];
+	if (this._zimlet._settingNav) {
+		var buttons = [
+			ZmOperation.PAGE_BACK,
+			ZmOperation.PAGE_FORWARD,
+			ZmOperation.GO_TO_URL,
+			ZmOperation.SEARCH,
+			ZmOperation.CLOSE
+		];
+	} else {
+		var buttons = [
+			ZmOperation.GO_TO_URL,
+			ZmOperation.SEARCH,
+			ZmOperation.CLOSE
+		];
+	}
 	this._toolbar = new ZmButtonToolBar({parent:appCtxt.getShell(), buttons:buttons, className:"ZmAppToolBar ImgSkin_Toolbar"});
 
 	// add listeners to the operations
