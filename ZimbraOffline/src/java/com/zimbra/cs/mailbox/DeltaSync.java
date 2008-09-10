@@ -30,6 +30,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.Offline;
@@ -329,9 +330,10 @@ public class DeltaSync {
 	            for (String idStr : deltype.getAttribute(MailConstants.A_IDS).split(",")) {
 	                Integer id = Integer.valueOf(idStr);
 	                Integer mask = ombx.getChangeMask(sContext, id, type);
-	                
-	                if (ombx.isItemInArchive(ombx.getItemById(sContext, id, type))) //don't delete something that was newly archived
-	                	continue;
+	                try {
+		                if (ombx.isItemInArchive(ombx.getItemById(sContext, id, type))) //don't delete something that was newly archived
+		                	continue;
+	                } catch (NoSuchItemException x) { continue; }
 	                // tag numbering conflict issues: don't delete tags we've created locally
 	                if (isTag && (mask & Change.MODIFIED_CONFLICT) != 0)
 	                    continue;
