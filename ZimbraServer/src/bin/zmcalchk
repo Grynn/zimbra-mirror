@@ -176,7 +176,7 @@ sub process_simple_json_object($) {
 sub process_simple_json_list($) {
     my $json = shift;
     my @list = ();
-    while (my $block = extract_bracketed($json, "{}", qr/\s*,?\[?\s*/)) {
+    while (my $block = extract_bracketed($json, '{"}', qr/\s*,?\[?\s*/)) {
         my $object = process_simple_json_object($block);
         push(@list, $object);
     }
@@ -493,6 +493,7 @@ sub main() {
             my $m = $@;
             chomp($m);
             print "$$item{'name'}: $m; skipping check\n\n";
+            next;
         }
         my @attList = keys %{$item->{'attendeesList'}};
 
