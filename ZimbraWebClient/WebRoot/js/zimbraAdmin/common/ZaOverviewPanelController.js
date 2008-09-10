@@ -116,24 +116,24 @@ function (ev) {
 
 
 ZaOverviewPanelController.prototype.searchDomains = function() {
-/*	if(this._app) {
-		this._app.searchDomains();
-	} else {	*/
-		var callback = new AjxCallback(this, this.domainSearchCallback);
-		var domainListController = this._app.getDomainListController ();
-		domainListController._currentQuery = "(zimbraDomainType=local)" ;
-		var searchParams = {
-				query: domainListController._currentQuery, 
-				types:[ZaSearch.DOMAINS],
-				sortBy:ZaDomain.A_domainName,
-				offset:"0",
-				sortAscending:"1",
-				limit:ZaDomain.MAXSEARCHRESULTS,
-				callback:callback,
-				controller: this
-		}
-		ZaSearch.searchDirectory(searchParams);
-	//}
+	var callback = new AjxCallback(this, this.domainSearchCallback);
+	var domainListController = this._app.getDomainListController ();
+	if(ZaSettings.DOMAINS_ENABLED)
+		domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
+	else
+		domainListController._currentQuery = "";
+		
+	var searchParams = {
+			query: domainListController._currentQuery, 
+			types:[ZaSearch.DOMAINS],
+			sortBy:ZaDomain.A_domainName,
+			offset:"0",
+			sortAscending:"1",
+			limit:ZaDomain.MAXSEARCHRESULTS,
+			callback:callback,
+			controller: this
+	}
+	ZaSearch.searchDirectory(searchParams);
 }
 
 ZaOverviewPanelController.prototype.domainSearchCallback = 
@@ -331,7 +331,7 @@ function (appCtxt, container) {
 	this._currentDomain = "";	
 	this._app = appCtxt.getAppController().getApp(ZaZimbraAdmin.ADMIN_APP);
 			
-	if(ZaSettings.DOMAINS_ENABLED)
+	if(ZaSettings.DOMAINS_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED)
 		this._domainsMap = new Object();
 	
 	if(ZaSettings.SERVERS_ENABLED)
@@ -404,53 +404,57 @@ function() {
         }
     }
 		
-	if(ZaSettings.SYSTEM_CONFIG_ENABLED) {	
+	if(ZaSettings.COSES_ENABLED || ZaSettings.SERVERS_ENABLED || ZaSettings.ADMIN_ZIMLETS_ENABLED || ZaSettings.ZIMLETS_ENABLED|| ZaSettings.GLOBAL_CONFIG_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED || ZaSettings.DOMAINS_ENABLED) {	
 		this._configTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._configTi.enableSelection(false);
 		this._configTi.setText(ZaMsg.OVP_configuration);
 		this._configTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SYS_CONFIG);	
 		
-		this._cosTi = new DwtTreeItem(this._configTi);
-		this._cosTi.setText(ZaMsg.OVP_cos);
-		this._cosTi.setImage("COS");
-		this._cosTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_LIST_VIEW);
-			
-		try {
-			//add COS nodes
-			var cosList = this._app.getCosList();
-			if(cosList && cosList.size()) {
-				var idHash = cosList.getIdHash();
-				for(var ix in idHash) {
-					var ti1 = new DwtTreeItem(this._cosTi);			
-					ti1.setText(idHash[ix].name);	
-					ti1.setImage("COS");
-					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
-					ti1.setData(ZaOverviewPanelController._OBJ_ID, idHash[ix].id);
-					this._cosMap[idHash[ix].id] = ti1;
+		if (ZaSettings.COSES_ENABLED) {
+			this._cosTi = new DwtTreeItem(this._configTi);
+			this._cosTi.setText(ZaMsg.OVP_cos);
+			this._cosTi.setImage("COS");
+			this._cosTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_LIST_VIEW);
+				
+			try {
+				//add COS nodes
+				var cosList = this._app.getCosList();
+				if(cosList && cosList.size()) {
+					var idHash = cosList.getIdHash();
+					for(var ix in idHash) {
+						var ti1 = new DwtTreeItem(this._cosTi);			
+						ti1.setText(idHash[ix].name);	
+						ti1.setImage("COS");
+						ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._COS_VIEW);
+						ti1.setData(ZaOverviewPanelController._OBJ_ID, idHash[ix].id);
+						this._cosMap[idHash[ix].id] = ti1;
+					}
 				}
-			}
-		} catch (ex) {
-			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
-		}	
-		
-		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_LIST_VIEW] = ZaOverviewPanelController.cosListTreeListener;		
-		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_VIEW] = ZaOverviewPanelController.cosTreeListener;				
-		
-		this._domainsTi = new DwtTreeItem(this._configTi);
-		this._domainsTi.setText(ZaMsg.OVP_domains);
-		this._domainsTi.setImage("Domain");
-		this._domainsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAINS_LIST_VIEW);
-	
-		try {
-			//add domain nodes
-			this.searchDomains();
-		} catch (ex) {
-			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
-		}
+			} catch (ex) {
+				this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+			}	
 			
-		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;		
-		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;				
-
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_LIST_VIEW] = ZaOverviewPanelController.cosListTreeListener;		
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_VIEW] = ZaOverviewPanelController.cosTreeListener;				
+		}
+		
+		if(ZaSettings.DOMAINS_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED) {
+			this._domainsTi = new DwtTreeItem(this._configTi);
+			this._domainsTi.setText(ZaMsg.OVP_domains);
+			this._domainsTi.setImage("Domain");
+			this._domainsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAINS_LIST_VIEW);
+	
+			try {
+			//add domain nodes
+				this.searchDomains();
+			} catch (ex) {
+				this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+			}
+			
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;		
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAIN_VIEW] = ZaOverviewPanelController.domainTreeListener;				
+		}
+	
         if (ZaSettings.SERVERS_ENABLED) {
             this._serversTi = new DwtTreeItem(this._configTi);
             this._serversTi.setText(ZaMsg.OVP_servers);
@@ -495,13 +499,14 @@ function() {
 			this._adminZimletsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW);
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW] = ZaOverviewPanelController.adminExtListTreeListener;					
 		}
-				
-		ti = new DwtTreeItem(this._configTi);
-		ti.setText(ZaMsg.OVP_global);
-		ti.setImage("GlobalSettings");
-		ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_SETTINGS);	
-
-		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;				
+		if(ZaSettings.GLOBAL_CONFIG_ENABLED) {		
+			ti = new DwtTreeItem(this._configTi);
+			ti.setText(ZaMsg.OVP_global);
+			ti.setImage("GlobalSettings");
+			ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_SETTINGS);	
+	
+			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;				
+		}
 		this._configTi.addSeparator();	
 		
 	}
@@ -765,7 +770,13 @@ ZaOverviewPanelController.serverListTreeListener = function (ev) {
 
 ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	var domainListController = this._app.getDomainListController ();
-		domainListController._currentQuery = "(zimbraDomainType=local)" ;
+	
+	//if we do not have access to domains we will only get our own domain in response anyway, so no need to add a query
+	if(ZaSettings.DOMAINS_ENABLED)
+		domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
+	else
+		domainListController._currentQuery = "" ;
+			
 	if(this._app.getCurrentController()) {
 		this._app.getCurrentController().switchToNextView(domainListController, ZaDomainListController.prototype.show, true);
 	} else {					

@@ -60,15 +60,29 @@ function(entry) {
 **/
 ZaDomainController.initToolbarMethod = 
 function () {
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
+	if (!ZaSettings.DOMAINS_ARE_READONLY)
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
+	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener)));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
+	if (!ZaSettings.DOMAINS_ARE_READONLY)
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener)));
+	
+	if (!ZaSettings.DOMAINS_ARE_READONLY)
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.INIT_NOTEBOOK, ZaMsg.DTBB_InitNotebook, ZaMsg.DTBB_InitNotebook_tt, "NewNotebook", "NewNotebookDis", new AjxListener(this, ZaDomainController.prototype._initNotebookButtonListener)));   		   		   		
+	
+	if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED)
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
+	
+	if(ZaSettings.DOMAIN_AUTH_WIZ_ENABLED)
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
+	
+	if(ZaSettings.DOMAIN_WIKI_ENABLED)
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.INIT_NOTEBOOK, ZaMsg.DTBB_InitNotebook, ZaMsg.DTBB_InitNotebook_tt, "NewNotebook", "NewNotebookDis", new AjxListener(this, ZaDomainController.prototype._initNotebookButtonListener)));
+		
+	if(ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED)
+	   	this._toolbarOperations.push(new ZaOperation(ZaOperation.INIT_NOTEBOOK, ZaMsg.DTBB_CheckMX, ZaMsg.DTBB_CheckMX_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaDomainController.prototype._checkMXButtonListener)));
 
 }
 ZaController.initToolbarMethods["ZaDomainController"].push(ZaDomainController.initToolbarMethod);
@@ -84,26 +98,41 @@ function(entry) {
 		this._createUI();
 	} 
 	this._app.pushView(this.getContentViewId());
-	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
+	if(!ZaSettings.DOMAINS_ARE_READONLY)
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
 
 	if(entry.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
-		this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);
-		this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(false);
-		this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(false);		
-		this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
-	} else {
-		if(!entry.id) {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
-		} else {
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-		}			
-		this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(true);
-		this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(true);		
+		if(!ZaSettings.DOMAINS_ARE_READONLY)
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);
 		
-		if(entry.attrs[ZaDomain.A_zimbraNotebookAccount])
+		if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED)
+			this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(false);
+		
+		if(ZaSettings.DOMAIN_AUTH_WIZ_ENABLED)
+			this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(false);		
+		
+		if(ZaSettings.DOMAIN_WIKI_ENABLED)
 			this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
-		else
-			this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(true);
+	} else {
+		if(!ZaSettings.DOMAINS_ARE_READONLY) {
+			if(!entry.id) {
+				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
+			} else {
+				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+			}
+		}			
+		if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED)
+			this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(true);
+		
+		if(ZaSettings.DOMAIN_AUTH_WIZ_ENABLED)
+			this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(true);		
+		
+		if(ZaSettings.DOMAIN_WIKI_ENABLED) {
+			if(entry.attrs[ZaDomain.A_zimbraNotebookAccount])
+				this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
+			else
+				this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(true);
+		}
 	}
 	this._view.setDirty(false);
 	
@@ -566,6 +595,11 @@ function(ev) {
 		this._handleException(ex, "ZaDomainController.prototype._finishDomainNotebookListener", null, false);
 	}
 	return;
+}
+
+ZaDomainController.prototype._checkMXButtonListener = 
+function (ev) {
+	//ZaDomainthis._currentObject
 }
 
 ZaDomainController.prototype._initNotebookButtonListener = 

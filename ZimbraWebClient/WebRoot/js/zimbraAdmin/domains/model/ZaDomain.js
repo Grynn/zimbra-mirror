@@ -109,6 +109,8 @@ ZaDomain.A_zimbraDomainStatus = "zimbraDomainStatus";
 ZaDomain.A_zimbraPublicServiceHostname = "zimbraPublicServiceHostname";
 ZaDomain.A_zimbraPublicServicePort = "zimbraPublicServicePort";
 ZaDomain.A_zimbraPublicServiceProtocol = "zimbraPublicServiceProtocol";
+ZaDomain.A_zimbraDNSCheckHostname = "zimbraDNSCheckHostname";
+
 //GAL search
 ZaDomain.A_GalMaxResults = "zimbraGalMaxResults";
 ZaDomain.A_GalMode = "zimbraGalMode";
@@ -136,6 +138,7 @@ ZaDomain.A_AuthLdapSearchFilter = "zimbraAuthLdapSearchFilter";
 ZaDomain.A_AuthLdapSearchBindDn ="zimbraAuthLdapSearchBindDn";
 ZaDomain.A_AuthLdapSearchBindPassword="zimbraAuthLdapSearchBindPassword";
 
+ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck = "zimbraFeatureAdminConsoleDNSCheck";
 //internal attributes - not synched with the server code yet
 //GAL
 ZaDomain.A_GALServerType = "galservertype";
@@ -245,7 +248,7 @@ ZaDomain.putDomainToCache = function(domain) {
 ZaDomain.getAll =
 function(app) {
 	var params = {
-		query: ZaDomain.LOCAL_DOMAIN_QUERY, 
+		query: (ZaSettings.DOMAINS_ENABLED ? ZaDomain.LOCAL_DOMAIN_QUERY : ""), 
 		types:[ZaSearch.DOMAINS],
 		sortBy:ZaDomain.A_domainName,
 		offset:"0",
@@ -1144,8 +1147,9 @@ function(by, val) {
 	//var getDomainCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
+	
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : (this._app ? this._app.getCurrentController() : null),
 		busyMsg : ZaMsg.BUSY_GET_DOMAIN
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
@@ -1166,11 +1170,27 @@ function(by, val) {
 		try {
 			this.parseNotebookFolderAcls(getFolderCommand.invoke(params));
 		} catch (ex) {
-			this._app.getCurrentController()._handleException(ex, "ZaDomain.loadMethod", null, false);
+			if(this._app)
+				this._app.getCurrentController()._handleException(ex, "ZaDomain.loadMethod", null, false);
 		}
 	}	
 }
 ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
+
+
+ZaDomain.checkDomainMXRecord = 
+function(by, val) {
+	var soapDoc = AjxSoapDoc.create("CheckDomainMXRecordRequest", ZaZimbraAdmin.URN, null);
+
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var reqMgrParams = {
+		controller : (this._app ? this._app.getCurrentController() : null),
+		busyMsg : ZaMsg.BUSY_CHECKING_MX
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
+}
+
 
 ZaDomain.aclXModel = {
 	items: [

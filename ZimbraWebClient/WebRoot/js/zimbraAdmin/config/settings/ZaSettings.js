@@ -232,7 +232,13 @@ ZaSettings.ZIMLETS_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;
 ZaSettings.SAVE_SEARCH_ENABLED = true ;
 ZaSettings.TOOLS_ENABLED = true;
-
+ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED = false;
+ZaSettings.DOMAIN_GAL_WIZ_ENABLED = true;
+ZaSettings.DOMAIN_AUTH_WIZ_ENABLED = true;
+ZaSettings.DOMAINS_ARE_READONLY = false;
+ZaSettings.DOMAIN_WIKI_ENABLED = true;
+ZaSettings.DOMAIN_VIRTUAL_HOST_ENABLED = true;
+ZaSettings.DOMAIN_INTEROP_ENABLED = true;
 // initialization for settings: [name, type, data type, default value]
 ZaSettings.INIT = new Object();
 // IDs FOR HTML COMPONENTS IN THE SKIN
