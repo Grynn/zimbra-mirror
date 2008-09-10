@@ -300,6 +300,33 @@ public class DbOfflineMailbox {
         }
     }
     
+	public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(OfflineMailbox ombx)
+			throws ServiceException {
+		Connection conn = ombx.getOperationConnection();
+		
+		Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.prepareStatement("SELECT id, change_mask, flags" +
+					" FROM " + DbMailItem.getMailItemTableName(ombx) + Derby.forceIndex("i_change_mask") +
+					" WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask IS NOT NULL");
+			int pos = 1;
+			stmt.setInt(pos++, ombx.getId());
+		
+			rs = stmt.executeQuery();
+			while (rs.next())
+				result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
+			return result;
+		} catch (SQLException e) {
+			throw ServiceException.FAILURE("getting changed item ids for ombx "
+					+ ombx.getId(), e);
+		} finally {
+			DbPool.closeResults(rs);
+			DbPool.closeStatement(stmt);
+		}
+	}
+    
     public static List<Pair<Integer, Integer>> getSimpleUnreadChanges(OfflineMailbox ombx, boolean isUnread) throws ServiceException {
     	Connection conn = ombx.getOperationConnection();
     	List<Pair<Integer, Integer>> readList = new ArrayList<Pair<Integer, Integer>>();

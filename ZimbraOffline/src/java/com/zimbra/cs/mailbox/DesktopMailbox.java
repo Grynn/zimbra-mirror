@@ -18,6 +18,7 @@ import com.zimbra.cs.util.ZimbraApplication;
 public abstract class DesktopMailbox extends Mailbox {
 
 	public static final String OUTBOX_PATH = "Outbox";
+	public static final String ARCHIVE_PATH = "Archive";
 	public static final String FAILURE_PATH = "Error Reports";
 	public static final int ID_FOLDER_FAILURE = 252;
     public static final int ID_FOLDER_ARCHIVE = 253;
@@ -46,6 +47,7 @@ public abstract class DesktopMailbox extends Mailbox {
         // create a system outbox folder
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
         Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
+        //Folder.create(ID_FOLDER_ARCHIVE, this, userRoot, ARCHIVE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
         Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
     }
     

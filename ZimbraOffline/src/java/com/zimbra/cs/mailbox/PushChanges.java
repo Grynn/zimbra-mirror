@@ -174,6 +174,47 @@ public class PushChanges {
     }
 
     private boolean sync(boolean isOnRequest) throws ServiceException {
+        //deal with archiving first
+        List<Integer> archived = new ArrayList<Integer>();
+    	synchronized (ombx) {
+            //find archived items to delete on server
+    		Map<Integer, Pair<Integer, Integer>> changeMasksAndFlags = ombx.getChangeMasksAndFlags(sContext);
+            for (Map.Entry<Integer, Pair<Integer, Integer>> entry : changeMasksAndFlags.entrySet()) {
+            	int changeMask = entry.getValue().getFirst().intValue();
+            	boolean hasArchivedBit = (changeMask & Change.MODIFIED_ARCHIVED) != 0;
+            	boolean hasArchivedFlag = (entry.getValue().getSecond().intValue() & Flag.BITMASK_ARCHIVED) != 0;
+            	
+            	if (hasArchivedBit && hasArchivedFlag)
+            		archived.add(entry.getKey());
+            	else if (hasArchivedBit) //was first moved into archive then moved out; we just clear the archived bit
+            		ombx.setChangeMask(sContext, entry.getKey(), MailItem.TYPE_UNKNOWN, changeMask & ~Change.MODIFIED_ARCHIVED);
+            }
+    	}
+    	
+    	//push up deletes due to archiving.  we are sure that everything in the list is safe.  if a folder was archived and then one of its subfolder is unarchived,
+    	//the subfolder and its content would have their archived flags clears and therefore not included in the list.
+        if (!archived.isEmpty()) {
+            String ids = concatenateIds(archived);
+            Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+            request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailConstants.A_ID, ids);
+            ombx.sendRequest(request);
+            OfflineLog.offline.debug("push: pushed deletes due to archiving: [" + ids + ']');
+            
+            //now we need to deal with items unarchived during the pushup
+            synchronized (ombx) {
+	            Map<Integer, Pair<Integer, Integer>> changeMasksAndFlags = ombx.getChangeMasksAndFlags(sContext);
+	            for (int id : archived) {
+	            	Pair<Integer, Integer> value = changeMasksAndFlags.remove(id);
+	            	assert (value != null && (value.getFirst().intValue() & Change.MODIFIED_ARCHIVED) != 0); //you can't lose the archived bit between the two checks
+	            	if ((value.getSecond().intValue() & Flag.BITMASK_ARCHIVED) != 0) //still in archive
+	            		ombx.setChangeMask(sContext, id, MailItem.TYPE_UNKNOWN, 0); //clear change mask since we no longer need to keep track of items in archive
+	            	else { //we deleted from server but the item was unarchived, make it new
+	            		ombx.setChangeMask(sContext, id, MailItem.TYPE_UNKNOWN, Change.MODIFIED_CONFLICT);
+	            	}
+	            }
+            }
+        }
+    	
         int limit;
         TypedIdList changes, tombstones;
         // do simple change batch push first
@@ -193,10 +234,10 @@ public class PushChanges {
         }
 
         if (changes.isEmpty() && tombstones.isEmpty())
-            return false;
+            return archived.size() != 0;
 
         OfflineLog.offline.debug("starting change push");
-        
+
         boolean hasDeletes = !tombstones.isEmpty();
 
         // because tags reuse IDs, we need to do tag deletes before any other changes (especially tag creates)
@@ -551,6 +592,9 @@ public class PushChanges {
         boolean create = false;
         synchronized (ombx) {
             SearchFolder search = ombx.getSearchFolderById(sContext, id);
+            if (ombx.isItemInArchive(search))
+            	return false;
+            
             name = search.getName();    flags = search.getInternalFlagBitmask();
             color = search.getColor();  parentId = search.getFolderId();  
             query = search.getQuery();  searchTypes = search.getReturnTypes();  sort = search.getSortField();
@@ -592,7 +636,11 @@ public class PushChanges {
             SearchFolder search = ombx.getSearchFolderById(sContext, id);
             // check to see if the search was changed while we were pushing the update...
             int mask = 0;
-            if (flags != search.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
+            if (flags != search.getInternalFlagBitmask()) {
+            	mask |= Change.MODIFIED_FLAGS;
+            	if (ombx.isItemInArchive(search))
+            		mask |= Change.MODIFIED_ARCHIVED;
+            }
             if (parentId != search.getFolderId())          mask |= Change.MODIFIED_NAME;
             if (color != search.getColor())                mask |= Change.MODIFIED_COLOR;
             if (!name.equals(search.getName()))            mask |= Change.MODIFIED_NAME;
@@ -616,6 +664,9 @@ public class PushChanges {
         boolean create = false;
         synchronized (ombx) {
             Folder folder = ombx.getFolderById(sContext, id);
+            if (ombx.isItemInArchive(folder))
+            	return false;
+            
             name = folder.getName();  parentId = folder.getFolderId();  flags = folder.getInternalFlagBitmask();
             url = folder.getUrl();    color = folder.getColor();
 
@@ -657,7 +708,11 @@ public class PushChanges {
             Folder folder = ombx.getFolderById(sContext, id);
             // check to see if the folder was changed while we were pushing the update...
             int mask = 0;
-            if (flags != folder.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
+            if (flags != folder.getInternalFlagBitmask()) {
+            	mask |= Change.MODIFIED_FLAGS;
+            	if (ombx.isItemInArchive(folder))
+            		mask |= Change.MODIFIED_ARCHIVED;
+            }
             if (parentId != folder.getFolderId())          mask |= Change.MODIFIED_NAME;
             if (color != folder.getColor())                mask |= Change.MODIFIED_COLOR;
             if (!name.equals(folder.getName()))            mask |= Change.MODIFIED_NAME;
@@ -798,6 +853,9 @@ public class PushChanges {
         Contact cn = null;
         synchronized (ombx) {
             cn = ombx.getContactById(sContext, id);
+            if (ombx.isItemInArchive(cn))
+            	return false;
+            
             date = cn.getDate();    flags = cn.getFlagBitmask();  tags = cn.getTagBitmask();
             color = cn.getColor();  folderId = cn.getFolderId();
 
@@ -853,7 +911,11 @@ public class PushChanges {
             cn = ombx.getContactById(sContext, id);
             // check to see if the contact was changed while we were pushing the update...
             int mask = 0;
-            if (flags != cn.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
+            if (flags != cn.getInternalFlagBitmask()) {
+            	mask |= Change.MODIFIED_FLAGS;
+            	if (ombx.isItemInArchive(cn))
+            		mask |= Change.MODIFIED_ARCHIVED;
+            }
             if (tags != cn.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
             if (folderId != cn.getFolderId())          mask |= Change.MODIFIED_FOLDER;
             if (color != cn.getColor())                mask |= Change.MODIFIED_COLOR;
@@ -999,6 +1061,9 @@ public class PushChanges {
         Message msg = null;
         synchronized (ombx) {
             msg = ombx.getMessageById(sContext, id);
+            if (ombx.isItemInArchive(msg))
+            	return false;
+            
             digest = msg.getDigest();  flags = msg.getFlagBitmask();  tags = msg.getTagBitmask();
             color = msg.getColor();    folderId = msg.getFolderId();
             
@@ -1061,7 +1126,11 @@ public class PushChanges {
             msg = ombx.getMessageById(sContext, id);
             // check to see if the message was changed while we were pushing the update...
             int mask = 0;
-            if (flags != msg.getFlagBitmask())    mask |= Change.MODIFIED_FLAGS;
+            if (flags != msg.getFlagBitmask()) {
+            	mask |= Change.MODIFIED_FLAGS;
+            	if (ombx.isItemInArchive(msg))
+            		mask |= Change.MODIFIED_ARCHIVED;
+            }
             if (tags != msg.getTagBitmask())      mask |= Change.MODIFIED_TAGS;
             if (folderId != msg.getFolderId())    mask |= Change.MODIFIED_FOLDER;
             if (color != msg.getColor())          mask |= Change.MODIFIED_COLOR;
@@ -1088,6 +1157,9 @@ public class PushChanges {
         
         synchronized (ombx) {
             CalendarItem cal = ombx.getCalendarItemById(sContext, id);
+            if (ombx.isItemInArchive(cal))
+            	return false;
+            
             name = cal.getSubject();
             date = cal.getDate();
             tags = cal.getTagBitmask();
@@ -1142,8 +1214,12 @@ public class PushChanges {
             CalendarItem cal = ombx.getCalendarItemById(sContext, id);
             // check to see if the calendar item was changed while we were pushing the update...
             mask = 0;
+            if (flags != cal.getInternalFlagBitmask()) {
+            	mask |= Change.MODIFIED_FLAGS;
+            	if (ombx.isItemInArchive(cal))
+            		mask |= Change.MODIFIED_ARCHIVED;
+            }
             if (tags != cal.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
-            if (flags != cal.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
             if (folderId != cal.getFolderId())          mask |= Change.MODIFIED_FOLDER;
             if (color != cal.getColor())                mask |= Change.MODIFIED_COLOR;
             if (date != cal.getDate())                  mask |= Change.MODIFIED_CONTENT;

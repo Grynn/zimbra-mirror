@@ -19,6 +19,7 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +44,7 @@ import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.httpclient.URLUtil;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
+import com.zimbra.cs.mailbox.MailItem.TypedIdList;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.util.TypedIdList;
@@ -396,6 +398,19 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
     
+    synchronized Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(OperationContext octxt) throws ServiceException {
+        boolean success = false;
+        try {
+            beginTransaction("getChangeMasksAndFlags", octxt);
+
+            Map<Integer, Pair<Integer, Integer>> result = DbOfflineMailbox.getChangeMasksAndFlags(this);
+            success = true;
+            return result;
+        } finally {
+            endTransaction(success);
+        }
+    }
+    
     synchronized List<Pair<Integer, Integer>> getSimpleUnreadChanges(OperationContext octxt, boolean isUnread) throws ServiceException {
         boolean success = false;
         try {
@@ -575,6 +590,26 @@ public class OfflineMailbox extends DesktopMailbox {
             endTransaction(success);
         }
     }
+    
+    /* NOTE: how we deal with archiving
+     * 
+     * all items in archive will have the \Archived flag set.  this flag will tell us if an item is moved in or out of archive at the end of a move transaction
+     * items newly moved into archive before hard-deletes are pushed to server will have the archived dirty bit set.
+     * 
+     * when an item is moved into archive, we'll flag it \Archived and set the archived dirty bit.
+     * 
+     * when an item is moved out of archive, we'll clear the \Archived flag.  if archived dirty bit is not set,
+     * we'll also set the conflict dirty bit to mark it as new item to be uploaded.  in the case when an item is first
+     * moved into archive and then moved out before sync with server, we'll keep the archived dirty bit and address that on the next push.
+     * 
+     * when setting the archived dirty bit, we should preserve other change bits in case the item is moved out of archive before the next sync.
+     * 
+     * if an item is in archive and the archived dirty bit is not set, we don't need to keep track of changes on it; if the archived dirty bit
+     * is set, which means there's no sync since it was archived, we'll still need to keep track of changes.
+     * 
+     * regarding new items.  if an item is added in archive directly, we'll simply add \Archived flag.  when an item with conflict dirty bit is moved into
+     * archive we'll still set the archived dirty bit since pushing up unnecessary delete is always A-OK.
+     */
 
     @Override void snapshotCounts() throws ServiceException {
         // do the normal persisting of folder/tag counts
@@ -592,10 +627,15 @@ public class OfflineMailbox extends DesktopMailbox {
 
         if (pms.created != null) {
             for (MailItem item : pms.created.values()) {
-                if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && PushChanges.PUSH_TYPES_SET.contains(item.getType()))
-                    DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
-                if (item.getFolderId() == ID_FOLDER_OUTBOX)
-                	outboxed = true;
+                if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && PushChanges.PUSH_TYPES_SET.contains(item.getType()) && item.getFolderId() != ID_FOLDER_FAILURE) {
+                    if (isInArchive(item)) //new item created or imported into archive
+                    	alterArchivedFlag(item, true);
+                    else {
+                    	DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
+                        if (item.getFolderId() == ID_FOLDER_OUTBOX)
+                        	outboxed = true;
+                    }
+                }
             }
         }
 
@@ -604,27 +644,38 @@ public class OfflineMailbox extends DesktopMailbox {
                 if (!(change.what instanceof MailItem))
                     continue;
                 MailItem item = (MailItem) change.what;
-                if (item.getId() == ID_FOLDER_OUTBOX || item.getId() == ID_FOLDER_FAILURE || item.getFolderId() == ID_FOLDER_FAILURE)
-                	continue;
-                if (item.getFolderId() == ID_FOLDER_OUTBOX)
-                	outboxed = true;
+                if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && PushChanges.PUSH_TYPES_SET.contains(item.getType()) && item.getFolderId() != ID_FOLDER_FAILURE) {
+                    boolean isInArchive = isInArchive(item);
+                	if (!isInArchive || !item.isTagged(mArchivedFlag)) { //either not in archive, or newly archived, we need to keep track
+                        int filter = 0;
+                        switch (item.getType()) {
+                            case MailItem.TYPE_MESSAGE:       filter = PushChanges.MESSAGE_CHANGES;     break;
+                            case MailItem.TYPE_CHAT:          filter = PushChanges.CHAT_CHANGES;        break;
+                            case MailItem.TYPE_CONTACT:       filter = PushChanges.CONTACT_CHANGES;     break;
+                            case MailItem.TYPE_FOLDER:        filter = PushChanges.FOLDER_CHANGES;      break;
+                            case MailItem.TYPE_SEARCHFOLDER:  filter = PushChanges.SEARCH_CHANGES;      break;
+                            case MailItem.TYPE_TAG:           filter = PushChanges.TAG_CHANGES;         break;
+                            case MailItem.TYPE_APPOINTMENT:
+                            case MailItem.TYPE_TASK:          filter = PushChanges.APPOINTMENT_CHANGES; break;
+                            case MailItem.TYPE_WIKI:
+                            case MailItem.TYPE_DOCUMENT:      filter = PushChanges.DOCUMENT_CHANGES;    break;
+                        }
 
-                int filter = 0;
-                switch (item.getType()) {
-                    case MailItem.TYPE_MESSAGE:       filter = PushChanges.MESSAGE_CHANGES;     break;
-                    case MailItem.TYPE_CHAT:          filter = PushChanges.CHAT_CHANGES;        break;
-                    case MailItem.TYPE_CONTACT:       filter = PushChanges.CONTACT_CHANGES;     break;
-                    case MailItem.TYPE_FOLDER:        filter = PushChanges.FOLDER_CHANGES;      break;
-                    case MailItem.TYPE_SEARCHFOLDER:  filter = PushChanges.SEARCH_CHANGES;      break;
-                    case MailItem.TYPE_TAG:           filter = PushChanges.TAG_CHANGES;         break;
-                    case MailItem.TYPE_APPOINTMENT:
-                    case MailItem.TYPE_TASK:          filter = PushChanges.APPOINTMENT_CHANGES; break;
-                    case MailItem.TYPE_WIKI:
-                    case MailItem.TYPE_DOCUMENT:      filter = PushChanges.DOCUMENT_CHANGES; break;
+                        if ((change.why & filter) != 0)
+                            DbOfflineMailbox.updateChangeRecord(item, change.why & filter);
+                    	
+                        if (item.getFolderId() == ID_FOLDER_OUTBOX)
+                        	outboxed = true;
+                	}
+                    
+                	//do this after processing changes so that the flag change doesn't doesn't alter dirty bits
+                	if ((change.why & Change.MODIFIED_FOLDER) != 0) {
+                    	if (isInArchive && !item.isTagged(mArchivedFlag)) //moved into archive
+                        	archive(item, true);
+                    	else if (!isInArchive && item.isTagged(mArchivedFlag)) //moved out of archive
+                        	archive(item, false);
+                    }
                 }
-
-                if ((change.why & filter) != 0)
-                    DbOfflineMailbox.updateChangeRecord(item, change.why & filter);
             }
         }
         
@@ -632,6 +683,67 @@ public class OfflineMailbox extends DesktopMailbox {
         	OutboxTracker.invalidate(this);
         	syncNow();
         }
+    }
+    
+    private void alterArchivedFlag(MailItem item, boolean toArchive) throws ServiceException {
+    	//alter \Archived flag, but don't use MailItem.alterSystemFlag() since that would insert more changes into PendingModifications
+    	//we are currently looping through.  in any case we don't need to keep track of this particular flag change.
+    	DbMailItem.alterTag(mArchivedFlag, Arrays.asList(item.getId()), toArchive);
+    	if (toArchive)
+    		item.mData.flags |= mArchivedFlag.getBitmask();
+        else
+        	item.mData.flags &= ~mArchivedFlag.getBitmask();
+    }
+
+    /**
+     * An item has been moved into or out of archive.  We'll set or clear \Archive flag, and will set or clear dirty bits accordingly.
+     * If the item is a folder, we do the same to all its subfolders and leaf items.
+     * 
+     * @param item
+     * @param toArchive true to move into archive; false to move out of
+     * @throws ServiceException
+     */
+    private void archive(MailItem item, boolean toArchive) throws ServiceException {
+    	if (item instanceof Folder) {
+    		TypedIdList ids = DbMailItem.listByFolder((Folder)item, true);
+    		for (byte type : ids.types()) {    			
+    			MailItem[] items = getItemById(ids.getIds(type), type);
+    			for (MailItem i : items) {
+    				if (type == MailItem.TYPE_FOLDER)
+    					archive(i, toArchive);
+    				else
+    					archiveSingleItem(i, toArchive);
+    			}
+    		}
+    	}
+    	archiveSingleItem(item, toArchive);
+    }
+    
+    private void archiveSingleItem(MailItem item, boolean toArchive) throws ServiceException {
+    	alterArchivedFlag(item, toArchive);
+    	
+		if (!PushChanges.PUSH_TYPES_SET.contains(item.getType()))
+		    return;
+    	
+    	if (toArchive)
+    		DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_ARCHIVED);
+    	else {
+    		//if archived dirty bit is not set, we will set the conflict dirty bit;
+    		//if archived dirty bit is set, meaning there was no sync since the item was first moved into archive,
+    		//we should should keep the archived dirty bit so that the next push can straighten it out.
+    		int mask = DbOfflineMailbox.getChangeMask(item);
+    		if ((mask & Change.MODIFIED_ARCHIVED) == 0 && (mask & Change.MODIFIED_CONFLICT) == 0)
+    			DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
+    	}
+    }
+    
+    //only called by snapshotCounts
+    private boolean isInArchive(MailItem item) throws ServiceException {
+    	return item.getPath().startsWith("/" + ARCHIVE_PATH);
+    }
+    
+    boolean isItemInArchive(MailItem item) throws ServiceException {
+    	return (item.getInternalFlagBitmask() & Flag.BITMASK_ARCHIVED) != 0;
     }
     
     public Element proxyRequest(Element request, SoapProtocol resProto, boolean quietWhenOffline, String op) throws ServiceException {
