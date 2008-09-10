@@ -5,6 +5,7 @@
 	<zimletPanelItem label="Dictionary">
 		<toolTipText>Select a word and press Ctrl-Y to look it up.</toolTipText>
 		<contextMenu>
+	      <menuItem label="Look Up Word" id="lookup"/>
 	      <menuItem label="Preferences..." id="prefs"/>
 		</contextMenu>
 	</zimletPanelItem>

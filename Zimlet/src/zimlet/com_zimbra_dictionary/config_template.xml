@@ -1,5 +1,8 @@
 <zimletConfig name="com_zimbra_dictionary" version="1.0">
     <global>
         <property name="allowedDomains">*.dict.org</property>
+		<property name="dictionaryServer">http://www.dict.org/bin/Dict</property>
+		<property name="dictionaryServerTop">http://www.dict.org/</property>
+		<property name="keyMapping">Ctrl+89</property> <!-- Ctrl-Y (ASCII code for Y) -->
     </global>
 </zimletConfig>

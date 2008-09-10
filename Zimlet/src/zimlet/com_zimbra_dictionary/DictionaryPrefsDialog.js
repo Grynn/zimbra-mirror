@@ -43,7 +43,7 @@ DictionaryPrefsDialog.prototype._createSearchHtml = function() {
 
 	row = table.insertRow(-1);
 	cell = row.insertCell(-1);
-	cell.innerHTML = "Dictionary Search Results from <a target=\"_blank\" href=\"http://www.dict.org/\">dict.org</a><br/><br/>Set Default Dictionary:";
+	cell.innerHTML = "Dictionary Search Results from <a target=\"_blank\" href=\""+Com_Zimbra_Dictionary.prototype._dictionaryServerTop+"\">"+Com_Zimbra_Dictionary.prototype._dictionaryServerTop+"</a><br/><br/>Set Default Dictionary:";
 	cell.appendChild(this._dictSelect.getHtmlElement());
 
 	var element = this._getContentDiv();
