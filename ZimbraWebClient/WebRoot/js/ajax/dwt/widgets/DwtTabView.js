@@ -252,7 +252,8 @@ function() {
 		for (var k = 0; k < seqs.length; k++) {
 			var ks = seqs[k];
 			for (var i = 1; i <= num; i++) {
-				var newKs = ks.replace(/NNN/, i);
+                var keycode = 48 + i;
+				var newKs = ks.replace(/NNN/, keycode);
 				kmm.setMapping("DwtTabView", newKs, "GoToTab" + i);
 			}
 		}
