@@ -21,6 +21,11 @@ source `dirname $0`/../bin/zmshutil || exit 1
 if [ "x$1" != "x" ]; then
 	echo "Usage: $0"
 	echo "	Use $0 to set up this server as an ldap replica"
+	echo "  or to enable the replication database on the master"
+	echo ""
+	echo "  $0 must have been run on the master prior to being"
+	echo "  run on any replicas.  It is only necessary to run"
+	echo "  $0 once on the master."
 	exit 1
 fi
 
