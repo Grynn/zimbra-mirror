@@ -101,7 +101,7 @@ ZmOrganizer.ID_CHATS			= 14;
 ZmOrganizer.ID_TASKS			= 15;
 ZmOrganizer.ID_BRIEFCASE		= 16;
 ZmOrganizer.ID_SYNC_FAILURES	= 252		// offline only
-ZmOrganizer.ID_ARCHIVE    		= 253;
+ZmOrganizer.ID_ARCHIVE    		= 253;		// offline only
 ZmOrganizer.ID_OUTBOX    		= 254;		// offline only
 ZmOrganizer.ID_ZIMLET			= -1000;	// zimlets need a range.  start from -1000 incrementing up.
 ZmOrganizer.ID_ROSTER_LIST		= -11;
@@ -124,6 +124,7 @@ ZmOrganizer.FLAG_CHECKED			= "#";
 ZmOrganizer.FLAG_DISALLOW_SUBFOLDER	= "o";
 ZmOrganizer.FLAG_EXCLUDE_FREE_BUSY	= "b";
 ZmOrganizer.FLAG_IMAP_SUBSCRIBED	= "*";
+ZmOrganizer.FLAG_OFFLINE_ARCHIVE	= "@";
 ZmOrganizer.FLAG_OFFLINE_SYNCABLE	= "y";
 ZmOrganizer.FLAG_OFFLINE_SYNCING	= "~";
 ZmOrganizer.ALL_FLAGS = [
@@ -131,6 +132,7 @@ ZmOrganizer.ALL_FLAGS = [
 	ZmOrganizer.FLAG_IMAP_SUBSCRIBED,
 	ZmOrganizer.FLAG_EXCLUDE_FREE_BUSY,
 	ZmOrganizer.FLAG_DISALLOW_SUBFOLDER,
+	ZmOrganizer.FLAG_OFFLINE_ARCHIVE,
 	ZmOrganizer.FLAG_OFFLINE_SYNCABLE,
 	ZmOrganizer.FLAG_OFFLINE_SYNCING
 ];
@@ -141,6 +143,7 @@ ZmOrganizer.FLAG_PROP[ZmOrganizer.FLAG_CHECKED]				= "isChecked";
 ZmOrganizer.FLAG_PROP[ZmOrganizer.FLAG_IMAP_SUBSCRIBED]		= "imapSubscribed";
 ZmOrganizer.FLAG_PROP[ZmOrganizer.FLAG_EXCLUDE_FREE_BUSY]	= "excludeFreeBusy";
 ZmOrganizer.FLAG_PROP[ZmOrganizer.FLAG_DISALLOW_SUBFOLDER]	= "disallowSubFolder";
+ZmOrganizer.FLAG_PROP[ZmOrganizer.FLAG_OFFLINE_ARCHIVE]		= "isOfflineArchive";
 ZmOrganizer.FLAG_PROP[ZmOrganizer.FLAG_OFFLINE_SYNCABLE]	= "isOfflineSyncable";
 ZmOrganizer.FLAG_PROP[ZmOrganizer.FLAG_OFFLINE_SYNCING]		= "isOfflineSyncing";
 
