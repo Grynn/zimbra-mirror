@@ -188,29 +188,24 @@ function () {
     var	isNew = (!tmpObj.id) ? true : false;
     var renameNotebookAccount = false;
 	for(var a in tmpObj.attrs) {
-		/** ???? This block of code basically will not reflect the change of the array attributes, such as virtualhost 
-		if(tmpObj.attrs[a]!=null && tmpObj.attrs[a] instanceof Array)
-			continue;
-		**/
-		
-		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName || a == ZaDomain.A_zimbraZimletDomainAvailableZimlets)
+		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName)
 			continue;
 		
-		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
+		if (!(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
 			if(tmpObj.attrs[a] instanceof Array) {
 					if(this._currentObject.attrs[a] && tmpObj.attrs[a] 
 						&& tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
 						mods[a] = tmpObj.attrs[a];
 						haveSmth = true;
 					}	
-			}else if(tmpObj.attrs[a] != this._currentObject.attrs[a]) {
+			} else if(tmpObj.attrs[a] != this._currentObject.attrs[a]) {
 				mods[a] = tmpObj.attrs[a];
 				haveSmth = true;
 			}
 		}
 	}
     
-   	if(ZaSettings.ZIMLETS_ENABLED) {
+   /*	if(ZaSettings.ZIMLETS_ENABLED) {
 		if(tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
 			var tmpMods = [];
 			if(!(tmpObj.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] instanceof Array)) {
@@ -245,7 +240,7 @@ function () {
         if (mods[ZaDomain.A_zimbraZimletDomainAvailableZimlets] != null) {
             haveSmth = true ;
         }
-    }
+    }*/
     /*
 	if(tmpObj.attrs[ZaDomain.A_notes] != this._currentObject.attrs[ZaDomain.A_notes]) {
 		mods[ZaDomain.A_notes] = tmpObj.attrs[ZaDomain.A_notes] ;
@@ -599,7 +594,34 @@ function(ev) {
 
 ZaDomainController.prototype._checkMXButtonListener = 
 function (ev) {
-	//ZaDomainthis._currentObject
+	var callback = new AjxCallback(this, this.checkMXCallback);
+	ZaDomain.checkDomainMXRecord(this._currentObject, callback);
+}
+
+ZaDomainController.prototype.checkMXCallback = 
+function (resp) {
+	if(!resp)
+		return;
+	if(resp.isException()) {
+		this._handleException(resp.getException(), "ZaDomainController.prototype.checkMXCallback", null, false);
+		return;
+	} 
+	var response = resp.getResponse().Body.CheckDomainMXRecordResponse;
+	if(response.code[0]._content=="Ok") {
+		this.popupMsgDialog(ZaMsg.MX_RecordCheckSuccess);
+	} else {
+		var msgArray = [];
+		msgArray.push(ZaMsg.foundTheseMXRecords);
+		if(response.entry && response.entry.length>0) {
+			var cnt = response.entry.length;
+			for (var i=0;i<cnt;i++) {
+				msgArray.push(response.entry[i]._content);
+			}
+		}
+		this._errorDialog.setMessage(response.message[0]._content, msgArray.join("<br/>"), DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+		this._errorDialog.popup();
+	}
+	
 }
 
 ZaDomainController.prototype._initNotebookButtonListener = 
@@ -617,11 +639,11 @@ function (ev) {
 ZaDomainController.prototype._handleException = 
 function (ex, method, params, restartOnError, obj) {
 	if(ex.code == ZmCsfeException.DOMAIN_NOT_EMPTY) {
-		this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._errorDialog.popup();			
+		this._errorDialog.popupErrorDialog(ZaMsg.ERROR_DOMAIN_NOT_EMPTY);
+		
 	} else if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
-		this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_EXISTS, null, DwtMessageDialog.CRITICAL_STYLE, null);
-		this._errorDialog.popup(this._getDialogXY());
+		this._errorDialog.popupErrorDialog(ZaMsg.ERROR_DOMAIN_EXISTS);
+		
 	} else {
 		ZaController.prototype._handleException.call(this, ex, method, params, restartOnError, obj);				
 	}	

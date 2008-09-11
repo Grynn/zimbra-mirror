@@ -55,7 +55,8 @@ ZaGlobalConfig.A_zimbraMtaMyNetworks = "zimbraMtaMyNetworks";
 //ZaGlobalConfig.A_zimbraMtaRelayPortInternal = "__zimbraMtaRelayPort";
 ZaGlobalConfig.A_zimbraComponentAvailable = "zimbraComponentAvailable";
 ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP = "zimbraSmtpSendAddOriginatingIP";
-
+ZaGlobalConfig.A_zimbraDNSCheckHostname = "zimbraDNSCheckHostname";
+ZaGlobalConfig.A_zimbraFeatureAdminConsoleDNSCheck = "zimbraFeatureAdminConsoleDNSCheck";
 // --protocol checks
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
 ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";

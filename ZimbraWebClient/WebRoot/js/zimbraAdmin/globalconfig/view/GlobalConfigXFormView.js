@@ -217,7 +217,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							   	}
 							 ]
 						},
-						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_NetworkGrp,
+						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_NetworkGrp,id:"mta_network_group",
 							items:[
 								{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _TEXTFIELD_,
 								  onChange:ZaTabView.onFormFieldChanged,
@@ -237,7 +237,18 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 									type:_TEXTFIELD_,onChange:ZaTabView.onFormFieldChanged ,
 									toolTipContent: ZaMsg.tt_MTA_MyNetworks
 								},*/
-
+								{ type: _DWT_ALERT_,
+									containerCssStyle: "padding-bottom:0px",
+									style: DwtAlert.INFO,
+									iconVisible: true, 
+									content: ZaMsg.Domain_InboundSMTPNote,
+									colSpan:"*"
+								},
+								{ ref: ZaGlobalConfig.A_zimbraDNSCheckHostname, type: _TEXTFIELD_,
+								  onChange:ZaTabView.onFormFieldChanged,
+								  label:ZaMsg.Domain_zimbraDNSCheckHostname,
+								  toolTipContent: ZaMsg.Domain_zimbraDNSCheckHostname
+								},								
 							  	{ ref: ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _CHECKBOX_,
 							  	  label: ZaMsg.NAD_MTA_DnsLookups,
 							  	  trueValue: "TRUE", falseValue: "FALSE",

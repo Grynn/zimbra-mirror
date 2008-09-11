@@ -416,6 +416,17 @@ function(tmpObj, app) {
 		attr.setAttribute("n", ZaDomain.A_zimbraPublicServiceHostname);	
 	}
 		
+	
+	if(tmpObj.attrs[ZaDomain.A_zimbraDNSCheckHostname]) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraDNSCheckHostname]);
+		attr.setAttribute("n", ZaDomain.A_zimbraDNSCheckHostname);	
+	}
+	
+	if(tmpObj.attrs[ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck]) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck]);
+		attr.setAttribute("n", ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck);	
+	}
+	
 	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]);
 		attr.setAttribute("n", ZaDomain.A_zimbraDomainStatus);	
@@ -1179,16 +1190,21 @@ ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
 
 
 ZaDomain.checkDomainMXRecord = 
-function(by, val) {
+function(obj, callback) {
 	var soapDoc = AjxSoapDoc.create("CheckDomainMXRecordRequest", ZaZimbraAdmin.URN, null);
-
+	var elBy = soapDoc.set("domain", obj.id);
+	elBy.setAttribute("by", "id");
 	var params = new Object();
 	params.soapDoc = soapDoc;	
+	if(callback) {
+		params.asyncMode = true;
+		params.callback = callback;
+	}
 	var reqMgrParams = {
 		controller : (this._app ? this._app.getCurrentController() : null),
 		busyMsg : ZaMsg.BUSY_CHECKING_MX
 	}
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
+	ZaRequestMgr.invoke(params, reqMgrParams);
 }
 
 
@@ -1214,7 +1230,9 @@ ZaDomain.myXModel = {
 		{id:"name", type:_STRING_, ref:"name"},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
 		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255},
-		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},		
+		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},
+		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},		
+		{id:ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck},
 		{id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},		
 		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description}, 
 		{id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
