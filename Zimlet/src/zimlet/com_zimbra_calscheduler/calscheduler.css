@@ -1,6 +1,6 @@
 .CalScheduler_TimeGrid {
 	background-color: #ffffff;
-	overflow-x: auto;
+	overflow-x: scroll;
 	overflow-y: hidden;
 }
 

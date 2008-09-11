@@ -1965,7 +1965,9 @@ function(resize) {
 		Dwt.setHandler(this._timeGrid, DwtEvent.ONCLICK, CalSchedulerView._onTimeGridClick);
 		Dwt.setHandler(this._timeGrid, DwtEvent.ONMOUSEOVER, CalSchedulerView._onFreeBusyMouseOver);
 		Dwt.setHandler(this._timeGrid, DwtEvent.ONMOUSEOUT, CalSchedulerView._onFreeBusyMouseOut);
-	}
+        this._timeGrid.style.overflowX = "scroll";
+        this._timeGrid.style.overflowY = "hidden";
+    }
 
 	Dwt.setLocation(this._timeGrid, x, loc.y - 2*CalSchedulerView._DAY_HEADING_HEIGHT+2);
 	//if(resize) {
