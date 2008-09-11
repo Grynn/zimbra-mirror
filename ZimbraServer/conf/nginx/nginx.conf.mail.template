@@ -17,6 +17,9 @@ mail
 
     ${mail.:auth_http}
 
+    # Route lookup timeout
+    auth_http_timeout           ${mail.auth_http_timeout};
+
     # IMAP/POP3 greeting messages
     # 
 
