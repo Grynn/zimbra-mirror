@@ -331,7 +331,8 @@ function(entry) {
 		ZaNewAccountXWizard.zimletChoices.setChoices(_tmpZimlets);
 		ZaNewAccountXWizard.zimletChoices.dirtyChoices();		
 	}
-	this._localXForm.setInstance(this._containedObject);
+
+    this._localXForm.setInstance(this._containedObject);
 }
 
 ZaNewAccountXWizard.onCOSChanged = 
@@ -509,8 +510,32 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		]
 	};
 	case1Items.push(passwordGroup);														
-	
-	var notesGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_wiz_notes_group",
+
+    if (ZaSettings.NEW_ACCT_TIME_ZONE_ENABLED) {
+        var new_acct_timezone_group = {
+            type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_TimezoneGrouper, id: "account_wiz_timezone_group",
+            numCols: 2,
+            items: [
+                    /*
+                {ref:"default_timezone", type:_CHECKBOX_, msgName:"default",
+                    label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
+                    elementChanged: function(elementValue,instanceValue, event) {
+                        if(elementValue=="TRUE") {
+                            ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials]);
+                        }
+                        this.getForm().itemChanged(this, elementValue, event);
+                    }
+                }     */
+               {ref:ZaAccount.A_zimbraPrefTimeZoneId, type:_SELECT1_, msgName:ZaMsg.NAD_zimbraPrefTimeZoneId,
+                   label:ZaMsg.NAD_zimbraPrefTimeZoneId+":", labelLocation:_LEFT_ }
+            ]
+        }
+
+        case1Items.push (new_acct_timezone_group) ;
+    }
+
+
+    var notesGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_wiz_notes_group",
 		numCols:2,
 	 	items:[
 

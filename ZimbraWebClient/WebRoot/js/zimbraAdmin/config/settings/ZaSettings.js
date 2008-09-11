@@ -239,6 +239,8 @@ ZaSettings.DOMAINS_ARE_READONLY = false;
 ZaSettings.DOMAIN_WIKI_ENABLED = true;
 ZaSettings.DOMAIN_VIRTUAL_HOST_ENABLED = true;
 ZaSettings.DOMAIN_INTEROP_ENABLED = true;
+ZaSettings.NEW_ACCT_TIME_ZONE_ENABLED = false ;
+
 // initialization for settings: [name, type, data type, default value]
 ZaSettings.INIT = new Object();
 // IDs FOR HTML COMPONENTS IN THE SKIN
@@ -259,7 +261,12 @@ ZaSettings.INIT[ZaSettings.SKIN_TREE_ID]					= [null, ZaSettings.T_CONFIG, ZaSet
 ZaSettings.INIT[ZaSettings.SKIN_TREE_FOOTER_ID]			= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_tree_footer"];
 
 ZaSettings.INIT[ZaSettings.SKIN_USER_INFO_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_quota"];
-ZaSettings.timeZoneChoices = new XFormChoices(AjxTimezoneData.TIMEZONE_RULES, XFormChoices.OBJECT_LIST, "serverId", "serverId");	
+//ZaSettings.timeZoneChoices = new XFormChoices(AjxTimezoneData.TIMEZONE_RULES, XFormChoices.OBJECT_LIST, "serverId", "serverId");
+//add a default time zone
+var timeZoneRules = [{ serverId: "", clientId: "" }]  ;
+var timeZoneRules = timeZoneRules.concat(AjxTimezoneData.TIMEZONE_RULES) ;
+ZaSettings.timeZoneChoices = new XFormChoices(timeZoneRules,
+        XFormChoices.OBJECT_LIST, "serverId", "serverId");
 ZaSettings.INIT[ZaSettings.SKIN_APP_TABS_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_tabs"];
 
 ZaSettings.SKIN_LOGOFF_DOM_ID = "skin_container_logoff" ;

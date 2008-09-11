@@ -1492,7 +1492,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									msgName:ZaMsg.NAD_zimbraPrefComposeFormat,
 									label:ZaMsg.NAD_zimbraPrefComposeFormat, 
 									onChange:ZaTabView.onFormFieldChanged},
-								,
+								
 								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize, 
 									//colSpan:2,
 									type:_SUPER_SELECT1_, 
