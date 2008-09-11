@@ -368,7 +368,7 @@ DwtSelect.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtButton.prototype._createHtmlFromTemplate.call(this, containerTemplateId, containerData);
     this._selectEl = document.getElementById(data.id+"_select_container");
     this._pseudoItemsEl = document.getElementById(data.id+"_pseudoitems_container");
-
+    this._pseudoItemsEl.style.display="none";
     // set classes
     var el = this.getHtmlElement();
     this._containerEl = el;
