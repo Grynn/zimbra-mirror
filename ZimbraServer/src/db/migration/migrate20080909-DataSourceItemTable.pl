@@ -31,7 +31,7 @@ exit(0);
 #####################
 
 sub createDataSourceItemTable() {
-  Migrate::log("Creating data_source_item table.");
+  Migrate::logSql("Creating data_source_item table.");
 
   my ($group) = @_;
   my $sql = <<CREATE_TABLE_EOF;
