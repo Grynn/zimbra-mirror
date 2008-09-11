@@ -1,5 +1,6 @@
 package com.zimbra.cs.db;
 
+import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,6 +41,9 @@ public class DbOfflineMigration {
             switch (oldDbVersion) {
             case 51:
             	migrateFromVersion51(conn, isTestRun);
+            	break;
+            case 52:
+            	migrateFromVersion52(conn, isTestRun);
             	break;
             default:
             	throw new DbUnsupportedVersionException();
@@ -94,8 +98,61 @@ public class DbOfflineMigration {
         }
 	}
 	
+	private void migrateFromVersion52(Connection conn, boolean isTestRun) throws Exception {
+        PreparedStatement stmt = null;
+        boolean isSuccess = false;
+        ArrayList<String> mboxgroups = new ArrayList<String>();
+        try {
+            stmt = conn.prepareStatement("SELECT schemaname FROM SYS.SYSSCHEMAS");
+            //stmt = conn.prepareStatement("SHOW DATABASES LIKE 'mboxgroup%'");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+            	String name = rs.getString(1);
+            	if (name.toLowerCase().startsWith("mboxgroup"))
+            		mboxgroups.add(name);
+            }
+            	
+            rs.close();
+            stmt.close();
+
+            for (String mboxgroup : mboxgroups) {
+                String stmtStr = 
+                	"CREATE TABLE " + mboxgroup + ".data_source_item (" +
+            		   "mailbox_id     INTEGER NOT NULL," +
+            		   "data_source_id CHAR(36) NOT NULL," +
+            		   "item_id        INTEGER NOT NULL," +
+            		   "remote_id      VARCHAR(255) NOT NULL," +
+            		   "metadata       CLOB," +
+            		   "PRIMARY KEY (mailbox_id, item_id)," +
+            		   "CONSTRAINT fk_data_source_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)" +
+            		")";
+                stmt = conn.prepareStatement(stmtStr);
+                stmt.executeUpdate();
+                stmt.close();
+                stmtStr = 
+            		"CREATE UNIQUE INDEX i_remote_id ON " +
+            		mboxgroup + ".data_source_item (mailbox_id, data_source_id, remote_id)";
+                stmt = conn.prepareStatement(stmtStr);
+                stmt.executeUpdate();
+                stmt.close();
+            }
+            
+            stmt = conn.prepareStatement("UPDATE zimbra.config set value='53' where name='db.version'");
+            stmt.executeUpdate();
+            stmt.close();
+            
+            isSuccess = true;
+        } finally {
+            DbPool.closeStatement(stmt);
+            if (isTestRun || !isSuccess)
+            	conn.rollback();
+            else
+            	conn.commit();
+        }
+	}
+	
 	public static void main(String[] args) throws Exception {
-		System.setProperty("zimbra.config", "/opt/zimbra/zdesktop/conf/localconfig.xml");
+		System.setProperty("zimbra.config", "/opt/zimbra/zdesktop dev/conf/localconfig.xml");
 		
 		new DbOfflineMigration().testRun();
 	}
