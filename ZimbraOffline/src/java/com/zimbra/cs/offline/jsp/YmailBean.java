@@ -21,8 +21,8 @@ public class YmailBean extends XmailBean {
 		if (email.indexOf('@') < 0)
 			email += '@' + domain;
 		
-		int atSign = email.indexOf("@" + domain);
-		if (atSign > 0) //username of yahoo.com or yahoo.com.* email is without @domain
+		int atSign = email.indexOf("@yahoo.");
+		if (atSign > 0) //username of yahoo.com or yahoo.co.* email is without @domain
 			username = email.substring(0, atSign);
 		else
 			username = email;
