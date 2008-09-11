@@ -117,6 +117,11 @@ function(id) {
 	return null;
 };
 
+DwtAccordion.prototype.getItemByIndex =
+function(index) {
+	return (index >=0 && index < this._items.length) ? this._items[index] : null;
+}
+
 /**
  * Hides all accordion items.
  */
