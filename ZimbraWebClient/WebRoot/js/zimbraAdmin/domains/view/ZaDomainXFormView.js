@@ -22,7 +22,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaDomainXFormView = function(parent, app) {
+ZaDomainXFormView = function(parent, app, entry) {
 	ZaTabView.call(this, parent, app,"ZaDomainXFormView");	
 	this.GALModes = [
 		{label:ZaMsg.GALMode_internal, value:ZaDomain.GAL_Mode_internal},
@@ -398,8 +398,25 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		  label:ZaMsg.NAD_Description, width:250,
 		  onChange:ZaDomainXFormView.onFormFieldChanged});
 	}
-		
-	if(ZaSettings.COSES_ENABLED) {
+
+    //add the ZimbraDomainCosMaxAccounts information
+    //TODO: may need to add switch for the domain amdin
+    var accountLimitsItems = { type:_GROUP_, colSpan: "*", colSizes: ["300px", "*"], numCols: 2, 
+        relevant: "((instance.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts] != null) && "
+                    + " (instance.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts].length > 0)) " ,
+        relevantBehavior: _HIDE_,
+        items: [
+          {type:_OUTPUT_, value: ZaMsg.accountLimitsByCos, align: _RIGHT_ },
+          {ref:ZaDomain.A_zimbraDomainCOSMaxAccounts, type:_DWT_LIST_, height:"100", width:"200px",
+                 forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
+                headerList:null
+            }
+        ]
+    }
+
+    case1.items.push( accountLimitsItems );
+
+    if(ZaSettings.COSES_ENABLED) {
 		case1.items.push(
 			{ref:ZaDomain.A_domainDefaultCOSId, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _INPUT_), 
 				label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
@@ -663,8 +680,10 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			]
 		};
     	switchGroup.items.push(case7);
-	}			
-	xFormObject.items.push(tabBar);
+	}
+
+    
+    xFormObject.items.push(tabBar);
 	xFormObject.items.push(switchGroup);
 }
 
