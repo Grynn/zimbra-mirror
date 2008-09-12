@@ -39,6 +39,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_retry_delay_max;    
     public static final KnownKey zdesktop_client_poll_interval;
     public static final KnownKey zdesktop_retry_limit;
+    public static final KnownKey zdesktop_gal_sync_trace_enabled;
     public static final KnownKey zdesktop_gal_sync_interval_secs;
     public static final KnownKey zdesktop_gal_refresh_interval_days;
     
@@ -146,6 +147,10 @@ public class OfflineLC {
 	    zdesktop_retry_limit.setDefault("2");
 	    zdesktop_retry_limit.setDoc("Number of times to retry if sync fails. Default 2.");
 
+	    zdesktop_gal_sync_trace_enabled = new KnownKey("zdesktop_gal_sync_trace_enabled");
+	    zdesktop_gal_sync_trace_enabled.setDefault("false");
+	    zdesktop_gal_sync_trace_enabled.setDoc("Whether to enable GAL sync trace logging. Default false");
+	    
         zdesktop_gal_sync_interval_secs = new KnownKey("zdesktop_gal_sync_interval_seconds");
         zdesktop_gal_sync_interval_secs.setDefault("43200");
         zdesktop_gal_sync_interval_secs.setDoc("How often offline GAL is delta-sync'ed. Default every 12 hours.");

@@ -16,6 +16,9 @@
   <key name="zdesktop_skins">
     <value>yahoo,bare,beach,bones,hotrod,lavender,lemongrass,sand,sky,steel,waves,zmail</value>
   </key>
+  <key name="zdesktop_gal_sync_trace_enabled">
+    <value>false</value>
+  </key>
   <key name="zdesktop_gal_sync_interval_seconds">
     <value>43200</value>
   </key>

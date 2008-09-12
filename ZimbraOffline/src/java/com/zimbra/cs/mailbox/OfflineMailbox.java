@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.httpclient.Header;
+import org.dom4j.ElementHandler;
 
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
@@ -777,6 +778,10 @@ public class OfflineMailbox extends DesktopMailbox {
     }
     
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto) throws ServiceException {
+        return sendRequest(request, requiresAuth, noSession, timeout, resProto, null);
+    }
+    public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto,
+        Map<String, ElementHandler> saxHandlers) throws ServiceException {
         String uri = getSoapUri();
         OfflineAccount acct = getOfflineAccount();
         SoapHttpTransport transport = new SoapHttpTransport(uri, acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass());
@@ -794,14 +799,16 @@ public class OfflineMailbox extends DesktopMailbox {
             	OfflineLog.request.debug(request);
 
             Element response = null;
-            if (noSession) {
+            if (saxHandlers != null) {
+                response = transport.invoke(request.detach(), false, true, null, null, null, saxHandlers);
+            } else if (noSession) {
             	response = transport.invokeWithoutSession(request.detach());
             } else {
             	if (mSessionId != null)
             		transport.setSessionId(mSessionId);
             	response = transport.invoke(request.detach());
             }
-            if (acct.isDebugTraceEnabled())
+            if (acct.isDebugTraceEnabled() && response != null)
             	OfflineLog.response.debug(response);
 
             // update sessionId if changed
