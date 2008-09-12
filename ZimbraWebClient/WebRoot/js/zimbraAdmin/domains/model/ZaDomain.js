@@ -140,7 +140,7 @@ ZaDomain.A_AuthLdapSearchFilter = "zimbraAuthLdapSearchFilter";
 ZaDomain.A_AuthLdapSearchBindDn ="zimbraAuthLdapSearchBindDn";
 ZaDomain.A_AuthLdapSearchBindPassword="zimbraAuthLdapSearchBindPassword";
 
-ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck = "zimbraFeatureAdminConsoleDNSCheck";
+ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled = "zimbraAdminConsoleDNSCheckEnabled";
 //internal attributes - not synched with the server code yet
 //GAL
 ZaDomain.A_GALServerType = "galservertype";
@@ -426,9 +426,9 @@ function(tmpObj, app) {
 		attr.setAttribute("n", ZaDomain.A_zimbraDNSCheckHostname);	
 	}
 	
-	if(tmpObj.attrs[ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck]) {
-		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck]);
-		attr.setAttribute("n", ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck);	
+	if(tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled]) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled]);
+		attr.setAttribute("n", ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled);	
 	}
 	
 	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]) {
@@ -1244,7 +1244,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255},
 		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},
 		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},		
-		{id:ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck},
+		{id:ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled},
 		{id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},		
 		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description}, 
 		{id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
