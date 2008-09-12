@@ -126,7 +126,9 @@ function(str) {
 	} else {
 		parts = str.match(AjxEmailAddress.addrPat1);
 		if (parts && parts.length) {
-			addr = parts[0];
+            //AjxEmailAddress.addrPat regocognizes the email better than using parts[0] from AjxEmailAddress.addrPat1
+            addr = str.match(AjxEmailAddress.addrPat);
+            addr = ( addr && addr.length && addr[0] != "") ? AjxStringUtil.trim(addr[0]) : parts[0];
 			str = str.replace(AjxEmailAddress.addrPat, '');
 		}
 	}
