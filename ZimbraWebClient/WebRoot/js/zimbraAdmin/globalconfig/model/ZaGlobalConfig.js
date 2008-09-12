@@ -361,6 +361,9 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, type: _ENUM_, choices: [false,true] },
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname, type: _ENUM_, choices: [false,true] },
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, type: _ENUM_, choices: [false,true] },
+		{id:ZaGlobalConfig.A_zimbraDNSCheckHostname, type:_STRING_, ref:"attrs/" + ZaGlobalConfig.A_zimbraDNSCheckHostname, maxLength:255},		
+		{id:ZaGlobalConfig.A_zimbraFeatureAdminConsoleDNSCheck, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaGlobalConfig.A_zimbraFeatureAdminConsoleDNSCheck},
+		
 		//rbl check
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectRblClient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectRblClient, type: _LIST_, listItem:{type:_STRING_}},
 		// smtp

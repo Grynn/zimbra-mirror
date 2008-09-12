@@ -191,7 +191,10 @@ function () {
 		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName)
 			continue;
 		
-		if (!(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
+		if (!( 
+				(this._currentObject.attrs[a] == undefined || this._currentObject.attrs[a] == null) && 
+				( (tmpObj.attrs[a] == "") || (tmpObj.attrs[a] == null) ) 
+			 )) {
 			if(tmpObj.attrs[a] instanceof Array) {
 					if(this._currentObject.attrs[a] && tmpObj.attrs[a] 
 						&& tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
@@ -199,6 +202,7 @@ function () {
 						haveSmth = true;
 					}	
 			} else if(tmpObj.attrs[a] != this._currentObject.attrs[a]) {
+			} else {
 				mods[a] = tmpObj.attrs[a];
 				haveSmth = true;
 			}

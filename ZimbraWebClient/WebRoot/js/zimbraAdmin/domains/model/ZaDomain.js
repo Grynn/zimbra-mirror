@@ -1091,7 +1091,7 @@ function(callback) {
 }
 
 ZaDomain.getDomainByName = 
-function(domName, app) {
+function(domName, app, withConfig) {
 	if(!domName)
 		return null;
 		
@@ -1099,7 +1099,7 @@ function(domName, app) {
 	if(!domain) {
 		domain = new ZaDomain(app);
 		try {
-			domain.load("name", domName);
+			domain.load("name", domName, withConfig);
 		} catch (ex) {
 			if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
 				return null;
@@ -1107,13 +1107,14 @@ function(domName, app) {
 				throw (ex);
 			}
 		}
-		ZaDomain.putDomainToCache(domain);
+		if(app)
+			ZaDomain.putDomainToCache(domain);
 	} 
 	return domain;	
 } 
 
 ZaDomain.getDomainById = 
-function (domId, app) {
+function (domId, app, withConfig) {
 	if(!domId)
 		return null;
 		
@@ -1121,7 +1122,7 @@ function (domId, app) {
 	if(!domain) {
 		domain = new ZaDomain(app);
 		try {
-			domain.load("id", domId);
+			domain.load("id", domId, withConfig);
 		} catch (ex) {
 			if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
 				return null;
@@ -1129,13 +1130,14 @@ function (domId, app) {
 				throw (ex);
 			}
 		}
-		ZaDomain.putDomainToCache(domain);
+		if(app)
+			ZaDomain.putDomainToCache(domain);
 	}
 	return domId;
 }
 
 ZaDomain.loadMethod = 
-function(by, val) {
+function(by, val, withConfig) {
 	by = by ? by : "name";
 	val = val ? val : this.attrs[ZaDomain.A_domainName];
 	this.notebookAcls[ZaDomain.A_NotebookAllACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
@@ -1154,7 +1156,11 @@ function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);
 	var elBy = soapDoc.set("domain", val);
 	elBy.setAttribute("by", by);
-	
+	if(withConfig)
+		soapDoc.getMethod().setAttribute("applyConfig", "1");
+	else
+		soapDoc.getMethod().setAttribute("applyConfig", "0");
+		
 	//var getDomainCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -1184,7 +1190,9 @@ function(by, val) {
 			if(this._app)
 				this._app.getCurrentController()._handleException(ex, "ZaDomain.loadMethod", null, false);
 		}
-	}	
+	}
+	if(this._app)
+		this.cos = this._app.getGlobalConfig();	
 }
 ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
 
@@ -1231,8 +1239,8 @@ ZaDomain.myXModel = {
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
 		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255},
 		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},
-		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},		
-		{id:ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck},
+		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},		
+		{id:ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraFeatureAdminConsoleDNSCheck},
 		{id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},		
 		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description}, 
 		{id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},

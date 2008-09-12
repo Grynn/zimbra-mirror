@@ -638,10 +638,12 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 					items: [
 						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, width:200},
 						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},						
-						{ type: _DWT_ALERT_,containerCssStyle: "padding-bottom:0px",style: DwtAlert.INFO,
-							iconVisible: true,content: ZaMsg.Domain_InboundSMTPNote,colSpan:"*"},
-						{ref: ZaDomain.A_zimbraDNSCheckHostname, type:_INPUT_, 
-	 						label:ZaMsg.Domain_zimbraDNSCheckHostname, width:250},	
+						{type:_ZA_PLAIN_GROUPER_,colSpan:"*", colSizes:["auto"],numCols:1,id:"dns_check_group",items:[
+							{ type: _DWT_ALERT_,containerCssStyle: "padding-bottom:0px",style: DwtAlert.INFO,
+								iconVisible: true,content: ZaMsg.Domain_InboundSMTPNote,colSpan:"*"},
+							{ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPER_TEXTFIELD_, 
+		 						txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal, width:250}	
+						]},	
 						{ref:ZaDomain.A_description, type:_TEXTFIELD_, label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width:250},
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_OSELECT1_, 
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 

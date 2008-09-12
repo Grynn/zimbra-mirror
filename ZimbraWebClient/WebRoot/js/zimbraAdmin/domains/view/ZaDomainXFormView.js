@@ -63,7 +63,7 @@ ZaDomainXFormView.prototype.setObject =
 function(entry) {
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
-
+	this._containedObject.cos = entry.cos;
 	this._containedObject.name = entry.name;
 	this._containedObject.id = entry.id;
 	this._containedObject.type = entry.type ;
@@ -376,16 +376,21 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 	};
 
 	if(ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED) {
-		if(!ZaSettings.DOMAINS_ARE_READONLY) {		
-			case1.items.push({ type: _DWT_ALERT_,
+		if(!ZaSettings.DOMAINS_ARE_READONLY) {
+			var group = {type:_ZA_PLAIN_GROUPER_,colSpan:"*", colSizes:["auto"],numCols:1,id:"dns_check_group",items: []};
+			group.items.push({ type: _DWT_ALERT_,
 			containerCssStyle: "padding-bottom:0px",
 			style: DwtAlert.INFO,
 			iconVisible: true, 
 			content: ZaMsg.Domain_InboundSMTPNote,
 			colSpan:"*"});
+			group.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _SUPER_TEXTFIELD_), 
+	 			txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, width:250,onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
+	 		case1.items.push(group);
+		} else {
+			case1.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:_OUTPUT_, 
+	 			label:ZaMsg.Domain_zimbraDNSCheckHostname, width:250});
 		}
-		case1.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _INPUT_), 
-	 	label:ZaMsg.Domain_zimbraDNSCheckHostname, width:250,onChange:ZaDomainXFormView.onFormFieldChanged});
 	}
 		
 	if(!ZaSettings.DOMAINS_ARE_READONLY) {
