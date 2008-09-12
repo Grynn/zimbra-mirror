@@ -601,6 +601,26 @@ function(fromThisDate,thisWeekday,count) {
     }
     return r;
 }
+
+/**
+ *
+ * @param fromThisDate The searching work week days starting from this date
+ * @param count Which occurence, like first, second.. has to be always positive
+ *
+ */
+AjxDateUtil.getDateForNextWorkWeekDay =
+function(fromThisDate,count) {
+    count = count?count:1;
+    var r = new Date(fromThisDate);
+    for(var i=0;i<count;i++){
+        r = AjxDateUtil._getDateForNextWorkWeekday(r);
+        if(i<count-1){
+            r.setDate(r.getDate()+1);
+        }
+    }
+    return r;
+}
+
 /**
  *
  * @param fromThisDate The starting point
@@ -613,6 +633,20 @@ function(fromThisDate,thisWeekday,count) {
         return AjxDateUtil.getDateForPrevDay(fromThisDate,thisWeekday,-count); //-(-)  is plus
     }else{
         return AjxDateUtil.getDateForNextDay(fromThisDate,thisWeekday,count);
+    }
+}
+
+/**
+ *
+ * @param fromThisDate The starting point
+ * @param count this many positions to navigate, if negative goes in reverse, if positive goes forward
+ */
+AjxDateUtil.getDateForThisWorkWeekDay =
+function(fromThisDate, count) {
+    if(count < 0 ){
+        return AjxDateUtil.getDateForPrevWorkWeekDay(fromThisDate,-count); //-(-)  is plus
+    }else{
+        return AjxDateUtil.getDateForNextWorkWeekDay(fromThisDate,count);
     }
 }
 
@@ -636,6 +670,25 @@ function(fromThisDate,thisWeekday,count) {
     return r;
 }
 
+/**
+ *
+ * @param fromThisDate The searching for work week days starting from this date in reverse direction.
+ * @param count Which occurence, like first, second..has to be always positive
+ */
+
+AjxDateUtil.getDateForPrevWorkWeekDay =
+function(fromThisDate, count) {
+    count = count?count:1;
+    var r = new Date(fromThisDate);
+    for(var i=0;i<count;i++){
+        r = AjxDateUtil._getDateForPrevWorkWeekday(r);
+        if(i<count-1){
+            r.setDate(r.getDate()-1);
+        }
+    }
+    return r;
+}
+
 AjxDateUtil._getDateForNextWeekday =
 function(fromThisDate,thisWeekday) {
     var newDate = new Date(fromThisDate);
@@ -652,6 +705,17 @@ function(fromThisDate,thisWeekday) {
     return newDate;
 }
 
+AjxDateUtil._getDateForNextWorkWeekday =
+function(fromThisDate) {
+    var newDate = new Date(fromThisDate);
+    var weekDay = fromThisDate.getDay();
+    if(weekDay == AjxDateUtil.SUNDAY) {
+        newDate.setDate(fromThisDate.getDate()+1);
+    }else if(weekDay == AjxDateUtil.SATURDAY) {
+        newDate.setDate(fromThisDate.getDate()+2);
+    }
+    return newDate;
+}
 
 AjxDateUtil._getDateForPrevWeekday =
 function(fromThisDate,thisWeekday) {
@@ -665,6 +729,18 @@ function(fromThisDate,thisWeekday) {
         newDate.setDate(fromThisDate.getDate()-diff);
     }else{
         newDate.setDate(fromThisDate.getDate()- (7 + diff));
+    }
+    return newDate;
+}
+
+AjxDateUtil._getDateForPrevWorkWeekday =
+function(fromThisDate) {
+    var newDate = new Date(fromThisDate);
+    var weekDay = fromThisDate.getDay();
+    if(weekDay == AjxDateUtil.SUNDAY) {
+        newDate.setDate(fromThisDate.getDate()-2);
+    }else if(weekDay == AjxDateUtil.SATURDAY) {
+        newDate.setDate(fromThisDate.getDate()-1);
     }
     return newDate;
 }
