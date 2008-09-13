@@ -91,7 +91,9 @@ function(entry) {
 		}	
 		this._view.setDirty(false);
 		entry[ZaModel.currentTab] = "1"
-		entry.load("id", entry.id);
+		if(entry.id)
+			entry.load("id", entry.id);
+			
 	  	this._view.setObject(entry);
 
 	} catch (ex) {
