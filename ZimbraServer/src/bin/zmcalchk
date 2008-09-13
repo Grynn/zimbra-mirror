@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # ***** BEGIN LICENSE BLOCK *****
 #
@@ -15,12 +15,18 @@
 #
 # ***** END LICENSE BLOCK *****
 #
+
+#$SIG{'__WARN__'} = sub { die "$_[0]" };
+
+use lib qw(/opt/zimbra/zimbramon/lib);
+use warnings;
 use strict;
 use Text::Balanced qw(extract_delimited extract_bracketed);
 use Data::Dumper;
 use sigtrap qw(QUIT);
 use XML::Parser;
 use Getopt::Std;
+
 
 my $attendeeLimit = 50;
 my %opts = ();
@@ -49,12 +55,9 @@ if (exists $opts{'m'}) {
 }
 
 my $source_user = shift @ARGV;
-my $ts_start    = shift @ARGV; # will be overwritten to time in millis
-my $ts_end      = shift @ARGV; # ditto ts_start
+my $ts_start    = shift @ARGV;
+my $ts_end      = shift @ARGV;
 
-my $zmsoap        = '/opt/zimbra/bin/zmsoap';
-my $zmprov        = '/opt/zimbra/bin/zmprov';
-my $zmmailbox     = '/opt/zimbra/bin/zmmailbox';
 my $zmlocalconfig = '/opt/zimbra/bin/zmlocalconfig';
 
 my %userHostMap = ();
@@ -69,12 +72,11 @@ my $host;
 
 sub getDomains() {
     my @domains = ();
-    open(ZMPROV, "$zmprov gad |") || die $!;
-    while (<ZMPROV>) {
+    my @response = ZmClient::sendZmprovRequest("gad");
+    for (@response) {
         chomp();
         push(@domains, $_);
     }
-    close(ZMPROV);
     @domains;
 }
 sub getAdminServicePort() {
@@ -83,41 +85,6 @@ sub getAdminServicePort() {
     chomp($line);
     close(ZMLOCALCONFIG);
     (split(/\s+=\s+/, $line))[1];
-}
-
-sub getAuthToken($) {
-    my $host = shift;
-    open(ZMMAILBOX, "$zmmailbox -u https://$host:$adminPort/ -d -z no 2> /dev/null |") || die $!;
-    my $authToken;
-    my $sessionId;
-    while (<ZMMAILBOX>) {
-        if (m#<authToken>(.*?)</authToken>#) {
-            $authToken = $1;
-        }
-        if (m#<sessionId type="admin" id="(\d+)#) {
-            $sessionId = $1;
-        }
-    }
-    close(ZMMAILBOX);
-    ($sessionId, $authToken);
-}
-
-sub getDelegateAuthToken($$) {
-    my $host = shift;
-    my $login = shift;
-    my $authTok;
-    my $delegateAuthFound = 0;
-    open(ZMMAILBOX, "$zmmailbox -u https://$host:$adminPort/ -d -z -m $login no 2> /dev/null |") || die $!;
-    while (<ZMMAILBOX>) {
-        $delegateAuthFound = 1 if (/<DelegateAuthResponse/);
-        if ($delegateAuthFound) {
-            if (m#<authToken>(.*?)</authToken>#) {
-                $authTok = $1;
-            }
-        }
-    }
-    close(ZMMAILBOX);
-    $authTok;
 }
 
 # trivial (crappy) json parser, avoids having to depend on the JSON module,
@@ -204,9 +171,9 @@ sub getMailServer($) {
 
     return $userHostMap{$user} if (exists($userHostMap{$user}));
 
-    print STDERR "LOOKUP USER: $zmprov ga $user 2>&1 |\n" if ($debug);
-    open(ZMPROV, "$zmprov ga $user 2>&1 |") || die $!;
-    while (<ZMPROV>) {
+    print STDERR "LOOKUP USER: ga $user\n" if ($debug);
+    my @response = ZmClient::sendZmprovRequest("ga $user");
+    for (@response) {
         if ($_ =~ /^zimbraAccountStatus:\s*(\S+)/) {
             if ($1 ne 'active') {
                 undef($mailhost);
@@ -218,9 +185,9 @@ sub getMailServer($) {
         }
         last if ($_ =~ /ERROR: account.NO_SUCH_ACCOUNT/);
     }
-    close(ZMPROV);
     die "$user does not exist" if (!defined($mailhost));
     $userHostMap{$user} = $mailhost;
+    ZmClient::initZmmailbox($mailhost, $adminPort);
     $mailhost;
 }
 
@@ -228,16 +195,16 @@ sub getCalendarFolders($$) {
     my $host = shift;
     my $login = shift;
     my @appo_folders = ();
-    print STDERR "LIST FOLDERS: $zmmailbox -u https://$host:$adminPort/ -z -m $login gaf | grep -w appo |\n" if ($debug);
-    open(ZMMAILBOX, "$zmmailbox -u https://$host:$adminPort/ -z -m $login gaf | grep -w appo |") || die $!;
-    while (<ZMMAILBOX>) {
+    print STDERR "LIST FOLDERS: sm $login; gaf\n" if ($debug);
+    ZmClient::sendZmmailboxRequest($host, "sm $login");
+    my $response = ZmClient::sendZmmailboxRequestNP($host, "gaf");
+    for (split(/\n/, $response)) {
         if (m{\s*\d+\s+appo\s+\d+\s+\d+\s+(/.*?)$}) {
             my $folder = $1;
             # ignore shared folders \(\S+\)$
-            push(@appo_folders, $folder) if ($folder !~ m{\(\S+\)$})
+            push(@appo_folders, $folder) if ($folder !~ m{\(\s*\S+\s*\)$})
         }
     }
-    close(ZMMAILBOX);
     @appo_folders;
 }
 
@@ -263,6 +230,8 @@ sub findCalendarItem($$) {
 
     my $calendarItem;
 
+    print STDERR "SEARCHING FOLDERS: sm $login\n" if ($debug);
+    ZmClient::sendZmmailboxRequest($host, "sm $login");
     my @folderList = @{$userFolderList{$login}};
     FOLDER: foreach my $folder (@folderList) {
         # cached, skip it
@@ -272,25 +241,8 @@ sub findCalendarItem($$) {
         }
         $folder =~ s/"/\\"/g;
         $folder =~ s/\$/\\\$/g;
-        print STDERR "SEARCHING FOLDER: $zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $ts_start $ts_end \"$folder\" 2>&1 |\n" if ($debug);
-        open(ZMMAILBOX, "$zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $ts_start $ts_end \"$folder\" 2>&1 |") || die $!;
-        my $json_string;
-        my @lines;
-        while (<ZMMAILBOX>) {
-            if ($_ =~ /==== SOAP RECEIVE ====/o) {
-                @lines = ();
-            } elsif ($_ =~ /================/o) {
-                $json_string = join('', @lines);
-            } elsif ($_ =~ /zclient.CLIENT_ERROR (.*$)/) {
-                print STDERR "$1\n" if ($debug);
-                @lines = ();
-                close(ZMMAILBOX);
-                next FOLDER;
-            } else {
-                push(@lines, $_);
-            }
-        }
-        close(ZMMAILBOX);
+        print STDERR "SEARCHING FOLDER: gaps $ts_start $ts_end \"$folder\"\n" if ($debug);
+        my $json_string = ZmClient::sendZmmailboxRequest($host, "gaps $ts_start $ts_end \"$folder\"");
         my $jsonObj = process_simple_json($json_string);
         if (exists($jsonObj->{'Body'}->{'SearchResponse'}->{'appt'})) {
             foreach my $appt (@{$jsonObj->{'Body'}->{'SearchResponse'}->{'appt'}}) {
@@ -314,24 +266,9 @@ sub getCalendarSummary($$$) {
     $folder =~ s/"/\\"/g;
     $folder =~ s/!/\\!/g;
     $folder =~ s/[\$]/\\\$/g;
-    print "$zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $ts_start $ts_end \"$folder\" 2> /dev/null |\n" if ($debug);
-    open(ZMMAILBOX, "$zmmailbox -d -u https://$host:$adminPort/ -z -m $login gaps $ts_start $ts_end \"$folder\" 2> /dev/null |") || die $!;
-    my $json_string;
-    my @lines;
-    while (<ZMMAILBOX>) {
-        if ($_ =~ /==== SOAP RECEIVE ====/o) {
-            @lines = ();
-        } elsif ($_ =~ /================/o) {
-            $json_string = join('', @lines);
-        } elsif ($_ =~ /"calExpandInstEnd"\s*:\s*(\d+),/o) {
-            $ts_end = $1;
-        } elsif ($_ =~ /"calExpandInstStart"\s*:\s*(\d+),/o) {
-            $ts_start = $1;
-        } else {
-            push(@lines, $_);
-        }
-    }
-    close(ZMMAILBOX);
+    ZmClient::sendZmmailboxRequest($host, "sm $login");
+    print "gaps $ts_start $ts_end \"$folder\"\n" if ($debug);
+    my $json_string = ZmClient::sendZmmailboxRequest($host, "gaps $ts_start $ts_end \"$folder\"");
     process_simple_json($json_string);
 }
 
@@ -373,13 +310,12 @@ sub expandAttendees($) {
                 # non-existent users are treated as an empty distribution list
                 $distributionLists{$att} = [];
                 print STDERR "Expanding distribution list: $att ($@)\n" if ($debug);
-                open(ZMPROV, "$zmprov gdl $att 2>&1 |") || die $!;
-                while (<ZMPROV>) {
+                my @response = ZmClient::sendZmprovRequest("gdl $att");
+                for (@response) {
                     last if ($_ =~ /ERROR: account.NO_SUCH_DISTRIBUTION_LIST/);
                     next if ($_ !~ /^zimbraMailForwardingAddress:\s+(\S+)/);
                     push(@{$distributionLists{$att}}, $1);
                 }
-                close(ZMPROV);
             }
             if (exists($distributionLists{$att})) {
                 delete $item->{'attendeesList'}->{$att};
@@ -402,20 +338,23 @@ sub getItem($$) {
     my ($user, $item) = @_;
 
     print STDERR "Retrieving item $$item{'id'} ($user)\n" if $debug;
-    print STDERR "$zmsoap -z -m $user GetItemRequest/item/\@id=$$item{'id'} |\n" if ($debug);
-    open(ZMSOAP, "$zmsoap -z -m $user GetItemRequest/item/\@id=$$item{'id'} |") || die $!;
-    my @itemResponse = <ZMSOAP>;
-    close(ZMSOAP);
-    my $calendarItem = join('', @itemResponse);
+    print STDERR "getItemRequest($user, $$item{'id'})\n" if ($debug);
+
+    my $ms = getMailServer($user);
+    my $calendarItem = ZmClient::getItemRequest($ms, $user, $item->{'id'});
     $CalendarItemParser::itemRef = $item;
     my $p = new XML::Parser(Style => 'Subs', Pkg => 'CalendarItemParser');
     $p->parse($calendarItem);
 }
 
 sub main() {
+
+    ZmClient::init();
+    ZmClient::initZmprov();
+
     @domains = getDomains();
-    $host = getMailServer($source_user);
     $adminPort = getAdminServicePort();
+    $host = getMailServer($source_user);
     my @folders = getCalendarFolders($host, $source_user);
     my @calendar_items = ();
     print "Calendars: " . join(", ", @folders) . "\n";
@@ -434,20 +373,33 @@ sub main() {
         my $has_atts = $item->{"otherAtt"};
         next if (!defined($has_atts) || $has_atts eq '' || $has_atts eq 'false');
 
-        open(ZMSOAP, "$zmsoap -z -m $source_user GetItemRequest/item/\@id=$$item{'id'} |") || die $!;
-        my @itemResponse = <ZMSOAP>;
-        close(ZMSOAP);
-
         getItem($source_user, $item);
 
         next if (scalar keys(%{$item->{'attendeesList'}}) == 0);
+        my $or = $item->{'or'}->{'a'};
+        $or =~ s/\@\S+$//;
+        my $src = $source_user;
+        $src =~ s/\@\S+$//;
+        my $found = 0;
+        if ($or ne $src) {
+            foreach my $domain (@domains) {
+                $found = $item->{'or'}->{'a'} =~ /\@$domain$/i if (!$found);
+            }
+            if (!$found) {
+                $or = $item->{'or'}->{'a'};
+                next;
+            }
+        }
 
         push(@items, $item);
     }
 
     print "Remaining items to check: " . scalar(@items) . "\n";
     print STDERR Dumper(\@items) if ($debug);
+    my $i = 0;
+    my $itemCount = @items;
     foreach my $item (@items) {
+        $i++;
         my @errors = ();
         my $or = $item->{'or'}->{'a'};
         $or =~ s/\@\S+$//;
@@ -457,18 +409,9 @@ sub main() {
         # save itemId in case it's another organizer
         my $itemId = $item->{'id'};
 
-        print "Checking event $itemId [$$item{'name'}]\n";
+        print "Checking event $itemId [$$item{'name'}] $i/$itemCount\n";
 
         if ($or ne $src) {
-            my $found = 0;
-            foreach my $domain (@domains) {
-                $found = $item->{'or'}->{'a'} =~ /\@$domain$/i if (!$found);
-            }
-            if (!$found) {
-                $or = $item->{'or'}->{'a'};
-                print "$or: organizer is not local for [$$item{'name'}]; skipping\n\n";
-                next;
-            }
             my $or_item;
             eval {
                 $or_item = findCalendarItem($or, $item);
@@ -551,9 +494,11 @@ sub main() {
     }
 }
 
+
 main();
 
 package CalendarItemParser;
+
 
 our $itemRef;
 
@@ -570,3 +515,179 @@ sub at {
         }
     }
 }
+
+package ZmClient;
+
+use IPC::Open2;
+use IO::Handle;
+use Net::HTTP;
+use LWP::UserAgent;
+use HTTP::Request;
+
+my $zmprov_exe = '/opt/zimbra/bin/zmprov';
+my %zmprov = ();
+my $zmmailbox_exe = '/opt/zimbra/bin/zmmailbox';
+my %zmmailbox = ();
+my %authTokens = ();
+
+sub init() {
+    $zmprov_exe = '/opt/zimbra/bin/zmprov';
+    %zmprov = ();
+    $zmmailbox_exe = '/opt/zimbra/bin/zmmailbox';
+    %zmmailbox = ();
+    %authTokens = ();
+}
+
+sub initZmprov() {
+    my $buf;
+    return if (exists $zmprov{'pid'} && kill(0, $zmprov{'pid'}));
+    $zmprov{'pid'} = open2(
+            $zmprov{'in'}, $zmprov{'out'}, "$zmprov_exe 2>&1 ") || die "$!";
+    do { # this part, we can ignore
+        sysread($zmprov{'in'}, $buf, 8192);
+    } while ($buf !~ /^prov> $/osm);
+}
+
+sub sendZmprovRequest($) {
+    my $cmd = shift @_;
+    my $buf;
+    die "zmprov not initialized" if (!exists $zmprov{'out'});
+    $zmprov{'out'}->print($cmd . "\n");
+    my @lines = ();
+    my $needs_join = 0;
+
+    do {
+        sysread($zmprov{'in'}, $buf, 8192);
+        my @newlines = split(/\n/, $buf);
+
+        if ($needs_join) {
+            $lines[$#lines] .= shift @newlines if @newlines > 0;
+            $needs_join = 0;
+        }
+
+        $needs_join = 1 if ($buf !~ /\n$/osm);
+
+        push(@lines, @newlines);
+    } while ($buf !~ /^prov> $/osm);
+    pop @lines if ($lines[$#lines] =~ /^prov> $/osm);
+    wantarray ? @lines : join("\n", @lines);
+}
+
+sub getItemRequest($$$) {
+    my ($host, $login, $itemId) = @_;
+    my $authToken = getDelegateAuthToken($host, $login);
+    my $port = $zmmailbox{$host}->{'port'};
+    my $url = "https://$host:$port/service/admin/soap/";
+
+    my $item_request = <<"EOF";
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+  <soap:Body>
+    <GetItemRequest xmlns="urn:zimbraMail">
+      <item id="$itemId"/>
+    </GetItemRequest>
+  </soap:Body>
+  <soap:Header>
+    <context xmlns="urn:zimbra">
+      <authToken>$authToken</authToken>
+    </context>
+  </soap:Header>
+</soap:Envelope>
+EOF
+    my $ua = LWP::UserAgent->new;
+    $ua->agent("ZmCalChk/0.1");
+
+    my $req = HTTP::Request->new(POST => $url);
+    $req->content_type("application/xml");
+    $req->content($item_request);
+    my $resp = $ua->request($req);
+
+    if ($resp->is_success) {
+        return $resp->content;
+    } else {
+        print $resp->content if ($debug);
+        die $resp->status_line;
+    }
+}
+
+sub initZmmailbox($$) {
+    my ($host, $port) = @_;
+    return if (exists $zmmailbox{$host}->{'pid'} &&
+               kill(0, $zmmailbox{$host}->{'pid'}));
+
+    my $buf;
+    $zmmailbox{$host} = {};
+    $zmmailbox{$host}->{'pid'} = open2(
+            $zmmailbox{$host}->{'in'}, $zmmailbox{$host}->{'out'},
+            "$zmmailbox_exe -u https://$host:$port/ -d -z 2>&1 ") || die "$!";
+    do { # this part, we can ignore
+        sysread($zmmailbox{$host}->{'in'}, $buf, 8192);
+    } while ($buf !~ /^mbox> $/osm);
+    $zmmailbox{$host}->{'port'} = $port;
+}
+
+sub getDelegateAuthToken($$) {
+    my ($host, $login) = @_;
+
+    return $authTokens{$login} if (exists $authTokens{$login});
+
+    my $authToken = {};
+    &sendZmmailboxRequest($host, "sm $login", $authToken);
+    $authTokens{$login} = $authToken->{'value'};
+}
+
+# NP = no parsing
+sub sendZmmailboxRequestNP($$) {
+    my ($host, $cmd) = @_;
+    my $buf;
+    die "zmmailbox for $host not initialized" if (!exists $zmmailbox{$host});
+    $zmmailbox{$host}->{'out'}->print($cmd . "\n");
+    my @lines = ();
+    my $needs_join = 0;
+
+    do {
+        sysread($zmmailbox{$host}->{'in'}, $buf, 8192);
+        my @newlines = split(/\n/, $buf);
+
+        if ($needs_join) {
+            $lines[$#lines] .= shift @newlines;
+            $needs_join = 0;
+        }
+
+        $needs_join = 1 if ($buf !~ /\n$/osm);
+
+        push(@lines, @newlines);
+    } while ($buf !~ /^mbox\s*\S*?> $/osm);
+    pop @lines if ($lines[$#lines] =~ /^mbox\s*\S*?>> $/osm);
+    wantarray ? @lines : join("\n", @lines);
+}
+sub sendZmmailboxRequest($$) {
+    my ($host, $cmd, $authTokenRef) = @_;
+    my $buf;
+    my @lines = sendZmmailboxRequestNP($host, $cmd);
+
+    my @json = ();
+    my $json_string;
+    my $delegateAuthFound = 0;
+    for (@lines) {
+        if (defined $authTokenRef) {
+            $delegateAuthFound = 1 if ($_ =~ /<DelegateAuthResponse/);
+            if ($delegateAuthFound) {
+                if ($_ =~ m#<authToken>(.*?)</authToken>#) {
+                    $authTokenRef->{'value'} = $1;
+                }
+            }
+        }
+        if ($_ =~ /==== SOAP RECEIVE ====/o) {
+            @json = ();
+        } elsif ($_ =~ /================/o) {
+            $json_string = join("", @json);
+        } elsif ($_ =~ /zclient.CLIENT_ERROR (.*$)/) {
+            die "$1";
+        } else {
+            push(@json, $_);
+        }
+    }
+    $json_string;
+}
+
