@@ -428,7 +428,10 @@ function () {
 			return false;
 		}
 	}
-	return true;
+
+    //TODO: may need to check if the account type update is needed. update the domain account limits object
+   
+    return true;
 }
 
 // new button was pressed

@@ -198,8 +198,13 @@ function(entry) {
 		ZaAccountXFormView.zimletChoices.setChoices(_tmpZimlets);
 		ZaAccountXFormView.zimletChoices.dirtyChoices();		
 	}
-			
-	this._localXForm.setInstance(this._containedObject);
+
+    //check the account type here 
+    var domainName = ZaAccount.getDomain (this._containedObject.name) ;
+    this._containedObject[ZaAccount.A2_accountTypes] =
+                ZaDomain.getDomainByName (domainName, this._app).getAccountTypes () ;
+    
+    this._localXForm.setInstance(this._containedObject);
 	//update the tab
 	this.updateTab();
 }
@@ -777,8 +782,22 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts, relevant: "instance[ZaAccount.A2_domainLeftAccounts] != null",
 				relevantBehavior: _HIDE_ , containerCssStyle: "width:400px;",
 				style: DwtAlert.WARNING, iconVisible: false
-		 }, 
-		{type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_form_name_group",
+		 },
+
+        //account types group
+        {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_type_group",
+                colSpan: "*", numCols: 1, colSizes: ["100%"], 
+                relevant: "instance[ZaAccount.A2_accountTypes] != null && instance[ZaAccount.A2_accountTypes].length > 0 ",
+                relevantBehavior: _HIDE_,
+                items: [
+                    { type: _OUTPUT_, getDisplayValue: ZaAccount.getAccountTypeOutput,
+                        //center the elements
+                        cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
+                    }
+               ]
+        },
+
+        {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_form_name_group",
 			colSizes:["275px","*"],numCols:2,
 			items:[
 			{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,

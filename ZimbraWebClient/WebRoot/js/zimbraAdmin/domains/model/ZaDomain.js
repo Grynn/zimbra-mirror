@@ -1438,7 +1438,12 @@ ZaDomain.myXModel = {
 
 
 ZaDomain.prototype.getUsedAccounts =
-function (cosId) {
+function (cosName) {
+    var cosId = ZaCos.getCosByName (cosName, this._app).id ;
+    if (cosId == null) {
+        this._app.getCurrentController().popupErrorDialog(
+                AjxMessageFormat.format(ZaMsg.ERROR_NO_COS_FOR_ACCOUNT_TYPE, [cosName]), null );
+    }
     var query = "zimbraCosId=" + cosId ;
 
     var params = {
@@ -1456,12 +1461,13 @@ function (cosId) {
     var used =  resp.Body.SearchDirectoryResponse.searchTotal ;
 
     //update the instance value
-    var cosName = ZaCos.getCosById (cosId, this._app).name ;
+   // var cosName = ZaCos.getCosById (cosId, this._app).name ;
     
     if (used != null & used >= 0) {
         if (!this[ZaDomain.A2_account_limit]) this[ZaDomain.A2_account_limit] = {} ;
         if (!this[ZaDomain.A2_account_limit][cosName]) this[ZaDomain.A2_account_limit][cosName] = {} ;
         this[ZaDomain.A2_account_limit][cosName].used = used ;
+        this[ZaDomain.A2_account_limit][cosName].available = this.getMaxAccounts(cosName) - used ;
     }else{
         app.getCurrentController().popupErrorDialog(
                 AjxMessageFormat.format(ZaMsg.ERROR_GET_USED_ACCOUNTS, [this.name]), null);
@@ -1471,10 +1477,10 @@ function (cosId) {
 
 }
 
-ZaDomain.prototype.getMaxAccounts = function (cosId) {
+ZaDomain.prototype.getMaxAccounts = function (cosName) {
     if (! this [ZaDomain.A2_account_limit] )  this[ZaDomain.A2_account_limit] = {} ;
 
-    var cosName = ZaCos.getCosById (cosId, this._app).name ;
+    //var cosName = ZaCos.getCosById (cosId, this._app).name ;
     if (!this[ZaDomain.A2_account_limit][cosName]) this[ZaDomain.A2_account_limit][cosName] = {} ;
 
     if (! this [ZaDomain.A2_account_limit][cosName].max ) {
@@ -1492,17 +1498,30 @@ ZaDomain.prototype.getMaxAccounts = function (cosId) {
     return  this[ZaDomain.A2_account_limit][cosName].max ;
 }
 
-ZaDomain.prototype.getAvailableAccounts = function (cosId, refresh) {
-    var cosName = ZaCos.getCosById (cosId, this._app).name ;
+ZaDomain.prototype.getAvailableAccounts = function (cosName, refresh) {
+    //var cosName = ZaCos.getCosById (cosId, this._app).name ;
     if (!this[ZaDomain.A2_account_limit][cosName]) this[ZaDomain.A2_account_limit][cosName] = {} ;
     if (! this [ZaDomain.A2_account_limit][cosName].available
             || refresh ) {
         //retrieve the used accounts
-        var used = this.getUsedAccounts (cosId);
-        var max = this.getMaxAccounts (cosId) ;
+        var used = this.getUsedAccounts (cosName);
+        var max = this.getMaxAccounts (cosName) ;
         this [ZaDomain.A2_account_limit][cosName].available = max - used ;
     }
 
     return this[ZaDomain.A2_account_limit][cosName].available;
 }
 
+//Account types is only available when ZimbraDomainCOSMaxAccounts are set
+ZaDomain.prototype.getAccountTypes = function () {
+    var types = [] ;
+    var cosMaxAccounts = this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts];
+    if (cosMaxAccounts && cosMaxAccounts.length > 0 ) {
+        for (var i=0; i < cosMaxAccounts.length; i ++) {
+            var val = cosMaxAccounts[i].split(":") ;
+            types.push (val[0]) ;
+        }
+    }
+
+    return types ;
+}

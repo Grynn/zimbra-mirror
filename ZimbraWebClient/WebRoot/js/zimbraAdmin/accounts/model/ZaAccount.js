@@ -236,6 +236,9 @@ ZaAccount.A2_soapURL = "soapURL";
 ZaAccount.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaAccount.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 
+ZaAccount.A2_accountTypes = "accountTypes" ; //used to save the account types available to this account based on domain
+
+
 ZaAccount.checkValues = 
 function(tmpObj, app) {
 	/**
@@ -1795,4 +1798,75 @@ ZaAccount.isEmailRetentionPolicyEnabled = function () {
     }
 
     return true ;
+}
+
+
+ZaAccount.getAccountTypeOutput = function () {
+    var form = this.getForm () ;
+    var instance = form.getInstance () ;
+    var currentCos = ZaCos.getCosById(instance.attrs[ZaAccount.A_COSId]) ;
+    if (currentCos)
+        var currentType = currentCos.name ; 
+
+    var acctTypes = instance[ZaAccount.A2_accountTypes] ;
+    var domainName = ZaAccount.getDomain (instance.name) ;
+    var domainObj =  ZaDomain.getDomainByName (domainName, form.parent._app);
+    
+    var out = [] ;
+    out.push("<table with=100%>");
+    out.push("<colgroup><col width='200px' /><col width='200px' /><col width='200px' /></colgroup> ");
+    out.push("<tbody>") ;
+    if (acctTypes && acctTypes.length > 0) {
+        var radioGroupName = "account_type_radio_group_" + Dwt.getNextId() ;
+        for (var i=0; i < acctTypes.length; i ++) {
+            //3 columns a row
+            if (i % 3 == 0) { //first col, need open <tr>
+                out.push("<tr>") ;
+            }
+            out.push("<td>") ;
+
+            //output the contents
+            var usedAccounts = domainObj.getUsedAccounts(acctTypes[i]);
+            var availableAccounts = domainObj.getAvailableAccounts(acctTypes[i]);
+
+            out.push("<div>" +
+                     "<label style='font-weight: bold;"
+                    + ((availableAccounts > 0) ? "" : "color: #686357;")
+                    + "'>") ;
+            //account type is disable when no accounts available
+            out.push("<input type=radio name=" + radioGroupName + " value=" + acctTypes[i]
+                    + ((availableAccounts > 0) ?  (" onclick=\"ZaAccount.setAccountType.call("
+                                    + this.getGlobalRef() + ", '" + acctTypes[i] +  "', event );\" ") : (" disabled "))
+                    + ((currentType == acctTypes[i]) ? " checked " : "" )
+                    + " />") ;
+            out.push(acctTypes[i] + "</label></div>") ;
+
+            out.push("<div>" + AjxMessageFormat.format(ZaMsg.AccountsAvailable, [usedAccounts, availableAccounts])  + "</div> ") ;
+            out.push("</td>")
+       
+            if ((i % 3 == 2) || (i + 1 == acctTypes.length)) { //last col, need close </td>
+                out.push("</tr>") ;
+            }
+        }
+    }
+
+    out.push("</tbody></table>") ;
+    return out.join("") ; 
+}
+
+ZaAccount.setAccountType = function (newType, ev) {
+    //console.log ("Account Type Changed") ;
+    var form = this.getForm() ;
+    var instance = form.getInstance () ;
+
+    var newCos = ZaCos.getCosByName(newType) ;
+    if (newCos.id != instance.attrs[ZaAccount.A_COSId])  {
+        //change the account type
+        if (instance.cos) instance.cos = newCos ;
+        instance.autoCos = "FALSE" ;
+        instance.attrs[ZaAccount.A_COSId] = newCos.id ;
+        form.parent._isCosChanged = true ;
+        if(form.parent.setDirty)
+			form.parent.setDirty(true);
+    }
 }

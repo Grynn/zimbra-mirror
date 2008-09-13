@@ -331,7 +331,11 @@ function(entry) {
 		ZaNewAccountXWizard.zimletChoices.setChoices(_tmpZimlets);
 		ZaNewAccountXWizard.zimletChoices.dirtyChoices();		
 	}
-
+    //check the account type here
+    var domainName = ZaAccount.getDomain (this._containedObject.name) ;
+    this._containedObject[ZaAccount.A2_accountTypes] =
+                ZaDomain.getDomainByName (domainName, this._app).getAccountTypes () ;
+   
     this._localXForm.setInstance(this._containedObject);
 }
 
@@ -348,7 +352,8 @@ function(value, event, form) {
 		} 
 	}
 	this.setInstanceValue(value);
-	return value;
+    form.parent._isCosChanged = true ;
+    return value;
 }
 
 ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {	
@@ -368,8 +373,22 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts, relevant: "instance[ZaAccount.A2_domainLeftAccounts] != null",
 				relevantBehavior: _HIDE_ , containerCssStyle: "width:400px;",
 				style: DwtAlert.WARNING, iconVisible: false
-		 }, 
-		{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_wiz_name_group",numCols:2,
+		 },
+
+
+        //account types group
+        {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_wiz_type_group",
+                colSpan: "*", numCols: 1, colSizes: ["100%"],
+                relevant: "instance[ZaAccount.A2_accountTypes] != null && instance[ZaAccount.A2_accountTypes].length > 0 ",
+                relevantBehavior: _HIDE_,
+                items: [
+                    { type: _OUTPUT_, getDisplayValue: ZaAccount.getAccountTypeOutput,
+                        //center the elements
+                        cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
+                    }
+               ]
+        },
+        {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_wiz_name_group",numCols:2,
 			items:[
 			{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
 							 labelLocation:_LEFT_,forceUpdate:true,
