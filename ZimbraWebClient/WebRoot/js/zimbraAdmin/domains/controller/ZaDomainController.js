@@ -65,16 +65,18 @@ function () {
 	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-	if (!ZaSettings.DOMAINS_ARE_READONLY)
+
+	if(ZaSettings.CAN_CREATE_DOMAINS)
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener)));
 	
-	if (!ZaSettings.DOMAINS_ARE_READONLY)
+	if (ZaSettings.CAN_DELETE_DOMAINS )
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener)));    	    	
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
 	
-	if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED)
+	
+	if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED) {
+		this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.GAL_WIZARD, ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener)));   		
-	
+	}
 	if(ZaSettings.DOMAIN_AUTH_WIZ_ENABLED)
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.AUTH_WIZARD, ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainController.prototype._authWizButtonListener)));   		   		
 	
@@ -102,7 +104,7 @@ function(entry) {
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
 
 	if(entry.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
-		if(!ZaSettings.DOMAINS_ARE_READONLY)
+		if(ZaSettings.CAN_DELETE_DOMAINS)
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);
 		
 		if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED)
@@ -114,7 +116,7 @@ function(entry) {
 		if(ZaSettings.DOMAIN_WIKI_ENABLED)
 			this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
 	} else {
-		if(!ZaSettings.DOMAINS_ARE_READONLY) {
+		if(ZaSettings.CAN_DELETE_DOMAINS) {
 			if(!entry.id) {
 				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 			} else {
@@ -496,7 +498,9 @@ function(ev) {
 		if(domain != null) {
 			//if creation took place - fire an DomainChangeEvent
 			this.fireCreationEvent(domain);
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);	
+			if(ZaSettings.CAN_DELETE_DOMAINS)
+				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);
+					
 			this._newDomainWizard.popdown();		
 			if(this._newDomainWizard.getObject()[ZaDomain.A_CreateNotebook]=="TRUE") {
 				var params = new Object();

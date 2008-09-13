@@ -368,7 +368,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
 			  label:ZaMsg.Domain_ACEName+":",relevant:"ZaDomainXFormView.hasACEName.call(this)", relevantBehavior:_HIDE_
 			},	
-			{ ref: ZaDomain.A_zimbraPublicServiceHostname, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _INPUT_), 
+			{ ref: ZaDomain.A_zimbraPublicServiceHostname, type:(ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME ? _INPUT_ : _OUTPUT_), 
 			  label:ZaMsg.Domain_zimbraPublicServiceHostname, width:250,
 			  onChange:ZaDomainXFormView.onFormFieldChanged
 		  	}
@@ -376,7 +376,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 	};
 
 	if(ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED) {
-		if(!ZaSettings.DOMAINS_ARE_READONLY) {
+		if(!ZaSettings.DOMAINS_ARE_READONLY && ZaSettings.GLOBAL_CONFIG_ENABLED) {
 			var group = {type:_ZA_PLAIN_GROUPER_,colSpan:"*", colSizes:["auto"],numCols:1,id:"dns_check_group",items: []};
 			group.items.push({ type: _DWT_ALERT_,
 			containerCssStyle: "padding-bottom:0px",
@@ -388,8 +388,14 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 	 			txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, width:250,onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
 	 		case1.items.push(group);
 		} else {
-			case1.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:_OUTPUT_, 
-	 			label:ZaMsg.Domain_zimbraDNSCheckHostname, width:250});
+			case1.items.push({ type: _DWT_ALERT_,
+			containerCssStyle: "padding-bottom:0px",
+			style: DwtAlert.INFO,
+			iconVisible: true, 
+			content: ZaMsg.Domain_InboundSMTPNote,
+			colSpan:"*"});
+			case1.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _TEXTFIELD_), 
+	 			label:ZaMsg.Domain_zimbraDNSCheckHostname, width:250,onChange:ZaDomainXFormView.onFormFieldChanged});
 		}
 	}
 		
@@ -424,7 +430,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				relevantBehavior:_HIDE_,relevant:("ZaSettings.COSES_ENABLED")});
 	}
 	
-	case1.items.push({ref:ZaDomain.A_zimbraDomainStatus, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _INPUT_), msgName:ZaMsg.Domain_zimbraDomainStatus,
+	case1.items.push({ref:ZaDomain.A_zimbraDomainStatus, type:(ZaSettings.CAN_CHANGE_DOMAIN_STATUS ? _OSELECT1_ : _OUTPUT_ ), msgName:ZaMsg.Domain_zimbraDomainStatus,
 				label:ZaMsg.Domain_zimbraDomainStatus+":", 
 				labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaDomainXFormView.onFormFieldChanged});
 	

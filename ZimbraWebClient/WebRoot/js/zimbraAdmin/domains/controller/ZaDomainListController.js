@@ -107,13 +107,15 @@ function (ev) {
 
 ZaDomainListController.initPopupMenuMethod =
 function () {
+	if(ZaSettings.CAN_CREATE_DOMAINS)
+		this._popupOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));
+	
 	if (!ZaSettings.DOMAINS_ARE_READONLY) {
-   		this._popupOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));
    		this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener)));    	
 	} else {
 		this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_View, ZaMsg.DTBB_View_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener)));
 	}
-	if (!ZaSettings.DOMAINS_ARE_READONLY)
+	if (ZaSettings.CAN_DELETE_DOMAINS )
    		this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener)));    	    	
 	
 	if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED)
@@ -131,15 +133,16 @@ ZaController.initPopupMenuMethods["ZaDomainListController"].push(ZaDomainListCon
 ZaDomainListController.initToolbarMethod =
 function () {
 	// first button in the toolbar is a menu.
+	if(ZaSettings.CAN_CREATE_DOMAINS)
+   		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));	
 	
 	if (!ZaSettings.DOMAINS_ARE_READONLY) {
-   		this._toolbarOperations.push(new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener)));
  	  	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener)));    	
 	} else {
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_View, ZaMsg.DTBB_View_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener)));
 	}
 	
-   	if (!ZaSettings.DOMAINS_ARE_READONLY)
+   	if (ZaSettings.CAN_DELETE_DOMAINS)
    		this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener)));    	    	
 	
 	if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED)
@@ -452,9 +455,12 @@ function (enableArray,disableArray) {
 		if(item) {
 			if(!(item.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN)) {
 				enableArray.push(ZaOperation.EDIT);
-				enableArray.push(ZaOperation.DELETE);
-				enableArray.push(ZaOperation.AUTH_WIZARD);				
-				enableArray.push(ZaOperation.GAL_WIZARD);				
+				if(ZaSettings.CAN_DELETE_DOMAINS)
+					enableArray.push(ZaOperation.DELETE);
+				if(ZaSettings.DOMAIN_AUTH_WIZ_ENABLED)
+					enableArray.push(ZaOperation.AUTH_WIZARD);				
+				if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED)
+					enableArray.push(ZaOperation.GAL_WIZARD);				
 			} else {
 				enableArray.push(ZaOperation.EDIT);
 				disableArray.push(ZaOperation.DELETE);

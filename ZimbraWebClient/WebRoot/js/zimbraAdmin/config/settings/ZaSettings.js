@@ -240,7 +240,11 @@ ZaSettings.DOMAIN_WIKI_ENABLED = true;
 ZaSettings.DOMAIN_VIRTUAL_HOST_ENABLED = true;
 ZaSettings.DOMAIN_INTEROP_ENABLED = true;
 ZaSettings.NEW_ACCT_TIME_ZONE_ENABLED = false ;
-
+ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME = true;
+ZaSettings.CAN_CREATE_DOMAINS = true;
+ZaSettings.CAN_CHANGE_DOMAIN_ACC_LIMIT = true;
+ZaSettings.CAN_CHANGE_DOMAIN_STATUS = true;
+ZaSettings.CAN_DELETE_DOMAINS = true;
 // initialization for settings: [name, type, data type, default value]
 ZaSettings.INIT = new Object();
 // IDs FOR HTML COMPONENTS IN THE SKIN
