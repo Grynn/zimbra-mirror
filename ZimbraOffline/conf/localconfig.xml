@@ -26,13 +26,13 @@
     <value>30</value>
   </key>
   <key name="http_connection_timeout">
-    <value>15000</value>
+    <value>30000</value>
   </key>
   <key name="http_so_timeout">
-    <value>15000</value>
+    <value>30000</value>
   </key>
   <key name="zdesktop_request_timeout">
-    <value>15000</value>
+    <value>30000</value>
   </key>
   <key name="zdesktop_galsync_request_timeout">
     <value>60000</value>

@@ -204,20 +204,20 @@ public class OfflineLC {
 	    dns_cache_ttl.setDoc("Number of seconds a resolved address stays valid");
 
 	    zdesktop_request_timeout = new KnownKey("zdesktop_request_timeout");
-	    zdesktop_request_timeout.setDefault("15000");
-	    zdesktop_request_timeout.setDoc("HTTP request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 15000 (15 seconds).");
+	    zdesktop_request_timeout.setDefault("30000");
+	    zdesktop_request_timeout.setDoc("HTTP request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 30000 (30 seconds).");
 
 	    zdesktop_galsync_request_timeout = new KnownKey("zdesktop_galsync_request_timeout");
 	    zdesktop_galsync_request_timeout.setDefault("60000");
 	    zdesktop_galsync_request_timeout.setDoc("HTTP GAL sync request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 60 seconds.");
 	        
 	    http_so_timeout = new KnownKey("http_so_timeout");
-	    http_so_timeout.setDefault("15000");
-	    http_so_timeout.setDoc("Socket timeout (SO_TIMEOUT) in milliseconds while waiting for data. A value of zero means no timeout. Default 15000 (15 seconds).");
+	    http_so_timeout.setDefault("30000");
+	    http_so_timeout.setDoc("Socket timeout (SO_TIMEOUT) in milliseconds while waiting for data. A value of zero means no timeout. Default 30000 (30 seconds).");
 
 	    http_connection_timeout = new KnownKey("http_connection_timeout");
-	    http_connection_timeout.setDefault("15000");
-	    http_connection_timeout.setDoc("Timeout in milliseconds while waiting for connection to establish. A value of zero means no timeout. Default 15000 (15 seconds).");
+	    http_connection_timeout.setDefault("30000");
+	    http_connection_timeout.setDoc("Timeout in milliseconds while waiting for connection to establish. A value of zero means no timeout. Default 30000 (30 seconds).");
 	    
 	    zdesktop_datasource_properties = new KnownKey("zdesktop_datasource_properties");
 	    zdesktop_datasource_properties.setDefault("${zimbra_home}" + File.separator + "conf" + File.separator + "datasource.properties");
