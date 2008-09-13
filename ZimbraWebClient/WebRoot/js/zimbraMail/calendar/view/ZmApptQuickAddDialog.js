@@ -172,6 +172,9 @@ function(loc) {
 	}
 	this._tabGroup.setFocusMember(this._subjectField);
 
+	var defaultWarningTime = appCtxt.get(ZmSetting.CAL_REMINDER_WARNING_TIME);
+	this._reminderSelect.setSelectedValue(defaultWarningTime);
+	
 	DBG.timePt("ZmQuickAddDialog#popup", true);
 };
 
