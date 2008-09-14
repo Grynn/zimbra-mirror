@@ -124,7 +124,7 @@ ZaGlobalConfig.A_zimbraImapProxyBindPort="zimbraImapProxyBindPort";
 ZaGlobalConfig.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
 ZaGlobalConfig.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";
 ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
-
+ZaGlobalConfig.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";
 // others
 ZaGlobalConfig.A_zimbraInstalledSkin = "zimbraInstalledSkin";
 ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";

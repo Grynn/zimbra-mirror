@@ -42,6 +42,20 @@ function (value, event, form) {
 	return value;
 }
 
+ZaServerXFormView.onReverseLookupTargetFieldChanged = 
+function (value, event, form) {
+	DBG.println (AjxDebug.DBG1, "On Form Field Changed ...");
+	
+	form.parent.setDirty(true);
+	this.setInstanceValue(value);
+	if(value=="TRUE") {
+		this.setInstanceValue("TRUE","/attrs/"+ZaServer.A_ImapCleartextLoginEnabled);
+		this.setInstanceValue("TRUE","/attrs/"+ZaServer.A_Pop3CleartextLoginEnabled);
+	}
+	return value;
+}
+
+
 ZaServerXFormView.prototype.setObject = 
 function (entry) {
 	this.entry = entry;
@@ -157,6 +171,10 @@ ZaServerXFormView.getPOP3ProxyEnabled = function () {
 
 ZaServerXFormView.getPOP3SSLProxyEnabled = function () {
 	return (ZaServerXFormView.getMailProxyEnabled.call(this) && ZaServerXFormView.getPOP3SSLEnabled.call(this));
+}
+
+ZaServerXFormView.getIsReverseProxyLookupTarget = function () {
+	return (this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_zimbraReverseProxyLookupTarget) == "TRUE");
 }
 
 ZaServerXFormView.volumeSelectionListener = 
@@ -456,7 +474,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 				{type:_ZATABCASE_, colSizes:["auto"],numCols:1, relevant:"instance[ZaModel.currentTab] == 1", 
 					id:"server_general_tab",
 					items:[
-						{type:_ZAGROUP_, items:[
+						{type:_ZA_PLAIN_GROUPER_/*_ZAGROUP_*/, items:[
 							{ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_},
 							{ ref: ZaServer.A_description, type:_INPUT_, 
 							  label:ZaMsg.NAD_Description,cssClass:"admin_xform_name_input",
@@ -481,16 +499,17 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							  	cssClass:"admin_xform_name_input",
 							  onChange:ZaServerXFormView.onFormFieldChanged
 							},
-							{type:_GROUP_, colSpan: "*", colSizes: [ 275, 85, 100, 150], numCols: 4, width: "100%", 
-								items: [
-									{ref:ZaServer.A_zimbraMailPurgeSleepInterval, type:_SUPER_LIFETIME_, 
-											resetToSuperLabel:ZaMsg.NAD_ResetToGlobal, 
-											msgName:ZaMsg.NAD_zimbraMailPurgeSleepInterval,
-											txtBoxLabel:ZaMsg.NAD_zimbraMailPurgeSleepInterval,
-											onChange:ZaServerXFormView.onFormFieldChanged
-									}
-								]
+							{ref:ZaServer.A_zimbraMailPurgeSleepInterval, type:_SUPER_LIFETIME_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToGlobal, 
+									msgName:ZaMsg.NAD_zimbraMailPurgeSleepInterval,
+									txtBoxLabel:ZaMsg.NAD_zimbraMailPurgeSleepInterval,
+									onChange:ZaServerXFormView.onFormFieldChanged
 							},
+							{ref:ZaServer.A_zimbraReverseProxyLookupTarget,
+								type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal, 
+								msgName:ZaMsg.NAD_zimbraReverseProxyLookupTarget,
+								checkBoxLabel:ZaMsg.NAD_zimbraReverseProxyLookupTarget, 
+								trueValue:"TRUE", falseValue:"FALSE", onChange:ZaServerXFormView.onReverseLookupTargetFieldChanged},
 							{ ref: ZaServer.A_notes, type:_TEXTAREA_, 
 							  label: ZaMsg.NAD_Notes, labelCssStyle: "vertical-align:top", width: "30em",
 							  onChange:ZaServerXFormView.onFormFieldChanged
@@ -656,7 +675,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 						      	},
 						  	    { ref: ZaServer.A_ImapCleartextLoginEnabled, type: _SUPER_CHECKBOX_,
 						      	  checkBoxLabel:ZaMsg.IMAP_CleartextLoginEnabled,
-						      	  relevant:"ZaServerXFormView.getIMAPEnabled.call(item)",
+						      	  relevant:"(ZaServerXFormView.getIMAPEnabled.call(item) && !ZaServerXFormView.getIsReverseProxyLookupTarget.call(item))",
 						      	  trueValue: "TRUE", falseValue: "FALSE",
 						      	  onChange: ZaServerXFormView.onFormFieldChanged,
 						      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
@@ -734,7 +753,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 				      	    },
 				      	    { ref: ZaServer.A_Pop3CleartextLoginEnabled, type: _SUPER_CHECKBOX_,
 					      	  checkBoxLabel:ZaMsg.NAD_POP_CleartextLoginEnabled,
-				      		  relevant:"ZaServerXFormView.getPOP3Enabled.call(item)",
+				      		  relevant:"(ZaServerXFormView.getPOP3Enabled.call(item) && !ZaServerXFormView.getIsReverseProxyLookupTarget.call(item))",
 				    	  	  relevantBehavior: _DISABLE_,
 					      	  trueValue: "TRUE", falseValue: "FALSE",
 					      	  onChange: ZaServerXFormView.onFormFieldChanged,
