@@ -276,7 +276,7 @@ public class ZComposeUploaderBean {
         if(getParam(F_bodyText)==null || "".equals(getParam(F_bodyText))){
         compose.setContent(getParam(F_body));    
         }else{
-        compose.setHtmlContent("<html><body>"+getParam(F_body)+"</body></html>");
+        compose.setHtmlContent(getParam(F_body));
         compose.setContent(getParam(F_bodyText));
         }
         compose.setFrom(getParam(F_from));
