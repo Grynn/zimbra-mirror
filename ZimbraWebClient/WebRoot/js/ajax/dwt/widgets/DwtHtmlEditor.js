@@ -641,12 +641,13 @@ function(mode, convert) {
 		return;
 	}
 
+	var idoc = this._getIframeDoc();
 	this._mode = mode;
 	if (mode == DwtHtmlEditor.HTML) {
 		var textArea = document.getElementById(this._textAreaId);
 		var iFrame;
 		if (this._iFrameId != null) {
-			this._getIframeDoc().body.innerHTML = (convert)
+			idoc.body.innerHTML = (convert)
 				? AjxStringUtil.convertToHtml(textArea.value)
 				: textArea.value;
 			iFrame = document.getElementById(this._iFrameId);
@@ -662,7 +663,7 @@ function(mode, convert) {
 
 		// XXX: mozilla hack
 		if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
-			this._enableDesignMode(this._getIframeDoc());
+			this._enableDesignMode(idoc);
 		}
 	} else {
 		var textArea = this._textAreaId != null
@@ -673,17 +674,15 @@ function(mode, convert) {
 		// if the widget is instantiated and immediate setMode is called w/o getting out
 		// to the event loop where _finishHtmlModeInit is triggered
 		var content = (!this._pendingContent)
-			? this._getIframeDoc().body.innerHTML
+			? (idoc.body ? idoc.body.innerHTML : "")
 			: (this._pendingContent || "");
 
-		textArea.value = (convert)
-			? this._convertHtml2Text()
-			: this._getIframeDoc().innerHTML;;
+		textArea.value = convert ? this._convertHtml2Text() : idoc.innerHTML;
 
 		Dwt.setVisible(document.getElementById(this._iFrameId), false);
 		Dwt.setVisible(textArea, true);
 	}
-}
+};
 
 DwtHtmlEditor.prototype.getMode =
 function() {
