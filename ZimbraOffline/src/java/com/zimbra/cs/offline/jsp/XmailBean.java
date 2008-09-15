@@ -153,6 +153,10 @@ public class XmailBean extends MailBean {
 			        }
 			        
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
+					
+					if (dsType == DataSource.Type.imap)
+						dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, syncAllServerFolders ? Provisioning.TRUE : Provisioning.FALSE);
+			        
 			        if (dsType == DataSource.Type.pop3) {
 			            dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Boolean.toString(leaveOnServer).toUpperCase());
 		                    dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_INBOX);
@@ -189,9 +193,6 @@ public class XmailBean extends MailBean {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, adomain);
 					}
 				}
-				
-				if (dsType == DataSource.Type.imap)
-					dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, syncAllServerFolders ? Provisioning.TRUE : Provisioning.FALSE);
 			}
 			
 			if (isAllOK()) {                

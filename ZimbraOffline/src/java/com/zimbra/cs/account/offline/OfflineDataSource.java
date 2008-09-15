@@ -29,11 +29,8 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.Folder;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.LocalMailbox;
-import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
@@ -132,7 +129,7 @@ public class OfflineDataSource extends DataSource {
         return null;
     }
 
-    private boolean isSyncEnabledByDefault(String localPath) {
+    public boolean isSyncEnabledByDefault(String localPath) {
         if (localPath.equalsIgnoreCase("/Inbox"))
             return true;
         KnownFolder kf = getKnownFolderByLocalPath(localPath);
@@ -147,36 +144,29 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public String matchKnownRemotePath(String localPath) {
+    	if (DesktopMailbox.isInArchive(localPath))
+    		return ""; //empty means to ignore
         KnownFolder kf = getKnownFolderByLocalPath(localPath);
         return kf == null ? null : kf.remotePath;
     }
 
     @Override
-    public void initializedLocalFolder(String localPath, boolean isLocallyCreated) {
-        try {
-            DesktopMailbox mbox = (DesktopMailbox)MailboxManager.getInstance().getMailboxByAccount(getAccount());
-            Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
-            if (folder != null) {
-                if (folder.getId() == DesktopMailbox.ID_FOLDER_OUTBOX || folder.getId() == DesktopMailbox.ID_FOLDER_ARCHIVE || folder.getId() == DesktopMailbox.ID_FOLDER_FAILURE)
-                    return;
-
-                OperationContext context = new Mailbox.OperationContext(mbox);
-                mbox.alterTag(context, folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNCFOLDER, true);
-                mbox.alterTag(context, folder.getId(), MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, isLocallyCreated ? false : isSyncEnabledByDefault(localPath));
-            } else
-                OfflineLog.offline.warn("local path " + localPath + " not found");
-        } catch (ServiceException x) {
-            OfflineLog.offline.warn(x);
-        }
+    public boolean isSyncCapable(Folder folder) {
+    	return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0;
     }
-
+    
+    @Override
+    public boolean isSyncEnabled(Folder folder) {
+    	return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0 && (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
+    }
+    
     @Override
     public boolean isSyncEnabled(String localPath) {
         try {
             Mailbox mbox = getMailbox();
             Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
             if (folder != null)
-                return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0 && (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
+                return isSyncEnabled(folder);
             else
                 OfflineLog.offline.warn("local path " + localPath + " not found");
         } catch (ServiceException x) {

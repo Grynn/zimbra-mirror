@@ -1,5 +1,6 @@
 package com.zimbra.cs.mailbox;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.datasource.DataSourceManager;
+import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mime.Mime;
@@ -38,74 +40,77 @@ import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.YMailSender;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
-import com.zimbra.cs.session.PendingModifications;
-import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.util.JMSession;
 
 public class LocalMailbox extends DesktopMailbox {
     
+	private boolean isImapMailbox;
+	
     LocalMailbox(MailboxData data) throws ServiceException {
         super(data);
+        
+        DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
+        isImapMailbox = ds != null && ds.getType() == DataSource.Type.imap;
     }
+	
+    @Override protected synchronized void initialize() throws ServiceException {
+        super.initialize();
+        if (isImapMailbox) {
+	        List<Pair<Integer, String>> systemMailFolders = new ArrayList<Pair<Integer, String>>();
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_INBOX, "Inbox"));
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_TRASH, "Trash"));
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SPAM, "Junk"));
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SENT, "Sent"));
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_DRAFTS, "Drafts"));
+        	for (Pair<Integer, String> pair : systemMailFolders) {
+        		MailItem mi = getCachedItem(pair.getFirst());
+        		DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(pair.getFirst()), true);
+        		if (mi != null)
+        			mi.mData.flags |= mSyncFolderFlag.getBitmask();
+        		if (isSyncEnabledByDefault(pair.getSecond())) {
+        			DbMailItem.alterTag(mSyncFlag, Arrays.asList(pair.getFirst()), true);
+        			if (mi != null)
+        				mi.mData.flags |= mSyncFlag.getBitmask();
+        		}
+        	}
+        }
+    }
+    
+    private boolean isSyncEnabledByDefault(String path) throws ServiceException {
+    	OfflineDataSource ds = (OfflineDataSource)(OfflineProvisioning.getOfflineInstance().getDataSource(getAccount()));
+    	return ds != null && ds.isSyncEnabledByDefault(path);
+    }
+    
+    private void alterSyncFolderFlag(Folder folder, boolean canSync) throws ServiceException {
+    	DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(folder.getId()), canSync);
+    	if (canSync) {
+    		folder.mData.flags |= mSyncFolderFlag.getBitmask();
+    		if (isSyncEnabledByDefault(folder.getPath())) {
+    			DbMailItem.alterTag(mSyncFlag, Arrays.asList(folder.getId()), canSync);
+    			folder.mData.flags |= mSyncFlag.getBitmask();
+    		}
+    	} else {
+    		folder.mData.flags &= ~mSyncFolderFlag.getBitmask();
+    		folder.mData.flags &= ~mSyncFlag.getBitmask();
+    	}
+    }
+    
+    @Override
+    void archiveSingleItem(MailItem item, boolean toArchive) throws ServiceException {
+    	super.archiveSingleItem(item, toArchive);
+    	if (isImapMailbox && item instanceof Folder)
+    		alterSyncFolderFlag((Folder)item, !toArchive);
+    }
+	
+    @Override
+	void itemCreated(MailItem item, boolean inArchive) throws ServiceException {
+		if (isImapMailbox && !inArchive && item instanceof Folder)
+			alterSyncFolderFlag((Folder)item, true);
+	}
     
     @Override
     public MailSender getMailSender() {
         return new OfflineMailSender();
-    }
-
-    private int adjustFlags(int flags) throws ServiceException {
-    	DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
-    	if (ds != null && ds.getType() == DataSource.Type.imap) {
-    		flags |= Flag.BITMASK_SYNCFOLDER;
-    	}
-    	return flags;
-    }
-    
-    @Override
-    public synchronized Folder createFolder(OperationContext octxt, String name, int parentId, byte attrs, byte defaultView, int flags, byte color, String url) throws ServiceException {
-    	flags = adjustFlags(flags);
-    	return super.createFolder(octxt, name, parentId, attrs, defaultView, flags, color, url);
-    }
-    
-    @Override
-    public synchronized Folder createFolder(OperationContext octxt, String path, byte attrs, byte defaultView, int flags, byte color, String url) throws ServiceException {
-    	flags = adjustFlags(flags);
-    	return super.createFolder(octxt, path, attrs, defaultView, flags, color, url);
-    }
-    
-    @Override
-    void snapshotCounts() throws ServiceException {
-        // do the normal persisting of folder/tag counts
-        super.snapshotCounts();
-
-        boolean outboxed = false;
-        
-        PendingModifications pms = getPendingModifications();
-        if (pms == null || !pms.hasNotifications())
-            return;
-
-        if (pms.created != null) {
-            for (MailItem item : pms.created.values()) {
-                if (item.getFolderId() == ID_FOLDER_OUTBOX)
-                	outboxed = true;
-            }
-        }
-
-        if (pms.modified != null) {
-            for (Change change : pms.modified.values()) {
-                if (!(change.what instanceof MailItem))
-                    continue;
-                MailItem item = (MailItem) change.what;
-                if (item.getFolderId() == ID_FOLDER_OUTBOX) {
-                	outboxed = true;
-                }
-            }
-        }
-        
-        if (outboxed) {
-        	OutboxTracker.invalidate(this);
-        	syncNow();
-        }
     }
     
     /*

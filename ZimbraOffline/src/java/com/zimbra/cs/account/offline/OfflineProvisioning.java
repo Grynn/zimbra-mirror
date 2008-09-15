@@ -477,7 +477,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         attrs.put(A_zimbraJunkMessagesIndexingEnabled, TRUE);
 
-        Account account = createAccountInternal(emailAddress, zgi.getId(), attrs);
+        Account account = createAccountInternal(emailAddress, zgi.getId(), attrs, true);
         try {
             // create identity entries in database
             for (ZIdentity zident : zgi.getIdentities())
@@ -591,13 +591,24 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	attrs.put(A_zimbraPrefSkin, "yahoo");
         }
 
-        Account account = createAccountInternal(emailAddress, accountId, attrs);
+        Account account = createAccountInternal(emailAddress, accountId, attrs, false);
+        DataSource ds = null;
         try {
-        	createDataSource(account, type, dsName, dsAttrs, true, false);
+        	ds = createDataSource(account, type, dsName, dsAttrs, true, false);
         } catch (Throwable t) {
         	OfflineLog.offline.warn("failed creating datasource: " + dsName, t);
         	deleteAccount(account.getId());
         }
+        try {
+            MailboxManager.getInstance().getMailboxByAccount(account);
+        } catch (ServiceException e) {
+            OfflineLog.offline.error("error initializing account " + emailAddress, e);
+            deleteDataSource(account, ds.getId());
+            mAccountCache.remove(account);
+            deleteAccount(accountId);
+            throw e;
+        }
+        
         return account;
     }
 
@@ -651,7 +662,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         setDefaultAccountAttributes(attrs);
 
-        OfflineAccount galAcct = (OfflineAccount)createAccountInternal(name, id, attrs);
+        OfflineAccount galAcct = (OfflineAccount)createAccountInternal(name, id, attrs, true);
         setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, galAcct.getId());
         return galAcct;
     }
@@ -676,7 +687,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         setDefaultAccountAttributes(attrs);
 
-        return createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs);
+        return createAccountInternal(LOCAL_ACCOUNT_NAME, LOCAL_ACCOUNT_ID, attrs, true);
     }
 
     public synchronized Account getLocalAccount() throws ServiceException {
@@ -694,7 +705,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	return account.getId().equals(LOCAL_ACCOUNT_ID);
     }
 
-    private synchronized Account createAccountInternal(String emailAddress, String accountId, Map<String, Object> attrs) throws ServiceException {
+    private synchronized Account createAccountInternal(String emailAddress, String accountId, Map<String, Object> attrs, boolean initMailbox) throws ServiceException {
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
             if (attrs.containsKey(attr))
@@ -713,14 +724,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         AttributeManager.getInstance().postModify(attrs, acct, context, true);
 
-        try {
-            MailboxManager.getInstance().getMailboxByAccount(acct);
-        } catch (ServiceException e) {
-            OfflineLog.offline.error("error initializing account " + emailAddress, e);
-            mAccountCache.remove(acct);
-            deleteAccount(accountId);
-            throw e;
-        }
+        if (initMailbox)
+	        try {
+	            MailboxManager.getInstance().getMailboxByAccount(acct);
+	        } catch (ServiceException e) {
+	            OfflineLog.offline.error("error initializing account " + emailAddress, e);
+	            mAccountCache.remove(acct);
+	            deleteAccount(accountId);
+	            throw e;
+	        }
 
         return acct;
     }

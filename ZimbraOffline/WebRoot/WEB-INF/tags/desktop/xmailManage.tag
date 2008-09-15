@@ -19,7 +19,7 @@ function InitScreen() {
 	    <c:when test="${bean.pop}" >
 	        zd.show("popSettingsRow");
 	    </c:when>
-	    <c:when test="${bean.syncAllServerFolders}">
+	    <c:when test="${bean.imap}">
 	        zd.show("imapSettingsRow");
 	    </c:when>
 	</c:choose>
@@ -281,7 +281,7 @@ function passOnEdit(id) {
         </tr>
         
         <tr id='imapSettingsRow'>
-            <td style='text-align:right'><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''} disabled></td>
+            <td style='text-align:right'><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td>
             <td class="ZCheckboxLabel"><fmt:message key='SyncAllFolders'/></td>
         </tr>
         
