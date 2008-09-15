@@ -108,6 +108,8 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
             String e = attrs.get(Contact.A_email);
             String e2 = attrs.get(Contact.A_email2);
             String e3 = attrs.get(Contact.A_email3);
+            // workemail1 is comcast specific
+            String e4 = attrs.get(Contact.A_workEmail1);
             String nickname = attrs.get(Contact.A_nickname);
             String dlist = attrs.get(Contact.A_dlist);
 
@@ -138,8 +140,9 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
             if (addrs.contains(e)) e = null;
             if (addrs.contains(e2)) e2 = null;
             if (addrs.contains(e3)) e3 = null;
+            if (addrs.contains(e4)) e4 = null;
 
-            if (e == null && e2 == null && e3 == null) return;
+            if (e == null && e2 == null && e3 == null && e4 ==null) return;
 
             boolean fs = first != null && first.toLowerCase().startsWith(query);
             boolean ls = !fs && last != null && last.toLowerCase().startsWith(query);
@@ -149,6 +152,10 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
                     contacts.add(new AContact(first, last, e, c.isGalContact()));
                     addrs.add(e);
                 }
+                if(e4 != null){
+                    contacts.add(new AContact(first, last, e4, c.isGalContact()));
+                    addrs.add(e4);
+                }
                 if (e2 != null && (e == null || !sameDomain(e, e2))) {
                     contacts.add(new AContact(first, last, e2, c.isGalContact()));
                     addrs.add(e2);
@@ -157,14 +164,21 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
                     contacts.add(new AContact(first, last, e3, c.isGalContact()));
                     addrs.add(e3);
                 }
+
             } else {
                 boolean e1match = e != null && e.toLowerCase().startsWith(query);
                 boolean e2match = e2 != null && e2.toLowerCase().startsWith(query);
                 boolean e3match = e3 != null && e3.toLowerCase().startsWith(query);
+                boolean e4match = e4 != null && e4.toLowerCase().startsWith(query);
 
                 if (e1match) {
                     contacts.add(new AContact(first, last, e, c.isGalContact()));
                     addrs.add(e);
+                }
+
+                if (e4match) {
+                    contacts.add(new AContact(first, last, e4, c.isGalContact()));
+                    addrs.add(e4);
                 }
 
                 if (e2match && (!e1match || !sameDomain(e, e2))) {
@@ -176,6 +190,8 @@ public class ContactAutoCompleteTag extends ZimbraSimpleTag {
                     contacts.add(new AContact(first, last, e3, c.isGalContact()));
                     addrs.add(e3);
                 }
+
+
             }
         }
 
