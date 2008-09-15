@@ -23,10 +23,21 @@ function Com_Zimbra_YMEmoticons() {
 Com_Zimbra_YMEmoticons.prototype = new ZmZimletBase;
 Com_Zimbra_YMEmoticons.prototype.constructor = Com_Zimbra_YMEmoticons;
 
-// Com_Zimbra_YMEmoticons.prototype.init = function() {
-// 	// not sure it's wise to register it for now.
-// //	ZmObjectManager.registerHandler("Com_Zimbra_YMEmoticons", "ymemoticons", this._zimletContext.priority);
-// };
+Com_Zimbra_YMEmoticons.prototype.onFindMsgObjects = function(msg, manager) {
+	if (msg.folderId == ZmOrganizer.ID_CHATS) {
+		if (!manager.__hasSmileysHandler) {
+			manager.addHandler(this);
+			manager.sortHandlers();
+			manager.__hasSmileysHandler = true;
+		}
+	} else {
+		if (manager.__hasSmileysHandler) {
+			manager.removeHandler(this);
+			manager.sortHandlers();
+			manager.__hasSmileysHandler = false;
+		}
+	}
+};
 
 Com_Zimbra_YMEmoticons.prototype.match = function(line, startIndex) {
 	this.re.lastIndex = startIndex;
