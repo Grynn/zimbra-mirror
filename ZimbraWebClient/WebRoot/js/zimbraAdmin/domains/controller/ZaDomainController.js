@@ -58,9 +58,9 @@ function(entry) {
 * Each ZaOperation object defines one toolbar button.
 * Help button is always the last button in the toolbar
 **/
-ZaDomainController.initToolbarMethod = 
-function () {
-	if (!ZaSettings.DOMAINS_ARE_READONLY)
+ZaDomainController.initToolbarMethod =          
+function () {                                    
+	if (!ZaSettings.DOMAINS_ARE_READONLY || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS)
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
 	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
@@ -137,7 +137,8 @@ function(entry) {
 		}
 	}
 	this._view.setDirty(false);
-	
+	entry [ZaAccount.A_zimbraMailCatchAllAddress]
+           = ZaAccount.getCatchAllAccount (entry.name) ;
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
@@ -189,8 +190,16 @@ function () {
 	var haveSmth = false; //what is this variable for?
     var	isNew = (!tmpObj.id) ? true : false;
     var renameNotebookAccount = false;
+    var catchAllChanged = false ;
+
+    if (tmpObj[ZaAccount.A_zimbraMailCatchAllAddress]
+            != this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress]) {
+         catchAllChanged = true ;
+    }
+
+
 	for(var a in tmpObj.attrs) {
-		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName)
+		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName )
 			continue;
 		
 		if (!( 
@@ -208,7 +217,7 @@ function () {
 				mods[a] = tmpObj.attrs[a];
 				haveSmth = true;
 			}
-		}
+		}                                       
 	}
     
    /*	if(ZaSettings.ZIMLETS_ENABLED) {
@@ -315,7 +324,7 @@ function () {
 /*	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus] != this._currentObject.attrs[ZaDomain.A_zimbraDomainStatus]) {
 		changeStatus = true;
 	}	*/	
-	if(haveSmth || writeACLs) {
+	if(haveSmth || writeACLs || catchAllChanged) {
 		try { 
 			var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
 			soapDoc.setMethodAttribute("onerror", "stop");		
@@ -324,6 +333,20 @@ function () {
 				account.load(ZaAccount.A_name,this._currentObject.attrs[ZaDomain.A_zimbraNotebookAccount]);
 				account.rename(tmpObj.attrs[ZaDomain.A_zimbraNotebookAccount]);
 			}
+
+            //change the catchAllMailAddress for the account
+            if (catchAllChanged) {
+                //1. remove the old account catchAll
+                ZaAccount.modifyCatchAll (
+                        this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress], "") ;
+                //2. Add the new account catchAll
+                ZaAccount.modifyCatchAll (
+                        tmpObj[ZaAccount.A_zimbraMailCatchAllAddress], this._currentObject.attrs[ZaDomain.A_domainName]) ;
+
+                //3. Set the new catchAll value to the current object
+                this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress] = tmpObj[ZaAccount.A_zimbraMailCatchAllAddress] ;
+            }
+
 			if(haveSmth) {
 				var modifyDomainRequest = soapDoc.set("ModifyDomainRequest", null, null, ZaZimbraAdmin.URN);
 //				modifyDomainRequest.setAttribute("xmlns", ZaZimbraAdmin.URN);

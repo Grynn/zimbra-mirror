@@ -141,8 +141,9 @@ ZaDomain.A_AuthLdapSearchBindDn ="zimbraAuthLdapSearchBindDn";
 ZaDomain.A_AuthLdapSearchBindPassword="zimbraAuthLdapSearchBindPassword";
 
 ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled = "zimbraAdminConsoleDNSCheckEnabled";
+ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled = "zimbraAdminConsoleCatchAllAddressEnabled";
 //internal attributes - not synched with the server code yet
-//GAL
+//GAL               
 ZaDomain.A_GALServerType = "galservertype";
 ZaDomain.A_GALSyncServerType = "galsyncservertype";
 ZaDomain.A_GALSyncUseGALSearch = "galsyncusegalsearch";
@@ -430,8 +431,13 @@ function(tmpObj, app) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled]);
 		attr.setAttribute("n", ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled);	
 	}
-	
-	if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]) {
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]);
+		attr.setAttribute("n", ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled);
+	}
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraDomainStatus]);
 		attr.setAttribute("n", ZaDomain.A_zimbraDomainStatus);	
 	}
@@ -1160,7 +1166,7 @@ function(by, val, withConfig) {
 	var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);
 	var elBy = soapDoc.set("domain", val);
 	elBy.setAttribute("by", by);
-	if(withConfig)
+	if(withConfig || ZaSettings.isDomainAdmin)
 		soapDoc.getMethod().setAttribute("applyConfig", "1");
 	else
 		soapDoc.getMethod().setAttribute("applyConfig", "0");
@@ -1175,8 +1181,11 @@ function(by, val, withConfig) {
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
 	this.initFromJS(resp.domain[0]);
-	
-	if(this.attrs[ZaDomain.A_zimbraNotebookAccount]) {
+
+    //this flag is only effective in domain admin case to enable the save button
+    ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS = (this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == "TRUE") ; 
+                                                                                        
+    if(this.attrs[ZaDomain.A_zimbraNotebookAccount]) {
 		var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail", null);
 		var getFolderCommand = new ZmCsfeCommand();
 		var params = new Object();
@@ -1245,7 +1254,8 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},
 		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},		
 		{id:ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled},
-		{id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},		
+        {id:ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled},
+        {id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},
 		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description}, 
 		{id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
 		{id:ZaDomain.A_domainDefaultCOSId, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainDefaultCOSId},		
@@ -1402,6 +1412,7 @@ ZaDomain.myXModel = {
       {id:ZaDomain.A_zimbraZimletDomainAvailableZimlets, type:_LIST_,
           ref:"attrs/" + ZaDomain.A_zimbraZimletDomainAvailableZimlets,
           dataType: _STRING_ ,outputType:_LIST_},
+     { id:ZaAccount.A_zimbraMailCatchAllAddress, ref:ZaAccount.A_zimbraMailCatchAllAddress , type:_STRING_ },
       { id:ZaDomain.A_zimbraDomainCOSMaxAccounts, ref:"attrs/" + ZaDomain.A_zimbraDomainCOSMaxAccounts ,
                  type:_LIST_ , listItem:{type:_STRING_} },
 

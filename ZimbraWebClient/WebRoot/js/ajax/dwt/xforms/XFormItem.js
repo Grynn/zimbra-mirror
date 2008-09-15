@@ -1104,8 +1104,8 @@ XFormItem.prototype.updateChoicesHTML = function () {
 	var html = new AjxBuffer();
 	var updateScript = new AjxBuffer();	// NOTE: we won't be using this...
 	this.outputHTML(html, new AjxBuffer());
-	this.getContainer().innerHTML = html.toString();
-	return;
+	if (this.getContainer())  this.getContainer().innerHTML = html.toString();
+	return;       
 
 /*	var element = this.getElement();
 	if (element != null) {

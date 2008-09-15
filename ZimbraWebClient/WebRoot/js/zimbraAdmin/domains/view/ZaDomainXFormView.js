@@ -22,7 +22,7 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaDomainXFormView = function(parent, app, entry) {
+ZaDomainXFormView = function(parent, app) {
 	ZaTabView.call(this, parent, app,"ZaDomainXFormView");	
 	this.GALModes = [
 		{label:ZaMsg.GALMode_internal, value:ZaDomain.GAL_Mode_internal},
@@ -141,8 +141,26 @@ function(entry) {
 		ZaDomainXFormView.zimletChoices.dirtyChoices();
 	}
 
-    this._localXForm.setInstance(this._containedObject);
+    //set the catchAllChoices
+    var isCatchAllEnabled = this._containedObject.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]
+            || this._containedObject.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ;
+    if (isCatchAllEnabled && isCatchAllEnabled == "TRUE") {
+        var catchAllItem = this._localXForm.getItemsById("zimbraMailCatchAllAddress")[0] ;
+        catchAllItem.setChoices (ZaAccount.getCatchAllChoices(entry.name)) ;
+        this._containedObject[ZaAccount.A_zimbraMailCatchAllAddress] = entry [ZaAccount.A_zimbraMailCatchAllAddress] ;
+    }
+    
+    this._localXForm.setInstance(this._containedObject);        
 	this.updateTab();
+}
+
+ZaDomainXFormView.isCatchAllEnabled = function () {
+    var form = this;
+    var instance = form.getInstance () ;
+    var isCatchAllEnabled = instance.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]
+               || instance.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ;
+
+    return (isCatchAllEnabled == "TRUE" ? true : false) ;
 }
 
 ZaDomainXFormView.aclSelectionListener = 
@@ -329,9 +347,10 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 	headerList[0] = new ZaListHeaderItem("gt", ZaMsg.Domain_Notebook_type_col, null, "150px", false, null, false, true);
 	headerList[1] = new ZaListHeaderItem("name", ZaMsg.Domain_Notebook_name_col, null,"200px", false, null, false, true);
 	headerList[2] = new ZaListHeaderItem("acl", ZaMsg.Domain_Notebook_perms_col, null, "200px", null, null, false, true);							
-	
-	
-	xFormObject.items = [ ];
+
+
+
+    xFormObject.items = [ ];
 	
 	xFormObject.items.push({type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [
@@ -363,9 +382,19 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				colSpan:"*"
 			},
 			{ ref: "name", type:_OUTPUT_, 
-			  label:ZaMsg.Domain_DomainName
+			  label:ZaMsg.Domain_DomainName                        
 			},
-			{ ref: ZaDomain.A_domainName, type:_OUTPUT_, 
+            {ref:ZaAccount.A_zimbraMailCatchAllAddress, id: ZaAccount.A_zimbraMailCatchAllAddress, type:_OSELECT1_,
+               // relevant: "((instance.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == 'TRUE') " +
+               //           "|| ((instance.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == null) && (instance.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == 'TRUE')))" ,
+                relevant: "ZaDomainXFormView.isCatchAllEnabled.call(this)" ,
+                relevantBehavior: _HIDE_,
+                label:ZaMsg.L_catchAll, labelLocation:_LEFT_,
+                //choices:ZaAccount.getCatchAllChoices(ZaSettings.myDomainName),
+                onChange:ZaDomainXFormView.onFormFieldChanged
+            },
+
+			{ ref: ZaDomain.A_domainName, type:_OUTPUT_,
 			  label:ZaMsg.Domain_ACEName+":",relevant:"ZaDomainXFormView.hasACEName.call(this)", relevantBehavior:_HIDE_
 			},	
 			{ ref: ZaDomain.A_zimbraPublicServiceHostname, type:(ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME ? _INPUT_ : _OUTPUT_), 

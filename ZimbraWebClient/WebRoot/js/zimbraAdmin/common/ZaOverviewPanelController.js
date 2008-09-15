@@ -118,11 +118,12 @@ function (ev) {
 ZaOverviewPanelController.prototype.searchDomains = function() {
 	var callback = new AjxCallback(this, this.domainSearchCallback);
 	var domainListController = this._app.getDomainListController ();
-	if(ZaSettings.DOMAINS_ENABLED)
+	
+    if(ZaSettings.DOMAINS_ENABLED)
 		domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
 	else
-		domainListController._currentQuery = "";
-		
+		domainListController._currentQuery = "" ;  
+                                                               
 	var searchParams = {
 			query: domainListController._currentQuery, 
 			types:[ZaSearch.DOMAINS],

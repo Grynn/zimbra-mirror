@@ -183,6 +183,7 @@ ZaAccount.A_zimbraFeatureNewMailNotificationEnabled = "zimbraFeatureNewMailNotif
 ZaAccount.A_zimbraFeatureMailPollingIntervalPreferenceEnabled = "zimbraFeatureMailPollingIntervalPreferenceEnabled" ;
 ZaAccount.A_zimbraHideInGal = "zimbraHideInGal";
 ZaAccount.A_zimbraMailCanonicalAddress = "zimbraMailCanonicalAddress";
+ZaAccount.A_zimbraMailCatchAllAddress = "zimbraMailCatchAllAddress" ;
 ZaAccount.A_zimbraFeatureOptionsEnabled = "zimbraFeatureOptionsEnabled";
 ZaAccount.A_zimbraFeatureShortcutAliasesEnabled = "zimbraFeatureShortcutAliasesEnabled" ;
 ZaAccount.A_zimbraFeatureMailEnabled = "zimbraFeatureMailEnabled" ;
@@ -1804,7 +1805,7 @@ ZaAccount.isEmailRetentionPolicyEnabled = function () {
 ZaAccount.getAccountTypeOutput = function () {
     var form = this.getForm () ;
     var instance = form.getInstance () ;
-    var currentCos = ZaCos.getCosById(instance.attrs[ZaAccount.A_COSId]) ;
+    var currentCos = ZaCos.getCosById(instance.attrs[ZaAccount.A_COSId], form.parent._app) ;
     if (currentCos)
         var currentType = currentCos.name ; 
 
@@ -1869,4 +1870,76 @@ ZaAccount.setAccountType = function (newType, ev) {
         if(form.parent.setDirty)
 			form.parent.setDirty(true);
     }
+}
+
+//Set the zimbraMailCatchAll address
+ZaAccount.getAllDomainAccounts = function (domainName) {
+     var searchParams = {
+          limit : 0 , //all
+          type : [ZaSearch.ACCOUNTS] ,
+          domain: domainName ,
+          applyCos:  0,
+          attrs: [ZaAccount.A_zimbraMailCatchAllAddress]
+        }
+    var resp =  ZaSearch.searchDirectory (searchParams).Body.SearchDirectoryResponse ;
+    var list = new ZaItemList(null, null);
+	list.loadFromJS(resp);
+    return list.getArray() ;
+}
+
+
+
+ZaAccount.getCatchAllDomain = function (domainName) {
+    return "@" + domainName ;
+}
+
+ZaAccount.getCatchAllChoices = function (domainName) {
+    var accounts = ZaAccount.getAllDomainAccounts (domainName) ;
+    //var choices = [{value:"", label: ZaMsg.L_none}] ;
+    var choices = [{value:"", label: ""}] ;         
+    for (var i=0; i < accounts.length; i++) {
+        choices.push ({ value: accounts[i].id, label: accounts[i].name}) ;
+    }
+    return choices ;
+}
+
+//find the catch all account for the domain
+ZaAccount.getCatchAllAccount = function (domainName) {
+   var accounts = ZaAccount.getAllDomainAccounts (domainName) ;
+    for (var i=0; i < accounts.length; i++) {
+        if (accounts [i].attrs[ZaAccount.A_zimbraMailCatchAllAddress] == ZaAccount.getCatchAllDomain(domainName)) {
+            return accounts [i].id;
+        }
+   }
+
+    return "" ;
+}
+
+//++++++++++Modify CatchAll +++++++++++++++++++++++++
+ZaAccount.modifyCatchAll =
+function (accountId, domainName) {
+    if (accountId == null | accountId.length <= 0) {
+        return ;
+    }
+    var soapDoc = AjxSoapDoc.create("ModifyAccountRequest", "urn:zimbraAdmin", null);
+	soapDoc.set("id", accountId);
+    var catchAllDomain = "" ;
+    if (domainName == null || domainName.length == 0) {
+        //remove the catchAll value from the account
+        catchAllDomain = "" ;
+    }else if (domainName.indexOf("@") == -1) { //has no @
+        catchAllDomain = ZaAccount.getCatchAllDomain (domainName) ;
+    }else if (domainName.indexOf("@") != 0) {
+        catchAllDomain = domainName.substring(domainName.lastIndexOf("@"))
+    }else {
+        catchAllDomain = domainName ;
+    }
+    var el = soapDoc.set("a", catchAllDomain) ;
+
+    el.setAttribute("n", ZaAccount.A_zimbraMailCatchAllAddress) ;
+
+    var command = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	command.invoke(params);
 }
