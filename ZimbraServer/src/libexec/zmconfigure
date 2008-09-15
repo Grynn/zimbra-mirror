@@ -59,7 +59,7 @@ my $host = "";
 foreach my $sline (@slines) {
 	while ($sline =~ m/\@\@([^\@]+)\@\@/g) {
 		my $sr = $1;
-		my $rep=`/opt/zimbra/bin/zmlocalconfig -q -m nokey $sr`;
+		my $rep=`/opt/zimbra/bin/zmlocalconfig -s -q -m nokey $sr`;
 		chomp $rep;
 		$sline =~ s/\@\@$sr\@\@/$rep/g;
 	}
