@@ -18,7 +18,7 @@ p4_root=`cd ${cyrus_root}/../..; pwd`
 build_platform=`sh ${p4_root}/ZimbraBuild/rpmconf/Build/get_plat_tag.sh`
 
 heimdal_version=1.2
-openssl_version=0.9.8h
+openssl_version=0.9.8i
 curl_version=7.18.2
 xml2_version=2.6.32
 

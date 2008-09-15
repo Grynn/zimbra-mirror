@@ -10,7 +10,7 @@ endif
 CYRUS_VERSION ?= 2.1.22.3z
 CYRUS_LIB_DIR ?= $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)/lib
 
-SSL_VERSION	?= 0.9.8h
+SSL_VERSION	?= 0.9.8i
 
 ZIMBRA_HOME ?= /opt/zimbra
 
