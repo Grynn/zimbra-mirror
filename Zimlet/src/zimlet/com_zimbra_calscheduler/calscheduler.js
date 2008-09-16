@@ -1971,7 +1971,13 @@ function(resize) {
 
 	Dwt.setLocation(this._timeGrid, x, loc.y - 2*CalSchedulerView._DAY_HEADING_HEIGHT+2);
 	//if(resize) {
-	Dwt.setSize(this._timeGrid, this.getSize().x-x - CalSchedulerView.TIME_GRID_MARGIN, this.getSize().y-loc.y+2*CalSchedulerView._DAY_HEADING_HEIGHT - CalSchedulerView.TIME_GRID_MARGIN);
+
+    var height  = this.getSize().y-loc.y+2*CalSchedulerView._DAY_HEADING_HEIGHT - CalSchedulerView.TIME_GRID_MARGIN;
+    var noOfRows = this._schedTable.length;
+    if(noOfRows*size.y > height) {
+        height = noOfRows*size.y + 2*CalSchedulerView._DAY_HEADING_HEIGHT + CalSchedulerView.TIME_GRID_MARGIN;  
+    }
+    Dwt.setSize(this._timeGrid, this.getSize().x-x - CalSchedulerView.TIME_GRID_MARGIN, height);
 	//}
 
 	if(needsTemplateContent) {
