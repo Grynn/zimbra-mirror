@@ -1412,30 +1412,11 @@ default:
             </serializedBean>
             <condition>!context.getBooleanVariable("keepUserData")</condition>
             <validation />
-            <preActivation />
+            <preActivation>if (Util.isWindows()) {
+    context.setInstallationDirectory(new File(context.getVariable("sys.userHome") + "\\Local Settings\\Application Data\\Zimbra\\zdesktop"));
+}</preActivation>
             <postActivation />
-            <actions>
-              <action name="sys.installationDir" id="275920" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.control.SetVariableAction">
-                      <void property="script">
-                        <object class="com.install4j.api.beans.ScriptProperty">
-                          <void property="value">
-                            <string>return context.getVariable("sys.installationDir").toString();
-</string>
-                          </void>
-                        </object>
-                      </void>
-                      <void property="variableName">
-                        <string>sys.installationDir</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition />
-              </action>
-            </actions>
+            <actions />
             <formComponents />
           </screen>
           <screen name="" id="5" beanClass="com.install4j.runtime.beans.screens.InstallationScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="true" backButton="2" finishScreen="false">
@@ -1769,12 +1750,7 @@ try {
                             <string>File prism = context.getDestinationFile("win32/prism/prism.exe");
 File icon = context.getDestinationFile("win32/launcher_32x32.ico");
 
-File webapp = context.getDestinationFile("zdesktop.webapp");
-File override = context.getDestinationFile("zdesktop.webapp/override.ini");
-File profile = context.getDestinationFile("profile");
-
-String argument = "-webapp \"" + webapp.getCanonicalPath() + "\" -override \"" + override.getCanonicalPath() + 
-    "\" -profile \"" + profile.getCanonicalPath() + "\"";
+String argument = "-webapp ..\\..\\zdesktop.webapp -override ..\\..\\zdesktop.webapp\\override.ini -profile ..\\..\\profile";
 
 File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Yahoo! Zimbra Desktop.lnk");
 File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Yahoo! Zimbra Desktop.lnk");
