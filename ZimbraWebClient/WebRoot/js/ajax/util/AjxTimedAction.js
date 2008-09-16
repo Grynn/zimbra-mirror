@@ -25,6 +25,11 @@ AjxTimedAction = function(obj, func, args) {
 AjxTimedAction.prototype = new AjxCallback();
 AjxTimedAction.prototype.constructor = AjxTimedAction;
 
+// Setting a timeout of 25 days or more appears to revert it
+// to 0 in FF3 and Safari3. There's really no reason to set
+// it to anything above a few days, so set a max of 20 days.
+AjxTimedAction.MAX_TIMEOUT = 20 * 24 * 60 * 60 * 1000;
+
 AjxTimedAction.prototype.toString = 
 function() {
 	return "AjxTimedAction";
@@ -46,10 +51,17 @@ function(action, timeout){
 		AjxTimedAction.cancelAction(action._id);
 	}
 
+	timeout = timeout || 0; // make sure timeout is numeric
+	if (timeout > AjxTimedAction.MAX_TIMEOUT) {
+		if (window.DBG) {
+			DBG.println(AjxDebug.DBG1, "timeout value above maximum: " + timeout);
+		}
+		timeout = AjxTimedAction.MAX_TIMEOUT;
+	}
 	var id = action._id = AjxTimedAction._nextActionId++;
 	AjxTimedAction._pendingActions[id] = action;
 	var actionStr = "AjxTimedAction._exec(" + id + ")";
-	action._tid = window.setTimeout(actionStr, timeout ? timeout : 0); // mac no like null/void
+	action._tid = window.setTimeout(actionStr, timeout);
 	return action._id;
 };
 
