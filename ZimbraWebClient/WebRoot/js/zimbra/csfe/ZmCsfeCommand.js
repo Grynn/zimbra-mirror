@@ -47,7 +47,7 @@ function(uri) {
 };
 
 ZmCsfeCommand.setAuthToken =
-function(authToken, lifetimeMs, sessionId) {
+function(authToken, lifetimeMs, sessionId, secure) {
 	ZmCsfeCommand._curAuthToken = authToken;
 	if (lifetimeMs != null) {
 		var exp = null;
@@ -56,7 +56,7 @@ function(authToken, lifetimeMs, sessionId) {
 			var lifetime = parseInt(lifetimeMs);
 			exp.setTime(exp.getTime() + lifetime);
 		}
-		AjxCookie.setCookie(document, ZmCsfeCommand._COOKIE_NAME, authToken, exp, "/");		
+		AjxCookie.setCookie(document, ZmCsfeCommand._COOKIE_NAME, authToken, exp, "/", null, secure);
 	} else {
 		AjxCookie.deleteCookie(document, ZmCsfeCommand._COOKIE_NAME, "/");
 	}

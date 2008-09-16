@@ -77,7 +77,7 @@ function(resp) {
 		else if (el.nodeName=="session")
 			sessionId = el.firstChild.nodeValue;
 	}
-	ZmCsfeCommand.setAuthToken(authToken, -1, sessionId);
+	ZmCsfeCommand.setAuthToken(authToken, -1, sessionId, true);
 
 	//Instrumentation code start
 	if(ZaAuthenticate.processResponseMethods) {

@@ -142,6 +142,8 @@ public class LoginTag extends ZimbraSimpleTag {
                     if (maxAge != null)
                         authTokenCookie.setMaxAge(maxAge.intValue());
                     ZimbraCookie.setAuthTokenCookieDomainPath(authTokenCookie, ZimbraCookie.PATH_ROOT);
+                    
+                    authTokenCookie.setSecure(ZJspSession.secureAuthTokenCookie(request));
                     response.addCookie(authTokenCookie);
                 }
             }
