@@ -23,7 +23,7 @@ import com.zimbra.cs.util.ZimbraApplication;
 public abstract class DesktopMailbox extends Mailbox {
 
 	public static final String OUTBOX_PATH = "Outbox";
-	public static final String ARCHIVE_PATH = "Archive";
+	public static final String ARCHIVE_PATH = "Local Folders";
 	public static final String FAILURE_PATH = "Error Reports";
 	public static final int ID_FOLDER_FAILURE = 252;
     public static final int ID_FOLDER_ARCHIVE = 253;
