@@ -625,6 +625,10 @@ function(node, select) {
 	}
 };
 
+DwtHtmlEditor.prototype.isHtmlModeInited =
+function(){
+    return this._htmlModeInited;
+};
 
 /**
 * Changes the editor mode.
