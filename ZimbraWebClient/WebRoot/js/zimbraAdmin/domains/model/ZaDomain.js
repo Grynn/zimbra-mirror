@@ -1459,11 +1459,15 @@ ZaDomain.myXModel = {
 
 ZaDomain.prototype.getUsedAccounts =
 function (cosName) {
-    var cosId = ZaCos.getCosByName (cosName, this._app).id ;
-    if (cosId == null) {
+    var cos = ZaCos.getCosByName (cosName, this._app) ;
+    if (cos == null) {
         this._app.getCurrentController().popupErrorDialog(
                 AjxMessageFormat.format(ZaMsg.ERROR_NO_COS_FOR_ACCOUNT_TYPE, [cosName]), null );
+        return ;
     }
+
+    var cosId = cos.id;
+    
     var query = "zimbraCosId=" + cosId ;
 
     var params = {
@@ -1508,7 +1512,13 @@ ZaDomain.prototype.getMaxAccounts = function (cosName) {
         var cosMaxAccounts = this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts];
         for (var i=0; i < cosMaxAccounts.length; i ++) {
             var val = cosMaxAccounts[i].split(":") ;
-            var n = val[0] ;
+            var cos = ZaCos.getCosById (val[0], this._app) ;
+            if (cos == null) {
+                    this._app.getCurrentController.popupErrorDialog(
+                        AjxMessageFormat.format(ZaMsg.ERROR_INVALID_ACCOUNT_TYPE, [val[0]]));
+                return ;
+            }
+            var n = cos.name ;
             //TODO: report error on the invalid value 
             if (!this[ZaDomain.A2_account_limit][n]) this[ZaDomain.A2_account_limit][n] = {} ;
             this[ZaDomain.A2_account_limit][n].max = val [1] ;

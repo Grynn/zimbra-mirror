@@ -1806,9 +1806,10 @@ ZaAccount.getAccountTypeOutput = function () {
     var form = this.getForm () ;
     var instance = form.getInstance () ;
     var currentCos = ZaCos.getCosById(instance.attrs[ZaAccount.A_COSId], form.parent._app) ;
+    var currentType = null ;
     if (currentCos)
-        var currentType = currentCos.name ; 
-
+        currentType = currentCos.id ;
+    
     var acctTypes = instance[ZaAccount.A2_accountTypes] ;
     var domainName = ZaAccount.getDomain (instance.name) ;
     var domainObj =  ZaDomain.getDomainByName (domainName, form.parent._app);
@@ -1820,6 +1821,16 @@ ZaAccount.getAccountTypeOutput = function () {
     if (acctTypes && acctTypes.length > 0) {
         var radioGroupName = "account_type_radio_group_" + Dwt.getNextId() ;
         for (var i=0; i < acctTypes.length; i ++) {
+            var cos = ZaCos.getCosById (acctTypes[i] , form.parent._app) ;
+            if (cos == null) {
+                form.parent._app.getCurrentController().popupErrorDialog(
+                        AjxMessageFormat.format(ZaMsg.ERROR_INVALID_ACCOUNT_TYPE, [acctTypes[i]]));
+                return ;
+            }
+            var accountTypeDisplayValue = cos.attrs[ZaCos.A_description] ;
+            if (!accountTypeDisplayValue)
+                accountTypeDisplayValue = cos.name ;
+            
             //3 columns a row
             if (i % 3 == 0) { //first col, need open <tr>
                 out.push("<tr>") ;
@@ -1827,8 +1838,8 @@ ZaAccount.getAccountTypeOutput = function () {
             out.push("<td>") ;
 
             //output the contents
-            var usedAccounts = domainObj.getUsedAccounts(acctTypes[i]);
-            var availableAccounts = domainObj.getAvailableAccounts(acctTypes[i]);
+            var usedAccounts = domainObj.getUsedAccounts(cos.name);
+            var availableAccounts = domainObj.getAvailableAccounts(cos.name);
 
             out.push("<div>" +
                      "<label style='font-weight: bold;"
@@ -1840,7 +1851,7 @@ ZaAccount.getAccountTypeOutput = function () {
                                     + this.getGlobalRef() + ", '" + acctTypes[i] +  "', event );\" ") : (" disabled "))
                     + ((currentType == acctTypes[i]) ? " checked " : "" )
                     + " />") ;
-            out.push(acctTypes[i] + "</label></div>") ;
+            out.push(accountTypeDisplayValue + "</label></div>") ;
 
             out.push("<div>" + AjxMessageFormat.format(ZaMsg.AccountsAvailable, [usedAccounts, availableAccounts])  + "</div> ") ;
             out.push("</td>")
@@ -1860,7 +1871,7 @@ ZaAccount.setAccountType = function (newType, ev) {
     var form = this.getForm() ;
     var instance = form.getInstance () ;
 
-    var newCos = ZaCos.getCosByName(newType) ;
+    var newCos = ZaCos.getCosById (newType) ;
     if (newCos.id != instance.attrs[ZaAccount.A_COSId])  {
         //change the account type
         if (instance.cos) instance.cos = newCos ;

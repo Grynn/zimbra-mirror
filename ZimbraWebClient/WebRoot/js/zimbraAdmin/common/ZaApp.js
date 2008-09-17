@@ -646,7 +646,6 @@ function(refresh) {
 		var response = ZaSearch.searchDirectory(searchParams);	
 		this._cosList = new ZaItemList(ZaCos, this._app);		
 		this._cosList.loadFromJS(response);
-		//ZaCos.loadAll(this,this._cosList);
 	}
 	return this._cosList;	
 }

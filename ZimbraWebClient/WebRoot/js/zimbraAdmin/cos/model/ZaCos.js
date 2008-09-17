@@ -408,6 +408,15 @@ function(app) {
 	return list;
 }
 
+ZaCos.getCosChoices = function () {
+    if (ZaCos.cosChoices) {
+        return ZaCos.cosChoices ;
+    }else{
+        ZaCos.cosChoices = new XFormChoices
+    }
+}
+
+/** NOT USED in any code
 ZaCos.loadAll =
 function(app, container) {
 	if(!(container instanceof ZaItemList)) {
@@ -424,6 +433,8 @@ function(app, container) {
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllCosResponse;
 	container.loadFromJS(resp);
 }
+*/
+
 
 
 ZaCos.getDefaultCos4Account =

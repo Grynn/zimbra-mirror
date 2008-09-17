@@ -735,6 +735,8 @@ ZaDomainCOSMaxAccountsListView = function(parent, className, posStyle, headerLis
 	if (arguments.length == 0) return;
 	ZaListView.call(this, parent, className, posStyle, headerList);
 	this.hideHeader = true;
+    this._app = this.parent.parent._app ;
+    
 }
 
 ZaDomainCOSMaxAccountsListView.prototype = new ZaListView;
@@ -761,7 +763,22 @@ function(item) {
 	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 
     var itemArr = item.split(":");
-    var cosName = itemArr [0];
+    var cosId = itemArr [0];
+    var cos = ZaCos.getCosById(cosId, this._app) ;
+    var cosDisplayValue ;
+    
+    if (cos) {
+        cosDisplayValue = cos.name ;
+
+        if (ZaSettings.isDomainAdmin) {
+            var cosDescription = cos.attrs[ZaCos.A_description] ;
+            if (cosDescription)
+                cosDisplayValue = cosDescription ;
+        }
+    } else {
+        cosDisplayValue = AjxMessageFormat.format (ZaMsg.ERROR_INAVLID_VALUE, [cosId]) ;
+    }
+
     var limits = itemArr [1] ;
 
     var idx = 0;
@@ -770,7 +787,7 @@ function(item) {
 	html[idx++] = "<tr>";
     //cos
     html[idx++] = "<td width=" + this._headerList[0]._width + ">";
-    html[idx++] = AjxStringUtil.htmlEncode(cosName);
+    html[idx++] = AjxStringUtil.htmlEncode(cosDisplayValue);
     html[idx++] = "</td>";
 
     // limits
