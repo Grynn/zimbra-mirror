@@ -113,7 +113,7 @@ DwtControl = function(params) {
 	/** @private */
 	this.__index = params.index;
 
-        this.__parentElement = params.parentElement;
+	this.__parentElement = params.parentElement;
 
 	/** enabled state of this control. Public APIs to this member are
 	 * <code>getEnabled</code> and <code>setEnabled</code>
