@@ -434,22 +434,6 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		  onChange:ZaDomainXFormView.onFormFieldChanged});
 	}
 
-    //add the ZimbraDomainCosMaxAccounts information
-    //TODO: may need to add switch for the domain amdin
-    var accountLimitsItems = { type:_GROUP_, colSpan: "*", colSizes: ["300px", "*"], numCols: 2, 
-        relevant: "((instance.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts] != null) && "
-                    + " (instance.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts].length > 0)) " ,
-        relevantBehavior: _HIDE_,
-        items: [
-          {type:_OUTPUT_, value: ZaMsg.accountLimitsByCos, align: _RIGHT_ },
-          {ref:ZaDomain.A_zimbraDomainCOSMaxAccounts, type:_DWT_LIST_, height:"100", width:"200px",
-                 forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
-                headerList:null
-            }
-        ]
-    }
-
-    case1.items.push( accountLimitsItems );
 
     if(ZaSettings.COSES_ENABLED) {
 		case1.items.push(
@@ -723,3 +707,92 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 }
 
 ZaTabView.XFormModifiers["ZaDomainXFormView"].push(ZaDomainXFormView.myXFormModifier);
+
+
+ZaAccMiniListView = function(parent, className, posStyle, headerList) {
+	if (arguments.length == 0) return;
+	ZaListView.call(this, parent, className, posStyle, headerList);
+	this.hideHeader = true;
+}
+
+ZaAccMiniListView.prototype = new ZaListView;
+ZaAccMiniListView.prototype.constructor = ZaAccMiniListView;
+
+ZaAccMiniListView.prototype.toString = function() {
+	return "ZaAccMiniListView";
+};
+
+ZaAccMiniListView.prototype.createHeaderHtml = function (defaultColumnSort) {
+	if(!this.hideHeader) {
+		DwtListView.prototype.createHeaderHtml.call(this,defaultColumnSort);
+	}
+}
+
+//-------------------------------------------------------------------------------------------------------
+//List View for the zimbraDomainCOSMaxAccounts
+
+ZaDomainCOSMaxAccountsListView = function(parent, className, posStyle, headerList) {
+	if (arguments.length == 0) return;
+	ZaListView.call(this, parent, className, posStyle, headerList);
+	this.hideHeader = true;
+}
+
+ZaDomainCOSMaxAccountsListView.prototype = new ZaListView;
+ZaDomainCOSMaxAccountsListView.prototype.constructor = ZaDomainCOSMaxAccountsListView;
+
+ZaDomainCOSMaxAccountsListView.prototype.toString = function() {
+	return "ZaDomainCOSMaxAccountsListView";
+};
+
+ZaDomainCOSMaxAccountsListView.prototype.createHeaderHtml = function (defaultColumnSort) {
+	if(!this.hideHeader) {
+		DwtListView.prototype.createHeaderHtml.call(this,defaultColumnSort);
+	}
+}
+
+
+ZaDomainCOSMaxAccountsListView.prototype._createItemHtml =
+function(item) {
+	var html = new Array(50);
+	var	div = document.createElement("div");
+	div[DwtListView._STYLE_CLASS] = "Row";
+	div[DwtListView._SELECTED_STYLE_CLASS] = div[DwtListView._STYLE_CLASS] + "-" + DwtCssStyle.SELECTED;
+	div.className = div[DwtListView._STYLE_CLASS];
+	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
+
+    var itemArr = item.split(":");
+    var cosName = itemArr [0];
+    var limits = itemArr [1] ;
+
+    var idx = 0;
+	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+
+	html[idx++] = "<tr>";
+    //cos
+    html[idx++] = "<td width=" + this._headerList[0]._width + ">";
+    html[idx++] = AjxStringUtil.htmlEncode(cosName);
+    html[idx++] = "</td>";
+
+    // limits
+    html[idx++] = "<td align='left' width=" + this._headerList[1]._width + "><nobr>";
+    html[idx++] = AjxStringUtil.htmlEncode(limits);
+    html[idx++] = "</nobr></td>";
+
+	html[idx++] = "</tr></table>";
+	div.innerHTML = html.join("");
+	return div;
+}
+
+
+ZaDomainCOSMaxAccountsListView.prototype._setNoResultsHtml = function() {
+	var buffer = new AjxBuffer();
+	var	div = document.createElement("div");
+
+	buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
+				  "<tr><td class='NoResults'><br />",
+                  ZaMsg.NO_LIMITS, 
+                  "</td></tr></table>");
+
+	div.innerHTML = buffer.toString();
+	this._addRow(div);
+};

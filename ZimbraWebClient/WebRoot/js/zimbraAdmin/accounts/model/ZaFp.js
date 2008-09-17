@@ -50,7 +50,7 @@ ZaFp.getObject = function (entry) {
     //var regEx = /(.+):(.*)/  ;
     //var result = entry.match(regEx) ;
     var found = false;
-    for (var i=0; i <= ZaFp.INTEROP_PROVIDER_CHOICES.length; i ++) {
+    for (var i=0; i < ZaFp.INTEROP_PROVIDER_CHOICES.length; i ++) {
        if (entry.indexOf(ZaFp.INTEROP_PROVIDER_CHOICES[i].value) == 0) {
            obj[ZaFp.A_prefix] = ZaFp.INTEROP_PROVIDER_CHOICES[i].value;
            obj[ZaFp.A_name] = entry.substr(ZaFp.INTEROP_PROVIDER_CHOICES[i].value.length);

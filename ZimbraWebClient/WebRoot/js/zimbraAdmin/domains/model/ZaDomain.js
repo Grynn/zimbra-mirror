@@ -930,8 +930,17 @@ ZaItem.modifyMethods["ZaDomain"].push(ZaDomain.modifyMethod);
 
 ZaDomain.prototype.initFromJS = 
 function (obj) {
-	ZaItem.prototype.initFromJS.call(this, obj);
-	if(!(this.attrs[ZaDomain.A_zimbraVirtualHostname] instanceof Array)) {
+    ZaItem.prototype.initFromJS.call(this, obj);
+
+    if (!(this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts] instanceof Array)) {
+        if (this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts]) {
+            this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts] = [this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts]];
+        } else {
+            this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts] = [];
+        }
+    }
+
+    if(!(this.attrs[ZaDomain.A_zimbraVirtualHostname] instanceof Array)) {
 		if(this.attrs[ZaDomain.A_zimbraVirtualHostname])
 			this.attrs[ZaDomain.A_zimbraVirtualHostname] = [this.attrs[ZaDomain.A_zimbraVirtualHostname]];	
 		else
@@ -1414,7 +1423,7 @@ ZaDomain.myXModel = {
           dataType: _STRING_ ,outputType:_LIST_},
      { id:ZaAccount.A_zimbraMailCatchAllAddress, ref:ZaAccount.A_zimbraMailCatchAllAddress , type:_STRING_ },
       { id:ZaDomain.A_zimbraDomainCOSMaxAccounts, ref:"attrs/" + ZaDomain.A_zimbraDomainCOSMaxAccounts ,
-                 type:_LIST_ , listItem:{type:_STRING_} },
+                 type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ },
 
         //interop
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthUsername, type: _STRING_ },
