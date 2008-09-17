@@ -1,0 +1,20 @@
+<zimlet name="com_zimbra_searchauto" version="0.1" description="Search Auto-complete">
+
+	<include>yahoo-min.js</include>
+	<include>dom-min.js</include>
+	<include>event-min.js</include>
+	<include>datasource-beta-min.js</include>
+	<include>autocomplete-min.js</include>
+  <include>searchauto.js</include>
+  <includeCSS>searchauto.css</includeCSS>
+  <handlerObject>com_zimbra_searchauto</handlerObject>
+
+  <zimletPanelItem label="Search Autocomplete" icon="sa-panelIcon">
+    <toolTipText>Stores and auto-completes Search History</toolTipText>
+  </zimletPanelItem>
+
+  <userProperties>
+   <property  name="history"/>
+   <property type="string" name="turnONAutoComplete" value="true"/>
+  </userProperties>
+</zimlet>

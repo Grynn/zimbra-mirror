@@ -1,0 +1,32 @@
+.Imgsa-panelIcon {
+  background: url("sa.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+#autoCompleteHistoryContainerID{
+    width:15em; /* set width here */
+    padding-bottom:2em;
+}
+#autoCompleteHistoryContainerID {
+    z-index:9000; /* z-index needed on top instance for ie & sf absolute inside relative issue */
+}
+
+
+
+.sa_ctrl_class {
+    position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;
+}
+
+
+.sa_ctrl_class ul{
+    margin:0;padding:0;width:100%;
+}
+
+.sa_ctrl_class li {
+    margin:0;padding:2px 5px;cursor:default;white-space:nowrap;
+}
+
+
+
