@@ -39,8 +39,11 @@ function() {
 	var xFormObject = {
 		numCols:1,
 		items:[
-			{ref:ZaAccount.A_name, type:_TEXTFIELD_, label:ZaMsg.Enter_EmailAddr,width:230}
-		]
+            {type:_GROUP_,isTabGroup:true, items: [ //allows tab key iteration
+                {ref:ZaAccount.A_name, type:_TEXTFIELD_, label:ZaMsg.Enter_EmailAddr,width:230}
+                ]
+            }
+        ]
 	};
 	return xFormObject;
 }

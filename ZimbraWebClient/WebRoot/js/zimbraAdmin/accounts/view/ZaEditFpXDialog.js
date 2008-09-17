@@ -41,10 +41,13 @@ function() {
 	var xFormObject = {
 		numCols:1,
 		items:[
-            {ref:ZaFp.A_prefix, type:_OSELECT1_, choices: ZaFp.INTEROP_PROVIDER_CHOICES,
-                label:ZaMsg.Select_Interop_Provider, width:230} ,
-            {ref:ZaFp.A_name, type:_TEXTFIELD_, label:ZaMsg.Enter_ForeignAccount,width:230}
-		]
-	};
+            {type:_GROUP_,isTabGroup:true, items: [ //allows tab key iteration
+                {ref:ZaFp.A_prefix, type:_OSELECT1_, choices: ZaFp.INTEROP_PROVIDER_CHOICES,
+                    label:ZaMsg.Select_Interop_Provider, width:230} ,
+                {ref:ZaFp.A_name, type:_TEXTFIELD_, label:ZaMsg.Enter_ForeignAccount,width:230}
+		       ]
+            }
+        ]
+    };
 	return xFormObject;
 }

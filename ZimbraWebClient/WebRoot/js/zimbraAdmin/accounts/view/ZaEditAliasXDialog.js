@@ -38,8 +38,11 @@ function() {
 	var xFormObject = {
 		numCols:1,
 		items:[
-			{ref:ZaAccount.A_name, type:_EMAILADDR_, label:null}
-		]
+            {type:_GROUP_,isTabGroup:true, items: [ //allows tab key iteration
+                {ref:ZaAccount.A_name, type:_EMAILADDR_, label:null}
+                    ]
+            }
+        ]
 	};
 	return xFormObject;
 }
@@ -70,9 +73,12 @@ function() {
 	var xFormObject = {
 		numCols:1,
 		items:[
-			{ref:ZaAccount.A_name, type:_EMAILADDR_, label:ZaMsg.Alias_Dlg_label_alias},
-			{ref:ZaAlias.A_targetAccount, type:_EMAILADDR_, label:ZaMsg.Alias_Dlg_label_target_acct}
-		]
+          {type:_GROUP_,isTabGroup:true, items: [ //allows tab key iteration
+                {ref:ZaAccount.A_name, type:_EMAILADDR_, label:ZaMsg.Alias_Dlg_label_alias},
+                {ref:ZaAlias.A_targetAccount, type:_EMAILADDR_, label:ZaMsg.Alias_Dlg_label_target_acct}
+            ]
+          }
+        ]
 	};
 	return xFormObject;
 }
