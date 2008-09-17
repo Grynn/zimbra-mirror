@@ -596,6 +596,10 @@ public class ZMessageComposeBean {
         
         if (msg != null) {
             setMessageId(msg.getId());
+            ZMimePartBean body = msg.getBody();
+            if (body != null) {
+                setContenttype(body.getContentType());    
+            }
         }
 
         // compute identity
