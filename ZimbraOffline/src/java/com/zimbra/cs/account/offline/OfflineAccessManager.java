@@ -45,7 +45,13 @@ public class OfflineAccessManager extends AccessManager {
 			throws ServiceException {
 		return true;
 	}
-
+	
+	@Override
+	public  boolean canAccessCos(AuthToken at, String cosId)
+			throws ServiceException {
+		return true;
+	}
+	
 	@Override
 	public boolean canAccessEmail(AuthToken at, String email)
 			throws ServiceException {
