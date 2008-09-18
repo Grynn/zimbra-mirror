@@ -440,9 +440,12 @@ function(ev) {
 	try {
 		var newAccount = new ZaAccount(this._app);
 		if(!this._app._newAccountWizard)
-			this._app._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);	
-			
-		this._app._newAccountWizard.setObject(newAccount);
+			this._app._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);
+        else { //update the account type if needed
+            this._app._newAccountWizard.updateAccountType () ;    
+        }
+
+        this._app._newAccountWizard.setObject(newAccount);
 		this._app._newAccountWizard.popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._newButtonListener", null, false);

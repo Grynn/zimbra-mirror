@@ -230,7 +230,19 @@ function(value, event, form) {
 		} 
 	}
 	this.setInstanceValue(value);
-	return value;
+
+      //if cos is changed,  update the account type information
+    form.parent.updateAccountType();
+    
+    return value;
+}
+
+//update the account type output and it is called when the domain name is changed.
+ZaAccountXFormView.accountTypeItemId = "account_type_output_" + Dwt.getNextId();
+ZaAccountXFormView.prototype.updateAccountType =
+function ()  {
+    var item = this._localXForm.getItemsById (ZaAccountXFormView.accountTypeItemId) [0] ;
+    item.updateElement(ZaAccount.getAccountTypeOutput.call(item, true)) ;
 }
 
 ZaAccountXFormView.onRepeatRemove = 
@@ -792,7 +804,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
                 relevant: "instance[ZaAccount.A2_accountTypes] != null && instance[ZaAccount.A2_accountTypes].length > 0 ",
                 relevantBehavior: _HIDE_,
                 items: [
-                    { type: _OUTPUT_, getDisplayValue: ZaAccount.getAccountTypeOutput,
+                    {type: _DWT_ALERT_, relevant:"!ZaAccount.isAccountTypeSet(this.instance)",
+                        relevantBehavior: _HIDE_, containerCssStyle: "width:400px;",
+                        style: DwtAlert.CRITICAL, iconVisible: false ,
+                        content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
+                    }, 
+                    { type: _OUTPUT_, id: ZaAccountXFormView.accountTypeItemId ,
+                        getDisplayValue: ZaAccount.getAccountTypeOutput,
                         //center the elements
                         cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
                     }

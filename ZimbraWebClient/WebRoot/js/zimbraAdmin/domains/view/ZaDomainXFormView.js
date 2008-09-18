@@ -823,7 +823,7 @@ function(item) {
                 cosDisplayValue = cosDescription ;
         }
     } else {
-        cosDisplayValue = AjxMessageFormat.format (ZaMsg.ERROR_INAVLID_VALUE, [cosId]) ;
+        cosDisplayValue = AjxMessageFormat.format (ZaMsg.ERROR_INVALID_COS_VALUE, [cosId]) ;
     }
 
     var limits = itemArr [1] ;

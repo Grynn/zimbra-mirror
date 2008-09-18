@@ -363,6 +363,9 @@ function(ev) {
 		var newAccount = new ZaAccount(this._app);
 		if(!this._app.dialogs["newAccountWizard"])
 			this._app.dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container, this._app);	
+        else { //update the account type if needed
+            this._app.dialogs["newAccountWizard"].updateAccountType () ;    
+        }
 
 		this._app.dialogs["newAccountWizard"].setObject(newAccount);
 		this._app.dialogs["newAccountWizard"].popup();

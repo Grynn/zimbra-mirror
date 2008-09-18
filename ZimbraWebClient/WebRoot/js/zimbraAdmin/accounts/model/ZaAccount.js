@@ -238,7 +238,7 @@ ZaAccount.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaAccount.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 
 ZaAccount.A2_accountTypes = "accountTypes" ; //used to save the account types available to this account based on domain
-
+ZaAccount.A2_previousName = "previousName" ;
 
 ZaAccount.checkValues = 
 function(tmpObj, app) {
@@ -612,7 +612,12 @@ function(tmpObj, app) {
 		}	
 	}		
 
-	return true;
+    if (!ZaAccount.isAccountTypeSet(tmpObj))  {
+        app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET);
+        return false;
+    }
+    
+    return true;
 }
 
 /**
@@ -1605,59 +1610,55 @@ function (value, event, form){
 	try {
 		var instance = form.getInstance();
 		var p = form.parent ;
-		var newDomainName = ZaAccount.getDomain(value) ;
-		if ((ZaSettings.COSES_ENABLED) && (! form.parent._isCosChanged) 
+        var oldDomainName = ZaAccount.getDomain(instance[ZaAccount.A2_previousName]) ;
+        var newDomainName = ZaAccount.getDomain(value) ;
+        var domainObj =  ZaDomain.getDomainByName(newDomainName,form.parent._app) ;
+        
+        if ((ZaSettings.COSES_ENABLED) && (! form.parent._isCosChanged)
 			&& ((newDomainName != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
 				//set the right default cos at the account creation time
 				|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
 		{ //see if the cos needs to be updated accordingly
 			instance.cos = ZaCos.getDefaultCos4Account.call(p, value, form.parent._app );
 			instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
-			
-			
-		} else if (!ZaSettings.COSES_ENABLED ){
+		}
+        /*
+        else if (!ZaSettings.COSES_ENABLED ){
 			if ((!p._domains) || (!p._domains[newDomainName])){
-				//send the GetDomainRequest
-				/*var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);	
-				var domainEl = soapDoc.set("domain", newDomainName);
-				domainEl.setAttribute ("by", "name");
-				//var getDomainCommand = new ZmCsfeCommand();
-				var params = new Object();
-				params.soapDoc = soapDoc;	
-				var reqMgrParams = {
-					controller: form.parent._app.getCurrentController()
-				}
-				var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
-				
-				var domain = new ZaItem ();
-				domain.initFromJS (resp.domain[0]);
-				*/
-				var domain = ZaDomain.getDomainByName(newDomainName,form.parent._app)
 				//keep the domain instance, so the future call is not needed.
 				//it is used in new account and edit account
 				if (p._domains) {
 					p._domains[newDomainName] = domain ;
 				}
 			}
-		}
-		
-		if (ZaDomain.A_domainMaxAccounts && p._domains && p._domains[newDomainName]){ 
-			var maxDomainAccounts = p._domains[newDomainName].attrs[ZaDomain.A_domainMaxAccounts] ;
-			if (maxDomainAccounts && maxDomainAccounts > 0) {
-				
-				var usedAccounts = ZaSearch.getUsedDomainAccounts(newDomainName, form.parent._app.getCurrentController() );
-				instance[ZaAccount.A2_domainLeftAccounts] = 
-					AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]) ;
-			}else{
-				instance[ZaAccount.A2_domainLeftAccounts] = null ;
-			}
-		}
-	
-		if(form.parent.setDirty)
+		} */                    
+
+        //if domain name is not changed, we don't want to update the account type output
+        if (oldDomainName !=  newDomainName) {
+            if (ZaDomain.A_domainMaxAccounts){
+                var maxDomainAccounts = domainObj.attrs[ZaDomain.A_domainMaxAccounts] ;
+                if (maxDomainAccounts && maxDomainAccounts > 0) {
+                    var usedAccounts = ZaSearch.getUsedDomainAccounts(newDomainName, form.parent._app.getCurrentController() );
+                    instance[ZaAccount.A2_domainLeftAccounts] =
+                        AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]) ;
+                }else{
+                    instance[ZaAccount.A2_domainLeftAccounts] = null ;
+                }
+            }
+
+            //update the account type information
+            instance [ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
+            form.parent.updateAccountType();
+        }
+        if(form.parent.setDirty)  { //edit account view
 			form.parent.setDirty(true);	
-			
-		this.setInstanceValue(value);
-		form.refresh();
+        }else {  //new account view
+            //nothing
+        }
+        
+        this.setInstanceValue(value);
+        instance [ZaAccount.A2_previousName] = value ;
+        form.refresh();
 	} catch (ex) {
 		form.parent._app.getCurrentController()._handleException(ex, "ZaAccount.setDomainChanged", null, false);	
 	}
@@ -1802,7 +1803,7 @@ ZaAccount.isEmailRetentionPolicyEnabled = function () {
 }
 
 
-ZaAccount.getAccountTypeOutput = function () {
+ZaAccount.getAccountTypeOutput = function (isNewAccount) {
     var form = this.getForm () ;
     var instance = form.getInstance () ;
     var currentCos = ZaCos.getCosById(instance.attrs[ZaAccount.A_COSId], form.parent._app) ;
@@ -1843,11 +1844,11 @@ ZaAccount.getAccountTypeOutput = function () {
 
             out.push("<div>" +
                      "<label style='font-weight: bold;"
-                    + ((availableAccounts > 0) ? "" : "color: #686357;")
+                    + ((availableAccounts > 0 || currentType == acctTypes[i] ) ? "" : "color: #686357;")
                     + "'>") ;
             //account type is disable when no accounts available
             out.push("<input type=radio name=" + radioGroupName + " value=" + acctTypes[i]
-                    + ((availableAccounts > 0) ?  (" onclick=\"ZaAccount.setAccountType.call("
+                    + ((availableAccounts > 0 || currentType == acctTypes[i] ) ?  (" onclick=\"ZaAccount.setAccountType.call("
                                     + this.getGlobalRef() + ", '" + acctTypes[i] +  "', event );\" ") : (" disabled "))
                     + ((currentType == acctTypes[i]) ? " checked " : "" )
                     + " />") ;
@@ -1878,9 +1879,30 @@ ZaAccount.setAccountType = function (newType, ev) {
         instance.autoCos = "FALSE" ;
         instance.attrs[ZaAccount.A_COSId] = newCos.id ;
         form.parent._isCosChanged = true ;
+
+        form.itemChanged(this, newType, ev);
+
         if(form.parent.setDirty)
 			form.parent.setDirty(true);
     }
+}
+
+ZaAccount.isAccountTypeSet = function (tmpObj) {
+
+    var cosId = tmpObj.attrs [ZaAccount.A_COSId] ;
+    if (!tmpObj.accountTypes  || tmpObj.accountTypes.length <= 0) {
+        return  true ; //account type is not present, no need to check if it is set
+    } else if (!cosId){
+        return false ;
+    }
+
+    for (var i=0; i < tmpObj.accountTypes.length; i ++) {
+        if (cosId == tmpObj.accountTypes[i] )
+            return true ;
+    }
+
+    return false ;
+
 }
 
 //Set the zimbraMailCatchAll address

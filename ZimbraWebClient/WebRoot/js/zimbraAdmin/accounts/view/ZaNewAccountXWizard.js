@@ -103,7 +103,10 @@ function () {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 	} else {
-		if(this._containedObject.attrs[ZaAccount.A_lastName] && this._containedObject[ZaAccount.A_name].indexOf("@") > 0) {
+		if(this._containedObject.attrs[ZaAccount.A_lastName]
+                && this._containedObject[ZaAccount.A_name].indexOf("@") > 0
+                && ZaAccount.isAccountTypeSet(this._containedObject) 
+                ) {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 			if(this._containedObject[ZaModel.currentStep] != this._lastStep) {
 				this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
@@ -113,6 +116,15 @@ function () {
 			}			
 		}
 	}
+}
+
+//update the account type output with the right available/used account counts
+//and not default account type choices displayed
+ZaNewAccountXWizard.accountTypeItemId = "account_type_output_" + Dwt.getNextId();
+ZaNewAccountXWizard.prototype.updateAccountType =
+function ()  {                                                      
+    var item = this._localXForm.getItemsById (ZaNewAccountXWizard.accountTypeItemId) [0] ;
+    item.updateElement(ZaAccount.getAccountTypeOutput.call(item, true)) ;
 }
 
 /*
@@ -353,6 +365,10 @@ function(value, event, form) {
 	}
 	this.setInstanceValue(value);
     form.parent._isCosChanged = true ;
+
+    //if cos is changed,  update the account type information
+    form.parent.updateAccountType();
+    
     return value;
 }
 
@@ -377,14 +393,19 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				style: DwtAlert.WARNING, iconVisible: false
 		 },
 
-
         //account types group
         {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_wiz_type_group",
                 colSpan: "*", numCols: 1, colSizes: ["100%"],
                 relevant: "instance[ZaAccount.A2_accountTypes] != null && instance[ZaAccount.A2_accountTypes].length > 0 ",
                 relevantBehavior: _HIDE_,
                 items: [
-                    { type: _OUTPUT_, getDisplayValue: ZaAccount.getAccountTypeOutput,
+                    {type: _DWT_ALERT_, relevant:"!ZaAccount.isAccountTypeSet(this.instance)",
+                        relevantBehavior: _HIDE_, containerCssStyle: "width:400px;",
+                        style: DwtAlert.CRITICAL, iconVisible: false ,
+                        content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
+                    },
+                    { type: _OUTPUT_, id: ZaNewAccountXWizard.accountTypeItemId,
+                        getDisplayValue: ZaAccount.getAccountTypeOutput,
                         //center the elements
                         cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
                     }
