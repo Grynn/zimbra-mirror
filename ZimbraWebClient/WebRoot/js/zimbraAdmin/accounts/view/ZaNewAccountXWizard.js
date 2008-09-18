@@ -333,8 +333,8 @@ function(entry) {
 	}
     //check the account type here
     var domainName = ZaAccount.getDomain (this._containedObject.name) ;
-    this._containedObject[ZaAccount.A2_accountTypes] =
-                ZaDomain.getDomainByName (domainName, this._app).getAccountTypes () ;
+    var domainObj = ZaDomain.getDomainByName (domainName, this._app) ;
+    this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
    
     this._localXForm.setInstance(this._containedObject);
 }
@@ -370,7 +370,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	var case1Items = [ 
 		//{type: _OUTPUT_, ref: ZaAccount.A2_domainLeftAccounts, relevant: "instance[ZaAccount.A2_domainLeftAccounts] != null",
 			//	relevantBehavior: _HIDE_  },
-		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts, relevant: "instance[ZaAccount.A2_domainLeftAccounts] != null",
+		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
+                relevant: "(instance[ZaAccount.A2_domainLeftAccounts] != null) "
+                            + " && ( instance[ZaAccount.A2_accountTypes] == null || instance[ZaAccount.A2_accountTypes].length <= 0) ",
 				relevantBehavior: _HIDE_ , containerCssStyle: "width:400px;",
 				style: DwtAlert.WARNING, iconVisible: false
 		 },

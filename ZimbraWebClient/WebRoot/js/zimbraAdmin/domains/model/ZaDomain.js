@@ -1555,3 +1555,16 @@ ZaDomain.prototype.getAccountTypes = function () {
 
     return types ;
 }
+
+ZaDomain.getTotalLimitsPerAccountTypes = function (cosMaxAccounts) {
+    var total = 0 ;
+    //var cosMaxAccounts = this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts];
+    if (cosMaxAccounts && cosMaxAccounts.length > 0 ) {
+        for (var i=0; i < cosMaxAccounts.length; i ++) {
+            var val = cosMaxAccounts[i].split(":") ;
+            total += new Number (val [1]);
+        }
+    }
+
+    return total ;
+}
