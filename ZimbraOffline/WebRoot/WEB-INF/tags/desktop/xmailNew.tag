@@ -10,12 +10,12 @@
 <script type="text/javascript">
 <!--
 function InitScreen() {
-    zd.hide("imapSettingsRow");
+    zd.hide("syncSettingsRow");
     zd.hide("popSettingsRow");
     if (zd.isChecked("protocol_pop")) {
         zd.show("popSettingsRow");
     } else if (zd.isChecked("protocol_imap")) {
-        zd.show("imapSettingsRow");
+        zd.show("syncSettingsRow");
     }
     
     if (!zd.isChecked("smtpAuth")) {
@@ -26,13 +26,13 @@ function InitScreen() {
 
 function onSelectPop() {
     zd.show("popSettingsRow");
-    zd.hide("imapSettingsRow");
+    zd.hide("syncSettingsRow");
     SetPort();
 }
 
 function onSelectImap() {
     zd.hide("popSettingsRow");
-    zd.show("imapSettingsRow");
+    zd.show("syncSettingsRow");
     SetPort();
 }
 
@@ -264,7 +264,7 @@ function disableButtons() {
 	            </td>
 			</tr>
 
-            <tr id='imapSettingsRow'>
+            <tr id='syncSettingsRow'>
                 <td style='text-align:right'><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td>
                 <td class="ZCheckboxLabel"><fmt:message key='SyncAllFolders'/></td>
             </tr>

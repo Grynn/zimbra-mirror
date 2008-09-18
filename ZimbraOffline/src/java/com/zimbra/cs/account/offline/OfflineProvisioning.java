@@ -516,10 +516,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (error != null)
         	throw ServiceException.FAILURE(error, null);
 
-        // No need to test YMail SOAP access, since successful IMAP/POP3
+        // No need to test Live/YMail SOAP access, since successful IMAP/POP3
         // connection implies that SOAP access will succeed with same auth
         // credentials.
-        if (!ds.isYahoo()) {
+        if (!ds.isLive() && !ds.isYahoo()) {
             try {
                 SMTPTransport smtp = (SMTPTransport)(LocalJMSession.getSession(ds).getTransport());
                 smtp.connect();

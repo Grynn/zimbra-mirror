@@ -38,8 +38,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.3.2.jar"/>
-	<classpathentry kind="lib" path="jars/jdavmail-0.9.007.jar" sourcepath="/ThirdParty/jdavmail/src"/>
-	<classpathentry kind="lib" path="jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>
 	<classpathentry kind="lib" path="jars/ymail.jar"/>
 	<classpathentry kind="lib" path="tools/jaxws/lib/FastInfoset.jar"/>
 	<classpathentry kind="lib" path="tools/jaxws/lib/http.jar"/>
@@ -65,6 +63,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdavmail-0.9.007.jar" sourcepath="/ThirdParty/jdavmail/src"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>
 	<classpathentry kind="lib" path="/ZimbraTagLib/jars/jstl.jar"/>
 	<classpathentry kind="lib" path="/ZimbraTagLib/jars/standard.jar"/>
 	<classpathentry kind="lib" path="/ZimbraTagLib/build/zimbrataglib.jar"/>

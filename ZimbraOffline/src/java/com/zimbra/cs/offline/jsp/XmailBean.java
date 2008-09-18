@@ -35,6 +35,10 @@ public class XmailBean extends MailBean {
 
         protected boolean leaveOnServer = false;
     
+	private final String adomain = "aol.com";
+	private final String gdomain = "gmail.com";
+	private final String hdomain = "hotmail.com";
+	private final String mdomain = "msn.com";
 	private final String ydomain = "yahoo.com";
 	private final String ymdomain = "ymail.com";
 	private final String yrmdomain = "rocketmail.com";
@@ -106,7 +110,7 @@ public class XmailBean extends MailBean {
 			    	addInvalid("email");
 				
 		        domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
-				if (!isYmail()) {
+				if (!isLive() && !isYmail()) {
 					if (!isValidHost(smtpHost))
 				    	addInvalid("smtpHost");
 					if (!isValidPort(smtpPort))
@@ -138,7 +142,7 @@ public class XmailBean extends MailBean {
 			        
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
 			        
-			        if (!isYmail()) {
+			        if (!isLive() && !isYmail()) {
 				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost, smtpHost);
 				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort, smtpPort);
 				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType, (isSmtpSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
@@ -154,43 +158,47 @@ public class XmailBean extends MailBean {
 			        
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
 					
-					if (dsType == DataSource.Type.imap)
+					if (dsType == DataSource.Type.imap || dsType == DataSource.Type.live)
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, syncAllServerFolders ? Provisioning.TRUE : Provisioning.FALSE);
 			        
 			        if (dsType == DataSource.Type.pop3) {
 			            dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Boolean.toString(leaveOnServer).toUpperCase());
 		                    dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_INBOX);
 			        } else {
-			        	assert dsType == DataSource.Type.imap;
+			        	assert dsType == DataSource.Type.imap || dsType == DataSource.Type.live;
 			        	dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_USER_ROOT);
 			        }
 			    }
 			}
 			
-			String gdomain = "gmail.com";
-			String adomain = "aol.com";
-			
 			if (verb.isAdd()) {
 				if (email.endsWith('@' + ydomain) || email.endsWith('@' + ymdomain) || email.endsWith('@' + yrmdomain)) {
-					if (dsType == DataSource.Type.pop3) {
+					if (dsType == DataSource.Type.imap) {
+						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, ydomain);
+					} else {
 						addInvalid("protocol");
 						setError(getMessage("YMPMustUseImap"));
-					} else {
-						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, ydomain);
 					}
 				} else if (email.endsWith('@' + gdomain)) {
-					if (dsType == DataSource.Type.pop3) {
+					if (dsType == DataSource.Type.imap) {
+						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, gdomain);
+					} else {
 						addInvalid("protocol");
 						setError(getMessage("GmailMustUseImap"));
-					} else {
-						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, gdomain);
 					}
 				} else if (email.endsWith('@' + adomain)) {
-					if (dsType == DataSource.Type.pop3) {
+					if (dsType == DataSource.Type.imap) {
+						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, adomain);
+					} else {
 						addInvalid("protocol");
 						setError(getMessage("AOLMustUseImap"));
+					}
+				} else if (email.endsWith('@' + hdomain) || email.endsWith('@' + mdomain)) {
+					if (dsType == DataSource.Type.live) {
+						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, hdomain);
 					} else {
-						dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, adomain);
+						addInvalid("protocol");
+						setError(getMessage("LiveMustUseLive"));
 					}
 				}
 			}
@@ -340,6 +348,10 @@ public class XmailBean extends MailBean {
 
         public void setLeaveOnServer(boolean leaveOnServer) {
                 this.leaveOnServer = leaveOnServer;
+        }
+
+        public boolean isLive() {
+                return "live".equals(protocol);
         }
 
 	public boolean isYmail() {

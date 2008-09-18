@@ -34,6 +34,10 @@ function OnGmail() {
     window.location = "/zimbra/desktop/gmail.jsp";
 }
 
+function OnLmail() {
+    window.location = "/zimbra/desktop/lmail.jsp";
+}
+
 function OnAmail() {
     window.location = "/zimbra/desktop/amail.jsp";
 }
@@ -139,6 +143,27 @@ function OnMmail() {
                     <a href="javascript:zd.toggle('Gmail')"><fmt:message key='Close'/></a>
                 </div>
             </td>       
+        </tr>
+
+        <tr>
+            <td valign=top>
+                <button class='DwtButton' onclick="OnLmail()" style='width:100%'>
+                    <nobr><fmt:message key='LiveAcct'/></nobr>
+                </button>
+            </td>
+            <td><fmt:message key='LiveNote'>
+                                        <fmt:param><a href="javascript:zd.toggle('Live')"><fmt:message key='LiveMustAllowClient'/></a></fmt:param>
+                            </fmt:message>
+                        </td>
+        </tr>
+        <tr id='Live' style='display:none'>
+            <td colspan=2>
+                <div class='infoBox' style='margin:0px 30px 0px 30px;'>
+                    <div class='infoTitle'><fmt:message key='LiveAbout'/></div>
+                    <p><fmt:message key='LiveLimit'></fmt:message></p>
+                    <a href="javascript:zd.toggle('Live')"><fmt:message key='Close'/></a>
+                </div>
+            </td>
         </tr>
 
         <tr>

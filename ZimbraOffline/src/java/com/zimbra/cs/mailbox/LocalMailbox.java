@@ -35,6 +35,7 @@ import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
+import com.zimbra.cs.offline.LMailSender;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.YMailSender;
@@ -50,7 +51,8 @@ public class LocalMailbox extends DesktopMailbox {
         super(data);
         
         DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
-        isImapMailbox = ds != null && ds.getType() == DataSource.Type.imap;
+        isImapMailbox = ds != null && (ds.getType() == DataSource.Type.imap ||
+            ds.getType() == DataSource.Type.live);
     }
 	
     @Override protected synchronized void initialize() throws ServiceException {
@@ -146,7 +148,7 @@ public class LocalMailbox extends DesktopMailbox {
             Session session = null;
             //the client could send datasourceId as identityId
             OfflineDataSource ds = getDataSource(msg);
-            if (!ds.isYahoo()) {
+            if (!ds.isLive() && !ds.isYahoo()) {
                 session = LocalJMSession.getSession(ds);
                 if (session == null) {
                     OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
@@ -165,7 +167,23 @@ public class LocalMailbox extends DesktopMailbox {
             MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
             ItemId origMsgId = getOrigMsgId(msg);
 
-            if (ds.isYahoo()) {
+            if (ds.isLive()) {
+                LMailSender ms = LMailSender.newInstance(ds);
+                try {
+                    ms.sendMimeMessage(context, this, false, mm, null, null, origMsgId,
+                        msg.getDraftReplyType(), identity, false, false);
+                } catch (ServiceException e) {
+                    Throwable cause = e.getCause();
+                    if (cause instanceof MessagingException) {
+                        OfflineLog.offline.debug("smtp: failed to send mail (" + id + "): " + msg.getSubject(), e);
+                        OfflineLog.offline.info("SMTP send failure: " + msg.getSubject());
+                        OutboxTracker.recordFailure(this, id);
+                        continue;
+                    } else {
+                        throw e;
+                    }
+                }
+            } else if (ds.isYahoo()) {
                 YMailSender ms = YMailSender.newInstance(ds);
                 try {
                     ms.sendMimeMessage(context, this, false, mm, null, null, origMsgId,

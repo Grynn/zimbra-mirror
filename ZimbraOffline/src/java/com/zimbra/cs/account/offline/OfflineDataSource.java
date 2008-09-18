@@ -78,6 +78,7 @@ public class OfflineDataSource extends DataSource {
     private static final String PROP_REMOTE = "remote";
     private static final String PROP_SYNC = "sync";
 
+    private static final String SERVICE_NAME_LIVE = "hotmail.com";
     private static final String SERVICE_NAME_YAHOO = "yahoo.com";
 
     public static void init() throws IOException {
@@ -157,7 +158,7 @@ public class OfflineDataSource extends DataSource {
     
     @Override
     public boolean isSyncEnabled(Folder folder) {
-    	return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0 && (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
+        return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0 && (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
     }
     
     @Override
@@ -179,6 +180,10 @@ public class OfflineDataSource extends DataSource {
         return getType() == Type.pop3 || knownService == null || knownService.saveToSent;
     }
 
+    public boolean isLive() {
+        return knownService != null && knownService.name.equals(SERVICE_NAME_LIVE);
+    }
+    
     public boolean isYahoo() {
         return knownService != null && knownService.name.equals(SERVICE_NAME_YAHOO);
     }
@@ -187,6 +192,7 @@ public class OfflineDataSource extends DataSource {
 
     private static final Map<Object, SyncState> sSyncStateMap =
         Collections.synchronizedMap(new LinkedHashMap<Object, SyncState>() {
+            @SuppressWarnings("unchecked")
             protected boolean removeEldestEntry(Map.Entry eldest) {
                 return size() > MAX_ENTRIES;
             }
@@ -238,7 +244,7 @@ public class OfflineDataSource extends DataSource {
     private Object key(int folderId) {
         try {
             int mailboxId = getMailbox().getId();
-            return (long) mailboxId << 32 | ((long) folderId & 0xffffffffL);
+            return (long) mailboxId << 32 | (folderId & 0xffffffffL);
         } catch (ServiceException e) {
             return null;
         }
