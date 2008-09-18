@@ -633,7 +633,12 @@ function (resp) {
 	if(!resp)
 		return;
 	if(resp.isException()) {
-		this._handleException(resp.getException(), "ZaDomainController.prototype.checkMXCallback", null, false);
+		var ex = resp.getException();
+		if(ex.msg == "system failure: NameNotFoundException") {
+			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.failedToGetMXRecords, [this._currentObject.name]));
+		} else {
+			this._handleException(resp.getException(), "ZaDomainController.prototype.checkMXCallback", null, false);
+		}
 		return;
 	} 
 	var response = resp.getResponse().Body.CheckDomainMXRecordResponse;
@@ -669,10 +674,10 @@ function (ev) {
 ZaDomainController.prototype._handleException = 
 function (ex, method, params, restartOnError, obj) {
 	if(ex.code == ZmCsfeException.DOMAIN_NOT_EMPTY) {
-		this._errorDialog.popupErrorDialog(ZaMsg.ERROR_DOMAIN_NOT_EMPTY);
+		this.popupErrorDialog(ZaMsg.ERROR_DOMAIN_NOT_EMPTY);
 		
 	} else if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {
-		this._errorDialog.popupErrorDialog(ZaMsg.ERROR_DOMAIN_EXISTS);
+		this.popupErrorDialog(ZaMsg.ERROR_DOMAIN_EXISTS);
 		
 	} else {
 		ZaController.prototype._handleException.call(this, ex, method, params, restartOnError, obj);				
