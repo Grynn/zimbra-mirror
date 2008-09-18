@@ -39,6 +39,7 @@ ZaDomainXFormView = function(parent, app) {
 		{label:ZaMsg.AuthMech_ldap, value:ZaDomain.AuthMech_ldap},
 		{label:ZaMsg.AuthMech_ad, value:ZaDomain.AuthMech_ad}		
 	];
+	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());
 }
 
@@ -149,6 +150,14 @@ function(entry) {
         catchAllItem.setChoices (ZaAccount.getCatchAllChoices(entry.name)) ;
         this._containedObject[ZaAccount.A_zimbraMailCatchAllAddress] = entry [ZaAccount.A_zimbraMailCatchAllAddress] ;
     }
+    
+ 	if(ZaSettings.COSES_ENABLED) {	
+		if(this._containedObject.attrs[ZaDomain.A_domainDefaultCOSId]) {	
+			var cos = ZaCos.getCosById(this._containedObject.attrs[ZaDomain.A_domainDefaultCOSId], this._app);
+			this.cosChoices.setChoices([cos]);
+			this.cosChoices.dirtyChoices();
+		}
+	}
     
     this._localXForm.setInstance(this._containedObject);        
 	this.updateTab();
@@ -340,6 +349,22 @@ function (value, event, form) {
 	}
 }
 
+ZaDomainXFormView.onCOSChanged = 
+function(value, event, form) {
+	form.parent.setDirty(true);
+	if(ZaItem.ID_PATTERN.test(value))  {
+		this.setInstanceValue(value);
+	} else {
+		var cos = ZaCos.getCosByName(value, form.parent._app);
+		if(cos) {
+			//value = form.getInstance().cos.id;
+			value = cos.id;
+		} 
+	}
+	this.setInstanceValue(value);
+	return value;
+}
+
 ZaDomainXFormView.myXFormModifier = function(xFormObject) {	
 	xFormObject.tableCssStyle="width:100%;overflow:auto;";
 	
@@ -396,14 +421,16 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 
 			{ ref: ZaDomain.A_domainName, type:_OUTPUT_,
 			  label:ZaMsg.Domain_ACEName+":",relevant:"ZaDomainXFormView.hasACEName.call(this)", relevantBehavior:_HIDE_
-			},	
-			{ ref: ZaDomain.A_zimbraPublicServiceHostname, type:(ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME ? _INPUT_ : _OUTPUT_), 
-			  label:ZaMsg.Domain_zimbraPublicServiceHostname, width:250,
-			  onChange:ZaDomainXFormView.onFormFieldChanged
-		  	}
+			}
+			
 		 ]
 	};
-
+	if(ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME) {
+		case1.items.push({ ref: ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, 
+			  label:ZaMsg.Domain_zimbraPublicServiceHostname, width:250,
+			  onChange:ZaDomainXFormView.onFormFieldChanged
+		  	});
+	}
 	if(ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED) {
 		if(!ZaSettings.DOMAINS_ARE_READONLY && ZaSettings.GLOBAL_CONFIG_ENABLED) {
 			var group = {type:_ZA_PLAIN_GROUPER_,colSpan:"*", colSizes:["auto"],numCols:1,id:"dns_check_group",items: []};
@@ -413,7 +440,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			iconVisible: true, 
 			content: ZaMsg.Domain_InboundSMTPNote,
 			colSpan:"*"});
-			group.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _SUPER_TEXTFIELD_), 
+			group.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPER_TEXTFIELD_, 
 	 			txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, width:250,onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
 	 		case1.items.push(group);
 		} else {
@@ -428,7 +455,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		}
 	}
 		
-	if(!ZaSettings.DOMAINS_ARE_READONLY) {
+	if(ZaSettings.CAN_CHANGE_DOMAIN_DESCRIPTION) {
 		case1.items.push({ ref: ZaDomain.A_description, type: _INPUT_, 
 		  label:ZaMsg.NAD_Description, width:250,
 		  onChange:ZaDomainXFormView.onFormFieldChanged});
@@ -437,20 +464,40 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 
     if(ZaSettings.COSES_ENABLED) {
 		case1.items.push(
-			{ref:ZaDomain.A_domainDefaultCOSId, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _INPUT_), 
+			{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
 				label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
-				choices:this._app.getCosListChoices(), onChange:ZaDomainXFormView.onFormFieldChanged,
-				relevantBehavior:_HIDE_,relevant:("ZaSettings.COSES_ENABLED")});
+				onChange:ZaDomainXFormView.onCOSChanged,
+				dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
+				choices:this.cosChoices,
+				dataFetcherClass:ZaSearch,
+				editable:true,
+				getDisplayValue:function(newValue) {
+					// dereference through the choices array, if provided
+					//newValue = this.getChoiceLabel(newValue);
+					if(ZaItem.ID_PATTERN.test(newValue)) {
+						var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
+						if(cos)
+							newValue = cos.name;
+					} 
+					if (newValue == null) {
+						newValue = "";
+					} else {
+						newValue = "" + newValue;
+					}
+					return newValue;
+				}
+			});
 	}
-	
-	case1.items.push({ref:ZaDomain.A_zimbraDomainStatus, type:(ZaSettings.CAN_CHANGE_DOMAIN_STATUS ? _OSELECT1_ : _OUTPUT_ ), msgName:ZaMsg.Domain_zimbraDomainStatus,
+	if(ZaSettings.CAN_CHANGE_DOMAIN_STATUS) {
+		case1.items.push({ref:ZaDomain.A_zimbraDomainStatus, type:_OSELECT1_, msgName:ZaMsg.Domain_zimbraDomainStatus,
 				label:ZaMsg.Domain_zimbraDomainStatus+":", 
 				labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaDomainXFormView.onFormFieldChanged});
-	
-	case1.items.push({ ref: ZaDomain.A_notes, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _TEXTAREA_)	, 
+	}
+	if(ZaSettings.CAN_CHANGE_DOMAIN_NOTES) {
+		case1.items.push({ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
 				  label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top", width:250,
 				  onChange:ZaDomainXFormView.onFormFieldChanged});
-		
+	}
 	
 			
 	switchGroup.items.push(case1);

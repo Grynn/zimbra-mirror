@@ -245,6 +245,8 @@ ZaSettings.CAN_CREATE_DOMAINS = true;
 ZaSettings.CAN_CHANGE_DOMAIN_ACC_LIMIT = true;
 ZaSettings.CAN_CHANGE_DOMAIN_STATUS = true;
 ZaSettings.CAN_DELETE_DOMAINS = true;
+ZaSettings.CAN_CHANGE_DOMAIN_DESCRIPTION = true;
+ZaSettings.CAN_CHANGE_DOMAIN_NOTES = true;
 // initialization for settings: [name, type, data type, default value]
 ZaSettings.INIT = new Object();
 // IDs FOR HTML COMPONENTS IN THE SKIN

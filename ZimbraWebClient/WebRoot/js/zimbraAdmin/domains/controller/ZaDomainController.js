@@ -192,8 +192,8 @@ function () {
     var renameNotebookAccount = false;
     var catchAllChanged = false ;
 
-    if (tmpObj[ZaAccount.A_zimbraMailCatchAllAddress]
-            != this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress]) {
+    if (!(AjxUtil.isEmpty(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress]) && AjxUtil.isEmpty(this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress])) 
+    	&& (tmpObj[ZaAccount.A_zimbraMailCatchAllAddress] != this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress])) {
          catchAllChanged = true ;
     }
 
@@ -202,9 +202,7 @@ function () {
 		if(a == ZaItem.A_zimbraId || a==ZaDomain.A_domainName || a == ZaDomain.A_domainType)
 			continue;
 		
-		if (!( (this._currentObject.attrs[a] == undefined || this._currentObject.attrs[a] == null) &&
-				( (tmpObj.attrs[a] == "") || (tmpObj.attrs[a] == null) ) 
-			 )) {
+		if (!(AjxUtil.isEmpty(this._currentObject.attrs[a]) && AjxUtil.isEmpty(tmpObj.attrs[a]))) {
 			if(tmpObj.attrs[a] instanceof Array) {
 					if((this._currentObject.attrs[a] && tmpObj.attrs[a]
 						&& tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf())

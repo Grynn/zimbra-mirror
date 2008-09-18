@@ -29,7 +29,7 @@ ZaHelpView = function(parent, app) {
 	this.initForm(new Object(), this.getMyXForm())
 //	this._createHTML();
 }
-
+ZaHelpView.mainHelpPage = "administration_console_help.htm";
 ZaHelpView.prototype = new ZaTabView();
 ZaHelpView.prototype.constructor = ZaHelpView;
 ZaTabView.XFormModifiers["ZaHelpView"] = new Array();
@@ -90,7 +90,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("Help")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_2, href:(location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm?locid="+AjxEnv.DEFAULT_LOCALE)}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_2, href:(location.pathname + ZaUtil.HELP_URL + ZaHelpView.mainHelpPage + "?locid="+AjxEnv.DEFAULT_LOCALE)}
 						]
 					},
 					{type:_GROUP_,numCols:2,
