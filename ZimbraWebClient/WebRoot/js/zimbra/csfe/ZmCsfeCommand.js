@@ -246,10 +246,14 @@ function(params) {
 		}
 		context.authToken = ZmCsfeCommand._curAuthToken = authToken;
 	}
-	
-	DBG.println(AjxDebug.DBG1, ["<H4>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" ,"</H4>"].join(""), params.methodNameStr);
+
+	if (window.DBG) {
+		var ts = DBG._getTimeStamp();
+		DBG.println(AjxDebug.DBG1, ["<H4>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</H4>"].join(""), params.methodNameStr);
+		DBG.dumpObj(AjxDebug.DBG1, obj);
+	}
+
 	var requestStr = AjxStringUtil.objToString(obj);
-	DBG.dumpObj(AjxDebug.DBG1, obj);
 
 	return requestStr;
 };
@@ -345,9 +349,13 @@ function(params) {
 			soapDoc.set("authToken", authToken, context);
 		}
 	}
-	
-	DBG.println(AjxDebug.DBG1, ["<H4>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" ,"</H4>"].join(""), params.methodNameStr);
-	DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
+
+	if (window.DBG) {
+		var ts = DBG._getTimeStamp();
+		DBG.println(AjxDebug.DBG1, ["<H4>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</H4>"].join(""), params.methodNameStr);
+		DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
+	}
+
 
 	return soapDoc.getXml();
 };
@@ -445,7 +453,10 @@ function(response, params) {
 		var m = respDoc.match(/\{"?Body"?:\{"?(\w+)"?:/);
 		if (m && m.length) linkName = m[1];
 	}
-	DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", params.asyncMode ? " (asynchronous)" : "" ,"</H4>"].join(""), linkName);
+	if (window.DBG) {
+		var ts = DBG._getTimeStamp();
+		DBG.println(AjxDebug.DBG1, ["<H4> RESPONSE", params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</H4>"].join(""), linkName);
+	}
 
 	var obj = {};
 
