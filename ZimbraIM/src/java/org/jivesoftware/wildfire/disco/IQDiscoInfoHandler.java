@@ -252,6 +252,7 @@ public class IQDiscoInfoHandler extends IQHandler {
         for (ServerFeaturesProvider provider : server.getServerFeaturesProviders()) {
             addServerFeaturesProvider(provider);
         }
+        // FIXME should register *all* domains on the server
         setProvider(server.getServerInfo().getDefaultName(), getServerInfoProvider());
     }
 

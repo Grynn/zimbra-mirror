@@ -185,6 +185,8 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
      * is reset each time the Statistic makes a sampling.
      */
     private AtomicLong outMessages = new AtomicLong(0);
+    
+    private boolean mServiceEnabled = false;
 
     /**
      * Create a new group chat server.
@@ -583,22 +585,14 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
         return IMConfig.XMPP_MUC_RESTRCIT_ROOM_CREATION.getBoolean();
     }
     
+    public void setStartupParameters(ComponentIdentifier identifier, HashMap<String, String> properties) {
+        chatServiceName = identifier.serviceName;
+        chatServiceDomain = identifier.serviceDomain;
+    }
+    
     public void initialize(XMPPServer server) {
         super.initialize(server);
 
-        List<ComponentIdentifier> componentIds = null;         
-        try {
-            componentIds = XMPPServer.getInstance().getThisServerComponents("muc");
-        } catch(ServiceException ex) { // FIXME real error handling!
-            ZimbraLog.im.warn("Caught service exception getting local component list", ex);
-        }
-        
-        // HACK throw NPE here to cancel init if no local component
-        ComponentIdentifier identifier = componentIds.get(0);
-        
-        chatServiceName = identifier.serviceName;
-        chatServiceDomain = identifier.serviceDomain;
-        
         // Load the list of JIDs that are sysadmins of the MUC service
         String property = IMConfig.XMPP_MUC_SYSADMIN_JID.getString();
         String[] jids;
@@ -647,6 +641,8 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
         super.start();
         // Add the route to this service
         routingTable.addRoute(getAddress(), this);
+        mServiceEnabled = true;
+        XMPPServer.getInstance().getIQDiscoItemsHandler().addServerItemsProvider(this);
         ArrayList<String> params = new ArrayList<String>();
         params.clear();
         params.add(getServiceDomain());
@@ -667,6 +663,8 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
     public void stop() {
         super.stop();
         // Remove the route to this service
+        XMPPServer.getInstance().getIQDiscoItemsHandler().removeServerItemsProvider(this);
+        mServiceEnabled = false;
         routingTable.removeRoute(getAddress());
         timer.cancel();
         logAllConversation();
@@ -680,13 +678,7 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
     }
 
     public boolean isServiceEnabled() {
-        try {
-            List<ComponentIdentifier> componentIds = XMPPServer.getInstance().getThisServerComponents("muc");
-            return (componentIds != null && !componentIds.isEmpty());
-        } catch (ServiceException ex) {
-            ZimbraLog.im.warn("Unable to get list of local components", ex);
-            return false;
-        }
+        return mServiceEnabled;
     }
 
     public long getTotalChatTime() {

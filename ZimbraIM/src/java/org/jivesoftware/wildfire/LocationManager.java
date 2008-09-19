@@ -34,6 +34,7 @@ public interface LocationManager {
 
     public boolean isRemote(JID jid)  throws UserNotFoundException;
     
+    public List<ComponentIdentifier> getAllServerComponents() throws ServiceException;
     
     public List<ComponentIdentifier> getRemoteServerComponents() throws ServiceException;
     

@@ -16,7 +16,10 @@
  */
 package org.jivesoftware.wildfire.container;
 
+import java.util.HashMap;
+
 import org.jivesoftware.wildfire.XMPPServer;
+import org.jivesoftware.wildfire.LocationManager.ComponentIdentifier;
 
 /**
  * A default Module implementation that basically avoids subclasses having to implement the whole
@@ -93,4 +96,8 @@ public class BasicModule implements Module {
      */
     public void destroy() {
     }
+    
+    public void setStartupParameters(ComponentIdentifier identifier, HashMap<String, String> properties) {
+    }
+    
 }

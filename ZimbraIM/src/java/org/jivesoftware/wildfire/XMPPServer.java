@@ -27,6 +27,7 @@ import org.jivesoftware.wildfire.audit.AuditManager;
 import org.jivesoftware.wildfire.audit.spi.AuditManagerImpl;
 import org.jivesoftware.wildfire.commands.AdHocCommandHandler;
 import org.jivesoftware.wildfire.component.InternalComponentManager;
+import org.jivesoftware.wildfire.container.BasicModule;
 import org.jivesoftware.wildfire.container.Module;
 import org.jivesoftware.wildfire.container.PluginManager;
 import org.jivesoftware.wildfire.disco.DiscoInfoProvider;
@@ -99,12 +100,22 @@ public class XMPPServer {
     private Date startDate;
     private Date stopDate;
     private boolean initialized = false;
-    private List<String> mServerNames; 
+    private List<String> mServerNames;
+    
+    private static class ModuleData {
+        public Module module;
+        public ComponentIdentifier identifier;
+    }
 
     /**
-     * All modules loaded by this server
+     * All singleton modules loaded by this server
      */
-    private Map<Class, Module> modules = new HashMap<Class, Module>();
+    private Map<Class, Module> singletonModules = new HashMap<Class, Module>();
+    
+    /**
+     * New-style non-singleton modules
+     */
+    private Map<String, ModuleData> modules = new HashMap<String, ModuleData>();
 
     /**
      * Listeners that will be notified when the server has started or is about to be stopped.
@@ -357,7 +368,7 @@ public class XMPPServer {
                 }
 
                 public String getNode() {
-                    return null;
+                    return ""; // FIXME
                 }
 
                 public DiscoInfoProvider getDiscoInfoProvider() {
@@ -379,6 +390,7 @@ public class XMPPServer {
         
         try {
             for (ComponentIdentifier c : mLocationManager.getRemoteServerComponents()) {
+//            for (ComponentIdentifier c : mLocationManager.getAllServerComponents()) {
                 ServerItemsProvider sip = new MyServerItemsProvider(c);
                 mServerItemsProviders.add(sip);
             }
@@ -448,53 +460,63 @@ public class XMPPServer {
 
     private void loadModules() {
         // Load boot modules
-        mRoutingTable = (RoutingTable)loadModule(IMConfig.ROUTING_TABLE_CLASSNAME.getString());
-        loadModule(AuditManagerImpl.class.getName());
-        loadModule(RosterManager.class.getName());
-        loadModule(PrivateStorage.class.getName());
+        mRoutingTable = (RoutingTable)loadSingletonModule(IMConfig.ROUTING_TABLE_CLASSNAME.getString());
+        loadSingletonModule(AuditManagerImpl.class.getName());
+        loadSingletonModule(RosterManager.class.getName());
+        loadSingletonModule(PrivateStorage.class.getName());
         // Load core modules
-        loadModule(PresenceManagerImpl.class.getName());
-        loadModule(SessionManager.class.getName());
-        loadModule(PacketRouterImpl.class.getName());
-        loadModule(IQRouter.class.getName());
-        loadModule(MessageRouter.class.getName());
-        loadModule(PresenceRouter.class.getName());
-        loadModule(MulticastRouter.class.getName());
+        loadSingletonModule(PresenceManagerImpl.class.getName());
+        loadSingletonModule(SessionManager.class.getName());
+        loadSingletonModule(PacketRouterImpl.class.getName());
+        loadSingletonModule(IQRouter.class.getName());
+        loadSingletonModule(MessageRouter.class.getName());
+        loadSingletonModule(PresenceRouter.class.getName());
+        loadSingletonModule(MulticastRouter.class.getName());
 //        loadModule(PacketTransporterImpl.class.getName());
-        loadModule(PacketDelivererImpl.class.getName());
-        loadModule(TransportHandler.class.getName());
-        loadModule(OfflineMessageStrategy.class.getName());
-        loadModule(OfflineMessageStore.class.getName());
-        loadModule(VCardManager.class.getName());
+        loadSingletonModule(PacketDelivererImpl.class.getName());
+        loadSingletonModule(TransportHandler.class.getName());
+        loadSingletonModule(OfflineMessageStrategy.class.getName());
+        loadSingletonModule(OfflineMessageStore.class.getName());
+        loadSingletonModule(VCardManager.class.getName());
         // Load standard modules
-        loadModule(IQBindHandler.class.getName());
-        loadModule(IQSessionEstablishmentHandler.class.getName());
-        loadModule(IQAuthHandler.class.getName());
-        loadModule(IQPrivateHandler.class.getName());
-        loadModule(IQRegisterHandler.class.getName());
-        loadModule(IQRosterHandler.class.getName());
-        loadModule(IQTimeHandler.class.getName());
-        loadModule(IQvCardHandler.class.getName());
-        loadModule(IQVersionHandler.class.getName());
-        loadModule(IQLastActivityHandler.class.getName());
-        loadModule(PresenceSubscribeHandler.class.getName());
-        loadModule(PresenceUpdateHandler.class.getName());
-        loadModule(IQDiscoInfoHandler.class.getName());
-        loadModule(IQDiscoItemsHandler.class.getName());
-        loadModule(IQOfflineMessagesHandler.class.getName());
-        loadModule(MultiUserChatServerImpl.class.getName());
+        loadSingletonModule(IQBindHandler.class.getName());
+        loadSingletonModule(IQSessionEstablishmentHandler.class.getName());
+        loadSingletonModule(IQAuthHandler.class.getName());
+        loadSingletonModule(IQPrivateHandler.class.getName());
+        loadSingletonModule(IQRegisterHandler.class.getName());
+        loadSingletonModule(IQRosterHandler.class.getName());
+        loadSingletonModule(IQTimeHandler.class.getName());
+        loadSingletonModule(IQvCardHandler.class.getName());
+        loadSingletonModule(IQVersionHandler.class.getName());
+        loadSingletonModule(IQLastActivityHandler.class.getName());
+        loadSingletonModule(PresenceSubscribeHandler.class.getName());
+        loadSingletonModule(PresenceUpdateHandler.class.getName());
+        loadSingletonModule(IQDiscoInfoHandler.class.getName());
+        loadSingletonModule(IQDiscoItemsHandler.class.getName());
+        loadSingletonModule(IQOfflineMessagesHandler.class.getName());
+//        loadSingletonModule(MultiUserChatServerImpl.class.getName());
 
         // TIM HACK
 //        loadModule(MulticastDNSService.class.getName());
-        loadModule(IQSharedGroupHandler.class.getName());
-        loadModule(AdHocCommandHandler.class.getName());
-        loadModule(IQPrivacyHandler.class.getName());
-        loadModule(DefaultFileTransferManager.class.getName());
-        loadModule(FileTransferProxy.class.getName());
+        loadSingletonModule(IQSharedGroupHandler.class.getName());
+        loadSingletonModule(AdHocCommandHandler.class.getName());
+        loadSingletonModule(IQPrivacyHandler.class.getName());
+        loadSingletonModule(DefaultFileTransferManager.class.getName());
+        loadSingletonModule(FileTransferProxy.class.getName());
 //        loadModule(UpdateManager.class.getName());
         // Load this module always last since we don't want to start listening for clients
         // before the rest of the modules have been started
-        loadModule(ConnectionManagerImpl.class.getName());
+        loadSingletonModule(ConnectionManagerImpl.class.getName());
+        
+        List<ComponentIdentifier> componentIds = null;         
+        try {
+            componentIds = XMPPServer.getInstance().getThisServerComponents(null);
+            for (ComponentIdentifier id : componentIds) {
+                loadModule(id);
+            }
+        } catch(ServiceException ex) { // FIXME real error handling!
+            ZimbraLog.im.warn("Caught service exception getting local component list", ex);
+        }
     }
 
     /**
@@ -502,11 +524,27 @@ public class XMPPServer {
      *
      * @param module the name of the class that implements the Module interface.
      */
-    private Module loadModule(String module) {
+    private Module loadModule(ComponentIdentifier modId) {
+        String className = null;
+//        if ("muc".equals(modId.type)) {
+            className = MultiUserChatServerImpl.class.getName();
+//        }
+        
+        if (className == null)
+            return null; // ignore
+        
         try {
-            Class modClass = loader.loadClass(module);
+            Class modClass = loader.loadClass(className);
             Module mod = (Module) modClass.newInstance();
-            this.modules.put(modClass, mod);
+
+            if (mod instanceof BasicModule) {
+                BasicModule bm = (BasicModule)mod;
+                bm.setStartupParameters(modId, new HashMap<String, String>());
+            }
+            ModuleData md = new ModuleData();
+            md.module = mod;
+            md.identifier = modId;
+            this.modules.put(modId.serviceDomain, md);
             return mod;
         }
         catch (Exception e) {
@@ -515,27 +553,55 @@ public class XMPPServer {
             return null;
         }
     }
-
-    private void initModules() {
-//        for (Module module : modules.values()) {
-        for (Iterator<Module> iter = modules.values().iterator(); iter.hasNext();) {
-            Module module = iter.next();
-            boolean isInitialized = false;
-            try {
-                module.initialize(this);
-                isInitialized = true;
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                // Remove the failed initialized module
-                iter.remove();
-                if (isInitialized) {
-                    module.stop();
-                    module.destroy();
-                }
-                Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
-            }
+    
+    /**
+     * Loads a module.
+     *
+     * @param module the name of the class that implements the Module interface.
+     */
+    private Module loadSingletonModule(String module) {
+        try {
+            Class modClass = loader.loadClass(module);
+            Module mod = (Module) modClass.newInstance();
+            this.singletonModules.put(modClass, mod);
+            return mod;
         }
+        catch (Exception e) {
+            e.printStackTrace();
+            Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
+            return null;
+        }
+    }
+    
+    private void initModules() {
+        for (Iterator<Module> iter = singletonModules.values().iterator(); iter.hasNext();) {
+            Module module = iter.next();
+            if (!doModuleInit(module))
+                iter.remove();
+        }
+        for (Iterator<ModuleData> iter = modules.values().iterator(); iter.hasNext();) {
+            ModuleData md = iter.next();
+            if (!doModuleInit(md.module)) 
+                iter.remove();
+        }
+    }
+    
+    private boolean doModuleInit(Module module) {
+        boolean isInitialized = false;
+        try {
+            module.initialize(this);
+            isInitialized = true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            if (isInitialized) {
+                module.stop();
+                module.destroy();
+            }
+            Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -544,18 +610,25 @@ public class XMPPServer {
      * start them.</p>
      */
     private void startModules() {
-        for (Module module : modules.values()) {
-            boolean started = false;
-            try {
-                module.start();
+        for (Module module : singletonModules.values()) {
+            doStartModule(module);
+        }
+        for (ModuleData md : modules.values()) {
+            doStartModule(md.module);
+        }
+    }
+    
+    private void doStartModule(Module module) {
+        boolean started = false;
+        try {
+            module.start();
+        }
+        catch (Exception e) {
+            if (started && module != null) {
+                module.stop();
+                module.destroy();
             }
-            catch (Exception e) {
-                if (started && module != null) {
-                    module.stop();
-                    module.destroy();
-                }
-                Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
-            }
+            Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
         }
     }
 
@@ -765,15 +838,22 @@ public class XMPPServer {
 //        Interop.getInstance().stop();
         
         // If we don't have modules then the server has already been shutdown
-        if (modules.isEmpty()) {
+        if (singletonModules.isEmpty()) {
             return;
         }
+        
+        for (ModuleData md : modules.values()) {
+            md.module.stop();
+            md.module.destroy();
+        }
+        modules.clear();
+        
         // Get all modules and stop and destroy them
-        for (Module module : modules.values()) {
+        for (Module module : singletonModules.values()) {
             module.stop();
             module.destroy();
         }
-        modules.clear();
+        singletonModules.clear();
         // Stop all plugins
         if (pluginManager != null) {
             pluginManager.shutdown();
@@ -792,7 +872,7 @@ public class XMPPServer {
      * @return the <code>ConnectionManager</code> registered with this server.
      */
     public ConnectionManager getConnectionManager() {
-        return (ConnectionManager) modules.get(ConnectionManagerImpl.class);
+        return (ConnectionManager) singletonModules.get(ConnectionManagerImpl.class);
     }
 
     /**
@@ -814,7 +894,7 @@ public class XMPPServer {
      * @return the <code>PacketDeliverer</code> registered with this server.
      */
     public PacketDeliverer getPacketDeliverer() {
-        return (PacketDeliverer) modules.get(PacketDelivererImpl.class);
+        return (PacketDeliverer) singletonModules.get(PacketDelivererImpl.class);
     }
 
     /**
@@ -825,7 +905,7 @@ public class XMPPServer {
      * @return the <code>RosterManager</code> registered with this server.
      */
     public RosterManager getRosterManager() {
-        return (RosterManager) modules.get(RosterManager.class);
+        return (RosterManager) singletonModules.get(RosterManager.class);
     }
 
     /**
@@ -836,7 +916,7 @@ public class XMPPServer {
      * @return the <code>PresenceManager</code> registered with this server.
      */
     public PresenceManager getPresenceManager() {
-        return (PresenceManager) modules.get(PresenceManagerImpl.class);
+        return (PresenceManager) singletonModules.get(PresenceManagerImpl.class);
     }
 
     /**
@@ -847,7 +927,7 @@ public class XMPPServer {
      * @return the <code>OfflineMessageStore</code> registered with this server.
      */
     public OfflineMessageStore getOfflineMessageStore() {
-        return (OfflineMessageStore) modules.get(OfflineMessageStore.class);
+        return (OfflineMessageStore) singletonModules.get(OfflineMessageStore.class);
     }
 
     /**
@@ -858,7 +938,7 @@ public class XMPPServer {
      * @return the <code>OfflineMessageStrategy</code> registered with this server.
      */
     public OfflineMessageStrategy getOfflineMessageStrategy() {
-        return (OfflineMessageStrategy) modules.get(OfflineMessageStrategy.class);
+        return (OfflineMessageStrategy) singletonModules.get(OfflineMessageStrategy.class);
     }
 
     /**
@@ -869,7 +949,7 @@ public class XMPPServer {
      * @return the <code>PacketRouter</code> registered with this server.
      */
     public PacketRouter getPacketRouter() {
-        return (PacketRouter) modules.get(PacketRouterImpl.class);
+        return (PacketRouter) singletonModules.get(PacketRouterImpl.class);
     }
 
     /**
@@ -880,7 +960,7 @@ public class XMPPServer {
      * @return the <code>IQRegisterHandler</code> registered with this server.
      */
     public IQRegisterHandler getIQRegisterHandler() {
-        return (IQRegisterHandler) modules.get(IQRegisterHandler.class);
+        return (IQRegisterHandler) singletonModules.get(IQRegisterHandler.class);
     }
 
     /**
@@ -891,7 +971,7 @@ public class XMPPServer {
      * @return the <code>IQAuthHandler</code> registered with this server.
      */
     public IQAuthHandler getIQAuthHandler() {
-        return (IQAuthHandler) modules.get(IQAuthHandler.class);
+        return (IQAuthHandler) singletonModules.get(IQAuthHandler.class);
     }
 
     /**
@@ -910,7 +990,7 @@ public class XMPPServer {
      */
     public List<IQHandler> getIQHandlers() {
         List<IQHandler> answer = new ArrayList<IQHandler>();
-        for (Module module : modules.values()) {
+        for (Module module : singletonModules.values()) {
             if (module instanceof IQHandler) {
                 answer.add((IQHandler) module);
             }
@@ -926,7 +1006,7 @@ public class XMPPServer {
      * @return the <code>SessionManager</code> registered with this server.
      */
     public SessionManager getSessionManager() {
-        return (SessionManager) modules.get(SessionManager.class);
+        return (SessionManager) singletonModules.get(SessionManager.class);
     }
 
     /**
@@ -937,7 +1017,7 @@ public class XMPPServer {
      * @return the <code>TransportHandler</code> registered with this server.
      */
     public TransportHandler getTransportHandler() {
-        return (TransportHandler) modules.get(TransportHandler.class);
+        return (TransportHandler) singletonModules.get(TransportHandler.class);
     }
 
     /**
@@ -948,7 +1028,7 @@ public class XMPPServer {
      * @return the <code>PresenceUpdateHandler</code> registered with this server.
      */
     public PresenceUpdateHandler getPresenceUpdateHandler() {
-        return (PresenceUpdateHandler) modules.get(PresenceUpdateHandler.class);
+        return (PresenceUpdateHandler) singletonModules.get(PresenceUpdateHandler.class);
     }
 
     /**
@@ -959,7 +1039,7 @@ public class XMPPServer {
      * @return the <code>PresenceSubscribeHandler</code> registered with this server.
      */
     public PresenceSubscribeHandler getPresenceSubscribeHandler() {
-        return (PresenceSubscribeHandler) modules.get(PresenceSubscribeHandler.class);
+        return (PresenceSubscribeHandler) singletonModules.get(PresenceSubscribeHandler.class);
     }
 
     /**
@@ -970,7 +1050,7 @@ public class XMPPServer {
      * @return the <code>IQRouter</code> registered with this server.
      */
     public IQRouter getIQRouter() {
-        return (IQRouter) modules.get(IQRouter.class);
+        return (IQRouter) singletonModules.get(IQRouter.class);
     }
 
     /**
@@ -981,7 +1061,7 @@ public class XMPPServer {
      * @return the <code>MessageRouter</code> registered with this server.
      */
     public MessageRouter getMessageRouter() {
-        return (MessageRouter) modules.get(MessageRouter.class);
+        return (MessageRouter) singletonModules.get(MessageRouter.class);
     }
 
     /**
@@ -992,7 +1072,7 @@ public class XMPPServer {
      * @return the <code>PresenceRouter</code> registered with this server.
      */
     public PresenceRouter getPresenceRouter() {
-        return (PresenceRouter) modules.get(PresenceRouter.class);
+        return (PresenceRouter) singletonModules.get(PresenceRouter.class);
     }
 
     /**
@@ -1003,7 +1083,7 @@ public class XMPPServer {
      * @return the <code>MulticastRouter</code> registered with this server.
      */
     public MulticastRouter getMulticastRouter() {
-        return (MulticastRouter) modules.get(MulticastRouter.class);
+        return (MulticastRouter) singletonModules.get(MulticastRouter.class);
     }
 
     /**
@@ -1036,7 +1116,7 @@ public class XMPPServer {
      * @return the <code>AuditManager</code> registered with this server.
      */
     public AuditManager getAuditManager() {
-        return (AuditManager) modules.get(AuditManagerImpl.class);
+        return (AuditManager) singletonModules.get(AuditManagerImpl.class);
     }
 
     /**
@@ -1046,7 +1126,7 @@ public class XMPPServer {
      */
     public List<ServerFeaturesProvider> getServerFeaturesProviders() {
         List<ServerFeaturesProvider> answer = new ArrayList<ServerFeaturesProvider>();
-        for (Module module : modules.values()) {
+        for (Module module : singletonModules.values()) {
             if (module instanceof ServerFeaturesProvider) {
                 answer.add((ServerFeaturesProvider) module);
             }
@@ -1063,7 +1143,7 @@ public class XMPPServer {
      */
     public List<ServerItemsProvider> getServerItemsProviders() {
         List<ServerItemsProvider> answer = new ArrayList<ServerItemsProvider>();
-        for (Module module : modules.values()) {
+        for (Module module : singletonModules.values()) {
             if (module instanceof ServerItemsProvider) {
                 answer.add((ServerItemsProvider) module);
             }
@@ -1079,7 +1159,7 @@ public class XMPPServer {
      * @return the <code>IQDiscoInfoHandler</code> registered with this server.
      */
     public IQDiscoInfoHandler getIQDiscoInfoHandler() {
-        return (IQDiscoInfoHandler) modules.get(IQDiscoInfoHandler.class);
+        return (IQDiscoInfoHandler) singletonModules.get(IQDiscoInfoHandler.class);
     }
 
     /**
@@ -1090,7 +1170,7 @@ public class XMPPServer {
      * @return the <code>IQDiscoItemsHandler</code> registered with this server.
      */
     public IQDiscoItemsHandler getIQDiscoItemsHandler() {
-        return (IQDiscoItemsHandler) modules.get(IQDiscoItemsHandler.class);
+        return (IQDiscoItemsHandler) singletonModules.get(IQDiscoItemsHandler.class);
     }
 
     /**
@@ -1101,7 +1181,7 @@ public class XMPPServer {
      * @return the <code>PrivateStorage</code> registered with this server.
      */
     public PrivateStorage getPrivateStorage() {
-        return (PrivateStorage) modules.get(PrivateStorage.class);
+        return (PrivateStorage) singletonModules.get(PrivateStorage.class);
     }
 
     /**
@@ -1112,7 +1192,7 @@ public class XMPPServer {
      * @return the <code>AdHocCommandHandler</code> registered with this server.
      */
     public AdHocCommandHandler getAdHocCommandHandler() {
-        return (AdHocCommandHandler) modules.get(AdHocCommandHandler.class);
+        return (AdHocCommandHandler) singletonModules.get(AdHocCommandHandler.class);
     }
 
     /**
@@ -1123,7 +1203,7 @@ public class XMPPServer {
      * @return the <code>FileTransferProxy</code> registered with this server.
      */
     public FileTransferProxy getFileTransferProxy() {
-        return (FileTransferProxy) modules.get(FileTransferProxy.class);
+        return (FileTransferProxy) singletonModules.get(FileTransferProxy.class);
     }
 
     /**
@@ -1134,6 +1214,6 @@ public class XMPPServer {
      * @return the <code>FileTransferProxy</code> registered with this server.
      */
     public FileTransferManager getFileTransferManager() {
-        return (FileTransferManager) modules.get(DefaultFileTransferManager.class);
+        return (FileTransferManager) singletonModules.get(DefaultFileTransferManager.class);
     }
 }
