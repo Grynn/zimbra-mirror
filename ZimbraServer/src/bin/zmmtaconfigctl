@@ -18,7 +18,7 @@
 
 if [ x`whoami` != xzimbra ]; then
     echo Error: must be run as zimbra user
-	exit 1
+  exit 1
 fi
 
 source `dirname $0`/zmshutil || exit 1
@@ -26,49 +26,102 @@ zmsetvars \
     zimbra_home \
     zimbra_log_directory
 
+pid=""
+pidfile="${zimbra_log_directory}/zmmtaconfig.pid"
+
+getpid()
+{
+  if [ -f ${pidfile} ]; then
+    pid=$(cat ${pidfile})
+  fi
+}
+
+checkrunning()
+{
+  getpid
+  if [ "x$pid" = "x" ]; then
+    running=0
+  else
+    kill -0 $pid 2> /dev/null
+    if [ $? != 0 ]; then
+      pid=""
+      running=0
+    else
+      running=1
+    fi 
+  fi
+} 
+
 #
 # Main
 #
 case "$1" in
-    'start')
-		${zimbra_home}/libexec/zmmtaconfig </dev/null  \
-		    >> ${zimbra_log_directory}/zmmtaconfig.log 2>&1 
-        ;;
+  'start')
+    checkrunning
+    echo -n "Starting zmmtaconfig..."
+    if [ $running = 1 ]; then
+      echo "zmmtaconfig is already running."
+      exit 0
+    fi
+    ${zimbra_home}/libexec/zmmtaconfig >> ${zimbra_log_directory}/zmmtaconfig.log 2>&1 
+    for ((i = 0; i < 30; i++)) do
+      checkrunning
+      if [ $running = 1 ]; then
+        echo "done."
+        exit 0
+      fi
+      sleep 1
+    done
+    echo "failed."
+    exit 1
+   ;;
 
-    'kill')
-		if [ -f "/opt/zimbra/log/zmmtaconfig.pid" ]; then
-			cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
-			kill -TERM "$cpid" 2> /dev/null
-			rm -f /opt/zimbra/log/zmmtaconfig.pid
-		fi
-		exit 0
-        ;;
+  'kill'|'stop')
+    checkrunning
+    if [ $running = 0 ]; then
+      echo "zmmtaconfig is not running."
+      exit 0
+    else 
+      echo -n "Stopping zmmtaconfig..."
+      for ((i = 0; i < 30; i++)); do
+        kill -0 $pid 2> /dev/null
+        if [ $? != 0 ]; then
+          rm -rf ${pidfile}
+          break
+        fi
+        kill $pid
+        sleep 1
+      done
+    fi
+    if [ -s ${pidfile} ]; then
+      exit 1
+    else
+      echo "done."
+    fi
+    exit 0
+  ;;
 
-    'stop')
-		if [ -f "/opt/zimbra/log/zmmtaconfig.pid" ]; then
-			cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
-			kill -TERM "$cpid" 2> /dev/null
-			rm -f /opt/zimbra/log/zmmtaconfig.pid
-		fi
-		exit 0
-        ;;
     
-    'restart'|'reload')
-        $0 stop
-        $0 start
-        ;;
-	
-    'status')
-		if [ -f "/opt/zimbra/log/zmmtaconfig.pid" ]; then
-			cpid=`cat /opt/zimbra/log/zmmtaconfig.pid`
-			kill -0 "$cpid" 2> /dev/null
-			exit $?
-		fi
-		exit 1
-    ;;
+  'restart'|'reload')
+    $0 stop
+    $0 start
+  ;;
+  
+  'status')
+    echo -n "zmmtaconfig is "
+    checkrunning
+    if [ $running = 0 ]; then
+      echo "not running." 
+      exit 1
+    else
+      echo "running."
+      exit 0
+    fi
+   ;;
     
-    *)
-        echo "Usage: $0 start|stop|kill|restart|status"
-        exit 1
-        ;;
+  *)
+    echo "Usage: $0 start|stop|kill|restart|status"
+    exit 1
+  ;;
+
 esac

@@ -21,71 +21,112 @@ if [ x`whoami` != xzimbra ]; then
   exit 1
 fi
 
-platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
     zimbra_log_directory
 
+platform=$(${zimbra_home}/libexec/get_plat_tag.sh)
+pid=""
+saslversion="2.1.22.3z"
+pidfile="${zimbra_log_directory}/zmmtaconfig.pid"
+pidfile="${zimbra_home}/cyrus-sasl/state/saslauthd.pid"
+
 rewriteconfig() {
-  /opt/zimbra/libexec/zmmtaconfig sasl > /dev/null 2>&1
+  ${zimbra_home}/libexec/zmmtaconfig sasl > /dev/null 2>&1
+}
+
+getpid()
+{
+  if [ -f ${pidfile} ]; then
+    pid=$(cat ${pidfile})
+  fi
+}
+
+checkrunning()
+{
+  getpid
+  if [ "x$pid" = "x" ]; then
+    running=0
+  else
+    kill -0 $pid 2> /dev/null
+    if [ $? != 0 ]; then
+      pid=""
+      running=0
+    else
+      running=1
+    fi
+  fi
 }
 
 #
 # Main
 #
 case "$1" in
-    'start')
-    if [ -f ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid ]; then
-      cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid`
-      kill -0 "$cpid" 2> /dev/null
-      if [ $? -eq 0 ]; then
-        exit 0
-      fi
+  'start')
+    checkrunning
+    echo -n "Starting saslauthd..."
+    if [ $running = 1 ]; then
+      echo "already running."
+      exit 0
     fi
-    mkdir -p ${zimbra_home}/cyrus-sasl-2.1.22.3z/state
+    mkdir -p ${zimbra_home}/cyrus-sasl/state
     if [ x$2 = "x" ]; then
       rewriteconfig
     fi
-    ${zimbra_home}/cyrus-sasl-2.1.22.3z/sbin/saslauthd -r -a zimbra 
-        ;;
-
-    'kill')
-    cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid`
-        kill -TERM "$cpid" 2> /dev/null
-        ;;
-
-    'stop')
-    if [ -f ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid ]; then
-      cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid`
-      kill -TERM "$cpid" 2> /dev/null
-    fi
-    if [ -f ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid ]; then
-      if [ x$platform = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
-        killall -TERM saslauthd > /dev/null 2>&1
-      else
-        killall -TERM ${zimbra_home}/cyrus-sasl-2.1.22.3z/sbin/saslauthd > /dev/null 2>&1
+    ${zimbra_home}/cyrus-sasl/sbin/saslauthd -r -a zimbra 
+    for ((i = 0; i < 30; i++)) do
+      checkrunning
+      if [ $running = 1 ]; then
+        echo "done."
+        exit 0
       fi
+      sleep 1
+    done
+    echo "failed."
+    exit 1
+    ;;
+
+  'kill'|'stop')
+    checkrunning
+    if [ $running = 0 ]; then
+      echo "saslauthd is not running."
+      exit 0
+    else
+      echo -n "Stopping saslauthd..."
+      for ((i = 0; i < 30; i++)); do
+        kill -0 $pid 2> /dev/null
+        if [ $? != 0 ]; then
+          rm -rf ${pidfile}
+          break
+        fi
+        kill $pid
+        sleep 1
+      done
+    fi
+    if [ -s ${pidfile} ]; then
+      exit 1
+    else
+      echo "done."
     fi
     exit 0
-        ;;
-    
-    'restart'|'reload')
-        $0 stop
-        $0 start
-        ;;
+    ;;
+
+  'restart'|'reload')
+    $0 stop
+    $0 start
+    ;;
   
   'status')
-    cpid=`cat ${zimbra_home}/cyrus-sasl-2.1.22.3z/state/saslauthd.pid 2> /dev/null`
-    kill -0 "$cpid" 2> /dev/null
-    rc=$?
-    if [ $rc = 0 ]; then
-      echo "saslauthd is running with pid $cpid"
+    checkrunning
+    if [ $running = 1 ]; then
+      echo "saslauthd is running with pid $pid"
+      exit 0
     else 
-      echo "saslauthd is not running"
+      echo "saslauthd is not running."
+      exit 1
     fi
-    exit $rc
     ;;
     
     *)
