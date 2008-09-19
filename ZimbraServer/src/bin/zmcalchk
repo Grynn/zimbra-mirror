@@ -456,6 +456,11 @@ sub main() {
                 push(@errors, "$att: no matching event found; rsvp=$rsvp, role=$role");
             } else {
                 foreach my $instance (@{$item->{'inst'}}) {
+                    if (!defined($instance->{'ridZ'})) {
+                        print STDERR "WARNING: recurrence ID not found for $$item{'name'}\n" if ($debug);
+                        next;
+                    }
+
                     my $attInst = getInstanceByInstId($attItem, $instance->{'ridZ'});
                     my $iTime = scalar localtime($instance->{'s'} / 1000);
                     if (!defined($attInst)) {
