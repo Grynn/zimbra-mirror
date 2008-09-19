@@ -300,7 +300,19 @@ function(actionCode, ev) {
 		case DwtKeyMap.CANCEL:
 			this.popdown();
 			break;
-			
+
+		case DwtKeyMap.YES:
+			if (this._buttonDesc[DwtDialog.YES_BUTTON]) {
+				this._runCallbackForButtonId(DwtDialog.YES_BUTTON);
+			}
+			break;
+
+		case DwtKeyMap.NO:
+			if (this._buttonDesc[DwtDialog.NO_BUTTON]) {
+				this._runCallbackForButtonId(DwtDialog.NO_BUTTON);
+			}
+			break;
+
 		default:
 			return false;
 	}

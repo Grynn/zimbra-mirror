@@ -109,6 +109,7 @@ DwtKeyMap.JUSTIFY_LEFT		= "LeftJustify";
 DwtKeyMap.JUSTIFY_RIGHT		= "RightJustify";
 DwtKeyMap.NEXT				= "Next";
 DwtKeyMap.NEXT_TAB			= "NextTab";
+DwtKeyMap.NO				= "No";
 DwtKeyMap.PARENTMENU		= "ParentMenu";
 DwtKeyMap.PREV				= "Previous";
 DwtKeyMap.PREV_TAB			= "PreviousTab";
@@ -124,6 +125,7 @@ DwtKeyMap.TEXT_BOLD			= "Bold";
 DwtKeyMap.TEXT_ITALIC		= "Italic";
 DwtKeyMap.TEXT_UNDERLINE	= "Underline";
 DwtKeyMap.TEXT_STRIKETHRU	= "Strikethru";
+DwtKeyMap.YES				= "Yes";
 
 DwtKeyMap.GOTO_TAB_RE = new RegExp(DwtKeyMap.GOTO_TAB + "(\\d+)");
 
