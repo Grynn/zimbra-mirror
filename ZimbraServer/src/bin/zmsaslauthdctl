@@ -27,9 +27,7 @@ zmsetvars \
     zimbra_home \
     zimbra_log_directory
 
-platform=$(${zimbra_home}/libexec/get_plat_tag.sh)
 pid=""
-saslversion="2.1.22.3z"
 pidfile="${zimbra_log_directory}/zmmtaconfig.pid"
 pidfile="${zimbra_home}/cyrus-sasl/state/saslauthd.pid"
 
