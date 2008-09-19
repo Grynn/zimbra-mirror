@@ -422,6 +422,20 @@ public class ZJspSession {
         }
     }
 
+    public static ZMailbox getRestMailbox(PageContext context, ZAuthToken authToken, String targetAccountId) throws ServiceException {
+        if (authToken == null) {
+            return null;
+        } else {
+            // see if we can get a mailbox from the auth token
+            ZMailbox.Options options = new ZMailbox.Options(authToken, getSoapURL(context));
+            options.setNoSession(true);
+            options.setAuthAuthToken(false);
+            options.setTargetAccount(targetAccountId);
+            options.setTargetAccountBy(Provisioning.AccountBy.id);
+            options.setClientIp(context.getRequest().getRemoteAddr());
+            return ZMailbox.getMailbox(options);
+        }
+    }
 
     public static void setCollapsed(ZFolder folder, HashMap<String,String> expanded) {
         if (!folder.getSubFolders().isEmpty()) {
