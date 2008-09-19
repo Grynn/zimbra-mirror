@@ -41,7 +41,7 @@ public class DbOfflineMigration {
             switch (oldDbVersion) {
             case 51:
             	migrateFromVersion51(conn, isTestRun);
-            	break;
+            	//fall-through
             case 52:
             	migrateFromVersion52(conn, isTestRun);
             	break;
@@ -100,18 +100,17 @@ public class DbOfflineMigration {
 	
 	private void migrateFromVersion52(Connection conn, boolean isTestRun) throws Exception {
         PreparedStatement stmt = null;
+        ResultSet rs = null;
         boolean isSuccess = false;
         ArrayList<String> mboxgroups = new ArrayList<String>();
         try {
             stmt = conn.prepareStatement("SELECT schemaname FROM SYS.SYSSCHEMAS");
-            //stmt = conn.prepareStatement("SHOW DATABASES LIKE 'mboxgroup%'");
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
             while (rs.next()) {
             	String name = rs.getString(1);
             	if (name.toLowerCase().startsWith("mboxgroup"))
             		mboxgroups.add(name);
             }
-            	
             rs.close();
             stmt.close();
 
@@ -135,6 +134,25 @@ public class DbOfflineMigration {
                 stmt = conn.prepareStatement(stmtStr);
                 stmt.executeUpdate();
                 stmt.close();
+                
+                //Rename "Sync Failures" to "Error Reports"
+                stmt = conn.prepareStatement("SELECT name FROM " + mboxgroup + ".mail_item WHERE id=252");
+                rs = stmt.executeQuery();
+                String failureFolderName = null;
+                boolean folderExists = false;
+                if (rs.next()) {
+                	folderExists = true;
+                	failureFolderName = rs.getString(1);
+                }
+                rs.close();
+                stmt.close();
+                
+                String newName = "Error Reports";
+                if (folderExists && !newName.equals(failureFolderName)) {
+                	stmt = conn.prepareStatement("UPDATE " + mboxgroup + ".mail_item SET name='" + newName + "' , subject='" + newName + "' WHERE id=252");
+                	stmt.executeUpdate();
+                	stmt.close();
+                }
             }
             
             stmt = conn.prepareStatement("UPDATE zimbra.config set value='53' where name='db.version'");
@@ -143,6 +161,7 @@ public class DbOfflineMigration {
             
             isSuccess = true;
         } finally {
+        	DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);
             if (isTestRun || !isSuccess)
             	conn.rollback();
@@ -152,7 +171,7 @@ public class DbOfflineMigration {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		System.setProperty("zimbra.config", "/opt/zimbra/zdesktop dev/conf/localconfig.xml");
+		System.setProperty("zimbra.config", "/Users/jjzhuang/zimbra/zdesktop/conf/localconfig.xml");
 		
 		new DbOfflineMigration().testRun();
 	}

@@ -172,7 +172,6 @@ class SyncExceptionHandler {
         	buf.append("\n");
     	}
     	try {
-			dmbx.ensureFailureFolderExists();
 			MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
 			mm.setSentDate(now);
 			mm.setFrom(new InternetAddress(dmbx.getAccount().getName()));
@@ -191,7 +190,6 @@ class SyncExceptionHandler {
     
     private static void logSyncErrorMessage(DesktopMailbox dmbx, int id, String subject, String message) {
     	try {
-			dmbx.ensureFailureFolderExists();
 			Date now = new Date();
 			MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
 			mm.setSentDate(now);
