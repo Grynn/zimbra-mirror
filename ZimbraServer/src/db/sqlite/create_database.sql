@@ -306,8 +306,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
    item_id         INTEGER UNSIGNED NOT NULL PRIMARY KEY,
    data_source_id  CHAR(36) NOT NULL,
    remote_id       VARCHAR(255) NOT NULL,
-   metadata        MEDIUMTEXT
-)%
+   metadata        MEDIUMTEXT,
 
--- for reverse lookup
-CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_remote_id ON data_source_item (data_source_id, remote_id)%
+   UNIQUE (data_source_id, remote_id)
+)%
