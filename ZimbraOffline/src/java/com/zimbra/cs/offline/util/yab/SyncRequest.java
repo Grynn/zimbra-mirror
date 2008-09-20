@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 
-import com.zimbra.cs.util.yauth.AuthenticationException;
+import com.zimbra.cs.offline.util.Xml;
 
 /**
  * Yahoo address book synchronization request.
@@ -33,6 +33,7 @@ public class SyncRequest extends Request {
 
     private static final String SYNCHRONIZE = "synchronize";
     private static final String MYREV = "myrev";
+    private static final String SYNC_REQUEST = "sync-request";
     
     public SyncRequest(Session session, int revision) {
         super(session);
@@ -42,6 +43,10 @@ public class SyncRequest extends Request {
 
     public void addEvent(SyncRequestEvent event) {
         events.add(event);
+    }
+
+    public List<SyncRequestEvent> getEvents() {
+        return new ArrayList<SyncRequestEvent>(events);
     }
 
     @Override
@@ -56,7 +61,7 @@ public class SyncRequest extends Request {
 
     @Override
     public Element toXml(Document doc) {
-        Element e = doc.createElement("sync-request");
+        Element e = doc.createElement(SYNC_REQUEST);
         for (SyncRequestEvent event : events) {
             e.appendChild(event.toXml(doc));
         }
@@ -81,5 +86,10 @@ public class SyncRequest extends Request {
             events.get(i).setResult(results.get(i));
         }
         return res;
+    }
+
+    @Override
+    public String toString() {
+        return Xml.toString(toXml(Xml.newDocument()));
     }
 }

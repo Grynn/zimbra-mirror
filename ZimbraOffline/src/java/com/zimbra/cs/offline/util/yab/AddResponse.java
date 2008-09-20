@@ -17,6 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Document;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -45,12 +46,7 @@ public class AddResponse extends Response {
             throw new IllegalArgumentException(
                 "Not an '" + TAG + "' element: " + e.getTagName());
         }
-        List<Element> children = Xml.getChildren(e);
-        if (children.isEmpty()) {
-            throw new IllegalArgumentException(
-                "Expected at least one result element");
-        }
-        for (Element child : children) {
+        for (Element child : Xml.getChildren(e)) {
             String tag = child.getTagName();
             if (tag.equals(ContactResult.TAG)) {
                 results.add(ContactResult.fromXml(child));
@@ -58,9 +54,22 @@ public class AddResponse extends Response {
                 results.add(ErrorResult.fromXml(child));
             } else {
                 throw new IllegalArgumentException(
-                    "Unrecognized '" + TAG + "' result element: " + tag);
+                    "Unexpected result element: " + tag);
             }
         }
+        if (results.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Expected at least one result element");
+        }
         return this;
+    }
+
+    @Override
+    public Element toXml(Document doc) {
+        Element e = doc.createElement(TAG);
+        for (Result result : results) {
+            e.appendChild(result.toXml(doc));
+        }
+        return e;
     }
 }

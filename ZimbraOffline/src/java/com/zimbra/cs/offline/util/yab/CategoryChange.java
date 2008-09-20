@@ -22,12 +22,15 @@ import org.w3c.dom.Document;
 /**
  * YAB category action.
  */
-public class CategoryChange {
+public class CategoryChange extends Entity {
     private final Type type;
     private final Category category;
 
-    public static enum Type {
-        ADD, REMOVE
+    public enum Type {
+        ADD("add-to-category"), REMOVE("remove-from-category");
+
+        String tag;
+        Type(String tag) { this.tag = tag; }
     }
 
     public static CategoryChange add(Category category) {
@@ -51,14 +54,9 @@ public class CategoryChange {
         return category;
     }
 
+    @Override
     public Element toXml(Document doc) {
-        switch (type) {
-        case ADD:
-            return category.toXml(doc, "add-to-category");
-        case REMOVE:
-            return category.toXml(doc, "remove-from-category");
-        }
-        return null;
+        return category.toXml(doc, type.tag);
     }
 }
 

@@ -27,6 +27,8 @@ public class ContactChange {
     private final List<FieldChange> fieldChanges;
     private final List<CategoryChange> categoryChanges;
 
+    private static final String CID = "cid";
+
     public ContactChange() {
         fieldChanges = new ArrayList<FieldChange>();
         categoryChanges = new ArrayList<CategoryChange>();
@@ -56,10 +58,14 @@ public class ContactChange {
         return categoryChanges;
     }
 
+    public boolean isEmpty() {
+        return fieldChanges.isEmpty() && categoryChanges.isEmpty();
+    }
+
     public Element toXml(Document doc, String tag) {
         Element e = doc.createElement(tag);
         if (cid != -1) {
-            e.setAttribute(Contact.CID, String.valueOf(cid));
+            e.setAttribute(CID, String.valueOf(cid));
         }
         for (FieldChange change : fieldChanges) {
             e.appendChild(change.toXml(doc));

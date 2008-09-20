@@ -52,11 +52,11 @@ public final class Xml {
     }
 
     public static Element createElement(Document doc, String name, Object value) {
-        return appendText(doc.createElement(name), value.toString());
+        return appendText(doc.createElement(name), value);
     }
 
     public static Element appendElement(Element e, String name, Object value) {
-        e.appendChild(createElement(e.getOwnerDocument(), name, value.toString()));
+        e.appendChild(createElement(e.getOwnerDocument(), name, value));
         return e;
     }
 
@@ -117,6 +117,10 @@ public final class Xml {
         }
     }
 
+    public static Document newDocument() {
+        return newDocumentBuilder().newDocument();
+    }
+    
     public static void print(Node node, OutputStream os) throws IOException {
         TransformerFactory tf = TransformerFactory.newInstance();
         tf.setAttribute("indent-number", 2);
@@ -127,13 +131,19 @@ public final class Xml {
             t.transform(new DOMSource(node), new StreamResult(w));
             w.flush();
         } catch (TransformerException e) {
-            throw new IllegalStateException("Unable to serialize document", e);
+            // This should never happen
+            throw new IllegalArgumentException("Unable to serialize node", e);
         }
     }
 
-    public static String toString(Node node) throws IOException {
+    public static String toString(Node node) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        print(node, baos);
-        return new String(baos.toByteArray(), "UTF8");
+        try {
+            print(node, baos);
+            return new String(baos.toByteArray(), "utf-8");
+        } catch (IOException e) {
+            // This should never happen
+            throw new IllegalArgumentException("Unable to serialize node", e);
+        }
     }
 }

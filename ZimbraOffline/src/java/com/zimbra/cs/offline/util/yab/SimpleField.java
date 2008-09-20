@@ -45,12 +45,12 @@ public final class SimpleField extends Field {
         return new SimpleField(EMAIL, email, flags);
     }
 
-    public static SimpleField yahooid(String yid, String... flags) {
-        return new SimpleField(YAHOOID, yid, flags);
+    public static SimpleField yahooid(String id, String... flags) {
+        return new SimpleField(YAHOOID, id, flags);
     }
 
-    public static SimpleField otherid(String yid, String... flags) {
-        return new SimpleField(OTHERID, yid, flags);
+    public static SimpleField otherid(String id, String... flags) {
+        return new SimpleField(OTHERID, id, flags);
     }
 
     public static SimpleField phone(String phone, String... flags) {
@@ -67,6 +67,10 @@ public final class SimpleField extends Field {
 
     public static SimpleField notes(String notes) {
         return new SimpleField(NOTES, notes);
+    }
+
+    public static SimpleField link(String link, String... flags) {
+        return new SimpleField(LINK, link, flags);
     }
 
     public static SimpleField custom(String phone, String... flags) {
@@ -90,9 +94,20 @@ public final class SimpleField extends Field {
     }
 
     @Override
-    public boolean isSimple() {
-        return true;
+    public Type getType() {
+        return Type.SIMPLE;
     }
+
+    public boolean isNickname() { return NICKNAME.equals(getName()); }
+    public boolean isEmail()    { return EMAIL.equals(getName()); }
+    public boolean isYahooid()  { return YAHOOID.equals(getName()); }
+    public boolean isOtherid()  { return OTHERID.equals(getName()); }
+    public boolean isPhone()    { return PHONE.equals(getName()); }
+    public boolean isJobtitle() { return JOBTITLE.equals(getName()); }
+    public boolean isCompany()  { return COMPANY.equals(getName()); }
+    public boolean isNotes()    { return NOTES.equals(getName()); }
+    public boolean isLink()     { return LINK.equals(getName()); }
+    public boolean isCustom()   { return CUSTOM.equals(getName()); }
     
     public void setValue(String value) {
         this.value = value;

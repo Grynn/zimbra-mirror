@@ -17,6 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class SearchRequest extends Request {
     private static final String ACTION = "searchContacts";
@@ -33,5 +34,10 @@ public class SearchRequest extends Request {
     @Override
     protected Response parseResponse(Document doc) {
         return SearchResponse.fromXml(doc.getDocumentElement());
+    }
+
+    @Override
+    public Element toXml(Document doc) {
+        return null; // Not an XML entity
     }
 }

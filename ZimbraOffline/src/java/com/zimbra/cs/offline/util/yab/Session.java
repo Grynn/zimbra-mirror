@@ -18,19 +18,20 @@ package com.zimbra.cs.offline.util.yab;
 
 import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.util.yauth.Authenticator;
-import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.offline.util.Xml;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 
@@ -70,10 +71,6 @@ public class Session {
         this(Yab.XML, authenticator);
     }
 
-    public SyncResponse getChanges(int revision) throws IOException {
-        return (SyncResponse) createSyncRequest(revision).send();
-    }
-    
     public List<Contact> search(String params)
         throws IOException {
         SearchResponse res = (SearchResponse) createSearchRequest(params).send();
@@ -97,7 +94,6 @@ public class Session {
     public SyncRequest createSyncRequest(int revision) {
         return new SyncRequest(this, revision);
     }
-
     
     public String getFormat() {
         return format;
@@ -111,14 +107,26 @@ public class Session {
         return httpClient;
     }
 
+    public String toString(Node node) {
+        try {
+            return transform(node).toString("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("Unsupported encoding UTF-8");
+        }
+    }
+    
     public RequestEntity getRequestEntity(Document doc) {
+        return new ByteArrayRequestEntity(transform(doc).toByteArray());
+    }
+
+    private ByteArrayOutputStream transform(Node node) {
         baos.reset();
         try {
-            transformer.transform(new DOMSource(doc), new StreamResult(baos));
+            transformer.transform(new DOMSource(node), new StreamResult(baos));
         } catch (TransformerException e) {
             throw new IllegalStateException("Could not serialize document", e);
         }
-        return new ByteArrayRequestEntity(baos.toByteArray());
+        return baos;
     }
 
     public Document createDocument() {

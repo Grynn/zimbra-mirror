@@ -17,6 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Document;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -52,4 +53,12 @@ public class SearchResponse extends Response {
         return this;
     }
 
+    @Override
+    public Element toXml(Document doc) {
+        Element e = doc.createElement(TAG);
+        for (Contact contact : contacts) {
+            e.appendChild(contact.toXml(doc));
+        }
+        return e;
+    }
 }

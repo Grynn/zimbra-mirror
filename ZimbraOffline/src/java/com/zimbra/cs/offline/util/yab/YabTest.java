@@ -36,7 +36,7 @@ public class YabTest {
 
     private static final String APPID = "D2hTUBHAkY0IEL5MA7ibTS_1K86E8RErSSaTGn4-";
     private static final String USER = "dacztest";
-    private static final String PASS = "test1234";
+    private static final String PASS = "test123";
 
     private static final NameField NAME = new NameField("John", "Doe");
     private static final SimpleField EMAIL = SimpleField.email("john@foo.com", Flag.HOME);
@@ -80,24 +80,28 @@ public class YabTest {
         SyncRequest req = session.createSyncRequest(0);
         SyncResponse res = (SyncResponse) req.send();
         int cid = findContact(res.getAddedContacts(), NAME);
-        if (cid != -1) {
-            // Remove contact
-            req = session.createSyncRequest(res.getRevision());
-            req.addEvent(SyncRequestEvent.removeContact(cid));
-            res = (SyncResponse) req.send();
-            Assert.assertEquals(1, res.getRemovedContacts().size());
-        }
         // Add new contact
         req = session.createSyncRequest(res.getRevision());
         Contact contact = new Contact();
         contact.addField(NAME);
-        SyncRequestEvent event = SyncRequestEvent.addContact(contact);
-        req.addEvent(event);
+        if (cid != -1) {
+            req.addEvent(SyncRequestEvent.removeContact(cid));
+        }
+        req.addEvent(SyncRequestEvent.addContact(contact));
         res = (SyncResponse) req.send();
-        Assert.assertNotNull(event.getResult());
-        Assert.assertTrue(event.getResult().isSuccess());
-        Assert.assertTrue(((SuccessResult) event.getResult()).isAdded());
+        checkResults(res);
+        if (cid != -1) {
+            Assert.assertEquals(1, res.getRemovedContacts().size());
+        }
         Assert.assertEquals(1, res.getAddedContacts().size());
+        Assert.assertEquals(0, res.getUpdatedContacts().size());
+    }
+
+    private static void checkResults(SyncResponse res) {
+        for (Result result : res.getResults()) {
+            Assert.assertNotNull(result);
+            Assert.assertFalse(result.isError());
+        }
     }
 
     private static int findContact(List<Contact> contacts, NameField name) {
@@ -118,6 +122,6 @@ public class YabTest {
     public static void main(String... args) throws Exception {
         YabTest test = new YabTest();
         test.setUp();
-        test.testSyncRequest();
+        test.testSynchronize();
     }
 }

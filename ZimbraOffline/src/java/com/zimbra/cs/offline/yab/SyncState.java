@@ -19,45 +19,128 @@ package com.zimbra.cs.offline.yab;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.MetadataList;
+import com.zimbra.cs.offline.util.yab.Contact;
+import com.zimbra.cs.offline.util.yab.Session;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Log;
 
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collection;
+
+import org.w3c.dom.Document;
 
 public class SyncState {
+    private final SyncSession sync;
     private int revision;  // YAB revision number
     private int sequence;  // Zimbra mailbox last change id
-    private Map<Integer, Integer> localRemoteCidMap = new HashMap<Integer, Integer>();
-    private Map<Integer, Integer> remoteLocalCidMap = new HashMap<Integer, Integer>();
-    private Map<Integer, Integer> localRemoteCatidMap = new HashMap<Integer, Integer>();
-    private Map<Integer, Integer> remoteLocalCatidMap = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> contactIdByItemId = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> itemIdByContactId = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> categoryIdByItemId = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> itemIdByCategoryId = new HashMap<Integer, Integer>();
+    private Map<Integer, String> contactsByItemId = new HashMap<Integer, String>();
 
     private static final String YAB = "YAB";
     private static final String REV = "REV";
     private static final String SEQ = "SEQ";
     private static final String CIDS = "CIDS";
     private static final String CATIDS = "CATIDS";
+    private static final String CONTACTS = "CONTACTS";
 
-    public static SyncState load(Mailbox mbox) throws ServiceException {
-        return new SyncState().loadState(mbox);
+    private static final Log LOG = OfflineLog.yab;
+
+    public static SyncState load(SyncSession sync)
+        throws ServiceException {
+        return new SyncState(sync).load();
     }
 
-    private SyncState loadState(Mailbox mbox) throws ServiceException {
-        Metadata md = mbox.getConfig(new Mailbox.OperationContext(mbox), YAB);
+    private SyncState(SyncSession sync) {
+        this.sync = sync;
+    }
+
+    private SyncState load() throws ServiceException {
+        Mailbox mbox = sync.getMailbox();
+        Metadata md = mbox.getConfig(sync.getContext(), YAB);
         if (md == null) return this;
         revision = (int) md.getLong(REV);
         sequence = (int) md.getLong(SEQ);
-        loadIds(md.getList(CIDS), localRemoteCidMap, remoteLocalCidMap);
-        loadIds(md.getList(CATIDS), localRemoteCatidMap, remoteLocalCatidMap);
+        loadIds(md.getList(CIDS), contactIdByItemId, itemIdByContactId);
+        loadIds(md.getList(CATIDS), categoryIdByItemId, itemIdByCategoryId);
+        loadContacts(md.getList(CONTACTS));
+        LOG.debug("Loaded sync state: %s", this);
         return this;
     }
 
-    public int getRevision() { return revision; }
+    private static void loadIds(MetadataList ml,
+                                Map<Integer, Integer> remoteByLocalId,
+                                Map<Integer, Integer> localByRemoteId) {
+        if (ml == null) return;
+        assert ml.size() % 2 == 0;
+        for (Iterator it = ml.asList().iterator(); it.hasNext(); ) {
+            Integer localId = ((Long) it.next()).intValue();
+            Integer remoteId = ((Long) it.next()).intValue();
+            remoteByLocalId.put(localId, remoteId);
+            localByRemoteId.put(remoteId, localId);
+        }
+    }
+
+    private void loadContacts(MetadataList ml) throws ServiceException {
+        contactsByItemId = new HashMap<Integer, String>(ml.size() / 2);
+        for (int i = 0; i < ml.size(); ) {
+            int cid = Integer.parseInt(ml.get(i++));
+            String contact = ml.get(i++);
+            contactsByItemId.put(cid, contact);
+        }
+    }
     
+    public void save() throws ServiceException {
+        Metadata md = new Metadata();
+        md.put(REV, revision);
+        md.put(SEQ, sequence);
+        md.put(CIDS, saveIds(contactIdByItemId));
+        md.put(CATIDS, saveIds(categoryIdByItemId));
+        md.put(CONTACTS, saveContacts());
+        sync.getMailbox().setConfig(sync.getContext(), YAB, md);
+        LOG.debug("Saved sync state: %s", this);
+    }
+
+    private static List<Long> saveIds(Map<Integer, Integer> remoteByLocalId) {
+        List<Long> ids = new ArrayList<Long>(remoteByLocalId.size() * 2);
+        for (Map.Entry<Integer, Integer> e : remoteByLocalId.entrySet()) {
+            ids.add(e.getKey().longValue());
+            ids.add(e.getValue().longValue());
+        }
+        return ids;
+    }
+
+    private MetadataList saveContacts() {
+        MetadataList ml = new MetadataList();
+        for (Map.Entry<Integer, String> me : contactsByItemId.entrySet()) {
+            ml.add(me.getKey().toString());
+            ml.add(me.getValue());
+        }
+        return ml;
+    }
+
+    public void delete() throws ServiceException {
+        sync.getMailbox().setConfig(sync.getContext(), YAB, null);
+        clear();
+    }
+
+    public void clear() {
+        revision = 0;
+        sequence = 0;
+        contactIdByItemId.clear();
+        itemIdByContactId.clear();
+        categoryIdByItemId.clear();
+        itemIdByCategoryId.clear();
+        contactsByItemId.clear();
+    }
+
+    public int getRevision() { return revision; }
     public int getSequence() { return sequence; }
 
     public void setRevision(int revision) {
@@ -67,21 +150,21 @@ public class SyncState {
     public void setSequence(int sequence) {
         this.sequence = sequence;
     }
-    
-    public int getCid(int contactId) {
-        return getInt(localRemoteCidMap, contactId);
+
+    public int getContactId(int itemId) {
+        return getInt(contactIdByItemId, itemId);
     }
 
-    public int getContactId(int cid) {
-        return getInt(remoteLocalCidMap, cid);
+    public int getContactItemId(int contactId) {
+        return getInt(itemIdByContactId, contactId);
     }
 
-    public int getCatid(int categoryId) {
-        return getInt(localRemoteCatidMap, categoryId);
+    public int getCategoryId(int itemId) {
+        return getInt(categoryIdByItemId, itemId);
     }
 
-    public int getCategoryId(int catid) {
-        return getInt(remoteLocalCatidMap, catid);
+    public int getCategoryItemId(int categoryId) {
+        return getInt(itemIdByCategoryId, categoryId);
     }
 
     private static int getInt(Map<Integer, Integer> map, int key) {
@@ -89,70 +172,72 @@ public class SyncState {
         return value != null ? value : -1;
     }
 
-    public List<Integer> getCids(Collection<Integer> contactIds) {
-        List<Integer> cids = new ArrayList<Integer>(contactIds.size());
-        for (int contactId : contactIds) {
-            int cid = getCid(contactId);
-            if (cid != -1) cids.add(cid);
+    public void addContact(int itemId, int contactId) {
+        if (getContactId(itemId) != -1) {
+            throw new IllegalArgumentException("Duplicate contact id");
         }
-        return cids;
-    }
-    
-    public void addContact(int contactId, int cid) {
-        localRemoteCidMap.put(contactId, cid);
-        remoteLocalCidMap.put(cid, contactId);
+        contactIdByItemId.put(itemId, contactId);
+        itemIdByContactId.put(contactId, itemId);
+        LOG.debug("Added contact for itemId=%d, cid=%d", itemId, contactId);
     }
 
-    public void addCategory(int categoryId, int catid) throws SyncException {
-        localRemoteCatidMap.put(categoryId, catid);
-        remoteLocalCatidMap.put(catid, categoryId);
-    }
 
-    public void removeContact(int contactId) {
-        Integer cid = localRemoteCidMap.remove(contactId);
+    public void removeContact(int itemId) {
+        Integer cid = contactIdByItemId.remove(itemId);
         if (cid != null) {
-            remoteLocalCidMap.remove(cid);
+            itemIdByContactId.remove(cid);
         }
     }
 
-    public void remoteCategory(int categoryId) {
-        Integer catid = localRemoteCatidMap.remove(categoryId);
+    public void addCategory(int itemId, int categoryId) {
+        categoryIdByItemId.put(itemId, categoryId);
+        itemIdByCategoryId.put(categoryId, itemId);
+    }
+
+    public void removeCategory(int itemId) {
+        Integer catid = categoryIdByItemId.remove(itemId);
         if (catid != null) {
-            remoteLocalCatidMap.remove(catid);
-        }
-    }
-    
-    public void save() throws ServiceException {
-        Metadata md = new Metadata();
-        md.put(REV, revision);
-        md.put(SEQ, sequence);
-        if (!localRemoteCidMap.isEmpty()) {
-            md.put(CIDS, idList(localRemoteCidMap));
-        }
-        if (!localRemoteCatidMap.isEmpty()) {
-            md.put(CATIDS, idList(localRemoteCatidMap));
-        }
-    }
-    
-    private static void loadIds(MetadataList ids,
-                                Map<Integer, Integer> localRemoteMap,
-                                Map<Integer, Integer> remoteLocalMap) {
-        if (ids == null) return;
-        assert ids.size() % 2 == 0;
-        for (Iterator it = ids.asList().iterator(); it.hasNext(); ) {
-            Integer local = ((Long) it.next()).intValue();
-            Integer remote = ((Long) it.next()).intValue();
-            localRemoteMap.put(local, remote);
-            remoteLocalMap.put(remote, local);
+            itemIdByCategoryId.remove(catid);
         }
     }
 
-    private static List<Long> idList(Map<Integer, Integer> localRemoteMap) {
-        List<Long> ids = new ArrayList<Long>(localRemoteMap.size() * 2);
-        for (Map.Entry<Integer, Integer> e : localRemoteMap.entrySet()) {
-            ids.add(e.getKey().longValue());
-            ids.add(e.getValue().longValue());
+    public String toString() {
+        return String.format("[rev=%d,seq=%d,contacts=%d,categories=%d]",
+            revision, sequence, contactIdByItemId.size(), categoryIdByItemId.size());
+    }
+
+    // TODO Remove following methods once we store contact in per-item metadata
+
+    public Contact getContact(int itemId) throws ServiceException {
+        String s = contactsByItemId.get(itemId);
+        LOG.debug("Loading contact for itemId = %s:\n", s);
+        if (s != null) {
+            try {
+                Document doc = sync.getSession().parseDocument(s);
+                return Contact.fromXml(doc.getDocumentElement());
+            } catch (Exception e) {
+                throw ServiceException.FAILURE(
+                    "Unable to parse contact for cid " + itemId, null);
+            }
         }
-        return ids;
+        return null;
+    }
+
+    public void updateContact(Contact contact) throws SyncException {
+        int cid = contact.getId();
+        int itemId = getContactItemId(cid);
+        if (itemId == -1) {
+            throw new IllegalArgumentException("Unknown contact id " + cid);
+        }
+        String data = serialize(contact);
+        contactsByItemId.put(itemId, data);
+        LOG.debug("Saved contact data for itemId=%d:\n%s", itemId, data);
+    }
+
+    private String serialize(Contact contact) {
+        Session session = sync.getSession();
+        Document doc = session.createDocument();
+        return session.toString(contact.toXml(doc));
+
     }
 }

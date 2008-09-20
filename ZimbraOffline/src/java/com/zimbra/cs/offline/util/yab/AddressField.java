@@ -43,8 +43,8 @@ public final class AddressField extends Field {
     }
 
     @Override
-    public boolean isAddress() {
-        return true;
+    public Type getType() {
+        return Type.ADDRESS;
     }
     
     public String getStreet() {

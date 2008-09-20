@@ -23,10 +23,12 @@ import com.zimbra.cs.offline.util.Xml;
 /**
  * Category reference by name or id.
  */
-public final class Category {
+public final class Category extends Entity {
     private String name;
     private int id = -1;
 
+    public static final String TAG = "category";
+    
     private static final String CATID = "catid";
 
     public Category() {}
@@ -60,7 +62,12 @@ public final class Category {
         cat.parseXml(e);
         return cat;
     }
-        
+
+    @Override
+    public Element toXml(Document doc) {
+        return toXml(doc, TAG);
+    }
+    
     public Element toXml(Document doc, String tag) {
         Element e = doc.createElement(tag);
         if (id != -1) {

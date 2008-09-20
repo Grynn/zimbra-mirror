@@ -50,7 +50,7 @@ public class AddRequest extends Request {
         }
         Element e = doc.createElement(TAG);
         for (Contact contact : contacts) {
-            e.appendChild(contact.toXml(doc, "contact"));
+            e.appendChild(contact.toXml(doc));
         }
         return e;
     }

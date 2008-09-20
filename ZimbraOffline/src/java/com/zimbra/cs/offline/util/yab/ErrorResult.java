@@ -17,6 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Document;
 import com.zimbra.cs.offline.util.Xml;
 
 public class ErrorResult extends Result {
@@ -27,12 +28,15 @@ public class ErrorResult extends Result {
 
     public static final String TAG = "error";
 
+    private static final String CODE = "code";
+    private static final String USER_MESSAGE = "user-message";
+    private static final String DEBUG_MESSAGE = "debug-message";
+    private static final String RETRY_AFTER = "retry-after";
+
     private ErrorResult() {}
 
     @Override
-    public boolean isError() {
-        return true;
-    }
+    public boolean isError() { return true; }
     
     public int getCode() {
         return code;
@@ -58,13 +62,13 @@ public class ErrorResult extends Result {
         assert e.getTagName().equals(TAG);
         for (Element child : Xml.getChildren(e)) {
             String name = child.getTagName();
-            if (name.equals("code")) {
+            if (name.equals(CODE)) {
                 code = Xml.getIntValue(child);
-            } else if (name.equals("user-message")) {
+            } else if (name.equals(USER_MESSAGE)) {
                 userMessage = Xml.getTextValue(child);
-            } else if (name.equals("debug-message")) {
+            } else if (name.equals(DEBUG_MESSAGE)) {
                 debugMessage = Xml.getTextValue(child);
-            } else if (name.equals("retry-after")) {
+            } else if (name.equals(RETRY_AFTER)) {
                 retryAfter = Xml.getIntValue(child);
             } else {
                 throw new IllegalArgumentException(
@@ -72,5 +76,23 @@ public class ErrorResult extends Result {
             }
         }
         return this;
+    }
+
+    @Override
+    public Element toXml(Document doc) {
+        Element e = doc.createElement(TAG);
+        if (code != -1) {
+            Xml.appendElement(e, CODE, code);
+        }
+        if (userMessage != null) {
+            Xml.appendElement(e, USER_MESSAGE, userMessage);
+        }
+        if (debugMessage != null) {
+            Xml.appendElement(e, DEBUG_MESSAGE, debugMessage);
+        }
+        if (retryAfter != -1) {
+            Xml.appendElement(e, RETRY_AFTER, retryAfter);
+        }
+        return e;
     }
 }

@@ -538,7 +538,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
     }
 
-    private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String password, Map<String, Object> dsAttrs) throws ServiceException {
+    private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String _password, Map<String, Object> dsAttrs) throws ServiceException {
         validEmailAddress(emailAddress);
         emailAddress = emailAddress.toLowerCase().trim();
         String parts[] = emailAddress.split("@");
@@ -557,8 +557,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	DataSource.Type type = DataSource.Type.valueOf(dsType);
         String dsid = UUID.randomUUID().toString();
     	dsAttrs.put(A_zimbraDataSourceId, dsid);
-    	
-    	dsAttrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) dsAttrs.get(A_zimbraDataSourcePassword)));
+    	String password = (String) dsAttrs.remove(A_zimbraDataSourcePassword);
+    	dsAttrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, password));
     	String smtpPassword = (String) dsAttrs.get(A_zimbraDataSourceSmtpAuthPassword);
     	if (smtpPassword != null)
     		dsAttrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dsid, smtpPassword));
@@ -592,9 +592,19 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
 
         Account account = createAccountInternal(emailAddress, accountId, attrs, false);
-        DataSource ds = null;
+        OfflineDataSource ds = null;
+        OfflineDataSource yabDs = null;
         try {
-        	ds = createDataSource(account, type, dsName, dsAttrs, true, false);
+        	ds = (OfflineDataSource) createDataSource(account, type, dsName, dsAttrs, true, false);
+            if (ds.isYahoo()) {
+                // Create data source for Yahoo Address Nook
+                Map<String, Object> yabAttrs = new HashMap<String, Object>(dsAttrs);
+                String yabId = UUID.randomUUID().toString();
+                yabAttrs.put(A_zimbraDataSourceId, yabId);
+                yabAttrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(yabId, password));
+                yabDs = (OfflineDataSource) createDataSource(
+                    account, DataSource.Type.yab, "yab:" + dsName, yabAttrs, true, false);
+            }
         } catch (Throwable t) {
         	OfflineLog.offline.warn("failed creating datasource: " + dsName, t);
         	deleteAccount(account.getId());
@@ -603,7 +613,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             MailboxManager.getInstance().getMailboxByAccount(account);
         } catch (ServiceException e) {
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
-            deleteDataSource(account, ds.getId());
+            if (ds != null) {
+                deleteDataSource(account, ds.getId());
+                if (yabDs != null) {
+                    deleteDataSource(account, yabDs.getId());
+                }
+            }
             mAccountCache.remove(account);
             deleteAccount(accountId);
             throw e;

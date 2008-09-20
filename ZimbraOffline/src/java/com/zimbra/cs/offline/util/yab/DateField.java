@@ -41,8 +41,16 @@ public final class DateField extends Field {
         return new DateField(BIRTHDAY, day, month, year);
     }
 
+    public static DateField birthday(Date date) {
+        return new DateField(BIRTHDAY, date);
+    }
+
     public static DateField anniversary(int day, int month, int year) {
         return new DateField(ANNIVERSARY, day, month, year);
+    }
+
+    public static DateField anniversary(Date date) {
+        return new DateField(ANNIVERSARY, date);
     }
 
     public DateField(String name) {
@@ -56,9 +64,14 @@ public final class DateField extends Field {
         this.year = year;
     }
 
+    public DateField(String name, Date date) {
+        super(name);
+        setDate(date);
+    }
+
     @Override
-    public boolean isDate() {
-        return true;
+    public Type getType() {
+        return Type.DATE;
     }
     
     public boolean isBirthday() {

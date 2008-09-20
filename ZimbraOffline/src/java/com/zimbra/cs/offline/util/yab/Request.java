@@ -15,9 +15,8 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-public abstract class Request {
+public abstract class Request extends Entity {
     protected final Session session;
     protected final List<String> params;
 
@@ -31,7 +30,7 @@ public abstract class Request {
     }
 
     protected abstract String getAction();
-
+    
     public void addParam(String name, String value) {
         params.add(name + "=" + encode(value));
     }
@@ -45,10 +44,6 @@ public abstract class Request {
             }
             addParam(param.substring(0, i), param.substring(i + 1));
         }
-    }
-
-    public Element toXml(Document doc) {
-        return null; // Only needed for POST requests
     }
 
     public Response send() throws IOException {

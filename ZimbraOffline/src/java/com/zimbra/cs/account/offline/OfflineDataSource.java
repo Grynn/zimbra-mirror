@@ -33,6 +33,7 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.yab.YabImport;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.datasource.SyncState;
 
@@ -266,6 +267,14 @@ public class OfflineDataSource extends DataSource {
     public long getSyncFrequency() {
         return getTimeInterval(OfflineProvisioning.A_zimbraDataSourceSyncFreq,
                                OfflineConstants.DEFAULT_SYNC_FREQ);
+    }
+
+    @Override
+    public DataImport getDataImport() throws ServiceException {
+        if (getType() == Type.yab && isYahoo()) {
+            return new YabImport(this);
+        }
+        return super.getDataImport();
     }
 }
 

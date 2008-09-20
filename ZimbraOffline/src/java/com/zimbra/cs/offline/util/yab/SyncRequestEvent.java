@@ -19,7 +19,7 @@ package com.zimbra.cs.offline.util.yab;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 
-public class SyncRequestEvent {
+public class SyncRequestEvent extends Entity {
     private final Type type;
     private final Object param;
     private Result result;
@@ -86,7 +86,8 @@ public class SyncRequestEvent {
     public void setResult(Result result) {
         this.result = result;
     }
-    
+
+    @Override
     public Element toXml(Document doc) {
         switch (type) {
         case ADD_CONTACT:

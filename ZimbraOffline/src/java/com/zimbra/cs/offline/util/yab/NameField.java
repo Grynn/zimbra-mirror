@@ -54,8 +54,8 @@ public final class NameField extends Field {
     }
 
     @Override
-    public boolean isName() {
-        return true;
+    public Type getType() {
+        return Type.NAME;
     }
 
     public String getFirst() {

@@ -22,7 +22,7 @@ import org.w3c.dom.Document;
 /**
  * Represents a Contact field change.
  */
-public class FieldChange {
+public class FieldChange extends Entity {
     private final Type type;
     private final Field field;
     private final int fid;
@@ -61,6 +61,7 @@ public class FieldChange {
         return fid;
     }
 
+    @Override
     public Element toXml(Document doc) {
         switch (type) {
         case ADD:

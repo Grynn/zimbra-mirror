@@ -19,12 +19,6 @@ package com.zimbra.cs.offline.util.yab;
 /**
  * Request result.
  */
-public class Result {
-    public boolean isSuccess() {
-        return false;
-    }
-
-    public boolean isError() {
-        return false;
-    }
+public abstract class Result extends Entity {
+    public abstract boolean isError();
 }

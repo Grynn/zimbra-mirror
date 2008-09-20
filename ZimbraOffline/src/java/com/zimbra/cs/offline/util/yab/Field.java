@@ -29,13 +29,17 @@ import com.zimbra.cs.offline.util.Xml;
 /**
  * YAB field type.
  */
-public abstract class Field {
+public abstract class Field extends Entity {
     private String name;
     private int id = -1;
     private final Map<String, Boolean> flags;
 
     public static final String FID = "fid";
 
+    public static enum Type {
+        NAME, DATE, ADDRESS, SIMPLE
+    }
+    
     public Field() {
         flags = new HashMap<String, Boolean>();
     }
@@ -45,10 +49,12 @@ public abstract class Field {
         setName(name);
     }
 
-    public boolean isName() { return false; }
-    public boolean isDate() { return false; }
-    public boolean isAddress() { return false; }
-    public boolean isSimple() { return false; }
+    public abstract Type getType();
+    
+    public boolean isName()    { return getType() == Type.NAME; }
+    public boolean isDate()    { return getType() == Type.DATE; }
+    public boolean isAddress() { return getType() == Type.ADDRESS; }
+    public boolean isSimple()  { return getType() == Type.SIMPLE; }
 
     public void setName(String name) {
         this.name = name;
@@ -110,6 +116,11 @@ public abstract class Field {
         return e;
     }
 
+    @Override
+    public Element toXml(Document doc) {
+        return toXml(doc, getName());
+    }
+    
     public static Field fromXml(Element e) {
         Field field = newField(e.getTagName());
         field.parseXml(e);

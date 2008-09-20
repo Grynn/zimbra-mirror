@@ -17,6 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Document;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class SyncResponse extends Response {
     private final List<SyncResponseEvent> events;
 
     private static final String TAG = "sync-response";
+    
+    private static final String LMT = "lmt";
+    private static final String REV = "rev";
     
     public static SyncResponse fromXml(Element e) {
         return new SyncResponse().parseXml(e);
@@ -97,8 +101,8 @@ public class SyncResponse extends Response {
             throw new IllegalArgumentException(
                 "Not a '" + TAG + "' element: " + e.getTagName());
         }
-        lastModifiedTime = Xml.getIntAttribute(e, "lmt");
-        revision = Xml.getIntAttribute(e, "rev");
+        lastModifiedTime = Xml.getIntAttribute(e, LMT);
+        revision = Xml.getIntAttribute(e, REV);
         ListIterator<Element> it = Xml.getChildren(e).listIterator();
         // Parse categories
         Category category;
@@ -120,7 +124,9 @@ public class SyncResponse extends Response {
     private static Category parseCategory(ListIterator<Element> it) {
         if (it.hasNext()) {
             Element e = it.next();
-            if (e.getTagName().equals("category")) return Category.fromXml(e);
+            if (e.getTagName().equals(Category.TAG)) {
+                return Category.fromXml(e);
+            }
             it.previous();
         }
         return null;
@@ -130,10 +136,34 @@ public class SyncResponse extends Response {
         if (it.hasNext()) {
             Element e = it.next();
             String tag = e.getTagName();
-            if (tag.equals("success")) return SuccessResult.fromXml(e);
-            if (tag.equals("error")) return ErrorResult.fromXml(e);
+            if (tag.equals(SuccessResult.TAG)) {
+                return SuccessResult.fromXml(e);
+            } else if (tag.equals(ErrorResult.TAG)) {
+                return ErrorResult.fromXml(e);
+            }
             it.previous();
         }
         return null;
+    }
+
+    @Override
+    public Element toXml(Document doc) {
+        Element e = doc.createElement(TAG);
+        if (lastModifiedTime != -1) {
+            Xml.appendElement(e, LMT, lastModifiedTime);
+        }
+        if (revision != -1) {
+            Xml.appendElement(e, REV, revision);
+        }
+        for (Category category : categories) {
+            e.appendChild(category.toXml(doc));
+        }
+        for (Result result : results) {
+            e.appendChild(result.toXml(doc));
+        }
+        for (SyncResponseEvent event : events) {
+            e.appendChild(event.toXml(doc));
+        }
+        return e;
     }
 }

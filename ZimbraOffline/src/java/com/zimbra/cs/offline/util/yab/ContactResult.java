@@ -17,6 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Document;
 
 public class ContactResult extends Result {
     private AddAction addAction;
@@ -27,8 +28,8 @@ public class ContactResult extends Result {
     private ContactResult() {}
 
     @Override
-    public boolean isSuccess() {
-        return true;
+    public boolean isError() {
+        return false;
     }
     
     public boolean isAdded() {
@@ -50,7 +51,17 @@ public class ContactResult extends Result {
     private ContactResult parseXml(Element e) {
         assert e.getTagName().equals(TAG);
         addAction = AddAction.fromXml(e);
+        if (addAction == null) {
+            throw new IllegalArgumentException("Missing add-action element");
+        }
         contact = Contact.fromXml(e);
         return this;
+    }
+
+    @Override
+    public Element toXml(Document doc) {
+        Element e = contact.toXml(doc, TAG);
+        addAction.setAttribute(e);
+        return e;
     }
 }

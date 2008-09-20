@@ -27,12 +27,14 @@ import com.zimbra.cs.offline.util.Xml;
 /**
  * YAB contact information.
  */
-public class Contact {
+public class Contact extends Entity {
     private int id = -1;
     private final List<Field> fields;
     private final List<Category> categories;
 
-    public static final String CID = "cid";
+    public static final String TAG = "contact";
+    
+    private static final String CID = "cid";
 
     public Contact() {
         fields = new ArrayList<Field>();
@@ -87,9 +89,14 @@ public class Contact {
             e.appendChild(field.toXml(doc, field.getName()));
         }
         for (Category cat : categories) {
-            e.appendChild(cat.toXml(doc, "category"));
+            e.appendChild(cat.toXml(doc));
         }
         return e;
+    }
+
+    @Override
+    public Element toXml(Document doc) {
+        return toXml(doc, TAG);
     }
     
     public static Contact fromXml(Element e) {
@@ -101,8 +108,7 @@ public class Contact {
     private Contact parseXml(Element e) {
         id = Xml.getIntAttribute(e, CID);
         for (Element child : Xml.getChildren(e)) {
-            String tag = child.getTagName();
-            if (tag.equals("category")) {
+            if (child.getTagName().equals(Category.TAG)) {
                 addCategory(Category.fromXml(child));
             } else {
                 addField(Field.fromXml(child));
@@ -110,5 +116,4 @@ public class Contact {
         }
         return this;
     }
-
 }
