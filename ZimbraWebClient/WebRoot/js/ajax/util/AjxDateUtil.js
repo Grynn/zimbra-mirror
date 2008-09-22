@@ -843,6 +843,26 @@ AjxDateUtil.S_WEEKORD = [
 	AjxMsg["calc.ordinal.last"]
 ].join("|");
 
+// NOTE: Originally, the keywords for the date calculation rules
+//       were in the message bundle so that they could be translated.
+//       But while the keywords were translated, the rules were not
+//       updated to use the translated keywords. So none of the date
+//       matching worked in other languages. So I am reverting that
+//       decision and hard-coding all of the relevant keywords. The
+//       ordinals, day names, and month names still need to be
+//       translated, though.
+
+AjxMsg["calc.now"]	= "now";
+AjxMsg["calc.date"]	= "date";
+
+AjxMsg["calc.duration.year"]		= "year|years";
+AjxMsg["calc.duration.month"]		= "month|months";
+AjxMsg["calc.duration.day"]			= "day|days";
+AjxMsg["calc.duration.hour"]		= "hour|hours";
+AjxMsg["calc.duration.minute"]		= "min|mins|minute|minutes";
+AjxMsg["calc.duration.second"]		= "sec|secs|second|seconds";
+AjxMsg["calc.duration.millisecond"]	= "milli|millis|millisecond|milliseconds";
+
 AjxDateUtil.S_DURATION = [
 	AjxMsg["calc.duration.year"],
 	AjxMsg["calc.duration.month"],
