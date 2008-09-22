@@ -59,11 +59,11 @@ public class LocalMailbox extends DesktopMailbox {
         super.initialize();
         if (isImapMailbox) {
 	        List<Pair<Integer, String>> systemMailFolders = new ArrayList<Pair<Integer, String>>();
-	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_INBOX, "Inbox"));
-	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_TRASH, "Trash"));
-	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SPAM, "Junk"));
-	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SENT, "Sent"));
-	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_DRAFTS, "Drafts"));
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_INBOX, "/Inbox"));
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_TRASH, "/Trash"));
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SPAM, "/Junk"));
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SENT, "/Sent"));
+	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_DRAFTS, "/Drafts"));
         	for (Pair<Integer, String> pair : systemMailFolders) {
         		MailItem mi = getCachedItem(pair.getFirst());
         		DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(pair.getFirst()), true);
