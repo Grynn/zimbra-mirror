@@ -394,7 +394,8 @@ DwtTabViewPage = function(parent, className, posStyle) {
 	DwtPropertyPage.call(this, parent, clsName, ps);
 
     this._createHtml();
-	this.setScrollStyle(Dwt.SCROLL);
+	this.getHtmlElement().style.overflowY = "auto";
+	this.getHtmlElement().style.overflowX = "visible";
 };
 
 DwtTabViewPage.prototype = new DwtPropertyPage;
@@ -428,11 +429,7 @@ function() {
 		}
 	}
 
-	if (this.parent.getHtmlElement().offsetWidth > 0) { 						// if parent visible, use offsetWidth
-		this._contentEl.style.width=this.parent.getHtmlElement().offsetWidth;
-	} else {
-		this._contentEl.style.width = this.parent.getHtmlElement().style.width;	//if parent not visible, resize page to fit parent
-	}
+	this._contentEl.style.width = this.parent.getHtmlElement().style.width;	// resize page to fit parent
 };
 
 DwtTabViewPage.prototype.hideMe = 
