@@ -2476,6 +2476,14 @@
         </attribute>
         <attribute>
             <description>
+                auth token (ZAuthToken) for use with REST HTML rendering.
+            </description>
+            <name>restauthtokenobject</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>        
+        <attribute>
+            <description>
                 target account id for use with REST HTML rendering.
             </description>
             <name>resttargetaccountid</name>
