@@ -879,7 +879,7 @@ public class SkinResources
                     }
                 } else if ((index = token.indexOf("gecko/")) != -1) {
                     isGeckoBased = true;
-                    geckoDate = Float.parseFloat(token.substring(index + 6));
+                    geckoDate = parseFloat(token.substring(index + 6));
                 } else if ((index = token.indexOf("applewebkit/")) != -1) {
                     isWebKitBased = true;
                     webKitVersion = parseFloat(token.substring(index + 12));
