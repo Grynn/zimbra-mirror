@@ -24,6 +24,26 @@
 <!ENTITY tools.label                "@prism.exts.Tools@">
 <!ENTITY addons.label               "@prism.exts.AddOns@">
 
+<!ENTITY zoomIn.label               "@prism.exts.ZoomIn@">
+<!ENTITY zoomIn.commandkey          "+">
+<!ENTITY zoomIn.commandkey2         "=">
+<!ENTITY zoomIn.modifiers           "accel">
+<!ENTITY zoomOut.label              "@prism.exts.ZoomOut@">
+<!ENTITY zoomOut.commandkey         "-">
+<!ENTITY zoomOut.modifiers          "accel">
+<!ENTITY zoomReset.label            "@prism.exts.ZoomReset@">
+<!ENTITY zoomReset.commandkey       "0">
+<!ENTITY zoomReset.modifiers        "accel">
+
+<!ENTITY findOnCmd.label            "@prism.exts.FindInThisPage@">
+<!ENTITY findOnCmd.accesskey        "F">
+<!ENTITY findOnCmd.commandkey       "f">
+<!ENTITY findNextCmd.label          "@prism.exts.FindNext@">
+<!ENTITY findNextCmd.accesskey      "g">
+<!ENTITY findNextCmd.commandkey     "g">
+<!ENTITY findNextCmd.commandkey2    "VK_F3">
+<!ENTITY findPreviousCmd.label      "@prism.exts.FindPrevious@">
+
 <!ENTITY servicesMenu.label         "@prism.exts.Services@">
 <!ENTITY hideThisApp.label          "@prism.exts.HideZD@">
 <!ENTITY hideThisApp.commandkey     "H">
