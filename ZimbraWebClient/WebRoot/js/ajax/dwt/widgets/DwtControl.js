@@ -1465,6 +1465,31 @@ function(callback) {
 };
 
 /**
+ * Call this method if the tooltip is already popped up and its content needs to
+ * be refreshed.
+ */
+DwtControl.prototype.refreshTooltip =
+function() {
+	if (!this.__toolTipContent) { return; }
+
+	var mouseEv = DwtShell.mouseEvent;
+	if (mouseEv && mouseEv.docX > 0 && mouseEv.docY > 0) {
+		var shell = DwtShell.getShell(window);
+		var manager = shell.getHoverMgr();
+		if (((manager.getHoverObject() == this) && manager.isHovering()) &&
+			!DwtMenu.menuShowing())
+		{
+			manager.reset();
+			manager.setHoverObject(this);
+			manager.setHoverOverData(this);
+			manager.setHoverOverDelay(DwtToolTip.TOOLTIP_DELAY);
+			manager.setHoverOverListener(this._hoverOverListener);
+			manager.hoverOver(mouseEv.docX, mouseEv.docY);
+		}
+	}
+};
+
+/**
  * @return true if the control is visible (i.e. its HTML elements display style
  * 		attribute is not none)
  * @type Boolean
@@ -2765,15 +2790,20 @@ function(targetEl) {
 	return bIsInput;
 };
 
-DwtControl.ON_UNLOAD = function() {
-        // break widget-element references
-        var h = DwtControl.ALL_BY_ID, i;
-        for (i in h)
-                h[i]._elRef = null;
-        DwtControl.ALL_BY_ID = null;
+
+// onunload hacking
+DwtControl.ON_UNLOAD =
+function() {
+	// break widget-element references
+	var h = DwtControl.ALL_BY_ID, i;
+	for (i in h) {
+		h[i]._elRef = null;
+	}
+	DwtControl.ALL_BY_ID = null;
 };
 
-if (AjxEnv.isIE)
-        window.attachEvent("onunload", DwtControl.ON_UNLOAD);
-else
-        window.addEventListener("unload", DwtControl.ON_UNLOAD, false);
+if (AjxEnv.isIE) {
+	window.attachEvent("onunload", DwtControl.ON_UNLOAD);
+} else {
+	window.addEventListener("unload", DwtControl.ON_UNLOAD, false);
+}
