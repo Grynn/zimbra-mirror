@@ -191,13 +191,111 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	canvas.innerHTML = toolTip;
 };
 
+Com_Zimbra_Email.prototype.createFilterMenu =
+function(actionMenu) {
+
+    if(this._filterMenu) return;
+
+    this._newFilterMenuItem = actionMenu.getOp("ADDTOFILTER");
+    this._filterMenu = new ZmPopupMenu(actionMenu);
+    this._newFilterMenuItem.setMenu(this._filterMenu);
+
+
+    this._rules = AjxDispatcher.run("GetFilterRules");
+    this._rules.addChangeListener(new AjxListener(this, this._rulesChangeListener));
+    this._resetFilterMenu();
+};
+
+
+Com_Zimbra_Email.prototype._resetFilterMenu =
+function(){
+    var filterItems = this._filterMenu.getItems();
+    while(filterItems.length > 0){
+        this._filterMenu.removeChild(filterItems[0]);
+    }
+    this._rules.loadRules(false, new AjxCallback(this, this._populateFiltersMenu));
+};
+
+Com_Zimbra_Email.NEW_FILTER = "__new__";
+Com_Zimbra_Email.prototype._populateFiltersMenu =
+function(results){
+
+    var filters = results.getResponse();
+    var menu = this._filterMenu;
+
+	var miNew = new DwtMenuItem({parent:menu});
+	miNew.setText(this.getMessage("newFilter"));
+	miNew.setImage("Plus");
+	miNew.setData(Dwt.KEY_OBJECT, Com_Zimbra_Email.NEW_FILTER);
+	miNew.addSelectionListener(new AjxListener(this, this._filterItemSelectionListener));
+
+    if (filters.size())
+		menu.createSeparator();
+
+    for (var i = 0; i < filters.size(); i++) {
+		var filter = filters.get(i);;
+		this._addFilter(menu, filter);
+	}
+
+};
+
+
+Com_Zimbra_Email.prototype._rulesChangeListener =
+function(ev){
+
+    if (ev.type != ZmEvent.S_FILTER) { return; }
+	if (!ev.handled) {
+        this._resetFilterMenu();
+		ev.handled = true;
+	}
+
+};
+
+Com_Zimbra_Email.prototype._filterItemSelectionListener =
+function(ev){
+    var filterMenuItem = ev.item;
+    var editFilterMode = true;
+
+    var filter = filterMenuItem.getData(Dwt.KEY_OBJECT);
+    
+    if(filter == Com_Zimbra_Email.NEW_FILTER){
+        editFilterMode = false;
+        filter = new ZmFilterRule();
+        filter.addAction(new ZmAction(ZmFilterRule.A_KEEP));
+    }
+
+    var addr = this._getAddress(this._actionObject);
+	if (AjxUtil.isString(addr) && this.isMailToLink(addr)) {
+		addr = (this.parseMailToLink(addr)).to || addr;
+	}
+	filter.addCondition(new ZmCondition(ZmFilterRule.C_FROM, ZmFilterRule.OP_IS, addr ));
+
+	appCtxt.getFilterRuleDialog().popup(filter, editFilterMode);
+};
+
+
+Com_Zimbra_Email.nameLength = 20;
+Com_Zimbra_Email.prototype._addFilter =
+function(menu, filter, index) {
+	var mi = new DwtMenuItem({parent:menu, index:index});
+    mi.setText(AjxStringUtil.clipByLength(filter.name, Com_Zimbra_Email.nameLength));
+	mi.setData(Dwt.KEY_OBJECT, filter);
+	mi.addSelectionListener(new AjxListener(this, this._filterItemSelectionListener));
+};
+
+
 Com_Zimbra_Email.prototype.getActionMenu =
 function(obj, span, context) {
 
 	// call base class first to get the action menu
 	var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
 
-	var addr = (obj instanceof AjxEmailAddress) ? obj.getAddress() : obj;
+    if ( appCtxt.get(ZmSetting.FILTERS_ENABLED) && actionMenu.getOp("ADDTOFILTER") ) {
+        this.createFilterMenu(actionMenu);
+    }
+
+
+    var addr = (obj instanceof AjxEmailAddress) ? obj.getAddress() : obj;
 	if (this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
@@ -238,8 +336,8 @@ function(obj, span, context) {
 		ZmOperation.removeOperation(actionMenu, "SEARCHBUILDER", actionMenu._menuItems);
 	}
 
-	if (actionMenu.getOp("NEWFILTER") && !appCtxt.get(ZmSetting.FILTERS_ENABLED)) {
-		ZmOperation.removeOperation(actionMenu, "NEWFILTER", actionMenu._menuItems);
+	if (actionMenu.getOp("ADDTOFILTER") && !appCtxt.get(ZmSetting.FILTERS_ENABLED)) {
+		ZmOperation.removeOperation(actionMenu, "ADDTOFILTER", actionMenu._menuItems);
 	}
 
     return actionMenu;
@@ -306,7 +404,7 @@ function(itemId, item, ev) {
 	    case "NEWEMAIL":		this._composeListener(ev);	break;
 		case "NEWIM":			this._newImListener(ev);	break;
 		case "NEWCONTACT":		this._contactListener();	break;
-		case "NEWFILTER":		this._filterListener();		break;
+		case "ADDTOFILTER":		this._filterListener();		break;
 		case "GOTOURL":			this._goToUrlListener();	break;
 	}
 };

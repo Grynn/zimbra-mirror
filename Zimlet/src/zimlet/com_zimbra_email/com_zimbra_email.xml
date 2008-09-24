@@ -11,7 +11,7 @@
 			<menuItem label="${msg.newEmail}" icon="NewMessage" id="NEWEMAIL"/>
             <menuItem label="${msg.newIM}" icon="ImAvailable" id="NEWIM"/>
 			<menuItem label="${msg.newContact}" icon="Edit" id="NEWCONTACT"/>
-			<menuItem label="${msg.newFilter}" icon="Plus" id="NEWFILTER"/>
+			<menuItem label="${msg.addToFilter}" icon="Plus" id="ADDTOFILTER"/>
 			<menuItem label="${msg.goToUrl}" icon="URL" id="GOTOURL"/>
 		</contextMenu>
 	</contentObject>
