@@ -24,7 +24,7 @@
 **/
 ZaNewDomainXWizard = function(parent, app) {
 	this._app=app;
-	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NDD_Title, "550px", "300px","ZaNewDomainXWizard");
+	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NDD_Title, "650px", "300px","ZaNewDomainXWizard");
 
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GeneralPage, value:1},
@@ -634,15 +634,16 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},		
 		{type: _SWITCH_,
 			items: [
-				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehavior:_HIDE_,
+				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehavior:_HIDE_, colSizes:["200px","auto"],numCols:2,
 					items: [
 						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, width:200},
 						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},						
-						{type:_ZA_PLAIN_GROUPER_,colSpan:"*", colSizes:["auto"],numCols:1,id:"dns_check_group",items:[
-							{ type: _DWT_ALERT_,containerCssStyle: "padding-bottom:0px",style: DwtAlert.INFO,
+						{ type: _DWT_ALERT_,containerCssStyle: "padding-bottom:0px",style: DwtAlert.INFO,
 								iconVisible: true,content: ZaMsg.Domain_InboundSMTPNote,colSpan:"*"},
-							{ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPERWIZ_TEXTFIELD_, 
-		 						txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal}	
+						{type:_GROUP_,colSpan:"2", colSizes:["200px","250px", "150px"],numCols:2,id:"dns_check_group",items:[
+						
+							{ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPERWIZ_TEXTFIELD_, textFieldWidth:200,
+		 						label:null,txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal}/*, {type:_CELLSPACER_}*/	
 						]},	
 						{ref:ZaDomain.A_description, type:_TEXTFIELD_, label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width:250},
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_OSELECT1_, 

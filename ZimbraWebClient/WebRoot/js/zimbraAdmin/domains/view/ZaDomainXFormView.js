@@ -395,7 +395,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 	tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_GeneralPage});
 	var switchGroup = {type:_SWITCH_, items:[]};
 	var case1 = {type:_ZATABCASE_, relevant:("instance[ZaModel.currentTab] == " + tabIx), 
-		colSizes:["300px","*"],
+		colSizes:["275px","*"],
 		items:[
 			{ type: _DWT_ALERT_,
 				relevantBehavior:_HIDE_,
@@ -433,15 +433,15 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 	}
 	if(ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED) {
 		if(!ZaSettings.DOMAINS_ARE_READONLY && ZaSettings.GLOBAL_CONFIG_ENABLED) {
-			var group = {type:_ZA_PLAIN_GROUPER_,colSpan:"*", colSizes:["auto"],numCols:1,id:"dns_check_group",items: []};
-			group.items.push({ type: _DWT_ALERT_,
+			var group = {type:_GROUP_,colSpan:"2", id:"dns_check_group",items: [], width:"100%"};
+			case1.items.push({ type: _DWT_ALERT_,
 			containerCssStyle: "padding-bottom:0px",
 			style: DwtAlert.INFO,
 			iconVisible: true, 
 			content: ZaMsg.Domain_InboundSMTPNote,
-			colSpan:"*"});
-			group.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPER_TEXTFIELD_, 
-	 			txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, width:250,onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
+			colSpan:"2"});
+			group.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPER_TEXTFIELD_, colSpan:2,
+	 			txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
 	 		case1.items.push(group);
 		} else {
 			case1.items.push({ type: _DWT_ALERT_,
@@ -449,9 +449,9 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			style: DwtAlert.INFO,
 			iconVisible: true, 
 			content: ZaMsg.Domain_InboundSMTPNote,
-			colSpan:"*"});
-			case1.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _TEXTFIELD_), 
-	 			label:ZaMsg.Domain_zimbraDNSCheckHostname, width:250,onChange:ZaDomainXFormView.onFormFieldChanged});
+			colSpan:"2"});
+			case1.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, colSpan:2, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _TEXTFIELD_), 
+	 			label:ZaMsg.Domain_zimbraDNSCheckHostname, onChange:ZaDomainXFormView.onFormFieldChanged});
 		}
 	}
 		
