@@ -45,50 +45,50 @@ CREATE TABLE ${DATABASE_NAME}.mail_item (
    mod_content   INTEGER NOT NULL,           -- change number for last change to "content" (e.g. blob)
    change_mask   INTEGER,                    -- bitmask of changes since the last server push
 
-   CONSTRAINT pk_mail_item PRIMARY KEY (id, mailbox_id),
+   CONSTRAINT pk_mail_item PRIMARY KEY (mailbox_id, id),
    CONSTRAINT fk_mail_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
    CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id),
-   CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id, mailbox_id) REFERENCES ${DATABASE_NAME}.mail_item(id, mailbox_id),
-   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (folder_id, mailbox_id) REFERENCES ${DATABASE_NAME}.mail_item(id, mailbox_id)
+   CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (mailbox_id, parent_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
+   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (mailbox_id, folder_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id)
 );
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_type
-ON mail_item(type, mailbox_id);                      -- for looking up folders and tags
+ON mail_item(mailbox_id, type);                      -- for looking up folders and tags
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_folder_id_date
-ON mail_item(folder_id, date DESC, mailbox_id);      -- for looking up by folder and sorting by date
+ON mail_item(mailbox_id, folder_id, date DESC);      -- for looking up by folder and sorting by date
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_index_id
-ON mail_item(index_id, mailbox_id);                  -- for looking up based on search results
+ON mail_item(mailbox_id, index_id);                  -- for looking up based on search results
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_unread
-ON mail_item(unread, mailbox_id);                    -- there should be a small number of items with unread=TRUE
+ON mail_item(mailbox_id, unread);                    -- there should be a small number of items with unread=TRUE
 
                              -- no compound index on (unread, date); so we save space at
                              -- the expense of sorting a small number of rows
                                              
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_date
-ON mail_item(date DESC, mailbox_id);                      -- fallback index in case other constraints are not specified
+ON mail_item(mailbox_id, date DESC);                      -- fallback index in case other constraints are not specified
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_mod_metadata
-ON mail_item(mod_metadata, mailbox_id);              -- used by the sync code
+ON mail_item(mailbox_id, mod_metadata);              -- used by the sync code
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_tags_date
-ON mail_item(tags, date DESC, mailbox_id);           -- for tag searches
+ON mail_item(mailbox_id, tags, date DESC);           -- for tag searches
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_flags_date
-ON mail_item(flags, date DESC, mailbox_id);          -- for flag searches
+ON mail_item(flags, mailbox_id, date DESC);          -- for flag searches
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_volume_id
-ON mail_item(volume_id, mailbox_id);                 -- for the foreign key into the volume table
+ON mail_item(mailbox_id, volume_id);                 -- for the foreign key into the volume table
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_change_mask
-ON mail_item(change_mask, mailbox_id);               -- for figuring out which items to push during sync
+ON mail_item(mailbox_id, change_mask);               -- for figuring out which items to push during sync
 
                               -- the following is a UNIQUE INDEX in the mainline database schema
 
 CREATE INDEX ${DATABASE_NAME}.i_mail_item_name_folder_id
-ON mail_item(folder_id, name, mailbox_id);           -- for namespace uniqueness
+ON mail_item(mailbox_id, folder_id, name);           -- for namespace uniqueness
 
 
 -- -----------------------------------------------------------------------
@@ -109,9 +109,9 @@ CREATE TABLE ${DATABASE_NAME}.revision (
    change_date   INTEGER,                    -- UNIX-style timestamp for last row modification
    mod_content   INTEGER NOT NULL,           -- change number for last change to "content" (e.g. blob)
 
-   CONSTRAINT pk_revision PRIMARY KEY (item_id, version, mailbox_id),
+   CONSTRAINT pk_revision PRIMARY KEY (mailbox_id, item_id, version),
    CONSTRAINT fk_revision_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
-   CONSTRAINT fk_revision_item_id FOREIGN KEY (item_id, mailbox_id) REFERENCES ${DATABASE_NAME}.mail_item(id, mailbox_id)
+   CONSTRAINT fk_revision_item_id FOREIGN KEY (mailbox_id, item_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id)
       ON DELETE CASCADE ON UPDATE NO ACTION
 );
 
@@ -125,10 +125,10 @@ CREATE TABLE ${DATABASE_NAME}.open_conversation (
    hash        CHAR(28) NOT NULL,
    conv_id     INTEGER NOT NULL,
 
-   CONSTRAINT pk_open_conversation PRIMARY KEY (hash, mailbox_id),
-   CONSTRAINT ui_open_conversation_conv_id UNIQUE (conv_id, mailbox_id),
+   CONSTRAINT pk_open_conversation PRIMARY KEY (mailbox_id, hash),
+   CONSTRAINT ui_open_conversation_conv_id UNIQUE (mailbox_id, conv_id),
    CONSTRAINT fk_open_conversation_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
-   CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (conv_id, mailbox_id) REFERENCES ${DATABASE_NAME}.mail_item(id, mailbox_id)
+   CONSTRAINT fk_open_conversation_conv_id FOREIGN KEY (mailbox_id, conv_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id)
       ON DELETE CASCADE ON UPDATE NO ACTION
 );
 
@@ -144,14 +144,14 @@ CREATE TABLE ${DATABASE_NAME}.appointment (
    start_time  TIMESTAMP NOT NULL,
    end_time    TIMESTAMP,
 
-   CONSTRAINT pk_appointment PRIMARY KEY (uid, mailbox_id),
+   CONSTRAINT pk_appointment PRIMARY KEY (mailbox_id, uid),
    CONSTRAINT fk_appointment_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
-   CONSTRAINT fk_appointment_item_id FOREIGN KEY (item_id, mailbox_id) REFERENCES ${DATABASE_NAME}.mail_item(id, mailbox_id)
+   CONSTRAINT fk_appointment_item_id FOREIGN KEY (mailbox_id, item_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id)
       ON DELETE CASCADE ON UPDATE NO ACTION
 );
 
 CREATE INDEX ${DATABASE_NAME}.i_appointment_item_id
-ON appointment(item_id, mailbox_id);
+ON appointment(mailbox_id, item_id);
 
 
 -- -----------------------------------------------------------------------
@@ -170,7 +170,7 @@ CREATE TABLE ${DATABASE_NAME}.tombstone (
 );
 
 CREATE INDEX ${DATABASE_NAME}.i_tombstone_sequence
-ON tombstone(sequence, mailbox_id);
+ON tombstone(mailbox_id, sequence);
 
 
 -- -----------------------------------------------------------------------
@@ -183,7 +183,7 @@ CREATE TABLE ${DATABASE_NAME}.pop3_message (
    uid             VARCHAR(255) NOT NULL,
    item_id         INTEGER NOT NULL,
 
-   CONSTRAINT pk_pop3_message PRIMARY KEY (item_id, mailbox_id),
+   CONSTRAINT pk_pop3_message PRIMARY KEY (mailbox_id, item_id),
    CONSTRAINT ui_uid_pop3_id UNIQUE (uid, data_source_id),
    CONSTRAINT fk_pop3_message_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
       ON DELETE CASCADE
@@ -197,7 +197,7 @@ CREATE TABLE ${DATABASE_NAME}.imap_folder (
    local_path         VARCHAR(1000) NOT NULL,
    remote_path        VARCHAR(1000) NOT NULL,
    uid_validity       INTEGER,
-   PRIMARY KEY (item_id, mailbox_id),
+   PRIMARY KEY (mailbox_id, item_id),
    CONSTRAINT fk_imap_folder_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
 );
 
@@ -215,14 +215,14 @@ CREATE TABLE ${DATABASE_NAME}.imap_message (
    item_id        INTEGER NOT NULL,
    flags         INTEGER NOT NULL DEFAULT 0,
    
-   PRIMARY KEY (item_id, mailbox_id),
+   PRIMARY KEY (mailbox_id, item_id),
    CONSTRAINT fk_imap_message_mailbox_id FOREIGN KEY (mailbox_id)
       REFERENCES zimbra.mailbox(id) ON DELETE CASCADE,
-   CONSTRAINT fk_imap_message_imap_folder_id FOREIGN KEY (imap_folder_id, mailbox_id)
-      REFERENCES ${DATABASE_NAME}.imap_folder(item_id, mailbox_id) ON DELETE CASCADE
+   CONSTRAINT fk_imap_message_imap_folder_id FOREIGN KEY (mailbox_id, imap_folder_id)
+      REFERENCES ${DATABASE_NAME}.imap_folder(mailbox_id, item_id) ON DELETE CASCADE
 );
 
-CREATE UNIQUE INDEX i_uid_imap_id ON ${DATABASE_NAME}.imap_message (imap_folder_id, uid, mailbox_id);
+CREATE UNIQUE INDEX i_uid_imap_id ON ${DATABASE_NAME}.imap_message (mailbox_id, imap_folder_id, uid);
 
 -- Tracks local MailItem created from remote objects via DataSource
 CREATE TABLE ${DATABASE_NAME}.data_source_item (
@@ -232,10 +232,10 @@ CREATE TABLE ${DATABASE_NAME}.data_source_item (
    remote_id      VARCHAR(255) NOT NULL,
    metadata       CLOB,
    
-   PRIMARY KEY (item_id, mailbox_id),
+   PRIMARY KEY (mailbox_id, item_id),
    CONSTRAINT fk_data_source_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
 );
 
 -- for reverse lookup
 CREATE UNIQUE INDEX i_remote_id 
-ON ${DATABASE_NAME}.data_source_item (data_source_id, remote_id, mailbox_id);
+ON ${DATABASE_NAME}.data_source_item (mailbox_id, data_source_id, remote_id);
