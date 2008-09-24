@@ -164,7 +164,7 @@ function(params) {
 		if (params.asyncMode) {
 			//DBG.println(AjxDebug.DBG1, "set callback for asynchronous response");
 			rpcCallback = new AjxCallback(this, this._runCallback, [params]);
-			AjxRpc.invoke(requestStr, uri, requestHeaders, rpcCallback);
+			this._rpcId = AjxRpc.invoke(requestStr, uri, requestHeaders, rpcCallback);
 		} else {
 			//DBG.println(AjxDebug.DBG1, "parse response synchronously");
 			var response = AjxRpc.invoke(requestStr, uri, requestHeaders);
@@ -369,8 +369,6 @@ function(params) {
 ZmCsfeCommand.prototype._runCallback =
 function(params, result) {
 	if (!result) { return; }
-
-	this._rpcId = result.reqId;
 
 	var response;
 	if (result instanceof ZmCsfeResult) {
