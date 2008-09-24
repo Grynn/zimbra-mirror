@@ -77,7 +77,7 @@ DwtDialog = function(params) {
 	if (standardButtons || extraButtons) {
 		this._buttonDesc = {};
 		if (standardButtons && standardButtons.length) {
-			this._enterButtonId = standardButtons[0];
+			this._initialEnterButtonId = this._enterButtonId = standardButtons[0];
 			for (var i = 0; i < standardButtons.length; i++) {
 				var buttonId = standardButtons[i];
 				this._buttonList.push(buttonId);
@@ -93,7 +93,7 @@ DwtDialog = function(params) {
 		}
 		if (extraButtons && extraButtons.length) {
 			if (!this._enterButtonId) {
-				this._enterButtonId = extraButtons[0];
+				this._initialEnterButtonId = this._enterButtonId = extraButtons[0];
 			}
 			for (var i = 0; i < extraButtons.length; i++) {
 				var buttonId = extraButtons[i].id;
@@ -199,6 +199,24 @@ function() {
 	this.resetButtonStates();
 };
 
+DwtDialog.prototype.popup =
+function(loc, focusButtonId){
+
+    this._focusButtonId = focusButtonId;
+
+    DwtBaseDialog.prototype.popup.call(this, loc);
+};
+
+DwtDialog.prototype._resetTabFocus =
+function(){
+    if(this._focusButtonId){
+        var focusButton = this.getButton(this._focusButtonId);
+        this._tabGroup.setFocusMember(focusButton, true);
+    }else{
+        DwtBaseDialog.prototype._resetTabFocus.call(this);
+    }
+};
+
 /**
 * Sets the dialog back to its original state after being constructed, by clearing any
 * detail message and resetting the standard button callbacks.
@@ -219,6 +237,7 @@ function() {
 		this._button[b].setEnabled(true);
 		this._button[b].setHovered(false);
 	}
+    this.associateEnterWithButton(this._initialEnterButtonId);
 };
 
 DwtDialog.prototype.getButton =
