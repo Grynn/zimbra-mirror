@@ -244,8 +244,19 @@ public class ZJspSession {
 
     public static String getChangePasswordUrl(PageContext context, String path) {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
+        
+        try {
+            ZMailbox mbox = getZMailbox(context);
+            String publicUrl = mbox.getAccountInfo(false).getPublicURLBase();
+            if (publicUrl != null)
+                return getRedirect(request, publicUrl, path, null, null);
+        } catch (JspException e) {
+            // fall through to use the Host header
+        } catch (ServiceException e) {
+            // fall through to use the Host header
+        }
+        
         String proto = MODE_HTTP ? PROTO_HTTP : PROTO_HTTPS;
-        // return getRedirect(request, proto, request.getServerName(), path, null, null);
         return getRedirectToHostHeader(request, proto, path, null, null);
     }
 
