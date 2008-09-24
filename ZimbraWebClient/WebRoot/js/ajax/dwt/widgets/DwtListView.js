@@ -2245,10 +2245,9 @@ function() {
 	// force relayout of header column
 	this.headerColCreated = false;
 	var headerCol = this._headerIdHash[this._currentColId];
-	if (!headerCol) { return; }
-	var sortField = headerCol._sortable ? headerCol._field : null;
-	var sel = this.getSelection()[0];
+	var sortField = (headerCol && headerCol._sortable) ? headerCol._field : null;
 	this.setUI(sortField);
+	var sel = this.getSelection()[0];
 	this.setSelection(sel, true);
 };
 
