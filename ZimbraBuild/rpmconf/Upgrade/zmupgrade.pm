@@ -2384,7 +2384,7 @@ sub upgrade5010GA {
 	my ($startBuild, $targetVersion, $targetBuild) = (@_);
 	main::progress("Updating from 5.0.10_GA\n");
     #bug 31177
-    upgradeLocalConfigValue("zmmtaconfig_enable_config_restarts", "TRUE", "");
+    upgradeLocalConfigValue("zmmtaconfig_enable_config_restarts", "true", "");
 
   if (main::isInstalled("zimbra-ldap") && $isLdapMaster) {
 	  main::runAsZimbra("$ZMPROV mcf zimbraReverseProxyIpThrottleMsg 'Login rejected from this IP'");
