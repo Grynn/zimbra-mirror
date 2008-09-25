@@ -211,19 +211,48 @@ return true;</string>
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
               </action>
-              <action name="sys.installationDir" id="275921" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="Set instanceId" id="286628" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
                       <void property="script">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>return context.getVariable("sys.installationDir").toString();</string>
+                            <string>import java.util.UUID;
+import java.util.Properties;
+import java.io.File;
+import java.io.FileInputStream;
+
+String instDir = (String) context.getVariable("sys.installationDir");
+File regFile = new File(instDir + "/conf/install.reg");
+String guid;
+
+if (regFile.exists()) {
+    try {
+        FileInputStream is = new FileInputStream(regFile);
+        Properties prop = new Properties();
+        prop.load(is);
+        is.close();
+        
+        guid = prop.getProperty("guid", UUID.randomUUID().toString());
+        
+        String version = prop.getProperty("version");
+        String build = prop.getProperty("build");
+        if (version != null &amp;&amp; build != null &amp;&amp; version.length() &gt; 0 &amp;&amp; build.length() &gt; 0) {
+            context.setVariable("prevVersion", version);
+            context.setVariable("prevBuild", build);   
+        }        
+    } catch (IOException e) {
+        guid = UUID.randomUUID().toString();
+    }    
+} else {
+    guid = UUID.randomUUID().toString();
+}
+
+context.setVariable("instanceId", guid);    
+return true;</string>
                           </void>
                         </object>
-                      </void>
-                      <void property="variableName">
-                        <string>sys.installationDir</string>
                       </void>
                     </object>
                   </java>
@@ -248,7 +277,10 @@ import org.w3c.dom.Element;
 String appId = context.getApplicationId();
 
 ApplicationRegistry.ApplicationInfo[] appInfoList = ApplicationRegistry.getApplicationInfoById(appId);
-if (appInfoList != null &amp;&amp; appInfoList.length &gt; 0) {
+boolean installed = (appInfoList != null &amp;&amp; appInfoList.length &gt; 0);
+
+String pver = (String) context.getVariable("prevVersion");
+if (installed &amp;&amp; (pver == null || pver.length() == 0)) {
     File instDir = appInfoList[0].getInstallationDirectory();
     File confFile = new File(instDir.getAbsolutePath() + "/conf/localconfig.xml");
     String ver = "0.0";
@@ -276,12 +308,12 @@ if (appInfoList != null &amp;&amp; appInfoList.length &gt; 0) {
         }
         context.setVariable("prevVersion", ver);
         context.setVariable("prevBuild", build);
-    } catch(Exception e) { Util.showMessage(e.getMessage()); }        
-        
-    return Boolean.TRUE;
+    } catch(Exception e) {
+        Util.showMessage(e.getMessage()); 
+    }               
 }
 
-return Boolean.FALSE;</string>
+return installed;</string>
                           </void>
                         </object>
                       </void>
@@ -2806,6 +2838,45 @@ user_pref("general.useragent.locale", "@languageId@");</string>
                       </void>
                       <void property="searchValue">
                         <string>@languageId@</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Save installation info" id="286567" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>import java.io.File;
+import java.io.FileWriter;
+
+String instDir = (String) context.getVariable("sys.installationDir");
+File regFile = new File(instDir + "/conf/install.reg");
+
+try {
+    if (!regFile.exists())
+        regFile.createNewFile();
+
+    FileWriter writer = new FileWriter(regFile);
+    writer.write("### THIS FILE IS CREATED BY THE INSTALLER OF YAHOO! ZIMBRA DESKTOP. PLEASE DO NOT EDIT. ###\n");
+
+    writer.write("version=${compiler:offline_version}\n");
+    writer.write("build=${compiler:offline_buildid}\n");
+    writer.write("locale=" + (String) context.getLanguageId() + "\n");
+    writer.write("guid=" + (String) context.getVariable("instanceId") + "\n");
+    
+    writer.close();
+} catch (IOException e) {
+    Util.showWarningMessage(e.getMessage());
+}
+
+return true;</string>
+                          </void>
+                        </object>
                       </void>
                     </object>
                   </java>
