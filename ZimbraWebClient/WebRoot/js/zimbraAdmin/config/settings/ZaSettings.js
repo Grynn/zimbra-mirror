@@ -233,6 +233,7 @@ ZaSettings.ADMIN_ZIMLETS_ENABLED = true;
 ZaSettings.SAVE_SEARCH_ENABLED = true ;
 ZaSettings.TOOLS_ENABLED = true;
 ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED = true;
+ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS = false; //this attribute only take effective in domain admin 
 ZaSettings.DOMAIN_GAL_WIZ_ENABLED = true;
 ZaSettings.DOMAIN_AUTH_WIZ_ENABLED = true;
 ZaSettings.DOMAINS_ARE_READONLY = false;

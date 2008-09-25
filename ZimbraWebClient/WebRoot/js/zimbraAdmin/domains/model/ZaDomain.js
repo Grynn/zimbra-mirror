@@ -1191,8 +1191,6 @@ function(by, val, withConfig) {
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
 	this.initFromJS(resp.domain[0]);
 
-    //this flag is only effective in domain admin case to enable the save button
-    ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS = (this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == "TRUE") ; 
                                                                                         
     if(this.attrs[ZaDomain.A_zimbraNotebookAccount]) {
 		var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail", null);
