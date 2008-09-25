@@ -3878,7 +3878,7 @@ return true;</string>
     </applications>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="198394" mediaFileName="${compiler:sys.shortName}_${compiler:offline_version}_build_${compiler:offline_buildid}_win32" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.5.0_15" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows" id="198394" mediaFileName="${compiler:sys.shortName}_${compiler:offline_version}_build_${compiler:offline_buildid}_win32" installDir="zdesktop" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.5.0_15" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="true">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
