@@ -1,0 +1,91 @@
+http://bugzilla.zimbra.com/show_bug.cgi?id=31430
+
+Requirements:
+
+Ability to do bulk provisioning via admin console for domain admins via csv
+file import.
+
+user@domain.tld, displayname, password
+
+see the following url for a functional spec and overview.
+http://twiki.corp.yahoo.com/view/Mail/ZimbraLDAPPasswordMigration
+
+------------------------------------------------------------------------------------------------
+Work flows/Function specs:
+
+Client (User)                             |                               ZCS
+                                          |
+Upload -----------------------------------|---------------------------> Return the uploaded file attachmentId
+
+                                          |
+List of Accounts to be provisioned   -----|---------------------------> Parse and validate the CSV file and rturn the number of accounts
+(GetBulkProvisionAccountsRequest)
+                                          |
+User Check Required Fields                |
+And init provision commands          -----|---------------------------->
+                                          |                              Accounts are provisioned one by one
+Account Provision Status updated     <----|-----------------------------
+                                          |
+Download Account provision Summary   -----|----------------------------> A summary file is returned for download (CSV Also)
+
+                                       Done!
+
+
+
+1) Parse and Validation of CSV file
+   - CSV File format
+   - The accounts must have the domain name and should be in the current domain
+     (Global Admin can create accounts in all the existing domains)
+
+2) List of accounts to be provisioned  (use zimbraAdminExt:GetBulkProvisionAccountsRequest )
+   account name / display name / password /  checkbox (allow provision or not) / checkbox (Users must change passwords on first login)/ Provision Status (succeed/failed with error info)
+
+   Nice to have:
+    a) allow editing of lists
+    b) allow add more accounts
+
+3) provision accounts  (use zimbraAdmin:CreateAccountRequest)
+   - Display and update the create status
+   - Use a loop to iterate through all the accounts and disable the UI with Cancel option and status display
+   - zimbraPasswordMustChange=TRUE
+   - the status will keep on the client side
+    
+4) Allow the provision summary to be downloaded.
+   - Should use the server data
+
+   ? csv vs HTML (maybe both can be provided)
+    - HTML : better display
+    - CSV: allow easy edit the csv file and resubmit
+
+
+
+-----------------------------------------------------------------------------------------------------
+Soap Commands:
+
+namespaces: urn:zimbraAdminExt
+
+-----------------------------------
+<GetBulkProvisionAccountsRequest>
+    <aid>uploaded csv file attachment id</aid>
+</GetBulkProvisionAccountsRequest>
+
+<GetBulkProvisonAccountsResponse>
+    <aid>uploaded csv file attachment id</aid>
+    <account>
+        <a n="attr-name">...</a>+
+    </account>+
+<GetBulkProvisonAccountsResponse>
+
+attrs:
+   1) accountName
+   2) displayName
+   3) password
+   4) status (optional)
+   5) isValid: some rows of the csv file may be corrupted
+       - invalid domain name
+       - password too weak
+       value: TRUE or FALSE
+
+        
+
+

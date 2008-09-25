@@ -4315,6 +4315,48 @@ Dwt_List_XFormItem.prototype.updateWidget = function (newValue) {
 	}
 };
 
+//the method used to compare the contents of the list array.
+//because object  array  join alwasy return [Object Object]
+//we need to compare the property values
+//we should return once we find the differences
+//Assume that itemArray and existingArr has the same length
+Dwt_List_XFormItem.isItemsChanged = function (itemArray, existingArr) {
+    var isChanged = false ;
+    if ((itemArray._version !=null && existingArr._version !=null && (itemArray._version != existingArr._version ))
+			|| (itemArray.length != existingArr.length)) {
+        isChanged = true ;
+    } else {
+        var rows = [] ;
+        var existingRows = [] ;
+        for (var i=0; i < itemArray.length; i ++) {
+            if (itemArray[i] instanceof Object)  {
+                for (var p in itemArray[i]) {
+                    rows.push (itemArray[i][p]) ;
+                }
+            } else {
+                rows.push(itemArray[i]) ;
+            }
+
+            if (existingArr[i] instanceof Object)  {
+                for (var p1 in existingArr[i]) {
+                    existingRows.push (existingArr[i][p1]) ;
+                }
+            } else {
+                existingRows.push(existingArr[i]) ;
+            }
+
+            if (rows.join() != existingRows.join()) {
+                isChanged = true;
+                break ;
+            }else{
+                rows = [];
+                existingRows = [] ;
+            }
+        }
+    }
+
+    return isChanged ;
+}
 Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	var list = this.widget.getList();
 	var existingArr = new Array();
@@ -4326,10 +4368,8 @@ Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 	var defaultColumnSort = this.getInheritedProperty("defaultColumnSortable") ;
 	if (itemArray && itemArray.length > 0) {	
 		//we have to compare the objects, because XForm calls this method every time an item in the list is selected
-		if( (itemArray._version !=null && existingArr._version !=null && (itemArray._version != existingArr._version ) )
-			|| (itemArray.length != existingArr.length) 
-			|| (itemArray.join() != existingArr.join()) ) {
-			var preserveSelection = this.getInheritedProperty("preserveSelection");
+		if ( Dwt_List_XFormItem.isItemsChanged(itemArray, existingArr)) {
+            var preserveSelection = this.getInheritedProperty("preserveSelection");
 			var selection = null;
 			if(preserveSelection) {
 				selection = this.widget.getSelection();

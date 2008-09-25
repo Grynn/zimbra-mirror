@@ -1,4 +1,4 @@
-<project name="ZimbraAdminExt">
+<project name="ZimbraAdminExt" default="deploy">
 
     <import file="../ZimbraCustomerServices/hosted/YahooSmb/ZimbraAdminExt/build.xml" optional="true" />
     <property file="build.properties"/>
@@ -198,7 +198,9 @@
 	</target>
 	
 	<!-- deploy the extension for development -->
-	<target name="deploy-cert" depends="package-zimlet, jar, copy-files-to-dev-machine" description="Deploy the extension"/>
+	<target name="deploy-dev-cert" depends="package-zimlet, jar, copy-files-to-dev-machine" description="Deploy the extension"/>
 
+    <target name="deploy" depends="clean, deploy-zimlet, deploy-server-extension"
+            description="Deploy the extension, must have ext.dir and ext.name property set"/> 
    
 </project>
