@@ -58,4 +58,4 @@ cn: all
 objectclass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
 zimbraMimeHandlerClass: UnknownTypeHandler
-description: All Document
+description: All Documents
