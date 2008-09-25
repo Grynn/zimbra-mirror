@@ -287,6 +287,21 @@ sub getInstanceByInstId($$) {
     }
     $instance;
 }
+sub getInstanceByStartTime($$) {
+    my ($item, $time) = @_;
+    my $instance;
+
+    if (exists($item->{'inst'})) {
+        my $instList = $item->{'inst'};
+        foreach my $inst (@{$instList}) {
+            if ($inst->{'s'} eq $time) {
+                $instance = $inst;
+                last;
+            }
+        }
+    }
+    $instance;
+}
 
 sub expandAttendees($) {
     my ($item) = @_;
@@ -461,7 +476,14 @@ sub main() {
                         next;
                     }
 
-                    my $attInst = getInstanceByInstId($attItem, $instance->{'ridZ'});
+                    my $attInst;
+                    if (exists $instance->{'ridZ'}
+                            && defined $instance->{'ridZ'}) {
+                        $attInst = getInstanceByInstId($attItem, $instance->{'ridZ'});
+                    } else {
+                        $attInst = getInstanceByStartTime($attItem, $instance->{'s'});
+                        $instance->{'ridZ'} = "N/A";
+                    }
                     my $iTime = scalar localtime($instance->{'s'} / 1000);
                     if (!defined($attInst)) {
                         push(@errors, "$att:$$attItem{'id'} no instance found for ridZ=$$instance{'ridZ'}, time=$iTime");
