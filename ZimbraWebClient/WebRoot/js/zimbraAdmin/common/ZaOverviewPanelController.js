@@ -621,7 +621,8 @@ function() {
 	if(ZaSettings.ADDRESSES_ENABLED)
 		this._addressesTi.setExpanded(true, false);
 
-	if(ZaSettings.SYSTEM_CONFIG_ENABLED || ZaSettings.DOMAINS_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS)	
+	if(ZaSettings.SYSTEM_CONFIG_ENABLED || ZaSettings.COSES_ENABLED || ZaSettings.SERVERS_ENABLED || ZaSettings.ADMIN_ZIMLETS_ENABLED || ZaSettings.ZIMLETS_ENABLED
+			|| ZaSettings.GLOBAL_CONFIG_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED || ZaSettings.DOMAINS_ENABLED  || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS )	
 		this._configTi.setExpanded(true, false);
 	
 	if(ZaSettings.MONITORING_ENABLED)
