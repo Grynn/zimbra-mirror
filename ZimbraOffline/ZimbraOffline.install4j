@@ -224,7 +224,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 String instDir = (String) context.getVariable("sys.installationDir");
-File regFile = new File(instDir + "/conf/install.reg");
+File regFile = new File(instDir + "/conf/install.info");
 String guid;
 
 if (regFile.exists()) {
@@ -2482,6 +2482,66 @@ return true;</string>
             <preActivation />
             <postActivation />
             <actions>
+              <action name="macos - preferences.js" id="286804" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                        </object>
+                      </void>
+                      <void property="replaceValue">
+                        <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
+                      </void>
+                      <void property="searchValue">
+                        <string>@offline.installer.vars@</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
+              </action>
+              <action name="win32 - preferences.js" id="286805" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>win32/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                        </object>
+                      </void>
+                      <void property="replaceValue">
+                        <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
+                      </void>
+                      <void property="searchValue">
+                        <string>@offline.installer.vars@</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isWindows()</condition>
+              </action>
+              <action name="linux - preferences.js" id="286806" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>linux/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                        </object>
+                      </void>
+                      <void property="replaceValue">
+                        <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
+                      </void>
+                      <void property="searchValue">
+                        <string>@offline.installer.vars@</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>!Util.isMacOS() &amp;&amp; !Util.isWindows()</condition>
+              </action>
               <action name="zdesktop" id="145686" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -2855,7 +2915,7 @@ user_pref("general.useragent.locale", "@languageId@");</string>
 import java.io.FileWriter;
 
 String instDir = (String) context.getVariable("sys.installationDir");
-File regFile = new File(instDir + "/conf/install.reg");
+File regFile = new File(instDir + "/conf/install.info");
 
 try {
     if (!regFile.exists())

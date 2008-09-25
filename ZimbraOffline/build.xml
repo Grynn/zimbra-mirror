@@ -17,7 +17,7 @@
 	<condition property="offline.aushost" value="http://localhost:7070">
 	    <not><isset property="offline.aushost"/></not>
 	</condition>
-	<condition property="offline.auspath" value="/aus/zdesktop/update.php?chn=${offline.channel}&amp;ver=${offline.version}&amp;bid=${offline.buildid}&amp;bos=@target@&amp;loc=en-US">
+	<condition property="offline.auspath" value="/aus/zdesktop/update.php?chn=${offline.channel}&amp;ver=${offline.version}&amp;bid=${offline.buildid}&amp;bos=@target@&amp;@offline.installer.vars@">
 	    <not><isset property="offline.auspath"/></not>
 	</condition>
 	<condition property="offline.aus_url" value="${offline.aushost}${offline.auspath}">
