@@ -22,7 +22,7 @@ LESS    := $(shell which less)
 WGET    := $(shell which wget)
 MAKE    := $(shell which make)
 
-BDB_VERSION ?= 4.7.25.1
+BDB_VERSION ?= 4.7.25.2
 SSL_VERSION ?= 0.9.8i
 LDAP_VERSION ?= 2.4.11.2z
 BDB_INC ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
