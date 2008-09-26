@@ -122,6 +122,6 @@ public class YabTest {
     public static void main(String... args) throws Exception {
         YabTest test = new YabTest();
         test.setUp();
-        test.testSynchronize();
+        test.testSyncRequest();
     }
 }

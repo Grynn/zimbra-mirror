@@ -25,18 +25,26 @@ import com.zimbra.cs.offline.util.yab.Contact;
 import com.zimbra.cs.offline.util.yab.Field;
 import com.zimbra.cs.offline.util.yab.ContactChange;
 import com.zimbra.cs.offline.util.yab.FieldChange;
+import com.zimbra.cs.offline.util.yab.CategoryChange;
+import com.zimbra.cs.offline.util.yab.Category;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 
 import static com.zimbra.cs.mailbox.Contact.*;
+import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.DateUtil;
 
 public class ContactData implements Serializable {
-    private Map<String, Field> fields;
+    private final Map<String, Field> fields = new HashMap<String, Field>();
+    private final List<Category> categories = new ArrayList<Category>();
 
     private static final String[] NAME_FIELDS =
         { A_firstName, A_middleName, A_lastName, A_namePrefix, A_nameSuffix };
@@ -52,24 +60,16 @@ public class ContactData implements Serializable {
     private static final String SERVICE_MSN = "msn";
     private static final String SERVICE_OTHER = "other";
 
-    public static ParsedContact getParsedContact(Contact contact)
-        throws ServiceException {
-        return new ContactData(contact).getParsedContact();
-    }
-
-    public static Contact getContact(com.zimbra.cs.mailbox.Contact zcontact) {
-        return new ContactData(zcontact).getContact();
-    }
-    
     public ContactData(Contact contact) {
-        fields = new HashMap<String, Field>();
         for (Field field : contact.getFields()) {
             importField(field);
         }
+        categories.addAll(contact.getCategories());
     }
 
-    public ContactData(com.zimbra.cs.mailbox.Contact contact) {
-        fields = new HashMap<String, Field>();
+    public ContactData(com.zimbra.cs.mailbox.Contact contact,
+                       Map<Integer, Category> categoriesByItemId)
+        throws ServiceException {
         Map<String, String> zfields = contact.getFields();
         importField(A_firstName, getName(zfields));
         importField(A_homeStreet, getHomeAddress(zfields));
@@ -79,8 +79,20 @@ public class ContactData implements Serializable {
             String name = entry.getKey();
             importField(name, getSimple(name, entry.getValue()));
         }
+        for (Tag tag : contact.getTagList()) {
+            int itemId = tag.getId();
+            Category cat = categoriesByItemId.get(itemId);
+            if (cat == null) {
+                cat = new Category(tag.getName());
+            }
+            categories.add(cat);
+        }
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+    
     private void importField(Field field) {
         if (field == null) return;
         if (field.isName()) {
@@ -102,7 +114,7 @@ public class ContactData implements Serializable {
             }
         }
     }
-         
+
     private void importField(String name, Field value) {
         if (!fields.containsKey(name) && value != null) {
             fields.put(name, value);
@@ -293,10 +305,10 @@ public class ContactData implements Serializable {
     }
     
     public ContactChange getContactChange(int id, ContactData oldData) {
-        Map<String, Field> oldFields = new HashMap<String, Field>(oldData.fields);
         ContactChange cc = new ContactChange();
         cc.setId(id);
         // Get added and updated fields
+        Map<String, Field> oldFields = new HashMap<String, Field>(oldData.fields);
         for (Map.Entry<String, Field> entry : fields.entrySet()) {
             Field newField = entry.getValue();
             Field oldField = oldFields.remove(entry.getKey());
@@ -311,9 +323,31 @@ public class ContactData implements Serializable {
         for (Field field : oldFields.values()) {
             cc.addFieldChange(FieldChange.remove(field.getId()));
         }
+        // Get category changes
+        Set<Integer> oldCatids = oldData.getCategoryIds();
+        for (Category cat : categories) {
+            int catid = cat.getId();
+            if (catid == -1 || !oldCatids.contains(catid)) {
+                cc.addCategoryChange(CategoryChange.add(cat));
+            }
+        }
+        for (int catid : oldCatids) {
+            cc.addCategoryChange(CategoryChange.remove(catid));
+        }
         return cc;
     }
 
+    private Set<Integer> getCategoryIds() {
+        Set<Integer> catids = new HashSet<Integer>();
+        for (Category cat : categories) {
+            int id = cat.getId();
+            if (id != -1) {
+                catids.add(id);
+            }
+        }
+        return catids;
+    }
+    
     private static boolean isUnchanged(Field field1, Field field2) {
         if (field1.isName()) {
             NameField name1 = (NameField) field1;

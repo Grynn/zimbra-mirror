@@ -37,8 +37,24 @@ public class CategoryChange extends Entity {
         return new CategoryChange(Type.ADD, category);
     }
 
+    public static CategoryChange add(int id) {
+        return add(new Category(id));
+    }
+
+    public static CategoryChange add(String name) {
+        return add(new Category(name));
+    }
+    
     public static CategoryChange remove(Category category) {
         return new CategoryChange(Type.REMOVE, category);
+    }
+    
+    public static CategoryChange remove(int id) {
+        return remove(new Category(id));
+    }
+
+    public static CategoryChange remove(String name) {
+        return remove(new Category(name));
     }
     
     private CategoryChange(Type type, Category category) {

@@ -103,47 +103,19 @@ public class SyncResponse extends Response {
         }
         lastModifiedTime = Xml.getIntAttribute(e, LMT);
         revision = Xml.getIntAttribute(e, REV);
-        ListIterator<Element> it = Xml.getChildren(e).listIterator();
-        // Parse categories
-        Category category;
-        while ((category = parseCategory(it)) != null) {
-            categories.add(category);
-        }
-        // Parse success or error results
-        Result result;
-        while ((result = parseResult(it)) != null) {
-            results.add(result);
-        }
-        // Parse events
-        while (it.hasNext()) {
-            events.add(SyncResponseEvent.fromXml(it.next()));
+        for (Element child : Xml.getChildren(e)) {
+            String tag = child.getTagName();
+            if (tag.equals(Category.TAG)) {
+                categories.add(Category.fromXml(child));
+            } else if (tag.equals(SuccessResult.TAG)) {
+                results.add(SuccessResult.fromXml(child));
+            } else if (tag.equals(ErrorResult.TAG)) {
+                results.add(ErrorResult.fromXml(child));
+            } else {
+                events.add(SyncResponseEvent.fromXml(child));
+            }
         }
         return this;
-    }
-
-    private static Category parseCategory(ListIterator<Element> it) {
-        if (it.hasNext()) {
-            Element e = it.next();
-            if (e.getTagName().equals(Category.TAG)) {
-                return Category.fromXml(e);
-            }
-            it.previous();
-        }
-        return null;
-    }
-
-    private static Result parseResult(ListIterator<Element> it) {
-        if (it.hasNext()) {
-            Element e = it.next();
-            String tag = e.getTagName();
-            if (tag.equals(SuccessResult.TAG)) {
-                return SuccessResult.fromXml(e);
-            } else if (tag.equals(ErrorResult.TAG)) {
-                return ErrorResult.fromXml(e);
-            }
-            it.previous();
-        }
-        return null;
     }
 
     @Override

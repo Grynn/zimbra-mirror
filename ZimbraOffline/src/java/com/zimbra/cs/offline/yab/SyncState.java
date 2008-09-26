@@ -21,15 +21,13 @@ import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.MetadataList;
 import com.zimbra.cs.offline.util.yab.Contact;
 import com.zimbra.cs.offline.util.yab.Session;
+import com.zimbra.cs.offline.util.yab.Category;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 
@@ -37,96 +35,111 @@ public class SyncState {
     private final SyncSession sync;
     private int revision;  // YAB revision number
     private int sequence;  // Zimbra mailbox last change id
-    private Map<Integer, Integer> contactIdByItemId = new HashMap<Integer, Integer>();
-    private Map<Integer, Integer> itemIdByContactId = new HashMap<Integer, Integer>();
-    private Map<Integer, Integer> categoryIdByItemId = new HashMap<Integer, Integer>();
-    private Map<Integer, Integer> itemIdByCategoryId = new HashMap<Integer, Integer>();
-    private Map<Integer, String> contactsByItemId = new HashMap<Integer, String>();
-
-    private static final String YAB = "YAB";
-    private static final String REV = "REV";
-    private static final String SEQ = "SEQ";
-    private static final String CIDS = "CIDS";
-    private static final String CATIDS = "CATIDS";
-    private static final String CONTACTS = "CONTACTS";
+    private final Map<Integer, Integer> contactIdByItemId;
+    private final Map<Integer, Integer> itemIdByContactId;
+    private final Map<Integer, String> contactByItemId;
+    private final Map<Integer, Integer> itemIdByCategoryId;
+    private final Map<Integer, Category> categoryByItemId;
 
     private static final Log LOG = OfflineLog.yab;
 
-    public static SyncState load(SyncSession sync)
-        throws ServiceException {
-        return new SyncState(sync).load();
-    }
+    private static final int VERSION = 1;
 
-    private SyncState(SyncSession sync) {
+    private static final String KEY_YAB = "YAB";
+    private static final String KEY_VERSION = "VERSION";
+    private static final String KEY_REVISION = "REVISION";
+    private static final String KEY_SEQUENCE = "SEQUENCE";
+    private static final String KEY_CIDS = "CIDS";
+    private static final String KEY_CATIDS = "CATIDS";
+    private static final String KEY_CONTACTS = "CONTACTS";
+    private static final String KEY_CATEGORIES = "CATEGORIES";
+
+    public SyncState(SyncSession sync) {
         this.sync = sync;
+        contactIdByItemId = new HashMap<Integer, Integer>();
+        itemIdByContactId = new HashMap<Integer, Integer>();
+        contactByItemId = new HashMap<Integer, String>();
+        itemIdByCategoryId = new HashMap<Integer, Integer>();
+        categoryByItemId = new HashMap<Integer, Category>();
     }
 
-    private SyncState load() throws ServiceException {
+    public void load() throws ServiceException {
+        clear();
         Mailbox mbox = sync.getMailbox();
-        Metadata md = mbox.getConfig(sync.getContext(), YAB);
-        if (md == null) return this;
-        revision = (int) md.getLong(REV);
-        sequence = (int) md.getLong(SEQ);
-        loadIds(md.getList(CIDS), contactIdByItemId, itemIdByContactId);
-        loadIds(md.getList(CATIDS), categoryIdByItemId, itemIdByCategoryId);
-        loadContacts(md.getList(CONTACTS));
+        Metadata md = mbox.getConfig(sync.getContext(), KEY_YAB);
+        if (md == null) return;
+        int version = (int) md.getLong(KEY_VERSION);
+        if (version != VERSION) {
+            throw new IllegalStateException("Incompatible sync state version");
+        }
+        revision = (int) md.getLong(KEY_REVISION);
+        sequence = (int) md.getLong(KEY_SEQUENCE);
+        MetadataList cids = md.getList(KEY_CIDS);
+        MetadataList contacts = md.getList(KEY_CONTACTS);
+        for (int i = 0; i < cids.size(); i += 2) {
+            int itemId = (int) cids.getLong(i);
+            int cid = (int) cids.getLong(i + 1);
+            contactIdByItemId.put(itemId, cid);
+            itemIdByContactId.put(cid, itemId);
+            contactByItemId.put(itemId, contacts.get(i >> 1));
+        }
+        MetadataList catids = md.getList(KEY_CATIDS);
+        MetadataList categories = md.getList(KEY_CATEGORIES);
+        for (int i = 0; i < catids.size(); i += 2) {
+            int itemId = (int) catids.getLong(i);
+            int catid = (int) catids.getLong(i + 1);
+            String name = categories.get(i >> 1);
+            Category cat = new Category(name, catid);
+            categoryByItemId.put(itemId, cat);
+            itemIdByCategoryId.put(catid, itemId);
+        }
         LOG.debug("Loaded sync state: %s", this);
-        return this;
     }
 
-    private static void loadIds(MetadataList ml,
-                                Map<Integer, Integer> remoteByLocalId,
-                                Map<Integer, Integer> localByRemoteId) {
-        if (ml == null) return;
-        assert ml.size() % 2 == 0;
-        for (Iterator it = ml.asList().iterator(); it.hasNext(); ) {
-            Integer localId = ((Long) it.next()).intValue();
-            Integer remoteId = ((Long) it.next()).intValue();
-            remoteByLocalId.put(localId, remoteId);
-            localByRemoteId.put(remoteId, localId);
-        }
-    }
-
-    private void loadContacts(MetadataList ml) throws ServiceException {
-        contactsByItemId = new HashMap<Integer, String>(ml.size() / 2);
-        for (int i = 0; i < ml.size(); ) {
-            int cid = Integer.parseInt(ml.get(i++));
-            String contact = ml.get(i++);
-            contactsByItemId.put(cid, contact);
-        }
-    }
-    
     public void save() throws ServiceException {
         Metadata md = new Metadata();
-        md.put(REV, revision);
-        md.put(SEQ, sequence);
-        md.put(CIDS, saveIds(contactIdByItemId));
-        md.put(CATIDS, saveIds(categoryIdByItemId));
-        md.put(CONTACTS, saveContacts());
-        sync.getMailbox().setConfig(sync.getContext(), YAB, md);
+        md.put(KEY_VERSION, VERSION);
+        md.put(KEY_REVISION, revision);
+        md.put(KEY_SEQUENCE, sequence);
+        MetadataList cids = new MetadataList();
+        MetadataList contacts = new MetadataList();
+        for (Map.Entry<Integer, Integer> e : contactIdByItemId.entrySet()) {
+            int itemId = e.getKey();
+            cids.add(itemId);
+            cids.add(e.getValue());
+            String contact = contactByItemId.get(itemId);
+            if (contact == null) {
+                throw new IllegalStateException("Missing contact data for cid: " + e.getValue());
+            }
+            contacts.add(contact);
+        }
+        md.put(KEY_CIDS, cids);
+        md.put(KEY_CONTACTS, contacts);
+        MetadataList catids = new MetadataList();
+        MetadataList categories = new MetadataList();
+        for (Map.Entry<Integer, Category> e : categoryByItemId.entrySet()) {
+            int itemId = e.getKey();
+            Category cat = e.getValue();
+            int catid = cat.getId();
+            if (catid == -1) {
+                throw new IllegalStateException("Missing category id for item id: " + itemId);
+            }
+            String name = cat.getName();
+            if (name == null) {
+                throw new IllegalStateException("Missing category name for item id: " + itemId);
+            }
+            catids.add(itemId);
+            catids.add(catid);
+            categories.add(name);
+        }
+        md.put(KEY_CATIDS, catids);
+        md.put(KEY_CATEGORIES, categories);
+        sync.getMailbox().setConfig(sync.getContext(), KEY_YAB, md);
         LOG.debug("Saved sync state: %s", this);
     }
 
-    private static List<Long> saveIds(Map<Integer, Integer> remoteByLocalId) {
-        List<Long> ids = new ArrayList<Long>(remoteByLocalId.size() * 2);
-        for (Map.Entry<Integer, Integer> e : remoteByLocalId.entrySet()) {
-            ids.add(e.getKey().longValue());
-            ids.add(e.getValue().longValue());
-        }
-        return ids;
-    }
-
-    private MetadataList saveContacts() {
-        MetadataList ml = new MetadataList();
-        for (Map.Entry<Integer, String> me : contactsByItemId.entrySet()) {
-            ml.add(me.getKey().toString());
-            ml.add(me.getValue());
-        }
-        return ml;
-    }
-
     public void delete() throws ServiceException {
-        sync.getMailbox().setConfig(sync.getContext(), YAB, null);
+        sync.getMailbox().setConfig(sync.getContext(), KEY_YAB, null);
         clear();
     }
 
@@ -135,9 +148,7 @@ public class SyncState {
         sequence = 0;
         contactIdByItemId.clear();
         itemIdByContactId.clear();
-        categoryIdByItemId.clear();
-        itemIdByCategoryId.clear();
-        contactsByItemId.clear();
+        contactByItemId.clear();
     }
 
     public int getRevision() { return revision; }
@@ -159,14 +170,46 @@ public class SyncState {
         return getInt(itemIdByContactId, contactId);
     }
 
-    public int getCategoryId(int itemId) {
-        return getInt(categoryIdByItemId, itemId);
+    public void addCategory(int itemId, int categoryId) {
+        if (getCategory(itemId) != null) {
+            throw new IllegalArgumentException("Duplicate category id");
+        }
+        Category cat = new Category(categoryId);
+        categoryByItemId.put(itemId, cat);
+        itemIdByCategoryId.put(categoryId, itemId);
+        LOG.debug("Added category for itemid=%d, catid=%d", itemId, categoryId);
+    }
+
+    public Map<Integer, Category> getCategories() {
+        return new HashMap<Integer, Category>(categoryByItemId);
+    }
+
+    public Category getCategory(int itemId) {
+        return categoryByItemId.get(itemId);
     }
 
     public int getCategoryItemId(int categoryId) {
         return getInt(itemIdByCategoryId, categoryId);
     }
+    
+    public void removeCategory(int itemId) {
+        Category cat = categoryByItemId.remove(itemId);
+        if (cat != null) {
+            itemIdByCategoryId.remove(cat.getId());
+            LOG.debug("Removed category for itemId=%d, catid=%d", itemId, cat.getId());
+        }
+    }
 
+    public void updateCategoryName(int itemId, String name) {
+        Category cat = getCategory(itemId);
+        if (cat == null) {
+            cat = new Category();
+            categoryByItemId.put(itemId, cat);
+        }
+        cat.setName(name);
+        LOG.debug("Updated category name for itemId=%d, newName=%s", itemId, name);
+    }
+    
     private static int getInt(Map<Integer, Integer> map, int key) {
         Integer value = map.get(key);
         return value != null ? value : -1;
@@ -187,29 +230,18 @@ public class SyncState {
         if (cid != null) {
             itemIdByContactId.remove(cid);
         }
-    }
-
-    public void addCategory(int itemId, int categoryId) {
-        categoryIdByItemId.put(itemId, categoryId);
-        itemIdByCategoryId.put(categoryId, itemId);
-    }
-
-    public void removeCategory(int itemId) {
-        Integer catid = categoryIdByItemId.remove(itemId);
-        if (catid != null) {
-            itemIdByCategoryId.remove(catid);
-        }
+        LOG.debug("Removed contact for itemId=%d, cid=%d", itemId, cid);
     }
 
     public String toString() {
         return String.format("[rev=%d,seq=%d,contacts=%d,categories=%d]",
-            revision, sequence, contactIdByItemId.size(), categoryIdByItemId.size());
+            revision, sequence, contactIdByItemId.size(), categoryByItemId.size());
     }
 
     // TODO Remove following methods once we store contact in per-item metadata
 
     public Contact getContact(int itemId) throws ServiceException {
-        String s = contactsByItemId.get(itemId);
+        String s = contactByItemId.get(itemId);
         LOG.debug("Loading contact for itemId = %s:\n", s);
         if (s != null) {
             try {
@@ -230,7 +262,7 @@ public class SyncState {
             throw new IllegalArgumentException("Unknown contact id " + cid);
         }
         String data = serialize(contact);
-        contactsByItemId.put(itemId, data);
+        contactByItemId.put(itemId, data);
         LOG.debug("Saved contact data for itemId=%d:\n%s", itemId, data);
     }
 
@@ -238,6 +270,5 @@ public class SyncState {
         Session session = sync.getSession();
         Document doc = session.createDocument();
         return session.toString(contact.toXml(doc));
-
     }
 }

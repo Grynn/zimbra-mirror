@@ -45,13 +45,29 @@ public class SyncRequestEvent extends Entity {
         return new SyncRequestEvent(Type.ADD_CATEGORY, new Category(name));
     }
 
-    public static SyncRequestEvent renameCategory(Category category, String toName) {
+    public static SyncRequestEvent renameCategory(Category category, String newName) {
         return new SyncRequestEvent(Type.RENAME_CATEGORY,
-            new Category[] { category, new Category(toName) });
+            new Category[] { category, new Category(newName) });
+    }
+
+    public static SyncRequestEvent renameCategory(int id, String newName) {
+        return SyncRequestEvent.renameCategory(new Category(id), newName);
+    }
+
+    public static SyncRequestEvent renameCategory(String oldName, String newName) {
+        return SyncRequestEvent.renameCategory(new Category(oldName), newName);
     }
     
     public static SyncRequestEvent removeCategory(Category category) {
         return new SyncRequestEvent(Type.REMOVE_CATEGORY, category);
+    }
+
+    public static SyncRequestEvent removeCategory(int id) {
+        return removeCategory(new Category(id));
+    }
+
+    public static SyncRequestEvent removeCategory(String name) {
+        return removeCategory(new Category(name));
     }
 
     private SyncRequestEvent(Type type, Object param) {
