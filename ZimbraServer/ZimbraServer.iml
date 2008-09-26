@@ -355,7 +355,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/jsieve-0.1-zimbra.jar!/" />
+          <root url="jar://$MODULE_DIR$/../ZimbraCommon/jars/apache-jsieve-0.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
