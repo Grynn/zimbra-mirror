@@ -749,6 +749,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 	            throw e;
 	        }
 
+	    cachedaccountIds = null;    
+	    
         return acct;
     }
     
@@ -906,6 +908,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized void deleteAccount(String zimbraId) throws ServiceException {       
         deleteGalAccount(zimbraId);
         deleteOfflineAccount(zimbraId);
+        
+        cachedaccountIds = null;
     }
     
     private synchronized void deleteOfflineAccount(String zimbraId) throws ServiceException {
@@ -996,17 +1000,18 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         throw new UnsupportedOperationException();
     }
 
+    private List<String> cachedaccountIds;
+
     public List<Account> getAllAccounts() throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
-        List<String> accountIds;
         synchronized (this) {
-        	accountIds = DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
-        }
-        for (String zimbraId : accountIds) {
-            Account acct = get(AccountBy.id, zimbraId);
-            if (acct != null && !isLocalAccount(acct) && !isGalAccount(acct)) {
-            	MailboxManager.getInstance().getMailboxByAccount(acct);
-                accts.add(acct);
+        	cachedaccountIds = cachedaccountIds != null ? cachedaccountIds : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
+            for (String zimbraId : cachedaccountIds) {
+                Account acct = get(AccountBy.id, zimbraId);
+                if (acct != null && !isLocalAccount(acct) && !isGalAccount(acct)) {
+                	MailboxManager.getInstance().getMailboxByAccount(acct);
+                    accts.add(acct);
+                }
             }
         }
         return accts;
@@ -1703,13 +1708,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return new OfflineSignature(account, attrs);
     }
     
+    private Map<String, List<DataSource>> cachedDataSources = new HashMap<String, List<DataSource>>();
+    
     @Override
     public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
         return createDataSource(account, type, name, attrs, false, isSyncAccount(account));
     }
 
     @Override
-    public DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
+    public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
         return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, isSyncAccount(account));
     }
 
@@ -1750,6 +1757,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mHasDirtyAccounts |= markChanged;
 
         AttributeManager.getInstance().postModify(attrs, ds, context, true);
+        
+        cachedDataSources.remove(account.getId());
+        
         return ds;
     }
 
@@ -1766,18 +1776,21 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         DbOfflineDirectory.deleteDirectoryLeaf(EntryType.DATASOURCE, account, dsrc.getId(), markChanged);
         reload(account);
         mHasDirtyAccounts |= markChanged;
+        
+        cachedDataSources.remove(account.getId());
     }
 
     @Override
     public synchronized List<DataSource> getAllDataSources(Account account) throws ServiceException {
-        List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.DATASOURCE, account);
-        if (names.isEmpty())
-            return Collections.emptyList();
-
-        List<DataSource> sources = new ArrayList<DataSource>(names.size());
-        for (String name : names)
-            sources.add(get(account, DataSourceBy.name, name));
-        return sources;
+    	List<DataSource> sources = cachedDataSources.get(account.getId());
+    	if (sources == null) {
+    		List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.DATASOURCE, account);
+    		sources = new ArrayList<DataSource>(names.size());
+    		for (String name : names)
+                sources.add(get(account, DataSourceBy.name, name));
+    		cachedDataSources.put(account.getId(), sources);
+    	}
+    	return sources;
     }
 
     @Override
@@ -1868,6 +1881,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized DataSource get(Account account, DataSourceBy keyType, String key) throws ServiceException {
+    	List<DataSource> cached = cachedDataSources.get(account.getId());
+    	if (cached != null) {
+    		for (DataSource ds : cached) {
+    	        if (keyType == DataSourceBy.name && ds.getName().equals(key) ||
+    	        		keyType == DataSourceBy.id && ds.getId().equals(key))
+    	            return ds;
+    		}
+    		return null;
+    	}
+    	
         Map<String,Object> attrs = null;
         if (keyType == DataSourceBy.name) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.DATASOURCE, account, A_offlineDn, key);
