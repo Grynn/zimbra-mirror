@@ -634,7 +634,7 @@ function (resp) {
 		return;
 	if(resp.isException()) {
 		var ex = resp.getException();
-		if(ex.msg == "system failure: NameNotFoundException") {
+		if(ex.msg && (ex.msg.indexOf("NameNotFoundException")>0 || ex.msg.indexOf("NoMXRecordsForDomain")>0)) {
 			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.failedToGetMXRecords, [this._currentObject.name]));
 		} else {
 			this._handleException(resp.getException(), "ZaDomainController.prototype.checkMXCallback", null, false);
