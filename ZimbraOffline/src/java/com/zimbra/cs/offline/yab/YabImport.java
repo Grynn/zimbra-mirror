@@ -47,6 +47,6 @@ public class YabImport implements DataSource.DataImport {
 
     private SyncSession newSyncSession() throws ServiceException {
         Session session = new Session(OfflineYAuth.newAuthenticator(ds));
-        return new SyncSession(ds.getMailbox(), session);
+        return new SyncSession(ds, session);
     }
 }

@@ -21,6 +21,7 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.mailbox.MailServiceException;
+import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.offline.util.yab.Session;
 import com.zimbra.cs.offline.util.yab.Contact;
 import com.zimbra.cs.offline.util.yab.SyncResponse;
@@ -34,6 +35,9 @@ import com.zimbra.cs.offline.util.yab.Yab;
 import com.zimbra.cs.offline.util.yab.SuccessResult;
 import com.zimbra.cs.offline.util.yab.Category;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.db.DbDataSource;
+import com.zimbra.cs.db.DbDataSource.DataSourceItem;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 
@@ -44,9 +48,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Collections;
 import java.util.Collection;
+import java.util.Arrays;
 import java.io.IOException;
 
+import org.w3c.dom.Document;
+
 public class SyncSession {
+    private final DataSource ds;
     private final Mailbox mbox;
     private final Session session;
     private final Set<Integer> deletedContacts;
@@ -69,8 +77,9 @@ public class SyncSession {
         Yab.enableDebug();
     }
     
-    public SyncSession(Mailbox mbox, Session session) throws ServiceException {
-        this.mbox = mbox;
+    public SyncSession(DataSource ds, Session session) throws ServiceException {
+        this.ds = ds;
+        this.mbox = ds.getMailbox();
         this.session = session;
         deletedContacts = new HashSet<Integer>();
         modifiedContacts = new HashSet<Integer>();
@@ -130,6 +139,7 @@ public class SyncSession {
             mbox.emptyFolder(CONTEXT, Mailbox.ID_FOLDER_CONTACTS, true);
             state.delete();
             pushedContacts.clear();
+            DbDataSource.deleteAllMappings(mbox, ds);
         }
     }
     
@@ -231,11 +241,7 @@ public class SyncSession {
                 // Update existing contact
                 ContactData oldData = pushedContacts.get(itemId);
                 if (oldData == null) {
-                    Contact oldContact = state.getContact(itemId);
-                    if (oldContact == null) {
-                        throw syncError("Missing original contact data for itemId=%d, cid=%d", itemId, cid);
-                    }
-                    oldData = new ContactData(oldContact);
+                    oldData = new ContactData(loadContact(itemId));
                 }
                 ContactChange cc = newData.getContactChange(cid, oldData);
                 if (!cc.isEmpty()) {
@@ -335,7 +341,7 @@ public class SyncSession {
                 mbox.modifyContact(CONTEXT, itemId, cd.getParsedContact());
                 long mask = getTagBitmask(cd);
                 mbox.setTags(CONTEXT, itemId, MailItem.TYPE_CONTACT, MailItem.FLAG_UNCHANGED, mask);
-                state.updateContact(contact);
+                saveContact(itemId, contact);
                 LOG.debug("Modified local contact: itemId=%d, cid=%d, tag_bits=%x", itemId, cid, mask);
             }
         } else {
@@ -347,8 +353,40 @@ public class SyncSession {
             long mask = getTagBitmask(cd);
             mbox.setTags(CONTEXT, itemId, MailItem.TYPE_CONTACT, MailItem.FLAG_UNCHANGED, mask);
             state.addContact(itemId, cid);
-            state.updateContact(contact);
+            saveContact(itemId, contact);
             LOG.debug("Created new local contact: itemId=%d, cid=%d, tag_bits=%x", itemId, cid, mask);
+        }
+    }
+
+    private static final String KEY_CONTACT = "CONTACT";
+    
+    private void saveContact(int itemId, Contact contact) throws ServiceException {
+        LOG.debug("Saving original contact data for item id: %d", itemId);
+        Metadata md = new Metadata();
+        String data = session.toString(contact.toXml(session.createDocument()));
+        md.put(KEY_CONTACT, data);
+        String remoteId = String.valueOf(contact.getId());
+        DataSourceItem dsi = new DataSourceItem(itemId, remoteId, md);
+        if (DbDataSource.hasMapping(mbox, ds, itemId)) {
+            DbDataSource.updateMapping(mbox, ds, dsi);
+        } else {
+            DbDataSource.addMapping(mbox, ds, dsi);
+        }
+    }
+
+    private Contact loadContact(int itemId) throws ServiceException {
+        LOG.debug("Loading original contact data for item id: %d", itemId);
+        DataSourceItem dsi = DbDataSource.getMapping(mbox, ds, itemId);
+        String data = dsi.md.get(KEY_CONTACT);
+        if (data == null) {
+            throw new IllegalStateException("Missing saved contact data for item id: " + itemId);
+        }
+        try {
+            Document doc = session.parseDocument(data);
+            return Contact.fromXml(doc.getDocumentElement());
+        } catch (Exception e) {
+            throw ServiceException.FAILURE(
+                "Unable to parse contact for cid " + itemId, null);
         }
     }
 
@@ -378,6 +416,7 @@ public class SyncSession {
         deletedContacts.remove(itemId);
         modifiedContacts.remove(itemId);
         state.removeContact(itemId);
+        DbDataSource.deleteMappings(mbox, ds, Arrays.asList(itemId));
         LOG.debug("Deleted local contact: itemId=%d, cid=%d", itemId, cid);
     }
 
