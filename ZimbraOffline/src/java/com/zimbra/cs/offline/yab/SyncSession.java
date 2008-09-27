@@ -79,7 +79,7 @@ public class SyncSession {
     
     public SyncSession(DataSource ds, Session session) throws ServiceException {
         this.ds = ds;
-        this.mbox = ds.getMailbox();
+        mbox = ds.getMailbox();
         this.session = session;
         deletedContacts = new HashSet<Integer>();
         modifiedContacts = new HashSet<Integer>();
@@ -139,7 +139,7 @@ public class SyncSession {
             mbox.emptyFolder(CONTEXT, Mailbox.ID_FOLDER_CONTACTS, true);
             state.delete();
             pushedContacts.clear();
-            DbDataSource.deleteAllMappings(mbox, ds);
+            DbDataSource.deleteAllMappings(ds);
         }
     }
     
@@ -367,16 +367,16 @@ public class SyncSession {
         md.put(KEY_CONTACT, data);
         String remoteId = String.valueOf(contact.getId());
         DataSourceItem dsi = new DataSourceItem(itemId, remoteId, md);
-        if (DbDataSource.hasMapping(mbox, ds, itemId)) {
-            DbDataSource.updateMapping(mbox, ds, dsi);
+        if (DbDataSource.hasMapping(ds, itemId)) {
+            DbDataSource.updateMapping(ds, dsi);
         } else {
-            DbDataSource.addMapping(mbox, ds, dsi);
+            DbDataSource.addMapping(ds, dsi);
         }
     }
 
     private Contact loadContact(int itemId) throws ServiceException {
         LOG.debug("Loading original contact data for item id: %d", itemId);
-        DataSourceItem dsi = DbDataSource.getMapping(mbox, ds, itemId);
+        DataSourceItem dsi = DbDataSource.getMapping(ds, itemId);
         String data = dsi.md.get(KEY_CONTACT);
         if (data == null) {
             throw new IllegalStateException("Missing saved contact data for item id: " + itemId);
@@ -416,7 +416,7 @@ public class SyncSession {
         deletedContacts.remove(itemId);
         modifiedContacts.remove(itemId);
         state.removeContact(itemId);
-        DbDataSource.deleteMappings(mbox, ds, Arrays.asList(itemId));
+        DbDataSource.deleteMappings(ds, Arrays.asList(itemId));
         LOG.debug("Deleted local contact: itemId=%d, cid=%d", itemId, cid);
     }
 
