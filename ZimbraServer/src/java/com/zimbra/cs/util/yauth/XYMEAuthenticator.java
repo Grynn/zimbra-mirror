@@ -14,11 +14,10 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.util.ymail;
+package com.zimbra.cs.util.yauth;
 
 import com.zimbra.cs.mailclient.auth.Authenticator;
 import com.zimbra.cs.mailclient.MailConfig;
-import com.zimbra.cs.util.yauth.Auth;
 
 import java.io.UnsupportedEncodingException;
 

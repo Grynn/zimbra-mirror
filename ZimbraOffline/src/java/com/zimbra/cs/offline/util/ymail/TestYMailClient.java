@@ -10,6 +10,7 @@ import org.apache.log4j.Level;
 import com.zimbra.cs.util.yauth.RawAuthManager;
 import com.zimbra.cs.util.yauth.FileTokenStore;
 import com.zimbra.cs.util.yauth.Auth;
+import com.zimbra.cs.util.yauth.XYMEAuthenticator;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.mailclient.imap.ImapConnection;
 import com.zimbra.cs.mailclient.imap.ImapConfig;

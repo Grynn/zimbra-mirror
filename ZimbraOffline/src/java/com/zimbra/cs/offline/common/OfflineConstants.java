@@ -56,4 +56,5 @@ public interface OfflineConstants {
     public static final String LOCAL_ACCOUNT_ID = "ffffffff-ffff-ffff-ffff-ffffffffffff";    
     public static final String GAL_ACCOUNT_SUFFIX = "__OFFLINE_GAL__";
     public static final String GAL_LDAP_DN = "GAL_LDAP_DN";
+    public static final String YMAIL_PARTNER_NAME = "Zimbra";
 }
