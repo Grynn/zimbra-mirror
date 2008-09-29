@@ -357,7 +357,7 @@ updater.DownloadError=There was an error while downloading from\n\n{0}\n\nPlease
 updater.FinishTitle=Download Finished
 updater.FinishInfoText=The update for {0} has been downloaded to your computer.
 updater.LaunchError=The update installer could not be launched
-updater.LaunchUpdaterQuestion=Do you want to lauch the update installer now?
+updater.LaunchUpdaterQuestion=Do you want to launch the update installer now?
 updater.LaunchUpdaterLabel=Yes, execute the update installer now
 updater.DoNotLaunchUpdaterLabel=No, I will execute the update installer later
 updater.OpenContainingFolderLabel=Open containing folder
@@ -385,15 +385,12 @@ UseSu=use su (please enter the root password)
 
 
 languages.zh_CN=Chinese (Simplified)
-languages.zh_HK=Chinese (Traditional)
+languages.zh_TW=Chinese (Traditional)
 languages.hr=Croatian
 languages.cs=Czech
 languages.da=Danish
 languages.nl=Dutch
 languages.en=English
-languages.en_AU=English (Australia)
-languages.en_GB=English (Great Britain)
-languages.en_US=English (United States)
 languages.fi=Finnish
 languages.fr=French
 languages.de=German

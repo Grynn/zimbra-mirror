@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.1.3" transformSequenceNumber="2">
+<install4j version="4.1.4" transformSequenceNumber="2">
   <directoryPresets config="./build/dist/jetty/common/lib" />
-  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.90" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
+  <application name="Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.90" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" installerName="" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en_US" customLocalizationFile="./src/installer/messages/ZiMsg.properties" />
       <additionalLanguages>
@@ -162,6 +162,9 @@
               </void>
               <void property="useCustomIcon">
                 <boolean>true</boolean>
+              </void>
+              <void property="vmParameters">
+                <string>-Dinstall4j.noSecondaryProcess=true</string>
               </void>
             </object>
           </java>
@@ -821,7 +824,7 @@ default:
                     </object>
                   </java>
                 </serializedBean>
-                <condition>(!Util.isWindows() || context.getLanguageId().equals("en_US")) &amp;&amp; context.getBooleanVariable("keepUserData")</condition>
+                <condition>context.getBooleanVariable("keepUserData")</condition>
               </action>
               <action name="launchctl remove" id="275894" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
                 <serializedBean>
@@ -1058,7 +1061,7 @@ default:
                     </object>
                   </java>
                 </serializedBean>
-                <condition>(!Util.isWindows() || context.getLanguageId().equals("en_US")) &amp;&amp; context.getBooleanVariable("keepUserData")</condition>
+                <condition>context.getBooleanVariable("keepUserData")</condition>
               </action>
               <action name="derby" id="275903" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
@@ -1144,57 +1147,6 @@ default:
                   </java>
                 </serializedBean>
                 <condition>!context.getBooleanVariable("keepUserData")</condition>
-              </action>
-              <action name="win32" id="275908" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>win32</string>
-                        </object>
-                      </void>
-                      <void property="recurse">
-                        <boolean>true</boolean>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition />
-              </action>
-              <action name="linux" id="275909" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>linux</string>
-                        </object>
-                      </void>
-                      <void property="recurse">
-                        <boolean>true</boolean>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition />
-              </action>
-              <action name="macos" id="275910" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>macos</string>
-                        </object>
-                      </void>
-                      <void property="recurse">
-                        <boolean>true</boolean>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition />
               </action>
               <action name="zdesktop.webapp" id="275911" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
@@ -1665,7 +1617,7 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="derbyij non-win32 or en_US" id="263089" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrDBInitFailed}">
+              <action name="derbyij" id="263089" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrDBInitFailed}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -1688,58 +1640,7 @@ try {
                     </object>
                   </java>
                 </serializedBean>
-                <condition>(!Util.isWindows() || context.getLanguageId().equals("en_US")) &amp;&amp; !context.getBooleanVariable("keepUserData")</condition>
-              </action>
-              <action name="derbyij win32 and non en_US" id="285439" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrDBInitFailed}">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="4">
-                          <void index="0">
-                            <string>-cp</string>
-                          </void>
-                          <void index="1">
-                            <string>"lib/derbytools.jar;jetty/common/lib/derby.jar"</string>
-                          </void>
-                          <void index="2">
-                            <string>org.apache.derby.tools.ij</string>
-                          </void>
-                          <void index="3">
-                            <string>db/derbyij.sql</string>
-                          </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>jre/bin/java.exe</string>
-                        </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="stderrFile">
-                        <object class="java.io.File">
-                          <string>${installer:sys.installationDir}/log/derbyinit.err</string>
-                        </object>
-                      </void>
-                      <void property="stdoutFile">
-                        <object class="java.io.File">
-                          <string>${installer:sys.installationDir}/log/derbyinit.out</string>
-                        </object>
-                      </void>
-                      <void property="wait">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>${installer:sys.installationDir}</string>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>Util.isWindows() &amp;&amp; !context.getLanguageId().equals("en_US") &amp;&amp; !context.getBooleanVariable("keepUserData")</condition>
+                <condition>!context.getBooleanVariable("keepUserData")</condition>
               </action>
               <action name="" id="8" beanClass="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
@@ -2578,26 +2479,6 @@ return true;</string>
                   </java>
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
-              </action>
-              <action name="zdesktop" id="62119" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>zdesktop</string>
-                        </object>
-                      </void>
-                      <void property="replaceValue">
-                        <string>-1  &gt; "$prg_dir/log/zdesktop.out" &amp;</string>
-                      </void>
-                      <void property="searchValue">
-                        <string>-1  &amp;</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>false &amp;&amp; Util.isMacOS()</condition>
               </action>
               <action name="zdesktop" id="68534" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
@@ -3611,57 +3492,6 @@ return true;</string>
                       <void property="file">
                         <object class="java.io.File">
                           <string>zdesktop.webapp</string>
-                        </object>
-                      </void>
-                      <void property="recurse">
-                        <boolean>true</boolean>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition />
-              </action>
-              <action name="macos" id="271565" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>macos</string>
-                        </object>
-                      </void>
-                      <void property="recurse">
-                        <boolean>true</boolean>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition />
-              </action>
-              <action name="linux" id="271566" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>linux</string>
-                        </object>
-                      </void>
-                      <void property="recurse">
-                        <boolean>true</boolean>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition />
-              </action>
-              <action name="win32" id="271567" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>win32</string>
                         </object>
                       </void>
                       <void property="recurse">
