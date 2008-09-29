@@ -149,6 +149,26 @@ function(id) {
 };
 
 /**
+ * Allows the accordion items to be clickable or not. If disabled, the label of
+ * each accordion item will be grayed out.
+ *
+ * @param enabled	[Boolean]		True if enabled.
+ */
+DwtAccordion.prototype.setEnabled =
+function(enabled) {
+	if (enabled == this._enabled) { return; }
+
+	this._enabled = enabled;
+
+	for (var i in this._items) {
+		var item = this._items[i];
+		if (this._currentItemId != item.id) {
+			item._setEnabled(enabled);
+		}
+	}
+};
+
+/**
  * This override applies accordion size changes to accordion items as well.
  *
  * @param width		[int]	new width for accordion
@@ -349,6 +369,8 @@ function() {
  */
 DwtAccordion.prototype._handleOnClickHeader =
 function(item, ev) {
+	if (!this._enabled) { return; }
+
 	ev = ev || window.event;
 
 	this.expandItem(item.id);
@@ -450,5 +472,26 @@ function(title) {
 	var titleCell = document.getElementById(this.accordion._htmlElId + "_title_" + this.id);
 	if (titleCell) {
 		titleCell.innerHTML = title;
+	}
+};
+
+DwtAccordionItem.prototype._setEnabled =
+function(enabled) {
+	var titleCell = document.getElementById(this.accordion._htmlElId + "_title_" + this.id);
+	if (titleCell) {
+		if (enabled) {
+			Dwt.delClass(titleCell, "ZDisabled");
+		} else {
+			Dwt.addClass(titleCell, "ZDisabled");
+		}
+	}
+
+	var status = document.getElementById(this.accordion._htmlElId + "_status_" + this.id);
+	if (status) {
+		if (enabled) {
+			Dwt.delClass(status, "ZDisabledImage ZDisabled");
+		} else {
+			Dwt.addClass(status, "ZDisabledImage ZDisabled");
+		}
 	}
 };
