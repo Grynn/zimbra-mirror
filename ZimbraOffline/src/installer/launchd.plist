@@ -16,6 +16,6 @@
         <key>StandardOutPath</key>
         <string>@install@/log/zdesktop.out</string>
         <key>StandardErrorPath</key>
-        <string>@install@/log/zdesktop.err</string>
+        <string>@install@/log/zdesktop.out</string>
 </dict>
 </plist>

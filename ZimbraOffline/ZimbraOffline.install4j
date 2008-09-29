@@ -98,7 +98,7 @@
   </files>
   <launchers>
     <launcher name="Yahoo! Zimbra Desktop Service" id="32" external="false" excludeFromMenu="true" menuName="" icnsFile="" pngIcon16File="./src/installer/resources/launcher_16x16.png" pngIcon32File="./src/installer/resources/launcher_32x32.png" macServiceDependencies="" swtApp="false" fileset="">
-      <executable name="zdesktop" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/zdesktop.err" redirectStdout="true" stdoutFile="log/zdesktop.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="log" singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Yahoo! Zimbra Desktop Service" jreLocation="" executionLevel="asInvoker">
+      <executable name="zdesktop" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="true" stderrFile="log/zdesktop.out" redirectStdout="true" stdoutFile="log/zdesktop.out" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="log" singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="Yahoo! Zimbra Desktop Service" jreLocation="" executionLevel="asInvoker">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
       <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
