@@ -643,7 +643,7 @@ function(refresh) {
 			attrs:[ZaCos.A_name,ZaCos.A_description].join(),
 			controller: this.getCurrentController()
 		}
-		var response = ZaSearch.searchDirectory(searchParams);	
+		var response = ZaSearch.searchDirectory(searchParams).Body.SearchDirectoryResponse;
 		this._cosList = new ZaItemList(ZaCos, this._app);		
 		this._cosList.loadFromJS(response);
 	}

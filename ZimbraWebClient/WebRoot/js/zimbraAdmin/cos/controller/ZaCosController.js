@@ -59,7 +59,8 @@ function(entry) {
 ZaCosController.setViewMethod =
 function(entry) {
 	try {
-	   	//create toolbar
+        if (!entry._app) entry._app = this._app ;
+           //create toolbar
 		if(!this._UICreated) {
 			this._initToolbar();
 			//always add Help button at the end of the toolbar		
