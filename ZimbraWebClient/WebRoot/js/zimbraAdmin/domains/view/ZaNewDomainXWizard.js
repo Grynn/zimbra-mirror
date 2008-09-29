@@ -380,6 +380,21 @@ function (value, event, form) {
 	}
 }
 
+ZaNewDomainXWizard.onCOSChanged = 
+function(value, event, form) {
+	if(ZaItem.ID_PATTERN.test(value))  {
+		this.setInstanceValue(value);
+	} else {
+		var cos = ZaCos.getCosByName(value, form.parent._app);
+		if(cos) {
+			//value = form.getInstance().cos.id;
+			value = cos.id;
+		} 
+	}
+	this.setInstanceValue(value);
+	return value;
+}
+
 ZaNewDomainXWizard.prototype.testAuthSettings =
 function () {
 	if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ad) {
@@ -646,9 +661,32 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 		 						label:null,txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal}/*, {type:_CELLSPACER_}*/	
 						]},	
 						{ref:ZaDomain.A_description, type:_TEXTFIELD_, label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width:250},
-						{ref:ZaDomain.A_domainDefaultCOSId, type:_OSELECT1_, 
+						/*{ref:ZaDomain.A_domainDefaultCOSId, type:_OSELECT1_, 
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
 							choices:this._app.getCosListChoices()
+						},*/
+						{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
+							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
+							onChange:ZaNewDomainXWizard.onCOSChanged,
+							dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
+							choices:this.cosChoices,
+							dataFetcherClass:ZaSearch,
+							editable:true,
+							getDisplayValue:function(newValue) {
+								// dereference through the choices array, if provided
+								//newValue = this.getChoiceLabel(newValue);
+								if(ZaItem.ID_PATTERN.test(newValue)) {
+									var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
+									if(cos)
+										newValue = cos.name;
+								} 
+								if (newValue == null) {
+									newValue = "";
+								} else {
+									newValue = "" + newValue;
+								}
+								return newValue;
+							}
 						},
 						{ref:ZaDomain.A_zimbraDomainStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_DomainStatus,
 							label:ZaMsg.Domain_zimbraDomainStatus, 
