@@ -205,7 +205,6 @@ function(defaultColumnSort) {
 	var numCols = this._headerList.length;
 	for (var i = 0; i < numCols; i++) {
 		var headerCol = this._headerList[i];
-		if (!headerCol._visible) { continue; }
 
 		var field = headerCol._field;
 		headerCol._index = i;
@@ -214,6 +213,8 @@ function(defaultColumnSort) {
 		this._headerHash[field] = headerCol;
 		this._headerIdHash[id] = headerCol;
 
+		if (!headerCol._visible) { continue; }
+		
 		htmlArr[idx++] = "<td id='";
 		htmlArr[idx++] = id;
 		htmlArr[idx++] = "' class='";
