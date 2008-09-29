@@ -34,7 +34,7 @@ CREATE TABLE raw_logs (
 	app					VARCHAR(64) NOT NULL,
 	pid					INTEGER UNSIGNED NOT NULL DEFAULT 0,
 	msg 				TEXT NOT NULL,
-	postfix_qid			VARCHAR(12),
+	postfix_qid			VARCHAR(25),
 	INDEX i_app (app),
 	INDEX i_postfix_qid (postfix_qid),
 	INDEX i_log_date (log_date)
@@ -62,7 +62,7 @@ CREATE TABLE mta (
 	from_IP				VARCHAR(16),
 	to_host				VARCHAR(255),
 	to_IP				VARCHAR(16),
-	qid					VARCHAR(16),
+	qid					VARCHAR(25),
 	amavis_pid			VARCHAR(16),
 	bytes				INTEGER,
 	INDEX i_msgid (msgid),
