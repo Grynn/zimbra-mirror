@@ -59,11 +59,6 @@ if ($id ne "zimbra") {
     exit (1);
 }
 
-if (!isInstalled("zimbra-store") && !isInstalled("zimbra-proxy")) {
-    print STDERR "Error: The store or proxy package must be installed.\n";
-    exit {1};
-}
-
 if ($options{h})  {
    usage();
    exit 1;
@@ -136,6 +131,12 @@ if ((lc($hostname) ne lc($zimbra_server_hostname)) && !$options{r}) {
    print "Must use -r option to modify a remote host.\n";
    exit 1;
 }
+
+if (!isInstalled("zimbra-store") && !isInstalled("zimbra-proxy")) {
+    print STDERR "Error: The store or proxy package must be installed.\n";
+    exit {1};
+}
+
 
 open(ZMPROV, "|$ZMPROV");
 
