@@ -29,6 +29,11 @@ keyfile="${zimbra_home}/.ssh/zimbra_identity"
 
 mkdir -p ${zimbra_home}/.ssh
 
+if [ ! -d "${zimbra_home}/.ssh" ]; then
+  echo "Unable to create ${zimbra_home}/.ssh."
+  exit 1
+fi
+
 chmod 700 ${zimbra_home}/.ssh
 
 rm -f ${keyfile}
