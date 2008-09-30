@@ -41,10 +41,13 @@ public class DbOfflineMigration {
             switch (oldDbVersion) {
             case 51:
             	migrateFromVersion51(conn, isTestRun);
-            	//fall-through
+                //fall-through
             case 52:
             	migrateFromVersion52(conn, isTestRun);
-            	break;
+                //fall-through
+            case 53:
+                migrateFromVersion53(conn, isTestRun);
+                break;
             default:
             	throw new DbUnsupportedVersionException();
             }
@@ -98,6 +101,89 @@ public class DbOfflineMigration {
         }
 	}
 	
+    private static final String sql53to54 =
+        "SET SCHEMA zimbra;\n;"+
+        "DROP TABLE IF EXISTS zimbra.jiveVersion;\n"+
+        "DROP TABLE IF EXISTS zimbra.mucRoom;\n"+
+        "DROP TABLE IF EXISTS zimbra.mucRoomProp;\n"+
+        "DROP TABLE IF EXISTS zimbra.mucAffiliation;\n"+
+        "DROP TABLE IF EXISTS zimbra.mucMember;\n"+
+        "DROP TABLE IF EXISTS zimbra.mucConversationLog;\n"+
+        "CREATE TABLE mucRoom (\n"+
+        "   service               VARCHAR(255)    NOT NULL,\n"+
+        "   roomID                BIGINT          NOT NULL,\n"+
+        "   creationDate          CHAR(15)        NOT NULL,\n"+
+        "   modificationDate      CHAR(15)        NOT NULL,\n"+
+        "   name                  VARCHAR(50)     NOT NULL,\n"+
+        "   naturalName           VARCHAR(255)    NOT NULL,\n"+
+        "   description           VARCHAR(255),\n"+
+        "   lockedDate            CHAR(15)        NOT NULL,\n"+
+        "   emptyDate             CHAR(15),\n"+
+        "   canChangeSubject      SMALLINT        NOT NULL,\n"+
+        "   maxUsers              INTEGER         NOT NULL,\n"+
+        "   publicRoom            SMALLINT        NOT NULL,\n"+
+        "   moderated             SMALLINT        NOT NULL,\n"+
+        "   membersOnly           SMALLINT        NOT NULL,\n"+
+        "   canInvite             SMALLINT        NOT NULL,\n"+
+        "   password              VARCHAR(50),\n"+
+        "   canDiscoverJID        SMALLINT        NOT NULL,\n"+
+        "   logEnabled            SMALLINT        NOT NULL,\n"+
+        "   subject               VARCHAR(100),\n"+
+        "   rolesToBroadcast      SMALLINT        NOT NULL,\n"+
+        "   useReservedNick       SMALLINT        NOT NULL,\n"+
+        "   canChangeNick         SMALLINT        NOT NULL,\n"+
+        "   canRegister           SMALLINT        NOT NULL,\n"+
+        "\n"+
+        "   CONSTRAINT pk_mucRoom PRIMARY KEY (service,name)\n"+
+        ");\n"+
+        "\n"+
+        "CREATE INDEX mucRoom_roomid_idx ON mucRoom(service,roomID);\n"+
+        "\n"+
+        "CREATE TABLE mucRoomProp (\n"+
+        "   service               VARCHAR(255)    NOT NULL,\n"+
+        "   roomID                BIGINT          NOT NULL,\n"+
+        "   name                  VARCHAR(100)    NOT NULL,\n"+
+        "   propValue             CLOB            NOT NULL,\n"+
+        "\n"+
+        "   CONSTRAINT pk_mucRoomProp PRIMARY KEY (service,roomID, name)\n"+
+        ");\n"+
+        "\n"+
+        "CREATE TABLE mucAffiliation (\n"+
+        "   service               VARCHAR(255)    NOT NULL,\n"+
+        "   roomID                BIGINT          NOT NULL,\n"+
+        "   jid                   VARCHAR(32672)  NOT NULL,\n"+
+        "   affiliation           SMALLINT        NOT NULL,\n"+
+        "\n"+
+        "   CONSTRAINT pk_mucAffiliation PRIMARY KEY (service,roomID, jid)\n"+
+        ");\n"+
+        "\n"+
+        "CREATE TABLE mucMember (\n"+
+        "   service               VARCHAR(255)    NOT NULL,\n"+
+        "   roomID                BIGINT          NOT NULL,\n"+
+        "   jid                   VARCHAR(32672)  NOT NULL,\n"+
+        "   nickname              VARCHAR(255),\n"+
+        "   firstName             VARCHAR(100),\n"+
+        "   lastName              VARCHAR(100),\n"+
+        "   url                   VARCHAR(100),\n"+
+        "   email                 VARCHAR(100),\n"+
+        "   faqentry              VARCHAR(100),\n"+
+        "\n"+
+        "   CONSTRAINT pk_mucMember PRIMARY KEY (service,roomID, jid)\n"+
+        ");\n"+
+        "\n"+
+        "CREATE TABLE mucConversationLog (\n"+
+        "   service               VARCHAR(255)    NOT NULL,\n"+
+        "   roomID                BIGINT          NOT NULL,\n"+
+        "   sender                CLOB            NOT NULL,\n"+
+        "   nickname              VARCHAR(255),\n"+
+        "   time                  CHAR(15)        NOT NULL,\n"+
+        "   subject               VARCHAR(255),\n"+
+        "   body                  CLOB\n"+
+        ");\n"+
+        "\n"+
+        "CREATE INDEX mucLog_time_idx ON mucConversationLog(time);\n";
+        
+    
 	private void migrateFromVersion52(Connection conn, boolean isTestRun) throws Exception {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -167,6 +253,26 @@ public class DbOfflineMigration {
             	conn.rollback();
             else
             	conn.commit();
+        }
+	}
+	
+	private void migrateFromVersion53(Connection conn, boolean isTestRun) throws Exception {
+        PreparedStatement stmt = null;
+        boolean isSuccess = false;
+        try {
+            stmt = conn.prepareStatement(sql53to54);
+            stmt.executeUpdate();
+            stmt.close();
+            stmt = conn.prepareStatement("UPDATE zimbra.config set value='60' where name='db.version'");
+            stmt.executeUpdate();
+            stmt.close();
+            isSuccess = true;
+        } finally {
+            DbPool.closeStatement(stmt);
+            if (isTestRun || !isSuccess)
+                conn.rollback();
+            else
+                conn.commit();
         }
 	}
 	

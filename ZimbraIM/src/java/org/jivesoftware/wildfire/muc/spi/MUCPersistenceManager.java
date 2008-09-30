@@ -42,73 +42,71 @@ import java.util.*;
  * @author Gaston Dombiak
  */
 public class MUCPersistenceManager {
-
     private static final String GET_RESERVED_NAME =
-        "SELECT nickname FROM mucMember WHERE roomID=? AND jid=?";
+        "SELECT nickname FROM mucMember WHERE service=? AND roomID=? AND jid=?";
     private static final String LOAD_ROOM =
         "SELECT roomID, creationDate, modificationDate, naturalName, description, lockedDate, " +
         "emptyDate, canChangeSubject, maxUsers, publicRoom, moderated, membersOnly, canInvite, " +
         "password, canDiscoverJID, logEnabled, subject, rolesToBroadcast, useReservedNick, " +
-        "canChangeNick, canRegister FROM mucRoom WHERE name=?";
+        "canChangeNick, canRegister FROM mucRoom WHERE service=? AND name=?";
     private static final String LOAD_AFFILIATIONS =
-        "SELECT jid, affiliation FROM mucAffiliation WHERE roomID=?";
+        "SELECT jid, affiliation FROM mucAffiliation WHERE service=? AND roomID=?";
     private static final String LOAD_MEMBERS =
-        "SELECT jid, nickname FROM mucMember WHERE roomID=?";
+        "SELECT jid, nickname FROM mucMember WHERE service=? AND roomID=?";
     private static final String LOAD_HISTORY =
         "SELECT sender, nickname, time, subject, body FROM mucConversationLog " +
-        "WHERE time>? AND roomID=? AND (nickname <> '' OR subject IS NOT NULL) ORDER BY time";
+        "WHERE time>? AND service=? AND roomID=? AND (nickname <> '' OR subject IS NOT NULL) ORDER BY time";
     private static final String LOAD_ALL_ROOMS =
         "SELECT roomID, creationDate, modificationDate, name, naturalName, description, " +
         "lockedDate, emptyDate, canChangeSubject, maxUsers, publicRoom, moderated, membersOnly, " +
         "canInvite, password, canDiscoverJID, logEnabled, subject, rolesToBroadcast, " +
         "useReservedNick, canChangeNick, canRegister " +
-        "FROM mucRoom WHERE emptyDate IS NULL or emptyDate > ?";
+        "FROM mucRoom WHERE service=? AND (emptyDate IS NULL or emptyDate > ?)";
     private static final String LOAD_ALL_AFFILIATIONS =
-        "SELECT roomID,jid,affiliation FROM mucAffiliation";
+        "SELECT roomID,jid,affiliation FROM mucAffiliation where service=?";
     private static final String LOAD_ALL_MEMBERS =
-        "SELECT roomID,jid, nickname FROM mucMember";
+        "SELECT roomID,jid, nickname FROM mucMember where service=?";
     private static final String LOAD_ALL_HISTORY =
         "SELECT roomID, sender, nickname, time, subject, body FROM mucConversationLog " +
-        "WHERE time>? AND (nickname <> '' OR subject IS NOT NULL) ORDER BY time";
+        "WHERE time>? AND service=? AND (nickname <> '' OR subject IS NOT NULL) ORDER BY time";
     private static final String UPDATE_ROOM =
         "UPDATE mucRoom SET modificationDate=?, naturalName=?, description=?, " +
         "canChangeSubject=?, maxUsers=?, publicRoom=?, moderated=?, membersOnly=?, " +
         "canInvite=?, password=?, canDiscoverJID=?, logEnabled=?, rolesToBroadcast=?, " +
-        "useReservedNick=?, canChangeNick=?, canRegister=? WHERE roomID=?";
+        "useReservedNick=?, canChangeNick=?, canRegister=? WHERE service=? AND roomID=?";
     private static final String ADD_ROOM = 
-        "INSERT INTO mucRoom (roomID, creationDate, modificationDate, name, naturalName, " +
+        "INSERT INTO mucRoom (service, roomID, creationDate, modificationDate, name, naturalName, " +
         "description, lockedDate, emptyDate, canChangeSubject, maxUsers, publicRoom, moderated, " +
         "membersOnly, canInvite, password, canDiscoverJID, logEnabled, subject, " +
-        "rolesToBroadcast, useReservedNick, canChangeNick, canRegister) VALUES (?,?,?,?,?,?,?,?," +
+        "rolesToBroadcast, useReservedNick, canChangeNick, canRegister) VALUES (?,?,?,?,?,?,?,?,?," +
             "?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE_SUBJECT =
-        "UPDATE mucRoom SET subject=? WHERE roomID=?";
+        "UPDATE mucRoom SET subject=? WHERE service=? AND roomID=?";
     private static final String UPDATE_LOCK =
-        "UPDATE mucRoom SET lockedDate=? WHERE roomID=?";
+        "UPDATE mucRoom SET lockedDate=? WHERE service=? AND roomID=?";
     private static final String UPDATE_EMPTYDATE =
-        "UPDATE mucRoom SET emptyDate=? WHERE roomID=?";
+        "UPDATE mucRoom SET emptyDate=? WHERE service=? AND roomID=?";
     private static final String DELETE_ROOM =
-        "DELETE FROM mucRoom WHERE roomID=?";
+        "DELETE FROM mucRoom WHERE service=? AND roomID=?";
     private static final String DELETE_AFFILIATIONS =
-        "DELETE FROM mucAffiliation WHERE roomID=?";
+        "DELETE FROM mucAffiliation WHERE service=? AND roomID=?";
     private static final String DELETE_MEMBERS =
-        "DELETE FROM mucMember WHERE roomID=?";
+        "DELETE FROM mucMember WHERE service=? AND roomID=?";
     private static final String ADD_MEMBER =
-        "INSERT INTO mucMember (roomID,jid,nickname) VALUES (?,?,?)";
+        "INSERT INTO mucMember (service,roomID,jid,nickname) VALUES (?,?,?,?)";
     private static final String UPDATE_MEMBER =
-        "UPDATE mucMember SET nickname=? WHERE roomID=? AND jid=?";
+        "UPDATE mucMember SET nickname=? WHERE service=? AND roomID=? AND jid=?";
     private static final String DELETE_MEMBER =
-        "DELETE FROM mucMember WHERE roomID=? AND jid=?";
+        "DELETE FROM mucMember WHERE service=? AND roomID=? AND jid=?";
     private static final String ADD_AFFILIATION =
-        "INSERT INTO mucAffiliation (roomID,jid,affiliation) VALUES (?,?,?)";
+        "INSERT INTO mucAffiliation (service,roomID,jid,affiliation) VALUES (?,?,?,?)";
     private static final String UPDATE_AFFILIATION =
-        "UPDATE mucAffiliation SET affiliation=? WHERE roomID=? AND jid=?";
+        "UPDATE mucAffiliation SET affiliation=? WHERE service=? AND roomID=? AND jid=?";
     private static final String DELETE_AFFILIATION =
-        "DELETE FROM mucAffiliation WHERE roomID=? AND jid=?";
-
+        "DELETE FROM mucAffiliation WHERE service=? AND roomID=? AND jid=?";
     private static final String ADD_CONVERSATION_LOG =
-        "INSERT INTO mucConversationLog (roomID,sender,nickname,time,subject,body) " +
-        "VALUES (?,?,?,?,?,?)";
+        "INSERT INTO mucConversationLog (service,roomID,sender,nickname,time,subject,body) " +
+        "VALUES (?,?,?,?,?,?,?)";
 
     /**
      * Returns the reserved room nickname for the bare JID in a given room or null if none.
@@ -123,9 +121,11 @@ public class MUCPersistenceManager {
         String answer = null;
         try {
             con = DbConnectionManager.getConnection();
+            int offset = 1;
             pstmt = con.prepareStatement(GET_RESERVED_NAME);
-            pstmt.setLong(1, room.getID());
-            pstmt.setString(2, bareJID);
+            pstmt.setString(offset++, room.getServiceDomain());
+            pstmt.setLong(offset++, room.getID());
+            pstmt.setString(offset++, bareJID);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 answer = rs.getString(1);
@@ -143,6 +143,14 @@ public class MUCPersistenceManager {
         }
         return answer;
     }
+    
+    private static String chopRoomName(String name) {
+        if (name.indexOf('@') > 0) {
+            return name.substring(0, name.indexOf('@'));
+        } else {
+            return name;
+        }
+    }
 
     /**
      * Loads the room configuration from the database if the room was persistent.
@@ -155,10 +163,12 @@ public class MUCPersistenceManager {
         try {
             con = DbConnectionManager.getConnection();
             pstmt = con.prepareStatement(LOAD_ROOM);
-            pstmt.setString(1, room.getName());
+            int offset = 1;
+            pstmt.setString(offset++, room.getServiceDomain());
+            pstmt.setString(offset++, chopRoomName(room.getName()));
             ResultSet rs = pstmt.executeQuery();
             if (!rs.next()) {
-                throw new IllegalArgumentException("Room " + room.getName() + " was not found in the database.");
+                throw new IllegalArgumentException("Room " + chopRoomName(room.getName()) + " was not found in the database.");
             }
             room.setID(rs.getLong(1));
             room.setCreationDate(new Date(Long.parseLong(rs.getString(2).trim()))); // creation date
@@ -205,7 +215,8 @@ public class MUCPersistenceManager {
             // Recreate the history until two days ago
             long from = System.currentTimeMillis() - (86400000 * 2);
             pstmt.setString(1, StringUtils.dateToMillis(new Date(from)));
-            pstmt.setLong(2, room.getID());
+            pstmt.setString(2, room.getServiceDomain());
+            pstmt.setLong(3, room.getID());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 String senderJID = rs.getString(1);
@@ -232,7 +243,8 @@ public class MUCPersistenceManager {
             }
 
             pstmt = con.prepareStatement(LOAD_AFFILIATIONS);
-            pstmt.setLong(1, room.getID());
+            pstmt.setString(1, room.getServiceDomain());
+            pstmt.setLong(2, room.getID());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 String jid = rs.getString(1);
@@ -261,7 +273,8 @@ public class MUCPersistenceManager {
             pstmt.close();
 
             pstmt = con.prepareStatement(LOAD_MEMBERS);
-            pstmt.setLong(1, room.getID());
+            pstmt.setString(1, room.getServiceDomain());
+            pstmt.setLong(2, room.getID());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 try {
@@ -322,39 +335,41 @@ public class MUCPersistenceManager {
                 pstmt.setInt(14, (room.isLoginRestrictedToNickname() ? 1 : 0));
                 pstmt.setInt(15, (room.canChangeNickname() ? 1 : 0));
                 pstmt.setInt(16, (room.isRegistrationEnabled() ? 1 : 0));
-                pstmt.setLong(17, room.getID());
+                pstmt.setString(17, room.getServiceDomain());
+                pstmt.setLong(18, room.getID());
                 pstmt.executeUpdate();
             }
             else {
                 pstmt = con.prepareStatement(ADD_ROOM);
-                pstmt.setLong(1, room.getID());
-                pstmt.setString(2, StringUtils.dateToMillis(room.getCreationDate()));
-                pstmt.setString(3, StringUtils.dateToMillis(room.getModificationDate()));
-                pstmt.setString(4, room.getName());
-                pstmt.setString(5, room.getNaturalLanguageName());
-                pstmt.setString(6, room.getDescription());
-                pstmt.setString(7, StringUtils.dateToMillis(room.getLockedDate()));
+                pstmt.setString(1, room.getServiceDomain());
+                pstmt.setLong(2, room.getID());
+                pstmt.setString(3, StringUtils.dateToMillis(room.getCreationDate()));
+                pstmt.setString(4, StringUtils.dateToMillis(room.getModificationDate()));
+                pstmt.setString(5, chopRoomName(room.getName()));
+                pstmt.setString(6, room.getNaturalLanguageName());
+                pstmt.setString(7, room.getDescription());
+                pstmt.setString(8, StringUtils.dateToMillis(room.getLockedDate()));
                 Date emptyDate = room.getEmptyDate();
                 if (emptyDate == null) {
-                    pstmt.setString(8, null);
+                    pstmt.setString(9, null);
                 }
                 else {
-                    pstmt.setString(8, StringUtils.dateToMillis(emptyDate));
+                    pstmt.setString(9, StringUtils.dateToMillis(emptyDate));
                 }
-                pstmt.setInt(9, (room.canOccupantsChangeSubject() ? 1 : 0));
-                pstmt.setInt(10, room.getMaxUsers());
-                pstmt.setInt(11, (room.isPublicRoom() ? 1 : 0));
-                pstmt.setInt(12, (room.isModerated() ? 1 : 0));
-                pstmt.setInt(13, (room.isMembersOnly() ? 1 : 0));
-                pstmt.setInt(14, (room.canOccupantsInvite() ? 1 : 0));
-                pstmt.setString(15, room.getPassword());
-                pstmt.setInt(16, (room.canAnyoneDiscoverJID() ? 1 : 0));
-                pstmt.setInt(17, (room.isLogEnabled() ? 1 : 0));
-                pstmt.setString(18, room.getSubject());
-                pstmt.setInt(19, marshallRolesToBroadcast(room));
-                pstmt.setInt(20, (room.isLoginRestrictedToNickname() ? 1 : 0));
-                pstmt.setInt(21, (room.canChangeNickname() ? 1 : 0));
-                pstmt.setInt(22, (room.isRegistrationEnabled() ? 1 : 0));
+                pstmt.setInt(10, (room.canOccupantsChangeSubject() ? 1 : 0));
+                pstmt.setInt(11, room.getMaxUsers());
+                pstmt.setInt(12, (room.isPublicRoom() ? 1 : 0));
+                pstmt.setInt(13, (room.isModerated() ? 1 : 0));
+                pstmt.setInt(14, (room.isMembersOnly() ? 1 : 0));
+                pstmt.setInt(15, (room.canOccupantsInvite() ? 1 : 0));
+                pstmt.setString(16, room.getPassword());
+                pstmt.setInt(17, (room.canAnyoneDiscoverJID() ? 1 : 0));
+                pstmt.setInt(18, (room.isLogEnabled() ? 1 : 0));
+                pstmt.setString(19, room.getSubject());
+                pstmt.setInt(20, marshallRolesToBroadcast(room));
+                pstmt.setInt(21, (room.isLoginRestrictedToNickname() ? 1 : 0));
+                pstmt.setInt(22, (room.canChangeNickname() ? 1 : 0));
+                pstmt.setInt(23, (room.isRegistrationEnabled() ? 1 : 0));
                 pstmt.executeUpdate();
             }
         }
@@ -384,17 +399,20 @@ public class MUCPersistenceManager {
         try {
             con = DbConnectionManager.getTransactionConnection();
             pstmt = con.prepareStatement(DELETE_AFFILIATIONS);
-            pstmt.setLong(1, room.getID());
+            pstmt.setString(1, room.getServiceDomain());
+            pstmt.setLong(2, room.getID());
             pstmt.executeUpdate();
             pstmt.close();
 
             pstmt = con.prepareStatement(DELETE_MEMBERS);
-            pstmt.setLong(1, room.getID());
+            pstmt.setString(1, room.getServiceDomain());
+            pstmt.setLong(2, room.getID());
             pstmt.executeUpdate();
             pstmt.close();
 
             pstmt = con.prepareStatement(DELETE_ROOM);
-            pstmt.setLong(1, room.getID());
+            pstmt.setString(1, room.getServiceDomain());
+            pstmt.setLong(2, room.getID());
             pstmt.executeUpdate();
 
             // Update the room (in memory) to indicate the it's no longer in the database.
@@ -428,11 +446,13 @@ public class MUCPersistenceManager {
         try {
             con = DbConnectionManager.getConnection();
             pstmt = con.prepareStatement(LOAD_ALL_ROOMS);
-            pstmt.setString(1, StringUtils.dateToMillis(emptyDate));
+            pstmt.setString(1, chatserver.getServiceDomain());
+            pstmt.setString(2, StringUtils.dateToMillis(emptyDate));
             ResultSet rs = pstmt.executeQuery();
             MUCRoomImpl room = null;
             while (rs.next()) {
-                room = new MUCRoomImpl(chatserver, rs.getString(4), packetRouter);
+                String shortName = rs.getString(4);
+                room = new MUCRoomImpl(chatserver, shortName+'@'+chatserver.getServiceDomain(), packetRouter);
                 room.setID(rs.getLong(1));
                 room.setCreationDate(new Date(Long.parseLong(rs.getString(2).trim()))); // creation date
                 room.setModificationDate(new Date(Long.parseLong(rs.getString(3).trim()))); // modification date
@@ -480,6 +500,7 @@ public class MUCPersistenceManager {
             // Recreate the history until two days ago
             long from = System.currentTimeMillis() - (86400000 * 2);
             pstmt.setString(1, StringUtils.dateToMillis(new Date(from)));
+            pstmt.setString(2, chatserver.getServiceDomain());
             // Load the rooms conversations from the last two days
             rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -521,6 +542,7 @@ public class MUCPersistenceManager {
             }
 
             pstmt = con.prepareStatement(LOAD_ALL_AFFILIATIONS);
+            pstmt.setString(1, chatserver.getServiceDomain());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 long roomID = rs.getLong(1);
@@ -555,6 +577,7 @@ public class MUCPersistenceManager {
             pstmt.close();
 
             pstmt = con.prepareStatement(LOAD_ALL_MEMBERS);
+            pstmt.setString(1, chatserver.getServiceDomain());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 room = (MUCRoomImpl) rooms.get(rs.getLong(1));
@@ -612,7 +635,8 @@ public class MUCPersistenceManager {
             con = DbConnectionManager.getConnection();
             pstmt = con.prepareStatement(UPDATE_SUBJECT);
             pstmt.setString(1, room.getSubject());
-            pstmt.setLong(2, room.getID());
+            pstmt.setString(2, room.getServiceDomain());
+            pstmt.setLong(3, room.getID());
             pstmt.executeUpdate();
         }
         catch (SQLException sqle) {
@@ -642,7 +666,8 @@ public class MUCPersistenceManager {
             con = DbConnectionManager.getConnection();
             pstmt = con.prepareStatement(UPDATE_LOCK);
             pstmt.setString(1, StringUtils.dateToMillis(room.getLockedDate()));
-            pstmt.setLong(2, room.getID());
+            pstmt.setString(2, room.getServiceDomain());
+            pstmt.setLong(3, room.getID());
             pstmt.executeUpdate();
         }
         catch (SQLException sqle) {
@@ -678,7 +703,8 @@ public class MUCPersistenceManager {
             else {
                 pstmt.setString(1, StringUtils.dateToMillis(emptyDate));
             }
-            pstmt.setLong(2, room.getID());
+            pstmt.setString(2, room.getServiceDomain());
+            pstmt.setLong(3, room.getID());
             pstmt.executeUpdate();
         }
         catch (SQLException sqle) {
@@ -716,9 +742,10 @@ public class MUCPersistenceManager {
                 try {
                     con = DbConnectionManager.getConnection();
                     pstmt = con.prepareStatement(ADD_MEMBER);
-                    pstmt.setLong(1, room.getID());
-                    pstmt.setString(2, bareJID);
-                    pstmt.setString(3, nickname);
+                    pstmt.setString(1, room.getServiceDomain());
+                    pstmt.setLong(2, room.getID());
+                    pstmt.setString(3, bareJID);
+                    pstmt.setString(4, nickname);
                     pstmt.executeUpdate();
                 }
                 catch (SQLException sqle) {
@@ -738,9 +765,10 @@ public class MUCPersistenceManager {
                 try {
                     con = DbConnectionManager.getConnection();
                     pstmt = con.prepareStatement(ADD_AFFILIATION);
-                    pstmt.setLong(1, room.getID());
-                    pstmt.setString(2, bareJID);
-                    pstmt.setInt(3, newAffiliation.getValue());
+                    pstmt.setString(1, room.getServiceDomain());
+                    pstmt.setLong(2, room.getID());
+                    pstmt.setString(3, bareJID);
+                    pstmt.setInt(4, newAffiliation.getValue());
                     pstmt.executeUpdate();
                 }
                 catch (SQLException sqle) {
@@ -765,8 +793,9 @@ public class MUCPersistenceManager {
                     con = DbConnectionManager.getConnection();
                     pstmt = con.prepareStatement(UPDATE_MEMBER);
                     pstmt.setString(1, nickname);
-                    pstmt.setLong(2, room.getID());
-                    pstmt.setString(3, bareJID);
+                    pstmt.setString(2, room.getServiceDomain());
+                    pstmt.setLong(3, room.getID());
+                    pstmt.setString(4, bareJID);
                     pstmt.executeUpdate();
                 }
                 catch (SQLException sqle) {
@@ -787,16 +816,18 @@ public class MUCPersistenceManager {
                     // Remove the user from the generic affiliations table
                     con = DbConnectionManager.getTransactionConnection();
                     pstmt = con.prepareStatement(DELETE_AFFILIATION);
-                    pstmt.setLong(1, room.getID());
-                    pstmt.setString(2, bareJID);
+                    pstmt.setString(1, room.getServiceDomain());
+                    pstmt.setLong(2, room.getID());
+                    pstmt.setString(3, bareJID);
                     pstmt.executeUpdate();
                     pstmt.close();
 
                     // Add them as a member.
                     pstmt = con.prepareStatement(ADD_MEMBER);
-                    pstmt.setLong(1, room.getID());
-                    pstmt.setString(2, bareJID);
-                    pstmt.setString(3, nickname);
+                    pstmt.setString(1, room.getServiceDomain());
+                    pstmt.setLong(2, room.getID());
+                    pstmt.setString(3, bareJID);
+                    pstmt.setString(4, nickname);
                     pstmt.executeUpdate();
                 }
                 catch (SQLException sqle) {
@@ -816,15 +847,17 @@ public class MUCPersistenceManager {
                 try {
                     con = DbConnectionManager.getTransactionConnection();
                     pstmt = con.prepareStatement(DELETE_MEMBER);
-                    pstmt.setLong(1, room.getID());
-                    pstmt.setString(2, bareJID);
+                    pstmt.setString(1, room.getServiceDomain());
+                    pstmt.setLong(2, room.getID());
+                    pstmt.setString(3, bareJID);
                     pstmt.executeUpdate();
                     pstmt.close();
 
                     pstmt = con.prepareStatement(ADD_AFFILIATION);
-                    pstmt.setLong(1, room.getID());
-                    pstmt.setString(2, bareJID);
-                    pstmt.setInt(3, newAffiliation.getValue());
+                    pstmt.setString(1, room.getServiceDomain());
+                    pstmt.setLong(2, room.getID());
+                    pstmt.setString(3, bareJID);
+                    pstmt.setInt(4, newAffiliation.getValue());
                     pstmt.executeUpdate();
                 }
                 catch (SQLException sqle) {
@@ -845,8 +878,9 @@ public class MUCPersistenceManager {
                     con = DbConnectionManager.getConnection();
                     pstmt = con.prepareStatement(UPDATE_AFFILIATION);
                     pstmt.setInt(1, newAffiliation.getValue());
-                    pstmt.setLong(2, room.getID());
-                    pstmt.setString(3, bareJID);
+                    pstmt.setString(2, room.getServiceDomain());
+                    pstmt.setLong(3, room.getID());
+                    pstmt.setString(4, bareJID);
                     pstmt.executeUpdate();
                 }
                 catch (SQLException sqle) {
@@ -880,8 +914,9 @@ public class MUCPersistenceManager {
                 try {
                     con = DbConnectionManager.getConnection();
                     pstmt = con.prepareStatement(DELETE_MEMBER);
-                    pstmt.setLong(1, room.getID());
-                    pstmt.setString(2, bareJID);
+                    pstmt.setString(1, room.getServiceDomain());
+                    pstmt.setLong(2, room.getID());
+                    pstmt.setString(3, bareJID);
                     pstmt.executeUpdate();
                 }
                 catch (SQLException sqle) {
@@ -901,8 +936,9 @@ public class MUCPersistenceManager {
                 try {
                     con = DbConnectionManager.getConnection();
                     pstmt = con.prepareStatement(DELETE_AFFILIATION);
-                    pstmt.setLong(1, room.getID());
-                    pstmt.setString(2, bareJID);
+                    pstmt.setString(1, room.getServiceDomain());
+                    pstmt.setLong(2, room.getID());
+                    pstmt.setString(3, bareJID);
                     pstmt.executeUpdate();
                 }
                 catch (SQLException sqle) {
@@ -930,12 +966,13 @@ public class MUCPersistenceManager {
         try {
             con = DbConnectionManager.getConnection();
             pstmt = con.prepareStatement(ADD_CONVERSATION_LOG);
-            pstmt.setLong(1, entry.getRoomID());
-            pstmt.setString(2, entry.getSender().toString());
-            pstmt.setString(3, entry.getNickname());
-            pstmt.setString(4, StringUtils.dateToMillis(entry.getDate()));
-            pstmt.setString(5, entry.getSubject());
-            pstmt.setString(6, entry.getBody());
+            pstmt.setString(1, entry.getServiceDomain());
+            pstmt.setLong(2, entry.getRoomID());
+            pstmt.setString(3, entry.getSender().toString());
+            pstmt.setString(4, entry.getNickname());
+            pstmt.setString(5, StringUtils.dateToMillis(entry.getDate()));
+            pstmt.setString(6, entry.getSubject());
+            pstmt.setString(7, entry.getBody());
             pstmt.executeUpdate();
             return true;
         }

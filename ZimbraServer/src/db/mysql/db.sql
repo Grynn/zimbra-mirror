@@ -275,13 +275,6 @@ CREATE TABLE jiveProperty (
   PRIMARY KEY (name)
 );
 
-
-CREATE TABLE jiveVersion (
-  name     VARCHAR(50)  NOT NULL,
-  version  INTEGER  NOT NULL,
-  PRIMARY KEY (name)
-);
-
 CREATE TABLE jiveExtComponentConf (
   subdomain             VARCHAR(200)    NOT NULL,
   secret                VARCHAR(200),
@@ -312,6 +305,7 @@ CREATE TABLE jiveSASLAuthorized (
 );
 
 CREATE TABLE mucRoom (
+  service             VARCHAR(255)  NOT NULL,
   roomID              BIGINT        NOT NULL,
   creationDate        CHAR(15)      NOT NULL,
   modificationDate    CHAR(15)      NOT NULL,
@@ -334,25 +328,28 @@ CREATE TABLE mucRoom (
   useReservedNick     TINYINT       NOT NULL,
   canChangeNick       TINYINT       NOT NULL,
   canRegister         TINYINT       NOT NULL,
-  PRIMARY KEY (name),
-  INDEX mucRoom_roomid_idx (roomID)
+  PRIMARY KEY (service,name),
+  INDEX mucRoom_roomid_idx (service,roomID)
 );
 
 CREATE TABLE mucRoomProp (
+  service               VARCHAR(255)    NOT NULL,
   roomID                BIGINT          NOT NULL,
   name                  VARCHAR(100)    NOT NULL,
   propValue             TEXT            NOT NULL,
-  PRIMARY KEY (roomID, name)
+  PRIMARY KEY (service(200),roomID, name)
 );
 
 CREATE TABLE mucAffiliation (
+  service             VARCHAR(255)  NOT NULL,
   roomID              BIGINT        NOT NULL,
   jid                 TEXT          NOT NULL,
   affiliation         TINYINT       NOT NULL,
-  PRIMARY KEY (roomID,jid(70))
+  PRIMARY KEY (service,roomID,jid(70))
 );
 
 CREATE TABLE mucMember (
+  service             VARCHAR(255)  NOT NULL,
   roomID              BIGINT        NOT NULL,
   jid                 TEXT          NOT NULL,
   nickname            VARCHAR(255)  NULL,
@@ -361,10 +358,11 @@ CREATE TABLE mucMember (
   url                 VARCHAR(100)  NULL,
   email               VARCHAR(100)  NULL,
   faqentry            VARCHAR(100)  NULL,
-  PRIMARY KEY (roomID,jid(70))
+  PRIMARY KEY (service,roomID,jid(70))
 );
 
 CREATE TABLE mucConversationLog (
+  service             VARCHAR(255)  NOT NULL,
   roomID              BIGINT        NOT NULL,
   sender              TEXT          NOT NULL,
   nickname            VARCHAR(255)  NULL,
@@ -378,4 +376,3 @@ CREATE TABLE mucConversationLog (
 INSERT INTO jiveID (idType, id) VALUES (18, 1);
 INSERT INTO jiveID (idType, id) VALUES (19, 1);
 INSERT INTO jiveID (idType, id) VALUES (23, 1);
-INSERT INTO jiveVersion (name, version) VALUES ('wildfire', 10);

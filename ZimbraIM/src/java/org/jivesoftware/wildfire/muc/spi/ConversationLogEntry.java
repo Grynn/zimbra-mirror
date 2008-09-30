@@ -19,6 +19,7 @@ package org.jivesoftware.wildfire.muc.spi;
 import java.util.Date;
 
 import org.jivesoftware.wildfire.muc.MUCRoom;
+import org.jivesoftware.wildfire.muc.MultiUserChatServer;
 import org.xmpp.packet.Message;
 import org.xmpp.packet.JID;
 
@@ -41,6 +42,8 @@ class ConversationLogEntry {
     private String nickname;
     
     private long roomID;
+    
+    private MultiUserChatServer server;
 
     /**
      * Creates a new ConversationLogEntry that registers that a given message was sent to a given
@@ -51,13 +54,21 @@ class ConversationLogEntry {
      * @param message the message to log as part of the conversation in the room.
      * @param sender the real XMPPAddress of the sender (e.g. john@example.org). 
      */
-    public ConversationLogEntry(Date date, MUCRoom room, Message message, JID sender) {
+    public ConversationLogEntry(MultiUserChatServer server, Date date, MUCRoom room, Message message, JID sender) {
+        this.server = server;
         this.date = date;
         this.subject = message.getSubject();
         this.body = message.getBody();
         this.sender = sender;
         this.roomID = room.getID();
         this.nickname = message.getFrom().getResource();
+    }
+    
+    /** 
+     * Returns service domain of the MUC instance this entry is for
+     */
+    public String getServiceDomain() {
+        return server.getServiceDomain();
     }
 
     /**

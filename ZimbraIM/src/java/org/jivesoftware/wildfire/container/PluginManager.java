@@ -379,15 +379,6 @@ public class PluginManager {
                     classloaders.put(plugin, pluginLoader);
                 }
 
-                // Check the plugin's database schema (if it requires one).
-                if (!DbConnectionManager.getSchemaManager().checkPluginSchema(plugin)) {
-                    // The schema was not there and auto-upgrade failed.
-                    Log.error(pluginName + " - " +
-                            LocaleUtils.getLocalizedString("upgrade.database.failure"));
-                    System.out.println(pluginName + " - " +
-                            LocaleUtils.getLocalizedString("upgrade.database.failure"));
-                }
-
 //                // Load any JSP's defined by the plugin.
 //                File webXML = new File(pluginDir, "web" + File.separator + "WEB-INF" +
 //                    File.separator + "web.xml");

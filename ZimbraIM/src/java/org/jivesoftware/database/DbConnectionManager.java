@@ -59,8 +59,6 @@ public class DbConnectionManager {
 
     private static DatabaseType databaseType = DatabaseType.unknown;
 
-    private static SchemaManager schemaManager = new SchemaManager();
-
     /**
      * Returns a database connection from the currently active connection
      * provider. (auto commit is set to true).
@@ -448,9 +446,6 @@ public class DbConnectionManager {
             try {
                 con = connectionProvider.getConnection();
                 setMetaData(con);
-
-                // Check to see if the database schema needs to be upgraded.
-                schemaManager.checkWildfireSchema(con);
             }
             catch (Exception e) {
                 Log.error(e);
@@ -608,16 +603,6 @@ public class DbConnectionManager {
                 fetchSizeSupported = false;
             }
         }
-    }
-
-    /**
-     * Returns a SchemaManager instance, which can be used to manage the database
-     * schema information for Wildfire and plugins.
-     *
-     * @return a SchemaManager instance.
-     */
-    public static SchemaManager getSchemaManager() {
-        return schemaManager;
     }
 
     /**

@@ -234,7 +234,6 @@ public class FileTransferProxy extends BasicModule
      * @return Returns the port that the file transfer proxy is opertating on.
      */
     public int getProxyPort() {
-//        return JiveGlobals.getIntProperty(JIVEPROPERTY_PORT, DEFAULT_PORT);
         return IMConfig.XMPP_PROXY_PORT.getInt();
     }
 

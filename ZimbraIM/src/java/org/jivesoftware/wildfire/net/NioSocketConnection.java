@@ -77,15 +77,6 @@ public class NioSocketConnection extends SocketConnection {
             
             SSLContext tlsContext = null;
             
-            /**
-             Manual SQL config:
-            
-             insert into jiveProperty set name="xmpp.socket.ssl.keystore", propValue="tomcat/conf/keystore";
-             insert into jiveProperty set name="xmpp.socket.ssl.keypass", propValue="zimbra";
-             insert into jiveProperty set name="xmpp.socket.ssl.truststore", propValue="tomcat/conf/keystore";
-             insert into jiveProperty set name="xmpp.socket.ssl.trustpass", propValue="zimbra";
-             **/
-            
             if (true) { // leave X509 for now at bottom for testing
                 // First initialize the key and trust material.
                 KeyStore ksKeys = SSLConfig.getKeyStore();

@@ -107,13 +107,6 @@ CREATE TABLE jiveProperty (
    CONSTRAINT pk_jiveProperty PRIMARY KEY (name)
 );
 
-CREATE TABLE jiveVersion (
-   name                  VARCHAR(50)     NOT NULL,
-   version               INTEGER         NOT NULL,
-
-   CONSTRAINT pk_jiveVersion PRIMARY KEY (name)
-);
-
 CREATE TABLE jiveExtComponentConf (
    subdomain             VARCHAR(200)    NOT NULL,
    secret                VARCHAR(200),
@@ -149,6 +142,7 @@ CREATE TABLE jiveSASLAuthorized (
 );
 
 CREATE TABLE mucRoom (
+   service               VARCHAR(255)    NOT NULL,
    roomID                BIGINT          NOT NULL,
    creationDate          CHAR(15)        NOT NULL,
    modificationDate      CHAR(15)        NOT NULL,
@@ -172,28 +166,31 @@ CREATE TABLE mucRoom (
    canChangeNick         SMALLINT        NOT NULL,
    canRegister           SMALLINT        NOT NULL,
 
-   CONSTRAINT pk_mucRoom PRIMARY KEY (name)
+   CONSTRAINT pk_mucRoom PRIMARY KEY (service,name)
 );
 
-CREATE INDEX mucRoom_roomid_idx ON mucRoom(roomID);
+CREATE INDEX mucRoom_roomid_idx ON mucRoom(service,roomID);
 
 CREATE TABLE mucRoomProp (
+   service               VARCHAR(255)    NOT NULL,
    roomID                BIGINT          NOT NULL,
    name                  VARCHAR(100)    NOT NULL,
    propValue             CLOB            NOT NULL,
 
-   CONSTRAINT pk_mucRoomProp PRIMARY KEY (roomID, name)
+   CONSTRAINT pk_mucRoomProp PRIMARY KEY (service,roomID, name)
 );
 
 CREATE TABLE mucAffiliation (
+   service               VARCHAR(255)    NOT NULL,
    roomID                BIGINT          NOT NULL,
    jid                   VARCHAR(32672)  NOT NULL,
    affiliation           SMALLINT        NOT NULL,
 
-   CONSTRAINT pk_mucAffiliation PRIMARY KEY (roomID, jid)
+   CONSTRAINT pk_mucAffiliation PRIMARY KEY (service,roomID, jid)
 );
 
 CREATE TABLE mucMember (
+   service               VARCHAR(255)    NOT NULL,
    roomID                BIGINT          NOT NULL,
    jid                   VARCHAR(32672)  NOT NULL,
    nickname              VARCHAR(255),
@@ -203,10 +200,11 @@ CREATE TABLE mucMember (
    email                 VARCHAR(100),
    faqentry              VARCHAR(100),
 
-   CONSTRAINT pk_mucMember PRIMARY KEY (roomID, jid)
+   CONSTRAINT pk_mucMember PRIMARY KEY (service,roomID, jid)
 );
 
 CREATE TABLE mucConversationLog (
+   service               VARCHAR(255)    NOT NULL,
    roomID                BIGINT          NOT NULL,
    sender                CLOB            NOT NULL,
    nickname              VARCHAR(255),
@@ -221,4 +219,3 @@ CREATE INDEX mucLog_time_idx ON mucConversationLog(time);
 INSERT INTO jiveID (idType, id) VALUES (18, 1);
 INSERT INTO jiveID (idType, id) VALUES (19, 1);
 INSERT INTO jiveID (idType, id) VALUES (23, 1);
-INSERT INTO jiveVersion (name, version) VALUES ('wildfire', 10);

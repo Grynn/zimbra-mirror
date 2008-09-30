@@ -44,6 +44,11 @@ import org.xmpp.packet.Packet;
 @JiveID(JiveConstants.MUC_ROOM)
 public interface MUCRoom {
 
+    /** 
+     * Get the service name of the conference service that owns this room
+     */
+    String getServiceDomain();
+    
     /**
      * Get the name of this room.
      *

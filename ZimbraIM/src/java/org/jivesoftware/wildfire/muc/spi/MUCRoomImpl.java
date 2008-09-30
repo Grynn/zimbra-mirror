@@ -299,6 +299,10 @@ public class MUCRoomImpl implements MUCRoom {
         rolesToBroadcastPresence.add("participant");
         rolesToBroadcastPresence.add("visitor");
     }
+    
+    public String getServiceDomain() {
+        return server.getServiceDomain();
+    }
 
     public String getName() {
         return name;
