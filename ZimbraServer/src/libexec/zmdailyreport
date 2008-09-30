@@ -27,21 +27,25 @@ use Time::Local;
 use Mail::Mailer;
 use FileHandle;
 use IPC::Open3;
-use Getopt::Std;
+use Getopt::Long;
 
-my %options = ();
+my ($mailreport,$now,$debug,$user,$time,$help,$report_to,$report_from);
 my @msgIds;
 my %senders = ();
 my %recipients = ();
 my %errors = ();
 my $report = ();
 
-unless ( getopts( 'mndu:t:h', \%options ) ) { usage(); }
-if ($options{h}) {usage();}
-my $user = $options{u};
-my $debug = $options{d} ? 1 : 0;
+usage() unless ( GetOptions( "mailreport" => \$mailreport,
+                   "now"  => \$now,
+                   "debug" => \$debug,
+                   "user=s" => \$user,
+                   "time=s{,1}" => \$time,
+                   "help" => \$help) );
 
-if ($options{m} && !$options{d}) {
+usage() if ($help);
+
+if ($mailreport && !$debug) {
   #close(STDOUT);
   #close(STDERR);
 }
@@ -51,13 +55,13 @@ my $dbh = connectDb();
 my $startTime;
 my $endTime;
 
-if ($options{t}) {
-	($startTime, $endTime) = split (',',$options{t});
+if ($time) {
+	($startTime, $endTime) = split (',',$time);
 	$startTime = timeToSqlTime($startTime);
 	if ($endTime) {
 		$endTime = timeToSqlTime($endTime);
 	}
-} elsif ($options{n}) {
+} elsif ($now) {
   $startTime = tsToSqlTime(time(),1);
   $endTime = tsToSqlTime(time(),0);
 } else {
@@ -82,7 +86,7 @@ getRecipients(\%recipients);
 getErrors(\%errors);
 
 displayStats($msgs, %senders, %recipients, %errors);
-if ($options{m}) {
+if ($mailreport) {
   sendEmailReport($report);
 } else {
   print @$report;
@@ -93,7 +97,6 @@ if ($options{m}) {
 #-------------
 sub getMsgIds {
 	my $ids = shift;
-	my $user = $options{u};
 
 	my $whereClause = "";
 	my @clauses = ();
@@ -281,8 +284,8 @@ sub displayMsg {
 	my $indent = shift;
 	my $only = shift;
 
-	my $sender = $options{s};
-	my $recip = $options{r};
+	my $sender = $report_to;
+	my $recip = $report_from;
 
 	foreach my $msgId (sort keys %{$msg}) {
 
@@ -523,8 +526,13 @@ sub execSelect {
 }
 
 sub usage {
-	print STDERR "Usage: $0 [ -u user ] [ -t start,end ]\n";
-	print STDERR "\ttimes in YYYYMMDD[hhmmss] format\n\n";
+	print STDERR "Usage: $0 [ -user <email_address> ] [ -time start,end | -now ] [ -mail ]\n\n";
+  print STDERR "\t--user <email_address>  Report usage for only <email_address>\n";
+  print STDERR "\t--mail Send report via email, default is stdout.\n";
+  print STDERR "\t--now shortcut for midnight to the current time\n";
+  print STDERR "\t--time <start>,<end> Default value is midnight to midnight of the previous day.\n";
+  print STDERR "\t--help Application usage.\n\n";
+	print STDERR "\tStart and end times must be in YYYYMMDD[hhmmss] format\n\n";
 
 	exit (1);
 }
@@ -677,7 +685,7 @@ sub addToReport {
 
 sub logError {
   my $msg = shift;
-  if ($options{m} && !$options{d}) {
+  if ($mailreport && !$debug) {
     my $dt = `date "+%Y-%m-%d %H:%M:%S"`;
     chomp($dt);
     Zimbra::Mon::Logger::Log("err", "$dt, zmdailyreport: $msg");
