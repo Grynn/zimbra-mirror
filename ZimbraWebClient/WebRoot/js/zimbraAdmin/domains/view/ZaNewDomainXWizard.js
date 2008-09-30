@@ -647,7 +647,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},		
-		{type: _SWITCH_,
+		{type: _SWITCH_,width:600,
 			items: [
 				{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehavior:_HIDE_, colSizes:["200px","auto"],numCols:2,
 					items: [
