@@ -13,6 +13,8 @@ ZaBulkProvision.prototype.constructor = ZaBulkProvision;
 
 ZaBulkProvision.A_csv_aid = "csv_aid" ; //uploaded csv file attachment id
 ZaBulkProvision.A_provision_accounts = "provision_accounts" ;
+ZaBulkProvision.A_mustChangePassword = "mustChangePassword" ; //the value of the must change password check box
+ZaBulkProvision.A_isValidCSV = "isValidCSV" ;
 
 ZaBulkProvision.A2_isToProvision = "isToProvision" ;
 ZaBulkProvision.A2_accountName = "accountName" ;
@@ -25,8 +27,12 @@ ZaBulkProvision.getMyXModel = function () {
     var xmodel = {
         items: [
             {id: ZaBulkProvision.A_csv_aid, type: _STRING_, ref: ZaBulkProvision.A_csv_aid},
-            {id:ZaBulkProvision.A_provision_accounts, ref: ZaBulkProvision.A_provision_accounts ,
-                           type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ }
+            {id: ZaBulkProvision.A_provision_accounts, ref: ZaBulkProvision.A_provision_accounts ,
+                           type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ } ,
+            {id: ZaBulkProvision.A_mustChangePassword,ref: ZaBulkProvision.A_mustChangePassword,
+                 type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES },
+            {id: ZaBulkProvision.A_isValidCSV,ref: ZaBulkProvision.A_isValidCSV,
+                 type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES }
         ]
     }
 
@@ -58,7 +64,7 @@ ZaBulkProvision.getBulkProvisionAccounts = function (app, aid) {
     
     var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetBulkProvisionAccountsResponse ;
     var accounts = [] ;
-    var aid ;
+    var aid, isValidCSV ;
     if (resp && resp.account ) {
         for (var i=0; i < resp.account.length ; i ++) {
             accounts.push (resp.account[i]._attrs) ;            
@@ -68,7 +74,11 @@ ZaBulkProvision.getBulkProvisionAccounts = function (app, aid) {
     if (resp && resp.aid) {
         aid = resp.aid[0]._content ;
     }
-    return { accounts: accounts, aid: aid  } ;
+
+    if (resp && resp[ZaBulkProvision.A_isValidCSV])    {
+        isValidCSV = resp[ZaBulkProvision.A_isValidCSV][0]._content ;        
+    }
+    return { accounts: accounts, aid: aid, isValidCSV: isValidCSV  } ;
 }
 
 ZaBulkProvision.initProvisionAccounts = function (accounts) {

@@ -165,6 +165,7 @@ function (status, uploadResults) {
             if (resp.aid == this._containedObject[ZaBulkProvision.A_csv_aid]) {
                 this._containedObject[ZaBulkProvision.A_provision_accounts] =
                                                 ZaBulkProvision.initProvisionAccounts (resp.accounts) ;
+                this._containedObject[ZaBulkProvision.A_isValidCSV] = resp[ZaBulkProvision.A_isValidCSV] ;
             }else{
                 throw new AjxException(com_zimbra_bulkprovision.error_unmatching_aid) ;
             }
@@ -290,7 +291,11 @@ function() {
 
                 //set the account attributes
                 var attrs = {} ;
-                attrs [ZaAccount.A_zimbraPasswordMustChange] = "TRUE" ;
+                if ((this._containedObject[ZaBulkProvision.A_mustChangePassword] == "TRUE")
+                        || (account[ZaBulkProvision.A_mustChangePassword] == "TRUE")){
+                    attrs [ZaAccount.A_zimbraPasswordMustChange] = "TRUE" ;
+                }
+                
                 if (account[ZaBulkProvision.A2_displayName]) {
                     attrs [ZaAccount.A_displayname] = account[ZaBulkProvision.A2_displayName] ; 
                 }
@@ -299,7 +304,6 @@ function() {
                     var attr = soapDoc.set("a", attrs[aname]) ;
                     attr.setAttribute("n", aname) ;
                 }
-
 
                 var csfeParams = new Object();
                 csfeParams.soapDoc = soapDoc;
@@ -359,6 +363,9 @@ ZaBulkProvisionWizard.prototype.goPage = function (pageKey) {
         finish = false ;
     } else if (pageKey == ZaBulkProvisionWizard.STEP_PROVISION) {
         finish = false ;
+        if (this._containedObject[ZaBulkProvision.A_isValidCSV] == "FALSE") {
+            next = false ;
+        }
     } else if (pageKey == ZaBulkProvisionWizard.STEP_SUMMARY) {
         next = false ;
     }
@@ -392,7 +399,8 @@ function(entry) {
 	this._containedObject = entry ;
 
 	this._containedObject[ZaModel.currentStep] = ZaBulkProvisionWizard.STEP_UPLOAD_CSV;
-	this._localXForm.setInstance(this._containedObject);
+	this._containedObject[ZaBulkProvision.A_mustChangePassword] = "TRUE" ;
+    this._localXForm.setInstance(this._containedObject);
 }
 
 ZaBulkProvisionWizard.csvUploadFormId = Dwt.getNextId();
@@ -437,7 +445,15 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 								{ type:_OUTPUT_, value: com_zimbra_bulkprovision.CSV_uploadTitle, align: _LEFT_},
 								{ type:_SPACER_ , height: 10 },
                                 { type:_OUTPUT_, value: ZaBulkProvisionWizard.getUploadFormHtml() } ,
-								{ type:_SPACER_ , height: 10 } ,
+                                { type: _GROUP_, numCols: 2,items: [
+                                        { type: _CHECKBOX_, ref: ZaBulkProvision.A_mustChangePassword,
+                                            label:com_zimbra_bulkprovision.CKB_mustChangePasswd, labelLocation:_RIGHT_,
+                                            trueValue:"TRUE", falseValue:"FALSE",
+                                            align: _LEFT_
+                                        }
+                                    ]
+                                },
+                                { type:_SPACER_ , height: 10 } ,
                                 { type:_OUTPUT_, value: com_zimbra_bulkprovision.CSV_uploadNotes } 
                             ]
 						}

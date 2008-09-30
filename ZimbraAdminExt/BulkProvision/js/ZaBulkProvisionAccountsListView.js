@@ -31,8 +31,6 @@ function(item) {
     div[DwtListView._SELECTED_STYLE_CLASS] = div[DwtListView._STYLE_CLASS] + "-" + DwtCssStyle.SELECTED;
 	div.className = div[DwtListView._STYLE_CLASS];
 
-
-
     var id = this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
 
     var idx = 0;
@@ -43,13 +41,19 @@ function(item) {
     html[idx++] = ">";
     html[idx++] = "<tr>";
 
-    var cnt = this._headerList.length;
-    for(var i = 0; i < cnt; i++) {
-        var field = this._headerList[i]._field;
-
-        html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-        html[idx++] = AjxStringUtil.htmlEncode(item[field]);
+    if (item[ZaBulkProvision.A2_isValid] != "TRUE") {
+        html[idx++] = "<td align='left' colspan=3><nobr>";
+        html[idx++] = AjxStringUtil.htmlEncode(item[ZaBulkProvision.A2_status]);
         html[idx++] = "</nobr></td>";
+    }   else {
+        var cnt = this._headerList.length;
+        for(var i = 0; i < cnt; i++) {
+            var field = this._headerList[i]._field;
+
+            html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+            html[idx++] = AjxStringUtil.htmlEncode(item[field]);
+            html[idx++] = "</nobr></td>";
+        }
     }
 
     html[idx++] = "</tr></table>";
