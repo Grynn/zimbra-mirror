@@ -252,7 +252,7 @@ public class OfflineLC {
 	    zdesktop_support_email.setDoc("support email address");
 	    
 	    zdesktop_min_zcs_version_sync_tgz = new KnownKey("zdesktop_min_zcs_version_sync_tgz");
-	    zdesktop_min_zcs_version_sync_tgz.setDefault("5.0.9");
+	    zdesktop_min_zcs_version_sync_tgz.setDefault("5.0.11");
 	    zdesktop_min_zcs_version_sync_tgz.setDoc("min zcs server version to support tgz format for sync");
     }
     
