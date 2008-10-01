@@ -19,8 +19,12 @@ public class ZimbraBulkProvisionService  implements DocumentService {
 
     public static final QName GET_BULK_PROVISION_ACCOUNTS_REQUEST = QName.get("GetBulkProvisionAccountsRequest", NAMESPACE) ;
     public static final QName GET_BULK_PROVISION_ACCOUNTS_RESPONSE = QName.get("GetBulkProvisionAccountsResponse", NAMESPACE) ;
-    
+
+    public static final QName UPDATE_BULK_PROVISION_STATUS_REQUEST = QName.get("UpdateBulkProvisionStatusRequest", NAMESPACE) ;
+    public static final QName UPDATE_BULK_PROVISION_STATUS_RESPONSE = QName.get("UpdateBulkProvisionStatusResponse", NAMESPACE) ;
+
     public void registerHandlers(DocumentDispatcher dispatcher) {
         dispatcher.registerHandler(GET_BULK_PROVISION_ACCOUNTS_REQUEST, new GetBulkProvisionAccounts());
+        dispatcher.registerHandler(UPDATE_BULK_PROVISION_STATUS_REQUEST, new UpdateBulkProvisionStatus());
     }
 }

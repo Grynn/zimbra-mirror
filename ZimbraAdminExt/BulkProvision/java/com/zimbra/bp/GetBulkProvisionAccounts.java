@@ -12,6 +12,7 @@ import com.zimbra.common.util.ByteUtil;
 import com.zimbra.soap.ZimbraSoapContext;
 
 import java.util.Map;
+import java.util.Hashtable;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -58,6 +59,7 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
 
         InputStream in = null ;
         boolean isValidCSV = true ;
+        Hashtable<String, String []> ht = new Hashtable<String, String[]> ();
         int lineNo = 1 ;
         try {
             in = up.getInputStream() ;
@@ -96,11 +98,16 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
                         el.addKeyValuePair(A_mustChangePassword, "TRUE") ;
                     }
                     el.addKeyValuePair(A_password, password.trim()) ;
-                } 
-
-                if (isValidEntry) {
                     el.addKeyValuePair(A_isValid, "TRUE");
-                }else{
+                    //update the provision status hash
+                    ZimbraLog.extensions.debug("Add the entry: " + accountName + " to " + "BulkProvisionStatus hash.") ;
+                    String [] bpStatusEntry = new String [4] ;
+                    bpStatusEntry[BulkProvisionStatus.INDEX_ACCT_NAME] = accountName ;
+                    bpStatusEntry[BulkProvisionStatus.INDEX_DISPLAY_NAME] = displayName ;
+                    bpStatusEntry[BulkProvisionStatus.INDEX_PASSWD] = password.trim() ;
+                    ht.put(accountName, bpStatusEntry) ;
+                } else{
+                    isValidCSV = false ;
                     el.addKeyValuePair(A_isValid, "FALSE");
                 }
                 
@@ -125,6 +132,7 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
 
         if (isValidCSV)  {
             response.addElement(A_isValidCSV).addText("TRUE") ;
+            BulkProvisionStatus.addBpStatus(aid, ht);
         }else{
             response.addElement(A_isValidCSV).addText("FALSE") ;
         }
@@ -183,6 +191,8 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
             throw ServiceException.PARSE_ERROR(errorMsg, new Exception(errorMsg)) ;
         }
 
+        //TODO: duplicated entry with the same account name
+
         return true ;
     }
 
@@ -221,12 +231,12 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
       private static int byteToInt(byte b) {
         return (int) b & 0xFF;
       }
-    
+    /*
     public static void main (String [] args) {
         try {
             System.out.println (generateStrongPassword(8));
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
+    } */
 }

@@ -81,6 +81,36 @@ ZaBulkProvision.getBulkProvisionAccounts = function (app, aid) {
     return { accounts: accounts, aid: aid, isValidCSV: isValidCSV  } ;
 }
 
+ZaBulkProvision.updateBulkProvisionStatus = function (app, instance) {
+    var controller = app.getCurrentController();
+    var soapDoc = AjxSoapDoc.create("UpdateBulkProvisionStatusRequest", ZaBulkProvision.URN, null);
+    var aid =  instance [ZaBulkProvision.A_csv_aid] ;
+
+    if (aid != null) {
+        soapDoc.set("aid", aid) ;
+    }else{
+         controller.popupErrorDialog(com_zimbra_bulkprovision.error_no_aid) ;
+         return ;
+    }
+
+    var accounts = instance[ZaBulkProvision.A_provision_accounts] ;
+    for (var i=0; i < accounts.length; i ++) {
+        soapDoc.set("account", {
+            name: accounts[i][ZaBulkProvision.A2_accountName],
+            status: accounts[i][ZaBulkProvision.A2_status]
+        })
+    }
+    
+    var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = controller ;
+	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_UPDATE_BP_STATUS ;
+
+    ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.UpdateBulkProvisionStatusResponse ;
+
+}
+
 ZaBulkProvision.initProvisionAccounts = function (accounts) {
     for (var i=0; i < accounts.length; i ++) {
         if (accounts[i][ZaBulkProvision.A2_isValid] == "TRUE") {

@@ -145,7 +145,6 @@ function() {
 	}
 } */
 
-
 ZaBulkProvisionWizard.prototype._uploadCallback =
 function (status, uploadResults) {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
@@ -335,7 +334,9 @@ function() {
 
         busyMsg += "<br />" + com_zimbra_bulkprovision.DONE ;
         statusDialog.setMessage( busyMsg) ;
-        
+
+        //update the status now
+        ZaBulkProvision.updateBulkProvisionStatus (this._app, this._containedObject) ;
         nextStep = ZaBulkProvisionWizard.STEP_SUMMARY ;
         this.goPage(nextStep) ;
 	}
@@ -476,7 +477,22 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
     
 
     var case_provision_items = [
-	        {type:_OUTPUT_, colSpan: 2, value: com_zimbra_bulkprovision.BP_wizard_upload_status },
+            {type:_GROUP_, colSpan: 2, numCols: 1,
+                relevant: "instance[ZaBulkProvision.A_isValidCSV] == 'TRUE'",
+                relevantBehavior: _HIDE_,
+                items: [
+                {type:_OUTPUT_, colSpan: 2,  value: com_zimbra_bulkprovision.BP_wizard_upload_status}
+             ]
+            },
+        //relevant doesn't apply on the _OUTPUT_ item, must use _GROUP_ to make the relevant work  
+            {type:_GROUP_, colSpan: 2, numCols: 1,
+                relevant: "instance[ZaBulkProvision.A_isValidCSV] == 'FALSE'",
+                relevantBehavior: _HIDE_,
+                items: [
+                    {type:_OUTPUT_, value: com_zimbra_bulkprovision.BP_wizard_csv_invalid}
+                ]
+            },
+            { type:_SPACER_ , height: 5 } ,
              //provision account lists
             {ref:ZaBulkProvision.A_provision_accounts, type:_DWT_LIST_, height:"250", width:"525px",
                 forceUpdate: true, cssClass: "DLSource",
@@ -495,9 +511,23 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 			items :[
 				{ type:_OUTPUT_, value: com_zimbra_bulkprovision.summary_download },
 				{ type:_SPACER_ , height: 10 },
-				{ type:_OUTPUT_, value:"<a href='adminres?action=getBPSummary' onclick='ZaZimbraAdmin.unloadHackCallback();'> "
+				/*
+                { type:_OUTPUT_, value:"<a href='adminres?action=getBPSummary' onclick='ZaZimbraAdmin.unloadHackCallback();'> "
 										+ com_zimbra_bulkprovision.download_csv + "</a> "},
-				{ type:_SPACER_ , height: 10 },
+				*/
+
+                { type:_OUTPUT_, ref: ZaBulkProvision.A_csv_aid, getDisplayValue: function (newValue) {
+                        return "<a target='_blank' href='/service/afd/?action=getBP&aid=" + newValue
+                            + "' onclick='ZaZimbraAdmin.unloadHackCallback();'> "
+										+ com_zimbra_bulkprovision.download_csv + "</a> "
+                    }
+                },
+                 /*
+                { type: _ANCHOR_,  isNewWindow: true, href: "adminres" ,
+                    label: com_zimbra_bulkprovision.download_csv, labelLocation:_NONE_,
+                    onActivate: ZaBulkProvisionWizard.downloadBPStatus
+                }, */
+                { type:_SPACER_ , height: 10 },
                 { ref:ZaBulkProvision.A_provision_accounts, type:_DWT_LIST_, height:"250", width:"525px",
                     forceUpdate: true, cssClass: "DLSource",
                     widgetClass: ZaBulkProvisionAccountsListView,
@@ -522,4 +552,9 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 };
 ZaXDialog.XFormModifiers["ZaBulkProvisionWizard"].push(ZaBulkProvisionWizard.myXFormModifier);
 
-
+ZaBulkProvisionWizard.downloadBPStatus = function () {
+    var form = this.getForm() ;
+    var instance = form.getInstance () ;
+    
+    return ;
+}
