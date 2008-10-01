@@ -39,12 +39,8 @@ public final class OfflineYAuth {
     public static Authenticator newAuthenticator(DataSource ds)
         throws ServiceException {
         RawAuthManager ram = getRawAuthManager(ds.getMailbox());
-        TokenStore ts = ram.getTokenStore();
-        String username = ds.getUsername();
-        if (!ts.hasToken(APPID, username)) {
-            newToken(ds, ds.getDecryptedPassword());
-        }
-        return ram.newAuthenticator(APPID, username);
+        return ram.newAuthenticator(
+            APPID, ds.getUsername(), ds.getDecryptedPassword());
     }
 
     public static RawAuth authenticate(DataSource ds)
