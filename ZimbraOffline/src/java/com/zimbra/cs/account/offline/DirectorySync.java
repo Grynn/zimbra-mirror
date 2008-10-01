@@ -31,6 +31,7 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AttributeManager;
 import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
@@ -435,7 +436,8 @@ public class DirectorySync {
             Map<String, Object> changes = new HashMap<String, Object>(modified.size());
             for (String pref : modified) {
                 // we're only authorized to push changes to user preferences
-                if (pref.startsWith(ModifyPrefs.PREF_PREFIX) && !OfflineProvisioning.sOfflineAttributes.contains(pref)) {
+                if (pref.startsWith(ModifyPrefs.PREF_PREFIX) && !OfflineProvisioning.sOfflineAttributes.contains(pref)
+                		&& AttributeManager.getInstance().inVersion(pref, ((OfflineAccount)acct).getRemoteServerVersion().toString())) {
                 	Object val = attrs.get(pref);
                 	if (val == null) {
                 		OfflineLog.offline.debug("dpush: attr name=%s has null value", pref);
