@@ -62,6 +62,7 @@ DwtKeyMap.MAP_NAME["toolbar"]			= "DwtToolBar";
 DwtKeyMap.MAP_NAME["toolbarHorizontal"]	= "DwtToolBar-horiz";
 DwtKeyMap.MAP_NAME["toolbarVertical"]	= "DwtToolBar-vert";
 DwtKeyMap.MAP_NAME["tabView"]			= "DwtTabView";
+DwtKeyMap.MAP_NAME["tree"]				= "DwtTreeItem";
 
 // Returns true if the given key is a modifier. The list of modifier keys is
 // taken from the AjxKeys properties file.
@@ -95,7 +96,9 @@ DwtKeyMap.SELECT_CURRENT	= "SelectCurrent";
 DwtKeyMap.ADD_SELECT_NEXT	= "AddNext";
 DwtKeyMap.ADD_SELECT_PREV	= "AddPrevious";
 DwtKeyMap.CANCEL			= "Cancel";
+DwtKeyMap.COLLAPSE			= "Collapse";
 DwtKeyMap.DBLCLICK			= "DoubleClick";
+DwtKeyMap.EXPAND			= "Expand";
 DwtKeyMap.GOTO_TAB			= "GoToTab";
 DwtKeyMap.HEADER1			= "Header1";
 DwtKeyMap.HEADER2			= "Header2";

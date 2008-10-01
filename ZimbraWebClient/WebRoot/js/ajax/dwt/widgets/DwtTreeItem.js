@@ -346,6 +346,147 @@ function(child) {
 	}
 };
 
+DwtTreeItem.prototype.getKeyMapName =
+function() {
+	return "DwtTreeItem";
+};
+
+DwtTreeItem.prototype.handleKeyAction =
+function(actionCode, ev) {
+
+	var curItem;
+	var sel = this._tree.getSelection();
+	if (sel && sel.length) {
+		curItem = sel[0];
+	} else {
+		var items = this._tree.getItems();
+		if (items && items.length) {
+			this._tree.setSelection(items[0], true);
+			return true;
+		}
+	}
+
+	switch (actionCode) {
+
+		case DwtKeyMap.SELECT_NEXT: {
+			DBG.println("tree view: SELECT NEXT");
+			var ti = curItem._getNextTreeItem(true);
+			if (ti) {
+				DBG.println("setting focus to tree item: " + ti._htmlElId);
+				this._tree.setSelection(ti, true);
+			}
+			break;
+		}
+
+		case DwtKeyMap.SELECT_PREV: {
+			DBG.println("tree view: SELECT PREV");
+			var ti = curItem._getNextTreeItem(false);
+			if (ti) {
+				DBG.println("setting focus to tree item: " + ti._htmlElId);
+				this._tree.setSelection(ti, true);
+			}
+			break;
+		}
+
+		default:
+			return false;
+
+	}
+
+	return true;
+};
+
+/**
+ * Returns the next (or previous) tree item as it appears to the user. In other words, the visible
+ * tree item immediately above or below this one.
+ *
+ * @param next		[boolean]		if true, return next tree item; otherwise, return previous tree item
+ * @param noExp		[boolean]*		if true, do not return first child as next tree item (for recursive call)
+ */
+DwtTreeItem.prototype._getNextTreeItem =
+function(next, noExp) {
+	var ti = null;
+	if (next) {
+		if (!noExp && this._expanded) {
+			var children = this.getChildren();
+			ti = children && children.length && children[0];
+		}
+	} else {
+		if (this.parent && (this.parent instanceof DwtTreeItem) && this.parent._expanded) {
+			var children = this.parent.getChildren();
+			var test = children && children.length && children[0];
+			if (this == test) {
+				ti = this.parent;
+			}
+		}
+	}
+
+	if (!ti) {
+		ti = this._getSiblingTreeItem(next);
+		if (ti && !next) {
+			ti = ti._getLastVisibleSubitem();
+		}
+	}
+
+	if (!ti) {
+		var parent = this.parent;
+		if (parent && (parent instanceof DwtTreeItem)) {
+			return parent._getNextTreeItem(next, true);
+		} else {
+			return null;
+		}
+	}
+
+	return ti;
+};
+
+/**
+ * Returns the next (or previous) tree item at the same level as this one, skipping
+ * over separators.
+ *
+ * @param next		[boolean]		if true, return next tree item; otherwise, return previous tree item
+ */
+DwtTreeItem.prototype._getSiblingTreeItem =
+function(next) {
+	var found = false;
+	var sibs = this.parent.getChildren();
+	for (var i = 0; i < sibs.length; i++) {
+		if (sibs[i]._htmlElId == this._htmlElId) {
+			found = true;
+			break;
+		}
+	}
+
+	var okay = next ? (i < sibs.length - 1) : (i > 0);
+	if (found) {
+		while (okay) {
+			i = next ? i + 1 : i - 1;
+			ti = sibs[i];
+			if (ti && !ti._isSeparator) { return ti; }
+			okay = next ? (i < sibs.length - 1) : (i > 0); 
+		}
+	}
+	return null;
+};
+
+/**
+ * Returns the bottommost visible tree item at or below this one.
+ */
+DwtTreeItem.prototype._getLastVisibleSubitem =
+function() {
+	if (!this._expanded) { return this; }
+
+	var children = this.getChildren();
+	for (var i = children.length - 1; i >= 0; i--) {
+		var ti = children[i];
+		if (!ti._isSeparator) {
+			return ti._getLastVisibleSubitem();
+		}
+	}
+
+	return this;
+};
+
 DwtTreeItem.prototype._initialize =
 function(index, realizeDeferred) {
 	this._checkState();
