@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.1.4" transformSequenceNumber="2">
   <directoryPresets config="./build/dist/jetty/common/lib" />
-  <application name="Yahoo! Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.90" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" installerName="Zimbra Desktop" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
+  <application name="Yahoo! Zimbra Desktop" distributionSourceDir="" applicationId="4062-5711-9195-4050" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" keepModificationTimes="true" shortName="zdesktop" publisher="Yahoo! Inc" publisherWeb="www.zimbra.com" version="0.90" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="ZIMD" installerName="Zimbra Desktop Installer" javaMinVersion="1.5" javaMaxVersion="1.5" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en_US" customLocalizationFile="./src/installer/messages/ZiMsg.properties" />
       <additionalLanguages>
@@ -536,43 +536,50 @@ return (uid != 0);</string>
                 </serializedBean>
                 <condition>Util.isWindows()</condition>
               </action>
-              <action name="win stop prism" id="285851" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <group name="stop prism" id="287038" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="3">
-                          <void index="0">
-                            <string>-override</string>
-                          </void>
-                          <void index="1">
-                            <string>"${installer:sys.installationDir}/zdesktop.webapp/override.ini"</string>
-                          </void>
-                          <void index="2">
-                            <string>-close</string>
-                          </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
-                        </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="wait">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>log</string>
-                        </object>
-                      </void>
-                    </object>
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
                   </java>
                 </serializedBean>
-                <condition>if (!Util.isWindows())
+                <beans>
+                  <action name="win stop prism" id="287039" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="3">
+                              <void index="0">
+                                <string>-override</string>
+                              </void>
+                              <void index="1">
+                                <string>"${installer:sys.installationDir}/zdesktop.webapp/override.ini"</string>
+                              </void>
+                              <void index="2">
+                                <string>-close</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>if (!Util.isWindows())
     return false;
     
 String pver = (String)context.getVariable("prevVersion");
@@ -586,44 +593,76 @@ try {
     return false;
 }
    </condition>
-              </action>
-              <action name="linux stop prism" id="285852" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="3">
-                          <void index="0">
-                            <string>-override</string>
+                  </action>
+                  <action name="macos stop prism" id="287041" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="1">
+                              <void index="0">
+                                <string>${installer:sys.installationDir}/macos/quit_zdesktop.applescript</string>
+                              </void>
+                            </array>
                           </void>
-                          <void index="1">
-                            <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>/usr/bin/osascript</string>
+                            </object>
                           </void>
-                          <void index="2">
-                            <string>-close</string>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
                           </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>${installer:sys.installationDir}/linux/prism/prism</string>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
                         </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="wait">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>log</string>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isMacOS()</condition>
+                  </action>
+                  <action name="linux stop prism" id="287040" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="3">
+                              <void index="0">
+                                <string>-override</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                              </void>
+                              <void index="2">
+                                <string>-close</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/linux/prism/prism</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
                         </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>if (Util.isWindows() || Util.isMacOS())
+                      </java>
+                    </serializedBean>
+                    <condition>if (Util.isWindows() || Util.isMacOS())
     return false;
         
 String pver = (String)context.getVariable("prevVersion");
@@ -637,39 +676,9 @@ try {
     return false;
 }
 </condition>
-              </action>
-              <action name="macos stop prism" id="286016" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="1">
-                          <void index="0">
-                            <string>"${installer:sys.installationDir}/macos/quit_zdesktop.applescript"</string>
-                          </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>/usr/bin/osascript</string>
-                        </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="wait">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>log</string>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>Util.isMacOS()</condition>
-              </action>
+                  </action>
+                </beans>
+              </group>
               <action name="stop old win32 service" id="285547" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -686,7 +695,7 @@ try {
                       </void>
                       <void property="executable">
                         <object class="java.io.File">
-                          <string>net.exe</string>
+                          <string>${installer:sys.system32Dir}/net.exe</string>
                         </object>
                       </void>
                       <void property="wait">
@@ -772,6 +781,107 @@ try {
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
               </action>
+              <group name="kill service" id="287042" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
+                  </java>
+                </serializedBean>
+                <beans>
+                  <action name="win32 kill service" id="287043" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="2">
+                              <void index="0">
+                                <string>svckill.vbs</string>
+                              </void>
+                              <void index="1">
+                                <string>//b</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.system32Dir}/cscript.exe</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>win32</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isWindows()</condition>
+                  </action>
+                  <action name="macos kill service" id="287044" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="1">
+                              <void index="0">
+                                <string>${installer:sys.installationDir}/macos/svckill.msh</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>/bin/sh</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isMacOS()</condition>
+                  </action>
+                  <action name="linux kill service" id="287045" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/linux/svckill.sh</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+                  </action>
+                </beans>
+              </group>
               <action name="migration test run" id="284554" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -858,7 +968,7 @@ default:
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
               </action>
-              <action name="macos clear error" id="285704" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="clear error" id="285704" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -873,7 +983,7 @@ return true;</string>
                     </object>
                   </java>
                 </serializedBean>
-                <condition>Util.isMacOS()</condition>
+                <condition />
               </action>
               <action name="macos uninstall symlink for older version" id="285294" beanClass="com.install4j.runtime.beans.actions.files.CreateSymlinkAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
@@ -2383,66 +2493,75 @@ return true;</string>
             <preActivation />
             <postActivation />
             <actions>
-              <action name="macos - preferences.js" id="286804" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <group name="set installer vars in upgrade url" id="287055" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
-                        </object>
-                      </void>
-                      <void property="replaceValue">
-                        <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
-                      </void>
-                      <void property="searchValue">
-                        <string>@offline.installer.vars@</string>
-                      </void>
-                    </object>
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
                   </java>
                 </serializedBean>
-                <condition>Util.isMacOS()</condition>
-              </action>
-              <action name="win32 - preferences.js" id="286805" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>win32/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                <beans>
+                  <action name="macos - preferences.js" id="287056" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>@offline.installer.vars@</string>
+                          </void>
                         </object>
-                      </void>
-                      <void property="replaceValue">
-                        <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
-                      </void>
-                      <void property="searchValue">
-                        <string>@offline.installer.vars@</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>Util.isWindows()</condition>
-              </action>
-              <action name="linux - preferences.js" id="286806" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                      <void property="file">
-                        <object class="java.io.File">
-                          <string>linux/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isMacOS()</condition>
+                  </action>
+                  <action name="win32 - preferences.js" id="287057" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>win32/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>@offline.installer.vars@</string>
+                          </void>
                         </object>
-                      </void>
-                      <void property="replaceValue">
-                        <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
-                      </void>
-                      <void property="searchValue">
-                        <string>@offline.installer.vars@</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>!Util.isMacOS() &amp;&amp; !Util.isWindows()</condition>
-              </action>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isWindows()</condition>
+                  </action>
+                  <action name="linux - preferences.js" id="287058" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>linux/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>@offline.installer.vars@</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isMacOS() &amp;&amp; !Util.isWindows()</condition>
+                  </action>
+                </beans>
+              </group>
               <action name="zdesktop" id="145686" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -3185,115 +3304,124 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="win stop prism" id="286017" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <group name="stop prism" id="287048" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="3">
-                          <void index="0">
-                            <string>-override</string>
-                          </void>
-                          <void index="1">
-                            <string>"${installer:sys.installationDir}/zdesktop.webapp/override.ini"</string>
-                          </void>
-                          <void index="2">
-                            <string>-close</string>
-                          </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
-                        </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="wait">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>log</string>
-                        </object>
-                      </void>
-                    </object>
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
                   </java>
                 </serializedBean>
-                <condition>Util.isWindows()</condition>
-              </action>
-              <action name="linux stop prism" id="286019" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="3">
-                          <void index="0">
-                            <string>-override</string>
+                <beans>
+                  <action name="win stop prism" id="287051" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="3">
+                              <void index="0">
+                                <string>-override</string>
+                              </void>
+                              <void index="1">
+                                <string>"${installer:sys.installationDir}/zdesktop.webapp/override.ini"</string>
+                              </void>
+                              <void index="2">
+                                <string>-close</string>
+                              </void>
+                            </array>
                           </void>
-                          <void index="1">
-                            <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
+                            </object>
                           </void>
-                          <void index="2">
-                            <string>-close</string>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
                           </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>${installer:sys.installationDir}/linux/prism/prism</string>
-                        </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="wait">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>log</string>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
-              </action>
-              <action name="macos stop prism" id="286020" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="1">
-                          <void index="0">
-                            <string>"${installer:sys.installationDir}/macos/quit_zdesktop.applescript"</string>
+                          <void property="wait">
+                            <boolean>true</boolean>
                           </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>/usr/bin/osascript</string>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
                         </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="wait">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>log</string>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isWindows()</condition>
+                  </action>
+                  <action name="macos stop prism" id="287049" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="1">
+                              <void index="0">
+                                <string>${installer:sys.installationDir}/macos/quit_zdesktop.applescript</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>/usr/bin/osascript</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
                         </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>Util.isMacOS()</condition>
-              </action>
-              <action name="" id="95843" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="3" errorMessage="${i18n:installer.ErrCannotStopSvc}">
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isMacOS()</condition>
+                  </action>
+                  <action name="linux stop prism" id="287050" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="3">
+                              <void index="0">
+                                <string>-override</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                              </void>
+                              <void index="2">
+                                <string>-close</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/linux/prism/prism</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+                  </action>
+                </beans>
+              </group>
+              <action name="" id="95843" beanClass="com.install4j.runtime.beans.actions.services.StopServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.services.StopServiceAction">
@@ -3334,6 +3462,107 @@ return true;</string>
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
               </action>
+              <group name="kill service" id="287046" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
+                  </java>
+                </serializedBean>
+                <beans>
+                  <action name="win32 kill service" id="287054" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="2">
+                              <void index="0">
+                                <string>svckill.vbs</string>
+                              </void>
+                              <void index="1">
+                                <string>//b</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.system32Dir}/cscript.exe</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>win32</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isWindows()</condition>
+                  </action>
+                  <action name="macos kill service" id="287053" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="1">
+                              <void index="0">
+                                <string>${installer:sys.installationDir}/macos/svckill.msh</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>/bin/sh</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isMacOS()</condition>
+                  </action>
+                  <action name="linux kill service" id="287052" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/linux/svckill.sh</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+                  </action>
+                </beans>
+              </group>
               <action name="launchctl remove" id="145683" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -3366,7 +3595,7 @@ return true;</string>
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
               </action>
-              <action name="macos clear error" id="285708" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="clear error" id="285708" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -3381,7 +3610,7 @@ return true;</string>
                     </object>
                   </java>
                 </serializedBean>
-                <condition>Util.isMacOS()</condition>
+                <condition />
               </action>
               <action name="jetty/work" id="95844" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>

@@ -738,12 +738,12 @@
 		<copy tofile="${dist.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
 
 		<copy todir="${dist.dir}" overwrite="true">
-                        <fileset dir="src/installer" includes="README.txt" />
+			<fileset dir="src/installer" includes="README.txt" />
 		</copy>
 		<replace file="${dist.dir}/README.txt" token="@version@" value="${offline.version} (build ${offline.buildid})"/>
 
 		<copy todir="${dist.dir}/zdesktop.webapp" overwrite="true">
-                        <fileset dir="src/installer/webapp" />
+			<fileset dir="src/installer/webapp" />
 		</copy>
 		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.icns" file="src/installer/resources/launcher_128x128.icns" overwrite="true"/>
 		<copy tofile="${dist.dir}/zdesktop.webapp/icons/default/launcher.png" file="src/installer/resources/launcher_32x32.png" overwrite="true"/>
@@ -755,22 +755,25 @@
 		<mkdir dir="${dist.dir}/win32"/>
 
 		<copy todir="${dist.dir}/macos" overwrite="true">
-                        <fileset dir="src/installer" includes="launchd.plist quit_zdesktop.applescript" />
-                        <fileset dir="src/installer/resources" includes="launcher_128x128.icns" />
+			<fileset dir="src/installer" includes="launchd.plist quit_zdesktop.applescript svckill.msh" />
+			<fileset dir="src/installer/resources" includes="launcher_128x128.icns" />
 		</copy>
+		<chmod file="${dist.dir}/macos/svckill.msh" perm="ugo+x"/>
 		<copy todir="${dist.dir}/macos/Yahoo! Zimbra Desktop.app" overwrite="true">
-                        <fileset dir="src/installer/macos.app" includes="*/**" />
+			<fileset dir="src/installer/macos.app" includes="*/**" />
 		</copy>
 		<copy todir="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/" file="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism"/>
 		<chmod file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism" perm="ugo+x"/>
 		<replace file="${dist.dir}/macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist" token="@version@" value="${offline.version}"/>
 
 		<copy todir="${dist.dir}/linux" overwrite="true">
-                        <fileset dir="src/installer" includes="linux.desktop" />
+			<fileset dir="src/installer" includes="linux.desktop svckill.sh" />
 		</copy>
+		<chmod file="${dist.dir}/linux/svckill.sh" perm="ugo+x"/>
 
 		<copy todir="${dist.dir}/win32" overwrite="true">
-                	<fileset dir="src/installer/resources" includes="launcher_32x32.ico" />
+			<fileset dir="src/installer" includes="svckill.vbs" />
+			<fileset dir="src/installer/resources" includes="launcher_32x32.ico" />
 		</copy>
 	</target>
 
