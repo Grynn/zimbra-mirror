@@ -40,6 +40,7 @@ public class LMailSender extends MailSender {
     private LMailSender(OfflineDataSource ds) throws ServiceException {
         Properties prop = new Properties();
         prop.setProperty("mail.davmail.from", ds.getEmailAddress());
+        prop.setProperty("mail.davmail.saveinsent", "f");
         Session ses = Session.getInstance(prop);
         try {
             transport = ses.getTransport("davmail_xmit");
