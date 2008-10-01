@@ -1790,6 +1790,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 sources.add(get(account, DataSourceBy.name, name));
     		cachedDataSources.put(account.getId(), sources);
     	}
+    	for (DataSource ds : sources)
+    		ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(ds.getName()).toString());
     	return sources;
     }
 
@@ -1903,9 +1905,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String name = (String)attrs.get(A_zimbraDataSourceName);
         if (name == null)
         	return null;
-        
-        //There are attributes we don't persist into DB.  This is where we add them:
-    	attrs.put(OfflineConstants.A_zimbraDataSourceSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
 
         DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
         return new OfflineDataSource(account, type, name, (String) attrs.get(A_zimbraDataSourceId), attrs);
