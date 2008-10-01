@@ -119,7 +119,7 @@ case "$1" in
   'status')
     checkrunning
     if [ $running = 1 ]; then
-      echo "saslauthd is running with pid $pid"
+      echo "saslauthd is running."
       exit 0
     else 
       echo "saslauthd is not running."
@@ -128,7 +128,7 @@ case "$1" in
     ;;
     
     *)
-        echo "Usage: $0 start|stop|kill|restart|status"
+        echo "Usage: $0 start|stop|kill|restart|reload|status"
         exit 1
         ;;
 esac

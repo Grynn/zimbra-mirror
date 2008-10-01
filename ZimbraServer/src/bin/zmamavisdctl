@@ -74,8 +74,10 @@ checkrunning() {
 case "$1" in
   'start')
     checkrunning
+  
+    echo -n "Starting amavisd..."
     if [ $RUNNING = 1 ]; then
-      echo "amavisd already running: pid $PID"
+      echo "amavisd is already running."
       exit 0
     else
       if [ ! -d /opt/zimbra/data/amavisd/quarantine ]; then
@@ -118,9 +120,9 @@ case "$1" in
         sleep 1
       done
       if [ "x$PID" = "x" ]; then
-        echo "Failed to start amavisd."
+        echo "failed."
       else 
-        echo "Started amavisd: pid $PID"
+        echo "done."
       fi 
     fi
   ;;
@@ -131,11 +133,11 @@ case "$1" in
 
   'stop')
     checkrunning
+    echo -n "Stopping amavisd..."
     if [ $RUNNING = 0 ]; then
-      echo "amavisd not running"
+      echo "amavisd is not running."
       exit 0
     else 
-      echo -n "Killing amavisd with pid $PID"
       kill -TERM $PID 2> /dev/null
       for ((i=0; i < 300; i++)); do
         sleep 5
@@ -144,7 +146,6 @@ case "$1" in
           echo " done."
           exit 0
         fi
-        echo -n "."
       done
       kill -TERM $PID 2> /dev/null
       if [ $? = 0 ]; then
@@ -157,23 +158,25 @@ case "$1" in
     exit 0
   ;;
     
-  'restart')
+  'restart'|'reload')
     $0 stop
     $0 start
   ;;
   
   'status')
     checkrunning
+    echo -n "amavisd is "
     if [ $RUNNING = 0 ]; then
+      echo "not running."
       exit 1
     else
-      echo "amavisd running pid: $PID"
+      echo "running."
       exit 0
     fi
   ;;
     
   *)
-    echo "Usage: $0 start|stop|kill|restart|status"
+    echo "Usage: $0 start|stop|kill|reload|restart|status"
     exit 1
   ;;
 esac

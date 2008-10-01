@@ -89,6 +89,7 @@ case "$1" in
       --config-file=${zimbra_home}/conf/freshclam.conf -d --checks=12 \
         >> ${zimbra_log_directory}/freshclam.log 2>&1 &
 
+    echo -n "Starting clamd..."
     ${zimbra_home}/clamav/sbin/clamd \
       --config-file=${zimbra_home}/conf/clamd.conf \
         >> ${zimbra_log_directory}/clamd.log 2>&1 &
@@ -96,11 +97,12 @@ case "$1" in
     for ((i = 0; i < 12; i++)); do
       checkrunning
       if [ $running = 1 ]; then
+        echo "done."
         exit 0
       fi
       sleep 5
     done
-    echo "clamd failed to start"
+    echo "failed."
     exit 1
    ;;
   
@@ -124,6 +126,7 @@ case "$1" in
    ;;
 
   'stop')
+    echo -n "Stopping clamd..."
     if [ -f /opt/zimbra/log/freshclam.pid ]; then
       cpid=`cat /opt/zimbra/log/freshclam.pid`
       kill -TERM "$cpid" 2> /dev/null
@@ -140,12 +143,17 @@ case "$1" in
         break
       fi
       kill $cpid
-      echo -n "."
     done
+    if [ -s ${pidfile} ]; then
+      echo "failed."
+      exit 1
+    else
+      echo "done."
+    fi
     exit 0
   ;;
   
-  'restart')
+  'restart'|'reload')
     $0 stop
     $0 start
   ;;

@@ -98,55 +98,61 @@ case "$1" in
       if [ -z "`echo ${mailboxd_java_options} | grep Xss`" ]; then
         mailboxd_java_options="${mailboxd_java_options} -Xss${mailboxd_thread_stack_size}"
       fi
-
+      echo -n "Starting mailboxd..."
       sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
         -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options} < /dev/null > /dev/null 2>&1
       status=$?
       if [ $status = 0 ]; then
-        echo "mailboxd started."
+        echo "done."
       else
-        echo "mailboxed failed to start."
+        echo "failed."
       fi
       exit $status
     ;;
 
-    'kill')
+    'kill'|'stop')
+
+      echo -n "Stopping mailboxd..."
+      sudo ${zimbra_home}/libexec/zmmailboxdmgr status
+      if [ $? != 0 ]; then
+        echo "mailboxd is not running."
+        exit 0
+      fi
       lines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
       sudo ${zimbra_home}/libexec/zmmailboxdmgr threaddump
       sleep 2
       newlines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
       difflines=`expr $newlines - $lines`
       tail -${difflines} ${zimbra_home}/log/zmmailboxd.out > ${zimbra_home}/log/stacktrace.$$
-
       sudo ${zimbra_home}/libexec/zmmailboxdmgr stop 
+      if [ $? = 0 ]; then
+        echo "done."
+      else 
+        echo "failed."
+      fi 
       exit 0
     ;;
 
-    'stop')
-
-      lines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
-      sudo ${zimbra_home}/libexec/zmmailboxdmgr threaddump
-      sleep 2
-      newlines=`wc -l ${zimbra_home}/log/zmmailboxd.out | awk '{print $1}'`
-      difflines=`expr $newlines - $lines`
-      tail -${difflines} ${zimbra_home}/log/zmmailboxd.out > ${zimbra_home}/log/stacktrace.$$
-  
-      sudo ${zimbra_home}/libexec/zmmailboxdmgr stop
-      exit 0
-    ;;
     
-    'restart')
+    'restart'|'reload')
         $0 stop
         $0 start
     ;;
     
     'status')
+      echo -n "mailboxd is "
       sudo ${zimbra_home}/libexec/zmmailboxdmgr status
-      exit $?
+      if [ $? = 0 ]; then
+        echo "running."
+        exit 0
+      else 
+        echo "not running."
+        exit 1
+      fi
     ;;
 
     *)
-      echo "Usage: $0 start|stop|kill|restart|status"
+      echo "Usage: $0 start|stop|kill|restart|reload|status"
       exit 1
     ;;
 esac

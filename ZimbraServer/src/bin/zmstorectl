@@ -50,9 +50,9 @@ case "$1" in
 		done
 		exit $STATUS
 	;;
-	restart)
+	restart|reload)
 		for i in $START_ORDER; do
-			${zimbra_home}/bin/$i restart
+			${zimbra_home}/bin/$i $1
 			R=$?
 			if [ $R -ne "0" ]; then
 				STATUS=$R
@@ -65,18 +65,18 @@ case "$1" in
 			if [ $i = "mysql.server" ]; then
 				${zimbra_home}/bin/mysqladmin status > /dev/null 2>&1
 			else
-				${zimbra_home}/bin/$i status
-			fi
+				${zimbra_home}/bin/$i status > /dev/null 2>&1
+      fi
 			R=$?
 			if [ $R -ne "0" ]; then
-				echo "$i is not running"
-				STATUS=$R
+			 echo "$i is not running."
+			 STATUS=$R
 			fi
 		done
 		exit $STATUS
 	;;
 	*)
-		echo "$0 start|stop|restart|status"
+		echo "$0 start|stop|restart|reload|status"
 		exit 1
 	;;
 esac

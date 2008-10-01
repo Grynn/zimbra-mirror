@@ -36,6 +36,10 @@ case "$1" in
 		fi
 		exit 0
 	;;
+  restart)
+    $0 stop
+    $0 start
+  ;;
 	stop)
 		if [ -f $PIDFILE ]; then
 			if [ -f $APACHECTL ]; then
@@ -66,7 +70,7 @@ case "$1" in
     fi
 	;;
 	*)
-		echo "$0 start|stop|reload|graceful|status"
+		echo "$0 start|stop|restart|reload|graceful|status"
 		exit 1
 	;;
 esac

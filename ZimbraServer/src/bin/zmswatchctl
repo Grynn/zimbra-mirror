@@ -16,78 +16,130 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-BASE=/opt/zimbra
-CONFIG=$BASE/conf/swatchrc
-PIDFILE=${BASE}/log/swatch.pid
-LOGFILE=${BASE}/log/zmswatch.out
-
-if [ -f $PIDFILE ]; then
-	PID=`cat $PIDFILE`
+if [ x`whoami` != xzimbra ]; then
+    echo Error: must be run as zimbra user
+  exit 1
 fi
 
-source /opt/zimbra/.bashrc
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+    zimbra_home \
+    zimbra_log_directory
+
+configfile=${zimbra_home}/conf/swatchrc
+pidfile=${zimbra_log_directory}/swatch.pid
+logfile=${zimbra_log_directory}/zmswatch.out
+pid=""
+
+getpid()
+{
+  if [ -f ${pidfile} ]; then
+    pid=$(cat ${pidfile})
+  fi
+}
+
+checkrunning()
+{
+  getpid
+  if [ "x$pid" = "x" ]; then
+    running=0
+  else
+    kill -0 $pid 2> /dev/null
+    if [ $? != 0 ]; then
+      pid=""
+      running=0
+    else
+      running=1
+    fi
+  fi
+}
 
 case "$1" in 
-	start)
-		if [ ! -f $CONFIG ]; then
-			zmsnmpinit
-		fi
-		if [ -f $CONFIG ]; then
-      # make sure it's not already running
-      if [ x$PID != 'x' ]; then
-        kill -0 $PID 2> /dev/null
-        if [ $? = 0 ]; then
-          exit 1
-        fi
+  start)
+    if [ ! -f ${configfile} ]; then
+      zmsnmpinit
+    fi
+
+    checkrunning
+    echo -n "Starting swatch..."
+    if [ $running = 1 ]; then
+      echo "swatch is already running."
+      exit 0
+    fi
+
+    ${zimbra_home}/libexec/swatch --config-file=${configfile} \
+      --use-cpan-file-tail \
+      --script-dir=/tmp -t /var/log/zimbra.log > $logfile 2>&1 &
+    pid=$!
+    if [ "x$pid" != 'x' ]; then
+      if [ -f $logfile ]; then
+        touch $logfile
       fi
-			$BASE/libexec/swatch --config-file=$BASE/conf/swatchrc \
-			--use-cpan-file-tail \
-			--script-dir=/tmp -t /var/log/zimbra.log > $LOGFILE 2>&1 &
-			PID=$!
-			echo $PID > $PIDFILE
-			chmod 644 $LOGFILE
-			if [ x$PID != 'x' ]; then
-				kill -0 $PID
-				exit $?
-			else
-				exit 1
-			fi
-		else
-			exit 1
-		fi
-	;;
-	stop)
-		if [ x$PID != 'x' ]; then
-			kill -TERM $PID
-		fi
-		rm -f $PIDFILE
-		if [ "x$platform" = "xMACOSX" ]; then
-				killall -TERM swatch > /dev/null 2>&1
-		else
-				killall -TERM ${zimbra_home}/libexec/swatch > /dev/null 2>&1
-		fi
-		exit 0
-	;;
-	reload)
-		if [ x$PID != 'x' ]; then
-			kill -HUP $PID
-		fi
-	;;
-	status)
-		if [ x$PID != 'x' ]; then
-			kill -0 $PID
-			R=$?
-			if [ $R -ne 0 ]; then
-				echo "swatch is not running"
-			fi
-			exit $R
-		else
-			echo "swatch is not running"
-			exit 1
-		fi
-	;;
-	*)
-		echo "$0 start|stop|reload|status"
-		exit 1
-	;;
+      chmod 644 $logfile
+      echo $pid > $pidfile
+    else
+      echo "failed."
+      exit 1
+    fi
+    checkrunning
+    if [ $running = 1 ]; then
+      echo "done."
+      exit 0
+    else
+      echo "failed."
+      exit 1
+    fi
+  ;;
+  stop)
+    checkrunning
+    echo -n "Stopping swatch..."
+    if [ $running = 0 ]; then
+      echo "swatch is not running."
+      exit 0
+    else
+      for ((i = 0; i < 30; i++)); do
+        kill -0 $pid 2> /dev/null
+        if [ $? != 0 ]; then
+          rm -rf ${pidfile}
+          break
+        fi
+        kill $pid
+        sleep 1
+      done
+    fi
+    if [ -s ${pidfile} ]; then
+      echo "failed."
+      exit 1
+    else
+      echo "done."
+    fi
+    exit 0
+  ;;
+  restart)
+    $0 stop
+    $0 start
+  ;;
+  reload)
+    checkrunning
+    if [ $running = 1 -a "x$pid" != "x" ]; then
+      echo -n "Reloading swatch..."
+      kill -HUP $pid
+      echo "done."
+    fi
+  ;;
+  status)
+    echo -n "zmswatch is "
+    checkrunning
+    if [ $running = 0 ]; then
+      echo "not running."
+      exit 1
+    else
+      echo "running."
+      exit 0
+    fi
+  ;;
+  *)
+    echo "$0 start|stop|restart|reload|status"
+    exit 1
+  ;;
 esac

@@ -19,10 +19,20 @@
 BASE=/opt/zimbra
 SCRIPTS="zmmtaconfigctl postfix zmsaslauthdctl"
 
+rewriteconfig() {
+  echo -n "Rewriting configuration files..."
+  /opt/zimbra/libexec/zmmtaconfig antispam antivirus mta sasl  > /dev/null 2>&1
+  if [ $? = 0 ]; then
+    echo "done."
+  else
+    echo "failed."
+  fi
+}
+
 case "$1" in 
 	start)
 		if [ x$2 = "x" ]; then
-			/opt/zimbra/libexec/zmmtaconfig antispam antivirus mta sasl
+      rewriteconfig
 		fi
 		STATUS=0
 		for i in $SCRIPTS; do
@@ -40,18 +50,22 @@ case "$1" in
 			/opt/zimbra/bin/$i stop
 		done
 	;;
-	reload)
+	reload|restart)
 		if [ x$2 = "x" ]; then
-			/opt/zimbra/libexec/zmmtaconfig antispam antivirus mta sasl
+      rewriteconfig
 		fi
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i reload
+      if [ "x$i" = "xpostfix" ]; then
+        /opt/zimbra/bin/$i reload
+      else 
+			  /opt/zimbra/bin/$i $1
+      fi
 		done
 	;;
 	status)
 		STATUS=0
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i status
+			/opt/zimbra/bin/$i status > /dev/null 2>&1
 			R=$?
 			if [ $R -ne "0" ]; then
 				echo "$i is not running"
@@ -61,7 +75,7 @@ case "$1" in
 		exit $STATUS
 	;;
 	*)
-		echo "$0 start|stop|reload|status"
+		echo "$0 start|stop|restart|reload|status"
 		exit 1
 	;;
 esac

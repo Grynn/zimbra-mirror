@@ -32,9 +32,9 @@ case "$1" in
 			/opt/zimbra/bin/$i stop
 		done
 	;;
-	reload)
+	reload|restart)
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i restart
+			/opt/zimbra/bin/$i $1
 		done
 	;;
 	status)
@@ -50,7 +50,7 @@ case "$1" in
 		exit $STATUS
 	;;
 	*)
-		echo "$0 start|stop|reload|status"
+		echo "$0 start|stop|restart|reload|status"
 		exit 1
 	;;
 esac

@@ -30,13 +30,9 @@ case "$1" in
 			/opt/zimbra/bin/$i stop
 		done
 	;;
-	reload)
+	restart|reload)
 		for i in $SCRIPTS; do
-      if [ x"$i" = "xlogmysql.server" ]; then
-			  /opt/zimbra/bin/$i restart
-      else
-			  /opt/zimbra/bin/$i reload
-      fi
+			/opt/zimbra/bin/$i $1
 		done
 	;;
 	status)
@@ -45,7 +41,7 @@ case "$1" in
 			if [ $i = "logmysql.server" ]; then
 				/opt/zimbra/bin/logmysqladmin status > /dev/null 2>&1
 			else
-				/opt/zimbra/bin/$i status
+				/opt/zimbra/bin/$i status > /dev/null 2>&1
 			fi
 			R=$?
 			if [ $R -ne "0" ]; then
@@ -56,7 +52,7 @@ case "$1" in
 		exit $STATUS
 	;;
 	*)
-		echo "$0 start|stop|reload|status"
+		echo "$0 start|stop|restart|reload|status"
 		exit 1
 	;;
 esac

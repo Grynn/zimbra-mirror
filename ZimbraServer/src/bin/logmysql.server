@@ -86,12 +86,18 @@ case "$1" in
       cp -f /dev/null ${logger_mysql_errlogfile}
     fi
     # --defaults-file must be first argument
+    echo -n "Starting mysqld..."
     cd ${logger_mysql_directory}; \
       ${logger_mysql_directory}/bin/mysqld_safe \
       --defaults-file=${logger_mysql_mycnf} \
       --external-locking \
       --log-error=${logger_mysql_errlogfile} \
-      --ledir=${logger_mysql_directory}/libexec &
+      --ledir=${logger_mysql_directory}/libexec >> ${logger_mysql_errlogfile} 2>&1 &
+    if [ $? = 0 ]; then
+      echo "done."
+    else 
+      echo "failed."
+    fi
     ;;
     
   'stop')
@@ -100,8 +106,8 @@ case "$1" in
       echo "mysqld not running: no pid in '${mysql_pidfile}'"
       quit 0
     else
-      echo -n "Killing mysqld with pid $pid "
-      kill $pid
+      echo -n "Stopping mysqld..."
+      kill $pid >> ${logger_mysql_errlogfile} 2>&1
       # wait for mysqld pid file to be removed
       for ((i = 0; i < 30; i++)); do
         sleep 2;
@@ -110,20 +116,19 @@ case "$1" in
           rm -f ${logger_mysql_pidfile}
           break
         fi
-        kill $pid
-        echo -n "."
+        kill $pid >> ${logger_mysql_errlogfile} 2>&1
       done 
       if [ -s ${logger_mysql_pidfile} ]; then 
-        echo " gave up waiting!"
+        echo "gave up waiting!"
         quit 1
       else
-        echo " done."
+        echo "done."
       fi
     fi
     quit 0
     ;;
     
-  'restart')
+  'restart'|'reload')
     $0 stop
     $0 start
     ;;
@@ -140,7 +145,7 @@ case "$1" in
     ;;
 
   *)
-    echo "Usage: $0 start|stop|status|restart"
+    echo "Usage: $0 start|stop|restart|reload|status"
     quit 1
     ;;
 esac

@@ -78,11 +78,11 @@ case "$1" in
 
   'kill'|'stop')
     checkrunning
+    echo -n "Stopping zmmtaconfig..."
     if [ $running = 0 ]; then
       echo "zmmtaconfig is not running."
       exit 0
     else 
-      echo -n "Stopping zmmtaconfig..."
       for ((i = 0; i < 30; i++)); do
         kill -0 $pid 2> /dev/null
         if [ $? != 0 ]; then
@@ -94,6 +94,7 @@ case "$1" in
       done
     fi
     if [ -s ${pidfile} ]; then
+      echo "failed."
       exit 1
     else
       echo "done."
@@ -120,7 +121,7 @@ case "$1" in
    ;;
     
   *)
-    echo "Usage: $0 start|stop|kill|restart|status"
+    echo "Usage: $0 start|stop|kill|restart|reload|status"
     exit 1
   ;;
 
