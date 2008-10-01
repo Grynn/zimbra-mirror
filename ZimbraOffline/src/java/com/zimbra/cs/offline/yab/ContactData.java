@@ -92,6 +92,10 @@ public class ContactData implements Serializable {
     public List<Category> getCategories() {
         return categories;
     }
+
+    public boolean isEmpty() {
+        return fields.isEmpty();
+    }
     
     private void importField(Field field) {
         if (field == null) return;

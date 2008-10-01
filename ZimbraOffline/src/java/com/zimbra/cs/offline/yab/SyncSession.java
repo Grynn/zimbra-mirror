@@ -331,33 +331,44 @@ public class SyncSession {
     private void updateContact(Contact contact) throws SyncException, ServiceException {
         int cid = contact.getId();
         int itemId = state.getContactItemId(cid);
-        if (itemId != -1) {
+        if (itemId == -1) {
+            addContact(contact);
+        } else if (!isChanged(cid)) {
             // Update existing contact unless it has been modified since we
             // sent the sync request, in which case we delay updating the
             // contact until we've had a chance to push the new changes.
-            if (!isChanged(cid)) {
-                pushedContacts.remove(itemId);
-                ContactData cd = new ContactData(contact);
-                mbox.modifyContact(CONTEXT, itemId, cd.getParsedContact());
-                long mask = getTagBitmask(cd);
-                mbox.setTags(CONTEXT, itemId, MailItem.TYPE_CONTACT, MailItem.FLAG_UNCHANGED, mask);
-                saveContact(itemId, contact);
-                LOG.debug("Modified local contact: itemId=%d, cid=%d, tag_bits=%x", itemId, cid, mask);
-            }
-        } else {
-            // Add new contact
+            pushedContacts.remove(itemId);
             ContactData cd = new ContactData(contact);
-            MailItem item = mbox.createContact(
-                CONTEXT, cd.getParsedContact(), Mailbox.ID_FOLDER_CONTACTS, null);
-            itemId = item.getId();
+            if (cd.isEmpty()) {
+                LOG.debug("Removing contact with cid %d since changes would result in an empty contact", cid);
+                removeContact(cid);
+                return;
+            }
+            mbox.modifyContact(CONTEXT, itemId, cd.getParsedContact());
             long mask = getTagBitmask(cd);
             mbox.setTags(CONTEXT, itemId, MailItem.TYPE_CONTACT, MailItem.FLAG_UNCHANGED, mask);
-            state.addContact(itemId, cid);
             saveContact(itemId, contact);
-            LOG.debug("Created new local contact: itemId=%d, cid=%d, tag_bits=%x", itemId, cid, mask);
+            LOG.debug("Modified local contact: itemId=%d, cid=%d, tag_bits=%x", itemId, cid, mask);
         }
     }
 
+    private void addContact(Contact contact) throws SyncException, ServiceException {
+        int cid = contact.getId();
+        ContactData cd = new ContactData(contact);
+        if (cd.isEmpty()) {
+            LOG.debug("Not importing contact with cid %d since it would result in an empty contact", cid);
+            return;
+        }
+        MailItem item = mbox.createContact(
+            CONTEXT, cd.getParsedContact(), Mailbox.ID_FOLDER_CONTACTS, null);
+        int itemId = item.getId();
+        long mask = getTagBitmask(cd);
+        mbox.setTags(CONTEXT, itemId, MailItem.TYPE_CONTACT, MailItem.FLAG_UNCHANGED, mask);
+        state.addContact(itemId, cid);
+        saveContact(itemId, contact);
+        LOG.debug("Created new local contact: itemId=%d, cid=%d, tag_bits=%x", itemId, cid, mask);
+
+    }
     private static final String KEY_CONTACT = "CONTACT";
     
     private void saveContact(int itemId, Contact contact) throws ServiceException {
