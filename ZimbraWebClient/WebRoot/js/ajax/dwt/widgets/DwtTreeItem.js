@@ -365,7 +365,7 @@ function(actionCode, ev) {
 			return true;
 		}
 	}
-
+	DBG.println("tree item: " + this.getText());
 	switch (actionCode) {
 
 		case DwtKeyMap.SELECT_NEXT: {
@@ -384,6 +384,24 @@ function(actionCode, ev) {
 			if (ti) {
 				DBG.println("setting focus to tree item: " + ti._htmlElId);
 				this._tree.setSelection(ti, true);
+			}
+			break;
+		}
+
+		case DwtKeyMap.EXPAND: {
+			DBG.println("tree view: EXPAND");
+			if (!this._expanded) {
+				DBG.println("tree view: expanding");
+				this.setExpanded(true, false, true);
+			}
+			break;
+		}
+
+		case DwtKeyMap.COLLAPSE: {
+			DBG.println("tree view: COLLAPSE");
+			if (this._expanded) {
+				DBG.println("tree view: collapsing");
+				this.setExpanded(false, false, true);
 			}
 			break;
 		}
@@ -808,6 +826,7 @@ function(selected) {
             if (this._textCell) {
                 this._textCell.className = this._selectedClassName;
             }
+			this.focus();
             return true;
 		} else {
             if (this._textCell) {
