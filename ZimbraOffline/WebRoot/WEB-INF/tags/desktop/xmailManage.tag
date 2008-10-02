@@ -165,6 +165,7 @@ function passOnEdit(id) {
         <c:when test="${bean.ymail}">
             <input type="hidden" name="host" value="${bean.host}">
             <input type="hidden" name="port" value="${bean.port}">
+            <input type="hidden" name="ssl" value="${bean.ssl ? 'true' : 'false'}">
         </c:when>
         <c:otherwise>
         
