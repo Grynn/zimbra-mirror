@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
+import javax.security.auth.login.LoginException;
 
 import org.dom4j.QName;
 
@@ -30,6 +31,7 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.service.offline.OfflineService;
+import com.zimbra.cs.util.yauth.AuthenticationException;
 
 public class OfflineSyncManager {
 	
@@ -101,7 +103,7 @@ public class OfflineSyncManager {
         	return true;
         }
         
-        void connecitonDown() {
+        void connectionDown() {
         	if (++mRetryCount >= OfflineLC.zdesktop_retry_limit.intValue()) {
         		mLastFailTime = System.currentTimeMillis();
         	}
@@ -133,9 +135,7 @@ public class OfflineSyncManager {
     	}
     	
     	boolean reauthOK(String password) {
-    		if (!password.equals(authPassword) || System.currentTimeMillis() - lastAuthFail > OfflineLC.zdesktop_reauth_delay.longValue())
-    			return true;
-    		return false;
+    		return !password.equals(authPassword) || System.currentTimeMillis() - lastAuthFail > OfflineLC.zdesktop_reauth_delay.longValue();
     	}
     	
     	void authSuccess(String password, ZAuthToken token, long expires) {
@@ -166,8 +166,9 @@ public class OfflineSyncManager {
     	}
     }
     
-    private Map<String, OfflineSyncStatus> syncStatusTable = Collections.synchronizedMap(new HashMap<String, OfflineSyncStatus>());
-	private OfflineSyncStatus getStatus(String targetName) {
+    private final Map<String, OfflineSyncStatus> syncStatusTable = Collections.synchronizedMap(new HashMap<String, OfflineSyncStatus>());
+
+    private OfflineSyncStatus getStatus(String targetName) {
 		synchronized (syncStatusTable) {
 			OfflineSyncStatus status = syncStatusTable.get(targetName);
 			if (status == null) {
@@ -201,7 +202,7 @@ public class OfflineSyncManager {
 	}
 	
     public void syncStart(String targetName) {
-    	boolean b = false;
+    	boolean b;
     	synchronized (syncStatusTable) {
     		b = getStatus(targetName).syncStart();
     	}
@@ -210,7 +211,7 @@ public class OfflineSyncManager {
     }
     
     public void syncComplete(String targetName) {
-    	boolean b = false;
+    	boolean b;
     	synchronized (syncStatusTable) {
     		b = getStatus(targetName).syncComplete();
     	}
@@ -218,9 +219,9 @@ public class OfflineSyncManager {
     		notifyStateChange();
     }
     
-    public void connecitonDown(String targetName) {
+    public void connectionDown(String targetName) {
     	synchronized (syncStatusTable) {
-    		getStatus(targetName).connecitonDown();
+    		getStatus(targetName).connectionDown();
     	}
     	notifyStateChange();
     }
@@ -314,7 +315,7 @@ public class OfflineSyncManager {
 	}
 	
 	private void authFailed(DataSource dataSource) throws ServiceException {
-		synchronized (syncStatusTable) {
+        synchronized (syncStatusTable) {
 			getStatus(dataSource.getName()).authFailed(dataSource.getDecryptedPassword());
 		}
 	}
@@ -323,25 +324,30 @@ public class OfflineSyncManager {
 	// process failure
 	//
 	
-	public static boolean isReceiverFault(Exception exception) {
+	public static boolean isReceiversFault(Exception exception) {
 		SoapFaultException fault = null;
 		if (exception instanceof SoapFaultException) {
 			fault = (SoapFaultException)exception;
 		} else if (exception.getCause() instanceof SoapFaultException) {
 			fault = (SoapFaultException)(exception.getCause());
 		}
-		if (fault != null && fault.isReceiversFault())
-			return true;
-		return false;
+		return fault != null && fault.isReceiversFault();
 	}
 	
-	public static boolean isAuthEerror(Exception exception) {
-		return exception instanceof SoapFaultException &&
-					((SoapFaultException)exception).getCode().equals(AccountServiceException.AUTH_FAILED) ||
-			   exception instanceof ServiceException && exception.getCause() instanceof AuthenticationFailedException;
-	}
+	public static boolean isAuthError(Exception exception) {
+        if (exception instanceof SoapFaultException) {
+		    return ((SoapFaultException)exception).getCode().equals(AccountServiceException.AUTH_FAILED);
+        }
+        if (exception instanceof ServiceException) {
+            Throwable cause = exception.getCause();
+            return cause instanceof AuthenticationFailedException ||
+                   cause instanceof AuthenticationException ||
+                   cause instanceof LoginException;
+        }
+        return false;
+    }
 	
-	public static boolean isConnectionDown(Exception exception) {
+    public static boolean isConnectionDown(Exception exception) {
         if (exception instanceof ServiceException) {
         	Throwable cause = findCause(exception);
 	        if (cause instanceof java.net.UnknownHostException ||
@@ -377,14 +383,14 @@ public class OfflineSyncManager {
 	}
 	
     public void processSyncException(Account account, Exception exception) {
-    	if (isAuthEerror(exception)) {
+    	if (isAuthError(exception)) {
     		authFailed(account);
     	}
     	processSyncException(account.getName(), ((OfflineAccount)account).getRemotePassword(), exception);
     }
     
     public void processSyncException(DataSource dataSource, Exception exception) throws ServiceException {
-    	if (isAuthEerror(exception)) {
+    	if (isAuthError(exception)) {
     		authFailed(dataSource);
     	}
     	processSyncException(dataSource.getName(), dataSource.getDecryptedPassword(), exception);
@@ -392,9 +398,9 @@ public class OfflineSyncManager {
     
 	public void processSyncException(String targetName, String password, Exception exception) {
 		if (isConnectionDown(exception)) {
-        	connecitonDown(targetName);
+        	connectionDown(targetName);
         	OfflineLog.offline.info("sync connection down: " + targetName);
-        } else if (isAuthEerror(exception)) {
+        } else if (isAuthError(exception)) {
         	authFailed(targetName, password);
     		OfflineLog.offline.warn("sync remote auth failure: " + targetName);
         } else {

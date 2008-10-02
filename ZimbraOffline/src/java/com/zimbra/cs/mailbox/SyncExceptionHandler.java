@@ -23,7 +23,7 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.util.JMSession;
 
-class SyncExceptionHandler {
+public class SyncExceptionHandler {
 	
 	private static final String MESSAGE_SYNC_FAILED = "message sync failed";
 	private static final String CALENDAR_SYNC_FAILED = "calendar sync failed";
@@ -34,12 +34,12 @@ class SyncExceptionHandler {
 	
 	
 	static void checkRecoverableException(String message, Exception exception) throws ServiceException {
-		if (OfflineSyncManager.isIOException(exception) || OfflineSyncManager.isConnectionDown(exception) || OfflineSyncManager.isAuthEerror(exception) || OfflineSyncManager.isReceiverFault(exception))
+		if (OfflineSyncManager.isIOException(exception) || OfflineSyncManager.isConnectionDown(exception) || OfflineSyncManager.isAuthError(exception) || OfflineSyncManager.isReceiversFault(exception))
 			throw ServiceException.FAILURE(message, exception); // let it bubble in case it's server issue so we interrupt sync to retry later
 	}
 	
 	static void syncMessageFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
-		saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, null, 0, exception);
+		saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, exception);
 	}
 	
 	private static final int MESSAGE_DATA_LIMIT = 4* 1024 * 1024;
@@ -51,15 +51,14 @@ class SyncExceptionHandler {
 			ByteUtil.copy(msgStream, true, bao, true, MESSAGE_DATA_LIMIT);
 			saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, bao.toString(), pm.getRawSize(), exception);
 		} catch (IOException x) {
-			saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, null, 0, exception);
+			saveFailureReport(ombx, itemId, MESSAGE_SYNC_FAILED, exception);
 		} finally {
 		    ByteUtil.closeStream(msgStream);
         }
 	}
 	
 	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
-		saveFailureReport(ombx, itemId, CALENDAR_SYNC_FAILED, null, 0, exception);
-		
+		saveFailureReport(ombx, itemId, CALENDAR_SYNC_FAILED, exception);
 	}
 	
 	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, String xml, Exception exception) throws ServiceException {
@@ -67,21 +66,29 @@ class SyncExceptionHandler {
 	}
 	
 	static void localDeleteFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
-		saveFailureReport(ombx, itemId, DELETE_ITEM_FAILED, null, 0, exception);
+		saveFailureReport(ombx, itemId, DELETE_ITEM_FAILED, exception);
 	}
 	
 	static void pushItemFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
-		saveFailureReport(ombx, itemId, PUSH_ITEM_FAILED, null, 0, exception);
+		saveFailureReport(ombx, itemId, PUSH_ITEM_FAILED, exception);
 	}
 	
 	static String sendMailFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
-		return saveFailureReport(ombx, itemId, SEND_MAIL_FAILED, null, 0, exception);
+		return saveFailureReport(ombx, itemId, SEND_MAIL_FAILED, exception);
 	}
 	
 	static void syncDocumentFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
-		saveFailureReport(ombx, itemId, DOCUMENT_SYNC_FAILED, null, 0, exception);
+		saveFailureReport(ombx, itemId, DOCUMENT_SYNC_FAILED, exception);
 	}
-	
+
+    public static void importFailed(DesktopMailbox dmbx, int id, String error, Exception exception) {
+        saveFailureReport(dmbx, id, error, exception);
+    }
+
+    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, Exception exception) {
+        return saveFailureReport(dmbx, id, error, null, 0, exception);
+    }
+    
     private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, Exception exception) {
     	Date now = new Date();
     	String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
@@ -101,7 +108,7 @@ class SyncExceptionHandler {
     	sb.append("Error type:      ").append(code).append("\n");
     	sb.append("Error summary:   ").append(error).append("\n\n");
 
-    	if (data != null) {
+        if (data != null) {
     		sb.append("----------------------------------------------------------------------------\n");
     		sb.append("Affected data - PLEASE REMOVE ANY SENSITIVE INFORMATION");
     		if (totalSize > data.length())
@@ -115,11 +122,11 @@ class SyncExceptionHandler {
     	}
 
     	ByteArrayOutputStream bao = new ByteArrayOutputStream() {
-    		private static final int STATCK_TRACE_LIMIT = 1024 * 1024;
+    		private static final int STACK_TRACE_LIMIT = 1024 * 1024;
 
     		@Override
     		public synchronized void write(byte[] b, int off, int len) {
-    			len = len > STATCK_TRACE_LIMIT - count ? STATCK_TRACE_LIMIT - count : len;
+    			len = len > STACK_TRACE_LIMIT - count ? STACK_TRACE_LIMIT - count : len;
     			if (len > 0)
     				super.write(b, off, len);
     			//otherwise discard
@@ -127,7 +134,7 @@ class SyncExceptionHandler {
 
     		@Override
     		public synchronized void write(int b) {
-    			if (count < STATCK_TRACE_LIMIT)
+    			if (count < STACK_TRACE_LIMIT)
     				super.write(b);
     		}
     	};

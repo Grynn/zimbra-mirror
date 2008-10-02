@@ -31,6 +31,7 @@ import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.LocalMailbox;
+import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.util.OfflineYAuth;
@@ -251,6 +252,15 @@ public class OfflineDataSource extends DataSource {
             return (long) mailboxId << 32 | (folderId & 0xffffffffL);
         } catch (ServiceException e) {
             return null;
+        }
+    }
+
+    @Override
+    public void reportError(int itemId, String error, Exception e) {
+        try {
+            SyncExceptionHandler.importFailed((DesktopMailbox) getMailbox(), itemId, error, e);
+        } catch (ServiceException x) {
+            // Ignore
         }
     }
 

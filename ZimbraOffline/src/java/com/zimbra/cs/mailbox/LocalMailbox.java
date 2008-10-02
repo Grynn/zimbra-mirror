@@ -190,9 +190,10 @@ public class LocalMailbox extends DesktopMailbox {
                                        msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
                     if (ms.sendFailed()) {
-                        // Let YMail handle bounce to inbox...
                         OfflineLog.offline.info("YMail send failure: " + msg.getSubject(), ms.getError());
+                        // YMail will handle bounce to inbox...
                         OutboxTracker.remove(this, id);
+                        OutboxTracker.recordFailure(this, id);
                         continue;
                     } else {
                         throw e;

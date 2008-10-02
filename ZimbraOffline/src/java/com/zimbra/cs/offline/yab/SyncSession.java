@@ -70,11 +70,10 @@ public class SyncSession {
     private static final Mailbox.OperationContext CONTEXT =
         new OfflineMailbox.OfflineContext();
 
-    private static final int MAX_RETRIES = 3;
-
     static {
-        LOG.setLevel(Log.Level.debug);
-        Yab.enableDebug();
+        if (LOG.isDebugEnabled()) {
+            Yab.enableDebug();
+        }
     }
     
     public SyncSession(DataSource ds, Session session) throws ServiceException {
@@ -91,18 +90,11 @@ public class SyncSession {
     }
 
     public void sync() throws ServiceException {
-        int count = 0;
-        do {
-            try {
-                syncData();
-                return;
-            } catch (Exception e) {
-                LOG.error("Contact sync error", e);
-                resetData();
-            }
-        } while (count++ < MAX_RETRIES);
-        throw ServiceException.FAILURE(
-            "Unrecoverable contact sync error after " + MAX_RETRIES + " retry attempts", null);
+        try {
+            syncData();
+        } catch (Exception e) {
+            throw ServiceException.FAILURE("Contact sync error", e);
+        }
     }
     
     private void syncData() throws IOException, ServiceException {
@@ -132,7 +124,7 @@ public class SyncSession {
         state.save();
     }
 
-    private void resetData() throws ServiceException {
+    public void resetData() throws ServiceException {
         // TODO Push any local changes that may be pending
         LOG.debug("Resetting local contacts");
         synchronized (mbox) {
