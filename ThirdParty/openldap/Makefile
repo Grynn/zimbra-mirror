@@ -61,6 +61,7 @@ build:
 		--disable-shell \
 		--disable-sql \
 		--disable-bdb \
+		--disable-ndb \
 	--enable-overlays=mod \
 	--enable-debug \
 	--enable-crypt; \
