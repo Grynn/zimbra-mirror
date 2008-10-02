@@ -93,7 +93,7 @@ public class TestYMailClient {
             ts.newToken(APPID, USER, PASS);
         }
         RawAuthManager ram = new RawAuthManager(ts);
-        Auth auth = ram.authenticate(APPID, USER);
+        Auth auth = ram.authenticate(APPID, USER, PASS);
         ymc = new YMailClient(auth);
         ymc.enableTrace(System.out);
         // Set up IMAP connection

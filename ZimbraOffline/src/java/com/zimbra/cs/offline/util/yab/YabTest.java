@@ -64,7 +64,7 @@ public class YabTest {
                 ts.newToken(APPID, USER, PASS);
             }
             RawAuthManager ram = new RawAuthManager(ts);
-            session = Yab.createSession(ram.newAuthenticator(APPID, USER));
+            session = Yab.createSession(ram.newAuthenticator(APPID, USER, PASS));
         }
     }                     
 
