@@ -53,6 +53,12 @@ function OnManage() {
     document.hidden_form.submit();
 }
 
+function OnSwitch(ds) {
+    if (ds == 'caldav') {
+        document.caldav_form.submit();
+    }
+}
+
 function beforeSubmit() {
     disableButtons();
     zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
@@ -67,6 +73,9 @@ function disableButtons() {
     zd.disable("deleteButton");
     zd.disable("manageButton");
     zd.disable("saveButton");
+<c:if test="${zdf:getLocalConfig('zdesktop_caldav_enabled') == 'true'}">
+    zd.disable("calendarButton");
+</c:if>
 }
 
 function passOnEdit(id) {
@@ -95,6 +104,14 @@ function passOnEdit(id) {
     </c:choose>
     </span>
 </div>
+
+<form name="caldav_form" action="/zimbra/desktop/caldav.jsp" method="POST">
+    <input type="hidden" name="accountId" value="${bean.accountId}">
+    <input type="hidden" name="accountName" value="${bean.accountName}">
+    <input type="hidden" name="displayName" value="${bean.fromDisplay}">
+    <input type="hidden" name="mailUsername" value="${bean.email}">
+    <input type="hidden" name="defaultCalDavUrl" value="${bean.defaultCalDavUrl}">
+</form>
 
 <form name="hidden_form" action="${uri}" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
@@ -310,6 +327,13 @@ function passOnEdit(id) {
         <td class="ZWizardButton" width="1%">
             <button id='deleteButton' class='DwtButton' onclick="OnDelete()"><fmt:message key='RemoveAccount'/></button>
         </td>
+        
+        <c:if test="${zdf:getLocalConfig('zdesktop_caldav_enabled') == 'true'}">
+            <td class="ZWizardButton" width="1%">
+                <button id='calendarButton' class='DwtButton' onclick="OnSwitch('caldav')"><fmt:message key='ViewCalendarSettings'/></button>
+            </td>
+        </c:if>
+        
         <td class="ZWizardButtonSpacer">
             <div></div>
         </td>

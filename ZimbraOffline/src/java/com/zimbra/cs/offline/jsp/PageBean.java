@@ -79,4 +79,8 @@ public class PageBean {
 	        serverLocale = (Locale)locale.clone();						
 	    }
 	}
+	
+	public static String getLocalConfig(String key) {
+		return LC.get(key);
+	}
 }

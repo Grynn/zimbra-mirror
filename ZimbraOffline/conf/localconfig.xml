@@ -82,4 +82,7 @@
   <key name="mailboxd_output_rotate_interval">
     <value>0</value>
   </key>
+  <key name="zdesktop_caldav_enabled">
+    <value>false</value>
+  </key>
 </localconfig>

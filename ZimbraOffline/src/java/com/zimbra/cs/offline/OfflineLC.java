@@ -77,6 +77,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_support_email;
     
     public static final KnownKey zdesktop_min_zcs_version_sync_tgz;
+    public static final KnownKey zdesktop_caldav_enabled;
     
 
     static void init() {
@@ -254,6 +255,8 @@ public class OfflineLC {
 	    zdesktop_min_zcs_version_sync_tgz = new KnownKey("zdesktop_min_zcs_version_sync_tgz");
 	    zdesktop_min_zcs_version_sync_tgz.setDefault("5.0.11");
 	    zdesktop_min_zcs_version_sync_tgz.setDoc("min zcs server version to support tgz format for sync");
+	    
+	    zdesktop_caldav_enabled = new KnownKey("zdesktop_caldav_enabled", "false", "whether to enable caldav sync");
     }
     
     public static String getFullVersion() {

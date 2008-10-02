@@ -34,4 +34,13 @@
             void doRequest(com.zimbra.cs.offline.jsp.FormBean)
         </function-signature>
     </function>
+    <function>
+        <name>getLocalConfig</name>
+        <function-class>
+            com.zimbra.cs.offline.jsp.PageBean
+        </function-class>
+        <function-signature>
+            String getLocalConfig(java.lang.String)
+        </function-signature>
+    </function>
 </taglib>

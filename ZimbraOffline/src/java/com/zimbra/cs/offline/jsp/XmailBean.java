@@ -33,8 +33,10 @@ public class XmailBean extends MailBean {
 	
 	protected boolean syncAllServerFolders;
 
-        protected boolean leaveOnServer = false;
-    
+	protected boolean leaveOnServer = false;
+
+	protected String defaultCalDavUrl = "";
+	
 	private final String adomain = "aol.com";
 	private final String gdomain = "gmail.com";
 	private final String hdomain = "hotmail.com";
@@ -81,7 +83,15 @@ public class XmailBean extends MailBean {
 
 		syncFreqSecs = ds.getTimeIntervalSecs(OfflineConstants.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
 		syncAllServerFolders = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
-                leaveOnServer = ds.getBooleanAttr(Provisioning.A_zimbraDataSourceLeaveOnServer, false);
+		leaveOnServer = ds.getBooleanAttr(Provisioning.A_zimbraDataSourceLeaveOnServer, false);
+		
+		if (domain != null) {
+			if (domain.equals(gdomain)) {
+				defaultCalDavUrl = "https://www.google.com/calendar/dav/" + username + "/user";
+			} else if (domain.equals(ydomain)) {
+				defaultCalDavUrl = "https://caldav.calendar.yahoo.com/principals/users/" + username;
+			}
+		}
 	}
 	
 	@Override
@@ -358,5 +368,13 @@ public class XmailBean extends MailBean {
 		return domain != null && (domain.equals(ydomain) ||
 			domain.equals(ymdomain) ||
 			domain.equals(yrmdomain));
+	}
+	
+	public void setDefaultCalDavUrl(String url) {
+		defaultCalDavUrl = url;
+	}
+	
+	public String getDefaultCalDavUrl() {
+		return defaultCalDavUrl;
 	}
 }
