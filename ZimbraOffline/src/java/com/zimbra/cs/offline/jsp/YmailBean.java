@@ -28,9 +28,9 @@ public class YmailBean extends XmailBean {
 			username = email;
 		
 		protocol = DataSource.Type.imap.toString();
-		host = "imap.mail.yahoo.com";
-		port = "143";
-		isSsl = false;
+		host = "imap-ssl.mail.yahoo.com";
+		port = "993";
+		isSsl = true;
 	}
 	
 	@Override
