@@ -32,6 +32,7 @@ import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
+import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.util.OfflineYAuth;
@@ -179,6 +180,13 @@ public class OfflineDataSource extends DataSource {
             OfflineLog.offline.warn(x);
         }
         return isSyncEnabledByDefault(localPath);
+    }
+
+    @Override
+    public void disableSync(int folderId) throws ServiceException {
+        Mailbox mbox = getMailbox();
+        mbox.alterTag(new Mailbox.OperationContext(mbox), folderId,
+                      MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, false);
     }
 
     public boolean isSaveToSent() {
