@@ -21,6 +21,7 @@
 use lib qw(/opt/zimbra/zimbramon/lib);
 use warnings;
 use strict;
+use Mail::Mailer;
 use Text::Balanced qw(extract_delimited extract_bracketed);
 use Data::Dumper;
 use sigtrap qw(QUIT);
@@ -30,15 +31,17 @@ use Getopt::Std;
 
 my $attendeeLimit = 50;
 my %opts = ();
-getopts('dm:', \%opts);
+my $notifications = "none";
+getopts('dm:n:', \%opts);
 sub usage() {
     print STDERR <<"EOF";
-Usage: zmcalchk [-d] <user> <start-time-spec> <end-time-spec>
+Usage: zmcalchk [-d] [-n <type>] <user> <start-time-spec> <end-time-spec>
 
     See the output of 'zmmailbox help appointment' for details on time-specs.
 
     -d        DEBUG: extremely verbose details
     -m        Max attendees to check, (default $attendeeLimit)
+    -n        <none|user|organizer|attendee|all> whom to notify (default none)
 
 EOF
     exit;
@@ -52,6 +55,14 @@ if (exists $opts{'m'}) {
     $attendeeLimit = $opts{'m'};
     usage() if ($attendeeLimit !~ /^\d+$/);
     print STDERR "Setting max attendee check limit to $attendeeLimit\n" if ($debug);
+}
+
+if (exists $opts{'n'}) {
+    usage() if (!defined $opts{'n'});
+    $notifications = $opts{'n'};
+    usage() if ($notifications ne "none"      && $notifications ne "all"
+             && $notifications ne "organizer" && $notifications ne "attendee"
+             && $notifications ne "user");
 }
 
 my $source_user = shift @ARGV;
@@ -165,6 +176,30 @@ sub process_simple_json($) {
 }
 ### end basic JSON parser
 
+sub getMailDeliveryAddress($) {
+    my $user = shift;
+
+    my $address;
+    my @response = ZmClient::sendZmprovRequest("ga $user");
+    for (@response) {
+        if ($_ =~ /^zimbraMailDeliveryAddress:\s*(\S+)/) {
+            $address = $1;
+            last;
+        }
+    }
+    $address;
+}
+sub getSmtpServer() {
+    my @response = ZmClient::sendZmprovRequest("gcf zimbraSmtpHostname");
+    my $smtp_server;
+    for (@response) {
+        if ($_ =~ /^zimbraSmtpHostname:\s*(\S+)/) {
+            $smtp_server = $1;
+        }
+    }
+    die "unable to determine smtp server" if (!defined($smtp_server));
+    $smtp_server;
+}
 sub getMailServer($) {
     my $user = shift;
     my $mailhost;
@@ -287,8 +322,8 @@ sub getInstanceByInstId($$) {
     }
     $instance;
 }
-sub getInstanceByStartTime($$) {
-    my ($item, $time) = @_;
+sub getInstanceByStartTime($$$) {
+    my ($item, $time, $index) = @_;
     my $instance;
 
     if (exists($item->{'inst'})) {
@@ -298,6 +333,9 @@ sub getInstanceByStartTime($$) {
                 $instance = $inst;
                 last;
             }
+        }
+        if (!defined $instance && $#{$instList} >= $index) {
+            $instance = ${$instList}[$index];
         }
     }
     $instance;
@@ -370,6 +408,7 @@ sub main() {
     @domains = getDomains();
     $adminPort = getAdminServicePort();
     $host = getMailServer($source_user);
+    $source_user = getMailDeliveryAddress($source_user);
     my @folders = getCalendarFolders($host, $source_user);
     my @calendar_items = ();
     print "Calendars: " . join(", ", @folders) . "\n";
@@ -413,6 +452,7 @@ sub main() {
     print STDERR Dumper(\@items) if ($debug);
     my $i = 0;
     my $itemCount = @items;
+    my @errors_for_notification = ();
     foreach my $item (@items) {
         $i++;
         my @errors = ();
@@ -424,6 +464,10 @@ sub main() {
 
         # save itemId in case it's another organizer
         my $itemId = $item->{'id'};
+        my $desc = " * $$item{'name'}: id=$itemId, uid=$$item{'uid'}, organizer=$or";
+        my $notification_hash = { label => $desc, organizer => $organizer,
+             errors => {} };
+        push(@errors_for_notification, $notification_hash);
 
         print "Checking event $itemId [$$item{'name'}] $i/$itemCount\n";
 
@@ -436,10 +480,14 @@ sub main() {
                 }
             };
             if ($@) {
-                push(@errors, "$organizer: organizer account not found: $@");
+                my $error = "$organizer: organizer account not found: $@";
+                $notification_hash->{'errors'}->{$source_user} = [ $error ];
+                push(@errors, $error);
             }
             if (!defined($or_item)) {
-                push(@errors, "$organizer: organizer's event not found!");
+                my $error = "$organizer: organizer's event not found!";
+                $notification_hash->{'errors'}->{$source_user} = [ $error ];
+                push(@errors, $error);
             } else {
                 $item = $or_item;
             }
@@ -458,18 +506,26 @@ sub main() {
 
         print STDERR "Attendees: [" . join(", ", @attList) . "]\n" if ($debug);
         foreach my $att (@attList) {
+            $notification_hash->{'errors'}->{$att} = []
+                    if !exists $notification_hash->{'errors'}->{$att};
+                    # in case $source_user is an $att
+
             my $attItem;
             eval {
                 $attItem = findCalendarItem($att, $item);
             };
             if ($@) {
-                push(@errors, "$att: unable to find calendar event: $@");
+                my $error = "unable to find calendar event: $@";
+                push(@{$notification_hash->{'errors'}->{$att}}, $error);
+                push(@errors, "$att: $error");
             }
             if (!defined($attItem)) {
                 my $h = $item->{'attendeesList'}->{$att};
                 my $rsvp = defined($$h{'rsvp'}) ? $$h{'rsvp'} : 'undefined';
                 my $role = defined($$h{'role'}) ? $$h{'role'} : 'undefined';
-                push(@errors, "$att: no matching event found; rsvp=$rsvp, role=$role");
+                my $error = "no matching event found; rsvp=$rsvp, role=$role";
+                push(@{$notification_hash->{'errors'}->{$att}}, $error);
+                push(@errors, "$att: $error");
             } else {
                 foreach my $instance (@{$item->{'inst'}}) {
                     my $attInst;
@@ -477,21 +533,33 @@ sub main() {
                             && defined $instance->{'ridZ'}) {
                         $attInst = getInstanceByInstId($attItem, $instance->{'ridZ'});
                     } else {
-                        $attInst = getInstanceByStartTime($attItem, $instance->{'s'});
+                        my $i;
+                        my @instances = @{$item->{'inst'}};
+                        for ($i = 0; $i < @instances; $i++) {
+                            last if ($instances[$i] == $instance);
+                        }
+                        # fall back to index if not found by time
+                        $attInst = getInstanceByStartTime($attItem, $instance->{'s'}, $i);
                         $instance->{'ridZ'} = "N/A";
                     }
                     my $iTime = scalar localtime($instance->{'s'} / 1000);
                     if (!defined($attInst)) {
-                        push(@errors, "$att:$$attItem{'id'} no instance found for ridZ=$$instance{'ridZ'}, time=$iTime");
+                        my $error = "$$attItem{'id'} no instance found for ridZ=$$instance{'ridZ'}, time=$iTime";
+                        push(@{$notification_hash->{'errors'}->{$att}}, $error);
+                        push(@errors, "$att:$error");
                     }
                     elsif ($attInst->{'s'} != $instance->{'s'}) {
                         my $aTime = scalar localtime($attInst->{'s'} / 1000);
-                        push(@errors, "$att:$$attItem{'id'} time mismatch: $iTime != $aTime");
+                        my $error = "$$attItem{'id'} time mismatch: $iTime != $aTime";
+                        push(@{$notification_hash->{'errors'}->{$att}}, $error);
+                        push(@errors, "$att:$error");
                     }
                 }
             }
+            if (@{$notification_hash->{'errors'}->{$att}} == 0) {
+                delete $notification_hash->{'errors'}->{$att};
+            }
         }
-        my $desc = " * $$item{'name'}: id=$itemId, uid=$$item{'uid'}, organizer=$or";
         my @times = ();
         foreach my $inst (@{$item->{'inst'}}) {
             push(@times, scalar localtime($inst->{'s'} / 1000));
@@ -515,8 +583,87 @@ sub main() {
             }
         }
     }
+    sendNotifications(\@errors_for_notification);
 }
 
+sub sendNotifications($) {
+    return if ($notifications eq 'none');
+    my $errors = shift @_;
+    my $smtp_host = getSmtpServer();
+    my $mail_from = "zimbra\@localhost";
+
+    my $messages = {};
+    foreach my $error (@{$errors}) {
+        if (keys %{$error->{'errors'}} > 0) {
+            if ($notifications eq 'organizer' || $notifications eq 'all') {
+                my $message = $error->{'label'} . "\n";
+                foreach my $att (keys %{$error->{'errors'}}) {
+                    foreach my $err (@{$error->{'errors'}->{$att}}) {
+                        $message .= "   $att: $err\n";
+                    }
+                }
+                addErrorMessage($messages, $error->{'organizer'}, $message);
+            }
+            if ($notifications eq 'attendee'  || $notifications eq 'all') {
+                foreach my $att (keys %{$error->{'errors'}}) {
+                    my $message = $error->{'label'} . "\n";
+                    foreach my $err (@{$error->{'errors'}->{$att}}) {
+                        $message .= "   $err\n";
+                    }
+                    addErrorMessage($messages, $att, $message);
+                }
+            }
+            if ($notifications eq 'user'      || $notifications eq 'all') {
+                my $message = $error->{'label'} . "\n";
+                if ($source_user eq $error->{'organizer'} ||
+                       $source_user =~ /$$error{'organizer'}\@/) {
+                    foreach my $att (keys %{$error->{'errors'}}) {
+                        foreach my $err (@{$error->{'errors'}->{$att}}) {
+                            $message .= "   $att:$err\n";
+                        }
+                    }
+                    addErrorMessage($messages, $source_user, $message);
+                } elsif (exists $error->{'errors'}->{$source_user}) {
+                    foreach my $err (@{$error->{'errors'}->{$source_user}}) {
+                        $message .= "   $err\n";
+                    }
+                    addErrorMessage($messages, $source_user, $message);
+                }
+            }
+        }
+    }
+    eval {
+        my $mailer = new Mail::Mailer("smtp", Server => $smtp_host);
+        foreach my $address (keys %{$messages}) {
+            print "Sending notification message to $address\n";
+            $mailer->open({
+                    From => $mail_from, To => $address,
+                    Subject => "ZIMBRA: Calendar Consistency Check Results" });
+            print $mailer $messages->{$address};
+            $mailer->close();
+        }
+    };
+    if ($@) {
+        print "Unable to send notification message(s): $@\n";
+    }
+}
+
+sub addErrorMessage($$$) {
+    my ($hashref, $user, $message) = @_;
+
+    if (!exists $hashref->{$user}) {
+        $hashref->{$user} = <<'EOF';
+Hello, this is an automated message from the Zimbra Server.  An
+administrator has run a calendar check inconsistencies have been found
+in your events.  These inconsistencies are described below; not all
+consistencies may be detailed, depending on the way the calendar
+checker was run.
+
+EOF
+    }
+
+    $hashref->{$user} .= "\n$message\n";
+}
 
 main();
 
