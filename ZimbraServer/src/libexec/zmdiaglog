@@ -222,6 +222,7 @@ logmsg "Saving server configuration\n";
 exec_with_timeout("su - zimbra -c '$ZMPROV gs $ZMHOSTNAME' > zmprov-gs.txt 2>&1", $timeout);
 exec_with_timeout("su - zimbra -c '$ZMPROV gacf' > zmprov-gacf.txt 2>&1", $timeout);
 system("cp /opt/zimbra/conf/localconfig.xml $destination/");
+system("cp /opt/zimbra/conf/my.cnf $destination/");
 
 for (my $i = 1; $i <= 10; $i++) {
     logmsg "Collecting thread stats/stacks: $i of 10\n";
