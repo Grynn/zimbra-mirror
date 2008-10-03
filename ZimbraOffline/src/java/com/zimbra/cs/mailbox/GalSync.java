@@ -141,7 +141,7 @@ public class GalSync {
                     if (fullSync || ((ctime = map.get("createTimeStamp")) != null &&
                         (mtime = map.get("modifyTimeStamp")) != null && mtime.equals(ctime))) {
                         galMbox.createContact(context, contact, Mailbox.ID_FOLDER_CONTACTS, null);
-                        OfflineLog.offline.debug("Offline GAL contact crearted: dn=" + dn);
+                        OfflineLog.offline.debug("Offline GAL contact created: dn=" + dn);
                     } else {
                         byte[] types = new byte[1];
                         types[0] = MailItem.TYPE_CONTACT;
@@ -152,7 +152,7 @@ public class GalSync {
                             OfflineLog.offline.debug("Offline GAL contact modified: dn=" + dn);
                         } else {
                             galMbox.createContact(context, contact, Mailbox.ID_FOLDER_CONTACTS, null);
-                            OfflineLog.offline.debug("Offline GAL contact crearted: dn=" + dn);
+                            OfflineLog.offline.debug("Offline GAL contact created: dn=" + dn);
                         }
                     }
                 } catch (ServiceException e) {
