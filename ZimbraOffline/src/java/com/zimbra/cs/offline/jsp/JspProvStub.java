@@ -109,8 +109,10 @@ public class JspProvStub {
     	Account account = prov.get(AccountBy.id, accountId);
     	DataSource.Type dsType = DataSource.Type.caldav;
     	String name = account.getAttr(OfflineConstants.A_offlineDataSourceName) + OfflineConstants.CALDAV_DS;
+    	dsAttrs.put(Provisioning.A_zimbraDataSourceName, name);
     	dsAttrs.put(OfflineConstants.A_offlineDataSourceName, name);
     	dsAttrs.put(OfflineConstants.A_offlineDataSourceType, dsType.toString());
+    	dsAttrs.put(Provisioning.A_zimbraDataSourceImportClassName, DataSource.getDefaultImportClass(dsType));
     	prov.createDataSource(account, dsType, name, dsAttrs);
 	}
     

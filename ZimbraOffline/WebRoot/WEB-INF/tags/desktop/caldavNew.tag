@@ -27,15 +27,16 @@ function OnSwitch(app) {
 function OnClickToggle(arg) {
     if (arg) {
         zd.disable("email");
-        zd.disable("password");
     } else {
         zd.enable("email");
-        zd.enable("password");
     }
 }
 
 function OnSubmit() {
     beforeSubmit();
+    if (!${bean.loaded}) {
+        document.caldavNew.verb.value = "add";
+    }
     caldavNew.submit();
 }
 
@@ -80,20 +81,21 @@ function disableButtons() {
 
 <form name="caldavNew" action="${uri}" method="POST">
 
-    <input type="hidden" name="verb" value="add">
+    <input type="hidden" name="accountId" value="${bean.accountId}">
+    <input type="hidden" name="verb" value="mod">
 
     <table class="ZWizardForm" style='width:90%'>
         <tr id='descriptionRow'>
-            <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Description'/>:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}">
+            <td class="${zdf:isValid(bean, 'name') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Description'/>:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="name" name="name" value="${bean.name}">
                         <span id='service_hint' class='ZHint'><fmt:message key='DescHint'/></span></td>
         </tr>
         <tr><td class="ZFieldLabel"><fmt:message key='FullName'/>:</td>
             <td><input style='width:200px' class="ZField" type="text" id="displayName" name="displayName" value="${bean.displayName}"></td>
         </tr>
         <tr id='urlRow'>
-            <td class="${zdf:isValid(bean, 'url') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='CalDavUrl'/>:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="url" name="url" value="${bean.principalUrl}">
+            <td class="${zdf:isValid(bean, 'principalUrl') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='CalDavUrl'/>:</td>
+            <td><input style='width:200px' class="ZField" type="text" id="principalUrl" name="principalUrl" value="${bean.principalUrl}">
             </td>
         </tr>
         <tr id='emailRow'>
@@ -102,7 +104,7 @@ function disableButtons() {
         </tr>
         <tr id='passwordRow'>
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Password'/>:</td>
-            <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}" ${bean.useLoginFromEmail ? 'disabled' : ''}></td>
+            <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}" }></td>
         </tr>
         
         <tr id='useLoginFromEmailCheckboxRow'>
