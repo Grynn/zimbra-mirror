@@ -19,7 +19,7 @@ build_platform=`sh ${p4_root}/ZimbraBuild/rpmconf/Build/get_plat_tag.sh`
 
 heimdal_version=1.2.1
 openssl_version=0.9.8i
-curl_version=7.18.2
+curl_version=7.19.0
 xml2_version=2.6.32
 
 openssl_lib_dir=/opt/zimbra/openssl-${openssl_version}/lib
