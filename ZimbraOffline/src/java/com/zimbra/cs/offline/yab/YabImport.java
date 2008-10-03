@@ -42,6 +42,7 @@ public class YabImport implements DataSource.DataImport {
 
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
+        ds.getMailbox().beginTrackingSync();
         session.sync();
     }
 

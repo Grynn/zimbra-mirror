@@ -1788,6 +1788,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     		sources = new ArrayList<DataSource>(names.size());
     		for (String name : names)
                 sources.add(get(account, DataSourceBy.name, name));
+            sort(sources);
     		cachedDataSources.put(account.getId(), sources);
     	}
     	for (DataSource ds : sources)
@@ -1795,6 +1796,25 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	return sources;
     }
 
+    private static void sort(List<DataSource> sources) {
+        Collections.sort(sources, new Comparator<DataSource>() {
+            public int compare(DataSource ds1, DataSource ds2) {
+                return syncOrder(ds1) - syncOrder(ds2);
+            }
+        });
+    }
+
+    private static int syncOrder(DataSource ds) {
+        switch (ds.getType()) {
+        case yab:
+            return 1;
+        case caldav:
+            return 2;
+        default:
+            return 3;
+        }
+    }
+    
     @Override
     public synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) throws ServiceException {
         modifyDataSource(account, dataSourceId, attrs, isSyncAccount(account));
