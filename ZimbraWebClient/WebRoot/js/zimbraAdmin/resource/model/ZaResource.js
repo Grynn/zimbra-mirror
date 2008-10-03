@@ -94,6 +94,7 @@ ZaResource.SCHEDULE_POLICY_MANUAL = "acceptDeclineManual";
 ZaResource.A2_schedulePolicy = "schedulePolicy";
 ZaResource.A2_autodisplayname = "autodisplayname";
 ZaResource.A2_autoMailServer = "automailserver";
+ZaResource.A2_autoCos = "autoCos";
 ZaResource.A2_autoLocationName = "autolocationname";
 ZaResource.A2_myCOS = "mycos";
 
@@ -211,6 +212,11 @@ function (tmpObj, resource, app) {
 	//set mail host	
 	if(tmpObj[ZaResource.A2_autoMailServer] == "TRUE") {
 		tmpObj.attrs[ZaResource.A_mailHost] = null;
+	}
+	
+	//check if we need to set the cosId
+	if (tmpObj[ZaResource.A2_autoCos] == "TRUE" ) {
+		tmpObj.attrs[ZaResource.A_COSId] = null ;
 	}
 	
 	//set scheduling policy
@@ -589,6 +595,7 @@ ZaResource.myXModel = {
 		
 		{id:ZaResource.A2_autodisplayname, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaResource.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaResource.A2_autoCos, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaResource.A2_autoLocationName, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES}
 		
 	]

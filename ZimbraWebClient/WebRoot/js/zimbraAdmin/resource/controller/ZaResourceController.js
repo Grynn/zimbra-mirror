@@ -247,6 +247,11 @@ function () {
 			
 	var changeDetails = new Object();
 	
+	//set the cosId to "" if the autoCos is enabled.
+	if (tmpObj[ZaResource.A2_autoCos] == "TRUE") {
+		tmpObj.attrs[ZaResource.A_COSId] = "" ;
+	}
+	
 	//check if need to rename
 	if(newName) {
 		changeDetails["newName"] = newName;
