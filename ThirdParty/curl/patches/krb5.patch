@@ -1,0 +1,29 @@
+--- curl-7.19.0/configure.orig	2008-10-03 12:14:54.000000000 -0700
++++ curl-7.19.0/configure	2008-10-03 12:15:12.000000000 -0700
+@@ -29070,7 +29070,7 @@
+ 
+ 
+ 
+-for ac_header in gssapi/gssapi.h gssapi/gssapi_generic.h gssapi/gssapi_krb5.h
++for ac_header in gssapi/gssapi.h gssapi/gssapi_krb5.h
+ do
+ as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+@@ -29368,7 +29368,7 @@
+       else
+ 
+ cat >>confdefs.h <<\_ACEOF
+-#define HAVE_GSSMIT 1
++#define HAVE_GSSHEIMDAL 1
+ _ACEOF
+ 
+                 { echo "$as_me:$LINENO: checking if gssapi headers declare GSS_C_NT_HOSTBASED_SERVICE" >&5
+@@ -29430,7 +29430,7 @@
+ echo "${ECHO_T}no" >&6; }
+ 
+ cat >>confdefs.h <<\_ACEOF
+-#define HAVE_OLD_GSSMIT 1
++#undef HAVE_OLD_GSSMIT
+ _ACEOF
+ 
+ 
