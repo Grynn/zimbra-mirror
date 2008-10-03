@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.20";
+my $version = "1.21";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -72,6 +72,9 @@ my $oworginalfile=0;
 my $nonStandardDTSTART=0;
 # for standard DTSTART(29743)
 my $StandardDTSTART=1;
+#If no pattern found,create standalone recurrences by default.
+#else create YEARLY exceptions series
+my $YearlyException =0;
 
 if ($#ARGV<0)
 {
@@ -115,7 +118,7 @@ while ($ARGV[0] =~ /^-(.+)/)
   }
   elsif ($switch eq "tz")
   {
-    $useTZcomponent = shift;
+    $useTZcomponent = 1;
   }
   elsif ($switch eq "logpath")
   {
@@ -129,6 +132,10 @@ while ($ARGV[0] =~ /^-(.+)/)
   {
     $StandardDTSTART=1;
   }
+  elsif (lc($switch) eq lc("YearlyException"))
+  {
+    $YearlyException =1;
+  }
   else
   {
     print "\nNo such option '$switch'.\n\n";
@@ -139,8 +146,10 @@ while ($ARGV[0] =~ /^-(.+)/)
 #call functions
 &Initialize (@ARGV);
 my %rhlist= &processfile;
-#&print_hlist(%rhlist);
 &UnInitialize;
+#set task status to compelete for 100% complete tasks.
+&sed_settaskstatus;
+&end_message;
 
 #help menu
 sub help
@@ -148,13 +157,29 @@ sub help
   print "Usage: icalmig -f <ics file> [options]\n";
   print "[options]\n";
   print "-h           (Shows help)  \n";
-  print "-v           (Shows Version)\n";
+  print "-v           (Shows Version)\n\n";
+  print "-tz          (0-OFF 1-ON ) (DEFAULT: 0)\n";
+  print "       - Add timezone component to ics file.
+         Date/Recurrence information would be
+         modified to add the TZ information.
+         Only EST5DT TZ support for now.\n\n";
+  print "-nonStandardDTSTART        (Default: 0)\n";
+  print "       - If master event has DTSTART later than
+        one of the RDATEs, use this option to
+        use the least RDATE as event start date.\n\n";
+  print "-YearlyException           (Default: 0)\n";
+  print "       - To create YEARLY exception series
+        for which no pattern can be found else standalone
+        event list be created.\n\n";
+  print "-logpath <path>            (Default /opt/zimbra/log)\n";
+  print "       - Specify altrenate logfile path.\n";
+  
   print "-delrdate    (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-exceptions  (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-patternrule (0-OFF 1-ON ) (DEFAULT: 1)\n";
-  print "-tz          (0-OFF 1-ON ) (DEFAULT: 0)\n";
-  print "-nonStandardDTSTART        (Default: 0)\n";
-  print "-logpath <path>            (Default /opt/zimbra/log)\n";
+  print "       - Above given options are for debug
+        testing. Dont use until you know what are
+        expecting.\n\n";
   print "\n";
   
 }
@@ -208,6 +233,10 @@ sub UnInitialize
     rename($icalfile, $icalfile.$bakfileext);
     rename($outfile, $icalfile);
   }
+}
+
+sub end_message
+{
   &log_message("\n");
   &log_message("*************************************************************");
   &log_message("NOTE:Output file path:$outfile.");
@@ -696,6 +725,8 @@ sub processfile
 
 
       #Create master event
+      my $mUID=0;
+      my $IsExceptionSeries=0;
       if ($masterrec->{'MASTER_VEVENT'})
       {
         &log_message("Creating master event. UID:$masterrec->{'UID'}");
@@ -1026,6 +1057,7 @@ sub processfile
                   &log_message("New RRULE: $wkrrule");
                   $RPrulecreated=1;
                   &log_message("WEEKLY RRULE CREATED.");
+                  #clear limited exception list
                   %ltd_exlist=();
                   for(my $wectr=0;$wectr<$#wkltd_exlist+1;$wectr++)
                   {
@@ -1036,7 +1068,19 @@ sub processfile
                   $checkforltdex=1;
                   $isdescchanged=1;#To push into limited exception creation
                 }
-
+                
+                #if not rrule created, check for monthly pattern
+                if(!$RPrulecreated)
+                {
+                  my $mthlyrrule=get_monthly_rrule(\%srtd_newrecarr);
+                  if ($mthlyrrule ne -1)
+                  {
+                    print_outfile("$mthlyrrule");
+                    &log_message("New RRULE: $mthlyrrule");
+                    $RPrulecreated=1;
+                    &log_message("MONTHLY RRULE CREATED.");
+                  }
+                }
                 if (!$RPrulecreated)
                 {
 	                #check for pattern
@@ -1172,12 +1216,25 @@ sub processfile
                 $delta_days=get_date_diff($fdt, $ldt)+1;
                 my $reccnt=keys(%$rdarray)+1;
                 my $newrrule= "RRULE:FREQ=YEARLY;COUNT=$reccnt;INTERVAL=1";
-                print_outfile("$newrrule");
-                &log_message("New RRULE: $newrrule.");
+                #Add new RRULE only, if yearlyException mode is true
+                #otherwise let it go in same way as for yealry but without RRULE
+                #to create as standalone occurrences
+                if($YearlyException)
+                {
+                  print_outfile("$newrrule");
+                  &log_message("New RRULE: $newrrule.");
+                }
                 $checkforltdex=0;
+                $IsExceptionSeries=1;
               }
             }#end if (!$isrruledone)
             $isrruledone=1;
+          }#end if ($str =~/^RDATE/)
+          elsif ($str =~/^UID/)
+          {
+            #store UID as it will be used after $IsExceptionSeries can be determined
+            #in DTSTART part
+            $mUID = $str;
           }
           elsif ($str =~/^DTSTART/)
           {
@@ -1194,6 +1251,24 @@ sub processfile
             $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
             print_outfile("$tzdtst");
             &log_message("New DTSTART: $tzdtst");
+            
+            #if not yearlyException mode, create newUID for master occurrence
+            #but exception series found
+            if((!$YearlyException)&&($IsExceptionSeries))
+            {
+              #create new UID to appear as standalone event
+              my $idtstart = get_datepart_from_icsdt($tzdtst);
+              #new UID will be created
+              my $newUID= trim($mUID)."-".$idtstart;
+              &log_message("newUID: $newUID");
+              print_outfile("$newUID");
+            }
+            else
+            {
+              #for log purpose only
+              &log_message("$mUID");
+              print_outfile("$mUID");
+            }
           }
           elsif ($str =~/^DTEND/)
           {
@@ -1351,7 +1426,7 @@ sub processfile
         $mstrdtstart = substr($mstrdtstart,$ridx+1);
         my $ndtstart=$mstrdtstart;
         my $syear= substr($ndtstart,0,4);
-
+        my $iUID=0;
         foreach my $srdtkey (sort keys %srtd_newrecarr)
         {
           my $occurrec=$srtd_newrecarr{$srdtkey}[0];
@@ -1375,8 +1450,12 @@ sub processfile
                 $ndtstart= $syear.substr($ndtstart,4);
                 #$ndtstart= get_date_by_days($ndtstart,$dyinyr); #for yearly increment
                 my $rndtstart= "RECURRENCE-ID$TZTag$recidfmtstr$ndtstart";
-                print_outfile("$rndtstart");
-                &log_message("New RECURRENCE-$rndtstart");
+                #if yearlyException mode
+                if(($YearlyException)&&($IsExceptionSeries))
+                {
+                  print_outfile("$rndtstart");
+                  &log_message("New RECURRENCE-$rndtstart");
+                }
                 $recctr++;
               
                 #start date
@@ -1390,6 +1469,16 @@ sub processfile
                 $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
                 print_outfile("$tzdtst");
                 &log_message("New DTSATRT:$tzdtst");
+
+                if((!$YearlyException)&&($IsExceptionSeries))
+                {
+                  #create new UID to appear as standalone event
+                  my $idtstart = get_datepart_from_icsdt($tzdtst);
+                  #new UID will be created
+                  my $newUID= trim($iUID)."-".$idtstart;
+                  &log_message("newUID: $newUID");
+                  print_outfile("$newUID");
+                }
               }
               elsif ($str =~/^DTEND/)
               {
@@ -1413,9 +1502,18 @@ sub processfile
               }
               elsif ($str =~/^UID/)
               {
-                #for log purpose only
-                &log_message("$str");
-                print_outfile("$str");
+                #For yearlyException mode
+                if(($YearlyException)||(!$IsExceptionSeries))
+                {
+                  #for log purpose only
+                  &log_message("$str");
+                  print_outfile("$str");
+                }
+                else
+                {
+                  #store UID to process it in DTSTART section to create newUID from it.
+                  $iUID = $str;
+                }
               }
               else
               {
@@ -1449,6 +1547,287 @@ sub processfile
   return %hlist;
 }
 
+sub sed_settaskstatus
+{
+  &log_message("using sed to set 100% compelete task's status to complete");
+  my $sedcmd = "sed -i '/PERCENT-COMPLETE:100/ a STATUS:COMPLETED' $icalfile$newfileext";
+  &log_message("sed command: $sedcmd");
+  system $sedcmd;
+}
+
+sub get_monthly_rrule
+{
+  my $srtd_darray = shift;
+  my $frstround=1;
+  my $prvcalcdt;
+  my $mthlyctr=0;
+  my $tot_ctr=0;
+  #check for recurrence by fix dates
+  foreach my $rdate (sort keys %$srtd_darray)
+  {
+    $rdate =get_datepart_from_icsdt($rdate);
+    my $month=get_month($rdate);
+    my $year = get_year($rdate);
+    my $days = Days_in_Month($year,$month);
+    #Get next month date by adding month days
+    my $nxtmthdate=get_date_by_days($rdate,$days);
+    #check if calculated next month date is equal to $srtd_darray date
+    if (!$frstround)
+    {
+      if ($prvcalcdt eq $rdate)
+      {
+        $mthlyctr++;
+      }
+    }
+    else
+    {
+      $frstround=0;
+    }
+    $prvcalcdt=$nxtmthdate;
+    $tot_ctr++;
+  }
+  if($tot_ctr eq ($mthlyctr+1))
+  {
+    $mthlyctr++;
+    my $mthlyRrule="RRULE:FREQ=MONTHLY;INTERVAL=1;COUNT=$mthlyctr";
+    return $mthlyRrule;
+  }
+  else #check for recurrence by fix days e.g. first monday, 3rd saturday of month etc
+  {
+    my $continue = 1;
+    my %yrmonthdates =();
+    my %mnthwkday=();
+    my %rdatewkday=();
+    my $prvyr=0;
+    my $prvmm=0;
+    my $stdate=0; my $stmnweek=0;
+    $mthlyctr=0;
+    
+    #1. create rdates hash
+    foreach my $rdate (sort keys %$srtd_darray)
+    {
+      $rdate =get_datepart_from_icsdt($rdate);
+      $rdate =get_date($rdate);
+      #store start date and start month week
+      if($stdate ==0)
+      {
+        $stdate= get_date_part($rdate);
+        my $ty=substr($rdate,0,4);
+        my $tm=substr($rdate,4,2);
+        my $td=substr($rdate,6,2);
+        $stmnweek= week_of_month_nonISO($ty,$tm,$td);
+      }
+      #if same date already exists, its too complex to find pattern, breakout
+      if (exists $yrmonthdates{$rdate})
+      {
+        $continue=0;
+      }
+      #create a hash based on rdates.
+      push @{$yrmonthdates{$rdate}},$rdate;
+      $mthlyctr++;
+    }
+
+    #2.a) check for month continuity and create weeknum hash on base of month.year
+    #  b) Check for weeknums
+    my %mthwknumlist=();
+    my %mnth_wknum_wkdayhash=();
+    my %wknum_wkdayhash=();
+    foreach my $yrmonthdate (sort keys %yrmonthdates)
+    {
+      my $yr= substr($yrmonthdate,0,4);
+      my $mm= substr($yrmonthdate,4,2);
+      my $dt= substr($yrmonthdate,6,2);
+
+      #for year end checking
+      if ($mm < $prvmm)
+      {
+        #prvmonth must be 12 else continuity is broken
+        if($prvmm != 12)
+        {
+          $continue =0;
+        }
+        $prvyr = $prvyr+1;
+        $prvmm = 1;
+      }
+      else
+      {
+        $prvyr = $yr;
+        $prvmm = $mm;
+      }
+      
+      if (($prvyr ne 0)&&($continue))
+      {
+        #check for month frequency. Event should occur every month. if month is not continous break out.
+        if ( (($mm != ($prvmm)) && ($mm != ($prvmm+1)))||($yr != $prvyr))
+        {
+          $continue =0;
+        }
+        else
+        {
+          my $wkday = &get_weekday($yrmonthdate);
+          #store year.month.dt and its weekday
+          push @{$mnthwkday{$yr.$mm}},$wkday;
+          push @{$rdatewkday{$yr.$mm.$dt}},$wkday;
+          #calculate weeknumber for occurrences
+          my $wkofmonth=week_of_month_nonISO($yr,$mm,$dt);
+          my $firstwkdayofmonth=Day_of_Week($yr,$mm,1);
+          my $curwkdayofmonth = Day_of_Week($yr,$mm,$dt);
+          my $wknum;
+          if($firstwkdayofmonth <= $curwkdayofmonth)
+          {
+            $wknum = $wkofmonth;
+          }
+          else
+          {
+            $wknum = $wkofmonth-1;
+          }
+
+          #create weeknumber array for each month
+          push @{$mthwknumlist{$yr.$mm}},$wknum;
+
+          #create yr.month =>{wknum=>wkday} hash
+          #generate relative weeknum
+          #if 1 weeknum (key) has more than 1 weekday than generate weeknum
+          #by multiplying 7. It will be used as modulo(%) of 7 to get real value
+          my $wknumctr=0;
+          while (exists $mnth_wknum_wkdayhash{$yr.$mm}{(7*$wknumctr)+$wknum})
+          {
+            $wknumctr++;
+          }
+          $mnth_wknum_wkdayhash{$yr.$mm}{(7*$wknumctr)+$wknum}= $wkday;
+          &log_message("year-mm: $yr,$mm Weeknum: $wknum");
+        }#end else
+      }#end if ($prvyr...)
+    }#end foreach my $yrmonthdate
+
+    my $fwkn_wkd_hashref;
+    if($continue)
+    {
+      $continue=0;
+      my $chkctr=0;
+      my $swkn_wkd_hashref;
+      my $firstyrmth; my $secyrmth;
+      my $foundsecref=0;
+      my $fleastwkn=-1;
+      foreach my $yrmth (sort keys %mnth_wknum_wkdayhash)
+      {
+        print "$yrmth\n";
+        my $iwkn_kkdhash =$mnth_wknum_wkdayhash{$yrmth};
+        foreach my $wkn (sort keys %$iwkn_kkdhash)
+        {
+          print "$wkn  $iwkn_kkdhash->{$wkn}\n";
+          #first yrmonth info
+          if ($chkctr == 0)
+          {
+            $firstyrmth=$yrmth;
+            $fwkn_wkd_hashref =$mnth_wknum_wkdayhash{$firstyrmth};
+            if ($fleastwkn==-1)
+            {
+              $fleastwkn = $wkn;
+            }
+          }
+          #2nd yrmonth info
+          if ($chkctr == 1)
+          {
+            $continue=1;
+            my $use2ndref=0;
+            $secyrmth=$yrmth;
+            $swkn_wkd_hashref=$mnth_wknum_wkdayhash{$secyrmth};
+            $foundsecref=1;
+
+            #check if all first month weekdays and weeknum exists in 2nd ref
+            #if 2nd ref's weeknum is less than the least weeknum of first
+            #and rest are available, use 2nd as ref for further comparision
+            #if non-existing weeknum is less the first weeknum of first number,
+            #dont make it decisive. if other weeknums found, 2nd hash ref will become
+            #referential for further comparision
+            my $lwkcnt=0;
+            foreach my $wkn (keys %$swkn_wkd_hashref)
+            {
+              if ((!exists $fwkn_wkd_hashref->{$wkn})&&(($wkn % 7) > $fleastwkn))
+              {
+                $continue =0;
+              }
+              if (exists $fwkn_wkd_hashref->{$wkn})
+              {
+                if ($fwkn_wkd_hashref->{$wkn} !=$swkn_wkd_hashref->{$wkn})
+                {
+                  $continue =0;
+                }
+              }
+              if(!(($wkn % 7) > $fleastwkn)&&(!exists $fwkn_wkd_hashref->{$wkn}))
+              {
+                $use2ndref=1;
+                $lwkcnt++;
+              }
+            }
+            my $fcnt = keys %$fwkn_wkd_hashref;
+            my $scnt = keys %$swkn_wkd_hashref;
+            #check for weeknum/day count, scnt = fcnt+lwkcnt
+            if ($scnt != $fcnt+$lwkcnt)
+            {
+              $continue =0;
+            }
+            
+            #change the first ref
+            if (($use2ndref)&&($continue))
+            {
+              $fwkn_wkd_hashref = $swkn_wkd_hashref;
+            }
+          }
+
+          #for rest of months
+          if ($chkctr > 1)
+          {
+            foreach my $wkn (keys %$iwkn_kkdhash)
+            {
+              if (!exists $fwkn_wkd_hashref->{$wkn})
+              {
+                $continue =0;
+              }
+            }
+            #elements should be same in count. last one can be less as it may
+            #finish early
+            my $fcount = keys %$fwkn_wkd_hashref;
+            my $rcount= keys %$iwkn_kkdhash;
+            my $totcount = keys %mnth_wknum_wkdayhash;
+            if (($fcount != $rcount)&&($chkctr != ($totcount-1)))
+            {
+              $continue =0;
+            }
+          }#end if ($chkctr > 1)
+        }
+        $chkctr++;
+      }
+    }#end if continue
+
+    if (!$continue)
+    {
+      return -1;
+    }
+    else
+    {
+      my $byday;
+      my $oneadded=0;
+      foreach my $wkn (sort keys %$fwkn_wkd_hashref)
+      {
+        my $twd= $fwkn_wkd_hashref->{$wkn};
+        if ($oneadded)
+        {
+          $byday=$byday.",".($wkn % 7).get_weekday_str($twd);
+        }
+        else
+        {
+          $byday=($wkn % 7).get_weekday_str($twd);
+        }
+        $oneadded++;
+      }
+      my $mthlyRrule="RRULE:FREQ=MONTHLY;INTERVAL=1;COUNT=$mthlyctr;BYDAY=".$byday;
+      return $mthlyRrule;
+    }
+  }
+}
+
 sub print_wdarrlist
 {
   my $hashlist= shift;
@@ -1461,6 +1840,61 @@ sub print_wdarrlist
       &log_message("$wdkey: $wdarr[$i]");
     }
   }
+}
+
+sub week_of_month_nonISO
+{
+  my $yr= shift;
+  my $mm= shift;
+  my $dd = shift;
+  my $firstdayofmonthnr=Day_of_Week($yr,$mm,1);
+  my $weekofmonth = int(($dd + $firstdayofmonthnr - 2) / 7);
+
+  $weekofmonth = $weekofmonth+ 1;
+
+  return $weekofmonth;
+}
+
+sub week_of_month_ISO
+{
+  my $yr= shift;
+  my $mm= shift;
+  my $dd = shift;
+  my $firstdayofmonthnr=Day_of_Week($yr,$mm,1);
+  my $weekofmonth = int(($dd + $firstdayofmonthnr - 2) / 7);
+  #make it ISO 8601 compatible where start week which contains Thursday,
+  #is considered the first week of month
+  if ($firstdayofmonthnr > 4)  #4 => THURSDAY
+  {
+     $weekofmonth = $weekofmonth;
+  }
+  else
+  {
+    $weekofmonth = $weekofmonth+ 1;
+  }
+  return $weekofmonth;
+}
+
+# Takes as arguments:
+#  - The date
+#  - The day that we want to call the start of the week (1 is Monday, 7
+#    Sunday) (optional)
+sub get_week_num {
+  my $dt            = shift;
+  my $start_of_week = shift || 1;
+
+  # Work out what day the first of the month falls on
+  my $first = $dt->clone();
+  $first->set(day => 1);
+  my $wday  = $first->day_of_week();
+
+  # And adjust the day to the start of the week
+  $wday = ($wday - $start_of_week + 7) % 7;
+
+  # Then do the calculation to work out the week
+  my $mday  = $dt->day_of_month_0();
+
+  return int ( ($mday + $wday) / 7 ) + 1;
 }
 
 sub get_byday
@@ -1699,6 +2133,7 @@ sub IsWeekendDay
   }
 }
 
+#get by weekday number corresponding string representation
 sub get_str_weekday
 {
   my $stwkday = shift;
@@ -1843,7 +2278,6 @@ sub get_weekday
   my $dd1= substr($dt,6,2);
   my $dow=Day_of_Week($yr1,$mm1,$dd1);
   my $tdow = Day_of_Week_to_Text($dow);
-  #log_message("Weekday: $dow - $tdow");
   return $dow;
 }
 
@@ -1894,6 +2328,34 @@ sub get_time
   return $tm;
 }
 
+sub get_date_part
+{
+  my $dt=shift;
+  $dt = get_date($dt);
+  $dt = substr($dt,6,2);
+  return $dt;
+
+}
+
+#Input format 20070302T153000Z, 20070406
+#returns month
+sub get_month
+{
+  my $dt=shift;
+  $dt = get_date($dt);
+  my $mn= substr($dt,4,2);
+  return $mn;
+}
+
+#Input format 20070302T153000Z, 20070406
+#returns year
+sub get_year
+{
+  my $dt=shift;
+  $dt = get_date($dt);
+  my $yr= substr($dt,0,4);
+  return $yr;
+}
 
 sub print_outfile
 {
