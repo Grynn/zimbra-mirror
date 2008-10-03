@@ -12,19 +12,19 @@
 <script type="text/javascript">
 <!--
 function InitScreen() {
-    zd.hide("imapSettingsRow");
+    zd.hide("syncSettingsRow");
     zd.hide("popSettingsRow");
 
 	<c:choose>
 	    <c:when test="${bean.pop}" >
 	        zd.show("popSettingsRow");
 	    </c:when>
-	    <c:when test="${bean.imap}">
-	        zd.show("imapSettingsRow");
+	    <c:when test="${bean.imap || bean.live}">
+	        zd.show("syncSettingsRow");
 	    </c:when>
 	</c:choose>
 
-	<c:if test="${not bean.ymail}">
+	<c:if test="${not bean.live && not bean.ymail}">
     if (!zd.isChecked("smtpAuth")) {
         zd.hide("smtpAuthSettingsRow");
     }
@@ -63,7 +63,7 @@ function beforeSubmit() {
     disableButtons();
     zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
     zd.enable("password");
-    if (!${bean.ymail}) {
+    if (!${bean.live} && !${bean.ymail}) {
         zd.enable("smtpPassword");
     }
 }
@@ -95,6 +95,9 @@ function passOnEdit(id) {
     <div id='settings_hint' class='ZFloatInHead'></div>
     <span id='pageTitle'>
     <c:choose>
+    <c:when test="${bean.live}" >
+        <fmt:message key='LiveChgSetup'/>
+    </c:when>
     <c:when test="${bean.ymail}" >
         <fmt:message key='YMPChgSetup'/>
     </c:when>
@@ -141,11 +144,11 @@ function passOnEdit(id) {
         <input type="hidden" name="domain" value="${bean.domain}">
     </c:if>
     
-    <input type="hidden" name="protocol" value="${bean.pop ? 'pop3' : 'imap'}">
+    <input type="hidden" name="protocol" value="${bean.pop ? 'pop3' : bean.imap ? 'imap' : 'live'}">
     <input type="hidden" name="username" value="${bean.username}">
 
     <table class="ZWizardForm" style='width:90%'>
-        <c:if test="${not bean.ymail}">    
+        <c:if test="${not bean.live and not bean.ymail}">    
 	        <tr id='accountTypeRow'>
 	            <td class="ZFieldLabel">*<fmt:message key='AccountType'/>:</td>
 	            <td><input style='width:200px' class="ZField" type="text" id="protocol" value="${bean.pop ? 'POP3' : 'IMAP4'}" disabled></td>
@@ -179,7 +182,7 @@ function passOnEdit(id) {
         </tr>
         
         <c:choose>
-        <c:when test="${bean.ymail}">
+        <c:when test="${bean.live || bean.ymail}">
             <input type="hidden" name="host" value="${bean.host}">
             <input type="hidden" name="port" value="${bean.port}">
             <input type="hidden" name="ssl" value="${bean.ssl ? 'true' : 'false'}">
@@ -298,7 +301,7 @@ function passOnEdit(id) {
             </td>
         </tr>
         
-        <tr id='imapSettingsRow'>
+        <tr id='syncSettingsRow'>
             <td style='text-align:right'><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td>
             <td class="ZCheckboxLabel"><fmt:message key='SyncAllFolders'/></td>
         </tr>
