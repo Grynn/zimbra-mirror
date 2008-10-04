@@ -305,5 +305,12 @@ public class OfflineDataSource extends DataSource {
         }
         return super.getDataImport();
     }
+    
+    public boolean isEmail() {
+    	return getType() == Type.imap || getType() == Type.pop3;
+    }
+    public boolean needsSmtpAuth() {
+    	return isEmail() && !isLive() && !isYahoo();
+    }
 }
 

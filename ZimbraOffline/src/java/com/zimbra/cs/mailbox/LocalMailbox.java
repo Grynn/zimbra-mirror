@@ -341,18 +341,17 @@ public class LocalMailbox extends DesktopMailbox {
         // Force a full sync if INBOX has not yet been successfully imported
         boolean inboxSynced = ds.hasSyncState(Mailbox.ID_FOLDER_INBOX);
         boolean fullSync = isOnRequest || !inboxSynced;
-        if (fullSync) {
-            // Import all folders if full sync requested
-            DataSourceManager.importData(ds, null, true);
-        } else {
-            // Import only INBOX and SENT (if not save-to-sent) folders
-            List<Integer> folderIds = new ArrayList<Integer>(2);
-            folderIds.add(Mailbox.ID_FOLDER_INBOX);
-            if (!ds.isSaveToSent()) {
-                folderIds.add(Mailbox.ID_FOLDER_SENT);
-            }
-            DataSourceManager.importData(ds, folderIds, false);
-        }
+        List<Integer> folderIds = null;
+        OfflineDataSource ods = (OfflineDataSource)ds;
+        if (!fullSync && ods.isEmail()) {
+        	// Import only INBOX and SENT (if not save-to-sent) folders
+        	folderIds = new ArrayList<Integer>(2);
+        	folderIds.add(Mailbox.ID_FOLDER_INBOX);
+        	if (!ds.isSaveToSent()) {
+        		folderIds.add(Mailbox.ID_FOLDER_SENT);
+        	}
+        } 
+        DataSourceManager.importData(ds, folderIds, fullSync);
     }
 
     private boolean mSyncRunning;

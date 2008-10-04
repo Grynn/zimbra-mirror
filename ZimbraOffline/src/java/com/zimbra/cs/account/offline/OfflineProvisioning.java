@@ -519,7 +519,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         // No need to test Live/YMail SOAP access, since successful IMAP/POP3
         // connection implies that SOAP access will succeed with same auth
         // credentials.
-        if (!ds.isLive() && !ds.isYahoo()) {
+        if (ds.needsSmtpAuth()) {
             try {
                 SMTPTransport smtp = (SMTPTransport)(LocalJMSession.getSession(ds).getTransport());
                 smtp.connect();
@@ -1742,6 +1742,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (isDataSourceAccount(account))
 		    attrs.put(A_zimbraDataSourceEnabled, TRUE);
 
+        testDataSource(new OfflineDataSource(account, type, name, dsid, attrs));
+        
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
             if (attrs.containsKey(attr))

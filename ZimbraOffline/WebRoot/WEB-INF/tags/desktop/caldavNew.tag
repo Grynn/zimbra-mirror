@@ -82,6 +82,7 @@ function disableButtons() {
 <form name="caldavNew" action="${uri}" method="POST">
 
     <input type="hidden" name="accountId" value="${bean.accountId}">
+    <input type="hidden" name="loaded" value="${bean.loaded}">
     <input type="hidden" name="verb" value="mod">
 
     <table class="ZWizardForm" style='width:90%'>

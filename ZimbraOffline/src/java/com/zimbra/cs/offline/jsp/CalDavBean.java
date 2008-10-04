@@ -95,9 +95,7 @@ public class CalDavBean extends FormBean {
 	}
 	
 	public String getPassword() {
-		if (verb == null)
-			return "";
-		return JspConstants.MASKED_PASSWORD;
+		return "";
 	}
 	
 	public void setPassword(String password) {
@@ -321,7 +319,7 @@ public class CalDavBean extends FormBean {
 	        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 	        
 	        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
-            dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_CALENDAR);
+            dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_USER_ROOT);
 
 			try {
 				JspProvStub stub = JspProvStub.getInstance();
