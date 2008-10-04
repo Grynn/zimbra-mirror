@@ -199,7 +199,7 @@ public class GalSync {
             OfflineLog.offline.info("Offline GAL sync started: " + user);            
             syncGal(ombx, account, isOnRequest);                            
         } catch (Exception e) {
-            syncMan.processSyncException(target, "", e);
+            syncMan.processSyncException(target, "", e, account.isDebugTraceEnabled());
             success = false;
         } finally {
             syncMan.syncComplete(target);

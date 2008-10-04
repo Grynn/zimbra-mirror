@@ -386,23 +386,27 @@ public class OfflineSyncManager {
     	if (isAuthError(exception)) {
     		authFailed(account);
     	}
-    	processSyncException(account.getName(), ((OfflineAccount)account).getRemotePassword(), exception);
+    	processSyncException(account.getName(), ((OfflineAccount)account).getRemotePassword(), exception, ((OfflineAccount)account).isDebugTraceEnabled());
     }
     
     public void processSyncException(DataSource dataSource, Exception exception) throws ServiceException {
     	if (isAuthError(exception)) {
     		authFailed(dataSource);
     	}
-    	processSyncException(dataSource.getName(), dataSource.getDecryptedPassword(), exception);
+    	processSyncException(dataSource.getName(), dataSource.getDecryptedPassword(), exception, dataSource.isDebugTraceEnabled());
     }
     
-	public void processSyncException(String targetName, String password, Exception exception) {
+	public void processSyncException(String targetName, String password, Exception exception, boolean isDebugTraceOn) {
 		if (isConnectionDown(exception)) {
         	connectionDown(targetName);
         	OfflineLog.offline.info("sync connection down: " + targetName);
+        	if (isDebugTraceOn)
+        		OfflineLog.offline.debug("sync conneciton down: " + targetName, exception);
         } else if (isAuthError(exception)) {
         	authFailed(targetName, password);
     		OfflineLog.offline.warn("sync remote auth failure: " + targetName);
+        	if (isDebugTraceOn)
+        		OfflineLog.offline.debug("sync remote auth failure: " + targetName, exception);
         } else {
         	syncFailed(targetName, exception);
         	OfflineLog.offline.error("sync failure: " + targetName, exception);
