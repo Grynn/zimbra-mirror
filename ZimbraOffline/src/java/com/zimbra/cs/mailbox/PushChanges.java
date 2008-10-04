@@ -354,7 +354,7 @@ public class PushChanges {
      *  store.  As a side effect, removes the corresponding (now-deleted)
      *  drafts from the list of pending creates that need to be pushed to the
      *  server. */
-    private int sendPendingMessages(TypedIdList creates, boolean isOnRequest) throws ServiceException {
+    private int sendPendingMessages(boolean isOnRequest) throws ServiceException {
     	int totalSent = 0;
     	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         for (Iterator<Integer> iterator = OutboxTracker.iterator(ombx, isOnRequest ? 0L : ombx.getSyncFrequency());	iterator.hasNext();) {
@@ -444,8 +444,6 @@ public class PushChanges {
 
                 // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
                 sSendUIDs.remove(msgKey);
-                if (creates != null)
-                	creates.remove(MailItem.TYPE_MESSAGE, id);
             } catch (NoSuchItemException nsie) {
                 OutboxTracker.remove(ombx, id);
                 OfflineLog.offline.debug("push: ignoring deleted pending mail (" + id + ")");
@@ -455,7 +453,7 @@ public class PushChanges {
     }
     
     public static int sendPendingMessages(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {
-    	return new PushChanges(ombx).sendPendingMessages(ombx.getLocalChanges(sContext), isOnRequest);
+    	return new PushChanges(ombx).sendPendingMessages(isOnRequest);
     }
     
     /**
