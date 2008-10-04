@@ -610,7 +610,7 @@ DwtResizableWindow.__static_dlgMouseDown = function(ev) {
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev);
 	var htmlEl = DwtUiEvent.getTargetWithProp(mouseEv, "isDwtResizableWindow");
-	obj = DwtControl.findControl(htmlEl);
+	var obj = DwtControl.findControl(htmlEl);
 	obj.__dlgMouseDown(mouseEv);
 };
 
