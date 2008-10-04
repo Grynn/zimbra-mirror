@@ -86,7 +86,7 @@ public class ZMailboxBean {
     
     public ZFeatures getFeatures() throws ServiceException { return mMbox.getFeatures(); }
 
-    public boolean getHasTags() throws ServiceException { return !mMbox.getAllTags().isEmpty(); }
+    public boolean getHasTags() throws ServiceException { return mMbox.hasTags(); }
 
     public List<String> getAvailableSkins() throws ServiceException { return mMbox.getAvailableSkins(); }
 
