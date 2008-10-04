@@ -349,6 +349,8 @@ public class OfflineSyncManager {
 	
     public static boolean isConnectionDown(Exception exception) {
         if (exception instanceof ServiceException) {
+        	if (((ServiceException)exception).getCode().equals(ServiceException.RESOURCE_UNREACHABLE))
+        		return true;
         	Throwable cause = findCause(exception);
 	        if (cause instanceof java.net.UnknownHostException ||
 		            cause instanceof java.net.NoRouteToHostException ||
