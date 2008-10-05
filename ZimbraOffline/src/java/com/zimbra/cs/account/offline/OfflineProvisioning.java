@@ -1742,7 +1742,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (isDataSourceAccount(account))
 		    attrs.put(A_zimbraDataSourceEnabled, TRUE);
 
-        testDataSource(new OfflineDataSource(account, type, name, dsid, attrs));
+        //testDataSource(new OfflineDataSource(account, type, name, dsid, attrs));
         
         Map<String,Object> immutable = new HashMap<String, Object>();
         for (String attr : AttributeManager.getInstance().getImmutableAttrs())
