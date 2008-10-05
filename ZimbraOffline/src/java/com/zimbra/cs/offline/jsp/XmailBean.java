@@ -36,14 +36,16 @@ public class XmailBean extends MailBean {
 	protected boolean leaveOnServer = false;
 
 	protected String defaultCalDavUrl = "";
+
+    protected boolean yabSyncEnabled = true;
 	
-	private final String adomain = "aol.com";
-	private final String gdomain = "gmail.com";
-	private final String hdomain = "hotmail.com";
-	private final String mdomain = "msn.com";
-	private final String ydomain = "yahoo.com";
-	private final String ymdomain = "ymail.com";
-	private final String yrmdomain = "rocketmail.com";
+	private static final String adomain = "aol.com";
+	private static final String gdomain = "gmail.com";
+	private static final String hdomain = "hotmail.com";
+	private static final String mdomain = "msn.com";
+	private static final String ydomain = "yahoo.com";
+	private static final String ymdomain = "ymail.com";
+	private static final String yrmdomain = "rocketmail.com";
 	
 	@Override
 	protected void reload() {
@@ -67,6 +69,7 @@ public class XmailBean extends MailBean {
 		port = ds.getPort().toString();
 		isSsl = ds.getConnectionType() == DataSource.ConnectionType.ssl;
 		isDebugTraceEnabled = ds.isDebugTraceEnabled();
+        yabSyncEnabled = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceYabSyncEnabled, false);
 		
 		domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain, null);
 		smtpHost = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpHost, null);
@@ -118,8 +121,10 @@ public class XmailBean extends MailBean {
 			    	addInvalid("port");
 				if (!isValidEmail(email))
 			    	addInvalid("email");
-				
-		        domain = domain == null ? email.substring(email.indexOf('@') + 1) : domain;
+
+                if (domain == null) {
+                    domain = email.substring(email.indexOf('@') + 1);
+                }
 				if (!isLive() && !isYmail()) {
 					if (!isValidHost(smtpHost))
 				    	addInvalid("smtpHost");
@@ -149,7 +154,12 @@ public class XmailBean extends MailBean {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
-			        
+
+                    if (isYmail()) {
+                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceYabSyncEnabled,
+                                    yabSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
+                    }
+
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
 			        
 			        if (!isLive() && !isYmail()) {
@@ -377,4 +387,12 @@ public class XmailBean extends MailBean {
 	public String getDefaultCalDavUrl() {
 		return defaultCalDavUrl;
 	}
+
+    public void setYabSyncEnabled(boolean enabled) {
+        yabSyncEnabled = enabled;
+    }
+
+    public boolean isYabSyncEnabled() {
+        return yabSyncEnabled;
+    }
 }

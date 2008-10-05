@@ -35,12 +35,9 @@ import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.offline.util.OfflineYAuth;
-import com.zimbra.cs.offline.yab.YabImport;
+import com.zimbra.cs.offline.YMailImport;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.datasource.SyncState;
-import com.zimbra.cs.datasource.ImapSync;
-import com.zimbra.cs.util.yauth.XYMEAuthenticator;
 
 public class OfflineDataSource extends DataSource {
     private KnownService knownService;
@@ -292,16 +289,8 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public DataImport getDataImport() throws ServiceException {
-        if (isYahoo()) {
-            Type type = getType();
-            if (type == Type.yab) {
-                return new YabImport(this);
-            } else if (type == Type.imap) {
-                XYMEAuthenticator auth = new XYMEAuthenticator(
-                    OfflineYAuth.authenticate(this),
-                    OfflineConstants.YMAIL_PARTNER_NAME);
-                return new ImapSync(this, auth);
-            }
+        if (isYahoo() && getType() == Type.imap) {
+            return new YMailImport(this);
         }
         return super.getDataImport();
     }

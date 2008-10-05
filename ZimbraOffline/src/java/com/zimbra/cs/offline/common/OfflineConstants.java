@@ -4,8 +4,8 @@ import com.zimbra.common.util.Constants;
 
 
 public interface OfflineConstants {
-	
-	public static enum SyncStatus {
+
+    public static enum SyncStatus {
 		unknown, offline, online, running, authfail, error
 	}	
 	
@@ -31,7 +31,7 @@ public interface OfflineConstants {
     public static final String A_offlineSyncStatus = "offlineSyncStatus";
     public static final String A_offlineLastSync = "offlineLastSync";
     public static final String A_offlineEnableTrace = "offlineEnableTrace";
-    
+                                                         
     public static final String A_zimbraDataSourceDomain = "zimbraDataSourceDomain";
     public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
     public static final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";
@@ -47,6 +47,8 @@ public interface OfflineConstants {
     public static final String A_zimbraDataSourceSyncFreq = "zimbraDataSourceSyncFreq";
     public static final String A_zimbraDataSourceSyncStatus = "zimbraDataSourceSyncStatus";
     public static final String A_zimbraDataSourceLastSync = "zimbraDataSourceLastSync";
+
+    public static final String A_zimbraDataSourceYabSyncEnabled = "zimbraDataSourceYabSyncEnabled";
     
     public static final String A_zimbraDataSourceSyncAllServerFolders = "zimbraDataSourceSyncAllServerFolders";
     
@@ -57,5 +59,6 @@ public interface OfflineConstants {
     public static final String GAL_ACCOUNT_SUFFIX = "__OFFLINE_GAL__";
     public static final String GAL_LDAP_DN = "GAL_LDAP_DN";
     public static final String YMAIL_PARTNER_NAME = "Zimbra";
-    public static final String CALDAV_DS = "caldav";
+    public static final String CALDAV_DS = "caldav:";
+    public static final String YAB_DS = "yab:";
 }

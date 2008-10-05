@@ -593,18 +593,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         Account account = createAccountInternal(emailAddress, accountId, attrs, false);
         OfflineDataSource ds = null;
-        OfflineDataSource yabDs = null;
         try {
         	ds = (OfflineDataSource) createDataSource(account, type, dsName, dsAttrs, true, false);
-            if (ds.isYahoo()) {
-                // Create data source for Yahoo Address Nook
-                Map<String, Object> yabAttrs = new HashMap<String, Object>(dsAttrs);
-                String yabId = UUID.randomUUID().toString();
-                yabAttrs.put(A_zimbraDataSourceId, yabId);
-                yabAttrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(yabId, password));
-                yabDs = (OfflineDataSource) createDataSource(
-                    account, DataSource.Type.yab, "yab:" + dsName, yabAttrs, true, false);
-            }
         } catch (Throwable t) {
         	OfflineLog.offline.warn("failed creating datasource: " + dsName, t);
         	deleteAccount(account.getId());
@@ -615,9 +605,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
             if (ds != null) {
                 deleteDataSource(account, ds.getId());
-                if (yabDs != null) {
-                    deleteDataSource(account, yabDs.getId());
-                }
             }
             mAccountCache.remove(account);
             deleteAccount(accountId);
