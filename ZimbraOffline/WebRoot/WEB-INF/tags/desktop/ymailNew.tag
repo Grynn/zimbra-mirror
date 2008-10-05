@@ -106,6 +106,11 @@ function disableButtons() {
             <td class="ZCheckboxLabel"><fmt:message key='SyncAllFolders'/></td>
         </tr>
 
+        <tr>
+             <td style='text-align:right'><input type="checkbox" id="yabSyncEnabled" name="yabSyncEnabled" checked></td>
+             <td class="ZCheckboxLabel"><fmt:message key='YabSyncEnabled'/></td>
+         </tr>
+
     </table>
 
 </form>

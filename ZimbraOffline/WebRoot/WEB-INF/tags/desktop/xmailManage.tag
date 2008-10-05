@@ -310,11 +310,6 @@ function passOnEdit(id) {
             <td style='text-align:right'><input type="checkbox" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? 'checked' : ''}></td>
             <td class="ZCheckboxLabel"><fmt:message key='LeaveOnServer'/></td>
         </tr>
-        
-        <tr>
-            <td style='text-align:right'><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td>
-            <td class="ZCheckboxLabel"><fmt:message key='EnableTrace'/></td>
-        </tr>
 
         <c:if test="${bean.ymail}">
             <tr>
@@ -323,6 +318,10 @@ function passOnEdit(id) {
             </tr>
         </c:if>
 
+        <tr>
+            <td style='text-align:right'><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td>
+            <td class="ZCheckboxLabel"><fmt:message key='EnableTrace'/></td>
+        </tr>
     </table>
 
 </form>

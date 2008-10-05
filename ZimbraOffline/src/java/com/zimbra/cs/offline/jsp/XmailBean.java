@@ -33,11 +33,11 @@ public class XmailBean extends MailBean {
 	
 	protected boolean syncAllServerFolders;
 
-	protected boolean leaveOnServer = false;
+	protected boolean leaveOnServer;
 
 	protected String defaultCalDavUrl = "";
 
-    protected boolean yabSyncEnabled = true;
+    protected boolean yabSyncEnabled;
 	
 	private static final String adomain = "aol.com";
 	private static final String gdomain = "gmail.com";
