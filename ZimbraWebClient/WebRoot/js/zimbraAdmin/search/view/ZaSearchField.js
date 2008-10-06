@@ -79,7 +79,7 @@ function() {
 	}else {
 		DBG.println(AjxDebug.DBG1, "Basic Search ....") ;
 		searchListController._searchFieldInput = query ;
-		params.query = ZaSearch.getSearchByNameQuery(query);
+		params.query = ZaSearch.getSearchDomainByNameQuery(query);      
 	}
 	
 	//set the currentController's _currentQuery
