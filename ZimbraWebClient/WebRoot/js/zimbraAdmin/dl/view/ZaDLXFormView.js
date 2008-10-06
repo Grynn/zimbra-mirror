@@ -406,25 +406,24 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
  						    //{type:_CELLSPACER_, width:10, rowSpan:9},
  						    {type:_SPACER_, height:"5"}, 						    
  						    {type: _GROUP_, width: "98%", numCols: 2, colSizes:[100, "*"], items: [
- 						    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.DLXV_LabelListName, label: ZaMsg.DLXV_LabelListName +":", 
-        								onChange:ZaTabView.onFormFieldChanged, forceUpdate:true, tableCssStyle: "width:100", inputWidth:"100",
+ 						    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.DLXV_LabelListName, label: ZaMsg.DLXV_LabelListName +":", forceUpdate:true, tableCssStyle: "width:100", inputWidth:"100",
         								id:"dl_name_field"
         							},
         						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName+":", msgName:ZaMsg.NAD_DisplayName,width:"100%",
-        						    	cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged, align: _LEFT_
+        						    	cssClass:"admin_xform_name_input", align: _LEFT_
         						    },							
         						    {ref:ZaAccount.A_description, type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription+":",msgName: ZaMsg.DLXV_LabelDescription, width:"100%",
-        						    	cssClass:"admin_xform_name_input", onChange:ZaTabView.onFormFieldChanged
+        						    	cssClass:"admin_xform_name_input"
         						    },
         							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
         								label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,
-        								labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
+        								labelCssClass:"xform_label", cssStyle:"padding-left:0px"
         							},	
         							/*{ref:ZaDistributionList.A_isgroup, type:_CHECKBOX_, trueValue:1, falseValue:0, align:_LEFT_,
-        								label:ZaMsg.DLXV_LabelIsgroup, msgName:ZaMsg.DLXV_LabelIsgroup, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
+        								label:ZaMsg.DLXV_LabelIsgroup, msgName:ZaMsg.DLXV_LabelIsgroup, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px"
         							},*/					    
         							{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_, trueValue:"TRUE", falseValue:"FALSE", align:_LEFT_,
-        								label:ZaMsg.NAD_zimbraHideInGal, msgName:ZaMsg.NAD_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px", onChange:ZaTabView.onFormFieldChanged
+        								label:ZaMsg.NAD_zimbraHideInGal, msgName:ZaMsg.NAD_zimbraHideInGal, labelLocation:_LEFT_,labelCssClass:"xform_label", cssStyle:"padding-left:0px"
         							}
     							]
 							},
@@ -541,8 +540,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					    {type:_CELLSPACER_, width:10 },
 					    {type: _OUTPUT_, value:ZaMsg.DLXV_LabelNotes, cssStyle:"align:left"},
 					    {type:_CELLSPACER_, width:10 },
-					    {ref:ZaAccount.A_notes, type:_TEXTAREA_, width:"90%", height:"400", labelCssStyle:"vertical-align: top",
-					    	onChange:ZaTabView.onFormFieldChanged
+					    {ref:ZaAccount.A_notes, type:_TEXTAREA_, width:"90%", height:"400", labelCssStyle:"vertical-align: top"
 					    }
 					]
 				 },
@@ -726,12 +724,12 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
-											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",
+											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
 											relevant:"ZaAccountXFormView.isDeleteAliasEnabled.call(this)", relevantBehavior:_DISABLE_
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
-											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",
+											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",id:"editAliasButton",
 											relevant:"ZaAccountXFormView.isEditAliasEnabled.call(this)", relevantBehavior:_DISABLE_
 										},
 										{type:_CELLSPACER_},
