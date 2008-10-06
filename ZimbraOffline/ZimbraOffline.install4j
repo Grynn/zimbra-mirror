@@ -553,7 +553,7 @@ return (uid != 0);</string>
                                 <string>-override</string>
                               </void>
                               <void index="1">
-                                <string>"${installer:sys.installationDir}/zdesktop.webapp/override.ini"</string>
+                                <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
                               </void>
                               <void index="2">
                                 <string>-close</string>
@@ -2981,19 +2981,19 @@ return true;</string>
                             <string>-webapp</string>
                           </void>
                           <void index="1">
-                            <string>"${installer:sys.installationDir}\zdesktop.webapp"</string>
+                            <string>${installer:sys.installationDir}\zdesktop.webapp</string>
                           </void>
                           <void index="2">
                             <string>-override</string>
                           </void>
                           <void index="3">
-                            <string>"${installer:sys.installationDir}\zdesktop.webapp\override.ini"</string>
+                            <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
                           </void>
                           <void index="4">
                             <string>-profile</string>
                           </void>
                           <void index="5">
-                            <string>"${installer:sys.installationDir}\profile"</string>
+                            <string>${installer:sys.installationDir}\profile</string>
                           </void>
                         </array>
                       </void>
@@ -3321,7 +3321,7 @@ return true;</string>
                                 <string>-override</string>
                               </void>
                               <void index="1">
-                                <string>"${installer:sys.installationDir}/zdesktop.webapp/override.ini"</string>
+                                <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
                               </void>
                               <void index="2">
                                 <string>-close</string>
