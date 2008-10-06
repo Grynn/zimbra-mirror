@@ -216,6 +216,14 @@ function(x, y, width, height) {
 };
 
 /**
+ * Returns the expanded accordion item
+ */
+DwtAccordion.prototype.getExpandedItem =
+function() {
+	return this._items[this._currentItemId];
+};
+
+/**
  * Expands the accordion item with the given ID by making its body visible. The bodies of
  * other items are hidden.
  *
