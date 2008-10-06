@@ -525,15 +525,19 @@ ZaAccountListController._viewMailListenerLauncher =
 function(account) {
 	try {
 		var obj;
+		var accId;
 		if(account.type == ZaItem.ACCOUNT || account.type == ZaItem.RESOURCE) {
 			obj = ZaAccount.getViewMailLink(account.id,this._app);
+			accId = account.id;
 		} else if(account.type == ZaItem.ALIAS && account.attrs[ZaAlias.A_AliasTargetId]) {
 			obj = ZaAccount.getViewMailLink(account.attrs[ZaAlias.A_AliasTargetId],this._app);
+			accId = account.attrs[ZaAlias.A_AliasTargetId];
+			account = new ZaAccount(this._app);
 		} else {
 			return;
 		}
 		if(!account[ZaAccount.A2_publicMailURL]) {
-			account.load("id", account.id);
+			account.load("id", accId);
 		}
 		if(!obj.authToken || !obj.lifetime)
 			throw new AjxException(ZaMsg.ERROR_FAILED_TO_GET_CREDENTIALS, AjxException.UNKNOWN, "ZaAccountListController.prototype._viewMailListener");
