@@ -39,6 +39,7 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineUtil;
+import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
@@ -623,11 +624,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return accounts;
     }
 
-    public boolean isDataSourceAccount(Account account) {
-        return account.getAttr(A_offlineDataSourceName, null) instanceof String;
+    public static boolean isDataSourceAccount(Account account) {
+        return account.getAttr(A_offlineDataSourceName, null) != null;
     }
 
-    public String getDataSourceName(Account account) {
+    public static String getDataSourceName(Account account) {
         return account.getAttr(A_offlineDataSourceName, null);
     }
 
@@ -1805,11 +1806,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     @Override
-    public synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) throws ServiceException {
+    public void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs) throws ServiceException {
         modifyDataSource(account, dataSourceId, attrs, isSyncAccount(account));
     }
 
-    synchronized void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
+    void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
         DataSource ds = get(account, DataSourceBy.id, dataSourceId);
         if (ds == null)
             throw AccountServiceException.NO_SUCH_DATA_SOURCE(dataSourceId);
@@ -1850,9 +1851,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         		password = ds.getAttr(A_zimbraDataSourcePassword);
         		attrs.put(A_zimbraDataSourcePassword, password);
         	} else if (!isTestNeeded && !password.equals(ds.getAttr(A_zimbraDataSourcePassword)))
-        		isTestNeeded = true;
-        	
-        	String domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain);
+                isTestNeeded = true;
+
+            String domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain);
         	if (!"yahoo.com".equals(domain)) {
 	        	if (!isTestNeeded && (!ds.getAttr(A_zimbraDataSourceSmtpHost).equals(attrs.get(A_zimbraDataSourceSmtpHost)) ||
 	        			!ds.getAttr(A_zimbraDataSourceSmtpPort).equals(attrs.get(A_zimbraDataSourceSmtpPort)) ||
@@ -1874,20 +1875,27 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	}
         	
             if (isTestNeeded) {
+                if ("yahoo.com".equals(domain)) {
+                    // Clear auth token so that it will be regenerated during test...
+                    OfflineYAuth.removeToken(ds);
+                }
                 testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs));
             }
     	
             attrs.put(A_zimbraDataSourceEnabled, TRUE);
         }
-        
+
         Map<String, Object> context = new HashMap<String, Object>();
-        AttributeManager.getInstance().preModify(attrs, ds, context, false, true, true);
 
-        DbOfflineDirectory.modifyDirectoryLeaf(EntryType.DATASOURCE, account, A_zimbraId, dataSourceId, attrs, markChanged, newName);
-        reload(ds);
-        mHasDirtyAccounts |= markChanged;
+        synchronized (this) {
+            AttributeManager.getInstance().preModify(attrs, ds, context, false, true, true);
 
-        AttributeManager.getInstance().postModify(attrs, ds, context, false, true);
+            DbOfflineDirectory.modifyDirectoryLeaf(EntryType.DATASOURCE, account, A_zimbraId, dataSourceId, attrs, markChanged, newName);
+            reload(ds);
+            mHasDirtyAccounts |= markChanged;
+
+            AttributeManager.getInstance().postModify(attrs, ds, context, false, true);
+        }
     }
 
     @Override
@@ -1976,6 +1984,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     		attrs.put(A_offlineAccountsOrder, newOrderStr);
     		modifyAttrs(localAccount, attrs, false, false, false);
     	}
-    	return newOrder;
+        return newOrder;
     }
 }

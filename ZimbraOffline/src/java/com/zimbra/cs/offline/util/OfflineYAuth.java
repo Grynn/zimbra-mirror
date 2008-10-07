@@ -51,6 +51,11 @@ public final class OfflineYAuth {
             throw ServiceException.FAILURE("Authentication failed", e);
         }
     }
+
+    public static void removeToken(DataSource ds) throws ServiceException {
+        TokenStore store = getRawAuthManager(ds.getMailbox()).getTokenStore();
+        store.removeToken(APPID, ds.getUsername());
+    }
     
     public static void newToken(DataSource ds, String password)
         throws ServiceException {
