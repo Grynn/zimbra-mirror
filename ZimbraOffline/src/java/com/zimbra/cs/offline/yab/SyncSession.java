@@ -292,6 +292,12 @@ public class SyncSession {
     }
 
     private Tag createTag(String name) throws ServiceException {
+        String normalized = MailItem.normalizeItemName(name);
+        if (!name.equals(normalized)) {
+            LOG.warn("Normalizing YAB category name '%s' to '%s' since it" +
+                     " contains invalid tag characters", name, normalized);
+            name = normalized;
+        }
         try {
             return mbox.getTagByName(name);
         } catch (MailServiceException.NoSuchItemException e) {
