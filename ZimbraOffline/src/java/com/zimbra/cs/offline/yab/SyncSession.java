@@ -95,6 +95,7 @@ public class SyncSession {
         } catch (Exception e) {
             throw ServiceException.FAILURE("Contact sync error", e);
         }
+        throw ServiceException.FAILURE("Contact sync error", null);
     }
     
     private void syncData() throws IOException, ServiceException {

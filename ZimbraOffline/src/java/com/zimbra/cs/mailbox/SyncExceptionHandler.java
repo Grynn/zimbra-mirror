@@ -33,7 +33,7 @@ public class SyncExceptionHandler {
 	private static final String DOCUMENT_SYNC_FAILED = "document sync failed";
 	
 	
-	static void checkRecoverableException(String message, Exception exception) throws ServiceException {
+	public static void checkRecoverableException(String message, Exception exception) throws ServiceException {
 		if (OfflineSyncManager.isIOException(exception) || OfflineSyncManager.isConnectionDown(exception) || OfflineSyncManager.isAuthError(exception) || OfflineSyncManager.isReceiversFault(exception))
 			throw ServiceException.FAILURE(message, exception); // let it bubble in case it's server issue so we interrupt sync to retry later
 	}
