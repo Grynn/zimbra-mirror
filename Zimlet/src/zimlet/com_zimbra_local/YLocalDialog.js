@@ -15,16 +15,12 @@
  * ***** END LICENSE BLOCK *****
  */
 
-YLocalDialog = function(shell, className, parent,isZip) {
+YLocalDialog = function(shell, className, parent,msg,showZip) {
 	className = className || "YSymbolsDialog";
 	this._zimlet = parent;
 	var title = "Select Option";
 	DwtDialog.call(this, {parent:shell, className:className, title:title});
-	if(!isZip)
-        this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, parent._controller._locateLocation));
-    else
-        this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, parent._controller.setLanLongAndChangeLocation));
-    this._createSearchHtml();
+	this._createSearchHtml(msg,showZip);
 	//DBG.println("user prop:"+this._zimlet.getUserProperty("Yahoo Local"));
 };
 
@@ -33,19 +29,49 @@ YLocalDialog.prototype.constructor = YLocalDialog;
 
 YLocalDialog.prototype._lookupCallback;
 
-YLocalDialog.prototype._createSearchHtml = function() {
+YLocalDialog.prototype._createSearchHtml = function(msg,showZip) {
 
 	this._textObj1 = new DwtInputField(this);
     this._textObj2 = new DwtInputField(this);
     this._lableObj = new DwtButton(this);
 
+   
     var table = document.createElement("TABLE");
 	table.border = 0;
 	table.cellPadding = 0;
 	table.cellSpacing = 4;
+    var row;
+    var cell;
 
-	var row = table.insertRow(-1);
-	var cell = row.insertCell(-1);
+    if(msg){
+        row = table.insertRow(-1);
+        cell = row.insertCell(-1);
+        cell.colSpan = 2;
+        cell.innerHTML = msg;
+
+        row = table.insertRow(-1);
+        cell = row.insertCell(-1);
+        cell.colSpan = 2;
+        cell.align = "center";
+        cell.innerHTML = "<hr>";
+    }
+    if(showZip){
+         //For zip
+        this._textZip = new DwtInputField(this);
+        row = table.insertRow(-1);
+        cell = row.insertCell(-1);
+        cell.innerHTML = "Zip:";
+        cell = row.insertCell(-1);
+        cell.appendChild(this._textZip.getHtmlElement());
+
+        row = table.insertRow(-1);
+        cell = row.insertCell(-1);
+        cell.colSpan = 2;
+        cell.align = "center";
+        cell.innerHTML = "<b>or</b>";
+    }
+    row = table.insertRow(-1);
+	cell = row.insertCell(-1);
 	cell.colSpan = 2;
 	cell.innerHTML = "Enter Latitude and Longitude";
 
@@ -121,8 +147,7 @@ YLocalDialog.prototype.popup = function(name, callback) {
 	this._lookupCallback = callback;
 
 	this.setTitle("Select Option");
-
-
+    this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okButtonListener));
 	// enable buttons
 	this.setButtonEnabled(DwtDialog.OK_BUTTON, true);
 	this.setButtonEnabled(DwtDialog.CANCEL_BUTTON, true);
@@ -135,3 +160,12 @@ YLocalDialog.prototype.popdown =
 function() {
 	ZmDialog.prototype.popdown.call(this);
 };
+
+YLocalDialog.prototype.okButtonListener = function(){
+    if(this._textZip && this._textZip.getValue() != ''){
+        this._zimlet._controller._getLatLonForZip(this._textZip.getValue());
+    }else{
+        this._zimlet._controller.setLanLongAndChangeLocation(this._textObj1.getValue(),this._textObj2.getValue());
+    }
+    DwtDialog.prototype.popdown.call(this);
+}

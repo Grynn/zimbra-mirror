@@ -438,7 +438,7 @@ function(lati,longi) {
 
 
     if((!latitude || !longitude) && (!coords ||(coords && (!coords.latitude || !coords.longitude))) && lati!=45){
-        var msg = "<span style=\"text-align:center;\">" +
+        /*var msg = "<span style=\"text-align:center;\">" +
                                  "Maxmind is paid service.You need to pay to know latitude and longitude<br>"+
                                   "otherwise you have to enter latitude and longitude manually."+
                                  "</span>";
@@ -448,7 +448,10 @@ function(lati,longi) {
             var listener = new AjxListener (this, this.selectLocation,false);
             messageDlg.setButtonListener (DwtDialog.OK_BUTTON, listener);
             messageDlg.popup();
-        }
+        }*/
+        var msg = this._zimlet.getMessage("maxMindError");
+        var selectDialog = new YLocalDialog(appCtxt._shell, null, this._zimlet, msg, true);
+        selectDialog.popup();
     }
     if(!coords){
          this._zimlet._ylocal = {
@@ -572,7 +575,7 @@ function(zip) {
 YahooLocalController.prototype._handleLatLonForZip =
 function(zip, result) {
 	if (!result || (result && !result.success)) {
-		var msg = "<span style=\"text-align:center;\">" +
+		/*var msg = "<span style=\"text-align:center;\">" +
                                  "Csgnetwork is a paid service.You need to pay to know latitude and longitude<br>"+
                                   "otherwise you have to enter latitude and longitude manually."+
                                  "</span>";
@@ -582,9 +585,12 @@ function(zip, result) {
             var listener = new AjxListener (this, this.selectLocation,true);
             messageDlg.setButtonListener (DwtDialog.OK_BUTTON, listener);
             messageDlg.popup();
-        }
+        } */
         //this.test();
-		return;
+        var msg = this._zimlet.getMessage("csgNetworkError");
+        var selectDialog = new YLocalDialog(appCtxt._shell, null, this._zimlet, msg, false);
+        selectDialog.popup();
+        return;
     }
 
 	if (result.text.match(/Zipcode not found!/i)) {
@@ -619,10 +625,10 @@ function(zip, result) {
 };
 
 YahooLocalController.prototype.setLanLongAndChangeLocation=
-function(){
-    this.popdown();
-    var latitude = this._textObj1.getValue();
-    var longitude = this._textObj2.getValue();
+function(latitude,longitude){
+    //this.popdown();
+    //var latitude = this._textObj1.getValue();
+    //var longitude = this._textObj2.getValue();
     var params = {
 		clean: true,
 		typeControl:true,
