@@ -9,12 +9,12 @@
 		<matchOn>
 			<regex attrs="igm">\b\d+[A-Za-z]?[ ]+([ewns]\.?[ ]+)?[A-Za-z0-9]+([ ]+[A-Za-z0-9]+)*[\s,\.](\s*(\#|[A-Za-z]+[,\.]?)[ ]*\d+[\s,\.])?\s*[A-Za-z]+([ ]+[A-Za-z]+)*[ ,][ ]*[A-Za-z]{2}([A-Za-z]+([ ][A-Za-z]+)?)?[ ]+\d{5}(-\d{4})?\b</regex>
 		</matchOn>
-		<onClick>
+		<!--<onClick>
 			<canvas type="window" />
 			<actionUrl target="http://maps.yahoo.com/maps_result">
-				<param name="addr">${src.objectContent}</param>
+				<param name="addr">${escape(src.objectContent.replace("\n",""))}</param>
 			</actionUrl>
-		</onClick>
+		</onClick>-->
 	</contentObject>
 
 	<zimletPanelItem label="Maps" icon="YMAPS-panelIcon">

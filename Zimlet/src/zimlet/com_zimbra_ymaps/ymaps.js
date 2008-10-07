@@ -42,7 +42,12 @@ Com_Zimbra_YMaps.CACHE = new Array();
 Com_Zimbra_YMaps.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
-
+//Called when clicked on matched text
+Com_Zimbra_YMaps.prototype.clicked = function(spanElem, contentObj, matchContext, canvas) {
+    var url = "http://maps.yahoo.com/maps_result?addr=";
+    var addr = contentObj.replace("\n"," ").replace("\r"," ");
+    canvas = window.open(url+escape(addr));
+}
 // Called by the Zimbra framework when the Ymaps panel item was clicked
 Com_Zimbra_YMaps.prototype.singleClicked = function() {
 	var editorProps = [
