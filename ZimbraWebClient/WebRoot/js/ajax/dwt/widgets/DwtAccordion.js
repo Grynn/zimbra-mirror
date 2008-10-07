@@ -220,7 +220,7 @@ function(x, y, width, height) {
  */
 DwtAccordion.prototype.getExpandedItem =
 function() {
-	return this._items[this._currentItemId];
+	return this._items[this._currentItemId || 0];
 };
 
 /**
