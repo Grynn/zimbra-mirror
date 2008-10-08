@@ -31,9 +31,9 @@ exit(0);
 #####################
 
 sub createDataSourceItemTable() {
-  Migrate::logSql("Creating data_source_item table.");
-
   my ($group) = @_;
+  Migrate::logSql("Creating data_source_item table for ".$group.".");
+  
   my $sql = <<CREATE_TABLE_EOF;
 CREATE TABLE IF NOT EXISTS $group.data_source_item (
    mailbox_id     INTEGER UNSIGNED NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS $group.data_source_item (
    
    PRIMARY KEY (mailbox_id, item_id),
    UNIQUE INDEX i_remote_id (mailbox_id, data_source_id, remote_id),   -- for reverse lookup
-   CONSTRAINT fk_data_source_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
+   CONSTRAINT fk_data_source_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 CREATE_TABLE_EOF
 
