@@ -43,8 +43,8 @@ build:
 	(tar xzf src/openldap-$(LDAP_RELEASE).tgz; \
 	mv openldap-$(LDAP_RELEASE) openldap-$(LDAP_VERSION); \
 	cd openldap-$(LDAP_VERSION); \
-	patch -N -p1 < ../patches/ITS5037.patch; \
-	patch -N -p1 < ../patches/leopard.fix; \
+	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
+	patch -g0 -N -p1 < ../patches/leopard.fix; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(OPENLDAP_CLIB_DIR) -L$(LIBTOOL_LIB_DIR) \
 		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(OPENLDAP_CLIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
