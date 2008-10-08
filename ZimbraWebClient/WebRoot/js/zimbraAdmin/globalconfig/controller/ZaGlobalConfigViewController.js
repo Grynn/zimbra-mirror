@@ -130,7 +130,25 @@ function () {
 		this._errorDialog.popup();		
 		return false;
 	}
-		
+	
+	//check if domain is real
+	if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
+		if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName] != this._currentObject.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
+			var testD = new ZaDomain(this._app);
+			try {
+				testD.load("name",tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]);
+			} catch (ex) {
+				if (ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
+					this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_WRONG_DOMAIN_IN_GS, [tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
+					this._errorDialog.popup();	
+					return false;	
+				} else {
+					throw (ex);
+				}
+			}
+		}
+	}
+	
 	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaGlobalConfig.A_zimbraGalMaxResults])) {
 		//show error msg
 		this._errorDialog.setMessage(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_GalMaxResults + " ! ", null, DwtMessageDialog.CRITICAL_STYLE, null);
