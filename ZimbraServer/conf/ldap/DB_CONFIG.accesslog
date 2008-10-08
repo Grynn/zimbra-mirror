@@ -1,7 +1,7 @@
 set_cachesize 0 104857600 1
 set_lg_regionmax 262144
 set_lg_bsize 2097152
-set_lg_dir /opt/zimbra/openldap-data/accesslog/logs
+set_lg_dir /opt/zimbra/data/ldap/accesslog/logs
 #
 # Automatically remove log files that are no longer needed.
-set_flags DB_LOG_AUTOREMOVE
+log_set_config DB_LOG_AUTO_REMOVE

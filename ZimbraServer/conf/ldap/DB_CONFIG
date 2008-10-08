@@ -6,7 +6,7 @@ set_cachesize   0       52428800        0
 #
 # Set database flags.
 # Automatically remove log files that are no longer needed.
-set_flags DB_LOG_AUTOREMOVE 
+log_set_config DB_LOG_AUTO_REMOVE
 
 #
 # Set log values.
@@ -14,7 +14,7 @@ set_flags DB_LOG_AUTOREMOVE
 set_lg_regionmax        262144
 set_lg_max              10485760
 set_lg_bsize            2097152
-set_lg_dir              /opt/zimbra/openldap-data/logs
+set_lg_dir              /opt/zimbra/data/ldap/hdb/logs
 # Increase locks
 set_lk_max_locks	3000
 set_lk_max_objects	1500

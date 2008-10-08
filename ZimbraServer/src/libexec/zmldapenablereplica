@@ -79,8 +79,8 @@ verifyLdap() {
 enableSyncProv() {
 	echo -n "Enabling sync provider..."
 	sed -i.pre-replica -e '/syncprov/ s/#//g' -e '/accesslog/ s/###//g' ${zimbra_home}/conf/slapd.conf.in
-	mkdir -p ${zimbra_home}/openldap-data/accesslog/db
-	mkdir -p ${zimbra_home}/openldap-data/accesslog/logs
+	mkdir -p ${zimbra_home}/data/ldap/accesslog/db
+	mkdir -p ${zimbra_home}/data/ldap/accesslog/logs
 	cp -p -f ${zimbra_home}/openldap/etc/openldap/master-accesslog.conf ${zimbra_home}/conf/
 	cp -p -f ${zimbra_home}/openldap/etc/openldap/master-accesslog-overlay.conf ${zimbra_home}/conf/
 	echo "succeeded"

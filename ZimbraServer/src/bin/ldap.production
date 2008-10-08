@@ -87,20 +87,22 @@ start()
 {
    checkrunning
    if [ $RUNNING = 0 ]; then
-     if [ ! -f /opt/zimbra/openldap-data/DB_CONFIG -o ! -s /opt/zimbra/openldap-data/DB_CONFIG ]; then
+     if [ ! -f /opt/zimbra/data/ldap/hdb/db/DB_CONFIG -o ! -s /opt/zimbra/data/ldap/hdb/db/DB_CONFIG ]; then
        if [ -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.custom ]; then
-         cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.custom /opt/zimbra/openldap-data/DB_CONFIG
+	     mkdir -p /opt/zimbra/data/ldap/hdb/db
+         cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.custom /opt/zimbra/data/ldap/hdb/db/DB_CONFIG
        else
-         cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG /opt/zimbra/openldap-data/DB_CONFIG
+	     mkdir -p /opt/zimbra/data/ldap/hdb/db
+         cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG /opt/zimbra/data/ldap/hdb/db/DB_CONFIG
        fi
      fi 
      if [ x$ldap_is_master = "xtrue" ]; then
-       if [ -d /opt/zimbra/openldap-data/accesslog/db ]; then
-         if [ ! -f /opt/zimbra/openldap-data/accesslog/db/DB_CONFIG -o ! -s /opt/zimbra/openldap-data/accesslog/db/DB_CONFIG ]; then
+       if [ -d /opt/zimbra/data/ldap/accesslog/db ]; then
+         if [ ! -f /opt/zimbra/data/ldap/accesslog/db/DB_CONFIG -o ! -s /opt/zimbra/data/ldap/accesslog/db/DB_CONFIG ]; then
            if [ -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.accesslog.custom ]; then
-             cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.accesslog.custom /opt/zimbra/openldap-data/accesslog/db/DB_CONFIG
+             cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.accesslog.custom /opt/zimbra/data/ldap/accesslog/db/DB_CONFIG
            else
-             cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.accesslog /opt/zimbra/openldap-data/accesslog/db/DB_CONFIG
+             cp -f /opt/zimbra/openldap/var/openldap-data/DB_CONFIG.accesslog /opt/zimbra/data/ldap/accesslog/db/DB_CONFIG
            fi
          fi
        fi
