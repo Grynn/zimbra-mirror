@@ -6,7 +6,7 @@ set_cachesize   0       52428800        0
 #
 # Set database flags.
 # Automatically remove log files that are no longer needed.
-log_set_config DB_LOG_AUTO_REMOVE
+set_log_config DB_LOG_AUTO_REMOVE
 
 #
 # Set log values.
