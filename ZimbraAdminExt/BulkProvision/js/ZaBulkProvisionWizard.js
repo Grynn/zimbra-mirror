@@ -212,13 +212,17 @@ function(uploadManager) {
 
 ZaBulkProvisionWizard.prototype.getProvisionStatusDialog = function () {
     if (!this._provisionStatusDialog) {
+        /*
         var params = {
             parent: this.parent,
             title: com_zimbra_bulkprovision.title_provision
-        } ;
+        } ; */
 
-        this._provisionStatusDialog = new DwtMessageDialog (params) ;
-        //this._provisionStatusDialog.
+//        this._provisionStatusDialog = new DwtMessageDialog (params) ;
+//        this._provisionStatusDialog.setSize (432, 250) ;
+//        this._provisionStatusDialog.setScrollStyle(Dwt.SCROLL)
+        this._provisionStatusDialog = new ZaBulkProvisionStatusDialog (
+                this.parent, this._app);
     }
 
     return this._provisionStatusDialog ;
@@ -269,18 +273,32 @@ function() {
             return ;
         }
 	}else if (cStep == ZaBulkProvisionWizard.STEP_PROVISION) {
-	    //create the accounts now, it is a sychronous action with status updated 
+	    //create the accounts now, it is a sychronous action with status updated
+        var startTime = new Date ();
+        console.log("Start provisiong accounts: " + startTime.toUTCString());
         var controller = this._app.getCurrentController() ;
-        var busyMsg = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS ;
+//        var busyMsg = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS ;
         var statusDialog = this.getProvisionStatusDialog() ;
-        statusDialog.setMessage(busyMsg) ;
+        this._provisionStatusObject = {} ;
+        this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS ;
+        this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts] = [] ;
+        var statusDialogCreatedAccounts =  this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts] ;
+        //statusDialog.setMessage(busyMsg) ;
+        statusDialog.setObject( this._provisionStatusObject) ;
         statusDialog.popup() ;
 
         var accounts = this._containedObject[ZaBulkProvision.A_provision_accounts] ;
         for (var i = 0 ; i < accounts.length; i ++) {
             var account = accounts[i] ;
+            /*
             busyMsg += "<br />" + AjxMessageFormat.format (
                                    com_zimbra_bulkprovision.BUSY_CREATE_ACCOUNTS, [account[ZaBulkProvision.A2_accountName]]) ;
+            */
+            this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] = AjxMessageFormat.format (
+                                   com_zimbra_bulkprovision.BUSY_CREATE_ACCOUNTS, [account[ZaBulkProvision.A2_accountName]]); 
+
+            statusDialogCreatedAccounts[i] = {} ;
+            statusDialogCreatedAccounts[i][ZaBulkProvision.A2_accountName] = account[ZaBulkProvision.A2_accountName] ;
 
             if (account[ZaBulkProvision.A2_isToProvision]) {
 
@@ -313,7 +331,12 @@ function() {
                 try {
                     resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.CreateAccountResponse;
                     if (resp && resp.account && resp.account[0].id) {
-                        busyMsg += com_zimbra_bulkprovision.SUCCEEDED ;
+//                        busyMsg += com_zimbra_bulkprovision.SUCCEEDED ;
+                        statusDialogCreatedAccounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.SUCCEEDED ;
+                        this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts].push(
+
+                                account[ZaBulkProvision.A2_accountName]) ;
+                        
                         accounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.SUCCEEDED ;
                         accounts[i][ZaBulkProvision.A2_isToProvision] = false ;     //succeed, don't try to create the second time
                         accounts[i][ZaBulkProvision.A2_isValid] = "TRUE" ;
@@ -321,20 +344,30 @@ function() {
                         accounts[i][ZaBulkProvision.A2_isValid] = "FALSE" ;
                     }
                 }catch (ex) {
-                    busyMsg += com_zimbra_bulkprovision.BUSY_FAILED ;
+//                    busyMsg += com_zimbra_bulkprovision.BUSY_FAILED ;
+                    statusDialogCreatedAccounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.BUSY_FAILED ;
                     accounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.BUSY_FAILED + ( ex.msg  ? ": " + ex.msg : "") ;
                     accounts[i][ZaBulkProvision.A2_isValid] = "FALSE" ;
                 }
             }else{
-                busyMsg += com_zimbra_bulkprovision.SKIP ;
+                  com_zimbra_bulkprovision.BUSY_FAILED =  com_zimbra_bulkprovision.SKIP ;
+//                busyMsg += com_zimbra_bulkprovision.SKIP ;
             }
 
-            statusDialog.setMessage(busyMsg) ;
+//            statusDialog.setMessage(busyMsg) ;
+            statusDialog.setObject(this._provisionStatusObject ) ;
         }
 
-        busyMsg += "<br />" + com_zimbra_bulkprovision.DONE ;
-        statusDialog.setMessage( busyMsg) ;
+//        busyMsg += "<br />" + com_zimbra_bulkprovision.DONE ;
+//        statusDialog.setMessage( busyMsg) ;
+        this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] =  com_zimbra_bulkprovision.DONE ;
+        statusDialog.setObject(this._provisionStatusObject ) ;
 
+        var endTime = new Date ();
+        console.log("End provisiong accounts: " + endTime.toUTCString());
+        var total = endTime.getTime () - startTime.getTime () ;
+        
+        console.log("Total Time (ms): "  + total) ; 
         //update the status now
         ZaBulkProvision.updateBulkProvisionStatus (this._app, this._containedObject) ;
         nextStep = ZaBulkProvisionWizard.STEP_SUMMARY ;

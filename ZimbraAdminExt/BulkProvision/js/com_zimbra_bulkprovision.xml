@@ -5,4 +5,5 @@
     <include>ZaBulkProvisionWizard.js</include>
     <include>ZaBulkProvision.js</include>
     <include>ZaBulkProvisionAccountsListView.js</include>
+    <include>ZaBulkProvisionStatusDialog.js</include>    
 </zimlet>
