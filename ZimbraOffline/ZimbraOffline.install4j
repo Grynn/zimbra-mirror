@@ -1507,7 +1507,8 @@ default:
             <condition>!context.getBooleanVariable("keepUserData")</condition>
             <validation />
             <preActivation>if (Util.isWindows()) {
-    context.setInstallationDirectory(new File(context.getVariable("sys.userHome") + "\\Local Settings\\Application Data\\Zimbra\\zdesktop"));
+    String subdir = Util.isWindowsVista() ? "\\AppData\\Local\\Zimbra\\zdesktop" : "\\Local Settings\\Application Data\\Zimbra\\zdesktop";
+    context.setInstallationDirectory(new File(context.getVariable("sys.userHome") + subdir));
 }</preActivation>
             <postActivation />
             <actions />
