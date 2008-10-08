@@ -19,7 +19,7 @@ BDB_LIB_DIR ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
 CONFIG_FLAG :=
 
 ifneq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	CONFIG_FLAG := --with-mutex=POSIX/pthreads
+	CONFIG_FLAG := --enable-posixmutexes --with-mutex=POSIX/pthreads
 endif
 
 all: build tar
@@ -31,7 +31,7 @@ build:
 	patch -g0 -p1 < ../patches/4.7.25-1.patch; \
 	patch -g0 -p1 < ../patches/4.7.25-2.patch; \
 	cd build_unix; \
-	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) ../dist/configure --prefix=$(ZIMBRA_HOME)/bdb-$(BDB_VERSION) --enable-posixmutexes $(CONFIG_FLAG); \
+	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) ../dist/configure --prefix=$(ZIMBRA_HOME)/bdb-$(BDB_VERSION) $(CONFIG_FLAG); \
 	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE) install)
 	(cd $(ZIMBRA_HOME); ln -s bdb-$(BDB_VERSION) bdb)
