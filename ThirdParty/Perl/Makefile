@@ -154,6 +154,10 @@ DEST_DIR		:= $(PERL_LIB_SOURCE)/zimbramon
 DEST_LIB_DIR	:= $(DEST_DIR)/lib
 DEST_BIN_DIR	:= $(DEST_DIR)/bin
 
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+	DEST_BIN_DIR	:=	$(DEST_DIR)/usr/bin
+endif
+
 # TARGETS
 
 CLEAN_TARGETS	=	\
