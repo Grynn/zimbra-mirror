@@ -443,6 +443,7 @@ function(focusObj) {
 			// ctrl -> ctrl: tell newly focused ctrl it got focus
 			DwtKeyboardMgr.__onFocusHdlr();
 		} else {
+			DwtKeyboardMgr.__onFocusHdlr();
 			// input -> ctrl: set browser focus to keyboard input field
 			this._kbFocusField.focus();
 		}

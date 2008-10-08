@@ -24,22 +24,24 @@
  *
  * @author Dave Comfort
  *
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        index 		[int]*				index at which to add this control among parent's children
- *        text 			[string]*			label text for the tree item
- *        imageInfo		[string]*			icon for the tree item
- *        deferred		[boolean]*			If true, postpone initialization until needed.
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        forceNotifySelection	[boolean]*	force notify selection even if checked style
- *        forceNotifyAction		[boolean]*	force notify action even if checked style
- * 		  button		[hash]*				hash of data for showing a button in the item: image, tooltip, callback
+ * @param params				[hash]				hash of params:
+ *        parent				[DwtComposite] 		parent widget
+ *        index 				[int]*				index at which to add this control among parent's children
+ *        text 					[string]*			label text for the tree item
+ *        imageInfo				[string]*			icon for the tree item
+ *        deferred				[boolean]*			If true, postpone initialization until needed.
+ *        className				[string]*			CSS class
+ *        posStyle				[constant]*			positioning style
+ *        forceNotifySelection	[boolean]*			force notify selection even if checked style
+ *        forceNotifyAction		[boolean]*			force notify action even if checked style
+ * 		  button				[hash]*				hash of data for showing a button in the item: image, tooltip, callback
+ *        selectable			[boolean]*			if true, this item is selectable
  */
 DwtHeaderTreeItem = function(params) {
 	this.overview = params.overview;
 	this._button = params.button;
 	DwtTreeItem.call(this, params);
+	this._selectable = params.selectable;
 }
 
 DwtHeaderTreeItem.prototype = new DwtTreeItem;

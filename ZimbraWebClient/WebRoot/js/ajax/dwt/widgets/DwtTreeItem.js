@@ -24,16 +24,16 @@
  *
  * @author Ross Dargahi
  * 
- * @param params		[hash]				hash of params:
- *        parent		[DwtComposite] 		parent widget
- *        index 		[int]*				index at which to add this control among parent's children 
- *        text 			[string]*			label text for the tree item
- *        imageInfo		[string]*			icon for the tree item
- *        deferred		[boolean]*			If true, postpone initialization until needed.
- *        className		[string]*			CSS class
- *        posStyle		[constant]*			positioning style
- *        forceNotifySelection	[boolean]*	force notify selection even if checked style
- *        forceNotifyAction		[boolean]*	force notify action even if checked style
+ * @param params				[hash]				hash of params:
+ *        parent				[DwtComposite] 		parent widget
+ *        index 				[int]*				index at which to add this control among parent's children
+ *        text 					[string]*			label text for the tree item
+ *        imageInfo				[string]*			icon for the tree item
+ *        deferred				[boolean]*			If true, postpone initialization until needed.
+ *        className				[string]*			CSS class
+ *        posStyle				[constant]*			positioning style
+ *        forceNotifySelection	[boolean]*			force notify selection even if checked style
+ *        forceNotifyAction		[boolean]*			force notify action even if checked style
  */
 DwtTreeItem = function(params) {
     if (arguments.length == 0) { return; }    
@@ -48,10 +48,11 @@ DwtTreeItem = function(params) {
 	}
 
 	this._origClassName = params.className || "DwtTreeItem";
-	this._textClassName = this._origClassName + "-Text";
-	this._selectedClassName = this._origClassName + "-" + DwtCssStyle.SELECTED;
-	this._actionedClassName = this._origClassName + "-" + DwtCssStyle.ACTIONED;
-	this._dragOverClassName = this._origClassName + "-" + DwtCssStyle.DRAG_OVER;
+	this._textClassName = [this._origClassName, "Text"].join("-");
+	this._selectedClassName = [this._origClassName, DwtCssStyle.SELECTED].join("-");
+	this._selectedFocusedClassName = [this._origClassName, DwtCssStyle.SELECTED, DwtCssStyle.FOCUSED].join("-");
+	this._actionedClassName = [this._origClassName, DwtCssStyle.ACTIONED].join("-");
+	this._dragOverClassName = [this._origClassName, DwtCssStyle.DRAG_OVER].join("-");
 
 	params.deferred = (params.deferred !== false);
 	params.className = null;
@@ -66,6 +67,7 @@ DwtTreeItem = function(params) {
 	this._forceNotifySelection = Boolean(params.forceNotifySelection);
 	this._actionEnabled = true;
 	this._forceNotifyAction = Boolean(params.forceNotifyAction);
+	this._selectable = true;
 
 	// disable selection if checkbox style
 	if (this._tree._isCheckedStyle()) {
@@ -83,7 +85,8 @@ DwtTreeItem = function(params) {
 	}
 };
 
-DwtTreeItem.PARAMS = ["parent", "index", "text", "imageInfo", "deferred", "className", "posStyle"];
+DwtTreeItem.PARAMS = ["parent", "index", "text", "imageInfo", "deferred", "className", "posStyle",
+					  "forceNotifySelection", "forceNotifyAction", "selectable"];
 
 DwtTreeItem.prototype = new DwtComposite;
 DwtTreeItem.prototype.constructor = DwtTreeItem;
@@ -354,53 +357,34 @@ function() {
 DwtTreeItem.prototype.handleKeyAction =
 function(actionCode, ev) {
 
-	var curItem;
-	var sel = this._tree.getSelection();
-	if (sel && sel.length) {
-		curItem = sel[0];
-	} else {
-		var items = this._tree.getItems();
-		if (items && items.length) {
-			this._tree.setSelection(items[0], true);
-			return true;
-		}
-	}
-	DBG.println("tree item: " + this.getText());
+
 	switch (actionCode) {
 
-		case DwtKeyMap.SELECT_NEXT: {
-			DBG.println("tree view: SELECT NEXT");
-			var ti = curItem._getNextTreeItem(true);
+		case DwtKeyMap.NEXT: {
+			var ti = this._tree._getNextTreeItem(true);
 			if (ti) {
-				DBG.println("setting focus to tree item: " + ti._htmlElId);
-				this._tree.setSelection(ti, true);
+				this._tree.setSelection(ti, false, true);
 			}
 			break;
 		}
 
-		case DwtKeyMap.SELECT_PREV: {
-			DBG.println("tree view: SELECT PREV");
-			var ti = curItem._getNextTreeItem(false);
+		case DwtKeyMap.PREV: {
+			var ti = this._tree._getNextTreeItem(false);
 			if (ti) {
-				DBG.println("setting focus to tree item: " + ti._htmlElId);
-				this._tree.setSelection(ti, true);
+				this._tree.setSelection(ti, false, true);
 			}
 			break;
 		}
 
 		case DwtKeyMap.EXPAND: {
-			DBG.println("tree view: EXPAND");
 			if (!this._expanded) {
-				DBG.println("tree view: expanding");
 				this.setExpanded(true, false, true);
 			}
 			break;
 		}
 
 		case DwtKeyMap.COLLAPSE: {
-			DBG.println("tree view: COLLAPSE");
 			if (this._expanded) {
-				DBG.println("tree view: collapsing");
 				this.setExpanded(false, false, true);
 			}
 			break;
@@ -414,96 +398,6 @@ function(actionCode, ev) {
 	return true;
 };
 
-/**
- * Returns the next (or previous) tree item as it appears to the user. In other words, the visible
- * tree item immediately above or below this one.
- *
- * @param next		[boolean]		if true, return next tree item; otherwise, return previous tree item
- * @param noExp		[boolean]*		if true, do not return first child as next tree item (for recursive call)
- */
-DwtTreeItem.prototype._getNextTreeItem =
-function(next, noExp) {
-	var ti = null;
-	if (next) {
-		if (!noExp && this._expanded) {
-			var children = this.getChildren();
-			ti = children && children.length && children[0];
-		}
-	} else {
-		if (this.parent && (this.parent instanceof DwtTreeItem) && this.parent._expanded) {
-			var children = this.parent.getChildren();
-			var test = children && children.length && children[0];
-			if (this == test) {
-				ti = this.parent;
-			}
-		}
-	}
-
-	if (!ti) {
-		ti = this._getSiblingTreeItem(next);
-		if (ti && !next) {
-			ti = ti._getLastVisibleSubitem();
-		}
-	}
-
-	if (!ti) {
-		var parent = this.parent;
-		if (parent && (parent instanceof DwtTreeItem)) {
-			return parent._getNextTreeItem(next, true);
-		} else {
-			return null;
-		}
-	}
-
-	return ti;
-};
-
-/**
- * Returns the next (or previous) tree item at the same level as this one, skipping
- * over separators.
- *
- * @param next		[boolean]		if true, return next tree item; otherwise, return previous tree item
- */
-DwtTreeItem.prototype._getSiblingTreeItem =
-function(next) {
-	var found = false;
-	var sibs = this.parent.getChildren();
-	for (var i = 0; i < sibs.length; i++) {
-		if (sibs[i]._htmlElId == this._htmlElId) {
-			found = true;
-			break;
-		}
-	}
-
-	var okay = next ? (i < sibs.length - 1) : (i > 0);
-	if (found) {
-		while (okay) {
-			i = next ? i + 1 : i - 1;
-			ti = sibs[i];
-			if (ti && !ti._isSeparator) { return ti; }
-			okay = next ? (i < sibs.length - 1) : (i > 0); 
-		}
-	}
-	return null;
-};
-
-/**
- * Returns the bottommost visible tree item at or below this one.
- */
-DwtTreeItem.prototype._getLastVisibleSubitem =
-function() {
-	if (!this._expanded) { return this; }
-
-	var children = this.getChildren();
-	for (var i = children.length - 1; i >= 0; i--) {
-		var ti = children[i];
-		if (!ti._isSeparator) {
-			return ti._getLastVisibleSubitem();
-		}
-	}
-
-	return this;
-};
 
 DwtTreeItem.prototype._initialize =
 function(index, realizeDeferred) {
@@ -822,16 +716,13 @@ function(selected) {
 		if (!this._initialized) {
 			this._initialize();
 		}
+		if (!this._textCell) { return; }
 		if (selected && (this._selectionEnabled || this._forceNotifySelection)) {
-            if (this._textCell) {
-                this._textCell.className = this._selectedClassName;
-            }
+            this._textCell.className = this._selectedClassName;
 			this.focus();
             return true;
 		} else {
-            if (this._textCell) {
-    			this._textCell.className = this._textClassName;
-            }
+   			this._textCell.className = this._textClassName;
             return false;
 		}
 	}
@@ -844,16 +735,31 @@ function(actioned) {
 		if (!this._initialized) {
 			this._initialize();
 		}
-		if (this._textCell && actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected) {
+		if (!this._textCell) { return; }
+		if (actioned && (this._actionEnabled || this._forceNotifyAction) && !this._selected) {
 			this._textCell.className = this._actionedClassName;
 			return true;
 		} else if (!actioned) {
-			if (this._textCell && !this._selected) {
+			if (!this._selected) {
 				this._textCell.className = this._textClassName;
 			}
 			return false;
 		}
 	}
+};
+
+DwtTreeItem.prototype._focus =
+function() {
+	if (!this._textCell) { return; }
+	// focused tree item should always be selected as well
+	this._textCell.className = this._selectedFocusedClassName;
+	this._tree.setFocusedItem(this);
+};
+
+DwtTreeItem.prototype._blur =
+function() {
+	if (!this._textCell) { return; }
+	this._textCell.className = this._selected ? this._selectedClassName : this._textClassName;
 };
 
 DwtTreeItem._checkBoxMouseDownHdlr =
@@ -974,6 +880,7 @@ DwtTreeItemSeparator = function(parent) {
 	this.parent = parent;
 	this._isSeparator = true;
 	this._initialized = true;
+	this._selectable = false;
 };
 
 DwtTreeItemSeparator.prototype.dispose =
