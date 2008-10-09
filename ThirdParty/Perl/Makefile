@@ -111,7 +111,7 @@ PERL_LIBS 	:= \
 	Mail::DKIM
 
 NET_SSLeay := \
-	Net-SSLeay-1.32
+	Net-SSLeay-1.35
 
 CRYPT_SSLeay := \
 	Crypt-SSLeay-0.57
@@ -132,7 +132,7 @@ SA_PERL_LIBS = \
 	Mail::SpamAssassin
 
 SWATCH = \
-	swatch-3.2.2
+	swatch-3.2.3
 
 LDAPAPI = \
 	Net-LDAPapi-3.0.3
