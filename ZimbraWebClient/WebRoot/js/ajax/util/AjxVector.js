@@ -115,6 +115,11 @@ function() {
 	return this._array.length > 0 ? this._array.pop() : null;
 };
 
+AjxVector.prototype.reverse =
+function() {
+	this._array.reverse();
+};
+
 AjxVector.prototype.replace =
 function(index, newObj) {
 	var oldObj = this._array[index];
