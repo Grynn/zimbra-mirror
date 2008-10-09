@@ -1,11 +1,23 @@
 --- amavisd-new-2.6.1/amavisd.orig	2008-10-09 12:17:05.000000000 -0700
-+++ amavisd-new-2.6.1/amavisd	2008-10-09 12:31:34.000000000 -0700
++++ amavisd-new-2.6.1/amavisd	2008-10-09 13:09:55.000000000 -0700
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl -T
 +#!/usr/bin/perl
  
  #------------------------------------------------------------------------------
  # This is amavisd-new.
+@@ -149,9 +149,9 @@
+         if ($errn)         { $msg = "is inaccessible: $!" }
+         elsif (-d _)       { $msg = "is a directory" }
+         elsif (!-f _)      { $msg = "is not a regular file" }
+-        elsif ($> && -o _) { $msg = "should not be owned by EUID $>"  }
++#        elsif ($> && -o _) { $msg = "should not be owned by EUID $>"  }
+         elsif ($> && -w _) { $msg = "is writable by EUID $>, EGID $)" }
+-        elsif ($owner_uid) { $msg = "should be owned by root (uid 0) "}
++#       elsif ($owner_uid) { $msg = "should be owned by root (uid 0) "}
+         !defined($msg) or die "Requiring $full_fname, file $msg,\n";
+         $! = 0;
+         $result = do $full_fname;
 @@ -378,6 +378,7 @@
      [qw(
        $helpers_home $dspam $sa_spawned
@@ -23,15 +35,18 @@
  
    # similar to $spam_quarantine_to, but the lookup key is the sender address
    $spam_quarantine_bysender_to = undef;  # dflt: no by-sender spam quarantine
-@@ -1641,7 +1642,7 @@
+@@ -1641,9 +1642,9 @@
      elsif ($errn)        { $msg = "is inaccessible: $!" }
      elsif (-d _)         { $msg = "is a directory" }
      elsif (!-f _)        { $msg = "is not a regular file" }
 -    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
 +#    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
      elsif ($> && -w _)   { $msg = "is writable by EUID $>, EGID $)" }
-     elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
+-    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
++#    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
      if (defined $msg)    { die "Config file \"$config_file\" $msg," }
+     $read_config_files_depth++;  push(@actual_config_files, $config_file);
+     if ($read_config_files_depth >= 100) {
 @@ -8611,8 +8612,8 @@
            rename($config_file.'.moved', $config_file);
            $m = 'is writable (confirmed)';

@@ -149,9 +149,9 @@ sub my_require($) {
         if ($errn)         { $msg = "is inaccessible: $!" }
         elsif (-d _)       { $msg = "is a directory" }
         elsif (!-f _)      { $msg = "is not a regular file" }
-        elsif ($> && -o _) { $msg = "should not be owned by EUID $>"  }
+#        elsif ($> && -o _) { $msg = "should not be owned by EUID $>"  }
         elsif ($> && -w _) { $msg = "is writable by EUID $>, EGID $)" }
-        elsif ($owner_uid) { $msg = "should be owned by root (uid 0) "}
+#       elsif ($owner_uid) { $msg = "should be owned by root (uid 0) "}
         !defined($msg) or die "Requiring $full_fname, file $msg,\n";
         $! = 0;
         $result = do $full_fname;
@@ -1644,7 +1644,7 @@ sub read_config_file($$) {
     elsif (!-f _)        { $msg = "is not a regular file" }
 #    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
     elsif ($> && -w _)   { $msg = "is writable by EUID $>, EGID $)" }
-    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
+#    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
     if (defined $msg)    { die "Config file \"$config_file\" $msg," }
     $read_config_files_depth++;  push(@actual_config_files, $config_file);
     if ($read_config_files_depth >= 100) {
