@@ -169,7 +169,11 @@ function (status, uploadResults) {
                 throw new AjxException(com_zimbra_bulkprovision.error_unmatching_aid) ;
             }
         }catch (ex) {
-            this._app.getCurrentController()._handleException(ex) ;
+            if (ex.code == "bulkprovision.BP_TOO_MANY_ACCOUNTS")  {
+                this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_TOO_MANY_ACCOUNTS, ex, true);
+            }else{
+                this._app.getCurrentController()._handleException(ex) ;
+            }
             return ;
         }
         this.goPage(ZaBulkProvisionWizard.STEP_PROVISION);
@@ -275,7 +279,7 @@ function() {
 	}else if (cStep == ZaBulkProvisionWizard.STEP_PROVISION) {
 	    //create the accounts now, it is a sychronous action with status updated
         var startTime = new Date ();
-        console.log("Start provisiong accounts: " + startTime.toUTCString());
+        if (AjxEnv.hasFirebug) console.log("Start provisiong accounts: " + startTime.toUTCString());
         var controller = this._app.getCurrentController() ;
 //        var busyMsg = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS ;
         var statusDialog = this.getProvisionStatusDialog() ;
@@ -304,14 +308,18 @@ function() {
 
                 var soapDoc = AjxSoapDoc.create("CreateAccountRequest", ZaZimbraAdmin.URN, null);
                 soapDoc.set(ZaAccount.A_name, account.accountName);
-                soapDoc.set(ZaAccount.A_password, account.password);
+//              we set the password using setPasswordRequest               
+//                soapDoc.set(ZaAccount.A_password, account.password);
 
                 //set the account attributes
                 var attrs = {} ;
+                /*
                 if ((this._containedObject[ZaBulkProvision.A_mustChangePassword] == "TRUE")
                         || (account[ZaBulkProvision.A_mustChangePassword] == "TRUE")){
                     attrs [ZaAccount.A_zimbraPasswordMustChange] = "TRUE" ;
-                }
+                } */
+                //always change the password
+                attrs [ZaAccount.A_zimbraPasswordMustChange] = "TRUE" ;
                 
                 if (account[ZaBulkProvision.A2_displayName]) {
                     attrs [ZaAccount.A_displayname] = account[ZaBulkProvision.A2_displayName] ; 
@@ -340,6 +348,21 @@ function() {
                         accounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.SUCCEEDED ;
                         accounts[i][ZaBulkProvision.A2_isToProvision] = false ;     //succeed, don't try to create the second time
                         accounts[i][ZaBulkProvision.A2_isValid] = "TRUE" ;
+
+                        //set the password now
+                        var sp_soapDoc = AjxSoapDoc.create("SetPasswordRequest", ZaZimbraAdmin.URN, null);
+                        sp_soapDoc.set("id", resp.account[0].id) ;
+                        sp_soapDoc.set("newPassword", account.password) ;
+                        var sp_Params = { soapDoc: sp_soapDoc }
+                        ZaRequestMgr.invoke(sp_Params, {} ) ;
+
+                        //enforce must change password,  mustChangePassword is revoked by the setPasswordRequest
+                        var ma_soapDoc = AjxSoapDoc.create("ModifyAccountRequest", ZaZimbraAdmin.URN, null);
+                        ma_soapDoc.set("id", resp.account[0].id);
+                        var ma_attr = ma_soapDoc.set("a", "TRUE") ;
+                        ma_attr.setAttribute("n", ZaAccount.A_zimbraPasswordMustChange) ;
+                        var ma_params = {soapDoc: ma_soapDoc};
+                        ZaRequestMgr.invoke(ma_params, {}) ;
                     } else {
                         accounts[i][ZaBulkProvision.A2_isValid] = "FALSE" ;
                     }
@@ -364,10 +387,10 @@ function() {
         statusDialog.setObject(this._provisionStatusObject ) ;
 
         var endTime = new Date ();
-        console.log("End provisiong accounts: " + endTime.toUTCString());
+        if (AjxEnv.hasFirebug) console.log("End provisiong accounts: " + endTime.toUTCString());
         var total = endTime.getTime () - startTime.getTime () ;
         
-        console.log("Total Time (ms): "  + total) ; 
+        if (AjxEnv.hasFirebug) console.log("Total Time (ms): "  + total) ; 
         //update the status now
         ZaBulkProvision.updateBulkProvisionStatus (this._app, this._containedObject) ;
         nextStep = ZaBulkProvisionWizard.STEP_SUMMARY ;
@@ -479,6 +502,7 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 								{ type:_OUTPUT_, value: com_zimbra_bulkprovision.CSV_uploadTitle, align: _LEFT_},
 								{ type:_SPACER_ , height: 10 },
                                 { type:_OUTPUT_, value: ZaBulkProvisionWizard.getUploadFormHtml() } ,
+                                /* always change the password
                                 { type: _GROUP_, numCols: 2,items: [
                                         { type: _CHECKBOX_, ref: ZaBulkProvision.A_mustChangePassword,
                                             label:com_zimbra_bulkprovision.CKB_mustChangePasswd, labelLocation:_RIGHT_,
@@ -486,7 +510,7 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
                                             align: _LEFT_
                                         }
                                     ]
-                                },
+                                }, */
                                 { type:_SPACER_ , height: 10 } ,
                                 { type:_OUTPUT_, value: com_zimbra_bulkprovision.CSV_uploadNotes } 
                             ]
@@ -505,7 +529,7 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
     // bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_isToProvision, ZaMsg.ALV_Name_col, null, 100, null, null, true, true);
     bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_accountName, ZaMsg.ALV_Name_col, null, 150, null, null, true, true);
     bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_displayName, ZaMsg.ALV_DspName_col, null, 150, null, null, true, true);
-    bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_password, com_zimbra_bulkprovision.ALV_Password_col, null, 50, null, null, true, true);
+    bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_password, com_zimbra_bulkprovision.ALV_Password_col, null, 100, null, null, true, true);
     bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_status, com_zimbra_bulkprovision.ALV_Stauts_col, null, null, null, null, true, true);
     
 

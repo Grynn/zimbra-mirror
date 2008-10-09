@@ -13,6 +13,8 @@ import com.zimbra.soap.ZimbraSoapContext;
 
 import java.util.Map;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,7 +30,8 @@ import au.com.bytecode.opencsv.CSVReader;
  * To change this template use File | Settings | File Templates.
  */
 public class GetBulkProvisionAccounts extends AdminDocumentHandler {
-
+    public static final int MAX_ACCOUNTS_LIMIT = 1000 ;
+    
     public static final String A_accountName = "accountName" ;
     public static final String A_displayName = "displayName" ;
     public static final String A_password = "password" ;
@@ -39,6 +42,9 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
 //    public static final String A_error = "error" ;
 
     public static final String ERROR_INVALID_ACCOUNT_NAME = "Invalid account name. " ;
+
+    private ArrayList<String> accountNames = new ArrayList <String> ();
+    
     public boolean domainAuthSufficient(Map context) {
         return true;
     }
@@ -70,8 +76,14 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
 
             String accountName, displayName, password, status ;
             ZimbraLog.extensions.debug("Read CSV file content.")  ;
+            List allEntries = reader.readAll() ;
+            int totalNumberOfEntries = allEntries.size() ;
+           
+            checkAccountLimits(totalNumberOfEntries);
 
-            while ((nextLine = reader.readNext()) != null) {
+//            while ((nextLine = reader.readNext()) != null) {
+            for (int i=0; i < totalNumberOfEntries; i ++) {
+                nextLine = (String []) allEntries.get(i);
                 boolean isValidEntry = false ;
                 accountName = displayName = password = status = null ;
                 try {
@@ -79,7 +91,7 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
                 }catch (ServiceException e) {
                     isValidCSV = false ;
                     ZimbraLog.extensions.error(e);
-                    status = "Line " + lineNo + ": " + e.getMessage() ;
+                    status = "Line " + (i+1) + ": " + e.getMessage() ;
                 }
 
                 el = response.addElement("account") ;
@@ -114,8 +126,6 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
                 if ((status != null) && (status.length()>0)) {
                     el.addKeyValuePair(A_status, status) ;
                 }
-
-                lineNo ++ ;
             }
 
             in.close();
@@ -140,6 +150,21 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
         return response;
 	}
 
+    /**
+     * The account limits are decided by the following factors:
+     * 1) Hard limit: MAX_ACCOUNTS_LIMIT
+     * 2) zimbraDomainMaxAccounts (NOT DONE YET)
+     *
+     * @param numberOfEntries
+     * @throws ServiceException
+     */
+    private void checkAccountLimits (int numberOfEntries) throws ServiceException {
+        if (numberOfEntries > MAX_ACCOUNTS_LIMIT) {
+            throw BulkProvisionException.BP_TOO_MANY_ACCOUNTS (
+                    "the maximum accounts you can bulk provisioning is "+ MAX_ACCOUNTS_LIMIT);
+        }
+    }
+    
     private boolean validEntry (String [] entries, ZimbraSoapContext lc) throws ServiceException {
         Provisioning prov = Provisioning.getInstance();
         String errorMsg = "" ;
@@ -191,14 +216,28 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
             throw ServiceException.PARSE_ERROR(errorMsg, new Exception(errorMsg)) ;
         }
 
-        //TODO: duplicated entry with the same account name
+        if (isDuplicatedEntry(accountName)) {
+            errorMsg = "duplicate entry: " + accountName;
+            throw ServiceException.PARSE_ERROR(errorMsg, new Exception(errorMsg)) ;
+        }
 
+        accountNames.add(accountName) ;
         return true ;
     }
 
-    //      private static char[] pwdChars = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`1234567890~!@#$%^&*()".toCharArray();
-    private static char[] pwdChars = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
+    private boolean isDuplicatedEntry (String acctName) {
+        for (int i = 0; i < accountNames.size(); i ++) {
+            if (acctName.trim().equals(accountNames.get(i).trim())){
+                return true ;
+            }
+        }
+        return false ;
+    }
 
+    //      private static char[] pwdChars = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`1234567890~!@#$%^&*()".toCharArray();
+    private static char[] pwdChars = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*().,;:`<>?-+|}{[]'\"".toCharArray();
+//    private static char[] pwdPunc = .toCharArray();
+    
     private static char[] generateStrongPassword(int length) {
         char[] pwd = new char[length];
         try {

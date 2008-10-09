@@ -30,7 +30,7 @@ ZaBulkProvisionStatusDialog = function(parent,  app) {
 	this._app = app;
 	this._standardButtons = [DwtDialog.OK_BUTTON];
     w = "420px" ;
-    h = "3200px"
+    h = "320px"
     ZaXDialog.call(this, parent, app, null, com_zimbra_bulkprovision.title_provision, w, h);
 	this._containedObject = [];
 	this.initForm(ZaBulkProvisionStatusDialog.myXModel,this.getMyXForm());
