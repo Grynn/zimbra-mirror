@@ -105,7 +105,8 @@ PERL_LIBS 	:= \
 	List::Compare \
 	Getopt::Easy \
 	Crypt::SaltedHash \
-	Archive::Zip 
+	Archive::Zip  \
+	Mail::DKIM
 
 NET_SSLeay := \
 	Net-SSLeay-1.32
