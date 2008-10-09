@@ -106,6 +106,9 @@ PERL_LIBS 	:= \
 	Getopt::Easy \
 	Crypt::SaltedHash \
 	Archive::Zip  \
+	Crypt::OpenSSL::RSA \
+	Digest::SHA \
+	Error \
 	Mail::DKIM
 
 NET_SSLeay := \
