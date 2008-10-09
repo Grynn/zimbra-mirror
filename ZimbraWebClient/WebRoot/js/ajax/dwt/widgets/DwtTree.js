@@ -120,8 +120,9 @@ function() {
 	for (var i = 0; i < sz; i++) {
 		a[i]._setSelected(false);
 	}
-	if (sz > 0)
+	if (sz > 0) {
 		this._notifyListeners(DwtEvent.SELECTION, this._selectedItems.getArray(), DwtTree.ITEM_DESELECTED, null, this._selEv);
+	}
 	this._selectedItems.removeAll();
 }
 
@@ -249,12 +250,11 @@ function(next) {
 				break;
 			}
 		}
-		nextItem = list[idx];
+		nextItem = list[idx]; // if array index out of bounds, nextItem is undefined
 	} else {
 		// if nothing is selected yet, return the first or last item
-		var items = this.getItems();
-		if (items && items.length) {
-			nextItem = next ? items[0] : items[items.length - 1];
+		if (list && list.length) {
+			nextItem = next ? list[0] : list[list.length - 1];
 		}
 	}
 	return nextItem;
@@ -290,11 +290,6 @@ function(list, treeItem) {
 DwtTree.prototype._clearTreeItemList =
 function() {
 	this._treeItemList = null;
-};
-
-DwtTree.prototype.setFocusedItem =
-function(treeItem) {
-	this._focusedTreeItem = treeItem;
 };
 
 /**

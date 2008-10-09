@@ -363,7 +363,7 @@ function(actionCode, ev) {
 		case DwtKeyMap.NEXT: {
 			var ti = this._tree._getNextTreeItem(true);
 			if (ti) {
-				this._tree.setSelection(ti, false, true);
+				ti._tree.setSelection(ti, false, true);
 			}
 			break;
 		}
@@ -371,7 +371,7 @@ function(actionCode, ev) {
 		case DwtKeyMap.PREV: {
 			var ti = this._tree._getNextTreeItem(false);
 			if (ti) {
-				this._tree.setSelection(ti, false, true);
+				ti._tree.setSelection(ti, false, true);
 			}
 			break;
 		}
@@ -753,7 +753,6 @@ function() {
 	if (!this._textCell) { return; }
 	// focused tree item should always be selected as well
 	this._textCell.className = this._selectedFocusedClassName;
-	this._tree.setFocusedItem(this);
 };
 
 DwtTreeItem.prototype._blur =
