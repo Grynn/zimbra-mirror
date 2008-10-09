@@ -346,12 +346,14 @@ fi
 
 if [ -d ${zimbra_home}/data/postfix ]; then
 	printMsg "Fixing ownership and permisions on ${zimbra_home}/data/postfix"
-	if [ ! -d ${zimbra_home}/data/postfix/spool ]; then
-		mkdir -p ${zimbra_home}/data/postfix/spool
+	if [ ! -d ${zimbra_home}/data/postfix/spool/pid ]; then
+		mkdir -p ${zimbra_home}/data/postfix/spool/pid
 	fi
 	chown -fR ${postfix_owner}:${postfix_owner} ${zimbra_home}/data/postfix/spool
 	chown -f root ${zimbra_home}/data/postfix/spool
 	chgrp -f ${postfix_owner} ${zimbra_home}/data/postfix/spool
+	chown -f ${postfix_owner} ${zimbra_home}/data/postfix/spool/pid
+	chgrp -f root ${zimbra_home}/data/postfix/spool/pid
 	# Postfix specific permissions
 	if [ -d ${zimbra_home}/data/postfix/spool/public ]; then
 		chgrp -f ${postfix_suid_group} ${zimbra_home}/data/postfix/spool/public
@@ -361,6 +363,7 @@ if [ -d ${zimbra_home}/data/postfix ]; then
 		chgrp -f ${postfix_suid_group} ${zimbra_home}/data/postfix/spool/maildrop
 		chmod 730 ${zimbra_home}/data/postfix/spool/maildrop
 	fi
+	chown -f ${postfix_owner} ${zimbra_home}/data/postfix
 fi
 
 if [ -f ${zimbra_home}/conf/ldap-scm.cf ]; then
