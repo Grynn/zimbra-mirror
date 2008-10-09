@@ -106,7 +106,6 @@ PERL_LIBS 	:= \
 	Getopt::Easy \
 	Crypt::SaltedHash \
 	Archive::Zip  \
-	Crypt::OpenSSL::RSA \
 	Digest::SHA \
 	Error \
 	Mail::DKIM
@@ -116,6 +115,12 @@ NET_SSLeay := \
 
 CRYPT_SSLeay := \
 	Crypt-SSLeay-0.57
+
+CRYPT_RANDOM := \
+	Crypt-OpenSSL-Random-0.04
+
+CRYPT_RSA := \
+	Crypt-OpenSSL-RSA-0.25
 
 DBFILE_PERL_LIBS := \
 	DB_File
@@ -178,7 +183,25 @@ all: setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --lib=/opt/zimbra/openssl-$(SSL_VERSION)/lib LDFLAGS="-L/opt/zimbra/openssl-$(SSL_VERSION)/lib -R/opt/zimbra/openssl-$(SSL_VERSION)/lib"; \
-			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+
+	@for lib in $(CRYPT_RANDOM); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L/opt/zimbra/openssl-$(SSL_VERSION)/lib -R/opt/zimbra/openssl-$(SSL_VERSION)/lib -lssl -lcrypto" INC="-I/opt/zimbra/openssl-$(SSL_VERSION)/include"; \
+			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+
+	@for lib in $(CRYPT_RSA); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L/opt/zimbra/openssl-$(SSL_VERSION)/lib -R/opt/zimbra/openssl-$(SSL_VERSION)/lib -lssl -lcrypto" INC="-I/opt/zimbra/openssl-$(SSL_VERSION)/include"; \
+			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
