@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.ZimbraCookie;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZAuthResult;
@@ -76,7 +77,7 @@ public class LoginTag extends ZimbraSimpleTag {
     public void setRequestedSkin(String skin) { this.mRequestedSkin = skin; }
 
     private String getVirtualHost(HttpServletRequest request) {
-        return request.getServerName();
+        return HttpUtil.getVirtulaHost(request);
         /*
         String virtualHost = request.getHeader("Host");
         if (virtualHost != null) {

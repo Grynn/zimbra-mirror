@@ -18,6 +18,7 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.VoiceConstants;
 import com.zimbra.cs.taglib.ZJspSession;
@@ -500,8 +501,9 @@ public class BeanUtils {
     }
 
     public static String getServerName(PageContext pc) {
-        return  ((HttpServletRequest) pc.getRequest()).getServerName();
+        return HttpUtil.getVirtulaHost((HttpServletRequest) pc.getRequest());
     }
+    
     public static ZTagBean getTag(PageContext pc, String id) throws JspException {
         try {
             ZMailbox mbox = ZJspSession.getZMailbox(pc);
