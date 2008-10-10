@@ -75,6 +75,8 @@ function (xModelMetaData, xFormMetaData) {
 	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
 	this._localXForm.setController(this._app);
 	this._localXForm.draw();
+	var formChangeListener = new AjxListener(this, ZaTabView.prototype.setDirty,[true]) ;
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_CHANGED,formChangeListener);
 	this._drawn = true;
 }
 
@@ -207,12 +209,13 @@ function () {
 	return this._isDirty;
 }
 
+/*
 ZaTabView.onFormFieldChanged = 
 function (value, event, form) {
 	form.parent.setDirty(true);	
 	this.setInstanceValue(value);
 	return value;
-}
+}*/
 
 ZaTabView.prototype.getTabToolTip =
 function () {

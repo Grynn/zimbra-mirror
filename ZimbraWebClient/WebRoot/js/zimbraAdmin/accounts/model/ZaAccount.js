@@ -1802,6 +1802,9 @@ ZaAccount.isEmailRetentionPolicyEnabled = function () {
     return true ;
 }
 
+ZaAccount.isEmailRetentionPolicyDisabled = function () {
+	return !ZaAccount.isEmailRetentionPolicyEnabled.call(this);
+}
 
 ZaAccount.getAccountTypeOutput = function (isNewAccount) {
     var form = this.getForm () ;

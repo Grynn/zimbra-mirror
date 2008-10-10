@@ -340,7 +340,7 @@ function (form, listId){
  */
 ZaAccountMemberOfListView.shouldEnableAddRemoveButton =
 function (listId){
-	return  (ZaAccountMemberOfListView._getSelections(this, listId).length > 0);
+	return  (ZaAccountMemberOfListView._getSelections(this.getForm(), listId).length > 0);
 };
 
 /**
@@ -348,7 +348,7 @@ function (listId){
  */
 ZaAccountMemberOfListView.shouldEnableAllButton =
 function (listItemId){
-	var list = this.getItemsById(listItemId)[0].widget.getList();
+	var list = this.getForm().getItemsById(listItemId)[0].widget.getList();
 	if (list != null) return ( list.size() > 0);
 	return false;
 };
