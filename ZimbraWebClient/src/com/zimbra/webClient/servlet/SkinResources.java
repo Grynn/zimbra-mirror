@@ -21,6 +21,7 @@ import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.servlet.DiskCacheServlet;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 import org.w3c.dom.Document;
@@ -56,7 +57,7 @@ import java.awt.Color;
  * TODO: Clean up this code!
  */
 public class SkinResources
-        extends HttpServlet {
+        extends DiskCacheServlet {
 
     //
     // Constants
@@ -141,20 +142,6 @@ public class SkinResources
     // Data
     //
 
-    /**
-     * <ul>
-     * <li>Key: client:skin/templates={true|false|split|only}:browser[:locale]
-     * (e.g. standard:beach/templates=split:GECKO NAVIGATOR MACINTOSH:en_US)
-     * <li>Value: Map
-     * <ul>
-     * <li>Key: request uri
-     * <li>Value: String buffer
-     * </ul>
-     * </ul>
-     */
-    private Map<String, Map<String, String>> cache =
-            new HashMap<String, Map<String, String>>();
-
 	/**
 	 * <strong>Note:</strong>
 	 * This is needed because only the generate method knows if the
@@ -168,6 +155,14 @@ public class SkinResources
 	 * launchZCS.jsp. 
 	 */
 	private Map<String,Boolean> included = new HashMap<String,Boolean>();
+
+	//
+	// Constructors
+	//
+
+	public SkinResources() {
+		super("skinres");
+	}
 
     //
     // HttpServlet methods
@@ -200,7 +195,7 @@ public class SkinResources
 		String serverName = getServerName(req);
 
 		Locale locale = getLocale(req);
-        String cacheId = serverName + ":" + client + ":" + skin + "/templates=" + templates + ":" + browserType;
+        String cacheId = serverName + ":" + uri + ":" + client + ":" + skin + "/templates=" + templates + ":" + browserType;
         if (type.equals(T_JAVASCRIPT) || type.equals(T_CSS)) {
             cacheId += ":" + locale;
         }
@@ -219,9 +214,9 @@ public class SkinResources
         }
 
         // generate buffer
-        Map<String, String> buffers = cache.get(cacheId);
-        String buffer = buffers != null && !debug ? buffers.get(uri) : null;
-        if (buffer == null) {
+		String buffer = null;
+        File file = !debug ? getCacheFile(cacheId) : null;
+        if (file == null || !file.exists()) {
             if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: generating buffer");
             buffer = generate(req, resp, cacheId, macros, type, client, locale, templates);
             if (!debug) {
@@ -262,64 +257,54 @@ public class SkinResources
                     compressor.compress(out, 0, true, false, false, false);
                     buffer = out.toString();
                 }
-                if (buffers == null) {
-                    buffers = new HashMap<String, String>();
-                    cache.put(cacheId, buffers);
-                }
-                buffers.put(uri, buffer);
+				ZimbraLog.webclient.debug("DEBUG: buffer.length: "+buffer.length());
+
+				// write buffer to cache file
+				if (!debug) {
+					file = File.createTempFile("res-", "."+type, getCacheDir());
+					if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: buffer file: "+file);
+					copy(buffer, file);
+					compress(file);
+					putCacheFile(cacheId, file);
+				}
             }
         } else {
             if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: using previous buffer");
         }
 
-        // write buffer
+        // set headers
+		String compressStr = req.getParameter(P_COMPRESS);
+		boolean compress = compressStr != null && (compressStr.equals("true") || compressStr.equals("1"));
+		compress = compress && macros.get("MSIE_6") == null;
         try {
             // We browser sniff so need to make sure any caches do the same.
             resp.addHeader("Vary", "User-Agent");
             // Cache It!
             resp.setHeader("Cache-control", "public, max-age=604800");
             resp.setContentType(contentType);
-            resp.setContentLength(buffer.length());
+			// NOTE: I cast the file length to an int which I think is
+			//       fine. If the aggregated contents are larger than
+			//       Integer.MAX_VALUE, then we've got other problems. ;)
+            resp.setContentLength(file != null ? (int)file.length() : buffer.length());
         }
         catch (IllegalStateException e) {
             // ignore -- thrown if called from including JSP
         }
 
-		String compressStr = req.getParameter(P_COMPRESS);
-		boolean compress = compressStr != null && (compressStr.equals("true") || compressStr.equals("1"));
-		compress = compress && macros.get("MSIE_6") == null;
-		if (compress) {
-			try {
-				resp.setHeader("Content-Encoding", "gzip");
-			}
-			catch (IllegalStateException e) {
-				compress = false;
-			}
+		// write buffer
+		if (file != null) {
+			copy(file, resp, compress);
 		}
-		try {
-            OutputStream out = resp.getOutputStream();
-            byte[] bytes = buffer.getBytes("UTF-8");
-			if (compress) {
-				ByteArrayOutputStream bos = new ByteArrayOutputStream(bytes.length);
-				OutputStream gzos = new GZIPOutputStream(bos);
-				gzos.write(bytes);
-				gzos.close();
-				bytes = bos.toByteArray();
-			}
-			out.write(bytes);
-			out.flush();
-		}
-        catch (IllegalStateException e) {
-            // use writer if called from including JSP
-            PrintWriter out = resp.getWriter();
-            out.print(buffer);
-			out.flush();
+		else {
+			copy(buffer, resp, compress);
 		}
 
+		// keep track of whether the templates were included
 		Boolean included = this.included.get(cacheId);
 		if (included != null) {
 			req.setAttribute(A_TEMPLATES_INCLUDED, included);
 		}
+
     } // doGet(HttpServletRequest,HttpServletResponse)
 
     //
@@ -699,7 +684,7 @@ public class SkinResources
 
 	private String getServerName(HttpServletRequest req) {
 		String serverName = getServletConfig().getInitParameter(P_SERVER_NAME);
-		return serverName != null ? serverName : HttpUtil.getVirtulaHost(req);
+		return serverName != null ? serverName.trim() : HttpUtil.getVirtulaHost(req);
 	}
 
     /**
