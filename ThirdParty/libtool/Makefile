@@ -22,7 +22,7 @@ build:
 	CFLAGS="-D_REENTRANT -g -O2" CXXFLAGS="-D_REENTRANT -g -O2" LD_RUN_PATH=$(LIBTOOL_LIB_DIR) ./configure --prefix=$(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION); \
 	CFLAGS="-D_REENTRANT -g -O2" CXXFLAGS="-D_REENTRANT -g -O2" LD_RUN_PATH=$(LIBTOOL_LIB_DIR) $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(LIBTOOL_LIB_DIR) $(MAKE) install)
-	(cd $(ZIMBRA_HOME); ln -s libtool-$(LIBTOOL_VERSION) libtool)
+	(cd $(ZIMBRA_HOME); ln -s libtool-$(LIBTOOL_VERSION) libtool; rm -rf $(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/{bin,share})
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/libtool
