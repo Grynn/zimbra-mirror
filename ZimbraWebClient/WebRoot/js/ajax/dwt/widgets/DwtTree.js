@@ -54,6 +54,7 @@ DwtTree = function(params) {
 	}
 	this._selectedItems = new AjxVector();
 	this._selEv = new DwtSelectionEvent(true);
+	this._tmpPoint = new DwtPoint(0, 0);
 }
 
 DwtTree.PARAMS = ["parent", "style", "className", "posStyle"];
@@ -153,15 +154,13 @@ function(treeItem, skipNotify, kbNavEvent) {
 		}
 	}
 
-	this._selEv.kbNavEvent = kbNavEvent;
-
 	if (da && !skipNotify) {
-		this._notifyListeners(DwtEvent.SELECTION, da, DwtTree.ITEM_DESELECTED, null, this._selEv);
+		this._notifyListeners(DwtEvent.SELECTION, da, DwtTree.ITEM_DESELECTED, null, this._selEv, kbNavEvent);
 	}
 
 	if (alreadySelected) { return; }
 	this._selectedItems.add(treeItem);
-	
+
 	// Expand all parent nodes, and then set item selected
 	var parent = treeItem.parent
 	while(parent instanceof DwtTreeItem) {
@@ -169,7 +168,7 @@ function(treeItem, skipNotify, kbNavEvent) {
 		parent = parent.parent;
 	}
 	if (treeItem._setSelected(true) && !skipNotify) {
-		this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv);
+		this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent);
 	}
 };
 
@@ -351,15 +350,17 @@ function(item, ev) {
 	var numSelectedItems = this._selectedItems.size();
 	if (this._style & DwtTree.SINGLE_STYLE || (!ev.shiftKey && !ev.ctrlKey)) {
 		if (numSelectedItems > 0) {
-			for (i = 0; i < numSelectedItems; i++)
+			for (i = 0; i < numSelectedItems; i++) {
 				a[i]._setSelected(false);
+			}
 			// Notify listeners of deselection
 			this._notifyListeners(DwtEvent.SELECTION, this._selectedItems.getArray(), DwtTree.ITEM_DESELECTED, ev, this._selEv);
 			this._selectedItems.removeAll();
 		}
 		this._selectedItems.add(item);
-		if (item._setSelected(true))
+		if (item._setSelected(true)) {
 			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
+		}
 	} else {
 		if (ev.ctrlKey) {
 			if (this._selectedItems.contains(item)) {
@@ -368,8 +369,9 @@ function(item, ev) {
 				this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_DESELECTED, ev, this._selEv);
 			} else {
 				this._selectedItems.add(item);
-				if (item._setSelected(true))
+				if (item._setSelected(true)) {
 					this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
+				}
 			}
 		} else {
 			// SHIFT KEY
@@ -428,7 +430,7 @@ function(item, ev, skipNotify) {
 }
 
 DwtTree.prototype._notifyListeners =
-function(listener, items, detail, srcEv, destEv) {
+function(listener, items, detail, srcEv, destEv, kbNavEvent) {
 	if (this.isListenerRegistered(listener)) {
 		if (srcEv) {
 			DwtUiEvent.copy(destEv, srcEv);
@@ -438,6 +440,32 @@ function(listener, items, detail, srcEv, destEv) {
 			destEv.item = items[0];
 		}
 		destEv.detail = detail;
+		destEv.kbNavEvent = kbNavEvent;
 		this.notifyListeners(listener, destEv);
 	}
 }
+
+DwtTree.prototype._scrollIntoView =
+function(itemDiv, parentNode) {
+	DBG.println("scr", "scrollIntoView");
+	var itemDivTop = Dwt.getLocation(itemDiv, this._tmpPoint).y;
+	DBG.println("scr", "itemDivTop: " + itemDivTop);
+	var parentTop = Dwt.getLocation(parentNode, this._tmpPoint).y;
+	DBG.println("scr", "parentTop: " + parentTop);
+
+	var diff = itemDivTop - (parentNode.scrollTop + parentTop);
+	if (diff < 0) {
+		DBG.println("scr", "A: add to scrollTop: " + diff);
+		parentNode.scrollTop += diff;
+	} else {
+		var parentH = Dwt.getSize(parentNode, this._tmpPoint).y;
+		DBG.println("scr", "parentH: " + parentH);
+		var itemDivH = Dwt.getSize(itemDiv, this._tmpPoint).y;
+		DBG.println("scr", "itemDivH: " + itemDivH);
+		diff = (itemDivTop + itemDivH) - (parentTop + parentH + parentNode.scrollTop);
+		if (diff > 0) {
+			DBG.println("scr", "B: add to scrollTop: " + diff);
+			parentNode.scrollTop += diff;
+		}
+	}
+};
