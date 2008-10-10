@@ -444,28 +444,3 @@ function(listener, items, detail, srcEv, destEv, kbNavEvent) {
 		this.notifyListeners(listener, destEv);
 	}
 }
-
-DwtTree.prototype._scrollIntoView =
-function(itemDiv, parentNode) {
-	DBG.println("scr", "scrollIntoView");
-	var itemDivTop = Dwt.getLocation(itemDiv, this._tmpPoint).y;
-	DBG.println("scr", "itemDivTop: " + itemDivTop);
-	var parentTop = Dwt.getLocation(parentNode, this._tmpPoint).y;
-	DBG.println("scr", "parentTop: " + parentTop);
-
-	var diff = itemDivTop - (parentNode.scrollTop + parentTop);
-	if (diff < 0) {
-		DBG.println("scr", "A: add to scrollTop: " + diff);
-		parentNode.scrollTop += diff;
-	} else {
-		var parentH = Dwt.getSize(parentNode, this._tmpPoint).y;
-		DBG.println("scr", "parentH: " + parentH);
-		var itemDivH = Dwt.getSize(itemDiv, this._tmpPoint).y;
-		DBG.println("scr", "itemDivH: " + itemDivH);
-		diff = (itemDivTop + itemDivH) - (parentTop + parentH + parentNode.scrollTop);
-		if (diff > 0) {
-			DBG.println("scr", "B: add to scrollTop: " + diff);
-			parentNode.scrollTop += diff;
-		}
-	}
-};

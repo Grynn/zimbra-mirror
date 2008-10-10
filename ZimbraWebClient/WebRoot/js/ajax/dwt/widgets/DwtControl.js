@@ -2131,7 +2131,29 @@ function() {
 	return true;
 };
 
+/**
+ * Resets the scrollTop of container (if necessary) to ensure that element is visible.
+ * 
+ * @param element
+ * @param container
+ */
+DwtControl.prototype._scrollIntoView =
+function(element, container) {
+	var elementTop = Dwt.toWindow(element, 0, 0, null, null, this._tmpPoint).y;
+	var parentTop = Dwt.toWindow(container, 0, 0, null, null, this._tmpPoint).y;
 
+	var diff = elementTop - (container.scrollTop + parentTop);
+	if (diff < 0) {
+		container.scrollTop += diff;
+	} else {
+		var parentH = Dwt.getSize(container, this._tmpPoint).y;
+		var elementH = Dwt.getSize(element, this._tmpPoint).y;
+		diff = (elementTop + elementH) - (parentTop + parentH + container.scrollTop);
+		if (diff > 0) {
+			container.scrollTop += diff;
+		}
+	}
+};
 
 
 /**

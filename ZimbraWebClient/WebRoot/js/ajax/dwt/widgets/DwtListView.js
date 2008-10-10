@@ -1680,22 +1680,7 @@ function(element, next) {
  */
 DwtListView.prototype._scrollList =
 function(itemDiv) {
-	// TODO might be able to cache some of these values
-	var parentNode = itemDiv.parentNode;
-	var itemDivTop = Dwt.getLocation(itemDiv, this._tmpPoint).y;
-	var parentTop = Dwt.getLocation(parentNode, this._tmpPoint).y;
-
-	var diff = itemDivTop - (parentNode.scrollTop + parentTop);
-	if (diff < 0) {
-		parentNode.scrollTop += diff;
-	} else {
-		var parentH = Dwt.getSize(parentNode, this._tmpPoint).y;
-		var itemDivH = Dwt.getSize(itemDiv, this._tmpPoint).y;
-		diff = (itemDivTop + itemDivH) - (parentTop + parentH + parentNode.scrollTop);
-		if (diff > 0) {
-			parentNode.scrollTop += diff;
-		}
-	}
+	this._scrollIntoView(itemDiv, itemDiv.parentNode);
 };
 
 DwtListView.prototype._emulateSingleClick =
