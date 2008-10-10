@@ -195,7 +195,7 @@ DwtEvent.XFORMS_VALUE_CHANGED		= "xforms-value-changed";
 DwtEvent.XFORMS_FORM_DIRTY_CHANGE	= "xforms-form-dirty-change";
 DwtEvent.XFORMS_CHOICES_CHANGED		= "xforms-choices-changed";
 DwtEvent.XFORMS_VALUE_ERROR			= "xforms-value-error";
-
+DwtEvent.XFORMS_INSTANCE_CHANGED 	= "xforms-instance-cahnged"; //fires when a new instance is applied to the form
 // Convenience lists
 /** Array of key event types
  * @type Array*/

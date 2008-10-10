@@ -248,6 +248,10 @@ XModel.prototype.setInstanceValue = function (instance, path, value) {
 		}
 		parentValue[ref] = value;
 	}
+	
+	//notify listeners that my value has changed
+	var event = new DwtXModelEvent(instance, modelItem, path, value);
+	modelItem.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
 	return value;
 }
 

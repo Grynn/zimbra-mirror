@@ -65,10 +65,63 @@ XFormItemFactory.createItem = function (attributes, parentItem, xform) {
 	
 	// assign the item into our form's index so we can be found later
 	xform.indexItem(item, item.id);
+	
 
 	// tell the item to initialize any special properties it needs to on construction
 	item.initFormItem();
 	
+	//register this item's listeners with model items
+	var itemsVisibilityChangers = item.getInheritedProperty("visibilityChangeEventSources");
+	if(!AjxUtil.isEmpty(itemsVisibilityChangers)) {
+		var model = xform.getModel();
+		var cnt = itemsVisibilityChangers.length;
+		if(model && cnt>0) {
+			for (var i=0; i < cnt; i++) {
+				var modelItm = model.getItem(itemsVisibilityChangers[i], false);
+				if(modelItm) {
+					var lsnr = new AjxListener(item, XFormItem.prototype.updateVisibilityLsnr);
+					modelItm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
+				}
+			}
+		}
+	}
+	
+	var itemsEnableDisableChangers = item.getInheritedProperty("enableDisableChangeEventSources");
+	if(!AjxUtil.isEmpty(itemsEnableDisableChangers)) {
+		var model = xform.getModel();
+		var cnt = itemsEnableDisableChangers.length;
+		if(model && cnt>0) {
+			for (var i=0; i < cnt; i++) {
+				var modelItm = model.getItem(itemsEnableDisableChangers[i], false);
+				if(modelItm) {
+					var lsnr = new AjxListener(item, XFormItem.prototype.updateEnabledDisabledLsnr);
+					modelItm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
+				}
+			}
+		}
+	}	
+	
+	var itemsValueChangers = item.getInheritedProperty("valueChangeEventSources");
+	if(!AjxUtil.isEmpty(itemsValueChangers)) {
+		var model = xform.getModel();
+		var cnt = itemsValueChangers.length;
+		if(model && cnt>0) {
+			for (var i=0; i < cnt; i++) {
+				var modelItm = model.getItem(itemsValueChangers[i], false);
+				if(modelItm) {
+					var lsnr = new AjxListener(item, XFormItem.prototype.valueChangeLsnr);
+					modelItm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
+				}
+			}
+		}
+	}
+	
+	//listen to changes of my own model item
+	var bmolsnr = item.getInheritedProperty("bmolsnr");
+	if(modelItem && bmolsnr) {
+		var lsnr = new AjxListener(item, XFormItem.prototype.valueChangeLsnr);
+		modelItem.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
+	}		
 	return item;
 } 
 
@@ -271,13 +324,28 @@ XFormItem.prototype.labelWrap = false;
 XFormItem.prototype.align = _UNDEFINED_;						// _UNDEFINED_ because it's a bit faster to draw
 XFormItem.prototype.valign = _UNDEFINED_;						// _UNDEFINED_ because it's a bit faster to draw
 XFormItem.prototype.focusable = false;
-
+XFormItem.prototype.bmolsnr = false; //Be My Own Listener
 // updating
 XFormItem.prototype.forceUpdate = false;			// SET TO true TO FORCE AN ITEM TO UPDATE, EVEN IF VALUE HAS NOT CHANGED
-XFormItem.prototype.relevant;
-XFormItem.prototype.relevantIfEmpty = true;
-XFormItem.prototype.relevantBehavior = _HIDE_;		//	_HIDE_, _DISABLE_
+//XFormItem.prototype.relevant;
+//XFormItem.prototype.relevantIfEmpty = true;
+//XFormItem.prototype.relevantBehavior = _HIDE_;		//	_HIDE_, _DISABLE_
+XFormItem.prototype.isBlockElement = false;
+XFormItem.prototype.visibilityChecks = []; //array of method references that check whether this element should be visible
+XFormItem.prototype.enabledDisabledChecks = []; //array of methods that check whether this element should be enabled 
+XFormItem.prototype.visibilityChangeEventSources = []; //paths to XModelItems that influence visibility of this XFormItem
+XFormItem.prototype.enableDisableChangeEventSources = []; //paths to XModelItems that influence Enabled/Disabled state of this XFormItem
+XFormItem.prototype.valueChangeEventSources = []; //paths to XModelItems that influence the value this XFormItem
 
+/* array of references to XModel items that may affect the visibility of this item. 
+* Whenever any of the XModel items referenced in this array change, they will notify this XForm item
+*/
+XFormItem.prototype.visibilityUpdaters = [];
+
+/* array of references to XModel items that may affect whether this item is enabled. 
+* Whenever any of the XModel items referenced in this array change, they will notify this XForm item
+*/
+XFormItem.prototype.enabledDisabledUpdaters = [];
 
 // changing/saving
 XFormItem.prototype.elementChangeHandler = "onchange";
@@ -322,7 +390,159 @@ XFormItem.prototype.initializeItems = function () {
 	}
 }
 
+XFormItem.prototype.registerActiveChild = function(item) {
+	if(!this.activeChildren)
+		this.activeChildren = {};
+	this.activeChildren[item.getId()]=true;	
+}
 
+XFormItem.prototype.valueChangeLsnr = function (event) {
+	var updateMethod = this.getUpdateElementMethod();
+	if(!updateMethod)
+		return;
+		
+	var value = event.details;	
+	var getDisplayValueMethod = this.getDisplayValueMethod();
+	if(getDisplayValueMethod)
+		value = getDisplayValueMethod.call(this,value);
+	
+	updateMethod.call(this, value);
+}
+
+XFormItem.prototype.updateElement = function() {
+	//run update methods on all initialized children
+	if(!this.activeChildren)
+		return;
+		
+	for(var itemId in this.activeChildren) {
+		if(this.activeChildren[itemId]===true) {
+			var item = this.getForm().getItemById(itemId);
+			if(item && this.getInstance()) {
+				var updateMethod = item.getUpdateElementMethod();
+				var getDisplayValueMethod = item.getDisplayValueMethod();
+				
+				if(updateMethod) {
+					var xmodel = this.getModel();
+					var value = xmodel.getInstanceValue(this.getInstance(), item.getRefPath());
+					if (getDisplayValueMethod) {
+						value =  getDisplayValueMethod.call(item,value);
+					}
+					updateMethod.call(item,value);
+				}
+			}
+		}
+	}
+}
+
+XFormItem.prototype.updateVisibilityLsnr = function (event) {
+	var updateMethod = this.getUpdateVisibilityMethod();
+	updateMethod.call(this);
+}
+
+XFormItem.prototype.updateVisibility = function () {
+	var isVisible = true;
+	
+	//check if the parent element is visible
+	var parentItem = this.getParentItem();
+	if(parentItem)
+		isVisible=this.getParentItem().getIsVisible();
+	
+	//run stack of visibility checks until encounter a negative result
+	if(isVisible) {
+		var myVisibilityChecks = this.getInheritedProperty("visibilityChecks");
+		if(myVisibilityChecks && myVisibilityChecks instanceof Array) {
+			var cnt = myVisibilityChecks.length;
+			for(var i=0;i<cnt;i++) {
+				if(myVisibilityChecks[i] != null && typeof(myVisibilityChecks[i])=="function") {
+					isVisible = myVisibilityChecks[i].call(this);
+					if(!isVisible)
+						break;
+				}
+			}
+		}
+	}	
+	var reRunRefresh = false;	
+	if(isVisible) {
+		if(this.deferred)
+			reRunRefresh=true;
+			
+		this.show();
+	} else
+		this.hide();
+	
+	//update visibility for active child items
+	for(var itemId in this.activeChildren) {
+		if(this.activeChildren[itemId]===true) {
+			var item = this.getForm().getItemById(itemId);
+			if(item && this.getInstance()) {
+				var updateMethod = item.getUpdateVisibilityMethod();				
+				if(updateMethod) {
+					updateMethod.call(item);
+				}
+			}
+		}
+	}
+	
+	if(reRunRefresh) {
+		this.updateEnabledDisabled();
+		this.updateElement();
+	}	
+}
+
+XFormItem.prototype.updateEnabledDisabledLsnr = function (event) {
+	var updateMethod = this.getUpdateEnabledDisabledtMethod();
+	updateMethod.call(this);	
+}
+
+XFormItem.prototype.updateEnabledDisabled = function () {
+	var isEnabled = true;
+	
+	//no reason to enable/disable an invisible element
+	if(!this.getIsVisible())
+		return;
+			
+	//run stack of visibility checks until encounter a negative result
+	if(isEnabled) {
+		var myEnabledDisabledChecks = this.getInheritedProperty("enabledDisabledChecks");
+		if(myEnabledDisabledChecks && myEnabledDisabledChecks instanceof Array) {
+			var cnt = myEnabledDisabledChecks.length;
+			for(var i=0;i<cnt;i++) {
+				if(myEnabledDisabledChecks[i] != null) {
+					if(typeof(myEnabledDisabledChecks[i])=="function") {
+						isEnabled = myEnabledDisabledChecks[i].call(this);
+						if(!isEnabled)
+							break;
+					} else if (myEnabledDisabledChecks[i] instanceof Array) {
+						//first element is a func reference, the rest of elements are arguments
+						var func = myEnabledDisabledChecks[i].shift();
+						isEnabled = func.apply(this, myEnabledDisabledChecks[i]);
+						myEnabledDisabledChecks[i].unshift(func);
+						if(!isEnabled)
+							break;
+					}
+				}
+			}
+		}
+	}	
+	
+	if(isEnabled)
+		this.enableElement();
+	else
+		this.disableElement();
+	
+	//update enableddisabled for active child items
+	for(var itemId in this.activeChildren) {
+		if(this.activeChildren[itemId]===true) {
+			var item = this.getForm().getItemById(itemId);
+			if(item && this.getInstance()) {
+				var updateMethod = item.getUpdateEnabledDisabledtMethod();				
+				if(updateMethod) {
+					updateMethod.call(item);
+				}
+			}
+		}
+	}
+}
 // error handling
 
 /**
@@ -436,6 +656,9 @@ XFormItem.prototype.getModel = function () {
 	return this.getForm().getModel();
 }
 
+XFormItem.prototype.getController = function () {
+	return this.getForm().getController();
+}
 
 XFormItem.prototype.getFormController = function () {
 	return this.getForm().getController();
@@ -493,7 +716,7 @@ XFormItem.prototype.getOnClickMethod = function() {
 }
 
 XFormItem.prototype.getExternalChangeHandler = function() {
-	return "var item = " + this.getGlobalRef() + "; item.$elementChanged(value, item.getInstanceValue(), event||window.event);";
+	return "var item = " + this.getGlobalRef() + "; var elementChangedMethod = item.getElementChangedMethod(); elementChangedMethod.call(item, value, item.getInstanceValue(), event||window.event);";
 }
 XFormItem.prototype.getElementValueGetterHTML = function () {
 	return "var value = this.value;";
@@ -654,7 +877,7 @@ XFormItem.prototype.getKeyPressHandlerHTML = function () {
 //
 
 
-XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, colSpan, rowSpan) {
+XFormItem.prototype.outputContainerTDStartHTML = function (html,  colSpan, rowSpan) {
 	var _align = this.getAlign();
 	html.append( "<td id=\"",  this.getId(), "___container\"",
 					(colSpan > 1 ? " colspan=" + colSpan : ""),
@@ -665,7 +888,7 @@ XFormItem.prototype.outputContainerTDStartHTML = function (html, updateScript, c
 	);
 } 
 
-XFormItem.prototype.outputContainerTDEndHTML = function (html, updateScript) {
+XFormItem.prototype.outputContainerTDEndHTML = function (html) {
 	html.append("\r", "</td id=\"",  this.getId(), "___container\">\r");
 } 
 
@@ -675,18 +898,18 @@ XFormItem.prototype.outputContainerTDEndHTML = function (html, updateScript) {
 //
 // for items that are effectively elements (or are drawn by something other than this form)
 // NOTE: you can pass in any random CSS properties you want in cssStyle
-XFormItem.prototype.outputElementDivStart = function (html, updateScript) {
+XFormItem.prototype.outputElementDivStart = function (html) {
 	html.append( "<div id=", this.getId(), this.getCssString(), " xform_type='elementDiv'>\r");
 }
 
-XFormItem.prototype.outputElementDivEnd = function (html, updateScript) {
+XFormItem.prototype.outputElementDivEnd = function (html) {
 	html.append("\r", "</div id=\"", this.getId(), "\">");
 }
 
 //
 //	label td
 //
-XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, rowSpan, labelLocation) {
+XFormItem.prototype.outputLabelCellHTML = function (html,  rowSpan, labelLocation) {
 	var label = this.getLabel();
 	if (label == null) return;
 	
@@ -742,207 +965,6 @@ function (item){
 	}
 }
 
-//
-//	update script
-//
-XFormItem.prototype.outputUpdateScriptStart = function (html, updateScript) {
-	// we need to always call these, so they're set up for items with or without "ref" properties
-	var updateElementMethod = this.getUpdateElementMethod();
-	var elementChangedMethod = this.getElementChangedMethod();
-	var getDisplayValueMethod = this.getDisplayValueMethod();
-
-//TODO: take the script they want to place, do a regex look for the variables below and only include the ones they care about!
-	var forceUpdate = this.getForceUpdate();
-	var relevant = this.getRelevant();
-	var relevantIfEmpty = this.getRelevantIfEmpty();
-	
-	var parentRequiresRelevantCheck = (this.__parentItem ? (this.__parentItem._childRelevantCheckRequired == true) : false);
-	if (	forceUpdate == false 
-			&& this.refPath == null 
-			&& relevant == null 
-			&& relevantIfEmpty == true
-			&& parentRequiresRelevantCheck == false
-			&& typeof this.insertElement != "function"
-		) return;
-
-
-
-
-	/*updateScript.append(
-			// first line is to separate out each item
-			"_____________________________________________________++;\r",
-			"item = form.getItemById('", this.getId(),"', '", this.getRefPath(), "');\r"
-	);*/
-	updateScript.append(
-			// first line is to separate out each item
-			"_____________________________________________________++;\r",
-			"item = form.getItemById('", this.getId(),"');\r"
-	);
-	
-	//tab CASE_XFORMITEM parent id
-	/*var currentTabId = null ; //used to controll th TAB key focus order
-	currentTabId = XFormItem.getParentTabGroupId(this);
-	
-	updateScript.append(
-		"var _tabIdOrder = item.getForm().tabIdOrder ;",
-		"var _currentTabIdOrder = null ;"
-	);
-		
-	if (currentTabId != null) {
-		updateScript.append(
-			"if (! _tabIdOrder.", currentTabId, ") {",
-				"_tabIdOrder.", currentTabId, " = [] ;",
-			"}",
-			
-			"_currentTabIdOrder = _tabIdOrder.", currentTabId, " ;");
-	}else {
-		updateScript.append(
-			"_currentTabIdOrder = _tabIdOrder ;" );
-	}
-	*/
-	// if there is a relevant attribute, 
-	//		get whether or not this item is relevant, and
-	//		write a script that will show or hide the container element
-	//
-	//	NOTE: we leave the script dangling in the "if relevant" clause, 
-	//			and close the if clause in writeUpdateScriptEnd().
-	//		It is the job  of each individual outputter to write script that will
-	//		update the value of the element (or subelements, etc) during the updateScript.
-	//		The can be assured that it will only be called when it is relevant, and
-	//		can access the following variables:
-	//			value = new value to show
-	//			element = DOM element of the 'control' itself (INPUT, SELECT, whatever a custom outputter gave us)
-	//			itemId = (often internally generated) ID for the control
-	//			ref = ref for the control (in the XForm, not the model)
-	//			container = DOM element of the DIV container of the control
-	//
-	if (relevant != null || relevantIfEmpty == false || parentRequiresRelevantCheck) {
-		if (relevantIfEmpty == false) {
-			if (relevant == null) {
-				relevant = "get(item) != null";
-			} else {
-				relevant = "get(item) != null && (" + relevant + ")";
-			}
-		}
-		if (parentRequiresRelevantCheck) {
-			if (relevant == null) {
-				relevant = "item.__parentItem.isRelevant()";
-			} else {
-				relevant = "item.__parentItem.isRelevant() && (" + relevant + ")";
-			}
-		}
-		updateScript.append(
-			"relevant = (", relevant, ");\r",
-			"item.setRelevant(relevant == true);\r"
-		);
-			
-		var relevantBehavior = this.getRelevantBehavior();
-		if (relevantBehavior == _HIDE_ ) {
-			this._endRelevantClause = true;
-			this._childRelevantCheckRequired = true;
-			updateScript.append(
-				"if (!item.isRelevant()) {\r",
-					"item.hide(false);\r",
-				"} else {\r  ");
-/*			if (this.focusable) {
-				updateScript.append(
-// 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
-//					It should be in the tab order if the element is hidden.
-					"_currentTabIdOrder.push(item.getId());\r"
-				);
-			}*/
-			updateScript.append("item.show();\r");
-		} else if (relevantBehavior == _BLOCK_HIDE_) {
-			this._endRelevantClause = true;
-			this._childRelevantCheckRequired = true;
-			updateScript.append(
-				"if (!item.isRelevant()) {\r",
-					"item.hide(true);\r",
-				"} else {\r  ");
-/*			if (this.focusable) {
-				updateScript.append(
-// 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
-//					It should be in the tab order if the element is hidden.
-					"_currentTabIdOrder.push(item.getId());\r"
-				);
-			}*/
-			updateScript.append("item.show();\r");
-		} else if (relevantBehavior == _DISABLE_) {
-			this._endRelevantClause = false;
-			this._childRelevantCheckRequired = true;
-			updateScript.append(
-				"if (!item.isRelevant()) {\r",
-					"item.disableElement();\r",
-				"} else {\r  ");
-/*			if (this.focusable) {
-				updateScript.append(
-// 					"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
-//					It should be in the tab order if the element is disabled.
-					"_currentTabIdOrder.push(item.getId());\r"
-				);
-			}*/
-			updateScript.append(
-					"item.enableElement();\r",
-				"}\r"//,
-			);		
-		}
-	}/* else {
-		if (this.focusable) {
-			updateScript.append(
-// 				"DBG.println(AjxDebug.DBG1, \"Adding item ", this.getId(), " to the tabIdOrder \");\r",
-				"_currentTabIdOrder.push(item.getId());\r"
-			);
-		}
-	}*/
-
-	// if the item should be inserted after drawing, do that now
-	//	(note: this means that hidden elements won't be inserted until they're relevant)
-	if (typeof this.insertElement == "function") {
-		updateScript.append("item.insertElement();\r");
-	}
-
-	// if we should update the element, call that now.
-	// NOTE: by default, we only update values that have changed since the last time
-	//	the form items was updated.  To turn this off, set "forceUpdate:true" in a particular item.
-	//
-	if ((this.refPath || forceUpdate) && (updateElementMethod)) {
-		updateScript.append(
-			"if (!item.hasError()){\r",
-				"value = ", (this.refPath ? 
-							 "model.getInstanceValue(instance, item.refPath)" 
-							 : "null"
-							 ), ";\r",
-			(getDisplayValueMethod != null? "value = item.$getDisplayValue(value);\r" : "")
-		);
-
-		if (forceUpdate != true) {
-			updateScript.append(
-				"var valueStr='';\r",
-				"try {\r",
-					"valueStr = ''+String(value);\r",
-				"} catch (ex) {}\r",
-				"if (item.$lastDisplayValue != valueStr) {\r  ",
-					"item.$updateElement(value);\r",
-					"item.$lastDisplayValue = valueStr;\r",
-				"}\r"
-			);
-		} else {
-			updateScript.append(
-				"item.$updateElement(value);\r"
-			);
-		}
-		updateScript.append("}\r");
-	}
-}
-
-
-XFormItem.prototype.outputUpdateScriptEnd = function (html, updateScript) {
-	if (this._endRelevantClause) {
-		updateScript.append("\r}\r");
-		delete this._endRelevantClause;
-	}
-}
-
 
 //
 //	change handling
@@ -951,12 +973,6 @@ XFormItem.prototype.outputUpdateScriptEnd = function (html, updateScript) {
 XFormItem.prototype.elementChanged = function(elementValue, instanceValue, event) {
 	this.getForm().itemChanged(this.getId(), elementValue, event);
 }
-
-
-
-
-
-
 
 //
 //	get and set instance values!
@@ -1102,17 +1118,9 @@ XFormItem.prototype.updateChoicesHTML = function () {
 	//	for now, just set the outer HTML of the entire widget
 	// TODO: do this by frobbing the options manually for speed and so things don't flash
 	var html = new AjxBuffer();
-	var updateScript = new AjxBuffer();	// NOTE: we won't be using this...
 	this.outputHTML(html, new AjxBuffer());
 	if (this.getContainer())  this.getContainer().innerHTML = html.toString();
 	return;       
-
-/*	var element = this.getElement();
-	if (element != null) {
-		var options = element.options;
-		element.options.innerHTML = this.getChoicesHTML();
-	}
-*/
 }
 
 
@@ -1153,8 +1161,18 @@ XFormItem.prototype.cacheInheritedMethod = function (methodName, cacheProp, argu
 
 
 XFormItem.prototype.getElement = XForm.prototype.getElement;
-XFormItem.prototype.showElement = XForm.prototype.showElement;
-XFormItem.prototype.hideElement = XForm.prototype.hideElement;
+XFormItem.prototype.showElement = function (id) {
+	XForm.prototype.showElement.call(this, id);
+}
+
+XFormItem.prototype.getIsVisible = function () {
+	return this.__isVisible;
+}
+ 
+XFormItem.prototype.hideElement = function (id,isBlock) {
+	XForm.prototype.hideElement.call(this,id,isBlock);
+}
+
 XFormItem.prototype.createElement = XForm.prototype.createElement;
 
 XFormItem.estimateMyWidth = function (label,withIcon,extraMargin) {
@@ -1183,29 +1201,20 @@ XFormItem.prototype.getLabelContainer = function() {
 	return this.getElement(this.getId() + "___label");
 }
 XFormItem.prototype.show = function() {
-	var reRunRefresh = false;
 	if(this.deferred) {
 		this._outputHTML();
-		reRunRefresh = true;
 	}	
 	var container = this.getLabelContainer();
 	if (container) this.showElement(container);
 	container = this.getContainer();
 	if (container != null) {
 		this.showElement(container);
-	} else {
-		var items = this.getItems();
-		if (items != null) {
-			for (var i = 0; i < items.length; i++) {
-				var item = items[i];
-				item.show();
-			}
-		}
-	}
-	if(reRunRefresh)
-		this.getForm().refresh();
+	} 
+	this.__isVisible = true;
 }
+
 XFormItem.prototype.hide = function(isBlock) {
+	isBlock = this.getInheritedProperty("isBlockElement") || isBlock;
 	var container = this.getLabelContainer()
 	if (container) this.hideElement(container,isBlock);
 	container = this.getContainer();
@@ -1219,6 +1228,7 @@ XFormItem.prototype.hide = function(isBlock) {
 			}
 		}
 	}
+	this.__isVisible = false;
 }
 
 XFormItem.prototype.focus = function () {
@@ -1247,6 +1257,7 @@ XFormItem.prototype.getItems = function () {
 	if (this.items) return this.items;
 	return this.__attributes.items;
 }
+
 
 XFormItem.prototype.getRelevant = function () {
 	return this.cacheInheritedProperty("relevant","_relevant");
@@ -1719,7 +1730,7 @@ XFormItem.prototype.getForceUpdate = function() {
 XFormItem.prototype.getOutputHTMLMethod = function() {
 	return this.convertToFunction(
 				this.getInheritedProperty("outputHTML"),
-				"html,updateScript,currentCol"
+				"html,currentCol"
 		);
 }
 
@@ -1735,6 +1746,13 @@ XFormItem.prototype.getDisplayValueMethod = function() {
 	return this.cacheInheritedMethod("getDisplayValue","$getDisplayValue","newValue");
 }
 
+XFormItem.prototype.getUpdateVisibilityMethod = function() {
+	return this.cacheInheritedMethod("updateVisibility","$updateVisibility");
+}
+
+XFormItem.prototype.getUpdateEnabledDisabledtMethod = function() {
+	return this.cacheInheritedMethod("updateEnabledDisabled","$updateEnabledDisabled");
+}
 
 XFormItem.prototype.convertToFunction = function (script, arguments) {
 	if ((script == null) || (typeof(script) == "function")) return script;
@@ -1742,7 +1760,6 @@ XFormItem.prototype.convertToFunction = function (script, arguments) {
 	// CLOSURE???
 	return new Function(arguments, script);
 }
-
 
 
 // note that this form item's display needs to be updated
@@ -1939,7 +1956,7 @@ Output_XFormItem.prototype.containerCssClass =  "xform_output_container";	// ele
 
 //	methods
 
-Output_XFormItem.prototype.outputHTML = function (html, updateScript) {
+Output_XFormItem.prototype.outputHTML = function (html) {
 	// by defaut, we output the "attributes.value" if set 
 	//	(in case an item only wants to write out on the initial draw)
 	// NOTE: dereferencing through the choice map happens in getDisplayValue()
@@ -2024,7 +2041,7 @@ Textfield_XFormItem.prototype.focusable = true;
 Textfield_XFormItem.prototype.containerCssClass = "xform_field_container";
 
 //	methods
-Textfield_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+Textfield_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 	var inputType = this._inputType;
 	var value = this.getValue();
 	var modelItem = this.getModelItem();
@@ -2150,7 +2167,7 @@ Textarea_XFormItem.prototype.width = "100%";
 Textarea_XFormItem.prototype.height = 100;
 Textarea_XFormItem.prototype.focusable = true;
 //	methods
-Textarea_XFormItem.prototype.outputHTML = function (html, updateScript,  currentCol) {
+Textarea_XFormItem.prototype.outputHTML = function (html,   currentCol) {
 	var wrap = this.getInheritedProperty("textWrapping");
 	if (!wrap)
 		wrap = "off";
@@ -2188,7 +2205,7 @@ Checkbox_XFormItem.prototype.falseValue = _UNDEFINED_;
 Checkbox_XFormItem.prototype.focusable = true;
 
 //	methods
-Checkbox_XFormItem.prototype.outputHTML = function (html, updateScript,currentCol) {
+Checkbox_XFormItem.prototype.outputHTML = function (html, currentCol) {
 	// figure out how to show the checkbox as checked or not
 	var checked = "";
 	if (this.getInstanceValue() == this.getTrueValue()) {
@@ -2264,7 +2281,7 @@ Radio_XFormItem.prototype.updateElement = function(newValue) {
 }
 
 //	methods
-Radio_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+Radio_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 	// figure out how to show the checkbox as checked or not
 	var checked = "";
 	if (this.getInstanceValue() == this.getTrueValue()) {
@@ -2313,7 +2330,7 @@ Radio_XFormItem.prototype.updateElement = function(newValue) {
 }
 
 //	methods
-Radio_Label_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+Radio_Label_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 	// figure out how to show the checkbox as checked or not
 	var checked = "";
 	if (this.getInstanceValue() == this.getTrueValue()) {
@@ -2329,7 +2346,7 @@ Radio_Label_XFormItem.prototype.outputHTML = function (html, updateScript, curre
 	html.append(">");
 }
 
-Radio_Label_XFormItem.prototype.outputLabelCellHTML = function (html, updateScript, rowSpan, labelLocation) {
+Radio_Label_XFormItem.prototype.outputLabelCellHTML = function (html,  rowSpan, labelLocation) {
 	var labelRef = this.getInheritedProperty("labelRef");
 	if (labelRef == null) return;
 	var label = this.getInstanceValue(labelRef);
@@ -2370,7 +2387,7 @@ Button_XFormItem.prototype.relevantBehavior = _DISABLE_;
 Button_XFormItem.prototype.cssClass = "xform_button";
 Button_XFormItem.prototype.focusable = true;
 // 	methods
-Button_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+Button_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 	// write the div to hold the value (will be filled in on update)
 	html.append(
 		"<button id=\"", this.getId(), "\"", this.getCssString(),
@@ -2396,7 +2413,7 @@ XFormItemFactory.createItemType("_SUBMIT_", "submit", Submit_XFormItem, Button_X
 
 
 //	methods
-Submit_XFormItem.prototype.outputHTML = function (html, updateScript,  currentCol) {
+Submit_XFormItem.prototype.outputHTML = function (html,   currentCol) {
 	// write the div to hold the value (will be filled in on update)
 	html.append(
 		"<input id=\"", this.getId(), "\" type=\"submit\"", this.getCssString(),
@@ -2652,7 +2669,7 @@ Select1_XFormItem.prototype.initFormItem = function () {
 }
 
 
-Select1_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+Select1_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 	html.append( 
 		"<select id=\"", this.getId(), "\" ", this.getCssString(), 
 			(this.getMultiple() ? "multiple " : ""), 
@@ -2740,7 +2757,7 @@ Spacer_XFormItem.prototype.colSpan = "*";
 Spacer_XFormItem.prototype.focusable = false;
 
 // 	methods
-Spacer_XFormItem.prototype.outputHTML = function (html, updateScript,  currentCol) {
+Spacer_XFormItem.prototype.outputHTML = function (html,   currentCol) {
 	html.append( "<div id=", this.getId(), this.getCssString(),"></div>");
 }
 
@@ -2776,7 +2793,7 @@ Separator_XFormItem.prototype.height = 10;
 Separator_XFormItem.prototype.focusable = false;
 
 // methods
-Separator_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
+Separator_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 	var css = (this.getCssClass() || '');
 	if (css != '' && css != null) css = " class=\"" + css + "\"";
 	
@@ -2824,8 +2841,8 @@ Group_XFormItem.prototype.initFormItem = function () {
 
 }
 
-Group_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
-	this.getForm().outputItemList(this.getItems(), this, html, updateScript,  this.getNumCols(), currentCol);
+Group_XFormItem.prototype.outputHTML = function (html,  currentCol) {
+	this.getForm().outputItemList(this.getItems(), this, html,   this.getNumCols(), currentCol);
 }
 
 Group_XFormItem.prototype.clearError = function() {
@@ -2849,33 +2866,8 @@ Group_XFormItem.prototype.clearError = function() {
 
 Group_XFormItem.prototype.setElementEnabled  =  function (enable) {
 		if (AjxEnv.hasFirebug) console.log("Enable/Disable the Group/Repeated items ...");
-		//disable buttons from the _REPEAT_, what a mess!
-		//if (this.removeButton) this.removeButton.setElementEnabled (false) ;
-		//if (this.addButton) this.addButton.setElementEnabled (false) ;	
-		//moveUpButton, moveDownButton
-		//if (this.moveUpButton) this.moveUpButton.setElementEnabled (false) ;	
-		//if (this.moveDownButton) this.moveDownButton.setElementEnabled (false) ;	
-		//disable repeate item
-		for (var i=0; i < this.items.length; i++ ){
-			this.items[i].setElementEnabled (enable) ;
-		}
 }
 
-
-/*
-Group_XFormItem.prototype.initializeItems = function() {
-	XFormItem.prototype.initializeItems.call(this);
-	if(this.getInheritedProperty("isTabGroup")) {
-		var items = this.getItems();
-		for(var i in items)	 {
-			if(items[i].focusable) {
-				this.tabIdOrder.push(items[i].getId());
-			}
-		}
-	}
-}*/
-// nothing to do on group update -- each item will take care of it itself
-//group_XFormItem.prototype.updateElement = function (newValue) {}
 
 
 /**
@@ -2889,8 +2881,6 @@ Grouper_XFormItem.prototype.labelCssClass = "GrouperLabel";
 Grouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by this class
 Grouper_XFormItem.prototype.borderCssClass = "GrouperBorder";
 Grouper_XFormItem.prototype.insetCssClass = "GrouperInset";
-//Grouper_XFormItem.prototype.colSpan = "*";
-//Grouper_XFormItem.prototype.width = "100%";
 
 Grouper_XFormItem.prototype.getBorderCssClass = function () {
 	return this.getInheritedProperty("borderCssClass");
@@ -2901,7 +2891,7 @@ Grouper_XFormItem.prototype.getInsetCssClass = function () {
 }
 
 // output the label
-Grouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, currentCol) {
+Grouper_XFormItem.prototype.outputHTMLStart = function (html,  currentCol) {
 	html.append(
 			"<div class=", this.getBorderCssClass(), ">",
 				"<span ", this.getLabelCssString(),">", this.getLabel(), "</span>",
@@ -2909,7 +2899,7 @@ Grouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript, curr
 		);
 }
 
-Grouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, currentCol) {
+Grouper_XFormItem.prototype.outputHTMLEnd = function (html,  currentCol) {
 	html.append(
 			"</div></div>"
 		);
@@ -2956,14 +2946,15 @@ Case_XFormItem.prototype.cellspacing = 0;
 Case_XFormItem.prototype.cellpadding = 0;
 Case_XFormItem.prototype.cssClass = "XFormCase";
 Case_XFormItem.prototype.isTabGroup = true;	
-Case_XFormItem.prototype.outputHTML = function (html, updateScript, currentCol) {
-//	this.getForm().outputItemList([], this, html, updateScript,this.getNumCols(), 0);
-//	this.getForm().outputItemList(this.getItems(), this, html, updateScript + "  ",this.getNumCols(), currentCol);
+Case_XFormItem.prototype.caseVarRef = "currentStep";
+Case_XFormItem.prototype.visibilityChangeEventSources = [Case_XFormItem.prototype.caseVarRef];
+
+Case_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 	this.deferred = this.getInheritedProperty("deferred");
 	if(this.deferred) {
-		this.getForm().outputItemList([], this, html, updateScript, this.getNumCols(), 0, true, false);
+		this.getForm().outputItemList([], this, html,  this.getNumCols(), 0, true, false);
 	} else {
-		this.getForm().outputItemList(this.getItems(), this, html, updateScript, this.getNumCols(), currentCol);
+		this.getForm().outputItemList(this.getItems(), this, html,  this.getNumCols(), currentCol);
 	}
 }
 
@@ -2994,28 +2985,21 @@ Case_XFormItem.prototype._outputHTML = function () {
 			}
 		}
 	}	
-//	var table = element.getElementsByTagName("table")[0];
-	//var tbody = element.getElementsByTagName("tbody")[0];
 
 	if (AjxEnv.isIE) {
 		var tempDiv = this.createElement("temp",null,"div","");
 		tempDiv.display = "none";
 	}
-	var updateScript = new AjxBuffer();
+
 	var html = new AjxBuffer();
 	
 	if (this.outputHTMLStart) {
-		this.outputHTMLStart(html, updateScript, 0);
+		this.outputHTMLStart(html,  0);
 	}
 	
 	var drawTable = (this.getUseParentTable() == false);
 	if (drawTable) {
 		var colSizes = this.getColSizes();
-		//XXX MOW: appending an elementDiv around the container if we need to style it
-/*		var outerStyle = this.getCssString();
-		if (outerStyle != null && outerStyle != "") {
-			this.outputElementDivStart(html, updateScript, "");
-		}*/
 		var cellspacing = this.getInheritedProperty("cellspacing");
 		var cellpadding = this.getInheritedProperty("cellpadding");		
 		html.append("<table cellspacing=",cellspacing," cellpadding=",cellpadding," ",  
@@ -3032,39 +3016,14 @@ Case_XFormItem.prototype._outputHTML = function () {
 		}
 		html.append("<tbody>\r");
 	}
-	form.outputItemList(this.getItems(), this, html, updateScript,this.getNumCols(), 0, true, true);
+	//output HTML for all child elements
+	form.outputItemList(this.getItems(), this, html, this.getNumCols(), 0, true, true);
 	html.append("</table>");	
 
 	
 //	DBG.dumpObj(html.toString());
 	element.innerHTML = html.toString();
-
-	/*if (AjxEnv.isIE) {
-		tempDiv.innerHTML = "<table>" + html.toString() + "</table>";
-		var rows = tempDiv.getElementsByTagName("table")[0].rows;
-		for (var r = 0; r < rows.length; r++) {
-			tbody.appendChild(rows[r]);
-		}
-	} else {
-		var row = table.insertRow(-1);
-		var cell = row.insertCell(-1);
-		cell.innerHTML = html;
-	}*/
-
-		
-	// update the insert and update scripts so they'll be called next time
-	form.appendToUpdateScript(updateScript);
-	this.deferred = false;		
-	// Since this is being called in the middle of update, 
-	//	any items that need to be inserted won't have been, 
-	//  and we won't have updated the items required.  
-	// Handle this now.
-
-	//TODO: PUT this IN THE CORRECT PLACE BY PARSING THE STRING SOMEHOW???
-	/*form.tempScript = new Function(form.getUpdateScriptStart() + updateScript + form.getUpdateScriptEnd());
-	form.tempScript();
-	delete form.tempScript;*/
-	
+	this.deferred = false;	
 }
 
 Case_XFormItem.prototype.hide = function(isBlock) {
@@ -3077,6 +3036,17 @@ Case_XFormItem.prototype.show = function(isBlock) {
 	this.showElement(this.getElement(),isBlock)	;
 }
 
+Case_XFormItem.prototype.isCurrentTab = function () {
+	var isCurrent = false;
+	var tabKey = this.getInheritedProperty("tabKey");
+	if(!AjxUtil.isEmpty(tabKey)) {
+		var caseVarRef = this.getInheritedProperty("caseVarRef");
+		var currentKey = this.getInstanceValue(caseVarRef);
+		isCurrent = (currentKey == tabKey);
+	}
+	return isCurrent;
+}
+Case_XFormItem.prototype.visibilityChecks = [Case_XFormItem.prototype.isCurrentTab];
 /**
 * @class defines XFormItem type _TOP_GROUPER_
 * Draws a simple border around the group, with the label placed over the border
@@ -3090,7 +3060,7 @@ TopGrouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by
 TopGrouper_XFormItem.prototype.insetCssClass = "GrouperInset";
 
 // output the label
-TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript,  currentCol) {
+TopGrouper_XFormItem.prototype.outputHTMLStart = function (html,   currentCol) {
 	html.append(
 			"<div class=", this.getBorderCssClass(), ">",
 				"<div ", this.getLabelCssString(),">", this.getLabel(), "</div>",
@@ -3098,7 +3068,7 @@ TopGrouper_XFormItem.prototype.outputHTMLStart = function (html, updateScript,  
 		);
 }
 
-TopGrouper_XFormItem.prototype.outputHTMLEnd = function (html, updateScript, currentCol) {
+TopGrouper_XFormItem.prototype.outputHTMLEnd = function (html,  currentCol) {
 	html.append(
 			"</div></div>"
 		);
@@ -3120,56 +3090,70 @@ Switch_XFormItem.prototype.colSpan = "*";
 Switch_XFormItem.prototype.width = "100%";
 Switch_XFormItem.prototype.numCols = 1;
 
-Switch_XFormItem.prototype.outputHTML = function (html, updateScript) {
-	Switch_XFormItem.outputItemList.call(this.getForm(),this.getItems(), this, html, updateScript);
+Switch_XFormItem.prototype.outputHTML = function (html) {
+	Switch_XFormItem.outputItemList.call(this.getForm(),this.getItems(), this, html);
 }
 
-Switch_XFormItem.outputItemList = function (items, parentItem, html, updateScript,  numCols, currentCol, skipTable, skipOuter) {
+Switch_XFormItem.prototype.setElementEnabled = function (enable) {};
+
+Switch_XFormItem.outputItemList = function (items, parentItem, html,   numCols, currentCol, skipTable, skipOuter) {
 	if (parentItem.outputHTMLStart) {
-		parentItem.outputHTMLStart(html, updateScript, currentCol);
+		parentItem.outputHTMLStart(html,  currentCol);
 	}
 	var outerStyle = null;
 	if(!skipOuter) {
 		outerStyle = parentItem.getCssString();
 		if (outerStyle != null && outerStyle != "") {
-			parentItem.outputElementDivStart(html, updateScript);
+			parentItem.outputElementDivStart(html);
 		}
 	}
 	for (var itemNum = 0; itemNum < items.length; itemNum++) {	
 		var item = items[itemNum];
 		var isNestingItem = (item.getItems() != null);
 		var itemUsesParentTable = (item.getUseParentTable() != false);
-		item.outputUpdateScriptStart(html, updateScript);
+
 		var writeElementDiv = item.getWriteElementDiv();
 		var outputMethod = item.getOutputHTMLMethod();
 		
 		if (isNestingItem && itemUsesParentTable) {
 			// actually write out the item
-			if (outputMethod) outputMethod.call(item, html, updateScript, currentCol);
+			if (outputMethod) outputMethod.call(item, html,  currentCol);
 
 		} else {
 
 			// begin the element div, if required
-			if (writeElementDiv) 	item.outputElementDivStart(html, updateScript);
+			if (writeElementDiv) 	item.outputElementDivStart(html);
 			
 			// actually write out the item
-			if (outputMethod) outputMethod.call(item, html, updateScript, 0);
+			if (outputMethod) outputMethod.call(item, html,  0);
 
 	
 			// end the element div, if required
-			if (writeElementDiv) 	item.outputElementDivEnd(html, updateScript);
+			if (writeElementDiv) 	item.outputElementDivEnd(html);
 	
 		}
 		
-		item.outputUpdateScriptEnd(html, updateScript);
+		if(parentItem)
+			parentItem.registerActiveChild(item);
+		
+		var itemUpdateMethod = item.getUpdateElementMethod();
+		if(itemUpdateMethod) {
+			var itemRefpath = item.getRefPath();
+			if(itemRefpath) {
+				var instance = this.getInstance();
+				if(instance) {
+					itemUpdateMethod.call(item, item.getInstanceValue());
+				}
+			}
+		}
 	}
 	if (outerStyle != null && outerStyle != "") {
-		parentItem.outputElementDivEnd(html, updateScript);
+		parentItem.outputElementDivEnd(html);
 	}
 
 
 	if (parentItem.outputHTMLEnd) {
-		parentItem.outputHTMLEnd(html, updateScript, currentCol);
+		parentItem.outputHTMLEnd(html,  currentCol);
 	}		
 }
 /*
@@ -3368,11 +3352,11 @@ Repeat_XFormItem.prototype.makeRepeatInstance = function() {
 }
 
 
-Repeat_XFormItem.prototype.outputHTML = function (html, updateScript,  currentCol) {
+Repeat_XFormItem.prototype.outputHTML = function (html,   currentCol) {
 	// output one item to start
 	//	all other items will be output dynamically
 	this.makeRepeatInstance();
-	this.getForm().outputItemList(this.items, this, html, updateScript,this.getNumCols(), 0);
+	this.getForm().outputItemList(this.items, this, html, this.getNumCols(), 0);
 }
 
 
@@ -3397,11 +3381,10 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 			tempDiv = this.createElement("temp",null,"div","");
 			tempDiv.display = "none";
 		}
-		var updateScript = new AjxBuffer();
 		while (this.items.length < itemsToShow) {
 			var newItems = this.makeRepeatInstance(this);
 			var html = new AjxBuffer();
-			form.outputItemList(newItems, this, html, updateScript, this.getNumCols(), 0, true);
+			form.outputItemList(newItems, this, html,  this.getNumCols(), 0, true);
 			if (AjxEnv.isIE) {
 				tempDiv.innerHTML = "<table>" + html.toString() + "</table>";
 				var rows = tempDiv.getElementsByTagName("table")[0].rows;
@@ -3413,26 +3396,12 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 				row.innerHTML = html;
 			}
 		}
-		
-		// update the insert and update scripts so they'll be called next time
-		form.appendToUpdateScript(updateScript);
-		
-		// Since this is being called in the middle of update, 
-		//	any items that need to be inserted won't have been, 
-		//  and we won't have updated the items required.  
-		// Handle this now.
-
-		//TODO: PUT this IN THE CORRECT PLACE BY PARSING THE STRING SOMEHOW???
-		form.tempScript = new Function(form.getUpdateScriptStart() + updateScript + form.getUpdateScriptEnd());
-		form.tempScript();
-		delete form.tempScript;
 	}
 }
 
 Repeat_XFormItem.prototype.addRowButtonClicked = function (instanceNum) {
 	var path = this.getRefPath();
 	this.getModel().addRowAfter(this.getInstance(), path, instanceNum);
-	this.getForm().refresh();
 }
 
 Repeat_XFormItem.prototype.removeRowButtonClicked = function (instanceNum) {
@@ -3444,7 +3413,7 @@ Repeat_XFormItem.prototype.removeRowButtonClicked = function (instanceNum) {
 	}
 	this.items[instanceNum].clearError();
 	this.getForm().setIsDirty(true,this);
-	this.getForm().refresh();	
+
 }
 
 Repeat_XFormItem.prototype.getOnRemoveMethod = function() {
@@ -3640,8 +3609,9 @@ Time_XFormItem.prototype.items = [
 				this.__dummyDate.setHours(hours);
 			}
 			var parentItem = this.getParentItem();
-			if (parentItem.$elementChanged != null) {
-				this.getParentItem().$elementChanged(this.__dummyDate, currentDate, event);
+			var elementChangedMethod = parentItem.getElementChangedMethod();
+			if (elementChangedMethod != null) {
+				elementChangedMethod.call(this.getParentItem(),this.__dummyDate, currentDate, event);
 			} else {
 				this.getForm().itemChanged(this.getParentItem(), this.__dummyDate, event);
 			}
@@ -3674,8 +3644,9 @@ Time_XFormItem.prototype.items = [
 				this.__dummyDate.setMinutes(minutes);
 			}
 			var parentItem = this.getParentItem();
-			if (parentItem.$elementChanged != null) {
-				this.getParentItem().$elementChanged(this.__dummyDate, currentDate, event);
+			var elementChangedMethod = parentItem.getElementChangedMethod();
+			if (elementChangedMethod!= null) {
+				elementChangedMethod.call(this.getParentItem(), this.__dummyDate, currentDate, event);
 			} else {
 				this.getForm().itemChanged(this.getParentItem(), this.__dummyDate, event);
 			}
@@ -3707,8 +3678,9 @@ Time_XFormItem.prototype.items = [
 			
 			this.__dummyDate.setHours(hours + (isPM ? 12 : 0));
 			var parentItem = this.getParentItem();
-			if (parentItem.$elementChanged != null) {
-				this.getParentItem().$elementChanged(this.__dummyDate, currentDate, event);
+			var elementChangedMethod = parentItem.getElementChangedMethod();
+			if (elementChangedMethod!= null) {
+				elementChangedMethod.call(this.getParentItem(), this.__dummyDate, currentDate, event);
 			} else {
 				this.getForm().itemChanged(this.getParentItem(), this.__dummyDate, event);
 			}
@@ -3784,7 +3756,7 @@ WidgetAdaptor_XFormItem.prototype.constructWidget = function () {}
 //
 //	insertElement must guarantee that each element is only inserted ONCE
 //
-WidgetAdaptor_XFormItem.prototype.insertElement = function (newValue) {
+WidgetAdaptor_XFormItem.prototype.insertElement = function () {
 	if (!this.__alreadyInserted) {
 		this.__alreadyInserted = true;
 		
@@ -3800,13 +3772,18 @@ WidgetAdaptor_XFormItem.prototype.insertElement = function (newValue) {
 	}
 }
 
+WidgetAdaptor_XFormItem.prototype.showElement = function (id) {
+	this.insertElement();
+	XForm.prototype.showElement.call(this, id);
+}
 
 WidgetAdaptor_XFormItem.prototype.insertWidget = function (form, widget, element) {
 	this.widget.insertIntoXForm(form, this, element);
 }
 
 WidgetAdaptor_XFormItem.prototype.updateElement = function(newValue) {
-	this.updateWidget(newValue);
+	if (this.__alreadyInserted) 
+		this.updateWidget(newValue);
 }
 WidgetAdaptor_XFormItem.prototype.updateWidget = function (newValue) {
 	this.widget.updateInXForm(this.getForm(), this, newValue, this.getElement());
@@ -4194,14 +4171,18 @@ Dwt_Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToIte
 	 function (newDate, currentDate, event) {
 	 	currentDate = currentDate ? currentDate : new Date();
 		newDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), 0);
-		this.getParentItem().$elementChanged(newDate, currentDate, event);
+		var elementChangedMethod = this.getParentItem().getElementChangedMethod();
+		if(elementChangedMethod)
+			elementChangedMethod.call(this.getParentItem(),newDate, currentDate, event);
 	 }
 	},
 	{type:_DWT_TIME_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_, 
 	 elementChanged:
 	 function (newDate, currentDate, event) {
 		currentDate = currentDate ? currentDate : new Date();
-		this.getParentItem().$elementChanged(newDate, currentDate, event);
+		var elementChangedMethod = this.getParentItem().getElementChangedMethod();
+		if(elementChangedMethod)
+			elementChangedMethod.call(this.getParentItem(),newDate, currentDate, event);
 	 }
 	}
 );
@@ -4302,7 +4283,9 @@ Dwt_List_XFormItem.prototype.getSelection = function () {
 };
 
 Dwt_List_XFormItem.prototype._handleSelection = function (event) {
-	this.getForm().refresh();
+	var modelItem = this.getModelItem();
+	var event = new DwtXModelEvent(this.getInstance(), modelItem, null, null);
+	modelItem.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
 };
 
 Dwt_List_XFormItem.prototype.insertWidget = function (form, widget, element) {
@@ -4442,6 +4425,9 @@ Tab_Bar_XFormItem.prototype.align = _CENTER_;
 Tab_Bar_XFormItem.prototype.colSpan = "*";
 
 //	methods
+Tab_Bar_XFormItem.prototype.elementChanged = function(elementValue, instanceValue, event) {
+	this.getForm().itemChanged(this.getId(), elementValue, event, true);
+}
 
 Tab_Bar_XFormItem.prototype.constructWidget = function () {
 	var changeHandler = this.getExternalChangeHandler();
@@ -4712,7 +4698,7 @@ Dwt_TabBar_XFormItem.prototype._handleStateChange = function(event) {
 	var id = this.getId();
 	//release the focus  
 	form.releaseFocus() ;
-	form.itemChanged(id, newvalue);
+	form.itemChanged(id, newvalue, event, true);
 }
 
 Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
