@@ -1,0 +1,20 @@
+/*
+
+This module contains extensions to the Messenger SDK for managing chat sessions.
+
+It has event and session managers to manage conversations.  It has send utilities 
+for sending messages and other events that generally only occur in conversations.
+(The main SDK does contain some send functionality as well, ones needed for user
+presence and other non-conversation operations.)
+
+There are also some utils for converting HTML to YML and back, and for verifying SMS
+phone numbers.
+
+This code is to be considered owned by the Messenger team.  DO NOT make Candygram-specific
+additions to these files, and DO NOT call any Candygram code from here.  Note that the
+entire directory is not munged.
+
+The file z_ymsgr_ext.js follows Candygram naming conventions, but does not contain CG
+code.
+
+*/

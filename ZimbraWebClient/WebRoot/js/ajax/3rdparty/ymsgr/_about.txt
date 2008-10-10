@@ -1,0 +1,16 @@
+/*
+
+This module contains the required core of the Messenger SDK, needed as soon
+as the application wants to login, establish presence, and generate a
+buddy list.
+
+It is intended to be a minimal set of functionality for applications to load
+when starting up IM presence.  As much as possible, code related to actual
+conversations has been moved out to another module, y_msgr_ext.
+
+The file z_ymsgr.js is Candygram-specific.  It is intended for this to move
+into a Candygram module eventually.  The other files are application-agnostic,
+should be considered owned by the Messenger team, and should not call out
+to or contain any CG-specific code.
+
+*/
