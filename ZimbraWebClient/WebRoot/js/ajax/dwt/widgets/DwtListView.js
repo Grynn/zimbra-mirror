@@ -887,7 +887,13 @@ function(actionCode, ev) {
 		case DwtKeyMap.ADD_SELECT_PREV: this._selectItem(false, true, true); break;
 		case DwtKeyMap.PREV:			this._setKbFocusElement(false); break;
 		case DwtKeyMap.NEXT:			this._setKbFocusElement(true); break;
-		case DwtKeyMap.DBLCLICK:		this.emulateDblClick(this.getItemFromElement(this._kbAnchor)); break;
+		case DwtKeyMap.DBLCLICK:
+			if (this.getSelectionCount() > 0) {
+				this.emulateDblClick(this.getItemFromElement(this._kbAnchor));
+			} else if (this._kbAnchor) {
+				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT});
+			}
+			break;
 
 		case DwtKeyMap.SELECT_ALL:
 			if (this._list && this._list.size()) {
@@ -1705,11 +1711,13 @@ function(next) {
 	}
 
 	if (this._kbAnchor != orig) {
-		var selClass = this._selectedClass;
-		if (orig.className.indexOf(selClass) != -1) {
-			Dwt.delClass(orig, this._styleRe, selClass);
-		} else {
-			Dwt.delClass(orig, this._styleRe);		// , this._normalClass		MOW
+		if (orig) {
+			var selClass = this._selectedClass;
+			if (orig.className.indexOf(selClass) != -1) {
+				Dwt.delClass(orig, this._styleRe, selClass);
+			} else {
+				Dwt.delClass(orig, this._styleRe);		// , this._normalClass		MOW
+			}
 		}
 		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
 	}
@@ -1719,7 +1727,7 @@ function(next) {
 
 DwtListView.prototype._itemSelected =
 function(itemDiv, ev) {
-	if (this._allowLeftSelection(itemDiv, ev, (ev) ? ev.button : null)) {
+	if (this._allowLeftSelection(itemDiv, ev, ev && ev.button)) {
 		/* Unmark the KB focus element. We need to do this because it is
 		 * possible for this element to not be the same as the selection
 		 * anchor due to NEXT and PREV keyboard actions */
@@ -2260,6 +2268,8 @@ DwtListView.prototype._focus =
 function() {
 	if (this._kbAnchor) {
 		Dwt.addClass(this._kbAnchor, this._kbFocusClass);
+	} else {
+		this._setKbFocusElement();
 	}
 };
 
