@@ -239,7 +239,9 @@ ZaAccount.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 
 ZaAccount.A2_accountTypes = "accountTypes" ; //used to save the account types available to this account based on domain
 ZaAccount.A2_previousName = "previousName" ;
-
+ZaAccount.A2_alias_selection_cache = "alias_selection_cache";
+ZaAccount.A2_fwdAddr_selection_cache = "fwdAddr_selection_cache";
+ZaAccount.A2_fp_selection_cache = "fp_selection_cache"; 
 ZaAccount.checkValues = 
 function(tmpObj, app) {
 	/**
@@ -1529,6 +1531,9 @@ ZaAccount.myXModel = {
 		{id:ZaAccount.A2_autodisplayname, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A2_autoCos, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaAccount.A2_alias_selection_cache, type:_LIST_},
+		{id:ZaAccount.A2_fwdAddr_selection_cache, type:_LIST_},
+		{id:ZaAccount.A2_fp_selection_cache, type:_LIST_},
 		{id:ZaAccount.A_zimbraHideInGal, type:_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraHideInGal, choices:ZaModel.BOOLEAN_CHOICES},
 
 		//security

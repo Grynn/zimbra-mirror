@@ -4198,7 +4198,7 @@ XFormItemFactory.createItemType("_DWT_LIST_", "dwt_list", Dwt_List_XFormItem, Dw
 //	type defaults
 Dwt_List_XFormItem.prototype.writeElementDiv = false;
 Dwt_List_XFormItem.prototype.widgetClass = DwtListView;
-
+Dwt_List_XFormItem.prototype.bmolsnr = true;
 Dwt_List_XFormItem.prototype.getOnSelectionMethod = function() {
 	return this.cacheInheritedMethod("onSelection","$onSelection","event");
 }
