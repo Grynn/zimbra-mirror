@@ -468,16 +468,16 @@ ZaAccountListController.prototype._editItem = function (item) {
 	var type = item.type;
 	var viewContstructor = ZaAccountXFormView;
 	if (type == ZaItem.ACCOUNT) {
-		viewContstructor = ZaAccountXFormView ;	
+		viewContstructor = ZaAccountXFormView;	
 	} else if (type == ZaItem.DL) {
-		viewContstructor = ZaDLXFormView ;	
+		viewContstructor = ZaDLXFormView;	
 	} else if (type == ZaItem.RESOURCE ){
 		viewContstructor = ZaResourceXFormView;
 	} else if (type == ZaItem.ALIAS) {
 		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {	
-			viewController = ZaAccountXFormView ;
+			viewController = ZaAccountXFormView;
 		}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
-		    viewController = ZaDLXFormView ;
+		    viewController = ZaDLXFormView;
 		}
 	}
 		

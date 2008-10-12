@@ -897,7 +897,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 				
 				}
             ]
-		},
+		}
 
     ];
 };

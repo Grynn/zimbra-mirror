@@ -58,7 +58,7 @@ function() {
 					},
 					{type:_RADIO_LABEL_,forceUpdate: true, ref:"selectedChoice",labelRef:"choice1Label",label:"N/A",groupname:"proxyChoice", value:0},
 					{type:_RADIO_LABEL_,forceUpdate: true, ref:"selectedChoice",labelRef:"choice2Label",label:"N/A",groupname:"proxyChoice", value:1},
-					{type:_RADIO_LABEL_,forceUpdate: true, ref:"selectedChoice",labelRef:"choice3Label",label:"N/A",groupname:"proxyChoice", value:2},
+					{type:_RADIO_LABEL_,forceUpdate: true, ref:"selectedChoice",labelRef:"choice3Label",label:"N/A",groupname:"proxyChoice", value:2}
 				]
 			}
 		]
