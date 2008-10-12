@@ -67,7 +67,6 @@ DwtTreeItem = function(params) {
 	this._forceNotifySelection = Boolean(params.forceNotifySelection);
 	this._actionEnabled = true;
 	this._forceNotifyAction = Boolean(params.forceNotifyAction);
-	this._selectable = true;
 
 	// disable selection if checkbox style
 	if (this._tree._isCheckedStyle()) {
@@ -86,7 +85,7 @@ DwtTreeItem = function(params) {
 };
 
 DwtTreeItem.PARAMS = ["parent", "index", "text", "imageInfo", "deferred", "className", "posStyle",
-					  "forceNotifySelection", "forceNotifyAction", "selectable"];
+					  "forceNotifySelection", "forceNotifyAction"];
 
 DwtTreeItem.prototype = new DwtComposite;
 DwtTreeItem.prototype.constructor = DwtTreeItem;
@@ -710,7 +709,7 @@ function(item) {
 };
 
 DwtTreeItem.prototype._setSelected =
-function(selected) {
+function(selected, noFocus) {
 	if (this._selected != selected) {
 		this._selected = selected;
 		if (!this._initialized) {
@@ -719,7 +718,9 @@ function(selected) {
 		if (!this._textCell) { return; }
 		if (selected && (this._selectionEnabled || this._forceNotifySelection)) {
             this._textCell.className = this._selectedClassName;
-			this.focus();
+			if (!noFocus) {
+				this.focus();
+			}
             return true;
 		} else {
    			this._textCell.className = this._textClassName;
@@ -879,7 +880,6 @@ DwtTreeItemSeparator = function(parent) {
 	this.parent = parent;
 	this._isSeparator = true;
 	this._initialized = true;
-	this._selectable = false;
 };
 
 DwtTreeItemSeparator.prototype.dispose =

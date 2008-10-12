@@ -133,7 +133,7 @@ function() {
 }
 
 DwtTree.prototype.setSelection =
-function(treeItem, skipNotify, kbNavEvent) {
+function(treeItem, skipNotify, kbNavEvent, noFocus) {
 	// Remove currently selected items from the selection list. if <treeItem> is in that list, then note it and return
 	// after we are done processing the selected list
 	var a = this._selectedItems.getArray();
@@ -167,7 +167,7 @@ function(treeItem, skipNotify, kbNavEvent) {
 		parent.setExpanded(true);
 		parent = parent.parent;
 	}
-	if (treeItem._setSelected(true) && !skipNotify) {
+	if (treeItem._setSelected(true, noFocus) && !skipNotify) {
 		this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent);
 	}
 };
@@ -260,7 +260,7 @@ function(next) {
 };
 
 /**
- * Creates a flat list of this tree's visible items, going depth-first.
+ * Creates a flat list of this tree's visible and selectable items, going depth-first.
  */
 DwtTree.prototype._getTreeItemList =
 function() {
@@ -273,7 +273,7 @@ function() {
 
 DwtTree.prototype._addToList =
 function(list, treeItem) {
-	if (treeItem && treeItem._selectable) {
+	if (treeItem && treeItem._selectionEnabled) {
 		list.push(treeItem);
 	}
 	if (!treeItem || treeItem._expanded) {
