@@ -196,8 +196,13 @@ public class GalSync {
         
         boolean success = true;
         try {
+            OfflineAccount galAccount = ensureGalAccountExists(account);
+            long lastFullSync = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
+            if (isOnRequest && lastFullSync > 0)
+                return;
+            
             OfflineLog.offline.info("Offline GAL sync started: " + user);            
-            syncGal(ombx, account, isOnRequest);                            
+            syncGal(ombx, galAccount, lastFullSync, account.isDebugTraceEnabled());                            
         } catch (Exception e) {
             syncMan.processSyncException(target, "", e, account.isDebugTraceEnabled());
             success = false;
@@ -227,14 +232,8 @@ public class GalSync {
         return galAcct;
     }
     
-    private static void syncGal(OfflineMailbox mbox, OfflineAccount account, boolean isOnRequest)
-        throws ServiceException, IOException, ParseException {        
-        OfflineAccount galAccount = ensureGalAccountExists(account);
-
-        long lastFullSync = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
-        if (isOnRequest && lastFullSync > 0)
-            return;
-        
+    private static void syncGal(OfflineMailbox mbox, OfflineAccount galAccount, long lastFullSync, boolean traceEnabled)
+        throws ServiceException, IOException, ParseException {                
         String syncToken = galAccount.getAttr(OfflineConstants.A_offlineGalAccountSyncToken);
         long interval = OfflineLC.zdesktop_gal_refresh_interval_days.longValue();        
         if (lastFullSync > 0 && (System.currentTimeMillis() - lastFullSync) / Constants.MILLIS_PER_DAY >= interval)
@@ -245,7 +244,7 @@ public class GalSync {
         if (!fullSync)
             req.addAttribute(AdminConstants.A_TOKEN, syncToken);
                
-        SaxHandler handler =  (new GalSync()).new SaxHandler(galAccount, fullSync, account.isDebugTraceEnabled()); 
+        SaxHandler handler =  (new GalSync()).new SaxHandler(galAccount, fullSync, traceEnabled); 
         HashMap<String, ElementHandler> handlers = new HashMap<String, ElementHandler>();
         handlers.put(SaxHandler.PATH_RESPONSE, handler);
         handlers.put(SaxHandler.PATH_CN, handler);
