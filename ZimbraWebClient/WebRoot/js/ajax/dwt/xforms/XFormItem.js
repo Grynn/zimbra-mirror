@@ -417,7 +417,7 @@ XFormItem.prototype.updateElement = function() {
 	for(var itemId in this.activeChildren) {
 		if(this.activeChildren[itemId]===true) {
 			var item = this.getForm().getItemById(itemId);
-			if(item && this.getInstance()) {
+			if(item && this.getInstance() && item.getRefPath()) {
 				var updateMethod = item.getUpdateElementMethod();
 				var getDisplayValueMethod = item.getDisplayValueMethod();
 				

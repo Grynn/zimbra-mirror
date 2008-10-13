@@ -35,10 +35,10 @@ ZaAccountXFormView = function(parent, app) {
 	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.TAB_INDEX = 0;
 	this._domains = {} ;
-	console.time("ZaAccountXFormView.initForm");
+	//console.time("ZaAccountXFormView.initForm");
 	//DBG.timePt(AjxDebug.PERF, "started initForm");
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());
-	console.timeEnd("ZaAccountXFormView.initForm");
+	//console.timeEnd("ZaAccountXFormView.initForm");
 	//DBG.timePt(AjxDebug.PERF, "finished initForm");
 }
 
