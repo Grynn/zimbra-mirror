@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_searchauto" version="1.0">
+    <global>
+        <property name="allowedDomains">search.yahooapis.com,*.yahoo.com</property>
+    </global>
+</zimletConfig>

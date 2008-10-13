@@ -28,5 +28,16 @@
     margin:0;padding:2px 5px;cursor:default;white-space:nowrap;
 }
 
+.sa_yAutoListItem {
+color:purple;
+}
+
+.sa_autoListHdr{
+	background:#FFFFCC;
+
+	font-weight:bold;
+}
+
+
 
 

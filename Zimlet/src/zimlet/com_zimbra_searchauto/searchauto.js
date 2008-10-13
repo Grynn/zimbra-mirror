@@ -16,6 +16,13 @@
  *@Author Raja Rao DV
  */
 com_zimbra_searchauto.maxHistoryItems = 1000;//max unique search items to store
+com_zimbra_searchauto.searchHistoryHdr = "Search History";
+com_zimbra_searchauto.advSearchHdr = "Advanced Search";
+com_zimbra_searchauto.ySearchHdr = "Yahoo Search";
+com_zimbra_searchauto.searchYFor = " Search for: ";
+com_zimbra_searchauto.searchYLFor = " Local Search for: ";
+com_zimbra_searchauto.URL = "http://search.yahooapis.com/WebSearchService/V1/webSearch?appid=zimbra&results=5&output=json";
+
 
 function com_zimbra_searchauto() {
 }
@@ -49,6 +56,7 @@ function() {
     Dwt.setHandler(this.searchField, DwtEvent.ONKEYPRESS, AjxCallback.simpleClosure(this.scrollACList, this));
 
 }
+
 //------------------------------------------------------------------------------------------
 //			STORE HISTORY
 //------------------------------------------------------------------------------------------
@@ -60,14 +68,16 @@ com_zimbra_searchauto.prototype.onSearchButtonClick =
 function(val) {
     if (!this.searchAutoCompleteON)
         return;
+    if (appCtxt.getSearchController()._searchFor != ZmId.SEARCH_MAIL)//if its not mail/conv search.. dont show
+        return;
     if (val == undefined || val == "")
         return;
 
     var currHistory = this.getUserProperty("history");
     if (("::" + currHistory + "::").indexOf("::" + val + "::") == -1) {//dont add dupes
-		//load to the front of the string to get latest
-        this.setUserProperty("history",  val + "::" + currHistory , true);
-		this._manageHistory();//make sure to store upto 1000 unique items, remove older ones
+        //load to the front of the string to get latest
+        this.setUserProperty("history", val + "::" + currHistory, true);
+        this._manageHistory();//make sure to store upto 1000 unique items, remove older ones
     }
 
 
@@ -77,14 +87,14 @@ function(val) {
 com_zimbra_searchauto.prototype._manageHistory =
 function() {
     var tmp = this.getUserProperty("history").split("::");
-	if(tmp.length >com_zimbra_searchauto.maxHistoryItems){//store a max of 1000 unique items
-		var newHistory = "";
-		for(var i=0; i < (com_zimbra_searchauto.maxHistoryItems+200); i++) {
-				newHistory = newHistory +"::"+ tmp[i];
-		}
-		 this.setUserProperty("history",  newHistory, true);
+    if (tmp.length > com_zimbra_searchauto.maxHistoryItems) {//store a max of 1000 unique items
+        var newHistory = "";
+        for (var i = 0; i < (com_zimbra_searchauto.maxHistoryItems + 200); i++) {
+            newHistory = newHistory + "::" + tmp[i];
+        }
+        this.setUserProperty("history", newHistory, true);
 
-	}
+    }
 }
 
 //------------------------------------------------------------------------------------------
@@ -100,7 +110,7 @@ function(ev) {
     var event = ev || window.event;
     if (event == undefined)
         return;
-    if (event.keyCode != 40 && event.keyCode != 38) {//redirect(yet to handle keypress for enterkey)
+    if (event.keyCode != 40 && event.keyCode != 38) {//redirect
         this.showHistory();
         return;
     } else if (event.keyCode == 13 || event.keyCode == 3) {
@@ -134,8 +144,25 @@ function(ev) {
         this._onclick();
         return;
     }
+    this._parseQuery();
+    this.doYahooSearch();
 
-    this.createAutoCompleteList();
+};
+com_zimbra_searchauto.prototype.doYahooSearch =
+function() {
+    var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(com_zimbra_searchauto.URL + "&query=" + this._noFldrQuery.replace(" ", "+"));
+    AjxRpc.invoke(null, url, null, new AjxCallback(this, this.handleSearchAndShowHistory), true);
+}
+
+com_zimbra_searchauto.prototype.handleSearchAndShowHistory =
+function(result) {
+    var ySearchArry = new Array();
+    try {
+        ySearchArry = eval("(" + result.text + ")").ResultSet.Result;
+    } catch(e) {
+        ySearchArry = new Array();
+    }
+    this.createAutoCompleteList(ySearchArry);
     var el = document.getElementById('searchautoCtrl');
     var input = document.getElementById('mainSearchInputFieldID');
 			//set the x,y & width of the autocomplete popup
@@ -145,10 +172,9 @@ function(ev) {
         el.style.top = inputPos[1] + input.offsetHeight;
         el.style.width = document.getElementById('mainSearchInputFieldID').scrollWidth - 2;
     }
-
-};
+}
 com_zimbra_searchauto.prototype.createAutoCompleteList =
-function() {
+function(ySearchArry) {
     var result = this.returnHistory();
     var startStr = "<ul id='sa_ulist'>";
     var endStr = "</ul>";
@@ -156,19 +182,51 @@ function() {
     this._currentHoverNo = -1;
     this._listCollapsed = true;
     this._selectedItemId = "";
-    this._totalListItems = result.length;
+    this.idAndVal = new Array();
     if (result.length == 0) {
         this._ctrlDiv.innerHTML = (startStr + li + endStr);
         return;
     }
+    var cnt = 0;
+    for (var el in result) {
+        var val = result[el];
+        var id;
+        if (val == com_zimbra_searchauto.searchHistoryHdr || val == com_zimbra_searchauto.advSearchHdr
+                || val == com_zimbra_searchauto.ySearchHdr) {
+            id = "autoList_Hdr_" + cnt;
+            li = li + "<li class='sa_autoListHdr' id='" + id + "'>" + val + "</li>";
 
-    for (var i = 0; i < result.length; i++) {
-        li = li + "<li id='autoListItem_" + i + "'>" + result[i] + "</li>";
+        } else if (val.indexOf(com_zimbra_searchauto.searchYFor) >= 0 || val.indexOf(com_zimbra_searchauto.searchYLFor) >= 0) {
+            id = "autoListItem_" + cnt;
+            li = li + "<li  class='sa_yAutoListItem' id='" + id + "'><img src='" + this.getResource("y1.gif") + "'/>" + val + "</li>";
+            cnt++;//increment
+        } else {
+            id = "autoListItem_" + cnt;
+            li = li + "<li id='" + id + "'>" + val + "</li>";
+            cnt++;//increment
+        }
+        this.idAndVal[id] = val.replace("<b>", "").replace("</b>", "");
     }
+	
 
+	//append ysearch results..
+    var newcnt = cnt;//make sure the count starts where it left off	
+    for (var el in ySearchArry) {
+        var val = "<b>" + ySearchArry[el].Title + "</b><br/>" + ySearchArry[el].Url;
+        var id = "autoListItem_" + newcnt;
+        li = li + "<li  class='sa_yAutoListItem' id='" + id + "'><img src='" + this.getResource("y1.gif") + "'/> " + val + "</li>";
+        this.idAndVal[id] = ySearchArry[el].Url;
+        newcnt++;//increment
+
+    }
+    this._totalListItems = newcnt;//store
     this._ctrlDiv.innerHTML = startStr + li + endStr;
     var lis = this._ctrlDiv.getElementsByTagName("li");
     for (var i = 0; i < lis.length; i++) {
+        if (this.idAndVal[lis.id] == com_zimbra_searchauto.searchHistoryHdr || this.idAndVal[lis.id] == com_zimbra_searchauto.advSearchHdr
+                || this.idAndVal[lis.id] == com_zimbra_searchauto.ySearchHdr) {
+            continue;
+        }
         var itm = lis[i];
         var id = itm.id;
         itm.onmouseover = AjxCallback.simpleClosure(this._onmouseover, this, id);
@@ -178,28 +236,23 @@ function() {
     this.showContainer();
 }
 
+
 com_zimbra_searchauto.prototype.showContainer =
 function() {
     document.getElementById("autoCompleteHistoryContainerID").style.display = "block";
     document.getElementById("searchautoCtrl").style.display = "block";
     this._listCollapsed = false;
-    this.addTimer();
-
+    DwtEventManager.addListener(DwtEvent.ONMOUSEDOWN, AjxCallback.simpleClosure(this.hideContainer, this));
 }
-com_zimbra_searchauto.prototype.addTimer =
-function() {
-    if (this.timer) {//clear previous timer if any
-        clearTimeout(this.timer);
-    }
-    this.timer = setTimeout(AjxCallback.simpleClosure(this.hideContainer, this), 3000);//collapse after timeout
 
-}
 com_zimbra_searchauto.prototype.hideContainer =
 function() {
     document.getElementById("autoCompleteHistoryContainerID").style.display = "none";
     document.getElementById("searchautoCtrl").style.display = "none";
     this._listCollapsed = true;
+    DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN, AjxCallback.simpleClosure(this.hideContainer, this));
 }
+
 com_zimbra_searchauto.prototype._onmouseover =
 function(id) {
     if (this._selectedItemId != "") {
@@ -208,26 +261,39 @@ function(id) {
     }
     this._selectedItemId = id;
     document.getElementById(id).style.backgroundColor = "gainsboro";
-    this.addTimer();
 }
 com_zimbra_searchauto.prototype._onmouseout =
 function(id) {
     document.getElementById(id).style.backgroundColor = "white";
 }
 com_zimbra_searchauto.prototype._onclick =
-function(id) {
-
-    if (!this._listCollapsed) {
-        if (this._selectedItemId != "") {//replace the selected list's value
-            this.searchField.value = document.getElementById(this._selectedItemId).innerHTML;
+function() {
+    if (this._selectedItemId != "") {//when one of the items is selected..
+        if (document.getElementById(this._selectedItemId).className == "sa_yAutoListItem") {//open website/ysearch
+            var target = this.idAndVal[this._selectedItemId];
+            if (target.indexOf(com_zimbra_searchauto.searchYLFor) >= 0) {
+                target = target.replace(com_zimbra_searchauto.searchYLFor, "").replace("<b>", "").replace("</b>", "");
+                target = "http://local.yahoo.com/?p=" + AjxStringUtil.urlComponentEncode(target);
+            } else if (target.indexOf(com_zimbra_searchauto.searchYFor) >= 0) {
+                target = target.replace(com_zimbra_searchauto.searchYFor, "").replace("<b>", "").replace("</b>", "");
+                target = "http://search.yahoo.com/search?p=" + AjxStringUtil.urlComponentEncode(target);
+            }
+            window.open(target);
+            this.hideContainer();
+            return;
+        }
+        if (!this._listCollapsed) {//advanced search or searchHistory was selected..
+            if (this._selectedItemId != "") {//replace the selected list's value
+                this.searchField.value = this.idAndVal[this._selectedItemId];
+            }
         }
     }
 	//add to history(if unique)
-	this.onKeyPressSearchField( this.searchField.value);
-	//search..
-    this.hideContainer();
+    this.onKeyPressSearchField(this.searchField.value);
+
     var getHtml = appCtxt.get(ZmSetting.VIEW_AS_HTML);
     appCtxt.getSearchController().search({query: this.searchField.value, userText: true, getHtml: getHtml});
+    this.hideContainer();
 }
 
 com_zimbra_searchauto.prototype._findPos =
@@ -241,37 +307,62 @@ function(obj) {
         return [curleft,curtop];
     }
 };
-
+com_zimbra_searchauto.prototype._parseQuery =
+function() {
+    this._query = document.getElementById('mainSearchInputFieldID').value;
+    this._noFldrQuery = this._query.replace(/in:\w*\s/, "");//remove any folder-context(like in:inbox) to get actual search-query
+    this._fldrInQuery = this._query.match(/in:\w*\s/, "");
+    if (this._fldrInQuery == undefined)
+        this._fldrInQuery = "";
+}
 com_zimbra_searchauto.prototype.returnHistory =
 function() {
 
-    var query = document.getElementById('mainSearchInputFieldID').value;
+    //var query = document.getElementById('mainSearchInputFieldID').value;
     var historyArry = this.getUserProperty("history").split("::");
 
-    if (query == "")
+    if (this._query.length < 2)//must have atleast 1 letter
         return [];
-    var res = [ "from:(" + query + ")", "cc:(" + query + ")","subject:(" + query + ")", "from:(@" + query + ")", query + " has:attachment"];
-    var sp = query.indexOf(" ");
-    if (sp != -1) {
-        var len = query.length;
-        var f = query.substring(0, sp);
-        var s = query.substring(sp + 1, query.length);
-        res.push("from:(" + f + ") subject:(" + s + ")");
-        res.push("from:(" + s + ") subject:(" + f + ")");
-    }
 
-    res.push("----Search History----");
-	var count = 0;
+    var noFldrQuery_bold = "<b>" + this._noFldrQuery + "</b>";
+
+
+    var ySearch = [
+        com_zimbra_searchauto.ySearchHdr,
+        com_zimbra_searchauto.searchYFor + noFldrQuery_bold,
+        com_zimbra_searchauto.searchYLFor + noFldrQuery_bold,
+
+    ];
+
+    var advSearch = [
+        com_zimbra_searchauto.advSearchHdr,
+        this._fldrInQuery + "from:(" + noFldrQuery_bold + ")",
+        this._fldrInQuery + "cc:(" + noFldrQuery_bold + ")",
+        this._fldrInQuery + "subject:(" + noFldrQuery_bold + ")",
+        this._fldrInQuery + "from:(@" + noFldrQuery_bold + ")",
+        this._fldrInQuery + noFldrQuery_bold + " has:attachment"
+    ];
+
+
+    var hist = new Array();
+    var count = 0;
     for (var i = 0; i < historyArry.length; i++) {
-        if (historyArry[i].indexOf(query) == 0 || (historyArry[i].indexOf(" " + query) > 0) || (historyArry[i].indexOf(":" + query) > 0)) {
-            res.push(historyArry[i]);
-			count++;
+        if ((historyArry[i].indexOf(this._query) >= 0 || historyArry[i].indexOf(":" + this._query) > 0)) {
+            if (count == 0) {//push the header
+                hist.push(com_zimbra_searchauto.searchHistoryHdr);//search history header
+                this._hasHistory = true;
+            }
+            hist.push(historyArry[i].replace(this._query, "<b>" + this._query + "</b>"));//bold the matched letters
+            count++;
         }
-		if(count >9)//max 10 history
-			break;
+        if (count > 5)//max 5 history
+            break;
     }
+    if (this._hasHistory == undefined)
+        return advSearch.concat(ySearch);
+    else
+        return hist.concat(advSearch.concat(ySearch));
 
-    return res;
 }
 
 
@@ -288,24 +379,28 @@ com_zimbra_searchauto.prototype.singleClicked = function() {
 }
 com_zimbra_searchauto.prototype.showPrefDialog =
 function() {
+    //if zimlet dialog already exists...
+    if (this.pbDialog) {
+        this.pbDialog.popup();
+        return;
+    }
     this.pView = new DwtComposite(this.getShell());
-    this.pView.setSize("200", "100");
     this.pView.getHtmlElement().innerHTML = this.createPrefView();
 
-    if (this.getUserProperty("turnONAutoComplete") == "true"){
+    if (this.getUserProperty("turnONAutoComplete") == "true") {
         document.getElementById("turnONAutoCompleteId").checked = true;
-	}
+    }
 
-	var clrHistoryBtn = new DwtDialog_ButtonDescriptor("sa_clearHistoryBtnId", "Clear History", DwtDialog.ALIGN_LEFT);
+    var clrHistoryBtn = new DwtDialog_ButtonDescriptor("sa_clearHistoryBtnId", "Clear History", DwtDialog.ALIGN_LEFT);
     this.pbDialog = this._createDialog({title:"Search History Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON],extraButtons:[clrHistoryBtn]});
     this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
-	this.pbDialog.setButtonListener("sa_clearHistoryBtnId", new AjxListener(this, this._clrHisBtnListner));
+    this.pbDialog.setButtonListener("sa_clearHistoryBtnId", new AjxListener(this, this._clrHisBtnListner));
     this.pbDialog.popup();
 
 };
 com_zimbra_searchauto.prototype._clrHisBtnListner =
 function() {
-        this.setUserProperty("history", "", true);
+    this.setUserProperty("history", "", true);
 }
 com_zimbra_searchauto.prototype._okBtnListner =
 function() {
