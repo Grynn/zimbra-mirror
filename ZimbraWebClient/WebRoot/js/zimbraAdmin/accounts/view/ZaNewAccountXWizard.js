@@ -372,7 +372,7 @@ ZaNewAccountXWizard.isAutoCos = function () {
 }
 
 ZaNewAccountXWizard.isAutoMailServer = function () {
-	return (this.getInstanceValue(ZaAccount.A2_autoMailServer)=="FALSE" && !AxjUtil.isEmpty(this.getController().getServerListChoices().getChoices()) && !AxjUtil.isEmpty(this.getController().getServerListChoices().getChoices().values));
+	return (this.getInstanceValue(ZaAccount.A2_autoMailServer)=="FALSE" && !AjxUtil.isEmpty(this.getController().getServerListChoices().getChoices()) && !AjxUtil.isEmpty(this.getController().getServerListChoices().getChoices().values));
 }
 
 ZaNewAccountXWizard.isIMFeatureEnabled = function () {
