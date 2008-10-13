@@ -257,12 +257,23 @@ function(key, field, value) {
  */
 DwtKeyMap.prototype._canonicalize =
 function(ks) {
-	if (ks.indexOf(DwtKeyMap.JOIN) == -1) { return ks; }
-	var parts = ks.split(DwtKeyMap.JOIN);
-	var mods = parts.slice(0, parts.length - 1);
-	mods.sort(function(a, b) {
-		return DwtKeyMap.MOD_ORDER[a] - DwtKeyMap.MOD_ORDER[b];
-	});
-	mods.push(parts[parts.length - 1]);
-	return mods.join(DwtKeyMap.JOIN);
+	var keys = ks.split(DwtKeyMap.SEP);
+	var result = [];
+	for (var i = 0; i < keys.length; i++) {
+		var key = keys[i];
+		var parts = key.split(DwtKeyMap.JOIN);
+		if (parts.length > 2) {
+			var mods = parts.slice(0, parts.length - 1);
+			mods.sort(function(a, b) {
+				var sortA = DwtKeyMap.MOD_ORDER[a] || 0;
+				var sortB = DwtKeyMap.MOD_ORDER[b] || 0;
+				return Number(sortA - sortB);
+			});
+			mods.push(parts[parts.length - 1]);
+			result.push(mods.join(DwtKeyMap.JOIN));
+		} else {
+			result.push(key);
+		}
+	}
+	return result.join(",");
 };
