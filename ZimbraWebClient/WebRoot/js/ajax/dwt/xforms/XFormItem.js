@@ -332,7 +332,7 @@ XFormItem.prototype.forceUpdate = false;			// SET TO true TO FORCE AN ITEM TO UP
 //XFormItem.prototype.relevantBehavior = _HIDE_;		//	_HIDE_, _DISABLE_
 XFormItem.prototype.isBlockElement = false;
 XFormItem.prototype.visibilityChecks = []; //array of method references that check whether this element should be visible
-XFormItem.prototype.enabledDisabledChecks = []; //array of methods that check whether this element should be enabled 
+XFormItem.prototype.enableDisableChecks = []; //array of methods that check whether this element should be enabled 
 XFormItem.prototype.visibilityChangeEventSources = []; //paths to XModelItems that influence visibility of this XFormItem
 XFormItem.prototype.enableDisableChangeEventSources = []; //paths to XModelItems that influence Enabled/Disabled state of this XFormItem
 XFormItem.prototype.valueChangeEventSources = []; //paths to XModelItems that influence the value this XFormItem
@@ -494,16 +494,17 @@ XFormItem.prototype.updateEnabledDisabledLsnr = function (event) {
 	updateMethod.call(this);	
 }
 
-XFormItem.prototype.updateEnabledDisabled = function () {
+XFormItem.prototype.updateEnabledDisabled = function (parentDisabled) {
 	var isEnabled = true;
 	
-	//no reason to enable/disable an invisible element
-	if(!this.getIsVisible())
-		return;
-			
+	//check if the parent element is visible
+	var parentItem = this.getParentItem();
+	if(parentItem)
+		isEnabled=this.getParentItem().getIsEnabled();
+		
 	//run stack of visibility checks until encounter a negative result
 	if(isEnabled) {
-		var myEnabledDisabledChecks = this.getInheritedProperty("enabledDisabledChecks");
+		var myEnabledDisabledChecks = this.getInheritedProperty("enableDisableChecks");
 		if(myEnabledDisabledChecks && myEnabledDisabledChecks instanceof Array) {
 			var cnt = myEnabledDisabledChecks.length;
 			for(var i=0;i<cnt;i++) {
@@ -1168,6 +1169,10 @@ XFormItem.prototype.showElement = function (id) {
 XFormItem.prototype.getIsVisible = function () {
 	return this.__isVisible;
 }
+
+XFormItem.prototype.getIsEnabled = function () {
+	return this.__isEnabled;
+}
  
 XFormItem.prototype.hideElement = function (id,isBlock) {
 	XForm.prototype.hideElement.call(this,id,isBlock);
@@ -1773,10 +1778,12 @@ XFormItem.prototype.setElementEnabled = function(enable) {}
 // convenience methods that call the above routine
 XFormItem.prototype.disableElement = function () {
 	this.setElementEnabled(false);
+	this.__isEnabled = false;
 }
 
 XFormItem.prototype.enableElement = function () {
 	this.setElementEnabled(true);
+	this.__isEnabled = true;
 }
 
 // you can use these to 
@@ -3038,11 +3045,11 @@ Case_XFormItem.prototype.show = function(isBlock) {
 
 Case_XFormItem.prototype.isCurrentTab = function () {
 	var isCurrent = false;
-	var tabKey = this.getInheritedProperty("tabKey");
-	if(!AjxUtil.isEmpty(tabKey)) {
+	var caseKey = this.getInheritedProperty("caseKey");
+	if(!AjxUtil.isEmpty(caseKey)) {
 		var caseVarRef = this.getInheritedProperty("caseVarRef");
 		var currentKey = this.getInstanceValue(caseVarRef);
-		isCurrent = (currentKey == tabKey);
+		isCurrent = (currentKey == caseKey);
 	}
 	return isCurrent;
 }
@@ -3949,7 +3956,6 @@ function (){
 **/
 Dwt_Select_XFormItem = function() {}
 XFormItemFactory.createItemType("_DWT_SELECT_", "dwt_select", Dwt_Select_XFormItem, Dwt_Adaptor_XFormItem)
-//XFormItemFactory.registerItemType("_SELECT1_", "select1", Dwt_Select_XFormItem)
 
 //	type defaults
 Dwt_Select_XFormItem.prototype.writeElementDiv = false;
@@ -4706,7 +4712,6 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 	var cssClass = this.getCssClass();
 	var btnCssClass = this.getInheritedProperty("buttonCssClass");	
 	
-	//var widget = new DwtTabView(form, cssClass, DwtControl.STATIC_STYLE);
 	var widget = new DwtTabBar(form, cssClass, btnCssClass);
 	this._value2tabkey = {};
 	this._tabkey2value = {};
@@ -4724,9 +4729,7 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 			// NOTE: DwtTabView keeps its own internal keys that are numerical
 			this._value2tabkey[values[i]] = i + 1;
 			this._tabkey2value[i + 1] = values[i];
-	//		var page = new DwtTabViewPage(widget);
 			widget.addButton(i+1, labels[i]);
-			//widget.addTab(choice.label, page);
 		}			
 	} else {
 		var cnt = choices.length;
@@ -4735,9 +4738,7 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 			// NOTE: DwtTabView keeps its own internal keys that are numerical
 			this._value2tabkey[choice.value] = i + 1;
 			this._tabkey2value[i + 1] = choice.value;
-	//		var page = new DwtTabViewPage(widget);
 			widget.addButton(i+1, choice.label);
-			//widget.addTab(choice.label, page);
 		}
 	}
 	
@@ -4759,7 +4760,6 @@ Dwt_TabBar_XFormItem.prototype.updateWidget = function(newvalue) {
 	
 	var tabKey = this._value2tabkey[newvalue];
 	if (tabKey != this.widget.getCurrentTab()) {
-		//this.widget.switchToTab(tabKey);
 		this.widget.openTab(tabKey);
 	}
 
@@ -4817,7 +4817,6 @@ Dwt_ProgressBar_XFormItem.prototype.constructWidget = function() {
 
 Dwt_ProgressBar_XFormItem.prototype.updateWidget = function(newvalue) {
 	// nothing
-//	var maxValueRef = this.getInheritedProperty("maxValueRef");
 	if(!newvalue)
 		newvalue=0;
 	if(this.maxValueRef) {
