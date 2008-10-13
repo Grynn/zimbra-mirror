@@ -1,0 +1,93 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2004, 2005, 2006, 2007 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+use strict;
+
+if (scalar(@ARGV) != 1) {
+    print(STDERR "Usage: install-openldap <p4-branch-name>\n");
+    exit(1);
+}
+
+my $baseDir = "/opt/zimbra";
+my $cacheDir = "$baseDir/third-party-cache";
+my $p4Path = "//depot/$ARGV[0]/ThirdPartyBuilds/" . getPlatformDirName();
+my %binaries = (
+    "bdb" => "4.7.25.2",
+    "curl" => "7.19.0",
+    "cyrus-sasl" => "2.1.22.3z",
+    "heimdal" => "1.2.1",
+    "libtool" => "2.2.4",
+    "openldap" => "2.4.12.2z",
+    "openssl" => "0.9.8i"
+);
+
+if (! -d $cacheDir) {
+    mkdir($cacheDir) || die "Could not create directory: $cacheDir";
+}
+
+for my $binaryName (keys %binaries) {
+    my $cmd = "rm -rf $baseDir/$binaryName-* $baseDir/$binaryName";
+    runCommand($cmd);
+    my $version = $binaries{$binaryName};
+
+    # Copy tarballs to the third party cache directory if necessary.
+    my $tarball = "$cacheDir/$binaryName-$version.tgz";
+    if (! -f $tarball) {
+	$cmd = "p4 print -o $tarball $p4Path/$binaryName/$binaryName-$version.tgz";
+	runCommand($cmd);
+    }
+
+    # Untar and create links
+    $cmd = "tar -xzf $tarball -C $baseDir";
+    runCommand($cmd);
+    symlink("$baseDir/$binaryName-$version", "$baseDir/$binaryName") || die "Could not create symlink for $binaryName";
+}
+
+sub runCommand($) {
+    my $cmd = shift();
+    print("$cmd\n");
+    system($cmd);
+    if ($? != 0) {
+	print(STDERR "An error occurred while running '$cmd'.\n");
+	exit(1);
+    }
+}
+
+sub getPlatformDirName() {
+    my $os = `uname -s`;
+    chomp($os);
+    my $dirName;
+
+    if ($os eq "Darwin") {
+	my $version = `uname -r | cut -f1 -d.`;
+	chomp($version);
+	if ($version eq "8") {
+	    $dirName = "MACOSx86";
+	} else {
+	    $dirName = "MACOSXx86_10.5";
+	}
+    } else {
+	if (-f "/etc/redhat-release") {
+	    $dirName = "RHEL4";
+	} else {
+	    $dirName = "UBUNTU8";
+	}
+    }
+    
+    return $dirName;
+}
