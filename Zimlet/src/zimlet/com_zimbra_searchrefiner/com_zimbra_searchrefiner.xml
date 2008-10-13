@@ -1,0 +1,14 @@
+<zimlet name="com_zimbra_searchrefiner" version="0.1" description="Search Refiner">
+  <include>searchrefiner.js</include>
+  <includeCSS>searchrefiner.css</includeCSS>
+  <handlerObject>com_zimbra_searchrefiner</handlerObject>
+
+  <zimletPanelItem label="Search Refiner" icon="sr-panelIcon">
+    <toolTipText>Refines Search</toolTipText>
+  </zimletPanelItem>
+
+  <userProperties>
+   <property type="string" name="turnOnSearchRefiner" value="true"/>
+     <property type="string" name="refinerSearchSize" value="400"/>
+  </userProperties>
+</zimlet>
