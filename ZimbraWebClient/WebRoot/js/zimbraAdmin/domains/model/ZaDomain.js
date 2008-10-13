@@ -213,6 +213,15 @@ ZaDomain.A_zimbraZimletDomainAvailableZimlets = "zimbraZimletDomainAvailableZiml
 ZaDomain.A_zimbraDomainCOSMaxAccounts = "zimbraDomainCOSMaxAccounts" ;
 ZaDomain.A2_account_limits = "account_limits" ;
 
+//skin properties
+ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
+ZaDomain.A_zimbraSkinBackgroundColor = "zimbraSkinBackgroundColor" ;
+ZaDomain.A_zimbraSkinLogoURL ="zimbraSkinLogoURL" ;
+ZaDomain.A_zimbraSkinSecondaryColor = "zimbraSkinSecondaryColor" ;
+ZaDomain.A_zimbraSkinSelectionColor  = "zimbraSkinSelectionColor" ;
+ZaDomain.A_zimbraSkinLogoLoginBanner = "zimbraSkinLogoLoginBanner" ;
+ZaDomain.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
+
 //result codes returned from Check* requests
 ZaDomain.Check_OK = "check.OK";
 ZaDomain.Check_UNKNOWN_HOST="check.UNKNOWN_HOST";
@@ -1419,9 +1428,15 @@ ZaDomain.myXModel = {
       {id:ZaDomain.A_zimbraZimletDomainAvailableZimlets, type:_LIST_,
           ref:"attrs/" + ZaDomain.A_zimbraZimletDomainAvailableZimlets,
           dataType: _STRING_ ,outputType:_LIST_},
-     { id:ZaAccount.A_zimbraMailCatchAllAddress, ref:ZaAccount.A_zimbraMailCatchAllAddress , type:_STRING_ },
+      { id:ZaAccount.A_zimbraMailCatchAllAddress, ref:ZaAccount.A_zimbraMailCatchAllAddress , type:_STRING_ },
       { id:ZaDomain.A_zimbraDomainCOSMaxAccounts, ref:"attrs/" + ZaDomain.A_zimbraDomainCOSMaxAccounts ,
                  type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ },
+
+       //skin properties
+      { id:ZaDomain.A_zimbraSkinForegroundColor, ref:"attrs/" + ZaDomain.A_zimbraSkinForegroundColor, type: _COS_STRING_ },
+      { id:ZaDomain.A_zimbraSkinBackgroundColor, ref:"attrs/" + ZaDomain.A_zimbraSkinBackgroundColor, type: _COS_STRING_ },
+      { id:ZaDomain.A_zimbraSkinSecondaryColor, ref:"attrs/" + ZaDomain.A_zimbraSkinSecondaryColor, type: _COS_STRING_ },
+      { id:ZaDomain.A_zimbraSkinSelectionColor, ref:"attrs/" + ZaDomain.A_zimbraSkinSelectionColor, type: _COS_STRING_ },
 
         //interop
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthUsername, type: _STRING_ },

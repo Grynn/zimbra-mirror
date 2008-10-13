@@ -80,7 +80,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				{value:4, label:ZaMsg.NAD_Tab_IMAP},
 				{value:5, label:ZaMsg.NAD_Tab_POP},
 				{value:6, label:ZaMsg.NAD_Tab_ASAV},
-                {value:7, label:ZaMsg.TABT_Interop}
+                {value:7, label:ZaMsg.TABT_Interop},
+                {value:8, label:ZaMsg.TABT_Skin}    
             ]
 		},
 		{type:_SWITCH_, items:[
@@ -478,8 +479,44 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
                           ]
 						}
 					]
+				},
+                //skin properties
+                {type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 8",
+					colSizes:["auto"],numCols:1,id:"global_skin_tab",
+				 	items: [
+                        {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Settings,//colSizes:["175px","*"],
+                            items: [
+                                {ref:ZaGlobalConfig.A_zimbraSkinForegroundColor,
+                                    type:_DWT_COLORPICKER_,
+        //                            labelCssStyle:"width:175px", colSizes:["375px","190px"],
+                                    //msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
+                                    label:ZaMsg.NAD_zimbraSkinForegroundColor,
+                                    labelLocation:_LEFT_,
+                                    onChange:ZaTabView.onFormFieldChanged
+                                }  ,
+                                {ref:ZaGlobalConfig.A_zimbraSkinBackgroundColor,
+                                    type:_DWT_COLORPICKER_,
+                                    label:ZaMsg.NAD_zimbraSkinBackgroundColor,
+                                    labelLocation:_LEFT_,
+                                    onChange:ZaTabView.onFormFieldChanged
+                                }  ,
+                                {ref:ZaGlobalConfig.A_zimbraSkinSecondaryColor,
+                                    type:_DWT_COLORPICKER_,
+                                    label:ZaMsg.NAD_zimbraSkinSecondaryColor,
+                                    labelLocation:_LEFT_,
+                                    onChange:ZaTabView.onFormFieldChanged
+                                },
+                                {ref:ZaGlobalConfig.A_zimbraSkinSelectionColor,
+                                    type:_DWT_COLORPICKER_,
+                                    label:ZaMsg.NAD_zimbraSkinSelectionColor,
+                                    labelLocation:_LEFT_,
+                                    onChange:ZaTabView.onFormFieldChanged
+                                }
+                            ]
+                        }
+					]                    
 				}
-			]
+            ]
 		}
 	];
 };

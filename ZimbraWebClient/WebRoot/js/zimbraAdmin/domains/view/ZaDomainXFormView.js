@@ -747,6 +747,48 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		};
     	switchGroup.items.push(case7);
 	}
+    //domain skin properties
+    if(ZaSettings.DOMAIN_SKIN_ENABLED) {
+		tabIx++;
+		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Skin});
+       	var case8 = {type:_ZATABCASE_, id:"domain_form_skin_tab", colSizes:["auto"],numCols:1,
+        	relevant:("instance[ZaModel.currentTab] == " + tabIx),
+			items:[
+            	{type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Settings,//colSizes:["175px","*"],
+					items: [
+                    	{ref:ZaDomain.A_zimbraSkinForegroundColor,
+                            type:_SUPER_DWT_COLORPICKER_,
+//                            labelCssStyle:"width:175px", colSizes:["375px","190px"],
+                            //msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
+                            label:ZaMsg.NAD_zimbraSkinForegroundColor,
+                            labelLocation:_LEFT_,
+                            resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            onChange:ZaTabView.onFormFieldChanged
+                        }  ,
+                        {ref:ZaGlobalConfig.A_zimbraSkinBackgroundColor,
+                            type:_SUPER_DWT_COLORPICKER_,
+                            label:ZaMsg.NAD_zimbraSkinBackgroundColor,
+                            labelLocation:_LEFT_,  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            onChange:ZaTabView.onFormFieldChanged
+                        }  ,
+                        {ref:ZaGlobalConfig.A_zimbraSkinSecondaryColor,
+                            type:_SUPER_DWT_COLORPICKER_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            label:ZaMsg.NAD_zimbraSkinSecondaryColor,
+                            labelLocation:_LEFT_,
+                            onChange:ZaTabView.onFormFieldChanged
+                        },
+                        {ref:ZaGlobalConfig.A_zimbraSkinSelectionColor,
+                            type:_SUPER_DWT_COLORPICKER_,
+                            label:ZaMsg.NAD_zimbraSkinSelectionColor,
+                            labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            onChange:ZaTabView.onFormFieldChanged
+                        }
+					]
+				}
+			]
+		};
+    	switchGroup.items.push(case8);
+	}
 
     
     xFormObject.items.push(tabBar);

@@ -227,6 +227,7 @@ ZaSettings.SYSTEM_CONFIG_ENABLED = true;
 ZaSettings.ADDRESSES_ENABLED = true;
 ZaSettings.RESOURCES_ENABLED = true;
 ZaSettings.SKIN_PREFS_ENABLED = true;
+ZaSettings.DOMAIN_SKIN_ENABLED = true ; //allow the skin properties tab in domain to show in domain admin
 ZaSettings.LICENSE_ENABLED = true;
 ZaSettings.ZIMLETS_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;

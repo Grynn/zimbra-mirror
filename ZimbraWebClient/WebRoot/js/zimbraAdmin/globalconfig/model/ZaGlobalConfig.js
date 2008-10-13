@@ -140,6 +140,16 @@ ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme  = "zimbraFreebusyExchangeAuth
 ZaGlobalConfig.A_zimbraFreebusyExchangeURL ="zimbraFreebusyExchangeURL";
 ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg = "zimbraFreebusyExchangeUserOrg"  ;
 
+//Skin Properties
+ZaGlobalConfig.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
+ZaGlobalConfig.A_zimbraSkinBackgroundColor = "zimbraSkinBackgroundColor" ;
+ZaGlobalConfig.A_zimbraSkinSecondaryColor = "zimbraSkinSecondaryColor" ;
+ZaGlobalConfig.A_zimbraSkinSelectionColor  = "zimbraSkinSelectionColor" ;
+ZaGlobalConfig.A_zimbraSkinLogoURL ="zimbraSkinLogoURL" ;
+ZaGlobalConfig.A_zimbraSkinLogoLoginBanner = "zimbraSkinLogoLoginBanner" ;
+ZaGlobalConfig.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
+
+
 ZaGlobalConfig.loadMethod = 
 function(by, val, withConfig) {
 	if(!ZaSettings.GLOBAL_CONFIG_ENABLED)
@@ -400,6 +410,12 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraLmtpBindPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpBindPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraLmtpNumThreads, ref:"attrs/" + ZaGlobalConfig.A_zimbraLmtpNumThreads, type:_PORT_ },		
 		{ id:ZaGlobalConfig.A_zimbraInstalledSkin, ref:"attrs/" + ZaGlobalConfig.A_zimbraInstalledSkin, type:_LIST_, listItem:{type:_STRING_}},
+
+        //skin properties
+        { id:ZaGlobalConfig.A_zimbraSkinForegroundColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinForegroundColor, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraSkinBackgroundColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinBackgroundColor, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraSkinSecondaryColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinSecondaryColor, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraSkinSelectionColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinSelectionColor, type: _STRING_ },
 
          //interop
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, type: _STRING_ },
