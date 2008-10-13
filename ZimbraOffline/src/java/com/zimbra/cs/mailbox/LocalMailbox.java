@@ -87,10 +87,10 @@ public class LocalMailbox extends DesktopMailbox {
     	DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(folder.getId()), canSync);
     	if (canSync) {
     		folder.mData.flags |= mSyncFolderFlag.getBitmask();
-    		if (isSyncEnabledByDefault(folder.getPath())) {
-    			DbMailItem.alterTag(mSyncFlag, Arrays.asList(folder.getId()), canSync);
-    			folder.mData.flags |= mSyncFlag.getBitmask();
-    		}
+//    		if (isSyncEnabledByDefault(folder.getPath())) {
+//    			DbMailItem.alterTag(mSyncFlag, Arrays.asList(folder.getId()), canSync);
+//    			folder.mData.flags |= mSyncFlag.getBitmask();
+//    		}
     	} else {
     		folder.mData.flags &= ~mSyncFolderFlag.getBitmask();
     		folder.mData.flags &= ~mSyncFlag.getBitmask();
