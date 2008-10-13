@@ -23,7 +23,6 @@ ZaNewAccountXWizard = function(parent, app) {
 		{value:ZaAccount.ACCOUNT_STATUS_LOCKED, label: ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_LOCKED)},
 		{value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_MAINTENANCE)}
 	];
-//	this.accountStatusChoices = [ZaAccount.ACCOUNT_STATUS_ACTIVE, ZaAccount.ACCOUNT_STATUS_MAINTENANCE, ZaAccount.ACCOUNT_STATUS_LOCKED, ZaAccount.ACCOUNT_STATUS_CLOSED];		
 
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GeneralPage, value:ZaNewAccountXWizard.GENERAL_STEP},
@@ -254,7 +253,6 @@ function(entry) {
 		if(this._containedObject.attrs[ZaAccount.A_COSId]) {
 			this._containedObject.cos = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId], this._app);
 		}
-		//this._containedObject.cos = this._app.getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
 		if(!this._containedObject.cos) {
 			this._containedObject.cos = ZaCos.getCosByName("default", this._app);
 		}
@@ -351,6 +349,44 @@ function(entry) {
     this._localXForm.setInstance(this._containedObject);
 }
 
+ZaNewAccountXWizard.isDomainLeftAccountsAlertVisible = function () {
+	var val1 = this.getInstanceValue(ZaAccount.A2_domainLeftAccounts);
+	var val2 = this.getInstanceValue(ZaAccount.A2_accountTypes);
+	return (!AjxUtil.isEmpty(val1) && AjxUtil.isEmpty(val2));
+}
+
+ZaNewAccountXWizard.isAccountTypeGrouperVisible = function () {
+	return !AjxUtil.isEmpty(this.getInstanceValue(ZaAccount.A2_accountTypes));
+}
+
+ZaNewAccountXWizard.isAccountTypeSet = function () {
+	return !ZaAccount.isAccountTypeSet(this.getInstance());
+}
+
+ZaNewAccountXWizard.isAutoDisplayname = function () {
+	return (this.getInstanceValue(ZaAccount.A2_autodisplayname)=="FALSE");
+}
+
+ZaNewAccountXWizard.isAutoCos = function () {
+	return (this.getInstanceValue(ZaAccount.A2_autoCos)=="FALSE");
+}
+
+ZaNewAccountXWizard.isAutoMailServer = function () {
+	return (this.getInstanceValue(ZaAccount.A2_autoMailServer)=="FALSE" && !AxjUtil.isEmpty(this.getController().getServerListChoices().getChoices()) && !AxjUtil.isEmpty(this.getController().getServerListChoices().getChoices().values));
+}
+
+ZaNewAccountXWizard.isIMFeatureEnabled = function () {
+	return (this.getInstanceValue(ZaAccount.A_zimbraFeatureIMEnabled) == "TRUE");
+}
+
+ZaNewAccountXWizard.isCalendarFeatureEnabled = function () {
+	return this.getInstanceValue(ZaAccount.A_zimbraFeatureCalendarEnabled)=="TRUE";
+}
+
+ZaNewAccountXWizard.isMailForwardingEnabled = function () {
+	return (this.getInstanceValue(ZaAccount.A_zimbraFeatureMailForwardingEnabled) == "TRUE");
+}
+
 ZaNewAccountXWizard.onCOSChanged = 
 function(value, event, form) {
 	if(ZaItem.ID_PATTERN.test(value))  {
@@ -382,25 +418,25 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	var emptyAlias = "@" + domainName;
 	var cases = new Array();
 	
-	var case1 = {type:_CASE_, tabGroupKey:ZaNewAccountXWizard.GENERAL_STEP, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.GENERAL_STEP", align:_LEFT_, valign:_TOP_};
+	var case1 = {type:_CASE_, tabGroupKey:ZaNewAccountXWizard.GENERAL_STEP, caseKey:ZaNewAccountXWizard.GENERAL_STEP, numCols:1,  align:_LEFT_, valign:_TOP_};
 	var case1Items = [ 
-		//{type: _OUTPUT_, ref: ZaAccount.A2_domainLeftAccounts, relevant: "instance[ZaAccount.A2_domainLeftAccounts] != null",
-			//	relevantBehavior: _HIDE_  },
 		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
-                relevant: "(instance[ZaAccount.A2_domainLeftAccounts] != null) "
-                            + " && ( instance[ZaAccount.A2_accountTypes] == null || instance[ZaAccount.A2_accountTypes].length <= 0) ",
-				relevantBehavior: _HIDE_ , containerCssStyle: "width:400px;",
+                visibilityChecks:[ZaNewAccountXWizard.isDomainLeftAccountsAlertVisible],
+                visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes],
+				containerCssStyle: "width:400px;",
 				style: DwtAlert.WARNING, iconVisible: false
 		 },
 
         //account types group
         {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_wiz_type_group",
                 colSpan: "*", numCols: 1, colSizes: ["100%"],
-                relevant: "instance[ZaAccount.A2_accountTypes] != null && instance[ZaAccount.A2_accountTypes].length > 0 ",
-                relevantBehavior: _HIDE_,
+                visibilityChecks:[ZaNewAccountXWizard.isAccountTypeGrouperVisible],
+                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
                 items: [
-                    {type: _DWT_ALERT_, relevant:"!ZaAccount.isAccountTypeSet(this.instance)",
-                        relevantBehavior: _HIDE_, containerCssStyle: "width:400px;",
+                    {type: _DWT_ALERT_, 
+                    	visibilityChecks:[ZaNewAccountXWizard.isAccountTypeSet],
+                        visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
+                        containerCssStyle: "width:400px;",
                         style: DwtAlert.CRITICAL, iconVisible: false ,
                         content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
                     },
@@ -445,8 +481,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 			{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_, 
 				items: [
 					{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150, 
-						relevant:"instance[ZaAccount.A2_autodisplayname] == \"FALSE\"",
-						relevantBehavior:_DISABLE_
+						enableDisableChecks:[ZaNewAccountXWizard.isAutoDisplayname],
+						enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname]
 					},
 					{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 						elementChanged: function(elementValue,instanceValue, event) {
@@ -481,13 +517,10 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		setupGroup.items.push(
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [
-					/*{ref:ZaAccount.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,label: null, 
-						relevant:"instance[ZaAccount.A2_autoCos]==\"FALSE\"", relevantBehavior:_DISABLE_ ,
-						labelLocation:_LEFT_, choices:this._app.getCosListChoices(), onChange:ZaNewAccountXWizard.onCOSChanged },
-					*/
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
 						onChange:ZaNewAccountXWizard.onCOSChanged,
-						relevant:"instance[ZaAccount.A2_autoCos]==\"FALSE\"",relevantBehavior:_DISABLE_ ,
+						enableDisableChecks:[ZaNewAccountXWizard.isAutoCos],
+						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
 						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,choices:this.cosChoices,
 						dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
 								// dereference through the choices array, if provided
@@ -520,15 +553,15 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	}
 	setupGroup.items.push({ref:ZaAccount.A_isAdminAccount, type:_CHECKBOX_, 
 							msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin,
-							trueValue:"TRUE", falseValue:"FALSE",
-							relevantBehavior:_HIDE_
+							trueValue:"TRUE", falseValue:"FALSE"
 						});
 	if(ZaSettings.SERVERS_ENABLED) {
 		setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
 							items: [
 								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: this._app.getServerListChoices(), 
-									relevant:"instance[ZaAccount.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices().getChoices().values.length != 0",
-									relevantBehavior:_DISABLE_, tableCssStyle: "height: 15px"
+									enableDisableChecks:[ZaNewAccountXWizard.isAutoMailServer],
+									enableDisableChangeEventSources:[ZaAccount.A2_autoMailServer],
+									tableCssStyle: "height: 15px"
 							  	},
 								{ref:ZaAccount.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
 							]
@@ -593,7 +626,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	case1Items.push(notesGroup);
 	case1.items = case1Items;
 	cases.push(case1);
-	var case2={type:_CASE_,tabGroupKey:ZaNewAccountXWizard.CONTACT_STEP, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.CONTACT_STEP",
+	var case2={type:_CASE_, caseKey:ZaNewAccountXWizard.CONTACT_STEP, tabGroupKey:ZaNewAccountXWizard.CONTACT_STEP, numCols:1, 
 					items: [
 						{type:_ZAWIZGROUP_, 
 							items:[
@@ -621,7 +654,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	cases.push(case2);
 
 	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
-		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.ALIASES_STEP, numCols:1, relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.ALIASES_STEP",
+		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.ALIASES_STEP, caseKey:ZaNewAccountXWizard.ALIASES_STEP, numCols:1, 
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.NAD_AccountAliases},
 						{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
@@ -645,7 +678,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 
 
 	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
-		cases.push({type:_CASE_,tabGroupKey:ZaNewAccountXWizard.FORWARDING_STEP, numCols:2,colSizes:["200px","auto"], relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.FORWARDING_STEP",
+		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.FORWARDING_STEP, tabGroupKey:ZaNewAccountXWizard.FORWARDING_STEP, numCols:2,colSizes:["200px","auto"], 
 					id:"account_form_forwarding_step",
 					items: [
 						{
@@ -666,9 +699,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
 							label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_, 
 							cssClass:"admin_xform_name_input",
-							relevantBehavior:_DISABLE_,
 							nowrap:false,labelWrap:true, 
-							relevant:"this.getModel().getInstanceValue(this.getInstance(),ZaAccount.A_zimbraFeatureMailForwardingEnabled) == \"TRUE\""
+							enableDisableChecks:[ZaAccountXFormView.isMailForwardingEnabled],
+							enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailForwardingEnabled, ZaAccount.A_COSId]
 						},		
 						{type:_SEPARATOR_,colSpan:2},
                         {type: _DWT_ALERT_, colSpan: 2,
@@ -693,9 +726,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				});				
 	}	
 	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED) {
-		cases.push({type:_CASE_,tabGroupKey:ZaNewAccountXWizard.FEATURES_STEP,id:"account_form_features_step",
+		cases.push({type:_CASE_,caseKey:ZaNewAccountXWizard.FEATURES_STEP, tabGroupKey:ZaNewAccountXWizard.FEATURES_STEP,id:"account_form_features_step",
 				numCols:1, width:"100%",
-				relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.FEATURES_STEP",
 				items: [
 					{ type: _DWT_ALERT_,
 					  containerCssStyle: "padding-top:20px;width:400px;",
@@ -761,8 +793,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						]
 					},	
 					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraMailFeature, id:"account_wiz_features_mail",
-						 colSizes:["auto"],numCols:1,
-					 	relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == 'TRUE'))", relevantBehavior: _DISABLE_,
+						colSizes:["auto"],numCols:1,
+					 	enableDisableChecks:[ZaAccountXFormView.isMailFeatureEnabled],
+						enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailEnabled, ZaAccount.A_COSId],
 						items:[													
 							{ref:ZaAccount.A_zimbraFeatureMailPriorityEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureMailPriorityEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureMailPriorityEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureFlaggingEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureFlaggingEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureFlaggingEnabled, trueValue:"TRUE", falseValue:"FALSE"},
@@ -809,14 +842,16 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					},
 					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature, id:"account_wiz_features_calendar",
 					 	colSizes:["auto"],numCols:1,
-					 	relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == 'TRUE'))", relevantBehavior: _DISABLE_,
+					 	enableDisableChecks:[ZaAccountXFormView.isCalendarFeatureEnabled],
+						enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureCalendarEnabled,ZaAccount.A_COSId],
 						items:[		
 							{ref:ZaAccount.A_zimbraFeatureGroupCalendarEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled, trueValue:"TRUE", falseValue:"FALSE"}		
 						]
 					},
 					{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraIMFeature, id:"account_wiz_features_im",
 					 	colSizes:["auto"],numCols:1,
-					 	relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE'))", relevantBehavior: _HIDE_,
+						visibilityChecks:[ZaAccountXFormView.isIMFeatureEnabled],
+						visibilityChangeEventSources:[ZaAccount.A_zimbraFeatureIMEnabled,ZaAccount.A_COSId],
 						items:[			
 							{ref:ZaAccount.A_zimbraFeatureInstantNotify, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureInstantNotify,checkBoxLabel:ZaMsg.NAD_zimbraFeatureInstantNotify, trueValue:"TRUE", falseValue:"FALSE"}											
 						]
@@ -923,8 +958,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									msgName:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress,
 									label:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress, 
 									labelLocation:_LEFT_,
-									relevant:"ZaAccountXFormView.isMailNotificationAddressEnabled.call(this)",
-									relevantBehavior:_DISABLE_
+									enableDisableChecks:[ZaAccountXFormView.isMailNotificationAddressEnabled],
+									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefNewMailNotificationEnabled]
 								},
 								{ref:ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled, 
 									type:_ZA_CHECKBOX_, msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled,label:ZaMsg.NAD_zimbraPrefOutOfOfficeReplyEnabled, trueValue:"TRUE", falseValue:"FALSE"},
@@ -939,10 +974,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									msgName:ZaMsg.NAD_zimbraPrefOutOfOfficeReply,
 									label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, 
 									labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em",
-									relevant:"ZaAccountXFormView.isOutOfOfficeReplyEnabled.call(this)",
-								 	relevantBehavior: _DISABLE_		
+									enableDisableChecks:[ZaAccountXFormView.isOutOfOfficeReplyEnabled],
+									enableDisableChangeEvantSources:[ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled]
 								}
-								
 							]
 						},						
 						{type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
@@ -973,14 +1007,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									showAddButton:true, 
 									showRemoveButton:true, 
 									showAddOnNextRow:true, 
-//									alwaysShowAddButton:true,
 									removeButtonLabel:ZaMsg.NAD_RemoveAddress,								
 									items: [
 										{ref:".", type:_TEXTFIELD_, label:null, width:"200px"}
 									],
 									nowrap:false,labelWrap:true,
-									relevant: "!(ZaAccountXFormView.isSendingFromAnyAddressAllowed.call(this))",
-								 	relevantBehavior: _HIDE_									
+									visibilityChecks:[ZaAccountXFormView.isSendingFromAnyAddressDisAllowed],
+									visibilityChangeEventSources:[ZaAccount.A_zimbraAllowAnyFromAddress, ZaAccount.A_COSId]										
 								}
 							]
 						},
@@ -1038,8 +1071,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaAccount.A_prefMailSignature, type:_TEXTAREA_, msgName:ZaMsg.NAD_prefMailSignature,
 									label:ZaMsg.NAD_prefMailSignature, labelLocation:_LEFT_, 
 									labelCssStyle:"vertical-align:top", width:"30em",
-									relevant:"ZaAccountXFormView.isMailSignatureEnabled.call(this)",
-								 	relevantBehavior: _DISABLE_										
+									enableDisableChangeEventSources:[ZaAccount.A_prefMailSignatureEnabled],
+									enableDisableChecks:[ZaAccountXFormView.isMailSignatureEnabled]									
 								}
 							]
 						},
@@ -1077,19 +1110,20 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							]
 						}							
 					];
-		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.PREFS_STEP,relevant:"instance[ZaModel.currentStep] == ZaNewAccountXWizard.PREFS_STEP", 
+		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.PREFS_STEP, tabGroupKey:ZaNewAccountXWizard.PREFS_STEP, 
 					numCols:1, width:"100%", items :prefItems});
 	}	
 
 	if(ZaSettings.SKIN_PREFS_ENABLED) {
-		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.SKINS_STEP, id:"account_form_themes_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.SKINS_STEP", 
+		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.SKINS_STEP, tabGroupKey:ZaNewAccountXWizard.SKINS_STEP, id:"account_form_themes_step", numCols:1, width:"100%",  
 						items: [	
 							{type:_GROUP_, 
 								items:[
 								{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPERWIZ_SELECT1_, 
-									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, 
 									choices:this._app.getInstalledSkins(),
-									relevant:"ZaAccountXFormView.gotSkins.call(this)"}
+									visibilityChecks:[ZaAccountXFormView.gotSkins]}
 								] 
 							},
 							{type:_SPACER_},
@@ -1097,8 +1131,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								selectRef:ZaAccount.A_zimbraAvailableSkin, 
 								ref:ZaAccount.A_zimbraAvailableSkin, 
 								choices:ZaNewAccountXWizard.themeChoices,
-								relevant:("instance[ZaModel.currentStep]==ZaNewAccountXWizard.SKINS_STEP"),
-								relevantBehavior:_HIDE_,
+								visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
+								visibilityChangeEventSources:[ZaModel.currentStep],
+								caseKey:ZaNewAccountXWizard.SKINS_STEP, caseVarRef:ZaModel.currentStep,
 								limitLabel:ZaMsg.NAD_LimitThemesTo
 							}
 						]
@@ -1106,7 +1141,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	}
 	
 	if(ZaSettings.ZIMLETS_ENABLED) {
-		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.ZIMLETS_STEP, id:"account_form_zimlets_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.ZIMLETS_STEP", 
+		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.ZIMLETS_STEP, tabGroupKey:ZaNewAccountXWizard.ZIMLETS_STEP, id:"account_form_zimlets_step", numCols:1, width:"100%", 
 						items: [	
 							{type:_ZAWIZGROUP_, numCols:1,colSizes:["auto"], 
 								items: [
@@ -1114,9 +1149,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 										selectRef:ZaAccount.A_zimbraZimletAvailableZimlets, 
 										ref:ZaAccount.A_zimbraZimletAvailableZimlets, 
 										choices:ZaNewAccountXWizard.zimletChoices,
-										limitLabel:ZaMsg.NAD_LimitZimletsTo,
-										//resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-										relevant:("instance[ZaModel.currentStep]==ZaNewAccountXWizard.ZIMLETS_STEP")
+										limitLabel:ZaMsg.NAD_LimitZimletsTo
 									}
 								]
 							}							
@@ -1125,7 +1158,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	}
 		
 	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
-		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.ADVANCED_STEP, id:"account_form_advanced_step", numCols:1, width:"100%", relevant:"instance[ZaModel.currentStep]==ZaNewAccountXWizard.ADVANCED_STEP", 
+		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.ADVANCED_STEP, tabGroupKey:ZaNewAccountXWizard.ADVANCED_STEP, id:"account_form_advanced_step", numCols:1, width:"100%", 
 						items: [
 						{type:_ZAWIZ_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_AttachmentsGrouper,						
@@ -1227,8 +1260,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									labelCssStyle:"width:250px;", trueValue:"TRUE", falseValue:"FALSE"
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutMaxFailures, type:_SUPERWIZ_TEXTFIELD_, 
-									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
-								 	relevantBehavior: _DISABLE_,
+									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
+								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId],
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutMaxFailures+":",
 									toolTipContent:ZaMsg.NAD_zimbraPasswordLockoutMaxFailuresSub,
 									msgName:ZaMsg.NAD_zimbraPasswordLockoutMaxFailures,
@@ -1238,8 +1271,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									labelCssStyle:"width:250px;"
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPERWIZ_LIFETIME_, 
-									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
-									relevantBehavior: _DISABLE_,
+									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
+								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId],
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutDuration+":",
 									toolTipContent:ZaMsg.NAD_zimbraPasswordLockoutDurationSub,
 									msgName:ZaMsg.NAD_zimbraPasswordLockoutDuration,
@@ -1247,8 +1280,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_SUPERWIZ_LIFETIME_, 
-									relevant: "ZaAccountXFormView.isPasswordLockoutEnabled.call(this)",
-									relevantBehavior: _DISABLE_,								
+									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
+								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId],								
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime+":",
 									toolTipContent:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetimeSub,
 									msgName:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime,
@@ -1267,8 +1300,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_AdminAuthTokenLifetime,
 									txtBoxLabel:ZaMsg.NAD_AdminAuthTokenLifetime+":",
-									relevant:"instance.attrs[ZaAccount.A_isAdminAccount]==\'TRUE\'",
-									relevantBehavior:_DISABLE_
+									enableDisableChecks:[ZaAccountXFormView.isAdminAccount],
+									enableDisableChangeEventSources:[ZaAccount.A_isAdminAccount]
 								},							
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,
 									type:_SUPERWIZ_LIFETIME_, 

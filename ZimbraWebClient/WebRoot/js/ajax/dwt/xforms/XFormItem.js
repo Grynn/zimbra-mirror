@@ -2872,9 +2872,59 @@ Group_XFormItem.prototype.clearError = function() {
 };
 
 Group_XFormItem.prototype.setElementEnabled  =  function (enable) {
-		if (AjxEnv.hasFirebug) console.log("Enable/Disable the Group/Repeated items ...");
+		
 }
 
+Group_XFormItem.prototype.updateVisibility = function () {
+	var isVisible = true;
+	
+	//check if the parent element is visible
+	var parentItem = this.getParentItem();
+	if(parentItem)
+		isVisible=this.getParentItem().getIsVisible();
+	
+	//run stack of visibility checks until encounter a negative result
+	if(isVisible) {
+		var myVisibilityChecks = this.getInheritedProperty("visibilityChecks");
+		if(myVisibilityChecks && myVisibilityChecks instanceof Array) {
+			var cnt = myVisibilityChecks.length;
+			for(var i=0;i<cnt;i++) {
+				if(myVisibilityChecks[i] != null && typeof(myVisibilityChecks[i])=="function") {
+					isVisible = myVisibilityChecks[i].call(this);
+					if(!isVisible)
+						break;
+				}
+			}
+		}
+	}	
+	var reRunRefresh = false;	
+	if(isVisible) {
+		if(this.deferred)
+			reRunRefresh=true;
+			
+		this.show();
+	} else
+		this.hide();
+	
+	//update visibility for active child items
+	if(isVisible) {
+		for(var itemId in this.activeChildren) {
+			if(this.activeChildren[itemId]===true) {
+				var item = this.getForm().getItemById(itemId);
+				if(item && this.getInstance()) {
+					var updateMethod = item.getUpdateVisibilityMethod();				
+					if(updateMethod) {
+						updateMethod.call(item);
+					}
+				}
+			}
+		}
+	}
+	if(reRunRefresh) {
+		this.updateEnabledDisabled();
+		this.updateElement();
+	}	
+}
 
 
 /**

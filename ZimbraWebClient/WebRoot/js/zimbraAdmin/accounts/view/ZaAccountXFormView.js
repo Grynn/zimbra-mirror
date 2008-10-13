@@ -35,7 +35,11 @@ ZaAccountXFormView = function(parent, app) {
 	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.TAB_INDEX = 0;
 	this._domains = {} ;
+	console.time("ZaAccountXFormView.initForm");
+	//DBG.timePt(AjxDebug.PERF, "started initForm");
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());
+	console.timeEnd("ZaAccountXFormView.initForm");
+	//DBG.timePt(AjxDebug.PERF, "finished initForm");
 }
 
 ZaAccountXFormView.prototype = new ZaTabView();
@@ -213,7 +217,7 @@ ZaAccountXFormView.gotSkins = function () {
 	if(!ZaSettings.SKIN_PREFS_ENABLED)
 		return false;
 	else 
-		return ((this.parent._app.getInstalledSkins() != null) && (this.parent._app.getInstalledSkins().length > 0));
+		return ((this.getController().getInstalledSkins() != null) && (this.getController().getInstalledSkins().length > 0));
 }
 
 ZaAccountXFormView.onCOSChanged = 
