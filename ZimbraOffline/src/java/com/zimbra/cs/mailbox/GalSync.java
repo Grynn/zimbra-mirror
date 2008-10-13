@@ -194,13 +194,13 @@ public class GalSync {
             return;
         }
         
+        OfflineAccount galAccount = ensureGalAccountExists(account);
+        long lastFullSync = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
+        if (isOnRequest && lastFullSync > 0)
+            return;
+        
         boolean success = true;
-        try {
-            OfflineAccount galAccount = ensureGalAccountExists(account);
-            long lastFullSync = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
-            if (isOnRequest && lastFullSync > 0)
-                return;
-            
+        try {            
             OfflineLog.offline.info("Offline GAL sync started: " + user);            
             syncGal(ombx, galAccount, lastFullSync, account.isDebugTraceEnabled());                            
         } catch (Exception e) {
