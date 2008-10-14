@@ -47,7 +47,7 @@ else
              --with-mail_ssl_module; \
 	LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib:$(CYRUS_LIB_DIR)" make; make install)
 endif
-	ln -s $(NGINX_INSTALL) $(ZIMBRA_HOME)/nginx
+	(cd $(ZIMBRA_HOME); ln -s $(NGINX_INSTALL) nginx)
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx
