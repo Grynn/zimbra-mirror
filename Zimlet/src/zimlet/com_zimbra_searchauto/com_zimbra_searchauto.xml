@@ -8,7 +8,7 @@
   </zimletPanelItem>
 
   <userProperties>
-   <property  name="history"/>
+   <property type="string" name="history"  value=""/>
    <property type="string" name="turnONAutoComplete" value="true"/>
   </userProperties>
 </zimlet>

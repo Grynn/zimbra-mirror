@@ -18,7 +18,7 @@
 com_zimbra_searchauto.maxHistoryItems = 1000;//max unique search items to store
 com_zimbra_searchauto.searchHistoryHdr = "Search History";
 com_zimbra_searchauto.advSearchHdr = "Advanced Search";
-com_zimbra_searchauto.ySearchHdr = "Yahoo Search";
+com_zimbra_searchauto.ySearchHdr = "Top 5 Yahoo Search Result";
 com_zimbra_searchauto.searchYFor = " Search for: ";
 com_zimbra_searchauto.searchYLFor = " Local Search for: ";
 com_zimbra_searchauto.URL = "http://search.yahooapis.com/WebSearchService/V1/webSearch?appid=zimbra&results=5&output=json";
@@ -60,11 +60,14 @@ function() {
 //------------------------------------------------------------------------------------------
 //			STORE HISTORY
 //------------------------------------------------------------------------------------------
-com_zimbra_searchauto.prototype.onKeyPressSearchField =
-function(val) {
-    this.onSearchButtonClick(val);
-}
+
 com_zimbra_searchauto.prototype.onSearchButtonClick =
+function(val) {
+    this._mouseOrKeySelection = false;
+    this.onKeyPressSearchField(val);
+}
+
+com_zimbra_searchauto.prototype.onKeyPressSearchField =
 function(val) {
     if (!this.searchAutoCompleteON)
         return;
@@ -80,8 +83,8 @@ function(val) {
         this._manageHistory();//make sure to store upto 1000 unique items, remove older ones
     }
 
-
 }
+
 
 //if history count goes >1000, this restores it back to 800(i.e. 200 new space)
 com_zimbra_searchauto.prototype._manageHistory =
@@ -114,6 +117,7 @@ function(ev) {
         this.showHistory();
         return;
     } else if (event.keyCode == 13 || event.keyCode == 3) {
+        this._mouseOrKeySelection = true;
         this._onclick();
         return;
     }
@@ -141,6 +145,7 @@ function(ev) {
         this.scrollACList();
         return;
     } else if (event.keyCode == 13 || event.keyCode == 3) {
+        this._mouseOrKeySelection = true;
         this._onclick();
         return;
     }
@@ -179,6 +184,7 @@ function(ySearchArry) {
     var startStr = "<ul id='sa_ulist'>";
     var endStr = "</ul>";
     var li = "";
+	 var ys_li = "";
     this._currentHoverNo = -1;
     this._listCollapsed = true;
     this._selectedItemId = "";
@@ -191,12 +197,14 @@ function(ySearchArry) {
     for (var el in result) {
         var val = result[el];
         var id;
-        if (val == com_zimbra_searchauto.searchHistoryHdr || val == com_zimbra_searchauto.advSearchHdr
-                || val == com_zimbra_searchauto.ySearchHdr) {
+        if (val == com_zimbra_searchauto.searchHistoryHdr || val == com_zimbra_searchauto.advSearchHdr) {
             id = "autoList_Hdr_" + cnt;
             li = li + "<li class='sa_autoListHdr' id='" + id + "'>" + val + "</li>";
 
-        } else if (val.indexOf(com_zimbra_searchauto.searchYFor) >= 0 || val.indexOf(com_zimbra_searchauto.searchYLFor) >= 0) {
+        } else if(val == com_zimbra_searchauto.ySearchHdr){
+			id = "autoList_Hdr_" + cnt;
+            ys_li  = ys_li  + "<li class='sa_autoListHdr' id='" + id + "'>" + val + "</li>";
+		}else if (val.indexOf(com_zimbra_searchauto.searchYFor) >= 0 || val.indexOf(com_zimbra_searchauto.searchYLFor) >= 0) {
             id = "autoListItem_" + cnt;
             li = li + "<li  class='sa_yAutoListItem' id='" + id + "'><img src='" + this.getResource("y1.gif") + "'/>" + val + "</li>";
             cnt++;//increment
@@ -208,13 +216,14 @@ function(ySearchArry) {
         this.idAndVal[id] = val.replace("<b>", "").replace("</b>", "");
     }
 	
+	 li = li + ys_li;//add yahoo-search header
 
 	//append ysearch results..
     var newcnt = cnt;//make sure the count starts where it left off	
     for (var el in ySearchArry) {
         var val = "<b>" + ySearchArry[el].Title + "</b><br/>" + ySearchArry[el].Url;
         var id = "autoListItem_" + newcnt;
-        li = li + "<li  class='sa_yAutoListItem' id='" + id + "'><img src='" + this.getResource("y1.gif") + "'/> " + val + "</li>";
+        li = li + "<li  class='sa_yAutoListItem' id='" + id + "'> " + val + "</li>";
         this.idAndVal[id] = ySearchArry[el].Url;
         newcnt++;//increment
 
@@ -239,6 +248,9 @@ function(ySearchArry) {
 
 com_zimbra_searchauto.prototype.showContainer =
 function() {
+    if (this.searchWasJustTriggered)//handle fast-typing+enter(will be set to false by a timer)
+        return;
+
     document.getElementById("autoCompleteHistoryContainerID").style.display = "block";
     document.getElementById("searchautoCtrl").style.display = "block";
     this._listCollapsed = false;
@@ -282,6 +294,8 @@ function() {
             this.hideContainer();
             return;
         }
+
+
         if (!this._listCollapsed) {//advanced search or searchHistory was selected..
             if (this._selectedItemId != "") {//replace the selected list's value
                 this.searchField.value = this.idAndVal[this._selectedItemId];
@@ -294,8 +308,43 @@ function() {
     var getHtml = appCtxt.get(ZmSetting.VIEW_AS_HTML);
     appCtxt.getSearchController().search({query: this.searchField.value, userText: true, getHtml: getHtml});
     this.hideContainer();
+
+//finally, notify searchRefinerZimlet
+    // & also disable this zimlet for 3 seconds(to handle fast-typing+enter)
+    if (this._mouseOrKeySelection) {
+        this.notifySearchRefinerZimlet();
+        this.searchWasJustTriggered = true;
+        setTimeout(AjxCallback.simpleClosure(this.resetSWJT, this), 3000);
+    }
+
 }
 
+
+com_zimbra_searchauto.prototype.resetSWJT =
+function() {
+    this.searchWasJustTriggered = false;
+
+}
+
+//notifies searchRefiner zimlet when the history-search or when enter-key is clicked(since this zimlet consumes both those events)
+com_zimbra_searchauto.prototype.notifySearchRefinerZimlet =
+function() {
+    var searchRefinerZimlet;
+    if (!appCtxt.zimletsPresent()) {
+        return;
+    }
+    var zimlets = appCtxt.getZimletMgr().getZimlets();
+    for (var i = 0; i < zimlets.length; i++) {
+        if (zimlets[i].name == "com_zimbra_searchrefiner") {
+            searchRefinerZimlet = zimlets[i];
+            break;
+        }
+    }
+    if (searchRefinerZimlet != undefined) {
+        searchRefinerZimlet.handlerObject.onKeyPressSearchField();
+    }
+
+}
 com_zimbra_searchauto.prototype._findPos =
 function(obj) {
     var curleft = curtop = 0;

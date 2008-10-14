@@ -73,8 +73,10 @@ function(result) {
         return;
     }
     var array = result.getResponse().getResults("MSG").getVector().getArray();
-    if (array.length == 0)//no results
+    if (array.length == 0){//no results
+		com_zimbra_searchrefiner.hide();
         return;
+	}
 
     this.senderArry = [];
     this.propArry = [];
