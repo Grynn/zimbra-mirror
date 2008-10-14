@@ -118,13 +118,13 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	$(SHELL) postfix-install -non-interactive  setgid_group=_postdrop mail_owner=_postfix; \
 	cp auxiliary/qshape/qshape.pl $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin; \
 	chmod a+rx $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin/qshape.pl;)
-	(cd $(ZIMBRA_HOME); ln -s $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION) postfix)
+	(cd $(ZIMBRA_HOME); ln -s postfix-$(POSTFIX_VERSION) postfix)
 else
 	(cd postfix-$(POSTFIX_VERSION); \
 	$(MAKE) upgrade; \
 	cp auxiliary/qshape/qshape.pl $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin;\
 	chmod a+rx $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin/qshape.pl;)
-	(cd $(ZIMBRA_HOME); ln -s $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION) postfix)
+	(cd $(ZIMBRA_HOME); ln -s postfix-$(POSTFIX_VERSION) postfix)
 endif
 
 tar:
