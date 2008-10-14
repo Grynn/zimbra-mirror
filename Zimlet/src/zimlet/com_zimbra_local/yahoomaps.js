@@ -377,7 +377,7 @@ function(event) {
 		"endtime:'"+event.end_time+"',"+
 		"bizurl:'"+event.url+"'," +
 		"url:'http://upcoming.yahoo.com/event/"+ event.id +"/'" +
-		"});\">+Calander</a>";
+		"});\">+Calendar</a>";
 		html[idx++] = "&nbsp;|&nbsp;<a href=\"#\" onclick=\"YahooMaps._sendEvent({" +
 		"name:'"+name+"'," +
 		//"description:'"+desc+"',"+
