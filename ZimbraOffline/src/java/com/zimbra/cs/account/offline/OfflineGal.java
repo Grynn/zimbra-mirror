@@ -117,25 +117,29 @@ public class OfflineGal {
             return;
         }
                    
-        int c = 0;
-        while (c++ < limit && zqr.hasNext()) {
-            int id = zqr.getNext().getItemId();
+        try {
+            int c = 0;
+            while (c++ < limit && zqr.hasNext()) {
+                int id = zqr.getNext().getItemId();
             
-            Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.TYPE_CONTACT);
-            Element cn = response.addElement(MailConstants.E_CONTACT);
-            cn.addAttribute(MailConstants.A_ID, id);
+                Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.TYPE_CONTACT);
+                Element cn = response.addElement(MailConstants.E_CONTACT);
+                cn.addAttribute(MailConstants.A_ID, id);
             
-            String val;
-            if ((val = contact.get(Contact.A_firstName)) != null)
-                cn.addKeyValuePair(Contact.A_firstName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-            if ((val = contact.get(Contact.A_lastName)) != null)
-                cn.addKeyValuePair(Contact.A_lastName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-            if ((val = contact.get(Contact.A_fullName)) != null)
-                cn.addKeyValuePair(Contact.A_fullName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
-            if ((val = contact.get(Contact.A_email)) != null)
-                cn.addKeyValuePair(Contact.A_email, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                String val;
+                if ((val = contact.get(Contact.A_firstName)) != null)
+                    cn.addKeyValuePair(Contact.A_firstName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(Contact.A_lastName)) != null)
+                    cn.addKeyValuePair(Contact.A_lastName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(Contact.A_fullName)) != null)
+                    cn.addKeyValuePair(Contact.A_fullName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(Contact.A_email)) != null)
+                    cn.addKeyValuePair(Contact.A_email, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+            }
+                    
+            response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());
+        } finally {
+            zqr.doneWithSearchResults();
         }
-        
-        response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());
     }
 }

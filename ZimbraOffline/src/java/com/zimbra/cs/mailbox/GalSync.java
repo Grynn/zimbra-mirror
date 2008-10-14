@@ -145,14 +145,18 @@ public class GalSync {
                     } else {
                         byte[] types = new byte[1];
                         types[0] = MailItem.TYPE_CONTACT;
-                        ZimbraQueryResults zqr = galMbox.search(context, dn, types, SortBy.NONE, 1);
                         
-                        if (zqr.hasNext()) {
-                            galMbox.modifyContact(context, zqr.getNext().getItemId(), contact);
-                            OfflineLog.offline.debug("Offline GAL contact modified: dn=" + dn);
-                        } else {
-                            galMbox.createContact(context, contact, Mailbox.ID_FOLDER_CONTACTS, null);
-                            OfflineLog.offline.debug("Offline GAL contact created: dn=" + dn);
+                        ZimbraQueryResults zqr = galMbox.search(context, dn, types, SortBy.NONE, 1);
+                        try {                         
+                            if (zqr.hasNext()) {
+                                galMbox.modifyContact(context, zqr.getNext().getItemId(), contact);
+                                OfflineLog.offline.debug("Offline GAL contact modified: dn=" + dn);
+                            } else {
+                                galMbox.createContact(context, contact, Mailbox.ID_FOLDER_CONTACTS, null);
+                                OfflineLog.offline.debug("Offline GAL contact created: dn=" + dn);
+                            }
+                        } finally {
+                            zqr.doneWithSearchResults();
                         }
                     }
                 } catch (ServiceException e) {
