@@ -574,7 +574,7 @@ deployCert() {
     return
   fi
 
-  if [ x"$ldap_is_master" = "xtrue" -a x"$SKIP_LDAP" != "x1" ]; then
+  if [ "x$SKIP_LDAP" != "x1" ]; then
     if [ x"$ALLSERVERS" = "x-allserver" ]; then
       saveConfigKey "zimbraSSLCertificate" ${current_crt} "global"
       saveConfigKey "zimbraSSLPrivateKey" ${current_key} "global"
