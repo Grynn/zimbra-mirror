@@ -216,9 +216,10 @@ ZaDomain.A2_account_limits = "account_limits" ;
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
 ZaDomain.A_zimbraSkinBackgroundColor = "zimbraSkinBackgroundColor" ;
-ZaDomain.A_zimbraSkinLogoURL ="zimbraSkinLogoURL" ;
 ZaDomain.A_zimbraSkinSecondaryColor = "zimbraSkinSecondaryColor" ;
 ZaDomain.A_zimbraSkinSelectionColor  = "zimbraSkinSelectionColor" ;
+
+ZaDomain.A_zimbraSkinLogoURL ="zimbraSkinLogoURL" ;
 ZaDomain.A_zimbraSkinLogoLoginBanner = "zimbraSkinLogoLoginBanner" ;
 ZaDomain.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
 
@@ -1437,6 +1438,10 @@ ZaDomain.myXModel = {
       { id:ZaDomain.A_zimbraSkinBackgroundColor, ref:"attrs/" + ZaDomain.A_zimbraSkinBackgroundColor, type: _COS_STRING_ },
       { id:ZaDomain.A_zimbraSkinSecondaryColor, ref:"attrs/" + ZaDomain.A_zimbraSkinSecondaryColor, type: _COS_STRING_ },
       { id:ZaDomain.A_zimbraSkinSelectionColor, ref:"attrs/" + ZaDomain.A_zimbraSkinSelectionColor, type: _COS_STRING_ },
+
+      { id:ZaDomain.A_zimbraSkinLogoURL, ref:"attrs/" + ZaDomain.A_zimbraSkinLogoURL, type:_COS_STRING_ },
+      { id:ZaDomain.A_zimbraSkinLogoLoginBanner, ref:"attrs/" + ZaDomain.A_zimbraSkinLogoLoginBanner, type:_COS_STRING_ },
+      { id:ZaDomain.A_zimbraSkinLogoAppBanner, ref:"attrs/" + ZaDomain.A_zimbraSkinLogoAppBanner, type:_COS_STRING_ },
 
         //interop
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthUsername, type: _STRING_ },

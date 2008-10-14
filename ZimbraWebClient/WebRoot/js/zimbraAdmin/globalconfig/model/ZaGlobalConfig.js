@@ -417,6 +417,10 @@ ZaGlobalConfig.myXModel = {
         { id:ZaGlobalConfig.A_zimbraSkinSecondaryColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinSecondaryColor, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraSkinSelectionColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinSelectionColor, type: _STRING_ },
 
+        { id:ZaGlobalConfig.A_zimbraSkinLogoURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinLogoURL, type:_STRING_ },
+        { id:ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, type:_STRING_ },
+        { id:ZaGlobalConfig.A_zimbraSkinLogoAppBanner, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinLogoAppBanner, type:_STRING_ },
+
          //interop
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, type: _STRING_ },
