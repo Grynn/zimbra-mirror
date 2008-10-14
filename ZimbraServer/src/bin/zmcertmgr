@@ -194,12 +194,13 @@ saveConfigKey() {
     return
   fi
 
-  if [ x"$LDAP_IS_RUNNING" = "x" ]; then
-    isLdapRunning
-  fi
-  if [ x"$LDAP_IS_RUNNING" != "x0" ]; then
-    return
-  fi
+  #if [ x"$LDAP_IS_RUNNING" = "x" ]; then
+  #  isLdapRunning
+  #fi
+  #if [ x"$LDAP_IS_RUNNING" != "x0" ]; then
+  #  return
+  #fi
+
   echo -n "** Saving $location config key $key..."
   su - zimbra -c "${zimbra_home}/bin/zmprov -l -- ${zmprov_opts} ${key} \"$content\" 2> /dev/null"
   if [ $? = 0 ]; then
