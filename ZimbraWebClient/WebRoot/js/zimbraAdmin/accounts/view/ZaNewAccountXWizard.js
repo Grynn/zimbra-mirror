@@ -657,7 +657,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		cases.push({type:_CASE_, tabGroupKey:ZaNewAccountXWizard.ALIASES_STEP, caseKey:ZaNewAccountXWizard.ALIASES_STEP, numCols:1, 
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.NAD_AccountAliases},
-						{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, showRemoveButton:true, 
+						{ref:ZaAccount.A_zimbraMailAlias, type:_REPEAT_, label:null, repeatInstance:emptyAlias, showAddButton:true, 
+							showRemoveButton:true, 
 							addButtonLabel:ZaMsg.NAD_AddAlias, 
 							showAddOnNextRow:true,
 							removeButtonLabel:ZaMsg.NAD_RemoveAlias,

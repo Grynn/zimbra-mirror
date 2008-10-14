@@ -89,12 +89,13 @@ function () {
 **/
 ZaXWizardDialog.prototype.goPage = 
 function(pageKey) {
-	this._containedObject[ZaModel.currentStep] = pageKey;
+	//this._containedObject[ZaModel.currentStep] = pageKey;
 	//reset the domain lists
 	EmailAddr_XFormItem.resetDomainLists.call (this);
 	//release the focus to make the cursor visible
 	this._localXForm.releaseFocus();
-	this._localXForm.refresh(); //run update script
+	this._localXModel.setInstanceValue(this._containedObject,ZaModel.currentStep, pageKey);
+	//this._localXForm.refresh(); //run update script
 	if(this._localXForm.tabGroupIDs[pageKey])
 		this._localXForm.focusFirst(this._localXForm.tabGroupIDs[pageKey]);
 	else

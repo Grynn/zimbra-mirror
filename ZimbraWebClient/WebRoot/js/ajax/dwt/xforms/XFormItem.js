@@ -70,58 +70,7 @@ XFormItemFactory.createItem = function (attributes, parentItem, xform) {
 	// tell the item to initialize any special properties it needs to on construction
 	item.initFormItem();
 	
-	//register this item's listeners with model items
-	var itemsVisibilityChangers = item.getInheritedProperty("visibilityChangeEventSources");
-	if(!AjxUtil.isEmpty(itemsVisibilityChangers)) {
-		var model = xform.getModel();
-		var cnt = itemsVisibilityChangers.length;
-		if(model && cnt>0) {
-			for (var i=0; i < cnt; i++) {
-				var modelItm = model.getItem(itemsVisibilityChangers[i], false);
-				if(modelItm) {
-					var lsnr = new AjxListener(item, XFormItem.prototype.updateVisibilityLsnr);
-					modelItm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
-				}
-			}
-		}
-	}
-	
-	var itemsEnableDisableChangers = item.getInheritedProperty("enableDisableChangeEventSources");
-	if(!AjxUtil.isEmpty(itemsEnableDisableChangers)) {
-		var model = xform.getModel();
-		var cnt = itemsEnableDisableChangers.length;
-		if(model && cnt>0) {
-			for (var i=0; i < cnt; i++) {
-				var modelItm = model.getItem(itemsEnableDisableChangers[i], false);
-				if(modelItm) {
-					var lsnr = new AjxListener(item, XFormItem.prototype.updateEnabledDisabledLsnr);
-					modelItm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
-				}
-			}
-		}
-	}	
-	
-	var itemsValueChangers = item.getInheritedProperty("valueChangeEventSources");
-	if(!AjxUtil.isEmpty(itemsValueChangers)) {
-		var model = xform.getModel();
-		var cnt = itemsValueChangers.length;
-		if(model && cnt>0) {
-			for (var i=0; i < cnt; i++) {
-				var modelItm = model.getItem(itemsValueChangers[i], false);
-				if(modelItm) {
-					var lsnr = new AjxListener(item, XFormItem.prototype.valueChangeLsnr);
-					modelItm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
-				}
-			}
-		}
-	}
-	
-	//listen to changes of my own model item
-	var bmolsnr = item.getInheritedProperty("bmolsnr");
-	if(modelItem && bmolsnr) {
-		var lsnr = new AjxListener(item, XFormItem.prototype.valueChangeLsnr);
-		modelItem.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
-	}		
+		
 	return item;
 } 
 
@@ -396,6 +345,64 @@ XFormItem.prototype.registerActiveChild = function(item) {
 	this.activeChildren[item.getId()]=true;	
 }
 
+XFormItem.prototype.signUpForEvents = function () {
+	var modelItem;
+	modelItem = this.getModelItem();
+
+	//register this item's listeners with model items
+	var itemsVisibilityChangers = this.getInheritedProperty("visibilityChangeEventSources");
+	if(!AjxUtil.isEmpty(itemsVisibilityChangers)) {
+		var model = this.getModel();
+		var cnt = itemsVisibilityChangers.length;
+		if(model && cnt>0) {
+			for (var i=0; i < cnt; i++) {
+				var modelItm = model.getItem(itemsVisibilityChangers[i], false);
+				if(modelItm) {
+					var lsnr = new AjxListener(this, XFormItem.prototype.updateVisibilityLsnr);
+					modelItm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
+				}
+			}
+		}
+	}
+	
+	var itemsEnableDisableChangers = this.getInheritedProperty("enableDisableChangeEventSources");
+	if(!AjxUtil.isEmpty(itemsEnableDisableChangers)) {
+		var model = this.getModel();
+		var cnt = itemsEnableDisableChangers.length;
+		if(model && cnt>0) {
+			for (var i=0; i < cnt; i++) {
+				var modelItm = model.getItem(itemsEnableDisableChangers[i], false);
+				if(modelItm) {
+					var lsnr = new AjxListener(this, XFormItem.prototype.updateEnabledDisabledLsnr);
+					modelItm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
+				}
+			}
+		}
+	}	
+	
+	var itemsValueChangers = this.getInheritedProperty("valueChangeEventSources");
+	if(!AjxUtil.isEmpty(itemsValueChangers)) {
+		var model = this.getModel();
+		var cnt = itemsValueChangers.length;
+		if(model && cnt>0) {
+			for (var i=0; i < cnt; i++) {
+				var modelItm = model.getItem(itemsValueChangers[i], false);
+				if(modelItm) {
+					var lsnr = new AjxListener(this, XFormItem.prototype.valueChangeLsnr);
+					modelItm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
+				}
+			}
+		}
+	}
+	
+	//listen to changes of my own model item
+	var bmolsnr = this.getInheritedProperty("bmolsnr");
+	if(modelItem && bmolsnr) {
+		var lsnr = new AjxListener(this, XFormItem.prototype.valueChangeLsnr);
+		modelItem.addListener(DwtEvent.XFORMS_VALUE_CHANGED, lsnr);
+	}
+}
+
 XFormItem.prototype.valueChangeLsnr = function (event) {
 	var updateMethod = this.getUpdateElementMethod();
 	if(!updateMethod)
@@ -433,7 +440,7 @@ XFormItem.prototype.updateElement = function() {
 		}
 	}
 }
-
+ 
 XFormItem.prototype.updateVisibilityLsnr = function (event) {
 	var updateMethod = this.getUpdateVisibilityMethod();
 	updateMethod.call(this);
@@ -3193,6 +3200,8 @@ Switch_XFormItem.outputItemList = function (items, parentItem, html,   numCols, 
 		if(parentItem)
 			parentItem.registerActiveChild(item);
 		
+		item.signUpForEvents();
+		
 		var itemUpdateMethod = item.getUpdateElementMethod();
 		if(itemUpdateMethod) {
 			var itemRefpath = item.getRefPath();
@@ -3232,6 +3241,19 @@ Repeat_XFormItem.prototype.showAddButton = true;
 Repeat_XFormItem.prototype.alwaysShowAddButton = false;
 Repeat_XFormItem.prototype.showMoveUpButton = false;
 Repeat_XFormItem.prototype.showMoveDownButton = false;
+Repeat_XFormItem.prototype.bmolsnr = true;
+
+Repeat_XFormItem.haveAnyRows = function () {
+	return (this.getParentItem().getInstanceCount() != 0);
+}
+
+Repeat_XFormItem.isLastRow = function () {
+	return ((this.getParentItem().getInstanceCount()-1) == this.getParentItem().instanceNum);
+}
+
+Repeat_XFormItem.isAddButtonVisible = function () {
+	return (this.getParentItem().getParentItem().getAlwaysShowAddButton() || Repeat_XFormItem.isLastRow.call(this) || !(Repeat_XFormItem.haveAnyRows.call(this)));
+}
 
 Repeat_XFormItem.prototype.getRemoveButton = function () {
 	if(!this.removeButton) {
@@ -3244,8 +3266,8 @@ Repeat_XFormItem.prototype.getRemoveButton = function () {
 				var repeatItem = this.getParentItem().getParentItem();
 				repeatItem.removeRowButtonClicked(this.getParentItem().instanceNum);
 			},
-			relevantBehavior:_HIDE_,
-			relevant: "item.__parentItem.getInstanceCount() != 0"
+			visibilityChecks:[Repeat_XFormItem.haveAnyRows],
+			visibilityChangeEventSources:[this.getRef()]
 		};
 		var label = this.getInheritedProperty("removeButtonLabel");
 		if(label)
@@ -3273,7 +3295,8 @@ Repeat_XFormItem.prototype.getAddButton = function () {
 				var repeatItem = this.getParentItem().getParentItem();
 				repeatItem.addRowButtonClicked(this.getParentItem().instanceNum);
 			},
-			relevantBehavior:_HIDE_,
+			visibilityChecks:[Repeat_XFormItem.isAddButtonVisible],
+			visibilityChangeEventSources:[this.getRef()],
 			forceUpdate:true
 		};
 		var label = this.getInheritedProperty("addButtonLabel");
@@ -3316,6 +3339,9 @@ Repeat_XFormItem.prototype.moveDownButton = {
 	forceUpdate:true
 }
 
+Repeat_XFormItem.groupVisibilityCheck = function () {
+	return ( (this.instanceNum < this.getNumberToShow()) || (this.instanceNum <= this.getInstanceCount()) );	
+}
 
 Repeat_XFormItem.prototype.initializeItems = function () {
 	var items = this.getItems();
@@ -3338,8 +3364,11 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 
 	var relevant = "(item.instanceNum < " + this.getNumberToShow() + ") || "+
 				   "(item.instanceNum < item.getInstanceCount())";
-	group.relevant = relevant;
-	group.relevantBehavior = this.getRelevantBehavior();
+	group.visibilityChecks = [Repeat_XFormItem.groupVisibilityCheck];
+	group.visibilityChangeEventSources = [this.getRef()];
+	/*group.relevant = relevant;
+	group.relevantBehavior = this.getRelevantBehavior();*/
+	
 	//Check if we have an explicit condition defined for Remove button
 	
 	// add the add and remove buttons to the original items array, if appropriate
@@ -3357,12 +3386,12 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 		var button = this.getAddButton();
 	
 		var showAddOnNextRow = this.getInheritedProperty("showAddOnNextRow");
-		if (!this.getAlwaysShowAddButton()) {
+/*		if (!this.getAlwaysShowAddButton()) {
 			button.relevant = "(item.getInstanceCount()-1) == item.__parentItem.instanceNum";
-		}
+		}*/
 		group.items[group.items.length] = button;
 		if(showAddOnNextRow) {
-			group.items[group.items.length] = {type:_SPACER_, colSpan:(group.numCols-1), relevant:"(item.getInstanceCount()-1) == item.__parentItem.instanceNum"};
+			group.items[group.items.length] = {type:_SPACER_, colSpan:(group.numCols-1), visibilityChecks:[Repeat_XFormItem.isLastRow], visibilityChangeEventSources:[this.getRef()]};
 		} else {
 			group.numCols++;
 		}

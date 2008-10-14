@@ -707,6 +707,8 @@ XForm.prototype.outputItemList = function (items, parentItem, html,  numCols, cu
 		
 		if(parentItem)
 			parentItem.registerActiveChild(item);
+			
+		item.signUpForEvents();	
 	}
 	
 	

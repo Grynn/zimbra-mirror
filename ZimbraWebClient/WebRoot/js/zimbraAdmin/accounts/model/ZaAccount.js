@@ -1614,6 +1614,7 @@ function (value, event, form){
 		{ //see if the cos needs to be updated accordingly
 			instance.cos = ZaCos.getDefaultCos4Account.call(p, value, form.parent._app );
 			instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
+			form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A_COSId,instance.cos.id);
 		}
         /*
         else if (!ZaSettings.COSES_ENABLED ){
@@ -1635,12 +1636,15 @@ function (value, event, form){
                     instance[ZaAccount.A2_domainLeftAccounts] =
                         AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]) ;
                 }else{
-                    instance[ZaAccount.A2_domainLeftAccounts] = null ;
+                    //instance[ZaAccount.A2_domainLeftAccounts] = null ;
+                    form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,null);
                 }
             }
 
             //update the account type information
-            instance [ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
+            
+            //instance [ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
+            form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_accountTypes,domainObj.getAccountTypes ());
             form.parent.updateAccountType();
         }
         if(form.parent.setDirty)  { //edit account view
@@ -1650,8 +1654,8 @@ function (value, event, form){
         }
         
         this.setInstanceValue(value);
-        instance [ZaAccount.A2_previousName] = value ;
-        form.refresh();
+        form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_previousName,value) ;
+        //form.refresh();
 	} catch (ex) {
 		form.parent._app.getCurrentController()._handleException(ex, "ZaAccount.setDomainChanged", null, false);	
 	}

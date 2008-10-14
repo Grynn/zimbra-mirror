@@ -297,12 +297,11 @@ XModel.prototype.addRowAfter = function (instance, path, afterRow) {
 	}
 	var list = this.getInstanceValue(instance, path);
 	if (list == null) {
-		// create a list and install it!
 		list = [];
-		this.setInstanceValue(instance, path, list);
 	}
 
 	list.splice(afterRow+1, 0, newInstance);
+	this.setInstanceValue(instance, path, list);
 }
 
 

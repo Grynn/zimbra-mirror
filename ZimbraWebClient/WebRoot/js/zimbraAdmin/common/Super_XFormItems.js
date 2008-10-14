@@ -383,7 +383,6 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 		cssStyle:textFieldCssStyle,
 		width:textFieldWidth,
 		forceUpdate:true,
-		relevantBehavior:_PARENT_,
 		nowrap:this.getInheritedProperty("nowrap"),
 		labelWrap:this.getInheritedProperty("labelWrap")		
 	};
@@ -396,8 +395,6 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		visibilityChecks:[Super_XFormItem.checkIfOverWriten],
 		visibilityChangeEventSources:[this.getRefPath()],
-		/*relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
-		relevantBehavior:_BLOCK_HIDE_,*/
 		onChange:Composite_XFormItem.onFieldChange,
 		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:150px")
 	};
@@ -453,7 +450,6 @@ Super_Textarea_XFormItem.prototype.initializeItems = function() {
 		cssStyle:textAreaCssStyle,
 		width:textAreaWidth,
 		forceUpdate:true,
-		relevantBehavior:_PARENT_,
 		nowrap:this.getInheritedProperty("nowrap"),
 		labelWrap:this.getInheritedProperty("labelWrap")		
 	};
@@ -464,8 +460,6 @@ Super_Textarea_XFormItem.prototype.initializeItems = function() {
 		type:_SUPER_ANCHOR_HELPER_, ref:".",
 		visibilityChecks:[Super_XFormItem.checkIfOverWriten],
 		visibilityChangeEventSources:[this.getRefPath()],
-		//relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
-		//relevantBehavior:_BLOCK_HIDE_,
 		onChange:Composite_XFormItem.onFieldChange,
 		cssStyle: (anchorCssStyle ? anchorCssStyle : "width:150px")
 	};
@@ -500,7 +494,6 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 		},
 		trueValue:this.getInheritedProperty("trueValue"),
 		falseValue:this.getInheritedProperty("falseValue"),
-		relevantBehavior:_PARENT_,
 		forceUpdate:true
 	};
 	
@@ -634,8 +627,6 @@ Super_DwtChooser_XFormItem.prototype.initializeItems = function() {
 			type:_SUPER_ANCHOR_HELPER_, ref:".",
 			visibilityChecks:[Super_XFormItem.checkIfOverWriten],
 			visibilityChangeEventSources:[this.getRefPath()],
-			//relevant:"Super_XFormItem.checkIfOverWriten.call(item)",
-			//relevantBehavior:_BLOCK_HIDE_,
 			cssSyle:(anchorCssStyle ? anchorCssStyle : "width:150px;"),
 			onChange:Composite_XFormItem.onFieldChange,
 			label:resetToSuperLabel,align:_CENTER_,
@@ -1191,7 +1182,7 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 		labelWrap:this.getInheritedProperty("labelWrap"),		
 		labelCssStyle:this.getLabelCssStyle(),
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
-		relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+		cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
 			var val = "1";
 			if(itemVal != null && itemVal.length >0) {
@@ -1219,7 +1210,7 @@ Super_Lifetime_XFormItem.prototype.initializeItems = function() {
 	};
 	
 	var selectField = 	{
-		type:_OSELECT1_, ref:".", relevantBehavior:_PARENT_, 
+		type:_OSELECT1_, ref:".",  
 		choices:ZaModel.getTimeChoices(),
 		getDisplayValue:function (itemVal){
 			var val = "d";
@@ -1301,7 +1292,7 @@ Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 		labelWrap:this.getInheritedProperty("labelWrap"),		
 		labelCssStyle:this.getLabelCssStyle(),
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
-		relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+		cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
 			var val = "1";
 			if(itemVal != null && itemVal.length >0) {
@@ -1329,7 +1320,7 @@ Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 	};
 	
 	var selectField = 	{
-		type:_OSELECT1_, ref:".", relevantBehavior:_PARENT_, 
+		type:_OSELECT1_, ref:".", 
 		choices:ZaModel.getTimeChoices1(),
 		getDisplayValue:function (itemVal){
 			var val = "d";
@@ -1400,7 +1391,7 @@ Super_Lifetime2_XFormItem.prototype.initializeItems = function() {
 		labelWrap:this.getInheritedProperty("labelWrap"),		
 		labelCssStyle:this.getLabelCssStyle(),
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
-		relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+		cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
 			var val = "1";
 			if(itemVal != null && itemVal.length >0) {
@@ -1429,7 +1420,7 @@ Super_Lifetime2_XFormItem.prototype.initializeItems = function() {
 	};
 	
 	var selectField = 	{
-		type:_OUTPUT_, relevantBehavior:_PARENT_, 
+		type:_OUTPUT_,
 		ref:null,
 		label:null,
 		labelLocation:_NONE_,

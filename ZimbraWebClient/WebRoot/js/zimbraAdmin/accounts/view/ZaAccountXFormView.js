@@ -679,7 +679,6 @@ ZaAccountXFormView.isMailForwardingEnabled = function () {
 
 ZaAccountXFormView.isMailFeatureEnabled = function () {
 	return (this.getInstanceValue(ZaAccount.A_zimbraFeatureMailEnabled) == "TRUE");
-	//relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == 'TRUE'))"
 }
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}

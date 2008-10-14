@@ -80,9 +80,16 @@ function () {
 	}
 		
 };
+EmailAddr_XFormItem.isStaticDomain = function () {
+	return !ZaSettings.DOMAINS_ENABLED;
+}
+
+EmailAddr_XFormItem.isNonSaticDomain = function () {
+	return ZaSettings.DOMAINS_ENABLED;
+}
 
 EmailAddr_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_name_input",
+	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_name_input",
 	 errorLocation:_PARENT_,
 		getDisplayValue:function (itemVal) {
 			var val = itemVal;
@@ -112,7 +119,7 @@ EmailAddr_XFormItem.prototype.items = [
 		}
 	},
 	{type:_OUTPUT_, value:"@"},
-	{type:_OUTPUT_,ref:".",relevant:"!ZaSettings.DOMAINS_ENABLED", relevantBehavior:_HIDE_,
+	{type:_OUTPUT_,ref:".",visibilityChecks:[EmailAddr_XFormItem.isStaticDomain],
 		choices:EmailAddr_XFormItem.domainChoices,
 		getDisplayValue:function (itemVal){
 			var val = null;
@@ -124,17 +131,16 @@ EmailAddr_XFormItem.prototype.items = [
 				} 
 			}
 			if(!val) {
-//				if(this.getChoices() && this.getChoices()._choiceObject && this.getChoices()._choiceObject[0])
 					val = this.getParentItem()._domainPart;
 			}	
-	//		this.getParentItem()._domainPart = val;
 			
 			return val;
 		}	
 	},
-	{type:_DYNSELECT_DOMAIN_PART_, ref:".", labelLocation:_NONE_, relevantBehavior:_HIDE_, 
+	{type:_DYNSELECT_DOMAIN_PART_, ref:".", labelLocation:_NONE_,  
 	 	choices:EmailAddr_XFormItem.domainChoices,editable:true,
-	 	relevant:"ZaSettings.DOMAINS_ENABLED",dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
+	 	visibilityChecks:[EmailAddr_XFormItem.isNonSaticDomain],
+	 	dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
 		dataFetcherClass:ZaSearch,
 	 	errorLocation:_PARENT_,
 		getDisplayValue:function (itemVal){
@@ -184,33 +190,7 @@ EmailAddr_XFormItem.prototype.items = [
 			//bug: 14250, change the instance value here also even if the whole email address is invalid
 			this.getParentItem().setInstanceValue (val) ;
 			this.getForm().itemChanged(this.getParentItem(), val, event);
-		}	/*,
-		keyUp:function(newValue,ev) {
-			if(!(ev.keyCode==XFG.ARROW_LEFT || ev.keyCode==XFG.ARROW_RIGHT)) {
-				//DBG.println(AjxDebug.DBG1, "EmailAddr_XFormItem.keyUp handled key code "+ ev.keyCode +" char code " + (new Date()).getTime());
-				var n = "";
-				if(newValue)
-					n = String(newValue).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
-					
-				var query = "(zimbraDomainName="+n+"*)";
-				var app = this.getForm().parent._app ; 
-				app._domainQuery = query ;
-				//initialize the searchDomains action
-				
-				if (this.keyPressDelayHdlr != null) {
-					AjxTimedAction.cancelAction(this.keyPressDelayHdlr);					
-				}
-				
-				this._acInterval = DynSelect_XFormItem.LOAD_PAUSE;
-				this._acActionId = -1;
-				this._acAction = new AjxTimedAction(app, app.scheduledSearchDomains, this);
-				
-				this.keyPressDelayHdlr = AjxTimedAction.scheduleAction (this._acAction, this._acInterval);
-				
-				//this.getForm().getController().searchDomains(query);
-				EmailAddr_XFormItem.choicesDirty = true ;
-			}
-		}*/
+		}	
 	}
 ];
 
