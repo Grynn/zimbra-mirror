@@ -22,9 +22,7 @@ import com.zimbra.cs.taglib.bean.ZMailboxBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.zclient.ZAppointmentHit;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.ZApptSummaryResult;
 import com.zimbra.cs.zclient.ZMailbox.ZGetFreeBusyResult;
-import com.zimbra.cs.zclient.ZSearchParams;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -33,7 +31,6 @@ import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 public class GetFreeBusyAppointmentsTag extends ZimbraSimpleTag {
 
@@ -42,6 +39,7 @@ public class GetFreeBusyAppointmentsTag extends ZimbraSimpleTag {
     private String mVarException;
     private long mStart;
     private long mEnd;
+    private int mFolderId;
     private ZMailboxBean mMailbox;
 
     public void setVar(String var) { this.mVar = var; }
@@ -50,6 +48,7 @@ public class GetFreeBusyAppointmentsTag extends ZimbraSimpleTag {
 
     public void setStart(long start) { this.mStart = start; }
     public void setEnd(long end) { this.mEnd = end; }
+    public void setFolderid(int folderid) { mFolderId = folderid; }
     public void setBox(ZMailboxBean mailbox) { this.mMailbox = mailbox; }
 
     public void doTag() throws JspException, IOException {
@@ -58,7 +57,7 @@ public class GetFreeBusyAppointmentsTag extends ZimbraSimpleTag {
             ZMailbox mbox = mMailbox != null ? mMailbox.getMailbox() :  getMailbox();
 
             List<ZGetFreeBusyResult> result =
-                mbox.getFreeBusy(mEmail, mStart, mEnd);
+                mbox.getFreeBusy(mEmail, mStart, mEnd, mFolderId);
             List<ZAppointmentHit>appts = mbox.createAppointmentHits(result.get(0).getTimeSlots());
             jctxt.setAttribute(mVar, new ZApptSummariesBean(appts),  PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {

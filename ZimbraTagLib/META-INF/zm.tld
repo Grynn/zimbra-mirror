@@ -4422,6 +4422,15 @@
         </attribute>
 
         <attribute>
+            <description>
+                folder to request free/busy for.  If not specified get free/busy for all calendar folders.
+            </description>
+            <name>folderid</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
             <description>email address to get free busy for</description>
             <name>email</name>
             <required>true</required>
