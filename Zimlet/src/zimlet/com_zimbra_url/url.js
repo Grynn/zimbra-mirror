@@ -33,6 +33,22 @@ function() {
 		this._alexaKey = AjxStringUtil.trim(this.getConfig("alexaThumbnailKey"));
 		// console.log("Found Alexa Key: %s", this._alexaKey);
 	}
+    Com_Zimbra_Url.REGEXES = [];
+    //populate regular expressions
+    var s = this.getConfig("ZIMLET_CONFIG_REGEX_VALUE");
+    if(s){
+        var r = new RegExp(s,"gi");
+        if(r)
+        Com_Zimbra_Url.REGEXES.push(r);
+    }
+
+    if (/^\s*true\s*$/i.test(this.getConfig("supportUNC"))) {
+        s = this.getConfig("ZIMLET_UNC_REGEX_VALUE");
+        var r = new RegExp(s,"gi");
+        if(r)
+        Com_Zimbra_Url.REGEXES.push(r);
+    }
+
 };
 
 // Const
@@ -42,29 +58,41 @@ Com_Zimbra_Url.THUMB_SIZE = 'width="200" height="150"';
 
 Com_Zimbra_Url.prototype.match =
 function(line, startIndex) {
-	this.RE.lastIndex = startIndex;
-	var m = this.RE.exec(line);
-	if (!m) {
-		return null;
-	}
-
-	var last = m[0].charAt(m[0].length - 1);
-	if (last == '.' || last == "," || last == '!') {
-		var m2 = {index: m.index };
-		m2[0] = m[0].substring(0, m[0].length - 1);
-		return m2;
-	} else {
-		return m;
-	}
+    for (i = 0; i < Com_Zimbra_Url.REGEXES.length; i++) {
+        
+        re = Com_Zimbra_Url.REGEXES[i];
+		re.lastIndex = startIndex;
+		m = re.exec(line);
+        if (!m) {
+            continue;
+        }
+        var last = m[0].charAt(m[0].length - 1);
+        if (last == '.' || last == "," || last == '!') {
+            var m2 = {index: m.index };
+            m2[0] = m[0].substring(0, m[0].length - 1);
+            return m2;
+        } else {
+            return m;
+        }
+    }
 };
 
 Com_Zimbra_Url.prototype._getHtmlContent =
 function(html, idx, obj, context) {
-	var escapedUrl = obj.replace(/\"/g, '\"');
+	var escapedUrl = obj.replace(/\"/g, '\"').replace(/^\s+|\s+$/g,"");
 	if (escapedUrl.substr(0, 4) == 'www.') {
 		escapedUrl = "http://" + escapedUrl + "/";
 	}
-	html[idx++] = "<a target='_blank' href='";
+    /*if(navigator.appVersion.match(/windows/ig)){
+        escapedUrl = obj.replace(/\//g,'\\');
+    }else{*/
+        escapedUrl = obj.replace(/\\/g,'/');
+    /*}*/
+    if(escapedUrl.indexOf("\\\\") == 0 || escapedUrl.indexOf("//") == 0){
+       obj.isUNC = true;
+       escapedUrl = "file://"+escapedUrl;
+    }
+    html[idx++] = "<a target='_blank' href='";
 	html[idx++] = escapedUrl;
 	html[idx++] = "'>";
 	html[idx++] = AjxStringUtil.htmlEncode(obj);
@@ -74,12 +102,20 @@ function(html, idx, obj, context) {
 
 Com_Zimbra_Url.prototype.toolTipPoppedUp =
 function(spanElement, obj, context, canvas) {
-	var url = obj;
+	var url = obj.replace(/^\s+|\s+$/g,"");
 	if (/^\s*true\s*$/i.test(this.getConfig("stripUrls"))) {
 		url = url.replace(/[?#].*$/, "");
 	}
-	
-	if(this._disablePreview){
+    /*if(navigator.appVersion.match(/windows/ig)){
+        url = url.replace(/\//g,'\\');
+    }else{*/
+        url = url.replace(/\\/g,'/');
+   /* }*/
+    if(url.indexOf("\\\\") == 0 || url.indexOf("//") == 0){
+       url = "file://"+url;
+    }
+
+    if(this._disablePreview || url.indexOf("file://")==0){  //local files
 		this._showUrlThumbnail(url,canvas);
 	} else if (this._alexaId) {
 		this._showAlexaThumbnail(url, canvas);
