@@ -142,6 +142,8 @@ ZaDomain.A_AuthLdapSearchBindPassword="zimbraAuthLdapSearchBindPassword";
 
 ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled = "zimbraAdminConsoleDNSCheckEnabled";
 ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled = "zimbraAdminConsoleCatchAllAddressEnabled";
+ZaDomain.A_zimbraAdminConsoleSkinEnabled = "zimbraAdminConsoleSkinEnabled";
+
 //internal attributes - not synched with the server code yet
 //GAL               
 ZaDomain.A_GALServerType = "galservertype";
@@ -1272,6 +1274,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},		
 		{id:ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled},
         {id:ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled},
+        {id:ZaDomain.A_zimbraAdminConsoleSkinEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminSkinAddressEnabled},
         {id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},
 		{id:ZaDomain.A_description, type:_STRING_, ref:"attrs/" + ZaDomain.A_description}, 
 		{id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},

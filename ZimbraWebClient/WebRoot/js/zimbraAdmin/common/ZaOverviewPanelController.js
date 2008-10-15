@@ -332,7 +332,8 @@ function (appCtxt, container) {
 	this._currentDomain = "";	
 	this._app = appCtxt.getAppController().getApp(ZaZimbraAdmin.ADMIN_APP);
 			
-	if(ZaSettings.DOMAINS_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS)
+	if(ZaSettings.DOMAINS_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED
+            || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS || ZaSettings.DOMAIN_SKIN_ENABLED)
 		this._domainsMap = new Object();
 	
 	if(ZaSettings.SERVERS_ENABLED)
@@ -406,7 +407,7 @@ function() {
     }
 		
 	if(ZaSettings.COSES_ENABLED || ZaSettings.SERVERS_ENABLED || ZaSettings.ADMIN_ZIMLETS_ENABLED || ZaSettings.ZIMLETS_ENABLED|| ZaSettings.GLOBAL_CONFIG_ENABLED
-            || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS || ZaSettings.DOMAINS_ENABLED) {	
+            || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED || ZaSettings.DOMAIN_SKIN_ENABLED || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS || ZaSettings.DOMAINS_ENABLED) {	
 		this._configTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._configTi.enableSelection(false);
 		this._configTi.setText(ZaMsg.OVP_configuration);
@@ -440,7 +441,8 @@ function() {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_VIEW] = ZaOverviewPanelController.cosTreeListener;				
 		}
 		
-		if(ZaSettings.DOMAINS_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS) {
+		if(ZaSettings.DOMAINS_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED
+                || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS || ZaSettings.DOMAIN_SKIN_ENABLED) {
 			this._domainsTi = new DwtTreeItem(this._configTi);
 			this._domainsTi.setText(ZaMsg.OVP_domains);
 			this._domainsTi.setImage("Domain");
@@ -622,7 +624,8 @@ function() {
 		this._addressesTi.setExpanded(true, false);
 
 	if(ZaSettings.SYSTEM_CONFIG_ENABLED || ZaSettings.COSES_ENABLED || ZaSettings.SERVERS_ENABLED || ZaSettings.ADMIN_ZIMLETS_ENABLED || ZaSettings.ZIMLETS_ENABLED
-			|| ZaSettings.GLOBAL_CONFIG_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED || ZaSettings.DOMAINS_ENABLED  || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS )	
+			|| ZaSettings.GLOBAL_CONFIG_ENABLED || ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED || ZaSettings.DOMAINS_ENABLED  || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS
+            || ZaSettings.DOMAIN_SKIN_ENABLED )	
 		this._configTi.setExpanded(true, false);
 	
 	if(ZaSettings.MONITORING_ENABLED)

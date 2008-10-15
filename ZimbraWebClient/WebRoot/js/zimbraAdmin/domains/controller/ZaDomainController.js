@@ -60,7 +60,8 @@ function(entry) {
 **/
 ZaDomainController.initToolbarMethod =          
 function () {                                    
-	if (!ZaSettings.DOMAINS_ARE_READONLY || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS)
+	if (!ZaSettings.DOMAINS_ARE_READONLY || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS
+            || ZaSettings.DOMAIN_SKIN_ENABLED )
 		this._toolbarOperations.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
 	
 	this._toolbarOperations.push(new ZaOperation(ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	

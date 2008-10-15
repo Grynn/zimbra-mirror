@@ -513,42 +513,6 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
                                     onChange:ZaTabView.onFormFieldChanged
                                 }
                             ]
-                        },
-
-                        {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Logo_Settings,//colSizes:["175px","*"],
-                            items: [
-                                {ref:ZaGlobalConfig.A_zimbraSkinLogoURL,
-                                    type:_TEXTFIELD_,
-                                    label:ZaMsg.NAD_zimbraSkinLogoURL,
-                                    labelLocation:_LEFT_, width: 200,
-                                    onChange:ZaTabView.onFormFieldChanged
-                                } ,
-                                {ref:ZaGlobalConfig.A_zimbraSkinLogoAppBanner,
-                                    type:_TEXTFIELD_,
-                                    label:ZaMsg.NAD_zimbraSkinLogoAppBanner,
-                                    labelLocation:_LEFT_, width: 200,
-                                     onChange: GlobalConfigXFormView.onAppLogoURLChange
-                                },
-                                { type:_SPACER_, height: 5 },
-                                {type:_OUTPUT_, id:GlobalConfigXFormView.LogoAppBannerPreviewId,
-                                    label:ZaMsg.NAD_zimbraLogoAppBannerPreview,
-                                    getDisplayValue: ZaDomainXFormView.getAppLogoPreview,
-                                    labelLocation:_LEFT_
-                                },
-                                { type:_SPACER_, height: 5 },
-                                {ref:ZaGlobalConfig.A_zimbraSkinLogoLoginBanner,
-                                    type:_TEXTFIELD_,
-                                    label:ZaMsg.NAD_zimbraSkinLogoLoginBanner,
-                                    labelLocation:_LEFT_, width: 200,
-                                    onChange: GlobalConfigXFormView.onLoginLogoURLChange
-                                },
-                                { type:_SPACER_, height: 5 },
-                                {type:_OUTPUT_, id:GlobalConfigXFormView.LogoLoginBannerPreviewId,
-                                    label:ZaMsg.NAD_zimbraLogoLoginBannerPreview,
-                                    getDisplayValue: ZaDomainXFormView.getLoginLogoPreview,
-                                    labelLocation:_LEFT_
-                                }
-                            ]
                         }
                     ]
                 }
@@ -557,22 +521,3 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 	];
 };
 ZaTabView.XFormModifiers["GlobalConfigXFormView"].push(GlobalConfigXFormView.myXFormModifier);
-
-
-GlobalConfigXFormView.LogoAppBannerPreviewId = Dwt.getNextId() ;
-
-GlobalConfigXFormView.onAppLogoURLChange = function (value, event, form) {
-    ZaTabView.onFormFieldChanged.call (this, value, event, form) ;
-
-    var appBannerPreviewItem = form.getItemsById (GlobalConfigXFormView.LogoAppBannerPreviewId) [0];
-    appBannerPreviewItem.updateElement(ZaDomainXFormView.getAppLogoPreview.call(this)) ;
-}
-
-GlobalConfigXFormView.LogoLoginBannerPreviewId = Dwt.getNextId() ;
-
-GlobalConfigXFormView.onLoginLogoURLChange = function (value, event, form) {
-    ZaTabView.onFormFieldChanged.call (this, value, event, form) ;
-
-    var loginBannerPreviewItem = form.getItemsById (GlobalConfigXFormView.LogoLoginBannerPreviewId) [0];
-    loginBannerPreviewItem.updateElement(ZaDomainXFormView.getLoginLogoPreview.call(this)) ;
-}

@@ -58,6 +58,7 @@ ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP = "zimbraSmtpSendAddOriginatingI
 ZaGlobalConfig.A_zimbraDNSCheckHostname = "zimbraDNSCheckHostname";
 ZaGlobalConfig.A_zimbraAdminConsoleDNSCheckEnabled = "zimbraAdminConsoleDNSCheckEnabled";
 ZaGlobalConfig.A_zimbraAdminConsoleCatchAllAddressEnabled = "zimbraAdminConsoleCatchAllAddressEnabled";
+ZaGlobalConfig.A_zimbraAdminConsoleSkinEnabled = "zimbraAdminConsoleSkinEnabled";
 // --protocol checks
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
 ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";
@@ -374,8 +375,10 @@ ZaGlobalConfig.myXModel = {
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain, type: _ENUM_, choices: [false,true] },
 		{id:ZaGlobalConfig.A_zimbraDNSCheckHostname, type:_STRING_, ref:"attrs/" + ZaGlobalConfig.A_zimbraDNSCheckHostname, maxLength:255},		
 		{id:ZaGlobalConfig.A_zimbraAdminConsoleDNSCheckEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaGlobalConfig.A_zimbraAdminConsoleDNSCheckEnabled},
+
         {id:ZaGlobalConfig.A_zimbraAdminConsoleCatchAllAddressEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaGlobalConfig.A_zimbraAdminConsoleCatchAllAddressEnabled},
-		//rbl check
+		{id:ZaGlobalConfig.A_zimbraAdminConsoleSkinEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaGlobalConfig.A_zimbraAdminConsoleSkinEnabled},
+        //rbl check
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectRblClient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectRblClient, type: _LIST_, listItem:{type:_STRING_}},
 		// smtp
 		{ id:ZaGlobalConfig.A_zimbraSmtpTimeout, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpTimeout, type:_NUMBER_, minInclusive: 0 },
