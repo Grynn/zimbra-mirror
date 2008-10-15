@@ -3340,7 +3340,7 @@ Repeat_XFormItem.prototype.moveDownButton = {
 }
 
 Repeat_XFormItem.groupVisibilityCheck = function () {
-	return ( (this.instanceNum < this.getNumberToShow()) || (this.instanceNum <= this.getInstanceCount()) );	
+	return ( (this.instanceNum < this.getNumberToShow()) || (this.instanceNum < this.getInstanceCount()) || (this.instanceNum==0));	
 }
 
 Repeat_XFormItem.prototype.initializeItems = function () {
@@ -3375,10 +3375,11 @@ Repeat_XFormItem.prototype.initializeItems = function () {
 	if (this.getShowRemoveButton()) {
 		var button = this.getRemoveButton();
 			
-		var removeButtonRelevant = this.cacheInheritedProperty("remove_relevant","_remove_relevant");
-		if(removeButtonRelevant) {
+		//var removeButtonRelevant = this.cacheInheritedProperty("remove_relevant","_remove_relevant");
+		/*if(removeButtonRelevant) {
 			button.relevant = removeButtonRelevant;
-		} 
+		} */
+		
 		group.items[group.items.length] = button;
 		group.numCols++;			
 	}
@@ -3481,8 +3482,26 @@ Repeat_XFormItem.prototype.updateElement = function (value) {
 				var row = table.insertRow(-1);
 				row.innerHTML = html;
 			}
+			var cnt = newItems.length;
+			for(var i = 0; i <cnt; i++) {
+				var updateMethod = newItems[i].getUpdateVisibilityMethod();
+				if(updateMethod)
+					updateMethod.call(newItems[i]);
+				
+				updateMethod = newItems[i].getUpdateEnabledDisabledtMethod();
+				if(updateMethod)
+					updateMethod.call(newItems[i]);				
+			}
 		}
 	}
+	/*var updateMethod = this.getUpdateVisibilityMethod();
+	if(updateMethod)
+		updateMethod.call(this);
+	updateMethod = this.getUpdateEnabledDisabledtMethod();
+	if(updateMethod)
+		updateMethod.call(this);	*/
+	
+	XFormItem.prototype.updateElement.call(this, value);
 }
 
 Repeat_XFormItem.prototype.addRowButtonClicked = function (instanceNum) {
