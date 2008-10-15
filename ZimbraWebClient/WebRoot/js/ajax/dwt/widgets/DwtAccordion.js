@@ -379,17 +379,7 @@ DwtAccordion.prototype._handleOnClickHeader =
 function(item, ev) {
 	if (!this._enabled) { return; }
 
-	ev = ev || window.event;
-
-	this.expandItem(item.id);
-
-	if (this.isListenerRegistered(DwtEvent.SELECTION)) {
-		var selEv = DwtShell.selectionEvent;
-		DwtUiEvent.copy(selEv, ev);
-		selEv.item = this;
-		selEv.detail = item;
-		this.notifyListeners(DwtEvent.SELECTION, selEv);
-	}
+	this.expandItem(item.id, true);
 };
 
 /**
