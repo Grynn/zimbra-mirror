@@ -63,11 +63,13 @@ public class ParseDateTag extends BodyTagSupport {
 		this.pattern = pattern;
 	}
 
-	public void setTimeZone(TimeZone timeZone) {
-		this.timeZone = (TimeZone)timeZone;
-	}
-	public void setTimeZone(String timeZone) {
-		this.timeZone = TimeZone.getTimeZone(String.valueOf(timeZone));
+	public void setTimeZone(Object timeZone) {
+		if (timeZone instanceof TimeZone) {
+			this.timeZone = (TimeZone)timeZone;
+		}
+		else {
+			this.timeZone = TimeZone.getTimeZone(String.valueOf(timeZone));
+		}
 	}
 
 	public void setLocale(Locale locale) {

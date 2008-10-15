@@ -63,11 +63,11 @@ public class FormatDateTag extends SimpleTagSupport  {
 	}
 
 	public void setTimeZone(Object timeZone) {
-		if (timeZone instanceof String) {
-			this.timeZone = TimeZone.getTimeZone(String.valueOf(timeZone));
+		if (timeZone instanceof TimeZone) {
+			this.timeZone = (TimeZone)timeZone;
 		}
 		else {
-			this.timeZone = (TimeZone)timeZone;
+			this.timeZone = TimeZone.getTimeZone(String.valueOf(timeZone));
 		}
 	}
 
