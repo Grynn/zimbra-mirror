@@ -36,8 +36,8 @@ public class XmailBean extends MailBean {
 	protected boolean leaveOnServer;
 
 	protected String defaultCalDavUrl = "";
-
-    protected boolean yabSyncEnabled;
+	
+	protected boolean contactSyncEnabled;
 	
 	private static final String adomain = "aol.com";
 	private static final String gdomain = "gmail.com";
@@ -69,7 +69,7 @@ public class XmailBean extends MailBean {
 		port = ds.getPort().toString();
 		isSsl = ds.getConnectionType() == DataSource.ConnectionType.ssl;
 		isDebugTraceEnabled = ds.isDebugTraceEnabled();
-        yabSyncEnabled = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceYabSyncEnabled, false);
+		contactSyncEnabled = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceContactSyncEnabled, false);
 		
 		domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain, null);
 		smtpHost = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpHost, null);
@@ -154,11 +154,11 @@ public class XmailBean extends MailBean {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
-
-                    if (isYmail()) {
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceYabSyncEnabled,
-                                    yabSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
-                    }
+			        
+			        if (isLive() || isYmail()) {
+						dsAttrs.put(OfflineConstants.A_zimbraDataSourceContactSyncEnabled,
+						contactSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
+					}
 
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
 			        
@@ -362,17 +362,17 @@ public class XmailBean extends MailBean {
 		return syncAllServerFolders;
 	}
 
-        public boolean isLeaveOnServer() {
-                return leaveOnServer;
-        }
+	public boolean isLeaveOnServer() {
+			return leaveOnServer;
+	}
 
-        public void setLeaveOnServer(boolean leaveOnServer) {
-                this.leaveOnServer = leaveOnServer;
-        }
+	public void setLeaveOnServer(boolean leaveOnServer) {
+			this.leaveOnServer = leaveOnServer;
+	}
 
-        public boolean isLive() {
-                return "live".equals(protocol);
-        }
+	public boolean isLive() {
+			return "live".equals(protocol);
+	}
 
 	public boolean isYmail() {
 		return domain != null && (domain.equals(ydomain) ||
@@ -388,11 +388,11 @@ public class XmailBean extends MailBean {
 		return defaultCalDavUrl;
 	}
 
-    public void setYabSyncEnabled(boolean enabled) {
-        yabSyncEnabled = enabled;
-    }
+	public void setContactSyncEnabled(boolean enabled) {
+		contactSyncEnabled = enabled;
+	}
 
-    public boolean isYabSyncEnabled() {
-        return yabSyncEnabled;
-    }
+	public boolean isContactSyncEnabled() {
+		return contactSyncEnabled;
+	}
 }

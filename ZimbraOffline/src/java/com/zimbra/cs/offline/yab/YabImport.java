@@ -63,7 +63,7 @@ public class YabImport implements DataSource.DataImport {
     private void disableYabSync() throws ServiceException {
         OfflineProvisioning op = (OfflineProvisioning) Provisioning.getInstance();
         op.setDataSourceAttribute(ds,
-            OfflineProvisioning.A_zimbraDataSourceYabSyncEnabled,
+            OfflineProvisioning.A_zimbraDataSourceContactSyncEnabled,
             Provisioning.FALSE);
     }
 }

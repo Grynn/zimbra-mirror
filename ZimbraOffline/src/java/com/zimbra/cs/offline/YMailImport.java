@@ -21,7 +21,7 @@ public class YMailImport extends ImapSync {
     public YMailImport(DataSource ds) throws ServiceException {
         super(ds, new XYMEAuthenticator(OfflineYAuth.authenticate(ds),
                                         OfflineConstants.YMAIL_PARTNER_NAME));
-        yabImport = isYabSyncEnabled() ? new YabImport(ds) : null;
+        yabImport = isContactSyncEnabled() ? new YabImport(ds) : null;
     }
 
     @Override
@@ -36,8 +36,8 @@ public class YMailImport extends ImapSync {
         super.importData(folderIds, fullSync);
     }
 
-    private boolean isYabSyncEnabled() {
+    private boolean isContactSyncEnabled() {
         return dataSource.getBooleanAttr(
-            OfflineProvisioning.A_zimbraDataSourceYabSyncEnabled, false);
+            OfflineProvisioning.A_zimbraDataSourceContactSyncEnabled, false);
     }
 }

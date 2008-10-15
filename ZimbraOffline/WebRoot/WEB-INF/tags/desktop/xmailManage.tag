@@ -313,8 +313,8 @@ function passOnEdit(id) {
 
         <c:if test="${bean.ymail}">
             <tr>
-                <td style='text-align:right'><input type="checkbox" id="yabSyncEnabled" name="yabSyncEnabled" ${bean.yabSyncEnabled ? 'checked' : ''}></td>
-                <td class="ZCheckboxLabel"><fmt:message key='YabSyncEnabled'/></td>
+                <td style='text-align:right'><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td>
+                <td class="ZCheckboxLabel"><fmt:message key='ContactSyncEnabled'/></td>
             </tr>
         </c:if>
 

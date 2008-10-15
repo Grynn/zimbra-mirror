@@ -48,7 +48,7 @@ public interface OfflineConstants {
     public static final String A_zimbraDataSourceSyncStatus = "zimbraDataSourceSyncStatus";
     public static final String A_zimbraDataSourceLastSync = "zimbraDataSourceLastSync";
 
-    public static final String A_zimbraDataSourceYabSyncEnabled = "zimbraDataSourceYabSyncEnabled";
+    public static final String A_zimbraDataSourceContactSyncEnabled = "zimbraDataSourceContactSyncEnabled";
     
     public static final String A_zimbraDataSourceSyncAllServerFolders = "zimbraDataSourceSyncAllServerFolders";
     
