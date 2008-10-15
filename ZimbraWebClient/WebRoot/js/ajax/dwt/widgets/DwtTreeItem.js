@@ -389,6 +389,20 @@ function(actionCode, ev) {
 			break;
 		}
 
+		case DwtKeyMap.ACTION: {
+			var target = this.getHtmlElement();
+			var p = Dwt.toWindow(target, 0, 0);
+			var s = this.getSize();
+			var docX = p.x + s.x / 4;
+			var docY = p.y + s.y / 2;
+			this._gotMouseDownRight = true;
+			this._emulateSingleClick({dwtObj:this, target:target, button:DwtMouseEvent.RIGHT,
+									  docX:docX, docY:docY, kbNavEvent:true});
+
+			break;
+		}
+
+
 		default:
 			return false;
 
@@ -858,6 +872,14 @@ function(ev) {
 			return obj.notifyListeners(DwtEvent.ONMOUSEUP, ev);
 		}
 	}
+};
+
+DwtTreeItem.prototype._emulateSingleClick =
+function(params) {
+	var mev = new DwtMouseEvent();
+	this._setMouseEvent(mev, params);
+	mev.kbNavEvent = params.kbNavEvent;
+	this.notifyListeners(DwtEvent.ONMOUSEUP, mev);
 };
 
 DwtTreeItem._listeners = {};

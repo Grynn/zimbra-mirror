@@ -879,8 +879,8 @@ function() {
 DwtListView.prototype.handleKeyAction =
 function(actionCode, ev) {
 	switch (actionCode) {
-		case DwtKeyMap.SELECT:			this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT}); break;
-		case DwtKeyMap.SELECT_CURRENT:	this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT, ctrlKey:true}); break;
+		case DwtKeyMap.SELECT:			this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT, kbNavEvent:true}); break;
+		case DwtKeyMap.SELECT_CURRENT:	this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT, ctrlKey:true, kbNavEvent:true}); break;
 		case DwtKeyMap.SELECT_NEXT:		this._selectItem(true, false, true); break;
 		case DwtKeyMap.SELECT_PREV:		this._selectItem(false, false, true); break;
 		case DwtKeyMap.ADD_SELECT_NEXT: this._selectItem(true, true, true); break;
@@ -898,9 +898,9 @@ function(actionCode, ev) {
 				}
 			}
 			if (anchorSelected) {
-				this.emulateDblClick(this.getItemFromElement(this._kbAnchor));
+				this.emulateDblClick(this.getItemFromElement(this._kbAnchor), true);
 			} else {
-				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT});
+				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT, kbNavEvent:true});
 			}
 			break;
 		}
@@ -933,7 +933,7 @@ function(actionCode, ev) {
 				var s = Dwt.getSize(this._kbAnchor);
 				var docX = p.x + s.x / 4;
 				var docY = p.y + s.y / 2;
-				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.RIGHT, docX:docX, docY:docY});
+				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.RIGHT, docX:docX, docY:docY, kbNavEvent:true});
 			}
 			break;
 
@@ -1653,11 +1653,12 @@ function(ev) {
 };
 
 DwtListView.prototype.emulateDblClick =
-function(item) {
+function(item, kbNavEvent) {
 	var div = document.getElementById(this._getItemId(item));
 	if (div) {
 		var mev = new DwtMouseEvent();
 		this._setMouseEvent(mev, {target:div, button:DwtMouseEvent.LEFT});
+		mev.kbNavEvent = kbNavEvent;
 		this._itemClicked(div, mev);
 		this._doubleClickListener(mev);
 	}
