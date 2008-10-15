@@ -887,13 +887,23 @@ function(actionCode, ev) {
 		case DwtKeyMap.ADD_SELECT_PREV: this._selectItem(false, true, true); break;
 		case DwtKeyMap.PREV:			this._setKbFocusElement(false); break;
 		case DwtKeyMap.NEXT:			this._setKbFocusElement(true); break;
-		case DwtKeyMap.DBLCLICK:
-			if (this.getSelectionCount() > 0) {
+		case DwtKeyMap.DBLCLICK: {
+			if (!this._kbAnchor) { break; }
+			var anchorSelected = false;
+			var a = this.getSelectedItems().getArray();
+			for (var i = 0; i < a.length; i++) {
+				if (a[i] == this._kbAnchor) {
+					anchorSelected = true;
+					break;
+				}
+			}
+			if (anchorSelected) {
 				this.emulateDblClick(this.getItemFromElement(this._kbAnchor));
-			} else if (this._kbAnchor) {
+			} else {
 				this._emulateSingleClick({target:this._kbAnchor, button:DwtMouseEvent.LEFT});
 			}
 			break;
+		}
 
 		case DwtKeyMap.SELECT_ALL:
 			if (this._list && this._list.size()) {
