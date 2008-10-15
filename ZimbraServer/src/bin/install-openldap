@@ -82,7 +82,7 @@ sub getPlatformDirName() {
 	my $version = `uname -r | cut -f1 -d.`;
 	chomp($version);
 	if ($version eq "8") {
-	    $dirName = "MACOSx86";
+	    $dirName = "MACOSXx86";
 	} else {
 	    $dirName = "MACOSXx86_10.5";
 	}
