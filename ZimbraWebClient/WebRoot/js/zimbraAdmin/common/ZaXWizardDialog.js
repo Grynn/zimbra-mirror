@@ -89,13 +89,11 @@ function () {
 **/
 ZaXWizardDialog.prototype.goPage = 
 function(pageKey) {
-	//this._containedObject[ZaModel.currentStep] = pageKey;
 	//reset the domain lists
 	EmailAddr_XFormItem.resetDomainLists.call (this);
 	//release the focus to make the cursor visible
 	this._localXForm.releaseFocus();
 	this._localXModel.setInstanceValue(this._containedObject,ZaModel.currentStep, pageKey);
-	//this._localXForm.refresh(); //run update script
 	if(this._localXForm.tabGroupIDs[pageKey])
 		this._localXForm.focusFirst(this._localXForm.tabGroupIDs[pageKey]);
 	else
@@ -193,113 +191,3 @@ function(entry) {
 	
 	this._localXForm.setInstance(this._containedObject.attrs);
 }
-
-
-
-/**
-* @class ZaXWizProgressBar
-* @constructor
-* @param parent
-**/
-ZaXWizProgressBar = function(parent) {
-	if (arguments.length == 0) return;
-	DwtComposite.call(this, parent, "ZaXWizProgressBar", DwtControl.STATIC_STYLE);
-	this._table = document.createElement("table");
-	this._table.border = 0;
-	this._table.cellPadding = 0;
-	this._table.cellSpacing = 0;
-	this._menuListeners = new AjxVector();
-	this.getHtmlElement().appendChild(this._table);
-	this._table.backgroundColor = DwtCssStyle.getProperty(this.parent.getHtmlElement(), "background-color");
-	this._stepsNumber = 0; //number of steps
-	this._steps = new Array();
-	this._lblHeader = new ZaXWizStepLabel(this);
-	this._lblHeader.setText("Step 0 of 0");
-	this._lblHeader.setActive(true);
-}
-
-
-ZaXWizProgressBar.prototype = new DwtComposite;
-ZaXWizProgressBar.prototype.constructor = ZaXWizProgressBar;
-
-ZaXWizProgressBar.prototype.toString = 
-function() {
-	return "ZaXWizProgressBar";
-}
-
-/**
-* member of  ZaXWizProgressBar
-* @param stepKey
-**/
-ZaXWizProgressBar.prototype.showStep = 
-function(stepKey) {
-	var szLabelTxt = "Step " + stepKey + " of " + this._stepsNumber;
-	if(this._steps[stepKey]) {
-		szLabelTxt = szLabelTxt + ": " + this._steps[stepKey];
-	}
-	this._lblHeader.setText(szLabelTxt);
-}
-
-/**
-* member of  ZaXWizProgressBar
-* @param stepKey
-* @param stepNumber
-**/
-ZaXWizProgressBar.prototype.addStep =
-function (stepKey, stepTitle) {
-	this._steps[stepKey] = stepTitle;
-	return (++this._stepsNumber);
-}
-
-/**
-* member of  ZaXWizProgressBar
-* @param child {dom element}
-**/
-ZaXWizProgressBar.prototype.addChild =
-function(child) {
-	this._children.add(child);
-	var row;
-	var col;
-	this._table.width = "100%";
-	row = (this._table.rows.length != 0) ? this._table.rows[0]: this._table.insertRow(0);
-	row.align = "center";
-	row.vAlign = "middle";
-		
-	col = row.insertCell(row.cells.length);
-	col.align = "center";
-	col.vAlign = "middle";
-	col.noWrap = true;
-	col.appendChild(child.getHtmlElement());
-}
-
-
-/**
-* @class ZaXWizStepLabel
-* @constructor
-* @param parent
-**/
-ZaXWizStepLabel = function(parent) {
-	DwtLabel.call(this, parent, DwtLabel.ALIGN_CENTER, "ZaXWizStepLabel");
-}
-
-ZaXWizStepLabel.prototype = new DwtLabel;
-ZaXWizStepLabel.prototype.constructor = ZaXWizStepLabel;
-
-ZaXWizStepLabel.prototype.toString = 
-function() {
-	return "ZaXWizStepLabel";
-}
-
-/**
-* member of  ZaXWizStepLabel
-* @param isActive {Boolean}
-**/
-ZaXWizStepLabel.prototype.setActive = 
-function(isActive) {
-	if (isActive) {
- 		this._textCell.className="ZaXWizStepLabelActive";
- 	} else {
-	 	this._textCell.className="ZaXWizStepLabelInactive";
- 	}
-}
-
