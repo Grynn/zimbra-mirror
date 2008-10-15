@@ -372,7 +372,7 @@ function(event) {
 		"city:'"+event.venue_city+"'," +
 		"state:'"+ event.venue_state_name+"'," +
 		"startdate:'"+event.start_date+"',"+
-		"starttime:'"+event.start_time+"',"+
+        "starttime:'"+event.start_time+"',"+
 		"enddate:'"+event.end_date+"',"+
 		"endtime:'"+event.end_time+"',"+
 		"bizurl:'"+event.url+"'," +
@@ -402,9 +402,21 @@ YahooMaps._addAppt =
 function(params){
 	var appt = new ZmAppt();
 	appt.setName(params.name);
-	appt.setStartDate(YahooMaps._parseDate(params.startdate));
-	appt.setEndDate(YahooMaps._parseDate(params.enddate));
-	var directions = [
+	var isValidStartTime = YahooMaps._isValidTime(params.starttime);
+    var isValidEndTime = YahooMaps._isValidTime(params.starttEnd);
+    if(isValidStartTime)
+        appt.setStartDate(YahooMaps._parseDate(params.startdate,params.starttime));
+    else
+        appt.setStartDate(YahooMaps._parseDate(params.startdate));
+
+    if(!isValidEndTime && isValidStartTime && params.startdate == params.enddate)
+        appt.setEndDate(YahooMaps._parseDate(params.enddate,params.starttime,1));
+    else if(!(isValidEndTime && isValidStartTime))
+        appt.setEndDate(YahooMaps._parseDate(params.enddate));
+    else
+        appt.setEndDate(YahooMaps._parseDate(params.enddate,params.starttime));
+    
+    var directions = [
 		"Direction:\n\n",
 		params.addr, "\n",
 		params.city, ",",
@@ -421,13 +433,28 @@ function(params){
 };
 
 YahooMaps._parseDate =
-function(dateStr) {
-    if (dateStr) {
-		var str = dateStr.split("-");
-		return (new Date(str[0],str[1]-1,str[2]));
-	}
-	return null;
+function(date,time,hours) {
+    if(date)
+        var dateStr = date.split("-");
+    if(time)
+        var timeStr = time.split(":");
+
+    if(timeStr && hours)
+       return (new Date(dateStr[0],dateStr[1]-1,dateStr[2],parseInt(timeStr[0])+hours,timeStr[1],timeStr[2]));
+    else if(timeStr && !hours)
+       return (new Date(dateStr[0],dateStr[1]-1,dateStr[2],timeStr[0],timeStr[1],timeStr[2]));
+    else if(date)
+        return (new Date(dateStr[0],dateStr[1]-1,dateStr[2]));
+
+    return null;
 };
+
+YahooMaps._isValidTime =
+function(timeStr) {
+    if(timeStr)
+        return timeStr.split(":").length > 1 ? true:false;
+    return false;
+}
 
 YahooMaps._sendEvent =
 function(params){
