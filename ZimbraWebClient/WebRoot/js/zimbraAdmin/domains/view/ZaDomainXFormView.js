@@ -54,6 +54,7 @@ function (index, form) {
 	var list = this.getInstanceValue();
 	if (list == null || typeof(list) == "string" || index >= list.length || index<0) return;
 	list.splice(index, 1);
+	this.setInstanceValue(list);
 	form.parent.setDirty(true);
 }
 /**
