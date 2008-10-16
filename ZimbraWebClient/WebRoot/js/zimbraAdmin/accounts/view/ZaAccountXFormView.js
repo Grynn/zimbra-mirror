@@ -257,24 +257,9 @@ function (index, form) {
 	form.parent.setDirty(true);
 }
 
-ZaAccountXFormView.isPasswordLockoutEnabled = function () {
-	return (this.getInstanceValue(ZaAccount.A_zimbraPasswordLockoutEnabled) == 'TRUE');
-}
 
 ZaAccountXFormView.isSendingFromAnyAddressDisAllowed = function () {
 	return (this.getInstanceValue(ZaAccount.A_zimbraAllowAnyFromAddress) != 'TRUE');
-}
-
-ZaAccountXFormView.isMailSignatureEnabled = function () {
-	return (this.getInstanceValue(ZaAccount.A_prefMailSignatureEnabled) == 'TRUE');
-}
-
-ZaAccountXFormView.isOutOfOfficeReplyEnabled = function () {
-	return (this.getInstanceValue(ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled) == 'TRUE');
-}
-
-ZaAccountXFormView.isMailNotificationAddressEnabled = function () {
-	return (this.getInstanceValue(ZaAccount.A_zimbraPrefNewMailNotificationEnabled) == 'TRUE');
 }
 
 ZaAccountXFormView.aliasSelectionListener = 
@@ -653,33 +638,7 @@ ZaAccountXFormView.isAccountTypeSet = function () {
 	 return !ZaAccount.isAccountTypeSet(this.getInstance());
 }
 
-ZaAccountXFormView.isAdminAccount = function () { 
-	return (this.getInstanceValue(ZaAccount.A_isAdminAccount) == "TRUE"); 
-}
 
-ZaAccountXFormView.isAutoDisplayname = function () {
-	 return (this.getInstanceValue(ZaAccount.A2_autodisplayname)=="FALSE");
-}
-
-ZaAccountXFormView.isAutoCos = function () {
-	 return (this.getInstanceValue(ZaAccount.A2_autoCos)=="FALSE");
-}
-
-ZaAccountXFormView.isIMFeatureEnabled = function () {
-	return (this.getInstanceValue(ZaAccount.A_zimbraFeatureIMEnabled) == "TRUE");
-}
-
-ZaAccountXFormView.isCalendarFeatureEnabled = function () {
-	return this.getInstanceValue(ZaAccount.A_zimbraFeatureCalendarEnabled)=="TRUE";
-}
-
-ZaAccountXFormView.isMailForwardingEnabled = function () {
-	return (this.getInstanceValue(ZaAccount.A_zimbraFeatureMailForwardingEnabled) == "TRUE");
-}
-
-ZaAccountXFormView.isMailFeatureEnabled = function () {
-	return (this.getInstanceValue(ZaAccount.A_zimbraFeatureMailEnabled) == "TRUE");
-}
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
 * @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
@@ -857,7 +816,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 			{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_, 
 				items: [
 					{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150,
-						enableDisableChecks:[ZaAccountXFormView.isAutoDisplayname],
+						enableDisableChecks:[ [ZaTabView.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"] ],
 						enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname]
 					},
 					{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
@@ -898,7 +857,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				items: [
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
 						onChange:ZaAccountXFormView.onCOSChanged,
-						enableDisableChecks:[ZaAccountXFormView.isAutoCos],
+						//enableDisableChecks:[ZaAccountXFormView.isAutoCos],
+						enableDisableChecks:[ [ZaTabView.checkInstanceValue,ZaAccount.A2_autoCos,"FALSE"]],
 						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
 						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,choices:this.cosChoices,
 						dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
@@ -1227,9 +1187,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						]
 					},	
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraMailFeature, id:"account_form_features_mail", colSizes:["auto"],numCols:1,
-						enableDisableChecks:[ZaAccountXFormView.isMailFeatureEnabled],
+						enableDisableChecks:[[ZaTabView.checkInstanceValue,ZaAccount.A_zimbraFeatureMailEnabled,"TRUE"]],
 						enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailEnabled, ZaAccount.A_COSId],
-						//relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureMailEnabled] == 'TRUE'))", relevantBehavior: _DISABLE_,
 						items:[													
 							{ref:ZaAccount.A_zimbraFeatureMailPriorityEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureMailPriorityEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureMailPriorityEnabled, trueValue:"TRUE", falseValue:"FALSE"}	,
 							{ref:ZaAccount.A_zimbraFeatureFlaggingEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureFlaggingEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureFlaggingEnabled, trueValue:"TRUE", falseValue:"FALSE"}	,
@@ -1252,17 +1211,15 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						]
 					},
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraCalendarFeature, id:"account_form_features_calendar",colSizes:["auto"],numCols:1,
-						enableDisableChecks:[ZaAccountXFormView.isCalendarFeatureEnabled],
+						enableDisableChecks:[[ZaTabView.checkInstanceValue,ZaAccount.A_zimbraFeatureCalendarEnabled,"TRUE"]],
 						enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureCalendarEnabled,ZaAccount.A_COSId],
-						//relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == null) && (instance.cos.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureCalendarEnabled] == 'TRUE'))", relevantBehavior: _DISABLE_,
 						items:[						
 							{ref:ZaAccount.A_zimbraFeatureGroupCalendarEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled,checkBoxLabel:ZaMsg.NAD_zimbraFeatureGroupCalendarEnabled, trueValue:"TRUE", falseValue:"FALSE"}	
 						]
 					},
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraIMFeature, id:"account_form_features_im", colSizes:["auto"],numCols:1,
-						visibilityChecks:[ZaAccountXFormView.isIMFeatureEnabled],
+						visibilityChecks:[[ZaTabView.checkInstanceValue,ZaAccount.A_zimbraFeatureIMEnabled,"TRUE"]],
 						visibilityChangeEventSources:[ZaAccount.A_zimbraFeatureIMEnabled,ZaAccount.A_COSId],
-						//relevant: "(((instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == null) && (instance.cos.attrs[ZaCos.A_zimbraFeatureIMEnabled] == 'TRUE')) ||  (instance.attrs[ZaAccount.A_zimbraFeatureIMEnabled] == 'TRUE'))", relevantBehavior: _HIDE_,
 						items:[	
 							{ref:ZaAccount.A_zimbraFeatureInstantNotify,
 								 type:_SUPER_CHECKBOX_,
@@ -1411,7 +1368,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									msgName:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress,
 									label:ZaMsg.NAD_zimbraPrefNewMailNotificationAddress, 
 									labelLocation:_LEFT_,
-									enableDisableChecks:[ZaAccountXFormView.isMailNotificationAddressEnabled],
+									enableDisableChecks:[[ZaTabView.checkInstanceValue,ZaAccount.A_zimbraPrefNewMailNotificationEnabled,"TRUE"]],
 									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefNewMailNotificationEnabled],
 									nowrap:false,labelWrap:true
 								},
@@ -1433,7 +1390,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									label:ZaMsg.NAD_zimbraPrefOutOfOfficeReply, labelLocation:_LEFT_, 
 									labelCssStyle:"vertical-align:top", 
 									width:"30em",
-									enableDisableChecks:[ZaAccountXFormView.isOutOfOfficeReplyEnabled],
+									enableDisableChecks:[[ZaTabView.checkInstanceValue,ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled,"TRUE"]],
 									enableDisableChangeEvantSources:[ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled]
 								}
 							]
@@ -1551,7 +1508,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									label:ZaMsg.NAD_prefMailSignature, labelLocation:_LEFT_, 
 									labelCssStyle:"vertical-align:top", width:"30em",
 									enableDisableChangeEventSources:[ZaAccount.A_prefMailSignatureEnabled],
-									enableDisableChecks:[ZaAccountXFormView.isMailSignatureEnabled]
+									enableDisableChecks:[[ZaTabView.checkInstanceValue,ZaAccount.A_prefMailSignatureEnabled,"TRUE"]]
 								}
 						
 							]
@@ -1676,7 +1633,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
 										label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_,
 										align:_LEFT_,
-										enableDisableChecks:[ZaAccountXFormView.isMailForwardingEnabled],
+										enableDisableChecks:[[ZaTabView.checkInstanceValue,ZaAccount.A_zimbraFeatureMailForwardingEnabled,"TRUE"]],
 										enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailForwardingEnabled, ZaAccount.A_COSId]										
 									},
 								  	{type:_SPACER_}								
@@ -1917,7 +1874,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									trueValue:"TRUE", falseValue:"FALSE"
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutMaxFailures, type:_SUPER_TEXTFIELD_, 
-									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
+									enableDisableChecks: [[ZaTabView.checkInstanceValue,ZaAccount.A_zimbraPasswordLockoutEnabled,"TRUE"]],
 								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId],
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutMaxFailures+":",
 									toolTipContent:ZaMsg.NAD_zimbraPasswordLockoutMaxFailuresSub,
@@ -1928,7 +1885,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPER_LIFETIME_, 
 									colSpan:3,
-									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
+									enableDisableChecks: [[ZaTabView.checkInstanceValue,ZaAccount.A_zimbraPasswordLockoutEnabled,"TRUE"]],
 								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId],
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutDuration+":",
 									toolTipContent:ZaMsg.NAD_zimbraPasswordLockoutDurationSub,
@@ -1938,7 +1895,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_SUPER_LIFETIME_, 
 									colSpan:3,									
-									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
+									enableDisableChecks: [[ZaTabView.checkInstanceValue,ZaAccount.A_zimbraPasswordLockoutEnabled,"TRUE"]],
 								 	enableDisableChangeEventSources:[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_COSId],								
 									txtBoxLabel:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetime+":",
 									toolTipContent:ZaMsg.NAD_zimbraPasswordLockoutFailureLifetimeSub,
@@ -1959,7 +1916,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_AdminAuthTokenLifetime,
 									txtBoxLabel:ZaMsg.NAD_AdminAuthTokenLifetime+":",
-									enableDisableChecks:[ZaAccountXFormView.isAdminAccount],
+									//enableDisableChecks:[ZaAccountXFormView.isAdminAccount],
+									enableDisableChecks:[ [ZaTabView.checkInstanceValue,ZaAccount.A_isAdminAccount,"TRUE"] ],
 									enableDisableChangeEventSources:[ZaAccount.A_isAdminAccount]
 								},								
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,

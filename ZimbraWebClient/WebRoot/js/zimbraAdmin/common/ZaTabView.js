@@ -209,6 +209,17 @@ function () {
 	return this._isDirty;
 }
 
+ZaTabView.checkInstanceValue = function(refPath,val) {
+	return (this.getInstanceValue(refPath) == val);
+}
+
+ZaTabView.checkInstanceValueEmty = function(refPath) {
+	return AjxUtil.isEmpty(this.getInstanceValue(refPath));
+}
+
+ZaTabView.checkInstanceValueNotEmty = function(refPath) {
+	return !AjxUtil.isEmpty(this.getInstanceValue(refPath));
+}
 /*
 ZaTabView.onFormFieldChanged = 
 function (value, event, form) {

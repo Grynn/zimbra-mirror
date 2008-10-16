@@ -460,10 +460,19 @@ XFormItem.prototype.updateVisibility = function () {
 		if(myVisibilityChecks && myVisibilityChecks instanceof Array) {
 			var cnt = myVisibilityChecks.length;
 			for(var i=0;i<cnt;i++) {
-				if(myVisibilityChecks[i] != null && typeof(myVisibilityChecks[i])=="function") {
-					isVisible = myVisibilityChecks[i].call(this);
-					if(!isVisible)
-						break;
+				if(myVisibilityChecks[i] != null) {
+					if(typeof(myVisibilityChecks[i])=="function") {
+						isVisible = myVisibilityChecks[i].call(this);
+						if(!isVisible)
+							break;
+					} else if (myVisibilityChecks[i] instanceof Array) {
+						//first element is a func reference, the rest of elements are arguments
+						var func = myVisibilityChecks[i].shift();
+						isVisible = func.apply(this, myVisibilityChecks[i]);
+						myVisibilityChecks[i].unshift(func);
+						if(!isVisible)
+							break;
+					}
 				}
 			}
 		}
@@ -2896,10 +2905,19 @@ Group_XFormItem.prototype.updateVisibility = function () {
 		if(myVisibilityChecks && myVisibilityChecks instanceof Array) {
 			var cnt = myVisibilityChecks.length;
 			for(var i=0;i<cnt;i++) {
-				if(myVisibilityChecks[i] != null && typeof(myVisibilityChecks[i])=="function") {
-					isVisible = myVisibilityChecks[i].call(this);
-					if(!isVisible)
-						break;
+				if(myVisibilityChecks[i] != null) {
+					if(typeof(myVisibilityChecks[i])=="function") {
+						isVisible = myVisibilityChecks[i].call(this);
+						if(!isVisible)
+							break;
+					} else if (myVisibilityChecks[i] instanceof Array) {
+						//first element is a func reference, the rest of elements are arguments
+						var func = myVisibilityChecks[i].shift();
+						isVisible = func.apply(this, myVisibilityChecks[i]);
+						myVisibilityChecks[i].unshift(func);
+						if(!isVisible)
+							break;
+					}
 				}
 			}
 		}
