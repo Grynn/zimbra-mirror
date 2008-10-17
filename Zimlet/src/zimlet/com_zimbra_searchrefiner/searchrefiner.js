@@ -402,44 +402,24 @@ com_zimbra_searchrefiner.show = function() {
     var sr = document.getElementById("sr_mainDivId");
     sr.style.display = "block";
     sr.style.zIndex = 500;
-    try {
-        document.getElementById("zt__Mail__FOLDER").style.display = "none";
-    } catch(e) {
-    }
-    try {
-        document.getElementById("zt__Mail__SEARCH").style.display = "none";
-    } catch(e) {
-    }
-    try {
-        document.getElementById("zt__Mail__TAG").style.display = "none";
-    } catch(e) {
-    }
-    try {
-        document.getElementById("zt__Mail__ZIMLET").style.display = "none";
-    } catch(e) {
-    }
+	var treeHdrs = document.getElementById("zov__Mail").childNodes;
+	for(var i=0; i < treeHdrs.length; i++) {
+		if(treeHdrs[i].id != "sr_mainDivId"){
+			treeHdrs[i].style.display = "none";
+		}
+	}
 }
 
 com_zimbra_searchrefiner.hide = function() {
     var sr = document.getElementById("sr_mainDivId");
     sr.style.display = "none";
     sr.style.zIndex = 100;
-    try {
-        document.getElementById("zt__Mail__FOLDER").style.display = "block";
-    } catch(e) {
-    }
-    try {
-        document.getElementById("zt__Mail__SEARCH").style.display = "block";
-    } catch(e) {
-    }
-    try {
-        document.getElementById("zt__Mail__TAG").style.display = "block";
-    } catch(e) {
-    }
-    try {
-        document.getElementById("zt__Mail__ZIMLET").style.display = "block";
-    } catch(e) {
-    }
+	var treeHdrs = document.getElementById("zov__Mail").childNodes;
+	for(var i=0; i < treeHdrs.length; i++) {
+		if(treeHdrs[i].id != "sr_mainDivId"){
+			treeHdrs[i].style.display = "block";
+		}
+	}
 }
 
 
