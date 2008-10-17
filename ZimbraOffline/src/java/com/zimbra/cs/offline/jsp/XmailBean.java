@@ -35,9 +35,8 @@ public class XmailBean extends MailBean {
 
 	protected boolean leaveOnServer;
 
-	protected String defaultCalDavUrl = "";
-	
 	protected boolean contactSyncEnabled;
+    protected boolean syncCalendar;
 	
 	private static final String adomain = "aol.com";
 	private static final String gdomain = "gmail.com";
@@ -70,6 +69,7 @@ public class XmailBean extends MailBean {
 		isSsl = ds.getConnectionType() == DataSource.ConnectionType.ssl;
 		isDebugTraceEnabled = ds.isDebugTraceEnabled();
 		contactSyncEnabled = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceContactSyncEnabled, false);
+        syncCalendar = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled, false);
 		
 		domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain, null);
 		smtpHost = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpHost, null);
@@ -86,15 +86,7 @@ public class XmailBean extends MailBean {
 
 		syncFreqSecs = ds.getTimeIntervalSecs(OfflineConstants.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
 		syncAllServerFolders = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
-		leaveOnServer = ds.getBooleanAttr(Provisioning.A_zimbraDataSourceLeaveOnServer, false);
-		
-		if (domain != null) {
-			if (domain.equals(gdomain)) {
-				defaultCalDavUrl = "https://www.google.com/calendar/dav/" + username + "/user";
-			} else if (domain.equals(ydomain)) {
-				defaultCalDavUrl = "https://caldav.calendar.yahoo.com/principals/users/" + username;
-			}
-		}
+		leaveOnServer = ds.getBooleanAttr(Provisioning.A_zimbraDataSourceLeaveOnServer, false);		
 	}
 	
 	@Override
@@ -160,6 +152,10 @@ public class XmailBean extends MailBean {
 						contactSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 					}
 
+			        if (isGmail()) {
+	                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled,
+	                     syncCalendar ? Provisioning.TRUE : Provisioning.FALSE);
+			        }
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
 			        
 			        if (!isLive() && !isYmail()) {
@@ -362,17 +358,17 @@ public class XmailBean extends MailBean {
 		return syncAllServerFolders;
 	}
 
-	public boolean isLeaveOnServer() {
-			return leaveOnServer;
-	}
+    public boolean isLeaveOnServer() {
+        return leaveOnServer;
+    }
 
-	public void setLeaveOnServer(boolean leaveOnServer) {
-			this.leaveOnServer = leaveOnServer;
-	}
+    public void setLeaveOnServer(boolean leaveOnServer) {
+        this.leaveOnServer = leaveOnServer;
+    }
 
-	public boolean isLive() {
-			return "live".equals(protocol);
-	}
+    public boolean isLive() {
+        return "live".equals(protocol);
+    }
 
 	public boolean isYmail() {
 		return domain != null && (domain.equals(ydomain) ||
@@ -380,19 +376,23 @@ public class XmailBean extends MailBean {
 			domain.equals(yrmdomain));
 	}
 	
-	public void setDefaultCalDavUrl(String url) {
-		defaultCalDavUrl = url;
+	public boolean isGmail() {
+	    return domain != null && domain.equals(gdomain);
 	}
 	
-	public String getDefaultCalDavUrl() {
-		return defaultCalDavUrl;
-	}
-
 	public void setContactSyncEnabled(boolean enabled) {
 		contactSyncEnabled = enabled;
 	}
 
 	public boolean isContactSyncEnabled() {
 		return contactSyncEnabled;
+	}
+	
+	public void setSyncCalendar(boolean enabled) {
+	    syncCalendar = enabled;
+	}
+
+	public boolean isSyncCalendar() {
+	    return syncCalendar;
 	}
 }

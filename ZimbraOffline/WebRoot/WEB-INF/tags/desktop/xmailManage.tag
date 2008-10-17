@@ -73,9 +73,6 @@ function disableButtons() {
     zd.disable("deleteButton");
     zd.disable("manageButton");
     zd.disable("saveButton");
-<c:if test="${zdf:getLocalConfig('zdesktop_caldav_enabled') == 'true'}">
-    zd.disable("calendarButton");
-</c:if>
 }
 
 function passOnEdit(id) {
@@ -113,7 +110,6 @@ function passOnEdit(id) {
     <input type="hidden" name="accountName" value="${bean.accountName}">
     <input type="hidden" name="displayName" value="${bean.fromDisplay}">
     <input type="hidden" name="mailUsername" value="${bean.email}">
-    <input type="hidden" name="defaultCalDavUrl" value="${bean.defaultCalDavUrl}">
 </form>
 
 <form name="hidden_form" action="${uri}" method="POST">
@@ -318,6 +314,13 @@ function passOnEdit(id) {
             </tr>
         </c:if>
 
+        <c:if test="${bean.gmail}">
+            <tr>
+                <td style='text-align:right'><input type="checkbox" id="syncCalendar" name="syncCalendar" ${bean.syncCalendar ? 'checked' : ''}></td>
+                <td class="ZCheckboxLabel"><fmt:message key='GmailSyncCal'/></td>
+            </tr>
+        </c:if>
+
         <tr>
             <td style='text-align:right'><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td>
             <td class="ZCheckboxLabel"><fmt:message key='EnableTrace'/></td>
@@ -336,12 +339,6 @@ function passOnEdit(id) {
         <td class="ZWizardButton" width="1%">
             <button id='deleteButton' class='DwtButton' onclick="OnDelete()"><fmt:message key='RemoveAccount'/></button>
         </td>
-        
-        <c:if test="${zdf:getLocalConfig('zdesktop_caldav_enabled') == 'true'}">
-            <td class="ZWizardButton" width="1%">
-                <button id='calendarButton' class='DwtButton' onclick="OnSwitch('caldav')"><fmt:message key='ViewCalendarSettings'/></button>
-            </td>
-        </c:if>
         
         <td class="ZWizardButtonSpacer">
             <div></div>

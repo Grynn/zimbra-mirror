@@ -71,6 +71,10 @@ class EProperties extends Properties {
         }
     }
 
+    public String getNumberedProperty(String prefix, int n1, String midfix, int n2) {
+        return getProperty(prefix + '.' + n1 + '.' + midfix + '.' + n2);
+    }
+    
     public String getNumberedProperty(String prefix, int n1, String midfix, int n2, String suffix) {
         return getProperty(prefix + '.' + n1 + '.' + midfix + '.' + n2 + '.' + suffix);
     }

@@ -35,6 +35,7 @@ import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.GMailImport;
 import com.zimbra.cs.offline.YMailImport;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.datasource.SyncState;
@@ -55,10 +56,15 @@ public class OfflineDataSource extends DataSource {
     	knownService = serviceName == null ? null : knownServices.get(serviceName);
     }
 
-    private static class KnownService {
-        String name;
-        boolean saveToSent;
-        KnownFolder[] folders;
+    public KnownService getKnownService() {
+        return knownService;
+    }
+    
+    public static class KnownService {        
+        public String name;
+        public boolean saveToSent;
+        public KnownFolder[] folders;
+        public Map<String, String> attrs;
     }
     
     private static class KnownFolder {
@@ -80,9 +86,12 @@ public class OfflineDataSource extends DataSource {
     private static final String PROP_LOCAL = "local";
     private static final String PROP_REMOTE = "remote";
     private static final String PROP_SYNC = "sync";
+    private static final String PROP_ATTR_COUNT = "attr.count";
+    private static final String PROP_ATTR = "attr";
 
     private static final String SERVICE_NAME_LIVE = "hotmail.com";
     private static final String SERVICE_NAME_YAHOO = "yahoo.com";
+    private static final String SERVICE_NAME_GMAIL = "gmail.com";
 
     public static void init() throws IOException {
         EProperties props = new EProperties();
@@ -94,13 +103,14 @@ public class OfflineDataSource extends DataSource {
         for (int i = 0; i < dsCount; ++i) {
             String serviceName = props.getNumberedProperty(PROP_DATASOURCE, i, PROP_SERVICENAME);
             if (serviceName != null && serviceName.length() > 0) {
+                KnownService ks = new KnownService();
+                ks.name = serviceName;
+                ks.saveToSent = "true".equalsIgnoreCase(
+                    props.getNumberedProperty(PROP_DATASOURCE, i, PROP_SAVETOSENT, "true"));
+                
                 int folderCount = props.getNumberedPropertyAsInteger(PROP_DATASOURCE, i, PROP_KNOWNFOLDER_COUNT, 0);
                 if (folderCount > 0) {
-                    OfflineLog.offline.debug("Loading %d folder mappings for service '%s'", folderCount, serviceName);
-                    KnownService ks = new KnownService();
-                    ks.name = serviceName;
-                    ks.saveToSent = "true".equalsIgnoreCase(
-                        props.getNumberedProperty(PROP_DATASOURCE, i, PROP_SAVETOSENT, "true"));
+                    OfflineLog.offline.debug("Loading %d folder mappings for service '%s'", folderCount, serviceName);                    
                     ks.folders = new KnownFolder[folderCount];
                     for (int j = 0; j < folderCount; ++j) {
                         KnownFolder kf = new KnownFolder();
@@ -110,9 +120,25 @@ public class OfflineDataSource extends DataSource {
                         kf.remotePath = ".ignore".equals(kf.remotePath) ? "" : kf.remotePath;
                         kf.isSyncEnabled = props.getNumberedPropertyAsBoolean(PROP_DATASOURCE, i, PROP_KNOWNFOLDER, j, PROP_SYNC, false);
                         ks.folders[j] = kf;
-                    }
-                    knownServices.put(serviceName, ks);
+                    }                    
                 }
+                                
+                int attrCount = props.getNumberedPropertyAsInteger(PROP_DATASOURCE, i, PROP_ATTR_COUNT, 0);
+                if (attrCount > 0) {
+                    OfflineLog.offline.debug("Loading %d attrs for service '%s'", attrCount, serviceName);
+                    ks.attrs = new HashMap <String, String> ();
+                    for (int j = 0; j < attrCount; ++j) {
+                        String kv = props.getNumberedProperty(PROP_DATASOURCE, i, PROP_ATTR, j);
+                        int pos;
+                        if (kv != null && (pos = kv.indexOf(':')) > 0)
+                            ks.attrs.put(kv.substring(0, pos), kv.substring(pos + 1)); 
+                    }
+                } else {
+                    ks.attrs = null;
+                }
+                
+                if (folderCount > 0 || attrCount > 0)
+                    knownServices.put(serviceName, ks);
             }
         }
     }
@@ -196,6 +222,10 @@ public class OfflineDataSource extends DataSource {
     
     public boolean isYahoo() {
         return knownService != null && knownService.name.equals(SERVICE_NAME_YAHOO);
+    }
+    
+    public boolean isGmail() {
+        return knownService != null && knownService.name.equals(SERVICE_NAME_GMAIL);
     }
     
     private static final int MAX_ENTRIES = 64 * 1024;
@@ -289,8 +319,12 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public DataImport getDataImport() throws ServiceException {
-        if (isYahoo() && getType() == Type.imap) {
-            return new YMailImport(this);
+        if (getType() == Type.imap) {
+            if (isYahoo()) {
+                return new YMailImport(this);
+            } else if (isGmail()) {
+                return new GMailImport(this);
+            }
         }
         return super.getDataImport();
     }
@@ -298,8 +332,9 @@ public class OfflineDataSource extends DataSource {
     public boolean isEmail() {
     	return getType() == Type.imap || getType() == Type.pop3;
     }
+    
     public boolean needsSmtpAuth() {
     	return isEmail() && !isLive() && !isYahoo();
-    }
+    }    
 }
 

@@ -105,6 +105,10 @@ function disableButtons() {
             <td style='text-align:right'><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td>
             <td class="ZCheckboxLabel"><fmt:message key='SyncAllFolders'/></td>
         </tr>
+		<tr>
+            <td style='text-align:right'><input type="checkbox" id="syncCalendar" name="syncCalendar" checked></td>
+            <td class="ZCheckboxLabel"><fmt:message key='GmailSyncCal'/></td>
+		</tr>
 
     </table>
 
