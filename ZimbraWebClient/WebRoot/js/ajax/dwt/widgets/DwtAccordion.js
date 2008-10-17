@@ -254,12 +254,18 @@ function(id, notify) {
 			cell.style.height = "0px";
 		}
 	}
+
 	if (selectedItem && notify && this.isListenerRegistered(DwtEvent.SELECTION)) {
-		var selEv = DwtShell.selectionEvent;
-		selEv.item = this;
-		selEv.detail = selectedItem;
-		this.notifyListeners(DwtEvent.SELECTION, selEv);
+		this.notifySelectionListeners(selectedItem);
 	}
+};
+
+DwtAccordion.prototype.notifySelectionListeners =
+function(selectedItem) {
+	var selEv = DwtShell.selectionEvent;
+	selEv.item = this;
+	selEv.detail = selectedItem;
+	this.notifyListeners(DwtEvent.SELECTION, selEv);
 };
 
 /**
