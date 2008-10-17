@@ -406,7 +406,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		colSizes:["275px","*"],
 		items:[
 			{ type: _DWT_ALERT_,
-				visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
+				visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
 				visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
 				containerCssStyle: "padding-bottom:0px",
 				style: DwtAlert.WARNING,
@@ -515,7 +515,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			items: [
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
-					visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
 					containerCssStyle: "padding-bottom:0px",
 					style: DwtAlert.WARNING,
 					iconVisible: true, 
@@ -528,11 +528,11 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 					items: [
 						{ref:ZaDomain.A_GALServerType, type:_OUTPUT_, label:ZaMsg.Domain_GALServerType, choices:this.GALServerTypes, labelLocation:_LEFT_},
 						{ref:ZaDomain.A_GalLdapFilter, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, 
-							visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
+							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
 							visibilityChangeEventSources:[ZaDomain.A_GALServerType]
 						},
 						{ref:ZaDomain.A_zimbraGalAutoCompleteLdapFilter, type:_OUTPUT_, label:ZaMsg.Domain_zimbraGalAutoCompleteLdapFilter, labelLocation:_LEFT_, 
-							visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
+							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
 							visibilityChangeEventSources:[ZaDomain.A_GALServerType]
 						},								
 						{ref:ZaDomain.A_GalLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_},
@@ -543,7 +543,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						},								
 						{ref:ZaDomain.A_GalLdapBindDn, type:_OUTPUT_, label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
 							enableDisableChangeEventSources:[ZaDomain.A_UseBindPassword],
-							enableDisableChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"]]
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_UseBindPassword,"TRUE"]]
 							
 						}
 					]
@@ -560,7 +560,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			items: [
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
-					visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
 					containerCssStyle: "padding-bottom:0px",
 					style: DwtAlert.WARNING,
 					iconVisible: true, 
@@ -569,7 +569,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				},
 				{ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs},
 				{type:_GROUP_,useParentTable:true, colSpan:"*", 
-					visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
 					visibilityChangeEventSources:[ZaDomain.A_AuthMech],
 					items:[
 						{ref:ZaDomain.A_AuthLdapUserDn, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapUserDn, labelLocation:_LEFT_},
@@ -581,7 +581,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 					]
 				},
 				{type:_GROUP_,useParentTable:true, colSpan:"*", 
-					visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ldap]],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ldap]],
 					visibilityChangeEventSources:[ZaDomain.A_AuthMech],
 					items:[
 						{ref:ZaDomain.A_AuthLdapUserDn, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapUserDn, labelLocation:_LEFT_},
@@ -594,7 +594,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 						{ref:ZaDomain.A_AuthLdapSearchBase, type:_OUTPUT_, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_},
 						{ref:ZaDomain.A_AuthUseBindPassword, type:_OUTPUT_, label:ZaMsg.Domain_AuthUseBindPassword, labelLocation:_LEFT_,choices:ZaModel.BOOLEAN_CHOICES},											
 						{ref:ZaDomain.A_AuthLdapSearchBindDn, type:_INPUT_, label:ZaMsg.Domain_AuthLdapBindDn, labelLocation:_LEFT_, 
-							visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_AuthUseBindPassword,"TRUE"]],
+							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthUseBindPassword,"TRUE"]],
 							visibilityChangeEventSources:[ZaDomain.A_AuthUseBindPassword]
 						}											
 					]
@@ -611,7 +611,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			items:[
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
-					visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
 					containerCssStyle: "padding-bottom:0px",
 					style: DwtAlert.WARNING,
 					iconVisible: true, 
@@ -647,7 +647,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			items : [
 				{ type: _DWT_ALERT_,
 					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
-					visibilityChecks:[[ZaTabView.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SHUTDOWN]],
 					containerCssStyle: "padding-bottom:0px",
 					style: DwtAlert.WARNING,
 					iconVisible: true, 
@@ -659,13 +659,13 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				  style: DwtAlert.WARNING,
 				  iconVisible: true, 
 				  content: ZaMsg.Alert_NotebookNotInitialized,
-				  visibilityChecks:[[ZaTabView.checkInstanceValueEmty,ZaDomain.A_zimbraNotebookAccount]],
+				  visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A_zimbraNotebookAccount]],
 				  visibilityChangeEventSources:[ZaDomain.A_zimbraNotebookAccount]
 				},
 				{type:_GROUP_,  numCols:2,
 					//relevant:"instance.attrs[ZaDomain.A_zimbraNotebookAccount] != null",
 					//relevantBehavior:_HIDE_,
-					visibilityChecks:[[ZaTabView.checkInstanceValueNotEmty,ZaDomain.A_zimbraNotebookAccount]],
+					visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A_zimbraNotebookAccount]],
 				  	visibilityChangeEventSources:[ZaDomain.A_zimbraNotebookAccount],
 					items: [
 						{ref:ZaDomain.A_zimbraNotebookAccount, type:_EMAILADDR_, 

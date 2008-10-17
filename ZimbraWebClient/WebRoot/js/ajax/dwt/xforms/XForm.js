@@ -290,8 +290,6 @@ XForm.prototype.setModel = function (model) {
 	this.xmodel = model;
 }
 
-
-
 XForm.prototype.getInstance = function () {
 	return this.instance;
 }
@@ -905,3 +903,14 @@ XForm.prototype.insertExternalWidget = function (item) {
 	delete this._itemsToInsert[item.getId()];
 }
 
+XForm.checkInstanceValue = function(refPath,val) {
+	return (this.getInstanceValue(refPath) == val);
+}
+
+XForm.checkInstanceValueEmty = function(refPath) {
+	return AjxUtil.isEmpty(this.getInstanceValue(refPath));
+}
+
+XForm.checkInstanceValueNotEmty = function(refPath) {
+	return !AjxUtil.isEmpty(this.getInstanceValue(refPath));
+}
