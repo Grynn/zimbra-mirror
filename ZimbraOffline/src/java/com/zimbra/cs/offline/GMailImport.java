@@ -28,7 +28,7 @@ public class GMailImport extends ImapSync {
         if (calDavImport != null) {
             String dsName = dataSource.getName();
             LOG.info("Importing calendar for account '%s'", dsName);
-            calDavImport.importData(folderIds, fullSync);
+            calDavImport.importData(null, fullSync);
             LOG.info("Finished importing calendar for account '%s'", dsName);
         }
     }

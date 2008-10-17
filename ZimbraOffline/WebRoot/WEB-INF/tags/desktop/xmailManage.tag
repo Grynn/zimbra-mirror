@@ -312,6 +312,10 @@ function passOnEdit(id) {
                 <td style='text-align:right'><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td>
                 <td class="ZCheckboxLabel"><fmt:message key='ContactSyncEnabled'/></td>
             </tr>
+            <tr>
+                <td style='text-align:right'><input type="checkbox" id="syncCalendar" name="syncCalendar" ${bean.syncCalendar ? 'checked' : ''}></td>
+                <td class="ZCheckboxLabel"><fmt:message key='YMPSyncCal'/></td>
+            </tr>
         </c:if>
 
         <c:if test="${bean.gmail}">

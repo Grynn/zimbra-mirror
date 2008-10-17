@@ -111,6 +111,11 @@ function disableButtons() {
              <td class="ZCheckboxLabel"><fmt:message key='ContactSyncEnabled'/></td>
          </tr>
 
+        <tr>
+            <td style='text-align:right'><input type="checkbox" id="syncCalendar" name="syncCalendar" checked></td>
+            <td class="ZCheckboxLabel"><fmt:message key='YMPSyncCal'/></td>
+        </tr>
+
     </table>
 
 </form>

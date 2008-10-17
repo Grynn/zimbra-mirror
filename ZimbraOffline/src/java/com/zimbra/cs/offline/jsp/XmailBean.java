@@ -152,7 +152,7 @@ public class XmailBean extends MailBean {
 						contactSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 					}
 
-			        if (isGmail()) {
+			        if (isYmail() || isGmail()) {
 	                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled,
 	                     syncCalendar ? Provisioning.TRUE : Provisioning.FALSE);
 			        }
