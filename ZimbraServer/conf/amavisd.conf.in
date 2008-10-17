@@ -13,6 +13,9 @@ use strict;
 %%comment SERVICE:antivirus%% @bypass_virus_checks_maps = (1);  # uncomment to DISABLE anti-virus code
 %%comment SERVICE:antispam%% @bypass_spam_checks_maps  = (1);  # uncomment to DISABLE anti-spam code
 
+# Enable DKIM verification
+$enable_dkim_verification = 1;
+
 $enable_ldap = 1;
 $default_ldap = {
 	hostname      => [ split (' ','@@ldap_url@@') ],
