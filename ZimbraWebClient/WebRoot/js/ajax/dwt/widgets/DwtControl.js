@@ -2134,10 +2134,10 @@ function() {
 /**
  * Resets the scrollTop of container (if necessary) to ensure that element is visible.
  * 
- * @param element
- * @param container
+ * @param element		[Element]		the element to be made visible
+ * @param container		[Element]		the containing element to possibly scroll
  */
-DwtControl.prototype._scrollIntoView =
+DwtControl._scrollIntoView =
 function(element, container) {
 	var elementTop = Dwt.toWindow(element, 0, 0, null, null, DwtPoint.tmp).y;
 	var containerTop = Dwt.toWindow(container, 0, 0, null, null, DwtPoint.tmp).y + container.scrollTop;
@@ -2166,6 +2166,7 @@ function(element, container) {
  * 										check if scrolling is needed
  *        amount		[int]			number of pixels to scroll at each interval
  *        interval		[int]			number of ms to wait before continuing to scroll
+ *        id			[string]		ID for determing if we have moved out of container
  * @param ev
  */
 DwtControl._dndScrollCallback =
@@ -2176,7 +2177,8 @@ function(params, ev) {
 	// stop scrolling if mouse has moved out of the scrolling area, or dnd object has been released;
 	// a bit tricky because this callback is run as the mouse moves among objects within the scroll area,
 	// so we need to see if mouse has moved from within to outside of scroll area
-	if (ev.type == "mouseup" || (ev.dwtObj && params.id && ev.dwtObj._dndScrollId != params.id)) {
+	var dwtObjId = ev.dwtObj && ev.dwtObj._dndScrollId;
+	if (ev.type == "mouseup" || !dwtObjId || (params.id && dwtObjId != params.id)) {
 		if (container._dndScrollActionId != -1) {
 			AjxTimedAction.cancelAction(container._dndScrollActionId);
 			container._dndScrollActionId = -1;
@@ -2520,6 +2522,7 @@ function(ev) {
 				&& obj.__lastDestDwtObj._dropTarget
 				&& obj.__lastDestDwtObj != obj) {
 
+				// check if obj dragged out of scrollable container
 				if (destDwtObj && !destDwtObj._dndScrollCallback && obj.__lastDestDwtObj._dndScrollCallback) {
 					obj.__lastDestDwtObj._dndScrollCallback.run(mouseEv);
 				}
@@ -2530,7 +2533,7 @@ function(ev) {
 
 			obj.__lastDestDwtObj = destDwtObj;
 
-			if (destDwtObj && destDwtObj._dndScrollCallback) {
+			if ((destDwtObj != obj) && destDwtObj && destDwtObj._dndScrollCallback) {
 				destDwtObj._dndScrollCallback.run(mouseEv);
 			}
 

@@ -1696,7 +1696,7 @@ function(element, next) {
  */
 DwtListView.prototype._scrollList =
 function(itemDiv) {
-	this._scrollIntoView(itemDiv, itemDiv.parentNode);
+	DwtControl._scrollIntoView(itemDiv, itemDiv.parentNode);
 };
 
 DwtListView.prototype._emulateSingleClick =
