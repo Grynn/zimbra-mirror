@@ -2139,22 +2139,96 @@ function() {
  */
 DwtControl.prototype._scrollIntoView =
 function(element, container) {
-	var elementTop = Dwt.toWindow(element, 0, 0, null, null, this._tmpPoint).y;
-	var parentTop = Dwt.toWindow(container, 0, 0, null, null, this._tmpPoint).y;
+	var elementTop = Dwt.toWindow(element, 0, 0, null, null, DwtPoint.tmp).y;
+	var containerTop = Dwt.toWindow(container, 0, 0, null, null, DwtPoint.tmp).y + container.scrollTop;
 
-	var diff = elementTop - (container.scrollTop + parentTop);
+	var diff = elementTop - containerTop;
 	if (diff < 0) {
 		container.scrollTop += diff;
 	} else {
-		var parentH = Dwt.getSize(container, this._tmpPoint).y;
-		var elementH = Dwt.getSize(element, this._tmpPoint).y;
-		diff = (elementTop + elementH) - (parentTop + parentH + container.scrollTop);
+		var containerH = Dwt.getSize(container, DwtPoint.tmp).y;
+		var elementH = Dwt.getSize(element, DwtPoint.tmp).y;
+		diff = (elementTop + elementH) - (containerTop + containerH);
 		if (diff > 0) {
 			container.scrollTop += diff;
 		}
 	}
 };
 
+/**
+ * Handles scrolling of a drop area for an object being dragged. The scrolling is based on proximity to
+ * the top or bottom edge of the area (only vertical scrolling is done). The scrolling is done via a
+ * looping timer, so that the scrolling is smooth and does not depend on additional mouse movement.
+ *
+ * @param params		[hash]			hash of params:
+ *        container		[Element]		DOM element that may need to be scrolled
+ *        threshold		[int]			if mouse is within this many pixels of top or bottom of container,
+ * 										check if scrolling is needed
+ *        amount		[int]			number of pixels to scroll at each interval
+ *        interval		[int]			number of ms to wait before continuing to scroll
+ * @param ev
+ */
+DwtControl._dndScrollCallback =
+function(params, ev) {
+
+	var container = params.container;
+
+	// stop scrolling if mouse has moved out of the scrolling area, or dnd object has been released;
+	// a bit tricky because this callback is run as the mouse moves among objects within the scroll area,
+	// so we need to see if mouse has moved from within to outside of scroll area
+	if (ev.type == "mouseup" || (ev.dwtObj && params.id && ev.dwtObj._dndScrollId != params.id)) {
+		if (container._dndScrollActionId != -1) {
+			AjxTimedAction.cancelAction(container._dndScrollActionId);
+			container._dndScrollActionId = -1;
+		}
+		return;
+	}
+
+	container._scrollAmt = 0;
+	if (container.clientHeight < container.scrollHeight) {
+		var containerTop = Dwt.toWindow(container, 0, 0, null, null, DwtPoint.tmp).y;
+		var realTop = containerTop + container.scrollTop;
+		var scroll = container.scrollTop;
+		var diff = ev.docY - realTop; // do we need to scroll up?
+		var scrollAmt = (diff <= params.threshold) ? -1 * params.amount : 0;
+		if (scrollAmt == 0) {
+			var containerH = Dwt.getSize(container, DwtPoint.tmp).y;
+			var containerBottom = realTop + containerH;
+			diff = containerBottom - ev.docY; // do we need to scroll down?
+			scrollAmt = (diff <= params.threshold) ? params.amount : 0;
+		}
+		container._scrollAmt = scrollAmt;
+		if (scrollAmt) {
+			if (!container._dndScrollAction) {
+				container._dndScrollAction = new AjxTimedAction(null, DwtControl._dndScroll, [params]);
+				container._dndScrollActionId = -1;
+			}
+			// launch scrolling loop
+			if (container._dndScrollActionId == -1) {
+				container._dndScrollActionId = AjxTimedAction.scheduleAction(container._dndScrollAction, 0);
+			}
+		} else {
+			// stop scrolling
+			if (container._dndScrollActionId != -1) {
+				AjxTimedAction.cancelAction(container._dndScrollActionId);
+				container._dndScrollActionId = -1;
+			}
+		}
+	}
+};
+
+DwtControl._dndScroll =
+function(params) {
+	var container = params.container;
+	var containerTop = Dwt.toWindow(container, 0, 0, null, null, DwtPoint.tmp).y;
+	var containerH = Dwt.getSize(container, DwtPoint.tmp).y;
+	var scroll = container.scrollTop;
+	// if we are to scroll, make sure there is more scrolling to be done
+	if ((container._scrollAmt < 0 && scroll > 0) || (container._scrollAmt > 0 && (scroll + containerH < container.scrollHeight))) {
+		container.scrollTop += container._scrollAmt;
+		container._dndScrollActionId = AjxTimedAction.scheduleAction(container._dndScrollAction, params.interval);
+	}
+};
 
 /**
  * @private
@@ -2446,11 +2520,19 @@ function(ev) {
 				&& obj.__lastDestDwtObj._dropTarget
 				&& obj.__lastDestDwtObj != obj) {
 
+				if (destDwtObj && !destDwtObj._dndScrollCallback && obj.__lastDestDwtObj._dndScrollCallback) {
+					obj.__lastDestDwtObj._dndScrollCallback.run(mouseEv);
+				}
+
 				obj.__lastDestDwtObj._dragLeave(mouseEv);
 				obj.__lastDestDwtObj._dropTarget._dragLeave();
 			}
 
 			obj.__lastDestDwtObj = destDwtObj;
+
+			if (destDwtObj && destDwtObj._dndScrollCallback) {
+				destDwtObj._dndScrollCallback.run(mouseEv);
+			}
 
 			Dwt.setLocation(obj._dndProxy, mouseEv.docX + 2, mouseEv.docY + 2);
 			// TODO set up timed event to fire off another mouseover event.
@@ -2508,6 +2590,9 @@ function(ev) {
 				obj._dragging = DwtControl._NO_DRAG;
 			} else {
 				DwtControl.__badDrop(obj, mouseEv);
+			}
+			if (destDwtObj._dndScrollCallback) {
+				destDwtObj._dndScrollCallback.run(mouseEv);
 			}
 			mouseEv._stopPropagation = true;
 			mouseEv._returnValue = false;

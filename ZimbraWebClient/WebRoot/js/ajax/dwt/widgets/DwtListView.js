@@ -91,7 +91,6 @@ DwtListView = function(params) {
 	this.headerColCreated = false;
 	this.multiSelectEnabled = true;
 	this.firstSelIndex = -1;
-	this._tmpPoint = new DwtPoint(0, 0);
 
 	// the key is the HTML ID of the item's associated DIV; the value is an object
 	// with information about that row

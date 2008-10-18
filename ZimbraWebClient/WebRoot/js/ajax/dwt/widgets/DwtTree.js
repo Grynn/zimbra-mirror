@@ -54,7 +54,6 @@ DwtTree = function(params) {
 	}
 	this._selectedItems = new AjxVector();
 	this._selEv = new DwtSelectionEvent(true);
-	this._tmpPoint = new DwtPoint(0, 0);
 }
 
 DwtTree.PARAMS = ["parent", "style", "className", "posStyle"];

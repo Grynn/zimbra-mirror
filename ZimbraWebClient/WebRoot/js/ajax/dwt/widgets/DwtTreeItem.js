@@ -67,6 +67,8 @@ DwtTreeItem = function(params) {
 	this._forceNotifySelection = Boolean(params.forceNotifySelection);
 	this._actionEnabled = true;
 	this._forceNotifyAction = Boolean(params.forceNotifyAction);
+	this._dndScrollCallback = params.dndScrollCallback;
+	this._dndScrollId = params.dndScrollId;
 
 	// disable selection if checkbox style
 	if (this._tree._isCheckedStyle()) {
@@ -632,9 +634,10 @@ function() {
 };
 
 DwtTreeItem.prototype._dragLeave =
-function() {
-	if (this._preDragClassName)
+function(ev) {
+	if (this._preDragClassName) {
 		this._textCell.className = this._preDragClassName;
+	}
 };
 
 DwtTreeItem.prototype._drop =
@@ -643,7 +646,7 @@ function() {
 		this._textCell.className = this._preDragClassName;
 };
 
-DwtTreeItem._nodeIconMouseDownHdlr = 
+DwtTreeItem._nodeIconMouseDownHdlr =
 function(ev) {
 	var obj = DwtControl.getTargetControl(ev);
 	var mouseEv = DwtShell.mouseEvent;
