@@ -414,10 +414,9 @@ function(name) {
 	var lastLetter = name.charAt(name.length-1);
 	var html = [];
 	var idx = 0;
-	html[idx++] = "<center><table border=0><tr><td valign=top><div class='ImgWebSearch'></div></td><td>Click to visit ";
-	html[idx++] = name;
-	html[idx++] = (lastLetter == "S" || lastLetter == "s") ? "' " : "'s ";
-	html[idx++] = "Yahoo! profile<div class='TooltipHint'>";
+	html[idx++] = "<center><table border=0><tr><td valign=top><div class='ImgWebSearch'></div></td><td>"
+    html[idx++] = ZmMsg.leftClickYahoohint;
+    html[idx++] = "<div class='TooltipHint'>";
 	html[idx++] = ZmMsg.rightClickHint;
 	html[idx++] = "</div></td></tr></table></center>";
 	return html.join("");
