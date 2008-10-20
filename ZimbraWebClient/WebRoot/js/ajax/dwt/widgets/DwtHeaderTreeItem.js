@@ -63,12 +63,13 @@ function() {
 		if (buttonEl) {
 			buttonEl.className = "Img" + this._button.image;
 			buttonEl.onclick = AjxCallback.simpleClosure(this._onclickHandler, this);
-			var mouseOverListener = new AjxListener(this, this._mouseOverListener);
-			var mouseOutListener = new AjxListener(this, this._mouseOutListener);
+			var mouseOverListener = new AjxListener(null, DwtHeaderTreeItem._mouseOverListener);
+			var mouseOutListener = new AjxListener(null, DwtHeaderTreeItem._mouseOutListener);
 			this.addListener(DwtEvent.ONMOUSEOVER, mouseOverListener);
 			this.addListener(DwtEvent.ONMOUSEENTER, mouseOverListener);
 			this.addListener(DwtEvent.ONMOUSEOUT, mouseOutListener);
 			this.addListener(DwtEvent.ONMOUSELEAVE, mouseOutListener);
+			this.addListener(DwtEvent.ONMOUSEUP, new AjxListener(null, DwtHeaderTreeItem._mouseUpListener));
 		}
 	}
 };
@@ -80,17 +81,32 @@ function(ev) {
 	this._button.callback.run(mouseEv);
 };
 
-DwtHeaderTreeItem.prototype._mouseOverListener =
+DwtHeaderTreeItem._mouseOverListener =
 function(ev) {
+	var treeItem = ev.dwtObj;
 	var el = DwtUiEvent.getTarget(ev);
-	if (el && (el.id == this._headerButtonId)) {
-		this.setToolTipContent(this._button.tooltip);
+	if (el && (el.id == treeItem._headerButtonId)) {
+		treeItem.setToolTipContent(treeItem._button.tooltip);
 	}
 };
 
-DwtHeaderTreeItem.prototype._mouseOutListener =
-function() {
-	this.setToolTipContent(null);
+DwtHeaderTreeItem._mouseOutListener =
+function(ev) {
+	var treeItem = ev.dwtObj;
+	treeItem.setToolTipContent(null);
 };
 
+DwtHeaderTreeItem._mouseUpListener =
+function(ev) {
+	var treeItem = ev.dwtObj;
+	var targetId = ev.target && ev.target.id;
+	if (targetId && (targetId == treeItem._headerButtonId)) { return; }
+	DwtTreeItem._mouseUpListener.apply(null, arguments);
+};
 
+DwtHeaderTreeItem.prototype._focusByMouseUpEvent =
+function(ev)  {
+	var targetId = ev.target && ev.target.id;
+	if (targetId && (targetId == this._headerButtonId)) { return; }
+	DwtTreeItem.prototype._focusByMouseUpEvent.apply(this.arguments);
+};
