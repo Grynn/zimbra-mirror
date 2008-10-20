@@ -1,0 +1,80 @@
+dn: olcDatabase={2}hdb
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {2}hdb
+olcSuffix:
+olcLastMod: TRUE
+olcMaxDerefDepth: 15
+olcReadOnly: FALSE
+olcRootDN: cn=config
+olcSizeLimit: unlimited
+olcTimeLimit: unlimited
+olcMonitoring: TRUE
+olcDbDirectory: /opt/zimbra/data/ldap/hdb/db
+olcDbCacheSize: 10000
+olcDbCheckpoint: 64 5
+olcDbConfig: {0}#
+olcDbConfig: {1}# Set the database in memory cache size.
+olcDbConfig: {2}#
+olcDbConfig: {3}set_cachesize   0       52428800        0
+olcDbConfig: {4}
+olcDbConfig: {5}#
+olcDbConfig: {6}# Set database flags.
+olcDbConfig: {7}# Automatically remove log files that are no longer needed.
+olcDbConfig: {8}set_log_config DB_LOG_AUTO_REMOVE
+olcDbConfig: {9}
+olcDbConfig: {10}#
+olcDbConfig: {11}# Set log values.
+olcDbConfig: {12}#
+olcDbConfig: {13}set_lg_regionmax        262144
+olcDbConfig: {14}set_lg_max              10485760
+olcDbConfig: {15}set_lg_bsize            2097152
+olcDbConfig: {16}set_lg_dir              /opt/zimbra/data/ldap/hdb/logs
+olcDbConfig: {17}# Increase locks
+olcDbConfig:: ezE4fXNldF9sa19tYXhfbG9ja3MJMzAwMA==
+olcDbConfig:: ezE5fXNldF9sa19tYXhfb2JqZWN0cwkxNTAw
+olcDbConfig:: ezIwfXNldF9sa19tYXhfbG9ja2VycwkxNTAw
+olcDbNoSync: FALSE
+olcDbDirtyRead: FALSE
+olcDbIDLcacheSize: 10000
+olcDbIndex: objectClass eq
+olcDbIndex: entryUUID eq
+olcDbIndex: entryCSN eq
+olcDbIndex: cn pres,eq,sub
+olcDbIndex: uid pres,eq
+olcDbIndex: givenName pres,eq,sub
+olcDbIndex: displayName pres,eq,sub
+olcDbIndex: zimbraId eq
+olcDbIndex: mail pres,eq,sub
+olcDbIndex: zimbraMailCatchAllAddress eq,sub
+olcDbIndex: sn pres,eq,sub
+olcDbIndex: zimbraMailAlias eq,sub
+olcDbIndex: zimbraForeignPrincipal eq
+olcDbIndex: zimbraMailDeliveryAddress eq,sub
+olcDbIndex: zimbraMailForwardingAddress eq
+olcDbIndex: zimbraMailTransport eq
+olcDbIndex: zimbraDomainName eq,sub
+olcDbIndex: zimbraYahooId eq
+olcDbIndex: zimbraVirtualHostname eq
+olcDbIndex: zimbraVirtualIPAddress eq
+olcDbIndex: zimbraACE sub
+olcDbIndex: zimbraAuthKerberos5Realm eq
+olcDbIndex: zimbraShareInfo sub
+olcDbIndex: zimbraCalResSite eq,sub
+olcDbIndex: zimbraCalResBuilding eq,sub
+olcDbIndex: zimbraCalResRoom eq,sub
+olcDbIndex: zimbraCalResCapacity eq
+olcDbIndex: zimbraCalResFloor eq,sub
+olcDbLinearIndex: FALSE
+olcDbMode: 0600
+olcDbSearchStack: 16
+olcDbShmKey: 0
+olcDbCacheFree: 1
+olcDbDNcacheSize: 0
+structuralObjectClass: olcHdbConfig
+entryUUID: 152ab0a8-333e-102d-8700-d562901af228
+creatorsName: cn=config
+createTimestamp: 20081020215916Z
+entryCSN: 20081020215916.275992Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20081020215916Z

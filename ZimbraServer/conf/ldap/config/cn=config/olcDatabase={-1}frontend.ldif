@@ -1,0 +1,50 @@
+dn: olcDatabase={-1}frontend
+objectClass: olcDatabaseConfig
+objectClass: olcFrontendConfig
+olcDatabase: {-1}frontend
+olcAccess: {0}to *  by dn.children="cn=admins,cn=zimbra" write  by * +0 break
+olcAccess: {1}to dn.base=""  by * read
+olcAccess: {2}to dn.base="cn=subschema"  by * read
+olcAccess: {3}to attrs=userPassword  by anonymous auth  by dn.children="cn=adm
+ ins,cn=zimbra" write
+olcAccess: {4}to dn.subtree="cn=zimbra"  by dn.children="cn=admins,cn=zimbra" 
+ write
+olcAccess: {5}to attrs=zimbraZimletUserProperties,zimbraGalLdapBindPassword,zi
+ mbraGalLdapBindDn,zimbraAuthTokenKey,zimbraPreAuthKey,zimbraPasswordHistory,z
+ imbraIsAdminAccount,zimbraAuthLdapSearchBindPassword  by dn.children="cn=admi
+ ns,cn=zimbra" write  by * none
+olcAccess: {6}to attrs=objectclass  by dn.children="cn=admins,cn=zimbra" write
+   by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by dn.base="uid=zmam
+ avis,cn=appaccts,cn=zimbra" read  by * read
+olcAccess: {7}to attrs=@amavisAccount  by dn.children="cn=admins,cn=zimbra" wr
+ ite  by dn.base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break
+olcAccess: {8}to attrs=mail  by dn.children="cn=admins,cn=zimbra" write  by dn
+ .base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break
+olcAccess: {9}to attrs=zimbraAllowFromAddress  by dn.children="cn=admins,cn=zi
+ mbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read
+olcAccess: {10}to filter="(!(zimbraHideInGal=TRUE))"  attrs=cn,co,company,dc,d
+ isplayName,givenName,gn,initials,l,mail,o,ou,physicalDeliveryOfficeName,posta
+ lCode,sn,st,street,streetAddress,telephoneNumber,title,uid  by dn.children="c
+ n=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" r
+ ead  by * read
+olcAccess: {11}to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailC
+ anonicalAddress,zimbraMailCatchAllAddress,zimbraMailCatchAllCanonicalAddress,
+ zimbraMailCatchAllForwardingAddress,zimbraMailDeliveryAddress,zimbraMailForwa
+ rdingAddress,zimbraPrefMailForwardingAddress,zimbraMailHost,zimbraMailStatus,
+ zimbraMailTransport,zimbraDomainName,zimbraDomainType,zimbraPrefMailLocalDeli
+ veryDisabled  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmp
+ ostfix,cn=appaccts,cn=zimbra" read  by * read
+olcAccess: {12}to attrs=entry  by dn.children="cn=admins,cn=zimbra" write  by 
+ * read
+olcLastMod: TRUE
+olcMaxDerefDepth: 0
+olcReadOnly: FALSE
+olcSchemaDN: cn=Subschema
+olcMonitoring: FALSE
+structuralObjectClass: olcDatabaseConfig
+entryUUID: 152a840c-333e-102d-86fd-d562901af228
+creatorsName: cn=config
+createTimestamp: 20081020215916Z
+entryCSN: 20081020215916.275992Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20081020215916Z
