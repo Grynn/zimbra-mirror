@@ -28,6 +28,7 @@ import java.util.Set;
 import org.apache.commons.httpclient.Header;
 import org.dom4j.ElementHandler;
 
+import com.posisoft.jdavmail.FolderProxy;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -547,6 +548,7 @@ public class OfflineMailbox extends DesktopMailbox {
     synchronized void syncMetadata(OperationContext octxt, int itemId, byte type, int folderId, int flags, long tags, byte color)
     		throws ServiceException {
         boolean success = false;
+        String oldFolderPath = null;
         try {
             beginTransaction("syncMetadata", octxt);
             MailItem item = getItemById(itemId, type);
@@ -574,6 +576,9 @@ public class OfflineMailbox extends DesktopMailbox {
             flags &= ~Flag.BITMASK_UNREAD;
 
             int prevIndexId = item.getIndexId();
+            if (item instanceof Folder) {
+                oldFolderPath = ((Folder) item).getPath();
+            }
             item.move(getFolderById(folderId));
             if (prevIndexId != item.getIndexId()) {
                 queueForIndexing(item, false, null);
@@ -586,6 +591,10 @@ public class OfflineMailbox extends DesktopMailbox {
             success = true;
         } finally {
             endTransaction(success);
+        }
+        
+        if (success && oldFolderPath != null) {
+            updateFilterRules(itemId, oldFolderPath);
         }
     }
     
