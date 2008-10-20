@@ -168,16 +168,16 @@ public abstract class DesktopMailbox extends Mailbox {
                 MailItem item = (MailItem) change.what;
                 if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && item.getFolderId() != ID_FOLDER_FAILURE) {
                     boolean isInArchive = isInArchive(item.getPath());
-                	if (!isInArchive || !item.isTagged(mArchivedFlag)) { //either not in archive, or newly archived, we need to keep track
+                	if (!isInArchive || !item.isTagged(Flag.ID_FLAG_ARCHIVED)) { //either not in archive, or newly archived, we need to keep track
                 		trackChangeModified(item, change.why);
                         if (item.getFolderId() == ID_FOLDER_OUTBOX)
                         	outboxed = true;
                 	}
                     
                 	if ((change.why & Change.MODIFIED_FOLDER) != 0) {
-                    	if (isInArchive && !item.isTagged(mArchivedFlag)) //moved into archive
+                    	if (isInArchive && !item.isTagged(Flag.ID_FLAG_ARCHIVED)) //moved into archive
                         	archive(item, true);
-                    	else if (!isInArchive && item.isTagged(mArchivedFlag)) //moved out of archive
+                    	else if (!isInArchive && item.isTagged(Flag.ID_FLAG_ARCHIVED)) //moved out of archive
                         	archive(item, false);
                     }
                 }
@@ -191,13 +191,14 @@ public abstract class DesktopMailbox extends Mailbox {
     }
     
     private void alterArchivedFlag(MailItem item, boolean toArchive) throws ServiceException {
-    	//alter \Archived flag, but don't use MailItem.alterSystemFlag() since that would insert more changes into PendingModifications
-    	//we are currently looping through.  in any case we don't need to keep track of this particular flag change.
-    	DbMailItem.alterTag(mArchivedFlag, Arrays.asList(item.getId()), toArchive);
+    	// alter \Archived flag, but don't use MailItem.alterSystemFlag() since that would insert more changes into PendingModifications
+    	// we are currently looping through.  in any case we don't need to keep track of this particular flag change.
+        Flag archivedFlag = getFlagById(Flag.ID_FLAG_ARCHIVED);
+    	DbMailItem.alterTag(archivedFlag, Arrays.asList(item.getId()), toArchive);
     	if (toArchive)
-    		item.mData.flags |= mArchivedFlag.getBitmask();
+    		item.mData.flags |= archivedFlag.getBitmask();
         else
-        	item.mData.flags &= ~mArchivedFlag.getBitmask();
+        	item.mData.flags &= ~archivedFlag.getBitmask();
     }
 
     /**

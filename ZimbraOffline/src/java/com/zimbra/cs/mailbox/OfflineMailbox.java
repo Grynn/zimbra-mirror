@@ -586,7 +586,7 @@ public class OfflineMailbox extends DesktopMailbox {
             
             item.setColor(color);
             item.setTags(flags, tags);
-            if (mUnreadFlag.canTag(item))
+            if (getFlagById(Flag.ID_FLAG_UNREAD).canTag(item))
                 item.alterUnread(unread);
             success = true;
         } finally {

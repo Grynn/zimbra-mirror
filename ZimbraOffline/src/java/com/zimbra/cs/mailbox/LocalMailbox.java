@@ -45,16 +45,20 @@ import com.zimbra.cs.util.JMSession;
 
 public class LocalMailbox extends DesktopMailbox {
     
-	private boolean isImapMailbox;
+	private final boolean isImapMailbox;
+    private final Flag mSyncFlag;
+    private final Flag mSyncFolderFlag;
 	
     LocalMailbox(MailboxData data) throws ServiceException {
         super(data);
         
         DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
-        isImapMailbox = ds != null && (ds.getType() == DataSource.Type.imap ||
-            ds.getType() == DataSource.Type.live);
+        isImapMailbox = ds != null && (ds.getType() == DataSource.Type.imap || ds.getType() == DataSource.Type.live);
+
+        mSyncFlag = getFlagById(Flag.ID_FLAG_SYNC);
+        mSyncFolderFlag = getFlagById(Flag.ID_FLAG_SYNCFOLDER);
     }
-	
+
     @Override protected synchronized void initialize() throws ServiceException {
         super.initialize();
         if (isImapMailbox) {
@@ -277,7 +281,7 @@ public class LocalMailbox extends DesktopMailbox {
 		
     		//directly bounce to local inbox
     		ParsedMessage pm = new ParsedMessage(mm, true);
-    		addMessage(context, pm, OfflineMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
+    		addMessage(context, pm, Mailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
     		delete(context, id, MailItem.TYPE_MESSAGE);
 		} catch (Exception e) {
 			OfflineLog.offline.warn("smtp: can't bounce failed send (" + id + ")" + msg.getSubject(), e);

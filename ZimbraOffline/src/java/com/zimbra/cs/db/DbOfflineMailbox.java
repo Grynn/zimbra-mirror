@@ -28,6 +28,7 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
 import com.zimbra.cs.db.DbPool.Connection; 
+import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
@@ -68,7 +69,7 @@ public class DbOfflineMailbox {
             stmt.close();
 
             // then update all the dependent rows (foreign keys)
-            if (item.isTagged(mbox.mVersionedFlag)) {
+            if (item.isTagged(Flag.ID_FLAG_VERSIONED)) {
                 // update REVISION.ITEM_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getRevisionTableName(mbox) +
                         " SET item_id = ?" +
