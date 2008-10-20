@@ -40,7 +40,7 @@ usage() unless ( GetOptions( "mailreport" => \$mailreport,
                    "now"  => \$now,
                    "debug" => \$debug,
                    "user=s" => \$user,
-                   "time=s{,1}" => \$time,
+                   "time=s" => \$time,
                    "help" => \$help) );
 
 usage() if ($help);
