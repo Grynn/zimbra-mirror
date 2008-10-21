@@ -72,7 +72,7 @@ PERL_LIBS 	:= \
 	IO::Stringy \
 	MIME::Lite \
 	Mail::Mailer \
-	D/DO/DONEILL/MIME-tools-5.426.tar.gz \
+	D/DO/DONEILL/MIME-tools-5.427.tar.gz \
 	XML::Parser \
 	SOAP::Lite \
 	Net::Telnet \
