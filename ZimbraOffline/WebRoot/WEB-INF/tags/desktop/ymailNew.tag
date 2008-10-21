@@ -40,10 +40,8 @@ function disableButtons() {
 
 <span class="padding">
 <form name="ymailNew" action="${uri}" method="POST">
-
-    <input type="hidden" name="verb" value="add">
-    <input type="hidden" name="accntType" value="YMPAcct">
-
+    <input type="hidden" name="verb" value="add" />
+    <input type="hidden" name="accntType" value="YMPAcct"/>
     <table cellpadding="10">
         <tr>
             <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Description'/></td>
@@ -85,12 +83,12 @@ function disableButtons() {
             <td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}> <fmt:message key='SyncAllFolders'/></td>
         </tr>
 
-        ?<tr>
+        <tr>
             <td class="ZFieldLabel"></td>
             <td><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" checked><fmt:message key='ContactSyncEnabled'/></td>
         </tr>
 
-        ?<tr>
+        <tr>
             <td class="ZFieldLabel"></td>
             <td><input type="checkbox" id="syncCalendar" name="syncCalendar" checked><fmt:message key='YMPSyncCal'/></td>
         </tr>
