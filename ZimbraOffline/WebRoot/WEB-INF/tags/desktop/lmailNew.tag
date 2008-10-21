@@ -63,10 +63,10 @@ function disableButtons() {
             <td><input class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
         </tr>       
 
-        <tr><td colspan=2><b><fmt:message key='DownloadingMail'/></b><hr></td></tr>
+       
 
         <tr>
-            <td class="ZFieldLabel"><fmt:message key='SyncFrequency'/>:</td>
+            <td class="ZFieldLabel"><fmt:message key='SyncFrequency'/></td>
             <td>
                 <select class="ZSelectSmall" id="syncFreqSecs" name="syncFreqSecs">
                     <option value="-1" ${bean.syncFreqSecs == -1 ? 'selected' : ''}><fmt:message key='SyncManually'/></option>

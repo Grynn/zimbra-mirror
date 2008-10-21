@@ -12,6 +12,7 @@ HR {
 	border-width:1px 0px 0px 0px;
 	border-style: solid;
     border-color: #d4d4d4;
+    margin-top: 10px;
 }
 
 INPUT[type=text],
@@ -150,16 +151,17 @@ SELECT {
 	line-height: 20px;
 	word-spacing: 2px;
 	width: 700px;
+	
 	text-align: left;
 	padding: 20px;  
 }
 
 h2{ margin: 0px; padding: 0px}
 
-.ZField{ width: 350px; height:40px;}
+.ZField{ width: 350px; padding: 4px;}
 .ZSelect{ width: 350px; padding:2px;cursor:pointer;}
 .ZSelectSmall{ width: 180px; padding:2px;cursor:pointer;}
 .rowline td{border-bottom: 1px solid #e5e5e5;}
 
 h3{ font-size: 16px;}
-h2{ font-weight: normal;font-size: 26px;}
+h2{ font-weight: normal;font-size: 26px;letter-spacing: 1px;}

@@ -107,7 +107,7 @@
     <form name="newAccnt" action="" method="POST">
         <table cellpadding="10">
             <tr>
-                <td class="ZFieldLabel"><fmt:message key='AccountType'/>:</td>
+                <td class="ZFieldLabel"><fmt:message key='AccountType'/></td>
                 <td><select name="accntType" id="accntType" onchange="accntChange(this)" class="ZSelect">
                     <option value="ZimbraAcct" <c:if test="${param.accntType eq 'ZimbraAcct'}"> selected </c:if> > <fmt:message key='Zimbra'/></option>
                     <option value="YMPAcct" <c:if test="${param.accntType eq 'YMPAcct'}"> selected </c:if> > <fmt:message key='YMP'/></option>

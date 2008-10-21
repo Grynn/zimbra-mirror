@@ -63,18 +63,21 @@ function OnReset() {
 </head>
 
 <body>
-<br><br><br><br><br><br>
+<br><br>
 <div align="center">
+<img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
+<br><br>
+
 <c:choose>
     <c:when test="${bean.noVerb && bean.allOK}">
-<div id="dataManage" class="ZWizardPage">
+<div id="dataManage" class="whiteBg">
 <div class="ZWizardPageTitle">
 <div id='settings_hint' class='ZFloatInHead'></div>
-    <span id='pageTitle'>
-        <fmt:message key='ManageDataTitle'><fmt:param>${bean.accountName}</fmt:param></fmt:message>
-    </span>
+    <div id='pageTitle' align="center">
+        <h2><fmt:message key='ManageDataTitle'><b><fmt:param>${bean.accountName}</fmt:param></b></fmt:message> </h2> <hr>
+    </div>
 </div>
-<table cellpadding=10 style='margin-left: 20px;'>
+<table cellpadding=20 align="center">
     <tr>
         <td valign=top width=200px>
             <button class='DwtButton' id="exportButton" onclick="OnExport()" style='width: 100%'>
@@ -97,18 +100,12 @@ function OnReset() {
         </td>
     </tr>
 </table>
-<table class="ZWizardButtonBar" width="100%">
-    <tr>
-        <td class="ZWizardButtonSpacer">
-            <p><span id="status"></span></p>
-        </td>
-        <td class="ZWizardButton" width="1%">
-            <button class='DwtButton' id="cancelButton" onclick="OnCancel()">
-                <fmt:message key="Cancel"/>
-            </button>
-        </td>
-    </tr>
-</table>
+<hr>
+
+            <a href="#" id="cancelButton" onclick="OnCancel()">
+               <img src="/zimbra/desktop/img/cancelButton.gif" border="0">
+            </a>
+       
 </div>
 <form name="submitForm" action="/zimbra/desktop/manageData.jsp" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">

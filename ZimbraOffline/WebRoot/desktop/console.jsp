@@ -84,7 +84,8 @@ function OnDelete(id) {
 <c:choose>
     <c:when test="${param.accntVerb eq 'add'}">
 		<div id="serviceCreated" class="ZWizardPage ZWizardPageBig">
-            <div class="ZWizardPageTitle"><fmt:message key='ServiceCreated'/></div>
+            <hr>
+            <div><fmt:message key='ServiceCreated'/></div>
 		<span class="padding">
 		    <p><fmt:message key='ServiceAdded'><fmt:param>${param.srvcName}</fmt:param></fmt:message>
             </p>
@@ -92,6 +93,7 @@ function OnDelete(id) {
 		    <p><fmt:message key='ServiceAddedNote'/>
             </p>
         </span>
+        <hr>
 		</div>
     </c:when>
     <c:otherwise>
@@ -127,19 +129,29 @@ function OnDelete(id) {
 <c:when test="${empty accounts}">
     <div id="welcome" class='whiteBg'>
                    
-      <div align="center"><h2><fmt:message key='WizardTitle'/></h2></div>
+      <div align="center"><h2><fmt:message key='WizardTitle'/></h2></div> 
+      
         <hr>
-
+<fmt:message key='WizardDesc'/><br><br>
 <span class="padding">
-    <p><fmt:message key='WizardDescP1'/>
-    </p>
+    <p>
+    <ol>
+    <li>
+    <b><fmt:message key='WizardDescP1'/></b><br>
+    <fmt:message key='WizardDescInfo1'/>
+    </li>
 
-    <p><fmt:message key='WizardDescP2'/></p>
+    <li><b><fmt:message key='WizardDescP2'/></b><br>
+    <fmt:message key='WizardDescInfo2'/>
+    </li>
 
-    <p><fmt:message key='WizardDescP3'/>
+    <li><b><fmt:message key='WizardDescP3'/></b><br><fmt:message key='WizardDescInfo3'/>
+    <li><b><fmt:message key='WizardDescP4'/></b><br><fmt:message key='WizardDescInfo4'/>
+    
+    </li>
     </p>
     </span>
-
+<br><br>
             <div align="center">
                 <a href="#" onclick="OnNew()"><img src="/zimbra/desktop/img/CreateNewAccount.gif" border="0"></a>
             </div>
@@ -158,13 +170,13 @@ function OnDelete(id) {
 <div align="right" style="width: 680px; margin-bottom: 10px;"><a href="#" onclick="OnLogin()"><b><fmt:message key='GotoDesktop'/></b></a></div>
 <div id="console" class="whiteBg">
 
-					<div align="center"><h2 style="display: inline;"><fmt:message key='HeadTitle' /></h2> &nbsp; ( <a href="#" onclick="OnNew()"><fmt:message key='SetupAnotherAcct'/></a> )</div>
+					<div align="center"><h2 style="display: inline;"><fmt:message key='HeadTitle' /></h2> &nbsp; (<a href="#" onclick="OnNew()"><fmt:message key='SetupAnotherAcct'/></a>)</div>
 
 <hr>
 
 	<!-- p><fmt:message key='Instruction' /></p -->
 	<br><br>
-    <table cellpadding=5 border=0 align="center" width="100%">
+    <table cellpadding=5 border=0 align="center" width="90%">
     	<!--tr><th><fmt:message key='AccountName'/></th><th><fmt:message key='EmailAddress'/></th><th><fmt:message key='LastSync'/></th><th><fmt:message key='Status'/></th><th><fmt:message key='Order'/></th></tr-->
 
     	<c:forEach items="${accounts}" var="account">
@@ -210,7 +222,7 @@ function OnDelete(id) {
 
 
 	           </td>
-		       <td align="center">
+		       <td align="center">&nbsp;
 		           <c:if test="${not account.first}">
 		               <a href="javascript:OnPromote('${account.id}')"><img src="/zimbra/desktop/img/sortArrow.gif" border="0" alt="${moveup}"></a>
 		           </c:if>

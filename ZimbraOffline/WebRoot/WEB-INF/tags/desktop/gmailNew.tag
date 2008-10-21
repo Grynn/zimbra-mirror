@@ -63,7 +63,7 @@ function disableButtons() {
             <td><input class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
         </tr>
 
-        <tr><td colspan=2><b><fmt:message key='DownloadingMail'/></b><hr></td></tr>
+ 
         
         <tr>
             <td class="ZFieldLabel"><fmt:message key='SyncFrequency'/></td>
