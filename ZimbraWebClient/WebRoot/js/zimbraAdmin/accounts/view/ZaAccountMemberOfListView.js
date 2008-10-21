@@ -36,7 +36,7 @@ ZaAccountMemberOfListView.A_name = "name" ;
 ZaAccountMemberOfListView.A_via = "via" ;
 ZaAccountMemberOfListView._addList = [];
 ZaAccountMemberOfListView._removeList = [];
-ZaAccountMemberOfListView.SEARCH_LIMIT = 2 ;
+ZaAccountMemberOfListView.SEARCH_LIMIT = 25 ;
 
 
 
