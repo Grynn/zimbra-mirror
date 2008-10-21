@@ -249,6 +249,7 @@ import de.enough.polish.util.StringTokenizer;
 	private static final String AT_VERSION = "version";
     private static final String AT_VERB = "verb";
     private static final String AT_VIEW = "view";
+    private static final String AT_TZO = "tzo";
 
 
 	// ========== Email reply status constants
@@ -1131,6 +1132,7 @@ import de.enough.polish.util.StringTokenizer;
         a.mLocation = mParser.getAttributeValue(null, AT_LOC, a.mLocation);
         a.mStart = mParser.getAttributeValue(null, AT_START, a.mStart);
         a.mIsAllDay = mParser.getAttributeValue(null, AT_ALLDAY, a.mIsAllDay);
+        a.mOffset = mParser.getAttributeValue(null, AT_TZO, 0);
         if (a.mIsAllDay)
             a.mDuration = 0;
         else

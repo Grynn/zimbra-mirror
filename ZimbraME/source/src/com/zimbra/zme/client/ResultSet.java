@@ -15,6 +15,9 @@
 
 package com.zimbra.zme.client;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.Vector;
 
 
@@ -29,20 +32,27 @@ public class ResultSet {
     }
     
     public void addAppointment(Appointment appt) {
-        int numElements = mResults.size();
-        if (!appt.mIsAllDay) {
-            int i;
-            for (i = 0; i < numElements; i++) {
-                Appointment a1 = (Appointment)mResults.elementAt(i);
-                if (appt.mStart < a1.mStart) {
-                    mResults.insertElementAt(appt, i);
-                    break;
-                }
-            }
-            if (i >= numElements)
-                mResults.insertElementAt(appt, i);
-        } else {
-            mResults.insertElementAt(appt, 0);
+        if (appt.mIsAllDay) {
+            // start time is speficied as midnight in user's timezone preference.
+        	// shift the time to GMT
+            appt.mStart += appt.mOffset;
+            // find the offset from GMT to the local timezone
+        	Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+            c.setTime(new Date(appt.mStart));
+            long localOffset = TimeZone.getDefault().getOffset(1, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.DAY_OF_WEEK), 0);
+            // shift the time to local timezone
+            appt.mStart -= localOffset;
         }
+        int numElements = mResults.size();
+        int i;
+        for (i = 0; i < numElements; i++) {
+            Appointment a1 = (Appointment)mResults.elementAt(i);
+            if (appt.mStart < a1.mStart) {
+                mResults.insertElementAt(appt, i);
+                break;
+            }
+        }
+        if (i >= numElements)
+            mResults.insertElementAt(appt, i);
     }
 }

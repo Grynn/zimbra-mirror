@@ -49,6 +49,7 @@ public class Appointment extends MailboxItem {
 	public String mLocation;
 	public long mStart;
 	public long mDuration;
+	public long mOffset;
 	protected Appointment mBase;
 
 	public String mOrganizerEmail;
