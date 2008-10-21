@@ -31,7 +31,7 @@ function beforeSubmit() {
 }
 
 function disableButtons() {
-    zd.disable("typeButton");
+    //zd.disable("typeButton");
     zd.disable("cancelButton");
     zd.disable("saveButton");
 }
@@ -39,55 +39,36 @@ function disableButtons() {
 </script>
 
 
-<div id="newService" class="ZWizardPage">
-
-<div class="ZWizardPageTitle">
-    <div id='settings_hint' class='ZFloatInHead'></div>
-    <span id='pageTitle'><fmt:message key='AOLSetupTitle'/></span>
-    
-</div>
 <span class="padding">
-<c:choose>
-    <c:when test="${not empty bean.error}" >
-        <p class='ZOfflineError'>${bean.error}</p>
-    </c:when>
-    <c:when test="${not bean.allValid}" >
-        <p class='ZOfflineError'><fmt:message key='PlsCorrectInput'/></p>
-    </c:when>
-    <c:otherwise>
-        <p id='instructions'>* <fmt:message key='RequiredField'/><br>
-        <fmt:message key='AOLSettings'/></p>
-    </c:otherwise>
-</c:choose>
-
 <form name="amailNew" action="${uri}" method="POST">
 
     <input type="hidden" name="verb" value="add">
-
-    <table class="ZWizardForm" style='width:90%'>
+    <input type="hidden" name="accntType" value="AOLAcct">
+    
+    <table cellpadding="10">
         <tr>
-            <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Description'/>:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}">
+            <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Description'/></td>
+            <td><input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}">
                         <span id='service_hint' class='ZHint'><fmt:message key='DescHint'/></span></td>
         </tr>
-        <tr><td class="ZFieldLabel"><fmt:message key='FullName'/>:</td>
-            <td><input style='width:200px' class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
+        <tr><td class="ZFieldLabel"><fmt:message key='FullName'/></td>
+            <td><input class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
         </tr>
         <tr id='emailRow'>
-           <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='EmailAddr'/>:</td>
-            <td><input style='width:100px' class="ZField" type="text" id="username" name="username" value="${bean.username}"><span class="ZFieldLabel">@aol.com</span></td>
+           <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='EmailAddr'/></td>
+            <td><input class="ZField" type="text" id="username" name="username" value="${bean.username}"><span class="ZFieldLabel">@aol.com</span></td>
         </tr>
         <tr id='passwordRow'>
-            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}">*<fmt:message key='Password'/>:</td>
-            <td><input style='width:100px' class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
+            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
+            <td><input class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
         </tr>       
 
-        <tr><td colspan=2><div class='ZOfflineHeader'><fmt:message key='DownloadingMail'/></div></td></tr>
-        
+        <tr><td colspan=2><b><fmt:message key='DownloadingMail'/></b><hr></td></tr>
+
         <tr>
             <td class="ZFieldLabel"><fmt:message key='SyncFrequency'/>:</td>
             <td>
-                <select class="ZSelect" id="syncFreqSecs" name="syncFreqSecs">
+                <select class="ZSelectSmall" id="syncFreqSecs" name="syncFreqSecs">
                     <option value="-1" ${bean.syncFreqSecs == -1 ? 'selected' : ''}><fmt:message key='SyncManually'/></option>
                     <option value="60" ${bean.syncFreqSecs == 60 ? 'selected' : ''}><fmt:message key='SyncEveryMin'/></option>
                     <option value="300" ${bean.syncFreqSecs == 300 ? 'selected' : ''}><fmt:message key='SyncEvery5'/></option>
@@ -101,29 +82,12 @@ function disableButtons() {
         </tr>
         
         <tr>
-            <td style='text-align:right'><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td>
-            <td class="ZCheckboxLabel"><fmt:message key='SyncAllFolders'/></td>
+            <td class="ZFieldLabel"></td>
+            <td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}><fmt:message key='SyncAllFolders'/></td>
         </tr>
 
     </table>
 
 </form>
-
-<p><span id="whattodo"><fmt:message key='PressToVerify'><fmt:param><span class="ZWizardButtonRef"><fmt:message key='SaveSettings'/></span></fmt:param></fmt:message></span></p>
 </span>
-<table class="ZWizardButtonBar" width="100%">
-    <tr>
-        <td class="ZWizardButton">
-            <button id="typeButton" class='DwtButton' onclick="OnPickType()"><fmt:message key='UseDiffType'/></button>
-        </td>
-        <td class="ZWizardButtonSpacer">
-            <div></div>
-        </td>
-        <td class="ZWizardButton" width="1%">
-            <button id="cancelButton" class='DwtButton' onclick="OnCancel()"><fmt:message key='Cancel'/></button>
-        </td>
-        <td class="ZWizardButton" width="1%">
-            <button id="saveButton" class='DwtButton-focused' onclick="OnSubmit()"><fmt:message key='SaveSettings'/></button>
-        </td>
-</table>
-</div>
+<p><span id="whattodo"></span></p>

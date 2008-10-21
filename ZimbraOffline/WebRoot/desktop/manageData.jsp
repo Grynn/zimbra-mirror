@@ -33,7 +33,7 @@ ${zdf:doRequest(bean)}
 <script type="text/javascript">
 
 function OnCancel() {
-    document.submitForm.action = "/zimbra/desktop/${bean.zmail ? 'z' : 'x'}mail.jsp";
+    document.submitForm.action = "/zimbra/desktop/accsetup.jsp?accntType=${bean.zmail ? 'ZimbraAcct' : 'OtherAcct'}";
     document.submitForm.submit();
 }
 

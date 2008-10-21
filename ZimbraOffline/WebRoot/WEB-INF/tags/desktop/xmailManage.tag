@@ -70,7 +70,7 @@ function beforeSubmit() {
 
 function disableButtons() {
     zd.disable("cancelButton");
-    zd.disable("deleteButton");
+    //zd.disable("deleteButton");
     zd.disable("manageButton");
     zd.disable("saveButton");
 }
@@ -110,6 +110,7 @@ function passOnEdit(id) {
     <input type="hidden" name="accountName" value="${bean.accountName}">
     <input type="hidden" name="displayName" value="${bean.fromDisplay}">
     <input type="hidden" name="mailUsername" value="${bean.email}">
+    <input type="hidden" name="accntType" value="OtherAcct">
 </form>
 
 <form name="hidden_form" action="${uri}" method="POST">
@@ -117,6 +118,7 @@ function passOnEdit(id) {
     <input type="hidden" name="accountName" value="${bean.accountName}">
     <input type="hidden" name="email" value="${bean.email}">
     <input type="hidden" name="verb">
+    <input type="hidden" name="accntType" value="OtherAcct">
 </form>
 		<span class="padding">
 <c:choose>
@@ -136,6 +138,8 @@ function passOnEdit(id) {
     <input type="hidden" name="accountName" value="${bean.accountName}">
     <input type="hidden" name="email" value="${bean.email}">
     <input type="hidden" name="verb" value="mod">
+    <input type="hidden" name="accntType" value="OtherAcct">
+
     <c:if test="${not empty bean.domain}">
         <input type="hidden" name="domain" value="${bean.domain}">
     </c:if>
@@ -308,7 +312,7 @@ function passOnEdit(id) {
         </tr>
 
         <c:if test="${bean.ymail}">
-            <tr>
+            ?<tr>
                 <td style='text-align:right'><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td>
                 <td class="ZCheckboxLabel"><fmt:message key='ContactSyncEnabled'/></td>
             </tr>
@@ -318,13 +322,13 @@ function passOnEdit(id) {
             </tr>
         </c:if>
 
-        <c:if test="${bean.gmail}">
+        ?<c:if test="${bean.gmail}">
             <tr>
                 <td style='text-align:right'><input type="checkbox" id="syncCalendar" name="syncCalendar" ${bean.syncCalendar ? 'checked' : ''}></td>
                 <td class="ZCheckboxLabel"><fmt:message key='GmailSyncCal'/></td>
             </tr>
         </c:if>
-
+        
         <tr>
             <td style='text-align:right'><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td>
             <td class="ZCheckboxLabel"><fmt:message key='EnableTrace'/></td>
@@ -332,26 +336,13 @@ function passOnEdit(id) {
     </table>
 
 </form>
-
-<p><span id="whattodo"><fmt:message key='PressToVerify'><fmt:param><span class="ZWizardButtonRef"><fmt:message key='SaveSettings'/></span></fmt:param></fmt:message></span></p>
+<p><span id="whattodo"></span></p>
 </span>
 <table class="ZWizardButtonBar" width="100%">
     <tr>
         <td class="ZWizardButton">
             <button id="manageButton" class='DwtButton' onclick="OnManage()"><fmt:message key='ManageData'/></button>
         </td>
-        <td class="ZWizardButton" width="1%">
-            <button id='deleteButton' class='DwtButton' onclick="OnDelete()"><fmt:message key='RemoveAccount'/></button>
-        </td>
-        
-        <td class="ZWizardButtonSpacer">
-            <div></div>
-        </td>
-        <td class="ZWizardButton" width="1%">
-            <button id='cancelButton' class='DwtButton' onclick="OnCancel()"><fmt:message key='Cancel'/></button>
-        </td>
-        <td class="ZWizardButton" width="1%">
-            <button id='saveButton' class='DwtButton-focused' onclick="OnSubmit()"><fmt:message key='SaveSettings'/></button>
-        </td>
+   </tr>
 </table>
 </div>
