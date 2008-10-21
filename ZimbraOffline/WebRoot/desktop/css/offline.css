@@ -1,28 +1,30 @@
 /* Offline-specific styles */
-body{margin: 0px; padding: 0px;background-color:#e8dcc1;}
+body{margin: 0px; padding: 0px; background-color: #e9f2fa;}
 
 BODY, P, TH, TD, DIV, SELECT, TEXTAREA, BUTTON {
 	font-family:Tahoma, Arial, Helvetica, sans-serif;
 	font-size:11px;
 }
-
+FORM {
+     margin: 0px;
+}
 HR {
 	border-width:1px 0px 0px 0px;
-	margin:10px 0px;
+	border-style: solid;
+    border-color: #d4d4d4;
 }
 
 INPUT[type=text],
 INPUT[type=password]	{
-	height:22px !important;
+
+    border: 1px inset #CCCCCC;
+
 }
 SELECT {
 	padding:1px;
-	border:1px inset gray;
+	border:1px inset #CCCCCC;
 }
 
-a:link	{
-	text-decoration:underline !important;
-}
 
 .ZFloatInHead {
 	float:right;
@@ -42,8 +44,7 @@ a:link	{
 }
 
 .ZWizardPage {
-
-	width:600px;
+	width:700px;
 }
 
 .ZWizardPageBig P {
@@ -70,6 +71,7 @@ a:link	{
 .ZWizardForm TD {
 	vertical-align:top;
 }
+.ZFieldLabel{ width: 150px;}
 .ZFieldLabel,
 .ZFieldError,
 .ZFieldLabelLeft {
@@ -136,34 +138,28 @@ a:link	{
 	color:red;
 }
 
-.padding{padding: 10px;}
 .padding p{padding-left: 10px;}
 
 
-.ZWizardPage p{text-align: left;}
-
-.ZWizardPage{display:block;-moz-border-radius:3px;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #d1c6ae;-moz-border-top-colors:#a29a87 #d1c6ae;-moz-border-bottom-colors:#686357 #aea591;-moz-border-right-colors:#8b8474 #aea591;background-color:#eee5d1;}
-.ZWizardPage BUTTON{height:24px;cursor:pointer;}
-.ZWizardPageTitle{background-color:#bab09a;padding:7px;font-size:15px;font-weight:bold;}
-.noborder {border-width:0px !important;}
-.ZWizardButtonBar{padding:5px;background-color:#bab09a;}
-
-
-.ZWizardButtonRef{font-weight:bold;}
-.ZWizardButtonSpacer{width:100%;}
-.DwtButton{height:24px;cursor:pointer;background-color:#d1c6ae;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space: nowrap;}
-.DwtButton-hover{height:24px;cursor:pointer;background-color:#e8dcc1;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space: nowrap;}
-.DwtButton-active{height:24px;cursor:pointer;background-color:#f9f6f0;border:2px solid;-moz-border-left-colors:#a29a87 #746e61;-moz-border-top-colors:#a29a87 #746e61;-moz-border-bottom-colors:#d1c6ae #a29a87;-moz-border-right-colors:#d1c6ae #a29a87;white-space: nowrap;}
-.DwtButton-selected{height:24px;cursor:pointer;background-color:#f9f6f0!important;border:2px solid;-moz-border-left-colors:#a29a87 #eae0c7;-moz-border-top-colors:#a29a87 #eae0c7;-moz-border-bottom-colors:#746e61 #bab09a;-moz-border-right-colors:#746e61 #bab09a;white-space: nowrap;}
-.DwtButton-disabled{height:24px;cursor:pointer;background-color:transparent;border:1px solid;-moz-border-left-colors:#d1c6ae;-moz-border-top-colors:#d1c6ae;-moz-border-bottom-colors:#d1c6ae;-moz-border-right-colors:#d1c6ae;cursor:default!important;cursor:not-allowed!important;white-space: nowrap;}
-.DwtButton-active{height:24px;cursor:pointer;background-color:#d6e0ee;border:2px solid;-moz-border-left-colors:#78869b #b4c6e0;-moz-border-top-colors:#78869b #b4c6e0;-moz-border-bottom-colors:#56606f #8a9ab1;-moz-border-right-colors:#56606f #8a9ab1;white-space: nowrap;}
-.DwtButton-focused{height:24px;cursor:pointer;background-color:#fdf8ba;border:2px solid;-moz-border-left-colors:#b1ae82 #fdf9c1;-moz-border-top-colors:#b1ae82 #fdf9c1;-moz-border-bottom-colors:#7f7c5d #cac695;-moz-border-right-colors:#7f7c5d #cac695;white-space: nowrap;}
-.DwtButton .Text{text-align:center;color:black;}
-.DwtButton-hover .Text{text-align:center;color:black;}
-.DwtButton-active .Text{text-align:center;color:black;}
-.DwtButton-selected .Text{text-align:center;color:black;}
-.DwtButton-disabled .Text{text-align:center;color:#686357;}
-.DwtButton-active .Text{text-align:center;color:black;}
-.DwtButton-focused .Text{text-align:center;color:black;}
 .infoTitle{padding-left:5px;font-weight:bold;border-bottom:1px solid #FD0;margin-bottom:10px;}
 .infoBox{margin:0 5px 10px 0;background-color:#FFF6BF;border:1px solid #FD0;-moz-border-radius:10px;padding:10px 10px 10px 10px;}
+
+.whiteBg{
+	background-color: white;
+	font: 11px Arial, Verdana, san-serif;
+	line-height: 20px;
+	word-spacing: 2px;
+	width: 700px;
+	text-align: left;
+	padding: 20px;  
+}
+
+h2{ margin: 0px; padding: 0px}
+
+.ZField{ width: 350px; height:40px;}
+.ZSelect{ width: 350px; padding:2px;cursor:pointer;}
+.ZSelectSmall{ width: 180px; padding:2px;cursor:pointer;}
+.rowline td{border-bottom: 1px solid #e5e5e5;}
+
+h3{ font-size: 16px;}
+h2{ font-weight: normal;font-size: 26px;}
