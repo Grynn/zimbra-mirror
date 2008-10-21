@@ -19,13 +19,16 @@ package com.zimbra.cs.offline;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
 import com.zimbra.cs.mailbox.MailSender;
 import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Constants;
 
 public class LMailSender extends MailSender {
     private Transport transport;
@@ -38,10 +41,16 @@ public class LMailSender extends MailSender {
     }
     
     private LMailSender(OfflineDataSource ds) throws ServiceException {
-        Properties prop = new Properties();
-        prop.setProperty("mail.davmail.from", ds.getEmailAddress());
-        prop.setProperty("mail.davmail.saveinsent", "f");
-        Session ses = Session.getInstance(prop);
+        Properties props = new Properties();
+        Long timeout = LC.javamail_smtp_timeout.longValue() * Constants.MILLIS_PER_SECOND;
+
+        props.setProperty("mail.davmail.from", ds.getEmailAddress());
+        props.setProperty("mail.davmail.saveinsent", "f");
+        if (timeout > 0) {
+            props.setProperty("mail.davmail.timeout", timeout.toString());
+            props.setProperty("mail.davmail.connectiontimeout", timeout.toString());
+        }
+        Session ses = Session.getInstance(props);
         try {
             transport = ses.getTransport("davmail_xmit");
             transport.connect(null, ds.getUsername(), ds.getDecryptedPassword());
@@ -52,10 +61,18 @@ public class LMailSender extends MailSender {
 
     @Override
     protected void sendMessage(MimeMessage mm, boolean ignoreFailedAddresses,
-        RollbackData[] rollback) throws IOException {
+        RollbackData[] rollback) throws IOException, SafeMessagingException {
         try {
             transport.sendMessage(mm, mm.getAllRecipients());
+        } catch (MessagingException e) {
+            for (RollbackData rdata : rollback)
+                if (rdata != null)
+                    rdata.rollback();
+            throw new SafeMessagingException(e);
         } catch (Exception e) {
+            for (RollbackData rdata : rollback)
+                if (rdata != null)
+                    rdata.rollback();
             throw new IOException(e.toString());
         }
     }
