@@ -69,11 +69,11 @@ ${OC_OIDS}
 
 #### From Microsoft Schema
 attributetype ( 1.2.840.113556.1.2.146
-		NAME ( 'company' )
-		SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{512}
-		EQUALITY caseIgnoreMatch
-		SUBSTR caseIgnoreSubstringsMatch
-		SINGLE-VALUE )
+  NAME ( 'company' )
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{512}
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SINGLE-VALUE )
 
 
 ${ATTRIBUTE_DEFINITIONS}
