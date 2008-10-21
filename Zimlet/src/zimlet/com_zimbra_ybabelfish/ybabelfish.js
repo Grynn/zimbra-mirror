@@ -81,7 +81,18 @@ Com_Zimbra_Ybabelfish.URL = "http://babelfish.yahoo.com/translate_txt";
 // - canvas
 Com_Zimbra_Ybabelfish.prototype.doDrop =
 function(zmObject) {
-	this._zmObject = zmObject;
+	if(zmObject.length > 1) {
+        if (!this._inputDialog) {
+            this._inputDialog = new DwtDialog(appCtxt.getShell(),null,this.getMessage("dropOnlyOneMessage"),[DwtDialog.OK_BUTTON]);
+             this._inputDialog.popup();
+            return;
+        }
+        else {
+            this._inputDialog.popup();
+            return;
+        }
+    }
+    this._zmObject = zmObject;
 	this._isUserInput = false;
 
 	// create a dialog if one does not already exist
@@ -163,9 +174,13 @@ function() {
 
 Com_Zimbra_Ybabelfish.prototype._makeRequest =
 function(lang, text) {
-	var reqHeader = { "User-Agent": navigator.userAgent, "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "Referer": Com_Zimbra_Ybabelfish.URL, "Host": "babelfish.yahoo.com" };
+    text = text.replace(/&/g,'&amp;');
+    var encodedText = AjxStringUtil.urlEncode(text);
+    encodedText = encodedText.replace(/&amp;/g,'%26');
+    encodedText = encodedText.replace(/#/g,'%23');
+    var reqHeader = { "User-Agent": navigator.userAgent, "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "Referer": Com_Zimbra_Ybabelfish.URL, "Host": "babelfish.yahoo.com" };
 
-	AjxRpc.invoke(null, this.getResource("ybabelfish.jsp")+"?text="+AjxStringUtil.urlEncode(text)+"&lang="+AjxStringUtil.urlEncode(lang || "en_es")+"&userAgent="+AjxStringUtil.urlEncode(navigator.userAgent), reqHeader, new AjxCallback(this, this._resultCallback), true);
+	AjxRpc.invoke(null, this.getResource("ybabelfish.jsp")+"?text="+encodedText+"&lang="+AjxStringUtil.urlEncode(lang || "en_es")+"&userAgent="+AjxStringUtil.urlEncode(navigator.userAgent), reqHeader, new AjxCallback(this, this._resultCallback), true);
 };
 
 Com_Zimbra_Ybabelfish.prototype._initialize =
