@@ -63,7 +63,8 @@ function (index, form) {
 **/
 ZaDomainXFormView.prototype.setObject =
 function(entry) {
-	this._containedObject = new Object();
+    ZaAccount.prototype.manageSpecialAttrs.call (entry) ;
+    this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
 	this._containedObject.cos = entry.cos;
 	this._containedObject.name = entry.name;
@@ -426,9 +427,13 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 
 			{ ref: ZaDomain.A_domainName, type:_OUTPUT_,
 			  label:ZaMsg.Domain_ACEName+":",visibilityChecks:[ZaDomainXFormView.hasACEName], visibilityChangeEventSources:[ZaDomain.A_domainName]
-			}
-			
-		 ]
+			},
+            {ref:ZaDomain.A_zimbraPrefTimeZoneId, type:_OSELECT1_, msgName:ZaMsg.NAD_zimbraPrefTimeZoneId,
+                   label:ZaMsg.NAD_zimbraPrefTimeZoneId+":", labelLocation:_LEFT_,
+                   onChange:ZaDomainXFormView.onFormFieldChanged
+            }
+
+         ]
 	};
 	if(ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME) {
 		case1.items.push({ ref: ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, 
