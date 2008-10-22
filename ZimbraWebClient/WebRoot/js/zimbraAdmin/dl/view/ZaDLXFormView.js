@@ -445,14 +445,14 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80, 
 									   enableDisableChecks:[ZaDLXFormView.shouldEnableRemoveAllButton],
 									   enableDisableChangeEventSources:[ZaDistributionList.A2_members],
-									   onActivate:"ZaDLXFormView.removeAllMembers.call(this,event)",
-									   //relevantBehavior:_DISABLE_
+									   onActivate:"ZaDLXFormView.removeAllMembers.call(this,event)"
 									 },
 									{type:_CELLSPACER_},
 									{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:80, id:"removeButton",
 								      onActivate:"ZaDLXFormView.removeMembers.call(this,event)",
 								      relevant:"ZaDLXFormView.shouldEnableMemberListButtons.call(this)",
-								      relevantBehavior:_DISABLE_},
+								      relevantBehavior:_DISABLE_
+								    },
 									{type:_CELLSPACER_},
 									{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis", 	
 										onActivate:"ZaDLXFormView.backMemButtonHndlr.call(this,event)", 

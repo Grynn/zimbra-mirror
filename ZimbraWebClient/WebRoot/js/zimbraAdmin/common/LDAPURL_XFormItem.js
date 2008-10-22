@@ -35,12 +35,17 @@ LDAPURL_XFormItem.prototype.initializeItems = function () {
 	var ldapPort = this.getInheritedProperty("ldapPort");
 	var ldapSSLPort = this.getInheritedProperty("ldapSSLPort");
 	this.defPort = ldapPort ? ldapPort : "389";
-    this.defSSLPort = ldapSSLPort ? ldapSSLPort : "636";	
+    this.defSSLPort = ldapSSLPort ? ldapSSLPort : "636";
+    
 	Composite_XFormItem.prototype.initializeItems.call(this);
+	
+    this.items[0].valueChangeEventSources = [this.getRefPath()];
+    this.items[1].valueChangeEventSources = [this.getRefPath()];
+    this.items[3].valueChangeEventSources = [this.getRefPath()];
 }
 
 LDAPURL_XFormItem.prototype.items = [
-	{type:_OUTPUT_, width:"35px", ref:".", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,
+	{type:_OUTPUT_, width:"35px", ref:".", labelLocation:_NONE_, label:null,
 		getDisplayValue:function(itemVal) {
 			var val = "ldap://";
 			if(itemVal!=null && itemVal.length>0) {
@@ -58,7 +63,7 @@ LDAPURL_XFormItem.prototype.items = [
 			return val;
 		}
 	},
-	{type:_TEXTFIELD_, width:"200px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,
+	{type:_TEXTFIELD_, width:"200px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null,
 		required:true,
 		getDisplayValue:function (itemVal) {
 			var val = "";
@@ -83,8 +88,8 @@ LDAPURL_XFormItem.prototype.items = [
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	},
-	{type:_OUTPUT_, width:"5px", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,value:":"},
-	{type:_TEXTFIELD_,width:"40px",forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, relevantBehavior:_PARENT_, 
+	{type:_OUTPUT_, width:"5px", labelLocation:_NONE_, label:null,value:":", ref:null},
+	{type:_TEXTFIELD_,width:"40px",forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, 
 		getDisplayValue:function (itemVal) {
 			var val = this.getParentItem().defPort;
 			if(itemVal) {
@@ -114,7 +119,7 @@ LDAPURL_XFormItem.prototype.items = [
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	},
-	{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, relevantBehavior:_PARENT_,
+	{type:_CHECKBOX_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, 
 		getDisplayValue:function (itemVal) {
 			var val = false;
 			var protocol = "ldap://";
