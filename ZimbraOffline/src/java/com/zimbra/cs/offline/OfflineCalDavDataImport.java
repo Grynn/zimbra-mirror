@@ -1,9 +1,13 @@
 package com.zimbra.cs.offline;
 
+import java.io.IOException;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.datasource.CalDavDataImport;
+import com.zimbra.cs.dav.DavException;
+import com.zimbra.cs.dav.client.CalDavClient;
 
 public class OfflineCalDavDataImport extends CalDavDataImport {
     private static final String CALDAV_TARGET_URL = "calDavTargetUrl";
@@ -11,6 +15,24 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     
     public OfflineCalDavDataImport(DataSource ds) throws ServiceException {
         super(ds);
+    }
+    
+    public static int loginTest(String username, String password, String serviceName) throws IOException, ServiceException {
+        try {
+            OfflineDataSource.KnownService ks = OfflineDataSource.getKnownServiceByName(serviceName);
+            String url, path;                        
+            if (ks != null && ks.attrs != null && (url = ks.attrs.get(CALDAV_TARGET_URL)) != null &&
+                (path = ks.attrs.get(CALDAV_PRINCIPAL_PATH)) != null) {
+                CalDavClient client = new CalDavClient(url);
+                client.setCredential(username, password);
+                client.login(path.replaceAll("@USERNAME@", username));
+            } else {
+                return 599;
+            }
+        } catch (DavException e) {
+            return e.getStatus();
+        }
+        return 200;
     }
     
     @Override

@@ -60,6 +60,10 @@ public class OfflineDataSource extends DataSource {
         return knownService;
     }
     
+    public static synchronized KnownService getKnownServiceByName(String serviceName) {
+        return knownServices.get(serviceName);
+    }
+    
     public static class KnownService {        
         public String name;
         public boolean saveToSent;

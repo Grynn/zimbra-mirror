@@ -37,6 +37,7 @@ import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.OfflineCalDavDataImport;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.offline.util.OfflineYAuth;
@@ -45,6 +46,7 @@ import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 
+import java.io.IOException;
 import java.util.*;
 
 import javax.mail.AuthenticationFailedException;
@@ -539,6 +541,33 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
     }
 
+    private void testCalDav(String localPart, String domain, String password) throws ServiceException {
+        String username = null;
+        boolean isYmail = false;
+      
+        if (domain.equals("yahoo.com") || domain.equals("ymail.com") || domain.equals("rocketmail.com")) {
+            if (domain.equals("yahoo.com"))
+                username = localPart;
+            domain = "yahoo.com";
+            isYmail = true;
+        } else if (!domain.equals("gmail.com")) {
+            return;
+        }
+        if (username == null)
+            username = localPart + "@" + domain;
+        
+        int status;
+        try {
+            status = OfflineCalDavDataImport.loginTest(username, password, domain);
+            if (status == 502 && isYmail)
+                throw OfflineServiceException.YCALDAV_NEED_UPGRADE();
+            else if (status != 200)
+                throw OfflineServiceException.CALDAV_LOGIN_FAILED();
+        } catch (IOException e) {
+            throw ServiceException.FAILURE("IO error in CalDav login test", e);
+        }
+    }
+    
     private synchronized Account createDataSourceAccount(String dsName, String emailAddress, String _password, Map<String, Object> dsAttrs) throws ServiceException {
         validEmailAddress(emailAddress);
         emailAddress = emailAddress.toLowerCase().trim();
@@ -558,7 +587,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	DataSource.Type type = DataSource.Type.valueOf(dsType);
         String dsid = UUID.randomUUID().toString();
     	dsAttrs.put(A_zimbraDataSourceId, dsid);
-    	String password = (String) dsAttrs.remove(A_zimbraDataSourcePassword);
+        String password = (String) dsAttrs.remove(A_zimbraDataSourcePassword);
     	dsAttrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, password));
     	String smtpPassword = (String) dsAttrs.get(A_zimbraDataSourceSmtpAuthPassword);
     	if (smtpPassword != null)
@@ -567,6 +596,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         OfflineDataSource testDs = new OfflineDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs);
         testDataSource(testDs);
 
+        String syncCal = (String) dsAttrs.get(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled);
+        if (syncCal != null && syncCal.equals(Provisioning.TRUE))
+            testCalDav(localPart, domain, password);
+        
     	String accountId = UUID.randomUUID().toString();
 
         Map<String, Object> attrs = new HashMap<String, Object>();

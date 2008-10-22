@@ -31,6 +31,9 @@ public class OfflineServiceException extends ServiceException {
     public static final String MISSING_GAL_MAILBOX = "offline.MISSING_GAL_MAILBOX";
     public static final String ONLINE_ONLY_OP = "offline.ONLINE_ONLY_OP";
     
+    public static final String CALDAV_LOGIN_FAILED ="offlline.CALDAV_LOGIN_FAILED";
+    public static final String YCALDAV_NEED_UPGRADE = "offline.YCALDAV_NEED_UPGRADE";
+    
     public static final String ITEM_ID = "itemId";
 
     private OfflineServiceException(String message, String code, boolean isReceiversFault, Argument... args) {
@@ -68,4 +71,13 @@ public class OfflineServiceException extends ServiceException {
     public static OfflineServiceException ONLINE_ONLY_OP(String op) {
         return new OfflineServiceException("operation only supported when client is online: " + op, ONLINE_ONLY_OP, RECEIVERS_FAULT);
     }
+    
+    public static OfflineServiceException CALDAV_LOGIN_FAILED() {
+        return new OfflineServiceException("CalDAV login failed", CALDAV_LOGIN_FAILED, RECEIVERS_FAULT);
+    }
+    
+    public static OfflineServiceException YCALDAV_NEED_UPGRADE() {
+        return new OfflineServiceException("must upgrade to all-new yahoo calendar service", YCALDAV_NEED_UPGRADE, RECEIVERS_FAULT); 
+    }
 }
+

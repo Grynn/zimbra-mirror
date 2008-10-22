@@ -37,6 +37,7 @@ public class XmailBean extends MailBean {
 
 	protected boolean contactSyncEnabled;
     protected boolean syncCalendar;
+    protected boolean calLoginError;
 	
 	private static final String adomain = "aol.com";
 	private static final String gdomain = "gmail.com";
@@ -94,6 +95,7 @@ public class XmailBean extends MailBean {
 		if (verb == null || !isAllOK())
 			return;
 		
+		calLoginError = false;
 	    try {
 			Map<String, Object> dsAttrs = new HashMap<String, Object>();
 			DataSource.Type dsType = isEmpty(protocol) ? null : DataSource.Type.fromString(protocol);
@@ -242,6 +244,12 @@ public class XmailBean extends MailBean {
 	    		setError(getMessage("InvalidUserOrPass"));
 	    	} else if (x.getCode().equals("account.ACCOUNT_INACTIVE")) {
 	    		setError(getMessage("YMPPlusRequired"));
+	    	} else if (x.getCode().equals("offlline.CALDAV_LOGIN_FAILED")) {
+	    	    setError(getMessage("CalAccessErr"));
+	    	    calLoginError = true;
+	    	} else if (x.getCode().equals("offline.YCALDAV_NEED_UPGRADE")) {
+	    	    setError(getMessage("YMPSyncCalUpgradeNote"));
+	    	    calLoginError = true;
 	    	} else if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT"))) {
 	    		setExceptionError(x);
 	    	}
@@ -394,5 +402,13 @@ public class XmailBean extends MailBean {
 
 	public boolean isSyncCalendar() {
 	    return syncCalendar;
+	}
+	
+	public void setCalLoginError(boolean err) {
+	    calLoginError = err;
+	}
+	
+	public boolean isCalLoginError() {	    
+	    return calLoginError;
 	}
 }
