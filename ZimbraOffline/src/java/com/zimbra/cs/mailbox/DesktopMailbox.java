@@ -46,13 +46,12 @@ public abstract class DesktopMailbox extends Mailbox {
 			accountName = account.getName();
 	}
 	
-    @Override protected synchronized void initialize() throws ServiceException {
+    @Override
+    protected synchronized void initialize() throws ServiceException {
         super.initialize();
-
-        // create a system outbox folder
+        // create a system folders
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
         Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
-        Folder.create(ID_FOLDER_ARCHIVE, this, userRoot, ARCHIVE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR, null);
         Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
     }
     
@@ -66,19 +65,8 @@ public abstract class DesktopMailbox extends Mailbox {
 		return false;
 	}
 	
-	synchronized private void ensureSystemFolderExists() throws ServiceException {
+	synchronized void ensureSystemFolderExists() throws ServiceException {
 		Folder f = null;
-		try {
-			f = getFolderById(ID_FOLDER_ARCHIVE);
-		} catch (MailServiceException.NoSuchItemException x) {}
-		if (f == null) {
-	        CreateFolder redo = new CreateFolder(getId(), ARCHIVE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR, null);
-	        redo.setFolderId(ID_FOLDER_ARCHIVE);
-	        redo.start(System.currentTimeMillis());
-            createFolder(new OfflineContext(redo), ARCHIVE_PATH, ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR, null);
-		}
-		
-		f = null;
 		try {
 			f = getFolderById(ID_FOLDER_FAILURE);
 		} catch (MailServiceException.NoSuchItemException x) {}

@@ -616,7 +616,8 @@ public class InitialSync {
             int mod_metadata = (int)calElement.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE);
             
             Element setCalRequest = makeSetCalRequest(calElement, new RemoteInviteMimeLocator(ombx), ombx.getAccount(), isAppointment);
-            //OfflineLog.offline.debug(setCalRequest.prettyPrint());
+            if (ombx.getOfflineAccount().isDebugTraceEnabled())
+            	OfflineLog.offline.debug(setCalRequest.prettyPrint());
             
             try {
             	setCalendarItem(setCalRequest, id, folderId, date, mod_content, change_date, mod_metadata, flags, tags, isAppointment);
