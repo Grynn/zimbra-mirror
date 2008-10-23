@@ -1,14 +1,16 @@
 package com.zimbra.webClient.servlet;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
+import com.zimbra.cs.servlet.ZimbraServlet;
+import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.service.FileUploadServlet;
+import com.zimbra.cs.extension.ExtensionUtil;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.common.service.ServiceException;
+
+import java.io.*;
+import java.lang.reflect.Method;
+import java.util.Hashtable;
+import java.util.Enumeration;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -17,10 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-public class AdminServlet extends HttpServlet implements Servlet {
+public class AdminServlet extends ZimbraServlet {
 
     private static final String ACTION_GETCSR = "getCSR" ;
-    
+//    private static final String ACTION_GETBP = "getBP" ;
+
     
     public AdminServlet() {
         super ();
@@ -32,36 +35,49 @@ public class AdminServlet extends HttpServlet implements Servlet {
 
     /**
      * action:
-     *  - getCSR - return the commerical CSR 
+     *  - getCSR - return the commerical CSR
+     *  - getBP - return the bulk privisioin results
+     *       * it also needs a required parameter "aid" - uploaded file attachment id
+     *       * the status information is from the in-memory copy of the uploaded file contents
      */
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String action = req.getParameter("action") ;
         
-        if (action != null && action.equals(ACTION_GETCSR)) {
-           String filename = req.getParameter("fname") ;
-           if (filename == null || filename.length() <= 0) {
-               filename = "current" ;
-           }
-            
-            //      Set the headers.
-            //set the Content-Type header to a nonstandard value to avoid the browser to do something automatically
-           resp.setHeader("Expires", "Tue, 24 Jan 2000 20:46:50 GMT");
-           resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
-           resp.setContentType("application/x-download");
-           resp.setHeader("Content-Disposition", "attachment; filename=" + filename + ".csr");
-           
-            String adminHomeDir = getServletContext().getRealPath("/");
-            try {
-                getCSRFile(adminHomeDir, resp.getOutputStream()) ;  
-            }catch (Exception e){
-                resp.sendError(resp.SC_NOT_FOUND) ;
+        //check the auth token
+        AuthToken authToken = getAdminAuthTokenFromCookie(req, resp);
+        if (authToken == null)
+           return;
+
+        try {
+            if (action != null && action.equals(ACTION_GETCSR)) {
+               String filename = req.getParameter("fname") ;
+               if (filename == null || filename.length() <= 0) {
+                   filename = "current" ;
+               }
+
+                //      Set the headers.
+                //set the Content-Type header to a nonstandard value to avoid the browser to do something automatically
+               resp.setHeader("Expires", "Tue, 24 Jan 2000 20:46:50 GMT");
+               resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+               resp.setContentType("application/x-download");
+               resp.setHeader("Content-Disposition", "attachment; filename=" + filename + ".csr");
+
+                String adminHomeDir = getServletContext().getRealPath("/");
+
+                getCSRFile(adminHomeDir, resp.getOutputStream()) ;
+                
+                return ;
+
             }
-            return ;
+        }catch (Exception e){
+            ZimbraLog.webclient.error(e) ;
+            resp.sendError(resp.SC_NOT_FOUND) ;
         }
     }
     
     
-    public static void getCSRFile(String adminHomeDir, OutputStream out)
+    private static void getCSRFile(String adminHomeDir, OutputStream out)
         throws FileNotFoundException, IOException {
         String csrFileName =  adminHomeDir + "/tmp/current.csr" ;
         //System.out.println("csr file = " + csrFileName) ;
@@ -78,4 +94,5 @@ public class AdminServlet extends HttpServlet implements Servlet {
           if (in != null) in.close(  );
         }
     }
+
 }
