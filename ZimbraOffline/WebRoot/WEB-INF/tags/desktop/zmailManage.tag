@@ -57,7 +57,7 @@ function beforeSubmit() {
 function disableButtons() {
     zd.disable("cancelButton");
     //zd.disable("deleteButton");
-    zd.disable("manageButton");
+    //zd.disable("manageButton");
     zd.disable("saveButton");
 }
 

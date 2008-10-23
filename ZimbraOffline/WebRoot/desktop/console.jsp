@@ -127,11 +127,11 @@ function OnReset(id, zmail) {
             </c:when>
         </c:choose>
 
-        <div id="serviceDeleted" class="ZWizardPage">
-            <div class="ZWizardPageTitle"><fmt:message key='ManageService'/></div>
-      		<span class="padding">
+        <div id="serviceDeleted" class="infoBg">
+            <div><b><fmt:message key='ManageService'/></b></div>
+
                 <p><fmt:message key="${key}"><fmt:param>${param.srvcName}</fmt:param></fmt:message></p>
-			</span>            
+			            
         </div>
     </c:otherwise>
 </c:choose>
