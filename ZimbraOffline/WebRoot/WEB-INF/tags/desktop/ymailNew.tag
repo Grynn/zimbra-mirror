@@ -27,7 +27,7 @@ function OnSubmit() {
 
 function beforeSubmit() {
     disableButtons();
-    zd.set("whattodo", "<fmt:message key='Processing'/>");
+    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
 }
 
 function disableButtons() {
@@ -79,20 +79,32 @@ function disableButtons() {
 
         <tr>
         	<td class="ZFieldLabel"></td>
-            <td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}> <fmt:message key='SyncAllFolders'/></td>
+            <td>
+               <table cellpadding="0" cellspacing="0" border="0"><tr>
+                <td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td> <td><fmt:message key='SyncAllFolders'/>
+                </td></tr></table>
+                </td>
         </tr>
 
         <tr>
-            <td style='text-align:right'><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" checked></td>
-            <td class="ZCheckboxLabel"><fmt:message key='ContactSyncEnabled'/></td>
-		</tr>
-        <tr>
-            <td style='text-align:right'><input type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" checked></td>
-            <td class="ZCheckboxLabel"><fmt:message key='CalendarSyncEnabled'/></td>
+            <td class="ZFieldLabel"></td>
+            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" checked></td><td><fmt:message key='ContactSyncEnabled'/>
+            </td></tr></table>
+            
+            </td>
         </tr>
+
+        <tr>
+            <td class="ZFieldLabel"></td>
+            <td>
+            <table cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><input type="checkbox" id="syncCalendar" name="syncCalendar" checked></td><td><fmt:message key='YMPSyncCal'/>
+            </td></tr></table>
+            </td>
+        </tr>
+
 
     </table>
 
 </form>
-</span>
-<p><span id="whattodo"></span></p>

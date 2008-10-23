@@ -87,7 +87,7 @@ function OnSubmit() {
 
 function beforeSubmit() {
     disableButtons();
-    zd.set("whattodo", "<fmt:message key='Processing'/>");
+    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
 }
 
 function disableButtons() {
@@ -99,7 +99,7 @@ function disableButtons() {
 </script>
 
 
-<span class="padding">
+
     <form name="xmailNew" action="${uri}" method="POST">
 
 		<input type="hidden" name="verb" value="add">
@@ -109,7 +109,7 @@ function disableButtons() {
 			<tr>
 				<td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Description'/></td>
 				<td>
-					<input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}"><br>
+					<input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}"> 
 					<span id='service_hint' class='ZHint'><fmt:message key='DescHint2'/></span>
 				</td>
 			</tr>
@@ -129,14 +129,14 @@ function disableButtons() {
 				<td>
 					<table cellspacing=0 cellpadding=0><tr>
 						<td>
-							<input type=radio id='protocol_imap' name="protocol" value="imap" ${bean.imap ? 'checked' : ''} onclick='onSelectImap()'>
-
+							<input type=radio id='protocol_imap' name="protocol" value="imap" ${bean.imap ? 'checked' : ''} onclick='onSelectImap()'></td>
+						<td>		
 						<label class="ZRadioLabel" for='protocol_imap'>IMAP4</label></td>
 
 						<td>
-							<input type=radio id='protocol_pop' name="protocol" value="pop3" ${bean.pop ? 'checked' : ''} onclick='onSelectPop()'>
+							<input type=radio id='protocol_pop' name="protocol" value="pop3" ${bean.pop ? 'checked' : ''} onclick='onSelectPop()'></td>
 
-						<label class="ZRadioLabel" for='protocol_pop'>POP3</label></td>
+						<td><label class="ZRadioLabel" for='protocol_pop'>POP3</label></td>
 					</tr></table>
 				</td>
 			</tr>
@@ -168,7 +168,11 @@ function disableButtons() {
 			</tr>
 
 			<tr id='mailSecureRow'><td class="ZFieldLabel"></td>
-				<td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"> <fmt:message key='UseSSL'/></td>
+				<td>
+				<table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"></td><td><fmt:message key='UseSSL'/>
+				</td></tr></table>
+				</td>
 
 			</tr>
 
@@ -189,13 +193,19 @@ function disableButtons() {
 			</tr>
 
 			<tr id='smtpSecureRow'><td class="ZFieldLabel"></td>
-				<td><input type="checkbox" id="smtpSsl" name="smtpSsl" ${bean.smtpSsl ? 'checked' : ''} onclick="SetSmtpPort()"> <fmt:message key='UseSSL'/></td>
+				<td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="smtpSsl" name="smtpSsl" ${bean.smtpSsl ? 'checked' : ''} onclick="SetSmtpPort()"></td><td><fmt:message key='UseSSL'/>
+				</td></tr></table>
+				</td>
 
 			</tr>
 
 			<tr id='smtpAuthRow'><td class="ZCheckboxLabel"></td>
-				<td><input type="checkbox" id="smtpAuth" name="smtpAuth" ${bean.smtpAuth ? 'checked' : ''} onclick='zd.toggle("smtpAuthSettingsRow", this.checked)'> <fmt:message key='UsrPassForSend'/></td>
-
+				<td>
+				<table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="smtpAuth" name="smtpAuth" ${bean.smtpAuth ? 'checked' : ''} onclick='zd.toggle("smtpAuthSettingsRow", this.checked)'></td><td><fmt:message key='UsrPassForSend'/>
+				</td></tr></table>
+				</td>
 			</tr>
 
 			<tr id='smtpAuthSettingsRow'>
@@ -203,11 +213,11 @@ function disableButtons() {
 				<td>
 					<table>
 						<tr>
-							<td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='UserName'/></td>
+							<td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZLabel' : 'ZFieldError'}"><fmt:message key='UserName'/></td>
 							<td><input style='width:240px' class="ZField" type="text" id="smtpUsername" name="smtpUsername" value="${bean.smtpUsername}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
 						</tr>
 						<tr>
-							<td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
+							<td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
 							<td><input style='width:240px' class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
 						</tr>
 					</table>
@@ -219,8 +229,8 @@ function disableButtons() {
 				<td>
 					<table>
 						<tr>
-							<td><fmt:message key='Name'/></td>
-							<td><input style='width:240px' class="ZField" type="text" id="replyToDisplay" name="replyToDisplay" value="${bean.replyToDisplay}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
+							<td align="right"><fmt:message key='Name'/></td>
+							<td align="right"><input style='width:240px' class="ZField" type="text" id="replyToDisplay" name="replyToDisplay" value="${bean.replyToDisplay}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
 
 						</tr>
 						<tr>
@@ -261,4 +271,3 @@ function disableButtons() {
 			</tr>
 		</table>
 	</form>
-</span>

@@ -127,7 +127,10 @@ function passOnEdit(id) {
             </td>
         </tr>
         <tr id='mailSecureRow'><td class="ZFieldLabel"></td>
-            <td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"> <fmt:message key='UseSSL'/></td>
+            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"></td><td><fmt:message key='UseSSL'/>
+				</td></tr></table>
+				</td>
 
         </tr>
 
@@ -149,19 +152,14 @@ function passOnEdit(id) {
         </tr>
 
         <tr><td class="ZFieldLabel"></td>
-            <td><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}> <fmt:message key='EnableTrace'/></td>
+            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td><td><fmt:message key='EnableTrace'/>
+				</td></tr></table>
+				</td>
 
         </tr>
 
     </table>
 
 </form>
-</span>
-<table align="right">
-    <tr>
-        <td>
-            <a href="#"id="manageButton" onclick="OnManage()"><fmt:message key='ManageData'/></a>
-        </td>
-    </tr>
-</table>
 </div>

@@ -61,7 +61,7 @@ function OnSwitch(ds) {
 
 function beforeSubmit() {
     disableButtons();
-    zd.set("whattodo", <fmt:message key='Processing'/>");
+    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
     zd.enable("password");
     if (!${bean.live} && !${bean.ymail}) {
         zd.enable("smtpPassword");
@@ -120,8 +120,16 @@ function passOnEdit(id) {
     <input type="hidden" name="verb">
     <input type="hidden" name="accntType" value="OtherAcct">
 </form>
-
-<span class="padding">
+		<span class="padding">
+<c:choose>
+    <c:when test="${not empty bean.error}" >
+        <p class='ZOfflineError'>${bean.error}</p>
+    </c:when>
+    <c:when test="${not bean.allValid}" >
+        <p class='ZOfflineError'><fmt:message key='PlsCorrectInput'/></p>
+    </c:when>
+    
+</c:choose>
 
 <form name="xmailManage" action="${uri}" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
@@ -197,7 +205,10 @@ function passOnEdit(id) {
 	            </td>
 	        </tr>
 	        <tr id='mailSecureRow'><td class="ZFieldLabel"></td>
-	            <td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''}> <fmt:message key='UseSSL'/></td>
+	            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''}></td><td><fmt:message key='UseSSL'/>
+				</td></tr></table>
+				</td>
 	            
 	        </tr>
 	
@@ -219,13 +230,16 @@ function passOnEdit(id) {
 	            </td>
 	        </tr>
 	        <tr id='smtpSecureRow'><td class="ZFieldLabel"></td>
-	            <td><input type="checkbox" id="smtpSsl" name="smtpSsl" ${bean.smtpSsl ? 'checked' : ''}> <fmt:message key='UseSSL'/></td>
+	            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="smtpSsl" name="smtpSsl" ${bean.smtpSsl ? 'checked' : ''}></td><td><fmt:message key='UseSSL'/>
+				</td></tr></table></td>
 	            
 	        </tr>
-	        <tr id='smtpAuthRow'> <td class="ZCheckboxLabel"></td>
-	            <td><input type="checkbox" id="smtpAuth" name="smtpAuth" ${bean.smtpAuth ? 'checked' : ''}
-	                                        onclick='zd.toggle("smtpAuthSettingsRow", this.checked)'
-	                                    > <fmt:message key='UsrPassForSend'/></td>
+	        <tr id='smtpAuthRow'> <td class="ZFieldLabel"></td>
+	            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="smtpAuth" name="smtpAuth" ${bean.smtpAuth ? 'checked' : ''} onclick='zd.toggle("smtpAuthSettingsRow", this.checked)'></td><td><fmt:message key='UsrPassForSend'/>
+				</td></tr></table>
+				</td>
 	           
 	        </tr>
 	        <tr id='smtpAuthSettingsRow'>
@@ -233,11 +247,11 @@ function passOnEdit(id) {
 	            <td>
 	                <table>
 	                    <tr>
-	                        <td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='UserName'/></td>
+	                        <td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZLabel' : 'ZFieldError'}"><fmt:message key='UserName'/></td>
 	                        <td><input style='width:240px' class="ZField" type="text" id="smtpUsername" name="smtpUsername" value="${bean.smtpUsername}"></td>
 	                    </tr>
 	                    <tr>
-	                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
+	                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
 	                        <td>
                                <input style='width:240px' class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}"
                                  ${zdf:isValid(bean, 'smtpPassword') ? 'disabled' : ''}>
@@ -255,14 +269,14 @@ function passOnEdit(id) {
 	            <td>
 	                <table>
 	                    <tr>
-	                        <td><fmt:message key='Name'/></td>
+	                        <td align="right"><fmt:message key='Name'/></td>
 	                        <td><input style='width:240px' class="ZField" type="text" id="replyToDisplay" name="replyToDisplay" value="${bean.replyToDisplay}"
 	                                onkeypress='zd.markElementAsManuallyChanged(this)'
 	                        ></td>
 	                       
 	                    </tr>
 	                    <tr>
-	                         <td><fmt:message key='EmailAddress'/></td>
+	                         <td aign="right"><fmt:message key='EmailAddress'/></td>
 	                        <td><input style='width:240px' class="ZField" type="text" id="replyTo" name="replyTo" value="${bean.replyTo}"
 	                                onkeypress='zd.markElementAsManuallyChanged(this)'
 	                        ></td>
@@ -293,37 +307,56 @@ function passOnEdit(id) {
         </tr>
         
         <tr id='syncSettingsRow'><td class="ZFieldLabel"></td>
-            <td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}> <fmt:message key='SyncAllFolders'/></td>
+            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td><td><fmt:message key='SyncAllFolders'/>
+				</td></tr></table>
+				</td>
             
         </tr>
         
         <tr id='popSettingsRow'> <td class="ZFeildLabel"></td>
-            <td><input type="checkbox" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? 'checked' : ''}> <fmt:message key='LeaveOnServer'/></td>
+            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? 'checked' : ''}></td><td><fmt:message key='LeaveOnServer'/>
+				</td></tr></table>
+				</td>
            
         </tr>
 
-        <c:if test="${bean.contactSyncSupported}">
-            <tr>
-                <td style='text-align:right'><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td>
-                <td class="ZCheckboxLabel"><fmt:message key='ContactSyncEnabled'/></td>
+        <c:if test="${bean.ymail}">
+            <tr><td class="ZFieldLabel"></td>
+                <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td><td><fmt:message key='ContactSyncEnabled'/>
+				</td></tr></table>
+				</td>
+                
+            </tr>
+            <tr><td class="ZFieldLabel"></td>
+                <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="syncCalendar" name="syncCalendar" ${bean.syncCalendar ? 'checked' : ''}></td><td><fmt:message key='YMPSyncCal'/>
+				</td></tr></table>
+				</td>
+                
             </tr>
         </c:if>
-        <c:if test="${bean.contactSyncSupported}">
-            <tr>
-                <td style='text-align:right'><input type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled ? 'checked' : ''}></td>
-                <td class="ZCheckboxLabel"><fmt:message key='CalendarSyncEnabled'/></td>
+
+        <c:if test="${bean.gmail}">
+            <tr> <td class="ZFieldLabel"></td>
+                <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="syncCalendar" name="syncCalendar" ${bean.syncCalendar ? 'checked' : ''}></td><td><fmt:message key='GmailSyncCal'/>
+				</td></tr></table>
+				</td>
+               
             </tr>
         </c:if>
-        <tr>
-            <td style='text-align:right'><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td>
-            <td class="ZCheckboxLabel"><fmt:message key='EnableTrace'/></td>
+        
+        <tr><td class="ZFieldLabel"></td>
+            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td><td><fmt:message key='EnableTrace'/>
+				</td></tr></table>
+				</td>
+          
         </tr>
     </table>
 
 </form>
-</span>
-<div align="right">
-            <a href="#" id="manageButton" class='DwtButton' onclick="OnManage()"><fmt:message key='ManageData'/></a>
-       
-</div>
 </div>

@@ -39,7 +39,7 @@ function OnSubmit() {
 
 function beforeSubmit() {
     disableButtons();
-    zd.set("whattodo", "<fmt:message key='Processing'/>");
+    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
 }
 
 function disableButtons() {
@@ -75,7 +75,7 @@ function disableButtons() {
         </tr>
 
         <tr id='mailServerRow'>
-            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='ZmServer'/></td>
+            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}" valign="top"><br><fmt:message key='ZmServer'/></td>
             <td>
                 <table cellspacing=0 cellpadding=0>
                     <tr>
@@ -83,17 +83,21 @@ function disableButtons() {
                             <br><span class='ZHint'><fmt:message key='ZmSvrHint'/></span>
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
-                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Port'/></td>
-                        <td width=100%><input style='width:50px' class="ZField" type="text" id="port" name="port" value="${bean.port}" ${bean.defaultPort ? 'disabled' : ''}>
+                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}" valign="top"><fmt:message key='Port'/></td>
+                        <td width=100%  valign="top"><input style='width:50px' class="ZField" type="text" id="port" name="port" value="${bean.port}" ${bean.defaultPort ? 'disabled' : ''}>
                         <c:if test="${bean.defaultPort}">&nbsp;&nbsp;<a href="#" onclick="zd.enable('port');this.style.display='none'"><fmt:message key='Edit'/></a></c:if>
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
-        <tr id='mailSecureRow'>
+ <tr id='mailSecureRow'>
             <td class="ZFieldLabel"></td>
-            <td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"> <fmt:message key='UseSSL'/></td>
+            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+            
+            <td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"></td><td><fmt:message key='UseSSL'/>
+            </td></tr></table>
+            </td>
         </tr>
         <tr>
             <td class="ZFieldLabel"><fmt:message key='ZmSyncFrequency'/></td>
@@ -111,7 +115,7 @@ function disableButtons() {
                 </select>
             </td>
         </tr>
+       
     </table>
 
 </form>
-</span>

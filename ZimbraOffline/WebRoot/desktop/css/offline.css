@@ -72,11 +72,11 @@ SELECT {
 .ZWizardForm TD {
 	vertical-align:top;
 }
-.ZFieldLabel{ width: 150px; font-weight: bold;}
+.ZFieldLabel{ width: 170px; font-weight: bold; padding-top: 0px !important;}
 .ZFieldLabel,
 .ZFieldError,
 .ZFieldLabelLeft {
-	padding:4px 4px 0px 4px;
+	padding:0px 4px;
 	text-align:right;
 	white-space:nowrap;
 }
@@ -165,3 +165,5 @@ h2{ margin: 0px; padding: 0px}
 
 h3{ font-size: 16px;}
 h2{ font-weight: normal;font-size: 20px;letter-spacing: 1px;}
+.infoBg{ background-color: #fffff1; border: 1px solid #d5d6bb; text-align: left; width: 500px; line-height: 20px; padding: 10px; margin-bottom: 5px;}
+.ZLabel{text-align: right; padding: 0px 4px;}
