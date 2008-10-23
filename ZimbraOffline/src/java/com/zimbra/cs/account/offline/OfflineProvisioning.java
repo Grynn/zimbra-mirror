@@ -558,11 +558,19 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         int status;
         try {
+            OfflineLog.offline.debug("testing offline caldav access: username=" + username + " service=" + domain);
             status = OfflineCalDavDataImport.loginTest(username, password, domain);
-            if (status == 502 && isYmail)
+            if (status == 502 && isYmail) {
+                OfflineLog.offline.debug("must upgrade to all-new yahoo calendar servcie: username=" + username + " service=" + domain);
                 throw OfflineServiceException.YCALDAV_NEED_UPGRADE();
-            else if (status != 200)
+            } else if (status == 404 && domain.equals("gmail.com")) {
+                OfflineLog.offline.debug("google calendar servcie not enabled: username=" + username + " service=" + domain);
+                throw OfflineServiceException.GCALDAV_NEED_ENABLE();
+            } else if (status != 200) {
+                OfflineLog.offline.debug("caldav login failed: username=" + username + " service=" + domain + " status=" + Integer.toString(status));
                 throw OfflineServiceException.CALDAV_LOGIN_FAILED();
+            }
+            OfflineLog.offline.debug("caldav access test passed for " + username);
         } catch (IOException e) {
             throw ServiceException.FAILURE("IO error in CalDav login test", e);
         }

@@ -245,11 +245,11 @@ public class XmailBean extends MailBean {
 	    	} else if (x.getCode().equals("account.ACCOUNT_INACTIVE")) {
 	    		setError(getMessage("YMPPlusRequired"));
 	    	} else if (x.getCode().equals("offlline.CALDAV_LOGIN_FAILED")) {
-	    	    setError(getMessage("CalAccessErr"));
-	    	    calLoginError = true;
+	    	    setCalDavLoginError("CalAccessErr");
 	    	} else if (x.getCode().equals("offline.YCALDAV_NEED_UPGRADE")) {
-	    	    setError(getMessage("YMPSyncCalUpgradeNote"));
-	    	    calLoginError = true;
+	    	    setCalDavLoginError("YMPSyncCalUpgradeNote");
+	    	} else if (x.getCode().equals("offline.GCALDAV_NEED_ENABLE")) {
+	    	    setCalDavLoginError("GmailCalDisabled");
 	    	} else if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT"))) {
 	    		setExceptionError(x);
 	    	}
@@ -258,6 +258,11 @@ public class XmailBean extends MailBean {
         }
 	}
 
+	protected void setCalDavLoginError(String key) {
+	    setError(getMessage(key));
+	    calLoginError = true;
+	}
+	
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}

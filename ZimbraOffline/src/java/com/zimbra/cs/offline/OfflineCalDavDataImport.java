@@ -8,6 +8,7 @@ import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.datasource.CalDavDataImport;
 import com.zimbra.cs.dav.DavException;
 import com.zimbra.cs.dav.client.CalDavClient;
+import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflineCalDavDataImport extends CalDavDataImport {
     private static final String CALDAV_TARGET_URL = "calDavTargetUrl";
@@ -23,10 +24,12 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
             String url, path;                        
             if (ks != null && ks.attrs != null && (url = ks.attrs.get(CALDAV_TARGET_URL)) != null &&
                 (path = ks.attrs.get(CALDAV_PRINCIPAL_PATH)) != null) {
+                OfflineLog.offline.debug("offline caldav login test: url=" + url + " path=" + path);
                 CalDavClient client = new CalDavClient(url);
                 client.setCredential(username, password);
                 client.login(path.replaceAll("@USERNAME@", username));
             } else {
+                OfflineLog.offline.debug("offline caldav login test: missing caldav parameters for " + serviceName);
                 return 599;
             }
         } catch (DavException e) {
