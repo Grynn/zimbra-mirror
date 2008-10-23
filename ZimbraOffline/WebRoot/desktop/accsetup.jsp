@@ -318,18 +318,18 @@
         </c:otherwise>
     </c:choose>
 </c:if>
-</div><br>
-<hr>
-<table>
-    <tr>
+</div>
 
+<table cellpadding="3">
+    <tr>
+		<td class="ZFieldLabel">&nbsp;</td>
        <td>
-            <a href="#" id="saveButton" onclick="OnSubmit()"><img src="/zimbra/desktop/img/saveButton.gif" border="0"></a>
+            <a href="#" id="saveButton" onclick="OnSubmit()"><img src="/zimbra/desktop/img/saveButton.gif" border="0"></a> 
         </td>
         <td>
-            <a href="#" id="cancelButton" onclick="OnCancel()"><img src="/zimbra/desktop/img/cancelButton.gif" border="0"></a>
+             <a href="#" id="cancelButton" onclick="OnCancel()"><img src="/zimbra/desktop/img/cancelButton.gif" border="0"></a>
         </td>
-
+			<td> <span id="whattodo"></span></td>
 </table>
 
 </div>

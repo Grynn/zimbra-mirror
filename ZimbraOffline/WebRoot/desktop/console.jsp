@@ -184,43 +184,37 @@ function OnDelete(id) {
 	        <td style="line-height: 18px;">
 
 	        <h3 style="display:inline;">${account.name}</h3> &nbsp;${account.email}<br>
-	        <a href="javascript:OnAccount('${account.id}',${account.zmail})">Edit</a> &nbsp;<a href="javascript:OnDelete('${account.id}');"  id='deleteButton'>Delete</a>
-
-
-	        <br>
-
+	        <a href="javascript:OnAccount('${account.id}',${account.zmail})">Edit</a> &nbsp;<a href="javascript:OnDelete('${account.id}');"  id='deleteButton'>Delete</a> &nbsp;<a href="javascript:OnDelete('${account.id}');"  id='deleteButton'>Reset</a> 
+				<br>
+		            <c:choose>
+	                   <c:when test="${account.statusUnknown}">
+	                     <i><img src="/zimbra/img/im/ImgOffline.gif" align="absmiddle"> <fmt:message key='StatusUnknown'/></i>
+	                   </c:when>
+	                   <c:when test="${account.statusOffline}">
+	                       <i><img src="/zimbra/img/im/ImgImAway.gif" align="absmiddle">  <fmt:message key='StatusOffline'/></i>
+	                   </c:when>
+	                   <c:when test="${account.statusOnline}">
+	                       <i><img src="/zimbra/img/im/ImgImAvailable.gif" align="absmiddle">  <fmt:message key='StatusOnline'/></i>
+	                   </c:when>
+	                   <c:when test="${account.statusRunning}">
+	                       <i><img src="/zimbra/img/animated/Imgwait_16.gif" align="absmiddle">  <fmt:message key='StatusInProg'/></i>
+	                   </c:when>
+	                   <c:when test="${account.statusAuthFailed}">
+	                       <i><img src="/zimbra/img/im/ImgImDnd.gif" align="absmiddle">  <fmt:message key='StatusCantLogin'/></i>
+	                   </c:when>
+	                   <c:when test="${account.statusError}">
+	                       <i><img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif" align="absmiddle">  <fmt:message key='StatusErr'/></i>
+	                   </c:when>
+		           </c:choose>
+		           <br>
 					<c:choose>
 						<c:when test='${account.lastSync == null}'>
 							<i class="ZHint"><fmt:message key='SyncNotYetComplete'/></i>
 						</c:when>
 						<c:otherwise>
-							<i class="ZHint"><fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></i>
+							<i class="ZHint"><fmt:message key='LastSync'/>&nbsp;<fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></i>
 						</c:otherwise>
 					</c:choose>
-				<br>
-		            <c:choose>
-	                   <c:when test="${account.statusUnknown}">
-	                     <i><img src="/zimbra/img/im/ImgOffline.gif"> <fmt:message key='StatusUnknown'/></i>
-	                   </c:when>
-	                   <c:when test="${account.statusOffline}">
-	                       <i><img src="/zimbra/img/im/ImgImAway.gif">  <fmt:message key='StatusOffline'/></i>
-	                   </c:when>
-	                   <c:when test="${account.statusOnline}">
-	                       <i><img src="/zimbra/img/im/ImgImAvailable.gif">  <fmt:message key='StatusOnline'/></i>
-	                   </c:when>
-	                   <c:when test="${account.statusRunning}">
-	                       <i><img src="/zimbra/img/animated/Imgwait_16.gif">  <fmt:message key='StatusInProg'/></i>
-	                   </c:when>
-	                   <c:when test="${account.statusAuthFailed}">
-	                       <i><img src="/zimbra/img/im/ImgImDnd.gif">  <fmt:message key='StatusCantLogin'/></i>
-	                   </c:when>
-	                   <c:when test="${account.statusError}">
-	                       <i><img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif">  <fmt:message key='StatusErr'/></i>
-	                   </c:when>
-		           </c:choose>
-
-
-
 	           </td>
 		       <td align="center">&nbsp;
 		           <c:if test="${not account.first}">
@@ -230,7 +224,6 @@ function OnDelete(id) {
 	        </tr>
     	</c:forEach>
     </table>
-
 </span>
 <br>
 
