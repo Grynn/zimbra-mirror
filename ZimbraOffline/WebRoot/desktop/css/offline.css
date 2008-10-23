@@ -72,7 +72,7 @@ SELECT {
 .ZWizardForm TD {
 	vertical-align:top;
 }
-.ZFieldLabel{ width: 150px;}
+.ZFieldLabel{ width: 150px; font-weight: bold;}
 .ZFieldLabel,
 .ZFieldError,
 .ZFieldLabelLeft {
@@ -164,4 +164,4 @@ h2{ margin: 0px; padding: 0px}
 .rowline td{border-bottom: 1px solid #e5e5e5;}
 
 h3{ font-size: 16px;}
-h2{ font-weight: normal;font-size: 26px;letter-spacing: 1px;}
+h2{ font-weight: normal;font-size: 20px;letter-spacing: 1px;}
