@@ -1557,7 +1557,7 @@ AjxNumberFormat.NumberSegment.prototype.format = function(number) {
 // Protected methods
 
 AjxNumberFormat.NumberSegment.prototype._normalize = function(s) {
-	var match = s.split(/([\.Ee])/);
+	var match = s.split(/[\.Ee]/);
 	
 	// normalize whole part
 	var whole = match.shift();
@@ -1581,15 +1581,13 @@ AjxNumberFormat.NumberSegment.prototype._normalize = function(s) {
 	// normalize rest
 	var fract = '0';
 	var expon;
-	while (match.length > 0) {
-		switch (match.shift()) {
-			case '.': fract = match.shift(); break;
-			case 'E': case 'e': expon = match.shift(); break;
-			default: // NOTE: should never get here!
-		}
-	}
 
-	fract = fract.replace(/0+$/,"");
+    if(s.match(/\./))
+        fract = match.shift();
+    else if(s.match(/\e/) || s.match(/\E/))
+        expon = match.shift();
+
+    fract = fract.replace(/0+$/,"");
 	if (fract.length < this._parent._minFracDigits) {
 		fract = AjxFormat._zeroPad(fract, this._parent._minFracDigits, I18nMsg.numberZero, true);
 	}
