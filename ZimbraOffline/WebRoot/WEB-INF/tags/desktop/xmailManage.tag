@@ -120,16 +120,8 @@ function passOnEdit(id) {
     <input type="hidden" name="verb">
     <input type="hidden" name="accntType" value="OtherAcct">
 </form>
-		<span class="padding">
-<c:choose>
-    <c:when test="${not empty bean.error}" >
-        <p class='ZOfflineError'>${bean.error}</p>
-    </c:when>
-    <c:when test="${not bean.allValid}" >
-        <p class='ZOfflineError'><fmt:message key='PlsCorrectInput'/></p>
-    </c:when>
-    
-</c:choose>
+
+<span class="padding">
 
 <form name="xmailManage" action="${uri}" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">

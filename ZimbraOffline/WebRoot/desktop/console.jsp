@@ -59,12 +59,26 @@ function OnLoginTo(username) {
     document.hidden_form.submit();
 }
 
-function OnDelete(id) {
+function OnDelete(id, zmail) {
     if (confirm("${onDeleteWarn}")) {
-        //beforeSubmit();
-        document.hidden_form.action = "/zimbra/desktop/accsetup.jsp?accntType=OtherAcct";
+        if (zmail)
+    	    document.hidden_form.action = "/zimbra/desktop/accsetup.jsp";
+        else
+    	    document.hidden_form.action = "/zimbra/desktop/accsetup.jsp?accntType=OtherAcct";
         document.hidden_form.accountId.value = id;
         document.hidden_form.verb.value = "del";
+        document.hidden_form.submit();
+    }
+}
+
+function OnReset(id, zmail) {
+    if (confirm("<fmt:message key='OnResetWarn'/>")) {
+        if (zmail)
+    	    document.hidden_form.action = "/zimbra/desktop/accsetup.jsp";
+        else
+    	    document.hidden_form.action = "/zimbra/desktop/accsetup.jsp?accntType=OtherAcct";
+        document.hidden_form.accountId.value = id;
+        document.hidden_form.verb.value = "rst";
         document.hidden_form.submit();
     }
 }
@@ -110,7 +124,7 @@ function OnDelete(id) {
             <c:when test="${param.accntVerb eq 'mod'}">
                 <c:set var="key" value="ServiceUpdated"/>
             </c:when>
-            <c:when test="${param.accntVerb eq 'reset'}">
+            <c:when test="${param.accntVerb eq 'rst'}">
                 <c:set var="key" value="ServiceReset"/>
             </c:when>
         </c:choose>
@@ -136,21 +150,22 @@ function OnDelete(id) {
 <span class="padding">
     <p>
     <ol>
-    <li>
-    <b><fmt:message key='WizardDescP1'/></b><br>
-    <fmt:message key='WizardDescInfo1'/>
-    </li>
+        <li>
+            <b><fmt:message key='WizardDescP1'/></b><br>
+            <fmt:message key='WizardDescInfo1'/>
+        </li>
 
-    <li><b><fmt:message key='WizardDescP2'/></b><br>
-    <fmt:message key='WizardDescInfo2'/>
-    </li>
+        <li><b><fmt:message key='WizardDescP2'/></b><br>
+            <fmt:message key='WizardDescInfo2'/>
+        </li>
 
-    <li><b><fmt:message key='WizardDescP3'/></b><br><fmt:message key='WizardDescInfo3'/>
-    <li><b><fmt:message key='WizardDescP4'/></b><br><fmt:message key='WizardDescInfo4'/>
-    
-    </li>
+        <li><b><fmt:message key='WizardDescP3'/></b><br><fmt:message key='WizardDescInfo3'/>
+        <li><b><fmt:message key='WizardDescP4'/></b><br><fmt:message key='WizardDescInfo4'/>
+
+        </li>
+    </ol>
     </p>
-    </span>
+</span>
 <br><br>
             <div align="center">
                 <a href="#" onclick="OnNew()"><img src="/zimbra/desktop/img/CreateNewAccount.gif" border="0"></a>
@@ -170,7 +185,7 @@ function OnDelete(id) {
 <div align="right" style="width: 680px; margin-bottom: 10px;"><a href="#" onclick="OnLogin()"><b><fmt:message key='GotoDesktop'/></b></a></div>
 <div id="console" class="whiteBg">
 
-					<div align="center"><h2 style="display: inline;"><fmt:message key='HeadTitle' /></h2> &nbsp; (<a href="#" onclick="OnNew()"><fmt:message key='SetupAnotherAcct'/></a>)</div>
+					<div align="center"><h2 style="display: inline;"><fmt:message key='HeadTitle' /></h2> &nbsp; ( <a href="#" onclick="OnNew()"><fmt:message key='SetupAnotherAcct'/></a> )</div>
 
 <hr>
 
@@ -184,7 +199,7 @@ function OnDelete(id) {
 	        <td style="line-height: 18px;">
 
 	        <h3 style="display:inline;">${account.name}</h3> &nbsp;${account.email}<br>
-	        <a href="javascript:OnAccount('${account.id}',${account.zmail})">Edit</a> &nbsp;<a href="javascript:OnDelete('${account.id}');"  id='deleteButton'>Delete</a> &nbsp;<a href="javascript:OnDelete('${account.id}');"  id='deleteButton'>Reset</a> 
+	        <a href="javascript:OnAccount('${account.id}',${account.zmail})"><fmt:message key="Edit"/></a> &nbsp;<a href="javascript:OnDelete('${account.id}',${account.zmail});"  id='deleteButton'><fmt:message key="Delete"/></a> &nbsp;<a href="javascript:OnReset('${account.id}',${account.zmail});"  id='resetButton'><fmt:message key="ResetData"/></a> 
 				<br>
 		            <c:choose>
 	                   <c:when test="${account.statusUnknown}">
@@ -208,7 +223,7 @@ function OnDelete(id) {
 		           </c:choose>
 		           <br>
 					<c:choose>
-						<c:when test='${account.lastSync == null}'>
+						<c:when test='${account.lastSync != null}'>
 							<i class="ZHint"><fmt:message key='LastSync'/>&nbsp;<fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></i>
 						</c:when>
 					</c:choose>
@@ -221,7 +236,6 @@ function OnDelete(id) {
 	        </tr>
     	</c:forEach>
     </table>
-</span>
 <br>
 
 </div>
