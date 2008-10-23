@@ -97,17 +97,15 @@ function OnReset(id, zmail) {
 <c:if test="${not empty param.accntVerb && not empty param.srvcName}">
 <c:choose>
     <c:when test="${param.accntVerb eq 'add'}">
-		<div id="serviceCreated" class="ZWizardPage ZWizardPageBig">
-            <hr>
-            <div><fmt:message key='ServiceCreated'/></div>
-		<span class="padding">
-		    <p><fmt:message key='ServiceAdded'><fmt:param>${param.srvcName}</fmt:param></fmt:message>
-            </p>
-
-		    <p><fmt:message key='ServiceAddedNote'/>
-            </p>
-        </span>
-        <hr>
+		<div id="serviceCreated" class="infoBg">
+            
+            <p><b><fmt:message key='ServiceCreated'/></b></p>
+		
+		    <fmt:message key='ServiceAdded'><fmt:param>${param.srvcName}</fmt:param></fmt:message>
+            
+		    <p><fmt:message key='ServiceAddedNote'/></p>
+            
+        
 		</div>
     </c:when>
     <c:otherwise>
