@@ -401,11 +401,11 @@ public class XmailBean extends MailBean {
 		return contactSyncEnabled;
 	}
 
-	public void setSyncCalendar(boolean enabled) {
+	public void setCalendarSyncEnabled(boolean enabled) {
 	    calendarSyncEnabled = enabled;
 	}
 
-	public boolean isSyncCalendar() {
+	public boolean isCalendarSyncEnabled() {
 	    return calendarSyncEnabled;
 	}
 
