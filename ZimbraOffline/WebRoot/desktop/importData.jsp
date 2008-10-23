@@ -89,14 +89,16 @@ function done(errstr) {
 </head>
 
 <body>
-<br><br><br><br><br><br>
+<br><br>
 <div align="center">
-<div id="importData" class="ZWizardPage">
+<img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
+<br><br>
+<div id="importData" class="whiteBg">
 <div class="ZWizardPageTitle">
 <div id="settings_hint" class="ZFloatInHead"></div>
-    <span id="pageTitle">
-        <fmt:message key='ImportDataTitle'><fmt:param>${bean.accountName}</fmt:param></fmt:message>
-    </span>
+    <div id="pageTitle" align="center">
+        <h2><fmt:message key='ImportDataTitle'><fmt:param>${bean.accountName}</fmt:param></fmt:message></h2><hr>
+    </div>
 </div>
 <br>
 <form name="submitForm" method="POST" enctype="multipart/form-data" target="iframe">
@@ -105,8 +107,8 @@ function done(errstr) {
         <td>
             <table width="100%">
                 <tr>
-                    <td><nobr><fmt:message key="ImportFile"/></nobr></td>
-                    <td align="right"><input type="file" name="file" size="30" accept="application/x-tar-compressed"></td>
+                    <td class="ZFieldLabel"><nobr><fmt:message key="ImportFile"/></nobr></td>
+                    <td align="right"><input class="ZField" type="file" name="file" size="30" accept="application/x-tar-compressed"></td>
                 </tr>
             </table>
         </td>
@@ -169,7 +171,12 @@ function done(errstr) {
     </tr>
 </table>
 </form>
-<table class="ZWizardButtonBar" width="100%">
+<hr>
+
+    <a href="#" id="cancelButton" onclick="onCancel()">
+        <img src="/zimbra/desktop/img/cancelButton.gif" border="0">
+    </a>
+<!--table class="ZWizardButtonBar" width="100%">
     <tr>
         <td class="ZWizardButton" width="1%">
             <button class='DwtButton' id="submitButton" onclick="onSubmit()">
@@ -185,15 +192,16 @@ function done(errstr) {
             </button>
         </td>
     </tr>
-</table>
+</table-->
 </div>
 <div>
     <iframe name="iframe" id="iframe" frameborder="0" scrolling="no" style="width:0px;height:0px;border:0px"></iframe>
 </div>
-<form name="doneForm" action="/zimbra/desktop/${bean.zmail ? "z" : "x"}mail.jsp" method="POST">
+<form name="doneForm" action="/zimbra/desktop/accsetup.jsp" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
     <input type="hidden" name="accountName" value="${bean.accountName}">
     <input type="hidden" name="verb">
+    <input type="hidden" name="accntType" value="${bean.zmail ? 'ZimbraAcct' : 'OtherAcct'}">
 </form>
 </div>
 </body>

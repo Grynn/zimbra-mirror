@@ -61,7 +61,7 @@ function OnSwitch(ds) {
 
 function beforeSubmit() {
     disableButtons();
-    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
+    zd.set("whattodo", <fmt:message key='Processing'/>");
     zd.enable("password");
     if (!${bean.live} && !${bean.ymail}) {
         zd.enable("smtpPassword");
@@ -335,7 +335,6 @@ function passOnEdit(id) {
     </table>
 
 </form>
-<p><span id="whattodo"></span></p>
 </span>
 <div align="right">
             <a href="#" id="manageButton" class='DwtButton' onclick="OnManage()"><fmt:message key='ManageData'/></a>

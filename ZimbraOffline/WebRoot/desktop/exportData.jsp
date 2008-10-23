@@ -73,14 +73,16 @@ function done(errstr) {
 </head>
 
 <body>
-<br><br><br><br><br><br>
+<br><br>
 <div align="center">
-<div id="exportData" class="ZWizardPage">
+<img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
+<br><br>
+<div id="exportData" class="whiteBg">
 <div class="ZWizardPageTitle">
 <div id="settings_hint" class="ZFloatInHead"></div>
-    <span id="pageTitle">
-        <fmt:message key='ExportDataTitle'><fmt:param>${bean.accountName}</fmt:param></fmt:message>
-    </span>
+    <div id="pageTitle" align="center">
+        <h2><fmt:message key='ExportDataTitle'><fmt:param>${bean.accountName}</fmt:param></fmt:message></h2><hr>
+    </div>
 </div>
 <br>
 <form name="optionForm">
@@ -89,8 +91,8 @@ function done(errstr) {
         <td>
             <table width="100%">
                 <tr>
-                    <td><nobr><fmt:message key="ExportName"/></nobr></td>
-                    <td align="right"><input name="filename" size="30" value="${bean.accountName}"></td>
+                    <td class="ZFieldLabel"><nobr><fmt:message key="ExportName"/></nobr></td>
+                    <td align="right"><input class="ZField" name="filename" size="30" value="${bean.accountName}"></td>
                 </tr>
             </table>
         </td>
@@ -119,7 +121,12 @@ function done(errstr) {
     </tr>
 </table>
 </form>
-<table class="ZWizardButtonBar" width="100%">
+<hr>
+
+    <a href="#" id="cancelButton" onclick="onCancel()">
+        <img src="/zimbra/desktop/img/cancelButton.gif" border="0">
+    </a>    
+<!--table class="ZWizardButtonBar" width="100%">
     <tr>
         <td class="ZWizardButton" width="1%">
             <button class='DwtButton' id="submitButton"" onclick="onSubmit()">
@@ -135,10 +142,10 @@ function done(errstr) {
             </button>
         </td>
     </tr>
-</table>
+</table-->
 </div>
 <div>
-    <iframe name="iframe" id="iframe" frameborder="0 scrolling="no" style="width:0px;height:0px;border:0px"></iframe>
+    <iframe name="iframe" id="iframe" frameborder="0" scrolling="no" style="width:0px;height:0px;border:0px"></iframe>
 </div>
 <form name="submitForm" method="GET" target="iframe">
     <input type="hidden" name="callback" value="done">
@@ -147,10 +154,11 @@ function done(errstr) {
     <input type="hidden" name="query">
     <input type="hidden" name="types">
 </form>
-<form name="doneForm" action="/zimbra/desktop/${bean.zmail ? "z" : "x"}mail.jsp" method="POST">
+<form name="doneForm" action="/zimbra/desktop/accsetup.jsp" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
     <input type="hidden" name="accountName" value="${bean.accountName}">
     <input type="hidden" name="verb">
+    <input type="hidden" name="accntType" value="${bean.zmail ? 'ZimbraAcct' : 'OtherAcct'}">
 </form>
 </div>
 </body>

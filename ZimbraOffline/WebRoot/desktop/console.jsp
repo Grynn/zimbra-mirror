@@ -209,11 +209,8 @@ function OnDelete(id) {
 		           <br>
 					<c:choose>
 						<c:when test='${account.lastSync == null}'>
-							<i class="ZHint"><fmt:message key='SyncNotYetComplete'/></i>
-						</c:when>
-						<c:otherwise>
 							<i class="ZHint"><fmt:message key='LastSync'/>&nbsp;<fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></i>
-						</c:otherwise>
+						</c:when>
 					</c:choose>
 	           </td>
 		       <td align="center">&nbsp;

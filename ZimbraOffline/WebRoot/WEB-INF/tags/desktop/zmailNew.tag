@@ -39,7 +39,7 @@ function OnSubmit() {
 
 function beforeSubmit() {
     disableButtons();
-    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
+    zd.set("whattodo", "<fmt:message key='Processing'/>");
 }
 
 function disableButtons() {
@@ -91,7 +91,10 @@ function disableButtons() {
                 </table>
             </td>
         </tr>
-
+        <tr id='mailSecureRow'>
+            <td class="ZFieldLabel"></td>
+            <td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"> <fmt:message key='UseSSL'/></td>
+        </tr>
         <tr>
             <td class="ZFieldLabel"><fmt:message key='ZmSyncFrequency'/></td>
             <td>
@@ -108,12 +111,7 @@ function disableButtons() {
                 </select>
             </td>
         </tr>
-        <tr id='mailSecureRow'>
-            <td class="ZFieldLabel"></td>
-            <td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"> <fmt:message key='UseSSL'/></td>
-        </tr>
     </table>
 
 </form>
 </span>
-<p><span id="whattodo"></span></p>

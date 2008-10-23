@@ -66,7 +66,7 @@ function OnSubmit() {
 
 function beforeSubmit() {
     disableButtons();
-    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
+    zd.set("whattodo", "<fmt:message key='Processing'/>");
 }
 
 function disableButtons() {
@@ -218,4 +218,3 @@ function disableButtons() {
 		</table>
 	</form>
 </span>
-<p><span id="whattodo"></span></p>
