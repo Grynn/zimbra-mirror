@@ -83,17 +83,16 @@ function disableButtons() {
         </tr>
 
         <tr>
-            <td class="ZFieldLabel"></td>
-            <td><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" checked><fmt:message key='ContactSyncEnabled'/></td>
-        </tr>
-
+            <td style='text-align:right'><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" checked></td>
+            <td class="ZCheckboxLabel"><fmt:message key='ContactSyncEnabled'/></td>
+		</tr>
         <tr>
-            <td class="ZFieldLabel"></td>
-            <td><input type="checkbox" id="syncCalendar" name="syncCalendar" checked><fmt:message key='YMPSyncCal'/></td>
+            <td style='text-align:right'><input type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" checked></td>
+            <td class="ZCheckboxLabel"><fmt:message key='CalendarSyncEnabled'/></td>
         </tr>
-
 
     </table>
 
 </form>
 </span>
+<p><span id="whattodo"></span></p>

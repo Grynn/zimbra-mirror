@@ -26,6 +26,7 @@ import java.util.Collections;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.Folder;
@@ -339,6 +340,28 @@ public class OfflineDataSource extends DataSource {
     
     public boolean needsSmtpAuth() {
     	return isEmail() && !isLive() && !isYahoo();
-    }    
+    }
+
+    public boolean isContactSyncEnabled() {
+        return getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceContactSyncEnabled, false);
+    }
+
+    public boolean isCalendarSyncEnabled() {
+        return getBooleanAttr(OfflineProvisioning.A_zimbraDataSourceCalendarSyncEnabled, false);
+    }
+
+    public void setContactSyncEnabled(boolean enabled) throws ServiceException {
+        OfflineProvisioning op = (OfflineProvisioning) Provisioning.getInstance();
+        op.setDataSourceAttribute(
+            this, OfflineProvisioning.A_zimbraDataSourceContactSyncEnabled,
+            enabled ? Provisioning.TRUE : Provisioning.FALSE);
+    }
+
+    public void setCalendarSyncEnabled(boolean enabled) throws ServiceException {
+        OfflineProvisioning op = (OfflineProvisioning) Provisioning.getInstance();
+        op.setDataSourceAttribute(
+            this, OfflineProvisioning.A_zimbraDataSourceCalendarSyncEnabled,
+            enabled ? Provisioning.TRUE : Provisioning.FALSE);
+    }
 }
 

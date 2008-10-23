@@ -302,27 +302,21 @@ function passOnEdit(id) {
            
         </tr>
 
-        <c:if test="${bean.ymail}">
-            ?<tr><td class="ZFieldLabel"></td>
-                <td><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}> <fmt:message key='ContactSyncEnabled'/></td>
-                
-            </tr>
-            <tr><td class="ZFieldLabel"></td>
-                <td><input type="checkbox" id="syncCalendar" name="syncCalendar" ${bean.syncCalendar ? 'checked' : ''}> <fmt:message key='YMPSyncCal'/></td>
-                
+        <c:if test="${bean.contactSyncSupported}">
+            <tr>
+                <td style='text-align:right'><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td>
+                <td class="ZCheckboxLabel"><fmt:message key='ContactSyncEnabled'/></td>
             </tr>
         </c:if>
-
-        <c:if test="${bean.gmail}">
-            <tr> <td class="ZFieldLabel"></td>
-                <td><input type="checkbox" id="syncCalendar" name="syncCalendar" ${bean.syncCalendar ? 'checked' : ''}> <fmt:message key='GmailSyncCal'/></td>
-               
+        <c:if test="${bean.contactSyncSupported}">
+            <tr>
+                <td style='text-align:right'><input type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled ? 'checked' : ''}></td>
+                <td class="ZCheckboxLabel"><fmt:message key='CalendarSyncEnabled'/></td>
             </tr>
         </c:if>
-        
-        <tr><td class="ZFieldLabel"></td>
-            <td ><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}> <fmt:message key='EnableTrace'/></td>
-          
+        <tr>
+            <td style='text-align:right'><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td>
+            <td class="ZCheckboxLabel"><fmt:message key='EnableTrace'/></td>
         </tr>
     </table>
 

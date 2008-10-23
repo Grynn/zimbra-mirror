@@ -1,9 +1,23 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ *
+ * Zimbra Collaboration Suite Server
+ * Copyright (C) 2006, 2007 Zimbra, Inc.
+ *
+ * The contents of this file are subject to the Yahoo! Public License
+ * Version 1.0 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ *
+ * ***** END LICENSE BLOCK *****
+ */
 package com.zimbra.cs.offline;
 
 import com.zimbra.cs.datasource.ImapSync;
-import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.offline.OfflineCalDavDataImport;
+import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.offline.yab.YabImport;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.common.OfflineConstants;
@@ -20,40 +34,30 @@ public class YMailImport extends ImapSync {
     
     private static final Log LOG = ZimbraLog.datasource;
     
-    public YMailImport(DataSource ds) throws ServiceException {
+    public YMailImport(OfflineDataSource ds) throws ServiceException {
         super(ds, new XYMEAuthenticator(OfflineYAuth.authenticate(ds),
                                         OfflineConstants.YMAIL_PARTNER_NAME));
-        yabImport = isContactSyncEnabled() ? new YabImport(ds) : null;
-        calDavImport = isCalendarSyncEnabled() ? new OfflineCalDavDataImport(ds) : null;
+        yabImport = ds.isContactSyncEnabled() ? new YabImport(ds) : null;
+        calDavImport = ds.isCalendarSyncEnabled() ?
+            new OfflineCalDavDataImport(ds) : null;
     }
 
     @Override
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
         String dsName = dataSource.getName();
-        
         if (yabImport != null) {
-            LOG.info("Importing YAB contacts for account '%s'", dsName);
+            LOG.info("Importing contacts for YMail account '%s'", dsName);
             yabImport.importData(folderIds, fullSync);
-            LOG.info("Finished importing YAB contact for account '%s'", dsName);
+            LOG.info("Finished importing contacts for YMail account '%s'", dsName);
         }
         
         super.importData(folderIds, fullSync);
         
         if (calDavImport != null) {
-            LOG.info("Importing calendar for account '%s'", dsName);
+            LOG.info("Importing calendar for YMail account '%s'", dsName);
             calDavImport.importData(null, fullSync);
-            LOG.info("Finished importing calendar for account '%s'", dsName);
+            LOG.info("Finished importing calendar for YMail account '%s'", dsName);
         }
-    }
-
-    private boolean isContactSyncEnabled() {
-        return dataSource.getBooleanAttr(
-            OfflineProvisioning.A_zimbraDataSourceContactSyncEnabled, false);
-    }
-    
-    private boolean isCalendarSyncEnabled() {
-        return dataSource.getBooleanAttr(
-            OfflineProvisioning.A_zimbraDataSourceCalendarSyncEnabled, false);       
     }
 }

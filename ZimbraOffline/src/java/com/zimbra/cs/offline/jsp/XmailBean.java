@@ -36,9 +36,9 @@ public class XmailBean extends MailBean {
 	protected boolean leaveOnServer;
 
 	protected boolean contactSyncEnabled;
-    protected boolean syncCalendar;
+    protected boolean calendarSyncEnabled;
     protected boolean calLoginError;
-	
+
 	private static final String adomain = "aol.com";
 	private static final String gdomain = "gmail.com";
 	private static final String hdomain = "hotmail.com";
@@ -46,17 +46,17 @@ public class XmailBean extends MailBean {
 	private static final String ydomain = "yahoo.com";
 	private static final String ymdomain = "ymail.com";
 	private static final String yrmdomain = "rocketmail.com";
-	
+
 	@Override
 	protected void reload() {
-		DataSource ds = null;
+		DataSource ds;
 		try {
 			ds = JspProvStub.getInstance().getOfflineDataSource(accountId);
 		} catch (ServiceException x) {
 			setError(x.getMessage());
 			return;
 		}
-		
+
 		accountName = ds.getName();
 		username = ds.getUsername();
 		password = JspConstants.MASKED_PASSWORD;
@@ -70,8 +70,8 @@ public class XmailBean extends MailBean {
 		isSsl = ds.getConnectionType() == DataSource.ConnectionType.ssl;
 		isDebugTraceEnabled = ds.isDebugTraceEnabled();
 		contactSyncEnabled = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceContactSyncEnabled, false);
-        syncCalendar = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled, false);
-		
+        calendarSyncEnabled = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled, false);
+
 		domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain, null);
 		smtpHost = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpHost, null);
 		smtpPort = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpPort, null);
@@ -87,19 +87,19 @@ public class XmailBean extends MailBean {
 
 		syncFreqSecs = ds.getTimeIntervalSecs(OfflineConstants.A_zimbraDataSourceSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
 		syncAllServerFolders = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
-		leaveOnServer = ds.getBooleanAttr(Provisioning.A_zimbraDataSourceLeaveOnServer, false);		
+		leaveOnServer = ds.getBooleanAttr(Provisioning.A_zimbraDataSourceLeaveOnServer, false);
 	}
-	
+
 	@Override
 	protected void doRequest() {
 		if (verb == null || !isAllOK())
 			return;
-		
+
 		calLoginError = false;
 	    try {
 			Map<String, Object> dsAttrs = new HashMap<String, Object>();
 			DataSource.Type dsType = isEmpty(protocol) ? null : DataSource.Type.fromString(protocol);
-			
+
 			if (verb.isAdd() || verb.isModify()) {
 				if (dsType == null)
 					addInvalid("protocol");
@@ -131,41 +131,41 @@ public class XmailBean extends MailBean {
 				    		addInvalid("smtpPassword");
 				    }
 				}
-                    
+
 			    if (isAllOK()) {
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, Provisioning.TRUE);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, username);
 			        if (!password.equals(JspConstants.MASKED_PASSWORD)) {
 			            dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, password);
 			        }
-			        
+
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEmailAddress, email);
 			        dsAttrs.put(Provisioning.A_zimbraPrefFromDisplay, fromDisplay);
 			        dsAttrs.put(Provisioning.A_zimbraPrefReplyToAddress, replyTo);
 			        dsAttrs.put(Provisioning.A_zimbraPrefReplyToDisplay, replyToDisplay);
-			
+
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceHost, host);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
 			        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
-			        
-			        if (isLive() || isYmail()) {
+
+			        if (isContactSyncSupported()) {
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceContactSyncEnabled,
 						contactSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 					}
 
-			        if (isYmail() || isGmail()) {
+			        if (isCalendarSyncSupported()) {
 	                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled,
-	                     syncCalendar ? Provisioning.TRUE : Provisioning.FALSE);
+	                     calendarSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
 			        }
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain, domain);
-			        
+
 			        if (!isLive() && !isYmail()) {
 				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost, smtpHost);
 				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort, smtpPort);
 				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType, (isSmtpSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
 				        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, isSmtpAuth ? Provisioning.TRUE : Provisioning.FALSE);
-				        
+
 				        if (isSmtpAuth) {
 				        	dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername, smtpUsername);
 					        if (!smtpPassword.equals(JspConstants.MASKED_PASSWORD)) {
@@ -173,12 +173,12 @@ public class XmailBean extends MailBean {
 					        }
 				        }
 			        }
-			        
+
 			        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
-					
+
 					if (dsType == DataSource.Type.imap || dsType == DataSource.Type.live)
 						dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, syncAllServerFolders ? Provisioning.TRUE : Provisioning.FALSE);
-			        
+
 			        if (dsType == DataSource.Type.pop3) {
 			            dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Boolean.toString(leaveOnServer).toUpperCase());
 		                    dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_INBOX);
@@ -188,7 +188,7 @@ public class XmailBean extends MailBean {
 			        }
 			    }
 			}
-			
+
 			if (verb.isAdd()) {
 				if (email.endsWith('@' + ydomain) || email.endsWith('@' + ymdomain) || email.endsWith('@' + yrmdomain)) {
 					if (dsType == DataSource.Type.imap) {
@@ -220,8 +220,8 @@ public class XmailBean extends MailBean {
 					}
 				}
 			}
-			
-			if (isAllOK()) {                
+
+			if (isAllOK()) {
 				JspProvStub stub = JspProvStub.getInstance();
 				if (verb.isAdd()) {
 					stub.createOfflineDataSource(accountName, email, dsType, dsAttrs);
@@ -244,7 +244,7 @@ public class XmailBean extends MailBean {
 	    		setError(getMessage("InvalidUserOrPass"));
 	    	} else if (x.getCode().equals("account.ACCOUNT_INACTIVE")) {
 	    		setError(getMessage("YMPPlusRequired"));
-	    	} else if (x.getCode().equals("offlline.CALDAV_LOGIN_FAILED")) {
+	    	} else if (x.getCode().equals("offline.CALDAV_LOGIN_FAILED")) {
 	    	    setCalDavLoginError("CalAccessErr");
 	    	} else if (x.getCode().equals("offline.YCALDAV_NEED_UPGRADE")) {
 	    	    setCalDavLoginError("YMPSyncCalUpgradeNote");
@@ -262,79 +262,79 @@ public class XmailBean extends MailBean {
 	    setError(getMessage(key));
 	    calLoginError = true;
 	}
-	
+
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}
-	
+
 	public String getDomain() {
 		return domain;
 	}
-	
+
 	public void setUsername(String username) {
 		this.username = require(username);
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public void setFromDisplay(String fromDisplay) {
 		this.fromDisplay = optional(fromDisplay);
 	}
-	
+
 	public String getFromDisplay() {
 		return fromDisplay;
 	}
-	
+
 	public void setReplyTo(String replyTo) {
 		this.replyTo = optional(replyTo);
 	}
-	
+
 	public String getReplyTo() {
 		return replyTo;
 	}
-	
+
 	public void setReplyToDisplay(String replyToDisplay) {
 		this.replyToDisplay = optional(replyToDisplay);
 	}
-	
+
 	public String getReplyToDisplay() {
 		return replyToDisplay;
 	}
-	
+
 	public void setProtocol(String protocol) {
 		this.protocol = protocol;
 	}
-	
+
 	public boolean isImap() {
 		return "imap".equals(protocol);
 	}
-	
+
 	public boolean isPop() {
 		return "pop3".equals(protocol);
 	}
-	
+
 	public void setSmtpHost(String smtpHost) {
 		this.smtpHost = require(smtpHost);
 	}
-	
+
 	public String getSmtpHost() {
 		return smtpHost;
 	}
-	
+
 	public void setSmtpPort(String smtpPort) {
 		this.smtpPort = require(smtpPort);
 	}
-	
+
 	public String getSmtpPort() {
 		return smtpPort;
 	}
-	
+
 	public void setSmtpSsl(boolean isSmtpSsl) {
 		this.isSmtpSsl = isSmtpSsl;
 	}
-	
+
 	public boolean isSmtpSsl() {
 		return isSmtpSsl;
 	}
@@ -342,31 +342,31 @@ public class XmailBean extends MailBean {
 	public void setSmtpAuth(boolean isSmtpAuth) {
 		this.isSmtpAuth = isSmtpAuth;
 	}
-	
+
 	public boolean isSmtpAuth() {
 		return isSmtpAuth;
 	}
-	
+
 	public void setSmtpUsername(String smtpUsername) {
 		this.smtpUsername = optional(smtpUsername);
 	}
-	
+
 	public String getSmtpUsername() {
 		return smtpUsername;
 	}
-	
+
 	public void setSmtpPassword(String smtpPassword) {
 		this.smtpPassword = optional(smtpPassword);
 	}
-	
+
 	public String getSmtpPassword() {
 		return smtpPassword;
 	}
-	
+
 	public void setSyncAllServerFolders(boolean syncAllServerFolders) {
 		this.syncAllServerFolders = syncAllServerFolders;
 	}
-	
+
 	public boolean isSyncAllServerFolders() {
 		return syncAllServerFolders;
 	}
@@ -388,11 +388,11 @@ public class XmailBean extends MailBean {
 			domain.equals(ymdomain) ||
 			domain.equals(yrmdomain));
 	}
-	
+
 	public boolean isGmail() {
 	    return domain != null && domain.equals(gdomain);
 	}
-	
+
 	public void setContactSyncEnabled(boolean enabled) {
 		contactSyncEnabled = enabled;
 	}
@@ -400,20 +400,28 @@ public class XmailBean extends MailBean {
 	public boolean isContactSyncEnabled() {
 		return contactSyncEnabled;
 	}
-	
+
 	public void setSyncCalendar(boolean enabled) {
-	    syncCalendar = enabled;
+	    calendarSyncEnabled = enabled;
 	}
 
 	public boolean isSyncCalendar() {
-	    return syncCalendar;
+	    return calendarSyncEnabled;
 	}
-	
+
 	public void setCalLoginError(boolean err) {
 	    calLoginError = err;
 	}
-	
-	public boolean isCalLoginError() {	    
-	    return calLoginError;
-	}
+
+    public boolean isCalLoginError() {
+        return calLoginError;
+    }
+
+    public boolean isCalendarSyncSupported() {
+        return isYmail() || isGmail();
+    }
+
+    public boolean isContactSyncSupported() {
+        return isLive() || isYmail() || isGmail();
+    }
 }

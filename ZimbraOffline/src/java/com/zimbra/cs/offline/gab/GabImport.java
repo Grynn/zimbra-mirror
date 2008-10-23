@@ -14,31 +14,28 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.yab;
+package com.zimbra.cs.offline.gab;
 
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
-import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.offline.util.yab.Session;
-import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.common.service.ServiceException;
 
 import java.util.List;
+import java.io.IOException;
 
-public class YabImport implements DataSource.DataImport {
+public class GabImport implements DataSource.DataImport {
     private final OfflineDataSource ds;
     private final SyncSession session;
 
-    private static final String ERROR = "Yahoo address book synchronization failed";
-    
-    public YabImport(DataSource ds) throws ServiceException {
+    private static final String ERROR = "Google address book synchronization failed";
+
+    public GabImport(DataSource ds) throws ServiceException {
         this.ds = (OfflineDataSource) ds;
-        session = newSyncSession();
+        session = new SyncSession(ds);
     }
-    
+
     public String test() throws ServiceException {
         return null;
     }
@@ -53,10 +50,5 @@ public class YabImport implements DataSource.DataImport {
             ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR + " - contact synchronization disabled.", e);
             ds.setContactSyncEnabled(false);
         }
-    }
-
-    private SyncSession newSyncSession() throws ServiceException {
-        Session session = new Session(OfflineYAuth.newAuthenticator(ds));
-        return new SyncSession(ds, session);
     }
 }

@@ -32,4 +32,7 @@ public class OfflineLog {
 
     /** The "zimbra.offline.yab" logger. For recording Yahoo Address Book sync events */
     public static final com.zimbra.common.util.Log yab = LogFactory.getLog("zimbra.offline.yab");
+
+    /** The "zimbra.offline.gab" logger. For recording Google Address Book sync events */
+    public static final com.zimbra.common.util.Log gab = LogFactory.getLog("zimbra.offline.gab");
 }

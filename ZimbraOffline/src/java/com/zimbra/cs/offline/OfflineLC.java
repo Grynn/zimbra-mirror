@@ -78,8 +78,9 @@ public class OfflineLC {
     
     public static final KnownKey zdesktop_min_zcs_version_sync_tgz;
     public static final KnownKey zdesktop_caldav_enabled;
-    
 
+    public static final KnownKey zdesktop_gab_base_url;
+    
     static void init() {
         // This method is there to guarantee static initializer of this
         // class is run.
@@ -257,6 +258,10 @@ public class OfflineLC {
 	    zdesktop_min_zcs_version_sync_tgz.setDoc("min zcs server version to support tgz format for sync");
 	    
 	    zdesktop_caldav_enabled = new KnownKey("zdesktop_caldav_enabled", "false", "whether to enable caldav sync");
+
+        zdesktop_gab_base_url = new KnownKey("zdesktop_gab_base_url");
+        zdesktop_gab_base_url.setDefault("http://www.google.com/m8/feeds");
+        zdesktop_gab_base_url.setDoc("Google contacts base url");
     }
     
     public static String getFullVersion() {
