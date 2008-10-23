@@ -108,5 +108,5 @@ DwtHeaderTreeItem.prototype._focusByMouseUpEvent =
 function(ev)  {
 	var targetId = ev.target && ev.target.id;
 	if (targetId && (targetId == this._headerButtonId)) { return; }
-	DwtTreeItem.prototype._focusByMouseUpEvent.apply(this.arguments);
+	DwtTreeItem.prototype._focusByMouseUpEvent.apply(this, arguments);
 };
