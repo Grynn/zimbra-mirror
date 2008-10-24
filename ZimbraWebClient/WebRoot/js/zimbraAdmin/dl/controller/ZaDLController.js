@@ -205,7 +205,8 @@ ZaDLController.prototype.saveChangesCallback = function (obj, resp) {
 					var curAlias = this._addAliasArr[ix] ;
 					try {
 						if(curAlias) {
-							if(!AjxUtil.EMAIL_FULL_RE.test(curAlias)) {
+//							if(!AjxUtil.EMAIL_SHORT_RE.test(curAlias)) {
+							if(curAlias.lastIndexOf ("@")!=curAlias.indexOf ("@")) {
 								//show error msg
 								this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_ALIAS_INVALID,[curAlias]), null, DwtMessageDialog.CRITICAL_STYLE, null);
 								this._errorDialog.popup();		
@@ -422,13 +423,7 @@ ZaDLController.prototype._saveChanges = function () {
 		
 		//check if need to rename
 		if(this._currentObject && obj.name != this._currentObject.name && this._currentObject.id) {
-			//	var emailRegEx = /^([a-zA-Z0-9_\-])+((\.)?([a-zA-Z0-9_\-])+)*@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-			/*	if(!AjxUtil.EMAIL_RE.test(obj.name) ) {
-					//show error msg
-					this._errorDialog.setMessage(ZaMsg.ERROR_ACCOUNT_NAME_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
-					this._errorDialog.popup();		
-					return retval;
-				}*/
+
 				newName = obj.name;
 		}		
 		

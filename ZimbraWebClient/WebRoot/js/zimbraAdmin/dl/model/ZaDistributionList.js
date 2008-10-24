@@ -42,10 +42,11 @@ ZaDistributionList = function(app, id, name, memberList, description, notes) {
 	this.memNumPages=1;
 	this.query="";
 	//membership related instance variables
-	this[ZaAccount.A2_memberOf] = {	directMemberList: [],
-									indirectMemberList: [],
-									nonMemberList: []
-								};
+	this[ZaAccount.A2_memberOf] = {}
+	this[ZaAccount.A2_memberOf][ZaDistributionList.A2_directMemberList] = [];
+	this[ZaAccount.A2_memberOf][ZaDistributionList.A2_indirectMemberList] = [];
+	this[ZaAccount.A2_memberOf][ZaDistributionList.A2_nonMemberList] = [];
+
 	this[ZaAccount.A2_directMemberList + "_more"] = 0;
 	this[ZaAccount.A2_directMemberList + "_offset"] = 0;
 	this[ZaAccount.A2_indirectMemberList + "_more"] = 0;
@@ -68,11 +69,19 @@ ZaDistributionList.A_mailStatus = "zimbraMailStatus";
 ZaDistributionList.A2_members = "members";
 ZaDistributionList.A2_query = "query";
 ZaDistributionList.A2_poolPagenum = "poolPagenum";
+ZaDistributionList.A2_poolNumPages = "poolNumPages";
 ZaDistributionList.A2_memPagenum = "memPagenum";
 ZaDistributionList.A2_memNumPages = "memNumPages";
 ZaDistributionList.A2_memberPool = "memberPool";
 ZaDistributionList.A2_optionalAdd = "optionalAdd";
-
+ZaDistributionList.A2_membersSelected = "membersSelected";
+ZaDistributionList.A2_nonmembersSelected = "nonmembersSelected";
+ZaDistributionList.A2_memberPoolSelected = "memberPoolSelected";
+ZaDistributionList.A2_directMemberSelected = "directMemberSelected";
+ZaDistributionList.A2_indirectMemberSelected = "indirectMemberSelected";
+ZaDistributionList.A2_directMemberList = "directMemberList";
+ZaDistributionList.A2_indirectMemberList = "indirectMemberList";
+ZaDistributionList.A2_nonMemberList = "nonMemberList";
 ZaDistributionList._dlStatus = {
 	enabled  : ZaMsg.DL_Status_enabled ,
 	disabled : ZaMsg.DL_Status_disabled
@@ -819,7 +828,24 @@ ZaDistributionList.myXModel = {
 		{id:ZaAccount.A_notes, ref:"attrs/"+ZaAccount.A_notes, type:_STRING_},
 		{id:ZaAccount.A_displayname, type:_STRING_, ref:"attrs/"+ZaAccount.A_displayname},
 		{id:ZaAccount.A_zimbraMailAlias, type:_LIST_, ref:"attrs/"+ZaAccount.A_zimbraMailAlias, listItem:{type:_STRING_}},
-		{id:ZaDistributionList.A_mailStatus, ref:"attrs/"+ZaDistributionList.A_mailStatus, type:_STRING_}
+		{id:ZaDistributionList.A_mailStatus, ref:"attrs/"+ZaDistributionList.A_mailStatus, type:_STRING_},
+		{id:ZaDistributionList.A2_membersSelected, type:_LIST_},
+		{id:ZaDistributionList.A2_nonmembersSelected, type:_LIST_},
+		{id:ZaDistributionList.A2_memberPoolSelected, type:_LIST_},
+		{id:ZaDistributionList.A2_directMemberSelected, type:_LIST_},
+		{id:ZaDistributionList.A2_indirectMemberSelected, type:_LIST_},
+		{id:ZaAccount.A2_memberOf, type:_OBJECT_, items: [
+			{id:ZaDistributionList.A2_directMemberList, type:_LIST_},
+			{id:ZaDistributionList.A2_indirectMemberList, type:_LIST_},
+			{id:ZaDistributionList.A2_nonMemberList, type:_LIST_}
+			]
+		},		
+		{id:(ZaAccount.A2_directMemberList + "_more"), type:_LIST_},
+		{id:(ZaAccount.A2_directMemberList + "_offset"), type:_LIST_},
+		{id:(ZaAccount.A2_indirectMemberList + "_more"), type:_LIST_},
+		{id:(ZaAccount.A2_indirectMemberList + "_offset"), type:_LIST_},	
+		{id:(ZaAccount.A2_nonMemberList + "_more"), type:_LIST_},
+		{id:(ZaAccount.A2_nonMemberList + "_offset"), type:_LIST_}		
 		
 	]
 };
