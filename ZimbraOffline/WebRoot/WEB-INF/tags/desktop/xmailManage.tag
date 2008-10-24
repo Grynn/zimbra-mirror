@@ -145,7 +145,7 @@ function passOnEdit(id) {
     <input type="hidden" name="protocol" value="${bean.pop ? 'pop3' : bean.imap ? 'imap' : 'live'}">
     <input type="hidden" name="username" value="${bean.username}">
 
-    <table cellpadding="10">
+    <table cellpadding="5">
         <c:if test="${not bean.live and not bean.ymail}">    
 	        <tr id='accountTypeRow'>
 	            <td class="ZFieldLabel"><fmt:message key='AccountType'/></td>

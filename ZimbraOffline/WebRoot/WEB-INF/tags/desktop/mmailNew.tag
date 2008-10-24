@@ -84,7 +84,7 @@ function disableButtons() {
         <input type="hidden" name="verb" value="add">
         <input type="hidden" name="accntType" value="MSEAcct">
 
-        <table border=0 cellpadding="10">
+        <table border=0 cellpadding="5">
 			<tr>
 				<td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Description'/></td>
 				<td>

@@ -57,7 +57,7 @@ function disableButtons() {
     <input type="hidden" name="verb" value="add">
     <input type="hidden" name="accntType" value="ZimbraAcct">
 
-    <table cellpadding="10">
+    <table cellpadding="5">
         <tr>
             <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Description'/></td>
             <td><input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}">
@@ -75,22 +75,26 @@ function disableButtons() {
         </tr>
 
         <tr id='mailServerRow'>
-            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}" valign="top"><br><fmt:message key='ZmServer'/></td>
+            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='ZmServer'/></td>
             <td>
                 <table cellspacing=0 cellpadding=0>
                     <tr>
                         <td><input style='width:240px' class="ZField" type="text" id="host" name="host" value="${bean.host}">
-                            <br><span class='ZHint'><fmt:message key='ZmSvrHint'/></span>
+                            
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
                         <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}" valign="top"><fmt:message key='Port'/></td>
-                        <td width=100%  valign="top"><input style='width:50px' class="ZField" type="text" id="port" name="port" value="${bean.port}" ${bean.defaultPort ? 'disabled' : ''}>
+                        <td width=100%><input style='width:50px' class="ZField" type="text" id="port" name="port" value="${bean.port}" ${bean.defaultPort ? 'disabled' : ''}>
                         <c:if test="${bean.defaultPort}">&nbsp;&nbsp;<a href="#" onclick="zd.enable('port');this.style.display='none'"><fmt:message key='Edit'/></a></c:if>
                         </td>
                     </tr>
+                    
                 </table>
             </td>
         </tr>
+        <tr><td style="padding-top: 0px;" class="ZFiledLabel"></td><td style="padding-top: 0px;"><span class='ZHint'><fmt:message key='ZmSvrHint'/></span></td>
+                    
+                    </tr>
  <tr id='mailSecureRow'>
             <td class="ZFieldLabel"></td>
             <td><table cellpadding="0" cellspacing="0" border="0"><tr>

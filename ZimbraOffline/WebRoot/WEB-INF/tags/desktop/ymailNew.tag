@@ -42,7 +42,7 @@ function disableButtons() {
 <form name="ymailNew" action="${uri}" method="POST">
     <input type="hidden" name="verb" value="add" />
     <input type="hidden" name="accntType" value="YMPAcct"/>
-    <table cellpadding="10">
+    <table cellpadding="5">
         <tr>
             <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Description'/></td>
             <td><input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}">

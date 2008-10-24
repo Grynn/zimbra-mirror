@@ -90,7 +90,7 @@ function passOnEdit(id) {
     <input type="hidden" name="email" value="${bean.email}">
     <input type="hidden" name="verb" value="mod">
     <input type="hidden" name="accntType" value="ZimbraAcct">
-    <table cellpadding="10">
+    <table cellpadding="5">
         <tr>
             <td class="ZFieldLabel"><fmt:message key='Description'/></td>
             <td><input class="ZField" type="text" id="accountName" value="${bean.accountName}" disabled></td>
