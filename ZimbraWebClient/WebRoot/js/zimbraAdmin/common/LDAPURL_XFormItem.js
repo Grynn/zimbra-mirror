@@ -95,11 +95,6 @@ LDAPURL_XFormItem.prototype.items = [
 			if(itemVal) {
 				var URLChunks = itemVal.split(/[:\/]/);
 					
-					/*DBG.println(AjxDebug.DBG1, "_TEXTFIELD_");
-					for(var ix in URLChunks) {
-						DBG.println(AjxDebug.DBG1, "URLChunks[" + ix + "] = " + URLChunks[ix]);
-					}*/
-					
 				if(AjxEnv.isIE) {
 					var tmp = parseInt(URLChunks[URLChunks.length-1]);
 					if(tmp != NaN)

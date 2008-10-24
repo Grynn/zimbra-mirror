@@ -408,7 +408,7 @@ XFormItem.prototype.valueChangeLsnr = function (event) {
 	if(!updateMethod)
 		return;
 		
-	var value = event.details;	
+	var value = this.getInstanceValue();	
 	var getDisplayValueMethod = this.getDisplayValueMethod();
 	if(getDisplayValueMethod)
 		value = getDisplayValueMethod.call(this,value);
