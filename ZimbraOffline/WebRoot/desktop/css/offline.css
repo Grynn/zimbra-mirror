@@ -1,5 +1,5 @@
 /* Offline-specific styles */
-body{margin: 0px; padding: 0px; background-color: #e9f2fa;}
+body{margin: 0px; padding: 0px; background-color: white;}
 
 BODY, P, TH, TD, DIV, SELECT, TEXTAREA, BUTTON {
 	font-family:Tahoma, Arial, Helvetica, sans-serif;
@@ -146,12 +146,13 @@ SELECT {
 .infoBox{margin:0 5px 10px 0;background-color:#FFF6BF;border:1px solid #FD0;-moz-border-radius:10px;padding:10px 10px 10px 10px;}
 
 .whiteBg{
-	background-color: white;
+	background-color: #e9f2fa;
 	font: 11px Arial, Verdana, san-serif;
 	line-height: 20px;
 	word-spacing: 2px;
 	width: 700px;
-	
+	border: 1px solid #e9f2fa; 
+	-moz-border-radius: 8px;
 	text-align: left;
 	padding: 20px;  
 }

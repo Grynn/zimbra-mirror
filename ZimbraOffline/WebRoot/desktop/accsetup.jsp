@@ -319,7 +319,7 @@
     </c:choose>
 </c:if>
 </div>
-
+<hr>
 <table cellpadding="3">
     <tr>
         <td class="ZFieldLabel">&nbsp;</td>
