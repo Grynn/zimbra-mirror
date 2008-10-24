@@ -164,7 +164,11 @@ fi
 if [ -L ${zimbra_home}/dspam ]; then
   printMsg "Fixing ownership and permisions on ${zimbra_home}/dspam"
   chown ${root_user}:${root_group} ${zimbra_home}/dspam-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/dspam/*
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/dspam/*
+  if [ ! -d "${zimbra_home}/data/dspam" ]; then
+    mkdir -p ${zimbra_home}/data/dspam
+  fi
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/dspam
 fi
 
 if [ -L ${zimbra_home}/jetty ]; then

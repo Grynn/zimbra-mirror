@@ -16,6 +16,7 @@
 # ***** END LICENSE BLOCK *****
 # 
 
+
 autoTrainSystem() {
 
   timestampit "Starting spam/ham extraction from system accounts."
@@ -39,14 +40,15 @@ autoTrainSystem() {
 		--dbpath ${zimbra_home}/data/amavisd/.spamassassin --sync
   timestampit "Finished spamassassin training."
 
-  if [ x"$DSPAM" = "xenabled" ]; then
+  if [ x"$amavis_dspam_enabled" = "xtrue" ]; then
     timestampit "Starting dspam training"
-	  for f in ${spamdir}/*; do
-		  test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus --addspam zimbra ${f}
-	  done
-	  for f in ${hamdir}/*; do
-		  test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus zimbra ${f}
-	  done
+    ${zimbra_home}/dspam/bin/dspam_train zimbra ${spamdir} ${hamdir}
+	  #for f in ${spamdir}/*; do
+		  #test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus --addspam zimbra ${f}
+	  #done
+	  #for f in ${hamdir}/*; do
+		  #test -f ${f} && ${zimbra_home}/dspam/bin/dspam_corpus zimbra ${f}
+	  #done
 
     ${zimbra_home}/dspam/bin/dspam_clean -p0 $USER
     timestampit "Finished dspam training"
@@ -77,7 +79,7 @@ trainAccountFolder() {
 		--dbpath ${zimbra_home}/data/amavisd/.spamassassin --sync
   timestampit  "Finished spamassassin $MODE training for $USER using folder $FOLDER"
 
-  if [ x"$DSPAM" = "xenabled" ]; then
+  if [ x"$amavis_dspam_enabled" = "xtrue" ]; then
     timestampit  "Starting dspam $MODE training for $USER using folder $FOLDER"
     if [ $MODE == "ham" ]; then
 	    MODE="innocent"
@@ -117,7 +119,8 @@ fi
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
 	zimbra_home \
-	zimbra_server_hostname
+	zimbra_server_hostname \
+  amavis_dspam_enabled
 
 
 # No argument mode uses zmspamextract for auto-training.
