@@ -174,10 +174,10 @@ Com_Zimbra_Date.prototype._initDateObjectHandlers = function() {
 
 	// initialize constants
 	Com_Zimbra_Date.MAPPINGS = {
-		datenum:	"([1-9]|[1-2][0-9]|3[0-1])",
+		datenum:	"(0[1-9]|[1-9]|[1-2][0-9]|3[0-1])",
 		dayname:	"("+AjxDateUtil.S_DAYNAME+")",
 		weekord:	"("+AjxDateUtil.S_WEEKORD+")",
-		monthnum:	"([1-9]|1[0-2])",
+		monthnum:	"(0[1-9]|[1-9]|1[0-2])",
 		monthname:	"("+AjxDateUtil.S_MONTHNAME+")",
 		yearnum:	"(\\d{2}|[1-9]\\d{2,3})",
 		number:		"(\\d+)"
