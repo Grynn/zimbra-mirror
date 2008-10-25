@@ -33,7 +33,6 @@ import com.google.gdata.client.Service.GDataRequest.RequestType;
 import com.google.gdata.client.Query;
 import com.google.gdata.client.http.HttpGDataRequest;
 import com.google.gdata.util.AuthenticationException;
-import com.google.gdata.util.XmlParser;
 import com.google.gdata.util.common.xml.XmlWriter;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
@@ -50,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.EnumSet;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.ConsoleHandler;
@@ -71,6 +71,7 @@ public class SyncSession {
 
     private static final String KEY_GAB_CONTACT = "GAB_CONTACT";
     private static final String BASE_URL = OfflineLC.zdesktop_gab_base_url.value();
+    private static final boolean TRACE = true;
     
     private static final String APP_NAME = String.format("Zimbra-%s-%s",
         OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
@@ -142,7 +143,7 @@ public class SyncSession {
      */
     private void processRemoteChanges(ContactFeed feed,
                                       Map<Integer, ChangeType> changes)
-        throws ServiceException {
+        throws ServiceException, IOException {
         List<ContactEntry> entries = feed.getEntries();
         LOG.debug("Processing %d remote contact changes for feed %s",
                   entries.size(), contactsFeedUrl);
@@ -152,6 +153,9 @@ public class SyncSession {
         for (ContactEntry entry : entries) {
             String entryId = entry.getId();
             int itemId = state.getItemId(entryId);
+            if (isTraceEnabled()) {
+                LOG.debug("Processing remote contact entry:\n%s", pp(entry));
+            }
             if (itemId != -1) {
                 if (entry.getDeleted() != null) {
                     // Remote contact was deleted
@@ -171,7 +175,6 @@ public class SyncSession {
                 ContactData cd = new ContactData(entry);
                 Contact contact = mbox.createContact(
                     CONTEXT, cd.getParsedContact(), Mailbox.ID_FOLDER_CONTACTS, null);
-                state.addEntry(contact.getId(), entry.getId());
                 updateContactEntry(contact.getId(), entry);
                 added++;
             }
@@ -224,7 +227,6 @@ public class SyncSession {
         }
     }
 
-
     private void pushChanges(List<SyncRequest> reqs)
         throws ServiceException, IOException {
         int added = 0;
@@ -242,6 +244,7 @@ public class SyncSession {
                 case UPDATE:
                     updateContactEntry(req.getItemId(), req.getCurrentEntry());
                     updated++;
+                    break;
                 case INSERT:
                     updateContactEntry(req.getItemId(), req.getCurrentEntry());
                     added++;
@@ -282,7 +285,7 @@ public class SyncSession {
     }
 
     private ContactEntry getContactEntry(int itemId) throws ServiceException {
-        LOG.debug("Loading contact data for item id: %d", itemId);
+        LOG.debug("Loading contact data for itemid = %d", itemId);
         DataSourceItem dsi = DbDataSource.getMapping(ds, itemId);
         String data = dsi.md.get(KEY_GAB_CONTACT);
         if (data == null) return null;
@@ -292,24 +295,24 @@ public class SyncSession {
             return BaseEntry.readEntry(ps, ContactEntry.class, ep);
         } catch (Exception e) {
             throw ServiceException.FAILURE(
-                "Unable to parse contact data for item id = " + itemId, e);
+                "Unable to parse contact data for itemid = " + itemId, e);
         }
     }
 
-    private void updateContactEntry(int itemId, ContactEntry contact)
+    private void updateContactEntry(int itemId, ContactEntry entry)
         throws ServiceException {
-        LOG.debug("Saving contact entry for item id: %d", itemId);
-        state.addEntry(itemId, contact.getId());
+        LOG.debug("Saving contact entry for itemid = %d", itemId);
+        state.addEntry(itemId, entry.getId());
         StringWriter sw = new StringWriter();
         try {
-            contact.generateAtom(new XmlWriter(sw), service.getExtensionProfile());
+            entry.generateAtom(new XmlWriter(sw), service.getExtensionProfile());
         } catch (IOException e) {
             throw ServiceException.FAILURE(
-                "Unable to generate contact data for item id = " + itemId, e);
+                "Unable to generate XML for contact entry: itemid = " + itemId, e);
         }
         Metadata md = new Metadata();
         md.put(KEY_GAB_CONTACT, sw.toString());
-        DataSourceItem dsi = new DataSourceItem(itemId, contact.getId(), md);
+        DataSourceItem dsi = new DataSourceItem(itemId, entry.getId(), md);
         if (DbDataSource.hasMapping(ds, itemId)) {
             DbDataSource.updateMapping(ds, dsi);
         } else {
@@ -323,6 +326,18 @@ public class SyncSession {
         DbDataSource.deleteMappings(ds, Arrays.asList(itemId));
     }
 
+    public String pp(BaseEntry entry) throws IOException {
+        StringWriter sw = new StringWriter();
+        XmlWriter xw = new XmlWriter(sw,
+            EnumSet.of(XmlWriter.WriterFlags.PRETTY_PRINT), null);
+        entry.generateAtom(xw, service.getExtensionProfile());
+        return sw.toString();
+    }
+    
+    public boolean isTraceEnabled() {
+        return LOG.isDebugEnabled() && (TRACE || ds.isDebugTraceEnabled());
+    }
+    
     private static URL toUrl(String url) throws ServiceException {
         try {
             return new URL(url);

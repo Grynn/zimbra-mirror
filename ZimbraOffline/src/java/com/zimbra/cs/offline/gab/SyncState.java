@@ -120,20 +120,23 @@ public class SyncState {
     }
     
     public void addEntry(int itemId, String entryId) {
-        if (getEntryId(itemId) != null) {
-            throw new IllegalStateException("Duplicate entry id: " + entryId);
+        String oldEntryId = getEntryId(itemId);
+        if (oldEntryId == null) {
+            entryIdByItemId.put(itemId, entryId);
+            itemIdByEntryId.put(entryId, itemId);
+            LOG.debug("Added new entry for itemId=%d, entryId=%s", itemId, entryId);
+        } else if (!entryId.equals(oldEntryId)) {
+            throw new IllegalStateException("Inconsistent entry id: itemId=" +
+                itemId + ", oldEntryId=" + oldEntryId + ", newEntryId=" + entryId);
         }
-        entryIdByItemId.put(itemId, entryId);
-        itemIdByEntryId.put(entryId, itemId);
-        LOG.debug("Added new entry for itemId=%d, entryId=%s", itemId, entryId);
     }
 
     public void removeEntry(int itemId) {
         String entryId = entryIdByItemId.remove(itemId);
         if (entryId != null) {
             itemIdByEntryId.remove(entryId);
+            LOG.debug("Removed entry for itemId=%d, entryId=%s", itemId, entryId);
         }
-        LOG.debug("Removed entry for itemId=%d, entryId=%s", itemId, entryId);
     }
 
 

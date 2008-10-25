@@ -72,7 +72,7 @@ public class SyncRequest {
             editLink = ce.getEditLink();
         }
         if (!isSuccess()) {
-            LOG.debug("Contact sync '%s' request failed for item '%d'",
+            LOG.debug("Contact sync '%s' request failed for itemid = %d",
                       type, itemId, error);
             return false;
         }
@@ -81,7 +81,10 @@ public class SyncRequest {
     
     private boolean doExecute() throws IOException {
         ContactsService cs = session.getContactsService();
-        OfflineLog.gab.debug("Executing %s for item id %d", type, itemId);
+        if (session.isTraceEnabled()) {
+            LOG.debug("Executing %s request for entry (itemid = %d):\n%s",
+                      type, itemId, session.pp(entry));
+        }
         try {
             switch (type) {
             case INSERT:
@@ -98,8 +101,9 @@ public class SyncRequest {
             }
         } catch (ServiceException e) {
             error = e;
+            return false;
         }
-        return isSuccess();
+        return true;
     }
 
 }

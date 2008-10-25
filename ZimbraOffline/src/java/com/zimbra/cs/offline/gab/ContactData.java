@@ -21,6 +21,7 @@ import com.google.gdata.data.ValueConstruct;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.TextConstruct;
 import com.google.gdata.data.PlainTextConstruct;
+import com.google.gdata.data.Content;
 import com.google.gdata.data.extensions.PostalAddress;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.Im;
@@ -98,10 +99,11 @@ public class ContactData {
             set(A_company, getValue(organization.getOrgName()));
             set(A_jobTitle, getValue(organization.getOrgTitle()));
         }
-
-        TextContent notes = contact.getTextContent();
-        if (notes != null) {
-            set(A_notes, notes.getContent().getPlainText());
+        if (contact.getContent() != null) {
+            TextContent notes = contact.getTextContent();
+            if (notes != null) {
+                set(A_notes, notes.getContent().getPlainText());
+            }
         }
     }
 
