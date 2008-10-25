@@ -774,6 +774,7 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
 
     public Iterator<Element> getIdentities(String name, String node, JID senderJID) {
         ArrayList<Element> identities = new ArrayList<Element>();
+        name = ensureDomain(name);
         if (name == null && node == null) {
             // Answer the identity of the MUC service
             Element identity = DocumentHelper.createElement("identity");
@@ -814,6 +815,7 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
     }
 
     public Iterator<String> getFeatures(String name, String node, JID senderJID) {
+        name = ensureDomain(name);
         ArrayList<String> features = new ArrayList<String>();
         if (name == null && node == null) {
             // Answer the features of the MUC service
@@ -865,6 +867,8 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
     }
 
     public XDataFormImpl getExtendedInfo(String name, String node, JID senderJID) {
+        name = ensureDomain(name);
+        
         if (name != null && node == null) {
             // Answer the extended info of a given room
             // TODO lock the room while gathering this info???
@@ -909,6 +913,8 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
     }
 
     public boolean hasInfo(String name, String node, JID senderJID) {
+        name = ensureDomain(name);
+        
         // Check if the service is disabled. Info is not available when disabled.
         if (!isServiceEnabled()) {
             return false;
@@ -927,8 +933,17 @@ public class MultiUserChatServerImpl extends BasicModule implements MultiUserCha
         }
         return false;
     }
+    
+    private String ensureDomain(String name) {
+        if (name != null && name.indexOf('@')<0) {
+            return name + '@' + getServiceDomain();
+        } 
+        return name;
+    }
 
     public Iterator<Element> getItems(String name, String node, JID senderJID) {
+        name = ensureDomain(name);
+        
         // Check if the service is disabled. Info is not available when disabled.
         if (!isServiceEnabled()) {
             return null;
