@@ -150,11 +150,24 @@ function(ev) {
         return;
     }
     this._parseQuery();
-    this.doYahooSearch();
+	if(this._query == "")
+		return;
+    setTimeout(AjxCallback.simpleClosure( this.doYahooSearch, this), 300);
+
 
 };
 com_zimbra_searchauto.prototype.doYahooSearch =
 function() {
+
+	//handle fast-typing(ignore all queries queued up queries w/in interval: 350ms)
+	if(this._oldquery){
+		if(this._query ==this._oldquery){
+			return;
+		}
+	}
+	this._oldquery = this._query;
+
+
     var url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(com_zimbra_searchauto.URL + "&query=" + this._noFldrQuery.replace(" ", "+"));
     AjxRpc.invoke(null, url, null, new AjxCallback(this, this.handleSearchAndShowHistory), true);
 }
@@ -314,7 +327,7 @@ function() {
     if (this._mouseOrKeySelection) {
         this.notifySearchRefinerZimlet();
         this.searchWasJustTriggered = true;
-        setTimeout(AjxCallback.simpleClosure(this.resetSWJT, this), 3000);
+        setTimeout(AjxCallback.simpleClosure(this.resetSWJT, this), 10000);
     }
 
 }
@@ -453,12 +466,24 @@ function() {
 }
 com_zimbra_searchauto.prototype._okBtnListner =
 function() {
+	this._reloadRequired = false;
     if (document.getElementById("turnONAutoCompleteId").checked) {
+		if(!this.searchAutoCompleteON){
+			this._reloadRequired = true;
+		}
         this.setUserProperty("turnONAutoComplete", "true", true);
+
     } else {
         this.setUserProperty("turnONAutoComplete", "false", true);
+		if(this.searchAutoCompleteON)
+			this._reloadRequired = true;
     }
     this.pbDialog.popdown();
+	if(this._reloadRequired) {
+		window.onbeforeunload = null;
+		var url = AjxUtil.formatUrl({});
+		ZmZimbraMail.sendRedirect(url);
+	}
 
 }
 
@@ -467,7 +492,7 @@ function() {
     var html = new Array();
     var i = 0;
     html[i++] = "<DIV>";
-    html[i++] = "<input id='turnONAutoCompleteId'  type='checkbox'/>Turn ON Auto-Complete";
+    html[i++] = "<input id='turnONAutoCompleteId'  type='checkbox'/>Turn ON Auto-Complete (changing this would refresh the browser)";
     html[i++] = "</DIV>";
     return html.join("");
 
