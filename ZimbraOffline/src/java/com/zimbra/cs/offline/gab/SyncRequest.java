@@ -20,10 +20,10 @@ import com.google.gdata.client.Service.GDataRequest.RequestType;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.Link;
-import com.google.gdata.util.ServiceException;
 import com.google.gdata.util.VersionConflictException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.common.util.Log;
+import com.zimbra.common.service.ServiceException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,7 +35,7 @@ public class SyncRequest {
     private final ContactEntry entry;
     private Link editLink;
     private ContactEntry currentEntry;
-    private ServiceException error;
+    private Throwable error;
 
     private static final Log LOG = OfflineLog.gab;
     
@@ -52,14 +52,14 @@ public class SyncRequest {
     public RequestType getType() { return type; }
     public ContactEntry getEntry() { return entry; }
     public ContactEntry getCurrentEntry() { return currentEntry; }
-    public ServiceException getError() { return error; }
+    public Throwable getError() { return error; }
     public boolean isSuccess() { return error != null; }
 
     private boolean isVersionConflict() {
         return error != null && error instanceof VersionConflictException;
     }
     
-    public boolean execute() throws IOException {
+    public boolean execute() throws ServiceException, IOException {
         while (!doExecute() && isVersionConflict()) {
             // Retry with new edit link if remote contact has changed
             if (type == RequestType.UPDATE) {
@@ -68,15 +68,25 @@ public class SyncRequest {
                           "id %d - Overriding remote contact with local", itemId);
             }
             VersionConflictException vce = (VersionConflictException) error;
-            ContactEntry ce = (ContactEntry) vce.getCurrentEntry();
+            ContactEntry ce = getCurrentEntry(vce);
             editLink = ce.getEditLink();
         }
         if (!isSuccess()) {
             LOG.debug("Contact sync '%s' request failed for itemid = %d",
                       type, itemId, error);
+            LOG.debug("Trace", error);
             return false;
         }
         return true;
+    }
+
+    private ContactEntry getCurrentEntry(VersionConflictException e)
+        throws ServiceException, IOException {
+        String s = e.getResponseBody();
+        if (s == null) {
+            throw ServiceException.FAILURE("Missing response body", null);
+        }
+        return session.parseContactEntry(s);
     }
     
     private boolean doExecute() throws IOException {
@@ -99,7 +109,7 @@ public class SyncRequest {
             default:
                 throw new AssertionError("Invalid request type: " + type);
             }
-        } catch (ServiceException e) {
+        } catch (com.google.gdata.util.ServiceException e) {
             error = e;
             return false;
         }

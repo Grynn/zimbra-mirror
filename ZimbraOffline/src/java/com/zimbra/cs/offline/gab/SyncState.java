@@ -60,7 +60,7 @@ public class SyncState {
             throw new IllegalStateException("Incompatible sync state version");
         }
         String ts = md.get(KEY_TIMESTAMP);
-        lastUpdateTime = ts != null ? DateTime.parseDate(ts) : null;
+        lastUpdateTime = ts != null ? DateTime.parseDateTime(ts) : null;
         lastModSequence = (int) md.getLong(KEY_SEQUENCE);
         MetadataList ids = md.getList(KEY_IDS);
         for (int i = 0; i < ids.size(); i += 2) {

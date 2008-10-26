@@ -288,14 +288,16 @@ public class SyncSession {
         LOG.debug("Loading contact data for itemid = %d", itemId);
         DataSourceItem dsi = DbDataSource.getMapping(ds, itemId);
         String data = dsi.md.get(KEY_GAB_CONTACT);
-        if (data == null) return null;
-        ParseSource ps = new ParseSource(new StringReader(data));
-        ExtensionProfile ep = service.getExtensionProfile();
+        return data != null ? parseContactEntry(data) : null;
+    }
+
+    public ContactEntry parseContactEntry(String s) throws ServiceException {
         try {
-            return BaseEntry.readEntry(ps, ContactEntry.class, ep);
+            return BaseEntry.readEntry(new ParseSource(new StringReader(s)),
+                                       ContactEntry.class,
+                                       service.getExtensionProfile());
         } catch (Exception e) {
-            throw ServiceException.FAILURE(
-                "Unable to parse contact data for itemid = " + itemId, e);
+            throw ServiceException.FAILURE("Unable to parse contact data", e);
         }
     }
 
