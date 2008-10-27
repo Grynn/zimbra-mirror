@@ -134,6 +134,10 @@ public class SyncSession {
             DbDataSource.deleteAllMappings(ds);
         }
     }
+
+
+    private static final Set<Integer> CONTACT_FOLDERS =
+        new HashSet<Integer>(Arrays.asList(Mailbox.ID_FOLDER_CONTACTS));
     
     private void loadChanges() throws ServiceException {
         int seq = state.getSequence();
@@ -148,7 +152,7 @@ public class SyncSession {
                 }
             }
             modifiedContacts.addAll(mbox.getModifiedItems(
-                CONTEXT, seq, MailItem.TYPE_CONTACT).getFirst());
+                CONTEXT, seq, MailItem.TYPE_CONTACT, CONTACT_FOLDERS).getFirst());
             for (int itemId : getTombstones(seq, MailItem.TYPE_TAG)) {
                 if (state.getCategory(itemId) != null) {
                     deletedTags.add(itemId);
