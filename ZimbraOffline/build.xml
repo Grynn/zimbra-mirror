@@ -122,6 +122,10 @@
 		<exclude name="jaxws-tools.jar"/>
 	</fileset>
 
+        <fileset id="gdata.jars" dir="${jars.dir}">
+                <include name="gdata-*.jar"/>
+        </fileset>
+
 	<path id="jaxws.classpath">
 		<pathelement location="${java.home}/../lib/tools.jar"/>
 		<fileset dir="${jaxws.dir}/lib">
@@ -414,7 +418,8 @@
 			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="sqlite*.jar,mysql*.jar" />
 			<fileset file="${common.jars.dir}/derby.jar"/>
 			<fileset refid="jaxws.jars"/>
-		</copy>
+			<fileset refid="gdata.jars"/>
+                </copy>
 		<copy tofile="${dist.dir}/jetty/lib/log4j-1.2.8.jar" file="${common.jars.dir}/log4j-1.2.8.jar" overwrite="true" />
 
 		<copy todir="${dist.dir}/db" overwrite="true">
