@@ -48,7 +48,7 @@ public class GabImport implements DataSource.DataImport {
         } catch (Exception e) {
             SyncExceptionHandler.checkRecoverableException(ERROR, e);
             ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR + " - contact synchronization disabled.", e);
-            ds.setContactSyncEnabled(false);
+            // ds.setContactSyncEnabled(false);
         }
     }
 }

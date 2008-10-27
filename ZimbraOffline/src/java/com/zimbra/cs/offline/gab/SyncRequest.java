@@ -53,7 +53,7 @@ public class SyncRequest {
     public ContactEntry getEntry() { return entry; }
     public ContactEntry getCurrentEntry() { return currentEntry; }
     public Throwable getError() { return error; }
-    public boolean isSuccess() { return error != null; }
+    public boolean isSuccess() { return error == null; }
 
     private boolean isVersionConflict() {
         return error != null && error instanceof VersionConflictException;
@@ -68,13 +68,11 @@ public class SyncRequest {
                           "id %d - Overriding remote contact with local", itemId);
             }
             VersionConflictException vce = (VersionConflictException) error;
-            ContactEntry ce = getCurrentEntry(vce);
-            editLink = ce.getEditLink();
+            editLink = getCurrentEntry(vce).getEditLink();
         }
         if (!isSuccess()) {
             LOG.debug("Contact sync '%s' request failed for itemid = %d",
                       type, itemId, error);
-            LOG.debug("Trace", error);
             return false;
         }
         return true;
@@ -95,6 +93,7 @@ public class SyncRequest {
             LOG.debug("Executing %s request for entry (itemid = %d):\n%s",
                       type, itemId, session.pp(entry));
         }
+        error = null;
         try {
             switch (type) {
             case INSERT:
