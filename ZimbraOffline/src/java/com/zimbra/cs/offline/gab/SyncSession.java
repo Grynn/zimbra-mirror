@@ -38,7 +38,6 @@ import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.ParseSource;
-import com.google.gdata.data.ExtensionProfile;
 import com.google.gdata.data.DateTime;
 
 import java.net.URL;
@@ -80,6 +79,7 @@ public class SyncSession {
         new OfflineMailbox.OfflineContext();
 
     static {
+        /*
         Logger httpLogger = Logger.getLogger(HttpGDataRequest.class.getName());
         httpLogger.setLevel(Level.ALL);
         //Logger xmlLogger = Logger.getLogger(XmlParser.class.getName());
@@ -88,6 +88,7 @@ public class SyncSession {
         handler.setLevel(Level.ALL);
         httpLogger.addHandler(handler);
         //xmlLogger.addHandler(handler);
+        */
     }
 
     public SyncSession(DataSource ds) throws ServiceException {
@@ -122,16 +123,17 @@ public class SyncSession {
         synchronized (mbox) {
             // Get local changes sync last sync
             Map<Integer, ChangeType> changes = getLocalChanges(state.getLastModSequence());
-            state.setLastModSequence(mbox.getLastChangeID());
             // Process remote changes
             processRemoteChanges(feed, changes);
             // Process local changes and get changes to push
             requests = processLocalChanges(changes);
+            state.setLastModSequence(mbox.getLastChangeID());
         }
         // Push changes to remote
         pushChanges(requests);
         if (requests.size() > 0) {
-            throw ServiceException.FAILURE("Contact sync failed due to errors", null);
+            throw ServiceException.FAILURE(
+                "Contact sync failed due to one or more errors", null);
         }
         state.save();
     }
@@ -165,10 +167,15 @@ public class SyncSession {
                     deleted++;
                 } else if (!changes.containsKey(itemId)) {
                     // Remote contact was updated with no local change
-                    ContactData cd = new ContactData(entry);
-                    mbox.modifyContact(CONTEXT, itemId, cd.getParsedContact());
-                    updateContactEntry(itemId, entry);
-                    updated++;
+                    String url = getContactEntry(itemId).getEditLink().getHref();
+                    if (!entry.getEditLink().getHref().equals(url)) {
+                        // Only update local entry if edit url has changed
+                        // (avoids modifying contacts which we just pushed)
+                        ContactData cd = new ContactData(entry);
+                        mbox.modifyContact(CONTEXT, itemId, cd.getParsedContact());
+                        updateContactEntry(itemId, entry);
+                        updated++;
+                    }
                 }
             } else {
                 // Remote contact was added
@@ -217,6 +224,7 @@ public class SyncSession {
             if (lastUpdate != null) {
                 Query query = new Query(contactsFeedUrl);
                 query.setUpdatedMin(lastUpdate);
+                query.setStringCustomParameter("showdeleted", "true");
                 return service.getFeed(query, ContactFeed.class, lastUpdate);
             } else {
                 return service.getFeed(contactsFeedUrl, ContactFeed.class);
@@ -260,8 +268,8 @@ public class SyncSession {
     private Map<Integer, ChangeType> getLocalChanges(int seq)
         throws ServiceException {
         Map<Integer, ChangeType> changes = new HashMap<Integer, ChangeType>();
-        List<Integer> tombstones = mbox.getTombstones(seq).getIds(
-            MailItem.TYPE_CONTACT);
+        List<Integer> tombstones =
+            mbox.getTombstones(seq).getIds(MailItem.TYPE_CONTACT);
         if (tombstones != null) {
             for (int id : tombstones) {
                 changes.put(id, ChangeType.DELETE);

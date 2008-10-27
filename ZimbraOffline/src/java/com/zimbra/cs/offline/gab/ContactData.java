@@ -21,7 +21,6 @@ import com.google.gdata.data.ValueConstruct;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.TextConstruct;
 import com.google.gdata.data.PlainTextConstruct;
-import com.google.gdata.data.Content;
 import com.google.gdata.data.extensions.PostalAddress;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.Im;
@@ -132,17 +131,19 @@ public class ContactData {
     private void exportOrganization(ContactEntry contact) {
         String company = get(A_company);
         String title = get(A_jobTitle);
-        if (company == null || title == null) return;
-        Organization org;
-        List<Organization> orgs = contact.getOrganizations();
-        if (orgs.size() > 0) {
-            org = orgs.get(0);
-        } else {
-            org = new Organization();
-            orgs.add(org);
+        if (company != null || title != null) {
+            Organization org;
+            List<Organization> orgs = contact.getOrganizations();
+            if (orgs.size() > 0) {
+                org = orgs.get(0);
+            } else {
+                org = new Organization();
+                org.setRel(Organization.Rel.WORK);
+                orgs.add(org);
+            }
+            org.setOrgName(new OrgName(company));
+            org.setOrgTitle(new OrgTitle(title));
         }
-        org.setOrgName(new OrgName(company));
-        org.setOrgTitle(new OrgTitle(title));
     }
     
     private void importEmail(ContactEntry contact, int index, String field) {
@@ -186,19 +187,20 @@ public class ContactData {
 
     private void exportPhone(ContactEntry contact, String type, String field) {
         String value = get(field);
-        if (value == null) return;
-        for (PhoneNumber phone : contact.getPhoneNumbers()) {
-            if (type.equals(phone.getRel())) {
-                phone.setPhoneNumber(value);
-                return;
+        if (value != null) {
+            for (PhoneNumber phone : contact.getPhoneNumbers()) {
+                if (type.equals(phone.getRel())) {
+                    phone.setPhoneNumber(value);
+                    return;
+                }
             }
+            PhoneNumber phone = new PhoneNumber();
+            phone.setPhoneNumber(value);
+            phone.setRel(type);
+            contact.getPhoneNumbers().add(phone);
         }
-        PhoneNumber phone = new PhoneNumber();
-        phone.setPhoneNumber(value);
-        phone.setRel(type);
-        contact.getPhoneNumbers().add(phone);
     }
-    
+
     private void exportName(ContactEntry contact) {
         Name name = new Name();
         name.setFirst(get(A_firstName));
@@ -213,29 +215,31 @@ public class ContactData {
 
     private void exportEmail(ContactEntry contact, int index, String field) {
         String addr = fields.get(field);
-        if (addr == null) return;
-        List<Email> emails = contact.getEmailAddresses();
-        if (index < emails.size()) {
-            emails.get(index).setAddress(addr);
-        } else {
-            Email email = new Email();
-            email.setAddress(addr);
-            email.setRel(Email.Rel.HOME);
-            emails.add(email);
+        if (addr != null) {
+            List<Email> emails = contact.getEmailAddresses();
+            if (index < emails.size()) {
+                emails.get(index).setAddress(addr);
+            } else {
+                Email email = new Email();
+                email.setAddress(addr);
+                email.setRel(Email.Rel.HOME);
+                emails.add(email);
+            }
         }
     }
 
     private void exportIm(ContactEntry contact, int index, String field) {
         String addr = fields.get(field);
-        if (addr == null) return;
-        List<Im> ims = contact.getImAddresses();
-        if (index < ims.size()) {
-            Im newIm = getRemoteImAddress(addr);
-            Im im = ims.get(index);
-            im.setAddress(newIm.getAddress());
-            im.setProtocol(newIm.getProtocol());
-        } else {
-            ims.add(getRemoteImAddress(addr));
+        if (addr != null) {
+            List<Im> ims = contact.getImAddresses();
+            if (index < ims.size()) {
+                Im newIm = getRemoteImAddress(addr);
+                Im im = ims.get(index);
+                im.setAddress(newIm.getAddress());
+                im.setProtocol(newIm.getProtocol());
+            } else {
+                ims.add(getRemoteImAddress(addr));
+            }
         }
     }
     
@@ -265,14 +269,15 @@ public class ContactData {
         addr.setZip(get(A_homePostalCode));
         addr.setCountry(get(A_homeCountry));
         String value = addr.toString();
-        if (value.length() == 0) return;
-        PostalAddress paddr = getPostalAddress(contact, PostalAddress.Rel.HOME);
-        if (paddr == null) {
-            paddr = new PostalAddress();
-            paddr.setRel(PostalAddress.Rel.HOME);
-            contact.getPostalAddresses().add(paddr);
+        if (value.length() > 0) {
+            PostalAddress pa = getPostalAddress(contact, PostalAddress.Rel.HOME);
+            if (pa == null) {
+                pa = new PostalAddress();
+                pa.setRel(PostalAddress.Rel.HOME);
+                contact.getPostalAddresses().add(pa);
+            }
+            pa.setValue(value);
         }
-        paddr.setValue(value);
     }
 
     private void exportWorkAddress(ContactEntry contact) {
@@ -283,14 +288,15 @@ public class ContactData {
         addr.setZip(get(A_workPostalCode));
         addr.setCountry(get(A_workCountry));
         String value = addr.toString();
-        if (value.length() == 0) return;
-        PostalAddress paddr = getPostalAddress(contact, PostalAddress.Rel.WORK);
-        if (paddr == null) {
-            paddr = new PostalAddress();
-            paddr.setRel(PostalAddress.Rel.WORK);
-            contact.getPostalAddresses().add(paddr);
+        if (value.length() > 0) {
+            PostalAddress pa = getPostalAddress(contact, PostalAddress.Rel.WORK);
+            if (pa == null) {
+                pa = new PostalAddress();
+                pa.setRel(PostalAddress.Rel.WORK);
+                contact.getPostalAddresses().add(pa);
+            }
+            pa.setValue(value);
         }
-        paddr.setValue(value);
     }
 
     private void importName(String spec) {
