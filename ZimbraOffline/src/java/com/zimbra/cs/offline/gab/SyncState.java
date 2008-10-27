@@ -34,7 +34,7 @@ public class SyncState {
     private final Map<Integer, String> entryIdByItemId;
     private final Map<String, Integer> itemIdByEntryId;
 
-    private static final Log LOG = OfflineLog.yab;
+    private static final Log LOG = OfflineLog.gab;
 
     private static final int VERSION = 1;
     

@@ -49,6 +49,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumSet;
+import java.util.Set;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.ConsoleHandler;
@@ -77,6 +80,9 @@ public class SyncSession {
 
     private static final Mailbox.OperationContext CONTEXT =
         new OfflineMailbox.OfflineContext();
+
+    private static final Set<Integer> CONTACT_FOLDERS =
+        new HashSet<Integer>(Arrays.asList(Mailbox.ID_FOLDER_CONTACTS));
 
     static {
         /*
@@ -272,17 +278,15 @@ public class SyncSession {
             mbox.getTombstones(seq).getIds(MailItem.TYPE_CONTACT);
         if (tombstones != null) {
             for (int id : tombstones) {
-                changes.put(id, ChangeType.DELETE);
+                if (state.hasItem(id)) {
+                    changes.put(id, ChangeType.DELETE);
+                }
             }
         }
         List<Integer> modified = mbox.getModifiedItems(
-            CONTEXT, seq, MailItem.TYPE_CONTACT).getFirst();
-        for (int itemId : modified) {
-            if (state.hasItem(itemId)) {
-                changes.put(itemId, ChangeType.UPDATE);
-            } else {
-                changes.put(itemId, ChangeType.ADD);
-            }
+            CONTEXT, seq, MailItem.TYPE_CONTACT, CONTACT_FOLDERS).getFirst();
+        for (int id : modified) {
+            changes.put(id, state.hasItem(id) ? ChangeType.UPDATE : ChangeType.ADD);
         }
         return changes;
     }
