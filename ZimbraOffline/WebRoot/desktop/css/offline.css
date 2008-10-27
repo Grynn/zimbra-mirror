@@ -8,6 +8,10 @@ BODY, P, TH, TD, DIV, SELECT, TEXTAREA, BUTTON {
 FORM {
      margin: 0px;
 }
+
+a:link, a:active, a:visited{ text-decoration: none;}
+a:hover{text-decoration: underline;}
+
 HR {
 	border-width:1px 0px 0px 0px;
 	border-style: solid;
