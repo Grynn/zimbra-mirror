@@ -1,0 +1,188 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+if [ x`whoami` != xzimbra ]; then
+    echo Error: must be run as zimbra user
+  exit 1
+fi
+
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+    zimbra_home \
+    zimbra_log_directory \
+    zimbra_swatch_acct_threshold \
+    zimbra_swatch_ip_threshold \
+    zimbra_swatch_ipacct_threshold \
+    zimbra_swatch_total_threshold \
+    zimbra_swatch_threshold_seconds \
+    zimbra_swatch_notice_user 
+
+configfile=${zimbra_home}/conf/auditswatchrc
+pidfile=${zimbra_log_directory}/auditswatch.pid
+logfile=${zimbra_log_directory}/zmauditswatch.out
+pid=""
+zimbra_swatch_acct_threshold=${zimbra_swatch_acct_threshold:=10}
+zimbra_swatch_ip_threshold=${zimbra_swatch_ip_threshold:=20}
+zimbra_swatch_ipacct_threshold=${zimbra_swatch_ipacct_threshold:=10}
+zimbra_swatch_total_threshold=${zimbra_swatch_total_threshold:=100}
+zimbra_swatch_threshold_seconds=${zimbra_swatch_threshold_seconds:=60}
+
+
+getpid()
+{
+  if [ -f ${pidfile} ]; then
+    pid=$(cat ${pidfile})
+  fi
+}
+
+checkrunning()
+{
+  getpid
+  if [ "x$pid" = "x" ]; then
+    running=0
+  else
+    kill -0 $pid 2> /dev/null
+    if [ $? != 0 ]; then
+      pid=""
+      running=0
+    else
+      running=1
+    fi
+  fi
+}
+
+case "$1" in 
+  start)
+    if [ ! -f ${configfile} ]; then
+      echo "${configfile} is missing."
+    fi
+
+    checkrunning
+    echo -n "Starting auditswatch..."
+    if [ $running = 1 ]; then
+      echo "auditswatch is already running."
+      exit 0
+    fi
+
+    if [ x"${zimbra_swatch_notice_user}" = "x" ]; then
+      echo "Must have a notification email address defined."
+      echo "Set localconfig -e zimbra_swatch_notice_user=admin@example.com"
+      exit 1
+    else 
+      zimbra_swatch_notice_user=$(echo ${zimbra_swatch_notice_user} | sed -e 's/\@/\\\\@/')
+    fi
+
+    if [ -f ${configfile}.custom ]; then
+      sed -e s/@@zimbra_swatch_acct_threshold@@/${zimbra_swatch_acct_threshold}/ \
+        -e s/@@zimbra_swatch_ip_threshold@@/${zimbra_swatch_ip_threshold}/ \
+        -e s/@@zimbra_swatch_ipacct_threshold@@/${zimbra_swatch_ipacct_threshold}/ \
+        -e s/@@zimbra_swatch_total_threshold@@/${zimbra_swatch_total_threshold}/ \
+        -e s/@@zimbra_swatch_threshold_seconds@@/${zimbra_swatch_threshold_seconds}/ \
+        -e s/@@zimbra_swatch_notice_user@@/${zimbra_swatch_notice_user}/ \
+        ${configfile}.in > ${configfile}
+    elif [ -f ${configfile}.in ]; then
+      sed -e s/@@zimbra_swatch_acct_threshold@@/${zimbra_swatch_acct_threshold}/ \
+        -e s/@@zimbra_swatch_ip_threshold@@/${zimbra_swatch_ip_threshold}/ \
+        -e s/@@zimbra_swatch_ipacct_threshold@@/${zimbra_swatch_ipacct_threshold}/ \
+        -e s/@@zimbra_swatch_total_threshold@@/${zimbra_swatch_total_threshold}/ \
+        -e s/@@zimbra_swatch_threshold_seconds@@/${zimbra_swatch_threshold_seconds}/ \
+        -e s/@@zimbra_swatch_notice_user@@/${zimbra_swatch_notice_user}/ \
+        ${configfile}.in > ${configfile}
+    else
+      echo "${configfile} template not found."
+      exit 1
+    fi
+       
+    ${zimbra_home}/libexec/auditswatch --config-file=${configfile} \
+      --use-cpan-file-tail \
+      --script-dir=/tmp \
+      --tail-file /opt/zimbra/log/audit.log > $logfile 2>&1 &
+    pid=$!
+    if [ "x$pid" != 'x' ]; then
+      if [ -f $logfile ]; then
+        touch $logfile
+      fi
+      chmod 644 $logfile
+      echo $pid > $pidfile
+    else 
+      echo "failed."
+      exit 1
+    fi
+    checkrunning
+    if [ $running = 1 ]; then
+      echo "done."
+      exit 0
+    else
+      echo "failed."
+      exit 1
+    fi
+  ;;
+  stop)
+    checkrunning
+    echo -n "Stopping auditswatch..."
+    if [ $running = 0 ]; then
+      echo "auditswatch is not running."
+      exit 0
+    else
+      for ((i = 0; i < 30; i++)); do
+        kill -0 $pid 2> /dev/null
+        if [ $? != 0 ]; then
+          rm -rf ${pidfile}
+          break
+        fi
+        kill $pid
+        sleep 1
+      done
+    fi
+    if [ -s ${pidfile} ]; then
+      echo "failed."
+      exit 1
+    else
+      echo "done."
+    fi
+    exit 0
+  ;;
+  restart)
+    $0 stop
+    $0 start
+  ;;
+  reload)
+    checkrunning
+    if [ $running = 1 -a "x$pid" != "x" ]; then
+      echo -n "Reloading auditswatch..."
+      kill -HUP $pid
+      echo "done."
+    fi
+    
+  ;;
+  status)
+    echo -n "zmauditswatch is "
+    checkrunning
+    if [ $running = 0 ]; then
+      echo "not running."
+      exit 1
+    else
+      echo "running."
+      exit 0
+    fi
+  ;;
+  *)
+    echo "$0 start|stop|restart|reload|status"
+    exit 1
+  ;;
+esac

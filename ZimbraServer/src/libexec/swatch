@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 
-eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
+eval 'exec /usr/local/bin/perl  -S $0 ${1+"$@"}'
     if 0; # not running under some shell
 #
 #    swatch: The Simple WATCHdog
-#    Copyright (C) 1993-2004 E. Todd Atkins
+#    Copyright (C) 1993-2008 E. Todd Atkins
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -20,323 +20,6 @@ eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-
- 
-
-=head1  NAME
-
-swatch - simple watcher
-
-=head1  SYNOPSIS
-
-B<swatch> 
-[ B<--config-file> I<file> ] 
-[ B<--restart-time> I<time> ] 
-[ B<--input-record-separator> I<regex> ] 
-[ [ B<--examine> I<file_to_examine> ] 
-| [ B<--read-pipe> I<program_to_pipe_from> ] 
-| [ B<--tail> I<file_to_tail> ] ]
-[ B<--daemon> ] 
-[ B<--use-cpan-file-tail> ]
-[ B<--awk-field-syntax> ]
-[ B<--tail-program-name> I<filename> ]
-[ B<--tail-args> I<arguments_for_tail_program> ]
-
-=head1  DESCRIPTION
-
-B<Swatch> is designed to monitor system activity.
-In order for B<Swatch> to be useful, it requires a configuration file
-which contains I<pattern(s)> to look for and I<action(s)>
-to perform when each pattern is found.
-
-=head1 COMMAND LINE OPTIONS
-
-=over 4
-
-=item B<--config-file>=I<filename> or B<-c> I<filename>
-
-Tells B<swatch> where to find its configuration file. The default
-is I<${HOME}/.swatchrc>.
-
-=item B<--help>
-
-Prints usage information and exits.
-
-=item B<--input-record-separator>=I<regular_expression>
-
-Tells B<swatch> to use I<regular_expression> to delineate
-the boundary of each input record. The default is a carriage return. 
-
-=item B<--restart-time>=I<[+]hh:mm[am|pm]> or B<-r> I<[+]hh:mm[am|pm]>
-
-Restart at the specified time where I<hh> is hours and I<mm> is minutes. 
-If the am/pm indicator is omitted, then a 24-hour clock is assumed. 
-If the time is preceeded by the "+" character, then the restart time 
-will be set to the current time plus the specified time and the am/pm
-indicator will be ignored.
-
-=item B<--script-dir>=I</path/to/directory>
-
-This switch causes the temporary watcher script to be written to a file
-in the specified directory rather than the user's home directory. It is
-highly advised that you do B<NOT> use directories that are writable by others
-such as /tmp.
-
-=item B<--version> or B<-V>
-
-Prints version information and exits.
-
-=item B<--use-cpan-file-tail>
-
-Use CPAN's File::Tail module to read the log file instead of the tail(1) 
-command.
-
-=back
-
-You may specify only one of the following options:
-
-=over 4
-
-=item B<--tail-file>=I<filename> or B<-t> I<filename>
-
-Examine lines of text as they are added to filename. 
-
-=item B<--read-pipe>=I<command> or B<-p> I<command>
-
-Examine input piped in from the I<command>. 
-
-=item B<--examine>=I<filename> or B<-f> I<filename>
-
-Use I<filename> as the file to examine. 
-B<Swatch> will do a single pass through the named file. 
-
-=back
-
-The following options are purely for debugging purposes, but are
-documented here for completeness:
-
-=over 4
-
-=item B<--dump-script>[=I<filename>]
-
-Instead of running the watcher script after it is generated, 
-it is written to I<filename> or to STDOUT.
-
-=back 
-
-If swatch is called with no options, it is the same as typing the 
-command line
-
-=over 5
-
-=item
-
-C<swatch --config-file=~/.swatchrc --tail-file=/var/log/syslog>
-
-or if /var/log/messages exists
-
-C<swatch --config-file=~/.swatchrc --tail-file=/var/log/messages>
-
-
-=back
-
-If the configuration file doesn't exist then the following configuration
-is used:
-
-	watchfor  /.*/
-	    echo
-
-
-=head1 THE CONFIGURATION FILE 
-
-The configuration file is used by the B<swatch(8)>
-program to determine what types of expression patterns to look for
-and what type of action(s) should be taken when a pattern is matched.
-
-Each line should contain a keyword and a, sometimes optional,
-value for that keyword. The keyword and value are separated by 
-space or an equal (=) sign.
-
-watchfor regex
-
-ignore regex
-
-=over 4
-
-=item B<echo [modes]>
-
-.Echo the matched line. The text mode may be I<normal>,
-I<bold>, I<underscore>, I<blink>, I<inverse>, 
-I<black>, I<red>, I<green>, I<yellow>, I<blue>, I<magenta>, I<cyan>, I<white>,
-I<black_h>, I<red_h>, I<green_h>, I<yellow_h>, I<blue_h>, 
-I<magenta_h>, I<cyan_h>, and/or I<white_h>. The I<_h> colors specify 
-a highlighting color. The other colors are assigned to the letters.
-Some modes may not work on some terminals. B<Normal>
-is the default.
-
-=item B<bell [N]>
-
-Echo the matched line, and send a bell I<N> times (default = 1).
-
-=item B<exec command>
-
-Execute I<command>. The I<command> may contain variables which are 
-substituted with fields from the matched line. A I<$N> will be replaced
-by the I<Nth> field in the line. A I<$0> or I<$*> will be replaced by the
- entire line.
-
-=item B<mail [addresses=address:address:...][,subject=your_text_here]>
-
-Send I<mail> to I<address(es)> containing the matched lines as
-they appear (default address is the user who is running the program).
-
-=item B<pipe command[,keep_open]>
-
-Pipe matched lines into I<command>. Use the B<keep_open> option to 
-force the pipe to stay open until a different pipe action is run or 
-until swatch exits.
-
-=item B<write [user:user:...]>
-
-Use B<write(1)> to send matched lines to I<user(s)>.
-
-=item B<throttle hours:minutes:seconds,[use=message|regex|<regex>]>
-
-Use this action to limit the number of times that the matched pattern 
-has actions performed on it.
-
-The B<use=regex> option will cause throttling to be based on the regular
-expression instead of the message.
-
-You can also specify a perl compliant regular expression as the value for B,use>. The default is use="^\w{3}\s+\d{1,2}\s\d{2}:\d{2}:\d{2}\s+(.*)" causes the key to be the syslog message without the timestamp. This is most useful when throttling non-syslog created files.
-
-=item B<threshold events:seconds,[repeat=no|yes]>
-
-This action limits the actions on a matched pattern based on the number of
-times it appears in a given time frame.  An action like "threshold 4:60"
-will not perform any actions on that pattern unless it appears 4 times
-within any 60 second period (4:60 is the arbitrary default value).
- 
-The B<repeat=no> option will prevent the timer from being reset after the
-threshold has been reached.  By default (repeat=yes), once the pattern has
-been triggered, a new 60 second period is begun, which means that if the
-patterns match quickly enough, a threshold of 4:60 could mean that 1 in
-every 4 messages is reported.  By using B<repeat=no>, you indicate that
-there is not to be more than one match every time interval.
- 
-Note that this is similar to, but different from, the standard "throttle"
-command, since "throttle" shows the first line and ignores the rest, while
-"threshold" shows the last line and ignores the preceeding (and optionally
-the following).  However, an action like "threshold 1:120" should perform
-similarly to "throttle 0:2:0,use=regex" and has the advantage of not relying
-on a particular timestamp format in the source log entry.
-
-=item B<continue>
-
-Use this action to cause B<swatch> to continue to try to match other
-pattern/action groups after it is done with the current pattern/action
-block.
-
-=item B<quit>
-
-Use this action to cause B<swatch> to clean up and quit immediately.
-
-=back
-
-=head1 SPECIAL OPTION
-
-The following may be used as an option for any of the above actions except for throttle and threshold.
-
-=over 4
-
-=item B<when=>I<day_of_week:hour_of_day>
-
-Use this option to specify windows of time and days when the action can 
-be performed. 
-For example:
-
-mail=sysad-pager@somehost.somedomain,when=1-6:8-17
-
-=back
-
-=head1 FOR PERL HACKS ONLY
-
-=over 4
-
-=item B<perlcode> [I<depth>] arbitrary_Perl_code
- 
-This permits you to easily insert random Perl code into your swatchrc file.
-The optional depth value tells swatch how deep into the code to put the perl 
-code. (0=outside the main loop, 1=inside the main loop (default), 2=just inside the 
-conditional used by the current watchfor statement, and 3=inside the throttle
-block).
-
-Its intended use is to permit variable substitution through use like.
-
-C<perlcode $syslog="^\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}.*";>
- 
-watchfor /$syslog hostname pppd/>
- 
-=back
-
-but any valid Perl is permitted.  Remember the semicolon, and make judicious
-use of the B<--dump-script> option if you run into trouble.
-
-=head1 CONFIGURATION EXAMPLE
-
-=over 4
-
-=item perlcode my $fsf_regex = '\d{2}:\d{2}:\d{2}\s+(.* file system full)';
-
-=item watchfor /$fsf_regex/
-    echo
-    bell
-    throttle 01:00,use=$fsf_regex
-
-=back
-
-In this example, a line which contains the string "file system full" will
-be echoed and the screen bell will sound.  Also, B<throttle> will use what 
-is matched within the parentheses as its key rather than trying to use the 
-log message with its time stamp cut out. Multiple instances of
-the message will not be echoed if they appear within a minute of the 
-first one. Instead the following message will be acted upon after 
-the time interval has expired.  This is what may appear if the message
-appeared 20 times.
-
-=over 4
-
-=item
-
-C<** 20 in 00:01:00 ==> host.domain: /var: file system full>
-
-=back
-
-=head1 SEE ALSO
-
-B<signal(3)>, B<perl(1)>, B<perlre(1)>
-
-=head1 NOTES
-
-Upon receiving a ALRM or HUP signal swatch will re-read the
-configuration file and restart, except when used with the I<--daemon> 
-command line option where it will simply exit.
-Swatch will terminate gracefully
-when it receives a QUIT, TERM, or INT signal.
-
-=head1 AUTHOR
-
-    E. Todd Atkins
-    Todd.Atkins@StanfordAlumni.ORG
-
-=head1 AVAILABILITY
-
-Swatch is a SourceForge project whose project page is at 
-http://sourceforge.net/projects/swatch and homepage is at
-http://swatch.sourceforge.net
-
-=cut
-
  
 use strict;
 use English;
@@ -346,13 +29,13 @@ use IO::Handle;
 use POSIX ":sys_wait_h";
 use Date::Parse;
 use Date::Format;
+use Pod::Usage;
 
 use vars qw/
+  $commandLineString
   $awk_field_syntax
   $opt_config_file
   $opt_daemon
-  $opt_date_loc
-  $dont_get_state
   $opt_debug_level
   $opt_dump_script
   $opt_examine
@@ -366,7 +49,6 @@ use vars qw/
   $opt_read_pipe
   $opt_restart_time
   $opt_tail_file
-  $opt_time_loc
   $opt_script_dir
   $opt_version
   @Config
@@ -378,14 +60,13 @@ use vars qw/
   $thCounter
   $tail_cmd_args
   $tail_cmd_name
-  $state_file_name
   $use_cpan_file_tail
 /;
 
 my @Swatch_ARGV = join(' ', $0, @ARGV); # Save just in case we need to restart 
 (my $Me = $0) =~ s%.*/%%;	      # Strip the path off of the program name
 
-$SIG{'CHLD'} = 'IGNORE';
+$SIG{'CHLD'} = 'DEFAULT';
 
 my $DEF_CONFIG_FILE = "$ENV{'HOME'}/.swatchrc";
 my $DEF_INPUT;
@@ -399,30 +80,19 @@ my $Config_File     = '';
 my $Now = 0;  # The current time in Unix seconds. Gets set when set_restart_time is called
 my $thCounter = 0;
 my $tail_cmd_name = ''; # We'll try to find it in the PATH later
-my $tail_cmd_args = '-n 0 -f'; 
+my $tail_cmd_args = '-n 0 -F'; 
 $awk_field_syntax = 0;
 
-my $USAGE = qq/
-Usage:
-    $Me [<options>]
-Options:
-    --config-file=FILENAME               Use FILENAME for configuration.
-    --old-style-config                   Parse a pre-version 3 configuration.
-    --restart-time=[+]HH:MM[AM|PM]       Send a HUP signal to swatch at the specified time.
-    --input-record-separator=REGEX       Specify an what should be used to separate "lines."
-    --help                               Display this message.
-    --version                            Display author and version information.
-    --tail-file=FILENAME                 Watch a tail of FILENAME.
-    --read-pipe=COMMAND                  Watch a pipe from COMMAND
-    --examine=FILENAME                   Perform a single pass through FILENAME
-    --pid-file=FILENAME			 File to write pid of process to
-    --use-cpan-file-tail                 Use the File::Tail CPAN module to read the log file.
-/;
-
 my $AUTHOR = "E. Todd Atkins <Todd.Atkins\@StanfordAlumni.ORG>";
-$VERSION = "3.1.1";
-my $BUILD_DATE = "19 Jul 2004";
+$VERSION = "3.2.3";
+my $BUILD_DATE = "May 7, 2008";
 
+my $swID = 0; 		# Main ID used for threshold functionality within 
+			# watchfor blocks
+my $swIDSub = 0;	# Secondary ID used for threshold functionality 
+			# within individule actions (not implemented yet)
+
+my $commandLineString = $0 . ' ' . join(' ', @ARGV);
  
 sub print_version {
   print "This is $Me version $VERSION\n";
@@ -436,34 +106,30 @@ sub parse_command_line {
 
   use Getopt::Long;
   Getopt::Long::config('bundling');
-  die "$USAGE" if not GetOptions(
+  pod2usage if not GetOptions(
 				 "awk-field-syntax!" => \$awk_field_syntax,
 				 "config-file|c=s" => \$opt_config_file,
 				 "daemon" => \$opt_daemon,
-				 "date-loc|date-location=s" => \$opt_date_loc,
-				 "debug-level=i" => \$opt_debug_level,
-				 "dont-get-state" => \$dont_get_state,
-				 "dump-script:s" => \$opt_dump_script,
-				 "examine|f=s" => \$opt_examine,
-				 "extra-include-dirs|I=s@" => \@extra_include_dirs,
-                                 "extra-modules|M=s@" => \@extra_modules,
+				 "debug:i" => \$opt_debug_level,
+				 "extra-module|M=s@" => \@extra_modules,
+				 "extra-include-dir|I=s@" => \@extra_include_dirs,
 				 "help|h" => \$opt_help,
-				 "input-record-separator=s" => \$opt_input_record_separator,
+                                 "input-record-separator:s" => \$opt_input_record_separator,
 				 "old-style-config|O" => \$opt_old_style_config,
 				 "pid-file=s" => \$opt_pid_file,
-				 "read-pipe|p=s" => \$opt_read_pipe,
 				 "restart-time|r=s" => \$opt_restart_time,
 				 "tail-args=s" => \$tail_cmd_args,
 				 "tail-program-name=s" => \$tail_cmd_name,
 				 "tail-file|t=s" => \$opt_tail_file,
-				 "time-loc|time-location=s" => \$opt_time_loc,
-				 "save-state=s", \$state_file_name,
+				 "read-pipe|p=s" => \$opt_read_pipe,
+				 "examine|f=s" => \$opt_examine,
 				 "script-dir=s" => \$opt_script_dir,
 				 "use-cpan-file-tail" => \$use_cpan_file_tail,
 				 "version|V" => \$opt_version,
+				 "dump-script:s" => \$opt_dump_script,
 				);
 
-  die "$USAGE" if $opt_help;
+  pod2usage if $opt_help;
 
   if ($opt_version) {
     print_version;
@@ -510,25 +176,6 @@ sub dprint {
 
  
 #
-# returns a default array of records 
-#
-sub default_config {
-  my @records;
-  my $rec = (); # 
-
-  warn "$Me: using default configuration of:\n";
-  warn "\n\twatchfor = /.*/\n\t\techo\n\n";
-  sleep 5;
-  $rec = ();
-  $rec->{pattern} = '/.*/';
-  $rec->{keyword} = 'watchfor';
-  push(@{$rec->{actions}}, { action => 'echo', value => '' });
-  push(@records, $rec);
-  return(@records);
-}
-
- 
-#
 # checks validity of a regular expression. returns 1 if valid.
 #
 sub is_valid_pattern {
@@ -540,6 +187,8 @@ sub is_valid_pattern {
 #
 # Build a configuration record structure
 # 
+{
+  my @records;
 sub read_config {
   my $filename = shift;
   my $rec = ();
@@ -549,12 +198,9 @@ sub read_config {
   my $option;
   my $value;
   my $fh;
-  my @records;
 
   if ( not -r $filename ) {
-    warn "$Me: cannot read $filename\n";
-    exit 1 if $opt_daemon;
-    return(default_config());
+    die "$Me: cannot find $filename. Please create it or specify an alternate configuration file. Exiting.\n";
   }
 
   $fh = new FileHandle "$filename", "r";
@@ -569,10 +215,23 @@ sub read_config {
     s/^\s+//; ## strip off leading blank space
     s/\s+$//; ## strip off trailing blank space
 
-    ### Skip comments blank lines ###
-    next if (/^\#/ or /^\s*$/);
+    ### Skip comments and blank lines ###
+    next if (/^\#/ or /^$/);
 
     s/\#.*$//; ## strip trailing comments
+
+    ### combine lines that end with \ + <cr> ###
+    while (/\\$/) {
+      my $line;
+      s/\\$//;
+      if (defined($line = <$fh>)
+	  and not $line =~ /^\#/ and not $line =~ /^$/) {
+        chomp($line);
+        s/^\s+//; ## strip off leading blank space
+	s/\s+$//; ## strip off trailing blank space
+        $_ .= $line;
+      }
+    }
 
     if (/\s*=\s*/) {
       $key = (split(/\s*[= ]\s*/))[0];
@@ -581,7 +240,10 @@ sub read_config {
       $key = (split())[0];
       ($val = substr($_, length($key))) =~ s/^\s*//;
     }
-    if ($key =~ /^(watchfor|waitfor|ignore)$/i) {
+
+    if ($key =~ /include/i) {
+      @records = read_config($val);
+    } elsif ($key =~ /^(watchfor|waitfor|ignore)$/i) {
       $i++;
       if (defined $rec->{pattern}) {
 	push @records, $rec;
@@ -602,7 +264,7 @@ sub read_config {
 	$depth = $1;
 	$val = $2;
       }
-      if ($depth == 0 or $depth == 1) {
+      if ($depth < 2) {
 	$i++;
 	if (defined $rec->{pattern}) {
 	  push @records, $rec;
@@ -613,7 +275,7 @@ sub read_config {
 	$rec->{value} = $val if (length($val));
         push @records, $rec;
 	$rec = ();
-      } else {
+      } else { # depth is 2
 	push(@{$rec->{actions}}, { action => lc($key),
 				   depth => $depth,
 				   value => $val });
@@ -632,15 +294,13 @@ sub read_config {
     $rec = ();
   }
 
-  ## Sanity Check: If the config file did not contain anything useful then 
-  ## we need to return the default configuration.
+  ## Sanity Check: If the config file did not contain anything useful then exit 
   if ($#records < 0) {
-    warn "$Me: There were no useful entries in the configuration file.\n";
-    exit 1 if $opt_daemon;
-    return(default_config());
+    die "$Me: There were no useful entries in the configuration file. Exiting.\n";
   } else {
     return(@records);
   }
+}
 }
 
  
@@ -688,19 +348,8 @@ sub read_old_config {
 sub make_start_code {
   my $code = '';
   my $mail_cmd = '';
-  my $write_cmd = '';
   my $extra_includes = '';
   my $extra_modules = '';
-
-  foreach my $mailer (qw(/usr/lib/sendmail /usr/sbin/sendmail)) {
-    $mail_cmd = $mailer if ( -x $mailer );
-  }
-  if ($mail_cmd ne '') {
-    $mail_cmd .= ' -oi -t -odq'; 
-  }
-  foreach my $path (split(/:/, $ENV{'PATH'})) {
-    $write_cmd = "$path/write" if ( -x "$path/write" );
-  }
 
   if ($#extra_modules != -1) {
     foreach my $m (@extra_modules) {
@@ -715,7 +364,7 @@ sub make_start_code {
   $code  = qq[
 #
 #    swatch: The Simple WATCHdog
-#    Copyright (C) 1993-2004 E. Todd Atkins
+#    Copyright (C) 1993-2006 E. Todd Atkins
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -742,6 +391,7 @@ $extra_modules
 
 use Swatch::Actions;
 use Swatch::Throttle;
+use Swatch::Threshold;
 
 use vars qw/
   %Msg_Rec
@@ -749,23 +399,24 @@ use vars qw/
 /;
 
 \$SIG{'TERM'} = \$SIG{'HUP'} = 'goodbye';
-\$SIG{'CHLD'} = 'IGNORE';
+\$SIG{'CHLD'} = 'DEFAULT';
 
 ## Constants
 (my \$Me = \$0) =~ s%.*/%%;
 my \$BELL   = "\007";
-my \$MAILER = "$mail_cmd";
-my \$WRITE  = "$write_cmd";
 \$/ = "$opt_input_record_separator";
-my \$swatch_state_file_name = "$state_file_name";
 my \$swatch_flush_interval = 300;
 my \$swatch_last_flush = time;
+my \$tail_pid = -1;
 
 use IO::Handle;
-STDOUT->autoflush(1);;
+STDOUT->autoflush(1);
 
 sub goodbye {
   \$| = 0;
+  if( \$tail_pid != -1 ) {
+    kill('TERM', \$tail_pid);
+  }
 ];
 
   if ($opt_read_pipe) {
@@ -777,27 +428,7 @@ sub goodbye {
   $code .= q|
   &Swatch::Actions::close_pipe_if_open();
 
-  save_state($swatch_state_file_name);
-
   exit(0);
-}
-
-#
-#
-#
-sub get_state {
-  my $file = shift;
-  return if ($file eq '');
-  &Swatch::Throttle::readHistory($file);
-}
-
-#
-#
-#
-sub save_state {
-  my $file = shift;
-  return if ($file eq '');
-  &Swatch::Throttle::saveHistory($file);
 }
 
 #
@@ -826,13 +457,12 @@ die "Couldn't fork: \$!" unless defined(\$pid);
 POSIX::setsid() or die "Can't start new session: \$!"; 
 # set our named to 'swatch' so that rc scripts can 
 # figure out who we are.
-\$0="swatch";
+\$0="$commandLineString";
 	       ];
   } else {
     $code .= qq[print \"\\n*** ${Me} version ${VERSION} (pid:$$) started at \" . `/bin/date` . \"\\n\";];
   }
   
-  $code .= qq[get_state("\$swatch_state_file_name"); \n] unless $dont_get_state;
   $code .= qq[write_pid_file("$opt_pid_file"); \n] if (defined $opt_pid_file);
 
   return $code;
@@ -875,7 +505,7 @@ LOOP: while (<SW_PIPE>) {
       $code = qq[
 use File::Tail;
 my \$Filename = '$filename';
-my \$File = File::Tail->new(name=>\$Filename, tail=>1, maxinterval=>0.5, interval=>0.5, reset_tail=>1);
+my \$File = File::Tail->new(name=>\$Filename, tail=>1, maxinterval=>0.5, interval=>0.5);
 if (not defined \$File) {
     die "$0: cannot read input \\"\$Filename\\": \$!\\n";
 }
@@ -894,7 +524,8 @@ LOOP: while (defined(\$_=\$File->read)) {
       }
        $code = qq/
 my \$filename = '$filename';
-if (not open(TAIL, \"$tail_cmd_name $tail_cmd_args \$filename|\")) {
+\$tail_pid = open(TAIL, \"$tail_cmd_name $tail_cmd_args \$filename|\");
+if (not \$tail_pid) {
     die "$0: cannot read run \\"$tail_cmd_name $tail_cmd_args \$filename\\": \$!\\n";
 }
 
@@ -912,17 +543,7 @@ LOOP: while (<TAIL>) {
     $S_ =~ s/([;&\(\)\|\^><\$`'\\\\])/\\\\$1/g;
     my @S_ = split(/\s+/, $S_);
 
-    ### clean up the log history ###
-    my $swatch_time_now = time;
-    if ($swatch_time_now > $swatch_flush_interval + $swatch_last_flush) {
-      &Swatch::Throttle::flushOldLogRecords;
 !;
-  $code .= qq/
-      save_state(\$swatch_state_file_name);
-      \$swatch_last_flush = \$swatch_time_now;
-    }
-
-/;
 }
 
  
@@ -930,11 +551,11 @@ sub make_end_code {
     my $code;
     $code = q[
 }
+## TODO: Add close !!!
 ];
     return $code;
 } 
 
- 
 sub action_def_to_subroutine_call {
   my $key = shift;  # converts to subroutine name
   my $optstr = shift; # comma separated option string
@@ -962,8 +583,11 @@ sub action_def_to_subroutine_call {
     } else {
       my $opt = $v;
       $opt =~ s/@/\\@/g;
-      $opt =~ s/^['" ]*//;
-      $opt =~ s/['" ]*$//;
+      $opt =~ s/^\s+//o;
+      $opt =~ s/^\s+$//o;
+      $opt = $1 if ($opt =~ /^['"]\s*(.*)\s*['"]$/o);
+      $opt =~ s/"/\\"/go;
+
       if ($actinfo->{$key}{'def_arg'} eq 'MODES') { 
         ## Modes are processed as an array ##
 	push(@{$options{$actinfo->{$key}{'def_arg'}}}, $opt);
@@ -981,6 +605,9 @@ sub action_def_to_subroutine_call {
 
   my $opts = '';
   if (scalar %options) {
+    if ($key eq 'threshold') {
+      $opts = "\'SWID\' => \'$swID\', ";
+    }
     foreach my $k (keys %options) {
       if ($k eq 'MODES') {
 	$opts .= "\'$k\' => [ ";
@@ -1002,19 +629,18 @@ sub action_def_to_subroutine_call {
       } else {
 	$opts .= "\'$k\' => \"$options{$k}\", "; # if (defined $options{$k});
       }
+
+      if ($k eq 'THRESHOLD') {
+	$opts .= "\'SWID\' => \'$swID:$swIDSub\', ";
+      }
     }
   }
 
   my $sub_name = (exists $actinfo->{$key}{'sub_name'}) 
   ? $actinfo->{$key}{'sub_name'} : $key;
 
-  if ($key eq 'throttle') {
-    return "$sub_name('REGEX' => '$pattern', $opts)";
-  } else {
-    return "$sub_name($opts)";
-  }
+  return "$sub_name($opts)";
 }
-
  
 #
 # convert_command -- convert wildcards for fields in command from
@@ -1039,9 +665,8 @@ sub convert_command {
       push(@new_cmd, $i);
     }
   }
-#  $command =~ s/\$([0-9]+)/\$_[$1]/g;
 
-  return join(' ', @new_cmd);;
+  return join(' ', @new_cmd);
 }
 
  
@@ -1059,6 +684,9 @@ sub make_watchfor_block {
   my $do_quit = 0;
   my $do_continue = 0;
   my $message = '$_';
+
+  $swID++; 	# increment internal identifier
+  $swIDSub = 0; # reset internal sub identifier
 
   foreach my $a_ref (@{$ref->{actions}}) {
     if ($a_ref->{action} eq 'perlcode' and $a_ref->{depth} == 2) {
@@ -1084,6 +712,8 @@ sub make_watchfor_block {
   dprint(4,"watching $ref->{pattern}");
 
   foreach my $a_ref (@{$ref->{actions}}) {
+    $swIDSub++; # increment internal sub identifier
+
     my $act = $a_ref->{action};
     if ($act eq 'perlcode' and $a_ref->{depth} == 3) {
       $code .= "\t$a_ref->{value}\n";
@@ -1091,7 +721,7 @@ sub make_watchfor_block {
       $do_continue = 1;
     } elsif ($act eq 'quit') {
       $do_quit = 1
-    } else {
+    } elsif ($act ne 'perlcode') {
       $code .= "\t";
       $code .= action_def_to_subroutine_call($act, $a_ref->{value}, undef, $message);
       $code .= ";\n";
@@ -1140,6 +770,7 @@ sub make_script {
     my $config = $Config[$rec];
     if ($block_open) {
       $script .= "    }\n\n";
+      $block_open = 0;
     }
 
     $key = $config->{keyword};
@@ -1178,7 +809,7 @@ sub terminate {
     if ($Sig) { 
       print STDERR "Caught a SIG$Sig -- sending a TERM signal to $pid\n" 
     }
-    kill('9', $pid) unless $opt_dump_script;
+    kill('TERM', $pid) unless $opt_dump_script;
     $Restart = 0;
 }
 
@@ -1245,7 +876,7 @@ sub set_restart_time{
     if ( ! ($RestartTime = str2time("$timestring")) ) {
       die "Unrecognized time format \"$timestring\"\n";
     }
-    while ( $RestartTime < $Now  ) {
+    while ( $RestartTime <= $Now  ) {
       # if the time of day has already passed, then   
       # the user must mean that time tomorrow
       dprint(32, "set_restart_time(): adding a day to RestartTime $RestartTime (unix seconds)");
@@ -1310,10 +941,17 @@ sub doit {
   my $Watcher_Script = make_script;
   
 
-  if (defined $opt_dump_script) {## Just write the script to STDOUT and exit
-    print "### Watcher Script BEGIN ###\n";
-    print $Watcher_Script;
-    print "### Watcher Script END ###\n";
+  if (defined $opt_dump_script) {
+    ## Just write the script to STDOUT or the value of $opt_dump_script and exit
+    if ($opt_dump_script ne '') {
+      open(DS,">$opt_dump_script") or die "$0: cannot write to $opt_dump_script: $!\n";
+    } else {
+      open(DS,">-") or die "$0: cannot wrote to STDOUT: $!\n";
+    }
+    print DS "### Watcher Script BEGIN ###\n";
+    print DS $Watcher_Script;
+    print DS "### Watcher Script END ###\n";
+    close(DS);
     $Done = 1;
   } else { ## Write the script to a file and run it ##
 
@@ -1363,7 +1001,6 @@ sub doit {
   }
 }
 
- 
 ###
 ### MAIN
 ###
@@ -1380,3 +1017,378 @@ while (!$Done) {
 ### End of main block
 ###
  
+=head1  NAME
+
+swatch - simple watcher
+
+=head1  SYNOPSIS
+
+B<swatch> 
+[ B<--awk-field-syntax> ]
+[ B<--config-file|-c> I<file> ] 
+[ B<--daemon> ] 
+[ B<--extra-include-dir|-I> I<path> ]
+[ B<--extra-module|-M> I<module_name> ]
+[ B<--help|-h> ]
+[ B<--input-record-separator> I<regex> ] 
+[ B<--old-style-config|-O> ]
+[ B<--pid-file> I<file> ]
+[ B<--restart-time|-r> I<time> ] 
+[ B<--script-dir> I<path> ]
+[ B<--tail-args> I<arguments_for_tail_program> ]
+[ B<--tail-program-name> I<filename> ]
+[ B<--version|-V> ]
+[ B<--use-cpan-file-tail> ]
+[ [ B<--examine|-f> I<file_to_examine> ] 
+| [ B<--read-pipe|-p> I<program_to_pipe_from> ] 
+| [ B<--tail-file|-t> I<file_to_tail> ] ]
+[ B<--debug> [ I<level> ] ] 
+[ B<--dump-script> I<filename> ]
+
+=head1  DESCRIPTION
+
+B<Swatch> is designed to monitor system activity.
+In order for B<Swatch> to be useful, it requires a configuration file
+which contains I<pattern(s)> to look for and I<action(s)>
+to perform when each pattern is found.
+
+=head1 COMMAND LINE OPTIONS
+
+=over 4
+
+=item B<--awk-field-syntax>
+
+Use this option only if you want to overide regular expression backreferencing
+in favor of B<awk(1)> style field referencing. Included for backward 
+compatability.
+
+=item B<--config-file|-c> I<filename>
+
+Tells B<swatch> where to find its configuration file. The default
+is I<${HOME}/.swatchrc>.
+
+=item B<--daemon>
+
+This tells B<swatch> to run in the background and disassociate itself from 
+any terminal.
+
+=item B<--extra-include-dir|-I> I<path>
+
+This tells B<swatch> where to look for custom I<action> modules.
+
+=item B<--extra-module|-M> I<module_name>
+
+This tells B<swatch> what custom I<action> modules to load in.
+
+=item B<--help|-h>
+
+Prints usage information and exits.
+
+=item B<--input-record-separator>=I<regular_expression>
+
+Tells B<swatch> to use I<regular_expression> to delineate
+the boundary of each input record. The default is a carriage return. 
+
+=item B<--old-style-config|-O>
+
+This tells B<swatch> that your configuration file is written using the
+syntax that was abandoned back in the 1990's.
+
+=item B<--pid-file> I<file>
+
+Writes the process ID to I<file>. Useful when running in daemon mode.
+
+=item B<--restart-time>=I<[+]hh:mm[am|pm]> or B<-r> I<[+]hh:mm[am|pm]>
+
+Restart at the specified time where I<hh> is hours and I<mm> is minutes. 
+If the am/pm indicator is omitted, then a 24-hour clock is assumed. 
+If the time is preceded by the "+" character, then the restart time 
+will be set to the current time plus the specified time and the am/pm
+indicator will be ignored.
+
+=item B<--script-dir>=I</path/to/directory>
+
+This switch causes the temporary watcher script to be written to a file
+in the specified directory rather than the user's home directory. It is
+highly advised that you do B<NOT> use directories that are writable by others
+such as /tmp.
+
+=item B<--tail-args> I<arguments_for_tail_program>
+
+Pass specific options to the B<tail(1)> program.
+
+=item B<--tail-program-name> I<filename>
+
+Runs an alternate B<tail(1)> like program instead of the system default.
+
+=item B<--version> or B<-V>
+
+Prints version information and exits.
+
+=item B<--use-cpan-file-tail>
+
+Use CPAN's File::Tail module to read the log file instead of the tail(1) 
+command.
+
+=back
+
+You may specify only one of the following options:
+
+=over 4
+
+=item B<--tail-file>=I<filename> or B<-t> I<filename>
+
+Examine lines of text as they are added to filename. 
+
+=item B<--read-pipe>=I<command> or B<-p> I<command>
+
+Examine input piped in from the I<command>. 
+
+=item B<--examine>=I<filename> or B<-f> I<filename>
+
+Use I<filename> as the file to examine. 
+B<Swatch> will do a single pass through the named file. 
+
+=back
+
+The following options are purely for debugging purposes, but are
+documented here for completeness:
+
+=over 4
+
+=item B<--debug>[=I<level>]
+
+Spew out various levels of debugging for swatch developers.
+
+=item B<--dump-script>[=I<filename>]
+
+Instead of running the watcher script after it is generated, 
+it is written to I<filename> or to STDOUT.
+
+=back 
+
+If swatch is called with no options, it is the same as typing the 
+command line
+
+	swatch --config-file=~/.swatchrc --tail-file=/var/log/syslog
+
+or if /var/log/messages exists
+
+	swatch --config-file=~/.swatchrc --tail-file=/var/log/messages
+
+=head1 THE CONFIGURATION FILE 
+
+The configuration file is used by the B<swatch(8)>
+program to determine what types of expression patterns to look for
+and what type of action(s) should be taken when a pattern is matched.
+
+Each line should contain a keyword and a, sometimes optional,
+value for that keyword. The keyword and value are separated by 
+a space or an equal (=) sign.
+
+watchfor regex
+
+ignore regex
+
+=over 4
+
+=item B<echo [modes]>
+
+Echo the matched line. The text mode may be I<normal>,
+I<bold>, I<underscore>, I<blink>, I<inverse>, 
+I<black>, I<red>, I<green>, I<yellow>, I<blue>, I<magenta>, I<cyan>, I<white>,
+I<black_h>, I<red_h>, I<green_h>, I<yellow_h>, I<blue_h>, 
+I<magenta_h>, I<cyan_h>, and/or I<white_h>. The I<_h> colors specify 
+a highlighting color. The other colors are assigned to the letters.
+Some modes may not work on some terminals. B<Normal>
+is the default.
+
+=item B<bell [N]>
+
+Echo the matched line, and send a bell I<N> times (default = 1).
+
+=item B<exec command>
+
+Execute I<command>. The I<command> may contain variables which are 
+substituted with fields from the matched line. A I<$N> will be replaced
+by the I<Nth> field in the line. A I<$0> or I<$*> will be replaced by the
+entire line.
+
+=item B<mail [addresses=address:address:...][,subject=your_text_here]>
+
+Send I<mail> to I<address(es)> containing the matched lines as
+they appear (default address is the user who is running the program).
+
+=item B<pipe command[,keep_open]>
+
+Pipe matched lines into I<command>. Use the B<keep_open> option to 
+force the pipe to stay open until a different pipe action is run or 
+until swatch exits.
+
+=item B<write [user:user:...]>
+
+Use B<write(1)> to send matched lines to I<user(s)>.
+
+=item B<throttle hours:minutes:seconds,[key=message|regex|<regexE>]>
+
+This action has been depreciated. Use B<threshold> instead
+For example,
+
+=over 4
+
+throttle 15:00,key="foo"
+
+=back
+
+would look like this
+
+=over 4
+
+threshold track_by="foo",type=limit,count=1,seconds=900
+
+=back
+
+=item B<threshold track_by=key, type=<limit|threshold|both>, count=number, seconds=number>
+
+Thresholding can be done for the complete B<watchfor> block and/or for
+individual actions. Add "threshold=on" as an option along with the other
+threshold options when thresholding an individual action.
+
+=over 4
+
+=item B<track_by> 
+
+The value of this should be something that is unique to the B<watchfor>
+regular expression. Tip: enclose unique parts of the regular expression
+in parentheses, then use the sub matches as part of the value 
+(e.g. track_by="$2:$4").
+
+=item B<type>
+
+There are three types of thresholding. They are as follows:
+
+=over 4
+
+=item B<limit>
+
+Perform action(s) for the first "B<count>" matches during the
+time interval specified by "B<seconds>",
+then ignore events for the rest of the time interval (kind of like throttle)
+
+=item B<threshold>
+
+Perform action(s) on each match for up to B<count> matches during the 
+time interval specified by B<seconds>
+
+=item B<both>
+
+Perform actions(s) once per time interval after "B<count>" matches occur,
+then ignore additional matches during the time interval 
+specified by "B<seconds>"
+
+=back
+
+=back
+
+=item B<continue>
+
+Use this action to cause B<swatch> to continue to try to match other
+pattern/action groups after it is done with the current pattern/action
+block.
+
+=item B<quit>
+
+Use this action to cause B<swatch> to clean up and quit immediately.
+
+=back
+
+=head1 SPECIAL OPTION
+
+The following may be used as an option for any of the above actions except for throttle and threshold.
+
+=over 4
+
+=item B<when=>I<day_of_week:hour_of_day>
+
+Use this option to specify windows of time and days when the action can 
+be performed. 
+For example:
+
+=over 4
+
+mail=sysad-pager@somehost.somedomain,when=1-6:8-17
+
+=back
+
+=back
+
+=head1 FOR PERL HACKS ONLY
+
+=over 4
+
+=item B<perlcode> [I<depth>] arbitrary_Perl_code
+ 
+This permits you to easily insert random Perl code into your swatchrc file.
+The optional depth value tells swatch how deep into the code to put the perl 
+code. (0=outside the main loop, 1=inside the main loop (default), 2=just inside the 
+conditional used by the current watchfor statement, and 3=inside the throttle
+block).
+
+Its intended use is to permit variable substitution. For example:
+
+=over 4
+
+perlcode $syslog="^\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}.*";
+ 
+watchfor /$syslog hostname pppd/>
+ 
+=back
+
+but any valid Perl is permitted.  Remember the semicolon, and make judicious
+use of the B<--dump-script> option if you run into trouble.
+
+=head1 CONFIGURATION EXAMPLE
+
+=begin text 
+
+perlcode my $fsf_regex = '\d{2}:\d{2}:\d{2}\s+(.* file system full)';
+
+watchfor /$fsf_regex/
+    threshold track_by=$1,type=limit,count=1,seconds=60
+    echo
+    bell
+
+=end text
+
+In this example, a line which contains the string "file system full" will
+be echoed and the screen bell will sound.  Also, B<threshold> will use what 
+is matched within the parentheses as its key rather than trying to use the 
+log message with its time stamp cut out. Multiple instances of
+the message will not be echoed if they appear within a minute of the 
+first one. Instead the following message will be acted upon after 
+the time interval has expired.  
+
+=head1 SEE ALSO
+
+B<signal(3)>, B<perl(1)>, B<perlre(1)>
+
+=head1 NOTES
+
+Upon receiving an ALRM or HUP signal swatch will re-read the
+configuration file and restart, except when used with the I<--daemon> 
+command line option where it will simply exit.
+Swatch will terminate gracefully
+when it receives a QUIT, TERM, or INT signal.
+
+=head1 AUTHOR
+
+    E. Todd Atkins
+    Todd.Atkins@StanfordAlumni.ORG
+
+=head1 AVAILABILITY
+
+Swatch is a SourceForge project whose project page is at 
+http://sourceforge.net/projects/swatch and homepage is at
+http://swatch.sourceforge.net
+
+=cut
