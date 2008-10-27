@@ -474,7 +474,7 @@ function() {
     var html = new Array();
     var i = 0;
     html[i++] = "<DIV>";
-    html[i++] = "<input id='turnSearchRefinerON_chkbx'  type='checkbox'/>Enable Search Refiner Zimlet";
+    html[i++] = "<input id='turnSearchRefinerON_chkbx'  type='checkbox'/>Enable Search Refiner Zimlet (Changing this would refresh browser)";
     html[i++] = "</DIV>";
     html[i++] = "<BR>";
     html[i++] = "<DIV>";
@@ -505,14 +505,25 @@ function(id) {
 
 com_zimbra_searchrefiner.prototype._okBtnListner =
 function() {
+	this._reloadRequired = false;
     if (document.getElementById("turnSearchRefinerON_chkbx").checked) {
+		if(!this.turnSearchRefinerON){
+			this._reloadRequired = true;
+		}
         this.setUserProperty("turnSearchRefinerON", "true", true);
     } else {
         this.setUserProperty("turnSearchRefinerON", "false", true);
+		if(this.turnSearchRefinerON)
+			this._reloadRequired = true;
     }
 
     this.setUserProperty("refinerSearchSize", document.getElementById("sr_refinerSearchSize_menu").options[document.getElementById("sr_refinerSearchSize_menu").selectedIndex].value, true);
     this.pbDialog.popdown();
+	if(this._reloadRequired) {
+		window.onbeforeunload = null;
+		var url = AjxUtil.formatUrl({});
+		ZmZimbraMail.sendRedirect(url);
+	}
 
 }
 
