@@ -141,7 +141,7 @@ function disableButtons() {
 				</td>
 			</tr>
 
-			<tr id='receivingMailRow'><td colspan=2><b><fmt:message key='ReceivingMail'/></b><hr></td></tr>
+			<tr id='receivingMailRow'><td colspan=2><fmt:message key='ReceivingMail'/><hr></td></tr>
 
 			<tr id='usernameRow'>
 				<td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='UserName'/></td>
@@ -176,7 +176,7 @@ function disableButtons() {
 
 			</tr>
 
-			<tr id='sendingMailRow'><td colspan=2><b><fmt:message key='SendingMail'/></b><hr></td></tr>
+			<tr id='sendingMailRow'><td colspan=2><fmt:message key='SendingMail'/><hr></td></tr>
 
 			<tr id='smtpServerRow'>
 				<td class="${zdf:isValid(bean, 'smtpHost') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='OutMailServer'/></td>
@@ -225,7 +225,7 @@ function disableButtons() {
 			</tr>
 
 			<tr id='replyToRow'>
-				<td class="ZFieldLabel"><fmt:message key='ReplyTo'/></td>
+				<td class="ZFieldLabel" valign="top"style="padding-top: 12px !important;"><fmt:message key='ReplyTo'/></td>
 				<td>
 					<table>
 						<tr>
@@ -242,7 +242,7 @@ function disableButtons() {
 				</td>
 			</tr>
 
-			<tr><td colspan=2><b><fmt:message key='DownloadingMail'/></b><hr></td></tr>
+			<tr><td colspan=2><fmt:message key='DownloadingMail'/><hr></td></tr>
 
 			<tr>
 	            <td class="ZFieldLabel"><fmt:message key='SyncFrequency'/></td>
