@@ -506,12 +506,14 @@ function() {
 	DwtButton._dropDownCellMouseDownHdlr(mev);
 };
 
-/** This method is called from mouseUpHdl in <i>DwtControl</i>. */
+/** This method is called from mouseUpHdlr in <i>DwtControl</i>. */
 DwtButton.prototype._focusByMouseUpEvent =
-  function()  {
-	DBG.println(AjxDebug.DBG3, "DwtButton.prototype._focusByMouseUpEvent");
-	DwtShell.getShell(window).getKeyboardMgr().grabFocus(this.getTabGroupMember());
-  }
+function()  {
+	// don't steal focus if on a toolbar that's not part of focus ring
+	if (!(this.parent && (this.parent instanceof DwtToolBar) && this.parent.noFocus)) {
+		DwtShell.getShell(window).getKeyboardMgr().grabFocus(this.getTabGroupMember());
+	}
+};
 
 // NOTE: _focus and _blur will be reworked to reflect styles correctly
 DwtButton.prototype._focus =

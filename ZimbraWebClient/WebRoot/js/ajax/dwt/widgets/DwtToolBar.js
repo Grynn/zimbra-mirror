@@ -291,19 +291,22 @@ DwtToolBar.prototype._focus =
 function(item) {
 	DBG.println(AjxDebug.DBG3, "DwtToolBar: FOCUS");
 	// make sure the key for expanding a button submenu matches our style
-	var kbm = this.shell.getKeyboardMgr();
-	if (kbm.isEnabled()) {
-		var kmm = kbm.__keyMapMgr;
-		if (kmm) {
-			if (this._style == DwtToolBar.HORIZ_STYLE) {
-				kmm.removeMapping("DwtButton", "ArrowRight");
-				kmm.setMapping("DwtButton", "ArrowDown", DwtKeyMap.SUBMENU);
-			} else {
-				kmm.removeMapping("DwtButton", "ArrowDown");
-				kmm.setMapping("DwtButton", "ArrowRight", DwtKeyMap.SUBMENU);
+	if (!this._submenuKeySet) {
+		var kbm = this.shell.getKeyboardMgr();
+		if (kbm.isEnabled()) {
+			var kmm = kbm.__keyMapMgr;
+			if (kmm) {
+				if (this._style == DwtToolBar.HORIZ_STYLE) {
+					kmm.removeMapping("DwtButton", "ArrowRight");
+					kmm.setMapping("DwtButton", "ArrowDown", DwtKeyMap.SUBMENU);
+				} else {
+					kmm.removeMapping("DwtButton", "ArrowDown");
+					kmm.setMapping("DwtButton", "ArrowRight", DwtKeyMap.SUBMENU);
+				}
+				kmm.reloadMap("DwtButton");
 			}
-			kmm.reloadMap("DwtButton");
 		}
+		this._submenuKeySet = true;
 	}
 
 	item = item ? item : this._getFocusItem(this._curFocusIndex);
