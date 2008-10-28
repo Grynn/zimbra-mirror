@@ -326,10 +326,12 @@ function(defaultColumnSort) {
 DwtListView.prototype.getItemIndex =
 function(item) {
 	var list = this._list;
-	var len = list.size();
-	for (var i = 0; i < len; ++i) {
-		if (list.get(i).id == item.id) {
-			return i;
+	if (list) {
+		var len = list.size();
+		for (var i = 0; i < len; ++i) {
+			if (list.get(i).id == item.id) {
+				return i;
+			}
 		}
 	}
 	return null;
