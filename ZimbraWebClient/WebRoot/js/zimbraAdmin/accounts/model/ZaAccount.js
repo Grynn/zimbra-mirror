@@ -1825,20 +1825,22 @@ ZaAccount.isEmailRetentionPolicyDisabled = function () {
 ZaAccount.getAccountTypeOutput = function (isNewAccount) {
     var form = this.getForm () ;
     var instance = form.getInstance () ;
-    var currentCos = ZaCos.getCosById(instance.attrs[ZaAccount.A_COSId], form.parent._app) ;
-    var currentType = null ;
-    if (currentCos)
-        currentType = currentCos.id ;
-    
     var acctTypes = instance[ZaAccount.A2_accountTypes] ;
-    var domainName = ZaAccount.getDomain (instance.name) ;
-    var domainObj =  ZaDomain.getDomainByName (domainName, form.parent._app);
-    
     var out = [] ;
-    out.push("<table with=100%>");
-    out.push("<colgroup><col width='200px' /><col width='200px' /><col width='200px' /></colgroup> ");
-    out.push("<tbody>") ;
     if (acctTypes && acctTypes.length > 0) {
+        var currentCos = ZaCos.getCosById(instance.attrs[ZaAccount.A_COSId], form.parent._app) ;
+        var currentType = null ;
+        if (currentCos)
+            currentType = currentCos.id ;
+        
+        var domainName = ZaAccount.getDomain (instance.name) ;
+        var domainObj =  ZaDomain.getDomainByName (domainName, form.parent._app);
+
+
+        out.push("<table with=100%>");
+        out.push("<colgroup><col width='200px' /><col width='200px' /><col width='200px' /></colgroup> ");
+        out.push("<tbody>") ;
+
         var radioGroupName = "account_type_radio_group_" + Dwt.getNextId() ;
         for (var i=0; i < acctTypes.length; i ++) {
             var cos = ZaCos.getCosById (acctTypes[i] , ZaApp.getInstance()) ;
@@ -1880,9 +1882,10 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
                 out.push("</tr>") ;
             }
         }
+
+        out.push("</tbody></table>") ;
     }
 
-    out.push("</tbody></table>") ;
     return out.join("") ; 
 }
 
