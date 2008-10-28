@@ -188,7 +188,7 @@ EmailAddr_XFormItem.prototype.items = [
 			}
 			this.getParentItem()._domainPart = domainPart;
 			//bug: 14250, change the instance value here also even if the whole email address is invalid
-			this.getParentItem().setInstanceValue (val) ;
+			//this.getParentItem().setInstanceValue (val) ;
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}	
 	}
