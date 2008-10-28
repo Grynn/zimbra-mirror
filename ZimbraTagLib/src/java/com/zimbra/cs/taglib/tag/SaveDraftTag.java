@@ -49,6 +49,7 @@ public class SaveDraftTag extends ZimbraSimpleTag {
     private String mMessageId;    
     private String mMessages;
     private String mAttachments;
+	private String mAttachmentUploadId;
     private String mDraftId;
     private String mFolderId;
     private ZMessageComposeBean mCompose;
@@ -83,6 +84,8 @@ public class SaveDraftTag extends ZimbraSimpleTag {
 
     public void setAttachments(String attachments) { mAttachments = attachments; }
     
+    public void setAttachmentuploadid(String id) { mAttachmentUploadId = id; }
+
     public void setDraftid(String draftId) { mDraftId = draftId; }
         
     public void setFolderid(String folderId) { mFolderId = folderId; }
@@ -159,6 +162,8 @@ public class SaveDraftTag extends ZimbraSimpleTag {
             m.setMessageIdsToAttach(messages);
 
             m.setMessagePartsToAttach(attachments);
+
+            m.setAttachmentUploadId(mAttachmentUploadId);
 
             if (mMessageId != null && mMessageId.length() > 0)
                 m.setOriginalMessageId(mMessageId);

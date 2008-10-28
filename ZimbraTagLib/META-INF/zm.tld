@@ -243,6 +243,15 @@
         </attribute>
         <attribute>
             <description>
+                Attachment upload id
+            </description>
+            <name>attachmentuploadid</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
                 value of Cc addresses
             </description>
             <name>cc</name>
@@ -509,37 +518,6 @@
             </description>
             <name>var</name>
             <required>true</required>
-        </attribute>
-    </tag>
-
-    <tag>
-        <description>Sets voice mail-specific data on a compose</description>
-        <name>voiceMailCompose</name>
-        <tag-class>com.zimbra.cs.taglib.tag.voice.VoiceMailComposeTag</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <description>
-                Compose bean
-            </description>
-            <name>compose</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>
-                Serialized voice mail
-            </description>
-            <name>voiceid</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>
-                "reply" or "forward"
-            </description>
-            <name>operation</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
 
