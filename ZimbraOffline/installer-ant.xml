@@ -41,6 +41,7 @@
         	<ant dir="." target="offline-make-install-files" inheritAll="false"/>
         	<antcall target="installer-pack-media"/>
         	<antcall target="gen-update-php"/>
+        	<antcall target="symlink-media"/>
 	</target>
 
         <target name="gen-update-php">
@@ -74,5 +75,10 @@
                 </then></if>
         </target>
 
+	<target name="symlink-media">
+		<symlink link="${build.dir}/zdesktop_linux_i686.sh" resource="${media_linux}"/>
+		<symlink link="${build.dir}/zdesktop_macos_intel.dmg" resource="${media_macos}"/>
+		<symlink link="${build.dir}/zdesktop_win32.exe" resource="${media_win32}"/>
+	</target>
 </project>
 
