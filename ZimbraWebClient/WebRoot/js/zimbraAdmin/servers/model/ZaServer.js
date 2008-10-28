@@ -144,6 +144,7 @@ ZaServer.A_isCurrentVolume = "isCurrentVolume";
 ZaServer.STANDALONE = "standalone";
 ZaServer.MASTER = "master";
 ZaServer.SLAVE = "slave";
+ZaServer.A2_volume_selection_cache = "volume_selection_cache";
 
 ZaServer.MSG = 1;
 ZaServer.INDEX = 10;
@@ -407,7 +408,8 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_MasterRedologClientTcpNoDelay, ref:"attrs/" + ZaServer.A_MasterRedologClientTcpNoDelay, type:_STRING_},		
 		{id:ZaServer.A_zimbraUserServicesEnabled, ref:"attrs/" + ZaServer.A_zimbraUserServicesEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaServer.A_Volumes, type:_LIST_, listItem:ZaServer.volumeObjModel},
-		{id:ZaServer.A_showVolumes, ref:ZaServer.A_showVolumes, type: _ENUM_, choices: [false,true]}
+		{id:ZaServer.A_showVolumes, ref:ZaServer.A_showVolumes, type: _ENUM_, choices: [false,true]},
+		{id:ZaServer.A2_volume_selection_cache, type:_LIST_}
 
     ]
 };
