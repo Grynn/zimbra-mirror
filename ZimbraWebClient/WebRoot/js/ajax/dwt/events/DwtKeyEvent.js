@@ -56,7 +56,7 @@ function(dontCallParent) {
 
 DwtKeyEvent.prototype.isCommand =
 function(ev) {
-        return AjxEnv.isMac && this.metaKey || this.ctrlKey;
+	return AjxEnv.isMac && this.metaKey || this.ctrlKey;
 }
 
 DwtKeyEvent.prototype.setFromDhtmlEvent =
