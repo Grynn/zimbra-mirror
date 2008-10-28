@@ -88,7 +88,7 @@ function(ev, noPopView, func, obj, params) {
 			args["func"] = func ;
 			args["params"] = params ;
 		}else{
-			args["obj"] = this._app;		
+			args["obj"] = ZaApp.getInstance();		
 			args["params"] = null;
 			args["func"] = ZaApp.prototype.popView;
 		}
