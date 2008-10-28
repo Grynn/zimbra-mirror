@@ -348,7 +348,7 @@ function () {
 	if(instance.alias_selection_cache && instance.alias_selection_cache[0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editAliasDlg) {
-			formPage.editAliasDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.Edit_Alias_Title);
+			formPage.editAliasDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "150px",ZaMsg.Edit_Alias_Title);
 			formPage.editAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateAlias, this.getForm(), null);						
 		}
 		var obj = {};
@@ -386,7 +386,7 @@ function () {
 	var instance = this.getInstance();
 	var formPage = this.getForm().parent;
 	if(!formPage.addAliasDlg) {
-		formPage.addAliasDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.Add_Alias_Title);
+		formPage.addAliasDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "150px",ZaMsg.Add_Alias_Title);
 		formPage.addAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addAlias, this.getForm(), null);						
 	}
 	
@@ -462,7 +462,7 @@ function () {
 	if(instance.fwdAddr_selection_cache && instance.fwdAddr_selection_cache[0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editFwdAddrDlg) {
-			formPage.editFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"400px", "150px",ZaMsg.Edit_FwdAddr_Title);
+			formPage.editFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(),"400px", "150px",ZaMsg.Edit_FwdAddr_Title);
 			formPage.editFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateFwdAddr, this.getForm(), null);						
 		}
 		var obj = {};
@@ -500,7 +500,7 @@ function () {
 	var instance = this.getInstance();
 	var formPage = this.getForm().parent;
 	if(!formPage.addFwdAddrDlg) {
-		formPage.addFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"400px", "150px",ZaMsg.Add_FwdAddr_Title);
+		formPage.addFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "400px", "150px",ZaMsg.Add_FwdAddr_Title);
 		formPage.addFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addFwdAddr, this.getForm(), null);						
 	}
 	
@@ -581,7 +581,7 @@ function () {
 	if(instance.fp_selection_cache && instance.fp_selection_cache[0]) {
 		var formPage = this.getForm().parent;
 		if(!formPage.editFpDlg) {
-			formPage.editFpDlg = new ZaEditFpXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.Edit_Fp_Title);
+			formPage.editFpDlg = new ZaEditFpXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "150px",ZaMsg.Edit_Fp_Title);
 			formPage.editFpDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateFp, this.getForm(), null);
 		}
 		var obj = ZaFp.getObject (instance.fp_selection_cache[0]) ;
@@ -628,7 +628,7 @@ function () {
 	var formPage = this.getForm().parent;
     
     if(!formPage.addFpDlg) {
-		formPage.addFpDlg = new ZaEditFpXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.Add_Fp_Title);
+		formPage.addFpDlg = new ZaEditFpXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "150px",ZaMsg.Add_Fp_Title);
 		formPage.addFpDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addFp, this.getForm(), null);
 	}
 
