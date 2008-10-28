@@ -12,17 +12,17 @@
  * 		toolTip - the tooltip of the tab
 */
 
-//ZaAppTab = function(parent, app, label, icon, width, height, closable, selected, id) {
-ZaAppTab = function(parent, app, params) {
+//ZaAppTab = function(parent,ZaApp.getInstance().label, icon, width, height, closable, selected, id) {
+ZaAppTab = function(parent, params) {
 	if (arguments.length == 0) return ;
-	this._app = app ;
+	
 //	this._origClassName = "ImgAppTab" ;
 	DwtButton.call(this, parent, null, "ZaAppTabButton" , Dwt.ABSOLUTE_STYLE);	
 	//clean the DwtButton event listeners
 	this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
 	
 	//build the Tab UI
-	this._tabId = params.id || this._app._currentViewId ;
+	this._tabId = params.id || ZaApp.getInstance()._currentViewId ;
 	
 	var w = params.width || parent.getTabWidth() ;
 	var h = params.height || parent.getTabHeight() ;
@@ -105,7 +105,7 @@ function () {
 
 ZaAppTab.prototype.getAppView =
 function () {
-	return this._app.getViewById (this._tabId)[ZaAppViewMgr.C_APP_CONTENT] ;
+	return ZaApp.getInstance().getViewById (this._tabId)[ZaAppViewMgr.C_APP_CONTENT] ;
 }
 
 ZaAppTab.prototype._selListener =
@@ -159,8 +159,8 @@ function () {
 	this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
 	
 	var viewId = this.getTabId () ;
-	if (viewId != this._app._currentViewId) {
-		this._app.pushView (viewId);
+	if (viewId != ZaApp.getInstance()._currentViewId) {
+		ZaApp.getInstance().pushView (viewId);
 	}	
 	if (this._closeCell) {
 		AjxImg.setImage (this._closeCell, "Close") ;
@@ -254,12 +254,12 @@ function (ev) {
 	var obj = DwtControl.getTargetControl(ev); 
 	obj.closeTab();
 	/*
-	var app = obj._app ;
+
 	var tabViewId = obj.getTabId () ;
-	var cc = app.getControllerById (tabViewId) ;
+	var cc = ZaApp.getInstance().getControllerById (tabViewId) ;
 	
 	//check whether the closing view is hidden or visible
-	if (tabViewId == app._currentViewId) { //visible
+	if (tabViewId == ZaApp.getInstance()._currentViewId) { //visible
 		cc.closeButtonListener(ev); //Tab handling is in the view controller's close button listener
 	}else{ //hidden 
 		//TODO what if it is dirty?
@@ -274,12 +274,12 @@ function() {
 	} 
 	
 	if (this._closable) {
-		var app = this._app ;
+		
 		var tabViewId = this.getTabId () ;
-		var cc = app.getControllerById (tabViewId) ;
+		var cc = ZaApp.getInstance().getControllerById (tabViewId) ;
 		
 		//check whether the closing view is hidden or visible
-		if (tabViewId == app._currentViewId) { //visible
+		if (tabViewId == ZaApp.getInstance()._currentViewId) { //visible
 			//if (AjxEnv.hasFirebug) console.debug("Close current tab " + this.getTitle() + " with ID " + tabViewId);
 			cc.closeButtonListener(); //Tab handling is in the view controller's close button listener
 		}else{ //hidden 
@@ -299,7 +299,7 @@ function () {
 	 
 	var tabTitles = ZaAppTabGroup.getDirtyTabTitles() ;
 	if ( tabTitles.length > 0 ){
-		this._app.getCurrentController().popupMsgDialog(
+		ZaApp.getInstance().getCurrentController().popupMsgDialog(
 				AjxMessageFormat.format(ZaMsg.tab_close_warning, [tabTitles.join("<br />")]));
 		return ;
 	}else{
@@ -333,7 +333,7 @@ function () {
 	
 	var tabTitles = ZaAppTabGroup.getDirtyTabTitles() ;
 	if ( tabTitles.length > 0 ){
-		this._app.getCurrentController().popupMsgDialog(
+		ZaApp.getInstance().getCurrentController().popupMsgDialog(
 				AjxMessageFormat.format(ZaMsg.tab_close_warning, [tabTitles.join("<br />")]));
 		return ;
 	}else{
@@ -361,17 +361,17 @@ function () {
 
 ZaAppTab.prototype.closeHiddenTab =
 function () {
-	var app = this._app ;
+
 	var tabViewId = this.getTabId () ;
 	
 	//Make sure the nextTab is selected. 
 	// It is useful when user close a dirty hidden tab and the select action is invoked.
-	if (tabViewId == app._currentViewId) {
-		app.popView();
+	if (tabViewId == ZaApp.getInstance()._currentViewId) {
+		ZaApp.getInstance().popView();
 	}else{
 		this.parent.removeTab (this, true) ;
 		//dispose the view and remove the controller
-		app.disposeView (tabViewId,true) ;
+		ZaApp.getInstance().disposeView (tabViewId,true) ;
 	}
 }
 

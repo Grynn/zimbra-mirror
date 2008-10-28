@@ -22,14 +22,14 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaGlobalStatsView = function(parent, app) {
-	this._app = app;
+ZaGlobalStatsView = function(parent) {
+
 	DwtTabView.call(this, parent);
 	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	this._msgCountPage = new ZaGlobalMessageCountPage(this, app);
-	this._msgsVolumePage = new ZaGlobalMessageVolumePage(this, app);
-	this._spamPage = new ZaGlobalSpamActivityPage(this, app);	
+	this._msgCountPage = new ZaGlobalMessageCountPage(this);
+	this._msgsVolumePage = new ZaGlobalMessageVolumePage(this);
+	this._spamPage = new ZaGlobalSpamActivityPage(this);	
 	this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);		
 	this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);			
 	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);				

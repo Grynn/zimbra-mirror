@@ -24,8 +24,8 @@
 * @author Greg Solovyev
 **/
 
-ZaServerController = function(appCtxt, container,app) {
-	ZaXFormViewController.call(this, appCtxt, container,app,"ZaServerController");
+ZaServerController = function(appCtxt, container) {
+	ZaXFormViewController.call(this, appCtxt, container,"ZaServerController");
 	this._UICreated = false;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/managing_servers.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this._toolbarOperations = new Array();
@@ -90,11 +90,11 @@ function (nextViewCtrlr, func, params) {
 		args["obj"] = nextViewCtrlr;
 		args["func"] = func;
 		//ask if the user wants to save changes			
-		//this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);					
-		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.validateChanges, this, args);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].popup();
+		//ZaApp.getInstance().dialogs["confirmMessageDialog"] = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON]);					
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.validateChanges, this, args);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
 	} else {
 		ZaController.prototype.switchToNextView.call(this, nextViewCtrlr, func, params);
 	}
@@ -128,8 +128,8 @@ function(entry) {
 	if(!this._UICreated) {
 		this._createUI();
 	} 
-//	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
-	this._app.pushView(this.getContentViewId());
+//	ZaApp.getInstance().pushView(ZaZimbraAdmin._SERVER_VIEW);
+	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
@@ -141,7 +141,7 @@ ZaController.setViewMethods["ZaServerController"].push(ZaServerController.setVie
 **/
 ZaServerController.prototype._createUI =
 function () {
-	this._contentView = this._view = new this.tabConstructor(this._container, this._app);
+	this._contentView = this._view = new this.tabConstructor(this._container);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar
@@ -152,14 +152,14 @@ function () {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-    //this._app.createView(ZaZimbraAdmin._SERVER_VIEW, elements);
+    //ZaApp.getInstance().createView(ZaZimbraAdmin._SERVER_VIEW, elements);
     var tabParams = {
 		openInNewTab: true,
 		tabId: this.getContentViewId()
 	}
-	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 	this._UICreated = true;
-	this._app._controllers[this.getContentViewId ()] = this ;
+	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }
 
 ZaServerController.prototype._saveChanges =
@@ -311,11 +311,11 @@ ZaServerController.prototype.validateMTA =
 function (params) {
 	var obj = this._view.getObject();
 	if((!obj.attrs[ZaServer.A_SmtpHostname] || obj.attrs[ZaServer.A_SmtpHostname] == "") && (this._currentObject.attrs[ZaServer.A_SmtpHostname] != null && this._currentObject.attrs[ZaServer.A_SmtpHostname] != "")) {
-		if(this._app.dialogs["confirmMessageDialog"])
-			this._app.dialogs["confirmMessageDialog"].popdown();
+		if(ZaApp.getInstance().dialogs["confirmMessageDialog"])
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
 			
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);	
-		this._app.dialogs["confirmMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.WARNING_RESETING_SMTP_HOST,[obj.cos.attrs[ZaServer.A_SmtpHostname],obj.cos.attrs[ZaServer.A_SmtpHostname]]),  DwtMessageDialog.WARNING_STYLE);
+		ZaApp.getInstance().dialogs["confirmMessageDialog"] = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON]);	
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.WARNING_RESETING_SMTP_HOST,[obj.cos.attrs[ZaServer.A_SmtpHostname],obj.cos.attrs[ZaServer.A_SmtpHostname]]),  DwtMessageDialog.WARNING_STYLE);
 		var args;
 		var callBack = ZaServerController.prototype.runValidationStack;
 		if(!params || !params["func"]) {
@@ -323,8 +323,8 @@ function (params) {
 		} else {
 			args = params;		
 		}
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, callBack, this, args);		
-		this._app.dialogs["confirmMessageDialog"].popup();		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, callBack, this, args);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();		
 	} else {
 		this.runValidationStack(params);
 	}
@@ -335,11 +335,11 @@ ZaServerController.prototype.validateVolumeChanges =
 function (params) {
 	var obj = this._view.getObject();
 	if(obj[ZaServer.A_RemovedVolumes] && obj[ZaServer.A_RemovedVolumes].length > 0 ) {
-		if(this._app.dialogs["confirmMessageDialog"])
-			this._app.dialogs["confirmMessageDialog"].popdown();
+		if(ZaApp.getInstance().dialogs["confirmMessageDialog"])
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
 			
-		this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);	
-		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_DELETE_VOLUMES,  DwtMessageDialog.WARNING_STYLE);
+		ZaApp.getInstance().dialogs["confirmMessageDialog"] = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);	
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_DELETE_VOLUMES,  DwtMessageDialog.WARNING_STYLE);
 		var args;
 		var callBack = ZaServerController.prototype.runValidationStack;
 		if(!params || !params["func"]) {
@@ -347,8 +347,8 @@ function (params) {
 		} else {
 			args = params;		
 		}
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, callBack, this, args);		
-		this._app.dialogs["confirmMessageDialog"].popup();		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, callBack, this, args);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();		
 	} else {
 		this.runValidationStack(params);
 	}
@@ -356,8 +356,8 @@ function (params) {
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateVolumeChanges);
 
 ZaServerController.changeProxyPorts = function () {
-	if(this._app.dialogs["confirmMessageDialog"]) {
-		var obj = this._app.dialogs["confirmMessageDialog"].getObject();
+	if(ZaApp.getInstance().dialogs["confirmMessageDialog"]) {
+		var obj = ZaApp.getInstance().dialogs["confirmMessageDialog"].getObject();
 		if(obj) {
 			if(obj.selectedChoice == 0) {
 				//change
@@ -568,19 +568,19 @@ ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServ
 
 
 ZaServerController.showPortWarning = function (params, instanceObj) {
-	if(this._app.dialogs["confirmMessageDialog"])
-		this._app.dialogs["confirmMessageDialog"].popdown();
+	if(ZaApp.getInstance().dialogs["confirmMessageDialog"])
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
 		
-	this._app.dialogs["confirmMessageDialog"] = new ZaProxyPortWarningXDialog(this._app.getAppCtxt().getShell(), this._app,"550px", "150px",ZaMsg.Server_WrongPortWarningTitle);	
-	this._app.dialogs["confirmMessageDialog"].setObject(instanceObj);
-	this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.OK_BUTTON, ZaServerController.changeProxyPorts, this, null);
+	ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaProxyPortWarningXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "150px",ZaMsg.Server_WrongPortWarningTitle);	
+	ZaApp.getInstance().dialogs["confirmMessageDialog"].setObject(instanceObj);
+	ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.OK_BUTTON, ZaServerController.changeProxyPorts, this, null);
 	var args;
 	if(!params || !params["func"]) {
 		args = null;
 	} else {
 		args = params;		
 	}
-	this._app.dialogs["confirmMessageDialog"].popup();		
+	ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();		
 }
 /**
 * handles "save" button click

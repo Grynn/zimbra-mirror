@@ -23,9 +23,9 @@
 * param w (width)
 * param h (height)
 **/
-ReindexMailboxXDialog = function(parent,  app, w, h) {
+ReindexMailboxXDialog = function(parent,   w, h) {
 	if (arguments.length == 0) return;
-	ZaXDialog.call(this, parent, app, null, ZaMsg.Reindex_Title, null,null);
+	ZaXDialog.call(this, parent,  null, ZaMsg.Reindex_Title, null,null);
 	this.initForm(ZaReindexMailbox.myXModel,this.getMyXForm());
 	this._button[DwtDialog.OK_BUTTON].setToolTipContent(ZaMsg.Reindex_Mbx_tt);
 	this._containedObject = new ZaReindexMailbox();

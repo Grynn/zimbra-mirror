@@ -70,7 +70,7 @@ ZaAutoCompleteListView = function(params) {
 		DBG.println(e.message);
 	}
 	var _dataLoaderClass = params.dataLoaderClass;
-	this._dataLoaderObject = new _dataLoaderClass(app);
+	this._dataLoaderObject = new _dataLoaderClass();
 	this._dataLoaderMethod = params.dataLoaderMethod;
 	this._dataLoading = false;
 	this._data = null ;

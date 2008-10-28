@@ -22,10 +22,10 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaGlobalMessageCountPage = function(parent, app) {
+ZaGlobalMessageCountPage = function(parent) {
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
-	this._app = app;
+	this._app = ZaApp.getInstance();
 	//this._createHTML();
 	this.initialized=false;
 	this.setScrollStyle(DwtControl.SCROLL);	

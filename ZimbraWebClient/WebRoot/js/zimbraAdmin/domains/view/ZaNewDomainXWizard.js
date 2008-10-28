@@ -22,9 +22,9 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaNewDomainXWizard = function(parent, app) {
+ZaNewDomainXWizard = function(parent) {
 	this._app=app;
-	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NDD_Title, "650px", "300px","ZaNewDomainXWizard");
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NDD_Title, "650px", "300px","ZaNewDomainXWizard");
 
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GeneralPage, value:1},
@@ -532,11 +532,11 @@ function() {
 	if(this._containedObject[ZaModel.currentStep] == 3 && this._containedObject.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal) {	
 		//check that Filter is provided and at least one server
 		if(!this._containedObject.attrs[ZaDomain.A_GalLdapFilter]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
 			return;
 		}
 		if(!this._containedObject.attrs[ZaDomain.A_GalLdapURL] || this._containedObject.attrs[ZaDomain.A_GalLdapURL].length < 1) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);					
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);					
 			return;
 		}
 	} 
@@ -556,7 +556,7 @@ function() {
 		}
 		//check that passwords match
 		if(this._containedObject.attrs[ZaDomain.A_GalLdapBindPassword]!=this._containedObject.attrs[ZaDomain.A_GalLdapBindPasswordConfirm]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
 		this.goPage(5);
@@ -571,7 +571,7 @@ function() {
 		}
 	} else if(this._containedObject[ZaModel.currentStep] == 7) {
 		if(!this._containedObject[ZaDomain.A_GALSampleQuery]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_TERM_REQUIRED);			
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_TERM_REQUIRED);			
 			return;
 		}	
 		this.goPage(8);
@@ -586,7 +586,7 @@ function() {
 		}
 		//check that passwords match
 		if(this._containedObject.attrs[ZaDomain.A_zimbraGalSyncLdapBindPassword]!=this._containedObject.attrs[ZaDomain.A_GalSyncLdapBindPasswordConfirm]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
 		this.goPage(7);
@@ -603,7 +603,7 @@ function() {
 	} else if (this._containedObject[ZaModel.currentStep] == 11) {
 		//check if LDAP URL is provided
 		if(!this._containedObject.attrs[ZaDomain.A_AuthLdapURL]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
 			return false;
 		}
 		if(this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
@@ -622,7 +622,7 @@ function() {
 		}
 		//check that passwords match
 		if(this._containedObject.attrs[ZaDomain.A_AuthLdapSearchBindPassword]!=this._containedObject[ZaDomain.A_AuthLdapSearchBindPasswordConfirm]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
 		this.goPage(13);
@@ -636,7 +636,7 @@ function() {
 			this.goPage(this._containedObject[ZaModel.currentStep] + 2);
 			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
 		} else if(this._containedObject[ZaDomain.A_NotebookAccountPassword] != this._containedObject[ZaDomain.A_NotebookAccountPassword2]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 		} else {		
 			this.goPage(this._containedObject[ZaModel.currentStep] + 1);
 			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);

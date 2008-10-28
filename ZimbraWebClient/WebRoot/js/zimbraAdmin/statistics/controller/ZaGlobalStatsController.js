@@ -23,9 +23,9 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaGlobalStatsController = function(appCtxt, container, app) {
+ZaGlobalStatsController = function(appCtxt, container) {
 
-	ZaController.call(this, appCtxt, container, app,"ZaGlobalStatsController");
+	ZaController.call(this, appCtxt, container, "ZaGlobalStatsController");
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.tabConstructor = ZaGlobalStatsView;		
 }
@@ -38,7 +38,7 @@ ZaController.setViewMethods["ZaGlobalStatsController"] = [];
 ZaGlobalStatsController.prototype.show = 
 function() {
 	this._setView();
-	this._app.pushView(this.getContentViewId());
+	ZaApp.getInstance().pushView(this.getContentViewId());
 	var item=new Object();
 	try {		
 		item[ZaModel.currentTab] = "1"
@@ -53,7 +53,7 @@ function() {
 ZaGlobalStatsController.setViewMethod =
 function() {	
     if (!this._contentView) {
-		this._contentView  = new this.tabConstructor(this._container, this._app);
+		this._contentView  = new this.tabConstructor(this._container);
 		var elements = new Object();
 		this._ops = new Array();
 		this._ops = new Array();
@@ -69,9 +69,9 @@ function() {
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab()
 		}
-		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		this._UICreated = true;
-		this._app._controllers[this.getContentViewId ()] = this ;		
+		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;		
 	}
 }
 ZaController.setViewMethods["ZaGlobalStatsController"].push(ZaGlobalStatsController.setViewMethod);

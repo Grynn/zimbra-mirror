@@ -5,7 +5,7 @@ ZaBulkProvisionAccountsListView = function(parent, className, posStyle, headerLi
 	if (arguments.length == 0) return;
 	ZaListView.call(this, parent, className, posStyle, headerList);
 	this.hideHeader = true;
-    this._app = this.parent.parent._app ;
+    this._app = ZaApp.getInstance();
 
 }
 

@@ -23,13 +23,13 @@
 * @param app {ZaApp}
 * @author Greg Solovyev
 **/
-ZaResourceXFormView = function(parent, app) {
-	ZaTabView.call(this, parent, app, "ZaResourceXFormView");	
+ZaResourceXFormView = function(parent) {
+	ZaTabView.call(this, parent,"ZaResourceXFormView");	
 		
 	this.initForm(ZaResource.myXModel,this.getMyXForm());
-	this._localXForm.setController(this._app);	
-	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(app.getResourceController(), ZaResourceController.prototype.handleXFormChange));
-	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(app.getResourceController(), ZaResourceController.prototype.handleXFormChange));	
+	this._localXForm.setController(ZaApp.getInstance());	
+	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(ZaApp.getInstance().getResourceController(), ZaResourceController.prototype.handleXFormChange));
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(ZaApp.getInstance().getResourceController(), ZaResourceController.prototype.handleXFormChange));	
 	
 	this._helpURL = ZaResourceXFormView.helpURL;	
 }
@@ -78,17 +78,17 @@ function(entry) {
 		* If this account does not have a COS assigned to it - assign default COS
 		**/
 		if(this._containedObject.attrs[ZaResource.A_COSId]) {
-			this._containedObject.cos = ZaCos.getCosById(this._containedObject.attrs[ZaResource.A_COSId], this._app);
+			this._containedObject.cos = ZaCos.getCosById(this._containedObject.attrs[ZaResource.A_COSId]);
 		}
 		
 		if(!this._containedObject.cos) {
-			this._containedObject.cos = ZaCos.getCosByName("default", this._app);
+			this._containedObject.cos = ZaCos.getCosByName("default");
 			this._containedObject[ZaResource.A2_autoCos] = "TRUE" ;
 		} else {
 			this._containedObject[ZaResource.A2_autoCos] = "FALSE" ;
 		}
 		if(!this._containedObject.cos) {
-			var cosList = this._app.getCosList().getArray();
+			var cosList = ZaApp.getInstance().getCosList().getArray();
 			/**
 			* We did not find the COS assigned to this account,
 			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
@@ -117,7 +117,7 @@ function(entry) {
 	}
 	
 	if(ZaSettings.GLOBAL_CONFIG_ENABLED) {
-		this._containedObject.globalConfig = this._app.getGlobalConfig();
+		this._containedObject.globalConfig = ZaApp.getInstance().getGlobalConfig();
 	}
 	
    	this._containedObject[ZaResource.A2_autodisplayname] = "FALSE";
@@ -170,8 +170,8 @@ function (index, form) {
 ZaResourceXFormView.myXFormModifier = function(xFormObject) {	
 
 	var domainName;
-	if(ZaSettings.DOMAINS_ENABLED && this._app.getDomainList().size() > 0)
-		domainName = this._app.getDomainList().getArray()[0].name;
+	if(ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0)
+		domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
 	else 
 		domainName = ZaSettings.myDomainName;
 
@@ -183,7 +183,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2}];
 						
 	if(ZaSettings.COSES_ENABLED) {
-		headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:this._app.getCosListChoices()});
+		headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:ZaApp.getInstance().getCosListChoices()});
 	}
 	if(ZaSettings.SERVERS_ENABLED) {
 		headerItems.push({type:_OUTPUT_, ref:ZaResource.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer});
@@ -227,7 +227,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 		setupGroup.items.push(
 			/*{ref:ZaResource.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,
 				label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, 
-				choices:this._app.getCosListChoices(), onChange:ZaResourceXFormView.onCOSChanged
+				choices:ZaApp.getInstance().getCosListChoices(), onChange:ZaResourceXFormView.onCOSChanged
 			}*/
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [

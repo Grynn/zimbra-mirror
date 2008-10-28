@@ -22,9 +22,9 @@
 * this is the wizard dialog for deployig a zimlet or an admin extension
 * @author Greg Solovyev
 **/
-ZaZimletDeployXWizard = function(parent, app) {
-	ZaXWizardDialog.call(this, parent, app, null, ZaMsg.ZMLT_DeployZimletWizardTitle, "550px", "300px","ZaZimletDeployXWizard");
-	this._app = app;
+ZaZimletDeployXWizard = function(parent) {
+	ZaXWizardDialog.call(this, parent,null, ZaMsg.ZMLT_DeployZimletWizardTitle, "550px", "300px","ZaZimletDeployXWizard");
+	this._app = ZaApp.getInstance();
 	this.stepChoices = [
 		{label:ZaMsg.ZMLT_UploadFileStep_Title, value:1},
 		{label:ZaMsg.ZMLT_Deploying_Title, value:2}
@@ -139,14 +139,14 @@ function() {
 		try {
 			um.execute(zimletUploadCallback, document.getElementById (ZaZimletDeployXWizard.ZimletUploadFormId));
 		} catch (ex) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ZMLT_zimletFileNameError) ;
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ZMLT_zimletFileNameError) ;
 		}
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);	
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		ZaXWizardDialog.prototype.goNext.call(this);
 	} else {
-		this._app.getCurrentController().popupErrorDialog(ZaMsg.ZMLT_zimletFileNameError) ;
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ZMLT_zimletFileNameError) ;
 	}
 }
 
@@ -181,14 +181,14 @@ ZaZimletDeployXWizard.prototype.uploadCallback = function (status, attId) {
 		if ((status == AjxPost.SC_OK) && (attId != null)) {
 			instance[ZaZimlet.A_attachmentId] = attId;
 			instance[ZaZimlet.A_statusMsg] = ZaMsg.ZMLT_UploadZimletSuccessMsg;
-			ZaZimlet.deploy(this._app, ZaZimlet.ACTION_DEPLOY_ALL,attId,new AjxCallback(this, this.deployZimletClbck));			
+			ZaZimlet.deploy( ZaZimlet.ACTION_DEPLOY_ALL,attId,new AjxCallback(this, this.deployZimletClbck));			
 		} else {
 			// handle errors during attachment upload.
 			instance[ZaZimlet.A_deployStatus] = ZaZimlet.STATUS_FAILED;
 			instance[ZaZimlet.A_statusMsg] = AjxMessageFormat.format(ZaMsg.ZMLT_UploadZimletErrorMsg, status);
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.uploadCallback");	
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.uploadCallback");	
 	}	
 	this._localXForm.setInstance(instance);	
 }
@@ -196,9 +196,9 @@ ZaZimletDeployXWizard.prototype.uploadCallback = function (status, attId) {
 ZaZimletDeployXWizard.prototype.getDeploymentStatus = function () {
 	try {
 		var instance = this._localXForm.getInstance();
-		ZaZimlet.deploy(this._app, ZaZimlet.ACTION_DEPLOY_STATUS,instance[ZaZimlet.A_attachmentId],new AjxCallback(this, this.deployZimletClbck));					
+		ZaZimlet.deploy(ZaZimlet.ACTION_DEPLOY_STATUS,instance[ZaZimlet.A_attachmentId],new AjxCallback(this, this.deployZimletClbck));					
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.getDeploymentStatus");	
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.getDeploymentStatus");	
 	}	
 
 }
@@ -249,12 +249,12 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 					this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, this.pollInterval);		
 				} else {
 					AjxTimedAction.cancelAction(this._pollHandler);
-					this._app.getCurrentController().fireCreationEvent(new ZaZimlet(this._app));
+					ZaApp.getInstance().getCurrentController().fireCreationEvent(new ZaZimlet());
 				}
 			}
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.deployZimletClbck");	
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaZimletDeployXWizard.deployZimletClbck");	
 	}	
 	this._localXForm.setInstance(instance);	
 }

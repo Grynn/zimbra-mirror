@@ -25,7 +25,7 @@
 * @param h (height)
 **/
 
-ZaXDialog = function(parent, app, className, title, w, h,iKeyName) {
+ZaXDialog = function(parent,className, title, w, h,iKeyName) {
 	if (arguments.length == 0) return;
 	this._iKeyName = iKeyName;	
 	var clsName = className || "DwtDialog";
@@ -36,7 +36,7 @@ ZaXDialog = function(parent, app, className, title, w, h,iKeyName) {
 		this._extraButtons = [helpButton];
 	}
 	DwtDialog.call(this, parent, clsName, title, this._standardButtons,this._extraButtons);
-	this._app = app;
+	this._app = ZaApp.getInstance();
 	this._localXForm = null;
 	this._localXModel = null;
 	this._drawn = false;
@@ -104,7 +104,7 @@ function (xModelMetaData, xFormMetaData, defaultInstance) {
 		
 	this._localXModel = new XModel(xModelMetaData);
 	this._localXForm = new XForm(xFormMetaData, this._localXModel, defaultInstance, this);
-	this._localXForm.setController(this._app);
+	this._localXForm.setController(ZaApp.getInstance());
 	this._localXForm.draw(this._pageDiv);	
 	this._drawn = true;
 }

@@ -22,9 +22,9 @@
 * @param parent
 * param app
 **/
-ZaDomainNotebookXWizard = function(parent,  app, w, h) {
+ZaDomainNotebookXWizard = function(parent, w, h) {
 	this._app=app;
-	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NDW_Title, "550px", "300px","ZaDomainNotebookXWizard");
+	ZaXWizardDialog.call(this, parent,null, ZaMsg.NDW_Title, "550px", "300px","ZaDomainNotebookXWizard");
 
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GeneralPage, value:1},

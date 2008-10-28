@@ -72,7 +72,7 @@ ZaDistributionList.myXModel.items = ZaDistributionList.myXModel.items.concat(ZaA
  * 					
  */
 ZaAccountMemberOfListView.getAccountMemberShip = 
-function (app, val, by){
+function (val, by){
 	var directML = [];
 	var indirectML = [];
 	var nonML = [];
@@ -86,7 +86,7 @@ function (app, val, by){
 		var params = new Object();
 		params.soapDoc = soapDoc;	
 		var reqMgrParams = {
-			controller: app.getCurrentController ()
+			controller: ZaApp.getInstance().getCurrentController ()
 		}
 		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountMembershipResponse;
 		if (resp.dl && (resp.dl instanceof Array)){
@@ -105,7 +105,7 @@ function (app, val, by){
 		}
 
 	}catch (ex){
-		app.getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.getAccountMemberShip", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.getAccountMemberShip", null, false);
 	}
 	
 	var memberOf = {	directMemberList: directML,
@@ -116,7 +116,7 @@ function (app, val, by){
 }
 
 ZaAccountMemberOfListView.getDlMemberShip = 
-function (app, val, by){
+function (val, by){
 	var directML = [];
 	var indirectML = [];
 	var nonML = [];
@@ -130,7 +130,7 @@ function (app, val, by){
 		var params = new Object();
 		params.soapDoc = soapDoc;	
 		var reqMgrParams = {
-			controller: app.getCurrentController()
+			controller: ZaApp.getInstance().getCurrentController()
 		}
 		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDistributionListMembershipResponse;
 		
@@ -150,7 +150,7 @@ function (app, val, by){
 		}
 
 	}catch (ex){
-		app.getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.getDlMemberShip", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.getDlMemberShip", null, false);
 	}
 	
 	var memberOf = {	directMemberList: directML,
@@ -197,7 +197,7 @@ function (form, listArr){
 				var indirectDls = indirectArrFound.join("<br />");			
 				msg = AjxMessageFormat.format (ZaMsg.Q_REMOVE_INDIRECT_GROUP, [dlName, indirectDls]);
 				
-				var confirmMessageDialog =  new ZaMsgDialog(form.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], form.parent._app);					
+				var confirmMessageDialog =  new ZaMsgDialog(form.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);					
 				
 				confirmMessageDialog.setMessage(msg,  DwtMessageDialog.WARNING_STYLE);
 				confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountMemberOfListView._removeConfirmedList, null ,
@@ -510,7 +510,7 @@ function (item, offset){
 							applyCos: 0,
 							attrs: attrs,
 							types: [ZaSearch.DLS],
-							controller: xform.parent._app.getCurrentController()
+							controller: ZaApp.getInstance().getCurrentController()
 						 } ;
 					
 			var result = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;
@@ -535,7 +535,7 @@ function (item, offset){
 			//xform.setInstance(curInstance) ;
 //			xform.refresh();
 		}catch (ex){
-			xform.parent._app.getCurrentController()._handleException(
+			ZaApp.getInstance.getCurrentController()._handleException(
 				ex, "ZaAccountMemberOfListView.prototype.srchButtonHndlr");
 		}	
 	}

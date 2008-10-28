@@ -22,8 +22,8 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaDomainXFormView = function(parent, app) {
-	ZaTabView.call(this, parent, app,"ZaDomainXFormView");	
+ZaDomainXFormView = function(parent) {
+	ZaTabView.call(this, parent,"ZaDomainXFormView");	
 	this.GALModes = [
 		{label:ZaMsg.GALMode_internal, value:ZaDomain.GAL_Mode_internal},
 		{label:ZaMsg.GALMode_external, value:ZaDomain.GAL_Mode_external}, 
@@ -125,7 +125,7 @@ function(entry) {
 
 
 		//get sll Zimlets
-		var allZimlets = ZaZimlet.getAll(this._app, "extension");
+		var allZimlets = ZaZimlet.getAll("extension");
 		if(allZimlets == null) {
 			allZimlets = [];
 		}
@@ -155,7 +155,7 @@ function(entry) {
     
  	if(ZaSettings.COSES_ENABLED) {	
 		if(this._containedObject.attrs[ZaDomain.A_domainDefaultCOSId]) {	
-			var cos = ZaCos.getCosById(this._containedObject.attrs[ZaDomain.A_domainDefaultCOSId], this._app);
+			var cos = ZaCos.getCosById(this._containedObject.attrs[ZaDomain.A_domainDefaultCOSId]);
 			this.cosChoices.setChoices([cos]);
 			this.cosChoices.dirtyChoices();
 		}
@@ -227,7 +227,7 @@ ZaDomainXFormView.addButtonListener =
 function () {
 	var formPage = this.getForm().parent;
 	if(!formPage.addAclDlg) {
-		formPage.addAclDlg = new ZaAddDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px");
+		formPage.addAclDlg = new ZaAddDomainAclXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px");
 		formPage.addAclDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainXFormView.addAcl, this.getForm(), null);						
 	}
 	var obj = {};
@@ -272,7 +272,7 @@ function () {
 	if(instance.acl_selection_cache && instance.acl_selection_cache[0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editAclDlg) {
-			formPage.editAclDlg = new ZaEditDomainAclXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px");
+			formPage.editAclDlg = new ZaEditDomainAclXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px");
 			formPage.editAclDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainXFormView.updateAcl, this.getForm(), null);						
 		}
 		var obj = {};
@@ -358,20 +358,18 @@ function (value, event, form) {
 	}
 }
 
-ZaDomainXFormView.onCOSChanged = 
-function(value, event, form) {
-	form.parent.setDirty(true);
+ZaDomainXFormView.preProcessCOS = 
+function(value, form) {
+	var val = value;
 	if(ZaItem.ID_PATTERN.test(value))  {
-		this.setInstanceValue(value);
+		val = value;
 	} else {
 		var cos = ZaCos.getCosByName(value, form.parent._app);
 		if(cos) {
-			//value = form.getInstance().cos.id;
-			value = cos.id;
+			val = cos.id;
 		} 
 	}
-	this.setInstanceValue(value);
-	return value;
+	return val;
 }
 
 ZaDomainXFormView.myXFormModifier = function(xFormObject) {	
@@ -476,7 +474,8 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		case1.items.push(
 			{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
 				label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
-				onChange:ZaDomainXFormView.onCOSChanged,
+				inputPreProcessor:ZaDomainXFormView.preProcessCOS,
+				searchByProcessedValue:false,
 				dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
 				choices:this.cosChoices,
 				dataFetcherClass:ZaSearch,
@@ -882,7 +881,7 @@ function(item) {
 
     var itemArr = item.split(":");
     var cosId = itemArr [0];
-    var cos = ZaCos.getCosById(cosId, this._app) ;
+    var cos = ZaCos.getCosById(cosId) ;
     var cosDisplayValue ;
     
     if (cos) {

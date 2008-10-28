@@ -16,11 +16,11 @@ if (ZaController.initToolbarMethods["ZaAccountListController"]) {
  ZaAccountListController.prototype._bulkProvisionListener =
  function (ev) {
      try {
-		if(!this._app.dialogs["bulkProvisionWizard"]) {
-			this._app.dialogs["bulkProvisionWizard"] = new ZaBulkProvisionWizard(this._container, this._app);
+		if(!ZaApp.getInstance().dialogs["bulkProvisionWizard"]) {
+			ZaApp.getInstance().dialogs["bulkProvisionWizard"] = new ZaBulkProvisionWizard(this._container);
 		}
-		this._app.dialogs["bulkProvisionWizard"].setObject(new ZaBulkProvision(this._app));
-		this._app.dialogs["bulkProvisionWizard"].popup();
+		ZaApp.getInstance().dialogs["bulkProvisionWizard"].setObject(new ZaBulkProvision());
+		ZaApp.getInstance().dialogs["bulkProvisionWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._bulkProvisionListener", null, false);
 	}

@@ -22,9 +22,8 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaGALConfigXWizard = function(parent, app) {
-	this._app=app;
-	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NCD_GALConfigTitle, "550px", "300px","ZaGALConfigXWizard");
+ZaGALConfigXWizard = function(parent) {
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_GALConfigTitle, "550px", "300px","ZaGALConfigXWizard");
 	this.stepChoices = [
 		{label:ZaMsg.TABT_GALMode, value:1},
 		{label:ZaMsg.TABT_GALConfiguration, value:2}, 
@@ -327,11 +326,11 @@ function() {
 	if(this._containedObject[ZaModel.currentStep] == 2 && this._containedObject.attrs[ZaDomain.A_GalMode]!=ZaDomain.GAL_Mode_internal) {	
 		//check that Filter is provided and at least one server
 		if(!this._containedObject.attrs[ZaDomain.A_GalLdapFilter]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_FILTER_REQUIRED);			
 			return;
 		}
 		if(!this._containedObject.attrs[ZaDomain.A_GalLdapURL] || this._containedObject.attrs[ZaDomain.A_GalLdapURL].length < 1) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);					
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);					
 			return;
 		}
 	} 
@@ -344,7 +343,7 @@ function() {
 		}
 		//check that passwords match
 		if(this._containedObject.attrs[ZaDomain.A_GalLdapBindPassword]!=this._containedObject.attrs[ZaDomain.A_GalLdapBindPasswordConfirm]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
 		this.goPage(4);
@@ -356,7 +355,7 @@ function() {
 		}
 	} else if(this._containedObject[ZaModel.currentStep] == 6) {
 		if(!this._containedObject[ZaDomain.A_GALSampleQuery]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_TERM_REQUIRED);			
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_SEARCH_TERM_REQUIRED);			
 			return;
 		}
  		this.testSetings();

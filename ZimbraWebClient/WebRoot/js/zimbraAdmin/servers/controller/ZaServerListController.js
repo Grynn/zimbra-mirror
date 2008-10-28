@@ -21,8 +21,8 @@
 * This is a singleton object that controls all the user interaction with the list of ZaServer objects
 * @author Greg Solovyev
 **/
-ZaServerListController = function(appCtxt, container, app) {
-	ZaListViewController.call(this, appCtxt, container, app,"ZaServerListController");
+ZaServerListController = function(appCtxt, container) {
+	ZaListViewController.call(this, appCtxt, container,"ZaServerListController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	
@@ -46,8 +46,8 @@ function(list, openInNewTab) {
 	if (list != null)
 		this._contentView.set(list.getVector());
 	
-	//this._app.pushView(ZaZimbraAdmin._SERVERS_LIST_VIEW);			
-	this._app.pushView(this.getContentViewId());
+	//ZaApp.getInstance().pushView(ZaZimbraAdmin._SERVERS_LIST_VIEW);			
+	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._removeList = new Array();
 	if (list != null)
 		this._list = list;
@@ -91,20 +91,20 @@ ZaServerListController.prototype._createUI = function () {
 			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		//this._app.createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
+		//ZaApp.getInstance().createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
 		var tabParams = {
 			openInNewTab: false,
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab() 
 		}
-		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+		this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);					
 			
 		this._UICreated = true;
-		this._app._controllers[this.getContentViewId ()] = this ;
+		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	} catch (ex) {
 		this._handleException(ex, "ZaServerListController.prototype._createUI", null, false);
 		return;
@@ -116,7 +116,7 @@ ZaServerListController.prototype._createUI = function () {
 ZaServerListController.prototype.refresh = 
 function() {
 	try {
-		this._contentView.set(this._app.getServerList(true).getVector());
+		this._contentView.set(ZaApp.getInstance().getServerList(true).getVector());
 	} catch (ex) {
 		this._handleException(ex, ZaServerListController.prototype.refresh, null, false);
 	}
@@ -141,7 +141,7 @@ function (ev) {
 		if (details) {
 			if (this._list) this._list.replace (details);
 			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 			this.changeActionsState();
@@ -160,7 +160,7 @@ function (ev) {
 		if(ev.getDetails()) {
 			if (this._list) this._list.add(ev.getDetails());
 			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 		}
@@ -178,7 +178,7 @@ function (ev) {
 		if(ev.getDetails()) {
 			if (this._list) this._list.remove(ev.getDetails());
 			if (this._contentView ) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 		}
@@ -224,8 +224,8 @@ function(details) {
 // new button was pressed
 ZaServerListController.prototype._newButtonListener =
 function(ev) {
-	var newServer = new ZaServer(this._app);
-	this._app.getServerController().show(newServer);
+	var newServer = new ZaServer();
+	ZaApp.getInstance().getServerController().show(newServer);
 }
 
 /**
@@ -237,7 +237,7 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
 			this._selectedItem = ev.item;
-			this._app.getServerController().show(ev.item);
+			ZaApp.getInstance().getServerController().show(ev.item);
 		}
 	} else {
 		this.changeActionsState();	
@@ -258,7 +258,7 @@ ZaServerListController.prototype._editButtonListener =
 function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
-		this._app.getServerController().show(item);
+		ZaApp.getInstance().getServerController().show(item);
 	}
 }
 

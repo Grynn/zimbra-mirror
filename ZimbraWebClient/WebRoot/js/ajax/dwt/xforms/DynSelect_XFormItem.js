@@ -54,6 +54,9 @@ function (data, more, total) {
 }
 
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
+	//console.log("onKeyUp " + value);
+	var lastTypeTime = new Date().getTime();
+	
 	this.hideNote();
 	if(event.keyCode==XFG.ARROW_UP) {
 		if(!this.menuUp)
@@ -89,9 +92,10 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 	if(method) {
 		method.call(this, value, event);
 	} else {
+
 		var key = DwtKeyEvent.getCharCode(event);
 		// don't fire off another if we've already set one up unless this is an ENTER key
-		if (this.keyPressDelayHdlr != null) {
+		if (!AjxUtil.isEmpty(this.keyPressDelayHdlr)) {
 			AjxTimedAction.cancelAction(this.keyPressDelayHdlr);
 			this.keyPressDelayHdlr = null;
 		}
@@ -103,11 +107,13 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 		if (key == DwtKeyEvent.KEY_TAB) {
 			DwtUiEvent.setBehaviour(event, true, false);
 			return false;
-		} else if(!(event.keyCode==XFG.ARROW_RIGHT || event.keyCode==XFG.ARROW_LEFT)) { 
-			var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, value]);
+		} else if(!(event.keyCode==XFG.ARROW_RIGHT || event.keyCode==XFG.ARROW_LEFT)) {  
+			this._lastTypeTime = lastTypeTime;
+			var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, value,lastTypeTime]);
 			this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, DynSelect_XFormItem.LOAD_PAUSE);
 		}		
 	}
+
 }
 
 DynSelect_XFormItem.prototype.resetChoices = function () {
@@ -129,21 +135,103 @@ DynSelect_XFormItem.prototype.updateElement = function (newValue) {
 		}
 		if(!this.dataFetcherObject)
 			return;
-		
-		/*var callback = new AjxCallback(this, this.changeChoicesCallback);
-		this.dataFetcherMethod.call(this.dataFetcherObject, "", null, callback);*/
 	}
 }
 
-DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value) {
+DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTypeTime) {
+	//console.log("handleKeyPressDelay " + value);
+	this.keyPressDelayHdlr = null;
+	var val = this.preProcessInput(value);
 	
+	if(lastTypeTime == this._lastTypeTime) {
+		this.getForm().itemChanged(this, val, event);
+	} else {
+		console.log("typing faster than retreiving data");
+		return;
+	}		
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
 		this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
 	}
 	if(!this.dataFetcherObject)
 		return;
-		
+			
 	var callback = new AjxCallback(this, this.changeChoicesCallback);
-	this.dataFetcherMethod.call(this.dataFetcherObject, value, event, callback);
-	this.getForm().itemChanged(this, value, event);	
+	var searchByProcessedValue = this.getInheritedProperty("searchByProcessedValue");
+	
+	if(searchByProcessedValue)	
+		this.dataFetcherMethod.call(this.dataFetcherObject, val, event, callback);
+	else	
+		this.dataFetcherMethod.call(this.dataFetcherObject, value, event, callback);
+}
+
+DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
+	var id = this.getId();
+	var ref = this.getFormGlobalRef() + ".getItemById('"+ id + "')";	
+	var inputHtml;
+	var inputSize = this.getInheritedProperty("inputSize");		
+	inputHtml = ["<input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
+				" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
+				" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
+				">"].join("");
+	
+	if (this.getWidth() == "auto") {
+		if(this.getInheritedProperty("editable") && !AjxEnv.isIE) {
+			var element = this.getElement("tempInput");
+			if(!element) 
+				element = this.createElement("tempInput", null, "input", "MENU CONTENTS");
+			element.style.left = -1000;
+			element.style.top = -1000;
+			element.type="text";
+			element.size = inputSize;
+			element.className = this.getDisplayCssClass();
+			this._width = element.offsetWidth;
+		} else {
+			var element = this.getElement("tempDiv");
+			if(!element) 
+				element = this.createElement("tempDiv", null, "div", "MENU CONTENTS");
+			element.style.left = -1000;
+			element.style.top = -1000;
+			element.className = this.getMenuCssClass();
+			element.innerHTML = this.getChoicesHTML();
+			this._width = element.offsetWidth;
+			element.innerHTML = "";
+		}
+	}
+
+	
+
+	HTMLoutput.append(
+		"<div id=", id, this.getCssString(),
+			" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').onClick(this)\"",
+			" onselectstart=\"return false\"",
+			">",
+			"<table ", this.getTableCssString(), ">", 
+				"<tr><td width=100%>",inputHtml,"</td>",
+				"</tr>", 
+			"</table>", 
+		"</div>"
+	);
+ 
+}
+
+DynSelect_XFormItem.prototype.onClick = function() {
+	var choices = this.getNormalizedChoices();
+	if(choices && choices.values && choices.values.length) {
+		this.showMenu();
+	}
+}
+
+DynSelect_XFormItem.prototype.getArrowElement = function () {
+	return null;
+}
+
+DynSelect_XFormItem.prototype.preProcessInput = function (value) {
+	var preProcessMethod = this.getPreProcessMethod();
+	var val = null;
+	val = preProcessMethod.call(this, value, this.getForm());
+	return val;
+}
+
+DynSelect_XFormItem.prototype.getPreProcessMethod = function () {
+	return this.cacheInheritedMethod("inputPreProcessor","inputPreProcessor","value, form");
 }

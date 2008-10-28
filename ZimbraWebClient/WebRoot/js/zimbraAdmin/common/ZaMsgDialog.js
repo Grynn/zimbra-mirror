@@ -22,8 +22,8 @@
 * This class represents a reusable message dialog box. Messages can be informational, warning, or
 * critical.
 */
-ZaMsgDialog = function(parent, className, buttons, app, extraButtons) {
-	this._app = app;
+ZaMsgDialog = function(parent, className, buttons, extraButtons) {
+	this._app = ZaApp.getInstance();
  	DwtMessageDialog.call(this, parent, className, buttons, extraButtons);
 }
 
@@ -31,7 +31,7 @@ ZaMsgDialog.prototype = new DwtMessageDialog;
 ZaMsgDialog.prototype.constructor = ZaMsgDialog;
 
 ZaMsgDialog.prototype.setApp = 
-function(app) {
+function() {
 	this._app=app;
 }
 ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON = "close tab and delete";

@@ -20,8 +20,8 @@
 * @class ZaDomainListController
 * This is a singleton object that controls all the user interaction with the list of ZaDomain objects
 **/
-ZaDomainListController = function(appCtxt, container, app) {
-	ZaListViewController.call(this, appCtxt, container, app,"ZaDomainListController");
+ZaDomainListController = function(appCtxt, container) {
+	ZaListViewController.call(this, appCtxt, container, "ZaDomainListController");
 	this._helpURL = ZaDomainListController.helpURL;	
 	this._currentQuery = ""
 	this._currentPageNum = 1;
@@ -56,13 +56,13 @@ ZaDomainListController.prototype.show = function (doPush) {
 ZaDomainListController.prototype._show = 
 function (list,  openInNewTab, openInSearchTab) {
 	this._updateUI(list, openInNewTab, openInSearchTab);
-	//this._app.pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
-	this._app.pushView(this.getContentViewId(), openInNewTab, openInSearchTab);
+	//ZaApp.getInstance().pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
+	ZaApp.getInstance().pushView(this.getContentViewId(), openInNewTab, openInSearchTab);
 	
 	if (openInSearchTab) {
-		this._app.updateSearchTab();
+		ZaApp.getInstance().updateSearchTab();
 	}else{
-		this._app.updateTab(this.getMainTab(), this._app._currentViewId );
+		ZaApp.getInstance().updateTab(this.getMainTab(), ZaApp.getInstance()._currentViewId );
 	}
 }
 
@@ -96,7 +96,7 @@ function (ev) {
 		if (details){
 			if (this._list) this._list.replace(details);
 			if (this._contentView) this._contentView.setUI();
-			if(this._app.getCurrentController() == this) {
+			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
 			}
 			this.changeActionsState();			
@@ -158,7 +158,7 @@ ZaController.initToolbarMethods["ZaDomainListController"].push(ZaDomainListContr
 ZaDomainListController.prototype._createUI = 
 function (openInNewTab, openInSearchTab) {
 	this._contentView = new ZaDomainListView(this._container);
-	this._app._controllers[this.getContentViewId ()] = this ;
+	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	// create the menu operations/listeners first	
     this._initToolbar();
 	//always add Help and navigation buttons at the end of the toolbar    
@@ -176,13 +176,13 @@ function (openInNewTab, openInSearchTab) {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	//this._app.createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
+	//ZaApp.getInstance().createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
 	var tabParams = {
 			openInNewTab: false,
 			tabId: this.getContentViewId(),
 			tab: openInSearchTab ? this.getSearchTab() : this.getMainTab() 
 		}
-	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 	
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
@@ -190,7 +190,7 @@ function (openInNewTab, openInSearchTab) {
 	//set a selection listener on the account list view
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-	this._removeConfirmMessageDialog = this._app.dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
 		
 	this._UICreated = true;
 }
@@ -239,7 +239,7 @@ ZaDomainListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
-			this._app.getDomainController().show(ev.item);
+			ZaApp.getInstance().getDomainController().show(ev.item);
 		}
 	} else {
 		this.changeActionsState();	
@@ -261,7 +261,7 @@ ZaDomainListController.prototype._editButtonListener =
 function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
-		this._app.getDomainController().show(item);
+		ZaApp.getInstance().getDomainController().show(item);
 	}
 }
 
@@ -269,8 +269,8 @@ function(ev) {
 ZaDomainListController.prototype._newButtonListener =
 function(ev) {
 	try {
-		var domain = new ZaDomain(this._app);
-		this._newDomainWizard = this._app.dialogs["newDomainWizard"] = new ZaNewDomainXWizard(this._container, this._app);	
+		var domain = new ZaDomain();
+		this._newDomainWizard = ZaApp.getInstance().dialogs["newDomainWizard"] = new ZaNewDomainXWizard(this._container);	
 		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishNewButtonListener, this, null);			
 		this._newDomainWizard.setObject(domain);
 		this._newDomainWizard.popup();
@@ -286,7 +286,7 @@ function(ev) {
 		if(this._contentView.getSelectionCount() == 1) {
 			var item = this._contentView.getSelection()[0];
 			this._currentObject = item;
-			this._galWizard = this._app.dialogs["galWizard"] = new ZaGALConfigXWizard(this._container, this._app);	
+			this._galWizard = ZaApp.getInstance().dialogs["galWizard"] = new ZaGALConfigXWizard(this._container);	
 			this._galWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishGalButtonListener, this, null);			
 			this._galWizard.setObject(item);
 			this._galWizard.popup();
@@ -303,7 +303,7 @@ function(ev) {
 		if(this._contentView.getSelectionCount() == 1) {
 			var item = this._contentView.getSelection()[0];
 			this._currentObject = item;
-			this._authWizard = this._app.dialogs["authWizard"] = new ZaAuthConfigXWizard(this._container, this._app);	
+			this._authWizard = ZaApp.getInstance().dialogs["authWizard"] = new ZaAuthConfigXWizard(this._container);	
 			this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAuthButtonListener, this, null);			
 			this._authWizard.setObject(item);
 			this._authWizard.popup();
@@ -325,7 +325,7 @@ function(ev) {
 		for(var key =0; key < cnt; key++) {
 			var item = arrItems[key];
 			if (item) {
-				if (this._app.getTabGroup().getTabByItemId (item.id)) {
+				if (ZaApp.getInstance().getTabGroup().getTabByItemId (item.id)) {
 					this._itemsInTabList.push (item) ;
 				}else{
 					this._removeList.push(item);
@@ -335,21 +335,21 @@ function(ev) {
 	}
 	
 	if (this._itemsInTabList.length > 0) {
-		if(!this._app.dialogs["ConfirmDeleteItemsInTabDialog"]) {
-			this._app.dialogs["ConfirmDeleteItemsInTabDialog"] = 
-				new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.CANCEL_BUTTON], this._app,
+		if(!ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"]) {
+			ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"] = 
+				new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.CANCEL_BUTTON], 
 						[ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC , ZaMsgDialog.NO_DELETE_BUTTON_DESC]);			
 		}
 		
 		var msg = ZaMsg.dl_warning_delete_accounts_in_tab ; ;
 		msg += ZaDomainListController.getDlMsgFromList (this._itemsInTabList) ;
 		
-		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].setMessage(msg, DwtMessageDialog.WARNING_STYLE);	
-		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
+		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].setMessage(msg, DwtMessageDialog.WARNING_STYLE);	
+		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
 				ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON, ZaDomainListController.prototype._closeTabsBeforeRemove, this);
-		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
+		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].registerCallback(
 				ZaMsgDialog.NO_DELETE_BUTTON, ZaDomainListController.prototype._deleteDomainInRemoveList, this);		
-		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].popup();
+		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].popup();
 		
 	}else{
 		this._deleteDomainInRemoveList ();
@@ -365,8 +365,8 @@ function () {
 
 ZaDomainListController.prototype._deleteDomainInRemoveList =
 function () {
-	if (this._app.dialogs["ConfirmDeleteItemsInTabDialog"]) {
-		this._app.dialogs["ConfirmDeleteItemsInTabDialog"].popdown();
+	if (ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"]) {
+		ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"].popdown();
 	}
 	if(this._removeList.length) {
 		var dlgMsg = ZaMsg.Q_DELETE_DOMAINS;
@@ -485,7 +485,7 @@ ZaListViewController.changeActionsStateMethods["ZaDomainListController"].push(Za
 ZaDomainListController.prototype._finishNewButtonListener =
 function(ev) {
 	try {
-		var domain = ZaDomain.create(this._newDomainWizard.getObject(), this._app);
+		var domain = ZaDomain.create(this._newDomainWizard.getObject());
 		if(domain != null) {
 			this._newDomainWizard.popdown();
 			//if creation took place - fire an DomainChangeEvent

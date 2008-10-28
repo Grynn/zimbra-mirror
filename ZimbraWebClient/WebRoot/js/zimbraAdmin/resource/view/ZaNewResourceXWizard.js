@@ -23,8 +23,8 @@
 * This class defines the New Resource Wazards in XForm
 * @author Charles Cao
 **/
-ZaNewResourceXWizard = function(parent, app) {
-	ZaXWizardDialog.call(this, parent, app, null, ZaMsg.NCD_NewResTitle, "700px", "300px","ZaNewResourceXWizard");
+ZaNewResourceXWizard = function(parent) {
+	ZaXWizardDialog.call(this, parent,null, ZaMsg.NCD_NewResTitle, "700px", "300px","ZaNewResourceXWizard");
 	
 	this.stepChoices = [
 		{label:ZaMsg.TABT_ResourceProperties, value:1},
@@ -35,7 +35,7 @@ ZaNewResourceXWizard = function(parent, app) {
 
 	this.initForm(ZaResource.myXModel,this.getMyXForm());	
    
-	this._localXForm.setController(this._app);	
+	this._localXForm.setController(ZaApp.getInstance());	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewResourceXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewResourceXWizard.prototype.handleXFormChange));	
 	this._helpURL = ZaNewResourceXWizard.helpURL;
@@ -74,16 +74,16 @@ function (loc) {
 ZaNewResourceXWizard.prototype.finishWizard = 
 function() {
 	try {		
-		if(!ZaResource.checkValues(this._containedObject, this._app)) {
+		if(!ZaResource.checkValues(this._containedObject)) {
 			return false;
 		}
-		var resource = ZaItem.create(this._containedObject, ZaResource, "ZaResource", this._app);
+		var resource = ZaItem.create(this._containedObject, ZaResource, "ZaResource");
 		if(resource != null) {
-			this._app.getResourceController().fireCreationEvent(resource);
+			ZaApp.getInstance().getResourceController().fireCreationEvent(resource);
 			this.popdown();		
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaNewResourceXWizard.prototype.finishWizard", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaNewResourceXWizard.prototype.finishWizard", null, false);
 	}
 }
 
@@ -93,7 +93,7 @@ function() {
 		//check if passwords match
 		if(this._containedObject.attrs[ZaResource.A_password]) {
 			if(this._containedObject.attrs[ZaResource.A_password] != this._containedObject[ZaResource.A2_confirmPassword]) {
-				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 				return false;
 			}
 		}
@@ -103,23 +103,23 @@ function() {
 		var params = { 	query: ["(|(uid=",this._containedObject[ZaResource.A_name],")(cn=",this._containedObject[ZaResource.A_name],")(sn=",this._containedObject[ZaResource.A_name],")(gn=",this._containedObject[ZaResource.A_name],")(mail=",this._containedObject[ZaResource.A_name],")(zimbraMailDeliveryAddress=",this._containedObject[ZaResource.A_name],"))"].join(""),
 						limit : 2,
 						applyCos: 0,
-						controller: this._app.getCurrentController(),
+						controller: ZaApp.getInstance().getCurrentController(),
 						types: [ZaSearch.DLS,ZaSearch.ALIASES,ZaSearch.ACCOUNTS,ZaSearch.RESOURCES]
 					 };
 					
 		var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;		
-		var list = new ZaItemList(null, this._app);	
+		var list = new ZaItemList();	
 		list.loadFromJS(resp);	
 		if(list.size() > 0) {
 			var acc = list.getArray()[0];
 			if(acc.type==ZaItem.ALIAS) {
-				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_aliasWithThisNameExists);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_aliasWithThisNameExists);
 			} else if (acc.type==ZaItem.RESOURCE) {
-				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_resourceWithThisNameExists);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_resourceWithThisNameExists);
 			} else if (acc.type==ZaItem.DL) {
-				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_dlWithThisNameExists);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_dlWithThisNameExists);
 			} else {
-				this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_accountWithThisNameExists);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_accountWithThisNameExists);
 			}
 			return false;
 		} 
@@ -159,14 +159,14 @@ function(entry) {
 
 	this._containedObject.id = null;
 	if(ZaSettings.COSES_ENABLED) {
-		this._containedObject.cos = ZaCos.getCosByName("default",this._app);
+		this._containedObject.cos = ZaCos.getCosByName("default");
 		if(!this._containedObject.cos) {
-			var cosList = this._app.getCosList().getArray();
+			var cosList = ZaApp.getInstance().getCosList().getArray();
 			this._containedObject.cos = cosList[0];
 			this._containedObject.attrs[ZaResource.A_COSId] = cosList[0].id;
 		}
 	} else {
-		this._containedObject.cos = new ZaCos(this._app);
+		this._containedObject.cos = new ZaCos();
 	}
 	//set the default value of resource type and schedule policy
 	this._containedObject.attrs[ZaResource.A_zimbraCalResType] = ZaResource.RESOURCE_TYPE_LOCATION;
@@ -183,12 +183,12 @@ function(entry) {
 	if(ZaSettings.GLOBAL_CONFIG_ENABLED) {
 		if(!domainName) {
 			//find out what is the default domain
-			domainName = this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
-			if(!domainName && ZaSettings.DOMAINS_ENABLED && this._app.getDomainList().size() > 0) {
-				domainName = this._app.getDomainList().getArray()[0].name;
+			domainName = ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
+			if(!domainName && ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0) {
+				domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
 			}
 		}
-		this._containedObject.globalConfig = this._app.getGlobalConfig();
+		this._containedObject.globalConfig = ZaApp.getInstance().getGlobalConfig();
 	} 
 	if(!domainName) {
 		domainName =  ZaSettings.myDomainName;
@@ -219,8 +219,8 @@ function(value, event, form) {
 
 ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {	
 	var domainName;
-	if(ZaSettings.DOMAINS_ENABLED && this._app.getDomainList().size() > 0)
-		domainName = this._app.getDomainList().getArray()[0].name;
+	if(ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0)
+		domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
 	else 
 		domainName = ZaSettings.myDomainName;
 
@@ -238,7 +238,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 							this.getForm().itemChanged(this.getForm().getItemById(this.getForm().getId()+"_case").__xform.getItemById(this.getForm().getId()+"_resource_email_addr"), this.getInstance()[ZaResource.A_name], event);
 							this.getInstance()[ZaResource.A2_autodisplayname]="TRUE";
 						} catch (ex) {
-							this.getForm().parent._app.getCurrentController()._handleException(ex, "XForm." + ZaResource.A_displayname + ".elementChanged", null, false);
+							ZaApp.getInstance().getCurrentController()._handleException(ex, "XForm." + ZaResource.A_displayname + ".elementChanged", null, false);
 						}
 					}
 					this.getForm().itemChanged(this, elementValue, event);
@@ -270,7 +270,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 		setupGroup.items.push(
 			/*{ref:ZaResource.A_COSId, type:_OSELECT1_, msgName:ZaMsg.NAD_ClassOfService,
 				label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_, 
-				choices:this._app.getCosListChoices(), onChange:ZaNewResourceXWizard.onCOSChanged
+				choices:ZaApp.getInstance().getCosListChoices(), onChange:ZaNewResourceXWizard.onCOSChanged
 			}*/
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [
@@ -331,7 +331,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 		setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
 							items: [
 								{ ref: ZaResource.A_mailHost, type: _OSELECT1_, label: null, editable:false, 
-									choices: this._app.getServerListChoices(), 
+									choices: ZaApp.getInstance().getServerListChoices(), 
 									relevant:"instance[ZaResource.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices().getChoices().values.length != 0",
 									relevantBehavior:_DISABLE_
 							  	},

@@ -821,7 +821,7 @@ function () {
 XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 	var key = DwtKeyEvent.getCharCode(ev);
 	// don't fire off another if we've already set one up unless this is an ENTER key
-	if (this.keyPressDelayHdlr != null && key != DwtKeyEvent.KEY_ENTER) {
+	if (!AjxUtil.isEmpty(this.keyPressDelayHdlr) && key != DwtKeyEvent.KEY_ENTER) {
 		AjxTimedAction.cancelAction(this.keyPressDelayHdlr);
 		this.keyPressDelayHdlr = null;
 	}

@@ -22,8 +22,8 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaCosXFormView = function(parent, app) {
-	ZaTabView.call(this, parent, app, "ZaCosXFormView");
+ZaCosXFormView = function(parent) {
+	ZaTabView.call(this, parent,"ZaCosXFormView");
 	this.TAB_INDEX = 0;	
 	this.initForm(ZaCos.myXModel,this.getMyXForm());
 }
@@ -110,7 +110,7 @@ function(entry) {
 			this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = null;		
 		}
 
-		var skins = this._app.getInstalledSkins();
+		var skins = ZaApp.getInstance().getInstalledSkins();
 		if(skins == null) {
 			skins = [];
 		} else if (AjxUtil.isString(skins))	 {
@@ -140,7 +140,7 @@ function(entry) {
 		
 		
 		//get sll Zimlets
-		var allZimlets = ZaZimlet.getAll(this._app, "extension");
+		var allZimlets = ZaZimlet.getAll("extension");
 		if(allZimlets == null) {
 			allZimlets = [];
 		} 
@@ -161,7 +161,7 @@ function(entry) {
 
   	
   	
-  	this._containedObject.globalConfig = this._app.getGlobalConfig();
+  	this._containedObject.globalConfig = ZaApp.getInstance().getGlobalConfig();
   	
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
@@ -509,7 +509,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 	var case4Items = [
 		{type:_ZAGROUP_,items:[							{	
 			ref:ZaCos.A_zimbraPrefSkin, type:_OSELECT1_, 
-			msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_,choices:this._app.getInstalledSkins(),
+			msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_,choices:ZaApp.getInstance().getInstalledSkins(),
 			visibilityChecks:[ZaCosXFormView.gotSkins]
 		}]},
 		{type:_ZAGROUP_, numCols:1,colSizes:["auto"], 
@@ -558,7 +558,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 				{type:_ZIMLET_SELECT_RADIO_,
 					selectRef:ZaCos.A_zimbraMailHostPool, 
 					ref:ZaCos.A_zimbraMailHostPool, 
-					choices:this._app.getServerIdListChoices(),
+					choices:ZaApp.getInstance().getServerIdListChoices(),
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab],
 					visibilityChangeEventSources:[ZaModel.currentTab],
 					caseKey:_tab6, caseVarRef:ZaModel.currentTab,

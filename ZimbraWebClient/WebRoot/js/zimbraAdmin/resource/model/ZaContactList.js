@@ -19,9 +19,9 @@
   * This is the list containing the auto complete match contact lists
   * @author Charles Cao
   */
-ZaContactList = function(app) {
+ZaContactList = function() {
 	this._list = [];	//this is the array holds all the match objects
-	this._app = app;
+
 }
 
 ZaContactList.matchValue = ZaAccount.A_displayname; //the property name of the match ZaContactList
@@ -39,10 +39,10 @@ function (str, callback){
 		params.applyCos = "0";
 		myCallback = new AjxCallback(this, this.getDataCallback, callback);
 		params.callback = myCallback;
-		params.controller = this._app.getCurrentController () ;
+		params.controller = ZaApp.getInstance().getCurrentController () ;
 		ZaSearch.searchDirectory(params);
 	}	catch (ex){
-		this._app.getCurrentController()._handleException(ex, "ZaContactList.prototype.getContactList");	
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaContactList.prototype.getContactList");	
 	}
 }
 
@@ -85,7 +85,7 @@ function(callback, resp){
 		} else {
 			ZaSearch.TOO_MANY_RESULTS_FLAG = false ;
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			var list = new ZaItemList(null, this._app);	
+			var list = new ZaItemList();	
 			list.loadFromJS(response);
 			var arr = list.getArray();
 			var data = [];
@@ -110,7 +110,7 @@ function(callback, resp){
 			callback.run(data);			
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaContactList.prototype.getDataCallback");	
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaContactList.prototype.getDataCallback");	
 	}		
 	
 };

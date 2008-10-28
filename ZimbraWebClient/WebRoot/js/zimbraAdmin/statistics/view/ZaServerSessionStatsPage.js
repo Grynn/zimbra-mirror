@@ -4,9 +4,9 @@
  * 
  * @author Charles Cao
  */
-ZaServerSessionStatsPage = function(parent, app) {
+ZaServerSessionStatsPage = function(parent) {
 	DwtTabViewPage.call(this, parent);
-	this._app = app;
+
 	//The response objects
 	this._adminSessResp = {} ;
 	this._imapSessResp = {} ;
@@ -155,7 +155,7 @@ function (tabId) {
 }
 ZaServerSessionStatsPage.prototype.updateToolbar = 
 function (tabId, hide ){
-	var controller = this._app.getCurrentController();
+	var controller = ZaApp.getInstance().getCurrentController();
 	try {
 		//enable the page back/forward button
 		if ( controller instanceof ZaServerStatsController ){
@@ -364,7 +364,7 @@ function (resp) {
 	}
 	
 	//show the lists
-	//this._adminListView = new ZaServerSessionListView(this, this._app) ;
+	//this._adminListView = new ZaServerSessionListView(this) ;
 	//this._adminListView.set(this._adminSessList) ;
 	if (this._localXForm) {
 		var instance = this._localXForm.getInstance();
@@ -631,11 +631,11 @@ function(columnItem, bSortAsc) {
 	var sortBy = columnItem._sortField + (bSortAsc ? "Asc": "Desc") ;
 	if (AjxEnv.hasFirebug) console.log("SortBy: " + sortBy) ;
 	try {
-		var controller = this._app.getCurrentController() ;
+		var controller = ZaApp.getInstance().getCurrentController() ;
 		var sessStatsPage = controller._contentView._sessionPage ;
 		sessStatsPage.setSortBy (sortBy) ;
 		sessStatsPage.showMe(1);
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex);
+		ZaApp.getInstance().getCurrentController()._handleException(ex);
 	}
 }

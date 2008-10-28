@@ -2,12 +2,12 @@ if(ZaItem) {
 	ZaItem.SAMBA_DOMAIN = "sambaDomain";
 }
 
-function ZaSambaDomain(app) {
-	if (arguments.length == 0) return;	
-	ZaItem.call(this, app,"ZaSambaDomain");
+function ZaSambaDomain() {
+	//if (arguments.length == 0) return;	
+	ZaItem.call(this, "ZaSambaDomain");
 	this.type = ZaItem.SAMBA_DOMAIN;
 	this.attrs = [];
-	this._init(app);
+	this._init();
 }
 
 

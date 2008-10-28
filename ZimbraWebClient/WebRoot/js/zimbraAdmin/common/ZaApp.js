@@ -38,8 +38,19 @@ ZaApp = function(appCtxt, container) {
 	this._controllers = new Object();
 	this.dialogs = {};
 	this._tabGroup = null ;
-}
 
+}
+ZaApp.instance = null;
+ZaApp.getInstance = function (appCtxt, container) {
+	if(!ZaApp.instance) {
+	//	console.log("Trying to get ZaApp before it is instantiated") ;
+		if(!AjxUtil.isEmpty(appCtxt) && !AjxUtil.isEmpty(container)) {
+		//	console.log("Instantiating ZaApp ....") ; 
+			ZaApp.instance = new ZaApp(appCtxt, container);
+		}
+	}
+	return ZaApp.instance;
+}
 ZaApp.prototype.constructor = ZaApp;
 
 ZaApp.prototype.toString = 
@@ -153,7 +164,7 @@ function(viewId) {
 ZaApp.prototype.getSearchListController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW] == null) {
-		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW] = new ZaSearchListController(this._appCtxt, this._container, this);
+		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW] = new ZaSearchListController(this._appCtxt, this._container);
 		this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW].addRemovalListener(new AjxListener(this.getSearchListController(), this.getSearchListController().handleRemoval));							
 	}
 	return this._controllers[ZaZimbraAdmin._SEARCH_LIST_VIEW] ;
@@ -162,7 +173,7 @@ function() {
 ZaApp.prototype.getSearchBuilderController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_VIEW] == null) {
-		this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_VIEW] = new ZaSearchBuilderController(this._appCtxt, this._container, this);
+		this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_VIEW] = new ZaSearchBuilderController(this._appCtxt, this._container);
 		this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_VIEW].addRemovalListener(new AjxListener(this.getSearchBuilderController(), this.getSearchBuilderController().handleRemoval));							
 	}
 	return this._controllers[ZaZimbraAdmin._SEARCH_BUILDER_VIEW] ;
@@ -438,7 +449,7 @@ function (domainItem, resp) {
 		} else {
 			ZaSearch.TOO_MANY_RESULTS_FLAG = false ;
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
-			this._domainList = new ZaItemList(ZaDomain, this);	
+			this._domainList = new ZaItemList(ZaDomain);	
 			this._domainList.loadFromJS(response);
 			this._appCtxt.getAppController().getOverviewPanelController().updateDomainList(this._domainList);				
 			EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
@@ -461,7 +472,7 @@ function (domainItem, resp) {
 ZaApp.prototype.getDomainList =
 function(refresh) {
 	if (refresh || this._domainList == null) {
-		this._domainList = ZaDomain.getAll(this);
+		this._domainList = ZaDomain.getAll();
 		/*EmailAddr_XFormItem.domainChoices.setChoices(this._domainList.getArray());
 		EmailAddr_XFormItem.domainChoices.dirtyChoices();*/
 	}
@@ -480,7 +491,7 @@ function (refresh) {
 ZaApp.prototype.getDomainListChoices =
 function(refresh) {
 	if (refresh || this._domainList == null) {
-		this._domainList = ZaDomain.getAll(this);
+		this._domainList = ZaDomain.getAll();
 	}
 	if(refresh || this._domainListChoices == null) {
 		if(this._domainListChoices == null)
@@ -497,7 +508,7 @@ ZaApp.prototype.getServerByName =
 function(serverName) {
 	if (this._serverList == null) {
 //		DBG.println(AjxDebug.DBG1, "ZaApp.prototype.getServerByName :: this._serverList is null ");
-		this._serverList = ZaServer.getAll(this);
+		this._serverList = ZaServer.getAll();
 	}
 	var cnt = this._serverList.getArray().length;
 	var myServer = new ZaServer(this);
@@ -514,7 +525,7 @@ function(serverName) {
 ZaApp.prototype.getServerList =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll(this);
+		this._serverList = ZaServer.getAll();
 	}
 	return this._serverList;	
 }
@@ -522,7 +533,7 @@ function(refresh) {
 ZaApp.prototype.getPostQList = 
 function (refresh) {
 	if (refresh || this._postqList == null) {
-		this._postqList = ZaMTA.getAll(this);
+		this._postqList = ZaMTA.getAll();
 	}
 	return this._postqList;	
 }
@@ -530,7 +541,7 @@ function (refresh) {
 ZaApp.prototype.getMailServers =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll(this);
+		this._serverList = ZaServer.getAll();
 	}
 	var resArray = new Array();
 	var tmpArray = this._serverList.getArray();
@@ -564,7 +575,7 @@ function(refresh){
 ZaApp.prototype.getServerListChoices =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll(this);
+		this._serverList = ZaServer.getAll();
 	}
 	if(refresh || this._serverChoices == null) {
 		var hashMap = this._serverList.getIdHash();
@@ -587,7 +598,7 @@ function(refresh) {
 ZaApp.prototype.getServerIdListChoices =
 function(refresh) {
 	if (refresh || this._serverList == null) {
-		this._serverList = ZaServer.getAll(this);
+		this._serverList = ZaServer.getAll();
 	}
 	if(refresh || this._serverIdChoices == null) {
 		var hashMap = this._serverList.getIdHash();
@@ -614,7 +625,7 @@ ZaApp.prototype.getServerMap =
 function(refresh) {
 	if(refresh || this._serverList == null) {
 //		DBG.println(AjxDebug.DBG1, "ZaApp.prototype.getServerMap :: this._serverList is null ");						
-		this._serverList = ZaServer.getAll(this);
+		this._serverList = ZaServer.getAll();
 	}
 	if(refresh || this._serverMap == null) {
 		this._serverMap = new Object();
@@ -629,9 +640,7 @@ function(refresh) {
 ZaApp.prototype.getCosList =
 function(refresh) {
 	if (refresh || !this._cosList) {
-		/*if(!this._cosList)
-			this._cosList = new ZaItemList(ZaCos, this);
-		*/
+
 		var searchParams = {
 			query: "" ,
 			types:[ZaSearch.COSES],
@@ -644,7 +653,7 @@ function(refresh) {
 			controller: this.getCurrentController()
 		}
 		var response = ZaSearch.searchDirectory(searchParams).Body.SearchDirectoryResponse;
-		this._cosList = new ZaItemList(ZaCos, this._app);		
+		this._cosList = new ZaItemList(ZaCos);		
 		this._cosList.loadFromJS(response);
 	}
 	return this._cosList;	
@@ -688,7 +697,7 @@ function(refresh) {
 ZaApp.prototype.getGlobalConfig =
 function(refresh) {
 	if (refresh || this._globalConfig == null) {
-		this._globalConfig = new ZaGlobalConfig(this);
+		this._globalConfig = new ZaGlobalConfig();
 	}
 	return this._globalConfig;	
 }
@@ -720,7 +729,7 @@ function (ev) {
 		//add the new ZaCos to the controlled list
 		if(ev.getDetails()) {
 			if(!this._cosList) {
-				this._cosList=ZaCos.getAll(this);
+				this._cosList=ZaCos.getAll();
 			} else {
 				this._cosList.add(ev.getDetails());
 			}
@@ -745,7 +754,7 @@ function (ev) {
 		//add the new ZaCos to the controlled list
 		if(ev.getDetails()) {
 			if(!this._cosList) {
-				this._cosList=ZaCos.getAll(this);
+				this._cosList=ZaCos.getAll();
 			} else {
 				//find the modified COS 
 				this._cosList.replaceItem(ev.getDetails());
@@ -811,7 +820,7 @@ ZaApp.prototype.handleCosRemoval =
 function (ev) {
 	if(ev) {
 		if(!this._cosList) {
-			this._cosList=ZaCos.getAll(this);
+			this._cosList=ZaCos.getAll();
 		} else {
 			//remove the ZaCos from the controlled list
 			var detls = ev.getDetails();
@@ -836,7 +845,7 @@ ZaApp.prototype.handleServerChange =
 function (ev) {
 	if(ev) {
 		if(this._serverList) {
-			this._serverList=ZaServer.getAll(this);
+			this._serverList=ZaServer.getAll();
 			if(this._serverChoices == null) {
 				this._serverChoices = new XFormChoices(this._serverList.getArray(), XFormChoices.OBJECT_LIST, ZaServer.A_ServiceHostname, ZaServer.A_ServiceHostname);
 			} else {	
@@ -861,7 +870,7 @@ ZaApp.prototype.handleServerRemoval =
 function (ev) {
 	if(ev) {
 		if(!this._serverList) {
-			this._serverList=ZaServer.getAll(this);
+			this._serverList=ZaServer.getAll();
 		} else {
 			//remove the ZaCos from the controlled list
 			var detls = ev.getDetails();
@@ -966,10 +975,10 @@ function (tabId) {
 		selected: true
 	}
 	
-	var tab = new ZaAppTab (tabGroup, this, params );
+	var tab = new ZaAppTab (tabGroup,params );
 	/*
 				entry.name, entry.getTabIcon() , null, null, 
-				true, true, this._app._currentViewId) ;
+				true, true, ZaApp.getInstance()._currentViewId) ;
 	tab.setToolTipContent( entry.getTabToolTip()) ; */
 }
 

@@ -25,7 +25,7 @@
 */
 ZaZimbraAdmin = function(appCtxt) {
 	ZaZimbraAdmin._instance = this;
-	ZaController.call(this, appCtxt, null, null,"ZaZimbraAdmin");
+	ZaController.call(this, appCtxt, null,"ZaZimbraAdmin");
 
 	ZaZimbraAdmin.showSplash(this._shell);
 	appCtxt.setAppController(this);
@@ -155,8 +155,8 @@ function(domain) {
     var lm = new ZaZimbraAdmin(appCtxt);
 }
 ZaZimbraAdmin.prototype.getKeymapNameToUse = function () {
-	if (this._app && this._app.getCurrentController()) {
-		var c = this._app.getCurrentController();
+	if (ZaApp.getInstance() && ZaApp.getInstance().getCurrentController()) {
+		var c = ZaApp.getInstance().getCurrentController();
 		if (c && c.handleKeyAction)
 			return c.toString();
 	}
@@ -187,8 +187,8 @@ ZaZimbraAdmin.prototype.handleKeyAction = function () {
 			
 		default: {
 			
-			if (this._app && this._app.getCurrentController()) {
-				var c = this._app.getCurrentController();
+			if (ZaApp.getInstance() && ZaApp.getInstance().getCurrentController()) {
+				var c = ZaApp.getInstance().getCurrentController();
 				if (c && c.handleKeyAction)
 					return c.handleKeyAction(actionCode, ev);
 			} else {
@@ -238,7 +238,7 @@ function() {
 ZaZimbraAdmin.prototype.getOverviewPanelController =
 function() {
 	if (this._overviewPanelController == null)
-		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell, this._app);
+		this._overviewPanelController = new ZaOverviewPanelController(this._appCtxt, this._shell);
 	return this._overviewPanelController;
 }
 
@@ -398,7 +398,7 @@ function(statusBox) {
 
 ZaZimbraAdmin.prototype._createAppTabs =
 function () {
-	var appTabGroup = new ZaAppTabGroup(this._shell, this.getApp());
+	var appTabGroup = new ZaAppTabGroup(this._shell);
 	return appTabGroup ;
 }
 
@@ -456,20 +456,20 @@ function(ev) {
 		return;
 	}
 
-    if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getHelpViewController(), ZaHelpViewController.prototype.show, null);
+    if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getHelpViewController(), ZaHelpViewController.prototype.show, null);
 	} else {					
-		this._app.getHelpViewController().show();
+		ZaApp.getInstance().getHelpViewController().show();
 	}
 }
 
 ZaZimbraAdmin.prototype._dwListener = 
 function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Download is clicked ...") ;
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(this._app.getMigrationWizController(), ZaMigrationWizController.prototype.show, null);
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getMigrationWizController(), ZaMigrationWizController.prototype.show, null);
 	} else {					
-		this._app.getMigrationWizController().show();
+		ZaApp.getInstance().getMigrationWizController().show();
 	}
 }
 
@@ -570,7 +570,8 @@ function(shell) {
 **/
 ZaZimbraAdmin.prototype._createApp =
 function() {
-	this._app = new ZaApp(this._appCtxt, this._shell);	
+	this._app = ZaApp.getInstance(this._appCtxt, this._shell);
+		
 }
 
 
@@ -581,15 +582,14 @@ function() {
 **/
 ZaZimbraAdmin.prototype._launchApp =
 function() {
-    if (AjxEnv.hasFirebug)
-        console.log("Launching ZimbraAdmin Application ....") ;
+    //console.log("Launching ZimbraAdmin Application ....") ;
     if (!this._app)
 		this._createApp();
 
     //recreate the error/msg dialogs
     if (ZaZimbraAdmin._LOCALE_MSG_RELOADED) this.initDialogs(true) ;
 
-    this._appCtxt.setClientCmdHdlr(new ZaClientCmdHandler(this._app));
+    this._appCtxt.setClientCmdHdlr(new ZaClientCmdHandler());
     //draw stuff
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_SASH] = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE,"console_inset_app_l", 20);
@@ -609,9 +609,9 @@ function() {
 
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
-	elements[ZaAppViewMgr.C_SEARCH] = this._app.getSearchListController().getSearchPanel();		
-	elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = this._app.getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
-	elements[ZaAppViewMgr.C_SEARCH_BUILDER] = this._app.getSearchBuilderController().getSearchBuilderPanel();
+	elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();		
+	elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
+	elements[ZaAppViewMgr.C_SEARCH_BUILDER] = ZaApp.getInstance().getSearchBuilderController().getSearchBuilderPanel();
 	//Use reparentHtmlelement to add the tabs. Reenable this line if it doesn't work well.
 	elements[ZaAppViewMgr.C_APP_TABS] = this._createAppTabs() ;
 	elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
@@ -624,7 +624,7 @@ function() {
 	this._setUserName() ;
 	//this._createAppTabs() ;
 	
-	this._app.launch();
+	ZaApp.getInstance().launch();
 	
 	//create main Tab
 	//this._createMainTab() ;

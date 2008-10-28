@@ -1,13 +1,13 @@
 if (AjxEnv.hasFirebug) console.debug("Loaded ZaCertViewController.js");
 
-function ZaCertViewController(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app,"ZaCertViewController");
+function ZaCertViewController(appCtxt, container) {
+	ZaController.call(this, appCtxt, container, "ZaCertViewController");
    	this._UICreated = false;
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	//this.ServerPool = [];
 	this._helpURL = location.pathname + "help/admin/html/tools/creating_certificates.htm?locid=" + AjxEnv.DEFAULT_LOCALE;	
-	this._app = app ;				
+	this._app = ZaApp.getInstance() ;				
 }
 
 ZaCertViewController.prototype = new ZaController();

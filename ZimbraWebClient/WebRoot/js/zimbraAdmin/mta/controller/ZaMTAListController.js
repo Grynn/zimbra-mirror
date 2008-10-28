@@ -19,8 +19,8 @@
 * @constructor
 * @class ZaMTAListController
 **/
-ZaMTAListController = function(appCtxt, container, app) {
-	ZaController.call(this, appCtxt, container, app,"ZaMTAListController");
+ZaMTAListController = function(appCtxt, container) {
+	ZaController.call(this, appCtxt, container, "ZaMTAListController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	this.MTAPool = [];
@@ -62,8 +62,8 @@ function(list, openInNewTab) {
 			tmp[i].load();
 		}
 	}	
-	//this._app.pushView(ZaZimbraAdmin._POSTQ_VIEW);			
-	this._app.pushView(this.getContentViewId());
+	//ZaApp.getInstance().pushView(ZaZimbraAdmin._POSTQ_VIEW);			
+	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._removeList = new Array();
 	if (list != null)
 		this._list = list;
@@ -114,15 +114,15 @@ ZaMTAListController.prototype._createUI = function () {
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab() 
 		}
-		//this._app.createView(ZaZimbraAdmin._POSTQ_VIEW, elements);		
-		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		//ZaApp.getInstance().createView(ZaZimbraAdmin._POSTQ_VIEW, elements);		
+		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+		this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);					
 		
 		this._UICreated = true;
-		this._app._controllers[this.getContentViewId ()] = this ;
+		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	} catch (ex) {
 		this._handleException(ex, "ZaMTAListController.prototype._createUI", null, false);
 		return;
@@ -141,7 +141,7 @@ function() {
 ZaMTAListController.prototype.refresh = 
 function() {
 	try {
-		this._contentView.set(this._app.getServerList(true).getVector());
+		this._contentView.set(ZaApp.getInstance().getServerList(true).getVector());
 	} catch (ex) {
 		this._handleException(ex, ZaMTAListController.prototype.refresh, null, false);
 	}
@@ -162,7 +162,7 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		if(ev.item) {
 			this._selectedItem = ev.item;
-			this._app.getMTAController().show(ev.item);
+			ZaApp.getInstance().getMTAController().show(ev.item);
 		}
 	} else {
 		this.changeActionsState();	
@@ -183,7 +183,7 @@ ZaMTAListController.prototype._viewButtonListener =
 function(ev) {
 	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
-		this._app.getMTAController().show(item);
+		ZaApp.getInstance().getMTAController().show(item);
 	}
 }
 

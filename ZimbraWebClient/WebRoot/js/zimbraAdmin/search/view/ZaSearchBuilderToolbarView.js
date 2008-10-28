@@ -21,7 +21,7 @@
 * Class to create the advance search options toolbar view
 * @author Charles Cao
 **/
-ZaSearchBuilderToolbarView = function(parent, app){
+ZaSearchBuilderToolbarView = function(parent){
 	//toolbar operations
 	this._ops = [] ;
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_BASIC, ZaMsg.searchByBasic, ZaMsg.tt_searchByBasic, "SearchAll", "SearchAll", new AjxListener(this, this.basicTypeSelectHndlr)));
@@ -40,11 +40,11 @@ ZaSearchBuilderToolbarView = function(parent, app){
 	ZaToolBar.call(this, parent, this._ops, null, AjxEnv.isIE ? null : "ZaSearchBuilderToolBar" );
 	
 	
-	this._app = app;
+	this._app = ZaApp.getInstance();
 	this.zShow(false);
 	//this.setVisible (false);
-	this._app = app;
-	this._controller = this._app.getSearchBuilderController () ;
+
+	this._controller = ZaApp.getInstance().getSearchBuilderController () ;
 	//this._searchBuilder
 	this._view = {};
 }
@@ -109,11 +109,11 @@ function (event) {
 	DBG.println (AjxDebug.DBG3, "Close ... ");
 	
 	this._controller.toggleVisible ();
-	this._app._appViewMgr.showSearchBuilder (this._controller.isSBVisible());
+	ZaApp.getInstance()._appViewMgr.showSearchBuilder (this._controller.isSBVisible());
 	
 	//clear the search field
 	this._controller.setQuery ();
 	
 	//reset the advanced search button tooltip
-	this._app.getSearchListController()._searchField.setTooltipForSearchBuildButton (ZaMsg.tt_advanced_search_open);
+	ZaApp.getInstance().getSearchListController()._searchField.setTooltipForSearchBuildButton (ZaMsg.tt_advanced_search_open);
 }

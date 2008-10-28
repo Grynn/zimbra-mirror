@@ -22,9 +22,9 @@
 * this class is a model for zimbra calendar resource account 
 * @author Charles Cao
 **/
-ZaResource = function(app) {
-	ZaItem.call(this, app,"ZaResource");
-	this._init(app);
+ZaResource = function() {
+	ZaItem.call(this, "ZaResource");
+	this._init(s);
 	this.type=ZaItem.RESOURCE;
 }
 
@@ -110,21 +110,21 @@ ZaResource.searchAttributes = AjxBuffer.concat(ZaResource.A_displayname,",",
 											   ZaResource.A_zimbraCalResType);
 
 ZaResource.checkValues = 
-function(tmpObj, app) {
+function(tmpObj) {
 	/**
 	* check values
 	**/
 
 	if(tmpObj.name == null || tmpObj.name.length < 1) {
 		//show error msg
-		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_REQUIRED);
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_REQUIRED);
 		return false;
 	}
 	
 	/*if(!AjxUtil.EMAIL_SHORT_RE.test(tmpObj.name) ) {*/
 	if(tmpObj.name.lastIndexOf ("@")!=tmpObj.name.indexOf ("@")) {
 		//show error msg
-		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
 		return false;
 	}
 	
@@ -136,12 +136,12 @@ function(tmpObj, app) {
 	if(ZaSettings.COSES_ENABLED) {
 		
 		if(tmpObj.attrs[ZaResource.A_COSId]) {
-			myCos = ZaCos.getCosById (tmpObj.attrs[ZaResource.A_COSId],app);
+			myCos = ZaCos.getCosById (tmpObj.attrs[ZaResource.A_COSId]);
 		}
-		myCos = ZaCos.getCosById(tmpObj.attrs[ZaResource.A_COSId], app);
+		myCos = ZaCos.getCosById(tmpObj.attrs[ZaResource.A_COSId]);
 		//myCos = cosList.getItemById(tmpObj.attrs[ZaResource.A_COSId]);
 		if(!myCos ) {
-			var cosList = app.getCosList();
+			var cosList = ZaApp.getInstance().getCosList();
 			if(cosList.size()>0) {
 				myCos = cosList.getArray()[0];
 				tmpObj.attrs[ZaResource.A_COSId] = cosList.getArray()[0].id;
@@ -173,18 +173,18 @@ function(tmpObj, app) {
 	if(tmpObj.attrs[ZaResource.A_password]!=null || tmpObj[ZaResource.A2_confirmPassword]!=null) {
 		if(tmpObj.attrs[ZaResource.A_password] != tmpObj[ZaResource.A2_confirmPassword]) {
 			//show error msg
-			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		} 			
 		if(tmpObj.attrs[ZaResource.A_password].length < minPwdLen || AjxStringUtil.trim(tmpObj.attrs[ZaResource.A_password]).length < minPwdLen) { 
 			//show error msg
-			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen));
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen));
 			return false;		
 		}
 		
 		if(AjxStringUtil.trim(tmpObj.attrs[ZaResource.A_password]).length > maxPwdLen) { 
 			//show error msg
-			app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen));
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen));
 			return false;		
 		}
 	} 		
@@ -199,7 +199,7 @@ function(tmpObj, app) {
 * @param resource {ZaResource}
 **/
 ZaResource.createMethod = 
-function (tmpObj, resource, app) {
+function (tmpObj, resource) {
 	tmpObj.attrs[ZaResource.A_mail] = tmpObj.name;	
 	var resp;	
 	//create SOAP request
@@ -248,7 +248,7 @@ function (tmpObj, resource, app) {
 		var params = new Object();
 		params.soapDoc = soapDoc;
 		var reqMgrParams = {
-			controller : app.getCurrentController(),
+			controller : ZaApp.getInstance().getCurrentController(),
 			busyMsg : ZaMsg.BUSY_CREATE_RESOURCE
 		}	
 		resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.CreateCalendarResourceResponse;
@@ -296,7 +296,7 @@ function(mods) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_MODIFY_RESOURCE
 	}
 	resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyCalendarResourceResponse;
@@ -476,7 +476,7 @@ function(by, val, withCos) {
 	var params = new Object();
 	params.soapDoc = soapDoc;
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_RESOURCE
 	}	
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetCalendarResourceResponse;
@@ -532,7 +532,7 @@ function (newName) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_RENAME_RESOURCE
 	}
 	ZaRequestMgr.invoke(params, reqMgrParams);
@@ -630,7 +630,7 @@ ZaResource._SCHEDULE_POLICY_LABEL[ ZaResource.SCHEDULE_POLICY_ACCEPT_ALL] = ZaMs
 ZaResource._SCHEDULE_POLICY_LABEL[ ZaResource.SCHEDULE_POLICY_MANUAL] = ZaMsg.resScheduleManual;
 ZaResource._SCHEDULE_POLICY_LABEL[ ZaResource.SCHEDULE_POLICY_ACCEPT_UNLESS_BUSY] = ZaMsg.resScheduleAcceptUnlessBusy;
 
-ZaResource.initMethod = function (app) {
+ZaResource.initMethod = function () {
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";

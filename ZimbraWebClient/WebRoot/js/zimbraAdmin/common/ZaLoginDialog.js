@@ -59,7 +59,7 @@ ZaLoginDialog.prototype.getLoginURL = function () {
 	params.soapDoc = soapDoc;
     params.noAuthToken = true ;
     var reqMgrParams = {
-		//controller: this._app.getCurrentController()
+		//controller: ZaApp.getInstance().getCurrentController()
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainInfoResponse;
     var obj = {};

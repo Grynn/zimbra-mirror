@@ -21,8 +21,8 @@
 * This is a singleton object that controls all the user interaction with the list of ZaZimlet objects
 * @author Greg Solovyev
 **/
-ZaAdminExtListController = function(appCtxt, container, app) {
-	ZaListViewController.call(this, appCtxt, container, app,"ZaAdminExtListController");
+ZaAdminExtListController = function(appCtxt, container) {
+	ZaListViewController.call(this, appCtxt, container,"ZaAdminExtListController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	this.objType = ZaEvent.S_ZIMLET;
@@ -47,12 +47,12 @@ function(list, openInNewTab) {
 		this._contentView.set(list.getVector());
 		this._list = list;
 	} else {
-		this._list = ZaZimlet.getAll(this._app, ZaZimlet.EXCLUDE_MAIL);
+		this._list = ZaZimlet.getAll(ZaZimlet.EXCLUDE_MAIL);
 		this._contentView.set(this._list.getVector());
 		
 	}	
-	//this._app.pushView(ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW);					
-	this._app.pushView(this.getContentViewId());
+	//ZaApp.getInstance().pushView(ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW);					
+	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._removeList = new Array();
 		
 	this.changeActionsState();		
@@ -85,9 +85,9 @@ ZaAdminExtListController.prototype.deployZimletListener =
 function (ev) {
 	try {
 		if(!this._deployZimletWizard)
-			this._deployZimletWizard = new ZaZimletDeployXWizard(this._container, this._app);		
+			this._deployZimletWizard = new ZaZimletDeployXWizard(this._container);		
 	
-		var zimlet = new ZaZimlet(this._app);
+		var zimlet = new ZaZimlet();
 		this._deployZimletWizard.setObject(zimlet);		
 		this._deployZimletWizard.popup();
 	} catch (ex) {
@@ -110,20 +110,20 @@ ZaAdminExtListController.prototype._createUI = function () {
 			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		//this._app.createView(ZaZimbraAdmin._ZIMLET_LIST_VIEW, elements);
+		//ZaApp.getInstance().createView(ZaZimbraAdmin._ZIMLET_LIST_VIEW, elements);
 		var tabParams = {
 			openInNewTab: false,
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab() 
 		}
-		this._app.createView(this.getContentViewId(), elements, tabParams);
+		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams);
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+		this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);					
 		
 		this._UICreated = true;
-		this._app._controllers[this.getContentViewId()] = this ;
+		ZaApp.getInstance()._controllers[this.getContentViewId()] = this ;
 	} catch (ex) {
 		this._handleException(ex, "ZaAdminExtListController.prototype._createUI", null, false);
 		return;
@@ -145,7 +145,7 @@ function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 	/*	if(ev.item) {
 			this._selectedItem = ev.item;
-			this._app.getZimletController().show(ev.item);
+			ZaApp.getInstance().getZimletController().show(ev.item);
 		}*/
 	} else {
 		this.changeActionsState();	
@@ -166,7 +166,7 @@ ZaAdminExtListController.prototype._editButtonListener =
 function(ev) {
 /*	if(this._contentView.getSelectionCount() == 1) {
 		var item = this._contentView.getSelection()[0];
-		this._app.getZimletController().show(item);
+		ZaApp.getInstance().getZimletController().show(item);
 	}*/
 }
 

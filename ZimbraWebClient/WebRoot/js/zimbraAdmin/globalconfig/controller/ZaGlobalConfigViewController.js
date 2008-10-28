@@ -23,8 +23,8 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaGlobalConfigViewController = function(appCtxt, container, app) {
-	ZaXFormViewController.call(this, appCtxt, container, app,"ZaGlobalConfigViewController");
+ZaGlobalConfigViewController = function(appCtxt, container) {
+	ZaXFormViewController.call(this, appCtxt, container, "ZaGlobalConfigViewController");
 	this._UICreated = false;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_global_settings/global_settings.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.objType = ZaEvent.S_GLOBALCONFIG;
@@ -59,7 +59,7 @@ function(item, openInNewTab) {
 		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
 		this._toolbar = new ZaToolBar(this._container, this._ops);
 	
-		this._contentView = this._view = new this.tabConstructor(this._container, this._app);
+		this._contentView = this._view = new this.tabConstructor(this._container);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
@@ -68,13 +68,13 @@ function(item, openInNewTab) {
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab() 
 		}				
-		//this._app.createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
-		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		//ZaApp.getInstance().createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
+		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		this._UICreated = true;
-		this._app._controllers[this.getContentViewId ()] = this ;
+		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	}
-	//this._app.pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
-	this._app.pushView(this.getContentViewId());
+	//ZaApp.getInstance().pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
+	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  	
 	if (ZaOperation.UPDATELICENSE){
 		var updateLicenseButton = this._toolbar.getButton(ZaOperation.UPDATELICENSE) ;
@@ -134,7 +134,7 @@ function () {
 	//check if domain is real
 	if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
 		if(tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName] != this._currentObject.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]) {
-			var testD = new ZaDomain(this._app);
+			var testD = new ZaDomain();
 			try {
 				testD.load("name",tmpObj.attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]);
 			} catch (ex) {

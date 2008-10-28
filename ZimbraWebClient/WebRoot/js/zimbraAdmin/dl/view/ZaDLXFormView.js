@@ -22,8 +22,8 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaDLXFormView = function(parent, app) {
-	ZaTabView.call(this, parent, app,"ZaDLXFormView");
+ZaDLXFormView = function(parent) {
+	ZaTabView.call(this, parent, "ZaDLXFormView");
 	this.dlStatusChoices = [
 		{value:"enabled", label:ZaMsg.DL_Status_enabled}, 
 		{value:"disabled", label:ZaMsg.DL_Status_disabled}
@@ -50,7 +50,7 @@ function () {
 
 ZaDLXFormView.prototype.handleXFormChange = function (ev) {
 	if(ev && this._localXForm.hasErrors()) { 
-		this._app.getCurrentController()._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
+		ZaApp.getInstance().getCurrentController()._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 	}
 }
 
@@ -353,7 +353,7 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 			/*if(!AjxUtil.EMAIL_SHORT_RE.test(tmpval) ) {*/
 			if(tmpval.lastIndexOf ("@")!=tmpval.indexOf ("@")) {
 				//how error msg
-				form.parent._app.getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,null,DwtMessageDialog.WARNING_STYLE);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,null,DwtMessageDialog.WARNING_STYLE);
 				return false;
 			}
 			members.push(new ZaDistributionListMember(tmpval));
@@ -384,7 +384,7 @@ function (orderby, isascending) {
 		orderby = (orderby !=null) ? orderby : ZaAccount.A_name;
 		
 		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject["query"]), [ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES], false, "",null,10);
-		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["poolPagenum"], orderby, isascending, this._app);
+		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["poolPagenum"], orderby, isascending);
 		if(result.list) {
 			this._containedObject.memberPool = result.list.getArray();
 		}
@@ -394,8 +394,8 @@ function (orderby, isascending) {
 	} catch (ex) {
 		// Only restart on error if we are not initialized and it isn't a parse error
 		if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
-//			this._app.getCurrentController()._handleException(ex, "ZaDLXFormView.prototype.searchAccounts", null, (this._inited) ? false : true);
-			this._app.getCurrentController()._handleException(ex, "ZaDLXFormView.prototype.searchAccounts", null, false );
+//			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDLXFormView.prototype.searchAccounts", null, (this._inited) ? false : true);
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDLXFormView.prototype.searchAccounts", null, false );
 		} else {
 			this.popupErrorDialog(ZaMsg.queryParseError, ex);
 			this._searchField.setEnabled(true);	

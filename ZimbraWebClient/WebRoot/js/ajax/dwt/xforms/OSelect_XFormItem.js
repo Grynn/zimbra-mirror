@@ -632,7 +632,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 		var inputSize = this.getInheritedProperty("inputSize");		
 		inputHtml = ["<input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
 					" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
-					" onmouseup=\"", ref, ".showMenu(this, event)\"",
+					" onmouseup=\"", ref, ".showMenu(this)\"",
 					" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
 					">"].join("");
 	}
@@ -664,7 +664,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 	if(this.getInheritedProperty("editable")) {
 		HTMLoutput.append(
 			"<div id=", id, this.getCssString(),
-				" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
+				" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this)\"",
 				" onselectstart=\"return false\"",
 				">",
 				"<table ", this.getTableCssString(), ">", 
@@ -677,7 +677,7 @@ OSelect1_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 	} else {
 		HTMLoutput.append(
 			"<div id=", id, this.getCssString(),
-				" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this, event)\"",
+				" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').showMenu(this)\"",
 				" onselectstart=\"return false\"",
 				"><table ", this.getTableCssString(), ">",
 					"<tr><td width=100%><div id=", id, "_display class=", this.getDisplayCssClass(), ">VALUE</div></td>",
@@ -752,7 +752,10 @@ OSelect1_XFormItem.prototype.setElementEnabled = function(enabled) {
 	var table = this.getForm().getElement(this.getId()).getElementsByTagName("table")[0];
 	if(enabled) {
 		this.getDisplayElement().className = this.getDisplayCssClass();
-		AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrow");
+		var el = this.getArrowElement();
+		if(el)
+			AjxImg.setImage(el, "SelectPullDownArrow");
+			
 		this.getForm().getElement(this.getId()).className = this.cssClass;
 		table.className = this.getTableCssClass();
 		if(this.getInheritedProperty("editable")) {
@@ -760,7 +763,10 @@ OSelect1_XFormItem.prototype.setElementEnabled = function(enabled) {
 		}
 	} else {
 		this.getDisplayElement().className = this.getDisplayCssClass() + "_disabled";
-		AjxImg.setImage(this.getArrowElement(), "SelectPullDownArrowDis");
+		var el = this.getArrowElement();
+		if(el)
+			AjxImg.setImage(el, "SelectPullDownArrowDis");
+			
 		this.getForm().getElement(this.getId()).className = this.cssClass + "_disabled";
 		table.className = this.getTableCssClass()+"_disabled";
 		if(this.getInheritedProperty("editable")) {

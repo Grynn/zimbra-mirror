@@ -21,13 +21,13 @@
 * @param constructor {Function) a reference to a constructor function which is called to create a single instance of an object contained in the list.
 * @param app {ZaApp} {@link ZaApp} a reference to an instance of ZaApp. This reference is passed to constructor when a ZaItem object is constructed.
 **/
-ZaItemList = function(constructor, app) {
+ZaItemList = function(constructor) {
 
 	if (arguments.length == 0) return;
 	ZaModel.call(this, true);
 
 	this._constructor = constructor;
-	this._app = app;
+
 	
 	this._vector = new ZaItemVector();
 	this._idHash = new Object();
@@ -158,9 +158,9 @@ function(respNode) {
 	for (var i = 0; i < nodes.length; i++) {
 		var item;
 		if(this._constructor) {
-			item = new this._constructor(this._app);
+			item = new this._constructor();
 		} else {
-			item = ZaItem.getFromType(nodes[i].nodeName, this._app);
+			item = ZaItem.getFromType(nodes[i].nodeName);
 		}
 		item.type = nodes[i].nodeName;
 		item.initFromDom(nodes[i]);
@@ -185,9 +185,9 @@ function(resp) {
 			for(var i = 0; i < len; i++) {
 				var item;
 				if(this._constructor) {
-					item = new this._constructor(this._app);
+					item = new this._constructor();
 				} else {
-					item = ZaItem.getFromType(ix, this._app);
+					item = ZaItem.getFromType(ix);
 				}
 				item.type = ix;	
 				item.initFromJS(arr[i]);

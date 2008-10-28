@@ -24,7 +24,7 @@
 * @see ZaDomainListController
 * @see ZaXFormViewController
 */
-ZaController = function(appCtxt, container, app, iKeyName) {
+ZaController = function(appCtxt, container,iKeyName) {
 
 	if (arguments.length == 0) return;
 	this._evtMgr = new AjxEventMgr();
@@ -34,7 +34,6 @@ ZaController = function(appCtxt, container, app, iKeyName) {
 	this._iKeyName = iKeyName;
 	this._appCtxt = appCtxt;
 	this._container = container;
-	this._app = app;
 	
 	this._shell = appCtxt.getShell();
 	this._appViews = new Object();   
@@ -54,14 +53,13 @@ ZaController = function(appCtxt, container, app, iKeyName) {
 }
 
 ZaController.prototype.initDialogs = function (refresh) {
-    this._errorDialog = this._appCtxt.getErrorDialog(refresh);
-	this._msgDialog = this._appCtxt.getMsgDialog(refresh);
-	if(this._app) {
-		this._msgDialog = this._app.dialogs["msgDialog"] = this._appCtxt.getMsgDialog(refresh);
-		this._msgDialog.setApp(this._app);
-		this._errorDialog = this._app.dialogs["errorDialog"] = this._appCtxt.getErrorDialog(refresh);
-		this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);
-		this._app.dialogs["confirmDeleteMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);
+
+	if(ZaApp.getInstance()) {
+		this._msgDialog = ZaApp.getInstance().dialogs["msgDialog"] = this._appCtxt.getMsgDialog(refresh);
+
+		this._errorDialog = ZaApp.getInstance().dialogs["errorDialog"] = this._appCtxt.getErrorDialog(refresh);
+		ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON]);
+		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
 	    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
     	this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);
 	}
@@ -103,9 +101,9 @@ function() {
 
 ZaController.prototype.getProgressDialog =
 function() {
-	if (!this._app.dialogs["progressDialog"])
-		this._app.dialogs["progressDialog"] = new ZaXProgressDialog(this._appCtxt.getShell(), this._app, "300px", "300px");
-	return this._app.dialogs["progressDialog"];
+	if (!ZaApp.getInstance().dialogs["progressDialog"])
+		ZaApp.getInstance().dialogs["progressDialog"] = new ZaXProgressDialog(this._appCtxt.getShell(),  "300px", "300px");
+	return ZaApp.getInstance().dialogs["progressDialog"];
 }
 
 ZaController.prototype.setDirty = 
@@ -254,8 +252,8 @@ function(entry, openInNewTab) {
 	//Instrumentation code end	
 	/*
 	if (openInNewTab) {
-		var tab = new ZaAppTab (this._app.getTabGroup(), this._app, 
-				entry.name, entry.getTabIcon() , null, null, true, true, this._app._currentViewId) ;
+		var tab = new ZaAppTab (ZaApp.getInstance().getTabGroup(),  
+				entry.name, entry.getTabIcon() , null, null, true, true, ZaApp.getInstance()._currentViewId) ;
 		tab.setToolTipContent( entry.getTabToolTip()) ;
 	}*/
 }
@@ -265,8 +263,8 @@ function(entry, openInNewTab) {
 ZaController.prototype.updateMainTab =
 function (icon, titleLabel, tabId ) {
 	titleLabel = titleLabel || this._contentView.getTitle () ;
-	tabId = tabId || this._app._currentViewId ;
-	var tabGroup = this._app.getTabGroup() ;
+	tabId = tabId || ZaApp.getInstance()._currentViewId ;
+	var tabGroup = ZaApp.getInstance().getTabGroup() ;
 	var mainTab = tabGroup.getMainTab() ;
 	mainTab.setToolTipContent (titleLabel) ;
 	mainTab.resetLabel (titleLabel) ;
@@ -277,12 +275,12 @@ function (icon, titleLabel, tabId ) {
 
 ZaController.prototype.getMainTab =
 function () {
-	return this._app.getTabGroup().getMainTab () ;
+	return ZaApp.getInstance().getTabGroup().getMainTab () ;
 }
 
 ZaController.prototype.getSearchTab =
 function () {
-	return this._app.getTabGroup().getSearchTab () ;
+	return ZaApp.getInstance().getTabGroup().getSearchTab () ;
 }
 
 //Listeners for default toolbar buttons (close, save, delete)
@@ -297,8 +295,8 @@ function(ev, noPopView, func, obj, params) {
 	if (noPopView){
 		func.call(obj, params) ;
 	}else{
-		this._app.popView();
-		//this._app.getTabGroup().removeCurrentTab(true) ;
+		ZaApp.getInstance().popView();
+		//ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
 	}
 }
 
@@ -353,11 +351,10 @@ function(ex, method, params, restartOnError, obj) {
 			if (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
 			{
 				ZmCsfeCommand._curAuthToken = null;
-				if(this._app) {
-					var dlgs = this._app.dialogs;
-					for (var dlg in dlgs) {
-						dlgs[dlg].popdown();
-					}
+
+				var dlgs = ZaApp.getInstance().dialogs;
+				for (var dlg in dlgs) {
+					dlgs[dlg].popdown();
 				}
 				this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
 				this._loginDialog.registerCallback(this.loginCallback, this);
@@ -615,7 +612,7 @@ function(uname, oldPass, newPass, conPass) {
 
 ZaController.prototype._errorDialogCallback =
 function() {
-	this._app.dialogs["errorDialog"].popdown();
+	ZaApp.getInstance().dialogs["errorDialog"].popdown();
 	if (this._execFrame) {
 		if (this._execFrame.restartOnError && !this._authenticating)
 			this._execFrame.method.apply(this, this._execFrame.args);
@@ -681,8 +678,8 @@ ZaController.prototype._initPopupMenu = function () {
 
 ZaController.prototype.closeCnfrmDlg = 
 function () {
-	if(this._app.dialogs["confirmMessageDialog"])
-		this._app.dialogs["confirmMessageDialog"].popdown();	
+	if(ZaApp.getInstance().dialogs["confirmMessageDialog"])
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();	
 }
 
 /**
@@ -832,7 +829,7 @@ function (event) {
 
 ZaController.prototype.selectExistingTabByItemId =
 function (itemId, tabConstructor) {
-	var tabGroup = this._app.getTabGroup ();
+	var tabGroup = ZaApp.getInstance().getTabGroup ();
 	var tab = tabGroup.getTabByItemId (itemId, tabConstructor ? tabConstructor : this.tabConstructor) ;
 	if (tab) {
 		tabGroup.selectTab (tab) ;
@@ -844,7 +841,7 @@ function (itemId, tabConstructor) {
 
 ZaController.prototype.closeTabsInRemoveList =
 function (){
-	var tabGroup = this._app.getTabGroup();
+	var tabGroup = ZaApp.getInstance().getTabGroup();
 	for (var i=0; i< this._itemsInTabList.length ; i ++) {
 		var item = this._itemsInTabList[i];
 		tabGroup.removeTab (tabGroup.getTabByItemId(item.id)) ;
@@ -866,7 +863,7 @@ ZaController.prototype._showAccountsView = function (defaultType, ev) {
 	} else {
 		viewId=ZaZimbraAdmin._ACCOUNTS_LIST_VIEW;
 	}	
-	var acctListController = this._app.getAccountListController(viewId);
+	var acctListController = ZaApp.getInstance().getAccountListController(viewId);
 	
 
 		
@@ -886,8 +883,8 @@ ZaController.prototype._showAccountsView = function (defaultType, ev) {
 		acctListController.setFetchAttrs(ZaSearch.standardAttributes);
 	}	
 	
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,true);
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(acctListController, ZaAccountListController.prototype.show,true);
 	} else {					
 		acctListController.show(true);
 	}

@@ -21,8 +21,8 @@
 * This is a singleton object that controls all the user interaction with the list of ZaServer objects
 * @author Greg Solovyev
 **/
-ZaCertsServerListController = function(appCtxt, container, app) {
-	ZaListViewController.call(this, appCtxt, container, app,"ZaCertsServerListController");
+ZaCertsServerListController = function(appCtxt, container) {
+	ZaListViewController.call(this, appCtxt, container, "ZaCertsServerListController");
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
 	
@@ -47,7 +47,7 @@ function(list, openInNewTab) {
 	if (list != null)
 		this._contentView.set(list.getVector());
 		
-	this._app.pushView(this.getContentViewId());
+	ZaApp.getInstance().pushView(this.getContentViewId());
 	if (list != null)
 		this._list = list;
 			
@@ -85,20 +85,20 @@ ZaCertsServerListController.prototype._createUI = function () {
 			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		//this._app.createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
+		//ZaApp.getInstance().createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
 		var tabParams = {
 			openInNewTab: false,
 			tabId: this.getContentViewId(),
 			tab: this.getMainTab() 
 		}
-		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-		this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);					
+		this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], ZaApp.getInstance());					
 			
 		this._UICreated = true;
-		this._app._controllers[this.getContentViewId ()] = this ;
+		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	} catch (ex) {
 		this._handleException(ex, "ZaCertsServerListController.prototype._createUI", null, false);
 		return;
@@ -124,8 +124,8 @@ function(ev) {
 
 ZaCertsServerListController.prototype.viewCertListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("View the certificates ... ") ;
-	this._app.getCertViewController().show(
-		ZaCert.getCerts(this._app, this._selectedItem.id),
+	ZaApp.getInstance().getCertViewController().show(
+		ZaCert.getCerts(ZaApp.getInstance(), this._selectedItem.id),
 		this._selectedItem.id) ;
 }
 
@@ -139,8 +139,8 @@ function(ev) {
 			this._selectedItem = ev.item;
 	}
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-			this._app.getCertViewController().show(
-				ZaCert.getCerts(this._app, this._selectedItem.id),
+			ZaApp.getInstance().getCertViewController().show(
+				ZaCert.getCerts(ZaApp.getInstance(), this._selectedItem.id),
 				this._selectedItem.id);
 	} else {
 		this.changeActionsState();	

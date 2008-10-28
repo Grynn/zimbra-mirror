@@ -15,8 +15,8 @@
  * ***** END LICENSE BLOCK *****
  */
 
-ZaGlobalConfig = function(app) {
-	ZaItem.call(this, app, "ZaGlobalConfig");
+ZaGlobalConfig = function() {
+	ZaItem.call(this,"ZaGlobalConfig");
 	this.attrs = new Object();
 //	this.attrsInternal = new Object();	
 	this.load();
@@ -160,7 +160,7 @@ function(by, val, withConfig) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_ALL_CONFIG
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllConfigResponse;
@@ -292,7 +292,7 @@ ZaGlobalConfig.modifyMethod = function (mods) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	command.invoke(params);
-	/*var newConfig = this._app.getGlobalConfig(true);
+	/*var newConfig = ZaApp.getInstance().getGlobalConfig(true);
 	if(newConfig.attrs) {
 		for (var aname in newConfig.attrs) {
 			this.attrs[aname] = newConfig.attrs[aname];

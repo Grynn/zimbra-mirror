@@ -6,11 +6,11 @@
  * 
 */
 
-ZaAppTabGroup = function(parent, app, parentElId) {
+ZaAppTabGroup = function(parent,parentElId) {
 	if (arguments.length == 0) return;
 	DwtComposite.call(this, parent, "ZaAppTabGroup", Dwt.ABSOLUTE_STYLE);	
 	this._created = false ;
-	this._app = app ;
+
 	this._mainTab = null;
 	this._currentTab = null ;
 	this._currentTabWidth = 0;
@@ -65,8 +65,8 @@ function (parentElId) {
 			closable: false,
 			selected: true
 		}
-		//this._mainTab = new ZaAppTab (this, this._app, null, null,	null, null, false, true);
-		this._mainTab = new ZaAppTab (this, this._app, tabParams);
+		//this._mainTab = new ZaAppTab (this,  null, null,	null, null, false, true);
+		this._mainTab = new ZaAppTab (this,  tabParams);
 		this._currentTab = this._mainTab ;
 		/*
 		if (mainTab) {
@@ -74,7 +74,7 @@ function (parentElId) {
 		}*/
 			
 		this._created = true ;
-		this._app.setTabGroup (this) ;
+		ZaApp.getInstance().setTabGroup (this) ;
 	}
 }
 
@@ -127,7 +127,7 @@ function (shouldShift){
 
     var y ;
     if (AjxEnv.isIE) {
-		if (this._app._appViewMgr._isAdvancedSearchBuilderDisplayed)  { //once the advancedSearchBuilder is displayed, the skin height got changed. (weird). Hack to make it displayed properly
+		if (ZaApp.getInstance()._appViewMgr._isAdvancedSearchBuilderDisplayed)  { //once the advancedSearchBuilder is displayed, the skin height got changed. (weird). Hack to make it displayed properly
             y = -11 ;
         }else{
             y = -4 ;
@@ -428,8 +428,8 @@ function (tab, resize) {
 	/*
 	var cSize = ZaAppTabGroup._TABS.size () ;
 	if (cSize >= ZaAppTabGroup.TAB_LIMIT) {
-		this._app.getCurrentController().popupMsgDialog(ZaMsg.too_many_tabs);
-		this._app.disposeView (tab.getTabId());
+		ZaApp.getInstance().getCurrentController().popupMsgDialog(ZaMsg.too_many_tabs);
+		ZaApp.getInstance().disposeView (tab.getTabId());
 		tab.dispose();
 		return false ;
 	}else{
@@ -446,7 +446,7 @@ function (tab, resize) {
 	if (tab == this._searchTab) {
 		this._searchTab = null ;
 		//need to reset the search list controller
-		this._app.getSearchListController().reset() ;
+		ZaApp.getInstance().getSearchListController().reset() ;
 	}
 	ZaAppTabGroup._TABS.remove (tab) ;
 	
@@ -461,7 +461,7 @@ function (resize) {
 	var cTab = this.getCurrentTab () ;
 	this.removeTab(cTab, resize) ;
 	//select the next active Tab
-	this.selectTab (this.getTabById (cTab._app._currentViewId)) ; 
+	this.selectTab (this.getTabById (ZaApp.getInstance()._currentViewId)) ; 
 }
 	
 ZaAppTabGroup.prototype.selectTab =
@@ -527,7 +527,7 @@ function () {
 			selected: true
 		}
 		
-		this._searchTab = new ZaAppTab (this, this._app, tabParams);
+		this._searchTab = new ZaAppTab (this,  tabParams);
 		return this._searchTab ;
 	}
 }

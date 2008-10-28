@@ -21,9 +21,7 @@
 * Provides the data model and UI items for the advanced search options
 * @author Charles Cao
 **/
-ZaSearchOption = function(app) {
-	if(app)
-		this._app = app;
+ZaSearchOption = function() {
 }
 
 ZaSearchOption.ID = 100;
@@ -411,7 +409,7 @@ function () {
 
 /////////////////////////////////////////////////////////////////////////////////////
 //the list view for the domain and server filter
-ZaOptionList = function(parent, app, className) {
+ZaOptionList = function(parent,className) {
 	//DwtListView.call(this, parent, null, Dwt.STATIC_STYLE);
 	DwtListView.call(this, parent, null, Dwt.ABSOLUTE_STYLE);
 }

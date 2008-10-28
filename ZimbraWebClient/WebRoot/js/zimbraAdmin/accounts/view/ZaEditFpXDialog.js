@@ -22,13 +22,13 @@
 * @param parent
 * param app
 **/
-ZaEditFpXDialog = function(parent,  app, w, h, title) {
+ZaEditFpXDialog = function(parent, w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];
-	ZaXDialog.call(this, parent, app, null, title, w, h);
+	ZaXDialog.call(this, parent,null, title, w, h);
     this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_global_settings/making_free_busy_view__available_.htm?locid="+AjxEnv.DEFAULT_LOCALE ;
     //get the provider first
-    ZaFp.getProviders(app);
+    ZaFp.getProviders();
     this._containedObject = {};
 	this.initForm(ZaFp.getXModel(),this.getMyXForm());
 }

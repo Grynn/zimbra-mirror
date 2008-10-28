@@ -22,17 +22,17 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaServerStatsView = function(parent, app) {
-	this._app = app;
+ZaServerStatsView = function(parent) {
+
 	DwtTabView.call(this, parent);
 	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	this._msgCountPage = new ZaServerMessageCountPage(this, app);
-	this._msgsVolumePage = new ZaServerMessageVolumePage(this, app);
-	this._spamPage = new ZaServerSpamActivityPage(this, app);	
-	this._diskPage = new ZaServerDiskStatsPage(this, app);	
-	this._mbxPage = new ZaServerMBXStatsPage (this, app);
-	this._sessionPage = new ZaServerSessionStatsPage(this, app);
+	this._msgCountPage = new ZaServerMessageCountPage(this);
+	this._msgsVolumePage = new ZaServerMessageVolumePage(this);
+	this._spamPage = new ZaServerSpamActivityPage(this);	
+	this._diskPage = new ZaServerDiskStatsPage(this);	
+	this._mbxPage = new ZaServerMBXStatsPage (this);
+	this._sessionPage = new ZaServerSessionStatsPage(this);
 	this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);		
 	this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);			
 	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
@@ -85,7 +85,7 @@ function () {
 
 ZaServerStatsView.prototype.getAppTab =
 function () {
-	return this._app.getTabGroup().getTabById(this.__internalId) ;
+	return ZaApp.getInstance().getTabGroup().getTabById(this.__internalId) ;
 } 
  
 /**

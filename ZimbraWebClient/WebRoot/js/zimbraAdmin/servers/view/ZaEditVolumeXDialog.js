@@ -22,10 +22,10 @@
 * @param parent
 * param app
 **/
-ZaEditVolumeXDialog = function(parent,  app, w, h, title) {
+ZaEditVolumeXDialog = function(parent, w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
-	ZaXDialog.call(this, parent, app, null, title, w, h);
+	ZaXDialog.call(this, parent,null, title, w, h);
 	this._containedObject = {};
 	this.initForm(ZaServer.volumeObjModel,this.getMyXForm());
 }

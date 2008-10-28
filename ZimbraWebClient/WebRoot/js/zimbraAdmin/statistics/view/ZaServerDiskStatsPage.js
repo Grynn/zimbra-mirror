@@ -22,10 +22,10 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaServerDiskStatsPage = function(parent, app) {
+ZaServerDiskStatsPage = function(parent) {
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
-	this._app = app;
+
 	this.initialized=false;
 	this._rendered = false;
 }

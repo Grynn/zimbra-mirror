@@ -22,10 +22,10 @@
 * @param parent
 * param app
 **/
-ZaEditAliasXDialog = function(parent,  app, w, h, title) {
+ZaEditAliasXDialog = function(parent,   w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
-	ZaXDialog.call(this, parent, app, null, title, w, h);
+	ZaXDialog.call(this, parent, null, title, w, h);
 	this._containedObject = {};
 	this.initForm(ZaAlias.myXModel,this.getMyXForm());
 }
@@ -55,10 +55,10 @@ function() {
 * @param parent
 * param app
 **/
-ZaNewAliasXDialog = function(parent,  app, w, h, title) {
+ZaNewAliasXDialog = function(parent,   w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
-	ZaXDialog.call(this, parent, app, null, title, w, h);
+	ZaXDialog.call(this, parent, null, title, w, h);
 	this._containedObject = {};
 	this.initForm(ZaAlias.myXModel,this.getMyXForm());
     this._helpURL = ZaNewAliasXDialog.helpURL;

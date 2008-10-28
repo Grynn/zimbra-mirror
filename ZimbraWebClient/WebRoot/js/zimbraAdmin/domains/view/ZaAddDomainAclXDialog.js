@@ -22,10 +22,10 @@
 * @param parent
 * param app
 **/
-ZaAddDomainAclXDialog = function(parent,  app, w, h) {
+ZaAddDomainAclXDialog = function(parent, w, h) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
-	ZaXDialog.call(this, parent, app, null, ZaMsg.Add_perms_title, w, h);
+	ZaXDialog.call(this, parent,null, ZaMsg.Add_perms_title, w, h);
 	this._containedObject = {acl:{r:0,w:0,i:0,d:0,a:0,x:0},name:"",gt:""};
 	this.initForm(ZaDomain.aclXModel,this.getMyXForm());
 }

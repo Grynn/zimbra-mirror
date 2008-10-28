@@ -20,8 +20,8 @@
  * @author Charles Cao
  * resource controller 
  */  
-ZaResourceController = function(appCtxt, container, app) {
-	ZaXFormViewController.call(this, appCtxt, container, app, "ZaResourceController");
+ZaResourceController = function(appCtxt, container) {
+	ZaXFormViewController.call(this, appCtxt, container,"ZaResourceController");
 	this._UICreated = false;
 	this._toolbarOperations = new Array();
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/managing_resource.htm?locid="+AjxEnv.DEFAULT_LOCALE;
@@ -67,8 +67,8 @@ function (entry)	{
 		this._createUI();
 	} 	
 	try {
-		//this._app.pushView(ZaZimbraAdmin._RESOURCE_VIEW);
-		this._app.pushView(this.getContentViewId());
+		//ZaApp.getInstance().pushView(ZaZimbraAdmin._RESOURCE_VIEW);
+		ZaApp.getInstance().pushView(this.getContentViewId());
 		if(!entry.id) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
@@ -101,12 +101,12 @@ ZaController.initToolbarMethods["ZaResourceController"].push(ZaResourceControlle
 
 ZaResourceController.prototype.newResource = function () {
 	try {
-		var newResource = new ZaResource(this._app);
-		if(!this._app.dialogs["newResourceWizard"])
-			this._app.dialogs["newResourceWizard"]= new ZaNewResourceXWizard(this._container, this._app);	
+		var newResource = new ZaResource();
+		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
+			ZaApp.getInstance().dialogs["newResourceWizard"]= new ZaNewResourceXWizard(this._container);	
 
-		this._app.dialogs["newResourceWizard"].setObject(newResource);
-		this._app.dialogs["newResourceWizard"].popup();
+		ZaApp.getInstance().dialogs["newResourceWizard"].setObject(newResource);
+		ZaApp.getInstance().dialogs["newResourceWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaResourceController.prototype.newResource", null, false);
 	}
@@ -122,11 +122,11 @@ function(ev) {
 		args["obj"] = this;
 		args["func"] = ZaResourceController.prototype.newResource;
 		//ask if the user wants to save changes		
-		//this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].popup();
+		//ZaApp.getInstance().dialogs["confirmMessageDialog"] = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON]);								
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
 	} else {
 		this.newResource();
 	}	
@@ -137,7 +137,7 @@ ZaResourceController.prototype._createUI =
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._contentView = this._view = new this.tabConstructor(this._container, this._app);
+	this._contentView = this._view = new this.tabConstructor(this._container);
 
     this._initToolbar();
 	//always add Help button at the end of the toolbar    
@@ -149,16 +149,16 @@ function () {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	//this._app.createView(ZaZimbraAdmin._RESOURCE_VIEW, elements);
+	//ZaApp.getInstance().createView(ZaZimbraAdmin._RESOURCE_VIEW, elements);
 	var tabParams = {
 			openInNewTab: true,
 			tabId: this.getContentViewId()
 		}
-	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 	
-	this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
 	this._UICreated = true;
-	this._app._controllers[this.getContentViewId ()] = this ;
+	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }
 
 
@@ -229,7 +229,7 @@ function () {
 
 	var mods = new Object();
 	
-	if(!ZaResource.checkValues(tmpObj, this._app))
+	if(!ZaResource.checkValues(tmpObj))
 		return false;
 		
 	if(ZaSettings.ACCOUNTS_CHPWD_ENABLED) {

@@ -22,10 +22,10 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaGlobalSpamActivityPage = function(parent, app) {
+ZaGlobalSpamActivityPage = function(parent) {
 	DwtTabViewPage.call(this, parent);
 	this._fieldIds = new Object(); //stores the ids of all the form elements
-	this._app = app;
+
 	//this._createHTML();
 	this.initialized=false;
 	this.setScrollStyle(DwtControl.SCROLL);	

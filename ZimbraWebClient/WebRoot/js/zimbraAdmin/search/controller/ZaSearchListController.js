@@ -24,8 +24,8 @@
 * @extends ZaController
 * @author Greg Solovyev
 **/
-ZaSearchListController = function(appCtxt, container, app) {
-	ZaListViewController.call(this, appCtxt, container, app, "ZaSearchListController");
+ZaSearchListController = function(appCtxt, container) {
+	ZaListViewController.call(this, appCtxt, container,"ZaSearchListController");
     //Account operations
    	this._toolbarOperations = new Array();
    	this._popupOperations = new Array();			
@@ -76,8 +76,8 @@ ZaSearchListController.prototype.show = function (doPush) {
 ZaSearchListController.prototype._show = 
 function (list, openInNewTab, openInSearchTab) {
 	this._updateUI(list, openInNewTab, openInSearchTab);
-	//this._app.pushView(ZaZimbraAdmin._SEARCH_LIST_VIEW);
-	this._app.pushView(this.getContentViewId());
+	//ZaApp.getInstance().pushView(ZaZimbraAdmin._SEARCH_LIST_VIEW);
+	ZaApp.getInstance().pushView(this.getContentViewId());
 }
 
 /**
@@ -86,10 +86,10 @@ function (list, openInNewTab, openInSearchTab) {
 ZaSearchListController.prototype.getSearchPanel = 
 function () {
 	if(!this._searchPanel) {
-	    this._searchPanel = new DwtComposite(this._app.getAppCtxt().getShell(), "SearchPanel", DwtControl.ABSOLUTE_STYLE);
+	    this._searchPanel = new DwtComposite(ZaApp.getInstance().getAppCtxt().getShell(), "SearchPanel", DwtControl.ABSOLUTE_STYLE);
 	    
 		// Create search toolbar and setup browse tool bar button handlers
-		this._searchToolBar = new ZaSearchToolBar(this._searchPanel, null, this._app);
+		this._searchToolBar = new ZaSearchToolBar(this._searchPanel, null);
 	    
 		// Setup search field handler
 		this._searchField = this._searchToolBar.getSearchField();
@@ -183,13 +183,13 @@ function(params) {
 
 			callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,show:true});			
 	} else if (AjxUtil.indexOf(params.types,ZaSearch.DOMAINS)>-1) {
-		controller = this._app.getDomainListController(null, true);
+		controller = ZaApp.getInstance().getDomainListController(null, true);
 	} else if((AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS)>-1) || 
 				(AjxUtil.indexOf(params.types,ZaSearch.ALIASES)>-1) || 
 				(AjxUtil.indexOf(params.types,ZaSearch.RESOURCES)>-1) ||
 				(AjxUtil.indexOf(params.types,ZaSearch.DLS)>-1)) {
 		
-		controller = this._app.getAccountListController(null, true);
+		controller = ZaApp.getInstance().getAccountListController(null, true);
 		
 		if((AjxUtil.indexOf(params.types,ZaSearch.ACCOUNTS)>-1)&& 
 				!(AjxUtil.indexOf(params.types,ZaSearch.ALIASES)>-1) && 
@@ -290,8 +290,8 @@ ZaSearchListController.prototype._createUI =
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._contentView = new ZaSearchListView(this._container, this._app);
-	this._app._controllers[this.getContentViewId ()] = this ;
+	this._contentView = new ZaSearchListView(this._container);
+	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	this._newDLListener = new AjxListener(this, ZaSearchListController.prototype._newDistributionListListener);
 	this._newAcctListener = new AjxListener(this, ZaSearchListController.prototype._newAccountListener);
 	this._newResListener = new AjxListener(this, ZaSearchListController.prototype._newResourceListener);
@@ -310,14 +310,14 @@ function () {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	//this._app.createView(ZaZimbraAdmin._SEARCH_LIST_VIEW, elements);
+	//ZaApp.getInstance().createView(ZaZimbraAdmin._SEARCH_LIST_VIEW, elements);
 	//always open the search list view in the search tab
 	var tabParams = {
 		openInNewTab: false,
 		tabId: this.getContentViewId(),
-		tab: this._app.getTabGroup().getSearchTab ()
+		tab: ZaApp.getInstance().getTabGroup().getSearchTab ()
 	}
-	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 	
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
@@ -325,7 +325,7 @@ function () {
 	//set a selection listener on the account list view
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-	this._removeConfirmMessageDialog = this._app.dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
 	this._UICreated = true;
 }
 
@@ -334,7 +334,7 @@ function(ev, noPopView, func, obj, params) {
 	if (noPopView) {
 		func.call(obj, params) ;
 	}else{
-		this._app.popView () ;
+		ZaApp.getInstance().popView () ;
 	}
 	
 	//reset the search text when the search list view/tab is closed
@@ -348,12 +348,12 @@ ZaSearchListController.prototype._newAccountListener =
 function(ev) {
 
 	try {
-		var newAccount = new ZaAccount(this._app);
-		if(!this._app.dialogs["newAccountWizard"])
-			this._app.dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container, this._app);	
+		var newAccount = new ZaAccount();
+		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
+			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container);	
 
-		this._app.dialogs["newAccountWizard"].setObject(newAccount);
-		this._app.dialogs["newAccountWizard"].popup();
+		ZaApp.getInstance().dialogs["newAccountWizard"].setObject(newAccount);
+		ZaApp.getInstance().dialogs["newAccountWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaSearchListController.prototype._newAccountListener", null, false);
 	}
@@ -362,8 +362,8 @@ function(ev) {
 ZaSearchListController.prototype._newDistributionListListener =
 function(ev) {
 	try {
-		var newDL = new ZaDistributionList(this._app);
-		this._app.getDistributionListController().show(newDL);
+		var newDL = new ZaDistributionList();
+		ZaApp.getInstance().getDistributionListController().show(newDL);
 	} catch (ex) {
 		this._handleException(ex, "ZaSearchListController.prototype._newDistributionListListener", null, false);
 	}
@@ -373,12 +373,12 @@ function(ev) {
 ZaSearchListController.prototype._newResourceListener =
 function(ev) {
 	try {
-		var newResource = new ZaResource(this._app);
-		if(!this._app.dialogs["newResourceWizard"])
-			this._app.dialogs["newResourceWizard"] = new ZaNewResourceXWizard(this._container, this._app);	
+		var newResource = new ZaResource();
+		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
+			ZaApp.getInstance().dialogs["newResourceWizard"] = new ZaNewResourceXWizard(this._container);	
 
-		this._app.dialogs["newResourceWizard"].setObject(newResource);
-		this._app.dialogs["newResourceWizard"].popup();
+		ZaApp.getInstance().dialogs["newResourceWizard"].setObject(newResource);
+		ZaApp.getInstance().dialogs["newResourceWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaSearchListController.prototype._newResourceListener", null, false);
 	}
@@ -437,21 +437,21 @@ function (ev) {
 ZaSearchListController.prototype._editItem = function (item) {
 	var type = item.type;
 	if (type == ZaItem.ACCOUNT) {
-		this._app.getAccountViewController().show(item);
+		ZaApp.getInstance().getAccountViewController().show(item);
 	} else if (type == ZaItem.DL) {
-		this._app.getDistributionListController().show(item);
+		ZaApp.getInstance().getDistributionListController().show(item);
 	} else if(type == ZaItem.ALIAS) {
 		var targetObj = item.getAliasTargetObj() ;
 		
 		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {			
-			this._app.getAccountViewController().show(targetObj, true);
+			ZaApp.getInstance().getAccountViewController().show(targetObj, true);
 		}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
-			this._app.getDistributionListController().show(targetObj, true);
+			ZaApp.getInstance().getDistributionListController().show(targetObj, true);
 		}
 	} else if (type == ZaItem.RESOURCE ){
-		this._app.getResourceController().show(item);
+		ZaApp.getInstance().getResourceController().show(item);
 	} else if (type==ZaItem.DOMAIN) {
-		this._app.getDomainController().show(item);
+		ZaApp.getInstance().getDomainController().show(item);
 	}
 };
 

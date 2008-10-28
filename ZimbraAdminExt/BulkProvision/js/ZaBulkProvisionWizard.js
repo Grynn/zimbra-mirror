@@ -1,10 +1,10 @@
 //ZaBulkProvisionWizard
-function ZaBulkProvisionWizard (parent, app) {
+function ZaBulkProvisionWizard (parent) {
     var w = "550px" ;
     if (AjxEnv.isIE) {
         w = "600px" ;
     }
-    ZaXWizardDialog.call(this, parent, app, null, com_zimbra_bulkprovision.BP_Wizard_title,
+    ZaXWizardDialog.call(this, parent, null, com_zimbra_bulkprovision.BP_Wizard_title,
                                 w, "300px","ZaBulkProvisionWizard");
 
 	this.stepChoices = [
@@ -18,7 +18,7 @@ function ZaBulkProvisionWizard (parent, app) {
 
     this.initForm(ZaBulkProvision.getMyXModel(),this.getMyXForm());
 
-	this._localXForm.setController(this._app);
+	this._localXForm.setController(ZaApp.getInstance());
     /*
     this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE,
             new AjxListener(this, ZaBulkProvisionWizard.prototype.handleXFormChange));
@@ -136,12 +136,12 @@ function() {
             //allserver: (this._containedObject[ZaCert.A_target_server] == ZaCert.ALL_SERVERS) ? 1 : 0,
 			callback: callback
 		}
-		ZaCert.installCert (this._app, params, this._containedObject[ZaCert.A_target_server]  ) ;
+		ZaCert.installCert (ZaApp.getInstance(), params, this._containedObject[ZaCert.A_target_server]  ) ;
 
 		this.popdown();
 
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaBulkProvisionWizard.prototype.finishWizard", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaBulkProvisionWizard.prototype.finishWizard", null, false);
 	}
 } */
 
@@ -155,12 +155,12 @@ function (status, uploadResults) {
         if (v.aid != null && v.aid.length > 0) {
            this._containedObject [ZaBulkProvision.A_csv_aid] =  v.aid ;
         } else {
-           this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_csv_no_aid, null, null, true);
+           ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_csv_no_aid, null, null, true);
            return ;
         }
         //File is uploaded successfully
         try {
-            var resp = ZaBulkProvision.getBulkProvisionAccounts(this._app, this._containedObject [ZaBulkProvision.A_csv_aid]);
+            var resp = ZaBulkProvision.getBulkProvisionAccounts(ZaApp.getInstance(), this._containedObject [ZaBulkProvision.A_csv_aid]);
             if (resp.aid == this._containedObject[ZaBulkProvision.A_csv_aid]) {
                 this._containedObject[ZaBulkProvision.A_provision_accounts] =
                                                 ZaBulkProvision.initProvisionAccounts (resp.accounts) ;
@@ -170,9 +170,9 @@ function (status, uploadResults) {
             }
         }catch (ex) {
             if (ex.code == "bulkprovision.BP_TOO_MANY_ACCOUNTS")  {
-                this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_TOO_MANY_ACCOUNTS, ex, true);
+                ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_TOO_MANY_ACCOUNTS, ex, true);
             }else{
-                this._app.getCurrentController()._handleException(ex) ;
+                ZaApp.getInstance().getCurrentController()._handleException(ex) ;
             }
             return ;
         }
@@ -181,7 +181,7 @@ function (status, uploadResults) {
 	} else {
 		// handle errors during attachment upload.
 		var msg = AjxMessageFormat.format(com_zimbra_bulkprovision.error_upload_csv, [status]);
-		this._app.getCurrentController().popupErrorDialog(msg, null, null, true);
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(msg, null, null, true);
 	}
 }
 
@@ -226,7 +226,7 @@ ZaBulkProvisionWizard.prototype.getProvisionStatusDialog = function () {
 //        this._provisionStatusDialog.setSize (432, 250) ;
 //        this._provisionStatusDialog.setScrollStyle(Dwt.SCROLL)
         this._provisionStatusDialog = new ZaBulkProvisionStatusDialog (
-                this.parent, this._app);
+                this.parent, ZaApp.getInstance());
     }
 
     return this._provisionStatusDialog ;
@@ -252,7 +252,7 @@ function() {
                 var v = ZaBulkProvisionWizard.getFileName(inputEls[i].value) ;
                 if ( n == "csvFile") {
                     if (v == null || v.length <= 0) {
-                        this._app.getCurrentController().popupErrorDialog (
+                        ZaApp.getInstance().getCurrentController().popupErrorDialog (
                             com_zimbra_bulkprovision.error_no_csv_file_specified
                         );
                         return ;
@@ -273,14 +273,14 @@ function() {
             um.execute(csvUploadCallback, document.getElementById (ZaBulkProvisionWizard.csvUploadFormId));
             return ; //allow the callback to handle the wizard buttons
         }catch (err) {
-            this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_no_csv_file_specified) ;
+            ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_no_csv_file_specified) ;
             return ;
         }
 	}else if (cStep == ZaBulkProvisionWizard.STEP_PROVISION) {
 	    //create the accounts now, it is a sychronous action with status updated
         var startTime = new Date ();
         if (AjxEnv.hasFirebug) console.log("Start provisiong accounts: " + startTime.toUTCString());
-        var controller = this._app.getCurrentController() ;
+        var controller = ZaApp.getInstance().getCurrentController() ;
 //        var busyMsg = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS ;
         var statusDialog = this.getProvisionStatusDialog() ;
         this._provisionStatusObject = {} ;
@@ -392,7 +392,7 @@ function() {
         
         if (AjxEnv.hasFirebug) console.log("Total Time (ms): "  + total) ; 
         //update the status now
-        ZaBulkProvision.updateBulkProvisionStatus (this._app, this._containedObject) ;
+        ZaBulkProvision.updateBulkProvisionStatus (ZaApp.getInstance(), this._containedObject) ;
         nextStep = ZaBulkProvisionWizard.STEP_SUMMARY ;
         this.goPage(nextStep) ;
 	}

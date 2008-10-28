@@ -22,9 +22,9 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaAuthConfigXWizard = function(parent, app) {
-	this._app=app;
-	ZaXWizardDialog.call(this, parent,app, null, ZaMsg.NCD_AuthConfigTitle, "550px", "300px","ZaAuthConfigXWizard");
+ZaAuthConfigXWizard = function(parent) {
+
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_AuthConfigTitle, "550px", "300px","ZaAuthConfigXWizard");
 
 	this.stepChoices = [
 		{label:ZaMsg.TABT_AuthMode, value:1},				
@@ -227,7 +227,7 @@ function() {
 		this.goPage(5);
 	} else if (this._containedObject[ZaModel.currentStep]==2 && this._containedObject.attrs[ZaDomain.A_AuthMech]==ZaDomain.AuthMech_ad) {
 		if(!this._containedObject.attrs[ZaDomain.A_AuthLdapURL]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_LDAP_URL_REQUIRED);
 			return false;
 		}	
 		this.goPage(4);//skip 3rd step for Active Directory
@@ -240,7 +240,7 @@ function() {
 		}
 		//check that passwords match
 		if(this._containedObject.attrs[ZaDomain.A_AuthLdapSearchBindPassword]!=this._containedObject[ZaDomain.A_AuthLdapSearchBindPasswordConfirm]) {
-			this._app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
 			return false;
 		}
 		this.goPage(4);

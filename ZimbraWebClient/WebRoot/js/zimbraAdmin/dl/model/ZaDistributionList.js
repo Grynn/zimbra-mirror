@@ -17,8 +17,8 @@
  /**
  * @author EMC
  **/
-ZaDistributionList = function(app, id, name, memberList, description, notes) {
-	ZaItem.call(this, app);
+ZaDistributionList = function(id, name, memberList, description, notes) {
+	ZaItem.call(this);
 	this.attrs = new Object();
 	this.attrs[ZaDistributionList.A_mailStatus] = "enabled";
 	this.attrs[ZaAccount.A_zimbraMailAlias] = [];
@@ -104,7 +104,7 @@ ZaDistributionList.prototype.clone = function () {
 	if(this._memberList) {
 		memberList = this._memberList.getArray();
 	}
-	var dl = new ZaDistributionList(this._app, this.id, this.name, memberList, this.description, this.notes);
+	var dl = new ZaDistributionList( this.id, this.name, memberList, this.description, this.notes);
  	if (memberList != null) {
  		dl._memberList = new AjxVector();
  		for (var i = 0 ; i < memberList.length; ++i) {
@@ -220,7 +220,7 @@ function (newName) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_RENAME_DL
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.RenameDistributionListResponse;	
@@ -272,7 +272,7 @@ function(tmpObj, callback) {
 		command.invoke(params);
 	} else {
 		var reqMgrParams = {
-			controller : this._app.getCurrentController(),
+			controller : ZaApp.getInstance().getCurrentController(),
 			busyMsg : ZaMsg.BUSY_MODIFY_DL
 		}
 		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDistributionListResponse;	
@@ -328,13 +328,13 @@ function(tmpObj, callback) {
 	} catch (ex) {
 		switch(ex.code) {
 			case ZmCsfeException.DISTRIBUTION_LIST_EXISTS:
-				app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
 			break;
 			case ZmCsfeException.ACCT_EXISTS:
-				app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS);
 			break;
 			default:
-				app.getCurrentController()._handleException(ex, "ZaDistributionList.create", null, false);
+				ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.create", null, false);
 			break;
 		}
 		return null;
@@ -342,17 +342,17 @@ function(tmpObj, callback) {
 
 }
 
-ZaDistributionList.checkValues = function(tmpObj, app) {
+ZaDistributionList.checkValues = function(tmpObj) {
 	if(tmpObj.name == null || tmpObj.name.length < 1) {
 		//show error msg
-		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_REQUIRED);
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_REQUIRED);
 		return false;
 	}
 
 	
 	if(tmpObj.name.lastIndexOf ("@")!=tmpObj.name.indexOf ("@")) {
 		//show error msg
-		app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_INVALID);
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_DL_NAME_INVALID);
 		return false;
 	}	
 
@@ -422,7 +422,7 @@ ZaDistributionList.prototype.getMembers = function (limit) {
 			var params = new Object();
 			params.soapDoc = soapDoc;
 			var reqMgrParams = {
-				controller : this._app.getCurrentController(),
+				controller : ZaApp.getInstance().getCurrentController(),
 				busyMsg : ZaMsg.BUSY_GET_DL
 			}
 			var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDistributionListResponse;	
@@ -446,14 +446,14 @@ ZaDistributionList.prototype.getMembers = function (limit) {
 			this.initFromJS(resp.dl[0]);
 			
 			//Make a GetAccountMembershipRequest
-	this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getDlMemberShip(this._app, this.id, "id" ) ;
+	this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getDlMemberShip(this.id, "id" ) ;
 	this[ZaAccount.A2_directMemberList + "_more"] = 
 			(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
 	this[ZaAccount.A2_indirectMemberList + "_more"] = 
 			(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
 			
 		} catch (ex) {
-			this._app.getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
 			//DBG.dumpObj(ex);
 		}
 	} else if (this._memberList == null){
@@ -632,7 +632,7 @@ ZaDistributionList.prototype.addNewMembers = function (list) {
 		var params = new Object();
 		params.soapDoc = addMemberSoapDoc;	
 		var reqMgrParams = {
-			controller : this._app.getCurrentController(),
+			controller : ZaApp.getInstance().getCurrentController(),
 			busyMsg : ZaMsg.BUSY_ADD_DL_MEMBER
 		}
 		ZaRequestMgr.invoke(params, reqMgrParams).Body.AddDistributionListMemberResponse;
@@ -667,7 +667,7 @@ ZaDistributionList.prototype.removeDeletedMembers = function (list) {
 		var params = new Object();
 		params.soapDoc = removeMemberSoapDoc;	
 		var reqMgrParams = {
-			controller : this._app.getCurrentController(),
+			controller : ZaApp.getInstance().getCurrentController(),
 			busyMsg : ZaMsg.BUSY_REMOVE_DL_MEMBER
 		}
 		ZaRequestMgr.invoke(params, reqMgrParams).Body.RemoveDistributionListMemberResponse;		

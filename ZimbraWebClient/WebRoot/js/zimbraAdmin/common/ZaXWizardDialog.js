@@ -28,7 +28,7 @@
 * This class represents a reusable wizard dialog. 
 * After calling the constructor, define metadata for and call initForm to draw the contents of the dialog
 */
-ZaXWizardDialog = function(parent, app, className, title, w, h,iKeyName, extraButtons) {
+ZaXWizardDialog = function(parent,className, title, w, h,iKeyName, extraButtons) {
 	if (arguments.length == 0) return;
 
 	this._standardButtons = [DwtDialog.CANCEL_BUTTON];
@@ -42,7 +42,7 @@ ZaXWizardDialog = function(parent, app, className, title, w, h,iKeyName, extraBu
 		var finishButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.FINISH_BUTTON, AjxMsg._finish, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.finishWizard));
 		this._extraButtons = [helpButton,prevButton,nextButton,finishButton];
 	}
-	ZaXDialog.call(this, parent,app, className,title, w, h,iKeyName);
+	ZaXDialog.call(this, parent,className,title, w, h,iKeyName);
 	this._pageIx = 1;
 	this._currentPage = 1;
 }
@@ -158,7 +158,7 @@ function (xModelMetaData, xFormMetaData) {
 		
 	this._localXModel = new XModel(xModelMetaData);
 	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
-	this._localXForm.setController(this._app);
+	this._localXForm.setController(ZaApp.getInstance());
 	this._localXForm.draw(this._pageDiv);
 	this._drawn = true;
 }

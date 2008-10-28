@@ -22,9 +22,9 @@
 * @author Roland Schemers
 * @author Greg Solovyev
 **/
-ZaServicesListView = function(parent, app, clsName) {
+ZaServicesListView = function(parent,clsName) {
 	if (arguments.length == 0) return;
-	this._app = app;
+
 	var className = clsName || "ZaServicesListView";
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	

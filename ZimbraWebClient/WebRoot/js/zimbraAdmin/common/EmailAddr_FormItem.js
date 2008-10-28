@@ -64,7 +64,7 @@ function () {
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	try {
 		if(this.getForm().parent._app) {
-			this._domainPart = this.getForm().parent._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]
+			this._domainPart = ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]
 		}
 	} catch (ex) {
 		this._domainPart = null;
@@ -199,7 +199,7 @@ EmailAddr_XFormItem.resetDomainLists =
 function (force) {
 	if (force || EmailAddr_XFormItem.choicesDirty) {
 		DBG.println(AjxDebug.DBG3, "Reset the domain lists ....") ;
-		this._app.searchDomains();
+		ZaApp.getInstance().searchDomains();
 		 EmailAddr_XFormItem.choicesDirty = false ;
 	}
 }

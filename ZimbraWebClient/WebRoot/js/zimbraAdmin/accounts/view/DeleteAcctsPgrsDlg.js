@@ -24,14 +24,13 @@
 **/
 
 
-DeleteAcctsPgrsDlg = function(parent,  app, w, h) {
+DeleteAcctsPgrsDlg = function(parent,  w, h) {
 	if (arguments.length == 0) return;
-	this._app = app;
 	this._standardButtons = [DwtDialog.OK_BUTTON];
 	var helpButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.HELP_BUTTON, ZaMsg.TBB_Help, DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
 	var abortButton = new DwtDialog_ButtonDescriptor(DeleteAcctsPgrsDlg.ABORT_BUTTON, ZaMsg.NAD_AbortDeleting, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.abortDeletingAccounts));		
 	this._extraButtons = [helpButton, abortButton];
-	ZaXDialog.call(this, parent, app, null, ZaMsg.NAD_DeletingAccTitle, w, h);
+	ZaXDialog.call(this, parent,  null, ZaMsg.NAD_DeletingAccTitle, w, h);
 	this._containedObject = [];
 //	this._deletedAccounts = [];
 	this._currentIndex = 0;
@@ -98,14 +97,14 @@ function(evt) {
 		*/
 		this._button[DeleteAcctsPgrsDlg.ABORT_BUTTON].setEnabled(false);
 		var obj = this._localXForm.getInstance();
-//		this._app.getAccountListController().fireRemovalEvent(obj[DeleteAcctsPgrsDlg._DELETED_ACCTS]);			
+//		ZaApp.getInstance().getAccountListController().fireRemovalEvent(obj[DeleteAcctsPgrsDlg._DELETED_ACCTS]);			
 		AjxTimedAction.cancelAction(this._pollHandler);
 		this._pollHandler = null;
 		this._aborted = true;
 		this._localXForm.getInstance().status = ZaMsg.NAD_DeletingCancelled;
 		this._localXForm.refresh();
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "DeleteAcctsPgrsDlg.abortDeletingAccounts", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "DeleteAcctsPgrsDlg.abortDeletingAccounts", null, false);
 	}
 }
 
@@ -121,7 +120,7 @@ function(evt) {
 		this._localXForm.setInstance(obj);
 		this._pollHandler = AjxTimedAction.scheduleAction(this.pollAction, "50");		
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "DeleteAcctsPgrsDlg.startDeletingAccounts", null, false);	
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "DeleteAcctsPgrsDlg.startDeletingAccounts", null, false);	
 	}
 }
 
@@ -146,7 +145,7 @@ function (result) {
 		this._pollHandler = null;	
 //		this._localXForm.setInstance(obj);	
 		this._localXForm.refresh();	
-		this._app.getCurrentController()._handleException(ex, "DeleteAcctsPgrsDlg.prototype.deleteOneAccountCallback", null, false);		
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "DeleteAcctsPgrsDlg.prototype.deleteOneAccountCallback", null, false);		
 	} else {
 		obj[DeleteAcctsPgrsDlg._DELETED_ACCTS].push(this._containedObject[this._currentIndex]);
 		this._currentIndex++;
@@ -156,7 +155,7 @@ function (result) {
 		} else {
 			//done
 			this._button[DeleteAcctsPgrsDlg.ABORT_BUTTON].setEnabled(false);			
-			this._app.getCurrentController().fireRemovalEvent(obj[DeleteAcctsPgrsDlg._DELETED_ACCTS]);						
+			ZaApp.getInstance().getCurrentController().fireRemovalEvent(obj[DeleteAcctsPgrsDlg._DELETED_ACCTS]);						
 			AjxTimedAction.cancelAction(this._pollHandler);	
 			this._pollHandler = null;
 			if(!this._aborted) {

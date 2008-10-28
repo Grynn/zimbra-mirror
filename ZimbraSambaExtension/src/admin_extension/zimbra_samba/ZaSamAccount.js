@@ -1,11 +1,11 @@
 if(ZaItem) {
 	ZaItem.SAMBA_SAM_ACCOUNT = "sambaSamAccount";
 }
-function ZaSamAccount(app) {
-	if (arguments.length == 0) return;	
-	ZaItem.call(this, app,"ZaSamAccount");
+function ZaSamAccount() {
+	//if (arguments.length == 0) return;	
+	ZaItem.call(this, "ZaSamAccount");
 	this.type = ZaItem.SAMBA_SAM_ACCOUNT;
-	this._init(app);
+	this._init();
 }
 
 ZaSamAccount.A_isSpecialNTAccount = "isSpecialNTAccount";

@@ -22,10 +22,10 @@
 * @param parent
 * param app
 **/
-ZaProxyPortWarningXDialog = function(parent,  app, w, h, title, instance) {
+ZaProxyPortWarningXDialog = function(parent, w, h, title, instance) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
-	ZaXDialog.call(this, parent, app, null, title, w, h);
+	ZaXDialog.call(this, parent,null, title, w, h);
 	this._containedObject = instance ? instance :  {selectedChoice:0, choice1Label:"",choice2Label:"",choice3Label:"",warningMsg:""};
 	var objModel = {
 		items:[

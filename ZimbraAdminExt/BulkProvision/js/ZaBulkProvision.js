@@ -1,7 +1,7 @@
-function ZaBulkProvision (app) {
+function ZaBulkProvision () {
     if (arguments.length == 0) return;
-    ZaItem.call (this, app, "ZaBulkProvision") ;
-	this._init(app);
+    ZaItem.call (this, "ZaBulkProvision") ;
+	this._init();
 	this.type = ZaItem.BULK_PROVISION;
 }
 

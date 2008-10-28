@@ -22,14 +22,14 @@
 * @author Charles Cao
 **/
 
-ZaSearchBuilderView = function(parent, app){
+ZaSearchBuilderView = function(parent){
 	DwtComposite.call(this, parent, "ZaSearchBuilderView", Dwt.ABSOLUTE_STYLE, true);		
 	var visible = false ;
 	this.zShow(visible);
-	this._app = app;
+	this._app = ZaApp.getInstance();
 	
 	this._option_next_x = 0;
-	this._controller = this._app.getSearchBuilderController () ;
+	this._controller = ZaApp.getInstance().getSearchBuilderController () ;
 	this.setScrollStyle(DwtControl.SCROLL);
 }
 

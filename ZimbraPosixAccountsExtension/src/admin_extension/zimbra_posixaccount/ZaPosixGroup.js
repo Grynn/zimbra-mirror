@@ -2,13 +2,13 @@ if(ZaItem) {
 	ZaItem.POSIX_GROUP = "posixGroup";
 }
 
-function ZaPosixGroup(app) {
-	if (arguments.length == 0) return;	
-	ZaItem.call(this, app,"ZaPosixGroup");
+function ZaPosixGroup() {
+	//if (arguments.length == 0) return;	
+	ZaItem.call(this, "ZaPosixGroup");
 	this.type = ZaItem.POSIX_GROUP;
 	this.attrs = [];
 	this.attrs[ZaItem.A_objectClass] = [];
-	this._init(app);
+	this._init();
 }
 
 

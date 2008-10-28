@@ -22,15 +22,15 @@
 * @param parent
 * param app
 **/
-MoveAliasXDialog = function(parent,  app, w, h) {
+MoveAliasXDialog = function(parent,   w, h) {
 	if (arguments.length == 0) return;
-	this._app = app;
+
 	this._standardButtons = [DwtDialog.CANCEL_BUTTON];
 	var helpButton = new DwtDialog_ButtonDescriptor(ZaXWizardDialog.HELP_BUTTON, ZaMsg.TBB_Help, DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
 	var moveButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.MOVE_BUTTON, ZaMsg._move, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.doMove));	
 	var closeButton = new DwtDialog_ButtonDescriptor(MoveAliasXDialog.CLOSE_BUTTON, AjxMsg._close, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.closeMe));		
 	this._extraButtons = [helpButton,moveButton,closeButton];	
-	ZaXDialog.call(this, parent, app, null, ZaMsg.MoveAlias_Title, w, h,"MoveAliasXDialog");
+	ZaXDialog.call(this, parent,  null, ZaMsg.MoveAlias_Title, w, h,"MoveAliasXDialog");
 	if (this._button[MoveAliasXDialog.MOVE_BUTTON]) {
 		this._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled (false);
 	}
@@ -93,7 +93,7 @@ function() {
 				name = this._alias.name;
 				ZaAlias.prototype.remove.call(this._alias);
 			} catch (ex) {
-				this._app.getCurrentController()._handleException(ex, "MoveAliasXDialog.prototype.moveAlias:_alias.remove", null, false);
+				ZaApp.getInstance().getCurrentController()._handleException(ex, "MoveAliasXDialog.prototype.moveAlias:_alias.remove", null, false);
 				return false;
 			}
 			if(name) {
@@ -102,14 +102,14 @@ function() {
 				//throw	
 				throw (new AjxException(ZaMsg.FAILED_MOVE_ALIAS, AjxException.UNKNOWN_ERROR, "MoveAliasXDialog.prototype.moveAlias", "Alias name is not available"));
 			}
-			this._app.getAccountListController().show();	
+			ZaApp.getInstance().getAccountListController().show();	
 			this._containedObject.resultMsg = String(ZaMsg.Alias_Moved_To).replace("{0}",name).replace("{1}",this._containedObject[ZaSearch.A_selected].name); 
 			return true;							
 		}else{
-			this._app.getCurrentController().popupErrorDialog( AjxMessageFormat.format(ZaMsg.WARNING_ALIASES_TARGET_NON_EXIST,[this._containedObject[ZaSearch.A_selected]]));
+			ZaApp.getInstance().getCurrentController().popupErrorDialog( AjxMessageFormat.format(ZaMsg.WARNING_ALIASES_TARGET_NON_EXIST,[this._containedObject[ZaSearch.A_selected]]));
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "MoveAliasXDialog.prototype.moveAlias", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "MoveAliasXDialog.prototype.moveAlias", null, false);
 		return false;
 	}
 	return false;

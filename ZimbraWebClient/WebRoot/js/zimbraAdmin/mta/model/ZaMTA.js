@@ -22,9 +22,9 @@
 * @contructor
 * @param app reference to the application instance
 **/
-ZaMTA = function(app) {
-	ZaItem.call(this, app,"ZaMTA");
-	this._init(app);
+ZaMTA = function() {
+	ZaItem.call(this, "ZaMTA");
+	this._init();
 }
 
 
@@ -115,7 +115,7 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 		}
 		if(resp.isException && resp.isException()) {
 			var details = {obj:this,qName:null,poll:false};
-			this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);		
+			ZaApp.getInstance().getMTAController(this._viewInternalId).fireChangeEvent(details);		
 			throw (resp.getException());
 		} 	
 		var response = resp.getResponse();
@@ -126,11 +126,11 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 			ZaMTA._quecountsArr.sort();
 			ZaMTA.threashHold = ZaMTA._quecountsArr[Math.round(ZaMTA._quecountsArr.length/2)];
 			var details = {obj:this,qName:null,poll:false};
-			this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);
+			ZaApp.getInstance().getMTAController(this._viewInternalId).fireChangeEvent(details);
 		} else {
 			var ex = new ZmCsfeException(ZMsg["service.UNKNOWN_DOCUMENT"],ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.QCountsCallback");
 			throw(ex);
-			//this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
+			//ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");
 		}
 	} catch (ex) {
 		this[ZaMTA.A_DeferredQ] = {n:ZaMsg.PQ_Error};
@@ -145,8 +145,8 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 		this[ZaMTA.A_HoldQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Error;
 		this[ZaMTA.A_CorruptQ][ZaMTA.A_refreshTime] = ZaMsg.PQ_Error;	
 		var details = {obj:this,qName:null,poll:false};
-		this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);		
-		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");				
+		ZaApp.getInstance().getMTAController(this._viewInternalId).fireChangeEvent(details);		
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaMTA.prototype.QCountsCallback");				
 	}
 }
 
@@ -154,7 +154,7 @@ ZaMTA.prototype.QCountsCallback = function (resp) {
 * @param app {ZaApp}
 * @return {ZaItemList} a list of ZaMTA objects {@link ZaItemList}
 **/
-ZaMTA.getAll = function (app) {
+ZaMTA.getAll = function () {
 	var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	
 	soapDoc.getMethod().setAttribute("service", "mta");
 	//var command = new ZmCsfeCommand();
@@ -162,11 +162,11 @@ ZaMTA.getAll = function (app) {
 	params.asyncMode=false;
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller : app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_ALL_SERVER
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllServersResponse;	
-	var list = new ZaItemList(ZaMTA, app);
+	var list = new ZaItemList(ZaMTA);
 	list.loadFromJS(resp);	
 	return list;	
 }
@@ -250,7 +250,7 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 							item[k].getToolTip = ZaMTAQSummaryItem.prototype.getToolTip;
 							item[k].toString = ZaMTAQSummaryItem.prototype.toString;
 							//this[qName][qs[j].type].push(item);
-							//this[qName][qs[j].type].push(new ZaMTAQSummaryItem(this._app, item[ZaMTAQSummaryItem.A_description], item[ZaMTAQSummaryItem.A_text], item[ZaMTAQSummaryItem.A_count]));
+							//this[qName][qs[j].type].push(new ZaMTAQSummaryItem( item[ZaMTAQSummaryItem.A_description], item[ZaMTAQSummaryItem.A_text], item[ZaMTAQSummaryItem.A_count]));
 						}
 						this[qName][qs[j].type] = item;
 					}
@@ -369,18 +369,18 @@ ZaMTA.prototype.mailQStatusCallback = function (arg,resp) {
 	var qName = arg.qName;
 	if(!resp) {
 		var ex = new ZmCsfeException(ZMsg.errorEmptyResponse,ZmCsfeException.CSFE_SVC_ERROR,"ZaMTA.prototype.mailQStatusCallback");
-		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.mailQStatusCallback");
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaMTA.prototype.mailQStatusCallback");
 		//this.goPrev();
 		return;		
 	}
 	if(resp.isException && resp.isException()) {
 		if(resp.getException().code == ZmCsfeException.SVC_ALREADY_IN_PROGRESS) {
 			var details = {obj:this,qName:qName,poll:true};
-			this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);				
+			ZaApp.getInstance().getMTAController(this._viewInternalId).fireChangeEvent(details);				
 		} else if (resp.getException().code == ZmCsfeException.SVC_TEMPORARILY_UNAVAILABLE) {
-			this._app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_PQ_SERVICE_UNAVAILABLE);
+			ZaApp.getInstance().getCurrentController().popupMsgDialog(ZaMsg.ERROR_PQ_SERVICE_UNAVAILABLE);
 		} else {
-			this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.mailQStatusCallback");
+			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.mailQStatusCallback");
 		}
 		return;
 	} 	
@@ -394,10 +394,10 @@ ZaMTA.prototype.mailQStatusCallback = function (arg,resp) {
 			details[ix] = arg[ix];
 		}
 
-		this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);
+		ZaApp.getInstance().getMTAController(this._viewInternalId).fireChangeEvent(details);
 	} else {
 		var ex = new ZmCsfeException(ZMsg["service.UNKNOWN_DOCUMENT"],ZmCsfeException.SVC_UNKNOWN_DOCUMENT,"ZaMTA.prototype.mailQStatusCallback");
-		this._app.getCurrentController()._handleException(ex, "ZaMTA.prototype.mailQStatusCallback");
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaMTA.prototype.mailQStatusCallback");
 		return;	
 	}	
 }
@@ -466,11 +466,11 @@ ZaMTA.prototype.mailQueueActionClbck = function (qName, resp) {
 	if(resp.isException && resp.isException()) {
 		if(resp.getException().code == ZmCsfeException.SVC_ALREADY_IN_PROGRESS) {
 			var details = {obj:this,qName:qName};
-			this._app.getMTAController(this._viewInternalId).fireChangeEvent(details);				
+			ZaApp.getInstance().getMTAController(this._viewInternalId).fireChangeEvent(details);				
 		} else if (resp.getException().code == ZmCsfeException.SVC_TEMPORARILY_UNAVAILABLE) {
-			this._app.getCurrentController().popupMsgDialog(ZaMsg.ERROR_PQ_SERVICE_UNAVAILABLE);
+			ZaApp.getInstance().getCurrentController().popupMsgDialog(ZaMsg.ERROR_PQ_SERVICE_UNAVAILABLE);
 		} else {
-			this._app.getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.mailQueueActionClbck");
+			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaMTA.prototype.mailQueueActionClbck");
 		}
 	} else {
 		this.getMailQStatus(qName);
@@ -487,13 +487,13 @@ ZaMTA.prototype.flushQueues = function () {
 	params.soapDoc = soapDoc;	
 	params.asyncMode = false;
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_FLUSH_QUEUE
 	}
 	ZaRequestMgr.invoke(params, reqMgrParams);		
 }
 
-ZaMTA.initMethod = function (app) {
+ZaMTA.initMethod = function () {
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";
@@ -524,10 +524,10 @@ ZaMTA.initMethod = function (app) {
 }
 ZaItem.initMethods["ZaMTA"].push(ZaMTA.initMethod);
 
-ZaMTAQSummaryItem = function (app, d, t, n) {
+ZaMTAQSummaryItem = function (d, t, n) {
 	if (arguments.length == 0) return;
-	ZaItem.call(this, app,"ZaMTAQSummaryItem");
-	this._init(app);
+	ZaItem.call(this,"ZaMTAQSummaryItem");
+	this._init();
 	if(d) 
 		this[ZaMTAQSummaryItem.A_description] = d;
 	if(t)
@@ -574,10 +574,10 @@ function() {
 }
 
 
-ZaMTAQMsgItem = function (app) {
+ZaMTAQMsgItem = function () {
 	if (arguments.length == 0) return;
-	ZaItem.call(this, app,"ZaMTAQMsgItem");
-	this._init(app);
+	ZaItem.call(this, "ZaMTAQMsgItem");
+	this._init();
 }
 
 

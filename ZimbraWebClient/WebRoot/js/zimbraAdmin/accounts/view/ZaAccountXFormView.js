@@ -23,8 +23,8 @@
 * @param app {ZaApp}
 * @author Greg Solovyev
 **/
-ZaAccountXFormView = function(parent, app) {
-	ZaTabView.call(this, parent, app, "ZaAccountXFormView");	
+ZaAccountXFormView = function(parent) {
+	ZaTabView.call(this, parent,  "ZaAccountXFormView");	
 	this.accountStatusChoices = [
 		{value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_ACTIVE)},
 		{value:ZaAccount.ACCOUNT_STATUS_CLOSED, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_CLOSED)},
@@ -112,8 +112,8 @@ function(entry) {
 		if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
 			this._containedObject[ZaAccount.A2_autoCos] = "FALSE" ;
 			
-			//this._containedObject.cos = this._app.getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
-			this._containedObject.cos = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId],this._app);
+			//this._containedObject.cos = ZaApp.getInstance().getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
+			this._containedObject.cos = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);
 			
 		}
 		if(!this._containedObject.cos) {
@@ -122,16 +122,17 @@ function(entry) {
 			* We did not find the COS assigned to this account,
 			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
 			**/
-			ZaAccount.setDefaultCos(this._containedObject, this._app) ;
+			this._containedObject.cos = ZaCos.getDefaultCos4Account(this._containedObject.name);
+			/*ZaAccount.setDefaultCos(this._containedObject) ;
 			if(!this._containedObject.cos) {
 				//default COS was not found - just assign the first COS
-				var hashMap = this._app.getCosList().getIdHash();
+				var hashMap = ZaApp.getInstance().getCosList().getIdHash();
 				for(var id in hashMap) {
 					this._containedObject.cos = hashMap[id];
 					this._containedObject.attrs[ZaAccount.A_COSId] = id;					
 					break;
 				}
-			}
+			}*/
 		}
 		this.cosChoices.setChoices([this._containedObject.cos]);
 		this.cosChoices.dirtyChoices();
@@ -140,7 +141,7 @@ function(entry) {
 	this._containedObject[ZaAccount.A2_confirmPassword] = entry[ZaAccount.A2_confirmPassword];
 	
 	if(ZaSettings.GLOBAL_CONFIG_ENABLED) {
-		this._containedObject.globalConfig = this._app.getGlobalConfig();
+		this._containedObject.globalConfig = ZaApp.getInstance().getGlobalConfig();
 	}
    	
 			
@@ -160,7 +161,7 @@ function(entry) {
 			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = null;		
 		}
 
-		var skins = this._app.getInstalledSkins();
+		var skins = ZaApp.getInstance().getInstalledSkins();
 		if(skins == null) {
 			skins = [];
 		} else if (AjxUtil.isString(skins))	 {
@@ -184,7 +185,7 @@ function(entry) {
 		
 		
 		//get sll Zimlets
-		var allZimlets = ZaZimlet.getAll(this._app, "extension");
+		var allZimlets = ZaZimlet.getAll("extension");
 		if(allZimlets == null) {
 			allZimlets = [];
 		} 
@@ -205,7 +206,7 @@ function(entry) {
 
     //check the account type here 
     var domainName = ZaAccount.getDomain (this._containedObject.name) ;
-    var domainObj =  ZaDomain.getDomainByName (domainName, this._app) ;
+    var domainObj =  ZaDomain.getDomainByName (domainName) ;
     this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
     
     this._localXForm.setInstance(this._containedObject);
@@ -220,25 +221,25 @@ ZaAccountXFormView.gotSkins = function () {
 		return ((this.getController().getInstalledSkins() != null) && (this.getController().getInstalledSkins().length > 0));
 }
 
-ZaAccountXFormView.onCOSChanged = 
-function(value, event, form) {
-	form.parent.setDirty(true);
+ZaAccountXFormView.preProcessCOS = 
+function(value,  form) {
+	var val = value;
 	if(ZaItem.ID_PATTERN.test(value))  {
 		form.getInstance().cos = ZaCos.getCosById(value, form.parent._app);
-		this.setInstanceValue(value);
+		//val = value;
 	} else {
 		form.getInstance().cos = ZaCos.getCosByName(value, form.parent._app);
 		if(form.getInstance().cos) {
 			//value = form.getInstance().cos.id;
-			value = form.getInstance().cos.id;
+			val = form.getInstance().cos.id;
 		} 
 	}
-	this.setInstanceValue(value);
+	//this.setInstanceValue(value);
 
       //if cos is changed,  update the account type information
-    form.parent.updateAccountType();
+    //form.parent.updateAccountType();
     
-    return value;
+    return val;
 }
 
 //update the account type output and it is called when the domain name is changed.
@@ -347,7 +348,7 @@ function () {
 	if(instance.alias_selection_cache && instance.alias_selection_cache[0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editAliasDlg) {
-			formPage.editAliasDlg = new ZaEditAliasXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.Edit_Alias_Title);
+			formPage.editAliasDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.Edit_Alias_Title);
 			formPage.editAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateAlias, this.getForm(), null);						
 		}
 		var obj = {};
@@ -385,7 +386,7 @@ function () {
 	var instance = this.getInstance();
 	var formPage = this.getForm().parent;
 	if(!formPage.addAliasDlg) {
-		formPage.addAliasDlg = new ZaEditAliasXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.Add_Alias_Title);
+		formPage.addAliasDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.Add_Alias_Title);
 		formPage.addAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addAlias, this.getForm(), null);						
 	}
 	
@@ -461,7 +462,7 @@ function () {
 	if(instance.fwdAddr_selection_cache && instance.fwdAddr_selection_cache[0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editFwdAddrDlg) {
-			formPage.editFwdAddrDlg = new ZaEditFwdAddrXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"400px", "150px",ZaMsg.Edit_FwdAddr_Title);
+			formPage.editFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"400px", "150px",ZaMsg.Edit_FwdAddr_Title);
 			formPage.editFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateFwdAddr, this.getForm(), null);						
 		}
 		var obj = {};
@@ -499,7 +500,7 @@ function () {
 	var instance = this.getInstance();
 	var formPage = this.getForm().parent;
 	if(!formPage.addFwdAddrDlg) {
-		formPage.addFwdAddrDlg = new ZaEditFwdAddrXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"400px", "150px",ZaMsg.Add_FwdAddr_Title);
+		formPage.addFwdAddrDlg = new ZaEditFwdAddrXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"400px", "150px",ZaMsg.Add_FwdAddr_Title);
 		formPage.addFwdAddrDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addFwdAddr, this.getForm(), null);						
 	}
 	
@@ -580,7 +581,7 @@ function () {
 	if(instance.fp_selection_cache && instance.fp_selection_cache[0]) {
 		var formPage = this.getForm().parent;
 		if(!formPage.editFpDlg) {
-			formPage.editFpDlg = new ZaEditFpXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.Edit_Fp_Title);
+			formPage.editFpDlg = new ZaEditFpXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.Edit_Fp_Title);
 			formPage.editFpDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateFp, this.getForm(), null);
 		}
 		var obj = ZaFp.getObject (instance.fp_selection_cache[0]) ;
@@ -599,11 +600,11 @@ function () {
 
 ZaAccountXFormView.pushFpButtonListener = function () {
 	var instance = this.getInstance();
-    var app = this.getForm().parent._app ;
+
     if (this.getForm().parent.isDirty()) {
-       app.getCurrentController().popupMsgDialog (ZaMsg.DIRTY_SAVE_ACCT, true);
+       ZaApp.getInstance().getCurrentController().popupMsgDialog (ZaMsg.DIRTY_SAVE_ACCT, true);
     } else if (instance.attrs[ZaAccount.A_zimbraForeignPrincipal].length > 0) {
-	   ZaFp.push (app, instance.id);
+	   ZaFp.push (instance.id);
   	}
 }
 
@@ -627,7 +628,7 @@ function () {
 	var formPage = this.getForm().parent;
     
     if(!formPage.addFpDlg) {
-		formPage.addFpDlg = new ZaEditFpXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.Add_Fp_Title);
+		formPage.addFpDlg = new ZaEditFpXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.Add_Fp_Title);
 		formPage.addFpDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.addFp, this.getForm(), null);
 	}
 
@@ -646,7 +647,7 @@ ZaAccountXFormView.addFp  = function () {
         var app = this.parent._app ;
         var currentFps =  this.getInstance().attrs[ZaAccount.A_zimbraForeignPrincipal] ;
         if (ZaFp.findDupPrefixFp(currentFps, obj[ZaFp.A_prefix])){
-            app.getCurrentController().popupErrorDialog(ZaMsg.ERROR_ONE_FP_PREFIX_ALLOWED, null);
+            ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ONE_FP_PREFIX_ALLOWED, null);
         }  else {
             this.parent.addFpDlg.popdown();
             if(ZaFp.getEntry(obj).length > 0) {
@@ -683,9 +684,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	
 	var domainName;
 	if(ZaSettings.DOMAINS_ENABLED) {
-		domainName = this._app.getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
-		if(!domainName && this._app.getDomainList().size() > 0)
-			domainName = this._app.getDomainList().getArray()[0].name;
+		domainName = ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
+		if(!domainName && ZaApp.getInstance().getDomainList().size() > 0)
+			domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
 	} else 
 		domainName = ZaSettings.myDomainName;
 
@@ -891,7 +892,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
-						onChange:ZaAccountXFormView.onCOSChanged,
+						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
 						//enableDisableChecks:[ZaAccountXFormView.isAutoCos],
 						enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autoCos,"FALSE"]],
 						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
@@ -1771,7 +1772,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				{type:_SPACER_},
 				{type:_GROUP_, 
 					items:[
-					{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_,choices:this._app.getInstalledSkins(),
+					{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_,choices:ZaApp.getInstance().getInstalledSkins(),
 						visibilityChecks:[ZaAccountXFormView.gotSkins]}
 					] 
 				},

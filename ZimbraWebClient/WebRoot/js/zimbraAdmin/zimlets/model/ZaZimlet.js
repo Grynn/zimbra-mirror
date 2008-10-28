@@ -21,8 +21,8 @@
 * this class is a model for managing Zimlets
 * @author Greg Solovyev
 **/
-ZaZimlet = function(app) {
-	ZaItem.call(this, app);
+ZaZimlet = function() {
+	ZaItem.call(this);
 	this.label = "";
 	this[ZaModel.currentStep] = 1;
 }
@@ -64,7 +64,7 @@ ZaZimlet.prototype.toString = function() {
 }
 
 ZaZimlet.getAll =
-function(app, exclude) {
+function(exclude) {
 	var exc = exclude ? exclude : "none";
 	var soapDoc = AjxSoapDoc.create("GetAllZimletsRequest", ZaZimbraAdmin.URN, null);	
 	soapDoc.getMethod().setAttribute("exclude", exc);	
@@ -72,12 +72,12 @@ function(app, exclude) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller : app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_ZIMLET
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllZimletsResponse;	
 	
-	var list = new ZaItemList(ZaZimlet, app);
+	var list = new ZaItemList(ZaZimlet);
 	list.loadFromJS(resp);	
 	return list;
 }
@@ -112,7 +112,7 @@ ZaZimlet.prototype.enable = function (enabled, callback) {
 		params.callback = callback;
 	}
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_MODIFY_ZIMLET
 	}
 	ZaRequestMgr.invoke(params, reqMgrParams);	
@@ -188,7 +188,7 @@ function() {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_UNDEPLOY_ZIMLET
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams);	
@@ -199,7 +199,7 @@ function() {
 	this.load();	
 }
 
-ZaZimlet.deploy = function (app, action,attId, callback) {
+ZaZimlet.deploy = function (action,attId, callback) {
 	var soapDoc = AjxSoapDoc.create("DeployZimletRequest", ZaZimbraAdmin.URN, null);
 	if(action)
 		soapDoc.getMethod().setAttribute("action", action);		
@@ -217,7 +217,7 @@ ZaZimlet.deploy = function (app, action,attId, callback) {
 	}
 	
 	var reqMgrParams = {
-		controller : app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_DEPLOY_ZIMLET
 	}
 	
@@ -235,7 +235,7 @@ function(by, val, withConfig) {
 	params.soapDoc = soapDoc;	
 	params.asyncMode = false;
 	var reqMgrParams = {
-		controller : this._app.getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_ZIMLET
 	}
 	resp = command.invoke(params, reqMgrParams);		

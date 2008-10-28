@@ -20,8 +20,8 @@
  * @author EMC
  * Distribution list controller 
  */
-ZaDLController = function(appCtxt, container, app) {
-	ZaXFormViewController.call(this, appCtxt, container, app, "ZaDLController");
+ZaDLController = function(appCtxt, container) {
+	ZaXFormViewController.call(this, appCtxt, container,"ZaDLController");
 	this._UICreated = false;
 	this._toolbarOperations = new Array();
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/distribution_lists.htm?locid="+AjxEnv.DEFAULT_LOCALE;
@@ -54,8 +54,8 @@ function (entry)	{
 		this._createUI();
 	} 	
 	try {
-		//this._app.pushView(ZaZimbraAdmin._DL_VIEW);
-		this._app.pushView(this.getContentViewId());
+		//ZaApp.getInstance().pushView(ZaZimbraAdmin._DL_VIEW);
+		ZaApp.getInstance().pushView(this.getContentViewId());
 		if(!entry.id) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
@@ -84,7 +84,7 @@ function () {
 ZaController.initToolbarMethods["ZaDLController"].push(ZaDLController.initToolbarMethod);
 
 ZaDLController.prototype.newDl = function () {
-	var newDL = new ZaDistributionList(this._app);
+	var newDL = new ZaDistributionList();
 	this.show(newDL);
 }
 
@@ -101,11 +101,11 @@ function(openInNewTab, ev) {
 			args["obj"] = this;
 			args["func"] = ZaDLController.prototype.newDl;
 			//ask if the user wants to save changes		
-			//this._app.dialogs["confirmMessageDialog"] = this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-			this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-			this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
-			this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-			this._app.dialogs["confirmMessageDialog"].popup();
+			//ZaApp.getInstance().dialogs["confirmMessageDialog"] = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON]);								
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
 		} else {
 			this.newDl();
 		}	
@@ -133,7 +133,7 @@ ZaDLController.prototype._createUI =
 function () {
 	//create accounts list view
 	// create the menu operations/listeners first	
-	this._contentView = this._view = new this.tabConstructor(this._container, this._app);
+	this._contentView = this._view = new this.tabConstructor(this._container);
 
     this._initToolbar();
 	//always add Help button at the end of the toolbar    
@@ -145,16 +145,16 @@ function () {
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	//this._app.createView(ZaZimbraAdmin._DL_VIEW, elements);
+	//ZaApp.getInstance().createView(ZaZimbraAdmin._DL_VIEW, elements);
 	var tabParams = {
 			openInNewTab: true,
 			tabId: this.getContentViewId()
 		}
-	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 	
-	this._removeConfirmMessageDialog = new ZaMsgDialog(this._app.getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], this._app);			
+	this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
 	this._UICreated = true;
-	this._app._controllers[this.getContentViewId()] = this ;
+	ZaApp.getInstance()._controllers[this.getContentViewId()] = this ;
 }
 /**
  * This method is called by an asynchronous command when
@@ -181,7 +181,7 @@ ZaDLController.prototype.saveChangesCallback = function (obj, resp) {
 					this.getProgressDialog().setProgress({numTotal:this._totalToAdd,numDone:(this._totalToAdd-obj._addList.size()),progressMsg:ZaMsg.MSG_ADDING_DL_MEMBERS});				
 					this.getProgressDialog().enableOk(false);
 				} else if (resp.getResponse().Body.CreateDistributionListResponse) {
-					var dl = new ZaDistributionList(this._app);
+					var dl = new ZaDistributionList();
 					dl.initFromJS(resp.getResponse().Body.CreateDistributionListResponse.dl[0]);
 					this._currentObject = dl;
 				}
@@ -366,7 +366,7 @@ ZaDLController.prototype._saveChanges = function () {
 		}
 		var obj = this._view.getObject();
 			
-		if(!ZaDistributionList.checkValues(obj, this._app))
+		if(!ZaDistributionList.checkValues(obj))
 			return retval;
 		
 		//generate add-remove aliases obj and execute in the call back

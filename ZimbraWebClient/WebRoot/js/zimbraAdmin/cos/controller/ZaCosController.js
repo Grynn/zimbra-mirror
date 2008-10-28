@@ -23,8 +23,8 @@
 * @param abApp
 **/
 
-ZaCosController = function(appCtxt, container,app) {
-	ZaXFormViewController.call(this, appCtxt, container,app, "ZaCosController");
+ZaCosController = function(appCtxt, container) {
+	ZaXFormViewController.call(this, appCtxt, container, "ZaCosController");
 	this._UICreated = false;	
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "cos/creating_classes_of_service.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.deleteMsg = ZaMsg.Q_DELETE_COS;
@@ -59,7 +59,7 @@ function(entry) {
 ZaCosController.setViewMethod =
 function(entry) {
 	try {
-        if (!entry._app) entry._app = this._app ;
+      //  if (!entry._app) entry._app = this._app ;
            //create toolbar
 		if(!this._UICreated) {
 			this._initToolbar();
@@ -68,22 +68,22 @@ function(entry) {
 			this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
 	
-		  	this._contentView = this._view = new this.tabConstructor(this._container, this._app, entry.id);
+		  	this._contentView = this._view = new this.tabConstructor(this._container,  entry.id);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;			  	
-		    //this._app.createView(ZaZimbraAdmin._COS_VIEW, elements);
+		    //ZaApp.getInstance().createView(ZaZimbraAdmin._COS_VIEW, elements);
 		    var tabParams = {
 				openInNewTab: true,
 				tabId: this.getContentViewId()
 			}  	
-		    this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		    ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 			this._UICreated = true;
-			this._app._controllers[this.getContentViewId ()] = this ;
+			ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	  	}
 	
-		//this._app.pushView(ZaZimbraAdmin._COS_VIEW);
-		this._app.pushView(this.getContentViewId());
+		//ZaApp.getInstance().pushView(ZaZimbraAdmin._COS_VIEW);
+		ZaApp.getInstance().pushView(this.getContentViewId());
 		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 		if(!entry.id || (entry.name == "default")) {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
@@ -608,8 +608,8 @@ function () {
 
 ZaCosController.prototype.newCos = 
 function () {
-	var newCos = new ZaCos(this._app);
-	var defCos = ZaCos.getCosByName("default",this._app);
+	var newCos = new ZaCos();
+	var defCos = ZaCos.getCosByName("default");
 	//copy values from default cos to the new cos
 	for(var aname in defCos.attrs) {
 		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
@@ -632,11 +632,11 @@ function(openInNewTab, ev) {
 			args["obj"] = this;
 			args["func"] = ZaCosController.prototype.newCos;
 			//ask if the user wants to save changes		
-			//this._app.dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], this._app);								
-			this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-			this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
-			this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-			this._app.dialogs["confirmMessageDialog"].popup();
+			//ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON]);								
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
+			ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
 		} else {
 			this.newCos();
 		}	

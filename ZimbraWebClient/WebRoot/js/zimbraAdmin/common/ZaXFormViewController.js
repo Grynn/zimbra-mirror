@@ -30,10 +30,10 @@
 * @see ZaGlobalConfigViewController
 **/
 
-ZaXFormViewController = function(appCtxt, container, app, iKeyName) {
+ZaXFormViewController = function(appCtxt, container,iKeyName) {
 	if (arguments.length == 0) return;
 	this._currentObject = null;
-	ZaController.call(this, appCtxt, container, app, iKeyName);
+	ZaController.call(this, appCtxt, container,iKeyName);
 	this.deleteMsg = ZaMsg.Q_DELETE_ACCOUNT;
 }
 
@@ -93,15 +93,15 @@ function(ev, noPopView, func, obj, params) {
 			args["func"] = ZaApp.prototype.popView;
 		}
 		//ask if the user wants to save changes		
-		this._app.dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
-		this._app.dialogs["confirmMessageDialog"].popup();
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_CHANGES, DwtMessageDialog.INFO_STYLE);
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.saveAndGoAway, this, args);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.discardAndGoAway, this, args);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
 	} else if (noPopView){
 		func.call(obj, params) ;
 	}else{
-		this._app.popView();
-		//this._app.getTabGroup().removeCurrentTab(true) ;
+		ZaApp.getInstance().popView();
+		//ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
 	}
 }
 
@@ -113,12 +113,12 @@ function(ev, noPopView, func, obj, params) {
 ZaXFormViewController.prototype.deleteButtonListener =
 function(ev) {
 	if(this._currentObject.id) {
-		this._app.dialogs["confirmMessageDialog"].setMessage(this.deleteMsg, DwtMessageDialog.INFO_STYLE);
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.deleteAndGoAway, this, null);		
-		this._app.dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
-		this._app.dialogs["confirmMessageDialog"].popup();
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(this.deleteMsg, DwtMessageDialog.INFO_STYLE);
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.deleteAndGoAway, this, null);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
 	} else {
-		this._app.popView();
+		ZaApp.getInstance().popView();
 	}
 }
 
@@ -152,7 +152,7 @@ function (params) {
 		if(this._saveChanges()) {
 			this.fireChangeEvent(this._currentObject);			
 			params["func"].call(params["obj"], params["params"]);	
-			//this._app.getTabGroup().removeCurrentTab(true) ;
+			//ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;
 		}
 	} catch (ex) {
 		this._handleException(ex, ZaXFormViewController.prototype.saveAndGoAway, null, false);
@@ -172,8 +172,8 @@ function () {
 			this.fireRemovalEvent(this._currentObject);
 		}
 		this.closeCnfrmDlg();	
-		this._app.popView();		
-		//this._app.getTabGroup().removeCurrentTab(true) ;	
+		ZaApp.getInstance().popView();		
+		//ZaApp.getInstance().getTabGroup().removeCurrentTab(true) ;	
 	} catch (ex) {
 		this.closeCnfrmDlg();	
 		this._handleException(ex, "ZaXFormViewController.prototype.deleteAndGoAway", null, false);				
@@ -284,8 +284,8 @@ function(entry) {
 	if(!this._UICreated) {
 		this._createUI();
 	} 
-//	this._app.pushView(ZaZimbraAdmin._SERVER_VIEW);
-	this._app.pushView(this.getContentViewId());
+//	ZaApp.getInstance().pushView(ZaZimbraAdmin._SERVER_VIEW);
+	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
@@ -295,7 +295,7 @@ function(entry) {
 **/
 ZaXFormViewController.prototype._createUI =
 function () {
-	this._contentView = this._view = new this.tabConstructor(this._container, this._app);
+	this._contentView = this._view = new this.tabConstructor(this._container);
 
 	this._initToolbar();
 	//always add Help button at the end of the toolbar
@@ -310,15 +310,15 @@ function () {
 		openInNewTab: true,
 		tabId: this.getContentViewId()
 	}
-	this._app.createView(this.getContentViewId(), elements, tabParams) ;
+	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 	this._UICreated = true;
-	this._app._controllers[this.getContentViewId ()] = this ;
+	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }
 
 ZaXFormViewController.prototype._findAlias = function (alias) {
 	var searchQuery = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(alias), [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], null, false);
 	// this search should only return one result
-	var results = ZaSearch.searchByQueryHolder(searchQuery, 1, null, null, this._app);
+	var results = ZaSearch.searchByQueryHolder(searchQuery, 1, null, null);
 	return results.list.getArray()[0];
 };
 

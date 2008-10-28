@@ -22,10 +22,10 @@
 * @param app {@link ZaApp}
 * @author Greg Solovyev
 **/
-ZaServerXFormView = function(parent, app) {
-	ZaTabView.call(this, parent, app,"ZaServerXFormView");	
+ZaServerXFormView = function(parent) {
+	ZaTabView.call(this, parent, "ZaServerXFormView");	
 	this.initForm(ZaServer.myXModel,this.getMyXForm());
-	this._localXForm.setController(this._app);
+	this._localXForm.setController(ZaApp.getInstance());
 }
 
 ZaServerXFormView.prototype = new ZaTabView();
@@ -226,7 +226,7 @@ ZaServerXFormView.updateVolume = function () {
 				instance.volume_selection_cache[0][ZaServer.A_VolumeRootPath] = obj[ZaServer.A_VolumeRootPath];
 				dirty=true;
 				if(instance.volume_selection_cache[0][ZaServer.A_isCurrent]) {
-					this.parent._app.getCurrentController().popupWarningDialog(ZaMsg.VM_Warning_Changing_CurVolumePath);
+					ZaApp.getInstance().getCurrentController().popupWarningDialog(ZaMsg.VM_Warning_Changing_CurVolumePath);
 				}
 			}
 			if(instance.volume_selection_cache[0][ZaServer.A_VolumeCompressBlobs] != obj[ZaServer.A_VolumeCompressBlobs]) {
@@ -328,7 +328,7 @@ function () {
 	if(instance.volume_selection_cache && instance.volume_selection_cache[0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editVolumeDlg) {
-			formPage.editVolumeDlg = new ZaEditVolumeXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.VM_Edit_Volume_Title);
+			formPage.editVolumeDlg = new ZaEditVolumeXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.VM_Edit_Volume_Title);
 			formPage.editVolumeDlg.registerCallback(DwtDialog.OK_BUTTON, ZaServerXFormView.updateVolume, this.getForm(), null);						
 		}
 		var obj = {};
@@ -402,7 +402,7 @@ function () {
 	var instance = this.getInstance();
 	var formPage = this.getForm().parent;
 	if(!formPage.addVolumeDlg) {
-		formPage.addVolumeDlg = new ZaEditVolumeXDialog(formPage._app.getAppCtxt().getShell(), formPage._app,"550px", "150px",ZaMsg.VM_Add_Volume_Title);
+		formPage.addVolumeDlg = new ZaEditVolumeXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px",ZaMsg.VM_Add_Volume_Title);
 		formPage.addVolumeDlg.registerCallback(DwtDialog.OK_BUTTON, ZaServerXFormView.addVolume, this.getForm(), null);						
 	}
 	

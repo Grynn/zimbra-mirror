@@ -1,6 +1,6 @@
 if (AjxEnv.hasFirebug) console.debug("Loaded ZaCertView.js");
 
-function ZaCertView (parent, app, className) {
+function ZaCertView (parent,className) {
 	if (arguments.length == 0) return ;
 	className = className || "ZaCertView" ;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
@@ -9,7 +9,7 @@ function ZaCertView (parent, app, className) {
 	this._certInstallStatus = new DwtAlert (this) ;
 	this._certInstallStatus.setIconVisible(false) ;
 	this.setScrollStyle (Dwt.SCROLL);
-	this._app = app ;
+	this._app = ZaApp.getInstance() ;
 }
 
 ZaCertView.prototype = new DwtComposite ;

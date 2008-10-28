@@ -746,6 +746,7 @@ XForm.prototype.onBlur = function(id) {
 }
 
 XForm.prototype.itemChanged = function (id, value, event, quite) {
+	//console.log("XForm.prototype.itemChanged start (" + id +","+value+","+event+")");
 	var item = this.getItemById(id);
 	if (item == null) return alert("Couldn't get item for " + id);	// EXCEPTION
 	
@@ -774,6 +775,10 @@ XForm.prototype.itemChanged = function (id, value, event, quite) {
 //		DBG.println("itemChanged(", item.ref, ").onChange = ", onChangeMethod);
 		value = onChangeMethod.call(item, value, event, this);
 	} else {
+		var oldVal = item.getInstanceValue();
+		if(oldVal == value)
+			return;
+			
 		item.setInstanceValue(value);
 	}
 	
@@ -782,6 +787,7 @@ XForm.prototype.itemChanged = function (id, value, event, quite) {
 		this.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
 
 	this.setIsDirty(true, item);
+	//console.log("XForm.prototype.itemChanged end (" + id +","+value+","+event+")");
 }
 
 

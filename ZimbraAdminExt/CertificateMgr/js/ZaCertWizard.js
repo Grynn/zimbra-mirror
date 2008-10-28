@@ -1,10 +1,10 @@
 //ZaCertWizard
-function ZaCertWizard (parent, app) {
+function ZaCertWizard (parent) {
     var w = "500px" ;
     if (AjxEnv.isIE) {
         w = "550px" ;
     }
-    ZaXWizardDialog.call(this, parent, app, null, com_zimbra_cert_manager.CERT_WIZARD_title, w, "300px","ZaCertWizard");
+    ZaXWizardDialog.call(this, parent, null, com_zimbra_cert_manager.CERT_WIZARD_title, w, "300px","ZaCertWizard");
 
 	this.stepChoices = [
 		{label:com_zimbra_cert_manager.CERT_WIZARD_TABT_selectServer, value:ZaCertWizard.STEP_SELECT_SERVER},
@@ -22,7 +22,7 @@ function ZaCertWizard (parent, app) {
 	//this.initForm(null,this.getMyXForm());	
 	this.initForm(ZaCert.myXModel,this.getMyXForm());	
    
-	this._localXForm.setController(this._app);	
+	this._localXForm.setController(ZaApp.getInstance());	
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaCertWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaCertWizard.prototype.handleXFormChange));	
 	this._helpURL = ZaCertWizard.helpURL;
@@ -133,12 +133,12 @@ function() {
             //allserver: (this._containedObject[ZaCert.A_target_server] == ZaCert.ALL_SERVERS) ? 1 : 0,
 			callback: callback 
 		}
-		ZaCert.installCert (this._app, params, this._containedObject[ZaCert.A_target_server]  ) ;
+		ZaCert.installCert (ZaApp.getInstance(), params, this._containedObject[ZaCert.A_target_server]  ) ;
 			
 		this.popdown();	
 			
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex, "ZaCertWizard.prototype.finishWizard", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaCertWizard.prototype.finishWizard", null, false);
 	}
 }
 
@@ -157,7 +157,7 @@ function (detailMsg) {
 
 ZaCertWizard.prototype.installCallback =
 function (resp){
-	var controller = this._app.getCurrentController();
+	var controller = ZaApp.getInstance().getCurrentController();
 	var statusElement = controller._contentView._certInstallStatus ;
 	
 	try {
@@ -174,7 +174,7 @@ function (resp){
 				statusElement.setStyle (DwtAlert.INFORMATION) ;
 				statusElement.setContent(com_zimbra_cert_manager.CERT_INSTALL_STATUS_0);
 				if (controller instanceof ZaCertViewController) {
-					controller.show(ZaCert.getCerts(this._app, this._containedObject[ZaCert.A_target_server]), 
+					controller.show(ZaCert.getCerts(ZaApp.getInstance(), this._containedObject[ZaCert.A_target_server]), 
 									this._containedObject[ZaCert.A_target_server]) ;
 				}
 				ZaCertWizard.INSTALL_STATUS = -1;
@@ -188,7 +188,7 @@ function (resp){
 		statusElement .setContent(ex.msg);
 		statusElement .setStyle (DwtAlert.CRITICAL) ;
 		if (controller instanceof ZaCertViewController) {
-			controller.show(ZaCert.getCerts(this._app)) ;
+			controller.show(ZaCert.getCerts(ZaApp.getInstance())) ;
 		}
 		ZaCertWizard.INSTALL_STATUS = -1; //reset hte install_status
 		//alert(ex);
@@ -216,7 +216,7 @@ function (status, uploadResults) {
 			//1. content type validation - ct
       // comment this out as these are coming back as application/octet-stream
 			//if (v.ct != "application/x-x509-ca-cert") {
-				//this._app.getCurrentController().popupErrorDialog (
+				//ZaApp.getInstance().getCurrentController().popupErrorDialog (
 					//com_zimbra_cert_manager.invalidContentType + ": " + v.filename
 				//);
 				//return ;
@@ -249,7 +249,7 @@ function (status, uploadResults) {
 	} else {
 		// handle errors during attachment upload.
 		var msg = AjxMessageFormat.format(com_zimbra_cert_manager.UploadCertErrorMsg, status);
-		this._app.getCurrentController().popupErrorDialog(msg + com_zimbra_cert_manager.ErrorTryAgain, null, null, true);		
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(msg + com_zimbra_cert_manager.ErrorTryAgain, null, null, true);		
 	}	
 }
 
@@ -317,7 +317,7 @@ function() {
 		this.goPage(nextStep) ;
 	}else if (cStep == ZaCertWizard.STEP_USER_OPTION) {
 		this._containedObject.initCSR(
-			ZaCert.getCSR(this._app, this._containedObject[ZaCert.A_target_server], type)) ;
+			ZaCert.getCSR(ZaApp.getInstance(), this._containedObject[ZaCert.A_target_server], type)) ;
 		if (this._containedObject[ZaCert.A_type_csr] 
 			|| this._containedObject[ZaCert.A_type_self]) {
 		 	nextStep = ZaCertWizard.STEP_GEN_CSR ;
@@ -335,7 +335,7 @@ function() {
 		var san_regEx = /^[A-Za-z0-9\-\_]{1,}(\.[A-Za-z0-9\-\_]{2,}){1,}$/;
 		if (cn.match(cn_regEx) == null){
 			//show error msg
-			this._app.getCurrentController().popupErrorDialog(
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(
 					AjxMessageFormat.format(com_zimbra_cert_manager.CERT_CN_INVALID, cn || "Current CN "));
 			return false;
 		}
@@ -343,7 +343,7 @@ function() {
 		var subjAltNames = this._containedObject.attrs[ZaCert.A_subject_alt];
 		for (var i=0; i < subjAltNames.length; i ++) {
 			if (subjAltNames[i].match(san_regEx) == null){
-				this._app.getCurrentController().popupErrorDialog(	
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(	
 					AjxMessageFormat.format(com_zimbra_cert_manager.CERT_SUBJ_ALT_NAME_INVALID, subjAltNames[i]||"SubjectAltName " + i));
 				return false;
 			}
@@ -356,12 +356,12 @@ function() {
 		}
 		try {
 			if ((!this._containedObject[ZaCert.A_csr_exists]) || (this._containedObject[ZaCert.A_force_new_csr] == 'TRUE')){
-				ZaCert.genCSR (this._app, this._containedObject.attrs, type, true,  this._containedObject[ZaCert.A_target_server]) ;
+				ZaCert.genCSR (ZaApp.getInstance(), this._containedObject.attrs, type, true,  this._containedObject[ZaCert.A_target_server]) ;
 			}else{
 				if (AjxEnv.hasFirebug) console.log("Previous CSR exists, skip the CSR generation.") ;
 			}
 		}catch (ex) {
-			this._app.getCurrentController().popupErrorDialog(com_zimbra_cert_manager.genCSRError, ex, true) ;		
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_cert_manager.genCSRError, ex, true) ;		
 		}
 		this.goPage(nextStep) ;
 	}else if (cStep == ZaCertWizard.STEP_UPLOAD_CERT) {
@@ -385,7 +385,7 @@ function() {
 					var v = ZaCertWizard.getFileName(inputEls[i].value) ;
 					if (v != null && v.length != 0) {
 						if (ZaUtil.findValueInArray(filenameArr, v) != -1) {
-							this._app.getCurrentController().popupErrorDialog (
+							ZaApp.getInstance().getCurrentController().popupErrorDialog (
 								com_zimbra_cert_manager.dupFileNameError + v
 							);
 							return ;
@@ -395,14 +395,14 @@ function() {
 					
 					if ( n == "certFile") {
 						if (v == null ||  v.length == 0) {
-							this._app.getCurrentController().popupErrorDialog(com_zimbra_cert_manager.noCertFileError);
+							ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_cert_manager.noCertFileError);
 							return ;
 						}else{
 							this.uploadInputs["certFile"] = v ;
 						}
 					}else if (n == "rootCA") {
 						if (v == null || v.length == 0 ) {
-							this._app.getCurrentController().popupErrorDialog(com_zimbra_cert_manager.noRootCAError);
+							ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_cert_manager.noRootCAError);
 							return ;
 						}else{
 							this.uploadInputs["rootCA"] = v ;							
@@ -425,13 +425,13 @@ function() {
 				um.execute(certUploadCallback, document.getElementById (ZaCertWizard.CertUploadFormId));
 				return ; //allow the callback to handle the wizard buttons
 			}catch (err) {
-				this._app.getCurrentController().popupErrorDialog(com_zimbra_cert_manager.certFileNameError) ;
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_cert_manager.certFileNameError) ;
 				return ;
 			}			
 		}else if (this._containedObject[ZaCert.A_type_self]) {
 			this.goPage(nextStep) ;
 		}else {
-			this._app.getCurrentController().popupErrorDialog(com_zimbra_cert_manager.certTypeError) ;	
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_cert_manager.certTypeError) ;	
 		}
 	}else if (cStep == ZaCertWizard.STEP_CSR_CONFIRM) {
 		nextStep = ZaCertWizard.STEP_UPLOAD_CERT;

@@ -15,8 +15,8 @@
  * ***** END LICENSE BLOCK *****
  */
 
-ZaAlias = function(app) {
-	ZaItem.call(this, app);
+ZaAlias = function() {
+	ZaItem.call(this);
 	this.attrs = new Object();
 	this.id = "";
 	this.name="";
@@ -88,7 +88,7 @@ function() {
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
 		//get my account
-//		var account = this._app.getAccountList().getItemById(this.attrs[ZaAlias.A_AliasTargetId]);
+//		var account = ZaApp.getInstance().getAccountList().getItemById(this.attrs[ZaAlias.A_AliasTargetId]);
 		var target = this.getAliasTargetObj();
 		if(target && (this.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT)) {
 			idx = this._addRow(ZaItem._attrDesc(ZaAlias.A_targetAccount), 
@@ -127,7 +127,7 @@ ZaAlias.myXModel = {
 
 ZaAlias.prototype.addAlias = 
 function (form) {
-	var app = form.parent._app ;
+	
 	var instance = form.getInstance() ;
 	var newAlias = instance [ZaAccount.A_name] ;
 	var targetName = instance [ZaAlias.A_targetAccount] ;
@@ -137,12 +137,12 @@ function (form) {
 		var targetType = ZaAlias.TARGET_TYPE_ACCOUNT ;
 		
 		try {
-			targetObj = ZaAlias.getTargetByName(app, targetName, targetType) ;
+			targetObj = ZaAlias.getTargetByName( targetName, targetType) ;
 		}catch (ex) {
 			if (ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
 				//the target is Distribution List
 				targetType =  ZaAlias.TARGET_TYPE_DL ;
-				targetObj = ZaAlias.getTargetByName(app, targetName, targetType) ;
+				targetObj = ZaAlias.getTargetByName(targetName, targetType) ;
 			}else{
 				throw ex ;
 			}
@@ -150,18 +150,18 @@ function (form) {
 		
 		targetObj.addAlias ( newAlias ) ;  
 		//TODO Need to refresh the alias list view.
-		this._app.getAccountViewController(true).fireCreationEvent(this);
+		ZaApp.getInstance().getAccountViewController(true).fireCreationEvent(this);
 		form.parent.popdown();
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.ACCT_EXISTS ) {
-			app.getCurrentController().popupErrorDialog(ZaMsg.WARNING_ALIAS_EXISTS + " " + newAlias 
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.WARNING_ALIAS_EXISTS + " " + newAlias 
 					+ "<BR />" + ex.msg );
 		} else if (ex.code == ZmCsfeException.NO_SUCH_DISTRIBUTION_LIST || ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT){
-			app.getCurrentController().popupErrorDialog(
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(
 				AjxMessageFormat.format(ZaMsg.WARNING_ALIASES_TARGET_NON_EXIST,[targetName]));
 		}else{
 			//if failed for another reason - jump out
-			app.getCurrentController()._handleException(ex, "ZaAlias.prototype.addAlias", null, false);
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAlias.prototype.addAlias", null, false);
 		}
 	}
 }
@@ -193,7 +193,7 @@ function (app, val, targetType) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller: app.getCurrentController ()
+		controller: ZaApp.getInstance().getCurrentController()
 	}
 	var respBody = ZaRequestMgr.invoke(params, reqMgrParams).Body ;
 	var resp ;
@@ -201,10 +201,10 @@ function (app, val, targetType) {
 	
 	if (targetType == ZaAlias.TARGET_TYPE_DL) {
 		resp = respBody.GetDistributionListResponse.dl[0] ;
-		targetObj = new ZaDistributionList(app) ;
+		targetObj = new ZaDistributionList() ;
 	}else if (targetType == ZaAlias.TARGET_TYPE_ACCOUNT) {
 		resp = respBody.GetAccountResponse.account[0];
-		targetObj = new ZaAccount(app) ;
+		targetObj = new ZaAccount() ;
 	}
 
 	targetObj.attrs = new Object();
@@ -224,9 +224,9 @@ function () {
 	var targetId = this.attrs[ZaAlias.A_AliasTargetId] ;
 	
 	if (targetType == ZaAlias.TARGET_TYPE_DL) {
-		targetObj = new ZaDistributionList(this._app, targetId, targetName) ;
+		targetObj = new ZaDistributionList(targetId, targetName) ;
 	}else if (targetType == ZaAlias.TARGET_TYPE_ACCOUNT) {
-		targetObj = new ZaAccount(this._app) ;
+		targetObj = new ZaAccount() ;
 	}else {
 		throw new Error ("Alias type " + targetType + " is not valid.") ;
 	}

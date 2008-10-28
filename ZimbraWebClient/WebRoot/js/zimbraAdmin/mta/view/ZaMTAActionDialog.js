@@ -23,10 +23,10 @@
 * param w (width)
 * param h (height)
 **/
-ZaMTAActionDialog = function(parent, app, title, w, h) {
+ZaMTAActionDialog = function(parent,title, w, h) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON];
-	ZaXDialog.call(this, parent, app, null, title, w,h);
+	ZaXDialog.call(this, parent,null, title, w,h);
 	this.initForm(ZaMTAActionDialog.myXModel,this.getMyXForm());
 	this._helpURL = ZaMTAActionDialog.helpURL;		
 }

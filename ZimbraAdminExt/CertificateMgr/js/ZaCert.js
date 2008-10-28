@@ -1,8 +1,8 @@
 if (AjxEnv.hasFirebug) console.debug("Loaded ZaCert.js");
 
-function ZaCert (app) {
-	ZaItem.call(this, app, "ZaCert");
-	this._init(app);
+function ZaCert () {
+	ZaItem.call(this,  "ZaCert");
+	this._init();
 	this.type = ZaItem.CERT ;
 }
 
@@ -174,11 +174,11 @@ ZaCert.certOvTreeModifier = function (tree) {
 //When the certs tree item is clicked
 ZaCert.certsServerListTreeListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Show the server lists ...") ;
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(
-			this._app.getCertsServerListController(),ZaCertsServerListController.prototype.show, ZaServer.getAll(this._app));
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(
+			ZaApp.getInstance().getCertsServerListController(),ZaCertsServerListController.prototype.show, ZaServer.getAll(ZaApp.getInstance()));
 	} else {					
-		this._app.getCertsServerListController().show(ZaServer.getAll(this._app));
+		ZaApp.getInstance().getCertsServerListController().show(ZaServer.getAll(ZaApp.getInstance()));
 	}
 }
 
@@ -187,14 +187,14 @@ ZaCert.certsServerNodeTreeListener = function (ev) {
 	var serverNodeId = ev.item.getData(ZaOverviewPanelController._OBJ_ID) ;
 	if (AjxEnv.hasFirebug) console.log("Click the server node: " + serverNodeId) ;
 	
-	if(this._app.getCurrentController()) {
-		this._app.getCurrentController().switchToNextView(
-			this._app.getCertViewController(),
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(
+			ZaApp.getInstance().getCertViewController(),
 			ZaCertViewController.prototype.show, 
-			[ZaCert.getCerts(this._app, serverNodeId), serverNodeId]);
+			[ZaCert.getCerts(ZaApp.getInstance(), serverNodeId), serverNodeId]);
 	} else {					
-		this._app.getCertViewController().show(
-			ZaCert.getCerts(this._app, serverNodeId), 
+		ZaApp.getInstance().getCertViewController().show(
+			ZaCert.getCerts(ZaApp.getInstance(), serverNodeId), 
 			serverNodeId);
 	}
 }
@@ -357,14 +357,14 @@ ZaCert.prototype.setTargetServer = function (serverId) {
 
 ZaCert.launchNewCertWizard = function (serverId) {
 	try {
-		if(!this._app.dialogs["certInstallWizard"])
-			this._app.dialogs["certInstallWizard"] = new ZaCertWizard (this._container, this._app) ;;	
+		if(!ZaApp.getInstance().dialogs["certInstallWizard"])
+			ZaApp.getInstance().dialogs["certInstallWizard"] = new ZaCertWizard (this._container, ZaApp.getInstance()) ;	
 		
-		this._cert = new ZaCert(this._app);
+		this._cert = new ZaCert(ZaApp.getInstance());
 		this._cert.setTargetServer (serverId);		
 		this._cert.init() ;
-		this._app.dialogs["certInstallWizard"].setObject(this._cert);
-		this._app.dialogs["certInstallWizard"].popup();
+		ZaApp.getInstance().dialogs["certInstallWizard"].setObject(this._cert);
+		ZaApp.getInstance().dialogs["certInstallWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaCert.launchNewCertWizard", null, false);
 	}

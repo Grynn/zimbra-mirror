@@ -25,8 +25,8 @@
 * @author Greg Solovyev
 **/
 
-ZaAccountViewController = function(appCtxt, container, app) {
-	ZaXFormViewController.call(this, appCtxt, container, app, "ZaAccountViewController");
+ZaAccountViewController = function(appCtxt, container) {
+	ZaXFormViewController.call(this, appCtxt, container, "ZaAccountViewController");
 	this._UICreated = false;
 	this.objType = ZaEvent.S_ACCOUNT;
 	this._helpURL = ZaAccountViewController.helpURL;
@@ -87,7 +87,7 @@ function(entry) {
 			
 			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
 	
-	  		this._contentView = this._view = new this.tabConstructor(this._container, this._app);
+	  		this._contentView = this._view = new this.tabConstructor(this._container);
 			var elements = new Object();
 			elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
@@ -97,21 +97,21 @@ function(entry) {
 				tabId: this.getContentViewId()
 			}
 				  		
-	    	this._app.createView(this.getContentViewId(), elements, tabParams);
+	    	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams);
 	    	this._UICreated = true;
 	    	//associate the controller with the view by viewId
-	    	this._app._controllers[this.getContentViewId ()] = this ;
+	    	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
   		}
-		//this._app.pushView(ZaZimbraAdmin._ACCOUNT_VIEW);
-		this._app.pushView(this.getContentViewId()) ;
-		if(entry.id) {
+		//ZaApp.getInstance().pushView(ZaZimbraAdmin._ACCOUNT_VIEW);
+		ZaApp.getInstance().pushView(this.getContentViewId()) ;
+		if(!AjxUtil.isEmpty(entry.id)) {
 			try {
 				entry.refresh(!ZaSettings.COSES_ENABLED);
 			} catch (ex) {
 				// Data corruption may cause anexception. We should catch it here in order to display the form anyway.
 				this._handleException(ex, null, null, false);
 				if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
-					this._app.popView();
+					ZaApp.getInstance().popView();
 					return ;
 					
 				}
@@ -187,7 +187,7 @@ function () {
 		
 	var mods = new Object();
 
-	if(!ZaAccount.checkValues(tmpObj, this._app))
+	if(!ZaAccount.checkValues(tmpObj))
 		return false;
 	
 	if(ZaSettings.ACCOUNTS_CHPWD_ENABLED) {
@@ -438,15 +438,15 @@ function () {
 ZaAccountViewController.prototype._newButtonListener =
 function(ev) {
 	try {
-		var newAccount = new ZaAccount(this._app);
-		if(!this._app._newAccountWizard)
-			this._app._newAccountWizard = new ZaNewAccountXWizard(this._container, this._app);
+		var newAccount = new ZaAccount();
+		if(!ZaApp.getInstance()._newAccountWizard)
+			ZaApp.getInstance()._newAccountWizard = new ZaNewAccountXWizard(this._container);
         else { //update the account type if needed
-            this._app._newAccountWizard.updateAccountType () ;    
+            ZaApp.getInstance()._newAccountWizard.updateAccountType () ;    
         }
 
-        this._app._newAccountWizard.setObject(newAccount);
-		this._app._newAccountWizard.popup();
+        ZaApp.getInstance()._newAccountWizard.setObject(newAccount);
+		ZaApp.getInstance()._newAccountWizard.popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._newButtonListener", null, false);
 	}
@@ -456,13 +456,13 @@ ZaAccountViewController.prototype._reindexMbxListener =
 function (ev) {
 	try {
 
-		if(!this._app.dialogs["reindexWizard"])
-			this._app.dialogs["reindexWizard"] = new ReindexMailboxXDialog(this._container, this._app);	
+		if(!ZaApp.getInstance().dialogs["reindexWizard"])
+			ZaApp.getInstance().dialogs["reindexWizard"] = new ReindexMailboxXDialog(this._container);	
 
 		var obj = new ZaReindexMailbox();
 		obj.mbxId = this._currentObject.id;
-		this._app.dialogs["reindexWizard"].setObject(obj);
-		this._app.dialogs["reindexWizard"].popup();
+		ZaApp.getInstance().dialogs["reindexWizard"].setObject(obj);
+		ZaApp.getInstance().dialogs["reindexWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._reindexMbxListener", null, false);
 	}

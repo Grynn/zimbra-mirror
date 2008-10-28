@@ -22,9 +22,9 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaMigrationWizView = function(parent, app) {
+ZaMigrationWizView = function(parent) {
 	if (arguments.length == 0) return;
-	ZaTabView.call(this, parent, app, "ZaMigrationWizView");
+	ZaTabView.call(this, parent,"ZaMigrationWizView");
 	this.setScrollStyle(Dwt.SCROLL);
 	this.initForm(new Object(), this.getMyXForm())
 //	this._createHTML();

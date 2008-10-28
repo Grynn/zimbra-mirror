@@ -23,9 +23,9 @@
 * @param app
 * @author Greg Solovyev
 **/
-ZaServerStatsController = function(appCtxt, container, app) {
+ZaServerStatsController = function(appCtxt, container) {
 
-	ZaController.call(this, appCtxt, container, app, "ZaServerStatsController");
+	ZaController.call(this, appCtxt, container,"ZaServerStatsController");
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.tabConstructor = ZaServerStatsView;
 }
@@ -46,7 +46,7 @@ function(entry, openInNewTab, skipRefresh) {
 ZaServerStatsController.setViewMethod =
 function(item) {	
     if (!this._contentView) {
-		this._view = this._contentView = new this.tabConstructor(this._container, this._app);
+		this._view = this._contentView = new this.tabConstructor(this._container);
 		var elements = new Object();
 		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener)));
@@ -73,26 +73,26 @@ function(item) {
 		
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
-		//this._app.createView(ZaZimbraAdmin._STATISTICS_BY_SERVER, elements);
+		//ZaApp.getInstance().createView(ZaZimbraAdmin._STATISTICS_BY_SERVER, elements);
 		var tabParams = {
 			openInNewTab: true,
 			tabId: this.getContentViewId()
 		}
-		this._app.createView(this.getContentViewId(), elements, tabParams) ;
+		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		this._UICreated = true;
-		this._app._controllers[this.getContentViewId ()] = this ;
+		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 	}
-//	this._app.pushView(ZaZimbraAdmin._STATISTICS_BY_SERVER);
-	this._app.pushView(this.getContentViewId());
-//	this._app.setCurrentController(this);
+//	ZaApp.getInstance().pushView(ZaZimbraAdmin._STATISTICS_BY_SERVER);
+	ZaApp.getInstance().pushView(this.getContentViewId());
+//	ZaApp.getInstance().setCurrentController(this);
 
 	this._contentView.setObject(item);
 
 	
 	//show the view in the new tab
 	/*
-	var tab = new ZaAppTab (this._app.getTabGroup(), this._app, 
-				item.name, "StatisticsByServer" , null, null, true, true, this._app._currentViewId) ;
+	var tab = new ZaAppTab (ZaApp.getInstance().getTabGroup(),  
+				item.name, "StatisticsByServer" , null, null, true, true, ZaApp.getInstance()._currentViewId) ;
 	tab.setToolTipContent(ZaMsg.tt_tab_View + " " + item.type + " " + item.name + " " + ZaMsg.tt_tab_Statistics) ;
 	*/	
 }
