@@ -47,6 +47,10 @@ function() {
 	return "DwtText";
 }
 
+DwtText.prototype.getTabGroupMember = function() {
+	return null;
+};
+
 DwtText.prototype.setText =
 function(text) {
 	if (!this._textNode) {
