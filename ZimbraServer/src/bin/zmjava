@@ -20,6 +20,8 @@ zimbra_home="`dirname $0`/.."
 zimbra_home=$(cd "${zimbra_home}"; pwd)
 zimbra_java_home=${zimbra_home}/java
 
+zimbra_zmjava_options="`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmjava_options`"
+
 if [ -d ${zimbra_java_home}/jre ]; then
     JRE_EXT_DIR=${zimbra_java_home}/jre/lib/ext
 else
@@ -51,7 +53,7 @@ else
 fi 
 
 exec ${zimbra_java_home}/bin/java ${java_options} \
-     -client -Xmx256m \
+     -client ${zimbra_zmjava_options} \
      -Dzimbra.home=${zimbra_home} \
      -Djava.library.path=${zimbra_home}/lib \
      -Djava.ext.dirs=${JRE_EXT_DIR}${PATHSEP}${zimbra_home}/lib/jars${PATHSEP}${ZIMBRA_EXT_DIR} \
