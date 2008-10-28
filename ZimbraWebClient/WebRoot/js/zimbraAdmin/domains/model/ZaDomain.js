@@ -56,6 +56,7 @@ ZaDomain = function() {
 		}*/];
 
     this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts ] = [];
+    this.attrs[ZaDomain.A_zimbraDomainFeatureMaxAccounts ] = [];
 }
 ZaDomain.DEF_WIKI_ACC = "wiki";
 ZaDomain.WIKI_FOLDER_ID = "12";
@@ -212,6 +213,7 @@ ZaDomain.A_zimbraFreebusyExchangeUserOrg = "zimbraFreebusyExchangeUserOrg" ;
 ZaDomain.A_zimbraZimletDomainAvailableZimlets = "zimbraZimletDomainAvailableZimlets" ;
 //hosted attributes
 ZaDomain.A_zimbraDomainCOSMaxAccounts = "zimbraDomainCOSMaxAccounts" ;
+ZaDomain.A_zimbraDomainFeatureMaxAccounts = "zimbraDomainFeatureMaxAccounts" ;
 ZaDomain.A2_account_limits = "account_limits" ;
 
 //skin properties
@@ -955,6 +957,15 @@ function (obj) {
         }
     }
 
+    if (!(this.attrs[ZaDomain.A_zimbraDomainFeatureMaxAccounts] instanceof Array)) {
+        if (this.attrs[ZaDomain.A_zimbraDomainFeatureMaxAccounts]) {
+            this.attrs[ZaDomain.A_zimbraDomainFeatureMaxAccounts] = [this.attrs[ZaDomain.A_zimbraDomainFeatureMaxAccounts]];
+        } else {
+            this.attrs[ZaDomain.A_zimbraDomainFeatureMaxAccounts] = [];
+        }
+    }
+
+
     if(!(this.attrs[ZaDomain.A_zimbraVirtualHostname] instanceof Array)) {
 		if(this.attrs[ZaDomain.A_zimbraVirtualHostname])
 			this.attrs[ZaDomain.A_zimbraVirtualHostname] = [this.attrs[ZaDomain.A_zimbraVirtualHostname]];	
@@ -1438,6 +1449,8 @@ ZaDomain.myXModel = {
       { id:ZaAccount.A_zimbraMailCatchAllAddress, ref:ZaAccount.A_zimbraMailCatchAllAddress , type:_STRING_ },
       { id:ZaDomain.A_zimbraDomainCOSMaxAccounts, ref:"attrs/" + ZaDomain.A_zimbraDomainCOSMaxAccounts ,
                  type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ },
+      { id:ZaDomain.A_zimbraDomainFeatureMaxAccounts, ref:"attrs/" + ZaDomain.A_zimbraDomainFeatureMaxAccounts ,
+                        type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ },
 
        //skin properties
       { id:ZaDomain.A_zimbraSkinForegroundColor, ref:"attrs/" + ZaDomain.A_zimbraSkinForegroundColor, type: _COS_STRING_ },

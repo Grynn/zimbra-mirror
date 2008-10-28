@@ -166,6 +166,20 @@ ZaCos.putCosToCache = function(cos) {
 		ZaCos.staticCosByIdCacheTable[cos.id] = cos;
 	}
 }
+
+ZaCos.MAJOR_FEATURES_CHOICES = [
+    {value: ZaCos.A_zimbraFeatureMailEnabled, label:ZaMsg.NAD_zimbraFeatureMailEnabled },
+    {value: ZaCos.A_zimbraFeatureContactsEnabled, label:ZaMsg.NAD_FeatureContactsEnabled },
+    {value: ZaCos.A_zimbraFeatureCalendarEnabled, label:ZaMsg.NAD_FeatureCalendarEnabled },
+    {value:ZaCos.A_zimbraFeatureTasksEnabled, label:ZaMsg.NAD_FeatureTaskEnabled},
+    {value:ZaCos.A_zimbraFeatureNotebookEnabled,label:ZaMsg.NAD_zimbraFeatureNotebookEnabled},
+    {value:ZaCos.A_zimbraFeatureBriefcasesEnabled,label:ZaMsg.NAD_zimbraFeatureBriefcasesEnabled},
+    {value:ZaCos.A_zimbraFeatureIMEnabled,label:ZaMsg.NAD_zimbraFeatureIMEnabled},
+    {value:ZaCos.A_zimbraFeatureOptionsEnabled, label:ZaMsg.NAD_zimbraFeatureOptionsEnabled}
+        
+];
+
+
 //internal attributes - do not send these to the server
 //ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
 //ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";

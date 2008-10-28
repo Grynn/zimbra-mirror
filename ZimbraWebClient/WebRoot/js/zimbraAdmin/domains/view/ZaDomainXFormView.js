@@ -930,3 +930,92 @@ ZaDomainCOSMaxAccountsListView.prototype._setNoResultsHtml = function() {
 	div.innerHTML = buffer.toString();
 	this._addRow(div);
 };
+
+//-------------------------------------------------------------------------------------------------------
+//List View for the zimbraDomainFeatureMaxAccounts
+
+ZaDomainFeatureMaxAccountsListView = function(parent, className, posStyle, headerList) {
+	if (arguments.length == 0) return;
+	ZaListView.call(this, parent, className, posStyle, headerList);
+	this.hideHeader = true;
+    this._app = this.parent.parent._app ;
+
+}
+
+ZaDomainFeatureMaxAccountsListView.prototype = new ZaListView;
+ZaDomainFeatureMaxAccountsListView.prototype.constructor = ZaDomainFeatureMaxAccountsListView;
+
+ZaDomainFeatureMaxAccountsListView.prototype.toString = function() {
+	return "ZaDomainFeatureMaxAccountsListView";
+};
+
+ZaDomainFeatureMaxAccountsListView.prototype.createHeaderHtml = function (defaultColumnSort) {
+	if(!this.hideHeader) {
+		DwtListView.prototype.createHeaderHtml.call(this,defaultColumnSort);
+	}
+}
+
+
+ZaDomainFeatureMaxAccountsListView.prototype._createItemHtml =
+function(item) {
+	var html = new Array(50);
+	var	div = document.createElement("div");
+	div[DwtListView._STYLE_CLASS] = "Row";
+	div[DwtListView._SELECTED_STYLE_CLASS] = div[DwtListView._STYLE_CLASS] + "-" + DwtCssStyle.SELECTED;
+	div.className = div[DwtListView._STYLE_CLASS];
+	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM);
+
+    var itemArr = item.split(":");
+    var feature = ZaUtil.getListItemLabel(ZaCos.MAJOR_FEATURES_CHOICES, itemArr [0]) || itemArr [0];
+
+    //get the feature display value
+    /*
+    var cos = ZaCos.getCosById(cosId, this._app) ;
+    var cosDisplayValue ;
+
+    if (cos) {
+        cosDisplayValue = cos.name ;
+
+        if (ZaSettings.isDomainAdmin) {
+            var cosDescription = cos.attrs[ZaCos.A_description] ;
+            if (cosDescription)
+                cosDisplayValue = cosDescription ;
+        }
+    } else {
+        cosDisplayValue = AjxMessageFormat.format (ZaMsg.ERROR_INVALID_COS_VALUE, [cosId]) ;
+    } */
+
+    var limits = itemArr [1] ;
+
+    var idx = 0;
+	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+
+	html[idx++] = "<tr>";
+    //cos
+    html[idx++] = "<td width=" + this._headerList[0]._width + ">";
+    html[idx++] = AjxStringUtil.htmlEncode(feature);
+    html[idx++] = "</td>";
+
+    // limits
+    html[idx++] = "<td align='left' width=" + this._headerList[1]._width + "><nobr>";
+    html[idx++] = AjxStringUtil.htmlEncode(limits);
+    html[idx++] = "</nobr></td>";
+
+	html[idx++] = "</tr></table>";
+	div.innerHTML = html.join("");
+	return div;
+}
+
+
+ZaDomainFeatureMaxAccountsListView.prototype._setNoResultsHtml = function() {
+	var buffer = new AjxBuffer();
+	var	div = document.createElement("div");
+
+	buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
+				  "<tr><td class='NoResults'><br />",
+                  ZaMsg.NO_LIMITS,
+                  "</td></tr></table>");
+
+	div.innerHTML = buffer.toString();
+	this._addRow(div);
+};

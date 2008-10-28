@@ -164,7 +164,7 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 //		menu.style.height = (parseInt(bounds.height-3)*choices.values.length)+3;
 //        menu.style.height = (17*choices.values.length)+3;
         var visibleChoices = choices.values.length - choices.totalInvisibleChoices;
-        menu.style.height = (17*visibleChoices)+3;
+        menu.style.height = (19*visibleChoices)+3;
 
     }
 

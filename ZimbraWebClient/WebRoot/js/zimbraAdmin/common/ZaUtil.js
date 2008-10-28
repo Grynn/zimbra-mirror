@@ -61,6 +61,16 @@ function (arr, value, property){
 	return -1;
 }
 
+ZaUtil.getListItemLabel = function (arr, value)  {
+   for(var i=0; i<arr.length; i++) {
+		if (arr[i]["value"] == value){
+			return arr[i]["label"] ;
+		}
+	}
+
+    return null ;
+}
+
 ZaUtil.findValueInArray =
 function (arr, value){
 	for(var i=0; i<arr.length; i++) {
