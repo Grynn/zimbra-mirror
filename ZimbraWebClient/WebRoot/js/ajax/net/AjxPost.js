@@ -70,8 +70,17 @@ function(callback, form, optionalTimeout) {
 	var tags = form.getElementsByTagName("input");
 	var inputs = new Array();
 	for (var i = 0; i < tags.length; i++) {
-		if (tags[i].type == "file")
-			inputs.push(tags[i]);
+		var tag = tags[i];
+		if (tag.type == "file") {
+			inputs.push(tag);
+			continue;
+		}
+		// clean up form from previous posts
+		if (tag.name && tag.name.match(/^filename\d+$/)) {
+			tag.parentNode.removeChild(tag);
+			i--; // list is live, so stay on same index
+			continue;
+		}
 	}
 	for (var i = 0; i < inputs.length; i++) {
 		var hidden = document.createElement("input");

@@ -246,10 +246,16 @@ function(optionHandle) {
 	this.setSelectedOption(optionObj);
 };
 
+DwtSelect.prototype.getOptionCount = function() {
+	return this._options.size();
+};
+
 DwtSelect.prototype.getOptionWithHandle =
 function(optionHandle) {
 	return this._options.get(optionHandle);
 };
+
+DwtSelect.prototype.getOptionAtIndex = DwtSelect.prototype.getOptionWithHandle;
 
 DwtSelect.prototype.getIndexForValue =
 function(value) {
