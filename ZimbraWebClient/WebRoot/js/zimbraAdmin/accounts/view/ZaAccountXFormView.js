@@ -694,7 +694,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var emptyAlias = " @" + domainName;
 	var headerItems = [{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:2},{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2}];
 	if(ZaSettings.COSES_ENABLED) {
-		headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:this.cosChoices,getDisplayValue:function(newValue) {
+		headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_COSId,valueChangeEventSources:[ZaAccount.A_COSId], labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:this.cosChoices,getDisplayValue:function(newValue) {
 				if(ZaItem.ID_PATTERN.test(newValue)) {
 					var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
 					if(cos)
@@ -891,15 +891,15 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		setupGroup.items.push(
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [
-					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
+					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, choices:this.cosChoices,
 						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
-						//enableDisableChecks:[ZaAccountXFormView.isAutoCos],
 						enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autoCos,"FALSE"]],
 						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
-						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,choices:this.cosChoices,
+						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
+						onChange:ZaAccount.setCosChanged,
 						dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
 								if(ZaItem.ID_PATTERN.test(newValue)) {
-									var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
+									var cos = ZaCos.getCosById(newValue);
 									if(cos)
 										newValue = cos.name;
 								} 
@@ -917,7 +917,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						elementChanged: function(elementValue,instanceValue, event) {
 							this.getForm().parent.setDirty(true);
 							if(elementValue=="TRUE") {
-								ZaAccount.setDefaultCos(this.getInstance(), this.getForm().parent._app);	
+								ZaAccount.setDefaultCos(this.getInstance());	
 							}
 							this.getForm().itemChanged(this, elementValue, event);
 						}

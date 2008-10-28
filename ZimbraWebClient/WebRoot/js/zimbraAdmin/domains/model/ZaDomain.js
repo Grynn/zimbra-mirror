@@ -937,7 +937,8 @@ function(mods) {
 		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
 	}	
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
-	this.initFromJS(resp.domain[0]);
+	this.refresh();
+	//this.initFromJS(resp.domain[0]);
 	ZaDomain.putDomainToCache(this);	
 }
 ZaItem.modifyMethods["ZaDomain"].push(ZaDomain.modifyMethod);

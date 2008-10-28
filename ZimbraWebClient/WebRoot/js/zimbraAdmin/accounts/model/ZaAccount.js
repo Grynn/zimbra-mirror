@@ -1610,6 +1610,23 @@ function (accountName) {
 	return accountName.substring(accountName.lastIndexOf ("@") + 1 ) ;	
 }
 
+ZaAccount.setCosChanged = function (value, event, form) {
+	var oldVal = this.getInstanceValue();
+	if(oldVal == value)
+		return;
+			
+	this.setInstanceValue(value);
+	
+	if(ZaItem.ID_PATTERN.test(value)) {
+		this.cos = ZaCos.getCosById(value);
+	} else {
+		this.setError(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[value]));
+		var event = new DwtXFormsEvent(form, this, value);
+		form.notifyListeners(DwtEvent.XFORMS_VALUE_ERROR, event);
+		return;
+	}
+} 
+
 ZaAccount.setDomainChanged =
 function (value, event, form){
 	//form.parent.setDirty(true);
@@ -1618,14 +1635,17 @@ function (value, event, form){
 		var p = form.parent ;
         var oldDomainName = ZaAccount.getDomain(instance[ZaAccount.A2_previousName]) ;
         var newDomainName = ZaAccount.getDomain(value) ;
-        var domainObj =  ZaDomain.getDomainByName(newDomainName,form.parent._app) ;
+        var domainObj =  ZaDomain.getDomainByName(newDomainName) ;
         
         if ((ZaSettings.COSES_ENABLED) 
 			&& ((newDomainName != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
 				//set the right default cos at the account creation time
 				|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
 		{ //see if the cos needs to be updated accordingly
-			instance.cos = ZaCos.getDefaultCos4Account.call(p, value, form.parent._app );
+			if(!form.getModel().getInstanceValue(instance, ZaAccount.A_COSId)) {
+				instance.cos = ZaCos.getDefaultCos4Account.call(p, value);	
+			}
+			
 			//instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
 			//form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A_COSId,instance.cos.id);
 		}
