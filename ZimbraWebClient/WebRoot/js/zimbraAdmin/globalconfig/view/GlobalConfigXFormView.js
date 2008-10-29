@@ -24,6 +24,7 @@
 **/
 GlobalConfigXFormView = function(parent) {
 	ZaTabView.call(this, parent, "GlobalConfigXFormView");
+	this.TAB_INDEX = 0;	
 	this.initForm(ZaGlobalConfig.myXModel,this.getMyXForm());
 }
 
@@ -59,8 +60,66 @@ function () {
 	return this.getTitle ();
 }
 
+GlobalConfigXFormView.blockedExtSelectionListener = function () {
+	var arr = this.widget.getSelection();
+	if(arr && arr.length) {
+		arr.sort();
+		this.getModel().setInstanceValue(this.getInstance(), ZaGlobalConfig.A2_blocked_extension_selection, arr);
+	} else {
+		this.getModel().setInstanceValue(this.getInstance(), ZaGlobalConfig.A2_blocked_extension_selection, null);
+	}
+}
+
+GlobalConfigXFormView.commonExtSelectionListener = function () {
+	var arr = this.widget.getSelection();
+	if(arr && arr.length) {
+		arr.sort();
+		this.getModel().setInstanceValue(this.getInstance(), ZaGlobalConfig.A2_common_extension_selection, arr);
+	} else {
+		this.getModel().setInstanceValue(this.getInstance(), ZaGlobalConfig.A2_common_extension_selection, null);
+	}
+}
+
+GlobalConfigXFormView.shouldEnableRemoveAllButton = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaBlockedExtension)));
+}
+
+GlobalConfigXFormView.shouldEnableRemoveButton = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaGlobalConfig.A2_blocked_extension_selection)));
+}
+
+GlobalConfigXFormView.shouldEnableAddButton = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaGlobalConfig.A2_common_extension_selection)));
+}
+
+GlobalConfigXFormView.shouldEnableAddAllButton = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension)));
+}
+
+GlobalConfigXFormView.addCommonExt = function () {
+	var commonExtArr = this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaBlockedExtension);
+	var newExtArr = this.getInstanceValue(ZaGlobalConfig.A2_common_extension_selection);
+	
+	this.setInstanceValue(AjxUtil.mergeArrays(commonExtArr,newExtArr),ZaGlobalConfig.A_zimbraMtaBlockedExtension);		
+}
+
+GlobalConfigXFormView.addAllCommonExt = function () {
+	var commonExtArr = this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaBlockedExtension);
+	var newExtArr = this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension);
+	
+	this.setInstanceValue(AjxUtil.mergeArrays(commonExtArr,newExtArr),ZaGlobalConfig.A_zimbraMtaBlockedExtension);			
+}
+
 GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
+	var _tab1 = ++this.TAB_INDEX;
+	var _tab2 = ++this.TAB_INDEX;	
+	var _tab3 = ++this.TAB_INDEX;	
+	var _tab4 = ++this.TAB_INDEX;	
+	var _tab5 = ++this.TAB_INDEX;		
+	var _tab6 = ++this.TAB_INDEX;	
+	var _tab7 = ++this.TAB_INDEX;		
+	var _tab8 = ++this.TAB_INDEX;	
 
 	xFormObject.items = [
 		{ type: _DWT_ALERT_,
@@ -85,7 +144,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
             ]
 		},
 		{type:_SWITCH_, items:[
-			{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 1",
+			{type:_ZATABCASE_, caseKey:_tab1,
 				colSizes:["auto"],numCols:1,
 				items:[
 					{type:_ZAGROUP_,
@@ -122,16 +181,91 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					}
 				]
 			},
-			{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 2", id:"gs_form_attachment_tab", items:[
-				{type: _GROUP_, id:"attachment_settings",
-					label: ZaMsg.NAD_Attach_IncomingAttachments, labelCssStyle: "vertical-align:top",
-					items: [
-						{ref: ZaGlobalConfig.A_zimbraAttachmentsBlocked, type: _CHECKBOX_,
-						  label: ZaMsg.NAD_GlobalRemoveAllAttachments,
-						  trueValue: "TRUE", falseValue: "FALSE"
-					   	}
-				    ]},
-				  	{type: _GROUP_,
+			{type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab", numCols:2, colSizes: ["50%","50%"], items:[
+				//{type: _GROUP_, id:"attachment_settings",
+					//label: ZaMsg.NAD_Attach_IncomingAttachments, labelCssStyle: "vertical-align:top",
+					//items: [
+					
+				 {type:_GROUP_, width: "98%", numCols: 1,   
+					items:[	
+						{type:_SPACER_, height:"5"}, 						    
+ 						{type: _GROUP_, width: "98%", numCols: 2, colSizes:[100, "*"], items: [
+							{ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _CHECKBOX_,
+						  		label: ZaMsg.NAD_GlobalRemoveAllAttachments,
+						  		trueValue: "TRUE", falseValue: "FALSE"
+					   		}
+					   	]},
+					    {type:_SPACER_, height:"10"},
+        				{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%",  //height: 400,
+							items:[
+								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
+							   		items: [
+										{type:_OUTPUT_, value:ZaMsg.NAD_GlobalBlockedExtensions, cssClass:"RadioGrouperLabel"},
+										{type:_CELLSPACER_}
+									]
+								},					   	
+								{ref:ZaGlobalConfig.A_zimbraMtaBlockedExtension, type:_DWT_LIST_, height:"200", width:"98%", 
+									cssClass: "DLTarget", cssStyle:"margin-left: 5px; ",
+									onSelection:GlobalConfigXFormView.blockedExtSelectionListener
+								},
+								{type:_SPACER_, height:"5"},
+								{type:_GROUP_, width:"100%", numCols:8, colSizes:[85,5, 85,"*"], 
+									items:[
+										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80, 
+										   	enableDisableChecks:[GlobalConfigXFormView.shouldEnableRemoveAllButton],
+									   		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension]
+										},
+										{type:_CELLSPACER_},
+										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:80,
+										   	enableDisableChecks:[GlobalConfigXFormView.shouldEnableRemoveButton],
+									   		enableDisableChangeEventSources:[ZaGlobalConfig.A2_blocked_extension_selection]										
+									    },
+										{type:_CELLSPACER_}									
+									]
+								}								
+							]
+        				}
+					]
+				 },
+				 {type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.NAD_GlobalAddBlockedExtensions,	
+					items:[
+						{type:_SPACER_, height:"5"}, 			      
+					    {type:_GROUP_, numCols:3, width:"98%", 
+						   items:[
+								{type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaGlobalConfig.A_zimbraNewExtension, label:ZaMsg.NAD_Attach_NewExtension},
+								{type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension, width:80}
+							]
+					    },
+					    {type:_SPACER_, height:"5"},
+					    {type:_SPACER_, height:"3"},
+					    {type:_OUTPUT_, value:ZaMsg.NAD_GlobalCommonExtensions,  cssClass:"xform_label_left",
+        					width: AjxEnv.isIE ? 100 : 94, cssStyle:"text-align: right;"
+        				},						    
+						{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",
+							onSelection:GlobalConfigXFormView.commonExtSelectionListener
+						},
+					    {type:_SPACER_, height:"5"},
+					    {type:_GROUP_, width:"98%", numCols:8, colSizes:[85,5, 85,"*"],
+							items: [
+							   	{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromList, width:80,
+									onActivate:"GlobalConfigXFormView.addCommonExt.call(this,event)",
+									enableDisableChecks:[GlobalConfigXFormView.shouldEnableAddButton],
+									enableDisableChangeEventSources:[ZaGlobalConfig.A2_common_extension_selection]										
+								},
+							    {type:_CELLSPACER_},
+							    {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:80,
+									onActivate:"GlobalConfigXFormView.addAllCommonExt.call(this,event)",
+									enableDisableChecks:[GlobalConfigXFormView.shouldEnableAddAllButton],
+									enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension]										
+								},
+								{type:_CELLSPACER_}	
+						  	]
+					    }
+					]
+				  }
+				    //]},
+				    
+				  	/*{type: _GROUP_,
 				  	  label: "", labelCssStyle: "vertical-align:top",
 				  	  items: [
 				  	  	{ type: _SEPARATOR_, colSpan: "*" },
@@ -190,9 +324,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 			    	  	  	form.refresh();
 			    	  	  }
 			    	  	}
-			    	]}
+			    	]}*/
 				]},
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 3",
+				{type:_ZATABCASE_, caseKey:_tab3,
 					colSizes:["auto"],numCols:1,id:"global_mta_tab",
 					items: [
 						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_AuthenticationGrp,
@@ -202,7 +336,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							   	  trueValue: "TRUE", falseValue: "FALSE"
 						   	    },
 						   	    { ref: ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, type: _CHECKBOX_,
-						   	      relevant: "instance.attrs[ZaGlobalConfig.A_zimbraMtaAuthEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+						  	  		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaAuthEnabled],
+						  	  		enableDisableChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraMtaAuthEnabled,"TRUE"]],						   	      
+						   	      //relevant: "instance.attrs[ZaGlobalConfig.A_zimbraMtaAuthEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
 				   	    		  label: ZaMsg.NAD_MTA_TlsAuthenticationOnly,
 						   	      trueValue: "TRUE", falseValue: "FALSE"
 
@@ -298,7 +434,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						]}
 
 				]},
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 4",
+				{type:_ZATABCASE_, caseKey:_tab4,
 					colSizes:["auto"],numCols:1,id:"global_imap_tab",
 					items: [
 						{ type: _DWT_ALERT_,
@@ -314,14 +450,14 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							  trueValue:"TRUE", falseValue:"FALSE"
 	  						},
 						  	{ ref: ZaGlobalConfig.A_zimbraImapSSLServerEnabled, type:_CHECKBOX_,
-					  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraImapServerEnabled] == 'TRUE'",
-					  	  	  relevantBehavior: _DISABLE_,
+						  	  enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraImapServerEnabled],
+						  	  enableDisableChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraImapServerEnabled,'TRUE']],					  	  	  
 						  	  label: ZaMsg.IMAP_SSLService,
 						  	  trueValue:"TRUE", falseValue:"FALSE"
 					  	  	},
 							{ ref: ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, type:_CHECKBOX_,
-					  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraImapServerEnabled] == 'TRUE'",
-					  	  	  relevantBehavior: _DISABLE_,
+						  	  enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraImapServerEnabled],
+						  	  enableDisableChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraImapServerEnabled,'TRUE']],							
 							  label: ZaMsg.IMAP_CleartextLoginEnabled,
 							  trueValue:"TRUE", falseValue:"FALSE"
 						  	},
@@ -353,7 +489,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						}*/
 					]
 				},
-				{type:_ZATABCASE_, relevant:"instance[ZaModel.currentTab] == 5",
+				{type:_ZATABCASE_, caseKey:_tab5,
 					colSizes:["auto"],numCols:1,id:"global_pop_tab",
 					items: [
 						{ type: _DWT_ALERT_,
@@ -369,14 +505,14 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							  trueValue: "TRUE", falseValue: "FALSE"
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type: _CHECKBOX_,
-					  	  	 // relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'",
-					  	  	  //relevantBehavior: _DISABLE_,
+						  	  enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraPop3ServerEnabled],
+						  	  enableDisableChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraPop3ServerEnabled,'TRUE']],							  	
 							  label: ZaMsg.NAD_POP_SSL,
 							  trueValue: "TRUE", falseValue: "FALSE"
 						  	},
 						  	{ ref: ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type: _CHECKBOX_,
-					  	  	  relevant: "instance.attrs[ZaGlobalConfig.A_zimbraPop3ServerEnabled] == 'TRUE'",
-					  	  	  relevantBehavior: _DISABLE_,
+						  	  enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraPop3ServerEnabled],
+						  	  enableDisableChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraPop3ServerEnabled,'TRUE']],					  	  	  
 						  	  label: ZaMsg.NAD_POP_CleartextLoginEnabled,
 						  	  trueValue: "TRUE", falseValue: "FALSE"
 					  	  	},
@@ -406,7 +542,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					]
 				},
 				// anti-spam
-				{type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 6",
+				{type: _ZATABCASE_, caseKey:_tab6,
 					colSizes:["auto"],numCols:1,id:"global_asav_tab",
 				 	items: [
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AS_Settings,
@@ -445,7 +581,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					]
 				} ,
 				// Interop
-				{type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 7",
+				{type: _ZATABCASE_, caseKey:_tab7,
 					colSizes:["auto"],numCols:1,id:"global_interop_tab",
 				 	items: [
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Exchange_Settings,
@@ -481,7 +617,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 					]
 				},
                 //skin properties
-                {type: _ZATABCASE_, relevant: "instance[ZaModel.currentTab] == 8",
+                {type: _ZATABCASE_, caseKey:_tab8,
 					colSizes:["auto"],numCols:1,id:"global_skin_tab",
 				 	items: [
                         {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Settings,//colSizes:["175px","*"],

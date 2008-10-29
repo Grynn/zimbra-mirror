@@ -461,11 +461,10 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 		},
 		{type:_SWITCH_,
 			items:[
-				{type:_ZATABCASE_,  caseKey:_tab1,  numCols:2,  colSizes: ["50%","50%"], //["50%","47%", "3%"],
+				{type:_ZATABCASE_,  caseKey:_tab1,  numCols:2,  colSizes: ["50%","50%"], 
 				  items:[
-					 {type:_GROUP_, width: "98%", numCols: 1,  //colSizes:[10,120,"auto",20],
+					 {type:_GROUP_, width: "98%", numCols: 1, 
 						items:[	
- 						    //{type:_CELLSPACER_, width:10, rowSpan:9},
  						    {type:_SPACER_, height:"5"}, 						    
  						    {type: _GROUP_, width: "98%", numCols: 2, colSizes:[100, "*"], items: [
  						    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.DLXV_LabelListName, label: ZaMsg.DLXV_LabelListName +":", forceUpdate:true, tableCssStyle: "width:100", inputWidth:"100",

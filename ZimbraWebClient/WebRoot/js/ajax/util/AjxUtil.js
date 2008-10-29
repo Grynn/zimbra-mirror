@@ -475,3 +475,48 @@ function(type, msg) {
 	if (!AjxUtil.LOG[type]) { return; }
 	AjxUtil.LOG[type].push(msg);
 };
+
+/**
+ * mergesort+dedupe
+**/
+AjxUtil.mergeArrays = function (arr1,arr2) {
+
+	var resArr = [];
+	while(arr1.length>0 && arr2.length>0) {
+		if(arr1[0] == resArr[resArr.length-1]) {
+			arr1.shift();
+			continue;
+		}
+		
+		if(arr2[0] == resArr[resArr.length-1]) {
+			arr2.shift();
+			continue;
+		}		
+			
+		if(arr1[0] < arr2[0]) {
+			resArr.push(arr1.shift());
+		} else if (arr1[0]==arr2[0]) {
+			resArr.push(arr1.shift());
+			arr2.shift();
+		} else {
+			resArr.push(arr2.shift());
+		}
+	}
+		
+	while(arr1.length>0) {
+		if(arr1[0] == resArr[resArr.length-1]) {
+			arr1.shift();
+			continue;
+		}		
+		resArr.push(arr1.shift());
+	}
+		
+	while(arr2.length>0) {
+		if(arr2[0] == resArr[resArr.length-1]) {
+			arr2.shift();
+			continue;
+		}			
+		resArr.push(arr2.shift());
+	}
+	return resArr;	
+}
