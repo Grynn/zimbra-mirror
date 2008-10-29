@@ -39,7 +39,6 @@ import com.zimbra.cs.offline.LMailSender;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.YMailSender;
-import com.zimbra.cs.offline.util.ymail.RequestFailedException;
 import com.zimbra.cs.offline.util.ymail.YMailException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
