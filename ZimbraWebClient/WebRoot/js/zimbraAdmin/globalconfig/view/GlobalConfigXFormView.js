@@ -243,59 +243,49 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
         				}
 					]
 				 },
-				 {type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%",  //height: 400,
-				 //{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.NAD_GlobalAddBlockedExtensions,	
-					items:[
-						{type:_GROUP_,  numCols:2, width:"98%", colSizes:["auto", "auto"],
-						   	items: [
-								{type:_OUTPUT_, value:ZaMsg.NAD_GlobalCommonExtensions, cssClass:"RadioGrouperLabel"},
-								{type:_CELLSPACER_}
+				 {type: _GROUP_, width: "98%", numCols: 1, 
+					items: [
+					    {type:_SPACER_, height:"10"},	
+						{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%",  //height: 400,
+							items:[
+								{type:_GROUP_,  numCols:2, width:"98%", colSizes:["auto", "auto"],
+								   	items: [
+										{type:_OUTPUT_, value:ZaMsg.NAD_GlobalCommonExtensions, cssClass:"RadioGrouperLabel"},
+										{type:_CELLSPACER_}
+									]
+								},
+								{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",
+									onSelection:GlobalConfigXFormView.commonExtSelectionListener
+								},
+							    {type:_SPACER_, height:"5"},
+							    {type:_GROUP_, width:"98%", numCols:7, colSizes:[100,5, 85,5,100,60,85],
+									items: [
+									   	{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddSelected, width:80,
+											onActivate:"GlobalConfigXFormView.addCommonExt.call(this)",
+											enableDisableChecks:[GlobalConfigXFormView.shouldEnableAddButton],
+											enableDisableChangeEventSources:[ZaGlobalConfig.A2_common_extension_selection]										
+										},
+									    {type:_CELLSPACER_},
+									    {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:80,
+											onActivate:"GlobalConfigXFormView.addAllCommonExt.call(this)",
+											enableDisableChecks:[GlobalConfigXFormView.shouldEnableAddAllButton],
+											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension]										
+										},
+										{type:_CELLSPACER_},
+										{type:_TEXTFIELD_, cssStyle:"width:60px;", ref:ZaGlobalConfig.A_zimbraNewExtension, 
+											label:ZaMsg.NAD_Attach_NewExtension,bmolsnr:true
+										},
+										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension, width:80,
+											onActivate:"GlobalConfigXFormView.addNewExt.call(this)",
+											enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaGlobalConfig.A_zimbraNewExtension]],
+											enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraNewExtension]									
+										}	
+								  	]
+							    }
 							]
-						},
-					/*	{type:_SPACER_, height:"5"}, 			      
-					    {type:_GROUP_, numCols:3, width:"98%", 
-						   items:[
-								{type:_TEXTFIELD_, cssClass:"admin_xform_name_input", ref:ZaGlobalConfig.A_zimbraNewExtension, label:ZaMsg.NAD_Attach_NewExtension},
-								{type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension, width:80}
-							]
-					    },*/
-					    //{type:_SPACER_, height:"5"},
-					    //{type:_SPACER_, height:"3"},
-					    /*{type:_OUTPUT_, value:ZaMsg.NAD_GlobalCommonExtensions,  cssClass:"xform_label_left",
-        					width: AjxEnv.isIE ? 100 : 94, cssStyle:"text-align: right;"
-        				},*/						    
-						{ref:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",
-							onSelection:GlobalConfigXFormView.commonExtSelectionListener
-						},
-					    {type:_SPACER_, height:"5"},
-					    {type:_GROUP_, width:"98%", numCols:7, colSizes:[100,5, 85,5,100,60,85],
-							items: [
-							   	{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddSelected, width:80,
-									onActivate:"GlobalConfigXFormView.addCommonExt.call(this)",
-									enableDisableChecks:[GlobalConfigXFormView.shouldEnableAddButton],
-									enableDisableChangeEventSources:[ZaGlobalConfig.A2_common_extension_selection]										
-								},
-							    {type:_CELLSPACER_},
-							    {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddAll, width:80,
-									onActivate:"GlobalConfigXFormView.addAllCommonExt.call(this)",
-									enableDisableChecks:[GlobalConfigXFormView.shouldEnableAddAllButton],
-									enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension]										
-								},
-								{type:_CELLSPACER_},
-								{type:_TEXTFIELD_, cssStyle:"width:60px;", ref:ZaGlobalConfig.A_zimbraNewExtension, 
-									label:ZaMsg.NAD_Attach_NewExtension,bmolsnr:true
-								},
-								{type:_DWT_BUTTON_, label:ZaMsg.NAD_Attach_AddExtension, width:80,
-									onActivate:"GlobalConfigXFormView.addNewExt.call(this)",
-									enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaGlobalConfig.A_zimbraNewExtension]],
-									enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraNewExtension]									
-								}	
-						  	]
-					    }
-					]
-				  }
-				    //]},
-				    
+						  }
+				    	]
+				    }
 				  	/*{type: _GROUP_,
 				  	  label: "", labelCssStyle: "vertical-align:top",
 				  	  items: [
