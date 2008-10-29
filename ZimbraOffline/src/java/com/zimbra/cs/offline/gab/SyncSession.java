@@ -22,8 +22,13 @@ import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Contact;
+import com.zimbra.cs.mailbox.Tag;
+import com.zimbra.cs.mailbox.MailServiceException;
+import com.zimbra.cs.mailbox.SyncExceptionHandler;
+import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.yab.SyncException;
 import com.zimbra.cs.db.DbDataSource;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.common.util.Log;
@@ -36,6 +41,8 @@ import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.common.xml.XmlWriter;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
+import com.google.gdata.data.contacts.GroupMembershipInfo;
+import com.google.gdata.data.contacts.ContactGroupFeed;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.ParseSource;
 import com.google.gdata.data.DateTime;
@@ -50,11 +57,11 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.EnumSet;
 import java.util.Set;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Collection;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -73,7 +80,9 @@ public class SyncSession {
 
     private static final String KEY_GAB_CONTACT = "GAB_CONTACT";
     private static final String BASE_URL = OfflineLC.zdesktop_gab_base_url.value();
-    private static final boolean TRACE = true;
+
+    private static final boolean DEBUG_TRACE = true;
+    private static final boolean HTTP_DEBUG = false;
     
     private static final String APP_NAME = String.format("Zimbra-%s-%s",
         OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
@@ -85,16 +94,16 @@ public class SyncSession {
         new HashSet<Integer>(Arrays.asList(Mailbox.ID_FOLDER_CONTACTS));
 
     static {
-        /*
-        Logger httpLogger = Logger.getLogger(HttpGDataRequest.class.getName());
-        httpLogger.setLevel(Level.ALL);
-        //Logger xmlLogger = Logger.getLogger(XmlParser.class.getName());
-        // Create a log handler which prints all log events to the console.
-        ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(Level.ALL);
-        httpLogger.addHandler(handler);
-        //xmlLogger.addHandler(handler);
-        */
+        if (HTTP_DEBUG) {
+            Logger httpLogger = Logger.getLogger(HttpGDataRequest.class.getName());
+            httpLogger.setLevel(Level.ALL);
+            //Logger xmlLogger = Logger.getLogger(XmlParser.class.getName());
+            // Create a log handler which prints all log events to the console.
+            ConsoleHandler handler = new ConsoleHandler();
+            handler.setLevel(Level.ALL);
+            httpLogger.addHandler(handler);
+            //xmlLogger.addHandler(handler);
+        }
     }
 
     public SyncSession(DataSource ds) throws ServiceException {
@@ -138,8 +147,7 @@ public class SyncSession {
         // Push changes to remote
         pushChanges(requests);
         if (requests.size() > 0) {
-            throw ServiceException.FAILURE(
-                "Contact sync failed due to one or more errors", null);
+            LOG.debug("Contact sync had %d errors", requests.size());
         }
         state.save();
     }
@@ -164,32 +172,36 @@ public class SyncSession {
             if (isTraceEnabled()) {
                 LOG.debug("Processing remote contact entry:\n%s", pp(entry));
             }
-            if (itemId != -1) {
-                if (entry.getDeleted() != null) {
-                    // Remote contact was deleted
-                    mbox.delete(CONTEXT, itemId, MailItem.TYPE_CONTACT);
-                    deleteContactEntry(itemId);
-                    changes.remove(itemId);
-                    deleted++;
-                } else if (!changes.containsKey(itemId)) {
-                    // Remote contact was updated with no local change
-                    String url = getContactEntry(itemId).getEditLink().getHref();
-                    if (!entry.getEditLink().getHref().equals(url)) {
-                        // Only update local entry if edit url has changed
-                        // (avoids modifying contacts which we just pushed)
-                        ContactData cd = new ContactData(entry);
-                        mbox.modifyContact(CONTEXT, itemId, cd.getParsedContact());
-                        updateContactEntry(itemId, entry);
-                        updated++;
+            try {
+                if (itemId != -1) {
+                    if (entry.getDeleted() != null) {
+                        // Remote contact was deleted
+                        mbox.delete(CONTEXT, itemId, MailItem.TYPE_CONTACT);
+                        deleteContactEntry(itemId);
+                        changes.remove(itemId);
+                        deleted++;
+                    } else if (!changes.containsKey(itemId)) {
+                        // Remote contact was updated with no local change
+                        String url = getContactEntry(itemId).getEditLink().getHref();
+                        if (!entry.getEditLink().getHref().equals(url)) {
+                            // Only update local entry if edit url has changed
+                            // (avoids modifying contacts which we just pushed)
+                            ContactData cd = new ContactData(entry);
+                            mbox.modifyContact(CONTEXT, itemId, cd.getParsedContact());
+                            updateContactEntry(itemId, entry);
+                            updated++;
+                        }
                     }
+                } else {
+                    // Remote contact was added
+                    ContactData cd = new ContactData(entry);
+                    Contact contact = mbox.createContact(
+                        CONTEXT, cd.getParsedContact(), Mailbox.ID_FOLDER_CONTACTS, null);
+                    updateContactEntry(contact.getId(), entry);
+                    added++;
                 }
-            } else {
-                // Remote contact was added
-                ContactData cd = new ContactData(entry);
-                Contact contact = mbox.createContact(
-                    CONTEXT, cd.getParsedContact(), Mailbox.ID_FOLDER_CONTACTS, null);
-                updateContactEntry(contact.getId(), entry);
-                added++;
+            } catch (ServiceException e) {
+                syncContactFailed(e, itemId, entry);
             }
         }
         LOG.debug("Processed remote changes: %d local contacts added, " +
@@ -241,6 +253,23 @@ public class SyncSession {
         }
     }
 
+    private ContactGroupFeed getGroupsFeed(DateTime lastUpdate)
+        throws IOException, ServiceException {
+        try {
+            if (lastUpdate != null) {
+                Query query = new Query(groupsFeedUrl);
+                query.setUpdatedMin(lastUpdate);
+                query.setStringCustomParameter("showdeleted", "true");
+                return service.getFeed(query, ContactGroupFeed.class, lastUpdate);
+            } else {
+                return service.getFeed(groupsFeedUrl, ContactGroupFeed.class);
+            }
+        } catch (com.google.gdata.util.ServiceException e) {
+            throw ServiceException.FAILURE(
+                "Unable to retrieve contact groups feed " + groupsFeedUrl, e);
+        }
+    }
+
     private void pushChanges(List<SyncRequest> reqs)
         throws ServiceException, IOException {
         int added = 0;
@@ -249,33 +278,49 @@ public class SyncSession {
         Iterator<SyncRequest> it = reqs.iterator();
         while (it.hasNext()) {
             SyncRequest req = it.next();
-            if (req.execute()) {
+            int itemId = req.getItemId();
+            ContactEntry entry = req.getEntry();
+            try {
+                req.execute();
                 switch (req.getType()) {
                 case DELETE:
-                    deleteContactEntry(req.getItemId());
+                    deleteContactEntry(itemId);
                     deleted++;
                     break;
                 case UPDATE:
-                    updateContactEntry(req.getItemId(), req.getCurrentEntry());
+                    updateContactEntry(itemId, entry);
                     updated++;
                     break;
                 case INSERT:
-                    updateContactEntry(req.getItemId(), req.getCurrentEntry());
+                    updateContactEntry(itemId, entry);
                     added++;
                     break;
                 }
                 it.remove();
+            } catch (ServiceException e) {
+                syncContactFailed(e, itemId, entry);
             }
         }
         LOG.debug("pushChanged finished: %d contacts added, %d updated, " +
                   "and %d deleted", added, updated, deleted);
     }
     
+    private void syncContactFailed(ServiceException e, int itemId,
+                                   ContactEntry entry) throws ServiceException {
+        SyncExceptionHandler.checkRecoverableException("Contact sync failed", e);
+        DesktopMailbox dmbx = (DesktopMailbox) mbox;
+        try {
+            SyncExceptionHandler.syncContactFailed(dmbx, itemId, pp(entry), e);
+        } catch (IOException ioe) {
+            SyncExceptionHandler.syncContactFailed(dmbx, itemId, e);
+        }
+    }
+    
     private Map<Integer, ChangeType> getLocalChanges(int seq)
         throws ServiceException {
         Map<Integer, ChangeType> changes = new HashMap<Integer, ChangeType>();
         List<Integer> tombstones =
-            mbox.getTombstones(seq).getIds(MailItem.TYPE_CONTACT);
+            mbox.getTombstones(seq).getIds(MailItem.TYPE_CONTACT, MailItem.TYPE_TAG);
         if (tombstones != null) {
             for (int id : tombstones) {
                 if (state.hasItem(id)) {
@@ -283,14 +328,29 @@ public class SyncSession {
                 }
             }
         }
-        List<Integer> modified = mbox.getModifiedItems(
-            CONTEXT, seq, MailItem.TYPE_CONTACT, CONTACT_FOLDERS).getFirst();
+        List<Integer> modified = getModifiedItems(seq, MailItem.TYPE_CONTACT);
         for (int id : modified) {
             changes.put(id, state.hasItem(id) ? ChangeType.UPDATE : ChangeType.ADD);
         }
         return changes;
     }
 
+    private Set<Integer> getContactTags(Collection<Integer> itemIds)
+        throws ServiceException {
+        Set<Integer> tags = new HashSet<Integer>();
+        for (int itemId : itemIds) {
+            MailItem item = mbox.getItemById(CONTEXT, itemId, MailItem.TYPE_CONTACT);
+            for (Tag tag : item.getTagList()) {
+                tags.add(tag.getId());
+            }
+        }
+        return tags;
+    }
+    
+    private List<Integer> getModifiedItems(int seq, byte type) throws ServiceException {
+        return mbox.getModifiedItems(CONTEXT, seq, type, CONTACT_FOLDERS).getFirst();
+    }
+    
     private ContactData getContactData(int itemId) throws ServiceException {
         return new ContactData((Contact)
             mbox.getItemById(CONTEXT, itemId, MailItem.TYPE_CONTACT));
@@ -340,6 +400,35 @@ public class SyncSession {
         DbDataSource.deleteMappings(ds, Arrays.asList(itemId));
     }
 
+    private Tag createTag(String name) throws ServiceException {
+        String normalized = MailItem.normalizeItemName(name);
+        if (!name.equals(normalized)) {
+            LOG.warn("Normalizing GAB category name '%s' to '%s' since it " +
+                     "contains invalid tag characters", name, normalized);
+            name = normalized;
+        }
+        try {
+            return mbox.getTagByName(name);
+        } catch (MailServiceException.NoSuchItemException e) {
+            return mbox.createTag(CONTEXT, name, Tag.DEFAULT_COLOR);
+        }
+    }
+    
+    private long getTagBitmask(ContactEntry entry)
+        throws SyncException, ServiceException {
+        long mask = 0;
+        for (GroupMembershipInfo info : entry.getGroupMembershipInfos()) {
+            int itemId = state.getItemId(info.getHref());
+            if (itemId == -1) {
+                throw ServiceException.FAILURE(
+                    "Missing item id for contact group url = " + info.getHref(), null);
+            }
+            Tag tag = mbox.getTagById(CONTEXT, itemId);
+            mask |= tag.getBitmask();
+        }
+        return mask;
+    }
+
     public String pp(BaseEntry entry) throws IOException {
         StringWriter sw = new StringWriter();
         XmlWriter xw = new XmlWriter(sw,
@@ -349,9 +438,9 @@ public class SyncSession {
     }
     
     public boolean isTraceEnabled() {
-        return LOG.isDebugEnabled() && (TRACE || ds.isDebugTraceEnabled());
+        return LOG.isDebugEnabled() && (DEBUG_TRACE || ds.isDebugTraceEnabled());
     }
-    
+
     private static URL toUrl(String url) throws ServiceException {
         try {
             return new URL(url);

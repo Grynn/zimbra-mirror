@@ -342,6 +342,7 @@ public class OfflineSyncManager {
             Throwable cause = exception.getCause();
             return cause instanceof AuthenticationFailedException ||
                    cause instanceof AuthenticationException ||
+                   cause instanceof com.google.gdata.util.AuthenticationException ||
                    cause instanceof LoginException;
         }
         return false;

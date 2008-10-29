@@ -19,7 +19,6 @@ package com.zimbra.cs.offline.gab;
 import com.google.gdata.client.Service.GDataRequest.RequestType;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.contacts.ContactEntry;
-import com.google.gdata.data.Link;
 import com.google.gdata.util.VersionConflictException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.common.util.Log;
@@ -27,17 +26,18 @@ import com.zimbra.common.service.ServiceException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.MalformedURLException;
 
 public class SyncRequest {
     private final SyncSession session;
     private final int itemId;
     private final RequestType type;
-    private final ContactEntry entry;
-    private Link editLink;
-    private ContactEntry currentEntry;
-    private Throwable error;
+    private ContactEntry entry;
+    private com.google.gdata.util.ServiceException error;
 
     private static final Log LOG = OfflineLog.gab;
+
+    private static final int MAX_COUNT = 3;
     
     public SyncRequest(SyncSession session, int itemId, RequestType type,
                        ContactEntry entry) {
@@ -45,34 +45,58 @@ public class SyncRequest {
         this.itemId = itemId;
         this.type = type;
         this.entry = entry;
-        editLink = entry.getEditLink();
     }
 
     public int getItemId() { return itemId; }
     public RequestType getType() { return type; }
     public ContactEntry getEntry() { return entry; }
-    public ContactEntry getCurrentEntry() { return currentEntry; }
-    public Throwable getError() { return error; }
-    public boolean isSuccess() { return error == null; }
 
     private boolean isVersionConflict() {
         return error != null && error instanceof VersionConflictException;
     }
-    
-    public boolean execute() throws ServiceException, IOException {
-        while (!doExecute() && isVersionConflict()) {
-            // Retry with new edit link if remote contact has changed
-            if (type == RequestType.UPDATE) {
-                // TODO Merge non-conflicting remote contact changes
-                LOG.debug("Detected version conflict during update for item " +
-                          "id %d - Overriding remote contact with local", itemId);
+
+    public void execute() throws ServiceException, IOException {
+        if (type == RequestType.UPDATE) {
+            int count = 0;
+            while (count++ < MAX_COUNT && !doExecute() && isVersionConflict()) {
+                LOG.debug("Retrying UPDATE request for itemId %d (count = %d)",
+                          itemId, count);
+                VersionConflictException vce = (VersionConflictException) error;
+                entry = getCurrentEntry(vce);
             }
-            VersionConflictException vce = (VersionConflictException) error;
-            editLink = getCurrentEntry(vce).getEditLink();
+        } else {
+            doExecute();
         }
-        if (!isSuccess()) {
-            LOG.debug("Contact sync '%s' request failed for itemid = %d",
-                      type, itemId, error);
+        if (error != null) {
+            LOG.debug("%s request failed for item id %d: %s", type, itemId,
+                      error.getMessage());
+            throw ServiceException.FAILURE(type + " request failed", error);
+        }
+    }
+    
+    private boolean doExecute() throws IOException {
+        ContactsService cs = session.getContactsService();
+        if (session.isTraceEnabled()) {
+            LOG.debug("Executing %s request for item id %d:\n%s", type, itemId,
+                      session.pp(entry));
+        }
+        error = null;
+        try {
+            switch (type) {
+            case INSERT:
+                entry = cs.insert(session.getContactsFeedUrl(), entry);
+                break;
+            case UPDATE:
+                entry = cs.update(getEditUrl(entry), entry);
+                break;
+            case DELETE:
+                cs.delete(getEditUrl(entry));
+                break;
+            default:
+                throw new AssertionError("Invalid request type: " + type);
+            }
+        } catch (com.google.gdata.util.ServiceException e) {
+            error = e;
             return false;
         }
         return true;
@@ -87,32 +111,7 @@ public class SyncRequest {
         return session.parseContactEntry(s);
     }
     
-    private boolean doExecute() throws IOException {
-        ContactsService cs = session.getContactsService();
-        if (session.isTraceEnabled()) {
-            LOG.debug("Executing %s request for entry (itemid = %d):\n%s",
-                      type, itemId, session.pp(entry));
-        }
-        error = null;
-        try {
-            switch (type) {
-            case INSERT:
-                currentEntry = cs.insert(session.getContactsFeedUrl(), entry);
-                break;
-            case UPDATE:
-                currentEntry = cs.update(new URL(editLink.getHref()), entry);
-                break;
-            case DELETE:
-                cs.delete(new URL(editLink.getHref()));
-                break;
-            default:
-                throw new AssertionError("Invalid request type: " + type);
-            }
-        } catch (com.google.gdata.util.ServiceException e) {
-            error = e;
-            return false;
-        }
-        return true;
+    private static URL getEditUrl(ContactEntry entry) throws MalformedURLException {
+        return new URL(entry.getEditLink().getHref());
     }
-
 }

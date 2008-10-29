@@ -26,7 +26,8 @@ import com.zimbra.cs.util.JMSession;
 public class SyncExceptionHandler {
 	
 	private static final String MESSAGE_SYNC_FAILED = "message sync failed";
-	private static final String CALENDAR_SYNC_FAILED = "calendar sync failed";
+    private static final String CALENDAR_SYNC_FAILED = "calendar sync failed";
+    private static final String CONTACT_SYNC_FAILED = "calendar sync failed";
 	private static final String DELETE_ITEM_FAILED = "delete item failed";
 	private static final String PUSH_ITEM_FAILED = "push item failed";
 	private static final String SEND_MAIL_FAILED = "send mail failed";
@@ -56,16 +57,24 @@ public class SyncExceptionHandler {
 		    ByteUtil.closeStream(msgStream);
         }
 	}
-	
+
 	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, CALENDAR_SYNC_FAILED, exception);
 	}
-	
+
 	static void syncCalendarFailed(OfflineMailbox ombx, int itemId, String xml, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, CALENDAR_SYNC_FAILED, xml, xml.length(), exception);
 	}
+
+	public static void syncContactFailed(DesktopMailbox dmbx, int itemId, Exception exception) throws ServiceException {
+		saveFailureReport(dmbx, itemId, CONTACT_SYNC_FAILED, exception);
+	}
+
+	public static void syncContactFailed(DesktopMailbox dmbx, int itemId, String xml, Exception exception) throws ServiceException {
+		saveFailureReport(dmbx, itemId, CONTACT_SYNC_FAILED, xml, xml.length(), exception);
+	}
 	
-	static void localDeleteFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
+    static void localDeleteFailed(OfflineMailbox ombx, int itemId, Exception exception) throws ServiceException {
 		saveFailureReport(ombx, itemId, DELETE_ITEM_FAILED, exception);
 	}
 	
