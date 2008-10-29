@@ -449,7 +449,7 @@ public class SkinResources
 		}
 
         // load manifest
-        Manifest manifest = new Manifest(manifestFile, macros, client, substOverrides);
+        Manifest manifest = new Manifest(manifestFile, macros, client, substOverrides, requestedLocale);
 
         // process input files
         StringTokenizer tokenizer = new StringTokenizer(filenames, ",");
@@ -541,7 +541,7 @@ public class SkinResources
                 if (ZimbraLog.webclient.isDebugEnabled())
                     ZimbraLog.webclient.debug("DEBUG: preprocess " + file.getAbsolutePath());
                 preprocess(file, cout, macros, manifest,
-                        commentStart, commentContinue, commentEnd);
+                        commentStart, commentContinue, commentEnd, requestedLocale);
             }
         }
 
@@ -616,10 +616,32 @@ public class SkinResources
                            Manifest manifest,
                            String commentStart,
                            String commentContinue,
+                           String commentEnd,
+						   Locale locale)
+            throws IOException {
+		String filename = file.getName().replaceAll("\\..*?$", "");
+		String ext = file.getName().replaceAll("^.*(\\..*?)$", "$1");
+
+		// get list of files
+		List<File> files = new LinkedList<File>();
+		files.add(file);
+		addLocaleFiles(files, locale, file.getParentFile(), filename, ext);
+
+		// print the files in order
+		PrintWriter out = new PrintWriter(writer);
+		for (File ifile : files) {
+			preprocess0(ifile , out, macros, manifest, commentStart, commentContinue, commentEnd);
+		}
+	}
+
+	static void preprocess0(File file,
+                           PrintWriter out,
+                           Map<String, String> macros,
+                           Manifest manifest,
+                           String commentStart,
+                           String commentContinue,
                            String commentEnd)
             throws IOException {
-        PrintWriter out = new PrintWriter(writer);
-
         out.println(commentStart);
         out.print(commentContinue);
         out.println("File: " + file.getAbsolutePath().replaceAll("^.*/webapps/",""));
@@ -676,6 +698,8 @@ public class SkinResources
             out.println(line);
         }
         in.close();
+
+		out.flush();
     }
 
     //
@@ -1061,7 +1085,7 @@ public class SkinResources
         //
 
         public Manifest(File manifestFile, Map<String, String> macros, String client,
-						Map<String,String> substOverrides)
+						Map<String,String> substOverrides, Locale locale)
                 throws IOException {
             this.client = client;
             // rememeber the macros passed in (for skin substitution functions)
@@ -1096,7 +1120,7 @@ public class SkinResources
                 if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: subst file = " + file);
                 try {
                     CharArrayWriter out = new CharArrayWriter(4096); // 4K
-                    SkinResources.preprocess(file, out, macros, null, "#", "#", "#");
+                    SkinResources.preprocess(file, out, macros, null, "#", "#", "#", locale);
                     String content = out.toString();
                     // NOTE: properties files should be ISO-Latin-1 with
                     //       escaped Unicode char sequences.
