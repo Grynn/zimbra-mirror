@@ -468,7 +468,7 @@ function(params){
 		"For Reviews & more info view ", params.url, "\n"
 	].join("");
 	var footer = "\n\nThis email was sent to you by a user on Upcoming (upcoming.com)."
-	var bodyText = params.description + "\n\n" + addrFormat + footer;
+	var bodyText = "Hi," + "\n\n" + addrFormat + footer;
 	if (appCtxt.get(ZmSetting.HTML_COMPOSE_ENABLED) &&
 		appCtxt.get(ZmSetting.COMPOSE_AS_FORMAT) == ZmSetting.COMPOSE_HTML)
 	{
