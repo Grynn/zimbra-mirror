@@ -24,7 +24,7 @@
 **/
 ZaResource = function() {
 	ZaItem.call(this, "ZaResource");
-	this._init(s);
+	this._init();
 	this.type=ZaItem.RESOURCE;
 }
 
