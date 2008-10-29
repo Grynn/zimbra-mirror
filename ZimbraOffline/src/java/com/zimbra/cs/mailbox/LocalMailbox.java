@@ -39,6 +39,8 @@ import com.zimbra.cs.offline.LMailSender;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.YMailSender;
+import com.zimbra.cs.offline.util.ymail.RequestFailedException;
+import com.zimbra.cs.offline.util.ymail.YMailException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.util.JMSession;
@@ -193,10 +195,9 @@ public class LocalMailbox extends DesktopMailbox {
                     ms.sendMimeMessage(context, this, false, mm, null, null, origMsgId,
                                        msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
-                    if (ms.sendFailed()) {
-                        OfflineLog.offline.info("YMail send failure: " + msg.getSubject(), ms.getError());
-                        // YMail will handle bounce to inbox...
-                        OutboxTracker.remove(this, id);
+                    Throwable cause = e.getCause();
+                    if (cause instanceof YMailException) {
+                        OfflineLog.offline.info("YMail request failed: " + msg.getSubject(), cause);
                         OutboxTracker.recordFailure(this, id);
                         continue;
                     } else {

@@ -30,9 +30,9 @@ import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.offline.util.Xml;
 
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.WebServiceException;
 import javax.xml.ws.Binding;
 import javax.xml.ws.Holder;
+import javax.xml.ws.soap.SOAPFaultException;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.Handler;
 import javax.xml.ws.handler.soap.SOAPHandler;
@@ -114,22 +114,36 @@ public final class YMailClient {
     public UserData getUserData() throws IOException {
         try {
             return stub.getUserData();
-        } catch (WebServiceException e) {
-            throw requestFailed(e);
-        }
-    }
-    
-    public String sendMessage(MimeMessage mm) throws IOException {
-        try {
-            ComposeMessage cm = getComposeMessage(mm);
-            return stub.sendMessage(cm, true);
         } catch (Exception e) {
-            throw requestFailed(e);
+            failed("GetUserData", e);
+            return null;
         }
     }
 
-    public Message getMessage(String fid, String... mids)
-        throws IOException {
+    /**
+     * Sends specified email message via Cascade.
+     *
+     * @param mm the MimeMessage to send
+     * @return the message id of the sent message
+     * @throws YMailException if the request could not be created
+     * @throws IOException if an I/O error occurred while sending the request
+     */
+    public String sendMessage(MimeMessage mm) throws IOException {
+        ComposeMessage cm;
+        try {
+            cm = getComposeMessage(mm);
+        } catch (MessagingException e) {
+            throw new YMailException("Unable to create request", e);
+        }
+        try {
+            return stub.sendMessage(cm, true);
+        } catch (Exception e) {
+            failed("SendMessage", e);
+            return null;
+        }
+    }
+
+    public Message getMessage(String fid, String... mids) throws IOException {
         List<MidRequest> mrs = new ArrayList<MidRequest>(mids.length);
         for (String mid : mids) {
             MidRequest mr = new MidRequest();
@@ -151,11 +165,12 @@ public final class YMailClient {
                 null,       // Holder<List<Header>> header
                 codes);     // Holder<List<ErrorCode>> code
         } catch (Exception e) {
-            throw requestFailed(e);
+            failed("GetMessage", e);
+            return null;
         }
         if (codes.value != null) {
-            throw new IOException(
-                "getMessage failed: " + codes.value.get(0).getCode());    
+            throw new YMailException(
+                "GetMessage failed: " + codes.value.get(0).getCode());
         }
         if (msgs.value == null || msgs.value.isEmpty()) {
             return null;
@@ -163,6 +178,15 @@ public final class YMailClient {
         return msgs.value.get(0);
     }
 
+    private void failed(String name, Exception e) throws IOException {
+        if (e instanceof SOAPFaultException) {
+            throw new YMailException(name + " failed: " + e.getMessage(), e);
+        }
+        IOException ioe = new IOException(name + " could not be sent");
+        ioe.initCause(e);
+        throw ioe;
+    }
+    
     public void enableTrace(PrintStream out) {
         traceOut = out;
         Binding binding = ((BindingProvider) stub).getBinding();

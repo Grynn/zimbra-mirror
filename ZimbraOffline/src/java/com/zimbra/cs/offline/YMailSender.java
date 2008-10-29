@@ -27,7 +27,6 @@ import java.io.IOException;
 
 public class YMailSender extends MailSender {
     private final YMailClient ymc;
-    private IOException error;
 
     public static YMailSender newInstance(OfflineDataSource ds)
         throws ServiceException {
@@ -49,19 +48,6 @@ public class YMailSender extends MailSender {
     protected void sendMessage(MimeMessage mm,
                                boolean ignoreFailedAddresses,
                                RollbackData[] rollback) throws IOException {
-        try {
-            ymc.sendMessage(mm);
-        } catch (IOException e) {
-            error = e;
-            throw e;
-        }
-    }
-
-    public boolean sendFailed() {
-        return error != null;
-    }
-
-    public IOException getError() {
-        return error;
+        ymc.sendMessage(mm);
     }
 }
