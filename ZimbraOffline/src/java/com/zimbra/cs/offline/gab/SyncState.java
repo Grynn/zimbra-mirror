@@ -70,6 +70,7 @@ public class SyncState {
             itemIdByEntryId.put(entryId, itemId);
         }
         LOG.debug("Loaded sync state: %s", this);
+        // LOG.debug("Entries: " + entryIdByItemId);
     }
 
     public void save() throws ServiceException {
@@ -84,7 +85,8 @@ public class SyncState {
         }
         md.put(KEY_IDS, ids);
         sync.getMailbox().setConfig(sync.getContext(), KEY_GAB, md);
-        LOG.debug("Saved sync state: %s", this);
+        LOG.debug("Saved sync state: " + this);
+        // LOG.debug("Entries: " + entryIdByItemId);
     }
 
     public void clear() {
@@ -120,6 +122,8 @@ public class SyncState {
     }
     
     public void addEntry(int itemId, String entryId) {
+        if (itemId < 0) throw new IllegalArgumentException("itemId");
+        if (entryId == null) throw new NullPointerException("entryId");
         String oldEntryId = getEntryId(itemId);
         if (oldEntryId == null) {
             entryIdByItemId.put(itemId, entryId);
@@ -139,9 +143,8 @@ public class SyncState {
         }
     }
 
-
     public String toString() {
-        return String.format("[ts=%s, seq=%d, entries=%d",
+        return String.format("[ts=%s, seq=%d, entries=%d]",
             lastUpdateTime, lastModSequence, entryIdByItemId.size());
     }
 }

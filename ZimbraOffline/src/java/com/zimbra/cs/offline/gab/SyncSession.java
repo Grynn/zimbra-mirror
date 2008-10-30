@@ -279,7 +279,6 @@ public class SyncSession {
         while (it.hasNext()) {
             SyncRequest req = it.next();
             int itemId = req.getItemId();
-            ContactEntry entry = req.getEntry();
             try {
                 req.execute();
                 switch (req.getType()) {
@@ -288,17 +287,17 @@ public class SyncSession {
                     deleted++;
                     break;
                 case UPDATE:
-                    updateContactEntry(itemId, entry);
+                    updateContactEntry(itemId, req.getEntry());
                     updated++;
                     break;
                 case INSERT:
-                    updateContactEntry(itemId, entry);
+                    updateContactEntry(itemId, req.getEntry());
                     added++;
                     break;
                 }
                 it.remove();
             } catch (ServiceException e) {
-                syncContactFailed(e, itemId, entry);
+                syncContactFailed(e, itemId, req.getEntry());
             }
         }
         LOG.debug("pushChanged finished: %d contacts added, %d updated, " +
