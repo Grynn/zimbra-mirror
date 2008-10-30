@@ -225,20 +225,12 @@ ZaAccountXFormView.preProcessCOS =
 function(value,  form) {
 	var val = value;
 	if(ZaItem.ID_PATTERN.test(value))  {
-		form.getInstance().cos = ZaCos.getCosById(value, form.parent._app);
-		//val = value;
+		val = value;
 	} else {
-		form.getInstance().cos = ZaCos.getCosByName(value, form.parent._app);
-		if(form.getInstance().cos) {
-			//value = form.getInstance().cos.id;
-			val = form.getInstance().cos.id;
-		} 
+		var cos = ZaCos.getCosByName(value);
+		if(cos)
+			val = cos.id;
 	}
-	//this.setInstanceValue(value);
-
-      //if cos is changed,  update the account type information
-    //form.parent.updateAccountType();
-    
     return val;
 }
 
@@ -897,6 +889,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
 						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
 						onChange:ZaAccount.setCosChanged,
+						emptyText:ZaMsg.enterSearchTerm,
 						dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
 								if(ZaItem.ID_PATTERN.test(newValue)) {
 									var cos = ZaCos.getCosById(newValue);

@@ -518,7 +518,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
-						inputPreProcessor:ZaNewAccountXWizard.preProcessCOS,
+						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
+						onChange:ZaAccount.setCosChanged,
+						emptyText:ZaMsg.enterSearchTerm,						
 						enableDisableChecks:[ZaNewAccountXWizard.isAutoCos],
 						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
 						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,choices:this.cosChoices,

@@ -27,6 +27,7 @@ XFormItemFactory.createItemType("_DYNSELECT_", "dynselect", DynSelect_XFormItem,
 DynSelect_XFormItem.prototype.dataFetcherClass = null;
 DynSelect_XFormItem.prototype.dataFetcherMethod = null;
 DynSelect_XFormItem.prototype.dataFetcherObject = null;
+DynSelect_XFormItem.prototype.emptyText = "";
 DynSelect_XFormItem.LOAD_PAUSE = AjxEnv.isIE ? 500 : 250;	// delay between chunks
 DynSelect_XFormItem.prototype.initFormItem = function () {
 	// if we're dealing with an XFormChoices object...
@@ -129,16 +130,6 @@ DynSelect_XFormItem.prototype.resetChoices = function () {
 	this.dataFetcherMethod.call(this.dataFetcherObject, "", null, callback);
 }
 
-DynSelect_XFormItem.prototype.updateElement = function (newValue) {
-	OSelect1_XFormItem.prototype.updateElement.call(this, newValue);
-	if(!newValue || newValue=="") {
-		if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
-			this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
-		}
-		if(!this.dataFetcherObject)
-			return;
-	}
-}
 
 DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTypeTime) {
 	//console.log("handleKeyPressDelay " + value);
@@ -221,6 +212,12 @@ DynSelect_XFormItem.prototype.onClick = function() {
 	if(choices && choices.values && choices.values.length) {
 		this.showMenu();
 	}
+	if(AjxUtil.isEmpty(this.getInstanceValue()) && this._enabled) {
+		var el = this.getDisplayElement();
+		el.value = "";
+		el.className = this.getDisplayCssClass();
+	}
+	
 }
 
 DynSelect_XFormItem.prototype.getArrowElement = function () {
@@ -238,4 +235,67 @@ DynSelect_XFormItem.prototype.preProcessInput = function (value) {
 
 DynSelect_XFormItem.prototype.getPreProcessMethod = function () {
 	return this.cacheInheritedMethod("inputPreProcessor","inputPreProcessor","value, form");
+}
+
+DynSelect_XFormItem.prototype.updateElement = function (newValue) {
+	if (this.getMultiple() && newValue != null && newValue.indexOf(",") > -1) {
+		newValue = newValue.split(",");
+		for (var i = 0; i < newValue.length; i++) {
+			newValue[i] = this.getChoiceLabel(newValue[i]);
+		}
+	} else {
+		newValue = this.getChoiceLabel(newValue);
+	}
+	
+	var el = this.getDisplayElement();
+
+	if (el) {
+		if(AjxUtil.isEmpty(newValue) && this._enabled) {
+			var emptyText = this.getInheritedProperty("emptyText");
+			if(!AjxUtil.isEmpty(emptyText)) {
+				newValue = emptyText;
+				el.className = this.getDisplayCssClass() + "_empty";
+			}		
+		} else if(this._enabled) {
+			el.className = this.getDisplayCssClass();
+		}
+		el.value = newValue;
+	}
+	
+	if(AjxUtil.isEmpty(newValue)) {
+		if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
+			this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
+		}
+		if(!this.dataFetcherObject)
+			return;
+	}	
+}
+
+DynSelect_XFormItem.prototype.setElementEnabled = function(enabled) {
+	this._enabled = enabled;
+	var table = this.getForm().getElement(this.getId()).getElementsByTagName("table")[0];
+	if(enabled) {
+		if(AjxUtil.isEmpty(this.getInstanceValue()) && !AjxUtil.isEmpty(this.getInheritedProperty("emptyText"))) {
+			this.getDisplayElement().className = this.getDisplayCssClass() + "_empty";
+			this.getDisplayElement().value = this.getInheritedProperty("emptyText");
+		} else {
+			this.getDisplayElement().className = this.getDisplayCssClass();
+		}
+		
+		this.getForm().getElement(this.getId()).className = this.cssClass;
+		table.className = this.getTableCssClass();
+		this.getDisplayElement().disabled=false;
+		
+	} else {
+		this.getDisplayElement().className = this.getDisplayCssClass() + "_disabled";
+		var el = this.getArrowElement();
+		if(el)
+			AjxImg.setImage(el, "SelectPullDownArrowDis");
+			
+		this.getForm().getElement(this.getId()).className = this.cssClass + "_disabled";
+		table.className = this.getTableCssClass()+"_disabled";
+		if(this.getInheritedProperty("editable")) {
+			this.getDisplayElement().disabled=true;
+		}
+	}
 }
