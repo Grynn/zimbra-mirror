@@ -138,10 +138,6 @@ function(entry) {
 	this.updateTab();
 }
 
-ZaResourceXFormView.isLocation = function () {
-	return (this.getInstanceValue(ZaResource.A_zimbraCalResType).toLowerCase() ==  ZaResource.RESOURCE_TYPE_LOCATION.toLowerCase());
-}
-
 ZaResourceXFormView.onRepeatRemove = 
 function (index, form) {
 	var list = this.getInstanceValue();
@@ -269,8 +265,10 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 			
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
 		msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,
-		relevantBehavior:_DISABLE_, relevant:"(instance[ZaResource.A2_schedulePolicy]!=ZaResource.SCHEDULE_POLICY_MANUAL)",
-		labelCssClass:"xform_label", align:_LEFT_, labelLocation:_LEFT_,
+		enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
+		enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],								
+		//relevantBehavior:_DISABLE_, relevant:"(instance[ZaResource.A2_schedulePolicy]!=ZaResource.SCHEDULE_POLICY_MANUAL)",
+		//labelCssClass:"xform_label", align:_LEFT_, labelLocation:_LEFT_,
 		trueValue:"TRUE", falseValue:"FALSE"});
 
 	var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper, id:"resource_form_password_group",
@@ -322,8 +320,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 				{type:_GROUP_, numCols:3, nowrap:true, msgName:ZaMsg.NAD_LocationDisplayName, width:200, label:ZaMsg.NAD_LocationDisplayName, labelLocation:_LEFT_, 
 					items: [
 						{ref:ZaResource.A_locationDisplayName, type:_TEXTFIELD_, label:null, cssClass:"admin_xform_name_input", width:defaultWidth,  
-							enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"] ],
-							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname]							
+							enableDisableChecks:[ [XForm.checkInstanceValue,ZaResource.A2_autodisplayname,"FALSE"] ],
+							enableDisableChangeEventSources:[ZaResource.A2_autodisplayname]							
 							//relevant:"instance[ZaResource.A2_autoLocationName] == \"FALSE\"",
 							//relevantBehavior:_DISABLE_
 						},
@@ -354,7 +352,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 				{ref:ZaResource.A_zimbraCalResCapacity, type:_TEXTFIELD_, 
 					msgName:ZaMsg.NAD_Capacity,label:ZaMsg.NAD_Capacity,
 					labelLocation:_LEFT_, width:defaultWidth,
-					visibilityChecks:[ZaResourceXFormView.isLocation],
+					visibilityChecks:[ZaResource.isLocation],
 					visibilityChangeEventSources:[ZaResource.A_zimbraCalResType]
 					//relevant: "instance.attrs[ZaResource.A_zimbraCalResType].toLowerCase() ==  ZaResource.RESOURCE_TYPE_LOCATION.toLowerCase( )",
 					//relevantBehavior:_HIDE_

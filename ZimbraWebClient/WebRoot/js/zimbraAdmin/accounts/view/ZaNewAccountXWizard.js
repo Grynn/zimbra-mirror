@@ -371,9 +371,6 @@ ZaNewAccountXWizard.isAutoCos = function () {
 	return (this.getInstanceValue(ZaAccount.A2_autoCos)=="FALSE");
 }
 
-ZaNewAccountXWizard.isAutoMailServer = function () {
-	return (this.getInstanceValue(ZaAccount.A2_autoMailServer)=="FALSE" && !AjxUtil.isEmpty(this.getController().getServerListChoices().getChoices()) && !AjxUtil.isEmpty(this.getController().getServerListChoices().getChoices().values));
-}
 
 ZaNewAccountXWizard.isIMFeatureEnabled = function () {
 	return (this.getInstanceValue(ZaAccount.A_zimbraFeatureIMEnabled) == "TRUE");
@@ -561,7 +558,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
 							items: [
 								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: ZaApp.getInstance().getServerListChoices(), 
-									enableDisableChecks:[ZaNewAccountXWizard.isAutoMailServer],
+									enableDisableChecks:[ZaAccount.isAutoMailServer],
 									enableDisableChangeEventSources:[ZaAccount.A2_autoMailServer],
 									tableCssStyle: "height: 15px"
 							  	},

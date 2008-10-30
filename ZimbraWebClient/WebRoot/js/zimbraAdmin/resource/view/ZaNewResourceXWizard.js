@@ -275,14 +275,14 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [
 					{ref:ZaResource.A_COSId, type:_DYNSELECT_,label: null, 
-						onChange:ZaNewResourceXWizard.onCOSChanged,
-						relevant:"instance[ZaResource.A2_autoCos]==\"FALSE\"",relevantBehavior:_DISABLE_ ,
-						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,choices:this.cosChoices,
+						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
+						enableDisableChecks:[ [XForm.checkInstanceValue,ZaResource.A2_autoCos,"FALSE"]],
+						enableDisableChangeEventSources:[ZaResource.A2_autoCos],
+						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
+						onChange:ZaAccount.setCosChanged,
 						dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
-								// dereference through the choices array, if provided
-								//newValue = this.getChoiceLabel(newValue);
 								if(ZaItem.ID_PATTERN.test(newValue)) {
-									var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
+									var cos = ZaCos.getCosById(newValue);
 									if(cos)
 										newValue = cos.name;
 								} 
@@ -322,7 +322,9 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 						},
 						choices:ZaResource.schedulePolicyChoices});	
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
-						relevant:"(instance[ZaResource.A2_schedulePolicy]!=ZaResource.SCHEDULE_POLICY_MANUAL)",relevantBehavior:_DISABLE_,
+						//relevant:"(instance[ZaResource.A2_schedulePolicy]!=ZaResource.SCHEDULE_POLICY_MANUAL)",relevantBehavior:_DISABLE_,
+						enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
+						enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],						
 						msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring, 
 						labelCssClass:"xform_label", align:_LEFT_,labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE"});
 					
@@ -332,8 +334,10 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 							items: [
 								{ ref: ZaResource.A_mailHost, type: _OSELECT1_, label: null, editable:false, 
 									choices: ZaApp.getInstance().getServerListChoices(), 
-									relevant:"instance[ZaResource.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices().getChoices().values.length != 0",
-									relevantBehavior:_DISABLE_
+									enableDisableChecks:[ZaAccount.isAutoMailServer],
+									enableDisableChangeEventSources:[ZaResource.A2_autoMailServer]									
+									//relevant:"instance[ZaResource.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices().getChoices().values.length != 0",
+									//relevantBehavior:_DISABLE_
 							  	},
 								{ref:ZaResource.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,
 									label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}
@@ -358,7 +362,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 			{ref:ZaResource.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes, labelLocation:_LEFT_}
 		]
 	};
-	var case1 = {type:_CASE_, numCols:1, relevant:"instance[ZaModel.currentStep] == 1", align:_LEFT_, valign:_TOP_,
+	var case1 = {type:_CASE_, numCols:1, caseKey:1, align:_LEFT_, valign:_TOP_,
 		items:[nameGroup,setupGroup,passwordGroup,notesGroup]
 	
 	};	
@@ -367,7 +371,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 	cases.push(case1);
 
 	var defaultWidth = 250;	
-	var case2={type:_CASE_, numCols:1,  relevant:"instance[ZaModel.currentStep] == 2",
+	var case2={type:_CASE_, numCols:1,  caseKey:2,
 					items: [
 						/*{type:_GROUP_, numCols:3, nowrap:true, useParentTable:false,
 							colSizes:["250px","50px","100px"],
@@ -402,8 +406,8 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 									items: [
 										{ref:ZaResource.A_locationDisplayName, type:_TEXTFIELD_, 
 											label:null,	width:defaultWidth,  
-											relevant:"instance[ZaResource.A2_autoLocationName] == \"FALSE\"",
-											relevantBehavior:_DISABLE_
+											enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"] ],
+											enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname]
 										},
 										{ref:ZaResource.A2_autoLocationName, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 											elementChanged: ZaResource.setAutoLocationName
@@ -420,8 +424,8 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 										labelLocation:_LEFT_, width:defaultWidth, elementChanged: ZaResource.setAutoLocationName},
 								{ref:ZaResource.A_zimbraCalResCapacity, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Capacity,label:ZaMsg.NAD_Capacity, 
 									labelLocation:_LEFT_, width:defaultWidth,
-									relevant: "instance.attrs[ZaResource.A_zimbraCalResType].toLowerCase() ==  ZaResource.RESOURCE_TYPE_LOCATION.toLowerCase( )",
-									relevantBehavior:_HIDE_
+									visibilityChecks:[ZaResourceXFormView.isLocation],
+									visibilityChangeEventSources:[ZaResource.A_zimbraCalResType]
 								}
 							]
 						},											

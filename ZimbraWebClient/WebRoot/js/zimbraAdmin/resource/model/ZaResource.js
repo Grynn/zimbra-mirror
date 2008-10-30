@@ -648,6 +648,13 @@ function (elementValue,instanceValue, event){
 	this.getForm().refresh();	
 }
 
+ZaResource.isLocation = function () {
+	return (this.getInstanceValue(ZaResource.A_zimbraCalResType).toLowerCase() ==  ZaResource.RESOURCE_TYPE_LOCATION.toLowerCase());
+}
+
+ZaResource.isSchedulePolicyNotManual = function () {
+	return (this.getInstanceValue(ZaResource.A2_schedulePolicy) != ZaResource.SCHEDULE_POLICY_MANUAL);
+}
 //generate the account name automatically
 ZaResource.setAutoAccountName =
 function (instance, newValue) {

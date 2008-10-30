@@ -1610,6 +1610,11 @@ function (accountName) {
 	return accountName.substring(accountName.lastIndexOf ("@") + 1 ) ;	
 }
 
+ZaAccount.isAutoMailServer = function () {
+	return (this.getInstanceValue(ZaAccount.A2_autoMailServer)=="FALSE" && !AjxUtil.isEmpty(ZaApp.getInstance().getServerListChoices().getChoices()) && !AjxUtil.isEmpty(ZaApp.getInstance().getServerListChoices().getChoices().values));
+}
+
+
 ZaAccount.setCosChanged = function (value, event, form) {
 	var oldVal = this.getInstanceValue();
 	if(oldVal == value)
