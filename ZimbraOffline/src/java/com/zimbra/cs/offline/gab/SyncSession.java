@@ -22,13 +22,10 @@ import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.mailbox.Tag;
-import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineLC;
-import com.zimbra.cs.offline.yab.SyncException;
 import com.zimbra.cs.db.DbDataSource;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.common.util.Log;
@@ -41,7 +38,6 @@ import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.common.xml.XmlWriter;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
-import com.google.gdata.data.contacts.GroupMembershipInfo;
 import com.google.gdata.data.contacts.ContactGroupFeed;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.ParseSource;
@@ -58,7 +54,6 @@ import java.util.HashMap;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Collection;
 import java.util.logging.Logger;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -70,7 +65,6 @@ public class SyncSession {
     private final DataSource ds;
     private final Mailbox mbox;
     private final ContactsService service;
-    private final SyncState state;
     private final URL contactsFeedUrl;
     private final URL groupsFeedUrl;
 
@@ -87,7 +81,7 @@ public class SyncSession {
     private static final String APP_NAME = String.format("Zimbra-%s-%s",
         OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
 
-    private static final Mailbox.OperationContext CONTEXT =
+    public static final Mailbox.OperationContext CONTEXT =
         new OfflineMailbox.OfflineContext();
 
     private static final Set<Integer> CONTACT_FOLDERS =
@@ -110,7 +104,6 @@ public class SyncSession {
         this.ds = ds;
         mbox = ds.getMailbox();
         service = new ContactsService(APP_NAME);
-        state = new SyncState(this);
         String user = ds.getUsername();
         contactsFeedUrl = toUrl(BASE_URL + "/contacts/" + user + "/full");
         groupsFeedUrl = toUrl(BASE_URL + "/groups/" + user + "/full");
@@ -130,7 +123,7 @@ public class SyncSession {
     }
 
     private void syncContacts() throws IOException, ServiceException {
-        state.load();
+        SyncState state = new SyncState(mbox);
         // Get remote changes since last sync
         ContactFeed feed = getContactFeed(state.getLastUpdateTime());
         state.setLastUpdateTime(feed.getUpdated());
@@ -149,7 +142,7 @@ public class SyncSession {
         if (requests.size() > 0) {
             LOG.debug("Contact sync had %d errors", requests.size());
         }
-        state.save();
+        state.save(mbox);
     }
 
     /*
@@ -167,13 +160,13 @@ public class SyncSession {
         int deleted = 0;
         int updated = 0;
         for (ContactEntry entry : entries) {
-            String entryId = entry.getId();
-            int itemId = state.getItemId(entryId);
             if (isTraceEnabled()) {
                 LOG.debug("Processing remote contact entry:\n%s", pp(entry));
             }
+            DataSourceItem dsi = DbDataSource.getReverseMapping(ds, entry.getId());
+            int itemId = dsi.itemId;
             try {
-                if (itemId != -1) {
+                if (itemId > 0) {
                     if (entry.getDeleted() != null) {
                         // Remote contact was deleted
                         mbox.delete(CONTEXT, itemId, MailItem.TYPE_CONTACT);
@@ -182,7 +175,7 @@ public class SyncSession {
                         deleted++;
                     } else if (!changes.containsKey(itemId)) {
                         // Remote contact was updated with no local change
-                        String url = getContactEntry(itemId).getEditLink().getHref();
+                        String url = getContactEntry(dsi).getEditLink().getHref();
                         if (!entry.getEditLink().getHref().equals(url)) {
                             // Only update local entry if edit url has changed
                             // (avoids modifying contacts which we just pushed)
@@ -320,28 +313,17 @@ public class SyncSession {
             mbox.getTombstones(seq).getIds(MailItem.TYPE_CONTACT, MailItem.TYPE_TAG);
         if (tombstones != null) {
             for (int id : tombstones) {
-                if (state.hasItem(id)) {
+                if (DbDataSource.hasMapping(ds, id)) {
                     changes.put(id, ChangeType.DELETE);
                 }
             }
         }
         List<Integer> modified = getModifiedItems(seq, MailItem.TYPE_CONTACT);
         for (int id : modified) {
-            changes.put(id, state.hasItem(id) ? ChangeType.UPDATE : ChangeType.ADD);
+            changes.put(id, DbDataSource.hasMapping(ds, id) ?
+                            ChangeType.UPDATE : ChangeType.ADD);
         }
         return changes;
-    }
-
-    private Set<Integer> getContactTags(Collection<Integer> itemIds)
-        throws ServiceException {
-        Set<Integer> tags = new HashSet<Integer>();
-        for (int itemId : itemIds) {
-            MailItem item = mbox.getItemById(CONTEXT, itemId, MailItem.TYPE_CONTACT);
-            for (Tag tag : item.getTagList()) {
-                tags.add(tag.getId());
-            }
-        }
-        return tags;
     }
     
     private List<Integer> getModifiedItems(int seq, byte type) throws ServiceException {
@@ -360,6 +342,12 @@ public class SyncSession {
         return data != null ? parseContactEntry(data) : null;
     }
 
+    private ContactEntry getContactEntry(DataSourceItem dsi) throws ServiceException {
+        LOG.debug("Loading contact data for itemid = %d", dsi.itemId);
+        String data = dsi.md.get(KEY_GAB_CONTACT);
+        return data != null ? parseContactEntry(data) : null;
+    }
+
     public ContactEntry parseContactEntry(String s) throws ServiceException {
         try {
             return BaseEntry.readEntry(new ParseSource(new StringReader(s)),
@@ -372,14 +360,14 @@ public class SyncSession {
 
     private void updateContactEntry(int itemId, ContactEntry entry)
         throws ServiceException {
-        LOG.debug("Saving contact entry for itemid = %d", itemId);
-        state.addEntry(itemId, entry.getId());
+        LOG.debug("Saving contact entry for item id = %d, entry id = %s",
+                  itemId, entry.getId());
         StringWriter sw = new StringWriter();
         try {
             entry.generateAtom(new XmlWriter(sw), service.getExtensionProfile());
         } catch (IOException e) {
             throw ServiceException.FAILURE(
-                "Unable to generate XML for contact entry: itemid = " + itemId, e);
+                "Unable to generate XML for contact entry: item id = " + itemId, e);
         }
         Metadata md = new Metadata();
         md.put(KEY_GAB_CONTACT, sw.toString());
@@ -393,8 +381,20 @@ public class SyncSession {
 
     private void deleteContactEntry(int itemId) throws ServiceException {
         LOG.debug("Deleting contact entry for item id: %d", itemId);
-        state.removeEntry(itemId);
         DbDataSource.deleteMappings(ds, Arrays.asList(itemId));
+    }
+
+    /*
+    private Set<Integer> getContactTags(Collection<Integer> itemIds)
+        throws ServiceException {
+        Set<Integer> tags = new HashSet<Integer>();
+        for (int itemId : itemIds) {
+            MailItem item = mbox.getItemById(CONTEXT, itemId, MailItem.TYPE_CONTACT);
+            for (Tag tag : item.getTagList()) {
+                tags.add(tag.getId());
+            }
+        }
+        return tags;
     }
 
     private Tag createTag(String name) throws ServiceException {
@@ -425,6 +425,7 @@ public class SyncSession {
         }
         return mask;
     }
+    */
 
     public String pp(BaseEntry entry) throws IOException {
         StringWriter sw = new StringWriter();
@@ -448,7 +449,6 @@ public class SyncSession {
 
     public Mailbox getMailbox() { return mbox; }
     public ContactsService getContactsService() { return service; }
-    public Mailbox.OperationContext getContext() { return CONTEXT; }
     public DataSource getDataSource() { return ds; }
     public URL getContactsFeedUrl() { return contactsFeedUrl; }
     public URL getGroupsFeedUrl() { return groupsFeedUrl; }

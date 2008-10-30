@@ -19,20 +19,13 @@ package com.zimbra.cs.offline.gab;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.Metadata;
-import com.zimbra.cs.mailbox.MetadataList;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.service.ServiceException;
 import com.google.gdata.data.DateTime;
 
-import java.util.Map;
-import java.util.HashMap;
-
 public class SyncState {
-    private final SyncSession sync;             
     private DateTime lastUpdateTime;
     private int lastModSequence;
-    private final Map<Integer, String> entryIdByItemId;
-    private final Map<String, Integer> itemIdByEntryId;
 
     private static final Log LOG = OfflineLog.gab;
 
@@ -42,18 +35,13 @@ public class SyncState {
     private static final String KEY_VERSION = "VERSION";
     private static final String KEY_TIMESTAMP = "TIMESTAMP";
     private static final String KEY_SEQUENCE = "SEQUENCE";
-    private static final String KEY_IDS = "IDS";
 
-    public SyncState(SyncSession sync) {
-        this.sync = sync;
-        entryIdByItemId = new HashMap<Integer, String>();
-        itemIdByEntryId = new HashMap<String, Integer>();
+    public SyncState(Mailbox mbox) throws ServiceException {
+        load(mbox);
     }
-
-    public void load() throws ServiceException {
-        clear();
-        Mailbox mbox = sync.getMailbox();
-        Metadata md = mbox.getConfig(sync.getContext(), KEY_GAB);
+    
+    private void load(Mailbox mbox) throws ServiceException {
+        Metadata md = mbox.getConfig(SyncSession.CONTEXT, KEY_GAB);
         if (md == null) return;
         int version = (int) md.getLong(KEY_VERSION);
         if (version != VERSION) {
@@ -62,42 +50,20 @@ public class SyncState {
         String ts = md.get(KEY_TIMESTAMP);
         lastUpdateTime = ts != null ? DateTime.parseDateTime(ts) : null;
         lastModSequence = (int) md.getLong(KEY_SEQUENCE);
-        MetadataList ids = md.getList(KEY_IDS);
-        for (int i = 0; i < ids.size(); i += 2) {
-            int itemId = (int) ids.getLong(i);
-            String entryId = ids.get(i + 1);
-            entryIdByItemId.put(itemId, entryId);
-            itemIdByEntryId.put(entryId, itemId);
-        }
         LOG.debug("Loaded sync state: %s", this);
-        // LOG.debug("Entries: " + entryIdByItemId);
     }
 
-    public void save() throws ServiceException {
+    public void save(Mailbox mbox) throws ServiceException {
         Metadata md = new Metadata();
         md.put(KEY_VERSION, VERSION);
         md.put(KEY_TIMESTAMP, lastUpdateTime.toString());
         md.put(KEY_SEQUENCE, lastModSequence);
-        MetadataList ids = new MetadataList();
-        for (Map.Entry<Integer, String> e : entryIdByItemId.entrySet()) {
-            ids.add(e.getKey());
-            ids.add(e.getValue());
-        }
-        md.put(KEY_IDS, ids);
-        sync.getMailbox().setConfig(sync.getContext(), KEY_GAB, md);
+        mbox.setConfig(SyncSession.CONTEXT, KEY_GAB, md);
         LOG.debug("Saved sync state: " + this);
-        // LOG.debug("Entries: " + entryIdByItemId);
-    }
-
-    public void clear() {
-        lastUpdateTime = null;
-        lastModSequence = 0;
-        entryIdByItemId.clear();
-        itemIdByEntryId.clear();
     }
 
     public DateTime getLastUpdateTime() { return lastUpdateTime; }
-
+    
     public int getLastModSequence() { return lastModSequence; }
 
     public void setLastUpdateTime(DateTime lastUpdateTime) {
@@ -108,43 +74,8 @@ public class SyncState {
         this.lastModSequence = lastModSequence;
     }
 
-    public String getEntryId(int itemId) {
-        return entryIdByItemId.get(itemId);
-    }
-
-    public int getItemId(String entryId) {
-        Integer id = itemIdByEntryId.get(entryId);
-        return id != null ? id : -1;
-    }
-
-    public boolean hasItem(int itemId) {
-        return getEntryId(itemId) != null;
-    }
-    
-    public void addEntry(int itemId, String entryId) {
-        if (itemId < 0) throw new IllegalArgumentException("itemId");
-        if (entryId == null) throw new NullPointerException("entryId");
-        String oldEntryId = getEntryId(itemId);
-        if (oldEntryId == null) {
-            entryIdByItemId.put(itemId, entryId);
-            itemIdByEntryId.put(entryId, itemId);
-            LOG.debug("Added new entry for itemId=%d, entryId=%s", itemId, entryId);
-        } else if (!entryId.equals(oldEntryId)) {
-            throw new IllegalStateException("Inconsistent entry id: itemId=" +
-                itemId + ", oldEntryId=" + oldEntryId + ", newEntryId=" + entryId);
-        }
-    }
-
-    public void removeEntry(int itemId) {
-        String entryId = entryIdByItemId.remove(itemId);
-        if (entryId != null) {
-            itemIdByEntryId.remove(entryId);
-            LOG.debug("Removed entry for itemId=%d, entryId=%s", itemId, entryId);
-        }
-    }
-
     public String toString() {
-        return String.format("[ts=%s, seq=%d, entries=%d]",
-            lastUpdateTime, lastModSequence, entryIdByItemId.size());
+        return String.format("[lastUpdateTime=%s, lastModSequence=%d]",
+                             lastUpdateTime, lastModSequence);
     }
 }

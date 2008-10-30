@@ -47,10 +47,12 @@ public class Address {
             addr.state = parts.get(--size);
             parts = parts.subList(0, size);
         }
-        String part = parts.get(size - 1);
-        if (size > 1 && !part.matches("[0-9].*")) {
-            addr.city = part;
-            parts = parts.subList(0, --size);
+        if (size > 1) {
+            String part = parts.get(size - 1);
+            if (!part.matches("[0-9].*")) {
+                addr.city = part;
+                parts = parts.subList(0, --size);
+            }
         }
         if (size > 0) {
             addr.street = join(parts);
