@@ -192,7 +192,7 @@ public class SyncSession {
                             updated++;
                         }
                     }
-                } else {
+                } else if (entry.getDeleted() == null) {
                     // Remote contact was added
                     ContactData cd = new ContactData(entry);
                     Contact contact = mbox.createContact(
@@ -239,14 +239,13 @@ public class SyncSession {
     private ContactFeed getContactFeed(DateTime lastUpdate)
         throws IOException, ServiceException {
         try {
+            Query query = new Query(contactsFeedUrl);
+            query.setMaxResults(9999999);
             if (lastUpdate != null) {
-                Query query = new Query(contactsFeedUrl);
                 query.setUpdatedMin(lastUpdate);
                 query.setStringCustomParameter("showdeleted", "true");
-                return service.getFeed(query, ContactFeed.class, lastUpdate);
-            } else {
-                return service.getFeed(contactsFeedUrl, ContactFeed.class);
             }
+            return service.getFeed(query, ContactFeed.class, lastUpdate);
         } catch (com.google.gdata.util.ServiceException e) {
             throw ServiceException.FAILURE(
                 "Unable to retrieve contact feed " + contactsFeedUrl, e);
@@ -256,14 +255,13 @@ public class SyncSession {
     private ContactGroupFeed getGroupsFeed(DateTime lastUpdate)
         throws IOException, ServiceException {
         try {
+            Query query = new Query(groupsFeedUrl);
+            query.setMaxResults(9999999);
             if (lastUpdate != null) {
-                Query query = new Query(groupsFeedUrl);
                 query.setUpdatedMin(lastUpdate);
                 query.setStringCustomParameter("showdeleted", "true");
-                return service.getFeed(query, ContactGroupFeed.class, lastUpdate);
-            } else {
-                return service.getFeed(groupsFeedUrl, ContactGroupFeed.class);
             }
+            return service.getFeed(query, ContactGroupFeed.class, lastUpdate);
         } catch (com.google.gdata.util.ServiceException e) {
             throw ServiceException.FAILURE(
                 "Unable to retrieve contact groups feed " + groupsFeedUrl, e);
