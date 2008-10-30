@@ -51,6 +51,8 @@ function (data, more, total) {
 	if(more) {
 		this.showNote(AjxMessageFormat.format(ZaMsg.Alert_MoreResultsAvailable,total));
 	}
+	if(!this.menuUp)
+		this.showMenu();	
 }
 
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
@@ -228,7 +230,9 @@ DynSelect_XFormItem.prototype.getArrowElement = function () {
 DynSelect_XFormItem.prototype.preProcessInput = function (value) {
 	var preProcessMethod = this.getPreProcessMethod();
 	var val = null;
-	val = preProcessMethod.call(this, value, this.getForm());
+	if(preProcessMethod)
+		val = preProcessMethod.call(this, value, this.getForm());
+		
 	return val;
 }
 

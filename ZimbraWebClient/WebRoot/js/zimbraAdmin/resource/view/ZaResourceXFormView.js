@@ -28,8 +28,8 @@ ZaResourceXFormView = function(parent) {
 		
 	this.initForm(ZaResource.myXModel,this.getMyXForm());
 	this._localXForm.setController(ZaApp.getInstance());	
-	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(ZaApp.getInstance().getResourceController(), ZaResourceController.prototype.handleXFormChange));
-	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(ZaApp.getInstance().getResourceController(), ZaResourceController.prototype.handleXFormChange));	
+	//this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(ZaApp.getInstance().getResourceController(), ZaResourceController.prototype.handleXFormChange));
+	//this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(ZaApp.getInstance().getResourceController(), ZaResourceController.prototype.handleXFormChange));	
 	
 	this._helpURL = ZaResourceXFormView.helpURL;	
 }
@@ -99,7 +99,7 @@ function(entry) {
 				**/
 				if(cosList[i].name == "default") {
 					this._containedObject.cos = cosList[i];
-					this._containedObject.attrs[ZaResource.A_COSId] = cosList[i].id;										
+					//this._containedObject.attrs[ZaResource.A_COSId] = cosList[i].id;										
 					break;
 				}
 			}
@@ -107,7 +107,7 @@ function(entry) {
 				//default COS was not found - just assign the first COS
 				if(cosList && cosList.length > 0) {
 					this._containedObject.cos = cosList[0];
-					this._containedObject.attrs[ZaResource.A_COSId] = cosList[0].id;					
+					//this._containedObject.attrs[ZaResource.A_COSId] = cosList[0].id;					
 				}
 			}
 		}
@@ -138,21 +138,8 @@ function(entry) {
 	this.updateTab();
 }
 
-ZaResourceXFormView.onCOSChanged = 
-function(value, event, form) {
-	form.parent.setDirty(true);
-	if(ZaItem.ID_PATTERN.test(value))  {
-		form.getInstance().cos = ZaCos.getCosById(value, form.parent._app);
-		this.setInstanceValue(value);
-	} else {
-		form.getInstance().cos = ZaCos.getCosByName(value, form.parent._app);
-		if(form.getInstance().cos) {
-			//value = form.getInstance().cos.id;
-			value = form.getInstance().cos.id;
-		} 
-	}
-	this.setInstanceValue(value);
-    return value;
+ZaResourceXFormView.isLocation = function () {
+	return (this.getInstanceValue(ZaResource.A_zimbraCalResType).toLowerCase() ==  ZaResource.RESOURCE_TYPE_LOCATION.toLowerCase());
 }
 
 ZaResourceXFormView.onRepeatRemove = 
@@ -231,15 +218,15 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 			}*/
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				items: [
-					{ref:ZaResource.A_COSId, type:_DYNSELECT_,label: null, 
-						onChange:ZaResourceXFormView.onCOSChanged,
-						relevant:"instance[ZaResource.A2_autoCos]==\"FALSE\"",relevantBehavior:_DISABLE_ ,
-						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,choices:this.cosChoices,
+					{ref:ZaResource.A_COSId, type:_DYNSELECT_,label: null, choices:this.cosChoices,
+						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
+						enableDisableChecks:[ [XForm.checkInstanceValue,ZaResource.A2_autoCos,"FALSE"]],
+						enableDisableChangeEventSources:[ZaResource.A2_autoCos],
+						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
+						onChange:ZaAccount.setCosChanged,
 						dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
-								// dereference through the choices array, if provided
-								//newValue = this.getChoiceLabel(newValue);
 								if(ZaItem.ID_PATTERN.test(newValue)) {
-									var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
+									var cos = ZaCos.getCosById(newValue);
 									if(cos)
 										newValue = cos.name;
 								} 
@@ -310,14 +297,14 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 		}
 	]};		
 	
-	var case1 = {type:_ZATABCASE_, numCols:1,  relevant:("instance[ZaModel.currentTab] == " + _tab1), height:"400px",  align:_LEFT_, valign:_TOP_,
+	var case1 = {type:_ZATABCASE_, numCols:1,  caseKey:_tab1, height:"400px",  align:_LEFT_, valign:_TOP_,
 		items:[nameGroup,setupGroup,passwordGroup,notesGroup]
 	};
 
 	cases.push(case1);
 	
 	var defaultWidth = 200 ;
-	var case2={type:_ZATABCASE_, numCols:1, relevant:("instance[ZaModel.currentTab] == " + _tab2),
+	var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2,
 		items: [
 			{type:_ZAGROUP_, items:[
 				{ref:ZaResource.A_zimbraCalResContactName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactName,label:ZaMsg.NAD_ContactName, labelLocation:_LEFT_, width:defaultWidth},	
@@ -335,8 +322,10 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 				{type:_GROUP_, numCols:3, nowrap:true, msgName:ZaMsg.NAD_LocationDisplayName, width:200, label:ZaMsg.NAD_LocationDisplayName, labelLocation:_LEFT_, 
 					items: [
 						{ref:ZaResource.A_locationDisplayName, type:_TEXTFIELD_, label:null, cssClass:"admin_xform_name_input", width:defaultWidth,  
-							relevant:"instance[ZaResource.A2_autoLocationName] == \"FALSE\"",
-							relevantBehavior:_DISABLE_
+							enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"] ],
+							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname]							
+							//relevant:"instance[ZaResource.A2_autoLocationName] == \"FALSE\"",
+							//relevantBehavior:_DISABLE_
 						},
 						{ref:ZaResource.A2_autoLocationName , type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,
 							label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
@@ -365,8 +354,10 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 				{ref:ZaResource.A_zimbraCalResCapacity, type:_TEXTFIELD_, 
 					msgName:ZaMsg.NAD_Capacity,label:ZaMsg.NAD_Capacity,
 					labelLocation:_LEFT_, width:defaultWidth,
-					relevant: "instance.attrs[ZaResource.A_zimbraCalResType].toLowerCase() ==  ZaResource.RESOURCE_TYPE_LOCATION.toLowerCase( )",
-					relevantBehavior:_HIDE_
+					visibilityChecks:[ZaResourceXFormView.isLocation],
+					visibilityChangeEventSources:[ZaResource.A_zimbraCalResType]
+					//relevant: "instance.attrs[ZaResource.A_zimbraCalResType].toLowerCase() ==  ZaResource.RESOURCE_TYPE_LOCATION.toLowerCase( )",
+					//relevantBehavior:_HIDE_
 				}
 			]},			
 			{type:_ZAGROUP_, items:[
