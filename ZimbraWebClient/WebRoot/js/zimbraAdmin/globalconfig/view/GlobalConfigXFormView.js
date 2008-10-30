@@ -157,7 +157,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				{value:5, label:ZaMsg.NAD_Tab_POP},
 				{value:6, label:ZaMsg.NAD_Tab_ASAV},
                 {value:7, label:ZaMsg.TABT_Interop},
-                {value:8, label:ZaMsg.TABT_Skin}    
+                {value:8, label:ZaMsg.TABT_Themes}    
             ]
 		},
 		{type:_SWITCH_, items:[
@@ -641,7 +641,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
                 {type: _ZATABCASE_, caseKey:_tab8,
 					colSizes:["auto"],numCols:1,id:"global_skin_tab",
 				 	items: [
-                        {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Settings,//colSizes:["175px","*"],
+                        {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Color_Settings,//colSizes:["175px","*"],
                             items: [
                                 {ref:ZaGlobalConfig.A_zimbraSkinForegroundColor,
                                     type:_DWT_COLORPICKER_,

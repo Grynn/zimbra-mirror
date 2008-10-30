@@ -1620,7 +1620,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									headerList:null,onSelection:ZaAccountXFormView.aliasSelectionListener
 								},
 								{type:_GROUP_, numCols:5, width:"350px", colSizes:["100px","auto","100px","auto","100px"], 
-									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left:10px;margin-right:10px;",
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
@@ -1734,7 +1734,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									headerList:null,onSelection:ZaAccountXFormView.fpSelectionListener
 								},
 								{type:_GROUP_, numCols:7, width:"350px", colSizes:["100px","auto","100px","auto","100px", "auto","100px"],
-									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left:10px;margin-right:10px;",
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Push,width:"100px",
 											onActivate:"ZaAccountXFormView.pushFpButtonListener.call(this);",
