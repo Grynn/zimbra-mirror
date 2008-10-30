@@ -84,18 +84,25 @@ function disableButtons() {
         <tr>
             <td class="ZFieldLabel"></td>
             <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td><td><fmt:message key='SyncAllFolders'/>
+				<td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders"></td><td><fmt:message key='SyncAllFolders'/>
 				</td></tr></table>
 				</td>
         </tr>
-        <tr>
-            <td class="ZFieldLabel"></td>                       
-            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="syncCalendar" name="syncCalendar" checked></td><td><fmt:message key='GmailSyncCal'/>
+
+        <tr><td class="ZFieldLabel"></td>
+                <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" checked></td><td><fmt:message key='ContactSyncEnabled'/>
 				</td></tr></table>
 				</td>
-		</tr>
+            </tr>
+        <tr>
 
+        <tr><td class="ZFieldLabel"></td>
+                <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+				<td><input type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" checked></td><td><fmt:message key='CalendarSyncEnabled'/>
+				</td></tr></table>
+				</td>
+        </tr>
     </table>
 
 </form>

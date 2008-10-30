@@ -306,15 +306,19 @@ function passOnEdit(id) {
             </td>
         </tr>
         
-        <tr id='syncSettingsRow'><td class="ZFieldLabel"></td>
-            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td><td><fmt:message key='SyncAllFolders'/>
-				</td></tr></table>
-				</td>
-            
+        <tr id='syncSettingsRow'>
+            <td class="ZFieldLabel"></td>
+            <td>
+                <table cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+				    <td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td>
+                    <td><fmt:message key='SyncAllFolders'/></td>
+                  </tr>
+                </table>
+	        </td>
         </tr>
         
-        <tr id='popSettingsRow'> <td class="ZFeildLabel"></td>
+        <tr id='popSettingsRow'> <td class="ZFieldLabel"></td>
             <td><table cellpadding="0" cellspacing="0" border="0"><tr>
 				<td><input type="checkbox" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? 'checked' : ''}></td><td><fmt:message key='LeaveOnServer'/>
 				</td></tr></table>
@@ -322,39 +326,29 @@ function passOnEdit(id) {
            
         </tr>
 
-        <c:if test="${bean.ymail}">
+        <c:if test="${bean.contactSyncSupported}">
             <tr><td class="ZFieldLabel"></td>
                 <td><table cellpadding="0" cellspacing="0" border="0"><tr>
 				<td><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td><td><fmt:message key='ContactSyncEnabled'/>
 				</td></tr></table>
 				</td>
-                
-            </tr>
-            <tr><td class="ZFieldLabel"></td>
-                <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="syncCalendar" name="syncCalendar" ${bean.syncCalendar ? 'checked' : ''}></td><td><fmt:message key='YMPSyncCal'/>
-				</td></tr></table>
-				</td>
-                
             </tr>
         </c:if>
 
-        <c:if test="${bean.gmail}">
-            <tr> <td class="ZFieldLabel"></td>
+        <c:if test="${bean.contactSyncSupported}">
+            <tr><td class="ZFieldLabel"></td>
                 <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="syncCalendar" name="syncCalendar" ${bean.syncCalendar ? 'checked' : ''}></td><td><fmt:message key='GmailSyncCal'/>
+				<td><input type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled ? 'checked' : ''}></td><td><fmt:message key='CalendarSyncEnabled'/>
 				</td></tr></table>
 				</td>
-               
             </tr>
         </c:if>
-        
+
         <tr><td class="ZFieldLabel"></td>
             <td><table cellpadding="0" cellspacing="0" border="0"><tr>
 				<td><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td><td><fmt:message key='EnableTrace'/>
 				</td></tr></table>
 				</td>
-          
         </tr>
     </table>
 

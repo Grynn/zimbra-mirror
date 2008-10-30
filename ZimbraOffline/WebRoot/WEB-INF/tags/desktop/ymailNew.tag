@@ -99,7 +99,7 @@ function disableButtons() {
             <td class="ZFieldLabel"></td>
             <td>
             <table cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><input type="checkbox" id="syncCalendar" name="syncCalendar" checked></td><td><fmt:message key='YMPSyncCal'/>
+            <td><input type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" checked></td><td><fmt:message key='CalendarSyncEnabled'/>
             </td></tr></table>
             </td>
         </tr>
