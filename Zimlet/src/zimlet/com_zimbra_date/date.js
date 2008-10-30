@@ -126,7 +126,7 @@ Com_Zimbra_Date.prototype.match = function(line, startIndex){
 		re = Com_Zimbra_Date.REGEXES[i];
 		re.lastIndex = startIndex;
 		m = re.exec(line);
-		if (m && m[0] && (!match || match.index > m.index)) {
+		if (m && m[0] && (!match || (m.index + m[0].length) > (match.index + match[0].length))) { //Longest match wins 
 			match = m;
 			rule = Com_Zimbra_Date.RULES[i];
 			mapping = re.mapping;
