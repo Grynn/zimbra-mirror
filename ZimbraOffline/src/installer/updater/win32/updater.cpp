@@ -227,13 +227,15 @@ DoUpdate(NS_tchar *path)
   NS_tchar spath[MAXPATHLEN];
   NS_tchar dpath[MAXPATHLEN];
   NS_tchar upstatus[MAXPATHLEN];
+  NS_tchar upparams[MAXPATHLEN];
   NS_tsnprintf(spath, MAXPATHLEN, NS_T("%s/update.mar"), path);
   NS_tsnprintf(dpath, MAXPATHLEN, NS_T("%s/update.exe"), path);
   NS_tsnprintf(upstatus, MAXPATHLEN, NS_T("%s/update.status"), path);
+  NS_tsnprintf(upparams, MAXPATHLEN, NS_T("%s/../../update.params"), path);
 
   int rv = NS_taccess(spath, F_OK | R_OK | W_OK);
   if (rv != OK) {
-  	LOG(("failed: can't access update.mar (rv=%d)", rv));
+  	LOG(("failed: can't access update.mar (rv=%d)\n", rv));
 	NS_tremove(spath);
 	NS_tremove(upstatus);
 	return;
@@ -242,14 +244,47 @@ DoUpdate(NS_tchar *path)
   NS_tremove(dpath);
   rv = NS_trename(spath, dpath);
   if (rv != OK) {
-  	LOG(("failed: can't rename update.mar (rv=%d)", rv));
+  	LOG(("failed: can't rename update.mar (rv=%d)\n", rv));
 	NS_tremove(spath);
 	NS_tremove(upstatus);
 	return;
   }
+  
+  int largc = 1;
+  NS_tchar* largv[16]; //16 being max
+  largv[0] = dpath; //first arg is the path to exe
+  NS_tchar argbuf[MAXPATHLEN];
+  int start = 0;
+  int end = 0;
 
-  NS_tchar *exe = dpath;
-  LaunchApp(path, 1, &exe);
+  rv = NS_taccess(upparams, F_OK | R_OK);
+  char buf[MAXPATHLEN];
+  if (rv == OK) {
+      int fd = NS_topen(upparams, O_RDONLY | O_BINARY);
+      if (fd >= 0) {
+          int num = read(fd, buf, MAXPATHLEN - 1);
+	  if (num > 0) {
+	      buf[num] = '\0';
+	      for (int i = 0; i <= num; ++i) {
+                  if (buf[i] != ' ' && buf[i] != '\n' && buf[i] != '\r' && buf[i] != '\0')
+                      argbuf[end++] = buf[i];
+	          else if (end > start) { //we had an arg
+		      largv[largc++] = argbuf + start;
+		      argbuf[end++] = '\0';
+		      start = end;
+	          }
+	      }	
+	  } else
+              LOG(("warn: can't read update.params\n"));
+      } else
+  	  LOG(("warn: can't open update.params\n"));
+  } else
+      LOG(("warn: can't access update.params (rv=%d)\n", rv));
+
+  //for (int i = 0; i < largc; ++i)
+  //    NS_tfprintf(stderr, NS_T("arg[%d]=%s\n"), i, largv[i]);
+
+  LaunchApp(path, largc, largv);
 
   LOG(("succeeded\n"));
   //WriteStatusFile(path, rv);
