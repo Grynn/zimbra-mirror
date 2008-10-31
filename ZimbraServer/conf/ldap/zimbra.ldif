@@ -99,4 +99,11 @@ dn: cn=xmppcomponents,cn=zimbra
 objectclass: organizationalRole
 cn: xmppcomponents
 
+# for granting global rights
+dn: cn=globalgrant,cn=zimbra
+objectclass: zimbraAclTarget
+description: acl target for global grants
+cn: globalgrant
+
+
 
