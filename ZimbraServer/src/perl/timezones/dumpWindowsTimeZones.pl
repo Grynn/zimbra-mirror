@@ -60,7 +60,7 @@ sub parseOnset($) {
     my $systemTime = shift;
     my $mon = signedNum(substr($systemTime, 2, 2));
     if ($mon == 0) {
-	return (undef, '16010101T000000');
+	return (undef, '19710101T000000');
     }
     my $year = signedNum(substr($systemTime, 0, 2));
     my $dayOfWeek = signedNum(substr($systemTime, 4, 2));
@@ -70,7 +70,7 @@ sub parseOnset($) {
     my $sec = signedNum(substr($systemTime, 12, 2));
     my $msec = signedNum(substr($systemTime, 14, 2));
 
-    my $dtStart = sprintf("16010101T%02d%02d%02d", $hour, $min, $sec);
+    my $dtStart = sprintf("19710101T%02d%02d%02d", $hour, $min, $sec);
     my $rule = sprintf("FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=%d;BYDAY=%s",
 		       $mon, getByDay($day, $dayOfWeek));
 
@@ -139,8 +139,16 @@ sub parseTZ($) {
     $hash{'TZID'} = sanitizeTZName($hash{'Display'});
     my $tzi = $hash{'TZI'};
     my ($std, $dst) = parseTZI($tzi);
-    $hash{'STANDARD'} = $std;
+    if (defined($std)) {
+	if (defined($hash{'Std'})) {
+	    $std->{'Windows-Name'} = $hash{'Std'};
+	}
+	$hash{'STANDARD'} = $std;
+    }
     if (defined($dst)) {
+	if (defined($hash{'Dlt'})) {
+	    $dst->{'Windows-Name'} = $hash{'Dlt'};
+	}
 	$hash{'DAYLIGHT'} = $dst;
     }
 
@@ -162,12 +170,16 @@ sub toVTIMEZONE($) {
     $vtimezone .= "LAST-MODIFIED:$NOW_DATETIMEZ\n";
     foreach my $comp (@comps) {
 	my $name = $comp->{'name'};
+	my $windowsName = $comp->{'Windows-Name'};
 	my $dtStart = $comp->{'DTSTART'};
 	my $offsetTo = $comp->{'TZOFFSETTO'};
 	my $offsetFrom = $comp->{'TZOFFSETFROM'};
 	my $rule = $comp->{'RRULE'};
 
 	$vtimezone .= "BEGIN:$name\n";
+	#if (defined($windowsName)) {
+	#    $vtimezone .= "X-ZIMBRA-TZNAME-WINDOWS:$windowsName\n";
+	#}
         $vtimezone .= "DTSTART:$dtStart\n";
 	$vtimezone .= "TZOFFSETTO:$offsetTo\n";
 	$vtimezone .= "TZOFFSETFROM:$offsetFrom\n";
@@ -178,48 +190,6 @@ sub toVTIMEZONE($) {
     }
     $vtimezone .= "END:VTIMEZONE\n";
     return $vtimezone;
-}
-
-sub toLDIF($) {
-    my $tz = shift;
-    my $standard = $tz->{'STANDARD'};
-    my $daylight = $tz->{'DAYLIGHT'};
-
-    my $tzid = $tz->{'TZID'};
-    my $dnSafe = $tzid;
-    $dnSafe =~ s/\+/\\\+/g;
-
-    my $ldif = "# $tzid\n";
-    if (defined($daylight)) {
-	$ldif .= "# (supports Daylight Savings Time)\n";
-    }
-    $ldif .= "dn: cn=$dnSafe,cn=timezones,cn=config,cn=zimbra\n";
-    $ldif .= "objectclass: zimbraTimeZone\n";
-    $ldif .= "cn: $tzid\n";
-    my $stdDtStart = $standard->{'DTSTART'};
-    my $stdOffset = $standard->{'TZOFFSETTO'};
-    $ldif .= "zimbraTimeZoneStandardDtStart: $stdDtStart\n";
-    $ldif .= "zimbraTimeZoneStandardOffset: $stdOffset\n";
-    my $stdRule = $standard->{'RRULE'};
-    if (defined($stdRule)) {
-	$ldif .= "zimbraTimeZoneStandardRRule: $stdRule\n";
-    }
-
-    if (defined($daylight)) {
-	my $dstDtStart = $daylight->{'DTSTART'};
-	my $dstOffset = $daylight->{'TZOFFSETTO'};
-	$ldif .= "zimbraTimeZoneDaylightDtStart: $dstDtStart\n";
-	$ldif .= "zimbraTimeZoneDaylightOffset: $dstOffset\n";
-	my $dstRule = $daylight->{'RRULE'};
-	if (defined($dstRule)) {
-	    $ldif .= "zimbraTimeZoneDaylightRRule: $dstRule\n";
-	}
-    } else {
-	$ldif .= "zimbraTimeZoneDaylightDtStart: $stdDtStart\n";
-	$ldif .= "zimbraTimeZoneDaylightOffset: $stdOffset\n";
-    }
-
-    return $ldif;
 }
 
 sub tzComparator {
@@ -245,22 +215,10 @@ sub tzComparator {
     return $tzA->{'Index'} <=> $tzB->{'Index'};
 }
 
-sub doTZ($) {
-    my $tzRegistry = shift;
-    my $tz = parseTZ($tzRegistry);
-    my $index = $tz->{'Index'};
-    my $displayName = $tz->{'Display'};
-    my $vtimezone = toVTIMEZONE($tz);
-    my $ldif = toLDIF($tz);
-    print "[[ $displayName ($index) ]]\n$vtimezone\n$ldif\n";
-}
-
 sub usage() {
     print <<_USAGE_;
-Usage: dumpWindowsTimeZones.pl [--icalendar] [--ldif]
-Dump time zone definitions in Windows registry to stdot, in either LDIF
-or iCalendar format.  Default is iCalendar.  Only one format must be used.
-format.
+Usage: dumpWindowsTimeZones.pl
+Dump time zone definitions in Windows registry to stdot in iCalendar format.
 _USAGE_
     exit(1);
 }
@@ -270,22 +228,12 @@ _USAGE_
 # main
 #
 
-my ($ICAL, $LDIF, $USAGE);
+my ($USAGE);
 
-my $good = GetOptions('icalendar' => \$ICAL,
-		      'ldif' => \$LDIF,
-		      'help' => \$USAGE);
+my $good = GetOptions('help' => \$USAGE);
 if (!$good || $USAGE) {
     usage();
 }
-if (defined($ICAL) && defined($LDIF)) {
-    usage();
-}
-if (!defined($ICAL) && !defined($LDIF)) {
-    $LDIF = 1;
-}
-$LDIF |= 0;
-$ICAL |= 0;
 
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = gmtime();
 $NOW_DATETIMEZ = sprintf("%04d%02d%02dT%02d%02d%02dZ",
@@ -303,26 +251,12 @@ foreach my $tzname ($tzRoot->SubKeyNames()) {
 }
 @tzlist = sort tzComparator @tzlist;
 
-if ($ICAL) {
-    print "BEGIN:VCALENDAR\n";
-    print "PRODID:Zimbra-Calendar-Provider\n";
-    print "VERSION:2.0\n";
-    print "METHOD:PUBLISH\n";
-    my $first = 1;
-    foreach my $tz (@tzlist) {
-	print toVTIMEZONE($tz);
-    }
-    print "END:VCALENDAR\n";
+print "BEGIN:VCALENDAR\n";
+print "PRODID:Zimbra-Calendar-Provider\n";
+print "VERSION:2.0\n";
+print "METHOD:PUBLISH\n";
+my $first = 1;
+foreach my $tz (@tzlist) {
+    print toVTIMEZONE($tz);
 }
-
-if ($LDIF) {
-    my $first = 1;
-    foreach my $tz (@tzlist) {
-	if ($first) {
-	    $first = 0;
-	} else {
-	    print "\n";
-	}
-	print toLDIF($tz);
-    }
-}
+print "END:VCALENDAR\n";
