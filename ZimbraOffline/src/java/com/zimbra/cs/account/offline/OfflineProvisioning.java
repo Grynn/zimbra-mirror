@@ -406,7 +406,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraAccountStatus,
             A_zimbraPrefSkin,
             A_zimbraZimletAvailableZimlets,
-            A_zimbraFeatureSharingEnabled,
             A_zimbraPrefClientType,
             A_zimbraPrefLabel,
             A_zimbraPrefMailPollingInterval,
@@ -478,7 +477,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
         
         attrs.put(A_zimbraPrefClientType, "advanced");
-        attrs.put(A_zimbraFeatureSharingEnabled, FALSE);
+        attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
         
         attrs.remove(A_zimbraChildAccount);
         attrs.remove(A_zimbraPrefChildVisibleAccount);
