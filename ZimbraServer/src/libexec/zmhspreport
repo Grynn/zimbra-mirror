@@ -1,0 +1,266 @@
+#!/usr/bin/perl -w
+
+use strict;
+use lib "/opt/zimbra/zimbramon/lib";
+use Net::LDAP;
+use Data::Dumper;
+
+my $ldap_master_url = getLocalConfig("ldap_master_url");
+my $ldap_pass = getLocalConfig("zimbra_ldap_password");
+my $zimbra_ldap_userdn = "uid=zimbra,cn=admins,cn=zimbra";
+my %stats;
+my %majorFeatures;
+foreach my $item qw(zimbraFeatureMailEnabled zimbraFeatureContactsEnabled zimbraFeatureCalendarEnabled zimbraFeatureTasksEnabled zimbraFeatureNotebookEnabled zimbraFeatureBriefcasesEnabled zimbraFeatureIMEnabled zimbraFeatureOptionsEnabled zimbraFeatureMobileSyncEnabled zimbraImapEnabled zimbraPop3Enabled) { $majorFeatures{$item} = 1 };
+
+my $ldap = Net::LDAP->new($ldap_master_url) or die "Unable to contact $ldap_master_url\n";
+my $result = $ldap->bind($zimbra_ldap_userdn, password => $ldap_pass);
+
+exit $result->code() if $result->code();
+
+my $dn = "cn=cos,cn=zimbra";
+$result = GetCOSs($ldap,$dn);
+#print($result->code() ? "Failed to search $dn: ".$result->error()."\n" : "Searched $dn\n");
+
+$result = GetAccounts($ldap,$zimbra_ldap_userdn);
+#print($result->code() ? "Failed to search $zimbra_ldap_userdn: ".$result->error()."\n" : "Searched $zimbra_ldap_userdn\n");
+
+$result = $ldap->unbind;
+
+sub GetCOSs {
+  my ($handle, $dn) = @_;
+  my $result = $handle->search( base => $dn, scope => 'one', filter => "(objectclass=zimbraCOS)");
+  return $result if ($result->code());
+  foreach my $entry ($result->all_entries) {
+    my $cosName = $entry->get_value("cn");
+    $cosName = "unknown" if (!defined $cosName || $cosName eq "");
+    my $cosId = $entry->get_value("zimbraId");
+    next if (!defined $cosId || $cosId eq "");
+    #print "$cosName: $cosId\n";
+    $stats{cos}{default} = $cosId if ($cosName eq "default");
+    $stats{cos}{$cosId}{name} = $cosName;
+    foreach my $attr ($entry->attributes ) {
+      next if ($attr =~ /^zimbraPref/);
+      my $value = $entry->get_value($attr);
+      $stats{cos}{$cosId}{attrs}{$attr} = lc($value)
+        if ($attr =~ /^zimbraFeature|Enabled$/ && defined $value);
+    }
+  }
+  return $result;
+}
+
+sub GetAccounts {
+  my ($handle, $dn) = @_;
+  my $result = $handle->search( base => '', scope => 'sub', filter => "(&(objectclass=zimbraAccount)(!(objectclass=zimbraCalendarResource)))"); 
+  return $result if ($result->code());
+
+  foreach my $entry ($result->all_entries) {
+    next unless(my $mail_addr = $entry->get_value("zimbraMailDeliveryAddress"));
+    #print "Account: $mail_addr\n";
+
+    my ($user,$domain) = split(/\@/, $mail_addr);
+
+    next if ($domain =~ /\.archive$/);
+
+    my $accountStatus = $entry->get_value("zimbraAccountStatus");
+    $accountStatus = "unknown" unless ( defined $accountStatus );
+    #print "$user: $accountStatus\n";
+
+    # count resources
+    my $isResource = $entry->get_value("zimbraIsSystemResource");
+    if (defined $isResource && lc($isResource) eq "true") {
+      $stats{global}{zimbraIsSystemResource}{$accountStatus}++;
+      $stats{domain}{$domain}{zimbraIsSystemResource}{$accountStatus}++;
+      next;
+    }
+
+    # count archive enabled accounts
+    my $isArchiveAccount = $entry->get_value("amavisArchiveQuarantineTo");
+    if (defined $isArchiveAccount) {
+      $stats{global}{zimbraIsArchiveAccount}{$accountStatus}++;
+      $stats{domain}{$domain}{zimbraIsArchiveAccount}{$accountStatus}++;
+    }
+
+    # count users
+    $stats{global}{accts}{$accountStatus}++;
+    $stats{global}{accts}{total}++;
+    $stats{domain}{$domain}{accts}{$accountStatus}++;
+    $stats{domain}{$domain}{accts}{total}++;
+
+    next if ($accountStatus ne "active");
+
+    # count admins
+    foreach my $attr qw(zimbraIsAdminAccount zimbraIsDomainAdminAccount) {
+      my $value = $entry->get_value($attr);
+      if (defined $value && lc($value) eq "true") {
+       $stats{global}{attrs}{$attr}++;
+       $stats{domain}{$domain}{attrs}{$attr}++;
+      }
+    }
+
+    # count features
+    #get features from the COS object
+    my $cosId = $entry->get_value("zimbraCOSId") || $stats{cos}{default};
+    #print "\tCOS: $cosId\n";
+    $stats{global}{cos}{$stats{cos}{$cosId}{name}}++;
+    if (defined $cosId && $cosId ne "") {
+      foreach my $attr (keys %{$stats{cos}{$cosId}{attrs}}) {
+        if ($stats{cos}{$cosId}{attrs}{$attr} eq "true") {
+          #print "\tadding counts for $attr from $cosId\n";
+          $stats{global}{attrs}{$attr}++;
+          $stats{domain}{$domain}{attrs}{$attr}++;
+        }
+      }
+
+    }
+    #get features from the account object
+    foreach my $attr ($entry->attributes ) {
+      my $value = lc($entry->get_value($attr));
+      if ($attr =~ /^zimbraFeature|Enabled$/) {
+        next if ($attr =~ /^zimbraPref/);
+        if ($value eq "false" && $stats{cos}{$cosId}{attrs}{$attr} eq "true") {
+            $stats{global}{attrs}{$attr}--;
+            $stats{domain}{$domain}{attrs}{$attr}--;
+        }
+        $stats{global}{attrs}{$attr}++;
+        $stats{domain}{$domain}{attrs}{$attr}++
+      }
+    }
+
+    #print $entry->dump();
+  }
+  return $result;
+  
+}
+
+# global account summary
+my $numActive = $stats{global}{accts}{active} || 0;
+my $numClosed = $stats{global}{accts}{closed} || 0;
+my $numLocked = $stats{global}{accts}{locked} || 0;
+my $numLockout = $stats{global}{accts}{lockout} || 0;
+my $numLock = $numLocked+$numLockout;
+my $numMaint = $stats{global}{accts}{maintenance} || 0;
+my $numTotal = $stats{global}{accts}{total} || 0;
+my $numDomains = scalar(keys %{$stats{domain}});
+format GLOBAL_ACCT_TOP =
+                           global summary
+---------------------------------------------------------------------------
+                        account summary                      domain summary 
+-----------------------------------------------------------  --------------
+     active      closed      locked       maint       total           total
+-----------------------------------------------------------  --------------
+.
+format GLOBAL_ACCT = 
+@>>>>>>>>>> @>>>>>>>>>> @>>>>>>>>>> @>>>>>>>>>> @>>>>>>>>>>     @>>>>>>>>>>
+$numActive, $numClosed, $numLock, $numMaint, $numTotal, $numDomains
+.
+
+format_top_name STDOUT "GLOBAL_ACCT_TOP";
+format_name STDOUT "GLOBAL_ACCT";
+write;
+print "-" x 75, "\n" x 3;
+
+# domain account summary
+my ($domain);
+format DOMAIN_TOP =
+                          domain summary
+---------------------------------------------------------------------------
+           domain            active   closed   locked    maint        total  
+---------------------------------------------------------------------------
+.
+format DOMAIN = 
+@<<<<<<<<<<<<<<<<<<<<<<<<< @>>>>>>> @>>>>>>> @>>>>>>> @>>>>>>> @>>>>>>>>>>
+$domain, $numActive, $numClosed, $numLock, $numMaint, $numTotal
+.
+
+format_top_name STDOUT "DOMAIN_TOP";
+format_name STDOUT "DOMAIN";
+$-=0;
+foreach $domain (sort keys %{$stats{domain}}) {
+  $numActive = $stats{domain}{$domain}{accts}{active} || 0;
+  $numClosed = $stats{domain}{$domain}{accts}{closed} || 0;
+  $numLocked = $stats{domain}{$domain}{accts}{locked} || 0;
+  $numLockout = $stats{domain}{$domain}{accts}{lockout} || 0;
+  $numLock = $numLocked+$numLockout;
+  $numMaint = $stats{domain}{$domain}{accts}{maintenance} || 0;
+  $numTotal = $stats{domain}{$domain}{accts}{total} || 0;
+  write;
+}
+print "-" x 75, "\n" x 3;
+
+
+# resource/archive account summary
+my ($numResources, $numArchive, $numAdmins);
+format ZAD_TOP =
+                     archive/resource/admin accounts summary
+---------------------------------------------------------------------------
+           domain                             archive  resources     admins
+---------------------------------------------------------------------------
+.
+format ZAD = 
+@<<<<<<<<<<<<<<<<<<<<<<<<<                 @>>>>>>>>> @>>>>>>>>> @>>>>>>>>>
+$domain, $numArchive, $numResources, $numAdmins
+.
+
+format_top_name STDOUT "ZAD_TOP";
+format_name STDOUT "ZAD";
+$-=0;
+$domain = "Totals for all domains";
+$numResources = $stats{global}{zimbraIsSystemResource}{active} || 0;
+$numArchive = $stats{global}{zimbraIsArchiveAccount}{active} || 0;
+$numAdmins = $stats{global}{attrs}{zimbraIsDomainAdminAccount} || 0;
+write;
+foreach $domain (sort keys %{$stats{domain}}) {
+  $numResources = $stats{domain}{$domain}{zimbraIsSystemResource}{active} || 0;
+  $numArchive = $stats{domain}{$domain}{zimbraIsArchiveAccount}{active} || 0;
+  $numAdmins = $stats{domain}{$domain}{attrs}{zimbraIsDomainAdminAccount} || 0;
+  next if ($numResources == 0 && $numArchive == 0 && $numAdmins == 0);
+  write;
+}
+print "-" x 75, "\n" x 3;
+
+# cos summary
+my $attribute;
+format FEATURES_TOP =
+                        global major feature summary
+---------------------------------------------------------------------------
+           feature                                                 accounts
+---------------------------------------------------------------------------
+.
+format FEATURES = 
+@<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< @>>>>>>>>>>>>>>>>>>
+$attribute, $stats{global}{attrs}{$attribute}
+.
+            
+
+format_top_name STDOUT "FEATURES_TOP";
+format_name STDOUT "FEATURES";
+$-=0;
+foreach $attribute (sort keys %{$stats{global}{attrs}}) {
+  write if (exists $majorFeatures{$attribute});
+  #print "$attribute $stats{global}{attrs}{$attribute}\n";
+  #write;
+}
+print "-" x 75, "\n" x 3;
+
+
+sub getLocalConfig {
+  my $key = shift;
+  if (defined ($ENV{zmsetvars})) {
+    return $ENV{$key};
+  }
+  open CONF, "/opt/zimbra/bin/zmlocalconfig -q -m shell |" or die "Can't open local config: $!";
+  my @conf = <CONF>;
+  close CONF;
+
+  chomp @conf;
+
+  foreach (@conf) {
+    my ($key, $val) = split '=', $_, 2;
+    $val =~ s/;$//;
+    $val =~ s/'$//;
+    $val =~ s/^'//;
+    $ENV{$key} = $val;
+  }
+  $ENV{zmsetvars} = 'true';
+  return $ENV{$key};
+} 
