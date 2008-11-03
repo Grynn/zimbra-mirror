@@ -3,6 +3,37 @@ objectClass: olcDatabaseConfig
 objectClass: olcHdbConfig
 olcDatabase: {2}hdb
 olcSuffix:
+olcAccess: {0}to attrs=userPassword  by anonymous auth  by dn.children="cn=adm
+ ins,cn=zimbra" write
+olcAccess: {1}to dn.subtree="cn=zimbra"  by dn.children="cn=admins,cn=zimbra" 
+ write
+olcAccess: {2}to attrs=zimbraZimletUserProperties,zimbraGalLdapBindPassword,zi
+ mbraGalLdapBindDn,zimbraAuthTokenKey,zimbraPreAuthKey,zimbraPasswordHistory,z
+ imbraIsAdminAccount,zimbraAuthLdapSearchBindPassword  by dn.children="cn=admi
+ ns,cn=zimbra" write  by * none
+olcAccess: {3}to attrs=objectclass  by dn.children="cn=admins,cn=zimbra" write
+   by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by dn.base="uid=zmam
+ avis,cn=appaccts,cn=zimbra" read  by * read
+olcAccess: {4}to attrs=@amavisAccount  by dn.children="cn=admins,cn=zimbra" wr
+ ite  by dn.base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break
+olcAccess: {5}to attrs=mail  by dn.children="cn=admins,cn=zimbra" write  by dn
+ .base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break
+olcAccess: {6}to attrs=zimbraAllowFromAddress  by dn.children="cn=admins,cn=zi
+ mbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read
+olcAccess: {7}to filter="(!(zimbraHideInGal=TRUE))"  attrs=cn,co,company,dc,di
+ splayName,givenName,gn,initials,l,mail,o,ou,physicalDeliveryOfficeName,postal
+ Code,sn,st,street,streetAddress,telephoneNumber,title,uid  by dn.children="cn
+ =admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" re
+ ad  by * read
+olcAccess: {8}to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCa
+ nonicalAddress,zimbraMailCatchAllAddress,zimbraMailCatchAllCanonicalAddress,z
+ imbraMailCatchAllForwardingAddress,zimbraMailDeliveryAddress,zimbraMailForwar
+ dingAddress,zimbraPrefMailForwardingAddress,zimbraMailHost,zimbraMailStatus,z
+ imbraMailTransport,zimbraDomainName,zimbraDomainType,zimbraPrefMailLocalDeliv
+ eryDisabled  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpo
+ stfix,cn=appaccts,cn=zimbra" read  by * read
+olcAccess: {9}to attrs=entry  by dn.children="cn=admins,cn=zimbra" write  by *
+  read
 olcLastMod: TRUE
 olcMaxDerefDepth: 15
 olcReadOnly: FALSE
@@ -42,35 +73,35 @@ olcDbIndex: entryUUID eq
 olcDbIndex: entryCSN eq
 olcDbIndex: cn pres,eq,sub
 olcDbIndex: uid pres,eq
-olcDbIndex: givenName pres,eq,sub
-olcDbIndex: displayName pres,eq,sub
-olcDbIndex: zimbraId eq
-olcDbIndex: mail pres,eq,sub
-olcDbIndex: zimbraMailCatchAllAddress eq,sub
-olcDbIndex: sn pres,eq,sub
-olcDbIndex: zimbraMailAlias eq,sub
 olcDbIndex: zimbraForeignPrincipal eq
-olcDbIndex: zimbraMailDeliveryAddress eq,sub
-olcDbIndex: zimbraMailForwardingAddress eq
-olcDbIndex: zimbraMailTransport eq
-olcDbIndex: zimbraDomainName eq,sub
 olcDbIndex: zimbraYahooId eq
+olcDbIndex: zimbraId eq
 olcDbIndex: zimbraVirtualHostname eq
 olcDbIndex: zimbraVirtualIPAddress eq
-olcDbIndex: zimbraACE sub
+olcDbIndex: zimbraMailDeliveryAddress eq,sub
 olcDbIndex: zimbraAuthKerberos5Realm eq
+olcDbIndex: zimbraMailForwardingAddress eq
+olcDbIndex: zimbraMailCatchAllAddress eq,sub
 olcDbIndex: zimbraShareInfo sub
+olcDbIndex: zimbraMailTransport eq
+olcDbIndex: zimbraMailAlias eq,sub
+olcDbIndex: zimbraACE sub
+olcDbIndex: zimbraDomainName eq,sub
+olcDbIndex: mail pres,eq,sub
 olcDbIndex: zimbraCalResSite eq,sub
-olcDbIndex: zimbraCalResBuilding eq,sub
+olcDbIndex: givenName pres,eq,sub
+olcDbIndex: displayName pres,eq,sub
+olcDbIndex: sn pres,eq,sub
 olcDbIndex: zimbraCalResRoom eq,sub
 olcDbIndex: zimbraCalResCapacity eq
+olcDbIndex: zimbraCalResBuilding eq,sub
 olcDbIndex: zimbraCalResFloor eq,sub
 olcDbLinearIndex: FALSE
 olcDbMode: 0600
 olcDbSearchStack: 16
 olcDbShmKey: 0
 olcDbCacheFree: 1
-olcDbDNcacheSize: 0
+olcDbDNcacheSize: 20000
 structuralObjectClass: olcHdbConfig
 entryUUID: 152ab0a8-333e-102d-8700-d562901af228
 creatorsName: cn=config

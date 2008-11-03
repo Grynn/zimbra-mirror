@@ -16,7 +16,8 @@ olcIndexSubstrAnyLen: 4
 olcIndexSubstrAnyStep: 2
 olcIndexIntLen: 4
 olcLocalSSF: 71
-olcLogLevel: 49152
+olcLogLevel: Sync
+olcLogLevel: None
 olcPidFile: /opt/zimbra/openldap/var/run/slapd.pid
 olcReadOnly: FALSE
 olcSaslSecProps: noplain,noanonymous
