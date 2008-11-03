@@ -95,7 +95,7 @@ public class DbOfflineMailbox {
                 stmt.close();
             }
 
-            if (type == MailItem.TYPE_APPOINTMENT) {
+            if (type == MailItem.TYPE_APPOINTMENT || type == MailItem.TYPE_TASK) {
                 // update APPOINTMENT.ITEM_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getCalendarItemTableName(mbox) +
                         " SET item_id = ?" +
@@ -366,13 +366,14 @@ public class DbOfflineMailbox {
         try {
             stmt = conn.prepareStatement("SELECT id, folder_id, mod_metadata" +
                     " FROM " + DbMailItem.getMailItemTableName(ombx) +
-                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?) AND change_mask=?");
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?, ?) AND change_mask=?");
             int pos = 1;
             stmt.setInt(pos++, ombx.getId());
             stmt.setShort(pos++, MailItem.TYPE_CONTACT);
             stmt.setShort(pos++, MailItem.TYPE_MESSAGE);
             stmt.setShort(pos++, MailItem.TYPE_CHAT);
             stmt.setShort(pos++, MailItem.TYPE_APPOINTMENT);
+            stmt.setShort(pos++, MailItem.TYPE_TASK);
             stmt.setInt(pos++, Change.MODIFIED_FOLDER);
             
             rs = stmt.executeQuery();
