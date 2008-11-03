@@ -420,11 +420,14 @@ function(params) {
 	var url = [];
 	var i = 0;
 	if (!params.relative) {
-		url[i++] = params.protocol || location.protocol;
+		var proto = params.protocol || location.protocol; 
+		url[i++] = proto;
 		url[i++] = "//";
 		url[i++] = params.host || location.hostname;
 		var port = Number(params.port || location.port);
-		if (port && (port != 80)) {
+		if (port &&
+			((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) ||
+			 (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
 			url[i++] =  ":";
 			url[i++] = port;
 		}
