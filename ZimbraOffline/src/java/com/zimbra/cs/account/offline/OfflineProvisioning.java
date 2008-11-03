@@ -372,6 +372,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized Config getConfig() {
         return mLocalConfig;
     }
+    
+    @Override
+    public synchronized GlobalGrant getGlobalGrant() throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("getGlobalGrant");
+    }
 
     @Override
     public synchronized List<MimeTypeInfo> getMimeTypes(String name) {
