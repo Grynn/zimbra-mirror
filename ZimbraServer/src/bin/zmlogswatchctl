@@ -103,7 +103,7 @@ case "$1" in
           rm -rf ${pidfile}
           break
         fi
-        kill $pid
+        kill -9 $pid
         sleep 1
       done
     fi
