@@ -10,7 +10,7 @@ ifeq ($(BUILD_PLATFORM), )
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-CLAMAV_VERSION ?= 0.94
+CLAMAV_VERSION ?= 0.94.1
 
 CLAMAV_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/clamav-$(CLAMAV_VERSION).tgz
