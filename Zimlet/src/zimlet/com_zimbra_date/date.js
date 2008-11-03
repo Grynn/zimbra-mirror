@@ -126,7 +126,7 @@ Com_Zimbra_Date.prototype.match = function(line, startIndex){
 		re = Com_Zimbra_Date.REGEXES[i];
 		re.lastIndex = startIndex;
 		m = re.exec(line);
-		if (m && m[0] && (!match || (m.index + m[0].length) > (match.index + match[0].length))) { //Longest match wins 
+		if (m && m[0] && (!match || m[0].length > match[0].length )) { //Longest match wins 
 			match = m;
 			rule = Com_Zimbra_Date.RULES[i];
 			mapping = re.mapping;
@@ -190,8 +190,9 @@ Com_Zimbra_Date.prototype._initDateObjectHandlers = function() {
 	// get all the defined patterns
 	var i, pattern;
 	for (i = 1; pattern = this.getMessage("format"+i+".pattern"); i++) {
-		if (pattern.match(/^#+/)) break;
-		Com_Zimbra_Date.PATTERNS.push(pattern);
+		if (pattern.match(/^###+/)) break; //Minimum three hashes to terminate
+        if (pattern.match(/^#/)) continue; //one hash to skip/disable the pattern
+        Com_Zimbra_Date.PATTERNS.push(pattern);
 		Com_Zimbra_Date.RULES.push(this.getMessage("format"+i+".rule"));
 	}
 	for (i = 0; i < Com_Zimbra_Date.DEFAULT_FORMATS.length; i++) {
