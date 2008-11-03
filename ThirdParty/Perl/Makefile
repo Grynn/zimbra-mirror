@@ -108,7 +108,8 @@ PERL_LIBS 	:= \
 	Archive::Zip  \
 	Digest::SHA \
 	Error \
-	Mail::DKIM
+	Mail::DKIM \
+	XML::Simple
 
 NET_SSLeay := \
 	Net-SSLeay-1.35
