@@ -98,3 +98,12 @@
     rotate 7
     compress
 }
+
+/opt/zimbra/zmstat/zmstat.out {
+    daily
+    missingok
+    copytruncate
+    rotate 7
+    notifempty
+    compress
+}
