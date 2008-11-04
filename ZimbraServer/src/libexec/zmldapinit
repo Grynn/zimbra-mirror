@@ -76,7 +76,7 @@ $ctx = Crypt::SaltedHash->new(algorithm => 'SHA-1');
 $ctx->add("$zimbra_ldap_password");
 my $zimbra_ssha_password = $ctx->generate;
 
-# Update slapd.conf
+# Update config database
 #
 my $infile="$ldap_config_dir/olcDatabase\=\{0\}config.ldif";
 my $outfile="/tmp/olcDatabase\=\{0\}config.ldif.$$";
