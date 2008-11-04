@@ -148,7 +148,7 @@ function() {
 ZaBulkProvisionWizard.prototype._uploadCallback =
 function (status, uploadResults) {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	//if (AjxEnv.hasFirebug)
+	if (AjxEnv.hasFirebug)
 		console.log("Cert File Upload: status = " + status);
 	if ((status == AjxPost.SC_OK) && (uploadResults != null) && (uploadResults.length > 0)) {
     	var v = uploadResults[0] ;
