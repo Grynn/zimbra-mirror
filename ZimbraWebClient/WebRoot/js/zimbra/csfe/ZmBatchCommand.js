@@ -131,6 +131,7 @@ function(callback, errorCallback) {
 		    	if (!batchRequest[methodName]) {
 		    		batchRequest[methodName] = [];
 		    	}
+				request[methodName].requestId = i;
 		    	batchRequest[methodName].push(request[methodName]);
 		    }
 	    }
@@ -193,27 +194,13 @@ function(callback, errorCallback, result) {
 	}
 };
 
-ZmBatchCommand.prototype._handleResponseRunSafari =
-function(callback, result) {
-	var resp = result.getResponse();
-	for (var i in resp) {
-		this._processResponse(i, resp[i]);
-	}
-
-	// only run the final callback once all async requests have returned
-    var size = this.size();
-    if (++this._responseCount == size && callback) {
-		callback.run(result);
-	}
-};
-
 /**
  * Adds the given command parameters to the batch command, as part of a command's
  * invocation. Should be called by a function that was added via add() earlier; that
  * function should pass the request object.
  * 
  * @param request		[AjxSoapDoc|object]	a SOAP document or JSON object with the command's request
- * @param callback		[AjxCallback]*		next callback in chain for async request
+ * @param respCallback	[AjxCallback]*		next callback in chain for async request
  * @param errorCallback	[Object]*			callback to run if there is an exception
  */
 ZmBatchCommand.prototype.addRequestParams =
@@ -229,7 +216,7 @@ function(request, respCallback, errorCallback) {
  * object can immediately generate its request object.
  * 
  * @param request		[AjxSoapDoc|object]	a SOAP document or JSON object with the command's request
- * @param callback		[AjxCallback]*		next callback in chain for async request
+ * @param respCallback	[AjxCallback]*		next callback in chain for async request
  * @param errorCallback	[Object]*			callback to run if there is an exception
  */
 ZmBatchCommand.prototype.addNewRequestParams =

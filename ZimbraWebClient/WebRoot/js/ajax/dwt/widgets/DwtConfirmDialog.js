@@ -33,17 +33,11 @@ DwtConfirmDialog = function(parent, className) {
 DwtConfirmDialog.prototype = new DwtDialog;
 DwtConfirmDialog.prototype.constructor = DwtConfirmDialog;
 
-DwtConfirmDialog.prototype.toString = function() {
+DwtConfirmDialog.prototype.toString =
+function() {
 	return "DwtConfirmDialog";
 };
 
-// Data
-
-DwtConfirmDialog.prototype._questionDiv;
-
-DwtConfirmDialog.prototype._yesCallback;
-DwtConfirmDialog.prototype._noCallback;
-DwtConfirmDialog.prototype._cancelCallback;
 
 // Public methods
 
@@ -69,26 +63,33 @@ function(questionHtml, yesCallback, noCallback, cancelCallback, loc) {
 	DwtDialog.prototype.popup.call(this, loc);
 };
 
-DwtConfirmDialog.prototype.popdown = function() {
+DwtConfirmDialog.prototype.popdown =
+function() {
 	this._yesCallback = this._noCallback = this._cancelCallback = null;
 	DwtDialog.prototype.popdown.call(this);
 };
 
 // Protected methods
 
-DwtConfirmDialog.prototype._handleYesButton = function(ev) {
+DwtConfirmDialog.prototype._handleYesButton =
+function(ev) {
 	if (this._yesCallback) this._yesCallback.run(ev);
 	this.popdown();
 };
-DwtConfirmDialog.prototype._handleNoButton = function(ev) {
+
+DwtConfirmDialog.prototype._handleNoButton =
+function(ev) {
 	if (this._noCallback) this._noCallback.run(ev);
 	this.popdown();
 };
-DwtConfirmDialog.prototype._handleCancelButton = function(ev) {
+
+DwtConfirmDialog.prototype._handleCancelButton =
+function(ev) {
 	if (this._cancelCallback) this._cancelCallback.run(ev);
 	this.popdown();
 };
 
-DwtConfirmDialog.prototype._getSeparatorTemplate = function() {
+DwtConfirmDialog.prototype._getSeparatorTemplate =
+function() {
 	return "";
 };
