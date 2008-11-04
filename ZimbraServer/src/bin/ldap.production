@@ -68,8 +68,8 @@ checkrunning()
 
 doDebugStart() {
   TIMEOUT=60 # timelimit for command
-	sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -4 -u zimbra -h "${bind_url}" \
-			-f /opt/zimbra/conf/slapd.conf -d 1 2>&1 | egrep "failed|error" &
+	sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -4 -u zimbra -h "${bind_url} ldapi:///" \
+			-F /opt/zimbra/data/ldap/config -d 1 2>&1 | egrep "failed|error" &
   cmd_pid=$!
   sleep $TIMEOUT | (
     read nothing # wait on sleep to finish
@@ -113,15 +113,14 @@ start()
     if [ x"$bind_url" = "x" ]; then
 		  bind_url=$(echo ${ldap_url} | awk '{print $1}')
     fi
-		/opt/zimbra/libexec/zmconfigure /opt/zimbra/conf/slapd.conf.in /opt/zimbra/conf/slapd.conf
-		sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -4 \
-      -u zimbra -h "${bind_url}" -f /opt/zimbra/conf/slapd.conf
+	sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -4 \
+      -u zimbra -h "${bind_url} ldapi:///" -F /opt/zimbra/data/ldap/config
     sleep 5
     for ((i =0; i < 6; i++)); do
       checkrunning
       if [ $RUNNING = 0 ]; then
-		    sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -4 \
-          -u zimbra -h "${bind_url}" -f /opt/zimbra/conf/slapd.conf
+	    sudo /opt/zimbra/libexec/zmslapd -l LOCAL0 -4 \
+          -u zimbra -h "${bind_url} ldapi:///" -F /opt/zimbra/data/ldap/config
       else 
         break
       fi

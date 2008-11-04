@@ -28,13 +28,16 @@ use MIME::Base64;
 
 my $source_config_dir = "/opt/zimbra/openldap/etc/openldap";
 my $config_dir = "/opt/zimbra/conf";
+my $ldap_config_dir="/opt/zimbra/data/ldap/config/cn\=config";
 
 my $zimbra_home=getLocalConfig("zimbra_home");
+my $zimbra_user=getLocalConfig("zimbra_user");
 my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
 my $zimbra_ldap_password = getLocalConfig("zimbra_ldap_password");
 my $ldap_root_password = getLocalConfig("ldap_root_password");
 my $ldap_master_url = getLocalConfig("ldap_master_url");
 my $ldap_is_master = getLocalConfig("ldap_is_master");
+my $ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
 
 # Get the SHA password.
 my $ctx = Crypt::SaltedHash->new(algorithm => 'SHA-1');
@@ -45,15 +48,17 @@ $ctx = Crypt::SaltedHash->new(algorithm => 'SHA-1');
 $ctx->add("$zimbra_ldap_password");
 my $zimbra_ssha_password = $ctx->generate;
 
-# Update slapd.conf
-my $infile="$source_config_dir/slapd.conf";
-my $outfile="$config_dir/slapd.conf.in";
+# Update cn=config
+my $infile="$ldap_config_dir/olcDatabase\=\{0\}config.ldif";
+my $outfile="/tmp/olcDatabase\=\{0\}config.ldif.$$";
+my $mime_root_passwd=MIME::Base64::encode($root_ssha_password);
+chomp ($mime_root_passwd);
 
 open(IN,"<$infile");
 open(OUT,">$outfile");
 while (<IN>) {
-  if ($_ =~ /^rootpw/) {
-    $_ =~ s|^rootpw.*|rootpw $root_ssha_password|;
+  if ($_ =~ /^olcRootPW/) {
+    $_ =~ s|^olcRootPW.*|olcRootPW:: $$mime_root_passwd|;
     print OUT $_;
   } else {
     print OUT $_;
@@ -61,49 +66,20 @@ while (<IN>) {
 }
 close IN;
 close OUT;
-
-# Add zimbra-ext schema if needed
-if ( -f "/opt/zimbra/lib/conf/zimbra-ext.schema") {
-   if ( !fgrep { /zimbra-ext.schema/ } "${config_dir}/slapd.conf.in" ) {
-      $infile="${config_dir}/slapd.conf.in";
-      $outfile="/tmp/slapd.conf.$$";
-      
-      open(IN,"<$infile");
-      open(OUT,">$outfile");
-      while (<IN>) {
-         if ($_ =~ /\/opt\/zimbra\/openldap\/etc\/openldap\/schema\/zimbra.schema/) {
-            print OUT $_;
-            print OUT "include\t\t\"/opt/zimbra/lib/conf/zimbra-ext.schema\"";
-            print OUT "\n";
-         } else {
-            print OUT $_;
-         }
-      }
-      close OUT;
-      close IN;
-      if ( -s $outfile ) {
-         my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
-         if ($rc != 0) {
-            print "Warning: Failed to backup $infile\n";
-         }
-         $rc=0xffff & system("/bin/mv -f $outfile $infile");
-         if ($rc != 0) {
-            print "Failed to move $outfile to $infile\nRestoring old configuration\n";
-            $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
-            if ($rc != 0) {
-               print "Failed to restore backup\n";
-            }
-         } else {
-            system("/bin/rm -f $infile.bak");
-         }
-      }
-   }
+if ( -s $outfile ) {
+  my $rc=0xffff & system("/bin/mv -f $outfile $infile");
+  if ($rc != 0) {
+    print "Warning: failed to write $infile\n";
+  }
+  `chown $zimbra_user:$zimbra_user $infile`; 
+  `chmod 600 $infile`;
+} else {
+  print "Warning: Failed to update root password.\n";
 }
 
 # Update zimbra.ldif
 unlink("${config_dir}/zimbra.ldif");
 
-# Update zimbra.ldif
 $infile = "$source_config_dir/zimbra.ldif";
 $outfile = "$config_dir/zimbra.ldif";
 my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
@@ -147,11 +123,13 @@ my $ldap = Net::LDAP->new("${ldap_master_url}")  or  die "$@";
 # startTLS Operation
 my $mesg;
 if ($ldap_master_url !~ /^ldaps/i) {
-   $mesg = $ldap->start_tls(
-        verify => 'none',
-        capath => "${zimbra_home}/conf/ca",
-        ) or die "start_tls: $@";
-   $mesg->code && die "TLS: " . $mesg->error . "\n";
+  if ($ldap_starttls_supported) {
+    $mesg = $ldap->start_tls(
+         verify => 'none',
+         capath => "${zimbra_home}/conf/ca",
+         ) or die "start_tls: $@";
+    $mesg->code && die "TLS: " . $mesg->error . "\n";
+  }
 }
 
 $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
