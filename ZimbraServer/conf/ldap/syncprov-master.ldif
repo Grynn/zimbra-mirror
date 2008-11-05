@@ -1,0 +1,58 @@
+dn: olcDatabase={2}hdb,cn=config
+changetype: add
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {2}hdb
+olcDbDirectory: /opt/zimbra/data/ldap/accesslog/db
+olcSuffix: cn=accesslog
+olcAccess: {0}to dn.subtree="cn=accesslog"  by dn.exact="uid=zimbra,cn=admins,cn=zimbra" read  by dn.exact="cn=config" read
+  by dn.exact="uid=zmreplica,cn=admins,cn=zimbra" read
+olcLastMod: TRUE
+olcMaxDerefDepth: 15
+olcReadOnly: FALSE
+olcRootDN: cn=config
+olcSizeLimit: unlimited
+olcTimeLimit: unlimited
+olcMonitoring: TRUE
+olcDbCacheSize: 10000
+olcDbCheckpoint: 64 5
+olcDbNoSync: FALSE
+olcDbDirtyRead: FALSE
+olcDbIDLcacheSize: 10000
+olcDbIndex: entryCSN eq
+olcDbIndex: objectClass eq
+olcDbIndex: reqEnd eq
+olcDbIndex: reqResult eq
+olcDbIndex: reqStart eq
+olcDbLinearIndex: FALSE
+olcDbMode: 0600
+olcDbSearchStack: 16
+olcDbShmKey: 0
+olcDbCacheFree: 1
+olcDbDNcacheSize: 20000
+
+dn: olcOverlay=syncprov,olcDatabase={2}hdb,cn=config
+changetype: add
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov
+olcSpNoPresent: TRUE
+olcSpReloadHint: TRUE
+
+dn: olcOverlay=syncprov,olcDatabase={3}hdb,cn=config
+changetype: add
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov
+olcSpCheckpoint: 20 10
+olcSpSessionlog: 500
+
+dn: olcOverlay=accesslog,olcDatabase={3}hdb,cn=config
+changetype: add
+objectClass: olcOverlayConfig
+objectClass: olcAccessLogConfig
+olcOverlay: accesslog
+olcAccessLogDB: cn=accesslog
+olcAccessLogOps: writes
+olcAccessLogSuccess: TRUE
+olcAccessLogPurge: 07+00:00  01+00:00
