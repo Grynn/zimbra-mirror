@@ -58,7 +58,7 @@ open(IN,"<$infile");
 open(OUT,">$outfile");
 while (<IN>) {
   if ($_ =~ /^olcRootPW/) {
-    $_ =~ s|^olcRootPW.*|olcRootPW:: $$mime_root_passwd|;
+    $_ =~ s|^olcRootPW.*|olcRootPW:: $mime_root_passwd|;
     print OUT $_;
   } else {
     print OUT $_;
