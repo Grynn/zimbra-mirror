@@ -1,0 +1,180 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Getopt::Long;
+
+my %keys = ();
+my @lines = ();
+my %opt = ();
+
+sub usage {
+    my $message = shift;
+    if (defined($message)) {
+        print "Error: $message\n";
+	exit 1;
+    } else {
+    print<<EOF;
+Usage: 
+  zminiutil [--help] --(list|isset|get|set|unset) \\
+    --section=s --key=k [--value=v] inifile
+
+Eg:
+  zminiutil --isset --section=serverd --key=locking srv.cnf
+  zminiutil --get   --section=serverd --key=max-fds srv.cnf
+  zminiutil --set   --section=serverd --key=locking < srv.cnf
+  zminiutil --set   --section=serverd --key=max-fds --value=2048 srv.cnf
+  zminiutil --unset --section=serverd --key=buffersz < srv.cnf
+EOF
+	exit 0;
+    }
+}
+
+GetOptions
+    (
+     'debug'     => \$opt{debug},
+     'help'      => \$opt{help},
+     'get'       => \$opt{get},
+     'isset'     => \$opt{isset},
+     'list'      => \$opt{list},
+     'set'       => \$opt{set},
+     'unset'     => \$opt{unset},
+     'section=s' => \$opt{section},
+     'key=s'     => \$opt{key},
+     'value=s'   => \$opt{value}
+     ) || usage("Unknown option!");
+
+usage() if (defined($opt{help}));
+
+my $op = 0;
+$op++ if defined $opt{get};
+$op++ if defined $opt{isset};
+$op++ if defined $opt{list};
+$op++ if defined $opt{set};
+$op++ if defined $opt{unset};
+usage("one of --(list|isset|get|set|unset) must be specified") if $op < 1;
+usage("only one of --(list|isset|get|set|unset) must be specified") if $op > 1;
+usage("--key not specified") if (!defined($opt{key}) && !defined($opt{list}));
+usage("--section not specified") if (!defined($opt{section}) && !defined($opt{list}));
+
+if (defined($opt{value}) && !defined($opt{set})) {
+    usage("--value can only be specified with --set");
+}
+
+#
+# Debug print key/value
+#
+sub dp($$) {
+    return if (!defined($opt{debug}));
+    my ($k, $v) = @_; 
+    print "parser: $k="; 
+    print "'$v'" if (defined($v));
+    print "<undef>" if (!defined($v)); 
+    print "\n";
+}
+        
+#
+# Parse
+#
+my $currentSection = undef;
+while (<>) {
+    my %line = ();
+    $line{content} = $_;
+    push(@lines, \%line);
+
+    # look for a new section definition
+    my ($section) = m/^\s*[[](\s*\w*\s*)[]]\s*(|\x23.*)$/; # \x23=#
+    if (defined($section)) {
+        print "parse: new section=$section\n\n" if ($opt{debug});
+        $currentSection = $section;
+        $line{newSection} = $section;
+        next;
+    }
+
+    # look for empty or comment lines and avoid parsing those
+    if (/^\s*(|\x23.*)$/) {
+        next;
+    }
+
+    my ($keyPre, $key, $keyPost, $equals, $valuePre, $value, $valuePost) =
+        m/^(\s*)([^=\s]*)(\s*)(=?)(\s*)([^\s]*)(\s*(|\x23.*))$/;
+    dp('==== content', $_);
+    $line{section}   = $currentSection; dp('section',   $currentSection);
+    $line{keyPre}    = $keyPre;         dp('keyPre',    $keyPre); 
+    $line{key}       = $key;            dp('key',       $key);
+    $line{keyPost}   = $keyPost;        dp('keyPost',   $keyPost); 
+    $line{equals}    = $equals;         dp('equals',    $equals);
+    $line{valuePre}  = $valuePre;       dp('valuePre',  $valuePre); 
+    $line{value}     = $value;          dp('value',     $value);
+    $line{valuePost} = $valuePost;      dp('valuePost', $valuePost);
+    if (defined($line{section}) && defined($line{key})) {
+        my $compoundKey = $line{section} . "->" . $line{key};
+        $keys{$compoundKey} = $value;
+    }
+}
+
+#
+# OP == LIST
+#
+if (defined $opt{list}) {
+    for my $k (sort keys %keys) {
+        print $k, '=', $keys{$k}, "\n";
+    }
+    exit 0;
+}
+
+#
+# OP == GET
+#
+my $fullKey = $opt{section} . "->" . $opt{key};
+if (defined $opt{get}) {
+    if (defined $keys{$fullKey}) {
+	print $keys{$fullKey}, "\n";
+	exit 0;
+    } else {
+	exit 1;
+    }
+}
+
+#
+# OP == ISSET
+#
+if (defined $opt{isset}) {
+    exit 0 if defined $keys{$fullKey};
+    exit 1;
+}
+
+#
+# OP == SET or UNSET
+#
+LINE: for my $line (@lines) {
+    # Set a previously undefined key at start of its section
+    if (defined($line->{newSection}) &&
+        defined($opt{set}) &&
+        ($line->{newSection} eq $opt{section}) &&
+	!defined($keys{$fullKey}))
+    {
+        print $line->{content}; # the section header
+	print "\n", $opt{key};
+	print " = ", $opt{value} if defined $opt{value};
+	print "\n";
+	next LINE;
+    }
+
+    # Modify existing key
+    if (defined($line->{key}) && ($line->{key} eq $opt{key}) &&
+        defined($line->{section}) && ($line->{section} eq $opt{section}))
+    {
+        ### UNSET
+	next LINE if defined $opt{unset};
+
+        ### REPLACE
+        if (defined($opt{set})) {       
+	    print $opt{key};
+	    print " = ", $opt{value} if defined $opt{value};
+	    print "\n";
+	    next LINE;
+	}
+    }
+    print $line->{content};
+}
+

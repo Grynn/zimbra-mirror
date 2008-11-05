@@ -1,0 +1,77 @@
+#!/bin/bash
+
+ini=/tmp/initest.$$ 
+inix=/tmp/initest-x.$$
+zminiutil=./zminiutil
+
+asf() {
+    echo "==== asf:" $@
+    if $@; then	echo "==== test failed! aborting! ===="; exit 1; fi
+}
+
+ast() {
+    echo "==== ast:" $@
+    if ! $@; then echo "==== test failed"; exit 1; fi
+}
+
+ase() {
+    echo "==== ase:" $@; expected=$1; shift; run=$@;
+    actual="$($run)"
+    if [ "x$expected" != "x$actual" ]; then echo "==== test failed"; exit 1; fi
+}
+      
+ast ${zminiutil} --help
+asf ${zminiutil}
+asf ${zminiutil} --set
+asf ${zminiutil} --set --get
+
+(echo '[xxx]'; echo 'aaa=10'; echo '[yyy]'; echo 'bbb=20'; \
+echo '[zzz]'; echo 'ccc=30' ) > ${ini}
+
+ast ${zminiutil} --list ${ini}
+#ast ${zminiutil} --debug --list my.1 ${ini}
+
+asf ${zminiutil} --isset --section gobble --key gook ${ini}
+asf ${zminiutil} --isset --section xxx --key gook ${ini}
+asf ${zminiutil} --isset --section gobble --key aaa ${ini}
+ast ${zminiutil} --isset --section xxx --key aaa ${ini}
+
+asf ${zminiutil} --get --section gobble --key gook ${ini}
+asf ${zminiutil} --get --section xxx --key gook ${ini}
+asf ${zminiutil} --get --section gobble --key aaa ${ini}
+ast ${zminiutil} --get --section xxx --key aaa ${ini}
+
+ase "" ${zminiutil} --get --section gobble --key gook ${ini}
+ase "" ${zminiutil} --get --section xxx --key gook ${ini}
+ase "" ${zminiutil} --get --section gobble --key aaa ${ini}
+ase "10" ${zminiutil} --get --section xxx --key aaa ${ini}
+ase "20" ${zminiutil} --get --section yyy --key bbb ${ini}
+ase "30" ${zminiutil} --get --section zzz --key ccc ${ini}
+
+# test for new key, empty value
+for section in xxx yyy zzz; do
+ast ${zminiutil} --set --section $section --key foo ${ini} > ${inix}
+echo --------------------; cat ${inix}; echo --------------------
+ast ${zminiutil} --list ${inix}
+ast ${zminiutil} --isset --section $section --key foo ${inix}
+ase "" ${zminiutil} --get --section $section  --key foo ${inix}
+done
+
+# test for new key, some value
+for section in xxx yyy zzz; do
+ast ${zminiutil} --set --section $section --key foo ${ini} --value 12345 > ${inix}
+echo --------------------; cat ${inix}; echo --------------------
+ast ${zminiutil} --list ${inix}
+ast ${zminiutil} --isset --section $section --key foo ${inix}
+ase "12345" ${zminiutil} --get --section $section  --key foo ${inix}
+done
+
+# modify existing key
+ast ${zminiutil} --set --section xxx --key aaa ${ini} --value 56789 > ${inix}
+echo --------------------; cat ${inix}; echo --------------------
+ast ${zminiutil} --list ${inix}
+ast ${zminiutil} --isset --section xxx --key aaa ${inix}
+ase "56789" ${zminiutil} --get --section xxx --key aaa ${inix}
+
+rm ${ini}
+rm ${inix}
