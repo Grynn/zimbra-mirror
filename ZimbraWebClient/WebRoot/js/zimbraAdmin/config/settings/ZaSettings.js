@@ -440,6 +440,32 @@ ZaSettings.mailCharsetChoices = [
 	{ value: "x-windows-50221" , label: "x-windows-50221" } ,
 	{ value: "x-windows-874" , label: "x-windows-874" } ,
 	{ value: "x-windows-949" , label: "x-windows-949" } ,
-	{ value: "x-windows-950" , label: "x-windows-950" } ,
+	{ value: "x-windows-950" , label: "x-windows-950" } ,                                   
 	{ value: "x-windows-iso2022jp" , label: "x-windows-iso2022jp" } 
 ] ;
+
+ZaSettings.getLocaleChoices = function () {
+
+    if (! ZaSettings.localeChoices) {
+       //getAllLocalesRequest
+        var soapDoc = AjxSoapDoc.create("GetAllLocalesRequest", ZaZimbraAdmin.URN, null);
+        var params = {};
+        params.soapDoc = soapDoc;
+        var reqMgrParams = {
+                controller: (ZaApp.getInstance() ? ZaApp.getInstance().getCurrentController(): null ),
+                busyMsg : ZaMsg.BUSY_GET_LOCALE
+            }
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllLocalesResponse;
+        var locales = resp.locale ;
+        ZaSettings.localeChoices = [] ;
+
+        for (var i=0; i < locales.length; i ++) {
+            ZaSettings.localeChoices.push({
+                value: locales[i].id,
+                label: locales[i].name
+            });
+        }
+    }
+
+    return ZaSettings.localeChoices ;
+}

@@ -895,8 +895,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraJunkMessagesIndexingEnabled, type:_SUPER_WIZ_CHECKBOX_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,checkBoxLabel:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled,
-									trueValue:"TRUE", falseValue:"FALSE"}	
-							]
+									trueValue:"TRUE", falseValue:"FALSE"}	,
+                                {ref:ZaAccount.A_zimbraPrefLocale, type:_SUPERWIZ_SELECT1_, msgName:ZaMsg.NAD_zimbraPrefMailLocale,
+                                    choices: ZaSettings.getLocaleChoices(),
+                                    label:ZaMsg.NAD_zimbraPrefLocale, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
+
+                            ]
 						},	
 						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_mail_header",
 							items: [

@@ -1327,8 +1327,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled,
 									checkBoxLabel:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled, 
-									trueValue:"TRUE", falseValue:"FALSE"}	
-							]
+									trueValue:"TRUE", falseValue:"FALSE"},
+                                {ref:ZaAccount.A_zimbraPrefLocale, type:_SUPER_SELECT1_,
+									labelCssStyle:"width:175px", colSizes:["375px","190px"],
+                                    choices: ZaSettings.getLocaleChoices(),
+                                    msgName:ZaMsg.NAD_zimbraPrefLocale,label:ZaMsg.NAD_zimbraPrefLocale,
+									 labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
+                            ]                                                             
 						},	
 						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_mail_header",
 							items: [

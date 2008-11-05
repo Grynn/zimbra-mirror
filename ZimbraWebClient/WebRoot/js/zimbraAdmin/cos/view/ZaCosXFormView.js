@@ -364,7 +364,13 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 				msgName:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled,
 				label:ZaMsg.NAD_zimbraJunkMessagesIndexingEnabled, 
 				trueValue:"TRUE", falseValue:"FALSE"
-			}
+			},
+            {ref:ZaCos.A_zimbraPrefLocale, type:_OSELECT1_,
+				 msgName:ZaMsg.NAD_zimbraPrefLocale,label:ZaMsg.NAD_zimbraPrefLocale, 
+				 labelLocation:_LEFT_,
+				 labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true,
+                 choices: ZaSettings.getLocaleChoices()
+            }
 		]},							
 		{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"cos_form_prefs_mail_header",
 			items: [
