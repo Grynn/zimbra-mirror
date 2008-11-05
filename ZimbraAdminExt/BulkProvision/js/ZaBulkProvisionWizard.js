@@ -389,13 +389,16 @@ function() {
         var endTime = new Date ();
         if (AjxEnv.hasFirebug) console.log("End provisiong accounts: " + endTime.toUTCString());
         var total = endTime.getTime () - startTime.getTime () ;
-        
-        if (AjxEnv.hasFirebug) console.log("Total Time (ms): "  + total) ; 
+        if (AjxEnv.hasFirebug) console.log("Total Time (ms): "  + total) ;
         //update the status now
         ZaBulkProvision.updateBulkProvisionStatus (ZaApp.getInstance(), this._containedObject) ;
         nextStep = ZaBulkProvisionWizard.STEP_SUMMARY ;
         this.goPage(nextStep) ;
-	}
+
+        //update account list view
+        this._app.getAccountListController().fireCreationEvent(accounts);
+
+    }
 }
 
 ZaBulkProvisionWizard.prototype.goPrev =

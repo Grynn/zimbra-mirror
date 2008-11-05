@@ -43,7 +43,7 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
 
     public static final String ERROR_INVALID_ACCOUNT_NAME = "Invalid account name. " ;
 
-    private ArrayList<String> accountNames = new ArrayList <String> ();
+    private ArrayList<String> accountNames ;
     
     public boolean domainAuthSufficient(Map context) {
         return true;
@@ -64,6 +64,7 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
            throw ServiceException.FAILURE("Uploaded CSV file with id " + aid + " was not found.", null);
 
         InputStream in = null ;
+        accountNames = new ArrayList <String> ();
         boolean isValidCSV = true ;
         Hashtable<String, String []> ht = new Hashtable<String, String[]> ();
         int lineNo = 1 ;
