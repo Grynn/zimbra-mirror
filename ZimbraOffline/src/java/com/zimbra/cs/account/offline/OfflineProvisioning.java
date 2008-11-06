@@ -1998,16 +1998,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     @Override
-    public void grantPermission(TargetType targetType, Entry target,
-                                GranteeType granteeType, NamedEntry grantee, 
-                                Right right, boolean deny) throws ServiceException {
+    public void grantRight(TargetType targetType, Entry target,
+                           GranteeType granteeType, NamedEntry grantee, 
+                           Right right, boolean deny) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("grantPermission");
     }
 
     @Override
-    public void revokePermission(TargetType targetType, Entry target,
-                                 GranteeType granteeType, NamedEntry grantee, 
-                                 Right right, boolean deny) throws ServiceException {
+    public void revokeRight(TargetType targetType, Entry target,
+                            GranteeType granteeType, NamedEntry grantee, 
+                            Right right, boolean deny) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("revokePermission");
     }
 
