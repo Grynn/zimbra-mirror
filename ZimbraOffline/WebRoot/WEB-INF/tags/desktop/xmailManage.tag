@@ -1,297 +1,206 @@
 <%@ tag body-content="empty" %>
+<%@ attribute name="accountFlavor" required="true" %>
 <%@ attribute name="uri" required="true" %>
+<%@ attribute name="verb" required="false" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
+<%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
 
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
-<c:set var='onDeleteWarn'><fmt:message key='OnDeleteWarn'/></c:set>
-
 <script type="text/javascript">
-<!--
 function InitScreen() {
-    zd.hide("syncSettingsRow");
-    zd.hide("popSettingsRow");
-
-	<c:choose>
-	    <c:when test="${bean.pop}" >
-	        zd.show("popSettingsRow");
-	    </c:when>
-	    <c:when test="${bean.imap || bean.live}">
-	        zd.show("syncSettingsRow");
-	    </c:when>
-	</c:choose>
-
-	<c:if test="${not bean.live && not bean.ymail}">
-    if (!zd.isChecked("smtpAuth")) {
-        zd.hide("smtpAuthSettingsRow");
-    }
-	</c:if>
+<c:if test="${bean.password eq '' or not zdf:isValid(bean, 'password')}"> 
+    zd.hide("editPasswordRow");
+    zd.show("passwordRow");
+</c:if>
 }
 
-function OnCancel() {
-    window.location = '/zimbra/desktop/console.jsp';
-}
-
-function OnSubmit() {
-    beforeSubmit();
-    xmailManage.submit();
-}
-
-function OnDelete() {
-    if (confirm("${onDeleteWarn}")) {
-        beforeSubmit();
-        document.hidden_form.verb.value = "del";
-        document.hidden_form.submit();
+function SetPort() {
+    if (zd.isDisabled("port")) {
+        if (${bean.type eq 'pop3'}) {
+            if (${bean.ssl})
+                zd.set("port", "995");
+            else
+                zd.set("port", "110");
+        } else if (${bean.type eq 'imap'}) {
+            if (zd.isChecked("ssl"))
+                zd.set("port", "993");
+            else
+                zd.set("port", "143");
+        }
+    } else if (${bean.type eq 'zimbra'}) {
+        if (zd.isChecked("ssl"))
+            zd.set("port", "443");
+        else
+            zd.set("port", "80");
     }
 }
 
-function OnManage() {
-    document.hidden_form.action = '/zimbra/desktop/manageData.jsp';
-    document.hidden_form.submit();
-}
-
-function OnSwitch(ds) {
-    if (ds == 'caldav') {
-        document.caldav_form.submit();
+function SetSmtpPort() {
+    if (zd.isDisabled("smtpPort")) {
+        if (${bean.ssl}) {
+            zd.set("smtpPort", "465");
+        } else {
+            zd.set("smtpPort", "25");
+        }
     }
 }
-
-function beforeSubmit() {
-    disableButtons();
-    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
-    zd.enable("password");
-    if (!${bean.live} && !${bean.ymail}) {
-        zd.enable("smtpPassword");
-    }
-}
-
-function disableButtons() {
-    zd.disable("cancelButton");
-    //zd.disable("deleteButton");
-    //zd.disable("manageButton");
-    zd.disable("saveButton");
-}
-
-function passOnEdit(id) {
-    zd.enable(id);
-    passObj = document.getElementById(id);
-    passObj.value='';
-    passObj.focus();
-}
-
-//-->
 </script>
-
 
 <div id="newService" class="ZWizardPage">
 
-<div class="ZWizardPageTitle">
-    <div id='settings_hint' class='ZFloatInHead'></div>
-    <span id='pageTitle'>
-    <c:choose>
-    <c:when test="${bean.live}" >
-        <h2 align="center"><fmt:message key='LiveChgSetup'/></h2><hr>
-    </c:when>
-    <c:when test="${bean.ymail}" >
-         <h2 align="center"><fmt:message key='YMPChgSetup'/></h2><hr>
-    </c:when>
-    <c:otherwise>
-        <h2 align="center"><fmt:message key='OtherChgSetup'/></h2><hr>
-    </c:otherwise>
-    </c:choose>
-    </span>
-</div>
-
-<form name="caldav_form" action="/zimbra/desktop/caldav.jsp" method="POST">
+<span class="padding">
+<form name="accountForm" action="${uri}" method="POST">
     <input type="hidden" name="accountId" value="${bean.accountId}">
-    <input type="hidden" name="accountName" value="${bean.accountName}">
-    <input type="hidden" name="displayName" value="${bean.fromDisplay}">
-    <input type="hidden" name="mailUsername" value="${bean.email}">
-    <input type="hidden" name="accntType" value="OtherAcct">
-</form>
+    <input type="hidden" name="accountFlavor" value="${accountFlavor}">
+<c:if test="${bean.type ne 'zimbra' and not empty bean.domain}">
+    <input type="hidden" name="domain" value="${bean.domain}">
+</c:if>
+    <input type="hidden" name="verb" value="${verb}">
 
-<form name="hidden_form" action="${uri}" method="POST">
-    <input type="hidden" name="accountId" value="${bean.accountId}">
-    <input type="hidden" name="accountName" value="${bean.accountName}">
-    <input type="hidden" name="email" value="${bean.email}">
-    <input type="hidden" name="verb">
-    <input type="hidden" name="accntType" value="OtherAcct">
-</form>
-		<span class="padding">
-<c:choose>
-    <c:when test="${not empty bean.error}" >
-        <p class='ZOfflineError'>${bean.error}</p>
-    </c:when>
-    <c:when test="${not bean.allValid}" >
-        <p class='ZOfflineError'><fmt:message key='PlsCorrectInput'/></p>
-    </c:when>
-    
-</c:choose>
-
-<form name="xmailManage" action="${uri}" method="POST">
-    <input type="hidden" name="accountId" value="${bean.accountId}">
-    <input type="hidden" name="accountName" value="${bean.accountName}">
-    <input type="hidden" name="email" value="${bean.email}">
-    <input type="hidden" name="verb" value="mod">
-    <input type="hidden" name="accntType" value="OtherAcct">
-
-    <c:if test="${not empty bean.domain}">
-        <input type="hidden" name="domain" value="${bean.domain}">
+        <tr>
+            <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='AccountName'/></td>
+            <td><input class="ZField" type="text" id="accountName" name="accountName" value="${bean.accountName}" ${empty bean.accountId ? '' : 'disabled'}><td>
+        </tr>
+<c:if test="${bean.type ne 'zimbra'}">
+        <tr>
+            <td class="ZFieldLabel"><fmt:message key='FullName'/></td>
+            <td><input class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
+        </tr>
+</c:if>
+        <tr id="emailRow">
+            <td class="${zdf:isValid(bean, 'email') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='EmailAddress'/></td>
+            <td><input class="ZField" type="text" id="email" name="email" value="${bean.email}"></td>
+        </tr>
+<c:if test="${bean.serverConfigSupported}">    
+    <c:if test="${bean.usernameRequired}">    
+        <tr id="receivingMailRow">
+            <td class="ZSection" colspan="2"><fmt:message key='ReceivingMail'/></td>
+        </tr>
+        <tr><td><td></tr>
+        <tr id="usernameRow">
+            <td class="${zdf:isValid(bean, 'username') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='UserName'/></td>
+            <td><input class="ZField" type="text" id="username" name="username" value="${bean.username}"></td>
+        </tr>       
     </c:if>
-    
-    <input type="hidden" name="protocol" value="${bean.pop ? 'pop3' : bean.imap ? 'imap' : 'live'}">
-    <input type="hidden" name="username" value="${bean.username}">
-
-    <table cellpadding="5">
-        <c:if test="${not bean.live and not bean.ymail}">    
-	        <tr id='accountTypeRow'>
-	            <td class="ZFieldLabel"><fmt:message key='AccountType'/></td>
-	            <td><input class="ZField" type="text" id="protocol" value="${bean.pop ? 'POP3' : 'IMAP4'}" disabled></td>
-	        </tr>
-	    </c:if>
-	    
-        <tr>
-            <td class="ZFieldLabel"><fmt:message key='Description'/></td>
-            <td><input class="ZField" type="text" id="accountName" value="${bean.accountName}" disabled></td>
-        </tr>
-        <tr id='usernameRow'>
-            <td class="ZFieldLabel"><fmt:message key='UserName'/></td>
-            <td><input class="ZField" type="text" id="username" value="${bean.username}" disabled></td>
-        </tr>
-        <tr id='passwordRow'>
+</c:if>
+        <tr id="editPasswordRow">
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
-            <td><input  class="ZField" type="password" id="password" name="password" value="${bean.password}"
-                    onkeypress='zd.syncIdsOnTimer(this, "smtpPassword")' ${zdf:isValid(bean, 'password') ? 'disabled' : ''}>
-                <c:if test="${zdf:isValid(bean, 'password')}"><a href="#" onclick="passOnEdit('password');this.style.display='none'"><fmt:message key='Edit'/></a></c:if>
+            <td>
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td><input style="width:300px" class="ZField" type="password" id="editPassword" name="editPassword" value="${bean.password}" disabled></td>
+                        <td align="right">&nbsp;<a href="#" onclick="onEditPassword('password');this.style.display='none'"><fmt:message key='Edit'/></a></td>
+                    </tr>
+                </table>
             </td>
         </tr>
-        
-        <tr><td class="ZFieldLabel"><fmt:message key='FullName'/></td>
-            <td><input  class="ZField" type="text" id="fromDisplay" name="fromDisplay" value="${bean.fromDisplay}"></td>
-        </tr>
-        <tr id='emailRow'>
-            <td class="ZFieldLabel"><fmt:message key='EmailAddr'/></td>
-            <td><input  class="ZField" type="text" id="email" name="email" value="${bean.email}" disabled>
-                <span id='email_hint' class='ZHint'>
+        <tr id="passwordRow" style="display:none">
+            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
+            <td><input class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
+        </tr>       
+<c:if test="${bean.serverConfigSupported}">    
+        <tr id="mailServerRow">
+            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='InMailServer'/></td>
+            <td>
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td><input style="width:200px" class="ZField" type="text" id="host" name="host" value="${bean.host}"></td>
+                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Port'/>&nbsp;</td>
+                        <td width="1%"><input style="width:40px" class="ZField" type="text" id="port" name="port" value="${bean.port}" "disabled"></td>
+                        <td>&nbsp;<a href="#" onclick="onEditPort(this, 'port')"><fmt:message key='Edit'/></a></td>
+                    </tr>
+                </table>
             </td>
         </tr>
-        
-        <c:choose>
-        <c:when test="${bean.live || bean.ymail}">
-            <input type="hidden" name="host" value="${bean.host}">
-            <input type="hidden" name="port" value="${bean.port}">
-            <input type="hidden" name="ssl" value="${bean.ssl ? 'true' : 'false'}">
-        </c:when>
-        <c:otherwise>
-        
-	        <tr id='receivingMailRow'><td colspan=2><fmt:message key='ReceivingMail'/><hr></td></tr>
-	        
-	        <tr id='mailServerRow'>
-	            <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='InMailServer'/></td>
-	            <td>
-	                <table cellspacing=0 cellpadding=0>
-	                    <tr>
-	                        <td><input style='width:240px' class="ZField" type="text" id="host" name="host" value="${bean.host}">
-	                        </td>
-	                        <td>&nbsp;&nbsp;&nbsp;</td>
-	                        <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Port'/></td>
-	                        <td width=100%><input style='width:50px' class="ZField" type="text" id="port" name="port" value="${bean.port}">
-	                        </td>
-	                    </tr>
-	                </table>
-	            </td>
-	        </tr>
-	        <tr id='mailSecureRow'><td class="ZFieldLabel"></td>
-	            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''}></td><td><fmt:message key='UseSSL'/>
-				</td></tr></table>
-				</td>
-	            
-	        </tr>
-	
-	        <tr id='sendingMailRow'><td colspan=2><fmt:message key='SendingMail'/><hr></td></tr>
-        
-	        <tr id='smtpServerRow'>
-	            <td class="${zdf:isValid(bean, 'smtpHost') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='OutMailServer'/></td>
-	            <td>
-	                <table cellspacing=0 cellpadding=0>
-	                    <tr>
-	                        <td><input style='width:240px' class="ZField" type="text" id=smtpHost name="smtpHost" value="${bean.smtpHost}">
-	                        </td>
-	                        <td>&nbsp;&nbsp;&nbsp;</td>
-	                        <td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Port'/></td>
-	                        <td width=100%><input style='width:50px' class="ZField" type="text" id="smtpPort" name="smtpPort" value="${bean.smtpPort}">
-	                        </td>
-	                    </tr>
-	                </table>
-	            </td>
-	        </tr>
-	        <tr id='smtpSecureRow'><td class="ZFieldLabel"></td>
-	            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="smtpSsl" name="smtpSsl" ${bean.smtpSsl ? 'checked' : ''}></td><td><fmt:message key='UseSSL'/>
-				</td></tr></table></td>
-	            
-	        </tr>
-	        <tr id='smtpAuthRow'> <td class="ZFieldLabel"></td>
-	            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="smtpAuth" name="smtpAuth" ${bean.smtpAuth ? 'checked' : ''} onclick='zd.toggle("smtpAuthSettingsRow", this.checked)'></td><td><fmt:message key='UsrPassForSend'/>
-				</td></tr></table>
-				</td>
-	           
-	        </tr>
-	        <tr id='smtpAuthSettingsRow'>
-	            <td class="ZFieldLabel"></td>
-	            <td>
-	                <table>
-	                    <tr>
-	                        <td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZLabel' : 'ZFieldError'}"><fmt:message key='UserName'/></td>
-	                        <td><input style='width:240px' class="ZField" type="text" id="smtpUsername" name="smtpUsername" value="${bean.smtpUsername}"></td>
-	                    </tr>
-	                    <tr>
-	                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
-	                        <td>
-                               <input style='width:240px' class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}"
-                                 ${zdf:isValid(bean, 'smtpPassword') ? 'disabled' : ''}>
-                               <c:if test="${zdf:isValid(bean, 'smtpPassword')}">
-                                 <a href="#" onclick="passOnEdit('smtpPassword');this.style.display='none'"><fmt:message key='Edit'/></a>
-                               </c:if>
-	                        </td>
-	                    </tr>
-	                </table>
-	            </td>
-	        </tr>
-
-	        <tr id='replyToRow'>
-				<td class="ZFieldLabel" valign="top"style="padding-top: 12px !important;"><fmt:message key='ReplyTo'/></td>
-	            <td>
-	                <table>
-	                    <tr>
-	                        <td align="right"><fmt:message key='Name'/></td>
-	                        <td><input style='width:240px' class="ZField" type="text" id="replyToDisplay" name="replyToDisplay" value="${bean.replyToDisplay}"
-	                                onkeypress='zd.markElementAsManuallyChanged(this)'
-	                        ></td>
-	                       
-	                    </tr>
-	                    <tr>
-	                         <td aign="right"><fmt:message key='EmailAddress'/></td>
-	                        <td><input style='width:240px' class="ZField" type="text" id="replyTo" name="replyTo" value="${bean.replyTo}"
-	                                onkeypress='zd.markElementAsManuallyChanged(this)'
-	                        ></td>
-	                    </tr>
-	                </table>
-	            </td>
-	        </tr>       
-        
-        </c:otherwise>
-        </c:choose>
-
-        <tr><td colspan=2><fmt:message key='SendAndReceive'/><hr></td></tr>
-
+        <tr id="mailSecureRow">
+            <td class="ZFieldLabel"></td>
+            <td>
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td><input class="ZCheckboxCell" type="checkbox" id="ssl" name="ssl" ${bean.ssl ? 'checked' : ''} onclick="SetPort()"></td>
+                        <td><fmt:message key='UseSSL'/></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+<c:if test="${bean.smtpConfigSupported}">    
+        <tr id="sendingMailRow">
+            <td class="ZSection" colspan="2"><fmt:message key='SendingMail'/></td>
+        </tr>
+        <tr><td><td></tr>
+        <tr id="smtpServerRow">
+            <td class="${zdf:isValid(bean, 'smtpHost') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='OutMailServer'/></td>
+            <td>
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td><input style="width:200px" class="ZField" type="text" id="smtpHost" name="smtpHost" value="${bean.smtpHost}"></td>
+                        <td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Port'/>&nbsp;</td>
+                        <td width="1%"><input style="width:40px" class="ZField" type="text" id="smtpPort" name="port" value="${bean.smtpPort}" "disabled"></td>
+                        <td>&nbsp;<a href="#" onclick="onEditPort(this, 'smtpPort')"><fmt:message key='Edit'/></a></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr id="smtpSecureRow">
+            <td class="ZFieldLabel"></td>
+            <td>
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td><input class="ZCheckboxCell" type="checkbox" id="smtpSsl" name="smtpSsl" ${bean.smtpSsl ? 'checked' : ''} onclick="SetSmtpPort()"></td>
+                        <td><fmt:message key='UseSSL'/></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr id="smtpAuthRow">
+            <td class="ZFieldLabel"></td>
+            <td>
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td><input class="ZCheckboxCell" type="checkbox" id="smtpAuth" name="smtpAuth" ${bean.smtpAuth ? 'checked' : ''} onclick='zd.toggle("smtpAuthSettingsRow", this.checked)'></td>
+                        <td><fmt:message key='UsrPassForSend'/></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr id="smtpAuthSettingsRow" align="right" ${bean.smtpAuth ? '' : 'style="display:none"'}>
+            <td class="ZFieldLabel"></td>
+            <td align="right">
+                <table cellpadding="5">
+                    <tr>
+                        <td class="${zdf:isValid(bean, 'smtpUsername') ? 'ZLabel' : 'ZFieldError'}"><nobr><fmt:message key='UserName'/></nobr></td>
+                        <td><input style="width:240px" class="ZField" type="text" id="smtpUsername" name="smtpUsername" value="${bean.smtpUsername}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
+                    </tr>
+                    <tr>
+                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZLabel' : 'ZFieldError'}"><nobr><fmt:message key='Password'/></nobr></td>
+                        <td><input style="width:240px" class="ZField" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr id="replyToRow">
+            <td class="ZFieldLabel"><fmt:message key='ReplyTo'/></td>
+            <td align="right">
+                <table cellpadding="5">
+                    <tr>
+                        <td align="right"><nobr><fmt:message key='Name'/></nobr></td>
+                        <td><input style="width:240px;" class="ZField" type="text" id="replyToDisplay" name="replyToDisplay" value="${bean.replyToDisplay}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
+                    </tr>
+                    <tr>
+                        <td align="right"><nobr><fmt:message key='EmailAddress'/></nobr></td>
+                        <td><input style="width:240px;" class="ZField" type="text" id="replyTo" name="replyTo" value="${bean.replyTo}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+</c:if>
+</c:if>
+        <tr><td class="ZSection" colspan="2"><fmt:message key='SyncOptions'/></td><tr>
         <tr>
-            <td class="ZFieldLabel"><fmt:message key='OtherSyncFrequency'/></td>
+            <td class="ZFieldLabel"><fmt:message key='SyncFrequency'/></td>
             <td>
                 <select class="ZSelectSmall" id="syncFreqSecs" name="syncFreqSecs">
                     <option value="-1" ${bean.syncFreqSecs == -1 ? 'selected' : ''}><fmt:message key='SyncManually'/></option>
@@ -305,52 +214,56 @@ function passOnEdit(id) {
                 </select>
             </td>
         </tr>
-        
-        <tr id='syncSettingsRow'>
-            <td class="ZFieldLabel"></td>
+<c:if test="${bean.type eq 'pop3'}">
+        <tr id="popSettingsRow">
+            <td class="ZFieldLabel"><fmt:message key='SyncMsgs'/></td>
             <td>
-                <table cellpadding="0" cellspacing="0" border="0">
-                  <tr>
-				    <td><input type="checkbox" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''}></td>
-                    <td><fmt:message key='SyncAllFolders'/></td>
-                  </tr>
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td><input class="ZRadioCell" type="radio" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? '' : 'checked'} value="false"></td>
+                        <td><nobr><fmt:message key='SyncMsgsDelete'/><nobr></td>
+                        <td width="99%">&nbsp;</td>
+                        <td><input type="radio" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? 'checked' : ''} value="true"></td>
+                        <td><nobr><fmt:message key='SyncMsgsLeave'/></nobr></td>
+                    </tr>
                 </table>
-	        </td>
+            </td>
         </tr>
-        
-        <tr id='popSettingsRow'> <td class="ZFieldLabel"></td>
-            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="leaveOnServer" name="leaveOnServer" ${bean.leaveOnServer ? 'checked' : ''}></td><td><fmt:message key='LeaveOnServer'/>
-				</td></tr></table>
-				</td>
-           
+</c:if>
+<c:if test="${bean.folderSyncSupported}">
+        <tr id="syncFoldersRow" >
+            <td class="ZFieldLabel"><fmt:message key='SyncFolders'/></td>
+            <td>
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td><input type="radio" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''} value="true"></td>
+                        <td><nobr><fmt:message key='SyncFoldersAll'/></nobr></td>
+                        <td width="99%">&nbsp;</td>
+                        <td><input class="ZRadioCell" type="radio" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? '' : 'checked'} value="false"></td>
+                        <td><nobr><fmt:message key='SyncFoldersInbox'/><nobr></td>
+                    </tr>
+                </table>
+            </td>
         </tr>
-
-        <c:if test="${bean.contactSyncSupported}">
-            <tr><td class="ZFieldLabel"></td>
-                <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td><td><fmt:message key='ContactSyncEnabled'/>
-				</td></tr></table>
-				</td>
-            </tr>
-        </c:if>
-
-        <c:if test="${bean.contactSyncSupported}">
-            <tr><td class="ZFieldLabel"></td>
-                <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled ? 'checked' : ''}></td><td><fmt:message key='CalendarSyncEnabled'/>
-				</td></tr></table>
-				</td>
-            </tr>
-        </c:if>
-
-        <tr><td class="ZFieldLabel"></td>
-            <td><table cellpadding="0" cellspacing="0" border="0"><tr>
-				<td><input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td><td><fmt:message key='EnableTrace'/>
-				</td></tr></table>
-				</td>
+</c:if>
+<c:if test="${bean.calendarSyncSupported}">
+        <tr id="syncCalendarRow">
+            <td class="ZFieldLabel"><fmt:message key='SyncCalendar'/></td>
+            <td><input class="ZCheckboxCell" type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled ? 'checked' : ''}></td>
         </tr>
-    </table>
-
+</c:if>
+<c:if test="${bean.contactSyncSupported}">
+        <tr id="syncContactsRow" >
+            <td class="ZFieldLabel"><fmt:message key='SyncContacts'/></td>
+            <td><input class="ZCheckboxCell" type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td>
+        </tr>
+</c:if>
+<c:if test="${not empty bean.accountId}">
+        <tr id="debugTraceRow">
+            <td class="ZFieldLabel"><fmt:message key='EnableTrace'/></td>
+            <td><input class="ZCheckboxCell" type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}></td>
+        </tr>
+</c:if>
 </form>
 </div>
+</span>

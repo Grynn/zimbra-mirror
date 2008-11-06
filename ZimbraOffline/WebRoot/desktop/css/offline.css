@@ -1,35 +1,34 @@
 /* Offline-specific styles */
-body{margin: 0px; padding: 0px; background-color: white;}
+body { margin: 0px; padding: 0px; background-color: white; }
 
 BODY, P, TH, TD, DIV, SELECT, TEXTAREA, BUTTON {
 	font-family:Tahoma, Arial, Helvetica, sans-serif;
 	font-size:11px;
 }
+
 FORM {
      margin: 0px;
 }
 
-a:link, a:active, a:visited{ text-decoration: none;}
-a:hover{text-decoration: underline;}
+a:link, a:active, a:visited { text-decoration: none; }
+a:hover {text-decoration: underline; }
 
 HR {
 	border-width:1px 0px 0px 0px;
 	border-style: solid;
-    border-color: #d4d4d4;
-    margin-top: 10px;
+	border-color: #d4d4d4;
+	margin-top: 10px;
 }
 
 INPUT[type=text],
 INPUT[type=password]	{
-
-    border: 1px inset #CCCCCC;
-
+	border: 1px inset #CCCCCC;
 }
+
 SELECT {
 	padding:1px;
 	border:1px inset #CCCCCC;
 }
-
 
 .ZFloatInHead {
 	float:right;
@@ -76,7 +75,9 @@ SELECT {
 .ZWizardForm TD {
 	vertical-align:top;
 }
-.ZFieldLabel{ width: 170px; font-weight: bold; padding-top: 0px !important;}
+
+.ZFieldLabel { font-weight: bold; padding-top: 0px !important; }
+
 .ZFieldLabel,
 .ZFieldError,
 .ZFieldLabelLeft {
@@ -84,22 +85,25 @@ SELECT {
 	text-align:right;
 	white-space:nowrap;
 }
+
 .ZFieldError {
 	color:red;
 }
+
 .ZFieldLabelLeft {
 	text-align:left;
-}
-
-.ZRadioCell {
-	padding-top:2px;
 }
 
 .ZCheckboxCell {
 	text-align:right;
 }
+
 .ZCheckboxLabel {
 	padding-top:4px;
+}
+
+.ZRadioCell {
+	padding-top:2px;
 }
 
 .ZHint {
@@ -143,13 +147,26 @@ SELECT {
 	color:red;
 }
 
-.padding p{padding-left: 10px;}
+.ZSection {
+	border-bottom:2px solid lightgrey;
+	color: grey;
+	font-weight: bold;
+	padding: 10px 0px 2px 0px;
+}
 
+.ZSeparator {
+	border-bottom:2px solid lightgrey;
+	font-size: 1px;
+	padding: 6px 0px 6px 0px;
+}
 
-.infoTitle{padding-left:5px;font-weight:bold;border-bottom:1px solid #FD0;margin-bottom:10px;}
-.infoBox{margin:0 5px 10px 0;background-color:#FFF6BF;border:1px solid #FD0;-moz-border-radius:10px;padding:10px 10px 10px 10px;}
+.padding p { padding-left: 10px;}
 
-.whiteBg{
+.infoTitle { padding-left:5px;font-weight:bold;border-bottom:1px solid #FD0;margin-bottom:10px;}
+
+.infoBox { margin:0 5px 10px 0;background-color:#FFF6BF;border:1px solid #FD0;-moz-border-radius:10px;padding:10px 10px 10px 10px; }
+
+.whiteBg {
 	background-color: #e9f2fa;
 	font: 11px Arial, Verdana, san-serif;
 	line-height: 20px;
@@ -161,14 +178,41 @@ SELECT {
 	padding: 20px;  
 }
 
-h2{ margin: 0px; padding: 0px}
+.ZField { width: 350px; padding: 4px; }
 
-.ZField{ width: 350px; padding: 4px;}
-.ZSelect{ width: 350px; padding:2px;cursor:pointer;}
-.ZSelectSmall{ width: 180px; padding:2px;cursor:pointer;}
-.rowline td{border-bottom: 1px solid #e5e5e5;}
+.ZSelect { width: 350px; padding:2px;cursor:pointer; }
 
-h3{ font-size: 16px;}
-h2{ font-weight: normal;font-size: 20px;letter-spacing: 1px;}
-.infoBg{ background-color: #fffff1; border: 1px solid #d5d6bb; text-align: left; width: 500px; line-height: 20px; padding: 10px; margin-bottom: 5px;}
-.ZLabel{text-align: right; padding: 0px 4px;}
+.ZSelectSmall { width: 180px; padding:2px;cursor:pointer; }
+
+.rowline td { border-bottom: 1px solid #e5e5e5; }
+
+h2 { font-weight: normal;font-size: 16px;letter-spacing: 1px; margin: 0px; padding: 0px }
+
+h3 { font-size: 14px; }
+
+.infoBg { background-color: #fffff1; border: 1px solid #d5d6bb; text-align: left; width: 500px; line-height: 20px; padding: 10px; margin-bottom: 5px; }
+
+.ZLabel {text-align: right; padding: 0px 4px; }
+
+.ZBlueButton			{ cursor:pointer; }
+.ZBlueButton TABLE		{ border-collapse:collapse; display:inline;}
+.ZBlueButton TD 		{ padding:0px; }
+.ZBlueButton .title 		{ font-size:12px; font-weight:bold; color:white; vertical-align:middle;}
+.ZBlueButton .over .title	{ text-decoration:underline;}
+.zBlueButton .down .title	{ text-decoration:underline; color:darkblue; }
+
+.ImgBlueButton_L		{ width:15px; height:26px; background:url(/zimbra/desktop/img/ImgBlueButton_L.gif) no-repeat; }
+.ImgBlueButton  		{ height:26px; background:url(/zimbra/desktop/img/ImgBlueButton.repeatx.gif) repeat-x; padding: 0 5 0 5 !important; }
+.ImgBlueButton_R		{ width:15px; height:26px; background:url(/zimbra/desktop/img/ImgBlueButton_R.gif) no-repeat; }
+
+.ZGreyButton			{ cursor:pointer;  }
+.ZGreyButton TABLE		{ border-collapse:collapse; display:inline;}
+.ZGreyButton TD 		{ padding:0px; }
+.ZGreyButton .title 		{ font-size:12px; line-height:22px; font-weight:bold; color:#666; }
+.ZGreyButton .over .title 	{ text-decoration:underline;}
+.ZGreyButton .down .title 	{ text-decoration:underline; color:darkblue; }
+
+.ImgGreyButton_L		{ width:15px; height:26px; background:url(/zimbra/desktop/img/ImgGreyButton_L.gif) no-repeat; }
+.ImgGreyButton  		{ height:26px; background:url(/zimbra/desktop/img/ImgGreyButton.repeatx.gif) repeat-x; padding: 0 5 0 5 !important;}
+.ImgGreyButton_R		{ width:15px; height:26px; background:url(/zimbra/desktop/img/ImgGreyButton_R.gif) no-repeat; }
+

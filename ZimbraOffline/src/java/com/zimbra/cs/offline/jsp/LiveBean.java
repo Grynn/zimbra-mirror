@@ -2,37 +2,31 @@ package com.zimbra.cs.offline.jsp;
 
 import com.zimbra.cs.account.DataSource;
 
-public class GmailBean extends ImapBean {
-    public static final String Domain = "gmail.com";
+public class LiveBean extends XmailBean {
+    public static final String Domain = "hotmail.com";
 
-    public GmailBean() {}
-	
+    public LiveBean() {}
+
     @Override
     protected void doRequest() {
 	domain = Domain;
+        type = DataSource.Type.live.toString();
         if (verb != null && (verb.isAdd() || verb.isModify())) {
             if (!isEmpty(email) && email.indexOf('@') < 0)
                 email += '@' + domain;
 	    username = email;
         }
-	host = "imap.gmail.com";
-	isSsl = true;
-	port = "993";
-
-	smtpHost = "smtp.gmail.com";
-	smtpPort = "465";
-	isSmtpSsl = true;
-	isSmtpAuth = true;
-	smtpUsername = email;
-	smtpPassword = password;
-	super.doRequest();
-    }
-
-    public boolean isCalendarSyncSupported() {
-	return true;
+        host = "www.hotmail.com";
+        isSsl = false;
+        port = "80";
+        super.doRequest();
     }
 
     public boolean isContactSyncSupported() {
+	return true;
+    }
+
+    public boolean isFolderSyncSupported() {
 	return true;
     }
 
@@ -48,3 +42,4 @@ public class GmailBean extends ImapBean {
 	return false;
     }
 }
+
