@@ -67,11 +67,32 @@ function() {
 };
 
 //
+// Data
+//
+
+ZmBatchCommand.prototype._sensitive = false;
+
+//
 // Constants
 //
 
 ZmBatchCommand.STOP = "stop";
 ZmBatchCommand.CONTINUE = "continue";
+
+//
+// Public methods
+//
+
+/**
+ * Indicates that this batch command contains a request with sensitive
+ * data. Note: There is no way to unset this value for the batch command.
+ */
+ZmBatchCommand.prototype.setSensitive = function(sensitive) {
+	this._sensitive = this._sensitive || sensitive;
+};
+ZmBatchCommand.prototype.isSensitive = function() {
+	return this._sensitive;
+};
 
 /**
  * Adds a command to the list of commands to run as part of this batch request.
@@ -112,6 +133,7 @@ function(callback, errorCallback) {
 	}
 
 	var params = {
+		sensitive:		this._sensitive,
 		asyncMode:		true,
 		callback:		new AjxCallback(this, this._handleResponseRun, [callback, errorCallback]),
 		errorCallback:	errorCallback,

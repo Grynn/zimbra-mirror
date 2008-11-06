@@ -18,6 +18,11 @@
 ZmCsfeCommand = function() {
 };
 
+ZmCsfeCommand.prototype.toString =
+function() {
+	return "ZmCsfeCommand";
+};
+
 // Static properties
 
 // Global settings for each CSFE command
@@ -117,11 +122,6 @@ function(request) {
 	return (methodName || "[unknown]");
 };
 
-ZmCsfeCommand.prototype.toString =
-function() {
-	return "ZmCsfeCommand";
-};
-
 /**
  * Sends a SOAP request to the server and processes the response. The request can be in the form
  * of a SOAP document, or a JSON object.
@@ -149,7 +149,7 @@ function(params) {
 
 	if (!(params && (params.soapDoc || params.jsonObj))) { return; }
 
-	var requestStr = params.soapDoc ? this._getSoapRequestStr(params) : this._getJsonRequestStr(params);
+	var requestStr = ZmCsfeCommand.getRequestStr(params);
 
 	var rpcCallback;
 	try {
@@ -187,7 +187,11 @@ function(params) {
 	}
 };
 
-ZmCsfeCommand.prototype._getJsonRequestStr =
+ZmCsfeCommand.getRequestStr = function(params) {
+	return 	params.soapDoc ? ZmCsfeCommand._getSoapRequestStr(params) : ZmCsfeCommand._getJsonRequestStr(params);
+};
+
+ZmCsfeCommand._getJsonRequestStr =
 function(params) {
 
 	var obj = {Header:{}, Body:params.jsonObj};
@@ -258,7 +262,7 @@ function(params) {
 	return requestStr;
 };
 
-ZmCsfeCommand.prototype._getSoapRequestStr =
+ZmCsfeCommand._getSoapRequestStr =
 function(params) {
 
 	var soapDoc = params.soapDoc;
