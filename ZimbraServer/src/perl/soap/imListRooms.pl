@@ -3,7 +3,7 @@
 # ***** BEGIN LICENSE BLOCK *****
 # 
 # Zimbra Collaboration Suite Server
-# Copyright (C) 2007 Zimbra, Inc.
+# Copyright (C) 2005, 2007 Zimbra, Inc.
 # 
 # The contents of this file are subject to the Yahoo! Public License
 # Version 1.0 ("License"); you may not use this file except in
@@ -16,53 +16,46 @@
 # ***** END LICENSE BLOCK *****
 # 
 
+#
+# Simple SOAP test-harness for the AddMsg API
+#
+
+use Date::Parse;
+use Time::HiRes qw ( time );
 use strict;
+
 use lib '.';
 
 use LWP::UserAgent;
 use Getopt::Long;
+use ZimbraSoapTest;
+use XmlElement;
 use XmlDoc;
 use Soap;
-use ZimbraSoapTest;
-
-# specific to this app
-my ($threadId, $addr, $nickname);
 
 #standard options
-my ($user, $pw, $host, $help); #standard
+my ($user, $pw, $host, $help);  #standard
+
+my $svc;
+
 GetOptions("u|user=s" => \$user,
            "pw=s" => \$pw,
            "h|host=s" => \$host,
            "help|?" => \$help,
-           # add specific params below:
-           "t=s", \$threadId,
-           "a=s", \$addr,
-           "n=s", \$nickname,
+           "svc=s" => \$svc,
           );
 
-
-
-if (!defined($user) || !defined($addr) || defined($help)) {
-    my $usage = <<END_OF_USAGE;
-    
-USAGE: $0 -u USER [-t threadId] -a addr [-n nickname]
-END_OF_USAGE
-    die $usage;
+if (!defined($user)) {
+    print "USAGE: $0 -u USER -s CONFERENCE_SERVICE\n";
+    exit 1;
 }
 
 my $z = ZimbraSoapTest->new($user, $host, $pw);
 $z->doStdAuth();
 
 my $d = new XmlDoc;
-my $searchName = "SearchRequest";
-
-if (defined $nickname) {
-  $d->start("IMJoinChatRequest", $Soap::ZIMBRA_IM_NS, { 'addr' => $addr, 'thread' => $threadId, 'nick' => $nickname });
-} else {
-  $d->start("IMJoinChatRequest", $Soap::ZIMBRA_IM_NS, { 'addr' => $addr, 'thread' => $threadId });
-}
-
- $d->end(); 
+$d->start('IMListConferenceRoomsRequest', $Soap::ZIMBRA_IM_NS, { "svc" => $svc });
+$d->end(); #request
 
 my $response = $z->invokeMail($d->root());
 

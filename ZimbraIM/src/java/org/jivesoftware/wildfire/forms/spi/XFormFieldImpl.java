@@ -173,7 +173,7 @@ public class XFormFieldImpl implements FormField {
      *
      * @return Iterator for the available options.
      */
-    private Iterator<Option> getOptions() {
+    public Iterator<Option> getOptions() {
         synchronized (options) {
             return Collections.unmodifiableList(new ArrayList<Option>(options)).iterator();
         }
@@ -221,7 +221,7 @@ public class XFormFieldImpl implements FormField {
      *
      * @author Gaston Dombiak
      */
-    private static class Option {
+    public static class Option {
         private String label;
         private String value;
 
