@@ -24,7 +24,7 @@ import com.zimbra.common.service.ServiceException;
 import com.google.gdata.data.DateTime;
 
 public class SyncState {
-    private DateTime lastUpdateTime;
+    private DateTime lastSyncTime;
     private int lastModSequence;
 
     private static final Log LOG = OfflineLog.gab;
@@ -48,7 +48,7 @@ public class SyncState {
             throw new IllegalStateException("Incompatible sync state version");
         }
         String ts = md.get(KEY_TIMESTAMP);
-        lastUpdateTime = ts != null ? DateTime.parseDateTime(ts) : null;
+        lastSyncTime = ts != null ? DateTime.parseDateTime(ts) : null;
         lastModSequence = (int) md.getLong(KEY_SEQUENCE);
         LOG.debug("Loaded sync state: %s", this);
     }
@@ -56,18 +56,18 @@ public class SyncState {
     public void save(Mailbox mbox) throws ServiceException {
         Metadata md = new Metadata();
         md.put(KEY_VERSION, VERSION);
-        md.put(KEY_TIMESTAMP, lastUpdateTime.toString());
+        md.put(KEY_TIMESTAMP, lastSyncTime.toString());
         md.put(KEY_SEQUENCE, lastModSequence);
         mbox.setConfig(SyncSession.CONTEXT, KEY_GAB, md);
         LOG.debug("Saved sync state: " + this);
     }
 
-    public DateTime getLastUpdateTime() { return lastUpdateTime; }
+    public DateTime getLastSyncTime() { return lastSyncTime; }
     
     public int getLastModSequence() { return lastModSequence; }
 
-    public void setLastUpdateTime(DateTime lastUpdateTime) {
-        this.lastUpdateTime = lastUpdateTime;
+    public void setLastSyncTime(DateTime lastSyncTime) {
+        this.lastSyncTime = lastSyncTime;
     }
 
     public void setLastModSequence(int lastModSequence) {
@@ -76,6 +76,6 @@ public class SyncState {
 
     public String toString() {
         return String.format("[lastUpdateTime=%s, lastModSequence=%d]",
-                             lastUpdateTime, lastModSequence);
+            lastSyncTime, lastModSequence);
     }
 }

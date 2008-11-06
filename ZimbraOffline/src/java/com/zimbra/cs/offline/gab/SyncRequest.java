@@ -17,31 +17,42 @@
 package com.zimbra.cs.offline.gab;
 
 import com.google.gdata.client.Service.GDataRequest.RequestType;
-import com.google.gdata.client.contacts.ContactsService;
-import com.google.gdata.data.contacts.ContactEntry;
+import com.google.gdata.data.BaseEntry;
+import com.google.gdata.data.contacts.ContactGroupEntry;
 import com.google.gdata.util.VersionConflictException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.service.ServiceException;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.MalformedURLException;
 
 public class SyncRequest {
     private final SyncSession session;
+    private final GabService service;
     private final int itemId;
     private final RequestType type;
-    private ContactEntry entry;
+    private BaseEntry entry;
     private com.google.gdata.util.ServiceException error;
 
     private static final Log LOG = OfflineLog.gab;
 
     private static final int MAX_COUNT = 3;
+
+    public static SyncRequest insert(SyncSession session, int itemId, BaseEntry entry) {
+        return new SyncRequest(session, itemId, RequestType.INSERT, entry);
+    }
+
+    public static SyncRequest update(SyncSession session, int itemId, BaseEntry entry) {
+        return new SyncRequest(session, itemId, RequestType.UPDATE, entry);
+    }
+
+    public static SyncRequest delete(SyncSession session, int itemId, BaseEntry entry) {
+        return new SyncRequest(session, itemId, RequestType.DELETE, entry);
+    }
     
-    public SyncRequest(SyncSession session, int itemId, RequestType type,
-                       ContactEntry entry) {
+    private SyncRequest(SyncSession session, int itemId, RequestType type, BaseEntry entry) {
         this.session = session;
+        this.service = session.getGabService();
         this.itemId = itemId;
         this.type = type;
         this.entry = entry;
@@ -49,7 +60,15 @@ public class SyncRequest {
 
     public int getItemId() { return itemId; }
     public RequestType getType() { return type; }
-    public ContactEntry getEntry() { return entry; }
+    public BaseEntry getEntry() { return entry; }
+
+    public void setEntry(BaseEntry entry) {
+        this.entry = entry;
+    }
+    
+    public boolean isGroup() {
+        return entry != null && entry.getClass() == ContactGroupEntry.class;
+    }
 
     private boolean isVersionConflict() {
         return error != null && error instanceof VersionConflictException;
@@ -62,7 +81,7 @@ public class SyncRequest {
                 LOG.debug("Retrying UPDATE request for itemId %d (count = %d)",
                           itemId, count);
                 VersionConflictException vce = (VersionConflictException) error;
-                entry = getCurrentEntry(vce);
+                entry = service.getCurrentEntry(vce, entry.getClass());
             }
         } else {
             doExecute();
@@ -75,22 +94,21 @@ public class SyncRequest {
     }
     
     private boolean doExecute() throws IOException {
-        ContactsService cs = session.getContactsService();
         if (session.isTraceEnabled()) {
             LOG.debug("Executing %s request for item id %d:\n%s", type, itemId,
-                      session.pp(entry));
+                      service.pp(entry));
         }
         error = null;
         try {
             switch (type) {
             case INSERT:
-                entry = cs.insert(session.getContactsFeedUrl(), entry);
+                entry = service.insert(entry);
                 break;
             case UPDATE:
-                entry = cs.update(getEditUrl(entry), entry);
+                entry = service.update(entry);
                 break;
             case DELETE:
-                cs.delete(getEditUrl(entry));
+                service.delete(entry);
                 break;
             default:
                 throw new AssertionError("Invalid request type: " + type);
@@ -100,18 +118,5 @@ public class SyncRequest {
             return false;
         }
         return true;
-    }
-
-    private ContactEntry getCurrentEntry(VersionConflictException e)
-        throws ServiceException, IOException {
-        String s = e.getResponseBody();
-        if (s == null) {
-            throw ServiceException.FAILURE("Missing response body", null);
-        }
-        return session.parseContactEntry(s);
-    }
-    
-    private static URL getEditUrl(ContactEntry entry) throws MalformedURLException {
-        return new URL(entry.getEditLink().getHref());
     }
 }
