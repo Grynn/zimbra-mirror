@@ -168,23 +168,21 @@ public class XmailBean extends MailBean {
                     }
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain,
                         domain);
-                    if (isSmtpConfigSupported()) {
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost,
-                            smtpHost);
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort,
-                            smtpPort);
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType,
-                            (isSmtpSsl ? ConnectionType.ssl :
-                            ConnectionType.cleartext).toString());
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired,
-                            isSmtpAuth ? Provisioning.TRUE : Provisioning.FALSE);
-                        if (isSmtpAuth) {
-                            dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername,
-                                smtpUsername);
-                            if (!smtpPassword.equals(JspConstants.MASKED_PASSWORD))
-                                dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword,
-                                    smtpPassword);
-                        }
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost,
+                        smtpHost);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort,
+                        smtpPort);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType,
+                        (isSmtpSsl ? ConnectionType.ssl :
+                        ConnectionType.cleartext).toString());
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired,
+                        isSmtpAuth ? Provisioning.TRUE : Provisioning.FALSE);
+                    if (isSmtpAuth) {
+                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername,
+                            smtpUsername);
+                        if (!smtpPassword.equals(JspConstants.MASKED_PASSWORD))
+                            dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword,
+                                smtpPassword);
                     }
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq,
                         Long.toString(syncFreqSecs));

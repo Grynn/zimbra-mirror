@@ -8,6 +8,8 @@
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
 <c:set var="accountFlavor" value="${param.accountFlavor eq null ? '' : param.accountFlavor}"/>
+<c:set var='cancel'><fmt:message key='Cancel'/></c:set>
+<c:set var='save'><fmt:message key='Save'/></c:set>
 <c:set var="uri" value="/zimbra/desktop/accsetup.jsp"/>
 
 <c:choose>
@@ -165,21 +167,25 @@ function onEditPort(link, id) {
         </tr>
     </c:otherwise>
 </c:choose>
-        <tr><td class="ZSeparator" colspan="2">&nbsp;</td></tr>
-        <tr>
-            <td colspan="2" align="center" width="450px">
+        <tr><td colspan="2"><hr class="ZSeparator"></td></tr>
 <c:choose>
     <c:when test="${accountFlavor eq ''}">
     </c:when>
     <c:when test="${not empty bean.error}" >
+        <tr>
+            <td colspan="2" width="450px">
                 <p class='ZOfflineError'>${bean.error}</p>
-    </c:when>
-    <c:when test="${not bean.allValid}" >
-                <p class='ZOfflineError'><fmt:message key='PlsCorrectInput'/></p>
-    </c:when>
-</c:choose>
             </td>
         </tr>
+    </c:when>
+    <c:when test="${not bean.allValid}" >
+        <tr>
+            <td colspan="2" width="450px">
+                <p class='ZOfflineError'><fmt:message key='PlsCorrectInput'/></p>
+            </td>
+        </tr>
+    </c:when>
+</c:choose>
 <c:if test="${empty bean.accountId}">
         <tr>
             <td class="ZFieldLabel"><fmt:message key='AccountType'/></td>
@@ -187,14 +193,14 @@ function onEditPort(link, id) {
                 <form name="newAccnt" action="" method="POST">
                     <select name="accountFlavor" id="accountFlavor" onchange="accntChange(this)" class="ZSelect">
                         <option value=""><fmt:message key='AccountSelect'/></option>
-                        <option value="AOL" <c:if test="${accountFlavor eq 'AOL'}"> selected </c:if> ><fmt:message key='AOL'/></option>
-                        <option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}"> selected </c:if> ><fmt:message key='Gmail'/></option>
-                        <option value="Imap" <c:if test="${accountFlavor eq 'Imap'}"> selected </c:if> ><fmt:message key='Imap'/></option>
-                        <option value="MSE" <c:if test="${accountFlavor eq 'MSE'}"> selected </c:if> ><fmt:message key='MSE'/></option>
-                        <option value="Live" <c:if test="${accountFlavor eq 'Live'}"> selected </c:if> ><fmt:message key='Live'/></option>
-                        <option value="Pop"<c:if test="${accountFlavor eq 'Pop'}"> selected </c:if> ><fmt:message key='Pop'/></option>
-                        <option value="YMP" <c:if test="${accountFlavor eq 'YMP'}"> selected </c:if> > <fmt:message key='YMP'/></option>
                         <option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}"> selected </c:if> > <fmt:message key='Zimbra'/></option>
+                        <option value="YMP" <c:if test="${accountFlavor eq 'YMP'}"> selected </c:if> > <fmt:message key='YMP'/></option>
+                        <option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}"> selected </c:if> ><fmt:message key='Gmail'/></option>
+                        <option value="Live" <c:if test="${accountFlavor eq 'Live'}"> selected </c:if> ><fmt:message key='Live'/></option>
+                        <option value="AOL" <c:if test="${accountFlavor eq 'AOL'}"> selected </c:if> ><fmt:message key='AOL'/></option>
+                        <option value="MSE" <c:if test="${accountFlavor eq 'MSE'}"> selected </c:if> ><fmt:message key='MSE'/></option>
+                        <option value="Imap" <c:if test="${accountFlavor eq 'Imap'}"> selected </c:if> ><fmt:message key='Imap'/></option>
+                        <option value="Pop"<c:if test="${accountFlavor eq 'Pop'}"> selected </c:if> ><fmt:message key='Pop'/></option>
                     </select>
                 </form>
             </td>
@@ -217,25 +223,28 @@ function onEditPort(link, id) {
         <zd:xmailManage accountFlavor="${accountFlavor}" uri="${uri}" verb="mod"/>
     </c:otherwise>
 </c:choose>
-        <tr><td class="ZSeparator" colspan="2">&nbsp;</td></tr>
+        <tr><td colspan="2"><hr class="ZSeparator"></td></tr>
         <tr>
             <td align="center" colspan="2">
+<c:choose>
+    <c:when test="${accountFlavor eq ''}">
+                <zd:button onclick='OnCancel()' text='${cancel}' primary='false'/>
+    </c:when>
+    <c:otherwise>
                 <table cellpadding="0" cellspacing="0" width="70%">
                     <tr>
                         <td id="saveButton">
-<c:if test="${accountFlavor ne ''}">
-<c:set var='save'><fmt:message key='Save'/></c:set>
                             <zd:button onclick='OnSubmit()' text='${save}'/>
-</c:if>
                         </td>
                         <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
                         <td id="cancelButton" align="right">
-<c:set var='cancel'><fmt:message key='Cancel'/></c:set>
                             <zd:button onclick='OnCancel()' text='${cancel}' primary='false'/>
 			</td>
                     </tr>
                 </table>
             </td>
+    </c:otherwise>
+</c:choose>
         </tr>
     </table>
 </div>

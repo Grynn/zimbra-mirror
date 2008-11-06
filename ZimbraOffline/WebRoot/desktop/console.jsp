@@ -96,7 +96,7 @@ function submit(id, type, flavor, verb) {
             </div>
         </td>
     </tr>
-    <tr><td class="ZSeparator">&nbsp;</td></tr>
+    <tr><td><hr class="ZSeparator"></td></tr>
     <tr>
         <td>
             <div align="center"><fmt:message key='WizardDesc'/></div><br>
@@ -136,7 +136,7 @@ function submit(id, type, flavor, verb) {
             </div>
         </td>
     </tr>
-    <tr><td class="ZSeparator">&nbsp;</td></tr>
+    <tr><td><hr class="ZSeparator"></td></tr>
 <c:if test="${not empty param.verb && not empty param.srvcName}">
     <tr>
         <td>
@@ -218,12 +218,11 @@ function submit(id, type, flavor, verb) {
     	</c:when>
     </c:choose>
                 </tr>
-                <tr><td class="ZSeparator" colspan="3">&nbsp;</td></tr>
+                <tr><td colspan="3"><hr class="ZSeparator"></td></tr>
 </c:forEach>
             </table>
         </td>
     </tr>
-    <tr></tr>
     <tr>
         <td>
             <table cellpadding="0" cellspacing="0" width="100%">

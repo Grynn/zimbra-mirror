@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
 function InitScreen() {
-<c:if test="${bean.password eq '' or not zdf:isValid(bean, 'password')}"> 
+<c:if test="${bean.password eq '' or not zdf:isValid(bean, 'password') || bean.verb eq 'add'}"> 
     zd.hide("editPasswordRow");
     zd.show("passwordRow");
 </c:if>
@@ -249,13 +249,13 @@ function SetSmtpPort() {
 <c:if test="${bean.calendarSyncSupported}">
         <tr id="syncCalendarRow">
             <td class="ZFieldLabel"><fmt:message key='SyncCalendar'/></td>
-            <td><input class="ZCheckboxCell" type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled ? 'checked' : ''}></td>
+            <td><input class="ZCheckboxCell" type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled || empty bean.accountName ? 'checked' : ''}></td>
         </tr>
 </c:if>
 <c:if test="${bean.contactSyncSupported}">
         <tr id="syncContactsRow" >
             <td class="ZFieldLabel"><fmt:message key='SyncContacts'/></td>
-            <td><input class="ZCheckboxCell" type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td>
+            <td><input class="ZCheckboxCell" type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled || empty bean.accountName ? 'checked' : ''}></td>
         </tr>
 </c:if>
 <c:if test="${not empty bean.accountId}">

@@ -1,9 +1,13 @@
 /* Offline-specific styles */
-body { margin: 0px; padding: 0px; background-color: white; }
+BODY {
+	margin: 0px;
+	padding: 0px;
+	background-color: white;
+}
 
 BODY, P, TH, TD, DIV, SELECT, TEXTAREA, BUTTON {
-	font-family:Tahoma, Arial, Helvetica, sans-serif;
-	font-size:11px;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 11px;
 }
 
 FORM {
@@ -11,10 +15,11 @@ FORM {
 }
 
 a:link, a:active, a:visited { text-decoration: none; }
+
 a:hover {text-decoration: underline; }
 
 HR {
-	border-width:1px 0px 0px 0px;
+	border-width: 1px 0px 0px 0px;
 	border-style: solid;
 	border-color: #d4d4d4;
 	margin-top: 10px;
@@ -26,19 +31,19 @@ INPUT[type=password]	{
 }
 
 SELECT {
-	padding:1px;
-	border:1px inset #CCCCCC;
+	padding: 1px;
+	border: 1px inset #CCCCCC;
 }
 
 .ZFloatInHead {
-	float:right;
-	font-size:11px;
-	font-weight:normal;
+	float: right;
+	font-size: 11px;
+	font-weight: normal;
 }
 
 .ZHeadTitle {
-	font-size:15px;
-	font-weight:bold;
+	font-size: 15px;
+	font-weight: bold;
 }
 
 .ZHeadHint {
@@ -48,157 +53,209 @@ SELECT {
 }
 
 .ZWizardPage {
-	width:700px;
+	width: 90%;
 }
 
 .ZWizardPageBig P {
-	font-size:1.2em;
+	font-size: 1.2em;
 }
 
 .ZOfflineHeader {
-	margin-top:15px;
-	margin-bottom:5px;
-	padding:5px 10px;
-	background-color:tan;
-	border-bottom:1px solid brown;
+	margin-top: 15px;
+	margin-bottom: 5px;
+	padding: 5px 10px;
+	background-color: tan;
+	border-bottom: 1px solid brown;
 }
 
 .ZWizardForm {
 }
 
 .ZWizardForm A {
-	margin-left:5px;
-	padding:1px;
-	text-decoration:underline !important;
+	margin-left: 5px;
+	padding: 1px;
+	text-decoration: underline !important;
 }
 
 .ZWizardForm TD {
-	vertical-align:top;
+	vertical-align: top;
 }
 
-.ZFieldLabel { font-weight: bold; padding-top: 0px !important; }
+.ZFieldLabel {
+	font-weight: bold;
+	padding-top: 0px !important;
+}
 
 .ZFieldLabel,
 .ZFieldError,
 .ZFieldLabelLeft {
-	padding:0px 4px;
-	text-align:right;
-	white-space:nowrap;
+	padding: 0px 4px;
+	text-align: right;
+	white-space: nowrap;
 }
 
 .ZFieldError {
-	color:red;
+	color: red;
 }
 
 .ZFieldLabelLeft {
-	text-align:left;
+	text-align: left;
 }
 
 .ZCheckboxCell {
-	text-align:right;
+	text-align: right;
 }
 
 .ZCheckboxLabel {
-	padding-top:4px;
+	padding-top: 4px;
 }
 
 .ZRadioCell {
-	padding-top:2px;
+	padding-top: 2px;
 }
 
 .ZHint {
-	color:gray;
-	white-space:nowrap;
+	color: gray;
+	white-space: nowrap;
 }
 
 .ZOfflineError {
-	font-weight:bold;
-	color:red;
+	font-weight: bold;
+	color: red;
 }
 
 .ZOfflineNotice {
-	font-weight:bold;
-	color:blue;
+	font-weight: bold;
+	color: blue;
 }
 
 .ZWizardButtonBar .DwtButton,
 .ZWizardButtonBar .DwtButton-focused {
-	font-weight:bold;
+	font-weight: bold;
 }
 
 .ZWizardTable {
-	width:90%;
-	border:1px solid tan;
-	border-collapse:collapse;
+	width: 90%;
+	border: 1px solid tan;
+	border-collapse: collapse;
 }
 
 .ZWizardTable TH {
-	text-align:left;
-	background-color:tan;
+	text-align: left;
+	background-color: tan;
 }
 
 .ZWizardTable TD {
-	border:1px solid tan;
-	background-color:antiquewhite;
+	border: 1px solid tan;
+	background-color: antiquewhite;
 }
 
 .ZSyncErrorNotice {
-	font-weight:bold;
-	color:red;
+	font-weight: bold;
+	color: red;
 }
 
 .ZSection {
-	border-bottom:2px solid lightgrey;
+	border-bottom: 2px solid lightgrey;
 	color: grey;
 	font-weight: bold;
 	padding: 10px 0px 2px 0px;
 }
 
 .ZSeparator {
-	border-bottom:2px solid lightgrey;
+	background-color: lightgrey;
+	color: lightgrey;
+	height: 2px;
+	margin: 5px 0px 5px 0px;
+}
+
+.ZSpacer {
 	font-size: 1px;
-	padding: 6px 0px 6px 0px;
+	padding: 0px 0px 4px 0px;
 }
 
 .padding p { padding-left: 10px;}
 
-.infoTitle { padding-left:5px;font-weight:bold;border-bottom:1px solid #FD0;margin-bottom:10px;}
+.infoTitle {
+	padding-left: 5px;
+	font-weight: bold;
+	border-bottom: 1px solid #FD0;
+	margin-bottom: 10px;
+}
 
-.infoBox { margin:0 5px 10px 0;background-color:#FFF6BF;border:1px solid #FD0;-moz-border-radius:10px;padding:10px 10px 10px 10px; }
+.infoBox {
+	margin:0 5px 10px 0;
+	background-color:#FFF6BF;
+	border:1px solid #FD0;
+	-moz-border-radius:10px;
+	padding:10px 10px 10px 10px;
+}
 
 .whiteBg {
 	background-color: #e9f2fa;
 	font: 11px Arial, Verdana, san-serif;
 	line-height: 20px;
 	word-spacing: 2px;
-	width: 700px;
+	width: 90%;
 	border: 1px solid #e9f2fa; 
 	-moz-border-radius: 8px;
 	text-align: left;
 	padding: 20px;  
 }
 
-.ZField { width: 350px; padding: 4px; }
+.ZField {
+	width: 350px;
+	padding: 4px;
+}
 
-.ZSelect { width: 350px; padding:2px;cursor:pointer; }
+.ZSelect {
+	width: 350px;
+	padding:2px;
+	cursor:pointer;
+}
 
-.ZSelectSmall { width: 180px; padding:2px;cursor:pointer; }
+.ZSelectSmall {
+	width: 180px;
+	padding:2px;
+	cursor:pointer;
+}
 
-.rowline td { border-bottom: 1px solid #e5e5e5; }
+.rowline td {
+	border-bottom: 1px solid #e5e5e5;
+}
 
-h2 { font-weight: normal;font-size: 16px;letter-spacing: 1px; margin: 0px; padding: 0px }
+h2 {
+	font-weight: normal;
+	font-size: 16px;
+	letter-spacing: 1px;
+	margin: 0px;
+	padding: 0px
+}
 
-h3 { font-size: 14px; }
+h3 {
+	font-size: 14px;
+}
 
-.infoBg { background-color: #fffff1; border: 1px solid #d5d6bb; text-align: left; width: 500px; line-height: 20px; padding: 10px; margin-bottom: 5px; }
+.infoBg {
+	background-color: #fffff1;
+	border: 1px solid #d5d6bb;
+	text-align: left;
+	width: 500px;
+	line-height: 20px;
+	padding: 10px;
+	margin-bottom: 5px;
+}
 
-.ZLabel {text-align: right; padding: 0px 4px; }
+.ZLabel {
+	text-align: right;
+	padding: 0px 4px;
+}
 
 .ZBlueButton			{ cursor:pointer; }
-.ZBlueButton TABLE		{ border-collapse:collapse; display:inline;}
+.ZBlueButton TABLE		{ border-collapse:collapse; display:inline; }
 .ZBlueButton TD 		{ padding:0px; }
 .ZBlueButton .title 		{ font-size:12px; font-weight:bold; color:white; vertical-align:middle;}
-.ZBlueButton .over .title	{ text-decoration:underline;}
+.ZBlueButton .over .title	{ text-decoration:underline; }
 .zBlueButton .down .title	{ text-decoration:underline; color:darkblue; }
 
 .ImgBlueButton_L		{ width:15px; height:26px; background:url(/zimbra/desktop/img/ImgBlueButton_L.gif) no-repeat; }
@@ -206,13 +263,13 @@ h3 { font-size: 14px; }
 .ImgBlueButton_R		{ width:15px; height:26px; background:url(/zimbra/desktop/img/ImgBlueButton_R.gif) no-repeat; }
 
 .ZGreyButton			{ cursor:pointer;  }
-.ZGreyButton TABLE		{ border-collapse:collapse; display:inline;}
+.ZGreyButton TABLE		{ border-collapse:collapse; display:inline; }
 .ZGreyButton TD 		{ padding:0px; }
 .ZGreyButton .title 		{ font-size:12px; line-height:22px; font-weight:bold; color:#666; }
-.ZGreyButton .over .title 	{ text-decoration:underline;}
+.ZGreyButton .over .title 	{ text-decoration:underline; }
 .ZGreyButton .down .title 	{ text-decoration:underline; color:darkblue; }
 
 .ImgGreyButton_L		{ width:15px; height:26px; background:url(/zimbra/desktop/img/ImgGreyButton_L.gif) no-repeat; }
-.ImgGreyButton  		{ height:26px; background:url(/zimbra/desktop/img/ImgGreyButton.repeatx.gif) repeat-x; padding: 0 5 0 5 !important;}
+.ImgGreyButton  		{ height:26px; background:url(/zimbra/desktop/img/ImgGreyButton.repeatx.gif) repeat-x; padding: 0 5 0 5 !important; }
 .ImgGreyButton_R		{ width:15px; height:26px; background:url(/zimbra/desktop/img/ImgGreyButton_R.gif) no-repeat; }
 
