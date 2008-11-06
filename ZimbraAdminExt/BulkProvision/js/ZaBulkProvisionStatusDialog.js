@@ -99,7 +99,7 @@ function() {
 //			{type:_SPACER_, height:"5"},
 //			{type:_OUTPUT_,value:ZaBulkProvisionStatusDialog.NAD_DeletedAccounts,colSpan:"*", colSpan:"*",align:_LEFT_},
 		   	{type:_SPACER_, height:"10"},
-		   	{ref:ZaBulkProvisionStatusDialog.A_createdAccounts, type:_DWT_LIST_, height:"200px", width:"400px",colSpan:"*",  cssClass: "DLSource",
+		   	{ref:ZaBulkProvisionStatusDialog.A_createdAccounts, type:_DWT_LIST_, height:200, width:400, colSpan:"*",  cssClass: "DLSource",
 				forceUpdate: true, widgetClass:ZaBPStatusDialogListView, headerList:sourceHeaderList, hideHeader: false
 			}
 		]
