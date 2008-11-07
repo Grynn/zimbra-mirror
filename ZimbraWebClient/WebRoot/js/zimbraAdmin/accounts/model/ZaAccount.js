@@ -1660,7 +1660,7 @@ function (value, event, form){
                    
 
         //if domain name is not changed, we don't want to update the account type output
-        if (oldDomainName !=  newDomainName) {
+        if ((!ZaSettings.isDomainAdmin) && (oldDomainName !=  newDomainName)) {   
             if (ZaDomain.A_domainMaxAccounts){
                 var maxDomainAccounts = domainObj.attrs[ZaDomain.A_domainMaxAccounts] ;
                 if (maxDomainAccounts && maxDomainAccounts > 0) {
