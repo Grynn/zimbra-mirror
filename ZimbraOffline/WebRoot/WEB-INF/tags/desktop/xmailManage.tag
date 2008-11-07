@@ -40,11 +40,10 @@ function SetPort() {
 
 function SetSmtpPort() {
     if (zd.isDisabled("smtpPort")) {
-        if (${bean.ssl}) {
+        if (zd.isChecked("smtpSsl"))
             zd.set("smtpPort", "465");
-        } else {
+        else
             zd.set("smtpPort", "25");
-        }
     }
 }
 </script>
@@ -199,6 +198,7 @@ function SetSmtpPort() {
 </c:if>
 </c:if>
         <tr><td class="ZSection" colspan="2"><fmt:message key='SyncOptions'/></td><tr>
+        <tr><td><td></tr>
         <tr>
             <td class="ZFieldLabel"><fmt:message key='SyncFrequency'/></td>
             <td>

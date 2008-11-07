@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="/zimbra/desktop/css/offline.css" type="text/css">
 <title><fmt:message key="ZimbraDesktop"/></title>
 
-<script type="text/javascript" src="js/desktop.js"></script>
+<script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
 <script type="text/javascript">
 function OnAdd() {
     window.location = "/zimbra/desktop/accsetup.jsp";

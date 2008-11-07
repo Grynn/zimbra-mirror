@@ -81,7 +81,7 @@
 <link rel="stylesheet" href="/zimbra/desktop/css/offline.css" type="text/css">
 <title><fmt:message key="ZimbraDesktop"/></title>
 
-<script type="text/javascript" src="js/desktop.js"></script>
+<script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
 <script type="text/javascript">
 function InitScreen() {}
 
@@ -242,9 +242,9 @@ function onEditPort(link, id) {
 			</td>
                     </tr>
                 </table>
-            </td>
     </c:otherwise>
 </c:choose>
+            </td>
         </tr>
     </table>
 </div>
