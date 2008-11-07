@@ -19,7 +19,7 @@
 /**
 * @class ZaBulkProvisionStatusDialog
 * @contructor ZaBulkProvisionStatusDialog
-* @author Greg Solovyev
+* @author Charles Cao
 * @param parent
 * param app
 **/
@@ -43,12 +43,6 @@ ZaBulkProvisionStatusDialog.A_currentStatus = "currentStatus" ;
 ZaBulkProvisionStatusDialog.A_createdAccounts = "createdAccounts" ;
 
 ZaBulkProvisionStatusDialog.myXModel = {
-	getDeletedAccounts: function (model, instance) {
-		return instance.deletedAccounts;
-	},
-	setDeletedAccounts: function (value, instance, parentValue, ref) {
-		instance.deletedAccounts = value;
-	},
 	items: [
         {ref: ZaBulkProvisionStatusDialog.A_currentStatus, type:_STRING_},
         {ref: ZaBulkProvisionStatusDialog.A_createdAccounts, type:_LIST_,
@@ -67,6 +61,7 @@ function(entry) {
 
     this._localXForm.setInstance(this._containedObject);
 	this._button[DwtDialog.OK_BUTTON].setEnabled(true);
+//    this._localXForm.refresh () ;
 }
 
 
@@ -96,8 +91,6 @@ function() {
 				  ref:ZaBulkProvisionStatusDialog.A_currentStatus
 			},
 
-//			{type:_SPACER_, height:"5"},
-//			{type:_OUTPUT_,value:ZaBulkProvisionStatusDialog.NAD_DeletedAccounts,colSpan:"*", colSpan:"*",align:_LEFT_},
 		   	{type:_SPACER_, height:"10"},
 		   	{ref:ZaBulkProvisionStatusDialog.A_createdAccounts, type:_DWT_LIST_, height:200, width:400, colSpan:"*",  cssClass: "DLSource",
 				forceUpdate: true, widgetClass:ZaBPStatusDialogListView, headerList:sourceHeaderList, hideHeader: false

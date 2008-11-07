@@ -119,20 +119,156 @@ function(uploadManager) {
 
 ZaBulkProvisionWizard.prototype.getProvisionStatusDialog = function () {
     if (!this._provisionStatusDialog) {
-        /*
-        var params = {
-            parent: this.parent,
-            title: com_zimbra_bulkprovision.title_provision
-        } ; */
-
-//        this._provisionStatusDialog = new DwtMessageDialog (params) ;
-//        this._provisionStatusDialog.setSize (432, 250) ;
-//        this._provisionStatusDialog.setScrollStyle(Dwt.SCROLL)
         this._provisionStatusDialog = new ZaBulkProvisionStatusDialog (
                 this.parent, this._app);
+        this._provisionStatusDialog.addPopupListener(new AjxListener(this, this.statusDialogPopupListener)) ;
     }
 
     return this._provisionStatusDialog ;
+}
+
+ZaBulkProvisionWizard.prototype.createAccountCallback =  function ( account, result) {
+    var i =  this._currentCreateAccountIndex ;
+
+    var accounts = this._containedObject[ZaBulkProvision.A_provision_accounts] ;
+    var statusDialogCreatedAccounts =  this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts] ;
+    var statusDialog = this.getProvisionStatusDialog() ;
+    
+    if (result._isException)  {
+        var ex = result._data ;
+        statusDialogCreatedAccounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.BUSY_FAILED ;
+        accounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.BUSY_FAILED + " (" + accounts[i].accountName  + ") " 
+                                        +  ( ex.msg  ? ": " + ex.msg : "") ;
+        accounts[i][ZaBulkProvision.A2_isValid] = "FALSE" ;
+    } else {
+        var resp = result._data.Body.CreateAccountResponse ;
+        if (resp && resp.account && resp.account[0].id) {
+            statusDialogCreatedAccounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.SUCCEEDED ;
+            this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts].push(
+                    account[ZaBulkProvision.A2_accountName]) ;
+
+            accounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.SUCCEEDED ;
+            accounts[i][ZaBulkProvision.A2_isToProvision] = false ;     //succeed, don't try to create the second time
+            accounts[i][ZaBulkProvision.A2_isValid] = "TRUE" ;
+
+            try {
+                //set the password now
+                var sp_soapDoc = AjxSoapDoc.create("SetPasswordRequest", ZaZimbraAdmin.URN, null);
+                sp_soapDoc.set("id", resp.account[0].id) ;
+                sp_soapDoc.set("newPassword", account.password) ;
+                var sp_Params = { soapDoc: sp_soapDoc }
+                ZaRequestMgr.invoke(sp_Params, {} ) ;
+
+                //enforce must change password,  mustChangePassword is revoked by the setPasswordRequest
+                var ma_soapDoc = AjxSoapDoc.create("ModifyAccountRequest", ZaZimbraAdmin.URN, null);
+                ma_soapDoc.set("id", resp.account[0].id);
+                var ma_attr = ma_soapDoc.set("a", "TRUE") ;
+                ma_attr.setAttribute("n", ZaAccount.A_zimbraPasswordMustChange) ;
+                var ma_params = {soapDoc: ma_soapDoc};
+                ZaRequestMgr.invoke(ma_params, {}) ;
+            }catch (ex) {
+                accounts[i][ZaBulkProvision.A2_status] += ex.message ;
+            }
+        } else {
+            accounts[i][ZaBulkProvision.A2_isValid] = "FALSE" ;
+        }
+    }
+
+    statusDialog.setObject(this._provisionStatusObject ) ;
+    
+    this._currentCreateAccountIndex ++ ;
+    this.createAccounts ();
+}
+
+ZaBulkProvisionWizard.prototype.createAccounts = function () {
+    var statusDialogCreatedAccounts =  this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts] ;
+    var statusDialog = this.getProvisionStatusDialog() ;
+    var accounts = this._containedObject[ZaBulkProvision.A_provision_accounts] ;
+    
+    var totalNumberOfAccounts = accounts.length ;
+    var i =  this._currentCreateAccountIndex  ;
+    
+    if (i < totalNumberOfAccounts ) {
+        //create account  this._currentCreateAccountIndex
+        var account = accounts[i] ;
+        this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] = AjxMessageFormat.format (
+                               com_zimbra_bulkprovision.BUSY_CREATE_ACCOUNTS, [account[ZaBulkProvision.A2_accountName]]);
+        statusDialog.setObject(this._provisionStatusObject ) ;
+
+        statusDialogCreatedAccounts[i] = {} ;
+        statusDialogCreatedAccounts[i][ZaBulkProvision.A2_accountName] = account[ZaBulkProvision.A2_accountName] ;
+
+        
+        if (account[ZaBulkProvision.A2_isToProvision]) {
+            var soapDoc = AjxSoapDoc.create("CreateAccountRequest", ZaZimbraAdmin.URN, null);
+            soapDoc.set(ZaAccount.A_name, account.accountName);
+//              we set the password using setPasswordRequest
+//                soapDoc.set(ZaAccount.A_password, account.password);
+
+            //set the account attributes
+            var attrs = {} ;
+            /*
+            if ((this._containedObject[ZaBulkProvision.A_mustChangePassword] == "TRUE")
+                    || (account[ZaBulkProvision.A_mustChangePassword] == "TRUE")){
+                attrs [ZaAccount.A_zimbraPasswordMustChange] = "TRUE" ;
+            } */
+            //always change the password
+            attrs [ZaAccount.A_zimbraPasswordMustChange] = "TRUE" ;
+
+            if (account[ZaBulkProvision.A2_displayName]) {
+                attrs [ZaAccount.A_displayname] = account[ZaBulkProvision.A2_displayName] ;
+            }
+
+            for (var aname in attrs) {
+                var attr = soapDoc.set("a", attrs[aname]) ;
+                attr.setAttribute("n", aname) ;
+            }
+
+            var csfeParams = new Object();
+            csfeParams.soapDoc = soapDoc;
+            csfeParams.asyncMode = true ;
+            csfeParams.callback = new AjxCallback(this, this.createAccountCallback, [account]);
+            var reqMgrParams = {} ;
+            ZaRequestMgr.invoke(csfeParams, reqMgrParams );
+        }else{
+//            com_zimbra_bulkprovision.BUSY_FAILED =  com_zimbra_bulkprovision.SKIP ;
+            statusDialogCreatedAccounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.SKIPPED ;
+            statusDialog.setObject( this._provisionStatusObject ) ;
+            this._currentCreateAccountIndex ++ ;
+            this.createAccounts () ;
+        }
+    } else {
+        //Done with create accounts
+        this._currentCreateAccountIndex = 0 ;
+        this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] =  com_zimbra_bulkprovision.DONE ;
+         //update the status view
+        statusDialog.setObject(this._provisionStatusObject ) ;
+
+        this._endTime = new Date ();
+        if (AjxEnv.hasFirebug) console.log("End provision accounts: " + this._endTime.toUTCString());
+        var total = this._endTime.getTime () - this._startTime.getTime () ;
+        if (AjxEnv.hasFirebug) console.log("Total Time (ms): "  + total) ;
+        //update the status now
+        ZaBulkProvision.updateBulkProvisionStatus (this._app, this._containedObject) ;
+        var nextStep = ZaBulkProvisionWizard.STEP_SUMMARY ;
+        this.goPage(nextStep) ;
+
+        //update account list view
+        this._app.getAccountListController().fireCreationEvent(accounts);
+    }
+}
+
+ZaBulkProvisionWizard.prototype.statusDialogPopupListener = function (ev) {
+    this._startTime = new Date ();
+    if (AjxEnv.hasFirebug) console.log("Start provisiong accounts: " + this._startTime.toUTCString());
+
+    var statusDialogCreatedAccounts =  this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts] ;
+    var statusDialog = this.getProvisionStatusDialog() ;
+    var accounts = this._containedObject[ZaBulkProvision.A_provision_accounts] ;
+    
+    this._currentCreateAccountIndex = 0;
+    this.createAccounts ();
+
 }
 
 ZaBulkProvisionWizard.prototype.goNext =
@@ -181,128 +317,16 @@ function() {
         }
 	}else if (cStep == ZaBulkProvisionWizard.STEP_PROVISION) {
 	    //create the accounts now, it is a sychronous action with status updated
-        var startTime = new Date ();
-        if (AjxEnv.hasFirebug) console.log("Start provisiong accounts: " + startTime.toUTCString());
         var controller = this._app.getCurrentController() ;
 //        var busyMsg = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS ;
         var statusDialog = this.getProvisionStatusDialog() ;
         this._provisionStatusObject = {} ;
         this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS ;
         this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts] = [] ;
-        var statusDialogCreatedAccounts =  this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts] ;
         //statusDialog.setMessage(busyMsg) ;
         statusDialog.setObject( this._provisionStatusObject) ;
       
         statusDialog.popup() ;
-
-        var accounts = this._containedObject[ZaBulkProvision.A_provision_accounts] ;
-        for (var i = 0 ; i < accounts.length; i ++) {
-            var account = accounts[i] ;
-            /*
-            busyMsg += "<br />" + AjxMessageFormat.format (
-                                   com_zimbra_bulkprovision.BUSY_CREATE_ACCOUNTS, [account[ZaBulkProvision.A2_accountName]]) ;
-            */
-            this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] = AjxMessageFormat.format (
-                                   com_zimbra_bulkprovision.BUSY_CREATE_ACCOUNTS, [account[ZaBulkProvision.A2_accountName]]); 
-
-            statusDialogCreatedAccounts[i] = {} ;
-            statusDialogCreatedAccounts[i][ZaBulkProvision.A2_accountName] = account[ZaBulkProvision.A2_accountName] ;
-
-            if (account[ZaBulkProvision.A2_isToProvision]) {
-
-                if (console) console.log("Creating acccount " + account.accountName) ;
-                var soapDoc = AjxSoapDoc.create("CreateAccountRequest", ZaZimbraAdmin.URN, null);
-                soapDoc.set(ZaAccount.A_name, account.accountName);
-//              we set the password using setPasswordRequest               
-//                soapDoc.set(ZaAccount.A_password, account.password);
-
-                //set the account attributes
-                var attrs = {} ;
-                /*
-                if ((this._containedObject[ZaBulkProvision.A_mustChangePassword] == "TRUE")
-                        || (account[ZaBulkProvision.A_mustChangePassword] == "TRUE")){
-                    attrs [ZaAccount.A_zimbraPasswordMustChange] = "TRUE" ;
-                } */
-                //always change the password
-                attrs [ZaAccount.A_zimbraPasswordMustChange] = "TRUE" ;
-                
-                if (account[ZaBulkProvision.A2_displayName]) {
-                    attrs [ZaAccount.A_displayname] = account[ZaBulkProvision.A2_displayName] ; 
-                }
-
-                for (var aname in attrs) {
-                    var attr = soapDoc.set("a", attrs[aname]) ;
-                    attr.setAttribute("n", aname) ;
-                }
-
-                var csfeParams = new Object();
-                csfeParams.soapDoc = soapDoc;
-                var reqMgrParams = {} ;
-                //No busy dialog for single command
-                //reqMgrParams.controller = app.getCurrentController();
-                //reqMgrParams.busyMsg = ZaMsg.BUSY_CREATE_ACCOUNTS ;
-                try {
-                    resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.CreateAccountResponse;
-                    if (resp && resp.account && resp.account[0].id) {
-//                        busyMsg += com_zimbra_bulkprovision.SUCCEEDED ;
-                        statusDialogCreatedAccounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.SUCCEEDED ;
-                        this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts].push(
-
-                                account[ZaBulkProvision.A2_accountName]) ;
-                        
-                        accounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.SUCCEEDED ;
-                        accounts[i][ZaBulkProvision.A2_isToProvision] = false ;     //succeed, don't try to create the second time
-                        accounts[i][ZaBulkProvision.A2_isValid] = "TRUE" ;
-
-                        //set the password now
-                        var sp_soapDoc = AjxSoapDoc.create("SetPasswordRequest", ZaZimbraAdmin.URN, null);
-                        sp_soapDoc.set("id", resp.account[0].id) ;
-                        sp_soapDoc.set("newPassword", account.password) ;
-                        var sp_Params = { soapDoc: sp_soapDoc }
-                        ZaRequestMgr.invoke(sp_Params, {} ) ;
-
-                        //enforce must change password,  mustChangePassword is revoked by the setPasswordRequest
-                        var ma_soapDoc = AjxSoapDoc.create("ModifyAccountRequest", ZaZimbraAdmin.URN, null);
-                        ma_soapDoc.set("id", resp.account[0].id);
-                        var ma_attr = ma_soapDoc.set("a", "TRUE") ;
-                        ma_attr.setAttribute("n", ZaAccount.A_zimbraPasswordMustChange) ;
-                        var ma_params = {soapDoc: ma_soapDoc};
-                        ZaRequestMgr.invoke(ma_params, {}) ;
-                    } else {
-                        accounts[i][ZaBulkProvision.A2_isValid] = "FALSE" ;
-                    }
-                }catch (ex) {
-//                    busyMsg += com_zimbra_bulkprovision.BUSY_FAILED ;
-                    statusDialogCreatedAccounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.BUSY_FAILED ;
-                    accounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.BUSY_FAILED + ( ex.msg  ? ": " + ex.msg : "") ;
-                    accounts[i][ZaBulkProvision.A2_isValid] = "FALSE" ;
-                }
-            }else{
-                  com_zimbra_bulkprovision.BUSY_FAILED =  com_zimbra_bulkprovision.SKIP ;
-//                busyMsg += com_zimbra_bulkprovision.SKIP ;
-            }
-
-//            statusDialog.setMessage(busyMsg) ;
-            statusDialog.setObject(this._provisionStatusObject ) ;
-        }
-
-//        busyMsg += "<br />" + com_zimbra_bulkprovision.DONE ;
-//        statusDialog.setMessage( busyMsg) ;
-        this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] =  com_zimbra_bulkprovision.DONE ;
-        statusDialog.setObject(this._provisionStatusObject ) ;
-
-        var endTime = new Date ();
-        if (AjxEnv.hasFirebug) console.log("End provisiong accounts: " + endTime.toUTCString());
-        var total = endTime.getTime () - startTime.getTime () ;
-        if (AjxEnv.hasFirebug) console.log("Total Time (ms): "  + total) ;
-        //update the status now
-        ZaBulkProvision.updateBulkProvisionStatus (this._app, this._containedObject) ;
-        nextStep = ZaBulkProvisionWizard.STEP_SUMMARY ;
-        this.goPage(nextStep) ;
-
-        //update account list view
-        this._app.getAccountListController().fireCreationEvent(accounts);
-
     }
 }
 
@@ -433,8 +457,7 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 
     var bpAccountsListHeader = [] ;
     var i = 0 ;
-    //TODO: Add the checkbox
-    // bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_isToProvision, ZaMsg.ALV_Name_col, null, 100, null, null, true, true);
+
     bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_accountName, ZaMsg.ALV_Name_col, null, 150, null, null, true, true);
     bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_displayName, ZaMsg.ALV_DspName_col, null, 150, null, null, true, true);
     bpAccountsListHeader[i++] = new ZaListHeaderItem(ZaBulkProvision.A2_password, com_zimbra_bulkprovision.ALV_Password_col, null, 100, null, null, true, true);
@@ -488,7 +511,7 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
                     }
                 },
                 { type:_SPACER_ , height: 10 },
-                {type:_GROUP_, colSpan: 2, numCols: 1,
+                {type:_GROUP_, colSpan: "*", numCols: 1,
                     items: [
                         { ref:ZaBulkProvision.A_provision_accounts, type:_DWT_LIST_, height:(AjxEnv.isIE ? 270 : 260), width:525,
                             forceUpdate: true, cssClass: "DLSource",
