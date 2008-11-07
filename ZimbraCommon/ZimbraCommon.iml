@@ -18,7 +18,6 @@
         <jarDirectory url="file://$MODULE_DIR$/jars" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntryProperties />
   </component>
 </module>
 
