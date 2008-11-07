@@ -80,7 +80,7 @@ Q_MSGS_QUESTION_RADIO_XFormItem.prototype.nowrap = true;
 Q_MSGS_QUESTION_RADIO_XFormItem.prototype.items = [
 	{type:_RADIO_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, 
 		ref:ZaMTAActionDialog.ANSWER, labelLocation:_NONE_, label:null, 
-		relevantBehavior:_PARENT_, trueValue:ZaMTAActionDialog.SELECTED_MSGS,falseValue:ZaMTAActionDialog.FLTRED_SET,
+		trueValue:ZaMTAActionDialog.SELECTED_MSGS,falseValue:ZaMTAActionDialog.FLTRED_SET,
 		updateElement:function (newValue) {
 			this.getElement().checked = (newValue == ZaMTAActionDialog.SELECTED_MSGS);
 		},
@@ -108,7 +108,7 @@ Q_FLTRD_QUESTION_RADIO_XFormItem.prototype.nowrap = true;
 
 Q_FLTRD_QUESTION_RADIO_XFormItem.prototype.items = [
 	{type:_RADIO_,width:"40px",containerCssStyle:"width:40px", forceUpdate:true, 
-		ref:ZaMTAActionDialog.ANSWER, labelLocation:_NONE_, label:null, relevantBehavior:_PARENT_,
+		ref:ZaMTAActionDialog.ANSWER, labelLocation:_NONE_, label:null, 
 		trueValue:ZaMTAActionDialog.FLTRED_SET,falseValue:ZaMTAActionDialog.SELECTED_MSGS,
 		updateElement:function (newValue) {
 			this.getElement().checked = (newValue == ZaMTAActionDialog.FLTRED_SET);
