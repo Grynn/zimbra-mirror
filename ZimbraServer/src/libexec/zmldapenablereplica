@@ -138,7 +138,7 @@ createLdapConfig() {
         num=`expr match "$ldap_url" 'ldaps*'`
         if [ "$num" == 5 ]; then
 	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
-dn:  
+dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 add: olcSyncrepl
 olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
@@ -154,7 +154,7 @@ olcUpdateRef: ${ldap_master_url}
 EOF
 	else
 	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
-dn:
+dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 add: olcSyncrepl
 olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
@@ -163,7 +163,10 @@ olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
  logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase="cn=access
  log" scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
  a=accesslog
+-
+add: olcUpdateRef
 olcUpdateRef: ${ldap_master_url}
+-
 EOF
 	fi
 	ARGS="-x -H ldapi:/// -D cn=config -w ${ldap_root_password} -f ${zimbra_tmp_directory}/syncprov-replica.mod.$$"
