@@ -142,10 +142,10 @@ dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 add: olcSyncrepl
 olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
- mple timeout=0 network-timeout=0 binddn="uid=zmreplica,cn=admins,cn=zimbra" c
+ mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
  redentials=${ldap_replication_password} filter="(objectclass=*)" searchbase=""
- logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase="cn=access
- log" scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
+  logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
+ log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
  a=accesslog
 -
 add: olcUpdateRef
@@ -158,10 +158,10 @@ dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 add: olcSyncrepl
 olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
- mple timeout=0 network-timeout=0 binddn="uid=zmreplica,cn=admins,cn=zimbra" c
+ mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
  redentials=${ldap_replication_password} starttls=critical filter="(objectclass=*)" searchbase=""
- logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase="cn=access
- log" scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
+  logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
+ log scope=sub schemachecking=off type=refreshAndPersist retry="60 +" syncdat
  a=accesslog
 -
 add: olcUpdateRef
