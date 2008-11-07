@@ -376,9 +376,7 @@ DwtPropertyEditor.prototype._createCheckbox = function(prop, target) {
 	checkbox._prop = prop;
 	checkbox.id = prop.name;
 	checkbox.type = 'checkbox';
-	if (prop.value == 'true')
-		checkbox.checked = prop.value;
-		
+	
 		if(AjxEnv.isIE){
 		checkbox.attachEvent("onclick",prop._onCheckboxChange);
 		}else{
@@ -387,6 +385,8 @@ DwtPropertyEditor.prototype._createCheckbox = function(prop, target) {
 	
 	this._children.add(checkbox);
 	target.appendChild(checkbox);
+    if (prop.value == 'true')
+		checkbox.checked = prop.value;
 };
 
 DwtPropertyEditor.prototype._createCheckBoxGroup = function(prop, target) {
