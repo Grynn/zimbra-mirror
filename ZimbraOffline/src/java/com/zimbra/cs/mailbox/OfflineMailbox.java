@@ -149,7 +149,7 @@ public class OfflineMailbox extends DesktopMailbox {
     	return mMailboxSync;
     }
     
-    OfflineAccount getOfflineAccount() throws ServiceException {
+    public OfflineAccount getOfflineAccount() throws ServiceException {
     	return (OfflineAccount)getAccount();
     }
 
