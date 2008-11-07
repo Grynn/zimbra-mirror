@@ -153,7 +153,7 @@ public class OfflineMailbox extends DesktopMailbox {
     	return (OfflineAccount)getAccount();
     }
 
-    ZAuthToken getAuthToken() throws ServiceException {
+    public ZAuthToken getAuthToken() throws ServiceException {
     	ZAuthToken authToken = OfflineSyncManager.getInstance().lookupAuthToken(getAccount());
     	if (authToken == null) {
             String passwd = getAccount().getAttr(OfflineProvisioning.A_offlineRemotePassword);

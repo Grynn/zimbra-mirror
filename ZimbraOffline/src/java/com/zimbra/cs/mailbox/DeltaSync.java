@@ -400,8 +400,8 @@ public class DeltaSync {
         String type = elt.getName();
         if (type.equalsIgnoreCase(MailConstants.E_SEARCH))
             syncSearchFolder(elt, id);
-        else if (type.equalsIgnoreCase(MailConstants.E_FOLDER))
-            syncFolder(elt, id);
+        else if (type.equalsIgnoreCase(MailConstants.E_FOLDER) || type.equalsIgnoreCase(MailConstants.E_MOUNT))
+            syncFolder(elt, id, type);
     }
 
     void syncSearchFolder(Element elt, int id) throws ServiceException {
@@ -452,11 +452,12 @@ public class DeltaSync {
             OfflineLog.offline.debug("delta: updated search folder (" + id + "): " + name);
         }
     }
-
-    void syncFolder(Element elt, int id) throws ServiceException {
+   
+    void syncFolder(Element elt, int id, String type) throws ServiceException {
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null)) & ~Flag.BITMASK_UNREAD;
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         String url = elt.getAttribute(MailConstants.A_URL, null);
+        byte itemType = type.equals(MailConstants.E_FOLDER) ? MailItem.TYPE_FOLDER : MailItem.TYPE_MOUNTPOINT;
 
         ACL acl = getInitialSync().parseACL(elt.getOptionalElement(MailConstants.E_ACL));
 
@@ -470,11 +471,11 @@ public class DeltaSync {
             Folder folder = getFolder(id);
             if (folder == null) {
                 // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
-                if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_FOLDER))
+                if (ombx.isPendingDelete(sContext, id, itemType))
                     return;
                 // resolve any naming conflicts and actually create the folder
-                if (resolveFolderConflicts(elt, id, MailItem.TYPE_FOLDER, folder)) {
-                    getInitialSync().syncFolder(elt, id);
+                if (resolveFolderConflicts(elt, id, itemType, folder)) {
+                    getInitialSync().syncFolder(elt, id, type);
                     return;
                 } else {
                     folder = getFolder(id);
@@ -482,25 +483,28 @@ public class DeltaSync {
             }
 
             // if the folder was moved/renamed locally, that trumps any changes made remotely
-            resolveFolderConflicts(elt, id, MailItem.TYPE_FOLDER, folder);
+            resolveFolderConflicts(elt, id, itemType, folder);
 
             int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
             String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailConstants.A_NAME);
 
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_FOLDER);
             if (id != Mailbox.ID_FOLDER_ROOT)
-                ombx.rename(sContext, id, MailItem.TYPE_FOLDER, name, parentId);
+                ombx.rename(sContext, id, itemType, name, parentId);
             // XXX: do we need to sync if the folder has perms but the new ACL is empty?
             if ((change_mask & Change.MODIFIED_ACL) == 0 && acl != null)
                 ombx.setPermissions(sContext, id, acl);
             if ((change_mask & Change.MODIFIED_URL) == 0)
                 ombx.setFolderUrl(sContext, id, url);
-            // don't care about current feed syncpoint; sync can't be done offline
-            ombx.syncMetadata(sContext, id, MailItem.TYPE_FOLDER, parentId, flags, 0, color);
-            ombx.syncChangeIds(sContext, id, MailItem.TYPE_FOLDER, date, mod_content, timestamp, changeId);
+            
+            if (itemType == MailItem.TYPE_FOLDER) {
+                // don't care about current feed syncpoint; sync can't be done offline
+                ombx.syncMetadata(sContext, id, MailItem.TYPE_FOLDER, parentId, flags, 0, color);
+                ombx.syncChangeIds(sContext, id, MailItem.TYPE_FOLDER, date, mod_content, timestamp, changeId);
+            }
 
             if (elt.getAttributeBool(InitialSync.A_RELOCATED, false))
-                ombx.setChangeMask(sContext, id, MailItem.TYPE_FOLDER, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
+                ombx.setChangeMask(sContext, id, itemType, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
 
             OfflineLog.offline.debug("delta: updated folder (" + id + "): " + name);
         }

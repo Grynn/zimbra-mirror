@@ -52,6 +52,8 @@ import com.zimbra.common.soap.ZimbraNamespace;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineAccount.Version;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.MailItem.UnderlyingData;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
@@ -69,8 +71,10 @@ import com.zimbra.cs.redolog.op.CreateChat;
 import com.zimbra.cs.redolog.op.CreateContact;
 import com.zimbra.cs.redolog.op.CreateFolder;
 import com.zimbra.cs.redolog.op.CreateMessage;
+import com.zimbra.cs.redolog.op.CreateMountpoint;
 import com.zimbra.cs.redolog.op.CreateSavedSearch;
 import com.zimbra.cs.redolog.op.CreateTag;
+import com.zimbra.cs.redolog.op.RedoableOp;
 import com.zimbra.cs.redolog.op.SaveChat;
 import com.zimbra.cs.redolog.op.SaveDocument;
 import com.zimbra.cs.redolog.op.SaveDraft;
@@ -211,7 +215,7 @@ public class InitialSync {
     }
 
     static final Set<String> KNOWN_FOLDER_TYPES = new HashSet<String>(Arrays.asList(
-            MailConstants.E_FOLDER, MailConstants.E_SEARCH
+            MailConstants.E_FOLDER, MailConstants.E_SEARCH, MailConstants.E_MOUNT
     ));
     
     private void initialFolderSync(Element elt) throws ServiceException {
@@ -223,7 +227,7 @@ public class InitialSync {
         syncContainer(elt, folderId);
 
         // next, sync the leaf-node contents
-        if (elt.getName().equals(MailConstants.E_FOLDER)) {
+        if (elt.getName().equals(MailConstants.E_FOLDER) || elt.getName().equals(MailConstants.E_MOUNT)) {
             if (folderId == Mailbox.ID_FOLDER_TAGS) {
                 for (Element eTag : elt.listElements(MailConstants.E_TAG)) {
                     syncTag(eTag);
@@ -436,8 +440,8 @@ public class InitialSync {
         String type = elt.getName();
         if (type.equalsIgnoreCase(MailConstants.E_SEARCH))
             syncSearchFolder(elt, id);
-        else if (type.equalsIgnoreCase(MailConstants.E_FOLDER))
-            syncFolder(elt, id);
+        else if (type.equalsIgnoreCase(MailConstants.E_FOLDER) || type.equalsIgnoreCase(MailConstants.E_MOUNT))
+            syncFolder(elt, id, type);
     }
 
     void syncSearchFolder(Element elt, int id) throws ServiceException {
@@ -476,11 +480,12 @@ public class InitialSync {
             getDeltaSync().syncSearchFolder(elt, id);
         }
     }
-
-    void syncFolder(Element elt, int id) throws ServiceException {
+   
+    void syncFolder(Element elt, int id, String type) throws ServiceException {
         //system folders should be already created during mailbox initialization, but just in cases the server is of newer version
     	//and there's a newly added system folder
         byte system = id < Mailbox.FIRST_USER_ID ? Folder.FOLDER_IS_IMMUTABLE : (byte)0;
+        byte itemType = type.equals(MailConstants.E_FOLDER) ? MailItem.TYPE_FOLDER : MailItem.TYPE_MOUNTPOINT;
 
         int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
@@ -498,24 +503,47 @@ public class InitialSync {
 
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || (id != Mailbox.ID_FOLDER_ROOT && !name.equals(elt.getAttribute(MailConstants.A_NAME)));
 
-        CreateFolder redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, color, url);
-        redo.setFolderId(id);
+        RedoableOp redo;
+        String ownerId = null;
+        String ownerName = null;
+        int remoteId = 0;
+        if (itemType == MailItem.TYPE_FOLDER) {
+            redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, color, url);
+            ((CreateFolder)redo).setFolderId(id);
+        } else {
+            ownerId = elt.getAttribute(MailConstants.A_ZIMBRA_ID);
+            ownerName = elt.getAttribute(MailConstants.A_OWNER_NAME);
+            remoteId = (int)elt.getAttributeLong(MailConstants.A_REMOTE_ID);
+            redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, color);
+            ((CreateMountpoint)redo).setId(id);
+        }
         redo.setChangeId(mod_content);
         redo.start(timestamp * 1000L);
 
         try {
-            // don't care about current feed syncpoint; sync can't be done offline
-            ombx.createFolder(new OfflineContext(redo), name, parentId, system, view, flags, color, url);
+            if (itemType == MailItem.TYPE_FOLDER) {
+                // don't care about current feed syncpoint; sync can't be done offline
+                ombx.createFolder(new OfflineContext(redo), name, parentId, system, view, flags, color, url);
+            } else {
+                ombx.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);
+                
+                OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+                if (prov.get(Provisioning.AccountBy.id, ownerId) != null)
+                    prov.deleteAccount(ownerId);
+                OfflineAccount account = ombx.getOfflineAccount();
+                prov.createMountpointAccount(ownerName, ownerId, account);                
+            }
             if (relocated)
-                ombx.setChangeMask(sContext, id, MailItem.TYPE_FOLDER, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
+                ombx.setChangeMask(sContext, id, itemType, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
             if (acl != null)
                 ombx.setPermissions(sContext, id, acl);
-            ombx.syncChangeIds(sContext, id, MailItem.TYPE_FOLDER, date, mod_content, timestamp, changeId);
-            OfflineLog.offline.debug("initial: created folder (" + id + "): " + name);
+            if (itemType == MailItem.TYPE_FOLDER)
+                ombx.syncChangeIds(sContext, id, MailItem.TYPE_FOLDER, date, mod_content, timestamp, changeId);
+            OfflineLog.offline.debug("initial: created folder (id=" + id + " type=" + type + "): " + name);
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
-            getDeltaSync().syncFolder(elt, id);
+            getDeltaSync().syncFolder(elt, id, type);
         }
     }
 
