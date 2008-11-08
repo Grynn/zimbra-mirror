@@ -33,7 +33,7 @@ ZaBulkProvisionWizard.prototype = new ZaXWizardDialog;
 ZaBulkProvisionWizard.prototype.constructor = ZaBulkProvisionWizard;
 
 ZaXDialog.XFormModifiers["ZaBulkProvisionWizard"] = new Array();
-ZaBulkProvisionWizard.helpURL = location.pathname + "help/admin/html/tools/bulk_provisioning.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
+ZaBulkProvisionWizard.helpURL = location.pathname + "help/admin/html/managing_accounts/how_to_provision_multiple_accounts.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
 
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)
