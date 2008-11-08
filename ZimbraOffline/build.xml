@@ -407,6 +407,9 @@
 		<copy todir="${dist.dir}/conf/attrs" overwrite="true">
 			<fileset dir="${config.dir}/attrs" />
 		</copy>
+        <copy todir="${dist.dir}/conf/rights" overwrite="true">
+            <fileset dir="${server.config.dir}/rights"/>
+        </copy>
 		<fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" />
 
 		<copy tofile="${dist.dir}/jetty/etc/jetty.xml" file="${config.dir}/jetty-6.1/jetty.xml" overwrite="true" />
