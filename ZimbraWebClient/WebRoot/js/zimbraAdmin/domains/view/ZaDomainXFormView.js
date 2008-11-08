@@ -222,10 +222,10 @@ ZaDomainXFormView.hasACEName = function () {
 ZaDomainXFormView.resetAllColorThemes = function () {
     var form = this.getForm() ;
 //    var instance = form.getInstance () ;
-    this.setInstanceValue ("", ZaDomain.A_zimbraSkinForegroundColor) ;
-    this.setInstanceValue ("", ZaDomain.A_zimbraSkinBackgroundColor) ;
-    this.setInstanceValue ("", ZaDomain.A_zimbraSkinSecondaryColor) ;
-    this.setInstanceValue ("", ZaDomain.A_zimbraSkinSelectionColor) ;
+    this.setInstanceValue (null, ZaDomain.A_zimbraSkinForegroundColor) ;
+    this.setInstanceValue (null, ZaDomain.A_zimbraSkinBackgroundColor) ;
+    this.setInstanceValue (null, ZaDomain.A_zimbraSkinSecondaryColor) ;
+    this.setInstanceValue (null, ZaDomain.A_zimbraSkinSelectionColor) ;
 
     form.parent.setDirty(true);
     form.refresh () ;        
@@ -799,29 +799,31 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 					items: [
                     	{ref:ZaDomain.A_zimbraSkinForegroundColor,
                             type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
-//                            labelCssStyle:"width:175px", colSizes:["375px","190px"],
-                            //msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
                             label:ZaMsg.NAD_zimbraSkinForegroundColor,
                             labelLocation:_LEFT_,
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            buttonImage: "Color", width: "50px" ,
                             onChange:ZaTabView.onFormFieldChanged
                         }  ,
                         {ref:ZaDomain.A_zimbraSkinBackgroundColor,
                             type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinBackgroundColor,
                             labelLocation:_LEFT_,  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            buttonImage: "Color", width: "50px" ,
                             onChange:ZaTabView.onFormFieldChanged
                         }  ,
                         {ref:ZaDomain.A_zimbraSkinSecondaryColor,
                             type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             label:ZaMsg.NAD_zimbraSkinSecondaryColor,
                             labelLocation:_LEFT_,
+                            buttonImage: "Color", width: "50px" ,
                             onChange:ZaTabView.onFormFieldChanged
                         },
                         {ref:ZaDomain.A_zimbraSkinSelectionColor,
                             type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinSelectionColor,
                             labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            buttonImage: "Color", width: "50px" ,
                             onChange:ZaTabView.onFormFieldChanged
                         },
                         {type:_GROUP_,  colSpan: 2, cssStyle: "margin-top: 10px; margin-left: 200px", items: [

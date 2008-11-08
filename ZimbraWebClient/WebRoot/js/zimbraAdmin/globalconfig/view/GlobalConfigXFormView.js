@@ -645,29 +645,36 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
                             items: [
                                 {ref:ZaGlobalConfig.A_zimbraSkinForegroundColor,
                                     type:_DWT_COLORPICKER_,
-        //                            labelCssStyle:"width:175px", colSizes:["375px","190px"],
-                                    //msgName:ZaMsg.NAD_zimbraPrefHtmlEditorDefaultFontColor,
                                     label:ZaMsg.NAD_zimbraSkinForegroundColor,
                                     labelLocation:_LEFT_,
+                                    buttonImage: "Color", width: "50px" ,
                                     onChange:ZaTabView.onFormFieldChanged
                                 }  ,
                                 {ref:ZaGlobalConfig.A_zimbraSkinBackgroundColor,
                                     type:_DWT_COLORPICKER_,
                                     label:ZaMsg.NAD_zimbraSkinBackgroundColor,
                                     labelLocation:_LEFT_,
+                                    buttonImage: "Color", width: "50px" ,
                                     onChange:ZaTabView.onFormFieldChanged
                                 }  ,
                                 {ref:ZaGlobalConfig.A_zimbraSkinSecondaryColor,
                                     type:_DWT_COLORPICKER_,
                                     label:ZaMsg.NAD_zimbraSkinSecondaryColor,
                                     labelLocation:_LEFT_,
+                                    buttonImage: "Color", width: "50px" ,
                                     onChange:ZaTabView.onFormFieldChanged
                                 },
                                 {ref:ZaGlobalConfig.A_zimbraSkinSelectionColor,
                                     type:_DWT_COLORPICKER_,
                                     label:ZaMsg.NAD_zimbraSkinSelectionColor,
+                                    buttonImage: "Color", width: "50px" ,
                                     labelLocation:_LEFT_,
                                     onChange:ZaTabView.onFormFieldChanged
+                                },
+                                {type:_GROUP_,  colSpan: 2, cssStyle: "margin-top: 10px; margin-left: 200px", items: [
+                                        {type: _DWT_BUTTON_,  label: ZaMsg.bt_ResetAllSkinColor,
+                                            onActivate: ZaDomainXFormView.resetAllColorThemes }
+                                   ]
                                 }
                             ]
                         }

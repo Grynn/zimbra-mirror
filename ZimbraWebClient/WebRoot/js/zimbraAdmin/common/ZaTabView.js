@@ -211,8 +211,10 @@ function () {
 /*
 ZaTabView.onFormFieldChanged = 
 function (value, event, form) {
-	form.parent.setDirty(true);	
-	this.setInstanceValue(value);
+    if (this.getInstanceValue() != value) { //only set dirty when value is actually changed
+        form.parent.setDirty(true);
+    }
+    this.setInstanceValue(value);
 	return value;
 }*/
 

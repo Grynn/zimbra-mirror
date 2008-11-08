@@ -1110,11 +1110,14 @@ Super_Dwt_ColorPicker_XFormItem.prototype.labelWrap = true;
 Super_Dwt_ColorPicker_XFormItem.prototype.useParentTable = false;
 Super_Dwt_ColorPicker_XFormItem.prototype.numCols = 2;
 Super_Dwt_ColorPicker_XFormItem.prototype.initializeItems = function() {
-	this.items = [
+    var buttonImage = this.getInheritedProperty("buttonImage") ;
+    var width = this.getInheritedProperty("width") ;
+    this.items = [
 		{	type:_DWT_COLORPICKER_, ref:".", 
 			onChange:Composite_XFormItem.onFieldChange,
 			forceUpdate:true,
-			//this method is requied to show the "reset to cos" upon the element update
+            buttonImage: buttonImage, width: width,
+            //this method is requied to show the "reset to cos" upon the element update
 			elementChanged:function(elementValue, instanceValue, event) {
 				this.getForm().itemChanged(this, elementValue, event);
 			},

@@ -4137,14 +4137,15 @@ Dwt_ColorPicker_XFormItem.prototype.constructWidget = function () {
 	var widget = new DwtButtonColorPicker (this.getForm()) ;
 	widget.setActionTiming(DwtButton.ACTION_MOUSEDOWN);
 
-	widget.setImage("FontColor");
+    var buttonImage = this.getInheritedProperty("buttonImage") || "FontColor";
+    widget.setImage(buttonImage);
 	widget.showColorDisplay(true);
 	widget.setToolTipContent(ZMsg.xformFontColor);
 	if (this.getInstanceValue() != null) {
-		widget.setColor(this.getInstanceValue());
+		widget.setColor(this.getInstanceValue());       
 	}
-	widget.addSelectionListener(new AjxListener(this, this._colorOnChange));
-	
+//	widget.addSelectionListener(new AjxListener(this, this._colorOnChange)); //it cause the dwt color picker event handller is not invoked correctly
+    widget.__colorPicker.addSelectionListener(new AjxListener(this, this._colorOnChange)) ;
 	return widget;
 }
 
@@ -4152,21 +4153,22 @@ Dwt_ColorPicker_XFormItem.prototype.updateWidget = function (newValue) {
 	//if (AjxEnv.hasFirebug) console.log ("new color = " + newValue) ;
 	if (newValue != null) {
 		this.widget.setColor(newValue);
-	}
+	}else { //ensure the empty color can be set in the UI
+        this.widget.setColor("");            
+    }
 };
 
 Dwt_ColorPicker_XFormItem.prototype._colorOnChange = function (event) {
 	var value = event.detail;
-	var elementChanged = this.getElementChangedMethod();
+    
+    var elementChanged = this.getElementChangedMethod();
 	if (elementChanged) {
-		elementChanged.call(this,value, this.getInstanceValue(), event);	
+		elementChanged.call(this,value, this.getInstanceValue(), event);
 	}
 	var onChangeFunc = this.getOnChangeMethod();
 	if (onChangeFunc) {
 		onChangeFunc.call(this, value, event, this.getForm());	
 	}
-	
-	
 };
 
 /**	

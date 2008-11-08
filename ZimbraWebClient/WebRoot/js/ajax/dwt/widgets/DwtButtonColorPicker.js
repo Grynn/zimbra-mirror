@@ -57,7 +57,7 @@ DwtButtonColorPicker = function(params) {
 	this.setMenu(m);
 	var cp = new DwtColorPicker(m, null, null, params.noFillLabel);
 	cp.addSelectionListener(new AjxListener(this, this._colorPicked));
-
+    this.__colorPicker = cp ;    //for xform item _DWT_COLORPICKER_
 	// no color initially selected
 	this.__color = "";
 };
