@@ -44,7 +44,7 @@ public class OfflineSearchGal extends DocumentHandler {
         
         Mailbox mbox = getRequestedMailbox(ctxt);
         if (!(mbox instanceof OfflineMailbox))
-            throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
+            return getResponseElement(ctxt);
         
         Element response;
         if (account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {

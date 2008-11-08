@@ -21,7 +21,7 @@ import com.zimbra.soap.ZimbraSoapContext;
 public class OfflineCreateMountpoint extends OfflineServiceProxy {
 
     public OfflineCreateMountpoint() {
-        super("create mountpoint", false);
+        super("create mountpoint", false, false);
     }
     
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {

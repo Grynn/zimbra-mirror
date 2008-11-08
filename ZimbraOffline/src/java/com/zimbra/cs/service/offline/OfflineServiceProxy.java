@@ -30,17 +30,23 @@ public class OfflineServiceProxy extends DocumentHandler {
 
     private String mOp;
     private boolean mQuiet;
+    private boolean mHandleNonSync;
     
-    public OfflineServiceProxy(String op, boolean quiet) {
+    public OfflineServiceProxy(String op, boolean quiet, boolean handleNonSync) {
         mOp = op;
         mQuiet = quiet;
+        mHandleNonSync = handleNonSync;
     }
     
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(ctxt);
-        if (!(mbox instanceof OfflineMailbox))
-            throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
+        if (!(mbox instanceof OfflineMailbox)) {
+            if (mHandleNonSync)
+                return getResponseElement(ctxt);
+            else
+                throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
+        }
         
         Element parent = request.getParent();
         boolean fromBatch = parent != null && parent.getName().equals("BatchRequest");
@@ -53,11 +59,11 @@ public class OfflineServiceProxy extends DocumentHandler {
     }
     
     public static OfflineServiceProxy GetFreeBusy() {
-        return new OfflineServiceProxy("get free/busy", false);
+        return new OfflineServiceProxy("get free/busy", false, true);
     }
     
     public static OfflineServiceProxy SearchCalendarResources() {
-        return new OfflineServiceProxy("search cal resources", false);
+        return new OfflineServiceProxy("search cal resources", false, true);
     }
 }
 
