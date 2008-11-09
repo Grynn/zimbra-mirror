@@ -424,7 +424,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefMailtoAccountId,
             A_zimbraJunkMessagesIndexingEnabled,
             A_zimbraPrefMailToasterEnabled,
-            A_zimbraPrefCalendarToasterEnabled
+            A_zimbraPrefCalendarToasterEnabled,
+            A_zimbraMailQuota
     ));
 
     @Override
@@ -492,6 +493,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.remove(A_zimbraPrefChildVisibleAccount);
         
         attrs.put(A_zimbraJunkMessagesIndexingEnabled, TRUE);
+        
+        attrs.put(A_zimbraMailQuota, "0");
 
         Account account = createAccountInternal(emailAddress, zgi.getId(), attrs, true);
         try {
