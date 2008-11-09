@@ -1096,6 +1096,10 @@ public class InitialSync {
             OfflineLog.offline.debug("initial: created " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
             return;
         } catch (IOException e) {
+        	if (e.getMessage() != null && e.getMessage().startsWith("Unable to rename")) {
+        		SyncExceptionHandler.syncMessageFailed(ombx, id, pm, e);
+        		return;
+        	}
             throw ServiceException.FAILURE("storing " + MailItem.getNameForType(type) + " " + id, e);
         } catch (Exception e) {
             if (e instanceof ServiceException && ((ServiceException)e).getCode() != MailServiceException.ALREADY_EXISTS) {
