@@ -1,4 +1,4 @@
-package com.zimbra.cs.offline.gab;
+package com.zimbra.cs.offline.ab.gab;
 
 public class AddressTest {
     private static final String ADDRESSES[] = {

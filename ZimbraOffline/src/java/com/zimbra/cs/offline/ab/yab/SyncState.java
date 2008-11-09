@@ -14,7 +14,7 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.yab;
+package com.zimbra.cs.offline.ab.yab;
 
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.Metadata;

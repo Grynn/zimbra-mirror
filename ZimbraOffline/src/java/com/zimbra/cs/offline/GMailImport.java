@@ -16,7 +16,7 @@
  */
 package com.zimbra.cs.offline;
 
-import com.zimbra.cs.offline.gab.GabImport;
+import com.zimbra.cs.offline.ab.gab.GabImport;
 import com.zimbra.cs.datasource.ImapSync;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.common.service.ServiceException;

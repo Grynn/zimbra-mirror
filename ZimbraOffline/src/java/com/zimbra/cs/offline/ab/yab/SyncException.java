@@ -14,7 +14,7 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.yab;
+package com.zimbra.cs.offline.ab.yab;
 
 import java.io.IOException;
 

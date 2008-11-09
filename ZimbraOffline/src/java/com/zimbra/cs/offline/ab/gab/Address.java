@@ -14,7 +14,7 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.gab;
+package com.zimbra.cs.offline.ab.gab;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;

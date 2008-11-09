@@ -14,7 +14,7 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.yab;
+package com.zimbra.cs.offline.ab.yab;
 
 import com.zimbra.cs.offline.util.yab.NameField;
 import com.zimbra.cs.offline.util.yab.AddressField;

@@ -14,7 +14,7 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.gab;
+package com.zimbra.cs.offline.ab.gab;
 
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.mailbox.Mailbox;

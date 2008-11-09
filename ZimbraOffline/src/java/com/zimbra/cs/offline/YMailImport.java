@@ -18,7 +18,7 @@ package com.zimbra.cs.offline;
 
 import com.zimbra.cs.datasource.ImapSync;
 import com.zimbra.cs.account.offline.OfflineDataSource;
-import com.zimbra.cs.offline.yab.YabImport;
+import com.zimbra.cs.offline.ab.yab.YabImport;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.util.yauth.XYMEAuthenticator;

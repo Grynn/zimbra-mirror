@@ -14,7 +14,7 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.gab;
+package com.zimbra.cs.offline.ab.gab;
 
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
@@ -23,7 +23,6 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.common.service.ServiceException;
 
 import java.util.List;
-import java.io.IOException;
 
 public class GabImport implements DataSource.DataImport {
     private final OfflineDataSource ds;

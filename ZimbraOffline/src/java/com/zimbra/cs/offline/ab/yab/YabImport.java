@@ -14,12 +14,10 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.yab;
+package com.zimbra.cs.offline.ab.yab;
 
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
-import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.util.yab.Session;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
