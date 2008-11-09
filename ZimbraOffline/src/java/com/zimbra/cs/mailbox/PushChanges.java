@@ -865,6 +865,19 @@ public class PushChanges {
                 cnElem = request.addElement(MailConstants.E_CONTACT);
                 create = true;
             }
+            
+            if (create || (mask & Change.MODIFIED_CONTENT) != 0) {
+                for (Map.Entry<String, String> field : cn.getFields().entrySet()) {
+                    String name = field.getKey(), value = field.getValue();
+                    if (name == null || name.trim().equals("") || value == null || value.equals(""))
+                        continue;
+                    cnElem.addKeyValuePair(name, value);
+                }
+            } else {
+            	request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+            	cnElem = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
+            }
+            
             if (create || (mask & Change.MODIFIED_FLAGS) != 0)
             	cnElem.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
             if (create || (mask & Change.MODIFIED_TAGS) != 0)
@@ -873,14 +886,6 @@ public class PushChanges {
             	cnElem.addAttribute(MailConstants.A_FOLDER, folderId);
             if (create || (mask & Change.MODIFIED_COLOR) != 0)
             	cnElem.addAttribute(MailConstants.A_COLOR, color);
-            if (create || (mask & Change.MODIFIED_CONTENT) != 0) {
-                for (Map.Entry<String, String> field : cn.getFields().entrySet()) {
-                    String name = field.getKey(), value = field.getValue();
-                    if (name == null || name.trim().equals("") || value == null || value.equals(""))
-                        continue;
-                    cnElem.addKeyValuePair(name, value);
-                }
-            }
         }
 
         try {
