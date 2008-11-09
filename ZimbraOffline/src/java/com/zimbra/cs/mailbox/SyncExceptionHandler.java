@@ -151,12 +151,16 @@ public class SyncExceptionHandler {
     	exception.printStackTrace(ps);
     	ps.flush();
 
-    	sb.append("Failure details: \n");
+    	sb.append("Failure details - PLEASE REMOVE ANY SENSITIVE INFORMATION\n");
     	sb.append("----------------------------------------------------------------------------\n\n");
     	if (exception instanceof SoapFaultException) {
-    		Element fault = ((SoapFaultException)exception).getFault();
-    		if (fault != null)
-    			sb.append(fault.prettyPrint()).append("\n\n");
+    		SoapFaultException sfe = (SoapFaultException)exception;
+    		if (sfe.getFaultRequest() != null)
+    			sb.append(sfe.getFaultRequest()).append("\n\n");
+    		if (sfe.getFaultResponse() != null)
+    			sb.append(sfe.getFaultResponse()).append("\n\n");
+    		else if (sfe.getFault() != null)
+    			sb.append(sfe.getFault().prettyPrint()).append("\n\n");
     	}
     	sb.append(bao.toString());
     	sb.append("\n----------------------------------------------------------------------------\n");
