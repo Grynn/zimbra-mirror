@@ -130,38 +130,31 @@ function onEditPort(link, id) {
 </script>
 </head>
 <body onload="InitScreen();">
-    <br><br>
     <div align="center">
-    <img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
     <br><br>
-    <div class="whiteBg">
+    <div class="ZPanel">
     <div id="accountType" align="center">
     <table cellpadding="5">
+        <tr>
+            <td align="center" colspan="2">
+	        <img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
+            </td>
+        </tr>
 <c:choose>
     <c:when test="${empty bean.accountId}">
         <tr>
-            <td align="center" colspan="2">
-                <div class="ZWizardPageTitle">
-                    <div id='settings_hint' class='ZFloatInHead'></div>
-                    <span id='pageTitle'>
-                        <h2>
-                            <fmt:message key='AccountAdd'></fmt:message>
-                        </h2>
-                    </span>
+            <td colspan="2">
+                <div class="ZHeadTitle">
+                    <fmt:message key='AccountAdd'></fmt:message>
                 </div>
             </td>
         </tr>
     </c:when>
     <c:otherwise>
         <tr>
-            <td align="center" colspan="2">
-                <div class="ZWizardPageTitle">
-                    <div id='settings_hint' class='ZFloatInHead'></div>
-                    <span id='pageTitle'>
-                        <h2>
-                            <fmt:message key='AccountChange'><fmt:param><fmt:message key='${accountFlavor}'></fmt:message></fmt:param></fmt:message>
-                        </h2>
-                    </span>
+            <td colspan="2">
+                <div class="ZHeadTitle">
+                    <fmt:message key='AccountChange'><fmt:param><fmt:message key='${accountFlavor}'></fmt:message></fmt:param></fmt:message>
                 </div>
             </td>
         </tr>
@@ -226,24 +219,26 @@ function onEditPort(link, id) {
         <tr><td colspan="2"><hr class="ZSeparator"></td></tr>
         <tr>
             <td align="center" colspan="2">
+                <table cellpadding="0" cellspacing="0" width="90%">
+                    <tr>
 <c:choose>
     <c:when test="${accountFlavor eq ''}">
-                <zd:button onclick='OnCancel()' text='${cancel}' primary='false'/>
-    </c:when>
-    <c:otherwise>
-                <table cellpadding="0" cellspacing="0" width="70%">
-                    <tr>
-                        <td id="saveButton">
-                            <zd:button onclick='OnSubmit()' text='${save}'/>
-                        </td>
-                        <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
                         <td id="cancelButton" align="right">
                             <zd:button onclick='OnCancel()' text='${cancel}' primary='false'/>
 			</td>
-                    </tr>
-                </table>
+    </c:when>
+    <c:otherwise>
+                        <td id="cancelButton">
+                            <zd:button onclick='OnCancel()' text='${cancel}' primary='false'/>
+			</td>
+                        <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
+                        <td id="saveButton" align="right">
+                            <zd:button onclick='OnSubmit()' text='${save}'/>
+                        </td>
     </c:otherwise>
 </c:choose>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

@@ -69,70 +69,78 @@ function submit(id, type, flavor, verb) {
 </script>
 </head>
 <body>
-<form name="accountForm" action="/zimbra/desktop/accsetup.jsp" method="POST">
-    <input type="hidden" name="accountId">
-    <input type="hidden" name="accountType">
-    <input type="hidden" name="accountFlavor">
-    <input type="hidden" name="verb">
-</form>
-<br><br>
 <div align="center">
-<img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
 <br><br>
-<div class="whiteBg">
-<div id="console" align="center">
-<table cellpadding="5" width="90%">
+<div class="ZPanel">
+<div align="center">
+<table class="ZAccount" cellpadding="4" cellspacing="0">
+    <tr>
+        <td align="center">
+	    <img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
+        </td>
+    </tr>
+    <tr><td></td></tr>
 <c:choose>
 <c:when test="${empty accounts}">
     <tr>
-        <td align="center">
-            <div class="ZWizardPageTitle">
-                <div id='settings_hint' class='ZFloatInHead'></div>
-                <span id='pageTitle'>
-                    <h2>
-                        <fmt:message key='WizardTitle'></fmt:message>
-                    </h2>
-                </span>
+        <td>
+            <div class="ZHeadTitle">
+		<fmt:message key='WelcomeTitle'></fmt:message>
             </div>
         </td>
     </tr>
     <tr><td><hr class="ZSeparator"></td></tr>
     <tr>
-        <td>
-            <div align="center"><fmt:message key='WizardDesc'/></div><br>
-            <span class="padding">
-                <ol>
-                    <li>
-                        <b><fmt:message key='WizardDescP1'/></b><br>
-                        <fmt:message key='WizardDescInfo1'/>
-                    </li>
-                    <li><b><fmt:message key='WizardDescP2'/></b><br>
-                        <fmt:message key='WizardDescInfo2'/>
-                    </li>
-                    <li><b><fmt:message key='WizardDescP3'/></b><br>
-                        <fmt:message key='WizardDescInfo3'/>
-                    </li>
-                    <li><b><fmt:message key='WizardDescP4'/></b><br>
-                        <fmt:message key='WizardDescInfo4'/>
-                    </li>
-                </ol>
-            <br>
-        </td>
+        <td align="center">
+	    <table>
+		<tr>
+		    <td>
+			<div class="ZWelcome"><fmt:message key='WelcomeDesc1'/></div>
+			<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfo1'/></div>
+			<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfo2'/></div><br>
+		    </td>
+		</tr>
+		<tr>
+		    <td>
+			<ol>
+			    <li class="ZWelcome">
+				<div class="ZWelcome"><fmt:message key='WelcomeDescP1'/></div>
+				<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP1'/></div>
+			    </li>
+			    <li class="ZWelcome">
+				<div class="ZWelcome"><fmt:message key='WelcomeDescP2'/></div>
+				<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP2'/></div>
+			    </li>
+			    <li class="ZWelcome">
+				<div class="ZWelcome"><fmt:message key='WelcomeDescP3'/></div>
+				<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP3'/></div>
+			    </li>
+			    <li class="ZWelcome">
+				<div class="ZWelcome"><fmt:message key='WelcomeDescP4'/></div>
+				<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP4'/></div>
+			    </li>
+			</ol>
+		    </td>
+		</tr>
+	    </table>
+	</td>
     </tr>
+    <tr><td><hr class="ZSeparator"></td></tr>
     <tr>
-        <td align="center"><zd:button onclick='OnAdd()' text='${add}'/></td>
+        <td align="center">
+            <table cellpadding="0" cellspacing="0" width="90%">
+                <tr>
+                    <td align="right"><zd:button onclick='OnAdd()' text='${add}'/></td>
+		</tr>
+            </table>
+        <td>
     </tr>
 </c:when>
 <c:otherwise>
     <tr>
         <td align="center">
-            <div class="ZWizardPageTitle">
-                <div id='settings_hint' class='ZFloatInHead'></div>
-                <span id='pageTitle'>
-                    <h2>
-                        <fmt:message key='HeadTitle'></fmt:message>
-                    </h2>
-                </span>
+            <div class="ZHeadTitle">
+		<fmt:message key='HeadTitle'></fmt:message>
             </div>
         </td>
     </tr>
@@ -171,34 +179,38 @@ function submit(id, type, flavor, verb) {
 <c:forEach items="${accounts}" var="account">
                 <tr>
                     <td>
-                        <h3 style="display:inline;">${account.name}</h3>
+                        <div class="ZAccountName">${account.name}</div>
                     </td>
                 </tr>
                 <tr>
-                    <td>${account.email}</td>
                     <td>
+                        <div class="ZAccountInfo">${account.email}</div>
+                    </td>
+                    <td>
+                        <div class="ZAccountInfo">
     <c:choose>
        <c:when test="${account.statusUnknown}">
-                        <i><img src="/zimbra/img/im/ImgOffline.gif" align="absmiddle">&nbsp;<fmt:message key='StatusUnknown'/></i>
+			    <i><img src="/zimbra/img/im/ImgOffline.gif" align="absmiddle">&nbsp;<fmt:message key='StatusUnknown'/></i>
        </c:when>
        <c:when test="${account.statusOffline}">
-                        <i><img src="/zimbra/img/im/ImgImAway.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOffline'/></i>
+			    <i><img src="/zimbra/img/im/ImgImAway.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOffline'/></i>
        </c:when>
        <c:when test="${account.statusOnline}">
-                        <i><img src="/zimbra/img/im/ImgImAvailable.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOnline'/></i>
+			    <i><img src="/zimbra/img/im/ImgImAvailable.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOnline'/></i>
        </c:when>
        <c:when test="${account.statusRunning}">
-                        <i><img src="/zimbra/img/animated/Imgwait_16.gif" align="absmiddle">&nbsp;<fmt:message key='StatusInProg'/></i>
+			    <i><img src="/zimbra/img/animated/Imgwait_16.gif" align="absmiddle">&nbsp;<fmt:message key='StatusInProg'/></i>
        </c:when>
        <c:when test="${account.statusAuthFailed}">
-                        <i><img src="/zimbra/img/im/ImgImDnd.gif" align="absmiddle">&nbsp;<fmt:message key='StatusCantLogin'/></i>
+			    <i><img src="/zimbra/img/im/ImgImDnd.gif" align="absmiddle">&nbsp;<fmt:message key='StatusCantLogin'/></i>
        </c:when>
        <c:when test="${account.statusError}">
-                        <i><img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif" align="absmiddle">&nbsp;<fmt:message key='StatusErr'/></i>
+			    <i><img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif" align="absmiddle">&nbsp;<fmt:message key='StatusErr'/></i>
        </c:when>
     </c:choose>
+		       </div>
                    </td>
-                   <td align="center" width="80px">&nbsp;
+                   <td align="center" width="70px">&nbsp;
    <c:if test="${not account.first}">
                        <a href="javascript:OnPromote('${account.id}', '${account.type}', '${account.flavor}')"><img src="/zimbra/desktop/img/sortArrow.gif" border="0" alt="${moveup}"></a>
    </c:if>
@@ -206,14 +218,18 @@ function submit(id, type, flavor, verb) {
                 </tr>
                 <tr>
                     <td>
-                        <a href="javascript:OnEdit('${account.id}', '${account.type}', '${account.flavor}')" id='editButton'><fmt:message key="Edit"/></a>&nbsp;
-                        <a href="javascript:OnDelete('${account.id}', '${account.type}', '${account.flavor}')" id='deleteButton'><fmt:message key="Delete"/></a>&nbsp;
-                        <a href="javascript:OnReset('${account.id}', '${account.type}', '${account.flavor}')"  id='resetButton'><fmt:message key="ResetData"/></a>
+                        <div class="ZAccountInfo">
+                            <a href="javascript:OnEdit('${account.id}', '${account.type}', '${account.flavor}')" id='editButton'><fmt:message key="Edit"/></a>&nbsp;
+                            <a href="javascript:OnDelete('${account.id}', '${account.type}', '${account.flavor}')" id='deleteButton'><fmt:message key="Delete"/></a>&nbsp;
+                           <a href="javascript:OnReset('${account.id}', '${account.type}', '${account.flavor}')"  id='resetButton'><fmt:message key="ResetData"/></a>
+                        </div>
                     </td>
     <c:choose>
     	<c:when test='${account.lastSync != null}'>
-                    <td>
-                        <i class="ZHint"><fmt:message key='LastSync'/>&nbsp;<fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></i>
+                    <td width="1%">
+                        <div class="ZAccountInfo">
+			    <i class="ZHint"><fmt:message key='LastSync'/>&nbsp;<fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></i>
+                        </div>
                     </td>
     	</c:when>
     </c:choose>
@@ -224,15 +240,15 @@ function submit(id, type, flavor, verb) {
         </td>
     </tr>
     <tr>
-        <td>
-            <table cellpadding="0" cellspacing="0" width="100%">
+        <td align="center">
+            <table cellpadding="0" cellspacing="0" width="90%">
                 <tr>
-                    <td id="loginButton">
-                        <zd:button onclick='OnLogin()' text='${login}'/>
+                    <td id="addButton" align="left">
+                        <zd:button onclick='OnAdd()' text='${add}' primary='false'/>
                     </td>
                     <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
-                    <td id="addButton" align="right">
-                        <zd:button onclick='OnAdd()' text='${add}'/>
+                    <td id="loginButton" "align="right">
+                        <zd:button onclick='OnLogin()' text='${login}'/>
                     </td>
                 </tr>
             </table>
@@ -242,6 +258,13 @@ function submit(id, type, flavor, verb) {
 </c:choose>
 </table>
 </div>
+</div>
+<form name="accountForm" action="/zimbra/desktop/accsetup.jsp" method="POST">
+    <input type="hidden" name="accountId">
+    <input type="hidden" name="accountType">
+    <input type="hidden" name="accountFlavor">
+    <input type="hidden" name="verb">
+</form>
 </body>
 </html>
 
