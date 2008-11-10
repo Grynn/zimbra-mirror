@@ -736,7 +736,7 @@ function(ev) {
  */
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
 function(hdlr, ev, forceActionCode) {
-	var mapName = hdlr.getKeyMapName ? hdlr.getKeyMapName() : null;
+	var mapName = (hdlr && hdlr.getKeyMapName) ? hdlr.getKeyMapName() : null;
 	if (!mapName) {
 		return DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
 	}
