@@ -17,17 +17,14 @@
 package com.zimbra.cs.offline.ab.gab;
 
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OfflineMailbox;
-import com.zimbra.cs.mailbox.Metadata;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.mailbox.SyncExceptionHandler;
-import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Tag;
-import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.db.DbDataSource;
+import com.zimbra.cs.offline.ab.LocalData;
+import com.zimbra.cs.offline.ab.SyncState;
+import com.zimbra.cs.offline.ab.LocalData.ChangeType;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.service.ServiceException;
@@ -42,15 +39,9 @@ import com.google.gdata.data.DateTime;
 import com.google.gdata.data.PlainTextConstruct;
 
 import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Collection;
 import java.util.logging.Logger;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -58,12 +49,8 @@ import java.io.IOException;
 
 public class SyncSession {
     private final DataSource ds;
-    private final Mailbox mbox;
+    private final LocalData localData;
     private final GabService service;
-
-    private enum ChangeType {
-        ADD, UPDATE, DELETE
-    }
 
     private static class Stats {
         int added, updated, deleted;
@@ -76,17 +63,9 @@ public class SyncSession {
 
     private static final Log LOG = OfflineLog.gab;
 
-    private static final String KEY_GAB_ENTRY = "GAB_CONTACT";
-
     private static final boolean DEBUG_TRACE = true;
     private static final boolean HTTP_DEBUG = false;
 
-    public static final Mailbox.OperationContext CONTEXT =
-        new OfflineMailbox.OfflineContext();
-
-    private static final Set<Integer> CONTACT_FOLDERS =
-        new HashSet<Integer>(Arrays.asList(Mailbox.ID_FOLDER_CONTACTS));
-    
     static {
         if (HTTP_DEBUG) {
             Logger httpLogger = Logger.getLogger(HttpGDataRequest.class.getName());
@@ -102,7 +81,7 @@ public class SyncSession {
 
     public SyncSession(DataSource ds) throws ServiceException {
         this.ds = ds;
-        mbox = ds.getMailbox();
+        localData = new LocalData((OfflineDataSource) ds);
         service = new GabService(ds.getUsername(), ds.getDecryptedPassword());
     }
 
@@ -115,26 +94,28 @@ public class SyncSession {
     }
 
     private void syncContacts() throws IOException, ServiceException {
-        SyncState state = new SyncState(mbox);
+        Mailbox mbox = localData.getMailbox();
+        SyncState state = localData.loadState();
         // Get remote changes since last sync
         DateTime currentTime = DateTime.now();
-        DateTime lastSyncTime = state.getLastSyncTime();
+        String rev = state.getLastRevision();
+        DateTime lastSyncTime = rev != null ? DateTime.parseDateTime(rev) : null;
         ContactFeed contacts = service.getContacts(lastSyncTime, currentTime);
         ContactGroupFeed groups = service.getGroups(lastSyncTime, currentTime);
-        state.setLastSyncTime(currentTime);
+        state.setLastRevision(currentTime.toString());
         List<SyncRequest> groupRequests;
         List<SyncRequest> contactRequests;
         int seq = state.getLastModSequence();
         synchronized (mbox) {
             // Get local changes sync last sync
-            Map<Integer, ChangeType> groupChanges = getLocalGroupChanges(seq);
-            Map<Integer, ChangeType> contactChanges = getLocalContactChanges(seq);
-            // Process remote changes
+            Map<Integer, ChangeType> groupChanges = localData.getGroupChanges(seq);
+            Map<Integer, ChangeType> contactChanges = localData.getContactChanges(seq);
+            // Process remote group and contact changes
             processGroupChanges(groups.getEntries(), groupChanges);
             processContactChanges(contacts.getEntries(), contactChanges);
             // Process local changes and determine changes to push
-            groupRequests = processLocalGroupChanges(groupChanges);
-            contactRequests = processLocalContactChanges(contactChanges);
+            groupRequests = processGroupChanges(groupChanges);
+            contactRequests = processContactChanges(contactChanges);
             state.setLastModSequence(mbox.getLastChangeID());
         }
         // Push local changes to remote
@@ -144,7 +125,7 @@ public class SyncSession {
         if (errors > 0) {
             LOG.debug("Contact sync had %d errors", errors);
         }
-        state.save(mbox);
+        localData.saveState(state);
     }
 
     private void processGroupChanges(List<ContactGroupEntry> entries,
@@ -153,11 +134,11 @@ public class SyncSession {
         LOG.debug("Processing %d remote contact group changes", entries.size());
         Stats stats = new Stats();
         for (ContactGroupEntry entry : entries) {
-            DataSourceItem dsi = DbDataSource.getReverseMapping(ds, entry.getId());
+            DataSourceItem dsi = localData.getReverseMapping(entry.getId());
             try {
                 processGroupChange(entry, dsi, changes, stats);
             } catch (ServiceException e) {
-                syncContactFailed(e, dsi.itemId, entry);
+                localData.syncContactFailed(e, dsi.itemId, service.pp(entry));
             }
         }
         LOG.debug("Processed remote contact group changes: " + stats);
@@ -177,7 +158,7 @@ public class SyncSession {
             if (deleted) {
                 // Don't delete tag since we can't be sure that it is not
                 // also used by other non-contact items
-                deleteEntry(itemId);
+                localData.deleteMapping(itemId);
                 changes.remove(itemId);
                 stats.deleted++;
             } else if (!changes.containsKey(itemId)) {
@@ -185,34 +166,19 @@ public class SyncSession {
                 String oldName = getName(getEntry(dsi, ContactGroupEntry.class));
                 if (!newName.equals(oldName)) {
                     // Contact group was renamed...
-                    mbox.rename(CONTEXT, itemId, MailItem.TYPE_TAG, newName,
-                                Mailbox.ID_FOLDER_TAGS);
+                    localData.renameTag(itemId, newName);
                     stats.updated++;
                 }
                 updateEntry(itemId, entry);
             }
         } else if (!deleted) {
             // Contact group was added
-            Tag tag = createTag(getName(entry));
+            Tag tag = localData.createTag(getName(entry));
             updateEntry(tag.getId(), entry);
             stats.added++;
         }
     }
 
-    private Tag createTag(String name) throws ServiceException {
-        String normalized = MailItem.normalizeItemName(name);
-        if (!name.equals(normalized)) {
-            LOG.warn("Normalizing tag name '%s' to '%s' since it contains" +
-                     "invalid tag characters", name, normalized);
-            name = normalized;
-        }
-        try {
-            return mbox.getTagByName(name);
-        } catch (MailServiceException.NoSuchItemException e) {
-            return mbox.createTag(CONTEXT, name, Tag.DEFAULT_COLOR);
-        }
-    }
-    
     private static String getName(BaseEntry entry) {
         return entry.getTitle().getPlainText();
     }
@@ -223,11 +189,11 @@ public class SyncSession {
         LOG.debug("Processing %d remote contact changes", entries.size());
         Stats stats = new Stats();
         for (ContactEntry entry : entries) {
-            DataSourceItem dsi = DbDataSource.getReverseMapping(ds, entry.getId());
+            DataSourceItem dsi = localData.getReverseMapping(entry.getId());
             try {
                 processContactChange(entry, dsi, changes, stats);
             } catch (ServiceException e) {
-                syncContactFailed(e, dsi.itemId, entry);
+                localData.syncContactFailed(e, dsi.itemId, service.pp(entry));
             }
         }
         LOG.debug("Processed remote contact changes: " + stats);
@@ -245,8 +211,8 @@ public class SyncSession {
         if (itemId > 0) {
             // Contact updated or deleted
             if (deleted) {
-                mbox.delete(CONTEXT, itemId, MailItem.TYPE_CONTACT);
-                deleteEntry(itemId);
+                localData.deleteContact(itemId);
+                localData.deleteMapping(itemId);
                 changes.remove(itemId);
                 stats.deleted++;
             } else if (!changes.containsKey(itemId)) {
@@ -256,8 +222,8 @@ public class SyncSession {
                     // Only update local entry if edit url has changed
                     // (avoids modifying contacts which we just pushed)
                     ContactData cd = new ContactData(entry);
-                    mbox.modifyContact(CONTEXT, itemId, cd.getParsedContact());
-                    setTags(itemId, entry);
+                    localData.modifyContact(
+                        itemId, cd.getParsedContact(), getTagBitmask(entry));
                     updateEntry(itemId, entry);
                     stats.updated++;
                 }
@@ -265,26 +231,18 @@ public class SyncSession {
         } else if (!deleted) {
             // New contact added
             ContactData cd = new ContactData(entry);
-            Contact contact = mbox.createContact(
-                CONTEXT, cd.getParsedContact(), Mailbox.ID_FOLDER_CONTACTS, null);
-            setTags(contact.getId(), entry);
+            Contact contact = localData.createContact(
+                cd.getParsedContact(), getTagBitmask(entry));
             updateEntry(contact.getId(), entry);
             stats.added++;
         }
-    }
-
-    private void setTags(int itemId, ContactEntry entry) throws ServiceException {
-        long mask = getTagBitmask(entry);
-        LOG.debug("Setting tags for item id %d: %x", itemId, mask);
-        mbox.setTags(CONTEXT, itemId, MailItem.TYPE_CONTACT,
-                     MailItem.FLAG_UNCHANGED, mask);
     }
 
     private static String getEditUrl(BaseEntry entry) {
         return entry.getEditLink().getHref();
     }
 
-    private List<SyncRequest> processLocalGroupChanges(Map<Integer, ChangeType> changes)
+    private List<SyncRequest> processGroupChanges(Map<Integer, ChangeType> changes)
         throws ServiceException {
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
         for (Map.Entry<Integer, ChangeType> entry : changes.entrySet()) {
@@ -293,7 +251,7 @@ public class SyncSession {
         return reqs;
     }
 
-    private List<SyncRequest> processLocalContactChanges(Map<Integer, ChangeType> changes)
+    private List<SyncRequest> processContactChanges(Map<Integer, ChangeType> changes)
         throws ServiceException {
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
         for (Map.Entry<Integer, ChangeType> entry : changes.entrySet()) {
@@ -305,15 +263,16 @@ public class SyncSession {
     private SyncRequest getContactSyncRequest(int itemId, ChangeType type)
         throws ServiceException {
         ContactEntry entry;
+        // For ADD and UPDATE, group membership info will be set later after
+        // we've pushed contact group changes. Otherwise, we may not yet
+        // have the ids for newly added groups.
         switch (type) {
         case ADD:
             entry = getContactData(itemId).newContactEntry();
-            // setGroupInfo(entry, itemId);
             return SyncRequest.insert(this, itemId, entry);
         case UPDATE:
             entry = getEntry(itemId, ContactEntry.class);
             getContactData(itemId).updateContactEntry(entry);
-            // setGroupInfo(entry, itemId);
             return SyncRequest.update(this, itemId, entry);
         case DELETE:
             entry = getEntry(itemId, ContactEntry.class);
@@ -329,13 +288,11 @@ public class SyncSession {
         switch (type) {
         case ADD:
             entry = new ContactGroupEntry();
-            entry.setTitle(new PlainTextConstruct(
-                mbox.getTagById(CONTEXT, itemId).getName()));
+            entry.setTitle(new PlainTextConstruct(localData.getTag(itemId).getName()));
             return SyncRequest.insert(this, itemId, entry);
         case UPDATE:
             entry = getEntry(itemId, ContactGroupEntry.class);
-            entry.setTitle(new PlainTextConstruct(
-                mbox.getTagById(CONTEXT, itemId).getName()));
+            entry.setTitle(new PlainTextConstruct(localData.getTag(itemId).getName()));
             return SyncRequest.update(this, itemId, entry);
         case DELETE:
             entry = getEntry(itemId, ContactGroupEntry.class);
@@ -380,16 +337,12 @@ public class SyncSession {
         throws ServiceException {
         List<GroupMembershipInfo> groups = entry.getGroupMembershipInfos();
         groups.clear();
-        for (Tag tag : getTagList(itemId)) {
+        for (Tag tag : localData.getContact(itemId).getTagList()) {
             ContactGroupEntry ge = getEntry(tag.getId(), ContactGroupEntry.class);
             if (ge != null) {
                 groups.add(new GroupMembershipInfo(false, ge.getId()));
             }
         }
-    }
-
-    private List<Tag> getTagList(int itemId) throws ServiceException {
-        return mbox.getItemById(CONTEXT, itemId, MailItem.TYPE_CONTACT).getTagList();
     }
 
     private boolean pushChange(SyncRequest req, Stats stats)
@@ -399,7 +352,7 @@ public class SyncSession {
             req.execute();
             switch (req.getType()) {
             case DELETE:
-                deleteEntry(itemId);
+                localData.deleteMapping(itemId);
                 stats.deleted++;
                 break;
             case UPDATE:
@@ -413,108 +366,29 @@ public class SyncSession {
             }
             return true;
         } catch (ServiceException e) {
-            syncContactFailed(e, itemId, req.getEntry());
+            localData.syncContactFailed(e, itemId, service.pp(req.getEntry()));
             return false;
         }
     }
 
-    private void syncContactFailed(ServiceException e, int itemId,
-                                   BaseEntry entry) throws ServiceException {
-        SyncExceptionHandler.checkRecoverableException("Contact sync failed", e);
-        DesktopMailbox dmbx = (DesktopMailbox) mbox;
-        SyncExceptionHandler.syncContactFailed(dmbx, itemId, service.pp(entry), e);
-    }
-
-    private Map<Integer, ChangeType> getLocalContactChanges(int seq)
-        throws ServiceException {
-        Map<Integer, ChangeType> changes = new HashMap<Integer, ChangeType>();
-        // Get modified and deleted contacts
-        for (int id : getModifiedItems(seq, MailItem.TYPE_CONTACT)) {
-            changes.put(id, DbDataSource.hasMapping(ds, id) ?
-                        ChangeType.UPDATE : ChangeType.ADD);
-        }
-        for (int id : getTombstones(seq, MailItem.TYPE_CONTACT)) {
-            if (DbDataSource.hasMapping(ds, id)) {
-                changes.put(id, ChangeType.DELETE);
-            }
-        }
-        return changes;
-    }
-
-    private Map<Integer, ChangeType> getLocalGroupChanges(int seq)
-        throws ServiceException {
-        Map<Integer, ChangeType> changes = new HashMap<Integer, ChangeType>();
-        // Get modified tags (but only those associated with modified contacts)
-        Set<Integer> tags = getContactTags(
-            getModifiedItems(seq, MailItem.TYPE_CONTACT));
-        for (Tag tag : mbox.getModifiedTags(CONTEXT, seq)) {
-            int id = tag.getId();
-            if (tags.contains(id)) {
-                changes.put(id, DbDataSource.hasMapping(ds, id) ?
-                            ChangeType.UPDATE : ChangeType.ADD);
-            }
-        }
-        // Get deleted tags
-        for (int id : getTombstones(seq, MailItem.TYPE_TAG)) {
-            if (DbDataSource.hasMapping(ds, id)) {
-                changes.put(id, ChangeType.DELETE);
-            }
-        }
-        return changes;
-    }
-
-    public Set<Integer> getContactTags(Collection<Integer> itemIds)
-        throws ServiceException {
-        Set<Integer> tags = new HashSet<Integer>();
-        for (int itemId : itemIds) {
-            for (Tag tag : getTagList(itemId)) {
-                tags.add(tag.getId());
-            }
-        }
-        return tags;
-    }
-
-    private List<Integer> getTombstones(int seq, byte type) throws ServiceException {
-        List<Integer> ids = mbox.getTombstones(seq).getIds(type);
-        return ids != null ? ids : Collections.<Integer>emptyList();
-    }
-
-    private List<Integer> getModifiedItems(int seq, byte type) throws ServiceException {
-        return mbox.getModifiedItems(CONTEXT, seq, type, CONTACT_FOLDERS).getFirst();
-    }
-
     private ContactData getContactData(int itemId) throws ServiceException {
-        return new ContactData((Contact)
-            mbox.getItemById(CONTEXT, itemId, MailItem.TYPE_CONTACT));
+        return new ContactData(localData.getContact(itemId));
     }
 
     private <T extends BaseEntry> T getEntry(int itemId, Class<T> entryClass)
         throws ServiceException {
-        return getEntry(DbDataSource.getMapping(ds, itemId), entryClass);
+        return getEntry(localData.getMapping(itemId), entryClass);
     }
 
     private <T extends BaseEntry> T getEntry(DataSourceItem dsi, Class<T> entryClass)
         throws ServiceException {
         // LOG.debug("Loading contact data for item id = %d", dsi.itemId);
-        String xml = dsi.md.get(KEY_GAB_ENTRY);
+        String xml = localData.getEntry(dsi);
         return xml != null ? service.parseEntry(xml, entryClass) : null;
     }
 
     private void updateEntry(int itemId, BaseEntry entry) throws ServiceException {
-        LOG.debug("Saving entry for item id = %d, entry id = %s", itemId, entry.getId());
-        Metadata md = new Metadata();
-        md.put(KEY_GAB_ENTRY, service.toXml(entry));
-        DataSourceItem dsi = new DataSourceItem(itemId, entry.getId(), md);
-        if (DbDataSource.hasMapping(ds, itemId)) {
-            DbDataSource.updateMapping(ds, dsi);
-        } else {
-            DbDataSource.addMapping(ds, dsi);
-        }
-    }
-
-    private void deleteEntry(int itemId) throws ServiceException {
-        LOG.debug("Deleting entry for item id: %d", itemId);
-        DbDataSource.deleteMappings(ds, Arrays.asList(itemId));
+        localData.updateMapping(itemId, entry.getId(), service.toXml(entry));
     }
 
     private long getTagBitmask(ContactEntry entry) throws ServiceException {
@@ -523,13 +397,12 @@ public class SyncSession {
             Boolean deleted = info.getDeleted();
             if (deleted == null || !deleted) {
                 String id = info.getHref();
-                DataSourceItem dsi = DbDataSource.getReverseMapping(ds, id);
+                DataSourceItem dsi = localData.getReverseMapping(id);
                 if (dsi.itemId == -1) {
                     throw ServiceException.FAILURE(
                         "Missing item id for contact group: " + id, null);
                 }
-                Tag tag = mbox.getTagById(CONTEXT, dsi.itemId);
-                mask |= tag.getBitmask();
+                mask |= localData.getTag(dsi.itemId).getBitmask();
             }
         }
         return mask;
