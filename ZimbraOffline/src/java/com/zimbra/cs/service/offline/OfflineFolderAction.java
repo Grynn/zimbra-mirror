@@ -36,8 +36,6 @@ public class OfflineFolderAction extends FolderAction {
     public Element handle(Element request, Map<String, Object> context) throws ServiceException, SoapFaultException {
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(zsc);
-        if (!(mbox instanceof OfflineMailbox))
-            throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         OfflineMailbox ombx = (OfflineMailbox) mbox;
         
         Element action = request.getElement(MailConstants.E_ACTION);
@@ -59,6 +57,9 @@ public class OfflineFolderAction extends FolderAction {
         if (!(mmgr instanceof OfflineMailboxManager))
             return super.handle(request, context);
  
+        if (!(mbox instanceof OfflineMailbox))
+            throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
+        
         // before doing anything, make sure all data sources are pushed to the server
         ombx.sync(true);
         // proxy this operation to the remote server
