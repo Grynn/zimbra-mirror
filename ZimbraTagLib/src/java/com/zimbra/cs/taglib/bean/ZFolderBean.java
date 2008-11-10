@@ -405,6 +405,65 @@ public class  ZFolderBean {
         }
     }
 
+    public String getType(){
+        if (getIsSearchFolder()) {
+            return "SearchFolder";
+        } else if (getIsAppointmentView()) {
+            if (getIsMountPoint()) {
+                return "SharedCalendarFolder";
+            } else {
+                return "CalendarFolder";
+            }
+        } else if (getIsContactView()) {
+            if (getIsMountPoint()) {
+                return "SharedContactsFolder";
+            } else if (getIsAutoContacts()) {
+                return "EmailedContacts";
+            } else {
+                return "ContactsFolder";
+            }
+        } else if (getIsTaskView()) {
+            if (getIsMountPoint()) {
+                return "SharedTaskList";
+            } else {
+                return "TaskList";
+            }
+        } else if (getIsSystemFolder()) {
+            if (getIsInbox())
+                return "Inbox";
+            else if (getIsTrash())
+                return "Trash";
+            else if (getIsSpam())
+                return "SpamFolder";
+            else if (getIsSent())
+                return "SentFolder";
+            else if (getIsDrafts())
+                return "DraftFolder";
+            else
+                return "Folder";
+        } else if (getIsMailView() && getIsFeed()) {
+            return "RSS";
+        } else if (getIsMountPoint()) {
+            return "SharedMailFolder";
+        } else if (getIsVoiceView()) {
+            String name = getName();
+            if (VoiceConstants.FNAME_PLACEDCALLS.equals(name)) {
+                return "PlacedCalls";
+            } else if (VoiceConstants.FNAME_ANSWEREDCALLS.equals(name)) {
+                return "AnsweredCalls";
+            } else if (VoiceConstants.FNAME_MISSEDCALLS.equals(name)) {
+                return "MissedCalls";
+            } else if (VoiceConstants.FNAME_VOICEMAILINBOX.equals(name)) {
+                return "Voicemail";
+            } else if (VoiceConstants.FNAME_TRASH.equals(name)) {
+                return "Trash";
+            }
+            return null;
+        } else {
+            return "Folder";
+        }
+    }
+    
     public Boolean getHasPublicShare(){
         if (this.hasPublicShare == null) {
             this.initShareFlags();
