@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+ <HEAD>
+ <title>Discover! relevant webpages from  across the internet</title>
+	<style type="text/css" rel="stylesheet">
+		#discoverBtn { background-color: #000099; color:white;font: italic bold 10pt "arial", "sans-serif";}
+		#discover_clickMsg {color:#808080;  font:  9pt "arial", "sans-serif";}
+		#discover_urlName {color:#808080;  font:  9pt ;}
+		#discover_urlType { font:  bold 9pt "arial", "sans-serif";}
+	</style> 
+<script>
+var discoverWindowPageCount = 1;
+function openWebPage() {
+    var urlsString = document.getElementById("urls").innerHTML;
+    var allLinks = urlsString.split("::");
+    var randomnumber = Math.floor(Math.random() * allLinks.length);
+    var urlwithCat = allLinks[randomnumber];
+    var cat = urlwithCat.substring(0, 4);//get category
+    var url = urlwithCat.substring(4);//remove category
+    if (url == "") {
+        document.getElementById("discover_clickMsg").innerHTML = "";
+        document.getElementById('discover_urlName').innerHTML = "No url found";
+        document.getElementById('discover_urlType').innerHTML = "";
+        return;
+    }
+
+		//if url was found..	
+    try {
+        if (document.frames) {
+            document.frames['externalpages'].location.href = url;
+        } else {
+            document.getElementById('externalpages').src = url;
+        }
+        discoverWindowPageCount++;
+        document.getElementById('discover_urlName').innerHTML = " url: " + url;
+        document.getElementById('discover_urlType').innerHTML = " type: " + discover_getFullCategoryName(cat);
+		 document.getElementById('discover_urlType').style.color = discover_getcolor();
+		//remove the used url
+        document.getElementById("urls").innerHTML = (document.getElementById("urls").innerHTML).replace(urlwithCat + "::", "");
+
+		//remove message after 2
+        if (discoverWindowPageCount >= 2) {
+            document.getElementById("discover_clickMsg").innerHTML = "";
+        }
+    } catch(e) {
+    }
+
+
+}
+function discover_getcolor() {
+	var colors = ["#0000FF", "#008000","#800000","#8000FF","#804000","#400040", "#FF80C0"];
+    var randomnumber = Math.floor(Math.random() * colors.length);
+    return colors[randomnumber];
+}
+function discover_getFullCategoryName(shortName) {
+	  if(shortName == "humo")
+		  return "humor";
+	  else if(shortName == "busi")
+		    return "business";
+	   else if(shortName == "ente")
+		    return "entertainment";
+	   else if(shortName == "poli")
+		    return "politics";
+	   else if(shortName == "tech")
+		    return "technology";
+	   else if(shortName == "spor")
+		    return "sports";
+	   else if(shortName == "arts")
+		    return "arts";
+}
+</script>
+ </HEAD>
+
+ <BODY style="margin: 0pt; padding: 0pt; overflow: hidden; height: 100%;">
+ <div style="position:absolute;top:0px;left:0px;z-index:500;background-image:url(discoverTopBarBg.gif);width:100%">
+ <table>
+ <tr>
+ <td>
+ <button type="button"  id='discoverBtn' onClick="openWebPage()">discover!</button> 
+ </td>
+ <td id='discover_clickMsg' valign="middle">
+ </td>
+ <td id='discover_urlType'>
+ </td>
+ <td id='discover_urlName'>
+ </td>
+ </tr>
+ </table>
+</div>
+
+ <iframe name='externalpages' id='externalpages' width=100% height=100%  frameborder="0"  style="position: absolute;top: 20pt; width:100%; z-index: 300;" noresize="noresize">
+ 
+ </iframe>
+
+ 
+<div id='urls' style="display:none; "> </div>
+ </BODY>
+</HTML>

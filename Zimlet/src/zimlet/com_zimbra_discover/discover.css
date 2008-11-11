@@ -1,0 +1,22 @@
+.Imgdy-panelIcon {
+  background: url("dy.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+
+
+.dy_optionsName{
+font-size:28px;color:blue;font-family:Arial,Helvetica,sans-serif;
+}
+.dy_optionsEtc{
+font-size:12px;color:blue;font-family:Arial,Helvetica,sans-serif;
+}
+
+.dy_selectOptDiv{
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+.dy_selectOptTable{
+font-size:16px;font-weight:bold;color:blue;background-color:#FFFFCC;font-family:Arial,Helvetica,sans-serif;width:100%
+}
