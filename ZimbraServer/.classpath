@@ -21,7 +21,7 @@
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/dbcp/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.1.jar">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.2.1.jar" sourcepath="/ThirdParty/commons-collections-3.2.1/src/java">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/collections/apidocs/"/>
 		</attributes>
