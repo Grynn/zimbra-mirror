@@ -91,9 +91,8 @@ sub logDiskUsage {
     my $lvl = "info";
     $lvl = "err" if ($pct > $DISK_WARN_THRESHOLD);
     $lvl = "crit" if ($pct > $DISK_CRIT_THRESHOLD);
-    if ($lvl eq "info") {
-		  Zimbra::Mon::Logger::Log( "$lvl", "$dt, DISK: ${hostname}: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
-    } else {
+		Zimbra::Mon::Logger::Log( "info", "$dt, DISK: ${hostname}: dev: $dev, mp: $mp, tot: $total, avail: $avail" );
+    if ($lvl ne "info") {
 		  Zimbra::Mon::Logger::Log( "$lvl", "Disk warning: ${hostname} $dev at $pct%" );
     }
 	}
