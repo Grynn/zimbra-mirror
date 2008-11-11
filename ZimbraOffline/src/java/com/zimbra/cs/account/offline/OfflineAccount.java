@@ -99,8 +99,8 @@ public class OfflineAccount extends Account {
 		return getAttr(OfflineProvisioning.A_offlineProxyPass);
 	}
 
-    public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults, Account localAccount) {
-        super(name, id, attrs, defaults);
+    public OfflineAccount(String name, String id, Map<String, Object> attrs, Map<String, Object> defaults, Account localAccount, Provisioning prov) {
+        super(name, id, attrs, defaults, prov);
         this.localAccount = localAccount;
     }
 

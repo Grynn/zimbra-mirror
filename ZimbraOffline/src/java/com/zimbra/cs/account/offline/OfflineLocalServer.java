@@ -26,11 +26,11 @@ import com.zimbra.cs.account.Server;
 import com.zimbra.cs.offline.OfflineLC;
 
 class OfflineLocalServer extends Server {
-    private OfflineLocalServer(OfflineConfig oconfig, Map<String, Object> attrs) {
-        super((String) attrs.get(Provisioning.A_cn), (String) attrs.get(Provisioning.A_zimbraId), attrs, oconfig.getServerDefaults());
+    private OfflineLocalServer(OfflineConfig oconfig, Map<String, Object> attrs, Provisioning prov) {
+        super((String) attrs.get(Provisioning.A_cn), (String) attrs.get(Provisioning.A_zimbraId), attrs, oconfig.getServerDefaults(), prov);
     }
 
-    static OfflineLocalServer instantiate(OfflineConfig oconfig) {
+    static OfflineLocalServer instantiate(OfflineConfig oconfig, Provisioning prov) {
         Map<String, Object> attrs = new HashMap<String, Object>(12);
         attrs.put(Provisioning.A_objectClass, "zimbraServer");
         attrs.put(Provisioning.A_cn, "localhost");
@@ -46,6 +46,6 @@ class OfflineLocalServer extends Server {
         attrs.put(Provisioning.A_zimbraLmtpBindPort, "7635");
         attrs.put(Provisioning.A_zimbraFileUploadMaxSize, OfflineLC.zdesktop_upload_size_limit.value());
         attrs.put(Provisioning.A_zimbraMailDiskStreamingThreshold, OfflineLC.zdesktop_membuf_limit.value());
-        return new OfflineLocalServer(oconfig, attrs);
+        return new OfflineLocalServer(oconfig, attrs, prov);
     }
 }

@@ -28,11 +28,11 @@ import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.offline.OfflineLC;
 
 class OfflineCos extends Cos {
-    OfflineCos(String name, String id, Map<String, Object> attrs) {
-        super(name, id, attrs);
+    OfflineCos(String name, String id, Map<String, Object> attrs, Provisioning prov) {
+        super(name, id, attrs, prov);
     }
 
-    static OfflineCos instantiate() {
+    static OfflineCos instantiate(Provisioning prov) {
         try {
             Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.COS, OfflineProvisioning.A_offlineDn, "default");
             if (attrs == null) {
@@ -47,7 +47,7 @@ class OfflineCos extends Cos {
             attrs.put(Provisioning.A_zimbraAuthTokenLifetime, OfflineLC.auth_token_lifetime.value());
             attrs.put(Provisioning.A_zimbraAdminAuthTokenLifetime, OfflineLC.auth_token_lifetime.value());
             
-            return new OfflineCos("default", (String) attrs.get(Provisioning.A_zimbraId), attrs);
+            return new OfflineCos("default", (String) attrs.get(Provisioning.A_zimbraId), attrs, prov);
         } catch (ServiceException e) {
             // throw RuntimeException because we're being called at startup...
             throw new RuntimeException("failure instantiating default cos", e);

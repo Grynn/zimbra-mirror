@@ -44,8 +44,8 @@ import com.zimbra.cs.datasource.SyncState;
 public class OfflineDataSource extends DataSource {
     private KnownService knownService;
 
-    OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs) {
-        super(acct, type, name, id, attrs);
+    OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs, Provisioning prov) {
+        super(acct, type, name, id, attrs, prov);
         setServiceName(getAttr(OfflineConstants.A_zimbraDataSourceDomain));
     }
 

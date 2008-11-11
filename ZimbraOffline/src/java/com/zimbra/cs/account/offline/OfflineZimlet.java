@@ -27,11 +27,11 @@ import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
 
 class OfflineZimlet extends Zimlet {
-    OfflineZimlet(String name, String id, Map<String, Object> attrs) {
-        super(name, id, attrs);
+    OfflineZimlet(String name, String id, Map<String, Object> attrs, Provisioning prov) {
+        super(name, id, attrs, prov);
     }
 
-    static Map<String,Zimlet> instantiateAll() {
+    static Map<String,Zimlet> instantiateAll(Provisioning prov) {
         Map<String,Zimlet> zmap = new HashMap<String,Zimlet>();
         try {
             List<String> ids = DbOfflineDirectory.listAllDirectoryEntries(EntryType.ZIMLET);
@@ -41,7 +41,7 @@ class OfflineZimlet extends Zimlet {
                     continue;
                 String name = (String) attrs.get(Provisioning.A_cn);
                 if (name != null)
-                    zmap.put(name.toLowerCase(), new OfflineZimlet(name, id, attrs));
+                    zmap.put(name.toLowerCase(), new OfflineZimlet(name, id, attrs, prov));
             }
             return zmap;
         } catch (ServiceException e) {

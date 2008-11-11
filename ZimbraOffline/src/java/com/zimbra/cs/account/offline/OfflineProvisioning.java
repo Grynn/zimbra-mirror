@@ -125,11 +125,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private boolean mHasDirtyAccounts = true;
 
     public OfflineProvisioning() {
-        mLocalConfig  = OfflineConfig.instantiate();
-        mLocalServer  = OfflineLocalServer.instantiate(mLocalConfig);
-        mDefaultCos   = OfflineCos.instantiate();
+        mLocalConfig  = OfflineConfig.instantiate(this);
+        mLocalServer  = OfflineLocalServer.instantiate(mLocalConfig, this);
+        mDefaultCos   = OfflineCos.instantiate(this);
         mMimeTypes    = OfflineMimeType.instantiateAll();
-        mZimlets      = OfflineZimlet.instantiateAll();
+        mZimlets      = OfflineZimlet.instantiateAll(this);
         mSyncServerCache = new HashMap<String, Server>();
         mAccountCache = new NamedEntryCache<Account>(LC.ldap_cache_account_maxsize.intValue(), LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
     }
@@ -332,7 +332,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             attrs = DbOfflineDirectory.readDirectoryLeaf(etype, ((OfflineSignature) e).getAccount(), A_zimbraId, e.getAttr(A_zimbraSignatureId));
             ((OfflineSignature) e).setName(e.getAttr(A_zimbraSignatureName));
         } else if (etype == EntryType.CONFIG) {
-        	attrs = OfflineConfig.instantiate().getAttrs();
+        	attrs = OfflineConfig.instantiate(this).getAttrs();
         } else {
             attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId));
         }
@@ -617,7 +617,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	if (smtpPassword != null)
     		dsAttrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dsid, smtpPassword));
 
-        OfflineDataSource testDs = new OfflineDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs);
+        OfflineDataSource testDs = new OfflineDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs, this);
         testDataSource(testDs);
 
         String syncCal = (String) dsAttrs.get(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled);
@@ -810,7 +810,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         // create account entry in database
         DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
 
-        Account acct = new OfflineAccount(emailAddress, accountId, attrs, mDefaultCos.getAccountDefaults(), accountId.equals(LOCAL_ACCOUNT_ID) ? null : getLocalAccount());
+        Account acct = new OfflineAccount(emailAddress, accountId, attrs, mDefaultCos.getAccountDefaults(), accountId.equals(LOCAL_ACCOUNT_ID) ? null : getLocalAccount(), this);
         mAccountCache.put(acct);
 
         if (!skipAttrMgr)
@@ -1076,7 +1076,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     		acct.setAttrs(attrs);
     	} else {
         	acct = new OfflineAccount(name, (String) attrs.get(A_zimbraId), attrs, mDefaultCos.getAccountDefaults(),
-        			keyType == AccountBy.id && key.equals(LOCAL_ACCOUNT_ID) ? null : getLocalAccount());
+        			keyType == AccountBy.id && key.equals(LOCAL_ACCOUNT_ID) ? null : getLocalAccount(), this);
             mAccountCache.put(acct);
         }
 
@@ -1356,7 +1356,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraZimletIndexingEnabled, attrs.containsKey(A_zimbraZimletKeyword) ? TRUE : FALSE);
 
         DbOfflineDirectory.createDirectoryEntry(EntryType.ZIMLET, name, attrs, false);
-        Zimlet zimlet = new OfflineZimlet(name, (String) attrs.get(A_zimbraId), attrs);
+        Zimlet zimlet = new OfflineZimlet(name, (String) attrs.get(A_zimbraId), attrs, this);
         mZimlets.put(name, zimlet);
         AttributeManager.getInstance().postModify(attrs, zimlet, context, true);
         return zimlet;
@@ -1531,7 +1531,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.putAll(immutable);
 
         DbOfflineDirectory.createDirectoryLeaf(EntryType.IDENTITY, account, name, identId, attrs, markChanged);
-        Identity identity = new OfflineIdentity(account, name, attrs);
+        Identity identity = new OfflineIdentity(account, name, attrs, this);
         mHasDirtyAccounts |= markChanged;
 
         AttributeManager.getInstance().postModify(attrs, identity, context, true);
@@ -1636,7 +1636,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (attrs == null)
         	return null;
 
-        return new OfflineIdentity(account, (String) attrs.get(A_zimbraPrefIdentityName), attrs);
+        return new OfflineIdentity(account, (String) attrs.get(A_zimbraPrefIdentityName), attrs, this);
     }
 
     private static void validateSignatureAttrs(Map<String, Object> attrs) throws ServiceException {
@@ -1808,7 +1808,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (attrs == null)
             return null;
 
-        return new OfflineSignature(account, attrs);
+        return new OfflineSignature(account, attrs, this);
     }
     
     private Map<String, List<DataSource>> cachedDataSources = new HashMap<String, List<DataSource>>();
@@ -1858,7 +1858,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.putAll(immutable);
         
         DbOfflineDirectory.createDirectoryLeaf(EntryType.DATASOURCE, account, name, dsid, attrs, markChanged);
-        DataSource ds = new OfflineDataSource(account, type, name, dsid, attrs);
+        DataSource ds = new OfflineDataSource(account, type, name, dsid, attrs, this);
         mHasDirtyAccounts |= markChanged;
 
         AttributeManager.getInstance().postModify(attrs, ds, context, true);
@@ -1994,7 +1994,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     // Clear auth token so that it will be regenerated during test...
                     OfflineYAuth.removeToken(ds);
                 }
-                testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs));
+                testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs, this));
             }
     	
             attrs.put(A_zimbraDataSourceEnabled, TRUE);
@@ -2039,7 +2039,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	return null;
 
         DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
-        return new OfflineDataSource(account, type, name, (String) attrs.get(A_zimbraDataSourceId), attrs);
+        return new OfflineDataSource(account, type, name, (String) attrs.get(A_zimbraDataSourceId), attrs, this);
     }
     
     @Override
@@ -2156,7 +2156,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(Provisioning.A_zimbraAdminPort, port);
         attrs.put(Provisioning.A_zimbraMailMode, ssl ? "https" : "http");
 
-        Server server = new Server(key, key, attrs, null);
+        Server server = new Server(key, key, attrs, null, this);
         synchronized(mSyncServerCache) {
             mSyncServerCache.put(key, server);
         }        
