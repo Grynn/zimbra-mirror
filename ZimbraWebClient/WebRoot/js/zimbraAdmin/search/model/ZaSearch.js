@@ -503,10 +503,10 @@ ZaSearchQuery = function(queryString, types, byDomain, byVal, attrsCommaSeparate
  */
 ZaSearch.searchResultCountsView =
 function (opArr) {
-	opArr.push(new ZaOperation(ZaOperation.SEP));								
-	opArr.push(new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.searchResultCount, [0,0]),
-													 null, null, null, null,null,null,"ZaSearchResultCountLabel",ZaOperation.SEARCH_RESULT_COUNT));	
-	opArr.push(new ZaOperation(ZaOperation.SEP));
+	opArr[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);								
+	opArr[ZaOperation.LABEL] = new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.searchResultCount, [0,0]),
+													 null, null, null, null,null,null,"ZaSearchResultCountLabel",ZaOperation.SEARCH_RESULT_COUNT);	
+	opArr[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
 }
 
 ZaSearch.getUsedDomainAccounts =

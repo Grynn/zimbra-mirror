@@ -34,6 +34,7 @@ ZaServerListController.prototype.constructor = ZaServerListController;
 
 ZaController.initToolbarMethods["ZaServerListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaServerListController"] = new Array();
+ZaListViewController.changeActionsStateMethods["ZaServerListController"] = new Array();
 
 /**
 * @param list {ZaItemList} a list of ZaServer {@link ZaServer} objects
@@ -63,17 +64,21 @@ function(list, openInNewTab) {
 
 ZaServerListController.initToolbarMethod =
 function () {
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener)));    	
+   	this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener));    	
    	//this._toolbarOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener)));    	    	
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+	
+	this._toolbarOrder.push(ZaOperation.EDIT);
+	this._toolbarOrder.push(ZaOperation.NONE);	
+	this._toolbarOrder.push(ZaOperation.HELP);					
 }
 ZaController.initToolbarMethods["ZaServerListController"].push(ZaServerListController.initToolbarMethod);
 
 ZaServerListController.initPopupMenuMethod =
 function () {
-   	this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener)));    	
-   	//this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener)));    	    	
+   	this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaServerListController.prototype._editButtonListener));    	
+   	//this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaServerListController.prototype._deleteButtonListener));    	    	
 }
 ZaController.initPopupMenuMethods["ZaServerListController"].push(ZaServerListController.initPopupMenuMethod);
 
@@ -82,14 +87,11 @@ ZaServerListController.prototype._createUI = function () {
 		var elements = new Object();
 		this._contentView = new ZaServerListView(this._container);
 		this._initToolbar();
-		if(this._toolbarOperations && this._toolbarOperations.length) {
-			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		}
+		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder); 
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+
 		this._initPopupMenu();
-		if(this._popupOperations && this._popupOperations.length) {
-			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
-		}
+		this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		//ZaApp.getInstance().createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
 		var tabParams = {
@@ -340,22 +342,25 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaServerListController.prototype.changeActionsState = 
+ZaServerListController.changeActionsState = 
 function () {
 	if(this._contentView) {
 		var cnt = this._contentView.getSelectionCount();
-		if(cnt == 1) {
-			var opsArray = [ZaOperation.EDIT];
-			this._toolbar.enable(opsArray, true);
-			this._actionMenu.enable(opsArray, true);
-		} else if (cnt > 1){
-			var opsArray1 = [ZaOperation.EDIT];
-			this._toolbar.enable(opsArray1, false);
-			this._actionMenu.enable(opsArray1, false);
-		} else {
-			var opsArray = [ZaOperation.EDIT];
-			this._toolbar.enable(opsArray, false);
-			this._actionMenu.enable(opsArray, false);
+		 if (cnt > 1){
+			if(this._toolbarOperations[ZaOperation.EDIT])	
+				this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+				
+			if(this._popupOperations[ZaOperation.EDIT])	
+				this._popupOperations[ZaOperation.EDIT].enabled = false;
+				
+		} else if (cnt <1) {
+			if(this._toolbarOperations[ZaOperation.EDIT])	
+				this._toolbarOperations[ZaOperation.EDIT].enabled = false;
+				
+			if(this._popupOperations[ZaOperation.EDIT])	
+				this._popupOperations[ZaOperation.EDIT].enabled = false;
+				
 		}
 	}
 }
+ZaListViewController.changeActionsStateMethods["ZaServerListController"].push(ZaServerListController.changeActionsStateMethod);

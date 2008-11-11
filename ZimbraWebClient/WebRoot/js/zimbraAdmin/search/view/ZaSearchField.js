@@ -269,10 +269,10 @@ ZaSearchField.prototype.getSavedSearchActionMenu =
 function () {
 	if (!this._savedSearchActionMenu) {
 		this._popupOperations = [];
-		this._popupOperations.push(new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", 
-				new AjxListener(this, this._editSavedSearchListener)));
-		this._popupOperations.push(new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", 
-				new AjxListener(this, this._deleteSavedSearchListener)));
+		this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.ACTBB_Edit_tt, "Properties", "PropertiesDis", 
+				new AjxListener(this, this._editSavedSearchListener));
+		this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", 
+				new AjxListener(this, this._deleteSavedSearchListener));
 		this._savedSearchActionMenu = 
 			new ZaPopupMenu(this, "ActionMenu", null, this._popupOperations);
 	}

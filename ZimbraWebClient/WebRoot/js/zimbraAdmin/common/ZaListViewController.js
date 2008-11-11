@@ -31,6 +31,7 @@ ZaListViewController = function(appCtxt, container,iKeyName) {
 	if (arguments.length == 0) return;
 	this._currentPageNum = 1;	
    	this._toolbarOperations = new Array();
+   	this._toolbarOrder = new Array();
    	this._popupOperations = new Array();	
 	//this.pages = new Object();
 	this._currentSortOrder = "1";
@@ -168,16 +169,24 @@ function(params, resp) {
 
 ZaListViewController.prototype.changeActionsState =
 function () {
-	var opsArray1 = new Array();
-	var opsArray2 = new Array();
-
+	for(var i in  this._toolbarOperations) {
+		if(this._toolbarOperations[i] instanceof ZaOperation) {
+			this._toolbarOperations[i].enabled = true;
+		}
+	}
+	
+	for(var i in  this._popupOperations) {
+		if(this._popupOperations[i] instanceof ZaOperation) {
+			this._popupOperations[i].enabled = true;
+		}
+	}
 	if(ZaListViewController.changeActionsStateMethods[this._iKeyName]) {
 		var methods = ZaListViewController.changeActionsStateMethods[this._iKeyName];
 		var cnt = methods.length;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
 				try {
-					methods[i].call(this,opsArray1,opsArray2);
+					methods[i].call(this);
 				} catch (ex) {
 					this._handleException(ex, "ZaListViewController.prototype.changeActionsState");
 				}
@@ -185,15 +194,17 @@ function () {
 		}
 	}	
 
-	if(opsArray1.length) {
-		this._toolbar.enable(opsArray1, true);
-		this._actionMenu.enable(opsArray1, true);
+	for(var i in  this._toolbarOperations) {
+		if(this._toolbarOperations[i] instanceof ZaOperation &&  !AjxUtil.isEmpty(this._toolbar.getButton(this._toolbarOperations[i].id))) {
+			this._toolbar.getButton(this._toolbarOperations[i].id).setEnabled(this._toolbarOperations[i].enabled);
+		}
 	}
-	if(opsArray2.length) {
-		this._toolbar.enable(opsArray2, false);
-		this._actionMenu.enable(opsArray2, false);
-	}	
-
+	
+	for(var i in  this._popupOperations) {
+		if(this._popupOperations[i] instanceof ZaOperation && !AjxUtil.isEmpty(this._actionMenu.getMenuItem(this._popupOperations[i].id))) {
+			this._actionMenu.getMenuItem(this._popupOperations[i].id).setEnabled(this._popupOperations[i].enabled);
+		}
+	}
 }
 /**
 * @param ev

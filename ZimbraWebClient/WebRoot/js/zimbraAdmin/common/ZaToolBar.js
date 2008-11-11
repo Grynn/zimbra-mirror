@@ -22,27 +22,44 @@
 * @param parent parent object
 * @param opList array of ZaOperation objects
 **/
-ZaToolBar = function(parent, opList, posStyle, className) {
+ZaToolBar = function(parent, opList,btnOrder,posStyle,className) {
 	if (arguments.length == 0) return;
 	className = className || "ZaToolBar";
 	posStyle = posStyle || DwtControl.ABSOLUTE_STYLE;
 
 	DwtToolBar.call(this, parent, className, posStyle);
 	this._buttons = new Object();
+	if(!AjxUtil.isEmpty(btnOrder) && opList) {
+		var cnt = btnOrder.length;
+		for(var ix = 0; ix < cnt; ix++) {
+			if(opList[btnOrder[ix]] && opList[btnOrder[ix]] instanceof ZaOperation) {
+				if(opList[btnOrder[ix]].id == ZaOperation.SEP) {
+					this._createSeparator();
+				} else if (opList[btnOrder[ix]].id == ZaOperation.NONE) {
+					this.addFiller();
+				} else if (opList[btnOrder[ix]].id == ZaOperation.LABEL) {
+					this._createLabel(opList[btnOrder[ix]].labelId, opList[btnOrder[ix]].imageId, opList[btnOrder[ix]].caption, opList[btnOrder[ix]].disImageId, opList[btnOrder[ix]].tt, true, opList[btnOrder[ix]].className);
+				} else {
+					this._createButton(opList[btnOrder[ix]].id, opList[btnOrder[ix]].imageId, opList[btnOrder[ix]].caption, opList[btnOrder[ix]].disImageId, opList[btnOrder[ix]].tt, true, opList[btnOrder[ix]].className, opList[btnOrder[ix]].type, opList[btnOrder[ix]].menuOpList);
 		
-	if(opList) {
-		var cnt = opList.length;
-		for(var ix=0; ix < cnt; ix++) {
-			if(opList[ix].id == ZaOperation.SEP) {
-				this._createSeparator();
-			} else if (opList[ix].id == ZaOperation.NONE) {
-				this.addFiller();
-			} else if (opList[ix].id == ZaOperation.LABEL) {
-				this._createLabel(opList[ix].labelId, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className);
-			} else {
-				this._createButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className, opList[ix].type, opList[ix].menuOpList);
-	
-				this.addSelectionListener(opList[ix].id, opList[ix].listener);		
+					this.addSelectionListener(opList[btnOrder[ix]].id, opList[btnOrder[ix]].listener);		
+				}
+			}
+		}		
+	} else if(opList) {
+		for(var ix in opList) {
+			if(opList[ix] instanceof ZaOperation) {
+				if(opList[ix].id == ZaOperation.SEP) {
+					this._createSeparator();
+				} else if (opList[ix].id == ZaOperation.NONE) {
+					this.addFiller();
+				} else if (opList[ix].id == ZaOperation.LABEL) {
+					this._createLabel(opList[ix].labelId, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className);
+				} else {
+					this._createButton(opList[ix].id, opList[ix].imageId, opList[ix].caption, opList[ix].disImageId, opList[ix].tt, true, opList[ix].className, opList[ix].type, opList[ix].menuOpList);
+		
+					this.addSelectionListener(opList[ix].id, opList[ix].listener);		
+				}
 			}
 		}
 	}

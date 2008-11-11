@@ -60,7 +60,7 @@ ZaSearchOptionView = function(parent,optionId, width, position){
 	tb_items.push(new ZaOperation(ZaOperation.NONE));
 	tb_items.push(new ZaOperation(ZaOperation.CLOSE, null, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener)));    	
 	
-	this._header = new ZaToolBar (this, tb_items, null, "DwtToolBar") ;
+	this._header = new ZaToolBar (this, tb_items, null, null, "DwtToolBar") ;
 	//this._header.setSize (this._width, 25); //set the width, will lost the right border with the proper color.
 	this._header.setSize (null, ZaSearchOptionView.HEADER_HEIGHT);
 	this.initForm (ZaSearchOption.getObjectTypeXModel(optionId), ZaSearchOption.getObjectTypeXForm (optionId, height), ZaSearchOption.getDefaultInstance(optionId));

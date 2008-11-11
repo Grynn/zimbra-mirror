@@ -27,6 +27,7 @@
 ZaStatusViewController = function(appCtxt, container) {
 	ZaController.call(this, appCtxt, container,"ZaStatusViewController");
    	this._toolbarOperations = new Array();
+   	this._toolbarOrder = new Array();
    	this._popupOperations = new Array();
 	this._UICreated = false;	
 }
@@ -67,9 +68,12 @@ ZaStatusViewController.initToolbarMethod =
 function () {
 	// first button in the toolbar is a menu.
 	var newMenuOpList = new Array();
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener)));	
+	this._toolbarOrder.push(ZaOperation.LABEL);
+	this._toolbarOrder.push(ZaOperation.SEP);
+	this._toolbarOrder.push(ZaOperation.REFRESH);
+	this._toolbarOperations[ZaOperation.LABEL] = new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime");	
+	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
+	this._toolbarOperations[ZaOperation.REFRESH] =new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener));	
 }
 ZaController.initToolbarMethods["ZaStatusViewController"].push(ZaStatusViewController.initToolbarMethod);
 
@@ -79,7 +83,7 @@ ZaStatusViewController.prototype._createUI = function (openInNewTab) {
 		this._contentView = new ZaServicesListView(this._container);
 		this._initToolbar();
 		if(this._toolbarOperations && this._toolbarOperations.length) {
-			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
+			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder); 
 			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
 		}
 		this._initPopupMenu();

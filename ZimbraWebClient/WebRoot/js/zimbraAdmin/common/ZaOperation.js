@@ -37,6 +37,8 @@ ZaOperation = function(id, caption, tooltip, imgId, disImgId, lsnr, type, menuOp
 	this.menuOpList = menuOpList;
 	this.className = className;	
 	this.labelId = labelId;
+	this.enabled = true;
+	this.visible = true;
 }
 
 ZaOperation.prototype.toString = 
@@ -84,6 +86,7 @@ ZaOperation.HOLD = ++ZA_OP_INDEX;
 ZaOperation.REQUEUE = ++ZA_OP_INDEX;
 ZaOperation.RELEASE = ++ZA_OP_INDEX;
 ZaOperation.INIT_NOTEBOOK = ++ZA_OP_INDEX;
+ZaOperation.CHECK_MX_RECORD = ++ZA_OP_INDEX;
 ZaOperation.SEARCH_RESULT_COUNT = ++ZA_OP_INDEX;
 ZaOperation.SEARCH_BY_ADDESS_TYPE = ++ZA_OP_INDEX;
 ZaOperation.SEARCH_BY_DOMAIN = ++ZA_OP_INDEX;

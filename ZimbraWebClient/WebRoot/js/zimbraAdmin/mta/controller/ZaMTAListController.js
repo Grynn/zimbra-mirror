@@ -32,6 +32,7 @@ ZaMTAListController.prototype.constructor = ZaMTAListController;
 
 ZaController.initToolbarMethods["ZaMTAListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaMTAListController"] = new Array();
+ZaListViewController.changeActionsStateMethods["ZaMTAListController"] = new Array(); 
 
 ZaMTAListController.prototype.show = 
 function(list, openInNewTab) {
@@ -79,19 +80,24 @@ function(list, openInNewTab) {
 
 ZaMTAListController.initToolbarMethod =
 function () {
-	//this._toolbarOperations.push(new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
-//	this._toolbarOperations.push(new ZaOperation(ZaOperation.SEP));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener)));	
-   	this._toolbarOperations.push(new ZaOperation(ZaOperation.VIEW, ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaMTAListController.prototype._viewButtonListener)));    		
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.NONE));
-	this._toolbarOperations.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));				
+	//this._toolbarOperations[ZaOperation.LABEL]=new ZaOperation(ZaOperation.LABEL,ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
+//	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
+	this._toolbarOperations[ZaOperation.REFRESH]=new ZaOperation(ZaOperation.REFRESH,ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener));	
+   	this._toolbarOperations[ZaOperation.VIEW]=new ZaOperation(ZaOperation.VIEW,ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaMTAListController.prototype._viewButtonListener));    		
+	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+	
+	this._toolbarOrder.push(ZaOperation.REFRESH);
+	this._toolbarOrder.push(ZaOperation.VIEW);
+	this._toolbarOrder.push(ZaOperation.NONE);
+	this._toolbarOrder.push(ZaOperation.HELP);
    	
 }
 ZaController.initToolbarMethods["ZaMTAListController"].push(ZaMTAListController.initToolbarMethod);
 
 ZaMTAListController.initPopupMenuMethod =
 function () {
-    this._popupOperations.push(new ZaOperation(ZaOperation.VIEW, ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaMTAListController.prototype._viewButtonListener)));
+    this._popupOperations[ZaOperation.VIEW]=new ZaOperation(ZaOperation.VIEW,ZaMsg.TBB_View, ZaMsg.PQTBB_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaMTAListController.prototype._viewButtonListener));
 }
 ZaController.initPopupMenuMethods["ZaMTAListController"].push(ZaMTAListController.initPopupMenuMethod);
 
@@ -100,14 +106,12 @@ ZaMTAListController.prototype._createUI = function () {
 		var elements = new Object();
 		this._contentView = new ZaMTAListView(this._container);
 		this._initToolbar();
-		if(this._toolbarOperations && this._toolbarOperations.length) {
-			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
-		}
+		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder); 
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+
 		this._initPopupMenu();
-		if(this._popupOperations && this._popupOperations.length) {
-			this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
-		}
+		this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations);
+
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		var tabParams = {
 			openInNewTab: false,
@@ -188,24 +192,18 @@ function(ev) {
 }
 
 
-ZaMTAListController.prototype.changeActionsState = 
+ZaMTAListController.changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
-	if(cnt == 1) {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, true);
-		this._actionMenu.enable(opsArray, true);
-	} else if (cnt > 1){
-		var opsArray1 = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray1, false);
-		this._actionMenu.enable(opsArray1, false);
-	} else {
-		var opsArray = [ZaOperation.EDIT];
-		this._toolbar.enable(opsArray, false);
-		this._actionMenu.enable(opsArray, false);
+	if (cnt != 1){
+		if(this._toolbarOperations[ZaOperation.EDIT])
+			this._toolbarOperations[ZaOperation.EDIT].enabled=false;
+			
+		if(this._popupOperations[ZaOperation.EDIT])
+			this._popupOperations[ZaOperation.EDIT].enabled=false;			
 	}
 }
-
+ZaListViewController.changeActionsStateMethods["ZaMTAListController"].push(ZaMTAListController.changeActionsStateMethod);
 /**
 * @param ev
 * This listener is invoked by ZaMTAController or any other controller that can change a ZaMTA object
@@ -251,7 +249,7 @@ ZaMTAListController.prototype.refreshListener =
 function () {
 	this.getQCounts();
 }
-
+/*
 ZaMTAListController.prototype.changeActionsState = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
@@ -268,4 +266,4 @@ function () {
 		this._toolbar.enable(opsArray, false);
 		this._actionMenu.enable(opsArray, false);
 	}
-}
+}*/
