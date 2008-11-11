@@ -19,33 +19,18 @@ function InitScreen() {
 
 function SetPort() {
     if (zd.isDisabled("port")) {
-        if (${bean.type eq 'pop3'}) {
-            if (${bean.ssl})
-                zd.set("port", "995");
-            else
-                zd.set("port", "110");
-        } else if (${bean.type eq 'imap'}) {
-            if (zd.isChecked("ssl"))
-                zd.set("port", "993");
-            else
-                zd.set("port", "143");
-        }
-    } else if (${bean.type eq 'zimbra'}) {
-        if (zd.isChecked("ssl"))
-            zd.set("port", "443");
-        else
-            zd.set("port", "80");
+        if (${bean.type eq 'pop3'})
+            zd.set("port", zd.isChecked("ssl") ? "995" : "110");
+        else if (${bean.type eq 'imap'})
+            zd.set("port", zd.isChecked("ssl") ? "993" : "143");
+	else if (${bean.type eq 'zimbra'})
+            zd.set("port", zd.isChecked("ssl") ? "443" : "80");
     }
 }
 
 function SetSmtpPort() {
-    if (zd.isDisabled("smtpPort")) {
-        if (${bean.ssl}) {
-            zd.set("smtpPort", "465");
-        } else {
-            zd.set("smtpPort", "25");
-        }
-    }
+    if (zd.isDisabled("smtpPort"))
+        zd.set("smtpPort", zd.isChecked("smtpSsl") ? "465" : "25");
 }
 </script>
 
