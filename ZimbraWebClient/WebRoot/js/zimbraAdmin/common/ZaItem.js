@@ -369,7 +369,7 @@ function (newAlias) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller : aApp.getInstance().getCurrentController(),
+		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_ADD_ALIAS
 	}
 	ZaRequestMgr.invoke(params, reqMgrParams);
