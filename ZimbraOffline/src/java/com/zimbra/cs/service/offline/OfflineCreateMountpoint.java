@@ -5,8 +5,6 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
@@ -48,12 +46,8 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         redo.setId(id);
         redo.setChangeId(mod_content);
         try {
-            mbox.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);           
-            OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-            if (prov.get(Provisioning.AccountBy.id, ownerId) != null)
-                prov.deleteAccount(ownerId);
-            OfflineAccount account = ((OfflineMailbox)mbox).getOfflineAccount();
-            prov.createMountpointAccount(ownerName, ownerId, account); 
+            mbox.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);                       
+            OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((OfflineMailbox)mbox).getOfflineAccount(), true); 
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;

@@ -727,9 +727,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return galAcct;
     }
 
-    public synchronized OfflineAccount createMountpointAccount(String name, String id, OfflineAccount account) throws ServiceException {
+    public synchronized OfflineAccount createMountpointAccount(String name, String id, OfflineAccount account, boolean force) throws ServiceException {
+        if (force)
+            deleteMountpointAccount(name, id);
+        
         Map<String, Object> attrs = new HashMap<String, Object>();
-       
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );       
         attrs.put(A_zimbraMailHost, OfflineConstants.SYNC_SERVER_PREFIX + account.getAttr(OfflineConstants.A_offlineRemoteServerUri));
         attrs.put(A_uid, id);
@@ -1015,6 +1017,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         OfflineAccount galAcct = (OfflineAccount)get(AccountBy.id, galAcctId);
         if (galAcct != null)
             deleteOfflineAccount(galAcctId);
+    }
+    
+    public void deleteMountpointAccount(String name, String id) throws ServiceException {
+        Account acct = null;
+        if (id != null)
+            acct = get(Provisioning.AccountBy.id, id);           
+        if (acct == null && name != null)
+            acct = get(Provisioning.AccountBy.name, name);
+        
+        if (acct != null && isMountpointAccount(acct))
+            deleteAccount(acct.getId());
     }
     
     @Override
@@ -2136,7 +2149,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(Provisioning.A_zimbraId, account.getId());
         attrs.put("zimbraServiceEnabled", "mailbox");
         attrs.put("zimbraServiceInstalled", "mailbox");
-        attrs.put(Provisioning.A_zimbraMailPort, port);
+        if (ssl)
+            attrs.put(Provisioning.A_zimbraMailSSLPort, port);
+        else
+            attrs.put(Provisioning.A_zimbraMailPort, port);
         attrs.put(Provisioning.A_zimbraAdminPort, port);
         attrs.put(Provisioning.A_zimbraMailMode, ssl ? "https" : "http");
 
@@ -2144,6 +2160,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         synchronized(mSyncServerCache) {
             mSyncServerCache.put(key, server);
         }        
+    }
+    
+    @Override
+    public boolean isOfflineProxyServer(Server server) {
+        return server.getName().startsWith(OfflineConstants.SYNC_SERVER_PREFIX);
     }
     
     @Override

@@ -67,8 +67,13 @@ public class OfflineMailboxManager extends MailboxManager {
         }
     }
     
-    public void notifyAllMailboxes() {
+    public void notifyAllMailboxes() throws ServiceException {
         for (String acctId : getAccountIds()) {
+            OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+            Account acct = prov.get(Provisioning.AccountBy.id, acctId);
+            if (prov.isGalAccount(acct) || prov.isMountpointAccount(acct))
+                continue;
+                
             try {
                 Mailbox mbox = getMailboxByAccountId(acctId);
             	//loop through mailbox sessions and signal hanging NoOps

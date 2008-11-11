@@ -53,7 +53,6 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineAccount.Version;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.MailItem.UnderlyingData;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
@@ -526,12 +525,7 @@ public class InitialSync {
                 ombx.createFolder(new OfflineContext(redo), name, parentId, system, view, flags, color, url);
             } else {
                 ombx.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);
-                
-                OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-                if (prov.get(Provisioning.AccountBy.id, ownerId) != null)
-                    prov.deleteAccount(ownerId);
-                OfflineAccount account = ombx.getOfflineAccount();
-                prov.createMountpointAccount(ownerName, ownerId, account);                
+                OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount(), true);                
             }
             if (relocated)
                 ombx.setChangeMask(sContext, id, itemType, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
