@@ -308,7 +308,11 @@ public class LocalMailbox extends DesktopMailbox {
 
     @Override
     protected void syncOnTimer() {
-        sync(false);
+    	try {
+    		sync(false, false);
+    	} catch (ServiceException x) {
+    		OfflineLog.offline.error(x);
+    	}
     }
 
     private void syncAllLocalDataSources(boolean force, boolean isOnRequest) throws ServiceException {
@@ -380,14 +384,23 @@ public class LocalMailbox extends DesktopMailbox {
     	mSyncRunning = false;
     }
 
-    public void sync(boolean isOnRequest) {
+    public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
         if (lockMailboxToSync()) {
+        	if (isDebugTraceOn) {
+        		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
+        		getOfflineAccount().setRequestScopeDebugTraceOn(true);
+        	}
+        	
             try {
                 int count = sendPendingMessages(isOnRequest);
                 syncAllLocalDataSources(count > 0, isOnRequest);
             } catch (Exception x) {
                 OfflineLog.offline.error("exception encountered during sync", x);
             } finally {
+            	if (isDebugTraceOn) {
+            		getOfflineAccount().setRequestScopeDebugTraceOn(false);
+            		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE END ================================");
+            	}
                 unlockMailbox();
             }
         } else if (isOnRequest) {

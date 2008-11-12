@@ -144,9 +144,14 @@ public class MailboxSync {
     	mSyncRunning = false;
     }
     
-    void sync(boolean isOnRequest) throws ServiceException {
+    void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
        	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         if (lockMailboxToSync()) { //don't want to start another sync when one is already in progress
+        	if (isDebugTraceOn) {
+        		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
+        		ombx.getOfflineAccount().setRequestScopeDebugTraceOn(true);
+        	}
+        	
             try {
             	String user = ombx.getRemoteUser();
                 if (mStage == SyncStage.RESET) {
@@ -206,6 +211,10 @@ public class MailboxSync {
             	else
             		syncMan.processSyncException(ombx.getAccount(), e);
             } finally {
+            	if (isDebugTraceOn) {
+            		ombx.getOfflineAccount().setRequestScopeDebugTraceOn(false);
+            		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE END ================================");
+            	}
             	unlockMailbox();
             }
         } else if (isOnRequest) {

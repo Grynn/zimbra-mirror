@@ -46,6 +46,10 @@ public abstract class DesktopMailbox extends Mailbox {
 			accountName = account.getName();
 	}
 	
+    public OfflineAccount getOfflineAccount() throws ServiceException {
+    	return (OfflineAccount)getAccount();
+    }
+	
     @Override
     protected synchronized void initialize() throws ServiceException {
         super.initialize();

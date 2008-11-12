@@ -40,10 +40,12 @@ public class OfflineSync extends DocumentHandler {
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(zsc);
         
+        boolean isDebugTraceOn = request.getAttributeBool("debug", false);
+        
         if (mbox instanceof OfflineMailbox)
-        	((OfflineMailbox)mbox).sync(true);
+        	((OfflineMailbox)mbox).sync(true, isDebugTraceOn);
         else if (mbox instanceof LocalMailbox)
-        	((LocalMailbox)mbox).sync(true);
+        	((LocalMailbox)mbox).sync(true, isDebugTraceOn);
 
         return zsc.createElement(OfflineService.SYNC_RESPONSE);
     }

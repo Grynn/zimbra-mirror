@@ -120,7 +120,7 @@ public class OfflineMailbox extends DesktopMailbox {
 	}
 
 	@Override protected void syncOnTimer() {
-		sync(false);
+		sync(false, false);
 	}
 	
     public long getSyncFrequency() throws ServiceException {
@@ -137,9 +137,9 @@ public class OfflineMailbox extends DesktopMailbox {
     	return getRemoteServerVersion().isAtLeast(MIN_ZCS_VER_PUSH) && getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) == 0;
     }
     
-	public void sync(boolean isOnRequest) {
+	public void sync(boolean isOnRequest, boolean isDebugTraceOn) {
 		try {
-			mMailboxSync.sync(isOnRequest);
+			mMailboxSync.sync(isOnRequest, isDebugTraceOn);
 		} catch (ServiceException x) {
 			OfflineLog.offline.error(x);
 		}
@@ -147,10 +147,6 @@ public class OfflineMailbox extends DesktopMailbox {
 
     MailboxSync getMailboxSync() {
     	return mMailboxSync;
-    }
-    
-    public OfflineAccount getOfflineAccount() throws ServiceException {
-    	return (OfflineAccount)getAccount();
     }
 
     public ZAuthToken getAuthToken() throws ServiceException {

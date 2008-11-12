@@ -225,8 +225,13 @@ public class OfflineAccount extends Account {
     	}
     }
     
-    public boolean isDebugTraceEnabled() {
-    	return getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
+    boolean isRequestScopeDebugTraceOn = false;
+    public synchronized void setRequestScopeDebugTraceOn(boolean b) {
+    	isRequestScopeDebugTraceOn = b;
+    }
+    
+    public synchronized boolean isDebugTraceEnabled() {
+    	return isRequestScopeDebugTraceOn || getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
     }
     
     public static void main(String[] args) {

@@ -50,22 +50,22 @@ public class OfflineMailboxManager extends MailboxManager {
         return new LocalMailbox(data);
     }
     
-    public void syncAllMailboxes(boolean isOnRequest) throws ServiceException {
-        for (Account account : OfflineProvisioning.getOfflineInstance().getAllSyncAccounts()) {
-            try {
-                Mailbox mbox = getMailboxByAccount(account);
-                if (!(mbox instanceof OfflineMailbox)) {
-                    OfflineLog.offline.warn("cannot sync: not an OfflineMailbox for account " + mbox.getAccount().getName());
-                    continue;
-                }
-                ((OfflineMailbox)mbox).sync(isOnRequest);
-            } catch (ServiceException e) {
-                OfflineLog.offline.warn("cannot sync: error fetching mailbox/account for acct id " + account.getId(), e);
-            } catch (Throwable t) {
-            	OfflineLog.offline.error("unexpected exception syncing account " + account.getId(), t);
-            }
-        }
-    }
+//    public void syncAllMailboxes(boolean isOnRequest) throws ServiceException {
+//        for (Account account : OfflineProvisioning.getOfflineInstance().getAllSyncAccounts()) {
+//            try {
+//                Mailbox mbox = getMailboxByAccount(account);
+//                if (!(mbox instanceof OfflineMailbox)) {
+//                    OfflineLog.offline.warn("cannot sync: not an OfflineMailbox for account " + mbox.getAccount().getName());
+//                    continue;
+//                }
+//                ((OfflineMailbox)mbox).sync(isOnRequest);
+//            } catch (ServiceException e) {
+//                OfflineLog.offline.warn("cannot sync: error fetching mailbox/account for acct id " + account.getId(), e);
+//            } catch (Throwable t) {
+//            	OfflineLog.offline.error("unexpected exception syncing account " + account.getId(), t);
+//            }
+//        }
+//    }
     
     public void notifyAllMailboxes() throws ServiceException {
         for (String acctId : getAccountIds()) {
