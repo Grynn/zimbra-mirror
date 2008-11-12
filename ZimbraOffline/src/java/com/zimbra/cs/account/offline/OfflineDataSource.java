@@ -185,30 +185,41 @@ public class OfflineDataSource extends DataSource {
         return kf == null ? null : kf.remotePath;
     }
 
-    @Override
-    public boolean isSyncCapable(Folder folder) {
-    	return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0;
-    }
-    
-    @Override
-    public boolean isSyncEnabled(Folder folder) {
-        return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0 && (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
-    }
-    
-    @Override
-    public boolean isSyncEnabled(String localPath) {
-        try {
-            Mailbox mbox = getMailbox();
-            Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
-            if (folder != null)
-                return isSyncEnabled(folder);
+	@Override
+	public boolean isSyncInboxOnly() {
+		return !getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
+	}
+
+	@Override
+	public boolean isSyncCapable(Folder folder) {
+		if (isSyncInboxOnly())
+			return folder.getId() == Mailbox.ID_FOLDER_INBOX;
+		return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0;
+	}
+
+	@Override
+	public boolean isSyncEnabled(Folder folder) {
+		if (isSyncInboxOnly())
+			return folder.getId() == Mailbox.ID_FOLDER_INBOX;
+		return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0 && (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
+	}
+
+	@Override
+	public boolean isSyncEnabled(String localPath) {
+		if (isSyncInboxOnly())
+			return localPath.equalsIgnoreCase("/Inbox");
+		try {
+			Mailbox mbox = getMailbox();
+			Folder folder = mbox.getFolderByPath(new Mailbox.OperationContext(mbox), localPath);
+			if (folder != null)
+				return isSyncEnabled(folder);
             else
                 OfflineLog.offline.warn("local path " + localPath + " not found");
-        } catch (ServiceException x) {
-            OfflineLog.offline.warn(x);
-        }
-        return isSyncEnabledByDefault(localPath);
-    }
+		} catch (ServiceException x) {
+			OfflineLog.offline.warn(x);
+		}
+		return isSyncEnabledByDefault(localPath);
+	}
 
     @Override
     public void disableSync(int folderId) throws ServiceException {

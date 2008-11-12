@@ -83,6 +83,22 @@ public class LocalMailbox extends DesktopMailbox {
         }
     }
     
+    @Override
+    public String getItemFlagString(MailItem mi) {
+    	if (isImapMailbox && mi.getType() == MailItem.TYPE_FOLDER) {
+	    	try {
+	    		OfflineDataSource ds = (OfflineDataSource)(OfflineProvisioning.getOfflineInstance().getDataSource(getAccount()));
+	    		if (ds.isSyncInboxOnly()) {
+	    			int flags = mi.getFlagBitmask();
+	    			flags &= ~Flag.BITMASK_SYNCFOLDER;
+	    			flags &= ~Flag.BITMASK_SYNC;
+	    	        return Flag.bitmaskToFlags(flags);
+	    		}
+	    	} catch (ServiceException x) {}
+    	}
+    	return mi.getFlagString();
+    }
+    
     private boolean isSyncEnabledByDefault(String path) throws ServiceException {
     	OfflineDataSource ds = (OfflineDataSource)(OfflineProvisioning.getOfflineInstance().getDataSource(getAccount()));
     	return ds != null && ds.isSyncEnabledByDefault(path);
@@ -92,10 +108,10 @@ public class LocalMailbox extends DesktopMailbox {
     	DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(folder.getId()), canSync);
     	if (canSync) {
     		folder.mData.flags |= mSyncFolderFlag.getBitmask();
-//    		if (isSyncEnabledByDefault(folder.getPath())) {
-//    			DbMailItem.alterTag(mSyncFlag, Arrays.asList(folder.getId()), canSync);
-//    			folder.mData.flags |= mSyncFlag.getBitmask();
-//    		}
+    		if (isSyncEnabledByDefault(folder.getPath())) {
+    			DbMailItem.alterTag(mSyncFlag, Arrays.asList(folder.getId()), canSync);
+    			folder.mData.flags |= mSyncFlag.getBitmask();
+    		}
     	} else {
     		folder.mData.flags &= ~mSyncFolderFlag.getBitmask();
     		folder.mData.flags &= ~mSyncFlag.getBitmask();
