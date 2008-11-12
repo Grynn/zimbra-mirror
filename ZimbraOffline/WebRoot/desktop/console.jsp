@@ -136,7 +136,7 @@ function submit(id, type, flavor, verb) {
             </td>
           </tr>
           <tr><td><hr class="ZSeparator"></td></tr>
-<c:if test="${not empty param.verb && not empty param.srvcName}">
+<c:if test="${not empty param.verb && not empty param.accountName}">
           <tr>
             <td>
               <div id="message" class="ZMessageInfo">
