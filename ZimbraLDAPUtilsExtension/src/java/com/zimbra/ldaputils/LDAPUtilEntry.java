@@ -41,7 +41,7 @@ public class LDAPUtilEntry extends NamedEntry  implements LdapEntry {
     LDAPUtilEntry(String dn, Attributes attrs, Map<String, Object> defaults) throws NamingException {
         super(LdapUtil.getAttrString(attrs, Provisioning.A_cn),
         		LdapUtil.getAttrString(attrs, Provisioning.A_cn), 
-        		LdapUtil.getAttrs(attrs), defaults);
+        		LdapUtil.getAttrs(attrs), defaults, null);
         mDn = dn;
     }
 
