@@ -58,6 +58,10 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(AccountConstants.SEARCH_GAL_REQUEST, new OfflineSearchGal());
         dispatcher.registerHandler(MailConstants.GET_FREE_BUSY_REQUEST, OfflineServiceProxy.GetFreeBusy());
         dispatcher.registerHandler(AccountConstants.SEARCH_CALENDAR_RESOURCES_REQUEST, OfflineServiceProxy.SearchCalendarResources());
+        dispatcher.registerHandler(MailConstants.CREATE_APPOINTMENT_REQUEST, new OfflineCreateAppointment());
+        dispatcher.registerHandler(MailConstants.MODIFY_APPOINTMENT_REQUEST, new OfflineModifyAppointment());
+        dispatcher.registerHandler(MailConstants.CREATE_TASK_REQUEST, new OfflineCreateTask());
+        dispatcher.registerHandler(MailConstants.MODIFY_TASK_REQUEST, new OfflineModifyTask());
         
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());
