@@ -36,15 +36,14 @@ public class OfflineFolderAction extends FolderAction {
     public Element handle(Element request, Map<String, Object> context) throws ServiceException, SoapFaultException {
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(zsc);
-        OfflineMailbox ombx = (OfflineMailbox) mbox;
         
         Element action = request.getElement(MailConstants.E_ACTION);
         String operation = action.getAttribute(MailConstants.A_OPERATION).toLowerCase();
         
-        if (operation.equals(OP_GRANT)) {
+        if (operation.equals(OP_GRANT) && (mbox instanceof OfflineMailbox)) {
             Element parent = request.getParent();
             boolean fromBatch = parent != null && parent.getName().equals("BatchRequest");            
-            Element response = ombx.proxyRequest(request, zsc.getResponseProtocol(), false, "grant permission");
+            Element response = ((OfflineMailbox)mbox).proxyRequest(request, zsc.getResponseProtocol(), false, "grant permission");
             if (fromBatch)
                 response.detach();
             return response;
@@ -59,6 +58,7 @@ public class OfflineFolderAction extends FolderAction {
  
         if (!(mbox instanceof OfflineMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
+        OfflineMailbox ombx = (OfflineMailbox) mbox;
         
         // before doing anything, make sure all data sources are pushed to the server
         ombx.sync(true, false);
