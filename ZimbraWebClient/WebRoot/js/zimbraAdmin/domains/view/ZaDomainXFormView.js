@@ -40,6 +40,7 @@ ZaDomainXFormView = function(parent) {
 		{label:ZaMsg.AuthMech_ad, value:ZaDomain.AuthMech_ad}		
 	];
 	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
+	this.catchAllChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this.initForm(ZaDomain.myXModel,this.getMyXForm());
 }
 
@@ -145,12 +146,13 @@ function(entry) {
 	}
 
     //set the catchAllChoices
-    var isCatchAllEnabled = this._containedObject.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]
-            || this._containedObject.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ;
+    var isCatchAllEnabled = this._containedObject.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ?
+    			this._containedObject.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] : this._containedObject.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ;
+    			
     if (isCatchAllEnabled && isCatchAllEnabled == "TRUE") {
-        var catchAllItem = this._localXForm.getItemsById("zimbraMailCatchAllAddress")[0] ;
-        catchAllItem.setChoices (ZaAccount.getCatchAllChoices(entry.name)) ;
         this._containedObject[ZaAccount.A_zimbraMailCatchAllAddress] = entry [ZaAccount.A_zimbraMailCatchAllAddress] ;
+        this.catchAllChoices.setChoices ([entry[ZaAccount.A_zimbraMailCatchAllAddress]]) ;
+        this.catchAllChoices.dirtyChoices();
     }
     
  	if(ZaSettings.COSES_ENABLED) {	
@@ -428,11 +430,43 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			{ ref: "name", type:_OUTPUT_, 
 			  label:ZaMsg.Domain_DomainName                        
 			},
-            {ref:ZaAccount.A_zimbraMailCatchAllAddress, id: ZaAccount.A_zimbraMailCatchAllAddress, type:_OSELECT1_,
-                visibilityChecks: [ZaDomainXFormView.isCatchAllEnabled],
-                visibilityChangeEventSources:[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled],
+            {ref:ZaAccount.A_zimbraMailCatchAllAddress, id: ZaAccount.A_zimbraMailCatchAllAddress, type:_DYNSELECT_,
+                visibilityChecks:[ZaDomainXFormView.isCatchAllEnabled] ,
+				visibilityChangeEventSources:[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled],
+                dataFetcherClass:null,
+                choices:this.catchAllChoices,
+                emptyText:ZaMsg.enterSearchTerm,
+                dataFetcherInstance:true,
+                width:250,
+                //dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,
+                dataFetcherMethod:function (value, event, callback) {
+                	try {
+							var params = new Object();
+							dataCallback = new AjxCallback(this, ZaSearch.prototype.dynSelectDataCallback, callback);
+							params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
+							params.callback = dataCallback;
+							params.sortBy = ZaAccount.A_name;
+							params.domain = this.name;
+							params.query = ZaSearch.getSearchByNameQuery(value);
+							params.controller = ZaApp.getInstance().getCurrentController();
+							ZaSearch.searchDirectory(params);
+						} catch (ex) {
+							this._app.getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		
+						}
+					
+                },
                 label:ZaMsg.L_catchAll, labelLocation:_LEFT_,
-                onChange:ZaDomainXFormView.onFormFieldChanged
+                onChange:ZaDomainXFormView.onFormFieldChanged,
+                getDisplayValue:function(newValue) {
+                	if(newValue && newValue.name)
+                		return newValue.name;
+                	else {
+                		if(!AjxUtil.isEmpty(newValue))
+                			return newValue;
+                		else
+                			return "";
+                	}
+                }
             },
 
 			{ ref: ZaDomain.A_domainName, type:_OUTPUT_,

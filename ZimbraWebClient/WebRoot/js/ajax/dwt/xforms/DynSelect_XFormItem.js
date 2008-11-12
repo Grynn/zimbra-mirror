@@ -28,6 +28,8 @@ DynSelect_XFormItem.prototype.dataFetcherClass = null;
 DynSelect_XFormItem.prototype.dataFetcherMethod = null;
 DynSelect_XFormItem.prototype.dataFetcherObject = null;
 DynSelect_XFormItem.prototype.emptyText = "";
+DynSelect_XFormItem.prototype.cssClass = "dynselect";
+DynSelect_XFormItem.prototype.edited = false;
 DynSelect_XFormItem.LOAD_PAUSE = AjxEnv.isIE ? 500 : 250;	// delay between chunks
 DynSelect_XFormItem.prototype.initFormItem = function () {
 	// if we're dealing with an XFormChoices object...
@@ -37,20 +39,24 @@ DynSelect_XFormItem.prototype.initFormItem = function () {
 	//	...set up to receive notification when its choices change
 	var listener = new AjxListener(this, this.choicesChangeLsnr);
 	this.choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);
-	this.dataFetcherClass  = this.getInheritedProperty("dataFetcherClass");
-	this.dataFetcherMethod  = this.getInheritedProperty("dataFetcherMethod");	
+	this.dataFetcherClass = this.getInheritedProperty("dataFetcherClass");
+	this.dataFetcherMethod = this.getInheritedProperty("dataFetcherMethod");	
 	this.dataFetcherObject = null;
 }
 DynSelect_XFormItem.prototype.changeChoicesCallback = 
 function (data, more, total) {
-	DBG.println(AjxDebug.DBG1, AjxBuffer.concat(this.getId(),".choices came back"));
 	var choices = this.getChoices();
 	if(!choices)
 		return;
 	choices.setChoices(data);
 	choices.dirtyChoices();
-	if(more) {
-		this.showNote(AjxMessageFormat.format(ZaMsg.Alert_MoreResultsAvailable,total));
+
+		
+		
+	if(AjxUtil.isEmpty(data)) {
+		this.hideMenu();
+	} else {
+		this.showMenu();
 	}
 	if(!this.menuUp)
 		this.showMenu();	
@@ -59,7 +65,7 @@ function (data, more, total) {
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 	//console.log("onKeyUp " + value);
 	var lastTypeTime = new Date().getTime();
-	
+	this.edited = true;
 	this.hideNote();
 	if(event.keyCode==XFG.ARROW_UP) {
 		if(!this.menuUp)
@@ -122,7 +128,9 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 DynSelect_XFormItem.prototype.resetChoices = function () {
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
 			this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
-	}
+	} else if(this.getInheritedProperty("dataFetcherInstance")) {
+		this.dataFetcherObject = this.getInstance();
+	}	
 	if(!this.dataFetcherObject)
 		return;
 		
@@ -144,7 +152,10 @@ DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTy
 	}		
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
 		this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
-	}
+	} else if(this.getInheritedProperty("dataFetcherInstance")) {
+		this.dataFetcherObject = this.getInstance();
+	}	
+	
 	if(!this.dataFetcherObject)
 		return;
 			
@@ -204,7 +215,7 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 			"</table>", 
 		"</div>"
 	);
- 
+ 	this.edited = false;
 }
 
 DynSelect_XFormItem.prototype.onClick = function() {
@@ -226,7 +237,7 @@ DynSelect_XFormItem.prototype.getArrowElement = function () {
 
 DynSelect_XFormItem.prototype.preProcessInput = function (value) {
 	var preProcessMethod = this.getPreProcessMethod();
-	var val = null;
+	var val = value;
 	if(preProcessMethod)
 		val = preProcessMethod.call(this, value, this.getForm());
 		
@@ -250,7 +261,7 @@ DynSelect_XFormItem.prototype.updateElement = function (newValue) {
 	var el = this.getDisplayElement();
 
 	if (el) {
-		if(AjxUtil.isEmpty(newValue) && this._enabled) {
+		if(AjxUtil.isEmpty(newValue) && this._enabled && !this.edited) {
 			var emptyText = this.getInheritedProperty("emptyText");
 			if(!AjxUtil.isEmpty(emptyText)) {
 				newValue = emptyText;

@@ -1239,6 +1239,23 @@ function(by, val, withConfig) {
 }
 ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
 
+ZaDomain.loadCatchAll = function () {
+	if((this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] && this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == "TRUE")
+		|| (AjxUtil.isEmpty(this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]) && 
+			(!AjxUtil.isEmpty(this.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]) &&
+				this.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == "TRUE") )) {
+		
+		var acc = ZaAccount.getCatchAllAccount (this.name);
+		if(!AjxUtil.isEmpty(acc) && !AjxUtil.isEmpty(acc.id) && !AjxUtil.isEmpty(acc.name)) {
+			this [ZaAccount.A_zimbraMailCatchAllAddress] = acc;
+		} else {
+			this [ZaAccount.A_zimbraMailCatchAllAddress] = null;
+		}
+	} else {
+		this [ZaAccount.A_zimbraMailCatchAllAddress] = null;
+	}
+}
+ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadCatchAll);
 
 ZaDomain.checkDomainMXRecord = 
 function(obj, callback) {
@@ -1446,7 +1463,7 @@ ZaDomain.myXModel = {
       {id:ZaDomain.A_zimbraZimletDomainAvailableZimlets, type:_LIST_,
           ref:"attrs/" + ZaDomain.A_zimbraZimletDomainAvailableZimlets,
           dataType: _STRING_ ,outputType:_LIST_},
-      { id:ZaAccount.A_zimbraMailCatchAllAddress, ref:ZaAccount.A_zimbraMailCatchAllAddress , type:_STRING_ },
+      { id:ZaAccount.A_zimbraMailCatchAllAddress, ref:ZaAccount.A_zimbraMailCatchAllAddress , type:_OBJECT_,items:[ {id:"id", type:_STRING_},{id:"name", type:_STRING_}] },
       { id:ZaDomain.A_zimbraDomainCOSMaxAccounts, ref:"attrs/" + ZaDomain.A_zimbraDomainCOSMaxAccounts ,
                  type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ },
       { id:ZaDomain.A_zimbraDomainFeatureMaxAccounts, ref:"attrs/" + ZaDomain.A_zimbraDomainFeatureMaxAccounts ,

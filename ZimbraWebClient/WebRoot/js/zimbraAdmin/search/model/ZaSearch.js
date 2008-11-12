@@ -139,7 +139,7 @@ function (params) {
 	if(params.applyCos)	
 		soapDoc.getMethod().setAttribute("applyCos", params.applyCos);
 	
-	if(params.domain)	
+	if(params.domain)
 		soapDoc.getMethod().setAttribute("domain", params.domain);
 
 	if(params.attrs && params.attrs.length>0)

@@ -151,8 +151,6 @@ function(entry) {
 		}
 	}
 	this._view.setDirty(false);
-	entry [ZaAccount.A_zimbraMailCatchAllAddress]
-           = ZaAccount.getCatchAllAccount (entry.name) ;
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;
 }
@@ -350,14 +348,26 @@ function () {
             //change the catchAllMailAddress for the account
             if (catchAllChanged) {
                 //1. remove the old account catchAll
-                ZaAccount.modifyCatchAll (
-                        this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress], "") ;
+                if(!AjxUtil.isEmpty(this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress]) && !AjxUtil.isEmpty(this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress].id)) {
+                	ZaAccount.modifyCatchAll (this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress].id, "") ;
+                } else if (this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress] && ZaItem.ID_PATTERN.test(this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress])) {
+                	ZaAccount.modifyCatchAll (this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress], "") ;
+                }
+                if(!AjxUtil.isEmpty(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress]) && !AjxUtil.isEmpty(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress].id)) {
                 //2. Add the new account catchAll
-                ZaAccount.modifyCatchAll (
-                        tmpObj[ZaAccount.A_zimbraMailCatchAllAddress], this._currentObject.attrs[ZaDomain.A_domainName]) ;
-
+                	ZaAccount.modifyCatchAll (tmpObj[ZaAccount.A_zimbraMailCatchAllAddress].id, this._currentObject.attrs[ZaDomain.A_domainName]) ;
+                } else if(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress] && ZaItem.ID_PATTERN.test(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress])) {
+                	ZaAccount.modifyCatchAll (tmpObj[ZaAccount.A_zimbraMailCatchAllAddress], this._currentObject.attrs[ZaDomain.A_domainName]) ;	
+                	
+                }
+                if(!AjxUtil.isEmpty(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress])  && !AjxUtil.isEmpty(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress].id)) {
                 //3. Set the new catchAll value to the current object
-                this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress] = tmpObj[ZaAccount.A_zimbraMailCatchAllAddress] ;
+                	this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress] = tmpObj[ZaAccount.A_zimbraMailCatchAllAddress] ;
+                } else if (!AjxUtil.isEmpty(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress]) && ZaItem.ID_PATTERN.test(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress])) {
+                	var acc = new ZaAccount(ZaApp.getInstance());
+                	acc.load("id",tmpObj[ZaAccount.A_zimbraMailCatchAllAddress],false);
+                	this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress] = acc;
+                }
             }
 
 			if(haveSmth) {
@@ -601,11 +611,11 @@ function (resp) {
 			this._handleException(ex, "ZaDomainController.prototype.saveChangesCallback", null, false);
 		}
 	}
-	/*if(response.ModifyDomainResponse && response.ModifyDomainResponse.domain && response.ModifyDomainResponse.domain[0]) {
+	if(response.ModifyDomainResponse && response.ModifyDomainResponse.domain && response.ModifyDomainResponse.domain[0]) {
 		this._currentObject.initFromJS(response.ModifyDomainResponse.domain[0]);
-	}*/
-
-	this._currentObject.refresh(false);	
+	} else {
+		this._currentObject.refresh(false);
+	}	
 	this._view.setObject(this._currentObject);			
 	this.fireChangeEvent(this._currentObject);			
 }

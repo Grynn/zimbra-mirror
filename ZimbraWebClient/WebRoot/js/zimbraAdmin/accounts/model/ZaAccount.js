@@ -1947,7 +1947,8 @@ ZaAccount.isAccountTypeSet = function (tmpObj) {
 }
 
 //Set the zimbraMailCatchAll address
-ZaAccount.getAllDomainAccounts = function (domainName) {
+//this is a seriously evil call :) we should not make searches that broad unless we plan to paginate them. This is likely to return TOO_MANY_RESULTS and take a lot of time
+/*ZaAccount.getAllDomainAccounts = function (domainName) {
      var searchParams = {
           limit : 0 , //all
           type : [ZaSearch.ACCOUNTS] ,
@@ -1959,7 +1960,7 @@ ZaAccount.getAllDomainAccounts = function (domainName) {
     var list = new ZaItemList(null, null);
 	list.loadFromJS(resp);
     return list.getArray() ;
-}
+}*/
 
 
 
@@ -1967,6 +1968,7 @@ ZaAccount.getCatchAllDomain = function (domainName) {
     return "@" + domainName ;
 }
 
+/*
 ZaAccount.getCatchAllChoices = function (domainName) {
     var accounts = ZaAccount.getAllDomainAccounts (domainName) ;
     //var choices = [{value:"", label: ZaMsg.L_none}] ;
@@ -1975,18 +1977,36 @@ ZaAccount.getCatchAllChoices = function (domainName) {
         choices.push ({ value: accounts[i].id, label: accounts[i].name}) ;
     }
     return choices ;
-}
+}*/
 
 //find the catch all account for the domain
 ZaAccount.getCatchAllAccount = function (domainName) {
-   var accounts = ZaAccount.getAllDomainAccounts (domainName) ;
-    for (var i=0; i < accounts.length; i++) {
-        if (accounts [i].attrs[ZaAccount.A_zimbraMailCatchAllAddress] == ZaAccount.getCatchAllDomain(domainName)) {
-            return accounts [i].id;
-        }
-   }
-
-    return "" ;
+	  /* var accounts = ZaAccount.getAllDomainAccounts (domainName) ;
+	    for (var i=0; i < accounts.length; i++) {
+	        if (accounts [i].attrs[ZaAccount.A_zimbraMailCatchAllAddress] == ZaAccount.getCatchAllDomain(domainName)) {
+	            return accounts [i].id;
+	        }
+	   }
+	 */
+	  var searchParams = {
+	     limit : 1 , //just need one
+	     type : [ZaSearch.ACCOUNTS] ,
+	     domain: domainName ,
+	     applyCos:  0,
+	     attrs: [ZaAccount.A_zimbraMailCatchAllAddress],
+	     query:(["(",ZaAccount.A_zimbraMailCatchAllAddress,"=",ZaAccount.getCatchAllDomain(domainName),")"].join(""))
+	  }	
+	  
+	  var resp =  ZaSearch.searchDirectory (searchParams).Body.SearchDirectoryResponse ;
+	  var list = new ZaItemList(ZaAccount, ZaApp.getInstance());
+	  list.loadFromJS(resp);
+	  var arr = list.getArray();
+	  if(!AjxUtil.isEmpty(arr)) {
+	  	if(arr[0]) {
+	  		return arr[0];
+	  	}
+	  }  
+	  return new ZaAccount(ZaApp.getInstance());
 }
 
 //++++++++++Modify CatchAll +++++++++++++++++++++++++
