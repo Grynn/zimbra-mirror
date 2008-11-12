@@ -47,7 +47,7 @@ function OnLogin() {
 
 function OnDefault(id, type, flavor) {
     document.accountForm.action = "/zimbra/desktop/console.jsp";
-    submit(id, type, flavor);
+    submit(id, type, flavor, "");
 }
 
 function OnReset(id, type, flavor) {
@@ -56,9 +56,11 @@ function OnReset(id, type, flavor) {
 }
 
 function submit(id, type, flavor, verb) {
-    zd.hide("addButton");
-    zd.hide("loginButton");
-    zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
+    if (verb != "") {
+	zd.hide("addButton");
+	zd.hide("loginButton");
+	zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
+    }
     document.accountForm.accountId.value = id;
     document.accountForm.accountType.value = type;
     document.accountForm.accountFlavor.value = flavor;
@@ -119,7 +121,7 @@ function submit(id, type, flavor, verb) {
             <td align="center">
               <table cellpadding="0" cellspacing="0" width="90%">
                 <tr>
-                  <td align="right"><zd:button onclick='OnAdd()' text='${add}'/></td>
+                  <td align="center"><zd:button onclick='OnAdd()' text='${add}'/></td>
                 </tr>
               </table>
             <td>
@@ -176,7 +178,7 @@ function submit(id, type, flavor, verb) {
                   <td>
                     <div class="ZAccountInfo">${account.email}</div>
                   </td>
-                  <td>
+                  <td width="1%">
                     <div class="ZAccountInfo">
     <c:choose>
        <c:when test="${account.statusUnknown}">
@@ -214,9 +216,9 @@ function submit(id, type, flavor, verb) {
                     </td>
     <c:choose>
     	<c:when test='${account.lastSync != null}'>
-                    <td width="1%">
+                    <td align="right">
                       <div class="ZAccountInfo">
-                        <i class="ZHint"><fmt:message key='LastSync'/>&nbsp;<fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></i>
+                        <i class="ZHint"><fmt:message key='LastSync'><fmt:param><fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></fmt:param></fmt:message></i>
                       </div>
                     </td>
     	</c:when>
@@ -232,12 +234,12 @@ function submit(id, type, flavor, verb) {
               <td align="center">
                 <table cellpadding="0" cellspacing="0" width="90%">
                   <tr>
-                    <td id="addButton" align="left">
-                      <zd:button onclick='OnAdd()' text='${add}' primary='false'/>
+                    <td id="loginButton" align="left">
+                      <zd:button onclick='OnLogin()' text='${login}'/>
                     </td>
                     <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
-                    <td id="loginButton" align="right">
-                      <zd:button onclick='OnLogin()' text='${login}'/>
+                    <td id="addButton" align="right">
+                      <zd:button onclick='OnAdd()' text='${add}' primary='false'/>
                     </td>
                   </tr>
               </table>

@@ -143,7 +143,7 @@ SELECT {
 	background-color: #e9f2fa;
 	border: 0px;
 	-moz-border-radius: 0px 0px 8px 8px;
-	padding: 14px 40px 14px 40px;
+	padding: 14px 40px 20px 40px;
 	text-align: center;
 }
 
@@ -177,7 +177,7 @@ SELECT {
 .ZSeparator {
 	background-color: lightgrey;
 	border-style: solid;
-	border-color: #d4d4d4;
+	border-width: 0px;
 	color: lightgrey;
 	height: 2px;
 	margin: 5px 0px 5px 0px;
@@ -226,32 +226,45 @@ SELECT {
 	padding: 10px 10px 10px 10px;
 }
 
-.ZBlueButton			{ cursor: pointer; }
-.ZBlueButton TABLE		{ border-collapse: collapse; display: inline; }
-.ZBlueButton TD 		{ padding: 0px; }
-.ZBlueButton .title 		{ font-size: 12px; font-weight: normal; color: black; vertical-align: middle; text-align: center; white-space: nowrap; width: 40px; }
-.ZBlueButton .over .title	{ text-decoration: none; color: white}
-.zBlueButton .down .title	{ text-decoration: none; color: darkblue; }
+.ZButton {
+	cursor: pointer;
+	text-decoration: none;
+}
 
-.ImgBlueButton_L		{ width: 15px; height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton_L.gif) no-repeat; }
-.ImgBlueButton  		{ height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton.repeatx.gif) repeat-x; padding:  0 5 0 5 !important; }
-.ImgBlueButton_R		{ width: 15px; height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton_R.gif) no-repeat; }
+.ZButton TABLE {
+	background-color: #5CB3FF;
+	border: 2px solid #e9f2fa;
+	border-color: #CCCCCC grey grey #CCCCCC;
+	border-collapse: collapse;
+	display: inline;
+	-moz-border-radius: 8px;
+	overflow: visible;
+	padding: 3px 0px 0px 0px;
+	position: relative;
+}
 
-.ZGreyButton			{ cursor: pointer;  }
-.ZGreyButton TABLE		{ border-collapse: collapse; display: inline; }
-.ZGreyButton TD 		{ padding: 0px; }
-.ZGreyButton .title 		{ font-size: 12px; line-height: 22px; font-weight: normal; color: #34282C; text-align: center; white-space: nowrap; width: 40px; }
-.ZGreyButton .over .title 	{ text-decoration: none; color: white; }
-.ZGreyButton .down .title 	{ text-decoration: none; color: darkblue; }
+.ZButton .title {
+	color: #34282C;
+	font-size: 11px;
+	font-weight: bold;
+	height: 24px;
+	padding: 0px 8px 0px 8px;
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+	width: 80px;
+}
 
-.ImgGreyButton_L		{ width: 15px; height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton_L.gif) no-repeat; }
-.ImgGreyButton  		{ height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton.repeatx.gif) repeat-x; padding: 0 5 0 5 !important; }
-.ImgGreyButton_R		{ width: 15px; height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton_R.gif) no-repeat; }
+.ZButton .over .title {
+	color: white;
+}
 
-.ZButton			{ background: lightblue; cursor: pointer; }
-.ZButton TABLE			{ border-collapse: collapse; display: inline; }
-.ZButton TD 			{ padding: 0px; }
-.ZButton .title 		{ background: lightblue; font-size: 12px; font-weight: normal; color: black; -moz-border-radius: 4px; padding: 2px; vertical-align: middle; text-align: center; white-space: nowrap; width: 40px; }
-.ZButton .over .title		{ text-decoration: none; color: white}
-.zButton .down .title		{ text-decoration: none; color: darkblue; }
+.ZButton .down {
+	border: 2px solid #e9f2fa;
+	border-color: grey #CCCCCC #CCCCCC grey;
+}
+
+.ZButton .down .title {
+	color: white;
+}
 

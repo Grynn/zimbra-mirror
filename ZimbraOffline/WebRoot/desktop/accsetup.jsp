@@ -217,22 +217,15 @@ function onEditPort(link, id) {
               <td align="center" colspan="2">
                 <table cellpadding="0" cellspacing="0" width="90%">
                   <tr>
-<c:choose>
-<c:when test="${accountFlavor eq ''}">
+<c:if test="${accountFlavor ne ''}">
+                    <td id="saveButton" align="left">
+                      <zd:button onclick='OnSubmit()' text='${save}'/>
+                    </td>
+                    <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
+</c:if>
                     <td id="cancelButton" align="right">
                       <zd:button onclick='OnCancel()' text='${cancel}' primary='false'/>
                     <td>
-</c:when>
-<c:otherwise>
-                    <td id="cancelButton">
-                      <zd:button onclick='OnCancel()' text='${cancel}' primary='false'/>
-                    </td>
-                    <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
-                    <td id="saveButton" align="right">
-                      <zd:button onclick='OnSubmit()' text='${save}'/>
-                    </td>
-</c:otherwise>
-</c:choose>
                   </tr>
                 </table>
               </td>
