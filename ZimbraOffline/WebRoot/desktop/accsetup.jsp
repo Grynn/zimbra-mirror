@@ -215,17 +215,17 @@ function onEditPort(link, id) {
             <tr><td colspan="2"><hr class="ZSeparator"></td></tr>
             <tr>
               <td align="center" colspan="2">
-                <table cellpadding="0" cellspacing="0" width="90%">
+                <table cellpadding="5" cellspacing="0" width="95%">
                   <tr>
 <c:if test="${accountFlavor ne ''}">
                     <td id="saveButton" align="left">
                       <zd:button onclick='OnSubmit()' text='${save}'/>
                     </td>
-                    <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
+                    <td align="center" width="9%"><span id="whattodo" class="ZOfflineNotice"></span></td>
 </c:if>
                     <td id="cancelButton" align="right">
                       <zd:button onclick='OnCancel()' text='${cancel}' primary='false'/>
-                    <td>
+                    </td>
                   </tr>
                 </table>
               </td>

@@ -32,36 +32,37 @@ function OnAdd() {
     window.location = "/zimbra/desktop/accsetup.jsp";
 }
 
-function OnDelete(id, type, flavor) {
+function OnDelete(id, name, type, flavor) {
     if (confirm("<fmt:message key='OnDeleteWarn'/>"))
-        submit(id, type, flavor, "del");
+        submit(id, name, type, flavor, "del");
 }
 
-function OnEdit(id, type, flavor) {
-    submit(id, type, flavor, "");
+function OnEdit(id, name, type, flavor) {
+    submit(id, name, type, flavor, "");
 }
 
 function OnLogin() {
     window.location = "/zimbra/desktop/login.jsp";
 }
 
-function OnDefault(id, type, flavor) {
+function OnDefault(id, name, type, flavor) {
     document.accountForm.action = "/zimbra/desktop/console.jsp";
-    submit(id, type, flavor, "");
+    submit(id, name, type, flavor, "");
 }
 
-function OnReset(id, type, flavor) {
+function OnReset(id, name, type, flavor) {
     if (confirm("<fmt:message key='OnResetWarn'/>"))
-        submit(id, type, flavor, "rst");
+        submit(id, name, type, flavor, "rst");
 }
 
-function submit(id, type, flavor, verb) {
+function submit(id, name, type, flavor, verb) {
     if (verb != "") {
 	zd.hide("addButton");
 	zd.hide("loginButton");
 	zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
     }
     document.accountForm.accountId.value = id;
+    document.accountForm.accountName.value = name;
     document.accountForm.accountType.value = type;
     document.accountForm.accountFlavor.value = flavor;
     document.accountForm.verb.value = verb;
@@ -119,7 +120,7 @@ function submit(id, type, flavor, verb) {
           <tr><td><hr class="ZSeparator"></td></tr>
           <tr>
             <td align="center">
-              <table cellpadding="0" cellspacing="0" width="90%">
+              <table cellpadding="5" cellspacing="0" width="95%">
                 <tr>
                   <td align="center"><zd:button onclick='OnAdd()' text='${add}'/></td>
                 </tr>
@@ -163,6 +164,7 @@ function submit(id, type, flavor, verb) {
               </div>
             </td>
           </tr>
+          <tr><td><hr class="ZSeparator"></td></tr>
 </c:if>
           <tr>
             <td align="center">
@@ -207,11 +209,11 @@ function submit(id, type, flavor, verb) {
                   <td>
                     <div class="ZAccountInfo">
 	<c:if test="${not default}">
-                     <a href="javascript:OnDefault('${account.id}', '${account.type}', '${account.flavor}')" title="<fmt:message key='Default'/>"><b>&#x21E7;</b></a>
+                     <a href="javascript:OnDefault('${account.id}', '${account.name}', '${account.type}', '${account.flavor}')" title="<fmt:message key='Default'/>"><b>&#x21E7;</b></a>
        </c:if>
-                      <a href="javascript:OnEdit('${account.id}', '${account.type}', '${account.flavor}')"><fmt:message key="Edit"/></a>&nbsp;
-                      <a href="javascript:OnDelete('${account.id}', '${account.type}', '${account.flavor}')"><fmt:message key="Delete"/></a>&nbsp;
-                     <a href="javascript:OnReset('${account.id}', '${account.type}', '${account.flavor}')" id='resetButton'><fmt:message key="ResetData"/></a>
+                      <a href="javascript:OnEdit('${account.id}', '${account.name}', '${account.type}', '${account.flavor}')"><fmt:message key="Edit"/></a>&nbsp;
+                      <a href="javascript:OnDelete('${account.id}', '${account.name}', '${account.type}', '${account.flavor}')"><fmt:message key="Delete"/></a>&nbsp;
+                     <a href="javascript:OnReset('${account.id}', '${account.name}', '${account.type}', '${account.flavor}')" id='resetButton'><fmt:message key="ResetData"/></a>
                       </div>
                     </td>
     <c:choose>
@@ -232,7 +234,7 @@ function submit(id, type, flavor, verb) {
             </tr>
             <tr>
               <td align="center">
-                <table cellpadding="0" cellspacing="0" width="90%">
+                <table cellpadding="5" cellspacing="0" width="95%">
                   <tr>
                     <td id="loginButton" align="left">
                       <zd:button onclick='OnLogin()' text='${login}'/>
@@ -254,6 +256,7 @@ function submit(id, type, flavor, verb) {
 </div>
 <form name="accountForm" action="/zimbra/desktop/accsetup.jsp" method="POST">
     <input type="hidden" name="accountId">
+    <input type="hidden" name="accountName">
     <input type="hidden" name="accountType">
     <input type="hidden" name="accountFlavor">
     <input type="hidden" name="verb">
