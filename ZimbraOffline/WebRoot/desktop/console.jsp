@@ -13,7 +13,6 @@
 <c:set var="accounts" value="${bean.accounts}"/>
 <c:set var='add'><fmt:message key='AccountAdd'/></c:set>
 <c:set var='login'><fmt:message key='GotoDesktop'/></c:set>
-<c:set var='moveup'><fmt:message key='MoveUp'/></c:set>
 
 <c:if test="${param.loginOp != 'logout' && (param.client == 'advanced' || (param.client == 'standard' && fn:length(accounts) == 1))}">
     <jsp:forward page="/desktop/login.jsp"/>
@@ -46,7 +45,7 @@ function OnLogin() {
     window.location = "/zimbra/desktop/login.jsp";
 }
 
-function OnPromote(id, type, flavor) {
+function OnDefault(id, type, flavor) {
     document.accountForm.action = "/zimbra/desktop/console.jsp";
     submit(id, type, flavor);
 }
@@ -70,194 +69,186 @@ function submit(id, type, flavor, verb) {
 </head>
 <body>
 <div align="center">
-<br><br>
-<div class="ZPanel">
-<div align="center">
-<table class="ZAccount" cellpadding="4" cellspacing="0">
+  <table class="ZPanel" cellpadding="0" cellspacing="0">
     <tr>
-        <td align="center">
-	    <img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
-        </td>
+      <td class="ZPanelLogo">
+        <img src="/zimbra/desktop/img/YahooZimbraLogo.gif" border="0">
+      </td>
     </tr>
-    <tr><td></td></tr>
+    <tr>
+      <td class="ZPanelInfo">
 <c:choose>
 <c:when test="${empty accounts}">
-    <tr>
-        <td>
-            <div class="ZHeadTitle">
-		<fmt:message key='WelcomeTitle'></fmt:message>
-            </div>
-        </td>
-    </tr>
-    <tr><td><hr class="ZSeparator"></td></tr>
-    <tr>
-        <td align="center">
-	    <table>
-		<tr>
-		    <td>
-			<div class="ZWelcome"><fmt:message key='WelcomeDesc1'/></div>
-			<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfo1'/></div>
-			<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfo2'/></div><br>
-		    </td>
-		</tr>
-		<tr>
-		    <td>
-			<ol>
-			    <li class="ZWelcome">
-				<div class="ZWelcome"><fmt:message key='WelcomeDescP1'/></div>
-				<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP1'/></div>
-			    </li>
-			    <li class="ZWelcome">
-				<div class="ZWelcome"><fmt:message key='WelcomeDescP2'/></div>
-				<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP2'/></div>
-			    </li>
-			    <li class="ZWelcome">
-				<div class="ZWelcome"><fmt:message key='WelcomeDescP3'/></div>
-				<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP3'/></div>
-			    </li>
-			    <li class="ZWelcome">
-				<div class="ZWelcome"><fmt:message key='WelcomeDescP4'/></div>
-				<div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP4'/></div>
-			    </li>
-			</ol>
-		    </td>
-		</tr>
-	    </table>
-	</td>
-    </tr>
-    <tr><td><hr class="ZSeparator"></td></tr>
-    <tr>
-        <td align="center">
-            <table cellpadding="0" cellspacing="0" width="90%">
+        <table align="center" cellpadding="4" cellspacing="0">
+          <tr>
+            <td class="ZPanelTitle">
+                <fmt:message key='WelcomeTitle'></fmt:message>
+            </td>
+          </tr>
+          <tr><td><hr class="ZSeparator"></td></tr>
+          <tr>
+            <td>
+              <div class="ZWelcome"><fmt:message key='WelcomeDesc1'/></div>
+	      <br>
+              <div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfo1'/></div>
+              <div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfo2'/></div>
+	      <br>
+              <div class="ZWelcome"><fmt:message key='WelcomeDesc2'/></div>
+              <ol class="ZWelcome">
+                <li>
+                  <div class="ZWelcome"><fmt:message key='WelcomeDescP1'/></div>
+                  <div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP1'/></div>
+                </li>
+                <li>
+                  <div class="ZWelcome"><fmt:message key='WelcomeDescP2'/></div>
+                  <div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP2'/></div>
+                </li>
+                <li>
+                  <div class="ZWelcome"><fmt:message key='WelcomeDescP3'/></div>
+                  <div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP3'/></div>
+                </li>
+                <li>
+                  <div class="ZWelcome"><fmt:message key='WelcomeDescP4'/></div>
+                  <div class="ZWelcomeInfo"><fmt:message key='WelcomeDescInfoP4'/></div>
+                </li>
+              </ol>
+            </td>
+          </tr>
+          <tr><td><hr class="ZSeparator"></td></tr>
+          <tr>
+            <td align="center">
+              <table cellpadding="0" cellspacing="0" width="90%">
                 <tr>
-                    <td align="right"><zd:button onclick='OnAdd()' text='${add}'/></td>
-		</tr>
-            </table>
-        <td>
-    </tr>
+                  <td align="right"><zd:button onclick='OnAdd()' text='${add}'/></td>
+                </tr>
+              </table>
+            <td>
+          </tr>
+	</table>
 </c:when>
 <c:otherwise>
-    <tr>
-        <td align="center">
-            <div class="ZHeadTitle">
-		<fmt:message key='HeadTitle'></fmt:message>
-            </div>
-        </td>
-    </tr>
-    <tr><td><hr class="ZSeparator"></td></tr>
+        <table align="center" width="80%" cellpadding="4" cellspacing="0">
+          <tr>
+            <td class="ZPanelTitle">
+                <fmt:message key='HeadTitle'></fmt:message>
+            </td>
+          </tr>
+          <tr><td><hr class="ZSeparator"></td></tr>
 <c:if test="${not empty param.verb && not empty param.srvcName}">
-    <tr>
-        <td>
-            <div id="serviceMessage" class="infoBg">
+          <tr>
+            <td>
+              <div id="message" class="ZMessageInfo">
     <c:choose>
-        <c:when test="${param.verb eq 'add'}">
+    <c:when test="${param.verb eq 'add'}">
                 <b><fmt:message key='ServiceAdded'><fmt:param>${param.accountName}</fmt:param></fmt:message></b>
                 <p><fmt:message key='ServiceAddedNote'/></p>
-        </c:when>
-        <c:otherwise>
-            <c:choose>
-                <c:when test="${param.verb eq 'del'}">
-                    <c:set var="key" value="ServiceDeleted"/>
-                </c:when>
-                <c:when test="${param.verb eq 'mod'}">
-                    <c:set var="key" value="ServiceUpdated"/>
-                </c:when>
-                <c:when test="${param.verb eq 'rst'}">
-                    <c:set var="key" value="ServiceReset"/>
-                </c:when>
-            </c:choose>
+    </c:when>
+    <c:otherwise>
+	<c:choose>
+	<c:when test="${param.verb eq 'del'}">
+	    <c:set var="key" value="ServiceDeleted"/>
+	</c:when>
+	<c:when test="${param.verb eq 'mod'}">
+	    <c:set var="key" value="ServiceUpdated"/>
+	</c:when>
+	<c:when test="${param.verb eq 'rst'}">
+	    <c:set var="key" value="ServiceReset"/>
+	</c:when>
+	</c:choose>
                 <b><fmt:message key="${key}"><fmt:param>${param.accountName}</fmt:param></fmt:message></b>
-        </c:otherwise>
+    </c:otherwise>
     </c:choose>
-            </div>
-        </td>
-    </tr>
+              </div>
+            </td>
+          </tr>
 </c:if>
-    <tr>
-        <td>
-            <table cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td align="center">
+              <table cellpadding="0" cellspacing="0" width="100%">
+<c:set var='default' value='true'/>
 <c:forEach items="${accounts}" var="account">
                 <tr>
-                    <td>
-                        <div class="ZAccountName">${account.name}</div>
-                    </td>
+                  <td>
+                    <div class="ZAccountName">${account.name}</div>
+                  </td>
                 </tr>
                 <tr>
-                    <td>
-                        <div class="ZAccountInfo">${account.email}</div>
-                    </td>
-                    <td>
-                        <div class="ZAccountInfo">
+                  <td>
+                    <div class="ZAccountInfo">${account.email}</div>
+                  </td>
+                  <td>
+                    <div class="ZAccountInfo">
     <c:choose>
        <c:when test="${account.statusUnknown}">
-			    <i><img src="/zimbra/img/im/ImgOffline.gif" align="absmiddle">&nbsp;<fmt:message key='StatusUnknown'/></i>
+                      <i><img src="/zimbra/img/im/ImgOffline.gif" align="absmiddle">&nbsp;<fmt:message key='StatusUnknown'/></i>
        </c:when>
        <c:when test="${account.statusOffline}">
-			    <i><img src="/zimbra/img/im/ImgImAway.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOffline'/></i>
+                      <i><img src="/zimbra/img/im/ImgImAway.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOffline'/></i>
        </c:when>
        <c:when test="${account.statusOnline}">
-			    <i><img src="/zimbra/img/im/ImgImAvailable.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOnline'/></i>
+                      <i><img src="/zimbra/img/im/ImgImAvailable.gif" align="absmiddle">&nbsp;<fmt:message key='StatusOnline'/></i>
        </c:when>
        <c:when test="${account.statusRunning}">
-			    <i><img src="/zimbra/img/animated/Imgwait_16.gif" align="absmiddle">&nbsp;<fmt:message key='StatusInProg'/></i>
+                      <i><img src="/zimbra/img/animated/Imgwait_16.gif" align="absmiddle">&nbsp;<fmt:message key='StatusInProg'/></i>
        </c:when>
        <c:when test="${account.statusAuthFailed}">
-			    <i><img src="/zimbra/img/im/ImgImDnd.gif" align="absmiddle">&nbsp;<fmt:message key='StatusCantLogin'/></i>
+                      <i><img src="/zimbra/img/im/ImgImDnd.gif" align="absmiddle">&nbsp;<fmt:message key='StatusCantLogin'/></i>
        </c:when>
        <c:when test="${account.statusError}">
-			    <i><img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif" align="absmiddle">&nbsp;<fmt:message key='StatusErr'/></i>
+                      <i><img height="14" width="14" src="/zimbra/img/dwt/ImgCritical.gif" align="absmiddle">&nbsp;<fmt:message key='StatusErr'/></i>
        </c:when>
     </c:choose>
-		       </div>
-                   </td>
-                   <td align="center" width="70px">&nbsp;
-   <c:if test="${not account.first}">
-                       <a href="javascript:OnPromote('${account.id}', '${account.type}', '${account.flavor}')"><img src="/zimbra/desktop/img/sortArrow.gif" border="0" alt="${moveup}"></a>
-   </c:if>
-                   </td>
+		    </div>
+                  </td>
                 </tr>
                 <tr>
-                    <td>
-                        <div class="ZAccountInfo">
-                            <a href="javascript:OnEdit('${account.id}', '${account.type}', '${account.flavor}')" id='editButton'><fmt:message key="Edit"/></a>&nbsp;
-                            <a href="javascript:OnDelete('${account.id}', '${account.type}', '${account.flavor}')" id='deleteButton'><fmt:message key="Delete"/></a>&nbsp;
-                           <a href="javascript:OnReset('${account.id}', '${account.type}', '${account.flavor}')"  id='resetButton'><fmt:message key="ResetData"/></a>
-                        </div>
+                  <td>
+                    <div class="ZAccountInfo">
+	<c:if test="${not default}">
+                     <a href="javascript:OnDefault('${account.id}', '${account.type}', '${account.flavor}')" title="<fmt:message key='Default'/>"><b>&#x21E7;</b></a>
+       </c:if>
+                      <a href="javascript:OnEdit('${account.id}', '${account.type}', '${account.flavor}')"><fmt:message key="Edit"/></a>&nbsp;
+                      <a href="javascript:OnDelete('${account.id}', '${account.type}', '${account.flavor}')"><fmt:message key="Delete"/></a>&nbsp;
+                     <a href="javascript:OnReset('${account.id}', '${account.type}', '${account.flavor}')" id='resetButton'><fmt:message key="ResetData"/></a>
+                      </div>
                     </td>
     <c:choose>
     	<c:when test='${account.lastSync != null}'>
                     <td width="1%">
-                        <div class="ZAccountInfo">
-			    <i class="ZHint"><fmt:message key='LastSync'/>&nbsp;<fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></i>
-                        </div>
+                      <div class="ZAccountInfo">
+                        <i class="ZHint"><fmt:message key='LastSync'/>&nbsp;<fmt:formatDate value="${account.lastSync}" type="both" dateStyle="short" timeStyle="short"/></i>
+                      </div>
                     </td>
     	</c:when>
     </c:choose>
-                </tr>
-                <tr><td colspan="3"><hr class="ZSeparator"></td></tr>
+                  </tr>
+                  <tr><td colspan="2"><hr class="ZSeparator"></td></tr>
+<c:set var='default' value='false'/>
 </c:forEach>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td align="center">
-            <table cellpadding="0" cellspacing="0" width="90%">
-                <tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td align="center">
+                <table cellpadding="0" cellspacing="0" width="90%">
+                  <tr>
                     <td id="addButton" align="left">
-                        <zd:button onclick='OnAdd()' text='${add}' primary='false'/>
+                      <zd:button onclick='OnAdd()' text='${add}' primary='false'/>
                     </td>
                     <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
-                    <td id="loginButton" "align="right">
-                        <zd:button onclick='OnLogin()' text='${login}'/>
+                    <td id="loginButton" align="right">
+                      <zd:button onclick='OnLogin()' text='${login}'/>
                     </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+                  </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
 </c:otherwise>
 </c:choose>
-</table>
-</div>
+      </td>
+    </tr>
+  </table>
 </div>
 <form name="accountForm" action="/zimbra/desktop/accsetup.jsp" method="POST">
     <input type="hidden" name="accountId">

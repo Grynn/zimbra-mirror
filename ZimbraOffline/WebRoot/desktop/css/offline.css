@@ -2,7 +2,7 @@
 BODY {
 	background-color: #C7C7C7;
 	margin: 0px;
-	padding: 0px;
+	padding: 40px 0px 0px 0px;
 }
 
 BODY, P, TH, TD, DIV, SELECT, TEXTAREA, BUTTON {
@@ -22,13 +22,6 @@ a:hover {
 	text-decoration: underline;
 }
 
-zHR {
-	border-width: 1px 0px 0px 0px;
-	border-style: solid;
-	border-color: #d4d4d4;
-	margin-top: 10px;
-}
-
 INPUT[type=text],
 INPUT[type=password] {
 	border: 1px inset #CCCCCC;
@@ -40,7 +33,7 @@ SELECT {
 }
 
 .ZAccount {
-	width: 70%;
+	width: 80%;
 }
 
 .ZAccountName {
@@ -104,15 +97,6 @@ SELECT {
 	padding-right: 10px;
 }
 
-.ZHeadTitle {
-	font-size: 16px;
-	font-weight: normal;
-	letter-spacing: 1px;
-	margin: 0px;
-	padding: 0px;
-	text-align: center;
-}
-
 .ZHint {
 	color: gray;
 	white-space: nowrap;
@@ -121,6 +105,14 @@ SELECT {
 .ZLabel {
 	padding: 0px 4px;
 	text-align: right;
+}
+
+.ZMessageInfo {
+	background-color: #fffff1;
+	border: 1px solid #d5d6bb;
+	margin-bottom: 5px;
+	padding: 10px;
+	text-align: left;
 }
 
 .ZOfflineError {
@@ -134,15 +126,42 @@ SELECT {
 }
 
 .ZPanel {
-	background-color: #e9f2fa;
-	border: 1px solid #e9f2fa; 
+	border: 2px solid #e9f2fa; 
+	border-color: #CCCCCC grey grey #CCCCCC;
 	font: 11px Arial, Verdana, san-serif;
 	line-height: 20px;
 	-moz-border-radius: 8px;
-	padding: 15px;  
+	overflow: visible;
+	padding: 0px;
+	position: relative;
 	text-align: left;
-	width: 85%;
+	width: 720px;
 	word-spacing: 2px;
+}
+
+.ZPanelInfo {
+	background-color: #e9f2fa;
+	border: 0px;
+	-moz-border-radius: 0px 0px 8px 8px;
+	padding: 14px 40px 14px 40px;
+	text-align: center;
+}
+
+.ZPanelLogo {
+	background-color: white;
+	border: 0px;
+	-moz-border-radius: 8px 8px 0px 0px;
+	padding: 12px;
+	text-align: center;
+}
+
+.ZPanelTitle {
+	font-size: 18px;
+	font-weight: normal;
+	letter-spacing: 1px;
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
 }
 
 .ZRadioCell {
@@ -190,38 +209,13 @@ SELECT {
 .ZWelcome {
 	font-size: 12px;
 	font-weight: bold;
-	padding-bottom: 4px;
 }
 
 .ZWelcomeInfo {
 	font-size: 11px;
 	font-weight: normal;
 	padding-bottom: 4px;
-}
-
-.ZWizardButtonBar .DwtButton,
-.ZWizardButtonBar .DwtButton-focused {
-	font-weight: bold;
-}
-
-.ZWizardPage {
-	width: 85%;
-}
-
-.infoBg {
-	background-color: #fffff1;
-	border: 1px solid #d5d6bb;
-	line-height: 20px;
-	margin-bottom: 5px;
-	padding: 10px;
-	text-align: left;
-}
-
-.infoTitle {
-	border-bottom: 1px solid #FD0;
-	font-weight: bold;
-	margin-bottom: 10px;
-	padding-left: 5px;
+	padding-top: 4px;
 }
 
 .infoBox {
@@ -232,20 +226,12 @@ SELECT {
 	padding: 10px 10px 10px 10px;
 }
 
-.padding p {
-	padding-left: 10px;
-}
-
-.rowline td {
-	border-bottom: 1px solid #e5e5e5;
-}
-
 .ZBlueButton			{ cursor: pointer; }
 .ZBlueButton TABLE		{ border-collapse: collapse; display: inline; }
 .ZBlueButton TD 		{ padding: 0px; }
 .ZBlueButton .title 		{ font-size: 12px; font-weight: normal; color: black; vertical-align: middle; text-align: center; white-space: nowrap; width: 40px; }
-.ZBlueButton .over .title	{ text-decoration: underline; color: white}
-.zBlueButton .down .title	{ text-decoration: underline; color: darkblue; }
+.ZBlueButton .over .title	{ text-decoration: none; color: white}
+.zBlueButton .down .title	{ text-decoration: none; color: darkblue; }
 
 .ImgBlueButton_L		{ width: 15px; height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton_L.gif) no-repeat; }
 .ImgBlueButton  		{ height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton.repeatx.gif) repeat-x; padding:  0 5 0 5 !important; }
@@ -255,10 +241,17 @@ SELECT {
 .ZGreyButton TABLE		{ border-collapse: collapse; display: inline; }
 .ZGreyButton TD 		{ padding: 0px; }
 .ZGreyButton .title 		{ font-size: 12px; line-height: 22px; font-weight: normal; color: #34282C; text-align: center; white-space: nowrap; width: 40px; }
-.ZGreyButton .over .title 	{ text-decoration: underline; color: white; }
-.ZGreyButton .down .title 	{ text-decoration: underline; color: darkblue; }
+.ZGreyButton .over .title 	{ text-decoration: none; color: white; }
+.ZGreyButton .down .title 	{ text-decoration: none; color: darkblue; }
 
 .ImgGreyButton_L		{ width: 15px; height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton_L.gif) no-repeat; }
 .ImgGreyButton  		{ height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton.repeatx.gif) repeat-x; padding: 0 5 0 5 !important; }
 .ImgGreyButton_R		{ width: 15px; height: 26px; background: url(/zimbra/desktop/img/ImgBlueButton_R.gif) no-repeat; }
+
+.ZButton			{ background: lightblue; cursor: pointer; }
+.ZButton TABLE			{ border-collapse: collapse; display: inline; }
+.ZButton TD 			{ padding: 0px; }
+.ZButton .title 		{ background: lightblue; font-size: 12px; font-weight: normal; color: black; -moz-border-radius: 4px; padding: 2px; vertical-align: middle; text-align: center; white-space: nowrap; width: 40px; }
+.ZButton .over .title		{ text-decoration: none; color: white}
+.zButton .down .title		{ text-decoration: none; color: darkblue; }
 
