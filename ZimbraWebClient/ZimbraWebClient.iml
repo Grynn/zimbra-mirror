@@ -99,6 +99,25 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="ZimbraServer" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/jars/jsp-2.1/jsp-api-2.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/jars/jsp-2.1/jsp-2.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
   <component name="WebModuleBuildComponent">
     <setting name="EXPLODED_URL" value="file://" />
