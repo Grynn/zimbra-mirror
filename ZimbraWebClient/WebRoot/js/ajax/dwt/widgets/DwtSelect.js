@@ -123,6 +123,7 @@ function(element) {
  */
 DwtSelect.prototype.addOption =
 function(option, selected, value) {
+	if (!option) { return; }
 	var opt = null;
 	var val = null;
 	if (typeof(option) == 'string') {
