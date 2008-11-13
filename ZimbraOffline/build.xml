@@ -864,12 +864,8 @@
 		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 	
 		<!-- unzip zimbra drag and drop extension -->
-		<mkdir dir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/zimbradnd@zimbra.com"/>
-		<mkdir dir="${dist.dir}/win32/prism/extensions/zimbradnd@zimbra.com"/>
-		<mkdir dir="${dist.dir}/linux/prism/extensions/zimbradnd@zimbra.com"/>
-		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/zimbradnd@zimbra.com" overwrite="true"/>
-		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/win32/prism/extensions/zimbradnd@zimbra.com" overwrite="true"/>
-		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/linux/prism/extensions/zimbradnd@zimbra.com" overwrite="true"/>
+		<mkdir dir="${dist.dir}/profile/extensions/zimbradnd@zimbra.com"/>
+		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 
 		<!-- any non-branding patches that are between prism drops should go here -->
 
