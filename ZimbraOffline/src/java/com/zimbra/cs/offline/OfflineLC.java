@@ -81,6 +81,8 @@ public class OfflineLC {
 
     public static final KnownKey zdesktop_gab_base_url;
     
+    public static final KnownKey zdesktop_log_context_filter;
+    
     static void init() {
         // This method is there to guarantee static initializer of this
         // class is run.
@@ -262,6 +264,8 @@ public class OfflineLC {
         zdesktop_gab_base_url = new KnownKey("zdesktop_gab_base_url");
         zdesktop_gab_base_url.setDefault("http://www.google.com/m8/feeds");
         zdesktop_gab_base_url.setDoc("Google contacts base url");
+        
+        zdesktop_log_context_filter = new KnownKey("zdesktop_log_context_filter", "name,aname,ip,ua", "comma delimited list of log context items to filter out");
     }
     
     public static String getFullVersion() {

@@ -26,6 +26,7 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
@@ -147,7 +148,7 @@ public class MailboxSync {
     void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
        	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         if (lockMailboxToSync()) { //don't want to start another sync when one is already in progress
-        	if (isDebugTraceOn) {
+        	if (isOnRequest && isDebugTraceOn) {
         		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
         		ombx.getOfflineAccount().setRequestScopeDebugTraceOn(true);
         	}
@@ -189,6 +190,11 @@ public class MailboxSync {
         	    	}
         	    }
                 
+        	    OfflineLog.offline.info(">>>>>>>> name=%s;version=%s;build=%s;release=%s;os=%s;server=%s",
+        	    		ombx.getAccount().getName(), OfflineLC.zdesktop_version.value(), OfflineLC.zdesktop_buildid.value(), OfflineLC.zdesktop_relabel.value(),
+        	    		System.getProperty("os.name") + " " + System.getProperty("os.arch") + " " + System.getProperty("os.version"),
+        	    		ombx.getOfflineAccount().getRemoteServerVersion());
+        	    
                 syncMan.syncStart(user);
 
                 if (mStage == SyncStage.BLANK)
@@ -211,7 +217,7 @@ public class MailboxSync {
             	else
             		syncMan.processSyncException(ombx.getAccount(), e);
             } finally {
-            	if (isDebugTraceOn) {
+            	if (isOnRequest && isDebugTraceOn) {
             		ombx.getOfflineAccount().setRequestScopeDebugTraceOn(false);
             		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE END ================================");
             	}

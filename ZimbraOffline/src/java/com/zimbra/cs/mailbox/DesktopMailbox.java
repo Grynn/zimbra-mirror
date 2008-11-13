@@ -258,7 +258,7 @@ public abstract class DesktopMailbox extends Mailbox {
 				}
 			};
 		
-		timer = new Timer("sync-timer-" + getAccount().getName());
+		timer = new Timer("mid=" + getId());
 		timer.schedule(currentTask, 5 * Constants.MILLIS_PER_SECOND, 5 * Constants.MILLIS_PER_SECOND);
 	}
 	

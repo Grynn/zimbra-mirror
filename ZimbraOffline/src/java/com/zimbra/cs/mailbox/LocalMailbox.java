@@ -36,6 +36,7 @@ import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
 import com.zimbra.cs.offline.LMailSender;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.YMailSender;
@@ -347,6 +348,10 @@ public class LocalMailbox extends DesktopMailbox {
                     continue;
             }
             try {
+        	    OfflineLog.offline.info(">>>>>>>> name=%s;version=%s;build=%s;release=%s;os=%s;type=%s",
+        	    		ds.getAccount().getName(), OfflineLC.zdesktop_version.value(), OfflineLC.zdesktop_buildid.value(), OfflineLC.zdesktop_relabel.value(),
+        	    		System.getProperty("os.name") + " " + System.getProperty("os.arch") + " " + System.getProperty("os.version"), ds.getType());
+            	
                 syncMan.syncStart(ds.getName());
                 importData(ds, isOnRequest);
                 syncMan.syncComplete(ds.getName());
@@ -402,7 +407,7 @@ public class LocalMailbox extends DesktopMailbox {
 
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
         if (lockMailboxToSync()) {
-        	if (isDebugTraceOn) {
+        	if (isOnRequest && isDebugTraceOn) {
         		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
         		getOfflineAccount().setRequestScopeDebugTraceOn(true);
         	}
@@ -413,7 +418,7 @@ public class LocalMailbox extends DesktopMailbox {
             } catch (Exception x) {
                 OfflineLog.offline.error("exception encountered during sync", x);
             } finally {
-            	if (isDebugTraceOn) {
+            	if (isOnRequest && isDebugTraceOn) {
             		getOfflineAccount().setRequestScopeDebugTraceOn(false);
             		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE END ================================");
             	}

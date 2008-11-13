@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -84,6 +85,8 @@ public class OfflineServlet extends HttpServlet {
 	@Override
 	public void init() {
 		try {
+			ZimbraLog.addContextFilters(OfflineLC.zdesktop_log_context_filter.value());
+			
 			int port = Integer.parseInt(getServletConfig().getInitParameter("port"));
 			int adminPort = Integer.parseInt(getServletConfig().getInitParameter("adminPort"));
 			
