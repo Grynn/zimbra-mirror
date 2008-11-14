@@ -47,7 +47,7 @@ installCoreSchema() {
   cp -f ${zimbra_home}/openldap/etc/openldap/schema/core.ldif ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{0\}core.ldif
   chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{0\}core.ldif
   chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{0\}core.ldif
-  sed -i -e '/^dn: cn=core,/ s/dn: cn=core,cn=schema,cn=config/dn: cn={0}core/' -e '/^cn: core/ s/cn: core/cn: {0}core/' \
+  sed -i.orig -e '/^dn: cn=core,/ s/dn: cn=core,cn=schema,cn=config/dn: cn={0}core/' -e '/^cn: core/ s/cn: core/cn: {0}core/' \
     ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{0\}core.ldif
 }
 
@@ -56,7 +56,7 @@ installCosineSchema() {
   cp -f ${zimbra_home}/openldap/etc/openldap/schema/cosine.ldif ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{1\}cosine.ldif
   chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{1\}cosine.ldif
   chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{1\}cosine.ldif
-  sed -i -e '/^dn: cn=cosine,/ s/dn: cn=cosine,cn=schema,cn=config/dn: cn={1}cosine/' -e '/^cn: cosine/ s/cn: cosine/cn: {1}cosine/' \
+  sed -i.orig -e '/^dn: cn=cosine,/ s/dn: cn=cosine,cn=schema,cn=config/dn: cn={1}cosine/' -e '/^cn: cosine/ s/cn: cosine/cn: {1}cosine/' \
     ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{1\}cosine.ldif
 }
 
@@ -65,7 +65,7 @@ installInetOrgPersonSchema() {
   cp -f ${zimbra_home}/openldap/etc/openldap/schema/inetorgperson.ldif ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{2\}inetorgperson.ldif
   chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{2\}inetorgperson.ldif
   chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{2\}inetorgperson.ldif
-  sed -i -e '/^dn: cn=inetorgperson,/ s/dn: cn=inetorgperson,cn=schema,cn=config/dn: cn={2}inetorgperson/' -e '/^cn: inetorgperson/ s/cn: inetorgperson/cn: {2}inetorgperson/' \
+  sed -i.orig -e '/^dn: cn=inetorgperson,/ s/dn: cn=inetorgperson,cn=schema,cn=config/dn: cn={2}inetorgperson/' -e '/^cn: inetorgperson/ s/cn: inetorgperson/cn: {2}inetorgperson/' \
     ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{2\}inetorgperson.ldif
 }
 
@@ -74,7 +74,7 @@ installZimbraSchema() {
   cp -f ${zimbra_home}/openldap/etc/openldap/schema/zimbra.ldif ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{3\}zimbra.ldif
   chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{3\}zimbra.ldif
   chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{3\}zimbra.ldif
-  sed -i -e '/^dn: cn=zimbra,/ s/dn: cn=zimbra,cn=schema,cn=config/dn: cn={3}zimbra/' -e '/^cn: zimbra/ s/cn: zimbra/cn: {3}zimbra/' \
+  sed -i.orig -e '/^dn: cn=zimbra,/ s/dn: cn=zimbra,cn=schema,cn=config/dn: cn={3}zimbra/' -e '/^cn: zimbra/ s/cn: zimbra/cn: {3}zimbra/' \
     ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{3\}zimbra.ldif
 }
 
@@ -83,8 +83,12 @@ installAmavisSchema() {
   cp -f ${zimbra_home}/openldap/etc/openldap/schema/amavisd.ldif ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{4\}amavisd.ldif
   chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{4\}amavisd.ldif
   chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{4\}amavisd.ldif
-  sed -i -e '/^dn: cn=amavisd,/ s/dn: cn=amavisd,cn=schema,cn=config/dn: cn={4}amavisd/' -e '/^cn: amavisd/ s/cn: amavisd/cn: {4}amavisd/' \
+  sed -i.orig -e '/^dn: cn=amavisd,/ s/dn: cn=amavisd,cn=schema,cn=config/dn: cn={4}amavisd/' -e '/^cn: amavisd/ s/cn: amavisd/cn: {4}amavisd/' \
     ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{4\}amavisd.ldif
+}
+
+cleanup() {
+  rm -f ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/*.orig
 }
 
 verifyLdapInstalled
@@ -94,3 +98,4 @@ installCosineSchema
 installInetOrgPersonSchema
 installZimbraSchema
 installAmavisSchema
+cleanup
