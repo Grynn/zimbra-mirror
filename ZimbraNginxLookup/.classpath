@@ -14,9 +14,9 @@
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.1.jar">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.2.1.jar">
 		<attributes>
-			<attribute value="http://jakarta.apache.org/commons/collections/apidocs-COLLECTIONS_3_1/" name="javadoc_location"/>
+			<attribute value="http://commons.apache.org/collections/api-release/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
