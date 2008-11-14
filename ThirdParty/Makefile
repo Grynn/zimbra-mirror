@@ -73,6 +73,7 @@ DIRS := openssl \
 	postfix \
 	dspam \
 	rrdtool \
+	altermime \
 	snmp
 
 LOGFILE := /tmp/ThirdParty.make.log
