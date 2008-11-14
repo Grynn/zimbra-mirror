@@ -866,6 +866,10 @@
 		<!-- unzip zimbra drag and drop extension -->
 		<mkdir dir="${dist.dir}/profile/extensions/zimbradnd@zimbra.com"/>
 		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
+		
+		<!-- unzip inquisitor extension -->
+		<mkdir dir="${dist.dir}/profile/extensions/Inquisitor@yahoo"/>
+		<unzip src="src/installer/extensions/inquisitor4prism.xpi" dest="${dist.dir}/profile/extensions/Inquisitor@yahoo" overwrite="true"/>
 
 		<!-- any non-branding patches that are between prism drops should go here -->
 
