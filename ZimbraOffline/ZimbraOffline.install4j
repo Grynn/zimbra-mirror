@@ -2390,6 +2390,26 @@ return true;</string>
                   </java>
                 </serializedBean>
                 <beans>
+                  <action name="webapp.ini" id="287208" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>zdesktop.webapp/webapp.ini</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>status=true</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>status=false</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+                  </action>
                   <action name="linux.desktop" id="145819" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
