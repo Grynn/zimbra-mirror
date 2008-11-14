@@ -84,7 +84,7 @@ DwtBaseDialog = function(params) {
 
 	// reset tab index
     this.setZIndex(Dwt.Z_HIDDEN); // not displayed until popup() called
-	this._positionDialog(DwtBaseDialog.__nowhereLoc);
+	this._position(DwtBaseDialog.__nowhereLoc);
 }
 
 DwtBaseDialog.PARAMS = ["parent", "className", "title", "zIndex", "mode", "loc", "view", "dragHandleId"];
@@ -155,7 +155,7 @@ function(listener) {
 * Makes the dialog visible, and places it. Everything under the dialog will
 * become veiled if we are modal. Note also that popping up a dialog will block
 * keyboard actions from being delivered to the global key action handler (if one
-* is registered). To unblock this call <code>DwtKeyboadManager.prototype.
+* is registered).
 *
 * @param loc	the desired location
 */
@@ -178,10 +178,8 @@ function(loc) {
 	if (loc) {
 		this._loc.x = loc.x;
 		this._loc.y = loc.y;
-		this._positionDialog(loc);
-	} else {
-		this._positionDialog();
 	}
+	this._position(loc);
 
     //reset TAB focus before popup of dialog.
     //method be over-written to focus a different member.
@@ -237,7 +235,7 @@ function() {
 	    var myZIndex = this._zIndex;
 		this.setZIndex(Dwt.Z_HIDDEN);
 		//TODO we should not create an object everytime we popdown a dialog (ditto w/popup)
-		this._positionDialog(DwtBaseDialog.__nowhereLoc);
+		this._position(DwtBaseDialog.__nowhereLoc);
 		if (this._mode == DwtBaseDialog.MODAL) {
 			this._undoModality(myZIndex);
 		} else {
@@ -423,27 +421,6 @@ function (myZIndex) {
 	if (this._shell._veilOverlay.activeDialogs.length > 0 ) {
 		this._shell._veilOverlay.activeDialogs[0].focus();
 	}
-};
-
-DwtBaseDialog.prototype._positionDialog = 
-function (loc) {
-	var sizeShell = this._shell.getSize();
-	var sizeThis = this.getSize();
-	var x, y;
-	if (loc == null) {
-		// if no location, go for the middle
-		x = Math.round((sizeShell.x - sizeThis.x) / 2);
-		y = Math.round((sizeShell.y - sizeThis.y) / 2);
-	} else {
-		x = loc.x;
-		y = loc.y;
-	}
-	// try to stay within shell boundaries
-	if ((x + sizeThis.x) > sizeShell.x)
-		x = sizeShell.x - sizeThis.x;
-	if ((y + sizeThis.y) > sizeShell.y)
-		y = sizeShell.y - sizeThis.y;
-	this.setLocation(x, y);
 };
 
 /**

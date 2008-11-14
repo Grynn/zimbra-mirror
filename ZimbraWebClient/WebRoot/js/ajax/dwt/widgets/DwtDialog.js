@@ -67,7 +67,10 @@ DwtDialog = function(params) {
 		standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];
 	} else if (standardButtons == DwtDialog.NO_BUTTONS) {
 		standardButtons = null;
+	} else if (standardButtons && !standardButtons.length) {
+		standardButtons = [standardButtons];
 	}
+	
 	// assemble the list of button IDs, and the list of button descriptors
 	this._buttonList = [];
 	var buttonOrder = {};
