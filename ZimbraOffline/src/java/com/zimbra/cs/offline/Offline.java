@@ -19,6 +19,7 @@ package com.zimbra.cs.offline;
 import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 
+import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapTransport;
 import com.zimbra.cs.account.Account;
@@ -55,7 +56,15 @@ public class Offline {
 
         private Element getPayload(Element soap) {
             Element body = soap.getOptionalElement("Body");
-            if (body != null && !body.listElements().isEmpty())            return body.listElements().get(0);
+            if (body != null && !body.listElements().isEmpty()) {
+                Element elt = body.listElements().get(0);
+                if (elt.getName().equals(AccountConstants.AUTH_REQUEST.getName())) {
+                    Element eltPswd = elt.getOptionalElement(AccountConstants.E_PASSWORD);
+                    if (eltPswd != null)
+                        eltPswd.setText("*");
+                }
+                return elt;
+            }
             if (body == null && soap.getOptionalElement("Fault") != null)  return soap.getOptionalElement("Fault");
             return soap;
         }

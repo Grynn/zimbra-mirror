@@ -734,8 +734,20 @@ public class OfflineMailbox extends DesktopMailbox {
             if (resProto != null)
                 transport.setResponseProtocol(resProto);
 
-            if (acct.isDebugTraceEnabled())
+            if (acct.isDebugTraceEnabled()) {
+                Element elt = null;
+                String pswd = null;
+                if (request.getName().equals(AccountConstants.AUTH_REQUEST.getName())) {
+                    elt = request.getElement(AccountConstants.E_PASSWORD);
+                    pswd = elt.getText();
+                    elt.setText("*");
+                }
+                
             	OfflineLog.request.debug(request);
+            	
+            	if (pswd != null)
+            	    elt.setText(pswd);
+            }
 
             Element response = null;
             if (saxHandlers != null) {
