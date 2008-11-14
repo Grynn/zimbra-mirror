@@ -59,6 +59,7 @@ DwtTreeItem = function(params) {
 	DwtComposite.call(this, params);
 
 	this._imageInfoParam = params.imageInfo;
+	this._nodeParam = params.nodeParam;
 	this._textParam = params.text;
 	this._deferred = params.deferred;
 	this._itemChecked = false;
@@ -452,7 +453,7 @@ function(index, realizeDeferred) {
 				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEUP, DwtTreeItem._nodeIconMouseUpHdlr);
 			}
 		} else {
-			AjxImg.setImage(this._nodeCell, "Blank_16");
+			AjxImg.setImage(this._nodeCell, (this._nodeParam ||  "Blank_16"));
 		}
 	}
 
