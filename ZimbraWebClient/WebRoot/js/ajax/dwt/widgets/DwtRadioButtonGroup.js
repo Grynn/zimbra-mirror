@@ -152,7 +152,7 @@ function(event) {
 
 	var target = DwtUiEvent.getTarget(event);
 	if (target && target.nodeName.match(/label/i)) {
-        target = AjxEnv.isIE ? document.getElementById(target.getAttribute("htmlFor")):document.getElementById(target.getAttribute("for"));
+        target = document.getElementById(target.getAttribute(AjxEnv.isIE ? "htmlFor" : "for"));
     }
 
 	var id = target.id;
