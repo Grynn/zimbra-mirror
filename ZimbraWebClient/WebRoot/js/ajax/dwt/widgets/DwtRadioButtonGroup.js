@@ -152,8 +152,8 @@ function(event) {
 
 	var target = DwtUiEvent.getTarget(event);
 	if (target && target.nodeName.match(/label/i)) {
-		target = document.getElementById(target.getAttribute("for"));
-	}
+        target = AjxEnv.isIE ? document.getElementById(target.getAttribute("htmlFor")):document.getElementById(target.getAttribute("for"));
+    }
 
 	var id = target.id;
 	// NOTE: When you use the arrows on radio button groups in FF,
