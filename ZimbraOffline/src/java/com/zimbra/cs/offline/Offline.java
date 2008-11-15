@@ -59,6 +59,7 @@ public class Offline {
             if (body != null && !body.listElements().isEmpty()) {
                 Element elt = body.listElements().get(0);
                 if (elt.getName().equals(AccountConstants.AUTH_REQUEST.getName())) {
+                    elt = elt.clone();
                     Element eltPswd = elt.getOptionalElement(AccountConstants.E_PASSWORD);
                     if (eltPswd != null)
                         eltPswd.setText("*");
