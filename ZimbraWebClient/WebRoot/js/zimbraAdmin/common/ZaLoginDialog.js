@@ -124,9 +124,9 @@ function(loc,bReloginMode) {
 	if (loc) {
 		this._loc.x = loc.x;
 		this._loc.y = loc.y;
-		this._positionDialog(loc);
+		this._position(loc);
 	} else {
-		this._positionDialog();
+		this._position();
 	}
 	
 	this.setZIndex(thisZ);
