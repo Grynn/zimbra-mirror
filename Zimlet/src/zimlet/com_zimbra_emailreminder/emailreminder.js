@@ -226,9 +226,9 @@ function() {
     var html = new Array();
     var i = 0;
     html[i++] = "<DIV>";
-    html[i++] = "Just now we created a Calendar, '";
+    html[i++] = "Email Reminder Zimlet Setup: We created a Calendar, '";
     html[i++] = com_zimbra_emailreminder.followupFolder;
-    html[i++] = "' to keep Email Reminders.<br> But, we need to reload browser for this to work. Reload Browser?";
+    html[i++] = "' to store Email Reminders.<br> We need to reload Browser for setup to complete. Reload Browser?";
     html[i++] = "</DIV>";
     return html.join("");
 
@@ -358,7 +358,7 @@ com_zimbra_emailreminder.prototype._showReloadBrowserDlg = function() {
     this._reloadBrowserView.getHtmlElement().style.overflow = "auto";
     this._reloadBrowserView.getHtmlElement().innerHTML = this._createReloadBrowserView();
 
-    this._reloadBrowserDialog = this._createDialog({title:"Email Reminder: Need to Reload Browser", view:this._reloadBrowserView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+    this._reloadBrowserDialog = this._createDialog({title:"Email Reminder Zimlet: Need to Reload Browser", view:this._reloadBrowserView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
     this._reloadBrowserDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okReloadBrowserBtnListener));
     this._reloadBrowserDialog.popup();
 }
