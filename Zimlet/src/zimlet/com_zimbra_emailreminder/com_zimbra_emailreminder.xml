@@ -1,0 +1,18 @@
+<zimlet name="com_zimbra_emailreminder" version="0.1" description="Email Reminder">
+  <include>emailreminder.js</include>
+  <includeCSS>emailreminder.css</includeCSS>
+  <handlerObject>com_zimbra_emailreminder</handlerObject>
+
+  <zimletPanelItem label="Email Reminder" icon="emailreminder-panelIcon">
+    <toolTipText>Drag or flag an email to setup an email reminder</toolTipText>
+		<dragSource type="ZmConv" />
+		<dragSource type="ZmMailMsg" />
+  </zimletPanelItem>
+
+	<userProperties>
+		<property type="string" name="emailReminder_allowFlag" value="true"/>
+		<property type="string" name="emailReminder_allowDrag" value="true"/>
+		<property type="string" name="turnONEmailReminderZimlet" value="true"/>
+	</userProperties>
+
+</zimlet>
