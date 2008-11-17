@@ -27,10 +27,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.Provisioning.GranteeBy;
-import com.zimbra.cs.account.Provisioning.TargetBy;
-import com.zimbra.cs.account.accesscontrol.GranteeType;
-import com.zimbra.cs.account.accesscontrol.Right;
-import com.zimbra.cs.account.accesscontrol.TargetType;
+import com.zimbra.cs.account.accesscontrol.RightCommand;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.LocalJMSession;
@@ -2093,17 +2090,36 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     @Override
-    public void grantRight(TargetType targetType, Entry target,
-                           GranteeType granteeType, NamedEntry grantee, 
-                           Right right, boolean deny) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("grantPermission");
+    public boolean checkRight(String targetType, TargetBy targetBy, String target,
+            GranteeBy granteeBy, String grantee,
+            String right,
+            AccessManager.ViaGrant via) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("checkRight");
     }
 
     @Override
-    public void revokeRight(TargetType targetType, Entry target,
-                            GranteeType granteeType, NamedEntry grantee, 
-                            Right right, boolean deny) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("revokePermission");
+    public RightCommand.EffectiveRights getEffectiveRights(String targetType, TargetBy targetBy, String target,
+                                                           GranteeBy granteeBy, String grantee) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("getEffectiveRights");
+    }
+    
+    @Override
+    public RightCommand.ACL getGrants(String targetType, TargetBy targetBy, String target) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("getGrants");
+    }
+    
+    @Override
+    public void grantRight(String targetType, TargetBy targetBy, String target,
+             String granteeType, GranteeBy granteeBy, String grantee,
+             String right, boolean deny) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("grantRight");
+    }
+    
+    @Override
+    public void revokeRight(String targetType, TargetBy targetBy, String target,
+              String granteeType, GranteeBy granteeBy, String grantee,
+              String right, boolean deny) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("revokeRight");
     }
 
 

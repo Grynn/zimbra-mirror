@@ -73,17 +73,17 @@ public class OfflineAccessManager extends AccessManager {
 	}
 	
 	@Override
-	public boolean canPerform(AuthToken grantee, Entry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
+	public boolean canDo(AuthToken grantee, Entry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
 	    return defaultGrant;
 	}
     
 	@Override
-	public boolean canPerform(Account grantee, Entry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
+	public boolean canDo(Account grantee, Entry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
 	    return defaultGrant;
 	}
 	
 	@Override
-	public boolean canPerform(String grantee, Entry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
+	public boolean canDo(String grantee, Entry target, Right rightNeeded, boolean asAdmin, boolean defaultGrant) {
 	    return defaultGrant;
 	}
 	
