@@ -427,6 +427,36 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
+    
+    public static Map<Integer, Integer> getItemFolderIds(OfflineMailbox ombx, int[] ids) throws ServiceException {
+        Connection conn = ombx.getOperationConnection();
+        Map<Integer, Integer> result = new HashMap<Integer, Integer>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("SELECT id, folder_id" +
+                    " FROM " + DbMailItem.getMailItemTableName(ombx) +
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "id IN" + DbUtil.suitableNumberOfVariables(ids.length));
+            int pos = 1;
+            stmt.setInt(pos++, ombx.getId());
+            for (int id : ids)
+                stmt.setInt(pos++, id);
+            
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+            	int id = rs.getInt(1);
+            	int folderId = rs.getInt(2);
+            	result.put(id, folderId);
+            }
+            
+            return result;
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("getting folder ids of given items " + ombx.getId(), e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
 
     public static int getChangeMask(MailItem item) throws ServiceException {
         Mailbox mbox = item.getMailbox();

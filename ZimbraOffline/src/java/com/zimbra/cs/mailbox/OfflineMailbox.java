@@ -468,6 +468,19 @@ public class OfflineMailbox extends DesktopMailbox {
             endTransaction(success);
         }
     }
+    
+    synchronized Map<Integer, Integer> getItemFolderIds(OperationContext octxt, int[] ids) throws ServiceException {
+        boolean success = false;
+        try {
+            beginTransaction("getItemFolderIds", octxt);
+
+            Map<Integer, Integer> result = DbOfflineMailbox.getItemFolderIds(this, ids);
+            success = true;
+            return result;
+        } finally {
+            endTransaction(success);
+        }
+    }
 
     synchronized int getChangeMask(OperationContext octxt, int id, byte type) throws ServiceException {
         boolean success = false;
@@ -635,6 +648,11 @@ public class OfflineMailbox extends DesktopMailbox {
      * 
      * when an item with conflict dirty bit is moved into
      * archive we'll still set the archived dirty bit since pushing up unnecessary delete is always A-OK.
+     * 
+     * Bug 32184: if item moved into trash from archive has archived dirty bit, it's an item newly archived so we'll just remove its \Archived flag
+     * and treat it as a regular item.  if item moved into trash from archive has no archived dirty bit, we'll keep the \Archived flag and won't
+     * track any changes on it.  when an item with \Archived flag is moved into other non-archive folders, we'll clear the \Archived flag and set the
+     * conflict dirty bit to mark it as new item to be uploaded.
      */
     
     @Override
@@ -669,20 +687,24 @@ public class OfflineMailbox extends DesktopMailbox {
     }
     
     @Override
-    void trackChangeArchived(MailItem item, boolean toArchive) throws ServiceException {
+    boolean trackChangeArchived(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException {
     	if (!isTrackingSync() || !PushChanges.PUSH_TYPES_SET.contains(item.getType()))
-            return;
+            return true;
     	
-    	if (toArchive)
+    	if (toArchive) {
+    		assert !isTrashing;
     		DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_ARCHIVED);
-    	else {
+    	} else {
     		//if archived dirty bit is not set, we will set the conflict dirty bit;
     		//if archived dirty bit is set, meaning there was no sync since the item was first moved into archive,
     		//we should should keep the archived dirty bit so that the next push can straighten it out.
     		int mask = DbOfflineMailbox.getChangeMask(item);
-    		if ((mask & Change.MODIFIED_ARCHIVED) == 0 && (mask & Change.MODIFIED_CONFLICT) == 0)
+    		if (isTrashing)
+    			return (mask & Change.MODIFIED_ARCHIVED) != 0; //remove \Archived flag if archived bit is set
+    		else if ((mask & Change.MODIFIED_ARCHIVED) == 0 && (mask & Change.MODIFIED_CONFLICT) == 0)
     			DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
     	}
+    	return true;
     }
     
     public Element proxyRequest(Element request, SoapProtocol resProto, boolean quietWhenOffline, String op) throws ServiceException {

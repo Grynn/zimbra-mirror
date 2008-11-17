@@ -67,7 +67,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>
 	<classpathentry kind="lib" path="/ZimbraTagLib/jars/jstl.jar"/>
 	<classpathentry kind="lib" path="/ZimbraTagLib/jars/standard.jar"/>
-	<classpathentry kind="lib" path="/ZimbraTagLib/build/zimbrataglib.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-client-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-client-meta-1.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-contacts-1.0.jar"/>

@@ -120,8 +120,8 @@ public class LocalMailbox extends DesktopMailbox {
     }
     
     @Override
-    void archiveSingleItem(MailItem item, boolean toArchive) throws ServiceException {
-    	super.archiveSingleItem(item, toArchive);
+    void archiveSingleItem(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException {
+    	super.archiveSingleItem(item, toArchive, isTrashing);
     	if (isImapMailbox && item instanceof Folder)
     		alterSyncFolderFlag((Folder)item, !toArchive);
     }

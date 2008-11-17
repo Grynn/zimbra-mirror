@@ -125,6 +125,11 @@ public abstract class DesktopMailbox extends Mailbox {
      * when an item is moved out of archive, we'll clear the \Archived flag.
      * 
      * regarding new items.  if an item is added in archive directly, we'll simply add \Archived flag.
+     * 
+     * Bug 32184: when moving items out of archive into Trash, don't clear the \Archived flag;
+     * when moving items with \Archived flag into other non-archive folders, clear \Archived flag.
+     * In other words we'll treat Trash as an extension of Local Folders.
+     * 
      */
 
     @Override void snapshotCounts() throws ServiceException {
@@ -159,8 +164,10 @@ public abstract class DesktopMailbox extends Mailbox {
                     continue;
                 MailItem item = (MailItem) change.what;
                 if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && item.getFolderId() != ID_FOLDER_FAILURE) {
-                    boolean isInArchive = isInArchive(item.getPath());
-                	if (!isInArchive || !item.isTagged(Flag.ID_FLAG_ARCHIVED)) { //either not in archive, or newly archived, we need to keep track
+                	String path = item.getPath();
+                    boolean isInArchive = isInArchive(path);
+                    boolean isInTrash = isInTrash(path);
+                	if (!isInArchive && !isInTrash || !item.isTagged(Flag.ID_FLAG_ARCHIVED)) { //either not in archive/trash, or newly archived, we need to keep track
                 		trackChangeModified(item, change.why);
                         if (item.getFolderId() == ID_FOLDER_OUTBOX)
                         	outboxed = true;
@@ -168,9 +175,9 @@ public abstract class DesktopMailbox extends Mailbox {
                     
                 	if ((change.why & Change.MODIFIED_FOLDER) != 0) {
                     	if (isInArchive && !item.isTagged(Flag.ID_FLAG_ARCHIVED)) //moved into archive
-                        	archive(item, true);
+                        	archive(item, true, false);
                     	else if (!isInArchive && item.isTagged(Flag.ID_FLAG_ARCHIVED)) //moved out of archive
-                        	archive(item, false);
+                        	archive(item, false, isInTrash);
                     }
                 }
             }
@@ -201,29 +208,33 @@ public abstract class DesktopMailbox extends Mailbox {
      * @param toArchive true to move into archive; false to move out of
      * @throws ServiceException
      */
-    private void archive(MailItem item, boolean toArchive) throws ServiceException {
+    private void archive(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException {
     	if (item instanceof Folder) {
     		TypedIdList ids = DbMailItem.listByFolder((Folder)item, true);
     		for (byte type : ids.types()) {    			
     			MailItem[] items = getItemById(ids.getIds(type), type);
     			for (MailItem i : items) {
     				if (type == MailItem.TYPE_FOLDER)
-    					archive(i, toArchive);
+    					archive(i, toArchive, isTrashing);
     				else
-    					archiveSingleItem(i, toArchive);
+    					archiveSingleItem(i, toArchive, isTrashing);
     			}
     		}
     	}
-    	archiveSingleItem(item, toArchive);
+    	archiveSingleItem(item, toArchive, isTrashing);
     }
     
-    void archiveSingleItem(MailItem item, boolean toArchive) throws ServiceException {
-    	alterArchivedFlag(item, toArchive);
-    	trackChangeArchived(item, toArchive);
+    void archiveSingleItem(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException {
+    	if (trackChangeArchived(item, toArchive, isTrashing))
+    		alterArchivedFlag(item, toArchive);
     }
     
     public static boolean isInArchive(String path) {
     	return path.startsWith("/" + ARCHIVE_PATH);
+    }
+    
+    public static boolean isInTrash(String path) {
+    	return path.startsWith("/Trash");
     }
     
     boolean isItemInArchive(MailItem item) throws ServiceException {
@@ -234,7 +245,7 @@ public abstract class DesktopMailbox extends Mailbox {
 	
 	void trackChangeModified(MailItem item, int changeMask) throws ServiceException {}
 	
-	void trackChangeArchived(MailItem item, boolean toArchive) throws ServiceException {}
+	boolean trackChangeArchived(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException { return true; }
 	
 	void itemCreated(MailItem item, boolean inArchive) throws ServiceException {}
 

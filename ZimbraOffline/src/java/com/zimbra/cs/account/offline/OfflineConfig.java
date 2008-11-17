@@ -31,7 +31,7 @@ class OfflineConfig extends Config {
         super(attrs, provisioning);
     }
 
-    static OfflineConfig instantiate(Provisioning provisioning) {
+    static synchronized OfflineConfig instantiate(Provisioning provisioning) {
         try {
             Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.CONFIG, OfflineProvisioning.A_offlineDn, "config");
             if (attrs == null) {

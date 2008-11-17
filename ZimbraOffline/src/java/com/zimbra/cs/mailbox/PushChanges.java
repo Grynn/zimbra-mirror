@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
@@ -176,6 +177,7 @@ public class PushChanges {
     private boolean sync(boolean isOnRequest) throws ServiceException {
         //deal with archiving first
         List<Integer> archived = new ArrayList<Integer>();
+        Map<Integer, Integer> unarchived = new HashMap<Integer, Integer>();
     	synchronized (ombx) {
             //find archived items to delete on server
     		Map<Integer, Pair<Integer, Integer>> changeMasksAndFlags = ombx.getChangeMasksAndFlags(sContext);
@@ -187,8 +189,48 @@ public class PushChanges {
             	if (hasArchivedBit && hasArchivedFlag)
             		archived.add(entry.getKey());
             	else if (hasArchivedBit) //was first moved into archive then moved out; we just clear the archived bit
-            		ombx.setChangeMask(sContext, entry.getKey(), MailItem.TYPE_UNKNOWN, changeMask & ~Change.MODIFIED_ARCHIVED);
+            		if ((changeMask & Change.MODIFIED_CONFLICT) == 0)
+            			unarchived.put(entry.getKey(), changeMask);
+            		else //new item
+            			ombx.setChangeMask(sContext, entry.getKey(), MailItem.TYPE_UNKNOWN, changeMask & ~Change.MODIFIED_ARCHIVED);
             }
+    	}
+    	
+    	//must handle items moved back out first.  otherwise if children were moved out and parent remains in archive, pushing deletes of parent to remote server will
+    	//zap the children.
+    	if (!unarchived.isEmpty()) {
+    		int[] unIds = new int[unarchived.size()];
+    		int i = 0;
+    		for (int unId : unarchived.keySet())
+    			unIds[i++] = unId;
+    		Map<Integer, Integer> itemFolderMap = ombx.getItemFolderIds(sContext, unIds);
+    		Map<Integer, List<Integer>> movesByFolderIds = new HashMap<Integer, List<Integer>>();
+    		for (Entry<Integer, Integer> entry : itemFolderMap.entrySet()) {
+    			List<Integer> idListByFolder = movesByFolderIds.get(entry.getValue());
+    			if (idListByFolder == null) {
+    				idListByFolder = new ArrayList<Integer>();
+    				movesByFolderIds.put(entry.getValue(), idListByFolder);
+    			}
+    			idListByFolder.add(entry.getKey());
+    		}
+    		for (Entry<Integer, List<Integer>> entry : movesByFolderIds.entrySet()) {
+                String ids = concatenateIds(entry.getValue());
+                Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+                request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_MOVE).
+                		addAttribute(MailConstants.A_FOLDER, entry.getKey()).addAttribute(MailConstants.A_ID, ids);
+                try {
+	                ombx.sendRequest(request);
+	                OfflineLog.offline.debug("push: pushed moves due to unarchiving: [" + ids + ']');
+	                for (int movedId : entry.getValue())
+	                	ombx.setChangeMask(sContext, movedId, MailItem.TYPE_UNKNOWN, unarchived.get(movedId) & ~Change.MODIFIED_ARCHIVED & ~Change.MODIFIED_FOLDER);
+                } catch (SoapFaultException sfe) {
+                    if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER))
+                        throw sfe;
+                    OfflineLog.offline.info("push: remote folder " + entry.getKey() + " doesn't exist; skipping");
+                    for (int movedId : entry.getValue())
+	                	ombx.setChangeMask(sContext, movedId, MailItem.TYPE_UNKNOWN, unarchived.get(movedId) & ~Change.MODIFIED_ARCHIVED);
+                }
+    		}
     	}
     	
     	//push up deletes due to archiving.  we are sure that everything in the list is safe.  if a folder was archived and then one of its subfolder is unarchived,
