@@ -68,21 +68,16 @@ case "$1" in
     fi
 
     ${zimbra_home}/libexec/logswatch --config-file=${configfile} \
-      --use-cpan-file-tail \
+      --use-cpan-file-tail --pid-file=${pidfile}\
       --script-dir=/tmp -t /var/log/zimbra.log > $logfile 2>&1 &
-    pid=$!
-    if [ "x$pid" != 'x' ]; then
-      if [ -f $logfile ]; then
-        touch $logfile
+    for ((i=0; i < 30; i++)); do
+      checkrunning
+      if [ $running = 1 ]; then
+        break
       fi
-      chmod 644 $logfile
-      echo $pid > $pidfile
-    else 
-      echo "failed."
-      exit 1
-    fi
-    checkrunning
-    if [ $running = 1 ]; then
+      sleep 1
+    done
+    if [ "x$pid" != "x" ]; then
       echo "done."
       exit 0
     else
