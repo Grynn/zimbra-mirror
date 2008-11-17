@@ -17,6 +17,7 @@ cn: zimbra
 sn: zimbra
 zimbraAccountStatus: active
 zimbraIsAdminAccount: TRUE
+zimbraIsSystemResource: TRUE
 zimbraId: e0fafd89-1360-11d9-8661-000a95d98ef2
 description: The master zimbra admin account
 userPassword: {SSHA}8+r0nkcErptqasSrFPcT0k81NFrbTcAS
@@ -29,7 +30,7 @@ objectclass: organizationalPerson
 cn: zmreplica
 sn: zmreplica
 zimbraAccountStatus: active
-zimbraIsAdminAccount: TRUE
+zimbraIsSystemResource: TRUE
 zimbraId: D020C0FE-4F5E-11DC-B033-C3A8E67A905E
 description: The zimbra replication account
 userPassword: {SSHA}4M5vIBjKvm9mNdvkL6YAXRdok8M81vru
@@ -47,7 +48,7 @@ objectclass: organizationalPerson
 cn: zmnginx
 sn: zmnginx
 zimbraAccountStatus: active
-zimbraIsAdminAccount: TRUE
+zimbraIsSystemResource: TRUE
 zimbraId: DA336C18-4F5E-11DC-8514-DCA8E67A905E
 description: The zimbra nginx account
 userPassword: {SSHA}0TiyKd2oSDfY7OISyEmuEf8+iqdFlYk7
@@ -60,7 +61,7 @@ objectclass: organizationalPerson
 cn: zmpostfix
 sn: zmpostfix
 zimbraAccountStatus: active
-zimbraIsAdminAccount: TRUE
+zimbraIsSystemResource: TRUE
 zimbraId: DA336C18-4F5E-11DC-8514-DCA8E67A905E
 description: The zimbra postfix account
 userPassword: {SSHA}Cx6IUWjKNw5JGsaBQsLOcDmugUPyI0E4
@@ -73,7 +74,7 @@ objectclass: organizationalPerson
 cn: zmamavis
 sn: zmamavis
 zimbraAccountStatus: active
-zimbraIsAdminAccount: TRUE
+zimbraIsSystemResource: TRUE
 zimbraId: 12A0779A-88B6-11DC-AA4B-97F9DEB0B34E
 description: The zimbra amavis account
 userPassword: {SSHA}+3rEY5SCrc3KlzJxLQmm735pnRTPgnT2
