@@ -1028,6 +1028,10 @@ public class PushChanges {
     }
     
     private boolean syncDocument(int id) throws ServiceException {
+        if (!OfflineLC.zdesktop_sync_documents.booleanValue() ||
+        		!ombx.getRemoteServerVersion().isAtLeast(InitialSync.sMinDocumentSyncVersion)) {
+        	return true;
+        }
     	MailItem item = null;
     	boolean create = false;
     	synchronized (ombx) {
