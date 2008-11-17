@@ -6,6 +6,8 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.account.offline.OfflineAccount;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
@@ -27,7 +29,14 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         Mailbox mbox = getRequestedMailbox(ctxt);
         if (!(mbox instanceof OfflineMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
+        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
                        
+        Element eLink = request.getElement(MailConstants.E_MOUNT);
+        String zid = eLink.getAttribute(MailConstants.A_ZIMBRA_ID, null);
+        OfflineAccount acct = (OfflineAccount)prov.get(Provisioning.AccountBy.id, zid);
+        if (acct != null)
+            prov.checkMountpointAccount(acct, ctxt.getRequestedAccountId());
+        
         Element response = super.handle(request, context);
         
         Element eMount = response.getElement(MailConstants.E_MOUNT);
@@ -42,12 +51,12 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         int remoteId = (int) eMount.getAttributeLong(MailConstants.A_REMOTE_ID);
         int mod_content = (int) eMount.getAttributeLong(MailConstants.A_REVISION, -1);
         
+        prov.createMountpointAccount(ownerName, ownerId, ((OfflineMailbox)mbox).getOfflineAccount(), false);
         CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags, color);
         redo.setId(id);
         redo.setChangeId(mod_content);
         try {
-            mbox.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);                       
-            OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((OfflineMailbox)mbox).getOfflineAccount(), true); 
+            mbox.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;

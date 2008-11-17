@@ -66,6 +66,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_offlineDeletedDataSource = "offlineDeletedDataSource";
     public static final String A_offlineDeletedSignature = "offlineDeletedSignature";
     public static final String A_offlineMountpointProxyAccountId = "offlineMountpointProxyAccountId";
+    public static final String A_offlineMountpointAccountIds = "offlineMountpointAccountIds";
     public static final String A_zimbraPrefMailtoHandlerEnabled = "zimbraPrefMailtoHandlerEnabled";
     public static final String A_zimbraPrefMailtoAccountId = "zimbraPrefMailtoAccountId";
     public static final String A_zimbraPrefMailToasterEnabled = "zimbraPrefMailToasterEnabled";
@@ -727,24 +728,49 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return galAcct;
     }
 
-    public synchronized OfflineAccount createMountpointAccount(String name, String id, OfflineAccount account, boolean force) throws ServiceException {
-        if (force)
-            deleteMountpointAccount(name, id);
-        
-        Map<String, Object> attrs = new HashMap<String, Object>();
-        attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );       
-        attrs.put(A_zimbraMailHost, OfflineConstants.SYNC_SERVER_PREFIX + account.getAttr(OfflineConstants.A_offlineRemoteServerUri));
-        attrs.put(A_uid, id);
-        attrs.put(A_mail, name);
-        attrs.put(A_zimbraId, id);
-        attrs.put(A_cn, id);
-        attrs.put(A_sn, id);
-        attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
-        attrs.put(A_offlineMountpointProxyAccountId, account.getId());
+    private void setMountpointAccountId(OfflineAccount account, String mptAcctId) throws ServiceException {
+        String ids = account.getAttr(A_offlineMountpointAccountIds, null);
+        String newIds = null;
+        if (ids == null)
+            newIds = mptAcctId;
+        else if (ids.indexOf(mptAcctId) == -1)
+            newIds = ids + "," + mptAcctId;
+        if (newIds != null)
+            setAccountAttribute(account, A_offlineMountpointAccountIds, newIds);
+    }
+    
+    public void checkMountpointAccount(OfflineAccount mptAcct, String reqAcctId) throws ServiceException {
+        if (!isMountpointAccount(mptAcct))
+            throw OfflineServiceException.MOUNT_EXISTING_ACCT();
+        String pxyAcctId = mptAcct.getAttr(A_offlineMountpointProxyAccountId);
+        if (!pxyAcctId.equals(reqAcctId))
+            throw OfflineServiceException.MOUNT_OP_UNSUPPORTED(); 
+    }
+    
+    public synchronized OfflineAccount createMountpointAccount(String name, String id, OfflineAccount account, boolean check) throws ServiceException {
+        OfflineAccount mptAcct = (OfflineAccount)get(Provisioning.AccountBy.id, id);
+        if (mptAcct != null) {
+            if (check)
+                checkMountpointAccount(mptAcct, account.getId());
+        } else {
+            Map<String, Object> attrs = new HashMap<String, Object>();
+            attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );       
+            attrs.put(A_zimbraMailHost, OfflineConstants.SYNC_SERVER_PREFIX + account.getAttr(OfflineConstants.A_offlineRemoteServerUri));
+            attrs.put(A_uid, id);
+            attrs.put(A_mail, name);
+            attrs.put(A_zimbraId, id);
+            attrs.put(A_cn, id);
+            attrs.put(A_sn, id);
+            attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
+            attrs.put(A_offlineMountpointProxyAccountId, account.getId());
 
-        setDefaultAccountAttributes(attrs);
+            setDefaultAccountAttributes(attrs);
 
-        return (OfflineAccount)createAccountInternal(name, id, attrs, false, true);
+            mptAcct = (OfflineAccount)createAccountInternal(name, id, attrs, false, true);
+        }
+          
+        setMountpointAccountId(account, mptAcct.getId());
+        return mptAcct;
     }
     
     private static final String LOCAL_ACCOUNT_UID = "local";
@@ -984,6 +1010,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public synchronized void deleteAccount(String zimbraId) throws ServiceException {       
         deleteGalAccount(zimbraId);
+        deleteMountpointAccounts(zimbraId);
         deleteOfflineAccount(zimbraId);
         
         cachedaccountIds = null;
@@ -1019,16 +1046,19 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             deleteOfflineAccount(galAcctId);
     }
     
-    public void deleteMountpointAccount(String name, String id) throws ServiceException {
-        Account acct = null;
-        if (id != null)
-            acct = get(Provisioning.AccountBy.id, id);           
-        if (acct == null && name != null)
-            acct = get(Provisioning.AccountBy.name, name);
+    private void deleteMountpointAccounts(String mainAcctId) throws ServiceException {
+        OfflineAccount mainAcct = (OfflineAccount)get(AccountBy.id, mainAcctId);
+        String ids;
+        if (mainAcct == null || (ids = mainAcct.getAttr(A_offlineMountpointAccountIds, null)) == null)
+            return;       
         
-        if (acct != null && isMountpointAccount(acct))
-            deleteAccount(acct.getId());
-    }
+        String[] idList = ids.split(",");
+        for (String id : idList) {
+            Account acct = get(Provisioning.AccountBy.id, id);        
+            if (acct != null && isMountpointAccount(acct))
+                deleteOfflineAccount(id);
+        }
+    }        
     
     @Override
     public synchronized void renameAccount(String zimbraId, String newName) throws ServiceException {
@@ -1088,7 +1118,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	        server = mSyncServerCache.get((String)attrs.get(A_zimbraMailHost));
     	    }
     	    if (server == null)
-    	        loadRemoteSyncServer(pxyAcctId);
+    	        loadRemoteSyncServer(pxyAcctId, acct.getId());
     	}
     	
         return acct;
@@ -2117,7 +2147,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return newOrder;
     }
     
-    protected void loadRemoteSyncServer(String acctId) throws ServiceException {
+    protected void loadRemoteSyncServer(String acctId, String mptAcctId) throws ServiceException {
         Account account = get(AccountBy.id, acctId);
         if (account == null)
             throw AccountServiceException.NO_SUCH_ACCOUNT(acctId);
@@ -2159,7 +2189,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         Server server = new Server(key, key, attrs, null, this);
         synchronized(mSyncServerCache) {
             mSyncServerCache.put(key, server);
-        }        
+        }
+        
+        setMountpointAccountId((OfflineAccount)account, mptAcctId);
     }
     
     @Override

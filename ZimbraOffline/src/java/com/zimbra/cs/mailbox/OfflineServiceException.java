@@ -30,6 +30,8 @@ public class OfflineServiceException extends ServiceException {
     public static final String OUT_OF_SYNC = "offline.OUT_OF_SYNC";
     public static final String MISSING_GAL_MAILBOX = "offline.MISSING_GAL_MAILBOX";
     public static final String ONLINE_ONLY_OP = "offline.ONLINE_ONLY_OP";
+    public static final String MOUNT_OP_UNSUPPORTED = "offline.MOUNT_OP_UNSUPPORTED";
+    public static final String MOUNT_EXISTING_ACCT = "offline.MOUNT_EXISTING_ACCT";
     
     public static final String CALDAV_LOGIN_FAILED ="offlline.CALDAV_LOGIN_FAILED";
     public static final String YCALDAV_NEED_UPGRADE = "offline.YCALDAV_NEED_UPGRADE";
@@ -71,6 +73,14 @@ public class OfflineServiceException extends ServiceException {
     
     public static OfflineServiceException ONLINE_ONLY_OP(String op) {
         return new OfflineServiceException("operation only supported when client is online: " + op, ONLINE_ONLY_OP, RECEIVERS_FAULT);
+    }
+    
+    public static OfflineServiceException MOUNT_OP_UNSUPPORTED() {
+        return new OfflineServiceException("sharing the same resource by more than one account is unsupported", MOUNT_OP_UNSUPPORTED, RECEIVERS_FAULT);
+    }
+    
+    public static OfflineServiceException MOUNT_EXISTING_ACCT() {
+        return new OfflineServiceException("can not mount resource from an existing account", MOUNT_EXISTING_ACCT, RECEIVERS_FAULT);
     }
     
     public static OfflineServiceException CALDAV_LOGIN_FAILED() {

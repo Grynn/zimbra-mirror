@@ -513,6 +513,18 @@ public class InitialSync {
             ownerId = elt.getAttribute(MailConstants.A_ZIMBRA_ID);
             ownerName = elt.getAttribute(MailConstants.A_OWNER_NAME);
             remoteId = (int)elt.getAttributeLong(MailConstants.A_REMOTE_ID);
+            try {
+                OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount(), true);
+            } catch (OfflineServiceException e) {
+                if (e.getCode().equals(OfflineServiceException.MOUNT_OP_UNSUPPORTED) || 
+                    e.getCode().equals(OfflineServiceException.MOUNT_EXISTING_ACCT)) {
+                    OfflineLog.offline.warn(e.getMessage() + ": " + name);
+                    return;
+                } else {
+                    throw e;
+                }
+            }
+            
             redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, color);
             ((CreateMountpoint)redo).setId(id);
         }
@@ -524,8 +536,7 @@ public class InitialSync {
                 // don't care about current feed syncpoint; sync can't be done offline
                 ombx.createFolder(new OfflineContext(redo), name, parentId, system, view, flags, color, url);
             } else {
-                ombx.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);
-                OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount(), true);                
+                ombx.createMountpoint(new OfflineContext(redo), parentId, name, ownerId, remoteId, view, flags, color);               
             }
             if (relocated)
                 ombx.setChangeMask(sContext, id, itemType, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
