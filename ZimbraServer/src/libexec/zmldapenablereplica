@@ -135,7 +135,7 @@ enableSyncProv() {
 createLdapConfig() {
 	# Verify syncprov isn't already enabled on the db
 	echo -n "Enabling sync replication on replica..."
-        num=`expr match "$ldap_url" 'ldaps*'`
+        num=`expr match "$ldap_master_url" 'ldaps*'`
         if [ "$num" == 5 ]; then
 	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
 dn: olcDatabase={2}hdb,cn=config
