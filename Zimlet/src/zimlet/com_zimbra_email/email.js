@@ -323,7 +323,7 @@ function(obj, span, context) {
 		if (!appCtxt.get(ZmSetting.IM_ENABLED)) {
 			actionMenu.removeOp("NEWIM");
 		} else {
-			var addrObj = obj instanceof AjxEmailAddress ? addrObj : new AjxEmailAddress(obj);
+			var addrObj = obj instanceof AjxEmailAddress ? obj : new AjxEmailAddress(obj);
 			ZmImApp.updateImMenuItemByAddress(imItem, addrObj);
 		}
 	}
