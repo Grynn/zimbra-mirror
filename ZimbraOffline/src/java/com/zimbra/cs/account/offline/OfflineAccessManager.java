@@ -89,22 +89,22 @@ public class OfflineAccessManager extends AccessManager {
 	
 	@Override
     public AllowedAttrs canGetAttrs(Account grantee, Entry target, Map<String, Object> attrs) {
-        return ALLOW_ALL_ATTRS;
+        return ALLOW_ALL_ATTRS();
     }
     
 	@Override
     public AllowedAttrs canGetAttrs(AuthToken grantee, Entry target, Map<String, Object> attrs) {
-        return ALLOW_ALL_ATTRS;
+        return ALLOW_ALL_ATTRS();
     }
 	
 	@Override
     public AllowedAttrs canSetAttrs(Account grantee, Entry target, Map<String, Object> attrs) {
-        return ALLOW_ALL_ATTRS;
+        return ALLOW_ALL_ATTRS();
     }
 	
 	@Override
     public AllowedAttrs canSetAttrs(AuthToken grantee, Entry target, Map<String, Object> attrs) {
-        return ALLOW_ALL_ATTRS;
+        return ALLOW_ALL_ATTRS();
     }
 	
 

@@ -27,6 +27,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.Provisioning.GranteeBy;
+import com.zimbra.cs.account.Provisioning.RightBy;
 import com.zimbra.cs.account.accesscontrol.RightCommand;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
@@ -2087,6 +2088,31 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public void deleteXMPPComponent(XMPPComponent comp) throws ServiceException {
         throw ServiceException.FAILURE("unsupported", null);
+    }
+    
+    @Override
+    public Right get(RightBy keyType, String key) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("get right");
+    }
+    
+    @Override
+    public List<Right> getAllRights()  throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("getAllRights");
+    }
+    
+    @Override
+    public Right createRight(String name, Map<String, Object> attrs) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("createRight");
+    }
+    
+    @Override
+    public void deleteRight(String rightName) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("deleteRight");
+    }
+    
+    @Override
+    public void renameRight(String zimbraId, String newName) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("renameRight");
     }
     
     @Override
