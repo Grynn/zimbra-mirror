@@ -93,6 +93,8 @@ verifyAccesslog() {
 	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -eq 0 ]; then
 		echo 'Error: Accesslog enabled. Exiting...'
+		resetLdapUrl
+		zmsetvars -f ldap_url
 		exit 1
 	fi
 }
@@ -103,6 +105,8 @@ verifySyncProv() {
 	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -eq 0 ]; then
 		echo 'Error: Syncprov enabled. Exiting...'
+		resetLdapUrl
+		zmsetvars -f ldap_url
 		exit 1
 	fi
 }
@@ -175,6 +179,8 @@ EOF
 		echo "FAILED"
 		echo "ERROR: Unable to add syncrepl configuration to ${zimbra_server_hostname} - exiting"
 		echo $OUTPUT
+		resetLdapUrl
+		zmsetvars -f ldap_url
 		exit 1
 	fi
 
@@ -187,6 +193,8 @@ EOF
 		echo "FAILED"
 		echo "ERROR: Unable to add syncprov overlay to ${zimbra_server_hostname} - exiting"
 		echo $OUTPUT
+		resetLdapUrl
+		zmsetvars -f ldap_url
 		exit 1
 	fi
 }
@@ -212,6 +220,12 @@ updateLdapHost() {
 	echo "done"
 }
 
+resetLdapUrl() {
+	echo -n "Resetting ldap_url on ${zimbra_server_hostname}...";
+	${zimbra_home}/bin/zmlocalconfig -e ldap_url="${ldap_master_url}"
+	echo "done"
+}
+
 startLdap() {
 	echo -n "Starting LDAP on ${zimbra_server_hostname}..."
 	${zimbra_home}/bin/ldap start > /dev/null 2>&1
@@ -232,10 +246,10 @@ fi
 
 verifyLdapInstalled
 verifyLdap
+updateLdapHost
+zmsetvars -f ldap_url
 startLdap
 verifyAccesslog
 verifySyncProv
 createLdapConfig
 enableLdapService
-updateLdapHost
-zmsetvars -f ldap_url
