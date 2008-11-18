@@ -216,13 +216,13 @@ enableLdapService() {
 
 updateLdapHost() {
 	echo -n "Setting ldap_url on ${zimbra_server_hostname}...";
-	${zimbra_home}/bin/zmlocalconfig -e ldap_url="${proto}://${zimbra_server_hostname}:${ldap_port} ${ldap_master_url}"
+	${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${proto}://${zimbra_server_hostname}:${ldap_port} ${ldap_master_url}"
 	echo "done"
 }
 
 resetLdapUrl() {
 	echo -n "Resetting ldap_url on ${zimbra_server_hostname}...";
-	${zimbra_home}/bin/zmlocalconfig -e ldap_url="${ldap_master_url}"
+	${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${ldap_master_url}"
 	echo "done"
 }
 
