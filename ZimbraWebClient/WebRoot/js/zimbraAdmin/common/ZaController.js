@@ -170,11 +170,14 @@ function(msg, ex, noExecReset,style)  {
 		}
 	}
 	// popup alert
-	this._errorDialog.setMessage(msg, detailStr, style, ZaMsg.zimbraAdminTitle);
+	if (this._errorDialog) {
+        this._errorDialog.setMessage(msg, detailStr, style, ZaMsg.zimbraAdminTitle);
+
 	
-	if (!this._errorDialog.isPoppedUp()) {
-		this._errorDialog.popup();
-	}		
+        if (!this._errorDialog.isPoppedUp()) {
+            this._errorDialog.popup();
+        }
+    }
 
 }
 

@@ -33,7 +33,7 @@ ZaDomain = function() {
 	//default attributes
 	this.attrs[ZaDomain.A_GalMode] = ZaDomain.GAL_Mode_internal;
 	var globalConfig = null;
-	globalConfig = ZaApp.getInstance().getGlobalConfig(false);
+	globalConfig = (ZaApp.getInstance() ? ZaApp.getInstance().getGlobalConfig(false): null );
 	 
 	if(globalConfig) {
 		this.attrs[ZaDomain.A_GalMaxResults] = globalConfig.attrs[ZaGlobalConfig.A_zimbraGalMaxResults];
