@@ -526,9 +526,10 @@ public class XMPPServer {
      */
     private Module loadModule(ComponentIdentifier modId) {
         String className = null;
+        if ("conference".equals(modId.category) && "text".equals(modId.type)) {
 //        if ("muc".equals(modId.type)) {
             className = MultiUserChatServerImpl.class.getName();
-//        }
+        }
         
         if (className == null)
             return null; // ignore
