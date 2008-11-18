@@ -536,7 +536,8 @@ public class DirectorySync {
 
         Map<String, Object> attrs = signature.getAttrs();
         attrs.remove(OfflineProvisioning.A_offlineModifiedAttrs);
-        ZSignature zsig = new ZSignature(signature.getId(), signature.getName(), signature.getAttr(Provisioning.A_zimbraPrefMailSignature));
+        String sigType = signature.getAttr(Provisioning.A_zimbraPrefMailSignatureHTML, null) == null ? "text/plain" : "text/html";
+        ZSignature zsig = new ZSignature(signature.getId(), signature.getName(), signature.getAttr(Signature.mimeTypeToAttrName(sigType)), sigType);
 
         // create or modify the signature, as requested
         if (isLocallyCreated(signature)) {
