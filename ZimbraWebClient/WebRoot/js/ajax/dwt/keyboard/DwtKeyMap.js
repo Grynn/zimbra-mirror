@@ -63,6 +63,7 @@ DwtKeyMap.MAP_NAME["toolbarHorizontal"]	= "DwtToolBar-horiz";
 DwtKeyMap.MAP_NAME["toolbarVertical"]	= "DwtToolBar-vert";
 DwtKeyMap.MAP_NAME["tabView"]			= "DwtTabView";
 DwtKeyMap.MAP_NAME["tree"]				= "DwtTreeItem";
+DwtKeyMap.MAP_NAME["tabView"]			= "DwtTabView";
 
 // Returns true if the given key is a modifier. The list of modifier keys is
 // taken from the AjxKeys properties file.
