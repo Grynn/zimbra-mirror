@@ -1,26 +1,24 @@
 #!/usr/bin/perl -w
-# 
+#
 # ***** BEGIN LICENSE BLOCK *****
-# 
+#
 # Zimbra Collaboration Suite Server
 # Copyright (C) 2004, 2005, 2006, 2007 Zimbra, Inc.
-# 
+#
 # The contents of this file are subject to the Yahoo! Public License
 # Version 1.0 ("License"); you may not use this file except in
 # compliance with the License.  You may obtain a copy of the License at
 # http://www.zimbra.com/license.
-# 
+#
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
-# 
+#
 # ***** END LICENSE BLOCK *****
-# 
+#
 use strict;
 use warnings;
 use Getopt::Long;
-
-my %locks;                      # by LockID - hash w/ 'owner','type'
-my %threads;           # by threadId - hash w/ 'state' 'waitingOnLock'
+use ThreadDumpAnalyzer;
 
 my $filename = $ARGV[0];
 my ($dumpLocks, $dumpThreads, $searchThreadStack, $searchThreadId, $stackFrames, $sort, $filterByState, $allLocks, $negSearchThreadStack);
@@ -67,7 +65,7 @@ exit(0);
 
 sub usage() {
   my $usage = <<END_OF_USAGE;
-    
+
 USAGE:
     $0 FILENAME -dl [-frames #_ stack_frames] [-id REGEXP] [-all]
     $0 FILENAME -dt [-frames #_ stack_frames] [-sort id|state] [-stack REGEXP] [-id REGEXP] [-state REGEXP] [-waiting NUMBER]
@@ -95,7 +93,7 @@ USAGE:
 
     $0 threads.txt -dt -f 20 -w 1
         -- dumps a list of all the threads in the system that are blocking other threads (quick way to hunt for contention)
-    
+
 
 END_OF_USAGE
   die $usage;
@@ -104,8 +102,8 @@ END_OF_USAGE
 sub mySort($$) {
   my ($a, $b) = @_;
   if ($sort eq "state") {
-    my $state1 = $threads{$a}{state};
-    my $state2 = $threads{$b}{state};
+    my $state1 = ThreadDumpAnalyzer::getThreadState($a);
+    my $state2 = ThreadDumpAnalyzer::getThreadState($b);
     if (!defined $state1) {
       return 1;
     } elsif (!defined $state2) {
@@ -130,7 +128,7 @@ sub formatStackTrace($$) {
   my $ret;
   if ($stackFrames == 0) { return ""; }
   my $num = $stackFrames;
-  
+
   foreach my $line (split /\n/, $stack) {
     if ($num <= 0) {
       return $ret;
@@ -145,9 +143,10 @@ sub formatLock($) {
   my $lockId = shift;
   my $output = "$lockId - ";
   my $numData = 0;
-  for my $data (keys %{ $locks{$lockId}}) {
+  my %lock = %{ ThreadDumpAnalyzer::getLock($lockId) };
+  for my $data (sort keys %lock) {
     $output .= " $data=";
-    $output .= $locks{$lockId}{$data};
+    $output .= $lock{$data};
     $numData++;
   }
   if ($numData == 0) { $output .= " UNKNOWN"; }
@@ -161,92 +160,51 @@ sub formatThread($) {
   if (!defined($foo) || $foo eq "") {
     $foo = "ASDF";
   }
-  my $bar = $threads{$threadId}{state};
+  my $bar = ThreadDumpAnalyzer::getThreadState($threadId);
   if (!defined($bar) || $bar eq "") {
     $bar = "HJKL";
   }
   my $ret = $foo.$bar."\n";
-  if (defined $threads{$threadId}{waitingOnLock}) {
-    $ret .= "\tWaiting for: ".formatLock($threads{$threadId}{waitingOnLock})."\n";
+  my $waiting = ThreadDumpAnalyzer::getThreadWaitingOnLock($threadId);
+  if (defined $waiting) {
+    $ret .= "\tWaiting for: ".formatLock($waiting)."\n";
   }
 
-  my @blockedThreads = getBlockedThreads($threadId);
+  my @blockedThreads = ThreadDumpAnalyzer::getBlockedThreads($threadId);
   for my $blockedThread (sort @blockedThreads) {
     $ret .= "\t$blockedThread is waiting on this thread\n";
   }
-  
-  $ret .= formatStackTrace($threads{$threadId}{stack}, "\t  ");
+
+  $ret .= formatStackTrace(ThreadDumpAnalyzer::getThreadStack($threadId), "\t  ");
   if ($stackFrames > 0) {
     $ret .= "\n";
   }
   return $ret;
 }
 
-# given a lockId, return a list of the threads that are blocked on it
-sub getLockWaiters($) {
-  my $lockId = shift;
-  my @ret;
-
-  foreach my $threadId ( keys %threads ) {
-    if (defined $threads{$threadId}{waitingOnLock}) {
-      if ($threads{$threadId}{waitingOnLock} eq $lockId) {
-        push @ret, $threadId;
-      }
-    }
-  }
-  return @ret;
-}
-
-sub getLockOwner($) {
-  my $lockId = shift();
-  if (defined $locks{$lockId}) {
-    if (defined $locks{$lockId}{owner}) {
-      return $locks{$lockId}{owner};
-    } else {
-      return "";
-    }
-  } else {
-    return "";
-  }
-}
-
-# given a threadId, get a list of all other threads that are blocked
-# on locks it is holding
-sub getBlockedThreads($) {
-  my $threadId = shift;
-  my @ret;
-  foreach my $lockId ( sort keys %locks ) {
-    if (getLockOwner($lockId) eq $threadId) { # a lock we own
-      my @blockedThreads = getLockWaiters($lockId); 
-      foreach my $blockedThread (@blockedThreads) {
-        push @ret, $blockedThread;
-        push @ret, getBlockedThreads($blockedThread); #recurse!
-      }
-    }
-  }
-  return @ret;
-}
-
 sub dumpLocks() {
-  foreach my $lockId ( sort keys %locks ) {
+  foreach my $lockId (ThreadDumpAnalyzer::getLockIds()) {
     my $ret = "";
     my $numWaiters = 0;
     $ret .=  "LOCK: $lockId   ";
-    for my $data (keys %{ $locks{$lockId}}) {
+    my %lock = %{ ThreadDumpAnalyzer::getLock($lockId) };
+    for my $data (keys %lock) {
       $ret .=  "$data=";
-      $ret .=  $locks{$lockId}{$data};
+      $ret .=  $lock{$data};
       $ret .=  ", ";
     }
     $ret .= "\n";
-    foreach my $threadId ( keys %threads ) {
-      if (defined $threads{$threadId}{waitingOnLock}) {
-        if ($threads{$threadId}{waitingOnLock} eq $lockId) {
+    foreach my $threadId (ThreadDumpAnalyzer::getThreadIds()) {
+      my $waiting = ThreadDumpAnalyzer::getThreadWaitingOnLock($threadId);
+      if (defined $waiting) {
+        if ($waiting eq $lockId) {
           $ret .= "\tThread $threadId is waiting for this lock\n";
           $numWaiters++;
         }
       }
     }
-    $ret .= formatStackTrace($threads{getLockOwner($lockId)}{stack}, "\t");
+    my $lockOwnerId = ThreadDumpAnalyzer::getLockOwner($lockId);
+    $ret .= formatStackTrace(ThreadDumpAnalyzer::getThreadStack($lockOwnerId), "\t");
 
     if ((!defined $searchThreadId) || ($lockId =~ /$searchThreadId/)) {
       if ($numWaiters > 0 || defined $allLocks) {
@@ -260,16 +218,16 @@ sub dumpLocks() {
 }
 
 sub dumpThreads() {
-  foreach my $threadId ( sort { mySort($a, $b) } keys %threads ) {
+  foreach my $threadId ( sort { mySort($a, $b) } ThreadDumpAnalyzer::getThreadIds() ) {
     if (!defined $threadId) {
       # continue
-    } elsif (defined $negSearchThreadStack && ($threads{$threadId}{stack} =~ /$negSearchThreadStack/)) {
+    } elsif (defined $negSearchThreadStack && (ThreadDumpAnalyzer::getThreadStack($threadId) =~ /$negSearchThreadStack/)) {
       #continue
-    } elsif (defined $searchThreadStack && !($threads{$threadId}{stack} =~ /$searchThreadStack/)) {
+    } elsif (defined $searchThreadStack && !(ThreadDumpAnalyzer::getThreadStack($threadId) =~ /$searchThreadStack/)) {
       # continue
     } elsif (defined $searchThreadId && !($threadId =~ /$searchThreadId/)) {
       # continue
-    } elsif (defined $filterByState && !($threads{$threadId}{state} =~ /$filterByState/)) {
+    } elsif (defined $filterByState && !(ThreadDumpAnalyzer::getThreadState($threadId) =~ /$filterByState/)) {
       # continue
     } elsif (defined $waiting && (getBlockedThreads($threadId) < $waiting)) {
       # continue
@@ -281,76 +239,13 @@ sub dumpThreads() {
 
 sub readFile($) {
   my $filename = shift;
-  
+
   open IN, "<$filename" or die "couldn't open $filename";
-  
-  my @curThread;
-
+  my @lines;
   while (<>) {
-    chomp;
-    s/\r//g;
-    if ($_ eq "") {
-      if (@curThread) {
-        my $threadId;
-        my @locksHeld;
-        my $waitingOnLock;
-        my $threadState;
-        my $output;
-        
-        my $firstLineState;
-        
-        # 1stline
-        my $line = shift @curThread;
-        $output .= $line."\n";
-        if ($line =~ /"(.*)"/) {
-          $threadId = $1;
-          if ($line =~/nid=0x[0-9a-f]+\s([a-zA-Z\s\.()]+)/) {
-            $threads{$threadId}{state} = $1;
-          }
-
-        } else {
-          $threadId = $line;
-        }
-        if ($threadId eq "") { $threadId = "none"; }
-        
-        # 2nd line
-        $line = shift @curThread;
-        if (defined $line) {
-          $output .= $line."\n";
-          if ($line =~ /State: ([A-Z_]+)/) {
-            $threadState = $1;
-            $threads{$threadId}{state} = $1;
-          }
-          
-          foreach $line (@curThread) {
-            $output .= $line."\n";
-            if ($line =~ /locked <(0x[0-9a-f]+)>\s?(.*)?/) {
-              push @locksHeld, $1;
-              
-              $locks{$1}{owner} = $threadId;
-              $locks{$1}{type} = $2;
-              
-            } elsif ($line =~ /- waiting to lock <(0x[0-9a-f]+)>/) {
-              $waitingOnLock = $1;
-              $threads{$threadId}{waitingOnLock} = $1;
-            } elsif ($line =~ /- waiting to lock <(0x[0-9a-f]+)>/) {
-              $waitingOnLock = $1;
-              $threads{$threadId}{waitingOnLock} = $1;              
-            } 
-          }
-        } else {
-          $threads{$threadId}{state} = "unknown";
-        }
-        
-        $threads{$threadId}{stack} = $output;
-        undef @curThread;
-      }
-    } else {
-      push @curThread, $_;
-    }
+    push(@lines, $_);
   }
-  
+
   close IN;
+  ThreadDumpAnalyzer::initialize(@lines);
 }
-
-
