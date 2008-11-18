@@ -190,11 +190,30 @@ function(mapName, action) {
 /**
  * Reloads a given keymap
  * 
- * @param {string} mapName Name of the keymap to releoad
+ * @param {string} mapName Name of the keymap to reload
  */
 DwtKeyMapMgr.prototype.reloadMap =
 function(mapName) {
 	this._fsas[mapName] = DwtKeyMapMgr.__buildFSA({}, this._map[mapName], mapName);
+};
+
+/**
+ * Returns a list of maps that the given map inherits from.
+ *
+ * @param {string} mapName Name of the keymap to reload
+ */
+DwtKeyMapMgr.prototype.getAncestors =
+function(mapName, list) {
+    list = list || [];
+    var subMap = this._fsas[mapName];
+    var parents = subMap && subMap.inherit;
+    if (parents && parents.length) {
+        for (var i = 0; i < parents.length; i++) {
+            list.push(parents[i]);
+            list = this.getAncestors(parents[i], list);
+        }
+    }
+    return list;
 };
 
 /**
