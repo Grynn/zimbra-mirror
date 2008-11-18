@@ -81,12 +81,12 @@ Com_Zimbra_Url.prototype._getHtmlContent =
 function(html, idx, obj, context) {
 	var escapedUrl = obj.replace(/\"/g, '\"').replace(/^\s+|\s+$/g,"");
 	if (escapedUrl.substr(0, 4) == 'www.') {
-		escapedUrl = "http://" + escapedUrl + "/";
+		escapedUrl = "http://" + escapedUrl;
 	}
     /*if(navigator.appVersion.match(/windows/ig)){
         escapedUrl = obj.replace(/\//g,'\\');
     }else{*/
-        escapedUrl = obj.replace(/\\/g,'/');
+        escapedUrl = escapedUrl.replace(/\\/g,'/');
     /*}*/
     if(escapedUrl.indexOf("\\\\") == 0 || escapedUrl.indexOf("//") == 0){
        obj.isUNC = true;
