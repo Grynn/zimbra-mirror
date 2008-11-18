@@ -24,7 +24,7 @@ MAKE    := $(shell which make)
 
 BDB_VERSION ?= 4.7.25.2
 SSL_VERSION ?= 0.9.8i
-LDAP_VERSION ?= 2.4.12.2z
+LDAP_VERSION ?= 2.4.13.2z
 BDB_INC ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
 
