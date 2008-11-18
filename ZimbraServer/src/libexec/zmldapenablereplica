@@ -232,10 +232,10 @@ fi
 
 verifyLdapInstalled
 verifyLdap
+startLdap
 verifyAccesslog
 verifySyncProv
 createLdapConfig
 enableLdapService
 updateLdapHost
 zmsetvars -f ldap_url
-startLdap
