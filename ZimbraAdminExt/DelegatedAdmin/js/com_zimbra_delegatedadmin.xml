@@ -1,0 +1,14 @@
+<zimlet name="com_zimbra_delegatedadmin" version="5.5"
+	description="Delegated Admin UI Components" 
+	extension="true">
+    <target>admin-main</target>
+    
+    <include>ZaZimbraRights.js</include>
+    <include>ZaRight.js</include>
+    <include>ZaRightView.js</include>
+    <include>ZaRightsListView.js</include>
+    <include>ZaRightViewController.js</include>
+    <include>ZaRightsListViewController.js</include>
+
+    <include>ZaDelegatedAdminExt.js</include>
+</zimlet>
