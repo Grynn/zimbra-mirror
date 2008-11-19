@@ -93,8 +93,6 @@ verifyAccesslog() {
 	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -eq 0 ]; then
 		echo 'Error: Accesslog enabled. Exiting...'
-		resetLdapUrl
-		zmsetvars -f ldap_url
 		exit 1
 	fi
 }
