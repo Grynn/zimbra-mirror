@@ -18,57 +18,64 @@ package com.zimbra.cs.offline.ab.yab;
 
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailItem;
-import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.Tag;
-import com.zimbra.cs.mailbox.MailServiceException;
-import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.offline.util.yab.Session;
 import com.zimbra.cs.offline.util.yab.Contact;
 import com.zimbra.cs.offline.util.yab.SyncResponse;
 import com.zimbra.cs.offline.util.yab.SyncResponseEvent;
 import com.zimbra.cs.offline.util.yab.SyncRequest;
 import com.zimbra.cs.offline.util.yab.SyncRequestEvent;
-import com.zimbra.cs.offline.util.yab.ContactChange;
 import com.zimbra.cs.offline.util.yab.Result;
 import com.zimbra.cs.offline.util.yab.ErrorResult;
 import com.zimbra.cs.offline.util.yab.Yab;
 import com.zimbra.cs.offline.util.yab.SuccessResult;
 import com.zimbra.cs.offline.util.yab.Category;
+import com.zimbra.cs.offline.util.yab.Entity;
+import com.zimbra.cs.offline.util.yab.ContactChange;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.db.DbDataSource;
+import com.zimbra.cs.offline.ab.LocalData;
+import com.zimbra.cs.offline.ab.SyncState;
+import com.zimbra.cs.offline.ab.Change;
+import com.zimbra.cs.offline.ab.SyncException;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 
+import java.util.Map;
+import java.util.List;
+import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.Arrays;
 import java.io.IOException;
 
 import org.w3c.dom.Document;
 
 public class SyncSession {
-    private final DataSource ds;
-    private final Mailbox mbox;
+    private final LocalData localData;
     private final Session session;
-    private final Set<Integer> deletedContacts;
-    private final Set<Integer> modifiedContacts;
-    private final Set<Integer> deletedTags;
-    private final Set<Integer> modifiedTags;
-    private final Map<Integer, ContactData> pushedContacts;
-    private final Map<Integer, Integer> unmappedItemIds;
-    private final SyncState state;
+    private Map<Integer, Change> tagChanges;
+    private Map<Integer, Change> contactChanges;
+    private Map<Integer, Category> pushedCategories;
+    private Map<Integer, Contact> pushedContacts;
+    private List<Integer> eventItemIds;
+
+    private static class Stats {
+        int added, updated, deleted;
+
+        int total() { return added + updated + deleted; }
+        
+        public String toString() {
+            return String.format("%d added, %d updated, and %d deleted",
+                                 added, updated, deleted);
+        }
+    }
 
     private static final Log LOG = OfflineLog.yab;
-
-    private static final Mailbox.OperationContext CONTEXT =
-        new OfflineMailbox.OfflineContext();
 
     static {
         if (LOG.isDebugEnabled()) {
@@ -77,16 +84,8 @@ public class SyncSession {
     }
     
     public SyncSession(DataSource ds, Session session) throws ServiceException {
-        this.ds = ds;
-        mbox = ds.getMailbox();
+        localData = new LocalData((OfflineDataSource) ds);
         this.session = session;
-        deletedContacts = new HashSet<Integer>();
-        modifiedContacts = new HashSet<Integer>();
-        deletedTags = new HashSet<Integer>();
-        modifiedTags = new HashSet<Integer>();
-        pushedContacts = new HashMap<Integer, ContactData>();
-        unmappedItemIds = new HashMap<Integer, Integer>();
-        state = new SyncState(this);
     }
 
     public void sync() throws ServiceException {
@@ -98,372 +97,438 @@ public class SyncSession {
     }
     
     private void syncData() throws IOException, ServiceException {
-        pushedContacts.clear();
-        state.load();
+        Mailbox mbox = localData.getMailbox();
+        SyncState ss = localData.loadState();
         SyncRequest req;
         synchronized (mbox) {
-            loadChanges();
-            state.setSequence(mbox.getLastChangeID());
-            req = newSyncRequest();
+            getLocalChanges(ss);
+            ss.setLastModSequence(mbox.getLastChangeID());
+            req = getSyncRequest(getLastRevision(ss));
         }
         while (req != null) {
             SyncResponse res = (SyncResponse) req.send();
             synchronized (mbox) {
-                loadChanges();
-                checkResults(req.getEvents());
+                getLocalChanges(ss);
+                ss.setLastRevision(String.valueOf(res.getRevision()));
+                processCategoryResults(req.getEvents());
+                processContactResults(req.getEvents());
                 List<SyncResponseEvent> events = res.getEvents();
                 if (!events.isEmpty()) {
+                    // Categories are not returned unless there are contact changes 
                     processCategories(res.getCategories());
-                    processEvents(res.getEvents());
+                    processContactEvents(events);
                 }
-                state.setSequence(mbox.getLastChangeID());
-                state.setRevision(res.getRevision());
-                req = hasChanges() ? newSyncRequest() : null;
+                ss.setLastModSequence(mbox.getLastChangeID());
+                localData.saveState(ss);
+                req = hasLocalChanges() ? getSyncRequest(res.getRevision()) : null;
             }
-        }
-        state.save();
-    }
-
-    public void resetData() throws ServiceException {
-        // TODO Push any local changes that may be pending
-        LOG.debug("Resetting local contacts");
-        synchronized (mbox) {
-            mbox.emptyFolder(CONTEXT, Mailbox.ID_FOLDER_CONTACTS, true);
-            state.delete();
-            pushedContacts.clear();
-            DbDataSource.deleteAllMappings(ds);
         }
     }
 
-
-    private static final Set<Integer> CONTACT_FOLDERS =
-        new HashSet<Integer>(Arrays.asList(Mailbox.ID_FOLDER_CONTACTS));
-    
-    private void loadChanges() throws ServiceException {
-        int seq = state.getSequence();
-        deletedContacts.clear();
-        modifiedContacts.clear();
-        deletedTags.clear();
-        modifiedTags.clear();
-        if (seq > 0) {
-            for (int itemId : getTombstones(seq, MailItem.TYPE_CONTACT)) {
-                if (state.getContactId(itemId) != -1) {
-                    deletedContacts.add(itemId);
-                }
-            }
-            modifiedContacts.addAll(mbox.getModifiedItems(
-                CONTEXT, seq, MailItem.TYPE_CONTACT, CONTACT_FOLDERS).getFirst());
-            for (int itemId : getTombstones(seq, MailItem.TYPE_TAG)) {
-                if (state.getCategory(itemId) != null) {
-                    deletedTags.add(itemId);
-                }
-            }
-            // Only include modified tags which belong to changed contacts
-            Set<Integer> tags = getContactTags(modifiedContacts);
-            for (Tag tag : mbox.getModifiedTags(CONTEXT, seq)) {
-                int itemId = tag.getId();
-                if (tags.contains(itemId)) {
-                    modifiedTags.add(itemId);
-                }
-            }
-        }
-        LOG.debug("Loaded local contact changes: seq=%d, deleted_contact=%d, " +
-                  "modified_contacts=%d, deleted_tags=%d, modified_tags=%d",
-                   seq, deletedContacts.size(), modifiedContacts.size(),
-                   deletedTags.size(), modifiedTags.size());
+    private void getLocalChanges(SyncState ss) throws ServiceException {
+        int seq = ss.getLastModSequence();
+        tagChanges = localData.getTagChanges(seq);
+        contactChanges = localData.getContactChanges(seq);
+        LOG.debug("found %d local tag changes", tagChanges.size());
+        LOG.debug("found %d local contact changes", contactChanges.size());
     }
 
-    private List<Integer> getTombstones(int seq, byte type)
-        throws ServiceException {
-        List<Integer> ids = mbox.getTombstones(seq).getIds(type);
-        return ids != null ? ids : Collections.<Integer>emptyList();
-    }
-
-    private Set<Integer> getContactTags(Collection<Integer> itemIds)
-        throws ServiceException {
-        Set<Integer> tags = new HashSet<Integer>();
-        for (int itemId : itemIds) {
-            MailItem item = mbox.getItemById(CONTEXT, itemId, MailItem.TYPE_CONTACT);
-            for (Tag tag : item.getTagList()) {
-                tags.add(tag.getId());
-            }
-        }
-        return tags;
+    private boolean hasLocalChanges() {
+        return !tagChanges.isEmpty() || !contactChanges.isEmpty();
     }
     
-    private boolean hasChanges() {
-        return !deletedContacts.isEmpty() || !modifiedContacts.isEmpty() &&
-               !deletedTags.isEmpty() || !modifiedTags.isEmpty();
+    private static int getLastRevision(SyncState ss) {
+        String s = ss.getLastRevision();
+        return s != null ? Integer.parseInt(s) : 0;
     }
 
-    private SyncRequest newSyncRequest() throws SyncException, ServiceException {
-        SyncRequest req = session.createSyncRequest(state.getRevision());
-        Map<Integer, Category> categories = state.getCategories();
-        unmappedItemIds.clear();
-        for (int itemId : deletedTags) {
-            Category cat = state.getCategory(itemId);
-            if (cat != null) {
-                req.addEvent(SyncRequestEvent.removeCategory(cat.getId()));
-                state.removeCategory(itemId);
+    private SyncRequest getSyncRequest(int revision) throws ServiceException {
+        SyncRequest req = session.createSyncRequest(revision);
+        eventItemIds = new ArrayList<Integer>();
+        pushedCategories = new HashMap<Integer, Category>();
+        pushedContacts = new HashMap<Integer, Contact>();
+        for (Change change : tagChanges.values()) {
+            SyncRequestEvent event = getCategoryEvent(change);
+            if (event != null) {
+                req.addEvent(getCategoryEvent(change));
+                eventItemIds.add(change.getItemId());
             }
         }
-        for (int itemId : modifiedTags) {
-            Tag tag = mbox.getTagById(CONTEXT, itemId);
-            String name = tag.getName();
-            Category cat = state.getCategory(itemId);
-            if (cat != null) {
-                String oldName = cat.getName();
-                if (oldName != null && !name.equals(oldName)) {
-                    req.addEvent(SyncRequestEvent.renameCategory(oldName, name));
-                }
-                state.updateCategoryName(itemId, name);
-            } else {
-                unmappedItemIds.put(req.getEvents().size(), itemId);
-                req.addEvent(SyncRequestEvent.addCategory(name));
-                // Category id will be determined when we check sync results
-                state.updateCategoryName(itemId, name);
+        for (Change change : contactChanges.values()) {
+            SyncRequestEvent event = getContactEvent(change);
+            if (event != null) {
+                req.addEvent(getContactEvent(change));
+                eventItemIds.add(change.getItemId());
             }
         }
-        for (int itemId : deletedContacts) {
-            int cid = state.getContactId(itemId);
-            if (cid != -1) {
-                req.addEvent(SyncRequestEvent.removeContact(cid));
-            }
-        }
-        for (int itemId : modifiedContacts) {
-            ContactData newData = getContactData(itemId, categories);
-            int cid = state.getContactId(itemId);
-            if (cid != -1) {
-                // Update existing contact
-                ContactData oldData = pushedContacts.get(itemId);
-                if (oldData == null) {
-                    oldData = new ContactData(loadContact(itemId));
-                }
-                ContactChange cc = newData.getContactChange(cid, oldData);
-                if (!cc.isEmpty()) {
-                    req.addEvent(SyncRequestEvent.updateContact(cc));
-                    pushedContacts.put(itemId, newData);
-                }
-            } else {
-                // Add new contact
-                unmappedItemIds.put(req.getEvents().size(), itemId);
-                req.addEvent(SyncRequestEvent.addContact(newData.getContact()));
-                pushedContacts.put(itemId, newData);
-            }
-        }
-
         return req;
     }
 
-    private ContactData getContactData(int itemId, Map<Integer, Category> categories)
+    private SyncRequestEvent getCategoryEvent(Change change) throws ServiceException {
+        int itemId = change.getItemId();
+        if (change.isAdd()) {
+            String name = localData.getTagName(itemId);
+            pushedCategories.put(itemId, new Category(name));
+            return SyncRequestEvent.addCategory(name);
+        }
+        if (change.isUpdate()) {
+            Category category = getCategory(localData.getMapping(itemId));
+            String newName = localData.getTagName(itemId);
+            if (!newName.equals(category.getName())) {
+                category.setName(newName);
+                pushedCategories.put(itemId, category);
+                return SyncRequestEvent.renameCategory(category.getId(), newName);
+            }
+        } else if (change.isDelete()) {
+            DataSourceItem dsi = localData.getMapping(itemId);
+            int catid = RemoteId.parse(dsi.remoteId).getValue();
+            Category category = new Category(catid);
+            pushedCategories.put(itemId, category);
+            return SyncRequestEvent.removeCategory(catid);
+        }
+        return null;
+    }
+
+    private SyncRequestEvent getContactEvent(Change change) throws ServiceException {
+        int itemId = change.getItemId();
+        if (change.isAdd()) {
+            Contact contact = getContactData(itemId).getContact();
+            pushedContacts.put(itemId, contact);
+            return SyncRequestEvent.addContact(contact);
+        } else if (change.isUpdate()) {
+            ContactData cd = getContactData(itemId);
+            LOG.debug("count = " + cd.getCategories().size());
+            Contact newContact = cd.getContact();
+            Contact oldContact = getContact(localData.getMapping(itemId));
+            LOG.debug("oldContact: " + oldContact);
+            LOG.debug("newContact: " + newContact);
+            newContact.setId(oldContact.getId());
+            pushedContacts.put(itemId, newContact);
+            ContactChange cc = cd.getContactChange(oldContact);
+            if (!cc.isEmpty()) {
+                return SyncRequestEvent.updateContact(cc);
+            }
+        } else if (change.isDelete()) {
+            DataSourceItem dsi = localData.getMapping(itemId);
+            int cid = RemoteId.parse(dsi.remoteId).getValue();
+            pushedContacts.put(itemId, new Contact(cid));
+            return SyncRequestEvent.removeContact(cid);
+        }
+        return null;
+    }
+
+    private ContactData getContactData(int itemId) throws ServiceException {
+        com.zimbra.cs.mailbox.Contact contact = localData.getContact(itemId);
+        return new ContactData(contact, getCategories(contact));
+    }
+
+    private List<Category> getCategories(MailItem contact)
         throws ServiceException {
-        MailItem contact = mbox.getItemById(CONTEXT, itemId, MailItem.TYPE_CONTACT);
-        return contact != null ?
-            new ContactData((com.zimbra.cs.mailbox.Contact) contact, categories) : null;
-    }
-
-    private boolean isChanged(int cid) {
-        return deletedContacts.contains(cid) || modifiedContacts.contains(cid);
-    }
-
-    private void processCategories(List<Category> categories) throws ServiceException {
-        Set<Integer> catItemIds = state.getCategories().keySet();
-        for (Category category : categories) {
-            int catid = category.getId();
-            String name = category.getName();
-            int itemId = state.getCategoryItemId(catid);
-            if (itemId == -1) {
-                Tag tag = createTag(name);
-                itemId = tag.getId();
-                state.addCategory(itemId, catid);
-                state.updateCategoryName(itemId, name);
+        List<Tag> tags = contact.getTagList();
+        LOG.debug("tags for %d: %s", contact.getId(), tags);
+        List<Category> categories = new ArrayList<Category>(tags.size());
+        for (Tag tag : tags) {
+            DataSourceItem dsi = localData.getMapping(tag.getId());
+            if (dsi.md != null) {
+                categories.add(new Category(getCategory(dsi).getId()));
             } else {
-                catItemIds.remove(itemId);
-                Tag tag = mbox.getTagById(CONTEXT, itemId);
-                // Check if renamed
-                if (!tag.getName().equals(name)) {
-                    mbox.rename(CONTEXT, itemId, MailItem.TYPE_TAG, name, Mailbox.ID_FOLDER_TAGS);
-                    state.updateCategoryName(itemId, name);
-                }
+                categories.add(new Category(tag.getName()));
             }
         }
-        // Remaining categories have been removed. Do not remove local tag,
-        // since we cannot be sure that is not in use by non-contact mail
-        // items.
-        for (int itemId : catItemIds) {
-            state.removeCategory(itemId);
-        }
+        LOG.debug("categories: " + categories.size());
+        return categories;
     }
 
-    private Tag createTag(String name) throws ServiceException {
-        String normalized = MailItem.normalizeItemName(name);
-        if (!name.equals(normalized)) {
-            LOG.warn("Normalizing YAB category name '%s' to '%s' since it" +
-                     " contains invalid tag characters", name, normalized);
-            name = normalized;
-        }
-        try {
-            return mbox.getTagByName(name);
-        } catch (MailServiceException.NoSuchItemException e) {
-            return mbox.createTag(CONTEXT, name, Tag.DEFAULT_COLOR);
-        }
-    }
-    
-    private void processEvents(List<SyncResponseEvent> events)
-        throws SyncException, ServiceException {
-        for (SyncResponseEvent event : events) {
-            Contact contact = event.getContact();
-            switch (event.getType()) {
-            case ADD_CONTACT: case UPDATE_CONTACT:
-                updateContact(contact);
-                break;
-            case REMOVE_CONTACT:
-                removeContact(contact.getId());
-                break;
-            case ADDRESS_BOOK_RESET:
-                // TODO Can this ever be received after initial sync?
-                break;
-            }
-        }
-    }
-    
-    // YAB sometimes sends an "add-contact" event even for updated contacts,
-    // so rely on presence of existing contact to determine if contact needs
-    // to be updated or created.
-    private void updateContact(Contact contact) throws SyncException, ServiceException {
-        int cid = contact.getId();
-        int itemId = state.getContactItemId(cid);
-        if (itemId == -1) {
-            addContact(contact);
-        } else if (!isChanged(cid)) {
-            // Update existing contact unless it has been modified since we
-            // sent the sync request, in which case we delay updating the
-            // contact until we've had a chance to push the new changes.
-            pushedContacts.remove(itemId);
-            ContactData cd = new ContactData(contact);
-            if (cd.isEmpty()) {
-                LOG.debug("Removing contact with cid %d since changes would result in an empty contact", cid);
-                removeContact(cid);
-                return;
-            }
-            mbox.modifyContact(CONTEXT, itemId, cd.getParsedContact());
-            long mask = getTagBitmask(cd);
-            mbox.setTags(CONTEXT, itemId, MailItem.TYPE_CONTACT, MailItem.FLAG_UNCHANGED, mask);
-            saveContact(itemId, contact);
-            LOG.debug("Modified local contact: itemId=%d, cid=%d, tag_bits=%x", itemId, cid, mask);
-        }
-    }
-
-    private void addContact(Contact contact) throws SyncException, ServiceException {
-        int cid = contact.getId();
-        ContactData cd = new ContactData(contact);
-        if (cd.isEmpty()) {
-            LOG.debug("Not importing contact with cid %d since it would result in an empty contact", cid);
-            return;
-        }
-        MailItem item = mbox.createContact(
-            CONTEXT, cd.getParsedContact(), Mailbox.ID_FOLDER_CONTACTS, null);
-        int itemId = item.getId();
-        long mask = getTagBitmask(cd);
-        mbox.setTags(CONTEXT, itemId, MailItem.TYPE_CONTACT, MailItem.FLAG_UNCHANGED, mask);
-        state.addContact(itemId, cid);
-        saveContact(itemId, contact);
-        LOG.debug("Created new local contact: itemId=%d, cid=%d, tag_bits=%x", itemId, cid, mask);
-
-    }
-    private static final String KEY_CONTACT = "CONTACT";
-    
-    private void saveContact(int itemId, Contact contact) throws ServiceException {
-        LOG.debug("Saving original contact data for item id: %d", itemId);
-        Metadata md = new Metadata();
-        String data = session.toString(contact.toXml(session.createDocument()));
-        md.put(KEY_CONTACT, data);
-        String remoteId = String.valueOf(contact.getId());
-        DataSourceItem dsi = new DataSourceItem(itemId, remoteId, md);
-        if (DbDataSource.hasMapping(ds, itemId)) {
-            DbDataSource.updateMapping(ds, dsi);
-        } else {
-            DbDataSource.addMapping(ds, dsi);
-        }
-    }
-
-    private Contact loadContact(int itemId) throws ServiceException {
-        LOG.debug("Loading original contact data for item id: %d", itemId);
-        DataSourceItem dsi = DbDataSource.getMapping(ds, itemId);
-        String data = dsi.md.get(KEY_CONTACT);
-        if (data == null) {
-            throw new IllegalStateException("Missing saved contact data for item id: " + itemId);
-        }
-        try {
-            Document doc = session.parseDocument(data);
-            return Contact.fromXml(doc.getDocumentElement());
-        } catch (Exception e) {
-            throw ServiceException.FAILURE(
-                "Unable to parse contact for cid " + itemId, null);
-        }
-    }
-
-    private long getTagBitmask(ContactData cd) throws SyncException, ServiceException {
-        long mask = 0;
-        for (Category category : cd.getCategories()) {
-            int cid = category.getId();
-            if (cid == -1) {
-                throw syncError("Missing id in category response:\n", category);
-            }
-            int itemId = state.getCategoryItemId(cid);
-            if (itemId != -1) {
-                Tag tag = mbox.getTagById(CONTEXT, itemId);
-                mask |= tag.getBitmask();
-            }
-        }
-        return mask;
-    }
-    
-    private void removeContact(int cid) throws SyncException, ServiceException {
-        int itemId = state.getContactItemId(cid);
-        if (itemId == -1) {
-            throw syncError("Attempt to remove contact with unknown cid %d" + cid);
-        }
-        pushedContacts.remove(itemId);
-        mbox.delete(CONTEXT, itemId, MailItem.TYPE_CONTACT);
-        deletedContacts.remove(itemId);
-        modifiedContacts.remove(itemId);
-        state.removeContact(itemId);
-        DbDataSource.deleteMappings(ds, Arrays.asList(itemId));
-        LOG.debug("Deleted local contact: itemId=%d, cid=%d", itemId, cid);
-    }
-
-    private void checkResults(List<SyncRequestEvent> events) throws SyncException {
+    private void processCategoryResults(List<SyncRequestEvent> events)
+        throws ServiceException {
+        Stats stats = new Stats();
+        int errors = 0;
         for (int i = 0; i < events.size(); i++) {
             SyncRequestEvent event = events.get(i);
-            Result result = event.getResult();
-            if (result == null) {
-                throw syncError("Missing YAB result for event:\n%s", event);
-            } else if (result.isError()) {
-                ErrorResult error = (ErrorResult) result;
-                throw syncError("YAB SyncResponse error (code = %d): %s",
-                                error.getCode(), error.getUserMessage());
-            }
-            SuccessResult success = (SuccessResult) result;
-            if (success.getAddAction() != null) {
-                Integer itemId = unmappedItemIds.remove(i);
-                if (itemId != null) {
-                    int cid = success.getContactId();
-                    if (cid != -1) {
-                        state.addContact(itemId, success.getContactId());
-                    } else {
-                        state.addCategory(itemId, success.getCategoryId());
-                    }
+            if (event.isCategory()) {
+                int itemId = eventItemIds.get(i);
+                if (checkErrorResult(event, itemId)) {
+                    processCategoryResult(event, itemId, stats);
+                } else {
+                    errors++;
                 }
+            }
+        }
+        LOG.debug("Pushed %d category changes: %s", stats.total(), stats);
+        if (errors > 0) {
+            LOG.debug("%d category changes failed due to errors", errors);
+        }
+    }
+
+    private void processContactResults(List<SyncRequestEvent> events)
+        throws ServiceException {
+        Stats stats = new Stats();
+        int errors = 0;
+        for (int i = 0; i < events.size(); i++) {
+            SyncRequestEvent event = events.get(i);
+            if (event.isContact()) {
+                int itemId = eventItemIds.get(i);
+                if (checkErrorResult(event, itemId)) {
+                    processContactResult(event, itemId, stats);
+                } else {
+                    errors++;
+                }
+            }
+        }
+        LOG.debug("Pushed %d contact changes: %s", stats.total(), stats);
+        if (errors > 0) {
+            LOG.debug("%d contact changes failed due to errors", errors);
+        }
+    }
+
+    private boolean checkErrorResult(SyncRequestEvent event, int itemId)
+        throws ServiceException {
+        Result result = event.getResult();
+        if (result.isError()) {
+            ErrorResult error = (ErrorResult) result;
+            String msg = String.format(
+                "Error code: %s\nError description: %s\nRequest event:\n%s",
+                error.getCode(), error.getUserMessage(), event);
+            localData.syncContactFailed(
+                new SyncException("Sync request event failed"), itemId, msg);
+            return false;
+        }
+        return true;
+    }
+    
+    private void processCategoryResult(SyncRequestEvent event, int itemId, Stats stats)
+        throws ServiceException {
+        SuccessResult result = (SuccessResult) event.getResult();
+        Category category = pushedCategories.get(itemId);
+        if (event.isAddCategory()) {
+            category.setId(result.getCategoryId());
+            updateCategoryMapping(itemId, category);
+            stats.added++;
+        } else if (event.isRenameCategory()) {
+            updateCategoryMapping(itemId, category);
+            stats.updated++;
+        } else if (event.isRemoveCategory()) {
+            localData.deleteMapping(itemId);
+            stats.deleted++;
+        }
+    }
+
+    private void processContactResult(SyncRequestEvent event, int itemId, Stats stats)
+        throws ServiceException {
+        SuccessResult result = (SuccessResult) event.getResult();
+        Contact contact = pushedContacts.get(itemId);
+        if (event.isAddContact()) {
+            contact.setId(result.getContactId());
+            updateContactMapping(itemId, contact);
+            stats.added++;
+        } else if (event.isUpdateContact()) {
+            updateContactMapping(itemId, contact);
+            stats.updated++;
+        } else if (event.isRemoveContact()) {
+            localData.deleteMapping(itemId);
+            stats.deleted++;
+        }
+    }
+
+    private void processCategories(List<Category> categories)
+        throws ServiceException {
+        Stats stats = new Stats();
+        int errors = 0;
+        Set<Integer> tags = getCategoryTags();
+        for (Category category : categories) {
+            RemoteId rid = RemoteId.categoryId(category.getId());
+            DataSourceItem dsi = localData.getReverseMapping(rid.toString());
+            try {
+                Tag tag = processCategory(category, dsi, stats);
+                tags.remove(tag.getId());
+            } catch (ServiceException e) {
+                localData.syncContactFailed(e, dsi.itemId, category.toString());
+                errors++;
+            }
+        }
+        // Remaining categories have been deleted. Do not delete the
+        // associated tag since we can't be sure that it is not also 
+        // used by other non-contact items
+        for (int itemId : tags) {
+            localData.deleteMapping(itemId);
+            stats.deleted++;
+        }
+        LOG.debug("Processed %d remote category changes: %s", stats.total(), stats);
+        if (errors > 0) {
+            LOG.debug("%d category changes could not be processed due to errors", errors);
+        }
+    }
+
+    private Tag processCategory(Category category, DataSourceItem dsi, Stats stats)
+        throws ServiceException {
+        String name = category.getName();
+        // Check for new or updated category
+        if (dsi.itemId > 0) {
+            Tag tag = localData.getTag(dsi.itemId);
+            if (!tag.getName().equals(name)) {
+                localData.renameTag(dsi.itemId, name);
+                updateCategoryMapping(dsi.itemId, category);
+                stats.updated++;
+            }
+            return tag;
+        } else {
+            Tag tag = localData.createTag(name);
+            updateCategoryMapping(tag.getId(), category);
+            stats.added++;
+            return tag;
+        }
+    }
+    
+    /*
+     * Returns item id's for all tags associated with mapped categories.
+     */
+    private Set<Integer> getCategoryTags() throws ServiceException {
+        Collection<DataSourceItem> mappings =
+            localData.getAllMappingsInFolder(Mailbox.ID_FOLDER_TAGS);
+        Set<Integer> tags = new HashSet<Integer>(mappings.size());
+        for (DataSourceItem dsi : mappings) {
+            tags.add(dsi.itemId);
+        }
+        return tags;
+    }
+
+    private void processContactEvents(List<SyncResponseEvent> events)
+        throws ServiceException {
+        Stats stats = new Stats();
+        int errors = 0;
+        for (SyncResponseEvent event : events) {
+            if (!event.isAddressBookReset()) {
+                try {
+                    processEvent(event, stats);
+                } catch (ServiceException e) {
+                    String msg = String.format("Contact event:\n%s", event);
+                    localData.syncContactFailed(e, -1, msg);
+                    errors++;
+                }
+            }
+        }
+        LOG.debug("Processed %d remote contact changes: %s", stats.total(), stats);
+        if (errors > 0) {
+            LOG.debug("%d contact changes could not be processed due to errors", errors);
+        }
+    }
+
+    private void processEvent(SyncResponseEvent event, Stats stats)
+        throws ServiceException {
+        Contact contact = event.getContact();
+        RemoteId rid = RemoteId.contactId(contact.getId());
+        DataSourceItem dsi = localData.getReverseMapping(rid.toString());
+        if (event.isAddContact() || event.isUpdateContact()) {
+            if (dsi.itemId > 0) {
+                // Don't update contact if it has been modified locally since
+                // sync request was sent. Wait until we send the new changes
+                // before updating the local contact.
+                if (!contactChanges.containsKey(dsi.itemId)) {
+                    updateContact(contact, dsi, stats);
+                }
+            } else {
+                addContact(contact, stats);
+            }
+        } else if (event.isRemoveContact()) {
+            if (dsi.itemId > 0) {
+                deleteContact(contact.getId(), dsi, stats);
             }
         }
     }
 
-    private SyncException syncError(String fmt, Object... args) {
-        return new SyncException(String.format(fmt, args));
+    private void addContact(Contact contact, Stats stats)
+        throws ServiceException {
+        int cid = contact.getId();
+        ContactData cd = new ContactData(contact);
+        if (!cd.isEmpty()) {
+            ParsedContact pc = cd.getParsedContact();
+            long bits = getTagBitmask(cd);
+            int itemId = localData.createContact(pc, bits).getId();
+            updateContactMapping(itemId, contact);
+            stats.added++;
+            LOG.debug("Created new local contact: itemId=%d, cid=%d, tagBits=%x",
+                      itemId, cid, bits);
+        } else {
+            LOG.debug("Not adding contact with cid %d since it would " +
+                      "result in an empty contact", cid);
+        }
     }
 
-    public Mailbox getMailbox() { return mbox; }
-    public Session getSession() { return session; }
-    public Mailbox.OperationContext getContext() { return CONTEXT; }
+    private void updateContact(Contact contact, DataSourceItem dsi, Stats stats)
+        throws ServiceException {
+        int cid = contact.getId();
+        ContactData cd = new ContactData(contact);
+        if (!cd.isEmpty()) {
+            long bits = getTagBitmask(cd);
+            localData.modifyContact(dsi.itemId, cd.getParsedContact(), bits);
+            updateContactMapping(dsi.itemId, contact);
+            stats.updated++;
+            LOG.debug("Modified local contact: itemId=%d, cid=%d, tagBits=%x",
+                      dsi.itemId, cid, bits);
+        } else {
+            LOG.debug("Removing contact with cid %d since changes would " +
+                      "result in an empty contact", cid);
+            deleteContact(cid, dsi, stats);
+        }
+    }
+
+    private void deleteContact(int cid, DataSourceItem dsi, Stats stats)
+        throws ServiceException {
+        localData.deleteContact(dsi.itemId);
+        localData.deleteMapping(dsi.itemId);
+        stats.deleted++;
+        LOG.debug("Deleted contact: itemId=%d, cid=%d", dsi.itemId, cid);
+    }
+
+    /*
+     * Returns tag bits for specified contact data.
+     */
+    private long getTagBitmask(ContactData cd) throws ServiceException {
+        long bits = 0;
+        for (Category category : cd.getCategories()) {
+            RemoteId rid = RemoteId.categoryId(category.getId());
+            DataSourceItem dsi = localData.getReverseMapping(rid.toString());
+            if (dsi != null) {
+                bits |= localData.getTag(dsi.itemId).getBitmask();
+            }
+        }
+        return bits;
+    }
+
+    private void updateContactMapping(int itemId, Contact contact)
+        throws ServiceException {
+        RemoteId rid = RemoteId.contactId(contact.getId());
+        localData.updateMapping(itemId, rid.toString(), toXml(contact));
+    }
+
+    private void updateCategoryMapping(int itemId, Category category)
+        throws ServiceException {
+        RemoteId rid = RemoteId.categoryId(category.getId());
+        localData.updateMapping(itemId, rid.toString(), toXml(category));
+    }
+
+    private String toXml(Entity entity) {
+        return session.toString(entity.toXml(session.createDocument()));
+    }
+
+    private Contact getContact(DataSourceItem dsi) throws ServiceException {
+        return Contact.fromXml(getDocument(dsi).getDocumentElement());
+    }
+
+    private Category getCategory(DataSourceItem dsi) throws ServiceException {
+        return Category.fromXml(getDocument(dsi).getDocumentElement());
+    }
+
+    private Document getDocument(DataSourceItem dsi) throws ServiceException {
+        String xml = localData.getData(dsi);
+        if (xml != null) {
+            try {
+                return session.parseDocument(xml);
+            } catch (IOException e) {
+                throw new SyncException(
+                    "Unable to parse entry data for item id: " + dsi.itemId, null);
+            }
+        }
+        throw new SyncException("Missing data source item for id: " + dsi.itemId);
+    }
 }

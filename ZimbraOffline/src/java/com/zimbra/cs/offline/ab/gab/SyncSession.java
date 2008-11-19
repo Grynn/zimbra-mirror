@@ -24,7 +24,7 @@ import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.cs.offline.ab.SyncState;
-import com.zimbra.cs.offline.ab.LocalData.ChangeType;
+import com.zimbra.cs.offline.ab.Change;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.service.ServiceException;
@@ -42,13 +42,13 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Collection;
 import java.util.logging.Logger;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.io.IOException;
 
 public class SyncSession {
-    private final DataSource ds;
     private final LocalData localData;
     private final GabService service;
 
@@ -63,7 +63,7 @@ public class SyncSession {
 
     private static final Log LOG = OfflineLog.gab;
 
-    private static final boolean DEBUG_TRACE = true;
+    private static final boolean FORCE_TRACE = true;
     private static final boolean HTTP_DEBUG = false;
 
     static {
@@ -80,20 +80,19 @@ public class SyncSession {
     }
 
     public SyncSession(DataSource ds) throws ServiceException {
-        this.ds = ds;
         localData = new LocalData((OfflineDataSource) ds);
         service = new GabService(ds.getUsername(), ds.getDecryptedPassword());
     }
 
     public void sync() throws ServiceException {
         try {
-            syncContacts();
+            syncData();
         } catch (Exception e) {
             throw ServiceException.FAILURE("Google contact sync error", e);
         }
     }
 
-    private void syncContacts() throws IOException, ServiceException {
+    private void syncData() throws IOException, ServiceException {
         Mailbox mbox = localData.getMailbox();
         SyncState state = localData.loadState();
         // Get remote changes since last sync
@@ -107,15 +106,15 @@ public class SyncSession {
         List<SyncRequest> contactRequests;
         int seq = state.getLastModSequence();
         synchronized (mbox) {
-            // Get local changes sync last sync
-            Map<Integer, ChangeType> groupChanges = localData.getGroupChanges(seq);
-            Map<Integer, ChangeType> contactChanges = localData.getContactChanges(seq);
+            // Get local changes since last sync
+            Map<Integer, Change> tagChanges = localData.getTagChanges(seq);
+            Map<Integer, Change> contactChanges = localData.getContactChanges(seq);
             // Process remote group and contact changes
-            processGroupChanges(groups.getEntries(), groupChanges);
+            processGroupChanges(groups.getEntries(), tagChanges);
             processContactChanges(contacts.getEntries(), contactChanges);
             // Process local changes and determine changes to push
-            groupRequests = processGroupChanges(groupChanges);
-            contactRequests = processContactChanges(contactChanges);
+            groupRequests = processTagChanges(tagChanges.values());
+            contactRequests = processContactChanges(contactChanges.values());
             state.setLastModSequence(mbox.getLastChangeID());
         }
         // Push local changes to remote
@@ -129,7 +128,7 @@ public class SyncSession {
     }
 
     private void processGroupChanges(List<ContactGroupEntry> entries,
-                                     Map<Integer, ChangeType> changes)
+                                     Map<Integer, Change> changes)
         throws ServiceException, IOException {
         LOG.debug("Processing %d remote contact group changes", entries.size());
         Stats stats = new Stats();
@@ -146,7 +145,7 @@ public class SyncSession {
 
     private void processGroupChange(ContactGroupEntry entry,
                                     DataSourceItem dsi,
-                                    Map<Integer, ChangeType> changes,
+                                    Map<Integer, Change> changes,
                                     Stats stats) throws ServiceException {
         if (isTraceEnabled()) {
             LOG.debug("Processing remote group entry:\n%s", service.pp(entry));
@@ -184,7 +183,7 @@ public class SyncSession {
     }
     
     private void processContactChanges(List<ContactEntry> entries,
-                                       Map<Integer, ChangeType> changes)
+                                       Map<Integer, Change> changes)
         throws ServiceException, IOException {
         LOG.debug("Processing %d remote contact changes", entries.size());
         Stats stats = new Stats();
@@ -201,7 +200,7 @@ public class SyncSession {
 
     private void processContactChange(ContactEntry entry,
                                       DataSourceItem dsi,
-                                      Map<Integer, ChangeType> changes,
+                                      Map<Integer, Change> changes,
                                       Stats stats) throws ServiceException {
         if (isTraceEnabled()) {
             LOG.debug("Processing remote contact entry:\n%s", service.pp(entry));
@@ -242,64 +241,60 @@ public class SyncSession {
         return entry.getEditLink().getHref();
     }
 
-    private List<SyncRequest> processGroupChanges(Map<Integer, ChangeType> changes)
+    private List<SyncRequest> processTagChanges(Collection<Change> changes)
         throws ServiceException {
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
-        for (Map.Entry<Integer, ChangeType> entry : changes.entrySet()) {
-            reqs.add(getGroupSyncRequest(entry.getKey(), entry.getValue()));
+        for (Change change : changes) {
+            reqs.add(getGroupSyncRequest(change));
         }
         return reqs;
     }
 
-    private List<SyncRequest> processContactChanges(Map<Integer, ChangeType> changes)
+    private List<SyncRequest> processContactChanges(Collection<Change> changes)
         throws ServiceException {
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
-        for (Map.Entry<Integer, ChangeType> entry : changes.entrySet()) {
-            reqs.add(getContactSyncRequest(entry.getKey(), entry.getValue()));
+        for (Change change : changes) {
+            reqs.add(getContactSyncRequest(change));
         }
         return reqs;
     }
     
-    private SyncRequest getContactSyncRequest(int itemId, ChangeType type)
+    private SyncRequest getContactSyncRequest(Change change)
         throws ServiceException {
-        ContactEntry entry;
         // For ADD and UPDATE, group membership info will be set later after
-        // we've pushed contact group changes. Otherwise, we may not yet
-        // have the ids for newly added groups.
-        switch (type) {
-        case ADD:
-            entry = getContactData(itemId).newContactEntry();
-            return SyncRequest.insert(this, itemId, entry);
-        case UPDATE:
-            entry = getEntry(itemId, ContactEntry.class);
-            getContactData(itemId).updateContactEntry(entry);
-            return SyncRequest.update(this, itemId, entry);
-        case DELETE:
-            entry = getEntry(itemId, ContactEntry.class);
-            return SyncRequest.delete(this, itemId, entry);
-        default:
-            throw new AssertionError();
+        // we've pushed contact group changes, since until then we will not
+        // know the entry id for a newly added group.
+        int id = change.getItemId();
+        if (change.isAdd()) {
+            ContactEntry entry = getContactData(id).newContactEntry();
+            return SyncRequest.insert(this, id, entry);
+        } else if (change.isUpdate()) {
+            ContactEntry entry = getEntry(id, ContactEntry.class);
+            getContactData(id).updateContactEntry(entry);
+            return SyncRequest.update(this, id, entry);
+        } else if (change.isDelete()) {
+            ContactEntry entry = getEntry(id, ContactEntry.class);
+            return SyncRequest.delete(this, id, entry);
         }
+        return null;
     }
 
-    private SyncRequest getGroupSyncRequest(int itemId, ChangeType type)
+    private SyncRequest getGroupSyncRequest(Change change)
         throws ServiceException {
-        ContactGroupEntry entry;
-        switch (type) {
-        case ADD:
-            entry = new ContactGroupEntry();
-            entry.setTitle(new PlainTextConstruct(localData.getTag(itemId).getName()));
-            return SyncRequest.insert(this, itemId, entry);
-        case UPDATE:
-            entry = getEntry(itemId, ContactGroupEntry.class);
-            entry.setTitle(new PlainTextConstruct(localData.getTag(itemId).getName()));
-            return SyncRequest.update(this, itemId, entry);
-        case DELETE:
-            entry = getEntry(itemId, ContactGroupEntry.class);
-            return SyncRequest.delete(this, itemId, entry);
-        default:
-            throw new AssertionError();
+        int id = change.getItemId();
+        if (change.isAdd()) {
+            ContactGroupEntry entry = new ContactGroupEntry();
+            entry.setTitle(new PlainTextConstruct(localData.getTagName(id)));
+            return SyncRequest.insert(this, id, entry);
+        } else if (change.isUpdate()) {
+            ContactGroupEntry entry = getEntry(id, ContactGroupEntry.class);
+            entry.setTitle(new PlainTextConstruct(localData.getTagName(id)));
+            return SyncRequest.update(this, id, entry);
+        } else if (change.isDelete()) {
+            ContactGroupEntry entry = getEntry(id, ContactGroupEntry.class);
+            return SyncRequest.delete(this, id, entry);
         }
+        return null;
     }
 
     private void pushGroupChanges(List<SyncRequest> reqs)
@@ -322,8 +317,7 @@ public class SyncSession {
         Iterator<SyncRequest> it = reqs.iterator();
         while (it.hasNext()) {
             SyncRequest req = it.next();
-            switch (req.getType()) {
-            case INSERT: case UPDATE:
+            if (req.isInsert() || req.isUpdate()) {
                 setGroupInfo((ContactEntry) req.getEntry(), req.getItemId());
             }
             if (pushChange(req, stats)) {
@@ -350,19 +344,15 @@ public class SyncSession {
         int itemId = req.getItemId();
         try {
             req.execute();
-            switch (req.getType()) {
-            case DELETE:
-                localData.deleteMapping(itemId);
-                stats.deleted++;
-                break;
-            case UPDATE:
-                updateEntry(itemId, req.getEntry());
-                stats.updated++;
-                break;
-            case INSERT:
+            if (req.isInsert()) {
                 updateEntry(itemId, req.getEntry());
                 stats.added++;
-                break;
+            } else if (req.isUpdate()) {
+                updateEntry(itemId, req.getEntry());
+                stats.updated++;
+            } else if (req.isDelete()) {
+                localData.deleteMapping(itemId);
+                stats.deleted++;
             }
             return true;
         } catch (ServiceException e) {
@@ -383,7 +373,7 @@ public class SyncSession {
     private <T extends BaseEntry> T getEntry(DataSourceItem dsi, Class<T> entryClass)
         throws ServiceException {
         // LOG.debug("Loading contact data for item id = %d", dsi.itemId);
-        String xml = localData.getEntry(dsi);
+        String xml = localData.getData(dsi);
         return xml != null ? service.parseEntry(xml, entryClass) : null;
     }
 
@@ -398,7 +388,7 @@ public class SyncSession {
             if (deleted == null || !deleted) {
                 String id = info.getHref();
                 DataSourceItem dsi = localData.getReverseMapping(id);
-                if (dsi.itemId == -1) {
+                if (dsi.itemId == 0) {
                     throw ServiceException.FAILURE(
                         "Missing item id for contact group: " + id, null);
                 }
@@ -409,8 +399,10 @@ public class SyncSession {
     }
 
     public boolean isTraceEnabled() {
-        return LOG.isDebugEnabled() && (DEBUG_TRACE || ds.isDebugTraceEnabled());
+        return LOG.isDebugEnabled() &&
+               (FORCE_TRACE || localData.getDataSource().isDebugTraceEnabled());
     }
-
+    
     public GabService getGabService() { return service; }
+    public LocalData getLocalData() { return localData; }
 }

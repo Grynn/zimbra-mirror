@@ -29,8 +29,8 @@ import java.io.IOException;
 public class SyncRequest {
     private final SyncSession session;
     private final GabService service;
-    private final int itemId;
     private final RequestType type;
+    private final int itemId;
     private BaseEntry entry;
     private com.google.gdata.util.ServiceException error;
 
@@ -39,29 +39,33 @@ public class SyncRequest {
     private static final int MAX_COUNT = 3;
 
     public static SyncRequest insert(SyncSession session, int itemId, BaseEntry entry) {
-        return new SyncRequest(session, itemId, RequestType.INSERT, entry);
+        return new SyncRequest(session, RequestType.INSERT, itemId, entry);
     }
 
     public static SyncRequest update(SyncSession session, int itemId, BaseEntry entry) {
-        return new SyncRequest(session, itemId, RequestType.UPDATE, entry);
+        return new SyncRequest(session, RequestType.UPDATE, itemId, entry);
     }
 
     public static SyncRequest delete(SyncSession session, int itemId, BaseEntry entry) {
-        return new SyncRequest(session, itemId, RequestType.DELETE, entry);
+        return new SyncRequest(session, RequestType.DELETE, itemId, entry);
     }
     
-    private SyncRequest(SyncSession session, int itemId, RequestType type, BaseEntry entry) {
+    private SyncRequest(SyncSession session, RequestType type, int itemId, BaseEntry entry) {
         this.session = session;
         this.service = session.getGabService();
-        this.itemId = itemId;
         this.type = type;
+        this.itemId = itemId;
         this.entry = entry;
     }
 
-    public int getItemId() { return itemId; }
     public RequestType getType() { return type; }
+    public int getItemId() { return itemId; }
     public BaseEntry getEntry() { return entry; }
 
+    public boolean isInsert() { return type == RequestType.INSERT; }
+    public boolean isUpdate() { return type == RequestType.UPDATE; }
+    public boolean isDelete() { return type == RequestType.DELETE; }
+    
     public void setEntry(BaseEntry entry) {
         this.entry = entry;
     }
@@ -75,7 +79,7 @@ public class SyncRequest {
     }
 
     public void execute() throws ServiceException, IOException {
-        if (type == RequestType.UPDATE) {
+        if (isUpdate()) {
             int count = 0;
             while (count++ < MAX_COUNT && !doExecute() && isVersionConflict()) {
                 LOG.debug("Retrying UPDATE request for itemId %d (count = %d)",
@@ -100,18 +104,12 @@ public class SyncRequest {
         }
         error = null;
         try {
-            switch (type) {
-            case INSERT:
+            if (isInsert()) {
                 entry = service.insert(entry);
-                break;
-            case UPDATE:
+            } else if (isUpdate()) {
                 entry = service.update(entry);
-                break;
-            case DELETE:
+            } else if (isDelete()) {
                 service.delete(entry);
-                break;
-            default:
-                throw new AssertionError("Invalid request type: " + type);
             }
         } catch (com.google.gdata.util.ServiceException e) {
             error = e;

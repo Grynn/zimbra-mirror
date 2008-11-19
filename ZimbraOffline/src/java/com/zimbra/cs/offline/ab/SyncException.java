@@ -14,22 +14,16 @@
  *
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.offline.ab.yab;
+package com.zimbra.cs.offline.ab;
 
-import java.io.IOException;
+import com.zimbra.common.service.ServiceException;
 
-/**
- * Indicates a YAB sync error.
- */
-public class SyncException extends IOException {
-    public SyncException(String msg) {
-        super(msg);
+public class SyncException extends ServiceException {
+    public SyncException(String msg, Throwable cause) {
+        super(msg, FAILURE, RECEIVERS_FAULT, cause);
     }
 
-    public SyncException(String msg, Throwable cause) {
-        super(msg);
-        if (cause != null) {
-            initCause(cause);
-        }
+    public SyncException(String msg) {
+        this(msg, null);
     }
 }

@@ -24,7 +24,7 @@ public class SyncRequestEvent extends Entity {
     private final Object param;
     private Result result;
     
-    public static enum Type {
+    private static enum Type {
         ADD_CONTACT, UPDATE_CONTACT, REMOVE_CONTACT,
         ADD_CATEGORY, RENAME_CATEGORY, REMOVE_CATEGORY
     }
@@ -95,6 +95,45 @@ public class SyncRequestEvent extends Entity {
         return ((Category[]) param)[1];
     }
 
+    public boolean isAddContact() {
+        return type == Type.ADD_CONTACT;
+    }
+
+    public boolean isAddCategory() {
+        return type == Type.ADD_CATEGORY;
+    }
+
+    public boolean isUpdateContact() {
+        return type == Type.UPDATE_CONTACT;
+    }
+
+    public boolean isRenameCategory() {
+        return type == Type.RENAME_CATEGORY;
+    }
+
+    public boolean isRemoveContact() {
+        return type == Type.REMOVE_CONTACT;
+    }
+
+    public boolean isRemoveCategory() {
+        return type == Type.REMOVE_CATEGORY;
+    }
+    
+    public boolean isContact() {
+        switch (type) {
+        case ADD_CONTACT:
+        case UPDATE_CONTACT:
+        case REMOVE_CONTACT:
+            return true;
+        default:
+            return false;
+        }
+    }
+
+    public boolean isCategory() {
+        return !isContact();
+    }
+    
     public Result getResult() {
         return result;
     }

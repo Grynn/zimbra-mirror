@@ -37,7 +37,6 @@ import java.util.List;
 import java.io.Serializable;
 
 import static com.zimbra.cs.mailbox.Contact.*;
-import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.DateUtil;
@@ -68,7 +67,7 @@ public class ContactData implements Serializable {
     }
 
     public ContactData(com.zimbra.cs.mailbox.Contact contact,
-                       Map<Integer, Category> categoriesByItemId)
+                       List<Category> categories)
         throws ServiceException {
         Map<String, String> zfields = contact.getFields();
         importField(A_firstName, getName(zfields));
@@ -79,14 +78,7 @@ public class ContactData implements Serializable {
             String name = entry.getKey();
             importField(name, getSimple(name, entry.getValue()));
         }
-        for (Tag tag : contact.getTagList()) {
-            int itemId = tag.getId();
-            Category cat = categoriesByItemId.get(itemId);
-            if (cat == null) {
-                cat = new Category(tag.getName());
-            }
-            categories.add(cat);
-        }
+        this.categories.addAll(categories);
     }
 
     public List<Category> getCategories() {
@@ -305,12 +297,16 @@ public class ContactData implements Serializable {
         for (Field field : fields.values()) {
             contact.addField(field);
         }
+        for (Category category : categories) {
+            contact.addCategory(category);
+        }
         return contact;
     }
     
-    public ContactChange getContactChange(int id, ContactData oldData) {
+    public ContactChange getContactChange(Contact oldContact) {
         ContactChange cc = new ContactChange();
-        cc.setId(id);
+        ContactData oldData = new ContactData(oldContact);
+        cc.setId(oldContact.getId());
         // Get added and updated fields
         Map<String, Field> oldFields = new HashMap<String, Field>(oldData.fields);
         for (Map.Entry<String, Field> entry : fields.entrySet()) {
@@ -333,6 +329,9 @@ public class ContactData implements Serializable {
             int catid = cat.getId();
             if (catid == -1 || !oldCatids.contains(catid)) {
                 cc.addCategoryChange(CategoryChange.add(cat));
+            }
+            if (catid != -1) {
+                oldCatids.remove(catid);
             }
         }
         for (int catid : oldCatids) {
@@ -381,6 +380,12 @@ public class ContactData implements Serializable {
         return false;
     }
 
+    private static boolean eq(String s1, String s2) {
+        if (s1 == null) s1 = "";
+        if (s2 == null) s2 = "";
+        return s1.equals(s2);
+    }
+
     private static String getImService(SimpleField field) {
         if (field.isYahooid()) return SERVICE_YAHOO;
         if (field.isFlag(Flag.AOL)) return SERVICE_AOL;
@@ -418,10 +423,6 @@ public class ContactData implements Serializable {
     private static String toString(DateField date) {
         return date.getMonth() + '/' + date.getDay() + "/" +
                (date.getYear() != -1 ? Integer.toString(date.getYear()) : "0000");
-    }
-
-    private static boolean eq(Object o1, Object o2) {
-        return o1 != null ? o1.equals(o2) : o2 == null;
     }
 
     private static <T> boolean containsAny(Map<T, ?> map, T[] keys) {

@@ -59,6 +59,22 @@ public class SyncResponseEvent extends Entity {
         return type;
     }
 
+    public boolean isAddContact() {
+        return type == Type.ADD_CONTACT;
+    }
+
+    public boolean isUpdateContact() {
+        return type == Type.UPDATE_CONTACT;
+    }
+
+    public boolean isRemoveContact() {
+        return type == Type.REMOVE_CONTACT;
+    }
+
+    public boolean isAddressBookReset() {
+        return type == Type.ADDRESS_BOOK_RESET;
+    }
+
     public Contact getContact() {
         return contact;
     }

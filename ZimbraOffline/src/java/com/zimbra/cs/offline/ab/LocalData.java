@@ -1,3 +1,19 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ *
+ * Zimbra Collaboration Suite Server
+ * Copyright (C) 2007, 2008 Zimbra, Inc.
+ *
+ * The contents of this file are subject to the Yahoo! Public License
+ * Version 1.0 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ *
+ * ***** END LICENSE BLOCK *****
+ */
 package com.zimbra.cs.offline.ab;
 
 import com.zimbra.cs.mailbox.Mailbox;
@@ -38,11 +54,7 @@ public final class LocalData {
 
     private static final String KEY_GAB = "GAB";
     private static final String KEY_YAB = "YAB";
-    
-    public enum ChangeType {
-        ADD, UPDATE, DELETE
-    }
-    
+
     public static final Mailbox.OperationContext CONTEXT =
         new OfflineMailbox.OfflineContext();
 
@@ -69,38 +81,38 @@ public final class LocalData {
         return OfflineLog.offline;
     }
     
-    public Map<Integer, ChangeType> getContactChanges(int seq)
+    public Map<Integer, Change> getContactChanges(int seq)
         throws ServiceException {
-        Map<Integer, ChangeType> changes = new HashMap<Integer, ChangeType>();
+        Map<Integer, Change> changes = new HashMap<Integer, Change>();
         // Get modified and deleted contacts
         for (int id : getModifiedContacts(seq)) {
-            changes.put(id, hasEntry(id) ? ChangeType.UPDATE : ChangeType.ADD);
+            changes.put(id, hasMapping(id) ? Change.update(id) : Change.add(id));
         }
         for (int id : getTombstones(seq, MailItem.TYPE_CONTACT)) {
-            if (hasEntry(id)) {
-                changes.put(id, ChangeType.DELETE);
+            if (hasMapping(id)) {
+                changes.put(id, Change.delete(id));
             }
         }
         return changes;
     }
     
-    public Map<Integer, ChangeType> getGroupChanges(int seq)
+    public Map<Integer, Change> getTagChanges(int seq)
         throws ServiceException {
         // Get modified and deleted tags
-        Map<Integer, ChangeType> changes = new HashMap<Integer, ChangeType>();
+        Map<Integer, Change> changes = new HashMap<Integer, Change>();
         for (Tag tag : getModifiedTags(seq)) {
             int id = tag.getId();
-            changes.put(id, hasEntry(id) ? ChangeType.UPDATE : ChangeType.ADD);
+            changes.put(id, hasMapping(id) ? Change.update(id) : Change.add(id));
         }
         for (int id : getTombstones(seq, MailItem.TYPE_TAG)) {
-            if (hasEntry(id)) {
-                changes.put(id, ChangeType.DELETE);
+            if (hasMapping(id)) {
+                changes.put(id, Change.delete(id));
             }
         }
         return changes;
     }
 
-    private boolean hasEntry(int id) throws ServiceException {
+    private boolean hasMapping(int id) throws ServiceException {
         return DbDataSource.hasMapping(ds, id);
     }
 
@@ -113,7 +125,7 @@ public final class LocalData {
     private List<Tag> getModifiedTags(int seq) throws ServiceException {
         List<Tag> tags = mbox.getModifiedTags(CONTEXT, seq);
         Set<Integer> ctags = getContactTags(getModifiedContacts(seq));
-        // Include only those tags associated with modified tags
+        // Ignore tag changes not associated with modified contacts
         for (Iterator<Tag> it = tags.iterator(); it.hasNext(); ) {
             Tag tag = it.next();
             if (!ctags.contains(tag.getId())) {
@@ -140,8 +152,8 @@ public final class LocalData {
         return tags;
     }
 
-    public String getEntry(DataSourceItem dsi) throws ServiceException {
-        return dsi.md.get(key);
+    public String getData(DataSourceItem dsi) throws ServiceException {
+        return dsi.md != null ? dsi.md.get(key) : null;
     }
 
     public DataSourceItem getReverseMapping(String remoteId)
@@ -171,6 +183,11 @@ public final class LocalData {
             DbDataSource.addMapping(ds, dsi);
         }
     }
+
+    public Collection<DataSourceItem> getAllMappingsInFolder(int folderId)
+        throws ServiceException {
+        return DbDataSource.getAllMappingsInFolder(ds, folderId);
+    }
     
     public Contact getContact(int id) throws ServiceException {
         return mbox.getContactById(CONTEXT, id);
@@ -193,6 +210,10 @@ public final class LocalData {
 
     public Tag getTag(int id) throws ServiceException {
         return mbox.getTagById(CONTEXT, id);
+    }
+
+    public String getTagName(int id) throws ServiceException {
+        return getTag(id).getName();
     }
 
     public Contact createContact(ParsedContact pc, long tags)
@@ -225,7 +246,6 @@ public final class LocalData {
     }
 
     public SyncState loadState() throws ServiceException {
-        log.debug("Loading sync state for data source: %s", ds.getName());
         Metadata md = mbox.getConfig(CONTEXT, key);
         if (md != null && !SyncState.isCompatibleVersion(md)) {
             log.info("Sync state version change - resetting address book data");
@@ -234,11 +254,12 @@ public final class LocalData {
         }
         SyncState ss = new SyncState();
         ss.load(md);
+        log.debug("Loaded sync state for data source '%s': %s", ds.getName(), ss);
         return ss;
     }
 
     public void saveState(SyncState ss) throws ServiceException {
-        log.debug("Saving sync state for data source: %s", ds.getName());
+        log.debug("Saving sync state for data source '%s': %s", ds.getName(), ss);
         mbox.setConfig(CONTEXT, key, ss.getMetadata());
     }
 
@@ -257,6 +278,7 @@ public final class LocalData {
         SyncExceptionHandler.syncContactFailed(mbox, itemId, data, e);
     }
 
+    
     public OfflineDataSource getDataSource() { return ds; }
     public DesktopMailbox getMailbox() { return mbox; }
     public Log getLog() { return log; }
