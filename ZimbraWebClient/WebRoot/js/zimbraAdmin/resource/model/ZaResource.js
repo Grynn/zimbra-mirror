@@ -493,6 +493,32 @@ function(by, val, withCos) {
 }
 ZaItem.loadMethods["ZaResource"].push(ZaResource.loadMethod);
 
+ZaResource.loadInfoMethod = 
+function(by, val, withCos) {
+	var soapDoc = AjxSoapDoc.create("GetAccountInfoRequest", ZaZimbraAdmin.URN, null);
+
+	var elBy = soapDoc.set("account", val);
+	elBy.setAttribute("by", by);
+
+	//var getAccCommand = new ZmCsfeCommand();
+	var params = new Object();
+	params.soapDoc = soapDoc;	
+	var reqMgrParams = {
+		controller: this._app.getCurrentController()
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountInfoResponse;
+	if(resp[ZaAccount.A2_publicMailURL] && resp[ZaAccount.A2_publicMailURL][0])
+		this[ZaAccount.A2_publicMailURL] = resp[ZaAccount.A2_publicMailURL][0]._content;
+	
+	if(resp[ZaAccount.A2_adminSoapURL] && resp[ZaAccount.A2_adminSoapURL][0])
+		this[ZaAccount.A2_adminSoapURL] = resp[ZaAccount.A2_adminSoapURL][0]._content;
+	
+	if(resp[ZaAccount.A2_soapURL] && resp[ZaAccount.A2_soapURL][0])
+		this[ZaAccount.A2_soapURL] = resp[ZaAccount.A2_soapURL][0]._content;
+}
+
+ZaItem.loadMethods["ZaResource"].push(ZaResource.loadInfoMethod);
+
 ZaResource.prototype.getAutoLocationName = 
 function (){
 	var autoLocName = "";
