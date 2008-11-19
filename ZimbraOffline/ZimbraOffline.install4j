@@ -205,7 +205,8 @@ return true;</string>
                       <void property="script">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>System.getProperty("os.arch").equalsIgnoreCase("i386")</string>
+                            <string>String arch = System.getProperty("os.arch");
+return arch.startsWith("i386") || arch.startsWith("x86");</string>
                           </void>
                         </object>
                       </void>
