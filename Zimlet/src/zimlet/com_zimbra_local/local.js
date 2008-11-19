@@ -673,8 +673,9 @@ function(ev) {
 	var params = {
 		action: ZmOperation.NEW_MESSAGE,
 		subjOverride: subject,
-		extraBodyText: (body + url + footer)
-	};
+		extraBodyText: (body + url + footer),
+        inNewWindow:appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE)        
+    };
 
 	var cc = AjxDispatcher.run("GetComposeController");
 	cc.doAction(params);
