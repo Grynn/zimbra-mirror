@@ -109,14 +109,18 @@ public class RosterManager extends BasicModule implements GroupEventListener, Us
         return roster;
     }
 
+    public void deleteRoster(JID user) {
+        deleteRoster(user,false);
+    }
+    
     /**
      * Removes the entire roster of a given user. This is necessary when a user
      * account is being deleted from the server.
      *
      * @param user the user.
      */
-    public void deleteRoster(JID user) {
-        if (!server.isLocal(user)) {
+    public void deleteRoster(JID user, boolean ignoreLocalServerCheck) {
+        if (!ignoreLocalServerCheck && !server.isLocal(user)) {
             // Ignore request if user is not a local user
             return;
         }
