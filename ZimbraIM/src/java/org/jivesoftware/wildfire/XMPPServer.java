@@ -494,16 +494,12 @@ public class XMPPServer {
         loadSingletonModule(IQDiscoInfoHandler.class.getName());
         loadSingletonModule(IQDiscoItemsHandler.class.getName());
         loadSingletonModule(IQOfflineMessagesHandler.class.getName());
-//        loadSingletonModule(MultiUserChatServerImpl.class.getName());
-
-        // TIM HACK
-//        loadModule(MulticastDNSService.class.getName());
         loadSingletonModule(IQSharedGroupHandler.class.getName());
         loadSingletonModule(AdHocCommandHandler.class.getName());
         loadSingletonModule(IQPrivacyHandler.class.getName());
         loadSingletonModule(DefaultFileTransferManager.class.getName());
         loadSingletonModule(FileTransferProxy.class.getName());
-//        loadModule(UpdateManager.class.getName());
+        
         // Load this module always last since we don't want to start listening for clients
         // before the rest of the modules have been started
         loadSingletonModule(ConnectionManagerImpl.class.getName());
@@ -525,17 +521,19 @@ public class XMPPServer {
      * @param module the name of the class that implements the Module interface.
      */
     private Module loadModule(ComponentIdentifier modId) {
-        String className = null;
-        if ("conference".equals(modId.category) && "text".equals(modId.type)) {
+//        String className = null;
+//        if ("conference".equals(modId.category) && "text".equals(modId.type)) {
 //        if ("muc".equals(modId.type)) {
-            className = MultiUserChatServerImpl.class.getName();
+//            className = MultiUserChatServerImpl.class.getName();
+//        }
+        
+        if (modId.className == null) {
+            ZimbraLog.im.error("Unable to load XMPP component: "+modId);
+            return null; // ignore
         }
         
-        if (className == null)
-            return null; // ignore
-        
         try {
-            Class modClass = loader.loadClass(className);
+            Class modClass = loader.loadClass(modId.className);
             Module mod = (Module) modClass.newInstance();
 
             if (mod instanceof BasicModule) {
@@ -549,8 +547,9 @@ public class XMPPServer {
             return mod;
         }
         catch (Exception e) {
-            e.printStackTrace();
-            Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
+//            e.printStackTrace();
+//            Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
+            ZimbraLog.im.error("Unable to load XMPP component: "+modId, e);
             return null;
         }
     }

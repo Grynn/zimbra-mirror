@@ -20,6 +20,13 @@ public interface LocationManager {
         public String category;
         public String type;
         public List<String> features;
+        
+        // classname of class that actually runs the component
+        public String className;
+        
+        public String toString() {
+            return serviceName+"."+serviceDomain+" category="+category+" type="+type+" class="+className;
+        }
     }
     
     /**
