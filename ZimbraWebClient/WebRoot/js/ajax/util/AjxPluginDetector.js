@@ -126,15 +126,17 @@ function() {
 	    var numFound = 0;
 	    for(var namesCounter=0; namesCounter < names.length; namesCounter++) {
 			// if desired plugin name is found in either plugin name or description
-			if( (allPlugins[pluginsArrayCounter].name.indexOf(names[namesCounter]) >= 0)) {
-				// this name was found
-				DBG.println("AjxPluginDetector: found name match '" + allPlugins[pluginsArrayCounter].name + "'");
-				numFound++;
-			} else if (allPlugins[pluginsArrayCounter].description.indexOf(names[namesCounter]) >= 0) {
-			    // this name was found
-				DBG.println("AjxPluginDetector: found description match '" + allPlugins[pluginsArrayCounter].description + "'");
-				numFound++;
-			}   
+			if (allPlugins[pluginsArrayCounter]) {
+				if( (allPlugins[pluginsArrayCounter].name.indexOf(names[namesCounter]) >= 0)) {
+					// this name was found
+					DBG.println("AjxPluginDetector: found name match '" + allPlugins[pluginsArrayCounter].name + "'");
+					numFound++;
+				} else if (allPlugins[pluginsArrayCounter].description.indexOf(names[namesCounter]) >= 0) {
+					// this name was found
+					DBG.println("AjxPluginDetector: found description match '" + allPlugins[pluginsArrayCounter].description + "'");
+					numFound++;
+				}
+			}
 	    }
 	    // now that we have checked all the required names against this one plugin,
 	    // if the number we found matches the total number provided then we were successful
