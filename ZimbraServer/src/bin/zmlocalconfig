@@ -24,6 +24,8 @@
 ZMROOT=`dirname $0`/..
 ZMROOT=`(cd "${ZMROOT}"; pwd)`
 
+umask 0027
+
 if [ -x "${ZMROOT}/java/bin/java" ]; then
     java="${ZMROOT}/java/bin/java"
 else
