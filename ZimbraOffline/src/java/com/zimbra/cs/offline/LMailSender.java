@@ -17,8 +17,11 @@
 package com.zimbra.cs.offline;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Properties;
 
+import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -60,10 +63,12 @@ public class LMailSender extends MailSender {
     }
 
     @Override
-    protected void sendMessage(MimeMessage mm, boolean ignoreFailedAddresses,
+    protected Collection<Address> sendMessage(MimeMessage mm, boolean ignoreFailedAddresses,
         RollbackData[] rollback) throws IOException, SafeMessagingException {
         try {
-            transport.sendMessage(mm, mm.getAllRecipients());
+        	Address[] rcpts = mm.getAllRecipients();
+            transport.sendMessage(mm, rcpts);
+            return Arrays.asList(rcpts);
         } catch (MessagingException e) {
             for (RollbackData rdata : rollback)
                 if (rdata != null)

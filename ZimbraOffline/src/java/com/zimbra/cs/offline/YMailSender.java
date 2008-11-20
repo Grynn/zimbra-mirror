@@ -18,12 +18,17 @@ package com.zimbra.cs.offline;
 
 import com.zimbra.cs.mailbox.MailSender;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
+import com.zimbra.cs.offline.util.ymail.YMailException;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.common.service.ServiceException;
 
+import javax.mail.Address;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class YMailSender extends MailSender {
     private final YMailClient ymc;
@@ -45,9 +50,15 @@ public class YMailSender extends MailSender {
     }
 
     @Override
-    protected void sendMessage(MimeMessage mm,
+    protected Collection<Address> sendMessage(MimeMessage mm,
                                boolean ignoreFailedAddresses,
                                RollbackData[] rollback) throws IOException {
-        ymc.sendMessage(mm);
+        try {
+        	Address[] rcpts = mm.getAllRecipients();
+            ymc.sendMessage(mm);
+            return Arrays.asList(rcpts);
+        } catch (MessagingException e) {
+            throw new YMailException("Unable get recipient list", e);
+        }
     }
 }
