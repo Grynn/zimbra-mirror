@@ -58,7 +58,10 @@ ZmCsfeException.MAIL_SEND_ADDRESS_FAILURE_UNSENT = "unsent";
 ZmCsfeException.getErrorMsg =
 function(code, args) {
 	var msg = ZMsg[code];
-	if (!msg) { return ""; }
+	if (!msg) {
+		ZmCsfeException._unknownFormat = ZmCsfeException._unknownFormat || new AjxMessageFormat(ZMsg.unknownError);
+		return ZmCsfeException._unknownFormat.format(code);
+	}
 	this.msg = this.msg || msg;
 	return args ? AjxMessageFormat.format(msg, args) : msg;
 };
