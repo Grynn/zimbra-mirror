@@ -853,20 +853,12 @@ public class BeanUtils {
     public static long MSECS_PER_MINUTE() { return MSECS_PER_MINUTE; }
     public static long MSECS_PER_HOUR() { return MSECS_PER_HOUR; }
 
-    public static String getWindowsId(TimeZone tz) {
-        return TZIDMapper.toWindows(tz.getID());
-    }
-
-	public static String getJavaId(TimeZone tz) {
-		return TZIDMapper.toJava(tz.getID());
+	public static String getCanonicalId(TimeZone tz) {
+		return TZIDMapper.canonicalize(tz.getID());
 	}
 
-    public static String getCanonicalTimeZoneId(String id) {
-        return TZIDMapper.canonicalize(id);
-    }
-
     public static TimeZone getTimeZone(String id) {
-        id = TZIDMapper.toJava(id);
+        id = TZIDMapper.canonicalize(id);
         return id == null ? TimeZone.getDefault() : TimeZone.getTimeZone(id);
     }
 

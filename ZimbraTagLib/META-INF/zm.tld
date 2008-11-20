@@ -6219,16 +6219,10 @@
         <function-signature>long MSECS_PER_HOUR()</function-signature>
     </function>
 
-    <function>
-        <name>getWindowsId</name>
-        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String getWindowsId(java.util.TimeZone)</function-signature>
-    </function>
-
 	<function>
-		<name>getJavaId</name>
+		<name>getCanonicalId</name>
 		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-		<function-signature>java.lang.String getJavaId(java.util.TimeZone)</function-signature>
+		<function-signature>java.lang.String getCanonicalId(java.util.TimeZone)</function-signature>
 	</function>
 
     <function>
@@ -6265,12 +6259,6 @@
         <name>isSameTimeZone</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isSameTimeZone(java.lang.String,java.lang.String)</function-signature>
-    </function>
-
-    <function>
-        <name>getCanonicalTimeZoneId</name>
-        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String getCanonicalTimeZoneId(java.lang.String)</function-signature>
     </function>
 
     <function>
