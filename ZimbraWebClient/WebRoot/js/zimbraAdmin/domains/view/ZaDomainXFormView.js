@@ -120,9 +120,9 @@ function(entry) {
 			if (AjxUtil.isString(zimlets))	 {
 				zimlets = [zimlets];
 			}
-			this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = zimlets;
+			this._containedObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = zimlets;
 		} else
-			this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = null;
+			this._containedObject.attrs[ZaDomain.A_zimbraZimletDomainAvailableZimlets] = null;
 
 
 		//get sll Zimlets
