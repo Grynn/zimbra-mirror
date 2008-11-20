@@ -2157,11 +2157,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private String promoteAccount(String accountId) throws ServiceException {
     	String[] order = fixAccountsOrder(false);
     	for (int i = 0; i < order.length; ++i) {
-    		if (order[i].equals(accountId) && i > 0) {
-    			order[i] = order[i - 1];
-    			order[i - 1] = accountId;
-    			break;
-    		}
+            if (order[i].equals(accountId) && i > 0) {
+	        while (i > 0)
+                    order[i] = order[i-- - 1];
+                order[0] = accountId;
+                break;
+            }
     	}
     	return StringUtil.join(",", order);
     }

@@ -81,7 +81,9 @@ public class ConsoleBean extends PageBean {
         }
     }
 
-    private String accountId; // only set for promoting
+    // only set for promoting
+    private String accountId;
+    private String verb;
 
     private AccountSummary[] savedAccounts;
 
@@ -91,11 +93,15 @@ public class ConsoleBean extends PageBean {
         this.accountId = accountId;
     }
 
+    public void setVerb(String verb) {
+        this.verb = verb;
+    }
+
     public AccountSummary[] getAccounts() throws ServiceException {
         JspProvStub stub = JspProvStub.getInstance();
 
         String[] order = null;
-        if (accountId != null) {
+        if (accountId != null && verb == null) {
             order = stub.promoteAccount(accountId);
             accountId = null;
         } else if (savedAccounts != null)

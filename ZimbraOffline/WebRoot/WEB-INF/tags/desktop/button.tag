@@ -11,7 +11,7 @@
 	onmouseup	= "this.className = 'Over'"
 	onmouseout	= "this.className = ''">
 	<tr>
-	    <td class="ZButton title"><nobr>${text}</nobr></td>
+	    <td class="ZButton title">${text}</td>
 	</tr>
     </table>
 </span>

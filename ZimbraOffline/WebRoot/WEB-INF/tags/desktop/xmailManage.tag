@@ -72,10 +72,10 @@ function SetSmtpPort() {
         <tr id="editPasswordRow">
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
             <td>
-                <table cellpadding="0" cellspacing="0" width="100%">
+                <table cellpadding="0" cellspacing="0">
                     <tr>
                         <td><input class="ZFieldMedium" type="password" id="editPassword" name="editPassword" value="${bean.password}" disabled></td>
-                        <td align="right">&nbsp;<a href="#" onclick="onEditPassword('password');this.style.display='none'"><fmt:message key='Edit'/></a></td>
+                        <td>&nbsp;&nbsp;<a href="#" onclick="onEditPassword('password');this.style.display='none'"><fmt:message key='Edit'/></a></td>
                     </tr>
                 </table>
             </td>

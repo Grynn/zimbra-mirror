@@ -1,8 +1,7 @@
 /* Offline-specific styles */
 BODY {
-	background-color: #C7C7C7;
+	background-color: #D9D9D9;
 	margin: 0px;
-	padding: 40px 0px 0px 0px;
 }
 
 BODY, P, TH, TD, DIV, SELECT, TEXTAREA, BUTTON {
@@ -15,6 +14,7 @@ FORM {
 }
 
 a:link, a:active, a:visited {
+	color: #1A1AFF;
 	text-decoration: none;
 }
 
@@ -36,16 +36,25 @@ SELECT {
 	width: 80%;
 }
 
+.ZAccountHelp {
+	color: #333333;
+	width: 350px;
+}
+
+.ZAccountInfo {
+	font-size: 11px;
+	padding-bottom: 2px;
+	white-space: nowrap;
+}
+
 .ZAccountName {
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: bold;
 	padding-bottom: 4px;
 }
 
-.ZAccountInfo {
-	font-size: 10px;
-	padding-bottom: 2px;
-	white-space: nowrap;
+.ZAccountOver {
+	background-color: blue;
 }
 
 .ZCheckbox {
@@ -117,33 +126,37 @@ SELECT {
 }
 
 .ZPanel {
-	border: 2px solid #e9f2fa; 
+	border: solid #74797D; 
 	border-color: #CCCCCC #999999 #999999 #CCCCCC;
+	border-width:1px 2px 2px 1px;
 	font: 11px Arial, Verdana, san-serif;
-	line-height: 20px;
-	-moz-border-radius: 8px;
+	margin-top: 35px;
 	overflow: visible;
 	padding: 0px;
 	position: relative;
 	text-align: left;
 	width: 720px;
 	word-spacing: 2px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
 }
 
 .ZPanelInfo {
-	background-color: #e9f2fa;
+	background-color: #DAE5F1;
 	border: 0px;
-	-moz-border-radius: 0px 0px 8px 8px;
 	padding: 14px 40px 20px 40px;
 	text-align: center;
+	-moz-border-radius: 0px 0px 8px 8px;
+	-webkit-border-radius: 0px 0px 8px 8px;
 }
 
 .ZPanelLogo {
-	background-color: white;
+	background-color: #FCFDFE;
 	border: 0px;
-	-moz-border-radius: 8px 8px 0px 0px;
 	padding: 12px;
 	text-align: center;
+	-moz-border-radius: 8px 8px 0px 0px;
+	-webkit-border-radius: 8px 8px 0px 0px;
 }
 
 .ZPanelTitle {
@@ -186,7 +199,7 @@ SELECT {
 
 .ZSelectActive,
 .ZSelectSmallActive {
-	background-color: #e9f2fa;
+	background-color: #DAE5F1;
 }
 
 .ZSelectSmall {
@@ -211,44 +224,44 @@ SELECT {
 }
 
 .ZButton {
-	cursor: pointer;
+        cursor: pointer;
 	text-decoration: none;
 }
 
 .ZButton TABLE {
-	background-color: #AACEEE;
-	border: 2px solid #e9f2fa;
+	background-color: #90AED5;
 	border-color: #CCCCCC #999999 #999999 #CCCCCC;
-	border-collapse: collapse;
-	display: inline;
-	-moz-border-radius: 8px;
-	overflow: visible;
-	padding: 3px 0px 0px 0px;
-	position: relative;
-}
-
-.ZButton .title {
-	color: #333333;
-	font-size: 11px;
+	border-style: solid;
+	border-width: 1px 2px 2px 1px;
+	color: #262626;
+	cursor: pointer;
 	font-weight: bold;
-	height: 24px;
-	padding: 0px 8px 0px 8px;
+	overflow: visible;
 	text-align: center;
-	vertical-align: middle;
+	text-decoration: none;
 	white-space: nowrap;
 	width: 80px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
 }
 
-.ZButton .over .title {
-	color: white;
+.ZButton .Title {
+	border: 0px;
+	padding: 3px 5px 3px 7px;
+	white-space: nowrap;
 }
 
-.ZButton .down {
-	border: 2px solid #e9f2fa;
+.ZButton .Over {
+	color: #FCFDFE;
+}
+
+.ZButton .Down {
 	border-color: #999999 #CCCCCC #CCCCCC #999999;
+	border-width: 2px 1px 1px 2px;
+	color: #FCFDFE;
 }
 
-.ZButton .down .title {
-	color: white;
+.ZButton .Down .Title {
+	padding: 2px 6px 4px 6px;
 }
 

@@ -26,6 +26,21 @@
         <jsp:setProperty name="gbean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(gbean)}
         <c:set var="bean" value="${gbean}" scope="request"/>
+        <c:set var="help">
+            <fmt:message key='GmailNote'>
+                <fmt:param><a href="javascript:zd.toggle('helpInfo')"><fmt:message key='GmailMustAllowIMAP'/></a></fmt:param>
+            </fmt:message>
+        </c:set>
+        <c:set var="helpInfo">
+            <div><fmt:message key='GmailToAllowIMAP'/></div>
+            <ol>
+                <li><fmt:message key='GmailLogin'><fmt:param><a href=http://gmail.com target=_blank><fmt:message key='Gmail'/></a></fmt:param></fmt:message>
+                <li><fmt:message key='GmailClickTop'><fmt:param><b><fmt:message key='GmailSettingsLink'/></b></fmt:param></fmt:message>
+                <li><fmt:message key='GmailClick'><fmt:param><b><fmt:message key='GmailFwdPOP'/></b></fmt:param></fmt:message>
+                <li><fmt:message key='GmailSelect'><fmt:param><b><fmt:message key='GmailEnableIMAP'/></b></fmt:param></fmt:message>
+                <li><fmt:message key='GmailClick'><fmt:param><b><fmt:message key='GmailSaveChgs'/></b></fmt:param></fmt:message>
+            </ol>
+        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Imap'}">
         <jsp:useBean id="ibean" class="com.zimbra.cs.offline.jsp.ImapBean" scope="request"/>
@@ -40,6 +55,16 @@
         <jsp:setProperty name="lbean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(lbean)}
         <c:set var="bean" value="${lbean}" scope="request"/>
+        <c:set var="help">
+	    <fmt:message key='LiveNote'>
+                <fmt:param><a href="javascript:zd.toggle('helpInfo')"><fmt:message key='LiveMustAllowClient'/></a></fmt:param>
+            </fmt:message>
+        </c:set>
+        <c:set var="helpInfo">
+	    <fmt:message key='LiveLimit'>
+	        <fmt:param><a href=http://mail.yahoo.com target=_blank><fmt:message key='YMPLink'/></a></fmt:param>
+            </fmt:message>
+        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'MSE'}">
         <jsp:useBean id="mbean" class="com.zimbra.cs.offline.jsp.MmailBean" scope="request"/>
@@ -61,6 +86,16 @@
         <jsp:setProperty name="ybean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(ybean)}
         <c:set var="bean" value="${ybean}" scope="request"/>    
+        <c:set var="help">
+	    <fmt:message key='YMPNote'>
+                <fmt:param><a href="javascript:zd.toggle('helpInfo')"><fmt:message key='YMP'/></a></fmt:param>
+            </fmt:message>
+        </c:set>
+        <c:set var="helpInfo">
+	    <fmt:message key='YMPToSignup'>
+	        <fmt:param><a href=http://mail.yahoo.com target=_blank><fmt:message key='YMPLink'/></a></fmt:param>
+            </fmt:message>
+        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Zimbra'}">
         <jsp:useBean id="zbean" class="com.zimbra.cs.offline.jsp.ZmailBean" scope="request"/>
@@ -68,6 +103,11 @@
         <jsp:setProperty name="zbean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(zbean)}
         <c:set var="bean" value="${zbean}" scope="request"/>    
+        <c:set var="help">
+	    <fmt:message key='ToLearnZCS'>
+	        <fmt:param><a href="http://www.zimbra.com" target="_blank"><fmt:message key='Zimbra'/></a></fmt:param>
+            </fmt:message>
+        </c:set>
     </c:when>
     <c:otherwise>
     </c:otherwise>
@@ -133,7 +173,7 @@ function onEditPort(link, id) {
 }
 </script>
 </head>
-<body onload="InitScreen();">
+<body onload="InitScreen()">
 <div align="center">
   <table class="ZPanel" cellpadding="0" cellspacing="0">
     <tr>
@@ -182,14 +222,14 @@ function onEditPort(link, id) {
               <form name="newAccnt" action="" method="POST">
                 <select name="accountFlavor" id="accountFlavor" onchange="accntChange(this)" class="ZSelect">
                   <option value=""><fmt:message key='AccountSelect'/></option>
-                  <option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}"> selected </c:if> > <fmt:message key='Zimbra'/></option>
-                  <option value="YMP" <c:if test="${accountFlavor eq 'YMP'}"> selected </c:if> > <fmt:message key='YMP'/></option>
-                  <option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}"> selected </c:if> ><fmt:message key='Gmail'/></option>
-                  <option value="Live" <c:if test="${accountFlavor eq 'Live'}"> selected </c:if> ><fmt:message key='Live'/></option>
-                  <option value="AOL" <c:if test="${accountFlavor eq 'AOL'}"> selected </c:if> ><fmt:message key='AOL'/></option>
-                  <option value="MSE" <c:if test="${accountFlavor eq 'MSE'}"> selected </c:if> ><fmt:message key='MSE'/></option>
-                  <option value="Imap" <c:if test="${accountFlavor eq 'Imap'}"> selected </c:if> ><fmt:message key='Imap'/></option>
-                  <option value="Pop"<c:if test="${accountFlavor eq 'Pop'}"> selected </c:if> ><fmt:message key='Pop'/></option>
+                  <option value="Zimbra" <c:if test="${accountFlavor eq 'Zimbra'}">selected</c:if> ><fmt:message key='Zimbra'/></option>
+                  <option value="YMP" <c:if test="${accountFlavor eq 'YMP'}">selected</c:if> ><fmt:message key='YMP'/></option>
+                  <option value="Gmail" <c:if test="${accountFlavor eq 'Gmail'}">selected</c:if> ><fmt:message key='Gmail'/></option>
+                  <option value="Live" <c:if test="${accountFlavor eq 'Live'}">selected</c:if> ><fmt:message key='Live'/></option>
+                  <option value="AOL" <c:if test="${accountFlavor eq 'AOL'}">selected</c:if> ><fmt:message key='AOL'/></option>
+                  <option value="MSE" <c:if test="${accountFlavor eq 'MSE'}">selected</c:if> ><fmt:message key='MSE'/></option>
+                  <option value="Imap" <c:if test="${accountFlavor eq 'Imap'}">selected</c:if> ><fmt:message key='Imap'/></option>
+                  <option value="Pop" <c:if test="${accountFlavor eq 'Pop'}">selected</c:if> ><fmt:message key='Pop'/></option>
                   </select>
                 </form>
               </td>
@@ -205,6 +245,17 @@ function onEditPort(link, id) {
     </jsp:forward>
 </c:when>
 <c:when test="${bean.add || empty bean.accountId}">
+    <c:if test="${not empty help}">
+            <tr>
+	      <td></td>
+              <td class="ZAccountHelp">
+                ${help}
+	<c:if test="${not empty helpInfo}">
+                <div id="helpInfo" style="display:none"><br>${helpInfo}</div>
+	</c:if>
+              </td>
+            </tr>
+    </c:if>
     <zd:xmailManage accountFlavor="${accountFlavor}" uri="${uri}" verb="add"/>
 </c:when>
 <c:otherwise>
