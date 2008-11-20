@@ -54,6 +54,7 @@ function(symbol, result) {
     resultView.showMe();
     resultView._updateDays();
     resultView.scrollToCurrentDate();
+    resultView.loadSearchScope();
     resultView._setAttendees(resultView._organizer, resultView._attendees);
     return resultView;
 };
@@ -276,6 +277,10 @@ CalSchedulerView = function(parent, controller) {
 	this._dateToDayIndex = {};
     this._currentFreeSlotIdx = 0;
 
+    if(!ZmMsg.searchScope) {
+        ZmMsg.searchScope = "Search Scope";
+    }
+
 };
 
 
@@ -392,9 +397,7 @@ function(dateInfo, organizer, attendees) {
 		this._allDayCheckbox.checked = true;
 		this._showTimeFields(false);
 	}
-	this._resetFullDateField();
-
-
+	
     this._initTzSelect();
     this._resetTimezoneSelect(dateInfo);
 
@@ -514,21 +517,23 @@ function() {
 
 CalSchedulerView.prototype._createHTML =
 function() {
-	this._startDateFieldId 	= this._htmlElId + "_startDateField";
-	this._startMiniCalBtnId = this._htmlElId + "_startMiniCalBtn";
-	this._startTimeSelectId = this._htmlElId + "_startTimeSelect";
-	this._startTimeAtLblId	= this._htmlElId + "_startTimeAtLbl";
-	this._allDayCheckboxId 	= this._htmlElId + "_allDayCheckbox";
-	this._endDateFieldId 	= this._htmlElId + "_endDateField";
-	this._endMiniCalBtnId 	= this._htmlElId + "_endMiniCalBtn";
-	this._endTimeSelectId 	= this._htmlElId + "_endTimeSelect";
-    this._endTimeAtLblId	= this._htmlElId + "_endTimeAtLbl";
-    this._tzoneSelectId	    = this._htmlElId + "_tzoneSelect";
-	this._navToolbarId		= this._htmlElId + "_navToolbar";
-	this._attendeesTableId	= this._htmlElId + "_attendeesTable";
-	this._autoPickBtnId		= this._htmlElId + "_autoPickCell";
-	this._autoPickBtnId		= this._htmlElId + "_autoPickCell";
-	this._durationSelectId	= this._htmlElId + "_durationCell";
+	this._startDateFieldId 	        = this._htmlElId + "_startDateField";
+	this._startMiniCalBtnId         = this._htmlElId + "_startMiniCalBtn";
+	this._startTimeSelectId         = this._htmlElId + "_startTimeSelect";
+	this._startTimeAtLblId	        = this._htmlElId + "_startTimeAtLbl";
+	this._allDayCheckboxId 	        = this._htmlElId + "_allDayCheckbox";
+	this._endDateFieldId 	        = this._htmlElId + "_endDateField";
+	this._endMiniCalBtnId 	        = this._htmlElId + "_endMiniCalBtn";
+	this._endTimeSelectId 	        = this._htmlElId + "_endTimeSelect";
+    this._endTimeAtLblId	        = this._htmlElId + "_endTimeAtLbl";
+    this._tzoneSelectId	            = this._htmlElId + "_tzoneSelect";
+	this._navToolbarId		        = this._htmlElId + "_navToolbar";
+	this._attendeesTableId	        = this._htmlElId + "_attendeesTable";
+	this._autoPickBtnId		        = this._htmlElId + "_autoPickCell";
+	this._weekDayCellId		        = this._htmlElId + "_weekDayCell";
+	this._durationSelectId	        = this._htmlElId + "_durationCell";
+	this._startSearchTimeSelectId	= this._htmlElId + "_startSearchTimeSelect";
+	this._endSearchTimeSelectId	    = this._htmlElId + "_endSearchTimeSelect";
 
 	this._schedTable[0] = null;	// header row has no attendee data
 
@@ -747,6 +752,8 @@ function() {
     this._tzoneSelect = new DwtSelect({parent:this});
 	this._tzoneSelect.reparentHtmlElement(this._tzoneSelectId);
     this._tzoneSelect.addChangeListener(timezoneListener);
+
+    Dwt.setVisible(document.getElementById(this._tzoneSelectId), false);
     // NOTE: tzone select is initialized later
     delete this._tzoneSelectId;
 
@@ -796,12 +803,46 @@ function() {
 
 	this._selectChangeListener = new AjxListener(this, this._selectChangeListener);
 
+    this._weeklyCheckboxName = Dwt.getNextId();
+    var html = [];
+    var i = 0;
+    html[i++] = "<table border=0 cellpadding=0 cellspacing=0><tr>";
+    for (var j = 0; j < AjxDateUtil.WEEKDAY_MEDIUM.length; j++) {
+        if (j > 0) {
+            html[i++] = "<td>&nbsp;&nbsp;</td>";
+        }
+        html[i++] = "<td><input type='checkbox' name='";
+        html[i++] = this._weeklyCheckboxName;
+        html[i++] = "'></td><td>";
+        html[i++] = AjxDateUtil.WEEKDAY_MEDIUM[j];
+        html[i++] = "</td>";
+    }
+    html[i++] = "</tr></table>";
+    var weekCheckboxCell = document.getElementById(this._weekDayCellId);
+    weekCheckboxCell.innerHTML = html.join("");
+    this._weeklyCheckboxes = document.getElementsByName(this._weeklyCheckboxName);
+
+
+    var searchTimeSelectListener= new AjxListener(this, this._searchTimeChangeListener);
+    this._startSearchTimeSelect = new ZmTimeSelect(this, ZmTimeSelect.END);
+    this._startSearchTimeSelect.addChangeListener(searchTimeSelectListener);
+    this._startSearchTimeSelect.reparentHtmlElement(this._startSearchTimeSelectId);
+    delete this._startSearchTimeSelectId;
+
+    this._endSearchTimeSelect = new ZmTimeSelect(this, ZmTimeSelect.END);
+    this._endSearchTimeSelect.addChangeListener(searchTimeSelectListener);
+    this._endSearchTimeSelect.reparentHtmlElement(this._endSearchTimeSelectId);
+    delete this._endSearchTimeSelectId;
+
+    
+
 	this._autoPickBtn = new DwtButton({parent:this});
 	this._autoPickBtn.setText(ZmMsg.autoPick);
 	this._autoPickBtn.setImage("GroupSchedule");
 	this._autoPickBtn.addSelectionListener(new AjxListener(this, this._autoPickListener));
 	this._autoPickBtn.reparentHtmlElement(this._autoPickBtnId);
-
+   
+    
 	this._durationSelect = new DwtSelect({parent:this});
 	this._durationSelect.reparentHtmlElement(this._durationSelectId);
 	var durationListener = new AjxListener(this, this._durationListener);
@@ -964,8 +1005,6 @@ CalSchedulerView.prototype._updateFreeBusy =
 function() {
 	this._updateDays();
 	this._cleanupAllAttendeeSlots();
-	// update the full date field
-	this._resetFullDateField();
 
 	// clear the schedules for existing attendees
 	var uids = [];
@@ -1139,8 +1178,13 @@ function(sched) {
 
 CalSchedulerView.prototype._resetFullDateField =
 function() {
-	var formatter = AjxDateFormat.getDateInstance(AjxDateFormat.MEDIUM);
-	this._navToolbar.setText(formatter.format(AjxDateUtil.simpleParseDateStr(this._startDateField.value)));
+    if(this._days && this._days[0]) {
+        var dayFormatter = DwtCalendar.getDayFormatter();
+        var numDays = this.getNumDays();
+        var first = this._days[0].date;
+        var last = this._days[numDays-1].date;
+        this._navToolbar.setText([dayFormatter.format(first), " - ", dayFormatter.format(last)].join(""));
+    }
 };
 
 CalSchedulerView.prototype._handleDateChange =
@@ -1208,6 +1252,26 @@ CalSchedulerView.prototype._navBarListener =
 function(ev) {
 	var op = ev.item.getData(ZmOperation.KEY_ID);
 
+    var numDays = this.getNumDays();
+
+    var origStartDate = AjxDateUtil.simpleParseDateStr(this._startDateField.value);
+    var origEndDate = AjxDateUtil.simpleParseDateStr(this._endDateField.value);
+    var diffTime = origEndDate.getTime() - origStartDate.getTime();
+
+
+    var sd = this._days[0].date;
+    var ed = this._days[numDays-1].endDate;
+
+    sd.setDate(sd.getDate() + ((op == ZmOperation.PAGE_BACK) ? -7 : 7));
+    ed.setDate(ed.getDate() + ((op == ZmOperation.PAGE_BACK) ? -7 : 7));
+
+    this._startDateField.value = AjxDateUtil.simpleComputeDateStr(sd);
+    this._endDateField.value = AjxDateUtil.simpleComputeDateStr(new Date(sd.getTime() + diffTime));
+
+    this._updateFreeBusy();
+
+
+    /*
 	var sd = AjxDateUtil.simpleParseDateStr(this._startDateField.value);
 	var ed = AjxDateUtil.simpleParseDateStr(this._endDateField.value);
 
@@ -1229,6 +1293,7 @@ function(ev) {
 	}else{
 		this._resetFullDateField();
 	}
+	*/
 
 	// finally, update the appt tab view page w/ new date(s)
 	//this._editView.updateDateField(this._startDateField.value, this._endDateField.value);
@@ -1243,6 +1308,17 @@ function(ev) {
 	this._outlineAppt(this._dateInfo);
 	this._clearFreeSelections();
 	//this._editView.updateTimeField(this._dateInfo);
+};
+
+CalSchedulerView.prototype._searchTimeChangeListener =
+function(ev) {
+    if(!ZmTimeSelect.validStartEnd(this._startDateField, this._endDateField, this._startSearchTimeSelect, this._endSearchTimeSelect)) {
+        var startDate = AjxDateUtil.simpleParseDateStr(this._startDateField.value);
+        var searchStartDate = this._startSearchTimeSelect.getValue(startDate);
+        var searchEndDate = new Date(searchStartDate.getTime());
+        searchEndDate.setHours(23, 59, 0, 0)
+        this._endSearchTimeSelect.set(searchEndDate);
+    }
 };
 
 CalSchedulerView.prototype._timezoneListener =
@@ -1339,9 +1415,9 @@ function(sched, slots, status) {
 
 				var attendeeLoc = Dwt.toWindow(sched.attendeeCell, null, null, this.getHtmlElement());
 				var attendeeSize = Dwt.getSize(sched.attendeeCell);
-				Dwt.setLocation(div, deltaX, attendeeLoc.y-gridLoc.y);
+				Dwt.setLocation(div, deltaX, attendeeLoc.y-gridLoc.y+1);
 				var width = (CalSchedulerView.DAY_COLUMN_WIDTH*numDays)*((slots[i].e - slots[i].s)/diffTime);
-				Dwt.setSize(div, width, attendeeSize.y);
+				Dwt.setSize(div, width, attendeeSize.y-1);
 
 				div.s = slots[i].s;
 				div.e = slots[i].e;
@@ -2074,6 +2150,8 @@ function() {
 		d.setDate(d.getDate()+1);
 	}
 
+    this._resetFullDateField();
+
 };
 
 CalSchedulerView.prototype._dayKey =
@@ -2194,6 +2272,7 @@ function(clearSlots) {
 
 CalSchedulerView.prototype._autoPickListener =
 function() {
+    this.saveSearchScope();
 	var numDays = this.getNumDays();
 	var startTime = this._days[0].date.getTime();
 	var endTime = this._days[numDays-1].endDate.getTime();
@@ -2206,20 +2285,27 @@ function() {
 
 	var dur = this._durationSelect ? (this._durationSelect.getValue()*60*1000) : AjxDateUtil.MSEC_PER_HOUR;
 	var slot = null;
-
+    var newSlot = null;
+    
 	if(!this._currentFreeSlot) {
 		var startDate = this.getSelectedStartDate();
-		var newSlot = {s: startDate.getTime() , e: startDate.getTime() + dur};
-		slot = this.getFreeSlot(newSlot, startTime, endTime);
+        newSlot = this.getNextSearchSlot(startDate.getTime(), dur);
 	}else {
-		var newSlot = {s: this._currentFreeSlot.e, e: this._currentFreeSlot.e+dur};
-		slot = this.getFreeSlot(newSlot, startTime, endTime);
+		newSlot = this.getNextSearchSlot(this._currentFreeSlot.e, dur);
 	}
+    slot = this.getFreeSlot(newSlot, startTime, endTime);
 
 
-	if(slot == null) {
-		return;
-	}
+    if(slot == null) {
+        if(!ZmMsg.noFreeSlotFound) {
+            ZmMsg.noFreeSlotFound = "No free time slots found with on selected week range";             
+        }
+        var msgDialog = appCtxt.getMsgDialog();
+        msgDialog.reset();
+        msgDialog.setMessage(ZmMsg.noFreeSlotFound, DwtMessageDialog.INFO_STYLE);
+        msgDialog.popup();
+        return;
+    }
 
 	DBG.println("@ <font color=blue><b>Current Free Slot:</b></font>");
 	DBG.println("<br>"+new Date(slot.s)+" to "+new Date(slot.e));
@@ -2231,8 +2317,11 @@ function() {
 CalSchedulerView.prototype.getFreeSlot =
 function(newSlot, startTime, endTime) {
 
-	var slot = null;
+    if(newSlot == null) {
+        return null;
+    }
 
+	var slot = null;
 	while(newSlot.s < endTime) {
 		for(var i=0; i<this._freeSlots.size(); i++) {
 			var nextFreeSlot = this._freeSlots.get(i);
@@ -2242,10 +2331,84 @@ function(newSlot, startTime, endTime) {
 				return slot;
 			}
 		}
-		newSlot = {s: newSlot.s+AjxDateUtil.MSEC_PER_FIFTEEN_MINUTES, e: newSlot.e+AjxDateUtil.MSEC_PER_FIFTEEN_MINUTES};
+		newSlot = this.getNextSearchSlot(newSlot.s + AjxDateUtil.MSEC_PER_FIFTEEN_MINUTES, newSlot.e-newSlot.s);
+
+        if(newSlot == null) {
+            return null;
+        }
 	}
 	return slot;
+};
 
+
+CalSchedulerView.prototype.getNextSearchSlot =
+function(newStartTime, duration) {
+   var newStartDate = this.getNextPossibleDay(newStartTime);
+   //newStartDate = this.roundBySearchTimeSelection(newStartDate);
+
+    DBG.println("new Start Date : " + newStartDate);
+
+   if(newStartDate) {
+       return {s: newStartDate.getTime(), e: newStartDate.getTime() + duration};
+   }else {
+       return null;
+   }
+};
+
+/*
+* return closest possible date which falls in search scope
+*
+* @param newStartTime	[time]          start search time
+*/
+CalSchedulerView.prototype.getNextPossibleDay =
+function(newStartTime) {
+    var newStartDate = new Date(newStartTime);
+    var newDayOfWeek = newStartDate.getDay();
+    for(var i=newDayOfWeek; i<this._weeklyCheckboxes.length; i++) {
+        newDayOfWeek = newStartDate.getDay();
+        if(this._weeklyCheckboxes[i].checked) {
+            var sd = this.roundBySearchTimeSelection(newStartDate);
+            if(sd) {
+                return sd;
+            }
+        }
+        newStartDate = this.getNextDay(newStartDate);
+    }
+    return null;
+};
+
+CalSchedulerView.prototype.getNextDay =
+function(newStartDate) {
+    var oldDate = newStartDate.getDate();
+    newStartDate.setDate(newStartDate.getDate() + 1);
+    if(oldDate == newStartDate.getDate()) {
+        //daylight saving problem
+        newStartDate.setHours(0,0,0,0);
+        newStartDate.setTime(d.getTime() + AjxDateUtil.MSEC_PER_DAY);
+    }
+    //set this according to preference
+    newStartDate.setHours(0,0,0,0);
+    return newStartDate;
+};
+
+
+CalSchedulerView.prototype.roundBySearchTimeSelection =
+function(startDate) {
+    if(!startDate) {
+        return null;
+    }
+    var searchStartDate = this._startSearchTimeSelect.getValue(new Date(startDate));
+    var searchEndDate = this._endSearchTimeSelect.getValue(new Date(startDate));
+
+    if(startDate.getTime() < searchStartDate.getTime()) {
+        return searchStartDate;
+    }else if(startDate.getTime() > searchEndDate.getTime()) {
+        return null;
+    }else {
+        return startDate;
+    }
+    
+    //return (startDate.getTime() < searchStartDate.getTime())? searchStartDate:startDate;
 };
 
 CalSchedulerView.prototype._positionFreeStatusDiv =
@@ -2287,6 +2450,9 @@ function(slot, startTime, endTime) {
 };
 
 
+/*
+* scroll to the current selected date on free/busy time grid
+*/
 CalSchedulerView.prototype.scrollToCurrentDate =
 function() {
     var numDays = this.getNumDays();
@@ -2313,3 +2479,76 @@ function() {
     }*/
 };
 
+/*
+* checks/unchecks weekday checkboxes in search scope
+*
+* @param checked	[boolean]*		check/uncheck all checkboxs
+*/
+CalSchedulerView.prototype.toggleWeekdays =
+function(checked) {     
+    for(var i=0; i<this._weeklyCheckboxes.length; i++) {
+        this._weeklyCheckboxes[i].checked = checked;
+    }
+};
+
+/*
+* saves the search scope params into zimlet
+*
+*/
+CalSchedulerView.prototype.saveSearchScope =
+function() {
+    var selectedWkDays = [];
+    for(var i=0; i<this._weeklyCheckboxes.length; i++) {
+        if(this._weeklyCheckboxes[i].checked) {
+            selectedWkDays.push(i);
+        }
+    }
+
+    //dirty check
+    var newSearchScopeStr = [this._durationSelect.getValue(), selectedWkDays.join(",")].join("|");
+
+    if(!this._origSearchScopeStr || this._origSearchScopeStr != newSearchScopeStr) {
+        this._controller.setUserProperty("searchDuration", this._durationSelect.getValue());
+        this._controller.setUserProperty("searchWeekdays", selectedWkDays.join(","));
+        this._controller.setUserProperty("searchStartSelect", this._startSearchTimeSelect.getValue(new Date()).getTime());
+        this._controller.setUserProperty("searchEndSelect", this._endSearchTimeSelect.getValue(new Date()).getTime(), true);
+        this._origSearchScopeStr = newSearchScopeStr;
+    }
+};
+
+/*
+* loads search scope preferences from zimlet
+*
+*/
+CalSchedulerView.prototype.loadSearchScope =
+function() {
+    var searchDuration = this._controller.getUserProperty("searchDuration");
+    var searchWeekdays = this._controller.getUserProperty("searchWeekdays");
+    var searchStartSelect = this._controller.getUserProperty("searchStartSelect");
+    var searchEndSelect = this._controller.getUserProperty("searchEndSelect");
+
+    var searchDuration = searchDuration ? parseInt(searchDuration) : 60;
+    this._durationSelect.setSelectedValue(searchDuration);
+
+    this.toggleWeekdays(false);
+    var selectedWkDays = (searchWeekdays)?searchWeekdays.split(","):[1,2,3,4,5];
+    for(var i=0; i< selectedWkDays.length; i++) {
+        var day = parseInt(selectedWkDays[i]);
+        if(this._weeklyCheckboxes[day]) {
+            this._weeklyCheckboxes[day].checked = true;
+        }
+    }
+
+    var sd = searchStartSelect ? new Date(parseInt(searchStartSelect)) : new Date();
+    var ed = searchEndSelect ? new Date(parseInt(searchEndSelect)) : new Date();
+
+    if(!searchStartSelect) {
+        sd.setHours(6,0,0,0)
+    }
+    this._startSearchTimeSelect.set(sd);
+    if(!searchEndSelect) {
+        ed.setHours(22,0,0,0)
+    }
+    this._endSearchTimeSelect.set(ed);
+    this._origSearchScopeStr = [searchDuration,selectedWkDays.join(",")].join("|");
+};

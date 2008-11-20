@@ -2,13 +2,85 @@
 <template id='CalSchedulerView_Main'>
 	<table border=0 width=100% cellpadding=3><tr>
         <td width=100%>
+
             <table border=0 width="100%">
+                <tr>
+                    <td width="30%" valign="top">
+                        <fieldset style='height:95px'>
+                            <legend><$= ZmMsg.searchScope $></legend>
+                            <div>
+                                <table border=0 cellpadding=2 cellspacing=0 width="100%">
+                                    <tr>
+                                        <td id="${id}_autoPickCell" colspan="2"></td>
+                                        <td>&nbsp;</td>
+                                        <td><$= ZmMsg.fromLabel $></td>
+                                        <td id="${id}_startSearchTimeSelect"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ZmApptTabViewPageField"><$= ZmMsg.durationLabel $></td>
+                                        <td id="${id}_durationCell" width="40"></td>
+                                        <td>&nbsp;</td>
+                                        <td><$= ZmMsg.toLabel $></td>
+                                        <td id="${id}_endSearchTimeSelect" colspan="1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="${id}_weekDayCell" colspan="5"></td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </fieldset>
+                    </td>
+                    <td valign="top" width="220">
+                        <fieldset style='height:95px;'>
+                            <legend><$= ZmMsg.time $></legend>
+                            <div>
+                                <table border=0>
+                                    <$= AjxTemplate.expand("calendar.Appointment#ApptTimeSection", data) $>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </td>
+                    <td valign="top" width="150">
+                        <fieldset style='height:95px;width:150px'>
+                            <legend><$= ZmMsg.key $></legend>
+                            <div>
+                                <table border=0 cellspacing=2>
+                                    <tr>
+                                        <td><div class='ZmGraphKeyColorBox ZmScheduler-free'></div></td>
+                                        <td class='ZmGraphKeyColorText'><$= ZmMsg.free $></td>
+                                        <td>&nbsp;</td>
+                                        <td><div class='ZmGraphKeyColorBox ZmScheduler-busy'></div></td>
+                                        <td class='ZmGraphKeyColorText'><$= ZmMsg.busy $></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class='ZmGraphKeyColorBox ZmScheduler-tentative'></div></td>
+                                        <td class='ZmGraphKeyColorText'><$= ZmMsg.tentative $></td>
+                                        <td>&nbsp;</td>
+                                        <td><div class='ZmGraphKeyColorBox ZmScheduler-unknown'></div></td>
+                                        <td class='ZmGraphKeyColorText'><$= ZmMsg.unknown $></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>                                    
+                                        <td><div class='ZmGraphKeyColorBox ZmScheduler-outOfOffice'></div></td>
+                                        <td class='ZmGraphKeyColorText'><$= ZmMsg.outOfOffice $></td>
+                                        <td>&nbsp;</td>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                    </td>
+                </tr>
+            </table>
+
+            <!--table border=0 width="100%">
             <tr>
-            <td colspan="2" id="${id}_autoPickCell" width="100" valign="top">
+            <td colspan="2" id="${id}_autoPickCell" width="50%" valign="top">
+
 
             </td>
-            <td rowspan="2">
-            <!-- date/time section -->
+            <td rowspan="2" width="50%">
 			<table border=0>
             <$= AjxTemplate.expand("calendar.Appointment#ApptTimeSection", data) $>
             </table>
@@ -18,11 +90,11 @@
                 <td class="ZmApptTabViewPageField"><$= ZmMsg.durationLabel $></td>
                 <td id="${id}_durationCell"></td>
             </tr>
-            </table>
+            </table-->
+
         </td>
 
-        <td style='text-align:right'>
-			<!-- key/legend section -->
+        <!--td style='text-align:right'>
 			<table border=0 cellpadding=0 cellspacing=0 class='ZmGraphKey'>
 				<tr>
 					<td class='ZmGraphKeyHeader'><$= ZmMsg.key $></td>
@@ -53,7 +125,7 @@
 					</td>
 				</tr>
 			</table>
-		</td>
+		</td-->
 	</tr></table>
 	<div style='margin-top:25'>
 		<!-- free/busy section -->
