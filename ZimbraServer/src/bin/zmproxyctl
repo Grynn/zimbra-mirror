@@ -1,9 +1,9 @@
-#!/usr/bin/perl
+#!/bin/bash
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # 
 # Zimbra Collaboration Suite Server
-# Copyright (C) 2007 Zimbra, Inc.
+# Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
 # 
 # The contents of this file are subject to the Yahoo! Public License
 # Version 1.0 ("License"); you may not use this file except in
@@ -16,104 +16,39 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-use strict;
+BASE=/opt/zimbra
+SCRIPTS="zmmemcachedctl zmnginxctl"
 
-my $imapCapabilities = "--imap_capability \"IMAP4rev1 STARTTLS BINARY CHILDREN ID LITERAL+ LOGIN-REFERRALS NAMESPACE QUOTA SASL-IR UIDPLUS UNSELECT\"";
-
-# NOTE  - the double spaces in this string are significant
-my $popCapabilities = "--pop_capability \"TOP  USER  UIDL  STLS  EXPIRE 31 USER\"";
-
-my $arguments = $#ARGV;
-my $cmd = shift;
-
-sub start {
-	my $p = getPid("nginx");
-	if ($p) {
-		my $r = 0;
-		$r = kill (0, $p);
-		if ($r)  {
-			print "Error: nginx is already running\n";
-			exit;
-		}
-	}
-	$p = getPid("memcached");
-	if ($p) {
-		my $r = 0;
-		$r = kill (0, $p);
-		if ($r) {
-			print "memcached is already running\n";
-		} else {
-			`/opt/zimbra/memcached/bin/memcached -d -P /opt/zimbra/log/memcached.pid`;
-		}
-	} else {
-			`/opt/zimbra/memcached/bin/memcached -d -P /opt/zimbra/log/memcached.pid`;
-        }
-	if ( $arguments == 0 ) {
-		`/opt/zimbra/libexec/zmmtaconfig imapproxy`;
-	}
-	`sudo /opt/zimbra/nginx/sbin/nginx -c /opt/zimbra/conf/nginx.conf`;
-}
-
-sub stop {
-	my $p = getPid("nginx");
-	print "Stopping nginx\n";
-	if ($p) { kill "TERM", $p; }
-	$p = getPid("memcached");
-	print "Stopping memcached\n";
-	if ($p) { kill "TERM", $p; }
-}
-
-sub status {
-	my $status = 0;
-	my $p = getPid("nginx");
-	my $r = 0;
-	if ($p) {
-		$r = kill (0,$p);
-	}
-	if (!$p || !$r) {
-		print "nginx is not running\n";
-		$status = 1;
-	} else {
-		print "nginx is running\n";
-	}
-	$p = getPid("memcached");
-	$r = 0;
-	if ($p) {
-		$r = kill (0,$p);
-	}
-	if (!$p || !$r) {
-		print "memcached is not running\n";
-		$status = 1;
-	} else {
-		print "memcached is running\n";
-	}
-	return $status;
-}
-
-sub getPid {
-	my $service = shift;
-	if ( -f "/opt/zimbra/log/$service.pid" ) {
-		my $pid = `cat /opt/zimbra/log/$service.pid`;
-		chomp $pid;
-		return $pid;
-	}
-	return 0;
-}
-
-if ($cmd eq "start") {
-	start();
-} elsif ($cmd eq "stop") {
-	stop();
-	exit 0;
-} elsif ($cmd eq "restart") {
-	stop();
-	sleep 1;
-	start();
-} elsif ($cmd eq "status") {
-} else {
-	print "$0 start|stop|restart|status\n";
-	exit 1
-}
-
-sleep 1;
-exit (status());
+case "$1" in 
+	start)
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i start
+		done
+	;;
+	stop)
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i stop
+		done
+	;;
+	restart|reload)
+		for i in $SCRIPTS; do
+			/opt/zimbra/bin/$i $1
+		done
+	;;
+	status)
+		STATUS=0
+		for i in $SCRIPTS; do
+		  /opt/zimbra/bin/$i status > /dev/null 2>&1
+		  R=$?
+			if [ $R -ne "0" ]; then
+				echo "$i is not running"
+				STATUS=$R
+			fi
+		done
+		exit $STATUS
+	;;
+	*)
+		echo "$0 start|stop|restart|reload|status"
+		exit 1
+	;;
+esac
