@@ -11,6 +11,16 @@ if [ ! -r "$1/update.mar" ]; then
   exit 1
 fi
 
+#get parameters for installer
+parmfile="$1/../../update.params"
+params=" "
+if [ -r $parmfile ]; then
+  while [ 1 ]; do
+    read line || break
+    params="$params $line"
+  done < $parmfile
+fi
+
 echo Start updating... >> "$1/update.log"
 
 stage=/tmp/zdupdate
@@ -19,7 +29,7 @@ rm -fr $stage
 mkdir -p $stage
 mv "$1/update.mar" $stage/update.dmg
 /usr/bin/hdiutil attach $stage/update.dmg -mountpoint $stage/install
-"$stage/install/Zimbra Desktop Installer.app/Contents/MacOS/JavaApplicationStub"
+"$stage/install/Zimbra Desktop Installer.app/Contents/MacOS/JavaApplicationStub" $params
 /usr/bin/hdiutil detach $stage/install
 rm -fr $stage
 

@@ -189,6 +189,11 @@
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
                             <string>org.apache.log4j.BasicConfigurator.configure();
+
+String ou = context.getCompilerVariable("offline_update");
+if (ou != null &amp;&amp; ou.equals("true"))
+    System.setProperty("offline_update", "true");
+    
 return true;</string>
                           </void>
                         </object>
@@ -374,6 +379,69 @@ return Boolean.FALSE;</string>
                 </serializedBean>
                 <condition />
               </action>
+              <action name="" id="287296" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.ErrNotAdmin}">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.RequireAdminAction" />
+                  </java>
+                </serializedBean>
+                <condition>Boolean.getBoolean("offline_update") &amp;&amp; (Util.isMacOS() || Util.isWindows())</condition>
+              </action>
+              <action name="Disallow root user" id="287297" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.DisallowRoot}">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>com.sun.security.auth.module.UnixSystem unix = new com.sun.security.auth.module.UnixSystem();
+long uid = unix.getUid();
+return (uid != 0);</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>!Util.isWindows()</condition>
+              </action>
+              <action name="Set Language ID" id="287299" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>String langId = context.getLanguageId().replace('_', '-');
+context.setVariable("languageId", langId);
+return true;</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="Set MacUninstaller Var" id="287300" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>String fullname = (String)context.getCompilerVariable("sys.fullName");
+String uninstMenuEnt = context.getMessage("UninstallerMenuEntry").replaceFirst("\\{0\\}", fullname);
+context.setVariable("macUninstaller", uninstMenuEnt + ".app");
+return true;</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS()</condition>
+              </action>
             </actions>
             <formComponents />
           </screen>
@@ -399,16 +467,9 @@ return Boolean.FALSE;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition />
+            <condition>!Boolean.getBoolean("offline_update")</condition>
             <validation />
-            <preActivation>String langId = context.getLanguageId().replace('_', '-');
-context.setVariable("languageId", langId);
-
-String fullname = (String)context.getCompilerVariable("sys.fullName");
-String uninstMenuEnt = context.getMessage("UninstallerMenuEntry").replaceFirst("\\{0\\}", fullname);
-context.setVariable("macUninstaller", uninstMenuEnt + ".app");
-
-</preActivation>
+            <preActivation />
             <postActivation />
             <actions />
             <formComponents />
@@ -423,30 +484,12 @@ context.setVariable("macUninstaller", uninstMenuEnt + ".app");
                 </object>
               </java>
             </serializedBean>
-            <condition />
+            <condition>!Boolean.getBoolean("offline_update")</condition>
             <validation />
             <preActivation />
             <postActivation />
             <actions>
-              <action name="Disallow root user" id="285851" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.DisallowRoot}">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
-                      <void property="script">
-                        <object class="com.install4j.api.beans.ScriptProperty">
-                          <void property="value">
-                            <string>com.sun.security.auth.module.UnixSystem unix = new com.sun.security.auth.module.UnixSystem();
-long uid = unix.getUid();
-return (uid != 0);</string>
-                          </void>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>!Util.isWindows()</condition>
-              </action>
-              <action name="" id="284703" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.ErrNotAdmin}">
+              <action name="" id="287298" beanClass="com.install4j.runtime.beans.actions.misc.RequireAdminAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.ErrNotAdmin}">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RequireAdminAction" />
@@ -467,7 +510,7 @@ return (uid != 0);</string>
                 </object>
               </java>
             </serializedBean>
-            <condition>context.getBooleanVariable("needToUninstall")</condition>
+            <condition>!Boolean.getBoolean("offline_update") &amp;&amp; context.getBooleanVariable("needToUninstall")</condition>
             <validation />
             <preActivation />
             <postActivation />
@@ -969,6 +1012,74 @@ default:
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
               </action>
+              <group name="delete update.mar" id="287481" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup">
+                      <void property="conditionExpression">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>!Boolean.getBoolean("offline_update")</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <beans>
+                  <action name="win32 delete update.mar" id="287482" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                          <void property="backupForRollback">
+                            <boolean>false</boolean>
+                          </void>
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>win32/prism/updates/0/update.mar</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isWindows()</condition>
+                  </action>
+                  <action name="linux delete update.mar" id="287483" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                          <void property="backupForRollback">
+                            <boolean>false</boolean>
+                          </void>
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>linux/prism/updates/0/update.mar</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+                  </action>
+                  <action name="macos delete update.mar" id="287484" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
+                          <void property="backupForRollback">
+                            <boolean>false</boolean>
+                          </void>
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>macos/prism/Prism.app/Contents/Resources/updates/0/update.mar</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isMacOS()</condition>
+                  </action>
+                </beans>
+              </group>
               <action name="clear error" id="285704" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -1505,7 +1616,7 @@ default:
                 </object>
               </java>
             </serializedBean>
-            <condition>!context.getBooleanVariable("keepUserData")</condition>
+            <condition>!Boolean.getBoolean("offline_update") &amp;&amp; !context.getBooleanVariable("keepUserData")</condition>
             <validation />
             <preActivation>if (Util.isWindows()) {
     String subdir = Util.isWindowsVista() ? "\\AppData\\Local\\Zimbra\\zdesktop" : "\\Local Settings\\Application Data\\Zimbra\\zdesktop";
@@ -1780,702 +1891,11 @@ try {
                 <object class="com.install4j.runtime.beans.screens.AdditionalConfirmationsScreen" />
               </java>
             </serializedBean>
-            <condition>!context.isErrorOccured()</condition>
+            <condition>!Boolean.getBoolean("offline_update") &amp;&amp; !context.isErrorOccured()</condition>
             <validation />
             <preActivation />
             <postActivation />
-            <actions>
-              <action name="win32 links" id="284691" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
-                      <void property="script">
-                        <object class="com.install4j.api.beans.ScriptProperty">
-                          <void property="value">
-                            <string>File prism = context.getDestinationFile("win32/prism/prism.exe");
-File icon = context.getDestinationFile("win32/launcher_32x32.ico");
-
-String argument = "-webapp ..\\..\\zdesktop.webapp -override ..\\..\\zdesktop.webapp\\override.ini -profile ..\\..\\profile";
-
-File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Yahoo! Zimbra Desktop.lnk");
-File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Yahoo! Zimbra Desktop.lnk");
-
-WinFileSystem.createShellLink(startmenu, prism, icon, argument, "Yahoo! Zimbra Desktop");
-if (context.getBooleanVariable("createDesktopLinkAction"))
-  WinFileSystem.createShellLink(desktop, prism, icon, argument, "Yahoo! Zimbra Desktop");
-
-return true;</string>
-                          </void>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>Util.isWindows()</condition>
-              </action>
-              <group name="macos" id="284698" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.groups.ActionGroup">
-                      <void property="conditionExpression">
-                        <object class="com.install4j.api.beans.ScriptProperty">
-                          <void property="value">
-                            <string>Util.isMacOS()</string>
-                          </void>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <beans>
-                  <group name="macos.app" id="284694" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.groups.ActionGroup">
-                          <void property="conditionExpression">
-                            <object class="com.install4j.api.beans.ScriptProperty">
-                              <void property="value">
-                                <string>Util.isMacOS()</string>
-                              </void>
-                            </object>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <beans>
-                      <action name="application.ini" id="145799" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                              <void property="file">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
-                                </object>
-                              </void>
-                              <void property="replaceValue">
-                                <string>${installer:sys.installationDir}</string>
-                              </void>
-                              <void property="searchValue">
-                                <string>@install@</string>
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="macos.app extension" id="284474" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                              <void property="file">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
-                                </object>
-                              </void>
-                              <void property="replaceValue">
-                                <string>${installer:sys.installationDir}</string>
-                              </void>
-                              <void property="searchValue">
-                                <string>@install@</string>
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="macos.app prism" id="284475" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
-                              <void property="file">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
-                                </object>
-                              </void>
-                              <void property="mode">
-                                <string>755</string>
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                    </beans>
-                  </group>
-                  <group name="macos desktop" id="284696" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.groups.ActionGroup">
-                          <void property="conditionExpression">
-                            <object class="com.install4j.api.beans.ScriptProperty">
-                              <void property="value">
-                                <string>Util.isMacOS()</string>
-                              </void>
-                            </object>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <beans>
-                      <action name="desktop/Info.plist" id="145800" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop/icns" id="145815" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop/prism" id="284483" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
-                                </object>
-                              </void>
-                              <void property="mode">
-                                <string>755</string>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop/application.ini" id="284484" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop/brand.dtd" id="284485" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop/brand.properties" id="284486" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop/chrome.manifest" id="284487" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop/prism-runtime" id="284488" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                      <action name="desktop" id="203135" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
-                              <void property="file">
-                                <object class="java.io.File">
-                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app</string>
-                                </object>
-                              </void>
-                              <void property="mode">
-                                <string>775</string>
-                              </void>
-                              <void property="recursive">
-                                <boolean>true</boolean>
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                      </action>
-                    </beans>
-                  </group>
-                  <group name="Application" id="284695" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.groups.ActionGroup">
-                          <void property="conditionExpression">
-                            <object class="com.install4j.api.beans.ScriptProperty">
-                              <void property="value">
-                                <string>Util.isMacOS()</string>
-                              </void>
-                            </object>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <beans>
-                      <action name="applications/Info.plist" id="168012" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications/icns" id="168014" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications/prism" id="284476" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
-                                </object>
-                              </void>
-                              <void property="mode">
-                                <string>755</string>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications/application.ini" id="284478" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications/brand.dtd" id="284479" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications/brand.properties" id="284480" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications/chrome.manifest" id="284481" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications/prism-runtime" id="284482" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                              <void property="destinationFile">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
-                                </object>
-                              </void>
-                              <void property="overwriteMode">
-                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                              </void>
-                              <void property="sourceFile">
-                                <object class="java.io.File">
-                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
-                                </object>
-                              </void>
-                              <void property="uninstallMode">
-                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                      <action name="applications" id="284477" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                        <serializedBean>
-                          <java class="java.beans.XMLDecoder">
-                            <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
-                              <void property="file">
-                                <object class="java.io.File">
-                                  <string>/Applications/Yahoo! Zimbra Desktop.app</string>
-                                </object>
-                              </void>
-                              <void property="mode">
-                                <string>775</string>
-                              </void>
-                              <void property="recursive">
-                                <boolean>true</boolean>
-                              </void>
-                            </object>
-                          </java>
-                        </serializedBean>
-                        <condition>Util.isMacOS()</condition>
-                      </action>
-                    </beans>
-                  </group>
-                </beans>
-              </group>
-              <group name="linux desktop" id="284697" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
-                  </java>
-                </serializedBean>
-                <beans>
-                  <action name="webapp.ini" id="287208" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                          <void property="file">
-                            <object class="java.io.File">
-                              <string>zdesktop.webapp/webapp.ini</string>
-                            </object>
-                          </void>
-                          <void property="replaceValue">
-                            <string>status=true</string>
-                          </void>
-                          <void property="searchValue">
-                            <string>status=false</string>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
-                  </action>
-                  <action name="linux.desktop" id="145819" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                          <void property="file">
-                            <object class="java.io.File">
-                              <string>linux/linux.desktop</string>
-                            </object>
-                          </void>
-                          <void property="replaceValue">
-                            <string>${installer:sys.installationDir}</string>
-                          </void>
-                          <void property="searchValue">
-                            <string>@install@</string>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
-                  </action>
-                  <action name="linux.desktop" id="145820" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
-                          <void property="destinationFile">
-                            <object class="java.io.File">
-                              <string>${installer:sys.userHome}/Desktop/linux.desktop</string>
-                            </object>
-                          </void>
-                          <void property="overwriteMode">
-                            <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                          </void>
-                          <void property="sourceFile">
-                            <object class="java.io.File">
-                              <string>linux/linux.desktop</string>
-                            </object>
-                          </void>
-                          <void property="uninstallMode">
-                            <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
-                  </action>
-                </beans>
-              </group>
-              <action name="clear error" id="275928" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
-                      <void property="script">
-                        <object class="com.install4j.api.beans.ScriptProperty">
-                          <void property="value">
-                            <string>context.setErrorOccured(false);
-return true;</string>
-                          </void>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition />
-              </action>
-            </actions>
+            <actions />
             <formComponents>
               <formComponent name="Add a desktop link" id="5392" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
@@ -2515,6 +1935,715 @@ return true;</string>
             <preActivation />
             <postActivation />
             <actions>
+              <action name="Set createDesktopLinkAction" id="287336" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>return Boolean.TRUE;</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="variableName">
+                        <string>createDesktopLinkAction</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Boolean.getBoolean("offline_update")</condition>
+              </action>
+              <action name="win32 links" id="287304" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>File prism = context.getDestinationFile("win32/prism/prism.exe");
+File icon = context.getDestinationFile("win32/launcher_32x32.ico");
+
+String argument = "-webapp ..\\..\\zdesktop.webapp -override ..\\..\\zdesktop.webapp\\override.ini -profile ..\\..\\profile";
+
+File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Yahoo! Zimbra Desktop.lnk");
+File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Yahoo! Zimbra Desktop.lnk");
+
+WinFileSystem.createShellLink(startmenu, prism, icon, argument, "Yahoo! Zimbra Desktop");
+if (context.getBooleanVariable("createDesktopLinkAction"))
+  WinFileSystem.createShellLink(desktop, prism, icon, argument, "Yahoo! Zimbra Desktop");
+
+return true;</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isWindows()</condition>
+              </action>
+              <group name="macos" id="287305" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup">
+                      <void property="conditionExpression">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>Util.isMacOS()</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <beans>
+                  <group name="macos.app" id="287306" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.groups.ActionGroup">
+                          <void property="conditionExpression">
+                            <object class="com.install4j.api.beans.ScriptProperty">
+                              <void property="value">
+                                <string>Util.isMacOS()</string>
+                              </void>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <beans>
+                      <action name="application.ini" id="287307" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                              <void property="file">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
+                                </object>
+                              </void>
+                              <void property="replaceValue">
+                                <string>${installer:sys.installationDir}</string>
+                              </void>
+                              <void property="searchValue">
+                                <string>@install@</string>
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="macos.app extension" id="287308" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                              <void property="file">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                </object>
+                              </void>
+                              <void property="replaceValue">
+                                <string>${installer:sys.installationDir}</string>
+                              </void>
+                              <void property="searchValue">
+                                <string>@install@</string>
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="macos.app prism" id="287309" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
+                              <void property="file">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
+                                </object>
+                              </void>
+                              <void property="mode">
+                                <string>755</string>
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                    </beans>
+                  </group>
+                  <group name="macos desktop" id="287310" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.groups.ActionGroup">
+                          <void property="conditionExpression">
+                            <object class="com.install4j.api.beans.ScriptProperty">
+                              <void property="value">
+                                <string>Util.isMacOS()</string>
+                              </void>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <beans>
+                      <action name="desktop/Info.plist" id="287311" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                      </action>
+                      <action name="desktop/icns" id="287312" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                      </action>
+                      <action name="desktop/prism" id="287313" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
+                                </object>
+                              </void>
+                              <void property="mode">
+                                <string>755</string>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                      </action>
+                      <action name="desktop/application.ini" id="287314" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                      </action>
+                      <action name="desktop/brand.dtd" id="287315" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                      </action>
+                      <action name="desktop/brand.properties" id="287316" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                      </action>
+                      <action name="desktop/chrome.manifest" id="287317" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                      </action>
+                      <action name="desktop/prism-runtime" id="287318" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                      </action>
+                      <action name="desktop" id="287319" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
+                              <void property="file">
+                                <object class="java.io.File">
+                                  <string>${installer:sys.userHome}/Desktop/Yahoo! Zimbra Desktop.app</string>
+                                </object>
+                              </void>
+                              <void property="mode">
+                                <string>775</string>
+                              </void>
+                              <void property="recursive">
+                                <boolean>true</boolean>
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                      </action>
+                    </beans>
+                  </group>
+                  <group name="Application" id="287320" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.groups.ActionGroup">
+                          <void property="conditionExpression">
+                            <object class="com.install4j.api.beans.ScriptProperty">
+                              <void property="value">
+                                <string>Util.isMacOS()</string>
+                              </void>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <beans>
+                      <action name="applications/Info.plist" id="287321" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Info.plist</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="applications/icns" id="287322" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/launcher_128x128.icns</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="applications/prism" id="287323" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
+                                </object>
+                              </void>
+                              <void property="mode">
+                                <string>755</string>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="applications/application.ini" id="287324" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/application.ini</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="applications/brand.dtd" id="287325" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.dtd</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="applications/brand.properties" id="287326" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/branding/brand.properties</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="applications/chrome.manifest" id="287327" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/chrome/chrome.manifest</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="applications/prism-runtime" id="287328" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                              <void property="destinationFile">
+                                <object class="java.io.File">
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                </object>
+                              </void>
+                              <void property="overwriteMode">
+                                <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                              </void>
+                              <void property="sourceFile">
+                                <object class="java.io.File">
+                                  <string>macos/Yahoo! Zimbra Desktop.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org</string>
+                                </object>
+                              </void>
+                              <void property="uninstallMode">
+                                <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                      <action name="applications" id="287329" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                        <serializedBean>
+                          <java class="java.beans.XMLDecoder">
+                            <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
+                              <void property="file">
+                                <object class="java.io.File">
+                                  <string>/Applications/Yahoo! Zimbra Desktop.app</string>
+                                </object>
+                              </void>
+                              <void property="mode">
+                                <string>775</string>
+                              </void>
+                              <void property="recursive">
+                                <boolean>true</boolean>
+                              </void>
+                            </object>
+                          </java>
+                        </serializedBean>
+                        <condition>Util.isMacOS()</condition>
+                      </action>
+                    </beans>
+                  </group>
+                </beans>
+              </group>
+              <group name="linux desktop" id="287330" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
+                  </java>
+                </serializedBean>
+                <beans>
+                  <action name="webapp.ini" id="287331" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>zdesktop.webapp/webapp.ini</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>status=true</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>status=false</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+                  </action>
+                  <action name="linux.desktop" id="287332" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>linux/linux.desktop</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>${installer:sys.installationDir}</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>@install@</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
+                  </action>
+                  <action name="linux.desktop" id="287333" beanClass="com.install4j.runtime.beans.actions.files.CopyFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.CopyFileAction">
+                          <void property="destinationFile">
+                            <object class="java.io.File">
+                              <string>${installer:sys.userHome}/Desktop/linux.desktop</string>
+                            </object>
+                          </void>
+                          <void property="overwriteMode">
+                            <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                          </void>
+                          <void property="sourceFile">
+                            <object class="java.io.File">
+                              <string>linux/linux.desktop</string>
+                            </object>
+                          </void>
+                          <void property="uninstallMode">
+                            <object class="com.install4j.api.context.UninstallMode" field="ALWAYS" />
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS() &amp;&amp; context.getBooleanVariable("createDesktopLinkAction")</condition>
+                  </action>
+                </beans>
+              </group>
+              <action name="clear error" id="287334" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>context.setErrorOccured(false);
+return true;</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
               <group name="set installer vars in upgrade url" id="287055" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -2939,7 +3068,12 @@ import java.io.FileWriter;
 String instDir = (String) context.getVariable("sys.installationDir");
 File regFile = new File(instDir + "/conf/install.info");
 
+String upPath = Util.isWindows() ? "/win32/prism/" :
+    (Util.isMacOS() ? "/macos/prism/Prism.app/Contents/Resources/" : "/linux/prism/");
+File upFile = new File(instDir + upPath + "update.params");
+
 try {
+   //install.info
     if (!regFile.exists())
         regFile.createNewFile();
 
@@ -2950,8 +3084,16 @@ try {
     writer.write("build=${compiler:offline_buildid}\n");
     writer.write("locale=" + (String) context.getLanguageId() + "\n");
     writer.write("guid=" + (String) context.getVariable("instanceId") + "\n");
-    
     writer.close();
+    
+    //update.params
+    if (!upFile.exists())
+        upFile.createNewFile();
+     
+    writer = new FileWriter(upFile);
+    writer.write("-Doffline_update=true\n");
+    writer.write("-Dinstall4j.language=" + (String) context.getLanguageId() + "\n");   
+    writer.close();            
 } catch (IOException e) {
     Util.showWarningMessage(e.getMessage());
 }
@@ -3455,7 +3597,7 @@ return true;</string>
                 </serializedBean>
                 <condition>!Util.isMacOS()</condition>
               </action>
-              <action name="stop macos service" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="3" errorMessage="${i18n:installer.ErrCannotStopSvc}">
+              <action name="stop macos service" id="5382" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
