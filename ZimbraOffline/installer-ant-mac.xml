@@ -6,7 +6,7 @@
 	<property name="media_macos" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_macos}"/>
 	<property name="media_linux" value="zdesktop_${offline.filever}_build_${offline.buildid}_${offline.suffix_linux}"/>
 
-	<property name="install4j.dir" value="/Applications/install4j 4.1"/>
+	<property name="install4j.dir" value="/Applications/install4j"/>
   	<property name="build.dir" location="../ZimbraBuild/i386" />
 
 	<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="${install4j.dir}/bin/ant.jar"/>
@@ -20,6 +20,9 @@
 	<target name="installer-patch">
 		<copy todir="${install4j.dir}/resource/messages" overwrite="true">
 			<fileset dir="src/installer/install4j.patch" includes="*.utf8 languages"/>
+		</copy>	
+		<copy todir="${install4j.dir}/resource" overwrite="true">
+			<fileset dir="src/installer/install4j.patch" includes="i4jdel.exe"/>
 		</copy>	
 	</target>
 
