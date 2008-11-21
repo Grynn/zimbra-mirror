@@ -195,6 +195,10 @@ public class XMPPServer {
         return mServerNames;
     }
     
+    /**
+     * @param domain
+     * @return TRUE if the specified domain is local to this cloud (ie do't use XMPP S2S to connect)
+     */
     public boolean isLocalDomain(String domain) {
         return mServerNames.contains(domain);
     }
@@ -441,7 +445,6 @@ public class XMPPServer {
             params.add(IMConfig.formatDateTime(new Date()));
             String startupBanner = LocaleUtils.getLocalizedString("startup.name", params);
             Log.info(startupBanner);
-            System.out.println(startupBanner);
 
             startDate = new Date();
             stopDate = null;
@@ -451,9 +454,7 @@ public class XMPPServer {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
-            Log.error(e);
-            System.out.println(LocaleUtils.getLocalizedString("startup.error"));
+            ZimbraLog.im.error("Exception during IM server startup.  Aborting", e);
             shutdownServer();
         }
     }
@@ -521,12 +522,6 @@ public class XMPPServer {
      * @param module the name of the class that implements the Module interface.
      */
     private Module loadModule(ComponentIdentifier modId) {
-//        String className = null;
-//        if ("conference".equals(modId.category) && "text".equals(modId.type)) {
-//        if ("muc".equals(modId.type)) {
-//            className = MultiUserChatServerImpl.class.getName();
-//        }
-        
         if (modId.className == null) {
             ZimbraLog.im.error("Unable to load XMPP component: "+modId);
             return null; // ignore
@@ -567,8 +562,7 @@ public class XMPPServer {
             return mod;
         }
         catch (Exception e) {
-            e.printStackTrace();
-            Log.error(LocaleUtils.getLocalizedString("admin.error"), e);
+            ZimbraLog.im.error(LocaleUtils.getLocalizedString("admin.error"), e);
             return null;
         }
     }
@@ -593,7 +587,7 @@ public class XMPPServer {
             isInitialized = true;
         }
         catch (Exception e) {
-            e.printStackTrace();
+            ZimbraLog.im.error("IM Error in doModuleInit", e);
             if (isInitialized) {
                 module.stop();
                 module.destroy();
@@ -736,10 +730,7 @@ public class XMPPServer {
             stmt.close();
         }
         catch (Exception e) {
-            System.err.println("Database setup or configuration error: " +
-                    "Please verify your database settings and check the " +
-                    "logs/error.log file for detailed error messages.");
-            Log.error("Database could not be accessed", e);
+            ZimbraLog.im.error("Database could not be accessed", e);
             throw new IllegalArgumentException(e);
         }
         finally {
