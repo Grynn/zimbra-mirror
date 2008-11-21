@@ -2101,12 +2101,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     @Override
-    public Right createRight(String name, Map<String, Object> attrs) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("createRight");
+    public Right createRight(String name, Map<String, Object> rightAttrs) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("getAllRights");
     }
     
     @Override
-    public void deleteRight(String rightName) throws ServiceException {
+    public void deleteRight(String zimbraId) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("deleteRight");
     }
     
