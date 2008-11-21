@@ -43,9 +43,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 
-import static com.zimbra.cs.mailbox.Mailbox.*;
-import static com.zimbra.cs.mailbox.MailItem.*;
-
 public final class LocalData {
     private final OfflineDataSource ds;
     private final DesktopMailbox mbox;
@@ -59,7 +56,7 @@ public final class LocalData {
         new OfflineMailbox.OfflineContext();
 
     private static final Set<Integer> CONTACT_FOLDERS =
-        new HashSet<Integer>(Arrays.asList(ID_FOLDER_CONTACTS));
+        new HashSet<Integer>(Arrays.asList(Mailbox.ID_FOLDER_CONTACTS));
     
     public LocalData(OfflineDataSource ds) throws ServiceException {
         this.ds = ds;
@@ -137,7 +134,7 @@ public final class LocalData {
 
     private List<Integer> getModifiedContacts(int seq) throws ServiceException {
         return mbox.getModifiedItems(
-            CONTEXT, seq, TYPE_CONTACT, CONTACT_FOLDERS).getFirst();
+            CONTEXT, seq, MailItem.TYPE_CONTACT, CONTACT_FOLDERS).getFirst();
     }
     
     private Set<Integer> getContactTags(Collection<Integer> contactIds)
@@ -188,6 +185,11 @@ public final class LocalData {
         throws ServiceException {
         return DbDataSource.getAllMappingsInFolder(ds, folderId);
     }
+
+    public Collection<DataSourceItem> getMappingsForRemoteIdPrefix(int folderId, String prefix)
+        throws ServiceException {
+        return DbDataSource.getAllMappingsForRemoteIdPrefix(ds, folderId, prefix);
+    }
     
     public Contact getContact(int id) throws ServiceException {
         return mbox.getContactById(CONTEXT, id);
@@ -218,7 +220,8 @@ public final class LocalData {
 
     public Contact createContact(ParsedContact pc, long tags)
         throws ServiceException {
-        Contact contact = mbox.createContact(CONTEXT, pc, ID_FOLDER_CONTACTS, null);
+        Contact contact = mbox.createContact(
+            CONTEXT, pc, Mailbox.ID_FOLDER_CONTACTS, null);
         setContactTags(contact.getId(), tags);
         log.debug("Created new contact: id = %d, tags = %d", contact.getId(), tags);
         return contact;
@@ -226,23 +229,39 @@ public final class LocalData {
 
     public void modifyContact(int id, ParsedContact pc, long tags)
         throws ServiceException {
-        log.debug("Modifying contact: id = %d, tags = %d", id, tags);
         mbox.modifyContact(CONTEXT, id, pc);
         setContactTags(id, tags);
+        log.debug("Modified contact: id = %d, tags = %d", id, tags);
     }
 
     public void deleteContact(int id) throws ServiceException {
-        log.debug("Deleting contact: id = %d", id);
-        mbox.delete(CONTEXT, id, TYPE_CONTACT);
+        mbox.delete(CONTEXT, id, MailItem.TYPE_CONTACT);
+        log.debug("Deleted contact: id = %d", id);
     }
 
-    public void setContactTags(int id, long bitmask) throws ServiceException {
-        mbox.setTags(CONTEXT, id, TYPE_CONTACT, FLAG_UNCHANGED, bitmask);
+    private void setContactTags(int id, long bitmask) throws ServiceException {
+        mbox.setTags(CONTEXT, id, MailItem.TYPE_CONTACT,
+                     MailItem.FLAG_UNCHANGED, bitmask);
     }
-    
+
+    public ContactGroup getContactGroup(int id) throws ServiceException {
+        return ContactGroup.get(mbox, id);
+    }
+
+    public ContactGroup createContactGroup(int folderId, String name)
+        throws ServiceException {
+        log.debug("Creating contact group: folder = %d, name = %s", folderId, name);
+        return ContactGroup.create(mbox, folderId, name);
+    }
+
+    public void deleteContactGroup(int id) throws ServiceException {
+        log.debug("Deleting contact group: id = %d", id);
+        mbox.delete(CONTEXT, id, Contact.TYPE_CONTACT);
+    }
+
     public void renameTag(int id, String name) throws ServiceException {
         log.debug("Renaming tag: id = %d, new name = %s", id, name);
-        mbox.rename(CONTEXT, id, TYPE_TAG, name, ID_FOLDER_TAGS);
+        mbox.rename(CONTEXT, id, MailItem.TYPE_TAG, name, Mailbox.ID_FOLDER_TAGS);
     }
 
     public SyncState loadState() throws ServiceException {
@@ -278,7 +297,6 @@ public final class LocalData {
         SyncExceptionHandler.syncContactFailed(mbox, itemId, data, e);
     }
 
-    
     public OfflineDataSource getDataSource() { return ds; }
     public DesktopMailbox getMailbox() { return mbox; }
     public Log getLog() { return log; }

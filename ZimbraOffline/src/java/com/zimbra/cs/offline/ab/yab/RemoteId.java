@@ -24,7 +24,8 @@ public class RemoteId {
 
     private enum Type { CONTACT, CATEGORY }
 
-    private static final String SEPARATOR = ":";
+    public static final String CONTACT_PREFIX = "contact:";
+    public static final String CATEGORY_PREFIX = "category:";
 
     public static RemoteId contactId(int value) {
         return new RemoteId(Type.CONTACT, value);
@@ -35,18 +36,15 @@ public class RemoteId {
     }
 
     public static RemoteId parse(String s) throws SyncException {
-        int i = s.indexOf(SEPARATOR);
-        if (i != -1) {
-            try {
-                String prefix = s.substring(0, i);
-                int id = Integer.parseInt(s.substring(i + SEPARATOR.length()));
-                if (prefix.equalsIgnoreCase(Type.CONTACT.name())) {
-                    return contactId(id);
-                } else if (prefix.equalsIgnoreCase(Type.CATEGORY.name())) {
-                    return categoryId(id);
-                }
-            } catch (NumberFormatException e) {
+        try {
+            if (s.startsWith(CONTACT_PREFIX)) {
+                String id = s.substring(CONTACT_PREFIX.length());
+                return contactId(Integer.parseInt(id));
+            } else if (s.startsWith(CATEGORY_PREFIX)) {
+                String id = s.substring(CATEGORY_PREFIX.length());
+                return categoryId(Integer.parseInt(id));
             }
+        } catch (NumberFormatException e) {
         }
         throw new SyncException("Invalid ID syntax: " + s);
     }
@@ -83,6 +81,13 @@ public class RemoteId {
 
     @Override
     public String toString() {
-        return type.name().toLowerCase() + SEPARATOR + String.valueOf(value);
+        switch (type) {
+        case CONTACT:
+            return CONTACT_PREFIX + String.valueOf(value);
+        case CATEGORY:
+            return CATEGORY_PREFIX + String.valueOf(value);
+        default:
+            throw new AssertionError();
+        }
     }
 }

@@ -25,25 +25,18 @@ import com.zimbra.cs.offline.util.yab.Contact;
 import com.zimbra.cs.offline.util.yab.Field;
 import com.zimbra.cs.offline.util.yab.ContactChange;
 import com.zimbra.cs.offline.util.yab.FieldChange;
-import com.zimbra.cs.offline.util.yab.CategoryChange;
-import com.zimbra.cs.offline.util.yab.Category;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.io.Serializable;
-
-import static com.zimbra.cs.mailbox.Contact.*;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.DateUtil;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.io.Serializable;
+
+import static com.zimbra.cs.mailbox.Contact.*;
+
 public class ContactData implements Serializable {
     private final Map<String, Field> fields = new HashMap<String, Field>();
-    private final List<Category> categories = new ArrayList<Category>();
 
     private static final String[] NAME_FIELDS =
         { A_firstName, A_middleName, A_lastName, A_namePrefix, A_nameSuffix };
@@ -63,11 +56,9 @@ public class ContactData implements Serializable {
         for (Field field : contact.getFields()) {
             importField(field);
         }
-        categories.addAll(contact.getCategories());
     }
 
-    public ContactData(com.zimbra.cs.mailbox.Contact contact,
-                       List<Category> categories)
+    public ContactData(com.zimbra.cs.mailbox.Contact contact) 
         throws ServiceException {
         Map<String, String> zfields = contact.getFields();
         importField(A_firstName, getName(zfields));
@@ -78,11 +69,6 @@ public class ContactData implements Serializable {
             String name = entry.getKey();
             importField(name, getSimple(name, entry.getValue()));
         }
-        this.categories.addAll(categories);
-    }
-
-    public List<Category> getCategories() {
-        return categories;
     }
 
     public boolean isEmpty() {
@@ -168,6 +154,8 @@ public class ContactData implements Serializable {
         switch (getAttribute(name)) {
         case company:
             return SimpleField.company(value);
+        case nickname:
+            return SimpleField.nickname(value);
         case jobTitle:
             return SimpleField.jobtitle(value);
         case email: case email2: case email3:
@@ -198,6 +186,8 @@ public class ContactData implements Serializable {
     private String getSimpleName(SimpleField simple) {
         if (simple.isCompany()) {
             return A_company;
+        } else if (simple.isNickname()) {
+            return A_nickname;
         } else if (simple.isJobtitle()) {
             return A_jobTitle;
         } else if (simple.isEmail()) {
@@ -297,9 +287,6 @@ public class ContactData implements Serializable {
         for (Field field : fields.values()) {
             contact.addField(field);
         }
-        for (Category category : categories) {
-            contact.addCategory(category);
-        }
         return contact;
     }
     
@@ -323,34 +310,9 @@ public class ContactData implements Serializable {
         for (Field field : oldFields.values()) {
             cc.addFieldChange(FieldChange.remove(field.getId()));
         }
-        // Get category changes
-        Set<Integer> oldCatids = oldData.getCategoryIds();
-        for (Category cat : categories) {
-            int catid = cat.getId();
-            if (catid == -1 || !oldCatids.contains(catid)) {
-                cc.addCategoryChange(CategoryChange.add(cat));
-            }
-            if (catid != -1) {
-                oldCatids.remove(catid);
-            }
-        }
-        for (int catid : oldCatids) {
-            cc.addCategoryChange(CategoryChange.remove(catid));
-        }
         return cc;
     }
 
-    private Set<Integer> getCategoryIds() {
-        Set<Integer> catids = new HashSet<Integer>();
-        for (Category cat : categories) {
-            int id = cat.getId();
-            if (id != -1) {
-                catids.add(id);
-            }
-        }
-        return catids;
-    }
-    
     private static boolean isUnchanged(Field field1, Field field2) {
         if (field1.isName()) {
             NameField name1 = (NameField) field1;

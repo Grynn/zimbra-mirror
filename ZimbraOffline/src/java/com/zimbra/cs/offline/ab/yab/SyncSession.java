@@ -17,8 +17,6 @@
 package com.zimbra.cs.offline.ab.yab;
 
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.MailItem;
-import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.offline.util.yab.Session;
 import com.zimbra.cs.offline.util.yab.Contact;
 import com.zimbra.cs.offline.util.yab.SyncResponse;
@@ -37,6 +35,7 @@ import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.cs.offline.ab.SyncState;
 import com.zimbra.cs.offline.ab.Change;
 import com.zimbra.cs.offline.ab.SyncException;
+import com.zimbra.cs.offline.ab.ContactGroup;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
@@ -48,9 +47,10 @@ import java.util.Map;
 import java.util.List;
 import java.util.Collection;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Iterator;
 import java.io.IOException;
 
 import org.w3c.dom.Document;
@@ -58,11 +58,10 @@ import org.w3c.dom.Document;
 public class SyncSession {
     private final LocalData localData;
     private final Session session;
-    private Map<Integer, Change> tagChanges;
     private Map<Integer, Change> contactChanges;
-    private Map<Integer, Category> pushedCategories;
     private Map<Integer, Contact> pushedContacts;
     private List<Integer> eventItemIds;
+    private Map<RemoteId, ContactGroup> contactGroups;
 
     private static class Stats {
         int added, updated, deleted;
@@ -110,13 +109,13 @@ public class SyncSession {
             synchronized (mbox) {
                 getLocalChanges(ss);
                 ss.setLastRevision(String.valueOf(res.getRevision()));
-                processCategoryResults(req.getEvents());
                 processContactResults(req.getEvents());
                 List<SyncResponseEvent> events = res.getEvents();
                 if (!events.isEmpty()) {
-                    // Categories are not returned unless there are contact changes 
-                    processCategories(res.getCategories());
-                    processContactEvents(events);
+                    // Categories are not returned unless there are contact changes
+                    contactGroups = processCategories(res.getCategories());
+                    processEvents(events);
+                    saveContactGroups(contactGroups.values());
                 }
                 ss.setLastModSequence(mbox.getLastChangeID());
                 localData.saveState(ss);
@@ -126,15 +125,12 @@ public class SyncSession {
     }
 
     private void getLocalChanges(SyncState ss) throws ServiceException {
-        int seq = ss.getLastModSequence();
-        tagChanges = localData.getTagChanges(seq);
-        contactChanges = localData.getContactChanges(seq);
-        LOG.debug("found %d local tag changes", tagChanges.size());
+        contactChanges = localData.getContactChanges(ss.getLastModSequence());
         LOG.debug("found %d local contact changes", contactChanges.size());
     }
 
     private boolean hasLocalChanges() {
-        return !tagChanges.isEmpty() || !contactChanges.isEmpty();
+        return !contactChanges.isEmpty();
     }
     
     private static int getLastRevision(SyncState ss) {
@@ -145,15 +141,7 @@ public class SyncSession {
     private SyncRequest getSyncRequest(int revision) throws ServiceException {
         SyncRequest req = session.createSyncRequest(revision);
         eventItemIds = new ArrayList<Integer>();
-        pushedCategories = new HashMap<Integer, Category>();
         pushedContacts = new HashMap<Integer, Contact>();
-        for (Change change : tagChanges.values()) {
-            SyncRequestEvent event = getCategoryEvent(change);
-            if (event != null) {
-                req.addEvent(getCategoryEvent(change));
-                eventItemIds.add(change.getItemId());
-            }
-        }
         for (Change change : contactChanges.values()) {
             SyncRequestEvent event = getContactEvent(change);
             if (event != null) {
@@ -164,31 +152,6 @@ public class SyncSession {
         return req;
     }
 
-    private SyncRequestEvent getCategoryEvent(Change change) throws ServiceException {
-        int itemId = change.getItemId();
-        if (change.isAdd()) {
-            String name = localData.getTagName(itemId);
-            pushedCategories.put(itemId, new Category(name));
-            return SyncRequestEvent.addCategory(name);
-        }
-        if (change.isUpdate()) {
-            Category category = getCategory(localData.getMapping(itemId));
-            String newName = localData.getTagName(itemId);
-            if (!newName.equals(category.getName())) {
-                category.setName(newName);
-                pushedCategories.put(itemId, category);
-                return SyncRequestEvent.renameCategory(category.getId(), newName);
-            }
-        } else if (change.isDelete()) {
-            DataSourceItem dsi = localData.getMapping(itemId);
-            int catid = RemoteId.parse(dsi.remoteId).getValue();
-            Category category = new Category(catid);
-            pushedCategories.put(itemId, category);
-            return SyncRequestEvent.removeCategory(catid);
-        }
-        return null;
-    }
-
     private SyncRequestEvent getContactEvent(Change change) throws ServiceException {
         int itemId = change.getItemId();
         if (change.isAdd()) {
@@ -197,12 +160,16 @@ public class SyncSession {
             return SyncRequestEvent.addContact(contact);
         } else if (change.isUpdate()) {
             ContactData cd = getContactData(itemId);
-            LOG.debug("count = " + cd.getCategories().size());
+            //LOG.debug("count = " + cd.getCategories().size());
             Contact newContact = cd.getContact();
             Contact oldContact = getContact(localData.getMapping(itemId));
-            LOG.debug("oldContact: " + oldContact);
-            LOG.debug("newContact: " + newContact);
+            //LOG.debug("oldContact: " + oldContact);
+            //LOG.debug("newContact: " + newContact);
             newContact.setId(oldContact.getId());
+            // Add categories so we can track updates
+            for (Category category : oldContact.getCategories()) {
+                newContact.addCategory(category);
+            }
             pushedContacts.put(itemId, newContact);
             ContactChange cc = cd.getContactChange(oldContact);
             if (!cc.isEmpty()) {
@@ -218,46 +185,7 @@ public class SyncSession {
     }
 
     private ContactData getContactData(int itemId) throws ServiceException {
-        com.zimbra.cs.mailbox.Contact contact = localData.getContact(itemId);
-        return new ContactData(contact, getCategories(contact));
-    }
-
-    private List<Category> getCategories(MailItem contact)
-        throws ServiceException {
-        List<Tag> tags = contact.getTagList();
-        LOG.debug("tags for %d: %s", contact.getId(), tags);
-        List<Category> categories = new ArrayList<Category>(tags.size());
-        for (Tag tag : tags) {
-            DataSourceItem dsi = localData.getMapping(tag.getId());
-            if (dsi.md != null) {
-                categories.add(new Category(getCategory(dsi).getId()));
-            } else {
-                categories.add(new Category(tag.getName()));
-            }
-        }
-        LOG.debug("categories: " + categories.size());
-        return categories;
-    }
-
-    private void processCategoryResults(List<SyncRequestEvent> events)
-        throws ServiceException {
-        Stats stats = new Stats();
-        int errors = 0;
-        for (int i = 0; i < events.size(); i++) {
-            SyncRequestEvent event = events.get(i);
-            if (event.isCategory()) {
-                int itemId = eventItemIds.get(i);
-                if (checkErrorResult(event, itemId)) {
-                    processCategoryResult(event, itemId, stats);
-                } else {
-                    errors++;
-                }
-            }
-        }
-        LOG.debug("Pushed %d category changes: %s", stats.total(), stats);
-        if (errors > 0) {
-            LOG.debug("%d category changes failed due to errors", errors);
-        }
+        return new ContactData(localData.getContact(itemId));
     }
 
     private void processContactResults(List<SyncRequestEvent> events)
@@ -296,23 +224,6 @@ public class SyncSession {
         return true;
     }
     
-    private void processCategoryResult(SyncRequestEvent event, int itemId, Stats stats)
-        throws ServiceException {
-        SuccessResult result = (SuccessResult) event.getResult();
-        Category category = pushedCategories.get(itemId);
-        if (event.isAddCategory()) {
-            category.setId(result.getCategoryId());
-            updateCategoryMapping(itemId, category);
-            stats.added++;
-        } else if (event.isRenameCategory()) {
-            updateCategoryMapping(itemId, category);
-            stats.updated++;
-        } else if (event.isRemoveCategory()) {
-            localData.deleteMapping(itemId);
-            stats.deleted++;
-        }
-    }
-
     private void processContactResult(SyncRequestEvent event, int itemId, Stats stats)
         throws ServiceException {
         SuccessResult result = (SuccessResult) event.getResult();
@@ -325,74 +236,84 @@ public class SyncSession {
             updateContactMapping(itemId, contact);
             stats.updated++;
         } else if (event.isRemoveContact()) {
-            localData.deleteMapping(itemId);
-            stats.deleted++;
+            deleteContact(itemId, stats);
         }
     }
 
-    private void processCategories(List<Category> categories)
+    private Map<RemoteId, ContactGroup> processCategories(List<Category> categories)
         throws ServiceException {
         Stats stats = new Stats();
         int errors = 0;
-        Set<Integer> tags = getCategoryTags();
+        Map<RemoteId, ContactGroup> groups = getContactGroups();
+        Set<Integer> received = new HashSet<Integer>();
         for (Category category : categories) {
             RemoteId rid = RemoteId.categoryId(category.getId());
-            DataSourceItem dsi = localData.getReverseMapping(rid.toString());
+            String name = category.getName();
+            ContactGroup group = groups.get(rid);
             try {
-                Tag tag = processCategory(category, dsi, stats);
-                tags.remove(tag.getId());
+                if (group != null) {
+                    received.add(group.getId());
+                    if (!name.equals(group.getName())) {
+                        group.setName(name);
+                        group.modify();
+                        stats.updated++;
+                        LOG.debug("Updated contact group: %s", group);
+                    }
+                } else {
+                    group = localData.createContactGroup(
+                        Mailbox.ID_FOLDER_CONTACTS, name);
+                    received.add(group.getId());
+                    localData.updateMapping(group.getId(), rid.toString(), null);
+                    groups.put(rid, group);
+                    stats.added++;
+                    LOG.debug("Added new contact group: %s", group);
+                }
             } catch (ServiceException e) {
-                localData.syncContactFailed(e, dsi.itemId, category.toString());
+                localData.syncContactFailed(e, -1, category.toString());
                 errors++;
             }
         }
-        // Remaining categories have been deleted. Do not delete the
-        // associated tag since we can't be sure that it is not also 
-        // used by other non-contact items
-        for (int itemId : tags) {
-            localData.deleteMapping(itemId);
-            stats.deleted++;
+        // Unseen categories / groups have been deleted
+        Iterator<ContactGroup> it = groups.values().iterator();
+        while (it.hasNext()) {
+            ContactGroup group = it.next();
+            int id = group.getId();
+            if (!received.contains(id)) {
+                // Delete group
+                try {
+                    localData.deleteContactGroup(id);
+                    localData.deleteMapping(id);
+                } catch (ServiceException e) {
+                    localData.syncContactFailed(e, id, null);
+                    errors++;
+                }
+                it.remove();
+                stats.deleted++;
+            }
         }
         LOG.debug("Processed %d remote category changes: %s", stats.total(), stats);
         if (errors > 0) {
             LOG.debug("%d category changes could not be processed due to errors", errors);
         }
+        return groups;
     }
 
-    private Tag processCategory(Category category, DataSourceItem dsi, Stats stats)
-        throws ServiceException {
-        String name = category.getName();
-        // Check for new or updated category
-        if (dsi.itemId > 0) {
-            Tag tag = localData.getTag(dsi.itemId);
-            if (!tag.getName().equals(name)) {
-                localData.renameTag(dsi.itemId, name);
-                updateCategoryMapping(dsi.itemId, category);
-                stats.updated++;
-            }
-            return tag;
-        } else {
-            Tag tag = localData.createTag(name);
-            updateCategoryMapping(tag.getId(), category);
-            stats.added++;
-            return tag;
+    private Map<RemoteId, ContactGroup> getContactGroups() throws ServiceException {
+        Map<RemoteId, ContactGroup> groups = new HashMap<RemoteId, ContactGroup>();
+        for (DataSourceItem dsi : getGroupMappings()) {
+            RemoteId rid = RemoteId.parse(dsi.remoteId);
+            assert rid.isCategory();
+            groups.put(rid, localData.getContactGroup(dsi.itemId));
         }
-    }
-    
-    /*
-     * Returns item id's for all tags associated with mapped categories.
-     */
-    private Set<Integer> getCategoryTags() throws ServiceException {
-        Collection<DataSourceItem> mappings =
-            localData.getAllMappingsInFolder(Mailbox.ID_FOLDER_TAGS);
-        Set<Integer> tags = new HashSet<Integer>(mappings.size());
-        for (DataSourceItem dsi : mappings) {
-            tags.add(dsi.itemId);
-        }
-        return tags;
+        return groups;
     }
 
-    private void processContactEvents(List<SyncResponseEvent> events)
+    private Collection<DataSourceItem> getGroupMappings() throws ServiceException {
+        return localData.getMappingsForRemoteIdPrefix(
+            Mailbox.ID_FOLDER_CONTACTS, RemoteId.CATEGORY_PREFIX);
+    }
+
+    private void processEvents(List<SyncResponseEvent> events)
         throws ServiceException {
         Stats stats = new Stats();
         int errors = 0;
@@ -431,23 +352,21 @@ public class SyncSession {
             }
         } else if (event.isRemoveContact()) {
             if (dsi.itemId > 0) {
-                deleteContact(contact.getId(), dsi, stats);
+                deleteContact(dsi.itemId, stats);
             }
         }
     }
 
-    private void addContact(Contact contact, Stats stats)
-        throws ServiceException {
+    private void addContact(Contact contact, Stats stats) throws ServiceException {
         int cid = contact.getId();
         ContactData cd = new ContactData(contact);
         if (!cd.isEmpty()) {
             ParsedContact pc = cd.getParsedContact();
-            long bits = getTagBitmask(cd);
-            int itemId = localData.createContact(pc, bits).getId();
+            int itemId = localData.createContact(pc, 0).getId();
             updateContactMapping(itemId, contact);
+            updateContactGroups(itemId, contact, null);
             stats.added++;
-            LOG.debug("Created new local contact: itemId=%d, cid=%d, tagBits=%x",
-                      itemId, cid, bits);
+            LOG.debug("Created new local contact: itemId=%d, cid=%d", itemId, cid);
         } else {
             LOG.debug("Not adding contact with cid %d since it would " +
                       "result in an empty contact", cid);
@@ -459,40 +378,28 @@ public class SyncSession {
         int cid = contact.getId();
         ContactData cd = new ContactData(contact);
         if (!cd.isEmpty()) {
-            long bits = getTagBitmask(cd);
-            localData.modifyContact(dsi.itemId, cd.getParsedContact(), bits);
+            localData.modifyContact(dsi.itemId, cd.getParsedContact(), 0);
             updateContactMapping(dsi.itemId, contact);
+            updateContactGroups(dsi.itemId, contact, getContact(dsi));
             stats.updated++;
-            LOG.debug("Modified local contact: itemId=%d, cid=%d, tagBits=%x",
-                      dsi.itemId, cid, bits);
+            LOG.debug("Modified local contact: itemId=%d, cid=%d", dsi.itemId, cid);
         } else {
             LOG.debug("Removing contact with cid %d since changes would " +
                       "result in an empty contact", cid);
-            deleteContact(cid, dsi, stats);
+            deleteContact(dsi.itemId, stats);
         }
     }
 
-    private void deleteContact(int cid, DataSourceItem dsi, Stats stats)
+    private void deleteContact(int itemId, Stats stats)
         throws ServiceException {
-        localData.deleteContact(dsi.itemId);
-        localData.deleteMapping(dsi.itemId);
-        stats.deleted++;
-        LOG.debug("Deleted contact: itemId=%d, cid=%d", dsi.itemId, cid);
-    }
-
-    /*
-     * Returns tag bits for specified contact data.
-     */
-    private long getTagBitmask(ContactData cd) throws ServiceException {
-        long bits = 0;
-        for (Category category : cd.getCategories()) {
-            RemoteId rid = RemoteId.categoryId(category.getId());
-            DataSourceItem dsi = localData.getReverseMapping(rid.toString());
-            if (dsi != null) {
-                bits |= localData.getTag(dsi.itemId).getBitmask();
-            }
+        localData.deleteContact(itemId);
+        localData.deleteMapping(itemId);
+        // Remove contact from any contact groups
+        for (ContactGroup group : contactGroups.values()) {
+            group.removeContact(itemId);
         }
-        return bits;
+        stats.deleted++;
+        LOG.debug("Deleted contact with item id %d", itemId);
     }
 
     private void updateContactMapping(int itemId, Contact contact)
@@ -501,22 +408,67 @@ public class SyncSession {
         localData.updateMapping(itemId, rid.toString(), toXml(contact));
     }
 
-    private void updateCategoryMapping(int itemId, Category category)
-        throws ServiceException {
-        RemoteId rid = RemoteId.categoryId(category.getId());
-        localData.updateMapping(itemId, rid.toString(), toXml(category));
+    private void updateContactGroups(int itemId, Contact newContact,
+                                                 Contact oldContact)
+        throws SyncException {
+        Set<RemoteId> newIds = getCategoryIds(newContact);
+        Set<RemoteId> oldIds = getCategoryIds(oldContact);
+        for (RemoteId id : newIds) {
+            if (!oldIds.contains(id)) {
+                // Contact added to category / group
+                ContactGroup group = contactGroups.get(id);
+                if (group != null) {
+                    LOG.debug("Added contact id %d to group '%s' id %d",
+                              itemId, group.getName(), group.getId());
+                    group.addContact(itemId);
+                } else {
+                    LOG.warn("Contact group with rid %d does not exist", id.getValue());
+                }
+            }
+        }
+        for (RemoteId id : oldIds) {
+            if (!newIds.contains(id)) {
+                // Contact removed from (possibly deleted) category / group
+                ContactGroup group = contactGroups.get(id);
+                if (group != null) {
+                    group.removeContact(itemId);
+                    LOG.debug("Removed contact id %d from group '%s' id %d",
+                              itemId, group.getName(), group.getId());
+                }
+            }
+        }
     }
 
+    private Set<RemoteId> getCategoryIds(Contact contact) {
+        Set<RemoteId> ids = new HashSet<RemoteId>();
+        if (contact != null) {
+            for (Category category : contact.getCategories()) {
+                ids.add(RemoteId.categoryId(category.getId()));
+            }
+        }
+        return ids;
+    }
+
+    private void saveContactGroups(Collection<ContactGroup> groups)
+        throws ServiceException {
+        for (ContactGroup group : groups) {
+            if (group.hasChanges()) {
+                try {
+                    group.modify();
+                    LOG.debug("Changes saved for contact group: " + group);
+                } catch (ServiceException e) {
+                    localData.syncContactFailed(e, group.getId(), group.toString());
+                }
+            }
+        }
+    }
+    
     private String toXml(Entity entity) {
         return session.toString(entity.toXml(session.createDocument()));
     }
 
     private Contact getContact(DataSourceItem dsi) throws ServiceException {
         return Contact.fromXml(getDocument(dsi).getDocumentElement());
-    }
-
-    private Category getCategory(DataSourceItem dsi) throws ServiceException {
-        return Category.fromXml(getDocument(dsi).getDocumentElement());
     }
 
     private Document getDocument(DataSourceItem dsi) throws ServiceException {
