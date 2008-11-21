@@ -153,6 +153,11 @@ public class GenerateData {
         if (timezone.daylight == null) {
             out.print(" standard: { offset: ");
             out.print(timezone.standard.offset);
+            if (timezone.standard.tzname != null) {
+                out.print(", tzname: \"");
+                printEscaped(out, timezone.standard.tzname);
+                out.print("\"");
+            }
             out.print(" } ");
         }
         else {
@@ -197,6 +202,11 @@ public class GenerateData {
                 }
             }
             out.print(" ]");
+        }
+        if (onset.tzname != null) {
+            out.print(", tzname: \"");
+            printEscaped(out, onset.tzname);
+            out.print("\"");
         }
         out.print(" }");
     }
