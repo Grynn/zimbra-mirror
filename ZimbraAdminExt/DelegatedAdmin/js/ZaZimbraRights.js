@@ -23,6 +23,8 @@ ZaZimbraRights.targetType = [
     "cos" , "server", "config" , "global", "combo"    
 ]
 
+ZaZimbraRights.definedBy = ["system", "custom"] ;
+
 ZaZimbraRights ["preset"] = {} ;
 ZaZimbraRights ["preset"] ["accounts"] = [] ;
 ZaZimbraRights ["preset"] ["accounts"] =
@@ -32,21 +34,115 @@ ZaZimbraRights.JSON = [
 //  User Rights
     {
         name: "invite",
-        userRights: "1",
-        desc: com_zimbra_delegatedadmin.rights_desc_invite
+        attrs: {
+            name: "invite",
+            userRights: "1",
+            desc: com_zimbra_delegatedadmin.rights_desc_invite
+        }
     },
 
 // Admin rights
     {
         name: "createAccount",
-        type: "preset" ,
-        targetType: "domain",
-        desc: com_zimbra_delegatedadmin.rights_desc_createAccount
+        attrs: {
+            name: "createAccount",
+            type: "preset" ,
+            targetType: "domain",
+            definedBy: "system",
+            desc: com_zimbra_delegatedadmin.rights_desc_createAccount
+        }
     },
     {
         name: "renameServer",
-        type: "preset" ,
-        targetType: "server",
-        desc: com_zimbra_delegatedadmin.rights_desc_renameServer
+        attrs : {
+            name: "renameServer",
+            type: "preset" ,
+            targetType: "server",
+            definedBy: "system" ,
+            desc: com_zimbra_delegatedadmin.rights_desc_renameServer
+        }
+
+    },
+    {
+        name: "deleteAccount",
+        attrs: {
+            name: "deleteAccount",
+            type: "preset" ,
+            targetType: "domain",
+            definedBy: "system",
+            desc: com_zimbra_delegatedadmin.rights_desc_createAccount
+        }
+    },
+    {
+        name: "createDomain",
+        attrs : {
+            name: "createDomain",
+            type: "preset" ,
+            targetType: "domain",
+            definedBy: "system" ,
+            desc: com_zimbra_delegatedadmin.rights_desc_renameServer
+        }
+
     }
 ]
+
+ZaZimbraRights.getAllRights = function () {
+    if (! ZaZimbraRights._ALL_RIGHTS_CACHE ) {
+        ZaZimbraRights._ALL_RIGHTS_CACHE =
+            ZaZimbraRights.JSON.concat(ZaRight.getCustomRightsList().getArray());
+    }
+
+    return ZaZimbraRights._ALL_RIGHTS_CACHE ;
+}
+/*
+ rightsFilter: contains the properties value to filter the rights
+ example:
+ {
+     name: Create... ,
+     type: combo  ,
+     targetType: [account, cos],
+     definedBy: custom 
+ }
+
+ */
+ZaZimbraRights.getRights = function ( rightsFilter ) {
+    var allRights = ZaZimbraRights.getAllRights () ;
+    if (!rightsFilter || rightsFilter.length <= 0) {
+        return allRights ;
+    }
+    var rights = [];
+    for (var i = 0 ; i < allRights.length; i ++) {
+        var isMatched = true ;
+
+        for (var n in rightsFilter ) {
+            var value = allRights[i].attrs[n] ;
+            if (value == null) {
+                isMatched = false ;
+                break ;
+            }
+            
+            var v = rightsFilter [n] ;
+            if ((v == null) || (v.length <= 0)) { //the filter entry has no value
+                continue ;
+            } else if ((n == ZaRight.A_name || n == ZaRight.A_type)  && (value.indexOf(v) >= 0)){
+//              the rights name started with the filter entry
+                continue ;
+            } else if (n == ZaRight.A_targetType) {
+                for (var j=0; j < v.length ; j ++) {
+//              the targetType is matched.
+                    if ( value.join("").indexOf(v[j]) >= 0 )  {
+                        continue ;
+                    }
+                }
+            } else {
+                isMatched = false ;
+                break ;
+            }
+        }
+        if (isMatched)
+            rights.push (allRights [i].attrs[ZaRight.A_name]) ; //only use the attrs property of the right to represent the new right
+
+    }
+
+    return rights ;
+}

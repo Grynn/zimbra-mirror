@@ -1,8 +1,30 @@
+/**
+ * Rights object:
+ *  {
+ *      name: AComboRight ,
+ *      id: 3ajbkdaksfeekrwklkadfkdslk
+ *      attrs: {
+ *          name: AComboRight ,
+ *          id: 3ajbkdaksfeekrwklkadfkdslk ,
+ *          type: combo ,
+ *          targetType: [ "cos", "account"] ,
+ *          rights: [ CreateAccount, SetPassword ] ,
+ *          attrs: [only for  setAttrs, getAttrs]
+ *
+ *      }
+ * }
+ *
+ *
+ *
+ *
+ */
+
 ZaRight = function() {
 	ZaItem.call(this, "ZaRight");
 	this._init();
 	//The type is required. The application tab uses it to show the right icon
-	this.type = ZaItem.RIGHT ; 
+	this.type = ZaItem.RIGHT ;
+    this.attrs = {} ; //used to keep the right object properties
 }
 
 ZaRight.prototype = new ZaItem;
@@ -11,13 +33,16 @@ ZaItem.loadMethods["ZaRight"] = new Array();
 ZaItem.initMethods["ZaRight"] = new Array();
 ZaItem.modifyMethods["ZaRight"] = new Array();
 
-
+ZaRight.A_id = "id" ;
 ZaRight.A_name = "name" ;
 ZaRight.A_desc = "desc" ;
 ZaRight.A_attrs = "attrs" ;
 ZaRight.A_rights = "rights" ;
 ZaRight.A_type = "type" ;
 ZaRight.A_targetType = "targetType"  ;
+ZaRight.A_definedBy = "definedBy" ;
+
+ZaRight.A2_selected_rights = "selected_rights";
 
 //@return the lists of rights for the type specified
 ZaRight.getCustomRightsList = function () {
@@ -25,6 +50,7 @@ ZaRight.getCustomRightsList = function () {
     var customRights = [] ;
 
     for (var i = 0 ; i < 10 ; i ++) {
+        var right = new ZaRight () ;
         var type ;
         var j = i % ZaZimbraRights.type.length ;
         if (j == 0) {
@@ -32,7 +58,8 @@ ZaRight.getCustomRightsList = function () {
         } else {
             type = ZaZimbraRights.type [j] ;
         }
-        var right = {
+        right.name = "CustomRight" + i ;
+        right.attrs = {
             name: "CustomRight" + i ,
             type: type ,
             desc: "Prototype Custom Right " + i
@@ -40,11 +67,17 @@ ZaRight.getCustomRightsList = function () {
 
         var targetType ;
         if (type == "getAttrs") {
-            targetType = "account, cos" ;
+            targetType = [ "account", "cos" ] ;
+            right.attrs.attrs = ["zimbraMailQuota", "zimbraQuotaWarnPercent",
+                "zimbraQuotaWarnInterval", "zimbraQuotaWarnMessage"] ;
         } else if (type == "setAttrs"){
-            targetType = "domain" ;            
+            targetType = [ "domain" ];
+            right.attrs.attrs = ["zimbraFeatureIMEnabled", "zimbraFeatureCalendarEnabled",
+                "zimbraFeatureMailEnabled"] ;
+        } else if (type == "combo") {
+            right.attrs.rights = ["createAccount", "renameAccount", "configureQuotaWithinLimit"]  ;
         }
-        if (targetType) right.targetType = targetType ;
+        if (targetType) right.attrs.targetType = targetType ;
         customRights.push(right) ;
     }
 //    var resp = {right: customRights };
@@ -77,7 +110,7 @@ ZaRight.rightsOvTreeModifier = function (tree) {
 
         if(ZaOverviewPanelController.overviewTreeListeners) {
             ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._RIGHTS_LIST_VIEW] = ZaRight.customRightsListTreeListener;
-//                ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS] = ZaCert.certsRightNodeTreeListener;
+//            ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS] = ZaCert.certsRightNodeTreeListener;
         }
     }
 }
@@ -92,7 +125,15 @@ ZaRight.customRightsListTreeListener = function (ev) {
 }
 ZaRight.myXModel = {
 	items: [
-
+        {id: ZaRight.A_id, ref:  ZaRight.A_id, type: _STRING_},
+        {id: ZaRight.A_name, ref: ZaRight.A_name, type: _STRING_, required: true},
+        {id: ZaRight.A_type, ref: "attrs/" + ZaRight.A_type, type: _ENUM_, choices: ZaZimbraRights.type },
+            //TODO: have a new choice list xform item to display the targetType
+        {id: ZaRight.A_targetType, ref: "attrs/" + ZaRight.A_targetType, type: _LIST_, choices: ZaZimbraRights.targetType },
+        {id: ZaRight.A_desc, ref: "attrs/" + ZaRight.A_desc, type: _STRING_ },
+        {id: ZaRight.A_definedBy, ref: "attrs/" + ZaRight.A_definedBy, type: _ENUM_, choices: ZaZimbraRights.definedBy },
+        {id: ZaRight.A_attrs,  ref: "attrs/" + ZaRight.A_attrs, type: _LIST_, listItem:{type:_STRING_}} ,
+        {id: ZaRight.A_rights,  ref: "attrs/" + ZaRight.A_rights, type: _LIST_, listItem:{type:_STRING_}}
     ]
 };
 
@@ -143,12 +184,28 @@ function() {
 		html[idx++] = "</td>";
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
-		idx = this._addAttrRow(ZaItem.A_description, html, idx);
+		idx = this._addAttrRow(ZaRight.A_desc, com_zimbra_delegatedadmin.Col_right_desc + ": ", html, idx);
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");
 	}
 	return this._toolTip;
 }
+
+// Adds a row to the tool tip.
+ZaRight.prototype._addAttrRow =
+function(name, label, html, idx) {
+	var value = this.attrs[name];
+	if (value != null) {
+		html[idx++] = "<tr valign='top'><td align='left' style='padding-right: 5px;'><b>";
+		html[idx++] = AjxStringUtil.htmlEncode(label) ;
+		html[idx++] = "</b></td><td align='left'><div style='white-space:nowrap; overflow:hidden;'>";
+		html[idx++] = AjxStringUtil.htmlEncode(value);
+		html[idx++] = "</div></td></tr>";
+	}
+	return idx;
+}
+
+
 
 ZaRight.prototype.remove =
 function() {
@@ -169,16 +226,16 @@ function() {
 	this.load();
 }
 
+
 ZaRight.loadMethod =
 function(by, val, withConfig) {
-	var _by = by ? by : "id";
+// prototype empty return  
+    return ;
+    
+    var _by = by ? by : "id";
 	var _val = val ? val : this.id
 	var soapDoc = AjxSoapDoc.create("GetRightRequest", ZaZimbraAdmin.URN, null);
-	if(withConfig) {
-		soapDoc.getMethod().setAttribute("applyConfig", "1");
-	} else {
-		soapDoc.getMethod().setAttribute("applyConfig", "0");
-	}
+	
 	var elBy = soapDoc.set("server", _val);
 	elBy.setAttribute("by", _by);
 	//var command = new ZmCsfeCommand();
@@ -190,20 +247,15 @@ function(by, val, withConfig) {
 		busyMsg : ZaMsg.BUSY_GET_RIGHT
 	}
 	resp = ZaRequestMgr.invoke(params, reqMgrParams);
-	this.initFromJS(resp.Body.GetRightResponse.server[0]);
+    this.initFromJS(resp.Body.GetRightResponse.server[0]);
 
-	this.cos = ZaApp.getInstance().getGlobalConfig();
-
-	if(this.attrs[ZaRight.A_zimbraMailboxServiceEnabled]) {
-		this.getMyVolumes();
-		this.getCurrentVolumes();
-	}
 }
-
 ZaItem.loadMethods["ZaRight"].push(ZaRight.loadMethod);
 
-ZaRight.prototype.initFromJS = function(server) {
-	ZaItem.prototype.initFromJS.call(this, server);
+
+
+ZaRight.prototype.initFromJS = function(right) {
+	ZaItem.prototype.initFromJS.call(this, right);
 	// convert installed/enabled services to hidden fields for xform binding
 	var installed = this.attrs[ZaRight.A_zimbraServiceInstalled];
 	if (installed) {

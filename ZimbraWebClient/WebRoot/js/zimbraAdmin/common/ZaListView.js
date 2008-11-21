@@ -88,7 +88,7 @@ function(ev, div) {
 		div.style.cursor = AjxEnv.isIE ? "col-resize" : "e-resize";
     } else if (_type == DwtListView.TYPE_LIST_ITEM){
 		var item = this.getItemFromElement(div);
-		if (item && item.getToolTip)
+		if (item && item.getToolTip) {
 			var tt_content = "" ;
 			try {	
 				 if (AjxEnv.hasFirebug) console.log("Item: " + item.name) ;
@@ -97,7 +97,8 @@ function(ev, div) {
 				 tt_content = e.msg ;
 			}
 			this.setToolTipContent(tt_content);
-	}
+        }
+    }
 	return true;
 }
 

@@ -9,6 +9,7 @@
     <include>ZaRightsListView.js</include>
     <include>ZaRightViewController.js</include>
     <include>ZaRightsListViewController.js</include>
+    <include>ZaRightSelectionView.js</include>
 
     <include>ZaDelegatedAdminExt.js</include>
 </zimlet>
