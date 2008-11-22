@@ -13,16 +13,7 @@
 	</condition>
 	<condition property="offline.buildid" value="1">
 	    <not><isset property="offline.buildid"/></not>
-	</condition>
-	<condition property="offline.aushost" value="http://localhost:7070">
-	    <not><isset property="offline.aushost"/></not>
-	</condition>
-	<condition property="offline.auspath" value="/aus/zdesktop/update.php?chn=${offline.channel}&amp;ver=${offline.version}&amp;bid=${offline.buildid}&amp;bos=@target@&amp;@offline.installer.vars@">
-	    <not><isset property="offline.auspath"/></not>
-	</condition>
-	<condition property="offline.aus_url" value="${offline.aushost}${offline.auspath}">
-	    <not><isset property="offline.aus_url"/></not>
-	</condition>
+        </condition>
 
 	<!-- Properties -->
 
@@ -803,7 +794,6 @@
 			<fileset dir="${prism.src.dir}/mac-080922/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="*/**"/>
 		</copy>
 		<replace file="${build.dir}/prism/defaults/preferences/preferences.js" token="@version@" value="${offline.version}"/>
-		<replace file="${build.dir}/prism/defaults/preferences/preferences.js" token="@aus_url@" value="${offline.aus_url}"/>
 		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
 		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
 
@@ -856,9 +846,6 @@
 		</copy>
 
 		<!-- fix things that are specific to each platform -->
-		<replace file="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js" token="@target@" value="macos"/>
-		<replace file="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js" token="@target@" value="win32"/>
-		<replace file="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js" token="@target@" value="linux"/>
 		<copy tofile="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 		<copy tofile="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>

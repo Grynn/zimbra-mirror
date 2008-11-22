@@ -29,9 +29,12 @@
       <envVar name="JDK_HOME" />
     </searchSequence>
     <variables>
+      <variable name="offline_channel" value="alpha" />
       <variable name="offline_relabel" value="ALPHA" />
       <variable name="offline_version" value="0.1" />
       <variable name="offline_buildid" value="1" />
+      <variable name="offline_ausurl" value="" />
+      <variable name="offline_update" value="false" />
     </variables>
   </application>
   <files>
@@ -2644,13 +2647,37 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <group name="set installer vars in upgrade url" id="287055" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+              <group name="set upgrade url" id="287055" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.groups.ActionGroup" />
                   </java>
                 </serializedBean>
                 <beans>
+                  <action name="set ausUrl" id="287642" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                          <void property="script">
+                            <object class="com.install4j.api.beans.ScriptProperty">
+                              <void property="value">
+                                <string>String bos = Util.isWindows() ? "win32" : (Util.isMacOS() ? "macos" : "linux");
+String loc="${installer:languageId}";
+String key="${installer:instanceId}";
+
+String url = "${compiler:offline_ausurl}?chn=${compiler:offline_channel}&amp;ver=${compiler:offline_version}&amp;" + 
+    "bid=${compiler:offline_buildid}&amp;bos=" + bos + "&amp;loc=" + loc + "&amp;key=" + key;
+    
+context.setVariable("ausUrl", url);
+return true;</string>
+                              </void>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
                   <action name="macos - preferences.js" id="287056" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
@@ -2661,10 +2688,10 @@ return true;</string>
                             </object>
                           </void>
                           <void property="replaceValue">
-                            <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
+                            <string>${installer:ausUrl}</string>
                           </void>
                           <void property="searchValue">
-                            <string>@offline.installer.vars@</string>
+                            <string>@aus_url@</string>
                           </void>
                         </object>
                       </java>
@@ -2681,10 +2708,10 @@ return true;</string>
                             </object>
                           </void>
                           <void property="replaceValue">
-                            <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
+                            <string>${installer:ausUrl}</string>
                           </void>
                           <void property="searchValue">
-                            <string>@offline.installer.vars@</string>
+                            <string>@aus_url@</string>
                           </void>
                         </object>
                       </java>
@@ -2701,10 +2728,10 @@ return true;</string>
                             </object>
                           </void>
                           <void property="replaceValue">
-                            <string>loc=${installer:languageId}&amp;key=${installer:instanceId}</string>
+                            <string>${installer:ausUrl}</string>
                           </void>
                           <void property="searchValue">
-                            <string>@offline.installer.vars@</string>
+                            <string>@aus_url@</string>
                           </void>
                         </object>
                       </java>

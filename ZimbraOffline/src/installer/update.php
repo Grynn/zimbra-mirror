@@ -1,5 +1,5 @@
 <?php
-// this file must be located at @aushost@/aus/zdesktop/update.php
+// this file must be located at @ausurl@
 
 $download_url_prefix = "http://files.zimbra.com/downloads/zdesktop/beta";
 $details_url = "http://wiki.zimbra.com/index.php?title=Zimbra_Desktop";

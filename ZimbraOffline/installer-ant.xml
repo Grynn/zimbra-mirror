@@ -33,50 +33,87 @@
 	<target name="installer-pack-media">
 		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
 		           destination="${build.dir}" buildids="44,198394,59040">
-            		<variable name="offline_relabel" value="${offline.relabel}"/>
-            		<variable name="offline_version" value="${offline.version}"/>
-            		<variable name="offline_buildid" value="${offline.buildid}"/>
-        	</install4j>
-    	</target>
+       		<variable name="offline_channel" value="${offline.channel}"/>
+       		<variable name="offline_relabel" value="${offline.relabel}"/>
+       		<variable name="offline_version" value="${offline.version}"/>
+       		<variable name="offline_buildid" value="${offline.buildid}"/>
+			<variable name="offline_ausurl" value="${offline.aus.host}${offline.aus.path}"/>
+		</install4j>
+
+		<gen-update-php builddir="${build.dir}" ausurl="${offline.aus.host}${offline.aus.path}"/>
+	</target>
+
+	<target name="installer-pack-media-dev">
+		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
+		           destination="${build.dir}/dev" buildids="44,198394,59040">
+       		<variable name="offline_channel" value="${offline.channel}"/>
+       		<variable name="offline_relabel" value="${offline.relabel}"/>
+       		<variable name="offline_version" value="${offline.version}"/>
+       		<variable name="offline_buildid" value="${offline.buildid}"/>
+			<variable name="offline_ausurl" value="${offline.ausdev.host}${offline.ausdev.path}"/>
+		</install4j>
+
+		<gen-update-php builddir="${build.dir}/dev" ausurl="${offline.ausdev.host}${offline.ausdev.path}"/>
+	</target>
+
+	<!-- special target only for beta5 update -->
+	<target name="installer-pack-media-beta5update">
+		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
+		           destination="${build.dir}/beta5update" buildids="44,198394,59040">
+       		<variable name="offline_channel" value="${offline.channel}"/>
+       		<variable name="offline_relabel" value="${offline.relabel}"/>
+       		<variable name="offline_version" value="${offline.version}"/>
+       		<variable name="offline_buildid" value="${offline.buildid}"/>
+			<variable name="offline_ausurl" value="${offline.aus.host}${offline.aus.path}"/>
+			<variable name="offline_update" value="true"/>
+		</install4j>
+
+		<gen-update-php builddir="${build.dir}/beta5update" ausurl="${offline.aus.host}${offline.aus.path}"/>
+	</target>
 
 	<target name="installer-make">
 			<antcall target="installer-patch"/>
         	<ant dir="." target="offline-make-install-files" inheritAll="false"/>
         	<antcall target="installer-pack-media"/>
-        	<antcall target="gen-update-php"/>
+        	<antcall target="installer-pack-media-dev"/>
+        	<antcall target="installer-pack-media-beta5update"/>
         	<antcall target="symlink-media"/>
 	</target>
 
-        <target name="gen-update-php">
-                <copy file="src/installer/update.php" todir="${build.dir}" overwrite="true"/>
-                <replace file="${build.dir}/update.php" token="@aushost@" value="${offline.aushost}"/>
-                <replace file="${build.dir}/update.php" token="@version@" value="${offline.version}"/>
-                <replace file="${build.dir}/update.php" token="@buildid@" value="${offline.buildid}"/>
-                <replace file="${build.dir}/update.php" token="@suffix_win32@" value="${offline.suffix_win32}"/>
-                <replace file="${build.dir}/update.php" token="@suffix_macos@" value="${offline.suffix_macos}"/>
-                <replace file="${build.dir}/update.php" token="@suffix_linux@" value="${offline.suffix_linux}"/>
+        <macrodef name="gen-update-php">
+			<attribute name="builddir"/>
+			<attribute name="ausurl"/>
+			<sequential>
+                <copy file="src/installer/update.php" todir="@{builddir}" overwrite="true"/>
+                <replace file="@{builddir}/update.php" token="@ausurl@" value="@{ausurl}"/>
+                <replace file="@{builddir}/update.php" token="@version@" value="${offline.version}"/>
+                <replace file="@{builddir}/update.php" token="@buildid@" value="${offline.buildid}"/>
+                <replace file="@{builddir}/update.php" token="@suffix_win32@" value="${offline.suffix_win32}"/>
+                <replace file="@{builddir}/update.php" token="@suffix_macos@" value="${offline.suffix_macos}"/>
+                <replace file="@{builddir}/update.php" token="@suffix_linux@" value="${offline.suffix_linux}"/>
 
-                <if><available file="${build.dir}/${media_win32}" type="file"/><then>
-                        <checksum file="${build.dir}/${media_win32}" property="hash_win32"/>
-                        <length file="${build.dir}/${media_win32}" property="size_win32"/>
-                        <replace file="${build.dir}/update.php" token="@hash_win32@" value="${hash_win32}"/>
-                        <replace file="${build.dir}/update.php" token="@size_win32@" value="${size_win32}"/>
+                <if><available file="@{builddir}/${media_win32}" type="file"/><then>
+                        <checksum file="@{builddir}/${media_win32}" property="hash_win32"/>
+                        <length file="@{builddir}/${media_win32}" property="size_win32"/>
+                        <replace file="@{builddir}/update.php" token="@hash_win32@" value="${hash_win32}"/>
+                        <replace file="@{builddir}/update.php" token="@size_win32@" value="${size_win32}"/>
                 </then></if>
 
-                <if><available file="${build.dir}/${media_macos}" type="file"/><then>
-                        <checksum file="${build.dir}/${media_macos}" property="hash_macos"/>
-                        <length file="${build.dir}/${media_macos}" property="size_macos"/>
-                        <replace file="${build.dir}/update.php" token="@hash_macos@" value="${hash_macos}"/>
-                        <replace file="${build.dir}/update.php" token="@size_macos@" value="${size_macos}"/>
+                <if><available file="@{builddir}/${media_macos}" type="file"/><then>
+                        <checksum file="@{builddir}/${media_macos}" property="hash_macos"/>
+                        <length file="@{builddir}/${media_macos}" property="size_macos"/>
+                        <replace file="@{builddir}/update.php" token="@hash_macos@" value="${hash_macos}"/>
+                        <replace file="@{builddir}/update.php" token="@size_macos@" value="${size_macos}"/>
                 </then></if>
 
-                <if><available file="${build.dir}/${media_linux}" type="file"/><then>
-                        <checksum file="${build.dir}/${media_linux}" property="hash_linux"/>
-                        <length file="${build.dir}/${media_linux}" property="size_linux"/>
-                        <replace file="${build.dir}/update.php" token="@hash_linux@" value="${hash_linux}"/>
-                        <replace file="${build.dir}/update.php" token="@size_linux@" value="${size_linux}"/>
+                <if><available file="@{builddir}/${media_linux}" type="file"/><then>
+                        <checksum file="@{builddir}/${media_linux}" property="hash_linux"/>
+                        <length file="@{builddir}/${media_linux}" property="size_linux"/>
+                        <replace file="@{builddir}/update.php" token="@hash_linux@" value="${hash_linux}"/>
+                        <replace file="@{builddir}/update.php" token="@size_linux@" value="${size_linux}"/>
                 </then></if>
-        </target>
+			</sequential>
+        </macrodef>
 
 	<target name="symlink-media">
 		<symlink link="${build.dir}/zdesktop_linux_i686.sh" resource="${media_linux}"/>

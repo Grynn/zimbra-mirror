@@ -33,27 +33,33 @@
 	<target name="installer-pack-media-mac">
 		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
 		           destination="${build.dir}" buildids="44">
+			<variable name="offline_channel" value="${offline.channel}"/>
             <variable name="offline_relabel" value="${offline.relabel}"/>
             <variable name="offline_version" value="${offline.version}"/>
             <variable name="offline_buildid" value="${offline.buildid}"/>
+			<variable name="offline_ausurl" value="${offline.aus.host}${offline.aus.path}"/>
                 </install4j>
         </target>
 
 	<target name="installer-pack-media-win">
 		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
 		           destination="${build.dir}" buildids="198394">
+			<variable name="offline_channel" value="${offline.channel}"/>
             <variable name="offline_relabel" value="${offline.relabel}"/>
             <variable name="offline_version" value="${offline.version}"/>
             <variable name="offline_buildid" value="${offline.buildid}"/>
+			<variable name="offline_ausurl" value="${offline.aus.host}${offline.aus.path}"/>
                 </install4j>
         </target>
 
 	<target name="installer-pack-media-linux">
 		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
 		           destination="${build.dir}" buildids="59040">
+			<variable name="offline_channel" value="${offline.channel}"/>
             <variable name="offline_relabel" value="${offline.relabel}"/>
             <variable name="offline_version" value="${offline.version}"/>
             <variable name="offline_buildid" value="${offline.buildid}"/>
+			<variable name="offline_ausurl" value="${offline.aus.host}${offline.aus.path}"/>
                 </install4j>
         </target>
 
