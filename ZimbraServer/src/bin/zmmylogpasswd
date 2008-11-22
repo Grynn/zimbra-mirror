@@ -28,7 +28,7 @@ zmsetvars zimbra_home zimbra_mysql_user mysql_logger_root_password
 #
 usage() {
     cat<<EOF
-Usage: $ zmmylogpasswd [ --root ] newpassword
+Usage: $ zmmylogpasswd [ -help ] [ --root ] newpassword
 
 By default, this script changes zimbra_logger_myql_password.  If the --root
 option is specified, then mysql_logger_root_passwd is changed.  In both cases,
@@ -44,18 +44,26 @@ EOF
 #
 # Parse command line
 #
-if [ "x$1" = "x--root" ]; then
-    password_key="mysql_logger_root_password"
-    shift # lose --root option
-else
-    password_key="zimbra_logger_mysql_password"
-fi
-
 if [ $# -ne 1 ]; then
     usage
     exit 1
 fi
-newpassword="$1"
+
+case "$1" in
+  -root|--root)
+    password_key="mysql_logger_root_password"
+    shift
+    newpassword="$1"
+  ;;
+  -h|-help|--help)
+    usage
+    exit 0 
+  ;;
+  *)
+    password_key="zimbra_logger_mysql_password"
+    newpassword="$1"
+  ;;
+esac
 
 #
 # For zimbra_mysql_password
