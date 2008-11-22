@@ -62,6 +62,10 @@
   <desc>proxy server password</desc>
 </attr>
 
+<attr name="offlineAccountFlavor" type="string" cardinality="single" optionalIn="account">
+  <desc>Flavor of account datasource type (i.e. Ymail, Gmail, Live, Zimbra...)</desc>
+</attr>
+
 <attr name="offlineAccountName" type="string" cardinality="single" optionalIn="account">
   <desc>A user given name for a Zimbra account</desc>
 </attr>
