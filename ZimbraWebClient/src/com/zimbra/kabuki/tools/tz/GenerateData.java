@@ -20,8 +20,6 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-import com.zimbra.common.calendar.TZIDMapper;
-
 public class GenerateData {
 
     public static void main(String[] argv) throws Exception {
@@ -148,7 +146,7 @@ public class GenerateData {
         out.print("\t{ serverId: \"");
         printEscaped(out, timezone.id);
         out.print("\", clientId: \"");
-        printEscaped(out, TZIDMapper.canonicalize(timezone.id));
+        printEscaped(out, timezone.id);
         out.print("\",");
         if (timezone.daylight == null) {
             out.print(" standard: { offset: ");
@@ -233,7 +231,7 @@ public class GenerateData {
         private static Pattern RE_BEGIN_DAYLIGHT = Pattern.compile("^BEGIN:DAYLIGHT");
         private static Pattern RE_TZ_ID = Pattern.compile("^TZID:(.+)");
         private static Pattern RE_TZNAME = Pattern.compile("^TZNAME:(.+)");
-        private static Pattern RE_X_ZIMBRA_TZ_PRIMARY = Pattern.compile("^" + TZIDMapper.X_ZIMBRA_TZ_PRIMARY + ":(.+)");
+        private static Pattern RE_X_ZIMBRA_TZ_PRIMARY = Pattern.compile("^X-ZIMBRA-TZ-PRIMARY:(.+)");
         private static Pattern RE_TZ_OFFSET_TO = Pattern.compile("^TZOFFSETTO:([-+]?\\d+)");
         private static Pattern RE_DT_START = Pattern.compile(
             "DTSTART:(\\d{4})(\\d{2})(\\d{2})T(\\d{2})(\\d{2})(\\d{2})[Z]?"
