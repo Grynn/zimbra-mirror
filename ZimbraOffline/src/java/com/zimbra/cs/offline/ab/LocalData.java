@@ -19,9 +19,7 @@ package com.zimbra.cs.offline.ab;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
 import com.zimbra.cs.mailbox.MailItem;
-import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
@@ -39,7 +37,6 @@ import java.util.Set;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -93,22 +90,6 @@ public final class LocalData {
         return changes;
     }
     
-    public Map<Integer, Change> getTagChanges(int seq)
-        throws ServiceException {
-        // Get modified and deleted tags
-        Map<Integer, Change> changes = new HashMap<Integer, Change>();
-        for (Tag tag : getModifiedTags(seq)) {
-            int id = tag.getId();
-            changes.put(id, hasMapping(id) ? Change.update(id) : Change.add(id));
-        }
-        for (int id : getTombstones(seq, MailItem.TYPE_TAG)) {
-            if (hasMapping(id)) {
-                changes.put(id, Change.delete(id));
-            }
-        }
-        return changes;
-    }
-
     private boolean hasMapping(int id) throws ServiceException {
         return DbDataSource.hasMapping(ds, id);
     }
@@ -119,36 +100,11 @@ public final class LocalData {
         return ids != null ? ids : Collections.<Integer>emptyList();
     }
 
-    private List<Tag> getModifiedTags(int seq) throws ServiceException {
-        List<Tag> tags = mbox.getModifiedTags(CONTEXT, seq);
-        Set<Integer> ctags = getContactTags(getModifiedContacts(seq));
-        // Ignore tag changes not associated with modified contacts
-        for (Iterator<Tag> it = tags.iterator(); it.hasNext(); ) {
-            Tag tag = it.next();
-            if (!ctags.contains(tag.getId())) {
-                it.remove();
-            }
-        }
-        return tags;
-    }
-
     private List<Integer> getModifiedContacts(int seq) throws ServiceException {
         return mbox.getModifiedItems(
             CONTEXT, seq, MailItem.TYPE_CONTACT, CONTACT_FOLDERS).getFirst();
     }
     
-    private Set<Integer> getContactTags(Collection<Integer> contactIds)
-        throws ServiceException {
-        Set<Integer> tags = new HashSet<Integer>();
-        for (int id : contactIds) {
-            Contact contact = getContact(id);
-            for (Tag tag : contact.getTagList()) {
-                tags.add(tag.getId());
-            }
-        }
-        return tags;
-    }
-
     public String getData(DataSourceItem dsi) throws ServiceException {
         return dsi.md != null ? dsi.md.get(key) : null;
     }
@@ -195,53 +151,21 @@ public final class LocalData {
         return mbox.getContactById(CONTEXT, id);
     }
 
-    public Tag createTag(String name) throws ServiceException {
-        log.debug("Creating tag: name = %s", name);
-        String normalized = MailItem.normalizeItemName(name);
-        if (!name.equals(normalized)) {
-            log.warn("Normalizing tag name '%s' to '%s' since it contains " +
-                     "invalid characters", name, normalized);
-            name = normalized;
-        }
-        try {
-            return mbox.getTagByName(name);
-        } catch (MailServiceException.NoSuchItemException e) {
-            return mbox.createTag(CONTEXT, name, Tag.DEFAULT_COLOR);
-        }
-    }
-
-    public Tag getTag(int id) throws ServiceException {
-        return mbox.getTagById(CONTEXT, id);
-    }
-
-    public String getTagName(int id) throws ServiceException {
-        return getTag(id).getName();
-    }
-
-    public Contact createContact(ParsedContact pc, long tags)
-        throws ServiceException {
+    public Contact createContact(ParsedContact pc) throws ServiceException {
         Contact contact = mbox.createContact(
             CONTEXT, pc, Mailbox.ID_FOLDER_CONTACTS, null);
-        setContactTags(contact.getId(), tags);
-        log.debug("Created new contact: id = %d, tags = %d", contact.getId(), tags);
+        log.debug("Created new contact: id = %d", contact.getId());
         return contact;
     }
 
-    public void modifyContact(int id, ParsedContact pc, long tags)
-        throws ServiceException {
+    public void modifyContact(int id, ParsedContact pc) throws ServiceException {
         mbox.modifyContact(CONTEXT, id, pc);
-        setContactTags(id, tags);
-        log.debug("Modified contact: id = %d, tags = %d", id, tags);
+        log.debug("Modified contact: id = %d", id);
     }
 
     public void deleteContact(int id) throws ServiceException {
         mbox.delete(CONTEXT, id, MailItem.TYPE_CONTACT);
         log.debug("Deleted contact: id = %d", id);
-    }
-
-    private void setContactTags(int id, long bitmask) throws ServiceException {
-        mbox.setTags(CONTEXT, id, MailItem.TYPE_CONTACT,
-                     MailItem.FLAG_UNCHANGED, bitmask);
     }
 
     public ContactGroup getContactGroup(int id) throws ServiceException {
@@ -259,11 +183,20 @@ public final class LocalData {
         mbox.delete(CONTEXT, id, Contact.TYPE_CONTACT);
     }
 
-    public void renameTag(int id, String name) throws ServiceException {
-        log.debug("Renaming tag: id = %d, new name = %s", id, name);
-        mbox.rename(CONTEXT, id, MailItem.TYPE_TAG, name, Mailbox.ID_FOLDER_TAGS);
+    public void saveContactGroups(Collection<ContactGroup> groups)
+        throws ServiceException {
+        for (ContactGroup group : groups) {
+            if (group.hasChanges()) {
+                try {
+                    group.modify();
+                    log.debug("Changes saved for contact group: " + group);
+                } catch (ServiceException e) {
+                    syncContactFailed(e, group.getId(), group.toString());
+                }
+            }
+        }
     }
-
+    
     public SyncState loadState() throws ServiceException {
         Metadata md = mbox.getConfig(CONTEXT, key);
         if (md != null && !SyncState.isCompatibleVersion(md)) {

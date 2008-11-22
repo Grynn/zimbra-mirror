@@ -115,7 +115,7 @@ public class SyncSession {
                     // Categories are not returned unless there are contact changes
                     contactGroups = processCategories(res.getCategories());
                     processEvents(events);
-                    saveContactGroups(contactGroups.values());
+                    localData.saveContactGroups(contactGroups.values());
                 }
                 ss.setLastModSequence(mbox.getLastChangeID());
                 localData.saveState(ss);
@@ -362,7 +362,7 @@ public class SyncSession {
         ContactData cd = new ContactData(contact);
         if (!cd.isEmpty()) {
             ParsedContact pc = cd.getParsedContact();
-            int itemId = localData.createContact(pc, 0).getId();
+            int itemId = localData.createContact(pc).getId();
             updateContactMapping(itemId, contact);
             updateContactGroups(itemId, contact, null);
             stats.added++;
@@ -378,7 +378,7 @@ public class SyncSession {
         int cid = contact.getId();
         ContactData cd = new ContactData(contact);
         if (!cd.isEmpty()) {
-            localData.modifyContact(dsi.itemId, cd.getParsedContact(), 0);
+            localData.modifyContact(dsi.itemId, cd.getParsedContact());
             updateContactMapping(dsi.itemId, contact);
             updateContactGroups(dsi.itemId, contact, getContact(dsi));
             stats.updated++;
@@ -449,20 +449,6 @@ public class SyncSession {
         return ids;
     }
 
-    private void saveContactGroups(Collection<ContactGroup> groups)
-        throws ServiceException {
-        for (ContactGroup group : groups) {
-            if (group.hasChanges()) {
-                try {
-                    group.modify();
-                    LOG.debug("Changes saved for contact group: " + group);
-                } catch (ServiceException e) {
-                    localData.syncContactFailed(e, group.getId(), group.toString());
-                }
-            }
-        }
-    }
-    
     private String toXml(Entity entity) {
         return session.toString(entity.toXml(session.createDocument()));
     }

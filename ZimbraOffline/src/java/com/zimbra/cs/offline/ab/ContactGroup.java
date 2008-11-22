@@ -106,20 +106,36 @@ public class ContactGroup {
         return name;
     }
 
-    public void addContact(int cid) {
-        contactIds.add(cid);
-        contactsChanged = true;
+    public boolean hasContact(int cid) {
+        return contactIds.contains(cid);
+    }
+    
+    public boolean addContact(int cid) {
+        if (!contactIds.contains(cid)) {
+            contactIds.add(cid);
+            contactsChanged = true;
+            return true;
+        }
+        return false;
     }
 
-    public void removeContact(int cid) {
-        contactIds.remove(cid);
-        contactsChanged = true;
+    public boolean removeContact(int cid) {
+        if (contactIds.contains(cid)) {
+            contactIds.remove(cid);
+            contactsChanged = true;
+            return true;
+        }
+        return false;
     }
 
     public boolean hasChanges() {
         return nameChanged || contactsChanged;
     }
 
+    public int getCount() {
+        return contactIds.size();
+    }
+    
     public void modify() throws ServiceException {
         if (hasChanges()) {
             mbox.modifyContact(CONTEXT, itemId, getParsedContact(contactsChanged));

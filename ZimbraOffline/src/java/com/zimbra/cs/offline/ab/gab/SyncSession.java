@@ -20,11 +20,12 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.mailbox.Tag;
+import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.cs.offline.ab.SyncState;
 import com.zimbra.cs.offline.ab.Change;
+import com.zimbra.cs.offline.ab.ContactGroup;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.service.ServiceException;
@@ -36,13 +37,13 @@ import com.google.gdata.data.contacts.ContactGroupEntry;
 import com.google.gdata.data.contacts.ContactGroupFeed;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.DateTime;
-import com.google.gdata.data.PlainTextConstruct;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -51,6 +52,7 @@ import java.io.IOException;
 public class SyncSession {
     private final LocalData localData;
     private final GabService service;
+    private Map<String, ContactGroup> contactGroups;
 
     private static class Stats {
         int added, updated, deleted;
@@ -102,40 +104,37 @@ public class SyncSession {
         ContactFeed contacts = service.getContacts(lastSyncTime, currentTime);
         ContactGroupFeed groups = service.getGroups(lastSyncTime, currentTime);
         state.setLastRevision(currentTime.toString());
-        List<SyncRequest> groupRequests;
         List<SyncRequest> contactRequests;
         int seq = state.getLastModSequence();
+        contactGroups = new HashMap<String, ContactGroup>();
         synchronized (mbox) {
             // Get local changes since last sync
-            Map<Integer, Change> tagChanges = localData.getTagChanges(seq);
             Map<Integer, Change> contactChanges = localData.getContactChanges(seq);
             // Process remote group and contact changes
-            processGroupChanges(groups.getEntries(), tagChanges);
+            processGroupChanges(groups.getEntries());
             processContactChanges(contacts.getEntries(), contactChanges);
             // Process local changes and determine changes to push
-            groupRequests = processTagChanges(tagChanges.values());
             contactRequests = processContactChanges(contactChanges.values());
             state.setLastModSequence(mbox.getLastChangeID());
         }
         // Push local changes to remote
-        pushGroupChanges(groupRequests);
         pushContactChanges(contactRequests);
-        int errors = groupRequests.size() + contactRequests.size();
+        int errors = contactRequests.size();
         if (errors > 0) {
             LOG.debug("Contact sync had %d errors", errors);
         }
         localData.saveState(state);
+        localData.saveContactGroups(contactGroups.values());
     }
 
-    private void processGroupChanges(List<ContactGroupEntry> entries,
-                                     Map<Integer, Change> changes)
+    private void processGroupChanges(List<ContactGroupEntry> entries)
         throws ServiceException, IOException {
         LOG.debug("Processing %d remote contact group changes", entries.size());
         Stats stats = new Stats();
         for (ContactGroupEntry entry : entries) {
             DataSourceItem dsi = localData.getReverseMapping(entry.getId());
             try {
-                processGroupChange(entry, dsi, changes, stats);
+                processGroupChange(entry, dsi, stats);
             } catch (ServiceException e) {
                 localData.syncContactFailed(e, dsi.itemId, service.pp(entry));
             }
@@ -145,36 +144,41 @@ public class SyncSession {
 
     private void processGroupChange(ContactGroupEntry entry,
                                     DataSourceItem dsi,
-                                    Map<Integer, Change> changes,
                                     Stats stats) throws ServiceException {
         if (isTraceEnabled()) {
             LOG.debug("Processing remote group entry:\n%s", service.pp(entry));
         }
         int itemId = dsi.itemId;
         boolean deleted = entry.getDeleted() != null;
+        String remoteId = entry.getId();
         if (itemId > 0) {
-            // Contact group updated or deleted
+            // Existing ontact group updated or deleted
+            ContactGroup group = getContactGroup(remoteId, itemId);
             if (deleted) {
                 // Don't delete tag since we can't be sure that it is not
                 // also used by other non-contact items
                 localData.deleteMapping(itemId);
-                changes.remove(itemId);
+                localData.deleteContactGroup(itemId);
+                contactGroups.remove(remoteId);
                 stats.deleted++;
-            } else if (!changes.containsKey(itemId)) {
+                LOG.debug("Deleted contact group: " + group);
+            } else {
                 String newName = getName(entry);
-                String oldName = getName(getEntry(dsi, ContactGroupEntry.class));
-                if (!newName.equals(oldName)) {
-                    // Contact group was renamed...
-                    localData.renameTag(itemId, newName);
+                if (!newName.equals(group.getName())) {
+                    group.setName(newName);
+                    group.modify();
                     stats.updated++;
+                    LOG.debug("Updated contact group: " + group);
                 }
                 updateEntry(itemId, entry);
             }
         } else if (!deleted) {
             // Contact group was added
-            Tag tag = localData.createTag(getName(entry));
-            updateEntry(tag.getId(), entry);
+            ContactGroup group = localData.createContactGroup(
+                Mailbox.ID_FOLDER_CONTACTS, getName(entry));
+            contactGroups.put(remoteId, group);
             stats.added++;
+            LOG.debug("Contact group added: " + group);
         }
     }
 
@@ -221,8 +225,7 @@ public class SyncSession {
                     // Only update local entry if edit url has changed
                     // (avoids modifying contacts which we just pushed)
                     ContactData cd = new ContactData(entry);
-                    localData.modifyContact(
-                        itemId, cd.getParsedContact(), getTagBitmask(entry));
+                    localData.modifyContact(itemId, cd.getParsedContact());
                     updateEntry(itemId, entry);
                     stats.updated++;
                 }
@@ -230,8 +233,7 @@ public class SyncSession {
         } else if (!deleted) {
             // New contact added
             ContactData cd = new ContactData(entry);
-            Contact contact = localData.createContact(
-                cd.getParsedContact(), getTagBitmask(entry));
+            Contact contact = localData.createContact(cd.getParsedContact());
             updateEntry(contact.getId(), entry);
             stats.added++;
         }
@@ -239,15 +241,6 @@ public class SyncSession {
 
     private static String getEditUrl(BaseEntry entry) {
         return entry.getEditLink().getHref();
-    }
-
-    private List<SyncRequest> processTagChanges(Collection<Change> changes)
-        throws ServiceException {
-        List<SyncRequest> reqs = new ArrayList<SyncRequest>();
-        for (Change change : changes) {
-            reqs.add(getGroupSyncRequest(change));
-        }
-        return reqs;
     }
 
     private List<SyncRequest> processContactChanges(Collection<Change> changes)
@@ -279,47 +272,12 @@ public class SyncSession {
         return null;
     }
 
-    private SyncRequest getGroupSyncRequest(Change change)
-        throws ServiceException {
-        int id = change.getItemId();
-        if (change.isAdd()) {
-            ContactGroupEntry entry = new ContactGroupEntry();
-            entry.setTitle(new PlainTextConstruct(localData.getTagName(id)));
-            return SyncRequest.insert(this, id, entry);
-        } else if (change.isUpdate()) {
-            ContactGroupEntry entry = getEntry(id, ContactGroupEntry.class);
-            entry.setTitle(new PlainTextConstruct(localData.getTagName(id)));
-            return SyncRequest.update(this, id, entry);
-        } else if (change.isDelete()) {
-            ContactGroupEntry entry = getEntry(id, ContactGroupEntry.class);
-            return SyncRequest.delete(this, id, entry);
-        }
-        return null;
-    }
-
-    private void pushGroupChanges(List<SyncRequest> reqs)
-        throws ServiceException, IOException {
-        LOG.debug("Pushing contact group changes");
-        Stats stats = new Stats();
-        Iterator<SyncRequest> it = reqs.iterator();
-        while (it.hasNext()) {
-            SyncRequest req = it.next();
-            if (pushChange(req, stats)) {
-                it.remove();
-            }
-        }
-        LOG.debug("Pushed contact group changes: ", stats);
-    }
-    
     private void pushContactChanges(List<SyncRequest> reqs)
         throws ServiceException, IOException {
         Stats stats = new Stats();
         Iterator<SyncRequest> it = reqs.iterator();
         while (it.hasNext()) {
             SyncRequest req = it.next();
-            if (req.isInsert() || req.isUpdate()) {
-                setGroupInfo((ContactEntry) req.getEntry(), req.getItemId());
-            }
             if (pushChange(req, stats)) {
                 it.remove();
             }
@@ -327,18 +285,6 @@ public class SyncSession {
         LOG.debug("Contact changes pushed: " + stats);
     }
     
-    private void setGroupInfo(ContactEntry entry, int itemId)
-        throws ServiceException {
-        List<GroupMembershipInfo> groups = entry.getGroupMembershipInfos();
-        groups.clear();
-        for (Tag tag : localData.getContact(itemId).getTagList()) {
-            ContactGroupEntry ge = getEntry(tag.getId(), ContactGroupEntry.class);
-            if (ge != null) {
-                groups.add(new GroupMembershipInfo(false, ge.getId()));
-            }
-        }
-    }
-
     private boolean pushChange(SyncRequest req, Stats stats)
         throws ServiceException, IOException {
         int itemId = req.getItemId();
@@ -379,23 +325,51 @@ public class SyncSession {
 
     private void updateEntry(int itemId, BaseEntry entry) throws ServiceException {
         localData.updateMapping(itemId, entry.getId(), service.toXml(entry));
+        if (entry.getClass() == ContactEntry.class) {
+            updateContactGroups(itemId, (ContactEntry) entry);
+        }
     }
 
-    private long getTagBitmask(ContactEntry entry) throws ServiceException {
-        long mask = 0;
+    private void updateContactGroups(int itemId, ContactEntry entry) throws ServiceException {
         for (GroupMembershipInfo info : entry.getGroupMembershipInfos()) {
-            Boolean deleted = info.getDeleted();
-            if (deleted == null || !deleted) {
-                String id = info.getHref();
-                DataSourceItem dsi = localData.getReverseMapping(id);
-                if (dsi.itemId == 0) {
-                    throw ServiceException.FAILURE(
-                        "Missing item id for contact group: " + id, null);
+            ContactGroup group = getContactGroup(info.getHref());
+            if (group != null) {
+                boolean deleted = Boolean.TRUE.equals(info.getDeleted());
+                if (deleted) {
+                    if (group.removeContact(itemId)) {
+                        LOG.debug("Removed contact id %d from group %s", itemId, group);
+                    }
+                } else if (group.addContact(itemId)) {
+                    LOG.debug("Added contact id %d to group %s", itemId, group);
                 }
-                mask |= localData.getTag(dsi.itemId).getBitmask();
             }
         }
-        return mask;
+    }
+
+    private ContactGroup getContactGroup(String remoteId)
+        throws ServiceException {
+        ContactGroup group = contactGroups.get(remoteId);
+        if (group == null) {
+            DataSourceItem dsi = localData.getReverseMapping(remoteId);
+            if (dsi.itemId > 0) {
+                group = getContactGroup(remoteId, dsi.itemId);
+            }
+        }
+        return group;
+    }
+
+    private ContactGroup getContactGroup(String remoteId, int itemId)
+        throws ServiceException {
+        ContactGroup group = contactGroups.get(remoteId);
+        if (group == null) {
+            try {
+                group = localData.getContactGroup(itemId);
+            } catch (MailServiceException.NoSuchItemException e) {
+                return null;
+            }
+            contactGroups.put(remoteId, group);
+        }
+        return group;
     }
 
     public boolean isTraceEnabled() {
