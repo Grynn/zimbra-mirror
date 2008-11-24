@@ -448,10 +448,8 @@ function(option) {
  		if (displayValue) {
  			this.setText(AjxStringUtil.htmlEncode(displayValue));
  		}
- 		if (image) {
- 			this.setImage(image);
- 		}
-		this._selectedValue = option._value;
+ 		this.setImage(image);
+ 		this._selectedValue = option._value;
 		this._selectedOption = option;
 	}
     this._updateSelection(option);
