@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+use strict;
+use lib '/opt/zimbra/zimbramon/lib';
+use Sys::Syslog qw(:DEFAULT setlogsock);
+
+#
+# Syslogging options for verbose mode and for fatal errors.
+# NOTE: comment out the $syslog_socktype line if syslogging does not
+# work on your system.
+#
+$syslog_socktype = 'unix';
+$syslog_facility="mail";
+$syslog_options="pid";
+$syslog_priority="info";
+
+setlogsock $syslog_socktype;
+openlog $0, $syslog_options, $syslog_facility;
+
+sub smtpd_access_policy {
+  return "dunno";
+}
+
+#
+# We don't need getopt() for now.
+#
+while ($option = shift(@ARGV)) {
+    if ($option eq "-v") {
+        $verbose = 1;
+    } else {
+        syslog $syslog_priority, "Invalid option: %s. Usage: %s [-v]",
+                $option, $0;
+        exit 1;
+    }
+}
+
+#
+# Unbuffer standard output.
+#
+select((select(STDOUT), $| = 1)[0]);
+
+#
+# Receive a bunch of attributes, evaluate the policy, send the result.
+#
+while (<STDIN>) {
+    if (/([^=]+)=(.*)\n/) {
+        $attr{substr($1, 0, 512)} = substr($2, 0, 512);
+    } elsif ($_ eq "\n") {
+        if ($verbose) {
+            for (keys %attr) {
+                syslog $syslog_priority, "Attribute: %s=%s", $_, $attr{$_};
+            }
+        }
+        fatal_exit "unrecognized request type: '%s'", $attr{request}
+            unless $attr{"request"} eq "smtpd_access_policy";
+        $action = smtpd_access_policy();
+        syslog $syslog_priority, "Action: %s", $action if $verbose;
+        print STDOUT "action=$action\n\n";
+        %attr = ();
+    } else {
+        chop;
+        syslog $syslog_priority, "warning: ignoring garbage: %.100s", $_;
+    }
+}
