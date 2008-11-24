@@ -3134,6 +3134,204 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
+              <group name="Start zdesktop" id="287724" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup">
+                      <void property="conditionExpression">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>Boolean.getBoolean("offline_update") &amp;&amp; !context.isErrorOccured()</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <beans>
+                  <action name="set launch var" id="287732" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                          <void property="script">
+                            <object class="com.install4j.api.beans.ScriptProperty">
+                              <void property="value">
+                                <string>return Boolean.TRUE;</string>
+                              </void>
+                            </object>
+                          </void>
+                          <void property="variableName">
+                            <string>launch</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Boolean.getBoolean("offline_update")</condition>
+                  </action>
+                  <action name="windows" id="287725" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="6">
+                              <void index="0">
+                                <string>-webapp</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}\zdesktop.webapp</string>
+                              </void>
+                              <void index="2">
+                                <string>-override</string>
+                              </void>
+                              <void index="3">
+                                <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
+                              </void>
+                              <void index="4">
+                                <string>-profile</string>
+                              </void>
+                              <void index="5">
+                                <string>${installer:sys.installationDir}\profile</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="stderrFile">
+                            <object class="java.io.File">
+                              <string>log/app.err</string>
+                            </object>
+                          </void>
+                          <void property="stdoutFile">
+                            <object class="java.io.File">
+                              <string>log/app.out</string>
+                            </object>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isWindows() &amp;&amp; context.getBooleanVariable("launch")</condition>
+                  </action>
+                  <action name="macos" id="287726" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="6">
+                              <void index="0">
+                                <string>-webapp</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp</string>
+                              </void>
+                              <void index="2">
+                                <string>-override</string>
+                              </void>
+                              <void index="3">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                              </void>
+                              <void index="4">
+                                <string>-profile</string>
+                              </void>
+                              <void index="5">
+                                <string>${installer:sys.installationDir}/profile</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="stderrFile">
+                            <object class="java.io.File">
+                              <string>log/app.err</string>
+                            </object>
+                          </void>
+                          <void property="stdoutFile">
+                            <object class="java.io.File">
+                              <string>log/app.out</string>
+                            </object>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("launch")</condition>
+                  </action>
+                  <action name="linux" id="287727" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="6">
+                              <void index="0">
+                                <string>-webapp</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp</string>
+                              </void>
+                              <void index="2">
+                                <string>-override</string>
+                              </void>
+                              <void index="3">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                              </void>
+                              <void index="4">
+                                <string>-profile</string>
+                              </void>
+                              <void index="5">
+                                <string>${installer:sys.installationDir}/profile</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/linux/prism/prism</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="stderrFile">
+                            <object class="java.io.File">
+                              <string>log/app.err</string>
+                            </object>
+                          </void>
+                          <void property="stdoutFile">
+                            <object class="java.io.File">
+                              <string>log/app.out</string>
+                            </object>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS() &amp;&amp; context.getBooleanVariable("launch")</condition>
+                  </action>
+                </beans>
+              </group>
             </actions>
             <formComponents />
           </screen>
@@ -3157,173 +3355,190 @@ return true;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition>!context.isErrorOccured()</condition>
+            <condition>!Boolean.getBoolean("offline_update") &amp;&amp; !context.isErrorOccured()</condition>
             <validation />
             <preActivation />
             <postActivation />
             <actions>
-              <action name="windows" id="181367" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <group name="Start zdesktop" id="287728" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="6">
-                          <void index="0">
-                            <string>-webapp</string>
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup">
+                      <void property="conditionExpression">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string />
                           </void>
-                          <void index="1">
-                            <string>${installer:sys.installationDir}\zdesktop.webapp</string>
-                          </void>
-                          <void index="2">
-                            <string>-override</string>
-                          </void>
-                          <void index="3">
-                            <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
-                          </void>
-                          <void index="4">
-                            <string>-profile</string>
-                          </void>
-                          <void index="5">
-                            <string>${installer:sys.installationDir}\profile</string>
-                          </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
-                        </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="stderrFile">
-                        <object class="java.io.File">
-                          <string>log/app.err</string>
-                        </object>
-                      </void>
-                      <void property="stdoutFile">
-                        <object class="java.io.File">
-                          <string>log/app.out</string>
-                        </object>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>log</string>
                         </object>
                       </void>
                     </object>
                   </java>
                 </serializedBean>
-                <condition>Util.isWindows() &amp;&amp; context.getBooleanVariable("launch")</condition>
-              </action>
-              <action name="macos" id="154832" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="6">
-                          <void index="0">
-                            <string>-webapp</string>
+                <beans>
+                  <action name="windows" id="287729" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="6">
+                              <void index="0">
+                                <string>-webapp</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}\zdesktop.webapp</string>
+                              </void>
+                              <void index="2">
+                                <string>-override</string>
+                              </void>
+                              <void index="3">
+                                <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
+                              </void>
+                              <void index="4">
+                                <string>-profile</string>
+                              </void>
+                              <void index="5">
+                                <string>${installer:sys.installationDir}\profile</string>
+                              </void>
+                            </array>
                           </void>
-                          <void index="1">
-                            <string>${installer:sys.installationDir}/zdesktop.webapp</string>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
+                            </object>
                           </void>
-                          <void index="2">
-                            <string>-override</string>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
                           </void>
-                          <void index="3">
-                            <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                          <void property="stderrFile">
+                            <object class="java.io.File">
+                              <string>log/app.err</string>
+                            </object>
                           </void>
-                          <void index="4">
-                            <string>-profile</string>
+                          <void property="stdoutFile">
+                            <object class="java.io.File">
+                              <string>log/app.out</string>
+                            </object>
                           </void>
-                          <void index="5">
-                            <string>${installer:sys.installationDir}/profile</string>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
                           </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
                         </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="stderrFile">
-                        <object class="java.io.File">
-                          <string>log/app.err</string>
-                        </object>
-                      </void>
-                      <void property="stdoutFile">
-                        <object class="java.io.File">
-                          <string>log/app.out</string>
-                        </object>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>log</string>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("launch")</condition>
-              </action>
-              <action name="linux" id="181368" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                      <void property="arguments">
-                        <array class="java.lang.String" length="6">
-                          <void index="0">
-                            <string>-webapp</string>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isWindows() &amp;&amp; context.getBooleanVariable("launch")</condition>
+                  </action>
+                  <action name="macos" id="287730" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="6">
+                              <void index="0">
+                                <string>-webapp</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp</string>
+                              </void>
+                              <void index="2">
+                                <string>-override</string>
+                              </void>
+                              <void index="3">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                              </void>
+                              <void index="4">
+                                <string>-profile</string>
+                              </void>
+                              <void index="5">
+                                <string>${installer:sys.installationDir}/profile</string>
+                              </void>
+                            </array>
                           </void>
-                          <void index="1">
-                            <string>${installer:sys.installationDir}/zdesktop.webapp</string>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>macos/Yahoo! Zimbra Desktop.app/Contents/MacOS/prism</string>
+                            </object>
                           </void>
-                          <void index="2">
-                            <string>-override</string>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
                           </void>
-                          <void index="3">
-                            <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                          <void property="stderrFile">
+                            <object class="java.io.File">
+                              <string>log/app.err</string>
+                            </object>
                           </void>
-                          <void index="4">
-                            <string>-profile</string>
+                          <void property="stdoutFile">
+                            <object class="java.io.File">
+                              <string>log/app.out</string>
+                            </object>
                           </void>
-                          <void index="5">
-                            <string>${installer:sys.installationDir}/profile</string>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
                           </void>
-                        </array>
-                      </void>
-                      <void property="executable">
-                        <object class="java.io.File">
-                          <string>${installer:sys.installationDir}/linux/prism/prism</string>
                         </object>
-                      </void>
-                      <void property="logArguments">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="stderrFile">
-                        <object class="java.io.File">
-                          <string>log/app.err</string>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isMacOS() &amp;&amp; context.getBooleanVariable("launch")</condition>
+                  </action>
+                  <action name="linux" id="287731" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="6">
+                              <void index="0">
+                                <string>-webapp</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp</string>
+                              </void>
+                              <void index="2">
+                                <string>-override</string>
+                              </void>
+                              <void index="3">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                              </void>
+                              <void index="4">
+                                <string>-profile</string>
+                              </void>
+                              <void index="5">
+                                <string>${installer:sys.installationDir}/profile</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/linux/prism/prism</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="stderrFile">
+                            <object class="java.io.File">
+                              <string>log/app.err</string>
+                            </object>
+                          </void>
+                          <void property="stdoutFile">
+                            <object class="java.io.File">
+                              <string>log/app.out</string>
+                            </object>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
                         </object>
-                      </void>
-                      <void property="stdoutFile">
-                        <object class="java.io.File">
-                          <string>log/app.out</string>
-                        </object>
-                      </void>
-                      <void property="workingDirectory">
-                        <object class="java.io.File">
-                          <string>log</string>
-                        </object>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS() &amp;&amp; context.getBooleanVariable("launch")</condition>
-              </action>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS() &amp;&amp; context.getBooleanVariable("launch")</condition>
+                  </action>
+                </beans>
+              </group>
             </actions>
             <formComponents>
               <formComponent name="" id="3856" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
