@@ -204,7 +204,12 @@ sub dumpLocks() {
       }
     }
     my $lockOwnerId = ThreadDumpAnalyzer::getLockOwner($lockId);
-    $ret .= formatStackTrace(ThreadDumpAnalyzer::getThreadStack($lockOwnerId), "\t");
+    if (defined($lockOwnerId)) {
+      my $stack = ThreadDumpAnalyzer::getThreadStack($lockOwnerId);
+      if (defined($stack)) {
+	$ret .= formatStackTrace($stack, "\t");
+      }
+    }
 
     if ((!defined $searchThreadId) || ($lockId =~ /$searchThreadId/)) {
       if ($numWaiters > 0 || defined $allLocks) {

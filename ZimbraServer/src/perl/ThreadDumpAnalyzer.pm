@@ -139,7 +139,6 @@ sub initialize(@) {
 	    # Line break between thread dumps
 	    if (@curThread) {
 		my $threadId;
-		my @locksHeld;
 		my $waitingOnLock;
 		my $threadState;
 		my $output;
@@ -173,17 +172,19 @@ sub initialize(@) {
 		    foreach $line (@curThread) {
 			$output .= $line."\n";
 			if ($line =~ /locked <(0x[0-9a-f]+)>\s*\(a ([^\)]+)/) {
-			    push @locksHeld, $1;
-
 			    $locks{$1}{owner} = $threadId;
 			    $locks{$1}{type} = $2;
-
-			} elsif ($line =~ /- waiting to lock <(0x[0-9a-f]+)>/) {
+			} elsif ($line =~ /- waiting to lock <(0x[0-9a-f]+)>\s*\(a ([^\)]+)/) {
 			    $waitingOnLock = $1;
 			    $threads{$threadId}{waitingOnLock} = $1;
-			} elsif ($line =~ /- waiting to lock <(0x[0-9a-f]+)>/) {
-			    $waitingOnLock = $1;
-			    $threads{$threadId}{waitingOnLock} = $1;
+			    if (!defined($locks{$1})) {
+				# Handle the edge case where there is no "locked"
+				# line in the thread dump.  This probably happens
+				# because the lock was released as we were taking
+				# the thread dump.
+				$locks{$1}{owner} = "undetermined";
+				$locks{$1}{type} = $2;
+			    }
 			}
 		    }
 		} else {
