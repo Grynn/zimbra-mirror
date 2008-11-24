@@ -68,10 +68,10 @@ public class TestYMailClient {
 
     private static final String APPID = OfflineLC.zdesktop_yauth_appid.value();
     private static final String HOST = "imap.beta.mail.yahoo.com";
-    private static final String USER = "jjzhuang@vivazimbra.com";
+    private static final String USER = "dacztest";
     private static final String PASS = "test1234";
 
-    private static final String FROM = USER; // USER + "@yahoo.com";
+    private static final String FROM = USER + "@yahoo.com";
     private static final String TO = FROM;
     private static final String SENT = "Sent";
 
@@ -87,7 +87,6 @@ public class TestYMailClient {
     public static void setUpOnce() throws Exception {
         LOG.setLevel(Level.DEBUG);
         // Set up YMail client
-        Logger.getLogger(YMailClient.class).setLevel(Level.DEBUG);
         FileTokenStore ts = new FileTokenStore(TOKENS_FILE);
         if (!ts.hasToken(APPID, USER)) {
             ts.newToken(APPID, USER, PASS);
@@ -95,7 +94,7 @@ public class TestYMailClient {
         RawAuthManager ram = new RawAuthManager(ts);
         Auth auth = ram.authenticate(APPID, USER, PASS);
         ymc = new YMailClient(auth);
-        ymc.enableTrace(System.out);
+        ymc.setTrace(true);
         // Set up IMAP connection
         imc = connect(auth);
     }
@@ -328,14 +327,12 @@ public class TestYMailClient {
         assertEquals("1234", matcher.group(1));
     }
     
-    /*
     @Test
     public void testForwarded() throws Exception {
         debug("Testing send of forwarded message as attachment %s", MSG_FORWARDED);
-        MimeMessage mm = parseMimeMessage(MSG_FORWARDED);
+        MimeMessage mm = readMessage(MSG_FORWARDED);
         ymc.sendMessage(mm);
     }
-    */
 
     private static MimeMessage simpleMessage(String text) throws Exception {
         Session session = Session.getInstance(new Properties());

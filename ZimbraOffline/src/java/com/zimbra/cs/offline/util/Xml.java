@@ -23,6 +23,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -35,12 +36,9 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.OutputStream;
 import java.io.IOException;
-import java.io.Writer;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
-import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
 
 /**
  * Various XML utility methods.
@@ -121,29 +119,29 @@ public final class Xml {
         return newDocumentBuilder().newDocument();
     }
     
-    public static void print(Node node, OutputStream os) throws IOException {
+    public static String toString(Node node) {
         TransformerFactory tf = TransformerFactory.newInstance();
         tf.setAttribute("indent-number", 2);
-        Writer w = new OutputStreamWriter(os, "utf-8");
+        StringWriter sw = new StringWriter();
         try {
             Transformer t = tf.newTransformer();
             t.setOutputProperty(OutputKeys.INDENT, "yes");
-            t.transform(new DOMSource(node), new StreamResult(w));
-            w.flush();
+            t.transform(new DOMSource(node), new StreamResult(sw));
         } catch (TransformerException e) {
             // This should never happen
             throw new IllegalArgumentException("Unable to serialize node", e);
         }
+        return sw.toString();
     }
 
-    public static String toString(Node node) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    public static String prettyPrint(String xml) {
+        DocumentBuilder db = Xml.newDocumentBuilder();
         try {
-            print(node, baos);
-            return new String(baos.toByteArray(), "utf-8");
+            return toString(db.parse(new InputSource(new StringReader(xml))));
+        } catch (SAXException e) {
+            throw new IllegalArgumentException("Not a valid XML document");
         } catch (IOException e) {
-            // This should never happen
-            throw new IllegalArgumentException("Unable to serialize node", e);
+            throw new AssertionError();
         }
     }
 }

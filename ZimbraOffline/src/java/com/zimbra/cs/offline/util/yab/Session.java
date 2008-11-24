@@ -53,6 +53,7 @@ public class Session {
     private final DocumentBuilder docBuilder;
     private final Transformer transformer;
     private final ByteArrayOutputStream baos;
+    private boolean trace;
 
     public Session(String format, Authenticator authenticator) {
         if (!Yab.XML.equals(format)) {
@@ -71,6 +72,14 @@ public class Session {
         this(Yab.XML, authenticator);
     }
 
+    public void setTrace(boolean trace) {
+        this.trace = trace;
+    }
+
+    public boolean isTrace() {
+        return trace;
+    }
+    
     public List<Contact> search(String params)
         throws IOException {
         SearchResponse res = (SearchResponse) createSearchRequest(params).send();

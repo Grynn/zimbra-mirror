@@ -46,7 +46,6 @@ public class YabTest {
     static {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.INFO);
-        Yab.enableDebug();
     }
     
     static {
@@ -65,6 +64,7 @@ public class YabTest {
             }
             RawAuthManager ram = new RawAuthManager(ts);
             session = Yab.createSession(ram.newAuthenticator(APPID, USER, PASS));
+            session.setTrace(true);
         }
     }                     
 

@@ -35,4 +35,7 @@ public class OfflineLog {
 
     /** The "zimbra.offline.gab" logger. For recording Google Address Book sync events */
     public static final com.zimbra.common.util.Log gab = LogFactory.getLog("zimbra.offline.gab");
+
+    /** For logging YMail cascade events*/
+    public static final com.zimbra.common.util.Log ymail = LogFactory.getLog("zimbra.offline.ymail");
 }

@@ -76,12 +76,6 @@ public class SyncSession {
 
     private static final Log LOG = OfflineLog.yab;
 
-    static {
-        if (LOG.isDebugEnabled()) {
-            Yab.enableDebug();
-        }
-    }
-    
     public SyncSession(DataSource ds, Session session) throws ServiceException {
         localData = new LocalData((OfflineDataSource) ds);
         this.session = session;

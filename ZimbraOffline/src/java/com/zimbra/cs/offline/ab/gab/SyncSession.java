@@ -121,7 +121,7 @@ public class SyncSession {
         pushContactChanges(contactRequests);
         int errors = contactRequests.size();
         if (errors > 0) {
-            LOG.debug("Contact sync had %d errors", errors);
+            LOG.debug("Contact sync had %d error(s)", errors);
         }
         localData.saveState(state);
         localData.saveContactGroups(contactGroups.values());

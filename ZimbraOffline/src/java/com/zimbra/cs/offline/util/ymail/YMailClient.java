@@ -28,6 +28,8 @@ import com.yahoo.mail.Message;
 import com.yahoo.mail.ErrorCode;
 import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.offline.util.Xml;
+import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.common.util.Log;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Binding;
@@ -41,7 +43,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.InternetAddress;
@@ -66,7 +67,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
-import java.io.PrintStream;
 import java.io.ByteArrayOutputStream;
 
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -76,24 +76,20 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.Header;
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
 
 public final class YMailClient {
     private final Auth auth;
     private final YmwsPortType stub;
     private int maxInlineDataSize = MAX_INLINE_DATA_SIZE;
-    private PrintStream traceOut;
+    private boolean trace;
 
     private static DatatypeFactory dataTypeFactory;
 
-    private static final Logger LOG = Logger.getLogger(YMailClient.class);
-    
-    private static final String SOAP_URL =
-        "http://mail.yahooapis.com/ws/mail/v1.1/soap";
-    
-    private static final String UPLOAD_URL =
-        "http://mail.yahooapis.com/ya/upload";
+    public static final Log LOG = OfflineLog.ymail;
+
+    private static final String BASE_URL = "http://mail.yahooapis.com";
+    private static final String SOAP_URL = BASE_URL + "/ws/mail/v1.1/soap";
+    private static final String UPLOAD_URL = BASE_URL + "/ya/upload";
 
     // Maximum size of text/* attachment to include inline.
     private static final int MAX_INLINE_DATA_SIZE = 1024;
@@ -187,12 +183,15 @@ public final class YMailClient {
         throw ioe;
     }
     
-    public void enableTrace(PrintStream out) {
-        traceOut = out;
-        Binding binding = ((BindingProvider) stub).getBinding();
-        List<Handler> handlers = binding.getHandlerChain();
-        handlers.add(new LoggingHandler());
-        binding.setHandlerChain(handlers);
+    public void setTrace(boolean trace) {
+        this.trace = trace;
+        if (trace) {
+            LOG.debug("SOAP trace enabled");
+            Binding binding = ((BindingProvider) stub).getBinding();
+            List<Handler> handlers = binding.getHandlerChain();
+            handlers.add(new LoggingHandler());
+            binding.setHandlerChain(handlers);
+        }
     }
 
     private ComposeMessage getComposeMessage(MimeMessage mm)
@@ -351,11 +350,8 @@ public final class YMailClient {
             }
             throw new IOException("Upload failed (unknown error)");
         }
-        if (traceOut != null) {
-            traceOut.println(String.format(
-                "Uploaded YMail attachment: id = %s, filesize = %s, mimetype = %s",
-                id, params.get("filesize"), params.get("mimetype")));
-        }
+        LOG.debug("Uploaded YMail attachment: id = %s, filesize = %s, mimetype = %s",
+                  id, params.get("filesize"), params.get("mimetype"));
         return id;
     }
 
@@ -417,8 +413,8 @@ public final class YMailClient {
         YmwsPortType stub = service.getYmws();
         Map<String, Object> rc = ((BindingProvider) stub).getRequestContext();
         String url = SOAP_URL + "?" + getQueryString(auth);
-        LOG.debug("Endpoint = " + url);
-        LOG.debug("Cookie = " + auth.getCookie());
+        //LOG.debug("Endpoint is %s", url);
+        //LOG.debug("Cookie is %s", auth.getCookie());
         rc.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
         rc.put(MessageContext.HTTP_REQUEST_HEADERS, getHeaders(auth));
         return stub;
@@ -439,12 +435,6 @@ public final class YMailClient {
         return headers;
     }
 
-    private static IOException requestFailed(Throwable cause) {
-        IOException ioe = new IOException("Request failed");
-        ioe.initCause(cause);
-        return ioe;
-    }
-
     private class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
         public boolean handleMessage(SOAPMessageContext smc) {
             return logMessage(smc);
@@ -459,23 +449,16 @@ public final class YMailClient {
         public Set<QName> getHeaders() { return null; }
 
         private boolean logMessage(SOAPMessageContext smc) {
-            if (traceOut != null) {
-                boolean outbound = (Boolean)
+            if (trace && LOG.isDebugEnabled()) {
+                boolean request = (Boolean)
                     smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-                if (outbound) {
-                    traceOut.println("*** YMail SOAP Request ***");
-                } else {
-                    traceOut.println("*** YMail SOAP Response ***");
-                }
                 try {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     smc.getMessage().writeTo(baos);
-                    DocumentBuilder db = Xml.newDocumentBuilder();
-                    Document doc = db.parse(new ByteArrayInputStream(baos.toByteArray()));
-                    Xml.print(doc, traceOut);
-                    traceOut.println();
+                    LOG.debug("SOAP %s:\n%s", request ? "request" : "response",
+                              Xml.prettyPrint(baos.toString("utf-8")));
                 } catch (Exception e) {
-                    traceOut.println("Exception in handler: " + e);
+                    LOG.debug("Exception in handler", e);
                 }
             }
             return true;

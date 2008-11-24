@@ -54,8 +54,10 @@ public abstract class Request extends Entity {
         HttpMethod method = getHttpMethod(auth);
         if (Yab.isDebug()) {
             if (isPOST()) {
-                Yab.debug("Sending request: POST %s\n%s",
-                          method.getURI(), Xml.toString(toXml()));
+                Yab.debug("Sending request: POST %s", method.getURI());
+                if (session.isTrace()) {
+                    Yab.debug("Request body:\n%s", Xml.toString(toXml()));
+                }
             } else {
                 Yab.debug("Sending request: GET %s", method.getURI());
             }
@@ -74,8 +76,8 @@ public abstract class Request extends Entity {
                                     HttpStatus.getStatusText(code));
         }
         Document doc = session.parseDocument(is);
-        if (Yab.isDebug()) {
-            Yab.debug("Received response:\n%s", Xml.toString(doc));
+        if (Yab.isDebug() && session.isTrace()) {
+            Yab.debug("Response body:\n%s", Xml.toString(doc));
         }
         return parseResponse(doc);
     }

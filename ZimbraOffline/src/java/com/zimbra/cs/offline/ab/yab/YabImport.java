@@ -55,6 +55,7 @@ public class YabImport implements DataSource.DataImport {
 
     private SyncSession newSyncSession() throws ServiceException {
         Session session = new Session(OfflineYAuth.newAuthenticator(ds));
+        session.setTrace(ds.isDebugTraceEnabled());
         return new SyncSession(ds, session);
     }
 }

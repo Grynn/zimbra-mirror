@@ -39,9 +39,7 @@ public class YMailSender extends MailSender {
             throw new IllegalArgumentException("Must be yahoo data source");
         }
         YMailClient ymc = new YMailClient(OfflineYAuth.authenticate(ds));
-        if (ds.isDebugTraceEnabled()) {
-            ymc.enableTrace(System.out);
-        }
+        ymc.setTrace(ds.isDebugTraceEnabled());
         return new YMailSender(ymc);
     }
     
