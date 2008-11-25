@@ -35,6 +35,8 @@ virtual   unix  -       n       n       -       -       virtual
 lmtp      unix  -       -       n       -       -       lmtp
 anvil     unix  -       -       n       -       1       anvil
 scache	  unix	-	-	n	-	1	scache
+policy    unix  -       n       n       -       0       spawn
+    user=zimbra argv=/usr/bin/perl /opt/zimbra/libexec/zmpostfixpolicyd
 #
 # ====================================================================
 # Interfaces to non-Postfix software. Be sure to examine the manual
