@@ -8,16 +8,31 @@ use Sys::Syslog qw(:DEFAULT setlogsock);
 # NOTE: comment out the $syslog_socktype line if syslogging does not
 # work on your system.
 #
-$syslog_socktype = 'unix';
-$syslog_facility="mail";
-$syslog_options="pid";
-$syslog_priority="info";
+my $syslog_socktype = 'unix';
+my $syslog_facility="mail";
+my $syslog_options="pid";
+my $syslog_priority="info";
+my ($verbose, $option, $action);
+my %attr;
 
 setlogsock $syslog_socktype;
 openlog $0, $syslog_options, $syslog_facility;
 
 sub smtpd_access_policy {
+  my($domain);
+  $domain = lc $main::attr{"recipient"};
+  $domain =~ s/(.*)\@//;
+  syslog $main::syslog_priority, "Domain set: %s", $domain if $main::verbose;
   return "dunno";
+}
+
+#
+# Log an error and abort.
+#
+sub fatal_exit {
+    my($first) = shift(@_);
+    syslog "err", "fatal: $first", @_;
+    exit 1;
 }
 
 #
@@ -50,7 +65,7 @@ while (<STDIN>) {
                 syslog $syslog_priority, "Attribute: %s=%s", $_, $attr{$_};
             }
         }
-        fatal_exit "unrecognized request type: '%s'", $attr{request}
+        fatal_exit "unrecognized request type: '%s'", $attr{"request"}
             unless $attr{"request"} eq "smtpd_access_policy";
         $action = smtpd_access_policy();
         syslog $syslog_priority, "Action: %s", $action if $verbose;
