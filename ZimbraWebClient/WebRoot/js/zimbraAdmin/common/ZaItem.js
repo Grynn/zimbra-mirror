@@ -41,6 +41,8 @@ ZaItem.ALIAS = "alias";
 ZaItem.RESOURCE = "calresource";
 ZaItem.DOMAIN = "domain";
 ZaItem.COS = "cos";
+ZaItem.GLOBAL_CONFIG = "config";
+ZaItem.GLOBAL_GRANT = "global";
 ZaItem.SERVER = "server";
 ZaItem.ZIMLET = "zimlet";
 ZaItem.MAILQ_ITEM = "message";
@@ -176,7 +178,69 @@ function (target/*, fullRecursion*/) {
 	}
 }
 
-ZaItem.prototype.load = function (by, val, withConfig) {
+ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
+	if(resp && resp.target && resp.target instanceof Array) {
+		if(resp.target[0]) {
+			if(resp.target[0].right && resp.target[0].right instanceof Array) {
+				var rights = resp.target[0].right;
+				this.rights = {};
+				for(var r in rights) {
+					this.rights[rights[r].n] = true;
+				}
+			}
+			if(resp.target[0].getAttrs && resp.target[0].getAttrs instanceof Array && 
+				resp.target[0].getAttrs[0] && resp.target[0].getAttrs[0].a && 
+				resp.target[0].getAttrs[0].a instanceof Array) {
+				
+				var getAttrs = resp.target[0].getAttrs[0].a;
+				this.getAttrs = {};
+				for (var a in getAttrs) {
+					this.getAttrs[getAttrs[a].n] = true;
+				}
+			}			
+			if(resp.target[0].setAttrs && resp.target[0].setAttrs instanceof Array && 
+				resp.target[0].setAttrs[0] && resp.target[0].setAttrs[0].a && 
+				resp.target[0].setAttrs[0].a instanceof Array) {
+				
+				var setAttrs = resp.target[0].setAttrs[0].a;
+				this.setAttrs = {};
+				for (var a in setAttrs) {
+					this.setAttrs[setAttrs[a].n] = true;
+				}
+			}	
+		}
+	}
+	
+}
+
+ZaItem.prototype.loadEffectiveRights = function (by, val) {
+	var soapDoc = AjxSoapDoc.create("GetEffectiveRightsRequest", ZaZimbraAdmin.URN, null);
+	var elTarget = soapDoc.set("target", val);
+	elTarget.setAttribute("by",by);
+	elTarget.setAttribute("type",this.type);
+
+
+	var elGrantee = soapDoc.set("grantee", ZaZimbraAdmin.currentUserId);
+	elGrantee.setAttribute("by","id");
+	
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;	
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS ;
+	try {
+		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetEffectiveRightsResponse;
+		this.initEffectiveRightsFromJS(resp);
+	} catch (ex) {
+		//not implemented yet
+	}
+
+}
+ZaItem.prototype.load = function (by, val, withConfig, skipRights) {
+	//load rights
+	if(!skipRights) {
+		this.loadEffectiveRights(by,val);
+	}		
 	//Instrumentation code start
 	if(ZaItem.loadMethods[this._iKeyName]) {
 		var methods = ZaItem.loadMethods[this._iKeyName];
@@ -232,7 +296,8 @@ function(node) {
 	this.name = node.getAttribute("name");
 	this.id = node.getAttribute("id");
 	this.attrs = new Object();
-	this.type = node.nodeName;
+	if(!AjxUtil.isEmpty(node.nodeName))
+		this.type = node.nodeName;
 	
 	var children = node.childNodes;
 	var cnt = children.length;

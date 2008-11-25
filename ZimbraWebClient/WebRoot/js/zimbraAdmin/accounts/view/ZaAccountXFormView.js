@@ -748,217 +748,224 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	var _tab10 = ++this.TAB_INDEX;
     var _tab11 = ++this.TAB_INDEX;
 		
-	this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
-	this.tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});
-	this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
+	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_GENERAL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+		this.tabChoices.push({value:_tab1, label:ZaMsg.TABT_GeneralPage});
+	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CONTACT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])		
+		this.tabChoices.push({value:_tab2, label:ZaMsg.TABT_ContactInfo});
+	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_MEMBEROF_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+		this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
 
-	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED)
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FEATURES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Features});
 					
-	if(ZaSettings.ACCOUNTS_PREFS_ENABLED)
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_PREFS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});
 
-	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED)
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this.tabChoices.push({value:_tab6, label:ZaMsg.TABT_Aliases});
 
-	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED)
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FORWARDING_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Forwarding});
 
-    if (ZaSettings.ACCOUNTS_INTEROP_ENABLED) {
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_INTEROP_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
         this.tabChoices.push({value: _tab8, label: ZaMsg.TABT_Interop}) ;
-    }
 
-    if(ZaSettings.SKIN_PREFS_ENABLED)
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_Themes});
 
-	if(ZaSettings.ZIMLETS_ENABLED) 
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
 		this.tabChoices.push({value:_tab10, label:ZaMsg.TABT_Zimlets});
 			
-	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED)
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ADVANCED_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this.tabChoices.push({value:_tab11, label:ZaMsg.TABT_Advanced});
 
 
 	var cases = [];
-	var case1 = {type:_ZATABCASE_,caseKey:_tab1,   
-		numCols:1};
+	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_GENERAL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		var case1 = {type:_ZATABCASE_,caseKey:_tab1,   
+			numCols:1};
+		
+		var case1Items = [
+			 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
+			 	visibilityChecks:[ZaAccountXFormView.isDomainLeftAccountsAlertVisible],
+			 	visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes],
+				containerCssStyle: "width:400px;",
+				style: DwtAlert.WARNING, iconVisible: false
+			 },
 	
-	var case1Items = [
-		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
-		 	visibilityChecks:[ZaAccountXFormView.isDomainLeftAccountsAlertVisible],
-		 	visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes],
-			containerCssStyle: "width:400px;",
-			style: DwtAlert.WARNING, iconVisible: false
-		 },
-
-        //account types group
-        {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_type_group",
-                colSpan: "*", numCols: 1, colSizes: ["100%"], 
-                visibilityChecks:[ZaAccountXFormView.isAccountTypeGrouperVisible],
-                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
-                items: [
-                    {type: _DWT_ALERT_, 
-                    	visibilityChecks:[ZaAccountXFormView.isAccountTypeSet],
-                    	visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
-                    	containerCssStyle: "width:400px;",
-                        style: DwtAlert.CRITICAL, iconVisible: false ,
-                        content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
-                    }, 
-                    { type: _OUTPUT_, id: ZaAccountXFormView.accountTypeItemId ,
-                        getDisplayValue: ZaAccount.getAccountTypeOutput,
-                        //center the elements
-                        cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
-                    }
-               ]
-        },
-
-        {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_form_name_group",
+	        //account types group
+	        {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_type_group",
+	                colSpan: "*", numCols: 1, colSizes: ["100%"], 
+	                visibilityChecks:[ZaAccountXFormView.isAccountTypeGrouperVisible],
+	                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
+	                items: [
+	                    {type: _DWT_ALERT_, 
+	                    	visibilityChecks:[ZaAccountXFormView.isAccountTypeSet],
+	                    	visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
+	                    	containerCssStyle: "width:400px;",
+	                        style: DwtAlert.CRITICAL, iconVisible: false ,
+	                        content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
+	                    }, 
+	                    { type: _OUTPUT_, id: ZaAccountXFormView.accountTypeItemId ,
+	                        getDisplayValue: ZaAccount.getAccountTypeOutput,
+	                        //center the elements
+	                        cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
+	                    }
+	               ]
+	        },
+	
+	        {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_form_name_group",
+				colSizes:["275px","*"],numCols:2,
+				items:[
+				{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
+								 labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true},
+				{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
+					labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
+					elementChanged: function(elementValue,instanceValue, event) {
+						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
+							ZaAccount.generateDisplayName(this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
+						}
+						this.getForm().itemChanged(this, elementValue, event);
+					}
+				},
+				{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,
+					elementChanged: function(elementValue,instanceValue, event) {
+						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
+							ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
+						}
+						this.getForm().itemChanged(this, elementValue, event);
+					}
+				},
+				{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
+					elementChanged: function(elementValue,instanceValue, event) {
+						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
+							ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
+						}
+						this.getForm().itemChanged(this, elementValue, event);
+					}
+				},
+				{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_, 
+					items: [
+						{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150,
+							enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"] ],
+							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname]
+						},
+						{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
+							elementChanged: function(elementValue,instanceValue, event) {
+								if(elementValue=="TRUE") {
+									if(ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials])) {
+										this.getForm().parent.setDirty(true);
+									}
+								}
+								this.getForm().itemChanged(this, elementValue, event);
+							}
+						}
+					]
+				},
+				{ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_,width:250,
+					msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom, labelLocation:_LEFT_, align:_LEFT_
+				},
+				{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_,
+				  msgName:ZaMsg.NAD_zimbraHideInGal,
+				  label:ZaMsg.NAD_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
+				}
+			]}
+		];
+	
+		var setupGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountSetupGrouper, id:"account_form_setup_group", 
+			colSizes:["275px","*"],numCols:2,
+			items: [
+				{ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus,
+					label:ZaMsg.NAD_AccountStatus, 
+					labelLocation:_LEFT_, choices:this.accountStatusChoices
+				}
+			]
+		}
+			
+		if(ZaSettings.COSES_ENABLED) {
+			setupGroup.items.push(
+				{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
+					items: [
+						{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, choices:this.cosChoices,
+							inputPreProcessor:ZaAccountXFormView.preProcessCOS,
+							enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autoCos,"FALSE"]],
+							enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
+							dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
+							onChange:ZaAccount.setCosChanged,
+							emptyText:ZaMsg.enterSearchTerm,
+							dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
+									if(ZaItem.ID_PATTERN.test(newValue)) {
+										var cos = ZaCos.getCosById(newValue);
+										if(cos)
+											newValue = cos.name;
+									} 
+									if (newValue == null) {
+										newValue = "";
+									} else {
+										newValue = "" + newValue;
+									}
+									return newValue;
+								}
+						},
+						{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_, 
+							msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
+							trueValue:"TRUE", falseValue:"FALSE" ,
+							elementChanged: function(elementValue,instanceValue, event) {
+								this.getForm().parent.setDirty(true);
+								if(elementValue=="TRUE") {
+									ZaAccount.setDefaultCos(this.getInstance());	
+								}
+								this.getForm().itemChanged(this, elementValue, event);
+							}
+						}
+					]
+				});
+		}
+		
+		setupGroup.items.push({ref:ZaAccount.A_isAdminAccount, type:_CHECKBOX_, 
+								msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin,
+								trueValue:"TRUE", falseValue:"FALSE"
+							});
+		case1Items.push(setupGroup);
+		
+		var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_form_password_group", 
 			colSizes:["275px","*"],numCols:2,
 			items:[
-			{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
-							 labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true},
-			{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
-				labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
-				elementChanged: function(elementValue,instanceValue, event) {
-					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccount.generateDisplayName(this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
-					}
-					this.getForm().itemChanged(this, elementValue, event);
-				}
+			{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,
+				label:ZaMsg.NAD_Password, labelLocation:_LEFT_, 
+				cssClass:"admin_xform_name_input"
 			},
-			{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,
-				elementChanged: function(elementValue,instanceValue, event) {
-					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
-					}
-					this.getForm().itemChanged(this, elementValue, event);
-				}
+			{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,
+				label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, 
+				cssClass:"admin_xform_name_input"
 			},
-			{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
-				elementChanged: function(elementValue,instanceValue, event) {
-					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
-					}
-					this.getForm().itemChanged(this, elementValue, event);
-				}
-			},
-			{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_, 
-				items: [
-					{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150,
-						enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"] ],
-						enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname]
-					},
-					{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
-						elementChanged: function(elementValue,instanceValue, event) {
-							if(elementValue=="TRUE") {
-								if(ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials])) {
-									this.getForm().parent.setDirty(true);
-								}
-							}
-							this.getForm().itemChanged(this, elementValue, event);
-						}
-					}
-				]
-			},
-			{ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_,width:250,
-				msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom, labelLocation:_LEFT_, align:_LEFT_
-			},
-			{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_,
-			  msgName:ZaMsg.NAD_zimbraHideInGal,
-			  label:ZaMsg.NAD_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
-			}
-		]}
-	];
-
-	var setupGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountSetupGrouper, id:"account_form_setup_group", 
-		colSizes:["275px","*"],numCols:2,
-		items: [
-			{ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus,
-				label:ZaMsg.NAD_AccountStatus, 
-				labelLocation:_LEFT_, choices:this.accountStatusChoices
-			}
-		]
-	}
+			{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,  
+				msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE"}
+			]
+		};
+		case1Items.push(passwordGroup);														
 		
-	if(ZaSettings.COSES_ENABLED) {
-		setupGroup.items.push(
-			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
-				items: [
-					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, choices:this.cosChoices,
-						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
-						enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autoCos,"FALSE"]],
-						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
-						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
-						onChange:ZaAccount.setCosChanged,
-						emptyText:ZaMsg.enterSearchTerm,
-						dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
-								if(ZaItem.ID_PATTERN.test(newValue)) {
-									var cos = ZaCos.getCosById(newValue);
-									if(cos)
-										newValue = cos.name;
-								} 
-								if (newValue == null) {
-									newValue = "";
-								} else {
-									newValue = "" + newValue;
-								}
-								return newValue;
-							}
-					},
-					{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_, 
-						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
-						trueValue:"TRUE", falseValue:"FALSE" ,
-						elementChanged: function(elementValue,instanceValue, event) {
-							this.getForm().parent.setDirty(true);
-							if(elementValue=="TRUE") {
-								ZaAccount.setDefaultCos(this.getInstance());	
-							}
-							this.getForm().itemChanged(this, elementValue, event);
-						}
-					}
-				]
-			});
-	}
+		var notesGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_form_notes_group",
+			colSizes:["275px","*"],numCols:2,
+		 	items:[
 	
-	setupGroup.items.push({ref:ZaAccount.A_isAdminAccount, type:_CHECKBOX_, 
-							msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin,
-							trueValue:"TRUE", falseValue:"FALSE"
-						});
-	case1Items.push(setupGroup);
+			{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
+				label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"
+			},
+			{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
+				label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
+			}
+			]
+		};
 	
-	var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_form_password_group", 
-		colSizes:["275px","*"],numCols:2,
-		items:[
-		{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,
-			label:ZaMsg.NAD_Password, labelLocation:_LEFT_, 
-			cssClass:"admin_xform_name_input"
-		},
-		{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,
-			label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, 
-			cssClass:"admin_xform_name_input"
-		},
-		{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,  
-			msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE"}
-		]
-	};
-	case1Items.push(passwordGroup);														
-	
-	var notesGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_form_notes_group",
-		colSizes:["275px","*"],numCols:2,
-	 	items:[
-
-		{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
-			label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"
-		},
-		{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
-			label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
-		}
-		]
-	};
-
-	case1Items.push(notesGroup);
-	case1.items = case1Items;
-	cases.push(case1);
-	var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2, 
+		case1Items.push(notesGroup);
+		case1.items = case1Items;
+		cases.push(case1);
+	//}
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CONTACT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2, 
 					items: [
 						{type:_ZAGROUP_, 
 							items:[
@@ -983,14 +990,15 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						}							
 					]
 				};
-	cases.push(case2);
-	
+		cases.push(case2);
+	}
 	var directMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.DIRECT);
 	var indirectMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.INDIRECT);
 	var nonMemberOfHeaderList = new ZaAccountMemberOfsourceHeaderList(ZaAccountMemberOfsourceHeaderList.NON);
 	
-	//MemberOf Tab
-	var case3={type:_ZATABCASE_, numCols:2, caseKey:_tab3, colSizes: ["50%","50%"],
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_MEMBEROF_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		//MemberOf Tab
+		var case3={type:_ZATABCASE_, numCols:2, caseKey:_tab3, colSizes: ["50%","50%"],
 					items: [
 						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						
@@ -1145,9 +1153,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 						}
 					]
 				};
-	cases.push(case3);		
-					
-	if(ZaSettings.ACCOUNTS_FEATURES_ENABLED) {
+				
+		cases.push(case3);		
+	}				
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FEATURES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		cases.push({type:_ZATABCASE_,id:"account_form_features_tab",  numCols:1, width:"100%", caseKey:_tab4, 
 				items: [
 					{ type: _DWT_ALERT_,
@@ -1273,7 +1282,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				]
 			});
 	}
-	if(ZaSettings.ACCOUNTS_PREFS_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_PREFS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		var prefItems = [
 						{type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_general_header",
 							items: [
@@ -1605,7 +1614,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	}
 
 
-	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		cases.push({type:_ZATABCASE_, id:"account_form_aliases_tab", width:"100%", numCols:1,colSizes:["auto"],
 					caseKey:_tab6, 
 					items: [
@@ -1643,7 +1652,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 	
-	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FORWARDING_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		cases.push({type:_ZATABCASE_,id:"account_form_forwarding_tab", width:"100%", numCols:1,colSizes:["auto"],
 					caseKey:_tab7,  
 					items: [
@@ -1718,7 +1727,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 
-    if(ZaSettings.ACCOUNTS_INTEROP_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_INTEROP_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		cases.push({type:_ZATABCASE_, id:"account_form_interop_tab", width:"100%", numCols:1,colSizes:["auto"],
 					caseKey:_tab8, 
 					items: [
@@ -1763,7 +1772,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				});
 	}
 
-    if(ZaSettings.SKIN_PREFS_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		cases.push({type:_ZATABCASE_, id:"account_form_themes_tab", numCols:1,
             caseKey:_tab9,
 			items:[
@@ -1788,7 +1797,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		});
 	}	
 
-	if(ZaSettings.ZIMLETS_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		cases.push({type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,
             caseKey:_tab10, 
 			items:[
@@ -1808,7 +1817,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 			] 
 		});
 	}
-	if(ZaSettings.ACCOUNTS_ADVANCED_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ADVANCED_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		cases.push({type:_ZATABCASE_, id:"account_form_advanced_tab", numCols:1,
 					caseKey:_tab11, 
 					items: [

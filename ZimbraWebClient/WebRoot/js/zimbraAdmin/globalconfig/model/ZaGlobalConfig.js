@@ -18,6 +18,7 @@
 ZaGlobalConfig = function() {
 	ZaItem.call(this,"ZaGlobalConfig");
 	this.attrs = new Object();
+	this.type = ZaItem.GLOBAL_CONFIG;
 //	this.attrsInternal = new Object();	
 	this.load();
 }

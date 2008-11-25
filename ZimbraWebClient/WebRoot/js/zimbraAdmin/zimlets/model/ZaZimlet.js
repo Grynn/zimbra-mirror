@@ -24,6 +24,7 @@
 ZaZimlet = function() {
 	ZaItem.call(this);
 	this.label = "";
+	this.type = ZaItem.ZIMLET;
 	this[ZaModel.currentStep] = 1;
 }
 ZaZimlet.prototype = new ZaItem;

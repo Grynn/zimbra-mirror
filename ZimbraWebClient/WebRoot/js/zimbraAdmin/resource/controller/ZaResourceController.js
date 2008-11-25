@@ -238,7 +238,7 @@ function () {
 	if(!ZaResource.checkValues(tmpObj))
 		return false;
 		
-	if(ZaSettings.ACCOUNTS_CHPWD_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CHPWD] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		//change password if new password is provided
 		if(tmpObj.attrs[ZaResource.A_password]!=null && tmpObj[ZaResource.A2_confirmPassword]!=null && tmpObj.attrs[ZaResource.A_password].length > 0) {
 			try {

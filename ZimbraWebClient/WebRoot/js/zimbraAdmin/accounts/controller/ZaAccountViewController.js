@@ -69,11 +69,11 @@ function () {
 	this._toolbarOperations[ZaOperation.NEW_WIZARD] = new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener));   			    	
 	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));    	    	
 	
-	if(ZaSettings.ACCOUNTS_VIEW_MAIL_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		this._toolbarOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener));		
 		this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
 	}
-	if(ZaSettings.ACCOUNTS_REINDEX_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_REINDEX] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		this._toolbarOperations[ZaOperation.REINDEX_MAILBOX] = new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener));
 		this._toolbarOrder.push(ZaOperation.REINDEX_MAILBOX);
 	}					
@@ -202,7 +202,7 @@ function () {
 	if(!ZaAccount.checkValues(tmpObj))
 		return false;
 	
-	if(ZaSettings.ACCOUNTS_CHPWD_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CHPWD] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		//change password if new password is provided
 		if(tmpObj.attrs[ZaAccount.A_password]!=null && tmpObj[ZaAccount.A2_confirmPassword]!=null && tmpObj.attrs[ZaAccount.A_password].length > 0) {
 			try {
@@ -241,7 +241,7 @@ function () {
 		}
 	}
 
-	if(ZaSettings.SKIN_PREFS_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] != null) {
 			if(!(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof Array)) {
 				mods[ZaAccount.A_zimbraAvailableSkin] = [tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin]];
@@ -257,7 +257,7 @@ function () {
 		}
 	}
 		
-	if(ZaSettings.ZIMLETS_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] != null) {
 			if(!(tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] instanceof Array)) {
 				mods[ZaAccount.A_zimbraZimletAvailableZimlets] = [tmpObj.attrs[ZaAccount.A_zimbraZimletAvailableZimlets]];
@@ -292,7 +292,7 @@ function () {
 	//add-remove aliases
 	var tmpObjCnt = -1;
 	var currentObjCnt = -1;
-	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias]) {
 			if(typeof tmpObj.attrs[ZaAccount.A_zimbraMailAlias] == "string") {
 				var tmpStr = tmpObj.attrs[ZaAccount.A_zimbraMailAlias];

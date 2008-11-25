@@ -43,6 +43,8 @@ ZaZimbraAdmin._instance = null;
 
 ZaZimbraAdmin.ADMIN_APP = "admin";
 ZaZimbraAdmin.currentUserName = "" ;
+ZaZimbraAdmin.currentUserLogin = "";
+ZaZimbraAdmin.currentUserId = "";
 ZaZimbraAdmin.URN = "urn:zimbraAdmin";
 ZaZimbraAdmin.VIEW_INDEX = 0;
 
@@ -57,6 +59,7 @@ ZaZimbraAdmin._SERVERS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._DOMAINS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._COS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._MONITORING = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._TOOLS = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._STATUS = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._STATISTICS = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._STATISTICS_BY_SERVER = ZaZimbraAdmin.VIEW_INDEX++;
@@ -347,35 +350,40 @@ ZaZimbraAdmin.reload_msg = function () {
 
 ZaZimbraAdmin.initInfo =
 function (resp) {
-	if (resp && resp.Body && resp.Body.GetInfoResponse && resp.Body.GetInfoResponse.attrs){
-		if(resp.Body.GetInfoResponse.attrs.attr && resp.Body.GetInfoResponse.attrs.attr instanceof Array) {
-			var attrsArr = resp.Body.GetInfoResponse.attrs.attr;
-			for ( var i=0; i < attrsArr.length; i ++) {
-				if (attrsArr[i].name == "displayName") {
-					var v = attrsArr[i]._content ;
-					if (v != null && v.length > 0) {
-						ZaZimbraAdmin.currentUserName = v ;
+	if(resp && resp.Body && resp.Body.GetInfoResponse) {
+		ZaZimbraAdmin.currentUserLogin = resp.Body.GetInfoResponse.name;
+		ZaZimbraAdmin.currentUserId = resp.Body.GetInfoResponse.id;
+		
+		if (resp.Body.GetInfoResponse.attrs){
+			if(resp.Body.GetInfoResponse.attrs.attr && resp.Body.GetInfoResponse.attrs.attr instanceof Array) {
+				var attrsArr = resp.Body.GetInfoResponse.attrs.attr;
+				for ( var i=0; i < attrsArr.length; i ++) {
+					if (attrsArr[i].name == "displayName") {
+						var v = attrsArr[i]._content ;
+						if (v != null && v.length > 0) {
+							ZaZimbraAdmin.currentUserName = v ;
+						}
 					}
 				}
+			} else if (resp.Body.GetInfoResponse.attrs._attrs && typeof(resp.Body.GetInfoResponse.attrs._attrs) == "object") {
+				var attrsArr = resp.Body.GetInfoResponse.attrs._attrs;
+				if(attrsArr["displayName"] && attrsArr["displayName"].length) 
+					ZaZimbraAdmin.currentUserName = attrsArr["displayName"];
+	
+	        }
+			//fallback to email address	
+			if (!ZaZimbraAdmin.currentUserName || ZaZimbraAdmin.currentUserName.length <=0){
+				ZaZimbraAdmin.currentUserName = ZaZimbraAdmin.currentUserLogin;
 			}
-		} else if (resp.Body.GetInfoResponse.attrs._attrs && typeof(resp.Body.GetInfoResponse.attrs._attrs) == "object") {
-			var attrsArr = resp.Body.GetInfoResponse.attrs._attrs;
-			if(attrsArr["displayName"] && attrsArr["displayName"].length) 
-				ZaZimbraAdmin.currentUserName = attrsArr["displayName"];
-
-        }
-		//fallback to email address	
-		if ((!ZaZimbraAdmin.currentUserName || ZaZimbraAdmin.currentUserName.length <=0) && resp.Body.GetInfoResponse.name){
-			ZaZimbraAdmin.currentUserName = resp.Body.GetInfoResponse.name;
+	
+	        if (resp && resp.Body && resp.Body.GetInfoResponse && resp.Body.GetInfoResponse.prefs) {
+	            var prefs = resp.Body.GetInfoResponse.prefs._attrs ;
+	            if (prefs && prefs["zimbraPrefLocale"]) {
+	                //get the zimbraPrefLocale
+	                ZaZimbraAdmin.LOCALE = prefs["zimbraPrefLocale"] ;
+	            }
+	        }
 		}
-
-        if (resp && resp.Body && resp.Body.GetInfoResponse && resp.Body.GetInfoResponse.prefs) {
-            var prefs = resp.Body.GetInfoResponse.prefs._attrs ;
-            if (prefs && prefs["zimbraPrefLocale"]) {
-                //get the zimbraPrefLocale
-                ZaZimbraAdmin.LOCALE = prefs["zimbraPrefLocale"] ;
-            }
-        }
     }
 }
 

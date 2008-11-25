@@ -29,6 +29,13 @@ ZaSettings.MAXSEARCHRESULTS = 50;
 ZaSettings.postInit = function() {
     if (AjxEnv.hasFirebug)
         console.log("Finishing loading all the zimlets, and ready to initialize the application ...");
+        
+	//Instrumentation code end	
+	var shell = DwtShell.getShell(window);
+	var appCtxt = ZaAppCtxt.getFromShell(shell);
+	var appController = appCtxt.getAppController();
+	appController._createApp();
+	        
     //Instrumentation code start
 	if(ZaSettings.initMethods) {
 		var cnt = ZaSettings.initMethods.length;
@@ -38,16 +45,35 @@ ZaSettings.postInit = function() {
 			}
 		}
 	}	
-	//Instrumentation code end	
-	var shell = DwtShell.getShell(window);
-	var appCtxt = ZaAppCtxt.getFromShell(shell);
-	var appController = appCtxt.getAppController();
+
 	
 	appController._launchApp();	
 	ZaZimbraAdmin.setOnbeforeunload(ZaZimbraAdmin._confirmExitMethod);
 	ZaSettings.initialized = true;
 	ZaSettings.initializing = false;
 };
+
+ZaSettings.initRights = function () {
+	ZaSettings.ENABLED_UI_COMPONENTS=[];
+	ZaZimbraAdmin.currentAdminAccount = new ZaAccount();
+	ZaZimbraAdmin.currentAdminAccount.load("name", ZaZimbraAdmin.currentUserLogin);
+	if(AjxUtil.isEmpty(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents])) {
+		ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
+	} else {
+		if(typeof(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents])=="string") {
+			//unlikely to have an admin with only one value in this attr
+			//ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents]];
+			ZaSettings.ENABLED_UI_COMPONENTS[ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents]] = true;		
+		}	
+		var cnt = ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents].length;
+		for(var i=0;i<cnt;i++) {
+			ZaSettings.ENABLED_UI_COMPONENTS[ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents][i]] = true;
+		}	
+	}
+	
+	
+}
+ZaSettings.initMethods.push(ZaSettings.initRights);
 
 ZaSettings.loadStyles = function(includes) {
     var head = document.getElementsByTagName("head")[0];
@@ -200,47 +226,85 @@ ZaSettings.SKIN_HELP_ID					= i++ ;
 ZaSettings.SKIN_DW_ID					= i++ ;
 
 //CONSTANTS FOR ROLE-BASED ACCESS
-ZaSettings.STATUS_ENABLED= true;
-ZaSettings.STATS_ENABLED= true;
-ZaSettings.ACCOUNTS_CHPWD_ENABLED = true;
-ZaSettings.ACCOUNTS_ENABLED = true;
-ZaSettings.ACCOUNTS_FEATURES_ENABLED = true;
-ZaSettings.ACCOUNTS_ADVANCED_ENABLED = true;
-ZaSettings.ACCOUNTS_ALIASES_ENABLED=true;
-ZaSettings.ACCOUNTS_INTEROP_ENABLED = true ;
-ZaSettings.ACCOUNTS_FORWARDING_ENABLED=true;
-ZaSettings.ACCOUNTS_MOVE_ALIAS_ENABLED=true;
-ZaSettings.ACCOUNTS_REINDEX_ENABLED=true;
-ZaSettings.ACCOUNTS_PREFS_ENABLED = true;
-ZaSettings.ACCOUNTS_VIEW_MAIL_ENABLED = true;
+/**
+ * In order for an admin to be able to access a UI component, zimbraAdminConsoleUIComponents attribute of the admin's account should contain the corresponding values listed below
+ */
+//carte blanche - gives access to any UI element
+ZaSettings.CARTE_BLANCHE_UI = "cartBlancheUI";
+
+//List views
+ZaSettings.ACCOUNT_LIST_VIEW = "accountListView";
+ZaSettings.DOMAIN_LIST_VIEW = "domainListView";
+ZaSettings.ALIAS_LIST_VIEW = "aliasListView";
+ZaSettings.DL_LIST_VIEW = "DLListView";
+ZaSettings.RESOURCE_LIST_VIEW = "resourceListView";
+ZaSettings.COS_LIST_VIEW = "COSListView";
+ZaSettings.SERVER_LIST_VIEW = "serverListView";
+ZaSettings.GLOBAL_STATS_VIEW = "globalStatsView";
+ZaSettings.GLOBAL_STATUS_VIEW = "globalStatusView";
+ZaSettings.SERVER_STATS_VIEW = "serverStatsView";
+ZaSettings.MAILQ_VIEW = "mailQueueView";
+ZaSettings.ZIMLET_LIST_VIEW = "zimletListView";
+ZaSettings.ADMIN_ZIMLET_LIST_VIEW = "adminZimletListView";
+
+//Account view tabs
+ZaSettings.ACCOUNTS_GENERAL_TAB = "accountsGeneralTab";
+ZaSettings.ACCOUNTS_CONTACT_TAB = "accountsContactTab";
+ZaSettings.ACCOUNTS_MEMBEROF_TAB = "accountsMemberOfTab";
+ZaSettings.ACCOUNTS_PREFS_TAB = "accountsPrefsTab";
+ZaSettings.ACCOUNTS_FEATURES_TAB = "accountsFeaturesTab";
+ZaSettings.ACCOUNTS_ADVANCED_TAB = "accountsAdvancedTab";
+ZaSettings.ACCOUNTS_FORWARDING_TAB = "accountsForwardingTab";
+ZaSettings.ACCOUNTS_ALIASES_TAB = "accountsAliasesTab";
+ZaSettings.ACCOUNTS_INTEROP_TAB = "accountsInteropTab";
+ZaSettings.ACCOUNTS_SKIN_TAB = "accountsSkinTab";
+ZaSettings.ACCOUNTS_ZIMLET_TAB = "accountsZimletTab";
+
+//Miscelaneous operations
+ZaSettings.SAVE_SEARCH = "saveSearch";
+
+//Account operations
+ZaSettings.ACCOUNTS_CHPWD = "accountsChangePassword";
+ZaSettings.MOVE_ALIAS = "moveAlias";
+ZaSettings.ACCOUNTS_REINDEX = "accountsReindex";
+ZaSettings.ACCOUNTS_VIEW_MAIL = "accountsViewMail";
+ZaSettings.ACCOUNTS_ASSIGN_SERVER = "accountsAssignServer";
+ZaSettings.ACCOUNTS_RESTORE = "accountsRestore"; //this should be in bnr extension
+ZaSettings.ACCOUNTS_CREATE = "accountsCreate"; //this should be in bnr extension
+
+//Domain view tabs
+ZaSettings.DOMAIN_GENERAL_TAB = "domainGeneralTab";
+ZaSettings.DOMAIN_SKIN_TAB = "domainSkinsTab"; 
+ZaSettings.DOMAIN_WIKI_TAB = "domainWikiTab";
+ZaSettings.DOMAIN_VIRTUAL_HOST_TAB = "domainVirtualHostTab";
+ZaSettings.DOMAIN_INTEROP_TAB = "domainInteropTab";
+
+//Domain operations
+ZaSettings.DOMAIN_GAL_WIZ = "domainGALWizard";
+ZaSettings.DOMAIN_AUTH_WIZ = "domainAuthWizard";
+
+//ZaSettings.DOMAINS_ARE_READONLY = false;
+
+ZaSettings.GLOBAL_CONFIG_VIEW="globalConfigView";
+
+
 ZaSettings.ACCOUNTS_RESTORE_ENABLED = true;
-ZaSettings.ACCOUNTS_SECURITY_ENABLED = true;
+
 ZaSettings.COSES_ENABLED=true;
 ZaSettings.DOMAINS_ENABLED=true;
 ZaSettings.SERVERS_ENABLED=true;
-ZaSettings.SERVER_STATS_ENABLED=true;
+
 ZaSettings.GLOBAL_CONFIG_ENABLED= true;
-ZaSettings.DISTRIBUTION_LISTS_ENABLED = true;
-ZaSettings.MAILQ_ENABLED = true;
-ZaSettings.MONITORING_ENABLED = true;
-ZaSettings.SYSTEM_CONFIG_ENABLED = true;
-ZaSettings.ADDRESSES_ENABLED = true;
-ZaSettings.RESOURCES_ENABLED = true;
+
+
 ZaSettings.SKIN_PREFS_ENABLED = true;
 ZaSettings.LICENSE_ENABLED = true;
 ZaSettings.ZIMLETS_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;
 ZaSettings.SAVE_SEARCH_ENABLED = true ;
-ZaSettings.TOOLS_ENABLED = true;
+
 ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED = true;
 ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS = false; //this attribute only take effective in domain admin
-ZaSettings.DOMAIN_SKIN_ENABLED = true ; //allow the skin properties tab in domain to show in domain admin
-ZaSettings.DOMAIN_GAL_WIZ_ENABLED = true;
-ZaSettings.DOMAIN_AUTH_WIZ_ENABLED = true;
-ZaSettings.DOMAINS_ARE_READONLY = false;
-ZaSettings.DOMAIN_WIKI_ENABLED = true;
-ZaSettings.DOMAIN_VIRTUAL_HOST_ENABLED = true;
-ZaSettings.DOMAIN_INTEROP_ENABLED = true;
 ZaSettings.NEW_ACCT_TIME_ZONE_ENABLED = false ;
 ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME = true;
 ZaSettings.CAN_CREATE_DOMAINS = true;

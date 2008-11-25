@@ -39,6 +39,10 @@ ZaStatus.PRFX_Service = "status_service";
 ZaStatus.PRFX_Time = "status_time";
 ZaStatus.PRFX_Status = "status_status";
 
+ZaStatus.prototype.load = function (by, val, withConfig, skipRights) {
+	ZaItem.prototype.load.call(this,by,val,withConfig,true);
+}
+
 ZaStatus.loadMethod = 
 function() {
 	try {

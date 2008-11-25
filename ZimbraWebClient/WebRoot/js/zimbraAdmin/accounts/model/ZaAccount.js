@@ -197,6 +197,7 @@ ZaAccount.A_zimbraPasswordLockoutEnabled = "zimbraPasswordLockoutEnabled";
 ZaAccount.A_zimbraPasswordLockoutDuration = "zimbraPasswordLockoutDuration";
 ZaAccount.A_zimbraPasswordLockoutMaxFailures = "zimbraPasswordLockoutMaxFailures";
 ZaAccount.A_zimbraPasswordLockoutFailureLifetime = "zimbraPasswordLockoutFailureLifetime";
+ZaAccount.A_zimbraAdminConsoleUIComponents = "zimbraAdminConsoleUIComponents";
 
 ZaAccount.A_zimbraFreebusyExchangeUserOrg = "zimbraFreebusyExchangeUserOrg" ;
 //readonly
@@ -595,7 +596,7 @@ function(tmpObj) {
 		return false;
 		
 	}
-	if(ZaSettings.SKIN_PREFS_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		//check that current theme is part of selected themes
 		var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : ( ZaSettings.COSES_ENABLED ? tmpObj.cos.attrs[ZaCos.A_zimbraPrefSkin] : null);
 		var availableThemes = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] ? tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] : (ZaSettings.COSES_ENABLED ? tmpObj.cos.attrs[ZaCos.A_zimbraAvailableSkin] : null);	
@@ -651,22 +652,6 @@ function (tmpObj, account) {
 		tmpObj.attrs[ZaAccount.A_COSId] = null ;
 	}
 	
-	//check if zimbraAvailableSkin has been changed
-/*	if(ZaSettings.SKIN_PREFS_ENABLED) {
-		var skinIds = new Array();
-		if((tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] instanceof AjxVector) && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] && tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size()) {
-			var cnt = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].size();
-			for(var i = 0; i < cnt; i ++) {
-				skinIds.push(tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin].get(i).toString());
-			}
-			if(cnt > 0 ) {
-				tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = skinIds;
-			} else 
-				tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = "";
-				
-		} else
-			tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] = "";
-	}	*/
 	for (var aname in tmpObj.attrs) {
 		if(aname == ZaAccount.A_password || aname == ZaAccount.A_zimbraMailAlias || aname == ZaItem.A_objectClass || aname == ZaAccount.A2_mbxsize || aname == ZaAccount.A_mail) {
 			continue;
@@ -1184,7 +1169,7 @@ function() {
 		}
 		//idx = this._addRow(ZaMsg.NAD_DisplayName+":", this.attrs[ZaAccount.A_displayname], html, idx);
 		
-		if(ZaSettings.SERVERS_ENABLED) {
+		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ASSIGN_SERVER] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
 		}
 		html[idx++] = "</table>";

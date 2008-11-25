@@ -374,8 +374,8 @@ function(ex, method, params, restartOnError, obj) {
 			}
 			this._loginDialog.setReloginMode(bReloginMode);
 			this._showLoginDialog(bReloginMode);
-		} catch (ex) {
-			
+		} catch (ex2) {
+			console.log(ex2.code);
 		}
 	} 
 	else 

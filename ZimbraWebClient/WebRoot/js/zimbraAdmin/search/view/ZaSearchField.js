@@ -121,12 +121,12 @@ function () {
 				objList.push(ZaSearch.DLS);
 			}
 
-            if (ZaSettings.RESOURCES_ENABLED) {
+            if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) { 
                 if(this._containedObject[ZaSearch.A_fResources] == "TRUE") {
                     objList.push(ZaSearch.RESOURCES);
                 }
             }
-            if(ZaSettings.DOMAINS_ENABLED) {
+            if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) { 
 				if(this._containedObject[ZaSearch.A_fDomains] == "TRUE") {
 					objList.push(ZaSearch.DOMAINS);
 				}	
