@@ -5,6 +5,7 @@
     <languages skipLanguageSelection="false">
       <principalLanguage id="en_US" customLocalizationFile="./src/installer/messages/ZiMsg.properties" />
       <additionalLanguages>
+        <language id="es_ES" customLocalizationFile="./src/installer/messages/ZiMsg_es.properties" />
         <language id="sv" customLocalizationFile="./src/installer/messages/ZiMsg_sv.properties" />
         <language id="zh_CN" customLocalizationFile="./src/installer/messages/ZiMsg_zh_CN.properties" />
         <language id="zh_HK" customLocalizationFile="./src/installer/messages/ZiMsg_zh_HK.properties" />
@@ -12,7 +13,6 @@
         <language id="en_AU" customLocalizationFile="./src/installer/messages/ZiMsg_en_AU.properties" />
         <language id="pt_BR" customLocalizationFile="./src/installer/messages/ZiMsg_pt_BR.properties" />
         <language id="pl" customLocalizationFile="./src/installer/messages/ZiMsg_pl.properties" />
-        <language id="es" customLocalizationFile="./src/installer/messages/ZiMsg_es.properties" />
         <language id="ru" customLocalizationFile="./src/installer/messages/ZiMsg_ru.properties" />
         <language id="ko" customLocalizationFile="./src/installer/messages/ZiMsg_ko.properties" />
         <language id="ja" customLocalizationFile="./src/installer/messages/ZiMsg_ja.properties" />
@@ -33,7 +33,7 @@
       <variable name="offline_relabel" value="ALPHA" />
       <variable name="offline_version" value="0.1" />
       <variable name="offline_buildid" value="1" />
-      <variable name="offline_ausurl" value="" />
+      <variable name="offline_ausurl" value="http://devel.zimbra.com/aus/desktop/nightly/update.php" />
       <variable name="offline_update" value="false" />
     </variables>
   </application>

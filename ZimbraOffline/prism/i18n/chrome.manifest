@@ -27,9 +27,9 @@ locale webrunner en-GB chrome/en-GB/
 locale branding en-GB chrome/en-GB/branding/
 locale webapp en-GB chrome/en-GB/webapp/
 
-locale webrunner es chrome/es/
-locale branding es chrome/es/branding/
-locale webapp es chrome/es/webapp/
+locale webrunner es-ES chrome/es-ES/
+locale branding es-ES chrome/es-ES/branding/
+locale webapp es-ES chrome/es-ES/webapp/
 
 locale webrunner it chrome/it/
 locale branding it chrome/it/branding/
