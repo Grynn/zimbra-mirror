@@ -142,22 +142,25 @@ function OnDelete() {
 
 function OnSubmit() {
     zd.enable("accountName");
+    zd.enable("password");
     if (document.getElementById("port"))
 	zd.enable("port");
     if (document.getElementById("smtpPort"))
 	zd.enable("smtpPort");
+    if (document.getElementById("smtpPassword"))
+	zd.enable("smtpPassword");
     zd.hide("cancelButton");
     zd.hide("saveButton");
     zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
     document.accountForm.submit();
 }
 
-function onEditLink(id) {
+function onEditLink(id, keep) {
     var elem = document.getElementById(id + "Link");
 
     elem.style.display = "none";
     elem = document.getElementById(id);
-    if (elem.type == "password")
+    if (elem.type == "password" && !keep)
         elem.value = "";
     zd.enable(elem);
     elem.focus();
@@ -194,14 +197,14 @@ function onEditLink(id) {
 <c:when test="${not empty bean.error}" >
           <tr>
             <td colspan="2" width="450px">
-              <p class='ZOfflineError'>${bean.error}</p>
+              <div id="message" class="ZMessageInfo"><span class='ZOfflineError'>${bean.error}</span></div>
             </td>
           </tr>
 </c:when>
 <c:when test="${not bean.allValid}" >
           <tr>
             <td colspan="2" width="450px">
-              <p class='ZOfflineError'><fmt:message key='PlsCorrectInput'/></p>
+              <div id="message" class="ZMessageInfo"><span class='ZOfflineError'><fmt:message key='PlsCorrectInput'/></span></div>
             </td>
           </tr>
 </c:when>
