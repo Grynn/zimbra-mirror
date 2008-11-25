@@ -11,18 +11,18 @@ use Sys::Syslog qw(:DEFAULT setlogsock);
 my $syslog_socktype = 'unix';
 my $syslog_facility="mail";
 my $syslog_options="pid";
-my $syslog_priority="info";
-my ($verbose, $option, $action);
-my %attr;
+our $syslog_priority="info";
+our ($verbose, %attr);
+my ($option, $action);
 
 setlogsock $syslog_socktype;
 openlog $0, $syslog_options, $syslog_facility;
 
 sub smtpd_access_policy {
   my($domain);
-  $domain = lc $main::attr{"recipient"};
+  $domain = lc $attr{recipient};
   $domain =~ s/(.*)\@//;
-  syslog $main::syslog_priority, "Domain set: %s", $domain if $main::verbose;
+  syslog $syslog_priority, "Domain set: %s", $domain if $verbose;
   return "dunno";
 }
 
