@@ -2,6 +2,7 @@
 use strict;
 use lib '/opt/zimbra/zimbramon/lib';
 use Sys::Syslog qw(:DEFAULT setlogsock);
+use Net::LDAP;
 
 #
 # Syslogging options for verbose mode and for fatal errors.
@@ -19,10 +20,53 @@ setlogsock $syslog_socktype;
 openlog $0, $syslog_options, $syslog_facility;
 
 sub smtpd_access_policy {
-  my($domain);
-  $domain = lc $attr{recipient};
-  $domain =~ s/(.*)\@//;
-  syslog $syslog_priority, "Domain set: %s", $domain if $verbose;
+  my($domain, $ldap, $mesg, $user);
+  my $ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
+  my $postfix_pw = getLocalConfig("ldap_postfix_password");
+  my $ldap_master = getLocalConfig("ldap_master_url");
+  ($user, $domain) = split /\@/, lc $attr{recipient};
+  syslog $syslog_priority, "Recipient Domain: %s", $domain if $verbose;
+  syslog $syslog_priority, "Recipient userid: %s", $user if $verbose;
+  $ldap=Net::LDAP->new("$ldap_master");
+  if ( $ldap_starttls_supported ) {
+    $mesg = $ldap->start_tls(
+          verify => 'require',
+          capath => "/opt/zimbra/conf/ca",
+          ) or die "start_tls: $@";
+
+    $mesg->code && die "TLS: " . $mesg->error . "\n";
+  }
+  $mesg = $ldap->bind("uid=zmpostfix,cn=admins,cn=zimbra", password=>$postfix_pw);
+  $mesg = $ldap->search(
+            base=>"",
+            scope=>'sub',
+            filter=>"(&(zimbraDomainName=$domain)(objectClass=zimbraDomain))",
+            attrs=>['zimbraDomainType','zimbraMailCatchAllForwardingAddress'],
+          );
+  if ($mesg->count > 0) {
+    my $dobject = $mesg->entry(0);
+    if (lc($dobject->get_value("zimbraDomainType")) eq "alias") {
+      my $robject = $dobject->get_value("zimbraMailCatchAllForwardingAddress");
+      syslog $syslog_priority, "Real Domain: %s", $robject if $verbose;
+      $mesg = $ldap->search(
+                base=>"",
+                scope=>'sub',
+                filter=>
+        "(&(|(zimbraMailDeliveryAddress=$user"."$robject)(zimbraMailAlias=$user"."$robject)(zimbraMailCatchAllAddress=$user"."$robject))(zimbraMailStatus=enabled))",
+                attrs=>'1.1',
+              );
+      $ldap->unbind;
+      if ($mesg->count > 0) {
+        return "dunno";
+      } else { 
+        return "defer_if_permit Service temporarily unavailable";
+      }
+    } else {
+      $ldap->unbind;
+      return "dunno"; 
+    }
+  }
+  $ldap->unbind;
   return "dunno";
 }
 
@@ -33,6 +77,19 @@ sub fatal_exit {
     my($first) = shift(@_);
     syslog "err", "fatal: $first", @_;
     exit 1;
+}
+
+# Get local config values
+sub getLocalConfig {
+  my $key = shift;
+
+  return $main::loaded{lc}{$key}
+    if (exists $main::loaded{lc}{$key});
+
+  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
+  chomp $val;
+  $main::loaded{lc}{$key} = $val;
+  return $val;
 }
 
 #
