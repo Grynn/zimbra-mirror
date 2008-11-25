@@ -74,9 +74,8 @@ function() {
 
 
 //ZaRightsMiniListView only show the name of the rights
-ZaRightsMiniListView = function(parent) {
-    if (arguments.length == 0) return;
-	var className = null;
+ZaRightsMiniListView = function(parent, className, posStyle, headerList) {
+    var className = null;
 	var posStyle = null;
 	var headerList = ZaRightsMiniListView._getHeaderList();
     ZaListView.call(this, parent, className, posStyle, headerList);
@@ -129,7 +128,7 @@ function(right) {
 
 
 //ZaRightsAttrsListView only show the name of the rights
-ZaRightsAttrsListView = function(parent) {
+ZaRightsAttrsListView = function(parent, className, posStyle, headerList) {
     if (arguments.length == 0) return;
 	var className = null;
 	var posStyle = null;

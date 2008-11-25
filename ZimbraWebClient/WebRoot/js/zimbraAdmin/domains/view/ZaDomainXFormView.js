@@ -162,7 +162,7 @@ function(entry) {
 			this.cosChoices.dirtyChoices();
 		}
 	}
-    
+
     this._localXForm.setInstance(this._containedObject);        
 	this.updateTab();
 }

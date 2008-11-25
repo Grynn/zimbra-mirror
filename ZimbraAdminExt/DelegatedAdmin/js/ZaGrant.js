@@ -1,0 +1,86 @@
+ZaGrant = function () {
+    ZaItem.call(this, "ZaGrant") ;
+    this._init () ;
+    this.type = ZaItem.GRANT ;
+
+}
+
+ZaGrant.prototype = new ZaItem ;
+ZaGrant.prototype.constructor = ZaGrant ;
+
+ZaItem.loadMethods ["ZaGrant"] = [] ;
+ZaItem.initMethods["ZaGrant"] = [] ;
+
+ZaGrant.A_id = "id" ;
+ZaGrant.A_by = "by" ;
+ZaGrant.A_grantee = "grantee" ;
+ZaGrant.A_grantee_type = "grantee_type" ;
+ZaGrant.A_right = "right" ;
+ZaGrant.A_deny = "deny" ;
+ZaGrant.A_target = "target" ;
+ZaGrant.A_target_type = "target_type"
+
+
+ZaGrant.A2_grantsList = "grantsList" ;
+
+ZaGrant.GRANTEE_TYPE = ["usr", "grp"] ;
+
+ /*
+ A sample grant on a target:
+   {
+      type: usr or grp
+      id: 75b0677b-6ed1-4f0a-a37e-e5b24e4c2d22  (grantee-zimbraId)
+      name: user1 (grantee-name)
+      right: createAccount (right-name)
+      deny: 1 | 0 (default)
+  }
+
+  */
+ZaGrant.getSampleGrants = function () {
+    return [
+        { grantee_type: "usr",
+          id: "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d22",
+          grantee: "user1@ccaomac.zimbra.com",
+          right: "createAccount" ,
+          deny:  "1"
+        } ,
+        { grantee_type: "grp",
+          id: "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d23",
+          grantee: "dl1@ccaomac.zimbra.com",
+          right: "deleteAccount" ,
+          deny:  "1"
+        }
+    ]
+}
+
+ZaGrant.loadMethod = function (by, val) {
+// TODO: use GetGrantsRequest   
+    var grants = ZaGrant.getSampleGrants () ;
+//    var list = new ZaItemList(ZaGrant) ;
+//    list._vector = AjxVector.fromArray(grants) ;
+    this [ZaGrant.A2_grantsList] = grants ;
+}
+
+//GrantRightRequest
+ZaGrant.grantMethod = function (obj) {
+
+}
+
+//RevokeRightRequest
+ZaGrant.revokeMethod = function () {
+
+}
+
+
+ZaGrant.myXModel = {
+	items: [
+        {id: ZaGrant.A_grantee, type: _STRING_, ref: ZaGrant.A_grantee, required: true },
+        {id: ZaGrant.A_grantee_type, type:_LIST_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
+        {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
+        {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 },
+        {id: ZaGrant.A_target_type, ref: ZaGrant.A_target_type, type: _LIST_, choices: ZaZimbraRights.targetType },
+        {id: ZaGrant.A_target, type:_STRING_, ref: ZaGrant.A_target, required: true }
+    ]
+};
+
+

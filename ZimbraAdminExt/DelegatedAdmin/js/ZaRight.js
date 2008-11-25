@@ -42,6 +42,7 @@ ZaRight.A_type = "type" ;
 ZaRight.A_targetType = "targetType"  ;
 ZaRight.A_definedBy = "definedBy" ;
 
+
 ZaRight.A2_selected_rights = "selected_rights";
 
 //@return the lists of rights for the type specified

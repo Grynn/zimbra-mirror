@@ -11,5 +11,8 @@
     <include>ZaRightsListViewController.js</include>
     <include>ZaRightSelectionView.js</include>
 
+    <include>ZaGrant.js</include>
+    <include>ZaTargetPermission.js</include>
+    <include>ZaGrantDialog.js</include>
     <include>ZaDelegatedAdminExt.js</include>
 </zimlet>

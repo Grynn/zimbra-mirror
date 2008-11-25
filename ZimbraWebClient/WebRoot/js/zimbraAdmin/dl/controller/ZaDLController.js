@@ -60,8 +60,10 @@ function (entry)	{
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
 		} else {
 			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-			entry.getMembers();
-		}	
+//			entry.getMembers();
+//          Allow stacks of functions to be loaded for the view, especially useful to load the permission tab
+            entry.refresh () ;
+        }
 		this._view.setDirty(false);
 		entry[ZaModel.currentTab] = "1";
 		this._view.setObject(entry);

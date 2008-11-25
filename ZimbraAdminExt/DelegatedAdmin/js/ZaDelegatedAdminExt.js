@@ -12,6 +12,7 @@ function ZaDelegatedAdminExt () {} ;
 ZaSettings.RIGHTS_ENABLED = true ;
 ZaEvent.S_RIGHT = ZaEvent.EVENT_SOURCE_INDEX++;
 ZaItem.RIGHT = "right" ;
+ZaItem.GRANT = "grant" ;
 
 ZaZimbraAdmin._RIGHTS = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._RIGHTS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;

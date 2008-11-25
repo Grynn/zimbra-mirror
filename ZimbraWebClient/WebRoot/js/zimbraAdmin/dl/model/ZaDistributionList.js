@@ -18,8 +18,10 @@
  * @author EMC
  **/
 ZaDistributionList = function(id, name, memberList, description, notes) {
-	ZaItem.call(this);
-	this.attrs = new Object();
+	ZaItem.call(this, "ZaDistributionList");
+    this._init();
+
+    this.attrs = new Object();
 	this.attrs[ZaDistributionList.A_mailStatus] = "enabled";
 	this.attrs[ZaAccount.A_zimbraMailAlias] = [];
 	this.id = (id != null)? id: null;
@@ -57,6 +59,8 @@ ZaDistributionList = function(id, name, memberList, description, notes) {
 
 ZaDistributionList.prototype = new ZaItem;
 ZaDistributionList.prototype.constructor = ZaDistributionList;
+
+ZaItem.loadMethods["ZaDistributionList"] = [];
 
 ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
@@ -160,7 +164,7 @@ ZaDistributionList.prototype.removeMembers = function (arr) {
 };
 
 ZaDistributionList.prototype.refresh = function () {
-	this.getMembers();
+	this.load();
 }
 
 /**
@@ -461,6 +465,8 @@ ZaDistributionList.prototype.getMembers = function (limit) {
 	}
 	return this._memberList;
 };
+
+ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getMembers) ;
 
 ZaDistributionList.prototype.getMembersArray = function () {
 	if (this._memberList != null){
