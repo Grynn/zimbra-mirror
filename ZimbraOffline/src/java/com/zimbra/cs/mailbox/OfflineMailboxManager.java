@@ -71,7 +71,7 @@ public class OfflineMailboxManager extends MailboxManager {
         for (String acctId : getAccountIds()) {
             OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
             Account acct = prov.get(Provisioning.AccountBy.id, acctId);
-            if (prov.isGalAccount(acct) || prov.isMountpointAccount(acct))
+            if (acct == null || prov.isGalAccount(acct) || prov.isMountpointAccount(acct))
                 continue;
                 
             try {
