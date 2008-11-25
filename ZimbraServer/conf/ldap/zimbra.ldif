@@ -100,11 +100,6 @@ dn: cn=xmppcomponents,cn=zimbra
 objectclass: organizationalRole
 cn: xmppcomponents
 
-# for storing user defined right info
-dn: cn=rights,cn=zimbra
-objectclass: organizationalRole
-cn: rights
-
 # for granting global rights
 dn: cn=globalgrant,cn=zimbra
 objectclass: zimbraAclTarget
