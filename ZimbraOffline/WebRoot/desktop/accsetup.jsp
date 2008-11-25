@@ -149,25 +149,16 @@ function OnSubmit() {
     zd.hide("cancelButton");
     zd.hide("saveButton");
     zd.set("whattodo", "<span class='ZOfflineNotice'><fmt:message key='Processing'/></span>");
-<c:if test="not ${bean.smtpConfigSupported}">
-    zd.enable("smtpPassword");
-</c:if>
     document.accountForm.submit();
 }
 
-function onEditPassword(id) {
-    var elem = document.getElementById(id);
+function onEditLink(id) {
+    var elem = document.getElementById(id + "Link");
 
-    zd.hide("editPasswordRow");
-    zd.show("passwordRow");
-    elem.value = "";
-    elem.focus();
-}
-
-function onEditPort(link, id) {
-    var elem = document.getElementById(id);
-
-    link.display = "none";
+    elem.style.display = "none";
+    elem = document.getElementById(id);
+    if (elem.type == "password")
+        elem.value = "";
     zd.enable(elem);
     elem.focus();
 }

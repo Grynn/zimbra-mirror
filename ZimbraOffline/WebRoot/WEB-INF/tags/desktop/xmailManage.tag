@@ -11,9 +11,13 @@
 
 <script type="text/javascript">
 function InitScreen() {
+    zd.disable('password');
+    zd.disable('smtpPassword');
 <c:if test="${bean.password eq '' or not zdf:isValid(bean, 'password') || bean.verb eq 'add'}"> 
-    zd.hide("editPasswordRow");
-    zd.show("passwordRow");
+    onEditLink("password");
+</c:if>
+<c:if test="${bean.smtpPassword eq '' or not zdf:isValid(bean, 'smtpPassword') || bean.verb eq 'add'}"> 
+    onEditLink("smtpPassword");
 </c:if>
 }
 
@@ -69,21 +73,17 @@ function SetSmtpPort() {
         </tr>       
     </c:if>
 </c:if>
-        <tr id="editPasswordRow">
+        <tr id="passwordRow">
             <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
             <td>
-                <table cellpadding="0" cellspacing="0">
+                <table cellpadding="0" cellspacing="0" width="100%">
                     <tr>
-                        <td><input class="ZFieldMedium" type="password" id="editPassword" name="editPassword" value="${bean.password}" disabled></td>
-                        <td>&nbsp;&nbsp;<a href="#" onclick="onEditPassword('password');this.style.display='none'"><fmt:message key='Edit'/></a></td>
+                        <td><input class="ZFieldMedium" type="password" id="password" name="password" value="${bean.password}" style="width:100%" disabled></td>
+                        <td width="1%" id="passwordLink" onclick="onEditLink('password')">&nbsp;&nbsp;<a href="#"><fmt:message key='Edit'/></a></td>
                     </tr>
                 </table>
             </td>
         </tr>
-        <tr id="passwordRow" style="display:none">
-            <td class="${zdf:isValid(bean, 'password') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
-            <td><input class="ZField" type="password" id="password" name="password" value="${bean.password}"></td>
-        </tr>       
 <c:if test="${bean.serverConfigSupported}">    
         <tr id="mailServerRow">
             <td class="${zdf:isValid(bean, 'host') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='InMailServer'/></td>
@@ -92,8 +92,8 @@ function SetSmtpPort() {
                     <tr>
                         <td><input class="ZFieldMedium" type="text" id="host" name="host" value="${bean.host}"></td>
                         <td class="${zdf:isValid(bean, 'port') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Port'/>&nbsp;</td>
-                        <td width="1%"><input style="width:40px" class="ZField" type="text" id="port" name="port" value="${bean.port}" disabled></td>
-                        <td>&nbsp;<a href="#" onclick="onEditPort(this, 'port')"><fmt:message key='Edit'/></a></td>
+                        <td width="1%"><input class="ZField" type="text" id="port" name="port" value="${bean.port}" disabled style="width:40px"></td>
+                        <td width="1%" id="portLink" onclick="onEditLink('port')">&nbsp;&nbsp;<a href="#"><fmt:message key='Edit'/></a></td>
                     </tr>
                 </table>
             </td>
@@ -121,7 +121,7 @@ function SetSmtpPort() {
                         <td><input class="ZFieldMedium" type="text" id="smtpHost" name="smtpHost" value="${bean.smtpHost}"></td>
                         <td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Port'/>&nbsp;</td>
                         <td width="1%"><input style="width:40px" class="ZField" type="text" id="smtpPort" name="port" value="${bean.smtpPort}" disabled></td>
-                        <td>&nbsp;<a href="#" onclick="onEditPort(this, 'smtpPort')"><fmt:message key='Edit'/></a></td>
+                        <td width="1%" id="smtpPortLink" onclick="onEditLink('smtpPort')">&nbsp;&nbsp;<a href="#")"><fmt:message key='Edit'/></a></td>
                     </tr>
                 </table>
             </td>
@@ -162,12 +162,19 @@ function SetSmtpPort() {
         <tr id="smtpAuthSettingsRow2" align="right" ${bean.smtpAuth ? '' : 'style="display:none"'}>
             <td class="ZFieldLabel"></td>
             <td align="right">
-                <table cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldSubLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
-                        <td><input class="ZFieldMedium" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}" onkeypress='zd.markElementAsManuallyChanged(this)'></td>
-                    </tr>
-                </table>
+              <table cellpadding="0" cellspacing="0">
+                <tr id="smtpPasswordRow">
+                  <td class="${zdf:isValid(bean, 'smtpPassword') ? 'ZFieldSubLabel' : 'ZFieldError'}"><fmt:message key='Password'/></td>
+                  <td>
+                    <table cellpadding="0" cellspacing="0" width="200px">
+                      <tr>
+                        <td><input class="ZFieldMedium" type="password" id="smtpPassword" name="smtpPassword" value="${bean.smtpPassword}" style="width:100%" disabled></td>
+                        <td width="1%" id="smtpPasswordLink" onclick="onEditLink('smtpPassword')">&nbsp;&nbsp;<a href="#"><fmt:message key='Edit'/></a></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
             </td>
         </tr>
         <tr id="replyToRow">

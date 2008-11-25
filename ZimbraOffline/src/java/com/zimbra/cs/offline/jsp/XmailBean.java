@@ -130,9 +130,9 @@ public class XmailBean extends MailBean {
                         addInvalid("smtpPort");
                     if (isSmtpAuth) {
                         if (isEmpty(smtpUsername))
-                            addInvalid("smtpUsername");
+                            smtpUsername = username;
                         if (isEmpty(smtpPassword))
-                            addInvalid("smtpPassword");
+                            smtpPassword = password;
                     }
                 }
                 if (isAllOK()) {
