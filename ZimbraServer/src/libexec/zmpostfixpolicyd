@@ -59,7 +59,7 @@ sub smtpd_access_policy {
       if ($mesg->count > 0) {
         return "dunno";
       } else { 
-        return "defer_if_permit Service temporarily unavailable";
+        return "reject 5.1.1 Mailbox unavailable";
       }
     } else {
       $ldap->unbind;
