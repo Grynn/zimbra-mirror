@@ -40,7 +40,15 @@
  * press. If the control does not handle the key event, the event is handed to the application,
  * which handles it based on its current state. The application key event handler is in a sense
  * global, since it does not matter which control received the event.
+ * </p><p>
+ * At any given time there is a default handler, which is responsible for determining what
+ * action is associated with a particular key sequence, and then taking it. A handler should support
+ * the following methods:
+ * 		getKeyMapName()		returns the name of the map that defines shortcuts for this handler
+ * 		handleKeyAction()	performs the action associated with a shortcut
+ * 		handleKeyEvent()	(optional) override; handler solely responsible for handling event
  * </p>
+ *
  * @author Ross Dargahi
  *
  * @see DwtShell
@@ -736,6 +744,10 @@ function(ev) {
  */
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
 function(hdlr, ev, forceActionCode) {
+	if (hdlr && hdlr.handleKeyEvent) {
+		hdlr.handleKeyEvent(ev);
+		return DwtKeyboardMgr.__KEYSEQ_HANDLED;
+	}
 	var mapName = (hdlr && hdlr.getKeyMapName) ? hdlr.getKeyMapName() : null;
 	if (!mapName) {
 		return DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
