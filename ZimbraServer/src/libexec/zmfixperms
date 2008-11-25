@@ -263,10 +263,10 @@ if [ -L ${zimbra_home}/perdition ]; then
   chown -R ${root_user}:${root_group} ${zimbra_home}/perdition/*
 fi
 
-if [ -L ${zimbra_home}/sleepycat ]; then
-  printMsg "Fixing ownership and permisions on ${zimbra_home}/sleepycat"
-  chown ${root_user}:${root_group} ${zimbra_home}/sleepycat-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/sleepycat/*
+if [ -L ${zimbra_home}/bdb ]; then
+  printMsg "Fixing ownership and permisions on ${zimbra_home}/bdb"
+  chown ${root_user}:${root_group} ${zimbra_home}/bdb-*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/bdb/*
 fi
 
 if [ -L ${zimbra_home}/clamav ]; then
