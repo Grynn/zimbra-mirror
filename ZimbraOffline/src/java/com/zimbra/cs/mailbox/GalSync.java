@@ -187,6 +187,11 @@ public class GalSync {
                 return;
         }
                 
+        if (!OfflineLC.zdesktop_sync_gal.booleanValue()) {
+            OfflineLog.offline.debug("Offline GAL sync is disabled in local config (zdesktop_sync_gal=false)");
+            return;
+        }
+        
         syncMan.syncStart(target);
         
         OfflineAccount account = (OfflineAccount)ombx.getAccount();

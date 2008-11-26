@@ -52,6 +52,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_sync_tasks;
     public static final KnownKey zdesktop_sync_chats;
     public static final KnownKey zdesktop_sync_documents;
+    public static final KnownKey zdesktop_sync_gal;
+    public static final KnownKey zdesktop_sync_mountpoints;
     
     public static final KnownKey zdesktop_sync_skip_idlist;
     
@@ -195,6 +197,14 @@ public class OfflineLC {
 	    zdesktop_sync_documents.setDefault("true");
 	    zdesktop_sync_documents.setDoc("Whether to sync documents. Default true");
 	    
+        zdesktop_sync_gal = new KnownKey("zdesktop_sync_gal");
+        zdesktop_sync_gal.setDefault("true");
+        zdesktop_sync_gal.setDoc("Whether to sync GAL. Default true");
+
+        zdesktop_sync_mountpoints = new KnownKey("zdesktop_sync_mountpoints");
+        zdesktop_sync_mountpoints.setDefault("true");
+        zdesktop_sync_mountpoints.setDoc("Whether to sync mountpoints. Default true");
+        
 	    zdesktop_sync_skip_idlist = new KnownKey("zdesktop_sync_skip_idlist");
 	    zdesktop_sync_skip_idlist.setDefault("");
 	    zdesktop_sync_skip_idlist.setDoc("Comma delimited list of item IDs to skip during sync.  Default empty.");

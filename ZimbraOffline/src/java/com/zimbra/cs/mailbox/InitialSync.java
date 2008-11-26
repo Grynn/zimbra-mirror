@@ -510,6 +510,11 @@ public class InitialSync {
             redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, color, url);
             ((CreateFolder)redo).setFolderId(id);
         } else {
+            if (!OfflineLC.zdesktop_sync_mountpoints.booleanValue()) {
+                OfflineLog.offline.debug("mountpoint sync is disabled in local config (zdesktop_sync_mountpoints=false). mountpoint skipped: " + name);
+                return;
+            }
+                
             ownerName = elt.getAttribute(MailConstants.A_OWNER_NAME, null);
             if (ownerName == null) {
                 OfflineLog.offline.debug(elt.toString());
