@@ -262,7 +262,7 @@ function(defaultColumnSort) {
 			htmlArr[idx++] = "</td>";
 		}
 
-		if (headerCol._sortable) {
+		if (headerCol._sortable && !headerCol._noSortArrow) {
 			var arrowIcon = this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow";
 			
 			htmlArr[idx++] = "<td align=right style='padding-right:2px' width=100% id='";
@@ -1930,16 +1930,18 @@ function(columnId) {
 	if (this._currentColId && (columnId != this._currentColId)) {
 		// unset current column arrow
 		var headerCol = this._headerIdHash[this._currentColId];
-		var field = headerCol._field;
-		var oldArrowId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
-		var oldArrowCell = document.getElementById(oldArrowId);
-		if (oldArrowCell && oldArrowCell.firstChild) {
-			var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? oldArrowCell.firstChild : oldArrowCell.firstChild.firstChild;
-			if (imgEl) {
-				imgEl.style.visibility = "hidden";
+		if (!headerCol._noSortArrow) {
+			var field = headerCol._field;
+			var oldArrowId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
+			var oldArrowCell = document.getElementById(oldArrowId);
+			if (oldArrowCell && oldArrowCell.firstChild) {
+				var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? oldArrowCell.firstChild : oldArrowCell.firstChild.firstChild;
+				if (imgEl) {
+					imgEl.style.visibility = "hidden";
+				}
 			}
 		}
-		
+
 		// reset style for old sorted column
 		var oldSortedCol = document.getElementById(this._currentColId);
 		if (oldSortedCol) {
@@ -1948,16 +1950,18 @@ function(columnId) {
 	}
 	this._currentColId = columnId;
 	var headerCol = this._headerIdHash[this._currentColId];
-	var field = headerCol._field;
 
 	// set new column arrow
-	var newArrowId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
-	var newArrowCell = document.getElementById(newArrowId);
-	if (newArrowCell) {
-		AjxImg.setImage(newArrowCell, this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow");
-		var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? newArrowCell.firstChild : newArrowCell.firstChild.firstChild;
-		if (imgEl) {
-			imgEl.style.visibility = "visible";
+	if (!headerCol._noSortArrow) {
+		var field = headerCol._field;
+		var newArrowId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
+		var newArrowCell = document.getElementById(newArrowId);
+		if (newArrowCell) {
+			AjxImg.setImage(newArrowCell, this._bSortAsc ? "ColumnUpArrow" : "ColumnDownArrow");
+			var imgEl = (AjxImg._mode == AjxImg.SINGLE_IMG) ? newArrowCell.firstChild : newArrowCell.firstChild.firstChild;
+			if (imgEl) {
+				imgEl.style.visibility = "visible";
+			}
 		}
 	}
 	
@@ -2330,6 +2334,7 @@ function(clear) {
  *        align			[int]		alignment style of label
  *        noRemove		[boolean]*	flag indicating whether this column can be removed (overrides visible flag)
  *        view			[constant]	ID of owning view
+ *        noSortArrow	[boolean]*	if true, do not show up/down sort arrow in column
  */
 DwtListHeaderItem = function(params) {
 
@@ -2340,6 +2345,7 @@ DwtListHeaderItem = function(params) {
 	this._label = params.text;
 	this._iconInfo = params.icon;
 	this._sortable = params.sortable;
+	this._noSortArrow = params.noSortArrow;
 	this._resizeable = params.resizeable;
 	this._visible = (params.visible !== false); // default to visible
 	this._name = params.name || params.text;
