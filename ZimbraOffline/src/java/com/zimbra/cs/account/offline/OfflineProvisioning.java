@@ -2089,20 +2089,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     @Override
-    public boolean checkRight(String targetType, TargetBy targetBy, String target,
-            GranteeBy granteeBy, String grantee,
-            String right,
-            AccessManager.ViaGrant via) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("checkRight");
-    }
-
-    @Override
-    public RightCommand.EffectiveRights getEffectiveRights(String targetType, TargetBy targetBy, String target,
-                                                           GranteeBy granteeBy, String grantee) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("getEffectiveRights");
-    }
-    
-    @Override
     public RightCommand.ACL getGrants(String targetType, TargetBy targetBy, String target) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("getGrants");
     }
