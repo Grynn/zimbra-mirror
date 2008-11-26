@@ -510,8 +510,14 @@ public class InitialSync {
             redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, color, url);
             ((CreateFolder)redo).setFolderId(id);
         } else {
+            ownerName = elt.getAttribute(MailConstants.A_OWNER_NAME, null);
+            if (ownerName == null) {
+                OfflineLog.offline.debug(elt.toString());
+                OfflineLog.offline.warn("missing owner attr of a mountpoint. mountpoint is not sync'ed down: " + name);
+                return;
+            }
+            
             ownerId = elt.getAttribute(MailConstants.A_ZIMBRA_ID);
-            ownerName = elt.getAttribute(MailConstants.A_OWNER_NAME);
             remoteId = (int)elt.getAttributeLong(MailConstants.A_REMOTE_ID);
             try {
                 OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount(), true);
