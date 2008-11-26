@@ -14,5 +14,8 @@
     <include>ZaGrant.js</include>
     <include>ZaTargetPermission.js</include>
     <include>ZaGrantDialog.js</include>
+    <include>ZaGrantView.js</include>
+    <include>ZaGrantViewController.js</include>
+    <include>ZaGlobalGrantListViewController.js</include>
     <include>ZaDelegatedAdminExt.js</include>
 </zimlet>

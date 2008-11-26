@@ -37,20 +37,42 @@ ZaGrant.GRANTEE_TYPE = ["usr", "grp"] ;
 
   */
 ZaGrant.getSampleGrants = function () {
+    var grant1 = new ZaGrant ()  ;
+    var grant2 = new ZaGrant () ;
+    grant1.grantee_type =  "usr" ;
+    grant1.id = "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d22" ;
+    grant1.grantee = "user1@ccaomac.zimbra.com" ;
+    grant1.right = "createAccount" ;
+    grant1.deny = "1" ;
+
+    grant2.grantee_type = "grp";
+    grant2.id = "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d23";
+    grant2.grantee = "dl1@ccaomac.zimbra.com";
+    grant2.right = "deleteAccount";
+    grant2.deny =  "1" ;
     return [
+        grant1, grant2
+         /*
         { grantee_type: "usr",
           id: "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d22",
           grantee: "user1@ccaomac.zimbra.com",
           right: "createAccount" ,
-          deny:  "1"
+          deny:  "1"                                     Z
         } ,
         { grantee_type: "grp",
           id: "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d23",
           grantee: "dl1@ccaomac.zimbra.com",
           right: "deleteAccount" ,
           deny:  "1"
-        }
+        }  */
     ]
+}
+
+
+ZaGrant.getSampleGrantsList = function () {
+    var list = new ZaItemList(ZaGrant);
+    list._vector = AjxVector.fromArray(ZaGrant.getSampleGrants())  ;
+    return list ;         
 }
 
 ZaGrant.loadMethod = function (by, val) {
@@ -82,5 +104,32 @@ ZaGrant.myXModel = {
         {id: ZaGrant.A_target, type:_STRING_, ref: ZaGrant.A_target, required: true }
     ]
 };
+
+
+ZaGrant.globalGrantsListTreeListener = function (ev) {
+	if (AjxEnv.hasFirebug) console.log("Show the global grants lists ...") ;
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(
+			ZaApp.getInstance().getGlobalGrantListController(),ZaGlobalGrantListViewController.prototype.show, ZaGrant.getSampleGrantsList());
+	} else {
+		ZaApp.getInstance().getGlobalGrantListController().show(ZaGrant.getSampleGrantsList());
+	}
+}
+
+ZaGrant.grantsOvTreeModifier = function (tree) {
+    var overviewPanelController = this ;
+    if (!overviewPanelController) throw new Exception("ZaGrant.grantsOvTreeModifier: Overview Panel Controller is not set.");
+
+    if(ZaSettings.GRANTS_ENABLED) {
+        overviewPanelController._rightsTi = new DwtTreeItem(overviewPanelController._configTi);
+        overviewPanelController._rightsTi.setText(com_zimbra_delegatedadmin.OVP_global_grants);
+        overviewPanelController._rightsTi.setImage("Account"); //TODO: Use Grants icons
+		overviewPanelController._rightsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_GRANTS_LIST_VIEW);
+
+        if(ZaOverviewPanelController.overviewTreeListeners) {
+            ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_GRANTS_LIST_VIEW] = ZaGrant.globalGrantsListTreeListener;
+        }
+    }
+}
 
 

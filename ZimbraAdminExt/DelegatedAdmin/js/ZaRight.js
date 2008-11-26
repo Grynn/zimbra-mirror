@@ -96,8 +96,8 @@ ZaRight.rightsOvTreeModifier = function (tree) {
         overviewPanelController._rightsTi = new DwtTreeItem(overviewPanelController._configTi);
         overviewPanelController._rightsTi.setText(com_zimbra_delegatedadmin.OVP_rights);
         overviewPanelController._rightsTi.setImage("Account"); //TODO: Use Rights icons
-//		overviewPanelController._rightsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._RIGHTS_LIST_VIEW);
-
+		overviewPanelController._rightsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._RIGHTS_LIST_VIEW);
+       /*
         try {
             var ti1 = new DwtTreeItem( overviewPanelController._rightsTi );
             ti1.setText(com_zimbra_delegatedadmin.TI_custom_rights);
@@ -107,7 +107,7 @@ ZaRight.rightsOvTreeModifier = function (tree) {
 
         } catch (ex) {
             overviewPanelController._handleException(ex, "ZaRigth.rightsOvTreeModifier", null, false);
-        }
+        }*/
 
         if(ZaOverviewPanelController.overviewTreeListeners) {
             ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._RIGHTS_LIST_VIEW] = ZaRight.customRightsListTreeListener;
@@ -115,6 +115,7 @@ ZaRight.rightsOvTreeModifier = function (tree) {
         }
     }
 }
+
 ZaRight.customRightsListTreeListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Show the custom rigths lists ...") ;
 	if(ZaApp.getInstance().getCurrentController()) {
