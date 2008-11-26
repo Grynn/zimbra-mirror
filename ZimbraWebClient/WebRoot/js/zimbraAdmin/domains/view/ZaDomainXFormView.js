@@ -67,7 +67,7 @@ function(entry) {
     ZaAccount.prototype.manageSpecialAttrs.call (entry) ;
     this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
-	this._containedObject.cos = entry.cos;
+	this._containedObject._defaultValues = entry._defaultValues;
 	this._containedObject.name = entry.name;
 	this._containedObject.id = entry.id;
 	this._containedObject.type = entry.type ;
@@ -147,7 +147,7 @@ function(entry) {
 
     //set the catchAllChoices
     var isCatchAllEnabled = this._containedObject.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ?
-    			this._containedObject.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] : this._containedObject.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ;
+    			this._containedObject.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] : this._containedObject._defaultValues.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ;
     			
     if (isCatchAllEnabled && isCatchAllEnabled == "TRUE") {
         this._containedObject[ZaAccount.A_zimbraMailCatchAllAddress] = entry [ZaAccount.A_zimbraMailCatchAllAddress] ;
@@ -171,7 +171,7 @@ ZaDomainXFormView.isCatchAllEnabled = function () {
     /*var form = this;
     var instance = form.getInstance () ;
     var isCatchAllEnabled = instance.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]
-               || instance.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ;
+               || instance._defaultValues.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] ;
 
     return (isCatchAllEnabled == "TRUE" ? true : false) ;*/
     return (this.getInstanceValue(ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled) == "TRUE");
@@ -183,11 +183,13 @@ function (ev) {
 
 	var arr = this.widget.getSelection();	
 	if(arr && arr.length)
-		instance.acl_selection_cache = arr;
+		this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A2_acl_selection_cache,arr);
+		//instance[ZaDomain.A2_acl_selection_cache].acl_selection_cache = arr;
 	else 
-		instance.acl_selection_cache = null;
+		this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A2_acl_selection_cache,null);
+		//instance.acl_selection_cache = null;
 		
-	this.getForm().refresh();
+	//this.getForm().refresh();
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		ZaDomainXFormView.editButtonListener.call(this);
 	}	
@@ -275,7 +277,8 @@ function () {
 			aclsArr.push(obj);
 		}
 		aclsArr._version++;
-		this.refresh();
+		this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,aclsArr);
+		//this.refresh();
 		this.parent.setDirty(true);	
 	}	
 }
@@ -307,22 +310,25 @@ function () {
 	if(this.parent.editAclDlg) {
 		this.parent.editAclDlg.popdown();
 		var obj = this.parent.editAclDlg.getObject();
+		var aclSelection = this.getInstanceValue(ZaDomain.A2_acl_selection_cache);
 		var dirty = false;
-		if(obj.name != this.getInstance().acl_selection_cache[0].name) {
+		if(obj.name != aclSelection[0].name) {
 			dirty = true;
 		} else {
 			for(var a in obj.acl) {
-				if(obj.acl[a] != this.getInstance().acl_selection_cache[0].acl[a]) {
+				if(obj.acl[a] != aclSelection[0].acl[a]) {
 					dirty = true;
 					break;
 				}
 			}
 		}
 		if(dirty) {
-			this.getInstance().acl_selection_cache[0].acl = obj.acl;
-			this.getInstance().acl_selection_cache[0].name = obj.name;			
+			aclSelection[0].acl = obj.acl;
+			aclSelection[0].name = obj.name;
 			this.getInstance()[ZaDomain.A_allNotebookACLS]._version++;
-			this.refresh();
+			this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A2_acl_selection_cache,aclSelection);
+
+			//this.refresh();
 			this.parent.setDirty(true);	
 		}		
 	}
@@ -331,32 +337,36 @@ function () {
 ZaDomainXFormView.deleteButtonListener = 
 function () {
 	var instance = this.getInstance();
-	if(instance.acl_selection_cache) {
-		var cnt = instance.acl_selection_cache.length;
+	var aclSelectionCache = this.getInstanceValue(ZaDomain.A2_acl_selection_cache);
+	var allNoteBookACLs = this.getInstanceValue(ZaDomain.A_allNotebookACLS);
+	if(aclSelectionCache) {
+		var cnt = aclSelectionCache.length;
 		for(var i=0; i<cnt;i++) {
-			if(instance.acl_selection_cache[i].name && (instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookGroupACLs ||
-			 instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookUserACLs ||
-			 instance.acl_selection_cache[i].gt==ZaDomain.A_NotebookDomainACLs)) {
-				var cnt2 = instance[ZaDomain.A_allNotebookACLS].length-1;
+			if(aclSelectionCache[i].name && (aclSelectionCache[i].gt==ZaDomain.A_NotebookGroupACLs ||
+			 aclSelectionCache[i].gt==ZaDomain.A_NotebookUserACLs ||
+			 aclSelectionCache[i].gt==ZaDomain.A_NotebookDomainACLs)) {
+				var cnt2 = allNoteBookACLs.length-1;
 				for(var j=cnt2; j >= 0; j--) {
-					if(instance[ZaDomain.A_allNotebookACLS][j].name == instance.acl_selection_cache[i].name) {
-						instance[ZaDomain.A_allNotebookACLS].splice(j,1);
+					if(allNoteBookACLs[j].name == aclSelectionCache[i].name) {
+						allNoteBookACLs.splice(j,1);
 						break;
 					}
 				}
-			} else if (instance.acl_selection_cache[i].gt) {
-				var cnt2 = instance[ZaDomain.A_allNotebookACLS].length-1;
+			} else if (aclSelectionCache[i].gt) {
+				var cnt2 = allNoteBookACLs.length-1;
 				for(var j=cnt2; j >= 0; j--) {
-					if(instance[ZaDomain.A_allNotebookACLS][j].gt == instance.acl_selection_cache[i].gt) {
-						instance[ZaDomain.A_allNotebookACLS][j].acl = {r:0,w:0,i:0,d:0,a:0,x:0};
+					if(allNoteBookACLs[j].gt == aclSelectionCache[i].gt) {
+						allNotebookACLS[j].acl = {r:0,w:0,i:0,d:0,a:0,x:0};
 						break;
 					}
 				}
 			}
 		}
 	}
-	instance[ZaDomain.A_allNotebookACLS]._version++; 
-	this.getForm().refresh();
+	allNotebookACLS._version++;
+	this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,allNotebookACLS);
+	//instance[ZaDomain.A_allNotebookACLS]._version++; 
+	//this.getForm().refresh();
 	this.getForm().parent.setDirty(true);	
 }
 

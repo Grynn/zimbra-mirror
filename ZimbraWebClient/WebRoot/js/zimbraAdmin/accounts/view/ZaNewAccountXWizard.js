@@ -261,15 +261,15 @@ function(entry) {
 	this._containedObject.id = null;
 	if(ZaSettings.COSES_ENABLED) {
 		if(this._containedObject.attrs[ZaAccount.A_COSId]) {
-			this._containedObject.cos = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);
+			this._containedObject._defaultValues = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);
 		}
 		if(!this._containedObject.cos) {
-			this._containedObject.cos = ZaCos.getCosByName("default");
+			this._containedObject._defaultValues = ZaCos.getCosByName("default");
 		}
 		//this should never happen, because default cos should always be there. Last resort.
 		if(!this._containedObject.cos) {
 			var cosList = ZaApp.getInstance().getCosList().getArray();
-			this._containedObject.cos = cosList[0];
+			this._containedObject._defaultValues = cosList[0];
 			this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;
 		}
 	} 
@@ -397,13 +397,13 @@ ZaNewAccountXWizard.isMailForwardingEnabled = function () {
 ZaNewAccountXWizard.onCOSChanged = 
 function(value, event, form) {
 	if(ZaItem.ID_PATTERN.test(value))  {
-		form.getInstance().cos = ZaCos.getCosById(value, form.parent._app);
+		form.getInstance()._defaultValues = ZaCos.getCosById(value, form.parent._app);
 		this.setInstanceValue(value);
 	} else {
-		form.getInstance().cos = ZaCos.getCosByName(value, form.parent._app);
+		form.getInstance()._defaultValues = ZaCos.getCosByName(value, form.parent._app);
 		if(form.getInstance().cos) {
-			//value = form.getInstance().cos.id;
-			value = form.getInstance().cos.id;
+			//value = form.getInstance()._defaultValues.id;
+			value = form.getInstance()._defaultValues.id;
 		} 
 	}
 	this.setInstanceValue(value);

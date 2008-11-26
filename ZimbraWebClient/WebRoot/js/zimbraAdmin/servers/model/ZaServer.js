@@ -670,7 +670,7 @@ function(by, val, withConfig) {
 	resp = ZaRequestMgr.invoke(params, reqMgrParams);		
 	this.initFromJS(resp.Body.GetServerResponse.server[0]);
 	
-	this.cos = ZaApp.getInstance().getGlobalConfig();
+	this._defaultValues = ZaApp.getInstance().getGlobalConfig();
 
 	if(this.attrs[ZaServer.A_zimbraMailboxServiceEnabled]) {
 		this.getMyVolumes();

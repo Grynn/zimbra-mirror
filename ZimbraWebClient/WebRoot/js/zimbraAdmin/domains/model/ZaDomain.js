@@ -939,7 +939,7 @@ function(mods) {
 		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
 	}	
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
-	this.refresh();
+	this.refresh(false,true);
 	//this.initFromJS(resp.domain[0]);
 	ZaDomain.putDomainToCache(this);	
 }
@@ -1235,15 +1235,15 @@ function(by, val, withConfig) {
 			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.loadMethod", null, false);
 		}
 	}
-	this.cos = ZaApp.getInstance().getGlobalConfig();	
+	//this._defaultValues = ZaApp.getInstance().getGlobalConfig();	
 }
 ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
 
 ZaDomain.loadCatchAll = function () {
 	if((this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] && this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == "TRUE")
 		|| (AjxUtil.isEmpty(this.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]) && 
-			(!AjxUtil.isEmpty(this.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]) &&
-				this.cos.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == "TRUE") )) {
+			(!AjxUtil.isEmpty(this._defaultValues.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]) &&
+				this._defaultValues.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled] == "TRUE") )) {
 		
 		var acc = ZaAccount.getCatchAllAccount (this.name);
 		if(!AjxUtil.isEmpty(acc) && !AjxUtil.isEmpty(acc.id) && !AjxUtil.isEmpty(acc.name)) {
@@ -1442,7 +1442,7 @@ ZaDomain.myXModel = {
 				]
 			}
 		},
-		{id:ZaDomain.A_ACLS, ref:ZaDomain.A_allNotebookACLS, type:_LIST_,
+		{id:ZaDomain.A_allNotebookACLS, ref:ZaDomain.A_allNotebookACLS, type:_LIST_,
 			listItem:{type:_OBJECT_,
 				items: [
 					{id:"acl", type:_OBJECT_,

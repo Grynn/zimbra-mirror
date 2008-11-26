@@ -116,7 +116,7 @@ ZaDLXFormView.removeAllMembers = function(event) {
 	var form = this.getForm();
 	form.getInstance().removeAllMembers();
 	form.parent.setDirty(true);
-	form.refresh();
+	//form.refresh();
 };
 
 /**
@@ -128,7 +128,7 @@ ZaDLXFormView.removeMembers = function(event) {
 	if(membersSelection.length) {
 		form.getInstance().removeMembers(membersSelection);
 		form.parent.setDirty(true);
-		form.refresh();	
+		//form.refresh();	
 	}
 };
 
@@ -172,7 +172,7 @@ function(evt) {
 	var currentPageNum = this.getInstanceValue("/memPagenum")+1;
 	this.setInstanceValue(currentPageNum,"/memPagenum");
 	this.getInstance().getMembers(ZaDistributionList.MEMBER_QUERY_LIMIT);
-	this.getForm().refresh();
+	//this.getForm().refresh();
 }
 
 /**
@@ -184,7 +184,7 @@ function(evt) {
 	var currentPageNum = this.getInstanceValue("/memPagenum")-1;
 	this.setInstanceValue(currentPageNum,"/memPagenum");
 	this.getInstance().getMembers(ZaDistributionList.MEMBER_QUERY_LIMIT);
-	this.getForm().refresh();
+	//this.getForm().refresh();
 }
 /**
 * method of the XForm

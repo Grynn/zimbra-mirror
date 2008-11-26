@@ -70,8 +70,6 @@ ZaSettings.initRights = function () {
 			ZaSettings.ENABLED_UI_COMPONENTS[ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents][i]] = true;
 		}	
 	}
-	
-	
 }
 ZaSettings.initMethods.push(ZaSettings.initRights);
 

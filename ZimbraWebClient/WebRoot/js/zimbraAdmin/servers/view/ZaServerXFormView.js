@@ -61,7 +61,7 @@ ZaServerXFormView.prototype.setObject =
 function (entry) {
 	this.entry = entry;
 	this._containedObject = {attrs:{}};
-	this._containedObject.cos = entry.cos;
+	this._containedObject._defaultValues = entry._defaultValues;
 	this._containedObject[ZaServer.A_showVolumes] = entry[ZaServer.A_showVolumes];
 	
 	

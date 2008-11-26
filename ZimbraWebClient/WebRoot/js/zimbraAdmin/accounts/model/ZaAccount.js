@@ -598,8 +598,8 @@ function(tmpObj) {
 	}
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		//check that current theme is part of selected themes
-		var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : ( ZaSettings.COSES_ENABLED ? tmpObj.cos.attrs[ZaCos.A_zimbraPrefSkin] : null);
-		var availableThemes = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] ? tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] : (ZaSettings.COSES_ENABLED ? tmpObj.cos.attrs[ZaCos.A_zimbraAvailableSkin] : null);	
+		var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : ( ZaSettings.COSES_ENABLED ? tmpObj._defaultValues.attrs[ZaCos.A_zimbraPrefSkin] : null);
+		var availableThemes = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] ? tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] : (ZaSettings.COSES_ENABLED ? tmpObj._defaultValues.attrs[ZaCos.A_zimbraAvailableSkin] : null);	
 	
 		if(currentTheme && availableThemes) {
 			var arr = availableThemes instanceof Array ? availableThemes : [availableThemes];
@@ -1181,13 +1181,14 @@ function() {
 
 
 ZaAccount.loadMethod = 
-function(by, val, withCos) {
+function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetAccountRequest", ZaZimbraAdmin.URN, null);
-	if(withCos) {
+	/*if(withCos) {
 		soapDoc.getMethod().setAttribute("applyCos", "1");	
 	} else {
 		soapDoc.getMethod().setAttribute("applyCos", "0");		
-	}
+	}*/
+	soapDoc.getMethod().setAttribute("applyCos", "0");
 	var elBy = soapDoc.set("account", val);
 	elBy.setAttribute("by", by);
 
@@ -1259,7 +1260,7 @@ function(by, val, withCos) {
 ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadMethod);
 
 ZaAccount.loadInfoMethod = 
-function(by, val, withCos) {
+function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetAccountInfoRequest", ZaZimbraAdmin.URN, null);
 
 	var elBy = soapDoc.set("account", val);
@@ -1284,11 +1285,11 @@ function(by, val, withCos) {
 
 ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadInfoMethod);
 
-ZaAccount.prototype.refresh = 
+/*ZaAccount.prototype.refresh = 
 function(withCos) {
 	this.load("id", this.id, withCos);
 	
-}
+}*/
 
 /**
 * public rename; 
@@ -1372,6 +1373,8 @@ ZaAccount.prototype.getMyCosID = function (ins, current, ref) {
 
 ZaAccount.myXModel = {
     items: [
+    	{id:"getAttrs",type:_LIST_},
+    	{id:"setAttrs",type:_LIST_},
         {id:ZaAccount.A2_domainLeftAccounts, ref:ZaAccount.A2_domainLeftAccounts, type:_STRING_},
         {id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true},
         {id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
@@ -1611,7 +1614,7 @@ ZaAccount.setCosChanged = function (value, event, form) {
 	this.setInstanceValue(value);
 	
 	if(ZaItem.ID_PATTERN.test(value)) {
-		this.cos = ZaCos.getCosById(value);
+		this._defaultValues = ZaCos.getCosById(value);
 	} else {
 		this.setError(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[value]));
 		var event = new DwtXFormsEvent(form, this, value);
@@ -1630,17 +1633,26 @@ function (value, event, form){
         var newDomainName = ZaAccount.getDomain(value) ;
         var domainObj =  ZaDomain.getDomainByName(newDomainName) ;
         
-        if ((ZaSettings.COSES_ENABLED) 
-			&& ((newDomainName != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
+        
+        
+        if (((newDomainName != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
 				//set the right default cos at the account creation time
 				|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
 		{ //see if the cos needs to be updated accordingly
 			if(!form.getModel().getInstanceValue(instance, ZaAccount.A_COSId)) {
-				instance.cos = ZaCos.getDefaultCos4Account.call(p, value);	
+				try {
+					var myNewCos = ZaCos.getDefaultCos4Account.call(p, value);
+					if(!AjxUtil.isEmpty(myNewCos))
+						instance._defaultValues = myNewCos;
+				} catch (ex) {
+					//catch access denied and ignore or show a warning
+					//throw any other exception
+					ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.setDomainChanged", null, false);	
+				}	
 			}
 			
-			//instance.attrs[ZaAccount.A_COSId] = instance.cos.id ;
-			//form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A_COSId,instance.cos.id);
+			//instance.attrs[ZaAccount.A_COSId] = instance._defaultValues.id ;
+			//form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A_COSId,instance._defaultValues.id);
 		}
                    
 
@@ -1710,7 +1722,7 @@ function (instance) {
 	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name]);
 			
 	if(defaultCos.id) {
-		instance.cos = defaultCos;
+		instance._defaultValues = defaultCos;
 		instance.attrs[ZaAccount.A_COSId] = defaultCos.id;	
 	}
 }
@@ -1901,7 +1913,7 @@ ZaAccount.setAccountType = function (newType, ev) {
     var newCos = ZaCos.getCosById (newType) ;
     if (newCos.id != instance.attrs[ZaAccount.A_COSId])  {
         //change the account type
-        if (instance.cos) instance.cos = newCos ;
+        if (instance.cos) instance._defaultValues = newCos ;
         instance.autoCos = "FALSE" ;
         instance.attrs[ZaAccount.A_COSId] = newCos.id ;
         form.parent._isCosChanged = true ;

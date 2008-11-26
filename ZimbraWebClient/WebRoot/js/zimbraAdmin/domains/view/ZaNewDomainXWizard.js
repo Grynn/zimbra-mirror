@@ -407,7 +407,7 @@ function(value, event, form) {
 	} else {
 		var cos = ZaCos.getCosByName(value, form.parent._app);
 		if(cos) {
-			//value = form.getInstance().cos.id;
+			//value = form.getInstance()._defaultValues.id;
 			value = cos.id;
 		} 
 	}

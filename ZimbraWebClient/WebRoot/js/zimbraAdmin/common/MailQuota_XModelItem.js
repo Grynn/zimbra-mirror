@@ -85,7 +85,7 @@ MailQuota2_XModelItem.prototype.getSuperValue = function(ins, current, ref) {
 	if (!ins) { return null; }
 	var _ref  = ref  ? ref.replace("/", ".") : this.ref.replace("/", ".");
 //	var _ref = this.ref.replace("/", ".");
-	var value = (eval("ins.cos." + _ref) != null) ? Number(eval("ins.cos." + _ref) / 1048576).toFixed(0) : 0;
+	var value = (eval("ins._defaultValues." + _ref) != null) ? Number(eval("ins._defaultValues." + _ref) / 1048576).toFixed(0) : 0;
 	return value;
 }
 MailQuota2_XModelItem.prototype.getLocalValue = function(ins, current, ref) {

@@ -78,11 +78,11 @@ function(entry) {
 		* If this account does not have a COS assigned to it - assign default COS
 		**/
 		if(this._containedObject.attrs[ZaResource.A_COSId]) {
-			this._containedObject.cos = ZaCos.getCosById(this._containedObject.attrs[ZaResource.A_COSId]);
+			this._containedObject._defaultValues = ZaCos.getCosById(this._containedObject.attrs[ZaResource.A_COSId]);
 		}
 		
 		if(!this._containedObject.cos) {
-			this._containedObject.cos = ZaCos.getCosByName("default");
+			this._containedObject._defaultValues = ZaCos.getCosByName("default");
 			this._containedObject[ZaResource.A2_autoCos] = "TRUE" ;
 		} else {
 			this._containedObject[ZaResource.A2_autoCos] = "FALSE" ;
@@ -98,7 +98,7 @@ function(entry) {
 				* Find the COS assigned to this account 
 				**/
 				if(cosList[i].name == "default") {
-					this._containedObject.cos = cosList[i];
+					this._containedObject._defaultValues = cosList[i];
 					//this._containedObject.attrs[ZaResource.A_COSId] = cosList[i].id;										
 					break;
 				}
@@ -106,13 +106,13 @@ function(entry) {
 			if(!this._containedObject.cos) {
 				//default COS was not found - just assign the first COS
 				if(cosList && cosList.length > 0) {
-					this._containedObject.cos = cosList[0];
+					this._containedObject._defaultValues = cosList[0];
 					//this._containedObject.attrs[ZaResource.A_COSId] = cosList[0].id;					
 				}
 			}
 		}
 		if(!this._containedObject.cos) {
-			this._containedObject.cos = cosList[0];
+			this._containedObject._defaultValues = cosList[0];
 		}	
 	}
 	

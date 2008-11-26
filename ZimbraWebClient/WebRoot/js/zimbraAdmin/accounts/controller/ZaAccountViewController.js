@@ -118,7 +118,7 @@ function(entry) {
 		ZaApp.getInstance().pushView(this.getContentViewId()) ;
 		if(!AjxUtil.isEmpty(entry.id)) {
 			try {
-				entry.refresh(!ZaSettings.COSES_ENABLED);
+				entry.refresh(false,true);
 			} catch (ex) {
 				// Data corruption may cause anexception. We should catch it here in order to display the form anyway.
 				this._handleException(ex, null, null, false);

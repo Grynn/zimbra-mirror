@@ -72,7 +72,11 @@ function(entry) {
 		}
 	}
 	this._containedObject.name = entry.name;
-	this._containedObject.type = entry.type ;
+	this._containedObject.type = entry.type;
+	this._containedObject.setAttrs = entry.setAttrs;
+	this._containedObject.getAttrs = entry.getAttrs;
+	this._containedObject._defaultValues = entry._defaultValues;
+	
 	if(entry.id)
 		this._containedObject.id = entry.id;
 	
@@ -105,44 +109,48 @@ function(entry) {
 		}		
 	}
 					
-	if(ZaSettings.COSES_ENABLED) {	
+	//if(ZaSettings.COSES_ENABLED) {	
 		/**
 		* If this account does not have a COS assigned to it - assign default COS
 		**/
 		if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
 			this._containedObject[ZaAccount.A2_autoCos] = "FALSE" ;
 			
-			//this._containedObject.cos = ZaApp.getInstance().getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
-			this._containedObject.cos = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);
+			//this._containedObject._defaultValues = ZaApp.getInstance().getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
+			//this._containedObject._defaultValues = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);
 			
 		}
-		if(!this._containedObject.cos) {
+		if(!this._containedObject.attrs[ZaAccount.A_COSId]) {
 			this._containedObject[ZaAccount.A2_autoCos] = "TRUE" ;
+			//We do not need to find the COS when displaying an account, because all default (fall-back-to) values are returned in GetEfectiveRightsRequest
 			/**
 			* We did not find the COS assigned to this account,
 			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
 			**/
-			this._containedObject.cos = ZaCos.getDefaultCos4Account(this._containedObject.name);
+			//this._containedObject._defaultValues = ZaCos.getDefaultCos4Account(this._containedObject.name);
 			/*ZaAccount.setDefaultCos(this._containedObject) ;
 			if(!this._containedObject.cos) {
 				//default COS was not found - just assign the first COS
 				var hashMap = ZaApp.getInstance().getCosList().getIdHash();
 				for(var id in hashMap) {
-					this._containedObject.cos = hashMap[id];
+					this._containedObject._defaultValues = hashMap[id];
 					this._containedObject.attrs[ZaAccount.A_COSId] = id;					
 					break;
 				}
 			}*/
 		}
-		this.cosChoices.setChoices([this._containedObject.cos]);
+	if(this._containedObject.setAttrs[ZaAccount.A_COSId]) {
+		var cos = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);	
+		this.cosChoices.setChoices([cos]);
 		this.cosChoices.dirtyChoices();
 	}
+	//}
 	this._containedObject[ZaAccount.A2_autodisplayname] = entry[ZaAccount.A2_autodisplayname];
 	this._containedObject[ZaAccount.A2_confirmPassword] = entry[ZaAccount.A2_confirmPassword];
 	
-	if(ZaSettings.GLOBAL_CONFIG_ENABLED) {
+	/*if(ZaSettings.GLOBAL_CONFIG_ENABLED) {
 		this._containedObject.globalConfig = ZaApp.getInstance().getGlobalConfig();
-	}
+	}*/
    	
 			
 	if(!entry[ZaModel.currentTab])
@@ -675,13 +683,14 @@ ZaAccountXFormView.isAccountTypeSet = function () {
 ZaAccountXFormView.myXFormModifier = function(xFormObject) {	
 	
 	var domainName;
-	if(ZaSettings.DOMAINS_ENABLED) {
+	//if(ZaSettings.DOMAINS_ENABLED) {
+	try {
 		domainName = ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
 		if(!domainName && ZaApp.getInstance().getDomainList().size() > 0)
 			domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
-	} else 
+	} catch (ex) { 
 		domainName = ZaSettings.myDomainName;
-
+	}
 		
 	var emptyAlias = " @" + domainName;
 	var headerItems = [{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:2},{type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2}];
@@ -701,9 +710,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				}	
 		});
 	}
-	if(ZaSettings.SERVERS_ENABLED) {
-		headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer});
-	}
+	headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer});
 	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_accountStatus, label:ZaMsg.NAD_AccountStatus, labelLocation:_LEFT_, choices:this.accountStatusChoices});
 	headerItems.push({type:_OUTPUT_,ref:ZaAccount.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false});
 	headerItems.push({type:_OUTPUT_,ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
@@ -1171,7 +1178,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 								msgName:ZaMsg.NAD_zimbraFeatureMailEnabled,
 								checkBoxLabel:ZaMsg.NAD_zimbraFeatureMailEnabled, 
-								trueValue:"TRUE", falseValue:"FALSE"},							
+								trueValue:"TRUE", falseValue:"FALSE",
+								visibilityChecks:[XFormItem.prototype.hasReadPermission]
+							},							
 							{ref:ZaAccount.A_zimbraFeatureContactsEnabled,
 								type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 								msgName:ZaMsg.NAD_FeatureContactsEnabled,

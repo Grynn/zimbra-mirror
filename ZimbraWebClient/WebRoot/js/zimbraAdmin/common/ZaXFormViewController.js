@@ -242,7 +242,7 @@ function (params) {
 				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
 		
 			this.closeCnfrmDlg();
-			this._currentObject.refresh(false);	
+			this._currentObject.refresh(false,true);	
 			this.fireChangeEvent(this._currentObject);		
 			if(params) {
 				params["func"].call(params["obj"], params["params"]);

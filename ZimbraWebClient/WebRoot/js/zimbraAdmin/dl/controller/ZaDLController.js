@@ -307,15 +307,14 @@ ZaDLController.prototype.saveChangesCallback = function (obj, resp) {
 					ZaAccountMemberOfListView._removeList = []; //reset
 					this._handleException(ex, "ZaDistributionList.prototype.modify: remove distribution list failed", null, false);		
 				}
-				this._currentObject.refresh();
+				this._currentObject.refresh(false,true);
 				this._currentObject.markClean();	
 			
 				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true); 
 				this._view.setDirty(false);
 				if(this._toolbar)
 					this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
-			
-				this._currentObject.refresh(false);	
+				
 				this._view.setObject(this._currentObject);			
 				this.fireChangeEvent(this._currentObject);	
 				this.getProgressDialog().popdown();				

@@ -772,7 +772,7 @@ function (item) {
 				var myCos = null;
 				var maxPwdLen = null;
 				var minPwdLen = null;	
-				item.refresh(!ZaSettings.COSES_ENABLED);
+				item.refresh(true,false);
 				if(item.attrs[ZaAccount.A_zimbraMinPwdLength] != null) {
 					minPwdLen = item.attrs[ZaAccount.A_zimbraMinPwdLength];
 				} 

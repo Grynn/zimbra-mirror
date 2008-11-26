@@ -440,7 +440,19 @@ XFormItem.prototype.updateElement = function() {
 		}
 	}
 }
- 
+
+XFormItem.prototype.hasReadPermission = function () {
+	var instance = this.getInstance();
+	if (!instance.getAttrs)
+		return false;
+	
+	if(!this.refPath)
+		return true;
+		
+	return ((instance.getAttrs.all === true) || (instance.getAttrs[this.refPath] === true));
+		
+}
+
 XFormItem.prototype.updateVisibilityLsnr = function (event) {
 	var updateMethod = this.getUpdateVisibilityMethod();
 	updateMethod.call(this);

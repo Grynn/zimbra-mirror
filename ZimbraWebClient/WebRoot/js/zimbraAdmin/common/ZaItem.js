@@ -167,8 +167,8 @@ function () {
 }
 
 ZaItem.prototype.refresh = 
-function () {
-	this.load();
+function (skipRights,expandDefaults) {
+	this.load(this.id ? "id" : null, this.id ? this.id : null,skipRights,expandDefaults);
 }
 
 ZaItem.prototype.copyTo = 
@@ -179,6 +179,7 @@ function (target/*, fullRecursion*/) {
 }
 
 ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
+	this._defaultValues = {attrs:{}};
 	if(resp && resp.target && resp.target instanceof Array) {
 		if(resp.target[0]) {
 			if(resp.target[0].right && resp.target[0].right instanceof Array) {
@@ -189,23 +190,33 @@ ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
 				}
 			}
 			if(resp.target[0].getAttrs && resp.target[0].getAttrs instanceof Array && 
-				resp.target[0].getAttrs[0] && resp.target[0].getAttrs[0].a && 
-				resp.target[0].getAttrs[0].a instanceof Array) {
-				
-				var getAttrs = resp.target[0].getAttrs[0].a;
+				resp.target[0].getAttrs[0]) {
 				this.getAttrs = {};
-				for (var a in getAttrs) {
-					this.getAttrs[getAttrs[a].n] = true;
+				if(resp.target[0].getAttrs[0].a && resp.target[0].getAttrs[0].a instanceof Array) {
+					var getAttrs = resp.target[0].getAttrs[0].a;
+					for (var a in getAttrs) {
+						this.getAttrs[getAttrs[a].n] = true;
+						if(getAttrs[a]["default"] && getAttrs[a]["default"][0] && getAttrs[a]["default"][0].v && getAttrs[a]["default"][0].v instanceof Array) {
+							var cnt = getAttrs[a]["default"][0].v.length; 
+							for(var i = 0; i<cnt;i++) { 
+								this._defaultValues.attrs[getAttrs[a].n] = getAttrs[a]["default"][0].v[i]._content;
+							}
+						}
+					}
+				} else if (resp.target[0].getAttrs[0].all){
+					this.getAttrs.all = true; 	
 				}
 			}			
 			if(resp.target[0].setAttrs && resp.target[0].setAttrs instanceof Array && 
-				resp.target[0].setAttrs[0] && resp.target[0].setAttrs[0].a && 
-				resp.target[0].setAttrs[0].a instanceof Array) {
-				
-				var setAttrs = resp.target[0].setAttrs[0].a;
+				resp.target[0].setAttrs[0]) {
 				this.setAttrs = {};
-				for (var a in setAttrs) {
-					this.setAttrs[setAttrs[a].n] = true;
+				if(resp.target[0].setAttrs[0].a && resp.target[0].setAttrs[0].a instanceof Array) {
+					var setAttrs = resp.target[0].setAttrs[0].a;
+					for (var a in setAttrs) {
+						this.setAttrs[setAttrs[a].n] = true;
+					}
+				} else if(resp.target[0].setAttrs[0].all) {
+					this.setAttrs.all = true;
 				}
 			}	
 		}
@@ -213,8 +224,11 @@ ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
 	
 }
 
-ZaItem.prototype.loadEffectiveRights = function (by, val) {
+ZaItem.prototype.loadEffectiveRights = function (by, val, expandDefaults) {
 	var soapDoc = AjxSoapDoc.create("GetEffectiveRightsRequest", ZaZimbraAdmin.URN, null);
+	if(expandDefaults) {
+		soapDoc.setMethodAttribute("expandAllAttrs","getAttrs");
+	}
 	var elTarget = soapDoc.set("target", val);
 	elTarget.setAttribute("by",by);
 	elTarget.setAttribute("type",this.type);
@@ -236,10 +250,10 @@ ZaItem.prototype.loadEffectiveRights = function (by, val) {
 	}
 
 }
-ZaItem.prototype.load = function (by, val, withConfig, skipRights) {
+ZaItem.prototype.load = function (by, val, skipRights, expandDefaults) {
 	//load rights
 	if(!skipRights) {
-		this.loadEffectiveRights(by,val);
+		this.loadEffectiveRights(by,val,expandDefaults);
 	}		
 	//Instrumentation code start
 	if(ZaItem.loadMethods[this._iKeyName]) {
@@ -247,7 +261,7 @@ ZaItem.prototype.load = function (by, val, withConfig, skipRights) {
 		var cnt = methods.length;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
-				methods[i].call(this, by, val, withConfig);
+				methods[i].call(this, by, val);
 			}
 		}
 	}	

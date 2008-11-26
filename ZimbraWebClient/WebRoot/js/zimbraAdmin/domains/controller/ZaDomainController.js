@@ -365,7 +365,7 @@ function () {
                 	this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress] = tmpObj[ZaAccount.A_zimbraMailCatchAllAddress] ;
                 } else if (!AjxUtil.isEmpty(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress]) && ZaItem.ID_PATTERN.test(tmpObj[ZaAccount.A_zimbraMailCatchAllAddress])) {
                 	var acc = new ZaAccount(ZaApp.getInstance());
-                	acc.load("id",tmpObj[ZaAccount.A_zimbraMailCatchAllAddress],false);
+                	acc.load("id",tmpObj[ZaAccount.A_zimbraMailCatchAllAddress],false,true);
                 	this._currentObject[ZaAccount.A_zimbraMailCatchAllAddress] = acc;
                 }
             }
@@ -577,7 +577,7 @@ function (params, resp) {
 		var callback = new AjxCallback(this, this.setNotebookAclsCallback);				
 		ZaDomain.setNotebookACLs(params.obj, callback) ;
 //	}	
-	this._currentObject.refresh();
+	this._currentObject.refresh(false,true);
 	this.show(this._currentObject);
 }
 

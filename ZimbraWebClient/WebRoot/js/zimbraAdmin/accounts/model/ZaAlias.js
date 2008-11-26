@@ -231,7 +231,7 @@ function () {
 		throw new Error ("Alias type " + targetType + " is not valid.") ;
 	}
 
-	targetObj.load("name", targetName, (!ZaSettings.COSES_ENABLED));
+	targetObj.load("name", targetName, false, true);
 	
 	return targetObj ;
 }

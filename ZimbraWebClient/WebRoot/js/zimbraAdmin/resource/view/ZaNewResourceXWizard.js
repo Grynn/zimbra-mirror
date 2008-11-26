@@ -159,14 +159,14 @@ function(entry) {
 
 	this._containedObject.id = null;
 	if(ZaSettings.COSES_ENABLED) {
-		this._containedObject.cos = ZaCos.getCosByName("default");
+		this._containedObject._defaultValues = ZaCos.getCosByName("default");
 		if(!this._containedObject.cos) {
 			var cosList = ZaApp.getInstance().getCosList().getArray();
-			this._containedObject.cos = cosList[0];
+			this._containedObject._defaultValues = cosList[0];
 			this._containedObject.attrs[ZaResource.A_COSId] = cosList[0].id;
 		}
 	} else {
-		this._containedObject.cos = new ZaCos();
+		this._containedObject._defaultValues = new ZaCos();
 	}
 	//set the default value of resource type and schedule policy
 	this._containedObject.attrs[ZaResource.A_zimbraCalResType] = ZaResource.RESOURCE_TYPE_LOCATION;
@@ -200,13 +200,13 @@ function(entry) {
 ZaNewResourceXWizard.onCOSChanged = 
 function(value, event, form) {
 	if(ZaItem.ID_PATTERN.test(value))  {
-		form.getInstance().cos = ZaCos.getCosById(value, form.parent._app);
+		form.getInstance()._defaultValues = ZaCos.getCosById(value, form.parent._app);
 		this.setInstanceValue(value);
 	} else {
-		form.getInstance().cos = ZaCos.getCosByName(value, form.parent._app);
+		form.getInstance()._defaultValues = ZaCos.getCosByName(value, form.parent._app);
 		if(form.getInstance().cos) {
-			//value = form.getInstance().cos.id;
-			value = form.getInstance().cos.id;
+			//value = form.getInstance()._defaultValues.id;
+			value = form.getInstance()._defaultValues.id;
 		} 
 	}
 	this.setInstanceValue(value);

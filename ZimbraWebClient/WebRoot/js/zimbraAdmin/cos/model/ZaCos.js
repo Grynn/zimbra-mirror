@@ -308,7 +308,7 @@ function(newName) {
 		busyMsg : ZaMsg.BUSY_RENAME_COS
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.RenameCosResponse;
-	this.initFromJS(resp.cos[0]);	
+	this.initFromJS(resp._defaultValues[0]);	
 }
 
 /**
