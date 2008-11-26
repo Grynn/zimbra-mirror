@@ -33,7 +33,7 @@ DwtKeyMap = function(subclassInit) {
 	this._map			= {};
 	this._args			= {};
 	this._checkedMap	= {};	// cache results of _checkMap()
-	this._load(this._map, AjxKeys, DwtKeyMap.MAP_NAME);
+	this._load(this._map, AjxKeys);
 
 	DwtKeyMap.MOD_ORDER[DwtKeyMap.ALT]		= 1;
 	DwtKeyMap.MOD_ORDER[DwtKeyMap.CTRL]		= 2;
@@ -158,10 +158,13 @@ function() {
  * 
  * @param map			[hash]		hash to populate with shortcuts
  * @param keys			[hash]		properties version of shortcuts
- * @param mapNames		[hash]		map for getting internal map names
+ * @param mapNames		[hash]*		additional map for getting internal map names
  */
 DwtKeyMap.prototype._load =
 function(map, keys, mapNames) {
+
+	mapNames = mapNames || {};
+
 	// preprocess for platform-specific bindings
 	var curPlatform = AjxEnv.platform.toLowerCase();
 	for (var propName in keys) {
@@ -188,7 +191,7 @@ function(map, keys, mapNames) {
 			continue;
 		}
 		if (field != DwtKeyMap.INHERIT && field != "keycode") { continue; }
-		var mapName = mapNames[parts[0]];
+		var mapName = DwtKeyMap.MAP_NAME[parts[0]] || mapNames[parts[0]];
 		if ((this._checkedMap[mapName] === false) ||
 			(!this._checkedMap[mapName] && !this._checkMap(mapName))) { continue; }
 		if (!map[mapName]) {
@@ -199,10 +202,10 @@ function(map, keys, mapNames) {
 		for (var i = 0; i < keySequences.length; i++) {
 			var ks = this._canonicalize(keySequences[i]);
 			if (field == DwtKeyMap.INHERIT) {
-				var parents = ks.toLowerCase().split(/\s*,\s*/);
+				var parents = ks.split(/\s*,\s*/);
 				var parents1 = [];
 				for (var p = 0; p < parents.length; p++) {
-					parents1[p] = mapNames[parents[p]];
+					parents1[p] = DwtKeyMap.MAP_NAME[parents[p]] || mapNames[parents[p]];
 				}
 				map[mapName][parts[1]] = parents1.join(",");
 			} else if (field == "keycode") {
