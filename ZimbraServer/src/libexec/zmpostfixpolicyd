@@ -23,11 +23,12 @@ sub smtpd_access_policy {
   my($domain, $ldap, $mesg, $user);
   my $ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
   my $postfix_pw = getLocalConfig("ldap_postfix_password");
-  my $ldap_master = getLocalConfig("ldap_master_url");
+  my $ldap_url = getLocalConfig("ldap_url");
   ($user, $domain) = split /\@/, lc $attr{recipient};
   syslog $syslog_priority, "Recipient Domain: %s", $domain if $verbose;
   syslog $syslog_priority, "Recipient userid: %s", $user if $verbose;
-  $ldap=Net::LDAP->new("$ldap_master");
+  my @ldap_url = split / /, $ldap_url;
+  $ldap=Net::LDAP->new(\@ldap_url);
   if ( $ldap_starttls_supported ) {
     $mesg = $ldap->start_tls(
           verify => 'require',
