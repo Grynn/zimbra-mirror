@@ -112,7 +112,7 @@ function(listener) {
 
 
 ZaModel.setUnrecoganizedTimezone = function (tz) {
-	var new_tz = "Unrecognized";
+	var new_tz = ZaMsg.CHOICE_UNRECOGNIZED;
 	var tzChoices = ZaSettings.timeZoneChoices.getChoices () ;
 	for (var i=0; i < tzChoices.values.length; i ++) {
 		if (tz == tzChoices.values[i]) {
@@ -124,7 +124,7 @@ ZaModel.setUnrecoganizedTimezone = function (tz) {
 }
 
 ZaModel.setUnrecoganizedChoiceValue = function (v, choices) {
-	var new_v = "Unrecognized";
+	var new_v = ZaMsg.CHOICE_UNRECOGNIZED;
 	
 	for (var i=0; i < choices.length; i ++) {
 		if (v == choices[i].value) {

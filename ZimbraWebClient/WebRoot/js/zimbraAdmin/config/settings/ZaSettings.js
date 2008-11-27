@@ -336,7 +336,7 @@ ZaSettings.INIT[ZaSettings.SKIN_USER_INFO_ID]				= [null, ZaSettings.T_CONFIG, Z
 var timeZoneRules = [{ serverId: "", clientId: "" }]  ;
 var timeZoneRules = timeZoneRules.concat(AjxTimezoneData.TIMEZONE_RULES) ;
 ZaSettings.timeZoneChoices = new XFormChoices(timeZoneRules,
-        XFormChoices.OBJECT_LIST, "serverId", "serverId");
+        XFormChoices.OBJECT_LIST, "serverId", "clientId");
 ZaSettings.INIT[ZaSettings.SKIN_APP_TABS_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_tabs"];
 
 ZaSettings.SKIN_LOGOFF_DOM_ID = "skin_container_logoff" ;

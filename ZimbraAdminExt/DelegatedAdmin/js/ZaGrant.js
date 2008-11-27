@@ -19,11 +19,26 @@ ZaGrant.A_right = "right" ;
 ZaGrant.A_deny = "deny" ;
 ZaGrant.A_target = "target" ;
 ZaGrant.A_target_type = "target_type"
+ZaGrant.A_right_type = "right_type" ;
+ZaGrant.A_inline_right = "inline_right" ;
+ZaGrant.A_inline_verb = "verb" ;
+ZaGrant.A_inline_target_type = "inline_target_type" ;
+ZaGrant.A_inline_attr = "inline_attr" ;
 
 
 ZaGrant.A2_grantsList = "grantsList" ;
 
 ZaGrant.GRANTEE_TYPE = ["usr", "grp"] ;
+
+ZaGrant.RIGHT_TYPE_CHOICES =[
+    {value:"system", label:com_zimbra_delegatedadmin.Col_system_right},
+    {value:"inline", label:com_zimbra_delegatedadmin.Col_inline_right}
+];
+
+ZaGrant.INLINE_VERB_TYPE_CHOICES = [
+    {value:"getAttr", label:com_zimbra_delegatedadmin.Col_inline_verb_set},
+    {value:"setAttr", label:com_zimbra_delegatedadmin.Col_inline_verb_get}
+]
 
  /*
  A sample grant on a target:
@@ -97,11 +112,19 @@ ZaGrant.revokeMethod = function () {
 ZaGrant.myXModel = {
 	items: [
         {id: ZaGrant.A_grantee, type: _STRING_, ref: ZaGrant.A_grantee, required: true },
-        {id: ZaGrant.A_grantee_type, type:_LIST_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
+        {id: ZaGrant.A_grantee_type, type:_STRING_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
         {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
         {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 },
-        {id: ZaGrant.A_target_type, ref: ZaGrant.A_target_type, type: _LIST_, choices: ZaZimbraRights.targetType },
-        {id: ZaGrant.A_target, type:_STRING_, ref: ZaGrant.A_target, required: true }
+        {id: ZaGrant.A_target_type, ref: ZaGrant.A_target_type, type: _STRING_, choices: ZaZimbraRights.targetType },
+        {id: ZaGrant.A_target, type:_STRING_, ref: ZaGrant.A_target, required: true } ,
+        {id: ZaGrant.A_right_type, type:_ENUM_, ref: ZaGrant.A_right_type, required:true, choices: ZaGrant.RIGHT_TYPE_CHOICES },
+
+        {id: ZaGrant.A_inline_right, ref: ZaGrant.A_inline_right, type: _OBJECT_, items: [
+                {id: ZaGrant.A_inline_verb, type: _STRING_, ref: ZaGrant.A_inline_verb, choices: ZaGrant.INLINE_VERB_TYPE_CHOICES},
+                {id: ZaGrant.A_inline_target_type, type: _STRING_, ref: ZaGrant.A_inline_target_type, choices: ZaZimbraRights.targetType},
+                {id: ZaGrant.A_inline_attr, type: _STRING_, ref: ZaGrant.A_inline_attr }
+            ]
+        }
     ]
 };
 
