@@ -224,8 +224,6 @@ SELECT {
 }
 
 .ZButton {
-        cursor: pointer;
-	text-decoration: none;
 }
 
 .ZButton TABLE {
@@ -243,6 +241,10 @@ SELECT {
 	width: 80px;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
+}
+
+.ZButton .Warn TABLE {
+	background-color: #C46A64;
 }
 
 .ZButton .Title {

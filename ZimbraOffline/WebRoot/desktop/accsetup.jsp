@@ -264,12 +264,12 @@ function onEditLink(id, keep) {
                   <tr>
 <c:if test="${accountFlavor ne ''}">
                     <td id="saveButton" align="left">
-                      <zd:button onclick='OnSubmit()' text='${save}'/>
+                      <zd:button onclick='OnSubmit()' text='${save}' type='default'/>
                     </td>
                     <td align="center" width="9%"><span id="whattodo" class="ZOfflineNotice"></span></td>
 </c:if>
                     <td id="cancelButton" align="right">
-                      <zd:button onclick='OnCancel()' text='${cancel}' primary='false'/>
+                      <zd:button onclick='OnCancel()' text='${cancel}'/>
                     </td>
                   </tr>
                 </table>

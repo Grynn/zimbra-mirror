@@ -237,11 +237,11 @@ function submit(id, name, type, flavor, verb) {
                 <table cellpadding="5" cellspacing="0" width="95%">
                   <tr>
                     <td id="loginButton" align="left">
-                      <zd:button onclick='OnLogin()' text='${login}'/>
+                      <zd:button onclick='OnLogin()' text='${login}' type='default'/>
                     </td>
                     <td align="center"><span id="whattodo" class="ZOfflineNotice"></span></td>
                     <td id="addButton" align="right">
-                      <zd:button onclick='OnAdd()' text='${add}' primary='false'/>
+                      <zd:button onclick='OnAdd()' text='${add}'/>
                     </td>
                   </tr>
               </table>
