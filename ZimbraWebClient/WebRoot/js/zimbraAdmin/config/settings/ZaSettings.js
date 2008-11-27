@@ -56,7 +56,7 @@ ZaSettings.postInit = function() {
 ZaSettings.initRights = function () {
 	ZaSettings.ENABLED_UI_COMPONENTS=[];
 	ZaZimbraAdmin.currentAdminAccount = new ZaAccount();
-	ZaZimbraAdmin.currentAdminAccount.load("name", ZaZimbraAdmin.currentUserLogin);
+	ZaZimbraAdmin.currentAdminAccount.load("name", ZaZimbraAdmin.currentUserLogin,false,true);
 	if(AjxUtil.isEmpty(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents])) {
 		ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
 	} else {
@@ -276,10 +276,15 @@ ZaSettings.DOMAIN_SKIN_TAB = "domainSkinsTab";
 ZaSettings.DOMAIN_WIKI_TAB = "domainWikiTab";
 ZaSettings.DOMAIN_VIRTUAL_HOST_TAB = "domainVirtualHostTab";
 ZaSettings.DOMAIN_INTEROP_TAB = "domainInteropTab";
+ZaSettings.DOMAIN_AUTH_TAB = "domainAuthTab";
+ZaSettings.DOMAIN_GAL_TAB = "domainGALTab";
+ZaSettings.DOMAIN_ZIMLETS_TAB = "domainGALTab";
 
 //Domain operations
 ZaSettings.DOMAIN_GAL_WIZ = "domainGALWizard";
 ZaSettings.DOMAIN_AUTH_WIZ = "domainAuthWizard";
+ZaSettings.DOMAIN_WIKI_WIZ = "domainWikiWizard";
+ZaSettings.DOMAIN_CHECK_MX_WIZ = "domainCheckMXWiz";
 
 //ZaSettings.DOMAINS_ARE_READONLY = false;
 

@@ -247,6 +247,15 @@ ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDoma
 
 ZaDomain.LOCAL_DOMAIN_QUERY = "(zimbraDomainType=local)";
 
+//constants for rights
+ZaDomain.RIGHT_CREATE_DOMAIN = "createDomain";
+ZaDomain.RIGHT_DELETE_DOMAIN = "deleteDomain";
+ZaDomain.RIGHT_RENAME_DOMAIN = "renameDomain";
+ZaDomain.RIGHT_CREATE_SUB_DOMAIN = "createSubDomain";
+ZaDomain.RIGHT_CONFIGURE_GAL = "configureExternalGAL";
+ZaDomain.RIGHT_CONFIGURE_AUTH = "configureExternaAuth";
+ZaDomain.RIGHT_INIT_NOTEBOOK = "initNotebook";
+
 ZaDomain.cacheCounter = 0;
 ZaDomain.staticDomainByNameCacheTable = {};
 ZaDomain.staticDomainByIdCacheTable = {};
@@ -488,6 +497,13 @@ function(tmpObj) {
 	newDomain.initFromJS(resp.domain[0]);
 
 	return newDomain;
+}
+
+ZaDomain.prototype.canConfigureWiki = function () {
+	if(this.rights || !this.getAttrs)
+		return false;
+	if(this.rights[ZaDomain.RIGHT_INIT_NOTEBOOK] && (this.setAttrs.all || this.setAttrs[ZaDomain.A_zimbraNotebookAccount]))
+		return true;
 }
 
 ZaDomain.testAuthSettings = 

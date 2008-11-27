@@ -567,7 +567,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			
 	switchGroup.items.push(case1);
 	
-	if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED) {	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
 		tabIx++;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_GAL});
 		var case2 = {type:_ZATABCASE_, caseKey:tabIx,
@@ -612,7 +612,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		};
 		switchGroup.items.push(case2);
 	}
-	if(ZaSettings.DOMAIN_AUTH_WIZ_ENABLED)	{
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_AUTH_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 	{
 		tabIx++;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Authentication});
 		var case3 = {type:_ZATABCASE_, caseKey:tabIx, 
@@ -663,7 +663,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		};
 		switchGroup.items.push(case3);	
 	}
-	if(ZaSettings.DOMAIN_VIRTUAL_HOST_ENABLED)	{
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_VIRTUAL_HOST_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])	{
 		tabIx++;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_VirtualHost});
 		var case4 = {type:_ZATABCASE_, caseKey:tabIx,
@@ -700,7 +700,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		};
 		switchGroup.items.push(case4);	
 	}
-	if(ZaSettings.DOMAIN_WIKI_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_WIKI_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])	{
 		tabIx++;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Notebook});
 		var case5 = {type:_ZATABCASE_, caseKey:tabIx,cssStyle:"padding-left:10px",
@@ -765,7 +765,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		switchGroup.items.push(case5);
 	}
 	
-	if(ZaSettings.DOMAIN_INTEROP_ENABLED) {	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_INTEROP_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
         tabIx++;
         tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Interop});
         var case6 = {type: _ZATABCASE_, caseKey:tabIx,
@@ -812,7 +812,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		switchGroup.items.push(case6);	
 	}   
 	
-	if(ZaSettings.ZIMLETS_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_ZIMLETS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		tabIx++;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Zimlets});
        	var case7 = {type:_ZATABCASE_, id:"account_form_zimlets_tab", numCols:1,
@@ -833,7 +833,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
     	switchGroup.items.push(case7);
 	}
     //domain skin properties
-    if(ZaSettings.DOMAIN_SKIN_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		tabIx++;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Themes});
        	var case8 = {type:_ZATABCASE_, id:"domain_form_skin_tab", colSizes:["auto"],numCols:1,
