@@ -68,6 +68,15 @@ function (entry) {
 	this._containedObject[ZaServer.A_ServiceHostname] = entry[ZaServer.A_ServiceHostname];
 	this._containedObject.name = entry.name;
 	this._containedObject.type = entry.type ;
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+			
 	if(entry.id) this._containedObject.id = entry.id;
 	//this._containedObject = AjxUtil.createProxy(entry,3);
 

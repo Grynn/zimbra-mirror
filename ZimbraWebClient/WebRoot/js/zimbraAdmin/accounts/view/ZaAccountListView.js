@@ -109,9 +109,9 @@ function(account, now, isDragProxy) {
 				case ZaItem.ACCOUNT:
 					if(account.attrs[ZaAccount.A_isAdminAccount]=="TRUE") {
 						html[idx++] = AjxImg.getImageHtml("AdminUser");
-					} else if (ZaAccount.A_zimbraIsDomainAdminAccount && account.attrs[ZaAccount.A_zimbraIsDomainAdminAccount]=="TRUE") {
+					}/* else if (ZaAccount.A_zimbraIsDomainAdminAccount && account.attrs[ZaAccount.A_zimbraIsDomainAdminAccount]=="TRUE") {
 						html[idx++] = AjxImg.getImageHtml("DomainAdminUser");
-					} else {
+					}*/ else {
 						html[idx++] = AjxImg.getImageHtml("Account");
 					}	
 				break;

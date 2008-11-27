@@ -143,7 +143,15 @@ function(entry) {
 	this._containedObject.attrs = new Object();
 	this._containedObject.type = entry.type ;
 	this._containedObject.name = entry.name ;
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
 	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+		
 	for (var a in entry.attrs) {
 		if(entry.attrs[a] instanceof Array) {
 			this._containedObject.attrs[a] = [].concat(entry.attrs[a]);

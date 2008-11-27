@@ -531,6 +531,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 							this.getForm().itemChanged(this, elementValue, event);
 						}
 					},
+					visibilityChecks:[],
+					enableDisableChecks:[],
 					//cssClass:"search_input", 
 					cssStyle:"overflow: hidden;", width:"100%"
 				},

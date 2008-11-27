@@ -61,7 +61,7 @@ ZaSearch._savedSearchToBeUpdated = true ; //initial value to be true
 
 ZaSearch.getPredefinedSavedSearchesForAdminOnly = function () {
     return   [
-        {name: ZaMsg.ss_admin_account , query: "(|(zimbraIsAdminAccount=TRUE)(zimbraIsDomainAdminAccount=TRUE))"}
+        {name: ZaMsg.ss_admin_account , query: "(zimbraIsAdminAccount=TRUE)"}
     ];
 }
                   
@@ -595,11 +595,11 @@ function () {
 	if (! currentSavedSearches){//load the predefined searches
 		if (AjxEnv.hasFirebug) console.log("Load the predefined saved searches ...") ;
 		var savedSearchArr = [] ;
-		if (!ZaSettings.isDomainAdmin) { //admin only searches
+		//if (!ZaSettings.isDomainAdmin) { //admin only searches
 			for (var m=0; m < ZaSearch.getPredefinedSavedSearchesForAdminOnly().length; m++){
 				savedSearchArr.push (ZaSearch.getPredefinedSavedSearchesForAdminOnly()[m]) ;
 			}
-		}
+		//}
 		
 		for (var n=0; n < ZaSearch.getPredefinedSavedSearches().length; n ++) {
 			savedSearchArr.push (ZaSearch.getPredefinedSavedSearches()[n]) ;

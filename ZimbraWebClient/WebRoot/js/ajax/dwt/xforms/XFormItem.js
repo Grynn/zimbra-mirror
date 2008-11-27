@@ -441,16 +441,51 @@ XFormItem.prototype.updateElement = function() {
 	}
 }
 
-XFormItem.prototype.hasReadPermission = function () {
+XFormItem.prototype.hasReadPermission = function (refToCheck) {
 	var instance = this.getInstance();
 	if (!instance.getAttrs)
 		return false;
 	
-	if(!this.refPath)
+	var refPath=null;
+	if(refToCheck) {
+		refPath=refToCheck;
+	} else {
+		if(!this.refPath)
+			return true;
+		else
+			refPath=this.refPath;
+	}
+		
+	return ((instance.getAttrs.all === true) || (instance.getAttrs[refPath] === true));
+}
+
+XFormItem.prototype.hasWritePermission = function (refToCheck) {
+	var instance = this.getInstance();
+	if (!instance.setAttrs)
+		return false;
+	
+	var refPath=null;
+	if(refToCheck) {
+		refPath=refToCheck;
+	} else {
+		if(!this.refPath)
+			return true;
+		else
+			refPath=this.refPath;
+	}
+		
+	return ((instance.setAttrs.all === true) || (instance.setAttrs[refPath] === true));
+}
+
+XFormItem.prototype.hasRight = function (right) {
+	var instance = this.getInstance();
+	if (!instance.rights)
+		return false;
+	
+	if(!right)
 		return true;
 		
-	return ((instance.getAttrs.all === true) || (instance.getAttrs[this.refPath] === true));
-		
+	return (instance.rights[right] === true);
 }
 
 XFormItem.prototype.updateVisibilityLsnr = function (event) {
@@ -2074,7 +2109,8 @@ Textfield_XFormItem.prototype.elementChangeHandler="onchange";
 //Textfield_XFormItem.prototype.onclickHandler="onclick";
 Textfield_XFormItem.prototype.focusable = true;
 Textfield_XFormItem.prototype.containerCssClass = "xform_field_container";
-
+Textfield_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
+Textfield_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 //	methods
 Textfield_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 	var inputType = this._inputType;
@@ -2238,7 +2274,8 @@ Checkbox_XFormItem.prototype.align = _RIGHT_;
 Checkbox_XFormItem.prototype.trueValue = _UNDEFINED_;		// Don't set in proto so model can override
 Checkbox_XFormItem.prototype.falseValue = _UNDEFINED_;
 Checkbox_XFormItem.prototype.focusable = true;
-
+Checkbox_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
+Checkbox_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 //	methods
 Checkbox_XFormItem.prototype.outputHTML = function (html, currentCol) {
 	// figure out how to show the checkbox as checked or not
@@ -2691,7 +2728,8 @@ Select1_XFormItem.prototype.alwaysUpdateChoices = false;
 Select1_XFormItem.prototype.focusable = true;
 Select1_XFormItem.prototype.cssClass = "xform_select1";
 Select1_XFormItem.prototype.containerCssClass = "xform_select_container";
-
+Select1_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
+Select1_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 //	methods
 Select1_XFormItem.prototype.initFormItem = function () {
 	// if we're dealing with an XFormChoices object...
@@ -4162,6 +4200,9 @@ Dwt_ColorPicker_XFormItem.prototype.constructWidget = function () {
 }
 
 Dwt_ColorPicker_XFormItem.prototype.updateWidget = function (newValue) {
+	if(!this.widget)
+		return;
+		
 	//if (AjxEnv.hasFirebug) console.log ("new color = " + newValue) ;
 	if (newValue != null) {
 		this.widget.setColor(newValue);

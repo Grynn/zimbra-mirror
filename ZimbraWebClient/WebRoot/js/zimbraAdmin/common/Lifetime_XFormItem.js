@@ -51,7 +51,8 @@ MLifetime_XModelItem.prototype.validateType = function (value) {
 **/
 Lifetime_XFormItem = function() {}
 XFormItemFactory.createItemType("_LIFETIME_", "lifetime", Lifetime_XFormItem, Composite_XFormItem);
-
+Lifetime_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
+Lifetime_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 Lifetime_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {

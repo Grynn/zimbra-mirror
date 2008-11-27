@@ -247,6 +247,14 @@ ZaAccount.A2_previousName = "previousName" ;
 ZaAccount.A2_alias_selection_cache = "alias_selection_cache";
 ZaAccount.A2_fwdAddr_selection_cache = "fwdAddr_selection_cache";
 ZaAccount.A2_fp_selection_cache = "fp_selection_cache"; 
+
+//constants for rights
+
+ZaAccount.SET_PASSWORD_RIGHT = "setPassword";
+ZaAccount.REINDEX_MBX_RIGHT = "reindexMailbox";
+ZaAccount.GET_MBX_DUMP_RIGHT = "getMailboxDump";
+ZaAccount.VIEW_MAIL_RIGHT = "viewEmail";
+
 ZaAccount.checkValues = 
 function(tmpObj) {
 	/**

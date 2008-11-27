@@ -55,6 +55,8 @@ OSelect1_XFormItem.MENU_DIR_UP=2;
 OSelect1_XFormItem.MENU_DIR_UNKNOWN=0;
 OSelect1_XFormItem.NOTE_HEIGHT=40;
 OSelect1_XFormItem.prototype.menuDirection = OSelect1_XFormItem.MENU_DIR_UNKNOWN;
+OSelect1_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
+OSelect1_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 
 //	methods
 OSelect1_XFormItem.prototype.initFormItem = function () {

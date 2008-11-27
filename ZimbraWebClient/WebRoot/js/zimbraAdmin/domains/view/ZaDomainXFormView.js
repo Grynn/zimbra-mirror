@@ -67,7 +67,16 @@ function(entry) {
     ZaAccount.prototype.manageSpecialAttrs.call (entry) ;
     this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
-	this._containedObject._defaultValues = entry._defaultValues;
+	
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+		
 	this._containedObject.name = entry.name;
 	this._containedObject.id = entry.id;
 	this._containedObject.type = entry.type ;
@@ -489,14 +498,14 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 
          ]
 	};
-	if(ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME) {
+	//if(ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME) {
 		case1.items.push({ ref: ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, 
 			  label:ZaMsg.Domain_zimbraPublicServiceHostname, width:250,
 			  onChange:ZaDomainXFormView.onFormFieldChanged
 		  	});
-	}
-	if(ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED) {
-		if(!ZaSettings.DOMAINS_ARE_READONLY && ZaSettings.GLOBAL_CONFIG_ENABLED) {
+	//}
+	//if(ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED) {
+		//if(!ZaSettings.DOMAINS_ARE_READONLY && ZaSettings.GLOBAL_CONFIG_ENABLED) {
 			var group = {type:_GROUP_,colSpan:"2", id:"dns_check_group",items: [], width:"100%"};
 			case1.items.push({ type: _DWT_ALERT_,
 			containerCssStyle: "padding-bottom:0px",
@@ -507,7 +516,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			group.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPER_TEXTFIELD_, colSpan:2,
 	 			txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
 	 		case1.items.push(group);
-		} else {
+		/*} else {
 			case1.items.push({ type: _DWT_ALERT_,
 			containerCssStyle: "padding-bottom:0px",
 			style: DwtAlert.INFO,
@@ -516,17 +525,17 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 			colSpan:"2"});
 			case1.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, colSpan:2, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _TEXTFIELD_), 
 	 			label:ZaMsg.Domain_zimbraDNSCheckHostname, onChange:ZaDomainXFormView.onFormFieldChanged});
-		}
-	}
+		}*/
+	//}
 		
-	if(ZaSettings.CAN_CHANGE_DOMAIN_DESCRIPTION) {
+	//if(ZaSettings.CAN_CHANGE_DOMAIN_DESCRIPTION) {
 		case1.items.push({ ref: ZaDomain.A_description, type: _INPUT_, 
 		  label:ZaMsg.NAD_Description, width:250,
 		  onChange:ZaDomainXFormView.onFormFieldChanged});
-	}
+	//}
 
 
-    if(ZaSettings.COSES_ENABLED) {
+    //if(ZaSettings.COSES_ENABLED) {
 		case1.items.push(
 			{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
 				label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
@@ -552,17 +561,17 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 					return newValue;
 				}
 			});
-	}
-	if(ZaSettings.CAN_CHANGE_DOMAIN_STATUS) {
+	//}
+	//if(ZaSettings.CAN_CHANGE_DOMAIN_STATUS) {
 		case1.items.push({ref:ZaDomain.A_zimbraDomainStatus, type:_OSELECT1_, msgName:ZaMsg.Domain_zimbraDomainStatus,
 				label:ZaMsg.Domain_zimbraDomainStatus+":", 
 				labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaDomainXFormView.onFormFieldChanged});
-	}
-	if(ZaSettings.CAN_CHANGE_DOMAIN_NOTES) {
+	//}
+	//if(ZaSettings.CAN_CHANGE_DOMAIN_NOTES) {
 		case1.items.push({ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
 				  label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top", width:250,
 				  onChange:ZaDomainXFormView.onFormFieldChanged});
-	}
+	//}
 	
 			
 	switchGroup.items.push(case1);
@@ -842,7 +851,8 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
             	{type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Color_Settings,//colSizes:["175px","*"],
 					items: [
                     	{ref:ZaDomain.A_zimbraSkinForegroundColor,
-                            type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
+                            //type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
+                            type: _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinForegroundColor,
                             labelLocation:_LEFT_,
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
@@ -850,21 +860,25 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
                             onChange:ZaTabView.onFormFieldChanged
                         }  ,
                         {ref:ZaDomain.A_zimbraSkinBackgroundColor,
-                            type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
+                            //type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
+                            type: _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinBackgroundColor,
                             labelLocation:_LEFT_,  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             buttonImage: "Color", width: "50px" ,
                             onChange:ZaTabView.onFormFieldChanged
                         }  ,
                         {ref:ZaDomain.A_zimbraSkinSecondaryColor,
-                            type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            //type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_, 
+                            type: _SUPER_DWT_COLORPICKER_,
+                            resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             label:ZaMsg.NAD_zimbraSkinSecondaryColor,
                             labelLocation:_LEFT_,
                             buttonImage: "Color", width: "50px" ,
                             onChange:ZaTabView.onFormFieldChanged
                         },
                         {ref:ZaDomain.A_zimbraSkinSelectionColor,
-                            type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
+                            //type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
+                            type: _SUPER_DWT_COLORPICKER_,
                             label:ZaMsg.NAD_zimbraSkinSelectionColor,
                             labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
                             buttonImage: "Color", width: "50px" ,
@@ -950,11 +964,11 @@ function(item) {
     if (cos) {
         cosDisplayValue = cos.name ;
 
-        if (ZaSettings.isDomainAdmin) {
+        /*if (ZaSettings.isDomainAdmin) {
             var cosDescription = cos.attrs[ZaCos.A_description] ;
             if (cosDescription)
                 cosDisplayValue = cosDescription ;
-        }
+        }*/
     } else {
         cosDisplayValue = AjxMessageFormat.format (ZaMsg.ERROR_INVALID_COS_VALUE, [cosId]) ;
     }

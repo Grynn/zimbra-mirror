@@ -268,6 +268,8 @@ Cos_Subnet_XModelItem.prototype.pattern =  [AjxUtil.IP_ADDRESS_RE, AjxUtil.SUBNE
 Super_XFormItem = function () { }
 XFormItemFactory.createItemType("_SUPER_FIELD_", "cos_field", Super_XFormItem, Composite_XFormItem);
 Super_XFormItem.prototype.bmolsnr = true;
+Super_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
+Super_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 Super_XFormItem.checkIfOverWriten = function() {
 	if(this.getModelItem() && this.getModelItem().getLocalValue(this.getInstance())==null)
 		return false;

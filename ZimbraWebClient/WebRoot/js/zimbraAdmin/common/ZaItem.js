@@ -203,7 +203,8 @@ ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
 							}
 						}
 					}
-				} else if (resp.target[0].getAttrs[0].all){
+				} 
+				if (resp.target[0].getAttrs[0].all){
 					this.getAttrs.all = true; 	
 				}
 			}			
@@ -215,7 +216,8 @@ ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
 					for (var a in setAttrs) {
 						this.setAttrs[setAttrs[a].n] = true;
 					}
-				} else if(resp.target[0].setAttrs[0].all) {
+				} 
+				if(resp.target[0].setAttrs[0].all) {
 					this.setAttrs.all = true;
 				}
 			}	
