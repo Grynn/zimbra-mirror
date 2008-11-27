@@ -28,6 +28,8 @@ import com.zimbra.common.localconfig.LC;
 
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.HttpsURLConnection;
+
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 public class GMailImport extends ImapSync {
@@ -37,10 +39,14 @@ public class GMailImport extends ImapSync {
     private static final Log LOG = ZimbraLog.datasource;
 
     static {
-        HttpsURLConnection.setDefaultSSLSocketFactory(getSSLSocketFactory());
+    	try {
+    		HttpsURLConnection.setDefaultSSLSocketFactory(getSSLSocketFactory());
+    	} catch (GeneralSecurityException x) {
+    		LOG.error(x);
+    	}
     }
 
-    private static SSLSocketFactory getSSLSocketFactory() {
+    private static SSLSocketFactory getSSLSocketFactory() throws GeneralSecurityException {
         return LC.data_source_trust_self_signed_certs.booleanValue() ?
             new DummySSLSocketFactory() : new CustomSSLSocketFactory();
     }

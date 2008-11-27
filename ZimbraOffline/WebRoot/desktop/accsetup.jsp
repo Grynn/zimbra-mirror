@@ -10,6 +10,7 @@
 <c:set var="accountFlavor" value="${param.accountFlavor eq null ? '' : param.accountFlavor}"/>
 <c:set var='cancel'><fmt:message key='Cancel'/></c:set>
 <c:set var='save'><fmt:message key='Save'/></c:set>
+<c:set var='buttonType' value="default"/>
 <c:set var="uri" value="/zimbra/desktop/accsetup.jsp"/>
 
 <c:choose>
@@ -194,10 +195,26 @@ function onEditLink(id, keep) {
 <c:choose>
 <c:when test="${accountFlavor eq ''}">
 </c:when>
-<c:when test="${not empty bean.error}" >
+<c:when test="${not empty bean.error}">
           <tr>
             <td colspan="2" width="450px">
-              <div id="message" class="ZMessageInfo"><span class='ZOfflineError'>${bean.error}</span></div>
+              <div id="message" class="ZMessageInfo">
+                <span class='ZOfflineError'>${bean.error}</span>
+		        <c:if test="${not empty bean.sslCertInfo}">
+		            <zd:sslCertError/>
+		            <br>
+					<c:choose>
+					<c:when test="${not empty bean.sslCertInfo.alias}">
+					    <c:set var='save'><fmt:message key='CertAcceptButton'/></c:set>
+					    <c:set var='buttonType' value="Warn"/>
+					    <span class='ZOfflineError'><fmt:message key='CertAcceptWarning'/></span>
+					</c:when>
+					<c:otherwise>
+					    <span class='ZOfflineError'><fmt:message key='CertCantAccept'/></span>
+					</c:otherwise>
+					</c:choose>
+		        </c:if>
+              </div>
             </td>
           </tr>
 </c:when>
@@ -264,7 +281,7 @@ function onEditLink(id, keep) {
                   <tr>
 <c:if test="${accountFlavor ne ''}">
                     <td id="saveButton" align="left">
-                      <zd:button onclick='OnSubmit()' text='${save}' type='default'/>
+                      <zd:button onclick='OnSubmit()' text='${save}' type='${buttonType}'/>
                     </td>
                     <td align="center" width="9%"><span id="whattodo" class="ZOfflineNotice"></span></td>
 </c:if>

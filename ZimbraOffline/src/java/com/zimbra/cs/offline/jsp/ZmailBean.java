@@ -68,6 +68,8 @@ public class ZmailBean extends MailBean {
 			isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
                     if (!password.equals(JspConstants.MASKED_PASSWORD))
                         attrs.put(OfflineConstants.A_offlineRemotePassword, password);
+            if (sslCertAlias != null && sslCertAlias.length() > 0)
+            	attrs.put(OfflineConstants.A_offlineSslCertAlias, sslCertAlias);
 		    attrs.put(JspConstants.OFFLINE_REMOTE_HOST, host);
 		    attrs.put(JspConstants.OFFLINE_REMOTE_PORT, port);
 		    attrs.put(JspConstants.OFFLINE_REMOTE_SSL, isSsl ? Provisioning.TRUE : Provisioning.FALSE);

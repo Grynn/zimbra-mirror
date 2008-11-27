@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <localconfig>
-  <key name="ssl_allow_untrusted_certs">
-    <value>true</value>
-  </key>
-  <key name="data_source_trust_self_signed_certs">
-    <value>true</value>
-  </key>
   <key name="data_source_new_sync_enabled">
     <value>true</value>
+  </key>
+  <key name="zimbra_java_path">
+    <value>jre</value>
   </key>
   <key name="zdesktop_app_id">
     <value>4062-5711-9195-4050</value>
@@ -51,6 +48,12 @@
   </key>
   <key name="zimbra_class_rulerewriterfactory">
     <value>com.zimbra.cs.filter.OfflineRuleRewriterFactory</value>
+  </key>
+  <key name="zimbra_class_sslprotocolsocketfactory">
+    <value>com.zimbra.common.util.CustomSSLProtocolSocketFactory</value>
+  </key>
+  <key name="ssl_allow_mismatched_certs">
+    <value>false</value>
   </key>
   <key name="zimbra_mailbox_groups">
     <value>100</value>

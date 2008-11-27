@@ -102,6 +102,10 @@ SELECT {
 	padding-right: 10px;
 }
 
+.ZFieldSublabelLeft {
+    text-align: left;
+}
+
 .ZHint {
 	color: gray;
 	white-space: nowrap;

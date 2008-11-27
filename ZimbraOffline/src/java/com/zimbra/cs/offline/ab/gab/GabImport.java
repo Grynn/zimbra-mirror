@@ -35,9 +35,7 @@ public class GabImport implements DataSource.DataImport {
         session = new SyncSession(ds);
     }
 
-    public String test() throws ServiceException {
-        return null;
-    }
+    public void test() throws ServiceException {}
 
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {

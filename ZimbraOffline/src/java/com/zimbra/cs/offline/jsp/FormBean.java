@@ -3,7 +3,9 @@ package com.zimbra.cs.offline.jsp;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.SSLCertInfo;
 import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
 
 public abstract class FormBean extends PageBean {
@@ -13,6 +15,10 @@ public abstract class FormBean extends PageBean {
 	private String error;
 	
 	private Set<String> invalids = new HashSet<String>();
+	
+	private SSLCertInfo sslCertInfo;
+	
+	protected String sslCertAlias;
 	
 	public FormBean() {}
 	
@@ -59,8 +65,21 @@ public abstract class FormBean extends PageBean {
 	        return;	    
 	    String msg = getMessage("exception." + exCode, false);
 	    this.error = msg == null ? exCode + ": " + exMsg : msg;
+	    
+	    if (exCode.equals(RemoteServiceException.SSLCERT_ERROR)) {
+	    	if (exMsg.length() > 0)
+	    		sslCertInfo = SSLCertInfo.deserialize(exMsg);
+	    }
 	}
-	
+
+    public SSLCertInfo getSslCertInfo() {
+    	return sslCertInfo;
+    }
+    
+    public void setSslCertAlias(String sslCertAlias) {
+    	this.sslCertAlias = sslCertAlias;
+    }
+    
 	public String getError() {
 		return error;
 	}

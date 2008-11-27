@@ -19,10 +19,13 @@ package com.zimbra.cs.account.offline;
 import com.sun.mail.smtp.SMTPTransport;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.CustomTrustManager;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
@@ -49,10 +52,15 @@ import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.cert.CertificateException;
 import java.util.*;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
+import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLPeerUnverifiedException;
+import javax.security.auth.login.LoginException;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 
@@ -257,6 +265,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	attrs.put(key, value);
     	modifyDataSource(ds.getAccount(), ds.getId(), attrs, false);
     }
+    
+    private void checkForSSLCertAlias(Map<String, ? extends Object> attrs) throws ServiceException {
+    	String sslCertAlias = (String)attrs.remove(OfflineConstants.A_offlineSslCertAlias);
+    	if (sslCertAlias != null) {
+    		try {
+    			CustomTrustManager.getInstance().acceptCertificates(sslCertAlias);
+    		} catch (GeneralSecurityException x) {
+    			throw RemoteServiceException.SSLCERT_NOT_ACCEPTED(x.getMessage(), x);
+    		}
+    	}
+    }
 
     private void revalidateRemoteLogin(OfflineAccount acct, Map<String, ? extends Object> changes) throws ServiceException {
         String password = acct.getAttr(A_offlineRemotePassword);
@@ -305,6 +324,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         }
         
         if (!hasChange) return;
+        
+        checkForSSLCertAlias(changes);
 
         // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
         ZMailbox.Options options = new ZMailbox.Options(acct.getAttr(Provisioning.A_mail), AccountBy.name, password, Offline.getServerURI(baseUri, ZimbraServlet.USER_SERVICE_URI));
@@ -449,6 +470,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             throw ServiceException.INVALID_REQUEST("must be valid email address: " + emailAddress, null);
         String uid = parts[0];
 
+        checkForSSLCertAlias(attrs);
+        
         ZGetInfoResult zgi = newZMailbox(emailAddress, (String)attrs.get(A_offlineRemotePassword), attrs, ZimbraServlet.USER_SERVICE_URI).getAccountInfo(false);
         OfflineLog.offline.info("Remote Zimbra Server Version: " + zgi.getVersion());
         OfflineAccount.Version remoteVersion = new OfflineAccount.Version(zgi.getVersion());
@@ -528,29 +551,38 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     private void testDataSource(OfflineDataSource ds) throws ServiceException {
-        String error = DataSourceManager.test(ds);
-        if (error != null)
-        	throw ServiceException.FAILURE(error, null);
-
+        DataSourceManager.test(ds);
+        
         // No need to test Live/YMail SOAP access, since successful IMAP/POP3
         // connection implies that SOAP access will succeed with same auth
         // credentials.
         if (ds.needsSmtpAuth()) {
+        	OfflineLog.offline.info("SMTP Testing: %s", ds);
             try {
                 SMTPTransport smtp = (SMTPTransport)(LocalJMSession.getSession(ds).getTransport());
                 smtp.connect();
                 smtp.issueCommand("MAIL FROM:<" + ds.getEmailAddress() + ">", 250);
                 smtp.issueCommand("RSET", 250);
                 smtp.close();
+                OfflineLog.offline.info("SMTP Test Succeeded: %s", ds);
             } catch (Exception e) {
                 if (e instanceof AuthenticationFailedException)
-                    throw ServiceException.FAILURE("SMTP authentication failure. Invalid username or password, or invalid access", e);
+                    throw RemoteServiceException.SMTP_AUTH_FAILURE(e.getMessage(), e);
                 else if (e instanceof MessagingException && e.getMessage() != null && e.getMessage().startsWith("530"))
-                    throw ServiceException.FAILURE("SMTP authentication required", e);
-                else
-                    throw ServiceException.FAILURE("SMTP connect failure", e);
+                    throw RemoteServiceException.SMTP_AUTH_REQUIRED(e.getMessage(), e);
+                
+                Throwable t = SystemUtil.getInnermostException(e);
+                if (t == null)
+                	t = e;
+                if (t instanceof SSLPeerUnverifiedException)
+                	throw RemoteServiceException.SSLCERT_MISMATCH(t.getMessage(), t);
+                else if (t instanceof CertificateException)
+                	throw RemoteServiceException.SSLCERT_ERROR(t.getMessage(), t);
+                else if (t instanceof SSLHandshakeException)
+                	throw RemoteServiceException.SSL_HANDSHAKE(t.getMessage(), t);
+                
+                throw ServiceException.FAILURE("SMTP connect failure", e);
             }
-
         }
     }
 
@@ -613,6 +645,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	String smtpPassword = (String) dsAttrs.get(A_zimbraDataSourceSmtpAuthPassword);
     	if (smtpPassword != null)
     		dsAttrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dsid, smtpPassword));
+    	
+    	checkForSSLCertAlias(dsAttrs);
 
         OfflineDataSource testDs = new OfflineDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs, this);
         testDataSource(testDs);
@@ -2016,6 +2050,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	}
         	
             if (isTestNeeded) {
+            	checkForSSLCertAlias(attrs);
+            	
                 if ("yahoo.com".equals(domain)) {
                     // Clear auth token so that it will be regenerated during test...
                     OfflineYAuth.removeToken(ds);

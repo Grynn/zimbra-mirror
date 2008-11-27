@@ -50,6 +50,11 @@ function SetSmtpPort() {
 <c:if test="${bean.type ne 'zimbra' and not empty bean.domain}">
     <input type="hidden" name="domain" value="${bean.domain}">
 </c:if>
+
+<c:if test="${not empty bean.sslCertInfo and not empty bean.sslCertInfo.alias}">
+    <input type="hidden" name="sslCertAlias" value="${bean.sslCertInfo.alias}">
+</c:if>
+
     <input type="hidden" name="verb" value="${verb}">
         <tr>
             <td class="${zdf:isValid(bean, 'accountName') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='AccountName'/></td>

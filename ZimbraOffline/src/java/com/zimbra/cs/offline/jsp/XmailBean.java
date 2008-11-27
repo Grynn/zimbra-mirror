@@ -201,6 +201,8 @@ public class XmailBean extends MailBean {
                         dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId,
                             ZFolder.ID_USER_ROOT);
                     }
+                    if (sslCertAlias != null && sslCertAlias.length() > 0)
+                    	dsAttrs.put(OfflineConstants.A_offlineSslCertAlias, sslCertAlias);
                 }
             }
             if (verb.isAdd()) {

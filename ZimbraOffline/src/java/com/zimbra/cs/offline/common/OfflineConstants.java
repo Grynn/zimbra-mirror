@@ -32,6 +32,8 @@ public interface OfflineConstants {
     public static final String A_offlineSyncStatus = "offlineSyncStatus";
     public static final String A_offlineLastSync = "offlineLastSync";
     public static final String A_offlineEnableTrace = "offlineEnableTrace";
+    
+    public static final String A_offlineSslCertAlias = "offlineSslCertAlias";
                                                          
     public static final String A_zimbraDataSourceDomain = "zimbraDataSourceDomain";
     public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";

@@ -37,9 +37,7 @@ public class YabImport implements DataSource.DataImport {
         session = newSyncSession();
     }
     
-    public String test() throws ServiceException {
-        return null;
-    }
+    public void test() throws ServiceException {}
 
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
