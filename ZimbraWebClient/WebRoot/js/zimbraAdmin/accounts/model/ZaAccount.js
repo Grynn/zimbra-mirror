@@ -1691,28 +1691,30 @@ function (value, event, form){
 }
 
 ZaAccount.generateDisplayName =
-function (instance, firstName, lastName, initials) {
-	var oldDisplayName = instance.attrs[ZaAccount.A_displayname];
-	
+function (firstName, lastName, initials) {
+	var oldDisplayName = this.getInstanceValue(ZaAccount.A_displayname);
+	var newDisplayname = "";
 	if(firstName)
-		instance.attrs[ZaAccount.A_displayname] = firstName;
+		newDisplayname = firstName;
 	else
-		instance.attrs[ZaAccount.A_displayname] = "";
+		newDisplayname = "";
 		
 	if(initials) {
-		instance.attrs[ZaAccount.A_displayname] += " ";
-		instance.attrs[ZaAccount.A_displayname] += initials;
-		instance.attrs[ZaAccount.A_displayname] += ".";
+		
+		newDisplayname += " ";
+		newDisplayname += initials;
+		newDisplayname += ".";
 	}
 	if(lastName) {
-		if(instance.attrs[ZaAccount.A_displayname].length > 0)
-			instance.attrs[ZaAccount.A_displayname] += " ";
+		if(newDisplayname.length > 0)
+			newDisplayname += " ";
 			
-	    instance.attrs[ZaAccount.A_displayname] += lastName;
+	    newDisplayname += lastName;
 	} 
-	if(instance.attrs[ZaAccount.A_displayname] == oldDisplayName) {
+	if(newDisplayname == oldDisplayName) {
 		return false;
 	} else {
+		this.setInstanceValue(newDisplayname,ZaAccount.A_displayname);
 		return true;
 	}
 }

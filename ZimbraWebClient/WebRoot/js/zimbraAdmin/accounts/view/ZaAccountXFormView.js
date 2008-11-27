@@ -832,7 +832,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
 					elementChanged: function(elementValue,instanceValue, event) {
 						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-							ZaAccount.generateDisplayName(this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
+							ZaAccount.generateDisplayName.call(this, elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
 						}
 						this.getForm().itemChanged(this, elementValue, event);
 					}
@@ -840,7 +840,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,
 					elementChanged: function(elementValue,instanceValue, event) {
 						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-							ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
+							ZaAccount.generateDisplayName.call(this, this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
 						}
 						this.getForm().itemChanged(this, elementValue, event);
 					}
@@ -848,7 +848,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
 					elementChanged: function(elementValue,instanceValue, event) {
 						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-							ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
+							ZaAccount.generateDisplayName.call(this, this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
 						}
 						this.getForm().itemChanged(this, elementValue, event);
 					}
@@ -857,12 +857,12 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					items: [
 						{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150,
 							enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"] ],
-							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname]
+							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true
 						},
 						{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 							elementChanged: function(elementValue,instanceValue, event) {
 								if(elementValue=="TRUE") {
-									if(ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials])) {
+									if(ZaAccount.generateDisplayName.call(this, this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials])) {
 										this.getForm().parent.setDirty(true);
 									}
 								}
