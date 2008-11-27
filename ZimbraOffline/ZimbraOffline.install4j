@@ -399,7 +399,8 @@ return Boolean.FALSE;</string>
                           <void property="value">
                             <string>com.sun.security.auth.module.UnixSystem unix = new com.sun.security.auth.module.UnixSystem();
 long uid = unix.getUid();
-return (uid != 0);</string>
+long gid = unix.getGid();
+return (uid != 0 &amp;&amp; gid != 0);</string>
                           </void>
                         </object>
                       </void>
@@ -519,6 +520,79 @@ return true;</string>
             <postActivation />
             <actions />
             <formComponents />
+          </screen>
+          <screen name="Warn on Older Version" id="287799" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="3" finishScreen="false">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="fillVertically">
+                    <boolean>false</boolean>
+                  </void>
+                  <void property="scrollable">
+                    <boolean>false</boolean>
+                  </void>
+                  <void property="subTitle">
+                    <string>${i18n:installer.OlderVerWarn}</string>
+                  </void>
+                  <void property="title">
+                    <string>${i18n:installer.Warning}</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>if (Boolean.getBoolean("offline_update"))
+    return false;
+    
+String pv = (String)context.getVariable("prevVersion");
+String pb = (String)context.getVariable("prevBuild");
+if (pv == null || pb == null)
+    return false;
+    
+return pv.compareTo("${compiler:offline_version}") &gt; 0 || pb.compareTo("${compiler:offline_buildid}") &gt; 0;</condition>
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="previous" id="287809" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>${i18n:installer.PreviousVer}</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${installer:prevVersion} / ${installer:prevBuild}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+              </formComponent>
+              <formComponent name="" id="287811" beanClass="com.install4j.runtime.beans.formcomponents.SpacerComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.SpacerComponent" />
+                  </java>
+                </serializedBean>
+                <initScript />
+              </formComponent>
+              <formComponent name="installing" id="287810" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>${i18n:installer.NewVer}</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${compiler:offline_version} / ${compiler:offline_buildid}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+              </formComponent>
+            </formComponents>
           </screen>
           <screen name="uninstall" id="275891" beanClass="com.install4j.runtime.beans.screens.CustomizableProgressScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false">
             <serializedBean>
