@@ -25,7 +25,6 @@ import com.zimbra.cs.offline.util.yab.SyncRequest;
 import com.zimbra.cs.offline.util.yab.SyncRequestEvent;
 import com.zimbra.cs.offline.util.yab.Result;
 import com.zimbra.cs.offline.util.yab.ErrorResult;
-import com.zimbra.cs.offline.util.yab.Yab;
 import com.zimbra.cs.offline.util.yab.SuccessResult;
 import com.zimbra.cs.offline.util.yab.Category;
 import com.zimbra.cs.offline.util.yab.Entity;
@@ -139,7 +138,7 @@ public class SyncSession {
         for (Change change : contactChanges.values()) {
             SyncRequestEvent event = getContactEvent(change);
             if (event != null) {
-                req.addEvent(getContactEvent(change));
+                req.addEvent(event);
                 eventItemIds.add(change.getItemId());
             }
         }
@@ -148,38 +147,40 @@ public class SyncSession {
 
     private SyncRequestEvent getContactEvent(Change change) throws ServiceException {
         int itemId = change.getItemId();
-        if (change.isAdd()) {
-            Contact contact = getContactData(itemId).getContact();
-            pushedContacts.put(itemId, contact);
-            return SyncRequestEvent.addContact(contact);
-        } else if (change.isUpdate()) {
-            ContactData cd = getContactData(itemId);
-            //LOG.debug("count = " + cd.getCategories().size());
-            Contact newContact = cd.getContact();
-            Contact oldContact = getContact(localData.getMapping(itemId));
-            //LOG.debug("oldContact: " + oldContact);
-            //LOG.debug("newContact: " + newContact);
-            newContact.setId(oldContact.getId());
-            // Add categories so we can track updates
-            for (Category category : oldContact.getCategories()) {
-                newContact.addCategory(category);
-            }
-            pushedContacts.put(itemId, newContact);
-            ContactChange cc = cd.getContactChange(oldContact);
-            if (!cc.isEmpty()) {
-                return SyncRequestEvent.updateContact(cc);
+        if (change.isAdd() || change.isUpdate()) {
+            com.zimbra.cs.mailbox.Contact zcontact = localData.getContact(itemId);
+            if (!ContactGroup.isContactGroup(zcontact)) {
+                ContactData cd = new ContactData(zcontact);
+                if (change.isAdd()) {
+                    Contact contact = cd.getContact();
+                    pushedContacts.put(itemId, contact);
+                    return SyncRequestEvent.addContact(contact);
+                } else {
+                    //LOG.debug("count = " + cd.getCategories().size());
+                    Contact newContact = cd.getContact();
+                    Contact oldContact = getContact(localData.getMapping(itemId));
+                    //LOG.debug("oldContact: " + oldContact);
+                    //LOG.debug("newContact: " + newContact);
+                    newContact.setId(oldContact.getId());
+                    // Add categories so we can track updates
+                    for (Category category : oldContact.getCategories()) {
+                        newContact.addCategory(category);
+                    }
+                    pushedContacts.put(itemId, newContact);
+                    ContactChange cc = cd.getContactChange(oldContact);
+                    return SyncRequestEvent.updateContact(cc);
+                }
             }
         } else if (change.isDelete()) {
             DataSourceItem dsi = localData.getMapping(itemId);
-            int cid = RemoteId.parse(dsi.remoteId).getValue();
-            pushedContacts.put(itemId, new Contact(cid));
-            return SyncRequestEvent.removeContact(cid);
+            RemoteId rid = RemoteId.parse(dsi.remoteId);
+            if (rid.isContact()) {
+                int cid = rid.getValue();
+                pushedContacts.put(itemId, new Contact(cid));
+                return SyncRequestEvent.removeContact(cid);
+            }
         }
         return null;
-    }
-
-    private ContactData getContactData(int itemId) throws ServiceException {
-        return new ContactData(localData.getContact(itemId));
     }
 
     private void processContactResults(List<SyncRequestEvent> events)

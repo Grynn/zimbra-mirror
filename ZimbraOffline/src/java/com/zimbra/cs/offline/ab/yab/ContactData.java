@@ -74,7 +74,7 @@ public class ContactData implements Serializable {
     public boolean isEmpty() {
         return fields.isEmpty();
     }
-    
+
     private void importField(Field field) {
         if (field == null) return;
         if (field.isName()) {

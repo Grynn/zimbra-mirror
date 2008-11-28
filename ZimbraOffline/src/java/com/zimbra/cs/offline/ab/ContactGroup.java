@@ -19,6 +19,7 @@ package com.zimbra.cs.offline.ab;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
+import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
@@ -37,6 +38,7 @@ public class ContactGroup {
     private int itemId;
     private String name;
     private final Set<Integer> contactIds = new HashSet<Integer>();
+    private List<String> emails;
     private boolean nameChanged;
     private boolean contactsChanged;
 
@@ -114,6 +116,7 @@ public class ContactGroup {
         if (!contactIds.contains(cid)) {
             contactIds.add(cid);
             contactsChanged = true;
+            emails = null;
             return true;
         }
         return false;
@@ -123,6 +126,7 @@ public class ContactGroup {
         if (contactIds.contains(cid)) {
             contactIds.remove(cid);
             contactsChanged = true;
+            emails = null;
             return true;
         }
         return false;
@@ -132,8 +136,8 @@ public class ContactGroup {
         return nameChanged || contactsChanged;
     }
 
-    public int getCount() {
-        return contactIds.size();
+    public boolean isEmpty() throws ServiceException {
+        return getEmailAddresses().isEmpty();
     }
     
     public void modify() throws ServiceException {
@@ -157,20 +161,22 @@ public class ContactGroup {
         return new ParsedContact(fields);
     }
     
-    private List<String> getEmailAddresses() throws ServiceException {
-        List<String> emails = new ArrayList<String>();
-        for (int id : contactIds) {
-            try {
-                Contact contact = mbox.getContactById(CONTEXT, id);
-                for (String name : EMAIL_FIELDS) {
-                    String email = contact.get(name);
-                    if (email != null && email.length() > 0) {
-                        emails.add(email);
+    public List<String> getEmailAddresses() throws ServiceException {
+        if (emails == null) {
+            emails = new ArrayList<String>();
+            for (int id : contactIds) {
+                try {
+                    Contact contact = mbox.getContactById(CONTEXT, id);
+                    for (String name : EMAIL_FIELDS) {
+                        String email = contact.get(name);
+                        if (email != null && email.length() > 0) {
+                            emails.add(email);
+                        }
                     }
+                } catch (NoSuchItemException e) {
+                    e.printStackTrace(); // DEBUG
+                    // Ignore
                 }
-            } catch (NoSuchItemException e) {
-                e.printStackTrace(); // DEBUG
-                // Ignore
             }
         }
         return emails;

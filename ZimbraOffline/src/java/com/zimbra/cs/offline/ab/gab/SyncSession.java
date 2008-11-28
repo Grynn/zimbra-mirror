@@ -247,7 +247,10 @@ public class SyncSession {
         throws ServiceException {
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
         for (Change change : changes) {
-            reqs.add(getContactSyncRequest(change));
+            SyncRequest req = getContactSyncRequest(change);
+            if (req != null) {
+                reqs.add(req);
+            }
         }
         return reqs;
     }
@@ -258,16 +261,24 @@ public class SyncSession {
         // we've pushed contact group changes, since until then we will not
         // know the entry id for a newly added group.
         int id = change.getItemId();
-        if (change.isAdd()) {
-            ContactEntry entry = getContactData(id).newContactEntry();
-            return SyncRequest.insert(this, id, entry);
-        } else if (change.isUpdate()) {
-            ContactEntry entry = getEntry(id, ContactEntry.class);
-            getContactData(id).updateContactEntry(entry);
-            return SyncRequest.update(this, id, entry);
+        if (change.isAdd() || change.isUpdate()) {
+            Contact contact = localData.getContact(id);
+            if (!ContactGroup.isContactGroup(contact)) {
+                ContactData cd = new ContactData(contact);
+                if (change.isAdd()) {
+                    return SyncRequest.insert(this, id, cd.newContactEntry());
+                } else {
+                    ContactEntry entry = getEntry(id, ContactEntry.class);
+                    cd.updateContactEntry(entry);
+                    return SyncRequest.update(this, id, entry);
+                }
+            }
         } else if (change.isDelete()) {
             ContactEntry entry = getEntry(id, ContactEntry.class);
-            return SyncRequest.delete(this, id, entry);
+            // Entry will be null for contact group
+            if (entry != null) {
+                return SyncRequest.delete(this, id, entry);
+            }
         }
         return null;
     }
@@ -305,10 +316,6 @@ public class SyncSession {
             localData.syncContactFailed(e, itemId, service.pp(req.getEntry()));
             return false;
         }
-    }
-
-    private ContactData getContactData(int itemId) throws ServiceException {
-        return new ContactData(localData.getContact(itemId));
     }
 
     private <T extends BaseEntry> T getEntry(int itemId, Class<T> entryClass)

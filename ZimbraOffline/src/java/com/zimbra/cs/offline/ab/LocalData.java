@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public final class LocalData {
     private final OfflineDataSource ds;
@@ -185,18 +186,28 @@ public final class LocalData {
 
     public void saveContactGroups(Collection<ContactGroup> groups)
         throws ServiceException {
-        for (ContactGroup group : groups) {
-            if (group.hasChanges()) {
-                try {
-                    group.modify();
-                    log.debug("Changes saved for contact group: " + group);
-                } catch (ServiceException e) {
-                    syncContactFailed(e, group.getId(), group.toString());
+        Iterator<ContactGroup> it = groups.iterator();
+        while (it.hasNext()) {
+            ContactGroup group = it.next();
+            try {
+                if (group.hasChanges()) {
+                    if (group.isEmpty()) {
+                        // Remove empty contact group
+                        log.debug("Removing empty contact group: " + group);
+                        deleteContactGroup(group.getId());
+                        deleteMapping(group.getId());
+                        it.remove();
+                    } else {
+                        log.debug("Saving changes for contact group: " + group);
+                        group.modify();
+                    }
                 }
+            } catch (ServiceException e) {
+                syncContactFailed(e, group.getId(), group.toString());
             }
         }
     }
-    
+
     public SyncState loadState() throws ServiceException {
         Metadata md = mbox.getConfig(CONTEXT, key);
         if (md != null && !SyncState.isCompatibleVersion(md)) {

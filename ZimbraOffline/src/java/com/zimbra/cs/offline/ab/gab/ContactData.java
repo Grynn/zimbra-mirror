@@ -68,6 +68,10 @@ public class ContactData {
     public ParsedContact getParsedContact() throws ServiceException {
         return new ParsedContact(fields);
     }
+
+    public boolean isEmpty() {
+        return fields.isEmpty();
+    }
     
     private void importContact(ContactEntry contact) {
         TextConstruct title = contact.getTitle();
@@ -306,7 +310,7 @@ public class ContactData {
             set(A_middleName, name.getMiddle());
             set(A_lastName, name.getLast());
             set(A_namePrefix, name.getPrefix());
-            set(A_nameSuffix, "");
+            set(A_nameSuffix, null);
         }
     }
 
@@ -347,7 +351,11 @@ public class ContactData {
     }
 
     private void set(String name, String value) {
-        fields.put(name, value != null ? value : "");
+        if (value != null) {
+            fields.put(name, value);
+        } else {
+            fields.remove(name);
+        }
     }
 
     private String get(String name) {
