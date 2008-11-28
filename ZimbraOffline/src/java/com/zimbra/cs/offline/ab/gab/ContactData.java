@@ -36,6 +36,7 @@ import java.util.List;
 import static com.zimbra.cs.mailbox.Contact.*;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mime.ParsedContact;
+import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.common.service.ServiceException;
 
 public class ContactData {
@@ -66,6 +67,10 @@ public class ContactData {
     }
 
     public ParsedContact getParsedContact() throws ServiceException {
+        String fileAs = LocalData.getFileAs(fields);
+        if (fileAs != null) {
+            fields.put(A_fileAs, FA_EXPLICIT + ":" + fileAs);
+        }
         return new ParsedContact(fields);
     }
 
@@ -345,7 +350,7 @@ public class ContactData {
         }
         return im;
     }
-    
+
     private String getValue(ValueConstruct vc) {
         return vc != null ? vc.getValue() : null;
     }
