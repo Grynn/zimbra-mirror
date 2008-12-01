@@ -1,6 +1,7 @@
 package com.zimbra.cs.account.offline;
 
 import java.util.Map;
+import java.util.Set;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AccessManager;
@@ -8,7 +9,6 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Entry;
-import com.zimbra.cs.account.AccessManager.ViaGrant;
 import com.zimbra.cs.account.accesscontrol.Right;
 
 public class OfflineAccessManager extends AccessManager {
@@ -88,24 +88,35 @@ public class OfflineAccessManager extends AccessManager {
 	}
 	
 	@Override
-    public AllowedAttrs canGetAttrs(Account grantee, Entry target, Map<String, Object> attrs) {
-        return ALLOW_ALL_ATTRS();
-    }
-    
-	@Override
-    public AllowedAttrs canGetAttrs(AuthToken grantee, Entry target, Map<String, Object> attrs) {
-        return ALLOW_ALL_ATTRS();
+    public boolean canGetAttrs(Account grantee,   Entry target, Set<String> attrs) throws ServiceException {
+        return true;
     }
 	
 	@Override
-    public AllowedAttrs canSetAttrs(Account grantee, Entry target, Map<String, Object> attrs) {
-        return ALLOW_ALL_ATTRS();
+    public boolean canGetAttrs(AuthToken grantee, Entry target, Set<String> attrs) throws ServiceException {
+	    return true;
     }
 	
 	@Override
-    public AllowedAttrs canSetAttrs(AuthToken grantee, Entry target, Map<String, Object> attrs) {
-        return ALLOW_ALL_ATTRS();
+    public boolean canSetAttrs(Account grantee,   Entry target, Set<String> attrs) throws ServiceException {
+        return true;
     }
+	    
+    @Override
+    public boolean canSetAttrs(AuthToken grantee, Entry target, Set<String> attrs) throws ServiceException {
+        return true;
+    }
+	
+	@Override
+    public boolean canSetAttrs(Account grantee,   Entry target, Map<String, Object> attrs) throws ServiceException {
+	    return true;
+    }
+	
+	@Override
+    public boolean canSetAttrs(AuthToken grantee, Entry target, Map<String, Object> attrs) throws ServiceException {
+	    return true;
+    }
+
 	
 
 }
