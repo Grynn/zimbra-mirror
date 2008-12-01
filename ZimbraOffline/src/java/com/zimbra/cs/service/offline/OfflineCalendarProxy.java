@@ -8,7 +8,10 @@ public class OfflineCalendarProxy {
     public static void uploadAttachments(Element request, String acctId) throws ServiceException {
         Element eAttach = request.getElement(MailConstants.E_MSG).getOptionalElement(MailConstants.E_ATTACH);
         if (eAttach != null) {
-            String aid = eAttach.getAttribute(MailConstants.A_ATTACHMENT_ID);
+            String aid = eAttach.getAttribute(MailConstants.A_ATTACHMENT_ID, null);
+            if (aid == null)
+                return;
+            
             String[] ids = aid.split(",");
             String newAid = "";
             for (String id : ids) {

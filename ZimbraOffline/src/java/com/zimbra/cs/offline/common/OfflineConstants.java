@@ -65,5 +65,5 @@ public interface OfflineConstants {
     public static final String YMAIL_PARTNER_NAME = "Zimbra";
     public static final String CALDAV_DS = "caldav:";
     public static final String YAB_DS = "yab:";
-    public static final String SYNC_SERVER_PREFIX = "OFFLINE_SYNC_SERVER_";
+    public static final String SYNC_SERVER_PREFIX = "offline_sync_server_";
 }

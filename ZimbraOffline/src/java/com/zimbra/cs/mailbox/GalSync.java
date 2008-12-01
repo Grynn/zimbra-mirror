@@ -261,6 +261,7 @@ public class GalSync {
         mbox.sendRequest(req, true, true, OfflineLC.zdesktop_galsync_request_timeout.intValue(), SoapProtocol.Soap12, handlers);
 
         Exception e = handler.getException();
+        String token;
         if (e != null) {
             if (e instanceof ServiceException)
                 throw (ServiceException) e;
@@ -268,10 +269,12 @@ public class GalSync {
                 throw (ParseException) e;
             else
                 throw (IOException) e;
+        } else if ((token = handler.getToken()) == null) {
+            throw ServiceException.FAILURE("unable to search GAL", null);
         }
         
         OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
-        prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, handler.getToken());
+        prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, token);
         if (fullSync) {
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync,
                 Long.toString(System.currentTimeMillis()));

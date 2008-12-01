@@ -1328,9 +1328,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized Server get(ServerBy keyType, String key) throws ServiceException {
-        if (key.startsWith(OfflineConstants.SYNC_SERVER_PREFIX)) {
+        if (key.toLowerCase().startsWith(OfflineConstants.SYNC_SERVER_PREFIX)) {
             synchronized(mSyncServerCache) {
-                return mSyncServerCache.get(key);
+                return mSyncServerCache.get(key.toLowerCase());
             }
         } else if (keyType == ServerBy.id)
             return mLocalServer.getId().equalsIgnoreCase(key) ? mLocalServer : null;
@@ -2195,7 +2195,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             OfflineLog.offline.warn("offline account missing RemoteServerUri attr: " + account.getName());
             throw AccountServiceException.INVALID_ATTR_VALUE(OfflineConstants.A_offlineRemoteServerUri + " is null", null);            
         }        
-        String key = OfflineConstants.SYNC_SERVER_PREFIX + uri;
+        String key = (OfflineConstants.SYNC_SERVER_PREFIX + uri).toLowerCase();
 
         boolean ssl = uri.startsWith("https://");            
         String port = ssl ? "443" : "80";
