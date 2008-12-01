@@ -1,0 +1,23 @@
+.Imgcoloredemails-panelIcon {
+  background: url("coloredemails.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+.cEmail_exampleEmailTable{
+font-size:16px;
+font-weight:bold;
+color:blue;
+background-color:#FFFFCC;
+font-family:Arial,Helvetica,sans-serif;
+width:90%;
+border-bottom:1px solid #A7A194;
+border-right:1px solid #A7A194;
+}
+
+.cEmail_hidden {
+display:none
+}
+.cEmail_shown {
+display:block
+}
