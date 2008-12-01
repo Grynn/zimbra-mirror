@@ -34,7 +34,7 @@ ZaServerListController.prototype.constructor = ZaServerListController;
 
 ZaController.initToolbarMethods["ZaServerListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaServerListController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaServerListController"] = new Array();
+ZaController.changeActionsStateMethods["ZaServerListController"] = new Array();
 
 /**
 * @param list {ZaItemList} a list of ZaServer {@link ZaServer} objects
@@ -363,4 +363,4 @@ function () {
 		}
 	}
 }
-ZaListViewController.changeActionsStateMethods["ZaServerListController"].push(ZaServerListController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaServerListController"].push(ZaServerListController.changeActionsStateMethod);

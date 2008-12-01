@@ -251,6 +251,7 @@ ZaAccount.A2_fp_selection_cache = "fp_selection_cache";
 //constants for rights
 
 ZaAccount.SET_PASSWORD_RIGHT = "setPassword";
+ZaAccount.RENAME_ACCOUNT_RIGHT = "renameAccount";
 ZaAccount.REINDEX_MBX_RIGHT = "reindexMailbox";
 ZaAccount.GET_MBX_DUMP_RIGHT = "getMailboxDump";
 ZaAccount.VIEW_MAIL_RIGHT = "viewEmail";

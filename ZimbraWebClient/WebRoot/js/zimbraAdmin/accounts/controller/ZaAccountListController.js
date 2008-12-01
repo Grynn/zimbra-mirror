@@ -50,7 +50,7 @@ ZaAccountListController.prototype = new ZaListViewController();
 ZaAccountListController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaController.initToolbarMethods["ZaAccountListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaAccountListController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaAccountListController"] = new Array(); 
+ZaController.changeActionsStateMethods["ZaAccountListController"] = new Array(); 
 
 
 ZaAccountListController.prototype.show = function (doPush) {
@@ -980,7 +980,7 @@ function () {
 		}	
 	}
 }
-ZaListViewController.changeActionsStateMethods["ZaAccountListController"].push(ZaAccountListController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaAccountListController"].push(ZaAccountListController.changeActionsStateMethod);
 
 ZaAccountListController.prototype._moveAliasListener = 
 function (ev) {

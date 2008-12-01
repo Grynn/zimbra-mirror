@@ -50,6 +50,9 @@ ZaController = function(appCtxt, container,iKeyName) {
     
     this.objType = ZaEvent.S_ACCOUNT;
     this._helpURL = ZaController.helpURL;
+   	this._toolbarOperations = new Array();
+   	this._toolbarOrder = new Array();
+   	this._popupOperations = new Array();	    
 }
 
 ZaController.prototype.initDialogs = function (refresh) {
@@ -90,6 +93,7 @@ ZaController.initPopupMenuMethods = new Object();
 **/
 ZaController.setViewMethods = new Object();
 
+ZaController.changeActionsStateMethods = new Object();
 
 ZaController.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 // Public methods
@@ -255,7 +259,8 @@ function(entry, openInNewTab) {
 				}
 			}
 		}
-	}	
+	}
+	this.changeActionsState();	
 	//Instrumentation code end	
 	/*
 	if (openInNewTab) {
@@ -843,6 +848,46 @@ function (itemId, tabConstructor) {
 		return true ;
 	}else{
 		return false ;
+	}
+}
+
+ZaController.prototype.changeActionsState =
+function () {
+	for(var i in  this._toolbarOperations) {
+		if(this._toolbarOperations[i] instanceof ZaOperation) {
+			this._toolbarOperations[i].enabled = true;
+		}
+	}
+	
+	for(var i in  this._popupOperations) {
+		if(this._popupOperations[i] instanceof ZaOperation) {
+			this._popupOperations[i].enabled = true;
+		}
+	}
+	if(ZaController.changeActionsStateMethods[this._iKeyName]) {
+		var methods = ZaController.changeActionsStateMethods[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				try {
+					methods[i].call(this);
+				} catch (ex) {
+					this._handleException(ex, "ZaListViewController.prototype.changeActionsState");
+				}
+			}
+		}
+	}	
+
+	for(var i in  this._toolbarOperations) {
+		if(this._toolbarOperations[i] instanceof ZaOperation &&  !AjxUtil.isEmpty(this._toolbar.getButton(this._toolbarOperations[i].id))) {
+			this._toolbar.getButton(this._toolbarOperations[i].id).setEnabled(this._toolbarOperations[i].enabled);
+		}
+	}
+	
+	for(var i in  this._popupOperations) {
+		if(this._popupOperations[i] instanceof ZaOperation && !AjxUtil.isEmpty(this._actionMenu.getMenuItem(this._popupOperations[i].id))) {
+			this._actionMenu.getMenuItem(this._popupOperations[i].id).setEnabled(this._popupOperations[i].enabled);
+		}
 	}
 }
 

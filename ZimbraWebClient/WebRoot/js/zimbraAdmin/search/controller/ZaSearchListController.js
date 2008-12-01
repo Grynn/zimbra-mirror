@@ -51,7 +51,7 @@ ZaSearchListController.prototype.constructor = ZaSearchListController;
 ZaSearchListController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaController.initToolbarMethods["ZaSearchListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaSearchListController"] = new Array();
+ZaController.changeActionsStateMethods["ZaSearchListController"] = new Array();
 ZaSearchListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush});
 	/*
@@ -566,61 +566,4 @@ function () {
 		}	
 	}
 }
-/**
- * opsArray1 - contains operations to be enabled
- * opsArray2 - contains operations to be disabled
- */
- /*
-ZaSearchListController.changeActionsStateMethod = 
-function (opsArray1, opsArray2) {
-	var cnt = this._contentView.getSelectionCount();
-	if(cnt == 1) {
-		var item = this._contentView.getSelection()[0];		
-		if (item) {
-			opsArray1.push(ZaOperation.EDIT)
-			opsArray1.push(ZaOperation.DELETE);
-			
-			if (item.type == ZaItem.ALIAS) {
-				opsArray1.push(ZaOperation.MOVE_ALIAS);
-				opsArray1.push(ZaOperation.VIEW_MAIL) ;
-				
-				opsArray2.push(ZaOperation.CHNG_PWD);
-		
-			} else if (item.type == ZaItem.ACCOUNT) {
-				opsArray1.push(ZaOperation.CHNG_PWD) ;
-				opsArray1.push(ZaOperation.VIEW_MAIL) ;
-				
-				opsArray2.push(ZaOperation.MOVE_ALIAS);	
-		
-			} else if (item.type == ZaItem.RESOURCE){
-				opsArray1.push(ZaOperation.CHNG_PWD) ;
-				opsArray1.push(ZaOperation.VIEW_MAIL) ;	
-				
-				opsArray2.push(ZaOperation.MOVE_ALIAS);	
-			} else {
-				opsArray2.push(ZaOperation.CHNG_PWD);		
-				opsArray2.push(ZaOperation.VIEW_MAIL);				
-				opsArray2.push(ZaOperation.MOVE_ALIAS);						
-			}
-		} else {
-			opsArray2.push(ZaOperation.EDIT);
-			opsArray2.push(ZaOperation.CHNG_PWD);		
-			opsArray2.push(ZaOperation.VIEW_MAIL);				
-			opsArray2.push(ZaOperation.MOVE_ALIAS);						
-			opsArray2.push(ZaOperation.DELETE);	
-		}
-	} else if (cnt > 1){
-		opsArray1.push(ZaOperation.DELETE);
-		opsArray2.push(ZaOperation.EDIT)
-		opsArray2.push(ZaOperation.CHNG_PWD);
-		opsArray2.push(ZaOperation.VIEW_MAIL);
-		opsArray2.push(ZaOperation.MOVE_ALIAS);
-	} else {
-		opsArray2.push(ZaOperation.EDIT);
-		opsArray2.push(ZaOperation.DELETE);		
-		opsArray2.push(ZaOperation.CHNG_PWD);
-		opsArray2.push(ZaOperation.VIEW_MAIL);
-		opsArray2.push(ZaOperation.MOVE_ALIAS);			
-	}
-}*/
-ZaListViewController.changeActionsStateMethods["ZaSearchListController"].push(ZaSearchListController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaSearchListController"].push(ZaSearchListController.changeActionsStateMethod);

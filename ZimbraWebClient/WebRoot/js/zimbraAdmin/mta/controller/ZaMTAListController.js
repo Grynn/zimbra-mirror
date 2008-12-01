@@ -32,7 +32,7 @@ ZaMTAListController.prototype.constructor = ZaMTAListController;
 
 ZaController.initToolbarMethods["ZaMTAListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaMTAListController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaMTAListController"] = new Array(); 
+ZaController.changeActionsStateMethods["ZaMTAListController"] = new Array(); 
 
 ZaMTAListController.prototype.show = 
 function(list, openInNewTab) {
@@ -203,7 +203,7 @@ function () {
 			this._popupOperations[ZaOperation.EDIT].enabled=false;			
 	}
 }
-ZaListViewController.changeActionsStateMethods["ZaMTAListController"].push(ZaMTAListController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaMTAListController"].push(ZaMTAListController.changeActionsStateMethod);
 /**
 * @param ev
 * This listener is invoked by ZaMTAController or any other controller that can change a ZaMTA object

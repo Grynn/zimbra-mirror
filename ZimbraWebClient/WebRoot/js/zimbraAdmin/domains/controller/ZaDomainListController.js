@@ -36,7 +36,7 @@ ZaDomainListController.prototype.constructor = ZaDomainListController;
 ZaDomainListController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domains/managing_domains.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaController.initToolbarMethods["ZaDomainListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaDomainListController"] = new Array(); 
+ZaController.changeActionsStateMethods["ZaDomainListController"] = new Array(); 
 
 ZaDomainListController.prototype.show = function (doPush) {
 	var callback = new AjxCallback(this, this.searchCallback, {limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush});
@@ -134,7 +134,7 @@ ZaDomainListController.initToolbarMethod =
 function () {
 	// first button in the toolbar is a menu.
 	//if(ZaSettings.CAN_CREATE_DOMAINS)
-	if(ZaZimbraAdmin.currentAdminAccount.rights[ZaDomain.RIGHT_CREATE_DOMAIN])
+	if(ZaZimbraAdmin.currentAdminAccount.rights[ZaDomain.RIGHT_CREATE_TOP_DOMAIN])
    		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener));	
 	
 	//if (!ZaSettings.DOMAINS_ARE_READONLY) {
@@ -152,7 +152,7 @@ function () {
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_AUTH_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
 		this._toolbarOperations[ZaOperation.AUTH_WIZARD]=new ZaOperation(ZaOperation.AUTH_WIZARD,ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainListController.prototype._authWizButtonListener));
 		
-	this._toolbarOrder.push(ZaOperation.CAN_CREATE_DOMAINS);
+	this._toolbarOrder.push(ZaOperation.NEW);
 	this._toolbarOrder.push(ZaOperation.EDIT);
 	this._toolbarOrder.push(ZaOperation.DELETE);
 	this._toolbarOrder.push(ZaOperation.GAL_WIZARD);
@@ -536,7 +536,7 @@ function () {
 			this._popupOperations[ZaOperation.GAL_WIZARD].enabled=false;			
 	}
 }
-ZaListViewController.changeActionsStateMethods["ZaDomainListController"].push(ZaDomainListController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaDomainListController"].push(ZaDomainListController.changeActionsStateMethod);
 
 ZaDomainListController.prototype._finishNewButtonListener =
 function(ev) {

@@ -32,7 +32,7 @@ ZaCosListController.prototype = new ZaListViewController();
 ZaCosListController.prototype.constructor = ZaCosListController;
 ZaController.initToolbarMethods["ZaCosListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaCosListController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaCosListController"] = new Array(); 
+ZaController.changeActionsStateMethods["ZaCosListController"] = new Array(); 
 
 //ZaCosListController.COS_VIEW = "ZaCosListController.COS_VIEW";
 
@@ -502,6 +502,6 @@ function (enableArray,disableArray) {
 		}		
 	}
 }
-ZaListViewController.changeActionsStateMethods["ZaCosListController"].push(ZaCosListController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaCosListController"].push(ZaCosListController.changeActionsStateMethod);
 
 

@@ -70,6 +70,26 @@ ZaSettings.initRights = function () {
 			ZaSettings.ENABLED_UI_COMPONENTS[ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents][i]] = true;
 		}	
 	}
+	//load global permissions, e.g. createTopDomain, createCos
+	var soapDoc = AjxSoapDoc.create("GetEffectiveRightsRequest", ZaZimbraAdmin.URN, null);
+	var elTarget = soapDoc.set("target", "");
+	elTarget.setAttribute("type","global");
+
+
+	var elGrantee = soapDoc.set("grantee", ZaZimbraAdmin.currentUserId);
+	elGrantee.setAttribute("by","id");
+	
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;	
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS ;
+	try {
+		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetEffectiveRightsResponse;
+		ZaZimbraAdmin.currentAdminAccount.initEffectiveRightsFromJS(resp);
+	} catch (ex) {
+		//not implemented yet
+	}	
 }
 ZaSettings.initMethods.push(ZaSettings.initRights);
 

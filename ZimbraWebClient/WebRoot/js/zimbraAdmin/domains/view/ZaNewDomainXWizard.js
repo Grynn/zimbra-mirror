@@ -23,7 +23,6 @@
 * @author Greg Solovyev
 **/
 ZaNewDomainXWizard = function(parent) {
-	this._app=app;
 	ZaXWizardDialog.call(this, parent, null, ZaMsg.NDD_Title, "650px", "300px","ZaNewDomainXWizard");
 
 	this.stepChoices = [

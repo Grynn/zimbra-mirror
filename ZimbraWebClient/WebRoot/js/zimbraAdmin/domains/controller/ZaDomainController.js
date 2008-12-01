@@ -72,7 +72,7 @@ function () {
 	this._toolbarOrder.push(ZaOperation.CLOSE);
 	this._toolbarOrder.push(ZaOperation.SEP);
 
-//	if(ZaSettings.CAN_CREATE_DOMAINS) {
+	//if(ZaZimbraAdmin.currentAdminAccount.rights[ZaDomain.RIGHT_CREATE_SUB_DOMAIN])
 		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener));
 		this._toolbarOrder.push(ZaOperation.NEW);		
 //	}

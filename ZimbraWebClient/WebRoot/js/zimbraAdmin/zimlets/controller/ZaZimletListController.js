@@ -34,7 +34,7 @@ ZaZimletListController.prototype.constructor = ZaZimletListController;
 
 ZaController.initToolbarMethods["ZaZimletListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaZimletListController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaZimletListController"] = new Array(); 
+ZaController.changeActionsStateMethods["ZaZimletListController"] = new Array(); 
 /**
 * @param list {ZaItemList} a list of ZaZimlet {@link ZaZimlet} objects
 **/
@@ -338,4 +338,4 @@ function () {
 			this._popupOperations[ZaOperation.TOGGLE].enabled = false;			
 	} 
 }
-ZaListViewController.changeActionsStateMethods["ZaZimletListController"].push(ZaZimletListController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaZimletListController"].push(ZaZimletListController.changeActionsStateMethod);

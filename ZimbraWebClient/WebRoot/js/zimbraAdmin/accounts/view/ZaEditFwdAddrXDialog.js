@@ -40,7 +40,7 @@ function() {
 		numCols:1,
 		items:[
             {type:_GROUP_,isTabGroup:true, items: [ //allows tab key iteration
-                {ref:ZaAccount.A_name, type:_TEXTFIELD_, label:ZaMsg.Enter_EmailAddr,width:230}
+                {ref:ZaAccount.A_name, type:_TEXTFIELD_, label:ZaMsg.Enter_EmailAddr,width:230,visibilityChecks:[],enableDisableChecks:[]}
                 ]
             }
         ]

@@ -34,7 +34,7 @@ ZaAdminExtListController.prototype.constructor = ZaAdminExtListController;
  
 ZaController.initToolbarMethods["ZaAdminExtListController"] = new Array();
 ZaController.initPopupMenuMethods["ZaAdminExtListController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaAdminExtListController"] = new Array();
+ZaController.changeActionsStateMethods["ZaAdminExtListController"] = new Array();
 
 /**
 * @param list {ZaItemList} a list of ZaZimlet {@link ZaZimlet} objects
@@ -309,4 +309,4 @@ function () {
 			this._popupOperations[ZaOperation.DELETE].enabled = false;
 	}
 }
-ZaListViewController.changeActionsStateMethods["ZaAdminExtListController"].push(ZaAdminExtListController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaAdminExtListController"].push(ZaAdminExtListController.changeActionsStateMethod);

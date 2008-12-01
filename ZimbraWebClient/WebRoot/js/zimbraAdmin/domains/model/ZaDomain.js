@@ -248,7 +248,7 @@ ZaDomain.AUTH_MECH_CHOICES = [ZaDomain.AuthMech_ad,ZaDomain.AuthMech_ldap,ZaDoma
 ZaDomain.LOCAL_DOMAIN_QUERY = "(zimbraDomainType=local)";
 
 //constants for rights
-ZaDomain.RIGHT_CREATE_DOMAIN = "createDomain";
+ZaDomain.RIGHT_CREATE_TOP_DOMAIN = "createTopDomain";
 ZaDomain.RIGHT_DELETE_DOMAIN = "deleteDomain";
 ZaDomain.RIGHT_RENAME_DOMAIN = "renameDomain";
 ZaDomain.RIGHT_CREATE_SUB_DOMAIN = "createSubDomain";

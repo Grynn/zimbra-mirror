@@ -834,7 +834,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				colSizes:["275px","*"],numCols:2,
 				items:[
 				{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
-								 labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true},
+					labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
+					enableDisableChecks:[[XFormItem.prototype.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
+					visibilityChecks:[]
+				},
 				{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
 					labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
 					elementChanged: function(elementValue,instanceValue, event) {

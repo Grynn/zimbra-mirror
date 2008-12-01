@@ -37,8 +37,9 @@ ZaAccountViewController = function(appCtxt, container) {
 ZaAccountViewController.prototype = new ZaXFormViewController();
 ZaAccountViewController.prototype.constructor = ZaAccountViewController;
 ZaAccountViewController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/editing_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
-ZaController.initToolbarMethods["ZaAccountViewController"] = new Array();
+ZaController.changeActionsStateMethods["ZaAccountViewController"] = new Array();
 ZaController.setViewMethods["ZaAccountViewController"] = new Array();
+ZaController.initToolbarMethods["ZaAccountViewController"] = new Array();
 //public methods
 
 /**
@@ -147,6 +148,19 @@ function(entry) {
 	this._domainsChanged = false;
 }
 ZaController.setViewMethods["ZaAccountViewController"].push(ZaAccountViewController.setViewMethod);
+
+ZaAccountViewController.changeActionsStateMethod = function () {
+	if(!this._currentObject.rights[ZaAccount.VIEW_MAIL_RIGHT])	{
+		this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
+	}
+	if(!this._currentObject.rights[ZaAccount.REINDEX_MBX_RIGHT])	{
+		this._toolbarOperations[ZaOperation.REINDEX_MAILBOX].enabled = false;
+	}
+	
+}
+ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaAccountViewController.changeActionsStateMethod);
+
+
 //Private/protected methods
 /**
 * saves the changes in the fields, calls modify or create on the current ZaAccount

@@ -82,16 +82,18 @@ function () {
 	}
 		
 };
-EmailAddr_XFormItem.isStaticDomain = function () {
+/*EmailAddr_XFormItem.isStaticDomain = function () {
 	return !ZaSettings.DOMAINS_ENABLED;
 }
 
 EmailAddr_XFormItem.isNonSaticDomain = function () {
 	return ZaSettings.DOMAINS_ENABLED;
-}
+}*/
 
 EmailAddr_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_name_input",
+	 visibilityChecks:[],
+	 enableDisableChecks:[],
 	 errorLocation:_PARENT_,
 		getDisplayValue:function (itemVal) {
 			var val = itemVal;
@@ -121,7 +123,7 @@ EmailAddr_XFormItem.prototype.items = [
 		}
 	},
 	{type:_OUTPUT_, value:"@"},
-	{type:_OUTPUT_,ref:".",visibilityChecks:[EmailAddr_XFormItem.isStaticDomain],
+	/*{type:_OUTPUT_,ref:".",visibilityChecks:[EmailAddr_XFormItem.isStaticDomain],
 		choices:EmailAddr_XFormItem.domainChoices,
 		getDisplayValue:function (itemVal){
 			var val = null;
@@ -138,10 +140,12 @@ EmailAddr_XFormItem.prototype.items = [
 			
 			return val;
 		}	
-	},
+	},*/
 	{type:_DYNSELECT_DOMAIN_PART_, ref:".", labelLocation:_NONE_,  
 	 	choices:EmailAddr_XFormItem.domainChoices,editable:true,
-	 	visibilityChecks:[EmailAddr_XFormItem.isNonSaticDomain],
+	 	//visibilityChecks:[EmailAddr_XFormItem.isNonSaticDomain],
+	 	visibilityChecks:[],
+	 	enableDisableChecks:[],
 	 	dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
 		dataFetcherClass:ZaSearch,
 	 	errorLocation:_PARENT_,

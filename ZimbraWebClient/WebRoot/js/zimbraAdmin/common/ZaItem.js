@@ -184,14 +184,17 @@ ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
 		if(resp.target[0]) {
 			if(resp.target[0].right && resp.target[0].right instanceof Array) {
 				var rights = resp.target[0].right;
-				this.rights = {};
+				if(!this.rights)
+					this.rights = {};
+					
 				for(var r in rights) {
 					this.rights[rights[r].n] = true;
 				}
 			}
 			if(resp.target[0].getAttrs && resp.target[0].getAttrs instanceof Array && 
 				resp.target[0].getAttrs[0]) {
-				this.getAttrs = {};
+				if(!this.getAttrs)
+					this.getAttrs = {};
 				if(resp.target[0].getAttrs[0].a && resp.target[0].getAttrs[0].a instanceof Array) {
 					var getAttrs = resp.target[0].getAttrs[0].a;
 					for (var a in getAttrs) {
@@ -210,7 +213,9 @@ ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
 			}			
 			if(resp.target[0].setAttrs && resp.target[0].setAttrs instanceof Array && 
 				resp.target[0].setAttrs[0]) {
-				this.setAttrs = {};
+				if(!this.setAttrs)
+					this.setAttrs = {};
+					
 				if(resp.target[0].setAttrs[0].a && resp.target[0].setAttrs[0].a instanceof Array) {
 					var setAttrs = resp.target[0].setAttrs[0].a;
 					for (var a in setAttrs) {
@@ -231,8 +236,15 @@ ZaItem.prototype.loadEffectiveRights = function (by, val, expandDefaults) {
 	if(expandDefaults) {
 		soapDoc.setMethodAttribute("expandAllAttrs","getAttrs");
 	}
+	
+	if(AjxUtil.isUndefined(val) || AjxUtil.isNull(val))
+		val = "";
+		
 	var elTarget = soapDoc.set("target", val);
-	elTarget.setAttribute("by",by);
+	
+	if(!AjxUtil.isEmpty(by))
+		elTarget.setAttribute("by",by);
+		
 	elTarget.setAttribute("type",this.type);
 
 
@@ -250,11 +262,14 @@ ZaItem.prototype.loadEffectiveRights = function (by, val, expandDefaults) {
 	} catch (ex) {
 		//not implemented yet
 	}
-
 }
+
 ZaItem.prototype.load = function (by, val, skipRights, expandDefaults) {
 	//load rights
 	if(!skipRights) {
+		this.rights = null;
+		this.getAttrs = null;
+		this.setAttrs = null;
 		this.loadEffectiveRights(by,val,expandDefaults);
 	}		
 	//Instrumentation code start
