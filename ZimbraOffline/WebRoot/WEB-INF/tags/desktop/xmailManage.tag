@@ -128,7 +128,7 @@ function SetSmtpPort() {
                     <tr>
                         <td><input class="ZFieldMedium" type="text" id="smtpHost" name="smtpHost" value="${bean.smtpHost}"></td>
                         <td class="${zdf:isValid(bean, 'smtpPort') ? 'ZFieldLabel' : 'ZFieldError'}"><fmt:message key='Port'/>&nbsp;</td>
-                        <td width="1%"><input style="width:40px" class="ZField" type="text" id="smtpPort" name="port" value="${bean.smtpPort}" disabled></td>
+                        <td width="1%"><input style="width:40px" class="ZField" type="text" id="smtpPort" name="smtpPort" value="${bean.smtpPort}" disabled></td>
                         <td width="1%" id="smtpPortLink" onclick="onEditLink('smtpPort')">&nbsp;&nbsp;<a href="#")"><fmt:message key='Edit'/></a></td>
                     </tr>
                 </table>
