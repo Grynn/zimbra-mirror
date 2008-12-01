@@ -25,8 +25,7 @@ import javax.mail.Session;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
-import com.zimbra.common.util.CustomSSLSocketFactory;
-import com.zimbra.common.util.DummySSLSocketFactory;
+import com.zimbra.common.util.SSLSocketFactoryManager;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -91,9 +90,7 @@ public class LocalJMSession {
             props.setProperty("mail.smtps.timeout", Long.toString(timeout));
             props.setProperty("mail.smtps.localhost", localhost);
             props.setProperty("mail.smtps.sendpartial", "true");
-            props.put("mail.smtps.socketFactory.class",
-                LC.data_source_trust_self_signed_certs.booleanValue() ?
-                    DummySSLSocketFactory.class.getName() : CustomSSLSocketFactory.class.getName());
+            props.put("mail.smtps.socketFactory.class", SSLSocketFactoryManager.getDefaultSSLSocketFactoryClassName());
             props.put("mail.smtps.socketFactory.fallback", "false");
     		
             props.setProperty("mail.smtps.host", smtpHost);

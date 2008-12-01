@@ -1,5 +1,6 @@
 package com.zimbra.cs.offline.jsp;
 
+import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,9 +65,14 @@ public abstract class FormBean extends PageBean {
 	    if (this.error != null || (exMsg = ex.getMessage()) == null || (exCode = ex.getCode()) == null)
 	        return;	    
 	    String msg = getMessage("exception." + exCode, false);
-	    this.error = msg == null ? exCode + ": " + exMsg : msg;
+	    if (msg == null)
+	    	error = exCode + ": " + exMsg;
+	    else if(msg.indexOf("{0}") >= 0)
+	    	error = MessageFormat.format(msg, exMsg);
+	    else
+	    	error = msg;
 	    
-	    if (exCode.equals(RemoteServiceException.SSLCERT_ERROR)) {
+	    if (exCode.equals(RemoteServiceException.SSLCERT_ERROR) || exCode.equals(RemoteServiceException.SSLCERT_MISMATCH)) {
 	    	if (exMsg.length() > 0)
 	    		sslCertInfo = SSLCertInfo.deserialize(exMsg);
 	    }

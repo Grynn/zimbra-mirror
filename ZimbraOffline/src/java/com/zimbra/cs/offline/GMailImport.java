@@ -22,14 +22,7 @@ import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.common.util.DummySSLSocketFactory;
-import com.zimbra.common.util.CustomSSLSocketFactory;
-import com.zimbra.common.localconfig.LC;
 
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.HttpsURLConnection;
-
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 public class GMailImport extends ImapSync {
@@ -37,19 +30,6 @@ public class GMailImport extends ImapSync {
     private final OfflineCalDavDataImport calDavImport;
 
     private static final Log LOG = ZimbraLog.datasource;
-
-    static {
-    	try {
-    		HttpsURLConnection.setDefaultSSLSocketFactory(getSSLSocketFactory());
-    	} catch (GeneralSecurityException x) {
-    		LOG.error(x);
-    	}
-    }
-
-    private static SSLSocketFactory getSSLSocketFactory() throws GeneralSecurityException {
-        return LC.data_source_trust_self_signed_certs.booleanValue() ?
-            new DummySSLSocketFactory() : new CustomSSLSocketFactory();
-    }
     
     public GMailImport(OfflineDataSource ds) throws ServiceException {
         super(ds);

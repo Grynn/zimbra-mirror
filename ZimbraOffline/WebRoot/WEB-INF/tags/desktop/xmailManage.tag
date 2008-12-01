@@ -51,7 +51,7 @@ function SetSmtpPort() {
     <input type="hidden" name="domain" value="${bean.domain}">
 </c:if>
 
-<c:if test="${not empty bean.sslCertInfo and not empty bean.sslCertInfo.alias}">
+<c:if test="${not empty bean.sslCertInfo and bean.sslCertInfo.acceptable}">
     <input type="hidden" name="sslCertAlias" value="${bean.sslCertInfo.alias}">
 </c:if>
 

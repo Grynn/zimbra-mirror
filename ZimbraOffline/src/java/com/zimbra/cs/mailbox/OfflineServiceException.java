@@ -33,7 +33,7 @@ public class OfflineServiceException extends ServiceException {
     public static final String MOUNT_OP_UNSUPPORTED = "offline.MOUNT_OP_UNSUPPORTED";
     public static final String MOUNT_EXISTING_ACCT = "offline.MOUNT_EXISTING_ACCT";
     
-    public static final String CALDAV_LOGIN_FAILED ="offlline.CALDAV_LOGIN_FAILED";
+    public static final String CALDAV_LOGIN_FAILED ="offline.CALDAV_LOGIN_FAILED";
     public static final String YCALDAV_NEED_UPGRADE = "offline.YCALDAV_NEED_UPGRADE";
     public static final String GCALDAV_NEED_ENABLE = "offline.GCALDAV_NEED_ENABLE";
     

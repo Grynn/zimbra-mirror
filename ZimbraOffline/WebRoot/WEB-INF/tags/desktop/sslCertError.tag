@@ -2,9 +2,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 
-<a href="javascript:zd.toggle('certInfo')"><fmt:message key='CertDetails'/></a>
+&nbsp;&nbsp;<a href="javascript:zd.toggle('certInfo')">(<fmt:message key='CertDetails'/>)</a>
 
 <div id="certInfo" style="display:none">
+<p class="ZFieldSubLabelLeft">
+<c:choose>
+<c:when test="${bean.sslCertInfo.mismatch}">
+<fmt:message key='CertWarningMismatch'><fmt:param><b>${bean.sslCertInfo.hostname}</b></fmt:param><fmt:param><b>${bean.sslCertInfo.commonName}</b></fmt:param></fmt:message>
+</c:when>
+<c:otherwise>
+<fmt:message key='CertWarningUntrusted'><fmt:param><b>${bean.sslCertInfo.hostname}</b></fmt:param></fmt:message>
+</c:otherwise>
+</c:choose>
+</p>
 <p>
 <table cellpadding="0" cellspacing="0" width="100%">
     <tr><td class="ZFieldLabel"><fmt:message key='CertIssuedTo'/></td><td></td></tr>

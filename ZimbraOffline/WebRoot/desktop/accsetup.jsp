@@ -204,7 +204,7 @@ function onEditLink(id, keep) {
 		            <zd:sslCertError/>
 		            <br>
 					<c:choose>
-					<c:when test="${not empty bean.sslCertInfo.alias}">
+					<c:when test="${bean.sslCertInfo.acceptable}">
 					    <c:set var='save'><fmt:message key='CertAcceptButton'/></c:set>
 					    <c:set var='buttonType' value="Warn"/>
 					    <span class='ZOfflineError'><fmt:message key='CertAcceptWarning'/></span>

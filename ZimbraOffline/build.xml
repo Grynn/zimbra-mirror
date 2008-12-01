@@ -384,6 +384,7 @@
 		<antcall target="offline-zimbra-war" />
 
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
+		<copy tofile="${dist.dir}/conf/keystore.base" file="${config.dir}/keystore.base" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/datasource.properties" file="${config.dir}/datasource.properties" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/derby.properties" file="${config.dir}/derby.properties" overwrite="true" />
@@ -667,6 +668,10 @@
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
 			<arg line="-e zimlet_directory='${param.install.dir}/jetty/webapps/service/zimlet'" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e mailboxd_keystore='${param.install.dir}/conf/keystore'" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />

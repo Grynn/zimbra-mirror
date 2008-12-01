@@ -53,14 +53,10 @@ import com.zimbra.cs.zclient.ZMailbox;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.cert.CertificateException;
 import java.util.*;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
-import javax.net.ssl.SSLHandshakeException;
-import javax.net.ssl.SSLPeerUnverifiedException;
-import javax.security.auth.login.LoginException;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 
@@ -566,22 +562,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 smtp.close();
                 OfflineLog.offline.info("SMTP Test Succeeded: %s", ds);
             } catch (Exception e) {
-                if (e instanceof AuthenticationFailedException)
-                    throw RemoteServiceException.SMTP_AUTH_FAILURE(e.getMessage(), e);
-                else if (e instanceof MessagingException && e.getMessage() != null && e.getMessage().startsWith("530"))
-                    throw RemoteServiceException.SMTP_AUTH_REQUIRED(e.getMessage(), e);
-                
-                Throwable t = SystemUtil.getInnermostException(e);
-                if (t == null)
-                	t = e;
-                if (t instanceof SSLPeerUnverifiedException)
-                	throw RemoteServiceException.SSLCERT_MISMATCH(t.getMessage(), t);
-                else if (t instanceof CertificateException)
-                	throw RemoteServiceException.SSLCERT_ERROR(t.getMessage(), t);
-                else if (t instanceof SSLHandshakeException)
-                	throw RemoteServiceException.SSL_HANDSHAKE(t.getMessage(), t);
-                
-                throw ServiceException.FAILURE("SMTP connect failure", e);
+            	Throwable t = SystemUtil.getInnermostException(e);
+                if (t instanceof AuthenticationFailedException)
+                    throw RemoteServiceException.SMTP_AUTH_FAILURE(t.getMessage(), t);
+                else if (t instanceof MessagingException && t.getMessage() != null && t.getMessage().startsWith("530"))
+                    throw RemoteServiceException.SMTP_AUTH_REQUIRED(t.getMessage(), t);
+                RemoteServiceException.doConnectionFailures("SMTP server", t);
+                RemoteServiceException.doSSLFailures(t.getMessage(), t);
+                throw ServiceException.FAILURE("SMTP connect failure", t);
             }
         }
     }
