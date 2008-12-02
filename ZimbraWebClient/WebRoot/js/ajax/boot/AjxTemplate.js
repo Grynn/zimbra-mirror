@@ -2,7 +2,7 @@
  * ***** BEGIN LICENSE BLOCK *****
  * 
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2006, 2007 Zimbra, Inc.
+ * Copyright (C) 2007-2008 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Yahoo! Public License
  * Version 1.0 ("License"); you may not use this file except in
@@ -17,7 +17,7 @@
 /**
  * @author Andy Clark
  */
-AjxTemplate = function() {}
+AjxTemplate = function() {};
 
 //
 // Data
@@ -58,6 +58,19 @@ AjxTemplate.getParams = function(name) {
 };
 
 AjxTemplate.expand = function(name, data, buffer) {
+	// allow template text to come from document
+	if (!AjxTemplate._templates[name] && AjxTemplate.compile) {
+		var el = document.getElementById(name);
+		if (el) {
+			// NOTE: In all major browsers (IE, FF, Saf) the value property
+			//       of the textarea will be the literal text of the content.
+			//       Using the innerHTML will escape the HTML content which
+			//       is not desirable.
+			var isTextArea = el.nodeName.toUpperCase() == "TEXTAREA";
+			AjxTemplate.compile(name, true, true, isTextArea ? el.value : el.innerHTML);
+		}
+	}
+
     var pkg = name.replace(/#.*$/, "");
     if (name.match(/^#/) && AjxTemplate._stack.length > 0) {
         pkg = AjxTemplate._stack[AjxTemplate._stack.length - 1];
@@ -104,11 +117,11 @@ AjxTemplate.setContent = function(element, name, data) {
 	if (element == null) return;
 	var html = AjxTemplate.expand(name, data);
 	element.innerHTML = html;
-}
+};
 
 
 // temporary API for handling logic errors in templates
 //	may change to more robust solution later
 AjxTemplate.__formatError = function(templateName, error) {
 	return "Error in template '" + templateName + "': " + error;	
-}
+};
