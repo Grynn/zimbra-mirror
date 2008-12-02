@@ -33,9 +33,11 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
                        
         Element eLink = request.getElement(MailConstants.E_MOUNT);
         String zid = eLink.getAttribute(MailConstants.A_ZIMBRA_ID, null);
-        OfflineAccount acct = (OfflineAccount)prov.get(Provisioning.AccountBy.id, zid);
-        if (acct != null)
-            prov.checkMountpointAccount(acct, ctxt.getRequestedAccountId());
+        if (zid != null) {
+            OfflineAccount acct = (OfflineAccount)prov.get(Provisioning.AccountBy.id, zid);
+            if (acct != null)
+                prov.checkMountpointAccount(acct, ctxt.getRequestedAccountId());
+        }
         
         Element response = super.handle(request, context);
         
