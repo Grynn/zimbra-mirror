@@ -504,7 +504,7 @@ function(by, val, withCos) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller: this._app.getCurrentController()
+		controller: ZaApp.getInstance().getCurrentController()
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAccountInfoResponse;
 	if(resp[ZaAccount.A2_publicMailURL] && resp[ZaAccount.A2_publicMailURL][0])

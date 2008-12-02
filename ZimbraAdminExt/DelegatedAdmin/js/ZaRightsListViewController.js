@@ -12,7 +12,7 @@ ZaRightsListViewController.prototype.constructor = ZaRightsListViewController;
 
 ZaController.initToolbarMethods["ZaRightsListViewController"] = new Array();
 ZaController.initPopupMenuMethods["ZaRightsListViewController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaRightsListViewController"] = new Array();
+ZaController.changeActionsStateMethods["ZaRightsListViewController"] = new Array();
 
 /**
 * @param list {ZaItemList} a list of ZaRight {@link ZaRight} objects
@@ -341,4 +341,4 @@ function () {
 		}
 	}
 }
-ZaListViewController.changeActionsStateMethods["ZaRightsListViewController"].push(ZaRightsListViewController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaRightsListViewController"].push(ZaRightsListViewController.changeActionsStateMethod);

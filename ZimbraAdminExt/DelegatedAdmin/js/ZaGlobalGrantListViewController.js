@@ -12,7 +12,7 @@ ZaGlobalGrantListViewController.prototype.constructor = ZaGlobalGrantListViewCon
 
 ZaController.initToolbarMethods["ZaGlobalGrantListViewController"] = new Array();
 ZaController.initPopupMenuMethods["ZaGlobalGrantListViewController"] = new Array();
-ZaListViewController.changeActionsStateMethods["ZaGlobalGrantListViewController"] = new Array();
+ZaController.changeActionsStateMethods["ZaGlobalGrantListViewController"] = new Array();
 
 /**
 * @param list {ZaItemList} a list of ZaGrant {@link ZaGrant} objects
@@ -341,4 +341,4 @@ function () {
 		}
 	}
 }
-ZaListViewController.changeActionsStateMethods["ZaGlobalGrantListViewController"].push(ZaGlobalGrantListViewController.changeActionsStateMethod);
+ZaController.changeActionsStateMethods["ZaGlobalGrantListViewController"].push(ZaGlobalGrantListViewController.changeActionsStateMethod);

@@ -227,6 +227,75 @@ if (ZaController.setViewMethods["ZaDLController"]) {
 }
 
 
+//Resource target
+if (ZaResource) {
+    ZaResource.myXModel.items.push(grantListItem) ;
+}
+
+if (ZaTabView.XFormModifiers["ZaResourceXFormView"]){
+    ZaTabView.XFormModifiers["ZaResourceXFormView"].push(ZaTargetPermission.targetXFormModifier);
+}
+
+if (ZaItem.loadMethods["ZaResource"]) {
+    ZaItem.loadMethods["ZaResource"].push (ZaGrant.loadMethod) ;
+}
+
+if (ZaController.setViewMethods["ZaResourceController"]) {
+	ZaController.setViewMethods["ZaResourceController"].push(ZaTargetPermission.permissionViewMethod);
+}
+
+//COS Target
+if (ZaCos) {
+    ZaCos.myXModel.items.push(grantListItem) ;
+}
+
+if (ZaTabView.XFormModifiers["ZaCosXFormView"]){
+    ZaTabView.XFormModifiers["ZaCosXFormView"].push(ZaTargetPermission.targetXFormModifier);
+}
+
+if (ZaItem.loadMethods["ZaCos"]) {
+    ZaItem.loadMethods["ZaCos"].push (ZaGrant.loadMethod) ;
+}
+
+if (ZaController.setViewMethods["ZaCosController"]) {
+	ZaController.setViewMethods["ZaCosController"].push(ZaTargetPermission.permissionViewMethod);
+}
+
+//GlobalConfig Target
+if (ZaGlobalConfig) {
+    ZaGlobalConfig.myXModel.items.push(grantListItem) ;
+}
+
+if (ZaTabView.XFormModifiers["GlobalConfigXFormView"]){
+    ZaTabView.XFormModifiers["GlobalConfigXFormView"].push(ZaTargetPermission.targetXFormModifier);
+}
+
+if (ZaItem.loadMethods["ZaGlobalConfig"]) {
+    ZaItem.loadMethods["ZaGlobalConfig"].push (ZaGrant.loadMethod) ;
+}
+
+if (ZaController.setViewMethods["ZaGlobalConfigController"]) {
+	ZaController.setViewMethods["ZaGlobalConfigController"].push(ZaTargetPermission.permissionViewMethod);
+}
+
+//Server Target
+if (ZaServer) {
+    ZaServer.myXModel.items.push(grantListItem) ;
+}
+
+if (ZaTabView.XFormModifiers["ZaServerXFormView"]){
+    ZaTabView.XFormModifiers["ZaServerXFormView"].push(ZaTargetPermission.targetXFormModifier);
+}
+
+if (ZaItem.loadMethods["ZaServer"]) {
+    ZaItem.loadMethods["ZaServer"].push (ZaGrant.loadMethod) ;
+}
+
+if (ZaController.setViewMethods["ZaServerController"]) {
+	ZaController.setViewMethods["ZaServerController"].push(ZaTargetPermission.permissionViewMethod);
+}
+
+
 
 //TODO: permission actions - get/grant/revoke grants
 ZaTargetPermission.grantButtonListener =
