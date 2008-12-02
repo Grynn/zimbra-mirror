@@ -9,6 +9,8 @@ import java.net.URLEncoder;
 
 import com.zimbra.cs.offline.util.Xml;
 import com.zimbra.cs.util.yauth.Auth;
+import com.zimbra.cs.util.yauth.AuthenticationException;
+
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -46,7 +48,7 @@ public abstract class Request extends Entity {
         }
     }
 
-    public Response send() throws IOException {
+    public Response send() throws AuthenticationException, IOException {
         return sendRequest(session.authenticate());
     }
 

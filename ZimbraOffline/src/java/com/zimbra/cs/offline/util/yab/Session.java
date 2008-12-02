@@ -17,6 +17,7 @@
 package com.zimbra.cs.offline.util.yab;
 
 import com.zimbra.cs.util.yauth.Auth;
+import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.util.yauth.Authenticator;
 import com.zimbra.cs.offline.util.Xml;
 
@@ -81,7 +82,7 @@ public class Session {
     }
     
     public List<Contact> search(String params)
-        throws IOException {
+        throws AuthenticationException, IOException {
         SearchResponse res = (SearchResponse) createSearchRequest(params).send();
         return res.getContacts();
     }
@@ -108,7 +109,7 @@ public class Session {
         return format;
     }
 
-    public Auth authenticate() throws IOException {
+    public Auth authenticate() throws AuthenticationException, IOException {
         return authenticator.authenticate();
     }
     

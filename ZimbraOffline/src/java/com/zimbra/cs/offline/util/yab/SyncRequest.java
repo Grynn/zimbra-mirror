@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.io.IOException;
 
 import com.zimbra.cs.offline.util.Xml;
+import com.zimbra.cs.util.yauth.AuthenticationException;
 
 /**
  * Yahoo address book synchronization request.
@@ -74,7 +75,7 @@ public class SyncRequest extends Request {
     }
 
     @Override
-    public Response send() throws IOException {
+    public Response send() throws AuthenticationException, IOException {
         SyncResponse res = (SyncResponse) super.send();
         List<Result> results = res.getResults();
         if (events.size() != results.size()) {
