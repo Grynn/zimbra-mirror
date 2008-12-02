@@ -576,12 +576,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     private void testCalDav(String localPart, String domain, String password) throws ServiceException {
         String username = null;
+        String service = domain;
         boolean isYmail = false;
       
         if (domain.equals("yahoo.com") || domain.equals("ymail.com") || domain.equals("rocketmail.com")) {
             if (domain.equals("yahoo.com"))
                 username = localPart;
-            domain = "yahoo.com";
+            service = "yahoo.com";
             isYmail = true;
         } else if (!domain.equals("gmail.com")) {
             return;
@@ -591,16 +592,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         int status;
         try {
-            OfflineLog.offline.debug("testing offline caldav access: username=" + username + " service=" + domain);
-            status = OfflineCalDavDataImport.loginTest(username, password, domain);
+            OfflineLog.offline.debug("testing offline caldav access: username=" + username + " service=" + service);
+            status = OfflineCalDavDataImport.loginTest(username, password, service);
             if (status == 502 && isYmail) {
-                OfflineLog.offline.debug("must upgrade to all-new yahoo calendar servcie: username=" + username + " service=" + domain);
+                OfflineLog.offline.debug("must upgrade to all-new yahoo calendar servcie: username=" + username + " service=" + service);
                 throw OfflineServiceException.YCALDAV_NEED_UPGRADE();
-            } else if (status == 404 && domain.equals("gmail.com")) {
-                OfflineLog.offline.debug("google calendar servcie not enabled: username=" + username + " service=" + domain);
+            } else if (status == 404 && service.equals("gmail.com")) {
+                OfflineLog.offline.debug("google calendar servcie not enabled: username=" + username + " service=" + service);
                 throw OfflineServiceException.GCALDAV_NEED_ENABLE();
             } else if (status != 200) {
-                OfflineLog.offline.debug("caldav login failed: username=" + username + " service=" + domain + " status=" + Integer.toString(status));
+                OfflineLog.offline.debug("caldav login failed: username=" + username + " service=" + service + " status=" + Integer.toString(status));
                 throw OfflineServiceException.CALDAV_LOGIN_FAILED();
             }
             OfflineLog.offline.debug("caldav access test passed for " + username);
