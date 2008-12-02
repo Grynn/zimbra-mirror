@@ -194,7 +194,7 @@ fi
 if [ -d ${zimbra_home}/conf/spamassassin ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/conf/spamassassin"
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/spamassassin
-  chmod 600 ${zimbra_home}/conf/spamassassin
+  chmod 755 ${zimbra_home}/conf/spamassassin
 fi
 
 if [ -L ${zimbra_home}/jetty ]; then
