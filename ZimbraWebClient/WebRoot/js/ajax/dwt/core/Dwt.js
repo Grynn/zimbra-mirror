@@ -1067,8 +1067,12 @@ Dwt.setSelectionText = function(input, text) {
 };
 
 Dwt.instanceOf =
-function(obj, className) {
-	return (window[className] && obj instanceof window[className]);
+function(objOrClassName, className) {
+	if (typeof objOrClassName == "string") {
+		return window[objOrClassName] &&
+		       (objOrClassName == className || window[objOrClassName].prototype instanceof window[className]);
+	}
+	return (window[className] && objOrClassName instanceof window[className]);
 };
 
 /**

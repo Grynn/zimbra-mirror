@@ -155,9 +155,12 @@ DwtControl = function(params) {
 
 	// set to true to ignore OVER and OUT mouse events between elements in the same control
 	this._ignoreInternalOverOut = false;
-}
 
-DwtControl.PARAMS = ["parent", "className", "posStyle", "deferred", "id", "index"];
+	// override this control's default template
+	this.TEMPLATE = params.template || this.TEMPLATE;
+};
+
+DwtControl.PARAMS = ["parent", "className", "posStyle", "deferred", "id", "index", "template"];
 
 DwtControl.ALL_BY_ID = {};
 

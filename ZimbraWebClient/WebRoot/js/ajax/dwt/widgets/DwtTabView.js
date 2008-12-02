@@ -386,30 +386,33 @@ function (ev) {
 **/
 DwtTabViewPage = function(parent, className, posStyle) {
 	if (arguments.length == 0) return;
-
-	var clsName = className || "ZTabPage";
-	var ps = posStyle || DwtControl.ABSOLUTE_STYLE;
+	params = Dwt.getParams(arguments, DwtTabViewPage.PARAMS);
+	params.className = params.className || "ZTabPage";
+	params.posStyle = params.posStyle || DwtControl.ABSOLUTE_STYLE;
 	this._rendered = true; // by default UI creation is not lazy
 
-	DwtPropertyPage.call(this, parent, clsName, ps);
+	DwtPropertyPage.call(this, params);
 
     this._createHtml();
 	this.getHtmlElement().style.overflowY = "auto";
 	this.getHtmlElement().style.overflowX = "visible";
+	if (params.contentTemplate) {
+		this.getContentHtmlElement().innerHTML = AjxTemplate.expand(params.contentTemplate, this._htmlElId);
+	}
 };
 
 DwtTabViewPage.prototype = new DwtPropertyPage;
 DwtTabViewPage.prototype.constructor = DwtTabViewPage;
 
-DwtTabViewPage.prototype.TEMPLATE = "dwt.Widgets#ZTabPage";
-
-
-// Public methods
-
-DwtTabViewPage.prototype.toString =
-function() {
+DwtTabViewPage.prototype.toString = function() {
 	return "DwtTabViewPage";
 };
+
+DwtTabViewPage.prototype.TEMPLATE = "dwt.Widgets#ZTabPage";
+
+DwtTabViewPage.PARAMS = DwtPropertyPage.PARAMS.concat("contentTemplate");
+
+// Public methods
 
 DwtTabViewPage.prototype.getContentHtmlElement =
 function() {

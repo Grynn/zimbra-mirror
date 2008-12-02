@@ -24,22 +24,24 @@
 * @author Greg Solovyev
 **/
 
-DwtPropertyPage = function(parent, className, posStyle) {
+DwtPropertyPage = function(params) {
 	if (arguments.length == 0) return;
-	var clsName = className || "DwtPropertyPage";
-	DwtComposite.call(this, {parent:parent, className:className, posStyle:posStyle});
+	params = Dwt.getParams(arguments, DwtPropertyPage.PARAMS);
+	params.className = params.className || "DwtPropertyPage";
+	DwtComposite.call(this, params);
 	this._fieldIds = new Object();
 	this._fildDivIds = new Object();
 	this._isDirty = false;
-}
+};
 
 DwtPropertyPage.prototype = new DwtComposite;
 DwtPropertyPage.prototype.constructor = DwtPropertyPage;
 
-DwtPropertyPage.prototype.toString = 
-function() {
+DwtPropertyPage.prototype.toString = function() {
 	return "DwtPropertyPage";
-}
+};
+
+DwtPropertyPage.PARAMS = DwtComposite.PARAMS;
 
 /**
 * @param boolean

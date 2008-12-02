@@ -30,22 +30,21 @@
  *        id			[string]*			an explicit ID to use for the control's HTML element
  */
 DwtText = function(params) {
-
 	if (arguments.length == 0) return;
 	params = Dwt.getParams(arguments, DwtText.PARAMS);
 	params.className = params.className || "DwtText";
 	DwtControl.call(this, params);
-}
+};
 
 DwtText.PARAMS = ["parent", "className", "posStyle"];
 
 DwtText.prototype = new DwtControl;
 DwtText.prototype.constructor = DwtText;
 
-DwtText.prototype.toString = 
+DwtText.prototype.toString =
 function() {
 	return "DwtText";
-}
+};
 
 DwtText.prototype.getTabGroupMember = function() {
 	return null;
@@ -59,14 +58,14 @@ function(text) {
 	} else {
 		this._textNode.data = text;
 	}
-}
+};
 
 DwtText.prototype.getText =
 function() {
-	return this._textNode.data;
-}
+	return this._textNode ? this._textNode.data : "";
+};
 
 DwtText.prototype.getTextNode =
 function() {
 	return this._textNode;
-}
+};

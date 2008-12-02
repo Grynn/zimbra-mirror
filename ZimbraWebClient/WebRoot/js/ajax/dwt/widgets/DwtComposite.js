@@ -43,7 +43,7 @@ DwtComposite = function(params) {
 	this._children = new AjxVector();
 }
 
-DwtComposite.PARAMS = ["parent", "className", "posStyle", "deferred", "id", "index"];
+DwtComposite.PARAMS = DwtControl.PARAMS.concat();
 
 DwtComposite.prototype = new DwtControl;
 DwtComposite.prototype.constructor = DwtComposite;
