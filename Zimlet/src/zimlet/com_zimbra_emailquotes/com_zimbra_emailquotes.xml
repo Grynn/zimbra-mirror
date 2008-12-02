@@ -1,0 +1,17 @@
+<zimlet name="com_zimbra_emailquotes" version="0.1" description="Email Quotes">
+  <include>emailquotes.js</include>
+  <includeCSS>emailquotes.css</includeCSS>
+  <handlerObject>com_zimbra_emailquotes</handlerObject>
+
+  <zimletPanelItem label="Email Quotes" icon="emailquotes-panelIcon">
+    <toolTipText>Adds Random quotes to Email</toolTipText>
+  </zimletPanelItem>
+
+	<userProperties>
+		<!-- default: hope,humor,leadership,virtue,wisdom-->
+		<property type="string" name="equotes_defaultSelections" value="115,74,27,9,64,81"/>
+		<property type="string" name="equotes_userSelections" value=""/>		
+		
+		<property type="string" name="turnEmailQuotesZimletON" value="true"/>
+	</userProperties>
+</zimlet>
