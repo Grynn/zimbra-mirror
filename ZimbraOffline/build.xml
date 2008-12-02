@@ -379,12 +379,20 @@
         </echo>
 	</target>
 
+	<target name="offline-copy-keystore">
+  		<exec executable="cp">
+    			<arg value="${config.dir}/keystore.base"/>
+    			<arg value="${dist.dir}/conf/keystore.base"/>
+  		</exec>
+	</target>
+
 	<target name="offline-dev-dist">
 		<antcall target="offline-war" />
 		<antcall target="offline-zimbra-war" />
 
+		<antcall target="offline-copy-keystore"/>
+
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
-		<copy tofile="${dist.dir}/conf/keystore.base" file="${config.dir}/keystore.base" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/datasource.properties" file="${config.dir}/datasource.properties" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/derby.properties" file="${config.dir}/derby.properties" overwrite="true" />
