@@ -55,6 +55,7 @@ ZaSearch.A_fAccounts = "f_accounts";
 ZaSearch.A_fDomains = "f_domains";
 ZaSearch.A_fdistributionlists = "f_distributionlists";
 ZaSearch.A_fResources = "f_resources";
+ZaSearch.A_ResultMsg = "resultMsg";
 
 ZaSearch._currentQuery = null;
 ZaSearch._savedSearchToBeUpdated = true ; //initial value to be true
@@ -485,7 +486,8 @@ ZaSearch.myXModel = {
 		{id:ZaSearch.A_fAliases, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaSearch.A_fdistributionlists, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaSearch.A_fAccounts, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-		{id:ZaSearch.A_pagenum, type:_NUMBER_}
+		{id:ZaSearch.A_pagenum, type:_NUMBER_},
+		{id:ZaSearch.A_ResultMsg, type:_STRING_}
 	]
 }
 

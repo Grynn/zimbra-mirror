@@ -873,19 +873,31 @@ ZaReindexMailbox = function() {
 	this.errorDetail = null;
 	this.pollInterval = 500;	
 }
+ZaReindexMailbox.A_status = "status";
+ZaReindexMailbox.A_numSucceeded = "numSucceeded";
+ZaReindexMailbox.A_numFailed = "numFailed";
+ZaReindexMailbox.A_numRemaining = "numRemaining";
+ZaReindexMailbox.A_mbxId = "mbxId";
+ZaReindexMailbox.A_numTotal = "numTotal";
+ZaReindexMailbox.A_numDone = "numDone";
+ZaReindexMailbox.A_pollInterval = "pollInterval";
+ZaReindexMailbox.A_progressMsg = "progressMsg";
+ZaReindexMailbox.A_errorDetail = "errorDetail";
+ZaReindexMailbox.A_resultMsg = "resultMsg";
 
 ZaReindexMailbox.myXModel = {
 	items: [
-		{id:"status", ref:"status", type:_STRING_},						
-		{id:"numSucceeded", ref:"numSucceeded", type:_NUMBER_},								
-		{id:"numFailed", ref:"numFailed", type:_NUMBER_},										
-		{id:"numRemaining", ref:"numRemaining", type:_NUMBER_},												
-		{id:"mbxId", ref:"mbxId", type:_STRING_},														
-		{id:"numTotal", ref:"numTotal", type:_NUMBER_},			
-		{id:"numDone", ref:"numDone", type:_NUMBER_},					
-		{id:"numDone", ref:"numDone", type:_NUMBER_},							
-		{id:"pollInterval", ref:"pollInterval", type:_STRING_},
-		{id:"progressMsg", ref:"progressMsg", type:_STRING_}
+		{id:ZaReindexMailbox.A_status, ref:ZaReindexMailbox.A_status, type:_STRING_},						
+		{id:ZaReindexMailbox.A_numSucceeded, ref:ZaReindexMailbox.A_numSucceeded, type:_NUMBER_},								
+		{id:ZaReindexMailbox.A_numFailed, ref:ZaReindexMailbox.A_numFailed, type:_NUMBER_},										
+		{id:ZaReindexMailbox.A_numRemaining, ref:ZaReindexMailbox.A_numRemaining, type:_NUMBER_},												
+		{id:ZaReindexMailbox.A_mbxId, ref:ZaReindexMailbox.A_mbxId, type:_STRING_},														
+		{id:ZaReindexMailbox.A_numTotal, ref:ZaReindexMailbox.A_numTotal, type:_NUMBER_},								
+		{id:ZaReindexMailbox.A_numDone, ref:ZaReindexMailbox.A_numDone, type:_NUMBER_},							
+		{id:ZaReindexMailbox.A_pollInterval, ref:ZaReindexMailbox.A_pollInterval, type:_STRING_},
+		{id:ZaReindexMailbox.A_progressMsg, ref:ZaReindexMailbox.A_progressMsg, type:_STRING_},
+		{id:ZaReindexMailbox.A_resultMsg, ref:ZaReindexMailbox.A_pollInterval, type:_STRING_},
+		{id:ZaReindexMailbox.A_errorDetail, ref:ZaReindexMailbox.A_pollInterval, type:_STRING_}
 	]
 };
 

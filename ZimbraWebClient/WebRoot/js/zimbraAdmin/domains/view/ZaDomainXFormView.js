@@ -732,8 +732,6 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				  visibilityChangeEventSources:[ZaDomain.A_zimbraNotebookAccount]
 				},
 				{type:_GROUP_,  numCols:2,
-					//relevant:"instance.attrs[ZaDomain.A_zimbraNotebookAccount] != null",
-					//relevantBehavior:_HIDE_,
 					visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A_zimbraNotebookAccount]],
 				  	visibilityChangeEventSources:[ZaDomain.A_zimbraNotebookAccount],
 					items: [

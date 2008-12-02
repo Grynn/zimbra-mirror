@@ -54,7 +54,9 @@ XFormItemFactory.createItemType("_LIFETIME_", "lifetime", Lifetime_XFormItem, Co
 Lifetime_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
 Lifetime_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 Lifetime_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_, cssClass:"admin_xform_number_input", 
+	 	visibilityChecks:[],
+	 	enableDisableChecks:[],		
 		getDisplayValue:function (itemVal) {
 			var val = "";
 			if(itemVal != null && itemVal.length >0) {
@@ -76,7 +78,9 @@ Lifetime_XFormItem.prototype.items = [
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	},
-	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_PARENT_, choices: ZaModel.getTimeChoices(),
+	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, choices: ZaModel.getTimeChoices(),
+		visibilityChecks:[],
+	 	enableDisableChecks:[],
 		getDisplayValue:function (itemVal){
 			var val = "d";
 			if(itemVal != null && itemVal.length >0) {
@@ -98,9 +102,12 @@ Lifetime_XFormItem.prototype.items = [
 
 Lifetime1_XFormItem = function() {}
 XFormItemFactory.createItemType("_LIFETIME1_", "lifetime1", Lifetime1_XFormItem, Composite_XFormItem);
-
+Lifetime1_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
+Lifetime1_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
 Lifetime1_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_number_input", 
+		visibilityChecks:[],
+	 	enableDisableChecks:[],
 		getDisplayValue:function (itemVal) {
 			var val = "";
 			if(itemVal != null && itemVal.length >0) {
@@ -122,7 +129,9 @@ Lifetime1_XFormItem.prototype.items = [
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	},
-	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, relevantBehavior:_PARENT_, choices:ZaModel.getTimeChoices1(),
+	{type:_OSELECT1_, ref:".", labelLocation:_NONE_, choices:ZaModel.getTimeChoices1(),
+		visibilityChecks:[],
+	 	enableDisableChecks:[],
 		getDisplayValue:function (itemVal){
 			var val = "d";
 			if(itemVal != null && itemVal.length >0) {
@@ -147,7 +156,9 @@ XFormItemFactory.createItemType("_LIFETIME2_", "lifetime2", Lifetime2_XFormItem,
 
 
 Lifetime2_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,relevantBehavior:_PARENT_, cssClass:"admin_xform_number_input", 
+	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_number_input", 
+		visibilityChecks:[],
+	 	enableDisableChecks:[],		
 		getDisplayValue:function (itemVal) {
 			var val = "";
 			if(itemVal != null && itemVal.length >0) {
@@ -170,5 +181,5 @@ Lifetime2_XFormItem.prototype.items = [
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}
 	},
-	{type:_OUTPUT_, ref:null, labelLocation:_NONE_, relevantBehavior:_PARENT_,value:"d",getDisplayValue:function (itemVal){ return AjxMsg.days;}}
+	{type:_OUTPUT_, ref:null, labelLocation:_NONE_, value:"d",getDisplayValue:function (itemVal){ return AjxMsg.days;}}
 ];

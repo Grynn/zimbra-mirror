@@ -30,7 +30,8 @@ HostPort_XFormItem.prototype._serverPart = "";
 HostPort_XFormItem.prototype._portPart = "";
 
 HostPort_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_, width:"200px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,
+	{type:_TEXTFIELD_, width:"200px", forceUpdate:true, ref:".", labelLocation:_NONE_, label:null,
+		visibilityChecks:[],enableDisableChecks:[],
 		required:true,
 		getDisplayValue:function (itemVal) {
 			var val = "";
@@ -60,8 +61,9 @@ HostPort_XFormItem.prototype.items = [
 		onClick: "Super_HostPort_XFormItem.handleClick",
 		onMouseout: "Super_HostPort_XFormItem.handleMouseout"
 	},
-	{type:_OUTPUT_, width:"5px", labelLocation:_NONE_, label:null,relevantBehavior:_PARENT_,value:":"},
-	{type:_TEXTFIELD_,width:"40px",forceUpdate:true, ref:".", labelLocation:_NONE_, label:null, relevantBehavior:_PARENT_, 
+	{type:_OUTPUT_, width:"5px", labelLocation:_NONE_, label:null,value:":"},
+	{type:_TEXTFIELD_,width:"40px",forceUpdate:true, ref:".", labelLocation:_NONE_, label:null,
+		visibilityChecks:[],enableDisableChecks:[],
 		getDisplayValue:function (itemVal) {
 			var val = "";
 			if(itemVal) {

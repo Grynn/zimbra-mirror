@@ -103,7 +103,7 @@ function() {
 				throw (new AjxException(ZaMsg.FAILED_MOVE_ALIAS, AjxException.UNKNOWN_ERROR, "MoveAliasXDialog.prototype.moveAlias", "Alias name is not available"));
 			}
 			ZaApp.getInstance().getAccountListController().show();	
-			this._containedObject.resultMsg = String(ZaMsg.Alias_Moved_To).replace("{0}",name).replace("{1}",this._containedObject[ZaSearch.A_selected].name); 
+			this._containedObject[ZaSearch.A_ResultMsg] = String(ZaMsg.Alias_Moved_To).replace("{0}",name).replace("{1}",this._containedObject[ZaSearch.A_selected].name); 
 			return true;							
 		}else{
 			ZaApp.getInstance().getCurrentController().popupErrorDialog( AjxMessageFormat.format(ZaMsg.WARNING_ALIASES_TARGET_NON_EXIST,[this._containedObject[ZaSearch.A_selected]]));
@@ -123,7 +123,7 @@ function() {
 		items:[
 			{type: _SWITCH_,
 				items: [
-					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehavior:_HIDE_,
+					{type:_CASE_, caseKey:1, 
 						items: [
 							{type:_DWT_ALERT_,
 								content:null,ref:"name",
@@ -138,6 +138,7 @@ function() {
 								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,
 								width:"200px", inputSize:30, editable:true, forceUpdate:true,
 								choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
+								visibilityChecks:[],enableDisableChecks:[],
 								onChange: function(value, event, form){
 									if ((( value instanceof ZaAccount) || value instanceof ZaDistributionList) 
 											&& (value.id)){ 
@@ -149,55 +150,18 @@ function() {
 							}	
 						]
 					}, 
-					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 2", relevantBehavior:_HIDE_,
+					{type:_CASE_, caseKey:2, 
 						items :[
 							{ type: _DWT_ALERT_,
-								  style: DwtAlert.INFORMATION,
-								  iconVisible: false, 
-								  content: null,
-								  ref:"resultMsg",align:_CENTER_, valign:_MIDDLE_,
-								  relevant:"instance.resultMsg !=null"
+								style: DwtAlert.INFORMATION,
+								iconVisible: false, 
+								content: null,
+								ref:ZaSearch.A_ResultMsg,align:_CENTER_, valign:_MIDDLE_,
+								visibilityChecks:[[XForm.checkInstanceValueEmty,ZaSearch.A_ResultMsg]],
+				  				visibilityChangeEventSources:[ZaSearch.A_ResultMsg]
 							}
 						]
 					}
-/*					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 1", relevantBehavior:_HIDE_,
-						items: [
-							{type:_OUTPUT_, value:ZaMsg.MoveAlias_SelectTitle},
-							{type:_SPACER_},
-							{type:_TEXTFIELD_, ref:ZaSearch.A_query, width:"350px",containerCssStyle:"padding-left:2px;padding-right:2px;", label:null, 
-								elementChanged: function(elementValue,instanceValue, event) {
-									var charCode = event.charCode;
-									if (charCode == 13 || charCode == 3) {
-									   this.getForm().parent.searchAccounts();
-									} else {
-										this.getForm().itemChanged(this, elementValue, event);
-									}
-								}
-							},
-							{type:_DWT_BUTTON_, label:ZaMsg.search, toolTipContent:ZaMsg.searchForAccounts, icon:ZaMsg.search, onActivate:MoveAliasXDialog.srchButtonHndlr},
-							{type:_OSELECT_,width:"450px",height:"300px", colSpan:2,ref:ZaSearch.A_selected, 
-									choices:MoveAliasXDialog.resultChoices, label:null,multiple:false,
-									onChange: function(value, event, form){
-										DBG.println(AjxDebug.DBG1, "event happens. value = " + value );
-										if (( value instanceof ZaAccount)  && (value.id)){ //an account is selected
-											form.parent._button[MoveAliasXDialog.MOVE_BUTTON].setEnabled(true);
-										}
-										this.setInstanceValue(value);	
-									}									
-							}
-						]
-					},
-					{type:_CASE_, relevant:"instance[ZaModel.currentStep] == 2", relevantBehaviorBehavior:_HIDE_,
-						items: [
-							{ type: _DWT_ALERT_,
-								  style: DwtAlert.WARNING,
-								  iconVisible: false, 
-								  content: null,
-								  colSpan:"*",
-								  ref:"resultMsg",align:_CENTER_, valign:_MIDDLE_
-							}						
-						]						
-					}*/
 				]
 			}
 		]		

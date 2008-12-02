@@ -192,14 +192,16 @@ function() {
 				  iconVisible: true, 
 				  content: null,
 				  ref:DeleteAcctsPgrsDlg._STATUS,align:_CENTER_, valign:_MIDDLE_,colSpan:"*",width:"90%",
-				  relevant:"instance[DeleteAcctsPgrsDlg._ERROR_MSG] == null",relevantBehavior:_HIDE_
+				  visibilityChecks:[[XForm.checkInstanceValueEmty,DeleteAcctsPgrsDlg._ERROR_MSG]],
+				  visibilityChangeEventSources:[DeleteAcctsPgrsDlg._ERROR_MSG]
 			},
 			{ type: _DWT_ALERT_,
 				  style: DwtAlert.CRITICAL,
 				  iconVisible: true, 
 				  content: null,
 				  ref:DeleteAcctsPgrsDlg._ERROR_MSG, align:_CENTER_, valign:_MIDDLE_,colSpan:"*", width:"90%",
-				  relevant:"instance[DeleteAcctsPgrsDlg._ERROR_MSG] != null",relevantBehavior:_HIDE_				  
+				  visibilityChecks:[[XForm.checkInstanceValueNotEmty,DeleteAcctsPgrsDlg._ERROR_MSG]],
+				  visibilityChangeEventSources:[DeleteAcctsPgrsDlg._ERROR_MSG]				  				  
 			},			
 			{type:_SPACER_, height:"5"},	
 			{type:_OUTPUT_,value:ZaMsg.NAD_DeletedAccounts,colSpan:"*", colSpan:"*",align:_LEFT_},

@@ -26,7 +26,7 @@
 ReindexMailboxXDialog = function(parent,   w, h) {
 	if (arguments.length == 0) return;
 	ZaXDialog.call(this, parent,  null, ZaMsg.Reindex_Title, null,null);
-	this.initForm(ZaReindexMailbox.myXModel,this.getMyXForm());
+	this.initForm(ReindexMailboxXDialog.myXModel,this.getMyXForm());
 	this._button[DwtDialog.OK_BUTTON].setToolTipContent(ZaMsg.Reindex_Mbx_tt);
 	this._containedObject = new ZaReindexMailbox();
 	this.pollAction = new AjxTimedAction(this, this.getReindexStatus);
@@ -39,6 +39,17 @@ ReindexMailboxXDialog.prototype = new ZaXDialog;
 ReindexMailboxXDialog.prototype.constructor = ReindexMailboxXDialog;
 ReindexMailboxXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/re-indexing_a_mailbox.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
+ReindexMailboxXDialog.isStartEnabled = function () {
+	return (this.getInstanceValue(ZaReindexMailbox.A_status) != "running" && this.getInstanceValue(ZaReindexMailbox.A_status) != "started")	
+}
+
+ReindexMailboxXDialog.isAbortEnabled = function () {
+	return (this.getInstanceValue(ZaReindexMailbox.A_status) == "running" || this.getInstanceValue(ZaReindexMailbox.A_status) == "started")	
+}
+
+ReindexMailboxXDialog.isStatusNotError = function () {
+	return (this.getInstanceValue(ZaReindexMailbox.A_status) != "error");
+}
 ReindexMailboxXDialog.prototype.popup = 
 function () {
 	DwtDialog.prototype.popup.call(this);
@@ -78,16 +89,6 @@ function(evt) {
 			
 		var callback = new AjxCallback(this.getForm().parent, ReindexMailboxXDialog.prototype.getReindexStatusCallBack);			
 		ZaAccount.abortReindexMailbox(instance.mbxId,callback);
-		//ZaAccount.parseReindexResponse(ZaAccount.abortReindexMailbox(instance.mbxId),instance);
-
-		/*if(instance.status == "running" || instance.status == "started") {
-			// schedule next poll
-			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);		
-		} else if(this.getForm().parent._pollHandler) {
-			//stop polling
-			AjxTimedAction.cancelAction(this.getForm().parent._pollHandler);
-			this.getForm().parent._pollHandler = null;
-		}	*/	
 		this.getForm().refresh();
 	} catch (ex) {
 		this.getForm().getController().getCurrentController()._handleException(ex, "ReindexMailboxXDialog.abortReindexMailbox", null, false);
@@ -100,18 +101,7 @@ function(evt) {
 		var instance = this.getInstance();
 		var callback = new AjxCallback(this.getForm().parent, ReindexMailboxXDialog.prototype.getReindexStatusCallBack);		
 		ZaAccount.startReindexMailbox(instance.mbxId,callback);
-		//ZaAccount.parseReindexResponse(ZaAccount.startReindexMailbox(instance.mbxId),instance);
-		this.getForm().refresh();
-	
-		/*if(instance.status == "running" || instance.status == "started") {
-			// schedule next poll
-			this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);		
-		} else if(this.getForm().parent._pollHandler) {
-			//stop polling
-			AjxTimedAction.cancelAction(this.getForm().parent._pollHandler);
-			this.getForm().parent._pollHandler = null;
-		}*/
-		//this.getForm().parent._pollHandler = AjxTimedAction.scheduleAction(this.getForm().parent.pollAction, instance.pollInterval);	
+		this.getForm().refresh();	
 	} catch (ex) {
 		this.getForm().getController().getCurrentController()._handleException(ex, "ReindexMailboxXDialog.startReindexMailbox", null, false);	
 	}
@@ -153,56 +143,60 @@ function() {
 			  align:_CENTER_,
 			  valign:_TOP_
 			},
-			{ type: _DWT_ALERT_,
-			  style: DwtAlert.CRITICAL,
-			  iconVisible: true, 
-			  content: null,
-			  ref:"resultMsg",
-			  relevant:"instance.status == 'error'",
-			  relevantBehavior:_HIDE_,
-			  align:_CENTER_,
-			  colSpan:"*"
+			{type: _DWT_ALERT_,
+			 style: DwtAlert.CRITICAL,
+			 iconVisible: true, 
+			 content: null,
+			 ref:ZaReindexMailbox.A_resultMsg,
+			 visibilityChangeEventSources:[ZaReindexMailbox.A_status],
+			 visibilityChecks:[[XForm.checkInstanceValue,ZaReindexMailbox.A_status,"error"]],			  
+		  	 align:_CENTER_,
+		  	 colSpan:"*"
 			},	
 			{type:_TEXTAREA_,
-				relevant:"instance.status == 'error'", 
-				ref:"errorDetail", 
+				visibilityChangeEventSources:[ZaReindexMailbox.A_status],
+				visibilityChecks:[[XForm.checkInstanceValue,ZaReindexMailbox.A_status,"error"]],
+				ref:ZaReindexMailbox.A_errorDetail, 
 				label:ZaMsg.FAILED_REINDEX_DETAILS,
-				relevantBehavior:_HIDE_,
 				height:"100px", width:"200px",
 				colSpan:"*"
 			},
-			{type:_DWT_ALERT_, ref:"progressMsg",content: null,
-				//relevant:"instance.status == 'running' || instance.status == 'started'",
+			{type:_DWT_ALERT_, 
+				ref:ZaReindexMailbox.A_progressMsg,content: null,
 				colSpan:"*",
-				relevantBehavior:_HIDE_,
  				iconVisible: true,
 				align:_CENTER_,				
 				style: DwtAlert.INFORMATION
 			},
 			{type:_DWT_PROGRESS_BAR_, label:ZaMsg.ReindexMbx_Progress,
 				maxValue:null,
-				maxValueRef:"numTotal", 
-				ref:"numDone",
-				//relevant:"instance.status == 'running' || instance.status == 'started'",
-				relevantBehavior:_HIDE_,
+				maxValueRef:ZaReindexMailbox.A_numTotal, 
+				ref:ZaReindexMailbox.A_numDone,
 				valign:_CENTER_,
 				align:_CENTER_,	
 				wholeCssClass:"progressbar",
 				progressCssClass:"progressused"
 			},		
-			{type:_SPACER_, 
-				relevant:"instance.status != 'error'", 
+			{type:_SPACER_,
+				visibilityChecks:[ReindexMailboxXDialog.isStatusNotError],
+				visibilityChangeEventSources:[ZaReindexMailbox.A_status], 
 				height:"150px", width:"490px",colSpan:"*"
 			},			
 			{type:_GROUP_, colSpan:"*", numCols:5, width:"490px",cssStyle:"text-align:center", align:_CENTER_, items: [	
 				{type:_SPACER_, width:"100px", colSpan:1},
 				{type:_DWT_BUTTON_, 
-					onActivate:"ReindexMailboxXDialog.startReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Start_Reindexing, relevantBehavior:_DISABLE_, relevant:"instance.status != 'running' && instance.status != 'started'",
+					onActivate:"ReindexMailboxXDialog.startReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Start_Reindexing, 
+					enableDisableChecks:[ReindexMailboxXDialog.isStartEnabled],
+					enableDisableChangeEventSources:[ZaReindexMailbox.A_status],
+					visibilityChecks:[],					
 					valign:_BOTTOM_,width:"100px"
 				},
 				{type:_SPACER_, width:"90px", colSpan:1},
 				{type:_DWT_BUTTON_, 
-					onActivate:"ReindexMailboxXDialog.abortReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Abort_Reindexing, relevantBehavior:_DISABLE_, relevant:"instance.status == 'running' || instance.status == 'started'",
+					onActivate:"ReindexMailboxXDialog.abortReindexMailbox.call(this)", label:ZaMsg.NAD_ACC_Abort_Reindexing, 
+					enableDisableChecks:[ReindexMailboxXDialog.isAbortEnabled],
+					enableDisableChangeEventSources:[ZaReindexMailbox.A_status],
+					visibilityChecks:[],					
 					valign:_BOTTOM_,width:"100px"				
 				},
 				{type:_SPACER_, width:"100px", colSpan:1}

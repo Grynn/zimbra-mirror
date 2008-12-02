@@ -58,11 +58,11 @@ function() {
 			items:[
 			{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,
 				label:ZaMsg.NAD_Password, labelLocation:_LEFT_, 
-				cssClass:"admin_xform_name_input"
+				cssClass:"admin_xform_name_input",visibilityChecks:[],enableDisableChecks:[]
 			},
 			{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,
 				label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, 
-				cssClass:"admin_xform_name_input"
+				cssClass:"admin_xform_name_input",visibilityChecks:[],enableDisableChecks:[]
 			},
 			{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,  
 				msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE"}
