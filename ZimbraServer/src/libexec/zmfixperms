@@ -363,6 +363,7 @@ if [ -L ${zimbra_home}/postfix ]; then
 	chmod -fR 644 ${zimbra_home}/postfix/conf/*
 	chmod -f 755 ${zimbra_home}/postfix/conf/postfix-script
 	chmod -f 755 ${zimbra_home}/postfix/conf/post-install
+	chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/postfix/conf/master.cf.in
 
 	# Postfix specific permissions
 	if [ -d ${zimbra_home}/postfix/sbin ]; then
