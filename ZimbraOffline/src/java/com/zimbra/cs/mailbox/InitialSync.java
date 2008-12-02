@@ -34,8 +34,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.mail.MessagingException;
-
 import org.apache.commons.httpclient.Header;
 
 import com.zimbra.common.service.ServiceException;
@@ -1265,12 +1263,17 @@ public class InitialSync {
         String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=tgz&" + query);
         if (acct.isDebugTraceEnabled())
         	OfflineLog.request.debug("GET " + url);
-        InputStream rs = null;
+        UserServlet.HttpInputStream rs = null;
         int lastId = 0;
         int id = 0;
         try {
         	rs = UserServlet.getRemoteResourceAsStream(ombx.getAuthToken(), url,
         			acct.getProxyHost(), acct.getProxyPort(), acct.getProxyUser(), acct.getProxyPass()).getSecond();
+        	int statusCode = rs.getStatusCode();
+        	if (statusCode != 200) {
+            	OfflineLog.offline.warn("initial: remote server returned an error " + statusCode);
+            	return;
+        	}
             TarInputStream tis = new TarInputStream(new GZIPInputStream(rs), "UTF-8");
             TarEntry te;
 
@@ -1338,7 +1341,7 @@ public class InitialSync {
     		SyncExceptionHandler.syncDocumentFailed(ombx, id, x);
         } finally {
         	if (rs != null)
-        		try { rs.close(); } catch (IOException e) {}
+        		rs.close();
         }
     }
     
