@@ -31,6 +31,7 @@ import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.accesscontrol.RightCommand;
 import com.zimbra.cs.datasource.DataSourceManager;
+import com.zimbra.cs.datasource.SyncErrorManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -1926,7 +1927,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         DataSource dsrc = get(account, DataSourceBy.id, dataSourceId);
         if (dsrc == null)
             return;
-
+        SyncErrorManager.clearErrors(dsrc);        
         DbOfflineDirectory.deleteDirectoryLeaf(EntryType.DATASOURCE, account, dsrc.getId(), markChanged);
         reload(account);
         mHasDirtyAccounts |= markChanged;
