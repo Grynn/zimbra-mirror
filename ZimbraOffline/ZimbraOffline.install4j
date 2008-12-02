@@ -1515,7 +1515,7 @@ default:
                 </serializedBean>
                 <condition />
               </action>
-              <action name="conf" id="275915" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="conf" id="275915" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -4126,7 +4126,7 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <action name="conf" id="95848" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="conf" id="95848" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
