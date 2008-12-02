@@ -49,8 +49,8 @@ function(app, toolbar, controller, view) {
 			index: buttonIndex,
 			image: "PlayingMessage"
 		};
-		this._button = toolbar.createOp(com_zimbra_speak.SPEAK, buttonArgs);
-		this._button.addSelectionListener(new AjxListener(this, this._buttonListener, [controller]));
+		var button = toolbar.createOp(com_zimbra_speak.SPEAK, buttonArgs);
+		button.addSelectionListener(new AjxListener(this, this._buttonListener, [controller]));
 	}
 };
 
@@ -61,8 +61,7 @@ function(controller) {
 		AjxDispatcher.require([ "BrowserPlus" ]);
 		var serviceObj = { service: "TextToSpeech" };
 		var callback = new AjxCallback(this, this._serviceCallback, [message]);
-		var browserPlus = ZmBrowserPlus.getInstance();
-		browserPlus.require(serviceObj, callback, browserPlus.getDefaultErrorCallback());
+		ZmBrowserPlus.getInstance().require(serviceObj, callback);
 	}
 };
 
