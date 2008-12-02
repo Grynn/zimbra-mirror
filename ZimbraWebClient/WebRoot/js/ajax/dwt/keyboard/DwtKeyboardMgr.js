@@ -468,7 +468,7 @@ function(ev) {
 	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	kbMgr.__dwtCtrlHasFocus = true;
 	var focusObj = kbMgr.__focusObj;
-	if (focusObj && focusObj.__doFocus && (typeof focusObj.__doFocus == "function")) {
+	if (focusObj && focusObj.__doFocus) {
 		focusObj.__doFocus();
 	}
 //	DBG.println("kbnav", "focus object: " + kbMgr.__focusObj);
@@ -485,9 +485,9 @@ function(ev) {
 
 	// Got to play the trick with HTML elements which get focus before blur is
 	// called on the old focus object. (see _grabFocus)
-	var focusObj = kbMgr.__oldFocusObj ? kbMgr.__oldFocusObj : kbMgr.__focusObj;
+	var focusObj = kbMgr.__oldFocusObj || kbMgr.__focusObj;
 	
-	if (focusObj && focusObj.__doBlur && (typeof focusObj.__doBlur == "function")) {
+	if (focusObj && focusObj.__doBlur) {
 		focusObj.__doBlur();
 	}
 		
