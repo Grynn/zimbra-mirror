@@ -106,9 +106,9 @@ function() {
 /**
  * Pushes <code>tabGroup</code> onto the stack and makes it the active tab group.
  * 
- * @param {DwtTabGroup} tabGroup tab group to push onto the stack
+ * @param 	tabGroup	[DwtTabGroup]	tabGroup tab group to push onto the stack
  * 
- * @see #popTabGroup
+ * @see		popTabGroup
  */
 DwtKeyboardMgr.prototype.pushTabGroup =
 function(tabGroup) {
@@ -298,8 +298,8 @@ function(control) {
  *    </ul>
  * </ul>
  * 
- * @param {function} hdlr Handler function. This method should have the following
- * 		signature <code>Boolean hdlr(Int actionCode DwtKeyEvent event);</code>
+ * @param 	hdlr	[function]		hdlr Handler function. This method should have the following
+ * 									signature <code>Boolean hdlr(Int actionCode DwtKeyEvent event);</code>
  * 
  * @see DwtKeyEvent
  */
@@ -328,7 +328,7 @@ function(keyMap) {
  * Sets the timeout (in milliseconds) between key presses for handling multi-keypress
  * sequences
  * 
- * @param {number} timeout Timeout in milliseconds
+ * @param 	timeout		[Integer]	timeout Timeout in milliseconds
  */
 DwtKeyboardMgr.prototype.setKeyTimeout =
 function(timeout) {
@@ -338,7 +338,7 @@ function(timeout) {
 /**
  * Enables/disables keyboard nav.
  * 
- * @param enabled	{boolean}	if true, enable keyboard nav
+ * @param 	enabled		[boolean]	if true, enable keyboard nav
  */
 DwtKeyboardMgr.prototype.enable =
 function(enabled) {
@@ -787,7 +787,7 @@ function(hdlr, ev, forceActionCode) {
 DwtKeyboardMgr.prototype.__killKeySequenceAction =
 function() {
 //	DBG.println("kbnav", "DwtKeyboardMgr.__killKeySequenceAction: " + this.__mapName);
-	this.__dispatchKeyEvent(this.__hdlr, this.__mapName, this.__ev, true);
+	this.__dispatchKeyEvent(this.__hdlr, this.__ev, true);
 	this.__killKeySeqTimedActionId = -1;
 	this.__keySequence.length = 0;
 };
