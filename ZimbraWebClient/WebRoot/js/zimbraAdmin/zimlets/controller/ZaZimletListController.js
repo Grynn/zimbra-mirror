@@ -198,10 +198,10 @@ function(zimletList) {
 ZaZimletListController.prototype._listSelectionListener =
 function(ev) {
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
-	/*	if(ev.item) {
+		if(ev.item) {
 			this._selectedItem = ev.item;
 			ZaApp.getInstance().getZimletController().show(ev.item);
-		}*/
+		}
 	} else {
 		this.changeActionsState();	
 	}

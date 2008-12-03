@@ -43,7 +43,9 @@ ZaController.setViewMethods["ZaZimletViewController"] = new Array();
 
 ZaZimletViewController.prototype.show = 
 function(entry, skipRefresh) {
-	this._setView(entry, false, skipRefresh);
+    if (! this.selectExistingTabByItemId(entry.id)){
+		this._setView(entry, true);
+	}
 }
 
 
@@ -60,7 +62,8 @@ function(entry) {
 //	ZaApp.getInstance().pushView(ZaZimbraAdmin._ZIMLET_VIEW);
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._view.setDirty(false);
-	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
+    entry[ZaModel.currentTab] = "1";
+    this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view
 	this._currentObject = entry;
 }
 ZaController.setViewMethods["ZaZimletViewController"].push(ZaZimletViewController.setViewMethod);
@@ -70,10 +73,11 @@ ZaController.setViewMethods["ZaZimletViewController"].push(ZaZimletViewControlle
 **/
 ZaZimletViewController.prototype._createUI =
 function () {
-	this._view = new this.tabConstructor(this._container);
+	this._contentView = this._view = new this.tabConstructor(this._container);
 
 	this._initToolbar();
-	//always add Help button at the end of the toolbar
+    this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));
+    //always add Help button at the end of the toolbar
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));							
 	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);		

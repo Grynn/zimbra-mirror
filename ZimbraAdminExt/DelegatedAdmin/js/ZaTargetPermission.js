@@ -295,7 +295,22 @@ if (ZaController.setViewMethods["ZaServerController"]) {
 	ZaController.setViewMethods["ZaServerController"].push(ZaTargetPermission.permissionViewMethod);
 }
 
+//Zimlet Target
+if (ZaZimlet) {
+    ZaZimlet.myXModel.items.push(grantListItem) ;
+}
 
+if (ZaTabView.XFormModifiers["ZaZimletXFormView"]){
+    ZaTabView.XFormModifiers["ZaZimletXFormView"].push(ZaTargetPermission.targetXFormModifier);
+}
+
+if (ZaItem.loadMethods["ZaZimlet"]) {
+    ZaItem.loadMethods["ZaZimlet"].push (ZaGrant.loadMethod) ;
+}
+
+if (ZaController.setViewMethods["ZaZimletViewController"]) {
+	ZaController.setViewMethods["ZaZimletViewController"].push(ZaTargetPermission.permissionViewMethod);
+}
 
 //TODO: permission actions - get/grant/revoke grants
 ZaTargetPermission.grantButtonListener =

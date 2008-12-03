@@ -22,7 +22,7 @@
 * @author Greg Solovyev
 **/
 ZaZimlet = function() {
-	ZaItem.call(this);
+	ZaItem.call(this, "ZaZimlet");
 	this.label = "";
 	this.type = ZaItem.ZIMLET;
 	this[ZaModel.currentStep] = 1;
@@ -227,23 +227,26 @@ ZaZimlet.deploy = function (action,attId, callback) {
 
 ZaZimlet.loadMethod = 
 function(by, val, withConfig) {
-	var _val = val ? val : this.name
+	var _val = val ? val : this.name ;
 	var soapDoc = AjxSoapDoc.create("GetZimletRequest", ZaZimbraAdmin.URN, null);
 	var elZimlet = soapDoc.set("zimlet", "");
-	elZimlet.setAttribute("name", val);
-	//var command = new ZmCsfeCommand();
-	var params = new Object();
+	elZimlet.setAttribute("name", _val);
+	var params = {};
 	params.soapDoc = soapDoc;	
 	params.asyncMode = false;
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_ZIMLET
 	}
-	resp = command.invoke(params, reqMgrParams);		
+	resp = ZaRequestMgr.invoke(params, reqMgrParams);
 	this.initFromJS(resp.Body.GetZimletResponse.zimlet[0]);
 }
 ZaItem.loadMethods["ZaZimlet"].push(ZaZimlet.loadMethod);
 
 ZaZimlet.myXModel = { 
-	items:[]	
+	items:[
+        { id:ZaZimlet.A_name, ref:ZaZimlet.A_name, type: _STRING_ },    
+        { id:ZaZimlet.A_zimbraZimletDescription, ref:"attrs/" + ZaZimlet.A_zimbraZimletDescription, type: _STRING_ },
+        { id:ZaZimlet.A_zimbraZimletEnabled, ref:"attrs/" + ZaZimlet.A_zimbraZimletEnabled, type: _ENUM_,  choices:ZaModel.BOOLEAN_CHOICES} 
+    ]
 }
