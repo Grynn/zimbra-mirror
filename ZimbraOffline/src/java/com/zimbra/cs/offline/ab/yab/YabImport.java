@@ -22,32 +22,42 @@ import com.zimbra.cs.offline.util.yab.Session;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.util.yauth.Authenticator;
 import com.zimbra.common.service.ServiceException;
 
 import java.util.List;
+import java.io.IOException;
 
 public class YabImport implements DataSource.DataImport {
     private final OfflineDataSource ds;
-    private final SyncSession session;
+    private SyncSession session;
 
     private static final String ERROR = "Yahoo address book synchronization failed";
     
-    public YabImport(DataSource ds) throws ServiceException {
+    public YabImport(DataSource ds) {
         this.ds = (OfflineDataSource) ds;
-        session = newSyncSession();
     }
     
-    public void test() throws ServiceException {}
+    public void test() throws ServiceException {
+        try {
+            OfflineYAuth.newAuthenticator(ds).authenticate();
+        } catch (IOException e) {
+            throw ServiceException.FAILURE(
+                "Authentication failed due to I/O error", e);
+        }
+    }
 
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
         ds.getMailbox().beginTrackingSync();
+        if (session == null) {
+            session = newSyncSession();
+        }
         try {
             session.sync();
         } catch (Exception e) {
             SyncExceptionHandler.checkRecoverableException(ERROR, e);
-            ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR + " - contact synchronization disabled.", e);
-            ds.setContactSyncEnabled(false);
+            ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR, e);
         }
     }
 

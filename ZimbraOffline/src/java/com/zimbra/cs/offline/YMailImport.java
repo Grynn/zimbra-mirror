@@ -43,6 +43,14 @@ public class YMailImport extends ImapSync {
     }
 
     @Override
+    public void test() throws ServiceException {
+        if (yabImport != null) {
+            yabImport.test();
+        }
+        super.test();
+    }
+    
+    @Override
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
         String dsName = dataSource.getName();

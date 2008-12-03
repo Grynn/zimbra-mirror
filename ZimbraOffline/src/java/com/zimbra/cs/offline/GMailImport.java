@@ -39,6 +39,14 @@ public class GMailImport extends ImapSync {
     }
 
     @Override
+    public void test() throws ServiceException {
+        if (gabImport != null) {
+            gabImport.test();
+        }
+        super.test();
+    }
+    
+    @Override
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
         String dsName = dataSource.getName();

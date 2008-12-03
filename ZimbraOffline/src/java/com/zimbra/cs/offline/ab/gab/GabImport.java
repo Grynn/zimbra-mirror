@@ -26,26 +26,29 @@ import java.util.List;
 
 public class GabImport implements DataSource.DataImport {
     private final OfflineDataSource ds;
-    private final SyncSession session;
+    private SyncSession session;
 
     private static final String ERROR = "Google address book synchronization failed";
 
-    public GabImport(DataSource ds) throws ServiceException {
+    public GabImport(DataSource ds) {
         this.ds = (OfflineDataSource) ds;
-        session = new SyncSession(ds);
     }
 
-    public void test() throws ServiceException {}
+    public void test() throws ServiceException {
+        session = new SyncSession(ds);
+    }
 
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
         ds.getMailbox().beginTrackingSync();
+        if (session == null) {
+            session = new SyncSession(ds);
+        }
         try {
             session.sync();
         } catch (Exception e) {
             SyncExceptionHandler.checkRecoverableException(ERROR, e);
-            ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR + " - contact synchronization disabled.", e);
-            // ds.setContactSyncEnabled(false);
+            ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR, e);
         }
     }
 }
