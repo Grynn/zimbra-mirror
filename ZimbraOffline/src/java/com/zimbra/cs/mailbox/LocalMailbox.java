@@ -170,6 +170,9 @@ public class LocalMailbox extends DesktopMailbox {
             Session session = null;
             //the client could send datasourceId as identityId
             OfflineDataSource ds = getDataSource(msg);
+            if (!isOnRequest && isAutoSyncDisabled(ds))
+            	continue;
+            
             if (!ds.isLive() && !ds.isYahoo()) {
                 session = LocalJMSession.getSession(ds);
                 if (session == null) {
@@ -331,22 +334,23 @@ public class LocalMailbox extends DesktopMailbox {
     		OfflineLog.offline.error(x);
     	}
     }
+    
+    private boolean isTimeToSync(DataSource ds) throws ServiceException {
+    	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
+        if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds) || !syncMan.retryOK(ds))
+            return false;
+		long freqLimit = syncMan.getSyncFrequencyLimit();
+		long frequency = ds.getSyncFrequency() < freqLimit ? freqLimit : ds.getSyncFrequency();
+        return System.currentTimeMillis() - syncMan.getLastSyncTime(ds.getName()) >= frequency;
+    }
 
     private void syncAllLocalDataSources(boolean force, boolean isOnRequest) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         List<DataSource> dataSources = prov.getAllDataSources(getAccount());
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         for (DataSource ds : dataSources) {
-            if (!force && !isOnRequest) {
-                if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds) || !syncMan.retryOK(ds))
-                    continue;
-
-	    		long freqLimit = syncMan.getSyncFrequencyLimit();
-	    		long frequency = ds.getSyncFrequency() < freqLimit ? freqLimit : ds.getSyncFrequency();
-
-                if (System.currentTimeMillis() - syncMan.getLastSyncTime(ds.getName()) < frequency)
-                    continue;
-            }
+            if (!force && !isOnRequest && !isTimeToSync(ds))
+            	continue;
             try {
         	    OfflineLog.offline.info(">>>>>>>> name=%s;version=%s;build=%s;release=%s;os=%s;type=%s",
         	    		ds.getAccount().getName(), OfflineLC.zdesktop_version.value(), OfflineLC.zdesktop_buildid.value(), OfflineLC.zdesktop_relabel.value(),

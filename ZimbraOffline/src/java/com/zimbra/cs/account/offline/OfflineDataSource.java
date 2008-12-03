@@ -374,5 +374,16 @@ public class OfflineDataSource extends DataSource {
             this, OfflineProvisioning.A_zimbraDataSourceCalendarSyncEnabled,
             enabled ? Provisioning.TRUE : Provisioning.FALSE);
     }
+    
+    @Override
+    public boolean isDebugTraceEnabled() {
+    	if (super.isDebugTraceEnabled())
+    		return true;
+    	boolean accountDebugTrace = false;
+    	try {
+    		accountDebugTrace = ((OfflineAccount)getAccount()).isDebugTraceEnabled();
+    	} catch (ServiceException x) {}
+    	return  accountDebugTrace;
+    }
 }
 
