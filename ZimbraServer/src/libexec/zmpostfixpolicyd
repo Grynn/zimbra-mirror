@@ -70,8 +70,8 @@ sub smtpd_access_policy {
                 base=>"",
                 scope=>'sub',
                 filter=>
-                        "(&(|(mail=$user"."$robject)(mail=$daddr)(zimbraMailDeliveryAddress=$user"."$robject)(zimbraMailAlias=$user".
-                        "$robject)(zimbraMailAlias=$daddr)(zimbraMailCatchAllAddress=$user"."$robject))(zimbraMailStatus=enabled))",
+                        "(&(|(zimbraMailDeliveryAddress=$user"."$robject)(zimbraMailDeliveryAddress=$daddr)(zimbraMailAlias=$user".
+                        "$robject)(zimbraMailAlias=$daddr)(zimbraMailCatchAllAddress=$user"."$robject)(zimbraMailCatchAllAddress=$daddr))(zimbraMailStatus=enabled))",
                 attrs=>'1.1',
               );
       $ldap->unbind;
