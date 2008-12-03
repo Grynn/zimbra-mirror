@@ -29,22 +29,23 @@ my $syslog_socktype = 'unix';
 my $syslog_facility="mail";
 my $syslog_options="pid";
 our $syslog_priority="info";
-our ($verbose, %attr);
-my ($option, $action);
+our ($verbose, %attr, @ldap_url, $ldap_starttls_supported, $postfix_pw);
+my ($option, $action, $ldap_url);
 
 setlogsock $syslog_socktype;
 openlog $0, $syslog_options, $syslog_facility;
 
+$ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
+$postfix_pw = getLocalConfig("ldap_postfix_password");
+$ldap_url = getLocalConfig("ldap_url");
+@ldap_url = split / /, $ldap_url;
+
 sub smtpd_access_policy {
   my($domain, $ldap, $mesg, $user, $daddr);
-  my $ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
-  my $postfix_pw = getLocalConfig("ldap_postfix_password");
-  my $ldap_url = getLocalConfig("ldap_url");
   $daddr = lc $attr{recipient};
   ($user, $domain) = split /\@/, lc $attr{recipient};
   syslog $syslog_priority, "Recipient Domain: %s", $domain if $verbose;
   syslog $syslog_priority, "Recipient userid: %s", $user if $verbose;
-  my @ldap_url = split / /, $ldap_url;
   $ldap=Net::LDAP->new(\@ldap_url);
   if ( $ldap_starttls_supported ) {
     $mesg = $ldap->start_tls(
