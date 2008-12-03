@@ -36,10 +36,11 @@ setlogsock $syslog_socktype;
 openlog $0, $syslog_options, $syslog_facility;
 
 sub smtpd_access_policy {
-  my($domain, $ldap, $mesg, $user);
+  my($domain, $ldap, $mesg, $user, $daddr);
   my $ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
   my $postfix_pw = getLocalConfig("ldap_postfix_password");
   my $ldap_url = getLocalConfig("ldap_url");
+  $daddr = lc $attr{recipient};
   ($user, $domain) = split /\@/, lc $attr{recipient};
   syslog $syslog_priority, "Recipient Domain: %s", $domain if $verbose;
   syslog $syslog_priority, "Recipient userid: %s", $user if $verbose;
@@ -69,7 +70,8 @@ sub smtpd_access_policy {
                 base=>"",
                 scope=>'sub',
                 filter=>
-        "(&(|(mail=$user"."$robject)(zimbraMailDeliveryAddress=$user"."$robject)(zimbraMailAlias=$user"."$robject)(zimbraMailCatchAllAddress=$user"."$robject))(zimbraMailStatus=enabled))",
+                        "(&(|(mail=$user"."$robject)(mail=$daddr)(zimbraMailDeliveryAddress=$user"."$robject)(zimbraMailAlias=$user".
+                        "$robject)(zimbraMailAlias=$daddr)(zimbraMailCatchAllAddress=$user"."$robject))(zimbraMailStatus=enabled))",
                 attrs=>'1.1',
               );
       $ldap->unbind;
