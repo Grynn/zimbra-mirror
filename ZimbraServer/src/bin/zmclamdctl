@@ -78,7 +78,7 @@ case "$1" in
       cp -f ${zimbra_home}/clamav/db/main.cvd.init \
         ${zimbra_home}/data/clamav/db/main.cvd
       # Init the db
-      ${zimbra_home}/clamav/bin/freshclam \
+      ${zimbra_home}/clamav/bin/freshclam --quiet \
         --config-file=${zimbra_home}/conf/freshclam.conf &
     fi
     if [ x$2 = "x" ]; then
@@ -86,7 +86,7 @@ case "$1" in
     fi
 
     ${zimbra_home}/clamav/bin/freshclam \
-      --config-file=${zimbra_home}/conf/freshclam.conf -d --checks=12 \
+      --config-file=${zimbra_home}/conf/freshclam.conf --quiet --daemon --checks=12 \
         >> ${zimbra_log_directory}/freshclam.log 2>&1 &
 
     echo -n "Starting clamd..."
