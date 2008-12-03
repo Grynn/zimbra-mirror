@@ -20,6 +20,9 @@ function (value, event, form) {
 ZaGrantView.prototype.setObject =
 function (entry) {
     this._containedObject = entry ;
+    //TODO: temporary solution to show all the items.
+    this._containedObject.setAttrs = {} ;
+    this._containedObject.setAttrs.all = true ;
     this._localXForm.setInstance(this._containedObject) ;
 }
 
@@ -34,17 +37,22 @@ ZaGrantView.myXFormModifier = function(xFormObject) {
              {type:_GROUP_,  colSpan: "*", numCols: 2, colSizes: [200, "*"],
             items: [
                { type: _SPACER_ },
-               { ref: ZaGrant.A_target, type: _OUTPUT_ , value: com_zimbra_delegatedadmin.val_global_grant, label: com_zimbra_delegatedadmin.Label_target_name },
+               //target is always com_zimbra_delegatedadmin.val_global_grant for global grants     
+               { type: _OUTPUT_ , value: com_zimbra_delegatedadmin.val_global_grant, label: com_zimbra_delegatedadmin.Label_target_name },
                // make it type _DYNSELECT_
                { ref: ZaGrant.A_grantee, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
+                   visibilityChecks:[],
                    labelLocation:_LEFT_ },
                { ref: ZaGrant.A_grantee_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
+                   visibilityChecks:[],
                    labelLocation:_LEFT_, choices: ZaGrant.GRANTEE_TYPE
                },
                {ref: ZaGrant.A_right, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_right_name,
-                    labelLocation:_LEFT_ },
+                   visibilityChecks:[],
+                   labelLocation:_LEFT_ },
                {ref: ZaGrant.A_deny,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_deny ,
-                     labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" }
+                   visibilityChecks:[],  
+                   labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" }
               ]
             }
         ]
