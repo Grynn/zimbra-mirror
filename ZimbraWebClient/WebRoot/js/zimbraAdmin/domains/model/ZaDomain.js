@@ -1311,6 +1311,9 @@ ZaDomain.aclXModel = {
 
 ZaDomain.myXModel = {
 	items: [
+    	{id:"getAttrs",type:_LIST_},
+    	{id:"setAttrs",type:_LIST_},
+    	{id:"rights",type:_LIST_},	
 		{id:"name", type:_STRING_, ref:"name"},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
 		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255},

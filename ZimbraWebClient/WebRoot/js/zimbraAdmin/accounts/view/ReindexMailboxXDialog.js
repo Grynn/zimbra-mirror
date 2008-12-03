@@ -26,7 +26,7 @@
 ReindexMailboxXDialog = function(parent,   w, h) {
 	if (arguments.length == 0) return;
 	ZaXDialog.call(this, parent,  null, ZaMsg.Reindex_Title, null,null);
-	this.initForm(ReindexMailboxXDialog.myXModel,this.getMyXForm());
+	this.initForm(ZaReindexMailbox.myXModel,this.getMyXForm());
 	this._button[DwtDialog.OK_BUTTON].setToolTipContent(ZaMsg.Reindex_Mbx_tt);
 	this._containedObject = new ZaReindexMailbox();
 	this.pollAction = new AjxTimedAction(this, this.getReindexStatus);

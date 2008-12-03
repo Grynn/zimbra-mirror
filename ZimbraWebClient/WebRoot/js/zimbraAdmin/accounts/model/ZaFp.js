@@ -36,6 +36,9 @@ ZaFp.getXModel = function ()
 {
     var model = { items:
       [
+    	{id:"getAttrs",type:_LIST_},
+    	{id:"setAttrs",type:_LIST_},
+    	{id:"rights",type:_LIST_},      
 		{id:ZaFp.A_name, type:_STRING_, ref:ZaFp.A_name},
 		{id:ZaFp.A_index, type:_NUMBER_, ref:ZaFp.A_index},
         {id:ZaFp.A_prefix, type:_STRING_, ref:ZaFp.A_prefix}

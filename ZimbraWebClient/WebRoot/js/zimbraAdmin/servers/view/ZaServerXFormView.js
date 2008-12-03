@@ -61,13 +61,16 @@ ZaServerXFormView.prototype.setObject =
 function (entry) {
 	this.entry = entry;
 	this._containedObject = {attrs:{}};
-	this._containedObject._defaultValues = entry._defaultValues;
 	this._containedObject[ZaServer.A_showVolumes] = entry[ZaServer.A_showVolumes];
 	
 	
 	this._containedObject[ZaServer.A_ServiceHostname] = entry[ZaServer.A_ServiceHostname];
 	this._containedObject.name = entry.name;
 	this._containedObject.type = entry.type ;
+
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+	
 	if(entry.setAttrs)
 		this._containedObject.setAttrs = entry.setAttrs;
 	
@@ -76,9 +79,8 @@ function (entry) {
 		
 	if(entry._defaultValues)
 		this._containedObject._defaultValues = entry._defaultValues;
-			
+		
 	if(entry.id) this._containedObject.id = entry.id;
-	//this._containedObject = AjxUtil.createProxy(entry,3);
 
 	this._containedObject[ZaServer.A_Volumes] = [];
 	if(entry.attrs) {

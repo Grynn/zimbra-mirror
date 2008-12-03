@@ -143,6 +143,10 @@ function(entry) {
 	this._containedObject.attrs = new Object();
 	this._containedObject.type = entry.type ;
 	this._containedObject.name = entry.name ;
+
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+	
 	if(entry.setAttrs)
 		this._containedObject.setAttrs = entry.setAttrs;
 	

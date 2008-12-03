@@ -73,6 +73,10 @@ function(entry) {
 	}
 	this._containedObject.name = entry.name;
 	this._containedObject.type = entry.type;
+
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+
 	if(entry.setAttrs)
 		this._containedObject.setAttrs = entry.setAttrs;
 	
@@ -98,7 +102,9 @@ function(entry) {
 	if ((typeof ZaDomainAdmin == "function")) {
 		this._containedObject[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed];
 	}	
-	if(ZaSettings.ACCOUNTS_ALIASES_ENABLED) {
+	
+	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(this._containedObject.attrs[ZaAccount.A_zimbraMailAlias]) {
 			if(!this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] instanceof Array) {
 				this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = [this._containedObject.attrs[ZaAccount.A_zimbraMailAlias]];		
@@ -106,7 +112,7 @@ function(entry) {
 		}		
 	}	
 	
-	if(ZaSettings.ACCOUNTS_FORWARDING_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_FORWARDING_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(this._containedObject.attrs[ZaAccount.A_zimbraMailForwardingAddress]) {
 			if(!this._containedObject.attrs[ZaAccount.A_zimbraMailForwardingAddress] instanceof Array) {
 				this._containedObject.attrs[ZaAccount.A_zimbraMailForwardingAddress] = [this._containedObject.attrs[ZaAccount.A_zimbraMailForwardingAddress]];		
@@ -117,33 +123,33 @@ function(entry) {
 	//if(ZaSettings.COSES_ENABLED) {	
 		/**
 		* If this account does not have a COS assigned to it - assign default COS
+	**/
+	if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
+		this._containedObject[ZaAccount.A2_autoCos] = "FALSE" ;
+		
+		//this._containedObject._defaultValues = ZaApp.getInstance().getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
+		//this._containedObject._defaultValues = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);
+		
+	}
+	if(!this._containedObject.attrs[ZaAccount.A_COSId]) {
+		this._containedObject[ZaAccount.A2_autoCos] = "TRUE" ;
+		//We do not need to find the COS when displaying an account, because all default (fall-back-to) values are returned in GetEfectiveRightsRequest
+		/**
+		* We did not find the COS assigned to this account,
+		* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
 		**/
-		if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
-			this._containedObject[ZaAccount.A2_autoCos] = "FALSE" ;
-			
-			//this._containedObject._defaultValues = ZaApp.getInstance().getCosList().getItemById(this._containedObject.attrs[ZaAccount.A_COSId]);
-			//this._containedObject._defaultValues = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);
-			
-		}
-		if(!this._containedObject.attrs[ZaAccount.A_COSId]) {
-			this._containedObject[ZaAccount.A2_autoCos] = "TRUE" ;
-			//We do not need to find the COS when displaying an account, because all default (fall-back-to) values are returned in GetEfectiveRightsRequest
-			/**
-			* We did not find the COS assigned to this account,
-			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
-			**/
-			//this._containedObject._defaultValues = ZaCos.getDefaultCos4Account(this._containedObject.name);
-			/*ZaAccount.setDefaultCos(this._containedObject) ;
-			if(!this._containedObject.cos) {
-				//default COS was not found - just assign the first COS
-				var hashMap = ZaApp.getInstance().getCosList().getIdHash();
-				for(var id in hashMap) {
-					this._containedObject._defaultValues = hashMap[id];
-					this._containedObject.attrs[ZaAccount.A_COSId] = id;					
-					break;
-				}
-			}*/
-		}
+		//this._containedObject._defaultValues = ZaCos.getDefaultCos4Account(this._containedObject.name);
+		/*ZaAccount.setDefaultCos(this._containedObject) ;
+		if(!this._containedObject.cos) {
+			//default COS was not found - just assign the first COS
+			var hashMap = ZaApp.getInstance().getCosList().getIdHash();
+			for(var id in hashMap) {
+				this._containedObject._defaultValues = hashMap[id];
+				this._containedObject.attrs[ZaAccount.A_COSId] = id;					
+				break;
+			}
+		}*/
+	}
 	if(this._containedObject.setAttrs[ZaAccount.A_COSId]) {
 		var cos = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);	
 		this.cosChoices.setChoices([cos]);
@@ -163,7 +169,7 @@ function(entry) {
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 	
-	if(ZaSettings.SKIN_PREFS_ENABLED) {
+	if(entry.getAttrs[ZaAccount.AzimbraAvailableSkin] || entry.getAttrs.all) {
 		var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
 		if(skins != null && skins != "") {
 			if (AjxUtil.isString(skins))	 {
@@ -186,7 +192,7 @@ function(entry) {
 		
 	}
 	
-	if(ZaSettings.ZIMLETS_ENABLED) {
+	if(entry.getAttrs[ZaAccount.A_zimbraZimletAvailableZimlets] || entry.getAttrs.all) {
 		var zimlets = entry.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
 		if(zimlets != null && zimlets != "") {
 			if (AjxUtil.isString(zimlets))	 {
@@ -1662,17 +1668,18 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 											onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
-											enableDisableChecks:[ZaAccountXFormView.isDeleteAliasEnabled],
+											enableDisableChecks:[ZaAccountXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.REMOVE_ACCOUNT_ALIAS]],
 											enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
 											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",id:"editAliasButton",
-											enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache],
+											enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache,[XFormItem.prototype.hasRight,ZaAccount.ADD_ACCOUNT_ALIAS],[XFormItem.prototype.hasRight,ZaAccount.REMOVE_ACCOUNT_ALIAS]],
 											enableDisableChecks:[ZaAccountXFormView.isEditAliasEnabled]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+											enableDisableChecks:[ZaAccountXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.ADD_ACCOUNT_ALIAS]],
 											onActivate:"ZaAccountXFormView.addAliasButtonListener.call(this);"
 										}
 									]
@@ -1710,6 +1717,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										msgName:ZaMsg.NAD_zimbraPrefMailForwardingAddress,
 										label:ZaMsg.NAD_zimbraPrefMailForwardingAddress+":", labelLocation:_LEFT_,
 										align:_LEFT_,
+										visibilityChecks:[XFormItem.prototype.hasReadPermission],
 										enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureMailForwardingEnabled,"TRUE"]],
 										enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailForwardingEnabled, ZaAccount.A_COSId]										
 									},
@@ -1729,7 +1737,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
                                         },
                                 {ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"200", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
-									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup
+									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup,
+									visibilityChecks:[XFormItem.prototype.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
 									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
@@ -1737,17 +1746,18 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 											onActivate:"ZaAccountXFormView.deleteFwdAddrButtonListener.call(this);",
-											enableDisableChecks:[ZaAccountXFormView.isDeleteFwdAddrEnabled],
+											enableDisableChecks:[ZaAccountXFormView.isDeleteFwdAddrEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraMailForwardingAddress]],
 											enableDisableChangeEventSources:[ZaAccount.A2_fwdAddr_selection_cache]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
 											onActivate:"ZaAccountXFormView.editFwdAddrButtonListener.call(this);",
-											enableDisableChecks:[ZaAccountXFormView.isEditFwdAddrEnabled],
+											enableDisableChecks:[ZaAccountXFormView.isEditFwdAddrEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraMailForwardingAddress]],
 											enableDisableChangeEventSources:[ZaAccount.A2_fwdAddr_selection_cache]
 										},
 										{type:_CELLSPACER_},
                                         {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+											enableDisableChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraMailForwardingAddress]],                                        
 											onActivate:"ZaAccountXFormView.addFwdAddrButtonListener.call(this);"
 										}
 									]
@@ -1776,23 +1786,24 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Push,width:"100px",
 											onActivate:"ZaAccountXFormView.pushFpButtonListener.call(this);",
-											enableDisableChecks:[ZaAccountXFormView.isPushFpEnabled],
+											enableDisableChecks:[ZaAccountXFormView.isPushFpEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
 											enableDisableChangeEventSources:[ZaAccount.A_zimbraForeignPrincipal]
 										},
 										{type:_CELLSPACER_},
                                         {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
                                             onActivate:"ZaAccountXFormView.deleteFpButtonListener.call(this);",
-                                            enableDisableChecks:[ZaAccountXFormView.isDeleteFpEnabled],
+                                            enableDisableChecks:[ZaAccountXFormView.isDeleteFpEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
                                             enableDisableChangeEventSources:[ZaAccount.A2_fp_selection_cache]
                                         },
                                         {type:_CELLSPACER_},
                                         {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
                                             onActivate:"ZaAccountXFormView.editFpButtonListener.call(this);",
-                                            enableDisableChecks:[ZaAccountXFormView.isEditFpEnabled],
+                                            enableDisableChecks:[ZaAccountXFormView.isEditFpEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
                                             enableDisableChangeEventSources:[ZaAccount.A2_fp_selection_cache]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
+											enableDisableChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
 											onActivate:"ZaAccountXFormView.addFpButtonListener.call(this);"
 										}
 									]

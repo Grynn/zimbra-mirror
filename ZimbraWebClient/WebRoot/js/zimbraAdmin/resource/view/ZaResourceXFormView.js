@@ -70,55 +70,31 @@ function(entry) {
 	this._containedObject.type = entry.type ;
 	if(entry.id)
 		this._containedObject.id = entry.id;
-		
-	if(ZaSettings.COSES_ENABLED) {	
-		
-		
-		/**
-		* If this account does not have a COS assigned to it - assign default COS
-		**/
-		if(this._containedObject.attrs[ZaResource.A_COSId]) {
-			this._containedObject._defaultValues = ZaCos.getCosById(this._containedObject.attrs[ZaResource.A_COSId]);
-		}
-		
-		if(!this._containedObject.cos) {
-			this._containedObject._defaultValues = ZaCos.getCosByName("default");
-			this._containedObject[ZaResource.A2_autoCos] = "TRUE" ;
-		} else {
-			this._containedObject[ZaResource.A2_autoCos] = "FALSE" ;
-		}
-		if(!this._containedObject.cos) {
-			var cosList = ZaApp.getInstance().getCosList().getArray();
-			/**
-			* We did not find the COS assigned to this account,
-			* this means that the COS was deleted or wasn't assigned, therefore assign default COS to this account
-			**/
-			for(var i in cosList) {
-				/**
-				* Find the COS assigned to this account 
-				**/
-				if(cosList[i].name == "default") {
-					this._containedObject._defaultValues = cosList[i];
-					//this._containedObject.attrs[ZaResource.A_COSId] = cosList[i].id;										
-					break;
-				}
-			}
-			if(!this._containedObject.cos) {
-				//default COS was not found - just assign the first COS
-				if(cosList && cosList.length > 0) {
-					this._containedObject._defaultValues = cosList[0];
-					//this._containedObject.attrs[ZaResource.A_COSId] = cosList[0].id;					
-				}
-			}
-		}
-		if(!this._containedObject.cos) {
-			this._containedObject._defaultValues = cosList[0];
-		}	
-	}
+
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
 	
-	if(ZaSettings.GLOBAL_CONFIG_ENABLED) {
-		this._containedObject.globalConfig = ZaApp.getInstance().getGlobalConfig();
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+		
+	
+	if(this._containedObject.attrs[ZaResource.A_COSId]) {	
+		this._containedObject[ZaResource.A2_autoCos] = "FALSE" ;		
 	}
+	if(!this._containedObject.attrs[ZaResource.A_COSId]) {
+		this._containedObject[ZaResource.A2_autoCos] = "TRUE" ;
+	}
+	if(this._containedObject.setAttrs[ZaResource.A_COSId]) {
+		var cos = ZaCos.getCosById(this._containedObject.attrs[ZaResource.A_COSId]);	
+		this.cosChoices.setChoices([cos]);
+		this.cosChoices.dirtyChoices();
+	}		
 	
    	this._containedObject[ZaResource.A2_autodisplayname] = "FALSE";
    	this._containedObject[ZaResource.A2_autoLocationName] = entry[ZaResource.A2_autoLocationName];

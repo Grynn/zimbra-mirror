@@ -117,6 +117,9 @@ function() {
 
 ZaAlias.myXModel = { 
 	items: [
+	    {id:"getAttrs",type:_LIST_},
+    	{id:"setAttrs",type:_LIST_},
+    	{id:"rights",type:_LIST_},
 		{id:ZaAccount.A_name, type:_STRING_, ref:"name"},
 		{id:ZaAlias.A_AliasTargetId, type:_STRING_, ref:ZaAlias.A_AliasTargetId},
 		{id:ZaAlias.A_targetType, type:_STRING_, ref:ZaAlias.A_targetType},

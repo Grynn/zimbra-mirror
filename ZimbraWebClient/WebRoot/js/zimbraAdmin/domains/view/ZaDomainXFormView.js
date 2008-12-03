@@ -68,6 +68,9 @@ function(entry) {
     this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
 	
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+	
 	if(entry.setAttrs)
 		this._containedObject.setAttrs = entry.setAttrs;
 	

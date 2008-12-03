@@ -48,7 +48,19 @@ function(entry) {
 	
 	this._containedObject.name = entry.name;
 	this._containedObject.type = entry.type ;
+
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
 	
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+		
 	if(entry.id)
 		this._containedObject.id = entry.id;
 		
@@ -93,7 +105,7 @@ function(entry) {
 	}
 */
 	
-	if(ZaSettings.SKIN_PREFS_ENABLED) {
+	if(entry.getAttrs[ZaCos.A_zimbraAvailableSkin] || entry.getAttrs.all) {
 		var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];
 		if(skins != null && skins != "") {
 			if (AjxUtil.isString(skins))	 {
@@ -123,7 +135,7 @@ function(entry) {
 	}
 	
 	
-	if(ZaSettings.ZIMLETS_ENABLED) {
+	if(entry.getAttrs[ZaCos.A_zimbraZimletAvailableZimlets] || entry.getAttrs.all) {
 		var zimlets = entry.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
 		if(zimlets != null && zimlets != "") {
 			if (AjxUtil.isString(zimlets))	 {
@@ -158,10 +170,6 @@ function(entry) {
 		ZaCosXFormView.zimletChoices.setChoices(_tmpZimlets);
 		ZaCosXFormView.zimletChoices.dirtyChoices();		
 	}	
-
-  	
-  	
-  	this._containedObject.globalConfig = ZaApp.getInstance().getGlobalConfig();
   	
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";

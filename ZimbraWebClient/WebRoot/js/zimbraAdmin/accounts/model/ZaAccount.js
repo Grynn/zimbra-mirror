@@ -255,6 +255,8 @@ ZaAccount.RENAME_ACCOUNT_RIGHT = "renameAccount";
 ZaAccount.REINDEX_MBX_RIGHT = "reindexMailbox";
 ZaAccount.GET_MBX_DUMP_RIGHT = "getMailboxDump";
 ZaAccount.VIEW_MAIL_RIGHT = "viewEmail";
+ZaAccount.ADD_ACCOUNT_ALIAS = "addAccountAlias";
+ZaAccount.REMOVE_ACCOUNT_ALIAS = "removeAccountAlias";
 
 ZaAccount.checkValues = 
 function(tmpObj) {
@@ -1396,6 +1398,7 @@ ZaAccount.myXModel = {
     items: [
     	{id:"getAttrs",type:_LIST_},
     	{id:"setAttrs",type:_LIST_},
+    	{id:"rights",type:_LIST_},
         {id:ZaAccount.A2_domainLeftAccounts, ref:ZaAccount.A2_domainLeftAccounts, type:_STRING_},
         {id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true},
         {id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
