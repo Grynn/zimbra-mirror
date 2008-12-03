@@ -34,7 +34,7 @@ elif [ x$PLAT = "xDEBIAN4.0" -o x$PLAT = "xUBUNTU6" -o x$PLAT = "xUBUNTU8" ]; th
 elif [ x$PLAT = "xUBUNTU6_64" -o x$PLAT = "xUBUNTU8_64" ]; then
 	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/x86_64-linux-gnu-thread-multi"
 	export PERL5LIB=${PERLLIB}
-elif [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSX" ]; then
+elif [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSX" -o x$PLAT = "xMACOSXx86_10.5" ]; then
 	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/darwin-thread-multi-2level"
 	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xMANDRIVA2006" ]; then
@@ -47,6 +47,8 @@ cd ${BUILD_HOME}/$RELEASE/ThirdParty
 $P4 sync ... > /dev/null 
 cd ${BUILD_HOME}/$RELEASE/ZimbraBuild
 $P4 sync ... > /dev/null 
+
+mkdir -p ${BUILD_HOME}/$RELEASE/ThirdPartyBuilds/$PLAT
 
 if [ x$RELEASE = "xmain" ]; then
   cd ${BUILD_HOME}/$RELEASE/ThirdPartyBuilds/$PLAT
