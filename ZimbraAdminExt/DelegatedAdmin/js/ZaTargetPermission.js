@@ -274,8 +274,8 @@ if (ZaItem.loadMethods["ZaGlobalConfig"]) {
     ZaItem.loadMethods["ZaGlobalConfig"].push (ZaGrant.loadMethod) ;
 }
 
-if (ZaController.setViewMethods["ZaGlobalConfigController"]) {
-	ZaController.setViewMethods["ZaGlobalConfigController"].push(ZaTargetPermission.permissionViewMethod);
+if (ZaController.setViewMethods["ZaGlobalConfigViewController"]) {
+	ZaController.setViewMethods["ZaGlobalConfigViewController"].push(ZaTargetPermission.permissionViewMethod);
 }
 
 //Server Target
@@ -327,6 +327,9 @@ function () {
 	var obj = {};
 	obj[ZaGrant.A_target] = instance.name;
     obj[ZaGrant.A_target_type] = instance.type ;
+    //TODO: temporary solution to show all the items.
+    obj.setAttrs = {} ;
+    obj.setAttrs.all = true ;
     formPage.grantRightDlg.setObject(obj);
 	formPage.grantRightDlg.popup();
 }

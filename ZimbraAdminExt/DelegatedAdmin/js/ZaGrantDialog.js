@@ -24,12 +24,15 @@ function() {
                    labelLocation:_LEFT_, choices: ZaZimbraRights.targetType 
                },
                 { ref: ZaGrant.A_grantee_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
-                   labelLocation:_LEFT_, choices: ZaGrant.GRANTEE_TYPE
+                    visibilityChecks:[], //temporary solution to make this element visible
+                    labelLocation:_LEFT_, choices: ZaGrant.GRANTEE_TYPE
                },
                // make it type _DYNSELECT_
                { ref: ZaGrant.A_grantee, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
+                   visibilityChecks:[],
                    labelLocation:_LEFT_ },
                { ref: ZaGrant.A_right_type, type: _OSELECT1_, label: com_zimbra_delegatedadmin.Label_right_type,
+                   visibilityChecks:[],
                    labelLocation: _LEFT_, choices: ZaGrant.RIGHT_TYPE_CHOICES
                },
                { type: _GROUP_, colSpan:"*", numCols:2, colSizes: [165, "*"],
@@ -38,25 +41,30 @@ function() {
                    items:
                    [
                        {ref: ZaGrant.A_inline_right + "/" + ZaGrant.A_inline_verb, type: _OSELECT1_,
+                           visibilityChecks:[],
                             onChange: ZaGrantDialog.composeInlineRight,
                            label: com_zimbra_delegatedadmin.Label_inline_verb, required: true},
                        {ref: ZaGrant.A_inline_right + "/" + ZaGrant.A_inline_target_type,
+                           visibilityChecks:[],
                            onChange: ZaGrantDialog.composeInlineRight,  required: true,
                            type: _OSELECT1_, label: com_zimbra_delegatedadmin.Label_inline_target_type },
                        {ref: ZaGrant.A_inline_right + "/" + ZaGrant.A_inline_attr,
+                           visibilityChecks:[],
                            onChange: ZaGrantDialog.composeInlineRight,  required: true,
                            type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_inline_attr }
                    ]
                },
 
                {ref: ZaGrant.A_right, id: ZaGrant.A_right, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_right_name,
+                     visibilityChecks:[],
 //                   visibilityChecks: [[ZaGrantDialog.rightTypeListener, "system"]],
 //                   visibilityChangeEventSources: [ZaGrant.A_right_type] ,
                    enableDisableChecks:[[ZaGrantDialog.rightTypeListener, "system"]],
                    enableDisableChangeEventSources:[ZaGrant.A_right_type],
                    labelLocation:_LEFT_ },
                {ref: ZaGrant.A_deny,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_deny ,
-                     labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" }
+                   visibilityChecks:[],  
+                   labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" }
               ]
             }
         ]

@@ -36,6 +36,8 @@ ZaGlobalConfigViewController.prototype.constructor = ZaGlobalConfigViewControlle
 
 //ZaGlobalConfigViewController.STATUS_VIEW = "ZaGlobalConfigViewController.STATUS_VIEW";
 
+ZaController.setViewMethods["ZaGlobalConfigViewController"] = [];
+
 /**
 * Adds listener to removal of an ZaDomain 
 * @param listener
@@ -47,27 +49,31 @@ function(listener) {
 
 ZaGlobalConfigViewController.prototype.show = 
 function(item, openInNewTab) {
-	if(!this._UICreated) {
+	this._setView(item, false);
+}
+
+ZaGlobalConfigViewController.setViewMethod = function (item) {
+    if(!this._UICreated) {
   		this._ops = new Array();
 		this._ops.push(new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener)));
 		this._ops.push(new ZaOperation(ZaOperation.DOWNLOAD_GLOBAL_CONFIG, ZaMsg.TBB_DownloadConfig, ZaMsg.GLOBTBB_DownloadConfig_tt, "DownloadGlobalConfig", "DownloadGlobalConfig", new AjxListener(this, this.downloadConfigButtonListener)));
 		if (ZaOperation.UPDATELICENSE) {
 			this._ops.push(new ZaOperation(ZaOperation.UPDATELICENSE, ZaMsg.TBB_UpdateLicense, ZaMsg.ALTBB_UpdateLicense_tt, "UpdateLicense", "UpdateLicense",
-						new AjxListener(this, this.updateLicenseButtonListener)));		   
+						new AjxListener(this, this.updateLicenseButtonListener)));
 		}
 		this._ops.push(new ZaOperation(ZaOperation.NONE));
-		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));							
+		this._ops.push(new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener)));
 		this._toolbar = new ZaToolBar(this._container, this._ops);
-	
+
 		this._contentView = this._view = new this.tabConstructor(this._container);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;	
+		elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
 		var tabParams = {
 			openInNewTab: false,
 			tabId: this.getContentViewId(),
-			tab: this.getMainTab() 
-		}				
+			tab: this.getMainTab()
+		}
 		//ZaApp.getInstance().createView(ZaZimbraAdmin._GLOBAL_SETTINGS,elements);
 		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 		this._UICreated = true;
@@ -75,29 +81,24 @@ function(item, openInNewTab) {
 	}
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._GLOBAL_SETTINGS);
 	ZaApp.getInstance().pushView(this.getContentViewId());
-	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  	
+	this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);
 	if (ZaOperation.UPDATELICENSE){
 		var updateLicenseButton = this._toolbar.getButton(ZaOperation.UPDATELICENSE) ;
 		updateLicenseButton.setEnabled(false);
 		 var divEl = updateLicenseButton.getHtmlElement();
-		 divEl.style.visibility = "hidden";	
+		 divEl.style.visibility = "hidden";
 	}
 	item.load();
-	try {		
+	try {
 		item[ZaModel.currentTab] = "1"
 		this._view.setDirty(false);
 		this._view.setObject(item);
 	} catch (ex) {
 		this._handleException(ex, "ZaGlobalConfigViewController.prototype.show", null, false);
 	}
-	this._currentObject = item;		
-	/*
-	if (openInNewTab) {//when a ctrl shortcut is pressed
-		
-	}else{ //open in the main tab
-		this.updateMainTab ("GlobalSettings") ;	
-	}*/
+	this._currentObject = item;
 }
+ZaController.setViewMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.setViewMethod) ;
 
 ZaGlobalConfigViewController.prototype.setEnabled = 
 function(enable) {

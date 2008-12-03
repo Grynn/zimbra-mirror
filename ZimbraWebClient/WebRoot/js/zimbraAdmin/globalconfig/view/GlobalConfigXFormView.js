@@ -60,6 +60,7 @@ function () {
 	return this.getTitle ();
 }
 
+
 GlobalConfigXFormView.blockedExtSelectionListener = function () {
 	var arr = this.widget.getSelection();
 	if(arr && arr.length) {
