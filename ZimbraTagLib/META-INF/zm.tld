@@ -5865,6 +5865,14 @@
     </function>
 
     <function>
+        <name>getDateFormatSymbols</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.text.DateFormatSymbols
+            getDateFormatSymbols(java.util.Locale)
+        </function-signature>
+    </function>
+
+    <function>
         <name>getTagNames</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String

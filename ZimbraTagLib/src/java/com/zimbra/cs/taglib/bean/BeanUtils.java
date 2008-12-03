@@ -66,6 +66,7 @@ import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.text.DateFormatSymbols;
 import java.util.*;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -139,6 +140,11 @@ public class BeanUtils {
         return result.length() == 0 ? null : result;
     }
 
+    public static DateFormatSymbols
+            getDateFormatSymbols(java.util.Locale userLocale){
+        return new DateFormatSymbols(userLocale) ;
+    }
+    
     private static String escapeDollarSign(String value) {
         if (value == null || value.length() == 0 || value.indexOf('$') == -1)
             return value;
