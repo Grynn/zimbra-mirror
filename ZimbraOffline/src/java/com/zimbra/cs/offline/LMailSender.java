@@ -38,7 +38,7 @@ public class LMailSender extends MailSender {
     
     public static LMailSender newInstance(OfflineDataSource ds) throws
         ServiceException {
-        if (ds.isSaveToSent() || !ds.isLive())
+        if (!ds.isLive())
             throw new IllegalArgumentException("Must be Live data source");
         return new LMailSender(ds);
     }
@@ -48,7 +48,7 @@ public class LMailSender extends MailSender {
         Long timeout = LC.javamail_smtp_timeout.longValue() * Constants.MILLIS_PER_SECOND;
 
         props.setProperty("mail.davmail.from", ds.getEmailAddress());
-        props.setProperty("mail.davmail.saveinsent", "f");
+        props.setProperty("mail.davmail.saveinsent", ds.isSaveToSent() ? "f" : "t");
         if (timeout > 0) {
             props.setProperty("mail.davmail.timeout", timeout.toString());
             props.setProperty("mail.davmail.connectiontimeout", timeout.toString());

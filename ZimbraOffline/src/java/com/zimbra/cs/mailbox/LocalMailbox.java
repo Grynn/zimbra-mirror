@@ -192,27 +192,11 @@ public class LocalMailbox extends DesktopMailbox {
             MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
             ItemId origMsgId = getOrigMsgId(msg);
 
-            if (ds.isLive()) {
-                LMailSender ms = LMailSender.newInstance(ds);
-                try {
-                    ms.sendMimeMessage(context, this, false, mm, null, null, origMsgId,
-                        msg.getDraftReplyType(), identity, false, false);
-                } catch (ServiceException e) {
-                    Throwable cause = e.getCause();
-                    if (cause instanceof MessagingException) {
-                        OfflineLog.offline.debug("smtp: failed to send mail (" + id + "): " + msg.getSubject(), e);
-                        OfflineLog.offline.info("SMTP send failure: " + msg.getSubject());
-                        OutboxTracker.recordFailure(this, id);
-                        continue;
-                    } else {
-                        throw e;
-                    }
-                }
-            } else if (ds.isYahoo()) {
+            if (ds.isYahoo()) {
                 YMailSender ms = YMailSender.newInstance(ds);
                 try {
-                    ms.sendMimeMessage(context, this, false, mm, null, null, origMsgId,
-                                       msg.getDraftReplyType(), identity, false, false);
+                    ms.sendMimeMessage(context, this, ds.isSaveToSent() && getAccount().saveToSent(), mm, null, null,
+                        origMsgId, msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
                     if (cause instanceof YMailException) {
@@ -224,9 +208,9 @@ public class LocalMailbox extends DesktopMailbox {
                     }
                 }
             } else {
-                MailSender ms = new MailSender();
+                MailSender ms = ds.isLive() ? LMailSender.newInstance(ds) : new MailSender();
                 try {
-                    ms.sendMimeMessage(context, this, ds.isSaveToSent(), mm, null, null,
+                    ms.sendMimeMessage(context, this, ds.isSaveToSent() && getAccount().saveToSent(), mm, null, null,
                         origMsgId, msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
