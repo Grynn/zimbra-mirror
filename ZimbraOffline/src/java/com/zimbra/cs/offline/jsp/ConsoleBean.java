@@ -22,6 +22,7 @@ public class ConsoleBean extends PageBean {
         private String email;
         private long lastSync;
         private SyncStatus status = SyncStatus.unknown;
+        private String errorCode;
         private boolean isFirst;
 
         public String getId() {
@@ -50,6 +51,10 @@ public class ConsoleBean extends PageBean {
 
         public SyncStatus getSyncStatus() {
             return status;
+        }
+        
+        public String getErrorCode() {
+        	return errorCode;
         }
 
         public boolean isStatusUnknown() {
@@ -125,6 +130,7 @@ public class ConsoleBean extends PageBean {
             sum.lastSync = account.getLongAttr(OfflineConstants.A_offlineLastSync, 0);
             String status = account.getAttr(OfflineConstants.A_offlineSyncStatus);
             sum.status = status == null ? SyncStatus.unknown : SyncStatus.valueOf(status);
+            sum.errorCode = account.getAttr(OfflineConstants.A_offlineSyncStatusErrorCode);
             sums.add(sum);
         }
         List<DataSource> dataSources = stub.getOfflineDataSources();

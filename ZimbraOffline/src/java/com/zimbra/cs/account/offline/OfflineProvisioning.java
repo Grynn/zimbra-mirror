@@ -44,10 +44,12 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.OfflineCalDavDataImport;
+import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.servlet.ZimbraServlet;
+import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -58,6 +60,7 @@ import java.util.*;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
+import javax.security.auth.login.LoginException;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 
@@ -548,7 +551,20 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     private void testDataSource(OfflineDataSource ds) throws ServiceException {
-        DataSourceManager.test(ds);
+    	try {
+        	DataSourceManager.test(ds);
+    	} catch (ServiceException x) {
+        	Throwable t = SystemUtil.getInnermostException(x);
+            if (t instanceof LoginException)
+            	throw RemoteServiceException.AUTH_FAILURE(t.getMessage(), t);
+            if (t instanceof AuthenticationException)
+            	throw (AuthenticationException)t;
+            if (t instanceof com.google.gdata.util.ServiceException)
+            	GDataServiceException.doFailures((com.google.gdata.util.ServiceException)t);
+            RemoteServiceException.doConnectionFailures(ds.getHost() + ":" + ds.getPort(), t);
+            RemoteServiceException.doSSLFailures(t.getMessage(), t);
+            throw x;
+    	}
         
         // No need to test Live/YMail SOAP access, since successful IMAP/POP3
         // connection implies that SOAP access will succeed with same auth
@@ -1120,7 +1136,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	return null;
         
         //There are attributes we don't persist into DB.  This is where we add them:
-    	attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());    	
+    	attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
+    	String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(name);
+    	if (statusErrorCode != null)
+    		attrs.put(OfflineConstants.A_offlineSyncStatusErrorCode, statusErrorCode);
     	
     	if (acct != null) {
     		acct.setAttrs(attrs);
