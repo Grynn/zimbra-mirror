@@ -26,6 +26,7 @@ import com.zimbra.cs.offline.util.yab.Field;
 import com.zimbra.cs.offline.util.yab.ContactChange;
 import com.zimbra.cs.offline.util.yab.FieldChange;
 import com.zimbra.cs.offline.ab.LocalData;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.DateUtil;
@@ -33,6 +34,8 @@ import com.zimbra.common.util.DateUtil;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import static com.zimbra.cs.mailbox.Contact.*;
 
@@ -147,8 +150,15 @@ public class ContactData implements Serializable {
 
     private static DateField getBirthday(Map<String, String> fields) {
         String value = fields.get(A_birthday);
-        return value != null ?
-            DateField.birthday(DateUtil.parseDateSpecifier(value)) : null;
+        if (value != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                return DateField.birthday(sdf.parse(value));
+            } catch (ParseException e) {
+                OfflineLog.yab.warn("Cannot parse birthday field: " + value);
+            }
+        }
+        return null;
     }
 
     private static SimpleField getSimple(String name, String value) {
@@ -388,8 +398,7 @@ public class ContactData implements Serializable {
     }
     
     private static String toString(DateField date) {
-        return date.getMonth() + '/' + date.getDay() + "/" +
-               (date.getYear() != -1 ? Integer.toString(date.getYear()) : "0000");
+        return String.format("%d-%d-%d", date.getYear(), date.getMonth(), date.getDay());
     }
 
     private static <T> boolean containsAny(Map<T, ?> map, T[] keys) {

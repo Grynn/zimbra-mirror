@@ -108,14 +108,14 @@ public final class DateField extends Field {
 
     @SuppressWarnings("deprecation")
     public void setDate(Date date) {
-        day = date.getDay();
-        month = date.getMonth();
+        day = date.getDate();
+        month = date.getMonth() + 1;
         year = date.getYear() + 1900;
     }
 
     @SuppressWarnings("deprecation")
     public Date getDate() {
-        return new Date(year - 1900, month, day);
+        return new Date(year - 1900, month - 1, day);
     }
     
     @Override
@@ -143,5 +143,10 @@ public final class DateField extends Field {
                     "Invalid '" + getName() + "' field child element: " + tag);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d/%d/%d", day, month, year);
     }
 }
