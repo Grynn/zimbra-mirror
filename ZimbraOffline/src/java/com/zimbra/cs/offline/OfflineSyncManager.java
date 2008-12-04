@@ -178,6 +178,13 @@ public class OfflineSyncManager {
     	String getErrorCode() {
     		return mCode;
     	}
+    	
+    	void clearErrorCode() {
+        	mCode = null;
+        	mError = null;
+        	if (mStatus == SyncStatus.authfail || mStatus == SyncStatus.error || mStatus == SyncStatus.offline)
+        		mStatus = SyncStatus.unknown;
+    	}
     }
     
     private final Map<String, OfflineSyncStatus> syncStatusTable = Collections.synchronizedMap(new HashMap<String, OfflineSyncStatus>());
@@ -388,7 +395,7 @@ public class OfflineSyncManager {
 			code = RemoteServiceException.getErrorCode(cause);
 
 		if (isConnectionDown(exception)) {
-        	connectionDown(targetName, code);
+        	connectionDown(targetName, null); //offline don't need code
         	OfflineLog.offline.info("sync connection down: " + targetName);
         	if (isDebugTraceOn)
         		OfflineLog.offline.debug("sync conneciton down: " + targetName, exception);
@@ -416,6 +423,12 @@ public class OfflineSyncManager {
 	public void resetStatus(String targetName) {
 		synchronized (syncStatusTable) {
 			syncStatusTable.remove(targetName);
+		}
+	}
+	
+	public void clearErrorCode(String targetName) {
+		synchronized (syncStatusTable) {
+			getStatus(targetName).clearErrorCode();
 		}
 	}
 	

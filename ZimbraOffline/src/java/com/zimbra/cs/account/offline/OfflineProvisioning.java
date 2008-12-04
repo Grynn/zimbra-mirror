@@ -234,7 +234,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
 
-        if (etype == EntryType.ACCOUNT)
+        if (attrs.remove(A_offlineAccountSetup) != null && etype == EntryType.ACCOUNT)
         	revalidateRemoteLogin((OfflineAccount)e, attrs);
 
         if (etype == EntryType.CONFIG) {
@@ -266,15 +266,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	modifyDataSource(ds.getAccount(), ds.getId(), attrs, false);
     }
     
-    private void checkForSSLCertAlias(Map<String, ? extends Object> attrs) throws ServiceException {
-    	String sslCertAlias = (String)attrs.remove(OfflineConstants.A_offlineSslCertAlias);
-    	if (sslCertAlias != null) {
-    		try {
-    			CustomTrustManager.getInstance().acceptCertificates(sslCertAlias);
-    		} catch (GeneralSecurityException x) {
-    			throw RemoteServiceException.SSLCERT_NOT_ACCEPTED(x.getMessage(), x);
-    		}
-    	}
+    private void acceptSSLCertAlias(String sslCertAlias) throws ServiceException {
+		try {
+			CustomTrustManager.getInstance().acceptCertificates(sslCertAlias);
+		} catch (GeneralSecurityException x) {
+			throw RemoteServiceException.SSLCERT_NOT_ACCEPTED(x.getMessage(), x);
+		}
     }
 
     private void revalidateRemoteLogin(OfflineAccount acct, Map<String, ? extends Object> changes) throws ServiceException {
@@ -323,13 +320,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 			}
         }
         
-        if (!hasChange) return;
-        
-        checkForSSLCertAlias(changes);
+    	String sslCertAlias = (String)changes.remove(OfflineConstants.A_offlineSslCertAlias);
+    	if (sslCertAlias != null)
+    		acceptSSLCertAlias(sslCertAlias);
 
         // fetch the mailbox; this will throw an exception if the username/password/URI are incorrect
         ZMailbox.Options options = new ZMailbox.Options(acct.getAttr(Provisioning.A_mail), AccountBy.name, password, Offline.getServerURI(baseUri, ZimbraServlet.USER_SERVICE_URI));
         newZMailbox(options, proxyHost, proxyPort, proxyUser, proxyPass);
+        OfflineSyncManager.getInstance().clearErrorCode(acct.getName());
     }
 
     @Override
@@ -470,7 +468,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             throw ServiceException.INVALID_REQUEST("must be valid email address: " + emailAddress, null);
         String uid = parts[0];
 
-        checkForSSLCertAlias(attrs);
+    	String sslCertAlias = (String)attrs.remove(OfflineConstants.A_offlineSslCertAlias);
+    	if (sslCertAlias != null)
+    		acceptSSLCertAlias(sslCertAlias);
         
         ZGetInfoResult zgi = newZMailbox(emailAddress, (String)attrs.get(A_offlineRemotePassword), attrs, ZimbraServlet.USER_SERVICE_URI).getAccountInfo(false);
         OfflineLog.offline.info("Remote Zimbra Server Version: " + zgi.getVersion());
@@ -652,7 +652,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	if (smtpPassword != null)
     		dsAttrs.put(A_zimbraDataSourceSmtpAuthPassword, DataSource.encryptData(dsid, smtpPassword));
     	
-    	checkForSSLCertAlias(dsAttrs);
+    	String sslCertAlias = (String)dsAttrs.remove(OfflineConstants.A_zimbraDataSourceSslCertAlias);
+    	if (sslCertAlias != null)
+    		acceptSSLCertAlias(sslCertAlias);
 
         OfflineDataSource testDs = new OfflineDataSource(getLocalAccount(), type, dsName, dsid, dsAttrs, this);
         testDataSource(testDs);
@@ -1965,8 +1967,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             sort(sources);
     		cachedDataSources.put(account.getId(), sources);
     	}
-    	for (DataSource ds : sources)
+    	for (DataSource ds : sources) {
     		ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(ds.getName()).toString());
+        	String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(ds.getName());
+        	if (statusErrorCode != null)
+        		ds.getAttrs(false).put(OfflineConstants.A_zimbraDataSourceSyncStatusErrorCode, statusErrorCode);
+    	}
     	return sources;
     }
 
@@ -2058,14 +2064,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 	        		isTestNeeded = true;
         	}
         	
-            if (isTestNeeded) {
-            	checkForSSLCertAlias(attrs);
+        	if (attrs.remove(A_zimbraDataSourceAccountSetup) != null) {
+            	String sslCertAlias = (String)attrs.remove(OfflineConstants.A_zimbraDataSourceSslCertAlias);
+            	if (sslCertAlias != null)
+            		acceptSSLCertAlias(sslCertAlias);
             	
                 if ("yahoo.com".equals(domain)) {
                     // Clear auth token so that it will be regenerated during test...
                     OfflineYAuth.removeToken(ds);
                 }
-                testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs, this));
+                testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs));
+	            OfflineSyncManager.getInstance().clearErrorCode(ds.getName());
             }
     	
             attrs.put(A_zimbraDataSourceEnabled, TRUE);

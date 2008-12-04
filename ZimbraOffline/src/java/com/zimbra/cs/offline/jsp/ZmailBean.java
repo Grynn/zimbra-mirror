@@ -59,6 +59,8 @@ public class ZmailBean extends MailBean {
 		if (!isEmpty(port) && !isValidPort(port))
 		    addInvalid("port");
 		if (isAllOK()) {
+			attrs.put(OfflineConstants.A_offlineAccountSetup, Provisioning.TRUE);
+			
 		    attrs.put(Provisioning.A_zimbraPrefLabel, accountName);
 		    attrs.put(OfflineConstants.A_offlineRemoteServerUri,
 			getRemoteServerUri());

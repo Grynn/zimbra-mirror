@@ -14,7 +14,7 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 
 public class ConsoleBean extends PageBean {
-    public static class AccountSummary {
+    public class AccountSummary {
         private String id;
         private String type;
         private String flavor;
@@ -56,7 +56,17 @@ public class ConsoleBean extends PageBean {
         public String getErrorCode() {
         	return errorCode;
         }
-
+        
+        public String getUserFriendlyErrorMessage() {
+        	if (errorCode == null)
+        		return "";
+        	
+        	String msg = getMessage("client." + errorCode, false);
+        	if (msg == null)
+        		msg = getMessage("exception." + errorCode, false);
+        	return msg == null ? "" : msg;
+        }
+        
         public boolean isStatusUnknown() {
             return status == SyncStatus.unknown;
         }
@@ -161,6 +171,7 @@ public class ConsoleBean extends PageBean {
             sum.lastSync = ds.getLongAttr(OfflineConstants.A_zimbraDataSourceLastSync, 0);
             String status = ds.getAttr(OfflineConstants.A_zimbraDataSourceSyncStatus);
             sum.status = status == null ? SyncStatus.unknown : SyncStatus.valueOf(status);
+            sum.errorCode = ds.getAttr(OfflineConstants.A_zimbraDataSourceSyncStatusErrorCode);
             sums.add(sum);
         }
 

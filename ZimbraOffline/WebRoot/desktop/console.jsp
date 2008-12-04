@@ -171,6 +171,13 @@ function submit(id, name, type, flavor, verb) {
               <table cellpadding="0" cellspacing="0" width="100%">
 <c:set var='default' value='true'/>
 <c:forEach items="${accounts}" var="account">
+<c:if test="${not empty account.errorCode}">
+                <tr>
+                  <td colspan="2" width="100%">
+                    <div class="ZMessageInfo"><span class='ZOfflineError'>${account.userFriendlyErrorMessage}</span></div>
+                  </td>
+                </tr>
+</c:if>
                 <tr>
                   <td>
                     <div class="ZAccountName">${account.name}</div>

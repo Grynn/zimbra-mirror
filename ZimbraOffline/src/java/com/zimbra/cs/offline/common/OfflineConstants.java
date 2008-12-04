@@ -35,6 +35,7 @@ public interface OfflineConstants {
     public static final String A_offlineEnableTrace = "offlineEnableTrace";
     
     public static final String A_offlineSslCertAlias = "offlineSslCertAlias";
+    public static final String A_offlineAccountSetup = "offlineAccountSetup";
                                                          
     public static final String A_zimbraDataSourceDomain = "zimbraDataSourceDomain";
     public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
@@ -50,12 +51,16 @@ public interface OfflineConstants {
     
     public static final String A_zimbraDataSourceSyncFreq = "zimbraDataSourceSyncFreq";
     public static final String A_zimbraDataSourceSyncStatus = "zimbraDataSourceSyncStatus";
+    public static final String A_zimbraDataSourceSyncStatusErrorCode = "A_zimbraDataSourceSyncStatusErrorCode";
     public static final String A_zimbraDataSourceLastSync = "zimbraDataSourceLastSync";
 
     public static final String A_zimbraDataSourceContactSyncEnabled = "zimbraDataSourceContactSyncEnabled";
     public static final String A_zimbraDataSourceCalendarSyncEnabled = "zimbraDataSourceCalendarSyncEnabled";
     
     public static final String A_zimbraDataSourceSyncAllServerFolders = "zimbraDataSourceSyncAllServerFolders";
+    
+    public static final String A_zimbraDataSourceSslCertAlias = "zimbraDataSourceSslCertAlias";
+    public static final String A_zimbraDataSourceAccountSetup = "zimbraDataSourceAccountSetup";
     
     public static final long DEFAULT_SYNC_FREQ = 15 * Constants.MILLIS_PER_MINUTE;
     public static final long MIN_SYNC_FREQ = Constants.MILLIS_PER_MINUTE;

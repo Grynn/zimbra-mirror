@@ -136,6 +136,8 @@ public class XmailBean extends MailBean {
                     }
                 }
                 if (isAllOK()) {
+                	dsAttrs.put(OfflineConstants.A_zimbraDataSourceAccountSetup, Provisioning.TRUE);
+                	
                     dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled,
                         Provisioning.TRUE);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceUsername,
@@ -202,7 +204,7 @@ public class XmailBean extends MailBean {
                             ZFolder.ID_USER_ROOT);
                     }
                     if (sslCertAlias != null && sslCertAlias.length() > 0)
-                    	dsAttrs.put(OfflineConstants.A_offlineSslCertAlias, sslCertAlias);
+                    	dsAttrs.put(OfflineConstants.A_zimbraDataSourceSslCertAlias, sslCertAlias);
                 }
             }
             if (verb.isAdd()) {
