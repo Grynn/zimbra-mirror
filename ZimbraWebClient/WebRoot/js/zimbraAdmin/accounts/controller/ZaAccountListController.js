@@ -265,15 +265,15 @@ function () {
 			newMenuOpList.push(new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.ACTBB_New_menuItem, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", this._newAcctListener));
 		}
 		
-		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIASES_CREATE] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_CREATE_RIGHT] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 			newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.ALTBB_New_menuItem, ZaMsg.ALTBB_New_tt, "AccountAlias", "AccountAliasDis", this._newALListener));
 		}
 			
-		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_CREATE] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_CREATE_RIGHT] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 			newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.DLTBB_New_menuItem, ZaMsg.DLTBB_New_tt, "Group", "GroupDis", this._newDLListener));
 		}
 		
-		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCES_CREATE] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCES_CREATE_RIGHT] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 			newMenuOpList.push(new ZaOperation(ZaOperation.NEW, ZaMsg.RESTBB_New_menuItem, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", this._newResListener));
 		}
 			
@@ -387,6 +387,10 @@ function(ev) {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call(this) ;
 		var newAccount = new ZaAccount();
+		newAccount.getAttrs = {all:true};
+		newAccount.setAttrs = {all:true};
+		newAccount.rights = {};
+		newAccount.rights[ZaAccount.RENAME_ACCOUNT_RIGHT] = true;				
 		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
 			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container);	
         else { //update the account type if needed
@@ -406,6 +410,9 @@ function(ev) {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call(this) ;
 		var newAlias = new ZaAlias();
+		newAlias.getAttrs = {all:true};
+		newAlias.setAttrs = {all:true};		
+
 		if(!ZaApp.getInstance().dialogs["newAliasDialog"]) {
 			ZaApp.getInstance().dialogs["newAliasDialog"] = new ZaNewAliasXDialog(
 				this._container, "550px", "100px",ZaMsg.New_Alias_Title );	
@@ -427,6 +434,12 @@ function(ev) {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call (this);
 		var newDL = new ZaDistributionList();
+		newDL.getAttrs = {all:true};
+		newDL.setAttrs = {all:true};
+		newDL.rights = {};
+		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
+		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
+		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
 		ZaApp.getInstance().getDistributionListController().show(newDL);
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
@@ -439,6 +452,8 @@ function(ev) {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call (this);
 		var newResource = new ZaResource();
+		newResource.getAttrs = {all:true};
+		newResource.setAttrs = {all:true};
 		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
 			ZaApp.getInstance().dialogs["newResourceWizard"] = new ZaNewResourceXWizard(this._container);	
 

@@ -255,8 +255,8 @@ ZaAccount.RENAME_ACCOUNT_RIGHT = "renameAccount";
 ZaAccount.REINDEX_MBX_RIGHT = "reindexMailbox";
 ZaAccount.GET_MBX_DUMP_RIGHT = "getMailboxDump";
 ZaAccount.VIEW_MAIL_RIGHT = "viewEmail";
-ZaAccount.ADD_ACCOUNT_ALIAS = "addAccountAlias";
-ZaAccount.REMOVE_ACCOUNT_ALIAS = "removeAccountAlias";
+ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT = "addAccountAlias";
+ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT = "removeAccountAlias";
 
 ZaAccount.checkValues = 
 function(tmpObj) {

@@ -91,6 +91,12 @@ ZaDistributionList._dlStatus = {
 	disabled : ZaMsg.DL_Status_disabled
 }
 
+ZaDistributionList.RENAME_DL_RIGHT = "renameDistributionList";
+ZaDistributionList.ADD_DL_ALIAS_RIGHT = "addDistributionListAlias";
+ZaDistributionList.REMOVE_DL_ALIAS_RIGHT = "removeDistributionListAlias";
+ZaDistributionList.REMOVE_DL_MEMBER_RIGHT = "removeDistributionListMember";
+ZaDistributionList.ADD_DL_MEMBER_RIGHT = "addDistributionListMember";
+
 ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
 													   ZaItem.A_zimbraId,  "," , 
 													   ZaAccount.A_mailHost , "," , 

@@ -36,6 +36,7 @@ ZaDomainController = function(appCtxt, container) {
 ZaDomainController.prototype = new ZaXFormViewController();
 ZaDomainController.prototype.constructor = ZaDomainController;
 
+ZaController.changeActionsStateMethods["ZaDomainController"] = new Array();
 ZaController.initToolbarMethods["ZaDomainController"] = new Array();
 ZaController.setViewMethods["ZaDomainController"] = new Array();
 /**
@@ -104,6 +105,46 @@ function () {
 }
 ZaController.initToolbarMethods["ZaDomainController"].push(ZaDomainController.initToolbarMethod);
 
+ZaDomainController.changeActionsStateMethod = function () {
+	if(this._currentObject.setAttrs)
+		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
+
+	if(this._currentObject.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
+		if(this._currentObject.rights && this._currentObject.rights[ZaDomain.RIGHT_DELETE_DOMAIN])
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);
+		
+		if(this._currentObject.rights && this._currentObject.rights[ZaDomain.RIGHT_CONFIGURE_GAL])
+			this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(false);
+		
+		if(this._currentObject.rights && this._currentObject.rights[ZaDomain.RIGHT_CONFIGURE_AUTH])
+			this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(false);		
+		
+		if(ZaDomain.prototype.canConfigureWiki.call(this._currentObject))
+			this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
+	} else {
+		if(this._currentObject.rights && this._currentObject.rights[ZaDomain.RIGHT_DELETE_DOMAIN]) {
+			if(!this._currentObject.id) {
+				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
+			} else {
+				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
+			}
+		}			
+		if(this._currentObject.rights && this._currentObject.rights[ZaDomain.RIGHT_CONFIGURE_GAL])
+			this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(true);
+		
+		if(this._currentObject.rights && this._currentObject.rights[ZaDomain.RIGHT_CONFIGURE_AUTH])
+			this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(true);		
+		
+		if(ZaDomain.prototype.canConfigureWiki.call(this._currentObject)) {
+			if(this._currentObject.attrs[ZaDomain.A_zimbraNotebookAccount])
+				this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
+			else
+				this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(true);
+		}
+	}
+}
+ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaAccountViewController.changeActionsStateMethod);
+
 /**
 *	@method setViewMethod 
 *	@param entry - isntance of ZaDomain class
@@ -115,43 +156,6 @@ function(entry) {
 		this._createUI();
 	} 
 	ZaApp.getInstance().pushView(this.getContentViewId());
-	//if(!ZaSettings.DOMAINS_ARE_READONLY)
-	if(entry.setAttrs)
-		this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);  		
-
-	if(entry.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
-		if(entry.rights && entry.rights[ZaDomain.RIGHT_DELETE_DOMAIN])
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);
-		
-		if(entry.rights && entry.rights[ZaDomain.RIGHT_CONFIGURE_GAL])
-			this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(false);
-		
-		if(entry.rights && entry.rights[ZaDomain.RIGHT_CONFIGURE_AUTH])
-			this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(false);		
-		
-		if(ZaDomain.prototype.canConfigureWiki.call(entry))
-			this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
-	} else {
-		if(entry.rights && entry.rights[ZaDomain.RIGHT_DELETE_DOMAIN]) {
-			if(!entry.id) {
-				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(false);  			
-			} else {
-				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);  				
-			}
-		}			
-		if(entry.rights && entry.rights[ZaDomain.RIGHT_CONFIGURE_GAL])
-			this._toolbar.getButton(ZaOperation.GAL_WIZARD).setEnabled(true);
-		
-		if(entry.rights && entry.rights[ZaDomain.RIGHT_CONFIGURE_AUTH])
-			this._toolbar.getButton(ZaOperation.AUTH_WIZARD).setEnabled(true);		
-		
-		if(ZaDomain.prototype.canConfigureWiki.call(entry)) {
-			if(entry.attrs[ZaDomain.A_zimbraNotebookAccount])
-				this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(false);
-			else
-				this._toolbar.getButton(ZaOperation.INIT_NOTEBOOK).setEnabled(true);
-		}
-	}
 	this._view.setDirty(false);
 	this._view.setObject(entry); 	//setObject is delayed to be called after pushView in order to avoid jumping of the view	
 	this._currentObject = entry;

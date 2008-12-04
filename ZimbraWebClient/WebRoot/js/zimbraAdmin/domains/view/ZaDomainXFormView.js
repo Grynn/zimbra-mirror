@@ -547,6 +547,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
 				choices:this.cosChoices,
 				dataFetcherClass:ZaSearch,
+				emptyText:ZaMsg.enterSearchTerm,
 				editable:true,
 				getDisplayValue:function(newValue) {
 					// dereference through the choices array, if provided

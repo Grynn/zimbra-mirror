@@ -46,7 +46,6 @@ function() {
 				{type:_CASE_, 
 					visibilityChecks:[[XForm.checkInstanceValue,"gt",ZaDomain.A_NotebookGroupACLs]],
 					visibilityChangeEventSources:["gt"],
-					//relevant:"instance.gt==ZaDomain.A_NotebookGroupACLs",
 					items:[
 						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
@@ -57,7 +56,6 @@ function() {
 				{type:_CASE_, 
 					visibilityChecks:[[XForm.checkInstanceValue,"gt",ZaDomain.A_NotebookUserACLs]],
 					visibilityChangeEventSources:["gt"],
-					//relevant:"instance.gt==ZaDomain.A_NotebookUserACLs",
 					items:[
 						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
@@ -68,7 +66,6 @@ function() {
 				{type:_CASE_, 
 					visibilityChecks:[[XForm.checkInstanceValue,"gt",ZaDomain.A_NotebookDomainACLs]],
 					visibilityChangeEventSources:["gt"],
-					//relevant:"instance.gt==ZaDomain.A_NotebookDomainACLs",
 					items:[
 						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},

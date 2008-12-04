@@ -306,7 +306,19 @@ ZaSettings.DOMAIN_AUTH_WIZ = "domainAuthWizard";
 ZaSettings.DOMAIN_WIKI_WIZ = "domainWikiWizard";
 ZaSettings.DOMAIN_CHECK_MX_WIZ = "domainCheckMXWiz";
 
-//ZaSettings.DOMAINS_ARE_READONLY = false;
+//Distribution list view tabs
+ZaSettings.DL_NOTES_TAB = "dlNotesTab";
+ZaSettings.DL_MEMBEROF_TAB = "dlMemberOfTab";
+ZaSettings.DL_ALIASES_TAB = "dlAliasesTab";
+
+//Distribution list operations
+ZaSettings.DL_CREATE_RIGHT = "createDL";
+
+//Alias operations
+ZaSettings.ALIAS_CREATE_RIGHT = "createAlias";
+
+//Resources operations
+ZaSettings.RESOURCES_CREATE_RIGHT = "createResource";
 
 ZaSettings.GLOBAL_CONFIG_VIEW="globalConfigView";
 

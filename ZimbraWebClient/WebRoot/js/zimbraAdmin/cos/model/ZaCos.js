@@ -454,9 +454,9 @@ function (accountName){
 			var cos = ZaCos.getCosByName("default");
 			return cos ;
 		} else{
-			var cos = ZaCos.getCosById (domainCosId,app);
+			var cos = ZaCos.getCosById (domainCosId);
 			if(!cos)
-				cos = ZaCos.getCosByName("default",app);
+				cos = ZaCos.getCosByName("default");
 			
 		 	return cos ;
 			//return cosList.getItemById(domainCosId);
