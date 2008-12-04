@@ -242,16 +242,18 @@ public final class LocalData {
     }
 
     public static String getFileAs(Map<String, String> fields) {
-        if (fields.containsKey(Contact.A_firstName) ||
-            fields.containsKey(Contact.A_lastName)) {
-            return null;
+        if (!fields.containsKey(Contact.A_firstName) &&
+            !fields.containsKey(Contact.A_lastName)) {
+            String fileAs;
+            if ((fileAs = fields.get(Contact.A_fullName)) != null ||
+                (fileAs = fields.get(Contact.A_nickname)) != null ||
+                (fileAs = fields.get(Contact.A_email)) != null ||
+                (fileAs = fields.get(Contact.A_email2)) != null ||
+                (fileAs = fields.get(Contact.A_workEmail1)) != null ||
+                (fileAs = fields.get(Contact.A_imAddress1)) != null) {
+                return fileAs;
+            }
         }
-        String nickname = fields.get(Contact.A_nickname);
-        if (nickname != null) return nickname;
-        String email = fields.get(Contact.A_email);
-        if (email != null) return email;
-        String im = fields.get(Contact.A_imAddress1);
-        if (im != null) return im;
         return null;
     }
     
