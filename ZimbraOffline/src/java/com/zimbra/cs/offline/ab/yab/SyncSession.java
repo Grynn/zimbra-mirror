@@ -94,6 +94,7 @@ public class SyncSession {
         SyncRequest req;
         synchronized (mbox) {
             getLocalChanges(ss);
+            contactGroups = getContactGroups();
             ss.setLastModSequence(mbox.getLastChangeID());
             req = getSyncRequest(getLastRevision(ss));
         }
@@ -106,7 +107,7 @@ public class SyncSession {
                 List<SyncResponseEvent> events = res.getEvents();
                 if (!events.isEmpty()) {
                     // Categories are not returned unless there are contact changes
-                    contactGroups = processCategories(res.getCategories());
+                    processCategories(res.getCategories());
                     processEvents(events);
                     localData.saveContactGroups(contactGroups.values());
                 }
@@ -235,16 +236,15 @@ public class SyncSession {
         }
     }
 
-    private Map<RemoteId, ContactGroup> processCategories(List<Category> categories)
+    private void processCategories(List<Category> categories)
         throws ServiceException {
         Stats stats = new Stats();
         int errors = 0;
-        Map<RemoteId, ContactGroup> groups = getContactGroups();
         Set<Integer> received = new HashSet<Integer>();
         for (Category category : categories) {
             RemoteId rid = RemoteId.categoryId(category.getId());
             String name = category.getName();
-            ContactGroup group = groups.get(rid);
+            ContactGroup group = contactGroups.get(rid);
             try {
                 if (group != null) {
                     received.add(group.getId());
@@ -259,7 +259,7 @@ public class SyncSession {
                         Mailbox.ID_FOLDER_CONTACTS, name);
                     received.add(group.getId());
                     localData.updateMapping(group.getId(), rid.toString(), null);
-                    groups.put(rid, group);
+                    contactGroups.put(rid, group);
                     stats.added++;
                     LOG.debug("Added new contact group: %s", group);
                 }
@@ -269,7 +269,7 @@ public class SyncSession {
             }
         }
         // Unseen categories / groups have been deleted
-        Iterator<ContactGroup> it = groups.values().iterator();
+        Iterator<ContactGroup> it = contactGroups.values().iterator();
         while (it.hasNext()) {
             ContactGroup group = it.next();
             int id = group.getId();
@@ -290,7 +290,6 @@ public class SyncSession {
         if (errors > 0) {
             LOG.debug("%d category changes could not be processed due to errors", errors);
         }
-        return groups;
     }
 
     private Map<RemoteId, ContactGroup> getContactGroups() throws ServiceException {
