@@ -1323,7 +1323,27 @@ public class InitialSync {
             		ombx.getItemById(sContext, id, MailItem.TYPE_UNKNOWN);
             		ombx.addDocumentRevision(new OfflineContext(player), id, doc.getType(), pd);
             	} catch (MailServiceException.NoSuchItemException nsie) {
-            		ombx.createDocument(new OfflineContext(player), doc.getFolderId(), pd, doc.getType());
+            		try {
+                		ombx.createDocument(new OfflineContext(player), doc.getFolderId(), pd, doc.getType());
+            		} catch (MailServiceException me) {
+            			if (me.getCode().equals(MailServiceException.ALREADY_EXISTS)) {
+            				// this is an edge case where a different object of
+            				// the same name already exists on Desktop.  when the object
+            				// was created it should have been pushed to the server
+            				// so it's unclear how it ended up with such
+            				// inconsistency.  but evidently bug 33541
+            				// triggered this case.
+            				// rename the old item so we can sync the server item
+            				// down to Desktop.
+            				String name = doc.getName();
+            				String path = ombx.getFolderById(doc.getFolderId()).getPath() + "/" + name;
+            				MailItem oldItem = ombx.getItemByPath(sContext, path);
+            				String newName = path + "-old";
+            				ombx.rename(sContext, oldItem.mId, MailItem.TYPE_UNKNOWN, newName);
+                    		ombx.createDocument(new OfflineContext(player), doc.getFolderId(), pd, doc.getType());
+            			} else
+            				throw me;
+            		}
             	}
             	int flags = doc.getFlagBitmask();
             	if (flags != 0)
