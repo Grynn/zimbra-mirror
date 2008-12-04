@@ -206,6 +206,8 @@ if ( -d "/opt/zimbra/lib/conf/" ) {
     closedir DIR;
 }
 
+$ldap->unbind;
+
 exit 0;
 
 sub getLocalConfig {
