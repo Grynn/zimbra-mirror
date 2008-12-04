@@ -343,7 +343,17 @@ DwtForm.prototype._setControlValue = function(id, value) {
 		if (control.setSelectedValue) { control.setSelectedValue(value); return; }
 		if (control.setValue) { control.setValue(value); return; }
 		if (control.setText && !(control instanceof DwtButton)) { control.setText(value); return; }
-		if (!(control instanceof DwtControl)) { control.value = value; return; }
+		if (!(control instanceof DwtControl)) {
+			// TODO: support other native form elements like select
+			if (control.type == "checkbox" || control == "radio") {
+				control.checked = value;
+			}
+			else {
+				// TODO: handle error setting form input value
+				control.value = value;
+			}
+			return;
+		}
 	}
 };
 DwtForm.prototype._getControlValue = function(id) {
@@ -355,7 +365,10 @@ DwtForm.prototype._getControlValue = function(id) {
 		if (control.getSelectedValue) return control.getSelectedValue();
 		if (control.getValue) return control.getValue();
 		if (control.getText && !(control instanceof DwtButton)) return control.getText();
-		if (!(control instanceof DwtControl)) return control.value;
+		if (!(control instanceof DwtControl)) {
+			if (control.type == "checkbox" || control == "radio") return control.checked;
+			return control.value;
+		}
 	}
 };
 
@@ -518,6 +531,7 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 	// constructor params for input fields
 	var isTextField = Dwt.instanceOf(type, "DwtInputField");
 	if (isTextField) {
+		params.type = itemDef.password ? DwtInputField.PASSWORD : null;
 		params.size = itemDef.cols;
 		params.rows = itemDef.rows;
 	}
@@ -526,6 +540,13 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 	if (isTabPage) {
 		params.contentTemplate = itemDef.template;
 		delete itemDef.template;
+	}
+
+	// add extra params
+	if (itemDef.params) {
+		for (var p in itemDef.params) {
+			params[p] = itemDef.params[p];
+		}
 	}
 
 	// create control
