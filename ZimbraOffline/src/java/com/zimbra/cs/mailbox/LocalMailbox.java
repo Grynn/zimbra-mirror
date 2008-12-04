@@ -191,11 +191,12 @@ public class LocalMailbox extends DesktopMailbox {
 
             MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
             ItemId origMsgId = getOrigMsgId(msg);
+            boolean saveToSent = ds.isSaveToSent() && getAccount().getBooleanAttr(Provisioning.A_zimbraPrefSaveToSent, true);
 
             if (ds.isYahoo()) {
                 YMailSender ms = YMailSender.newInstance(ds);
                 try {
-                    ms.sendMimeMessage(context, this, ds.isSaveToSent() && getAccount().saveToSent(), mm, null, null,
+                    ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
                         origMsgId, msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
@@ -203,20 +204,18 @@ public class LocalMailbox extends DesktopMailbox {
                         OfflineLog.offline.info("YMail request failed: " + msg.getSubject(), cause);
                         OutboxTracker.recordFailure(this, id);
                         continue;
-                    } else {
-                        throw e;
                     }
+                    throw e;
                 }
             } else {
                 MailSender ms = ds.isLive() ? LMailSender.newInstance(ds) : new MailSender();
                 try {
-                    ms.sendMimeMessage(context, this, ds.isSaveToSent() && getAccount().saveToSent(), mm, null, null,
+                    ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
                         origMsgId, msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
                     if (cause instanceof MessagingException) {
-                        OfflineLog.offline.debug("smtp: failed to send mail (" + id + "): " + msg.getSubject(), e);
-                        OfflineLog.offline.info("SMTP send failure: " + msg.getSubject());
+                        OfflineLog.offline.info("Mail send failure: " + msg.getSubject(), cause);
                         if (cause instanceof SafeSendFailedException) {
                             bounceToInbox(context, id, msg, cause.getMessage());
                             OutboxTracker.remove(this, id);
@@ -224,9 +223,8 @@ public class LocalMailbox extends DesktopMailbox {
                             OutboxTracker.recordFailure(this, id);
                         }
                         continue;
-                    } else {
-                        throw e;
                     }
+                    throw e;
                 }
             }
             
