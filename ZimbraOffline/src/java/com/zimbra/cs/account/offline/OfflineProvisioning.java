@@ -2073,7 +2073,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     // Clear auth token so that it will be regenerated during test...
                     OfflineYAuth.removeToken(ds);
                 }
-                testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs));
+                testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs, this));
 	            OfflineSyncManager.getInstance().clearErrorCode(ds.getName());
             }
     	
