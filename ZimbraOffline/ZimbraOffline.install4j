@@ -3233,7 +3233,7 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <group name="Start zdesktop" id="287724" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+              <group name="Start zdesktop" id="287724" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="false" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.groups.ActionGroup">
@@ -3454,7 +3454,7 @@ return true;</string>
                 </object>
               </java>
             </serializedBean>
-            <condition>!Boolean.getBoolean("offline_update") &amp;&amp; !context.isErrorOccured()</condition>
+            <condition>!context.isErrorOccured()</condition>
             <validation />
             <preActivation />
             <postActivation />
