@@ -100,6 +100,7 @@ public final class AddressField extends Field {
 
     @Override
     protected void parseXml(Element e) {
+        super.parseXml(e);
         for (Element child : Xml.getChildren(e)) {
             String tag = child.getTagName();
             if (tag.equals(STREET)) {
