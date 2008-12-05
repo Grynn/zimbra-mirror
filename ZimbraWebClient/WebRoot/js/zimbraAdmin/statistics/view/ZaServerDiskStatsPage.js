@@ -151,14 +151,14 @@ ZaServerDiskStatsPage.prototype._getXForm = function () {
 
 		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_, 
 		    items:[
-			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 1", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_, caseKey:1, align:_LEFT_, valign:_TOP_, 
 			   		cssStyle: "position: absolute; overflow: auto;",
 			    items:[
 				   {type:_SPACER_, height:10, colSpan:"*" },
 				   {ref: "images", type:_OUTPUT_ ,  getDisplayValue:"return this.getFormController().writeImageHtml(1)"}
 				   ]
 			   },
-			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 2", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_,  caseKey:2, align:_LEFT_, valign:_TOP_, 
 			    	cssStyle: "position: absolute; overflow: auto;",
 			    items:[
 				   {type:_SPACER_, height:10, colSpan:"*" },
@@ -166,14 +166,14 @@ ZaServerDiskStatsPage.prototype._getXForm = function () {
 				   ]
 			   },
 
-			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 3", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_,  caseKey:3, align:_LEFT_, valign:_TOP_, 
 			    	cssStyle: "position: absolute; overflow: auto;",
 			    items:[
 				   {type:_SPACER_, height:10, colSpan:"*" },
 				   {ref: "images", type:_OUTPUT_ , getDisplayValue:"return this.getFormController().writeImageHtml(3)"}
 				   ]
 			   },
-			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 4", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_,  caseKey:4, align:_LEFT_, valign:_TOP_, 
 			    	cssStyle: "position: absolute; overflow: auto;",
 			    items:[
 				   {type:_SPACER_, height:10, colSpan:"*" },

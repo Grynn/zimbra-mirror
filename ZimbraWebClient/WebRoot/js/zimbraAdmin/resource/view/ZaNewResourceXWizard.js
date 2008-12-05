@@ -322,7 +322,6 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 						},
 						choices:ZaResource.schedulePolicyChoices});	
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
-						//relevant:"(instance[ZaResource.A2_schedulePolicy]!=ZaResource.SCHEDULE_POLICY_MANUAL)",relevantBehavior:_DISABLE_,
 						enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
 						enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],						
 						msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring, 
@@ -336,8 +335,6 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 									choices: ZaApp.getInstance().getServerListChoices(), 
 									enableDisableChecks:[ZaAccount.isAutoMailServer],
 									enableDisableChangeEventSources:[ZaResource.A2_autoMailServer]									
-									//relevant:"instance[ZaResource.A2_autoMailServer]==\"FALSE\" && form.getController().getServerListChoices().getChoices().values.length != 0",
-									//relevantBehavior:_DISABLE_
 							  	},
 								{ref:ZaResource.A2_autoMailServer, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,
 									label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE"}

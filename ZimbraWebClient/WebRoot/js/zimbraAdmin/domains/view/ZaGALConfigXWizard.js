@@ -413,7 +413,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 							addButtonLabel:ZaMsg.Domain_AddURL, 
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ad]],
 							visibilityChangeEventSources:[ZaDomain.A_GALServerType],							
-							//relevant:"(instance.attrs[ZaDomain.A_GALServerType]==ZaDomain.GAL_ServerType_ad)",
+							
 							removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
 							showAddOnNextRow:true,							
 							items: [
@@ -424,7 +424,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 							addButtonLabel:ZaMsg.Domain_AddURL,
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALServerType,ZaDomain.GAL_ServerType_ldap]],
 							visibilityChangeEventSources:[ZaDomain.A_GALServerType],								 
-							//relevant:"(instance.attrs[ZaDomain.A_GALServerType]==ZaDomain.GAL_ServerType_ldap)",
+							
 							removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
 							showAddOnNextRow:true,							
 							items: [
@@ -630,7 +630,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject) {
 						{type:_ZAWIZ_TOP_GROUPER_, 
 							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSearchTestResultCode,ZaDomain.Check_OK]] ,
 							visibilityChangeEventSources:[ZaDomain.A_GALSearchTestResultCode],							
-							//relevant:"instance[ZaDomain.A_GALSearchTestResultCode] == ZaDomain.Check_OK", 
+							
 							label:ZaMsg.Domain_GALSearchTestResults,
 							numCols:2,
 							items: [

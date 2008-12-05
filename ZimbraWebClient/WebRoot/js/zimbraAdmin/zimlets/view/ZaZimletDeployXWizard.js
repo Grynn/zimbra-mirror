@@ -259,16 +259,20 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 	this._localXForm.setInstance(instance);	
 }
 
+ZaZimletDeployXWizard.progressIsNotFailed = function () {
+	return (this.getInstanceValue(ZaZimlet.A_deployStatus) != ZaZimlet.STATUS_FAILED);	
+}
+
 ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
 	var case1 = {
-		type:_CASE_, numCols:1,relevant:"instance[ZaModel.currentStep] == 1",align:_LEFT_,valign:_TOP_,
+		type:_CASE_, numCols:1,caseKey:1,align:_LEFT_,valign:_TOP_,
 		items: [
 			{ type:_OUTPUT_, value: ZaMsg.ZMLT_uploadTitle, align: _LEFT_},
 			{ type:_OUTPUT_, value: this.getUploadFormHtml() }
 		]
 	};
 	var case2 = {
-		type:_CASE_, numCols:1,relevant:"instance[ZaModel.currentStep] == 2",width:"400px",		
+		type:_CASE_, numCols:1,caseKey:2, width:"400px",		
 		items:[
 			{type:_GROUP_, numCols:1,  
 				items: [
@@ -276,24 +280,30 @@ ZaZimletDeployXWizard.myXFormModifier = function(xFormObject) {
 					  iconVisible: true, 
 					  content: null,width:"400px",
 					  ref:ZaZimlet.A_statusMsg,
-					  relevant:"(ZaZimlet.STATUS_FAILED == instance[ZaZimlet.A_deployStatus])",
-					  relevantBehavior:_HIDE_,
+					  visibilityChecks:[[XForm.checkInstanceValue,ZaZimlet.A_deployStatus,ZaZimlet.STATUS_FAILED]],
+					  visibilityChangeEventSources:[ZaZimlet.A_deployStatus],
+					 // relevant:"(ZaZimlet.STATUS_FAILED == instance[ZaZimlet.A_deployStatus])",
+					 // relevantBehavior:_HIDE_,
 					  align:_CENTER_
 					},						
 					{type:_DWT_ALERT_,style: DwtAlert.INFORMATION, 
 		 				iconVisible: true,
 						content: null,width:"400px",
 						ref:ZaZimlet.A_statusMsg,
-						relevant:"(ZaZimlet.STATUS_FAILED != instance[ZaZimlet.A_deployStatus])",
-						relevantBehavior:_HIDE_,								
+						visibilityChecks:[ZaZimletDeployXWizard.progressIsNotFailed],
+						visibilityChangeEventSources:[ZaZimlet.A_deployStatus],
+//						relevant:"(ZaZimlet.STATUS_FAILED != instance[ZaZimlet.A_deployStatus])",
+//						relevantBehavior:_HIDE_,								
 						align:_CENTER_
 					},						
 					{type:_DWT_ALERT_,style: DwtAlert.INFORMATION, 
 		 				iconVisible: true,
 						content: null,width:"400px",
 						ref:ZaZimlet.A_progress,
-						relevant:"(instance[ZaZimlet.A_progress]!=null)",
-						relevantBehavior:_HIDE_,								
+						visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaZimlet.A_progress]],
+						visibilityChangeEventSources:[ZaZimlet.A_progress],
+//						relevant:"(instance[ZaZimlet.A_progress]!=null)",
+//						relevantBehavior:_HIDE_,								
 						align:_CENTER_
 					}					
 				]

@@ -287,12 +287,10 @@ function (optionId, height){
 		 },
 		 
 		 {type: _OUTPUT_, value: ZaMsg.no_domain_found_msg, colSpan: "*",
-		  	//relevant: "(instance.options[ZaSearchOption.A_domainList] == null) || (instance.options[ZaSearchOption.A_domainList].length <= 0) ", 
 	 		visibilityChecks:[[XForm.checkInstanceValueEmty,ZaSearchOption.A_domainList]] 
 		 },
 		 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30 - 25 - 5, 
 		 	cssStyle: "overflow:auto; position:absolute;margin-top: 5px;",
-		 	//relevant: "((instance.options[ZaSearchOption.A_domainList] != null) && (instance.options[ZaSearchOption.A_domainList].length > 0)) ", 
 			visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaSearchOption.A_domainList]],
 		 	items :[
 				 

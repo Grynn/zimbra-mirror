@@ -456,7 +456,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 
 		   {type:_SWITCH_, align:_LEFT_, valign:_TOP_, 
 		    items:[
-			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 1", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_, caseKey:1, align:_LEFT_, valign:_TOP_, 
 			   		cssStyle: "position: absolute; overflow: auto;",
 			    items:[
 				   {ref: "soap", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",     	
@@ -464,7 +464,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 						   		headerList:headerList1, defaultColumnSortable: 1}
 				   ]
 			   },
-			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 2", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_,  caseKey:2, align:_LEFT_, valign:_TOP_, 
 			    	cssStyle: "position: absolute; overflow: auto;",
 			    items:[
 				    {ref: "admin", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",     	
@@ -473,7 +473,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 				   ]
 			   },
 
-			   {type:_ZATABCASE_,  relevant:"instance[ZaModel.currentTab] == 3", align:_LEFT_, valign:_TOP_, 
+			   {type:_ZATABCASE_, caseKey:3, align:_LEFT_, valign:_TOP_, 
 			    	cssStyle: "position: absolute; overflow: auto;",
 			    items:[
 				   {ref: "imap", type:_DWT_LIST_ , width:"100%",  cssClass: "MBXList",     	

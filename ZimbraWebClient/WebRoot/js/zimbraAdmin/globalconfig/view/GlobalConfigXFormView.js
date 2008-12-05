@@ -360,7 +360,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						   	    { ref: ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, type: _CHECKBOX_,
 						  	  		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaAuthEnabled],
 						  	  		enableDisableChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraMtaAuthEnabled,"TRUE"]],						   	      
-						   	      //relevant: "instance.attrs[ZaGlobalConfig.A_zimbraMtaAuthEnabled] == 'TRUE'", relevantBehavior: _DISABLE_,
+						   	      
 				   	    		  label: ZaMsg.NAD_MTA_TlsAuthenticationOnly,
 						   	      trueValue: "TRUE", falseValue: "FALSE"
 
