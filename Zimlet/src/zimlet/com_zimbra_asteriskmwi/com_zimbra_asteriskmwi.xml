@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_asteriskmwi" version="3.0" description="Asterisk MWI"
+<zimlet name="com_zimbra_asteriskmwi" version="3.0" description="Asterisk MWI (an interface to an Asterisk PBX voicemail)"
 	xmlns:html="http://www.w3.org/1999/xhtml">
 	<summary>
 		This zimlet provides an interface to an Asterisk PBX voicemail

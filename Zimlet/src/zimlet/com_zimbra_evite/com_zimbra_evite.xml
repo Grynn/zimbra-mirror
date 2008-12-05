@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_evite" version="0.9" description="Evite">
+<zimlet name="com_zimbra_evite" version="0.9" description="Manages evite events">
   <include>evite.js</include>
   <includeCSS>evite.css</includeCSS>
   <handlerObject>Com_zimbra_evite</handlerObject>

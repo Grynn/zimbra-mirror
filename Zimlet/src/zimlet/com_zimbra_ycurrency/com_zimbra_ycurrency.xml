@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ycurrency" version="1.0" description="Currency Converter Zimlet">
+<zimlet name="com_zimbra_ycurrency" version="1.0" description="Highlights and converts currencies">
     <include>ycurrency.js</include>
     <includeCSS>ycurrency.css</includeCSS>
     <handlerObject>Com_Zimbra_YCurrency</handlerObject>

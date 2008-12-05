@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_emailreminder" version="0.1" description="Email Reminder">
+<zimlet name="com_zimbra_emailreminder" version="0.1" description="Setup email reminder for dragged/flagged email">
   <include>emailreminder.js</include>
   <includeCSS>emailreminder.css</includeCSS>
   <handlerObject>com_zimbra_emailreminder</handlerObject>

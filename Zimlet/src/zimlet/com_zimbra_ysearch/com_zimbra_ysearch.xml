@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ysearch" version="1.0" description="Yahoo Search">
+<zimlet name="com_zimbra_ysearch" version="1.0" description="Yahoo! Search">
 	<include>yahoo-dom-event.js</include>
 	<include>get-min.js</include>
 	<include>autocomplete-min.js</include>

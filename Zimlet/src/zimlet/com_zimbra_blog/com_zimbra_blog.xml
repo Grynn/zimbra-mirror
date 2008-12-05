@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_blog" version="1.0" description="Blog" xmlns:html="http://www.w3.org/1999/xhtml">
+<zimlet name="com_zimbra_blog" version="1.0" description="Drag and Drop items to post to blog" xmlns:html="http://www.w3.org/1999/xhtml">
 	<include>wordpress.js</include>
 	<include>typepad.js</include>
 	<include>blog.js</include>
@@ -6,7 +6,7 @@
 	<handlerObject>Com_Zimbra_Blog</handlerObject>
 
 	<zimletPanelItem label="Blog" icon="Blog-panelIcon">
-		<toolTipText>Drap and Drop items here to post to blog.</toolTipText>
+		<toolTipText>Drag and Drop items here to post to blog.</toolTipText>
 		<dragSource type="ZmContact" />
 		<dragSource type="ZmMailMsg" />
 		<dragSource type="ZmNotebook" />

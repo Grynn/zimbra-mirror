@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_dictionary" version="1.0" description="Dictionary">
+<zimlet name="com_zimbra_dictionary" version="1.0" description="Look up selected word by pressing Ctrl-Y">
 	<include>dictionary.js</include>
 	<include>DictionaryPrefsDialog.js</include>
 	<handlerObject>Com_Zimbra_Dictionary</handlerObject>

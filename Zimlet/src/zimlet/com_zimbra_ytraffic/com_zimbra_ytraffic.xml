@@ -1,10 +1,10 @@
-<zimlet name="com_zimbra_ytraffic" version="1.0" description="Yahoo Traffic">
+<zimlet name="com_zimbra_ytraffic" version="1.0" description="Traffic information using Yahoo! maps">
 	<include>ytraffic.js</include>
 	<includeCSS>ytraffic.css</includeCSS>
 	<resource>ytraffic.gif</resource>
 	<handlerObject>Com_Zimbra_YTraffic</handlerObject>
 	<zimletPanelItem label="Traffic" icon="YTraffic-panelIcon">		
-		<toolTipText>Yahoo Traffic, double click to launch it.</toolTipText>
+		<toolTipText>Yahoo! Traffic, double click to launch it.</toolTipText>
 		<contextMenu>
 			<menuItem label="Visit Yahoo Maps with Traffic Informat" id="TRAFFIC.YAHOO.COM" icon="YTraffic-panelIcon">
 				<canvas type="window" width="800" height="600" />

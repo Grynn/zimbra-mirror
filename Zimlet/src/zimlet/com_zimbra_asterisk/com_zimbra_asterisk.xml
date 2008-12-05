@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_asterisk" version="1.0" description="Asterisk"
+<zimlet name="com_zimbra_asterisk" version="1.0" description="Call through Asterisk"
         xmlns:html="http://www.w3.org/1999/xhtml">
 	<summary>
 		This zimlet provides an interface to an Asterisk PBX

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_edu" version="1.1" description="Zimbra EDU Zimlet">
+<zimlet name="com_zimbra_edu" version="1.1" description="Zimbra Education Manager">
 	<serverExtension hasKeyword="edu" regex="ZEDU\-\w+\-\w+"/>
 	<include>com_zimbra_edu.js</include>
 	<includeCSS>edu.css</includeCSS>

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_collector" version="1.1" description="Contact Collector">
+<zimlet name="com_zimbra_collector" version="1.1" description="Collect contacts from drag-drop conversation or message">
 	<include>collector.js</include>
 	<includeCSS>collector.css</includeCSS>
 	<resource>collector-icon.gif</resource>

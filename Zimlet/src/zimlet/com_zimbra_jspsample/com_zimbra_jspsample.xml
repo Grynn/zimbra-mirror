@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_jspsample" version="1.0" description="JSPSample">
+<zimlet name="com_zimbra_jspsample" version="1.0" description="Sends props to the JSP">
 
 <userProperties>
   <property type="string" name="uname" label="Username"/>

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_calscheduler" version="1.0" description="Calendar Scheduler">
+<zimlet name="com_zimbra_calscheduler" version="1.0" description="Schedule an appt from drag-drop message, auto add attendies, free/busy status for a week">
 	<include>calscheduler.js</include>
 	<includeCSS>calscheduler.css</includeCSS>
 	<include>templates/CalScheduler.template.js</include>	

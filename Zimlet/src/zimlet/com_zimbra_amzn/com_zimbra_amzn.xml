@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_amzn" version="1.0" description="Amazon">
+<zimlet name="com_zimbra_amzn" version="1.0" description="Amazon search">
 	<include>amzn.js</include>
 	<includeCSS>amzn.css</includeCSS>
 	<resource>blank_pixel.gif</resource>
