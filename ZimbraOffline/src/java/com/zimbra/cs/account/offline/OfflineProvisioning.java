@@ -2024,9 +2024,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         		isTestNeeded = true;
         	
         	String password = (String)attrs.get(A_zimbraDataSourcePassword);
+        	String decryptedPassword = password;
         	if (password == null) {
         		password = ds.getAttr(A_zimbraDataSourcePassword);
         		attrs.put(A_zimbraDataSourcePassword, password);
+        		decryptedPassword = ds.getDecryptedPassword();
         	} else if (!isTestNeeded && !password.equals(ds.getAttr(A_zimbraDataSourcePassword))) {
         		isTestNeeded = true;
         	}
@@ -2070,7 +2072,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 		            String localPart = parts[0];
 		            String domainFromEmail = parts[1];
 		            domainFromEmail = IDNUtil.toAsciiDomainName(domain);
-	                testCalDav(localPart, domainFromEmail, password);
+	                testCalDav(localPart, domainFromEmail, decryptedPassword);
 	            }
 	            
 	            OfflineSyncManager.getInstance().clearErrorCode(ds.getName());
