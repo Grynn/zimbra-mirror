@@ -59,6 +59,7 @@ PERL_LIBS 	:= \
 	IO \
 	Scalar::Util \
 	IO::Socket::SSL \
+	Socket6 \
 	DBI \
 	IO::Zlib \
 	Bit::Vector \
