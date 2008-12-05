@@ -7,6 +7,9 @@
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
 smtp      inet  n       -       n       -       -       smtpd
+465    inet  n       -       n       -       -       smtpd
+  -o smtpd_tls_wrappermode=yes 
+  -o smtpd_sasl_auth_enable=yes
 submission inet n      -       n       -       -       smtpd
 	-o smtpd_etrn_restrictions=reject
   -o smtpd_enforce_tls=yes
