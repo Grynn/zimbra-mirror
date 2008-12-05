@@ -180,6 +180,7 @@ ZaCos.MAJOR_FEATURES_CHOICES = [
         
 ];
 
+ZaCos.RENAME_COS_RIGHT = "renameCos";
 
 //internal attributes - do not send these to the server
 //ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
