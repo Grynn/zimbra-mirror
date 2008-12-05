@@ -64,7 +64,7 @@ public class YMailImport extends ImapSync {
         
         if (calDavImport != null) {
             LOG.info("Importing calendar for YMail account '%s'", dsName);
-            calDavImport.importData(null, fullSync);
+            calDavImport.importData("yahoo.com", null, fullSync);
             LOG.info("Finished importing calendar for YMail account '%s'", dsName);
         }
     }

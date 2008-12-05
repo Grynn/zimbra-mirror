@@ -57,7 +57,7 @@ public class GMailImport extends ImapSync {
         }
         if (calDavImport != null) {
             LOG.info("Importing calendar for GMail account '%s'", dsName);
-            calDavImport.importData(null, fullSync);
+            calDavImport.importData("gmail.com", null, fullSync);
             LOG.info("Finished importing calendar for GMail account '%s'", dsName);
         }
         super.importData(folderIds, fullSync);

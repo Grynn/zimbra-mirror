@@ -594,33 +594,20 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private void testCalDav(String localPart, String domain, String password) throws ServiceException {
         String username = null;
         String service = domain;
-        boolean isYmail = false;
       
         if (domain.equals("yahoo.com") || domain.equals("ymail.com") || domain.equals("rocketmail.com")) {
             if (domain.equals("yahoo.com"))
                 username = localPart;
             service = "yahoo.com";
-            isYmail = true;
         } else if (!domain.equals("gmail.com")) {
             return;
         }
         if (username == null)
             username = localPart + "@" + domain;
         
-        int status;
         try {
             OfflineLog.offline.debug("testing offline caldav access: username=" + username + " service=" + service);
-            status = OfflineCalDavDataImport.loginTest(username, password, service);
-            if (status == 502 && isYmail) {
-                OfflineLog.offline.debug("must upgrade to all-new yahoo calendar servcie: username=" + username + " service=" + service);
-                throw OfflineServiceException.YCALDAV_NEED_UPGRADE();
-            } else if (status == 404 && service.equals("gmail.com")) {
-                OfflineLog.offline.debug("google calendar servcie not enabled: username=" + username + " service=" + service);
-                throw OfflineServiceException.GCALDAV_NEED_ENABLE();
-            } else if (status != 200) {
-                OfflineLog.offline.debug("caldav login failed: username=" + username + " service=" + service + " status=" + Integer.toString(status));
-                throw OfflineServiceException.CALDAV_LOGIN_FAILED();
-            }
+            OfflineCalDavDataImport.loginTest(username, password, service);
             OfflineLog.offline.debug("caldav access test passed for " + username);
         } catch (IOException e) {
             throw ServiceException.FAILURE("IO error in CalDav login test", e);
@@ -2074,6 +2061,18 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     OfflineYAuth.removeToken(ds);
                 }
                 testDataSource(new OfflineDataSource(account, ds.getType(), ds.getName(), ds.getId(), attrs, this));
+	            
+	            String syncCal = (String) attrs.get(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled);
+	            if (syncCal != null && syncCal.equals(Provisioning.TRUE)) {
+		            String parts[] = ds.getEmailAddress().split("@");
+		            if (parts.length != 2)
+		                throw ServiceException.INVALID_REQUEST("must be valid email address: "+ ds.getEmailAddress(), null);
+		            String localPart = parts[0];
+		            String domainFromEmail = parts[1];
+		            domainFromEmail = IDNUtil.toAsciiDomainName(domain);
+	                testCalDav(localPart, domainFromEmail, password);
+	            }
+	            
 	            OfflineSyncManager.getInstance().clearErrorCode(ds.getName());
             }
     	

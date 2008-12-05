@@ -1,13 +1,16 @@
 package com.zimbra.cs.offline;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.SystemUtil;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.datasource.CalDavDataImport;
 import com.zimbra.cs.dav.DavException;
 import com.zimbra.cs.dav.client.CalDavClient;
+import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.OfflineLog;
 
 public class OfflineCalDavDataImport extends CalDavDataImport {
@@ -18,7 +21,7 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
         super(ds);
     }
     
-    public static int loginTest(String username, String password, String serviceName) throws IOException, ServiceException {
+    public static void loginTest(String username, String password, String serviceName) throws IOException, ServiceException {
         try {
             OfflineDataSource.KnownService ks = OfflineDataSource.getKnownServiceByName(serviceName);
             String url, path;                        
@@ -29,13 +32,34 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
                 client.setCredential(username, password);
                 client.login(path.replaceAll("@USERNAME@", username));
             } else {
-                OfflineLog.offline.debug("offline caldav login test: missing caldav parameters for " + serviceName);
-                return 599;
+                throw new DavException("offline caldav login test: missing caldav parameters for " + serviceName, 599);
             }
-        } catch (DavException e) {
-            return e.getStatus();
+        } catch (DavException x) {
+            doCalDavFailures(serviceName, x);
         }
-        return 200;
+    }
+    
+    public void importData(String serviceName, List<Integer> folderIds, boolean fullSync) throws ServiceException {
+    	try {
+    		super.importData(folderIds, fullSync);
+    	} catch (ServiceException x) {
+    		Throwable t = SystemUtil.getInnermostException(x);
+    		if (t instanceof DavException)
+    			doCalDavFailures(serviceName, (DavException)t);
+    		throw x;
+    	}
+    }
+    
+    private static void doCalDavFailures(String serviceName, DavException x) throws ServiceException {
+		int status = x.getStatus();
+        if (status == 502 && serviceName.equals("yahoo.com")) {
+            throw OfflineServiceException.YCALDAV_NEED_UPGRADE();
+        } else if (status == 404 && serviceName.equals("gmail.com")) {
+            throw OfflineServiceException.GCALDAV_NEED_ENABLE();
+        } else {
+            OfflineLog.offline.debug("caldav login failed: service=%s; status=%d", serviceName, status);
+            throw OfflineServiceException.CALDAV_LOGIN_FAILED();
+        }
     }
     
     @Override
