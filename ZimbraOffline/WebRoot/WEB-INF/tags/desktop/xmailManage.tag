@@ -15,12 +15,15 @@ function InitScreen() {
         zd.disable('password');
     if (document.getElementById("smtpPassword"))
         zd.disable('smtpPassword');
-<c:if test="${bean.password eq '' or not zdf:isValid(bean, 'password') || bean.verb eq 'add'}"> 
+<c:if test="${bean.password eq '' or not zdf:isValid(bean, 'password') || verb eq 'add'}"> 
     onEditLink("password", true);
 </c:if>
-<c:if test="${bean.smtpConfigSupported && (bean.smtpPassword eq '' or not zdf:isValid(bean, 'smtpPassword') || bean.verb eq 'add')}"> 
+<c:if test="${bean.smtpConfigSupported && (bean.smtpPassword eq '' or not zdf:isValid(bean, 'smtpPassword') || verb eq 'add')}"> 
 
     onEditLink("smtpPassword", true);
+</c:if>
+<c:if test="${verb eq 'add'}"> 
+	document.getElementById('accountName').focus();
 </c:if>
 }
 
