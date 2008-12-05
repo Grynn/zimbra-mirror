@@ -111,23 +111,14 @@ function(listener) {
 }
 
 
-ZaModel.setUnrecoganizedTimezone = function (tz) {
-	var new_tz = ZaMsg.CHOICE_UNRECOGNIZED;
-	var tzChoices = ZaSettings.timeZoneChoices.getChoices () ;
-	for (var i=0; i < tzChoices.values.length; i ++) {
-		if (tz == tzChoices.values[i]) {
-			new_tz = tz ;
-			break ;
-		}	
-	}
-	return new_tz ;
-}
-
 ZaModel.setUnrecoganizedChoiceValue = function (v, choices) {
-	var new_v = ZaMsg.CHOICE_UNRECOGNIZED;
-	
-	for (var i=0; i < choices.length; i ++) {
-		if (v == choices[i].value) {
+	var new_v = ZaMsg.VALUE_UNRECOGNIZED;
+	var myChoices = choices ;
+    if(typeof(choices) == "function") {
+        myChoices = choices.call (this) ;
+    }
+	for (var i=0; i < myChoices.length; i ++) {
+		if (v == myChoices[i].value) {
 			new_v = v ;
 			break ;
 		}	

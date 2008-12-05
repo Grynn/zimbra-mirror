@@ -1556,8 +1556,9 @@ XFormItem.prototype.getErrorLocation = function () {
 XFormItem.prototype.getChoiceLabel = function (value) {
 	var choices = this.getNormalizedChoices();
 	if (choices == null) return value;
-	
-	// choices will look like:  {values:[v1, v2, v3...], labels:[l1, l2, l3...]}
+	if (value == null) value = "" ; //make it an empty string, so empty value label can be returned
+    
+    // choices will look like:  {values:[v1, v2, v3...], labels:[l1, l2, l3...]}
 	var values = choices.values;
 	for (var i = 0; i < values.length; i++) {
 		if (values[i] == value) {

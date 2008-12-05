@@ -369,12 +369,21 @@ ZaSettings.INIT[ZaSettings.SKIN_TREE_FOOTER_ID]			= [null, ZaSettings.T_CONFIG, 
 
 ZaSettings.INIT[ZaSettings.SKIN_USER_INFO_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_quota"];
 //ZaSettings.timeZoneChoices = new XFormChoices(AjxTimezoneData.TIMEZONE_RULES, XFormChoices.OBJECT_LIST, "serverId", "serverId");
-//add a default time zone
-var timeZoneRules = [{ serverId: "", clientId: "" }]  ;
-var timeZoneRules = timeZoneRules.concat(AjxTimezoneData.TIMEZONE_RULES) ;
-ZaSettings.timeZoneChoices = new XFormChoices(timeZoneRules,
-        XFormChoices.OBJECT_LIST, "serverId", "clientId");
-ZaSettings.INIT[ZaSettings.SKIN_APP_TABS_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_tabs"];
+//in order to add the "Not Set" label to the timezone choices, we need to normalize it to label value pair
+ZaSettings.getTimeZoneChoices = function () {
+    if (!ZaSettings._timeZoneChoices) {
+    ZaSettings._timeZoneChoices = [{ label: ZaMsg.VALUE_NOT_SET, value: "" }]  ;
+        for (var i=0; i < AjxTimezoneData.TIMEZONE_RULES.length ; i ++) {
+            var currentTimezone = AjxTimezoneData.TIMEZONE_RULES[i] ;
+            ZaSettings._timeZoneChoices.push({label: currentTimezone.serverId,  value:currentTimezone.serverId});
+        }
+    }
+    return ZaSettings._timeZoneChoices;
+}
+
+ZaSettings.timeZoneChoices = ZaSettings.getTimeZoneChoices  ;
+
+ZaSettings.INIT[ZaSettings.SKIN_APP_TABS_ID] = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_tabs"];
 
 ZaSettings.SKIN_LOGOFF_DOM_ID = "skin_container_logoff" ;
 ZaSettings.SKIN_HELP_DOM_ID = "skin_container_help" ;

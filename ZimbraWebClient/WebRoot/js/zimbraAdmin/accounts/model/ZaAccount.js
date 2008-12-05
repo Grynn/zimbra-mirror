@@ -1792,7 +1792,7 @@ function () {
 	//handle the unrecognized timezone
 	var tz = this.attrs[ZaAccount.A_zimbraPrefTimeZoneId] ;
 	if (tz) {
-		var n_tz = ZaModel.setUnrecoganizedTimezone(tz) ;
+		var n_tz = ZaModel.setUnrecoganizedChoiceValue(tz, ZaSettings.timeZoneChoices) ;
 		if (tz != n_tz) {
 			this.attrs[ZaAccount.A_zimbraPrefTimeZoneId] = n_tz ;
 			warning +=  AjxMessageFormat.format(ZaMsg.WARNING_TIME_ZONE_INVALID ,  [ tz, "account - \"" + this.name +"\""] );
