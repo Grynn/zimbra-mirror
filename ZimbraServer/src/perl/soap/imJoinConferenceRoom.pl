@@ -57,9 +57,9 @@ my $d = new XmlDoc;
 my $searchName = "SearchRequest";
 
 if (defined $nickname) {
-  $d->start("IMJoinChatRequest", $Soap::ZIMBRA_IM_NS, { 'addr' => $addr, 'thread' => $threadId, 'nick' => $nickname });
+  $d->start("IMJoinConferenceRoomRequest", $Soap::ZIMBRA_IM_NS, { 'addr' => $addr, 'thread' => $threadId, 'nick' => $nickname });
 } else {
-  $d->start("IMJoinChatRequest", $Soap::ZIMBRA_IM_NS, { 'addr' => $addr, 'thread' => $threadId });
+  $d->start("IMJoinConferenceRoomRequest", $Soap::ZIMBRA_IM_NS, { 'addr' => $addr, 'thread' => $threadId });
 }
 
  $d->end(); 
