@@ -18,7 +18,7 @@
 use strict;
 use lib '/opt/zimbra/zimbramon/lib';
 use Sys::Syslog qw(:DEFAULT setlogsock);
-use Net::LDAP;
+use Net::LDAPapi;
 
 #
 # Syslogging options for verbose mode and for fatal errors.
@@ -30,53 +30,76 @@ my $syslog_facility="mail";
 my $syslog_options="pid";
 our $syslog_priority="info";
 our ($verbose, %attr, @ldap_url, $ldap_starttls_supported, $postfix_pw);
-my ($option, $action, $ldap_url);
+my ($option, $action, $ldap_url, @val);
 
+$ENV{'HOME'}='/opt/zimbra';
 setlogsock $syslog_socktype;
 openlog $0, $syslog_options, $syslog_facility;
 
-$ldap_starttls_supported = getLocalConfig("ldap_starttls_supported");
-$postfix_pw = getLocalConfig("ldap_postfix_password");
-$ldap_url = getLocalConfig("ldap_url");
+@val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ldap_starttls_supported ldap_postfix_password ldap_url 2> /dev/null`;
+
+$ldap_starttls_supported = $val[0];
+chomp ($ldap_starttls_supported);
+$postfix_pw = $val[1];
+chomp($postfix_pw);
+$ldap_url = $val[2];
+chomp($ldap_url);
 @ldap_url = split / /, $ldap_url;
 
 sub smtpd_access_policy {
-  my($domain, $ldap, $mesg, $user, $daddr);
+  my($domain, $ldap, $mesg, $user, $daddr, @attrs, $result);
   $daddr = lc $attr{recipient};
   ($user, $domain) = split /\@/, lc $attr{recipient};
   syslog $syslog_priority, "Recipient Domain: %s", $domain if $verbose;
   syslog $syslog_priority, "Recipient userid: %s", $user if $verbose;
-  $ldap=Net::LDAP->new(\@ldap_url);
-  if ( $ldap_starttls_supported ) {
-    $mesg = $ldap->start_tls(
-          verify => 'require',
-          capath => "/opt/zimbra/conf/ca",
-          ) or die "start_tls: $@";
-
-    $mesg->code && die "TLS: " . $mesg->error . "\n";
+  foreach my $url (@ldap_url) {
+    $ldap=Net::LDAPapi->new(-url=>$url);
+    if ( $ldap_starttls_supported ) {
+      $mesg = $ldap->start_tls_s();
+      if ($mesg != 0) {
+        next;
+      } else {
+        last;
+      }
+    }
+    $mesg = $ldap->bind_s("uid=zmpostfix,cn=appaccts,cn=zimbra",$postfix_pw);
+    if ($mesg != 0) {
+      next;
+    } else {
+      last;
+    }
   }
-  $mesg = $ldap->bind("uid=zmpostfix,cn=admins,cn=zimbra", password=>$postfix_pw);
-  $mesg = $ldap->search(
-            base=>"",
-            scope=>'sub',
-            filter=>"(&(zimbraDomainName=$domain)(objectClass=zimbraDomain))",
-            attrs=>['zimbraDomainType','zimbraMailCatchAllForwardingAddress'],
+  if ($mesg != 0) {
+     syslog $syslog_priority, "Error: zmpostfixpolicyd unable to find working LDAP server";
+      return "dunno";
+  }
+  @attrs=('zimbraDomainType', 'zimbraMailCatchAllForwardingAddress');
+  $mesg = $ldap->search_s(
+            "",
+            LDAP_SCOPE_SUBTREE,
+            "(&(zimbraDomainName=$domain)(objectClass=zimbraDomain))",
+            \@attrs,
+            0,
+            $result
           );
-  if ($mesg->count > 0) {
-    my $dobject = $mesg->entry(0);
-    if (lc($dobject->get_value("zimbraDomainType")) eq "alias") {
-      my $robject = $dobject->get_value("zimbraMailCatchAllForwardingAddress");
+  my $ent = $ldap->first_entry();
+  if ($ent != 0) {
+    if (lc(($ldap->get_values("zimbraDomainType"))[0]) eq "alias") {
+      my $robject = ($ldap->get_values("zimbraMailCatchAllForwardingAddress"))[0];
       syslog $syslog_priority, "Real Domain: %s", $robject if $verbose;
-      $mesg = $ldap->search(
-                base=>"",
-                scope=>'sub',
-                filter=>
-                        "(&(|(zimbraMailDeliveryAddress=$user"."$robject)(zimbraMailDeliveryAddress=$daddr)(zimbraMailAlias=$user".
-                        "$robject)(zimbraMailAlias=$daddr)(zimbraMailCatchAllAddress=$user"."$robject)(zimbraMailCatchAllAddress=$daddr))(zimbraMailStatus=enabled))",
-                attrs=>'1.1',
+      @attrs=('1.1');
+      $mesg = $ldap->search_s(
+                "",
+                LDAP_SCOPE_SUBTREE,
+                "(&(|(zimbraMailDeliveryAddress=$user"."$robject)(zimbraMailDeliveryAddress=$daddr)(zimbraMailAlias=$user".
+                "$robject)(zimbraMailAlias=$daddr)(zimbraMailCatchAllAddress=$user"."$robject)(zimbraMailCatchAllAddress=$daddr))(zimbraMailStatus=enabled))",
+                \@attrs,
+                0,
+                $result
               );
+      $ent = $ldap->first_entry();
       $ldap->unbind;
-      if ($mesg->count > 0) {
+      if ($ent != 0) {
         return "dunno";
       } else { 
         return "reject 5.1.1 Mailbox unavailable";
@@ -97,19 +120,6 @@ sub fatal_exit {
     my($first) = shift(@_);
     syslog "err", "fatal: $first", @_;
     exit 1;
-}
-
-# Get local config values
-sub getLocalConfig {
-  my $key = shift;
-
-  return $main::loaded{lc}{$key}
-    if (exists $main::loaded{lc}{$key});
-
-  my $val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ${key} 2> /dev/null`;
-  chomp $val;
-  $main::loaded{lc}{$key} = $val;
-  return $val;
 }
 
 #
