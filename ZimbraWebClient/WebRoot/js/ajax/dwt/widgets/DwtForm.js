@@ -277,6 +277,7 @@ DwtForm.prototype.reset = function() {
 	this._invalid = {};
 	for (var id in this._items) {
 		var itemDef = this._items[id].def;
+		if (!itemDef) continue;
 		this._initControl(itemDef);
 	}
 	// update values
@@ -375,7 +376,7 @@ DwtForm.prototype._getControlValue = function(id) {
 // utility
 
 DwtForm.prototype._call = function(func, args) {
-	return func.apply(this, args);
+	if (func) return func.apply(this, args);
 };
 
 // html creation
@@ -409,6 +410,7 @@ DwtForm.prototype._createHtmlFromTemplate = function(templateId, data) {
 	for (var i = 0; i < links.length; i++) {
 		var link = links[i];
 		if (!link.href) continue;
+		if (this._items[link.id]) continue;
 		controls.push({
 			tabindex:	link.getAttribute("tabindex") || Number.MAX_VALUE,
 			control:	link
@@ -462,31 +464,32 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 			name:  [parent._htmlElId, id].join("_"),
 			value: itemDef.value
 		};
-		for (var i = 0; i < itemDef.items.length; i++) {
-			var radioItemDef = itemDef.items[i];
-			var checked = radioItemDef.checked || radioItemDef.value == itemDef.value;
-			var radio = this._registerControl(radioItemDef, itemDef, tabIndexes, nparams, parent, "DwtRadioButton");
-			radio.setValue(radioItemDef.value);
-			this._items[radioItemDef.id].value = checked;
-			// handlers
-			control.addRadio(radio.getInputElement().id, radio, checked);
-			radio.addSelectionListener(new AjxListener(this, this._radio2group2model, [radioItemDef.id, id]));
-			if (radioItemDef.onclick) {
-				var handler = DwtForm.__makeFunc(radioItemDef.onclick);
-				radio.addSelectionListener(new AjxListener(this, this._item2handler, [radioItemDef.id, handler]));
+		if (itemDef.items) {
+			for (var i = 0; i < itemDef.items.length; i++) {
+				var radioItemDef = itemDef.items[i];
+				var checked = radioItemDef.checked || radioItemDef.value == itemDef.value;
+				var radio = this._registerControl(radioItemDef, itemDef, tabIndexes, nparams, parent, "DwtRadioButton");
+				radio.setValue(radioItemDef.value);
+				this._items[radioItemDef.id].value = checked;
+				control.addRadio(radio.getInputElement().id, radio, checked);
+				// handlers
+				var handler = DwtForm.__makeFunc(radioItemDef.onclick || itemDef.onclick);
+				radio.addSelectionListener(new AjxListener(this, this._radio2group2model, [radioItemDef.id, id, handler]));
+				// HACK: Work around fact that the DwtRadioButtonGroup overwrites
+				//       the radio button input element's onclick handler.
+				DwtForm.__hack_fixRadioButtonHandler(radio);
 			}
-			if (itemDef.onclick) {
-				var handler = DwtForm.__makeFunc(itemDef.onclick);
-				radio.addSelectionListener(new AjxListener(this, this._item2handler, [itemDef.id, handler]));
-			}
-			// HACK: Work around fact that the DwtRadioButtonGroup overwrites
-			//       the radio button input element's onclick handler.
-			DwtForm.__hack_fixRadioButtonHandler(radio);
 		}
 	}
-	else {
-		control = type ? this._createControl(itemDef, parentDef, tabIndexes, params, parent, defaultType) : element;
-		item.control = control;
+	else if (type) {
+		control = item.control = this._createControl(itemDef, parentDef, tabIndexes, params, parent, defaultType);
+	}
+	else if (element) {
+		this._attachElementHandlers(itemDef, parentDef, tabIndexes, parent, element);
+		control = item.control = element;
+		if (itemDef.items) {
+			this._registerControls(itemDef.items, itemDef, tabIndexes, null, parent, null);
+		}
 	}
 	if (element && control instanceof DwtControl) {
 		control.replaceElement(element);
@@ -508,6 +511,46 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 
 	// return control
 	return control;
+};
+
+DwtForm.prototype._attachElementHandlers = function(itemDef, parentDef, tabIndexes, parent, element) {
+	var id = itemDef.id;
+	var name = element.nodeName.toLowerCase();
+	var type = element.type;
+	if (type == "checkbox" || type == "radio") {
+		var parentId;
+		if (type == "radio") {
+			parentId = element.name;
+			if (!this._items[parentId]) this._items[parentId] = { id: parentId };
+			if (element.checked) {
+				this._items[parentId].value = element.value;
+			}
+		}
+		// checked
+		var onclick = element.onclick ;
+		var handler = DwtForm.__makeFunc(itemDef.onclick);
+		element.onclick = AjxCallback.simpleClosure(this._htmlInput_checked, this, id, parentId, handler, onclick);
+	}
+	else if (name == "select") {
+		// map selectedIndex to value of option
+		var onchange = element.onchange;
+		var handler = DwtForm.__makeFunc(itemDef.onchange);
+		element.onchange = AjxCallback.simpleClosure(this._htmlSelect_selectedIndex, this, id, handler, onchange);
+	}
+	else if (type == "button" || name == "button" || type == "reset" || type == "submit") {
+		// checked
+		var onclick = element.onclick ;
+		var handler = DwtForm.__makeFunc(itemDef.onclick);
+		element.onclick = AjxCallback.simpleClosure(this._htmlElement, this, id, handler, onclick);
+	}
+	else if (name == "textarea" || name == "input") { // type == "text" ||  || type == "file" || type == "password") {
+		// value
+		var onchange = element.onchange;
+		var handler = DwtForm.__makeFunc(itemDef.onchange);
+		element.onchange = AjxCallback.simpleClosure(this._htmlInput_value, this, id, handler, onchange);
+	}
+	// TODO: attach other handlers
+	return element;
 };
 
 DwtForm.prototype._createControl = function(itemDef, parentDef,
@@ -590,31 +633,21 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 			parentId = parentDef.id; //parent._zform_id;
 		}
 		// handlers
-		control.addSelectionListener(new AjxListener(this, this._item2parent, [id, parentId]));
-		if (itemDef.onclick) {
-			var handler = DwtForm.__makeFunc(itemDef.onclick);
-			control.addSelectionListener(new AjxListener(this, this._item2handler, [id, handler]));
-		}
-		if (parentDef && parentDef.onclick) {
-			var handler = DwtForm.__makeFunc(parentDef.onclick);
-			control.addSelectionListener(new AjxListener(this, this._item2handler, [parentDef.id, handler]));
-		}
+		var handler = DwtForm.__makeFunc(itemDef.onclick || (parentDef && parentDef.onclick));
+		control.addSelectionListener(new AjxListener(this, this._item2parent, [id, parentId, handler]));
 	}
 
 	// init checkbox, radio button
 	else if (control instanceof DwtCheckbox && !(control instanceof DwtRadioButton)) {
-		control.addSelectionListener(new AjxListener(this, this._control2model, [id]));
-		if (itemDef.onclick) {
-			var handler = DwtForm.__makeFunc(itemDef.onclick);
-			control.addSelectionListener(new AjxListener(this, this._item2handler, [id, handler]));
-		}
+		var handler = DwtForm.__makeFunc(itemDef.onclick);
+		control.addSelectionListener(new AjxListener(this, this._control2model, [id, handler]));
 	}
 
 	// init input field
 	else if (control instanceof DwtInputField) {
-		var func = DwtForm.__makeFunc(itemDef.onchange);
-		var handler = AjxCallback.simpleClosure(this._input2model2handler, this, id, func);
-		control.setHandler(DwtEvent.ONKEYUP, handler);
+		var handler = DwtForm.__makeFunc(itemDef.onchange);
+		var onkeyup = AjxCallback.simpleClosure(this._input2model2handler, this, id, handler);
+		control.setHandler(DwtEvent.ONKEYUP, onkeyup);
 		control.setHint(itemDef.hint);
 	}
 
@@ -710,17 +743,58 @@ DwtForm.prototype._initControl = function(itemDef) {
 	if (typeof itemDef.visible == "boolean") this.setVisible(id, itemDef.visible);
 };
 
-// handlers
+// html handlers
 
-DwtForm.prototype._control2model = function(id) {
-	this._setModelValue(id, this._getControlValue(id));
-	this.update();
+DwtForm.prototype._htmlElement = function(id, formHandler, elementHandler, evt) {
+	if (formHandler) {
+		this._call(formHandler, [id]);
+	}
+	if (elementHandler) {
+		elementHandler(evt);
+	}
 };
 
-DwtForm.prototype._radio2group2model = function(radioId, groupId) {
+DwtForm.prototype._htmlInput_checked = function(id, parentId, handler, onclick, evt) {
+	var control = this.getControl(id);
+	var checked = control.checked;
+	this._setModelValue(id, checked);
+	if (parentId && checked) {
+		this._setModelValue(parentId, control.value);
+	}
+	this.update();
+	this._htmlElement(id, handler, onclick, evt);
+};
+
+DwtForm.prototype._htmlInput_value = function(id, handler, onchange, evt) {
+	this._setModelValue(id, this.getControl(id).value);
+	this.update();
+	this._htmlElement(id, handler, onchange, evt);
+};
+
+DwtForm.prototype._htmlSelect_selectedIndex = function(id, handler, onchange, evt) {
+	var select = this.getControl(id);
+	this._setModelValue(id, select.options[select.selectedIndex].value);
+	this.update();
+	this._htmlElement(id, handler, onchange, evt);
+};
+
+// dwt handlers
+
+DwtForm.prototype._control2model = function(id, handler) {
+	this._setModelValue(id, this._getControlValue(id));
+	this.update();
+	if (handler) {
+		this._call(handler, [id]);
+	}
+};
+
+DwtForm.prototype._radio2group2model = function(radioId, groupId, handler) {
 	this._setModelValue(groupId, this.getControl(radioId).getValue());
 	this._setModelValue(radioId, this._getControlValue(radioId));
 	this.update();
+	if (handler) {
+		this._call(handler, [radioId]);
+	}
 };
 
 DwtForm.prototype._input2model2handler = function(id, handler) {
@@ -731,7 +805,7 @@ DwtForm.prototype._input2model2handler = function(id, handler) {
 	}
 };
 
-DwtForm.prototype._item2parent = function(itemId, parentId) {
+DwtForm.prototype._item2parent = function(itemId, parentId, handler) {
 	var control = this.getControl(itemId);
 	var itemDef = this._items[itemId].def;
 	if (control instanceof DwtButtonColorPicker || (itemDef.menu && !itemDef.onclick)) {
@@ -741,10 +815,9 @@ DwtForm.prototype._item2parent = function(itemId, parentId) {
 		this._setModelValue(parentId, this._getControlValue(itemId) || itemId);
 		this.update();
 	}
-};
-
-DwtForm.prototype._item2handler = function(id, handler) {
-	this._call(handler, [id]);
+	if (handler) {
+		this._call(handler, [itemId]);
+	}
 };
 
 DwtForm.prototype._handleListSelection = function(id, evt) {

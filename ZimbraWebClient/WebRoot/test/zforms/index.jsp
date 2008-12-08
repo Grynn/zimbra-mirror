@@ -11,6 +11,9 @@
 .CustomText { text-align: center; }
 .ZHover .CustomButtonBorder { background-color: lightgreen; }
 .ZActive .CustomButtonBorder { background-color: lightblue; }
+.ZTabPage {
+	width: 100%;
+}
 .ZTabPage TH {
 	white-space: nowrap;
 	vertical-align: top;
@@ -128,14 +131,26 @@ function showText(text) {
 						{ id: "BUTTON11_MENUITEM1", label: "Item 1, w/ onclick", onclick: "alert('BUTTON11_MENUITEM1')" },
 						{ id: "BUTTON11_MENUITEM2", label: "Item 2" }
 					]}
-				}
+				},
+				{ id: "BUTTON12" },
+				{ id: "BUTTON13" },
+				{ id: "BUTTON14", onclick: "alert('BUTTON14')" },
+				{ id: "BUTTON15", onclick: "alert('BUTTON15')" },
+				{ id: "BUTTON16" },
+				{ id: "BUTTON17" },
+				{ id: "BUTTON18", onclick: "alert('BUTTON18')" },
+				{ id: "BUTTON19", onclick: "alert('BUTTON19')" }
 			]},
 			// checkboxes
 			{ id: "CHECKBOXES", label: "Checkboxes", template: "test.zforms#checkboxes", items: [
 				{ id: "CHECKBOX1", type: "DwtCheckbox", label: "Option 1" },
 				{ id: "CHECKBOX2", type: "DwtCheckbox", label: "Option 2", enabled: false },
 				{ id: "CHECKBOX3", type: "DwtCheckbox", label: "Option 3", checked: true },
-				{ id: "CHECKBOX4", type: "DwtCheckbox", label: "Option 4", onclick:"alert('CHECKBOX4')" }
+				{ id: "CHECKBOX4", type: "DwtCheckbox", label: "Option 4", onclick:"alert('CHECKBOX4')" },
+				{ id: "CHECKBOX5" },
+				{ id: "CHECKBOX6" },
+				{ id: "CHECKBOX7", onclick:"alert('CHECKBOX7')" },
+				{ id: "CHECKBOX8", onclick:"alert('CHECKBOX8')" }
 			]},
 			// input fields
 			{ id: "INPUT_FIELDS", label: "Input Fields", template: "test.zforms#inputfields", items: [
@@ -144,7 +159,11 @@ function showText(text) {
 				{ id: "INPUT3", type: "DwtInputField", hint: "Some Text" },
 				{ id: "INPUT4", type: "DwtInputField", value: "Some Text", cols: 80 },
 				{ id: "INPUT5", type: "DwtInputField", value: "Some Text", cols: 80, rows: 2 },
-				{ id: "INPUT6", type: "DwtInputField", onchange: "alert('INPUT6')" }
+				{ id: "INPUT6", type: "DwtInputField", onchange: "alert('INPUT6')" },
+				{ id: "INPUT7" },
+				{ id: "INPUT8" },
+				{ id: "INPUT9", onchange: "alert(get('INPUT9'))" },
+				{ id: "INPUT10", onchange: "alert(get('INPUT10'))" }
 			]},
 			/***
 			// lists
@@ -161,6 +180,7 @@ function showText(text) {
 					{ id: "RADIO2", label: "radio button 2", value: "two" },
 					{ id: "RADIO3", label: "radio button 3", value: "three" }
 				]},
+				{ id: "RADIOS1_VALUE", type: "DwtText", getter: "get('RADIOS1') || 'None'" },
 				{ id: "RADIO_BUTTON1", type: "DwtButton", label: "Show Value (onclick string)", onclick: "alert(get('RADIOS1'))" },
 				{ id: "RADIO_BUTTON2", type: "DwtButton", label: "Show Value (onclick function)",
 					onclick: function() {
@@ -172,21 +192,37 @@ function showText(text) {
 					{ id: "RADIO5", label: "radio button 2", value: "two", checked: true },
 					{ id: "RADIO6", label: "radio button 3", value: "three" }
 				]},
+				{ id: "RADIOS2_VALUE", type: "DwtText", getter: "get('RADIOS2') || 'None'" },
 				{ id: "RADIOS3", type: "DwtRadioButtonGroup", value: "three", items: [
 					{ id: "RADIO7", label: "radio button 1", value: "one" },
 					{ id: "RADIO8", label: "radio button 2", value: "two", enabled: false },
 					{ id: "RADIO9", label: "radio button 3", value: "three", checked: true }
 				]},
+				{ id: "RADIOS3_VALUE", type: "DwtText", getter: "get('RADIOS3') || 'None'" },
 				{ id: "RADIOS4", type: "DwtRadioButtonGroup", items: [
 					{ id: "RADIO10", label: "radio button 1", value: "one", onclick: "alert('RADIO10')" },
 					{ id: "RADIO11", label: "radio button 2", value: "two", onclick: "alert('RADIO11')" },
 					{ id: "RADIO12", label: "radio button 3", value: "three", onclick: "alert('RADIO12')" }
 				]},
+				{ id: "RADIOS4_VALUE", type: "DwtText", getter: "get('RADIOS4') || 'None'" },
 				{ id: "RADIOS5", type: "DwtRadioButtonGroup", onclick: "alert(get('RADIOS5'))", items: [
 					{ id: "RADIO13", label: "radio button 1", value: "one" },
 					{ id: "RADIO14", label: "radio button 2", value: "two" },
 					{ id: "RADIO15", label: "radio button 3", value: "three" }
-				]}
+				]},
+				{ id: "RADIOS5_VALUE", type: "DwtText", getter: "get('RADIOS5') || 'None'" },
+				<%--{ id: "RADIOS6", items: [--%>
+					{ id: "RADIO16" },
+					{ id: "RADIO17" },
+					{ id: "RADIO18" },
+				<%--]},--%>
+				{ id: "RADIOS6_VALUE", type: "DwtText", getter: "get('RADIOS6') || 'None'" },
+				{ id: "RADIOS7", items: [
+					{ id: "RADIO19" },
+					{ id: "RADIO20" },
+					{ id: "RADIO21" }
+				]},
+				{ id: "RADIOS7_VALUE", type: "DwtText", getter: "get('RADIOS7') || 'None'" }
 			]},
 			// selects
 			{ id: "SELECTS", label: "Selects", template: "test.zforms#selects", items: [
@@ -204,7 +240,11 @@ function showText(text) {
 					{ value: "only-value" },
 					{ value: "value-n-label", label: "Value and Label" },
 					{ value: "value-label-image", label: "Value, Label, and Image", image: "NewMessage" }
-				]}
+				]},
+				{ id: "SELECT4" },
+				{ id: "SELECT5" },
+				{ id: "SELECT6", onchange: "alert(get('SELECT6'))" },
+				{ id: "SELECT7", onchange: "alert(get('SELECT7'))" }
 			]},
 			/***
 			// tabs
@@ -258,7 +298,9 @@ function showText(text) {
 			// conditional
 			{ id: "CONDITIONALS", label: "Conditionals", template: "test.zforms#conditionals", items: [
 				{ id: "COND_CHECKBOX1", type: "DwtCheckbox", label: "Enable button" },
-				{ id: "COND_BUTTON1", type: "DwtButton", label: "Click Me", enabled: "get('COND_CHECKBOX1')", onclick:"alert('COND_BUTTON1')" },
+				{ id: "COND_BUTTON1", type: "DwtButton", label: "Click Me",
+						enabled: "get('COND_CHECKBOX1')",
+						onclick:"alert('COND_BUTTON1')" },
 				{ id: "COND_CHECKBOX2", type: "DwtCheckbox", label: "Show button" },
 				{ id: "COND_BUTTON2", type: "DwtButton", label: "Click Me", visible: "get('COND_CHECKBOX2')", onclick:"alert('COND_BUTTON2')" },
 				{ id: "COND_CHECKBOX3", type: "DwtCheckbox", label: "Show element" },
@@ -305,6 +347,16 @@ function showText(text) {
 				<td><div id="\${id}_BUTTON9" tabindex="1073"></div>
 				<td><div id="\${id}_BUTTON10" tabindex="1074"></div>
 				<td><div id="\${id}_BUTTON11" tabindex="1075"></div>
+			<tr><th>&amp;lt;button>:</th>
+				<td><button id="\${id}_BUTTON12">no onclick</button></td>
+				<td><button id="\${id}_BUTTON13" onclick="alert('clicked!')">button onclick</button></td>
+				<td><button id="\${id}_BUTTON14">item onclick</button></td>
+				<td><button id="\${id}_BUTTON15" onclick="alert('clicked!')">both onclick</button></td>
+			<tr><th>&amp;lt;input type=button>:</th>
+				<td><input id="\${id}_BUTTON16" type='button' value='no onclick'></td>
+				<td><input id="\${id}_BUTTON17" type='button' value='button onclick' onclick="alert('clicked!')"></td>
+				<td><input id="\${id}_BUTTON18" type='button' value='item onclick'></td>
+				<td><input id="\${id}_BUTTON19" type='button' value='both clicked' onclick="alert('clicked!')"></td>
 		</table>
 		</div>
 	</textarea>
@@ -315,6 +367,15 @@ function showText(text) {
 			<tr><th>Disabled:<td><div id="\${id}_CHECKBOX2" tabindex="1090"></div>
 			<tr><th>Checked:<td><div id="\${id}_CHECKBOX3" tabindex="1100"></div>
 			<tr><th>onclick:<td><div id="\${id}_CHECKBOX4" tabindex="1100"></div>
+			<tr><th>&amp;lt;input type=checkbox>
+				<td><input id="\${id}_CHECKBOX5" type=checkbox>
+					<label for="\${id}_CHECKBOX5">no onclick</label>
+				<td><input id="\${id}_CHECKBOX6" type=checkbox onclick='alert("clicked!")'>
+					<label for="\${id}_CHECKBOX6">checkbox onclick</label>
+				<td><input id="\${id}_CHECKBOX7" type=checkbox>
+					<label for="\${id}_CHECKBOX7">item onclick</label>
+				<td><input id="\${id}_CHECKBOX8" type=checkbox onclick='alert("clicked!")'>
+					<label for="\${id}_CHECKBOX8">both onclick</label>
 		</table>
 		</div>
 	</textarea>
@@ -327,6 +388,12 @@ function showText(text) {
 			<tr><th>Wide input:<td colspan="3"><div id="\${id}_INPUT4" tabindex="1140"></div>
 			<tr><th>Text area:<td colspan="3"><div id="\${id}_INPUT5" tabindex="1150"></div>
 			<tr><th>onchange:<td colspan="3"><div id="\${id}_INPUT6" tabindex="1150"></div>
+			<tr><th>&amp;lt;input>:</th>
+				<td><input id="\${id}_INPUT7" value='no onchange'></td>
+				<td><input id="\${id}_INPUT8" value='input onchange' onchange="alert('changed!')"></td>
+				<td><input id="\${id}_INPUT9" value='item onchange'></td>
+				<td><input id="\${id}_INPUT10" value='both onchange' onchange="alert('changed!')"></td>
+			</tr>
 		</table>
 		</div>
 	</textarea>
@@ -345,6 +412,7 @@ function showText(text) {
 				<td><div id="\${id}_RADIO1" tabindex="1160"></div>
 				<td><div id="\${id}_RADIO2" tabindex="1161"></div>
 				<td><div id="\${id}_RADIO3" tabindex="1162"></div>
+				<td>Value:<td><div id="\${id}_RADIOS1_VALUE"></div></td>
 			<tr><td colspan="3">
 				<table cellpadding="0" cellspacing="3">
 					<tr><td><div id="\${id}_RADIO_BUTTON1" tabindex="1165"></div>
@@ -354,18 +422,45 @@ function showText(text) {
 				<td><div id="\${id}_RADIO4" tabindex="1170"></div>
 				<td><div id="\${id}_RADIO5" tabindex="1171"></div>
 				<td><div id="\${id}_RADIO6" tabindex="1172"></div>
+				<td>Value:<td><div id="\${id}_RADIOS2_VALUE"></div></td>
 			<tr><th>Partly disabled:</th>
 				<td><div id="\${id}_RADIO7" tabindex="1180"></div>
 				<td><div id="\${id}_RADIO8" tabindex="1181"></div>
 				<td><div id="\${id}_RADIO9" tabindex="1182"></div>
+				<td>Value:<td><div id="\${id}_RADIOS3_VALUE"></div></td>
 			<tr><th>Radio button onclick:</th>
 				<td><div id="\${id}_RADIO10" tabindex="1183"></div>
 				<td><div id="\${id}_RADIO11" tabindex="1184"></div>
 				<td><div id="\${id}_RADIO12" tabindex="1185"></div>
+				<td>Value:<td><div id="\${id}_RADIOS4_VALUE"></div></td>
 			<tr><th>Group onclick:</th>
 				<td><div id="\${id}_RADIO13" tabindex="1186"></div>
 				<td><div id="\${id}_RADIO14" tabindex="1187"></div>
 				<td><div id="\${id}_RADIO15" tabindex="1188"></div>
+				<td>Value:<td><div id="\${id}_RADIOS5_VALUE"></div></td>
+			<tr><th rowspan=2>&amp;lt;input type=radio>:</th>
+				<td><input id="\${id}_RADIO16" type="radio" name="RADIOS6" value='one'>
+					<label for="\${id}_RADIO16">radio button 1</label>
+				</td>
+				<td><input id="\${id}_RADIO17" type="radio" name="RADIOS6" value='two'>
+					<label for="\${id}_RADIO17">radio button 2</label>
+				</td>
+				<td><input id="\${id}_RADIO18" type="radio" name="RADIOS6" value='three'>
+					<label for="\${id}_RADIO18">radio button 3</label>
+				</td>
+				<td>Value:<td><div id="\${id}_RADIOS6_VALUE"></div></td>
+			</tr>
+			<tr><td><input id="\${id}_RADIO19" type="radio" name="RADIOS7" value='one'>
+					<label for="\${id}_RADIO19">radio button 1</label>
+				</td>
+				<td><input id="\${id}_RADIO20" type="radio" name="RADIOS7" value='two'>
+					<label for="\${id}_RADIO20">radio button 2</label>
+				</td>
+				<td><input id="\${id}_RADIO21" type="radio" name="RADIOS7" value='three'>
+					<label for="\${id}_RADIO21">radio button 3</label>
+				</td>
+				<td>Value:<td><div id="\${id}_RADIOS7_VALUE"></div></td>
+			</tr>
 		</table>
 		</div>
 	</textarea>
@@ -375,6 +470,32 @@ function showText(text) {
 			<tr><th>Enabled:<td><div id="\${id}_SELECT1" tabindex="1210"></div></td></tr>
 			<tr><th>Disabled:<td><div id="\${id}_SELECT2" tabindex="1211"></div></td></tr>
 			<tr><th>onclick:<td><div id="\${id}_SELECT3" tabindex="1211"></div></td></tr>
+			<tr><th>&amp;lt;select>:</th>
+				<td><select id="\${id}_SELECT4">
+						<option value="one">One: no onchange</option>
+						<option value="two">Two</option>
+						<option value="three">Three</option>
+					</select>
+				</td>
+				<td><select id="\${id}_SELECT5" onchange="alert('changed!')">
+						<option value="one">One: select onchange</option>
+						<option value="two">Two</option>
+						<option value="three">Three</option>
+					</select>
+				</td>
+				<td><select id="\${id}_SELECT6">
+						<option value="one">One: item onchange</option>
+						<option value="two">Two</option>
+						<option value="three">Three</option>
+					</select>
+				</td>
+				<td><select id="\${id}_SELECT7" onchange="alert('changed!')">
+						<option value="one">One: both onchange</option>
+						<option value="two">Two</option>
+						<option value="three">Three</option>
+					</select>
+				</td>
+			</tr>
 		</table>
 		</div>
 	</textarea>
