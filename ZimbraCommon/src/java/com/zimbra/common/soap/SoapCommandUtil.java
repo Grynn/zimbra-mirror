@@ -112,7 +112,7 @@ public class SoapCommandUtil implements SoapTransport.DebugListener {
             .withLongName("target").withArgument(name)
             .withDescription("Target account name to which requests will be sent.  Only used for non-admin sessions.").create();
         Option admin = obuilder
-            .withLongName("admin").withShortName("a").withDescription("Admin account name to authenticaste as.")
+            .withLongName("admin").withShortName("a").withDescription("Admin account name to authenticate as.")
             .withArgument(name).create();
         Option password = obuilder
             .withLongName("password").withShortName("p").withDescription("Password.")
