@@ -84,6 +84,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_gab_base_url;
     
     public static final KnownKey zdesktop_log_context_filter;
+    public static final KnownKey zdesktop_installation_key;
     
     static void init() {
         // This method is there to guarantee static initializer of this
@@ -276,6 +277,7 @@ public class OfflineLC {
         zdesktop_gab_base_url.setDoc("Google contacts base url");
         
         zdesktop_log_context_filter = new KnownKey("zdesktop_log_context_filter", "name,aname,ip,ua", "comma delimited list of log context items to filter out");
+        zdesktop_installation_key = new KnownKey("zdesktop_installation_key", null, "unique key of the installation instance");
     }
     
     public static String getFullVersion() {

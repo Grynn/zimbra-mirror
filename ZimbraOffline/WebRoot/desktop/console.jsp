@@ -3,6 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="com.zimbra.i18n" %>
 <%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
+<%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
 
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
@@ -10,12 +11,14 @@
 <jsp:setProperty name="bean" property="*"/>
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
+<zd:auth/>
+
 <c:set var="accounts" value="${bean.accounts}"/>
 <c:set var='add'><fmt:message key='AccountAdd'/></c:set>
 <c:set var='login'><fmt:message key='GotoDesktop'/></c:set>
 
 <c:if test="${param.loginOp != 'logout' && (param.client == 'advanced' || (param.client == 'standard' && fn:length(accounts) == 1))}">
-    <jsp:forward page="/desktop/login.jsp"/>
+    <jsp:forward page="${zdf:addAuthToken('/desktop/login.jsp')}"/>
 </c:if>
 
 <html>
@@ -29,7 +32,7 @@
 <script type="text/javascript" src="/zimbra/desktop/js/desktop.js"></script>
 <script type="text/javascript">
 function OnAdd() {
-    window.location = "/zimbra/desktop/accsetup.jsp";
+    window.location = "${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}";
 }
 
 function OnDelete(id, name, type, flavor) {
@@ -42,11 +45,11 @@ function OnEdit(id, name, type, flavor) {
 }
 
 function OnLogin() {
-    window.location = "/zimbra/desktop/login.jsp";
+    window.location = "${zdf:addAuthToken('/zimbra/desktop/login.jsp')}";
 }
 
 function OnDefault(id, name, type, flavor) {
-    document.accountForm.action = "/zimbra/desktop/console.jsp";
+    document.accountForm.action = "${zdf:addAuthToken('/zimbra/desktop/console.jsp')}";
     submit(id, name, type, flavor, "");
 }
 
@@ -261,7 +264,7 @@ function submit(id, name, type, flavor, verb) {
     </tr>
   </table>
 </div>
-<form name="accountForm" action="/zimbra/desktop/accsetup.jsp" method="POST">
+<form name="accountForm" action="${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}" method="POST">
     <input type="hidden" name="accountId">
     <input type="hidden" name="accountName">
     <input type="hidden" name="accountType">

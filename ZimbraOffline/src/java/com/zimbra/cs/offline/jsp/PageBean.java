@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import java.text.MessageFormat;
+import javax.servlet.http.HttpServletRequest;
 
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
@@ -82,5 +83,21 @@ public class PageBean {
 	
 	public static String getLocalConfig(String key) {
 		return LC.get(key);
+	}
+	
+	public static boolean checkAuthToken(HttpServletRequest request) {
+	    String key = LC.get("zdesktop_installation_key");
+	    if (key == null || key.startsWith("@"))
+	        return true;	    
+	    String at = request.getParameter("at");
+	    return (at != null && at.equals(key));
+	}
+	
+	public static String addAuthToken(String url) {
+        String key = LC.get("zdesktop_installation_key");
+        if (key == null || key.startsWith("@"))
+            return url;
+	    int pos = url.indexOf('?');
+	    return url + (pos < 0 ? "?" : "&") + "at=" + key;
 	}
 }

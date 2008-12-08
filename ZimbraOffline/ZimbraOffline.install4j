@@ -3233,6 +3233,49 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
+              <action name="set install key in localconfig.xml" id="288134" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="encoding">
+                        <string />
+                      </void>
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>conf/localconfig.xml</string>
+                        </object>
+                      </void>
+                      <void property="replaceValue">
+                        <string>${installer:instanceId}</string>
+                      </void>
+                      <void property="searchValue">
+                        <string>@install_key@</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="set install key in webapp.ini" id="288135" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>zdesktop.webapp/webapp.ini</string>
+                        </object>
+                      </void>
+                      <void property="replaceValue">
+                        <string>${installer:instanceId}</string>
+                      </void>
+                      <void property="searchValue">
+                        <string>@install_key@</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
               <group name="Start zdesktop" id="287724" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="false" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">

@@ -43,4 +43,22 @@
             String getLocalConfig(java.lang.String)
         </function-signature>
     </function>
+    <function>
+        <name>checkAuthToken</name>
+        <function-class>
+            com.zimbra.cs.offline.jsp.PageBean
+        </function-class>
+        <function-signature>
+            boolean checkAuthToken(javax.servlet.http.HttpServletRequest)
+        </function-signature>
+    </function>
+    <function>
+        <name>addAuthToken</name>
+        <function-class>
+            com.zimbra.cs.offline.jsp.PageBean
+        </function-class>
+        <function-signature>
+            String addAuthToken(java.lang.String)
+        </function-signature>
+    </function>
 </taglib>

@@ -7,11 +7,13 @@
 
 <fmt:setBundle basename="/desktop/ZdMsg" scope="request"/>
 
+<zd:auth/>
+
 <c:set var="accountFlavor" value="${param.accountFlavor eq null ? '' : param.accountFlavor}"/>
 <c:set var='cancel'><fmt:message key='Cancel'/></c:set>
 <c:set var='save'><fmt:message key='Save'/></c:set>
 <c:set var='buttonType' value="default"/>
-<c:set var="uri" value="/zimbra/desktop/accsetup.jsp"/>
+<c:set var="uri" value="${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}"/>
 
 <c:choose>
     <c:when test="${accountFlavor eq 'AOL'}">
@@ -131,7 +133,7 @@ function accntChange(accnt) {
 }
 
 function OnCancel() {
-    window.location = '/zimbra/desktop/console.jsp';
+    window.location = "${zdf:addAuthToken('/zimbra/desktop/console.jsp')}";
 }
 
 function OnDelete() {
@@ -250,7 +252,7 @@ function onEditLink(id, keep) {
 <c:when test="${accountFlavor eq ''}">
 </c:when>
 <c:when test="${not bean.noVerb && bean.allOK}">
-    <jsp:forward page="console.jsp">
+    <jsp:forward page="${zdf:addAuthToken('console.jsp')}">
 	<jsp:param name="accountName" value="${bean.accountName}"></jsp:param>
 	<jsp:param name="verb" value="${bean.verb}"></jsp:param>
     </jsp:forward>

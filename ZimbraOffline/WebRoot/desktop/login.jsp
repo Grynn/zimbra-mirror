@@ -1,12 +1,16 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="zm" uri="com.zimbra.zm" %>
+<%@ taglib prefix="zd" tagdir="/WEB-INF/tags/desktop" %>
+<%@ taglib prefix="zdf" uri="com.zimbra.cs.offline.jsp" %>
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.PageBean"/>
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
+<zd:auth/>
+
 <c:if test="${empty bean.loginUsername}">
-    <c:redirect url="/desktop/console.jsp"/>
+    <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp')}"/>
 </c:if>
 
 <c:set var="attrsToFetch" value="zimbraFeatureMailEnabled,zimbraFeatureCalendarEnabled,zimbraFeatureContactsEnabled,zimbraFeatureIMEnabled,zimbraFeatureNotebookEnabled,zimbraFeatureOptionsEnabled,zimbraFeaturePortalEnabled,zimbraFeatureTasksEnabled,zimbraFeatureVoiceEnabled,zimbraFeatureBriefcasesEnabled,zimbraFeatureMailUpsellEnabled,zimbraFeatureContactsUpsellEnabled,zimbraFeatureCalendarUpsellEnabled,zimbraFeatureVoiceUpsellEnabled"/>
@@ -36,6 +40,6 @@
     <jsp:forward page="/public/login.jsp"/>
 </c:when>
 <c:otherwise>
-    <c:redirect url="/desktop/console.jsp"/>
+    <c:redirect url="${zdf:addAuthToken('/desktop/console.jsp')}"/>
 </c:otherwise>
 </c:choose>
