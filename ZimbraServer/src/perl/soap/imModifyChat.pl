@@ -52,11 +52,11 @@ $z->doStdAuth();
 my $d = new XmlDoc;
 $d->start('IMModifyChatRequest', $Soap::ZIMBRA_IM_NS, { 'thread' => $thread, 'op'=>$op }); {
   if ($op eq "configure") {
-    $d->add("var", undef, { 'name'=>"persistent" }, "true");
+    $d->add("var", undef, { 'name'=>"persistent" }, "false");
     $d->add("var", undef, { 'name'=>"publicroom" }, "1");
-    $d->add("var", undef, { 'name'=>"moderated" }, "true");
-    $d->add("var", undef, { 'name'=>"description" }, "deeesc");
-    $d->add("var", undef, { 'name'=>"longname" }, "llllllllllllllll");
+    $d->add("var", undef, { 'name'=>"moderated" }, "false");
+    $d->add("var", undef, { 'name'=>"password" }, "test123");
+    $d->add("var", undef, { 'name'=>"passwordprotect" }, "1");
   }
 } $d->end();
 

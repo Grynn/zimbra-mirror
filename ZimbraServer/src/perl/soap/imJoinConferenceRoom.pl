@@ -26,7 +26,7 @@ use Soap;
 use ZimbraSoapTest;
 
 # specific to this app
-my ($threadId, $addr, $nickname);
+my ($threadId, $addr, $nickname, $pass);
 
 #standard options
 my ($user, $pw, $host, $help); #standard
@@ -38,6 +38,7 @@ GetOptions("u|user=s" => \$user,
            "t=s", \$threadId,
            "a=s", \$addr,
            "n=s", \$nickname,
+           "pass=s", \$pass,
           );
 
 
@@ -45,7 +46,7 @@ GetOptions("u|user=s" => \$user,
 if (!defined($user) || !defined($addr) || defined($help)) {
     my $usage = <<END_OF_USAGE;
     
-USAGE: $0 -u USER [-t threadId] -a addr [-n nickname]
+USAGE: $0 -u USER [-t threadId] -a addr [-n nickname] [-pass room_password]
 END_OF_USAGE
     die $usage;
 }
@@ -56,13 +57,19 @@ $z->doStdAuth();
 my $d = new XmlDoc;
 my $searchName = "SearchRequest";
 
+my %args = ('addr' => $addr, 'thread' => $threadId);
+
 if (defined $nickname) {
-  $d->start("IMJoinConferenceRoomRequest", $Soap::ZIMBRA_IM_NS, { 'addr' => $addr, 'thread' => $threadId, 'nick' => $nickname });
-} else {
-  $d->start("IMJoinConferenceRoomRequest", $Soap::ZIMBRA_IM_NS, { 'addr' => $addr, 'thread' => $threadId });
+  $args{'nick'} = $nickname;
 }
 
- $d->end(); 
+if (defined $pass) {
+  $args{'password'} = $pass;
+}
+
+$d->start("IMJoinConferenceRoomRequest", $Soap::ZIMBRA_IM_NS, \%args);
+
+$d->end(); 
 
 my $response = $z->invokeMail($d->root());
 
