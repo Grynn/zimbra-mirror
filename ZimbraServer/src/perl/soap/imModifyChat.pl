@@ -55,6 +55,8 @@ $d->start('IMModifyChatRequest', $Soap::ZIMBRA_IM_NS, { 'thread' => $thread, 'op
     $d->add("var", undef, { 'name'=>"persistent" }, "false");
     $d->add("var", undef, { 'name'=>"publicroom" }, "1");
     $d->add("var", undef, { 'name'=>"moderated" }, "false");
+    $d->add("var", undef, { 'name'=>"semianonymous" }, "true");
+    $d->add("var", undef, { 'name'=>"noanonymous" }, "false");
     $d->add("var", undef, { 'name'=>"password" }, "test123");
     $d->add("var", undef, { 'name'=>"passwordprotect" }, "1");
   }
