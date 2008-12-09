@@ -267,12 +267,19 @@ sub doAuthByName {
   my $authToken = $elt->content;
 
   if (!defined($sessionId)) {
+    # 6.x servers
     $elt = $authResponse->find_child('session');
     if (!defined($elt)) {
-      print "AuthRequest: ".$d->to_string("pretty")."\n";
-      print "AuthResponse: ".$authResponse->to_string("pretty")."\n";
-      #    die "Could not find sessionId in AuthToken";
-    } else {
+      # 5.x servers
+      $elt = $authResponse->find_child('sessionId');
+#      if (!defined($elt)) {
+#        print "Unable to locate session ID\n";
+        #      print "AuthRequest: ".$d->to_string("pretty")."\n";
+        #      print "AuthResponse: ".$authResponse->to_string("pretty")."\n";
+        #    die "Could not find sessionId in AuthToken";
+#      }
+    }
+    if (defined($elt)) {
       $sessionId = $elt->content;
     }
   }
@@ -288,7 +295,11 @@ sub doAuthByName {
 sub zimbraContext {
 	my ($self, $authtoken, $sessionId, $wantcontext, $opts) = @_;
 
-    print "SESSIONID is $sessionId\n";
+#    if (defined($sessionId)) {
+#      print "SESSIONID is $sessionId\n";
+#    } else {
+#      print "No session ID\n";
+#    }
 
     my $notSeq = '0';
     if (defined($opts) && defined($opts->{NOTSEQ})) {
@@ -300,12 +311,23 @@ sub zimbraContext {
 	$auth->content($authtoken);
 	$context->add_child($auth);
     if (defined($sessionId) && $sessionId ne "") {
-        my $sessionElt = new XmlElement("session");
-        if (defined ($wantcontext) && $wantcontext) {
-          $sessionElt->attrs({'notify' => '1' });
-        }
-        $sessionElt->attrs({'id' => $sessionId});
-        $context->add_child($sessionElt);
+      # SESSION elt (6.x servers)
+      my $sessionElt = new XmlElement("session");
+      if (defined ($wantcontext) && $wantcontext) {
+        $sessionElt->attrs({'notify' => '1' });
+      }
+      $sessionElt->attrs({'id' => $sessionId});
+      $context->add_child($sessionElt);
+
+      # SESSIONID elt (5.x servers)
+      my $sessionIdElt = new XmlElement("sessionId");
+      if (defined ($wantcontext) && $wantcontext) {
+        $sessionIdElt->attrs({'notify' => '1' });
+      }
+      $sessionIdElt->attrs({'id' => $sessionId});
+      $context->add_child($sessionIdElt);
+      
+      
     }
 	if (! defined ($wantcontext) ) {
 		my $want = new XmlElement("nosession");
@@ -344,6 +366,10 @@ sub invoke {
         $req->header("SOAPAction" => $uri);
     }
     $req->add_content($soap);
+
+    if ($LogRequest > 0) {
+      print "\nREQUEST: \n\t".$req->content."\n";
+    }
     
     eval {
         $res = $ua->request($req);
@@ -368,16 +394,16 @@ sub invoke {
 
     $err = $@;
 
-    if ( ($err && ($reqOK == 0))  || ($LogRequest > 0)) {
-        print "\nREQUEST: \n\t".$req->content."\n";
+    if ( ($err && ($reqOK == 0))  &&  (!($LogRequest > 0))) {
+      print "\nREQUEST: \n\t".$req->content."\n";
     }
-
+    
     if ( ($err && ($reqOK == 2))  || ($LogResponse  > 0)) {
         print "\nRESPONSE: \n\t".$res->content."\n";
     }
 
     if ($err) {
-      print "\nRESPONSE: \n\t".$res->content."\n";
+      print "\nERROR RESPONSE: \n\t".$res->content."\n";
       if ($reqOK == 0) {
           $err = "\nError Handling Soap Request".$err;
         } else {

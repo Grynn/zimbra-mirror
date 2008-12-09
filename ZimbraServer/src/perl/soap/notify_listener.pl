@@ -58,7 +58,7 @@ $z->verbose(3);
 if (defined($sessionId) && defined($authToken)) {
   $z->setAuthContext($authToken, $sessionId, \%soapargs);
 } else {
-  print "AUTH REQUEST:\n--------------------";
+#  print "AUTH REQUEST:\n--------------------";
   $z->doStdAuth();
 }
 
@@ -103,6 +103,7 @@ while (1) {
     $z->context()->find_child("notify")->attrs({'seq' => $notseq});
     print $z->to_string_simple($notify);
   }
+  sleep(1);
 }
 
 #print "REQUEST:\n-------------\n".$z->to_string_simple($d);
