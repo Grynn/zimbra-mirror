@@ -445,9 +445,9 @@ ZaSearchField.prototype.allFilterSelected = function (ev) {
 	this._containedObject[ZaSearch.A_fdistributionlists] = "TRUE";	
 	this._containedObject[ZaSearch.A_fAliases] = "TRUE";
 	this._containedObject[ZaSearch.A_fResources] = "TRUE";
-	if(ZaSettings.DOMAINS_ENABLED) {
-		this._containedObject[ZaSearch.A_fDomains] = "TRUE";	
-	}
+	//if(ZaSettings.DOMAINS_ENABLED) {
+	this._containedObject[ZaSearch.A_fDomains] = "TRUE";	
+	//}
 	this.setTooltipForSearchButton (ZaMsg.searchForAll);	
 }
 
@@ -484,13 +484,13 @@ ZaSearchField.prototype.resFilterSelected = function (ev) {
 }
 
 ZaSearchField.prototype.domainFilterSelected = function (ev) {
-	if(ZaSettings.DOMAINS_ENABLED) {
+	//if(ZaSettings.DOMAINS_ENABLED) {
 		this.resetSearchFilter();
 		//ev.item.parent.parent.setImage(ev.item.getImage());
 		this.setIconForSearchMenuButton ("Domain");
 		this._containedObject[ZaSearch.A_fDomains] = "TRUE";
 		this.setTooltipForSearchButton (ZaMsg.searchForDomains);	
-	}
+	//}
 }
 
 ZaSearchField.searchChoices = new XFormChoices([],XFormChoices.OBJECT_REFERENCE_LIST, null, "labelId");
@@ -501,9 +501,9 @@ ZaSearchField.prototype._getMyXForm = function() {
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DLS, ZaMsg.SearchFilter_DLs, ZaMsg.searchForDLs, "Group", "GroupDis", new AjxListener(this,this.dlFilterSelected)));		
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALIASES, ZaMsg.SearchFilter_Aliases, ZaMsg.searchForAliases, "AccountAlias", "AccountAlias", new AjxListener(this, this.aliasFilterSelected)));		
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_RESOURCES, ZaMsg.SearchFilter_Resources, ZaMsg.searchForResources, "Resource", "ResourceDis", new AjxListener(this, this.resFilterSelected)));		
-	if(ZaSettings.DOMAINS_ENABLED) {
+	//if(ZaSettings.DOMAINS_ENABLED) {
 		newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DOMAINS, ZaMsg.SearchFilter_Domains, ZaMsg.searchForDomains, "Domain", "DomainDis", new AjxListener(this, this.domainFilterSelected)));			
-	}
+	//}
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEP));				
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALL, ZaMsg.SearchFilter_All, ZaMsg.searchForAll, "SearchAll", "SearchAll", new AjxListener(this, this.allFilterSelected)));		
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);

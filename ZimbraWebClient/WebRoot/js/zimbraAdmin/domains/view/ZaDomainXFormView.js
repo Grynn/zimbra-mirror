@@ -167,13 +167,13 @@ function(entry) {
         this.catchAllChoices.dirtyChoices();
     }
     
- 	if(ZaSettings.COSES_ENABLED) {	
-		if(this._containedObject.attrs[ZaDomain.A_domainDefaultCOSId]) {	
-			var cos = ZaCos.getCosById(this._containedObject.attrs[ZaDomain.A_domainDefaultCOSId]);
-			this.cosChoices.setChoices([cos]);
-			this.cosChoices.dirtyChoices();
-		}
+ 	//if(ZaSettings.COSES_ENABLED) {	
+	if(this._containedObject.attrs[ZaDomain.A_domainDefaultCOSId] && this._containedObject.getAttrs[ZaDomain.A_domainDefaultCOSId]) {	
+		var cos = ZaCos.getCosById(this._containedObject.attrs[ZaDomain.A_domainDefaultCOSId]);
+		this.cosChoices.setChoices([cos]);
+		this.cosChoices.dirtyChoices();
 	}
+	//}
 
     this._localXForm.setInstance(this._containedObject);        
 	this.updateTab();
@@ -501,46 +501,28 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 
          ]
 	};
-	//if(ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME) {
-		case1.items.push({ ref: ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, 
-			  label:ZaMsg.Domain_zimbraPublicServiceHostname, width:250,
-			  onChange:ZaDomainXFormView.onFormFieldChanged
-		  	});
-	//}
-	//if(ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED) {
-		//if(!ZaSettings.DOMAINS_ARE_READONLY && ZaSettings.GLOBAL_CONFIG_ENABLED) {
-			var group = {type:_GROUP_,colSpan:"2", id:"dns_check_group",items: [], width:"100%"};
-			case1.items.push({ type: _DWT_ALERT_,
-			containerCssStyle: "padding-bottom:0px",
-			style: DwtAlert.INFO,
-			iconVisible: true, 
-			content: ZaMsg.Domain_InboundSMTPNote,
-			colSpan:"2"});
-			group.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPER_TEXTFIELD_, colSpan:2,
-	 			txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
-	 		case1.items.push(group);
-		/*} else {
-			case1.items.push({ type: _DWT_ALERT_,
-			containerCssStyle: "padding-bottom:0px",
-			style: DwtAlert.INFO,
-			iconVisible: true, 
-			content: ZaMsg.Domain_InboundSMTPNote,
-			colSpan:"2"});
-			case1.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, colSpan:2, type:(ZaSettings.DOMAINS_ARE_READONLY ? _OUTPUT_ : _TEXTFIELD_), 
-	 			label:ZaMsg.Domain_zimbraDNSCheckHostname, onChange:ZaDomainXFormView.onFormFieldChanged});
-		}*/
-	//}
-		
-	//if(ZaSettings.CAN_CHANGE_DOMAIN_DESCRIPTION) {
-		case1.items.push({ ref: ZaDomain.A_description, type: _INPUT_, 
-		  label:ZaMsg.NAD_Description, width:250,
-		  onChange:ZaDomainXFormView.onFormFieldChanged});
-	//}
 
+	case1.items.push({ ref: ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, 
+	  label:ZaMsg.Domain_zimbraPublicServiceHostname, width:250,
+	  onChange:ZaDomainXFormView.onFormFieldChanged
+  	});
 
-    //if(ZaSettings.COSES_ENABLED) {
-		case1.items.push(
-			{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
+	var group = {type:_GROUP_,colSpan:"2", id:"dns_check_group",items: [], width:"100%"};
+	case1.items.push({ type: _DWT_ALERT_,
+		containerCssStyle: "padding-bottom:0px",
+		style: DwtAlert.INFO,
+		iconVisible: true, 
+		content: ZaMsg.Domain_InboundSMTPNote,
+		colSpan:"2"});
+		group.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPER_TEXTFIELD_, colSpan:2,
+		txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
+	
+	case1.items.push(group);
+	case1.items.push({ ref: ZaDomain.A_description, type: _INPUT_, 
+	  	label:ZaMsg.NAD_Description, width:250,
+	  	onChange:ZaDomainXFormView.onFormFieldChanged});
+	case1.items.push(
+		{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
 				label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
 				inputPreProcessor:ZaDomainXFormView.preProcessCOS,
 				searchByProcessedValue:false,
@@ -564,18 +546,15 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 					}
 					return newValue;
 				}
-			});
-	//}
-	//if(ZaSettings.CAN_CHANGE_DOMAIN_STATUS) {
-		case1.items.push({ref:ZaDomain.A_zimbraDomainStatus, type:_OSELECT1_, msgName:ZaMsg.Domain_zimbraDomainStatus,
+		});
+	case1.items.push({ref:ZaDomain.A_zimbraDomainStatus, type:_OSELECT1_, msgName:ZaMsg.Domain_zimbraDomainStatus,
 				label:ZaMsg.Domain_zimbraDomainStatus+":", 
 				labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices, onChange:ZaDomainXFormView.onFormFieldChanged});
-	//}
-	//if(ZaSettings.CAN_CHANGE_DOMAIN_NOTES) {
-		case1.items.push({ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
+
+	case1.items.push({ ref: ZaDomain.A_notes, type:_TEXTAREA_, 
 				  label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top", width:250,
 				  onChange:ZaDomainXFormView.onFormFieldChanged});
-	//}
+
 	
 			
 	switchGroup.items.push(case1);

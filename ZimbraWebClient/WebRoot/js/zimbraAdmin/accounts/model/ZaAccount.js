@@ -285,15 +285,15 @@ function(tmpObj) {
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_INVALID);
 		return false;		
 	}
-	var myCos = null;
+
 	var maxPwdLen = Number.POSITIVE_INFINITY;
 	var minPwdLen = 0;	
 	var maxPwdAge = Number.POSITIVE_INFINITY;
 	var minPwdAge = 0;		
-	try {
+/*	try {
 		//find out what is this account's COS
 		if(ZaSettings.COSES_ENABLED) {
-			//myCos = ZaApp.getInstance().getCosList().getItemById(tmpObj.attrs[ZaAccount.A_COSId]);
+			
 			if(tmpObj.attrs[ZaAccount.A_COSId]) {
 				myCos = ZaCos.getCosById(tmpObj.attrs[ZaAccount.A_COSId]);
 				if(!myCos) {
@@ -302,14 +302,14 @@ function(tmpObj) {
 				}
 			}
 			if(!myCos) {
-				//myCos = cosList[0];
+
 				myCos = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name]);
 				tmpObj.attrs[ZaAccount.A_COSId] = myCos.id;
 			}		
 		}
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.checkValues", null, false);
-	}	
+	}*/	
 	
 
 	//validate this account's password constraints
@@ -355,22 +355,14 @@ function(tmpObj) {
 	//if the account did not have a valid cos id - pick the first COS
 	if(tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength] != null) {
 		minPwdLen = parseInt(tmpObj.attrs[ZaAccount.A_zimbraMinPwdLength]);
-	} else if(ZaSettings.COSES_ENABLED) {
-		if(myCos) {
-			if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
-				minPwdLen = parseInt(myCos.attrs[ZaCos.A_zimbraMinPwdLength]);
-			}
-		}
+	} else {
+		minPwdLen = parseInt(tmpObj._defaultValues.attrs[ZaAccount.A_zimbraMinPwdLength]);
 	}
 	
 	if(tmpObj.attrs[ZaAccount.A_zimbraMaxPwdLength] != null) {
 		maxPwdLen = parseInt (tmpObj.attrs[ZaAccount.A_zimbraMaxPwdLength]);
-	} else if(ZaSettings.COSES_ENABLED) {
-		if(myCos) {
-			if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
-				maxPwdLen = parseInt (myCos.attrs[ZaCos.A_zimbraMaxPwdLength]);
-			}		
-		}
+	} else {
+		maxPwdLen = parseInt (tmpObj._defaultValues.attrs[ZaAccount.A_zimbraMaxPwdLength]);
 	}
 	
 	if(maxPwdLen < minPwdLen) {
@@ -384,22 +376,14 @@ function(tmpObj) {
 	//if the account did not have a valid cos id - pick the first COS
 	if(tmpObj.attrs[ZaAccount.A_zimbraMaxPwdAge] != null) {
 		maxPwdAge = parseInt (tmpObj.attrs[ZaAccount.A_zimbraMaxPwdAge]);
-	} else if(ZaSettings.COSES_ENABLED) {
-		if(myCos) {
-			if(myCos.attrs[ZaCos.A_zimbraMaxPwdAge] > 0) {
-				maxPwdAge = parseInt ( myCos.attrs[ZaCos.A_zimbraMaxPwdAge]);
-			}
-		}
+	} else {
+		maxPwdAge = parseInt ( tmpObj._defaultValues.attrs[ZaAccount.A_zimbraMaxPwdAge]);
 	}
 	
 	if(tmpObj.attrs[ZaAccount.A_zimbraMinPwdAge] != null) {
 		minPwdAge = parseInt (tmpObj.attrs[ZaAccount.A_zimbraMinPwdAge]);
-	} else if(ZaSettings.COSES_ENABLED) {
-		if(myCos) {
-			if(myCos.attrs[ZaCos.A_zimbraMinPwdAge] > 0) {
-				minPwdAge = parseInt (myCos.attrs[ZaCos.A_zimbraMinPwdAge]);
-			}		
-		}
+	} else {
+		minPwdAge = parseInt (tmpObj._defaultValues.attrs[ZaCos.A_zimbraMinPwdAge]);
 	}
 		
 
@@ -520,16 +504,16 @@ function(tmpObj) {
 		return false;
 	}
 	
-	if ((min_mailPollingInterval == "" || min_mailPollingInterval == null)&& (myCos)) {
+	if (min_mailPollingInterval == "" || min_mailPollingInterval == null) {
 		//take the cos value
-		min_mailPollingInterval = myCos.attrs[ZaAccount.A_zimbraMailMinPollingInterval];
+		min_mailPollingInterval = tmpObj._defaultValues.attrs[ZaAccount.A_zimbraMailMinPollingInterval];
 	}
 	
-	if ((p_mailPollingInterval == "" || p_mailPollingInterval == null) && (myCos) && myCos.attrs[ZaAccount.A_zimbraPrefMailPollingInterval] != null){
-		p_mailPollingInterval = myCos.attrs[ZaAccount.A_zimbraPrefMailPollingInterval];
+	if (p_mailPollingInterval == "" || p_mailPollingInterval == null){
+		p_mailPollingInterval = tmpObj._defaultValues.attrs[ZaAccount.A_zimbraPrefMailPollingInterval];
 	}
 	if(p_mailPollingInterval != null && min_mailPollingInterval != null) {
-		if (myCos && (ZaUtil.getLifeTimeInSeconds(p_mailPollingInterval) < ZaUtil.getLifeTimeInSeconds(min_mailPollingInterval))){
+		if (ZaUtil.getLifeTimeInSeconds(p_mailPollingInterval) < ZaUtil.getLifeTimeInSeconds(min_mailPollingInterval)){
 			ZaApp.getInstance().getCurrentController().popupErrorDialog (ZaMsg.tt_mailPollingIntervalError + min_mailPollingInterval) ;
 			return false ;
 		}
@@ -609,8 +593,8 @@ function(tmpObj) {
 	}
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		//check that current theme is part of selected themes
-		var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : ( ZaSettings.COSES_ENABLED ? tmpObj._defaultValues.attrs[ZaCos.A_zimbraPrefSkin] : null);
-		var availableThemes = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] ? tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] : (ZaSettings.COSES_ENABLED ? tmpObj._defaultValues.attrs[ZaCos.A_zimbraAvailableSkin] : null);	
+		var currentTheme = tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] ? tmpObj.attrs[ZaAccount.A_zimbraPrefSkin] : tmpObj._defaultValues.attrs[ZaCos.A_zimbraPrefSkin];
+		var availableThemes = tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] ? tmpObj.attrs[ZaAccount.A_zimbraAvailableSkin] : tmpObj._defaultValues.attrs[ZaCos.A_zimbraAvailableSkin];	
 	
 		if(currentTheme && availableThemes) {
 			var arr = availableThemes instanceof Array ? availableThemes : [availableThemes];
@@ -1184,14 +1168,6 @@ function() {
 		html[idx++] = "<tr></tr>";
 		idx = this._addRow(ZaMsg.NAD_ZimbraID, this.id, html, idx);
 		
-		if (ZaSettings.COSES_ENABLED) {
-			var cos = this.getCurrentCos();
-			if(cos) {
-				idx = this._addRow(ZaMsg.NAD_ClassOfService, cos.name, html, idx);
-			}
-		}
-		//idx = this._addRow(ZaMsg.NAD_DisplayName+":", this.attrs[ZaAccount.A_displayname], html, idx);
-		
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ASSIGN_SERVER] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
 		}
@@ -1715,7 +1691,7 @@ function (value, event, form){
 }
 
 ZaAccount.generateDisplayName =
-function (firstName, lastName, initials) {
+function (instance, firstName, lastName, initials) {
 	var oldDisplayName = this.getInstanceValue(ZaAccount.A_displayname);
 	var newDisplayname = "";
 	if(firstName)
@@ -1738,7 +1714,7 @@ function (firstName, lastName, initials) {
 	if(newDisplayname == oldDisplayName) {
 		return false;
 	} else {
-		this.setInstanceValue(newDisplayname,ZaAccount.A_displayname);
+		this.getModel().setInstanceValue(instance, ZaAccount.A_displayname, newDisplayname);
 		return true;
 	}
 }

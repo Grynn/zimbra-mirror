@@ -390,6 +390,7 @@ function(ev) {
 		newAccount.getAttrs = {all:true};
 		newAccount.setAttrs = {all:true};
 		newAccount.rights = {};
+		newAccount._defaultValues = {attrs:{}};
 		newAccount.rights[ZaAccount.RENAME_ACCOUNT_RIGHT] = true;				
 		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
 			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container);	
@@ -412,7 +413,8 @@ function(ev) {
 		var newAlias = new ZaAlias();
 		newAlias.getAttrs = {all:true};
 		newAlias.setAttrs = {all:true};		
-
+		newAlias._defaultValues = {attrs:{}};
+		newAlias.rights = {}
 		if(!ZaApp.getInstance().dialogs["newAliasDialog"]) {
 			ZaApp.getInstance().dialogs["newAliasDialog"] = new ZaNewAliasXDialog(
 				this._container, "550px", "100px",ZaMsg.New_Alias_Title );	
@@ -437,6 +439,7 @@ function(ev) {
 		newDL.getAttrs = {all:true};
 		newDL.setAttrs = {all:true};
 		newDL.rights = {};
+		newDL._defaultValues = {attrs:{}};		
 		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
 		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
 		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
@@ -454,6 +457,7 @@ function(ev) {
 		var newResource = new ZaResource();
 		newResource.getAttrs = {all:true};
 		newResource.setAttrs = {all:true};
+		newResource._defaultValues = {attrs:{}};		
 		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
 			ZaApp.getInstance().dialogs["newResourceWizard"] = new ZaNewResourceXWizard(this._container);	
 
@@ -796,29 +800,12 @@ function (item) {
 					maxPwdLen = item.attrs[ZaAccount.A_zimbraMaxPwdLength];
 				} 
 				
-				if(!item.attrs[ZaAccount.A_COSId] && ZaSettings.COSES_ENABLED) {
-					var cosList = ZaApp.getInstance().getCosList().getArray();
-					item.attrs[ZaAccount.A_COSId] = cosList[0].id;
-				}
-				
 				if (minPwdLen == null) {
-					if(item.attrs[ZaAccount.A_COSId] && ZaSettings.COSES_ENABLED) {
-						myCos = ZaCos.getCosById(item.attrs[ZaAccount.A_COSId]);
-						if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
-							minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
-						}
-					}
+					minPwdLen = item._defaultValues[ZaAccount.A_zimbraMinPwdLength];
 				}			
 				
 				if (maxPwdLen == null) {
-					if(item.attrs[ZaAccount.A_COSId] && ZaSettings.COSES_ENABLED) {
-						if(!myCos) { 
-							myCos = ZaCos.getCosById(item.attrs[ZaAccount.A_COSId]);
-						}
-						if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
-							maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
-						}		
-					}
+					minPwdLen = item._defaultValues[ZaAccount.A_zimbraMaxPwdLength];
 				}		
 				
 				if (maxPwdLen == null) {

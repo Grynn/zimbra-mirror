@@ -128,46 +128,21 @@ function(tmpObj) {
 		return false;
 	}
 	
-	var myCos = null;
+
 	var maxPwdLen = Number.POSITIVE_INFINITY;
 	var minPwdLen = 1;	
 	
-	//find out what is this account's COS
-	if(ZaSettings.COSES_ENABLED) {
-		
-		if(tmpObj.attrs[ZaResource.A_COSId]) {
-			myCos = ZaCos.getCosById (tmpObj.attrs[ZaResource.A_COSId]);
-		}
-		myCos = ZaCos.getCosById(tmpObj.attrs[ZaResource.A_COSId]);
-		//myCos = cosList.getItemById(tmpObj.attrs[ZaResource.A_COSId]);
-		if(!myCos ) {
-			var cosList = ZaApp.getInstance().getCosList();
-			if(cosList.size()>0) {
-				myCos = cosList.getArray()[0];
-				tmpObj.attrs[ZaResource.A_COSId] = cosList.getArray()[0].id;
-			}
-		}		
-	}
-	//if the account did not have a valid cos id - pick the first COS
 	//validate password length against this account's COS setting
 	if(tmpObj.attrs[ZaResource.A_zimbraMinPwdLength] != null) {
 		minPwdLen = tmpObj.attrs[ZaResource.A_zimbraMinPwdLength];
-	} else if(ZaSettings.COSES_ENABLED) {
-		if(myCos) {
-			if(myCos.attrs[ZaCos.A_zimbraMinPwdLength] > 0) {
-				minPwdLen = myCos.attrs[ZaCos.A_zimbraMinPwdLength];
-			}
-		}
+	} else  {
+		tmpObj._defaultValues.attrs[ZaResource.A_zimbraMinPwdLength];
 	}
 	
 	if(tmpObj.attrs[ZaResource.A_zimbraMaxPwdLength] != null) {
 		maxPwdLen = tmpObj.attrs[ZaResource.A_zimbraMaxPwdLength];
-	} else if(ZaSettings.COSES_ENABLED) {
-		if(myCos) {
-			if(myCos.attrs[ZaCos.A_zimbraMaxPwdLength] > 0) {
-				maxPwdLen = myCos.attrs[ZaCos.A_zimbraMaxPwdLength];
-			}		
-		}
+	} else  {
+		maxPwdLen = tmpObj._defaultValues.attrs[ZaResource.A_zimbraMaxPwdLength];
 	}
 	//if there is a password - validate it
 	if(tmpObj.attrs[ZaResource.A_password]!=null || tmpObj[ZaResource.A2_confirmPassword]!=null) {
@@ -451,7 +426,7 @@ function() {
 		idx = this._addRow(ZaMsg.NAD_ResourceName, this.attrs[ZaResource.A_displayname], html, idx);
 		idx = this._addRow(ZaMsg.NAD_ResType, 
 						ZaResource.getResTypeLabel(this.attrs[ZaResource.A_zimbraCalResType]), html, idx);
-		if(ZaSettings.SERVERS_ENABLED) {
+		if(this.getAttrs[ZaResource.A_mailHost]) {
 			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaResource.A_mailHost], html, idx);
 		}
 		

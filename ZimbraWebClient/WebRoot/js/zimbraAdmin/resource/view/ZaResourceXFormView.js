@@ -129,9 +129,9 @@ function (index, form) {
 ZaResourceXFormView.myXFormModifier = function(xFormObject) {	
 
 	var domainName;
-	if(ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0)
+	/*if(ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0)
 		domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
-	else 
+	else*/ 
 		domainName = ZaSettings.myDomainName;
 
 	//get the image according to the type
@@ -139,19 +139,17 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 						{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label: "Resource_32"}   ];
 						
 	var headerItems = [	{type:_AJX_IMAGE_, ref:ZaResource.A_zimbraCalResType, src:"Resource_32", label:null, rowSpan:2, choices: imgChoices},
-						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2}];
+						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:2,visibilityChecks:[XFormItem.prototype.hasReadPermission]}];
 						
-	if(ZaSettings.COSES_ENABLED) {
-		headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:ZaApp.getInstance().getCosListChoices()});
-	}
-	if(ZaSettings.SERVERS_ENABLED) {
-		headerItems.push({type:_OUTPUT_, ref:ZaResource.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer});
-	}
-	headerItems.push({type:_OUTPUT_,  ref:ZaResource.A_accountStatus, label:ZaMsg.NAD_ResourceStatus, labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices});
+	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:ZaApp.getInstance().getCosListChoices(),visibilityChecks:[XFormItem.prototype.hasReadPermission]});
+
+	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_mailHost, labelLocation:_LEFT_,label:ZaMsg.NAD_MailServer,visibilityChecks:[XFormItem.prototype.hasReadPermission]});
+
+	headerItems.push({type:_OUTPUT_,  ref:ZaResource.A_accountStatus, label:ZaMsg.NAD_ResourceStatus, labelLocation:_LEFT_, choices:ZaResource.accountStatusChoices,visibilityChecks:[XFormItem.prototype.hasReadPermission]});
 	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_name, label:ZaMsg.NAD_Email, labelLocation:_LEFT_, required:false});
-	headerItems.push({type:_OUTPUT_,  ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID});
+	headerItems.push({type:_OUTPUT_,  ref:ZaItem.A_zimbraId, label:ZaMsg.NAD_ZimbraID,visibilityChecks:[XFormItem.prototype.hasReadPermission]});
 	headerItems.push({type:_OUTPUT_, ref:ZaResource.A_zimbraCalResType, label:ZaMsg.NAD_ResType, labelLocation:_LEFT_, required:false,
-						getDisplayValue: ZaResource.getResTypeLabel });	
+						getDisplayValue: ZaResource.getResTypeLabel,visibilityChecks:[XFormItem.prototype.hasReadPermission] });	
 
 	var tabChoices = new Array();
 	var _tab1 = 1;

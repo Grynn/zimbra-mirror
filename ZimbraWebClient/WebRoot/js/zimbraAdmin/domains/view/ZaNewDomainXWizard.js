@@ -200,6 +200,19 @@ function(entry) {
 
 	this._containedObject.notebookAcls = {};
 
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+
+
 	if(entry.notebookAcls) {
 		for(var gt in entry.notebookAcls) {
 			if(!(entry.notebookAcls[gt] instanceof Array)) {

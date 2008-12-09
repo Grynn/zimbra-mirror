@@ -97,7 +97,7 @@ function() {
 			idx = this._addRow(ZaMsg.NAD_AccountStatus, 
 						ZaAccount._accountStatus(target.attrs[ZaAccount.A_accountStatus]), html, idx);		
 			
-			if(ZaSettings.SERVERS_ENABLED) {
+			if(target.getAttrs[ZaAccount.A_mailHost]) {
 				idx = this._addRow(ZaMsg.NAD_MailServer, 
 				target.attrs[ZaAccount.A_mailHost], html, idx);
 			}			

@@ -155,8 +155,6 @@ ZaGlobalConfig.A2_common_extension_selection = "common_extension_selection";
 
 ZaGlobalConfig.loadMethod = 
 function(by, val, withConfig) {
-	if(!ZaSettings.GLOBAL_CONFIG_ENABLED)
-		return;
 	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", ZaZimbraAdmin.URN, null);
 	//var command = new ZmCsfeCommand();
 	var params = new Object();

@@ -278,7 +278,7 @@ ZaDomain.putDomainToCache = function(domain) {
 ZaDomain.getAll =
 function() {
 	var params = {
-		query: (ZaSettings.DOMAINS_ENABLED ? ZaDomain.LOCAL_DOMAIN_QUERY : ""), 
+		query: ZaDomain.LOCAL_DOMAIN_QUERY, 
 		types:[ZaSearch.DOMAINS],
 		sortBy:ZaDomain.A_domainName,
 		offset:"0",

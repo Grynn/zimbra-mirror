@@ -240,6 +240,7 @@ function(ev) {
 	newCos.getAttrs = {all:true};
 	newCos.setAttrs = {all:true};
 	newCos.rights = {};
+	newCos._defaultValues = {attrs:{}};		
 	newCos.rights[ZaCos.RENAME_COS_RIGHT] = true;
 	//copy values from default cos to the new cos
 	for(var aname in defCos.attrs) {

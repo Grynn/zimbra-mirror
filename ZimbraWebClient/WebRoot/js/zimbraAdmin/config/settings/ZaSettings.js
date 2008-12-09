@@ -325,29 +325,12 @@ ZaSettings.GLOBAL_CONFIG_VIEW="globalConfigView";
 
 ZaSettings.ACCOUNTS_RESTORE_ENABLED = true;
 
-ZaSettings.COSES_ENABLED=true;
-ZaSettings.DOMAINS_ENABLED=true;
-ZaSettings.SERVERS_ENABLED=true;
-
-ZaSettings.GLOBAL_CONFIG_ENABLED= true;
-
-
 ZaSettings.SKIN_PREFS_ENABLED = true;
 ZaSettings.LICENSE_ENABLED = true;
 ZaSettings.ZIMLETS_ENABLED = true;
 ZaSettings.ADMIN_ZIMLETS_ENABLED = true;
 ZaSettings.SAVE_SEARCH_ENABLED = true ;
 
-ZaSettings.DOMAIN_MX_RECORD_CHECK_ENABLED = true;
-ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS = false; //this attribute only take effective in domain admin
-ZaSettings.NEW_ACCT_TIME_ZONE_ENABLED = false ;
-ZaSettings.CAN_CHANGE_DOMAIN_SERVICE_HOSTNAME = true;
-ZaSettings.CAN_CREATE_DOMAINS = true;
-ZaSettings.CAN_CHANGE_DOMAIN_ACC_LIMIT = true;
-ZaSettings.CAN_CHANGE_DOMAIN_STATUS = true;
-ZaSettings.CAN_DELETE_DOMAINS = true;
-ZaSettings.CAN_CHANGE_DOMAIN_DESCRIPTION = true;
-ZaSettings.CAN_CHANGE_DOMAIN_NOTES = true;
 // initialization for settings: [name, type, data type, default value]
 ZaSettings.INIT = new Object();
 // IDs FOR HTML COMPONENTS IN THE SKIN

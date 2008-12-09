@@ -735,11 +735,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 										},
 										{ref: ZaAccount.A2_showSameDomain, type: _CHECKBOX_, align:_RIGHT_, 												
 												label:null,labelLocation:_NONE_, trueValue:"TRUE", falseValue:"FALSE",
-												visibilityChecks:[
-													function() {
-														return ZaSettings.DOMAINS_ENABLED;
-													}
-												]
+												visibilityChecks:[]
 										},										
 										{type:_OUTPUT_, value:ZaMsg.NAD_SearchSameDomain,colSpan:2}
 									]

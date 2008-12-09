@@ -258,6 +258,9 @@ function(entry) {
 	}
 	this._containedObject.name = "";
 
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+
 	if(entry.setAttrs)
 		this._containedObject.setAttrs = entry.setAttrs;
 	
@@ -268,7 +271,7 @@ function(entry) {
 		this._containedObject._defaultValues = entry._defaultValues;
 
 	this._containedObject.id = null;
-	if(ZaSettings.COSES_ENABLED) {
+	/*if(ZaSettings.COSES_ENABLED) {
 		if(this._containedObject.attrs[ZaAccount.A_COSId]) {
 			this._containedObject._defaultValues = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);
 		}
@@ -281,7 +284,7 @@ function(entry) {
 			this._containedObject._defaultValues = cosList[0];
 			this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;
 		}
-	} 
+	} */
 	this.cosChoices.setChoices([this._containedObject.cos]);
 	this.cosChoices.dirtyChoices();
 	this._containedObject.attrs[ZaAccount.A_accountStatus] = ZaAccount.ACCOUNT_STATUS_ACTIVE;
@@ -293,61 +296,66 @@ function(entry) {
 	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 //	var domainName = ZaApp.getInstance()._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
 	var domainName;
-	if(ZaSettings.GLOBAL_CONFIG_ENABLED) {
-		if(!domainName) {
-			//find out what is the default domain
+	if(!domainName) {
+		//find out what is the default domain
+		try {
 			domainName = ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName];
-			if(!domainName && ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0) {
-				domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
+		} catch (ex) {
+			if(ex.code != ZmCsfeException.SVC_PERM_DENIED) {
+				throw(ex);
 			}
-		}
-		this._containedObject.globalConfig = ZaApp.getInstance().getGlobalConfig();
-	} 
+		} 
+
+	}
+	//this._containedObject.globalConfig = ZaApp.getInstance().getGlobalConfig();
+	 
 	if(!domainName) {
 		domainName =  ZaSettings.myDomainName;
 	}
 	this._containedObject[ZaAccount.A_name] = "@" + domainName;
-	if(ZaSettings.SKIN_PREFS_ENABLED) {
-		var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
-		if(skins != null && skins != "") {
-			if (AjxUtil.isString(skins))	 {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		if(entry.getAttrs[ZaAccount.A_zimbraAvailableSkin]) {
+			var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
+			if(skins != null && skins != "") {
+				if (AjxUtil.isString(skins))	 {
+					skins = [skins];
+				}
+				this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = skins;
+			} else {
+				this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = null;		
+			}
+	
+			var skins = ZaApp.getInstance().getInstalledSkins();
+			if(skins == null) {
+				skins = [];
+			} else if (AjxUtil.isString(skins))	 {
 				skins = [skins];
 			}
-			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = skins;
-		} else {
-			this._containedObject.attrs[ZaAccount.A_zimbraAvailableSkin] = null;		
-		}
-
-		var skins = ZaApp.getInstance().getInstalledSkins();
-		if(skins == null) {
-			skins = [];
-		} else if (AjxUtil.isString(skins))	 {
-			skins = [skins];
-		}
-		
-		ZaNewAccountXWizard.themeChoices.setChoices(skins);
-		ZaNewAccountXWizard.themeChoices.dirtyChoices();		
+			
+			ZaNewAccountXWizard.themeChoices.setChoices(skins);
+			ZaNewAccountXWizard.themeChoices.dirtyChoices();
+		}		
 	}
-	if(ZaSettings.ZIMLETS_ENABLED) {
-		var zimlets = entry.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
-		if(zimlets != null && zimlets != "") {
-			var _tmpZimlets = [];
-			if (AjxUtil.isString(zimlets))	 {
-				zimlets = [zimlets];
-			}
-
-			this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = zimlets;
-		} else
-			this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = null;		
-		
-		
-
+	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])  {
+		if(entry.getAttrs[ZaAccount.A_zimbraZimletAvailableZimlets]) {
+			var zimlets = entry.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
+			if(zimlets != null && zimlets != "") {
+				var _tmpZimlets = [];
+				if (AjxUtil.isString(zimlets))	 {
+					zimlets = [zimlets];
+				}
+	
+				this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = zimlets;
+			} else
+				this._containedObject.attrs[ZaAccount.A_zimbraZimletAvailableZimlets] = null;		
+		}
 		var allZimlets = ZaZimlet.getAll("extension");
 		_tmpZimlets = [];
 		if(allZimlets == null) {
 			allZimlets = [];
 		} 
-		
+			
 		if(allZimlets instanceof ZaItemList || allZimlets instanceof AjxVector)
 			allZimlets = allZimlets.getArray();
 		
@@ -425,15 +433,11 @@ function(value, event, form) {
 }
 
 ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {	
-	var domainName;
-	if(ZaSettings.DOMAINS_ENABLED && ZaApp.getInstance().getDomainList().size() > 0)
-		domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
-	else 
-		domainName = ZaSettings.myDomainName;
+	var domainName = ZaSettings.myDomainName;
 
 	var emptyAlias = "@" + domainName;
 	var cases = new Array();
-//	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_GENERAL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+
 		var case1 = {type:_CASE_, tabGroupKey:ZaNewAccountXWizard.GENERAL_STEP, caseKey:ZaNewAccountXWizard.GENERAL_STEP, numCols:1,  align:_LEFT_, valign:_TOP_};
 		var case1Items = [ 
 			 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
@@ -473,7 +477,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
 					elementChanged: function(elementValue,instanceValue, event) {
 						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-							ZaAccount.generateDisplayName(this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
+							ZaAccount.generateDisplayName.call(this, this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
 						}
 						this.getForm().itemChanged(this, elementValue, event);
 					}
@@ -481,7 +485,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,
 					elementChanged: function(elementValue,instanceValue, event) {
 						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-							ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
+							ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
 						}
 						this.getForm().itemChanged(this, elementValue, event);
 					}
@@ -489,24 +493,23 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
 					elementChanged: function(elementValue,instanceValue, event) {
 						if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-							ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
+							ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
 						}
 						this.getForm().itemChanged(this, elementValue, event);
 					}
 				},
 				{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", 
-					labelLocation:_LEFT_, 
-					visibilityChecks:[[XFormItem.prototype.hasReadPermission,ZaAccount.A_displayname]],
+					labelLocation:_LEFT_, visibilityChecks:[[XFormItem.prototype.hasReadPermission,ZaAccount.A_displayname]],
 					items: [
 						{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150, 
 							enableDisableChecks:[ZaNewAccountXWizard.isAutoDisplayname,XFormItem.prototype.hasWritePermission],
-							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],
+							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true,
 							visibilityChecks:[]
 						},
 						{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 							elementChanged: function(elementValue,instanceValue, event) {
 								if(elementValue=="TRUE") {
-									ZaAccount.generateDisplayName(this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials]);	
+									ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials]);	
 								}
 								this.getForm().itemChanged(this, elementValue, event);
 							},
@@ -617,12 +620,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		};
 		case1Items.push(passwordGroup);														
 	
-	    if (ZaSettings.NEW_ACCT_TIME_ZONE_ENABLED) {
-	        var new_acct_timezone_group = {
-	            type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_TimezoneGrouper, id: "account_wiz_timezone_group",
-	            numCols: 2,
-	            items: [
-	                    /*
+	    var new_acct_timezone_group = {
+	         type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_TimezoneGrouper, id: "account_wiz_timezone_group",
+	         visibilityChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraPrefTimeZoneId]],
+	         numCols: 2,
+	         items: [
+	                   /*
 	                {ref:"default_timezone", type:_CHECKBOX_, msgName:"default",
 	                    label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 	                    elementChanged: function(elementValue,instanceValue, event) {
@@ -631,14 +634,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	                        }
 	                        this.getForm().itemChanged(this, elementValue, event);
 	                    }
-	                }     */
-	               {ref:ZaAccount.A_zimbraPrefTimeZoneId, type:_SELECT1_, msgName:ZaMsg.NAD_zimbraPrefTimeZoneId,
-	                   label:ZaMsg.NAD_zimbraPrefTimeZoneId+":", labelLocation:_LEFT_ }
-	            ]
-	        }
-	
-	        case1Items.push (new_acct_timezone_group) ;
+	              }     */
+	            {ref:ZaAccount.A_zimbraPrefTimeZoneId, type:_SELECT1_, msgName:ZaMsg.NAD_zimbraPrefTimeZoneId,
+	                 label:ZaMsg.NAD_zimbraPrefTimeZoneId+":", labelLocation:_LEFT_ }
+	         ]
 	    }
+	
+	    case1Items.push (new_acct_timezone_group) ;
+	    
 	
 	
 	    var notesGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_wiz_notes_group",

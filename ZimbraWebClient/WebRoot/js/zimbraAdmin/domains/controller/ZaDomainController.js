@@ -61,11 +61,9 @@ function(entry) {
 **/
 ZaDomainController.initToolbarMethod =          
 function () {                                    
-	//if (!ZaSettings.DOMAINS_ARE_READONLY || ZaSettings.CAN_MODIFY_CATCH_ALL_ADDRESS
-      //      || ZaSettings.DOMAIN_SKIN_ENABLED ) {
-		this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
-		this._toolbarOrder.push(ZaOperation.SAVE);		
-	//}
+	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.DTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
+	this._toolbarOrder.push(ZaOperation.SAVE);		
+
 	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.DTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));    	
 	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
 
@@ -73,15 +71,13 @@ function () {
 	this._toolbarOrder.push(ZaOperation.CLOSE);
 	this._toolbarOrder.push(ZaOperation.SEP);
 
-	//if(ZaZimbraAdmin.currentAdminAccount.rights[ZaDomain.RIGHT_CREATE_SUB_DOMAIN])
-		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener));
-		this._toolbarOrder.push(ZaOperation.NEW);		
-//	}
+	this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, this._newButtonListener));
+	this._toolbarOrder.push(ZaOperation.NEW);		
 
-//	if (ZaSettings.CAN_DELETE_DOMAINS ) {
-		this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
-		this._toolbarOrder.push(ZaOperation.DELETE);		    	    	
-//	}
+
+	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
+	this._toolbarOrder.push(ZaOperation.DELETE);		    	    	
+
 	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
@@ -439,6 +435,12 @@ function () {
 ZaDomainController.prototype.newDomain = 
 function () {
 	this._currentObject = new ZaDomain();
+	
+	this._currentObject._defaultValues = {attrs:{}};	
+	this._currentObject.getAttrs = {all:true};
+	this._currentObject.setAttrs = {all:true};
+	this._currentObject.rights = {};
+	
 	this._showNewDomainWizard();
 }
 

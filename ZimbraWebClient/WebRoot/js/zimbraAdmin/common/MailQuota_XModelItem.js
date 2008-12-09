@@ -75,7 +75,7 @@ MailQuota2_XModelItem.prototype.getter = "getValue";
 
 MailQuota2_XModelItem.prototype.getValue = function(instance, current, ref) {
 	var value = this.getLocalValue(instance, current, ref);
-	if (value == null && ZaSettings.COSES_ENABLED) value = this.getSuperValue(instance, current, ref);
+	if (value == null) value = this.getSuperValue(instance, current, ref);
 	if(value <=0) 
 		value = ZaMsg.Unlimited;
 	return value;

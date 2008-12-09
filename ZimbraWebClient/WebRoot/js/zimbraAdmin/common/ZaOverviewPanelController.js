@@ -119,10 +119,10 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 	var callback = new AjxCallback(this, this.domainSearchCallback);
 	var domainListController = ZaApp.getInstance().getDomainListController ();
 	
-    if(ZaSettings.DOMAINS_ENABLED)
+    //if(ZaSettings.DOMAINS_ENABLED)
 		domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
-	else
-		domainListController._currentQuery = "" ;  
+	/*else
+		domainListController._currentQuery = "" ;*/  
                                                                
 	var searchParams = {
 			query: domainListController._currentQuery, 
@@ -802,10 +802,10 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	var domainListController = ZaApp.getInstance().getDomainListController ();
 	
 	//if we do not have access to domains we will only get our own domain in response anyway, so no need to add a query
-	if(ZaSettings.DOMAINS_ENABLED)
+	//if(ZaSettings.DOMAINS_ENABLED)
 		domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
-	else
-		domainListController._currentQuery = "" ;
+	/*else
+		domainListController._currentQuery = "" ;*/
 			
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(domainListController, ZaDomainListController.prototype.show, true);

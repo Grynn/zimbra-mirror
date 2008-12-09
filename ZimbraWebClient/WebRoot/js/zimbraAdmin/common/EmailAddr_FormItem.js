@@ -82,13 +82,6 @@ function () {
 	}
 		
 };
-/*EmailAddr_XFormItem.isStaticDomain = function () {
-	return !ZaSettings.DOMAINS_ENABLED;
-}
-
-EmailAddr_XFormItem.isNonSaticDomain = function () {
-	return ZaSettings.DOMAINS_ENABLED;
-}*/
 
 EmailAddr_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_,forceUpdate:true, ref:".", labelLocation:_NONE_,cssClass:"admin_xform_name_input",
