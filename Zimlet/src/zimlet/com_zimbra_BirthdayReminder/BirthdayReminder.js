@@ -111,9 +111,17 @@ function(obj, apptType) {
 	var birthday = tmparry[1] + "/" + tmparry[2] + "/" + todayDate.getFullYear();
 	var subject = "";
 	var startDate = "";
+	var email_name = "";
+	if (obj.e == "") {
+		email_name = obj.fn;
+	} else if (obj.fn == "") {
+		email_name = obj.e;
+	} else {
+		email_name = obj.fn + "("+ obj.e+")";
+	}
 	if (apptType == "ON_THE_DAY") {
 		startDate = AjxDateUtil.simpleParseDateStr(birthday);
-		subject = "Today is Birthday of " + obj.fn + obj.e + "!";
+		subject = "Today is Birthday of " +email_name+"!";
 	} else if (apptType == "DAYS_BEFORE") {
 		var breminder_daysSlct = document.getElementById("breminder_daysSlct");
 		var daysCnt = breminder_daysSlct.options[breminder_daysSlct.selectedIndex].text;
@@ -121,7 +129,7 @@ function(obj, apptType) {
 		startDate = AjxDateUtil.simpleParseDateStr(birthday);
 		startDate.setHours("0", "00");
 		startDate = new Date(startDate.getTime() - (daysCnt * 24 * 3600 * 1000));
-		subject = "Birthday of " + obj.fn + obj.e + " is " + daysCnt + " day(s) away!";
+		subject = "Birthday of " +email_name+" is "+daysCnt+" day(s) away!";
 	} else if (apptType == "WEEKS_BEFORE") {
 		var breminder_weekSlct = document.getElementById("breminder_weekSlct");
 		var weeksCnt = breminder_weekSlct.options[breminder_weekSlct.selectedIndex].text;
@@ -129,7 +137,7 @@ function(obj, apptType) {
 		startDate = AjxDateUtil.simpleParseDateStr(birthday);
 		startDate.setHours("0", "00");
 		startDate = new Date(startDate.getTime() - (weeksCnt * 7 * 24 * 3600 * 1000));
-		subject = "Birthday of " + obj.fn + obj.e + " is " + weeksCnt + " week(s) away!";
+		subject = "Birthday of " +email_name+" is "+weeksCnt+" week(s) away!";
 	}
 
 
@@ -302,9 +310,9 @@ function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "Birthday Reminder Zimlet Setup: We created a Calendar, '";
+	html[i++] = "Birthday Reminder Zimlet Setup: We've just created a Calendar: '";
 	html[i++] = com_zimbra_BirthdayReminder.birthdayFolder;
-	html[i++] = "' to store Birthday Reminders.<br> We need to reload Browser for setup to complete. Reload Browser?";
+	html[i++] = "' to store Birthday Reminders.<br> We need to reload Browser for setup to complete. <br>Reload Browser?";
 	html[i++] = "</DIV>";
 	return html.join("");
 };
@@ -413,6 +421,8 @@ function() {
 		setTimeout(AjxCallback.simpleClosure(this._create3Appts, this, obj, counter, this._bDayAndEmail.length), counter*4000);
 		counter++;
 	}
+	//say done at the very end
+	setTimeout(AjxCallback.simpleClosure(this._saydone, this), counter*4000);//counter would know exactly how much to wait
 
 	this._preferenceDialog.popdown();
 	if (this._reloadRequired) {
@@ -420,7 +430,9 @@ function() {
 	}
 };
 
-
+com_zimbra_BirthdayReminder.prototype._saydone = function() {
+		appCtxt.getAppController().setStatusMsg("..Done creating Birthday Reminders", ZmStatusView.LEVEL_INFO);
+}
 com_zimbra_BirthdayReminder.prototype._addListListeners = function() {
 	var divs = this._preferenceDialog.getHtmlElement().getElementsByTagName("div");
 	for (var i = 0; i < divs.length; i++) {
