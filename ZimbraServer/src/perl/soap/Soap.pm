@@ -241,6 +241,8 @@ sub doAuthByName {
   my $ctxt = new XmlElement("context", "urn:zimbra");
   if (!defined($opts) || !defined($opts->{NOTIFY})) {
     $ctxt->add_child(new XmlElement("nosession"));
+  } else {
+    $ctxt->add_child(new XmlElement("session"));
   }
 
   my $d = new XmlDoc;
@@ -265,7 +267,7 @@ sub doAuthByName {
   my $authToken = $elt->content;
 
   if (!defined($sessionId)) {
-    $elt = $authResponse->find_child('sessionId');
+    $elt = $authResponse->find_child('session');
     if (!defined($elt)) {
       print "AuthRequest: ".$d->to_string("pretty")."\n";
       print "AuthResponse: ".$authResponse->to_string("pretty")."\n";
@@ -285,6 +287,8 @@ sub doAuthByName {
 
 sub zimbraContext {
 	my ($self, $authtoken, $sessionId, $wantcontext, $opts) = @_;
+
+    print "SESSIONID is $sessionId\n";
 
     my $notSeq = '0';
     if (defined($opts) && defined($opts->{NOTSEQ})) {
@@ -308,7 +312,9 @@ sub zimbraContext {
 		$want->content("");
 		$context->add_child($want);
 	} else {
-      print "****************notSeq = $notSeq***************************\n\n";
+#      print "****************notSeq = $notSeq***************************\n\n";
+#      my $session = new XmlElement("session");
+#      $context->add_child($session);
       my $want = new XmlElement("notify");
       $want->attrs({ 'seq' => $notSeq });
       $context->add_child($want);
@@ -325,7 +331,12 @@ sub invoke {
 
     my $env = $self->soapEnvelope($doc, $context);
     my $soap = $env->to_string();
-    my $ua = new LWP::UserAgent();
+    my $ua;
+    if (defined($options->{TIMEOUT})) {
+      $ua = new LWP::UserAgent(timeout => $options->{TIMEOUT});
+    } else {
+      $ua = new LWP::UserAgent();
+    }
     $req = new HTTP::Request(POST=> $uri);
     $req->content_type($self->getContentType());
     $req->content_length(length($soap));
@@ -348,7 +359,11 @@ sub invoke {
         die "unable to determine soap protocol" unless defined $rsoap;
         die "unexpected soap version in response" unless $rsoap == $self;
 
-        $toRet = $self->getElement($xml);
+        if (defined($options->{FULLRESPONSE})) {
+          $toRet = $xml;
+        } else {
+          $toRet = $self->getElement($xml);
+        }
     };
 
     $err = $@;
