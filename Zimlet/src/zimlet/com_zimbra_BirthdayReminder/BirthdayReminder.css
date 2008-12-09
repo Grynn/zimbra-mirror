@@ -1,0 +1,35 @@
+.ImgBirthdayReminder-panelIcon {
+  background: url("BirthdayReminder.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.breminder_cardDetailDiv{
+background:#FFFFCC;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+.breminder_cardHdrDiv{
+background:#FFFFFC;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+
+.breminder_mainDiv {
+border-bottom:1px solid #A7A194;
+}
+.breminder_msgDiv{
+background:#333399;
+color:white;
+font-size:25px;font-weight:bold;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+.breminder_hidden {
+display:none
+}
+.breminder_shown {
+display:block
+}
+
+.breminder_HdrTable{
+font-size:20px;font-weight:bold;color:black;font-family:Arial,Helvetica,sans-serif;width:100%
+}

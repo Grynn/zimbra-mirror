@@ -1,0 +1,14 @@
+<zimlet name="com_zimbra_BirthdayReminder" version="0.1" description="Birthday Reminder">
+  <include>BirthdayReminder.js</include>
+  <includeCSS>BirthdayReminder.css</includeCSS>
+  <handlerObject>com_zimbra_BirthdayReminder</handlerObject>
+
+  <zimletPanelItem label="Birthday Reminder" icon="BirthdayReminder-panelIcon">
+    <toolTipText>Scans Address Book for Birthdays and creates multiple Reminders</toolTipText>
+  </zimletPanelItem>
+
+	<userProperties>
+		<property type="string" name="bReminder_hasFolder" value="false"/>
+	</userProperties>
+
+</zimlet>
