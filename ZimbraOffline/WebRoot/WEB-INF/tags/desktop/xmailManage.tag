@@ -47,7 +47,7 @@ function SetSmtpPort() {
 <div id="newService" class="ZWizardPage">
 
 <span class="padding">
-<form name="accountForm" action="${uri}" method="POST">
+<form name="accountForm" action="${uri}" method="POST" onsubmit="OnSubmit()">
     <input type="hidden" name="accountId" value="${bean.accountId}">
     <input type="hidden" name="accountFlavor" value="${accountFlavor}">
 <c:if test="${bean.type ne 'zimbra' and not empty bean.domain}">

@@ -74,7 +74,7 @@ function submit(id, name, type, flavor, verb) {
 </script>
 </head>
 <body>
-<div align="center">
+<div class="ZPanelPadding" align="center">
   <table class="ZPanel" cellpadding="0" cellspacing="0">
     <tr>
       <td class="ZPanelLogo">

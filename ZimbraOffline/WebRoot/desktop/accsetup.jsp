@@ -171,7 +171,7 @@ function onEditLink(id, keep) {
 </script>
 </head>
 <body onload="InitScreen()">
-<div align="center">
+<div class="ZPanelPadding" align="center">
   <table class="ZPanel" cellpadding="0" cellspacing="0">
     <tr>
       <td class="ZPanelLogo">
