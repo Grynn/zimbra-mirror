@@ -19,6 +19,7 @@ use strict;
 use lib '/opt/zimbra/zimbramon/lib';
 use Sys::Syslog qw(:DEFAULT setlogsock);
 use Net::LDAPapi;
+use XML::Simple;
 
 #
 # Syslogging options for verbose mode and for fatal errors.
@@ -36,13 +37,13 @@ $ENV{'HOME'}='/opt/zimbra';
 setlogsock $syslog_socktype;
 openlog $0, $syslog_options, $syslog_facility;
 
-@val = `/opt/zimbra/bin/zmlocalconfig -x -s -m nokey ldap_starttls_supported ldap_postfix_password ldap_url 2> /dev/null`;
+my $localxml = XMLin("/opt/zimbra/conf/localconfig.xml");
 
-$ldap_starttls_supported = $val[0];
+$ldap_starttls_supported = $localxml->{key}->{ldap_starttls_supported}->{value};
 chomp ($ldap_starttls_supported);
-$postfix_pw = $val[1];
+$postfix_pw = $localxml->{key}->{ldap_postfix_password}->{value};
 chomp($postfix_pw);
-$ldap_url = $val[2];
+$ldap_url = $localxml->{key}->{ldap_url}->{value};
 chomp($ldap_url);
 @ldap_url = split / /, $ldap_url;
 
@@ -56,22 +57,22 @@ sub smtpd_access_policy {
     $ldap=Net::LDAPapi->new(-url=>$url);
     if ( $ldap_starttls_supported ) {
       $mesg = $ldap->start_tls_s();
-      if ($mesg != 0) {
-        next;
-      } else {
-        last;
-      }
+	  if ($mesg != 0) {
+	    next;
+	  } else {
+	    last;
+	  }
     }
     $mesg = $ldap->bind_s("uid=zmpostfix,cn=appaccts,cn=zimbra",$postfix_pw);
-    if ($mesg != 0) {
-      next;
-    } else {
-      last;
-    }
+	if ($mesg != 0) {
+	  next;
+	} else {
+	  last;
+	}
   }
   if ($mesg != 0) {
      syslog $syslog_priority, "Error: zmpostfixpolicyd unable to find working LDAP server";
-      return "dunno";
+	 return "dunno";
   }
   @attrs=('zimbraDomainType', 'zimbraMailCatchAllForwardingAddress');
   $mesg = $ldap->search_s(
