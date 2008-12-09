@@ -55,7 +55,7 @@ ZaCertView.prototype._setUI = function (certs) {
 	var html = [] ;
 	
 	html.push("<div style='padding-left:10px;'>") ;
-	html.push("<h2>" + com_zimbra_cert_manager.CERT_server_name + " + this.getTargetServerName() + "</h2>");
+	html.push("<h2>" + com_zimbra_cert_manager.CERT_server_name + this.getTargetServerName() + "</h2>");
 
 	if (certs.cert) {
 		for (var i=0; i < certs.cert.length; i ++) {
