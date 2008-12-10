@@ -272,11 +272,12 @@ ZaDomainListController.prototype._newButtonListener =
 function(ev) {
 	try {
 		var domain = new ZaDomain();
-		domain._defaultValues = {attrs:{}};	
+			
 		domain.getAttrs = {all:true};
-		domain.setAttrs = {all:true};
+		/*domain.setAttrs = {all:true};
 		domain.rights = {};
-		
+		domain._defaultValues = {attrs:{}};*/
+		domain.loadNewObjectDefaults();
 		this._newDomainWizard = ZaApp.getInstance().dialogs["newDomainWizard"] = new ZaNewDomainXWizard(this._container);	
 		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishNewButtonListener, this, null);			
 		this._newDomainWizard.setObject(domain);

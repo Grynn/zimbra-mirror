@@ -387,11 +387,11 @@ function(ev) {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call(this) ;
 		var newAccount = new ZaAccount();
+		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);
 		newAccount.getAttrs = {all:true};
-		newAccount.setAttrs = {all:true};
-		newAccount.rights = {};
-		newAccount._defaultValues = {attrs:{}};
-		newAccount.rights[ZaAccount.RENAME_ACCOUNT_RIGHT] = true;				
+		/*newAccount.rights = {};
+		newAccount._defaultValues = {attrs:{}};*/
+		//newAccount.rights[ZaAccount.RENAME_ACCOUNT_RIGHT] = true;				
 		if(!ZaApp.getInstance().dialogs["newAccountWizard"])
 			ZaApp.getInstance().dialogs["newAccountWizard"] = new ZaNewAccountXWizard(this._container);	
         else { //update the account type if needed
@@ -414,7 +414,8 @@ function(ev) {
 		newAlias.getAttrs = {all:true};
 		newAlias.setAttrs = {all:true};		
 		newAlias._defaultValues = {attrs:{}};
-		newAlias.rights = {}
+		newAlias.rights = {};
+		//newAlias.loadNewObjectDefaults("name", ZaSettings.myDomainName);
 		if(!ZaApp.getInstance().dialogs["newAliasDialog"]) {
 			ZaApp.getInstance().dialogs["newAliasDialog"] = new ZaNewAliasXDialog(
 				this._container, "550px", "100px",ZaMsg.New_Alias_Title );	
@@ -437,9 +438,10 @@ function(ev) {
 		EmailAddr_XFormItem.resetDomainLists.call (this);
 		var newDL = new ZaDistributionList();
 		newDL.getAttrs = {all:true};
-		newDL.setAttrs = {all:true};
+		/*newDL.setAttrs = {all:true};
 		newDL.rights = {};
-		newDL._defaultValues = {attrs:{}};		
+		newDL._defaultValues = {attrs:{}};*/	
+		newAlias.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
 		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
 		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
 		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
@@ -456,8 +458,9 @@ function(ev) {
 		EmailAddr_XFormItem.resetDomainLists.call (this);
 		var newResource = new ZaResource();
 		newResource.getAttrs = {all:true};
-		newResource.setAttrs = {all:true};
-		newResource._defaultValues = {attrs:{}};		
+		/*newResource.setAttrs = {all:true};
+		newResource._defaultValues = {attrs:{}};*/	
+		newResource.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
 		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
 			ZaApp.getInstance().dialogs["newResourceWizard"] = new ZaNewResourceXWizard(this._container);	
 

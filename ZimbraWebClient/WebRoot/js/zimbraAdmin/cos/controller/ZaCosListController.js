@@ -238,10 +238,11 @@ function(ev) {
 	//load default COS
 	var defCos = ZaCos.getCosByName("default");
 	newCos.getAttrs = {all:true};
-	newCos.setAttrs = {all:true};
+	/*newCos.setAttrs = {all:true};
 	newCos.rights = {};
 	newCos._defaultValues = {attrs:{}};		
-	newCos.rights[ZaCos.RENAME_COS_RIGHT] = true;
+	newCos.rights[ZaCos.RENAME_COS_RIGHT] = true;*/
+	newCos.loadNewObjectDefaults();
 	//copy values from default cos to the new cos
 	for(var aname in defCos.attrs) {
 		if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )

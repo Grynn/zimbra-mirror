@@ -436,11 +436,12 @@ ZaDomainController.prototype.newDomain =
 function () {
 	this._currentObject = new ZaDomain();
 	
-	this._currentObject._defaultValues = {attrs:{}};	
 	this._currentObject.getAttrs = {all:true};
-	this._currentObject.setAttrs = {all:true};
+	/*this._currentObject.setAttrs = {all:true};
 	this._currentObject.rights = {};
+	this._currentObject._defaultValues = {attrs:{}};*/
 	
+	this._currentObject.loadNewObjectDefaults();
 	this._showNewDomainWizard();
 }
 
