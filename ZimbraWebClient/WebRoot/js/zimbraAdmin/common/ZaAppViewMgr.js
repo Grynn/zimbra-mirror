@@ -118,6 +118,7 @@ ZaAppViewMgr.C_TOOLBAR_BOTTOM			= "BOTTOM TOOLBAR";
 ZaAppViewMgr.C_APP_CONTENT				= "APP CONTENT";
 ZaAppViewMgr.C_STATUS					= "STATUS";
 ZaAppViewMgr.C_SASH						= "SASH";
+ZaAppViewMgr.C_LOGIN_MESSAGE            = "LOGIN_MESSAGE" ;
 
 // keys for getting container IDs
 ZaAppViewMgr.CONT_ID_KEY = new Object();
@@ -136,6 +137,7 @@ ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_CONTENT]			= ZaSettings.SKIN_APP_MAI
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_STATUS]					= ZaSettings.SKIN_STATUS_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SASH]					= ZaSettings.SKIN_SASH_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_TABS]				= ZaSettings.SKIN_APP_TABS_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_LOGIN_MESSAGE]	        = ZaSettings.SKIN_LOGIN_MSG_ID;
 
 // Public methods
 
@@ -290,7 +292,8 @@ function(visible) {
 	this._components[ZaAppViewMgr.C_SEARCH_BUILDER].zShow(visible);
     if (visible) this._isAdvancedSearchBuilderDisplayed = true ;
     var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR,
-				ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_APP_TABS, 
+                ZaAppViewMgr.C_LOGIN_MESSAGE,
+                ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_APP_TABS,
 				ZaAppViewMgr.C_TREE,
 				ZaAppViewMgr.C_TREE_FOOTER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
 	this._stickToGrid(list);
@@ -299,7 +302,6 @@ function(visible) {
 		this._components[ZaAppViewMgr.C_SEARCH_BUILDER].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 	}
 };
-// Private methods
 
 ZaAppViewMgr.prototype._stickToGrid = 
 function(components) {
@@ -397,7 +399,7 @@ function(ev) {
 				this._stickToGrid(list);
 			}
 			if (deltaWidth) {
-				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_APP_TABS, 
+				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_APP_TABS, ZaAppViewMgr.C_LOGIN_MESSAGE,
 							ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, 
 							ZaAppViewMgr.C_TOOLBAR_BOTTOM,ZaAppViewMgr.C_SEARCH,
 							ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR];

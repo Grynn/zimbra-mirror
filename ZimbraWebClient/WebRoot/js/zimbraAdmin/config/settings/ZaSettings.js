@@ -219,7 +219,7 @@ ZaSettings.CSFE_SERVER_URI = (location.port == "80") ? "/service/admin/soap/" : 
 ZaSettings.CSFE_MSG_FETCHER_URI = (location.port == "80") ? "/service/content/get?" : ":" + location.port + "/service/content/get?";
 ZaSettings.CONFIG_PATH = location.pathname + "js/zimbraAdmin/config";
 //ZaSettings.ADMIN_NAME_COOKIE = "ZA_ADMIN_NAME_COOKIE";
-ZaSettings.myDomainName = "zimbra.com";
+ZaSettings.myDomainName = null;
 
 var i = 1;
 // IDs FOR HTML COMPONENTS IN THE SKIN
@@ -242,6 +242,7 @@ ZaSettings.SKIN_USER_INFO_ID				= i++;
 ZaSettings.SKIN_APP_TABS_ID				= i++;
 ZaSettings.SKIN_HELP_ID					= i++ ;
 ZaSettings.SKIN_DW_ID					= i++ ;
+ZaSettings.SKIN_LOGIN_MSG_ID            = i++ ;
 
 //CONSTANTS FOR ROLE-BASED ACCESS
 /**
@@ -349,7 +350,7 @@ ZaSettings.INIT[ZaSettings.SKIN_SHELL_ID]					= [null, ZaSettings.T_CONFIG, ZaSe
 ZaSettings.INIT[ZaSettings.SKIN_STATUS_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_status"];
 ZaSettings.INIT[ZaSettings.SKIN_TREE_ID]					= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_tree"];
 ZaSettings.INIT[ZaSettings.SKIN_TREE_FOOTER_ID]			= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_tree_footer"];
-
+ZaSettings.INIT[ZaSettings.SKIN_LOGIN_MSG_ID]           = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_login_msg"];
 ZaSettings.INIT[ZaSettings.SKIN_USER_INFO_ID]				= [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_quota"];
 //ZaSettings.timeZoneChoices = new XFormChoices(AjxTimezoneData.TIMEZONE_RULES, XFormChoices.OBJECT_LIST, "serverId", "serverId");
 //in order to add the "Not Set" label to the timezone choices, we need to normalize it to label value pair
@@ -372,6 +373,8 @@ ZaSettings.SKIN_LOGOFF_DOM_ID = "skin_container_logoff" ;
 ZaSettings.SKIN_HELP_DOM_ID = "skin_container_help" ;
 ZaSettings.SKIN_DW_DOM_ID = "skin_container_dw" ;
 ZaSettings.SKIN_TABS_DOM_ID = "skin_container_app_tabs" ;
+//ZaSettings.SKIN_LOGIN_MSG_ID = "skin_td_login_msg" ;
+
 ZaSettings.clientTypeChoices = [
 	{value:"advanced", label:ZaMsg.clientAdvanced},
 	{value:"standard", label:ZaMsg.clientStandard}

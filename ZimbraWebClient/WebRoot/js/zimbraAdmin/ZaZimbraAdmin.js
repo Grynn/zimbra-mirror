@@ -353,7 +353,14 @@ function (resp) {
 	if(resp && resp.Body && resp.Body.GetInfoResponse) {
 		ZaZimbraAdmin.currentUserLogin = resp.Body.GetInfoResponse.name;
 		ZaZimbraAdmin.currentUserId = resp.Body.GetInfoResponse.id;
-		
+		var adminName = resp.Body.GetInfoResponse.name;
+
+        if(adminName) {
+            var emailChunks = adminName.split("@");
+            if(emailChunks.length > 1 ) {
+                ZaSettings.myDomainName = emailChunks[1];
+            }
+        }
 		if (resp.Body.GetInfoResponse.attrs){
 			if(resp.Body.GetInfoResponse.attrs.attr && resp.Body.GetInfoResponse.attrs.attr instanceof Array) {
 				var attrsArr = resp.Body.GetInfoResponse.attrs.attr;
@@ -508,6 +515,47 @@ function () {
 	logoff.style.cursor = "pointer" ;
 }
 
+
+ZaZimbraAdmin.prototype._getLoginMsgPanel = function () {
+    if (!this._loginMsgPanel) {
+        this._loginMsgPanel = new DwtComposite (this._shell, null, Dwt.ABSOLUTE_STYLE);
+        var loginMsg = ZaDomain.getLoginMessage(ZaApp.getInstance()) ;
+//        var loginMsg = "abcd" ;
+        if (loginMsg) {
+            var loginMsgEl = new DwtAlert (this._loginMsgPanel, null, Dwt.ABSOLUTE_STYLE) ;
+
+            loginMsgEl.setStyle(DwtAlert.INFORMATION) ;
+            loginMsgEl.setContent (loginMsg);
+
+            var dismissBt = new DwtButton({parent: this._loginMsgPanel, className: "DwtToolbarButton"})
+            dismissBt.setImage("Close") ;
+            dismissBt.setText(ZaMsg.TBB_Close) ;
+            dismissBt.addSelectionListener(new AjxListener(this, this.closeLoginMsg)) ;
+            loginMsgEl.setDismissContent(dismissBt) ;           
+        }else{
+            this.closeLoginMsg();
+        }
+    }
+    return this._loginMsgPanel ;
+}
+
+ZaZimbraAdmin.prototype.closeLoginMsg = function () {
+    //hide the login msg skin component
+//    this._loginMsgPanel.setVisible(false)  ;
+    var loginMsgPanelId = this._loginMsgPanel.getHTMLElId() ;
+    Dwt.hide(loginMsgPanelId) ;
+    skin.hideLoginMsg() ;
+
+    //resize the components
+    var appViewMgr = ZaApp.getInstance ().getAppViewMgr () ;
+    var list = [//ZaAppViewMgr.C_LOGIN_MESSAGE,
+                ZaAppViewMgr.C_CURRENT_APP, ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_APP_TABS,
+				ZaAppViewMgr.C_TREE,
+				ZaAppViewMgr.C_TREE_FOOTER, ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
+
+	appViewMgr._stickToGrid(list);
+}
+
 //set the html content for logoff, help and download
 //max_lbl_length is used to constrict the maximum length of the label
 //which is different in different languages.
@@ -606,7 +654,8 @@ function() {
 	elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
 	this._statusBox.setScrollStyle(Dwt.CLIP);
 	this._setLicenseStatusMessage();
-	// the outer element of the entire skin is hidden until this point
+
+    // the outer element of the entire skin is hidden until this point
 	// so that the skin won't flash (become briefly visible) during app loading
 	if (skin && skin.showSkin){
 		skin.showSkin(true);	
@@ -620,7 +669,8 @@ function() {
 	elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();		
 	elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
 	elements[ZaAppViewMgr.C_SEARCH_BUILDER] = ZaApp.getInstance().getSearchBuilderController().getSearchBuilderPanel();
-	//Use reparentHtmlelement to add the tabs. Reenable this line if it doesn't work well.
+	elements[ZaAppViewMgr.C_LOGIN_MESSAGE]  = this._getLoginMsgPanel();
+    //Use reparentHtmlelement to add the tabs. Reenable this line if it doesn't work well.
 	elements[ZaAppViewMgr.C_APP_TABS] = this._createAppTabs() ;
 	elements[ZaAppViewMgr.C_CURRENT_APP] = new ZaCurrentAppToolBar(this._shell);
 	this._appViewMgr.addComponents(elements, true);
@@ -630,7 +680,8 @@ function() {
 	this._createHelpLink();
 	this._createDownloadLink() ;
 	this._setUserName() ;
-	//this._createAppTabs() ;
+//    this._createLoginMsg();
+    //this._createAppTabs() ;
 	
 	ZaApp.getInstance().launch();
 	

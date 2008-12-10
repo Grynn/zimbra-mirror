@@ -96,6 +96,7 @@ body						{	@ChromeBg@	}
 #ENDIF
 }
 
+#skin_container_login_msg { height: 39; margin: 5; padding: 5;  }
 
 
 /* current app, tree-app sash, top toolbar */

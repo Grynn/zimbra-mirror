@@ -227,6 +227,7 @@ ZaDomain.A_zimbraSkinLogoLoginBanner = "zimbraSkinLogoLoginBanner" ;
 ZaDomain.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
 
 ZaDomain.A_zimbraPrefTimeZoneId = "zimbraPrefTimeZoneId" ;
+ZaDomain.A_zimbraAdminConsoleLoginMessage = "zimbraAdminConsoleLoginMessage" ;
 
 ZaDomain.A2_acl_selection_cache = "acl_selection_cache";
 //result codes returned from Check* requests
@@ -1151,11 +1152,16 @@ function(callback) {
 	ZaRequestMgr.invoke(params, reqMgrParams);	
 }
 
+ZaDomain.getLoginMessage = function (app) {
+    var domain = ZaDomain.getDomainByName (ZaSettings.myDomainName, app, true) ;
+    return domain.attrs[ZaDomain.A_zimbraAdminConsoleLoginMessage]  ;
+}
+
 ZaDomain.getDomainByName = 
 function(domName,withConfig) {
 	if(!domName)
 		return null;
-		
+	//TODO: Potential Bug - withConfig = 0 at initial invoke, and withConfig = 1 will never be executed	
 	var domain = ZaDomain.staticDomainByNameCacheTable[domName];
 	if(!domain) {
 		domain = new ZaDomain();

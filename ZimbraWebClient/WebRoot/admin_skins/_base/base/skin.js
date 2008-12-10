@@ -57,6 +57,14 @@ skin.hideSearchBuilder = function () {
 	this.showSearchBuilder(false);
 }
 
+skin.showLoginMsg = function (state) {
+	skin._showEl("skin_container_login_msg", state);
+	skin._showEl("skin_td_login_msg", state);
+}
+skin.hideLoginMsg = function () {
+	this.showLoginMsg(false);
+}
+
 skin.showTopToolbar = function (state) {
 	skin._showEl("skin_tr_top_toolbar", state);
 }

@@ -103,6 +103,12 @@ DwtAlert.prototype.getContent = function() {
 	return this._alertContent;
 };
 
+DwtAlert.prototype.setDismissContent = function (dwtElement) {
+    if (this._dismissDiv) {
+        dwtElement.reparentHtmlElement(this._dismissDiv.id) ;
+    }
+}
+
 //
 // DwtControl methods
 //
@@ -126,4 +132,5 @@ DwtAlert.prototype._createHtmlFromTemplate = function(templateId, data) {
 	this._iconDiv = document.getElementById(data.id+"_icon");
 	this._titleDiv = document.getElementById(data.id+"_title");
 	this._contentDiv = document.getElementById(data.id+"_content");
+    this._dismissDiv = document.getElementById(data.id+"_dismiss") ;
 };
