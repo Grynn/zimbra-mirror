@@ -175,7 +175,7 @@ function (form) {
  * targetType: account/dl
  */
 ZaAlias.getTargetByName =
-function (app, val, targetType) {
+function (val, targetType) {
 	var soapDoc ;
 	var elBy ;
 	
