@@ -1046,7 +1046,7 @@ function(htmlEl)  {
 	while (htmlEl) {
 		try {
 			// catch Firefox bug that throws "Permission denied" exception
-			if (htmlEl.id && DwtControl.ALL_BY_ID[htmlEl.id]) {
+			if (htmlEl.id && DwtControl.ALL_BY_ID && DwtControl.ALL_BY_ID[htmlEl.id]) {
 				return DwtControl.ALL_BY_ID[htmlEl.id];
 			}
 		} catch (ex) { return null; }
