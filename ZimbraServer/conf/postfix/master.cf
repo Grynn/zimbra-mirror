@@ -84,6 +84,7 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o max_use=20
 127.0.0.1:10025 inet n  -       n       -       -  smtpd
 	-o content_filter=
+  -o smtpd_milters=
 	-o local_recipient_maps=
 	-o virtual_mailbox_maps=
 	-o virtual_alias_maps=
