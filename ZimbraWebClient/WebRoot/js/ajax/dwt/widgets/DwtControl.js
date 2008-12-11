@@ -1433,18 +1433,22 @@ function(width, height) {
 };
 
 /**
+ * Returns static tooltip content (typically set using setToolTipContent). Controls
+ * that want to return dynamic tooltip content should override this method.
+ *
+ * @param ev	[DwtEvent]		mouseover event
  * @return the tooltip content set for the control
  * @type String
  */
 DwtControl.prototype.getToolTipContent =
-function() {
+function(ev) {
 	if (this._disposed) { return; }
 
-	return this.__toolTipCallback ? this.__toolTipCallback.run() : this.__toolTipContent;
+	return this.__toolTipContent;
 };
 
 /**
- * Sets the tooltip content for the control. The content may be plain text of HTML
+ * Sets static tooltip content for the control. The content may be plain text or HTML.
  *
  * @param {String} text
  */
@@ -1457,7 +1461,6 @@ function(text) {
 
 /**
  * Sets a callback that will return the tooltip content for the control.
- * The content may be plain text of HTML
  *
  * @param {AjxCallback} callback
  */
@@ -2284,8 +2287,9 @@ function(ev) {
 };
 
 /**
- * @return true if the control does have tooltip content.
- * @type Boolean
+ * Returns true if the control has static tooltip content, or if it has overridden
+ * getToolTipContent() to return dynamic content. Essentially, it means that this
+ * control provides tooltips and will need to use the hover mgr.
  *
  * @private
  */
@@ -2293,7 +2297,7 @@ DwtControl.prototype.__hasToolTipContent =
 function() {
 	if (this._disposed) { return false; }
 
-	return Boolean(this.__toolTipCallback || this.__toolTipContent);
+	return Boolean(this.__toolTipContent || (this.getToolTipContent != DwtControl.prototype.getToolTipContent));
 };
 
 /**
@@ -2385,7 +2389,7 @@ function(ev, evType) {
 			if ((!manager.isHovering() || manager.getHoverObject() != obj) && !DwtMenu.menuShowing()) {
 				manager.reset();
 				manager.setHoverObject(obj);
-				manager.setHoverOverData(obj);
+				manager.setHoverOverData(mouseEv);
 				manager.setHoverOverDelay(DwtToolTip.TOOLTIP_DELAY);
 				manager.setHoverOverListener(obj._hoverOverListener);
 				manager.hoverOver(mouseEv.docX, mouseEv.docY);
@@ -2885,6 +2889,12 @@ function(m, c, d) {
 };
 
 /**
+ * Attempts to display a tooltip for this control, triggered by the cursor having been
+ * over the control for a period of time. The tooltip may have already been set (if it's
+ * a static tooltip). For dynamic tooltip content, the control implements getToolTipContent()
+ * to return the content or a callback. It should return a callback if it makes an
+ * async server call to get data.
+ *
  * @private
  */
 DwtControl.prototype.__handleHoverOver =
@@ -2892,15 +2902,41 @@ function(event) {
 	if (this._eventMgr.isListenerRegistered(DwtEvent.HOVEROVER)) {
 		this._eventMgr.notifyListeners(DwtEvent.HOVEROVER, event);
 	}
-	if (this.__hasToolTipContent()) {
-		var shell = DwtShell.getShell(window);
-		var tooltip = shell.getToolTip();
-		tooltip.setContent(this.getToolTipContent());
-		tooltip.popup(event.x, event.y);
-		this.__lastTooltipX = event.x;
-		this.__lastTooltipY = event.y;
-		this.__tooltipClosed = false;
+	var mouseEv = event && event.object;
+	var tooltip = this.getToolTipContent(mouseEv);
+	var content, callback;
+	if (typeof(tooltip) == "string") {
+		content = tooltip;
+	} else if (tooltip instanceof AjxCallback) {
+		callback = tooltip;
+	} else if (typeof(tooltip) == "object") {
+		content = tooltip && tooltip.content;
+		callback = tooltip && tooltip.callback;
 	}
+
+	if (content) {
+		this.__showToolTip(event, content);
+	}
+	if (callback) {
+		var callback1 = new AjxCallback(this, this.__showToolTip, [event]);
+		if (content) {
+			AjxTimedAction.scheduleAction(new AjxTimedAction(null, function() { callback.run(callback1); }, 2000));
+		} else {
+			callback.run(callback1);
+		}
+	}
+};
+
+DwtControl.prototype.__showToolTip =
+function(event, content) {
+	if (!content) { return; }
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.setContent(content);
+	tooltip.popup(event.x, event.y);
+	this.__lastTooltipX = event.x;
+	this.__lastTooltipY = event.y;
+	this.__tooltipClosed = false;
 };
 
 /**
