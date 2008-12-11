@@ -110,18 +110,9 @@ case "$1" in
     fi
     exit 0
   ;;
-  restart)
+  restart|reload)
     $0 stop
     $0 start
-  ;;
-  reload)
-    checkrunning
-    if [ $running = 1 -a "x$pid" != "x" ]; then
-      echo -n "Reloading logswatch..."
-      kill -HUP $pid
-      echo "done."
-    fi
-    
   ;;
   status)
     echo -n "zmlogswatch is "
