@@ -829,7 +829,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
        	var case8 = {type:_ZATABCASE_, id:"domain_form_skin_tab", colSizes:["auto"],numCols:1,
         	caseKey:tabIx,
 			items:[
-            	{type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Color_Settings,//colSizes:["175px","*"],
+            	{type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Color_Settings, colSizes:["275px","*"],
 					items: [
                     	{ref:ZaDomain.A_zimbraSkinForegroundColor,
                             //type: ZaSettings.isDomainAdmin ? _DWT_COLORPICKER_ : _SUPER_DWT_COLORPICKER_,
