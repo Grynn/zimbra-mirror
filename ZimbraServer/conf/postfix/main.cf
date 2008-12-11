@@ -673,7 +673,7 @@ smtpd_recipient_restrictions =
 
 broken_sasl_auth_clients = yes
 
-smtpd_use_tls = yes
+smtpd_tls_security_level = enforce
 smtpd_tls_cert_file = /opt/zimbra/conf/smtpd.crt
 smtpd_tls_key_file = /opt/zimbra/conf/smtpd.key
 smtpd_tls_loglevel = 3
