@@ -38,6 +38,7 @@
        		<variable name="offline_version" value="${offline.version}"/>
        		<variable name="offline_buildid" value="${offline.buildid}"/>
 			<variable name="offline_ausurl" value="${offline.aus.host}${offline.aus.path}"/>
+			<variable name="offline_ausurl_dev" value="${offline.ausdev.host}${offline.ausdev.path}"/>
 		</install4j>
 
 		<gen-update-php builddir="${build.dir}" ausurl="${offline.aus.host}${offline.aus.path}"/>
@@ -56,27 +57,10 @@
 		<gen-update-php builddir="${build.dir}/dev" ausurl="${offline.ausdev.host}${offline.ausdev.path}"/>
 	</target>
 
-	<!-- special target only for beta5 update -->
-	<target name="installer-pack-media-beta5update">
-		<install4j projectfile="ZimbraOffline.install4j" verbose="true" release="${offline.version}"
-		           destination="${build.dir}/beta5update" buildids="44,198394,59040">
-       		<variable name="offline_channel" value="${offline.channel}"/>
-       		<variable name="offline_relabel" value="${offline.relabel}"/>
-       		<variable name="offline_version" value="${offline.version}"/>
-       		<variable name="offline_buildid" value="${offline.buildid}"/>
-			<variable name="offline_ausurl" value="${offline.aus.host}${offline.aus.path}"/>
-			<variable name="offline_update" value="true"/>
-		</install4j>
-
-		<gen-update-php builddir="${build.dir}/beta5update" ausurl="${offline.aus.host}${offline.aus.path}"/>
-	</target>
-
 	<target name="installer-make">
 			<antcall target="installer-patch"/>
         	<ant dir="." target="offline-make-install-files" inheritAll="false"/>
         	<antcall target="installer-pack-media"/>
-        	<antcall target="installer-pack-media-dev"/>
-        	<antcall target="installer-pack-media-beta5update"/>
         	<antcall target="symlink-media"/>
 	</target>
 

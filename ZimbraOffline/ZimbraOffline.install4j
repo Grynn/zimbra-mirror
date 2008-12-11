@@ -33,8 +33,9 @@
       <variable name="offline_relabel" value="ALPHA" />
       <variable name="offline_version" value="0.1" />
       <variable name="offline_buildid" value="1" />
-      <variable name="offline_ausurl" value="http://devel.zimbra.com/aus/desktop/nightly/update.php" />
+      <variable name="offline_ausurl" value="https://www.zimbra.com/aus/zdesktop/update.php" />
       <variable name="offline_update" value="false" />
+      <variable name="offline_ausurl_dev" value="http://devel.zimbra.com/aus/desktop/nightly/update.php" />
     </variables>
   </application>
   <files>
@@ -223,7 +224,7 @@ return arch.startsWith("i386") || arch.startsWith("x86");</string>
                 </serializedBean>
                 <condition>Util.isMacOS()</condition>
               </action>
-              <action name="Set instanceId" id="286628" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="Load installation info" id="286628" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
@@ -238,6 +239,7 @@ import java.io.FileInputStream;
 String instDir = (String) context.getVariable("sys.installationDir");
 File regFile = new File(instDir + "/conf/install.info");
 String guid;
+String dev = "false";
 
 if (regFile.exists()) {
     try {
@@ -253,7 +255,9 @@ if (regFile.exists()) {
         if (version != null &amp;&amp; build != null &amp;&amp; version.length() &gt; 0 &amp;&amp; build.length() &gt; 0) {
             context.setVariable("prevVersion", version);
             context.setVariable("prevBuild", build);   
-        }        
+        }
+        
+        dev = prop.getProperty("dev", "false");
     } catch (IOException e) {
         guid = UUID.randomUUID().toString();
     }    
@@ -261,7 +265,8 @@ if (regFile.exists()) {
     guid = UUID.randomUUID().toString();
 }
 
-context.setVariable("instanceId", guid);    
+context.setVariable("instanceId", guid);
+context.setVariable("joinDevProg", dev);
 return true;</string>
                           </void>
                         </object>
@@ -572,7 +577,11 @@ return pv.compareTo("${compiler:offline_version}") &gt; 0 || pb.compareTo("${com
               <formComponent name="" id="287811" beanClass="com.install4j.runtime.beans.formcomponents.SpacerComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.SpacerComponent" />
+                    <object class="com.install4j.runtime.beans.formcomponents.SpacerComponent">
+                      <void property="height">
+                        <int>5</int>
+                      </void>
+                    </object>
                   </java>
                 </serializedBean>
                 <initScript />
@@ -2746,99 +2755,6 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
-              <group name="set upgrade url" id="287055" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
-                  </java>
-                </serializedBean>
-                <beans>
-                  <action name="set ausUrl" id="287642" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
-                          <void property="script">
-                            <object class="com.install4j.api.beans.ScriptProperty">
-                              <void property="value">
-                                <string>String bos = Util.isWindows() ? "win32" : (Util.isMacOS() ? "macos" : "linux");
-String loc="${installer:languageId}";
-String key="${installer:instanceId}";
-
-String url = "${compiler:offline_ausurl}?chn=${compiler:offline_channel}&amp;ver=${compiler:offline_version}&amp;" + 
-    "bid=${compiler:offline_buildid}&amp;bos=" + bos + "&amp;loc=" + loc + "&amp;key=" + key;
-    
-context.setVariable("ausUrl", url);
-return true;</string>
-                              </void>
-                            </object>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition />
-                  </action>
-                  <action name="macos - preferences.js" id="287056" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                          <void property="file">
-                            <object class="java.io.File">
-                              <string>macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
-                            </object>
-                          </void>
-                          <void property="replaceValue">
-                            <string>${installer:ausUrl}</string>
-                          </void>
-                          <void property="searchValue">
-                            <string>@aus_url@</string>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>Util.isMacOS()</condition>
-                  </action>
-                  <action name="win32 - preferences.js" id="287057" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                          <void property="file">
-                            <object class="java.io.File">
-                              <string>win32/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
-                            </object>
-                          </void>
-                          <void property="replaceValue">
-                            <string>${installer:ausUrl}</string>
-                          </void>
-                          <void property="searchValue">
-                            <string>@aus_url@</string>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>Util.isWindows()</condition>
-                  </action>
-                  <action name="linux - preferences.js" id="287058" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
-                          <void property="file">
-                            <object class="java.io.File">
-                              <string>linux/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
-                            </object>
-                          </void>
-                          <void property="replaceValue">
-                            <string>${installer:ausUrl}</string>
-                          </void>
-                          <void property="searchValue">
-                            <string>@aus_url@</string>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>!Util.isMacOS() &amp;&amp; !Util.isWindows()</condition>
-                  </action>
-                </beans>
-              </group>
               <action name="zdesktop" id="145686" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -3502,6 +3418,120 @@ return true;</string>
             <preActivation />
             <postActivation />
             <actions>
+              <action name="set dev flag in installation info" id="288209" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.text.AppendToFileAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>conf/install.info</string>
+                        </object>
+                      </void>
+                      <void property="text">
+                        <string>dev=${installer:joinDevProg}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>String s = context.getBooleanVariable("joinDevProgChecked") ? "true" : "false";
+context.setVariable("joinDevProg", s);
+return true;</condition>
+              </action>
+              <group name="set update url" id="288204" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
+                  </java>
+                </serializedBean>
+                <beans>
+                  <action name="set ausUrl" id="288205" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                          <void property="script">
+                            <object class="com.install4j.api.beans.ScriptProperty">
+                              <void property="value">
+                                <string>String bos = Util.isWindows() ? "win32" : (Util.isMacOS() ? "macos" : "linux");
+String loc="${installer:languageId}";
+String key="${installer:instanceId}";
+String url = ((String)context.getVariable("joinDevProg")).equals("true") ? 
+    "${compiler:offline_ausurl_dev}" : "${compiler:offline_ausurl}";
+
+url = url + "?chn=${compiler:offline_channel}&amp;ver=${compiler:offline_version}&amp;" + 
+    "bid=${compiler:offline_buildid}&amp;bos=" + bos + "&amp;loc=" + loc + "&amp;key=" + key;
+    
+context.setVariable("ausUrl", url);
+return true;</string>
+                              </void>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                  <action name="macos - preferences.js" id="288206" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>${installer:ausUrl}</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>@aus_url@</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isMacOS()</condition>
+                  </action>
+                  <action name="win32 - preferences.js" id="288207" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>win32/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>${installer:ausUrl}</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>@aus_url@</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>Util.isWindows()</condition>
+                  </action>
+                  <action name="linux - preferences.js" id="288208" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.text.ModifyTextFileAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>linux/prism/extensions/prism-runtime@developer.mozilla.org/defaults/preferences/preferences.js</string>
+                            </object>
+                          </void>
+                          <void property="replaceValue">
+                            <string>${installer:ausUrl}</string>
+                          </void>
+                          <void property="searchValue">
+                            <string>@aus_url@</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>!Util.isMacOS() &amp;&amp; !Util.isWindows()</condition>
+                  </action>
+                </beans>
+              </group>
               <group name="Start zdesktop" id="287728" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -3683,7 +3713,7 @@ return true;</string>
               </group>
             </actions>
             <formComponents>
-              <formComponent name="" id="3856" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+              <formComponent name="Launch" id="3856" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
@@ -3695,6 +3725,33 @@ return true;</string>
                       </void>
                       <void property="variableName">
                         <string>launch</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+              </formComponent>
+              <formComponent name="John Dev Prog" id="288210" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="false" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>${i18n:installer.JoinDevProg}</string>
+                      </void>
+                      <void property="variableName">
+                        <string>joinDevProgChecked</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript>((JCheckBox)configurationObject).setSelected(Boolean.valueOf((String) context.getVariable("joinDevProg")))</initScript>
+              </formComponent>
+              <formComponent name="John Dev Prog Note" id="288215" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="false" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>${i18n:installer.JoinDevProgNote}</string>
                       </void>
                     </object>
                   </java>
