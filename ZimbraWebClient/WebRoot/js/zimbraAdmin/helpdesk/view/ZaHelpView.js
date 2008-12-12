@@ -85,7 +85,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 			{type:_OUTPUT_, label:null, value:ZaMsg.HELP_PAGE_1, colSpan:"*", cssStyle:"font-size:12px;"},
 
 			{type:_SPACER_, colSpan:"*"},
-			{type:_GROUP_, numCols:2, 
+			{type:_GROUP_, numCols:2, id:"ZimbraHelpPageDownloadItems" , colSpan: "*",
 				items: [
 					{type:_GROUP_,numCols:2,
 						items: [
@@ -107,17 +107,14 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
 
-
 					{type:_GROUP_,numCols:2,
 						items: [
-								//{type:_OUTPUT_, value:"&nbsp;"},
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("favicon")},
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:"http://www.zimbra.com/forums/", showInNewWindow:true,labelLocation:_NONE_,  label:ZaMsg.HELP_PAGE_6 }
 						]
 					},					
 					{type:_GROUP_,numCols:2,
 						items: [
-								//{type:_OUTPUT_, value:"&nbsp;"},
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("favicon")},
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", href:"http://wiki.zimbra.com", showInNewWindow:true,labelLocation:_NONE_,  label:ZaMsg.HELP_PAGE_12 }
 						]
@@ -139,11 +136,9 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:4,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							//{type:_OUTPUT_, value:ZaMsg.HELP_PAGE_10},
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_EXCHANGE,href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf")},
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_DOMINO,href:(location.pathname + "adminhelp/pdf/MigrationWizard_Domino.pdf")}
-							//{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10,href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf")}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
@@ -157,22 +152,34 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2, id: "HelpOtherGuides",
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							//{type:_OUTPUT_, value: ZaMsg.HELP_OTHER_GUIDES},
 							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_OTHER_GUIDES_IMPORT,href:(location.pathname + "adminhelp/pdf/Import_Wizard_Outlook.pdf")}
 						]
 					},
-					{type:_SPACER_},
-					{type:_SPACER_, colSpan:"*"},
+                    {type:_GROUP_,numCols:2, id: "iCalMigDoc",
+						items: [
+							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
+                            {type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label: ZaMsg.ICAL_MIG_GUIDE,
+                                 href:(location.pathname + "help/admin/pdf/Zimbra%20iCalendar%20Migration%20Guide.pdf?locid=" + AjxEnv.DEFAULT_LOCALE)}
+						]
+					},
+                    {type:_SPACER_},
+
 					{type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.HELP_OTHER_GUIDES_IMPORT_INFO, 
 					 cssStyle:"padding-right:10px;padding-left:10px;"},
-					{type:_SPACER_},
+                    {type:_OUTPUT_, cssStyle:"font-size:12px;", label:null, value:ZaMsg.ICAL_MIG_GUIDE_INFO,
+                        cssStyle:"padding-right:10px;padding-left:10px;"},
 					{type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"},
-					{type:_SPACER_, height:"10px"},
-					
-					{type:_DWT_BUTTON_, label:ZaMsg.About_Button_Label, onActivate:"this.getFormController().showAboutDialog()", width:"125px"}
+                    {type:_SEPARATOR_, colSpan:1, cssClass:"helpSeparator"}
+
 				]
-			}
-		];
+			},
+        {type: _SPACER_, height: 10 },    
+        {type:_GROUP_, colSpan:"*", items: [
+                {type:_DWT_BUTTON_, label:ZaMsg.About_Button_Label,
+                    onActivate:"this.getFormController().showAboutDialog()", width:"125px"}
+            ]
+        }
+    ];
 }
 ZaTabView.XFormModifiers["ZaHelpView"].push(ZaHelpView.myXFormModifier);
 
