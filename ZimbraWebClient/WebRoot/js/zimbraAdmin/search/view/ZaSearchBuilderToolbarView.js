@@ -24,6 +24,7 @@
 ZaSearchBuilderToolbarView = function(parent){
 	//toolbar operations
 	this._ops = [] ;
+	this._toolbarOrder = [];
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_BASIC, ZaMsg.searchByBasic, ZaMsg.tt_searchByBasic, "SearchAll", "SearchAll", new AjxListener(this, this.basicTypeSelectHndlr)));
 	this._ops.push(new ZaOperation(ZaOperation.SEARCH_BY_ADDESS_TYPE, ZaMsg.searchByAddressType, ZaMsg.tt_searchByAddressType, "SearchAll", "SearchAll", new AjxListener(this, this.objTypeSelectHndlr)));
 	//if (!ZaSettings.isDomainAdmin) { //hide domain and server feature for the domain admin
@@ -37,7 +38,16 @@ ZaSearchBuilderToolbarView = function(parent){
 	this._ops.push(new ZaOperation(ZaOperation.NONE));
 	this._ops.push(new ZaOperation (ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.tt_advanced_search_close, "Close", "CloseDis", new AjxListener(this, this.closeHndlr)));   
 	
-	ZaToolBar.call(this, parent, this._ops, null, AjxEnv.isIE ? null : "ZaSearchBuilderToolBar" );
+	this._toolbarOrder.push(ZaOperation.SEARCH_BY_BASIC);
+	this._toolbarOrder.push(ZaOperation.SEARCH_BY_ADDESS_TYPE);
+	this._toolbarOrder.push(ZaOperation.SEARCH_BY_DOMAIN);
+	this._toolbarOrder.push(ZaOperation.SEARCH_BY_SERVER);
+	this._toolbarOrder.push(ZaOperation.SEARCH_BY_ADVANCED);
+	this._toolbarOrder.push(ZaOperation.SEP);
+	this._toolbarOrder.push(ZaOperation.SEARCH_BY_REMOVE_ALL);
+	this._toolbarOrder.push(ZaOperation.NONE);
+	this._toolbarOrder.push(ZaOperation.CLOSE);	
+	ZaToolBar.call(this, parent, this._ops, this._toolbarOrder, null, AjxEnv.isIE ? null : "ZaSearchBuilderToolBar" );
 	
 	
 	this._app = ZaApp.getInstance();
