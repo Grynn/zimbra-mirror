@@ -83,6 +83,7 @@ my $dn="olcDatabase={2}hdb,cn=config";
 if($ldap_is_master eq "true") {
   $mesg = $ldap->search(
                         base=> "cn=accesslog",
+                        filter=>"(objectClass=*)",
                         scope => "base",
                         attrs => ['1.1'],
                  );
