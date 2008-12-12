@@ -44,31 +44,17 @@ my @acls;
 
 if($options{d}) {
 @acls=(
-  '{0}to attrs=userPassword  by anonymous auth  by dn.children="cn=admins,cn=zimbra" write',
-  '{1}to dn.subtree="cn=zimbra"  by dn.children="cn=admins,cn=zimbra" write',
-  '{2}to attrs=zimbraZimletUserProperties,zimbraGalLdapBindPassword,zimbraGalLdapBindDn,zimbraAuthTokenKey,zimbraPreAuthKey,zimbraPasswordHistory,zimbraIsAdminAccount,zimbraAuthLdapSearchBindPassword  by dn.children="cn=admins,cn=zimbra" write  by * none',
   '{3}to attrs=objectclass  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by dn.base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * none',
-  '{4}to attrs=@amavisAccount  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break',
-  '{5}to attrs=mail  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break',
-  '{6}to attrs=zimbraAllowFromAddress  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read',
   '{7}to filter="(!(zimbraHideInGal=TRUE))"  attrs=cn,co,company,dc,displayName,givenName,gn,initials,l,mail,o,ou,physicalDeliveryOfficeName,postalCode,sn,st,street,streetAddress,telephoneNumber,title,uid  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by users read  by * none',
   '{8}to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCanonicalAddress,zimbraMailCatchAllAddress,zimbraMailCatchAllCanonicalAddress,zimbraMailCatchAllForwardingAddress,zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraPrefMailForwardingAddress,zimbraMailHost,zimbraMailStatus,zimbraMailTransport,zimbraDomainName,zimbraDomainType,zimbraPrefMailLocalDeliveryDisabled  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by * none',
-  '{9}to attrs=entry  by dn.children="cn=admins,cn=zimbra" write  by * read',
 );
 }
 
 if ($options{e}) {
 @acls=(
-  '{0}to attrs=userPassword  by anonymous auth  by dn.children="cn=admins,cn=zimbra" write',
-  '{1}to dn.subtree="cn=zimbra"  by dn.children="cn=admins,cn=zimbra" write',
-  '{2}to attrs=zimbraZimletUserProperties,zimbraGalLdapBindPassword,zimbraGalLdapBindDn,zimbraAuthTokenKey,zimbraPreAuthKey,zimbraPasswordHistory,zimbraIsAdminAccount,zimbraAuthLdapSearchBindPassword  by dn.children="cn=admins,cn=zimbra" write  by * none',
   '{3}to attrs=objectclass  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by dn.base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * read',
-  '{4}to attrs=@amavisAccount  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break',
-  '{5}to attrs=mail  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmamavis,cn=appaccts,cn=zimbra" read  by * +0 break',
-  '{6}to attrs=zimbraAllowFromAddress  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read',
   '{7}to filter="(!(zimbraHideInGal=TRUE))"  attrs=cn,co,company,dc,displayName,givenName,gn,initials,l,mail,o,ou,physicalDeliveryOfficeName,postalCode,sn,st,street,streetAddress,telephoneNumber,title,uid  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by * read',
   '{8}to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCanonicalAddress,zimbraMailCatchAllAddress,zimbraMailCatchAllCanonicalAddress,zimbraMailCatchAllForwardingAddress,zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraPrefMailForwardingAddress,zimbraMailHost,zimbraMailStatus,zimbraMailTransport,zimbraDomainName,zimbraDomainType,zimbraPrefMailLocalDeliveryDisabled  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by * read',
-  '{9}to attrs=entry  by dn.children="cn=admins,cn=zimbra" write  by * read',
 );
 }
 
@@ -96,9 +82,28 @@ if($ldap_is_master eq "true") {
 
 $mesg = $ldap->modify(
     $dn,
-    replace => {olcAccess => [@acls]},
+    delete => {olcAccess => '{3}'},
     );
-print ($mesg->code() ? "failed.\n" : "done.\n");
+$mesg = $ldap->modify(
+    $dn,
+	add =>{olcAccess=>"$acls[0]"},
+    );
+$mesg = $ldap->modify(
+    $dn,
+    delete => {olcAccess => '{7}'},
+    );
+$mesg = $ldap->modify(
+    $dn,
+    add => {olcAccess => "$acls[1]"},
+    );
+$mesg = $ldap->modify(
+    $dn,
+    delete => {olcAccess => '{8}'},
+    );
+$mesg = $ldap->modify(
+    $dn,
+	add =>{olcAccess=>"$acls[2]"},
+    );
 $ldap->unbind;
 
 sub usage() {
