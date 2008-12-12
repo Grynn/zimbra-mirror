@@ -38,7 +38,7 @@ my ($CONSOLE, $LOGFH, $LOGFILE, $HEADING, $ROTATE_DEFER, $ROTATE_NOW);
 sub getHeadingMac() {
     my @cols = ('timestamp');
     my $line = '';
-    my $cmd = "$IOSTAT -d -K";
+    my $cmd = "export LANG=C; $IOSTAT -d -K";
     open(HEADING, "$cmd |")
         || die "Unable to execute command \"$cmd\": $!";
 
@@ -61,7 +61,7 @@ sub getHeading($) {
     }
     my @cols = ('timestamp');
     my $line = '';
-    my $cmd = "$IOSTAT $opts";
+    my $cmd = "export LANG=C; $IOSTAT $opts";
     open(HEADING, "$cmd |")
         || die "Unable to execute command \"$cmd\": $!";
 
