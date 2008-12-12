@@ -3583,12 +3583,12 @@ return true;</string>
                           </void>
                           <void property="stderrFile">
                             <object class="java.io.File">
-                              <string>log/app.err</string>
+                              <string>${installer:sys.installationDir}/log/app.out</string>
                             </object>
                           </void>
                           <void property="stdoutFile">
                             <object class="java.io.File">
-                              <string>log/app.out</string>
+                              <string>${installer:sys.installationDir}/log/app.out</string>
                             </object>
                           </void>
                           <void property="workingDirectory">
@@ -3637,12 +3637,12 @@ return true;</string>
                           </void>
                           <void property="stderrFile">
                             <object class="java.io.File">
-                              <string>log/app.err</string>
+                              <string>${installer:sys.installationDir}/log/app.out</string>
                             </object>
                           </void>
                           <void property="stdoutFile">
                             <object class="java.io.File">
-                              <string>log/app.out</string>
+                              <string>${installer:sys.installationDir}/log/app.out</string>
                             </object>
                           </void>
                           <void property="workingDirectory">
@@ -3691,12 +3691,12 @@ return true;</string>
                           </void>
                           <void property="stderrFile">
                             <object class="java.io.File">
-                              <string>log/app.err</string>
+                              <string>${installer:sys.installationDir}/log/app.out</string>
                             </object>
                           </void>
                           <void property="stdoutFile">
                             <object class="java.io.File">
-                              <string>log/app.out</string>
+                              <string>${installer:sys.installationDir}/log/app.out</string>
                             </object>
                           </void>
                           <void property="workingDirectory">
