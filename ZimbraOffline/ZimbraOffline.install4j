@@ -526,7 +526,7 @@ return true;</string>
             <actions />
             <formComponents />
           </screen>
-          <screen name="Warn on Older Version" id="287799" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="3" finishScreen="false">
+          <screen name="Block downgrading" id="287799" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="3" finishScreen="true">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.FormScreen">
@@ -537,10 +537,10 @@ return true;</string>
                     <boolean>false</boolean>
                   </void>
                   <void property="subTitle">
-                    <string>${i18n:installer.OlderVerWarn}</string>
+                    <string>${i18n:installer.ErrDowngrade}</string>
                   </void>
                   <void property="title">
-                    <string>${i18n:installer.Warning}</string>
+                    <string>${i18n:installer.Error}</string>
                   </void>
                 </object>
               </java>
