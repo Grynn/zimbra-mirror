@@ -97,6 +97,13 @@ sub getDiskInfo() {
             }
         }
         close(IOSTAT);
+        # make sure there are no duplicate items in DEVICE_LIST
+        # see bug 32973
+        my %devices_tmp;
+        for (@DEVICE_LIST) {
+        	$devices_tmp{$_} = 1;
+        }
+        @DEVICE_LIST = keys %devices_tmp;
     }
     if (scalar(@DEVICE_LIST) < 1) {
         print STDERR "Unable to find any disk device; Skipping IO charts\n";
@@ -110,8 +117,13 @@ sub getDiskInfo() {
         while (defined($line = readLine(*MOUNT, 1))) {
             if ($line =~ /^\/dev\/([^\s+]+) on ([^\s+]+)/) {
                 my ($partition, $mountpoint) = ($1, $2);
+                my %partitions_seen;
                 foreach my $dev (@DEVICE_LIST) {
                     if ($partition =~ /^$dev/) {
+                    	# make sure to avoid duplicates
+                        # see bug 32973
+                    	next if (exists $partitions_seen{$partition});
+
                         $MOUNTS{$partition} = $mountpoint;
                         my $partitionList = $DEVICE_PARTITIONS{$dev};
                         if (!defined($partitionList)) {
@@ -125,6 +137,7 @@ sub getDiskInfo() {
                             $DEVICE_MOUNTPOINTS{$dev} = $mountpointList;
                         }
                         push(@$mountpointList, $mountpoint);
+                        $partitions_seen{$partition} = 1;
                     }
                 }
             }
