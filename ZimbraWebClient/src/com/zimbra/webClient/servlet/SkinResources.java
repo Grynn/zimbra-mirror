@@ -76,7 +76,8 @@ public class SkinResources
 	private static final String P_SERVLET_PATH = "servlet-path";
 	private static final String P_TEMPLATES = "templates";
 	private static final String P_COMPRESS = "compress";
-
+	private static final String P_CUSTOMER_DOMAIN = "customerDomain";
+	
 	private static final String V_TRUE = "true";
 	private static final String V_FALSE = "false";
 	private static final String V_SPLIT = "split";
@@ -202,6 +203,7 @@ public class SkinResources
 
         if (ZimbraLog.webclient.isDebugEnabled()) {
 			ZimbraLog.webclient.debug("DEBUG: === debug is " + debug+" ("+debugStr+") ===");
+			ZimbraLog.webclient.debug("DEBUG: querystring=" + req.getQueryString());
 			ZimbraLog.webclient.debug("DEBUG: uri=" + uri);
 			ZimbraLog.webclient.debug("DEBUG: type=" + type);
 			ZimbraLog.webclient.debug("DEBUG: contentType=" + contentType);
@@ -707,7 +709,11 @@ public class SkinResources
     //
 
 	private String getServerName(HttpServletRequest req) {
-		String serverName = getServletConfig().getInitParameter(P_SERVER_NAME);
+		String serverName = req.getParameter(P_CUSTOMER_DOMAIN);
+		
+		if(serverName==null || serverName.trim().length() == 0)
+			serverName = getServletConfig().getInitParameter(P_SERVER_NAME);
+		
 		return serverName != null ? serverName.trim() : HttpUtil.getVirtulaHost(req);
 	}
 
