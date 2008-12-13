@@ -42,7 +42,12 @@ else
     # generated one if necessary.
     conf=${zimbra_home}/conf/zmstat-chart.xml
     confTmp=$conf.$$.tmp
-    if [ ! -e $conf ]; then
+    CONF_TIME=0
+    CONFGEN_TIME=`stat -c %Z /opt/zimbra/bin/zmstat-chart-config`
+    if [ -f $conf ]; then
+        CONF_TIME=`stat -c %Z $conf`
+    fi
+    if [ $CONFGEN_TIME -gt $CONF_TIME ]; then
         zmstat-chart-config > $confTmp
         rc=$?
         if [ $rc -ne 0 ]; then
