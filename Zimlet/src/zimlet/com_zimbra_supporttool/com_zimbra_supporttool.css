@@ -1,0 +1,54 @@
+.Imgsupporttool-panelIcon {
+ background: url("supporttool.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.supporttool_cardHdrDivTop{
+background-image:url(hdr.gif);
+color:white;
+border-top:1px solid #A7A194;
+}
+
+.supporttool_cardHdrDivTB{
+background-image:url(hdr.gif);
+border-bottom:1px solid #A7A194;
+border-top:1px solid #A7A194;
+color:white;
+cursor: text;
+}
+
+
+
+.supporttool_cardHdrDivBR{
+background-image:url(hdr.gif);
+border-bottom:1px solid #A7A194;
+border-right:1px solid #A7A194;
+
+}
+
+
+.supporttool_cardListDiv{
+background:#FFFFFC;
+border-bottom:1px solid #A7A194;
+CURSOR: text;
+}
+
+
+.supporttool_errTd {
+color:red;
+}
+
+.supporttool_HdrTable{
+font-size:20px;font-weight:bold;color:black;font-family:Arial,Helvetica,sans-serif;width:100%;
+CURSOR: text;
+}
+
+.supporttool_mismatchRow {
+background:#EA0000;
+}
+
+.supporttool_mismatchRow td{
+color:white;
+}
