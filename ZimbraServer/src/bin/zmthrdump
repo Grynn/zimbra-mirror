@@ -102,17 +102,16 @@ print $outhandle "$msg";
 my $printing = 0;
 my $done = 0;
 
-my $requested = 0;
 $tail = open(TAIL, "tail -F $log_file |") || die "$log_file: unable to tail: $!";
+if (!fork()) {
+	# there seems to be a race condition if we don't wait for tail to start running
+	select(undef, undef, undef, 1.0);
+	kill(3, $pid) || die "$pid: no such process";
+	exit(0);
+}
 alarm($timeout);
 # this will not capture the heap statistics if this is java6
 while (<TAIL>) {
-    if (!$requested) {
-        # there's a race/buffering issue with open(TAIL)
-        # so kill -QUIT during the read loop instead of before.
-        kill(3, $pid) || die "$pid: no such process";
-        $requested = 1;
-    }
     if ($_ =~ /^Full thread dump Java HotSpot/) {
         $printing = 1;
     } elsif ($_ =~ /^"VM Periodic Task Thread"/ && $printing) {
