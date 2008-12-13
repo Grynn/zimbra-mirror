@@ -14,11 +14,11 @@ fi
 #get parameters for installer
 parmfile="$1/../../update.params"
 params=" "
-if [ -r $parmfile ]; then
+if [ -r "$parmfile" ]; then
   while [ 1 ]; do
     read line || break
     params="$params $line"
-  done < $parmfile
+  done < "$parmfile"
 fi
 
 echo Start updating... >> "$1/update.log"
