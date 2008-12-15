@@ -218,12 +218,12 @@ function submit(id, name, type, flavor, verb) {
                 <tr>
                   <td>
                     <div class="ZAccountInfo">
-	<c:if test="${not default}">
-                     <a href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')" title="<fmt:message key='Default'/>"><b>&#x21E7;</b></a>
-       </c:if>
                       <a href="javascript:OnEdit('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Edit"/></a>&nbsp;
                       <a href="javascript:OnDelete('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Delete"/></a>&nbsp;
-                     <a href="javascript:OnReset('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')" id='resetButton'><fmt:message key="ResetData"/></a>
+                     <a href="javascript:OnReset('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="ResetData"/></a>
+	<c:if test="${not default}">
+                     &nbsp;<a href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Default"/></a>
+       </c:if>
                       </div>
                     </td>
     <c:choose>
