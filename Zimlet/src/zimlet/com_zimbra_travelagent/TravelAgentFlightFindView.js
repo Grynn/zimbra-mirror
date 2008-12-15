@@ -521,7 +521,7 @@ function () {
 		childrenCell.appendChild(this._childrenSelect.getHtmlElement());	
 	
 	var cellNum = 0;
-	if(this.searchSideStep=="true" || this.searchSideStep===true) {	
+	if(this.searchSideStep===true || this.searchSideStep=="true") {
 		var searchButton = new DwtButton({parent:this});	
 		searchButton.setText("Search SideStep");
 		searchButton.setImage("SideStepIcon");
@@ -533,7 +533,7 @@ function () {
 
 		cellNum++;
 	}
-	if(this.searchTravelocity=="true" || this.searchTravelocity===true) {
+	if(this.searchTravelocity===true || this.searchTravelocity=="true") {
 		var searchButton2 = new DwtButton({parent:this});	
 		searchButton2.setText("Search Travelocity");
 		searchButton2.setImage("TravelocityIcon");		
@@ -546,7 +546,7 @@ function () {
 		cellNum++;
 	}
 	
-	if(this.searchHotwire=="true" || this.searchHotwire===true) {
+	if(this.searchHotwire===true || this.searchHotwire=="true") {
 		var searchButton3 = new DwtButton({parent:this});	
 		searchButton3.setText("Search Hotwire");
 		searchButton3.setImage("HotwireIcon");

@@ -252,7 +252,7 @@ function () {
 	//sigh
 	}	
 	
-	if(searchSideStep=="true") {
+	if(searchSideStep === true || searchSideStep=="true") {
 		var searchButton = new DwtButton({parent:this});	
 		searchButton.setText("Search SideStep.com");
 		searchButton.setImage("SideStepIcon");		
@@ -263,7 +263,7 @@ function () {
 			searchButtonCell.appendChild(searchButton.getHtmlElement());
 	}
 	
-	if(searchTravelocity=="true") {
+	if(searchTravelocity === true || searchTravelocity=="true"){
 		var searchButton2 = new DwtButton({parent:this});	
 		searchButton2.setText("Search travelocity.com");
 		searchButton2.setImage("TravelocityIcon");			
@@ -274,7 +274,7 @@ function () {
 			searchButtonCell2.appendChild(searchButton2.getHtmlElement());
 	}
 	
-	if(searchHotwire=="true") {
+	if(searchHotwire === true || searchHotwire=="true") {
 		var searchButton3 = new DwtButton({parent:this});	
 		searchButton3.setText("Search hotwire.com");
 		searchButton3.setImage("HotwireIcon");		
