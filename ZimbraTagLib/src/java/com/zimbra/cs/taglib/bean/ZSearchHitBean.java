@@ -20,31 +20,33 @@ import com.zimbra.cs.zclient.ZSearchHit;
 
 public abstract class ZSearchHitBean {
     
-    public enum HitType { conversation, contact, message, voiceMailItem, call, task, briefcase }
-    
+    public enum HitType { conversation, contact, message, voiceMailItem, call, task, briefcase, appointment }
+
     private HitType mHitType;
     private ZSearchHit mHit;
-    
+
     protected ZSearchHitBean(ZSearchHit hit, HitType hitType) {
         mHit = hit;
         mHitType = hitType;
     }
-    
+
     public final String getId() { return mHit.getId(); }
-    
+
     public final String getSortField() { return mHit.getSortField(); }
-    
+
     public final float getScore() { return mHit.getScore(); }
-    
+
     public final String getHitType() { return mHitType.name(); }
 
     public final boolean getIsConversation() { return mHitType == HitType.conversation; }
-    
+
     public final boolean getIsMessage() { return mHitType == HitType.message; }
-    
+
     public final boolean getIsContact() { return mHitType == HitType.contact; }
 
     public final boolean getIsTask() { return mHitType == HitType.task; }
+
+    public final boolean getIsAppointment() { return mHitType == HitType.appointment; }
 
     public final boolean getIsBriefcase() { return mHitType == HitType.briefcase; }
 
@@ -59,6 +61,8 @@ public abstract class ZSearchHitBean {
     public final ZContactHitBean getContactHit() { return getIsContact() ? (ZContactHitBean) this : null; }
 
     public final ZDocumentHitBean getBriefcaseHit() { return getIsBriefcase() ? (ZDocumentHitBean) this : null; }
+
+    public final ZAppointmentHitBean getAppointmentHit() { return getIsAppointment() ? (ZAppointmentHitBean) this : null; }
 
     public final ZTaskHitBean getTaskHit() { return getIsTask() ? (ZTaskHitBean) this : null; }
 
