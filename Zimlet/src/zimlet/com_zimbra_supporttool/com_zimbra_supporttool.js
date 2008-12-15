@@ -26,7 +26,7 @@ com_zimbra_supporttool.prototype.constructor = com_zimbra_supporttool;
 
 com_zimbra_supporttool.prototype.init =
 function() {
-	this._currentVersion = this._getVersion();
+	this._currentVersion =  appCtxt.getSettings().getInfoResponse.version;
 	this._saveVersions();
 };
 
@@ -50,6 +50,9 @@ function() {
 };
 
 
+//depricated - we now use appCtxt.getSettings().getInfoResponse.version in .init to get the version. 
+//but, if that breaks, call this method instead
+/*
 com_zimbra_supporttool.prototype._getVersion =
 function() {
 	var soapDoc = AjxSoapDoc.create("GetInfoRequest", "urn:zimbraAccount");
@@ -60,6 +63,7 @@ function() {
 	return resp.Body.GetInfoResponse.version;
 
 };
+*/
 
 com_zimbra_supporttool.prototype.sortByType =
 function(a, b) {
