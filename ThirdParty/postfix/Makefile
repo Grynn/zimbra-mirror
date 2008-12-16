@@ -67,12 +67,7 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	FD_SIZE := -DFD_SETSIZE=32768
 endif
 
-all: prep build install tar
-
-prep:
-	rm -rf $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)
-	mkdir -p $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/conf
-#	cp main.cf $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/conf
+all: allclean build install tar
 
 build:
 	(tar xzf src/postfix-$(POSTFIX_RELEASE).tar.gz; \

@@ -15,7 +15,7 @@ CLAMAV_VERSION ?= 0.94.2
 CLAMAV_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/clamav-$(CLAMAV_VERSION).tgz
 
-all: build tar
+all: allclean build tar
 
 build:
 	(tar xzf src/clamav-$(CLAMAV_VERSION).tar.gz; \

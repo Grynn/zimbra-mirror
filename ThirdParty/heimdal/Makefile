@@ -19,7 +19,7 @@ OPENSSL_VERSION ?= 0.9.8i
 OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
 HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
 
-all: build tar
+all: allclean build tar
 
 build:
 	(tar xzf src/heimdal-$(HEIMDAL_VERSION).tar.gz; \

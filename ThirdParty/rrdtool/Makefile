@@ -47,7 +47,7 @@ ENVMOD := env CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include
 	CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
 endif
 
-all: build tar
+all: allclean build tar
 
 build:
 	(tar xzf src/$(PNG_NAME)-$(PNG_VERSION).tar.gz; \

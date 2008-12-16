@@ -22,7 +22,7 @@ ifneq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	CONFIG_FLAG := --enable-posixmutexes --with-mutex=POSIX/pthreads
 endif
 
-all: build tar
+all: allclean build tar
 
 build:
 	(tar xzf src/db-$(BDB_RELEASE).tar.gz; \

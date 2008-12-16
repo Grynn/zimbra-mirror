@@ -19,7 +19,7 @@ ASPELL_TGZ_TARGET := \
 ASPELL_DICTS := \
 	aspell6-en-6.0-0
 
-all: build install dict-install tar
+all: allclean build install dict-install tar
 
 build:
 	tar xzf src/aspell-$(ASPELL_VERSION).tar.gz

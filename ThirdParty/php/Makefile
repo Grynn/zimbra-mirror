@@ -33,7 +33,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 PHP_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php/php-$(PHP_VERSION).tgz
 
-all: build tar
+all: allclean build tar
 
 build:
 	tar xzf src/php-$(PHP_VERSION).tar.gz

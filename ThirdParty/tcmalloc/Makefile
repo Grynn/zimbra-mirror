@@ -46,7 +46,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 TCMALLOC_VERSION ?= 0.99.2
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
 
-all: build tar
+all: allclean build tar
 
 build:
 	(tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \

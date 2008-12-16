@@ -77,7 +77,7 @@ DIRS := openssl \
 
 LOGFILE := /tmp/ThirdParty.make.log
 
-all: $(ZIMBRA_HOME) build 
+all: allclean $(ZIMBRA_HOME) build 
 
 $(ZIMBRA_HOME):
 	mkdir -p $@

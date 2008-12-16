@@ -54,7 +54,7 @@ OPENSSL_VERSION ?=  0.9.8i
 OPENSSL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/openssl/openssl-$(OPENSSL_VERSION).tgz
 OPENSSL_SOURCE := $(OPENSSL_ROOT)/openssl-$(OPENSSL_VERSION)
 
-all: build tar
+all: allclean build tar
 
 #patch -N -g0 -p1 < ../patches/leopard.sharedlib.fix; \
 

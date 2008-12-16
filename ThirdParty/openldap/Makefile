@@ -37,7 +37,7 @@ OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
 OPENLDAP_CLIB_DIR ?= $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)/lib
 LIBTOOL_LIB_DIR ?= $(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)/lib
 
-all: build tar
+all: allclean build tar
 
 build:
 	(tar xzf src/openldap-$(LDAP_RELEASE).tgz; \

@@ -16,7 +16,7 @@ MEMCACHED_VERSION ?= 1.2.5
 MEMCACHED_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/memcached/memcached-$(MEMCACHED_VERSION).tgz
 MEMCACHED_INSTALL := $(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION)
 
-all: build tar
+all: allclean build tar
 
 build:
 	(tar xfz src/libevent-$(LIBEVENT_VERSION).tar.gz; \

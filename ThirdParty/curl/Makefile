@@ -33,7 +33,7 @@ ifeq ($(BUILD_PLATFORM), SLES10_64)
 	LIB_DIR := /usr/lib64
 endif
 
-all: build tar
+all: allclean build tar
 
 build:
 	(tar xzf src/curl-$(CURL_VERSION).tar.gz; \

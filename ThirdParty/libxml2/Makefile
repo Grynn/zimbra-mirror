@@ -22,7 +22,7 @@ endif
 	#ENVMOD := env LIBS="-lresolv" 
 #endif
 
-all: build tar
+all: allclean build tar
 
 build: $(APP_NAME)-$(APP_VERSION)
 	(cd $(APP_NAME)-$(APP_VERSION); \

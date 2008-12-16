@@ -35,7 +35,7 @@ ifeq ($(BUILD_PLATFORM), CentOS5_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
 
-all: build tar
+all: allclean build tar
 
 build: $(APP_NAME)-$(APP_VERSION)
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)

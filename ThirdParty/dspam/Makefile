@@ -24,7 +24,7 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
 
-all: build tar
+all: allclean build tar
 
 build:
 	(tar xzf src/dspam-$(DSPAM_VERSION).tar.gz; \

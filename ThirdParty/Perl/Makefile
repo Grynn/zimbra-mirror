@@ -176,7 +176,7 @@ CLEAN_TARGETS	=	\
 		$(DEST_DIR) \
 		$(PERL_TGZ_DEST)
 
-all: setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
+all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)
 	@echo "Logging to $(LOGFILE)"
 

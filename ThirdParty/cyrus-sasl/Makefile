@@ -23,7 +23,7 @@ OPENSSL_VERSION ?= 0.9.8i
 HEIMDAL_LIB_DIR ?= $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)/lib
 OPENSSL_LIB_DIR ?= $(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib
 
-all: build 
+all: allclean build 
 
 build: 
 ifeq	(MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
