@@ -44,9 +44,20 @@
 	<property name="im.jars.dir" location="${im.dir}/jars" />
 	<property name="im.classes.dir" location="${im.dir}/build/classes" />
 
+	<condition property="is-windows">
+		<os family="windows" />
+	</condition>
+	<condition property="is-unix">
+		<not>
+			<os family="windows" />
+		</not>
+	</condition>
+
 	<!-- offline must be able to run from a path with spaces. here we have default dev installation -->
 	<!-- path contain space characters so that if this is broken, we can catch it right away.       -->
-	<property name="zimbra.home.dir" location="/opt/zimbra/zdesktop dev" />
+	<condition property="zimbra.home.dir" value="/opt/zimbra/zdesktop" else="/opt/zimbra/zdesktop dev">
+		<isset property="is-windows"/>
+	</condition>
 
 	<property name="zimbra.derby.dir" location="${zimbra.home.dir}/derby" />
 
@@ -77,15 +88,6 @@
 	</condition>
 	<condition property="server.db.dir" value="${server.src.dir}/db/derby" else="${server.src.dir}/db/sqlite">
 		<isset property="db-derby" />
-	</condition>
-
-	<condition property="is-windows">
-		<os family="windows" />
-	</condition>
-	<condition property="is-unix">
-		<not>
-			<os family="windows" />
-		</not>
 	</condition>
 
 	<property name="jetty.home.dir" location="${zimbra.home.dir}/jetty" />
