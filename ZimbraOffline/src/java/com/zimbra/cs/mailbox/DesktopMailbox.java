@@ -9,8 +9,9 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
-import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
+import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.mailbox.util.TypedIdList;
+import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.util.OfflineYAuth;
@@ -29,6 +30,11 @@ public abstract class DesktopMailbox extends Mailbox {
     public static final int ID_FOLDER_ARCHIVE = 253;
     public static final int ID_FOLDER_OUTBOX = 254;
 	
+    private static final String CONFIG_OFFLINE_VERSION = "offline_ver";
+    
+    private OfflineMailboxVersion offlineVersion;
+    private boolean isOfflineVerCheckComplete;
+    
 	private Timer timer;
 	private TimerTask currentTask;
 	
@@ -57,17 +63,49 @@ public abstract class DesktopMailbox extends Mailbox {
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
         Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
         Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
+        
+        // set the version to CURRENT
+        Metadata md = new Metadata();
+        offlineVersion = OfflineMailboxVersion.CURRENT();
+        offlineVersion.writeToMetadata(md);
+        DbMailbox.updateConfig(this, CONFIG_OFFLINE_VERSION, md);
     }
     
 	@Override
 	synchronized boolean finishInitialization() throws ServiceException {
 		if (super.finishInitialization()) {
 			ensureSystemFolderExists();
+			checkOfflineVersion();
 			initSyncTimer();
 			return true;
 		}
 		return false;
 	}
+	
+	synchronized void checkOfflineVersion() throws ServiceException {
+    	if (!isOfflineVerCheckComplete) {
+            if (offlineVersion == null) {
+                Metadata md = getConfig(null, CONFIG_OFFLINE_VERSION);
+                offlineVersion = OfflineMailboxVersion.fromMetadata(md);
+            }
+    		
+            if (!offlineVersion.atLeast(2)) {
+                OfflineMailboxMigrationV2.doMigration(this);
+                updateOfflineVersion(new OfflineMailboxVersion((short)2));
+    		}
+    		
+            isOfflineVerCheckComplete = true;
+    	}
+	}
+
+    private synchronized void updateOfflineVersion(OfflineMailboxVersion ver) throws ServiceException {
+    	offlineVersion = ver;
+        Metadata md = getConfig(null, CONFIG_OFFLINE_VERSION);
+        if (md == null)
+            md = new Metadata();
+        offlineVersion.writeToMetadata(md);
+        setConfig(null, CONFIG_OFFLINE_VERSION, md);
+    }
 	
 	synchronized void ensureSystemFolderExists() throws ServiceException {
 		Folder f = null;
