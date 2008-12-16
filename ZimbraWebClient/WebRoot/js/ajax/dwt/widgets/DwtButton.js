@@ -316,12 +316,14 @@ function (hoverImageInfo) {
 * @param shouldToggle
 * @param followIconStyle	style of menu item (should be checked or radio style) for
 *							which the button icon should reflect the menu item icon
+* @param popupAbove         true to pop up the menu above the button
 */
 DwtButton.prototype.setMenu =
-function(menuOrCallback, shouldToggle, followIconStyle) {
+function(menuOrCallback, shouldToggle, followIconStyle, popupAbove) {
 	this._menu = menuOrCallback;
 	this._shouldToggleMenu = (shouldToggle === true);
 	this._followIconStyle = followIconStyle;
+	this._popupAbove = popupAbove;
 	if (this._menu) {
         if (this._dropDownEl) {
 			var idx = (this._imageCell) ? 1 : 0;
@@ -371,7 +373,7 @@ function(dontCreate) {
 			return null;
 		}
 		var callback = this._menu;
-		this.setMenu(callback.run());
+		this.setMenu(callback.run(this), this._shouldToggleMenu, this._followIconStyle, this._popupAbove);
 		if ((this.__preventMenuFocus != null) && (this._menu instanceof DwtMenu))
 			this._menu.dontStealFocus(this.__preventMenuFocus);
 	}
@@ -447,12 +449,17 @@ function(menu) {
 	var parentElement = parent.getHtmlElement();
 	// since buttons are often absolutely positioned, and menus aren't, we need x,y relative to window
 	var parentLocation = Dwt.toWindow(parentElement, 0, 0);
-	var verticalBorder = (parentElement.style.borderLeftWidth == "") ? 0 : parseInt(parentElement.style.borderLeftWidth);
-	var x = parentLocation.x + verticalBorder;
+	var leftBorder = (parentElement.style.borderLeftWidth == "") ? 0 : parseInt(parentElement.style.borderLeftWidth);
+	var x = parentLocation.x + leftBorder;
 	x = ((x + menuSize.x) >= windowSize.x) ? windowSize.x - menuSize.x : x;
-	var horizontalBorder = (parentElement.style.borderTopWidth == "") ? 0 : parseInt(parentElement.style.borderTopWidth);
-	horizontalBorder += (parentElement.style.borderBottomWidth == "") ? 0 : parseInt(parentElement.style.borderBottomWidth);
-	var y = parentLocation.y + parentBounds.height + horizontalBorder;
+	var y;
+	if (this._popupAbove) {
+		y = parentLocation.y - menuSize.y;
+	} else {
+		var horizontalBorder = (parentElement.style.borderTopWidth == "") ? 0 : parseInt(parentElement.style.borderTopWidth);
+		horizontalBorder += (parentElement.style.borderBottomWidth == "") ? 0 : parseInt(parentElement.style.borderBottomWidth);
+		y = parentLocation.y + parentBounds.height + horizontalBorder;
+	}
 	menu.popup(0, x, y);
 };
 
