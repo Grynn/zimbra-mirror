@@ -7,9 +7,14 @@ P4PASSWD=public1234
 export P4USER P4CLIENT P4PASSWD
 P4=`which p4`;
 RELEASE=$1
+SYNC=$2
 
 if [ x$RELEASE = "x" ]; then
 	RELEASE=main
+fi
+
+if [ x$SYNC = "x" ]; then
+	SYNC=no
 fi
 
 PLAT=`$BUILD_HOME/$RELEASE/ZimbraBuild/rpmconf/Build/get_plat_tag.sh`;
@@ -43,16 +48,23 @@ elif [ x$PLAT = "xMANDRIVA2006" ]; then
 fi
 
 echo "Resyncing thirdparty source for $RELEASE"
-cd ${BUILD_HOME}/$RELEASE/ThirdParty
-$P4 sync ... > /dev/null 
-cd ${BUILD_HOME}/$RELEASE/ZimbraBuild
-$P4 sync ... > /dev/null 
+if [ x$SYNC = "xyes" ]; then
+	cd ${BUILD_HOME}/$RELEASE/ThirdParty
+	$P4 sync ... > /dev/null 
+fi
+
+if [ x$SYNC = "xyes" ]; then
+	cd ${BUILD_HOME}/$RELEASE/ZimbraBuild
+	$P4 sync ... > /dev/null 
+fi
 
 mkdir -p ${BUILD_HOME}/$RELEASE/ThirdPartyBuilds/$PLAT
 
-if [ x$RELEASE = "xmain" ]; then
-  cd ${BUILD_HOME}/$RELEASE/ThirdPartyBuilds/$PLAT
-  $P4 sync ... > /dev/null 
+if [ x$SYNC = "xyes" ]; then
+	if [ x$RELEASE = "xmain" ]; then
+		cd ${BUILD_HOME}/$RELEASE/ThirdPartyBuilds/$PLAT
+		$P4 sync ... > /dev/null 
+	fi
 fi
 
 echo "Removing /opt/zimbra"
