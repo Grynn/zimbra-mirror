@@ -34,6 +34,7 @@
  *        posStyle				[constant]*			positioning style
  *        forceNotifySelection	[boolean]*			force notify selection even if checked style
  *        forceNotifyAction		[boolean]*			force notify action even if checked style
+ *        singleClickAction		[boolean]*			true if an action is performed in single click
  */
 DwtTreeItem = function(params) {
     if (arguments.length == 0) { return; }    
@@ -75,6 +76,13 @@ DwtTreeItem = function(params) {
 	if (this._tree._isCheckedStyle()) {
 		this.enableSelection(false);
 		this._selectedClassName = this._origClassName;
+	}
+	if (params.singleClickAction) {
+		this._singleClickAction = true;
+		this._selectedFocusedClassName = this._selectedClassName = this._textClassName;
+		this._hoverClassName = [this._origClassName, DwtCssStyle.HOVER].join("-");
+	} else {
+		this._hoverClassName = this._textClassName;
 	}
 
 	// if our parent is DwtTree or our parent is initialized and is not deferred
@@ -507,7 +515,11 @@ function(className) {
 DwtTreeItem.prototype._addMouseListeners =
 function() {
 	var events = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEUP, DwtEvent.ONDBLCLICK];
-	events.push(AjxEnv.isIE ? DwtEvent.ONMOUSELEAVE : DwtEvent.ONMOUSEOUT);
+	if (AjxEnv.isIE) {
+		events.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
+	} else {
+		events.push(DwtEvent.ONMOUSEOVER, DwtEvent.ONMOUSEOUT);
+	}
 	if (AjxEnv.isSafari) {
 		events.push(DwtEvent.ONCONTEXTMENU);
 	}
@@ -771,7 +783,9 @@ DwtTreeItem.prototype._focus =
 function() {
 	if (!this._textCell) { return; }
 	// focused tree item should always be selected as well
-	this._textCell.className = this._selectedFocusedClassName;
+	if (this._selectionEnabled) {
+		this._textCell.className = this._selectedFocusedClassName;
+	}
 };
 
 DwtTreeItem.prototype._blur =
@@ -830,9 +844,23 @@ function(ev) {
 
 	treeItem._gotMouseDownLeft = false;
 	treeItem._gotMouseDownRight = false;
+	if (treeItem._singleClickAction && treeItem._textCell) {
+		treeItem._textCell.className = treeItem._textClassName;
+	}
 };
 
-DwtTreeItem._mouseUpListener = 
+DwtTreeItem._mouseOverListener =
+function(ev) {
+	var treeItem = ev.dwtObj;
+	if (!treeItem) { return false; }
+	if (ev.target == treeItem._childDiv) { return; }
+
+	if (treeItem._singleClickAction && treeItem._textCell) {
+		treeItem._textCell.className = treeItem._hoverClassName;
+	}
+};
+
+DwtTreeItem._mouseUpListener =
 function(ev) {
 	var treeItem = ev.dwtObj;
 	if (!treeItem) { return false; }
@@ -889,6 +917,9 @@ function(params) {
 DwtTreeItem._listeners = {};
 DwtTreeItem._listeners[DwtEvent.ONMOUSEDOWN] = new AjxListener(null, DwtTreeItem._mouseDownListener);
 DwtTreeItem._listeners[DwtEvent.ONMOUSEOUT] = new AjxListener(null, DwtTreeItem._mouseOutListener);
+DwtTreeItem._listeners[DwtEvent.ONMOUSELEAVE] = new AjxListener(null, DwtTreeItem._mouseOutListener);
+DwtTreeItem._listeners[DwtEvent.ONMOUSEENTER] = new AjxListener(null, DwtTreeItem._mouseOverListener);
+DwtTreeItem._listeners[DwtEvent.ONMOUSEOVER] = new AjxListener(null, DwtTreeItem._mouseOverListener);
 DwtTreeItem._listeners[DwtEvent.ONMOUSEUP] = new AjxListener(null, DwtTreeItem._mouseUpListener);
 DwtTreeItem._listeners[DwtEvent.ONDBLCLICK] = new AjxListener(null, DwtTreeItem._doubleClickListener);
 DwtTreeItem._listeners[DwtEvent.ONCONTEXTMENU] = new AjxListener(null, DwtTreeItem._contextListener);
