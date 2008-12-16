@@ -53,15 +53,14 @@ public class YMailImport extends ImapSync {
     @Override
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
+        super.importData(folderIds, fullSync);
+
         String dsName = dataSource.getName();
         if (yabImport != null) {
             LOG.info("Importing contacts for YMail account '%s'", dsName);
             yabImport.importData(folderIds, fullSync);
             LOG.info("Finished importing contacts for YMail account '%s'", dsName);
-        }
-        
-        super.importData(folderIds, fullSync);
-        
+        }                
         if (calDavImport != null) {
             LOG.info("Importing calendar for YMail account '%s'", dsName);
             calDavImport.importData("yahoo.com", null, fullSync);

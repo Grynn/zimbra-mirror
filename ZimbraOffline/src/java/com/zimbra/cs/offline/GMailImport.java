@@ -49,6 +49,8 @@ public class GMailImport extends ImapSync {
     @Override
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
+        super.importData(folderIds, fullSync);
+
         String dsName = dataSource.getName();
         if (gabImport != null) {
             LOG.info("Importing contacts for GMail account '%s'", dsName);
@@ -60,7 +62,6 @@ public class GMailImport extends ImapSync {
             calDavImport.importData("gmail.com", null, fullSync);
             LOG.info("Finished importing calendar for GMail account '%s'", dsName);
         }
-        super.importData(folderIds, fullSync);
     }
 }
 
