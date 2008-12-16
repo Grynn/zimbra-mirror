@@ -243,7 +243,6 @@ ZaAccount.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaAccount.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 
 ZaAccount.A2_accountTypes = "accountTypes" ; //used to save the account types available to this account based on domain
-ZaAccount.A2_previousName = "previousName" ;
 ZaAccount.A2_alias_selection_cache = "alias_selection_cache";
 ZaAccount.A2_fwdAddr_selection_cache = "fwdAddr_selection_cache";
 ZaAccount.A2_fp_selection_cache = "fp_selection_cache"; 
@@ -1629,15 +1628,13 @@ function (value, event, form){
 	try {
 		var instance = form.getInstance();
 		var p = form.parent ;
-        var oldDomainName = ZaAccount.getDomain(instance[ZaAccount.A2_previousName]) ;
+        var oldDomainName = this.getOldDomainPart ();
         var newDomainName = ZaAccount.getDomain(value) ;
         var domainObj =  ZaDomain.getDomainByName(newDomainName) ;
-        
-        
-        
-        if (((newDomainName != ZaAccount.getDomain(instance [ZaAccount.A_name] ))
+
+        if ((newDomainName != oldDomainName)
 				//set the right default cos at the account creation time
-				|| instance [ZaAccount.A_name].indexOf("@") == 0)) 
+				|| (instance [ZaAccount.A_name].indexOf("@") == 0)) 
 		{ //see if the cos needs to be updated accordingly
 			if(!form.getModel().getInstanceValue(instance, ZaAccount.A_COSId)) {
 				try {
@@ -1654,16 +1651,20 @@ function (value, event, form){
 			//instance.attrs[ZaAccount.A_COSId] = instance._defaultValues.id ;
 			//form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A_COSId,instance._defaultValues.id);
 		}
+       
                    
-
         //if domain name is not changed, we don't want to update the account type output
         if ((!ZaSettings.isDomainAdmin) && (oldDomainName !=  newDomainName)) {   
-            if (ZaDomain.A_domainMaxAccounts){
+            if (ZaDomain.A_domainMaxAccounts || ZaDomain.A_zimbraDomainCOSMaxAccounts){
                 var maxDomainAccounts = domainObj.attrs[ZaDomain.A_domainMaxAccounts] ;
-                if (maxDomainAccounts && maxDomainAccounts > 0) {
-                    var usedAccounts = ZaSearch.getUsedDomainAccounts(newDomainName, ZaApp.getInstance().getCurrentController() );
-                    instance[ZaAccount.A2_domainLeftAccounts] =
-                        AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]) ;
+                var cosMaxAccounts = domainObj.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts] ;
+                if ((maxDomainAccounts && maxDomainAccounts > 0)
+                        && (!cosMaxAccounts || cosMaxAccounts.length <= 0)) {
+                    //only show domain left accounts when zimbraDomainMaxAccounts is set, but zimbraDomainCOSMaxAccounts is not set
+                    var usedAccounts = domainObj.getUsedDomainAccounts(newDomainName );
+                    form.getModel().setInstanceValue(form.getInstance(),
+                        AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]),
+                            null);
                 }else{
                     //instance[ZaAccount.A2_domainLeftAccounts] = null ;
                     form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,null);
@@ -1860,6 +1861,8 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
         out.push("<tbody>") ;
 
         var radioGroupName = "account_type_radio_group_" + Dwt.getNextId() ;
+        //make sure CountAccountRequest is called to refresh the used accounts counts
+        domainObj.updateUsedAccounts();  
         for (var i=0; i < acctTypes.length; i ++) {
             var cos = ZaCos.getCosById (acctTypes[i] , ZaApp.getInstance()) ;
             if (cos == null) {

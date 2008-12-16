@@ -214,7 +214,7 @@ ZaDomain.A_zimbraZimletDomainAvailableZimlets = "zimbraZimletDomainAvailableZiml
 //hosted attributes
 ZaDomain.A_zimbraDomainCOSMaxAccounts = "zimbraDomainCOSMaxAccounts" ;
 ZaDomain.A_zimbraDomainFeatureMaxAccounts = "zimbraDomainFeatureMaxAccounts" ;
-ZaDomain.A2_account_limits = "account_limits" ;
+ZaDomain.A2_account_limit = "account_limit" ;
 
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -1515,7 +1515,6 @@ ZaDomain.myXModel = {
 };
 
 
-
 /**
  * Domain Level Account Limits Object, it is a client side only domain property and used
  * by both domain view and account view.  The value is based on the zimbraDomainCOSMaxAccounts
@@ -1535,49 +1534,67 @@ ZaDomain.myXModel = {
  *
  **/
 
+ZaDomain.prototype.getUsedDomainAccounts = function () {
+    var total = 0 ;    
+    var accountCountsByCoses = this.getAccountCountsByCoses();
+    if (accountCountsByCoses && accountCountsByCoses.length > 0) {
+      for (var i = 0 ; i < accountCountsByCoses.length; i ++) {
+        var count = accountCountsByCoses[i]._content ;
+        total += parseInt(count) ;
+      }
+    }
+    return total ;
+}
+
+ZaDomain.prototype.getAccountCountsByCoses = function () {
+    try {
+        var soapDoc = AjxSoapDoc.create("CountAccountRequest", ZaZimbraAdmin.URN, null);
+        var elBy = soapDoc.set("domain", this.name);
+        elBy.setAttribute("by", "name");
+        //var command = new ZmCsfeCommand();
+        var params = new Object();
+        params.soapDoc = soapDoc;
+
+        var reqMgrParams = {
+            controller : this._app.getCurrentController(),
+            busyMsg : ZaMsg.BUSY_COUNT_ACCOUNTS
+        }
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams);
+        var accountCountsByCoses = resp.Body.CountAccountResponse.cos ;
+        return accountCountsByCoses ;
+    }catch (ex) {
+        ZaApp.getInstance().getCurrentController().popupErrorDialog(
+                AjxMessageFormat.format(ZaMsg.ERROR_GET_USED_ACCOUNTS, [this.name]), ex);
+    }
+}
+
+ZaDomain.prototype.updateUsedAccounts = function () {
+    this.getUsedAccounts("default", true) ;
+}
 
 ZaDomain.prototype.getUsedAccounts =
-function (cosName) {
-    var cos = ZaCos.getCosByName (cosName) ;
-    if (cos == null) {
-        ZaApp.getInstance().getCurrentController().popupErrorDialog(
-                AjxMessageFormat.format(ZaMsg.ERROR_NO_COS_FOR_ACCOUNT_TYPE, [cosName]), null );
-        return ;
+function (cosName, refresh) {
+    if (!this[ZaDomain.A2_account_limit]) this[ZaDomain.A2_account_limit] = {};
+    if (!this[ZaDomain.A2_account_limit][cosName])  this[ZaDomain.A2_account_limit][cosName] = {} ;
+
+    if (refresh || (this[ZaDomain.A2_account_limit][cosName].used == null)) {
+        //need to call the CountAccountRequest
+        var accountCountsByCoses = this.getAccountCountsByCoses();
+        if (accountCountsByCoses && accountCountsByCoses.length > 0) {
+            for (var i = 0 ; i < accountCountsByCoses.length; i ++) {
+                var aCosName =  accountCountsByCoses[i].name ;
+                if (!this[ZaDomain.A2_account_limit][aCosName]) this[ZaDomain.A2_account_limit][aCosName] = {} ;
+                this[ZaDomain.A2_account_limit][aCosName].used =
+                                                parseInt (accountCountsByCoses[i]._content) ;
+            }
+        }else{
+            //no account has been created, so the used accounts are 0  
+        }
     }
 
-    var cosId = cos.id;
+    if (this[ZaDomain.A2_account_limit][cosName].used == null) this[ZaDomain.A2_account_limit][cosName].used = 0;
     
-    var query = "zimbraCosId=" + cosId ;
-
-    var params = {
-		domain: this.name,
-		limit: "0",
-		type: "accounts",
-		offset: "0",
-		applyCos: "0",
-		attrs: "",
-        query: query ,
-        controller: ZaApp.getInstance().getCurrentController()
-	}
-
-	var resp = ZaSearch.searchDirectory(params) ;
-    var used =  resp.Body.SearchDirectoryResponse.searchTotal ;
-
-    //update the instance value
-   // var cosName = ZaCos.getCosById (cosId).name ;
-    
-    if (used != null & used >= 0) {
-        if (!this[ZaDomain.A2_account_limit]) this[ZaDomain.A2_account_limit] = {} ;
-        if (!this[ZaDomain.A2_account_limit][cosName]) this[ZaDomain.A2_account_limit][cosName] = {} ;
-        this[ZaDomain.A2_account_limit][cosName].used = used ;
-        this[ZaDomain.A2_account_limit][cosName].available = this.getMaxAccounts(cosName) - used ;
-    }else{
-        ZaApp.getInstance().getCurrentController().popupErrorDialog(
-                AjxMessageFormat.format(ZaMsg.ERROR_GET_USED_ACCOUNTS, [this.name]), null);
-    }
-
     return this[ZaDomain.A2_account_limit][cosName].used ;
-
 }
 
 ZaDomain.prototype.getMaxAccounts = function (cosName) {
@@ -1613,7 +1630,7 @@ ZaDomain.prototype.getAvailableAccounts = function (cosName, refresh) {
     if (! this [ZaDomain.A2_account_limit][cosName].available
             || refresh ) {
         //retrieve the used accounts
-        var used = this.getUsedAccounts (cosName);
+        var used = this.getUsedAccounts (cosName, refresh);
         var max = this.getMaxAccounts (cosName) ;
         this [ZaDomain.A2_account_limit][cosName].available = max - used ;
     }
