@@ -26,6 +26,9 @@ public class ZAppointmentHitBean extends ZSearchHitBean {
         super(hit, HitType.appointment);
         mHit = hit;
     }
+	public ZAppointmentHit getAppointment() {
+	    return mHit;
+	}
 
 	public String getDocId() {
 		return mHit.getId();
