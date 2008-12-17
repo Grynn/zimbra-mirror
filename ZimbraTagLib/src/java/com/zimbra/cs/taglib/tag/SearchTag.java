@@ -19,17 +19,18 @@ package com.zimbra.cs.taglib.tag;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.SearchSortBy;
 import com.zimbra.cs.zclient.ZMailbox.Fetch;
+import com.zimbra.cs.zclient.ZMailbox.SearchSortBy;
 import com.zimbra.cs.zclient.ZSearchParams;
 import com.zimbra.cs.zclient.ZSearchResult;
 import org.apache.commons.collections.map.LRUMap;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import java.io.IOException;
+import java.util.TimeZone;
 
 public class SearchTag extends ZimbraSimpleTag {
 
@@ -49,6 +50,10 @@ public class SearchTag extends ZimbraSimpleTag {
     private boolean mWanthtml;
     private boolean mWantHtmlSet;
     private boolean mMarkread;
+    private long mStart;
+    private long mEnd;
+    private String mFolderId;
+    private TimeZone mTimeZone;
     private Fetch mFetch;
     private String mField = null;
     
@@ -72,7 +77,15 @@ public class SearchTag extends ZimbraSimpleTag {
     public void setMarkread(boolean markread) { this.mMarkread = markread; }
 
     public void setField(String field) { this.mField = field; }
-    
+
+    public void setStart(long start) { this.mStart = start; }
+
+    public void setEnd(long end) { this.mEnd = end; }
+
+    public void setFolderid(String folderId) { this.mFolderId = folderId; }
+
+    public void setTimezone(TimeZone timeZone) { this.mTimeZone = timeZone; }
+
     public void setWanthtml(boolean wanthtml) {
         this.mWanthtml = wanthtml;
         this.mWantHtmlSet = true;
@@ -91,6 +104,19 @@ public class SearchTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
 
+            if (mFolderId != null && mFolderId.length() > 0) {
+                StringBuilder newQuery = new StringBuilder();
+                newQuery.append("(");
+                for (String fid : mFolderId.split(",")) {
+                    if (newQuery.length() > 1) newQuery.append(" or ");
+                    newQuery.append("inid:").append(fid);
+                }
+                newQuery.append(")");
+                if (mQuery != null && mQuery.length() > 0) {
+                    newQuery.append("AND (").append(mQuery).append(")");
+                }
+                mQuery = newQuery.toString();
+            }
             ZSearchParams params = new ZSearchParams(mQuery);
             params.setOffset(mOffset);
             params.setLimit(mLimit);
@@ -100,6 +126,9 @@ public class SearchTag extends ZimbraSimpleTag {
             params.setPeferHtml(mWantHtmlSet ? mWanthtml : mbox.getPrefs().getMessageViewHtmlPreferred());
             params.setMarkAsRead(mMarkread);
             params.setField(mField);
+            if (mStart != 0) params.setCalExpandInstStart(mStart);
+            if (mEnd != 0) params.setCalExpandInstEnd(mEnd);
+            if (mTimeZone != null) params.setTimeZone(mTimeZone);
 
             ZSearchResult searchResults = mConvId == null ? mbox.search(params) : mbox.searchConversation(mConvId, params);
 
