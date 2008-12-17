@@ -447,8 +447,8 @@ public class PushChanges {
                 		ombx.move(sContext, id, MailItem.TYPE_MESSAGE, Mailbox.ID_FOLDER_DRAFTS); //move message back to drafts folder;
                 		
                 		//we need to tell user of the failure
-	                	MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
                 		try {
+                		    MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
                 			mm.setSentDate(new Date());
                 			mm.setFrom(new InternetAddress("donotreply@host.local", "Desktop Notifier"));
 	                		mm.setRecipient(RecipientType.TO, new InternetAddress(ombx.getAccount().getName()));

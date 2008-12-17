@@ -260,8 +260,8 @@ public class LocalMailbox extends DesktopMailbox {
     }
     
     private void bounceToInbox(OperationContext context, int id, Message msg, String error) {
-    	MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
 		try {
+	        MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
 			mm.setFrom(new InternetAddress(getAccount().getName()));
     		mm.setRecipient(RecipientType.TO, new InternetAddress(getAccount().getName()));
     		mm.setSubject("Delivery failed: " + error);
