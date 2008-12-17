@@ -1703,7 +1703,24 @@ default:
               </java>
             </serializedBean>
             <condition>!Boolean.getBoolean("offline_update") &amp;&amp; !context.getBooleanVariable("keepUserData")</condition>
-            <validation />
+            <validation>import java.util.regex.*;
+
+String langId = context.getLanguageId();
+if (langId.equalsIgnoreCase("zh_cn") ||
+    langId.equalsIgnoreCase("zh_hk") ||
+    langId.equalsIgnoreCase("ja") ||
+    langId.equalsIgnoreCase("ko"))
+    return true;
+
+String instPath = context.getInstallationDirectory().getPath();
+Pattern p = Pattern.compile("[!`']");
+Matcher m = p.matcher(instPath);
+String msg = "An installation path cannot contain any of the following charactors: !`'";
+if (m.find()) {
+    Util.showErrorMessage(msg);
+    return false;
+}
+return true;</validation>
             <preActivation>if (Util.isWindows()) {
     String subdir = Util.isWindowsVista() ? "\\AppData\\Local\\Zimbra\\zdesktop" : "\\Local Settings\\Application Data\\Zimbra\\zdesktop";
     context.setInstallationDirectory(new File(context.getVariable("sys.userHome") + subdir));
