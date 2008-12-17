@@ -1715,9 +1715,8 @@ if (langId.equalsIgnoreCase("zh_cn") ||
 String instPath = context.getInstallationDirectory().getPath();
 Pattern p = Pattern.compile("[!`']");
 Matcher m = p.matcher(instPath);
-String msg = "An installation path cannot contain any of the following charactors: !`'";
 if (m.find()) {
-    Util.showErrorMessage(msg);
+    Util.showErrorMessage(context.getMessage("installer.ErrBadCharsInPath"));
     return false;
 }
 return true;</validation>
