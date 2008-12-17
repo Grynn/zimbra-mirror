@@ -805,6 +805,9 @@
 		<copy todir="${build.dir}/prism/" overwrite="true">
 			<fileset dir="${prism.src.dir}/mac-080922/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="*/**"/>
 		</copy>
+
+		<copy tofile="${build.dir}/prism/components/ForceOnline.js" file="prism/components/ForceOnline.js" overwrite="true"/>
+
 		<replace file="${build.dir}/prism/defaults/preferences/preferences.js" token="@version@" value="${offline.version}"/>
 		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
 		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
