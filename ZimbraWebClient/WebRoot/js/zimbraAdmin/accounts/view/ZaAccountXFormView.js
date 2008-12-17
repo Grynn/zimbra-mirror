@@ -199,7 +199,7 @@ function(entry) {
     var domainName = ZaAccount.getDomain (this._containedObject.name) ;
     var domainObj =  ZaDomain.getDomainByName (domainName) ;
     this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
-    
+    this._containedObject[ZaAccount.A2_currentAccountType] = entry[ZaAccount.A2_currentAccountType]  ;
     this._localXForm.setInstance(this._containedObject);
 	//update the tab
 	this.updateTab();

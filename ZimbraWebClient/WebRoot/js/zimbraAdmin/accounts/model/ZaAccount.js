@@ -243,6 +243,7 @@ ZaAccount.MAXSEARCHRESULTS = ZaSettings.MAXSEARCHRESULTS;
 ZaAccount.RESULTSPERPAGE = ZaSettings.RESULTSPERPAGE;
 
 ZaAccount.A2_accountTypes = "accountTypes" ; //used to save the account types available to this account based on domain
+ZaAccount.A2_currentAccountType = "currentAccountType" ; //used to save the current account type - cos id
 ZaAccount.A2_alias_selection_cache = "alias_selection_cache";
 ZaAccount.A2_fwdAddr_selection_cache = "fwdAddr_selection_cache";
 ZaAccount.A2_fp_selection_cache = "fp_selection_cache"; 
@@ -1279,6 +1280,9 @@ function(by, val) {
 	
 	if(resp[ZaAccount.A2_soapURL] && resp[ZaAccount.A2_soapURL][0])
 		this[ZaAccount.A2_soapURL] = resp[ZaAccount.A2_soapURL][0]._content;
+
+    if (resp.cos && resp.cos.id)
+        this[ZaAccount.A2_currentAccountType] = resp.cos.id ;
 }
 
 ZaItem.loadMethods["ZaAccount"].push(ZaAccount.loadInfoMethod);
@@ -1847,11 +1851,13 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
     var acctTypes = instance[ZaAccount.A2_accountTypes] ;
     var out = [] ;
     if (acctTypes && acctTypes.length > 0) {
+        /*
         var currentCos = ZaCos.getCosById(instance.attrs[ZaAccount.A_COSId], form.parent._app) ;
         var currentType = null ;
         if (currentCos)
             currentType = currentCos.id ;
-        
+        */
+        var currentType = instance[ZaAccount.A2_currentAccountType] ;
         var domainName = ZaAccount.getDomain (instance.name) ;
         var domainObj =  ZaDomain.getDomainByName (domainName, form.parent._app);
 
@@ -1932,7 +1938,7 @@ ZaAccount.setAccountType = function (newType, ev) {
 
 ZaAccount.isAccountTypeSet = function (tmpObj) {
 
-    var cosId = tmpObj.attrs [ZaAccount.A_COSId] ;
+    var cosId = tmpObj.attrs [ZaAccount.A_COSId] || tmpObj[ZaAccount.A2_currentAccountType];    
     if (!tmpObj.accountTypes  || tmpObj.accountTypes.length <= 0) {
         return  true ; //account type is not present, no need to check if it is set
     } else if (!cosId){
