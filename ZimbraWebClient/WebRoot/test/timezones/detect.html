@@ -1,0 +1,101 @@
+<html>
+<body>
+<script>
+
+var byMonth = 0;
+var byDate = 1;
+var byHour = 2;
+var byMinute = 3;
+var bySecond = 4;
+
+// Sweep the range between d1 and d2 looking for DST transitions.
+// Iterate the range by "by" unit.  When a transition is detected,
+// sweep the range between before/after dates by increasingly
+// smaller unit, month then date then hour then minute then finally second.
+function sweepRange(d1, d2, by) {
+    var onsets = '';  // cheesy way to return the result
+    var upperBound = d2.getTime();
+    var d = new Date();
+    d.setTime(d1.getTime());
+    var prevD = new Date();
+    prevD.setTime(d.getTime());
+    var prevOffset = d1.getTimezoneOffset() * -1;
+    while (d.getTime() <= upperBound) {
+        // Increment by the right unit.
+	if (by == byMonth) {
+	    d.setUTCMonth(d.getUTCMonth() + 1);
+	} else if (by == byDate) {
+	    d.setUTCDate(d.getUTCDate() + 1);
+	} else if (by == byHour) {
+	    d.setUTCHours(d.getUTCHours() + 1);
+	} else if (by == byMinute) {
+	    d.setUTCMinutes(d.getUTCMinutes() + 1);
+	} else if (by == bySecond) {
+	    d.setUTCSeconds(d.getUTCSeconds() + 1);
+	} else {
+	    return onsets;
+	}
+
+	var offset = d.getTimezoneOffset() * -1;
+	if (offset != prevOffset) {
+	    if (by < bySecond) {
+                // Drill down.
+		onsets += sweepRange(prevD, d, by + 1);
+	    } else {
+                // Tricky:
+		// Initialize a Date object whose UTC fields are set to prevD's local fields.
+		// Then add 1 second to get UTC version of onset time.  We want to work in UTC
+		// to prevent the date object from experiencing the DST jump when we add 1 second.
+		var onset = new Date();
+		onset.setUTCFullYear(prevD.getFullYear(), prevD.getMonth(), prevD.getDate());
+		onset.setUTCHours(prevD.getHours(), prevD.getMinutes(), prevD.getSeconds() + 1);
+
+                var str;
+		if (prevOffset < offset) {
+		    str = 'DAYLIGHT: ';
+		} else {
+		    str = 'STANDARD: ';
+		}
+		str += onset.toUTCString();
+		str = str.replace(" GMT", "");  // Ignore the fact that this was UTC.
+		str += ' (' + prevOffset + ' --> ' + offset + ')';
+		return str + '<br>';
+	    }
+	}
+
+	prevD.setTime(d.getTime());
+	prevOffset = offset;
+    }
+
+    if (by == byMonth && onsets.length == 0) {
+	onsets = 'Non-DST: offset = ' + prevOffset;
+    }
+    return onsets;
+}
+
+// Find DST transitions between yyyy/07/71 00:00:00 and yyyy+1/06/30 23:59:59.
+// We can detect transition on/around 12/31 and 01/01.  Assume no one will
+// transition on/around 6/30 and 07/01.
+function findTransitions(year) {
+    var d1 = new Date();
+    var d2 = new Date();
+    // midnight on July 1st in the given year
+    d1.setUTCFullYear(year, 6, 1);
+    d1.setUTCHours(0, 0, 0, 0);
+    // 23:59:59 on June 30th in the next year
+    d2.setTime(d1.getTime());
+    d2.setUTCFullYear(year + 1);
+    d2.setUTCSeconds(-1);
+    return sweepRange(d1, d2, byMonth);
+}
+
+var onsets = findTransitions(2008);  // "2008-2009 season"
+document.writeln(onsets);
+
+// case 1: no onset returned -> TZ doesn't use DST
+// case 2: two onsets returned -> TZ uses DST
+// case 3: only one onset returned -> mid-year policy change -> simplify and assume it's non-DST
+// case 4: three or more onsets returned -> shouldn't happen
+
+</script>
+</html>

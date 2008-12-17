@@ -128,35 +128,62 @@ AjxTimezone = function() {}
 //
 
 AjxTimezone.createMDayTransition = function(date, offset) {
-    return {
-        offset: offset != null ? offset : date.getTimezoneOffset(),
-        mon: date.getMonth() + 1,
-        mday: date.getDate(),
-        hour: date.getHours(),
-        min: date.getMinutes(),
-        sec: date.getSeconds()
-    };
+	if (date instanceof Date) {
+		offset = offset != null ? offset : date.getTimezoneOffset();
+		date = [
+			date.getFullYear(), date.getMonth() + 1, date.getDate(),
+			date.getHours(), date.getMinutes(), date.getSeconds()
+		];
+	}
+	var onset = { offset: offset, trans: date };
+	return AjxTimezone.addMDayTransition(onset);
 };
-AjxTimezone.createWkDayTransition = function (date, offset) {
-    var mon = date.getMonth() + 1;
-    var monDay = date.getDate(); 
-    var week = Math.floor((monDay - 1) / 7);
-    // NOTE: This creates a date of the *last* day of specified month by
-    //       setting the month to *next* month and setting day of month
-    //       to zero (i.e. the day *before* the first day).
-    var count = new Date(new Date(date.getTime()).setMonth(mon, 0)).getDate();
-    var last = count - monDay < 7;
 
-    return {
-        offset: offset != null ? offset : date.getTimezoneOffset(),
-        mon: mon,
-        week: last ? -1 : week + 1,
-        wkday: date.getDay() + 1,
-        hour: date.getHours(),
-        min: date.getMinutes(),
-        sec: date.getSeconds()
-    };
+AjxTimezone.addMDayTransition = function(onset) {
+	var trans = onset.trans;
+	onset.mon = trans[1];
+	onset.mday = trans[2];
+	onset.hour = trans[3];
+	onset.min = trans[4];
+	onset.sec = trans[5];
+	return onset;
 };
+
+AjxTimezone.createWkDayTransition = function (date, offset) {
+	if (date instanceof Date) {
+		offset = offset != null ? offset : date.getTimezoneOffset();
+		date = [
+			date.getFullYear(), date.getMonth() + 1, date.getDate(),
+			date.getHours(), date.getMinutes(), date.getSeconds()
+		];
+	}
+	var onset = { offset: offset, trans: date };
+	return AjxTimezone.addWkDayTransition(onset);
+};
+
+AjxTimezone.addWkDayTransition = function(onset) {
+	var trans = onset.trans;
+	var mon = trans[1];
+	var monDay = trans[2];
+	var week = Math.floor((monDay - 1) / 7);
+	var date = new Date(trans[0], trans[1] - 1, trans[2], 12, 0, 0);
+
+	// NOTE: This creates a date of the *last* day of specified month by
+	//       setting the month to *next* month and setting day of month
+	//       to zero (i.e. the day *before* the first day).
+	var count = new Date(new Date(date.getTime()).setMonth(mon - 1, 0)).getDate();
+	var last = count - monDay < 7;
+
+	// set onset values
+	onset.mon =  mon;
+	onset.week = last ? -1 : week + 1;
+	onset.wkday = date.getDay() + 1;
+	onset.hour = trans[3];
+	onset.min = trans[4];
+	onset.sec = trans[5];
+	return onset;
+};
+
 AjxTimezone.createTransitionDate = function(onset) {
     var date = new Date(AjxTimezoneData.TRANSITION_YEAR, onset.mon - 1, 1, 12, 0, 0);
     if (onset.mday) {
@@ -202,7 +229,7 @@ function() {
 		}
 	}
 	return AjxTimezone._PREF_ZONE_DISPLAY;
-}
+};
 
 AjxTimezone.getZonePreferencesOptions =
 function() {
@@ -222,7 +249,7 @@ function() {
 		}
 	}
 	return AjxTimezone._PREF_ZONE_OPTIONS;
-}
+};
 
 AjxTimezone.getServerId = function(clientId) {
 	return AjxTimezone._CLIENT2SERVER[clientId] || clientId;
@@ -435,7 +462,6 @@ function() {
 	var jun1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 5, 1, 0, 0, 0);
 	var dec1offset = -dec1.getTimezoneOffset();
 	var jun1offset = -jun1.getTimezoneOffset();
-    var southernHemisphere = dec1offset > jun1offset;
 
     // if the offset for jun is the same as the offset in december,
 	// then we have a timezone that doesn't deal with daylight savings.
@@ -473,108 +499,134 @@ function() {
 	}
 
     // generate default rule
-    return AjxTimezone._generateDefaultRule(southernHemisphere);
+    return AjxTimezone._generateDefaultRule();
 };
 
-AjxTimezone._generateDefaultRule = function(southernHemisphere) {
-    if (southernHemisphere == null) {
-        var dec1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 11, 1, 0, 0, 0);
-        var jun1 = new Date(AjxTimezoneData.TRANSITION_YEAR, 5, 1, 0, 0, 0);
-        var dec1offset = -dec1.getTimezoneOffset();
-        var jun1offset = -jun1.getTimezoneOffset();
-        southernHemisphere = dec1offset > jun1offset;
-    }
+// Thanks to Jiho for this new, improved logic for generating the timezone rule.
+AjxTimezone._generateDefaultRule = function() {
+	var byMonth = 0;
+	var byDate = 1;
+	var byHour = 2;
+	var byMinute = 3;
+	var bySecond = 4;
 
-    // create temp dates
-	var d = new Date();
-	d.setMonth(0, 1);
-	d.setHours(0, 0, 0, 0);
+	// Sweep the range between d1 and d2 looking for DST transitions.
+	// Iterate the range by "by" unit.  When a transition is detected,
+	// sweep the range between before/after dates by increasingly
+	// smaller unit, month then date then hour then minute then finally second.
+	function sweepRange(d1, d2, by, rule) {
+		var upperBound = d2.getTime();
+		var d = new Date();
+		d.setTime(d1.getTime());
+		var prevD = new Date();
+		prevD.setTime(d.getTime());
+		var prevOffset = d1.getTimezoneOffset() * -1;
 
-	var d2 = new Date();
-	d2.setHours(0, 0, 0, 0);
-
-	// data
-	var stdOff = -d.getTimezoneOffset();
-	var lastOff = stdOff;
-	var trans = [];
-
-	// find transition points
-	for (var m = 0; m < 12; m++) {
-		// get last day of this month
-		d2.setMonth(m + 1, 0);
-		var ld = d2.getDate();
-
-		// check each day for a transition
-		for (var md = 1; md <= ld; md++) {
-            d.setMonth(m, md);
-			var curOff = -d.getTimezoneOffset();
-			if (curOff != lastOff) {
-                var td = new Date(d.getTime());
-				td.setDate(md - 1);
-
-				// now find exact hour where transition occurs
-				for (var h = 0; h < 24; h++) {
-					td.setHours(h, 0, 0, 0);
-                    // REVISIT: Need to figure out transition TIME as well! because
-                    //          it may not be on the hour (e.g. 23:59:59)
-					var transOff = -td.getTimezoneOffset();
-					if (transOff == curOff) {
-                        break;
-                    }
-				}
-
-                // save this transition
-                trans.push({ date: td, hour: h });
-                lastOff = curOff;
-                break;
-            }
+		// initialize rule
+		if (!rule) {
+			rule = {
+				clientId: AjxTimezone.AUTO_DETECTED,
+				autoDetected: true
+			};
 		}
+
+		// perform sweep
+		while (d.getTime() <= upperBound) {
+			// Increment by the right unit.
+			if (by == byMonth) {
+				d.setUTCMonth(d.getUTCMonth() + 1);
+			}
+			else if (by == byDate) {
+				d.setUTCDate(d.getUTCDate() + 1);
+			}
+			else if (by == byHour) {
+				d.setUTCHours(d.getUTCHours() + 1);
+			}
+			else if (by == byMinute) {
+				d.setUTCMinutes(d.getUTCMinutes() + 1);
+			}
+			else if (by == bySecond) {
+				d.setUTCSeconds(d.getUTCSeconds() + 1);
+			}
+			else {
+				return rule;
+			}
+
+			var offset = d.getTimezoneOffset() * -1;
+			if (offset != prevOffset) {
+				if (by < bySecond) {
+					// Drill down.
+					rule = sweepRange(prevD, d, by + 1, rule);
+				}
+				else {
+					// Tricky:
+					// Initialize a Date object whose UTC fields are set to prevD's local fields.
+					// Then add 1 second to get UTC version of onset time.  We want to work in UTC
+					// to prevent the date object from experiencing the DST jump when we add 1 second.
+					var trans = new Date();
+					trans.setUTCFullYear(prevD.getFullYear(), prevD.getMonth(), prevD.getDate());
+					trans.setUTCHours(prevD.getHours(), prevD.getMinutes(),     prevD.getSeconds() + 1);
+
+					var onset = rule[prevOffset < offset ? "daylight" : "standard"] = {
+						offset: offset,
+						trans: [
+							trans.getUTCFullYear(), trans.getUTCMonth() + 1, trans.getUTCDate(),    // yyyy-MM-dd
+							trans.getUTCHours(),    trans.getUTCMinutes(),   trans.getUTCSeconds()  //   HH:mm:ss
+						]
+					};
+					AjxTimezone.addWkDayTransition(onset);
+					return rule;
+				}
+			}
+
+			prevD.setTime(d.getTime());
+			prevOffset = offset;
+		}
+
+		return rule;
 	}
 
-    var offset = stdOff;
-    var rule = {
-        clientId: AjxTimezone.AUTO_DETECTED, 
-        serverId: ["(GMT",AjxTimezone._generateShortName(offset, true),") ",AjxTimezone.AUTO_DETECTED].join(""),
-		autoDetected: true
-	};
-    AjxTimezoneData.TIMEZONE_RULES.unshift(rule);
+	// Find DST transitions between yyyy/07/71 00:00:00 and yyyy+1/06/30 23:59:59.
+	// We can detect transition on/around 12/31 and 01/01.  Assume no one will
+	// transition on/around 6/30 and 07/01.
+	var d1 = new Date();
+	var d2 = new Date();
 
-	// generate non-DST rule
-	if (trans.length == 0) {
-        rule.standard = { offset: offset };
-        AjxTimezone.STANDARD_RULES.unshift(rule);
+	// set sweep start to yesterday
+	var year = d1.getFullYear();
+	d1.setUTCFullYear(year, d1.getMonth(), d1.getDate() - 1);
+	d1.setUTCHours(0, 0, 0, 0);
+
+	// set sweep end to tomorrow + 1 year
+	d2.setTime(d1.getTime());
+	d2.setUTCFullYear(year + 1, d1.getMonth(), d1.getDate() + 1);
+
+	// case 1: no onset returned -> TZ doesn't use DST
+	// case 2: two onsets returned -> TZ uses DST
+	// case 3: only one onset returned -> mid-year policy change -> simplify and assume it's non-DST
+	// case 4: three or more onsets returned -> shouldn't happen
+	var rule = sweepRange(d1, d2, byMonth);
+
+	// handle case 1 and 3
+	if (!rule.daylight || !rule.standard) {
+		rule.standard = { offset: d1.getTimezoneOffset() * -1 };
+		delete rule.daylight;
 	}
 
-	// generate DST rule
-	else {
-        // flip if southern hemisphere
-        var s2d = trans[southernHemisphere ? 1 : 0].date;
-        var d2s = trans[southernHemisphere ? 0 : 1].date;
+	// now that standard offset is determined, set serverId
+	rule.serverId = ["(GMT",AjxTimezone._generateShortName(rule.standard.offset, true),") ",AjxTimezone.AUTO_DETECTED].join("");
 
-        // standard
-        rule.standard = AjxTimezone.createWkDayTransition(d2s);
-        rule.standard.hour = trans[southernHemisphere ? 0 : 1].hour + 1;
-        // HACK: Don't know how to handle certain timezone transitions
-        if (rule.standard.hour > 23) {
-            rule.standard.hour = 23;
-        }
-        rule.standard.trans = [ d2s.getFullYear(), d2s.getMonth() + 1, d2s.getDate() ];
-        d2s.setDate(d2s.getDate() + 1);
-        rule.standard.offset = -d2s.getTimezoneOffset();
-
-        // daylight
-        rule.daylight = AjxTimezone.createWkDayTransition(s2d);
-        rule.daylight.hour = trans[southernHemisphere ? 1 : 0].hour - 1;
-        // HACK: Don't know how to handle certain timezone transitions
-        if (rule.daylight.hour > 23) {
-            rule.daylight.hour = 23;
-        }
-        rule.daylight.trans = [ s2d.getFullYear(), s2d.getMonth() + 1, s2d.getDate() ]
-        s2d.setDate(s2d.getDate() + 1);
-        rule.daylight.offset = -s2d.getTimezoneOffset();
-
-        AjxTimezone.DAYLIGHT_RULES.unshift(rule);
+	// bug 33800: guard against inverted daylight/standard onsets
+	if (rule.daylight && rule.daylight.offset < rule.standard.offset) {
+		var onset = rule.daylight;
+		rule.daylight = rule.standard;
+		rule.standard = onset;
 	}
+
+	// add generated rule to proper list
+	AjxTimezoneData.TIMEZONE_RULES.unshift(rule);
+	var rules = rule.daylight ? AjxTimezone.DAYLIGHT_RULES : AjxTimezone.STANDARD_RULES;
+	rules.unshift(rule);
 
 	return rule;
 };
