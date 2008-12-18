@@ -14,5 +14,7 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/gifencoder.jar"/>
 	<classpathentry kind="lib" path="jars/jsp-2.1/jsp-2.1.jar"/>
 	<classpathentry kind="lib" path="jars/jsp-2.1/jsp-api-2.1.jar"/>
+        <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-6.1.5.jar"/>
+        <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.5.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

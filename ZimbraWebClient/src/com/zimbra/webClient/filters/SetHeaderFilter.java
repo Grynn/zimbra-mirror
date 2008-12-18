@@ -37,8 +37,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.RequestDispatcher;
-
+import javax.servlet.http.HttpSession;
+    
 public class SetHeaderFilter implements Filter {
     
     // --------------------------------------------------------------
@@ -257,6 +257,7 @@ public class SetHeaderFilter implements Filter {
         boolean supportCompression;
         supportCompression = this.supportsGzip(req, resp);
         setRequestAttributes(req, resp, supportCompression);
+        secureCookieIfNecessary(req);
         if (!supportCompression) {
             if (debug > 0) {
                 System.out.println("doFilter gets called wo compression");
@@ -300,6 +301,49 @@ public class SetHeaderFilter implements Filter {
         }
         req.setAttribute("mode", mode);
 		req.setAttribute("prodMode", isProdMode);
+    }
+    
+    private void secureCookieIfNecessary(HttpServletRequest req) {
+        
+        boolean currentHttps = req.getScheme().equals("https");
+        if (!currentHttps)
+            return;
+        
+        HttpSession httpSession = req.getSession(false);
+        if (httpSession != null)
+            return;
+        
+        /*
+         * This is a https req, and we don't have a session yet.
+         * This is probably the first req of the session, which means user 
+         * browsed to https://, which means we should stay in https for all
+         * mail modes.  We need to secure the JSESSIONID cookie.
+         * 
+         * We do this by SessionManager.setSecureCookies(true), jetty
+         * will set secure on the session cookie.  This has to be done 
+         * here because it has to be done *before* the session is created.
+         * After the session is created, jetty would create the return 
+         * the JSESSIONID cookie in the response for the request for that 
+         * the session is created; and it will be too late to call 
+         * setSecureCookies because jetty has already baked the session cookie.
+         */
+        ServletContext servletContext = config.getServletContext();
+        if (servletContext instanceof org.mortbay.jetty.handler.ContextHandler.SContext) {
+            org.mortbay.jetty.handler.ContextHandler.SContext sContext = (org.mortbay.jetty.handler.ContextHandler.SContext)servletContext;
+            
+            // get the WebAppContext
+            org.mortbay.jetty.handler.ContextHandler contextHandler = sContext.getContextHandler();
+            if (contextHandler instanceof org.mortbay.jetty.servlet.Context) {
+                org.mortbay.jetty.servlet.Context context= (org.mortbay.jetty.servlet.Context)contextHandler;
+                
+                // get SessionManager
+                org.mortbay.jetty.SessionManager sessionManager = context.getSessionHandler().getSessionManager();
+                if (sessionManager instanceof org.mortbay.jetty.servlet.AbstractSessionManager) {
+                    org.mortbay.jetty.servlet.AbstractSessionManager asm = (org.mortbay.jetty.servlet.AbstractSessionManager)sessionManager;
+                    asm.setSecureCookies(true);
+                }
+            }
+        }
     }
 
     /**
