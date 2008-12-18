@@ -41,6 +41,7 @@
  *        posStyle		[constant]*			positioning style
  *        id			[string]*			ID to use for the control's HTML element
  *        index 		[int]*				index at which to add this control among parent's children
+ *        allowColorInput [boolean]           allow a text field to allow user to input their customized RGB value
  *        noFillLabel	
  */
 DwtButtonColorPicker = function(params) {
@@ -55,14 +56,14 @@ DwtButtonColorPicker = function(params) {
 	// unnecessarily complex :-(
 	var m = new DwtMenu({parent:this, style:DwtMenu.COLOR_PICKER_STYLE});
 	this.setMenu(m);
-	var cp = new DwtColorPicker(m, null, null, params.noFillLabel);
+	var cp = new DwtColorPicker(m, null, null, params.noFillLabel, params.allowColorInput);
 	cp.addSelectionListener(new AjxListener(this, this._colorPicked));
     this.__colorPicker = cp ;    //for xform item _DWT_COLORPICKER_
 	// no color initially selected
 	this.__color = "";
 };
 
-DwtButtonColorPicker.PARAMS = ["parent", "style", "className", "posStyle", "id", "index", "noFillLabel"];
+DwtButtonColorPicker.PARAMS = ["parent", "style", "className", "posStyle", "id", "index", "noFillLabel", "allowColorInput"];
 
 DwtButtonColorPicker.prototype = new DwtButton;
 DwtButtonColorPicker.prototype.constructor = DwtButtonColorPicker;

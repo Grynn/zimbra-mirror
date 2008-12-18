@@ -29,14 +29,16 @@
 * @param parent		the parent widget
 * @param className	a CSS class
 * @param posStyle	positioning style
+* @param allowColorInput:  allow a text field to allow user to input their customized RGB value
 */
-DwtColorPicker = function(parent, className, posStyle, noFillLabel) {
+DwtColorPicker = function(parent, className, posStyle, noFillLabel, allowColorInput) {
 	if (arguments.length == 0) return;
 	className = className || "DwtColorPicker";
 	DwtControl.call(this, {parent:parent, className:className, posStyle:posStyle});
 
 	this._noFillLabel = noFillLabel;
-	this._createColorTable();
+    this._allowColorInput = allowColorInput ;
+    this._createColorTable();
 	this._registerEventHdlrs();
 	//MOW:  this.setCursor("default");
 }
@@ -47,7 +49,7 @@ DwtColorPicker.prototype.constructor = DwtColorPicker;
 // RE to parse out components out of a "rgb(r, g, b);" string
 DwtColorPicker._RGB_RE = /rgb\(([0-9]{1,3}), ([0-9]{1,3}), ([0-9]{1,3})\)/;
 DwtColorPicker._HEX_RE = /\#([0-9FCfc]{2})([0-9FCfc]{2})([0-9FCfc]{2})/;
-
+DwtColorPicker._HEX_COMPLETE_RE = /\#([0-9ABCDEFabcdef]{2})([0-9ABCDEFabcdef]{2})([0-9ABCDEFabcdef]{2})/;
 
 // Public methods
 
@@ -93,18 +95,27 @@ function() {
 		var numCells = cells.length
 		for (var j = 0; j < numCells; j++) {
 			var cell = cells[j];
-			Dwt.setHandler(cell, DwtEvent.ONMOUSEDOWN, DwtColorPicker._mouseDownHdlr);
-			Dwt.setHandler(cell, DwtEvent.ONMOUSEUP, DwtColorPicker._mouseUpHdlr);
-			if (!AjxEnv.isIE) {
-				Dwt.setHandler(cell, DwtEvent.ONMOUSEOVER, DwtColorPicker._mouseOverHdlr);
-				Dwt.setHandler(cell, DwtEvent.ONMOUSEOUT, DwtColorPicker._mouseOutHdlr);
-			} else {
-				Dwt.setHandler(cell, DwtEvent.ONMOUSEENTER, DwtColorPicker._mouseOverHdlr);
-				Dwt.setHandler(cell, DwtEvent.ONMOUSELEAVE, DwtColorPicker._mouseOutHdlr);
-			}
-			if (cell.className != "NoFill")
-				cell.style.border = "2px outset " + cell.style.backgroundColor;
-		}
+            if (rows[i].className == "ColorInput") {
+                if (cell.className == "ColorInputField") {
+                   //no event handler
+                }else if (cell.className == "SetInputColor") {
+                    Dwt.setHandler(cell, DwtEvent.ONMOUSEDOWN, DwtColorPicker._mouseDownHdlr);
+                    Dwt.setHandler(cell, DwtEvent.ONMOUSEUP, DwtColorPicker._mouseUpHdlr);
+                }
+            }else{
+                Dwt.setHandler(cell, DwtEvent.ONMOUSEDOWN, DwtColorPicker._mouseDownHdlr);
+                Dwt.setHandler(cell, DwtEvent.ONMOUSEUP, DwtColorPicker._mouseUpHdlr);
+                if (!AjxEnv.isIE) {
+                    Dwt.setHandler(cell, DwtEvent.ONMOUSEOVER, DwtColorPicker._mouseOverHdlr);
+                    Dwt.setHandler(cell, DwtEvent.ONMOUSEOUT, DwtColorPicker._mouseOutHdlr);
+                } else {
+                    Dwt.setHandler(cell, DwtEvent.ONMOUSEENTER, DwtColorPicker._mouseOverHdlr);
+                    Dwt.setHandler(cell, DwtEvent.ONMOUSELEAVE, DwtColorPicker._mouseOutHdlr);
+                }
+                if (cell.className != "NoFill")
+                    cell.style.border = "2px outset " + cell.style.backgroundColor;
+            }
+        }
 	}
 }
 
@@ -194,9 +205,15 @@ function() {
 	html[i++] = "<td id='" + this._tdId + "#000066' style='background-color:#000066' width='12' height='14'><img height='1' width='1'/></td>";
 	html[i++] = "<td id='" + this._tdId + "#330099' style='background-color:#330099' width='12' height='14'><img height='1' width='1'/></td>";
 	html[i++] = "<td id='" + this._tdId + "#330033' style='background-color:#330033' width='12' height='14'><img height='1' width='1'/></td>";
-	html[i++] = "</tr></table>";
-	
-	this.getHtmlElement().innerHTML = html.join("");
+    if (this._allowColorInput) { //allow RGB input
+        html[i++] = "<tr><td></td></tr></tr><tr class='ColorInput'>";
+        html[i++] = "<td colspan=6 id='" + this._tdId +".ColorInputField' class='ColorInputField'><input type=text size=15 maxlength=6 ></input></td>" +
+                    "<td colspan=4 id='" + this._tdId +".SetInputColor' class='SetInputColor'>" + AjxMsg.setColor + "</td>" ;
+    }
+
+    html[i++] = "</tr></table>";
+
+    this.getHtmlElement().innerHTML = html.join("");
 }
 
 DwtColorPicker._mouseOverHdlr =
@@ -263,7 +280,7 @@ function(ev) {
 	// target.style.border = "2px inset " + colorStr;
 	target.style.borderStyle = "inset";
 
-	if (target.className != "NoFill") {
+	if ((target.className != "NoFill") && (target.className !=  "SetInputColor")) {
 		// IE refuses to convert Hex 2 rgb
 		if (colorStr.substr(0, 1) == "#") {
 			rgb = colorStr.match(DwtColorPicker._HEX_RE);
@@ -332,8 +349,12 @@ function(ev) {
 	    	var selEv = DwtShell.selectionEvent;
 	    	DwtUiEvent.copy(selEv, mouseEv);
 	    	selEv.item = me;
-	    	selEv.detail = mouseEv.target.id.substr(mouseEv.target.id.indexOf("#"));
-	    	me.notifyListeners(DwtEvent.SELECTION, selEv);
+            if (target.id == (me._tdId +".SetInputColor")) {
+                selEv.detail = me.getInputColor () ;
+            } else {
+                selEv.detail = mouseEv.target.id.substr(mouseEv.target.id.indexOf("#"));
+            }
+            me.notifyListeners(DwtEvent.SELECTION, selEv);
 	    }
 	}
 	
@@ -343,3 +364,15 @@ function(ev) {
 	mouseEv.setToDhtmlEvent(ev)
 	return false;
 }
+
+DwtColorPicker.prototype.getInputColor = function () {
+    var inputField = document.getElementById (this._tdId + ".ColorInputField").firstChild ;
+    var inputColor = "#" + inputField.value ;
+    if (inputColor.match(DwtColorPicker._HEX_COMPLETE_RE) != null) {
+        return inputColor ;
+    }else{
+        return "";
+    }
+}
+
+

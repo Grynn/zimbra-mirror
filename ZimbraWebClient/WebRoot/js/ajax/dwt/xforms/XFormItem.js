@@ -4184,8 +4184,12 @@ XFormItemFactory.createItemType("_DWT_COLORPICKER_", "dwt_colorpicker", Dwt_Colo
 Dwt_ColorPicker_XFormItem.prototype.cssStyle = "width:80px;";
 
 Dwt_ColorPicker_XFormItem.prototype.constructWidget = function () {
-
-	var widget = new DwtButtonColorPicker (this.getForm()) ;
+    var params = {
+        parent: this.getForm(),
+        allowColorInput: true,
+        noFillLabel: ZaMsg.bt_reset
+    };
+    var widget = new DwtButtonColorPicker (params) ;
 	widget.setActionTiming(DwtButton.ACTION_MOUSEDOWN);
 
     var buttonImage = this.getInheritedProperty("buttonImage") || "FontColor";
