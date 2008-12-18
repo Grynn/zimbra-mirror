@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.21";
+my $version = "1.22";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -178,8 +178,8 @@ sub help
   print "-exceptions  (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-patternrule (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "       - Above given options are for debug
-        testing. Dont use until you know what are
-        expecting.\n\n";
+        testing. Dont use them until you are
+        sure about it.\n\n";
   print "\n";
   
 }
@@ -1057,8 +1057,12 @@ sub processfile
                   &log_message("New RRULE: $wkrrule");
                   $RPrulecreated=1;
                   &log_message("WEEKLY RRULE CREATED.");
+                  #reset isweekok as in case of WEEKLY frequency, more than 1
+                  #weekdays can be present.
+                  $isweekdayok=1;
+                   
                   #clear limited exception list
-                  %ltd_exlist=();
+                  #%ltd_exlist=();
                   for(my $wectr=0;$wectr<$#wkltd_exlist+1;$wectr++)
                   {
                     my $twkdt=@wkltd_exlist[$wectr];
@@ -1079,8 +1083,12 @@ sub processfile
                     &log_message("New RRULE: $mthlyrrule");
                     $RPrulecreated=1;
                     &log_message("MONTHLY RRULE CREATED.");
+                    $isweekdayok=1;
+                    $checkforltdex=1;
+                    $isdescchanged=1;#To push into limited exception creation
                   }
                 }
+
                 if (!$RPrulecreated)
                 {
 	                #check for pattern
@@ -1694,6 +1702,10 @@ sub get_monthly_rrule
           {
             $wknumctr++;
           }
+          #TODO: Currently if weekday of same week are in different sequence,
+          #No monthly RRULE can be calclauted as it checks in same order.
+          #Need to implement so that all weekdays reamin in asending or descending order.
+          
           $mnth_wknum_wkdayhash{$yr.$mm}{(7*$wknumctr)+$wknum}= $wkday;
           &log_message("year-mm: $yr,$mm Weeknum: $wknum");
         }#end else
@@ -1742,7 +1754,7 @@ sub get_monthly_rrule
             #dont make it decisive. if other weeknums found, 2nd hash ref will become
             #referential for further comparision
             my $lwkcnt=0;
-            foreach my $wkn (keys %$swkn_wkd_hashref)
+            foreach my $wkn (sort keys %$swkn_wkd_hashref)
             {
               if ((!exists $fwkn_wkd_hashref->{$wkn})&&(($wkn % 7) > $fleastwkn))
               {
