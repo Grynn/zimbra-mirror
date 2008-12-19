@@ -913,10 +913,10 @@ createCert() {
 
 viewstagedcrt() {
   if [ x"${1}" = "x" ]; then
-    if [ -f "${zimbra_home}/conf/slapd.crt" ]; then
-      current_crt=${zimbra_home}/conf/slapd.crt
-    elif [ -f "${zimbra_home}/conf/smtpd.crt" ]; then
-      current_crt=${zimbra_home}/conf/smtpd.crt
+    if [ -f "${commercial_crt}" ]; then
+      current_crt=${commercial_crt}
+    elif [ -f "${server_crt}" ]; then
+      current_crt=${server_crt}
     else
       usage
     fi
