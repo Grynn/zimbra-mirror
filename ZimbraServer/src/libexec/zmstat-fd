@@ -47,6 +47,7 @@ sub sighup {
         $ROTATE_NOW = 1;
     }
 }
+$SIG{HUP} = \&sighup;
 
 sub usage {
     print STDERR << '_USAGE_';

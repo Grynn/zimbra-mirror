@@ -160,7 +160,7 @@ if (defined($cmd)) {
         my @pids = getPidFiles();
         if (scalar(@pids) == 0) {
             # zmstat must not be running if there is no pid file
-            exit(-1);
+            exit(1);
         }
         my $numDeadProcs = 0;
         foreach my $pidFile (@pids) {
@@ -178,6 +178,7 @@ if (defined($cmd)) {
         exit($numDeadProcs > 0 ? 1 : 0);
     } elsif ($cmd eq 'rotate') {
         my @pids = getPidFiles();
+        exit 1 if (@pids == 0);
         foreach my $pidFile (@pids) {
             my $pid = readPidFile($pidFile);
             if ($pid) {
