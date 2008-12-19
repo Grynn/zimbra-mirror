@@ -19,6 +19,7 @@ mail
 
     # Route lookup timeout
     auth_http_timeout           ${mail.auth_http_timeout};
+    auth_http_timeout_cache     ${mail.auth_http_timeout_cache};
 
     # IMAP/POP3 greeting messages
     # 
@@ -26,8 +27,8 @@ mail
     imap_greeting            "${mail.imap.greeting}";
     pop3_greeting            "${mail.pop3.greeting}";
 
-	pop3_capabilities        ${mail.pop3capa};
-	imap_capabilities        ${mail.imapcapa};
+    pop3_capabilities        ${mail.pop3capa};
+    imap_capabilities        ${mail.imapcapa};
 
     # IMAP4 ID Extension support (RFC 2971)
     # Use the imap_id directive to specify the string that should be sent
