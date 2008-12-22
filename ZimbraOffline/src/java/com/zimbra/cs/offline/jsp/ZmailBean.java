@@ -101,7 +101,7 @@ public class ZmailBean extends MailBean {
 	    if (!(verb != null && verb.isDelete() &&
 		e.getCode().equals("account.NO_SUCH_ACCOUNT")))
 		setExceptionError(e);
-	} catch (Throwable t) {
+	} catch (Exception t) {
 	    setError(t.getLocalizedMessage() == null ? t.toString() : t.getLocalizedMessage());
 	}
     }

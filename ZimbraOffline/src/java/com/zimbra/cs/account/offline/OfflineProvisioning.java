@@ -679,7 +679,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         OfflineDataSource ds = null;
         try {
         	ds = (OfflineDataSource) createDataSource(account, type, dsName, dsAttrs, true, false);
-        } catch (Throwable t) {
+        } catch (Exception t) {
         	OfflineLog.offline.warn("failed creating datasource: " + dsName, t);
         	deleteAccount(account.getId());
         }

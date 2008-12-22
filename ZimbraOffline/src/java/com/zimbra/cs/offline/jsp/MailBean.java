@@ -170,7 +170,7 @@ public class MailBean extends FormBean {
 		JspProvStub stub = JspProvStub.getInstance();
 
 		stub.resetOfflineDataSource(accountId);
-	    } catch (Throwable t) {
+	    } catch (Exception t) {
 		setError(t.getMessage());
 	    }
 	}

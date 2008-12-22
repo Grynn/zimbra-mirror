@@ -279,7 +279,7 @@ public class XmailBean extends MailBean {
                 "account.NO_SUCH_ACCOUNT"))) {
                 setExceptionError(x);
             }
-        } catch (Throwable t) {
+        } catch (Exception t) {
             setError(t.getLocalizedMessage() == null ? t.toString() : t.getLocalizedMessage());
         }
     }

@@ -61,7 +61,7 @@ public class OfflineMailboxManager extends MailboxManager {
 //                ((OfflineMailbox)mbox).sync(isOnRequest);
 //            } catch (ServiceException e) {
 //                OfflineLog.offline.warn("cannot sync: error fetching mailbox/account for acct id " + account.getId(), e);
-//            } catch (Throwable t) {
+//            } catch (Exception t) {
 //            	OfflineLog.offline.error("unexpected exception syncing account " + account.getId(), t);
 //            }
 //        }
@@ -84,7 +84,7 @@ public class OfflineMailboxManager extends MailboxManager {
             	}
             } catch (ServiceException e) {
                 OfflineLog.offline.warn("failed to notify mailbox account_id=" + acctId, e);
-            } catch (Throwable t) {
+            } catch (Exception t) {
             	OfflineLog.offline.error("unexpected exception notifying mailbox account_id" + acctId, t);
             }
         }

@@ -259,7 +259,7 @@ public class InitialSync {
 		                	syncCalendarItem(id, folderId, true);
 		                    if (++counter % 100 == 0)
 		                    	checkpoint(id);
-		                } catch (Throwable t) {
+		                } catch (Exception t) {
 		                	OfflineLog.offline.warn("failed to sync appointment id=" + id, t);
 		                }
 	                }
@@ -293,7 +293,7 @@ public class InitialSync {
 		                	syncCalendarItem(id, folderId, false);
 		                    if (++counter % 100 == 0)
 		                    	checkpoint(id);
-		                } catch (Throwable t) {
+		                } catch (Exception t) {
 		                	OfflineLog.offline.warn("failed to sync task id=" + id, t);
 		                }
 	                }

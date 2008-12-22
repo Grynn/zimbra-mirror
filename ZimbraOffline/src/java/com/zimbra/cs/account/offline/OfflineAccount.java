@@ -54,7 +54,7 @@ public class OfflineAccount extends Account {
 					minor = Integer.parseInt(digits[1]);
 				if (digits.length > 2)
 					maintenance = Integer.parseInt(digits[2]);
-			} catch (Throwable t) {
+			} catch (Exception t) {
 				OfflineLog.offline.warn("unknown remote server version: " + version);
 			}
 		}

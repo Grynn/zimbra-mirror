@@ -273,7 +273,7 @@ public class DeltaSync {
         if (isInitSyncDone && OfflineLC.zdesktop_sync_documents.booleanValue() && documents != null)
         	try {
             	syncDocuments(documents);
-        	} catch (Throwable t) {
+        	} catch (Exception t) {
     	        OfflineLog.offline.error("delta: error syncing Documents.", t);
         	}
 

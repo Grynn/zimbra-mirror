@@ -336,7 +336,7 @@ public class CalDavBean extends FormBean {
 		    	} else if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT"))) {
 		    		setExceptionError(x);
 		    	}
-	        } catch (Throwable t) {
+	        } catch (Exception t) {
 	            setError(t.getMessage());
 			}
 		}
