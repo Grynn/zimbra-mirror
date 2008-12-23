@@ -68,7 +68,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.DateFormatSymbols;
 import java.util.*;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -507,7 +506,8 @@ public class BeanUtils {
     }
 
     public static String getServerName(PageContext pc) {
-        return HttpUtil.getVirtulaHost((HttpServletRequest) pc.getRequest());
+		String serverName = pc.getRequest().getParameter("customerDomain");
+        return serverName != null ? serverName.trim() : HttpUtil.getVirtulaHost((HttpServletRequest) pc.getRequest());
     }
     
     public static ZTagBean getTag(PageContext pc, String id) throws JspException {
