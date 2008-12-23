@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_emailquotes" version="0.1" description="Adds Random quotes to Email">
+<zimlet name="com_zimbra_emailquotes" version="0.2" description="Adds Random quotes to Email">
   <include>emailquotes.js</include>
   <includeCSS>emailquotes.css</includeCSS>
   <handlerObject>com_zimbra_emailquotes</handlerObject>

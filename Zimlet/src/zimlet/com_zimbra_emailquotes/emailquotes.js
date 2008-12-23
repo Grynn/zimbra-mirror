@@ -70,11 +70,14 @@ function(feed) {
 com_zimbra_emailquotes.prototype.getXmlFromText =
 function(text) {
     var xmlDoc = null;
-    try {//Internet Explorer
-        xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-        xmlDoc.async = "false";
-        xmlDoc.loadXML(text);
-    } catch(e) {
+    if (AjxEnv.isIE) {
+        try { //Firefox, Mozilla, Opera, etc.
+            xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+            xmlDoc.async = "false";
+            xmlDoc.loadXML(text);
+        } catch(e) {
+        }
+    } else {
         try { //Firefox, Mozilla, Opera, etc.
             var parser = new DOMParser();
             xmlDoc = parser.parseFromString(text, "text/xml");
