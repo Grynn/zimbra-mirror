@@ -452,14 +452,17 @@ function(eventType, event) {
  */
 DwtControl.prototype.dispose =
 function() {
-	if (this._disposed) return;
+	if (this._disposed) { return; }
 
 	if (this.parent != null && this.parent instanceof DwtComposite) {
 		this.parent.removeChild(this);
 	}
 	this._elRef = null;
-	DwtControl.ALL_BY_ID[this._htmlElId] = null;
-	delete DwtControl.ALL_BY_ID[this._htmlElId];
+	
+	if (DwtControl.ALL_BY_ID) {
+		DwtControl.ALL_BY_ID[this._htmlElId] = null;
+		delete DwtControl.ALL_BY_ID[this._htmlElId];
+	}
 
 	this._disposed = true;
 	var ev = new DwtDisposeEvent();
@@ -468,7 +471,7 @@ function() {
 };
 
 /**
- * This method is deprecated. Please use "document" directly in
+ * This method is deprecated. Please use "document" directly.
  * @deprecated
  */
 DwtControl.prototype.getDocument =
@@ -1471,31 +1474,6 @@ function(callback) {
 };
 
 /**
- * Call this method if the tooltip is already popped up and its content needs to
- * be refreshed.
- */
-DwtControl.prototype.refreshTooltip =
-function() {
-	if (!this.__toolTipContent) { return; }
-
-	var mouseEv = DwtShell.mouseEvent;
-	if (mouseEv && mouseEv.docX > 0 && mouseEv.docY > 0) {
-		var shell = DwtShell.getShell(window);
-		var manager = shell.getHoverMgr();
-		if (((manager.getHoverObject() == this) && manager.isHovering()) &&
-			!DwtMenu.menuShowing())
-		{
-			manager.reset();
-			manager.setHoverObject(this);
-			manager.setHoverOverData(this);
-			manager.setHoverOverDelay(DwtToolTip.TOOLTIP_DELAY);
-			manager.setHoverOverListener(this._hoverOverListener);
-			manager.hoverOver(mouseEv.docX, mouseEv.docY);
-		}
-	}
-};
-
-/**
  * @return true if the control is visible (i.e. its HTML elements display style
  * 		attribute is not none)
  * @type Boolean
@@ -1794,7 +1772,7 @@ function(ev) {
  */
 DwtControl.prototype._getDragProxy =
 function(dragOp) {
-	DBG.println("DwtControl.prototype._getDragProxy");
+	DBG.println(AjxDebug.DBG2, "DwtControl.prototype._getDragProxy");
 	return null;
 };
 
@@ -2719,9 +2697,9 @@ function(ev, evType) {
 	if (obj.__hasToolTipContent()) {
 		var shell = DwtShell.getShell(window);
 		var manager = shell.getHoverMgr();
-		manager.setHoverOutListener(obj._hoverOutListener);
-		manager.hoverOut();
-		obj.__tooltipClosed = false;
+			manager.setHoverOutListener(obj._hoverOutListener);
+			manager.hoverOut();
+			obj.__tooltipClosed = false;
 	}
 	return DwtControl.__mouseEvent(ev, evType || DwtEvent.ONMOUSEOUT, obj);
 };
@@ -2830,11 +2808,13 @@ function() {
 	var htmlElement = this._elRef = document.createElement("div");
 	// __internalId is for back-compatibility (was side effect of Dwt.associateElementWithObject)
 	this._htmlElId = htmlElement.id = this.__internalId = this._htmlElId || Dwt.getNextId();
-	if (DwtControl.ALL_BY_ID[this._htmlElId]) {
-		DBG.println(AjxDebug.DBG1, "Duplicate ID for " + this.toString() + ": " + this._htmlElId);
-		this._htmlElId = htmlElement.id = this.__internalId = DwtId._makeId(this._htmlElId, Dwt.getNextId());
+	if (DwtControl.ALL_BY_ID) {
+		if (DwtControl.ALL_BY_ID[this._htmlElId]) {
+			DBG.println(AjxDebug.DBG1, "Duplicate ID for " + this.toString() + ": " + this._htmlElId);
+			this._htmlElId = htmlElement.id = this.__internalId = DwtId._makeId(this._htmlElId, Dwt.getNextId());
+		}
+		DwtControl.ALL_BY_ID[this._htmlElId] = this;
 	}
-	DwtControl.ALL_BY_ID[this._htmlElId] = this;
 	DwtComposite._pendingElements[this._htmlElId] = htmlElement;
 	if (this.__posStyle == null || this.__posStyle == DwtControl.STATIC_STYLE) {
         htmlElement.style.position = DwtControl.STATIC_STYLE;
@@ -2899,36 +2879,42 @@ function(m, c, d) {
  */
 DwtControl.prototype.__handleHoverOver =
 function(event) {
+
 	if (this._eventMgr.isListenerRegistered(DwtEvent.HOVEROVER)) {
 		this._eventMgr.notifyListeners(DwtEvent.HOVEROVER, event);
 	}
+
 	var mouseEv = event && event.object;
 	var tooltip = this.getToolTipContent(mouseEv);
 	var content, callback;
-	if (typeof(tooltip) == "string") {
+	if (!tooltip) {
+		content = "";
+	} else if (typeof(tooltip) == "string") {
 		content = tooltip;
 	} else if (tooltip instanceof AjxCallback) {
 		callback = tooltip;
 	} else if (typeof(tooltip) == "object") {
-		content = tooltip && tooltip.content;
-		callback = tooltip && tooltip.callback;
+		content = tooltip.content;
+		callback = tooltip.callback;
+	}
+
+	if (!content && callback && tooltip.loading) {
+		content = AjxMsg.loading;
 	}
 
 	if (content) {
 		this.__showToolTip(event, content);
 	}
+
 	if (callback) {
 		var callback1 = new AjxCallback(this, this.__showToolTip, [event]);
-		if (content) {
-			AjxTimedAction.scheduleAction(new AjxTimedAction(null, function() { callback.run(callback1); }, 2000));
-		} else {
-			callback.run(callback1);
-		}
+		AjxTimedAction.scheduleAction(new AjxTimedAction(null, function() { callback.run(callback1); }), 0);
 	}
 };
 
 DwtControl.prototype.__showToolTip =
 function(event, content) {
+
 	if (!content) { return; }
 	var shell = DwtShell.getShell(window);
 	var tooltip = shell.getToolTip();
