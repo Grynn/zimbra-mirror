@@ -48,6 +48,7 @@ objectclass: organizationalPerson
 cn: zmnginx
 sn: zmnginx
 zimbraAccountStatus: active
+zimbraIsAdminAccount: TRUE
 zimbraIsSystemResource: TRUE
 zimbraId: DA336C18-4F5E-11DC-8514-DCA8E67A905E
 description: The zimbra nginx account
