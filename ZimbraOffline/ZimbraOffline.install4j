@@ -3300,6 +3300,74 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
+              <group name="set special file permissions" id="288362" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup">
+                      <void property="conditionExpression">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>!Util.isWindows()</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <beans>
+                  <action name="install.info" id="288363" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>conf/install.info</string>
+                            </object>
+                          </void>
+                          <void property="mode">
+                            <string>600</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                  <action name="localconfig.xml" id="288364" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>conf/localconfig.xml</string>
+                            </object>
+                          </void>
+                          <void property="mode">
+                            <string>600</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                  <action name="webapp.ini" id="288365" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
+                          <void property="file">
+                            <object class="java.io.File">
+                              <string>zdesktop.webapp/webapp.ini</string>
+                            </object>
+                          </void>
+                          <void property="mode">
+                            <string>600</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                </beans>
+              </group>
               <group name="Start zdesktop" id="287724" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="false" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
