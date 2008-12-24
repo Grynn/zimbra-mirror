@@ -140,8 +140,9 @@ public class BeanUtils {
     }
 
     public static DateFormatSymbols
-            getDateFormatSymbols(java.util.Locale userLocale){
-        return new DateFormatSymbols(userLocale) ;
+            getDateFormatSymbols(java.util.Locale userLocale, PageContext pc){
+        DateFormatSymbols dfs = new ExtendedDateFormatSymbols(userLocale,pc);
+        return dfs;
     }
     
     private static String escapeDollarSign(String value) {
@@ -1296,4 +1297,35 @@ public class BeanUtils {
 		}
 		return String.valueOf(container).contains(String.valueOf(object));
 	}
+}
+
+class ExtendedDateFormatSymbols extends DateFormatSymbols{
+
+    public ExtendedDateFormatSymbols(Locale locale, PageContext pc){
+        super(locale);
+        init(pc);
+    }
+
+    private void init(PageContext pc){
+
+        String[] weekDays = new String[8], shortWeekDays=  new String[8], months = new String[12], shortMonths = new String[12];
+        String[] dayNames = {"Sun","Mon", "Tue" ,"Wed", "Thu", "Fri" , "Sat"};
+        String[] monthNames = {"Jan","Feb", "Mar" , "Apr", "May" , "Jun" , "Jul" , "Aug" , "Sep" ,"Oct" , "Nov" , "Dec"};
+
+        for(int i=0;i<dayNames.length;i++){
+            weekDays[i+1] = I18nUtil.getLocalizedMessage(pc,"weekday"+dayNames[i]+"Long", "/messages/I18nMsg");
+            shortWeekDays[i+1] = I18nUtil.getLocalizedMessage(pc,"weekday"+dayNames[i]+"Medium", "/messages/I18nMsg");
+        }
+
+        this.setWeekdays(weekDays);
+        this.setShortWeekdays(shortWeekDays);
+
+        for(int i=0;i<monthNames.length;i++){
+            months[i] = I18nUtil.getLocalizedMessage(pc,"month"+monthNames[i]+"Long", "/messages/I18nMsg");
+            shortMonths[i] = I18nUtil.getLocalizedMessage(pc,"month"+monthNames[i]+"Medium", "/messages/I18nMsg");
+        }
+
+        this.setMonths(months);
+        this.setShortMonths(shortMonths);
+    }
 }
