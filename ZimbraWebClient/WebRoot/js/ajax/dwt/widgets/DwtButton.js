@@ -572,10 +572,8 @@ function (){
 };
 
 DwtButton.prototype.deactivate =
-function (){
-	if (this._hoverImageInfo){
-		this.setImage(this._hoverImageInfo);
-	}
+function() {
+	this._showHoverImage(true);
 
 	if (this._style & DwtButton.TOGGLE_STYLE){
 		this._selected = !this._selected;
@@ -589,6 +587,21 @@ DwtButton.prototype.dontStealFocus = function(val) {
 	if (this._menu instanceof DwtMenu)
 		this._menu.dontStealFocus(val);
 	this.__preventMenuFocus = val;
+};
+
+DwtButton.prototype._showHoverImage =
+function(show) {
+	// if the button is image-only, DwtLabel#setImage is bad
+	// because it clears the element first
+	// (innerHTML = "") causing a mouseout event, then it
+	// re-sets the image, which results in a new mouseover
+	// event, thus looping forever eating your CPU and
+	// blinking.
+	if (this._hoverImageInfo){
+		var iconEl = this._getIconEl();
+		var info = show ? this._hoverImageInfo : this.__imageInfo;
+		iconEl.firstChild.className = AjxImg.getClassForImage(info);
+	}
 };
 
 DwtButton.prototype._handleClick =
@@ -683,22 +696,7 @@ DwtButton._mouseOverListener =
 function(ev) {
 	var button = ev.dwtObj;
 	if (!button) { return false; }
-    if (button._hoverImageInfo) {
-
-	    // if the button is image-only, the following is bad
-	    // because DwtLabel#setImage clears the element first
-	    // (innerHTML = "") causing a mouseout event, then it
-	    // re-sets the image, which results in a new mouseover
-	    // event, thus looping forever eating your CPU and
-	    // blinking.
-
-	    // this.setImage(this._hoverImageInfo); // sucks.
-
-	    // hope I'm not breaking anything (mihai@zimbra.com):
-
-	    var iconEl = button._getIconEl();
-	    iconEl.firstChild.className = AjxImg.getClassForImage(button._hoverImageInfo);
-    }
+	button._showHoverImage(true);
     button.setDisplayState(DwtControl.HOVER);
 
     var dropDown = button._dropDownEl;
@@ -714,9 +712,7 @@ DwtButton._mouseOutListener =
 function(ev) {
 	var button = ev.dwtObj;
 	if (!button) { return false; }
-    if (button._hoverImageInfo) {
-        button.setImage(button._enabledImageInfo);
-    }
+	button._showHoverImage(false);
 	button._setMouseOutClassName();
     button.isActive = false;
 
