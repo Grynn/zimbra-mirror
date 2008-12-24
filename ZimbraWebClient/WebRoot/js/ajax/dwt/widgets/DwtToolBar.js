@@ -157,6 +157,11 @@ function(className, index) {
 	return el;
 };
 
+DwtToolBar.prototype.removeSeparator =
+function(el) {
+	this._removeItem(el);
+};
+
 DwtToolBar.prototype.addFiller =
 function(className, index) {
 	var el = this._createFillerElement();
@@ -284,6 +289,17 @@ function(type, element, index) {
 
     // append spacer
     // TODO!
+};
+
+DwtToolBar.prototype._removeItem =
+function(item) {
+	for (var i = 0; i < this._items.length; i++) {
+		if (this._items[i] == item) {
+			this._items.splice(i,1);
+			this._itemsEl.removeChild(item);
+			break;
+		}
+	}
 };
 
 // transfer focus to the current item
