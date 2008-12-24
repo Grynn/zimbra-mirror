@@ -6,10 +6,14 @@ import java.util.TimerTask;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.cs.account.AccountServiceException;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
+import com.zimbra.cs.db.DbOfflineMailbox;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.offline.OfflineLog;
@@ -22,6 +26,52 @@ import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
 
 public abstract class DesktopMailbox extends Mailbox {
+
+	static class DeletingMailbox extends DesktopMailbox {
+		DeletingMailbox(MailboxData data) throws ServiceException {
+			super(data);
+		}
+		
+		@Override
+		synchronized boolean finishInitialization() throws ServiceException {
+	        final String accountId = getAccountId();
+	        new Thread(new Runnable() {
+				public void run() {
+					try {
+						deleteThisMailbox();
+					} catch (Exception x) {
+						OfflineLog.offline.error("Deleting mailbox %s mailbox", accountId, x);
+					}
+				}
+	        }, "mailbox-reaper:" + accountId).start();
+			return false;
+		}
+		
+		@Override
+		void resetSyncStatus() throws ServiceException {}
+		
+		@Override
+		public boolean isAutoSyncDisabled() { return false; }
+		
+		@Override
+		protected void syncOnTimer() {}
+	}
+	
+	private static final String DELETING_MID_SUFFIX = ":delete";
+	
+	static DesktopMailbox newMailbox(MailboxData data) throws ServiceException {
+    	if (data.accountId.endsWith(DELETING_MID_SUFFIX))
+    		return new DeletingMailbox(data);
+    	
+    	OfflineAccount account = (OfflineAccount)Provisioning.getInstance().get(AccountBy.id, data.accountId);
+    	if (account == null)
+    		throw AccountServiceException.NO_SUCH_ACCOUNT(data.accountId);
+    	
+    	if (account.isSyncAccount()) {
+    		return new OfflineMailbox(data);
+    	}
+        return new LocalMailbox(data);
+	}
 
 	public static final String OUTBOX_PATH = "Outbox";
 	public static final String ARCHIVE_PATH = "Local Folders";
@@ -45,11 +95,15 @@ public abstract class DesktopMailbox extends Mailbox {
 	public DesktopMailbox(MailboxData data) throws ServiceException {
 		super(data);
 		
-		OfflineAccount account = (OfflineAccount)getAccount();
-		if (account.isDataSourceAccount())
-			accountName = account.getAttr(OfflineProvisioning.A_offlineDataSourceName);
-		else
-			accountName = account.getName();
+		if (this instanceof DeletingMailbox)
+			accountName = getAccountId();
+		else {
+		    OfflineAccount account = (OfflineAccount)getAccount();
+		    if (account.isDataSourceAccount())
+			    accountName = account.getAttr(OfflineProvisioning.A_offlineDataSourceName);
+		    else
+			    accountName = account.getName();
+	    }
 	}
 	
     public OfflineAccount getOfflineAccount() throws ServiceException {
@@ -120,6 +174,30 @@ public abstract class DesktopMailbox extends Mailbox {
 		}
 	}
 	
+    Object syncLock = new Object();
+    
+    private boolean mSyncRunning;
+    
+    boolean lockMailboxToSync() {
+    	if (isDeleting())
+    		return false;
+    	
+    	if (!mSyncRunning) {
+	    	synchronized (this) {
+	    		if (!mSyncRunning) {
+	    			mSyncRunning = true;
+	    			return true;
+	    		}
+	    	}
+    	}
+    	return false;
+    }
+    
+    void unlockMailbox() {
+    	assert mSyncRunning == true;
+    	mSyncRunning = false;
+    }
+	
 	public boolean isDeleting() {
 		return isDeleting;
 	}
@@ -129,14 +207,72 @@ public abstract class DesktopMailbox extends Mailbox {
 	}
 
 	@Override
-        public synchronized void deleteMailbox() throws ServiceException {
+    public void deleteMailbox() throws ServiceException {
+		deleteMailbox(true);
+	}
+	
+	public void deleteMailbox(boolean asynch) throws ServiceException {
+		synchronized (this) {
+			if (isDeleting)
+				return;
 		isDeleting = true;
+			
 		cancelCurrentTask();
-		super.deleteMailbox();
+
+			beginMaintenance(); //putting mailbox in maintenance will cause sync to stop when writing
+		}
+		
+		synchronized (syncLock) { //wait for any hot sync thread to unwind
+			endMaintenance(true);
+		}
+
+		try {
+			resetSyncStatus();
+		} catch (ServiceException x) {
+			if (!x.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT))
+				OfflineLog.offline.warn(x);
+		}
+		
+        if (asynch) {
+        	MailboxManager mm = MailboxManager.getInstance();
+        	synchronized (mm) {
+		        unhookMailboxForDeletion();
+		        mm.markMailboxDeleted(this); //to remove from cache
+        	}
+	        mm.getMailboxById(getId(), true); //the mailbox will now be loaded as a DeletingMailbox
+        } else {
+        	deleteThisMailbox();
+        }
+    }
+	
+	void resetSyncStatus() throws ServiceException {
 		OfflineSyncManager.getInstance().resetStatus(accountName);
 		((OfflineAccount)getAccount()).resetLastSyncTimestamp();
                 OfflineYAuth.deleteRawAuthManager(this);
         }
+	
+	private synchronized String unhookMailboxForDeletion() throws ServiceException {
+		String accountId = getAccountId();
+		if (accountId.endsWith(DELETING_MID_SUFFIX))
+			return accountId;
+		
+		accountId = accountId + ":" + getId() + DELETING_MID_SUFFIX;
+        boolean success = false;
+        try {
+            beginTransaction("replaceAccountId", null);
+            DbOfflineMailbox.replaceAccountId(this, accountId);
+            success = true;
+            return accountId;
+        } finally {
+        	endTransaction(success);
+        }
+	}
+	
+	void deleteThisMailbox() throws ServiceException {
+		OfflineLog.offline.info("deleting mailbox %s", getAccountId());
+		super.deleteMailbox();
+		OfflineLog.offline.info("mailbox %s deleted", getAccountId());
+	}
 	
 	@Override
     public synchronized void alterTag(OperationContext octxt, int itemId, byte type, int tagId, boolean addTag) throws ServiceException {

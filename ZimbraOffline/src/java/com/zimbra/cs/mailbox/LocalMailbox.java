@@ -369,30 +369,10 @@ public class LocalMailbox extends DesktopMailbox {
         DataSourceManager.importData(ds, folderIds, fullSync);
     }
 
-    private boolean mSyncRunning;
-
-    private boolean lockMailboxToSync() {
-    	if (isDeleting())
-    		return false;
-    	
-    	if (!mSyncRunning) {
-	    	synchronized (this) {
-	    		if (!mSyncRunning) {
-	    			mSyncRunning = true;
-	    			return true;
-	    		}
-	    	}
-    	}
-    	return false;
-    }
-    
-    private void unlockMailbox() {
-    	assert mSyncRunning == true;
-    	mSyncRunning = false;
-    }
-
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
         if (lockMailboxToSync()) {
+        	synchronized (syncLock) {
+        	
         	if (isOnRequest && isDebugTraceOn) {
         		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
         		getOfflineAccount().setRequestScopeDebugTraceOn(true);
@@ -402,6 +382,9 @@ public class LocalMailbox extends DesktopMailbox {
                 int count = sendPendingMessages(isOnRequest);
                 syncAllLocalDataSources(count > 0, isOnRequest);
             } catch (Exception x) {
+            	if (isDeleting())
+            		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", getAccountName());
+            	else
                 OfflineLog.offline.error("exception encountered during sync", x);
             } finally {
             	if (isOnRequest && isDebugTraceOn) {
@@ -410,6 +393,7 @@ public class LocalMailbox extends DesktopMailbox {
             	}
                 unlockMailbox();
             }
+        	} //synchronized (syncLock)
         } else if (isOnRequest) {
             OfflineLog.offline.debug("sync already in progress");
         }

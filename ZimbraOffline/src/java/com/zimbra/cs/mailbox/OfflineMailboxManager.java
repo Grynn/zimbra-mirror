@@ -20,8 +20,6 @@ package com.zimbra.cs.mailbox;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.Mailbox.MailboxData;
 import com.zimbra.cs.offline.OfflineLog;
@@ -43,11 +41,7 @@ public class OfflineMailboxManager extends MailboxManager {
     /** Returns a new {@link OfflineMailbox} object to wrap the given data. */
     @Override
     protected Mailbox instantiateMailbox(MailboxData data) throws ServiceException {
-    	OfflineAccount account = (OfflineAccount)Provisioning.getInstance().get(AccountBy.id, data.accountId);
-    	if (account.isSyncAccount()) {
-    		return new OfflineMailbox(data);
-    	}
-        return new LocalMailbox(data);
+    	return DesktopMailbox.newMailbox(data);
     }
     
 //    public void syncAllMailboxes(boolean isOnRequest) throws ServiceException {

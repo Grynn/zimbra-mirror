@@ -55,8 +55,6 @@ public class MailboxSync {
         BLANK, INITIAL, SYNC, RESET
     }
 	
-    private boolean mSyncRunning = false;
-    
     private Element mSyncTree;
     
     private SyncStage mStage = SyncStage.BLANK;
@@ -124,29 +122,11 @@ public class MailboxSync {
     	}
     }
     
-    private boolean lockMailboxToSync() {
-    	if (ombx.isDeleting())
-    		return false;
-    	
-    	if (!mSyncRunning) {
-	    	synchronized (this) {
-	    		if (!mSyncRunning) {
-	    			mSyncRunning = true;
-	    			return true;
-	    		}
-	    	}
-    	}
-    	return false;
-    }
-    
-    private void unlockMailbox() {
-    	assert mSyncRunning == true;
-    	mSyncRunning = false;
-    }
-    
     void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
        	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-        if (lockMailboxToSync()) { //don't want to start another sync when one is already in progress
+        if (ombx.lockMailboxToSync()) { //don't want to start another sync when one is already in progress
+        	synchronized (ombx.syncLock) {
+        	
         	if (isOnRequest && isDebugTraceOn) {
         		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
         		ombx.getOfflineAccount().setRequestScopeDebugTraceOn(true);
@@ -220,8 +200,9 @@ public class MailboxSync {
             		ombx.getOfflineAccount().setRequestScopeDebugTraceOn(false);
             		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE END ================================");
             	}
-            	unlockMailbox();
+            	ombx.unlockMailbox();
             }
+        	} //synchronized (ombx.syncLock)
         } else if (isOnRequest) {
         	OfflineLog.offline.debug("sync already in progress");
         }

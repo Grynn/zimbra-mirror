@@ -27,6 +27,7 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.DirectorySync;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
@@ -357,8 +358,12 @@ public class OfflineSyncManager {
     }
 	
     public static boolean isConnectionDown(Exception exception) {
+        if (exception instanceof SoapFaultException && ((SoapFaultException)exception).getCode().equals(MailServiceException.MAINTENANCE))
+        	return true;
+    	
         if (exception instanceof ServiceException && ((ServiceException)exception).getCode().equals(ServiceException.RESOURCE_UNREACHABLE))
         	return true;
+        
         Throwable cause = SystemUtil.getInnermostException(exception);
         return cause instanceof java.net.UnknownHostException ||
 	           cause instanceof java.net.NoRouteToHostException ||
@@ -372,6 +377,10 @@ public class OfflineSyncManager {
 	public static boolean isIOException(Exception exception) {
 		Throwable cause = SystemUtil.getInnermostException(exception);
 		return cause instanceof IOException;
+	}
+	
+	public static boolean isMailboxInMaintenance(Exception exception) {
+		return exception instanceof ServiceException && ((ServiceException)exception).getCode().equals(MailServiceException.MAINTENANCE);
 	}
 	
     public void processSyncException(Account account, Exception exception) {
@@ -464,6 +473,15 @@ public class OfflineSyncManager {
 			MailboxManager.getInstance().getMailboxByAccount(syncAccount);
 		}
 		DirectorySync.getInstance();
+		
+		//deal with left over mailboxes from interrupted delete/reset
+		int[] mids = MailboxManager.getInstance().getMailboxIds();
+		for (int mid : mids)
+			try {
+				MailboxManager.getInstance().getMailboxById(mid, true);
+			} catch (ServiceException x) {
+				OfflineLog.offline.warn("failed to load mailbox id=%d", mid, x);
+			}
 	}
 	
 	/*

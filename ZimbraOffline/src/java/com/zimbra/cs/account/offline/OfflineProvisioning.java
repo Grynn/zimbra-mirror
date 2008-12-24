@@ -33,6 +33,7 @@ import com.zimbra.cs.account.accesscontrol.RightCommand;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncErrorManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
+import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
@@ -528,7 +529,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             OfflineLog.offline.error("error initializing account " + emailAddress, e);
             Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(account.getId(), false);
             if (mbox != null) {
-                mbox.deleteMailbox();
+                ((DesktopMailbox)mbox).deleteMailbox(false);
             }
             mAccountCache.remove(account);
             deleteAccount(zgi.getId());
@@ -1065,7 +1066,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(galAcctId, false);      
         if (mbox != null)
-            mbox.deleteMailbox(); 
+        	((DesktopMailbox)mbox).deleteMailbox(false);
         OfflineAccount galAcct = (OfflineAccount)get(AccountBy.id, galAcctId);
         if (galAcct != null)
             deleteOfflineAccount(galAcctId);

@@ -673,4 +673,21 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
+    
+    public static void replaceAccountId(Mailbox mbox, String newAccountId) throws ServiceException {
+        Connection conn = mbox.getOperationConnection();
+
+        PreparedStatement stmt = null;
+        try {
+        	stmt = conn.prepareStatement("UPDATE mailbox SET account_id = ? WHERE id = ?");
+            int pos = 1;
+            stmt.setString(pos++, newAccountId);
+            stmt.setInt(pos++, mbox.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("failed to replace account ID on mailbox " + mbox.getId() , e);
+        } finally {
+            DbPool.closeStatement(stmt);
+        }
+    }
 }

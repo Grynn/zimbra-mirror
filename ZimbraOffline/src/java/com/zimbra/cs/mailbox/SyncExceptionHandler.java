@@ -13,7 +13,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.cs.mime.Mime;
@@ -35,7 +34,9 @@ public class SyncExceptionHandler {
 	
 	
 	public static void checkRecoverableException(String message, Exception exception) throws ServiceException {
-		if (OfflineSyncManager.isIOException(exception) || OfflineSyncManager.isConnectionDown(exception) || OfflineSyncManager.isAuthError(exception) || OfflineSyncManager.isReceiversFault(exception))
+		if (OfflineSyncManager.isIOException(exception) || OfflineSyncManager.isConnectionDown(exception) ||
+				OfflineSyncManager.isAuthError(exception) || OfflineSyncManager.isReceiversFault(exception) ||
+				OfflineSyncManager.isMailboxInMaintenance(exception))
 			throw ServiceException.FAILURE(message, exception); // let it bubble in case it's server issue so we interrupt sync to retry later
 	}
 	
@@ -90,15 +91,18 @@ public class SyncExceptionHandler {
 		saveFailureReport(ombx, itemId, DOCUMENT_SYNC_FAILED, exception);
 	}
 
-    public static void importFailed(DesktopMailbox dmbx, int id, String error, Exception exception) {
+    public static void importFailed(DesktopMailbox dmbx, int id, String error, Exception exception) throws ServiceException {
         saveFailureReport(dmbx, id, error, exception);
     }
 
-    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, Exception exception) {
+    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, Exception exception) throws ServiceException {
         return saveFailureReport(dmbx, id, error, null, 0, exception);
     }
     
-    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, Exception exception) {
+    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, Exception exception) throws ServiceException {
+    	if (OfflineSyncManager.isMailboxInMaintenance(exception))
+    		throw (ServiceException)exception;
+    	
     	Date now = new Date();
     	String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
 
