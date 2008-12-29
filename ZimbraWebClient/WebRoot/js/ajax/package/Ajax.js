@@ -7,7 +7,6 @@ AjxPackage.require("ajax.soap.AjxSoapFault");
 AjxPackage.require("ajax.soap.AjxSoapDoc");
 AjxPackage.require("ajax.net.AjxRpcRequest");
 AjxPackage.require("ajax.net.AjxRpc");
-AjxPackage.require("ajax.util.AjxWindowOpener");
 AjxPackage.require("ajax.util.AjxVector");
 AjxPackage.require("ajax.util.AjxStringUtil");
 AjxPackage.require("ajax.debug.AjxDebug");
