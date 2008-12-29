@@ -714,7 +714,7 @@ public class OfflineMailbox extends DesktopMailbox {
         } catch (ServiceException e) {
             if (OfflineSyncManager.isConnectionDown(e)) {
                 if (quietWhenOffline) {
-                    OfflineLog.offline.debug(op + "is unavailable when offline");
+                    OfflineLog.offline.debug(op + " is unavailable when offline");
                     response = null;
                 } else {
                     throw OfflineServiceException.ONLINE_ONLY_OP(op);

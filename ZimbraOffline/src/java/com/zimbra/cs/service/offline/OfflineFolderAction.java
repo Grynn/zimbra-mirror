@@ -63,7 +63,7 @@ public class OfflineFolderAction extends FolderAction {
         // before doing anything, make sure all data sources are pushed to the server
         ombx.sync(true, false);
         // proxy this operation to the remote server
-        Element response = ombx.sendRequest(request);
+        Element response = ombx.proxyRequest(request, zsc.getResponseProtocol(), true, operation);
         // and get a head start on the sync of the newly-pulled-in messages
         ombx.sync(true, false);
 
