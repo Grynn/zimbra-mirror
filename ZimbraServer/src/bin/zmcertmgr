@@ -1079,10 +1079,17 @@ createCSR() {
   if [ "x${1}" != "x" ]; then 
     if [ "x${1}" = "x-subject" ]; then
       shift
+      if [ "x${1}" != "x" -a "x$(echo ${1} | cut -c1)" != "x-" ]; then
+        SUBJECT="${1}"
+        echo "subj=$SUBJECT"
+        shift
+      fi
     fi
-    SUBJECT="${1}"
-    echo "subj=$SUBJECT"
-    shift
+    if [ "x$(echo ${1} | cut -c1)" != "x-" ]; then
+      SUBJECT="${1}"
+      echo "subj=$SUBJECT"
+      shift
+    fi
   fi
 
   if [ x"$1" = "x-subjectAltNames" ]; then
