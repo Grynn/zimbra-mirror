@@ -551,24 +551,30 @@ function() {
 	this._acList = {};
 
 	// autocomplete for attendees
-	if (appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
-		var contactsClass = appCtxt.getApp(ZmApp.CONTACTS);
-		var contactsLoader = contactsClass.getContactList;
-		var params = {parent: shell, dataClass: contactsClass, dataLoader: contactsLoader, separator: "",
-					  matchValue: ZmContactsApp.AC_VALUE_NAME, keyUpCallback: keyUpCallback, compCallback: acCallback, smartPos: true};
+	if (appCtxt.get(ZmSetting.CONTACTS_ENABLED) || appCtxt.get(ZmSetting.GAL_ENABLED)) {
+		var params = {
+			parent: shell,
+			dataClass: appCtxt.getAutocompleter(),
+			separator: "",
+			options: {needItem: true},
+			matchValue: ZmAutocomplete.AC_VALUE_NAME,
+			keyUpCallback: keyUpCallback,
+			compCallback: acCallback,
+			smartPos: true
+		};
 		this._acContactsList = new ZmAutocompleteListView(params);
 		this._acList[ZmCalBaseItem.PERSON] = this._acContactsList;
-	}
-	// autocomplete for locations/equipment
-	if (appCtxt.get(ZmSetting.GAL_ENABLED)) {
-		var resourcesClass = appCtxt.getApp(ZmApp.CALENDAR);
-		var params = {parent: shell, dataClass: resourcesClass, dataLoader: resourcesClass.getLocations, separator: "",
-					  matchValue: ZmContactsApp.AC_VALUE_NAME, compCallback: acCallback, smartPos: true};
-		this._acLocationsList = new ZmAutocompleteListView(params);
-		this._acList[ZmCalBaseItem.LOCATION] = this._acLocationsList;
-		params.dataLoader = resourcesClass.getEquipment;
-		this._acEquipmentList = new ZmAutocompleteListView(params);
-		this._acList[ZmCalBaseItem.EQUIPMENT] = this._acEquipmentList;
+
+		// autocomplete for locations/equipment
+		if (appCtxt.get(ZmSetting.GAL_ENABLED)) {
+			params.options = {types:[ZmAutocomplete.AC_TYPE_LOCATION]};
+			this._acLocationsList = new ZmAutocompleteListView(params);
+			this._acList[ZmCalBaseItem.LOCATION] = this._acLocationsList;
+
+			params.options = {types:[ZmAutocomplete.AC_TYPE_EQUIPMENT]};
+			this._acEquipmentList = new ZmAutocompleteListView(params);
+			this._acList[ZmCalBaseItem.EQUIPMENT] = this._acEquipmentList;
+		}
 	}
 };
 
