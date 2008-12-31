@@ -63,6 +63,10 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(MailConstants.CREATE_TASK_REQUEST, new OfflineCreateTask());
         dispatcher.registerHandler(MailConstants.MODIFY_TASK_REQUEST, new OfflineModifyTask());
         dispatcher.registerHandler(MailConstants.CONV_ACTION_REQUEST, new OfflineConvAction());
+        dispatcher.registerHandler(MailConstants.GET_PERMISSION_REQUEST, OfflineServiceProxy.GetPermission());
+        dispatcher.registerHandler(MailConstants.GRANT_PERMISSION_REQUEST, OfflineServiceProxy.GrantPermission());
+        dispatcher.registerHandler(MailConstants.REVOKE_PERMISSION_REQUEST, OfflineServiceProxy.RevokePermission());
+        dispatcher.registerHandler(MailConstants.CHECK_PERMISSION_REQUEST, OfflineServiceProxy.CheckPermission());
         
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());

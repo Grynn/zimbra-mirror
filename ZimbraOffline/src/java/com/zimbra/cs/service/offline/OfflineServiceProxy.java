@@ -30,19 +30,19 @@ public class OfflineServiceProxy extends DocumentHandler {
 
     private String mOp;
     private boolean mQuiet;
-    private boolean mHandleNonSync;
+    private boolean mHandleLocal;
     
-    public OfflineServiceProxy(String op, boolean quiet, boolean handleNonSync) {
+    public OfflineServiceProxy(String op, boolean quiet, boolean handleLocal) {
         mOp = op;
         mQuiet = quiet;
-        mHandleNonSync = handleNonSync;
+        mHandleLocal = handleLocal;
     }
     
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(ctxt);
         if (!(mbox instanceof OfflineMailbox)) {
-            if (mHandleNonSync)
+            if (mHandleLocal)
                 return getResponseElement(ctxt);
             else
                 throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
@@ -52,8 +52,11 @@ public class OfflineServiceProxy extends DocumentHandler {
         boolean fromBatch = parent != null && parent.getName().equals("BatchRequest");
         
         Element response = ((OfflineMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), mQuiet, mOp);
-        if (fromBatch)
+        if (fromBatch && response != null)
             response.detach();
+        
+        if (mQuiet && response == null)
+            return getResponseElement(ctxt);
         
         return response;
     }
@@ -64,6 +67,22 @@ public class OfflineServiceProxy extends DocumentHandler {
     
     public static OfflineServiceProxy SearchCalendarResources() {
         return new OfflineServiceProxy("search cal resources", false, true);
+    }
+    
+    public static OfflineServiceProxy GetPermission() {
+        return new OfflineServiceProxy("get permission", true, true);
+    }
+    
+    public static OfflineServiceProxy GrantPermission() {
+        return new OfflineServiceProxy("grant permission", false, false);
+    }
+    
+    public static OfflineServiceProxy RevokePermission() {
+        return new OfflineServiceProxy("revoke permission", false, false);
+    }
+    
+    public static OfflineServiceProxy CheckPermission() {
+        return new OfflineServiceProxy("check permission", false, false);
     }
 }
 
