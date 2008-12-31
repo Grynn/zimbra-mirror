@@ -1025,7 +1025,7 @@ function() {
  */
 DwtControl.fromElement =
 function(htmlEl)  {
-	return DwtControl.ALL_BY_ID[htmlEl.id];
+	return DwtControl.ALL_BY_ID && DwtControl.ALL_BY_ID[htmlEl.id];
 };
 
 /**
@@ -1035,7 +1035,7 @@ function(htmlEl)  {
  */
 DwtControl.fromElementId =
 function(htmlElId)  {
-	return DwtControl.ALL_BY_ID[htmlElId];
+	return DwtControl.ALL_BY_ID && DwtControl.ALL_BY_ID[htmlElId];
 };
 
 /**
