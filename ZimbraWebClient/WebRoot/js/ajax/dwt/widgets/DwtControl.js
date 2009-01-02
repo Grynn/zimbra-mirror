@@ -2188,6 +2188,7 @@ DwtControl._dndScrollCallback =
 function(params, ev) {
 
 	var container = params.container;
+	if (!container) { return; }
 
 	// stop scrolling if mouse has moved out of the scrolling area, or dnd object has been released;
 	// a bit tricky because this callback is run as the mouse moves among objects within the scroll area,
