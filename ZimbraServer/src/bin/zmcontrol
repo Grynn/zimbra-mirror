@@ -44,14 +44,15 @@ my %startorder = (
 	"logger" 	=> 1,
 	"convertd"	=> 2,
 	"mailbox" 	=> 3,
-	"imapproxy"	=> 4,
-	"antispam" 	=> 5,
-	"antivirus"	=> 6,
-	"archiving"	=> 7,
-	"snmp" 		=> 8,
-	"spell" 	=> 9,
-	"mta" 		=> 10,
-	"stats"		=> 11,
+	"memcached"	=> 4,
+	"imapproxy"	=> 5,
+	"antispam" 	=> 6,
+	"antivirus"	=> 7,
+	"archiving"	=> 8,
+	"snmp" 		=> 9,
+	"spell" 	=> 10,
+	"mta" 		=> 11,
+	"stats"		=> 12,
 );
 
 my %allservices = ( 
@@ -65,6 +66,7 @@ my %allservices = (
 	"snmp" => "/opt/zimbra/bin/zmswatchctl", 
 	"ldap" => "/opt/zimbra/bin/ldap",
 	"spell" => "/opt/zimbra/bin/zmspellctl",
+	"memcached" => "/opt/zimbra/bin/zmmemcachedctl",
 	"imapproxy" => "/opt/zimbra/bin/zmproxyctl",
 	"stats" => "/opt/zimbra/bin/zmstatctl",
 );

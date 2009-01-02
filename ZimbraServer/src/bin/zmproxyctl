@@ -17,7 +17,7 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="zmmemcachedctl zmnginxctl"
+SCRIPTS="zmnginxctl"
 
 case "$1" in 
 	start)
