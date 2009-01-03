@@ -648,15 +648,10 @@ function() {
 }
 
 ZaServer.loadMethod = 
-function(by, val, withConfig) {
+function(by, val) {
 	var _by = by ? by : "id";
 	var _val = val ? val : this.id
 	var soapDoc = AjxSoapDoc.create("GetServerRequest", ZaZimbraAdmin.URN, null);
-	if(withConfig) {
-		soapDoc.getMethod().setAttribute("applyConfig", "1");	
-	} else {
-		soapDoc.getMethod().setAttribute("applyConfig", "0");		
-	}
 	var elBy = soapDoc.set("server", _val);
 	elBy.setAttribute("by", _by);
 	//var command = new ZmCsfeCommand();
@@ -681,7 +676,7 @@ function(by, val, withConfig) {
 ZaItem.loadMethods["ZaServer"].push(ZaServer.loadMethod);
 
 ZaServer.loadNIFS = 
-function(by, val, withConfig) {
+function(by, val) {
 	var _by = by ? by : "id";
 	var _val = val ? val : this.id
 	var soapDoc = AjxSoapDoc.create("GetServerNIfsRequest", ZaZimbraAdmin.URN, null);

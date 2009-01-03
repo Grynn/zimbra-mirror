@@ -226,7 +226,7 @@ ZaZimlet.deploy = function (action,attId, callback) {
 }
 
 ZaZimlet.loadMethod = 
-function(by, val, withConfig) {
+function(by, val) {
 	var _val = val ? val : this.name ;
 	var soapDoc = AjxSoapDoc.create("GetZimletRequest", ZaZimbraAdmin.URN, null);
 	var elZimlet = soapDoc.set("zimlet", "");

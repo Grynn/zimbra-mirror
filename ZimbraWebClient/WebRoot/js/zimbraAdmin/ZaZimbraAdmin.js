@@ -519,7 +519,7 @@ function () {
 ZaZimbraAdmin.prototype._getLoginMsgPanel = function () {
     if (!this._loginMsgPanel) {
         this._loginMsgPanel = new DwtComposite (this._shell, null, Dwt.ABSOLUTE_STYLE);
-        var loginMsg = ZaDomain.getLoginMessage(ZaApp.getInstance()) ;
+        var loginMsg = ZaDomain.getLoginMessage() ;
 //        var loginMsg = "abcd" ;
         if (loginMsg) {
             var loginMsgEl = new DwtAlert (this._loginMsgPanel, null, Dwt.ABSOLUTE_STYLE) ;

@@ -275,7 +275,7 @@ ZaMTA.prototype.initFromJS = function (obj, summary) {
 * Make a SOAP call to get file counts in queue folders
 **/
 ZaMTA.loadMethod = 
-function(by, val, withConfig) {
+function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetMailQueueInfoRequest", ZaZimbraAdmin.URN, null);
 	var attr = soapDoc.set("server", "");
 	attr.setAttribute("name", this.name);		
