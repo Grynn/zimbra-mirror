@@ -144,6 +144,7 @@ ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled = "zimbraAdminConsoleDNSCheckEnable
 ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled = "zimbraAdminConsoleCatchAllAddressEnabled";
 ZaDomain.A_zimbraAdminConsoleSkinEnabled = "zimbraAdminConsoleSkinEnabled";
 ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled = "zimbraAdminConsoleLDAPAuthEnabled" ;
+ZaDomain.A_zimbraAuthLdapStartTlsEnabled = "zimbraAuthLdapStartTlsEnabled";
 
 //internal attributes - not synched with the server code yet
 //GAL               
@@ -188,7 +189,6 @@ ZaDomain.A_AuthADDomainName = "zimbraAuthADDomainName";
 //ZaDomain.A_AuthLDAPServerName = "zimbraAuthLDAPServerName";
 ZaDomain.A_AuthLDAPSearchBase = "zimbraAuthLDAPSearchBase";
 //ZaDomain.A_AuthLDAPServerPort = "zimbraAuthLDAPServerPort";
-//ZaDomain.A_AuthLDAPUseSSL = "authldapusessl";
 ZaDomain.A_AuthTestUserName = "authtestusername";
 ZaDomain.A_AuthTestPassword = "authtestpassword";
 ZaDomain.A_AuthTestMessage = "authtestmessage";
@@ -379,10 +379,22 @@ function(tmpObj) {
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_notes]);
 	attr.setAttribute("n", ZaDomain.A_notes);	
 	
+	if(tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]);
+		attr.setAttribute("n", ZaDomain.A_zimbraAuthLdapStartTlsEnabled);	
+	}
+		
 	if(tmpObj.attrs[ZaDomain.A_AuthLdapURL]) {
 		var temp = tmpObj.attrs[ZaDomain.A_AuthLdapURL].join(" ");
 		attr = soapDoc.set("a", temp);
-		attr.setAttribute("n", ZaDomain.A_AuthLdapURL);		
+		attr.setAttribute("n", ZaDomain.A_AuthLdapURL);	
+				
+		if(tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled] == "TRUE" && tmpObj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ldap) {
+			//check that we don't have ldaps://
+			if(temp.indexOf("ldaps://") > -1) {
+				ZaApp.getInstance().getCurrentController().popupWarningDialog(ZaMsg.Domain_WarningStartTLSIgnored)
+			}		
+		}		
 	}
 	
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_description]);
@@ -528,7 +540,19 @@ function (obj, callback) {
 		attr = soapDoc.set("a", "%u@"+obj.attrs[ZaDomain.A_AuthADDomainName]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
 	}
-	if(obj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ldap) {	
+	if(obj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ldap) {
+		if(obj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]) {
+			attr = soapDoc.set("a", obj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]);
+			attr.setAttribute("n", ZaDomain.A_zimbraAuthLdapStartTlsEnabled);	
+		}			
+			
+		if(obj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled] == "TRUE") {
+			//check that we don't have ldaps://
+			if(temp.indexOf("ldaps://") > -1) {
+				ZaApp.getInstance().getCurrentController().popupWarningDialog(ZaMsg.Domain_WarningStartTLSIgnored)
+			}		
+		}
+					
 		attr = soapDoc.set("a", obj.attrs[ZaDomain.A_AuthLdapSearchBase]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapSearchBase);
 	
@@ -845,7 +869,20 @@ function(tmpObj) {
 		attr = soapDoc.set("a", "%u@"+tmpObj.attrs[ZaDomain.A_AuthADDomainName]);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapUserDn);	
 	} else if (tmpObj.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_ldap) {
+
+		if(tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]) {
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]);
+			attr.setAttribute("n", ZaDomain.A_zimbraAuthLdapStartTlsEnabled);	
+		}		
+		
 		var temp = tmpObj.attrs[ZaDomain.A_AuthLdapURL].join(" ");
+		
+		if(tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled] == "TRUE") {
+			//check that we don't have ldaps://
+			if(temp.indexOf("ldaps://") > -1) {
+				ZaApp.getInstance().getCurrentController().popupWarningDialog(ZaMsg.Domain_WarningStartTLSIgnored)
+			}		
+		}		
 		attr = soapDoc.set("a", temp);
 		attr.setAttribute("n", ZaDomain.A_AuthLdapURL);	
 
@@ -1159,21 +1196,20 @@ function(callback) {
 	ZaRequestMgr.invoke(params, reqMgrParams);	
 }
 
-ZaDomain.getLoginMessage = function (app) {
-    var domain = ZaDomain.getDomainByName (ZaSettings.myDomainName, app, true) ;
+ZaDomain.getLoginMessage = function () {
+    var domain = ZaDomain.getDomainByName (ZaSettings.myDomainName, true) ;
     return domain.attrs[ZaDomain.A_zimbraAdminConsoleLoginMessage]  ;
 }
 
 ZaDomain.getDomainByName = 
-function(domName,withConfig) {
+function(domName) {
 	if(!domName)
 		return null;
-	//TODO: Potential Bug - withConfig = 0 at initial invoke, and withConfig = 1 will never be executed	
 	var domain = ZaDomain.staticDomainByNameCacheTable[domName];
 	if(!domain) {
 		domain = new ZaDomain();
 		try {
-			domain.load("name", domName, withConfig);
+			domain.load("name", domName, false, true);
 		} catch (ex) {
 			if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
 				return null;
@@ -1188,7 +1224,7 @@ function(domName,withConfig) {
 } 
 
 ZaDomain.getDomainById = 
-function (domId,withConfig) {
+function (domId) {
 	if(!domId)
 		return null;
 		
@@ -1196,7 +1232,7 @@ function (domId,withConfig) {
 	if(!domain) {
 		domain = new ZaDomain();
 		try {
-			domain.load("id", domId, withConfig);
+			domain.load("id", domId, false, true);
 		} catch (ex) {
 			if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
 				return null;
@@ -1210,7 +1246,7 @@ function (domId,withConfig) {
 }
 
 ZaDomain.loadMethod = 
-function(by, val, withConfig) {
+function(by, val) {
 	by = by ? by : "name";
 	val = val ? val : this.attrs[ZaDomain.A_domainName];
 	this.notebookAcls[ZaDomain.A_NotebookAllACLs] = {r:0,w:0,i:0,d:0,a:0,x:0};
@@ -1229,11 +1265,6 @@ function(by, val, withConfig) {
 	var soapDoc = AjxSoapDoc.create("GetDomainRequest", ZaZimbraAdmin.URN, null);
 	var elBy = soapDoc.set("domain", val);
 	elBy.setAttribute("by", by);
-	if(withConfig || ZaSettings.isDomainAdmin)
-		soapDoc.getMethod().setAttribute("applyConfig", "1");
-	else
-		soapDoc.getMethod().setAttribute("applyConfig", "0");
-		
 	//var getDomainCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -1356,7 +1387,7 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GalLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPassword},
 		{id:ZaDomain.A_GalLdapBindPasswordConfirm, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapBindPasswordConfirm},		
 		{id:ZaDomain.A_AuthLdapUserDn, type:_STRING_,ref:"attrs/" + ZaDomain.A_AuthLdapUserDn},
-		{id:ZaDomain.A_AuthLDAPUseSSL, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_AuthLDAPUseSSL},
+		{id:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAuthLdapStartTlsEnabled},
 		{id:ZaDomain.A_AuthLDAPServerName, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLDAPServerName},
 		{id:ZaDomain.A_AuthLDAPSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_AuthLDAPSearchBase},
 		{id:ZaDomain.A_AuthLDAPServerPort, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_AuthLDAPServerPort, maxInclusive:2147483647},
