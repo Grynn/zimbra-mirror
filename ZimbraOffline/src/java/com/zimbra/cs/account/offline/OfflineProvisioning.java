@@ -61,6 +61,7 @@ import java.util.*;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
+import javax.mail.Session;
 import javax.security.auth.login.LoginException;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
@@ -573,7 +574,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (ds.needsSmtpAuth()) {
         	OfflineLog.offline.info("SMTP Testing: %s", ds);
             try {
-                SMTPTransport smtp = (SMTPTransport)(LocalJMSession.getSession(ds).getTransport());
+                Session session = LocalJMSession.getSession(ds);
+                session.setDebug(true);
+                SMTPTransport smtp = (SMTPTransport)(session.getTransport());
                 smtp.connect();
                 smtp.issueCommand("MAIL FROM:<" + ds.getEmailAddress() + ">", 250);
                 smtp.issueCommand("RSET", 250);
