@@ -17,16 +17,25 @@
 package com.zimbra.cs.offline.ab.gab;
 
 import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.ab.AbUtil;
+import com.zimbra.cs.mailbox.Contact;
+import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Log;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.client.Query;
+import com.google.gdata.client.Service.GDataRequest;
+import com.google.gdata.client.Service.GDataRequest.RequestType;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.VersionConflictException;
+import com.google.gdata.util.ContentType;
 import com.google.gdata.util.common.xml.XmlWriter;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.ParseSource;
 import com.google.gdata.data.BaseFeed;
 import com.google.gdata.data.DateTime;
+import com.google.gdata.data.Link;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.contacts.ContactGroupFeed;
@@ -42,7 +51,9 @@ class GabService {
     private final ContactsService cs;
     private final URL contactFeedUrl;
     private final URL groupFeedUrl;
-    
+
+    private static final Log LOG = OfflineLog.gab;
+
     private static final String BASE_URL = OfflineLC.zdesktop_gab_base_url.value();
 
     private static final String APP_NAME = String.format("Zimbra-%s-%s",
@@ -148,6 +159,37 @@ class GabService {
     public void delete(BaseEntry entry)
         throws IOException, com.google.gdata.util.ServiceException {
         cs.delete(getEditUrl(entry));
+    }
+
+    public void addPhoto(ContactEntry entry, byte[] data, String type)
+        throws IOException, com.google.gdata.util.ServiceException {
+        URL url = new URL(entry.getContactEditPhotoLink().getHref());
+        GDataRequest req = cs.createRequest(RequestType.UPDATE, url, new ContentType(type));
+        req.getRequestStream().write(data);
+        req.execute();
+        LOG.debug("Added photo for entry %s: edit url = %s, size = %d, type = %s",
+                  entry.getId(), url, data.length, type);
+    }
+
+    public Attachment getPhoto(ContactEntry entry)
+        throws IOException, com.google.gdata.util.ServiceException {
+        Link link = entry.getContactPhotoLink();
+        if (link == null) return null;
+        URL url = new URL(link.getHref());
+        GDataRequest req = cs.createRequest(RequestType.QUERY, url, null);
+        req.execute();
+        ContentType ctype = req.getResponseContentType();
+        byte[] content = AbUtil.readFully(req.getResponseStream());
+        LOG.debug("Retrieved photo for entry %s: size = %d, type = %s",
+                  entry.getId(), content.length, ctype.getMediaType());
+        return new Attachment(content, ctype.getMediaType(), Contact.A_image, null);
+    }
+
+    public void deletePhoto(ContactEntry entry)
+        throws IOException, com.google.gdata.util.ServiceException {
+        URL url = new URL(entry.getContactEditPhotoLink().getHref());
+        cs.delete(url);
+        LOG.debug("Deleted photo for entry %s: edit url = %s", entry.getId(), url);
     }
 
     private URL getFeedUrl(BaseEntry entry) {

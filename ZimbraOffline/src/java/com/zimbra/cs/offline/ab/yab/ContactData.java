@@ -25,11 +25,10 @@ import com.zimbra.cs.offline.util.yab.Contact;
 import com.zimbra.cs.offline.util.yab.Field;
 import com.zimbra.cs.offline.util.yab.ContactChange;
 import com.zimbra.cs.offline.util.yab.FieldChange;
-import com.zimbra.cs.offline.ab.LocalData;
+import com.zimbra.cs.offline.ab.AbUtil;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.DateUtil;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -266,7 +265,7 @@ public class ContactData implements Serializable {
                 zfields.put(name, ((SimpleField) field).getValue());
             }
         }
-        String fileAs = LocalData.getFileAs(zfields);
+        String fileAs = AbUtil.getFileAs(zfields);
         if (fileAs != null) {
             zfields.put(A_fileAs, FA_EXPLICIT + ":" + fileAs);
         }

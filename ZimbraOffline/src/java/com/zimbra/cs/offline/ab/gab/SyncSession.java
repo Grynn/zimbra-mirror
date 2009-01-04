@@ -20,13 +20,16 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.Contact;
+import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.cs.offline.ab.SyncState;
 import com.zimbra.cs.offline.ab.Change;
 import com.zimbra.cs.offline.ab.ContactGroup;
+import com.zimbra.cs.offline.ab.AbUtil;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
+import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.service.ServiceException;
 import com.google.gdata.client.http.HttpGDataRequest;
@@ -102,6 +105,7 @@ public class SyncSession {
         String rev = state.getLastRevision();
         DateTime lastSyncTime = rev != null ? DateTime.parseDateTime(rev) : null;
         ContactFeed contacts = service.getContacts(lastSyncTime, currentTime);
+        Map<String, Attachment> photos = getContactPhotos(contacts.getEntries());
         ContactGroupFeed groups = service.getGroups(lastSyncTime, currentTime);
         state.setLastRevision(currentTime.toString());
         List<SyncRequest> contactRequests;
@@ -112,9 +116,9 @@ public class SyncSession {
             Map<Integer, Change> contactChanges = localData.getContactChanges(seq);
             // Process remote group and contact changes
             processGroupChanges(groups.getEntries());
-            processContactChanges(contacts.getEntries(), contactChanges);
+            processContactChanges(contacts.getEntries(), contactChanges, photos);
             // Process local changes and determine changes to push
-            contactRequests = processContactChanges(contactChanges.values());
+            contactRequests = getContactRequests(contactChanges.values());
             state.setLastModSequence(mbox.getLastChangeID());
         }
         // Push local changes to remote
@@ -185,16 +189,51 @@ public class SyncSession {
     private static String getName(BaseEntry entry) {
         return entry.getTitle().getPlainText();
     }
+
+    private Map<String, Attachment> getContactPhotos(List<ContactEntry> entries)
+        throws ServiceException, IOException {
+        Map<String, Attachment> photos = new HashMap<String, Attachment>();
+        for (ContactEntry entry : entries) {
+            try {
+                Attachment photo = getContactPhoto(entry);
+                if (photo != null) {
+                    photos.put(getEditUrl(entry), photo);
+                }
+            } catch (com.google.gdata.util.ServiceException e) {
+                LOG.info("Unable to retrieve contact photo for entry id: " + entry.getId());
+
+            }
+        }
+        LOG.debug("Retrieved %d contact photos for %d contact entries",
+                  photos.size(), entries.size());
+        return photos;
+    }
+
+    private Attachment getContactPhoto(ContactEntry entry)
+        throws ServiceException, IOException, com.google.gdata.util.ServiceException {
+        boolean deleted = entry.getDeleted() != null;
+        if (deleted) return null;
+        DataSourceItem dsi = localData.getReverseMapping(entry.getId());
+        if (dsi.itemId > 0) {
+            // If existing contact then only retrieve photo if edit url has
+            // changed (otherwise contact was just pushed).
+            String url = getEditUrl(getEntry(dsi, ContactEntry.class));
+            if (getEditUrl(entry).equals(url)) return null;
+        }
+        LOG.debug("Retrieving contact photo for entry id: " + entry.getId());
+        return service.getPhoto(entry);
+    }
     
     private void processContactChanges(List<ContactEntry> entries,
-                                       Map<Integer, Change> changes)
+                                       Map<Integer, Change> changes,
+                                       Map<String, Attachment> photos)
         throws ServiceException, IOException {
         LOG.debug("Processing %d remote contact changes", entries.size());
         Stats stats = new Stats();
         for (ContactEntry entry : entries) {
             DataSourceItem dsi = localData.getReverseMapping(entry.getId());
             try {
-                processContactChange(entry, dsi, changes, stats);
+                processContactChange(entry, dsi, changes, photos, stats);
             } catch (ServiceException e) {
                 localData.syncContactFailed(e, dsi.itemId, service.pp(entry));
             }
@@ -205,11 +244,14 @@ public class SyncSession {
     private void processContactChange(ContactEntry entry,
                                       DataSourceItem dsi,
                                       Map<Integer, Change> changes,
-                                      Stats stats) throws ServiceException {
+                                      Map<String, Attachment> photos,
+                                      Stats stats)
+        throws IOException, ServiceException {
         if (isTraceEnabled()) {
             LOG.debug("Processing remote contact entry:\n%s", service.pp(entry));
         }
         int itemId = dsi.itemId;
+        String editUrl = getEditUrl(entry);
         boolean deleted = entry.getDeleted() != null;
         if (itemId > 0) {
             // Contact updated or deleted
@@ -220,12 +262,15 @@ public class SyncSession {
                 stats.deleted++;
             } else if (!changes.containsKey(itemId)) {
                 // Remote contact was updated with no local change
-                String url = getEditUrl(getEntry(dsi, ContactEntry.class));
-                if (!getEditUrl(entry).equals(url)) {
+                String pushedUrl = getEditUrl(getEntry(dsi, ContactEntry.class));
+                if (!editUrl.equals(pushedUrl)) {
                     // Only update local entry if edit url has changed
                     // (avoids modifying contacts which we just pushed)
+                    Contact contact = localData.getContact(itemId);
+                    ParsedContact pc = new ParsedContact(contact);
                     ContactData cd = new ContactData(entry);
-                    localData.modifyContact(itemId, cd.getParsedContact());
+                    cd.updateParsedContact(pc, photos.get(editUrl));
+                    localData.modifyContact(itemId, pc);
                     updateEntry(itemId, entry);
                     stats.updated++;
                 }
@@ -233,7 +278,8 @@ public class SyncSession {
         } else if (!deleted) {
             // New contact added
             ContactData cd = new ContactData(entry);
-            Contact contact = localData.createContact(cd.getParsedContact());
+            ParsedContact pc = cd.newParsedContact(photos.get(editUrl));
+            Contact contact = localData.createContact(pc);
             updateEntry(contact.getId(), entry);
             stats.added++;
         }
@@ -243,8 +289,9 @@ public class SyncSession {
         return entry.getEditLink().getHref();
     }
 
-    private List<SyncRequest> processContactChanges(Collection<Change> changes)
+    private List<SyncRequest> getContactRequests(Collection<Change> changes)
         throws ServiceException {
+        LOG.debug("Processing %d local contact changes", changes.size());
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
         for (Change change : changes) {
             SyncRequest req = getContactSyncRequest(change);
@@ -265,13 +312,20 @@ public class SyncSession {
             Contact contact = localData.getContact(id);
             if (!ContactGroup.isContactGroup(contact)) {
                 ContactData cd = new ContactData(contact);
+                SyncRequest req;
                 if (change.isAdd()) {
-                    return SyncRequest.insert(this, id, cd.newContactEntry());
+                    req = SyncRequest.insert(this, id, cd.newContactEntry());
                 } else {
                     ContactEntry entry = getEntry(id, ContactEntry.class);
                     cd.updateContactEntry(entry);
-                    return SyncRequest.update(this, id, entry);
+                    req = SyncRequest.update(this, id, entry);
                 }
+                Attachment photo = AbUtil.getPhoto(contact);
+                if (photo != null) {                                 
+                    LOG.debug("Photo added for contact id " + contact.getId());
+                    req.setPhoto(AbUtil.getContent(contact, photo), photo.getContentType());
+                }
+                return req;
             }
         } else if (change.isDelete()) {
             ContactEntry entry = getEntry(id, ContactEntry.class);

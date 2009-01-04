@@ -19,6 +19,7 @@ package com.zimbra.cs.offline.ab.gab;
 import com.google.gdata.client.Service.GDataRequest.RequestType;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.contacts.ContactGroupEntry;
+import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.util.VersionConflictException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.common.util.Log;
@@ -33,6 +34,8 @@ public class SyncRequest {
     private final int itemId;
     private BaseEntry entry;
     private com.google.gdata.util.ServiceException error;
+    private byte[] photoData;
+    private String photoType;
 
     private static final Log LOG = OfflineLog.gab;
 
@@ -58,6 +61,11 @@ public class SyncRequest {
         this.entry = entry;
     }
 
+    public void setPhoto(byte[] data, String type) {
+        photoData = data;
+        photoType = type;
+    }
+    
     public RequestType getType() { return type; }
     public int getItemId() { return itemId; }
     public BaseEntry getEntry() { return entry; }
@@ -66,12 +74,12 @@ public class SyncRequest {
     public boolean isUpdate() { return type == RequestType.UPDATE; }
     public boolean isDelete() { return type == RequestType.DELETE; }
     
-    public void setEntry(BaseEntry entry) {
-        this.entry = entry;
-    }
-    
     public boolean isGroup() {
         return entry != null && entry.getClass() == ContactGroupEntry.class;
+    }
+
+    public boolean isContact() {
+        return entry != null && entry.getClass() == ContactEntry.class;
     }
 
     private boolean isVersionConflict() {
@@ -104,10 +112,12 @@ public class SyncRequest {
         }
         error = null;
         try {
-            if (isInsert()) {
-                entry = service.insert(entry);
-            } else if (isUpdate()) {
-                entry = service.update(entry);
+            if (isInsert() || isUpdate()) {
+                entry = isInsert() ? service.insert(entry) : service.update(entry);
+                if (photoData != null && isContact()) {
+                    ContactEntry ce = (ContactEntry) entry;
+                    service.addPhoto((ContactEntry) entry, photoData, photoType);
+                }
             } else if (isDelete()) {
                 service.delete(entry);
             }

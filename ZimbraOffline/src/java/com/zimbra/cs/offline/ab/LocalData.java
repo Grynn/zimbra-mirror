@@ -241,22 +241,6 @@ public final class LocalData {
         SyncExceptionHandler.syncContactFailed(mbox, itemId, data, e);
     }
 
-    public static String getFileAs(Map<String, String> fields) {
-        if (!fields.containsKey(Contact.A_firstName) &&
-            !fields.containsKey(Contact.A_lastName)) {
-            String fileAs;
-            if ((fileAs = fields.get(Contact.A_fullName)) != null ||
-                (fileAs = fields.get(Contact.A_nickname)) != null ||
-                (fileAs = fields.get(Contact.A_email)) != null ||
-                (fileAs = fields.get(Contact.A_email2)) != null ||
-                (fileAs = fields.get(Contact.A_workEmail1)) != null ||
-                (fileAs = fields.get(Contact.A_imAddress1)) != null) {
-                return fileAs;
-            }
-        }
-        return null;
-    }
-    
     public OfflineDataSource getDataSource() { return ds; }
     public DesktopMailbox getMailbox() { return mbox; }
     public Log getLog() { return log; }

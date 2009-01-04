@@ -32,12 +32,14 @@ import com.google.gdata.data.extensions.OrgTitle;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Arrays;
 
-import static com.zimbra.cs.mailbox.Contact.*;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mime.ParsedContact;
-import com.zimbra.cs.offline.ab.LocalData;
+import com.zimbra.cs.offline.ab.AbUtil;
 import com.zimbra.common.service.ServiceException;
+
+import static com.zimbra.cs.mailbox.Contact.*;
 
 public class ContactData {
     private final Map<String, String> fields = new HashMap<String, String>();
@@ -61,17 +63,27 @@ public class ContactData {
         return contact;
     }
 
-    public ContactEntry updateContactEntry(ContactEntry contact) {
+    public void updateContactEntry(ContactEntry contact) {
         exportContact(contact);
-        return contact;
     }
 
-    public ParsedContact getParsedContact() throws ServiceException {
-        String fileAs = LocalData.getFileAs(fields);
+    public ParsedContact newParsedContact(Attachment photo)
+        throws ServiceException {
+        setFileAs();
+        return new ParsedContact(fields, photo != null ? Arrays.asList(photo) : null);
+    }
+
+    public void updateParsedContact(ParsedContact pc, Attachment photo)
+        throws ServiceException {
+        setFileAs();
+        pc.modify(fields, photo != null ? Arrays.asList(photo) : null);
+    }
+
+    private void setFileAs() {
+        String fileAs = AbUtil.getFileAs(fields);
         if (fileAs != null) {
             fields.put(A_fileAs, FA_EXPLICIT + ":" + fileAs);
         }
-        return new ParsedContact(fields);
     }
 
     public boolean isEmpty() {
@@ -91,11 +103,15 @@ public class ContactData {
         importIm(contact, 2, A_imAddress3);
         PostalAddress homeAddr = getPostalAddress(contact, PostalAddress.Rel.HOME);
         if (homeAddr != null) {
-            importHomeAddress(homeAddr.getValue());
+            importHomeAddress(Address.parse(homeAddr.getValue()));
+        } else {
+            importHomeAddress(new Address());
         }
         PostalAddress workAddr = getPostalAddress(contact, PostalAddress.Rel.WORK);
         if (workAddr != null) {
-            importWorkAddress(workAddr.getValue());
+            importWorkAddress(Address.parse(workAddr.getValue()));
+        } else {
+            importWorkAddress(new Address());
         }
         importPhone(contact, PhoneNumber.Rel.HOME, A_homePhone);
         importPhone(contact, PhoneNumber.Rel.WORK, A_workPhone);
@@ -106,11 +122,16 @@ public class ContactData {
             Organization organization = contact.getOrganizations().get(0);
             set(A_company, getValue(organization.getOrgName()));
             set(A_jobTitle, getValue(organization.getOrgTitle()));
+        } else {
+            set(A_company, null);
+            set(A_jobTitle, null);
         }
         if (contact.getContent() != null) {
             TextContent notes = contact.getTextContent();
             if (notes != null) {
                 set(A_notes, notes.getContent().getPlainText());
+            } else {
+                set(A_notes, null);
             }
         }
     }
@@ -160,8 +181,10 @@ public class ContactData {
             List<Email> emails = contact.getEmailAddresses();
             if (index < emails.size()) {
                 set(field, emails.get(index).getAddress());
+                return;
             }
         }
+        set(field, null);
     }
 
     private void importIm(ContactEntry contact, int index, String field) {
@@ -169,8 +192,10 @@ public class ContactData {
             List<Im> ims = contact.getImAddresses();
             if (index < ims.size()) {
                 set(field, getLocalImAddress(ims.get(index)));
+                return;
             }
         }
+        set(field, null);
     }
     
     private PostalAddress getPostalAddress(ContactEntry contact, String type) {
@@ -189,9 +214,11 @@ public class ContactData {
             for (PhoneNumber phone : contact.getPhoneNumbers()) {
                 if (type.equals(phone.getRel())) {
                     fields.put(field, phone.getPhoneNumber());
+                    return;
                 }
             }
         }
+        set(field, null);
     }
 
     private void exportPhone(ContactEntry contact, String type, String field) {
@@ -252,8 +279,7 @@ public class ContactData {
         }
     }
     
-    private void importHomeAddress(String spec) {
-        Address addr = Address.parse(spec);
+    private void importHomeAddress(Address addr) {
         set(A_homeStreet, addr.getStreet());
         set(A_homeCity, addr.getCity());
         set(A_homeState, addr.getState());
@@ -261,8 +287,7 @@ public class ContactData {
         set(A_homeCountry, addr.getCountry());
     }
 
-    private void importWorkAddress(String spec) {
-        Address addr = Address.parse(spec);
+    private void importWorkAddress(Address addr) {
         set(A_homeStreet, addr.getStreet());
         set(A_homeCity, addr.getCity());
         set(A_homeState, addr.getState());
