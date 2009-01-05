@@ -273,7 +273,8 @@ function(entry) {
 	this._containedObject[ZaDomain.A_AuthUseBindPassword] = entry[ZaDomain.A_AuthUseBindPassword];
 	this.setTitle(ZaMsg.NCD_AuthConfigTitle + " (" + entry.name + ")");
 
-    if (ZaSettings.isDomainAdmin && (entry.attrs[ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled] == "TRUE")) {
+    if (ZaSettings.isDomainAdmin && (entry.attrs[ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled] == "TRUE")
+           && entry.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled] != "TRUE") {
         this._containedObject [ZaDomain.A2_allowClearTextLDAPAuth] = "FALSE" ;
     }
 
@@ -346,7 +347,8 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 											{ref:".", type:_LDAPURL_, label:null,ldapSSLPort:"636",ldapPort:"389",  labelLocation:_NONE_}
 										]
 									},	
-									{ref:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_CHECKBOX_, label:ZaMsg.Domain_AuthLdapStartTlsEnabled, trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
+									{ref:ZaDomain.A_zimbraAuthLdapStartTlsEnabled, type:_CHECKBOX_, label:ZaMsg.Domain_AuthLdapStartTlsEnabled, onChange: ZaAuthConfigXWizard.startTlsEnabledChanged,
+										 trueValue:"TRUE", falseValue:"FALSE",labelCssClass:"xform_label", align:_LEFT_},
 									{ref:ZaDomain.A_AuthLdapSearchFilter, type:_TEXTAREA_, width:380, height:100, label:ZaMsg.Domain_AuthLdapFilter, labelLocation:_LEFT_, textWrapping:"soft"},
 									{ref:ZaDomain.A_AuthLdapSearchBase, type:_TEXTAREA_, width:380, height:50, label:ZaMsg.Domain_AuthLdapSearchBase, labelLocation:_LEFT_, textWrapping:"soft"},
 									{type:_OUTPUT_, value:ZaMsg.NAD_DomainsAuthStr, colSpan:2}
@@ -469,8 +471,41 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 }
 ZaXDialog.XFormModifiers["ZaAuthConfigXWizard"].push(ZaAuthConfigXWizard.myXFormModifier);
 
-/*
-ZaAuthConfigXWizard.        allowClearTextLDAPAuth = function (instance , item) {
-   return (instance [ZaDomain.A2_allowClearTextLDAPAuth] == "TRUE") ; 
+ZaAuthConfigXWizard.startTlsEnabledChanged =  function (value, event, form) {
+	this.setInstanceValue(value);
+    var instance = form.getInstance () ;
+    var ldapUrls = instance.attrs[ZaDomain.A_AuthLdapURL] ;
+    var newUrls = [];
+    if (ZaSettings.isDomainAdmin && (instance.attrs[ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled] == "TRUE")
+               && instance.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled] != "TRUE") {
+        //force ldaps protocol
+        instance[ZaDomain.A2_allowClearTextLDAPAuth] = "FALSE" ;
+
+        for (var i=0; i< ldapUrls.length; i++) {
+            var ldapUrl = ldapUrls [i] ;
+            if (ldapUrl == null || ldapUrl.length <=0) {
+                //remove this empty item
+//                ldapUrls[i] = "ldaps://" + ":" + "636" ;
+            }else {
+                //force to use ldaps://
+                ldapUrls[i] = ldapUrl.replace("ldap://", "ldaps://")  ;
+                newUrls.push (ldapUrls[i]);
+            }
+        }
+
+    }else{
+        for (var i=0; i< ldapUrls.length; i++) {
+            var ldapUrl = ldapUrls [i] ;
+            //remove this empty item
+            if (ldapUrl == null || ldapUrl.length <=0) {
+                
+            }else {
+                newUrls.push (ldapUrls[i]);
+            }
+        }
+        instance[ZaDomain.A2_allowClearTextLDAPAuth] = "TRUE" ;
+    }
+
+    instance.attrs[ZaDomain.A_AuthLdapURL] = newUrls ;
+    form.refresh ();  
 }
-*/
