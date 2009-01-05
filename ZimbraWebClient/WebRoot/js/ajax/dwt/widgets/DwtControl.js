@@ -848,6 +848,19 @@ function(state) {
     }
 };
 
+/**
+* Adds an alert style to the control, for example to indicate that a new message has arrived.
+*/
+DwtControl.prototype.showAlert =
+function(alert) {
+	if (alert && !this._alert) {
+		this.delClassName(null, "ZAlert");
+	} else if (!alert && this._alert) {
+		this.delClassName("ZAlert", null);
+	}
+	this._alert = alert;
+};
+
 DwtControl.prototype._createHtmlFromTemplate =
 function(templateId, data) {
     // set html content
