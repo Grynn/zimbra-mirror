@@ -3083,7 +3083,8 @@ return !hasFailures;</string>
                       </void>
                       <void property="text">
                         <string>user_pref("intl.accept_languages", "@languageId@");
-user_pref("general.useragent.locale", "@languageId@");</string>
+user_pref("general.useragent.locale", "@languageId@");
+user_pref("spellchecker.dictionary", "@languageId@");</string>
                       </void>
                     </object>
                   </java>
