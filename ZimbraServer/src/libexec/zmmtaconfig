@@ -104,6 +104,7 @@ my %exe = (
   'IMAPPROXY'     => "$config{baseDir}/bin/zmproxyctl",
   'STATS'         => "$config{baseDir}/bin/zmstatctl",
   'ARCHIVING'     => "$config{baseDir}/bin/zmamavisdctl",
+  'MEMCACHED'     => "$config{baseDir}/bin/zmmemcachedctl",
   'MTA'           => "$config{baseDir}/bin/postfix",
   'ANTISPAM'      => "$config{baseDir}/bin/zmamavisdctl",
   'AMAVIS'        => "$config{baseDir}/bin/zmamavisdctl",
