@@ -906,21 +906,18 @@
         <attribute>
             <description>starting time in msecs</description>
             <name>start</name>
-            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
 
         <attribute>
             <description>ending time in msecs</description>
             <name>end</name>
-            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
 
         <attribute>
             <description>timezone to compute correct start/end time for all day appts</description>
             <name>timezone</name>
-            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.util.TimeZone</type>
         </attribute>
