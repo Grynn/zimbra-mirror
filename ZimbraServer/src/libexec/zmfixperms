@@ -397,6 +397,7 @@ if [ -d ${zimbra_home}/data/postfix ]; then
 		chmod 730 ${zimbra_home}/data/postfix/spool/maildrop
 	fi
 	chown -f ${postfix_owner} ${zimbra_home}/data/postfix
+	chown -f ${postfix_owner} ${zimbra_home}/data/postfix/*
 fi
 
 if [ -f ${zimbra_home}/conf/ldap-scm.cf ]; then
