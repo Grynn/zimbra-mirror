@@ -815,10 +815,10 @@ sub compileActions {
         logMsg(5, "Adding postconf $postconf");
         $state->{current}->{postconf}->{$postconf} = $section->{config}->{postconf}->{$postconf};
       }
-	  if ($section->{name} eq "imapproxy") {
-	    logMsg(5, "Section $section->{name} changed compiling proxygen");
-		$state->{current}->{proxygen}=1;
-	  }
+      if ($section->{name} eq "imapproxy") {
+        logMsg(5, "Section $section->{name} changed compiling proxygen");
+        $state->{current}->{proxygen}=1;
+      }
       unless ($state->{forced}) {  # no restarts on forced rewrites
         logMsg(5, "Section $section->{name} changed compiling restarts");
         foreach my $restarts (keys %{$section->{config}->{restarts}}) {
