@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
@@ -22,7 +23,7 @@ public class JspProvStub {
     private JspProvStub() throws ServiceException {
     	prov = new SoapProvisioning();
         prov.soapSetURI(ConfigServlet.LOCALHOST_ADMIN_URL);
-        prov.soapZimbraAdminAuthenticate();
+        prov.soapAdminAuthenticate(LC.zimbra_ldap_user.value(), LC.get("zdesktop_installation_key"));
     }
     
     public static JspProvStub getInstance() throws ServiceException {

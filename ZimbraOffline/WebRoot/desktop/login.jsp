@@ -17,7 +17,7 @@
 <c:set var="prefsToFetch" value="zimbraPrefSkin,zimbraPrefClientType,zimbraPrefLocale"/>
 
 <c:catch var="loginException">
-    <zm:login username="${empty param.username ? bean.loginUsername : param.username}" password="anythingisfine"
+    <zm:login username="${empty param.username ? bean.loginUsername : param.username}" password="${zdf:getLocalConfig('zdesktop_installation_key')}"
         varRedirectUrl="postLoginUrl" varAuthResult="authResult" rememberme="true"
         prefs="${prefsToFetch}" attrs="${attrsToFetch}" requestedSkin="${param.skin}"/>
 </c:catch>
