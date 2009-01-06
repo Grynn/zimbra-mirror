@@ -15,13 +15,29 @@
  * ***** END LICENSE BLOCK *****
  */
 
-ZmCsfeException = function(msg, code, method, detail, data,trace) {
-	AjxException.call(this, msg, code, method, detail);
+/**
+ * Exception returned by the server as a response, generally as a fault. The fault
+ * data is converted to properties of the exception.
+ *
+ * @param params	[hash]		hash of params:
+ *        msg		[string]	terse explanation (Fault.Reason.Text)
+ *        code		[string]	error code (Fault.Detail.Error.Code)
+ *        method	[string]	request name
+ *        detail	[string]	Fault.Code.Value
+ *        data		[object]*	optional structured fault data (Fault.Detail.Error.a)
+ *        trace		[string]*	trace info (Fault.Detail.Error.Trace)
+ *        request	[string]*	SOAP or JSON that represents the request
+ */
+ZmCsfeException = function(params) {
+
+	params = Dwt.getParams(arguments, ZmCsfeException.PARAMS);
+
+	AjxException.call(this, params.msg, params.code, params.method, params.detail);
 	
-	if (data) {
+	if (params.data) {
 		this.data = {};
-		for (var i = 0; i < data.length; i++) {
-			var item = data[i];
+		for (var i = 0; i < params.data.length; i++) {
+			var item = params.data[i];
 			var key = item.n;
 			if (!this.data[key]) {
 				this.data[key] = [];
@@ -30,10 +46,11 @@ ZmCsfeException = function(msg, code, method, detail, data,trace) {
 		}
 	}
 	
-	if(trace) {
-		this.trace=trace;
-	}
+	this.trace = params.trace;
+	this.request = params.request;
 };
+
+ZmCsfeException.PARAMS = ["msg", "code", "method", "detail", "data", "trace"];
 
 ZmCsfeException.prototype = new AjxException;
 ZmCsfeException.prototype.constructor = ZmCsfeException;
@@ -77,7 +94,7 @@ function(args) {
 
 ZmCsfeException.prototype.getData =
 function(key) {
-	return this.data ? this.data[key] : null;
+	return this.data && this.data[key];
 };
 
 //

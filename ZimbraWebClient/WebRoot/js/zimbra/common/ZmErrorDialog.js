@@ -244,8 +244,7 @@ function() {
 
 	var msg = this._msgStr;
 	if (this._detailsVisible) {
-		msg += "<hr> " + this._detailStr.substr(0,300);
-		if (this._detailStr.length > 300) msg += "...";
+		msg += "<hr> " + this._detailStr;
 	}
 	DwtMessageDialog.prototype.setMessage.call(this, msg, this._msgStyle, this._msgTitle);
 	this._button[ZmErrorDialog.DETAIL_BUTTON].setText(this._detailsVisible ? this._hideDetailsMsg : this._showDetailsMsg);

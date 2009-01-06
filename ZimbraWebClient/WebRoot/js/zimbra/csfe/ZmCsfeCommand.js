@@ -89,15 +89,25 @@ function(sessionId) {
 };
 
 ZmCsfeCommand.faultToEx =
-function(fault, method) {
+function(fault, params) {
 	var faultCode = AjxStringUtil.getAsString(fault.Code.Value);
 	var errorCode = AjxStringUtil.getAsString(fault.Detail.Error.Code);
 	var msg = AjxStringUtil.getAsString(fault.Reason.Text);
-	var trace="";
-	if(fault.Detail.Error.Trace) {
-		trace = fault.Detail.Error.Trace;
+	var trace = fault.Detail.Error.Trace || "";
+
+	var request;
+	if (params.soapDoc) {
+		// note that we don't pretty-print XML if we get a soapDoc
+		request = params.soapDoc.getXml();
+	} else if (params.jsonRequestObj) {
+		if (params.jsonRequestObj && params.jsonRequestObj.Header && params.jsonRequestObj.Header.context) {
+			params.jsonRequestObj.Header.context.authToken = "(removed)";
+		}
+		request = AjxStringUtil.prettyPrint(params.jsonRequestObj, true);
 	}
-	return new ZmCsfeException(msg, errorCode, method, faultCode, fault.Detail.Error.a, trace);
+
+	return new ZmCsfeException({msg:msg, code:errorCode, method:params.methodNameStr, detail:faultCode,
+								data:fault.Detail.Error.a, trace:trace, request:request});
 };
 
 /**
@@ -257,9 +267,9 @@ function(params) {
 		DBG.dumpObj(AjxDebug.DBG1, obj);
 	}
 
-	var requestStr = AjxStringUtil.objToString(obj);
+	params.jsonRequestObj = obj;
 
-	return requestStr;
+	return AjxStringUtil.objToString(obj);
 };
 
 ZmCsfeCommand._getSoapRequestStr =
@@ -359,7 +369,6 @@ function(params) {
 		DBG.println(AjxDebug.DBG1, ["<H4>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</H4>"].join(""), params.methodNameStr);
 		DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 	}
-
 
 	return soapDoc.getXml();
 };
@@ -488,7 +497,7 @@ function(response, params) {
 	var fault = obj.Body.Fault;
 	if (fault) {
 		// JS response with fault
-		var ex = ZmCsfeCommand.faultToEx(fault, params.methodNameStr);
+		var ex = ZmCsfeCommand.faultToEx(fault, params);
 		if (params.asyncMode) {
 			result.set(ex, true, obj.Header);
 			return result;

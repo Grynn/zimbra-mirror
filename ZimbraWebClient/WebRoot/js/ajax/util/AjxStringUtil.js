@@ -339,21 +339,6 @@ AjxStringUtil.resolve =
 function(str, values) {
 	DBG.println(AjxDebug.DBG1, "Call to deprecated function AjxStringUtil.resolve");
 	return AjxMessageFormat.format(str, values);
-/*
-	if (!str) return "";
-	if (!(values instanceof Array)) values = [values];
-	if (!AjxEnv.isSafari)
-		return str.replace(/\$(\d+)/g, function(str, num) { return values[num]; });
-
-	//quick hack
-	var match;
-	while ((match = str.match(/\$(\d+)/)) != null) {
-		var d = match[1];
-		var re = new RegExp("\\$"+d);
-		str = str.replace(re, values[d]);
-	}
-	return str;
-*/
 };
 
 /**
@@ -1214,4 +1199,127 @@ function(o) {
 	}
 
 	return 'null';
+};
+
+AjxStringUtil.prettyPrint =
+function(obj, recurse, showFuncs, omit) {
+
+	AjxStringUtil._visited = new AjxVector();
+	var text = AjxStringUtil._prettyPrint(obj, recurse, showFuncs, omit);
+	AjxStringUtil._visited = null;
+
+	return text;
+};
+
+AjxStringUtil._visited = null;
+
+AjxStringUtil._prettyPrint =
+function(obj, recurse, showFuncs, omit) {
+
+	var indentLevel = 0;
+	var showBraces = false;
+	var stopRecursion = false;
+	if (arguments.length > 4) {
+		indentLevel = arguments[4];
+		showBraces = arguments[5];
+		stopRecursion = arguments[6];
+	}
+
+	if (AjxUtil.isObject(obj)) {
+		var objStr = obj.toString();
+		if (omit && omit[objStr]) {
+			return "[" + objStr + "]";
+		}
+		if (AjxStringUtil._visited.contains(obj)) {
+			return "[visited object]";
+		} else {
+			AjxStringUtil._visited.add(obj);
+		}
+	}
+
+	var indent = AjxStringUtil.repeat(" ", indentLevel);
+	var text = "";
+
+	if (obj === undefined) {
+		text += "[undefined]";
+	} else if (obj === null) {
+		text += "[null]";
+	} else if (AjxUtil.isBoolean(obj)) {
+		text += obj ? "true" : "false";
+	} else if (AjxUtil.isString(obj)) {
+		text += '"' + AjxStringUtil._escapeForHTML(obj) + '"';
+	} else if (AjxUtil.isNumber(obj)) {
+		text += obj;
+	} else if (AjxUtil.isObject(obj)) {
+		var isArray = AjxUtil.isArray(obj);
+		if (stopRecursion) {
+			text += isArray ? "[Array]" : obj.toString();
+		} else {
+			stopRecursion = !recurse;
+			var keys = new Array();
+			for (var i in obj) {
+				keys.push(i);
+			}
+
+			if (isArray) {
+				keys.sort(function(a,b) {return a - b;});
+			} else {
+				keys.sort();
+			}
+
+			if (showBraces) {
+				text += isArray ? "[" : "{";
+			}
+			var len = keys.length;
+			for (var i = 0; i < len; i++) {
+				var key = keys[i];
+				var nextObj = obj[key];
+				var value = null;
+				// For dumping events, and dom elements, though I may not want to
+				// traverse the node, I do want to know what the attribute is.
+				if (nextObj == window || nextObj == document || (!AjxEnv.isIE && nextObj instanceof Node)){
+					value = nextObj.toString();
+				}
+				if ((typeof(nextObj) == "function")){
+					if (showFuncs) {
+						value = "[function]";
+					} else {
+						continue;
+					}
+				}
+
+				if (i > 0) {
+					text += ",";
+				}
+				text += "\n" + indent;
+				if (value != null) {
+					text += key + ": " + value;
+				} else {
+					text += key + ": " + this._prettyPrint(nextObj, recurse, showFuncs, omit, indentLevel + 2, true, stopRecursion);
+				}
+			}
+			if (i > 0) {
+				text += "\n" + AjxStringUtil.repeat(" ", indentLevel - 1);
+			}
+			if (showBraces) {
+				text += isArray ? "]" : "}";
+			}
+		}
+	}
+	return text;
+};
+
+AjxStringUtil._escapeForHTML =
+function(str){
+
+	if (typeof(str) != 'string') { return str; }
+
+	var s = str;
+	s = s.replace(/\&/g, '&amp;');
+	s = s.replace(/\</g, '&lt;');
+	s = s.replace(/\>/g, '&gt;');
+	s = s.replace(/\"/g, '&quot;');
+	s = s.replace(/\xA0/g, '&nbsp;');
+
+	return s;
 };

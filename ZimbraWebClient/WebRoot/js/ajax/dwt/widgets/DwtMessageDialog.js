@@ -86,7 +86,7 @@ function(msgStr, style, title) {
 	if (msgStr) {
 		var html = new Array();
 		var i = 0;
-		html[i++] = "<table cellspacing=0 cellpadding=0 border=0><tr>";
+		html[i++] = "<table cellspacing=0 cellpadding=0 border=0 width='100%'><tr>";
 		html[i++] = "<td valign='top'>";
 		html[i++] = AjxImg.getImageHtml(DwtMessageDialog.ICON[style]);
 		html[i++] = "</td><td class='DwtMsgArea'>";

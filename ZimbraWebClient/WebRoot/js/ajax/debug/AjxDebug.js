@@ -142,11 +142,8 @@ function(level, obj, showFuncs, linkName) {
 	obj = args[0];
 	if (!obj) { return; }
 
-	this._showFuncs = args[1];
-
-	AjxDebug._visited = new AjxVector();
-	this._add(null, obj);
-	this._showFuncs = null;
+	showFuncs = args[1];
+	this._add(null, obj, false, false, null, showFuncs);
 };
 
 /**
@@ -307,7 +304,7 @@ function() {
 };
 
 AjxDebug.prototype._getHtmlForObject =
-function(anObj, isXml, isRaw, timestamp) {
+function(anObj, isXml, isRaw, timestamp, showFuncs) {
 	var html = [];
 	var idx = 0;
 
@@ -337,7 +334,7 @@ function(anObj, isXml, isRaw, timestamp) {
 			html[idx++] = "</div>";
 		} else {
 			html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'><pre>";
-			html[idx++] = this._dump(anObj, true);
+			html[idx++] = this._dump(anObj, true, showFuncs);
 			html[idx++] = "</div></pre>";
 		}
 	}
@@ -346,93 +343,9 @@ function(anObj, isXml, isRaw, timestamp) {
 
 // Pretty-prints a Javascript object
 AjxDebug.prototype._dump =
-function(obj, recurse) {
+function(obj, recurse, showFuncs) {
 
-	var indentLevel = 0;
-	var showBraces = false;
-	var stopRecursion = false;
-	if (arguments.length > 2) {
-		indentLevel = arguments[2];
-		showBraces = arguments[3];
-		stopRecursion = arguments[4];
-	}
-
-	if (AjxUtil.isObject(obj)) {
-		if (obj.toString() == "ZmAppCtxt") {
-			return "[ZmAppCtxt]";
-		}
-		if (AjxDebug._visited.contains(obj)) {
-			return "[visited object]";
-		} else {
-			AjxDebug._visited.add(obj);
-		}
-	}
-
-	var indent = AjxStringUtil.repeat(" ", indentLevel);
-	var text = "";
-
-	if (obj === undefined) {
-		text += "[undefined]";
-	} else if (obj === null) {
-		text += "[null]";
-	} else if (AjxUtil.isBoolean(obj)) {
-		text += obj ? "true" : "false";
-	} else if (AjxUtil.isString(obj)) {
-	//	obj = obj.replace(/\r/g, "\\r");
-	//	obj = obj.replace(/\n/g, "\\n");
-	//	obj = obj.replace(/\t/g, "\\t");
-		text += '"' + this._escapeForHTML(obj) + '"';
-	} else if (AjxUtil.isNumber(obj)) {
-		text += obj;
-	} else if (AjxUtil.isObject(obj)) {
-		var isArray = AjxUtil.isArray(obj);
-		if (stopRecursion) {
-			text += isArray ? "[Array]" : obj.toString();
-		} else {
-			stopRecursion = !recurse;
-			var keys = new Array();
-			for (var i in obj) {
-				keys.push(i);
-			}
-
-			isArray ? keys.sort(function(a,b) {return a - b;}) : keys.sort();
-
-			if (showBraces) {
-				text += isArray ? "[" : "{";
-			}
-			var len = keys.length;
-			for (var i = 0; i < len; i++) {
-				var key = keys[i];
-				var nextObj = obj[key];
-				var value = null;
-				// For dumping events, and dom elements, though I may not want to
-				// traverse the node, I do want to know what the attribute is.
-				if (nextObj == window || nextObj == document || (!AjxEnv.isIE && nextObj instanceof Node)){
-					value = nextObj.toString();
-				}
-				if ((typeof(nextObj) == "function")){
-					if (this._showFuncs) {
-						value = "[function]";
-					} else {
-						continue;
-					}
-				}
-
-				if (i > 0) text += ",";
-				text += "\n" + indent;
-				if (value != null) {
-					text += key + ": " + value;
-				} else {
-					text += key + ": " + this._dump(nextObj, recurse, indentLevel + 2, true, stopRecursion);
-				}
-			}
-			if (i > 0)
-				text += "\n" + AjxStringUtil.repeat(" ", indentLevel - 1);
-			if (showBraces)
-				text += isArray ? "]" : "}";
-		}
-	}
-	return text;
+	return AjxStringUtil.prettyPrint(obj, recurse, showFuncs, {ZmAppCtxt:true});
 };
 
 /*
@@ -735,10 +648,10 @@ function(obj) {
 };
 
 AjxDebug.prototype._add =
-function(aMsg, extraInfo, isXml, isRaw, linkName) {
+function(aMsg, extraInfo, isXml, isRaw, linkName, showFuncs) {
 	var timestamp = new Date();
 	if (extraInfo) {
-		extraInfo = this._getHtmlForObject(extraInfo, isXml, isRaw, timestamp);
+		extraInfo = this._getHtmlForObject(extraInfo, isXml, isRaw, timestamp, showFuncs);
 	}
 
 	// Add the message to our stack
@@ -865,19 +778,6 @@ function() {
 		this._debugWindow.onunload = null;
 	}
 };
-
-AjxDebug.prototype._escapeForHTML =
-function(str){
-	if (typeof(str) != 'string') return str;
-	var s = str;
-	s = s.replace(/\&/g, '&amp;');
-	s = s.replace(/\</g, '&lt;');
-	s = s.replace(/\>/g, '&gt;');
-	s = s.replace(/\"/g, '&quot;');
-	s = s.replace(/\xA0/g, '&nbsp;');
-	return s;
-};
-
 
 /**
  * Simple wrapper for log messages
