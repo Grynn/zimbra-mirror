@@ -56,11 +56,6 @@ chomp($config{hostname} = `/opt/zimbra/bin/zmhostname`)
  
 logMsg(0, "Can't determine server hostname") 
   if ($config{hostname} eq ""); 
-chomp($config{hostname} = `/opt/zimbra/bin/zmhostname`)
-  if ($config{hostname} eq "");
- 
-logMsg(0, "Can't determine server hostname") 
-  if ($config{hostname} eq ""); 
 
 my $sectionMap = { 
   amavis     => "mta",
