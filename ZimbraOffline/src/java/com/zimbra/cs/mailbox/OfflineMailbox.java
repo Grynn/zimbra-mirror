@@ -141,7 +141,15 @@ public class OfflineMailbox extends DesktopMailbox {
 		try {
 			mMailboxSync.sync(isOnRequest, isDebugTraceOn);
 		} catch (ServiceException x) {
-			OfflineLog.offline.error(x);
+			if (x.getCode().equals(ServiceException.AUTH_EXPIRED)) {
+				OfflineLog.offline.info("auth token expired; reauth and rerun sync.");
+				try {
+					mMailboxSync.sync(isOnRequest, isDebugTraceOn);
+				} catch (ServiceException e) {
+					OfflineLog.offline.error(e);
+				}
+			} else
+	 			OfflineLog.offline.error(x);
 		}
     }
 

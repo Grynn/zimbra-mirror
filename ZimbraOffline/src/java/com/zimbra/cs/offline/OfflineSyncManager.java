@@ -142,6 +142,11 @@ public class OfflineSyncManager {
     		return null;
     	}
     	
+    	void clearAuthToken() {
+    		authToken = null;
+    		authExpires = 0;
+    	}
+    	
     	boolean reauthOK(String password) {
     		return !password.equals(authPassword) || System.currentTimeMillis() - lastAuthFail > OfflineLC.zdesktop_reauth_delay.longValue();
     	}
@@ -289,6 +294,12 @@ public class OfflineSyncManager {
 	public ZAuthToken lookupAuthToken(Account account) {
 		synchronized (syncStatusTable) {
 			return getStatus(account.getName()).lookupAuthToken(((OfflineAccount)account).getRemotePassword());
+		}
+	}
+	
+	public void clearAuthToken(Account account) {
+		synchronized (syncStatusTable) {
+			getStatus(account.getName()).clearAuthToken();
 		}
 	}
 	

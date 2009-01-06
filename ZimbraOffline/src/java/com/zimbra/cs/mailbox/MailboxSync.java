@@ -193,7 +193,10 @@ public class MailboxSync {
             } catch (Exception e) {
             	if (ombx.isDeleting())
             		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccountName());
-            	else
+            	else if (e instanceof ServiceException && ((ServiceException)e).getCode().equals(ServiceException.AUTH_EXPIRED)) {
+            		syncMan.clearAuthToken(ombx.getAccount());
+            		throw (ServiceException)e;
+            	} else
             		syncMan.processSyncException(ombx.getAccount(), e);
             } finally {
             	if (isOnRequest && isDebugTraceOn) {
