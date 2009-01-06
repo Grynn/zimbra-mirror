@@ -26,6 +26,7 @@ use Data::Dumper;
 use POSIX qw(:signal_h :errno_h :sys_wait_h setsid);
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Util::Common;
+use Zimbra::Util::LDAP;
 use Zimbra::Mon::Logger;
 
 if ($^O eq "darwin") {
@@ -914,6 +915,10 @@ sub doActions() {
   foreach my $restart (keys %{$state->{current}->{restarts}}) {
     delete($state->{current}->{restarts}->{$restart})
       unless controlProcess($restart,$state->{current}->{restarts}->{$restart});
+  }
+  foreach my $ldap (keys %{$state->{current}->{ldap}}) {
+    delete($state->{current}->{ldap}->{$ldap})
+      unless Zimbra::Util::LDAP->doLdap($ldap,$state->{current}->{ldap}->{$ldap});
   }
 }
 
