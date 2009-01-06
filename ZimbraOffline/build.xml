@@ -240,9 +240,6 @@
 		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/desktop" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/classes/desktop" />
 		</copy>
-                <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/classes/messages" overwrite="true">
-                        <fileset dir="WebRoot/WEB-INF/classes/desktop" />
-                </copy>
 		<copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/tlds" overwrite="true">
 			<fileset dir="WebRoot/WEB-INF/tlds" />
 		</copy>

@@ -219,7 +219,7 @@
 		<init-param>
 			<param-name>basename-patterns</param-name>
 			<param-value>
-				<!--WEB-INF/classes/${dir}/${name}-->
+				WEB-INF/classes/desktop/${name},
 				WEB-INF/classes/messages/${name},
 				WEB-INF/classes/keys/${name},
 				WEB-INF/classes/${dir}/${name},
