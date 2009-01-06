@@ -755,7 +755,16 @@ public class ZMessageComposeBean {
         if (getContent() != null) {
             content.append(getContent());
         }
+        String composeFormat = mailbox.getPrefs().getComposeFormat();
+        Boolean isText = composeFormat.equals("text");
+        if((action == Action.REPLY || action == Action.REPLY_ALL || action == Action.INVITE_ACCEPT || action == Action.INVITE_DECLINE ||
+                action == Action.INVITE_TENTATIVE || action == Action.FORWARD) && mailbox.getPrefs().getForwardReplyInOriginalFormat()){
+            if (getContentType() != null) {isText = getContentType().equals("text/plain");} 
+        }
 
+        if(isText){
+           signature = BeanUtils.htmlDecode(signature);
+        }
         if (signatureTop && signature != null && signature.length() > 0)
             content.append("\n\n\n").append(signature);
 

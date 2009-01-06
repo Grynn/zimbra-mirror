@@ -181,6 +181,7 @@ public class BeanUtils {
     private static final Pattern sURL = Pattern.compile(
             "((telnet:)|((https?|ftp|gopher|news|file):\\/\\/)|(www\\.[\\w\\.\\_\\-]+))[^\\s\\xA0\\(\\)\\<\\>\\[\\]\\{\\}\'\"]*",
             Pattern.MULTILINE);
+    private static final Pattern sHTMLDECODE = Pattern.compile("\\<.*?\\>", Pattern.MULTILINE);
 
     public static String prefixContent(String content, String prefix) {
         if (content == null || prefix == null) return "";
@@ -193,6 +194,11 @@ public class BeanUtils {
         s = replaceAll(s, sLT, "&lt;");
         s = replaceAll(s, sGT, "&gt;");
         return s;
+    }
+
+    public static String htmlDecode(String text) {
+        if (text == null || text.length() == 0) return "";
+        return replaceAll(text, sHTMLDECODE, "");
     }
 
     public static String encodeHtmlAttr(String text) {
