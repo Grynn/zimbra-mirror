@@ -682,6 +682,10 @@
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
 			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+			<arg line="-e mailboxd_truststore='${param.install.dir}/conf/cacerts'" />
+		</java>
+		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
+			<sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
 			<arg line="-e zdesktop_relabel=${offline.relabel}" />
 		</java>
 		<java classname="com.zimbra.common.localconfig.Main" fork="true" classpathref="offline.class.path" failonerror="true">
