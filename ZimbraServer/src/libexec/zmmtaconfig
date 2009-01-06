@@ -61,31 +61,33 @@ my $sectionMap = {
   amavis     => "mta",
   sasl       => "mta", 
   webxml     => "mailbox",
-  nginx  => "imapproxy"
+  nginx      => "imapproxy"
 };
 
 my $state = {
-  firstRun      => 1,
-  anyFailed     => 0,
-  forced        => 0,
+  firstRun         => 1,
+  anyFailed        => 0,
+  forced           => 0,
   localconfig      => (),
   globalconfig     => (),
-  miscconfig     => (),
+  miscconfig       => (),
   serverconfig     => (),
   serviceconfig    => (),
   forcedconfig     => (),
   watchdog         => (),
-  current          => { rewrites => (),
-                        config   => (),
-                        restarts => (),
-                        postconf => (),
-                        services => (),
-						proxygen => 0, # 0|1
+  current          => { rewrites   => (),
+                        config     => (),
+                        restarts   => (),
+                        postconf   => (),
+                        services   => (),
+                        ldap       => (),
+                        proxygen   => 0, # 0|1
                       },
   sections         => { name   => "",
                         config => { depends    => (),
                                     rewrites   => (),
                                     restarts   => (),
+                                    ldap       => (),
                                     configkeys => ()
                                   }
                       },
@@ -694,6 +696,12 @@ sub readConfig {
           }
         } elsif ($line =~ m/^PROXYGEN/) {
           logMsg(5, "Running zmproxyconfgen.");
+        } elsif ($line =~ m/^LDAP/) {
+          if ($fields[2] eq "LOCAL") {
+            my $val = lookUpConfig($fields[2], $fields[3]);
+            logMsg(5, "Adding to ldap commands: \'$line\' $fields[1]=\'$val\'");
+            $section->{config}->{ldap}->{$fields[1]}="$val";
+          }
         } elsif ($line =~ m/^if/) {
           if (checkConditional($fields[1], $fields[2])) {
             logMsg(4, "checkConditional $fields[1] $fields[2] is true");
@@ -818,6 +826,11 @@ sub compileActions {
       if ($section->{name} eq "imapproxy") {
         logMsg(5, "Section $section->{name} changed compiling proxygen");
         $state->{current}->{proxygen}=1;
+      }
+      logMsg(5, "Section $section->{name} changed compiling ldap");
+      foreach my $ldap (keys %{$section->{config}->{ldap}}) {
+        logMsg(5, "Adding LDAP $ldap");
+        $state->{current}->{ldap}->{$ldap} = $section->{config}->{ldap}->{$ldap};
       }
       unless ($state->{forced}) {  # no restarts on forced rewrites
         logMsg(5, "Section $section->{name} changed compiling restarts");
