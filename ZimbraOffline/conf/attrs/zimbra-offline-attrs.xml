@@ -26,7 +26,7 @@
   <desc>the account's password on the remote server</desc>
 </attr>
 
-<attr name="offlineRemoteServerUri" type="string" cardinality="single" requiredIn="account">
+<attr name="offlineRemoteServerUri" type="string" cardinality="single" requiredIn="account" flags="accountInfo">
   <desc>base URI of the remote Zimbra server</desc>
 </attr>
 
