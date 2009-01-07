@@ -8,7 +8,7 @@ BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.s
 ZIMBRA_HOME ?= /opt/zimbra
 CURL_VERSION ?= 7.19.2
 HEIMDAL_VERSION ?= 1.2.1
-OPENSSL_VERSION ?= 0.9.8i
+OPENSSL_VERSION ?= 0.9.8j
 CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CURL_VERSION).tgz
 
 LIB_DIR := /usr/lib

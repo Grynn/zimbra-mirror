@@ -23,7 +23,7 @@ WGET    := $(shell which wget)
 MAKE    := $(shell which make)
 
 BDB_VERSION ?= 4.7.25.3
-SSL_VERSION ?= 0.9.8i
+SSL_VERSION ?= 0.9.8j
 LDAP_VERSION ?= 2.4.14.2z
 BDB_INC ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
