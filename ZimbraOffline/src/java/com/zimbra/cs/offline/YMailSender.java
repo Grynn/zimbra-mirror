@@ -38,12 +38,16 @@ public class YMailSender extends MailSender {
         if (ds.isSaveToSent() || !ds.isYahoo()) {
             throw new IllegalArgumentException("Must be yahoo data source");
         }
-        YMailClient ymc = new YMailClient(OfflineYAuth.authenticate(ds));
-        ymc.setTrace(ds.isDebugTraceEnabled());
-        return new YMailSender(ymc);
+        try {
+            YMailClient ymc = new YMailClient(OfflineYAuth.authenticate(ds));
+            ymc.setTrace(ds.isDebugTraceEnabled());
+            return new YMailSender(ymc);
+        } catch (Exception e) {
+            throw ServiceException.FAILURE("Unable to create initialize YMail client", e);
+        }
     }
     
-    private YMailSender(YMailClient ymc) throws ServiceException {
+    private YMailSender(YMailClient ymc) {
         this.ymc = ymc;
     }
 
