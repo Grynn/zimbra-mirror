@@ -71,8 +71,10 @@ DwtMenu = function(params) {
 	this._hasSetMouseEvents = true;
 	
 	var htmlElement = this.getHtmlElement();
-	
-	Dwt.setLocation(htmlElement, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+
+	if (params.posStyle != DwtControl.STATIC_STYLE) {
+		Dwt.setLocation(htmlElement, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
+	}
 
 	// Don't need to create table for color picker and calendar picker styles
 	if (this._style != DwtMenu.COLOR_PICKER_STYLE &&
