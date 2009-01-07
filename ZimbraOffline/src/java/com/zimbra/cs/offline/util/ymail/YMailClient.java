@@ -94,6 +94,10 @@ public final class YMailClient {
     // Maximum size of text/* attachment to include inline.
     private static final int MAX_INLINE_DATA_SIZE = 1024;
 
+    private static final String ENCODING_7BIT = "7bit";
+    private static final String ENCODING_QUOTABLE_PRINTABLE = "quoted-printable";
+    private static final String ENCODING_8BIT = "8bit";
+
     public YMailClient(Auth auth) {
         this.auth = auth;
         this.stub = getStub(auth);
@@ -245,11 +249,10 @@ public final class YMailClient {
         throws MessagingException, IOException {
         ComposeMessagePart cmp = new ComposeMessagePart();
         setAttributes(cmp, mbp);
-        ContentType ct = new ContentType(mbp.getContentType());
-        String ptype = ct.getPrimaryType();
-        if (ptype.equals("text") && !mustAttach(mbp)) {
-            cmp.setData((String) mbp.getContent());
-        } else if (ptype.equals("multipart")) {
+        String type = mbp.getContentType();
+        if (isAsciiText(mbp) && !mustAttach(mbp)) {
+            cmp.setData(getContentString(mbp));
+        } else if (type.startsWith("multipart/")) {
             addSubparts(cmp, (Multipart) mbp.getContent());
         } else {
             cmp.setAttachment("upload://" + uploadAttachment(mbp));
@@ -262,7 +265,33 @@ public final class YMailClient {
         int size = getContentSize(mbp);
         return size < 0 || size > maxInlineDataSize;
     }
-    
+
+    private static boolean isAsciiText(MimeBodyPart mbp)
+        throws IOException, MessagingException {
+        String type = mbp.getContentType();
+        if (type == null || !type.startsWith("text/")) return false;
+        Object content = mbp.getContent();
+        if (content instanceof String) return true;
+        String encoding = mbp.getEncoding();
+        return ENCODING_7BIT.equals(encoding) ||
+               ENCODING_QUOTABLE_PRINTABLE.equals(encoding);
+    }
+
+    private static String getContentString(MimeBodyPart mbp)
+        throws IOException, MessagingException {
+        Object content = mbp.getContent();
+        if (content instanceof String) {
+            return (String) content;
+        }
+        StringBuilder sb = new StringBuilder();
+        InputStream is = mbp.getInputStream();
+        int c;
+        while ((c = is.read()) != -1) {
+            sb.append((char) (c & 0x7f));
+        }
+        return sb.toString();
+    }
+
     private static int getContentSize(MimeBodyPart mbp)
         throws MessagingException, IOException {
         InputStream is = mbp.getRawInputStream();
