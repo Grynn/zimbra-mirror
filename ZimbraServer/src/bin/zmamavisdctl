@@ -87,7 +87,7 @@ case "$1" in
         mkdir /opt/zimbra/data/amavisd/db
       fi
       if [ ! -f /opt/zimbra/data/amavisd/db/DB_CONFIG -o ! -s /opt/zimbra/data/amavisd/db/DB_CONFIG ]; then
-        if [ -f /opt/zimbra/conf/custom/amavisd/DB_CONFIG]; then
+        if [ -f /opt/zimbra/conf/custom/amavisd/DB_CONFIG ]; then
           cp -f /opt/zimbra/conf/custom/amavisd/DB_CONFIG /opt/zimbra/data/amavisd/db/DB_CONFIG
         else
           cp -f /opt/zimbra/amavisd/DB_CONFIG.amavisd /opt/zimbra/data/amavisd/db/DB_CONFIG
