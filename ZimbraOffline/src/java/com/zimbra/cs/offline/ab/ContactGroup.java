@@ -87,10 +87,13 @@ public class ContactGroup {
     private void get(Contact contact) throws ServiceException {
         itemId = contact.getId();
         name = contact.get(Contact.A_nickname);
-        String mlist = contact.get(A_mlist).trim();
-        if (mlist != null && mlist.length() > 0) {
-            for (String id : mlist.split(",")) {
-                contactIds.add(Integer.parseInt(id));
+        String mlist = contact.get(A_mlist);
+        if (mlist != null) {
+            mlist = mlist.trim();
+            if (mlist.length() > 0) {
+                for (String id : mlist.split(",")) {
+                    contactIds.add(Integer.parseInt(id));
+                }
             }
         }
     }
