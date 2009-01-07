@@ -82,14 +82,18 @@ public class BulkProvisionStatus {
                 StringBuffer sb = new StringBuffer();
 
                 for (int i=0; i < entry.length; i ++) {
-                   sb.append(entry[i]) ;
+                    String field = entry[i].replace("\"", "\"\"") ;
+                    if (field.contains("\"") || field.contains(",") || field.contains("\n")){
+                        field = "\"" + field + "\"";
+                    }
+                    sb.append(field) ;
                    if (i == entry.length - 1) { //last one
                         sb.append("\n");                       
                    }else{
                        sb.append(",") ;
                    }
                 }
-//                ZimbraLog.extensions.debug("Adding entry content : " + content );
+                ZimbraLog.extensions.debug("Adding entry content : " + sb.toString() );
 
                 out.write(sb.toString().getBytes()) ;
                 //csv.writeNext(entry); //CSVWriter doesn't work well
@@ -100,7 +104,7 @@ public class BulkProvisionStatus {
             throw ServiceException.FAILURE(e.getMessage(), e) ;
         }
     }
-    /*
+   /*
     public static void main (String [] args) {
         Hashtable<String, String []> ht = new Hashtable<String, String []> ()  ;
         String [] entry = new String [] {"a@test.com", "Test", "test123", "succeeded"} ;
@@ -132,6 +136,6 @@ public class BulkProvisionStatus {
         }catch(Exception e) {
             e.printStackTrace();
         }
-   }  */
+   } */ 
 }
 

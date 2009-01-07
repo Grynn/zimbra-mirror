@@ -21,11 +21,13 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * A very simple CSV reader released under a commercial-friendly license.
  * 
  * @author Glen Smith
+ * @Modified Charles Cao
  * 
  */
 public class CSVReader {
@@ -173,12 +175,110 @@ public class CSVReader {
 
     /**
      * Parses an incoming String and returns an array of elements.
+     * 1) fields that contain commas, double-quotes, or line-breaks must be quoted,
+    *  2) a quote within a field must be escaped with an additional quote immediately preceding the literal quote,
+    *  3) space before and after delimiter commas may be trimmed (which is prohibited by RFC 4180), and
+    *  4) a line break within an element must be preserved.  
+
      * 
      * @param nextLine
      *            the string to parse
      * @return the comma-tokenized list of elements, or null if nextLine is null
      * @throws IOException if bad things happen during the read
      */
+
+    private String[] parseLine(String nextLine) throws IOException {
+        if (nextLine == null) {
+            return null;
+        }
+
+        List tokensOnThisLine = new ArrayList();
+        StringBuffer sb = new StringBuffer();
+        Stack quoteStack = new Stack () ;    //keep the position of the quotes
+        int quoteIndex ;
+
+        for (int i=0; i < nextLine.length();i++) {
+            char c = nextLine.charAt(i) ;
+            if (c == quotechar) {
+               if (quoteStack.empty()) {
+                   //it is the first quote
+                   quoteStack.push(i) ;
+               }else{
+                   quoteIndex = ((Integer) quoteStack.peek()).intValue() ;
+                   if (quoteIndex == i - 1) { //it is an escaped quote, eg.  abcd""efg  - quote at index(5)
+                       sb.append(c) ;
+                       quoteStack.pop(); //pop the previous quote
+                   } else if (i + 1 >= nextLine.length()) {
+                        //quote is the last character
+                        quoteStack.pop();
+                   } else {
+                       char nextChar = nextLine.charAt(i+1) ;
+                       if (nextChar == quotechar) {
+                           //it is the start of an escaped quote, "abcd""efg" - quote at index(5)
+                           quoteStack.push(i) ; //push this quote into the stack
+                       } else {
+                           // or it is the closing quote, eg: "abcd" , efg - quote at index(5)
+                           // try to find the separate or the end of the line
+                           int j = i ;
+                           for (; j < nextLine.length() - 1; j++) {
+                               nextChar = nextLine.charAt (j+1) ;
+                                if (nextChar == separator) {
+                                    break ;
+                                } else if (nextChar != ' ') { //only whitesapces can exist before the separate or the end of the quote
+                                    throw new IOException ("Parsing Error: invalid line at position (" + j
+                                             + ") character(" + nextChar + "):  " + nextLine) ;
+                                }
+                           }
+                           i = j ;  //let the main loop handles the separator
+                           quoteStack.pop(); //pop the previous quote
+//                           tokensOnThisLine.add(sb.toString()) ;
+//                           sb = new StringBuffer () ;
+//                           continue ;
+                       }
+
+                   }
+               }
+            } else if (c == separator ) {
+                if (quoteStack.empty()) {
+                    //end of the field
+                    tokensOnThisLine.add(sb.toString()) ;
+                    sb = new StringBuffer () ;
+                }else{
+                    //inside an quoted entry
+                    sb.append(c) ;
+                }
+            } else {
+                sb.append(c) ;
+            }
+
+            if (i+1 >= nextLine.length()) {
+                if (quoteStack.empty()) {
+                    //end of the field
+                    tokensOnThisLine.add(sb.toString()) ;
+                    sb = new StringBuffer () ;
+                    continue ;
+                }else{
+                    //inside an quoted entry with the new line
+                    sb.append("\n") ;
+                    String theFollowingLine =  getNextLine();
+                    if (theFollowingLine == null) {
+                        break ;
+                    }else {
+                        nextLine = nextLine + theFollowingLine;
+                    }
+                }
+            }
+        }
+        
+
+        if (!quoteStack.empty()) { //make sure all the quotes are closed
+              throw new IOException ("Parsing Error: invalid line: " + nextLine) ;
+        }
+        
+        return (String []) tokensOnThisLine.toArray(new String[0]);
+    }
+
+    /*
     private String[] parseLine(String nextLine) throws IOException {
 
         if (nextLine == null) {
@@ -231,7 +331,7 @@ public class CSVReader {
         tokensOnThisLine.add(sb.toString());
         return (String[]) tokensOnThisLine.toArray(new String[0]);
 
-    }
+    }   */
 
     /**
      * Closes the underlying reader.

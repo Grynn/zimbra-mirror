@@ -98,9 +98,9 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
                 el = response.addElement("account") ;
 
                 if (isValidEntry) {
-                    accountName = nextLine [0] ;
-                    displayName = nextLine [1] ;
-                    password = nextLine [2] ;
+                    accountName = nextLine [0].trim() ;
+                    displayName = nextLine [1].trim() ;
+                    password = nextLine [2].trim() ;
     
                     el.addKeyValuePair(A_accountName, accountName) ;
                     el.addKeyValuePair(A_displayName, displayName) ;
@@ -180,7 +180,7 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
         if (accountName == null || accountName.length() <= 0) {
             throw ServiceException.PARSE_ERROR(ERROR_INVALID_ACCOUNT_NAME, new Exception(ERROR_INVALID_ACCOUNT_NAME)) ;
         }
-
+        accountName = accountName.trim();
         String parts[] = accountName.split("@");
 
         if (parts.length != 2)
