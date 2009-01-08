@@ -79,9 +79,6 @@
   <key name="javamail_smtp_debug">
     <value>false</value>
   </key>
-  <key name="calendar_allow_null_organizer_with_attendees">
-    <value>true</value>
-  </key>
   <key name="mailboxd_output_filename">
     <value>zdesktop.out</value>
   </key>
