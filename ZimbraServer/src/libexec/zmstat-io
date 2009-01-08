@@ -142,7 +142,6 @@ sub sighup {
 }
 
 
-
 #
 # main
 #
@@ -192,6 +191,13 @@ $LOGFH = openLogFile($LOGFILE, $HEADING);
 my $date = getDate();
 waitUntilNiceRoundSecond($interval);
 my $iostatFH = runIOSTAT($iostatOpts, $interval);
+
+sub sigterm {
+	close($iostatFH) if $iostatFH;
+	exit(0);
+}
+$SIG{TERM} = \&sigterm;
+
 while (1) {
     my $line;
     while (!defined($line = readLine($iostatFH, 1))) {

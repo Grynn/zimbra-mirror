@@ -183,6 +183,11 @@ $LOGFH = openLogFile($LOGFILE, $HEADING);
 my $date = getDate();
 waitUntilNiceRoundSecond($interval);
 my $vmstatFH = runVMSTAT($interval);
+sub sigterm {
+	close($vmstatFH) if $vmstatFH;
+	exit(0);
+}
+$SIG{TERM} = \&sigterm;
 while (1) {
     my $line;
     while (!defined($line = readLine($vmstatFH, 1))) {
