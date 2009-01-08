@@ -22,10 +22,7 @@
  * 
  * ***** END LICENSE BLOCK *****
  */
-/**
- * 
- */
-package com.zimbra.common.stats;
+package com.zimbra.cs.stats;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +30,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.stats.StatsDumperDataSource;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Provisioning;
 
 /**
  * Returns thread count statistics.  Threads whose names start with
@@ -44,16 +45,13 @@ public class ThreadStats
 implements StatsDumperDataSource
 {
     private String mFilename;
-    private String[] mThreadNamePrefixes;
 
     /**
      * Creates a new <tt>ThreadStats</tt> object.
      *  
-     * @param threadNamePrefixes known thread name prefixes
      * @param threadsCsvFile CSV file that stats are written to 
      */
-    public ThreadStats(String[] threadNamePrefixes, String filename) {
-        mThreadNamePrefixes = threadNamePrefixes;
+    public ThreadStats(String filename) {
         mFilename = filename;
     }
     
@@ -62,7 +60,7 @@ implements StatsDumperDataSource
     }
     
     public String getHeader() {
-        return StringUtil.join(",", mThreadNamePrefixes) + ",other,total";
+        return StringUtil.join(",", getThreadNamePrefixes()) + ",other,total";
     }
 
     /**
@@ -71,8 +69,9 @@ implements StatsDumperDataSource
      */
     public Collection<String> getDataLines() {
         // Tally threads by name
+        String[] threadNamePrefixes = getThreadNamePrefixes();
         Map<String, Integer> threadCount = new LinkedHashMap<String, Integer>();
-        for (String prefix : mThreadNamePrefixes) {
+        for (String prefix : threadNamePrefixes) {
             threadCount.put(prefix, 0);
         }
         threadCount.put("other", 0);
@@ -90,7 +89,7 @@ implements StatsDumperDataSource
             Thread thread = threads[i];
             String threadName = thread.getName();
             boolean found = false;
-            for (String prefix : mThreadNamePrefixes) {
+            for (String prefix : threadNamePrefixes) {
                 // Increment count for the prefix if found
                 if (threadName != null && threadName.startsWith(prefix)) {
                     threadCount.put(prefix, threadCount.get(prefix) + 1);
@@ -118,5 +117,14 @@ implements StatsDumperDataSource
 
     public boolean hasTimestampColumn() {
         return true;
+    }
+    
+    private String[] getThreadNamePrefixes() {
+        try {
+            return Provisioning.getInstance().getLocalServer().getStatThreadNamePrefix();
+        } catch (ServiceException e) {
+            ZimbraLog.perf.warn("Unable to determine thread name prefixes.", e);
+            return new String[0];
+        }
     }
 }
