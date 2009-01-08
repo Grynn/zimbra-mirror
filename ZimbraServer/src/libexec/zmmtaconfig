@@ -42,7 +42,7 @@ if ($> eq 0) {
   logMsg(0, "Error: must not be run as root user.");
 }
 
-my %config = (
+our %config = (
   progname    => "zmmtaconfig",
   hostname    => $ENV{zimbra_server_hostname},
   wd_all      => 0,
@@ -302,6 +302,8 @@ sub getLocalConfig {
       $state->{localconfig}->{$k} = $v;
     }
   }
+  $config{ldap_is_master} = $state->{localconfig}->{ldap_is_master};
+  $config{ldap_root_password} = $state->{localconfig}->{ldap_root_password};
   $config{loglevel} = $state->{localconfig}->{zmmtaconfig_log_level} || 3;
   $config{interval} = $state->{localconfig}->{zmmtaconfig_interval} || 60;
   $config{debug} = $state->{localconfig}->{zmmtaconfig_debug} || 0;
