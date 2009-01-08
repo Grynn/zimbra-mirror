@@ -1009,7 +1009,7 @@ function(enabled, setHtmlElement) {
 DwtControl.prototype.getHTMLElId =
 function () {
 	return this._htmlElId;
-}
+};
 
 /**
  * Returns the control's containing HTML element. By default this is a div element
