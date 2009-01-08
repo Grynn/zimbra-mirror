@@ -762,6 +762,7 @@ sub compareKeys {
     }
 
     $ref->{changed}=0; # reset the changed flagged
+    $state->{current}->{config}->{$ref->{name}}->{changedKeys}=();
     foreach my $key (keys %{$ref->{config}->{requiredvars}}) {
       my $type = $ref->{config}->{requiredvars}->{$key};
       my ($prev) = $state->{current}->{config}->{$ref->{name}}->{$type}->{$key};
@@ -772,6 +773,7 @@ sub compareKeys {
           logMsg(3, "Var $key changed from \'$prev\' -> \'$val\'")
             unless ($state->{firstRun} == 1);
           $state->{current}->{config}->{$ref->{name}}->{$type}->{$key} = "$val";
+          push(@{$state->{current}->{config}->{$ref->{name}}->{changedKeys}},$key);
           $ref->{changed} += 1;
         }
       } else {
@@ -831,7 +833,7 @@ sub compileActions {
         $state->{current}->{proxygen}=1;
       }
       logMsg(5, "Section $section->{name} changed compiling ldap");
-      foreach my $ldap (keys %{$section->{config}->{ldap}}) {
+      foreach my $ldap (@{$state->{current}->{config}->{ldap}->{changedKeys}}) {
         logMsg(5, "Adding LDAP $ldap");
         $state->{current}->{ldap}->{$ldap} = $section->{config}->{ldap}->{$ldap};
       }
