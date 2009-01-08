@@ -482,21 +482,22 @@ function(type, msg) {
 /**
  * mergesort+dedupe
 **/
-AjxUtil.mergeArrays = function (arr1,arr2) {
+AjxUtil.mergeArrays =
+function(arr1, arr2) {
 
 	var resArr = [];
-	while(arr1.length>0 && arr2.length>0) {
-		if(arr1[0] == resArr[resArr.length-1]) {
+	while (arr1.length>0 && arr2.length>0) {
+		if (arr1[0] == resArr[resArr.length-1]) {
 			arr1.shift();
 			continue;
 		}
 		
-		if(arr2[0] == resArr[resArr.length-1]) {
+		if (arr2[0] == resArr[resArr.length-1]) {
 			arr2.shift();
 			continue;
 		}		
 			
-		if(arr1[0] < arr2[0]) {
+		if (arr1[0] < arr2[0]) {
 			resArr.push(arr1.shift());
 		} else if (arr1[0]==arr2[0]) {
 			resArr.push(arr1.shift());
@@ -506,20 +507,81 @@ AjxUtil.mergeArrays = function (arr1,arr2) {
 		}
 	}
 		
-	while(arr1.length>0) {
-		if(arr1[0] == resArr[resArr.length-1]) {
+	while (arr1.length>0) {
+		if (arr1[0] == resArr[resArr.length-1]) {
 			arr1.shift();
 			continue;
 		}		
 		resArr.push(arr1.shift());
 	}
 		
-	while(arr2.length>0) {
-		if(arr2[0] == resArr[resArr.length-1]) {
+	while (arr2.length>0) {
+		if (arr2[0] == resArr[resArr.length-1]) {
 			arr2.shift();
 			continue;
 		}			
 		resArr.push(arr2.shift());
 	}
 	return resArr;	
-}
+};
+
+/**
+ * Returns the keys of the given hash as a sorted list.
+ *
+ * @param hash		[hash]
+ */
+AjxUtil.getHashKeys =
+function(hash) {
+
+	var list = [];
+	for (var key in hash) {
+		list.push(key);
+	}
+	list.sort();
+
+	return list;
+};
+
+/**
+ * Does a shallow comparison of two arrays.
+ *
+ * @param arr1	[array]
+ * @param arr2	[array]
+ */
+AjxUtil.arrayCompare =
+function(arr1, arr2) {
+	if ((!arr1 || !arr2) && (arr1 != arr2)) {
+		return false;
+	}
+	if (arr1.length != arr2.length) {
+		return false;
+	}
+	for (var i = 0; i < arr1.length; i++) {
+		if (arr1[i] != arr2[i]) {
+			return false;
+		}
+	}
+	return true;
+};
+
+/**
+ * Does a shallow comparison of two hashes.
+ *
+ * @param hash1	[hash]
+ * @param hash2	[hash]
+ */
+AjxUtil.hashCompare =
+function(hash1, hash2) {
+
+	var keys1 = AjxUtil.getHashKeys(hash1);
+	var keys2 = AjxUtil.getHashKeys(hash12);
+	if (!AjxUtil.arrayCompare(keys1, keys2)) {
+		return false;
+	}
+	for (var key in keys1) {
+		if (hash1[key] != hash2[key]) {
+			return false;
+		}
+	}
+	return true;
+};

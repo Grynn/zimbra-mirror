@@ -22,14 +22,8 @@
  * 
  * @param params	[hash]			hash of params:
  *        parent	[DwtComposite] 	parent widget
- *        style 	[constant]*		The text style. May be one of: <i>DwtCheckbox.TEXT_LEFT</i> or
- * 									<i>DwtCheckbox.TEXT_RIGHT</i> arithimatically or'd (|) with one of:
- * 									<i>DwtCheckbox.ALIGN_LEFT</i>, <i>DwtCheckbox.ALIGN_CENTER</i>, or
- * 									<i>DwtCheckbox.ALIGN_LEFT</i>.
- * 									The first determines were in the checkbox the text will appear
- * 									(if set), the second determine how the content of the text will be
- * 									aligned. The default value for this parameter is: 
- * 									<code>DwtCheckbox.TEXT_LEFT | DwtCheckbox.ALIGN_CENTER</code>.
+ *        style 	[constant]*		The text style. One of: <i>DwtCheckbox.TEXT_LEFT</i> or
+ * 									<i>DwtCheckbox.TEXT_RIGHT</i> (default). 
  *        name		[string]		The input control name. Required for IE.
  *        checked	[boolean]		The input control checked status. Required for IE.
  *        className	[string]*		CSS class
