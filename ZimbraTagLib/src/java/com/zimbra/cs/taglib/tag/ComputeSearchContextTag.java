@@ -236,8 +236,11 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
                     result.setBackTo(I18nUtil.getLocalizedMessage(pageContext, "backToSearchFolder", new Object[] {folder.getName()}));
                     result.setShortBackTo(folder.getName());
                 } else {
+                    String name = I18nUtil.getLocalizedMessage(pageContext, "FOLDER_LABEL_"+folder.getId());
+                    name = (name == null || name.startsWith("???")) ? folder.getName() : name;
+
                     result.setQuery("in:\"" + folder.getRootRelativePath() + "\"");
-                    result.setBackTo(I18nUtil.getLocalizedMessage(pageContext, "backToFolder", new Object[] {folder.getName()}));
+                    result.setBackTo(I18nUtil.getLocalizedMessage(pageContext, "backToFolder", new Object[] {name}));
                     result.setShortBackTo(folder.getName());
                 }
                 result.setFolder(new ZFolderBean(folder));
