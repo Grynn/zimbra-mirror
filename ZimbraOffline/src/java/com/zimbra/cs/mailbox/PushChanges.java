@@ -1110,7 +1110,12 @@ public class PushChanges {
         boolean upload = false;
         Message msg = null;
         synchronized (ombx) {
-            msg = ombx.getMessageById(sContext, id);
+        	try {
+        		msg = ombx.getMessageById(sContext, id);
+        	} catch (NoSuchItemException x) {
+        		OfflineLog.offline.debug("push: message %d deleted before push", id);
+        		return false;
+        	}
             if (ombx.isItemInArchive(msg))
             	return false;
             
@@ -1173,7 +1178,12 @@ public class PushChanges {
         }
 
         synchronized (ombx) {
-            msg = ombx.getMessageById(sContext, id);
+        	try {
+        		msg = ombx.getMessageById(sContext, id);
+        	} catch (NoSuchItemException x) {
+        		OfflineLog.offline.debug("push: message %d deleted after push", id);
+        		return false;
+        	}
             // check to see if the message was changed while we were pushing the update...
             int mask = 0;
             if (flags != msg.getFlagBitmask()) {
