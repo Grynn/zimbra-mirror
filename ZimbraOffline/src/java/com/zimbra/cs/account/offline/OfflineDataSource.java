@@ -40,6 +40,7 @@ import com.zimbra.cs.offline.GMailImport;
 import com.zimbra.cs.offline.YMailImport;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.datasource.SyncState;
+import com.zimbra.cs.mailclient.CommandFailedException;
 
 public class OfflineDataSource extends DataSource {
     private KnownService knownService;
@@ -308,8 +309,15 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public void reportError(int itemId, String error, Exception e) {
+        String data = null;
+        if (e instanceof CommandFailedException) {
+            String req = ((CommandFailedException) e).getRequest();
+            if (req != null) {
+                data = "Failed request: " + req;
+            }
+        }
         try {
-            SyncExceptionHandler.importFailed((DesktopMailbox) getMailbox(), itemId, error, e);
+            SyncExceptionHandler.saveFailureReport((DesktopMailbox) getMailbox(), itemId, error, data, 0, e);
         } catch (ServiceException x) {
             // Ignore
         }

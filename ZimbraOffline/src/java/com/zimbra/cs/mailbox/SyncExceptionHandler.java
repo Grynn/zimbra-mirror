@@ -95,11 +95,11 @@ public class SyncExceptionHandler {
         saveFailureReport(dmbx, id, error, exception);
     }
 
-    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, Exception exception) throws ServiceException {
+    public static String saveFailureReport(DesktopMailbox dmbx, int id, String error, Exception exception) throws ServiceException {
         return saveFailureReport(dmbx, id, error, null, 0, exception);
     }
     
-    private static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, Exception exception) throws ServiceException {
+    public static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, Exception exception) throws ServiceException {
     	if (OfflineSyncManager.isMailboxInMaintenance(exception))
     		throw (ServiceException)exception;
     	
