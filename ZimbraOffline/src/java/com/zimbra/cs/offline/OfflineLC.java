@@ -74,8 +74,9 @@ public class OfflineLC {
     public static final KnownKey zdesktop_yauth_appid;
     public static final KnownKey zdesktop_yauth_baseuri;
     public static final KnownKey zdesktop_yab_baseuri;
+    public static final KnownKey zdesktop_yab_sync_interval;
     public static final KnownKey zdesktop_ymail_baseuri;
-    
+
     public static final KnownKey zdesktop_support_email;
     
     public static final KnownKey zdesktop_min_zcs_version_sync_tgz;
@@ -257,6 +258,10 @@ public class OfflineLC {
 	    zdesktop_yab_baseuri = new KnownKey("zdesktop_yab_baseuri");
 	    zdesktop_yab_baseuri.setDefault("http://address.yahooapis.com/v1");
 	    zdesktop_yab_baseuri.setDoc("base uri for yab");
+
+        zdesktop_yab_sync_interval = new KnownKey("zdesktop_yab_sync_interval");
+        zdesktop_yab_sync_interval.setDefault("60"); // 1 hour
+        zdesktop_yab_sync_interval.setDoc("YAB sync interval in minutes");
 	    
 	    zdesktop_ymail_baseuri = new KnownKey("zdesktop_ymail_baseuri");
 	    zdesktop_ymail_baseuri.setDefault("http://mail.yahooapis.com/ws/mail/v1.1/soap");

@@ -57,9 +57,7 @@ public class YMailImport extends ImapSync {
 
         String dsName = dataSource.getName();
         if (yabImport != null) {
-            LOG.info("Importing contacts for YMail account '%s'", dsName);
             yabImport.importData(folderIds, fullSync);
-            LOG.info("Finished importing contacts for YMail account '%s'", dsName);
         }                
         if (calDavImport != null) {
             LOG.info("Importing calendar for YMail account '%s'", dsName);
