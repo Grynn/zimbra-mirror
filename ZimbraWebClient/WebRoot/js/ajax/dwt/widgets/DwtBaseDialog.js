@@ -344,15 +344,18 @@ DwtBaseDialog.prototype._initializeDragging =
 function(dragHandleId) {
 	var dragHandle = document.getElementById(dragHandleId);
 	if (dragHandle) {
-		var p = Dwt.getSize(DwtControl.fromElementId(window._dwtShellId).getHtmlElement());
-		var dragObj = document.getElementById(this._htmlElId);
-		var size = this.getSize();
-		var dragEndCb = new AjxCallback(this, this._dragEnd);
-		var dragCb = new AjxCallback(this, this._duringDrag);
-		var dragStartCb = new AjxCallback(this, this._dragStart);
+		var control = DwtControl.fromElementId(window._dwtShellId);
+		if (control) {
+			var p = Dwt.getSize(control.getHtmlElement());
+			var dragObj = document.getElementById(this._htmlElId);
+			var size = this.getSize();
+			var dragEndCb = new AjxCallback(this, this._dragEnd);
+			var dragCb = new AjxCallback(this, this._duringDrag);
+			var dragStartCb = new AjxCallback(this, this._dragStart);
 
- 		DwtDraggable.init(dragHandle, dragObj, 0,
- 						  document.body.offsetWidth - 10, 0, document.body.offsetHeight - 10, dragStartCb, dragCb, dragEndCb);
+			DwtDraggable.init(dragHandle, dragObj, 0,
+							  document.body.offsetWidth - 10, 0, document.body.offsetHeight - 10, dragStartCb, dragCb, dragEndCb);
+		}
 	}
 };
 
