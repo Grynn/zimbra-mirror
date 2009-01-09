@@ -482,6 +482,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         	throw ServiceException.FAILURE("Remote server version " + remoteVersion + ", ZCS 5.0 or later required", null);
         
         attrs.put(A_offlineRemoteServerVersion, zgi.getVersion());
+        emailAddress = zgi.getName();
 
         for (Map.Entry<String,List<String>> zattr : zgi.getAttrs().entrySet())
             for (String value : zattr.getValue())
