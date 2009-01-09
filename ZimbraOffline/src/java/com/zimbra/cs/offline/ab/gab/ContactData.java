@@ -201,7 +201,7 @@ public class ContactData {
     private PostalAddress getPostalAddress(ContactEntry contact, String type) {
         if (contact.hasPostalAddresses()) {
             for (PostalAddress addr : contact.getPostalAddresses()) {
-                if (type.equals(addr.getRel())) {
+                if (type.equals(addr.getRel()) && addr.getValue() != null) {
                     return addr;
                 }
             }
