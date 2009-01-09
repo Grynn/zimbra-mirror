@@ -3628,7 +3628,7 @@ return true;</string>
             <preActivation />
             <postActivation />
             <actions>
-              <action name="set dev flag in installation info" id="288209" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" enabled="false" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="set dev flag in installation info" id="288209" beanClass="com.install4j.runtime.beans.actions.text.AppendToFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.text.AppendToFileAction">
@@ -3941,7 +3941,7 @@ return true;</string>
                 </serializedBean>
                 <initScript />
               </formComponent>
-              <formComponent name="John Dev Prog" id="288210" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="false" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+              <formComponent name="John Dev Prog" id="288210" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
@@ -3956,7 +3956,7 @@ return true;</string>
                 </serializedBean>
                 <initScript>((JCheckBox)configurationObject).setSelected(Boolean.valueOf((String) context.getVariable("joinDevProg")))</initScript>
               </formComponent>
-              <formComponent name="John Dev Prog Note" id="288215" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="false" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+              <formComponent name="John Dev Prog Note" id="288215" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
