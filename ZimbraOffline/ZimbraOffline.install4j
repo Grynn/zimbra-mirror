@@ -1907,6 +1907,39 @@ return true;</string>
                 </serializedBean>
                 <condition />
               </action>
+              <action name="set installationDirUtf8" id="288442" beanClass="com.install4j.runtime.beans.actions.control.SetVariableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.SetVariableAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>import java.nio.charset.CharsetDecoder;
+import java.nio.charset.Charset;
+import java.nio.charset.CharacterCodingException;
+import java.nio.ByteBuffer;
+
+boolean utf8 = true;
+String instDir = (String)context.getVariable("sys.installationDir");
+CharsetDecoder cd = Charset.availableCharsets().get("UTF-8").newDecoder();
+try {
+    cd.decode(ByteBuffer.wrap(instDir.getBytes()));
+} catch (CharacterCodingException e) {
+    utf8 = false;
+}
+return utf8 ? instDir : new String(instDir.getBytes("UTF-8"));
+</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="variableName">
+                        <string>installationDirUtf8</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
               <action name="localconfig.xml" id="850" beanClass="com.install4j.runtime.beans.actions.text.ModifyTextFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -1917,7 +1950,7 @@ return true;</string>
                         </object>
                       </void>
                       <void property="replaceValue">
-                        <string>${installer:sys.installationDir}</string>
+                        <string>${installer:installationDirUtf8}</string>
                       </void>
                       <void property="searchValue">
                         <string>@install@</string>
