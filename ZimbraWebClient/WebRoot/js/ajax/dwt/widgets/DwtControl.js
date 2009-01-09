@@ -1466,24 +1466,13 @@ function(ev) {
 /**
  * Sets static tooltip content for the control. The content may be plain text or HTML.
  *
- * @param {String} text
+ * @param {String|AjxCallback} tooltip content or callback that specifies the content
  */
 DwtControl.prototype.setToolTipContent =
 function(text) {
 	if (this._disposed) { return; }
 
 	this.__toolTipContent = text;
-};
-
-/**
- * Sets a callback that will return the tooltip content for the control.
- *
- * @param {AjxCallback} callback
- */
-DwtControl.prototype.setToolTipCallback =
-function(callback) {
-	if (this._disposed) { return; }
-	this.__toolTipCallback = callback;
 };
 
 /**
