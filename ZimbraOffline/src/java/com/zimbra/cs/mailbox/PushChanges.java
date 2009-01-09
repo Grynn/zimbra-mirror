@@ -456,12 +456,12 @@ public class PushChanges {
 	                		String sentDate = new SimpleDateFormat("MMMMM d, yyyy").format(msg.getDate());
 	                		String sentTime = new SimpleDateFormat("h:mm a").format(msg.getDate());
 	                		
-	                		String text = "Your message \"" + msg.getSubject() + "\" sent on " + sentDate + " at " + sentTime + " to \"" + msg.getRecipients() + "\" can't be delivered.  It has been returned to Drafts folder for your review.\n";
+	                		String text = "Your message \"" + msg.getSubject() + "\" sent on " + sentDate + " at " + sentTime + " to \"" + msg.getRecipients() + "\" can't be delivered.  None of the recipients will receive the message.  It has been returned to Drafts folder for your review.\n";
 	                		String subject = null;
 	                		if (x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED))
 	                			subject = "message size exceeds server limit";
 	                		else if (x.getCode().equals(MailServiceException.SEND_ABORTED_ADDRESS_FAILURE))
-	                			subject = "invalid recipient address";
+	                			subject = x.getMessage();
 	                		else {
 	                			text += "\n----------------------------------------------------------------------------\n\n" +
 	                				    SyncExceptionHandler.sendMailFailed(ombx, id, x);
