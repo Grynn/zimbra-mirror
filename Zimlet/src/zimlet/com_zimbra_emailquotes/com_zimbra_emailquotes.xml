@@ -1,10 +1,10 @@
-<zimlet name="com_zimbra_emailquotes" version="0.2" description="Adds Random quotes to Email">
+<zimlet name="com_zimbra_emailquotes" version="0.3" description="Adds preferred quotes below neear email signature area">
   <include>emailquotes.js</include>
   <includeCSS>emailquotes.css</includeCSS>
   <handlerObject>com_zimbra_emailquotes</handlerObject>
 
   <zimletPanelItem label="Email Quotes" icon="emailquotes-panelIcon">
-    <toolTipText>Adds Random quotes to Email</toolTipText>
+    <toolTipText>Adds preferred quotes below neear email signature area</toolTipText>
   </zimletPanelItem>
 
 	<userProperties>
@@ -12,6 +12,6 @@
 		<property type="string" name="equotes_defaultSelections" value="115,74,27,9,64,81"/>
 		<property type="string" name="equotes_userSelections" value=""/>		
 		
-		<property type="string" name="turnEmailQuotesZimletON" value="true"/>
+		<property type="string" name="turnEmailQuotesZimletON" value="false"/>
 	</userProperties>
 </zimlet>
