@@ -23,6 +23,7 @@ import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
+import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
@@ -53,9 +54,6 @@ public final class LocalData {
     public static final Mailbox.OperationContext CONTEXT =
         new OfflineMailbox.OfflineContext();
 
-    private static final Set<Integer> CONTACT_FOLDERS =
-        new HashSet<Integer>(Arrays.asList(Mailbox.ID_FOLDER_CONTACTS));
-    
     public LocalData(OfflineDataSource ds) throws ServiceException {
         this.ds = ds;
         this.mbox = (DesktopMailbox) ds.getMailbox();
@@ -81,7 +79,17 @@ public final class LocalData {
         Map<Integer, Change> changes = new HashMap<Integer, Change>();
         // Get modified and deleted contacts
         for (int id : getModifiedContacts(seq)) {
-            changes.put(id, hasMapping(id) ? Change.update(id) : Change.add(id));
+            int folderId = getContact(id).getFolderId();
+            if (hasMapping(id)) {
+                if (folderId != Mailbox.ID_FOLDER_CONTACTS) {
+                    // Delete contact moved outside of contacts folder
+                    changes.put(id, Change.delete(id));
+                } else {
+                    changes.put(id, Change.update(id));
+                }
+            } else if (folderId == Mailbox.ID_FOLDER_CONTACTS) {
+                changes.put(id, Change.add(id));
+            }
         }
         for (int id : getTombstones(seq, MailItem.TYPE_CONTACT)) {
             if (hasMapping(id)) {
@@ -102,8 +110,7 @@ public final class LocalData {
     }
 
     private List<Integer> getModifiedContacts(int seq) throws ServiceException {
-        return mbox.getModifiedItems(
-            CONTEXT, seq, MailItem.TYPE_CONTACT, CONTACT_FOLDERS).getFirst();
+        return mbox.getModifiedItems(CONTEXT, seq, MailItem.TYPE_CONTACT).getFirst();
     }
     
     public String getData(DataSourceItem dsi) throws ServiceException {
@@ -165,8 +172,16 @@ public final class LocalData {
     }
 
     public void deleteContact(int id) throws ServiceException {
-        mbox.delete(CONTEXT, id, MailItem.TYPE_CONTACT);
-        log.debug("Deleted contact: id = %d", id);
+        try {
+            Contact contact = getContact(id);
+            // Don't delete contacts moved outside contact folder
+            if (contact.getFolderId() == Mailbox.ID_FOLDER_CONTACTS) {
+                mbox.delete(CONTEXT, id, MailItem.TYPE_CONTACT);
+                log.debug("Deleted contact: id = %d", id);
+            }
+        } catch (MailServiceException.NoSuchItemException e) {
+
+        }
     }
 
     public ContactGroup getContactGroup(int id) throws ServiceException {
