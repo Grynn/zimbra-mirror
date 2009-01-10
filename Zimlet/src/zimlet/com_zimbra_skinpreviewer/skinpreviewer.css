@@ -1,0 +1,13 @@
+.Imgskinpreviewer-panelIcon {
+  background: url("skinpreviewer-icon.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+
+.skinpreviewer_cardDetailDiv{
+background:#FFFFCC;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+font-weight: bold;
+}

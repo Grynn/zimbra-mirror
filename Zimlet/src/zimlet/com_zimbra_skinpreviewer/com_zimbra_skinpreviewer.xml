@@ -1,0 +1,13 @@
+<zimlet name="com_zimbra_skinpreviewer" version="1.0" description="Opens Zimbra in multiple windows with all existing skins to preview different skins">
+	<include>skinpreviewer.js</include>
+	<includeCSS>skinpreviewer.css</includeCSS>
+	<resource>skinpreviewer-icon.gif</resource>
+	<handlerObject>com_zimbra_skinpreviewer</handlerObject>
+
+	<zimletPanelItem label="Skin Previewer" icon="skinpreviewer-panelIcon">
+		<toolTipText>Opens Zimbra in multiple windows with all existing skins to preview different skins</toolTipText>
+	</zimletPanelItem>
+	<userProperties>
+		<property type="string" name="turnONSkinPreviewerZimlet" value="true"/>
+	</userProperties>	
+</zimlet>
