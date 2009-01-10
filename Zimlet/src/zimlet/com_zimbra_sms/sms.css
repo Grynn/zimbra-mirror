@@ -4,3 +4,23 @@
   height: 16px;
   overflow: hidden;
 }
+
+.sms_cardDetailDiv{
+background:#FFFFCC;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+.sms_cardHdrDiv{
+background:#FFFFFC;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+}
+
+.sms_mainDiv {
+border-bottom:1px solid #A7A194;
+}
+
+.sms_hidden {
+display:none
+}
+.sms_shown {
+display:block
+}
