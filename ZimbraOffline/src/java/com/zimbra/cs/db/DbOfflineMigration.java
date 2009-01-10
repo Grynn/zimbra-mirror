@@ -35,9 +35,7 @@ public class DbOfflineMigration {
             int newDbVersion = Integer.parseInt(Versions.DB_VERSION);
             System.out.println("oldDbVersion=" + oldDbVersion + " newDbVersion=" + newDbVersion);
             
-            if (oldDbVersion == newDbVersion)
-            	return;
-            
+            if (oldDbVersion != newDbVersion) {
             switch (oldDbVersion) {
             case 51:
             	migrateFromVersion51(conn, isTestRun);
@@ -50,6 +48,29 @@ public class DbOfflineMigration {
                 break;
             default:
             	throw new DbUnsupportedVersionException();
+            }
+            }
+                        
+            //now do offline specific db migration
+            stmt = conn.prepareStatement("SELECT value FROM zimbra.config WHERE name = 'offline.db.version'");
+            rs = stmt.executeQuery();
+            int oldOfflineDbVersion = 1; //default to 1 if missing
+            if (rs.next())
+            	oldOfflineDbVersion = Integer.parseInt(rs.getString(1));
+            rs.close();
+            stmt.close();
+            
+            int newOfflineDbVersion = OfflineVersions.OFFLINE_DB_VERSION;
+            System.out.println("oldOfflineDbVersion=" + oldOfflineDbVersion + " newOfflineDbVersion=" + newOfflineDbVersion);
+            
+            if (oldOfflineDbVersion != newOfflineDbVersion) {
+	            switch (oldOfflineDbVersion) {
+	            case 1:
+	            	migrateFromOfflineVersion1(conn, isTestRun);
+	            	break;
+	            default:
+	            	throw new DbUnsupportedVersionException();
+	            }
             }
         } catch (Exception x) {
         	x.printStackTrace(System.err);
@@ -276,8 +297,35 @@ public class DbOfflineMigration {
         }
 	}
 	
+		private void migrateFromOfflineVersion1(Connection conn, boolean isTestRun) throws Exception {
+        PreparedStatement stmt = null;
+        boolean isSuccess = false;
+        try {
+            stmt = conn.prepareStatement("ALTER TABLE zimbra.directory_attrs ALTER value SET DATA TYPE VARCHAR(32672)");
+            stmt.executeUpdate();
+            stmt.close();
+           
+            stmt = conn.prepareStatement("ALTER TABLE zimbra.directory_leaf_attrs ALTER value SET DATA TYPE VARCHAR(32672)");
+            stmt.executeUpdate();
+            stmt.close();
+            
+            //if it's from version 1 the offline.db.version row is missing
+            stmt = conn.prepareStatement("INSERT INTO zimbra.config(name, value, description) VALUES('offline.db.version', '2', 'offline db schema version')");
+            stmt.executeUpdate();
+            stmt.close();
+            
+            isSuccess = true;
+        } finally {
+            DbPool.closeStatement(stmt);
+            if (isTestRun || !isSuccess)
+            	conn.rollback();
+            else
+            	conn.commit();
+        }
+	}
+	
 	public static void main(String[] args) throws Exception {
-		System.setProperty("zimbra.config", "/Users/jjzhuang/zimbra/zdesktop/conf/localconfig.xml");
+		System.setProperty("zimbra.config", "/opt/zimbra/zdesktop dev/conf/localconfig.xml");
 		
 		new DbOfflineMigration().testRun();
 	}

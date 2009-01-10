@@ -37,7 +37,7 @@ CREATE UNIQUE INDEX ui_directory_zimbra_id ON directory(zimbra_id);
 CREATE TABLE directory_attrs (
    entry_id    INTEGER NOT NULL,
    name        VARCHAR(255) NOT NULL,
-   value       VARCHAR(10240) NOT NULL,
+   value       VARCHAR(32672) NOT NULL,
 
    CONSTRAINT fk_dattr_entry_id FOREIGN KEY (entry_id) REFERENCES directory(entry_id)
       ON DELETE CASCADE
@@ -65,7 +65,7 @@ CREATE TABLE directory_leaf (
 CREATE TABLE directory_leaf_attrs (
    entry_id    INTEGER NOT NULL,
    name        VARCHAR(255) NOT NULL,
-   value       VARCHAR(10240) NOT NULL,
+   value       VARCHAR(32672) NOT NULL,
 
    CONSTRAINT fk_dleafattr_entry_id FOREIGN KEY (entry_id) REFERENCES directory_leaf(entry_id)
       ON DELETE CASCADE
