@@ -37,7 +37,8 @@ public class OfflineConvAction extends ConvAction {
     public void postProxy(Element request, Element response, Map<String, Object> context) throws ServiceException {
         Element act = request.getOptionalElement(MailConstants.E_ACTION);
         String op;
-        if (act == null || (op = act.getAttribute(MailConstants.A_OPERATION, null)) == null || !op.equals(ItemAction.OP_MOVE))
+        if (act == null || (op = act.getAttribute(MailConstants.A_OPERATION, null)) == null ||
+            (!op.equals(ItemAction.OP_MOVE) && !op.equals(ItemAction.OP_COPY)))
             return;
         
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();        
