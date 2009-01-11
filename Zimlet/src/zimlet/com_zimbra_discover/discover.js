@@ -110,17 +110,30 @@ com_zimbra_discover.prototype.initToolbarButton = function() {
 
 	if (this._toolbar)
 		return;
-
 	// Add the discover Button to the conversation page
-	this._cnvController = AjxDispatcher.run("GetConvListController");
-	this._cnvController._discover = this;
-	if (!this._cnvController._toolbar) {
-		// initialize the compose controller's toolbar
-		this._cnvController._initializeToolBar();
+	var viewid = appCtxt.getAppViewMgr().getCurrentViewId();
+	if(viewid == ZmId.VIEW_CONVLIST) {
+		this._cnvController = AjxDispatcher.run("GetConvListController");
+		this._cnvController._discover = this;
+		if (!this._cnvController._toolbar) {
+			// initialize the conv controller's toolbar
+			this._cnvController._initializeToolBar();
+		}
+		this._toolbar = this._cnvController._toolbar.CLV;
+	} else if(viewid == ZmId.VIEW_TRAD) {
+		this._tradController = AjxDispatcher.run("GetTradController");
+		this._tradController._discover = this;
+		if (!this._tradController._toolbar) {
+			// initialize the trad controller's toolbar
+			this._tradController._initializeToolBar();
+		}
+		this._toolbar = this._tradController._toolbar.TV;
 	}
 
-	this._toolbar = this._cnvController._toolbar.CLV;
-	var indx = this._toolbar.getItemCount() + 5;
+	if(!this._toolbar)
+		return;//dont add button
+
+	var indx = this._toolbar.getItemCount() + 1;
 
 	// Add button to toolbar
 	if (!this._toolbar.getButton(com_zimbra_discover.discover)) {
