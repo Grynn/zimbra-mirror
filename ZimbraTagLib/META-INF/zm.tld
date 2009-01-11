@@ -4835,6 +4835,38 @@
     </tag>
 
     <tag>
+        <description>get document info</description>
+        <name>getDocument</name>
+        <tag-class>com.zimbra.cs.taglib.tag.briefcase.GetDocumentTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZDocumentBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>ZMailboxBean object to use</description>
+            <name>box</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Name of the exported scoped variable for the result.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>document id</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <description>
             Move an item to a folder.
         </description>
