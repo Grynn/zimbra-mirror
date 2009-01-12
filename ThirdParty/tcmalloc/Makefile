@@ -43,7 +43,7 @@ ifeq ($(BUILD_PLATFORM), UBUNTU8_64)
 endif
 
 ZIMBRA_HOME ?= /opt/zimbra
-TCMALLOC_VERSION ?= 0.99.2
+TCMALLOC_VERSION ?= 1.0
 TCMALLOC_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/tcmalloc/tcmalloc-$(TCMALLOC_VERSION).tgz
 
 all: allclean build tar
@@ -52,6 +52,8 @@ build:
 	(tar xzf src/google-perftools-$(TCMALLOC_VERSION).tar.gz; \
 	cd google-perftools-$(TCMALLOC_VERSION); \
 	CFLAGS="-g -O2" \
+	CPPFLAGS="-I/usr/include" \
+	CXXFLAGS="-I/usr/include" \
 	$(ENVMOD) ./configure --prefix=$(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION) $(CONF_OPS); \
 	make tcmalloc_minimal_unittest tcmalloc_minimal_large_unittest \
              addressmap_unittest atomicops_unittest frag_unittest \
