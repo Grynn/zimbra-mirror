@@ -30,6 +30,7 @@ configfile=${zimbra_home}/conf/logswatchrc
 pidfile=${zimbra_log_directory}/logswatch.pid
 logfile=${zimbra_log_directory}/zmlogswatch.out
 pid=""
+os=$(uname -s)
 
 getpid()
 {
@@ -98,7 +99,24 @@ case "$1" in
           rm -rf ${pidfile}
           break
         fi
-        kill -9 $pid
+        if [ x"$os" = "Linux" ]; then
+          index=0;quit=0
+          ids[$index]="$pid"
+          while [ $quit -eq 0 ]; do
+            ((index++))
+            ids[$index]=$(ps -o pid --ppid ${ids[$index-1]} | grep -v PID | tr \\n ' ')
+            if [ ! "${ids[$index]}" ]; then
+              ((quit++))
+            fi
+          done
+          for i in $(seq 0 ${#ids[@]}); do
+            if [ "${ids[$i]}" ]; then
+              kill -15 ${ids[$i]}
+            fi
+          done
+        else
+          kill -9 $pid
+        fi 
         sleep 1
       done
     fi
