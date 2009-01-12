@@ -128,7 +128,8 @@ public class LocalMailbox extends DesktopMailbox {
 	
     @Override
 	void itemCreated(MailItem item, boolean inArchive) throws ServiceException {
-		if (isImapMailbox && !inArchive && item instanceof Folder && ((Folder)item).getDefaultView() == MailItem.TYPE_MESSAGE)
+		if (isImapMailbox && !inArchive && item instanceof Folder && ((Folder)item).getDefaultView() == MailItem.TYPE_MESSAGE &&
+				(((Folder)item).getUrl() == null || ((Folder)item).getUrl().equals("")))
 			alterSyncFolderFlag((Folder)item, true);
 	}
     
