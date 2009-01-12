@@ -72,7 +72,7 @@ function() {
             null, 100, null  , ZaGrant.A_grantee_type, true, true);
 
     headerList[2] = new ZaListHeaderItem(ZaGrant.A_deny, com_zimbra_delegatedadmin.Col_deny,
-                50, null, null , ZaGrant.A_deny, true, true);
+                null, 150, null , ZaGrant.A_deny, true, true);
 
     headerList[3] = new ZaListHeaderItem(ZaGrant.A_right, com_zimbra_delegatedadmin.Col_grant_right_name,
                     null, null, null , ZaGrant.A_right, true, true);
@@ -99,7 +99,7 @@ var grantListItem = {
 
 //TODO: xform item definition
 var grantsListXFormItem  =  {
-    ref: ZaGrant.A2_grantsList, type: _DWT_LIST_, width:600, height: 200,
+    ref: ZaGrant.A2_grantsList, type: _DWT_LIST_, width:700, height: 200,
     cssClass: "DLSource", widgetClass: ZaGrantsListView,
     headerList: ZaGrantsListView._getHeaderList (),
     hideHeader: false ,
@@ -124,14 +124,14 @@ ZaTargetPermission.targetXFormModifier = function (xFormObject) {
     }
 
     var caseItem =
-        {type:_ZATABCASE_, id:"target_form_permission_tab", numCols:1, colSizes:["600px"],
+        {type:_ZATABCASE_, id:"target_form_permission_tab", numCols:1, colSizes:["700px"],
             caseKey:  tabIx,
             items:[
                {type:_SPACER_, height: "10px" },
                {type:_OUTPUT_, value: com_zimbra_delegatedadmin.Label_permission },
                grantsListXFormItem ,
 //                   {type:_CELLSPACER_},
-               {type:_GROUP_, numCols:3,width: 300, colSizes:["100px","20px","*"],  height: 30,
+               {type:_GROUP_, numCols:3,width: 350, colSizes:["100px","20px","*"],  height: 30,
                     cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left: 200px; margin-right:auto;",
                     items: [
                         {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_grant,width:"100px",
@@ -203,6 +203,12 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
 if (ZaItem.loadMethods["ZaAccount"]) {
     ZaItem.loadMethods["ZaAccount"].push (ZaGrant.loadMethod) ;
 }
+
+/*   Grant right and delete will be separated from the account modification
+if (ZaItem.modifyMethods["ZaAccount"]) {
+    ZaItem.modifyMethods["ZaAccount"].push(ZaGrant.grantMethod);
+}
+*/
 
 if (ZaController.setViewMethods["ZaAccountViewController"]) {
 	ZaController.setViewMethods["ZaAccountViewController"].push(ZaTargetPermission.permissionViewMethod);

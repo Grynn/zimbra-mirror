@@ -36,8 +36,8 @@ ZaGrant.RIGHT_TYPE_CHOICES =[
 ];
 
 ZaGrant.INLINE_VERB_TYPE_CHOICES = [
-    {value:"getAttr", label:com_zimbra_delegatedadmin.Col_inline_verb_set},
-    {value:"setAttr", label:com_zimbra_delegatedadmin.Col_inline_verb_get}
+    {value:"set", label:com_zimbra_delegatedadmin.Col_inline_verb_set},
+    {value:"get", label:com_zimbra_delegatedadmin.Col_inline_verb_get}
 ]
 
  /*
@@ -91,17 +91,91 @@ ZaGrant.getSampleGrantsList = function () {
 }
 
 ZaGrant.loadMethod = function (by, val) {
-// TODO: use GetGrantsRequest   
-    var grants = ZaGrant.getSampleGrants () ;
-//    var list = new ZaItemList(ZaGrant) ;
-//    list._vector = AjxVector.fromArray(grants) ;
-    this [ZaGrant.A2_grantsList] = grants ;
+//    var grants = ZaGrant.getSampleGrants () ;
+
+    var soapDoc = AjxSoapDoc.create("GetGrantsRequest", ZaZimbraAdmin.URN, null);
+    var elTarget = soapDoc.set("target", val) ;
+    elTarget.setAttribute ("by", by) ;
+    elTarget.setAttribute ("type", this.type ) ;
+    
+    var ctler =  ZaApp.getInstance().getCurrentController();
+    
+    try {
+        var params = new Object();
+        params.soapDoc = soapDoc;
+        var reqMgrParams = {
+            controller: ctler ,
+            busyMsg: com_zimbra_delegatedadmin.BUSY_GET_GRANTS
+        } ;
+
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetGrantsResponse ;
+        var grants = resp.grant ;
+        var grantList = [] ;
+        if (grants != null) {
+            for (var i = 0; i < grants.length; i++) {
+                var grant = new ZaGrant () ;
+                for (var key in grants[i]) {
+                    if (key == "deny") {
+                        grant [ZaGrant.A_deny] = grants[i][key] ? "1" : "0" ;
+                    } else if (key == "name") {
+                        grant [ZaGrant.A_grantee] = grants[i][key] ;
+                    } else if (key == "type") {
+                        grant [ZaGrant.A_grantee_type] = grants[i][key] ;
+                    } else if (key = "right") {
+                        grant [ZaGrant.A_right] = grants[i][key] ;
+                    }
+                }
+                grantList.push (grant) ;
+            }
+        }
+
+        this [ZaGrant.A2_grantsList] = grantList ;
+        
+    }catch (ex) {
+        if (ctler) { //at the initialization time, the controller may not be initialized yet
+            ctler.popupErrorDialog (com_zimbra_delegatedadmin.error_grant_right + ex.msg , ex) ;
+        }
+    }
 }
 
-//GrantRightRequest
+//GrantRightRequest, triggered by the GrantDialog actions
 ZaGrant.grantMethod = function (obj) {
+    if (AjxEnv.hasFirebug)
+      console.log("Grant Rights ...") ;
+//    var tempObj = ZaApp.getInstance().getCurrentController ()._view.GetObject ();
+//    var tempGrants = tempObj [ZaGrant.A2_grantsList]  ;
+    var soapDoc = AjxSoapDoc.create("GrantRightRequest", ZaZimbraAdmin.URN, null);
+    var elTarget = soapDoc.set("target", obj[ZaGrant.A_target]) ;
+    elTarget.setAttribute("by", "name") ;
+    elTarget.setAttribute("type", obj[ZaGrant.A_target_type]) ;
 
+    var elGrantee = soapDoc.set("grantee", obj[ZaGrant.A_grantee]) ;
+    elGrantee.setAttribute("by", "name") ;
+    elGrantee.setAttribute("type",obj[ZaGrant.A_grantee_type] ) ;
+
+    var elRight = soapDoc.set("right", obj[ZaGrant.A_right])
+    if (obj[ZaGrant.A_deny] == "1") {
+        elRight.setAttribute("deny", "1") ;   
+    }
+    var ctler =  ZaApp.getInstance().getCurrentController();
+    try {
+        var params = new Object();
+        params.soapDoc = soapDoc;
+        var reqMgrParams = {
+            controller: ctler ,
+            busyMsg: com_zimbra_delegatedadmin.BUSY_GRANTING_RIGHT
+        } ;
+
+        resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GrantRightResponse ;
+
+        return true ;
+    }catch (ex) {
+        ctler.popupErrorDialog (com_zimbra_delegatedadmin.error_grant_right + ex.msg , ex) ;
+        return false ;
+    }
 }
+
+
 
 //RevokeRightRequest
 ZaGrant.revokeMethod = function () {

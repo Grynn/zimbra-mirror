@@ -74,16 +74,21 @@ function() {
 
 ZaGrantDialog.grantRight = function () {
     if(this.parent.grantRightDlg) {
-		this.parent.grantRightDlg.popdown();
 		var obj = this.parent.grantRightDlg.getObject();
         var instance = this.getInstance();
         var currentGrantList = instance [ZaGrant.A2_grantsList] || [];
         //TODO: test if the grant exists in the current list already
         currentGrantList.push(obj) ;
 
-        this.getModel().setInstanceValue(this.getInstance(), ZaGrant.A2_grantsList, currentGrantList);
-        this.parent.setDirty(true);
-	}
+        //this.parent.setDirty(true);
+        //GrantRights Right here, instead of populating to the account modification saving time
+        // Advantages: 1. Avoid the double grants during the saving time
+        // 2. reduce the load of the server during the account modification time
+        if (ZaGrant.grantMethod (obj)) {
+            this.getModel().setInstanceValue(this.getInstance(), ZaGrant.A2_grantsList, currentGrantList);
+            this.parent.grantRightDlg.popdown();
+        }
+    }
 }
 
 ZaGrantDialog.rightTypeListener =  function (type) {
@@ -105,6 +110,6 @@ ZaGrantDialog.getInlineRightName = function (instance) {
     var targetType = this.getInstanceValue (ZaGrant.A_inline_right + "/" + ZaGrant.A_inline_target_type) || "" ;
     var attr = this.getInstanceValue (ZaGrant.A_inline_right + "/" + ZaGrant.A_inline_attr) || "";
 
-    return verb +":" + targetType + ":" + attr ;
+    return verb +"." + targetType + "." + attr ;
 
 }
