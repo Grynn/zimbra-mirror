@@ -179,7 +179,7 @@ public abstract class DesktopMailbox extends Mailbox {
     private boolean mSyncRunning;
     
     boolean lockMailboxToSync() {
-    	if (isDeleting())
+    	if (isDeleting() || !OfflineSyncManager.getInstance().isServiceOpen())
     		return false;
     	
     	if (!mSyncRunning) {

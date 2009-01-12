@@ -1,6 +1,10 @@
 package com.zimbra.cs.offline;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.NoRouteToHostException;
+import java.net.PortUnreachableException;
+import java.net.SocketTimeoutException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,13 +15,18 @@ import java.util.Set;
 import javax.mail.AuthenticationFailedException;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.dom4j.QName;
 
 import com.zimbra.common.auth.ZAuthToken;
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.common.soap.SoapHttpTransport;
+import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.ExceptionToString;
 import com.zimbra.common.util.SystemUtil;
@@ -34,6 +43,8 @@ import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.service.offline.OfflineService;
+import com.zimbra.cs.servlet.ZimbraServlet;
+import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 
 public class OfflineSyncManager {
@@ -493,7 +504,53 @@ public class OfflineSyncManager {
 			} catch (ServiceException x) {
 				OfflineLog.offline.warn("failed to load mailbox id=%d", mid, x);
 			}
+			
+		new Thread(new Runnable() {
+			public void run() {
+				confirmServiceOpen();
+			}
+		}, "service-port-ping").start();
 	}
+	
+	
+	private boolean isServiceOpen;
+	
+	public synchronized boolean isServiceOpen() {
+		return isServiceOpen;
+	}
+	
+	private synchronized void confirmServiceOpen() {
+        String uri = LC.zimbra_admin_service_scheme.value() + "localhost"+ ":" + LC.zimbra_admin_service_port.value() +
+        		     ZimbraServlet.ADMIN_SERVICE_URI;
+        for (int i = 0; i < 24; ++i) {
+		    try {
+		    	SoapHttpTransport transport = new SoapHttpTransport(uri);
+		        transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
+		        transport.setTimeout(5);
+		        transport.setRetryCount(1);
+		        transport.setRequestProtocol(SoapProtocol.Soap12);
+		        transport.setResponseProtocol(SoapProtocol.Soap12);
+		
+		        Element request = new Element.XMLElement(AdminConstants.PING_REQUEST);
+		        transport.invokeWithoutSession(request.detach());
+		        OfflineLog.offline.info("service port is ready.");
+		        isServiceOpen = true;
+		        return;
+		    } catch (Exception x) {
+		    	if (x instanceof ConnectException || x instanceof SocketTimeoutException || x instanceof ConnectTimeoutException)
+		    		OfflineLog.offline.warn("awaiting service port.");
+		    	else if (x instanceof NoRouteToHostException || x instanceof PortUnreachableException)
+		    		OfflineLog.offline.warn("service host or port unreachable; will retry in 5 seconds.", x);
+		    	else
+		    		OfflineLog.offline.warn("service port check failed; will retry in 5 seconds", x);
+		    }
+	    	try {
+	    		Thread.sleep(5000); //avoid potential tight loop
+	    	} catch (InterruptedException e) {}
+        }
+		Zimbra.halt("Zimbra Desktop Service failed to initialize.  Shutting down...");
+	}
+	
 	
 	/*
 		<zdsync xmlns="urn:zimbraOffline">
