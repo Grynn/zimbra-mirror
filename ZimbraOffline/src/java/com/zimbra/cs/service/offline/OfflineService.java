@@ -33,6 +33,9 @@ public class OfflineService implements DocumentService {
     // sync
     public static final QName SYNC_REQUEST = QName.get("SyncRequest", NAMESPACE);
     public static final QName SYNC_RESPONSE = QName.get("SyncResponse", NAMESPACE);
+    
+    public static final QName CLIENT_EVENT_NOTIFY_REQUEST = QName.get("ClientEventNotifyRequest", NAMESPACE);
+    public static final QName CLIENT_EVENT_NOTIFY_RESPONSE = QName.get("ClientEventNotifyResponse", NAMESPACE);
 
     public void registerHandlers(DocumentDispatcher dispatcher) {
         // sync
@@ -67,6 +70,8 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(MailConstants.GRANT_PERMISSION_REQUEST, OfflineServiceProxy.GrantPermission());
         dispatcher.registerHandler(MailConstants.REVOKE_PERMISSION_REQUEST, OfflineServiceProxy.RevokePermission());
         dispatcher.registerHandler(MailConstants.CHECK_PERMISSION_REQUEST, OfflineServiceProxy.CheckPermission());
+        
+        dispatcher.registerHandler(CLIENT_EVENT_NOTIFY_REQUEST, new OfflineClientEventNotify());
         
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());

@@ -199,6 +199,8 @@ public class PushChanges {
     	//must handle items moved back out first.  otherwise if children were moved out and parent remains in archive, pushing deletes of parent to remote server will
     	//zap the children.
     	if (!unarchived.isEmpty()) {
+    		OfflineSyncManager.getInstance().continueOK();
+    		
     		int[] unIds = new int[unarchived.size()];
     		int i = 0;
     		for (int unId : unarchived.keySet())
@@ -236,6 +238,8 @@ public class PushChanges {
     	//push up deletes due to archiving.  we are sure that everything in the list is safe.  if a folder was archived and then one of its subfolder is unarchived,
     	//the subfolder and its content would have their archived flags clears and therefore not included in the list.
         if (!archived.isEmpty()) {
+            OfflineSyncManager.getInstance().continueOK();
+        	
             String ids = concatenateIds(archived);
             Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
             request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailConstants.A_ID, ids);
@@ -278,6 +282,8 @@ public class PushChanges {
         if (changes.isEmpty() && tombstones.isEmpty())
             return archived.size() != 0;
 
+        OfflineSyncManager.getInstance().continueOK();
+        
         OfflineLog.offline.debug("starting change push");
 
         boolean hasDeletes = !tombstones.isEmpty();
@@ -319,16 +325,19 @@ public class PushChanges {
         // Do simple change batch push first
         Set<Integer> batched = new HashSet<Integer>();
         if (simpleReadChanges != null && simpleReadChanges.size() > 0) {
+            OfflineSyncManager.getInstance().continueOK();
         	pushSimpleChanges(simpleReadChanges, Change.MODIFIED_UNREAD, false, 0, batched);
         }
         
         if (simpleUnreadChanges != null && simpleUnreadChanges.size() > 0) {
+            OfflineSyncManager.getInstance().continueOK();
         	pushSimpleChanges(simpleUnreadChanges, Change.MODIFIED_UNREAD, true, 0, batched);
         }
         
         if (simpleFolderMoveChanges != null && simpleFolderMoveChanges.size() > 0) {
         	Set<Integer> folders = simpleFolderMoveChanges.keySet();
 	        for (int folderId : folders) {
+	            OfflineSyncManager.getInstance().continueOK();
 	        	pushSimpleChanges(simpleFolderMoveChanges.get(folderId), Change.MODIFIED_FOLDER, false, folderId, batched);
 	        }
         }
@@ -347,6 +356,9 @@ public class PushChanges {
                 	
                 	if (batched.contains(id)) //already done
                 		continue;
+                	
+                    OfflineSyncManager.getInstance().continueOK();
+                	
                 	try {
 	                    switch (type) {
 	                        case MailItem.TYPE_TAG:         syncTag(id);          break;
@@ -368,6 +380,8 @@ public class PushChanges {
 
         // folder deletes need to come after moves are processed, else we'll be deleting items we shouldn't
         if (!tombstones.isEmpty()) {
+            OfflineSyncManager.getInstance().continueOK();
+        	
             String ids = concatenateIds(tombstones.getAll());
             Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
             request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailConstants.A_ID, ids);

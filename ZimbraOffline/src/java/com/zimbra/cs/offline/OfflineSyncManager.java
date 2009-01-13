@@ -405,6 +405,13 @@ public class OfflineSyncManager {
 		return exception instanceof ServiceException && ((ServiceException)exception).getCode().equals(MailServiceException.MAINTENANCE);
 	}
 	
+	public static boolean isDbShutdown(Exception exception) {
+		Throwable e = SystemUtil.getInnermostException(exception);
+		if (e instanceof RuntimeException && ((RuntimeException)e).getMessage().equals("DbPool permanently shutdown"))
+			return true;
+		return false;
+	}
+	
     public void processSyncException(Account account, Exception exception) {
     	processSyncException(account.getName(), ((OfflineAccount)account).getRemotePassword(), exception, ((OfflineAccount)account).isDebugTraceEnabled());
     }
@@ -538,7 +545,7 @@ public class OfflineSyncManager {
 		        return;
 		    } catch (Exception x) {
 		    	if (x instanceof ConnectException || x instanceof SocketTimeoutException || x instanceof ConnectTimeoutException)
-		    		OfflineLog.offline.warn("awaiting service port.");
+		    		OfflineLog.offline.info("awaiting service port.");
 		    	else if (x instanceof NoRouteToHostException || x instanceof PortUnreachableException)
 		    		OfflineLog.offline.warn("service host or port unreachable; will retry in 5 seconds.", x);
 		    	else
@@ -549,6 +556,39 @@ public class OfflineSyncManager {
 	    	} catch (InterruptedException e) {}
         }
 		Zimbra.halt("Zimbra Desktop Service failed to initialize.  Shutting down...");
+	}
+	
+	private boolean isUiLoadingInProgress;
+	private long uiLoadingStartTime;
+	
+	public synchronized boolean isUiLoadingInProgress() {
+		if (!isUiLoadingInProgress)
+			return false;
+		if (System.currentTimeMillis() - uiLoadingStartTime >= 60000) { //hard limit of halting sync to 60 seconds
+			OfflineLog.offline.warn("ui loading has been in progress for more than 60 seconds; force resuming any blocked sync.");
+			setUiLoadingInProgress(false);
+			return false;
+		}
+		return isUiLoadingInProgress;
+	}
+	
+	public synchronized void setUiLoadingInProgress(boolean b) {
+		isUiLoadingInProgress = b;
+		if (b)
+			uiLoadingStartTime = System.currentTimeMillis();
+		else
+			uiLoadingStartTime = 0;
+	}
+	
+	public void continueOK() {
+		while (true) {
+			if (!isUiLoadingInProgress())
+				return;
+			OfflineLog.offline.info("ui loading in progress; sync on hold.");
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException x) {}
+		}
 	}
 	
 	

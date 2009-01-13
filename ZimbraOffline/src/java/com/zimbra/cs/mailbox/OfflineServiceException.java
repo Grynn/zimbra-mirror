@@ -24,6 +24,7 @@ public class OfflineServiceException extends ServiceException {
     public static final String MISCONFIGURED         = "offline.MISCONFIGURED";
     public static final String FOLDER_NOT_EMPTY      = "offline.FOLDER_NOT_EMPTY";
     public static final String UNSUPPORTED_OPERATION = "offline.UNSUPPORTED";
+    public static final String UNKNOWN_CLIENT_EVENT = "offline.UNKNOWN_CLIENT_EVENT";
     
     public static final String UNEXPECTED = "offline.UNEXPECTED";
     public static final String AUTH_FAILED = "offline.AUTH_FAILED";
@@ -53,6 +54,10 @@ public class OfflineServiceException extends ServiceException {
 
     public static OfflineServiceException UNSUPPORTED(String op) {
         return new OfflineServiceException("operation not supported by offline client: " + op, UNSUPPORTED_OPERATION, RECEIVERS_FAULT);
+    }
+    
+    public static OfflineServiceException UNKNOWN_CLIENT_EVENT(String event) {
+        return new OfflineServiceException("unknown client event: " + event, UNKNOWN_CLIENT_EVENT, SENDERS_FAULT);
     }
     
     public static OfflineServiceException UNEXPECTED(String error) {

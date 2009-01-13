@@ -86,7 +86,7 @@ function serverCheck() {
     
     // Pump events so the UI stays responsive
     threadManager.currentThread.processNextEvent(true);
-  } while(Date.now() - startTime < 30000);
+  } while(Date.now() - startTime < 60000);
 
   // Give up
   window.alert(bundle.GetStringFromName("StartServerFailed"));

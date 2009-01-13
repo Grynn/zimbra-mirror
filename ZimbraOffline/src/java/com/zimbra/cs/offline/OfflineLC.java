@@ -168,8 +168,8 @@ public class OfflineLC {
         zdesktop_gal_refresh_interval_days.setDoc("How often offline GAL is full-sync'ed. Default every 30 days.");
         
 	    zdesktop_sync_batch_size = new KnownKey("zdesktop_sync_batch_size");
-	    zdesktop_sync_batch_size.setDefault("100");
-	    zdesktop_sync_batch_size.setDoc("Max number of messages to download in each transaction. Default 100.");
+	    zdesktop_sync_batch_size.setDefault("25");
+	    zdesktop_sync_batch_size.setDoc("Max number of messages to download in each transaction. Default 25.");
 	    
 	    zdesktop_sync_zip_level = new KnownKey("zdesktop_sync_zip_level");
 	    zdesktop_sync_zip_level.setDefault("0");

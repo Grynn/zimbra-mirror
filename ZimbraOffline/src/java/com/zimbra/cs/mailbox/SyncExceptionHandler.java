@@ -103,6 +103,9 @@ public class SyncExceptionHandler {
     	if (OfflineSyncManager.isMailboxInMaintenance(exception))
     		throw (ServiceException)exception;
     	
+    	if (OfflineSyncManager.isDbShutdown(exception))
+    		throw ServiceException.FAILURE("DbPool permanently shutdown", exception);
+    	
     	Date now = new Date();
     	String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
 

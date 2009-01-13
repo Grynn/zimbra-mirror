@@ -11,6 +11,8 @@ import com.zimbra.soap.SoapServlet;
 public class OfflineNoOp extends NoOp {
 
 	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
+		OfflineSyncManager.getInstance().setUiLoadingInProgress(false);
+		
 		if (!context.containsKey(SoapServlet.IS_RESUMED_REQUEST))
 			OfflineSyncManager.getInstance().clientPing();
 		

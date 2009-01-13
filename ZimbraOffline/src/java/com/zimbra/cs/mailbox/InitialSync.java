@@ -163,6 +163,8 @@ public class InitialSync {
 
         lastPeek = System.currentTimeMillis();
         
+        OfflineSyncManager.getInstance().continueOK();
+        
         OfflineLog.offline.debug("starting initial sync");
         mMailboxSync.saveSyncTree(syncResponse, token);
         initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
@@ -185,6 +187,8 @@ public class InitialSync {
         interrupted = true;
 
         lastPeek = System.currentTimeMillis();
+        
+        OfflineSyncManager.getInstance().continueOK();
         
         OfflineLog.offline.debug("resuming initial sync");
         initialFolderSync(syncResponse.getElement(MailConstants.E_FOLDER));
@@ -638,7 +642,9 @@ public class InitialSync {
     }
     
     void syncCalendarItem(int id, int folderId, boolean isAppointment) throws ServiceException {
-        try {
+    	OfflineSyncManager.getInstance().continueOK();
+        
+    	try {
             Element request = new Element.XMLElement(isAppointment ? MailConstants.GET_APPOINTMENT_REQUEST : MailConstants.GET_TASK_REQUEST);
             request.addAttribute(MailConstants.A_ID, Integer.toString(id));
             request.addAttribute(MailConstants.A_CAL_INCLUDE_CONTENT, 1);
@@ -810,6 +816,8 @@ public class InitialSync {
     }
 
     void syncContact(Element elt, int folderId) throws ServiceException {
+        OfflineSyncManager.getInstance().continueOK();
+    	
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
@@ -882,6 +890,8 @@ public class InitialSync {
     private static final Version MIN_ZCS_VER_SYNC_TGZ = new Version(OfflineLC.zdesktop_min_zcs_version_sync_tgz.value()); //5.0.9
     
     private void syncMessages(List<Integer> ids, byte type) throws ServiceException {
+        OfflineSyncManager.getInstance().continueOK();
+    	
     	if (ombx.getRemoteServerVersion().isAtLeast(MIN_ZCS_VER_SYNC_TGZ))
     		syncMessagesAsTgz(ids, type);
     	else
@@ -996,6 +1006,8 @@ public class InitialSync {
     }
         
     void syncMessage(int id, int folderId, byte type) throws ServiceException {
+        OfflineSyncManager.getInstance().continueOK();
+    	
         Map<String, String> headers = new HashMap<String, String>();
 
         OfflineAccount acct =ombx.getOfflineAccount();
@@ -1193,6 +1205,8 @@ public class InitialSync {
     
     // for 5.0.6 without tar formatter
     void syncDocument(Element doc) throws ServiceException {
+        OfflineSyncManager.getInstance().continueOK();
+    	
     	byte type = doc.getName().equals(MailConstants.E_WIKIWORD) ? MailItem.TYPE_WIKI : MailItem.TYPE_DOCUMENT; 
     	int folderId = (int) doc.getAttributeLong(MailConstants.A_FOLDER);
     	long modifiedDate = doc.getAttributeLong(MailConstants.A_MODIFIED_DATE);
@@ -1259,6 +1273,8 @@ public class InitialSync {
     
     // tar formatter
     void syncDocument(String query) throws ServiceException {
+        OfflineSyncManager.getInstance().continueOK();
+    	
         OfflineAccount acct = ombx.getOfflineAccount();
         String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH + "/~/?fmt=tgz&" + query);
         if (acct.isDebugTraceEnabled())

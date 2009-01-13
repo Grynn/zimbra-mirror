@@ -179,7 +179,7 @@ public abstract class DesktopMailbox extends Mailbox {
     private boolean mSyncRunning;
     
     boolean lockMailboxToSync() {
-    	if (isDeleting() || !OfflineSyncManager.getInstance().isServiceOpen())
+    	if (isDeleting() || !OfflineSyncManager.getInstance().isServiceOpen() || OfflineSyncManager.getInstance().isUiLoadingInProgress())
     		return false;
     	
     	if (!mSyncRunning) {
@@ -444,7 +444,7 @@ public abstract class DesktopMailbox extends Mailbox {
 			};
 		
 		timer = new Timer("mid=" + getId());
-		timer.schedule(currentTask, 5 * Constants.MILLIS_PER_SECOND, 5 * Constants.MILLIS_PER_SECOND);
+		timer.schedule(currentTask, 10 * Constants.MILLIS_PER_SECOND, 5 * Constants.MILLIS_PER_SECOND);
 	}
 	
 	protected synchronized void syncNow() {
