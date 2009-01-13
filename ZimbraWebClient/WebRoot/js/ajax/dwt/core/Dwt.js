@@ -132,17 +132,9 @@ Dwt.Z_HIDDEN = 100;
 Dwt.Z_CURTAIN = 200;
 
 
-/** DwtWindowManager inside of a view.  It holds modeless dialogs (DwtResizableWindow).
- */
-Dwt.Z_VIEW_WINDOW_MANAGER = 290;
-
 /** Visible layer. Elements at this layer will be in view
  * @type Int*/
 Dwt.Z_VIEW = 300;
-
-/** DwtWindowManager.  It holds modeless dialogs (DwtResizableWindow).
- */
-Dwt.Z_WINDOW_MANAGER = 490;
 
 /** Popup menu layer. Used by the menu components
  * @type Int*/
