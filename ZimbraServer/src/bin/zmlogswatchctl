@@ -99,7 +99,7 @@ case "$1" in
           rm -rf ${pidfile}
           break
         fi
-        if [ x"$os" = "Linux" ]; then
+        if [ x"$os" = "xLinux" ]; then
           index=0;quit=0
           ids[$index]="$pid"
           while [ $quit -eq 0 ]; do
