@@ -28,7 +28,6 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
-import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.accesscontrol.RightCommand;
 import com.zimbra.cs.datasource.DataSourceManager;
@@ -829,9 +828,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     public synchronized Account getLocalAccount() throws ServiceException {
     	Account account = get(AccountBy.id, LOCAL_ACCOUNT_ID);
-    	if (account != null)
-    		return account;
-    	return createLocalAccount();
+    	if (account == null)
+    		account = createLocalAccount();
+    	
+    	String webappUri = account.getAttr(A_offlineWebappUri, null);
+    	if (webappUri == null)
+    	    setAccountAttribute(account, A_offlineWebappUri, "http://localhost:7633/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value());
+    	return account;
     }
 
     public boolean isGalAccount(Account account) {

@@ -30,6 +30,10 @@
   <desc>base URI of the remote Zimbra server</desc>
 </attr>
 
+<attr name="offlineWebappUri" type="string" cardinality="single" optionalIn="account" flags="accountInfo">
+  <desc>prism webapp uri</desc>
+</attr>
+
 <attr name="offlineRemoteHost" type="string" cardinality="single" requiredIn="account">
   <desc>host of the remote Zimbra server</desc>
 </attr>

@@ -14,6 +14,7 @@ public interface OfflineConstants {
     public static final String A_offlineRemoteServerVersion = "offlineRemoteServerVersion";
     public static final String A_offlineRemotePassword = "offlineRemotePassword";
     public static final String A_offlineRemoteServerUri = "offlineRemoteServerUri";
+    public static final String A_offlineWebappUri = "offlineWebappUri";
     
     public static final String A_offlineProxyHost = "offlineProxyHost";
     public static final String A_offlineProxyPort = "offlineProxyPort";
