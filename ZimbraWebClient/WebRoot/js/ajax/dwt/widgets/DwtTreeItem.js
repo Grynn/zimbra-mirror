@@ -60,7 +60,7 @@ DwtTreeItem = function(params) {
 	DwtComposite.call(this, params);
 
 	this._imageInfoParam = params.imageInfo;
-	this._nodeParam = params.nodeParam;
+	this._extraInfo = params.extraInfo;
 	this._textParam = params.text;
 	this._deferred = params.deferred;
 	this._itemChecked = false;
@@ -449,6 +449,7 @@ function(index, realizeDeferred) {
 	this._checkBox = document.getElementById(data.id + "_checkbox");
 	this._imageCell = document.getElementById(data.id + "_imageCell");
 	this._textCell = document.getElementById(data.id + "_textCell");
+	this._extraCell = document.getElementById(data.id + "_extraCell");
 
 	// If we have deferred children, then make sure we set up accordingly
 	if (this._nodeCell) {
@@ -460,9 +461,11 @@ function(index, realizeDeferred) {
 				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEDOWN, DwtTreeItem._nodeIconMouseDownHdlr);
 				Dwt.setHandler(imgEl, DwtEvent.ONMOUSEUP, DwtTreeItem._nodeIconMouseUpHdlr);
 			}
-		} else {
-			AjxImg.setImage(this._nodeCell, (this._nodeParam ||  "Blank_16"));
 		}
+	}
+
+	if (this._extraCell) {
+		AjxImg.setImage(this._extraCell, (this._extraInfo ||  "Blank_16"));
 	}
 
 	// initialize checkbox
