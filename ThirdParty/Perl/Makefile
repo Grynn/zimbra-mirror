@@ -110,6 +110,7 @@ PERL_LIBS 	:= \
 	Digest::SHA \
 	Error \
 	Mail::DKIM \
+	XML::SAX::Expat \
 	XML::Simple
 
 NET_SSLeay := \
