@@ -98,6 +98,8 @@ public final class YMailClient {
     private static final String ENCODING_QUOTABLE_PRINTABLE = "quoted-printable";
     private static final String ENCODING_8BIT = "8bit";
 
+    private static final String CONTENT_TYPE_RFC822 = "message/rfc822";
+
     public YMailClient(Auth auth) {
         this.auth = auth;
         this.stub = getStub(auth);
@@ -350,7 +352,20 @@ public final class YMailClient {
     public String uploadAttachment(MimeBodyPart mbp) throws IOException {
         Part part;
         try {
-            part = getPart(mbp);
+            if (ENCODING_BASE64.equalsIgnoreCase(mbp.getEncoding()) ||
+                CONTENT_TYPE_RFC822.equalsIgnoreCase(mbp.getContentType())) {
+                InputStream is = mbp.getInputStream();
+                try {
+                    tmpFile = createTempFile(mbp.getInputStream());
+                } finally {
+                    is.close();
+                }
+                String name = mbp.getFileName();
+                if (name == null) name = "attachment";
+                part = new FilePart(name, name, tmpFile, mbp.getContentType(), null);
+            } else {
+                part = getPart(mbp);
+            }
         } catch (MessagingException e) {
             throw new IllegalArgumentException("Mime content error", e);
         }
