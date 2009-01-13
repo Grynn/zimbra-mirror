@@ -52,7 +52,16 @@ function(grant, now, isDragProxy) {
 		var field = this._headerList[i]._field;
 
         html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-        html[idx++] = AjxStringUtil.htmlEncode(grant [field]) ;
+        if (field == ZaGrant.A_deny) {
+            if (grant [field] && grant [field] == "1") {
+                html[idx++] = ZaMsg.Yes ;
+            }else {
+                html[idx++] = ZaMsg.No ;    
+            }
+
+        }  else {
+            html[idx++] = AjxStringUtil.htmlEncode(grant [field]) ;
+        }
         html[idx++] = "</nobr></td>" ;
 	}
 	html[idx++] = "</tr></table>";
@@ -80,11 +89,48 @@ function() {
     return headerList;
 }
 
-ZaGrantsListView.grantSelectionListener = function () {
-    
+
+ZaGrantsListView.isDeleteEnabled = function () {
+    var grantListItem = this.getForm().getItemsById (ZaGrant.A2_grantsList) [0] ;
+    if (grantListItem && grantListItem.getSelection ()
+            && grantListItem.getSelection ().length > 0) { 
+        return true ;
+    } else {
+        return true ;    //TODO: somehow the delete button enabling is not working with enableDisableChecks condition
+    }
 }
 
-//TODO: model items definition
+ZaGrantsListView.revokeRight = function () {
+    var selectedGrants = this.getItemsById (ZaGrant.A2_grantsList) [0].getSelection() ;
+    if (selectedGrants && selectedGrants.length > 0) {
+        var instance = this.getInstance();
+        var targetInfo = {} ;
+        targetInfo [ZaGrant.A_target] = instance.name ;
+        targetInfo [ZaGrant.A_target_type] = instance.type ;
+        var currentGrantList = instance [ZaGrant.A2_grantsList] ;
+
+        for (var i = 0; i < selectedGrants.length; i ++) {
+// TODO: when multiselection enabled, we need a progress dialog to show the progress
+            if (ZaGrant.revokeMethod (targetInfo, selectedGrants[i])) {
+                var j = ZaTargetPermission.findIndexOfGrant(currentGrantList, selectedGrants[i]);
+                currentGrantList.splice(j, 1) ;
+            } else {
+                break ; //jump out if failed.
+            }
+        }
+        this.getModel().setInstanceValue(instance, ZaGrant.A2_grantsList, currentGrantList);
+    }
+
+    this.parent.revokeRightDlg.popdown () ;
+}
+
+ZaGrantsListView.grantSelectionListener = function () {
+    var instance = this.getForm().getInstance () ;
+    var selectedGrants = this.widget.getSelection () ;
+    this.getModel().setInstanceValue (instance,
+            ZaGrant.A2_grantsListSelectedItems, selectedGrants) ;
+}
+
 var grantListItem = {
     id: ZaGrant.A2_grantsList, ref: ZaGrant.A2_grantsList, type: _LIST_,
     listItems: { type: _OBJECT_, items:
@@ -97,13 +143,13 @@ var grantListItem = {
     }
 };
 
-//TODO: xform item definition
 var grantsListXFormItem  =  {
-    ref: ZaGrant.A2_grantsList, type: _DWT_LIST_, width:700, height: 200,
+    ref: ZaGrant.A2_grantsList, id: ZaGrant.A2_grantsList, type: _DWT_LIST_, width:700, height: 200,
     cssClass: "DLSource", widgetClass: ZaGrantsListView,
     headerList: ZaGrantsListView._getHeaderList (),
     hideHeader: false ,
-    onSelection:ZaGrantsListView.grantSelectionListener
+    onSelection:ZaGrantsListView.grantSelectionListener,
+    multiselect: false  //TODO: enable multiselect in the future
 } ;
 
 ZaTargetPermission.targetXFormModifier = function (xFormObject) {
@@ -141,6 +187,8 @@ ZaTargetPermission.targetXFormModifier = function (xFormObject) {
 //                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px" },
 //                            {type:_CELLSPACER_},
                         {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px", align: _LEFT_ ,
+                            enableDisableChangeEventSources: [ZaGrant.A2_grantsListSelectedItems, ZaGrant.A2_grantsList] ,
+                            enableDisableChecks:[ZaGrantsListView.isDeleteEnabled],
                             onActivate:"ZaTargetPermission.revokeButtonListener.call(this);"
                         }
                     ]
@@ -159,24 +207,16 @@ function (entry) {
         var instance  = xform.getInstance ();
         xform.getModel().setInstanceValue(instance, ZaGrant.A2_grantsList, entry[ZaGrant.A2_grantsList]);
     }
-
-    /*
-    if (instance) {
-		if (instance.attrs[ZaAccount.A_zimbraDomainAdminMaxMailQuota] >= 0) {
-			instance [ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed] = 'TRUE';
-		}else {
-			instance [ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed] = null ; //null will allow the cos value to be shown
-		}
-		xform.refresh ();
-	} */
 }
 
 
 //TODO: add model and xform to the target's main view as a new tab - permissions
+var grantListSelectItem = { ref: ZaGrant.A2_grantsListSelectedItems, type:_LIST_ }
 
 //Domain Target
 if (ZaDomain) {
     ZaDomain.myXModel.items.push(grantListItem) ;
+    ZaDomain.myXModel.items.push(grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaDomainXFormView"]){
@@ -194,6 +234,7 @@ if (ZaController.setViewMethods["ZaDomainController"]) {
 //Account Target
 if (ZaAccount) {
     ZaAccount.myXModel.items.push(grantListItem) ;
+    ZaAccount.myXModel.items.push(grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
@@ -218,6 +259,7 @@ if (ZaController.setViewMethods["ZaAccountViewController"]) {
 //DL Target
 if (ZaDistributionList) {
     ZaDistributionList.myXModel.items.push(grantListItem) ;
+    ZaDistributionList.myXModel.items.push(grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaDLXFormView"]){
@@ -235,6 +277,7 @@ if (ZaController.setViewMethods["ZaDLController"]) {
 
 //Resource target
 if (ZaResource) {
+    ZaResource.myXModel.items.push(grantListSelectItem) ;
     ZaResource.myXModel.items.push(grantListItem) ;
 }
 
@@ -253,6 +296,7 @@ if (ZaController.setViewMethods["ZaResourceController"]) {
 //COS Target
 if (ZaCos) {
     ZaCos.myXModel.items.push(grantListItem) ;
+    ZaCos.myXModel.items.push(grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaCosXFormView"]){
@@ -270,6 +314,7 @@ if (ZaController.setViewMethods["ZaCosController"]) {
 //GlobalConfig Target
 if (ZaGlobalConfig) {
     ZaGlobalConfig.myXModel.items.push(grantListItem) ;
+    ZaGlobalConfig.myXModel.items.push(grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["GlobalConfigXFormView"]){
@@ -287,6 +332,7 @@ if (ZaController.setViewMethods["ZaGlobalConfigViewController"]) {
 //Server Target
 if (ZaServer) {
     ZaServer.myXModel.items.push(grantListItem) ;
+    ZaServer.myXModel.items.push(grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaServerXFormView"]){
@@ -303,7 +349,8 @@ if (ZaController.setViewMethods["ZaServerController"]) {
 
 //Zimlet Target
 if (ZaZimlet) {
-    ZaZimlet.myXModel.items.push(grantListItem) ;
+   ZaZimlet.myXModel.items.push(grantListItem) ;
+    ZaZimlet.myXModel.items.push(grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaZimletXFormView"]){
@@ -318,7 +365,6 @@ if (ZaController.setViewMethods["ZaZimletViewController"]) {
 	ZaController.setViewMethods["ZaZimletViewController"].push(ZaTargetPermission.permissionViewMethod);
 }
 
-//TODO: permission actions - get/grant/revoke grants
 ZaTargetPermission.grantButtonListener =
 function () {
     var instance = this.getInstance();
@@ -333,7 +379,7 @@ function () {
 	var obj = {};
 	obj[ZaGrant.A_target] = instance.name;
     obj[ZaGrant.A_target_type] = instance.type ;
-    //TODO: temporary solution to show all the items.
+
     obj.setAttrs = {} ;
     obj.setAttrs.all = true ;
     formPage.grantRightDlg.setObject(obj);
@@ -341,7 +387,74 @@ function () {
 }
 
 ZaTargetPermission.revokeButtonListener = function () {
+    var instance = this.getInstance();
+    var form = this.getForm () ;
+    var formPage = form.parent;
+    var selectedGrant = form.getItemsById (ZaGrant.A2_grantsList) [0].getSelection() ;
+    if (selectedGrant && selectedGrant.length > 0) {
+        if(!formPage.revokeRightDlg) {
+            formPage.revokeRightDlg = new ZaMsgDialog (
+                    ZaApp.getInstance().getAppCtxt().getShell(),
+                    null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+        }
+        formPage.revokeRightDlg.registerCallback(DwtDialog.YES_BUTTON, ZaGrantsListView.revokeRight, form, null);
+        var confirmMsg =  com_zimbra_delegatedadmin.confirm_delete_grants + ZaTargetPermission.getDlMsgFromGrant(selectedGrant) ;
+        formPage.revokeRightDlg.setMessage (confirmMsg,  DwtMessageDialog.INFO_STYLE) ;
+        formPage.revokeRightDlg.popup ();
+    } else {
+        ZaApp.getInstance().getCurrentController().popupMsgDialog (com_zimbra_delegatedadmin.no_grant_selected_msg) ;
+    }
+}
+
+ZaTargetPermission.getDlMsgFromGrant =
+function (grantsList) {
+	var dlgMsg =  "<br><table>";
+    var keys = [ZaGrant.A_grantee,ZaGrant.A_right ,ZaGrant.A_deny] ;
+    for (var i=0; i < grantsList.length; i ++) {
+        var grant = grantsList [i] ;
+
+        for (var j =0; j < keys.length; j ++) {
+            var key = keys [j] ;
+            dlgMsg += "<tr>";
+            if (key ==ZaGrant.A_grantee)  {
+                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_grantee_name + ": " + "</td>";
+                dlgMsg += "<td>" + grant[ZaGrant.A_grantee] + "</td>" ;
+            } else if (key == ZaGrant.A_right) {
+                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_grant_right_name + ": " + "</td>";
+                dlgMsg += "<td>" + grant[ZaGrant.A_right] + "</td>" ;
+            } else if (key == ZaGrant.A_deny) {
+                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_deny + ": " + "</td>";
+                dlgMsg += "<td>" +( grant[key] && grant[key] == "1" ? ZaMsg.Yes : ZaMsg.No )+ "</td>" ;
+            }
+            dlgMsg += "</tr>";
+        }
+    }
+    dlgMsg += "</table>";
     
+    return dlgMsg ;
+}
+
+
+ZaTargetPermission.findIndexOfGrant = function (grantList, grant) {
+    var index = -1 ;
+    for (var i=0; i  < grantList.length; i ++) {
+        var keys = [ZaGrant.A_grantee, ZaGrant.A_grantee_type, ZaGrant.A_deny, ZaGrant.A_right, ZaGrant.A_right_type] ;
+        var found = true ;
+        for (var j =0; i < keys.length; j ++) {
+            var key = keys[j] ;
+            if (grant[key] != grantList[key]) {
+               found = false ;
+               break ;
+            }
+        }
+
+        if (found) {
+            index = i ;
+            break ;
+        }
+    }
+
+    return index ;
 }
 
 

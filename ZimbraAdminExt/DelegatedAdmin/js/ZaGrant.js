@@ -27,6 +27,7 @@ ZaGrant.A_inline_attr = "inline_attr" ;
 
 
 ZaGrant.A2_grantsList = "grantsList" ;
+ZaGrant.A2_grantsListSelectedItems = "grantsListSelectedItems" ;
 
 ZaGrant.GRANTEE_TYPE = ["usr", "grp"] ;
 
@@ -170,7 +171,7 @@ ZaGrant.grantMethod = function (obj) {
 
         return true ;
     }catch (ex) {
-        ctler.popupErrorDialog (com_zimbra_delegatedadmin.error_grant_right + ex.msg , ex) ;
+        ctler.popupErrorDialog (com_zimbra_delegatedadmin.error_grant_right + " " + ex.msg , ex) ;
         return false ;
     }
 }
@@ -178,7 +179,45 @@ ZaGrant.grantMethod = function (obj) {
 
 
 //RevokeRightRequest
-ZaGrant.revokeMethod = function () {
+/**
+ *
+ * @param target - target information
+ * @param obj - grant informaiton
+ */
+ZaGrant.revokeMethod = function (target, obj) {
+    if (AjxEnv.hasFirebug)
+      console.log("Revoke Rights ...") ;
+//    var tempObj = ZaApp.getInstance().getCurrentController ()._view.GetObject ();
+//    var tempGrants = tempObj [ZaGrant.A2_grantsList]  ;
+    var soapDoc = AjxSoapDoc.create("RevokeRightRequest", ZaZimbraAdmin.URN, null);
+    var elTarget = soapDoc.set("target", target[ZaGrant.A_target]) ;
+    elTarget.setAttribute("by", "name") ;
+    elTarget.setAttribute("type", target[ZaGrant.A_target_type]) ;
+
+    var elGrantee = soapDoc.set("grantee", obj[ZaGrant.A_grantee]) ;
+    elGrantee.setAttribute("by", "name") ;
+    elGrantee.setAttribute("type",obj[ZaGrant.A_grantee_type] ) ;
+
+    var elRight = soapDoc.set("right", obj[ZaGrant.A_right])
+    if (obj[ZaGrant.A_deny] == "1") {
+        elRight.setAttribute("deny", "1") ;
+    }
+    var ctler =  ZaApp.getInstance().getCurrentController();
+    try {
+        var params = new Object();
+        params.soapDoc = soapDoc;
+        var reqMgrParams = {
+            controller: ctler ,
+            busyMsg: com_zimbra_delegatedadmin.BUSY_DELETE_RIGHT
+        } ;
+
+        resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.RevokeRightResponse ;
+
+        return true ;
+    }catch (ex) {
+        ctler.popupErrorDialog (com_zimbra_delegatedadmin.error_revoke_right + " "+ ex.msg , ex) ;
+        return false ;
+    }   
 
 }
 
