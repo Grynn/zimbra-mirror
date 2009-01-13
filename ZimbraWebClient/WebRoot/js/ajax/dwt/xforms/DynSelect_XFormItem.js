@@ -116,7 +116,7 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 		if (key == DwtKeyEvent.KEY_TAB) {
 			DwtUiEvent.setBehaviour(event, true, false);
 			return false;
-		} else if(!(event.keyCode==XFG.ARROW_RIGHT || event.keyCode==XFG.ARROW_LEFT)) {  
+		} else if(!(event.keyCode==XFG.ARROW_RIGHT || event.keyCode==XFG.ARROW_LEFT || event.keyCode == DwtKeyEvent.KEY_ESCAPE)) {  
 			this._lastTypeTime = lastTypeTime;
 			var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, value,lastTypeTime]);
 			this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, DynSelect_XFormItem.LOAD_PAUSE);
@@ -147,7 +147,7 @@ DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTy
 	if(lastTypeTime == this._lastTypeTime) {
 		this.getForm().itemChanged(this, val, event);
 	} else {
-		console.log("typing faster than retreiving data");
+		if (AjxEnv.hasFirebug) console.log("typing faster than retreiving data");
 		return;
 	}		
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
