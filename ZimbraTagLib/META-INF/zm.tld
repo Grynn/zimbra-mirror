@@ -5860,6 +5860,12 @@
     </function>
 
     <function>
+        <name>truncateFixed</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String truncateFixed(java.lang.String,int,boolean)</function-signature>
+    </function>
+
+    <function>
         <name>joinLines</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String joinLines(java.lang.String,java.lang.String)</function-signature>
