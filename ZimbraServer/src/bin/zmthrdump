@@ -62,7 +62,10 @@ $log_file = $opts{'f'} if (exists $opts{'f'} && defined $opts{'f'});
 usage() if (exists $opts{'f'} && !defined $opts{'f'});
 
 die "-f requires a filename argument" if (!defined($log_file));
-die "$log_file: file not found" if (! -f $log_file);
+if (! -f $log_file) {
+    print STDERR "zmthrdump: $log_file: file not found\n";
+    exit 1;
+}
 
 if (exists $opts{'t'} && defined $opts{'t'}) {
     $timeout = $opts{'t'};
@@ -88,7 +91,10 @@ if (exists $opts{'p'}) {
     chomp($pid);
 }
 
-kill(0, $pid) || die "$pid: no such process";
+if (!kill(0, $pid)) {
+	print STDERR "zmthrdump: pid $pid not found\n";
+	exit 1;
+}
 
 my $ts = scalar(localtime);
 my $msg = "zmthrdump: Requested thread dump [PID $pid] at $ts\n";
