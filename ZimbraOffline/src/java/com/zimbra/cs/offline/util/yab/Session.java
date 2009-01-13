@@ -109,8 +109,8 @@ public class Session {
         return format;
     }
 
-    public Auth authenticate() throws AuthenticationException, IOException {
-        return authenticator.authenticate();
+    public Authenticator getAuthenticator() {
+        return authenticator;
     }
     
     public HttpClient getHttpClient() {

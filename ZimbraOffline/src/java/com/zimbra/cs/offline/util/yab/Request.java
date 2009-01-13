@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import com.zimbra.cs.offline.util.Xml;
 import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.util.yauth.AuthenticationException;
+import com.zimbra.cs.util.yauth.Authenticator;
 
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpException;
@@ -49,7 +50,20 @@ public abstract class Request extends Entity {
     }
 
     public Response send() throws AuthenticationException, IOException {
-        return sendRequest(session.authenticate());
+        Authenticator auth = session.getAuthenticator();
+        try {
+            return sendRequest(auth.authenticate());
+        } catch (HttpException e) {
+            int code = e.getReasonCode();
+            if (code != 401 && code != 403) {
+                throw e;
+            }
+            // Cached cookie expired or was invalid. Invalidate cookie
+            // and try once more.
+            Yab.debug("Invalidating possibly expired cookie and retrying auth");
+            auth.invalidate();
+            return sendRequest(auth.authenticate());
+        }
     }
 
     private Response sendRequest(Auth auth) throws IOException {
@@ -74,8 +88,10 @@ public abstract class Request extends Entity {
                               error.getCode(), error.getUserMessage(), error.getDebugMessage());
                 }
             }
-            throw new HttpException("HTTP request failed: " + code + ": " +
-                                    HttpStatus.getStatusText(code));
+            HttpException e = new HttpException(
+                "HTTP request failed: " + code + ": " + HttpStatus.getStatusText(code));
+            e.setReasonCode(code);
+            throw e;
         }
         Document doc = session.parseDocument(is);
         if (Yab.isDebug() && session.isTrace()) {
