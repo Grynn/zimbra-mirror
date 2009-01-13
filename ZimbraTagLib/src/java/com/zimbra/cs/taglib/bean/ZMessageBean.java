@@ -170,7 +170,11 @@ public class ZMessageBean {
         }
         return sb.toString();
     }
-
+    public boolean isRenderable(ZMimePart top){
+        String type = top.getContentType();
+        return (type.equalsIgnoreCase(ZMimePartBean.CT_TEXT_HTML) ||
+			type.equalsIgnoreCase(ZMimePartBean.CT_TEXT_PLAIN));
+    }
     public synchronized List<ZMimePartBean> getAttachments() {
         if (mAttachments == null) {
             mAttachments = new ArrayList<ZMimePartBean>();
@@ -180,9 +184,9 @@ public class ZMessageBean {
                 for (ZMimePart child: top.getChildren()) {
                     addAttachments(mAttachments, child);
                 }
-                if (mAttachments.isEmpty() && !top.isBody()) {
+                if (mAttachments.isEmpty() && (!isRenderable(top) || !top.isBody())) {
                     ZMimePartBean bb = new ZMimePartBean(top);
-                    if (!bb.isBody() && (bb.getIsVideo() || bb.getIsImage() || bb.getIsAudio() || bb.getIsApp())) {
+                    if ((bb.getIsVideo() || bb.getIsImage() || bb.getIsAudio() || bb.getIsApp() || !bb.isBody())) {
                         mAttachments.add(bb);
                     }
                 }
