@@ -1385,7 +1385,9 @@ function(dragOp) {
 	}
 
 	var imgHtml = AjxImg.getImageHtml("RoundPlus", roundPlusStyle);
-	icon.appendChild(Dwt.parseHtmlFragment(imgHtml));
+	if (!this._noDndPlusImage) {
+		icon.appendChild(Dwt.parseHtmlFragment(imgHtml));
+	}
 
 	this.shell.getHtmlElement().appendChild(icon);
 
