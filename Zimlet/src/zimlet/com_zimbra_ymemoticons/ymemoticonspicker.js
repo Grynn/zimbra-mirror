@@ -21,7 +21,7 @@ YMEmoticonsPickerButton = function(params){
 	params.actionTiming = DwtButton.ACTION_MOUSEUP;
     DwtToolBarButton.call(this, params);
 	this.setEmoticon();
-    this.setMenu(new AjxCallback(this, this._createMenu));
+    this.setMenu(new AjxCallback(this, this._createMenu), false, false, true);
 };
 
 YMEmoticonsPickerButton.prototype = new DwtToolBarButton;
