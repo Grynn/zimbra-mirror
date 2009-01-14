@@ -42,8 +42,9 @@ ZaRight.A_type = "type" ;
 ZaRight.A_targetType = "targetType"  ;
 ZaRight.A_definedBy = "definedBy" ;
 
-
 ZaRight.A2_selected_rights = "selected_rights";
+
+ZaRight.RIGHT_TYPES = ["preset", "setAttrs", "getAttrs", "combo"];
 
 //@return the lists of rights for the type specified
 ZaRight.getCustomRightsList = function () {
@@ -120,9 +121,10 @@ ZaRight.customRightsListTreeListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Show the custom rigths lists ...") ;
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(
-			ZaApp.getInstance().getRightsListController(),ZaRightsListViewController.prototype.show, ZaRight.getCustomRightsList());
+			ZaApp.getInstance().getRightsListController(),
+                ZaRightsListViewController.prototype.show, ZaRight.getAll());
 	} else {
-		ZaApp.getInstance().getRightsListController().show(ZaRights.getCustomRightsList());
+		ZaApp.getInstance().getRightsListController().show(ZaRight.getAll());
 	}
 }
 ZaRight.myXModel = {
@@ -143,21 +145,61 @@ ZaRight.prototype.toString = function() {
 	return this.name;
 }
 
-ZaRight.getAll =
-function() {
-	var soapDoc = AjxSoapDoc.create("GetAllRightsRequest", ZaZimbraAdmin.URN, null);
-//	var command = new ZmCsfeCommand();
-	var params = new Object();
+ZaRight.getRights = function (targetType, expandAllAttrs) {
+    var soapDoc = AjxSoapDoc.create("GetAllRightsRequest", ZaZimbraAdmin.URN, null);
+	if (targetType) {
+        soapDoc.setAttribute("targetType", targetType);
+    }
+    if (expandAllAttrs) {
+        soapDoc.setAttribute("expandAllAttrs", expandAllAttrs) ;
+    }
+    var params = new Object();
 	params.soapDoc = soapDoc;
 	params.asyncMode=false;
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_GET_ALL_RIGHT
+		busyMsg : com_zimbra_delegatedadmin.BUSY_GET_ALL_RIGHT
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllRightsResponse;
-	var list = new ZaItemList(ZaRight);
+    var list = new ZaItemRightList(ZaRight);
 	list.loadFromJS(resp);
 	return list;
+//    return resp.right ;
+}
+
+ //initialize and normalize the ZaRight.SYSTEM_RIGHTS
+ZaRight.initSystemRights = function () {
+   var allSystemRights = ZaRight.getRights () ;
+    ZaRight.SYSTEM_RIGHTS = allSystemRights ;
+    /*
+    //normalize the GetAllRightsResponse
+    ZaRight.SYSTEM_RIGHTS = {} ;
+    for (var i=0; i<ZaRight.RIGHT_TYPES.length; i++) {
+        ZaRight.SYSTEM_RIGHTS[ZaRight.RIGHT_TYPES] = [] ;
+    }
+
+    for (var j = 0; j < allSystemRights.length; j ++) {
+        ZaRight.SYSTEM_RIGHTS[ZaRight.RIGHT]
+    } */
+
+}
+
+ZaRight.getAll =
+function() {
+    if (!ZaRight.SYSTEM_RIGHTS)  {
+        ZaRight.initSystemRights () ;
+    }
+
+    return ZaRight.SYSTEM_RIGHTS ;
+}
+
+ZaRight.getRightsByTargetType =
+function (targetType) {
+    if (!ZaRight.SYSTEM_RIGHTS)  {
+        ZaRight.initSystemRights () ;
+    }
+
+    return ZaRight.SYSTEM_RIGHTS [targetType] ; 
 }
 
 ZaRight.modifyMethod = function (tmpObj) {
@@ -207,8 +249,6 @@ function(name, label, html, idx) {
 	return idx;
 }
 
-
-
 ZaRight.prototype.remove =
 function() {
 	var soapDoc = AjxSoapDoc.create("DeleteRightRequest", ZaZimbraAdmin.URN, null);
@@ -250,39 +290,36 @@ function(by, val, withConfig) {
 	}
 	resp = ZaRequestMgr.invoke(params, reqMgrParams);
     this.initFromJS(resp.Body.GetRightResponse.server[0]);
-
+                                                  
 }
 ZaItem.loadMethods["ZaRight"].push(ZaRight.loadMethod);
 
 
 
 ZaRight.prototype.initFromJS = function(right) {
-	ZaItem.prototype.initFromJS.call(this, right);
-	// convert installed/enabled services to hidden fields for xform binding
-	var installed = this.attrs[ZaRight.A_zimbraServiceInstalled];
-	if (installed) {
-		if (AjxUtil.isString(installed)) {
-			installed = [ installed ];
-		}
-		for (var i = 0; i < installed.length; i++) {
-			var service = installed[i];
-			this.attrs["_"+ZaRight.A_zimbraServiceInstalled+"_"+service] = true;
-			this.attrs["_"+ZaRight.A_zimbraServiceEnabled+"_"+service] = false;
-		}
-	}
-
-	var enabled = this.attrs[ZaRight.A_zimbraServiceEnabled];
-	if (enabled) {
-		if (AjxUtil.isString(enabled)) {
-			enabled = [ enabled ];
-		}
-		for (var i = 0; i < enabled.length; i++) {
-			var service = enabled[i];
-			this.attrs["_"+ZaRight.A_zimbraServiceEnabled+"_"+service] = true;
-		}
-	}
-	this[ZaRight.A_ServiceHostname] = this.attrs[ZaRight.A_ServiceHostname]; // a hack for New Account Wizard
-	this[ZaRight.A_showVolumes] = this.attrs[ZaRight.A_zimbraMailboxServiceEnabled];
+    if (!right) return ;
+    for ( var ix in right ) {
+        if (ix == "name") {
+            this.name = right.name ;
+            this.attrs.name = right.name ;
+        } else if (ix == "desc") {
+            if (right[ix] && right[ix][0]) {
+                this.attrs [ix] = right[ix][0]._content ;
+            }
+        } else if ( ix == "rights" || ix == "attrs") {
+            this.attrs [ix] = [] ;
+            if (right[ix] && right[ix][0]) {
+                var elVals ;
+                if (ix == "rights") elVals = right[ix][0].r ;
+                if (ix == "attrs")  elVals = right[ix][0];
+                for (var j = 0; j < elVals.length; j ++) {
+                    this.attrs[ix].push (elVals[j].n) ;
+                }
+            }
+        } else {
+            this.attrs [ix] = right [ix] ;            
+        }
+    }
 }
 
 ZaRight.initMethod = function () {

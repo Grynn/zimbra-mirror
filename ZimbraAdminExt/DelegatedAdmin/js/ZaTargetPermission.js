@@ -458,6 +458,67 @@ ZaTargetPermission.findIndexOfGrant = function (grantList, grant) {
 }
 
 
+ZaItemRightList = function (contructor) {
+    ZaItemList.call (this, contructor) ;
+}
+
+ZaItemRightList.prototype = new ZaItemList ;
+ZaItemRightList.prototype.constructor = ZaItemRightList ;
+
+ZaItemRightList.prototype.toString =
+function() {
+	return "ZaItemRightList";
+}
+
+ZaItemRightList.prototype.loadFromJS =
+function (resp) {
+    if(!resp || !resp.right)
+		return;
+
+    for (i = 0; i < resp.right.length; i ++) {
+        var item;
+        if(this._constructor) {
+            item = new this._constructor() ;
+        }
+        item.type = ZaItem.RIGHT ;
+        item.initFromJS(resp.right[i]) ;
+        this.add (item) ;
+    }
+    /*
+    for(var ix in resp) {
+		if(resp[ix] instanceof Array) {
+			var arr = resp[ix];
+			var len = arr.length;
+			for(var i = 0; i < len; i++) {
+				var item;
+				if(this._constructor) {
+					item = new this._constructor();
+				} else {
+					item = ZaItem.getFromType(ix);
+				}
+				item.type = ix;
+				item.initFromJS(arr[i]);
+
+				//special cases
+				if (item instanceof ZaDomain && item.attrs[ZaDomain.A_domainType] == "alias"){
+					continue ;
+				}
+				if (item instanceof ZaAlias) {
+					item.attrs[ZaAlias.A_targetType] = arr[i][ZaAlias.A_targetType] ;
+					item.attrs[ZaAlias.A_targetAccount] = arr[i][ZaAlias.A_targetAccount] ;
+				}
+
+				if(this._idHash[item.id]) {
+					this._idHash[item.id].initFromJS(arr[i]);
+				} else {
+					this.add(item);
+				}
+			}
+		}
+	}  */
+}
+
+
 
 
 
