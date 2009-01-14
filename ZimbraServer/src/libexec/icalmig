@@ -22,29 +22,36 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.22";
+my $version = "1.23";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
 my @TZHeader;
 my $TZTag="";
+my @TZIDArray=();
+my $GTZOffset="-00.00";
 
 #get script directory
 my $progdir = cwd;
+my $timezonefile;
 #keep log file in script directory
 my $logfilepath;
 if ($DEBUG)
 {
   $logfilepath="c:\\opt\\zimbra\\log";
+  $timezonefile="C:\\opt\\zimbra\\conf\\timezones.ics";
 }
 else
 {
   $logfilepath="/opt/zimbra/log";
+  $timezonefile="/opt/zimbra/conf/timezones.ics";
 }
 my $logfilename = "icalmig.log";
 my $logfile;
 my $icalfile;
 my $invalidfile;
+my $chtzid; #chosen TZID
+my $tzx_tz="NOTZ";
 #used for debug purpose
 $icalfile="" if ($DEBUG);
 
@@ -120,6 +127,11 @@ while ($ARGV[0] =~ /^-(.+)/)
   {
     $useTZcomponent = 1;
   }
+  elsif ($switch eq "tzx")
+  {
+    $useTZcomponent = 1;
+    $tzx_tz = shift;
+  }
   elsif ($switch eq "logpath")
   {
     $logfilepath= shift;
@@ -158,28 +170,32 @@ sub help
   print "[options]\n";
   print "-h           (Shows help)  \n";
   print "-v           (Shows Version)\n\n";
-  print "-tz          (0-OFF 1-ON ) (DEFAULT: 0)\n";
+  print "-tz          \n";
   print "       - Add timezone component to ics file.
+         Asks for TZID to be used. Specify desired TZID
+         from list displayed on screen.
          Date/Recurrence information would be
          modified to add the TZ information.
-         Only EST5DT TZ support for now.\n\n";
-  print "-nonStandardDTSTART        (Default: 0)\n";
+         Takes TZ information from ZCS's timezonesfile.\n\n";
+  print "-tzx         <TZID from ZCS's timezonesfile>\n";
+  print "       - Specify TZID for no question conversion.\n\n";
+  print "-nonStandardDTSTART        \n";
   print "       - If master event has DTSTART later than
         one of the RDATEs, use this option to
         use the least RDATE as event start date.\n\n";
-  print "-YearlyException           (Default: 0)\n";
+  print "-YearlyException           \n";
   print "       - To create YEARLY exception series
         for which no pattern can be found else standalone
         event list be created.\n\n";
   print "-logpath <path>            (Default /opt/zimbra/log)\n";
-  print "       - Specify altrenate logfile path.\n";
+  print "       - Specify altrenate logfile path.\n\n";
   
   print "-delrdate    (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-exceptions  (0-OFF 1-ON ) (DEFAULT: 1)\n";
   print "-patternrule (0-OFF 1-ON ) (DEFAULT: 1)\n";
-  print "       - Above given options are for debug
+  print "       - Above given 3 options are for debug
         testing. Dont use them until you are
-        sure about it.\n\n";
+        sure about them.\n\n";
   print "\n";
   
 }
@@ -213,9 +229,40 @@ sub Initialize
   #open Output file
   $outfile="$icalfile"."$newfileext";
   open OTHANDLE, ">$outfile" or die "can not open output file.";
-  #init TZHeader
-  &init_TZHeader if $useTZcomponent;
   &log_message("icalmig verison: $version");
+  #init TZHeader
+  if ($useTZcomponent)
+  {
+    open TZFHANDLE, "<$timezonefile" or die "can not open time zone file.";
+    &init_TZArray();
+    my $tzcoice;
+    if($tzx_tz eq "NOTZ")
+    {
+      print "Available TimeZones:\n";
+      &print_TZArray();
+      print "You have chosen to include the TimeZone information.\n";
+      print "Please mention the TZID of the required TimeZone from above printed list.\n";
+      chomp($tzcoice = <STDIN>);
+      print "\n";
+    }
+    else
+    {
+      $tzcoice=$tzx_tz;
+    }
+    &log_message("Entered time zone: $tzcoice");
+    $tzcoice = trim($tzcoice);
+    $chtzid=&get_chosed_TZ($tzcoice);
+    $chtzid = trim($chtzid);
+    &log_message("Retrieved time zone: $chtzid");
+    $TZTag= ";".$chtzid;
+    #get TZ offset
+    my $stidx= index($chtzid,'(');
+    my $enidx= index($chtzid,')');
+    my $tmptoff=substr($chtzid,$stidx+4,($enidx-$stidx-4));
+    $GTZOffset =$tmptoff;
+    &log_message("Offset: $GTZOffset");
+  }
+  #&init_TZHeader if $useTZcomponent;
 }
 
 #unInitialize: close logfile and ical file
@@ -227,6 +274,10 @@ sub UnInitialize
   #close IVHANDLE;
   &log_message("$icalfile and $logfile closed.");
   close LFHANDLE;
+  if ($useTZcomponent)
+  {
+    close TZFHANDLE;
+  }
   #save original file as bakupfile
   if ($oworginalfile)
   {
@@ -289,7 +340,8 @@ sub processfile
       if (($useTZcomponent)&&(!$IsTZHeaderPrinted))
       {
         &log_message("Add TimeZoneHeader.");
-        &Add_TZHeader;
+        #&Add_TZHeader;
+        &print_TZINFObyTZID($chtzid);
         $write_pos = tell OTHANDLE;
         $IsTZHeaderPrinted=1;
       }
@@ -564,18 +616,21 @@ sub processfile
       {
         my $tzdtst= $_;
         $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
+        $tzdtst =get_offset_datetime($tzdtst);
         print_outfile("$tzdtst");
       }
       elsif (/^DTEND/)
       {
         my $tzdten= $_;
         $tzdten=~ s/DTEND/DTEND$TZTag/;
+        $tzdten =get_offset_datetime($tzdten);
         print_outfile("$tzdten");
       }
       elsif (/^RECURRENCE-ID/)
       {
         my $tzrecid= $_;
         $tzrecid=~ s/RECURRENCE-ID/RECURRENCE-ID$TZTag/;
+        $tzrecid =get_offset_datetime($tzrecid);
         print_outfile("$tzrecid");
       }
       #Add METHOD:PUBLISH to avoid NPE during import
@@ -1257,6 +1312,7 @@ sub processfile
             }
             $orig_mstrsdt=$str;
             $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
+            $tzdtst =get_offset_datetime($tzdtst);
             print_outfile("$tzdtst");
             &log_message("New DTSTART: $tzdtst");
             
@@ -1291,6 +1347,7 @@ sub processfile
             }
             $orig_mstredt=$str;
             $tzdten=~ s/DTEND/DTEND$TZTag/;
+            $tzdten =get_offset_datetime($tzdten);
             print_outfile("$tzdten");
             &log_message("$tzdten");
           }
@@ -1360,6 +1417,7 @@ sub processfile
                 {
                   my $tzdtst= $str;
                   $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
+                  $tzdtst =get_offset_datetime($tzdtst);
                   print_outfile("$tzdtst");
                   &log_message("New DTSATRT:$tzdtst");
                 }
@@ -1367,6 +1425,7 @@ sub processfile
                 {
                   my $tzdten= $str;
                   $tzdten=~ s/DTEND/DTEND$TZTag/;
+                  $tzdten =get_offset_datetime($tzdten);
                   print_outfile("$tzdten");
                   &log_message("New DTEND: $tzdten");
                 }
@@ -1380,11 +1439,13 @@ sub processfile
                     $rndtt=get_date($rndtt);
                     $rntime = get_time($ndtstart);
                     $rndtt= "RECURRENCE-ID$TZTag$recidfmtstr$rndtt"."T$rntime";
+                    $rndtt =get_offset_datetime($rndtt);
                   }
                   else
                   {
                     $rndtt= $str;
                     $rndtt=~ s/RECURRENCE-ID/RECURRENCE-ID$TZTag/;
+                    $rndtt =get_offset_datetime($rndtt);
                   }
                   print_outfile("$rndtt");
                 }
@@ -1458,6 +1519,7 @@ sub processfile
                 $ndtstart= $syear.substr($ndtstart,4);
                 #$ndtstart= get_date_by_days($ndtstart,$dyinyr); #for yearly increment
                 my $rndtstart= "RECURRENCE-ID$TZTag$recidfmtstr$ndtstart";
+                $rndtstart =get_offset_datetime($rndtstart);
                 #if yearlyException mode
                 if(($YearlyException)&&($IsExceptionSeries))
                 {
@@ -1475,6 +1537,7 @@ sub processfile
                 }
                 my $tzdtst= $str;
                 $tzdtst=~ s/DTSTART/DTSTART$TZTag/;
+                $tzdtst =get_offset_datetime($tzdtst);
                 print_outfile("$tzdtst");
                 &log_message("New DTSATRT:$tzdtst");
 
@@ -1496,6 +1559,7 @@ sub processfile
                 }
                 my $tzdten= $str;
                 $tzdten=~ s/DTEND/DTEND$TZTag/;
+                $tzdten =get_offset_datetime($tzdten);
                 print_outfile("$tzdten");
                 &log_message("New DTEND: $tzdten");
               }
@@ -2225,6 +2289,7 @@ sub get_datepart_from_icsdt
   my $icsdate= shift;
   my $tidx= rindex($icsdate,':');
   my $ndt = substr($icsdate,$tidx+1);
+  my $ldt = substr($icsdate,0,$tidx);
   return $ndt;
 }
 
@@ -2369,6 +2434,43 @@ sub get_year
   return $yr;
 }
 
+#Input DateTime format 20070302T153000Z, 20070302T153000,20070406
+#Input TZ Offset -/+HR.MN([-/+]hour.minute)
+#returns
+sub get_DeltaDHMS
+{
+  my $dttm=shift;
+  my $tzoffset =shift;
+  
+  #DATETIME Info
+  my @darr = split(/T/, $dttm);
+  my $tdt= $darr[0];
+  my $yr= substr($tdt,0,4);
+  my $mm= substr($tdt,4,2);
+  my $dy= substr($tdt,6,2);
+  
+  my $dt= $darr[1];
+  my $hh= substr($dt,0,2);
+  my $mn= substr($dt,2,2);
+  my $ss= substr($dt,4,2);
+  
+  #TZ offset info
+  my $sgn= substr($tzoffset,0,1);
+  my $Dd =0;
+  my $Dh= substr($tzoffset,1,2);
+  my $Dm= substr($tzoffset,4,2);
+  my $Ds=0;
+  
+  my $yr2, my $mm2, my $dy2, my $h2, my $m2, my $s2;
+  ($yr2, $mm2, $dy2, $h2, $m2, $s2) =
+    Add_Delta_DHMS( $yr, $mm, $dy, $hh, $mn, $ss,
+                $Dd, $sgn.$Dh, $sgn.$Dm, $Ds );
+  my $newdt=sprintf("%d%02d%02dT%02d%02d%02d", $yr2,$mm2,$dy2,$h2,$m2,$s2);
+  
+  #my $newdt= $yr2.$mm2.$dy2.'T'.$h2.$m2.$s2;
+  return $newdt;
+
+}
 sub print_outfile
 {
   my $str=@_[0];
@@ -2440,6 +2542,116 @@ sub rtrim($)
 	return $string;
 }
 
+#initialize the time zone array with available TZID
+sub init_TZArray
+{
+  while (<TZFHANDLE>)
+  {
+    if($_=~/^TZID:/)
+    {
+      push (@TZIDArray,$_);
+    }
+  } #end while<TZFHANDLE>
+}
+#print TZID array for users choice
+sub print_TZArray
+{
+  for(my $i=0; $i<=$#TZIDArray; $i++)
+  {
+    print "$TZIDArray[$i]";
+  }
+}
+
+#get the complete TZID on the base of user's choice
+sub get_chosed_TZ
+{
+  my $tzchoice=shift;
+  my $retval; my $tzfound=0;
+  for(my $i=0; $i<=$#TZIDArray; $i++)
+  {
+    my $sindex = index( lc( $TZIDArray[$i] ), lc($tzchoice) );
+    if ($sindex !=-1)#($TZIDArray[$i] =~/$tzchoice/)
+    {
+      $retval = $TZIDArray[$i];
+      $tzfound=1;
+      last;
+    }
+  }
+  if(!$tzfound)
+  {
+    &log_message("$tzchoice not found. Switching to default TZID ((GMT-08.00) Pacific Time (US & Canada))");
+    $retval = "TZID:(GMT-08.00) Pacific Time (US & Canada)";
+  }
+  return $retval;
+}
+
+#Add chosen VTIMEZONE component to output file
+sub print_TZINFObyTZID
+{
+  #reset to start of file
+  seek(TZFHANDLE, 0, 0);
+  my $tzid= shift;
+  my $tzf_pos=0;
+  my $tzinfofound=0;
+  my $prv_pos=0;
+  my $tmpdlr= $_;
+  while (<TZFHANDLE>)
+  {
+    if ($_ =~/^BEGIN:VTIMEZONE/)
+    {
+      $tzf_pos = tell TZFHANDLE;
+      $tzf_pos =$prv_pos;
+    }
+    if(trim($_) eq $tzid)
+    {
+      seek TZFHANDLE, $tzf_pos, 0;
+      while (<TZFHANDLE>)
+      {
+        print_outfile("$_");
+        if($_=~/^END:VTIMEZONE/)
+        {
+          last;
+        }
+      }
+    }
+    $prv_pos =tell TZFHANDLE;
+  } #end while<TZFHANDLE>
+  $_=$tmpdlr;
+}
+
+#input icsdate with or without TZTag
+#Rules to offset the given time as per RFC2445
+#floating date-time shouldnt be offset (19980118T230000)
+#UTC date-time should not have TZID at all (19980119T070000Z)
+#Local date-time with TZ info should represent the local time with TZID
+#   (TZID=America/New_York:19980119T020000)
+
+sub get_offset_datetime
+{
+  my $icsdt= shift;
+  $icsdt = trim($icsdt);
+  my $tidx= rindex($icsdt,':');
+  my $ndt = substr($icsdt,$tidx+1);
+  my $ldt = substr($icsdt,0,$tidx+1);
+  
+  my $strlen=length ($icsdt);
+  my $lastchr= substr($icsdt,$strlen-1,1);
+  my $offsdt;
+  #UTC time->convert to local by offset and add TZID
+  if (($lastchr eq "Z")&&($useTZcomponent))
+  {
+    $offsdt=get_DeltaDHMS($ndt,$GTZOffset);
+  }
+  else #local time? Add just TZID
+  {
+    $offsdt=$ndt;
+  }
+  $ldt=~ s/TZID:/TZID=/;
+  chomp($ldt);
+  chomp($offsdt);
+  my $newdt=sprintf("%s%s", $ldt,$offsdt);
+  return $newdt;
+}
 #TimeZone information header for EST5EDT
 sub init_TZHeader
 {
@@ -2478,6 +2690,7 @@ sub init_TZHeader
   );
   $TZTag= ";TZID=EST5EDT";
 }
+
 sub Add_TZHeader
 {
   my $i;
