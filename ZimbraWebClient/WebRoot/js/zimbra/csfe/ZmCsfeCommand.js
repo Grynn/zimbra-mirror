@@ -90,24 +90,29 @@ function(sessionId) {
 
 ZmCsfeCommand.faultToEx =
 function(fault, params) {
-	var faultCode = AjxStringUtil.getAsString(fault.Code.Value);
-	var errorCode = AjxStringUtil.getAsString(fault.Detail.Error.Code);
-	var msg = AjxStringUtil.getAsString(fault.Reason.Text);
-	var trace = fault.Detail.Error.Trace || "";
+	var newParams = {
+		msg: AjxStringUtil.getAsString(fault.Reason.Text),
+		code: AjxStringUtil.getAsString(fault.Detail.Error.Code),
+		method: (params ? params.methodNameStr : null),
+		detail: AjxStringUtil.getAsString(fault.Code.Value),
+		data: fault.Detail.Error.a,
+		trace: (fault.Detail.Error.Trace || "")
+	};
 
 	var request;
-	if (params.soapDoc) {
-		// note that we don't pretty-print XML if we get a soapDoc
-		request = params.soapDoc.getXml();
-	} else if (params.jsonRequestObj) {
-		if (params.jsonRequestObj && params.jsonRequestObj.Header && params.jsonRequestObj.Header.context) {
-			params.jsonRequestObj.Header.context.authToken = "(removed)";
+	if (params) {
+		if (params.soapDoc) {
+			// note that we don't pretty-print XML if we get a soapDoc
+			newParams.request = params.soapDoc.getXml();
+		} else if (params.jsonRequestObj) {
+			if (params.jsonRequestObj && params.jsonRequestObj.Header && params.jsonRequestObj.Header.context) {
+				params.jsonRequestObj.Header.context.authToken = "(removed)";
+			}
+			newParams.request = AjxStringUtil.prettyPrint(params.jsonRequestObj, true);
 		}
-		request = AjxStringUtil.prettyPrint(params.jsonRequestObj, true);
 	}
 
-	return new ZmCsfeException({msg:msg, code:errorCode, method:params.methodNameStr, detail:faultCode,
-								data:fault.Detail.Error.a, trace:trace, request:request});
+	return new ZmCsfeException(newParams);
 };
 
 /**
