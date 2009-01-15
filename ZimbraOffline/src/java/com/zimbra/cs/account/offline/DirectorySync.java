@@ -215,6 +215,8 @@ public class DirectorySync {
             
             attrs = diffAttributes(acct, attrs);
             
+            attrs.put(Provisioning.A_zimbraMailQuota, "0"); //legacy account correction in case an old account sync down server quota
+            
             attrs.put(OfflineProvisioning.A_offlineRemoteServerVersion, zgi.getVersion()); //make sure always update if different
             OfflineLog.offline.info("dsync: remote server version: " + zgi.getVersion());
             
