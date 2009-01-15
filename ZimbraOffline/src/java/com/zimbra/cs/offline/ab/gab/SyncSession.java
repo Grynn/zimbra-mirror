@@ -177,12 +177,16 @@ public class SyncSession {
                 updateEntry(itemId, entry);
             }
         } else if (!deleted) {
-            // Contact group was added
-            ContactGroup group = localData.createContactGroup(
-                Mailbox.ID_FOLDER_CONTACTS, getName(entry));
-            contactGroups.put(remoteId, group);
-            stats.added++;
-            LOG.debug("Contact group added: " + group);
+            // Add new contact group if not a system group
+            if (entry.getSystemGroup() == null) {
+                ContactGroup group = localData.createContactGroup(
+                    Mailbox.ID_FOLDER_CONTACTS, getName(entry));
+                contactGroups.put(remoteId, group);
+                stats.added++;
+                LOG.debug("Contact group added: " + group);
+            } else {
+                LOG.debug("Not adding system group: " + entry.getId());
+            }
         }
     }
 
@@ -197,6 +201,7 @@ public class SyncSession {
             try {
                 Attachment photo = getContactPhoto(entry);
                 if (photo != null) {
+                    LOG.debug("Found contact photo for entry: " + entry.getId());
                     photos.put(getEditUrl(entry), photo);
                 }
             } catch (com.google.gdata.util.ServiceException e) {
@@ -220,7 +225,6 @@ public class SyncSession {
             String url = getEditUrl(getEntry(dsi, ContactEntry.class));
             if (getEditUrl(entry).equals(url)) return null;
         }
-        LOG.debug("Retrieving contact photo for entry id: " + entry.getId());
         return service.getPhoto(entry);
     }
     
@@ -276,12 +280,20 @@ public class SyncSession {
                 }
             }
         } else if (!deleted) {
-            // New contact added
-            ContactData cd = new ContactData(entry);
-            ParsedContact pc = cd.newParsedContact(photos.get(editUrl));
-            Contact contact = localData.createContact(pc);
-            updateEntry(contact.getId(), entry);
-            stats.added++;
+            // Add a new contact, but only if the contact is a member of at
+            // least one group. All contacts are members of the system group
+            // "My Contacts" unless they are "Suggested Contacts" created
+            // automatically by Gmail which we want to exclude.
+            if (entry.hasGroupMembershipInfos()) {
+                ContactData cd = new ContactData(entry);
+                ParsedContact pc = cd.newParsedContact(photos.get(editUrl));
+                Contact contact = localData.createContact(pc);
+                updateEntry(contact.getId(), entry);
+                stats.added++;
+            } else {
+                LOG.debug("Skipping contact with id %s because it has no groups",
+                          entry.getId());
+            }
         }
     }
 

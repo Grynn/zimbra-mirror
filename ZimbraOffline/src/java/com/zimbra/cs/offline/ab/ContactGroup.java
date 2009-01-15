@@ -19,7 +19,6 @@ package com.zimbra.cs.offline.ab;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.OfflineMailbox;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;

@@ -116,7 +116,9 @@
 	</fileset>
 
         <fileset id="gdata.jars" dir="${jars.dir}">
-                <include name="gdata-*.jar"/>
+                <include name="gdata-core-*.jar"/>
+                <include name="gdata-client-*.jar"/>
+                <include name="gdata-contacts-*.jar"/>
         </fileset>
 
 	<path id="jaxws.classpath">

@@ -153,28 +153,33 @@ class GabService {
 
     public <T extends BaseEntry> T update(T entry)
         throws IOException, com.google.gdata.util.ServiceException {
-        return cs.update(getEditUrl(entry), entry);
+        // Perform unconditional update
+        return cs.update(getEditUrl(entry), entry, "*");
     }
 
     public void delete(BaseEntry entry)
         throws IOException, com.google.gdata.util.ServiceException {
-        cs.delete(getEditUrl(entry));
+        // Perform unconditional delete
+        cs.delete(getEditUrl(entry), "*");
     }
 
     public void addPhoto(ContactEntry entry, byte[] data, String type)
         throws IOException, com.google.gdata.util.ServiceException {
-        URL url = new URL(entry.getContactEditPhotoLink().getHref());
+        URL url = new URL(entry.getContactPhotoLink().getHref());
         GDataRequest req = cs.createRequest(RequestType.UPDATE, url, new ContentType(type));
+        req.setEtag("*"); // Send unconditional request
         req.getRequestStream().write(data);
         req.execute();
-        LOG.debug("Added photo for entry %s: edit url = %s, size = %d, type = %s",
+        LOG.debug("Updated or added photo for entry %s: edit url = %s, size = %d, type = %s",
                   entry.getId(), url, data.length, type);
     }
 
     public Attachment getPhoto(ContactEntry entry)
         throws IOException, com.google.gdata.util.ServiceException {
         Link link = entry.getContactPhotoLink();
-        if (link == null) return null;
+        if (link == null || link.getEtag() == null) {
+            return null; // No photo to delete
+        }
         URL url = new URL(link.getHref());
         GDataRequest req = cs.createRequest(RequestType.QUERY, url, null);
         req.execute();
@@ -187,8 +192,8 @@ class GabService {
 
     public void deletePhoto(ContactEntry entry)
         throws IOException, com.google.gdata.util.ServiceException {
-        URL url = new URL(entry.getContactEditPhotoLink().getHref());
-        cs.delete(url);
+        URL url = new URL(entry.getContactPhotoLink().getHref());
+        cs.delete(url, "*"); // Unconditional delete
         LOG.debug("Deleted photo for entry %s: edit url = %s", entry.getId(), url);
     }
 

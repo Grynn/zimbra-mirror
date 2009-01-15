@@ -20,7 +20,6 @@ import com.google.gdata.client.Service.GDataRequest.RequestType;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.contacts.ContactGroupEntry;
 import com.google.gdata.data.contacts.ContactEntry;
-import com.google.gdata.util.VersionConflictException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.service.ServiceException;
@@ -33,13 +32,10 @@ public class SyncRequest {
     private final RequestType type;
     private final int itemId;
     private BaseEntry entry;
-    private com.google.gdata.util.ServiceException error;
     private byte[] photoData;
     private String photoType;
 
     private static final Log LOG = OfflineLog.gab;
-
-    private static final int MAX_COUNT = 3;
 
     public static SyncRequest insert(SyncSession session, int itemId, BaseEntry entry) {
         return new SyncRequest(session, RequestType.INSERT, itemId, entry);
@@ -82,49 +78,36 @@ public class SyncRequest {
         return entry != null && entry.getClass() == ContactEntry.class;
     }
 
-    private boolean isVersionConflict() {
-        return error != null && error instanceof VersionConflictException;
-    }
-
     public void execute() throws ServiceException, IOException {
-        if (isUpdate()) {
-            int count = 0;
-            while (count++ < MAX_COUNT && !doExecute() && isVersionConflict()) {
-                LOG.debug("Retrying UPDATE request for itemId %d (count = %d)",
-                          itemId, count);
-                VersionConflictException vce = (VersionConflictException) error;
-                entry = service.getCurrentEntry(vce, entry.getClass());
-            }
-        } else {
-            doExecute();
-        }
-        if (error != null) {
-            LOG.debug("%s request failed for item id %d: %s", type, itemId,
-                      error.getMessage());
-            throw ServiceException.FAILURE(type + " request failed", error);
-        }
-    }
-    
-    private boolean doExecute() throws IOException {
         if (session.isTraceEnabled()) {
             LOG.debug("Executing %s request for item id %d:\n%s", type, itemId,
                       service.pp(entry));
         }
-        error = null;
         try {
-            if (isInsert() || isUpdate()) {
-                entry = isInsert() ? service.insert(entry) : service.update(entry);
+            switch (type) {
+            case INSERT:
+                entry = service.insert(entry);
                 if (photoData != null && isContact()) {
-                    ContactEntry ce = (ContactEntry) entry;
                     service.addPhoto((ContactEntry) entry, photoData, photoType);
                 }
-            } else if (isDelete()) {
+                break;
+            case UPDATE:
+                entry = service.update(entry);
+                if (isContact()) {
+                    ContactEntry ce = (ContactEntry) entry;
+                    if (photoData != null) {
+                        service.addPhoto(ce, photoData, photoType);
+                    } else {
+                        service.deletePhoto(ce);
+                    }
+                }
+                break;
+            case DELETE:
                 service.delete(entry);
             }
         } catch (com.google.gdata.util.ServiceException e) {
-            error = e;
-            return false;
+            LOG.debug("%s request failed for item id %d: %s", type, itemId, e.getMessage());
+            throw ServiceException.FAILURE(type + " request failed", e);
         }
-        return true;
     }
 }
