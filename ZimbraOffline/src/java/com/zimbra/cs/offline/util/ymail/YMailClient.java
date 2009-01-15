@@ -43,6 +43,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.namespace.QName;
+import javax.xml.soap.SOAPFault;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.InternetAddress;
@@ -176,8 +177,8 @@ public final class YMailClient {
             return null;
         }
         if (codes.value != null) {
-            throw new YMailException(
-                "GetMessage failed: " + codes.value.get(0).getCode());
+            String err = codes.value.get(0).getCode();
+            throw new YMailException("GetMessage failed: " + err);
         }
         if (msgs.value == null || msgs.value.isEmpty()) {
             return null;
@@ -187,13 +188,20 @@ public final class YMailClient {
 
     private void failed(String name, Exception e) throws IOException {
         if (e instanceof SOAPFaultException) {
-            throw new YMailException(name + " failed: " + e.getMessage(), e);
+            YMailException yme = new YMailException(
+                name + " failed: " + e.getMessage(), e);
+            SOAPFault fault = ((SOAPFaultException) e).getFault();
+            if (fault != null) {
+                yme.setError(YMailError.fromSOAPFault(fault));
+            }
+            throw yme;
         }
+        // Otherwise, assume its a protocol exception
         IOException ioe = new IOException(name + " could not be sent");
         ioe.initCause(e);
         throw ioe;
     }
-    
+
     public void setTrace(boolean trace) {
         this.trace = trace;
         if (trace) {

@@ -201,9 +201,15 @@ public class LocalMailbox extends DesktopMailbox {
                         origMsgId, msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
-                    if (cause instanceof YMailException) {
+                    if (cause != null && cause instanceof YMailException) {
                         OfflineLog.offline.info("YMail request failed: " + msg.getSubject(), cause);
-                        OutboxTracker.recordFailure(this, id);
+                        YMailException yme = (YMailException) cause;
+                        if (yme.isRetriable()) {
+                            OutboxTracker.recordFailure(this, id);
+                        } else {
+                            bounceToInbox(context, id, msg, cause.getMessage());
+                            OutboxTracker.remove(this, id);
+                        }
                         continue;
                     }
                     throw e;
