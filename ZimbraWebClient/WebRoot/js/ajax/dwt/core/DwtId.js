@@ -54,6 +54,8 @@ DwtId.LIST_VIEW_ROWS	= "rows";
 
 DwtId.IFRAME = "iframe";
 
+DwtId.DND_PLUS_ID		= "z__roundPlus";
+
 /**
  * Joins the given arguments into an ID, excluding empty ones.
  */

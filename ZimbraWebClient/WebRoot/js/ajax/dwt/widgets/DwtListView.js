@@ -1384,7 +1384,7 @@ function(dragOp) {
 		Dwt.setBounds(icon, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE, 43 + 32 - 16, 36 + 32 - 20);
 	}
 
-	var imgHtml = AjxImg.getImageHtml("RoundPlus", roundPlusStyle);
+	var imgHtml = AjxImg.getImageHtml("RoundPlus", roundPlusStyle, "id=" + DwtId.DND_PLUS_ID);
 	if (!this._noDndPlusImage) {
 		icon.appendChild(Dwt.parseHtmlFragment(imgHtml));
 	}
