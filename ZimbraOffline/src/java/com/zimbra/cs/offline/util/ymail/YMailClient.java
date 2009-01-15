@@ -67,6 +67,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -92,8 +95,10 @@ public final class YMailClient {
     private static final String UPLOAD_URL = BASE_URL + "/ya/upload";
 
     // Maximum size of text/* attachment to include inline.
-    private static final int MAX_INLINE_DATA_SIZE = 1024;
+    private static final int MAX_INLINE_DATA_SIZE = 64*1024;
 
+    private static final String ENCODING_BASE64 = "base64";
+    private static final String ENCODING_BINARY = "binary";
     private static final String ENCODING_7BIT = "7bit";
     private static final String ENCODING_QUOTABLE_PRINTABLE = "quoted-printable";
     private static final String ENCODING_8BIT = "8bit";
@@ -350,6 +355,7 @@ public final class YMailClient {
     }
 
     public String uploadAttachment(MimeBodyPart mbp) throws IOException {
+        File tmpFile = null;
         Part part;
         try {
             if (ENCODING_BASE64.equalsIgnoreCase(mbp.getEncoding()) ||
@@ -377,6 +383,9 @@ public final class YMailClient {
             new MultipartRequestEntity(new Part[] { part }, post.getParams()));
         HttpClient client = new HttpClient();
         int status = client.executeMethod(post);
+        if (tmpFile != null) {
+            tmpFile.delete();
+        }
         if (status != 302) {
             throw new IOException("Upload failed: " + post.getStatusText());
         }
@@ -412,6 +421,8 @@ public final class YMailClient {
     
     private static Part getPart(MimeBodyPart mbp)
         throws MessagingException, IOException {
+        System.out.printf("getPart: name = %s, type = %s, encoding = %s, disposition = %s\n",
+            mbp.getFileName(), mbp.getContentType(), mbp.getEncoding(), mbp.getDisposition());
         final int size = getContentSize(mbp);
         if (size == -1) {
             throw new IllegalArgumentException(
@@ -433,6 +444,22 @@ public final class YMailClient {
             fp.setTransferEncoding(encoding);
         }
         return fp;
+    }
+
+    private static File createTempFile(InputStream is) throws IOException {
+        File file = File.createTempFile("ymail", "dat");
+        file.deleteOnExit();
+        OutputStream os = new FileOutputStream(file);
+        try {
+            byte[] b = new byte[8192];
+            int len;
+            while ((len = is.read(b)) != -1) {
+                os.write(b, 0, len);
+            }
+        } finally {
+            os.close();
+        }
+        return file;
     }
 
     private static XMLGregorianCalendar getXmlGregorianCalendar(Date date) {
