@@ -61,4 +61,13 @@
             String addAuthToken(java.lang.String)
         </function-signature>
     </function>
+    <function>
+        <name>onLogin</name>
+        <function-class>
+            com.zimbra.cs.offline.jsp.ClientEventBean
+        </function-class>
+        <function-signature>
+            void onLogin(com.zimbra.cs.offline.jsp.ClientEventBean)
+        </function-signature>
+    </function>
 </taglib>

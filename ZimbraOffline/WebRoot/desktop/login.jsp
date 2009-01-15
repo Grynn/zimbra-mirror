@@ -6,6 +6,9 @@
 
 <jsp:useBean id="bean" class="com.zimbra.cs.offline.jsp.PageBean"/>
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
+<jsp:useBean id="eventBean" class="com.zimbra.cs.offline.jsp.ClientEventBean"/>
+
+${zdf:onLogin(eventBean)}
 
 <zd:auth/>
 

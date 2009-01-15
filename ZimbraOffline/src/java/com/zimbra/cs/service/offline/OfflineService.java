@@ -16,30 +16,18 @@
  */
 package com.zimbra.cs.service.offline;
 
-import org.dom4j.Namespace;
-import org.dom4j.QName;
-
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentService;
 import com.zimbra.soap.SoapContextExtension;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.MailConstants;
+import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class OfflineService implements DocumentService {
 
-    public static final String NAMESPACE_STR = "urn:zimbraOffline";
-    public static final Namespace NAMESPACE = Namespace.get(NAMESPACE_STR);
-
-    // sync
-    public static final QName SYNC_REQUEST = QName.get("SyncRequest", NAMESPACE);
-    public static final QName SYNC_RESPONSE = QName.get("SyncResponse", NAMESPACE);
-    
-    public static final QName CLIENT_EVENT_NOTIFY_REQUEST = QName.get("ClientEventNotifyRequest", NAMESPACE);
-    public static final QName CLIENT_EVENT_NOTIFY_RESPONSE = QName.get("ClientEventNotifyResponse", NAMESPACE);
-
     public void registerHandlers(DocumentDispatcher dispatcher) {
         // sync
-        dispatcher.registerHandler(SYNC_REQUEST, new OfflineSync());
+        dispatcher.registerHandler(OfflineConstants.SYNC_REQUEST, new OfflineSync());
         
         dispatcher.registerHandler(MailConstants.NO_OP_REQUEST, new OfflineNoOp());
 
@@ -71,7 +59,7 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(MailConstants.REVOKE_PERMISSION_REQUEST, OfflineServiceProxy.RevokePermission());
         dispatcher.registerHandler(MailConstants.CHECK_PERMISSION_REQUEST, OfflineServiceProxy.CheckPermission());
         
-        dispatcher.registerHandler(CLIENT_EVENT_NOTIFY_REQUEST, new OfflineClientEventNotify());
+        dispatcher.registerHandler(OfflineConstants.CLIENT_EVENT_NOTIFY_REQUEST, new OfflineClientEventNotify());
         
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());

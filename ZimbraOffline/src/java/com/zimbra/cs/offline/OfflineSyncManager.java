@@ -41,18 +41,18 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.offline.ab.gab.GDataServiceException;
+import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
-import com.zimbra.cs.service.offline.OfflineService;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 
 public class OfflineSyncManager {
 	
-    private static final QName ZDSYNC_ZDSYNC = QName.get("zdsync", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_ACCOUNT = QName.get("account", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_ERROR = QName.get("error", OfflineService.NAMESPACE);
-    private static final QName ZDSYNC_EXCEPTION = QName.get("exception", OfflineService.NAMESPACE);
+    private static final QName ZDSYNC_ZDSYNC = QName.get("zdsync", OfflineConstants.NAMESPACE);
+    private static final QName ZDSYNC_ACCOUNT = QName.get("account", OfflineConstants.NAMESPACE);
+    private static final QName ZDSYNC_ERROR = QName.get("error", OfflineConstants.NAMESPACE);
+    private static final QName ZDSYNC_EXCEPTION = QName.get("exception", OfflineConstants.NAMESPACE);
     
     private static final String A_ZDSYNC_NAME = "name";
     private static final String A_ZDSYNC_ID = "id";
@@ -533,7 +533,7 @@ public class OfflineSyncManager {
 		    try {
 		    	SoapHttpTransport transport = new SoapHttpTransport(uri);
 		        transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
-		        transport.setTimeout(5);
+		        transport.setTimeout(5000);
 		        transport.setRetryCount(1);
 		        transport.setRequestProtocol(SoapProtocol.Soap12);
 		        transport.setResponseProtocol(SoapProtocol.Soap12);

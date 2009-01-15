@@ -1,10 +1,26 @@
 package com.zimbra.cs.offline.common;
 
+import org.dom4j.Namespace;
+import org.dom4j.QName;
+
 import com.zimbra.common.util.Constants;
 
 
 public interface OfflineConstants {
 
+    public static final String NAMESPACE_STR = "urn:zimbraOffline";
+    public static final Namespace NAMESPACE = Namespace.get(NAMESPACE_STR);
+
+    public static final QName SYNC_REQUEST = QName.get("SyncRequest", NAMESPACE);
+    public static final QName SYNC_RESPONSE = QName.get("SyncResponse", NAMESPACE);
+    
+    public static final QName CLIENT_EVENT_NOTIFY_REQUEST = QName.get("ClientEventNotifyRequest", NAMESPACE);
+    public static final QName CLIENT_EVENT_NOTIFY_RESPONSE = QName.get("ClientEventNotifyResponse", NAMESPACE);
+	
+	public static final String A_Event = "e";
+	public static final String EVENT_UI_LOAD_BEGIN = "ui_load_begin";
+	public static final String EVENT_UI_LOAD_END = "ui_load_end";
+    
     public static enum SyncStatus {
 		unknown, offline, online, running, authfail, error
 	}	
