@@ -271,6 +271,17 @@ public class BeanUtils {
         return text.subSequence(0, length)+(ellipses ? " ..." : "");
     }
 
+    public static String truncateFixed(String text, int length, boolean ellipses) {
+        if (length <= 0) return ellipses ? "..." : "";
+
+        if (text.length() <= length) {
+            return text;
+        }
+        else{
+            return text.subSequence(0, length)+(ellipses ? "..." : "");    
+        }
+    }
+
     public static String displaySize(long size) {
         return displaySize(size, 0);
     }
