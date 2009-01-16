@@ -22,7 +22,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.23";
+my $version = "1.24";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -1855,11 +1855,17 @@ sub get_monthly_rrule
           #for rest of months
           if ($chkctr > 1)
           {
-            foreach my $wkn (keys %$iwkn_kkdhash)
+            my $mthlastwk=0;
+            foreach my $wkn (sort keys %$iwkn_kkdhash)
             {
               if (!exists $fwkn_wkd_hashref->{$wkn})
               {
                 $continue =0;
+              }
+              #store last week of month
+              if($mthlastwk<($wkn%7))
+              {
+                $mthlastwk=($wkn%7);
               }
             }
             #elements should be same in count. last one can be less as it may
@@ -1870,6 +1876,19 @@ sub get_monthly_rrule
             if (($fcount != $rcount)&&($chkctr != ($totcount-1)))
             {
               $continue =0;
+            }
+            #if last one, check for week sequence too. It is possible that
+            # first or any number of week(s) between last event is not there,
+            #then skip it
+            if(($continue)&&($chkctr == ($totcount-1)))
+            {
+              foreach my $wkn (sort keys %$fwkn_wkd_hashref)
+              {
+                if ((($wkn%7)<=$mthlastwk)&&(!exists $iwkn_kkdhash->{($wkn%7)}))
+                {
+                  $continue =0;
+                }
+              }
             }
           }#end if ($chkctr > 1)
         }
