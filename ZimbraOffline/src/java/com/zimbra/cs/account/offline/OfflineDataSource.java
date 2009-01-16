@@ -200,9 +200,11 @@ public class OfflineDataSource extends DataSource {
 
 	@Override
 	public boolean isSyncEnabled(Folder folder) {
-		if (isSyncInboxOnly())
-			return folder.getId() == Mailbox.ID_FOLDER_INBOX;
-		return (folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0 && (folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0;
+        if (isSyncInboxOnly() && folder.getId() != Mailbox.ID_FOLDER_INBOX) {
+            return false;
+        }
+        int bits = folder.getFlagBitmask();
+        return (bits & Flag.BITMASK_SYNCFOLDER) != 0 && (bits & Flag.BITMASK_SYNC) != 0;
 	}
 
 	@Override
@@ -221,13 +223,6 @@ public class OfflineDataSource extends DataSource {
 		}
 		return isSyncEnabledByDefault(localPath);
 	}
-
-    @Override
-    public void disableSync(int folderId) throws ServiceException {
-        Mailbox mbox = getMailbox();
-        mbox.alterTag(new Mailbox.OperationContext(mbox), folderId,
-                      MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, false);
-    }
 
     public boolean isSaveToSent() {
         return getType() == Type.pop3 || knownService == null || knownService.saveToSent;

@@ -360,9 +360,10 @@ public class LocalMailbox extends DesktopMailbox {
 
     private static void importData(DataSource ds, boolean isOnRequest)
         throws ServiceException {
-        // Force a full sync if INBOX has not yet been successfully imported
-        boolean inboxSynced = ds.hasSyncState(Mailbox.ID_FOLDER_INBOX);
-        boolean fullSync = isOnRequest || !inboxSynced;
+        // Force a full sync if INBOX sync enabled and has not yet been successfully sync'd
+        Folder inbox = ds.getMailbox().getFolderById(Mailbox.ID_FOLDER_INBOX);
+        boolean forceSync = ds.isSyncEnabled(inbox) && !ds.hasSyncState(inbox.getId());
+        boolean fullSync = isOnRequest || forceSync;
         List<Integer> folderIds = null;
         OfflineDataSource ods = (OfflineDataSource)ds;
         if (!fullSync && ods.isEmail()) {
