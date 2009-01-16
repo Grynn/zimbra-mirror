@@ -661,8 +661,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_offlineDataSourceName, dsName);
         attrs.put(A_zimbraPrefLabel, accountLabel);
         String displayName = (String)dsAttrs.get(A_zimbraPrefFromDisplay);
-        if (displayName != null)
+        if (displayName != null) {
+        	attrs.put(A_displayName, displayName);
         	attrs.put(A_zimbraPrefFromDisplay, displayName);
+        }
         
         attrs.put(A_objectClass, new String[] { "organizationalPerson", "zimbraAccount" } );
         attrs.put(A_zimbraMailHost, "localhost");
@@ -671,7 +673,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraId, accountId);
         attrs.put(A_cn, localPart);
         attrs.put(A_sn, localPart);
-        attrs.put(A_displayName, dsName);
+
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
         setDefaultAccountAttributes(attrs);
@@ -2039,14 +2041,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         			!ds.getAttr(A_zimbraDataSourceConnectionType).equals(attrs.get(A_zimbraDataSourceConnectionType)))
         		isTestNeeded = true;
         	
-        	String password = (String)attrs.get(A_zimbraDataSourcePassword);
-        	String decryptedPassword = password;
-        	if (password == null) {
-        		password = ds.getAttr(A_zimbraDataSourcePassword);
-        		attrs.put(A_zimbraDataSourcePassword, password);
-        		decryptedPassword = ds.getDecryptedPassword();
-        	} else if (!isTestNeeded && !password.equals(ds.getAttr(A_zimbraDataSourcePassword))) {
-        		isTestNeeded = true;
+        	String encrypted = (String)attrs.get(A_zimbraDataSourcePassword);
+        	String decrypted = null;
+        	if (encrypted == null) {
+        		encrypted = ds.getAttr(A_zimbraDataSourcePassword);
+        		attrs.put(A_zimbraDataSourcePassword, encrypted);
+        		decrypted = ds.getDecryptedPassword();
+        	} else {
+        		decrypted = DataSource.decryptData(dataSourceId, encrypted);
+        		if (!isTestNeeded && !decrypted.equals(ds.getDecryptedPassword()))
+        			isTestNeeded = true;
         	}
         	String domain = ds.getAttr(OfflineConstants.A_zimbraDataSourceDomain);
         	if (ds.getType() != DataSource.Type.live && !"yahoo.com".equals(domain)) {
@@ -2088,10 +2092,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 		            String localPart = parts[0];
 		            String domainFromEmail = parts[1];
 		            domainFromEmail = IDNUtil.toAsciiDomainName(domain);
-	                testCalDav(localPart, domainFromEmail, decryptedPassword);
+	                testCalDav(localPart, domainFromEmail, decrypted);
 	            }
 	            
 	            OfflineSyncManager.getInstance().clearErrorCode(ds.getName());
+	            
+	            adjustAccountDisplayName(account, ds, attrs);
             }
     	
             attrs.put(A_zimbraDataSourceEnabled, TRUE);
@@ -2108,6 +2114,23 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
             AttributeManager.getInstance().postModify(attrs, ds, context, false, true);
         }
+    }
+
+    private void adjustAccountDisplayName(Account account, DataSource ds, Map<String, Object> dsAttrs) throws ServiceException {
+        String displayName = (String)dsAttrs.get(A_zimbraPrefFromDisplay);
+        String oldDisplayName = account.getAttr(A_displayName);
+        Map<String, Object> attrs = new HashMap<String, Object>();
+        if (displayName != null && !displayName.equals("")) {
+        	if (oldDisplayName == null || !displayName.equals(oldDisplayName)) {
+	        	attrs.put(A_displayName, displayName);
+	        	attrs.put(A_zimbraPrefFromDisplay, displayName);
+        	}
+        } else if (oldDisplayName != null) {
+        	attrs.put('-' + A_displayName, oldDisplayName);
+        	attrs.put('-' + A_zimbraPrefFromDisplay, oldDisplayName);
+        }
+        if (attrs.size() > 0)
+        	modifyAttrs(account, attrs, false, true, false);
     }
 
     @Override
