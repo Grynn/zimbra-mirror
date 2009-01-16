@@ -18,8 +18,11 @@ package org.jivesoftware.wildfire.net;
 
 /**
  * A TLSStatus enum describing the current handshaking state of this TLS connection.
+ *
+ * This source file originally from the Tigase project (http://www.tigase.org). Used with permission
+ * (DO NOT REMOVE ATTRIBUTION!)
  * 
- * @author Hao Chen
+ * @author Artur Hefczyc 
  */
 public enum TLSStatus {
 
