@@ -25,6 +25,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbOfflineDirectory;
 import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.OfflineLog;
 
 class OfflineConfig extends Config {
     private OfflineConfig(Map<String, Object> attrs, Provisioning provisioning) {
@@ -38,7 +39,11 @@ class OfflineConfig extends Config {
                 attrs = new HashMap<String, Object>(2);
                 attrs.put(Provisioning.A_cn, "config");
                 attrs.put(Provisioning.A_objectClass, "zimbraGlobalConfig");
-                DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs, false);
+                try {
+                	DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs, false);
+                } catch (ServiceException x) {
+                	OfflineLog.offline.error("can't save config", x); //shouldn't really happen.  see bug 34567
+                }
             }
            	String[] skins = OfflineLC.zdesktop_skins.value().split("\\s*,\\s*");
             attrs.put(Provisioning.A_zimbraInstalledSkin, skins);
