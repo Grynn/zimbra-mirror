@@ -37,6 +37,8 @@ ZaRight.A_id = "id" ;
 ZaRight.A_name = "name" ;
 ZaRight.A_desc = "desc" ;
 ZaRight.A_attrs = "attrs" ;
+//ZaRight.A_getAttrs = "getAttrs" ;
+//ZaRight.A_setAttrs = "setAttrs" ;
 ZaRight.A_rights = "rights" ;
 ZaRight.A_type = "type" ;
 ZaRight.A_targetType = "targetType"  ;
@@ -133,10 +135,12 @@ ZaRight.myXModel = {
         {id: ZaRight.A_name, ref: ZaRight.A_name, type: _STRING_, required: true},
         {id: ZaRight.A_type, ref: "attrs/" + ZaRight.A_type, type: _ENUM_, choices: ZaZimbraRights.type },
             //TODO: have a new choice list xform item to display the targetType
-        {id: ZaRight.A_targetType, ref: "attrs/" + ZaRight.A_targetType, type: _LIST_, choices: ZaZimbraRights.targetType },
+        {id: ZaRight.A_targetType, ref: "attrs/" + ZaRight.A_targetType, type: _LIST_, listItems: {type: _ENUM_, choices: ZaZimbraRights.targetType} },
         {id: ZaRight.A_desc, ref: "attrs/" + ZaRight.A_desc, type: _STRING_ },
         {id: ZaRight.A_definedBy, ref: "attrs/" + ZaRight.A_definedBy, type: _ENUM_, choices: ZaZimbraRights.definedBy },
         {id: ZaRight.A_attrs,  ref: "attrs/" + ZaRight.A_attrs, type: _LIST_, listItem:{type:_STRING_}} ,
+//        {id: ZaRight.A_getAttrs,  ref: "attrs/" + ZaRight.A_getAttrs, type: _LIST_, listItem:{type:_STRING_}} ,
+//        {id: ZaRight.A_setAttrs,  ref: "attrs/" + ZaRight.A_setAttrs, type: _LIST_, listItem:{type:_STRING_}} ,
         {id: ZaRight.A_rights,  ref: "attrs/" + ZaRight.A_rights, type: _LIST_, listItem:{type:_STRING_}}
     ]
 };
@@ -168,38 +172,21 @@ ZaRight.getRights = function (targetType, expandAllAttrs) {
 }
 
  //initialize and normalize the ZaRight.SYSTEM_RIGHTS
-ZaRight.initSystemRights = function () {
-   var allSystemRights = ZaRight.getRights () ;
-    ZaRight.SYSTEM_RIGHTS = allSystemRights ;
-    /*
-    //normalize the GetAllRightsResponse
-    ZaRight.SYSTEM_RIGHTS = {} ;
-    for (var i=0; i<ZaRight.RIGHT_TYPES.length; i++) {
-        ZaRight.SYSTEM_RIGHTS[ZaRight.RIGHT_TYPES] = [] ;
+ZaRight.initSystemRights = function (allSystemRightsList) {
+    if (!allSystemRightsList) return ;
+
+    ZaRight.SYSTEM_RIGHTS = [] ;
+    var arr = allSystemRightsList.getArray () ;
+    for (var j = 0; j < arr.length; j ++) {
+        ZaRight.SYSTEM_RIGHTS.push (arr [j].name);
     }
-
-    for (var j = 0; j < allSystemRights.length; j ++) {
-        ZaRight.SYSTEM_RIGHTS[ZaRight.RIGHT]
-    } */
-
 }
 
 ZaRight.getAll =
 function() {
-    if (!ZaRight.SYSTEM_RIGHTS)  {
-        ZaRight.initSystemRights () ;
-    }
-
-    return ZaRight.SYSTEM_RIGHTS ;
-}
-
-ZaRight.getRightsByTargetType =
-function (targetType) {
-    if (!ZaRight.SYSTEM_RIGHTS)  {
-        ZaRight.initSystemRights () ;
-    }
-
-    return ZaRight.SYSTEM_RIGHTS [targetType] ; 
+    var allSystemRightsList = ZaRight.getRights () ;
+    ZaRight.initSystemRights (allSystemRightsList);
+    return allSystemRightsList ;
 }
 
 ZaRight.modifyMethod = function (tmpObj) {
@@ -271,15 +258,9 @@ function() {
 
 ZaRight.loadMethod =
 function(by, val, withConfig) {
-// prototype empty return  
-    return ;
-    
-    var _by = by ? by : "id";
-	var _val = val ? val : this.id
-	var soapDoc = AjxSoapDoc.create("GetRightRequest", ZaZimbraAdmin.URN, null);
-	
-	var elBy = soapDoc.set("server", _val);
-	elBy.setAttribute("by", _by);
+   	var soapDoc = AjxSoapDoc.create("GetRightRequest", ZaZimbraAdmin.URN, null);
+	soapDoc.getMethod().setAttribute("expandAllAttrs", "1") ;
+	var elRight = soapDoc.set("right", this.name);
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
@@ -288,8 +269,8 @@ function(by, val, withConfig) {
 		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_RIGHT
 	}
-	resp = ZaRequestMgr.invoke(params, reqMgrParams);
-    this.initFromJS(resp.Body.GetRightResponse.server[0]);
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams);
+    this.initFromJS(resp.Body.GetRightResponse.right[0]);
                                                   
 }
 ZaItem.loadMethods["ZaRight"].push(ZaRight.loadMethod);
@@ -310,10 +291,16 @@ ZaRight.prototype.initFromJS = function(right) {
             this.attrs [ix] = [] ;
             if (right[ix] && right[ix][0]) {
                 var elVals ;
-                if (ix == "rights") elVals = right[ix][0].r ;
-                if (ix == "attrs")  elVals = right[ix][0];
-                for (var j = 0; j < elVals.length; j ++) {
-                    this.attrs[ix].push (elVals[j].n) ;
+                if (ix == "rights") {
+                    elVals = right[ix][0].r ;
+                    for (var j = 0; j < elVals.length; j ++) {
+                        this.attrs[ix].push (elVals[j].n) ;
+                    }
+                }else if (ix == "attrs")  {
+                    elVals = right[ix][0];
+                    for (var property in elVals) {
+                        this.attrs[ix].push(property) ;
+                    }
                 }
             }
         } else {

@@ -83,7 +83,7 @@ ZaRightsMiniListView = function(parent, className, posStyle, headerList) {
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 }
 
-ZaRightsMiniListView.prototype = new ZaRightsListView;
+ZaRightsMiniListView.prototype = new ZaListView;
 ZaRightsMiniListView.prototype.constructor = ZaRightsMiniListView;
 
 ZaRightsMiniListView.prototype.toString =
@@ -132,13 +132,13 @@ ZaRightsAttrsListView = function(parent, className, posStyle, headerList) {
     if (arguments.length == 0) return;
 	var className = null;
 	var posStyle = null;
-	var headerList = ZaRightsAttrsListView._getHeaderList();
-	ZaListView.call(this, parent, className, posStyle, headerList);
+    var headerList = ZaRightsAttrsListView._getHeaderList() ;
+    ZaListView.call(this, parent, className, posStyle, headerList);
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 }
 
-ZaRightsAttrsListView.prototype = new ZaRightsListView;
+ZaRightsAttrsListView.prototype = new ZaListView;
 ZaRightsAttrsListView.prototype.constructor = ZaRightsAttrsListView;
 
 ZaRightsAttrsListView.prototype.toString =
@@ -157,5 +157,29 @@ function() {
 
     return headerList;
 }
+
+ZaRightsAttrsListView.prototype._createItemHtml =
+function(attrName) {
+	var html = new Array(50);
+	var	div = document.createElement("div");
+	div[DwtListView._STYLE_CLASS] = "Row";
+	div[DwtListView._SELECTED_STYLE_CLASS] = div[DwtListView._STYLE_CLASS] + "-" + DwtCssStyle.SELECTED;
+	div.className = div[DwtListView._STYLE_CLASS];
+	this.associateItemWithElement(attrName, div, DwtListView.TYPE_LIST_ITEM);
+
+	var idx = 0;
+	html[idx++] = "<table width='100%' cellspacing='2' cellpadding='0'>";
+	html[idx++] = "<tr>";
+
+    html[idx++] = "<td align='left'><nobr>";
+//        html[idx++] = AjxStringUtil.htmlEncode(right.attrs [field]) ;
+    html[idx++] = AjxStringUtil.htmlEncode(attrName) ;
+    html[idx++] = "</nobr></td>" ;
+
+	html[idx++] = "</tr></table>";
+	div.innerHTML = html.join("");
+	return div;
+}
+
 
 

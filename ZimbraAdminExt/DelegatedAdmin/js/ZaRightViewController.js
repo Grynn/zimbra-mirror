@@ -68,7 +68,7 @@ function (nextViewCtrlr, func, params) {
 		ZaController.prototype.switchToNextView.call(this, nextViewCtrlr, func, params);
 	}
 }
-
+                                    
 
 
 /**
@@ -81,10 +81,10 @@ function (nextViewCtrlr, func, params) {
 **/
 ZaRightViewController.initToolbarMethod =
 function () {
-	this._toolbarOrder.push(ZaOperation.SAVE);
+//	this._toolbarOrder.push(ZaOperation.SAVE);
 //	this._toolbarOrder.push(ZaOperation.DOWNLOAD_RIGHT_CONFIG);
 	this._toolbarOrder.push(ZaOperation.CLOSE);
-	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
+//	this._toolbarOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.SERTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
 //	this._toolbarOperations[ZaOperation.DOWNLOAD_RIGHT_CONFIG]=new ZaOperation(ZaOperation.DOWNLOAD_RIGHT_CONFIG,ZaMsg.TBB_DownloadConfig, ZaMsg.SERTBB_DownloadConfig_tt, "DownloadServerConfig", "DownloadServerConfig", new AjxListener(this, this.downloadConfigButtonListener));
 	this._toolbarOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.SERTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));
 }

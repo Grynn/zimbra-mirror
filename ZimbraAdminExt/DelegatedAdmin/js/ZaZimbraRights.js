@@ -20,7 +20,7 @@ ZaZimbraRights.type = [
 
 ZaZimbraRights.targetType = [
     "account", "distributionlist", "resource", "domain" ,
-    "cos" , "server", "config" , "global", "combo"    
+    "cos" , "server", "config" , "global"
 ]
 
 ZaZimbraRights.definedBy = ["system", "custom"] ;

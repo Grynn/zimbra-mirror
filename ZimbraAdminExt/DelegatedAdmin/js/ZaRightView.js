@@ -10,7 +10,7 @@ ZaRightView.prototype = new ZaTabView();
 ZaRightView.prototype.constructor = ZaRightView;
 ZaTabView.XFormModifiers["ZaRightView"] = new Array();
 
-ZaRightView.onFormFieldChanged =
+ZaRightView.onFormFieldChanged =        
 function (value, event, form) {
 	form.parent.setDirty(true);
 	this.setInstanceValue(value);
@@ -20,7 +20,9 @@ function (value, event, form) {
 ZaRightView.prototype.setObject =
 function (entry) {
     this._containedObject = entry ;
-    this._localXForm.setInstance(this._containedObject) ;	
+    this._localXForm.setInstance(this._containedObject) ;
+    //update the tab
+    this.updateTab();
 }
 
 
@@ -90,6 +92,7 @@ ZaRightView.myXFormModifier = function(xFormObject) {
             items: [
                 { ref: ZaRight.A_name, type: _OUTPUT_ , label: com_zimbra_delegatedadmin.Col_right_name+ ": " },
                 { ref: ZaRight.A_desc, type: _OUTPUT_, label: com_zimbra_delegatedadmin.Col_right_desc + ": " },
+                /* No customer rights enabled
                 { ref: ZaRight.A_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Col_right_type + ": ",
                     labelLocation:_LEFT_, choices: ZaZimbraRights.type
                 },
@@ -101,7 +104,7 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                     colSpan: "*", numCols:4, colSizes: [20, 100, 20, "*"],
                     items: [
         //                { ref: ZaRight.A_targetType  }
-        //TODO:     hardcode the prototype first             
+        //TODO:     hardcode the prototype first
                         {type: _CHECKBOX_, label: "Account",labelLocation:_RIGHT_ } ,
                         {type: _CHECKBOX_, label: "Calendar Resource",labelLocation:_RIGHT_ } ,
                         {type: _CHECKBOX_, label: "Cos",labelLocation:_RIGHT_ } ,
@@ -112,9 +115,15 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                         {type: _CHECKBOX_, label: "Right",labelLocation:_RIGHT_ } ,
                         {type: _CHECKBOX_, label: "Server",labelLocation:_RIGHT_ } ,
                         {type: _CHECKBOX_, label: "XMPP Component",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Zimlet",labelLocation:_RIGHT_ } 
+                        {type: _CHECKBOX_, label: "Zimlet",labelLocation:_RIGHT_ }
                     ]
-                },
+                },*/
+                { ref: ZaRight.A_type, type:_OUTPUT_, label: com_zimbra_delegatedadmin.Col_right_type + ": " },
+                { ref: ZaRight.A_targetType, type:_OUTPUT_,
+                    visibilityChecks: [ZaRightView.isShowTargetType],
+                    visibilityChangeEventSources: [ZaRight.A_type] ,
+                    label: com_zimbra_delegatedadmin.Label_target_type },
+                    
                 {type:_SPACER_, height: "10px" },
             //Rights View
 
@@ -129,7 +138,9 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                         widgetClass: ZaRightsMiniListView,
     //                        headerList:acctLimitsHeaderList,
                         hideHeader: false
-                    },
+                    } ,
+                    {type: _SPACER_, height: 10 }
+                    /*  No custom rights are supported
                     {type:_CELLSPACER_},
                     {type:_GROUP_, numCols:3, width:"300px", colSizes:["80px","auto","80px"],  height: 30,
                         cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
@@ -142,10 +153,10 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                                 onActivate:"ZaRightView.addRightButtonListener.call(this);"
                             }
                         ]
-                    }
+                    } */
                 ]
              },
-
+            
                 //get attributes view
               { type:_GROUP_, colSpan: "*", colSizes: ["200px", "*"], numCols: 2,
                   visibilityChecks: [ZaRightView.isShowGetAttrs],
@@ -153,12 +164,14 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                 items: [
                   {type:_OUTPUT_, value: com_zimbra_delegatedadmin.Label_getAttr,
                       valign: _CENTER_, align: _RIGHT_ },
-                  {ref:ZaRight.A_get, type:_DWT_LIST_, height:"200", width:"300px",
+                  {ref:ZaRight.A_attrs, type:_DWT_LIST_, height:"200", width:"300px",
                         forceUpdate: true, cssClass: "DLSource",
                         widgetClass: ZaRightsAttrsListView,
-    //                        headerList:acctLimitsHeaderList,
+//                        headerList:ZaRightsAttrsListView._getHeaderList(ZaRight.A_getAttrs),
                         hideHeader: false
-                    },
+                  } ,
+                  {type: _SPACER_, height: 10 }
+                    /*  No custom rights are supported,
                     {type:_CELLSPACER_},
                     {type:_GROUP_, numCols:5, width:"300px", colSizes:["80px","auto","80px","auto","80px"],
                         cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
@@ -169,9 +182,10 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                             {type:_CELLSPACER_},
                             {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px"}
                         ]
-                    }
+                    } */
                 ]
              },
+
     //        setAttributes view
             { type:_GROUP_, colSpan: "*", colSizes: ["200px", "*"], numCols: 2,
                  visibilityChecks: [ZaRightView.isShowSetAttrs],
@@ -179,12 +193,14 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                 items: [
                   {type:_OUTPUT_, value: com_zimbra_delegatedadmin.Label_setAttr,
                       valign: _CENTER_, align: _RIGHT_ },
-                  {ref:ZaRight.A_get, type:_DWT_LIST_, height:"200", width:"300px",
+                  {ref:ZaRight.A_attrs, type:_DWT_LIST_, height:"200", width:"300px",
                         forceUpdate: true, cssClass: "DLSource",
                         widgetClass: ZaRightsAttrsListView,
-    //                        headerList:acctLimitsHeaderList,
+//                        headerList: ZaRightsAttrsListView._getHeaderList(ZaRight.A_setAttrs),
                         hideHeader: false
-                    },
+                  },
+                  {type: _SPACER_, height: 10 }
+                    /*  No custom rights are supported,
                     {type:_CELLSPACER_},
                     {type:_GROUP_, numCols:5, width:"300px", colSizes:["80px","auto","80px","auto","80px"],
                         cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
@@ -195,7 +211,7 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                             {type:_CELLSPACER_},
                             {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px"}
                         ]
-                    }
+                    }*/
                 ]
              }
            ]
@@ -211,12 +227,12 @@ ZaRightView.isShowTargetType =  function () {
 
 ZaRightView.isShowGetAttrs =  function () {
     var type = this.getInstanceValue(ZaRight.A_type) ;
-    return (type == "getAttrs" || type == "combo") ;
+    return (type == "getAttrs") ;
 }
 
 ZaRightView.isShowSetAttrs =  function () {
     var type = this.getInstanceValue(ZaRight.A_type) ;
-    return (type == "setAttrs" || type == "combo") ;
+    return (type == "setAttrs") ;
 }
 
 ZaRightView.isShowRights =  function () {

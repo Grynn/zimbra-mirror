@@ -28,35 +28,38 @@ function(list, openInNewTab) {
 
     //ZaApp.getInstance().pushView(ZaZimbraAdmin._SERVERS_LIST_VIEW);
 	ZaApp.getInstance().pushView(this.getContentViewId());
-	this._removeList = new Array();
+
+    /*
+    this._removeList = new Array();
 	if (list != null)
 		this._list = list;
-
-	this.changeActionsState();
+    */
+	this.changeActionsState();              
 }
 
 ZaRightsListViewController.initToolbarMethod =
 function () {
-
+    /* For view only, no action allowed
     this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_New, com_zimbra_delegatedadmin.RIGHT_New_tt, "Account", "AccountDis", new AjxListener(this, ZaRightsListViewController.prototype._newButtonListener));
-    this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit,com_zimbra_delegatedadmin.RIGHT_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaRightsListViewController.prototype._editButtonListener));
    	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, com_zimbra_delegatedadmin.RIGHT_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaRightsListViewController.prototype._deleteButtonListener));
-	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
-	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-
     this._toolbarOrder.push(ZaOperation.NEW);
-    this._toolbarOrder.push(ZaOperation.EDIT);
     this._toolbarOrder.push(ZaOperation.DELETE);
+	*/
+    this._toolbarOperations[ZaOperation.VIEW] = new ZaOperation(ZaOperation.VIEW, ZaMsg.TBB_View,com_zimbra_delegatedadmin.RIGHT_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaRightsListViewController.prototype._editButtonListener));
+    this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
+    this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
+     this._toolbarOrder.push(ZaOperation.VIEW);
     this._toolbarOrder.push(ZaOperation.NONE);
-	this._toolbarOrder.push(ZaOperation.HELP);
+    this._toolbarOrder.push(ZaOperation.HELP);
 }
 ZaController.initToolbarMethods["ZaRightsListViewController"].push(ZaRightsListViewController.initToolbarMethod);
 
 ZaRightsListViewController.initPopupMenuMethod =
 function () {
-   	this._popupOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit, ZaMsg.SERTBB_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaRightsListViewController.prototype._editButtonListener));
-    this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaRightsListViewController.prototype._deleteButtonListener));
 
+    this._popupOperations[ZaOperation.VIEW] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_View, com_zimbra_delegatedadmin.RIGHT_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaRightsListViewController.prototype._editButtonListener));
+//    this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.SERTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaRightsListViewController.prototype._deleteButtonListener));
+    
 }
 ZaController.initPopupMenuMethods["ZaRightsListViewController"].push(ZaRightsListViewController.initPopupMenuMethod);
 
