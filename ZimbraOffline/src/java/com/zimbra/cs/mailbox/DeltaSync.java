@@ -583,9 +583,12 @@ public class DeltaSync {
         if (type != folder.getType())
             return false;
 
-        if (type == MailItem.TYPE_FOLDER)
-           return folder.getDefaultView() == MailItem.getTypeForName(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
-        else
+        if (type == MailItem.TYPE_FOLDER) {
+        	byte localView = folder.getDefaultView();
+        	byte remoteView = MailItem.getTypeForName(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
+            return localView == remoteView || localView == MailItem.TYPE_MESSAGE && remoteView == MailItem.TYPE_UNKNOWN ||
+            	   localView == MailItem.TYPE_UNKNOWN && remoteView == MailItem.TYPE_MESSAGE; //bug 33871: fileinto auto-created folder can be of UNKNOWN type
+        } else
             return false;
     }
 
