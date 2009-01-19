@@ -30,6 +30,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.accesscontrol.RightCommand;
+import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncErrorManager;
 import com.zimbra.cs.db.DbOfflineDirectory;
@@ -1244,20 +1245,20 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized void authAccount(Account acct, String password, String proto) throws ServiceException {
+    public synchronized void authAccount(Account acct, String password, AuthContext.Protocol proto) throws ServiceException {
         String instkey = OfflineLC.zdesktop_installation_key.value();
         if (instkey == null || instkey.startsWith("@") || instkey.equals(password)) {
             ZimbraLog.security.info(ZimbraLog.encodeAttrs(
-                new String[] {"cmd", "Auth", "account", acct.getName(), "protocol", proto}));
+                new String[] {"cmd", "Auth", "account", acct.getName(), "protocol", proto.toString()}));
         } else {
             ZimbraLog.security.warn(ZimbraLog.encodeAttrs(
-                new String[] {"cmd", "Auth","account", acct.getName(), "protocol", proto, "error", "invalid password"}));
+                new String[] {"cmd", "Auth","account", acct.getName(), "protocol", proto.toString(), "error", "invalid password"}));
             throw AccountServiceException.INVALID_PASSWORD(password);
         }
     }
     
     @Override
-    public synchronized void authAccount(Account acct, String password, String proto, Map<String, Object> context) throws ServiceException {
+    public synchronized void authAccount(Account acct, String password, AuthContext.Protocol proto, Map<String, Object> context) throws ServiceException {
 	authAccount(acct, password, proto);
     }
 
