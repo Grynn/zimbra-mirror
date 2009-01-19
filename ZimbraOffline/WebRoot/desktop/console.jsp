@@ -177,7 +177,22 @@ function submit(id, name, type, flavor, verb) {
 <c:if test="${not empty account.errorCode}">
                 <tr>
                   <td colspan="2" width="100%">
-                    <div class="ZMessageInfo"><span class='ZOfflineError'>${account.userFriendlyErrorMessage}</span></div>
+                    <div class="ZMessageInfo"><span class='ZOfflineError'>${account.userFriendlyErrorMessage}</span>
+                      <c:if test="${not empty account.errorMsg}">
+                        <a href="javascript:zd.toggle('errorDetails')">(<fmt:message key='DebugInfo'/>)</a>
+                        <div id="errorDetails" style="display:none">
+                          <p class="ZFieldSubLabelLeft">
+                            <b><fmt:message key='DebugMsg'/></b>: ${account.errorMsg}
+                          </p>
+                          <c:if test="${not empty account.exception}">
+                            <p class="ZFieldSubLabelLeft">
+                              <b><fmt:message key='DebugStack'/></b>: <pre>${account.exception}</pre>
+                            </p>
+                          </c:if>
+                          <p class="ZFieldSubLabelLeft"><b><fmt:message key='DebugActionNote'/></b></p>
+                        </div>
+                      </c:if>
+                    </div>
                   </td>
                 </tr>
 </c:if>

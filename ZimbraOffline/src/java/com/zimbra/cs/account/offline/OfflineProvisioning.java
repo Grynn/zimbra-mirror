@@ -1103,6 +1103,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized Account get(AccountBy keyType, String key) throws ServiceException {
+    	return get(false, keyType, key);
+    }
+    
+    private synchronized Account get(boolean includeSyncStatus, AccountBy keyType, String key) throws ServiceException {
         Account acct = null;
         Map<String,Object> attrs = null;
         if (keyType == AccountBy.id) {
@@ -1135,11 +1139,19 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (name == null)
         	return null;
         
-        //There are attributes we don't persist into DB.  This is where we add them:
-    	attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
-    	String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(name);
-    	if (statusErrorCode != null)
-    		attrs.put(OfflineConstants.A_offlineSyncStatusErrorCode, statusErrorCode);
+        if (includeSyncStatus) {
+	        //There are attributes we don't persist into DB.  This is where we add them:
+	    	attrs.put(OfflineConstants.A_offlineSyncStatus, OfflineSyncManager.getInstance().getSyncStatus(name).toString());
+	    	String statusErrorCode = OfflineSyncManager.getInstance().getErrorCode(name);
+	    	if (statusErrorCode != null)
+	    		attrs.put(OfflineConstants.A_offlineSyncStatusErrorCode, statusErrorCode);
+	    	String statusErrorMsg = OfflineSyncManager.getInstance().getErrorMsg(name);
+	    	if (statusErrorMsg != null)
+	    		attrs.put(OfflineConstants.A_offlineSyncStatusErrorMsg, statusErrorMsg);
+	    	String statusException = OfflineSyncManager.getInstance().getException(name);
+	    	if (statusException != null)
+	    		attrs.put(OfflineConstants.A_offlineSyncStatusException, statusException);
+        }
     	
     	if (acct != null) {
     		acct.setAttrs(attrs);
@@ -1171,11 +1183,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private List<String> cachedaccountIds;
 
     public List<Account> getAllAccounts() throws ServiceException {
+    	return getAllAccounts(false);
+    }
+    
+    private List<Account> getAllAccounts(boolean includeSyncStatus) throws ServiceException {
         List<Account> accts = new ArrayList<Account>();
         synchronized (this) {
         	cachedaccountIds = cachedaccountIds != null ? cachedaccountIds : DbOfflineDirectory.listAllDirectoryEntries(EntryType.ACCOUNT);
             for (String zimbraId : cachedaccountIds) {
-                Account acct = get(AccountBy.id, zimbraId);
+                Account acct = get(includeSyncStatus, AccountBy.id, zimbraId);
                 if (acct != null && !isLocalAccount(acct) && !isGalAccount(acct) && !isMountpointAccount(acct)) {
                 	MailboxManager.getInstance().getMailboxByAccount(acct);
                     accts.add(acct);
@@ -1477,7 +1493,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public synchronized List<Account> getAllAccounts(Domain d) throws ServiceException {
         if (d == null || d.getAttr(A_zimbraDomainName) == null) {
-        	return getAllAccounts();
+        	return getAllAccounts(true);
         }
         
         List<Account> accts = new ArrayList<Account>();

@@ -40,6 +40,7 @@ import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
+import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
@@ -202,6 +203,14 @@ public class OfflineSyncManager {
         	if (mStatus == SyncStatus.authfail || mStatus == SyncStatus.error || mStatus == SyncStatus.offline)
         		mStatus = SyncStatus.unknown;
     	}
+    	
+    	String getErrorMsg() {
+    		return mError == null ? null : mError.message;
+    	}
+    	
+    	String getException() {
+    		return mError == null || mError.exception == null ? null : ExceptionToString.ToString(mError.exception); 
+    	}
     }
     
     private final Map<String, OfflineSyncStatus> syncStatusTable = Collections.synchronizedMap(new HashMap<String, OfflineSyncStatus>());
@@ -224,6 +233,18 @@ public class OfflineSyncManager {
     public String getErrorCode(String targetName) {
 		synchronized (syncStatusTable) {
 			return getStatus(targetName).mCode;
+		}
+    }
+    
+    public String getErrorMsg(String targetName) {
+		synchronized (syncStatusTable) {
+			return getStatus(targetName).getErrorMsg();
+		}
+    }
+    
+    public String getException(String targetName) {
+		synchronized (syncStatusTable) {
+			return getStatus(targetName).getException();
 		}
     }
 	
@@ -443,6 +464,7 @@ public class OfflineSyncManager {
         	if (isDebugTraceOn)
         		OfflineLog.offline.debug("sync remote auth failure: " + targetName, exception);
         } else {
+        	code = code == null ? OfflineServiceException.UNEXPECTED : code;
         	syncFailed(targetName, code, cause.getMessage(), exception);
         	OfflineLog.offline.error("sync failure: " + targetName, exception);
         	if (exception instanceof SoapFaultException) {

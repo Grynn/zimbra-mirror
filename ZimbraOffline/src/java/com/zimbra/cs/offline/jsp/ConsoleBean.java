@@ -23,6 +23,8 @@ public class ConsoleBean extends PageBean {
         private long lastSync;
         private SyncStatus status = SyncStatus.unknown;
         private String errorCode;
+        private String errorMsg;
+        private String exception;
         private boolean isFirst;
 
         public String getId() {
@@ -57,14 +59,24 @@ public class ConsoleBean extends PageBean {
         	return errorCode;
         }
         
+        public String getErrorMsg() {
+        	return errorMsg;
+        }
+        
+        public String getException() {
+        	return exception;
+        }
+        
         public String getUserFriendlyErrorMessage() {
         	if (errorCode == null)
-        		return "";
+        		errorCode = "offline.UNEXPECTED";
         	
         	String msg = getMessage("client." + errorCode, false);
         	if (msg == null)
         		msg = getMessage("exception." + errorCode, false);
-        	return msg == null ? "" : msg;
+        	if (msg == null)
+        		msg = getMessage("exception.offline.UNEXPECTED", false);
+        	return msg;
         }
         
         public boolean isStatusUnknown() {
@@ -141,6 +153,8 @@ public class ConsoleBean extends PageBean {
             String status = account.getAttr(OfflineConstants.A_offlineSyncStatus);
             sum.status = status == null ? SyncStatus.unknown : SyncStatus.valueOf(status);
             sum.errorCode = account.getAttr(OfflineConstants.A_offlineSyncStatusErrorCode);
+            sum.errorMsg = account.getAttr(OfflineConstants.A_offlineSyncStatusErrorMsg);
+            sum.exception = account.getAttr(OfflineConstants.A_offlineSyncStatusException);
             sums.add(sum);
         }
         List<DataSource> dataSources = stub.getOfflineDataSources();
