@@ -387,7 +387,7 @@ function(item, ev) {
 
 DwtTree.prototype._itemExpanded =
 function(item, ev, skipNotify) {
-	if (ev && !skipNotify) {
+	if (!skipNotify) {
 		this._notifyListeners(DwtEvent.TREE, [item], DwtTree.ITEM_EXPANDED, ev, DwtShell.treeEvent);
 	}
 	this._clearTreeItemList();
@@ -396,7 +396,7 @@ function(item, ev, skipNotify) {
 DwtTree.prototype._itemCollapsed =
 function(item, ev, skipNotify) {
 	var i;
-	if (ev && !skipNotify) {
+	if (!skipNotify) {
 		this._notifyListeners(DwtEvent.TREE, [item], DwtTree.ITEM_COLLAPSED, ev, DwtShell.treeEvent);
 	}
 	var setSelection = false;
