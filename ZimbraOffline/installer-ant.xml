@@ -27,7 +27,7 @@
 	</target>
 
 	<target name="installer-clean">
-		<delete dir="${build.dir}" includes="zdesktop*" />
+		<delete> <fileset dir="${build.dir}" includes="zdesktop*"/> </delete>
 	</target>
 
 	<target name="installer-pack-media">
@@ -100,9 +100,9 @@
         </macrodef>
 
 	<target name="symlink-media">
-		<symlink link="${build.dir}/zdesktop_linux_i686.sh" resource="${media_linux}"/>
-		<symlink link="${build.dir}/zdesktop_macos_intel.dmg" resource="${media_macos}"/>
-		<symlink link="${build.dir}/zdesktop_win32.exe" resource="${media_win32}"/>
+		<symlink link="${build.dir}/zdesktop_linux_i686.sh" resource="${media_linux}" overwrite="true"/>
+		<symlink link="${build.dir}/zdesktop_macos_intel.dmg" resource="${media_macos}" overwrite="true"/>
+		<symlink link="${build.dir}/zdesktop_win32.exe" resource="${media_win32}" overwrite="true"/>
 	</target>
 </project>
 

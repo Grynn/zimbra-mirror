@@ -22,6 +22,7 @@
 <!ENTITY console.label              "@prism.exts.ErrConsole@">
 <!ENTITY install.label              "@prism.exts.InstallShortcut@">
 <!ENTITY tools.label                "@prism.exts.Tools@">
+<!ENTITY prefs.label                "@prism.exts.Preferences@">
 <!ENTITY addons.label               "@prism.exts.AddOns@">
 
 <!ENTITY zoomIn.label               "@prism.exts.ZoomIn@">
@@ -34,6 +35,7 @@
 <!ENTITY zoomReset.label            "@prism.exts.ZoomReset@">
 <!ENTITY zoomReset.commandkey       "0">
 <!ENTITY zoomReset.modifiers        "accel">
+<!ENTITY fullScreen.label           "@prism.exts.Fullscreen@">
 
 <!ENTITY findOnCmd.label            "@prism.exts.FindInThisPage@">
 <!ENTITY findOnCmd.accesskey        "F">

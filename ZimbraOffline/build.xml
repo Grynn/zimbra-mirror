@@ -706,47 +706,6 @@
 		<mkdir dir="${dist.dir}/redolog"/>
 	</target>
 
-	<macrodef name="translate-prism-files">
-		<attribute name="language"/> <attribute name="country" default=""/>
-		<sequential>
-			<if> <equals arg1="@{country}" arg2=""/>
-				<then><var name="locale" value="@{language}"/></then>
-				<else><var name="locale" value="@{language}-@{country}"/></else>
-			</if>
-			<translate toDir="${build.dir}/prism/chrome/${locale}/branding" starttoken="@" endtoken="@"
-				bundle="src/installer/messages_utf8/ZiMsg" bundlelanguage="@{language}" bundlecountry="@{country}"
-					forceoverwrite="yes" srcencoding="UTF8" destencoding="UTF8">
-				<fileset dir="prism/i18n" includes="*.dtd *.properties"/>
-			</translate>
-			<move file="${build.dir}/prism/chrome/${locale}/branding/webrunner.dtd" todir="${build.dir}/prism/chrome/${locale}"/>
-			<move file="${build.dir}/prism/chrome/${locale}/branding/about.dtd" todir="${build.dir}/prism/chrome/${locale}"/>
-			<mkdir dir="${build.dir}/prism/chrome/${locale}/webapp"/>
-			<move file="${build.dir}/prism/chrome/${locale}/branding/webapp.properties" todir="${build.dir}/prism/chrome/${locale}/webapp"/>				
-		</sequential>	
-	</macrodef>
-
-	<target name="offline-prism-i18n">
-		<native2ascii reverse="true" encoding="UTF8" src="src/installer/messages" dest="src/installer/messages_utf8" includes="*.properties" />
-
-		<translate-prism-files language="en" country="US"/>
-		<translate-prism-files language="fr"/>
-		<translate-prism-files language="da"/>
-		<translate-prism-files language="de"/>
-		<translate-prism-files language="en" country="AU"/>
-		<translate-prism-files language="en" country="GB"/>
-		<translate-prism-files language="es" country="ES"/>
-		<translate-prism-files language="it"/>
-		<translate-prism-files language="ja"/>
-		<translate-prism-files language="ko"/>
-		<translate-prism-files language="nl"/>
-		<translate-prism-files language="pl"/>
-		<translate-prism-files language="pt" country="BR"/>
-		<translate-prism-files language="ru"/>
-		<translate-prism-files language="sv"/>
-		<translate-prism-files language="zh" country="CN"/>
-		<translate-prism-files language="zh" country="HK"/>		
-	</target>
-
 	<target name="offline-prep-launcher">
 		<copy tofile="${dist.dir}/lib/libzimbra-native.jnilib" file="../ZimbraServer/lib/libzimbra-native.jnilib.MacOSX.i386" overwrite="true"/>
 		<copy tofile="${dist.dir}/lib/libzimbra-native.so" file="../ZimbraServer/lib/libzimbra-native.so.Linux.i386" overwrite="true"/>
@@ -789,34 +748,91 @@
 			<fileset dir="src/installer" includes="svckill.vbs" />
 			<fileset dir="src/installer/resources" includes="launcher_32x32.ico" />
 		</copy>
+		<copy file="src/installer/win32/prism/application.ini" todir="${dist.dir}/win32/prism" overwrite="true"/>
 	</target>
+
+	<property name="prism.version.macos" value="090113"/>
+	<property name="prism.version.win32" value="090113"/>
+	<property name="prism.version.linux" value="090113"/>
+	<property name="prism.extroot.macos" value="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org"/>
+	<property name="prism.extroot.win32" value="${dist.dir}/win32/prism/extensions/prism-runtime@developer.mozilla.org"/>
+	<property name="prism.extroot.linux" value="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org"/>
+
+	<macrodef name="translate-prism-files">
+		<attribute name="language"/> 
+		<attribute name="country" default=""/>
+		<attribute name="extroot"/>
+		<sequential>
+			<if> <equals arg1="@{country}" arg2=""/>
+				<then><var name="locale" value="@{language}"/></then>
+				<else><var name="locale" value="@{language}-@{country}"/></else>
+			</if>
+			<translate toDir="${build.dir}/prism/chrome/${locale}/branding" starttoken="@" endtoken="@"
+				bundle="src/installer/messages_utf8/ZiMsg" bundlelanguage="@{language}" bundlecountry="@{country}"
+					forceoverwrite="yes" srcencoding="UTF8" destencoding="UTF8">
+				<fileset dir="prism/i18n" includes="*.dtd *.properties"/>
+			</translate>
+			<copy file="${build.dir}/prism/chrome/${locale}/branding/brand.dtd" todir="@{extroot}/chrome/${locale}/branding"/>
+			<copy file="${build.dir}/prism/chrome/${locale}/branding/brand.properties" todir="@{extroot}/chrome/${locale}/branding"/>
+			<copy file="${build.dir}/prism/chrome/${locale}/branding/webrunner.dtd" todir="@{extroot}/chrome/${locale}"/>
+			<copy file="${build.dir}/prism/chrome/${locale}/branding/about.dtd" todir="@{extroot}/chrome/${locale}"/>
+			<mkdir dir="@{extroot}/chrome/${locale}/webapp"/>
+			<copy file="${build.dir}/prism/chrome/${locale}/branding/webapp.properties" todir="@{extroot}/chrome/${locale}/webapp"/>				
+		</sequential>	
+	</macrodef>
+
+	<macrodef name="patch-prism-files">
+		<attribute name="os"/>
+		<attribute name="version"/>
+		<attribute name="extroot"/>
+
+		<sequential>
+			<copy todir="${dist.dir}/@{os}/prism/" overwrite="true">
+				<fileset dir="${prism.src.dir}/@{os}/@{version}/patches/" includes="*/**"/>	
+			</copy>
+
+			<replace file="@{extroot}/defaults/preferences/preferences.js" token="@version@" value="${offline.version}"/>
+			<replace file="@{extroot}/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
+			<replace file="@{extroot}/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
+
+			<copy tofile="@{extroot}/components/ForceOnline.js" file="prism/components/ForceOnline.js" overwrite="true"/>
+        	<copy tofile="@{extroot}/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
+
+			<translate-prism-files extroot="@{extroot}" language="en" country="US"/>
+			<translate-prism-files extroot="@{extroot}" language="fr"/>
+			<translate-prism-files extroot="@{extroot}" language="da"/>
+			<translate-prism-files extroot="@{extroot}" language="de"/>
+			<translate-prism-files extroot="@{extroot}" language="en" country="AU"/>
+			<translate-prism-files extroot="@{extroot}" language="en" country="GB"/>
+			<translate-prism-files extroot="@{extroot}" language="es" country="ES"/>
+			<translate-prism-files extroot="@{extroot}" language="it"/>
+			<translate-prism-files extroot="@{extroot}" language="ja"/>
+			<translate-prism-files extroot="@{extroot}" language="ko"/>
+			<translate-prism-files extroot="@{extroot}" language="nl"/>
+			<translate-prism-files extroot="@{extroot}" language="pl"/>
+			<translate-prism-files extroot="@{extroot}" language="pt" country="BR"/>
+			<translate-prism-files extroot="@{extroot}" language="ru"/>
+			<translate-prism-files extroot="@{extroot}" language="sv"/>
+			<translate-prism-files extroot="@{extroot}" language="zh" country="CN"/>
+			<translate-prism-files extroot="@{extroot}" language="zh" country="HK"/>
+		</sequential>		
+	</macrodef>
 
 	<target name="offline-prep-prism">
 	    <!-- unzip original prism drops to dist dirs -->			
-		<unzip src="${prism.src.dir}/prism-080922.macos.zip" dest="${dist.dir}/macos/prism" overwrite="true"/>
-		<unzip src="${prism.src.dir}/prism-080922.win32.zip" dest="${dist.dir}/win32/prism" overwrite="true"/>
-		<unzip src="${prism.src.dir}/prism-080922.linux.zip" dest="${dist.dir}/linux/prism" overwrite="true"/>
+		<unzip src="${prism.src.dir}/macos/${prism.version.macos}/drop/prism-${prism.version.macos}.macos.zip" dest="${dist.dir}/macos/prism" overwrite="true"/>
+		<unzip src="${prism.src.dir}/win32/${prism.version.win32}/drop/prism-${prism.version.win32}.win32.zip" dest="${dist.dir}/win32/prism" overwrite="true"/>
+		<unzip src="${prism.src.dir}/linux/${prism.version.linux}/drop/prism-${prism.version.linux}.linux.zip" dest="${dist.dir}/linux/prism" overwrite="true"/>
 
 		<!-- delete unused refractor extensions from win32 and linux -->
 		<delete dir="${dist.dir}/win32/prism/extensions/refractor@developer.mozilla.org"/>
 		<delete dir="${dist.dir}/linux/prism/extensions/refractor@developer.mozilla.org"/>
 
-		<!-- create patches for branding stuff in build dir, using mac's drop. the patches are common to mac/win/linux -->
-		<copy todir="${build.dir}/prism/" overwrite="true">
-			<fileset dir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="*/**"/>
-		</copy>
-		<copy todir="${build.dir}/prism/" overwrite="true">
-			<fileset dir="${prism.src.dir}/mac-080922/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" includes="*/**"/>
-		</copy>
-
-		<copy tofile="${build.dir}/prism/components/ForceOnline.js" file="prism/components/ForceOnline.js" overwrite="true"/>
-
-		<replace file="${build.dir}/prism/defaults/preferences/preferences.js" token="@version@" value="${offline.version}"/>
-		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@version@" value="${offline.version}"/>
-		<replace file="${build.dir}/prism/chrome/webrunner/content/about.js" token="@buildid@" value="${offline.buildid}"/>
-
-		<antcall target="offline-prism-i18n"/>
-        <copy tofile="${build.dir}/prism/chrome.manifest" file="prism/i18n/chrome.manifest" overwrite="true"/>
+		<!-- apply patches and i18n works -->
+		<native2ascii reverse="true" encoding="UTF8" src="src/installer/messages" dest="src/installer/messages_utf8" includes="*.properties" />
+		<patch-prism-files os="macos" version="${prism.version.macos}" extroot="${prism.extroot.macos}"/>
+		<patch-prism-files os="win32" version="${prism.version.win32}" extroot="${prism.extroot.win32}"/>
+		<patch-prism-files os="linux" version="${prism.version.linux}" extroot="${prism.extroot.linux}"/>
 
 		<!-- use firefox xulrunner to replace the one comes with prism -->
 		<delete>
@@ -852,7 +868,7 @@
 		<chmod file="${dist.dir}/macos/prism/Prism.app/Contents/MacOS/prism" perm="ugo+x"/> 
 		<chmod file="${dist.dir}/linux/prism/prism" perm="ugo+x"/>
 
-		<!-- copy over patched branding stuff from build dir -->
+		<!-- copy over patched branding stuff from build dir DELETE ME !!!!!!!!!!!!!!!!!! -->
 		<copy todir="${dist.dir}/macos/prism/Prism.app/Contents/Resources/extensions/prism-runtime@developer.mozilla.org" overwrite="true">
 			<fileset dir="${build.dir}/prism" includes="*/**"/>
 		</copy>
