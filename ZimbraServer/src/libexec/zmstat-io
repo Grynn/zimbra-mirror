@@ -100,11 +100,13 @@ sub getHeading($) {
     return join(', ', @cols);
 }
 
+
+my $stat_pid;
 sub runIOSTAT($$) {
     my ($opts, $interval) = @_;
     my $fh = new FileHandle;
     my $cmd = !$isMac ? "$IOSTAT $opts $interval" : "$IOSTAT -d -K -w $interval";
-    open($fh, "$cmd |") || die "Unable to execute command \"$cmd\": $!";
+    $stat_pid = open($fh, "$cmd |") || die "Unable to execute command \"$cmd\": $!";
     if ($isMac) {
         # Skip the first 2 lines.
         readLine($fh, 1);  # device list
@@ -193,6 +195,7 @@ waitUntilNiceRoundSecond($interval);
 my $iostatFH = runIOSTAT($iostatOpts, $interval);
 
 sub sigterm {
+	kill(15,$stat_pid) if $stat_pid;
 	close($iostatFH) if $iostatFH;
 	exit(0);
 }

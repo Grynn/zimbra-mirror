@@ -108,11 +108,12 @@ sub getLoadInfo() {
     return $load;
 }
 
+my $stat_pid;
 sub runVMSTAT($) {
     my $interval = shift;
     my $fh = new FileHandle;
     my $cmd = "$VMSTAT $interval";
-    open($fh, "$cmd |") || die "Unable to execute command \"$cmd\": $!";
+    $stat_pid = open($fh, "$cmd |") || die "Unable to execute command \"$cmd\": $!";
     # Skip over the first three lines.
     $fh->getline();
     $fh->getline();
@@ -184,6 +185,7 @@ my $date = getDate();
 waitUntilNiceRoundSecond($interval);
 my $vmstatFH = runVMSTAT($interval);
 sub sigterm {
+	kill(15,$stat_pid) if $stat_pid;
 	close($vmstatFH) if $vmstatFH;
 	exit(0);
 }
