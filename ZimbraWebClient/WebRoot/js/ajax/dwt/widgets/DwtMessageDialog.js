@@ -42,7 +42,7 @@ DwtMessageDialog = function(params) {
 	this.setContent(this._contentHtml());
 	this._msgCell = document.getElementById(this._msgCellId);
 	this.addEnterListener(new AjxListener(this, this._enterListener));
-}
+};
 
 DwtMessageDialog.PARAMS = ["parent", "className", "buttons", "extraButtons"];
 
@@ -53,12 +53,12 @@ DwtMessageDialog.CRITICAL_STYLE = 1;
 DwtMessageDialog.INFO_STYLE = 2;
 DwtMessageDialog.WARNING_STYLE = 3;
 
-DwtMessageDialog.TITLE = new Object();
+DwtMessageDialog.TITLE = {};
 DwtMessageDialog.TITLE[DwtMessageDialog.CRITICAL_STYLE] = AjxMsg.criticalMsg;
-DwtMessageDialog.TITLE[DwtMessageDialog.INFO_STYLE] = AjxMsg.infoMsg
+DwtMessageDialog.TITLE[DwtMessageDialog.INFO_STYLE] = AjxMsg.infoMsg;
 DwtMessageDialog.TITLE[DwtMessageDialog.WARNING_STYLE] = AjxMsg.warningMsg;
 
-DwtMessageDialog.ICON = new Object();
+DwtMessageDialog.ICON = {};
 DwtMessageDialog.ICON[DwtMessageDialog.CRITICAL_STYLE] = "Critical_32";
 DwtMessageDialog.ICON[DwtMessageDialog.INFO_STYLE] = "Information_32";
 DwtMessageDialog.ICON[DwtMessageDialog.WARNING_STYLE] = "Warning_32";
@@ -80,14 +80,13 @@ function() {
 */
 DwtMessageDialog.prototype.setMessage =
 function(msgStr, style, title) {
-	style = style ? style : DwtMessageDialog.INFO_STYLE;
-	title = title ? title : DwtMessageDialog.TITLE[style];
+	style = style || DwtMessageDialog.INFO_STYLE;
+	title = title || DwtMessageDialog.TITLE[style];
 	this.setTitle(title);
 	if (msgStr) {
-		var html = new Array();
+		var html = [];
 		var i = 0;
-		html[i++] = "<table cellspacing=0 cellpadding=0 border=0 width='100%'><tr>";
-		html[i++] = "<td valign='top'>";
+		html[i++] = "<table cellspacing=0 cellpadding=0 border=0 width='100%'><tr><td valign='top'>";
 		html[i++] = AjxImg.getImageHtml(DwtMessageDialog.ICON[style]);
 		html[i++] = "</td><td class='DwtMsgArea'>";
 		html[i++] = msgStr;
@@ -95,6 +94,14 @@ function(msgStr, style, title) {
 		this._msgCell.innerHTML = html.join("");
 	} else {
 		this._msgCell.innerHTML = "";
+	}
+};
+
+DwtMessageDialog.prototype.setSize =
+function(width, height) {
+	var msgCell = document.getElementById(this._msgCellId);
+	if (msgCell && (width || height)) {
+		Dwt.setSize(msgCell, width, height);
 	}
 };
 

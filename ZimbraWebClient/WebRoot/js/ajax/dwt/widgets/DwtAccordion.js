@@ -471,6 +471,11 @@ function(icon) {
 	}
 };
 
+DwtAccordionItem.prototype.getIconCell =
+function() {
+	return document.getElementById(this.accordion._htmlElId + "_icon_" + this.id);
+};
+
 DwtAccordionItem.prototype.setTitle =
 function(title) {
 	var titleCell = document.getElementById(this.accordion._htmlElId + "_title_" + this.id);

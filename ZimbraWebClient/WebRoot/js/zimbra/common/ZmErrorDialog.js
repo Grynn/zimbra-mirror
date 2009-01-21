@@ -36,12 +36,13 @@ ZmErrorDialog = function(parent, msgs) {
 	
 	this._showDetailsMsg = msgs.showDetails;
 	this._hideDetailsMsg = msgs.hideDetails;
-}
+};
 
 ZmErrorDialog.prototype = new DwtMessageDialog;
 ZmErrorDialog.prototype.constructor = ZmErrorDialog;
 
-ZmErrorDialog.prototype.toString = function() {
+ZmErrorDialog.prototype.toString =
+function() {
 	return "ZmErrorDialog";
 };
 
@@ -77,10 +78,10 @@ function() {
 */
 ZmErrorDialog.prototype.setDetailString = 
 function(text) {
-    if (!(this._button[ZmErrorDialog.DETAIL_BUTTON])) { return; }
+	if (!(this._button[ZmErrorDialog.DETAIL_BUTTON])) { return; }
 
-    this._button[ZmErrorDialog.DETAIL_BUTTON].setVisible(text != null);
-    this._detailStr = text;
+	this._button[ZmErrorDialog.DETAIL_BUTTON].setVisible(text != null);
+	this._detailStr = text;
 };
 
 ZmErrorDialog.prototype.setMessage =
@@ -93,14 +94,30 @@ function(msgStr, detailStr, style, title) {
 	// clear the 'detailsVisible' flag and reset the title of the 'showDetails' button
 	this._detailsVisible = false;
 	this._button[ZmErrorDialog.DETAIL_BUTTON].setText(this._showDetailsMsg);
-	
+
 	DwtMessageDialog.prototype.setMessage.call(this, msgStr, style, title);
 };
 
+/**
+ * Popup the error dialog.
+ * @param loc				[Object]*		the desired location
+ * @param hideReportButton	[Boolean]*		true if dialog shouldn't show "Send Report" button
+ */
+ZmErrorDialog.prototype.popup =
+function(loc, hideReportButton) {
+	if (hideReportButton) {
+		this.setButtonVisible(ZmErrorDialog.REPORT_BUTTON, false);
+	}
+	DwtMessageDialog.prototype.popup.call(this, loc);
+};
 
-ZmErrorDialog.prototype.popdown = function() {
-    DwtMessageDialog.prototype.popdown.call(this);
-    this.setButtonVisible(ZmErrorDialog.REPORT_BUTTON, true);
+ZmErrorDialog.prototype.popdown =
+function() {
+	DwtMessageDialog.prototype.popdown.call(this);
+
+	// reset dialog
+	this.setSize(Dwt.CLEAR, Dwt.CLEAR);
+	this.setButtonVisible(ZmErrorDialog.REPORT_BUTTON, true);
 };
 
 //
@@ -111,7 +128,7 @@ ZmErrorDialog.prototype._getNavigatorInfo =
 function() {
 	var strNav = [];
 	var idx = 0;
-	
+
 	// Add the url
 	strNav[idx++] = "\n\n";
 	strNav[idx++] = "href: ";
@@ -131,9 +148,9 @@ ZmErrorDialog.prototype._getSubjectPrefix =
 function() {
 	var strSubj = [];
 	var idx = 0;
-	
+
 	strSubj[idx++] = "ER: ";
-	
+
 	if (AjxEnv.isIE) 				strSubj[idx++] = "IE ";
 	else if (AjxEnv.isFirefox)		strSubj[idx++] = "FF ";
 	else if (AjxEnv.isMozilla)		strSubj[idx++] = "MOZ ";
@@ -190,7 +207,7 @@ function() {
 		var contentDiv = this._getContentDiv();
 		contentDiv.appendChild(this._iframe);
 	}
-	
+
 	var strPrefs = this._getUserPrefs();
 	var formId = Dwt.getNextId();
 
@@ -244,7 +261,10 @@ function() {
 
 	var msg = this._msgStr;
 	if (this._detailsVisible) {
-		msg += "<hr> " + this._detailStr;
+		msg += "<hr>" + this._detailStr;
+		this.setSize(Dwt.CLEAR, "300");
+	} else {
+		this.setSize(Dwt.CLEAR, Dwt.CLEAR);
 	}
 	DwtMessageDialog.prototype.setMessage.call(this, msg, this._msgStyle, this._msgTitle);
 	this._button[ZmErrorDialog.DETAIL_BUTTON].setText(this._detailsVisible ? this._hideDetailsMsg : this._showDetailsMsg);
