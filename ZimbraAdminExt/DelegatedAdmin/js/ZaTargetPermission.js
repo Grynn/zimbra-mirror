@@ -25,6 +25,8 @@ ZaGrantsListView = function(parent, className, posStyle, headerList) {
 
 	ZaListView.call(this, parent, className, posStyle, headerList);
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
+    //disable the multiselect for Grants List view
+    this.setMultiSelect(false) ;
 }
 
 ZaGrantsListView.prototype = new ZaListView;
@@ -33,6 +35,18 @@ ZaGrantsListView.prototype.constructor = ZaGrantsListView;
 ZaGrantsListView.prototype.toString =
 function() {
 	return "ZaGrantsListView";
+}
+
+//the tab title and icon are only requried in global grants
+//therefore their content is for global grants only
+ZaGrantsListView.prototype.getTitle =
+function () {
+	return com_zimbra_delegatedadmin.GlobalGrants_view_title;
+}
+
+ZaGrantsListView.prototype.getTabIcon =
+function () {
+	return "Server";
 }
 
 ZaGrantsListView.prototype._createItemHtml =
@@ -122,6 +136,27 @@ ZaGrantsListView.revokeRight = function () {
     }
 
     this.parent.revokeRightDlg.popdown () ;
+}
+
+ZaGrantsListView.revokeGlobalGrant = function () {
+    var selectedGrants = this._contentView.getSelection() ;
+    if (selectedGrants && selectedGrants.length > 0) {
+        var targetInfo = {} ;
+        targetInfo [ZaGrant.A_target] = "" ;
+        targetInfo [ZaGrant.A_target_type] = "global" ;
+
+        for (var i = 0; i < selectedGrants.length; i ++) {
+// TODO: when multiselection enabled, we need a progress dialog to show the progress
+            if (ZaGrant.revokeMethod (targetInfo, selectedGrants[i])) {
+// fire the removal event.               
+                this.fireRemovalEvent (selectedGrants[i]) ;
+            } else {
+                break ; //jump out if failed.
+            }
+        }
+    }
+
+    this.revokeRightDlg.popdown () ;
 }
 
 ZaGrantsListView.grantSelectionListener = function () {

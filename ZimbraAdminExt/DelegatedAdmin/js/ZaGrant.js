@@ -88,17 +88,30 @@ ZaGrant.getSampleGrants = function () {
 ZaGrant.getSampleGrantsList = function () {
     var list = new ZaItemList(ZaGrant);
     list._vector = AjxVector.fromArray(ZaGrant.getSampleGrants())  ;
-    return list ;         
+    return list ;
 }
 
-ZaGrant.loadMethod = function (by, val) {
+ZaGrant.getGlobalGrantsList = function () {
+    var list = new ZaItemRightList(ZaRight);
+	list._vector = AjxVector.fromArray (ZaGrant.loadMethod (null, null, "global")) ;
+	return list;
+}
+
+ZaGrant.loadMethod = function (by, val, type) {
 //    var grants = ZaGrant.getSampleGrants () ;
 
     var soapDoc = AjxSoapDoc.create("GetGrantsRequest", ZaZimbraAdmin.URN, null);
-    var elTarget = soapDoc.set("target", val) ;
-    elTarget.setAttribute ("by", by) ;
-    elTarget.setAttribute ("type", this.type ) ;
-    
+    if (!type) type = this.type ;
+
+    var elTarget ;
+    if (type == "global")  {
+        elTarget = soapDoc.set("target", "") ;
+    } else {
+        elTarget = soapDoc.set("target", val) ;
+        elTarget.setAttribute ("by", by) ;
+    }
+    elTarget.setAttribute ("type", type ) ;
+
     var ctler =  ZaApp.getInstance().getCurrentController();
     
     try {
@@ -130,8 +143,11 @@ ZaGrant.loadMethod = function (by, val) {
             }
         }
 
-        this [ZaGrant.A2_grantsList] = grantList ;
-        
+        if (type == "global") {
+            return grantList ;
+        } else {
+            this [ZaGrant.A2_grantsList] = grantList ;
+        }
     }catch (ex) {
         if (ctler) { //at the initialization time, the controller may not be initialized yet
             ctler.popupErrorDialog (com_zimbra_delegatedadmin.error_grant_right + ex.msg , ex) ;
@@ -176,8 +192,6 @@ ZaGrant.grantMethod = function (obj) {
     }
 }
 
-
-
 //RevokeRightRequest
 /**
  *
@@ -217,8 +231,7 @@ ZaGrant.revokeMethod = function (target, obj) {
     }catch (ex) {
         ctler.popupErrorDialog (com_zimbra_delegatedadmin.error_revoke_right + " "+ ex.msg , ex) ;
         return false ;
-    }   
-
+    }  
 }
 
 
@@ -246,9 +259,12 @@ ZaGrant.globalGrantsListTreeListener = function (ev) {
 	if (AjxEnv.hasFirebug) console.log("Show the global grants lists ...") ;
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(
-			ZaApp.getInstance().getGlobalGrantListController(),ZaGlobalGrantListViewController.prototype.show, ZaGrant.getSampleGrantsList());
+			ZaApp.getInstance().getGlobalGrantListController(),
+                ZaGlobalGrantListViewController.prototype.show,
+                ZaGrant.getGlobalGrantsList());
 	} else {
-		ZaApp.getInstance().getGlobalGrantListController().show(ZaGrant.getSampleGrantsList());
+		ZaApp.getInstance().getGlobalGrantListController().show(
+                ZaGrant.getGlobalGrantsList());
 	}
 }
 

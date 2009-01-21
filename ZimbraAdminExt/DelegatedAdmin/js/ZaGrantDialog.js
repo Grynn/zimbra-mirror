@@ -91,6 +91,28 @@ ZaGrantDialog.grantRight = function () {
     }
 }
 
+ZaGrantDialog.grantGlobalGrant = function () {
+    //add grant
+
+    if(this.grantRightDlg) {
+		var obj = this.grantRightDlg.getObject();
+
+        //this.parent.setDirty(true);
+        //GrantRights Right here, instead of populating to the account modification saving time
+        // Advantages: 1. Avoid the double grants during the saving time
+        // 2. reduce the load of the server during the account modification time
+        if (ZaGrant.grantMethod (obj)) {
+            //TODO: test if the grant exists in the current list already
+            this.fireCreationEvent(obj);
+            this.grantRightDlg.popdown();
+        }
+    }
+    // update the global grant list
+
+
+    
+}
+
 ZaGrantDialog.rightTypeListener =  function (type) {
     var rightType = this.getInstanceValue(ZaGrant.A_right_type) ;
     return (rightType == type) ;
