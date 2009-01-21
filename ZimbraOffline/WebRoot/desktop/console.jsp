@@ -180,7 +180,7 @@ function submit(id, name, type, flavor, verb) {
                     <div class="ZMessageInfo"><span class='ZOfflineError'>${account.userFriendlyErrorMessage}</span>
                       <c:if test="${not empty account.errorMsg}">
                         <a href="javascript:zd.toggle('errorDetails')">(<fmt:message key='DebugInfo'/>)</a>
-                        <div id="errorDetails" style="display:none">
+                        <div id="errorDetails" style="display:none;overflow:hidden">
                           <p class="ZFieldSubLabelLeft">
                             <b><fmt:message key='DebugMsg'/></b>: ${account.errorMsg}
                           </p>
