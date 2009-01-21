@@ -44,6 +44,11 @@ DwtPasswordField.prototype.getTabGroupMember = function() {
 	return this._tabGroup;
 };
 
+DwtPasswordField.prototype.setShowPassword = function(show) {
+	this._showCheckbox.setSelected(show);
+	this.setInputType(show ? DwtInputField.STRING : DwtInputField.PASSWORD);
+};
+
 //
 // Protected methods
 //
@@ -83,6 +88,5 @@ function(templateId, data) {
 };
 
 DwtPasswordField.prototype._handleShowCheckbox = function(event) {
-	var checked = event.detail;
-	this.setInputType(checked ? DwtInputField.STRING : DwtInputField.PASSWORD);
+	this.setShowPassword(event.detail);
 };
