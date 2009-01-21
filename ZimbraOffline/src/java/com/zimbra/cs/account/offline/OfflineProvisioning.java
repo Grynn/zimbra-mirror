@@ -2306,12 +2306,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         
         setMountpointAccountId((OfflineAccount)account, mptAcctId);
     }
-    
-    @Override
-    public boolean isOfflineProxyServer(Server server) {
-        return server.getName().startsWith(OfflineConstants.SYNC_SERVER_PREFIX);
-    }
-    
+        
     @Override
     public String getProxyAuthToken(String acctId) throws ServiceException {
         Account account = get(AccountBy.id, acctId);
@@ -2322,5 +2317,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         } else {
             return null;
         }
+    }
+    
+    @Override
+    public boolean isOfflineProxyServer(Server server) {
+        return server.getName().startsWith(OfflineConstants.SYNC_SERVER_PREFIX);
+    }
+    
+    @Override
+    public boolean allowsPingRemote() {
+        return false; // in offline don't actively ping remote servers for pending sessions
     }
 }
