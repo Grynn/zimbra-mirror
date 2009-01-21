@@ -10,8 +10,6 @@ ZaGrantDialog = function(parent,  app, title) {
 ZaGrantDialog.prototype = new ZaXDialog;
 ZaGrantDialog.prototype.constructor = ZaGrantDialog;
 
-
-
 ZaGrantDialog.prototype.getMyXForm =
 function() {
     var xFormObject = {
@@ -20,9 +18,7 @@ function() {
              {type:_GROUP_,isTabGroup:true, numCols:2, colSizes: [165, "*"], items: [ //allows tab key iteration
                { type: _SPACER_ },
                { ref: ZaGrant.A_target, type: _OUTPUT_ , label: com_zimbra_delegatedadmin.Label_target_name },
-               { ref: ZaGrant.A_target_type, type:_OUTPUT_, label: com_zimbra_delegatedadmin.Label_target_type ,
-                   labelLocation:_LEFT_, choices: ZaZimbraRights.targetType 
-               },
+               { ref: ZaGrant.A_target_type, type:_OUTPUT_, label: com_zimbra_delegatedadmin.Label_target_type   },
                 { ref: ZaGrant.A_grantee_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
                     visibilityChecks:[], //temporary solution to make this element visible
                     labelLocation:_LEFT_, choices: ZaGrant.GRANTEE_TYPE

@@ -102,7 +102,7 @@ ZaGrant.loadMethod = function (by, val, type) {
 
     var soapDoc = AjxSoapDoc.create("GetGrantsRequest", ZaZimbraAdmin.URN, null);
     if (!type) type = this.type ;
-
+    if (type == ZaItem.DL) type = ZaZimbraRights.type_dl ;
     var elTarget ;
     if (type == "global")  {
         elTarget = soapDoc.set("target", "") ;
@@ -247,7 +247,7 @@ ZaGrant.myXModel = {
 
         {id: ZaGrant.A_inline_right, ref: ZaGrant.A_inline_right, type: _OBJECT_, items: [
                 {id: ZaGrant.A_inline_verb, type: _STRING_, ref: ZaGrant.A_inline_verb, choices: ZaGrant.INLINE_VERB_TYPE_CHOICES},
-                {id: ZaGrant.A_inline_target_type, type: _STRING_, ref: ZaGrant.A_inline_target_type, choices: ZaZimbraRights.targetType},
+                {id: ZaGrant.A_inline_target_type, type: _STRING_, ref: ZaGrant.A_inline_target_type, choices: ZaZimbraRights.inlineTargetType},
                 {id: ZaGrant.A_inline_attr, type: _STRING_, ref: ZaGrant.A_inline_attr }
             ]
         }

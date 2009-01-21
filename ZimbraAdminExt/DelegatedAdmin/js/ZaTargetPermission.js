@@ -126,8 +126,12 @@ ZaGrantsListView.revokeRight = function () {
         for (var i = 0; i < selectedGrants.length; i ++) {
 // TODO: when multiselection enabled, we need a progress dialog to show the progress
             if (ZaGrant.revokeMethod (targetInfo, selectedGrants[i])) {
-                var j = ZaTargetPermission.findIndexOfGrant(currentGrantList, selectedGrants[i]);
-                currentGrantList.splice(j, 1) ;
+//                var j = ZaTargetPermission.findIndexOfGrant(currentGrantList, selectedGrants[i]);
+                for (var j = 0; j < currentGrantList.length; j ++) {
+                    if (selectedGrants[i] == currentGrantList[j] ) {
+                        currentGrantList.splice(j, 1) ;
+                    }
+                }
             } else {
                 break ; //jump out if failed.
             }
@@ -412,8 +416,15 @@ function () {
 	}
 
 	var obj = {};
-	obj[ZaGrant.A_target] = instance.name;
-    obj[ZaGrant.A_target_type] = instance.type ;
+    var targetType = instance.type ;
+    if (targetType == ZaItem.DL) targetType = ZaZimbraRights.type_dl ;
+    obj[ZaGrant.A_target_type] = targetType ;
+
+    if (targetType == ZaItem.GLOBAL_CONFIG) {
+        obj[ZaGrant.A_target] = ZaMsg.OVP_global ;     
+    }else{
+        obj[ZaGrant.A_target] = instance.name;
+    }
 
     obj.setAttrs = {} ;
     obj.setAttrs.all = true ;
@@ -467,29 +478,6 @@ function (grantsList) {
     dlgMsg += "</table>";
     
     return dlgMsg ;
-}
-
-
-ZaTargetPermission.findIndexOfGrant = function (grantList, grant) {
-    var index = -1 ;
-    for (var i=0; i  < grantList.length; i ++) {
-        var keys = [ZaGrant.A_grantee, ZaGrant.A_grantee_type, ZaGrant.A_deny, ZaGrant.A_right, ZaGrant.A_right_type] ;
-        var found = true ;
-        for (var j =0; i < keys.length; j ++) {
-            var key = keys[j] ;
-            if (grant[key] != grantList[key]) {
-               found = false ;
-               break ;
-            }
-        }
-
-        if (found) {
-            index = i ;
-            break ;
-        }
-    }
-
-    return index ;
 }
 
 

@@ -14,14 +14,21 @@
 ZaZimbraRights = {} ;
 
 /* Can build index here using the program */
+
 ZaZimbraRights.type = [
     "preset", "getAttrs", "setAttrs", "combo"
 ]
 
-ZaZimbraRights.targetType = [
-    "account", "distributionlist", "resource", "domain" ,
-    "cos" , "server", "config" , "global"
-]
+ZaZimbraRights.type_dl = "distributionlist" ;
+
+ZaZimbraRights.inlineTargetType = [
+    "account", ZaZimbraRights.type_dl, "resource", "domain" ,
+    "cos" , "server", "config"
+];
+
+
+
+ZaZimbraRights.targetType =  ZaZimbraRights.inlineTargetType.concat("global") ;
 
 ZaZimbraRights.definedBy = ["system", "custom"] ;
 

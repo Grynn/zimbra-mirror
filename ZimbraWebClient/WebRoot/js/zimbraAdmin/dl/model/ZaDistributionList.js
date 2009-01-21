@@ -169,9 +169,10 @@ ZaDistributionList.prototype.removeMembers = function (arr) {
 	return removed;
 };
 
+/*
 ZaDistributionList.prototype.refresh = function () {
 	this.load();
-}
+}   */
 
 /**
  * Adds a list of members
@@ -410,7 +411,7 @@ ZaDistributionList.prototype.setName = function (name) {
  * internal list of members is null
  */
 // TODO -- handle dynamic limit and offset
-ZaDistributionList.prototype.getMembers = function (limit) {
+ZaDistributionList.prototype.getMembers = function (by, val, limit) {
 	//DBG.println("Get members: memberList = " , this._memberList, "$");
 	if (this.id != null) {
 		this._memberList = null;
