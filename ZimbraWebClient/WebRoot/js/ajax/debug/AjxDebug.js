@@ -261,25 +261,26 @@ AjxDebug.prototype.getContentFrame =
 function() {
 	if (this._contentFrame) {
 		return this._contentFrame;
-	} else if (this._debugWindow && this._debugWindow.document) {
-		return this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
-	} else {
-		return null;
 	}
-}
+	if (this._debugWindow && this._debugWindow.document) {
+		return this._debugWindow.document.getElementById(AjxDebug._CONTENT_FRAME_ID);
+	}
+	return null;
+};
 
 AjxDebug.prototype.getLinkFrame =
 function(noOpen) {
 	if (this._linkFrame) {
 		return this._linkFrame;
-	} else if (this._debugWindow && this._debugWindow.document) {
+	}
+	if (this._debugWindow && this._debugWindow.document) {
 		return this._debugWindow.document.getElementById(AjxDebug._LINK_FRAME_ID);
-	} else if (!noOpen) {
+	}
+	if (!noOpen) {
 		this._openDebugWindow();
 		return this.getLinkFrame(true);
-	} else {
-		return null;
 	}
+	return null;
 };
 
 // Private methods
@@ -432,7 +433,7 @@ function(force) {
 			this._document.close();
 			
 			var ta = new AjxTimedAction(this, AjxDebug.prototype._finishInitWindow);
-			AjxTimedAction.scheduleAction(ta, 250);
+			AjxTimedAction.scheduleAction(ta, 1500);
 		} else {
 			this._finishInitWindow();
 
@@ -723,7 +724,7 @@ function(linkClass, linkLabel, contentClass, contentLabel) {
 		linkEl.innerHTML = [linkLabel, timeStamp].join(" - ");
 		linkEl._targetId = id;
 		linkEl._dbg = this;
-		linkEl.onclick = AjxDebug._linkClicked
+		linkEl.onclick = AjxDebug._linkClicked;
 
 		var linkBody = linkFrameDoc.body;
 		linkBody.appendChild(linkEl);
