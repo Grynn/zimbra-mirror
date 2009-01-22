@@ -1688,8 +1688,6 @@ function (value, event, form){
         }
         
         this.setInstanceValue(value);
-        form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_previousName,value) ;
-        //form.refresh();
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.setDomainChanged", null, false);	
 	}

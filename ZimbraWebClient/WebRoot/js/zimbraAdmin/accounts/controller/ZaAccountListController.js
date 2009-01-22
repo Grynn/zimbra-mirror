@@ -32,7 +32,6 @@ ZaAccountListController = function(appCtxt, container) {
    	this._popupOperations = new Object();			
    	
 	this._currentPageNum = 1;
-//	this._currentQuery = new ZaSearchQuery("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES], false, "");
 	this._currentQuery = null;
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = "1";

@@ -913,6 +913,10 @@ XForm.checkInstanceValue = function(refPath,val) {
 	return (this.getInstanceValue(refPath) == val);
 }
 
+XForm.checkInstanceValueNot = function(refPath,val) {
+	return (this.getInstanceValue(refPath) != val);
+}
+
 XForm.checkInstanceValueEmty = function(refPath) {
 	return AjxUtil.isEmpty(this.getInstanceValue(refPath));
 }
