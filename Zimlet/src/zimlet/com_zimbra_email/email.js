@@ -85,78 +85,94 @@ function(ev) {
 	}
 };
 
-/*
- * Look for the contact and buddy for the email address string.  
- */
-Com_Zimbra_Email.prototype._lookup =
-function(address) {
-	var result = {
-		contact: null,
-		buddy: null
-	};
-	// bug fix #25215 - always fetch contact list in case of multi-account
-	var contactList = AjxDispatcher.run("GetContacts");
-	if (contactList && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
-		result.contact = contactList.getContactByEmail(address);
-	}
-	if (appCtxt.get(ZmSetting.IM_ENABLED) &&
-		!(!appCtxt.get(ZmSetting.IM_PREF_AUTO_LOGIN) &&
-		  !appCtxt.getApp(ZmApp.IM).hasRoster())) // If not AUTO_LOGIN enabled, don't LOGIN
-	{
-		if (result.contact) {
-			result.buddy = result.contact.getBuddy();
+Com_Zimbra_Email.prototype._getHtmlContent =
+function(html, idx, obj, context, spanId) {
+
+	if (obj instanceof AjxEmailAddress) {
+		var contactsApp = appCtxt.getApp(ZmApp.CONTACTS);
+		var contact = contactsApp && contactsApp.getContactByEmail(obj.address); // contact in cache?
+		var buddy = this._getBuddy(contact, obj.address);
+		if (contactsApp && !contact && contact !== null) {
+			// search for contact
+			var respCallback = new AjxCallback(this, this._handleResponseGetContact, [html, idx, obj, spanId]);
+			contactsApp.getContactByEmail(obj.address, respCallback);
 		}
-		if (!result.buddy) {
-			result.buddy = AjxDispatcher.run("GetRoster").getRosterItem(address);
-		}
+		// return content for what we have now (may get updated after search)
+		return this._updateHtmlContent(html, idx, obj, contact, buddy);
+	} else {
+		html[idx++] = AjxStringUtil.htmlEncode(obj);
+		return idx;
 	}
-	return result;
 };
 
-Com_Zimbra_Email.prototype._getHtmlContent =
-function(html, idx, obj) {
+/**
+ * Returns content for this object's <span> element based on a contact and/or buddy.
+ * If given a spanId, it will instead replace the content of the <span>, for example,
+ * with the results of a search.
+ */
+Com_Zimbra_Email.prototype._updateHtmlContent =
+function(html, idx, obj, contact, buddy, spanId) {
+
 	var content;
-	if (obj instanceof AjxEmailAddress) {
-		var person = this._lookup(obj.address);
-		var contactList = AjxDispatcher.run("GetContacts");
-		if (contactList && appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
-			var content;
+	if (buddy) {
+		var pres = buddy.getPresence();
+		var pres_id = Dwt.getNextId();
+		var tmp = [
+			AjxStringUtil.htmlEncode(buddy.getDisplayName()), " ",
+			AjxImg.getImageHtml(pres.getIcon(), "display: inline; padding: 1px 8px;", "id=" + pres_id)
+		];
+		content = tmp.join("");
+		var params = {
+			contact : contact,
+			buddy   : buddy,
+			im_addr : buddy.getAddress(),
+			img_id  : pres_id
+		};
+		this._presenceCache.push(params);
 
-			if (person.buddy) {
-				var pres = person.buddy.getPresence();
-				var pres_id = Dwt.getNextId();
-				var tmp = [
-					AjxStringUtil.htmlEncode(person.buddy.getDisplayName()), " ",
-					AjxImg.getImageHtml(pres.getIcon(), "display: inline; padding: 1px 8px;", "id=" + pres_id)
-				];
-				content = tmp.join("");
-				var params = {
-					contact : person.contact,
-					buddy   : person.buddy,
-					im_addr : person.buddy.getAddress(),
-					img_id  : pres_id
-				};
-				this._presenceCache.push(params);
-
-				if (this._presenceCache.length > 50) {
-					// 50 should be enough.. maybe should be even smaller?
-					this._presenceCache.splice(0, 1);
-				}
-
-				this._getRoster();
-			}
-			else if (person.contact) {
-				content = AjxStringUtil.htmlEncode(person.contact.getFullName());
-			}
+		if (this._presenceCache.length > 50) {
+			// 50 should be enough.. maybe should be even smaller?
+			this._presenceCache.splice(0, 1);
 		}
-		if (!content) {
-			content = AjxStringUtil.htmlEncode(obj.toString());
+
+		this._getRoster();
+	} else if (contact) {
+		content = AjxStringUtil.htmlEncode(contact.getFullName());
+	} else {
+		content = AjxStringUtil.htmlEncode(obj.toString());
+	}
+
+	if (spanId) {
+		var span = document.getElementById(spanId);
+		if (span) {
+			span.innerHTML = content;
 		}
 	} else {
-		content = AjxStringUtil.htmlEncode(obj);
+		html[idx++] = content;
+		return idx;
 	}
-	html[idx++] = content;
-	return idx;
+};
+
+Com_Zimbra_Email.prototype._handleResponseGetContact =
+function(html, idx, obj, spanId, contact) {
+	if (contact) {
+		var buddy = this._getBuddy(contact, obj.address);
+		this._updateHtmlContent(html, idx, obj, contact, buddy, spanId);
+	}
+};
+
+Com_Zimbra_Email.prototype._getBuddy =
+function(contact, address) {
+	var buddy;
+	if (appCtxt.get(ZmSetting.IM_ENABLED) && !(!appCtxt.get(ZmSetting.IM_PREF_AUTO_LOGIN) &&
+		!appCtxt.getApp(ZmApp.IM).hasRoster())) {	// If not AUTO_LOGIN enabled, don't LOGIN
+
+		buddy = contact && contact.getBuddy();
+		if (!buddy) {
+			buddy = AjxDispatcher.run("GetRoster").getRosterItem(address);
+		}
+	}
+	return buddy;
 };
 
 Com_Zimbra_Email.prototype.toolTipPoppedUp =
@@ -289,21 +305,11 @@ function(obj, span, context) {
 	if (this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
-	var person = this._lookup(addr);
 
 	if (!appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		// make sure to remove adding new contact menu item if contacts are disabled
 		if (actionMenu.getOp("NEWCONTACT")) {
 			actionMenu.removeOp("NEWCONTACT");
-		}
-	} else {
-		// bug fix #5262 - Change action menu item for contact depending on
-		// whether email address is found in address book or not.
-		var contactList = AjxDispatcher.run("GetContacts");
-		if (contactList) {
-			var newOp = person.contact ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
-			var newText = person.contact ? null : ZmMsg.AB_ADD_CONTACT;
-			ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
 		}
 	}
 
@@ -329,7 +335,30 @@ function(obj, span, context) {
 		ZmOperation.removeOperation(actionMenu, "ADDTOFILTER", actionMenu._menuItems);
 	}
 
+	var contactsApp = appCtxt.getApp(ZmApp.CONTACTS);
+	var contact = contactsApp && contactsApp.getContactByEmail(obj.address);
+	if (contact) {
+		// contact for this address was found in the cache
+		ZmOperation.setOperation(actionMenu, "NEWCONTACT", ZmOperation.EDIT_CONTACT);
+	} else {
+		// contact not found, do a search
+		if (contactsApp && !contact && contact !== null) {
+			actionMenu.getOp("NEWCONTACT").setText(ZmMsg.loading);
+			var respCallback = new AjxCallback(this, this._handleResponseGetContact1, [actionMenu]);
+			contactsApp.getContactByEmail(addr, respCallback);
+		} else {
+			ZmOperation.setOperation(actionMenu, "NEWCONTACT", ZmOperation.NEW_CONTACT, ZmMsg.AB_ADD_CONTACT);
+		}
+	}
+
 	return actionMenu;
+};
+
+Com_Zimbra_Email.prototype._handleResponseGetContact1 =
+function(actionMenu, contact) {
+	var newOp = contact ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
+	var newText = contact ? null : ZmMsg.AB_ADD_CONTACT;
+	ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
 };
 
 Com_Zimbra_Email.prototype.isMailToLink =
