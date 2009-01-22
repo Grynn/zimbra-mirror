@@ -44,8 +44,11 @@ Windows and Linux installers are bundled with JRE.
 INSTRUCTIONS
 --------------------------------------------------------------------
 
-See Yahoo! Zimbra Desktop Wiki at
+See Yahoo! Zimbra Desktop release notes at
 http://wiki.zimbra.com/index.php?title=Zimbra_Desktop
+
+Also see Yahoo! Zimbra Desktop FAQ at
+http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQ
 
 ====================================================================
 SOURCE CODE INFORMATION

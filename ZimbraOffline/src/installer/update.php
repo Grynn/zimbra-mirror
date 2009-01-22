@@ -1,8 +1,9 @@
 <?php
 // this file must be located at @ausurl@
 
-$download_url_prefix = "http://files.zimbra.com/downloads/zdesktop/beta";
-$details_url = "http://wiki.zimbra.com/index.php?title=Zimbra_Desktop";
+$download_url_prefix = "http://files.zimbra.com/downloads/zdesktop/";
+$details_url = "http://www.zimbra.com/products/desktop.html";
+$license_url = "http://www.zimbra.com/license/zimbra_public_eula_2.1.html";
 $version = "@version@";
 $buildid = @buildid@;
 
@@ -48,7 +49,7 @@ echo "<?xml version=\"1.0\"?>\n";
 ?>
 <updates>
 <?php if ($buildid > $oldbid) { ?>
-  <update type="minor" version="<?php echo $verison?>" detailsURL="<?php echo $details_url?>">
+  <update type="minor" version="<?php echo $verison?>" detailsURL="<?php echo $details_url?>" licenseURL="<?php echo $license_url?>">
     <patch type="complete" URL="<?php echo $download_url?>" hashFunction="md5" hashValue="<?php echo $hash?>" size="<?php echo $size?>"/>
   </update>
 <?php } ?>
