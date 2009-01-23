@@ -93,7 +93,7 @@ else
 fi
 
 echo "Checking for prerequisite binaries"
-for req in autoconf autoheader automake libtool bison flex
+for req in autoconf autoheader automake libtool bison flex gcc g++ perl make patch
 do
 	echo "	Checking $req"
 	if [ ! -x "/usr/bin/$req" ]; then
