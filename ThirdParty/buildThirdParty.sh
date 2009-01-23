@@ -84,9 +84,6 @@ if [ -x "/sbin/ldconfig" ]; then
 fi
 
 
-cd ${BUILD_HOME}/$RELEASE/ThirdParty 
-rm -f make.out 2> /dev/null
-
 if [ x$RELEASE = "xmain" ]; then
 	LIBREQ="libncurses.so libz.so"
 	HEADERREQ="ncurses.h zlib.h"
@@ -132,7 +129,7 @@ fi
 echo "Checking for prerequisite headers"
 for req in $HEADERREQ
 do
-  	echo "	Checking $req"
+	echo "	Checking $req"
 	if [ ! -f "/usr/include/$req" ]; then
 		echo "Error: $req not found"
 		exit 1;
@@ -158,5 +155,7 @@ else
 	fi
 fi
 
+cd ${BUILD_HOME}/$RELEASE/ThirdParty
+rm -f make.out 2> /dev/null
 make allclean > /dev/null 2>&1
 make all 2>&1 | tee -a make.out
