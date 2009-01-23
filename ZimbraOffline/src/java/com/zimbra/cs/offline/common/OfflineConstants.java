@@ -76,6 +76,7 @@ public interface OfflineConstants {
 
     public static final String A_zimbraDataSourceContactSyncEnabled = "zimbraDataSourceContactSyncEnabled";
     public static final String A_zimbraDataSourceCalendarSyncEnabled = "zimbraDataSourceCalendarSyncEnabled";
+    public static final String A_zimbraDataSourceCalendarFolderId = "zimbraDataSourceCalendarFolderId";
     
     public static final String A_zimbraDataSourceSyncAllServerFolders = "zimbraDataSourceSyncAllServerFolders";
     

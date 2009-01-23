@@ -6,12 +6,14 @@ import java.util.List;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.SystemUtil;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.datasource.CalDavDataImport;
 import com.zimbra.cs.dav.DavException;
 import com.zimbra.cs.dav.client.CalDavClient;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class OfflineCalDavDataImport extends CalDavDataImport {
     private static final String CALDAV_TARGET_URL = "calDavTargetUrl";
@@ -79,5 +81,10 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
             return null;
         
         return path.replaceAll("@USERNAME@", dataSource.getUsername());
+    }
+    
+    @Override
+    protected int getRootFolderId(DataSource ds) throws ServiceException {
+    	return ds.getIntAttr(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ds.getFolderId());
     }
 }

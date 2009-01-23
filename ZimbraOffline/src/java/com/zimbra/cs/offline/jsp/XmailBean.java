@@ -244,7 +244,10 @@ public class XmailBean extends MailBean {
                         setError(getMessage("LiveMustUseLive"));
                     }
                 }
-		dsAttrs.put(OfflineConstants.A_offlineAccountFlavor, accountFlavor);
+                dsAttrs.put(OfflineConstants.A_offlineAccountFlavor, accountFlavor);
+                
+                if (isCalendarSyncSupported())
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ZFolder.ID_CALENDAR);
             }
             if (isAllOK()) {
                 JspProvStub stub = JspProvStub.getInstance();
