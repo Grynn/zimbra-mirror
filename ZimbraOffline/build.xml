@@ -746,7 +746,7 @@
 
 		<copy todir="${dist.dir}/win32" overwrite="true">
 			<fileset dir="src/installer" includes="svckill.vbs" />
-			<fileset dir="src/installer/resources" includes="launcher_32x32.ico" />
+			<fileset dir="src/installer/resources" includes="launcher_32x32.ico launcher_48x48.ico" />
 		</copy>
 		<copy file="src/installer/win32/prism/application.ini" todir="${dist.dir}/win32/prism" overwrite="true"/>
 	</target>

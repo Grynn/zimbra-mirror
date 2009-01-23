@@ -2137,7 +2137,9 @@ try {
                             <object class="com.install4j.api.beans.ScriptProperty">
                               <void property="value">
                                 <string>File prism = context.getDestinationFile("win32/prism/prism.exe");
-File icon = context.getDestinationFile("win32/launcher_32x32.ico");
+
+String iconFile = Util.isWindowsVista() ? "win32/launcher_48x48.ico" : "win32/launcher_32x32.ico";
+File icon = context.getDestinationFile(iconFile);
 
 File desktop = new File(WinFileSystem.getSpecialFolder(SpecialFolder.DESKTOP, false), "Yahoo! Zimbra Desktop.lnk");
 File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU, false), "Yahoo! Zimbra Desktop.lnk");
