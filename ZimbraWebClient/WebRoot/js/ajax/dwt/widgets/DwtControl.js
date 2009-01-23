@@ -861,6 +861,14 @@ function(alert) {
 	this._alert = alert;
 };
 
+/**
+* Returns true if the control is showing an alert.
+*/
+DwtControl.prototype.isAlertShown =
+function() {
+	return this._alert;
+};
+
 DwtControl.prototype._createHtmlFromTemplate =
 function(templateId, data) {
     // set html content
