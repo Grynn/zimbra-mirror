@@ -189,9 +189,7 @@ public class XmailBean extends MailBean {
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq,
                         Long.toString(syncFreqSecs));
                     if (isFolderSyncSupported())
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders,
-                            syncAllServerFolders ? Provisioning.TRUE :
-                            Provisioning.FALSE);
+                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, Provisioning.TRUE);
                     if (dsType == DataSource.Type.pop3) {
                         dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer,
                             Boolean.toString(leaveOnServer).toUpperCase());

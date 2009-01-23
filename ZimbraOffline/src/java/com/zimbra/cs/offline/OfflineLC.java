@@ -72,7 +72,6 @@ public class OfflineLC {
     public static final KnownKey zdesktop_upload_size_limit;
     
     public static final KnownKey zdesktop_yauth_appid;
-    public static final KnownKey zdesktop_yauth_baseuri;
     public static final KnownKey zdesktop_yab_baseuri;
     public static final KnownKey zdesktop_yab_sync_interval;
     public static final KnownKey zdesktop_ymail_baseuri;
@@ -250,10 +249,6 @@ public class OfflineLC {
 	    zdesktop_yauth_appid = new KnownKey("zdesktop_yauth_appid");
 	    zdesktop_yauth_appid.setDefault("0YbgbonAkY2iNypMZQOONB8mNDSJkrfBlr3wgxc-");
 	    zdesktop_yauth_appid.setDoc("appid for yauth with rw access to ab and mail");
-	    
-	    zdesktop_yauth_baseuri = new KnownKey("zdesktop_yauth_baseuri");
-	    zdesktop_yauth_baseuri.setDefault("https://login.yahoo.com/WSLogin/V1");
-	    zdesktop_yauth_baseuri.setDoc("base uri for yauth");
 	    
 	    zdesktop_yab_baseuri = new KnownKey("zdesktop_yab_baseuri");
 	    zdesktop_yab_baseuri.setDefault("http://address.yahooapis.com/v1");

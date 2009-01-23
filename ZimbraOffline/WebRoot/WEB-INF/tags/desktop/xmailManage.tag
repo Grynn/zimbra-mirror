@@ -249,22 +249,6 @@ function SetSmtpPort() {
             </td>
         </tr>
 </c:if>
-<c:if test="${bean.folderSyncSupported}">
-        <tr id="syncFoldersRow" >
-            <td class="ZFieldLabel"><fmt:message key='SyncFolders'/></td>
-            <td>
-                <table cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                        <td><input type="radio" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? 'checked' : ''} value="true"></td>
-                        <td class="ZFieldInfo"><fmt:message key='SyncFoldersAll'/></td>
-                        <td width="99%">&nbsp;</td>
-                        <td><input class="ZRadio" type="radio" id="syncAllServerFolders" name="syncAllServerFolders" ${bean.syncAllServerFolders ? '' : 'checked'} value="false"></td>
-                        <td class="ZFieldInfo"><fmt:message key='SyncFoldersInbox'/></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-</c:if>
 <c:if test="${bean.calendarSyncSupported}">
         <tr id="syncCalendarRow">
             <td class="ZFieldLabel"><fmt:message key='SyncCalendar'/></td>

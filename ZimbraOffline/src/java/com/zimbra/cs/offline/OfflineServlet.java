@@ -97,11 +97,12 @@ public class OfflineServlet extends HttpServlet {
 			
 			OfflineDataSource.init();
 			OfflineProvisioning.getOfflineInstance().getLocalAccount();
-			OfflineSyncManager.getInstance().init();
 			WikiUtil wu = WikiUtil.getInstance();
 			wu.initDefaultWiki("local@host.local");
 			String templatePath = LC.zimbra_home.value() + File.separator + "wiki" + File.separator + "Templates";
 			wu.startImport("local@host.local", "Template", new File(templatePath));
+			
+			OfflineSyncManager.getInstance().init();
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}

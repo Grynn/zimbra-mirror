@@ -48,6 +48,7 @@ import com.zimbra.cs.util.JMSession;
 public class LocalMailbox extends DesktopMailbox {
     
 	private final boolean isImapMailbox;
+	private final boolean isYahoo;
     private final Flag mSyncFlag;
     private final Flag mSyncFolderFlag;
 	
@@ -56,6 +57,7 @@ public class LocalMailbox extends DesktopMailbox {
         
         DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
         isImapMailbox = ds != null && (ds.getType() == DataSource.Type.imap || ds.getType() == DataSource.Type.live);
+        isYahoo = ds != null && ((OfflineDataSource)ds).isYahoo();
 
         mSyncFlag = getFlagById(Flag.ID_FLAG_SYNC);
         mSyncFolderFlag = getFlagById(Flag.ID_FLAG_SYNCFOLDER);
@@ -69,7 +71,7 @@ public class LocalMailbox extends DesktopMailbox {
 	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_TRASH, "/Trash"));
 	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SPAM, "/Junk"));
 	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SENT, "/Sent"));
-	        systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_DRAFTS, "/Drafts"));
+	        //systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_DRAFTS, "/Drafts"));
         	for (Pair<Integer, String> pair : systemMailFolders) {
         		MailItem mi = getCachedItem(pair.getFirst());
         		DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(pair.getFirst()), true);
@@ -81,8 +83,32 @@ public class LocalMailbox extends DesktopMailbox {
         				mi.mData.flags |= mSyncFlag.getBitmask();
         		}
         	}
+        	if (isYahoo) {
+    			DbMailItem.alterTag(mNoInferiorsFlag, Arrays.asList(ID_FOLDER_INBOX, ID_FOLDER_SENT), true);
+    			MailItem mi = getCachedItem(ID_FOLDER_INBOX);
+    			if (mi != null)
+    				mi.mData.flags |= mNoInferiorsFlag.getBitmask();
+    			mi = getCachedItem(ID_FOLDER_SENT);
+    			if (mi != null)
+    				mi.mData.flags |= mNoInferiorsFlag.getBitmask();
+    		}
         }
     }
+    
+    @Override
+	synchronized boolean finishInitialization() throws ServiceException {
+		if (super.finishInitialization()) {
+			if (isImapMailbox) {
+				Folder draft = getFolderById(ID_FOLDER_DRAFTS);
+				if ((draft.getFlagBitmask() & Flag.BITMASK_SYNC) != 0)
+					alterTag(null, ID_FOLDER_DRAFTS, MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, false);
+				if ((draft.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0)
+					alterTag(null, ID_FOLDER_DRAFTS, MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNCFOLDER, false);
+			}
+			return true;
+		}
+		return false;
+	}
     
     @Override
     public String getItemFlagString(MailItem mi) {
@@ -106,11 +132,11 @@ public class LocalMailbox extends DesktopMailbox {
     }
     
     private void alterSyncFolderFlag(Folder folder, boolean canSync) throws ServiceException {
-    	DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(folder.getId()), canSync);
+    	folder.alterTag(mSyncFolderFlag, canSync);
     	if (canSync) {
     		folder.mData.flags |= mSyncFolderFlag.getBitmask();
     		if (isSyncEnabledByDefault(folder.getPath())) {
-    			DbMailItem.alterTag(mSyncFlag, Arrays.asList(folder.getId()), canSync);
+    			folder.alterTag(mSyncFlag, canSync);
     			folder.mData.flags |= mSyncFlag.getBitmask();
     		}
     	} else {
@@ -129,8 +155,11 @@ public class LocalMailbox extends DesktopMailbox {
     @Override
 	void itemCreated(MailItem item, boolean inArchive) throws ServiceException {
 		if (isImapMailbox && !inArchive && item instanceof Folder && ((Folder)item).getDefaultView() == MailItem.TYPE_MESSAGE &&
-				(((Folder)item).getUrl() == null || ((Folder)item).getUrl().equals("")))
+				(((Folder)item).getUrl() == null || ((Folder)item).getUrl().equals(""))) {
 			alterSyncFolderFlag((Folder)item, true);
+			if (isYahoo)
+				item.alterTag(mNoInferiorsFlag, true);
+		}
 	}
     
     @Override
