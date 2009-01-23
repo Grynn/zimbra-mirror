@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILD_HOME=/home/public/p4/zcs
+BUILD_HOME=/home/public/p4
 P4USER=public
 P4CLIENT=public-view
 P4PASSWD=public1234
@@ -21,10 +21,10 @@ PLAT=`$BUILD_HOME/$RELEASE/ZimbraBuild/rpmconf/Build/get_plat_tag.sh`;
 
 if [ x$PLAT = "x" ]; then
     echo "Unknown platform, exiting."
-    exit
+    exit 1;
 fi
 
-if [ x$PLAT = "xRHEL4" -o x$PLAT = "CentOS4" -o x$PLAT = "xRHEL5" -o x$PLAT = "xCentOs5" -o x$PLAT = "xFC4" -o x$PLAT = "xFC5" -o x$PLAT = "xF7" -o x$PLAT = "xRPL1" -o x$PLAT = "xDEBIAN3.1" ]; then
+if [ x$PLAT = "xRHEL4" -o x$PLAT = "CentOS4" -o x$PLAT = "xRHEL5" -o x$PLAT = "xCentOS5" -o x$PLAT = "xFC4" -o x$PLAT = "xFC5" -o x$PLAT = "xF7" -o x$PLAT = "xRPL1" -o x$PLAT = "xDEBIAN3.1" ]; then
 	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/i386-linux-thread-multi"
 	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xRHEL4_64" -o x$PLAT = "xCentOS4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT = "xCentOS5_64"  -o x$PLAT = "xSLES10_64" ]; then
@@ -45,6 +45,12 @@ elif [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSX" -o x$PLAT = "xMACOSXx86_10.5"
 elif [ x$PLAT = "xMANDRIVA2006" ]; then
 	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/i386-linux"
 	export PERL5LIB=${PERLLIB}
+fi
+
+if [ x$PLAT = "xSLES10_64" -o x$PLAT = "xRHEL4_64" -o x$PLAT="xRHEL5_64" ]; then
+	LIBDIR="/usr/lib64"
+else
+	LIBDIR="/usr/lib"
 fi
 
 echo "Resyncing thirdparty source for $RELEASE"
@@ -80,5 +86,55 @@ fi
 
 cd ${BUILD_HOME}/$RELEASE/ThirdParty 
 rm -f make.out 2> /dev/null
+
+echo "Checking for prerequisite binaries"
+for req in autoconf autoheader automake libtool bison flex
+do
+  echo "	Checking $req"
+  if [ ! -x "/usr/bin/$req" ]; then
+      echo "Error: $req not found"
+      exit 1;
+  fi
+done
+
+echo "Checking for prerequisite libraries"
+for req in libncurses.so libltdl.so libz.so libpcre.so
+do
+  echo "	Checking $req"
+  if [ ! -f "$LIBDIR/$req" ]; then
+      echo "Error: $req not found"
+      exit 1;
+  fi
+done
+
+if [ x$PLAT="xRHEL4" -o x$PLAT="xRHEL4_64" -o x$PLAT="xCentOS4" -o x$PLAT="xCentOS4_64" ]; then
+	PCREH="pcre/pcre.h"
+else
+	PCREH="pcre.h"
+fi
+
+echo "Checking for prerequisite headers"
+for req in ncurses.h ltdl.h zlib.h
+do
+  	echo "	Checking $req"
+	if [ ! -x "/usr/include/$req" ]; then
+		echo "Error: $req not found"
+		exit 1;
+	fi
+done
+
+echo "	Checking pcre.h"
+if [ x$PLAT="MACOSXx86" -o x$PLAT="MACOSXx86_10.5" -o x$PLAT="MACOSX" ]; then
+	if [ ! -x "/opt/zimbra/include/pcre.h" ]; then
+		echo "Error: /opt/zimbra/include/pcre.h not found"
+		exit 1;
+	fi
+else
+	if [ ! -x "/usr/include/$PCREH" ]; then
+		echo "Error: $PCREH not found"
+		exit 1;
+	fi
+fi
+
 make allclean > /dev/null 2>&1
 make all 2>&1 | tee -a make.out
