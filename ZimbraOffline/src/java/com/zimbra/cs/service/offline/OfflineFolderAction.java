@@ -42,7 +42,7 @@ public class OfflineFolderAction extends FolderAction {
         
         Element action = request.getElement(MailConstants.E_ACTION);
         String operation = action.getAttribute(MailConstants.A_OPERATION).toLowerCase();           
-        if (!operation.equals(OP_REFRESH) && !operation.equals(OP_IMPORT) && !operation.equals(OP_GRANT))
+        if (!operation.equals(OP_REFRESH) && !operation.equals(OP_IMPORT) && !operation.equals(OP_GRANT) && !operation.equals(OP_REVOKE))
             return super.handle(request, context);        
         
         String folderId = action.getAttribute(MailConstants.A_ID);
@@ -58,13 +58,13 @@ public class OfflineFolderAction extends FolderAction {
         if (operation.equals(OP_REFRESH) && !folder.getUrl().equals("")) //e.g. load rss feed
             return super.handle(request, context);
 
-        // Ops below apply to OfflineMailbox only
+        // Operations below only apply to OfflineMailbox
         if (!(mbox instanceof OfflineMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         OfflineMailbox ombx = (OfflineMailbox) mbox;
         
         Element response;
-        if (operation.equals(OP_GRANT)) {
+        if (operation.equals(OP_GRANT) || operation.equals(OP_REVOKE)) {
             Element parent = request.getParent();
             boolean fromBatch = parent != null && parent.getName().equals("BatchRequest");            
             response = ombx.proxyRequest(request, zsc.getResponseProtocol(), false, operation);
