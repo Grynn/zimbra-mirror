@@ -87,50 +87,70 @@ fi
 cd ${BUILD_HOME}/$RELEASE/ThirdParty 
 rm -f make.out 2> /dev/null
 
+if [ x$RELEASE = "xmain" ]; then
+	LIBREQ="libncurses.so libz.so"
+	HEADERREQ="ncurses.h zlib.h"
+else
+	LIBREQ="libncurses.so libz.so libltdl.so"
+	HEADERREQ="ncurses.h ltdl.h zlib.h"
+fi
+
 echo "Checking for prerequisite binaries"
 for req in autoconf autoheader automake libtool bison flex
 do
-  echo "	Checking $req"
-  if [ ! -x "/usr/bin/$req" ]; then
-      echo "Error: $req not found"
-      exit 1;
-  fi
-done
-
-echo "Checking for prerequisite libraries"
-for req in libncurses.so libltdl.so libz.so libpcre.so
-do
-  echo "	Checking $req"
-  if [ ! -f "$LIBDIR/$req" ]; then
-      echo "Error: $req not found"
-      exit 1;
-  fi
-done
-
-if [ x$PLAT="xRHEL4" -o x$PLAT="xRHEL4_64" -o x$PLAT="xCentOS4" -o x$PLAT="xCentOS4_64" ]; then
-	PCREH="pcre/pcre.h"
-else
-	PCREH="pcre.h"
-fi
-
-echo "Checking for prerequisite headers"
-for req in ncurses.h ltdl.h zlib.h
-do
-  	echo "	Checking $req"
-	if [ ! -x "/usr/include/$req" ]; then
+	echo "	Checking $req"
+	if [ ! -x "/usr/bin/$req" ]; then
 		echo "Error: $req not found"
 		exit 1;
 	fi
 done
 
+echo "Checking for prerequisite libraries"
+for req in $LIBREQ
+do
+	echo "	Checking $req"
+	if [ ! -f "$LIBDIR/$req" ]; then
+		echo "Error: $req not found"
+		exit 1;
+	fi
+done
+
+if [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSXx86_10.5" -o x$PLAT = "xMACOSX" ]; then
+	if [ ! -f "/opt/zimbra/lib/libpcre.a" ]; then
+		echo "Error: /opt/zimbra/lib/libpcre.a not found"
+		exit 1;
+	fi
+else
+	if [ ! -f "/usr/lib/libpcre.so" ]; then
+		echo "Error: libpcre.so not found"
+		exit 1;
+	fi
+fi
+
+echo "Checking for prerequisite headers"
+for req in $HEADERREQ
+do
+  	echo "	Checking $req"
+	if [ ! -f "/usr/include/$req" ]; then
+		echo "Error: $req not found"
+		exit 1;
+	fi
+done
+
+if [ x$PLAT = "xRHEL4" -o x$PLAT = "xRHEL4_64" -o x$PLAT = "xCentOS4" -o x$PLAT = "xCentOS4_64" ]; then
+	PCREH="pcre/pcre.h"
+else
+	PCREH="pcre.h"
+fi
+
 echo "	Checking pcre.h"
-if [ x$PLAT="MACOSXx86" -o x$PLAT="MACOSXx86_10.5" -o x$PLAT="MACOSX" ]; then
-	if [ ! -x "/opt/zimbra/include/pcre.h" ]; then
+if [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSXx86_10.5" -o x$PLAT = "xMACOSX" ]; then
+	if [ ! -f "/opt/zimbra/include/pcre.h" ]; then
 		echo "Error: /opt/zimbra/include/pcre.h not found"
 		exit 1;
 	fi
 else
-	if [ ! -x "/usr/include/$PCREH" ]; then
+	if [ ! -f "/usr/include/$PCREH" ]; then
 		echo "Error: $PCREH not found"
 		exit 1;
 	fi
