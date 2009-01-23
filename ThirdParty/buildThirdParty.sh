@@ -116,11 +116,13 @@ do
 done
 
 if [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSXx86_10.5" -o x$PLAT = "xMACOSX" ]; then
+	echo "	Checking libpcre.a"
 	if [ ! -f "/opt/zimbra/lib/libpcre.a" ]; then
 		echo "Error: /opt/zimbra/lib/libpcre.a not found"
 		exit 1;
 	fi
 else
+	echo "	Checking libpcre.so"
 	if [ ! -f "/usr/lib/libpcre.so" ]; then
 		echo "Error: libpcre.so not found"
 		exit 1;
