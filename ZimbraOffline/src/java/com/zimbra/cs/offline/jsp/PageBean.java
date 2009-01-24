@@ -100,4 +100,12 @@ public class PageBean {
 	    int pos = url.indexOf('?');
 	    return url + (pos < 0 ? "?" : "&") + "at=" + key;
 	}
+	
+	public static boolean isPrism(String userAgent) {
+		return userAgent != null && userAgent.indexOf("Prism") >= 0;
+	}
+	
+	public static String getBaseUri() {
+		return "http://localhost:" + LC.zimbra_admin_service_port.value();
+	}
 }

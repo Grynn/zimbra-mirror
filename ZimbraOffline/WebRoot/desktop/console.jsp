@@ -277,6 +277,7 @@ function submit(id, name, type, flavor, verb) {
 </c:choose>
       </td>
     </tr>
+    <zd:tips userAgent="${header['User-Agent']}"/>
   </table>
 </div>
 <form name="accountForm" action="${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}" method="POST">

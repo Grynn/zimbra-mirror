@@ -1,15 +1,14 @@
 package com.zimbra.cs.offline.jsp;
 
-import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.cs.offline.common.OfflineConstants;
 
-public class ClientEventBean {
+public class ClientEventBean extends PageBean {
 	
 	protected void onLogin() {
-        String uri = "http://localhost:" + LC.zimbra_admin_service_port.value() + "/service/soap/";
+        String uri = getBaseUri() + "/service/soap/";
 		try {
 			SoapHttpTransport transport = new SoapHttpTransport(uri);
 			transport.setTimeout(5000);

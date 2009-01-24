@@ -149,9 +149,9 @@ SELECT {
 	border: 0px;
 	padding: 14px 40px 20px 40px;
 	text-align: center;
-	-moz-border-radius: 0px 0px 8px 8px;
-	-webkit-border-bottom-left-radius: 8px;
-	-webkit-border-bottom-right-radius: 8px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	-webkit-border-bottom-left-radius: 0px;
+	-webkit-border-bottom-right-radius: 0px;
 }
 
 .ZPanelLogo {
@@ -162,6 +162,16 @@ SELECT {
 	-moz-border-radius: 8px 8px 0px 0px;
 	-webkit-border-top-left-radius: 8px;
 	-webkit-border-top-right-radius: 8px;
+}
+
+.ZPanelBottom {
+    background-color: #DAE5F1;
+    border: 0px;
+    padding: 4px;
+    text-align: left;
+    -moz-border-radius: 0px 0px 8px 8px;
+    -webkit-border-bottom-left-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
 }
 
 .ZPanelPadding {

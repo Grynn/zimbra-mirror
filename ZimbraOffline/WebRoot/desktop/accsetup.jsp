@@ -297,6 +297,7 @@ function onEditLink(id, keep) {
         </table>
       </td>
     </tr>
+    <zd:tips userAgent="${header['User-Agent']}"/>
   </table>
 </div>
 </body>

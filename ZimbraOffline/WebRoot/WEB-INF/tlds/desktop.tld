@@ -53,6 +53,24 @@
         </function-signature>
     </function>
     <function>
+        <name>isPrism</name>
+        <function-class>
+            com.zimbra.cs.offline.jsp.PageBean
+        </function-class>
+        <function-signature>
+            boolean isPrism(java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>getBaseUri</name>
+        <function-class>
+            com.zimbra.cs.offline.jsp.PageBean
+        </function-class>
+        <function-signature>
+            boolean getBaseUri()
+        </function-signature>
+    </function>
+    <function>
         <name>addAuthToken</name>
         <function-class>
             com.zimbra.cs.offline.jsp.PageBean
