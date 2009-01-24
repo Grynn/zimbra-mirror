@@ -13,6 +13,7 @@
 
     <include>ZaGrant.js</include>
     <include>ZaTargetPermission.js</include>
+    <include>ZaUIComponent.js</include>
     <include>ZaGrantDialog.js</include>
     <include>ZaGrantView.js</include>
     <include>ZaGrantViewController.js</include>

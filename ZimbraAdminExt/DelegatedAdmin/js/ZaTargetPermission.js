@@ -170,7 +170,7 @@ ZaGrantsListView.grantSelectionListener = function () {
             ZaGrant.A2_grantsListSelectedItems, selectedGrants) ;
 }
 
-var grantListItem = {
+ZaTargetPermission.grantListItem = {
     id: ZaGrant.A2_grantsList, ref: ZaGrant.A2_grantsList, type: _LIST_,
     listItems: { type: _OBJECT_, items:
         [
@@ -182,7 +182,7 @@ var grantListItem = {
     }
 };
 
-var grantsListXFormItem  =  {
+ZaTargetPermission.grantsListXFormItem  =  {
     ref: ZaGrant.A2_grantsList, id: ZaGrant.A2_grantsList, type: _DWT_LIST_, width:700, height: 200,
     cssClass: "DLSource", widgetClass: ZaGrantsListView,
     headerList: ZaGrantsListView._getHeaderList (),
@@ -212,25 +212,28 @@ ZaTargetPermission.targetXFormModifier = function (xFormObject) {
         {type:_ZATABCASE_, id:"target_form_permission_tab", numCols:1, colSizes:["700px"],
             caseKey:  tabIx,
             items:[
-               {type:_SPACER_, height: "10px" },
-               {type:_OUTPUT_, value: com_zimbra_delegatedadmin.Label_permission },
-               grantsListXFormItem ,
-//                   {type:_CELLSPACER_},
-               {type:_GROUP_, numCols:3,width: 350, colSizes:["100px","20px","*"],  height: 30,
-                    cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left: 200px; margin-right:auto;",
-                    items: [
-                        {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_grant,width:"100px",
-                            onActivate:"ZaTargetPermission.grantButtonListener.call (this);",
-                            align: _RIGHT_},
-                        {type:_CELLSPACER_},
-//                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px" },
-//                            {type:_CELLSPACER_},
-                        {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px", align: _LEFT_ ,
-                            enableDisableChangeEventSources: [ZaGrant.A2_grantsListSelectedItems, ZaGrant.A2_grantsList] ,
-                            enableDisableChecks:[ZaGrantsListView.isDeleteEnabled],
-                            onActivate:"ZaTargetPermission.revokeButtonListener.call(this);"
+                {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_permission,
+                    id:"permission_grouper",
+                    colSizes:["700px"],numCols:1,
+                    items:[
+                        ZaTargetPermission.grantsListXFormItem ,
+                       {type:_GROUP_, numCols:3,width: 350, colSizes:["100px","20px","*"],  height: 30,
+                            cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left: 200px; margin-right:auto;",
+                            items: [
+                                {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_grant,width:"100px",
+                                    onActivate:"ZaTargetPermission.grantButtonListener.call (this);",
+                                    align: _RIGHT_},
+                                {type:_CELLSPACER_},
+        //                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px" },
+        //                            {type:_CELLSPACER_},
+                                {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px", align: _LEFT_ ,
+                                    enableDisableChangeEventSources: [ZaGrant.A2_grantsListSelectedItems, ZaGrant.A2_grantsList] ,
+                                    enableDisableChecks:[ZaGrantsListView.isDeleteEnabled],
+                                    onActivate:"ZaTargetPermission.revokeButtonListener.call(this);"
+                                }
+                            ]
                         }
-                    ]
+                   ]
                 }
             ]
         }
@@ -249,13 +252,13 @@ function (entry) {
 }
 
 
-//TODO: add model and xform to the target's main view as a new tab - permissions
-var grantListSelectItem = { ref: ZaGrant.A2_grantsListSelectedItems, type:_LIST_ }
+//add model and xform to the target's main view as a new tab - permissions
+ZaTargetPermission.grantListSelectItem = { ref: ZaGrant.A2_grantsListSelectedItems, type:_LIST_ }
 
 //Domain Target
 if (ZaDomain) {
-    ZaDomain.myXModel.items.push(grantListItem) ;
-    ZaDomain.myXModel.items.push(grantListSelectItem) ;
+    ZaDomain.myXModel.items.push(ZaTargetPermission.grantListItem) ;
+    ZaDomain.myXModel.items.push(ZaTargetPermission.grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaDomainXFormView"]){
@@ -272,12 +275,13 @@ if (ZaController.setViewMethods["ZaDomainController"]) {
 
 //Account Target
 if (ZaAccount) {
-    ZaAccount.myXModel.items.push(grantListItem) ;
-    ZaAccount.myXModel.items.push(grantListSelectItem) ;
+    ZaAccount.myXModel.items.push(ZaTargetPermission.grantListItem) ;
+    ZaAccount.myXModel.items.push(ZaTargetPermission.grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaTargetPermission.targetXFormModifier);
+    ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaTargetPermission.accountTargetXFormModifier);
 }
 
 if (ZaItem.loadMethods["ZaAccount"]) {
@@ -297,8 +301,8 @@ if (ZaController.setViewMethods["ZaAccountViewController"]) {
 
 //DL Target
 if (ZaDistributionList) {
-    ZaDistributionList.myXModel.items.push(grantListItem) ;
-    ZaDistributionList.myXModel.items.push(grantListSelectItem) ;
+    ZaDistributionList.myXModel.items.push(ZaTargetPermission.grantListItem) ;
+    ZaDistributionList.myXModel.items.push(ZaTargetPermission.grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaDLXFormView"]){
@@ -316,8 +320,8 @@ if (ZaController.setViewMethods["ZaDLController"]) {
 
 //Resource target
 if (ZaResource) {
-    ZaResource.myXModel.items.push(grantListSelectItem) ;
-    ZaResource.myXModel.items.push(grantListItem) ;
+    ZaResource.myXModel.items.push(ZaTargetPermission.grantListSelectItem) ;
+    ZaResource.myXModel.items.push(ZaTargetPermission.grantListItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaResourceXFormView"]){
@@ -334,8 +338,8 @@ if (ZaController.setViewMethods["ZaResourceController"]) {
 
 //COS Target
 if (ZaCos) {
-    ZaCos.myXModel.items.push(grantListItem) ;
-    ZaCos.myXModel.items.push(grantListSelectItem) ;
+    ZaCos.myXModel.items.push(ZaTargetPermission.grantListItem) ;
+    ZaCos.myXModel.items.push(ZaTargetPermission.grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaCosXFormView"]){
@@ -352,8 +356,8 @@ if (ZaController.setViewMethods["ZaCosController"]) {
 
 //GlobalConfig Target
 if (ZaGlobalConfig) {
-    ZaGlobalConfig.myXModel.items.push(grantListItem) ;
-    ZaGlobalConfig.myXModel.items.push(grantListSelectItem) ;
+    ZaGlobalConfig.myXModel.items.push(ZaTargetPermission.grantListItem) ;
+    ZaGlobalConfig.myXModel.items.push(ZaTargetPermission.grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["GlobalConfigXFormView"]){
@@ -370,8 +374,8 @@ if (ZaController.setViewMethods["ZaGlobalConfigViewController"]) {
 
 //Server Target
 if (ZaServer) {
-    ZaServer.myXModel.items.push(grantListItem) ;
-    ZaServer.myXModel.items.push(grantListSelectItem) ;
+    ZaServer.myXModel.items.push(ZaTargetPermission.grantListItem) ;
+    ZaServer.myXModel.items.push(ZaTargetPermission.grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaServerXFormView"]){
@@ -388,8 +392,8 @@ if (ZaController.setViewMethods["ZaServerController"]) {
 
 //Zimlet Target
 if (ZaZimlet) {
-   ZaZimlet.myXModel.items.push(grantListItem) ;
-    ZaZimlet.myXModel.items.push(grantListSelectItem) ;
+   ZaZimlet.myXModel.items.push(ZaTargetPermission.grantListItem) ;
+    ZaZimlet.myXModel.items.push(ZaTargetPermission.grantListSelectItem) ;
 }
 
 if (ZaTabView.XFormModifiers["ZaZimletXFormView"]){

@@ -251,9 +251,13 @@ ZaSettings.SKIN_LOGIN_MSG_ID            = i++ ;
 //carte blanche - gives access to any UI element
 ZaSettings.CARTE_BLANCHE_UI = "cartBlancheUI";
 
+ZaSettings.ALL_UI_COMPONENTS = [] ;
+
 //List views
 ZaSettings.ACCOUNT_LIST_VIEW = "accountListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNT_LIST_VIEW, label: "Account List View" });
 ZaSettings.DOMAIN_LIST_VIEW = "domainListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_LIST_VIEW, label: "Domain List View" });
 ZaSettings.ALIAS_LIST_VIEW = "aliasListView";
 ZaSettings.DL_LIST_VIEW = "DLListView";
 ZaSettings.RESOURCE_LIST_VIEW = "resourceListView";

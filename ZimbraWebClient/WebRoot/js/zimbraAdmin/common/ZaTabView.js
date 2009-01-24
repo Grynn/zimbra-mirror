@@ -273,3 +273,4 @@ ZaTabView.prototype.getAppTab =
 function () {
 	return ZaApp.getInstance().getTabGroup().getTabById(this.__internalId) ;
 }
+

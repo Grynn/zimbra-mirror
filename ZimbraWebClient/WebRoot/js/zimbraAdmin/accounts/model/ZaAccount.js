@@ -37,6 +37,7 @@ ZaItem.loadMethods["ZaAccount"] = new Array();
 ZaItem.initMethods["ZaAccount"] = new Array();
 ZaItem.modifyMethods["ZaAccount"] = new Array();
 ZaItem.createMethods["ZaAccount"] = new Array();
+ZaItem.ObjectModifiers["ZaAccount"] = [];
 ZaAccount.renameMethods = new Array();
 ZaAccount.changePasswordMethods = new Array();
 

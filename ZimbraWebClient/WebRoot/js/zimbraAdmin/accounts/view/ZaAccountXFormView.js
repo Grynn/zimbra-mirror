@@ -56,15 +56,17 @@ ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST)
 ZaAccountXFormView.prototype.setObject =
 function(entry) {
 	//handle the special attributes to be displayed in xform
-	entry.manageSpecialAttrs();
-	
-	this._containedObject = new Object();
+	//TODO  manageSpecialAttrs can be part of ZaItem.ObjectModifiers ;
+    entry.manageSpecialAttrs();
+	entry.modifyObject();
+
+    this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
 	
 	for (var a in entry.attrs) {
 		if(entry.attrs[a] instanceof Array) {
 			this._containedObject.attrs[a] = new Array();
-			for(var aa in entry.attrs[a]) {
+            for(var aa in entry.attrs[a]) {
 				this._containedObject.attrs[a][aa] = entry.attrs[a][aa];
 			}
 		} else {
@@ -200,6 +202,7 @@ function(entry) {
     var domainObj =  ZaDomain.getDomainByName (domainName) ;
     this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
     this._containedObject[ZaAccount.A2_currentAccountType] = entry[ZaAccount.A2_currentAccountType]  ;
+
     this._localXForm.setInstance(this._containedObject);
 	//update the tab
 	this.updateTab();

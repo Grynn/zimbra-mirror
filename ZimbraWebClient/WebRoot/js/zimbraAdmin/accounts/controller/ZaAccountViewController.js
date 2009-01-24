@@ -229,8 +229,7 @@ function () {
 				this._currentObject.changePassword(tmpObj.attrs[ZaAccount.A_password]);
 			} catch (ex) {
 				this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);
-				return false;				
-				
+				return false;	
 			}
 		}
 	}
@@ -251,8 +250,8 @@ function () {
 				continue; //skip uid, it is changed throw a separate request
 			}
 			if(tmpObj.attrs[a] instanceof Array) {
-				if(this._currentObject.attrs[a] && tmpObj.attrs[a] 
-					&& tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
+                if (!this._currentObject.attrs[a]) this._currentObject.attrs[a] = [] ;
+                if( tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
 					mods[a] = tmpObj.attrs[a];
 				}
 			} else {

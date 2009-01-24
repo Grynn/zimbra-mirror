@@ -664,3 +664,20 @@ ZaItem.checkFBSettings = function (oldSettingObj, currentSettingObj, controller)
     }
 }
 
+
+//Sometimes, the admin extensions needs to modify the object value before it is set
+//We can add the modifer function in the extension and it will be called by the main program
+ZaItem.ObjectModifiers = {} ;
+ZaItem.prototype.modifyObject =
+function () {
+    if(ZaItem.ObjectModifiers[this._iKeyName]) {
+		var methods = ZaItem.ObjectModifiers[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this);
+			}
+		}
+	}
+}
+
