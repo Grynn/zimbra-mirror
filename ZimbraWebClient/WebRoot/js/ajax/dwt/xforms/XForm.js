@@ -317,6 +317,29 @@ XForm.prototype.setInstance = function(instance) {
 	}
 }
 
+XForm.prototype.getInstance = function() {
+	return this.instance;
+}
+
+XForm.prototype.setInstanceValue = function(val, refPath) {
+	this.xmodel.setInstanceValue(this.instance,refPath,val);
+}
+
+XForm.checkInstanceValue = function(refPath,val) {
+	return (this.getInstanceValue(refPath) == val);
+}
+
+XForm.checkInstanceValueNot = function(refPath,val) {
+	return (this.getInstanceValue(refPath) != val);
+}
+
+XForm.checkInstanceValueEmty = function(refPath) {
+	return AjxUtil.isEmpty(this.getInstanceValue(refPath));
+}
+
+XForm.checkInstanceValueNotEmty = function(refPath) {
+	return !AjxUtil.isEmpty(this.getInstanceValue(refPath));
+}
 
 XForm.prototype.getController = function () {
 	return this.controller;
@@ -875,16 +898,6 @@ XForm.prototype._reparentDwtObject = function (dwtObj, newParent) {
 	newParent.appendChild(dwtE);
 }
 
-
-
-
-
-//
-//	INSERTING
-//
-
-
-
 XForm.prototype.shouldInsertItem = function (item) {
 	return (this._itemsToInsert[item.getId()] != null)
 }
@@ -907,20 +920,4 @@ XForm.prototype.insertExternalWidget = function (item) {
 
 	// take the item out of the list to insert so we don't insert it more than once
 	delete this._itemsToInsert[item.getId()];
-}
-
-XForm.checkInstanceValue = function(refPath,val) {
-	return (this.getInstanceValue(refPath) == val);
-}
-
-XForm.checkInstanceValueNot = function(refPath,val) {
-	return (this.getInstanceValue(refPath) != val);
-}
-
-XForm.checkInstanceValueEmty = function(refPath) {
-	return AjxUtil.isEmpty(this.getInstanceValue(refPath));
-}
-
-XForm.checkInstanceValueNotEmty = function(refPath) {
-	return !AjxUtil.isEmpty(this.getInstanceValue(refPath));
 }

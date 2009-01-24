@@ -155,6 +155,17 @@ ZaGlobalConfig.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
 ZaGlobalConfig.A2_blocked_extension_selection = "blocked_extension_selection";
 ZaGlobalConfig.A2_common_extension_selection = "common_extension_selection";
 
+ZaGlobalConfig.__configInstance = null;
+ZaGlobalConfig.isDirty = true;
+
+ZaGlobalConfig.getInstance = function(refresh) {
+	if(refresh || ZaGlobalConfig.isDirty || !!ZaGlobalConfig.__configInstance) {
+		ZaGlobalConfig.__configInstance = new ZaGlobalConfig();
+		ZaGlobalConfig.isDirty = false;
+	}
+	return ZaGlobalConfig.__configInstance;
+}
+
 ZaGlobalConfig.loadMethod = 
 function(by, val) {
 	var soapDoc = AjxSoapDoc.create("GetAllConfigRequest", ZaZimbraAdmin.URN, null);
@@ -180,50 +191,7 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 		this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension] = [this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension]];
 	}
 		
-	/*var blocked = this.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension];
-	if (blocked == null) {
-		blocked = [];
-	}
-	else if (AjxUtil.isString(blocked)) {
-		blocked = [ blocked ];
-	}
-	
-	// convert blocked extension lists to arrays
-	var common = this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension];
-	if (common == null) {
-		common = [];
-	}
-	else if (AjxUtil.isString(common)) {
-		common = [ common ];
-	}
-	var commonMap = {};
-	var unaddedBlockExt = [];
-	for (var i = 0; i < common.length; i++) {
-		var ext = common[i];
-		common[i] = new String(ext);
-		common[i].id = "id_"+ext;
-		commonMap[ext] = common[i];
-		
-		if (ZaUtil.findValueInArray(blocked, ext) <= -1) {
-			DBG.println(AjxDebug.DBG1, ext + " was added to the blocked list.");
-			//common.splice(i,1) ;
-			unaddedBlockExt.push(common[i]);
-		}
-	}
-	this.attrs[ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension] = unaddedBlockExt;
-		
-	for (var i = 0; i < blocked.length; i++) {
-		var ext = blocked[i];
-		if (commonMap[ext]) {
-			blocked[i] = commonMap[ext];
-		}
-		else {
-			blocked[i] = new String(ext);
-			blocked[i].id = "id_"+ext;
-		}
-	}
-	this.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = blocked;
-	*/
+
 	// convert available components to hidden fields for xform binding
 	var components = this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable];
 	if (components) {
@@ -301,12 +269,7 @@ ZaGlobalConfig.modifyMethod = function (mods) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	command.invoke(params);
-	/*var newConfig = ZaApp.getInstance().getGlobalConfig(true);
-	if(newConfig.attrs) {
-		for (var aname in newConfig.attrs) {
-			this.attrs[aname] = newConfig.attrs[aname];
-		}
-	}*/
+	ZaGlobalConfig.isDirty = true;
 }
 ZaItem.modifyMethods["ZaGlobalConfig"].push(ZaGlobalConfig.modifyMethod);
 

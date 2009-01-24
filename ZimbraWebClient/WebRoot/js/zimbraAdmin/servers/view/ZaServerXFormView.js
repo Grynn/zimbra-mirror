@@ -292,31 +292,32 @@ ZaServerXFormView.addVolume  = function () {
 		this.parent.addVolumeDlg.popdown();
 		var obj = this.parent.addVolumeDlg.getObject();
 		var instance = this.getInstance();
-		instance.volume_selection_cache = new Array();
-		instance[ZaServer.A_Volumes].push(obj);
-		instance[ZaServer.A_Volumes]._version++;
+		var volArr = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_Volumes);
+		this.getModel().setInstanceValue(this.getInstance(),ZaServer.A2_volume_selection_cache,[]);
+		
+		volArr.push(obj);
+		volArr._version++;
 
-		instance[ZaServer.A_Volumes].sort(ZaServer.compareVolumesByName);		
-		var cnt = instance[ZaServer.A_Volumes].length;
+		volArr.sort(ZaServer.compareVolumesByName);		
+		var cnt = volArr.length;
 		var indexArr = [];
 		var msgArr = [];
 		for(var i=0;i<cnt;i++) {
-			if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
+			if(volArr[i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
 				indexArr.push(instance[ZaServer.A_Volumes][i]);
-			} else if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType] == ZaServer.MSG) {
-				msgArr.push(instance[ZaServer.A_Volumes][i])
+			} else if(volArr[i][ZaServer.A_VolumeType] == ZaServer.MSG) {
+				msgArr.push(instance[ZaServer.A_Volumes][i]);
 			}
 		}
-
-		
+				
 		ZaServerXFormView.indexVolChoices.setChoices(indexArr);
 		ZaServerXFormView.indexVolChoices.dirtyChoices();	
 	
 		ZaServerXFormView.messageVolChoices.setChoices(msgArr);
 		ZaServerXFormView.messageVolChoices.dirtyChoices();
 	
+		this.getModel().setInstanceValue(this.getInstance(),ZaServer.A_Volumes,volArr);
 		this.parent.setDirty(true);
-		this.refresh();	
 	}
 }
 
@@ -347,10 +348,6 @@ function () {
 ZaServerXFormView.deleteButtonListener = function () {
 	var instance = this.getInstance();
 	var path = ZaServer.A_Volumes;
-
-	/*if(!this.getInstance()[ZaServer.A_RemovedVolumes]) {
-		this.getInstance()[ZaServer.A_RemovedVolumes] = new Array();
-	}*/
 
 	if(instance.volume_selection_cache != null) {
 		var selArr = this.getInstanceValue(ZaServer.A2_volume_selection_cache);

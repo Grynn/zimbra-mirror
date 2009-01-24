@@ -352,6 +352,8 @@ ZaItem.prototype.loadNewObjectDefaults = function (domainBy, domain, cosBy, cos)
 }
 
 ZaItem.prototype.load = function (by, val, skipRights, expandDefaults) {
+	by = by ? by : "id";
+	val = val ? val : this.id;
 	//load rights
 	if(!skipRights) {
 		this.rights = null;
