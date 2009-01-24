@@ -1,0 +1,19 @@
+<zimlet name="com_zimbra_stickynotes" version="1.0" description="Add Stickynotes to individual emails">
+	<include>stickynotes.js</include>
+	<includeCSS>stickynotes.css</includeCSS>
+	<resource>stickynotes-icon.gif</resource>
+	<handlerObject>com_zimbra_stickynotes</handlerObject>
+
+	<zimletPanelItem label="StickyNotes" icon="stickynotes-panelIcon">
+		<toolTipText>Add Stickynotes to individual emails</toolTipText>
+		<dragSource type="ZmConv" />
+	    <dragSource type="ZmMailMsg"/>
+	</zimletPanelItem>
+	<userProperties>
+		<property type="string" name="turnONstickynotesZimlet" value="false"/>
+		<property type="string" name="stickyNotes_ToolbarBtn" value="true"/>		
+		<property type="string" name="stickyNotes_data" value=""/>
+	</userProperties>	
+</zimlet>
+
+

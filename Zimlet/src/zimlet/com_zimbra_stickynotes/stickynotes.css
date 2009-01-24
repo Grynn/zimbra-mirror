@@ -1,0 +1,35 @@
+.Imgstickynotes-panelIcon {
+  background: url("stickynotes-icon.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.stickyn_textAreaClass {
+	padding-left:10px;
+	padding-top:30px;
+	font-weight:bold;
+	font-size:16px;font-family:Arial,Helvetica,sans-serif;
+	overflow:auto;
+	background-color:#FFFFCC;
+	border-left:0px solid #A7A194;border-top:0px solid #A7A194; border-bottom:2px solid #A7A194;border-right:2px solid #A7A194;
+  width: 248px;
+  height: 250px;
+    display:block;
+  z-index:9000;
+  position:relative;
+}
+
+
+
+.stickyn_axnClass {
+	font-size:16px;font-family:Arial,Helvetica,sans-serif;
+	overflow:auto;
+	background-color:#FFFFCC;
+	border-left:0px solid #A7A194;border-top:0px solid #A7A194; border-bottom:2px solid #A7A194;border-right:2px solid #A7A194;
+	  width: 246px;
+  height: 24px;
+  display:block;
+  z-index:9001;
+   position:absolute;
+}
