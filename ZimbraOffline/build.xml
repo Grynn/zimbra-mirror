@@ -828,6 +828,10 @@
 		<delete dir="${dist.dir}/win32/prism/extensions/refractor@developer.mozilla.org"/>
 		<delete dir="${dist.dir}/linux/prism/extensions/refractor@developer.mozilla.org"/>
 
+		<!-- rename prism executables on win32 and linux to zdclient -->
+		<move file="${dist.dir}/win32/prism/prism.exe" tofile="${dist.dir}/win32/prism/zdclient.exe" overwrite="true"/>
+		<move file="${dist.dir}/linux/prism/prism" tofile="${dist.dir}/linux/prism/zdclient" overwrite="true"/>
+
 		<!-- apply patches and i18n works -->
 		<native2ascii reverse="true" encoding="UTF8" src="src/installer/messages" dest="src/installer/messages_utf8" includes="*.properties" />
 		<patch-prism-files os="macos" version="${prism.version.macos}" extroot="${prism.extroot.macos}"/>

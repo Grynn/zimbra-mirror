@@ -718,7 +718,62 @@ if (pver == null || pbld == null)
     return false;
     
 try {
-    return (Float.parseFloat(pver) &gt;= 0.90f &amp;&amp; Integer.parseInt(pbld) &gt;= 1272);
+    Float ver = Float.parseFloat(pver);
+    int bld = Integer.parseInt(pbld);
+    return (ver &gt;= 0.90f &amp;&amp;  bld &gt;= 1272 &amp;&amp; bld &lt;= 1471);
+} catch (Exception e) {
+    return false;
+}
+   </condition>
+                  </action>
+                  <action name="win stop zdclient" id="288720" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="3">
+                              <void index="0">
+                                <string>-override</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
+                              </void>
+                              <void index="2">
+                                <string>-close</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/win32/prism/zdclient.exe</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>if (!Util.isWindows())
+    return false;
+    
+String pver = (String)context.getVariable("prevVersion");
+String pbld = (String)context.getVariable("prevBuild");
+if (pver == null || pbld == null)
+    return false;
+    
+try {
+    Float ver = Float.parseFloat(pver);
+    int bld = Integer.parseInt(pbld);
+    return (ver &gt;= 0.90f &amp;&amp;  bld &gt; 1471);
 } catch (Exception e) {
     return false;
 }
@@ -801,7 +856,62 @@ if (pver == null || pbld == null)
     return false;
 
 try {
-    return (Float.parseFloat(pver) &gt;= 0.90f &amp;&amp; Integer.parseInt(pbld) &gt;= 1272);
+    Float ver = Float.parseFloat(pver);
+    int bld = Integer.parseInt(pbld);
+    return (ver &gt;= 0.90f &amp;&amp;  bld &gt;= 1272 &amp;&amp; bld &lt;= 1471);
+} catch (Exception e) {
+    return false;
+}
+</condition>
+                  </action>
+                  <action name="linux stop zdclient" id="288721" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                          <void property="arguments">
+                            <array class="java.lang.String" length="3">
+                              <void index="0">
+                                <string>-override</string>
+                              </void>
+                              <void index="1">
+                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
+                              </void>
+                              <void index="2">
+                                <string>-close</string>
+                              </void>
+                            </array>
+                          </void>
+                          <void property="executable">
+                            <object class="java.io.File">
+                              <string>${installer:sys.installationDir}/linux/prism/zdclient</string>
+                            </object>
+                          </void>
+                          <void property="logArguments">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="wait">
+                            <boolean>true</boolean>
+                          </void>
+                          <void property="workingDirectory">
+                            <object class="java.io.File">
+                              <string>log</string>
+                            </object>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>if (Util.isWindows() || Util.isMacOS())
+    return false;
+        
+String pver = (String)context.getVariable("prevVersion");
+String pbld = (String)context.getVariable("prevBuild");
+if (pver == null || pbld == null)
+    return false;
+
+try {
+    Float ver = Float.parseFloat(pver);
+    int bld = Integer.parseInt(pbld);
+    return (ver &gt;= 0.90f &amp;&amp;  bld &gt; 1471);
 } catch (Exception e) {
     return false;
 }
@@ -2136,7 +2246,10 @@ try {
                           <void property="script">
                             <object class="com.install4j.api.beans.ScriptProperty">
                               <void property="value">
-                                <string>File prism = context.getDestinationFile("win32/prism/prism.exe");
+                                <string>import com.install4j.api.windows.WinRegistry;
+import com.install4j.api.windows.RegistryRoot;
+
+File prism = context.getDestinationFile("win32/prism/zdclient.exe");
 
 String iconFile = Util.isWindowsVista() ? "win32/launcher_48x48.ico" : "win32/launcher_32x32.ico";
 File icon = context.getDestinationFile(iconFile);
@@ -2147,6 +2260,17 @@ File startmenu = new File(WinFileSystem.getSpecialFolder(SpecialFolder.STARTMENU
 WinFileSystem.createShellLink(startmenu, prism, icon, "", "Yahoo! Zimbra Desktop");
 if (context.getBooleanVariable("createDesktopLinkAction"))
   WinFileSystem.createShellLink(desktop, prism, icon, "", "Yahoo! Zimbra Desktop");
+
+// migrate old mailto registery entry that still refers to prism.exe
+String mailtoCmd = (String)WinRegistry.getValue(RegistryRoot.HKEY_CLASSES_ROOT, "mailto\\shell\\open\\command", "");
+int pos;
+if (mailtoCmd != null &amp;&amp; (pos = mailtoCmd.indexOf("prism.exe")) &gt;= 0) {
+    String newCmd = mailtoCmd.substring(0, pos) + "zdclient.exe";
+    if (newCmd.substring(0, 1).equals("\""))
+        newCmd = newCmd + "\"";
+    newCmd = newCmd + " -url \"%1\"";
+    WinRegistry.setValue(RegistryRoot.HKEY_CLASSES_ROOT, "mailto\\shell\\open\\command", "", newCmd);
+}
 
 return true;</string>
                               </void>
@@ -3823,7 +3947,7 @@ return true;</string>
                           </void>
                           <void property="executable">
                             <object class="java.io.File">
-                              <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
+                              <string>${installer:sys.installationDir}/win32/prism/zdclient.exe</string>
                             </object>
                           </void>
                           <void property="logArguments">
@@ -3931,7 +4055,7 @@ return true;</string>
                           </void>
                           <void property="executable">
                             <object class="java.io.File">
-                              <string>${installer:sys.installationDir}/linux/prism/prism</string>
+                              <string>${installer:sys.installationDir}/linux/prism/zdclient</string>
                             </object>
                           </void>
                           <void property="logArguments">
