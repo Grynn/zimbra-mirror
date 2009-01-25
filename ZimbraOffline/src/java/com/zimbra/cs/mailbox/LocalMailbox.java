@@ -51,6 +51,7 @@ public class LocalMailbox extends DesktopMailbox {
 	private final boolean isYahoo;
     private final Flag mSyncFlag;
     private final Flag mSyncFolderFlag;
+    private final Flag mNoInferiorsFlag;
 	
     LocalMailbox(MailboxData data) throws ServiceException {
         super(data);
@@ -61,6 +62,7 @@ public class LocalMailbox extends DesktopMailbox {
 
         mSyncFlag = getFlagById(Flag.ID_FLAG_SYNC);
         mSyncFolderFlag = getFlagById(Flag.ID_FLAG_SYNCFOLDER);
+        mNoInferiorsFlag = getFlagById(Flag.ID_FLAG_NO_INFERIORS);
     }
 
     @Override protected synchronized void initialize() throws ServiceException {
