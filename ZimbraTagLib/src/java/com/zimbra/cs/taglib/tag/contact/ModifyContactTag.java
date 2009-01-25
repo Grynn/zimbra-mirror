@@ -42,7 +42,7 @@ public class ModifyContactTag extends ContactOpTag {
         try {
             getJspBody().invoke(null);
 
-            if (mAttrs.isEmpty() || (mReplace && allFieldsEmpty())){
+            if (mAttrs.isEmpty() || allFieldsEmpty()){
                 throw ZTagLibException.EMPTY_CONTACT("can't set all fields to blank", null);
             }
 
