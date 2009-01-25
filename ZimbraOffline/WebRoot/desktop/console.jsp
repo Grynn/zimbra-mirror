@@ -58,6 +58,11 @@ function OnReset(id, name, type, flavor) {
         submit(id, name, type, flavor, "rst");
 }
 
+function OnReindex(id, name, type, flavor) {
+    if (confirm("<fmt:message key='OnReindexWarn'/>"))
+        submit(id, name, type, flavor, "idx");
+}
+
 function submit(id, name, type, flavor, verb) {
     if (verb != "") {
 	zd.hide("addButton");
@@ -160,6 +165,9 @@ function submit(id, name, type, flavor, verb) {
 	<c:when test="${param.verb eq 'rst'}">
 	    <c:set var="key" value="ServiceReset"/>
 	</c:when>
+	<c:when test="${param.verb eq 'idx'}">
+        <c:set var="key" value="ServiceReindex"/>
+    </c:when>
 	</c:choose>
                 <b><fmt:message key="${key}"><fmt:param>${param.accountName}</fmt:param></fmt:message></b>
     </c:otherwise>
@@ -235,9 +243,10 @@ function submit(id, name, type, flavor, verb) {
                     <div class="ZAccountInfo">
                       <a href="javascript:OnEdit('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Edit"/></a>&nbsp;
                       <a href="javascript:OnDelete('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Delete"/></a>&nbsp;
-                     <a href="javascript:OnReset('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="ResetData"/></a>
+                      <a href="javascript:OnReset('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="ResetData"/></a>
+                      <a href="javascript:OnReindex('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Reindex"/></a>
 	<c:if test="${not default}">
-                     &nbsp;<a href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Default"/></a>
+                     &nbsp;<a href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><img src="/zimbra/img/arrows/ImgAccordionClosed.gif" width="12" heigh="12" align="absbottom" border="0"></a>
        </c:if>
                       </div>
                     </td>

@@ -261,6 +261,8 @@ public class XmailBean extends MailBean {
                         dsAttrs);
                 } else if (verb.isReset()) {
                     stub.resetOfflineDataSource(accountId);
+    		    } else if (verb.isReindex()) {
+    		    	stub.reIndex(accountId);
                 } else {
                     setError(getMessage("UnknownAct"));
                 }

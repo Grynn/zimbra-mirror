@@ -92,6 +92,8 @@ public class ZmailBean extends MailBean {
 			stub.resetOfflineAccount(accountId);
 		    } else if (verb.isDelete()) {
 			stub.deleteOfflineAccount(accountId);
+		    } else if (verb.isReindex()) {
+		    	stub.reIndex(accountId);
 		    } else {
 			setError(getMessage("UnknownAct"));
 		    }

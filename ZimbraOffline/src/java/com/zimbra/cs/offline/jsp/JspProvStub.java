@@ -144,4 +144,9 @@ public class JspProvStub {
     	String orderStr = account.getAttr(OfflineConstants.A_offlineAccountsOrder, "");
     	return orderStr.length() > 0 ? orderStr.split(",") : new String[0];
     }
+    
+    public void reIndex(String accountId) throws ServiceException {
+    	Account account = prov.get(AccountBy.id, accountId);
+    	prov.reIndex(account, "start", null, null);
+    }
 }

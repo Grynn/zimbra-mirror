@@ -5,7 +5,7 @@ import java.util.Arrays;
 public interface JspConstants {
 	
 	public enum JspVerb {
-		add, del, exp, imp, mod, rst;
+		add, del, exp, imp, mod, rst, idx;
 		
 		public boolean isAdd() { return this == add; }
                 public boolean isDelete() { return this == del; }
@@ -13,6 +13,7 @@ public interface JspConstants {
                 public boolean isImport() { return this == imp; }
 		public boolean isModify() { return this == mod; }
                 public boolean isReset() { return this == rst; }
+        public boolean isReindex() { return this == idx; }
 		
         public static JspVerb fromString(String s) {
             try {

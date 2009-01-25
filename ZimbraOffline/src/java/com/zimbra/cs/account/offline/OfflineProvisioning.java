@@ -237,7 +237,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         Map<String, Object> context = new HashMap<String, Object>();
         AttributeManager.getInstance().preModify(attrs, e, context, false, checkImmutable, allowCallback);
 
-        if (attrs.remove(A_offlineAccountSetup) != null && etype == EntryType.ACCOUNT)
+        boolean isAccountSetup = attrs.remove(A_offlineAccountSetup) != null;
+        
+        if (isAccountSetup && etype == EntryType.ACCOUNT)
         	revalidateRemoteLogin((OfflineAccount)e, attrs);
 
         if (etype == EntryType.CONFIG) {
@@ -249,6 +251,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         reload(e);
 
         AttributeManager.getInstance().postModify(attrs, e, context, false, allowCallback);
+        
+//        if (isAccountSetup && etype == EntryType.ACCOUNT) {
+//        	if (e.getBooleanAttr(A_offlineEnableTrace, false))
+//        		ZimbraLog.soap.addAccountLogger(((Account)e).getName(), Log.Level.debug);
+//        	else
+//        		ZimbraLog.soap.removeAccountLogger(((Account)e).getName());
+//        }
     }
     
     /*
@@ -335,6 +344,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public synchronized void reload(Entry e) throws ServiceException {
+    	if (e instanceof OfflineLocalServer)
+    		return; //no need to reload
+    	
         EntryType etype = EntryType.typeForEntry(e);
         if (etype == null)
             throw OfflineServiceException.UNSUPPORTED("reload(" + e.getClass().getSimpleName() + ")");
