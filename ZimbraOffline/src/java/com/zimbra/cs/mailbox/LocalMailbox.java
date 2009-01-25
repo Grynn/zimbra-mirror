@@ -49,6 +49,8 @@ public class LocalMailbox extends DesktopMailbox {
     
 	private final boolean isImapMailbox;
 	private final boolean isYahoo;
+	private final boolean isLive;
+	
     private final Flag mSyncFlag;
     private final Flag mSyncFolderFlag;
     private final Flag mNoInferiorsFlag;
@@ -56,10 +58,13 @@ public class LocalMailbox extends DesktopMailbox {
     LocalMailbox(MailboxData data) throws ServiceException {
         super(data);
         
-        DataSource ds = OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
-        isImapMailbox = ds != null && (ds.getType() == DataSource.Type.imap || ds.getType() == DataSource.Type.live);
-        isYahoo = ds != null && ((OfflineDataSource)ds).isYahoo();
-
+        OfflineDataSource ds = (OfflineDataSource)OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
+        if (ds != null) {
+	        isImapMailbox = ds.getType() == DataSource.Type.imap || ds.getType() == DataSource.Type.live;
+	        isYahoo = ds.isYahoo();
+        	isLive = ds.isLive();
+        }
+        
         mSyncFlag = getFlagById(Flag.ID_FLAG_SYNC);
         mSyncFolderFlag = getFlagById(Flag.ID_FLAG_SYNCFOLDER);
         mNoInferiorsFlag = getFlagById(Flag.ID_FLAG_NO_INFERIORS);
@@ -85,7 +90,7 @@ public class LocalMailbox extends DesktopMailbox {
         				mi.mData.flags |= mSyncFlag.getBitmask();
         		}
         	}
-        	if (isYahoo) {
+    		if (isYahoo || isLive) {
     			DbMailItem.alterTag(mNoInferiorsFlag, Arrays.asList(ID_FOLDER_INBOX, ID_FOLDER_SENT), true);
     			MailItem mi = getCachedItem(ID_FOLDER_INBOX);
     			if (mi != null)
@@ -159,7 +164,7 @@ public class LocalMailbox extends DesktopMailbox {
 		if (isImapMailbox && !inArchive && item instanceof Folder && ((Folder)item).getDefaultView() == MailItem.TYPE_MESSAGE &&
 				(((Folder)item).getUrl() == null || ((Folder)item).getUrl().equals(""))) {
 			alterSyncFolderFlag((Folder)item, true);
-			if (isYahoo)
+			if (isYahoo || isLive)
 				item.alterTag(mNoInferiorsFlag, true);
 		}
 	}
