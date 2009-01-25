@@ -363,7 +363,7 @@ function() {
 	html[i++] = "<input id='turnONstickynotesZimlet_chkbx'  type='checkbox'/>Enable 'Sticky Notes' Zimlet";
 	html[i++] = "</DIV>";
 	html[i++] = "<BR>";
-	html[i++] = "*Changing above prefrences would refresh browser";
+	html[i++] = "*Changing above preferences would refresh browser";
 	return html.join("");
 };
 
