@@ -30,6 +30,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.accesscontrol.RightCommand;
+import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncErrorManager;
@@ -2219,14 +2220,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public void grantRight(String targetType, TargetBy targetBy, String target,
              String granteeType, GranteeBy granteeBy, String grantee,
-             String right, boolean deny) throws ServiceException {
+             String right, RightModifier rightModifier) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("grantRight");
     }
     
     @Override
     public void revokeRight(String targetType, TargetBy targetBy, String target,
               String granteeType, GranteeBy granteeBy, String grantee,
-              String right, boolean deny) throws ServiceException {
+              String right, RightModifier rightModifier) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("revokeRight");
     }
 
