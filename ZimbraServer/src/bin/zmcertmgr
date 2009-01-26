@@ -385,15 +385,16 @@ createCA() {
   if [ ! -d "${zimbra_ssl_directory}" ]; then
     initSSLDirs
   fi
-  
-  if [ ! -f ${zimbra_ca_ssl_conf} ]; then
-    createConf "${zimbra_ca_ssl_conf}" "$subject_alt_names"
-  fi
 
   if [ x"$1" = "x-new" ]; then
     IS_NEW_CA=$1 #Allow the scripts to overwrite the existing csr
     shift
   fi
+  
+  if [ ! -f ${zimbra_ca_ssl_conf} -o x"${IS_NEW_CA}" = "x-new" ]; then
+    createConf "${zimbra_ca_ssl_conf}" "$subject_alt_names"
+  fi
+
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   chown zimbra ${tmpfile}
@@ -422,7 +423,7 @@ createCA() {
   rm -f ${tmpfile} 2> /dev/null
 
   # Create key/crt if it didn't exist in LDAP
-  if [ ! -s "${zimbra_ca_key}" ]; then
+  if [ ! -s "${zimbra_ca_key}" -o x"${IS_NEW_CA}" = "x-new" ]; then
     createCAKey
   elif [ ! -s "${zimbra_ca_key}" -o x"$(grep "PRIVATE KEY" $zimbra_ca_key)" = "x" ]; then
     createCAKey
@@ -862,8 +863,8 @@ createCert() {
     subject_alt_names=`su - zimbra -c "${zimbra_home}/bin/zmprov -l gas | xargs "`
     createCSR self -new 
     shift
-  elif [ ! -s "${server_csr}" ]; then
-    createCSR
+  elif [ ! -s "${server_csr}" -o x"${IS_NEW_CRT}" = "x-new" ]; then
+    createCSR self ${IS_NEW_CRT}
   fi
 
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
