@@ -62,6 +62,7 @@ public class OfflineFolderAction extends FolderAction {
         if (!(mbox instanceof OfflineMailbox))
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         OfflineMailbox ombx = (OfflineMailbox) mbox;
+        boolean traceOn = ombx.getOfflineAccount().isDebugTraceEnabled();
         
         Element response;
         if (operation.equals(OP_GRANT) || operation.equals(OP_REVOKE)) {
@@ -70,13 +71,14 @@ public class OfflineFolderAction extends FolderAction {
             response = ombx.proxyRequest(request, zsc.getResponseProtocol(), false, operation);
             if (fromBatch)
                 response.detach();
+            ombx.sync(true, traceOn);
         } else { 
             // before doing anything, make sure all data sources are pushed to the server
-            ombx.sync(true, false);
+            ombx.sync(true, traceOn);
             // proxy this operation to the remote server
             response = ombx.proxyRequest(request, zsc.getResponseProtocol(), true, operation);
             // and get a head start on the sync of the newly-pulled-in messages
-            ombx.sync(true, false);
+            ombx.sync(true, traceOn);
         }
         return response;
     }
