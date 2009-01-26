@@ -135,7 +135,7 @@ DynSelect_XFormItem.prototype.resetChoices = function () {
 		return;
 		
 	var callback = new AjxCallback(this, this.changeChoicesCallback);
-	this.dataFetcherMethod.call(this.dataFetcherObject, "", null, callback);
+	this.dataFetcherMethod.call(this.dataFetcherObject, "", null, callback , this.getForm());
 }
 
 
@@ -163,9 +163,9 @@ DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTy
 	var searchByProcessedValue = this.getInheritedProperty("searchByProcessedValue");
 	
 	if(searchByProcessedValue)	
-		this.dataFetcherMethod.call(this.dataFetcherObject, val, event, callback);
+		this.dataFetcherMethod.call(this.dataFetcherObject, val, event, callback, this.getForm());
 	else	
-		this.dataFetcherMethod.call(this.dataFetcherObject, value, event, callback);
+		this.dataFetcherMethod.call(this.dataFetcherObject, value, event, callback, this.getForm());
 }
 
 DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {

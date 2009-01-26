@@ -152,10 +152,10 @@ ZaRight.prototype.toString = function() {
 ZaRight.getRights = function (targetType, expandAllAttrs) {
     var soapDoc = AjxSoapDoc.create("GetAllRightsRequest", ZaZimbraAdmin.URN, null);
 	if (targetType) {
-        soapDoc.setAttribute("targetType", targetType);
+        soapDoc.setMethodAttribute("targetType", targetType);
     }
     if (expandAllAttrs) {
-        soapDoc.setAttribute("expandAllAttrs", expandAllAttrs) ;
+        soapDoc.setMethodAttribute("expandAllAttrs", expandAllAttrs) ;
     }
     var params = new Object();
 	params.soapDoc = soapDoc;
@@ -187,6 +187,46 @@ function() {
     var allSystemRightsList = ZaRight.getRights () ;
     ZaRight.initSystemRights (allSystemRightsList);
     return allSystemRightsList ;
+}
+
+ZaRight.getSystemRightsByTargetType = function (targetType)  {
+    if (!targetType) return ;
+
+    if (!ZaRight.SYSTEM_RIGHTS_BY_TARGET_TYPE) {
+        ZaRight.SYSTEM_RIGHTS_BY_TARGET_TYPE = {} ;
+    }
+
+    if (!ZaRight.SYSTEM_RIGHTS_BY_TARGET_TYPE[targetType]) {
+        ZaRight.SYSTEM_RIGHTS_BY_TARGET_TYPE[targetType] = [];
+        var lists = ZaRight.getRights(targetType) ;
+        var arr = lists.getArray () ;
+        for (var j = 0; j < arr.length; j ++) {
+            ZaRight.SYSTEM_RIGHTS_BY_TARGET_TYPE[targetType].push (arr [j].name);
+        }
+    }
+
+    return ZaRight.SYSTEM_RIGHTS_BY_TARGET_TYPE [targetType] ;
+}
+
+ZaRight.prototype.dynSelectRightNames = function (value, event, callback, form) {
+	try {
+        var targetType = form.getInstance()[ZaGrant.A_target_type] ;
+        var systemRightsByTarget = ZaRight.getSystemRightsByTargetType (targetType) ;
+
+        if (systemRightsByTarget)
+        //filter the choices by user input
+        var choices = [];
+        for (var i = 0; i < systemRightsByTarget.length; i ++) {
+//            if (systemRightsByTarget[i].indexOf (value) > 0) {
+               if (systemRightsByTarget[i].indexOf (value) == 0) {    //start with
+                choices.push(systemRightsByTarget[i])   ;
+            }
+        }
+        callback.run(choices) ;
+        
+    } catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchCoses");
+	}
 }
 
 ZaRight.modifyMethod = function (tmpObj) {
@@ -315,3 +355,5 @@ ZaRight.initMethod = function () {
 	this.name="";
 }
 ZaItem.initMethods["ZaRight"].push(ZaRight.initMethod);
+
+

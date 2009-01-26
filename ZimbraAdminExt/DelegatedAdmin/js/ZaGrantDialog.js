@@ -4,6 +4,8 @@ ZaGrantDialog = function(parent,  app, title) {
     ZaXDialog.call(this, parent,null,  title, "400px", "200px");
     this._containedObject = {};
 
+    this.systemRightsChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+
     this.initForm(ZaGrant.myXModel, this.getMyXForm());
 }
 
@@ -50,15 +52,30 @@ function() {
                            type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_inline_attr }
                    ]
                },
-
+               /*
                {ref: ZaGrant.A_right, id: ZaGrant.A_right, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_right_name,
                      visibilityChecks:[],
 //                   visibilityChecks: [[ZaGrantDialog.rightTypeListener, "system"]],
 //                   visibilityChangeEventSources: [ZaGrant.A_right_type] ,
                    enableDisableChecks:[[ZaGrantDialog.rightTypeListener, "system"]],
                    enableDisableChangeEventSources:[ZaGrant.A_right_type],
-                   labelLocation:_LEFT_ },
-               {ref: ZaGrant.A_deny,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_deny ,
+                   labelLocation:_LEFT_ }, */
+                 {ref: ZaGrant.A_right, id: ZaGrant.A_right, type: _DYNSELECT_, label: com_zimbra_delegatedadmin.Label_right_name,
+                         visibilityChecks:[],
+    //                   visibilityChecks: [[ZaGrantDialog.rightTypeListener, "system"]],
+    //                   visibilityChangeEventSources: [ZaGrant.A_right_type] ,
+                       enableDisableChecks:[[ZaGrantDialog.rightTypeListener, "system"]],
+                       enableDisableChangeEventSources:[ZaGrant.A_right_type],
+                       labelLocation:_LEFT_ ,
+                       emptyText:ZaMsg.enterSearchTerm,
+                       choices: this.systemRightsChoices, //TODO: change to all the choices based on the targetType
+//                       inputPreProcessor:ZaGrantDialog.preProcessRightNames,
+                       dataFetcherClass:ZaRight ,
+                       dataFetcherMethod:ZaRight.prototype.dynSelectRightNames,
+                       editable: true
+                 },
+
+                 {ref: ZaGrant.A_deny,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_deny ,
                    visibilityChecks:[],  
                    labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" }
               ]
@@ -67,6 +84,7 @@ function() {
     };
     return xFormObject;
 }
+
 
 ZaGrantDialog.grantRight = function () {
     if(this.parent.grantRightDlg) {
