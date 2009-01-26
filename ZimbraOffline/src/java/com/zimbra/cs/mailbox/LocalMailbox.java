@@ -47,9 +47,9 @@ import com.zimbra.cs.util.JMSession;
 
 public class LocalMailbox extends DesktopMailbox {
     
-	private final boolean isImapMailbox;
-	private final boolean isYahoo;
-	private final boolean isLive;
+	private boolean isImapMailbox;
+	private boolean isYahoo;
+	private boolean isLive;
 	
     private final Flag mSyncFlag;
     private final Flag mSyncFolderFlag;
