@@ -202,7 +202,7 @@ function (ev) {
 		this.getModel().setInstanceValue(this.getInstance(), ZaServer.A2_volume_selection_cache, null);
 		//instance.volume_selection_cache = null;
 	}	
-	this.getForm().refresh();
+
 	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
 		ZaServerXFormView.editButtonListener.call(this);
 	}	
@@ -231,59 +231,58 @@ ZaServerXFormView.updateVolume = function () {
 		this.parent.editVolumeDlg.popdown();
 		var obj = this.parent.editVolumeDlg.getObject();
 		var instance = this.getInstance();
+		var volumes = [];
+		var cnt = instance[ZaServer.A_Volumes].length;
+		for (var i=0; i< cnt; i++) {
+			volumes[i] = instance[ZaServer.A_Volumes][i];
+		}
 		var dirty = false;
-		if(instance[ZaServer.A2_volume_selection_cache][0][ZaServer.A_VolumeId]==obj[ZaServer.A_VolumeId]) {
-			if(instance[ZaServer.A2_volume_selection_cache][0][ZaServer.A_VolumeName] != obj[ZaServer.A_VolumeName]) {
-				instance.volume_selection_cache[0][ZaServer.A_VolumeName] = obj[ZaServer.A_VolumeName];
+		
+		if(volumes[obj._index]) {
+			if(volumes[obj._index][ZaServer.A_VolumeName] != obj[ZaServer.A_VolumeName]) {
+				volumes[obj._index][ZaServer.A_VolumeName] = obj[ZaServer.A_VolumeName];
 				dirty=true;
 			}
-			if(instance.volume_selection_cache[0][ZaServer.A_VolumeRootPath] != obj[ZaServer.A_VolumeRootPath]) {
-				instance.volume_selection_cache[0][ZaServer.A_VolumeRootPath] = obj[ZaServer.A_VolumeRootPath];
+			if(volumes[obj._index][ZaServer.A_VolumeRootPath] != obj[ZaServer.A_VolumeRootPath]) {
+				volumes[obj._index][ZaServer.A_VolumeRootPath] = obj[ZaServer.A_VolumeRootPath];
 				dirty=true;
-				if(instance.volume_selection_cache[0][ZaServer.A_isCurrent]) {
+				if(volumes[obj._index][ZaServer.A_isCurrent]) {
 					ZaApp.getInstance().getCurrentController().popupWarningDialog(ZaMsg.VM_Warning_Changing_CurVolumePath);
 				}
 			}
-			if(instance.volume_selection_cache[0][ZaServer.A_VolumeCompressBlobs] != obj[ZaServer.A_VolumeCompressBlobs]) {
-				instance.volume_selection_cache[0][ZaServer.A_VolumeCompressBlobs] = obj[ZaServer.A_VolumeCompressBlobs];
+			if(volumes[obj._index][ZaServer.A_VolumeCompressBlobs] != obj[ZaServer.A_VolumeCompressBlobs]) {
+				volumes[obj._index][ZaServer.A_VolumeCompressBlobs] = obj[ZaServer.A_VolumeCompressBlobs];
 				dirty=true;
 			}
-			if(instance.volume_selection_cache[0][ZaServer.A_VolumeCompressionThreshold] != obj[ZaServer.A_VolumeCompressionThreshold]) {
-				instance.volume_selection_cache[0][ZaServer.A_VolumeCompressionThreshold] = obj[ZaServer.A_VolumeCompressionThreshold];
+			if(volumes[obj._index][ZaServer.A_VolumeCompressionThreshold] != obj[ZaServer.A_VolumeCompressionThreshold]) {
+				volumes[obj._index][ZaServer.A_VolumeCompressionThreshold] = obj[ZaServer.A_VolumeCompressionThreshold];
 				dirty=true;
 			}
-			if(instance.volume_selection_cache[0][ZaServer.A_VolumeType] != obj[ZaServer.A_VolumeType]) {
-				instance.volume_selection_cache[0][ZaServer.A_VolumeType] = obj[ZaServer.A_VolumeType];
+			if(volumes[obj._index][ZaServer.A_VolumeType] != obj[ZaServer.A_VolumeType]) {
+				volumes[obj._index][ZaServer.A_VolumeType] = obj[ZaServer.A_VolumeType];
 				dirty=true;
-			}						
-
+			}					
 		}
 
 		if(dirty) {
 			var indexArr = [];
 			var msgArr = [];
-			var cnt = instance[ZaServer.A_Volumes].length;
 			for(var i=0;i<cnt;i++) {
-				if(!instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeId])
-					continue;
-					
-				if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.MSG) {
-					msgArr.push(instance[ZaServer.A_Volumes][i])
-				} else if(instance[ZaServer.A_Volumes][i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
-					indexArr.push(instance[ZaServer.A_Volumes][i]);
+				if(volumes[i][ZaServer.A_VolumeType]==ZaServer.MSG) {
+					msgArr.push(volumes[i])
+				} else if(volumes[i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
+					indexArr.push(volumes[i]);
 				}
 			}			
 			ZaServerXFormView.indexVolChoices.setChoices(indexArr);
 			ZaServerXFormView.indexVolChoices.dirtyChoices();	
 			ZaServerXFormView.messageVolChoices.setChoices(msgArr);
 			ZaServerXFormView.messageVolChoices.dirtyChoices();	
-			instance[ZaServer.A_Volumes]._version++;
+			volumes._version = instance[ZaServer.A_Volumes]+1;
+			this.getModel().setInstanceValue(this.getInstance(), ZaServer.A_Volumes, volumes);
 			this.getModel().setInstanceValue(this.getInstance(), ZaServer.A2_volume_selection_cache, new Array());
-			//instance.volume_selection_cache = new Array();
-			
 			this.parent.setDirty(dirty);	
-		}
-		this.refresh();				
+		}		
 	}
 }
 
@@ -292,11 +291,16 @@ ZaServerXFormView.addVolume  = function () {
 		this.parent.addVolumeDlg.popdown();
 		var obj = this.parent.addVolumeDlg.getObject();
 		var instance = this.getInstance();
-		var volArr = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_Volumes);
+		var volArr = [];
+		var oldArr = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_Volumes);
+		var cnt = oldArr.length;
+		for (var i=0; i< cnt; i++) {
+			volArr[i] = oldArr[i];
+		}		
 		this.getModel().setInstanceValue(this.getInstance(),ZaServer.A2_volume_selection_cache,[]);
 		
 		volArr.push(obj);
-		volArr._version++;
+		volArr._version = oldArr._version+1;
 
 		volArr.sort(ZaServer.compareVolumesByName);		
 		var cnt = volArr.length;
@@ -338,6 +342,18 @@ function () {
 		obj[ZaServer.A_VolumeCompressionThreshold] = instance.volume_selection_cache[0][ZaServer.A_VolumeCompressionThreshold];
 		obj[ZaServer.A_VolumeType] = instance.volume_selection_cache[0][ZaServer.A_VolumeType];		
 		
+		var volArr = this.getModel().getInstanceValue(this.getInstance(),ZaServer.A_Volumes);
+		
+		var cnt = volArr.length;
+		for(var i=0; i < cnt; i++) {
+			if(volArr[i][ZaServer.A_VolumeId]==obj[ZaServer.A_VolumeId] || 
+				(!volArr[i][ZaServer.A_VolumeId] && (volArr[i][ZaServer.A_VolumeName] == obj[ZaServer.A_VolumeName])
+					&& (volArr[i][ZaServer.A_VolumeRootPath] == obj[ZaServer.A_VolumeRootPath]))) {
+				obj._index = i;
+				break;
+			}
+		}
+		
 
 
 		formPage.editVolumeDlg.setObject(obj);
@@ -347,36 +363,43 @@ function () {
 
 ZaServerXFormView.deleteButtonListener = function () {
 	var instance = this.getInstance();
-	var path = ZaServer.A_Volumes;
+	var volArr = [];
+	if(!instance.volume_selection_cache) {
+		return;
+	}
+	var selArr = this.getInstanceValue(ZaServer.A2_volume_selection_cache);
 
-	if(instance.volume_selection_cache != null) {
-		var selArr = this.getInstanceValue(ZaServer.A2_volume_selection_cache);
-		var volArr = this.getInstanceValue(ZaServer.A_Volumes);
-		var removedArr = this.getInstanceValue(ZaServer.A_RemovedVolumes);
-		if(AjxUtil.isEmpty(removedArr))
-			removedArr = new Array();
-			
-		var cnt = selArr.length;
-		if(cnt && instance[ZaServer.A_Volumes] && instance[ZaServer.A_Volumes]) {
-			for(var i=0;i<cnt;i++) {
-				var cnt2 = instance[ZaServer.A_Volumes].length-1;				
-				for(var k=cnt2;k>=0;k--) {
-					if(instance[ZaServer.A_Volumes][k][ZaServer.A_VolumeId]==selArr[i][ZaServer.A_VolumeId]) {
-						removedArr.push(instance[ZaServer.A_Volumes][k]);
-						volArr.splice(k,1);
-						break;	
-					}
+	var oldArr = this.getInstanceValue(ZaServer.A_Volumes);
+	var cnt2 = oldArr.length;
+	for (var i=0; i< cnt2; i++) {
+		volArr[i] = oldArr[i];
+	}		
+	
+	var removedArr = this.getInstanceValue(ZaServer.A_RemovedVolumes);
+	if(AjxUtil.isEmpty(removedArr))
+		removedArr = new Array();
+		
+	var cnt = selArr.length;
+	if(cnt && volArr) {
+		for(var i=0;i<cnt;i++) {
+			cnt2--;				
+			for(var k=cnt2;k>=0;k--) {
+				if(volArr[k][ZaServer.A_VolumeId]==selArr[i][ZaServer.A_VolumeId]) {
+					removedArr.push(volArr[k]);
+					volArr.splice(k,1);
+					break;	
 				}
 			}
-				
 		}
+			
 	}
 	
-	volArr.sort(ZaServer.compareVolumesByName);		
-	var cnt = volArr.length;
+	volArr.sort(ZaServer.compareVolumesByName);	
+	volArr._version = oldArr._version+1;	
+	var cnt3 = volArr.length;
 	var indexArr = [];
 	var msgArr = [];
-	for(var i=0;i<cnt;i++) {
+	for(var i=0;i<cnt3;i++) {
 		if(volArr[i][ZaServer.A_VolumeType]==ZaServer.INDEX) {
 			indexArr.push(volArr[i]);
 		} else if(volArr[i][ZaServer.A_VolumeType] == ZaServer.MSG) {
@@ -395,7 +418,6 @@ ZaServerXFormView.deleteButtonListener = function () {
 	this.setInstanceValue([],ZaServer.A2_volume_selection_cache);
 	this.setInstanceValue(removedArr,ZaServer.A_RemovedVolumes);
 	this.getForm().parent.setDirty(true);
-	//this.getForm().refresh();
 }
 
 ZaServerXFormView.addButtonListener =
@@ -420,11 +442,11 @@ function () {
 	formPage.addVolumeDlg.popup();		
 }
 
-ZaServerXFormView.currentVolumeChanged = function (value, event, form) {
+/*ZaServerXFormView.currentVolumeChanged = function (value, event, form) {
 	this.getInstance()[ZaServer.A_Volumes]._version++;
 	this.setInstanceValue(value);
 	return value;
-}
+}*/
 /**
 * This method is added to the map {@link ZaTabView#XFormModifiers}
 * @param xFormObject {Object} a definition of the form. This method adds/removes/modifies xFormObject to construct
@@ -856,10 +878,10 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							cssStyle:"margin-top:10px;margin-bottom:10px;padding-bottom:0px;margin-left:10px;margin-right:10px;",
 							items: [
 								{ref:ZaServer.A_Volumes, type:_DWT_LIST_, height:"200", width:"100%", 
-									 	forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
+									 	preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									 	headerList:headerList, widgetClass:ZaServerVolumesListView,
 									 	onSelection:ZaServerXFormView.volumeSelectionListener,
-									 	valueChangeEventSources:[ZaServer.A_Volumes, ZaServer.A_RemovedVolumes]
+									 	valueChangeEventSources:[ZaServer.A_Volumes, ZaServer.A_CurrentMsgVolumeId, ZaServer.A_CurrentIndexVolumeId,ZaServer.A_RemovedVolumes]
 								},
 								{type:_GROUP_, numCols:5, colSizes:["100px","auto","100px","auto","100px"], width:"350px",
 									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
@@ -886,16 +908,20 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 							]
 						},							
 						{type:_ZA_TOP_GROUPER_,label:ZaMsg.VM_CurrentVolumesGrpTitle,id:"server_form_current_vol_group", items:[
-							{type:_OSELECT1_, editable:false,forceUpdate: true,
-							ref:ZaServer.A_CurrentMsgVolumeId,
-							choices:ZaServerXFormView.messageVolChoices,
-							onChange:ZaServerXFormView.currentVolumeChanged,
-							label:ZaMsg.VM_CurrentMessageVolume+":"},
-							{type:_OSELECT1_, editable:false,forceUpdate: true,
-							ref:ZaServer.A_CurrentIndexVolumeId,
-							choices:ZaServerXFormView.indexVolChoices,
-							onChange:ZaServerXFormView.currentVolumeChanged,
-							label:ZaMsg.VM_CurrentIndexVolume+":"}
+							{type:_OSELECT1_, editable:false,
+								valueChangeEventSources:[ZaServer.A_Volumes, ZaServer.A_RemovedVolumes],
+								ref:ZaServer.A_CurrentMsgVolumeId,
+								choices:ZaServerXFormView.messageVolChoices,
+								//onChange:ZaServerXFormView.currentVolumeChanged,
+								label:ZaMsg.VM_CurrentMessageVolume+":"
+							},
+							{type:_OSELECT1_, editable:false,
+								valueChangeEventSources:[ZaServer.A_Volumes, ZaServer.A_RemovedVolumes],
+								ref:ZaServer.A_CurrentIndexVolumeId,
+								choices:ZaServerXFormView.indexVolChoices,
+								//onChange:ZaServerXFormView.currentVolumeChanged,
+								label:ZaMsg.VM_CurrentIndexVolume+":"
+							}
 						]}						
 						
 					]

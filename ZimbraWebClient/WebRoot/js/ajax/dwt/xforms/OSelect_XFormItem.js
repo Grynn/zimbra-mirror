@@ -70,6 +70,7 @@ OSelect1_XFormItem.prototype.initFormItem = function () {
 }
 
 OSelect1_XFormItem.prototype.updateElement = function (newValue) {
+	if (this.choicesAreDirty()) this.updateChoicesHTML();
 	// hack: if this item can display multiple values and there's a comma in the value
 	//		assume it's a list of values
 	if (this.getMultiple() && newValue != null && newValue.indexOf(",") > -1) {
