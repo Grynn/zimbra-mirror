@@ -673,26 +673,20 @@ return pv.compareTo("${compiler:offline_version}") &gt; 0 || pb.compareTo("${com
                   </java>
                 </serializedBean>
                 <beans>
-                  <action name="win stop prism" id="287039" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                  <action name="win and linux stop prism" id="287039" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
                         <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                           <void property="arguments">
-                            <array class="java.lang.String" length="3">
+                            <array class="java.lang.String" length="1">
                               <void index="0">
-                                <string>-override</string>
-                              </void>
-                              <void index="1">
-                                <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
-                              </void>
-                              <void index="2">
-                                <string>-close</string>
+                                <string>${installer:prismBinaryArgs}</string>
                               </void>
                             </array>
                           </void>
                           <void property="executable">
                             <object class="java.io.File">
-                              <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
+                              <string>${installer:prismBinary}</string>
                             </object>
                           </void>
                           <void property="logArguments">
@@ -709,71 +703,41 @@ return pv.compareTo("${compiler:offline_version}") &gt; 0 || pb.compareTo("${com
                         </object>
                       </java>
                     </serializedBean>
-                    <condition>if (!Util.isWindows())
+                    <condition>if (Util.isMacOS())
     return false;
     
-String pver = (String)context.getVariable("prevVersion");
 String pbld = (String)context.getVariable("prevBuild");
-if (pver == null || pbld == null)
+if (pbld == null)
     return false;
     
 try {
-    Float ver = Float.parseFloat(pver);
     int bld = Integer.parseInt(pbld);
-    return (ver &gt;= 0.90f &amp;&amp;  bld &gt;= 1272 &amp;&amp; bld &lt;= 1471);
-} catch (Exception e) {
-    return false;
-}
-   </condition>
-                  </action>
-                  <action name="win stop zdclient" id="288720" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                          <void property="arguments">
-                            <array class="java.lang.String" length="3">
-                              <void index="0">
-                                <string>-override</string>
-                              </void>
-                              <void index="1">
-                                <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
-                              </void>
-                              <void index="2">
-                                <string>-close</string>
-                              </void>
-                            </array>
-                          </void>
-                          <void property="executable">
-                            <object class="java.io.File">
-                              <string>${installer:sys.installationDir}/win32/prism/zdclient.exe</string>
-                            </object>
-                          </void>
-                          <void property="logArguments">
-                            <boolean>true</boolean>
-                          </void>
-                          <void property="wait">
-                            <boolean>true</boolean>
-                          </void>
-                          <void property="workingDirectory">
-                            <object class="java.io.File">
-                              <string>log</string>
-                            </object>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>if (!Util.isWindows())
-    return false;
+    if (bld &lt; 1272)
+        return false;
+        
+    String instDir = (String)context.getVariable("sys.installationDir");
+    String oldBin;
+    String newBin;
+    if (Util.isWindows()) {
+        oldBin = instDir + "\\win32\\prism\\prism.exe";
+        newBin = instDir + "\\win32\\prism\\zdclient.exe";
+    } else {
+        oldBin = instDir + "/linux/prism/prism";
+        newBin = instDir + "/linux/prism/zdclient";
+    }
     
-String pver = (String)context.getVariable("prevVersion");
-String pbld = (String)context.getVariable("prevBuild");
-if (pver == null || pbld == null)
-    return false;
+    if ((new File(oldBin)).exists())
+        context.setVariable("prismBinary", oldBin);
+    else if ((new File(newBin)).exists())
+        context.setVariable("prismBinary", newBin);
+    else
+        return false;
     
-try {
-    Float ver = Float.parseFloat(pver);
-    int bld = Integer.parseInt(pbld);
-    return (ver &gt;= 0.90f &amp;&amp;  bld &gt; 1471);
+    String[] args = new String []{"-override",  Util.isWindows() ? 
+        (instDir + "\\zdesktop.webapp\\override.ini") : 
+        (instDir + "/zdesktop.webapp/override.ini"), "-close"};
+    context.setVariable("prismBinaryArgs", args);
+    return true;
 } catch (Exception e) {
     return false;
 }
@@ -810,112 +774,6 @@ try {
                       </java>
                     </serializedBean>
                     <condition>Util.isMacOS()</condition>
-                  </action>
-                  <action name="linux stop prism" id="287040" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                          <void property="arguments">
-                            <array class="java.lang.String" length="3">
-                              <void index="0">
-                                <string>-override</string>
-                              </void>
-                              <void index="1">
-                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
-                              </void>
-                              <void index="2">
-                                <string>-close</string>
-                              </void>
-                            </array>
-                          </void>
-                          <void property="executable">
-                            <object class="java.io.File">
-                              <string>${installer:sys.installationDir}/linux/prism/prism</string>
-                            </object>
-                          </void>
-                          <void property="logArguments">
-                            <boolean>true</boolean>
-                          </void>
-                          <void property="wait">
-                            <boolean>true</boolean>
-                          </void>
-                          <void property="workingDirectory">
-                            <object class="java.io.File">
-                              <string>log</string>
-                            </object>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>if (Util.isWindows() || Util.isMacOS())
-    return false;
-        
-String pver = (String)context.getVariable("prevVersion");
-String pbld = (String)context.getVariable("prevBuild");
-if (pver == null || pbld == null)
-    return false;
-
-try {
-    Float ver = Float.parseFloat(pver);
-    int bld = Integer.parseInt(pbld);
-    return (ver &gt;= 0.90f &amp;&amp;  bld &gt;= 1272 &amp;&amp; bld &lt;= 1471);
-} catch (Exception e) {
-    return false;
-}
-</condition>
-                  </action>
-                  <action name="linux stop zdclient" id="288721" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                          <void property="arguments">
-                            <array class="java.lang.String" length="3">
-                              <void index="0">
-                                <string>-override</string>
-                              </void>
-                              <void index="1">
-                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
-                              </void>
-                              <void index="2">
-                                <string>-close</string>
-                              </void>
-                            </array>
-                          </void>
-                          <void property="executable">
-                            <object class="java.io.File">
-                              <string>${installer:sys.installationDir}/linux/prism/zdclient</string>
-                            </object>
-                          </void>
-                          <void property="logArguments">
-                            <boolean>true</boolean>
-                          </void>
-                          <void property="wait">
-                            <boolean>true</boolean>
-                          </void>
-                          <void property="workingDirectory">
-                            <object class="java.io.File">
-                              <string>log</string>
-                            </object>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>if (Util.isWindows() || Util.isMacOS())
-    return false;
-        
-String pver = (String)context.getVariable("prevVersion");
-String pbld = (String)context.getVariable("prevBuild");
-if (pver == null || pbld == null)
-    return false;
-
-try {
-    Float ver = Float.parseFloat(pver);
-    int bld = Integer.parseInt(pbld);
-    return (ver &gt;= 0.90f &amp;&amp;  bld &gt; 1471);
-} catch (Exception e) {
-    return false;
-}
-</condition>
                   </action>
                 </beans>
               </group>
@@ -1276,6 +1134,66 @@ default:
                   </action>
                 </beans>
               </group>
+              <action name="backup prefs.js" id="288938" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                      <void property="destinationFile">
+                        <object class="java.io.File">
+                          <string>prefs.js.bak</string>
+                        </object>
+                      </void>
+                      <void property="mode">
+                        <string>600</string>
+                      </void>
+                      <void property="overwriteMode">
+                        <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                      </void>
+                      <void property="sourceFile">
+                        <object class="java.io.File">
+                          <string>profile/prefs.js</string>
+                        </object>
+                      </void>
+                      <void property="triggerReboot">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="uninstallMode">
+                        <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="backup persdict.dat" id="288939" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                      <void property="destinationFile">
+                        <object class="java.io.File">
+                          <string>persdict.dat.bak</string>
+                        </object>
+                      </void>
+                      <void property="overwriteMode">
+                        <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                      </void>
+                      <void property="sourceFile">
+                        <object class="java.io.File">
+                          <string>profile/persdict.dat</string>
+                        </object>
+                      </void>
+                      <void property="triggerReboot">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="uninstallMode">
+                        <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>String instDir = (String)context.getVariable("sys.installationDir");
+return (new File(instDir + "/profile/persdict.dat")).exists();</condition>
+              </action>
               <action name="clear error" id="285704" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -1583,7 +1501,7 @@ default:
                 </serializedBean>
                 <condition />
               </action>
-              <action name="profile" id="275912" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="profile" id="288940" beanClass="com.install4j.runtime.beans.actions.files.DeleteFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.files.DeleteFileAction">
@@ -3564,6 +3482,76 @@ return true;</string>
                   </action>
                 </beans>
               </group>
+              <group name="restore profile files" id="288932" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
+                  </java>
+                </serializedBean>
+                <beans>
+                  <action name="restore prefs.js" id="288933" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                          <void property="destinationFile">
+                            <object class="java.io.File">
+                              <string>profile/prefs.js</string>
+                            </object>
+                          </void>
+                          <void property="mode">
+                            <string>600</string>
+                          </void>
+                          <void property="overwriteMode">
+                            <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                          </void>
+                          <void property="sourceFile">
+                            <object class="java.io.File">
+                              <string>prefs.js.bak</string>
+                            </object>
+                          </void>
+                          <void property="triggerReboot">
+                            <boolean>false</boolean>
+                          </void>
+                          <void property="uninstallMode">
+                            <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>String instDir = (String)context.getVariable("sys.installationDir");
+return (new File(instDir + "/prefs.js.bak")).exists();</condition>
+                  </action>
+                  <action name="restore persdict.dat" id="288934" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                          <void property="destinationFile">
+                            <object class="java.io.File">
+                              <string>profile/persdict.dat</string>
+                            </object>
+                          </void>
+                          <void property="overwriteMode">
+                            <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                          </void>
+                          <void property="sourceFile">
+                            <object class="java.io.File">
+                              <string>persdict.dat.bak</string>
+                            </object>
+                          </void>
+                          <void property="triggerReboot">
+                            <boolean>false</boolean>
+                          </void>
+                          <void property="uninstallMode">
+                            <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>String instDir = (String)context.getVariable("sys.installationDir");
+return (new File(instDir + "/persdict.dat.bak")).exists();</condition>
+                  </action>
+                </beans>
+              </group>
               <group name="Start zdesktop" id="287724" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="false" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -4288,26 +4276,20 @@ return true;</string>
                   </java>
                 </serializedBean>
                 <beans>
-                  <action name="win stop prism" id="287051" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                  <action name="win and linux stop prism" id="288921" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
                         <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
                           <void property="arguments">
-                            <array class="java.lang.String" length="3">
+                            <array class="java.lang.String" length="1">
                               <void index="0">
-                                <string>-override</string>
-                              </void>
-                              <void index="1">
-                                <string>${installer:sys.installationDir}\zdesktop.webapp\override.ini</string>
-                              </void>
-                              <void index="2">
-                                <string>-close</string>
+                                <string>${installer:prismBinaryArgs}</string>
                               </void>
                             </array>
                           </void>
                           <void property="executable">
                             <object class="java.io.File">
-                              <string>${installer:sys.installationDir}/win32/prism/prism.exe</string>
+                              <string>${installer:prismBinary}</string>
                             </object>
                           </void>
                           <void property="logArguments">
@@ -4324,7 +4306,37 @@ return true;</string>
                         </object>
                       </java>
                     </serializedBean>
-                    <condition>Util.isWindows()</condition>
+                    <condition>if (Util.isMacOS())
+    return false;
+        
+try {        
+    String instDir = (String)context.getVariable("sys.installationDir");
+    String oldBin;
+    String newBin;
+    if (Util.isWindows()) {
+        oldBin = instDir + "\\win32\\prism\\prism.exe";
+        newBin = instDir + "\\win32\\prism\\zdclient.exe";
+    } else {
+        oldBin = instDir + "/linux/prism/prism";
+        newBin = instDir + "/linux/prism/zdclient";
+    }
+    
+    if ((new File(oldBin)).exists())
+        context.setVariable("prismBinary", oldBin);
+    else if ((new File(newBin)).exists())
+        context.setVariable("prismBinary", newBin);
+    else
+        return false;
+    
+    String[] args = new String []{"-override",  Util.isWindows() ? 
+        (instDir + "\\zdesktop.webapp\\override.ini") : 
+        (instDir + "/zdesktop.webapp/override.ini"), "-close"};
+    context.setVariable("prismBinaryArgs", args);
+    return true;
+} catch (Exception e) {
+    return false;
+}
+   </condition>
                   </action>
                   <action name="macos stop prism" id="287049" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                     <serializedBean>
@@ -4357,44 +4369,6 @@ return true;</string>
                       </java>
                     </serializedBean>
                     <condition>Util.isMacOS()</condition>
-                  </action>
-                  <action name="linux stop prism" id="287050" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                    <serializedBean>
-                      <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
-                          <void property="arguments">
-                            <array class="java.lang.String" length="3">
-                              <void index="0">
-                                <string>-override</string>
-                              </void>
-                              <void index="1">
-                                <string>${installer:sys.installationDir}/zdesktop.webapp/override.ini</string>
-                              </void>
-                              <void index="2">
-                                <string>-close</string>
-                              </void>
-                            </array>
-                          </void>
-                          <void property="executable">
-                            <object class="java.io.File">
-                              <string>${installer:sys.installationDir}/linux/prism/prism</string>
-                            </object>
-                          </void>
-                          <void property="logArguments">
-                            <boolean>true</boolean>
-                          </void>
-                          <void property="wait">
-                            <boolean>true</boolean>
-                          </void>
-                          <void property="workingDirectory">
-                            <object class="java.io.File">
-                              <string>log</string>
-                            </object>
-                          </void>
-                        </object>
-                      </java>
-                    </serializedBean>
-                    <condition>!Util.isWindows() &amp;&amp; !Util.isMacOS()</condition>
                   </action>
                 </beans>
               </group>
