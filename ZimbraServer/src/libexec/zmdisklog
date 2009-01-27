@@ -38,8 +38,8 @@ my $pidFile="${zimbra_home}/log/zmdisklog.pid";
 my $TIMEOUT=60;
 my $MNTCMD;
 my $DFCMD;
-my $DISK_CRIT_THRESHOLD = 90;
-my $DISK_WARN_THRESHOLD = 80;
+my $DISK_CRIT_THRESHOLD = getLocalConfig("zmdisklog_warn_threshold") || 95;
+my $DISK_WARN_THRESHOLD = getLocalConfig("zmdisklog_critical_threshold") || 85;
 
 if ($platform =~ /MACOSX/) {
 	$MNTCMD = "mount -t hfs";
@@ -121,4 +121,27 @@ sub clearPid {
 sub catchAlarm {
 		Zimbra::Mon::Logger::Log( "info", "zmdisklog timeout after $TIMEOUT seconds"); 
     exit 1;
+}
+
+sub getLocalConfig {
+  my $key = shift;
+  if (defined ($ENV{zmsetvars})) {
+    return $ENV{$key};
+  }
+  open CONF,
+    "/opt/zimbra/bin/zmlocalconfig -q -m shell |" or die "Can't open local config: $!";
+  my @conf = <CONF>;
+  close CONF;
+
+  chomp @conf;
+
+  foreach (@conf) {
+    my ($key, $val) = split '=', $_, 2;
+    $val =~ s/;$//;
+    $val =~ s/'$//;
+    $val =~ s/^'//;
+    $ENV{$key} = $val;
+  }
+  $ENV{zmsetvars} = 'true';
+  return $ENV{$key};
 }
