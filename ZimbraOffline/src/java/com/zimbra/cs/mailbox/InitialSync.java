@@ -693,6 +693,8 @@ public class InitialSync {
         long nextAlarm = resp.getAttributeLong(MailConstants.A_CAL_NEXT_ALARM, 0);
         if (nextAlarm > 0)
             req.addAttribute(MailConstants.A_CAL_NEXT_ALARM, nextAlarm);
+        else
+            req.addAttribute(MailConstants.A_CAL_NO_NEXT_ALARM, true);
     	
    	    // for each <inv>
         for (Iterator<Element> iter = resp.elementIterator(MailConstants.E_INVITE); iter.hasNext();) {
