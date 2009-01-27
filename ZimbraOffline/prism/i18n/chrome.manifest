@@ -2,6 +2,7 @@ content branding chrome/webrunner/branding/
 resource prism-runtime .
 content webrunner chrome/webrunner/content/ xpcnativewrappers=no
 skin webrunner classic/1.0 chrome/classic/
+overlay chrome://mozapps/content/downloads/unknownContentType.xul chrome://webrunner/content/unknownContentType.xul
 
 locale webrunner en-US chrome/en-US/
 locale branding en-US chrome/en-US/branding/
