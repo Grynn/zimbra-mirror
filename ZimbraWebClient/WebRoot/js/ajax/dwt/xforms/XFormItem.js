@@ -583,10 +583,12 @@ XFormItem.prototype.updateEnabledDisabled = function (parentDisabled) {
 						myEnabledDisabledChecks[i].unshift(func);
 						if(!isEnabled)
 							break;
-					}
+					}                      
 				}
 			}
-		}
+		}else if (myEnabledDisabledChecks == false) {   //always disable this element
+            isEnabled = false ;
+        }
 	}	
 	
 	if(isEnabled)

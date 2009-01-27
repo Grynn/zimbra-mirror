@@ -237,7 +237,7 @@ ZaGrant.revokeMethod = function (target, obj) {
 
 ZaGrant.myXModel = {
 	items: [
-        {id: ZaGrant.A_grantee, type: _STRING_, ref: ZaGrant.A_grantee, required: true },
+        {id: ZaGrant.A_grantee, type: _EMAILADDR_, ref: ZaGrant.A_grantee, required: true },
         {id: ZaGrant.A_grantee_type, type:_STRING_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
         {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
         {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 },

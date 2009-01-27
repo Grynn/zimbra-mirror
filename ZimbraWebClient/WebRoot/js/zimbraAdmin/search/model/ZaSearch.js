@@ -433,11 +433,6 @@ function(n) {
 	}
 }
 
-ZaSearch.getAdancedSearchQuery =
-function (searchOptionsInstance) {
-	DBG.println (AjxDebug.DBG1, "Process the options instance to get the LDAP query string ...");
-}
-
 ZaSearch.searchByQueryHolder = 
 function (queryHolder, pagenum, orderby, isascending) {
 	if(queryHolder.isByDomain) {

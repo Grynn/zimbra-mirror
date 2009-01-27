@@ -545,6 +545,53 @@ function (resp) {
 	}  */
 }
 
+if (ZaSearch) {
+    ZaSearch.prototype.dynSelectGrantees = function (value, event, callback) {
+        try {
+            var params = new Object();
+            var query = ZaSearch.getSearchByNameQuery(value);
+            query = "(&" + query
+                    + "(|"
+                    + "(" + ZaAccount.A_isAdminGroup + "=TRUE)"
+                    + "(" + ZaAccount.A_isAdminAccount + "=TRUE)"
+                    + "(" + ZaAccount.A_isSystemAdminAccount + "=TRUE)"
+                    + ")"
+                    + ")"
+            dataCallback = new AjxCallback(this, this.dynSelectGranteeCallback, callback);
+            params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
+            params.callback = dataCallback;
+            params.sortBy = ZaAccount.A_name;
+            params.query = query ;
+            params.controller = ZaApp.getInstance().getCurrentController();
+            ZaSearch.searchDirectory(params);
+        } catch (ex) {
+            ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");
+        }
+    }
+
+    ZaSearch.prototype.dynSelectGranteeCallback = function (callback, resp) {
+        if(!callback)
+            return;
+        try {
+            if(!resp) {
+                throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.dynSelectDataCallback"));
+            }
+            if(resp.isException()) {
+                throw(resp.getException());
+            } else {
+                var response = resp.getResponse().Body.SearchDirectoryResponse;
+                var list = new ZaItemList(null);
+                list.loadFromJS(response);
+                callback.run(list.getArray(), response.more, response.searchTotal);
+            }
+        } catch (ex) {
+            ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataCallback");
+        }
+    }
+
+
+}
+
 
 
 

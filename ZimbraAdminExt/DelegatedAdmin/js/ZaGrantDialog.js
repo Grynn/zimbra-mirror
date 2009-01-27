@@ -5,6 +5,7 @@ ZaGrantDialog = function(parent,  app, title) {
     this._containedObject = {};
 
     this.systemRightsChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+    this.granteeNameChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
 
     this.initForm(ZaGrant.myXModel, this.getMyXForm());
 }
@@ -21,14 +22,27 @@ function() {
                { type: _SPACER_ },
                { ref: ZaGrant.A_target, type: _OUTPUT_ , label: com_zimbra_delegatedadmin.Label_target_name },
                { ref: ZaGrant.A_target_type, type:_OUTPUT_, label: com_zimbra_delegatedadmin.Label_target_type   },
-                { ref: ZaGrant.A_grantee_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
+
+               // make it type _DYNSELECT_
+               { ref: ZaGrant.A_grantee, type: _DYNSELECT_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
+                   visibilityChecks:[],labelLocation:_LEFT_ ,
+                   emptyText:ZaMsg.enterSearchTerm,
+                   choices: this.granteeNameChoices,
+                   onChange: ZaGrantDialog.setGranteeChanged,
+                   dataFetcherClass:ZaSearch ,
+                   dataFetcherMethod:ZaSearch.prototype.dynSelectGrantees,
+                   editable: true
+               },
+               { ref: ZaGrant.A_grantee_type, type:_TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
+                    visibilityChecks:[], //temporary solution to make this element visible
+                    enableDisableChecks:false,
+//                    enableDisableChangeEventSources:[ZaGrant.A_right_type],
+                    labelLocation:_LEFT_
+               },     /*
+               { ref: ZaGrant.A_grantee_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
                     visibilityChecks:[], //temporary solution to make this element visible
                     labelLocation:_LEFT_, choices: ZaGrant.GRANTEE_TYPE
-               },
-               // make it type _DYNSELECT_
-               { ref: ZaGrant.A_grantee, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
-                   visibilityChecks:[],
-                   labelLocation:_LEFT_ },
+               },      */
                { ref: ZaGrant.A_right_type, type: _OSELECT1_, label: com_zimbra_delegatedadmin.Label_right_type,
                    visibilityChecks:[],
                    labelLocation: _LEFT_, choices: ZaGrant.RIGHT_TYPE_CHOICES
@@ -52,15 +66,7 @@ function() {
                            type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_inline_attr }
                    ]
                },
-               /*
-               {ref: ZaGrant.A_right, id: ZaGrant.A_right, type: _TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_right_name,
-                     visibilityChecks:[],
-//                   visibilityChecks: [[ZaGrantDialog.rightTypeListener, "system"]],
-//                   visibilityChangeEventSources: [ZaGrant.A_right_type] ,
-                   enableDisableChecks:[[ZaGrantDialog.rightTypeListener, "system"]],
-                   enableDisableChangeEventSources:[ZaGrant.A_right_type],
-                   labelLocation:_LEFT_ }, */
-                 {ref: ZaGrant.A_right, id: ZaGrant.A_right, type: _DYNSELECT_, label: com_zimbra_delegatedadmin.Label_right_name,
+               {ref: ZaGrant.A_right, id: ZaGrant.A_right, type: _DYNSELECT_, label: com_zimbra_delegatedadmin.Label_right_name,
                          visibilityChecks:[],
     //                   visibilityChecks: [[ZaGrantDialog.rightTypeListener, "system"]],
     //                   visibilityChangeEventSources: [ZaGrant.A_right_type] ,
@@ -68,7 +74,7 @@ function() {
                        enableDisableChangeEventSources:[ZaGrant.A_right_type],
                        labelLocation:_LEFT_ ,
                        emptyText:ZaMsg.enterSearchTerm,
-                       choices: this.systemRightsChoices, //TODO: change to all the choices based on the targetType
+                       choices: this.systemRightsChoices, 
 //                       inputPreProcessor:ZaGrantDialog.preProcessRightNames,
                        dataFetcherClass:ZaRight ,
                        dataFetcherMethod:ZaRight.prototype.dynSelectRightNames,
@@ -83,6 +89,75 @@ function() {
         ]
     };
     return xFormObject;
+}
+
+ZaGrantDialog.setGranteeChanged = function (value, event, form) {
+	var oldVal = this.getInstanceValue();
+	if(oldVal == value)
+		return;
+
+	this.setInstanceValue(value);
+
+
+    if(AjxUtil.EMAIL_FULL_RE.test(value)) {
+	    //update Grantee Type
+        form.parent.updateGranteeType (value) ;
+    } else {
+		this.setError(ZaMsg.RES_ErrorInvalidContactEmail);
+		var event = new DwtXFormsEvent(form, this, value);
+		form.notifyListeners(DwtEvent.XFORMS_VALUE_ERROR, event);
+		return;
+	} 
+}
+
+ZaGrantDialog.prototype.updateGranteeType = function (grantee) {
+    try {
+        var params = new Object();
+
+        query = "(|" +
+                "(" + ZaAccount.A_mail +"=" + grantee + ")" + //for account
+                "(" + ZaAccount.A_zimbraMailAlias + "=" + grantee + ")" + //for dl
+                ")" ;
+        dataCallback = new AjxCallback(this, this.setGranteeType);
+        params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
+        params.callback = dataCallback;
+        params.query = query ;
+        params.controller = ZaApp.getInstance().getCurrentController();
+        ZaSearch.searchDirectory(params);
+    } catch (ex) {
+        ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaGrantDialog.updateGranteeType");
+    }
+}
+
+ZaGrantDialog.prototype.setGranteeType = function (resp) {
+    try {
+        if(!resp) {
+            throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaGrantDialog.setGranteeType"));
+        }
+        if(resp.isException()) {
+            throw(resp.getException());
+        } else {
+            var response = resp.getResponse().Body.SearchDirectoryResponse;
+            var list = new ZaItemList(null);
+            list.loadFromJS(response);
+            var grantee = list.getArray() ;
+            if (grantee.length != 1) {
+                //either grantee doesn't exist or not unique.
+            }else{
+                var type = grantee[0].type ;
+                var granteeType = "";
+                if (type == ZaItem.ACCOUNT) {
+                    granteeType = "usr" ;                     
+                }else if (type == ZaItem.DL){
+                    granteeType = "grp" ;
+                }
+                this._localXForm.setInstanceValue(granteeType, ZaGrant.A_grantee_type) ;
+                this._localXForm.getItemsById (ZaGrant.A_grantee_type)[0].updateElement (granteeType);
+            }
+        }
+    } catch (ex) {
+        ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataCallback");
+    }
 }
 
 

@@ -69,6 +69,8 @@ ZaAccount.A_mailHost = "zimbraMailHost";
 ZaAccount.A_COSId = "zimbraCOSId";
 
 ZaAccount.A_isAdminAccount = "zimbraIsAdminAccount";
+ZaAccount.A_isAdminGroup = "zimbraIsAdminGroup" ;
+ZaAccount.A_isSystemAdminAccount = "zimbraIsSystemAdminAccount" ;
 ZaAccount.A_zimbraMinPwdLength="zimbraPasswordMinLength";
 ZaAccount.A_zimbraMaxPwdLength="zimbraPasswordMaxLength";
 ZaAccount.A_zimbraPasswordMinUpperCaseChars = "zimbraPasswordMinUpperCaseChars";

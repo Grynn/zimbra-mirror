@@ -27,7 +27,6 @@ ZaSearchBuilderController = function(appCtxt, container) {
 	this._searchBuildPanel = null;
 	this._searchBuildTBPanel = null ;
 	this._searchBuilderVisible = false ; //also indicate whether the advanced search query should be used
-	//this._query = ZaSearch.getAdancedSearchQuery (ZaSearchOption.getDefaultInstance()) ;
 	this._query = null ;
 	this._searchTypes = null ;
 	this._objTypeOptionViewPosition = -1; //indicate the whether objTypeOptionView is visible or not by its position
