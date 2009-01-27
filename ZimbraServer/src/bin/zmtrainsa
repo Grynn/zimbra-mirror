@@ -122,6 +122,7 @@ zmsetvars \
 	zimbra_server_hostname \
   amavis_dspam_enabled
 
+amavis_dspam_enabled=$(echo $amavis_dspam_enabled | tr A-Z a-z)
 
 # No argument mode uses zmspamextract for auto-training.
 if [ x$1 = "x" ]; then
