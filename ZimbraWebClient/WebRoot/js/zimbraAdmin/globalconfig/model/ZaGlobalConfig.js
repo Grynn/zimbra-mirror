@@ -159,7 +159,7 @@ ZaGlobalConfig.__configInstance = null;
 ZaGlobalConfig.isDirty = true;
 
 ZaGlobalConfig.getInstance = function(refresh) {
-	if(refresh || ZaGlobalConfig.isDirty || !!ZaGlobalConfig.__configInstance) {
+	if(refresh || ZaGlobalConfig.isDirty || !ZaGlobalConfig.__configInstance) {
 		ZaGlobalConfig.__configInstance = new ZaGlobalConfig();
 		ZaGlobalConfig.isDirty = false;
 	}
