@@ -85,6 +85,7 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     
     @Override
     protected int getRootFolderId(DataSource ds) throws ServiceException {
-    	return ds.getIntAttr(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ds.getFolderId());
+    	//return ds.getIntAttr(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ds.getFolderId());
+    	return ds.getFolderId();
     }
 }
