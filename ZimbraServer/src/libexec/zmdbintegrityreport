@@ -161,6 +161,36 @@ sub logError {
 }
 
 sub getLdapConfigValue {
+    my $attrib = shift;
+
+    return (undef) unless ($attrib);
+
+    my $val = getLdapServerConfigValue($attrib);
+    print "Server: $val\n" if $debug;
+    $val = getLdapGlobalConfigValue($attrib) if ($val eq "");
+    print "Global: $val\n" if $debug;
+    return $val;
+}
+sub getLdapServerConfigValue {
+    my $attrib = shift;
+
+    return (undef) unless ($attrib);
+    my $server = getLocalConfig("zimbra_server_hostname");
+    # could consider redirecting STDERR to /dev/null
+    open( CONF, "/opt/zimbra/bin/zmprov -l gs $server '$attrib' |" )
+      or die("Open global config failed: $!");
+
+    my ( $key, $val );
+    while (<CONF>) {
+        chomp;
+        next if (/^#/);
+        ( $key, $val ) = split( /:\s*/, $_, 2 );
+        # for now just assume a single value/attribute is requested
+        last if ($val);
+    }
+    return $val;
+}
+sub getLdapGlobalConfigValue {
   my $attrib = shift;
   my ($val,$err);
   my ($rfh,$wfh,$efh,$cmd,$rc);

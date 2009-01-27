@@ -113,6 +113,45 @@ sub sendEmailReport {
 sub getLdapConfigValue {
   my $attrib = shift;
   my ($val,$err);
+  $val = getLdapServerConfigValue($attrib);
+  $val = getLdapGlobalConfigValue($attrib) if ($val eq "");
+  logError("Failed to lookup $attrib\n") if ($val eq "");
+  return $val;
+}
+
+sub getLdapServerConfigValue {
+  my $attrib = shift;
+  my ($val,$err);
+  my ($rfh,$wfh,$efh,$cmd,$rc);
+  my $server = getLocalConfig("zimbra_server_hostname");
+  $rfh = new FileHandle;
+  $wfh = new FileHandle;
+  $efh = new FileHandle;
+  $cmd = "/opt/zimbra/bin/zmprov -l gs $server $attrib";
+  my $pid = open3($wfh,$rfh,$efh, $cmd);
+  unless(defined($pid)) {
+    return undef;
+  } 
+  close $wfh;
+  my @d = <$rfh>;
+  chomp($val = (split(/\s+/, $d[-2]))[-1]);
+  chomp($err = join "", <$efh>);
+  waitpid($pid,0);
+  if ($? == -1) {
+    # failed to execute
+    return undef;
+  } elsif ($? & 127) {
+    # died with signal 
+    return undef;
+  } else {
+    $rc = $? >> 8;
+    return undef if ($rc != 0);
+  }
+  return $val;
+}
+sub getLdapGlobalConfigValue {
+  my $attrib = shift;
+  my ($val,$err);
   my ($rfh,$wfh,$efh,$cmd,$rc);
   $rfh = new FileHandle;
   $wfh = new FileHandle;
