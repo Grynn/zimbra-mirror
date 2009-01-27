@@ -200,11 +200,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 				]
 			},
 			{type:_ZATABCASE_, caseKey:_tab2, id:"gs_form_attachment_tab", numCols:2, colSizes: ["50%","50%"], items:[
-				//{type: _GROUP_, id:"attachment_settings",
-					//label: ZaMsg.NAD_Attach_IncomingAttachments, labelCssStyle: "vertical-align:top",
-					//items: [
-					
- 				{type: _GROUP_, width: "98%", numCols: 2, colSpan:2, colSizes:[100, "*"], items: [
+ 				{type: _GROUP_,  id:"attachment_settings", width: "98%", numCols: 2, colSpan:2, colSizes:[100, "*"], items: [
 					{ref:ZaGlobalConfig.A_zimbraAttachmentsBlocked, type: _CHECKBOX_,
 				  		label: ZaMsg.NAD_GlobalRemoveAllAttachments,
 				  		trueValue: "TRUE", falseValue: "FALSE"
@@ -287,66 +283,6 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 						  }
 				    	]
 				    }
-				  	/*{type: _GROUP_,
-				  	  label: "", labelCssStyle: "vertical-align:top",
-				  	  items: [
-				  	  	{ type: _SEPARATOR_, colSpan: "*" },
-				  	    { type: _OUTPUT_, labelLocation: _NONE_,
-				  	      value: ZaMsg.NAD_Attach_RemoveAttachmentsByExt, colSpan: "*"
-			  	      	},
-				  	  	{ sourceRef: ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension,
-				  	  	  ref: ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _DWT_CHOOSER_,
-				  	  	  listCssClass: "DwtChooserListView ZaGlobalAttachExt", sorted: true,
-				  	  	  id: "chooser_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension
-				  	  	}
-			    	]},
-			    	{ type: _GROUP_, label: "", labelCssStyle: "vertical-align:top",
-			    	  useParentTable: false, numCols: 3,
-			    	  items: [
-			    	  	{ ref: ZaGlobalConfig.A_zimbraNewExtension, type: _INPUT_,
-				  	  	  id: "input_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension,
-			    	  	  label: ZaMsg.NAD_Attach_NewExtension
-			    	  	},
-			    	  	{ type: _DWT_BUTTON_, label: ZaMsg.NAD_Attach_AddExtension,
-			    	  	  onActivate: function() {
-			    	  	  	var form = this.getForm();
-			    	  	  	form.onCloseForm(); // HACK
-			    	  	  	var value = form.get(ZaGlobalConfig.A_zimbraNewExtension);
-			    	  	  	if (!value) {
-			    	  	  		return;
-		    	  	  		}
-			    	  	  	value = value.replace(/^\s+/,"").replace(/\s+$/,"");
-			    	  	  	if (value == "") {
-			    	  	  		return;
-			    	  	  	}
-
-							// NOTE: The id property is needed by the list view
-			    	  	  	value = new String(value);
-			    	  	  	value.id = "id_"+value;
-
-			    	  	  	// NOTE: form item's id is prefixed with form's id + underscore
-			    	  	  	var chooserId = form.getId()+"_chooser_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension;
-			    	  	  	var chooserFormItem = form.getItemById(chooserId);
-
-							// NOTE: Need a special way to stop the widget from
-							//		 updating w/o affecting the state change from
-							//		 it. Otherwise, the instance data and the
-							//		 target list won't stay in sync.
-			    	  	  	chooserFormItem._skipUpdate = true;
-
-			    	  	  	var chooserWidget = chooserFormItem.getWidget();
-							chooserWidget.addItems(value, DwtChooserListView.SOURCE, true);
-
-			    	  	  	chooserFormItem._skipUpdate = false;
-
-			    	  	  	var newExtId = form.getId()+"_input_"+ZaGlobalConfig.A_zimbraMtaBlockedExtension;
-			    	  	  	var newExtFormItem =form.getItemById(newExtId);
-			    	  	  	newExtFormItem.setInstanceValue("");
-			    	  	  	form.parent.setDirty(true);
-			    	  	  	form.refresh();
-			    	  	  }
-			    	  	}
-			    	]}*/
 				]},
 				{type:_ZATABCASE_, caseKey:_tab3,
 					colSizes:["auto"],numCols:1,id:"global_mta_tab",
