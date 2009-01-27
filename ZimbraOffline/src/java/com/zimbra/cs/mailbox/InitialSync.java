@@ -919,6 +919,9 @@ public class InitialSync {
 	        	OfflineLog.offline.error("initial: can't read sync response: " + url, x);
 	        	throw ServiceException.FAILURE("can't read sync response: " + url, x);
 	        }
+	    	
+	    	Set<Integer> idSet = new HashSet<Integer>();
+	    	idSet.addAll(ids);
 	        
 	        TarInputStream tis = null;
 	        TarEntry te = null;
@@ -936,6 +939,7 @@ public class InitialSync {
 				        	try {
 				        		saveMessage(tis, ud.id, ud.folderId, type, ud.date, ud.dateChanged, ud.modContent, ud.modMetadata,
 				        				Flag.flagsToBitmask(itemData.flags), itemData.tags, ud.parentId);
+				        		idSet.remove(ud.id);
 				        	} catch (Exception x) {
 				        		SyncExceptionHandler.checkRecoverableException("InitialSync.syncMessagesAsTgz", x);
 					        	SyncExceptionHandler.syncMessageFailed(ombx, ud.id, x);
@@ -946,6 +950,10 @@ public class InitialSync {
 	                } else {
 	                	throw new RuntimeException("missing meta entry reading tgz stream");
 	                }
+		        }
+		        if (!idSet.isEmpty()) {
+		        	for (int id : idSet)
+		        		SyncExceptionHandler.saveFailureReport(ombx, id, "message missing from server response", null);
 		        }
 	        } catch (IOException x) {
 	        	OfflineLog.offline.error("Invalid sync format", x);

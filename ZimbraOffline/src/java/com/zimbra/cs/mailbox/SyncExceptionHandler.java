@@ -100,10 +100,10 @@ public class SyncExceptionHandler {
     }
     
     public static String saveFailureReport(DesktopMailbox dmbx, int id, String error, String data, int totalSize, Exception exception) throws ServiceException {
-    	if (OfflineSyncManager.isMailboxInMaintenance(exception))
+    	if (exception != null && OfflineSyncManager.isMailboxInMaintenance(exception))
     		throw (ServiceException)exception;
     	
-    	if (OfflineSyncManager.isDbShutdown(exception))
+    	if (exception != null && OfflineSyncManager.isDbShutdown(exception))
     		throw ServiceException.FAILURE("DbPool permanently shutdown", exception);
     	
     	Date now = new Date();
@@ -111,7 +111,9 @@ public class SyncExceptionHandler {
 
     	OfflineLog.offline.warn("sync failure for id=" + id + "; generating failure report", exception);
 
-    	String code = exception instanceof ServiceException ? ((ServiceException)exception).getCode() : exception.getMessage();
+    	String code = "no exception";
+    	if (exception != null)
+    		code = exception instanceof ServiceException ? ((ServiceException)exception).getCode() : exception.getMessage();
     	
     	//TODO: need to i18n the entire block here
     	StringBuilder sb = new StringBuilder();
@@ -122,6 +124,7 @@ public class SyncExceptionHandler {
     	sb.append("OS Platform:     ").append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.arch")).append(" ").append(System.getProperty("os.version")).append("\n");
     	sb.append("Time of event:   ").append(timestamp).append("\n");
     	sb.append("Error type:      ").append(code).append("\n");
+    	sb.append("Item ID:         ").append(id).append("\n");
     	sb.append("Error summary:   ").append(error).append("\n\n");
 
         if (data != null) {
@@ -137,40 +140,42 @@ public class SyncExceptionHandler {
     		sb.append("\n\n----------------------------------------------------------------------------\n");
     	}
 
-    	ByteArrayOutputStream bao = new ByteArrayOutputStream() {
-    		private static final int STACK_TRACE_LIMIT = 1024 * 1024;
-
-    		@Override
-    		public synchronized void write(byte[] b, int off, int len) {
-    			len = len > STACK_TRACE_LIMIT - count ? STACK_TRACE_LIMIT - count : len;
-    			if (len > 0)
-    				super.write(b, off, len);
-    			//otherwise discard
-    		}
-
-    		@Override
-    		public synchronized void write(int b) {
-    			if (count < STACK_TRACE_LIMIT)
-    				super.write(b);
-    		}
-    	};
-    	PrintStream ps = new PrintStream(bao);
-    	exception.printStackTrace(ps);
-    	ps.flush();
-
-    	sb.append("Failure details - PLEASE REMOVE ANY SENSITIVE INFORMATION\n");
-    	sb.append("----------------------------------------------------------------------------\n\n");
-    	if (exception instanceof SoapFaultException) {
-    		SoapFaultException sfe = (SoapFaultException)exception;
-    		if (sfe.getFaultRequest() != null)
-    			sb.append(sfe.getFaultRequest()).append("\n\n");
-    		if (sfe.getFaultResponse() != null)
-    			sb.append(sfe.getFaultResponse()).append("\n\n");
-    		else if (sfe.getFault() != null)
-    			sb.append(sfe.getFault().prettyPrint()).append("\n\n");
-    	}
-    	sb.append(bao.toString());
-    	sb.append("\n----------------------------------------------------------------------------\n");
+        if (exception != null) {
+	    	ByteArrayOutputStream bao = new ByteArrayOutputStream() {
+	    		private static final int STACK_TRACE_LIMIT = 1024 * 1024;
+	
+	    		@Override
+	    		public synchronized void write(byte[] b, int off, int len) {
+	    			len = len > STACK_TRACE_LIMIT - count ? STACK_TRACE_LIMIT - count : len;
+	    			if (len > 0)
+	    				super.write(b, off, len);
+	    			//otherwise discard
+	    		}
+	
+	    		@Override
+	    		public synchronized void write(int b) {
+	    			if (count < STACK_TRACE_LIMIT)
+	    				super.write(b);
+	    		}
+	    	};
+	    	PrintStream ps = new PrintStream(bao);
+	    	exception.printStackTrace(ps);
+	    	ps.flush();
+	
+	    	sb.append("Failure details - PLEASE REMOVE ANY SENSITIVE INFORMATION\n");
+	    	sb.append("----------------------------------------------------------------------------\n\n");
+	    	if (exception instanceof SoapFaultException) {
+	    		SoapFaultException sfe = (SoapFaultException)exception;
+	    		if (sfe.getFaultRequest() != null)
+	    			sb.append(sfe.getFaultRequest()).append("\n\n");
+	    		if (sfe.getFaultResponse() != null)
+	    			sb.append(sfe.getFaultResponse()).append("\n\n");
+	    		else if (sfe.getFault() != null)
+	    			sb.append(sfe.getFault().prettyPrint()).append("\n\n");
+	    	}
+	    	sb.append(bao.toString());
+	    	sb.append("\n----------------------------------------------------------------------------\n");
+        }
 
     	logSyncErrorMessage(dmbx, id, "zdesktop error report (" + timestamp + "): " + code, sb.toString());
     	return sb.toString();
@@ -216,6 +221,7 @@ public class SyncExceptionHandler {
     }
     
     private static void logSyncErrorMessage(DesktopMailbox dmbx, int id, String subject, String message) {
+    	OfflineLog.offline.warn(message);
     	try {
 			Date now = new Date();
 			MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
