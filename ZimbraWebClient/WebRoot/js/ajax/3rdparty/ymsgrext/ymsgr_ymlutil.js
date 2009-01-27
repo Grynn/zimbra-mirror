@@ -812,25 +812,25 @@ YMSGR.YMLUtil = {
 
 			case "B" :
 			case "STRONG" :	
-				output += "<b>";
+				output += "\033[1m";
 				for(var i = 0; i < n; i++)
 					output += YMSGR.YMLUtil.domToYmlRaw(children[i], forIE);
-				output += "</b>";
+				output += "\033[x1m";
 				break;
 							
 			case "I":
 			case "EM" :	
-				output += "<i>";
+				output += "\033[2m";
 				for(var i = 0; i < n; i++)
 					output += YMSGR.YMLUtil.domToYmlRaw(children[i], forIE);
-				output += "</i>";
+				output += "\033[x2m";
 				break;
 						
 			case "U" :	
-				output += "<u>";
+				output += "\033[4m";
 				for(var i = 0; i < n; i++)
 					output += YMSGR.YMLUtil.domToYmlRaw(children[i], forIE);
-				output += "</u>";
+				output += "\033[x4m";
 				break;
 			
 			case "DIV" :
@@ -871,6 +871,9 @@ YMSGR.YMLUtil = {
 				if (style && msg.style.fontWeight == "bold")
 					fntbld = true;
 
+				var fntItalic = msg.style.fontStyle == "italic";
+				var fntUnderline = msg.style.textDecoration == "underline";
+
 				if(fntface && fntsize) {
 					output += "<font face=\"" + fntface + "\" size=\"" + (styleFont ? fntsize : sizeMap[fntsize - 1]) + "\">";
 				}
@@ -907,7 +910,13 @@ YMSGR.YMLUtil = {
 				}
 					
 				if(fntbld) {
-					output += "<b>";
+					output += "\033[1m";
+				}
+				if(fntItalic) {
+					output += "\033[2m";
+				}
+				if(fntUnderline) {
+					output += "\033[4m";
 				}
 
 				for(var i = 0; i < n; i++) {
@@ -918,8 +927,14 @@ YMSGR.YMLUtil = {
 					output += YMSGR.YMLUtil.domToYmlRaw(children[i], forIE);									
 				}
 				
+				if(fntUnderline) {
+					output += "\033[x4m";
+				}
+				if(fntItalic) {
+					output += "\033[x2m";
+				}
 				if(fntbld) {
-					output += "</b>";
+					output += "\033[x1m";
 				}
 
 				// we used to close font tags here so html is well-formed--
