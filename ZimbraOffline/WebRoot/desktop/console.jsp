@@ -243,7 +243,7 @@ function submit(id, name, type, flavor, verb) {
                     <div class="ZAccountInfo">
                       <a href="javascript:OnEdit('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Edit"/></a>&nbsp;
                       <a href="javascript:OnDelete('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Delete"/></a>&nbsp;
-                      <a href="javascript:OnReset('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="ResetData"/></a>
+                      <a href="javascript:OnReset('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="ResetData"/></a>&nbsp;
                       <a href="javascript:OnReindex('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><fmt:message key="Reindex"/></a>
 	<c:if test="${not default}">
                      &nbsp;<a href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')"><img src="/zimbra/img/arrows/ImgAccordionClosed.gif" width="12" heigh="12" align="absbottom" border="0"></a>
@@ -286,9 +286,11 @@ function submit(id, name, type, flavor, verb) {
 </c:choose>
       </td>
     </tr>
-    <zd:tips userAgent="${header['User-Agent']}"/>
+
   </table>
 </div>
+<zd:tips userAgent="${header['User-Agent']}"/>
+
 <form name="accountForm" action="${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}" method="POST">
     <input type="hidden" name="accountId">
     <input type="hidden" name="accountName">
