@@ -1,7 +1,7 @@
 <?php
 // this file must be located at @ausurl@
 
-$download_url_prefix = "http://files.zimbra.com/downloads/zdesktop/";
+$download_url_prefix = "http://files.zimbra.com/downloads/zdesktop";
 $details_url = "http://www.zimbra.com/products/desktop.html";
 $license_url = "http://www.zimbra.com/license/zimbra_public_eula_2.1.html";
 $version = "@version@";
