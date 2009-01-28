@@ -1,12 +1,12 @@
---- amavisd-new-2.6.1/amavisd.orig	2008-10-09 12:17:05.000000000 -0700
-+++ amavisd-new-2.6.1/amavisd	2008-10-09 13:09:55.000000000 -0700
+--- amavisd-new-2.6.2/amavisd.orig	2009-01-28 13:08:42.000000000 -0800
++++ amavisd-new-2.6.2/amavisd	2009-01-28 13:09:00.000000000 -0800
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl -T
 +#!/usr/bin/perl
  
  #------------------------------------------------------------------------------
  # This is amavisd-new.
-@@ -378,6 +378,7 @@
+@@ -383,6 +383,7 @@
      [qw(
        $helpers_home $dspam $sa_spawned
        $sa_local_tests_only $sa_auto_whitelist $sa_timeout $sa_debug
@@ -14,7 +14,7 @@
      )],
      'platform' => [qw(
        $can_truncate $unicode_aware $eol $my_pid
-@@ -816,7 +817,7 @@
+@@ -844,7 +845,7 @@
    $spam_quarantine_to       = 'spam-quarantine';
    $bad_header_quarantine_to = 'bad-header-quarantine';
    $clean_quarantine_to      = 'clean-quarantine';
@@ -23,7 +23,7 @@
  
    # similar to $spam_quarantine_to, but the lookup key is the sender address
    $spam_quarantine_bysender_to = undef;  # dflt: no by-sender spam quarantine
-@@ -1641,9 +1642,9 @@
+@@ -1689,9 +1690,9 @@
      elsif ($errn)        { $msg = "is inaccessible: $!" }
      elsif (-d _)         { $msg = "is a directory" }
      elsif (!-f _)        { $msg = "is not a regular file" }
@@ -35,7 +35,7 @@
      if (defined $msg)    { die "Config file \"$config_file\" $msg," }
      $read_config_files_depth++;  push(@actual_config_files, $config_file);
      if ($read_config_files_depth >= 100) {
-@@ -8611,8 +8612,8 @@
+@@ -8921,8 +8922,8 @@
            rename($config_file.'.moved', $config_file);
            $m = 'is writable (confirmed)';
          }
@@ -46,8 +46,8 @@
        }
        last  if @msg;
      }
-@@ -11802,6 +11803,14 @@
-       push(@qar_addr, $q)  if $q ne '' && !grep {$_ eq $q} @qar_addr;
+@@ -12368,6 +12369,14 @@
+       push(@q_tuples, [$qar_method,$q,'Arch'])  if defined $q && $q ne '';
      }
    }  # endfor per_recip_data
 +  if (defined($qar_method) && $qar_method ne '') {  # archiving quarantine on sender
@@ -58,10 +58,10 @@
 +      push(@qar_addr, $q)  if $q ne '' && !grep {$_ eq $q} @qar_addr;
 +    }
 +  }
+ 
    if ($ccat == CC_SPAM) {
      my($sqbsm) = ca('spam_quarantine_bysender_to_maps');
-     if (@$sqbsm) {  # by-sender spam quarantine (hardly useful, rarely used)
-@@ -20208,6 +20217,9 @@
+@@ -21037,6 +21046,9 @@
      local_tests_only  => $sa_local_tests_only,
      home_dir_for_helpers => $helpers_home,
      stop_at_threshold => 0,
