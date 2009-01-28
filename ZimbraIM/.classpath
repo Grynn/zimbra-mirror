@@ -27,7 +27,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jaxen-1.1-beta-3.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jakarta-oro-2.0.7.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jakarta-oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ical4j-0.9.16-patched.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ganymed-ssh2-build209.jar" sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2-build209/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/dom4j-1.5.jar" sourcepath="/ThirdParty/dom4j-1.5/src/java">
