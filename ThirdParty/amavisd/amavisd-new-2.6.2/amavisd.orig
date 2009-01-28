@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -T
 
 #------------------------------------------------------------------------------
 # This is amavisd-new.
@@ -383,7 +383,6 @@ BEGIN {
     [qw(
       $helpers_home $dspam $sa_spawned
       $sa_local_tests_only $sa_auto_whitelist $sa_timeout $sa_debug
-	$sa_rules_file $sa_site_rules_file $sa_userprefs_file
     )],
     'platform' => [qw(
       $can_truncate $unicode_aware $eol $my_pid
@@ -845,7 +844,7 @@ BEGIN {
   $spam_quarantine_to       = 'spam-quarantine';
   $bad_header_quarantine_to = 'bad-header-quarantine';
   $clean_quarantine_to      = 'clean-quarantine';
-  $archive_quarantine_to    = undef;
+  $archive_quarantine_to    = 'archive-quarantine';
 
   # similar to $spam_quarantine_to, but the lookup key is the sender address
   $spam_quarantine_bysender_to = undef;  # dflt: no by-sender spam quarantine
@@ -1690,9 +1689,9 @@ sub read_config_file($$) {
     elsif ($errn)        { $msg = "is inaccessible: $!" }
     elsif (-d _)         { $msg = "is a directory" }
     elsif (!-f _)        { $msg = "is not a regular file" }
-#    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
+    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
     elsif ($> && -w _)   { $msg = "is writable by EUID $>, EGID $)" }
-#    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
+    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
     if (defined $msg)    { die "Config file \"$config_file\" $msg," }
     $read_config_files_depth++;  push(@actual_config_files, $config_file);
     if ($read_config_files_depth >= 100) {
@@ -8922,8 +8921,8 @@ sub after_chroot_init() {
           rename($config_file.'.moved', $config_file);
           $m = 'is writable (confirmed)';
         }
-        #push(@msg, "Directory of a config file \"$config_file\" $m, ".
-        #           "UID $<, EUID $>, EGID $)" );
+        push(@msg, "Directory of a config file \"$config_file\" $m, ".
+                   "UID $<, EUID $>, EGID $)" );
       }
       last  if @msg;
     }
@@ -12369,14 +12368,6 @@ sub do_notify_and_quarantine($$$) {
       push(@q_tuples, [$qar_method,$q,'Arch'])  if defined $q && $q ne '';
     }
   }  # endfor per_recip_data
-  if (defined($qar_method) && $qar_method ne '') {  # archiving quarantine on sender
-    my($sender) = $msginfo->sender;
-    if ($sender ne '') {
-      my($q) = lookup(0,$sender,@{ca('archive_quarantine_to_maps')});
-      $q = $sender  if $q ne '' && $qar_method =~ /^bsmtp:/i;  # orig.recip
-      push(@qar_addr, $q)  if $q ne '' && !grep {$_ eq $q} @qar_addr;
-    }
-  }
 
   if ($ccat == CC_SPAM) {
     my($sqbsm) = ca('spam_quarantine_bysender_to_maps');
@@ -21046,9 +21037,6 @@ sub initializeSpamAssassin {
     local_tests_only  => $sa_local_tests_only,
     home_dir_for_helpers => $helpers_home,
     stop_at_threshold => 0,
-    rules_filename => $sa_rules_file,
-    site_rules_filename => $sa_site_rules_file,
-    userprefs_filename => $sa_userprefs_file,
     need_tags         => 'TIMING,LANGUAGES,RELAYCOUNTRY,ASN,ASNCIDR',
 #   LOCAL_STATE_DIR   => '/var/lib',
 #   PREFIX            => '/usr/local',
