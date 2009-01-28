@@ -6,18 +6,6 @@
  
  #------------------------------------------------------------------------------
  # This is amavisd-new.
-@@ -149,9 +149,9 @@
-         if ($errn)         { $msg = "is inaccessible: $!" }
-         elsif (-d _)       { $msg = "is a directory" }
-         elsif (!-f _)      { $msg = "is not a regular file" }
--        elsif ($> && -o _) { $msg = "should not be owned by EUID $>"  }
-+#        elsif ($> && -o _) { $msg = "should not be owned by EUID $>"  }
-         elsif ($> && -w _) { $msg = "is writable by EUID $>, EGID $)" }
--        elsif ($owner_uid) { $msg = "should be owned by root (uid 0) "}
-+#       elsif ($owner_uid) { $msg = "should be owned by root (uid 0) "}
-         !defined($msg) or die "Requiring $full_fname, file $msg,\n";
-         $! = 0;
-         $result = do $full_fname;
 @@ -378,6 +378,7 @@
      [qw(
        $helpers_home $dspam $sa_spawned
