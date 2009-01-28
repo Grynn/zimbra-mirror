@@ -75,6 +75,10 @@ public class OfflineLC {
     public static final KnownKey zdesktop_yab_baseuri;
     public static final KnownKey zdesktop_yab_sync_interval;
     public static final KnownKey zdesktop_ymail_baseuri;
+    public static final KnownKey zdesktop_imap_fullsync_interval;
+    public static final KnownKey zdesktop_ybizmail_smtp_host;
+    public static final KnownKey zdesktop_ybizmail_smtp_port;
+    public static final KnownKey zdesktop_ybizmail_smtp_ssl;
 
     public static final KnownKey zdesktop_support_email;
     
@@ -85,7 +89,7 @@ public class OfflineLC {
     
     public static final KnownKey zdesktop_log_context_filter;
     public static final KnownKey zdesktop_installation_key;
-    
+
     static void init() {
         // This method is there to guarantee static initializer of this
         // class is run.
@@ -261,6 +265,22 @@ public class OfflineLC {
 	    zdesktop_ymail_baseuri = new KnownKey("zdesktop_ymail_baseuri");
 	    zdesktop_ymail_baseuri.setDefault("http://mail.yahooapis.com/ws/mail/v1.1/soap");
 	    zdesktop_ymail_baseuri.setDoc("base uri for ymail");
+
+        zdesktop_imap_fullsync_interval = new KnownKey("zdesktop_imap_fullsync_interval");
+        zdesktop_imap_fullsync_interval.setDefault("60"); // 1 hour
+        zdesktop_imap_fullsync_interval.setDoc("Max number of minutes between full sync of INBOX");
+        
+        zdesktop_ybizmail_smtp_host = new KnownKey("zdesktop_ybizmail_smtp_host");
+        zdesktop_ybizmail_smtp_host.setDefault("smtp.bizmail.yahoo.com");
+        zdesktop_ybizmail_smtp_host.setDoc("Yahoo bizmail SMTP host");
+
+        zdesktop_ybizmail_smtp_port = new KnownKey("zdesktop_ybizmail_smtp_port");
+        zdesktop_ybizmail_smtp_port.setDefault("465");
+        zdesktop_ybizmail_smtp_port.setDoc("Yahoo bizmail SMTP port");
+
+        zdesktop_ybizmail_smtp_ssl = new KnownKey("zdesktop_ybizmail_smtp_ssl");
+        zdesktop_ybizmail_smtp_ssl.setDefault("true");
+        zdesktop_ybizmail_smtp_ssl.setDoc("Yahoo bizmail SMTP SSL enabled");
 	    
 	    zdesktop_support_email = new KnownKey("zdesktop_support_email");
 	    zdesktop_support_email.setDefault("zdesktop-report@zimbra.com");

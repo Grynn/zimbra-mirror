@@ -23,6 +23,7 @@ import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.util.yauth.XYMEAuthenticator;
 import com.zimbra.cs.util.yauth.Authenticator;
+import com.zimbra.cs.OfflineImapImport;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.util.ZimbraLog;
@@ -31,7 +32,7 @@ import javax.security.auth.login.LoginException;
 import java.util.List;
 import java.io.IOException;
 
-public class YMailImport extends ImapSync {
+public class YMailImport extends OfflineImapImport {
     private final YabImport yabImport;
     private final OfflineCalDavDataImport calDavImport;
     

@@ -19,13 +19,14 @@ package com.zimbra.cs.offline;
 import com.zimbra.cs.offline.ab.gab.GabImport;
 import com.zimbra.cs.datasource.ImapSync;
 import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.cs.OfflineImapImport;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 import com.zimbra.common.util.ZimbraLog;
 
 import java.util.List;
 
-public class GMailImport extends ImapSync {
+public class GMailImport extends OfflineImapImport {
     private final GabImport gabImport;
     private final OfflineCalDavDataImport calDavImport;
 

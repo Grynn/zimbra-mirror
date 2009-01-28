@@ -41,6 +41,7 @@ import com.zimbra.cs.offline.YMailImport;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.datasource.SyncState;
 import com.zimbra.cs.mailclient.CommandFailedException;
+import com.zimbra.cs.OfflineImapImport;
 
 public class OfflineDataSource extends DataSource {
     private KnownService knownService;
@@ -343,6 +344,8 @@ public class OfflineDataSource extends DataSource {
                 return new YMailImport(this);
             } else if (isGmail()) {
                 return new GMailImport(this);
+            } else {
+                return new OfflineImapImport(this);
             }
         }
         return super.getDataImport();
