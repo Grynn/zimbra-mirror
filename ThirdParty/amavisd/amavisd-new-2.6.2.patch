@@ -1,5 +1,5 @@
---- amavisd-new-2.6.2/amavisd.orig	2009-01-28 13:08:42.000000000 -0800
-+++ amavisd-new-2.6.2/amavisd	2009-01-28 13:09:00.000000000 -0800
+--- amavisd-new-2.6.2/amavisd.orig	2009-01-28 13:12:19.000000000 -0800
++++ amavisd-new-2.6.2/amavisd	2009-01-28 13:42:07.000000000 -0800
 @@ -1,4 +1,4 @@
 -#!/usr/bin/perl -T
 +#!/usr/bin/perl
@@ -55,7 +55,7 @@
 +    if ($sender ne '') {
 +      my($q) = lookup(0,$sender,@{ca('archive_quarantine_to_maps')});
 +      $q = $sender  if $q ne '' && $qar_method =~ /^bsmtp:/i;  # orig.recip
-+      push(@qar_addr, $q)  if $q ne '' && !grep {$_ eq $q} @qar_addr;
++      push(@q_tuples, [$qar_method,$q,'Arch'])  if defined $q && $q ne '';
 +    }
 +  }
  

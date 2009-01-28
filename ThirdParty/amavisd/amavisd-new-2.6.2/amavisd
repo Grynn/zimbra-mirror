@@ -12374,7 +12374,7 @@ sub do_notify_and_quarantine($$$) {
     if ($sender ne '') {
       my($q) = lookup(0,$sender,@{ca('archive_quarantine_to_maps')});
       $q = $sender  if $q ne '' && $qar_method =~ /^bsmtp:/i;  # orig.recip
-      push(@qar_addr, $q)  if $q ne '' && !grep {$_ eq $q} @qar_addr;
+      push(@q_tuples, [$qar_method,$q,'Arch'])  if defined $q && $q ne '';
     }
   }
 
