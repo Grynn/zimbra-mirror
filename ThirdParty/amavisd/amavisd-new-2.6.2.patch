@@ -73,15 +73,6 @@
    if ($ccat == CC_SPAM) {
      my($sqbsm) = ca('spam_quarantine_bysender_to_maps');
      if (@$sqbsm) {  # by-sender spam quarantine (hardly useful, rarely used)
-@@ -14079,7 +14088,7 @@
-     amavisLocal amavisMessageSizeLimit amavisWarnVirusRecip
-     amavisWarnBannedRecip amavisWarnBadHeaderRecip amavisVirusAdmin
-     amavisNewVirusAdmin amavisSpamAdmin amavisBannedAdmin
--    amavisBadHeaderAdmin amavisBannedRuleNames
-+    amavisBadHeaderAdmin amavisBannedRuleNames amavisArchiveQuarantineTo
-   );
- 
-   @mv_ldap_attrs = qw(amavisBlacklistSender amavisWhitelistSender);
 @@ -20208,6 +20217,9 @@
      local_tests_only  => $sa_local_tests_only,
      home_dir_for_helpers => $helpers_home,
