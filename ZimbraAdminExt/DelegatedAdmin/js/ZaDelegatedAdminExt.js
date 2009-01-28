@@ -21,6 +21,12 @@ ZaZimbraAdmin._RIGHTS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._GRANTS  = ZaZimbraAdmin.VIEW_INDEX++; 
 ZaZimbraAdmin._GLOBAL_GRANTS_LIST_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
+ZaSettings.RIGHT_LIST_VIEW = "rightListView" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.RIGHT_LIST_VIEW, label: com_zimbra_delegatedadmin.UI_Comp_RightListView });
+ZaSettings.GLOBAL_PERMISSION_VIEW = "globalPermissionView" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_PERMISSION_VIEW, label: com_zimbra_delegatedadmin.UI_Comp_GlobalPermView });
+
+
 if(ZaOverviewPanelController.treeModifiers)  {
 	ZaOverviewPanelController.treeModifiers.push(ZaRight.rightsOvTreeModifier);
 	ZaOverviewPanelController.treeModifiers.push(ZaGrant.grantsOvTreeModifier);

@@ -255,20 +255,33 @@ ZaSettings.ALL_UI_COMPONENTS = [] ;
 
 //List views
 ZaSettings.ACCOUNT_LIST_VIEW = "accountListView";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNT_LIST_VIEW, label: "Account List View" });
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNT_LIST_VIEW, label: ZaMsg.UI_Comp_AccountListView });
 ZaSettings.DOMAIN_LIST_VIEW = "domainListView";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_LIST_VIEW, label: "Domain List View" });
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_LIST_VIEW, label: ZaMsg.UI_Comp_DomainListView });
 ZaSettings.ALIAS_LIST_VIEW = "aliasListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ALIAS_LIST_VIEW, label: ZaMsg.UI_Comp_AliasListView });
 ZaSettings.DL_LIST_VIEW = "DLListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_LIST_VIEW, label: ZaMsg.UI_Comp_DlListView });
 ZaSettings.RESOURCE_LIST_VIEW = "resourceListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.RESOURCE_LIST_VIEW, label: ZaMsg.UI_Comp_ResourceListView });
 ZaSettings.COS_LIST_VIEW = "COSListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_LIST_VIEW, label: ZaMsg.UI_Comp_COSListView });
 ZaSettings.SERVER_LIST_VIEW = "serverListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_LIST_VIEW, label: ZaMsg.UI_Comp_ServerListView });
 ZaSettings.GLOBAL_STATS_VIEW = "globalStatsView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_VIEW, label: ZaMsg.UI_Comp_GlobalStatsView });
 ZaSettings.GLOBAL_STATUS_VIEW = "globalStatusView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATUS_VIEW, label: ZaMsg.UI_Comp_GlobalStatusView });
 ZaSettings.SERVER_STATS_VIEW = "serverStatsView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_VIEW, label: ZaMsg.UI_Comp_ServerStatsView });
 ZaSettings.MAILQ_VIEW = "mailQueueView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.MAILQ_VIEW, label: ZaMsg.UI_Comp_mailQueueView });
+
 ZaSettings.ZIMLET_LIST_VIEW = "zimletListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ZIMLET_LIST_VIEW, label: ZaMsg.UI_Comp_ZimletListView });
+
 ZaSettings.ADMIN_ZIMLET_LIST_VIEW = "adminZimletListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ADMIN_ZIMLET_LIST_VIEW, label: ZaMsg.UI_Comp_AdminZimletListView });
 
 //Account view tabs
 ZaSettings.ACCOUNTS_GENERAL_TAB = "accountsGeneralTab";
