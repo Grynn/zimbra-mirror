@@ -1134,66 +1134,104 @@ default:
                   </action>
                 </beans>
               </group>
-              <action name="backup prefs.js" id="288938" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <group name="backup prism user settings" id="289124" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
-                      <void property="destinationFile">
-                        <object class="java.io.File">
-                          <string>prefs.js.bak</string>
-                        </object>
-                      </void>
-                      <void property="mode">
-                        <string>600</string>
-                      </void>
-                      <void property="overwriteMode">
-                        <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                      </void>
-                      <void property="sourceFile">
-                        <object class="java.io.File">
-                          <string>profile/prefs.js</string>
-                        </object>
-                      </void>
-                      <void property="triggerReboot">
-                        <boolean>false</boolean>
-                      </void>
-                      <void property="uninstallMode">
-                        <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
-                      </void>
-                    </object>
+                    <object class="com.install4j.runtime.beans.groups.ActionGroup" />
                   </java>
                 </serializedBean>
-                <condition />
-              </action>
-              <action name="backup persdict.dat" id="288939" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
-                      <void property="destinationFile">
-                        <object class="java.io.File">
-                          <string>persdict.dat.bak</string>
+                <beans>
+                  <action name="backup prefs.js" id="289125" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                          <void property="destinationFile">
+                            <object class="java.io.File">
+                              <string>prefs.js.bak</string>
+                            </object>
+                          </void>
+                          <void property="mode">
+                            <string>600</string>
+                          </void>
+                          <void property="overwriteMode">
+                            <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                          </void>
+                          <void property="sourceFile">
+                            <object class="java.io.File">
+                              <string>profile/prefs.js</string>
+                            </object>
+                          </void>
+                          <void property="triggerReboot">
+                            <boolean>false</boolean>
+                          </void>
+                          <void property="uninstallMode">
+                            <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
+                          </void>
                         </object>
-                      </void>
-                      <void property="overwriteMode">
-                        <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
-                      </void>
-                      <void property="sourceFile">
-                        <object class="java.io.File">
-                          <string>profile/persdict.dat</string>
+                      </java>
+                    </serializedBean>
+                    <condition />
+                  </action>
+                  <action name="backup persdict.dat" id="289126" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                          <void property="destinationFile">
+                            <object class="java.io.File">
+                              <string>persdict.dat.bak</string>
+                            </object>
+                          </void>
+                          <void property="overwriteMode">
+                            <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                          </void>
+                          <void property="sourceFile">
+                            <object class="java.io.File">
+                              <string>profile/persdict.dat</string>
+                            </object>
+                          </void>
+                          <void property="triggerReboot">
+                            <boolean>false</boolean>
+                          </void>
+                          <void property="uninstallMode">
+                            <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
+                          </void>
                         </object>
-                      </void>
-                      <void property="triggerReboot">
-                        <boolean>false</boolean>
-                      </void>
-                      <void property="uninstallMode">
-                        <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <condition>String instDir = (String)context.getVariable("sys.installationDir");
+                      </java>
+                    </serializedBean>
+                    <condition>String instDir = (String)context.getVariable("sys.installationDir");
 return (new File(instDir + "/profile/persdict.dat")).exists();</condition>
-              </action>
+                  </action>
+                  <action name="backup localstore.json" id="289127" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                          <void property="destinationFile">
+                            <object class="java.io.File">
+                              <string>localstore.json.bak</string>
+                            </object>
+                          </void>
+                          <void property="overwriteMode">
+                            <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                          </void>
+                          <void property="sourceFile">
+                            <object class="java.io.File">
+                              <string>zdesktop.webapp/localstore.json</string>
+                            </object>
+                          </void>
+                          <void property="triggerReboot">
+                            <boolean>false</boolean>
+                          </void>
+                          <void property="uninstallMode">
+                            <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>String instDir = (String)context.getVariable("sys.installationDir");
+return (new File(instDir + "/zdesktop.webapp/localstore.json")).exists();</condition>
+                  </action>
+                </beans>
+              </group>
               <action name="clear error" id="285704" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -3482,7 +3520,7 @@ return true;</string>
                   </action>
                 </beans>
               </group>
-              <group name="restore profile files" id="288932" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
+              <group name="restore prism user settings" id="288932" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="true" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.groups.ActionGroup" />
@@ -3549,6 +3587,35 @@ return (new File(instDir + "/prefs.js.bak")).exists();</condition>
                     </serializedBean>
                     <condition>String instDir = (String)context.getVariable("sys.installationDir");
 return (new File(instDir + "/persdict.dat.bak")).exists();</condition>
+                  </action>
+                  <action name="restore localstore.json" id="289128" beanClass="com.install4j.runtime.beans.actions.files.MoveFileAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.actions.files.MoveFileAction">
+                          <void property="destinationFile">
+                            <object class="java.io.File">
+                              <string>zdesktop.webapp/localstore.json</string>
+                            </object>
+                          </void>
+                          <void property="overwriteMode">
+                            <object class="com.install4j.api.context.OverwriteMode" field="ALWAYS" />
+                          </void>
+                          <void property="sourceFile">
+                            <object class="java.io.File">
+                              <string>localstore.json.bak</string>
+                            </object>
+                          </void>
+                          <void property="triggerReboot">
+                            <boolean>false</boolean>
+                          </void>
+                          <void property="uninstallMode">
+                            <object class="com.install4j.api.context.UninstallMode" field="NEVER" />
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <condition>String instDir = (String)context.getVariable("sys.installationDir");
+return (new File(instDir + "/localstore.json.bak")).exists();</condition>
                   </action>
                 </beans>
               </group>
