@@ -51,7 +51,6 @@ public class OfflineImapImport extends ImapSync {
     // Force full sync if more than SYNC_INTERVAL minutes have elapsed since
     // the last full sync.
     private boolean checkSyncInterval(boolean fullSync) {
-        OfflineLog.offline.debug("TEST");
         long currentTime = System.currentTimeMillis();
         synchronized (lastFullSyncTime) {
             Long time = lastFullSyncTime.get(dataSource.getId());
