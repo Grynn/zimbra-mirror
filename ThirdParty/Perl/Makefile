@@ -110,7 +110,8 @@ PERL_LIBS 	:= \
 	Error \
 	Mail::DKIM \
 	XML::SAX::Expat \
-	XML::Simple
+	XML::Simple \
+	IO::Socket::INET6
 
 NET_SSLeay := \
 	Net-SSLeay-1.35
