@@ -2,7 +2,7 @@
 	description="Delegated Admin UI Components" 
 	extension="true">
     <target>admin-main</target>
-    
+    <include>ZaDelegatedAdmin.js</include>    
     <include>ZaZimbraRights.js</include>
     <include>ZaRight.js</include>
     <include>ZaRightView.js</include>

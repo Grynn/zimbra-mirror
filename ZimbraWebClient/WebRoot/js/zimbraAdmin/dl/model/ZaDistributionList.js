@@ -68,6 +68,7 @@ ZaDistributionList.ID = "ZDLID";
 ZaDistributionList.MEMBER_QUERY_LIMIT = 25;
 //ZaDistributionList.A_isgroup = "isgroup";
 ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
+ZaDistributionList.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
 ZaDistributionList.A_mailStatus = "zimbraMailStatus";
 ZaDistributionList.A2_members = "members";
@@ -252,7 +253,8 @@ function(tmpObj, callback) {
 	for (var aname in tmpObj.attrs) {
 		if(aname == ZaItem.A_objectClass || aname==ZaAccount.A_mail || aname == ZaItem.A_cn
 			|| aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid
-			|| aname == ZaDistributionList.A_zimbraGroupId || aname == ZaAccount.A_zimbraMailAlias) {
+			|| aname == ZaDistributionList.A_zimbraGroupId || aname == ZaAccount.A_zimbraMailAlias
+            || aname == ZaDistributionList.A_zimbraCreateTimestamp) {
 			continue;
 		}		
 		//multi-value attribute

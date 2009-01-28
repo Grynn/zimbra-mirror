@@ -552,7 +552,7 @@ if (ZaSearch) {
             var query = ZaSearch.getSearchByNameQuery(value);
             query = "(&" + query
                     + "(|"
-                    + "(" + ZaAccount.A_isAdminGroup + "=TRUE)"
+                    + "(" + ZaDistributionList.A_isAdminGroup + "=TRUE)"
                     + "(" + ZaAccount.A_isAdminAccount + "=TRUE)"
                     + "(" + ZaAccount.A_isSystemAdminAccount + "=TRUE)"
                     + ")"
