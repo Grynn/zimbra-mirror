@@ -40,6 +40,12 @@ ZaCert.TARGET_SERVER_CHOICES =  [
 		{label: "admindev2.zimbra.com", value: "admindev2.zimbra.com" }*/
 	];
 
+if(ZaSettings) {
+	ZaSettings.CERTS_VIEW = "certsView";
+	ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CERTS_VIEW, label: com_zimbra_cert_manager.UI_Comp_certsView });
+	ZaSettings.OVERVIEW_TOOLS_ITEMS.push(ZaSettings.CERTS_VIEW);
+}
+
 //Init the ZaCert Object for the new Cert wizard
 ZaCert.prototype.init = function (getCSRResp) {
 	// 1. Check if CSR is generated, set the csr_exists = true 
@@ -138,7 +144,7 @@ ZaCert.certOvTreeModifier = function (tree) {
 	var overviewPanelController = this ;
 	if (!overviewPanelController) throw new Exception("ZaCert.certOvTreeModifier: Overview Panel Controller is not set.");
 	
-	if(ZaSettings.TOOLS_ENABLED) {
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		overviewPanelController._certTi = new DwtTreeItem(overviewPanelController._toolsTi);
 		overviewPanelController._certTi.setText(com_zimbra_cert_manager.OVP_certs);
 		overviewPanelController._certTi.setImage("OverviewCertificate"); //TODO: Use Cert icons

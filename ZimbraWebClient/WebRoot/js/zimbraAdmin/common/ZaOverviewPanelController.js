@@ -367,11 +367,45 @@ function() {
 	var tree = this._overviewPanel.getFolderTree();
 	var l = new AjxListener(this, this._overviewTreeListener);
 	tree.addSelectionListener(l);
+	var showAddresses = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
+	var showTools = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
+	var showConfig = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
+	var showMonitoring = ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI];
+	if(!showAddresses) {
+		for(var i=0;i<ZaSettings.OVERVIEW_ADDRESSES_ITEMS.length;i++) {
+			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.OVERVIEW_ADDRESSES_ITEMS[i]]) {
+				showAddresses = true;
+				break;
+			}
+		}
+	}
+	if(!showTools) {
+		for(var i=0;i<ZaSettings.OVERVIEW_TOOLS_ITEMS.length;i++) {
+			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.OVERVIEW_TOOLS_ITEMS[i]]) {
+				showTools = true;
+				break;
+			}
+		}
+	}
+	if(!showConfig) {
+		for(var i=0;i<ZaSettings.OVERVIEW_CONFIG_ITEMS.length;i++) {
+			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.OVERVIEW_CONFIG_ITEMS[i]]) {
+				showConfig = true;
+				break;
+			}
+		}
+	}	
+	if(!showMonitoring) {
+		for(var i=0;i<ZaSettings.OVERVIEW_MONITORING_ITEMS.length;i++) {
+			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.OVERVIEW_MONITORING_ITEMS[i]]) {
+				showMonitoring = true;
+				break;
+			}
+		}
+	}	
 
 	var ti;
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW]
-	 || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW]
-	  || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
+	if(showAddresses) {
 		this._addressesTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._addressesTi.enableSelection(false);
 		this._addressesTi.setText(ZaMsg.OVP_addresses);
@@ -415,13 +449,7 @@ function() {
     }
 
 	//TODO:  ZaSettings.DOMAIN_AUTH_WIZ_ENABLED - LDAPAuthWizard enabled for the domain admin	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] ||
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW] ||
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_LIST_VIEW] ||
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ZIMLET_LIST_VIEW] ||
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ADMIN_ZIMLET_LIST_VIEW] ||
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_LIST_VIEW] ||
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_CONFIG_VIEW]  ) {	
+	if(showConfig ) {	
 		this._configTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._configTi.enableSelection(false);
 		this._configTi.setText(ZaMsg.OVP_configuration);
@@ -527,9 +555,7 @@ function() {
 		this._configTi.addSeparator();	
 		
 	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || 
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] ||
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SERVER_STATS_VIEW]) {
+	if(showTools) {
 		this._monitoringTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._monitoringTi.enableSelection(false);	
 		this._monitoringTi.setText(ZaMsg.OVP_monitoring);
@@ -585,7 +611,7 @@ function() {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._STATISTICS_BY_SERVER] = ZaOverviewPanelController.statsByServerTreeListener;						
 	}
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MAILQ_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	if(showMonitoring) {
 		this._toolsTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._toolsTi.enableSelection(false);	
 		this._toolsTi.setText(ZaMsg.OVP_tools);
