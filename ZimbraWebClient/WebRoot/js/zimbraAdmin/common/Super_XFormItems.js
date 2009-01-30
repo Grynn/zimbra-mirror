@@ -253,7 +253,7 @@ Cos_Port_XModelItem.prototype.maxInclusive = 65535;
 * _COS_SUBNET_
 **/
 Cos_Subnet_XModelItem = function (){}
-XModelItemFactory.createItemType("_COS_HOSTNAME_OR_IP_", "cos_subnet", Cos_Subnet_XModelItem, Cos_String_XModelItem);
+XModelItemFactory.createItemType("_COS_SUBNET_", "cos_subnet", Cos_Subnet_XModelItem, Cos_String_XModelItem);
 Cos_Subnet_XModelItem.prototype.validateType = XModelItem.prototype.validateString;
 Cos_Subnet_XModelItem.prototype.maxLength = 256;
 Cos_Subnet_XModelItem.prototype.pattern =  [AjxUtil.IP_ADDRESS_RE, AjxUtil.SUBNET_RE];
@@ -551,6 +551,7 @@ Super_HostPort_XFormItem.prototype.initializeItems = function() {
 		onMouseout: "Super_HostPort_XFormItem.handleMouseout",
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);
+			XFormItem.prototype.updateElement.call(this, value);
 		}
 	};
 	var anchorHlpr = {	

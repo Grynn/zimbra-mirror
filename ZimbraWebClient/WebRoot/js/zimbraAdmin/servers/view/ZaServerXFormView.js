@@ -36,7 +36,7 @@ ZaServerXFormView.indexVolChoices = new XFormChoices([], XFormChoices.OBJECT_LIS
 ZaServerXFormView.messageVolChoices = new XFormChoices([], XFormChoices.OBJECT_LIST,ZaServer.A_VolumeId, ZaServer.A_VolumeName);
 ZaServerXFormView.onFormFieldChanged = 
 function (value, event, form) {
-	DBG.println (AjxDebug.DBG1, "On Form Field Changed ...");
+	//DBG.println (AjxDebug.DBG1, "On Form Field Changed ...");
 	
 	form.parent.setDirty(true);
 	this.setInstanceValue(value);
