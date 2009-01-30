@@ -72,7 +72,7 @@ public class YMailImport extends OfflineImapImport {
 
     private boolean isAuthError(ServiceException e) {
         Throwable cause = e.getCause();
-        return cause == null || !(cause instanceof LoginException);
+        return cause == null || cause instanceof LoginException;
     }
 
     private void initAuth(Authenticator auth) throws ServiceException {
