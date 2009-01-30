@@ -2073,7 +2073,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 	xFormObject.items = [
 			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
 				items: [
-					{type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","200px"],items:headerItems}
+					{type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","*"],items:headerItems}
 				],
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
