@@ -683,3 +683,51 @@ function () {
 	}
 }
 
+/** It is used to get the object description property value.
+ *  especially when it has multi-values
+ *
+ * @param desp
+ */
+ZaItem.descriptionModelItem =  {id:"description", type: _LIST_, ref:"attrs/description",
+            listItem:{type:_STRING_}
+        } ;
+
+ZaItem.descriptionXFormItem = {
+    ref:"description",  msgName:ZaMsg.NAD_Description,
+    label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
+    labelCssStyle:"vertical-align:top",
+    type:_REPEAT_,
+    align:_LEFT_,
+    repeatInstance:"",
+    showAddButton:false,
+    showRemoveButton:false,
+    showAddOnNextRow:false,
+    enableDisableChecks:[],
+    visibilityChecks:[],
+    //removeButtonLabel:ZaMsg.NAD_RemoveAddress,
+    items: [
+        {ref:".", type:_TEXTFIELD_,
+            enableDisableChecks:[],
+            visibilityChecks:[],
+            width:"30em"}
+    ]
+} ;
+
+ZaItem.getDescriptionValue = function (desp) {
+    if ( !desp)  desp = "";
+    
+    if (desp instanceof Array) {
+        desp = desp.toString ();
+    }
+
+    return desp ;
+}
+
+ZaItem.normalizeMultiValueAttr = function (entry, attrName) {
+    if (entry.attrs[attrName] == null) {
+        entry.attrs[attrName] = [];
+    } else if (! (entry.attrs[attrName] instanceof Array)) {
+        entry.attrs[attrName] = [entry.attrs[attrName]] ;
+    }
+}
+

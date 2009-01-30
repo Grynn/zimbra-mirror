@@ -59,12 +59,13 @@ function (value, event, form) {
 
 ZaServerXFormView.prototype.setObject = 
 function (entry) {
-	this.entry = entry;
+    ZaItem.normalizeMultiValueAttr (entry, ZaServer.A_description) ;
+
+    this.entry = entry;
 	this._containedObject = {attrs:{}};
 	this._containedObject[ZaServer.A_showVolumes] = entry[ZaServer.A_showVolumes];
-	
-	
-	this._containedObject[ZaServer.A_ServiceHostname] = entry[ZaServer.A_ServiceHostname];
+    
+    this._containedObject[ZaServer.A_ServiceHostname] = entry[ZaServer.A_ServiceHostname];
 	this._containedObject.name = entry.name;
 	this._containedObject.type = entry.type ;
 
@@ -502,10 +503,12 @@ ZaServerXFormView.myXFormModifier = function(xFormObject) {
 					items:[
 						{type:_ZA_PLAIN_GROUPER_/*_ZAGROUP_*/, items:[
 							{ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_},
-							{ ref: ZaServer.A_description, type:_INPUT_, 
+                            ZaItem.descriptionXFormItem,
+                                /*
+                            { ref: ZaServer.A_description, type:_INPUT_,
 							  label:ZaMsg.NAD_Description,cssClass:"admin_xform_name_input",
 							  onChange:ZaServerXFormView.onFormFieldChanged
-							},
+							},    */
 							{ ref: ZaServer.A_ServiceHostname, type:_OUTPUT_, 
 							  label:ZaMsg.NAD_ServiceHostname+":", cssClass:"admin_xform_name_input"/*,
 							  onChange:ZaServerXFormView.onFormFieldChanged*/

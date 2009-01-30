@@ -164,14 +164,9 @@ function(account, now, isDragProxy) {
 			html[idx++] = "</nobr></td>";	
 		} else if (field == ZaAccount.A_description) {		
 			// description
-            var desp = account.attrs[ZaAccount.A_description] ;
-            if ( !desp) {
-                desp = "";
-            } else if (desp instanceof Array) {
-                desp = desp.toString ();
-            }
             html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(desp);
+			html[idx++] = AjxStringUtil.htmlEncode(
+                    ZaItem.getDescriptionValue(account.attrs[ZaAccount.A_description] ));
 			html[idx++] = "</nobr></td>";	
 		} else if (field == "target" + ZaAlias.A_targetType) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";

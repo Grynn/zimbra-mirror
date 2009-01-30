@@ -81,7 +81,8 @@ function(domain, now, isDragProxy) {
 		} else if(field == ZaDomain.A_description) {
 			// description		
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(domain.attrs[ZaDomain.A_description]);
+			html[idx++] = AjxStringUtil.htmlEncode(
+                    ZaItem.getDescriptionValue(domain.attrs[ZaDomain.A_description]));
 			html[idx++] = "</nobr></td>";
 		} else if(field == ZaDomain.A_zimbraDomainStatus) {
 			// description		

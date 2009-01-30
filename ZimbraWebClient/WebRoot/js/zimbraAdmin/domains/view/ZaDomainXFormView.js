@@ -65,6 +65,8 @@ function (index, form) {
 ZaDomainXFormView.prototype.setObject =
 function(entry) {
     ZaAccount.prototype.manageSpecialAttrs.call (entry) ;
+    ZaItem.normalizeMultiValueAttr (entry, ZaDomain.A_description) ;
+
     this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
 	
@@ -518,9 +520,10 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 		txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
 	
 	case1.items.push(group);
-	case1.items.push({ ref: ZaDomain.A_description, type: _INPUT_, 
+	case1.items.push(ZaItem.descriptionXFormItem) ;
+    /* case1.items.push({ ref: ZaDomain.A_description, type: _INPUT_,
 	  	label:ZaMsg.NAD_Description, width:250,
-	  	onChange:ZaDomainXFormView.onFormFieldChanged});
+	  	onChange:ZaDomainXFormView.onFormFieldChanged});   */
 	case1.items.push(
 		{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
 				label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 

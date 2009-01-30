@@ -336,8 +336,9 @@ ZaServer.myXModel = {
 	items: [
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
 		{id:ZaServer.A_name, ref:"attrs/" + ZaServer.A_name, type:_STRING_},
-		{id:ZaServer.A_description, ref:"attrs/" +  ZaServer.A_description, type:_STRING_},
-		{id:ZaServer.A_notes, ref:"attrs/" +  ZaServer.A_notes, type:_STRING_},		
+//		{id:ZaServer.A_description, ref:"attrs/" +  ZaServer.A_description, type:_STRING_},
+         ZaItem.descriptionModelItem,   
+        {id:ZaServer.A_notes, ref:"attrs/" +  ZaServer.A_notes, type:_STRING_},
 		{id:ZaServer.A_Service, ref:"attrs/" +  ZaServer.A_Service, type:_STRING_, maxLength: 256 },
 		{id:ZaServer.A_ServiceHostname, ref:"attrs/" +  ZaServer.A_ServiceHostname, type:_HOSTNAME_OR_IP_, maxLength: 256 },
 		// Services

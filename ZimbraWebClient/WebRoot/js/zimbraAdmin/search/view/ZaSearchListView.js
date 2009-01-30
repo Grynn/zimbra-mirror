@@ -158,7 +158,8 @@ function(account, now, isDragProxy) {
 		} else if (field == ZaAccount.A_description) {		
 			// description
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_description]);
+			html[idx++] = AjxStringUtil.htmlEncode(
+                    ZaItem.getDescriptionValue(account.attrs[ZaAccount.A_description]));
 			html[idx++] = "</nobr></td>";	
 		}
 	}

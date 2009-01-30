@@ -52,11 +52,10 @@ function () {
 ZaResourceXFormView.prototype.setObject =
 function(entry) {
 	this._containedObject = new Object();
+    this._containedObject.attrs = new Object();
 
-
-	this._containedObject.attrs = new Object();
-
-	for (var a in entry.attrs) {
+    ZaItem.normalizeMultiValueAttr (entry, ZaResource.A_description) ;
+    for (var a in entry.attrs) {
 		if(entry.attrs[a] instanceof Array) {
 			this._containedObject.attrs[a] = new Array();
 			for(var aa in entry.attrs[a]) {
@@ -257,10 +256,11 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 	
 	var notesGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"resource_form_notes_group",
 		colSizes:["275px","*"],numCols:2,items:[
-		{ref:ZaResource.A_description, type:_INPUT_, width: "300px", 
+        ZaItem.descriptionXFormItem,
+        /*{ref:ZaResource.A_description, type:_INPUT_, width: "300px",
 			msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description,
 			labelLocation:_LEFT_, cssClass:"admin_xform_name_input"
-		},
+		},*/
 		{ref:ZaResource.A_notes, type:_TEXTAREA_, width: "300px", 
 			msgName:ZaMsg.NAD_Notes,label:ZaMsg.NAD_Notes,
 			labelLocation:_LEFT_

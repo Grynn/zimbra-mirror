@@ -365,8 +365,11 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 
 ZaDLXFormView.prototype.setObject = 
 function (entry) {
-	this._containedObject = entry.clone();
-	
+
+    ZaItem.normalizeMultiValueAttr(entry, "description") ;
+    
+    this._containedObject = entry.clone();
+
 	if(entry.rights)
 		this._containedObject.rights = entry.rights;
 
@@ -469,11 +472,13 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName+":", msgName:ZaMsg.NAD_DisplayName,width:"100%",
 						    	visibilityChecks:[],
                                 cssClass:"admin_xform_name_input", align: _LEFT_
-						    },							
-						    {ref:ZaAccount.A_description, type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription+":",msgName: ZaMsg.DLXV_LabelDescription, width:"100%",
+						    },
+                            ZaItem.descriptionXFormItem,
+                            /*
+                            {ref:ZaAccount.A_description, type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription+":",msgName: ZaMsg.DLXV_LabelDescription, width:"100%",
 						    	visibilityChecks:[],
                                 cssClass:"admin_xform_name_input"
-						    },
+						    }, */
 							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
 								visibilityChecks:[],
                                 label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,

@@ -152,7 +152,9 @@ function (optionId, height){
            {value:ZaAccount.ACCOUNT_STATUS_CLOSED, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_CLOSED)},
            {value:ZaAccount.ACCOUNT_STATUS_LOCKED, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_LOCKED)},
            {value:ZaAccount.ACCOUNT_STATUS_LOCKOUT, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_LOCKOUT)},
+           {value:ZaAccount.ACCOUNT_STATUS_PENDING, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_PENDING)},
            {value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_MAINTENANCE)}
+
        ];
 	
     var xform = {

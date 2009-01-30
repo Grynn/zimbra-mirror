@@ -560,8 +560,9 @@ ZaResource.myXModel = {
 		{id:ZaResource.A_zimbraCalResAutoDeclineIfBusy, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResAutoDeclineIfBusy}, //scheduling pocily
 		{id:ZaResource.A_zimbraCalResAlwaysFree, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResAlwaysFree}, //scheduling pocily
 		{id:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResAutoDeclineRecurring},
-		{id:ZaResource.A_description, type:_STRING_, ref:"attrs/"+ZaResource.A_description},
-		{id:ZaResource.A_notes, type:_STRING_, ref:"attrs/"+ZaResource.A_notes}, 
+//		{id:ZaResource.A_description, type:_STRING_, ref:"attrs/"+ZaResource.A_description},
+		ZaItem.descriptionModelItem ,
+        {id:ZaResource.A_notes, type:_STRING_, ref:"attrs/"+ZaResource.A_notes},
 		
 		//Resource Location
 		{id:ZaResource.A_zimbraCalResSite, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResSite},

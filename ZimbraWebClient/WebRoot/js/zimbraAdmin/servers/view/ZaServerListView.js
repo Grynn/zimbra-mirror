@@ -77,7 +77,8 @@ function(server, now, isDragProxy) {
 		} else if(field == ZaServer.A_description) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(server.attrs[ZaServer.A_description]);
+			html[idx++] = AjxStringUtil.htmlEncode(
+                   ZaItem.getDescriptionValue(server.attrs[ZaServer.A_description]));
 			html[idx++] = "</nobr></td>";
 		}
 	}

@@ -80,7 +80,7 @@ function(cos, no, isDragProxy) {
 		} else if (field == ZaCos.A_description) {
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(cos.attrs[ZaCos.A_description]);
+			html[idx++] = AjxStringUtil.htmlEncode(ZaItem.getDescriptionValue (cos.attrs[ZaCos.A_description]));
 			html[idx++] = "</nobr></td>";	
 		}
 	}

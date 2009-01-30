@@ -30,6 +30,7 @@ ZaAccountXFormView = function(parent) {
 		{value:ZaAccount.ACCOUNT_STATUS_CLOSED, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_CLOSED)},
 		{value:ZaAccount.ACCOUNT_STATUS_LOCKED, label: ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_LOCKED)},
         {value:ZaAccount.ACCOUNT_STATUS_LOCKOUT, label: ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_LOCKOUT), visible: false},    
+        {value:ZaAccount.ACCOUNT_STATUS_PENDING, label: ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_PENDING)},
         {value:ZaAccount.ACCOUNT_STATUS_MAINTENANCE, label:ZaAccount.getAccountStatusMsg(ZaAccount.ACCOUNT_STATUS_MAINTENANCE)}
 	];
 	this.cosChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
@@ -63,12 +64,8 @@ function(entry) {
     this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
 
-    if (entry.attrs[ZaAccount.A_description] == null) {
-        entry.attrs[ZaAccount.A_description] = [];
-    } else if (! (entry.attrs[ZaAccount.A_description] instanceof Array)) {
-        entry.attrs[ZaAccount.A_description] = [entry.attrs[ZaAccount.A_description]] ;
-    }
-
+    ZaItem.normalizeMultiValueAttr (entry, ZaAccount.A_description) ;
+    
     for (var a in entry.attrs) {
 		if(entry.attrs[a] instanceof Array) {
 			this._containedObject.attrs[a] = new Array();
@@ -969,8 +966,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		var notesGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_form_notes_group",
 			colSizes:["275px","*"],numCols:2,
 		 	items:[
-
-           {ref:ZaAccount.A_description,  msgName:ZaMsg.NAD_Description,
+            ZaItem.descriptionXFormItem,
+           /*{ref:ZaAccount.A_description,  msgName:ZaMsg.NAD_Description,
 			   label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
                labelCssStyle:"vertical-align:top",
                type:_REPEAT_,
@@ -983,7 +980,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
                 items: [
                     {ref:".", type:_TEXTFIELD_, width:"30em"}
                 ]
-            },         /*
+            },
             {ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
 				label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"
 			},         */
