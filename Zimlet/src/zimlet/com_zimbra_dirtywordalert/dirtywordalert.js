@@ -31,81 +31,73 @@ function() {
 	this.turnONdirtywordalertZimlet = this.getUserProperty("turnONdirtywordalertZimlet") == "true";
 };
 
+com_zimbra_dirtywordalert.prototype.initializeRegEx =
+function() {
+	if (this._dWordsRegEx)
+		return;
+
+	this._dWordsList = ["shit","piss","fuck","cunt","cocksucker","motherfucker","tits","fart","turd","twat"];
+	this._dWordsRegEx = [];
+	for (var n = 0; n < this._dWordsList.length; n++) {
+		this._dWordsRegEx.push(new RegExp("^" + this._dWordsList[n], "i"));
+	}
+};
+
 com_zimbra_dirtywordalert.prototype.emailErrorCheck =
 function(mail, boolAndErrorMsgArray) {
-
 	if (!this.turnONdirtywordalertZimlet)
 		return;
 
-	var newMailContent = mail.textBodyContent;
-	var dWords = ["shit", "piss", "fuck", "cunt", "cocksucker", "motherfucker", "tits", "fart", "turd", "twat", "son of a bitch", "sob", "asshole", "bastard", "nigro", "nigga", "white trash"];
+	this.initializeRegEx();
+	this._ignoreWords = [];
+	if (mail.isReplied || mail.isForwarded) {
+		this._createIgnoreList(mail._origMsg);
+	}
 	var dWordsThatExists = "";
-	for (var k = 0; k < dWords.length; k++) {
-		var dWord = dWords[k];
-		var newMailArry = this._getBeforeAfterArray(newMailContent, dWord);
-		var newMailLen = newMailArry.length;
-		if (newMailLen == 0)
+	for (var k = 0; k < this._dWordsRegEx.length; k++) {
+		var dWord = this._dWordsRegEx[k];
+		var newMailContent = mail.textBodyContent;
+		var newMailArry = dWord.exec(newMailContent);
+		if (!newMailArry)
 			continue;
 
-		var origMailArry = [];
-		var origMailLen = 0;
-		if (mail.isReplied || mail.isForwarded) {
-			origMailArry = this._getBeforeAfterArray(mail._origMsg.getBodyContent(), dWord);
-			origMailLen = origMailArry.length;
-			var hasDWordStr = "";
-			for (var i = 0; i < newMailLen; i++) {
-				hasDWordStr = true;
-				var newMailStr = newMailArry[i];
-				for (var j = 0; j < origMailLen; j++) {
-					var origMailStr = origMailArry[j];
-					if (origMailStr == newMailStr) {
-						hasDWordStr = false;
-						break;
-					}
-				}
-			}
-			if (hasDWordStr) {
-				if (dWordsThatExists == "") {
-					dWordsThatExists = dWord;
-				} else {
-					dWordsThatExists = dWordsThatExists + ", " + dWord;
-				}
+		var newMailLen = newMailArry.length;
+		//if the number of dwords in the new mail is same as origMail, skip it
+		if (this._ignoreWords[dWord] != undefined) {
+			if (newMailLen <= this._ignoreWords[dWord]) {
+				hasDWordStr = false;
+				continue;
 			}
 		}
-
+		hasDWordStr = true;
+		if (hasDWordStr) {
+			if (dWordsThatExists == "") {
+				dWordsThatExists = dWord.source.replace(/\^/g, "");
+			} else {
+				dWordsThatExists = dWordsThatExists + ", " + dWord.source.replace(/\^/g, "");
+			}
+		}
 	}
 
 	if (dWordsThatExists == "")
 		return null;
 
 	//there is  some dirtyword in new mail (but not necessarily in old-mail)
-	return boolAndErrorMsgArray.push({hasError:true, errorMsg:"You are perhaps upset or unknowingly using <b>'" + dWordsThatExists + "'</b> dirty word(s) in the mail. You are better off not using these words.<BR> Still, send anyway?", zimletName:"com_zimbra_dirtywordalert"});
+	return boolAndErrorMsgArray.push({hasError:true, errorMsg:"You are perhaps upset or unknowingly using <b>'" + dWordsThatExists + "'</b> <a href=\"http://en.wikipedia.org/wiki/Seven_dirty_words\" target=\"_blank\"> dirty word(s)</a> in the mail. You are better off not using these words.<BR> Still, send anyway?", zimletName:"com_zimbra_dirtywordalert"});
 };
 
-com_zimbra_dirtywordalert.prototype._getBeforeAfterArray =
-function(content, wordToMatch) {
-	var arry = content.toLowerCase().split(wordToMatch.toLowerCase());
-	var len = arry.length;
-	var beforeAfterTxtArry = new Array();
-	if (len == 1)
-		return beforeAfterTxtArry;
 
-	for (var i = 0; i < len / 2; i = i + 2) {
-		var beforeTxt = "";
-		var afterTxt = "";
-		var txt1 = arry[i];
-		var txt2 = arry[i + 1];
-		//get before and after text of 'attach'
-		if (txt1.length >= 5)
-			beforeTxt = txt1.substring(txt1.length - 6, txt1.length - 1);
-		if (txt2.length >= 5)
-			afterTxt = txt2.substring(0, 4);
+com_zimbra_dirtywordalert.prototype._createIgnoreList =
+function(origMail) {
+	var bodyContent = origMail.getBodyContent();
+	for (var k = 0; k < this._dWordsRegEx.length; k++) {
+		var dWord = this._dWordsRegEx[k];
+		var mailArry = dWord.exec(bodyContent);
+		if (!mailArry)
+			continue;
 
-		if (txt2.indexOf("?") == -1)//ignore questions(use txt2 for complete string)
-			beforeAfterTxtArry.push(beforeTxt + afterTxt);//store 5-chars before and 5-char after 'attach'
+		this._ignoreWords[dWord] = mailArry.length;
 	}
-
-	return beforeAfterTxtArry;
 };
 
 com_zimbra_dirtywordalert.prototype.doubleClicked = function() {
@@ -129,7 +121,6 @@ function() {
 	if (this.getUserProperty("turnONdirtywordalertZimlet") == "true") {
 		document.getElementById("turnONdirtywordalertZimlet_chkbx").checked = true;
 	}
-
 	this.pbDialog = this._createDialog({title:"'Dirty words in compose Alert' Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON]});
 	this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
 	this.pbDialog.popup();
@@ -143,7 +134,6 @@ function() {
 	html[i++] = "<input id='turnONdirtywordalertZimlet_chkbx'  type='checkbox'/>Enable 'Dirty words in compose Alert' Zimlet (Changing this would refresh browser)";
 	html[i++] = "</DIV>";
 	return html.join("");
-
 };
 
 com_zimbra_dirtywordalert.prototype._okBtnListner =
