@@ -17,7 +17,7 @@
 
 ZaSearchToolBar = function(parent, posStyle) {
 
-	ZaToolBar.call(this, parent, null, posStyle, "SearchToolBar");
+	ZaToolBar.call(this, parent, null,null, posStyle, "SearchToolBar");
 	this._app = ZaApp.getInstance();
 	this._searchField = new ZaSearchField(this, "SearchTBSearchField", 48, null);
 //	var h1 = this._searchField.getSize().y;
