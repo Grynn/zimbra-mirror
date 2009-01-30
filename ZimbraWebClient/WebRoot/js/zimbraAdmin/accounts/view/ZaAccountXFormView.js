@@ -1676,12 +1676,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
 											onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",id:"editAliasButton",
-											enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache,[XFormItem.prototype.hasRight,ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT],[XFormItem.prototype.hasRight,ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT]],
-											enableDisableChecks:[ZaAccountXFormView.isEditAliasEnabled]
+											enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache],
+											enableDisableChecks:[ZaAccountXFormView.isEditAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT],[XFormItem.prototype.hasRight,ZaAccount.REMOVE_ACCOUNT_ALIAS_RIGHT]]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
 											enableDisableChecks:[ZaAccountXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.ADD_ACCOUNT_ALIAS_RIGHT]],
+											enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache],
 											onActivate:"ZaAccountXFormView.addAliasButtonListener.call(this);"
 										}
 									]
