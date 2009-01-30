@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.ArrayList;
+import java.io.IOException;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -41,9 +42,14 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.YMailSender;
 import com.zimbra.cs.offline.util.ymail.YMailException;
+import com.zimbra.cs.offline.util.ymail.YMailClient;
+import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.util.JMSession;
+import com.yahoo.mail.UserData;
+import com.yahoo.mail.AllOtherYahooMboxes;
+import com.yahoo.mail.YahooMbox;
 
 public class LocalMailbox extends DesktopMailbox {
     
@@ -209,8 +215,13 @@ public class LocalMailbox extends DesktopMailbox {
             OfflineDataSource ds = getDataSource(msg);
             if (!isOnRequest && isAutoSyncDisabled(ds))
             	continue;
+
+            // For Yahoo bizmail use SMTP rather than Cascade
+            boolean isYBizmail = ds.isYahoo() && ds.isYBizmail();
             
-            if (!ds.isLive() && !ds.isYahoo()) {
+            if (isYBizmail) {
+                session = ds.getYBizmailSession();
+            } else if (!ds.isLive() && !ds.isYahoo()) {
                 session = LocalJMSession.getSession(ds);
                 if (session == null) {
                     OfflineLog.offline.info("SMTP configuration not valid: " + msg.getSubject());
@@ -230,7 +241,7 @@ public class LocalMailbox extends DesktopMailbox {
             ItemId origMsgId = getOrigMsgId(msg);
             boolean saveToSent = ds.isSaveToSent() && getAccount().getBooleanAttr(Provisioning.A_zimbraPrefSaveToSent, true);
 
-            if (ds.isYahoo()) {
+            if (ds.isYahoo() && !isYBizmail) {
                 YMailSender ms = YMailSender.newInstance(ds);
                 try {
                     ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
@@ -285,7 +296,7 @@ public class LocalMailbox extends DesktopMailbox {
         
         return sentCount;
     }
-
+    
     private ItemId getOrigMsgId(Message msg) throws ServiceException {
         String origId = msg.getDraftOrigId();
         return StringUtil.isNullOrEmpty(origId) ? null : new ItemId(origId, getAccountId());

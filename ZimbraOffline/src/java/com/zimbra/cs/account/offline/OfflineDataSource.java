@@ -34,14 +34,22 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.GMailImport;
 import com.zimbra.cs.offline.YMailImport;
+import com.zimbra.cs.offline.util.ymail.YMailClient;
+import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.datasource.SyncState;
 import com.zimbra.cs.mailclient.CommandFailedException;
 import com.zimbra.cs.OfflineImapImport;
+import com.yahoo.mail.UserData;
+import com.yahoo.mail.AllOtherYahooMboxes;
+import com.yahoo.mail.YahooMbox;
+
+import javax.mail.Session;
 
 public class OfflineDataSource extends DataSource {
     private KnownService knownService;
@@ -391,5 +399,47 @@ public class OfflineDataSource extends DataSource {
     	} catch (ServiceException x) {}
     	return  accountDebugTrace;
     }
+
+
+    /*
+     * Returns true if the Yahoo email address associated with the specified
+     * data source refers to a YMail small biz account, in which case we use
+     * SMTP rather than Cascade to send the message.
+     */
+    public boolean isYBizmail() {
+        if (!isYahoo()) return false;
+        try {
+            YMailClient ymc = new YMailClient(OfflineYAuth.authenticate(this));
+            UserData ud = ymc.getUserData();
+            AllOtherYahooMboxes mbs = ud.getOtherYahooMboxes();
+            if (mbs != null && mbs.getOtherYahooMboxesTotal() > 0) {
+                String email = getEmailAddress();
+                for (YahooMbox mb : mbs.getYMbox()) {
+                    if (email.equalsIgnoreCase(mb.getEmail())) {
+                        return mb.isIsBizmail();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            OfflineLog.ymail.warn(
+                "Unable to get UserData for address %s", getEmailAddress());
+        }
+        return false;
+    }
+
+    public Session getYBizmailSession() throws ServiceException {
+        return LocalJMSession.getSession(
+            OfflineLC.zdesktop_ybizmail_smtp_host.value(),
+            OfflineLC.zdesktop_ybizmail_smtp_port.intValue(),
+            true, // isAuthRequired
+            getUsername(),
+            getDecryptedPassword(),
+            true, // useSSL
+            false,// useProxy
+            null, // proxyHost
+            0,    // proxyPort
+            isDebugTraceEnabled());
+    }
+    
 }
 

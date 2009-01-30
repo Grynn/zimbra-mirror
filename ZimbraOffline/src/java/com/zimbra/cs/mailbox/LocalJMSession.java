@@ -60,7 +60,7 @@ public class LocalJMSession {
         System.setProperty("mail.mime.base64.ignoreerrors", "true");
     }
     
-    private static Session getSession(String smtpHost, int smtpPort, boolean isAuthRequired, String smtpUser, String smtpPass,
+    public static Session getSession(String smtpHost, int smtpPort, boolean isAuthRequired, String smtpUser, String smtpPass,
     		                         boolean useSSL, boolean useProxy, String proxyHost, int proxyPort, boolean isDebugTraceEnabled) throws ServiceException {
     	long timeout = LC.javamail_smtp_timeout.longValue() * Constants.MILLIS_PER_SECOND;
     	

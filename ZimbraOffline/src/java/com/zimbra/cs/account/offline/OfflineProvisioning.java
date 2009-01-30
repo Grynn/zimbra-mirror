@@ -586,10 +586,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         // No need to test Live/YMail SOAP access, since successful IMAP/POP3
         // connection implies that SOAP access will succeed with same auth
         // credentials.
-        if (ds.needsSmtpAuth()) {
+        boolean isYBizmail = ds.isYBizmail();
+        if (ds.needsSmtpAuth() || isYBizmail) {
         	OfflineLog.offline.info("SMTP Testing: %s", ds);
             try {
-                Session session = LocalJMSession.getSession(ds);
+                Session session = isYBizmail ?
+                    ds.getYBizmailSession() : LocalJMSession.getSession(ds);
                 session.setDebug(true);
                 SMTPTransport smtp = (SMTPTransport)(session.getTransport());
                 smtp.connect();
