@@ -2,7 +2,7 @@
 // this file must be located at @ausurl@
 
 $download_url_prefix = "http://files.zimbra.com/downloads/zdesktop";
-$details_url = "http://www.zimbra.com/products/desktop.html";
+$details_url = "http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop";
 $license_url = "http://www.zimbra.com/license/zimbra_public_eula_2.1.html";
 $version = "@version@";
 $buildid = @buildid@;
