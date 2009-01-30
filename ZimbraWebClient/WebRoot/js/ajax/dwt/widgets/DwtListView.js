@@ -2213,6 +2213,9 @@ function(headerIdx) {
 // scrollbars are shown or not.
 DwtListView.prototype._resetColWidth =
 function() {
+
+	if (!this.headerColCreated) { return; }
+
 	var lastColIdx = this._getLastColumnIndex();
     if (lastColIdx) {
         var lastCol = this._headerList[lastColIdx];
