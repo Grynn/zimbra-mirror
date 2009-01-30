@@ -9,4 +9,5 @@
 	<include>ZaCertViewController.js</include>
 	<include>ZaCertsServerListController.js</include>
 	<include>zimbra_cert.js</include>
+	<disableUIUndeploy>TRUE</disableUIUndeploy>
 </zimlet>

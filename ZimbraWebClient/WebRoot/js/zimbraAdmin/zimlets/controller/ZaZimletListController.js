@@ -306,7 +306,7 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaZimletListController.changeActionsState = 
+ZaZimletListController.changeActionsStateMethod = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	var offArray = [];

@@ -19,4 +19,5 @@
     <include>ZaGrantViewController.js</include>
     <include>ZaGlobalGrantListViewController.js</include>
     <include>ZaDelegatedAdminExt.js</include>
+    <disableUIUndeploy>TRUE</disableUIUndeploy>
 </zimlet>

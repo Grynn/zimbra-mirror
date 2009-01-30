@@ -47,6 +47,7 @@ ZaZimlet.A_zimbraZimletContentObject = "zimbraZimletContentObject";
 ZaZimlet.A_zimbraZimletPanelItem = "zimbraZimletPanelItem";
 ZaZimlet.A_zimbraZimletScript = "zimbraZimletScript";
 ZaZimlet.A_zimbraZimletServerIndexRegex = "zimbraZimletServerIndexRegex";
+ZaZimlet.A_zimbraAdminExtDisableUIUndeploy = "zimbraAdminExtDisableUIUndeploy";
 ZaZimlet.A_attachmentId = "attId";
 ZaZimlet.A_deployStatus = "deployStatus";
 ZaZimlet.A_statusMsg = "statusMsg";

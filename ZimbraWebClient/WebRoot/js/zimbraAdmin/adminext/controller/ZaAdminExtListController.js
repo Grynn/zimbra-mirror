@@ -256,12 +256,12 @@ function () {
 	this._removeConfirmMessageDialog.popdown();
 }
 
-ZaAdminExtListController.changeActionsState = 
+ZaAdminExtListController.changeActionsStateMethod = 
 function () {
 	var cnt = this._contentView.getSelectionCount();
 	if(cnt == 1) {
 		var arrItems = this._contentView.getSelection();
-		if(arrItems[0].name && arrItems[0].name.substr(0,10)=="com_zimbra" && arrItems[0].attrs[ZaZimlet.A_zimbraZimletIsExtension] && arrItems[0].attrs[ZaZimlet.A_zimbraZimletIsExtension]=="TRUE") {
+		if(arrItems[0].attrs[ZaZimlet.A_zimbraAdminExtDisableUIUndeploy] && arrItems[0].attrs[ZaZimlet.A_zimbraAdminExtDisableUIUndeploy]=="TRUE") {
 			if(this._toolbarOperations[ZaOperation.DELETE])	
 				this._toolbarOperations[ZaOperation.DELETE].enabled = false;
 				
@@ -277,7 +277,7 @@ function () {
 		var gotInternal = false;	
 		for(var i=0;i<cnt;i++) {
 			if(!gotInternal) {
-				if(arrItems[i].name && arrItems[i].name.substr(0,10)=="com_zimbra" && arrItems[i].attrs[ZaZimlet.A_zimbraZimletIsExtension] && arrItems[i].attrs[ZaZimlet.A_zimbraZimletIsExtension]=="TRUE") {
+				if(arrItems[i].attrs[ZaZimlet.A_zimbraAdminExtDisableUIUndeploy] && arrItems[i].attrs[ZaZimlet.A_zimbraAdminExtDisableUIUndeploy]=="TRUE") {
 					gotInternal = true;
 				} 		
 			}

@@ -6,4 +6,5 @@
     <include>ZaBulkProvision.js</include>
     <include>ZaBulkProvisionAccountsListView.js</include>
     <include>ZaBulkProvisionStatusDialog.js</include>    
+<disableUIUndeploy>TRUE</disableUIUndeploy>
 </zimlet>
