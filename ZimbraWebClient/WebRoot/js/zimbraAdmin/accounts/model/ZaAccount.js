@@ -1389,7 +1389,9 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_mail, type:_STRING_, ref:"attrs/"+ZaAccount.A_mail},
         {id:ZaAccount.A_password, type:_STRING_, ref:"attrs/"+ZaAccount.A_password},
         {id:ZaAccount.A2_confirmPassword, type:_STRING_},
-        {id:ZaAccount.A_description, type:_STRING_, ref:"attrs/"+ZaAccount.A_description},
+        {id:ZaAccount.A_description, type: _LIST_, ref:"attrs/"+ZaAccount.A_description,
+            listItem:{type:_STRING_}
+        },
         {id:ZaAccount.A_telephoneNumber, type:_STRING_, ref:"attrs/"+ZaAccount.A_telephoneNumber},
         {id:ZaAccount.A_displayname, type:_STRING_, ref:"attrs/"+ZaAccount.A_displayname},
         {id:ZaAccount.A_country, type:_STRING_, ref:"attrs/"+ZaAccount.A_country},

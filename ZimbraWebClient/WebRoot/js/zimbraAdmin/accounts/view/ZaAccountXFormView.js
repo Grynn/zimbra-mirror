@@ -62,8 +62,14 @@ function(entry) {
 
     this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
-	
-	for (var a in entry.attrs) {
+
+    if (entry.attrs[ZaAccount.A_description] == null) {
+        entry.attrs[ZaAccount.A_description] = [];
+    } else if (! (entry.attrs[ZaAccount.A_description] instanceof Array)) {
+        entry.attrs[ZaAccount.A_description] = [entry.attrs[ZaAccount.A_description]] ;
+    }
+
+    for (var a in entry.attrs) {
 		if(entry.attrs[a] instanceof Array) {
 			this._containedObject.attrs[a] = new Array();
             for(var aa in entry.attrs[a]) {
@@ -963,10 +969,26 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 		var notesGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_form_notes_group",
 			colSizes:["275px","*"],numCols:2,
 		 	items:[
-	
-			{ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
+
+           {ref:ZaAccount.A_description,  msgName:ZaMsg.NAD_Description,
+			   label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
+               labelCssStyle:"vertical-align:top",
+               type:_REPEAT_,
+                align:_LEFT_,
+                repeatInstance:"",
+                showAddButton:false,
+                showRemoveButton:false,
+                showAddOnNextRow:false,
+//                removeButtonLabel:ZaMsg.NAD_RemoveAddress,
+                items: [
+                    {ref:".", type:_TEXTFIELD_, width:"30em"}
+                ]
+            },         /*
+            {ref:ZaAccount.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,
 				label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input"
-			},
+			},         */
+
+
 			{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
 				label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
 			}
@@ -1484,11 +1506,11 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									labelLocation:_LEFT_, 
 									addButtonLabel:ZaMsg.NAD_AddAddress, 
 									align:_LEFT_,
-									repeatInstance:emptyAlias, 
-									showAddButton:true, 
-									showRemoveButton:true, 
-									showAddOnNextRow:true, 
-									removeButtonLabel:ZaMsg.NAD_RemoveAddress,								
+									repeatInstance:emptyAlias,
+									showAddButton:true,
+									showRemoveButton:true,
+									showAddOnNextRow:true,
+									removeButtonLabel:ZaMsg.NAD_RemoveAddress,
 									items: [
 										{ref:".", type:_TEXTFIELD_, label:null,width:"200px"}
 									],
