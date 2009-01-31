@@ -39,7 +39,7 @@ elif [ x$PLAT = "xDEBIAN4.0" -o x$PLAT = "xUBUNTU6" -o x$PLAT = "xUBUNTU8" ]; th
 elif [ x$PLAT = "xUBUNTU6_64" -o x$PLAT = "xUBUNTU8_64" ]; then
 	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/x86_64-linux-gnu-thread-multi"
 	export PERL5LIB=${PERLLIB}
-elif [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSX" -o x$PLAT = "xMACOSXx86_10.5" ]; then
+elif [[ $PLAT == "MACOSX"* ]]; then
 	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/darwin-thread-multi-2level"
 	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xMANDRIVA2006" ]; then
@@ -83,6 +83,11 @@ if [ -x "/sbin/ldconfig" ]; then
   /sbin/ldconfig
 fi
 
+if [[ $PLAT == "MACOSX"* ]]; then
+	LIBEXT=dylib
+else
+	LIBEXT=so
+fi
 
 if [ x$RELEASE = "xmain" ]; then
 	LIBREQ="libncurses.so libz.so"
@@ -112,12 +117,8 @@ do
 	fi
 done
 
-if [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSXx86_10.5" -o x$PLAT = "xMACOSX" ]; then
-	echo "	Checking libpcre.a"
-	if [ ! -f "/opt/zimbra/lib/libpcre.a" ]; then
-		echo "Error: /opt/zimbra/lib/libpcre.a not found"
-		exit 1;
-	fi
+if [[ $PLAT == "MACOSX"* ]]; then
+	echo "	Skipping pcre library check"
 else
 	echo "	Checking libpcre.so"
 	if [ ! -f "$LIBDIR/libpcre.so" ]; then
@@ -143,11 +144,8 @@ else
 fi
 
 echo "	Checking pcre.h"
-if [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSXx86_10.5" -o x$PLAT = "xMACOSX" ]; then
-	if [ ! -f "/opt/zimbra/include/pcre.h" ]; then
-		echo "Error: /opt/zimbra/include/pcre.h not found"
-		exit 1;
-	fi
+if [[ $PLAT == "MACOSX"* ]]; then
+	echo "	Skipping pcre header check"
 else
 	if [ ! -f "/usr/include/$PCREH" ]; then
 		echo "Error: /usr/include/$PCREH not found"
