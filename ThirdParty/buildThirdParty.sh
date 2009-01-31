@@ -97,7 +97,7 @@ for req in autoconf autoheader automake libtool bison flex gcc g++ perl make pat
 do
 	echo "	Checking $req"
 	if [ ! -x "/usr/bin/$req" ]; then
-		echo "Error: $req not found"
+		echo "Error: /usr/bin/$req not found"
 		exit 1;
 	fi
 done
@@ -107,7 +107,7 @@ for req in $LIBREQ
 do
 	echo "	Checking $req"
 	if [ ! -f "$LIBDIR/$req" ]; then
-		echo "Error: $req not found"
+		echo "Error: $LIBDIR/$req not found"
 		exit 1;
 	fi
 done
@@ -121,7 +121,7 @@ if [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSXx86_10.5" -o x$PLAT = "xMACOSX" ]
 else
 	echo "	Checking libpcre.so"
 	if [ ! -f "$LIBDIR/libpcre.so" ]; then
-		echo "Error: libpcre.so not found"
+		echo "Error: $LIBDIR/libpcre.so not found"
 		exit 1;
 	fi
 fi
@@ -131,7 +131,7 @@ for req in $HEADERREQ
 do
 	echo "	Checking $req"
 	if [ ! -f "/usr/include/$req" ]; then
-		echo "Error: $req not found"
+		echo "Error: /usr/include/$req not found"
 		exit 1;
 	fi
 done
@@ -150,7 +150,7 @@ if [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSXx86_10.5" -o x$PLAT = "xMACOSX" ]
 	fi
 else
 	if [ ! -f "/usr/include/$PCREH" ]; then
-		echo "Error: $PCREH not found"
+		echo "Error: /usr/include/$PCREH not found"
 		exit 1;
 	fi
 fi
