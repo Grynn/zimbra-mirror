@@ -39,7 +39,7 @@ function() {
 	this._dWordsList = ["shit","piss","fuck","cunt","cocksucker","motherfucker","tits","fart","turd","twat"];
 	this._dWordsRegEx = [];
 	for (var n = 0; n < this._dWordsList.length; n++) {
-		this._dWordsRegEx.push(new RegExp("^" + this._dWordsList[n], "i"));
+		this._dWordsRegEx.push(new RegExp("\\b" + this._dWordsList[n], "ig"));
 	}
 };
 
@@ -54,10 +54,11 @@ function(mail, boolAndErrorMsgArray) {
 		this._createIgnoreList(mail._origMsg);
 	}
 	var dWordsThatExists = "";
+	var newMailContent = mail.textBodyContent;
 	for (var k = 0; k < this._dWordsRegEx.length; k++) {
 		var dWord = this._dWordsRegEx[k];
-		var newMailContent = mail.textBodyContent;
-		var newMailArry = dWord.exec(newMailContent);
+
+		var newMailArry =  newMailContent.match(dWord);
 		if (!newMailArry)
 			continue;
 
@@ -72,9 +73,9 @@ function(mail, boolAndErrorMsgArray) {
 		hasDWordStr = true;
 		if (hasDWordStr) {
 			if (dWordsThatExists == "") {
-				dWordsThatExists = dWord.source.replace(/\^/g, "");
+				dWordsThatExists = dWord.source.replace(/\\b/g, "");
 			} else {
-				dWordsThatExists = dWordsThatExists + ", " + dWord.source.replace(/\^/g, "");
+				dWordsThatExists = dWordsThatExists + ", " + dWord.source.replace(/\\b/g, "");
 			}
 		}
 	}
@@ -92,7 +93,7 @@ function(origMail) {
 	var bodyContent = origMail.getBodyContent();
 	for (var k = 0; k < this._dWordsRegEx.length; k++) {
 		var dWord = this._dWordsRegEx[k];
-		var mailArry = dWord.exec(bodyContent);
+		var mailArry = bodyContent.match(dWord);
 		if (!mailArry)
 			continue;
 
