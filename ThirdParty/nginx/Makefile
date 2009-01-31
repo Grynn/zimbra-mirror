@@ -14,7 +14,7 @@ SSL_VERSION	?= 0.9.8j
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-NGINX_VERSION ?= 0.5.30
+NGINX_VERSION ?= 0.5.37
 NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
 NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 
