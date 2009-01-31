@@ -24,13 +24,20 @@ use FileHandle;
 use IPC::Open3;
 use Time::Local;
 use Mail::Mailer;
-use Getopt::Std;
+use Getopt::Long;
 
 my %options = ();
 my $report = [];
+my $dbCheck = '';
 my $zimbra_home = "/opt/zimbra";
-
-unless ( getopts( 'mdhrv', \%options ) ) { usage(); }
+unless ( GetOptions ("mailReport" => \$options{m},
+                     "logger"     => \$options{l},
+                     "repair"     => \$options{r},
+                     "verbose"    => \$options{v},
+                     "debug"      => \$options{d},
+                     "help"       => \$options{h})) { usage(); };
+                     
+#unless ( getopts( 'mdhrv', \%options ) ) { usage(); }
 usage() if ($options{h});
 my $debug = $options{d} ? 1 : 0;
 my $verbose = $options{v} ? 1 : 0;
@@ -41,8 +48,15 @@ if ($verbose && $options{m}) {
   &usage();
 }
 
+my $check_disabled = getLocalConfig("zmdbintegrityreport_disabled");
+exit 0 if (lc($check_disabled) eq "true");
+
 addToReport("Generating report\n") if $verbose;
-checkDbs();
+if ($options{l}) {
+  checkLoggerDb();
+} else {
+  checkDbs();
+}
 if ($options{m}) {
   sendEmailReport($report);
 } else {
@@ -70,7 +84,8 @@ sub checkDbs() {
   my $cmd = "${zimbra_home}/mysql/bin/mysqlcheck";
   $cmd .= " --defaults-file=${mysql_mycnf}";
   $cmd .= " -S ${mysql_socket}";
-  $cmd .= " -A -C -s";
+  $cmd .= " -A -C";
+  $cmd .= " -s" unless $options{v};
   $cmd .= " -u root --password=${mysql_root_passwd}";
   $cmd .= " --auto-repair" if $options{r};
   unless (open(CMD, "$cmd|")) {
@@ -87,6 +102,36 @@ sub checkDbs() {
   }
   unless (close(CMD)) {
     addToReport("command failed $!\n");;
+    return undef;
+  }
+  return; 
+}
+
+sub checkLoggerDb() {
+  my $mysql_root_passwd = getLocalConfig("mysql_logger_root_password");
+  my $mysql_socket = getLocalConfig("logger_mysql_socket") || "${zimbra_home}/logger/db/mysql.sock";
+  my $mysql_mycnf = getLocalConfig("logger_mysql_mycnf") || "${zimbra_home}/conf/my.logger.cnf";
+  my $cmd = "${zimbra_home}/logger/mysql/bin/mysqlcheck";
+  $cmd .= " --defaults-file=${mysql_mycnf}";
+  $cmd .= " -S ${mysql_socket}";
+  $cmd .= " -A -C";
+  $cmd .= " -s" unless $options{v};
+  $cmd .= " -u root --password=${mysql_root_passwd}";
+  $cmd .= " --auto-repair" if $options{r};
+  unless (open(CMD, "$cmd|")) {
+    addToReport("can't run $cmd: $!\n"); 
+    return undef;
+  }
+  my @output = <CMD>;
+  if (scalar @output != 0) {
+    addToReport("Logger Database errors found.\n");
+    addToReport("$cmd\n");
+    addToReport("@output");
+  } else {
+    addToReport("No Logger DB errors found.\n") if $verbose;
+  }
+  unless (close(CMD)) {
+    addToReport("$cmd command failed: $!\n");;
     return undef;
   }
   return; 
