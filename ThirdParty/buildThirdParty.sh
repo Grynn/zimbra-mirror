@@ -120,7 +120,7 @@ if [ x$PLAT = "xMACOSXx86" -o x$PLAT = "xMACOSXx86_10.5" -o x$PLAT = "xMACOSX" ]
 	fi
 else
 	echo "	Checking libpcre.so"
-	if [ ! -f "/usr/lib/libpcre.so" ]; then
+	if [ ! -f "$LIBDIR/libpcre.so" ]; then
 		echo "Error: libpcre.so not found"
 		exit 1;
 	fi
