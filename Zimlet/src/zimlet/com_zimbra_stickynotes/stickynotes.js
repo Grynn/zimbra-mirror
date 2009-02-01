@@ -80,7 +80,7 @@ function() {
 	}
 	if (this._mainContainer) {
 		this._mainContainer.style.display = "block";
-		this.setContent(content);
+		this._setStickyContent(content);
 		this.stickyNotesDisplayed = true;
 		return;
 	}
@@ -104,16 +104,32 @@ com_zimbra_stickynotes.prototype._saveAndHideStickyNotes =
 function() {
 	if (!this._mainContainer)
 		return;
-	this._msgIdAndDataArry[this._msgId] = this.getContent();
-	var dbStr = "";
-	for (var msgId in this._msgIdAndDataArry) {
-		dbStr = "__id::" + msgId + ",__data::" + this._msgIdAndDataArry[msgId] + ":=:" + dbStr;
+
+	var content = this._getStickyContent();
+	
+	var saveContent = true;
+	if(this._msgIdAndDataArry[this._msgId]) {
+		if(content == this._msgIdAndDataArry[this._msgId]){
+			saveContent = false;
+		}
 	}
 
-	this.setUserProperty("stickyNotes_data", dbStr, true);
+	if(saveContent) {
+		this._msgIdAndDataArry[this._msgId] = content;
+		var dbStr = "";
+		for (var msgId in this._msgIdAndDataArry) {
+			dbStr = "__id::" + msgId + ",__data::" + this._msgIdAndDataArry[msgId] + ":=:" + dbStr;
+		}	
+		this.setUserProperty("stickyNotes_data", dbStr, true, new AjxCallback(this, this._saveContentCallback));
+	}
 	this._hideStickyNotes();
 	//add tag
 	this._tagAction(true);
+};
+com_zimbra_stickynotes.prototype._saveContentCallback =
+function () {
+	var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
+	appCtxt.getAppController().setStatusMsg("StickyNotes Saved", ZmStatusView.LEVEL_INFO, null, transitions);
 };
 
 com_zimbra_stickynotes.prototype._tagAction =
@@ -183,17 +199,17 @@ function(content) {
 	this._mainContainer.innerHTML = html.join("");
 	this._addListeners();
 	if (content) {
-		this.setContent(content);
+		this._setStickyContent(content);
 	}
 	this.stickyNotesDisplayed = true;
 };
 
-com_zimbra_stickynotes.prototype.setContent =
+com_zimbra_stickynotes.prototype._setStickyContent =
 function(content) {
 	document.getElementById("stickyn_textAreaID").value = content;
 };
 
-com_zimbra_stickynotes.prototype.getContent =
+com_zimbra_stickynotes.prototype._getStickyContent =
 function() {
 	return document.getElementById("stickyn_textAreaID").value;
 };
@@ -283,7 +299,7 @@ com_zimbra_stickynotes.prototype._createStickyNotes =
 function(mail) {
 	if (mail.type == "CONV") {
 		this._msgId = "CONV" + mail.id;
-	} else if (srcMsgObj.type == "MSG") {
+	} else if (mail.type == "MSG") {
 		this._msgId = "MSG" + mail.id;
 	} else {
 		return;
@@ -346,7 +362,6 @@ function() {
 		document.getElementById("stickyNotes_ToolbarBtn_chkbx").checked = true;
 	}
 	
-
 	this.pbDialog = this._createDialog({title:"'Sticky Notes' Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON]});
 	this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
 	this.pbDialog.popup();
@@ -382,7 +397,7 @@ function() {
 	}
 
 	if (document.getElementById("stickyNotes_ToolbarBtn_chkbx").checked) {
-		if (!this.stickyNotes_ToolbarBtn) {
+		if (!(this.getUserProperty("stickyNotes_ToolbarBtn") == "true")) {
 			this._reloadRequired = true;
 		}
 		this.setUserProperty("stickyNotes_ToolbarBtn", "true", true);
@@ -396,8 +411,15 @@ function() {
 	this.pbDialog.popdown();
 
 	if (this._reloadRequired) {
-		window.onbeforeunload = null;
-		var url = AjxUtil.formatUrl({});
-		ZmZimbraMail.sendRedirect(url);
+		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
+		appCtxt.getAppController().setStatusMsg("Browser will be refreshed for changes to take effect..", ZmStatusView.LEVEL_INFO, null, transitions);
+		setTimeout(AjxCallback.simpleClosure(this._refreshBrowser, this), 2000);
 	}
+};
+
+com_zimbra_stickynotes.prototype._refreshBrowser =
+function() {
+	window.onbeforeunload = null;
+	var url = AjxUtil.formatUrl({});
+	ZmZimbraMail.sendRedirect(url);
 };
