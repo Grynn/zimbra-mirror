@@ -35,6 +35,7 @@ import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.LocalJMSession;
+import com.zimbra.cs.mailbox.Message;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.GMailImport;
@@ -313,11 +314,19 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public void reportError(int itemId, String error, Exception e) {
-        String data = null;
+        String data = "";
+        try {
+            // If this is a message, then indicate folder name
+            Mailbox mbox = getMailbox();
+            Message msg = mbox.getMessageById(null, itemId);
+            Folder folder = mbox.getFolderById(null, msg.getFolderId());
+            data = "Local folder: " + folder.getPath() + "\n";
+        } catch (ServiceException ex) {
+        }
         if (e instanceof CommandFailedException) {
             String req = ((CommandFailedException) e).getRequest();
             if (req != null) {
-                data = "Failed request: " + req;
+                data += "Failed request: " + req;
             }
         }
         try {
