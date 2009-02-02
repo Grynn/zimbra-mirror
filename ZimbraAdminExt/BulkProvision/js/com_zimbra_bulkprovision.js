@@ -3,11 +3,19 @@
 if (ZaController.initToolbarMethods["ZaAccountListController"]) {
     ZaOperation.BULK_PROVISION = ++ ZA_OP_INDEX ;
     ZaAccountListController.initExtraToolbarMethod = function () {
-        this._toolbarOperations.push(
+        this._toolbarOperations [ZaOperation.BULK_PROVISION] = 
                 new ZaOperation(ZaOperation.BULK_PROVISION, com_zimbra_bulkprovision.ACTBB_BulkProvision,
                         com_zimbra_bulkprovision.ACTBB_BulkProvision_tt, "Account", "AccountDis", 
                         new AjxListener(this, ZaAccountListController.prototype._bulkProvisionListener)
-                        ));
+                        );
+
+        for (var i=0; i < this._toolbarOrder.length; i ++) {
+            if (this._toolbarOrder[i] == ZaOperation.NONE) {
+                this._toolbarOrder.splice(i,0,ZaOperation.BULK_PROVISION) ;
+                break ;
+            }
+        }
+
     }
 
     ZaController.initToolbarMethods["ZaAccountListController"].push(ZaAccountListController.initExtraToolbarMethod);
