@@ -129,7 +129,7 @@ YahooLocalController.prototype.constructor = YahooLocalController;
 YahooLocalController.prototype.getLocal =
 function() {
 
-	if (!AjxUtil.isFunction(geoip_country_code)) {
+	if (typeof(geoip_country_code) == 'undefined' || !AjxUtil.isFunction(geoip_country_code)) {
 		return;
 	}
 
@@ -184,7 +184,7 @@ function(query) {
 
 YahooLocalController.prototype._handleSearchLocal =
 function(query) {
-	var coords = this._setDefaultView();
+	var coords = this._setDefaultView(this._curr_lat, this._curr_lon);
 
 	if (coords) {
 		this.getMapsView().searchLocal({
@@ -228,7 +228,7 @@ function() {
 
 YahooLocalController.prototype._handleSearchUpcoming =
 function() {
-	var coords = this._setDefaultView();
+    var coords = this._setDefaultView(this._curr_lat, this._curr_lon);
 
 	if (coords) {
 		this.getMapsView().searchUpcoming({
@@ -247,7 +247,7 @@ function() {
 
 YahooLocalController.prototype._handleSearchTraffic =
 function() {
-	var coords = this._setDefaultView();
+    var coords = this._setDefaultView(this._curr_lat, this._curr_lon);
 
 	if (coords) {
 		this.getMapsView().searchTraffic({
@@ -266,7 +266,15 @@ function() {
 
 YahooLocalController.prototype._handleMarkMe =
 function() {
-	var coords = this._setDefaultView();
+	var lat;
+    var lon;
+    if(AjxUtil.isFunction(geoip_latitude) && AjxUtil.isFunction(geoip_longitude)){
+        lat = geoip_latitude();
+        lon = geoip_longitude();
+        this._curr_lat = lat;
+        this._curr_lon = lon;
+    }
+    var coords = this._setDefaultView(this._curr_lat,this._curr_lon);
 
 	if (coords) {
 		var latitude = coords ? coords.latitude : null;
@@ -437,21 +445,14 @@ function(lati,longi) {
     var longitude =  this._zimlet.getUserProperty("longitude");
 
 
-    if((!latitude || !longitude) && (!coords ||(coords && (!coords.latitude || !coords.longitude))) && lati!=45){
-        /*var msg = "<span style=\"text-align:center;\">" +
-                                 "Maxmind is paid service.You need to pay to know latitude and longitude<br>"+
-                                  "otherwise you have to enter latitude and longitude manually."+
-                                 "</span>";
-        var messageDlg = this._getMessageDlg(msg,false);
-        if (messageDlg)
-        {
-            var listener = new AjxListener (this, this.selectLocation,false);
-            messageDlg.setButtonListener (DwtDialog.OK_BUTTON, listener);
-            messageDlg.popup();
-        }*/
-        var msg = this._zimlet.getMessage("maxMindError");
-        var selectDialog = new YLocalDialog(appCtxt._shell, null, this._zimlet, msg, true);
-        selectDialog.popup();
+    if((!latitude || !longitude) && (!coords ||(coords && (!coords.latitude || !coords.longitude))) && (!lati && !longi)){
+        var manLoc = this._zimlet.getUserProperty("manuallocation");
+	    if (!manLoc || manLoc.match(/false/i)) {
+            var msg = this._zimlet.getMessage("maxMindError");
+            var selectDialog = new YLocalDialog(appCtxt._shell, null, this._zimlet, msg, true);
+            selectDialog.popup();
+            return;
+        }
     }
     if(!coords){
          this._zimlet._ylocal = {
@@ -459,13 +460,16 @@ function(lati,longi) {
 			countryName: "",
 			city: "",
 			region: "",
-			latitude:latitude || lati,
-			longitude:longitude || longi
+			latitude: lati || latitude,
+			longitude: longi || longitude
 		};
         coords = this._zimlet._ylocal;
     }
 
     if (coords) {
+        coords.latitude = lati || coords.latitude;
+        coords.longitude = longi || coords.longitude;
+
 		this.setView({
 			clean: true,
 			typeControl:true,
@@ -521,6 +525,8 @@ function(){
      var longitude = this._textObj2.getValue();
      this._zimlet.setUserProperty("latitude",latitude);
      this._zimlet.setUserProperty("longitude",longitude);
+     this._curr_lat = latitude;
+     this._curr_lon = longitude;
      this._zimlet._controller._dlg_propertyEditor.popdown();
      this._zimlet._controller._handleSearchLocal();
 }
@@ -564,7 +570,11 @@ function() {
 
 YahooLocalController.prototype._getLatLonForZip =
 function(zip) {
-	var url = "http://www.csgnetwork.com/cgi-bin/zipcodes.cgi?Zipcode=" + zip;
+    var ydnAPPID = this._zimlet.getConfig("ydnAPPID");
+    var url = this._zimlet.getMessage("ygeoapiURL");;//
+    url += "?appid=" + ydnAPPID + "&zip=" + zip;
+
+	//var url = "http://www.csgnetwork.com/cgi-bin/zipcodes.cgi?Zipcode=" + zip;
 	var serverURL = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	var callback = new AjxCallback(this, this._handleLatLonForZip, zip);
 
@@ -575,57 +585,31 @@ function(zip) {
 YahooLocalController.prototype._handleLatLonForZip =
 function(zip, result) {
 	if (!result || (result && !result.success)) {
-		/*var msg = "<span style=\"text-align:center;\">" +
-                                 "Csgnetwork is a paid service.You need to pay to know latitude and longitude<br>"+
-                                  "otherwise you have to enter latitude and longitude manually."+
-                                 "</span>";
-        var messageDlg = this._getMessageDlg(msg,true);
-        if (messageDlg)
-        {
-            var listener = new AjxListener (this, this.selectLocation,true);
-            messageDlg.setButtonListener (DwtDialog.OK_BUTTON, listener);
-            messageDlg.popup();
-        } */
-        //this.test();
-        var msg = this._zimlet.getMessage("csgNetworkError");
+		var msg = this._zimlet.getMessage("ygeoLocalError");
         var selectDialog = new YLocalDialog(appCtxt._shell, null, this._zimlet, msg, false);
         selectDialog.popup();
         return;
     }
 
-	if (result.text.match(/Zipcode not found!/i)) {
+	if (result.text.match(/Error/i)) {
 		appCtxt.setStatusMsg(this._zimlet.getMessage("zipCodeInvalid"), ZmStatusView.LEVEL_CRITICAL);
 		return;
 	}
 
-	var lat = AjxStringUtil.trim((result.text.match(/<td><b>Latitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Latitude/gi, ''));
-	var lon = AjxStringUtil.trim((result.text.match(/<td><b>Longitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Longitude/gi, ''));
-	if (!(lat && lon)) {
+	//var lat = AjxStringUtil.trim((result.text.match(/<td><b>Latitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Latitude/gi, ''));
+	//var lon = AjxStringUtil.trim((result.text.match(/<td><b>Longitude<\/b><\/td><td>.*(\-?[.\w]+)<\/td>/ig))[0].replace(/<\/?[^>]+>|Longitude/gi, ''));
+    var lat = AjxStringUtil.trim((result.text.match(/<Latitude>.*(\-?[.\w]+)<\/Latitude>/ig))[0].replace(/<\/?[^>]+>|Latitude/gi,''));
+    var lon = AjxStringUtil.trim((result.text.match(/<Longitude>.*(\-?[.\w]+)<\/Longitude>/ig))[0].replace(/<\/?[^>]+>|Longitude/gi,''));
+
+    if (!(lat && lon)) {
 		appCtxt.setStatusMsg(this._zimlet.getMessage("coordsNotFound"), ZmStatusView.LEVEL_CRITICAL);
 		return;
 	}
-
-	var cord = this.getLocal();
-	this.setView({
-		clean: true,
-		typeControl:true,
-		panControl:false,
-		zoomControl:"long",
-		zoomLevel: 3,
-		defaultLat: lat,
-		defaultLon: lon
-	});
-
-	this.getMapsView().changeLocation({
-		latitude:   cord.latitude,
-		longitude:  cord.longitude,
-		newLatitude: lat,
-		newLongitude: lon
-	});
+    this.setLanLongAndChangeLocation(lat,lon,3);
 };
 
 YahooLocalController.prototype.setLanLongAndChangeLocation=
-function(latitude,longitude){
+function(latitude,longitude,level){
     //this.popdown();
     //var latitude = this._textObj1.getValue();
     //var longitude = this._textObj2.getValue();
@@ -634,7 +618,7 @@ function(latitude,longitude){
 		typeControl:true,
 		panControl:false,
 		zoomControl:"long",
-		zoomLevel: 6,
+		zoomLevel: level || 6,
 		defaultLat: latitude,
 		defaultLon: longitude
 	};
@@ -644,6 +628,9 @@ function(latitude,longitude){
 		latitude:   latitude,
 		longitude:  longitude
 	});
+    this._curr_lat = latitude;
+    this._curr_lon = longitude;
+
 }
 
 YahooLocalController.prototype._sendListener =

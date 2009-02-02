@@ -3,5 +3,6 @@
 		<property name="allowedDomains">*.yahoo.com,*.yimg.com,*.yahooapis.com,*.csgnetwork.com,*.maxmind.com</property>
 		<property name="appid">ZimbraMail</property>
 		<property name="upcomingKey">ae7d801cfb</property>
+        <property name="ydnAPPID">fa4n0Y7V34Gcc4j3iQ29vbtzrS8gzUGcop_4kRCX3kKYMgX8pk9H7IdH5xDlYezTU3aYUg--</property>
 	</global>
 </zimletConfig>
