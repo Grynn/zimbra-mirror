@@ -30,7 +30,7 @@ import au.com.bytecode.opencsv.CSVReader;
  * To change this template use File | Settings | File Templates.
  */
 public class GetBulkProvisionAccounts extends AdminDocumentHandler {
-    public static final int MAX_ACCOUNTS_LIMIT = 1000 ;
+    public static final int MAX_ACCOUNTS_LIMIT = 500 ;
     
     public static final String A_accountName = "accountName" ;
     public static final String A_displayName = "displayName" ;
