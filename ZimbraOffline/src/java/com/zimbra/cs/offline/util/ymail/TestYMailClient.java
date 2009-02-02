@@ -111,7 +111,8 @@ public class TestYMailClient {
         config.setMaxLiteralMemSize(200);
         config.setDebug(true);
         config.setTrace(true);
-        config.setTimeout(600);
+        config.setReadTimeout(600);
+        config.setConnectTimeout(600);
         config.setAuthenticationId(USER);
         ImapConnection connection = new ImapConnection(config);
         connection.connect();
