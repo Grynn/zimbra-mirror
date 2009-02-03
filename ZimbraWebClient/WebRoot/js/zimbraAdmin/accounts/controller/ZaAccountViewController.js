@@ -138,9 +138,9 @@ function(entry) {
 		}	
 		this._view.setDirty(false);
 		entry.attrs[ZaAccount.A_password] = null; //get rid of VALUE-BLOCKED
-		entry[ZaModel.currentTab] = "1"
-		this._view.setObject(entry);
+		entry[ZaModel.currentTab] = "1";
 		this._currentObject = entry;
+		this._view.setObject(entry);
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountViewController.prototype._setView", null, false);
 	}	
@@ -470,6 +470,8 @@ ZaAccountViewController.prototype._newButtonListener =
 function(ev) {
 	try {
 		var newAccount = new ZaAccount();
+		newAccount.loadNewObjectDefaults("name", ZaSettings.myDomainName);
+		newAccount.getAttrs = {all:true};		
 		if(!ZaApp.getInstance()._newAccountWizard)
 			ZaApp.getInstance()._newAccountWizard = new ZaNewAccountXWizard(this._container);
         else { //update the account type if needed
