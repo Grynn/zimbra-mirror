@@ -1013,14 +1013,17 @@ sub rewriteConfig {
         } else {
           $rep = "";
         }
+        logMsg(5, "comment key=$key val=$val rep=$rep cmd=$cmd");
       } elsif ($sr =~ m/^uncomment/) {
         my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
         $val = lookUpConfig($cmd, $key);
-        if ($val eq "" || $val eq "no") {
-          $rep = "#";
-        } else {
+        if ($val ne "" &&
+          ( ( $val ne "no" && $val != 0 ) || $val == 1)) {
           $rep = "";
+        } else {
+          $rep = "#";
         }
+        logMsg(5, "uncomment key=$key val=$val rep=$rep cmd=$cmd");
       } elsif ($sr =~ m/^binary/) {
         my ($cmd, $key) = ($sr =~ m/binary ([^:]+):(\S+)/);
         $val = lookUpConfig($cmd, $key);
