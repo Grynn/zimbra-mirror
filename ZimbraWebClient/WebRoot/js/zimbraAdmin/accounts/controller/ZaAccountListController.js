@@ -437,10 +437,10 @@ function(ev) {
 		EmailAddr_XFormItem.resetDomainLists.call (this);
 		var newDL = new ZaDistributionList();
 		newDL.getAttrs = {all:true};
-		/*newDL.setAttrs = {all:true};
+		newDL.setAttrs = {all:true};
 		newDL.rights = {};
-		newDL._defaultValues = {attrs:{}};*/	
-		newAlias.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
+		newDL._defaultValues = {attrs:{}};
+		newDL.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
 		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
 		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
 		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
