@@ -89,11 +89,14 @@ else
 	LIBEXT=so
 fi
 
+NONMACLIB="libpcre.so libexpat.so libpopt.so"
+NONMACHEADER="expat.h popt.h"
+
 if [ x$RELEASE = "xmain" ]; then
-	LIBREQ="libncurses.so libz.so"
+	LIBREQ="libncurses.$LIBEXT libz.$LIBEXT"
 	HEADERREQ="ncurses.h zlib.h"
 else
-	LIBREQ="libncurses.so libz.so libltdl.so"
+	LIBREQ="libncurses.$LIBEXT libz.$LIBEXT libltdl.$LIBEXT"
 	HEADERREQ="ncurses.h ltdl.h zlib.h"
 fi
 
@@ -117,14 +120,15 @@ do
 	fi
 done
 
-if [[ $PLAT == "MACOSX"* ]]; then
-	echo "	Skipping pcre library check"
-else
-	echo "	Checking libpcre.so"
-	if [ ! -f "$LIBDIR/libpcre.so" ]; then
-		echo "Error: $LIBDIR/libpcre.so not found"
-		exit 1;
-	fi
+if [[ $PLAT != "MACOSX"* ]]; then
+	for req in $NONMACLIB
+	do
+		echo "	Checking $req"
+		if [ ! -f "$LIBDIR/$req" ]; then
+			echo "Error: $LIBDIR/$req not found"
+			exit 1;
+		fi
+	done
 fi
 
 echo "Checking for prerequisite headers"
@@ -137,6 +141,17 @@ do
 	fi
 done
 
+if [[ $PLAT != "MACOSX"* ]]; then
+	for req in $NONMACHEADER
+	do
+		echo "	Checking $req"
+		if [ ! -f "/usr/include/$req" ]; then
+			echo "Error: /usr/include/$req not found"
+			exit 1;
+		fi
+	done
+fi
+
 if [ x$PLAT = "xRHEL4" -o x$PLAT = "xRHEL4_64" -o x$PLAT = "xCentOS4" -o x$PLAT = "xCentOS4_64" ]; then
 	PCREH="pcre/pcre.h"
 else
@@ -144,9 +159,7 @@ else
 fi
 
 echo "	Checking pcre.h"
-if [[ $PLAT == "MACOSX"* ]]; then
-	echo "	Skipping pcre header check"
-else
+if [[ $PLAT != "MACOSX"* ]]; then
 	if [ ! -f "/usr/include/$PCREH" ]; then
 		echo "Error: /usr/include/$PCREH not found"
 		exit 1;
