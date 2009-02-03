@@ -1,6 +1,8 @@
 #!/bin/bash
 
-BUILD_HOME=/home/public/p4
+PROGDIR=`dirname $0`
+cd $PROGDIR
+PATHDIR=`pwd`
 P4USER=public
 P4CLIENT=public-view
 P4PASSWD=public1234
@@ -17,7 +19,7 @@ if [ x$SYNC = "x" ]; then
 	SYNC=no
 fi
 
-PLAT=`$BUILD_HOME/$RELEASE/ZimbraBuild/rpmconf/Build/get_plat_tag.sh`;
+PLAT=`$PATHDIR/../ZimbraBuild/rpmconf/Build/get_plat_tag.sh`;
 
 if [ x$PLAT = "x" ]; then
     echo "Unknown platform, exiting."
@@ -25,25 +27,25 @@ if [ x$PLAT = "x" ]; then
 fi
 
 if [ x$PLAT = "xRHEL4" -o x$PLAT = "CentOS4" -o x$PLAT = "xRHEL5" -o x$PLAT = "xCentOS5" -o x$PLAT = "xFC4" -o x$PLAT = "xFC5" -o x$PLAT = "xF7" -o x$PLAT = "xRPL1" -o x$PLAT = "xDEBIAN3.1" ]; then
-	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/i386-linux-thread-multi"
+	export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/i386-linux-thread-multi"
 	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xRHEL4_64" -o x$PLAT = "xCentOS4_64" -o x$PLAT = "xRHEL5_64" -o x$PLAT = "xCentOS5_64"  -o x$PLAT = "xSLES10_64" ]; then
-	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/x86_64-linux-thread-multi"
+	export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/x86_64-linux-thread-multi"
 	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xSuSEES9" -o x$PLAT = "xSuSEES10" -o x$PLAT = "xopenSUSE_10.2" -o x$PLAT = "xSuSE10" ]; then
-	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/i586-linux-thread-multi"
+	export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/i586-linux-thread-multi"
 	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xDEBIAN4.0" -o x$PLAT = "xUBUNTU6" -o x$PLAT = "xUBUNTU8" ]; then
-	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/i486-linux-gnu-thread-multi"
+	export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/i486-linux-gnu-thread-multi"
 	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xUBUNTU6_64" -o x$PLAT = "xUBUNTU8_64" ]; then
-	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/x86_64-linux-gnu-thread-multi"
+	export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/x86_64-linux-gnu-thread-multi"
 	export PERL5LIB=${PERLLIB}
 elif [[ $PLAT == "MACOSX"* ]]; then
-	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/darwin-thread-multi-2level"
+	export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/darwin-thread-multi-2level"
 	export PERL5LIB=${PERLLIB}
 elif [ x$PLAT = "xMANDRIVA2006" ]; then
-	export PERLLIB="${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib:${BUILD_HOME}/$RELEASE/ThirdParty/Perl/zimbramon/lib/i386-linux"
+	export PERLLIB="${PATHDIR}/Perl/zimbramon/lib:${PATHDIR}/Perl/zimbramon/lib/i386-linux"
 	export PERL5LIB=${PERLLIB}
 fi
 
@@ -53,22 +55,25 @@ else
 	LIBDIR="/usr/lib"
 fi
 
-echo "Resyncing thirdparty source for $RELEASE"
 if [ x$SYNC = "xyes" ]; then
-	cd ${BUILD_HOME}/$RELEASE/ThirdParty
+	echo "Resyncing thirdparty source for $RELEASE"
+fi
+
+if [ x$SYNC = "xyes" ]; then
+	cd ${PATHDIR}
 	$P4 sync ... > /dev/null 
 fi
 
 if [ x$SYNC = "xyes" ]; then
-	cd ${BUILD_HOME}/$RELEASE/ZimbraBuild
+	cd ${PATHDIR}/../ZimbraBuild
 	$P4 sync ... > /dev/null 
 fi
 
-mkdir -p ${BUILD_HOME}/$RELEASE/ThirdPartyBuilds/$PLAT
+mkdir -p ${PATHDIR}/../ThirdPartyBuilds/$PLAT
 
 if [ x$SYNC = "xyes" ]; then
-	if [ x$RELEASE = "xmain" ]; then
-		cd ${BUILD_HOME}/$RELEASE/ThirdPartyBuilds/$PLAT
+	if [ x$RELEASE != "xFRANK" ]; then
+		cd ${PATHDIR}/../ThirdPartyBuilds/$PLAT
 		$P4 sync ... > /dev/null 
 	fi
 fi
@@ -166,7 +171,7 @@ if [[ $PLAT != "MACOSX"* ]]; then
 	fi
 fi
 
-cd ${BUILD_HOME}/$RELEASE/ThirdParty
+cd ${PATHDIR}
 rm -f make.out 2> /dev/null
 make allclean > /dev/null 2>&1
 make all 2>&1 | tee -a make.out
