@@ -234,6 +234,20 @@ public class SetHeaderFilter implements Filter {
         if (debug > 0) {
             System.out.println("@doFilter");
         }
+
+	    /***/
+        // TODO: We could pass all the init-params through but we only need one for now.
+	    request.setAttribute("init.Expires", String.valueOf(expiresValue));
+	    /***
+	    Enumeration pnames = this.config.getInitParameterNames();
+	    while (pnames.hasMoreElements()) {
+		    String pname = (String)pnames.nextElement();
+		    String pvalue = this.config.getInitParameter(pname);
+		    if (pvalue == null) continue;
+		    request.setAttribute("init."+pname, pvalue);
+	    }
+	    /***/
+
         // make sure we're dealing with an http request
         HttpServletRequest req;
         HttpServletResponse resp;

@@ -282,7 +282,11 @@ public class SkinResources
             // We browser sniff so need to make sure any caches do the same.
             resp.addHeader("Vary", "User-Agent");
             // Cache It!
-            resp.setHeader("Cache-control", "public, max-age=604800");
+	        String maxAge = (String)req.getAttribute("init.Expires");
+	        if (maxAge == null) {
+		        maxAge = "604800";
+	        }
+            resp.setHeader("Cache-control", "public, max-age="+maxAge);
             resp.setContentType(contentType);
 			// NOTE: I cast the file length to an int which I think is
 			//       fine. If the aggregated contents are larger than
