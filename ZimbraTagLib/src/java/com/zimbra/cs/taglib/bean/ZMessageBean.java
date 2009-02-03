@@ -170,10 +170,23 @@ public class ZMessageBean {
         }
         return sb.toString();
     }
+     public boolean isIgnored(ZMimePart top){
+        String type = top.getContentType();
+         return (type.equalsIgnoreCase(ZMimePartBean.CT_MULTI_ALT) ||
+			type.equalsIgnoreCase(ZMimePartBean.CT_MULTI_MIXED) ||
+			type.equalsIgnoreCase(ZMimePartBean.CT_MULTI_RELATED) ||
+			type.equalsIgnoreCase(ZMimePartBean.CT_APP_APPLE_DOUBLE) ||
+			type.equalsIgnoreCase(ZMimePartBean.CT_APP_MS_TNEF) ||
+			type.equalsIgnoreCase(ZMimePartBean.CT_APP_MS_TNEF2));
+    }
     public boolean isRenderable(ZMimePart top){
         String type = top.getContentType();
-        return (type.equalsIgnoreCase(ZMimePartBean.CT_TEXT_HTML) ||
-			type.equalsIgnoreCase(ZMimePartBean.CT_TEXT_PLAIN));
+        return (
+                type.equalsIgnoreCase(ZMimePartBean.CT_TEXT_HTML) ||
+			    type.equalsIgnoreCase(ZMimePartBean.CT_TEXT_PLAIN) ||
+                type.equalsIgnoreCase(ZMimePartBean.CT_IMG_GIF) ||
+                type.equalsIgnoreCase(ZMimePartBean.CT_IMG_JPEG) ||
+                type.equalsIgnoreCase(ZMimePartBean.CT_IMG_PNG) );
     }
     public synchronized List<ZMimePartBean> getAttachments() {
         if (mAttachments == null) {
@@ -184,7 +197,7 @@ public class ZMessageBean {
                 for (ZMimePart child: top.getChildren()) {
                     addAttachments(mAttachments, child);
                 }
-                if (mAttachments.isEmpty() && (!isRenderable(top) || !top.isBody())) {
+                if (mAttachments.isEmpty() && !isIgnored(top) && (!isRenderable(top) || !top.isBody())) {
                     ZMimePartBean bb = new ZMimePartBean(top);
                     if ((bb.getIsVideo() || bb.getIsImage() || bb.getIsAudio() || bb.getIsApp() || !bb.isBody())) {
                         mAttachments.add(bb);
