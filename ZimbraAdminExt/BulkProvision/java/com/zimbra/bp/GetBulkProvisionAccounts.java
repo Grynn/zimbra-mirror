@@ -6,15 +6,13 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.soap.ZimbraSoapContext;
 
-import java.util.Map;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,19 +37,32 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
     public static final String A_isValid = "isValid" ;
     public static final String A_isValidCSV = "isValidCSV" ;
     public static final String A_mustChangePassword = "mustChangePassword" ;
+    public static final String A_accountLimit = "accountLimit" ;
 //    public static final String A_error = "error" ;
 
     public static final String ERROR_INVALID_ACCOUNT_NAME = "Invalid account name. " ;
 
     private ArrayList<String> accountNames ;
+    private int accountLimit = -1 ;  //-1 means no limit
     
     public boolean domainAuthSufficient(Map context) {
         return true;
     }
 
 	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
-
+         ZimbraSoapContext zsc = getZimbraSoapContext(context);
+         Provisioning prov = Provisioning.getInstance();
+        
         String aid = request.getElement("aid").getText();
+        String al_str = request.getAttribute(A_accountLimit, null) ;
+        if (al_str != null) {
+            accountLimit = Integer.parseInt(al_str) ;
+            if ((MAX_ACCOUNTS_LIMIT < accountLimit) || (accountLimit == -1)) {
+                accountLimit = MAX_ACCOUNTS_LIMIT ;
+            }
+        } else {
+            accountLimit = MAX_ACCOUNTS_LIMIT ;
+        }
         //String aid = request.getAttribute("aid");
         ZimbraLog.extensions.debug("Uploaded CSV file id = " + aid) ;
         ZimbraSoapContext lc = getZimbraSoapContext(context);
@@ -80,7 +91,7 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
             List allEntries = reader.readAll() ;
             int totalNumberOfEntries = allEntries.size() ;
            
-            checkAccountLimits(totalNumberOfEntries);
+            checkAccountLimits(allEntries, zsc, prov);
 
 //            while ((nextLine = reader.readNext()) != null) {
             for (int i=0; i < totalNumberOfEntries; i ++) {
@@ -153,16 +164,64 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
 
     /**
      * The account limits are decided by the following factors:
-     * 1) Hard limit: MAX_ACCOUNTS_LIMIT
-     * 2) zimbraDomainMaxAccounts (NOT DONE YET)
+     * 1) Hard limit: MAX_ACCOUNTS_LIMIT or accountLimit - License Account Limit (whichever is smaller)
+     * 2) zimbraDomainMaxAccounts 
      *
-     * @param numberOfEntries
+     * @param allEntries
      * @throws ServiceException
      */
-    private void checkAccountLimits (int numberOfEntries) throws ServiceException {
-        if (numberOfEntries > MAX_ACCOUNTS_LIMIT) {
+    private void checkAccountLimits (List allEntries, ZimbraSoapContext zsc, Provisioning prov ) throws ServiceException {
+        ZimbraLog.extensions.debug ("Check the account limits ...") ;
+        int numberOfEntries = allEntries.size() ;
+        if (accountLimit != -1 && numberOfEntries > accountLimit) {
             throw BulkProvisionException.BP_TOO_MANY_ACCOUNTS (
-                    "the maximum accounts you can bulk provisioning is "+ MAX_ACCOUNTS_LIMIT);
+                    "the maximum accounts you can bulk provisioning is "+ accountLimit + "\n");
+        }
+
+        //check against zimbraDomainMaxAccounts
+        Hashtable <String, Integer> h = new Hashtable <String, Integer>() ;
+
+        for (int i=0; i < numberOfEntries; i ++) {
+            String [] entry = entry = (String []) allEntries.get(i);
+            String accountName = null;
+            String parts[] = null;
+            String domainName = null;
+
+            if (entry != null) accountName = entry [0];
+            if (accountName != null) parts = accountName.trim().split("@");
+            if (parts != null && parts.length > 0) domainName = parts[1] ;
+            if (domainName != null) {
+                int count = 0;
+                if (h.containsKey(domainName)) {
+                    count = h.get(domainName).intValue()  ;
+                }
+                h.put(domainName, count + 1);
+            }
+        }
+
+        for (Enumeration<String> keys = h.keys(); keys.hasMoreElements();){
+            String domainName = keys.nextElement();
+            Domain domain = prov.get(Provisioning.DomainBy.name, domainName);
+            if (domain != null && canAccessDomain(zsc, domain)) {
+                String domainMaxAccounts = domain.getAttr("zimbraDomainMaxAccounts") ;
+                if (domainMaxAccounts != null && domainMaxAccounts.length() > 0) {
+                    int limit = Integer.parseInt(domainMaxAccounts) ;
+                    int used = 0;
+                    Provisioning.CountAccountResult result = prov.countAccount(domain);
+                    for (Provisioning.CountAccountResult.CountAccountByCos c : result.getCountAccountByCos()) {
+                        used += c.getCount();
+                    }
+
+                    int newAccounts = h.get(domainName).intValue() ;
+                    int available = limit - used ;
+                    ZimbraLog.extensions.debug("For domain " + domainName + " : csv entry = " + newAccounts
+                            + ", zimbraDomainMaxAccounts = " + limit + ", used accounts = " + used) ;
+                    if (newAccounts > available) {
+                       throw BulkProvisionException.BP_TOO_MANY_ACCOUNTS (
+                            "the maximum accounts you can bulk provisioning for domain: " + domainName + " is "+ available + "\n");
+                    }
+                }
+            }
         }
     }
     

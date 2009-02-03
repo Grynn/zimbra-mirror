@@ -63,7 +63,7 @@ function (status, uploadResults) {
         }
         //File is uploaded successfully
         try {
-            var resp = ZaBulkProvision.getBulkProvisionAccounts(this._app, this._containedObject [ZaBulkProvision.A_csv_aid]);
+            var resp = ZaBulkProvision.getBulkProvisionAccounts(this._app, this._containedObject );
             if (resp.aid == this._containedObject[ZaBulkProvision.A_csv_aid]) {
                 this._containedObject[ZaBulkProvision.A_provision_accounts] =
                                                 ZaBulkProvision.initProvisionAccounts (resp.accounts) ;
@@ -186,8 +186,8 @@ ZaBulkProvisionWizard.prototype.createAccounts = function () {
     
     var totalNumberOfAccounts = accounts.length ;
     var i =  this._currentCreateAccountIndex  ;
-    
-    if (i < totalNumberOfAccounts ) {
+
+    if (i < totalNumberOfAccounts  && (!statusDialog._aborted))  {
         //create account  this._currentCreateAccountIndex
         var account = accounts[i] ;
         this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] = AjxMessageFormat.format (
@@ -196,7 +196,6 @@ ZaBulkProvisionWizard.prototype.createAccounts = function () {
 
         statusDialogCreatedAccounts[i] = {} ;
         statusDialogCreatedAccounts[i][ZaBulkProvision.A2_accountName] = account[ZaBulkProvision.A2_accountName] ;
-
         
         if (account[ZaBulkProvision.A2_isToProvision]) {
             var soapDoc = AjxSoapDoc.create("CreateAccountRequest", ZaZimbraAdmin.URN, null);
@@ -236,13 +235,25 @@ ZaBulkProvisionWizard.prototype.createAccounts = function () {
             this._currentCreateAccountIndex ++ ;
             this.createAccounts () ;
         }
+    } else if (statusDialog._aborted && i < totalNumberOfAccounts) {
+        if (this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] != com_zimbra_bulkprovision.ABORTED) {
+            this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] =  com_zimbra_bulkprovision.ABORTED ;
+            //update the status view
+            statusDialog.setObject(this._provisionStatusObject ) ;
+        }
+        //update the wizard account creation status
+        accounts[i][ZaBulkProvision.A2_status] = com_zimbra_bulkprovision.ABORTED ;
+        this._currentCreateAccountIndex ++ ;
+        this.createAccounts () ;
     } else {
         //Done with create accounts
         this._currentCreateAccountIndex = 0 ;
-        this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] =  com_zimbra_bulkprovision.DONE ;
-         //update the status view
-        statusDialog.setObject(this._provisionStatusObject ) ;
-
+        if (!statusDialog._aborted)  {
+            this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_currentStatus] =  com_zimbra_bulkprovision.DONE ;
+             //update the status view
+            statusDialog.setObject(this._provisionStatusObject ) ;
+        }
+        
         this._endTime = new Date ();
         if (AjxEnv.hasFirebug) console.log("End provision accounts: " + this._endTime.toUTCString());
         var total = this._endTime.getTime () - this._startTime.getTime () ;
@@ -267,6 +278,34 @@ ZaBulkProvisionWizard.prototype.statusDialogPopupListener = function (ev) {
     
     this._currentCreateAccountIndex = 0;
     this.createAccounts ();
+}
+
+//it should be called once the CSV file is uploaded
+ZaBulkProvisionWizard.prototype.checkLicenseAccountLimit = function () {
+    var callback = new AjxCallback (this, this.updateLicenseAccountLimit) ;
+    ZaLicense.getLicenseInfo (null, null, callback) ;
+}
+
+ZaBulkProvisionWizard.prototype.updateLicenseAccountLimit = function (resp) {
+    var accountLimit = -1 ;
+    if (!resp._isException) {
+        var getLicenseResp = resp._data.Body.GetLicenseResponse ;
+        if (getLicenseResp.license) {
+            var licenseObj = new ZaLicense();
+            licenseObj.init(getLicenseResp);
+            var usedAccounts = parseInt (licenseObj.info[ZaLicense.Info_TotalAccounts]) ;
+            var licenseLimit = parseInt (licenseObj.attrs[ZaLicense.A_accountsLimit]) ;
+            if (licenseLimit != -1) { //-1 is unlimited
+                if (usedAccounts != -1) {
+                    accountLimit = licenseLimit - usedAccounts ;
+                } else {
+                    accountLimit = licenseLimit ;
+                }
+            }
+        }
+    }
+
+    this._containedObject[ZaBulkProvision.A2_accountLimit] = accountLimit ;
 }
 
 ZaBulkProvisionWizard.prototype.goNext =
@@ -308,12 +347,15 @@ function() {
         window._uploadManager = um;
         try {
             um.execute(csvUploadCallback, document.getElementById (ZaBulkProvisionWizard.csvUploadFormId));
-            return ; //allow the callback to handle the wizard buttons
         }catch (err) {
             this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_no_csv_file_specified) ;
-            return ;
         }
-	}else if (cStep == ZaBulkProvisionWizard.STEP_PROVISION) {
+
+         //3. Update the account limit information
+        this.checkLicenseAccountLimit() ;
+        
+        return ; //allow the callback to handle the wizard buttons
+    }else if (cStep == ZaBulkProvisionWizard.STEP_PROVISION) {
 	    //create the accounts now, it is a sychronous action with status updated
         var controller = this._app.getCurrentController() ;
 //        var busyMsg = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS ;

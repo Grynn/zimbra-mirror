@@ -29,6 +29,10 @@ ZaBulkProvisionStatusDialog = function(parent) {
 	if (arguments.length == 0) return;
 	this._app = ZaApp.getInstance();
 	this._standardButtons = [DwtDialog.OK_BUTTON];
+    var abortButton = new DwtDialog_ButtonDescriptor(ZaBulkProvisionStatusDialog.ABORT_BUTTON,
+            ZaMsg.NAD_AbortDeleting, DwtDialog.ALIGN_RIGHT, new AjxCallback(this, this.abortCreatingAccounts));
+    this._extraButtons = [abortButton];
+
     w = "420px" ;
     h = "320px"
     ZaXDialog.call(this, parent,null, com_zimbra_bulkprovision.title_provision, w, h);
@@ -39,6 +43,7 @@ ZaBulkProvisionStatusDialog = function(parent) {
 ZaBulkProvisionStatusDialog.prototype = new ZaXDialog;
 ZaBulkProvisionStatusDialog.prototype.constructor = ZaBulkProvisionStatusDialog;
 
+ZaBulkProvisionStatusDialog.ABORT_BUTTON = ++DwtDialog.LAST_BUTTON;
 ZaBulkProvisionStatusDialog.A_currentStatus = "currentStatus" ;
 ZaBulkProvisionStatusDialog.A_createdAccounts = "createdAccounts" ;
 
@@ -70,6 +75,12 @@ function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
 }
 
+ZaBulkProvisionStatusDialog.prototype.popdown =
+function (loc) {
+	ZaXWizardDialog.prototype.popdown.call(this) ;
+    this._aborted = false ;
+}
+
 ZaBulkProvisionStatusDialog.prototype.getMyXForm =
 function() {
 	var sourceHeaderList = new Array();
@@ -98,6 +109,15 @@ function() {
 		]
 	}
 	return xFormObject;
+}
+
+ZaBulkProvisionStatusDialog.prototype.abortCreatingAccounts = 
+function(evt) {
+	try {
+		this._aborted = true;
+	} catch (ex) {
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaBulkProvisionStatusDialog.prototype.abortCreatingAccounts", null, false);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -22,6 +22,7 @@ ZaBulkProvision.A2_displayName = "displayName" ;
 ZaBulkProvision.A2_status = "status" ;
 ZaBulkProvision.A2_isValid = "isValid" ;
 ZaBulkProvision.A2_password = "password" ;
+ZaBulkProvision.A2_accountLimit = "accountLimit" ;
 
 ZaBulkProvision.getMyXModel = function () {
     var xmodel = {
@@ -39,10 +40,10 @@ ZaBulkProvision.getMyXModel = function () {
     return xmodel ;
 }
 
-ZaBulkProvision.getBulkProvisionAccounts = function (app, aid) {
+ZaBulkProvision.getBulkProvisionAccounts = function (app, obj) {
     var controller = app.getCurrentController();
     var soapDoc = AjxSoapDoc.create("GetBulkProvisionAccountsRequest", ZaBulkProvision.URN, null);
-
+    var aid = obj [ZaBulkProvision.A_csv_aid] ;
     if (aid != null) {
      soapDoc.set("aid", aid) ;
     }else{
@@ -50,6 +51,12 @@ ZaBulkProvision.getBulkProvisionAccounts = function (app, aid) {
      return ;
     }
 
+    var accountLimit = obj [ZaBulkProvision.A2_accountLimit] ;
+
+    if (accountLimit != null) {
+        soapDoc.setMethodAttribute(ZaBulkProvision.A2_accountLimit, accountLimit) ;
+    }
+    
     var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;
 	var reqMgrParams = {} ;

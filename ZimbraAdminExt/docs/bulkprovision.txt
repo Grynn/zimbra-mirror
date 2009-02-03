@@ -63,7 +63,7 @@ Soap Commands:
 namespaces: urn:zimbraAdminExt
 
 -----------------------------------
-<GetBulkProvisionAccountsRequest>
+<GetBulkProvisionAccountsRequest accountLimit="20">
     <aid>uploaded csv file attachment id</aid>
 </GetBulkProvisionAccountsRequest>
 
@@ -75,6 +75,12 @@ namespaces: urn:zimbraAdminExt
     </account>+
 <GetBulkProvisonAccountsResponse>
 
+
+1) accountLimit - the available accounts allowed by license key.
+It is total accounts in license file - accounts used
+(This attributes can't get directory from server side since LicenseManager can't be
+ called from BulkProvision Extension, so we use the GetLicense Soap request to get these information)
+ 
 account attrs:
    1) accountName
    2) displayName
