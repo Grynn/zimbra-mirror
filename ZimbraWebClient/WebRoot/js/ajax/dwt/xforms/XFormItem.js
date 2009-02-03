@@ -299,7 +299,7 @@ XFormItem.prototype.enabledDisabledUpdaters = [];
 // changing/saving
 XFormItem.prototype.elementChangeHandler = "onchange";
 
-
+                              
 // choices map
 XFormItem.prototype.selection = _CLOSED_;
 XFormItem.prototype.openSelectionLabel = "";
@@ -519,7 +519,13 @@ XFormItem.prototype.updateVisibility = function () {
 						myVisibilityChecks[i].unshift(func);
 						if(!isVisible)
 							break;
-					}
+					} else if (typeof (myVisibilityChecks[i]) == "string") {
+                        //for relevant backward compatibility
+                        var instance = this.getInstance();
+                        isVisible = eval(myVisibilityChecks[i]) ;
+                        if(!isVisible)
+							break;
+                    }
 				}
 			}
 		}
@@ -2970,7 +2976,13 @@ Group_XFormItem.prototype.updateVisibility = function () {
 						myVisibilityChecks[i].unshift(func);
 						if(!isVisible)
 							break;
-					}
+					} else if (typeof (myVisibilityChecks[i]) == "string") {
+                        //for relevant backward compatibility
+                        var instance = this.getInstance();
+                        isVisible = eval(myVisibilityChecks[i]) ;
+                        if(!isVisible)
+							break;
+                    }
 				}
 			}
 		}

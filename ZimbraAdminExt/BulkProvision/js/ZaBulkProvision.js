@@ -108,7 +108,6 @@ ZaBulkProvision.updateBulkProvisionStatus = function (app, instance) {
 	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_UPDATE_BP_STATUS ;
 
     ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.UpdateBulkProvisionStatusResponse ;
-
 }
 
 ZaBulkProvision.initProvisionAccounts = function (accounts) {

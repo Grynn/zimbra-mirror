@@ -80,7 +80,6 @@ function (status, uploadResults) {
             return ;
         }
         this.goPage(ZaBulkProvisionWizard.STEP_PROVISION);
-		
 	} else {
 		// handle errors during attachment upload.
 		var msg = AjxMessageFormat.format(com_zimbra_bulkprovision.error_upload_csv, [status]);
@@ -268,7 +267,6 @@ ZaBulkProvisionWizard.prototype.statusDialogPopupListener = function (ev) {
     
     this._currentCreateAccountIndex = 0;
     this.createAccounts ();
-
 }
 
 ZaBulkProvisionWizard.prototype.goNext =
@@ -345,7 +343,6 @@ function() {
 
 ZaBulkProvisionWizard.prototype.goPage = function (pageKey) {
     ZaXWizardDialog.prototype.goPage.call(this, pageKey) ;
-
     var prev = next = finish = true ;
     if (pageKey == ZaBulkProvisionWizard.STEP_UPLOAD_CSV) {
 		prev = false;
@@ -355,14 +352,19 @@ ZaBulkProvisionWizard.prototype.goPage = function (pageKey) {
         if (this._containedObject[ZaBulkProvision.A_isValidCSV] == "FALSE") {
             next = false ;
         }
+        this._localXForm.setInstanceValue (
+              this._containedObject[ZaBulkProvision.A_provision_accounts], ZaBulkProvision.A_provision_accounts) ;
     } else if (pageKey == ZaBulkProvisionWizard.STEP_SUMMARY) {
         next = false ;
+        this._localXForm.setInstanceValue (
+              this._containedObject[ZaBulkProvision.A_provision_accounts], ZaBulkProvision.A_provision_accounts) ;
+        this._localXForm.setInstanceValue (
+                      this._containedObject[ZaBulkProvision.A_csv_aid], ZaBulkProvision.A_csv_aid) ;
     }
 
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(prev);
     this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(next);
     this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(finish);
-    
 }
 
 ZaBulkProvisionWizard.getFileName = function (fullPath) {
@@ -454,7 +456,7 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 
 	var case_provision = {type:_CASE_, numCols:2, colSizes:["200px", "*"], 
         tabGroupKey:ZaBulkProvisionWizard.STEP_PROVISION, caseKey:ZaBulkProvisionWizard.STEP_PROVISION,
-//                    relevant:"instance[ZaModel.currentStep] == ZaBulkProvisionWizard.STEP_PROVISION",
+//                      relevant:"instance[ZaModel.currentStep] == ZaBulkProvisionWizard.STEP_PROVISION",
 					align:_LEFT_, valign:_TOP_};
 
     var bpAccountsListHeader = [] ;
@@ -468,16 +470,16 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 
     var case_provision_items = [
             {type:_GROUP_, colSpan: 2, numCols: 1,
-                relevant: "instance[ZaBulkProvision.A_isValidCSV] == 'TRUE'",
-                relevantBehavior: _HIDE_,
+                visibilityChecks: ["instance[ZaBulkProvision.A_isValidCSV] == 'TRUE'"],
+                visibilityChangeEventSources: [ZaBulkProvision.A_isValidCSV],
                 items: [
-                {type:_OUTPUT_, colSpan: 2,  value: com_zimbra_bulkprovision.BP_wizard_upload_status}
-             ]
+                    {type:_OUTPUT_, colSpan: 2,  value: com_zimbra_bulkprovision.BP_wizard_upload_status}
+                 ]
             },
         //relevant doesn't apply on the _OUTPUT_ item, must use _GROUP_ to make the relevant work  
             {type:_GROUP_, colSpan: 2, numCols: 1,
-                relevant: "instance[ZaBulkProvision.A_isValidCSV] == 'FALSE'",
-                relevantBehavior: _HIDE_,
+                visibilityChecks: ["instance[ZaBulkProvision.A_isValidCSV] == 'FALSE'"],
+                visibilityChangeEventSources: [ZaBulkProvision.A_isValidCSV],
                 items: [
                     {type:_OUTPUT_, value: com_zimbra_bulkprovision.BP_wizard_csv_invalid}
                 ]
@@ -485,13 +487,17 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
             { type:_SPACER_ , height: 5 } ,
              //provision account lists
             {type:_GROUP_, colSpan: 2, numCols: 1,
+                  visibilityChecks:[],
+                  visibilityChangeEventSources: [ZaBulkProvision.A_provision_accounts],
                 items: [
-                    {ref:ZaBulkProvision.A_provision_accounts, type:_DWT_LIST_, height:(AjxEnv.isIE ? 270 : 260), width:525,
+                    {
+                        ref:ZaBulkProvision.A_provision_accounts, type: _DWT_LIST_,
+                        height:(AjxEnv.isIE ? 270 : 260), width:525,
                         forceUpdate: true,
                         cssClass: "DLSource",
                         widgetClass: ZaBulkProvisionAccountsListView,
                         headerList:bpAccountsListHeader, hideHeader: false
-                        }
+                    }
                 ]
             }
         ];
