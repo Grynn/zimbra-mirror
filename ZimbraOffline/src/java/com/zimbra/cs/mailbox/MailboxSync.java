@@ -190,6 +190,8 @@ public class MailboxSync {
                 		Long.toString(System.currentTimeMillis()));
                 
                 GalSync.sync(ombx, syncMan, isOnRequest);
+                
+                System.gc();
             } catch (Exception e) {
             	if (ombx.isDeleting())
             		OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccountName());
