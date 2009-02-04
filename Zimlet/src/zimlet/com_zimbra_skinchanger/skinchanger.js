@@ -29,9 +29,13 @@ com_zimbra_skinchanger.prototype.constructor = com_zimbra_skinchanger;
 
 com_zimbra_skinchanger.prototype.init =
 function() {
-	this.turnONSkinChangerZimlet = this.getUserProperty("turnONSkinChangerZimlet") == "true";
+	this.turnONSkinChangerZimletNew = this.getUserProperty("turnONSkinChangerZimletNew") == "true";
+	if(!this.turnONSkinChangerZimletNew)
+		return;
+
 	this.skinc_selectedFreq = this.getUserProperty("skinc_selectedFreq");
 	this.skinc_skinWasChangedOnDate = this.getUserProperty("skinc_skinWasChangedOnDate");
+
 
 	var weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 	this._day = weekdays[new Date().getDay()];
@@ -40,6 +44,7 @@ function() {
 
 	if (this.skinc_selectedFreq != "Everyday" && this.skinc_selectedFreq != this._day)
 		return;
+
 
 	this._loadAvailableSkins(new AjxCallback(this, this._handleResponseLoadAvailableSkins));
 
@@ -106,8 +111,8 @@ function() {
 	this.pView = new DwtComposite(this.getShell());
 	this.pView.getHtmlElement().innerHTML = this.createPrefView();
 
-	if (this.getUserProperty("turnONSkinChangerZimlet") == "true") {
-		document.getElementById("turnONSkinChangerZimlet_chkbx").checked = true;
+	if (this.getUserProperty("turnONSkinChangerZimletNew") == "true") {
+		document.getElementById("turnONSkinChangerZimletNew_chkbx").checked = true;
 	}
 
 	this.pbDialog = this._createDialog({title:"'Skin Changer' Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON]});
@@ -142,7 +147,7 @@ function() {
 	}
 	html[i++] = "<BR>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='turnONSkinChangerZimlet_chkbx'  type='checkbox'/>Enable 'Skin Changer' Zimlet (Changing this would refresh browser)";
+	html[i++] = "<input id='turnONSkinChangerZimletNew_chkbx'  type='checkbox'/>Enable 'Skin Changer' Zimlet (Changing this would refresh browser)";
 	html[i++] = "</DIV>";
 	return html.join("");
 
@@ -162,14 +167,14 @@ function() {
 com_zimbra_skinchanger.prototype._okBtnListner =
 function() {
 	this._reloadRequired = false;
-	if (document.getElementById("turnONSkinChangerZimlet_chkbx").checked) {
-		if (!this.turnONSkinChangerZimlet) {
+	if (document.getElementById("turnONSkinChangerZimletNew_chkbx").checked) {
+		if (!this.turnONSkinChangerZimletNew) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONSkinChangerZimlet", "true", true);
+		this.setUserProperty("turnONSkinChangerZimletNew", "true", true);
 	} else {
-		this.setUserProperty("turnONSkinChangerZimlet", "false", true);
-		if (this.turnONSkinChangerZimlet)
+		this.setUserProperty("turnONSkinChangerZimletNew", "false", true);
+		if (this.turnONSkinChangerZimletNew)
 			this._reloadRequired = true;
 	}
 	var lst = document.getElementById("skinc_availSkinList");
@@ -181,8 +186,15 @@ function() {
 	this.pbDialog.popdown();
 
 	if (this._reloadRequired) {
-		window.onbeforeunload = null;
-		var url = AjxUtil.formatUrl({});
-		ZmZimbraMail.sendRedirect(url);
+		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
+		appCtxt.getAppController().setStatusMsg("Browser will be refreshed for changes to take effect..", ZmStatusView.LEVEL_INFO, null, transitions);
+		setTimeout(AjxCallback.simpleClosure(this._refreshBrowser, this), 2000);
 	}
+};
+
+com_zimbra_skinchanger.prototype._refreshBrowser =
+function() {
+	window.onbeforeunload = null;
+	var url = AjxUtil.formatUrl({});
+	ZmZimbraMail.sendRedirect(url);
 };

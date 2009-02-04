@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_skinchanger" version="1.0" description="Automatically changes skin based on date preference">
+<zimlet name="com_zimbra_skinchanger" version="1.1" description="Automatically changes skin based on date preference">
 	<include>skinchanger.js</include>
 	<includeCSS>skinchanger.css</includeCSS>
 	<resource>skinchanger-icon.gif</resource>
@@ -8,10 +8,8 @@
 		<toolTipText>Automatically changes skin based on date preference</toolTipText>
 	</zimletPanelItem>
 	<userProperties>
-		<property type="string" name="turnONSkinChangerZimlet" value="true"/>
+		<property type="string" name="turnONSkinChangerZimletNew" value="false"/>
 		<property type="string" name="skinc_selectedFreq" value="Wednesday"/>
 		<property type="string" name="skinc_skinWasChangedOnDate" value=""/>
-
-
 	</userProperties>	
 </zimlet>
