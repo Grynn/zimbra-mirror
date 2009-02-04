@@ -66,12 +66,10 @@ Com_Zimbra_sms.prototype.init = function() {
 	if (ZmAssistant && ZmAssistant.register)
 		ZmAssistant.register(new Com_Zimbra_sms_Asst(this));
 
-
 	this.sms_smsUsername = this.getUserProperty("sms_smsUsername");
 	this.sms_smsPassword = this.getUserProperty("sms_smsPassword");
 	this.sms_showSendAndSMSButton = this.getUserProperty("sms_showSendAndSMSButton") == "true";
-	this.sms_smsDefaultContent = this.getUserProperty("sms_smsDefaultContent");
-	this.sms_includeEmailSubject = this.getUserProperty("sms_includeEmailSubject") == "true";
+	this.sms_alsoSendEmail = this.getUserProperty("sms_alsoSendEmail") == "true";
 };
 
 // Called by the Zimlet framework when the SMS panel item was double clicked
@@ -82,8 +80,8 @@ Com_Zimbra_sms.prototype.doubleClicked = function() {
 // Called by the Zimlet framework when the SMS panel item was single clicked
 Com_Zimbra_sms.prototype.singleClicked = function(toValue, bodyValue) {
 	if (!this.turnONSMSZimlet) {
-		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Please Turn-ON SMS Zimlet by selecting the checkbox", ZmStatusView.LEVEL_WARNING, null, transitions);
+		this._showWarningMsg("Please Turn-ON SMS Zimlet. Right-click on Zimlet > Select Preferences");
+		return;
 	}
 	var accountNotSet = this._initializeVariables(false);
 	if (accountNotSet)
@@ -240,7 +238,9 @@ function(recepients, body) {
 		setTimeout(AjxCallback.simpleClosure(this._auth, this, sendSmsCallback), counter * 1000);
 		counter++;
 	}
-
+	if (!this.sms_alsoSendEmail) {
+		this._closeComposeView();
+	}
 };
 
 Com_Zimbra_sms.prototype._sendSMS =
@@ -290,17 +290,23 @@ function() {
 	if (this.getUserProperty("sms_showSendAndSMSButton") == "true") {
 		document.getElementById("sms_showSendAndSMSButton").checked = true;
 	}
-	if (this.getUserProperty("sms_includeEmailSubject") == "true") {
-		document.getElementById("sms_includeEmailSubject").checked = true;
+	if (this.getUserProperty("sms_alsoSendEmail") == "true") {
+		document.getElementById("sms_alsoSendEmail").checked = true;
 	}
 
 	document.getElementById("sms_smsUsername").value = this.getUserProperty("sms_smsUsername");
 	document.getElementById("sms_smsPassword").value = this.getUserProperty("sms_smsPassword");
-	document.getElementById("sms_smsDefaultContent").value = this.getUserProperty("sms_smsDefaultContent");
-
-	this.pbDialog = this._createDialog({title:"SMS Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	var readMeButtonId = Dwt.getNextId();
+	var readMeButton = new DwtDialog_ButtonDescriptor(readMeButtonId, ("Read Me"), DwtDialog.ALIGN_LEFT);
+	this.pbDialog = this._createDialog({title:"SMS Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON],  extraButtons:[readMeButton]});
 	this.pbDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListner));
+	this.pbDialog.setButtonListener(readMeButtonId, new AjxListener(this, this._showSMSreadMe));
 	this.pbDialog.popup();
+};
+
+Com_Zimbra_sms.prototype._showSMSreadMe =
+function() {
+	window.open(this.getResource("showSMSreadMe.html"));
 };
 
 Com_Zimbra_sms.prototype._okBtnListner =
@@ -325,31 +331,27 @@ function() {
 		}
 		this.setUserProperty("sms_showSendAndSMSButton", "true", true);
 	} else {
-		if (!this.sms_showSendAndSMSButton) {
+		if (this.sms_showSendAndSMSButton) {
 			this._reloadRequired = true;
 		}
 		this.setUserProperty("sms_showSendAndSMSButton", "false", true);
-
 	}
-
-	if (document.getElementById("sms_includeEmailSubject").checked) {
-		if (!this.sms_includeEmailSubject) {
+	if (document.getElementById("sms_alsoSendEmail").checked) {
+		if (!this.sms_alsoSendEmail) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("sms_includeEmailSubject", "true", true);
+		this.setUserProperty("sms_alsoSendEmail", "true", true);
 	} else {
-		if (!this.sms_includeEmailSubject) {
+		if (this.sms_alsoSendEmail) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("sms_includeEmailSubject", "false", true);
-
+		this.setUserProperty("sms_alsoSendEmail", "false", true);
 	}
 
-	if (this.sms_smsDefaultContent != document.getElementById("sms_smsDefaultContent").value
-		|| this.sms_smsUsername != document.getElementById("sms_smsUsername").value
+
+	if (this.sms_smsUsername != document.getElementById("sms_smsUsername").value
 		|| this.sms_smsPassword != document.getElementById("sms_smsPassword").value) {
 
-		this.setUserProperty("sms_smsDefaultContent", document.getElementById("sms_smsDefaultContent").value, true);
 		this.setUserProperty("sms_smsUsername", document.getElementById("sms_smsUsername").value, true);
 		this.setUserProperty("sms_smsPassword", document.getElementById("sms_smsPassword").value, true);
 		this._reloadRequired = true;
@@ -357,9 +359,9 @@ function() {
 
 
 	if (this._reloadRequired) {
-		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Browser will be refreshed for changes to take effect..", ZmStatusView.LEVEL_INFO, null, transitions);
-		setTimeout(AjxCallback.simpleClosure(this._refreshBrowser, this), 2000);
+		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
+		appCtxt.getAppController().setStatusMsg("Please wait, saving preferences. Browser will be refreshed for changes to take effect..", ZmStatusView.LEVEL_INFO, null, transitions);
+		setTimeout(AjxCallback.simpleClosure(this._refreshBrowser, this), 9000);
 	}
 	this.pbDialog.popdown();
 
@@ -380,31 +382,30 @@ function() {
 	html[i++] = "<DIV class='sms_cardDetailDiv'>";
 	html[i++] = "<B>SMS ACCOUNT PREFERENCES</B><br> Please enter www.upsidewireless.com's username and password:";
 	html[i++] = "</DIV>";
+	html[i++] = "<BR>";
 	html[i++] = "<DIV>";
 	html[i++] = "Username:<input id='sms_smsUsername'  type='text'/>";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "Password:<input id='sms_smsPassword'  type='password'/>";
+	html[i++] = "Password: <input id='sms_smsPassword'  type='password'/>";
 	html[i++] = "</DIV>";
-	html[i++] = "<BR><BR>";
+	html[i++] = "<BR>";
 	html[i++] = "<DIV class='sms_cardDetailDiv'>";
-	html[i++] = "<B>SEND-AND-SMS AN EMAIL PREFERENCES:</B><BR> This can be used to send email as SMS to email-recepients whose mobile numbers are in Address Book.";
+	html[i++] = "<B>MAIL COMPOSE VIEW PREFERENCES:</B><br>Send SMS to one or more users via mail compose";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='sms_showSendAndSMSButton'  type='checkbox'/>Show 'Send And SMS' Button in mail compose";
+	html[i++] = "<input id='sms_showSendAndSMSButton'  type='checkbox'/>Show 'Send SMS' Button in mail compose";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "Default SMS Content:<BR><textarea rows='4' cols='40' id='sms_smsDefaultContent' ></textarea>";
+	html[i++] = "<input id='sms_alsoSendEmail'  type='checkbox'/>Also Send Email to all recepients(along with SMS)";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='sms_includeEmailSubject'  type='checkbox'/>Also include Email subject and body* as SMS content. <br>*Body is included if email is in text-format";
+	html[i++] = "<BR>";
+	html[i++] = "PS:Please Check out the Read Me";
 	html[i++] = "</DIV>";
 	html[i++] = "<BR><BR>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='turnONSMSZimlet'  type='checkbox'/><b>Turn ON SMS Zimlet</b>";
-	html[i++] = "</DIV>";
-	html[i++] = "<DIV>";
-	html[i++] = "*Changing above values would automatically refresh browser.";
+	html[i++] = "<input id='turnONSMSZimlet'  type='checkbox'/>Turn ON SMS Zimlet";
 	html[i++] = "</DIV>";
 	return html.join("");
 
@@ -609,7 +610,7 @@ Com_Zimbra_sms.prototype._onListClick = function(hdr, ev) {
 
 
 //============================================================================
-// Following section deals with hooking up with composeView for send and sms
+// Following section deals with hooking up with composeView for Send SMS
 //@author: Raja Rao DV
 //=============================================================================
 Com_Zimbra_sms.prototype.onShowView = function(viewId, isNewView) {
@@ -636,15 +637,15 @@ Com_Zimbra_sms.prototype._initComposeSMSToolbar = function() {
 		// initialize the compose controller's toolbar
 		this._composerCtrl._initializeToolBar();
 	}
-
 	this._toolbar = this._composerCtrl._toolbar;
+	this._composeView = this._composerCtrl._composeView;
 	// Add button to toolbar
 	if (!this._toolbar.getButton("SEND_AND_SMS")) {
-		ZmMsg.smsAdd = "Send & SMS";
-		ZmMsg.smsTooltip = "Send and SMS users about this email";
+		ZmMsg.smsAdd = "Send SMS";
+		ZmMsg.smsTooltip = "Send this Email as SMS";
 
 		var btn = this._toolbar.createOp(
-			"SENDANDADD",
+			"SEND_AND_SMS",
 		{
 			text	: ZmMsg.smsAdd,
 			tooltip : ZmMsg.smsTooltip,
@@ -658,16 +659,56 @@ Com_Zimbra_sms.prototype._initComposeSMSToolbar = function() {
 
 };
 
+Com_Zimbra_sms.prototype._closeComposeView = function() {
+	this._composeView.reset(true);
+	this._composeView.reEnableDesignMode();
+	appCtxt.getAppViewMgr().popView(true);
+};
+
 Com_Zimbra_sms.prototype._sendAndSMS = function() {
-	this._msg = this._composerCtrl._composeView.getMsg();
-	this._composerCtrl._send();
+	var emailOrSMSArry = [];
+	var smsNumber = "";
+	var justSMS = false;
+	var fields = this._composeView.getAddrFields();
+	for (var i = 0; i < fields.length; i++) {
+		var val = fields[i].value;
+		if (val != "" && val.indexOf("@") == -1) { //just sms
+			if (val.indexOf(",") > 0 || val.indexOf(";") > 0) {
+				var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
+				this._showWarningMsg("Cannot send sms to multiple users when mobile phone is directly entered.<BR>");
+				return;
+			}
+			smsNumber = val;
+			justSMS = true;
+			break;
+		}
+	}
+	if (justSMS) {
+		var subject = "";
+		if(this._composeView._subjectField) {
+			subject = this._composeView._subjectField.value;
+			subject = subject + "\r\n";
+		}
+		this._sendSMS(smsNumber, subject + "\r\n"+ this._composeView.getHtmlEditor().getTextVersion());
+		this._closeComposeView();
+		return;
+	}
+
+	this._msg = this._composeView.getMsg();
+	if (!this._msg) {
+		return;
+	}
+
+	if (this.sms_alsoSendEmail) {//if we have to send email as well..
+		this._composerCtrl._send();
+	}
 	this._emailAndPhone = new Array();
 	this.__oldNumContacts = 0;
 	this._noOpLoopCnt = 0;
 	this._totalWaitCnt = 0;
 
 	if (!this._contactsAreLoaded) {
-		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
+		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
 		appCtxt.getAppController().setStatusMsg("Please wait, scanning Address Book for Mobile numbers..", ZmStatusView.LEVEL_INFO, null, transitions);
 		this._waitForContactToLoadAndProcess();
 		this._contactsAreLoaded = true;
@@ -700,29 +741,37 @@ Com_Zimbra_sms.prototype._startProcessing = function() {
 	var cc = this._msg.getAddresses("CC", true, true);
 	var bcc = this._msg.getAddresses("BCC", true, true);
 	var allemails = new Array();
+	var emailsWithNoNumber = new Array();
 	allemails = to.getArray().concat(cc.getArray()).concat(bcc.getArray());
 
 	for (var j = 0; j < allemails.length; j++) {
 		var currentContact = allemails[j];
 		var attr = currentContact.attr ? currentContact.attr : currentContact._attrs;
-		this._emailAndPhone[j] = {email:attr.email, to:attr.mobilePhone};
-	}
-
-	var content = this.sms_smsDefaultContent;
-	if (content == undefined || content == null)
-		content = "";
-	if (this.sms_includeEmailSubject) { //if subject should be included..
-		content = this._msg.subject == "" ? content + "" : content + "\r\n" + this._msg.subject;
-		try {//if possible try to get some of the body-content
-			if (this._composerCtrl._composeView._composeMode == "text/plain") {
-				content = content + "\r\n" + this._composerCtrl._composeView._bodyField.value;
-			}
-		} catch(e) {
+		var mp = attr.mobilePhone;
+		if (mp == undefined || mp == "") {
+			emailsWithNoNumber.push(attr.email);
+			continue;
 		}
+		this._emailAndPhone[j] = {email:attr.email, to:mp};
+	}
+	if (emailsWithNoNumber.length > 0) {
+		this._showWarningMsg("Cannot send SMS. Following emails don't have mobile numbers associated in AddressBook. <br>" + emailsWithNoNumber.join(", "));
+		return;
 	}
 
+	var content = this._msg.subject + "\r\n" + this._composeView.getHtmlEditor().getTextVersion();
 	this._sendMultipleSMS(this._emailAndPhone, content);
 };
+
+Com_Zimbra_sms.prototype._showWarningMsg = function(message) {
+	var style = DwtMessageDialog.WARNING_STYLE;
+	var dialog = appCtxt.getMsgDialog();
+	this.warningDialog = dialog;
+	dialog.setMessage(message, style);
+	dialog.popup();
+};
+
+
 //////////////////////////////////////////////////////////////////////////
 // Zimlet assistant class
 // - used by the Assistant dialog to run games via "command-line"
@@ -732,8 +781,7 @@ function Com_Zimbra_sms_Asst(zimlet) {
 	// XXX: localize later (does NOT belong in ZmMsg.properties)
 	ZmAssistant.call(this, "Send SMS", "sms");
 	this._zimlet = zimlet;
-}
-;
+};
 
 Com_Zimbra_sms_Asst.prototype = new ZmAssistant();
 Com_Zimbra_sms_Asst.prototype.constructor = Com_Zimbra_sms_Asst;
@@ -753,7 +801,6 @@ function(dialog) {
 
 Com_Zimbra_sms_Asst.prototype.handle =
 function(dialog, verb, args) {
-
 	var match = this._objectManager.findMatch(args, ZmObjectManager.PHONE);
 	if (match != null && match != "") {
 		this._to = match[0];

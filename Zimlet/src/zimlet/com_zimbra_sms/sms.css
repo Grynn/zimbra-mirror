@@ -6,11 +6,11 @@
 }
 
 .sms_cardDetailDiv{
-background:#FFFFCC;
+background-image:url(sms_hdr.gif);
 border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
 }
 .sms_cardHdrDiv{
-background:#FFFFFC;
+background-image:url(sms_hdr.gif);
 border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
 }
 

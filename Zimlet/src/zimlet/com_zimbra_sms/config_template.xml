@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_sms" version="1.0">
+<zimletConfig name="com_zimbra_sms" version="2.1">
   <global>
     <property name="allowedDomains">*.upsidewireless.com,upsidewireless.com</property>
     <property name="smsusername">USERNAME</property>

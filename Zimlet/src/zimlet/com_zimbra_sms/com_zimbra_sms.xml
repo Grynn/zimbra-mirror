@@ -1,9 +1,8 @@
-<zimlet name="com_zimbra_sms" version="2.0" description="Send SMS during compose; Drag'n'drop a message, contact, appointment to send them as sms">
+<zimlet name="com_zimbra_sms" version="2.1" description="Send SMS during compose; Drag'n'drop a message, contact, appointment to send them as sms">
 	<include>sms.js</include>
 	<includeCSS>sms.css</includeCSS>
 	<resource>sms-icon.gif</resource>
 	<handlerObject>Com_Zimbra_sms</handlerObject>
-
 	<zimletPanelItem label="SMS" icon="SMS-panelIcon">
 		<toolTipText>Send SMS during compose; Drag'n'drop a message, contact, appointment to send them as sms</toolTipText>
 		<dragSource type="ZmContact" />
@@ -11,9 +10,7 @@
 		<dragSource type="ZmConv" />
 		<dragSource type="ZmAppt" />
 		<contextMenu>
-			<menuItem />
 			<menuItem label="SMS Zimlet Preferences" id="PREFERENCES" />
-			<menuItem />
 		</contextMenu>
 	</zimletPanelItem>
 
@@ -22,11 +19,8 @@
 		<property type="string" name="sms_smsUsername" value=""/>
 		<property type="string" name="sms_smsPassword" value=""/>
 		<!-- send and sms prefs -->
-		<property type="string" name="sms_showSendAndSMSButton" value="true"/>
-		<property type="string" name="sms_smsDefaultContent" value="Check your email with subject.. "/>
-		<property type="string" name="sms_includeEmailSubject" value="true"/>
-
+		<property type="string" name="sms_showSendAndSMSButton" value="false"/>
+		<property type="string" name="sms_alsoSendEmail" value="false"/>
 		<property type="string" name="turnONSMSZimlet" value="true"/>
-
 	</userProperties>
 </zimlet>
