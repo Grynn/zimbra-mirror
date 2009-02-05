@@ -585,7 +585,7 @@ sub lookUpConfig($$) {
   return (checkConditional($type,$key) ? "yes" : "no")
     if ($key =~ m/^\!/);
 
-  logMsg(5, "Looking up key=$key with type=$type");
+  logMsg(4, "Looking up key=$key with type=$type");
   if ($type eq "VAR") {
    $value = $state->{globalconfig}->{$key}
       if (defined $state->{globalconfig}->{$key});
@@ -621,13 +621,16 @@ sub lookUpConfig($$) {
 sub checkConditional($$) {
   my ($type,$key) = @_;
   my $negate=0;
+  logMsg(5, "Conditional Entry: key=$key type=$type negate=$negate");
   if ($key =~ m/^\!/) {
     $negate=1;
     $key =~ s/^\!//;
   }
+  logMsg(5, "Conditional After Negate Check: key=$key type=$type negate=$negate");
   my $value = lookUpConfig($type, $key);
+  logMsg(5, "Conditional After lookUpConfig: key=$key val=$value type=$type negate=$negate");
     
-  logMsg(4, "Checking conditional for negate=$negate type=$type $key=$value");
+  logMsg(5, "Checking conditional for negate=$negate type=$type $key=$value");
   $value = "" if ($value eq "0" or $value eq "no");
   my $return;
   if ($negate) {
@@ -1006,24 +1009,25 @@ sub rewriteConfig {
       my ($rep,$val);
       if ($sr =~ m/^comment/) {
         my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
+        logMsg(5, "comment before lookup key=$key cmd=$cmd sr=$sr");
         $val = lookUpConfig($cmd, $key);
-        if ($val ne "" &&
-          ( ( $val ne "no" && $val != 0 ) || $val == 1)) {
-          $rep = "#";
-        } else {
+        logMsg(5, "comment after lookup key=$key val=$val cmd=$cmd sr=$sr");
+        if ($val eq  "no" || $val eq "" || $val eq "0") {
           $rep = "";
+        } elsif ($val eq "1" || $val eq "yes") {
+          $rep = "#";
         }
-        logMsg(5, "comment key=$key val=$val rep=$rep cmd=$cmd");
+        logMsg(5, "comment after rep key=$key val=$val rep=$rep cmd=$cmd");
       } elsif ($sr =~ m/^uncomment/) {
-        my ($cmd, $key) = ($sr =~ m/comment ([^:]+):(\S+)/);
+        my ($cmd, $key) = ($sr =~ m/uncomment ([^:]+):(\S+)/);
+        logMsg(5, "uncomment before lookup key=$key cmd=$cmd sr=$sr");
         $val = lookUpConfig($cmd, $key);
-        if ($val ne "" &&
-          ( ( $val ne "no" && $val != 0 ) || $val == 1)) {
-          $rep = "";
-        } else {
+        if ($val eq  "no" || $val eq "" || $val eq "0") {
           $rep = "#";
+        } elsif ($val eq "1" || $val eq "yes") {
+          $rep = "";
         }
-        logMsg(5, "uncomment key=$key val=$val rep=$rep cmd=$cmd");
+        logMsg(5, "uncomment after rep key=$key val=$val rep=$rep cmd=$cmd");
       } elsif ($sr =~ m/^binary/) {
         my ($cmd, $key) = ($sr =~ m/binary ([^:]+):(\S+)/);
         $val = lookUpConfig($cmd, $key);
