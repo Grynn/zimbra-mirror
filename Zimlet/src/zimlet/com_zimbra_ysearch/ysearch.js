@@ -1,4 +1,4 @@
-/*
+.c/*
  * ***** BEGIN LICENSE BLOCK *****
  *
  * Zimbra Collaboration Suite Zimlets
@@ -273,7 +273,7 @@ function() {
 	var elements = {};
 	elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
 	elements[ZmAppViewMgr.C_APP_CONTENT] = this._searchView;
-	appCtxt.getAppViewMgr().createView(ZmId.VIEW_YSEARCH, null, elements);
+	appCtxt.getAppViewMgr().createView({viewId:ZmId.VIEW_YSEARCH, elements:elements});
 };
 
 YahooSearchController.prototype._createSearchView =

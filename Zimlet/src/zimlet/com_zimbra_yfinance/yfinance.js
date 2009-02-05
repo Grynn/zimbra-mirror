@@ -181,7 +181,7 @@ function(symbol, result) {
 		var elements = {};
 		elements[ZmAppViewMgr.C_APP_CONTENT] = resultView;
 		elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar[ZmId.VIEW_YF_RESULT];
-		appViewMgr.createView(ZmId.VIEW_YF_RESULT, null, elements);
+		appViewMgr.createView({viewId:ZmId.VIEW_YF_RESULT, elements:elements});
 	}
 
 	var adContent = this.getConfig("ziya_ads");

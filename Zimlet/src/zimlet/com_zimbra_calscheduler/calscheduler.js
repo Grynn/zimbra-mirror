@@ -70,7 +70,7 @@ function() {
 		var elements = {};
 		elements[ZmAppViewMgr.C_APP_CONTENT] = resultView;
 		elements[ZmAppViewMgr.C_TOOLBAR_TOP] = this._toolbar[ZmId.VIEW_CAL_SCHEDULE_ZIMLET];
-		appViewMgr.createView(ZmId.VIEW_CAL_SCHEDULE_ZIMLET, null, elements);
+		appViewMgr.createView({viewId:ZmId.VIEW_CAL_SCHEDULE_ZIMLET, elements:elements});
 
 		appViewMgr.pushView(ZmId.VIEW_CAL_SCHEDULE_ZIMLET);
 		resultView._initColumns();
