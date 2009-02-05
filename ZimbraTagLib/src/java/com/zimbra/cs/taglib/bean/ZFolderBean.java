@@ -404,6 +404,8 @@ public class  ZFolderBean {
             return "startup/ImgFolder.gif";
         }
     }
+    
+    public String getTypes() { return getIsSearchFolder() ? ((ZSearchFolder) mFolder).getTypes() : null; }
 
     public String getType(){
         if (getIsSearchFolder()) {
