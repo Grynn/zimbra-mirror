@@ -163,7 +163,7 @@ fi
 if [ -L ${zimbra_home}/cyrus-sasl ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/cyrus-sasl"
 	chown ${root_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/cyrus-sasl/*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/cyrus-sasl/* 2> /dev/null
   if [ ! -d ${zimbra_home}/cyrus-sasl/state ]; then  
     mkdir -p ${zimbra_home}/cyrus-sasl/state
   fi
@@ -184,7 +184,7 @@ fi
 if [ -L ${zimbra_home}/dspam ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/dspam"
   chown ${root_user}:${root_group} ${zimbra_home}/dspam-*
-  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/dspam/*
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/dspam/* 2> /dev/null
   if [ ! -d "${zimbra_home}/data/dspam" ]; then
     mkdir -p ${zimbra_home}/data/dspam
   fi
@@ -246,13 +246,13 @@ fi
 if [ -L ${zimbra_home}/httpd ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/httpd"
   chown ${root_user}:${root_group} ${zimbra_home}/httpd-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/httpd/*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/httpd/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/logger/mysql ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/logger/mysql"
   chown ${root_user}:${root_group} ${zimbra_home}/logger/mysql-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/logger/mysql/*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/logger/mysql/* 2> /dev/null
 fi
 
 if [ -d ${zimbra_home}/logger/db ]; then
@@ -263,43 +263,59 @@ fi
 if [ -L ${zimbra_home}/mysql ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/mysql"
   chown ${root_user}:${root_group} ${zimbra_home}/mysql-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/mysql/*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/mysql/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/snmp ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/snmp"
   chown ${root_user}:${root_group} ${zimbra_home}/net-snmp-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/snmp/*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/snmp/* 2> /dev/null
   chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/snmp/var
 fi
 
 if [ -L ${zimbra_home}/openldap ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/openldap"
-  chown ${root_user}:${root_group} ${zimbra_home}/openldap-*
-  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/ldap
-  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/ldap
-  chown -R ${root_user}:${root_group} ${zimbra_home}/openldap/*
-  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/openldap/{etc,var}
-  chmod 755 ${zimbra_home}/openldap/sbin/*
+  chown ${root_user}:${root_group} ${zimbra_home}/openldap-* 2> /dev/null
+  if [ -d ${zimbra_home}/data/ldap ]; then
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/ldap
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/ldap
+  fi
+  if [ -e ${zimbra_home}/openldap ]; then
+    chown -R ${root_user}:${root_group} ${zimbra_home}/openldap/* 2> /dev/null
+    if [ -d ${zimbra_home}/openldap/etc ]; then
+      chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/openldap/etc
+    fi
+    if [ -d ${zimbra_home}/openldap/var ]; then
+      chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/openldap/var
+    fi
+    if [ -d ${zimbra_home}/openldap/sbin ]; then
+      for i in ${zimbra_home}/openldap/sbin/*; do
+        chmod 755 ${i}
+      done
+    fi
+  fi
+
 fi
 
 if [ -L ${zimbra_home}/perdition ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/perdition"
   chown ${root_user}:${root_group} ${zimbra_home}/perdition-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/perdition/*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/perdition/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/bdb ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/bdb"
   chown ${root_user}:${root_group} ${zimbra_home}/bdb-*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/bdb/*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/bdb/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/clamav ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/clamav"
   chown ${root_user}:${root_group} ${zimbra_home}/clamav-*
-	chown ${root_user}:${root_group} ${zimbra_home}/clamav/*
-  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/clamav/db
+	chown ${root_user}:${root_group} ${zimbra_home}/clamav/* 2> /dev/null
+  if [ -d ${zimbra_home}/clamav/db ]; then
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/clamav/db
+  fi
 fi
 
 if [ -d ${zimbra_home}/data/clamav/db ]; then
@@ -308,13 +324,15 @@ fi
 
 if [ -L ${zimbra_home}/amavisd ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/amavisd"
-	chown ${root_user}:${root_group} ${zimbra_home}/amavisd/sbin
+  if [ -d ${zimbra_home}/amavisd/sbin ]; then
+	  chown ${root_user}:${root_group} ${zimbra_home}/amavisd/sbin
+  fi
 fi
 
 if [ -L ${zimbra_home}/aspell ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/aspell"
   chown ${root_user}:${root_group} ${zimbra_home}/aspell-*
-	chown ${root_user}:${root_group} ${zimbra_home}/aspell/*
+	chown ${root_user}:${root_group} ${zimbra_home}/aspell/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/tomcat ]; then
@@ -339,7 +357,7 @@ fi
 if [ -L ${zimbra_home}/zimbramon/rrdtool ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/rrdtool"
   chown ${root_user}:${root_group} ${zimbra_home}/zimbramon/rrdtool*
-  chown -R ${root_user}:${root_group} ${zimbra_home}/zimbramon/rrdtool/*
+  chown -R ${root_user}:${root_group} ${zimbra_home}/zimbramon/rrdtool/* 2> /dev/null
 fi
 
 if [ -f ${zimbra_home}/conf/ZCSLicense.xml ]; then
@@ -357,15 +375,21 @@ fi
 if [ -L ${zimbra_home}/postfix ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/postfix"
 	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix*
-	chown -fR ${root_user}:${postfix_owner} ${zimbra_home}/postfix/conf
 
-	chmod 775 ${zimbra_home}/postfix/conf
-	chmod -fR 644 ${zimbra_home}/postfix/conf/*
-	chmod -f 755 ${zimbra_home}/postfix/conf/postfix-script
-	chmod -f 755 ${zimbra_home}/postfix/conf/post-install
-	if [ -f ${zimbra_home}/postfix/conf/master.cf.in ]; then
-		chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/postfix/conf/master.cf.in
-	fi
+  if [ -e ${zimbra_home}/postfix/conf ]; then
+	  chown -fR ${root_user}:${postfix_owner} ${zimbra_home}/postfix/conf
+	  chmod 775 ${zimbra_home}/postfix/conf
+	  chmod -fR 644 ${zimbra_home}/postfix/conf/* 2> /dev/null
+    if [ -f ${zimbra_home}/postfix/conf/postfix-script ]; then
+	    chmod -f 755 ${zimbra_home}/postfix/conf/postfix-script
+    fi
+    if [ -f ${zimbra_home}/postfix/conf/post-install ]; then
+	    chmod -f 755 ${zimbra_home}/postfix/conf/post-install
+    fi
+	  if [ -f ${zimbra_home}/postfix/conf/master.cf.in ]; then
+		  chown -f ${zimbra_user}:${zimbra_group} ${zimbra_home}/postfix/conf/master.cf.in
+	  fi
+  fi
 
 	# Postfix specific permissions
 	if [ -d ${zimbra_home}/postfix/sbin ]; then
@@ -383,10 +407,10 @@ if [ -d ${zimbra_home}/data/postfix ]; then
 		mkdir -p ${zimbra_home}/data/postfix/spool/pid
 	fi
 	chown -fR ${postfix_owner}:${postfix_owner} ${zimbra_home}/data/postfix/spool
-	chown -f root ${zimbra_home}/data/postfix/spool
+	chown -f ${root_user} ${zimbra_home}/data/postfix/spool
 	chgrp -f ${postfix_owner} ${zimbra_home}/data/postfix/spool
 	chown -f ${postfix_owner} ${zimbra_home}/data/postfix/spool/pid
-	chgrp -f root ${zimbra_home}/data/postfix/spool/pid
+	chgrp -f ${root_group} ${zimbra_home}/data/postfix/spool/pid
 	# Postfix specific permissions
 	if [ -d ${zimbra_home}/data/postfix/spool/public ]; then
 		chgrp -f ${postfix_suid_group} ${zimbra_home}/data/postfix/spool/public
@@ -397,7 +421,7 @@ if [ -d ${zimbra_home}/data/postfix ]; then
 		chmod 730 ${zimbra_home}/data/postfix/spool/maildrop
 	fi
 	chown -f ${postfix_owner} ${zimbra_home}/data/postfix
-	chown -f ${postfix_owner} ${zimbra_home}/data/postfix/*
+	chown -f ${postfix_owner} ${zimbra_home}/data/postfix/* 2> /dev/null
 fi
 
 if [ -f ${zimbra_home}/conf/ldap-scm.cf ]; then
