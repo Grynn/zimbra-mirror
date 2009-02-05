@@ -312,15 +312,14 @@ function() {
 Com_Zimbra_sms.prototype._okBtnListner =
 function() {
 	this._reloadRequired = false;
-
 	if (document.getElementById("turnONSMSZimlet").checked) {
 		if (!this.turnONSMSZimlet) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONSMSZimlet", "true", true);
+		this.setUserProperty("turnONSMSZimlet", "true");
 
 	} else {
-		this.setUserProperty("turnONSMSZimlet", "false", true);
+		this.setUserProperty("turnONSMSZimlet", "false");
 		if (this.turnONSMSZimlet)
 			this._reloadRequired = true;
 	}
@@ -329,45 +328,43 @@ function() {
 		if (!this.sms_showSendAndSMSButton) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("sms_showSendAndSMSButton", "true", true);
+		this.setUserProperty("sms_showSendAndSMSButton", "true");
 	} else {
 		if (this.sms_showSendAndSMSButton) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("sms_showSendAndSMSButton", "false", true);
+		this.setUserProperty("sms_showSendAndSMSButton", "false");
 	}
 	if (document.getElementById("sms_alsoSendEmail").checked) {
 		if (!this.sms_alsoSendEmail) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("sms_alsoSendEmail", "true", true);
+		this.setUserProperty("sms_alsoSendEmail", "true");
 	} else {
 		if (this.sms_alsoSendEmail) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("sms_alsoSendEmail", "false", true);
+		this.setUserProperty("sms_alsoSendEmail", "false");
 	}
 
 
 	if (this.sms_smsUsername != document.getElementById("sms_smsUsername").value
 		|| this.sms_smsPassword != document.getElementById("sms_smsPassword").value) {
 
-		this.setUserProperty("sms_smsUsername", document.getElementById("sms_smsUsername").value, true);
-		this.setUserProperty("sms_smsPassword", document.getElementById("sms_smsPassword").value, true);
+		this.setUserProperty("sms_smsUsername", document.getElementById("sms_smsUsername").value);
+		this.setUserProperty("sms_smsPassword", document.getElementById("sms_smsPassword").value);
 		this._reloadRequired = true;
 	}
 
-
+	this.pbDialog.popdown();
 	if (this._reloadRequired) {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
 		appCtxt.getAppController().setStatusMsg("Please wait, saving preferences. Browser will be refreshed for changes to take effect..", ZmStatusView.LEVEL_INFO, null, transitions);
-		setTimeout(AjxCallback.simpleClosure(this._refreshBrowser, this), 9000);
+		this.saveUserProperties(new AjxCallback(this, this._reloadBrowser));
 	}
-	this.pbDialog.popdown();
-
 };
 
-Com_Zimbra_sms.prototype._refreshBrowser =
+Com_Zimbra_sms.prototype._reloadBrowser =
 function() {
 	window.onbeforeunload = null;
 	var url = AjxUtil.formatUrl({});
