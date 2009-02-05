@@ -658,8 +658,8 @@ function(width, height) {
 			sh = th = this._listSize ? this._listSize : (height == Dwt.DEFAULT) ? height : Math.floor(((height - btnSz.y) / 2) - 12);
 		}
 	}
-	this.sourceListView.setSize(w, sh);
-	this.targetListView.setSize(w, th);
+	this.sourceListView.setSize(w+2, sh);
+	this.targetListView.setSize(w+2, th);
 };
 
 /*
