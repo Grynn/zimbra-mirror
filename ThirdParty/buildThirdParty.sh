@@ -7,11 +7,22 @@ CLEAN=no
 SYNC=no
 RELEASE=main
 
+usage() {
+	echo "Usage: "`basename $0`" -c [-s] [-r RELEASE]" >&2
+	echo "-s: Re-sync source before building"
+	echo "-r RELEASE: RELEASE to build.  Defaults to main"
+	exit 2;
+}
+
 while [ $# -gt 0 ]; do
 	case $1 in
 		-c|--clean)
 			CLEAN=yes
 			shift;
+			;;
+		-h|--help)
+			usage;
+			exit 0;
 			;;
 		-s|--sync)
 			SYNC=yes
