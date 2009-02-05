@@ -494,48 +494,117 @@ function(type, msg) {
  * mergesort+dedupe
 **/
 AjxUtil.mergeArrays =
-function(arr1, arr2) {
+function(arr1, arr2, orderfunc) {
+	if(!orderfunc) {
+		orderfunc = function (val1,val2) {
+			if(val1>val2)
+				return 1;
+			if (val1 < val2)
+				return -1;
+			if(val1 == val2)
+				return 0;
+		}
+	}
+ 	var tmpArr1 = [];
+ 	var cnt1 = arr1.length;
+ 	for(var i = 0; i < cnt1; i++) {
+ 		tmpArr1.push(arr1[i]);
+ 	}
 
+ 	var tmpArr2 = [];
+ 	var cnt2 = arr2.length;
+ 	for(var i = 0; i < cnt2; i++) {
+ 		tmpArr2.push(arr2[i]);
+ 	} 	
 	var resArr = [];
-	while (arr1.length>0 && arr2.length>0) {
-		if (arr1[0] == resArr[resArr.length-1]) {
-			arr1.shift();
+	while (tmpArr1.length>0 && tmpArr2.length>0) {
+		if (orderfunc(tmpArr1[0],resArr[resArr.length-1])==0) {
+			tmpArr1.shift();
 			continue;
 		}
 		
-		if (arr2[0] == resArr[resArr.length-1]) {
-			arr2.shift();
+		if (orderfunc(tmpArr2[0],resArr[resArr.length-1])==0) {
+			tmpArr2.shift();
 			continue;
 		}		
 			
-		if (arr1[0] < arr2[0]) {
-			resArr.push(arr1.shift());
-		} else if (arr1[0]==arr2[0]) {
-			resArr.push(arr1.shift());
-			arr2.shift();
+		if (orderfunc(tmpArr1[0], tmpArr2[0])<0) {
+			resArr.push(tmpArr1.shift());
+		} else if (orderfunc(tmpArr1[0],tmpArr2[0])==0) {
+			resArr.push(tmpArr1.shift());
+			tmpArr2.shift();
 		} else {
-			resArr.push(arr2.shift());
+			resArr.push(tmpArr2.shift());
 		}
 	}
 		
-	while (arr1.length>0) {
-		if (arr1[0] == resArr[resArr.length-1]) {
-			arr1.shift();
+	while (tmpArr1.length>0) {
+		if (orderfunc(tmpArr1[0],resArr[resArr.length-1])==0) {
+			tmpArr1.shift();
 			continue;
 		}		
-		resArr.push(arr1.shift());
+		resArr.push(tmpArr1.shift());
 	}
 		
-	while (arr2.length>0) {
-		if (arr2[0] == resArr[resArr.length-1]) {
-			arr2.shift();
+	while (tmpArr2.length>0) {
+		if (orderfunc(tmpArr2[0], resArr[resArr.length-1])==0) {
+			tmpArr2.shift();
 			continue;
 		}			
-		resArr.push(arr2.shift());
+		resArr.push(tmpArr2.shift());
 	}
 	return resArr;	
 };
 
+AjxUtil.arraySubstract = function (arr1, arr2, orderfunc) {
+	if(!orderfunc) {
+		orderfunc = function (val1,val2) {
+			if(val1>val2)
+				return 1;
+			if (val1 < val2)
+				return -1;
+			if(val1 == val2)
+				return 0;
+		}
+	}
+ 	var tmpArr1 = [];
+ 	var cnt1 = arr1.length;
+ 	for(var i = 0; i < cnt1; i++) {
+ 		tmpArr1.push(arr1[i]);
+ 	}
+
+ 	var tmpArr2 = [];
+ 	var cnt2 = arr2.length;
+ 	for(var i = 0; i < cnt2; i++) {
+ 		tmpArr2.push(arr2[i]);
+ 	} 	
+ 	tmpArr2.sort(orderfunc);
+ 	tmpArr1.sort(orderfunc);
+	var resArr = [];
+	while(tmpArr1.length > 0 && tmpArr2.length > 0) {
+		if(orderfunc(tmpArr1[0],tmpArr2[0])==0) {
+			tmpArr1.shift();
+			tmpArr2.shift();
+			continue;
+		}
+		
+		if(orderfunc(tmpArr1[0],tmpArr2[0]) < 0) {
+			resArr.push(tmpArr1.shift());
+			continue;
+		}
+		
+		if(orderfunc(tmpArr1[0],tmpArr2[0]) > 0) {
+			tmpArr2.shift();
+			continue;
+		}
+	}
+	
+	while(tmpArr1.length > 0) {
+		resArr.push(tmpArr1.shift());
+	}
+	
+	return resArr;
+}
 /**
  * Returns the keys of the given hash as a sorted list.
  *

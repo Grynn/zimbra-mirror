@@ -114,8 +114,11 @@ function (ev) {
 **/
 ZaDLXFormView.removeAllMembers = function(event) {
 	var form = this.getForm();
-	form.getInstance().removeAllMembers();
-	form.parent.setDirty(true);
+	var tmpRemoveArray = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList);
+	tmpRemoveArray._version = tmpRemoveArray._version+1;
+	var tmpAddArray = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList);
+	//form.getInstance().removeAllMembers();
+	//form.parent.setDirty(true);
 	//form.refresh();
 };
 
@@ -124,12 +127,13 @@ ZaDLXFormView.removeAllMembers = function(event) {
 **/
 ZaDLXFormView.removeMembers = function(event) {
 	var form = this.getForm();
-	var membersSelection = ZaDLXFormView.getMemberSelection.call(form);
-	if(membersSelection.length) {
-		form.getInstance().removeMembers(membersSelection);
-		form.parent.setDirty(true);
-		//form.refresh();	
-	}
+	
+	var tmp = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList);
+	var tmpMembersArray = AjxUtil.arraySubstract(tmp,
+		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
+	
+	tmpMembersArray._version = tmp._version + 1;
+	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);	
 };
 
 /**
@@ -298,11 +302,16 @@ ZaDLXFormView.shouldEnableMemBackButton = function () {
 * method of the XForm
 **/
 ZaDLXFormView.addListToMemberList = function (list) {
-	if (this.getInstance().addMembers(list)) {
+	/*if (this.getInstance().addMembers(list)) {
 		this.refresh();
-	}
-	this.getItemsById(ZaDistributionList.A2_members )[0].widget.setSelectedItems(list);
-	this.getItemsById('removeButton')[0].widget.setEnabled(true);
+	}*/
+	//add to member list
+	//add to add list
+	//remove from remove list
+	
+	//this.getItemsById(ZaDistributionList.A2_members )[0].widget.setSelectedItems(list);
+	//this.getItemsById('removeButton')[0].widget.setEnabled(true);
+	
 	this.parent.setDirty(true);
 };
 
@@ -315,8 +324,20 @@ ZaDLXFormView.addListToMemberList = function (list) {
  */
 ZaDLXFormView.addAddressesToMembers = function (event) {
  	var form = this.getForm();
-	var memberPoolSelection = ZaDLXFormView.getMemberPoolSelection.call(form);
-	ZaDLXFormView.addListToMemberList.call(form, memberPoolSelection);
+	//var memberPoolSelection = ZaDLXFormView.getMemberPoolSelection.call(form);
+	//ZaDLXFormView.addListToMemberList.call(form, memberPoolSelection);
+	var tmpAddArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList),
+		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberPoolSelected));
+	
+	tmpAddArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList)._version + 1; 
+	
+	var tmpMembersArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList),
+		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberPoolSelected));
+	
+	tmpMembersArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList)._version + 1;
+	
+	this.setInstanceValue(tmpAddArray, ZaDistributionList.A2_addList);
+	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);	
 };
 
 /**
@@ -324,8 +345,21 @@ ZaDLXFormView.addAddressesToMembers = function (event) {
 **/
 ZaDLXFormView.addAllAddressesToMembers = function (event) {
 	var form = this.getForm();
-	var pool = form.get("memberPool");
-	ZaDLXFormView.addListToMemberList.call(form, pool);
+//	var pool = form.get("memberPool");
+//	ZaDLXFormView.addListToMemberList.call(form, pool);
+
+	var tmpAddArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList),
+		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberPool),ZaDistributionList.compareTwoMembers);
+	
+	tmpAddArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList)._version + 1; 
+	
+	var tmpMembersArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList),
+		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberPool),ZaDistributionList.compareTwoMembers);
+	
+	tmpMembersArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList)._version + 1;
+	
+	this.setInstanceValue(tmpAddArray, ZaDistributionList.A2_addList);
+	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);	
 };
 
 /**
@@ -334,7 +368,7 @@ ZaDLXFormView.addAllAddressesToMembers = function (event) {
 ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
  	var form = this.getForm();
 	// get the current value of the textfied
- 	var val = form.get("optionalAdd");
+ 	var val = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_optionalAdd);
  	if(!val)
  		return;
  		
@@ -359,8 +393,13 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 			members.push(new ZaDistributionListMember(tmpval));
 		}
 	}
-	ZaDLXFormView.addListToMemberList.call(form, members);
-	form.getInstance().optionalAdd = null;
+	//ZaDLXFormView.addListToMemberList.call(form, members);
+	var tmpMembersArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList),
+		members,ZaDistributionList.compareTwoMembers);
+	
+	tmpMembersArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList)._version + 1;
+	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);
+	this.setInstanceValue("", ZaDistributionList.A2_optionalAdd);
 };
 
 ZaDLXFormView.prototype.setObject = 
@@ -368,8 +407,59 @@ function (entry) {
 
     ZaItem.normalizeMultiValueAttr(entry, "description") ;
     
-    this._containedObject = entry.clone();
+    //this._containedObject = entry.clone();
+    this._containedObject = {attrs:{}};
 
+	
+	this._containedObject[ZaDistributionList.A2_memberList] = new Array();
+	this._containedObject[ZaDistributionList.A2_memberList]._version = 1;
+	if(entry[ZaDistributionList.A2_memberList]) {
+		var memberList;
+		memberList = entry[ZaDistributionList.A2_memberList];
+ 		for (var i = 0 ; i < memberList.length; ++i) {
+ 			this._containedObject[ZaDistributionList.A2_memberList].push(memberList[i]);
+ 		}
+	}
+ 	    
+	var val, tmp;
+	for (key in entry.attrs) {
+		val = entry.attrs[key];
+		if (AjxUtil.isArray(val)){
+			tmp = new Array();
+			for (var i = 0; i < val.length; ++i){
+				tmp[i] = val[i];
+			}
+			val = tmp;
+		}
+		this._containedObject.attrs[key] = val;
+	}
+	//Utility members
+	this._containedObject[ZaDistributionList.A2_addList] = new Array(); //members to add
+	this._containedObject[ZaDistributionList.A2_addList]._version = 1;
+	this._containedObject[ZaDistributionList.A2_removeList] = new Array(); //members to remove
+	this._containedObject[ZaDistributionList.A2_removeList]._version = 1;
+	this._containedObject[ZaDistributionList.A2_poolPagenum] = 1;
+	this._containedObject[ZaDistributionList.A2_poolNumPages] = 1;
+	this._containedObject[ZaDistributionList.A2_memPagenum] = 1;
+	this._containedObject[ZaDistributionList.A2_memNumPages] = 1;
+	this._containedObject[ZaDistributionList.A2_query] = "";
+	//membership related instance variables
+	this._containedObject[ZaAccount.A2_memberOf] = {}
+	this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_directMemberList] = [];
+	this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_indirectMemberList] = [];
+	this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_nonMemberList] = [];
+
+	this._containedObject[ZaAccount.A2_directMemberList + "_more"] = 0;
+	this._containedObject[ZaAccount.A2_directMemberList + "_offset"] = 0;
+	this._containedObject[ZaAccount.A2_indirectMemberList + "_more"] = 0;
+	this._containedObject[ZaAccount.A2_indirectMemberList + "_offset"] = 0;	
+	this._containedObject[ZaAccount.A2_nonMemberList + "_more"] = 0;
+	this._containedObject[ZaAccount.A2_nonMemberList + "_offset"] = 0;
+
+	//dl.isgroup = this.isgroup ;
+	
+	//clone the membership information
+	this._containedObject[ZaAccount.A2_memberOf] = entry[ZaAccount.A2_memberOf];
 	if(entry.rights)
 		this._containedObject.rights = entry.rights;
 
@@ -494,16 +584,16 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 			        {type:_OUTPUT_, value:ZaMsg.DLXV_LabelListMembers,  cssClass:"xform_label_left",
 						width: AjxEnv.isIE ? 100 : 94, cssStyle:"text-align: right;"
 					},
-					{ref:ZaDistributionList.A2_members , type:_DWT_LIST_, height:"338", width:"98%", 
+					{ref:ZaDistributionList.A2_memberList, type:_DWT_LIST_, height:"338", width:"98%", 
 						cssClass: "DLTarget", cssStyle:"margin-left: 5px; ",
 						widgetClass:ZaAccMiniListView, headerList:membersHeaderList,hideHeader:true,
-						onSelection:ZaDLXFormView.membersSelectionListener
+						onSelection:ZaDLXFormView.membersSelectionListener,bmolsnr:true
 					},
 			        {type:_SPACER_, height:"8"},
 				    {type:_GROUP_, width:"98%", numCols:8, colSizes:[85,5, 85,"100%",80,5,80,5], 
 						items:[
 							{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80, 
-							   enableDisableChangeEventSources:[ZaDistributionList.A2_members],
+							   enableDisableChangeEventSources:[ZaDistributionList.A2_memberList],
 							   enableDisableChecks:[ZaDLXFormView.shouldEnableRemoveAllButton,[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]],
 							   onActivate:"ZaDLXFormView.removeAllMembers.call(this,event)"
 							 },
@@ -516,13 +606,13 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 							{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"backButton", icon:"LeftArrow", disIcon:"LeftArrowDis", 	
 								onActivate:"ZaDLXFormView.backMemButtonHndlr.call(this,event)", 
-								enableDisableChangeEventSources:[ZaDistributionList.A2_members],
+								enableDisableChangeEventSources:[ZaDistributionList.A2_memberList],
 								enableDisableChecks:[ZaDLXFormView.shouldEnableMemBackButton]
 						    },								       
 							{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",	
 								onActivate:"ZaDLXFormView.fwdMemButtonHndlr.call(this,event)",
-								enableDisableChangeEventSources:[ZaDistributionList.A2_members], 
+								enableDisableChangeEventSources:[ZaDistributionList.A2_memberList], 
 								enableDisableChecks:[ZaDLXFormView.shouldEnableMemForwardButton]
 						    },								       
 							{type:_CELLSPACER_}									
@@ -586,7 +676,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 			       },
 			       
 			       {type:_OUTPUT_, value:ZaMsg.DLXV_GroupLabelEnterAddressBelow},
-			       {ref:"optionalAdd", type:_TEXTAREA_,width:"98%", height:98},
+			       {ref:ZaDistributionList.A2_optionalAdd, type:_TEXTAREA_,width:"98%", height:98,bmolsnr:true},
 			       {type:_SPACER_, height:"5"},
 			       {type:_GROUP_, numCols:2, width:"98%", colSizes:[80,"auto"],
 						items: [

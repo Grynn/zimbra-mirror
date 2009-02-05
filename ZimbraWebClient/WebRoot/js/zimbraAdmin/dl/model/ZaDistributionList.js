@@ -28,33 +28,13 @@ ZaDistributionList = function(id, name, memberList, description, notes) {
 	this.type = ZaItem.DL;
 	this.name = (name != null) ? name: null;
 	this._selfMember = new ZaDistributionListMember(this.name);
-	this._memberList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();
-	this.memberPool = new Array();
+	//this[ZaDistributionList.A2_memberList] = (memberList != null) ? AjxVector.fromArray(memberList): new AjxVector();
 	if (description != null) this.attrs.description = description;
 	if (notes != null) this.attrs.zimbraNotes = notes;
-	this.numMembers = 0;
-	//Utility members
-	this._origList = (memberList != null)? AjxVector.fromArray(memberList): new AjxVector();
-	this._addList = new AjxVector();
-	this._removeList = new AjxVector();
-	this._dirty = true;
-	this.poolPagenum=1;
-	this.poolNumPages=1;
-	this.memPagenum=1;
-	this.memNumPages=1;
-	this.query="";
-	//membership related instance variables
-	this[ZaAccount.A2_memberOf] = {}
-	this[ZaAccount.A2_memberOf][ZaDistributionList.A2_directMemberList] = [];
-	this[ZaAccount.A2_memberOf][ZaDistributionList.A2_indirectMemberList] = [];
-	this[ZaAccount.A2_memberOf][ZaDistributionList.A2_nonMemberList] = [];
+	this[ZaDistributionList.A2_numMembers] = 0;
+	this[ZaDistributionList.A2_memberList] = (memberList != null) ? memberList: new Array();
+	this[ZaDistributionList.A2_memberPool] = new Array();
 
-	this[ZaAccount.A2_directMemberList + "_more"] = 0;
-	this[ZaAccount.A2_directMemberList + "_offset"] = 0;
-	this[ZaAccount.A2_indirectMemberList + "_more"] = 0;
-	this[ZaAccount.A2_indirectMemberList + "_offset"] = 0;	
-	this[ZaAccount.A2_nonMemberList + "_more"] = 0;
-	this[ZaAccount.A2_nonMemberList + "_offset"] = 0;
 }
 
 ZaDistributionList.prototype = new ZaItem;
@@ -72,9 +52,15 @@ ZaDistributionList.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
 ZaDistributionList.A_mailStatus = "zimbraMailStatus";
 ZaDistributionList.A2_members = "members";
+ZaDistributionList.A2_memberList = "memberList";
+ZaDistributionList.A2_origList = "origList";
+ZaDistributionList.A2_addList = "addList";
+ZaDistributionList.A2_removeList = "addList";
 ZaDistributionList.A2_query = "query";
+ZaDistributionList.A2_pagenum = "pagenum";
 ZaDistributionList.A2_poolPagenum = "poolPagenum";
 ZaDistributionList.A2_poolNumPages = "poolNumPages";
+ZaDistributionList.A2_numMembers = "numMembers";
 ZaDistributionList.A2_memPagenum = "memPagenum";
 ZaDistributionList.A2_memNumPages = "memNumPages";
 ZaDistributionList.A2_memberPool = "memberPool";
@@ -112,24 +98,20 @@ ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,"
 
 ZaDistributionList.prototype.clone = function () {
 	var memberList;
-	if(this._memberList) {
-		memberList = this._memberList.getArray();
+	if(this[ZaDistributionList.A2_memberList]) {
+		memberList = this[ZaDistributionList.A2_memberList];
 	}
-	var dl = new ZaDistributionList( this.id, this.name, memberList, this.description, this.notes);
+	var dl = new ZaDistributionList( this.id, this.name, null, this.description, this.notes);
  	if (memberList != null) {
- 		dl._memberList = new AjxVector();
+ 		dl[ZaDistributionList.A2_memberList] = new Array();
  		for (var i = 0 ; i < memberList.length; ++i) {
- 			dl._memberList.add(memberList[i]);
+ 			dl[ZaDistributionList.A2_memberList].push(memberList[i]);
  		}
- 		dl._origList = new AjxVector();
+ 		dl[ZaDistributionList.A2_origList] = new AjxVector();
  		for (var i = 0 ; i < memberList.length; ++i) {
- 			dl._origList.add(memberList[i]);
+ 			dl[ZaDistributionList.A2_origList].add(memberList[i]);
  		}
- 	} else {
- 		this._memberList = null;
- 		this._origList = null;
- 	}
-
+ 	} 
 	var val, tmp;
 	for (key in this.attrs) {
 		val = this.attrs[key];
@@ -615,7 +597,6 @@ ZaDistributionList.prototype._dedupList = function (vector) {
 	}
 };
 
-
 ZaDistributionList.prototype.addNewMembersAsync = function (obj, finishedCallback) {
 	var addMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
@@ -635,25 +616,6 @@ ZaDistributionList.prototype.addNewMembersAsync = function (obj, finishedCallbac
 	command.invoke(params);
 };
 
-ZaDistributionList.prototype.addNewMembers = function (list) {
-	var addArray = list.getArray();
-	var len = addArray.length;
-	var addMemberSoapDoc;
-	//var command = new ZmCsfeCommand();
-	for (var i = 0; i < len; ++i) {
-		addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
-		addMemberSoapDoc.set("id", this.id);
-		addMemberSoapDoc.set("dlm", addArray[i].toString());
-		var params = new Object();
-		params.soapDoc = addMemberSoapDoc;	
-		var reqMgrParams = {
-			controller : ZaApp.getInstance().getCurrentController(),
-			busyMsg : ZaMsg.BUSY_ADD_DL_MEMBER
-		}
-		ZaRequestMgr.invoke(params, reqMgrParams).Body.AddDistributionListMemberResponse;
-	}
-};
-
 ZaDistributionList.prototype.removeDeletedMembersAsync = function (list, finishedCallback) {
 	var removeMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
@@ -668,25 +630,6 @@ ZaDistributionList.prototype.removeDeletedMembersAsync = function (list, finishe
 	//params.callback = new AjxCallback(this, this.addMemberCallback, {list:list,finishedCallback:finishedCallback});
 	list.removeLast();
 	command.invoke(params);
-};
-
-ZaDistributionList.prototype.removeDeletedMembers = function (list) {
-	var removeArray = list.getArray();
-	var len = removeArray.length;
-	var addMemberSoapDoc, r, removeMemberSoapDoc;
-	//var command = new ZmCsfeCommand();	
-	for (var i = 0; i < len; ++i) {
-		removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
-		removeMemberSoapDoc.set("id", this.id);
-		removeMemberSoapDoc.set("dlm", removeArray[i].toString());
-		var params = new Object();
-		params.soapDoc = removeMemberSoapDoc;	
-		var reqMgrParams = {
-			controller : ZaApp.getInstance().getCurrentController(),
-			busyMsg : ZaMsg.BUSY_REMOVE_DL_MEMBER
-		}
-		ZaRequestMgr.invoke(params, reqMgrParams).Body.RemoveDistributionListMemberResponse;		
-	}
 };
 
 ZaDistributionList.prototype.initFromDom = function(node) {
@@ -770,6 +713,33 @@ ZaDistributionList.prototype.setMembers = function (list) {
 	return this._memberList = AjxVector.fromArray(list);
 };
 
+ZaDistributionList.compareTwoMembers = function (val1, val2) {
+	var a = AjxUtil.isEmpty(val1);
+	var b = AjxUtil.isEmpty(val2);
+	if(a && !b)
+		return -1;
+	
+	if(!a && b)
+		return 1;
+		
+	if(a && b)
+		return 0;
+		
+	if(AjxUtil.isEmpty(val1.name) && AjxUtil.isEmpty(val2.name))
+		return 0;
+	
+	if(val1.name == val2.name)
+		return 0;
+	
+	if (val1.name < val2.name)
+		return -1;
+		
+	if (val1.name > val2.name)
+		return 1;
+	
+	return 0;
+		
+}
 /**
  * Small wrapper class for a distribution list member.
  * The id is needed at a higher level for DwtLists to work correctly.
@@ -783,6 +753,7 @@ ZaDistributionListMember = function(name) {
 ZaDistributionListMember.prototype.toString = function () {
 	return this[ZaAccount.A_name];
 };
+
 
 
 ZaDistributionList.myXModel = {
@@ -812,12 +783,14 @@ ZaDistributionList.myXModel = {
 	},
 	items: [
 		{id:ZaDistributionList.A2_query, type:_STRING_},
+		{id:ZaDistributionList.A2_pagenum, type:_NUMBER_, defaultValue:1},
 		{id:ZaDistributionList.A2_poolPagenum, type:_NUMBER_, defaultValue:1},
 		{id:ZaDistributionList.A2_poolNumPages, type:_NUMBER_, defaultValue:1},		
 		{id:ZaDistributionList.A2_memPagenum, type:_NUMBER_, defaultValue:1},
 		{id:ZaDistributionList.A2_memNumPages, type:_NUMBER_, defaultValue:1},	
 		{id:ZaDistributionList.A2_memberPool, type:_LIST_, setter:"setMemberPool", setterScope:_MODEL_, getter: "getMemberPool", getterScope:_MODEL_},
-		{id:ZaDistributionList.A2_optionalAdd, type:_UNTYPED_},
+		{id:ZaDistributionList.A2_memberList, type:_LIST_},
+		{id:ZaDistributionList.A2_optionalAdd, type:_STRING_},
 		{id:ZaAccount.A_name, type:_EMAIL_ADDRESS_, setter:"setName", setterScope: _INSTANCE_, required:true,
 		 constraints: {type:"method", value:
 					   function (value, form, formItem, instance) {
@@ -837,7 +810,8 @@ ZaDistributionList.myXModel = {
 					   }
 			}
 		},
-		{id:ZaDistributionList.A2_members, type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
+		//{id:ZaDistributionList.A2_members, type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
+		{id:ZaDistributionList.A2_members, type:_LIST_},
 //		{id:ZaAccount.A_description,ref:"attrs/"+ZaAccount.A_description, type:_STRING_},
 		ZaItem.descriptionModelItem,
         {id:ZaAccount.A_zimbraHideInGal, type:_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraHideInGal, choices:ZaModel.BOOLEAN_CHOICES},
