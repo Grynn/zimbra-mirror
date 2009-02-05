@@ -59,7 +59,7 @@ var zDnDService = {
 	onDrop: function (evt, transferData, session) {
 		try {
 			var td = transferData.flavour? transferData: transferData.first.first;
-			if (td.flavour.contentType == "application/x-moz-file") {
+            if (td.flavour.contentType == "application/x-moz-file") {
 				var files = [];
 				if (transferData.dataList && transferData.dataList.length > 1) {
 					for (var i = 0; i < transferData.dataList.length; i++) {
@@ -67,12 +67,12 @@ var zDnDService = {
 						for (var j = 0; j < td.dataList.length; j++) {
 							var fd = td.dataList[j];
 							if (fd.flavour.contentType == "application/x-moz-file") {
-								files.push(fd.data.path);
+								files.push(decodeURI(fd.data.path));
 							}
 						}
 					}
 				} else {
-					files.push(td.data.path);
+					files.push(decodeURI(td.data.path));
 				}
 				zUploadService.processFiles(evt, files);
 			}
@@ -92,12 +92,12 @@ var zDnDService = {
 									splitType = "file://";
 								}
 								var filePaths = filePath.split(splitType);
-								files.push(splitType+filePaths[i+1]);
+								files.push(decodeURI(splitType+filePaths[i+1]));
 							}
 						}
 					}
 				} else {
-					files.push(td.data);
+                    files.push(decodeURI(td.data));
 				}
 				zUploadService.processFiles(evt, files);
 			}
