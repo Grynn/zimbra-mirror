@@ -3,27 +3,63 @@
 PROGDIR=`dirname $0`
 cd $PROGDIR
 PATHDIR=`pwd`
-P4USER=public
-P4CLIENT=public-view
-P4PASSWD=public1234
-export P4USER P4CLIENT P4PASSWD
-P4=`which p4`;
-RELEASE=$1
-SYNC=$2
+CLEAN=no
+SYNC=no
+RELEASE=main
 
-if [ x$RELEASE = "x" ]; then
-	RELEASE=main
+while [ $# -gt 0 ]; do
+	case $1 in
+		-c|--clean)
+			CLEAN=yes
+			shift;
+			;;
+		-s|--sync)
+			SYNC=yes
+			shift;
+			;;
+		-r|--release)
+			shift;
+			case $1 in
+				main|FRANK|FRANKLIN)
+					RELEASE=$1
+					;;
+				*)
+					echo "Usage: $0 -c [-s] [-r RELEASE]"
+					exit 1;
+			esac
+			shift;
+			;;
+		*)
+			echo "Usage: $0 -c [-s] [-r RELEASE]"
+			exit 1;
+			;;
+	esac
+done
+
+#echo "CLEAN: $CLEAN"
+#echo "SYNC: $SYNC"
+#echo "RELEASE: $RELEASE"
+#exit;
+
+if [ x$CLEAN = x"no" ]; then
+	echo "WARNING: You must supply the clean option -c"
+	echo "WARNING: This will completely remove /opt/zimbra from the system"
+	exit 1;
 fi
 
-if [ x$SYNC = "x" ]; then
-	SYNC=no
+if [ x$SYNC = x"yes" ]; then
+	P4USER=public
+	P4CLIENT=public-view
+	P4PASSWD=public1234
+	export P4USER P4CLIENT P4PASSWD
+	P4=`which p4`;
 fi
 
 PLAT=`$PATHDIR/../ZimbraBuild/rpmconf/Build/get_plat_tag.sh`;
 
 if [ x$PLAT = "x" ]; then
-    echo "Unknown platform, exiting."
-    exit 1;
+	echo "Unknown platform, exiting."
+	exit 1;
 fi
 
 if [ x$PLAT = "xRHEL4" -o x$PLAT = "CentOS4" -o x$PLAT = "xRHEL5" -o x$PLAT = "xCentOS5" -o x$PLAT = "xFC4" -o x$PLAT = "xFC5" -o x$PLAT = "xF7" -o x$PLAT = "xRPL1" -o x$PLAT = "xDEBIAN3.1" ]; then
@@ -175,3 +211,4 @@ cd ${PATHDIR}
 rm -f make.out 2> /dev/null
 make allclean > /dev/null 2>&1
 make all 2>&1 | tee -a make.out
+exit 0;
