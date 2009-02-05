@@ -239,7 +239,7 @@ public class LocalMailbox extends DesktopMailbox {
 
             MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
             ItemId origMsgId = getOrigMsgId(msg);
-            boolean saveToSent = ds.isSaveToSent() && getAccount().getBooleanAttr(Provisioning.A_zimbraPrefSaveToSent, true);
+            boolean saveToSent = (isYBizmail || ds.isSaveToSent()) && getAccount().getBooleanAttr(Provisioning.A_zimbraPrefSaveToSent, true);
 
             if (ds.isYahoo() && !isYBizmail) {
                 YMailSender ms = YMailSender.newInstance(ds);
@@ -265,7 +265,7 @@ public class LocalMailbox extends DesktopMailbox {
                 MailSender ms = ds.isLive() ? LMailSender.newInstance(ds) : new MailSender();
                 try {
                     ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
-                        origMsgId, msg.getDraftReplyType(), identity, false, false);
+                                       origMsgId, msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
                     if (cause instanceof MessagingException) {
