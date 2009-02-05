@@ -27,7 +27,7 @@ olcDbIndex: reqStart eq
 olcDbLinearIndex: FALSE
 olcDbMode: 0600
 olcDbSearchStack: 16
-olcDbShmKey: 7
+olcDbShmKey: 0
 olcDbCacheFree: 1
 olcDbDNcacheSize: 20000
 
