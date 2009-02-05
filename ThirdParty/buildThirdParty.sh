@@ -8,11 +8,16 @@ SYNC=no
 RELEASE=main
 
 usage() {
+	echo ""
 	echo "Usage: "`basename $0`" -c [-s] [-r RELEASE]" >&2
 	echo "-s: Re-sync source before building"
 	echo "-r RELEASE: RELEASE to build.  Defaults to main"
 	exit 2;
 }
+
+if [ $# -lt 1 ]; then
+	usage
+fi
 
 while [ $# -gt 0 ]; do
 	case $1 in
