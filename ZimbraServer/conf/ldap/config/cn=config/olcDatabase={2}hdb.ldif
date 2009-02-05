@@ -99,7 +99,7 @@ olcDbIndex: zimbraCalResFloor eq,sub
 olcDbLinearIndex: FALSE
 olcDbMode: 0600
 olcDbSearchStack: 16
-olcDbShmKey: 0
+olcDbShmKey: 5
 olcDbCacheFree: 1
 olcDbDNcacheSize: 20000
 structuralObjectClass: olcHdbConfig
