@@ -10,11 +10,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	ENVMOD := env LIBS="-lresolv" 
-	CPPFLAG := "-DOPENLDAP_FD_SETSIZE=32768"
-endif
-ifeq ($(BUILD_PLATFORM), MACOSX)
+ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	ENVMOD := env LIBS="-lresolv" 
 	CPPFLAG := "-DOPENLDAP_FD_SETSIZE=32768"
 endif
