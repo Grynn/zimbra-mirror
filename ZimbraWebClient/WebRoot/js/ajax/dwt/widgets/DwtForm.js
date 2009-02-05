@@ -80,6 +80,10 @@ DwtForm.prototype.isRelevant = function(id) {
 	return this.isVisible(id) && this.isEnabled(id);
 };
 
+DwtForm.prototype.getTabGroupMember = function() {
+	return this._tabGroup;
+};
+
 // control methods
 
 DwtForm.prototype.setLabel = function(id, label) {
