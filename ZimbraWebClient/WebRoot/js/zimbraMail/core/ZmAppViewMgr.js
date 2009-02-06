@@ -1046,7 +1046,7 @@ function(ev) {
 					ZmAppViewMgr.C_SASH, ZmAppViewMgr.C_APP_CONTENT, ZmAppViewMgr.C_APP_CONTENT_FULL,
 					ZmAppViewMgr.C_STATUS, ZmAppViewMgr.C_TASKBAR
 				];
-				this._fitToContainer(list);
+				this._fitToContainer(list, true);
 			} else if (deltaWidth) {
 				var list = [
 					ZmAppViewMgr.C_BANNER, ZmAppViewMgr.C_SEARCH, ZmAppViewMgr.C_USER_INFO, ZmAppViewMgr.C_QUOTA_INFO,
@@ -1055,7 +1055,7 @@ function(ev) {
 					ZmAppViewMgr.C_TOOLBAR_TOP, ZmAppViewMgr.C_APP_CONTENT, ZmAppViewMgr.C_APP_CONTENT_FULL,
 					ZmAppViewMgr.C_TOOLBAR_BOTTOM, ZmAppViewMgr.C_TASKBAR
 				];
-				this._fitToContainer(list);
+				this._fitToContainer(list, true);
 			}
 		}
 	}
