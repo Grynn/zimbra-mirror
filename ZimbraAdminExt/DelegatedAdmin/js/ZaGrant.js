@@ -275,7 +275,7 @@ ZaGrant.grantsOvTreeModifier = function (tree) {
     if(ZaSettings.GRANTS_ENABLED) {
         overviewPanelController._rightsTi = new DwtTreeItem(overviewPanelController._configTi);
         overviewPanelController._rightsTi.setText(com_zimbra_delegatedadmin.OVP_global_grants);
-        overviewPanelController._rightsTi.setImage("Account"); //TODO: Use Grants icons
+        overviewPanelController._rightsTi.setImage("GlobalPermission"); //TODO: Use Grants icons
 		overviewPanelController._rightsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._GLOBAL_GRANTS_LIST_VIEW);
 
         if(ZaOverviewPanelController.overviewTreeListeners) {

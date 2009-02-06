@@ -39,7 +39,7 @@ function(list, openInNewTab) {
 ZaGlobalGrantListViewController.initToolbarMethod =
 function () {
 
-    this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW, com_zimbra_delegatedadmin.Bt_grant, com_zimbra_delegatedadmin.Grant_New_tt, "Account", "AccountDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._newButtonListener));
+    this._toolbarOperations[ZaOperation.NEW] = new ZaOperation(ZaOperation.NEW, com_zimbra_delegatedadmin.Bt_grant, com_zimbra_delegatedadmin.Grant_New_tt, "GlobalPermission", "GlobalPermissionDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._newButtonListener));
 //    this._toolbarOperations[ZaOperation.EDIT] = new ZaOperation(ZaOperation.EDIT, ZaMsg.TBB_Edit,com_zimbra_delegatedadmin.RIGHT_Edit_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._editButtonListener));
    	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, com_zimbra_delegatedadmin.Bt_revoke, com_zimbra_delegatedadmin.Grant_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaGlobalGrantListViewController.prototype._deleteButtonListener));
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);

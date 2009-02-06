@@ -45,7 +45,7 @@ function () {
     this._toolbarOrder.push(ZaOperation.NEW);
     this._toolbarOrder.push(ZaOperation.DELETE);
 	*/
-    this._toolbarOperations[ZaOperation.VIEW] = new ZaOperation(ZaOperation.VIEW, ZaMsg.TBB_View,com_zimbra_delegatedadmin.RIGHT_View_tt, "Properties", "PropertiesDis", new AjxListener(this, ZaRightsListViewController.prototype._editButtonListener));
+    this._toolbarOperations[ZaOperation.VIEW] = new ZaOperation(ZaOperation.VIEW, ZaMsg.TBB_View,com_zimbra_delegatedadmin.RIGHT_View_tt, "RightObject", "RightObjectDis", new AjxListener(this, ZaRightsListViewController.prototype._editButtonListener));
     this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
     this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
      this._toolbarOrder.push(ZaOperation.VIEW);

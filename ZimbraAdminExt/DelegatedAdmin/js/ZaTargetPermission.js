@@ -46,7 +46,7 @@ function () {
 
 ZaGrantsListView.prototype.getTabIcon =
 function () {
-	return "Server";
+	return "GlobalPermission";
 }
 
 ZaGrantsListView.prototype._createItemHtml =

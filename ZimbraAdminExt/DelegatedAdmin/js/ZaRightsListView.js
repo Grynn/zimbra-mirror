@@ -26,7 +26,7 @@ function () {
 
 ZaRightsListView.prototype.getTabIcon =
 function () {
-	return "Server";
+	return "RightObject";
 }
 
 ZaRightsListView.prototype._createItemHtml =

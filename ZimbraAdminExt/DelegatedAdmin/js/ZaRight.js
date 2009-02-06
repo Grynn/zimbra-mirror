@@ -98,20 +98,9 @@ ZaRight.rightsOvTreeModifier = function (tree) {
     if(ZaSettings.RIGHTS_ENABLED && overviewPanelController._configTi) {
         overviewPanelController._rightsTi = new DwtTreeItem(overviewPanelController._configTi);
         overviewPanelController._rightsTi.setText(com_zimbra_delegatedadmin.OVP_rights);
-        overviewPanelController._rightsTi.setImage("Account"); //TODO: Use Rights icons
+        overviewPanelController._rightsTi.setImage("RightObject"); //TODO: Use Rights icons
 		overviewPanelController._rightsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._RIGHTS_LIST_VIEW);
-       /*
-        try {
-            var ti1 = new DwtTreeItem( overviewPanelController._rightsTi );
-            ti1.setText(com_zimbra_delegatedadmin.TI_custom_rights);
-            ti1.setImage("Server");
-            ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._RIGHTS_LIST_VIEW);
-//            ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
-
-        } catch (ex) {
-            overviewPanelController._handleException(ex, "ZaRigth.rightsOvTreeModifier", null, false);
-        }*/
-
+       
         if(ZaOverviewPanelController.overviewTreeListeners) {
             ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._RIGHTS_LIST_VIEW] = ZaRight.customRightsListTreeListener;
 //            ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS] = ZaCert.certsRightNodeTreeListener;

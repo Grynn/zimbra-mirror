@@ -5,7 +5,7 @@ if (ZaController.initToolbarMethods["ZaAccountListController"]) {
     ZaAccountListController.initExtraToolbarMethod = function () {
         this._toolbarOperations [ZaOperation.BULK_PROVISION] = 
                 new ZaOperation(ZaOperation.BULK_PROVISION, com_zimbra_bulkprovision.ACTBB_BulkProvision,
-                        com_zimbra_bulkprovision.ACTBB_BulkProvision_tt, "Account", "AccountDis", 
+                        com_zimbra_bulkprovision.ACTBB_BulkProvision_tt, "BulkProvision", "BulkProvisionDis", 
                         new AjxListener(this, ZaAccountListController.prototype._bulkProvisionListener)
                         );
 

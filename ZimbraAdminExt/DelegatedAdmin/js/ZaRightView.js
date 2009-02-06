@@ -17,6 +17,10 @@ function (value, event, form) {
 	return value;
 }
 
+ZaRightView.prototype.getTabIcon = function () {
+   return "RightObject"; 
+}
+
 ZaRightView.prototype.setObject =
 function (entry) {
     this._containedObject = entry ;
@@ -92,32 +96,6 @@ ZaRightView.myXFormModifier = function(xFormObject) {
             items: [
                 { ref: ZaRight.A_name, type: _OUTPUT_ , label: com_zimbra_delegatedadmin.Col_right_name+ ": " },
                 { ref: ZaRight.A_desc, type: _OUTPUT_, label: com_zimbra_delegatedadmin.Col_right_desc + ": " },
-                /* No customer rights enabled
-                { ref: ZaRight.A_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Col_right_type + ": ",
-                    labelLocation:_LEFT_, choices: ZaZimbraRights.type
-                },
-                { type: _GROUP_,
-                    label: com_zimbra_delegatedadmin.Label_target_type, nowrap: true, labelLocation:_LEFT_,
-                    //show two columns of the target types
-                    visibilityChecks: [ZaRightView.isShowTargetType],
-                    visibilityChangeEventSources: [ZaRight.A_type] ,
-                    colSpan: "*", numCols:4, colSizes: [20, 100, 20, "*"],
-                    items: [
-        //                { ref: ZaRight.A_targetType  }
-        //TODO:     hardcode the prototype first
-                        {type: _CHECKBOX_, label: "Account",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Calendar Resource",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Cos",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Distribution List",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Domain",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Global Config",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Global Grant",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Right",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Server",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "XMPP Component",labelLocation:_RIGHT_ } ,
-                        {type: _CHECKBOX_, label: "Zimlet",labelLocation:_RIGHT_ }
-                    ]
-                },*/
                 { ref: ZaRight.A_type, type:_OUTPUT_, label: com_zimbra_delegatedadmin.Col_right_type + ": " },
                 { ref: ZaRight.A_targetType, type:_OUTPUT_,
                     visibilityChecks: [ZaRightView.isShowTargetType],
@@ -140,20 +118,6 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                         hideHeader: false
                     } ,
                     {type: _SPACER_, height: 10 }
-                    /*  No custom rights are supported
-                    {type:_CELLSPACER_},
-                    {type:_GROUP_, numCols:3, width:"300px", colSizes:["80px","auto","80px"],  height: 30,
-                        cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
-                        items: [
-                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px"},
-                            {type:_CELLSPACER_},
-//                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px" },
-//                            {type:_CELLSPACER_},
-                            {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
-                                onActivate:"ZaRightView.addRightButtonListener.call(this);"
-                            }
-                        ]
-                    } */
                 ]
              },
             
@@ -171,18 +135,6 @@ ZaRightView.myXFormModifier = function(xFormObject) {
                         hideHeader: false
                   } ,
                   {type: _SPACER_, height: 10 }
-                    /*  No custom rights are supported,
-                    {type:_CELLSPACER_},
-                    {type:_GROUP_, numCols:5, width:"300px", colSizes:["80px","auto","80px","auto","80px"],
-                        cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
-                        items: [
-                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px"},
-                            {type:_CELLSPACER_},
-                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px"},
-                            {type:_CELLSPACER_},
-                            {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px"}
-                        ]
-                    } */
                 ]
              },
 
