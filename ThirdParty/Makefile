@@ -87,7 +87,6 @@ build:
 		$(ECHO) -n "*** Building in $$dir "; \
 		$(MAKE) -C $$dir >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  $(ECHO) "FAILED.";  else  $(ECHO) "SUCCEEDED.";  fi ; \
-		if [ -x /sbin/ldconfig ]; then /sbin/ldconfig; fi ;\
 	done)
 	@($(ECHO) -n "*** Building in Perl "; $(MAKE) -C Perl ) 
 	@($(MAKE) -C apache-httpd tar >> $(LOGFILE) 2>&1)

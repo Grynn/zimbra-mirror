@@ -137,10 +137,6 @@ else
 	rm -f /opt/zimbra/blah
 fi
 
-if [ -x "/sbin/ldconfig" ]; then
-  /sbin/ldconfig
-fi
-
 if [[ $PLAT == "MACOSX"* ]]; then
 	LIBEXT=dylib
 else
