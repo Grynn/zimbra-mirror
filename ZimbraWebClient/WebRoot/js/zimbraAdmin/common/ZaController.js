@@ -880,8 +880,13 @@ function () {
 
 	for(var i in  this._toolbarOperations) {
 		if(this._toolbarOperations[i] instanceof ZaOperation &&  !AjxUtil.isEmpty(this._toolbar.getButton(this._toolbarOperations[i].id))) {
-			this._toolbar.getButton(this._toolbarOperations[i].id).setEnabled(this._toolbarOperations[i].enabled);
-		}
+			//paging button should be excluded
+            if (this._toolbarOperations[i].id == ZaOperation.PAGE_BACK || this._toolbarOperations[i].id == ZaOperation.PAGE_FORWARD) {
+                //do nothing
+            }else{
+                this._toolbar.getButton(this._toolbarOperations[i].id).setEnabled(this._toolbarOperations[i].enabled);
+            }
+        }
 	}
 	
 	for(var i in  this._popupOperations) {
