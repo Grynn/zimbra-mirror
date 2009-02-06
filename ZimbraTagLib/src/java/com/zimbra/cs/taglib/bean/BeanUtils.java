@@ -282,25 +282,42 @@ public class BeanUtils {
         }
     }
 
-    public static String displaySize(long size) {
-        return displaySize(size, 0);
+    public static String displaySize(PageContext pc, long size) {
+        return displaySize(pc, size, 0);
     }
 
-    public static String displaySize(long size, int fractions) {
+    public static String displaySize(PageContext pc, long size, int fractions) {
         String units;
         double dsize;
         if (size >= 1073741824) {
             dsize = size/1073741824.0;
-            units = " GB";
+            if(pc == null){
+                units = " GB";
+            }else{
+                units = I18nUtil.getLocalizedMessage(pc, "gb");// " GB";
+            }
+
         } else if (size >= 1048576) {
             dsize = size/1048576.0;
-            units = " MB";
+            if(pc == null){
+                units = " MB";
+            }else{
+                units = I18nUtil.getLocalizedMessage(pc, "mb");//" MB";
+            }
         } else if (size >= 1024) {
             dsize = size/1024.0;
-            units = " KB";
+            if(pc == null){
+                units = " KB";
+            }else{
+                units = I18nUtil.getLocalizedMessage(pc, "kb");;//" KB";
+            }
         } else {
             dsize = size;
-            units = " B";
+            if(pc == null){
+                units = " b";
+            }else{
+                units = I18nUtil.getLocalizedMessage(pc, "b");//" B";
+            }
         }
 
         if (fractions == 0) {

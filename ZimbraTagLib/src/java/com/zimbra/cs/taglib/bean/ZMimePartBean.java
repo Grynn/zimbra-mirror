@@ -172,7 +172,7 @@ public class ZMimePartBean {
     }
 
     public String getDisplaySize() {
-        return BeanUtils.displaySize(getSize());
+        return BeanUtils.displaySize(null, getSize());
     }
 
     public boolean getIsImage() {

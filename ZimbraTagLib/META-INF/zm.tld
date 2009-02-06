@@ -5874,13 +5874,13 @@
     <function>
         <name>displaySize</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String displaySize(long)</function-signature>
+        <function-signature>java.lang.String displaySize(javax.servlet.jsp.PageContext, long)</function-signature>
     </function>
 
     <function>
         <name>displaySizeFractions</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String displaySize(long, int)</function-signature>
+        <function-signature>java.lang.String displaySize(javax.servlet.jsp.PageContext, long, int)</function-signature>
     </function>
 
     <function>
