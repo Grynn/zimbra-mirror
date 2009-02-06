@@ -36,7 +36,8 @@ ZaItem.createMethods = new Object();
 ZaItem.removeMethods = new Object();
 
 ZaItem.ACCOUNT = "account";
-ZaItem.DL = "distributionlist";
+//ZaItem.DL = "distributionlist";
+ZaItem.DL = "dl";
 ZaItem.ALIAS = "alias";
 ZaItem.RESOURCE = "calresource";
 ZaItem.DOMAIN = "domain";
@@ -131,7 +132,7 @@ function (type) {
 			return new ZaAlias();
 
 		case ZaItem.DL:
-			return new ZaDistributionList();
+            return new ZaDistributionList();
 
 		case ZaItem.RESOURCE:
 			return new ZaResource();

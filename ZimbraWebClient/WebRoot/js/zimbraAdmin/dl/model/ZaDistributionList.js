@@ -404,8 +404,9 @@ ZaDistributionList.prototype.getMembers = function (by, val, limit) {
 			limit = ZaDistributionList.MEMBER_QUERY_LIMIT;
 			
 		soapDoc.setMethodAttribute("limit", limit);
-		
-		var offset = (this.memPagenum-1)*limit;
+
+        if (!this.memPagenum) this.memPagenum = 1 ; //by default, first page.
+        var offset = (this.memPagenum-1)*limit;
 		soapDoc.setMethodAttribute("offset", offset);
 			
 		var dl = soapDoc.set("dl", this.id);

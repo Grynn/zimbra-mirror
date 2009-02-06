@@ -19,7 +19,7 @@ ZaZimbraRights.type = [
     "preset", "getAttrs", "setAttrs", "combo"
 ]
 
-ZaZimbraRights.type_dl = "distributionlist" ;
+ZaZimbraRights.type_dl = ZaItem.DL ;
 
 ZaZimbraRights.inlineTargetType = [
     "account", ZaZimbraRights.type_dl, "resource", "domain" ,

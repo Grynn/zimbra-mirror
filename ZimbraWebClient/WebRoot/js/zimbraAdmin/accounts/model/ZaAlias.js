@@ -31,7 +31,7 @@ ZaAlias.A_targetType = "type";
 ZaAlias.A_index = "index";
 ZaAlias.A_uid = "uid";
 
-ZaAlias.TARGET_TYPE_DL = "distributionlist" ;
+ZaAlias.TARGET_TYPE_DL = ZaItem.DL ;
 ZaAlias.TARGET_TYPE_ACCOUNT = "account" ;
 
 ZaItem._ATTR[ZaAlias.A_targetAccount] = ZaMsg.attrDesc_aliasFor;
