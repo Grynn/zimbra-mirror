@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_sms" version="2.1" description="Send SMS during compose; Drag'n'drop a message, contact, appointment to send them as sms">
+<zimlet name="com_zimbra_sms" version="2.2" description="Send SMS during compose; Drag'n'drop a message, contact, appointment to send them as sms">
 	<include>sms.js</include>
 	<includeCSS>sms.css</includeCSS>
 	<resource>sms-icon.gif</resource>
@@ -21,6 +21,6 @@
 		<!-- send and sms prefs -->
 		<property type="string" name="sms_showSendAndSMSButton" value="false"/>
 		<property type="string" name="sms_alsoSendEmail" value="false"/>
-		<property type="string" name="turnONSMSZimlet" value="true"/>
+		<property type="string" name="turnOnZimlet_SMS" value="false"/>
 	</userProperties>
 </zimlet>

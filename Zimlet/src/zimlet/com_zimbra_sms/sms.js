@@ -59,8 +59,8 @@ function(obj) {
 
 Com_Zimbra_sms.prototype.init = function() {
 
-	this.turnONSMSZimlet = this.getUserProperty("turnONSMSZimlet") == "true";
-	if (!this.turnONSMSZimlet)
+	this.turnOnZimlet_SMS = this.getUserProperty("turnOnZimlet_SMS") == "true";
+	if (!this.turnOnZimlet_SMS)
 		return;
 
 	if (ZmAssistant && ZmAssistant.register)
@@ -79,7 +79,7 @@ Com_Zimbra_sms.prototype.doubleClicked = function() {
 
 // Called by the Zimlet framework when the SMS panel item was single clicked
 Com_Zimbra_sms.prototype.singleClicked = function(toValue, bodyValue) {
-	if (!this.turnONSMSZimlet) {
+	if (!this.turnOnZimlet_SMS) {
 		this._showWarningMsg("Please Turn-ON SMS Zimlet. Right-click on Zimlet > Select Preferences");
 		return;
 	}
@@ -284,8 +284,8 @@ function() {
 	this.pView = new DwtComposite(this.getShell());
 	this.pView.getHtmlElement().innerHTML = this.createPrefView();
 
-	if (this.getUserProperty("turnONSMSZimlet") == "true") {
-		document.getElementById("turnONSMSZimlet").checked = true;
+	if (this.getUserProperty("turnOnZimlet_SMS") == "true") {
+		document.getElementById("turnOnZimlet_SMS").checked = true;
 	}
 	if (this.getUserProperty("sms_showSendAndSMSButton") == "true") {
 		document.getElementById("sms_showSendAndSMSButton").checked = true;
@@ -312,15 +312,15 @@ function() {
 Com_Zimbra_sms.prototype._okBtnListner =
 function() {
 	this._reloadRequired = false;
-	if (document.getElementById("turnONSMSZimlet").checked) {
-		if (!this.turnONSMSZimlet) {
+	if (document.getElementById("turnOnZimlet_SMS").checked) {
+		if (!this.turnOnZimlet_SMS) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONSMSZimlet", "true");
+		this.setUserProperty("turnOnZimlet_SMS", "true");
 
 	} else {
-		this.setUserProperty("turnONSMSZimlet", "false");
-		if (this.turnONSMSZimlet)
+		this.setUserProperty("turnOnZimlet_SMS", "false");
+		if (this.turnOnZimlet_SMS)
 			this._reloadRequired = true;
 	}
 
@@ -402,7 +402,7 @@ function() {
 	html[i++] = "</DIV>";
 	html[i++] = "<BR><BR>";
 	html[i++] = "<DIV>";
-	html[i++] = "<input id='turnONSMSZimlet'  type='checkbox'/>Turn ON SMS Zimlet";
+	html[i++] = "<input id='turnOnZimlet_SMS'  type='checkbox'/>Turn ON SMS Zimlet";
 	html[i++] = "</DIV>";
 	return html.join("");
 
@@ -611,7 +611,7 @@ Com_Zimbra_sms.prototype._onListClick = function(hdr, ev) {
 //@author: Raja Rao DV
 //=============================================================================
 Com_Zimbra_sms.prototype.onShowView = function(viewId, isNewView) {
-	if (!this.turnONSMSZimlet || !this.sms_showSendAndSMSButton)
+	if (!this.turnOnZimlet_SMS || !this.sms_showSendAndSMSButton)
 		return;
 
 	if (viewId == ZmId.VIEW_COMPOSE && !this._toolbar) {
