@@ -5,13 +5,12 @@ cd $PROGDIR
 PATHDIR=`pwd`
 CLEAN=no
 SYNC=no
-RELEASE=main
 
 usage() {
 	echo ""
-	echo "Usage: "`basename $0`" -c [-s] [-r RELEASE]" >&2
+	echo "Usage: "`basename $0`" -c [-s]" >&2
+	echo "-c: Remove contents of /opt/zimbra (clean)"
 	echo "-s: Re-sync source before building"
-	echo "-r RELEASE: RELEASE to build.  Defaults to main"
 	exit 2;
 }
 
@@ -33,24 +32,15 @@ while [ $# -gt 0 ]; do
 			SYNC=yes
 			shift;
 			;;
-		-r|--release)
-			shift;
-			case $1 in
-				main|FRANK|FRANKLIN)
-					RELEASE=$1
-					;;
-				*)
-					echo "Usage: $0 -c [-s] [-r RELEASE]"
-					exit 1;
-			esac
-			shift;
-			;;
 		*)
-			echo "Usage: $0 -c [-s] [-r RELEASE]"
+			echo "Usage: $0 -c [-s]"
 			exit 1;
 			;;
 	esac
 done
+
+RELEASE=${PATHDIR%/*}
+RELEASE=${RELEASE##*/}
 
 #echo "CLEAN: $CLEAN"
 #echo "SYNC: $SYNC"
@@ -59,7 +49,7 @@ done
 
 if [ x$CLEAN = x"no" ]; then
 	echo "WARNING: You must supply the clean option -c"
-	echo "WARNING: This will completely remove /opt/zimbra from the system"
+	echo "WARNING: This will completely remove the contents of /opt/zimbra from the system"
 	exit 1;
 fi
 
@@ -130,10 +120,21 @@ if [ x$SYNC = "xyes" ]; then
 	fi
 fi
 
-echo "Removing /opt/zimbra"
+echo "Cleaning contents of /opt/zimbra"
 if [ -d "/opt/zimbra" ]; then
-  rm -rf /opt/zimbra
-  mkdir /opt/zimbra
+  rm -rf /opt/zimbra/* 2>/dev/null
+  rm -rf /opt/zimbra/.* 2>/dev/null
+  mkdir -p /opt/zimbra
+fi
+
+touch /opt/zimbra/blah 2>/dev/null
+RC=$?
+
+if [ $RC -eq 1 ]; then
+	echo "Error: Unable to write to /opt/zimbra"
+	exit 1;
+else
+	rm -f /opt/zimbra/blah
 fi
 
 if [ -x "/sbin/ldconfig" ]; then
