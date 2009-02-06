@@ -500,11 +500,17 @@ ZaSearchQuery = function(queryString, types, byDomain, byVal, attrsCommaSeparate
  * add the search result count information to the toolbar
  */
 ZaSearch.searchResultCountsView =
-function (opArr) {
-	opArr[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);								
+function (opArr, orderArr) {
+    opArr[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);								
 	opArr[ZaOperation.LABEL] = new ZaOperation(ZaOperation.LABEL, AjxMessageFormat.format (ZaMsg.searchResultCount, [0,0]),
 													 null, null, null, null,null,null,"ZaSearchResultCountLabel",ZaOperation.SEARCH_RESULT_COUNT);	
 	opArr[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
+    for (var i =0; i < orderArr.length; i ++) {
+        if (orderArr[i] == ZaOperation.PAGE_BACK) {
+            orderArr.splice(i + 1, 0, ZaOperation.SEP, ZaOperation.LABEL,ZaOperation.SEP) ;
+            break ;
+        }
+    }
 }
 
 /** Never use this call, always use CountAccountRequest
