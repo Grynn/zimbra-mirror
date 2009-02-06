@@ -393,7 +393,11 @@ return Boolean.FALSE;</string>
                     <object class="com.install4j.runtime.beans.actions.misc.RequireAdminAction" />
                   </java>
                 </serializedBean>
-                <condition>Boolean.getBoolean("offline_update") &amp;&amp; (Util.isMacOS() || Util.isWindows())</condition>
+                <condition>String nopass = System.getProperty("offline_nopass");
+if (nopass != null &amp;&amp; nopass.equals("true"))
+    return false;
+
+return Boolean.getBoolean("offline_update") &amp;&amp; (Util.isMacOS() || Util.isWindows());</condition>
               </action>
               <action name="Disallow root user" id="287297" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:installer.DisallowRoot}">
                 <serializedBean>
@@ -504,7 +508,11 @@ return true;</string>
                     <object class="com.install4j.runtime.beans.actions.misc.RequireAdminAction" />
                   </java>
                 </serializedBean>
-                <condition>Util.isMacOS() || Util.isWindows()</condition>
+                <condition>String nopass = System.getProperty("offline_nopass");
+if (nopass != null &amp;&amp; nopass.equals("true"))
+    return false;
+
+return Util.isMacOS() || Util.isWindows();</condition>
               </action>
             </actions>
             <formComponents />
