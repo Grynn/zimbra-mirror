@@ -234,12 +234,12 @@ public class XmailBean extends MailBean {
                     }
                 } else if (email.endsWith('@' + hdomain) ||
                     email.endsWith('@' + mdomain)) {
-                    if (dsType == DataSource.Type.live) {
+                    if (dsType == DataSource.Type.live || dsType == DataSource.Type.pop3) {
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceDomain,
                             hdomain);
                     } else {
                         addInvalid("type");
-                        setError(getMessage("LiveMustUseLive"));
+                        setError(getMessage("LiveMustUseLiveOrPop"));
                     }
                 }
                 dsAttrs.put(OfflineConstants.A_offlineAccountFlavor, accountFlavor);
