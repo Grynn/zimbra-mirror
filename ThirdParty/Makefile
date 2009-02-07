@@ -73,7 +73,10 @@ DIRS := openssl \
 	postfix \
 	dspam \
 	rrdtool \
-	snmp
+	snmp \
+	memcached \
+	nginx \
+	tcmalloc
 
 LOGFILE := /tmp/ThirdParty.make.log
 
