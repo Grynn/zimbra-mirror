@@ -589,7 +589,6 @@ function (xModelMetaData, xFormMetaData) {
 //The popup dialog to allow user to specify the name/query of the search to be saved.
 ZaSaveSearchDialog = function(searchField) {
 	if (!searchField) return ; 
-	this._app = app;
 	this._searchField = searchField
 	DwtDialog.call(this, searchField.shell);
 	this._okButton = this.getButton(DwtDialog.OK_BUTTON);
