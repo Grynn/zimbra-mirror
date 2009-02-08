@@ -32,23 +32,25 @@ import java.util.Collection;
 
 public class YMailSender extends MailSender {
     private final YMailClient ymc;
+    private final boolean saveCopy;
 
     public static YMailSender newInstance(OfflineDataSource ds)
         throws ServiceException {
-        if (ds.isSaveToSent() || !ds.isYahoo()) {
-            throw new IllegalArgumentException("Must be yahoo data source");
-        }
         try {
             YMailClient ymc = new YMailClient(OfflineYAuth.authenticate(ds));
             ymc.setTrace(ds.isDebugTraceEnabled());
-            return new YMailSender(ymc);
+            // Have YMail save a copy of the message to Sent folder if user
+            // has chosen this option and we don't save it ourselves.
+            boolean saveCopy = !ds.isSaveToSent() && ds.getAccount().isPrefSaveToSent();
+            return new YMailSender(ymc, saveCopy);
         } catch (Exception e) {
             throw ServiceException.FAILURE("Unable to create initialize YMail client", e);
         }
     }
-    
-    private YMailSender(YMailClient ymc) {
+
+    private YMailSender(YMailClient ymc, boolean saveCopy) {
         this.ymc = ymc;
+        this.saveCopy = saveCopy;
     }
 
     @Override
@@ -57,7 +59,7 @@ public class YMailSender extends MailSender {
                                RollbackData[] rollback) throws IOException {
         try {
         	Address[] rcpts = mm.getAllRecipients();
-            ymc.sendMessage(mm);
+            ymc.sendMessage(mm, saveCopy);
             return Arrays.asList(rcpts);
         } catch (MessagingException e) {
             throw new YMailException("Unable get recipient list", e);

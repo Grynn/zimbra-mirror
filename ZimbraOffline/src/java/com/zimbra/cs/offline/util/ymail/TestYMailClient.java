@@ -157,7 +157,7 @@ public class TestYMailClient {
     public void testSendSimple() throws Exception {
         debug("Testing send of simple message");
         MimeMessage mm = simpleMessage("Hello, world."); // readMessage(MSG_SIMPLE);
-        ymc.sendMessage(mm);
+        ymc.sendMessage(mm, true);
     }
 
     @Test
@@ -172,7 +172,7 @@ public class TestYMailClient {
         dump(mm);
         Mailbox mb = imc.select(SENT);
         assertNotNull(mb);
-        String mid = ymc.sendMessage(mm);
+        String mid = ymc.sendMessage(mm, true);
         assertNotNull(mid);
         imc.select(SENT);
         long uid = findUid(mid, mb.getUidNext());
@@ -332,7 +332,7 @@ public class TestYMailClient {
     public void testForwarded() throws Exception {
         debug("Testing send of forwarded message as attachment %s", MSG_FORWARDED);
         MimeMessage mm = readMessage(MSG_FORWARDED);
-        ymc.sendMessage(mm);
+        ymc.sendMessage(mm, true);
     }
 
     private static MimeMessage simpleMessage(String text) throws Exception {

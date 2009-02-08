@@ -132,11 +132,12 @@ public final class YMailClient {
      * Sends specified email message via Cascade.
      *
      * @param mm the MimeMessage to send
+     * @param saveCopy if true then copy will be saved to Sent folder
      * @return the message id of the sent message
      * @throws YMailException if the request could not be created
      * @throws IOException if an I/O error occurred while sending the request
      */
-    public String sendMessage(MimeMessage mm) throws IOException {
+    public String sendMessage(MimeMessage mm, boolean saveCopy) throws IOException {
         ComposeMessage cm;
         try {
             cm = getComposeMessage(mm);
@@ -144,7 +145,7 @@ public final class YMailClient {
             throw new YMailException("Unable to create request", e);
         }
         try {
-            return stub.sendMessage(cm, true);
+            return stub.sendMessage(cm, saveCopy);
         } catch (Exception e) {
             failed("SendMessage", e);
             return null;

@@ -60,17 +60,17 @@ public class LocalMailbox extends DesktopMailbox {
     private final Flag mSyncFlag;
     private final Flag mSyncFolderFlag;
     private final Flag mNoInferiorsFlag;
-	
+
     LocalMailbox(MailboxData data) throws ServiceException {
         super(data);
-        
+
         OfflineDataSource ds = (OfflineDataSource)OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
         if (ds != null) {
 	        isImapMailbox = ds.getType() == DataSource.Type.imap || ds.getType() == DataSource.Type.live;
 	        isYahoo = ds.isYahoo();
         	isLive = ds.isLive();
         }
-        
+
         mSyncFlag = getFlagById(Flag.ID_FLAG_SYNC);
         mSyncFolderFlag = getFlagById(Flag.ID_FLAG_SYNCFOLDER);
         mNoInferiorsFlag = getFlagById(Flag.ID_FLAG_NO_INFERIORS);
@@ -107,7 +107,7 @@ public class LocalMailbox extends DesktopMailbox {
     		}
         }
     }
-    
+
     @Override
 	synchronized boolean finishInitialization() throws ServiceException {
 		if (super.finishInitialization()) {
@@ -122,7 +122,7 @@ public class LocalMailbox extends DesktopMailbox {
 		}
 		return false;
 	}
-    
+
     @Override
     public String getItemFlagString(MailItem mi) {
     	if (isImapMailbox && mi.getType() == MailItem.TYPE_FOLDER) {
@@ -138,12 +138,12 @@ public class LocalMailbox extends DesktopMailbox {
     	}
     	return mi.getFlagString();
     }
-    
+
     private boolean isSyncEnabledByDefault(String path) throws ServiceException {
     	OfflineDataSource ds = (OfflineDataSource)(OfflineProvisioning.getOfflineInstance().getDataSource(getAccount()));
     	return ds != null && ds.isSyncEnabledByDefault(path);
     }
-    
+
     private void alterSyncFolderFlag(Folder folder, boolean canSync) throws ServiceException {
     	folder.alterTag(mSyncFolderFlag, canSync);
     	if (canSync) {
@@ -157,14 +157,14 @@ public class LocalMailbox extends DesktopMailbox {
     		folder.mData.flags &= ~mSyncFlag.getBitmask();
     	}
     }
-    
+
     @Override
     void archiveSingleItem(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException {
     	super.archiveSingleItem(item, toArchive, isTrashing);
     	if (isImapMailbox && item instanceof Folder)
     		alterSyncFolderFlag((Folder)item, !toArchive);
     }
-	
+
     @Override
 	void itemCreated(MailItem item, boolean inArchive) throws ServiceException {
 		if (isImapMailbox && !inArchive && item instanceof Folder && ((Folder)item).getDefaultView() == MailItem.TYPE_MESSAGE &&
@@ -174,17 +174,17 @@ public class LocalMailbox extends DesktopMailbox {
 				item.alterTag(mNoInferiorsFlag, true);
 		}
 	}
-    
+
     @Override
     public MailSender getMailSender() {
         return new OfflineMailSender();
     }
-    
+
     /*
      * Tracks messages that we've called SendMsg on but never got back a
      *  response.  This should help avoid duplicate sends when the connection
      *  goes away in the process of a SendMsg.<p>
-     *  
+     *
      *  key: a String of the form <tt>account-id:message-id</tt><p>
      *  value: a Pair containing the content change ID and the "send UID"
      *         used when the message was previously sent.
@@ -197,7 +197,7 @@ public class LocalMailbox extends DesktopMailbox {
     	int sentCount = 0;
         for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
             int id = iterator.next();
-        	
+
             Message msg;
             try {
             	msg = getMessageById(context, id);
@@ -209,7 +209,7 @@ public class LocalMailbox extends DesktopMailbox {
             	OutboxTracker.remove(this, id);
             	continue;
             }
-            
+
             Session session = null;
             //the client could send datasourceId as identityId
             OfflineDataSource ds = getDataSource(msg);
@@ -218,7 +218,7 @@ public class LocalMailbox extends DesktopMailbox {
 
             // For Yahoo bizmail use SMTP rather than Cascade
             boolean isYBizmail = ds.isYahoo() && ds.isYBizmail();
-            
+
             if (isYBizmail) {
                 session = ds.getYBizmailSession();
             } else if (!ds.isLive() && !ds.isYahoo()) {
@@ -239,7 +239,9 @@ public class LocalMailbox extends DesktopMailbox {
 
             MimeMessage mm = ((FixedMimeMessage) msg.getMimeMessage()).setSession(session);
             ItemId origMsgId = getOrigMsgId(msg);
-            boolean saveToSent = (isYBizmail || ds.isSaveToSent()) && getAccount().getBooleanAttr(Provisioning.A_zimbraPrefSaveToSent, true);
+
+            // Do we need to save a copy of the message ourselves to the Sent folder?
+            boolean saveToSent = (isYBizmail || ds.isSaveToSent()) && getAccount().isPrefSaveToSent();
 
             if (ds.isYahoo() && !isYBizmail) {
                 YMailSender ms = YMailSender.newInstance(ds);
@@ -265,7 +267,7 @@ public class LocalMailbox extends DesktopMailbox {
                 MailSender ms = ds.isLive() ? LMailSender.newInstance(ds) : new MailSender();
                 try {
                     ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
-                                       origMsgId, msg.getDraftReplyType(), identity, false, false);
+                        origMsgId, msg.getDraftReplyType(), identity, false, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
                     if (cause instanceof MessagingException) {
@@ -281,7 +283,7 @@ public class LocalMailbox extends DesktopMailbox {
                     throw e;
                 }
             }
-            
+
             OfflineLog.offline.debug("sent pending mail (" + id + "): " + msg.getSubject());
 
             // remove the draft from the outbox
@@ -293,10 +295,10 @@ public class LocalMailbox extends DesktopMailbox {
             sSendUIDs.remove(id);
             sentCount++;
         }
-        
+
         return sentCount;
     }
-    
+
     private ItemId getOrigMsgId(Message msg) throws ServiceException {
         String origId = msg.getDraftOrigId();
         return StringUtil.isNullOrEmpty(origId) ? null : new ItemId(origId, getAccountId());
@@ -312,29 +314,29 @@ public class LocalMailbox extends DesktopMailbox {
         }
         return (OfflineDataSource) ds;
     }
-    
+
     private void bounceToInbox(OperationContext context, int id, Message msg, String error) {
 		try {
 	        MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
 			mm.setFrom(new InternetAddress(getAccount().getName()));
     		mm.setRecipient(RecipientType.TO, new InternetAddress(getAccount().getName()));
     		mm.setSubject("Delivery failed: " + error);
-    		
+
     		mm.saveChanges(); //must call this to update the headers
-    		
+
     		MimeMultipart mmp = new MimeMultipart();
     		MimeBodyPart mbp = new MimeBodyPart();
     		mbp.setText(error == null ? "SEND FAILED. PLEASE CHECK RECIPIENT ADDRESSES AND SMTP SETTINGS." : error);
    			mmp.addBodyPart(mbp);
-    		
+
     		mbp = new MimeBodyPart();
     		mbp.setContent(msg.getMimeMessage(), "message/rfc822");
     		mbp.setHeader("Content-Disposition", "attachment");
     		mmp.addBodyPart(mbp, mmp.getCount());
-    		
+
     		mm.setContent(mmp);
     		mm.saveChanges();
-		
+
     		//directly bounce to local inbox
     		ParsedMessage pm = new ParsedMessage(mm, true);
     		addMessage(context, pm, Mailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
@@ -343,11 +345,11 @@ public class LocalMailbox extends DesktopMailbox {
 			OfflineLog.offline.warn("smtp: can't bounce failed send (" + id + ")" + msg.getSubject(), e);
 		}
     }
-    
+
     private boolean isAutoSyncDisabled(DataSource ds) {
         return ds.getSyncFrequency() <= 0;
     }
-    
+
     @Override
     public boolean isAutoSyncDisabled() {
     	try {
@@ -370,7 +372,7 @@ public class LocalMailbox extends DesktopMailbox {
     		OfflineLog.offline.error(x);
     	}
     }
-    
+
     private boolean isTimeToSync(DataSource ds) throws ServiceException {
     	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds) || !syncMan.retryOK(ds))
@@ -391,7 +393,7 @@ public class LocalMailbox extends DesktopMailbox {
         	    OfflineLog.offline.info(">>>>>>>> name=%s;version=%s;build=%s;release=%s;os=%s;type=%s",
         	    		ds.getAccount().getName(), OfflineLC.zdesktop_version.value(), OfflineLC.zdesktop_buildid.value(), OfflineLC.zdesktop_relabel.value(),
         	    		System.getProperty("os.name") + " " + System.getProperty("os.arch") + " " + System.getProperty("os.version"), ds.getType());
-            	
+
                 syncMan.syncStart(ds.getName());
                 importData(ds, isOnRequest);
                 syncMan.syncComplete(ds.getName());
@@ -420,19 +422,19 @@ public class LocalMailbox extends DesktopMailbox {
         	if (!ds.isSaveToSent()) {
         		folderIds.add(Mailbox.ID_FOLDER_SENT);
         	}
-        } 
+        }
         DataSourceManager.importData(ds, folderIds, fullSync);
     }
 
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
         if (lockMailboxToSync()) {
         	synchronized (syncLock) {
-        	
+
         	if (isOnRequest && isDebugTraceOn) {
         		OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
         		getOfflineAccount().setRequestScopeDebugTraceOn(true);
         	}
-        	
+
             try {
                 int count = sendPendingMessages(isOnRequest);
                 syncAllLocalDataSources(count > 0, isOnRequest);
