@@ -73,6 +73,13 @@ public final class LocalData {
         if (ds.isGmail()) return OfflineLog.gab;
         return OfflineLog.offline;
     }
+
+    public boolean hasLocalChanges() throws ServiceException {
+        SyncState ss = loadState();
+        int seq = ss.getLastModSequence();
+        return seq <= 0 || getModifiedContacts(seq).size() > 0 ||
+            getTombstones(seq, MailItem.TYPE_CONTACT).size() > 0;
+    }
     
     public Map<Integer, Change> getContactChanges(int seq)
         throws ServiceException {

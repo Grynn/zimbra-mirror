@@ -20,13 +20,18 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Log;
 
 import java.util.List;
 
 public class GabImport implements DataSource.DataImport {
     private final OfflineDataSource ds;
     private SyncSession session;
+
+    private static final Log LOG = OfflineLog.gab;
 
     private static final String ERROR = "Google address book synchronization failed";
 
@@ -40,6 +45,11 @@ public class GabImport implements DataSource.DataImport {
 
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
+         // Only sync contacts if full sync or there are local contact changes
+        if (!fullSync && !new LocalData(ds).hasLocalChanges()) {
+            return;
+        }
+        LOG.info("Importing contacts for account '%s'", ds.getName());
         ds.getMailbox().beginTrackingSync();
         if (session == null) {
             session = new SyncSession(ds);
@@ -50,5 +60,6 @@ public class GabImport implements DataSource.DataImport {
             SyncExceptionHandler.checkRecoverableException(ERROR, e);
             ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR, e);
         }
+        LOG.info("Finished importing contacts for account '%s'", ds.getName());
     }
 }

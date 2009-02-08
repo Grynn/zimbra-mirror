@@ -28,7 +28,7 @@ import java.util.LinkedHashMap;
 
 public class OfflineImapImport extends ImapSync {
     private static final int SYNC_INTERVAL =
-        OfflineLC.zdesktop_imap_fullsync_interval.intValue() * 60000;
+        OfflineLC.zdesktop_fullsync_interval.intValue() * 60000;
 
     private static final Map<String, Long> lastFullSyncTime =
          new LinkedHashMap<String, Long>() {
