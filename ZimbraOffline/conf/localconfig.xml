@@ -37,6 +37,9 @@
   <key name="zdesktop_installation_key">
     <value>@install_key@</value>
   </key>
+  <key name="zimbra_ldap_password">
+    <value>@install_key@</value>
+  </key>
   <key name="zimbra_class_accessmanager">
     <value>com.zimbra.cs.account.offline.OfflineAccessManager</value>
   </key>
