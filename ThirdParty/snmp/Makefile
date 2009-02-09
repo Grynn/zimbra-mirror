@@ -47,7 +47,7 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
 	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
-	--with-perl-modules="PREFIX=${PERL_DEST_DIR) LIB=$(PERL_DEST_LIB_DIR" \
+	--with-perl-modules="PREFIX=$(PERL_DEST_DIR) LIB=$(PERL_DEST_LIB_DIR)" \
 	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
 	sed -i .bak -e 's/-arch ppc//g' config.status; \
 	./config.status; \
@@ -60,7 +60,7 @@ else
 	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
 	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
-	--with-perl-modules="PREFIX=${PERL_DEST_DIR) LIB=$(PERL_DEST_LIB_DIR" \
+	--with-perl-modules="PREFIX=$(PERL_DEST_DIR) LIB=$(PERL_DEST_LIB_DIR)" \
 	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
 	$(MAKE) ; $(MAKE) install)
 	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
