@@ -362,12 +362,6 @@ function () {
 			for(var ix=0; ix < tmpObjCnt; ix++) {
 				try {
 					if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]) {
-						/*if(!AjxUtil.EMAIL_SHORT_RE.test(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix])) {
-							//show error msg
-							this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_ALIAS_INVALID,[tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-							this._errorDialog.popup();		
-							break;						
-						}*/
 						if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix].indexOf("@") != tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix].lastIndexOf("@")) {
 							//show error msg
 							this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_ALIAS_INVALID,[tmpObj.attrs[ZaAccount.A_zimbraMailAlias][ix]]), null, DwtMessageDialog.CRITICAL_STYLE, null);

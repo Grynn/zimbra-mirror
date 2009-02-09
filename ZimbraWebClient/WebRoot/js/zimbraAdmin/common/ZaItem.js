@@ -36,7 +36,6 @@ ZaItem.createMethods = new Object();
 ZaItem.removeMethods = new Object();
 
 ZaItem.ACCOUNT = "account";
-//ZaItem.DL = "distributionlist";
 ZaItem.DL = "dl";
 ZaItem.ALIAS = "alias";
 ZaItem.RESOURCE = "calresource";

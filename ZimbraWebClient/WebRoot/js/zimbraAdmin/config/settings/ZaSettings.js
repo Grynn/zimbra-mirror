@@ -306,6 +306,12 @@ ZaSettings.ACCOUNTS_INTEROP_TAB = "accountsInteropTab";
 ZaSettings.ACCOUNTS_SKIN_TAB = "accountsSkinTab";
 ZaSettings.ACCOUNTS_ZIMLET_TAB = "accountsZimletTab";
 
+//Distribution list view tabs
+ZaSettings.DL_MEMBERS_TAB = "dlMembersTab";
+ZaSettings.DL_ALIASES_TAB = "dlAliasesTab";
+ZaSettings.DL_MEMBEROF_TAB = "dlMemberOfTab";
+ZaSettings.DL_NOTES_TAB = "dlMemberOfTab";
+
 //Miscelaneous operations
 ZaSettings.SAVE_SEARCH = "saveSearch";
 

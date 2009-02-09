@@ -120,22 +120,6 @@ function(openInNewTab, ev) {
 	}
 }
 
-/**
-* This method handles "save" button click
-* member of ZaDLController
-* @param 	ev event object
-**/
-ZaDLController.prototype.saveButtonListener =
-function(ev) {
-	try {
-		this._saveChanges();
-		EmailAddr_XFormItem.resetDomainLists.call (this) ;
-	} catch (ex) {
-		this._handleException(ex, "ZaXFormViewController.prototype.saveButtonListener", null, false);
-	}
-	return;
-}
-
 //private and protected methods
 ZaDLController.prototype._createUI = 
 function () {
@@ -328,12 +312,9 @@ ZaDLController.prototype.saveChangesCallback = function (obj, resp) {
 }
 
 ZaDLController.prototype._saveChanges = function () {
-	//reset the alias arr value
-	this._addAliasArr = [] ;
-	this._removeAliasArr = [];
-	
 	var retval = false;
 	var newName = null;
+	var obj;
 	try { 
 		if(this._view.getMyForm().hasErrors()) {
 			var errItems = this._view.getMyForm().getItemsInErrorState();
@@ -372,119 +353,46 @@ ZaDLController.prototype._saveChanges = function () {
 			this.popupMsgDialog(dlgMsg, true);
 			return false;
 		}
-		var obj = this._view.getObject();
+		obj = this._view.getObject();
 			
 		if(!ZaDistributionList.checkValues(obj))
 			return retval;
 		
-		//generate add-remove aliases obj and execute in the call back
-		var tmpObjCnt = -1;
-		var currentObjCnt = -1;
-		
-		if(obj.attrs[ZaAccount.A_zimbraMailAlias]) {
-			if(typeof obj.attrs[ZaAccount.A_zimbraMailAlias] == "string") {
-				var tmpStr = obj.attrs[ZaAccount.A_zimbraMailAlias];
-				obj.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
-				obj.attrs[ZaAccount.A_zimbraMailAlias].push(tmpStr);
-			}
-			tmpObjCnt = obj.attrs[ZaAccount.A_zimbraMailAlias].length - 1;
-		}
-		
-		if(this._currentObject.attrs[ZaAccount.A_zimbraMailAlias]) {
-			if(typeof this._currentObject.attrs[ZaAccount.A_zimbraMailAlias] == "string") {
-				var tmpStr = this._currentObject.attrs[ZaAccount.A_zimbraMailAlias];
-				this._currentObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
-				this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].push(tmpStr);
-			}
-			currentObjCnt = this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].length - 1;
-		}
-	
-		//diff two arrays
-		for(var tmpIx=tmpObjCnt; tmpIx >= 0; tmpIx--) {
-			for(var currIx=currentObjCnt; currIx >=0; currIx--) {
-				if(obj.attrs[ZaAccount.A_zimbraMailAlias][tmpIx] == this._currentObject.attrs[ZaAccount.A_zimbraMailAlias][currIx]) {
-					//this alias already exists
-					obj.attrs[ZaAccount.A_zimbraMailAlias].splice(tmpIx,1);
-					this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].splice(currIx,1);
-					break;
-				}
-			}
-		}
-		//remove the aliases 
-		if(currentObjCnt != -1) {
-			currentObjCnt = this._currentObject.attrs[ZaAccount.A_zimbraMailAlias].length;
-		} 
-	
-		for(var ix=0; ix < currentObjCnt; ix++) {
-			this._removeAliasArr.push(this._currentObject.attrs[ZaAccount.A_zimbraMailAlias][ix]);
-		}
-		
-		if(tmpObjCnt != -1) {
-			tmpObjCnt = obj.attrs[ZaAccount.A_zimbraMailAlias].length;
-		}
-
-		for(var ix=0; ix < tmpObjCnt; ix++) {
-			if(obj.attrs[ZaAccount.A_zimbraMailAlias][ix]) {
-				this._addAliasArr.push(obj.attrs[ZaAccount.A_zimbraMailAlias][ix]) ;
-			}
-		}	
-		
-		//check if need to rename
-		if(this._currentObject && obj.name != this._currentObject.name && this._currentObject.id) {
-
-				newName = obj.name;
-		}		
-		
-		//check if need to rename
-		if(newName) {
-			try {
-				this._currentObject.rename(newName);
-			} catch (ex) {
-				if(ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
-					this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
-				} else {
-					this._handleException(ex, "ZaDLController.prototype._saveChanges", null, false);	
-				}
-				return retval;
-			}
-		}		
-		
 		if (this._currentObject.id){
-			this.getProgressDialog().setProgress({numTotal:100,numDone:0,progressMsg:"Saving changes. Please wait..."})
-			this.getProgressDialog().popup();			
-			this.getProgressDialog().enableOk(false);			
-			this._totalToAdd = obj._addList.size();
-			this._totalToRemove = obj._removeList.size();			
-			this._currentObject.modify(obj,new AjxCallback(this, this.saveChangesCallback,obj ));
-			
-			return true;			
+
+			this._currentObject.modify(obj);
+			//check if need to rename
+			if(this._currentObject && obj.name != this._currentObject.name && this._currentObject.id) {
+				newName = obj.name;
+			}		
+					
+			//check if need to rename
+			if(newName) {
+				try {
+					this._currentObject.rename(newName);
+				} catch (ex) {
+					if(ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
+						this.popupErrorDialog(ZaMsg.FAILED_RENAME_DL_1, ex, true);
+					} else {
+						this.popupErrorDialog(ZaMsg.FAILED_RENAME_DL, ex, true);	
+					}
+					return retval;
+				}
+			}				
 		} else {
-			this.getProgressDialog().setProgress({numTotal:100,numDone:0,progressMsg:"Saving changes. Please wait..."})
-			this.getProgressDialog().popup();			
-			this.getProgressDialog().enableOk(false);			
-			this._totalToAdd = obj._addList.size();
-			this._totalToRemove = obj._removeList.size();				
-			ZaDistributionList.create(obj,new AjxCallback(this, this.saveChangesCallback,obj ));
-			return true;
+			this._currentObject = ZaItem.create(obj,ZaDistributionList,"ZaDistributionList");
+			//this._currentObject.id = dl.id;
 		}
+				
+		//save changed fields
 	} catch (ex) {
-		var handled = false;
-		if (ex.code == ZmCsfeException.SVC_FAILURE) {
-			// TODO -- make this a ZaMsg, and grab the member name out of the exception message.
-			//
-			if (ex.msg.indexOf("add failed") != -1){
-				var m = ex.msg.replace(/system failure: /, "");
-				this.popupErrorDialog(m, ex, true);		
-				handled = true;
-			}
-		} else if (ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
-			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.DLXV_ErrorDistributionListExists,[dl.name]), ex, true);		
-			handled = true;
-		}
-		if (!handled) {
-			this._handleException(ex, "ZaDLController.prototype._saveChanges", null, false);
+		if(ex.code == ZmCsfeException.ACCT_EXISTS || ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
+			this.popupErrorDialog(ZaMsg.ERROR_dlWithThisNameExists, ex, true);
+		} else {
+			this._handleException(ex, "ZaDLController.prototype._saveChanges", null, false);	
 		}
 		return false;
-	}
+	}		
+	return true;
 };
 

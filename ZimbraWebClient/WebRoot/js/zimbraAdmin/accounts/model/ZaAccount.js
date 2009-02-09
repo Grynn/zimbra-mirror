@@ -713,7 +713,6 @@ function (tmpObj, account) {
 		return null;
 	}
 	
-	//account.initFromDom(resp.firstChild);
 	account.initFromJS(resp.account[0]);		
 	//add aliases
 	if(tmpObj.attrs[ZaAccount.A_zimbraMailAlias].length) {

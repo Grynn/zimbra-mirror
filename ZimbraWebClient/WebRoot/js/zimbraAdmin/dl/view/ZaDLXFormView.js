@@ -114,12 +114,15 @@ function (ev) {
 **/
 ZaDLXFormView.removeAllMembers = function(event) {
 	var form = this.getForm();
-	var tmpRemoveArray = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList);
-	tmpRemoveArray._version = tmpRemoveArray._version+1;
-	var tmpAddArray = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList);
-	//form.getInstance().removeAllMembers();
-	//form.parent.setDirty(true);
-	//form.refresh();
+	
+	var tmpRemoveArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList),
+		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList));
+	tmpRemoveArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList)._version+1;
+	
+
+	this.setInstanceValue([], ZaDistributionList.A2_addList);
+	this.setInstanceValue([], ZaDistributionList.A2_memberList);
+	this.setInstanceValue(tmpRemoveArray, ZaDistributionList.A2_removeList);
 };
 
 /**
@@ -134,6 +137,18 @@ ZaDLXFormView.removeMembers = function(event) {
 	
 	tmpMembersArray._version = tmp._version + 1;
 	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);	
+	
+	var tmp2 = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList);
+	var tmpMembersArray2 = AjxUtil.arraySubstract(tmp2,
+		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
+	
+	tmpAddArray._version = tmp2._version + 1;
+	this.setInstanceValue(tmpAddArray, ZaDistributionList.A2_addList);	
+	
+	var tmpRemoveArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList),
+		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList));	
+	tmpRemoveArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList)._version+1;
+	this.setInstanceValue(tmpRemoveArray, ZaDistributionList.A2_removeList);
 };
 
 /**
@@ -299,23 +314,6 @@ ZaDLXFormView.shouldEnableMemBackButton = function () {
 };
 
 /**
-* method of the XForm
-**/
-ZaDLXFormView.addListToMemberList = function (list) {
-	/*if (this.getInstance().addMembers(list)) {
-		this.refresh();
-	}*/
-	//add to member list
-	//add to add list
-	//remove from remove list
-	
-	//this.getItemsById(ZaDistributionList.A2_members )[0].widget.setSelectedItems(list);
-	//this.getItemsById('removeButton')[0].widget.setEnabled(true);
-	
-	this.parent.setDirty(true);
-};
-
-/**
  * method of an XFormItem
  * Currently, this manages the data, redraws the whole list, and then sets 
  * the selection. 
@@ -324,8 +322,6 @@ ZaDLXFormView.addListToMemberList = function (list) {
  */
 ZaDLXFormView.addAddressesToMembers = function (event) {
  	var form = this.getForm();
-	//var memberPoolSelection = ZaDLXFormView.getMemberPoolSelection.call(form);
-	//ZaDLXFormView.addListToMemberList.call(form, memberPoolSelection);
 	var tmpAddArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList),
 		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberPoolSelected));
 	
@@ -393,7 +389,6 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 			members.push(new ZaDistributionListMember(tmpval));
 		}
 	}
-	//ZaDLXFormView.addListToMemberList.call(form, members);
 	var tmpMembersArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList),
 		members,ZaDistributionList.compareTwoMembers);
 	
@@ -444,17 +439,17 @@ function (entry) {
 	this._containedObject[ZaDistributionList.A2_memNumPages] = 1;
 	this._containedObject[ZaDistributionList.A2_query] = "";
 	//membership related instance variables
-	this._containedObject[ZaAccount.A2_memberOf] = {}
-	this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_directMemberList] = [];
-	this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_indirectMemberList] = [];
-	this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_nonMemberList] = [];
+	this._containedObject[ZaAccount.A2_memberOf] = entry[ZaAccount.A2_memberOf];
+	//this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_directMemberList] = [];
+	//this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_indirectMemberList] = [];
+	//this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_nonMemberList] = [];
 
-	this._containedObject[ZaAccount.A2_directMemberList + "_more"] = 0;
-	this._containedObject[ZaAccount.A2_directMemberList + "_offset"] = 0;
-	this._containedObject[ZaAccount.A2_indirectMemberList + "_more"] = 0;
-	this._containedObject[ZaAccount.A2_indirectMemberList + "_offset"] = 0;	
-	this._containedObject[ZaAccount.A2_nonMemberList + "_more"] = 0;
-	this._containedObject[ZaAccount.A2_nonMemberList + "_offset"] = 0;
+	this._containedObject[ZaAccount.A2_directMemberList + "_more"] = entry[ZaAccount.A2_directMemberList + "_more"];
+	this._containedObject[ZaAccount.A2_directMemberList + "_offset"] = entry[ZaAccount.A2_directMemberList + "_offset"];
+	this._containedObject[ZaAccount.A2_indirectMemberList + "_more"] = entry[ZaAccount.A2_indirectMemberList + "_more"];
+	this._containedObject[ZaAccount.A2_indirectMemberList + "_offset"] = entry[ZaAccount.A2_indirectMemberList + "_offset"];	
+	this._containedObject[ZaAccount.A2_nonMemberList + "_more"] = entry[ZaAccount.A2_nonMemberList + "_more"];
+	this._containedObject[ZaAccount.A2_nonMemberList + "_offset"] = entry[ZaAccount.A2_nonMemberList + "_offset"];
 
 	//dl.isgroup = this.isgroup ;
 	

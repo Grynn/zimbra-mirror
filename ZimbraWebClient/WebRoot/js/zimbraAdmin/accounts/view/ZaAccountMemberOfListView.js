@@ -533,7 +533,7 @@ function (item, offset){
 			//xform.setInstance(curInstance) ;
 //			xform.refresh();
 		}catch (ex){
-			ZaApp.getInstance.getCurrentController()._handleException(
+			ZaApp.getInstance().getCurrentController()._handleException(
 				ex, "ZaAccountMemberOfListView.prototype.srchButtonHndlr");
 		}	
 	}
