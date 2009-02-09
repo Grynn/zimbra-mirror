@@ -111,6 +111,7 @@ allclean:
 	rm -rf $(ZIMBRA_HOME)/conf
 	rm -rf $(ZIMBRA_HOME)/log
 	rm -rf $(ZIMBRA_HOME)/zimbramon
+	rm -rf $(ZIMBRA_HOME)/data
 
 mysql: force
 	(cd $@; $(MAKE) > $(LOGFILE).$$ 2>&1)
