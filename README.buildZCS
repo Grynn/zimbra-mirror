@@ -1,0 +1,32 @@
+How to build 3rd party for Zimbra.
+
+If this is a new platform, edit ZimbraBuild/rpmconf/Build/get_plat_tag.sh
+and add the appropriate function to add a new tag for your platform.  Edit
+the Makefiles in the ThirdParty/* directories as appropriate for build
+options for your new platform.  If your platform already includes pcre,
+popt, and expat, make sure to add the appropriate lines so that building
+those pieces of software gets skipped.
+
+If you have added a platform tag to get_plat_tag.sh, update the
+buildThirdParty.sh script appropriately for setting the Perl library
+paths.
+
+Make sure the "zimbra" user exists in /etc/passwd
+Make sure the "zimbra" group exists in /etc/group
+
+Make sure that the p4 binary is in your path.
+
+It is also be required to update the Perl Mirror in:
+ThirdParty/Perl/MyConfig.pm.template
+
+Then, in the ThirdParty directory, run:
+./buildThirdParty.sh  (NOTE: This script will remove the contents of /opt/zimbra.  If you
+want it preserved, rename it prior to running).
+
+The 1.5 Java JDK must also be installed into /usr/local/java, so that the binary is:
+/usr/local/java/bin/java
+
+Ant must be installed in /usr/local/ant, so that the binary is:
+/usr/local/ant/bin/ant
+
+These must be installed prior to building, or the builds will fail.
