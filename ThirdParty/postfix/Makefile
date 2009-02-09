@@ -67,6 +67,11 @@ ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	FD_SIZE := -DFD_SETSIZE=32768
 endif
 
+INSTALL_PARMS := install_root=/../
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
+	INSTALL_PARMS := install_root=/../ setgid_group=_postdrop mail_owner=_postfix
+endif
+
 all: allclean build install tar
 
 build:
@@ -108,19 +113,11 @@ build:
 	LD_RUN_PATH=$(LD_RUN_PATH) $(MAKE) $(MAKEARGS);)
 
 install:
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	(cd postfix-$(POSTFIX_VERSION); \
-	$(SHELL) postfix-install -non-interactive  setgid_group=_postdrop mail_owner=_postfix; \
-	cp auxiliary/qshape/qshape.pl $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin; \
-	chmod a+rx $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin/qshape.pl;)
-	(cd $(ZIMBRA_HOME); ln -s postfix-$(POSTFIX_VERSION) postfix)
-else
-	(cd postfix-$(POSTFIX_VERSION); \
-	$(MAKE) upgrade; \
+	 $(MAKE) non-interactive-package $(INSTALL_PARMS); \
 	cp auxiliary/qshape/qshape.pl $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin;\
 	chmod a+rx $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION)/sbin/qshape.pl;)
 	(cd $(ZIMBRA_HOME); ln -s postfix-$(POSTFIX_VERSION) postfix)
-endif
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix
