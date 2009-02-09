@@ -135,7 +135,7 @@ DwtListView.ROW_CLASS_EVEN			= "RowOdd";
 // property names for row DIV to store styles
 DwtListView._STYLE_CLASS				= "_sc";
 DwtListView._SELECTED_STYLE_CLASS		= "_ssc";
-DwtListView._SELECTED_DIS_STYLE_CLASS	= "_sdsc"
+DwtListView._SELECTED_DIS_STYLE_CLASS	= "_sdsc";
 DwtListView._KBFOCUS_CLASS				= "_kfc";
 
 
@@ -358,19 +358,20 @@ function() {
 * Creates a list view out of the given vector of items. The derived class should override _createItemHtml()
 * in order to display an item.
 *
-* @param list	a vector of items (AjxVector)
-* @param defaultColumnSort	default column field to sort (optional)
+* @param list				[AjxVector]	a vector of items
+* @param defaultColumnSort	[Integer]	default column field to sort (optional)
+* @param noResultsOk		[boolean]*	if true, don't show "No Results" for empty list
 */
 DwtListView.prototype.set =
-function(list, defaultColumnSort) {
+function(list, defaultColumnSort, noResultsOk) {
 	if (this._selectedItems) {
 		this._selectedItems.removeAll();
 	}
 	this.sortingEnabled = true;
 	this._resetList();
 	this._list = list;
-	this.setUI(defaultColumnSort);
-}
+	this.setUI(defaultColumnSort, noResultsOk);
+};
 
 /**
 * Renders the list view using the current list of items.
@@ -485,17 +486,6 @@ function(item, skipNotify) {
 	}
 };
 
-DwtListView.prototype.removeLastItem =
-function(skipNotify) {
-	var last = this._list.get(this._list.size() - 1);
-	this._list.remove(last);
-	this._parentEl.removeChild(this._getElFromItem(last));
-
-	if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
-		this._evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
-	}
-};
-
 DwtListView.prototype.redrawItem =
 function(item) {
     var odiv = this._getElFromItem(item);
@@ -517,32 +507,32 @@ function(item) {
 DwtListView.prototype.addSelectionListener =
 function(listener) {
 	this._evtMgr.addListener(DwtEvent.SELECTION, listener);
-}
+};
 
 DwtListView.prototype.removeSelectionListener =
 function(listener) {
 	this._evtMgr.removeListener(DwtEvent.SELECTION, listener);
-}
+};
 
 DwtListView.prototype.addActionListener =
 function(listener) {
 	this._evtMgr.addListener(DwtEvent.ACTION, listener);
-}
+};
 
 DwtListView.prototype.removeActionListener =
 function(listener) {
 	this._evtMgr.removeListener(DwtEvent.ACTION, listener);
-}
+};
 
 DwtListView.prototype.addStateChangeListener =
 function(listener) {
 	this._evtMgr.addListener(DwtEvent.STATE_CHANGE, listener);
-}
+};
 
 DwtListView.prototype.removeStateChangeListener =
 function(listener) {
 	this._evtMgr.removeListener(DwtEvent.STATE_CHANGE, listener);
-}
+};
 
 DwtListView.prototype.removeAll =
 function(skipNotify) {
@@ -553,14 +543,14 @@ function(skipNotify) {
 	if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
 	}
-}
+};
 
 DwtListView.prototype.deselectAll =
 function() {
 	var a = this._selectedItems.getArray();
 	var sz = this._selectedItems.size();
 	for (var i = 0; i < sz; i++) {
-        Dwt.delClass(a[i], this._styleRe);		// , this._normalClass);  MOW
+        Dwt.delClass(a[i], this._styleRe);
     }
     this._selectedItems.removeAll();
 	this._selAnchor = null;
@@ -987,23 +977,23 @@ function(row, index) {
 	// bug fix #1894 - check for childNodes length otherwise IE barfs
 	var len = this._parentEl.childNodes.length;
 
-    var odd = Boolean((index != null ? index : len) % 2);
-    var oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
-    var nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
-    Dwt.delClass(row, oclass, nclass)
+	var odd = Boolean((index != null ? index : len) % 2);
+	var oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
+	var nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
+	Dwt.delClass(row, oclass, nclass);
 
-    if (index != null && len > 0 && index != len) {
-        var childNodes = this._parentEl.childNodes;
-        this._parentEl.insertBefore(row, childNodes[index]);
-        var sibling = row.nextSibling;
-        while (sibling) {
-            odd = !odd;
-            oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
-            nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
-            Dwt.delClass(sibling, oclass, nclass)
-            sibling = sibling.nextSibling;
-        }
-    } else {
+	if (index != null && len > 0 && index != len) {
+		var childNodes = this._parentEl.childNodes;
+		this._parentEl.insertBefore(row, childNodes[index]);
+		var sibling = row.nextSibling;
+		while (sibling) {
+			odd = !odd;
+			oclass = odd ? DwtListView.ROW_CLASS_ODD : DwtListView.ROW_CLASS_EVEN;
+			nclass = odd ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
+			Dwt.delClass(sibling, oclass, nclass);
+			sibling = sibling.nextSibling;
+		}
+	} else {
 		this._parentEl.appendChild(row);
 	}
 };
@@ -1400,7 +1390,7 @@ function(dragOp) {
 
 	Dwt.setZIndex(icon, Dwt.Z_DND);
 	return icon;
-}
+};
 
 DwtListView.prototype._setDragProxyState =
 function(dropAllowed) {
@@ -1434,7 +1424,7 @@ function() {
 DwtListView.prototype._clearRightSel =
 function() {
 	if (this._rightSelItem) {
-        Dwt.delClass(this._rightSelItem, this._styleRe);	// , this._normalClass MOW
+		Dwt.delClass(this._rightSelItem, this._styleRe);	// , this._normalClass MOW
 		this._rightSelItem = null;
 	}
 };
@@ -1447,7 +1437,7 @@ function(item) {
 DwtListView.prototype._getElFromItem =
 function(item) {
 	return Dwt.byId(this._getItemId(item));
-}
+};
 
 // returns the index of the given item based on the position of the row
 // in this list view that represents it
@@ -1634,7 +1624,7 @@ function(ev) {
 };
 
 DwtListView.prototype._doubleClickAction =
-function(mouseEv, div) {return true;}
+function(mouseEv, div) {return true;};
 
 DwtListView.prototype._doubleClickListener =
 function(ev) {
@@ -1785,7 +1775,10 @@ function(clickedEl, ev) {
 
 		if (ev.button == DwtMouseEvent.LEFT) {
 			this._itemSelected(clickedEl, ev);
-		} else if (ev.button == DwtMouseEvent.RIGHT && !bContained) {
+		}
+		else if (ev.button == DwtMouseEvent.RIGHT && !bContained &&
+				this._evtMgr.isListenerRegistered(DwtEvent.ACTION))
+		{
 			// save right click selection
 			this._rightSelItem = clickedEl;
             Dwt.delClass(clickedEl, this._styleRe, this._rightClickClass);
