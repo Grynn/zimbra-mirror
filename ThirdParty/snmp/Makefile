@@ -10,6 +10,9 @@ APP_VERSION ?= 5.4.2.1
 APP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/snmp/$(APP_NAME)-$(APP_VERSION).tgz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/$(APP_NAME)-$(APP_VERSION)
 
+PERL_DEST_DIR=$(APP_ROOT)/../Perl/zimbramon
+PERL_DEST_LIB_DIR=$(PERL_DEST_DIR)/lib
+
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
@@ -44,6 +47,7 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
 	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
+	--with-perl-modules="PREFIX=${PERL_DEST_DIR) LIB=$(PERL_DEST_LIB_DIR" \
 	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
 	sed -i .bak -e 's/-arch ppc//g' config.status; \
 	./config.status; \
