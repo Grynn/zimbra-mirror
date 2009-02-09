@@ -374,7 +374,6 @@ ZaItem.prototype.load = function (by, val, skipRights, expandDefaults) {
 	//Instrumentation code end
 }
 
-
 ZaItem.prototype.modify = function (mods) {
 	//Instrumentation code start
 	if(ZaItem.modifyMethods[this._iKeyName]) {
@@ -731,3 +730,68 @@ ZaItem.normalizeMultiValueAttr = function (entry, attrName) {
     }
 }
 
+/**
+ * Method of XFormItem
+ */
+ZaItem.hasReadPermission = function (refToCheck) {
+	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsSystemAdminAccount] == 'TRUE')
+		return true;
+	
+	var instance = this.getInstance();
+	if (!instance.getAttrs)
+		return false;
+	
+	var refPath=null;
+	if(refToCheck) {
+		refPath=refToCheck;
+	} else {
+		if(!this.refPath)
+			return true;
+		else
+			refPath=this.refPath;
+	}
+		
+	return ((instance.getAttrs.all === true) || (instance.getAttrs[refPath] === true));
+}
+XFormItem.prototype.hasReadPermission = ZaItem.hasReadPermission;
+/**
+ * Method of XFormItem
+ */
+ZaItem.hasWritePermission = function (refToCheck) {
+	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsSystemAdminAccount] == 'TRUE')
+		return true;
+	
+	var instance = this.getInstance();
+	if (!instance.setAttrs)
+		return false;
+	
+	var refPath=null;
+	if(refToCheck) {
+		refPath=refToCheck;
+	} else {
+		if(!this.refPath)
+			return true;
+		else
+			refPath=this.refPath;
+	}
+		
+	return ((instance.setAttrs.all === true) || (instance.setAttrs[refPath] === true));
+}
+XFormItem.prototype.hasWritePermission = ZaItem.hasWritePermission;
+/**
+ * Method of XFormItem
+ */
+ZaItem.hasRight = function (right) {
+	if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsSystemAdminAccount] == 'TRUE')
+		return true;
+		
+	var instance = this.getInstance();
+	if (!instance.rights)
+		return false;
+	
+	if(!right)
+		return true;
+		
+	return (instance.rights[right] === true);
+}
+XFormItem.prototype.hasRight = ZaItem.hasRight;
