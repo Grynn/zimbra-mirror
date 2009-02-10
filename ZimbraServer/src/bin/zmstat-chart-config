@@ -512,7 +512,7 @@ sub mailboxdConfig() {
          infile="$soapCsv"
          outfile="${ZIMBRA_HOSTNAME}_soap_call_count.png"
          yAxis="calls/min">
-    <groupplot data="exec_count" groupBy="command" aggregateFunction="max"/>
+    <groupplot data="exec_count" ignore="BackupRequest" groupBy="command" aggregateFunction="max"/>
   </chart>
   
   <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Average Call Duration: Summary (Top 10 avg)"
@@ -523,7 +523,7 @@ sub mailboxdConfig() {
          infile="$soapCsv"
          outfile="${ZIMBRA_HOSTNAME}_soap_avg_duration.png"
          yAxis="ms avg">
-    <groupplot data="exec_ms_avg" groupBy="command"/>
+    <groupplot data="exec_ms_avg" ignore="BackupRequest" groupBy="command"/>
   </chart>
   <chart title="Host $ZIMBRA_HOSTNAME: SOAP: Invocation Count: %s"
          category="soap"
