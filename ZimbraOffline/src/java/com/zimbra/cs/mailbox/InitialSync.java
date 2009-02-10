@@ -571,7 +571,7 @@ public class InitialSync {
         ACL acl = new ACL();
         for (Element eGrant : eAcl.listElements(MailConstants.E_GRANT)) {
             short rights = ACL.stringToRights(eGrant.getAttribute(MailConstants.A_RIGHTS));
-            byte gtype = FolderAction.stringToType(eGrant.getAttribute(MailConstants.A_GRANT_TYPE));
+            byte gtype = ACL.stringToType(eGrant.getAttribute(MailConstants.A_GRANT_TYPE));
             String zid = eGrant.getAttribute(MailConstants.A_ZIMBRA_ID, null);
             String name = eGrant.getAttribute(MailConstants.A_DISPLAY, null);
             String secret = null;
