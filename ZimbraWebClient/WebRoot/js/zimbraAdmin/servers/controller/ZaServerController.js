@@ -39,6 +39,7 @@ ZaServerController.prototype.constructor = ZaServerController;
 
 ZaController.initToolbarMethods["ZaServerController"] = new Array();
 ZaController.setViewMethods["ZaServerController"] = new Array();
+ZaController.changeActionsStateMethods["ZaServerController"] = new Array();
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"] = new Array();
 /**
 *	@method show
@@ -52,6 +53,11 @@ function(entry) {
 	}
 }
 
+ZaServerController.changeActionsStateMethod = function () {
+	if(this._toolbarOperations[ZaOperation.SAVE])
+		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+}
+ZaController.changeActionsStateMethods["ZaServerController"].push(ZaServerController.changeActionsStateMethod);
 
 ZaServerController.prototype.setEnabled = 
 function(enable) {

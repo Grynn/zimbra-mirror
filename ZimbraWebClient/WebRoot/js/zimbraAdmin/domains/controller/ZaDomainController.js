@@ -39,6 +39,7 @@ ZaDomainController.prototype.constructor = ZaDomainController;
 ZaController.changeActionsStateMethods["ZaDomainController"] = new Array();
 ZaController.initToolbarMethods["ZaDomainController"] = new Array();
 ZaController.setViewMethods["ZaDomainController"] = new Array();
+ZaController.changeActionsStateMethods["ZaDomainController"] = new Array();
 /**
 *	@method show
 *	@param entry - isntance of ZaDomain class
@@ -50,6 +51,12 @@ function(entry) {
 		this._setView(entry, true);
 	}
 }
+
+ZaDomainController.changeActionsStateMethod = function () {
+	if(this._toolbarOperations[ZaOperation.SAVE])
+		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+}
+ZaController.changeActionsStateMethods["ZaDomainController"].push(ZaDomainController.changeActionsStateMethod);
 
 /**
 * @method initToolbarMethod

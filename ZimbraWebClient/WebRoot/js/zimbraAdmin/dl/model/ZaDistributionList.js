@@ -59,7 +59,7 @@ ZaDistributionList.A2_members = "members";
 ZaDistributionList.A2_memberList = "memberList";
 ZaDistributionList.A2_origList = "origList";
 ZaDistributionList.A2_addList = "addList";
-ZaDistributionList.A2_removeList = "addList";
+ZaDistributionList.A2_removeList = "removeList";
 ZaDistributionList.A2_query = "query";
 ZaDistributionList.A2_pagenum = "pagenum";
 ZaDistributionList.A2_poolPagenum = "poolPagenum";
@@ -77,6 +77,7 @@ ZaDistributionList.A2_indirectMemberSelected = "indirectMemberSelected";
 ZaDistributionList.A2_directMemberList = "directMemberList";
 ZaDistributionList.A2_indirectMemberList = "indirectMemberList";
 ZaDistributionList.A2_nonMemberList = "nonMemberList";
+ZaDistributionList.A2_alias_selection_cache = "alias_selection_cache";
 ZaDistributionList._dlStatus = {
 	enabled  : ZaMsg.DL_Status_enabled ,
 	disabled : ZaMsg.DL_Status_disabled
@@ -99,47 +100,6 @@ ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,"
 // ==============================================================
 // public methods
 // ==============================================================
-
-ZaDistributionList.prototype.clone = function () {
-	var memberList;
-	if(this[ZaDistributionList.A2_memberList]) {
-		memberList = this[ZaDistributionList.A2_memberList];
-	}
-	var dl = new ZaDistributionList( this.id, this.name, null, this.description, this.notes);
- 	if (memberList != null) {
- 		dl[ZaDistributionList.A2_memberList] = new Array();
- 		for (var i = 0 ; i < memberList.length; ++i) {
- 			dl[ZaDistributionList.A2_memberList].push(memberList[i]);
- 		}
- 		dl[ZaDistributionList.A2_origList] = new AjxVector();
- 		for (var i = 0 ; i < memberList.length; ++i) {
- 			dl[ZaDistributionList.A2_origList].add(memberList[i]);
- 		}
- 	} 
-	var val, tmp;
-	for (key in this.attrs) {
-		val = this.attrs[key];
-		if (AjxUtil.isArray(val)){
-			tmp = new Array();
-			for (var i = 0; i < val.length; ++i){
-				tmp[i] = val[i];
-			}
-			val = tmp;
-		}
-		dl.attrs[key] = val;
-	}
-	dl.pagenum = this.pagenum;
-	dl.query = this.query;
-	dl.poolPagenum = this.poolPagenum;
-	dl.poolNumPages = this.poolNumPages;
-	dl.memPagenum = this.memPagenum;
-	dl.memNumPages = this.memNumPages;	
-	//dl.isgroup = this.isgroup ;
-	
-	//clone the membership information
-	dl[ZaAccount.A2_memberOf] = this [ZaAccount.A2_memberOf];	
-	return dl;
-};
 
 /**
  * Removes a list of members
@@ -480,7 +440,7 @@ ZaDistributionList.addRemoveAliases = function (obj) {
 }
 ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.addRemoveAliases);
 
-ZaDistributionList.addAliases = function (obj) {
+ZaDistributionList.addAliases = function (obj, dl) {
 	//add-remove aliases
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(obj.attrs[ZaAccount.A_zimbraMailAlias]) {
@@ -692,15 +652,17 @@ ZaDistributionList.prototype.getMembers = function (by, val, limit) {
 			this.memNumPages = Math.ceil(this.numMembers/limit);
 			var len = members ? members.length : 0;
 			if (len > 0) {
-				this._memberList = new AjxVector();
-				this._origList = new AjxVector();
+				this[ZaDistributionList.A2_memberList] = new Array();
+				this[ZaDistributionList.A2_origList] = new Array();
+				//this._memberList = new AjxVector();
+				//this._origList = new AjxVector();
 				for (var i =0; i < len; ++i) {
 					var mem = new ZaDistributionListMember(members[i]._content);
-					this._memberList.add(mem);
-					this._origList.add(mem);
+					this[ZaDistributionList.A2_memberList].push(mem);
+					this[ZaDistributionList.A2_origList].push(mem);
 				}
-				this._memberList.sort();
-				this._origList.sort();
+				this[ZaDistributionList.A2_memberList].sort();
+				this[ZaDistributionList.A2_origList].sort();
 			}
 			this.id = resp.dl[0].id;
 			this.initFromJS(resp.dl[0]);
@@ -716,20 +678,13 @@ ZaDistributionList.prototype.getMembers = function (by, val, limit) {
 			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
 			//DBG.dumpObj(ex);
 		}
-	} else if (this._memberList == null){
-		this._memberList = new AjxVector();
+	} else if (this[ZaDistributionList.A2_memberList] == null){
+		this[ZaDistributionList.A2_memberList] = new Array();
 	}
-	return this._memberList;
+	return this[ZaDistributionList.A2_memberList];
 };
 
 ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getMembers) ;
-
-ZaDistributionList.prototype.getMembersArray = function () {
-	if (this._memberList != null){
-		return this._memberList.getArray();
-	}
-	return [];
-};
 
 // ==============================================================
 // private internal methods
@@ -983,30 +938,7 @@ ZaDistributionListMember.prototype.toString = function () {
 
 
 ZaDistributionList.myXModel = {
-	getMemberPool: function (model, instance) {
-		return instance.memberPool;
-	},
-	setMemberPool: function (value, instance, parentValue, ref) {
-		instance.memberPool = value;
-	},
-	// transform a vector into something the list view will be 
-	// able to handle
-	getMembersArray: function (model, instance) {
-		var arr = instance.getMembersArray();
-		var tmpArr = new Array();
-		var tmp;
-		for (var i = 0; i < arr.length; ++i ){
-			tmp = arr[i];
-			if (!AjxUtil.isObject(arr[i])){
-				tmp = new ZaDistributionListMember(arr[i]);
-			}
-			tmpArr.push(tmp);
-		}
-		return tmpArr;
-	},
-	setMembersArray: function (value, instance, parentValue, ref) {
-		instance.setMembers(value);
-	},
+
 	items: [
 		{id:ZaDistributionList.A2_query, type:_STRING_},
 		{id:ZaDistributionList.A2_pagenum, type:_NUMBER_, defaultValue:1},
@@ -1014,7 +946,7 @@ ZaDistributionList.myXModel = {
 		{id:ZaDistributionList.A2_poolNumPages, type:_NUMBER_, defaultValue:1},		
 		{id:ZaDistributionList.A2_memPagenum, type:_NUMBER_, defaultValue:1},
 		{id:ZaDistributionList.A2_memNumPages, type:_NUMBER_, defaultValue:1},	
-		{id:ZaDistributionList.A2_memberPool, type:_LIST_, setter:"setMemberPool", setterScope:_MODEL_, getter: "getMemberPool", getterScope:_MODEL_},
+		{id:ZaDistributionList.A2_memberPool, type:_LIST_},
 		{id:ZaDistributionList.A2_memberList, type:_LIST_},
 		{id:ZaDistributionList.A2_origList, type:_LIST_},
 		{id:ZaDistributionList.A2_addList, type:_LIST_},
@@ -1064,7 +996,8 @@ ZaDistributionList.myXModel = {
 		{id:(ZaAccount.A2_indirectMemberList + "_more"), type:_LIST_},
 		{id:(ZaAccount.A2_indirectMemberList + "_offset"), type:_LIST_},	
 		{id:(ZaAccount.A2_nonMemberList + "_more"), type:_LIST_},
-		{id:(ZaAccount.A2_nonMemberList + "_offset"), type:_LIST_}		
+		{id:(ZaAccount.A2_nonMemberList + "_offset"), type:_LIST_},
+		{id:ZaDistributionList.A2_alias_selection_cache, type:_LIST_}	
 		
 	]
 };

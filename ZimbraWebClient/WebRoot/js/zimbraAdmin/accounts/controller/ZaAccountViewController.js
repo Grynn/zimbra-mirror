@@ -162,7 +162,8 @@ ZaAccountViewController.changeActionsStateMethod = function () {
 			this._toolbarOperations[ZaOperation.REINDEX_MAILBOX].enabled = false;
 		}
 	}
-	
+	if(this._toolbarOperations[ZaOperation.SAVE])	
+		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
 }
 ZaController.changeActionsStateMethods["ZaAccountViewController"].push(ZaAccountViewController.changeActionsStateMethod);
 

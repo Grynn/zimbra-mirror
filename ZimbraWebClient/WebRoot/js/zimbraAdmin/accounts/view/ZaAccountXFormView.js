@@ -318,7 +318,7 @@ ZaAccountXFormView.deleteAliasButtonListener = function () {
 			for(var i=0;i<cnt;i++) {
 				var cnt2 = aliasArr.length-1;				
 				for(var k=cnt2;k>=0;k--) {
-					if(aliasArr[k]==instance.alias_selection_cache[i]) {
+					if(aliasArr[k]==instance[ZaAccount.A2_alias_selection_cache][i]) {
 						aliasArr.splice(k,1);
 						break;	
 					}
@@ -341,10 +341,10 @@ function () {
 			formPage.editAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountXFormView.updateAlias, this.getForm(), null);						
 		}
 		var obj = {};
-		obj[ZaAccount.A_name] = instance.alias_selection_cache[0];
+		obj[ZaAccount.A_name] = instance[ZaAccount.A2_alias_selection_cache][0];
 		var cnt = instance.attrs[ZaAccount.A_zimbraMailAlias].length;
 		for(var i=0;i<cnt;i++) {
-			if(instance.alias_selection_cache[0]==instance.attrs[ZaAccount.A_zimbraMailAlias][i]) {
+			if(instance[ZaAccount.A2_alias_selection_cache][0]==instance.attrs[ZaAccount.A_zimbraMailAlias][i]) {
 				obj[ZaAlias.A_index] = i;
 				break;		
 			}

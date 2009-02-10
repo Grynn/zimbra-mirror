@@ -37,6 +37,7 @@ ZaDLController.prototype.constructor = ZaDLController;
 
 ZaController.initToolbarMethods["ZaDLController"] = new Array();
 ZaController.setViewMethods["ZaDLController"] = [];
+ZaController.changeActionsStateMethods["ZaDLController"] = new Array();
 
 ZaDLController.prototype.toString = function () {
 	return "ZaDLController";
@@ -74,6 +75,13 @@ function (entry)	{
 	}	
 };
 ZaController.setViewMethods["ZaDLController"].push(ZaDLController.setViewMethod);
+
+
+ZaDLController.changeActionsStateMethod = function () {
+	if(this._toolbarOperations[ZaOperation.SAVE])
+		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+}
+ZaController.changeActionsStateMethods["ZaDLController"].push(ZaDLController.changeActionsStateMethod);
 
 ZaDLController.initToolbarMethod =
 function () {
@@ -148,167 +156,6 @@ function () {
 	this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId()] = this ;
-}
-/**
- * This method is called by an asynchronous command when
- * AddDistributionListMemberRequest or ModifyDistributionListRequest return
- */
-ZaDLController.prototype.saveChangesCallback = function (obj, resp) {
-	try {
-		if(!resp) {
-			throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
-		}
-		if(resp.isException()) {
-			throw(resp.getException());
-		} else {
-			if (resp.getResponse() && resp.getResponse().Body) {
-				if(resp.getResponse().Body.ModifyDistributionListResponse) {
-					this.getProgressDialog().setProgress({numTotal:100,numDone:100,progressMsg:ZaMsg.MSG_SAVING_DL})
-					this.getProgressDialog().popup();	
-					var response = resp.getResponse().Body.ModifyDistributionListResponse;
-					this._currentObject.initFromJS(response.dl[0]);	
-				} else if (resp.getResponse().Body.RemoveDistributionListMemberResponse && obj._removeList) {
-					this.getProgressDialog().setProgress({numTotal:this._totalToRemove,numDone:(this._totalToRemove-obj._removeList.size()),progressMsg:ZaMsg.MSG_REMOVING_DL_MEMBERS});					
-					this.getProgressDialog().enableOk(false);
-				} else if (resp.getResponse().Body.AddDistributionListMemberResponse && obj._addList) {
-					this.getProgressDialog().setProgress({numTotal:this._totalToAdd,numDone:(this._totalToAdd-obj._addList.size()),progressMsg:ZaMsg.MSG_ADDING_DL_MEMBERS});				
-					this.getProgressDialog().enableOk(false);
-				} else if (resp.getResponse().Body.CreateDistributionListResponse) {
-					var dl = new ZaDistributionList();
-					dl.initFromJS(resp.getResponse().Body.CreateDistributionListResponse.dl[0]);
-					this._currentObject = dl;
-				}
-			}
-			
-			// add/remove aliases
-			try {
-				for(var ix=0; ix < this._removeAliasArr.length; ix++) {
-					this._currentObject.removeAlias(this._removeAliasArr [ix]);
-				}
-			} catch (ex) {
-				this._handleException(ex, "ZaDLController.prototype._saveChanges", null, false);
-					
-				return false;
-			}
-			
-			var failedAliases = "";
-			var failedAliasesCnt = 0;
-			try {
-				for(var ix=0; ix < this._addAliasArr.length; ix++) {
-					var curAlias = this._addAliasArr[ix] ;
-					try {
-						if(curAlias) {
-//							if(!AjxUtil.EMAIL_SHORT_RE.test(curAlias)) {
-							if(curAlias.lastIndexOf ("@")!=curAlias.indexOf ("@")) {
-								//show error msg
-								this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_ALIAS_INVALID,[curAlias]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-								this._errorDialog.popup();		
-								break;						
-							}
-							this._currentObject.addAlias(curAlias);
-						}
-					} catch (ex) {
-						if(ex.code == ZmCsfeException.ACCT_EXISTS || ex.code == ZmCsfeException.DISTRIBUTION_LIST_EXISTS) {
-							//if failed because account exists just show a warning
-							var account = this._findAlias(curAlias);
-							switch(account.type) {
-								case ZaItem.DL:
-									if(account.name == curAlias) {
-										failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS3,[account.name]);								
-									} else {
-										failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS4,[account.name, curAlias]);								
-									}
-								break;
-								case ZaItem.ACCOUNT:
-									if(account.name == curAlias) {
-										failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS2,[account.name]);								
-									} else {
-										failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS1,[account.name, curAlias]);								
-									}							
-								break;	
-								case ZaItem.RESOURCE:
-									if(account.name == curAlias) {
-										failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS5,[account.name]);								
-									} else {
-										failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS6,[account.name, obj.attrs[ZaAccount.A_zimbraMailAlias][ix]]);								
-									}							
-								break;							
-								default:
-									failedAliases += "<br>" +AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS0,[curAlias]);							
-								break;
-							}
-							failedAliasesCnt++;
-						} else {
-							//if failed for another reason - jump out
-							throw (ex);
-						}
-					}
-				}
-		
-				if(failedAliasesCnt == 1) {
-					this._errorDialog.setMessage(ZaMsg.WARNING_ALIAS_EXISTS + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
-					this._errorDialog.popup();			
-				} else if(failedAliasesCnt > 1) {
-					this._errorDialog.setMessage(ZaMsg.WARNING_ALIASES_EXIST + failedAliases, "", DwtMessageDialog.WARNING_STYLE, ZaMsg.zimbraAdminTitle);
-					this._errorDialog.popup();			
-				}
-			} catch (ex) {
-				this.popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex, true);	
-				return false;
-			}
-						
-			//add/remove memberOf lists
-			if(obj._addList && obj._addList.size()) {
-				var finishedCallback = new AjxCallback(this,this.saveChangesCallback, obj);
-				this._currentObject.addNewMembersAsync(obj,finishedCallback);
-			} else if(obj._removeList && obj._removeList.size()) {
-				//the list of members to be removed is reduced by each call to removeDeletedMembersAsync
-			//	this.getProgressDialog().setProgress({numTotal:this._totalToRemove,numDone:(this._totalToRemove-obj._removeList.size()),progressMsg:ZaMsg.MSG_REMOVING_DL_MEMBERS})
-				//this.getProgressDialog().popup();				
-//				this.getProgressDialog().enableOk(false);
-				var finishedCallback = new AjxCallback(this,this.saveChangesCallback, obj);
-				this._currentObject.removeDeletedMembersAsync(obj._removeList,finishedCallback);
-			} else {	
-				this.getProgressDialog().enableOk(true);	
-				//add the membership information
-				//update the member of first
-				try {
-					if (ZaAccountMemberOfListView._addList.length >0) { //you have new membership to be added.
-						ZaAccountMemberOfListView.addNewGroupsBySoap(this._currentObject, ZaAccountMemberOfListView._addList);
-					}	
-					ZaAccountMemberOfListView._addList = []; //reset
-				} catch (ex){
-					ZaAccountMemberOfListView._addList = []; //reset
-					this._handleException(ex, "ZaDistributionList.prototype.modify: add distribution list failed", null, false);	//try not to halt the account modification	
-				}
-				//remove may not needed during the creation time.
-				try {
-					if (ZaAccountMemberOfListView._removeList.length >0){//you have membership to be removed
-						ZaAccountMemberOfListView.removeGroupsBySoap(this._currentObject, ZaAccountMemberOfListView._removeList);
-					}
-					ZaAccountMemberOfListView._removeList = []; //reset
-				} catch (ex){
-					ZaAccountMemberOfListView._removeList = []; //reset
-					this._handleException(ex, "ZaDistributionList.prototype.modify: remove distribution list failed", null, false);		
-				}
-				this._currentObject.refresh(false,true);
-				this._currentObject.markClean();	
-			
-				this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true); 
-				this._view.setDirty(false);
-				if(this._toolbar)
-					this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
-				
-				this._view.setObject(this._currentObject);			
-				this.fireChangeEvent(this._currentObject);	
-				this.getProgressDialog().popdown();				
-			}	
-		}
-	} catch (ex) {
-		this.getProgressDialog().popdown();	
-		this._handleException(ex, "ZaDLController.prototype.saveChangesCallback", null, false);	
-	}
-	return;
 }
 
 ZaDLController.prototype._saveChanges = function () {

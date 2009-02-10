@@ -114,15 +114,17 @@ function (ev) {
 **/
 ZaDLXFormView.removeAllMembers = function(event) {
 	var form = this.getForm();
+	var tmpCurrentRemoveList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList);
+	var tmpCurrentMemberList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList);
 	
-	var tmpRemoveArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList),
-		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList));
-	tmpRemoveArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList)._version+1;
+	var newRemoveList = AjxUtil.mergeArrays(tmpCurrentRemoveList,tmpCurrentMemberList);
+	newRemoveList._version = tmpCurrentRemoveList._version+1;
 	
-
 	this.setInstanceValue([], ZaDistributionList.A2_addList);
 	this.setInstanceValue([], ZaDistributionList.A2_memberList);
-	this.setInstanceValue(tmpRemoveArray, ZaDistributionList.A2_removeList);
+	this.setInstanceValue(newRemoveList, ZaDistributionList.A2_removeList);
+
+	this.getForm().parent.setDirty(true);
 };
 
 /**
@@ -131,24 +133,26 @@ ZaDLXFormView.removeAllMembers = function(event) {
 ZaDLXFormView.removeMembers = function(event) {
 	var form = this.getForm();
 	
-	var tmp = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList);
-	var tmpMembersArray = AjxUtil.arraySubstract(tmp,
-		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
+	var tmpCurrentMemberList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList);
+	var tmpCurrentAddList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList);
+	var tmpSelectedList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected);
+	var tmpCurrentRemoveList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList);
 	
-	tmpMembersArray._version = tmp._version + 1;
-	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);	
+	var newMemberList = AjxUtil.arraySubstract(tmpCurrentMemberList, form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
+	newMemberList._version = tmpCurrentMemberList._version + 1;
+	this.setInstanceValue(newMemberList, ZaDistributionList.A2_memberList);	
 	
-	var tmp2 = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList);
-	var tmpMembersArray2 = AjxUtil.arraySubstract(tmp2,
-		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
 	
-	tmpAddArray._version = tmp2._version + 1;
-	this.setInstanceValue(tmpAddArray, ZaDistributionList.A2_addList);	
+	var newAddList = AjxUtil.arraySubstract(tmpCurrentAddList,form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
+	newAddList._version = tmpCurrentAddList._version + 1;
+	this.setInstanceValue(newAddList, ZaDistributionList.A2_addList);	
 	
-	var tmpRemoveArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList),
-		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList));	
-	tmpRemoveArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList)._version+1;
-	this.setInstanceValue(tmpRemoveArray, ZaDistributionList.A2_removeList);
+	
+	var newRemoveList = AjxUtil.mergeArrays(tmpCurrentRemoveList,tmpSelectedList);	
+	newRemoveList._version = tmpCurrentRemoveList._version+1;
+	this.setInstanceValue(newRemoveList, ZaDistributionList.A2_removeList);
+	
+	this.getForm().parent.setDirty(true);
 };
 
 /**
@@ -333,7 +337,8 @@ ZaDLXFormView.addAddressesToMembers = function (event) {
 	tmpMembersArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList)._version + 1;
 	
 	this.setInstanceValue(tmpAddArray, ZaDistributionList.A2_addList);
-	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);	
+	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);
+	this.getForm().parent.setDirty(true);	
 };
 
 /**
@@ -356,6 +361,7 @@ ZaDLXFormView.addAllAddressesToMembers = function (event) {
 	
 	this.setInstanceValue(tmpAddArray, ZaDistributionList.A2_addList);
 	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);	
+	this.getForm().parent.setDirty(true);
 };
 
 /**
@@ -395,17 +401,15 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 	tmpMembersArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList)._version + 1;
 	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);
 	this.setInstanceValue("", ZaDistributionList.A2_optionalAdd);
+	this.getForm().parent.setDirty(true);
 };
 
 ZaDLXFormView.prototype.setObject = 
 function (entry) {
 
     ZaItem.normalizeMultiValueAttr(entry, "description") ;
-    
-    //this._containedObject = entry.clone();
     this._containedObject = {attrs:{}};
 
-	
 	this._containedObject[ZaDistributionList.A2_memberList] = new Array();
 	this._containedObject[ZaDistributionList.A2_memberList]._version = 1;
 	if(entry[ZaDistributionList.A2_memberList]) {
@@ -467,7 +471,9 @@ function (entry) {
 	if(entry._defaultValues)
 		this._containedObject._defaultValues = entry._defaultValues;
 		
-	this._containedObject.type = entry.type ;
+	this._containedObject.name = entry.name;
+	this._containedObject.type = entry.type;
+	this._containedObject.id = entry.id;
 	
 	if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
@@ -504,6 +510,120 @@ function (orderby, isascending) {
 	}
 }
 
+ZaDLXFormView.aliasSelectionListener = 
+function (ev) {
+	var arr = this.widget.getSelection();	
+	if(arr && arr.length) {
+		arr.sort();
+		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_alias_selection_cache, arr);
+	} else {
+		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_alias_selection_cache, null);
+	}		
+	if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaDLXFormView.editAliasButtonListener.call(this);
+	}	
+}
+
+
+ZaDLXFormView.deleteAliasButtonListener = function () {
+	var instance = this.getInstance();
+	if(instance[ZaDistributionList.A2_alias_selection_cache] != null) {
+		var cnt = instance[ZaDistributionList.A2_alias_selection_cache].length;
+		if(cnt && instance.attrs[ZaAccount.A_zimbraMailAlias]) {
+			var aliasArr = instance.attrs[ZaAccount.A_zimbraMailAlias];
+			for(var i=0;i<cnt;i++) {
+				var cnt2 = aliasArr.length-1;				
+				for(var k=cnt2;k>=0;k--) {
+					if(aliasArr[k]==instance[ZaDistributionList.A2_alias_selection_cache][i]) {
+						aliasArr.splice(k,1);
+						break;	
+					}
+				}
+			}
+			this.getModel().setInstanceValue(instance, ZaAccount.A_zimbraMailAlias, aliasArr);	
+		}
+	}
+	this.getModel().setInstanceValue(instance, ZaDistributionList.A2_alias_selection_cache, []);
+	this.getForm().parent.setDirty(true);
+}
+
+ZaDLXFormView.editAliasButtonListener =
+function () {
+	var instance = this.getInstance();
+	if(instance.alias_selection_cache && instance.alias_selection_cache[0]) {	
+		var formPage = this.getForm().parent;
+		if(!formPage.editAliasDlg) {
+			formPage.editAliasDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "150px",ZaMsg.Edit_Alias_Title);
+			formPage.editAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDLXFormView.updateAlias, this.getForm(), null);						
+		}
+		var obj = {};
+		obj[ZaAccount.A_name] = instance[ZaDistributionList.A2_alias_selection_cache][0];
+		var cnt = instance.attrs[ZaAccount.A_zimbraMailAlias].length;
+		for(var i=0;i<cnt;i++) {
+			if(instance[ZaDistributionList.A2_alias_selection_cache][0]==instance.attrs[ZaAccount.A_zimbraMailAlias][i]) {
+				obj[ZaAlias.A_index] = i;
+				break;		
+			}
+		}
+		
+		formPage.editAliasDlg.setObject(obj);
+		formPage.editAliasDlg.popup();		
+	}
+}
+
+ZaDLXFormView.updateAlias = function () {
+	if(this.parent.editAliasDlg) {
+		this.parent.editAliasDlg.popdown();
+		var obj = this.parent.editAliasDlg.getObject();
+		var instance = this.getInstance();
+		var arr = instance.attrs[ZaAccount.A_zimbraMailAlias];
+		if(obj[ZaAlias.A_index] >=0 && arr[obj[ZaAlias.A_index]] != obj[ZaAccount.A_name] ) {			
+			arr[obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
+			this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr); 
+			this.getModel().setInstanceValue(this.getInstance(),ZaDistributionList.A2_alias_selection_cache, new Array());
+			this.parent.setDirty(true);	
+		}
+	}
+}
+
+ZaDLXFormView.addAliasButtonListener =
+function () {
+	var instance = this.getInstance();
+	var formPage = this.getForm().parent;
+	if(!formPage.addAliasDlg) {
+		formPage.addAliasDlg = new ZaEditAliasXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "150px",ZaMsg.Add_Alias_Title);
+		formPage.addAliasDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDLXFormView.addAlias, this.getForm(), null);						
+	}
+	
+	var obj = {};
+	obj[ZaAccount.A_name] = "";
+	obj[ZaAlias.A_index] = - 1;
+	formPage.addAliasDlg.setObject(obj);
+	formPage.addAliasDlg.popup();		
+}
+
+ZaDLXFormView.addAlias  = function () {
+	if(this.parent.addAliasDlg) {
+		this.parent.addAliasDlg.popdown();
+		var obj = this.parent.addAliasDlg.getObject();
+		if(obj[ZaAccount.A_name] && obj[ZaAccount.A_name].length>1) {
+			var instance = this.getInstance();
+			var arr = instance.attrs[ZaAccount.A_zimbraMailAlias]; 
+			arr.push(obj[ZaAccount.A_name]);
+			this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr);
+			this.getModel().setInstanceValue(this.getInstance(),ZaDistributionList.A2_alias_selection_cache, new Array());
+			this.parent.setDirty(true);
+		}
+	}
+}
+
+ZaDLXFormView.isEditAliasEnabled = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_alias_selection_cache)) && this.getInstanceValue(ZaAccount.A2_alias_selection_cache).length==1);
+}
+
+ZaDLXFormView.isDeleteAliasEnabled = function () {
+	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_alias_selection_cache)));
+}
 
 ZaDLXFormView.myXFormModifier = function(xFormObject) {	
 	var sourceHeaderList = new Array();
@@ -890,26 +1010,26 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 					items :[
 						{ref:ZaAccount.A_zimbraMailAlias, type:_DWT_LIST_, height:"200", width:"350px", 
 							forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
-							headerList:null,onSelection:ZaAccountXFormView.aliasSelectionListener
+							headerList:null,onSelection:ZaDLXFormView.aliasSelectionListener
 						},
 						{type:_GROUP_, numCols:5, width:"350px", colSizes:["100px","auto","100px","auto","100px"], 
 							cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 							items: [
 								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
-									onActivate:"ZaAccountXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
-									enableDisableChecks:[ZaAccountXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.REMOVE_DL_ALIAS_RIGHT]],
-									enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache]
+									onActivate:"ZaDLXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
+									enableDisableChecks:[ZaDLXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.REMOVE_DL_ALIAS_RIGHT]],
+									enableDisableChangeEventSources:[ZaDistributionList.A2_alias_selection_cache]
 								},
 								{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
-									enableDisableChangeEventSources:[ZaAccount.A2_alias_selection_cache],
-									enableDisableChecks:[ZaAccountXFormView.isEditAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.REMOVE_DL_ALIAS_RIGHT],[XFormItem.prototype.hasRight,ZaAccount.ADD_DL_ALIAS_RIGHT]],
-									onActivate:"ZaAccountXFormView.editAliasButtonListener.call(this);",id:"editAliasButton"
+									enableDisableChangeEventSources:[ZaDistributionList.A2_alias_selection_cache],
+									enableDisableChecks:[ZaDLXFormView.isEditAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.REMOVE_DL_ALIAS_RIGHT],[XFormItem.prototype.hasRight,ZaAccount.ADD_DL_ALIAS_RIGHT]],
+									onActivate:"ZaDLXFormView.editAliasButtonListener.call(this);",id:"editAliasButton"
 								},
 								{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
-									enableDisableChecks:[ZaAccountXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaAccount.ADD_DL_ALIAS_RIGHT]],
-									onActivate:"ZaAccountXFormView.addAliasButtonListener.call(this);"
+									enableDisableChecks:[[XFormItem.prototype.hasRight,ZaAccount.ADD_DL_ALIAS_RIGHT]],
+									onActivate:"ZaDLXFormView.addAliasButtonListener.call(this);"
 								}
 							]
 						}

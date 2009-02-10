@@ -34,6 +34,7 @@ ZaResourceController.prototype.constructor = ZaResourceController;
 
 ZaController.initToolbarMethods["ZaResourceController"] = new Array();
 ZaController.setViewMethods["ZaResourceController"] = [];
+ZaController.changeActionsStateMethods["ZaResourceController"] = new Array();
 
 ZaResourceController.prototype.toString = function () {
 	return "ZaResourceController";
@@ -59,6 +60,12 @@ ZaResourceController.prototype.show =
 function(entry, openInNewTab, skipRefresh) {
 	this._setView(entry, openInNewTab, skipRefresh);
 }
+
+ZaResourceController.changeActionsStateMethod = function () {
+	if(this._toolbarOperations[ZaOperation.SAVE])
+		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+}
+ZaController.changeActionsStateMethods["ZaResourceController"].push(ZaResourceController.changeActionsStateMethod);
 
 ZaResourceController.setViewMethod =
 function (entry)	{

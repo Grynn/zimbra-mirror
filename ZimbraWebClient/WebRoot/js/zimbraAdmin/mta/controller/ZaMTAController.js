@@ -38,6 +38,7 @@ ZaMTAController.prototype.constructor = ZaMTAController;
 
 ZaController.initToolbarMethods["ZaMTAController"] = new Array();
 ZaController.setViewMethods["ZaMTAController"] = new Array();
+ZaController.changeActionsStateMethods["ZaMTAController"] = new Array();
 /**
 *	@method show
 *	@param entry - isntance of ZaServer class

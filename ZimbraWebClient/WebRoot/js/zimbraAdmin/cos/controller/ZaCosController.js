@@ -36,7 +36,7 @@ ZaCosController.prototype = new ZaXFormViewController();
 ZaCosController.prototype.constructor = ZaCosController;
 ZaController.initToolbarMethods["ZaCosController"] = new Array();
 ZaController.setViewMethods["ZaCosController"] = new Array();
-
+ZaController.changeActionsStateMethods["ZaCosController"] = new Array();
 /**
 *	@method show
 *	@param entry - isntance of ZaCos class
@@ -50,6 +50,11 @@ function(entry) {
 	}
 }
 
+ZaCosController.changeActionsStateMethod = function () {
+	if(this._toolbarOperations[ZaOperation.SAVE])
+		this._toolbarOperations[ZaOperation.SAVE].enabled = false;
+}
+ZaController.changeActionsStateMethods["ZaCosController"].push(ZaCosController.changeActionsStateMethod);
 
 /**
 *	@method setViewMethod 
