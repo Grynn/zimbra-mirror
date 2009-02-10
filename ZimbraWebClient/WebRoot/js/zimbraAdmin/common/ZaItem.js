@@ -580,7 +580,7 @@ function (aliasToRemove) {
 	var params = new Object();
 	params.soapDoc = soapDoc;	
 	var reqMgrParams = {
-		controller : tZaApp.getInstance().etCurrentController(),
+		controller : ZaApp.getInstance().etCurrentController(),
 		busyMsg : ZaMsg.BUSY_REMOVE_ALIAS
 	}
 	ZaRequestMgr.invoke(params, reqMgrParams);	
