@@ -1,16 +1,16 @@
 .ImgSFORCE-panelIcon {
-  background: url("sforce.gif") no-repeat 0 0;
-  width: 16px;
-  height: 16px;
-  overflow: hidden;
+	background: url("sforce.gif") no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
 }
 
 h3.SForce-sec-label {
-  font-size: 14px;
-  margin: 0.5em 0;
-  border-bottom: 1px solid #777;
+	font-size: 14px;
+	margin: 0.5em 0;
+	border-bottom: 1px solid #777;
 }
 
 .SForce-icon-right {
-  background: url("sforce.gif") no-repeat 100% 50%;
+	background: url("sforce.gif") no-repeat 100% 50%;
 }

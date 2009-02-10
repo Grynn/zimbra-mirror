@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_gtranslator" version="1.0" description="Translats dragged message">
+<zimlet name="com_zimbra_gtranslator" version="1.0" description="Translates dragged message">
 	<include>gtranslator.js</include>
 	<includeCSS>gtranslator.css</includeCSS>
 	<resource>google-icon.gif</resource>
