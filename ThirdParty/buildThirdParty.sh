@@ -224,4 +224,7 @@ cd ${PATHDIR}
 rm -f make.out 2> /dev/null
 make allclean > /dev/null 2>&1
 make all 2>&1 | tee -a make.out
+mkdir -p $PATHDIR/../logs
+cp /tmp/ThirdParty.make.log $PATHDIR/../logs
+cp /tmp/ThirdParty-Perllibs.log $PATHDIR/../logs
 exit 0;
