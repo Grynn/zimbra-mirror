@@ -1,4 +1,4 @@
-How to build 3rd party for Zimbra.
+How to build ZCS:
 
 If this is a new platform, edit ZimbraBuild/rpmconf/Build/get_plat_tag.sh
 and add the appropriate function to add a new tag for your platform.  Edit
@@ -8,7 +8,7 @@ popt, and expat, make sure to add the appropriate lines so that building
 those pieces of software gets skipped.
 
 If you have added a platform tag to get_plat_tag.sh, update the
-buildThirdParty.sh script appropriately for setting the Perl library
+ThirdParty/buildThirdParty.sh script appropriately for setting the Perl library
 paths.
 
 Make sure the "zimbra" user exists in /etc/passwd
@@ -16,12 +16,8 @@ Make sure the "zimbra" group exists in /etc/group
 
 Make sure that the p4 binary is in your path.
 
-It is also be required to update the Perl Mirror in:
+It is also required to update the Perl Mirror in:
 ThirdParty/Perl/MyConfig.pm.template
-
-Then, in the ThirdParty directory, run:
-./buildThirdParty.sh  (NOTE: This script will remove the contents of /opt/zimbra.  If you
-want it preserved, rename it prior to running).
 
 The 1.5 Java JDK must also be installed into /usr/local/java, so that the binary is:
 /usr/local/java/bin/java
@@ -30,3 +26,20 @@ Ant must be installed in /usr/local/ant, so that the binary is:
 /usr/local/ant/bin/ant
 
 These must be installed prior to building, or the builds will fail.
+
+Then, in the ZimbraBuild directory, run:
+./buildZCS.sh
+(NOTE: This script will remove the contents of /opt/zimbra when used with -t.
+If you want it preserved, rename it prior to running).
+
+The buildZCS.sh script can do multiple things:
+
+(a) It can build the 3rd party software for you (-t option).  The Third Party software
+must be built before ZCS can be built.  However, if you've already built it, this allows
+you to skip rebuilding it just to rebuild the rest of ZCS.
+
+(b) It can build Zimbra Desktop for you (-d option).  It is not required to build Third
+Party to build Desktop.
+
+The buildZCS.sh script will do its best to make sure you have all pre-requisite software
+installed to both build Third Party and to build the ZCS product.
