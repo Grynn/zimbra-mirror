@@ -52,6 +52,8 @@ DwtTree = function(params) {
 		}
 		this._style = style;
 	}
+	this.isCheckedStyle = ((this._style & DwtTree.CHECKEDITEM_STYLE) != 0);
+
 	this._selectedItems = new AjxVector();
 	this._selEv = new DwtSelectionEvent(true);
 };
@@ -299,7 +301,7 @@ function() {
 */
 DwtTree.prototype.setCheckboxes =
 function(treeItem) {
-	if (!this._isCheckedStyle() || !AjxEnv.isIE) return;
+	if (!this.isCheckedStyle || !AjxEnv.isIE) return;
 	if (treeItem && treeItem._isSeparator) return;
 
 	var items;
@@ -321,11 +323,6 @@ function(item) {
 		item._setSelected(false);
 		this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_DESELECTED, null, this._selEv);
 	}
-};
-
-DwtTree.prototype._isCheckedStyle =
-function() {
-	return ((this._style & DwtTree.CHECKEDITEM_STYLE) != 0);
 };
 
 DwtTree.prototype._itemActioned =

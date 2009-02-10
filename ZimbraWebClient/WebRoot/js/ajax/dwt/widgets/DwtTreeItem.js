@@ -73,7 +73,7 @@ DwtTreeItem = function(params) {
 	this._dndScrollId = params.dndScrollId;
 
 	// disable selection if checkbox style
-	if (this._tree._isCheckedStyle()) {
+	if (this._tree.isCheckedStyle) {
 		this.enableSelection(false);
 		this._selectedClassName = this._origClassName;
 	}
@@ -434,7 +434,7 @@ function(index, realizeDeferred) {
 	}
 	var data = {id:this._htmlElId,
 				divClassName:this._origClassName,
-				isCheckedStyle:this._tree._isCheckedStyle(),
+				isCheckedStyle:this._tree.isCheckedStyle,
 				textClassName:this._textClassName };
 
 	this._createHtmlFromTemplate(this.TEMPLATE, data);
@@ -469,7 +469,7 @@ function(index, realizeDeferred) {
 	}
 
 	// initialize checkbox
-	if (this._tree._isCheckedStyle() && this._checkBox) {
+	if (this._tree.isCheckedStyle && this._checkBox) {
 		this.showCheckBox(this._checkBoxVisible);
 		if (AjxEnv.isIE) {
 			// HACK: See setChecked method for explanation
