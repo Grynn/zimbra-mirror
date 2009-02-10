@@ -519,6 +519,7 @@ function () {
 ZaZimbraAdmin.prototype._getLoginMsgPanel = function () {
     if (!this._loginMsgPanel) {
         this._loginMsgPanel = new DwtComposite (this._shell, null, Dwt.ABSOLUTE_STYLE);
+        
         var loginMsg = ZaDomain.getLoginMessage() ;
 //        var loginMsg = "abcd" ;
         if (loginMsg) {
@@ -680,15 +681,10 @@ function() {
 	this._createHelpLink();
 	this._createDownloadLink() ;
 	this._setUserName() ;
-//    this._createLoginMsg();
-    //this._createAppTabs() ;
 	
-	ZaApp.getInstance().launch();
-	
-	//create main Tab
-	//this._createMainTab() ;
-	
-	ZaZimbraAdmin._killSplash();
+    ZaApp.getInstance().launch();
+
+ 	ZaZimbraAdmin._killSplash();
 };
 
 // Listeners

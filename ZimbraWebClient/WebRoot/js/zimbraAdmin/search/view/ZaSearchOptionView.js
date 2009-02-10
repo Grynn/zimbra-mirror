@@ -62,7 +62,7 @@ ZaSearchOptionView = function(parent,optionId, width, position){
 	
 	this._header = new ZaToolBar (this, tb_items, null, null, "DwtToolBar") ;
 	//this._header.setSize (this._width, 25); //set the width, will lost the right border with the proper color.
-	this._header.setSize (null, ZaSearchOptionView.HEADER_HEIGHT);
+	this._header.setSize (this._width, ZaSearchOptionView.HEADER_HEIGHT);
 	this.initForm (ZaSearchOption.getObjectTypeXModel(optionId), ZaSearchOption.getObjectTypeXForm (optionId, height), ZaSearchOption.getDefaultInstance(optionId));
 }
 
