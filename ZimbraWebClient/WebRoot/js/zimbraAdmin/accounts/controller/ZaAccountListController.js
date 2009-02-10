@@ -556,6 +556,7 @@ function(ev) {
 	if(this._contentView.getSelectionCount()==1) {
 		this._chngPwdDlg = new ZaAccChangePwdXDlg(ZaApp.getInstance().getAppCtxt().getShell(), "400px","90px");
 		var item = this._contentView.getSelection()[0];
+		item.loadEffectiveRights("id", item.id);
 		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);				
 		this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title + " (" + item.name + ")");
 		var obj = new Object();
