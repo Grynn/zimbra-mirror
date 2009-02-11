@@ -349,7 +349,9 @@ function(ls) {
 com_zimbra_discover.prototype._checkIfDiscBtnOnExtWindowClicked =
 function() {
 	try {
-		if (this._extWindow.document.getElementById("discover_clickMsg").innerHTML == "") {
+		if (this._extWindow && this._extWindow.document &&
+			this._extWindow.document.getElementById("discover_clickMsg").innerHTML == "")
+		{
 			clearInterval(this._clickHereMsgTIid);
 			this.setUserProperty("dy_discoverBtnClickedOnExternalWindow", "true", true);
 		}
