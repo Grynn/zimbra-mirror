@@ -7,6 +7,7 @@ CLEAN=no
 SYNC=no
 PUBLIC=no
 OVERRIDE=no
+MIRROR="http://mirrors2.kernel.org/cpan/"
 
 usage() {
 	echo ""
@@ -296,12 +297,17 @@ if [[ $PLAT != "MACOSX"* ]]; then
 	fi
 fi
 
+if [ x$PUBLIC = x"yes" ]; then
+	askURL "CPAN URL?" "$MIRROR"
+	MIRROR=$response
+fi
+
 cd ${PATHDIR}
 rm -f make.out 2> /dev/null
 make allclean > /dev/null 2>&1
+
 if [ x$PUBLIC = x"yes" ]; then
-	askURL "CPAN URL?" "http://mirrors2.kernel.org/cpan/"
-	make all CMIRROR=$response 2>&1 | tee -a make.out
+	make all CMIRROR=$MIRROR 2>&1 | tee -a make.out
 else
 	make all 2>&1 | tee -a make.out
 fi
