@@ -6,6 +6,7 @@ PATHDIR=`pwd`
 CLEAN=no
 SYNC=no
 PUBLIC=no
+OVERRIDE=no
 
 usage() {
 	echo ""
@@ -59,6 +60,24 @@ askYN() {
   done
 }
 
+askURL() {
+  PROMPT=$1
+  DEFAULT=$2
+
+  while [ 1 ]; do
+    ask "$PROMPT" "$DEFAULT"
+    response=`echo $response | tr "[:upper:]" "[:lower:]"`
+    if [ -z $response ]; then
+      :
+    else
+      if [[ $response == "http://"* ]]; then
+        break
+      fi
+    fi
+    echo "A http:// formed URL is required"
+  done
+}
+
 if [ $# -lt 1 ]; then
 	usage
 fi
@@ -67,6 +86,10 @@ while [ $# -gt 0 ]; do
 	case $1 in
 		-c|--clean)
 			CLEAN=yes
+			shift;
+			;;
+		-o|--override)
+			OVERRIDE=yes
 			shift;
 			;;
 		-p|--public)
@@ -91,11 +114,6 @@ done
 RELEASE=${PATHDIR%/*}
 RELEASE=${RELEASE##*/}
 
-#echo "CLEAN: $CLEAN"
-#echo "SYNC: $SYNC"
-#echo "RELEASE: $RELEASE"
-#exit;
-
 if [ x$CLEAN = x"no" ]; then
 	echo "WARNING: You must supply the clean option -c"
 	echo "WARNING: This will completely remove the contents of /opt/zimbra from the system"
@@ -117,7 +135,9 @@ if [ x$PLAT = "x" ]; then
 	exit 1;
 fi
 
-askYN "Proceeding will remove /opt/zimbra.  Do you wish to continue?: " "N"
+if [ x$OVERRIDE = x"no" ]; then
+	askYN "Proceeding will remove /opt/zimbra.  Do you wish to continue?: " "N"
+fi
 
 if [ $response = "no" ]; then
 	echo "Exiting"
@@ -280,7 +300,8 @@ cd ${PATHDIR}
 rm -f make.out 2> /dev/null
 make allclean > /dev/null 2>&1
 if [ x$PUBLIC = x"yes" ]; then
-	make all CMIRROR=mirrors2.kernel.org 2>&1 | tee -a make.out
+	askURL "CPAN URL?" "http://mirrors2.kernel.org/cpan/"
+	make all CMIRROR=$response 2>&1 | tee -a make.out
 else
 	make all 2>&1 | tee -a make.out
 fi

@@ -21,7 +21,7 @@ GPG     := $(shell which gpg)
 LESS    := $(shell which less)
 WGET    := $(shell which wget)
 MAKE    := $(shell which make)
-CMIRROR	?= buildmaster.lab.zimbra.com
+CMIRROR	?= http://buildmaster.lab.zimbra.com/cpan/
 
 BDB_VERSION ?= 4.7.25.3
 SSL_VERSION ?= 0.9.8j
