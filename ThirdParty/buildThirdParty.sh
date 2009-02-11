@@ -138,11 +138,10 @@ fi
 
 if [ x$OVERRIDE = x"no" ]; then
 	askYN "Proceeding will remove /opt/zimbra.  Do you wish to continue?: " "N"
-fi
-
-if [ $response = "no" ]; then
-	echo "Exiting"
-	exit 1;
+	if [ $response = "no" ]; then
+		echo "Exiting"
+		exit 1;
+	fi
 fi
 
 if [ x$PLAT = "xRHEL4" -o x$PLAT = "CentOS4" -o x$PLAT = "xRHEL5" -o x$PLAT = "xCentOS5" -o x$PLAT = "xFC4" -o x$PLAT = "xFC5" -o x$PLAT = "xF7" -o x$PLAT = "xRPL1" -o x$PLAT = "xDEBIAN3.1" ]; then
