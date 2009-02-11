@@ -14,6 +14,49 @@ usage() {
 	exit 2;
 }
 
+ask() {
+  PROMPT=$1
+  DEFAULT=$2
+  
+  echo ""
+  echo -n "$PROMPT [$DEFAULT] "
+  read response
+  
+  if [ -z $response ]; then
+    response=$DEFAULT 
+  fi
+}   
+
+askYN() {
+  PROMPT=$1
+  DEFAULT=$2
+
+  if [ "x$DEFAULT" = "xyes" -o "x$DEFAULT" = "xYes" -o "x$DEFAULT" = "xy" -o "x$DEFAULT" = "xY" ]; then
+    DEFAULT="Y"
+  else
+    DEFAULT="N"
+  fi
+
+  while [ 1 ]; do
+    ask "$PROMPT" "$DEFAULT"
+    response=`echo $response | tr "[:upper:]" "[:lower:]"`
+    if [ -z $response ]; then
+      :
+    else
+      if [ $response = "yes" -o $response = "y" ]; then
+        response="yes"
+        break
+      else
+        if [ $response = "no" -o $response = "n" ]; then
+          response="no"
+          break
+        fi
+      fi
+    fi
+    echo "A Yes/No answer is required"
+  done
+}
+
 if [ $# -lt 1 ]; then
 	usage
 fi
@@ -65,6 +108,13 @@ PLAT=`$PATHDIR/../ZimbraBuild/rpmconf/Build/get_plat_tag.sh`;
 
 if [ x$PLAT = "x" ]; then
 	echo "Unknown platform, exiting."
+	exit 1;
+fi
+
+askYN "Proceeding will remove /opt/zimbra.  Do you wish to continue?: " "N"
+
+if [ $response = "no" ]; then
+	echo "Exiting"
 	exit 1;
 fi
 
