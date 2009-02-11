@@ -47,8 +47,8 @@ public class RedirectHelp implements Filter {
 		this.outDirName = config.getInitParameter(P_OUTPUT_DIRNAME);
 		if (this.outDirName == null) this.outDirName = DEFAULT_OUTPUT_DIRNAME;
 		if (ZimbraLog.webclient.isDebugEnabled()) {
-			ZimbraLog.webclient.debug("### "+this.inDirName);
-			ZimbraLog.webclient.debug("### "+this.outDirName);
+			ZimbraLog.webclient.debug("### indir:  "+this.inDirName);
+			ZimbraLog.webclient.debug("### outdir: "+this.outDirName);
 		}
 	}
 
@@ -65,8 +65,8 @@ public class RedirectHelp implements Filter {
 			this.inDirPattern = Pattern.compile("^"+escape(contextPath)+escape(this.inDirName)+"/(.*)");
 			this.outDirPattern = Pattern.compile("^"+escape(contextPath)+"/help/[a-z]{2}(?:_[A-Z]{2})?/.*");
 			if (ZimbraLog.webclient.isDebugEnabled()) {
-				ZimbraLog.webclient.debug("### "+this.inDirPattern.pattern());
-				ZimbraLog.webclient.debug("### "+this.outDirPattern.pattern());
+				ZimbraLog.webclient.debug("### indir pattern:  "+this.inDirPattern.pattern());
+				ZimbraLog.webclient.debug("### outdir pattern: "+this.outDirPattern.pattern());
 			}
 		}
 
@@ -101,8 +101,17 @@ public class RedirectHelp implements Filter {
 			return;
 		}
 
-		String filename = matcher.group(1).replace('/', File.separatorChar);
+		if (ZimbraLog.webclient.isDebugEnabled()) {
+			ZimbraLog.webclient.debug("### filename: "+matcher.group(1));
+		}
+		String filename = decode(matcher.group(1)).replace('/', File.separatorChar);
+		if (ZimbraLog.webclient.isDebugEnabled()) {
+			ZimbraLog.webclient.debug("### filename: "+filename);
+		}
 		File baseDir = new File(this.context.getRealPath("/"));
+		if (ZimbraLog.webclient.isDebugEnabled()) {
+			ZimbraLog.webclient.debug("### basedir:  "+baseDir);
+		}
 		for (Locale locale : locales) {
 			if (locale == null) continue;
 			File file = new File(baseDir,
@@ -156,6 +165,56 @@ public class RedirectHelp implements Filter {
 
 	private static String escape(String pattern) {
 		return pattern.replaceAll("[?+*\\\\\\{\\[\\(]", "\\$1");
+	}
+
+	//
+	// Private functions
+	//
+
+	private static final Pattern PATTERN = Pattern.compile("((?:%[0-9a-fA-F]{2})+)");
+
+	/**
+	 * Replace occurrences of "%ab" with the character represented by the hex
+	 * value. Strings of escaped characters are treated as UTF-8 byte sequences
+	 * and decoded appropriately.
+	 */
+	private static String decode(String s) {
+		int length = s.length();
+		StringBuilder str = new StringBuilder(length);
+		Matcher matcher = PATTERN.matcher(s);
+		int offset = 0;
+		byte[] bb = null;
+		while (matcher.find(offset)) {
+			int count = matcher.groupCount();
+			for (int i = 0; i < count; i++) {
+				String match = matcher.group(0);
+				int num = match.length() / 3;
+				if (bb == null || bb.length < num) {
+					bb = new byte[num];
+				}
+				for (int j = 0; j < num; j++) {
+					int head = j * 3 + 1;
+					int tail = head + 2;
+					bb[j] = (byte)Integer.parseInt(match.substring(head, tail), 16);
+				}
+				try {
+					String text = new String(bb, "UTF-8");
+					str.append(s.substring(offset, matcher.start()));
+					str.append(text);
+				}
+				catch (UnsupportedEncodingException e) {
+					// NOTE: This should *never* be thrown because all
+					//       JVMs are required to support UTF-8. I mean,
+					//       the strings in the .class file are all in
+					//       a modified UTF-8, for pete's sake! :)
+				}
+			}
+			offset = matcher.end();
+		}
+		if (offset < length) {
+			str.append(s.substring(offset));
+		}
+		return str.toString();
 	}
 
 } // class RedirectHelp
