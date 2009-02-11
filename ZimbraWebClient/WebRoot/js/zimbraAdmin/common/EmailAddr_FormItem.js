@@ -56,7 +56,7 @@ EmailAddr_XFormItem.choicesDirty = false ;
 EmailAddr_XFormItem.prototype.numCols = 4;
 EmailAddr_XFormItem.prototype.nowrap = true;
 EmailAddr_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
-EmailAddr_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
+EmailAddr_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 EmailAddr_XFormItem.prototype.initializeItems = 
 function () {
 	this._inputWidth = this.getInheritedProperty("inputWidth");

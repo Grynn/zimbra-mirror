@@ -136,7 +136,7 @@ function(tmpObj) {
 	if(tmpObj.attrs[ZaResource.A_zimbraMinPwdLength] != null) {
 		minPwdLen = tmpObj.attrs[ZaResource.A_zimbraMinPwdLength];
 	} else  {
-		tmpObj._defaultValues.attrs[ZaResource.A_zimbraMinPwdLength];
+		minPwdLen = tmpObj._defaultValues.attrs[ZaResource.A_zimbraMinPwdLength];
 	}
 	
 	if(tmpObj.attrs[ZaResource.A_zimbraMaxPwdLength] != null) {

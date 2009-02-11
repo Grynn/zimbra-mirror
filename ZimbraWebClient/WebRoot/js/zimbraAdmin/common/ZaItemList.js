@@ -23,10 +23,10 @@
 **/
 ZaItemList = function(constructor) {
 
-	if (arguments.length == 0) return;
+	//if (arguments.length == 0) return;
 	ZaModel.call(this, true);
-
-	this._constructor = constructor;
+	if(constructor)
+		this._constructor = constructor;
 
 	
 	this._vector = new ZaItemVector();

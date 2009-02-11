@@ -436,8 +436,8 @@ function(ev) {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call (this);
 		var newDL = new ZaDistributionList();
-		newDL.getAttrs = {all:true};
-		newDL.setAttrs = {all:true};
+		//newDL.getAttrs = {all:true};
+		//newDL.setAttrs = {all:true};
 		newDL.rights = {};
 		newDL._defaultValues = {attrs:{}};
 		newDL.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
@@ -456,9 +456,8 @@ function(ev) {
 	try {
 		EmailAddr_XFormItem.resetDomainLists.call (this);
 		var newResource = new ZaResource();
-		newResource.getAttrs = {all:true};
-		/*newResource.setAttrs = {all:true};
-		newResource._defaultValues = {attrs:{}};*/	
+		//newResource.getAttrs = {all:true};
+		//newResource._defaultValues = {attrs:{}};	
 		newResource.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
 		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
 			ZaApp.getInstance().dialogs["newResourceWizard"] = new ZaNewResourceXWizard(this._container);	

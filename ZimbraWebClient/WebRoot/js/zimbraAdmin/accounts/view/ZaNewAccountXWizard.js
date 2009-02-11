@@ -503,7 +503,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					labelLocation:_LEFT_, visibilityChecks:[[XFormItem.prototype.hasReadPermission,ZaAccount.A_displayname]],
 					items: [
 						{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150, 
-							enableDisableChecks:[ZaNewAccountXWizard.isAutoDisplayname,XFormItem.prototype.hasWritePermission],
+							enableDisableChecks:[ZaNewAccountXWizard.isAutoDisplayname,ZaItem.hasWritePermission],
 							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true,
 							visibilityChecks:[]
 						},
@@ -515,7 +515,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 								this.getForm().itemChanged(this, elementValue, event);
 							},
 							visibilityChecks:[],
-							enableDisableChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_displayname]]
+							enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_displayname]]
 						}
 					]
 				},
@@ -541,7 +541,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 
 		setupGroup.items.push(
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
-				visibilityChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_COSId]],
+				visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 				items: [
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
 						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
@@ -587,7 +587,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 							});
 							
 		setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,
-							visibilityChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_mailHost]],
+							visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_mailHost]],
 							items: [
 								{ ref: ZaAccount.A_mailHost, type: _OSELECT1_, label: null, editable:false, choices: ZaApp.getInstance().getServerListChoices(), 
 									enableDisableChecks:[ZaAccount.isAutoMailServer],
@@ -623,7 +623,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	
 	    var new_acct_timezone_group = {
 	         type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_TimezoneGrouper, id: "account_wiz_timezone_group",
-	         visibilityChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraPrefTimeZoneId]],
+	         visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefTimeZoneId]],
 	         numCols: 2,
 	         items: [
 	                   /*

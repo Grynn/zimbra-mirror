@@ -849,7 +849,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 					visibilityChecks:[[XFormItem.prototype.hasReadPermission,ZaAccount.A_displayname]],
 					items: [
 						{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150,
-							enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"],XFormItem.prototype.hasWritePermission],
+							enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"],ZaItem.hasWritePermission],
 							enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true,
 							visibilityChecks:[]
 						},
@@ -862,7 +862,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 								}
 								this.getForm().itemChanged(this, elementValue, event);
 							},
-							enableDisableChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_displayname]]
+							enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_displayname]]
 						}
 					]
 				},
@@ -889,7 +889,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 
 			setupGroup.items.push(
 				{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
-					visibilityChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_COSId]],
+					visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 					items: [
 						{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, choices:this.cosChoices,
 							inputPreProcessor:ZaAccountXFormView.preProcessCOS,
@@ -1746,18 +1746,18 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
 											onActivate:"ZaAccountXFormView.deleteFwdAddrButtonListener.call(this);",
-											enableDisableChecks:[ZaAccountXFormView.isDeleteFwdAddrEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraMailForwardingAddress]],
+											enableDisableChecks:[ZaAccountXFormView.isDeleteFwdAddrEnabled,[ZaItem.hasWritePermission,ZaAccount.A_zimbraMailForwardingAddress]],
 											enableDisableChangeEventSources:[ZaAccount.A2_fwdAddr_selection_cache]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
 											onActivate:"ZaAccountXFormView.editFwdAddrButtonListener.call(this);",
-											enableDisableChecks:[ZaAccountXFormView.isEditFwdAddrEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraMailForwardingAddress]],
+											enableDisableChecks:[ZaAccountXFormView.isEditFwdAddrEnabled,[ZaItem.hasWritePermission,ZaAccount.A_zimbraMailForwardingAddress]],
 											enableDisableChangeEventSources:[ZaAccount.A2_fwdAddr_selection_cache]
 										},
 										{type:_CELLSPACER_},
                                         {type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
-											enableDisableChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraMailForwardingAddress]],                                        
+											enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraMailForwardingAddress]],                                        
 											onActivate:"ZaAccountXFormView.addFwdAddrButtonListener.call(this);"
 										}
 									]
@@ -1786,24 +1786,24 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 									items: [
 										{type:_DWT_BUTTON_, label:ZaMsg.TBB_Push,width:"100px",
 											onActivate:"ZaAccountXFormView.pushFpButtonListener.call(this);",
-											enableDisableChecks:[ZaAccountXFormView.isPushFpEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
+											enableDisableChecks:[ZaAccountXFormView.isPushFpEnabled,[ZaItem.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
 											enableDisableChangeEventSources:[ZaAccount.A_zimbraForeignPrincipal]
 										},
 										{type:_CELLSPACER_},
                                         {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
                                             onActivate:"ZaAccountXFormView.deleteFpButtonListener.call(this);",
-                                            enableDisableChecks:[ZaAccountXFormView.isDeleteFpEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
+                                            enableDisableChecks:[ZaAccountXFormView.isDeleteFpEnabled,[ZaItem.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
                                             enableDisableChangeEventSources:[ZaAccount.A2_fp_selection_cache]
                                         },
                                         {type:_CELLSPACER_},
                                         {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
                                             onActivate:"ZaAccountXFormView.editFpButtonListener.call(this);",
-                                            enableDisableChecks:[ZaAccountXFormView.isEditFpEnabled,[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
+                                            enableDisableChecks:[ZaAccountXFormView.isEditFpEnabled,[ZaItem.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
                                             enableDisableChangeEventSources:[ZaAccount.A2_fp_selection_cache]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.NAD_Add,width:"100px",
-											enableDisableChecks:[[XFormItem.prototype.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
+											enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraForeignPrincipal]],
 											onActivate:"ZaAccountXFormView.addFpButtonListener.call(this);"
 										}
 									]

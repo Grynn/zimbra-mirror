@@ -189,10 +189,17 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 				this.rights[rights[r].n] = true;
 			}
 		}
+		if(!this._defaultValues)
+			this._defaultValues = {attrs:{}};
+
+		if(!this.getAttrs)
+			this.getAttrs = {};
+
+		if(!this.setAttrs)
+			this.setAttrs = {};
+											
 		if(targetObj.getAttrs && targetObj.getAttrs instanceof Array && 
 			targetObj.getAttrs[0]) {
-			if(!this.getAttrs)
-				this.getAttrs = {};
 			if(targetObj.getAttrs[0].a && targetObj.getAttrs[0].a instanceof Array) {
 				var getAttrs = targetObj.getAttrs[0].a;
 				for (var a in getAttrs) {
@@ -211,13 +218,19 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 		}			
 		if(targetObj.setAttrs && targetObj.setAttrs instanceof Array && 
 			targetObj.setAttrs[0]) {
-			if(!this.setAttrs)
-				this.setAttrs = {};
+
 				
 			if(targetObj.setAttrs[0].a && targetObj.setAttrs[0].a instanceof Array) {
 				var setAttrs = targetObj.setAttrs[0].a;
 				for (var a in setAttrs) {
 					this.setAttrs[setAttrs[a].n] = true;
+					this.getAttrs[setAttrs[a].n] = true;
+					if(setAttrs[a]["default"] && setAttrs[a]["default"][0] && setAttrs[a]["default"][0].v && setAttrs[a]["default"][0].v instanceof Array) {
+						var cnt = setAttrs[a]["default"][0].v.length; 
+						for(var i = 0; i<cnt;i++) { 
+							this._defaultValues.attrs[setAttrs[a].n] = setAttrs[a]["default"][0].v[i]._content;
+						}
+					}					
 				}
 			} 
 			if(targetObj.setAttrs[0].all) {
