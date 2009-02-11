@@ -5,11 +5,13 @@ cd $PROGDIR
 PATHDIR=`pwd`
 CLEAN=no
 SYNC=no
+PUBLIC=no
 
 usage() {
 	echo ""
-	echo "Usage: "`basename $0`" -c [-s]" >&2
+	echo "Usage: "`basename $0`" -c [-p] [-s]" >&2
 	echo "-c: Remove contents of /opt/zimbra (clean)"
+	echo "-p: Use public CPAN mirror"
 	echo "-s: Re-sync source before building"
 	exit 2;
 }
@@ -65,6 +67,10 @@ while [ $# -gt 0 ]; do
 	case $1 in
 		-c|--clean)
 			CLEAN=yes
+			shift;
+			;;
+		-p|--public)
+			PUBLIC=yes
 			shift;
 			;;
 		-h|--help)
@@ -273,8 +279,13 @@ fi
 cd ${PATHDIR}
 rm -f make.out 2> /dev/null
 make allclean > /dev/null 2>&1
-make all 2>&1 | tee -a make.out
+if [ x$PUBLIC = x"yes" ]; then
+	make all CMIRROR=mirrors2.kernel.org 2>&1 | tee -a make.out
+else
+	make all 2>&1 | tee -a make.out
+fi
+
 mkdir -p $PATHDIR/../logs
-cp /tmp/ThirdParty.make.log $PATHDIR/../logs
-cp /tmp/ThirdParty-Perllibs.log $PATHDIR/../logs
+cp -f /tmp/ThirdParty.make.log $PATHDIR/../logs
+cp -f /tmp/ThirdParty-Perllibs.log $PATHDIR/../logs
 exit 0;
