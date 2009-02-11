@@ -223,7 +223,7 @@ sub runLoggerSql(@) {
 	  $logScript = 1
       if (! defined($logScript));
 
-	  Migrate::log($script)
+	  Migrate::logSql($script)
       if ($logScript);
 
     # Run the mysql command and redirect output to a temp file
