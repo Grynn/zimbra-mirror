@@ -19,49 +19,44 @@ package com.zimbra.cs.offline;
 import com.zimbra.cs.offline.ab.gab.GabImport;
 import com.zimbra.cs.datasource.ImapSync;
 import com.zimbra.cs.account.offline.OfflineDataSource;
-import com.zimbra.cs.OfflineImapImport;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.Log;
-import com.zimbra.common.util.ZimbraLog;
 
 import java.util.List;
 
-public class GMailImport extends OfflineImapImport {
-    private final GabImport gabImport;
-    private final OfflineCalDavDataImport calDavImport;
+public class GMailImport implements DataSource.DataImport {
+    private OfflineImport imapImport;
+    private OfflineImport gabImport;
+    private OfflineImport calDavImport;
 
-    private static final Log LOG = ZimbraLog.datasource;
-    
     public GMailImport(OfflineDataSource ds) throws ServiceException {
-        super(ds);
-        gabImport = ds.isContactSyncEnabled() ? new GabImport(ds) : null;
-        calDavImport = ds.isCalendarSyncEnabled() ?
-            new OfflineCalDavDataImport(dataSource) : null;
+        imapImport = new OfflineImport(ds, new ImapSync(ds), OfflineImport.IMAP_INTERVAL);
+        if (ds.isContactSyncEnabled()) {
+            gabImport = new OfflineImport(
+                ds, new GabImport(ds), OfflineImport.CONTACTS_INTERVAL);
+        }
+        if (ds.isCalendarSyncEnabled()) {
+            calDavImport = new OfflineImport(
+                ds, new OfflineCalDavDataImport(ds, "gmail.com"),
+                OfflineImport.CALENDAR_INTERVAL);
+        }
     }
 
-    @Override
     public void test() throws ServiceException {
         if (gabImport != null) {
             gabImport.test();
         }
-        super.test();
+        imapImport.test();
     }
     
-    @Override
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
-        super.importData(folderIds, fullSync);
-
-        String dsName = dataSource.getName();
+        imapImport.importData(folderIds, fullSync);
         if (gabImport != null) {
-            LOG.info("Importing contacts for GMail account '%s'", dsName);
             gabImport.importData(null, fullSync);
-            LOG.info("Finished importing contacts for GMail account '%s'", dsName);
         }
         if (calDavImport != null) {
-            LOG.info("Importing calendar for GMail account '%s'", dsName);
-            calDavImport.importData("gmail.com", null, fullSync);
-            LOG.info("Finished importing calendar for GMail account '%s'", dsName);
+            calDavImport.importData(null, fullSync);
         }
     }
 }

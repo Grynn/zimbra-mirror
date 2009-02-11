@@ -5,22 +5,23 @@ import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.SystemUtil;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.datasource.CalDavDataImport;
 import com.zimbra.cs.dav.DavException;
 import com.zimbra.cs.dav.client.CalDavClient;
 import com.zimbra.cs.mailbox.OfflineServiceException;
-import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class OfflineCalDavDataImport extends CalDavDataImport {
+    private final String serviceName;
+    
     private static final String CALDAV_TARGET_URL = "calDavTargetUrl";
     private static final String CALDAV_PRINCIPAL_PATH = "calDavPrincipalPath";
     
-    public OfflineCalDavDataImport(DataSource ds) throws ServiceException {
+    public OfflineCalDavDataImport(DataSource ds, String serviceName) throws ServiceException {
         super(ds);
+        this.serviceName = serviceName;
     }
     
     public static void loginTest(String username, String password, String serviceName) throws IOException, ServiceException {
@@ -40,9 +41,10 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
             doCalDavFailures(serviceName, x);
         }
     }
-    
-    public void importData(String serviceName, List<Integer> folderIds, boolean fullSync) throws ServiceException {
-    	try {
+
+    public void importData(List<Integer> folderIds, boolean fullSync) throws ServiceException {
+        ZimbraLog.calendar.info("Importing calendar for account '%s'", dataSource.getName());
+        try {
     		super.importData(folderIds, fullSync);
     	} catch (ServiceException x) {
     		Throwable t = SystemUtil.getInnermostException(x);
@@ -50,6 +52,7 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     			doCalDavFailures(serviceName, (DavException)t);
     		throw x;
     	}
+        ZimbraLog.calendar.info("Finished importing calendar for account '%s'", dataSource.getName());
     }
     
     private static void doCalDavFailures(String serviceName, DavException x) throws ServiceException {

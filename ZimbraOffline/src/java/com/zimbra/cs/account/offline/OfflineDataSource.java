@@ -40,12 +40,13 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.GMailImport;
 import com.zimbra.cs.offline.YMailImport;
+import com.zimbra.cs.offline.OfflineImport;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.datasource.SyncState;
+import com.zimbra.cs.datasource.ImapSync;
 import com.zimbra.cs.mailclient.CommandFailedException;
-import com.zimbra.cs.OfflineImapImport;
 import com.yahoo.mail.UserData;
 import com.yahoo.mail.AllOtherYahooMboxes;
 import com.yahoo.mail.YahooMbox;
@@ -362,7 +363,7 @@ public class OfflineDataSource extends DataSource {
             } else if (isGmail()) {
                 return new GMailImport(this);
             } else {
-                return new OfflineImapImport(this);
+                return new OfflineImport(this, new ImapSync(this), OfflineImport.IMAP_INTERVAL);
             }
         }
         return super.getDataImport();

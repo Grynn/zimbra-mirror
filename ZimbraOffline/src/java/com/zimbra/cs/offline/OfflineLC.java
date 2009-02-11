@@ -74,7 +74,9 @@ public class OfflineLC {
     public static final KnownKey zdesktop_yauth_appid;
     public static final KnownKey zdesktop_yab_baseuri;
     public static final KnownKey zdesktop_ymail_baseuri;
-    public static final KnownKey zdesktop_fullsync_interval;
+    public static final KnownKey zdesktop_imap_fullsync_interval;
+    public static final KnownKey zdesktop_contacts_fullsync_interval;
+    public static final KnownKey zdesktop_calendar_fullsync_interval;
     public static final KnownKey zdesktop_ybizmail_smtp_host;
     public static final KnownKey zdesktop_ybizmail_smtp_port;
     public static final KnownKey zdesktop_ybizmail_smtp_ssl;
@@ -261,10 +263,18 @@ public class OfflineLC {
 	    zdesktop_ymail_baseuri.setDefault("http://mail.yahooapis.com/ws/mail/v1.1/soap");
 	    zdesktop_ymail_baseuri.setDoc("base uri for ymail");
 
-        zdesktop_fullsync_interval = new KnownKey("zdesktop_imap_fullsync_interval");
-        zdesktop_fullsync_interval.setDefault("60"); // 1 hour
-        zdesktop_fullsync_interval.setDoc("Max number of minutes between full sync of INBOX");
-        
+        zdesktop_imap_fullsync_interval = new KnownKey("zdesktop_imap_fullsync_interval");
+        zdesktop_imap_fullsync_interval.setDefault("60"); // 1 hour
+        zdesktop_imap_fullsync_interval.setDoc("Max number of minutes between full sync of IMAP");
+
+        zdesktop_contacts_fullsync_interval = new KnownKey("zdesktop_ab_fullsync_interval");
+        zdesktop_contacts_fullsync_interval.setDefault("15"); // 15 minutes
+        zdesktop_contacts_fullsync_interval.setDoc("Max number of minutes between full sync of contacts");
+
+        zdesktop_calendar_fullsync_interval = new KnownKey("zdesktop_caldav_fullsync_interval");
+        zdesktop_calendar_fullsync_interval.setDefault("15"); // 15 minutes
+        zdesktop_calendar_fullsync_interval.setDoc("Max number of minutes between full sync of calendar");
+
         zdesktop_ybizmail_smtp_host = new KnownKey("zdesktop_ybizmail_smtp_host");
         zdesktop_ybizmail_smtp_host.setDefault("smtp.bizmail.yahoo.com");
         zdesktop_ybizmail_smtp_host.setDoc("Yahoo bizmail SMTP host");
