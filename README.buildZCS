@@ -16,9 +16,6 @@ Make sure the "zimbra" group exists in /etc/group
 
 Make sure that the p4 binary is in your path.
 
-It is also required to update the Perl Mirror in:
-ThirdParty/Perl/MyConfig.pm.template
-
 The 1.5 Java JDK must also be installed into /usr/local/java, so that the binary is:
 /usr/local/java/bin/java
 
@@ -40,6 +37,8 @@ you to skip rebuilding it just to rebuild the rest of ZCS.
 
 (b) It can build Zimbra Desktop for you (-d option).  It is not required to build Third
 Party to build Desktop.
+
+(c) It can use a public CPAN mirror (-p option).  You'll likely need to use this flag.
 
 The buildZCS.sh script will do its best to make sure you have all pre-requisite software
 installed to both build Third Party and to build the ZCS product.
