@@ -97,12 +97,27 @@ GlobalConfigXFormView.shouldEnableAddAllButton = function () {
 	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension)));
 }
 
+GlobalConfigXFormView.removeExt = function () {
+	var blockedExtArray = this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaBlockedExtension);
+	var selectedExtArray = this.getInstanceValue(ZaGlobalConfig.A2_blocked_extension_selection);
+	var newBlockedExtArray = AjxUtil.arraySubstract(blockedExtArray,selectedExtArray);
+	this.setInstanceValue(newBlockedExtArray,ZaGlobalConfig.A_zimbraMtaBlockedExtension);
+	this.getForm().parent.setDirty(true);	
+}
+
+GlobalConfigXFormView.removeAllExt = function () {
+	this.setInstanceValue([],ZaGlobalConfig.A_zimbraMtaBlockedExtension);
+	this.setInstanceValue([],ZaGlobalConfig.A2_blocked_extension_selection);
+	this.getForm().parent.setDirty(true);	
+}
+
 GlobalConfigXFormView.addCommonExt = function () {
 	var commonExtArr = this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaBlockedExtension);
 	var newExtArr = this.getInstanceValue(ZaGlobalConfig.A2_common_extension_selection);
 	commonExtArr = AjxUtil.isEmpty(commonExtArr) ? [] : commonExtArr;
 	newExtArr = AjxUtil.isEmpty(newExtArr) ? [] : newExtArr;	
-	this.setInstanceValue(AjxUtil.mergeArrays(commonExtArr,newExtArr),ZaGlobalConfig.A_zimbraMtaBlockedExtension);		
+	this.setInstanceValue(AjxUtil.mergeArrays(commonExtArr,newExtArr),ZaGlobalConfig.A_zimbraMtaBlockedExtension);	
+	this.getForm().parent.setDirty(true);	
 }
 
 GlobalConfigXFormView.addAllCommonExt = function () {
@@ -110,7 +125,8 @@ GlobalConfigXFormView.addAllCommonExt = function () {
 	var newExtArr = this.getInstanceValue(ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension);
 	commonExtArr = AjxUtil.isEmpty(commonExtArr) ? [] : commonExtArr;
 	newExtArr = AjxUtil.isEmpty(newExtArr) ? [] : newExtArr;
-	this.setInstanceValue(AjxUtil.mergeArrays(commonExtArr,newExtArr),ZaGlobalConfig.A_zimbraMtaBlockedExtension);			
+	this.setInstanceValue(AjxUtil.mergeArrays(commonExtArr,newExtArr),ZaGlobalConfig.A_zimbraMtaBlockedExtension);
+	this.getForm().parent.setDirty(true);			
 }
 
 GlobalConfigXFormView.addNewExt = function() {
@@ -126,6 +142,7 @@ GlobalConfigXFormView.addNewExt = function() {
 	
 	this.setInstanceValue(AjxUtil.mergeArrays(commonExtArr,newExtArr),ZaGlobalConfig.A_zimbraMtaBlockedExtension);
 	this.setInstanceValue(null,ZaGlobalConfig.A_zimbraNewExtension);
+	this.getForm().parent.setDirty(true);
 }
 
 GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
@@ -225,11 +242,13 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 								{type:_GROUP_, width:"100%", numCols:4, colSizes:[85,5, 85,"*"], 
 									items:[
 										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemoveAll, width:80, 
+											onActivate:"GlobalConfigXFormView.removeAllExt.call(this)",
 										   	enableDisableChecks:[GlobalConfigXFormView.shouldEnableRemoveAllButton],
 									   		enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraMtaBlockedExtension]
 										},
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonRemove, width:80,
+										   	onActivate:"GlobalConfigXFormView.removeExt.call(this)",
 										   	enableDisableChecks:[GlobalConfigXFormView.shouldEnableRemoveButton],
 									   		enableDisableChangeEventSources:[ZaGlobalConfig.A2_blocked_extension_selection]										
 									    },
