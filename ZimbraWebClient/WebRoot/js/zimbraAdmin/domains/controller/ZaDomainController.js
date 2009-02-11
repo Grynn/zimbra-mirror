@@ -85,8 +85,11 @@ function () {
 	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
 	this._toolbarOrder.push(ZaOperation.DELETE);		    	    	
 
-	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+    this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS]=new ZaOperation(ZaOperation.VIEW_DOMAIN_ACCOUNTS,ZaMsg.Domain_view_accounts, ZaMsg.Domain_view_accounts_tt, "Search", "SearchDis", new AjxListener(this, this.viewAccountsButtonListener));
+    this._toolbarOrder.push(ZaOperation.VIEW_DOMAIN_ACCOUNTS);
+
+
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
 		this._toolbarOperations[ZaOperation.GAL_WIZARD]=new ZaOperation(ZaOperation.GAL_WIZARD,ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainController.prototype._galWizButtonListener));   		
 		this._toolbarOrder.push(ZaOperation.SEP);
@@ -484,6 +487,12 @@ function(ev) {
 	}	
 }
 
+
+ZaDomainController.prototype.viewAccountsButtonListener  =
+function (ev) {
+   var domainName = this._view.getObject().name ;
+   ZaDomain.searchAccountsInDomain (domainName) ;
+}
 
 ZaDomainController.prototype._galWizButtonListener =
 function(ev) {

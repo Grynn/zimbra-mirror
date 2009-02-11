@@ -112,8 +112,10 @@ function () {
 	this._popupOperations[ZaOperation.EDIT]=new ZaOperation(ZaOperation.EDIT,ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener));    	
 
 	this._popupOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener));    	    	
-	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
+
+    this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS]=new ZaOperation(ZaOperation.VIEW_DOMAIN_ACCOUNTS,ZaMsg.Domain_view_accounts, ZaMsg.Domain_view_accounts_tt, "Search", "SearchDis", new AjxListener(this, this.viewAccountsButtonListener));
+
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this._popupOperations[ZaOperation.GAL_WIZARD]=new ZaOperation(ZaOperation.GAL_WIZARD,ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener));   		
 	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_AUTH_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
@@ -136,8 +138,10 @@ function () {
   	this._toolbarOperations[ZaOperation.EDIT]=new ZaOperation(ZaOperation.EDIT,ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener));    	
 	
    	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener));    	    	
-	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
+
+    this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS]=new ZaOperation(ZaOperation.VIEW_DOMAIN_ACCOUNTS,ZaMsg.Domain_view_accounts, ZaMsg.Domain_view_accounts_tt, "Search", "SearchDis", new AjxListener(this, this.viewAccountsButtonListener));
+    
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_GAL_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this._toolbarOperations[ZaOperation.GAL_WIZARD]=new ZaOperation(ZaOperation.GAL_WIZARD,ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener));   		
 	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_AUTH_WIZ] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
@@ -146,7 +150,8 @@ function () {
 	this._toolbarOrder.push(ZaOperation.NEW);
 	this._toolbarOrder.push(ZaOperation.EDIT);
 	this._toolbarOrder.push(ZaOperation.DELETE);
-	this._toolbarOrder.push(ZaOperation.GAL_WIZARD);
+    this._toolbarOrder.push(ZaOperation.VIEW_DOMAIN_ACCOUNTS);
+    this._toolbarOrder.push(ZaOperation.GAL_WIZARD);
 	this._toolbarOrder.push(ZaOperation.AUTH_WIZARD);
 	this._toolbarOrder.push(ZaOperation.NONE);	
 	this._toolbarOrder.push(ZaOperation.PAGE_BACK);
@@ -364,6 +369,14 @@ function(ev) {
 	}
 }
 
+ZaDomainListController.prototype.viewAccountsButtonListener  =
+function (ev) {
+    if(this._contentView.getSelectionCount() == 1) {
+        var item = this._contentView.getSelection()[0];
+        var domainName = item.name ;
+        ZaDomain.searchAccountsInDomain (domainName) ;
+	}
+}
 
 ZaDomainListController.prototype._closeTabsBeforeRemove =
 function () {
@@ -461,13 +474,6 @@ function () {
 	if(cnt == 1) {
 		var item = this._contentView.getSelection()[0];
 		if(item) {
-				/*enableArray.push(ZaOperation.EDIT);
-				if(ZaSettings.CAN_DELETE_DOMAINS)
-					enableArray.push(ZaOperation.DELETE);
-				if(ZaSettings.DOMAIN_AUTH_WIZ_ENABLED)
-					enableArray.push(ZaOperation.AUTH_WIZARD);				
-				if(ZaSettings.DOMAIN_GAL_WIZ_ENABLED)
-					enableArray.push(ZaOperation.GAL_WIZARD);*/				
 			if(item.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
 				if(this._toolbarOperations[ZaOperation.EDIT])
 					this._toolbarOperations[ZaOperation.EDIT].enabled=false;
@@ -485,8 +491,14 @@ function () {
 					this._popupOperations[ZaOperation.AUTH_WIZARD].enabled=false;
 				
 				if(this._popupOperations[ZaOperation.GAL_WIZARD])
-					this._popupOperations[ZaOperation.GAL_WIZARD].enabled=false;					
-			}
+					this._popupOperations[ZaOperation.GAL_WIZARD].enabled=false;
+
+                if(this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
+					this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;
+
+                if (this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
+                    this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;                    
+            }
 		}
 	} else if (cnt > 1){
 		if(this._toolbarOperations[ZaOperation.AUTH_WIZARD])
@@ -506,7 +518,13 @@ function () {
 		
 		if(this._popupOperations[ZaOperation.EDIT])
 			this._popupOperations[ZaOperation.EDIT].enabled=false;
-	} else {
+
+        if(this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
+            this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;
+
+        if (this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
+            this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;    
+    } else {
 		if(this._toolbarOperations[ZaOperation.EDIT])
 			this._toolbarOperations[ZaOperation.EDIT].enabled=false;
 		
@@ -530,8 +548,14 @@ function () {
 			this._popupOperations[ZaOperation.AUTH_WIZARD].enabled=false;
 					
 		if(this._popupOperations[ZaOperation.GAL_WIZARD])
-			this._popupOperations[ZaOperation.GAL_WIZARD].enabled=false;			
-	}
+			this._popupOperations[ZaOperation.GAL_WIZARD].enabled=false;
+
+        if(this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
+            this._toolbarOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;
+
+        if (this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS])
+            this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS].enabled=false;    
+    }
 }
 ZaController.changeActionsStateMethods["ZaDomainListController"].push(ZaDomainListController.changeActionsStateMethod);
 
