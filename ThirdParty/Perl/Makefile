@@ -310,7 +310,7 @@ DBD:
 
 setup:
 	mkdir -p ${HOME}/.cpan/CPAN
-	sed -e "s|@@LYNX@@|$(LYNX)|g" -e "s|@@WGET@@|$(WGET)|g" -e "s|@@LESS@@|$(LESS)|g" -e "s|@@GPG@@|$(GPG)|g" -e "s|@@UNZIP@@|$(UNZIP)|g" -e "s|@@CURL@@|$(CURL)|g" -e "s|@@BZIP2@@|$(BZIP2)|g" -e "s|@@MAKE@@|$(MAKE)|g" -e "s|@@FTP@@|$(FTP)|g" -e "s|@@TAR@@|$(TAR)|g" -e "s|@@GZIP@@|$(GZIP)|g" -e "s|@@BUILD_ROOT@@|$(PERL_ROOT)|g" MyConfig.pm.template > ${HOME}/.cpan/CPAN/MyConfig.pm 
+	sed -e "s|@@LYNX@@|$(LYNX)|g" -e "s|@@WGET@@|$(WGET)|g" -e "s|@@LESS@@|$(LESS)|g" -e "s|@@GPG@@|$(GPG)|g" -e "s|@@UNZIP@@|$(UNZIP)|g" -e "s|@@CURL@@|$(CURL)|g" -e "s|@@BZIP2@@|$(BZIP2)|g" -e "s|@@MAKE@@|$(MAKE)|g" -e "s|@@FTP@@|$(FTP)|g" -e "s|@@TAR@@|$(TAR)|g" -e "s|@@GZIP@@|$(GZIP)|g" -e "s|@@BUILD_ROOT@@|$(PERL_ROOT)|g" -e "s|@@CMIRROR@@|$(CMIRROR)|g" MyConfig.pm.template > ${HOME}/.cpan/CPAN/MyConfig.pm 
 
 p4edit: $(PERL_TGZ_DEST) 
 	p4 add $(PERL_TGZ_DEST)
