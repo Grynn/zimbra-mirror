@@ -158,4 +158,16 @@ public abstract class Field extends Entity {
             }
         }
     }
+
+    protected String getTextValue(Element e) {
+        return denormalize(Xml.getTextValue(e));
+    }
+    
+    // "De-normalize" YAB field value (see Yahoo! address book reference guide)
+    private String denormalize(String s) {
+        if (s == null) return null;
+        return s.replaceAll("&lt;", "<").replaceAll("&gt;", ">")
+                .replaceAll("&#39;", "'").replaceAll("&quot;", "\"")
+                .replaceAll("&amp;", "&");
+    }
 }
