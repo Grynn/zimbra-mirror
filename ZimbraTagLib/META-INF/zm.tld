@@ -2563,6 +2563,67 @@
 
     <tag>
         <description>
+            Do a batch GetMiniCalRequest and Search call and get back JSON in variable.
+        </description>
+
+        <name>calSearchJSON</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.CalSearchJSONTag</tag-class>
+
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>
+                Name of the exported scoped variable to store the JSON result int.
+            </description>
+            <name>var</name>
+            <required>true</required>
+        </attribute>
+
+        <attribute>
+            <description>
+                auth token to use.
+            </description>
+            <name>authtoken</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                items per page in the search request
+            </description>
+            <name>itemsperpage</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                types to search for
+            </description>
+            <name>types</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>timezone to compute correct start/end time for search</description>
+            <name>timezone</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.TimeZone</type>
+        </attribute>
+
+    </tag>
+
+    <tag>
+        <description>
             Retreive the ZUserAgentBean
         </description>
 
