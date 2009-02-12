@@ -104,15 +104,15 @@ public final class AddressField extends Field {
         for (Element child : Xml.getChildren(e)) {
             String tag = child.getTagName();
             if (tag.equals(STREET)) {
-                street = Xml.getTextValue(child);
+                street = getTextValue(child);
             } else if (tag.equals(CITY)) {
-                city = Xml.getTextValue(child);
+                city = getTextValue(child);
             } else if (tag.equals(STATE)) {
-                state = Xml.getTextValue(child);
+                state = getTextValue(child);
             } else if (tag.equals(ZIP)) {
-                zip = Xml.getTextValue(child);
+                zip = getTextValue(child);
             } else if (tag.equals(COUNTRY)) {
-                country = Xml.getTextValue(child);
+                country = getTextValue(child);
             } else {
                 throw new IllegalArgumentException(
                     "Invalid 'address' field child element: " + tag);

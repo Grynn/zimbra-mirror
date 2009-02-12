@@ -133,19 +133,19 @@ public final class NameField extends Field {
         for (Element child : Xml.getChildren(e)) {
             String tag = child.getTagName();
             if (tag.equals(FIRST)) {
-                first = Xml.getTextValue(child);
+                first = getTextValue(child);
             } else if (tag.equals(MIDDLE)) {
-                middle = Xml.getTextValue(child);
+                middle = getTextValue(child);
             } else if (tag.equals(LAST)) {
-                last = Xml.getTextValue(child);
+                last = getTextValue(child);
             } else if (tag.equals(PREFIX)) {
-                prefix = Xml.getTextValue(child);
+                prefix = getTextValue(child);
             } else if (tag.equals(SUFFIX)) {
-                suffix = Xml.getTextValue(child);
+                suffix = getTextValue(child);
             } else if (tag.equals(FIRST_SOUND)) {
-                firstSound = Xml.getTextValue(child);
+                firstSound = getTextValue(child);
             } else if (tag.equals(LAST_SOUND)) {
-                lastSound = Xml.getTextValue(child);
+                lastSound = getTextValue(child);
             } else {
                 throw new IllegalArgumentException(
                     "Invalid 'name' field child element: " + tag);

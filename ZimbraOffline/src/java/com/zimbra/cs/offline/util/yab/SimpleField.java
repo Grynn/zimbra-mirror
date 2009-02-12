@@ -127,6 +127,6 @@ public final class SimpleField extends Field {
     @Override
     protected void parseXml(Element e) {
         super.parseXml(e);
-        value = Xml.getTextValue(e);
+        value = getTextValue(e);
     }
 }

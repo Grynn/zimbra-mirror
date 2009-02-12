@@ -428,8 +428,10 @@ public class OfflineSyncManager {
 	
 	public static boolean isDbShutdown(Exception exception) {
 		Throwable e = SystemUtil.getInnermostException(exception);
-		if (e instanceof RuntimeException && ((RuntimeException)e).getMessage().equals("DbPool permanently shutdown"))
-			return true;
+		if (e instanceof RuntimeException) {
+            String msg = e.getMessage();
+            return msg != null && msg.equals("DbPool permanently shutdown");
+        }
 		return false;
 	}
 	
