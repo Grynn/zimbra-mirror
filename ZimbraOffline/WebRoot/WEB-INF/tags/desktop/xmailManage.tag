@@ -255,8 +255,8 @@ function SetSmtpPort() {
             <td>
                 <table cellpadding="0" cellspacing="0">
                     <tr>
-                        <td><input class="ZCheckbox" type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled || empty bean.accountName ? 'checked' : ''}></td>
-		        <td class="ZFieldInfo"><fmt:message key='SyncCalendarInfo'/></td>
+                        <td><input class="ZCheckbox" type="checkbox" id="calendarSyncEnabled" name="calendarSyncEnabled" ${bean.calendarSyncEnabled ? 'checked' : ''}></td>
+		        <td class="ZFieldInfo"><fmt:message key='SyncCalendarInfo'/> &nbsp;<a href="javascript:zd.toggle('betaNote')">(<fmt:message key='Beta'/>)</a></td>
                     </tr>
                 </table>
             </td>
@@ -268,11 +268,17 @@ function SetSmtpPort() {
             <td>
                 <table cellpadding="0" cellspacing="0">
                     <tr>
-                        <td><input class="ZCheckbox" type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled || empty bean.accountName ? 'checked' : ''}></td>
-		        <td class="ZFieldInfo"><fmt:message key='SyncContactsInfo'/></td>
+                        <td><input class="ZCheckbox" type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''}></td>
+		        <td class="ZFieldInfo"><fmt:message key='SyncContactsInfo'/> &nbsp;<a href="javascript:zd.toggle('betaNote')">(<fmt:message key='Beta'/>)</a></td>
                     </tr>
                 </table>
             </td>
+        </tr>
+</c:if>
+<c:if test="${bean.calendarSyncSupported || bean.contactSyncSupported}">
+        <tr>
+            <td></td>
+            <td class="ZAccountHelp"><div id="betaNote" style="display:none"><fmt:message key='BetaNote'/></div></td>
         </tr>
 </c:if>
 <c:if test="${not empty bean.accountId}">
