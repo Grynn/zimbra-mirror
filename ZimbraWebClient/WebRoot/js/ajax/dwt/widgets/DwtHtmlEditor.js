@@ -1635,22 +1635,40 @@ function() {
 //    - text
 //    - title
 DwtHtmlEditor.prototype.insertLink = function(params) {
+
+    var doc  = this._getIframeDoc();
+    var content =  (AjxEnv.isIE && doc && doc.body) ? (doc.body.innerHTML) : "";
+
+    if(AjxEnv.isIE && content == ""){
+
+        var a = doc.createElement("a");
+        a.href = params.url;
+        if (params.title) a.title = params.title;
+
+        var tNode = doc.createTextNode(params.text);
+
+        a.appendChild(tNode);
+        doc.body.appendChild(a);
+        return a;
+
+    }else{
         if (params.text)
-                this.insertText(params.text, true);
+            this.insertText(params.text, true);
         var url = "javascript:" + Dwt.getNextId();
         this._execCommand("createlink", url);
-        var a = this._getIframeDoc().getElementsByTagName("a");
+        var a = doc.getElementsByTagName("a");
         var link;
         for (var i = a.length; --i >= 0;) {
-                if (a[i].href == url) {
-                        link = a[i];
-                        break;
-                }
+            if (a[i].href == url) {
+                link = a[i];
+                break;
+            }
         }
         link.href = params.url;
         if (params.title)
-                link.title = params.title;
+            link.title = params.title;
         return link;
+    }
 };
 
 // if the caret/selection is currently a link, select it and return its properties
