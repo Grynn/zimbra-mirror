@@ -28,9 +28,6 @@ ZaResourceXFormView = function(parent) {
 		
 	this.initForm(ZaResource.myXModel,this.getMyXForm());
 	this._localXForm.setController(ZaApp.getInstance());	
-	//this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(ZaApp.getInstance().getResourceController(), ZaResourceController.prototype.handleXFormChange));
-	//this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(ZaApp.getInstance().getResourceController(), ZaResourceController.prototype.handleXFormChange));	
-	
 	this._helpURL = ZaResourceXFormView.helpURL;	
 }
 
@@ -242,11 +239,15 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 	
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
 		msgName:ZaMsg.zimbraCalResMaxNumConflictsAllowed, label:ZaMsg.zimbraCalResMaxNumConflictsAllowed,
-		labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged});		
+		enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
+		enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],			
+		labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});		
 		
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxPercentConflictsAllowed, type:_TEXTFIELD_,
 		msgName:ZaMsg.zimbraCalResMaxPercentConflictsAllowed, label:ZaMsg.zimbraCalResMaxPercentConflictsAllowed,
-		labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged});		
+		enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
+		enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],			
+		labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});		
 	
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
 		msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,

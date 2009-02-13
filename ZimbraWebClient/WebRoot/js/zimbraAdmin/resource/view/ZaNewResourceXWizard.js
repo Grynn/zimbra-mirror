@@ -332,10 +332,14 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 						
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
 		msgName:ZaMsg.zimbraCalResMaxNumConflictsAllowed, label:ZaMsg.zimbraCalResMaxNumConflictsAllowed,
+		enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
+		enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],			
 		labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});		
 		
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxPercentConflictsAllowed, type:_TEXTFIELD_,
 		msgName:ZaMsg.zimbraCalResMaxPercentConflictsAllowed, label:ZaMsg.zimbraCalResMaxPercentConflictsAllowed,
+		enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
+		enableDisableChangeEventSources:[ZaResource.A2_schedulePolicy],			
 		labelLocation:_LEFT_, cssClass:"admin_xform_number_input"});	
 								
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 

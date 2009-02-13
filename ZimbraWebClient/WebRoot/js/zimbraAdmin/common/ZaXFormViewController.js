@@ -102,7 +102,6 @@ function(ev, noPopView, func, obj, params) {
 	} else if (noPopView){
 		func.call(obj, params) ;
 	}else{
-		this._app.popView();
 		if(this._view._localXForm && this._view.formDirtyLsnr) {
 			this._view._localXForm.removeListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE,this._view.formDirtyLsnr);
 			this._view._localXForm.removeListener(DwtEvent.XFORMS_VALUE_ERROR,this._view.formDirtyLsnr);
