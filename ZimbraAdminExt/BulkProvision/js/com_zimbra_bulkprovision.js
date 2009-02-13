@@ -8,11 +8,13 @@ if (ZaController.initToolbarMethods["ZaAccountListController"]) {
                         com_zimbra_bulkprovision.ACTBB_BulkProvision_tt, "BulkProvision", "BulkProvisionDis", 
                         new AjxListener(this, ZaAccountListController.prototype._bulkProvisionListener)
                         );
-
-        for (var i=0; i < this._toolbarOrder.length; i ++) {
-            if (this._toolbarOrder[i] == ZaOperation.NONE) {
-                this._toolbarOrder.splice(i,0,ZaOperation.BULK_PROVISION) ;
-                break ;
+        // only add the bulk provision for account list view.
+        if (this._defaultType == ZaItem.ACCOUNT) {
+            for (var i=0; i < this._toolbarOrder.length; i ++) {
+                if (this._toolbarOrder[i] == ZaOperation.NONE) {
+                    this._toolbarOrder.splice(i,0,ZaOperation.BULK_PROVISION) ;
+                    break ;
+                }
             }
         }
 
@@ -32,5 +34,4 @@ if (ZaController.initToolbarMethods["ZaAccountListController"]) {
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._bulkProvisionListener", null, false);
 	}
-	return;
  }
