@@ -219,7 +219,6 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 		if(targetObj.setAttrs && targetObj.setAttrs instanceof Array && 
 			targetObj.setAttrs[0]) {
 
-				
 			if(targetObj.setAttrs[0].a && targetObj.setAttrs[0].a instanceof Array) {
 				var setAttrs = targetObj.setAttrs[0].a;
 				for (var a in setAttrs) {
