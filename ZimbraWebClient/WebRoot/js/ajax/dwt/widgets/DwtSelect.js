@@ -205,6 +205,24 @@ function(value, newValue) {
 	this.setMenu(this._menuCallback, true);
 };
 
+/**
+ * Enables or disables an option.
+ *
+ * @param value		{object} 	value 		the value of the option to enable/disable
+ * @param enabled	{Boolean}	enabled 	true to enable the option
+ */
+DwtSelect.prototype.enableOption =
+function(value, enabled) {
+	var option = this.getOptionWithValue(value);
+	if (option.enabled != enabled) {
+		option.enabled = enabled;
+		var item = option.getItem();
+		if (item) {
+			item.setEnabled(enabled);
+		}
+	}
+};
+
 DwtSelect.prototype.clearOptions =
 function() {
 	var opts = this._options.getArray();
@@ -405,6 +423,7 @@ DwtSelect.prototype._createMenu = function() {
 		if (text) {
 			mi.setText(AjxStringUtil.htmlEncode(text));
 		}
+		mi.setEnabled(option.enabled);
 
 		mi.addSelectionListener(new AjxListener(this, this._handleOptionSelection));
 		mi._optionIndex = i;
@@ -524,6 +543,7 @@ DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, 
 	this._selectedValue = selectedValue;
 
 	this._internalObjectId = DwtSelect._assignId(this);
+	this.enabled = true;
 }
 
 DwtSelectOption.prototype.setItem = 
