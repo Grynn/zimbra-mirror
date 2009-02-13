@@ -135,3 +135,4 @@ allclean: clean zimclean
 
 zimclean:
 	rm -rf $(ZIMBRA_HOME)/postfix-$(POSTFIX_VERSION) $(ZIMBRA_HOME)/postfix
+	rm -f $(POSTFIX_TGZ_TARGET)
