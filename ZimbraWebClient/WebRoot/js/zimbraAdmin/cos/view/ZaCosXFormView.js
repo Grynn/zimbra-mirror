@@ -56,9 +56,10 @@ function(entry) {
 		this._containedObject.setAttrs = entry.setAttrs;
 	
 	if(entry.getAttrs)
-		this._containedObject.getAttrs = entry.getAttrs;
-		
-	if(entry._defaultValues)
+        this._containedObject.getAttrs = entry.getAttrs;
+
+
+    if(entry._defaultValues)
 		this._containedObject._defaultValues = entry._defaultValues;
 		
 	if(entry.id)
@@ -105,74 +106,75 @@ function(entry) {
 		this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = null;		
 	}
 */
-	
-	if(entry.getAttrs[ZaCos.A_zimbraAvailableSkin] || entry.getAttrs.all) {
-		var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];
-		if(skins != null && skins != "") {
-			if (AjxUtil.isString(skins))	 {
-				this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = [skins];
-			} else {
-				var cnt = skins.length;
-				this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = [];
-				for(var i = 0; i < cnt; i ++) {
-					this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin].push(skins[i]);					
-				}
-			}
+	if (entry.getAttrs) {
+        if(entry.getAttrs[ZaCos.A_zimbraAvailableSkin] || entry.getAttrs.all) {
+            var skins = entry.attrs[ZaCos.A_zimbraAvailableSkin];
+            if(skins != null && skins != "") {
+                if (AjxUtil.isString(skins))	 {
+                    this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = [skins];
+                } else {
+                    var cnt = skins.length;
+                    this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = [];
+                    for(var i = 0; i < cnt; i ++) {
+                        this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin].push(skins[i]);
+                    }
+                }
 
-		} else {
-			this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = null;		
-		}
+            } else {
+                this._containedObject.attrs[ZaCos.A_zimbraAvailableSkin] = null;
+            }
 
-		var skins = ZaApp.getInstance().getInstalledSkins();
-		if(skins == null) {
-			skins = [];
-		} else if (AjxUtil.isString(skins))	 {
-			skins = [skins];
-		}
-		
-		ZaCosXFormView.themeChoices.setChoices(skins);
-		ZaCosXFormView.themeChoices.dirtyChoices();		
-		
-	}
-	
-	
-	if(entry.getAttrs[ZaCos.A_zimbraZimletAvailableZimlets] || entry.getAttrs.all) {
-		var zimlets = entry.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
-		if(zimlets != null && zimlets != "") {
-			if (AjxUtil.isString(zimlets))	 {
-				this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = [zimlets];
-			} else {
-				var cnt = zimlets.length;
-				this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = [];
-				for(var i = 0; i < cnt; i ++) {
-					this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets].push(zimlets[i]);					
-				}
-			}
-		} else
-			this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = null;		
-		
-		
-		//get sll Zimlets
-		var allZimlets = ZaZimlet.getAll("extension");
-		if(allZimlets == null) {
-			allZimlets = [];
-		} 
-		
-		if(allZimlets instanceof ZaItemList || allZimlets instanceof AjxVector)
-			allZimlets = allZimlets.getArray();
-		
-		//convert objects to strings	
-		var cnt = allZimlets.length;
-		var _tmpZimlets = [];
-		for(var i=0; i<cnt; i++) {
-			var zimlet = allZimlets[i];
-			_tmpZimlets.push(zimlet.name);
-		}
-		ZaCosXFormView.zimletChoices.setChoices(_tmpZimlets);
-		ZaCosXFormView.zimletChoices.dirtyChoices();		
-	}	
-  	
-	if(!entry[ZaModel.currentTab])
+            var skins = ZaApp.getInstance().getInstalledSkins();
+            if(skins == null) {
+                skins = [];
+            } else if (AjxUtil.isString(skins))	 {
+                skins = [skins];
+            }
+
+            ZaCosXFormView.themeChoices.setChoices(skins);
+            ZaCosXFormView.themeChoices.dirtyChoices();
+
+        }
+
+
+        if(entry.getAttrs[ZaCos.A_zimbraZimletAvailableZimlets] || entry.getAttrs.all) {
+            var zimlets = entry.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
+            if(zimlets != null && zimlets != "") {
+                if (AjxUtil.isString(zimlets))	 {
+                    this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = [zimlets];
+                } else {
+                    var cnt = zimlets.length;
+                    this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = [];
+                    for(var i = 0; i < cnt; i ++) {
+                        this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets].push(zimlets[i]);
+                    }
+                }
+            } else
+                this._containedObject.attrs[ZaCos.A_zimbraZimletAvailableZimlets] = null;
+
+
+            //get sll Zimlets
+            var allZimlets = ZaZimlet.getAll("extension");
+            if(allZimlets == null) {
+                allZimlets = [];
+            }
+
+            if(allZimlets instanceof ZaItemList || allZimlets instanceof AjxVector)
+                allZimlets = allZimlets.getArray();
+
+            //convert objects to strings
+            var cnt = allZimlets.length;
+            var _tmpZimlets = [];
+            for(var i=0; i<cnt; i++) {
+                var zimlet = allZimlets[i];
+                _tmpZimlets.push(zimlet.name);
+            }
+            ZaCosXFormView.zimletChoices.setChoices(_tmpZimlets);
+            ZaCosXFormView.zimletChoices.dirtyChoices();
+        }
+    }
+
+    if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
@@ -236,7 +238,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 	var case1Items = [
 		{type:_ZAGROUP_,
 			items:[
-				{ref:ZaCos.A_name, type:_INPUT_, 
+				{ref:ZaCos.A_name, type:_INPUT_,
 					enableDisableChecks:[[XFormItem.prototype.hasRight,ZaCos.RENAME_COS_RIGHT]],
 					msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName+":", labelLocation:_LEFT_, cssClass:"admin_xform_name_input", required:true, width: "20em"},
 //				{ref:ZaCos.A_description, type:_INPUT_, msgName:ZaMsg.NAD_Description,label:ZaMsg.NAD_Description, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width: "30em"},

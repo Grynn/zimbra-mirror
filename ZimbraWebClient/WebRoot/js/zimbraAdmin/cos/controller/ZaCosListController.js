@@ -212,21 +212,40 @@ function(ev) {
 	var newCos = new ZaCos(); //new COS
 	if(this._contentView && (this._contentView.getSelectionCount() == 1)) {
 		var item = this._contentView.getSelection()[0];
-		if(item && item.attrs) { //copy the attributes from the selected COS to the new COS
-			for(var aname in item.attrs) {
-				if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
-					continue;	
-					
-				if ( (typeof item.attrs[aname] == "object") || (item.attrs[aname] instanceof Array)) {
-					newCos.attrs[aname] = AjxUtil.createProxy(item.attrs[aname],3);
-					/*for(var a in item.attrs[aname]) {
-						newCos.attrs[aname][a]=item.attrs[aname][a];
-					}*/
-				} else {
-					newCos.attrs[aname] = item.attrs[aname];
-				}
-			}
-		}
+		if(item) { //copy the attributes from the selected COS to the new COS
+            //need to get the cos first since rights, getAttrs and setAttrs are not in the cos list object
+            if (item.id) {
+                item.load ("id", item.id) ;
+            }
+
+            if ( item.attrs ) {
+                for(var aname in item.attrs) {
+                    if( (aname == ZaItem.A_objectClass) || (aname == ZaItem.A_zimbraId) || (aname == ZaCos.A_name) || (aname == ZaCos.A_description) || (aname == ZaCos.A_notes) )
+                        continue;
+
+                    if ( (typeof item.attrs[aname] == "object") || (item.attrs[aname] instanceof Array)) {
+                        newCos.attrs[aname] = AjxUtil.createProxy(item.attrs[aname],3);
+                        /*for(var a in item.attrs[aname]) {
+                            newCos.attrs[aname][a]=item.attrs[aname][a];
+                        }*/
+                    } else {
+                        newCos.attrs[aname] = item.attrs[aname];
+                    }
+                }
+            }
+
+            if (item.getAttrs)   {
+                newCos.getAttrs = item.getAttrs ;
+            }
+
+            if (item.setAttrs) {
+                newCos.setAttrs = item.setAttrs ;
+            }
+
+            if (item.rights) {
+                newCos.rights = item.rights ;
+            }
+        }
 	}	
 	ZaApp.getInstance().getCosController().show(newCos);
 }
