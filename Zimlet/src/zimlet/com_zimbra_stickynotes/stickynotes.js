@@ -113,7 +113,18 @@ function() {
 			saveContent = false;
 		}
 	}
-
+	//dont save it there is no content for *new*-stickynote
+	if(this._msgIdAndDataArry[this._msgId] == undefined) {
+		if(content == ""){
+			saveContent = false;
+		}
+		
+	}
+	//also set isNewStickyNotes
+	var isNewStickyNotes = false;
+	if(this._msgIdAndDataArry[this._msgId] == undefined) {
+		isNewStickyNotes = true;
+	}
 	if(saveContent) {
 		this._msgIdAndDataArry[this._msgId] = content;
 		var dbStr = "";
@@ -121,10 +132,11 @@ function() {
 			dbStr = "__id::" + msgId + ",__data::" + this._msgIdAndDataArry[msgId] + ":=:" + dbStr;
 		}	
 		this.setUserProperty("stickyNotes_data", dbStr, true, new AjxCallback(this, this._saveContentCallback));
+
+		if(isNewStickyNotes)
+			this._tagAction(true);
 	}
 	this._hideStickyNotes();
-	//add tag
-	this._tagAction(true);
 };
 com_zimbra_stickynotes.prototype._saveContentCallback =
 function () {
@@ -134,6 +146,9 @@ function () {
 
 com_zimbra_stickynotes.prototype._tagAction =
 function (trueOrFalse) {
+
+	if(appCtxt.getActiveAccount().trees.TAG.getByName(com_zimbra_stickynotes.tagName) == undefined)
+		return;
 	var axnType = "";
 	if (trueOrFalse)
 		axnType = "tag";
@@ -152,7 +167,6 @@ function (trueOrFalse) {
 	appCtxt.getAppController().sendRequest(params);
 };
 
-
 com_zimbra_stickynotes.prototype._deleteSaveAndHideStickyNotes =
 function() {
 	if (!this._mainContainer)
@@ -166,17 +180,16 @@ function() {
 
 	this.setUserProperty("stickyNotes_data", dbStr, true);
 	this._hideStickyNotes();
-	//remove tag
-	this._tagAction(false);
+	if(this.srcMsgObj.hasTag(this._tagId))
+		this._tagAction(false);
+	
 };
-
 
 com_zimbra_stickynotes.prototype._hideStickyNotes =
 function() {
 	this._mainContainer.style.display = "none";
 	this.stickyNotesDisplayed = false;
 };
-
 
 com_zimbra_stickynotes.prototype._stickyNotesView =
 function(content) {
@@ -213,7 +226,6 @@ com_zimbra_stickynotes.prototype._getStickyContent =
 function() {
 	return document.getElementById("stickyn_textAreaID").value;
 };
-
 
 com_zimbra_stickynotes.prototype._addListeners =
 function() {
@@ -271,7 +283,6 @@ com_zimbra_stickynotes.prototype._initToolbarButton = function() {
 	}
 };
 
-
 com_zimbra_stickynotes.prototype._stickyTBListener =
 function() {
 	if (!this.turnONstickynotesZimlet)
@@ -280,10 +291,12 @@ function() {
 	var selectedItms = this._controller.getCurrentView().getSelection();
 	if(selectedItms.length > 0) {
 		this.srcMsgObj = selectedItms[0];
+		if(this.srcMsgObj.type == "CONV"){
+			this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
+		}
 		this._createStickyNotes(this.srcMsgObj);
 	}
 };
-
 
 com_zimbra_stickynotes.prototype.doDrop =
 function(msgObj) {
@@ -291,9 +304,11 @@ function(msgObj) {
 		return;
 
 	this.srcMsgObj = msgObj.srcObj;
+	if(selectedItem.type == "CONV"){
+		this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
+	}
 	this._createStickyNotes(this.srcMsgObj);
 };
-
 
 com_zimbra_stickynotes.prototype._createStickyNotes =
 function(mail) {
@@ -308,18 +323,14 @@ function(mail) {
 	this._showStickyNotes();
 };
 
-
-
 com_zimbra_stickynotes.prototype.onMsgView =
 function(msg) {
 	if (!this.turnONstickynotesZimlet)
 		return;
 
-
 	this.srcMsgObj = msg;
 	var id = "MSG" + msg.id;
 	var convId = "CONV" + msg.cid;
-
 	this._getStoredData();
 	//give msgId higher priority than ConvId(if we have stickynotes for both)
 	if (this._msgIdAndDataArry[id]) {
@@ -389,9 +400,9 @@ function() {
 		if (!this.turnONstickynotesZimlet) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONstickynotesZimlet", "true", true);
+		this.setUserProperty("turnONstickynotesZimlet", "true");
 	} else {
-		this.setUserProperty("turnONstickynotesZimlet", "false", true);
+		this.setUserProperty("turnONstickynotesZimlet", "false");
 		if (this.turnONstickynotesZimlet)
 			this._reloadRequired = true;
 	}
@@ -400,9 +411,9 @@ function() {
 		if (!(this.getUserProperty("stickyNotes_ToolbarBtn") == "true")) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("stickyNotes_ToolbarBtn", "true", true);
+		this.setUserProperty("stickyNotes_ToolbarBtn", "true");
 	} else {
-		this.setUserProperty("stickyNotes_ToolbarBtn", "false", true);
+		this.setUserProperty("stickyNotes_ToolbarBtn", "false");
 		if (this.stickyNotes_ToolbarBtn){
 			this._reloadRequired = true;
 		}
@@ -413,7 +424,7 @@ function() {
 	if (this._reloadRequired) {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
 		appCtxt.getAppController().setStatusMsg("Browser will be refreshed for changes to take effect..", ZmStatusView.LEVEL_INFO, null, transitions);
-		setTimeout(AjxCallback.simpleClosure(this._refreshBrowser, this), 2000);
+		this.saveUserProperties(new AjxCallback(this, this._refreshBrowser));
 	}
 };
 
