@@ -234,6 +234,7 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 			} 
 			if(targetObj.setAttrs[0].all) {
 				this.setAttrs.all = true;
+				this.getAttrs.all = true; 	
 			}
 		}	
 	}

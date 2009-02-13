@@ -114,6 +114,10 @@ ZaController.initToolbarMethods["ZaResourceController"].push(ZaResourceControlle
 ZaResourceController.prototype.newResource = function () {
 	try {
 		var newResource = new ZaResource();
+		//newResource.getAttrs = {all:true};
+		//newResource._defaultValues = {attrs:{}};	
+		newResource.loadNewObjectDefaults("name", ZaSettings.myDomainName);	
+		
 		if(!ZaApp.getInstance().dialogs["newResourceWizard"])
 			ZaApp.getInstance().dialogs["newResourceWizard"]= new ZaNewResourceXWizard(this._container);	
 
