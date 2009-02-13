@@ -135,7 +135,7 @@ Com_Zimbra_Url.prototype.clicked = function(){
 };
 
 Com_Zimbra_Url.prototype._showUrlThumbnail = function(url, canvas){
-	canvas.innerHTML = "<b>URL:</b> "+url;
+	canvas.innerHTML = "<b>URL:</b> "+ decodeURI(url);
 };
 
 Com_Zimbra_Url.prototype._showFreeThumbnail = function(url, canvas) {
