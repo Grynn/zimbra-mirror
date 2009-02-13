@@ -110,6 +110,10 @@ function(entry) {
 	
 	//enforce the dirty = false, so the save button after the save can be disabled.
 	this.setDirty(false);
+	this.formDirtyLsnr = new AjxListener(ZaApp.getInstance().getCurrentController(), ZaResourceController.prototype.handleXFormChange);
+	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, this.formDirtyLsnr);
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);	
+	
 	this.updateTab();
 }
 
@@ -235,7 +239,15 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject) {
 				this.getForm().itemChanged(this, elementValue, event);
 			},
 			labelLocation:_LEFT_, width: "300px", choices:ZaResource.schedulePolicyChoices});	
-			
+	
+	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
+		msgName:ZaMsg.zimbraCalResMaxNumConflictsAllowed, label:ZaMsg.zimbraCalResMaxNumConflictsAllowed,
+		labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged});		
+		
+	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxPercentConflictsAllowed, type:_TEXTFIELD_,
+		msgName:ZaMsg.zimbraCalResMaxPercentConflictsAllowed, label:ZaMsg.zimbraCalResMaxPercentConflictsAllowed,
+		labelLocation:_LEFT_, cssClass:"admin_xform_number_input", onChange:ZaTabView.onFormFieldChanged});		
+	
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResAutoDeclineRecurring, type:_CHECKBOX_, 
 		msgName:ZaMsg.NAD_DeclineRecurring,label:ZaMsg.NAD_DeclineRecurring,
 		enableDisableChecks:[ZaResource.isSchedulePolicyNotManual],
