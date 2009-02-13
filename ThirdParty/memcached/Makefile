@@ -47,3 +47,4 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/memcached
+	rm -f $(MEMCACHED_TGZ_TARGET)

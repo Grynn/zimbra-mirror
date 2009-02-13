@@ -64,3 +64,4 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
 	/bin/rm -rf $(ZIMBRA_HOME)/nginx
+	rm -f $(NGINX_TGZ_TARGET)

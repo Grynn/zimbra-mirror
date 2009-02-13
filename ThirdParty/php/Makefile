@@ -44,6 +44,7 @@ clean:
 
 allclean: clean
 	rm -rf /opt/zimbra/php-$(PHP_VERSION)
+	rm -f $(PHP_TGZ_TARGET)
 
 tar: $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php
 	(cd $(ZIMBRA_HOME); tar czf \

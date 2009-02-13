@@ -78,3 +78,4 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/tcmalloc-$(TCMALLOC_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/tcmalloc
+	rm -f $(TCMALLOC_TGZ_TARGET)

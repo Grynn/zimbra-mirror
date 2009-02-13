@@ -57,3 +57,4 @@ clean:
 allclean: clean
 	rm -rf $(ZIMBRA_HOME)/cyrus-sasl-$(CYRUS_VERSION)
 	rm -rf $(ZIMBRA_HOME)/cyrus-sasl
+	rm -f $(CYRUS_TGZ_TARGET)

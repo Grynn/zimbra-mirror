@@ -54,3 +54,4 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/dspam-$(DSPAM_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/dspam
+	rm -f $(DSPAM_TGZ_TARGET)

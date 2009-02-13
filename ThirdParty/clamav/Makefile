@@ -42,3 +42,4 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/clamav-$(CLAMAV_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/clamav
+	rm -f $(CLAMAV_TGZ_TARGET)

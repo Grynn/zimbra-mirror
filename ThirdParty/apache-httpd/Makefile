@@ -37,3 +37,4 @@ clean:
 allclean: clean
 	rm -rf $(ZIMBRA_HOME)/httpd-$(HTTPD_VERSION)
 	rm -rf $(ZIMBRA_HOME)/httpd
+	rm -f $(HTTPD_TGZ_TARGET)

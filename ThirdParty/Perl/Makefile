@@ -176,7 +176,8 @@ endif
 CLEAN_TARGETS	=	\
 		$(TMPDIR) \
 		$(DEST_DIR) \
-		$(PERL_TGZ_DEST)
+		$(PERL_TGZ_DEST) \
+		$(PERL_BIN_TGZ_DEST)
 
 all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 	mkdir -p $(TMPDIR)

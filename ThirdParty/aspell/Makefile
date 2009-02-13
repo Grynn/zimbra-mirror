@@ -65,4 +65,5 @@ dict-clean:
 
 allclean: clean
 	(rm -rf $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION) $(ZIMBRA_HOME)/aspell)
+	rm -f $(ASPELL_TGZ_TARGET)
 

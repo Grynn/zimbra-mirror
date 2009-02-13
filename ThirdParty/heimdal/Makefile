@@ -85,3 +85,4 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/heimdal-$(HEIMDAL_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/heimdal
+	rm -f $(HEIMDAL_TGZ_TARGET)

@@ -39,3 +39,4 @@ p4edit: $(LIBTOOL_TGZ_TARGET)
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/libtool-$(LIBTOOL_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/libtool
+	rm -f $(LIBTOOL_TGZ_TARGET)

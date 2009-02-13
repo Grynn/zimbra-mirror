@@ -70,3 +70,4 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/curl-$(CURL_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/curl
+	rm -f $(CURL_TGZ_TARGET)

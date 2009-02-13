@@ -52,3 +52,4 @@ p4edit: $(BDB_TGZ_TARGET)
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/bdb
+	rm -f $(BDB_TGZ_TARGET)

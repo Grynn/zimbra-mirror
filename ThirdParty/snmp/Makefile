@@ -86,3 +86,4 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/$(APP_NAME)-$(APP_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/$(APP_NAME)
+	rm -f $(APP_TGZ_TARGET)

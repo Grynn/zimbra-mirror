@@ -88,3 +88,5 @@ allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/openldap
 	/bin/rm -rf $(ZIMBRA_HOME)/openldap-clibs-$(LDAP_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/openldap-clibs
+	rm -f $(LDAP_TGZ_TARGET)
+	rm -f $(LDAP_LIB_TGZ_TARGET)
