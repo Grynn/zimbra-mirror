@@ -21,15 +21,15 @@ cd $PROGDIR
 PATHDIR=`pwd`
 CLEAN=no
 SYNC=no
-PUBLIC=no
+PUBLIC=yes
 OVERRIDE=no
-MIRROR="http://mirrors2.kernel.org/cpan/"
+MIRROR="http://cpan.yahoo.com/"
 
 usage() {
 	echo ""
 	echo "Usage: "`basename $0`" -c [-p] [-s]" >&2
 	echo "-c: Remove contents of /opt/zimbra (clean)"
-	echo "-p: Use public CPAN mirror"
+	echo "-p: Use private CPAN mirror"
 	echo "-s: Re-sync source before building"
 	exit 2;
 }
@@ -116,8 +116,8 @@ while [ $# -gt 0 ]; do
 			OVERRIDE=yes
 			shift;
 			;;
-		-p|--public)
-			PUBLIC=yes
+		-p|--private)
+			PUBLIC=no
 			shift;
 			;;
 		-h|--help)
