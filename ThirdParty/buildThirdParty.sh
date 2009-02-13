@@ -248,7 +248,7 @@ do
 	elif [ $RC -eq 0 -a x$req = x"automake" ]; then
 		VERSION=$(${command} --version 2>&1 | grep "^automake" | sed -e 's/^automake //' -e 's/(GNU automake) //')
 		parseVersion $VERSION
-		if [ $MAJOR -eq 1 -a $MINOR -lt 7 ];
+		if [ $MAJOR -eq 1 -a $MINOR -lt 7 ]; then
 			echo "Error: Version 1.7.0 or higher of $req is required"
 			exit 1;
 		fi
