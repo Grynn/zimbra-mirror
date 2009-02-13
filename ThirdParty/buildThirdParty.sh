@@ -95,6 +95,13 @@ askURL() {
   done
 }
 
+parseVersion() {
+	VER=$1
+	MAJOR=`echo $VER | awk -F. '{print $1}'`
+	MINOR=`echo $VER | awk -F. '{print $2}'`
+	PATCH=`echo $VER | awk -F. '{print $3}'`
+}
+
 if [ $# -lt 1 ]; then
 	usage
 fi
@@ -212,23 +219,6 @@ if [ x$SYNC = "xyes" ]; then
 	fi
 fi
 
-echo "Cleaning contents of /opt/zimbra"
-if [ -d "/opt/zimbra" ]; then
-  rm -rf /opt/zimbra/* 2>/dev/null
-  rm -rf /opt/zimbra/.* 2>/dev/null
-  mkdir -p /opt/zimbra
-fi
-
-touch /opt/zimbra/blah 2>/dev/null
-RC=$?
-
-if [ $RC -eq 1 ]; then
-	echo "Error: Unable to write to /opt/zimbra"
-	exit 1;
-else
-	rm -f /opt/zimbra/blah
-fi
-
 if [[ $PLAT == "MACOSX"* ]]; then
 	LIBEXT=dylib
 else
@@ -250,9 +240,18 @@ echo "Checking for prerequisite binaries"
 for req in autoconf autoheader automake libtool bison flex gcc g++ perl make patch
 do
 	echo "	Checking $req"
-	if [ ! -x "/usr/bin/$req" ]; then
-		echo "Error: /usr/bin/$req not found"
+	command=`which $req 2>/dev/null`
+	RC=$?
+	if [ $RC -ne 0 ]; then
+		echo "Error: $req not found"
 		exit 1;
+	elif [ $RC -eq 0 -a x$req = x"automake" ]; then
+		VERSION=$(${command} --version 2>&1 | grep "^automake" | sed -e 's/^automake //' -e 's/(GNU automake) //')
+		parseVersion $VERSION
+		if [ $MAJOR -eq 1 -a $MINOR -lt 7 ];
+			echo "Error: Version 1.7.0 or higher of $req is required"
+			exit 1;
+		fi
 	fi
 done
 
@@ -310,6 +309,23 @@ if [[ $PLAT != "MACOSX"* ]]; then
 		echo "Error: /usr/include/$PCREH not found"
 		exit 1;
 	fi
+fi
+
+echo "Cleaning contents of /opt/zimbra"
+if [ -d "/opt/zimbra" ]; then
+  rm -rf /opt/zimbra/* 2>/dev/null
+  rm -rf /opt/zimbra/.* 2>/dev/null
+  mkdir -p /opt/zimbra
+fi
+
+touch /opt/zimbra/blah 2>/dev/null
+RC=$?
+
+if [ $RC -eq 1 ]; then
+	echo "Error: Unable to write to /opt/zimbra"
+	exit 1;
+else
+	rm -f /opt/zimbra/blah
 fi
 
 if [ x$PUBLIC = x"yes" ]; then
