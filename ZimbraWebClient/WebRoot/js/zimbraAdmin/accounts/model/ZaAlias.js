@@ -32,7 +32,7 @@ ZaAlias.A_index = "index";
 ZaAlias.A_uid = "uid";
 
 ZaAlias.TARGET_TYPE_DL = ZaItem.DL ;
-ZaAlias.TARGET_TYPE_ACCOUNT = "account" ;
+ZaAlias.TARGET_TYPE_ACCOUNT = ZaItem.ACCOUNT ;
 
 ZaItem._ATTR[ZaAlias.A_targetAccount] = ZaMsg.attrDesc_aliasFor;
 

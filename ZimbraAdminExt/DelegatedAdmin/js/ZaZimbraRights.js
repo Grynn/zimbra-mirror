@@ -22,11 +22,9 @@ ZaZimbraRights.type = [
 ZaZimbraRights.type_dl = ZaItem.DL ;
 
 ZaZimbraRights.inlineTargetType = [
-    "account", ZaZimbraRights.type_dl, "resource", "domain" ,
-    "cos" , "server", "config"
+    ZaItem.ACCOUNT, ZaZimbraRights.type_dl, ZaItem.RESOURCE, ZaItem.DOMAIN ,
+    ZaItem.COS , ZaItem.SERVER, ZaItem.GLOBAL_CONFIG
 ];
-
-
 
 ZaZimbraRights.targetType =  ZaZimbraRights.inlineTargetType.concat("global") ;
 

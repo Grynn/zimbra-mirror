@@ -172,9 +172,9 @@ function(account, now, isDragProxy) {
 			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
 			var targetType = account.attrs[ZaAlias.A_targetType] ;
 			var targetType_desc ;
-			if (targetType == "account" ) {
+			if (targetType == ZaItem.ACCOUNT ) {
 				targetType_desc = ZaMsg.aliasTargetTypeAccount ;
-			}else if (targetType == "distributionlist") {
+			}else if (targetType == ZaItem.DL) {
 				targetType_desc = ZaMsg.aliasTargetTypeDL ;
 			}
 			html[idx++] = AjxStringUtil.htmlEncode(targetType_desc);

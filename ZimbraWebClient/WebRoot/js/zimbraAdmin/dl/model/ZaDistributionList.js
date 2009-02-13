@@ -464,7 +464,7 @@ ZaDistributionList.addAliases = function (obj, dl) {
 							ZaApp.getInstance().getCurrentController()._errorDialog.popup();		
 							break;						
 						}						
-						this.addAlias(obj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
+						dl.addAlias(obj.attrs[ZaAccount.A_zimbraMailAlias][ix]);
 					}
 				} catch (ex) {
 					if(ex.code == ZmCsfeException.ACCT_EXISTS) {

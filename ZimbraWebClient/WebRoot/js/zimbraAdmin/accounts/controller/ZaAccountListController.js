@@ -878,7 +878,35 @@ function () {
 				opsArray1.push(ZaOperation.CHNG_PWD);
 				opsArray1.push(ZaOperation.VIEW_MAIL);
 			}*/
-		} else {
+
+            if (item.type == ZaItem.ALIAS || item.type == ZaItem.DL) {
+                if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
+                    this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
+                }
+
+                if(this._popupOperations[ZaOperation.CHNG_PWD]) {
+                    this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+                }	
+            }
+
+            if (((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.DL))
+                || (item.type == ZaItem.DL)) {
+                if (this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
+                    this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;                                        
+                }
+
+                if(this._popupOperations[ZaOperation.VIEW_MAIL]) {
+                    this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+                }
+            }
+
+            if (item.type == ZaItem.DL) {
+                if(this._popupOperations[ZaOperation.MOVE_ALIAS])	{
+                    this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+                }	    
+            }
+
+        } else {
 			if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
 				this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
 			}
