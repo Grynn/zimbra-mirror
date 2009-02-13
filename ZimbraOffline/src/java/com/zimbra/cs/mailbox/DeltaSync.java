@@ -826,8 +826,13 @@ public class DeltaSync {
 	        }
 	        OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
     	} catch (Exception x) {
-    		SyncExceptionHandler.checkRecoverableException("DeltaSync.syncMessage", x);
-    		SyncExceptionHandler.syncMessageFailed(ombx, id, x);
+    		if (x instanceof ServiceException && ((ServiceException)x).getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {
+    			//message could be moved during
+    			OfflineLog.offline.debug("delta: moved" + MailItem.getNameForType(type) + " (" + id + ")");
+    		} else {
+    			SyncExceptionHandler.checkRecoverableException("DeltaSync.syncMessage", x);
+    			SyncExceptionHandler.syncMessageFailed(ombx, id, x);
+    		}
     	}
     }
     

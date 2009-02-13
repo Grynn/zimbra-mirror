@@ -1140,11 +1140,14 @@ public class InitialSync {
         	}
             throw ServiceException.FAILURE("storing " + MailItem.getNameForType(type) + " " + id, e);
         } catch (Exception e) {
-            if (e instanceof ServiceException && ((ServiceException)e).getCode() != MailServiceException.ALREADY_EXISTS) {
-            	SyncExceptionHandler.syncMessageFailed(ombx, id, pm, e);
+        	if (e instanceof ServiceException && ((ServiceException)e).getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {
+        		OfflineLog.offline.debug("initial: moved " + MailItem.getNameForType(type) + " (" + id + ")");
+        		return; //message moved on server; we'll get that when we do delta
+        	} else if (!(e instanceof ServiceException) || !((ServiceException)e).getCode().equals(MailServiceException.ALREADY_EXISTS)) {
+        		SyncExceptionHandler.syncMessageFailed(ombx, id, pm, e);
             	return;
-            }
-            // fall through...
+        	}
+        	// fall through...
         }
 
         // if we're here, the message already exists; save new draft if needed, then update metadata

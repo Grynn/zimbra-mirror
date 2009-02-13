@@ -169,13 +169,13 @@ public class ConsoleBean extends PageBean {
 		    sum.flavor = "Live";
 		else if (sum.type.equals("pop3"))
 		    sum.flavor = "Pop";
-		else if (domain.equals(AmailBean.Domain))
+		else if (AmailBean.Domain.equals(domain))
 		    sum.flavor = "AOL";
-		else if (domain.equals(GmailBean.Domain))
+		else if (GmailBean.Domain.equals(domain))
 		    sum.flavor = "Gmail";
-		else if (domain.equals(MmailBean.Domain))
+		else if (MmailBean.Domain.equals(domain))
 		    sum.flavor = "MSE";
-		else if (domain.equals(YmailBean.Domain))
+		else if (YmailBean.Domain.equals(domain))
 		    sum.flavor = "YMP";
 		else
 		    sum.flavor = "Imap";
