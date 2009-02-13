@@ -35,10 +35,10 @@ The buildZCS.sh script can do multiple things:
 must be built before ZCS can be built.  However, if you've already built it, this allows
 you to skip rebuilding it just to rebuild the rest of ZCS.
 
-(b) It can build Zimbra Desktop for you (-d option).  It is not required to build Third
-Party to build Desktop.
+(b) It will use a public CPAN mirror.
 
-(c) It will use a public CPAN mirror.
+(c) It can build Zimbra Desktop for you (-d option).  It is not required to build Third
+Party to build Desktop.  However, you must have a licensed version of install4j.
 
 The buildZCS.sh script will do its best to make sure you have all pre-requisite software
 installed to both build Third Party and to build the ZCS product.
