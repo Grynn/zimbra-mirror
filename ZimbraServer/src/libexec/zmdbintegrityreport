@@ -85,7 +85,7 @@ sub checkDbs() {
   $cmd .= " --defaults-file=${mysql_mycnf}";
   $cmd .= " -S ${mysql_socket}";
   $cmd .= " -A -C";
-  $cmd .= " -s" unless $options{v};
+  $cmd .= " -s" unless $debug;
   $cmd .= " -u root --password=${mysql_root_passwd}";
   $cmd .= " --auto-repair" if $options{r};
   unless (open(CMD, "$cmd|")) {
@@ -115,7 +115,7 @@ sub checkLoggerDb() {
   $cmd .= " --defaults-file=${mysql_mycnf}";
   $cmd .= " -S ${mysql_socket}";
   $cmd .= " -A -C";
-  $cmd .= " -s" unless $options{v};
+  $cmd .= " -s" unless $debug;
   $cmd .= " -u root --password=${mysql_root_passwd}";
   $cmd .= " --auto-repair" if $options{r};
   unless (open(CMD, "$cmd|")) {
