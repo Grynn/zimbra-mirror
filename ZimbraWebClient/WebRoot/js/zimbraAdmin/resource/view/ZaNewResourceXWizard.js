@@ -243,7 +243,6 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 							var regEx = /[^a-zA-Z0-9_\-\.]/g ;
 							var newName = elementValue.replace(regEx, "") + oldAccName.substring(oldAccName.indexOf("@")) ;	
 							this.getModel().setInstanceValue(this.getInstance(),ZaResource.A_name,newName);
-							ZaResource.setAutoAccountName(this.getInstance(), elementValue );
 							this.getModel().setInstanceValue(this.getInstance(),ZaResource.A2_autodisplayname,"TRUE");
 						} catch (ex) {
 							ZaApp.getInstance().getCurrentController()._handleException(ex, "XForm." + ZaResource.A_displayname + ".elementChanged", null, false);

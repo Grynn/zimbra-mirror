@@ -662,13 +662,6 @@ ZaResource.isLocation = function () {
 ZaResource.isSchedulePolicyNotManual = function () {
 	return (this.getInstanceValue(ZaResource.A2_schedulePolicy) != ZaResource.SCHEDULE_POLICY_MANUAL);
 }
-//generate the account name automatically
-ZaResource.setAutoAccountName =
-function (instance, newValue) {
-	var oldAccName = instance[ZaResource.A_name] ;
-	var regEx = /[^a-zA-Z0-9_\-\.]/g ;
-	instance[ZaResource.A_name] = newValue.replace(regEx, "") + oldAccName.substring(oldAccName.indexOf("@")) ;	
-}
 
 ZaResource.accountStatusChoices = [
 		{value:ZaResource.ACCOUNT_STATUS_ACTIVE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_ACTIVE)}, 
