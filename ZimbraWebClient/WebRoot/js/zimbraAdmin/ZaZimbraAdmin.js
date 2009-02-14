@@ -649,7 +649,6 @@ function() {
     this._appCtxt.setClientCmdHdlr(new ZaClientCmdHandler());
     //draw stuff
 	var elements = new Object();
-	elements[ZaAppViewMgr.C_SASH] = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE,"console_inset_app_l", 20);
 	elements[ZaAppViewMgr.C_BANNER] = this._createBanner();		
 	//elements[ZaAppViewMgr.C_APP_CHOOSER] = this._createAppChooser();
 	elements[ZaAppViewMgr.C_STATUS] = this._statusBox = new DwtText(this._shell, "statusBox", Dwt.ABSOLUTE_STYLE);
@@ -667,6 +666,7 @@ function() {
 
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_TREE] = this.getOverviewPanelController().getOverviewPanel();
+	elements[ZaAppViewMgr.C_SASH] =  new DwtSash({parent:this._shell, style:DwtSash.HORIZONTAL_STYLE,className:"AppSash-horiz", threshold:20, id:"z_sash"});
 	elements[ZaAppViewMgr.C_SEARCH] = ZaApp.getInstance().getSearchListController().getSearchPanel();		
 	elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
 	elements[ZaAppViewMgr.C_SEARCH_BUILDER] = ZaApp.getInstance().getSearchBuilderController().getSearchBuilderPanel();

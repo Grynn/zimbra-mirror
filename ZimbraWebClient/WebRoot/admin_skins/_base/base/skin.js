@@ -28,9 +28,9 @@ skin.hints = {
 	helpButton		: {	style:"link", 		container:"quota",
 						url: "@HelpAdminURL@", daUrl: "@HelpDelegatedURL@"	},
 	logoutButton	: { style:"link", 		container:"quota"	},
-	logo			: { url: "@LogoURL@" }
+	logo			: { url: "@LogoURL@" },
+	tree:			{ minWidth:150, maxWidth:300, containers: ["skin_td_tree_container", "skin_table", "skin_tr_tree", "skin_td_tree", "skin_container_tree"] },
 }
-
 
 /* PUBLIC API FOR SHOWING/HIDING PIECES OF THE SKIN */
 
@@ -81,7 +81,11 @@ skin.hideTreeFooter = function () {
 	this.showTreeFooter(false);
 }
 
-
+	
+skin.getTreeWidth = function() {
+	return Dwt.getSize(this._getEl(skin.hints.tree.containers[0])).x;
+};
+	
 skin.setTreeWidth = function(newWidth) {
 	skin.setSize("skin_col_tree", newWidth, null);
 }
