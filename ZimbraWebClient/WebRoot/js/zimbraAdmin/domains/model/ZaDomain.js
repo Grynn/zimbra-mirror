@@ -1271,7 +1271,7 @@ function(by, val) {
 	params.soapDoc = soapDoc;	
 	
 	var reqMgrParams = {
-		controller : (this._app ? ZaApp.getInstance().getCurrentController() : null),
+		controller : (ZaApp.getInstance() ? ZaApp.getInstance().getCurrentController() : null),
 		busyMsg : ZaMsg.BUSY_GET_DOMAIN
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
@@ -1330,7 +1330,7 @@ function(obj, callback) {
 		params.callback = callback;
 	}
 	var reqMgrParams = {
-		controller : (this._app ? ZaApp.getInstance().getCurrentController() : null),
+		controller : (ZaApp.getInstance() ? ZaApp.getInstance().getCurrentController() : null),
 		busyMsg : ZaMsg.BUSY_CHECKING_MX
 	}
 	ZaRequestMgr.invoke(params, reqMgrParams);
@@ -1597,7 +1597,7 @@ ZaDomain.prototype.getAccountCountsByCoses = function () {
         params.soapDoc = soapDoc;
 
         var reqMgrParams = {
-            controller : this._app.getCurrentController(),
+            controller : ZaApp.getInstance().getCurrentController(),
             busyMsg : ZaMsg.BUSY_COUNT_ACCOUNTS
         }
         var resp = ZaRequestMgr.invoke(params, reqMgrParams);

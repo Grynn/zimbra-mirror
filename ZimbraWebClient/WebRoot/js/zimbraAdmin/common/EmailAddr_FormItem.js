@@ -106,12 +106,12 @@ EmailAddr_XFormItem.prototype.items = [
 			return val;	
 		},
 		elementChanged:function(namePart, instanceValue, event) {
-			var val = namePart + "@";
+            this.getParentItem()._namePart = namePart;
+            var val = namePart + "@";
 			if(this.getParentItem()._domainPart)
 				val += this.getParentItem()._domainPart;
-
-			this.getParentItem()._namePart = val;	
-			this.getForm().itemChanged(this.getParentItem(), val, event);
+            
+            this.getForm().itemChanged(this.getParentItem(), val, event);
 			if (AjxEnv.hasFirebug) console.log("EmailAddr_XFormItem setting value to "+val);
 		}
 	},
