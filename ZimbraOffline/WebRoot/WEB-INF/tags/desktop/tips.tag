@@ -9,11 +9,11 @@
     <tr>
       <td><a href="http://www.zimbra.com/products/desktop.html" target="_blank"><fmt:message key='TipsHome'/></a></td>
       <td>&nbsp;&nbsp;&nbsp;&#8226;&nbsp;&nbsp;&nbsp;</td>
-      <td><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQ" target="_blank"><fmt:message key='TipsFaq'/></a></td>
+      <td><a href="http://www.zimbra.com/desktop/help/en_US/Zimbra_Mail_Help.htm" target="_blank"><fmt:message key='TipsHelp'/></a></td>
       <td>&nbsp;&nbsp;&nbsp;&#8226;&nbsp;&nbsp;&nbsp;</td>
       <td><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop" target="_blank"><fmt:message key='TipsNotes'/></a></td>
       <td>&nbsp;&nbsp;&nbsp;&#8226;&nbsp;&nbsp;&nbsp;</td>
-      <td><a href="http://www.zimbra.com/desktop/help/${pageContext.request.locale}/Getting_Started/Zimbra_User_Help.htm" target="_blank"><fmt:message key='TipsHelp'/></a></td>
+      <td><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQ" target="_blank"><fmt:message key='TipsFaq'/></a></td>
       <td>&nbsp;&nbsp;&nbsp;&#8226;&nbsp;&nbsp;&nbsp;</td>
       <td><a href="http://www.zimbra.com/forums/zimbra-desktop/" target="_blank"><fmt:message key='TipsForums'/></a></td>
       <c:if test="${zdf:isPrism(userAgent)}">

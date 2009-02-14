@@ -649,7 +649,7 @@ public class InitialSync {
     	try {
             Element request = new Element.XMLElement(isAppointment ? MailConstants.GET_APPOINTMENT_REQUEST : MailConstants.GET_TASK_REQUEST);
             request.addAttribute(MailConstants.A_ID, Integer.toString(id));
-            request.addAttribute(MailConstants.A_CAL_INCLUDE_CONTENT, 1);
+            //request.addAttribute(MailConstants.A_CAL_INCLUDE_CONTENT, 1);
             request.addAttribute(MailConstants.A_SYNC, 1);
             Element response = ombx.sendRequest(request);
             //OfflineLog.offline.debug(response.prettyPrint());
