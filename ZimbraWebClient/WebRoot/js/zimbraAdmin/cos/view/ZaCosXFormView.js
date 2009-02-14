@@ -154,7 +154,7 @@ function(entry) {
 
 
             //get sll Zimlets
-            var allZimlets = ZaZimlet.getAll("extension");
+            var allZimlets = ZaZimlet.getAll(ZaZimlet.EXCLUDE_EXTENSIONS);
             if(allZimlets == null) {
                 allZimlets = [];
             }
