@@ -264,7 +264,10 @@ public class DbOfflineMailbox {
             int pos = 1;
             stmt.setInt(pos++, date);
             stmt.setInt(pos++, mod_content);
-            stmt.setInt(pos++, change_date);
+            if (change_date > 0)
+                stmt.setInt(pos++, change_date);
+            else
+                stmt.setNull(pos++, Types.INTEGER);
             stmt.setInt(pos++, mod_metadata);
             stmt.setInt(pos++, mbox.getId());
             stmt.setInt(pos++, item.getId());
