@@ -81,10 +81,14 @@ function() {
 	if (this._mainContainer) {
 		this._mainContainer.style.display = "block";
 		this._setStickyContent(content);
+		if(content == "")//focus only when its empty
+			this._focusStickyNotes();
 		this.stickyNotesDisplayed = true;
 		return;
 	}
 	this._stickyNotesView(content);
+	if(content == "")//focus only when its empty
+		this._focusStickyNotes();
 };
 
 com_zimbra_stickynotes.prototype._getStoredData =
@@ -222,6 +226,12 @@ function(content) {
 	document.getElementById("stickyn_textAreaID").value = content;
 };
 
+com_zimbra_stickynotes.prototype._focusStickyNotes =
+function() {
+	document.getElementById("stickyn_textAreaID").focus();
+};
+
+
 com_zimbra_stickynotes.prototype._getStickyContent =
 function() {
 	return document.getElementById("stickyn_textAreaID").value;
@@ -304,7 +314,7 @@ function(msgObj) {
 		return;
 
 	this.srcMsgObj = msgObj.srcObj;
-	if(selectedItem.type == "CONV"){
+	if(this.srcMsgObj.type == "CONV"){
 		this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
 	}
 	this._createStickyNotes(this.srcMsgObj);
