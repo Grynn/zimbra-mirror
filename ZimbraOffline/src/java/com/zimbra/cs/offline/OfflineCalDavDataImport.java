@@ -18,6 +18,7 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     
     private static final String CALDAV_TARGET_URL = "calDavTargetUrl";
     private static final String CALDAV_PRINCIPAL_PATH = "calDavPrincipalPath";
+    private static final String CALDAV_APPNAME = "Desktop";
     
     public OfflineCalDavDataImport(DataSource ds, String serviceName) throws ServiceException {
         super(ds);
@@ -32,6 +33,7 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
                 (path = ks.attrs.get(CALDAV_PRINCIPAL_PATH)) != null) {
                 OfflineLog.offline.debug("offline caldav login test: url=" + url + " path=" + path);
                 CalDavClient client = new CalDavClient(url);
+                client.setAppName(CALDAV_APPNAME);
                 client.setCredential(username, password);
                 client.login(path.replaceAll("@USERNAME@", username));
             } else {
@@ -84,6 +86,11 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
             return null;
         
         return path.replaceAll("@USERNAME@", dataSource.getUsername());
+    }
+    
+    @Override
+    protected String getAppName() {
+        return CALDAV_APPNAME;
     }
     
     @Override
