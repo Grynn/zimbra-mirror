@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mime.ParsedContact;
@@ -49,6 +50,21 @@ public class ContactData {
     private static final String SERVICE_MSN = "msn";
     private static final String SERVICE_OTHER = "other";
 
+    private static final List<String> PHONES = Arrays.asList(
+        PhoneNumber.Rel.MOBILE, A_mobilePhone,
+        PhoneNumber.Rel.HOME, A_homePhone,
+        PhoneNumber.Rel.WORK, A_workPhone,
+        PhoneNumber.Rel.WORK_MOBILE, A_workMobile,
+        PhoneNumber.Rel.CALLBACK, A_callbackPhone,
+        PhoneNumber.Rel.COMPANY_MAIN, A_companyPhone,
+        PhoneNumber.Rel.HOME_FAX, A_homeFax,
+        PhoneNumber.Rel.WORK_FAX, A_workFax,
+        PhoneNumber.Rel.OTHER_FAX, A_otherFax,
+        PhoneNumber.Rel.PAGER, A_pager,
+        PhoneNumber.Rel.CAR, A_carPhone,
+        PhoneNumber.Rel.OTHER, A_otherPhone
+    );
+    
     public ContactData(ContactEntry contact) {
         importContact(contact);
     }
@@ -89,7 +105,7 @@ public class ContactData {
     public boolean isEmpty() {
         return fields.isEmpty();
     }
-    
+
     private void importContact(ContactEntry contact) {
         TextConstruct title = contact.getTitle();
         if (title != null) {
@@ -113,11 +129,9 @@ public class ContactData {
         } else {
             importWorkAddress(new Address());
         }
-        importPhone(contact, PhoneNumber.Rel.HOME, A_homePhone);
-        importPhone(contact, PhoneNumber.Rel.WORK, A_workPhone);
-        importPhone(contact, PhoneNumber.Rel.HOME_FAX, A_homeFax);
-        importPhone(contact, PhoneNumber.Rel.WORK_FAX, A_workFax);
-        importPhone(contact, PhoneNumber.Rel.PAGER, A_pager);
+        for (Iterator<String> it = PHONES.iterator(); it.hasNext(); ) {
+            importPhone(contact, it.next(), it.next());
+        }
         if (contact.hasOrganizations()) {
             Organization organization = contact.getOrganizations().get(0);
             set(A_company, getValue(organization.getOrgName()));
@@ -146,11 +160,9 @@ public class ContactData {
         exportIm(contact, 2, A_imAddress3);
         exportHomeAddress(contact);
         exportWorkAddress(contact);
-        exportPhone(contact, PhoneNumber.Rel.HOME, A_homePhone);
-        exportPhone(contact, PhoneNumber.Rel.WORK, A_workPhone);
-        exportPhone(contact, PhoneNumber.Rel.HOME_FAX, A_homeFax);
-        exportPhone(contact, PhoneNumber.Rel.WORK_FAX, A_workFax);
-        exportPhone(contact, PhoneNumber.Rel.PAGER, A_pager);
+        for (Iterator<String> it = PHONES.iterator(); it.hasNext(); ) {
+            exportPhone(contact, it.next(), it.next());
+        }
         exportOrganization(contact);
         String notes = get(A_notes);
         if (notes != null) {
