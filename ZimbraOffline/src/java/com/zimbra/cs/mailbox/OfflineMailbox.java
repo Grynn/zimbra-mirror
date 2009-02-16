@@ -490,7 +490,7 @@ public class OfflineMailbox extends DesktopMailbox {
         }
     }
 
-    synchronized int getChangeMask(OperationContext octxt, int id, byte type) throws ServiceException {
+    public synchronized int getChangeMask(OperationContext octxt, int id, byte type) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getChangeMask", octxt);

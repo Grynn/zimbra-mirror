@@ -22,6 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.mailbox.Folder;
+import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailbox;
@@ -31,6 +32,7 @@ import com.zimbra.cs.mailbox.Mailbox.OperationContext;
 import com.zimbra.cs.service.mail.FolderAction;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.ZimbraSoapContext;
+import com.zimbra.cs.session.PendingModifications.Change;
 
 public class OfflineFolderAction extends FolderAction {
 
@@ -45,41 +47,50 @@ public class OfflineFolderAction extends FolderAction {
         if (!operation.equals(OP_REFRESH) && !operation.equals(OP_IMPORT) && !operation.equals(OP_GRANT) && !operation.equals(OP_REVOKE))
             return super.handle(request, context);        
         
-        String folderId = action.getAttribute(MailConstants.A_ID);
-        int pos = folderId.indexOf(':');
-        if (pos >= 0)
-            folderId = folderId.substring(pos + 1);
-        int fid = Integer.parseInt(folderId);
-        
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(zsc);
         OperationContext octxt = getOperationContext(zsc, context);
-        Folder folder = mbox.getFolderById(octxt, fid);
-        if (operation.equals(OP_REFRESH) && !folder.getUrl().equals("")) //e.g. load rss feed
-            return super.handle(request, context);
+        String zid = "";
+        String folderId = action.getAttribute(MailConstants.A_ID);
+        int pos = folderId.indexOf(':');
+        if (pos > 0) {
+            zid = folderId.substring(0, pos);
+            folderId = folderId.substring(pos + 1);
+        }
+        int id = Integer.parseInt(folderId);
+        Folder folder = mbox.getFolderById(octxt, id);
+        
+        if (!(mbox instanceof OfflineMailbox)) {
+            // load rss feed locally for non-zimbra accounts        
+            if ((operation.equals(OP_REFRESH) || operation.equals(OP_IMPORT)) && !folder.getUrl().equals(""))
+                return super.handle(request, context);
+            else
+                throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
+        }
 
-        // Operations below only apply to OfflineMailbox
-        if (!(mbox instanceof OfflineMailbox))
-            throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
         OfflineMailbox ombx = (OfflineMailbox) mbox;
         boolean traceOn = ombx.getOfflineAccount().isDebugTraceEnabled();
+        boolean quietWhenOffline = !operation.equals(OP_GRANT) && !operation.equals(OP_REVOKE);
+        Element parent = request.getParent();
+        boolean fromBatch = parent != null && parent.getName().equals("BatchRequest");
+        boolean isNew = (ombx.getChangeMask(octxt, id, MailItem.TYPE_FOLDER) & Change.MODIFIED_CONFLICT) != 0;
         
-        Element response;
-        if (operation.equals(OP_GRANT) || operation.equals(OP_REVOKE)) {
-            Element parent = request.getParent();
-            boolean fromBatch = parent != null && parent.getName().equals("BatchRequest");            
-            response = ombx.proxyRequest(request, zsc.getResponseProtocol(), false, operation);
-            if (fromBatch)
-                response.detach();
-            ombx.sync(true, traceOn);
-        } else { 
-            // before doing anything, make sure all data sources are pushed to the server
-            ombx.sync(true, traceOn);
-            // proxy this operation to the remote server
-            response = ombx.proxyRequest(request, zsc.getResponseProtocol(), true, operation);
-            // and get a head start on the sync of the newly-pulled-in messages
-            ombx.sync(true, traceOn);
+        // before doing anything, make sure all data sources are pushed to the server
+        ombx.sync(true, traceOn);
+        
+        // if it's a newly created folder, id must have been re-numbered after the sync. so we need to fix it in this request
+        if (isNew) {
+            String newId = Integer.toString(ombx.getFolderByName(octxt, folder.getParentId(), folder.getName()).getId());
+            action.addAttribute(MailConstants.A_ID, zid.equals("") ? newId : zid + ":" + newId);
         }
+        
+        // proxy this operation to the remote server
+        Element response = ombx.proxyRequest(request, zsc.getResponseProtocol(), quietWhenOffline, operation);
+        if (fromBatch && response != null)
+            response.detach();
+        
+        // and get a head start on the sync of the newly-pulled-in messages
+        ombx.sync(true, traceOn);
         return response;
     }
 }
