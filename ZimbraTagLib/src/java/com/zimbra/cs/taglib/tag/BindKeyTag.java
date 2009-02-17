@@ -17,18 +17,18 @@
 package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.taglib.bean.ZUserAgentBean;
+import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspWriter;
-import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
+import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -202,7 +202,7 @@ public class BindKeyTag extends ZimbraSimpleTag {
     private String getJavaScriptForMessage(JspContext ctxt, String message, boolean resolve) throws JspTagException {
         Map<String,String> cache = (Map<String,String>) ctxt.getAttribute(BINDKEY_CACHE, PageContext.SESSION_SCOPE);
         if (cache == null) {
-            cache = new HashMap<String,String>();
+            cache = Collections.synchronizedMap(new HashMap<String,String>());
             ctxt.setAttribute(BINDKEY_CACHE, cache, PageContext.SESSION_SCOPE);
         }
 
