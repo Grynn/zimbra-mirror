@@ -95,6 +95,9 @@ public class LocalMailbox extends DesktopMailbox {
     			MailItem mi = getCachedItem(ID_FOLDER_INBOX);
     			if (mi != null)
     				mi.mData.flags |= mNoInferiorsFlag.getBitmask();
+    			mi = getCachedItem(ID_FOLDER_TRASH);
+    			if (mi != null)
+    				mi.mData.flags |= mNoInferiorsFlag.getBitmask();
     			mi = getCachedItem(ID_FOLDER_SENT);
     			if (mi != null)
     				mi.mData.flags |= mNoInferiorsFlag.getBitmask();
