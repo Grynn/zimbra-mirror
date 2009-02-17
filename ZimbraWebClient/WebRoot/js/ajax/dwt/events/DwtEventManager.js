@@ -20,8 +20,7 @@
  * static class that wraps around AjxEventManager
  */
 DwtEventManager = function() {
-    
-}
+};
 
 DwtEventManager._instance = new AjxEventMgr();
 
@@ -50,14 +49,3 @@ DwtEventManager.removeListener =
 function(eventType, listener) {
 	DwtEventManager._instance.removeListener(eventType, listener);
 };
-
-// This tries to listen on a given element as well as to any event
-// received by other Dwt widgets
-DwtEventManager.addGlobalListener = 
-function (element, eventType, listener) {
-	AjxCore.addListener(element, eventType, listener);
-	var dwtEventName = DwtEventManager._domEventToDwtMap[eventType];
-	if (dwtEventName) {
-		DwtEventManager.addListener(dwtEventName, listener);
-	}
-}
