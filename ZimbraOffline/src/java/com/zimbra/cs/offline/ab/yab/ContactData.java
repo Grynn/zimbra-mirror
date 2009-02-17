@@ -50,6 +50,7 @@ public class ContactData implements Serializable {
     private static final String[] HOME_ADDRESS_FIELDS =
         { A_homeStreet, A_homeCity, A_homeState, A_homePostalCode, A_homeCountry };
 
+    private static final String SERVICE_ZIMBRA = "local";
     private static final String SERVICE_YAHOO = "yahoo";
     private static final String SERVICE_AOL = "aol";
     private static final String SERVICE_MSN = "msn";
@@ -187,7 +188,7 @@ public class ContactData implements Serializable {
         case otherPhone:
             return SimpleField.phone(value);
         case imAddress1: case imAddress2: case imAddress3:
-            return getImAddress(value);
+            return getRemoteImAddress(value);
         default:
             return null;
         }
@@ -259,7 +260,8 @@ public class ContactData implements Serializable {
                 break;
             case imAddress1: case imAddress2: case imAddress3: {
                 SimpleField simple = (SimpleField) field;
-                zfields.put(name, getImService(simple) + "://" + simple.getValue());
+                zfields.put(name, getLocalImAddress(simple));
+                break;
             }
             default:
                 zfields.put(name, ((SimpleField) field).getValue());
@@ -362,14 +364,24 @@ public class ContactData implements Serializable {
         return s1.equals(s2);
     }
 
-    private static String getImService(SimpleField field) {
-        if (field.isYahooid()) return SERVICE_YAHOO;
-        if (field.isFlag(Flag.AOL)) return SERVICE_AOL;
-        if (field.isFlag(Flag.MSN)) return SERVICE_MSN;
-        return SERVICE_OTHER;
+    private static final String ZIM_PREFIX = "zimbra:";
+    
+    private static String getLocalImAddress(SimpleField field) {
+        String value = field.getValue();
+        if (field.isYahooid()) {
+            return SERVICE_YAHOO + "://" + value;
+        } else if (field.isFlag(Flag.AOL)) {
+            return SERVICE_AOL + "://" + value;
+        } else if (field.isFlag(Flag.MSN)) {
+            return SERVICE_MSN + "://" + value;
+        } else if (value.startsWith(ZIM_PREFIX)) {
+            return SERVICE_ZIMBRA + "://" + value.substring(ZIM_PREFIX.length());
+        } else {
+            return SERVICE_OTHER + "://" + value;
+        }
     }
 
-    private static SimpleField getImAddress(String value) {
+    private static SimpleField getRemoteImAddress(String value) {
         int i = value.indexOf("://");
         if (i == -1) {
             return SimpleField.otherid(value);
@@ -378,8 +390,10 @@ public class ContactData implements Serializable {
         String id = value.substring(i + 3);
         if (service.equals(SERVICE_YAHOO)) {
             return SimpleField.yahooid(id);
+        } else if (service.equals(SERVICE_ZIMBRA)) {
+            return SimpleField.otherid(ZIM_PREFIX + id);
         }
-        SimpleField simple = SimpleField.otherid(value);
+        SimpleField simple = SimpleField.otherid(id);
         if (service.equals(SERVICE_AOL)) {
             simple.setFlag(Flag.AOL);
         } else if (service.equals(SERVICE_MSN)) {
