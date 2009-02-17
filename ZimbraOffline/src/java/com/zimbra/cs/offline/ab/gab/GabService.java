@@ -60,7 +60,9 @@ class GabService {
         OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
     
     GabService(String user, String pass) throws ServiceException {
-        this.cs = new ContactsService(APP_NAME);
+        cs = new ContactsService(APP_NAME);
+        cs.setReadTimeout(OfflineLC.http_so_timeout.intValue());
+        cs.setConnectTimeout(OfflineLC.http_connection_timeout.intValue());
         contactFeedUrl = toUrl(BASE_URL + "/contacts/" + user + "/full");
         groupFeedUrl = toUrl(BASE_URL + "/groups/" + user + "/full");
         authenticate(user, pass);
