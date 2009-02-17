@@ -301,11 +301,11 @@ public class ContactData {
     }
 
     private void importWorkAddress(Address addr) {
-        set(A_homeStreet, addr.getStreet());
-        set(A_homeCity, addr.getCity());
-        set(A_homeState, addr.getState());
-        set(A_homePostalCode, addr.getZip());
-        set(A_homeCountry, addr.getCountry());
+        set(A_workStreet, addr.getStreet());
+        set(A_workCity, addr.getCity());
+        set(A_workState, addr.getState());
+        set(A_workPostalCode, addr.getZip());
+        set(A_workCountry, addr.getCountry());
     }
 
     private void exportHomeAddress(ContactEntry contact) {
