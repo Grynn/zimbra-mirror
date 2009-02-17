@@ -30,6 +30,9 @@ com_zimbra_birthdayreminder.prototype.getbirthdayreminderFolderId =
 function() {
 	this._justCreatedCalendarFolder = false;
 	var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail");
+	var folderNode = soapDoc.set("folder");
+	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
+
 	var command = new ZmCsfeCommand();
 	var top = command.invoke({soapDoc: soapDoc}).Body.GetFolderResponse.folder[0];
 
@@ -45,15 +48,15 @@ function() {
 	}
 
 	//there is no such folder, so create one.
-	this.createBirthdayFolder(top.id);
+	this.createBirthdayFolder();
 };
 
 com_zimbra_birthdayreminder.prototype.createBirthdayFolder =
-function(parent) {
+function() {
 	var soapDoc = AjxSoapDoc.create("CreateFolderRequest", "urn:zimbraMail");
 	var folderNode = soapDoc.set("folder");
 	folderNode.setAttribute("name", com_zimbra_birthdayreminder.birthdayFolder);
-	folderNode.setAttribute("l", parent);
+	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
 	folderNode.setAttribute("view", com_zimbra_birthdayreminder.CALENDAR_VIEW);
 	var command = new ZmCsfeCommand();
 	var resp = command.invoke({soapDoc: soapDoc});
@@ -70,7 +73,6 @@ function(parent) {
 	command = new ZmCsfeCommand();
 	resp = command.invoke({soapDoc: soapDoc});
 	this._justCreatedCalendarFolder = true;
-
 };
 
 com_zimbra_birthdayreminder.prototype._create3Appts =
@@ -79,6 +81,7 @@ function(obj, currentCnt, total) {
 	var chkbx = document.getElementById(obj.chkbx_id);
 	if (!chkbx.checked)
 		return;
+
 	if (document.getElementById("breminder_onTheDayChk").checked) {
 		this._createVariousAppts(obj, "ON_THE_DAY");
 	}
@@ -95,7 +98,7 @@ com_zimbra_birthdayreminder.prototype._createVariousAppts =
 function(obj, apptType) {
 	var tmparry = obj.b.split("-");
 	var todayDate = new Date();
-	var birthday = tmparry[1] + "/" + tmparry[2] + "/" + todayDate.getFullYear();
+	var birthday = this._normalizeDate(tmparry[1],  tmparry[2], todayDate.getFullYear());
 	var subject = "";
 	var startDate = "";
 	var email_name = "";
@@ -132,7 +135,20 @@ function(obj, apptType) {
 	this._createAppt(startDate, endDate, subject);
 
 };
+com_zimbra_birthdayreminder.prototype._normalizeDate =
+function(month, day, year) {
+	var tmpArry = (I18nMsg.formatDateShort.toLowerCase()).split("/");
+	if(tmpArry[0].indexOf("d") >=0 && tmpArry[1].indexOf("m") >=0) {
+		return day + "/" + month + "/" + year;
+	} else if(tmpArry[1].indexOf("d") >=0 && tmpArry[0].indexOf("m") >=0) {
+		return month + "/" + day + "/" + year;
+	} else if(tmpArry[1].indexOf("m") >=0 && tmpArry[2].indexOf("d") >=0) {
+		return year + "/"+ month + "/" + day ;
+	} else if(tmpArry[1].indexOf("d") >=0 && tmpArry[2].indexOf("m") >=0) {
+			return year + "/"+ day + "/" + month ;
+	}
 
+};
 com_zimbra_birthdayreminder.prototype._createAppt =
 function(startDate, endDate, subject) {
 	var reminderMinutes = appCtxt.getSettings().getSetting("CAL_REMINDER_WARNING_TIME").value;
