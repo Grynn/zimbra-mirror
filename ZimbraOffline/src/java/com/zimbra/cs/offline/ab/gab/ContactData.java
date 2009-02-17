@@ -45,6 +45,7 @@ import static com.zimbra.cs.mailbox.Contact.*;
 public class ContactData {
     private final Map<String, String> fields = new HashMap<String, String>();
 
+    private static final String SERVICE_ZIMBRA = "zimbra";
     private static final String SERVICE_YAHOO = "yahoo";
     private static final String SERVICE_AOL = "aol";
     private static final String SERVICE_MSN = "msn";
@@ -356,16 +357,23 @@ public class ContactData {
         }
     }
 
-    private static String getLocalImAddress(Im im) {
-        return String.format("%s://%s", getService(im), im.getAddress());
-    }
+    private static final String ZIM_PREFIX = "zimbra:";
     
-    private static String getService(Im im) {
+    private static String getLocalImAddress(Im im) {
+        String address = im.getAddress();
         String protocol = im.getProtocol();
-        if (Im.Protocol.YAHOO.equals(protocol)) return SERVICE_YAHOO;
-        if (Im.Protocol.MSN.equals(protocol)) return SERVICE_MSN;
-        if (Im.Protocol.AIM.equals(protocol)) return SERVICE_AOL;
-        return SERVICE_OTHER;
+        if (Im.Protocol.YAHOO.equals(protocol)) {
+            return SERVICE_YAHOO + "://" + address;
+        } else if (Im.Protocol.MSN.equals(protocol)) {
+            return SERVICE_MSN + "://" + address;
+        } else if (Im.Protocol.AIM.equals(protocol)) {
+            return SERVICE_AOL + "://" + address;
+        } else if (Im.Protocol.JABBER.equals(protocol) &&
+                   address.startsWith(ZIM_PREFIX)) {
+            return SERVICE_ZIMBRA + "://" + address.substring(ZIM_PREFIX.length());
+        } else {
+            return SERVICE_OTHER + "://" + address;
+        }
     }
     
     private static Im getRemoteImAddress(String value) {
@@ -376,8 +384,14 @@ public class ContactData {
             im.setAddress(value);
             return im;
         }
-        im.setAddress(value.substring(i + 3));
         String service = value.substring(0, i);
+        String addr = value.substring(i + 3);
+        if (service.equals(SERVICE_ZIMBRA)) {
+            im.setProtocol(Im.Protocol.JABBER);
+            im.setAddress(ZIM_PREFIX + addr);
+            return im;
+        }
+        im.setAddress(addr);
         if (service.equals(SERVICE_YAHOO)) {
             im.setProtocol(Im.Protocol.YAHOO);
         } else if (service.equals(SERVICE_AOL)) {

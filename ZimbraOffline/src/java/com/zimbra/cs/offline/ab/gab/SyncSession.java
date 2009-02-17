@@ -101,13 +101,13 @@ public class SyncSession {
         Mailbox mbox = localData.getMailbox();
         SyncState state = localData.loadState();
         // Get remote changes since last sync
-        DateTime currentTime = DateTime.now();
         String rev = state.getLastRevision();
         DateTime lastSyncTime = rev != null ? DateTime.parseDateTime(rev) : null;
-        ContactFeed contacts = service.getContacts(lastSyncTime, currentTime);
+        ContactFeed contacts = service.getContacts(lastSyncTime, null);
         Map<String, Attachment> photos = getContactPhotos(contacts.getEntries());
-        ContactGroupFeed groups = service.getGroups(lastSyncTime, currentTime);
-        state.setLastRevision(currentTime.toString());
+        DateTime updated = contacts.getUpdated();
+        ContactGroupFeed groups = service.getGroups(lastSyncTime, updated);
+        state.setLastRevision(updated.toString());
         List<SyncRequest> contactRequests;
         int seq = state.getLastModSequence();
         contactGroups = new HashMap<String, ContactGroup>();
@@ -266,10 +266,11 @@ public class SyncSession {
                 stats.deleted++;
             } else if (!changes.containsKey(itemId)) {
                 // Remote contact was updated with no local change
-                String pushedUrl = getEditUrl(getEntry(dsi, ContactEntry.class));
-                if (!editUrl.equals(pushedUrl)) {
-                    // Only update local entry if edit url has changed
-                    // (avoids modifying contacts which we just pushed)
+                ContactEntry lastEntry = getEntry(dsi, ContactEntry.class);
+                if (!entry.getUpdated().equals(lastEntry.getUpdated())) {
+                    // Only update local entry if remote contact is different
+                    // from what we last pushed. This avoids modifying contacts
+                    // whose changes have just been pushed.
                     Contact contact = localData.getContact(itemId);
                     ParsedContact pc = new ParsedContact(contact);
                     ContactData cd = new ContactData(entry);
