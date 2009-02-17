@@ -68,8 +68,8 @@ function(type, action, currentViewId, lastViewId) {
  */
 function GoogleAnalytics() {
 	try {
-		this._pageTracker = _gat._getTracker("UA-7436833-1");					// replace with your own key
-		this._pageTracker._setDomainName("none");								// for localhost test only. comment out this line for production version
+		this._pageTracker = _gat._getTracker("UA-xxxxxxx-1");					// replace with your own tracker key. Issued by Google.
+//		this._pageTracker._setDomainName("none");								// for localhost test only. Leave commented out for production deployment.
 		this._pageTracker._trackPageview();										// this call is required.
 	} catch(err) {
 		alert("Google Analytics error.");										// probably want to silently fail here.
