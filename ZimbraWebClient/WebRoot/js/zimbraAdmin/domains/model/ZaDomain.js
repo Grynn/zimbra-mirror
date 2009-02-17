@@ -1277,25 +1277,23 @@ function(by, val) {
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetDomainResponse;
 	this.initFromJS(resp.domain[0]);
 
-                                                                                        
-    if(this.attrs[ZaDomain.A_zimbraNotebookAccount]) {
-		var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail", null);
-		var getFolderCommand = new ZmCsfeCommand();
-		var params = new Object();
-		//var callback = new AjxCallback(this, this.parseNotebookFolderAcls);
-		params.soapDoc = soapDoc;
-		//params.asyncMode = true;
-		//params.callback = callback;
-		params.accountName = this.attrs[ZaDomain.A_zimbraNotebookAccount];
-	
-		var folderEl = soapDoc.set("folder", "");
-		folderEl.setAttribute("l", ZaDomain.WIKI_FOLDER_ID);	
-		try {
-			this.parseNotebookFolderAcls(getFolderCommand.invoke(params));
-		} catch (ex) {
-			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.loadMethod", null, false);
+    if(this.attrs[ZaDomain.A_zimbraDomainStatus] != ZaDomain.DOMAIN_STATUS_MAINTENANCE && this.attrs[ZaDomain.A_zimbraDomainStatus] != ZaDomain.DOMAIN_STATUS_SUSPENDED) {                                                                                    
+	    if(this.attrs[ZaDomain.A_zimbraNotebookAccount]) {
+			var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail", null);
+			var getFolderCommand = new ZmCsfeCommand();
+			var params = new Object();
+			params.soapDoc = soapDoc;
+			params.accountName = this.attrs[ZaDomain.A_zimbraNotebookAccount];
+		
+			var folderEl = soapDoc.set("folder", "");
+			folderEl.setAttribute("l", ZaDomain.WIKI_FOLDER_ID);	
+			try {
+				this.parseNotebookFolderAcls(getFolderCommand.invoke(params));
+			} catch (ex) {
+				ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.loadMethod", null, false);
+			}
 		}
-	}
+    }
 	//this._defaultValues = ZaApp.getInstance().getGlobalConfig();	
 }
 ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);

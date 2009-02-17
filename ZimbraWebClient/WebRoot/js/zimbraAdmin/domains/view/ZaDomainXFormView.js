@@ -710,6 +710,25 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 					content: ZaMsg.Domain_Locked_Note,
 					colSpan:"*"
 				},
+				{ type: _DWT_ALERT_,
+					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SUSPENDED]],
+					containerCssStyle: "padding-bottom:0px",
+					style: DwtAlert.WARNING,
+					iconVisible: true, 
+					content: ZaMsg.Domain_Suspended_Note,
+					colSpan:"*"
+				},				
+				{ type: _DWT_ALERT_,
+					visibilityChangeEventSources:[ZaDomain.A_zimbraDomainStatus],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_MAINTENANCE]],
+					containerCssStyle: "padding-bottom:0px",
+					style: DwtAlert.WARNING,
+					iconVisible: true, 
+					content: ZaMsg.Domain_Maintenance_Note,
+					colSpan:"*"
+				},				
+
 				{type: _DWT_ALERT_,
 				  containerCssStyle: "padding-bottom:0px",
 				  style: DwtAlert.WARNING,
@@ -719,7 +738,10 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 				  visibilityChangeEventSources:[ZaDomain.A_zimbraNotebookAccount]
 				},
 				{type:_GROUP_,  numCols:2,
-					visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A_zimbraNotebookAccount]],
+					visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A_zimbraNotebookAccount],
+						[XForm.checkInstanceValueNot,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_MAINTENANCE],
+						[XForm.checkInstanceValueNot,ZaDomain.A_zimbraDomainStatus,ZaDomain.DOMAIN_STATUS_SUSPENDED]
+						],
 				  	visibilityChangeEventSources:[ZaDomain.A_zimbraNotebookAccount],
 					items: [
 						{ref:ZaDomain.A_zimbraNotebookAccount, type:_EMAILADDR_, 
