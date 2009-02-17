@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.ArrayList;
-import java.io.IOException;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -42,14 +41,9 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.YMailSender;
 import com.zimbra.cs.offline.util.ymail.YMailException;
-import com.zimbra.cs.offline.util.ymail.YMailClient;
-import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.util.JMSession;
-import com.yahoo.mail.UserData;
-import com.yahoo.mail.AllOtherYahooMboxes;
-import com.yahoo.mail.YahooMbox;
 
 public class LocalMailbox extends DesktopMailbox {
     
@@ -97,7 +91,7 @@ public class LocalMailbox extends DesktopMailbox {
         		}
         	}
     		if (isYahoo || isLive) {
-    			DbMailItem.alterTag(mNoInferiorsFlag, Arrays.asList(ID_FOLDER_INBOX, ID_FOLDER_SENT), true);
+    			DbMailItem.alterTag(mNoInferiorsFlag, Arrays.asList(ID_FOLDER_INBOX, ID_FOLDER_TRASH, ID_FOLDER_SENT), true);
     			MailItem mi = getCachedItem(ID_FOLDER_INBOX);
     			if (mi != null)
     				mi.mData.flags |= mNoInferiorsFlag.getBitmask();
