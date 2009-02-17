@@ -150,6 +150,9 @@ function submit(id, name, type, flavor, verb) {
             <td>
               <div id="message" class="ZMessageInfo">
     <c:choose>
+    <c:when test="${not empty param.error}">
+                <span class='ZOfflineError'>${param.error}</span>
+    </c:when>
     <c:when test="${param.verb eq 'add'}">
                 <b><fmt:message key='ServiceAdded'><fmt:param>${param.accountName}</fmt:param></fmt:message></b>
                 <p><fmt:message key='ServiceAddedNote'/></p>

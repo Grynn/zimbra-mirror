@@ -251,9 +251,10 @@ function onEditLink(id, keep) {
 <c:choose>
 <c:when test="${accountFlavor eq ''}">
 </c:when>
-<c:when test="${not bean.noVerb && bean.allOK}">
+<c:when test="${not bean.noVerb && (bean.allOK || not (bean.add || bean.modify))}">
     <jsp:forward page="${zdf:addAuthToken('console.jsp')}">
 	<jsp:param name="accountName" value="${bean.accountName}"></jsp:param>
+	<jsp:param name="error" value="${bean.error}"></jsp:param>
 	<jsp:param name="verb" value="${bean.verb}"></jsp:param>
     </jsp:forward>
 </c:when>
