@@ -46,6 +46,8 @@ com_zimbra_emailreminder.prototype.getEmailFollowupFolderId =
 function() {
 	this._justCreatedCalendarFolder = false;
 	var soapDoc = AjxSoapDoc.create("GetFolderRequest", "urn:zimbraMail");
+	var folderNode = soapDoc.set("folder");
+	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
 	var command = new ZmCsfeCommand();
 	var top = command.invoke({soapDoc: soapDoc}).Body.GetFolderResponse.folder[0];
 
@@ -59,17 +61,16 @@ function() {
 			}
 		}
 	}
-
 	//there is no such folder, so create one.
 	this.createEmailFollowupFolder(top.id);
 };
 
 com_zimbra_emailreminder.prototype.createEmailFollowupFolder =
-function(parent) {
+function() {
 	var soapDoc = AjxSoapDoc.create("CreateFolderRequest", "urn:zimbraMail");
 	var folderNode = soapDoc.set("folder");
 	folderNode.setAttribute("name", com_zimbra_emailreminder.followupFolder);
-	folderNode.setAttribute("l", parent);
+	folderNode.setAttribute("l", appCtxt.getFolderTree().root.id);
 	folderNode.setAttribute("view", com_zimbra_emailreminder.CALENDAR_VIEW);
 	var command = new ZmCsfeCommand();
 	var resp = command.invoke({soapDoc: soapDoc});
