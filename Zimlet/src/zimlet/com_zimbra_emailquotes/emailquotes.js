@@ -126,7 +126,8 @@ function(result) {
 //called by ZmComposeView.js _getSignature method
 com_zimbra_emailquotes.prototype.appendExtraSignature =
 function(buffer) {
-    buffer.push(this.currentQuote);
+	if(this.turnEmailQuotesZimletON)
+	    buffer.push(this.currentQuote);
 };
 
 com_zimbra_emailquotes.prototype.doubleClicked = function() {
