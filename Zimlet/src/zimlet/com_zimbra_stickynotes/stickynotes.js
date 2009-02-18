@@ -48,7 +48,7 @@ function() {
 	if (!tagObj) {
 		this._createTag({name:com_zimbra_stickynotes.tagName, color:ZmOrganizer.C_YELLOW, callback: new AjxCallback(this, this._handleTagCreation)});
 	} else {
-		this._tagId = tagObj.id;
+		this._tagId = tagObj.nId;
 	}
 };
 
