@@ -44,7 +44,7 @@ public class ModifyLDAPEntry extends AdminDocumentHandler {
 		zlc = new ZimbraLdapContext(true);
 
 		String dn = request.getAttribute(ZimbraLDAPUtilsService.E_DN);
-		Map<String, Object> attrs = AdminService.getAttrs(request, true);
+		Map<String, Object> attrs = AdminService.getAttrs(request);
 
 		try {
 			LDAPUtilEntry ne = GetLDAPEntries.getObjectByDN(dn, zlc);
