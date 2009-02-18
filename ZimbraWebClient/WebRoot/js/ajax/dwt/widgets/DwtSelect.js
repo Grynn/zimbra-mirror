@@ -135,7 +135,7 @@ function(option, selected, value) {
 			if (value)
 				opt.setValue(value);
 			selected = opt.isSelected();
-		} else if(option instanceof DwtSelectOptionData || option.value) {
+		} else if(option instanceof DwtSelectOptionData || option.value != null) {
 			val = value != null ? value : option.value;
 			opt = new DwtSelectOption(val, option.isSelected, option.displayValue, this, null, option.image, option.selectedValue);
 			selected = Boolean(option.isSelected);
