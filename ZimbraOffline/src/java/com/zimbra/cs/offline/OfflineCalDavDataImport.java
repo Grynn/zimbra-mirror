@@ -45,6 +45,9 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     }
 
     public void importData(List<Integer> folderIds, boolean fullSync) throws ServiceException {
+        if (!fullSync)
+            return;
+
         ZimbraLog.calendar.info("Importing calendar for account '%s'", dataSource.getName());
         try {
     		super.importData(folderIds, fullSync);
