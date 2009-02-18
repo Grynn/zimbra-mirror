@@ -29,18 +29,31 @@ com_zimbra_discover.discover = "DISCOVER";
 
 com_zimbra_discover.prototype.init =
 function() {
-	this.discZimletON = this.getUserProperty("turnONDiscoverZimlet") == "true";
+	this.discZimletON = this.getUserProperty("turnONDiscoverZimletNew") == "true";
 	this.selectionsList = ["humor","art","business","entertainment","politics","technology","sports"];
 	this.feeds_entertainment = this.feeds_business = this.feeds_art = this.feeds_humor = "";
 	this.feeds_politics = this.feeds_sports = this.feeds_technology = "";
 	if (!this.discZimletON) {
 		return;
 	}
-	this._masterFeed = "http://rajaraodv.feedpublish.com/rss.xml";
-	this._getMasterFeed();
-
+	//this._masterFeed = "http://rajaraodv.feedpublish.com/rss.xml";
+	//this._getMasterFeed();
+	this._loadFeeds();
+	this.initToolbarButton();
+};
+com_zimbra_discover.prototype._loadFeeds =
+function() {
+	//feedpublish is completely flacky, so hardcode.
+	this.feeds_humor = "http://feeds.delicious.com/v2/json/tag/funny+cool+humor+photo?count=200::http://feeds.delicious.com/v2/json/tag/funny+cool+prank?count=25::http://feeds.delicious.com/v2/json/tag/funny+cool+humor?count=25::http://feeds.delicious.com/v2/json/tag/funny+jokes?count=25::http://feeds.delicious.com/v2/json/tag/funny+cool+humor+awesome?count=30::http://rss.stumbleupon.com/buzz/humor::http://feeds.delicious.com/v2/json/tag/funny+pictures+awesome?count=200";
+	this.feeds_business = "http://feeds.delicious.com/v2/json/tag/business+interesting+startups?count=50::http://feeds.delicious.com/v2/json/tag/business+interesting+entrepreneurship+cool?count=30::http://feeds.delicious.com/v2/json/tag/business+web2.0+cool?count=30::http://feeds.delicious.com/v2/json/tag/business+cool+social+collaboration?count=30";
+	this.feeds_entertainment = "http://feeds.delicious.com/v2/json/tag/cool+celebritycount=40::http://feeds.delicious.com/v2/json/tag/cool+entertainment?count=100";
+	this.feeds_politics = "http://feeds.delicious.com/v2/json/tag/politics+cool?count=50::http://feeds.delicious.com/v2/json/tag/business+interesting+entrepreneurship+cool?count=30::http://feeds.delicious.com/v2/json/tag/business+web2.0+cool?count=30::http://feeds.delicious.com/v2/json/tag/business+cool+social+collaboration?count=30";
+	this.feeds_technology = "http://feeds.delicious.com/v2/json/tag/cool+tips+programming?count=40::http://feeds.delicious.com/v2/json/tag/cool+tips+webdesign+interesting?count=10::http://feeds.delicious.com/v2/json/tag/webdesign+interesting+useful+cool?count=15::http://feeds.delicious.com/v2/json/tag/interesting+useful+cool+apple?count=15::http://feeds.delicious.com/v2/json/tag/cool+interesting+computer?count=50";
+	this.feeds_sports = "http://feeds.delicious.com/v2/json/tag/sports+photos?count=150";
+	this.feeds_art = "http://feeds.delicious.com/v2/json/tag/art+awesome+amazing?count=75::http://feeds.delicious.com/v2/json/tag/art+painting+interesting?count=100::http://feeds.delicious.com/v2/json/tag/art+creative+awesome?count=100";
 };
 
+/*
 com_zimbra_discover.prototype._getMasterFeed =
 function() {
 	var feed = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(this._masterFeed);
@@ -93,7 +106,7 @@ function(result) {
 	}
 	this.initToolbarButton();
 };
-
+*/
 com_zimbra_discover.prototype._initializeVariables =
 function() {
 
@@ -190,7 +203,7 @@ com_zimbra_discover.prototype._okBtnListner =
 function() {
 	this.savePreferences();
 	this._topicsJustSelected = true;
-	this.setUserProperty("dy_usingFirstTime", "false", true);
+	this.setUserProperty("dy_usingFirstTime", "false");
 	this.pbDialog.popdown();
 	this._enableDisableZimlet();
 
@@ -207,9 +220,9 @@ function() {
 	for (var i = 0; i < this.selectionsList.length; i++) {
 		var optn = this.selectionsList[i];
 		if (document.getElementById("dy_chk_" + optn).checked) {
-			this.setUserProperty("dy_pref_" + optn, "true", true);
+			this.setUserProperty("dy_pref_" + optn, "true");
 		} else {
-			this.setUserProperty("dy_pref_" + optn, "false", true);
+			this.setUserProperty("dy_pref_" + optn, "false");
 		}
 	}
 };
@@ -223,7 +236,7 @@ function() {
 		}
 	}
 
-	if (this.getUserProperty("turnONDiscoverZimlet") == "true") {
+	if (this.getUserProperty("turnONDiscoverZimletNew") == "true") {
 		document.getElementById("dy_enableDiscZimlet").checked = true;
 	}
 
@@ -350,8 +363,8 @@ com_zimbra_discover.prototype._checkIfDiscBtnOnExtWindowClicked =
 function() {
 	try {
 		if (this._extWindow && this._extWindow.document &&
-			this._extWindow.document.getElementById("discover_clickMsg").innerHTML == "")
-		{
+				this._extWindow.document.getElementById("discover_clickMsg").innerHTML == "") 
+			{
 			clearInterval(this._clickHereMsgTIid);
 			this.setUserProperty("dy_discoverBtnClickedOnExternalWindow", "true", true);
 		}
@@ -466,7 +479,7 @@ com_zimbra_discover.prototype.createPrefView =
 function() {
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<DIV class='dy_selectOptDiv'>";
+	html[i++] = "<DIV align='center' class='dy_selectOptDiv'>";
 	html[i++] = "<TABLE class='dy_selectOptTable'><TR><TD>Select some of your favourite topics to discover!</TD></TR></TABLE>";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
@@ -505,18 +518,25 @@ function() {
 		if (!this.discZimletON) {
 			this._reloadRequired = true;
 		}
-		this.setUserProperty("turnONDiscoverZimlet", "true", true);
+		this.setUserProperty("turnONDiscoverZimletNew", "true");
 
 	} else {
-		this.setUserProperty("turnONDiscoverZimlet", "false", true);
+		this.setUserProperty("turnONDiscoverZimletNew", "false");
 		if (this.discZimletON)
 			this._reloadRequired = true;
 	}
 	this.pbDialog.popdown();
 	if (this._reloadRequired) {
-		window.onbeforeunload = null;
-		var url = AjxUtil.formatUrl({});
-		ZmZimbraMail.sendRedirect(url);
+		this.saveUserProperties(new AjxCallback(this, this._refreshBrowser));
+	} else{
+		this.saveUserProperties(null);
 	}
 
+};
+
+com_zimbra_discover.prototype._refreshBrowser =
+function() {
+	window.onbeforeunload = null;
+	var url = AjxUtil.formatUrl({});
+	ZmZimbraMail.sendRedirect(url);
 };

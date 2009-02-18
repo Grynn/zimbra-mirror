@@ -15,8 +15,8 @@ font-size:12px;color:blue;font-family:Arial,Helvetica,sans-serif;
 }
 
 .dy_selectOptDiv{
-border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;
+border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;width:99%;
 }
 .dy_selectOptTable{
-font-size:16px;font-weight:bold;color:blue;background-color:#FFFFCC;font-family:Arial,Helvetica,sans-serif;width:100%
+font-size:16px;font-weight:bold;color:blue;background-color:#FFFFCC;font-family:Arial,Helvetica,sans-serif;width:100%;
 }
