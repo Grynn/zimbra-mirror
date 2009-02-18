@@ -288,6 +288,7 @@ function(entry) {
 	} */
 	this.cosChoices.setChoices([this._containedObject.cos]);
 	this.cosChoices.dirtyChoices();
+	
 	this._containedObject.attrs[ZaAccount.A_accountStatus] = ZaAccount.ACCOUNT_STATUS_ACTIVE;
 	this._containedObject[ZaAccount.A2_autodisplayname] = "TRUE";
 	this._containedObject[ZaAccount.A2_autoMailServer] = "TRUE";
@@ -314,6 +315,9 @@ function(entry) {
 		domainName =  ZaSettings.myDomainName;
 	}
 	this._containedObject[ZaAccount.A_name] = "@" + domainName;
+	EmailAddr_XFormItem.domainChoices.setChoices([{name:domainName}]);
+	EmailAddr_XFormItem.domainChoices.dirtyChoices();
+	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(entry.getAttrs[ZaAccount.A_zimbraAvailableSkin]) {
 			var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];

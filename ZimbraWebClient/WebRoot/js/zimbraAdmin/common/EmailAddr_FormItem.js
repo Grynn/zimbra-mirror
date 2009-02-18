@@ -135,7 +135,8 @@ EmailAddr_XFormItem.prototype.items = [
 		}	
 	},*/
 	{type:_DYNSELECT_DOMAIN_PART_, ref:".", labelLocation:_NONE_,  
-	 	choices:EmailAddr_XFormItem.domainChoices,editable:true,
+	 	choices:EmailAddr_XFormItem.domainChoices,
+	 	editable:true,
 	 	//visibilityChecks:[EmailAddr_XFormItem.isNonSaticDomain],
 	 	visibilityChecks:[],
 	 	enableDisableChecks:[],
