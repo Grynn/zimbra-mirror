@@ -40,9 +40,10 @@
 DwtHeaderTreeItem = function(params) {
 	this.overview = params.overview;
 	this._button = params.button;
+	this._noNodeCell = params.noNodeCell;
 	DwtTreeItem.call(this, params);
 	this._selectable = params.selectable;
-}
+};
 
 DwtHeaderTreeItem.prototype = new DwtTreeItem;
 DwtHeaderTreeItem.prototype.constructor = DwtHeaderTreeItem;
@@ -52,6 +53,12 @@ DwtHeaderTreeItem.prototype.TEMPLATE = "dwt.Widgets#ZHeaderTreeItem";
 DwtHeaderTreeItem.prototype.toString =
 function() {
 	return "DwtHeaderTreeItem";
+};
+
+DwtHeaderTreeItem.prototype._createHtmlFromTemplate =
+function(template, data) {
+	data.noNodeCell = this._noNodeCell;
+	DwtTreeItem.prototype._createHtmlFromTemplate.apply(this, arguments);
 };
 
 DwtHeaderTreeItem.prototype._initialize =
