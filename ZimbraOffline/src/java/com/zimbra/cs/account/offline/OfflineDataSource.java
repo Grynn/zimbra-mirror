@@ -163,7 +163,7 @@ public class OfflineDataSource extends DataSource {
     private KnownFolder getKnownFolderByRemotePath(String remotePath) {
         if (knownService != null && knownService.folders != null)
             for (KnownFolder kf : knownService.folders)
-                if (remotePath.equals(kf.remotePath))
+                if (remotePath.equalsIgnoreCase(kf.remotePath))
                     return kf;
         return null;
     }
@@ -171,7 +171,7 @@ public class OfflineDataSource extends DataSource {
     private KnownFolder getKnownFolderByLocalPath(String localPath) {
         if (knownService != null && knownService.folders != null)
             for (KnownFolder kf : knownService.folders)
-                if (localPath.equals(kf.localPath))
+                if (localPath.equalsIgnoreCase(kf.localPath))
                     return kf;
         return null;
     }
