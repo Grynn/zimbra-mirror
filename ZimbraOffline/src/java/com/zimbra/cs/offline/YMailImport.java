@@ -33,7 +33,7 @@ public class YMailImport implements DataSource.DataImport {
             yabImport = OfflineImport.yabImport(ds);
         }
         if (ds.isCalendarSyncEnabled()) {
-            calDavImport = OfflineImport.gabImport(ds);
+            calDavImport = OfflineImport.ycalImport(ds);
         }
     }
 
