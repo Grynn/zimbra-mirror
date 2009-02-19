@@ -363,7 +363,7 @@ public class OfflineDataSource extends DataSource {
             } else if (isGmail()) {
                 return new GMailImport(this);
             } else {
-                return new OfflineImport(this, new ImapSync(this), OfflineImport.IMAP_INTERVAL);
+                return OfflineImport.imapImport(this);
             }
         }
         return super.getDataImport();

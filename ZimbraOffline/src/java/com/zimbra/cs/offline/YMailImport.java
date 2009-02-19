@@ -16,39 +16,24 @@
  */
 package com.zimbra.cs.offline;
 
-import com.zimbra.cs.datasource.ImapSync;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.offline.ab.yab.YabImport;
-import com.zimbra.cs.offline.util.OfflineYAuth;
-import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.util.yauth.XYMEAuthenticator;
-import com.zimbra.cs.util.yauth.Authenticator;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.Log;
-import com.zimbra.common.util.ZimbraLog;
 
-import javax.security.auth.login.LoginException;
 import java.util.List;
-import java.io.IOException;
 
 public class YMailImport implements DataSource.DataImport {
     private final OfflineImport imapImport;
     private OfflineImport yabImport;
     private OfflineImport calDavImport;
     
-    private static final Log LOG = ZimbraLog.datasource;
-    
     public YMailImport(OfflineDataSource ds) throws ServiceException {
-        imapImport = new OfflineImport(ds, new YMailSync(ds), OfflineImport.IMAP_INTERVAL);
+        imapImport = OfflineImport.imapImport(ds);
         if (ds.isContactSyncEnabled()) {
-            yabImport = new OfflineImport(
-                ds, new YabImport(ds), OfflineImport.CONTACTS_INTERVAL);
+            yabImport = OfflineImport.yabImport(ds);
         }
         if (ds.isCalendarSyncEnabled()) {
-            calDavImport =  new OfflineImport(
-                ds, new OfflineCalDavDataImport(ds, "ymail.com"),
-                OfflineImport.CALENDAR_INTERVAL);
+            calDavImport = OfflineImport.gabImport(ds);
         }
     }
 
@@ -71,42 +56,4 @@ public class YMailImport implements DataSource.DataImport {
             calDavImport.importData(null, fullSync);
         }
     }
-
-    private static class YMailSync extends ImapSync {
-        YMailSync(DataSource ds) throws ServiceException {
-            super(ds);
-        }
-
-        @Override
-        protected void connect() throws ServiceException {
-            Authenticator auth = OfflineYAuth.newAuthenticator(dataSource);
-            initAuth(auth);
-            try {
-                super.connect();
-            } catch (ServiceException e) {
-                if (!isAuthError(e)) throw e;
-                LOG.debug("Invalidating possibly expired cookie and retrying auth");
-                // Invalidate possibly expired cookie so that we will regenerate
-                // and try again
-                auth.invalidate();
-                initAuth(auth);
-                super.connect();
-            }
-        }
-
-        private void initAuth(Authenticator auth) throws ServiceException {
-            try {
-                setAuthenticator(new XYMEAuthenticator(
-                    auth.authenticate(), OfflineConstants.YMAIL_PARTNER_NAME));
-            } catch (IOException e) {
-                throw ServiceException.FAILURE("I/O error during authentication", e);
-            }
-        }
-    }
-
-    private static boolean isAuthError(ServiceException e) {
-        Throwable cause = e.getCause();
-        return cause == null || cause instanceof LoginException;
-    }
-
 }

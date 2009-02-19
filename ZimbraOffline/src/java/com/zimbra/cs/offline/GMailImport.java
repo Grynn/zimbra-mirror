@@ -16,8 +16,6 @@
  */
 package com.zimbra.cs.offline;
 
-import com.zimbra.cs.offline.ab.gab.GabImport;
-import com.zimbra.cs.datasource.ImapSync;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.common.service.ServiceException;
@@ -30,15 +28,12 @@ public class GMailImport implements DataSource.DataImport {
     private OfflineImport calDavImport;
 
     public GMailImport(OfflineDataSource ds) throws ServiceException {
-        imapImport = new OfflineImport(ds, new ImapSync(ds), OfflineImport.IMAP_INTERVAL);
+        imapImport = OfflineImport.imapImport(ds);
         if (ds.isContactSyncEnabled()) {
-            gabImport = new OfflineImport(
-                ds, new GabImport(ds), OfflineImport.CONTACTS_INTERVAL);
+            gabImport = OfflineImport.gabImport(ds);
         }
         if (ds.isCalendarSyncEnabled()) {
-            calDavImport = new OfflineImport(
-                ds, new OfflineCalDavDataImport(ds, "gmail.com"),
-                OfflineImport.CALENDAR_INTERVAL);
+            calDavImport = OfflineImport.gcalImport(ds);
         }
     }
 
