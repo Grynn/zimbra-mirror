@@ -2086,6 +2086,8 @@ Output_XFormItem.prototype.initFormItem = function () {
 	//	...set up to receive notification when its choices change
 	var listener = new AjxListener(this, this.dirtyDisplay);
 	choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);
+
+    this.signUpForEvents();   //so when the instance value changed, the output display can be updated.
 }
 
 Output_XFormItem.prototype.dirtyDisplay = function () {

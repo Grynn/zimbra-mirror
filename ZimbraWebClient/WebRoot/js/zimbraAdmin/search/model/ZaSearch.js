@@ -58,6 +58,7 @@ ZaSearch.A_fResources = "f_resources";
 ZaSearch.A_ResultMsg = "resultMsg";
 
 ZaSearch._currentQuery = null;
+ZaSearch._domain = null; //current searchDirectory's domain parameter
 ZaSearch._savedSearchToBeUpdated = true ; //initial value to be true
 
 ZaSearch.getPredefinedSavedSearchesForAdminOnly = function () {
@@ -140,10 +141,14 @@ function (params) {
 	if(params.applyCos)	
 		soapDoc.getMethod().setAttribute("applyCos", params.applyCos);
 	
-	if(params.domain)
+	if(params.domain)  {
 		soapDoc.getMethod().setAttribute("domain", params.domain);
+        ZaSearch._domain = params.domain;
+    } else{
+        ZaSearch._domain = null;        
+    }
 
-	if(params.attrs && params.attrs.length>0)
+    if(params.attrs && params.attrs.length>0)
 		soapDoc.getMethod().setAttribute("attrs", params.attrs.toString());
 		
 	if(params.types && params.types.length>0)

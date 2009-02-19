@@ -35,3 +35,45 @@ if (ZaController.initToolbarMethods["ZaAccountListController"]) {
 		this._handleException(ex, "ZaAccountListController.prototype._bulkProvisionListener", null, false);
 	}
  }
+
+
+ //add download the accounts to searchListView
+ if (ZaController.initToolbarMethods["ZaSearchListController"]) {
+    ZaOperation.DOWNLOAD_ACCOUNTS = ++ ZA_OP_INDEX ;
+    ZaSearchListController.initExtraToolbarMethod = function () {
+        this._toolbarOperations [ZaOperation.DOWNLOAD_ACCOUNTS] =
+                new ZaOperation(ZaOperation.DOWNLOAD_ACCOUNTS, com_zimbra_bulkprovision.ACTBB_DownloadAccounts,
+                        com_zimbra_bulkprovision.ACTBB_DownloadAccounts_tt, "DownloadGlobalConfig", "DownloadGlobalConfigDis",
+                        new AjxListener(this, ZaSearchListController.prototype._downloadAccountsListener)
+                        );
+
+        for (var i=0; i < this._toolbarOrder.length; i ++) {
+            if (this._toolbarOrder[i] == ZaOperation.NONE) {
+                this._toolbarOrder.splice(i,0,ZaOperation.DOWNLOAD_ACCOUNTS) ;
+                break ;
+            }
+        }
+    }
+
+    ZaController.initToolbarMethods["ZaSearchListController"].push(ZaSearchListController.initExtraToolbarMethod);
+}
+
+ZaSearchListController.prototype._downloadAccountsListener =
+ function (ev) {
+     //TODO: need to filter out non account items, such as domain, etc.
+     if (AjxEnv.hasFirebug) console.log("Download all the search result accounts ...") ;
+     var queryString = "?action=getSR";
+     if (this._currentQuery) {
+        queryString += "&q=" + AjxStringUtil.htmlEncode(this._currentQuery) ;
+     }
+
+     if (ZaSearch._domain && AjxUtil.isDomainName(ZaSearch._domain)) {
+        queryString += "&domain=" + AjxStringUtil.htmlEncode(ZaSearch._domain) ;        
+     }
+
+     if (this.searchTypes) {
+         queryString +="&types=" + AjxStringUtil.htmlEncode(this.searchTypes.join(","));
+     }
+
+     window.open("/service/afd/" + queryString);
+ }

@@ -1709,13 +1709,15 @@ function (domainName) {
     if (domainName) {
         var controller = ZaApp.getInstance().getSearchListController() ;
         var callback =  new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true});
-        controller._currentQuery = "(|(zimbraMailDeliveryAddress=*@" + domainName +")(zimbraMailAlias=*@"+ domainName+"))" ;
+//        controller._currentQuery = "(|(zimbraMailDeliveryAddress=*@" + domainName +")(zimbraMailAlias=*@"+ domainName+"))" ;
+        controller._currentQuery = "" ;
         var searchTypes = [ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.ALIASES, ZaSearch.RESOURCES] ;
 
         if(controller.setSearchTypes)
             controller.setSearchTypes(searchTypes);
         var searchParams = {
                 query:controller._currentQuery,
+                domain: domainName,
                 types:searchTypes,
                 attrs:ZaSearch.standardAttributes,
                 callback:callback,

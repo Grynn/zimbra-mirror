@@ -555,7 +555,9 @@ ZaBulkProvisionWizard.myXFormModifier = function(xFormObject) {
 			items :[
 				{ type:_OUTPUT_, value: com_zimbra_bulkprovision.summary_download },
 				{ type:_SPACER_ , height: 10 },
-			    { type:_OUTPUT_, ref: ZaBulkProvision.A_csv_aid, getDisplayValue: function (newValue) {
+			    { type:_OUTPUT_, ref: ZaBulkProvision.A_csv_aid,
+                    valueChangeEventSources:[ZaBulkProvision.A_csv_aid],
+                    getDisplayValue: function (newValue) {
                         return "<a target='_blank' href='/service/afd/?action=getBP&aid=" + newValue
                             + "' onclick='ZaZimbraAdmin.unloadHackCallback();'> "
 										+ com_zimbra_bulkprovision.download_csv + "</a> "
