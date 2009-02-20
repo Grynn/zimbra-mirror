@@ -742,7 +742,8 @@ function(x, y, width, height) {
 		this.__controlEvent.oldY = bds.y;
 		this.__controlEvent.oldWidth = bds.width;
 		this.__controlEvent.oldHeight = bds.height;
-		Dwt.setBounds(htmlElement, x, y, width, height);
+		this.setLocation(x, y);
+		this.setSize(width, height);
 		bds = Dwt.getBounds(htmlElement);
 		this.__controlEvent.newX = bds.x;
 		this.__controlEvent.newY = bds.y;
@@ -752,7 +753,8 @@ function(x, y, width, height) {
 		this.__controlEvent.requestedHeight = height;
 		this.notifyListeners(DwtEvent.CONTROL, this.__controlEvent);
 	} else {
-		Dwt.setBounds(htmlElement, x, y, width, height);
+		this.setLocation(x, y);
+		this.setSize(width, height);
 	}
 
 	return this;

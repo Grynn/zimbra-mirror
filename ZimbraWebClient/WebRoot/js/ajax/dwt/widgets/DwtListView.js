@@ -343,12 +343,6 @@ function(width, height) {
 	this._sizeChildren(height);
 };
 
-DwtListView.prototype.setBounds =
-function(x, y, width, height) {
-	DwtComposite.prototype.setBounds.call(this, x, y, width, height);
-	this._sizeChildren(height);
-};
-
 DwtListView.prototype.size =
 function() {
 	return this._list ? this._list.size() : 0;
