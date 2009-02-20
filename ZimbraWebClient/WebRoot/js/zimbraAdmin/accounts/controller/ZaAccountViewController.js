@@ -152,13 +152,13 @@ ZaController.setViewMethods["ZaAccountViewController"].push(ZaAccountViewControl
 ZaAccountViewController.changeActionsStateMethod = function () {
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || 
 		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-			if(!this._currentObject.rights[ZaAccount.VIEW_MAIL_RIGHT])	{
+			if(!this._currentObject.rights || !this._currentObject.rights[ZaAccount.VIEW_MAIL_RIGHT])	{
 				this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
 			}
 	}
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_REINDEX] || 
 		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		if(!this._currentObject.rights[ZaAccount.REINDEX_MBX_RIGHT])	{
+		if(!this._currentObject.rights || !this._currentObject.rights[ZaAccount.REINDEX_MBX_RIGHT])	{
 			this._toolbarOperations[ZaOperation.REINDEX_MAILBOX].enabled = false;
 		}
 	}

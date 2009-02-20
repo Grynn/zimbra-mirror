@@ -410,7 +410,7 @@ function() {
 		this._addressesTi.enableSelection(false);
 		this._addressesTi.setText(ZaMsg.OVP_addresses);
 		this._addressesTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADDRESSES);
-	
+	    this._addressesTi.setSty
 		if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
 			this.accountTi = ti = new DwtTreeItem(this._addressesTi);
 			ti.setText(ZaMsg.OVP_accounts);
@@ -438,7 +438,6 @@ function() {
             ti.setImage("Resource");
             ti.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._RESOURCE_VIEW);
         }
-		this._addressesTi.addSeparator();
 		
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = ZaOverviewPanelController.accountListTreeListener;
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ALIASES_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
@@ -552,8 +551,6 @@ function() {
 	
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;				
 		}
-		this._configTi.addSeparator();	
-		
 	}
 	if(showTools) {
 		this._monitoringTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
@@ -599,8 +596,6 @@ function() {
 			}
 		}
 		
-		this._monitoringTi.addSeparator();
-		
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._STATUS] = ZaOverviewPanelController.statusTreeListener;	
 		
@@ -639,7 +634,6 @@ function() {
 		} catch (ex) {
 			this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
 		}
-		this._toolsTi.addSeparator();
 		
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ_VIEW] = ZaOverviewPanelController.postqTreeListener;				
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW] = ZaOverviewPanelController.postqByServerTreeListener;						
@@ -672,23 +666,6 @@ function() {
 		
 		ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._SEARCH_LIST_VIEW] = ZaOverviewPanelController.searchListTreeListener;
 	}
-	
-		
-	if(this._addressesTi)
-		this._addressesTi.setExpanded(true, false);
-
-	if(this._configTi)	
-		this._configTi.setExpanded(true, false);
-	
-	if(this._monitoringTi)
-		this._monitoringTi.setExpanded(true, false);
-
-	if(this._toolsTi)
-		this._toolsTi.setExpanded(true, false);
-
-	
-	if (this._savedSearchTi) 
-		this._savedSearchTi.setExpanded(true, false);
 			
 	//Instrumentation code start
 	if(ZaOverviewPanelController.treeModifiers) {
@@ -700,7 +677,33 @@ function() {
 			}
 		}
 	}	
-	//Instrumentation code end			
+	//Instrumentation code end
+
+    //add the separater here
+    if(this._addressesTi)  {
+        this._addressesTi.addSeparator();
+        this._addressesTi.setExpanded(true, false);
+    }
+
+    if(this._configTi) {
+        this._configTi.addSeparator();
+        this._configTi.setExpanded(true, false);
+    }
+
+    if(this._monitoringTi) {
+        this._monitoringTi.addSeparator();
+        this._monitoringTi.setExpanded(true, false);
+    }
+
+    if(this._toolsTi) {
+        this._toolsTi.addSeparator();
+        this._toolsTi.setExpanded(true, false);
+    }
+
+    if (this._savedSearchTi) {
+        this._savedSearchTi.addSeparator();
+        this._savedSearchTi.setExpanded(true, false);
+    }
 }
 
 
