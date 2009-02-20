@@ -344,6 +344,18 @@ function(array) {
 	return hash;
 };
 
+AjxUtil.arrayAdd =
+function(array, member, index) {
+
+	if (index == null || index < 0 || index >= array.length) {
+		// index absent or is out of bounds - append object to the end
+		array.push(member);
+	} else {
+		// otherwise, insert object
+		array.splice(index, 0, member);
+	}
+};
+
 AjxUtil.arrayRemove =
 function(array, member) {
 	for (var i = 0; i < array.length; i++) {

@@ -263,12 +263,18 @@ DwtLabel.prototype._getIconEl = function() {
  * @private*/
 DwtLabel.prototype.__setImage =
 function(imageInfo) {
-	var iconEl = this._getIconEl();
-    if (iconEl) {
-    	AjxImg.setImage(iconEl, imageInfo, null, !this._enabled);
 
-		// set a ZHasRightIcon or ZHasLeftIcon on the outer element, depending on which we set
-    	var elementClass = (this._style & DwtLabel.IMAGE_RIGHT ? "ZHasRightIcon" : "ZHasLeftIcon");
-		Dwt.addClass(this.getHtmlElement(), elementClass);
-    }
-}
+
+	var iconEl = this._getIconEl();
+	if (iconEl) {
+		if (imageInfo) {
+			AjxImg.setImage(iconEl, imageInfo, null, !this._enabled);
+
+			// set a ZHasRightIcon or ZHasLeftIcon on the outer element, depending on which we set
+			var elementClass = (this._style & DwtLabel.IMAGE_RIGHT ? "ZHasRightIcon" : "ZHasLeftIcon");
+			Dwt.addClass(this.getHtmlElement(), elementClass);
+		} else {
+			iconEl.innerHTML = "";
+		}
+	}
+};

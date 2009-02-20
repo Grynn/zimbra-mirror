@@ -57,14 +57,7 @@ function(obj, index, noDuplicates) {
 		return;
 	}
 
-	// if index is out of bounds,
-	if (index == null || index < 0 || index >= this._array.length) {
-		// append object to the end
-		this._array.push(obj);
-	} else {
-		// otherwise, insert object
-		this._array.splice(index, 0, obj);
-	}
+	AjxUtil.arrayAdd(this._array, obj, index);
 };
 
 AjxVector.prototype.addList =
