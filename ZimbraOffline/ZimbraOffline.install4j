@@ -3627,6 +3627,39 @@ return (new File(instDir + "/localstore.json.bak")).exists();</condition>
                   </action>
                 </beans>
               </group>
+              <action name="delete old mailbox and zdesktop logs" id="289313" beanClass="com.install4j.runtime.beans.actions.control.RunScriptAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.control.RunScriptAction">
+                      <void property="script">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>import java.io.File;
+import java.util.regex.Pattern;
+
+String logDir = (String)context.getVariable("sys.installationDir") + "/log";
+String[] files = (new File(logDir)).list();
+Pattern p = Pattern.compile("zdesktop\\.log\\.\\d{4}-.+");
+
+for (String file : files) {
+    File f  = new File(logDir + "/" + file);
+    try {
+         if (f.isDirectory() || !f.canWrite())
+             continue;
+         if (file.indexOf("mailbox") &gt;= 0 || p.matcher(file).matches())
+             f.delete();
+    } catch (Exception e) {}
+}
+
+return true;</string>
+                          </void>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
               <group name="Start zdesktop" id="287724" beanClass="com.install4j.runtime.beans.groups.ActionGroup" enabled="false" commentSet="false" comment="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
