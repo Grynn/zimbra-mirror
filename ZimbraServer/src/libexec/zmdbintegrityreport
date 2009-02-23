@@ -29,6 +29,7 @@ use Getopt::Long;
 my %options = ();
 my $report = [];
 my $dbCheck = '';
+my $status = 0;
 my $zimbra_home = "/opt/zimbra";
 unless ( GetOptions ("mailReport" => \$options{m},
                      "logger"     => \$options{l},
@@ -51,17 +52,19 @@ if ($verbose && $options{m}) {
 my $check_disabled = getLocalConfig("zmdbintegrityreport_disabled");
 exit 0 if (lc($check_disabled) eq "true");
 
-addToReport("Generating report\n") if $verbose;
+addToReport("Generating report\n") if $debug;
 if ($options{l}) {
-  checkLoggerDb();
+  $status = (checkLoggerDb() ? 1 : 0);
 } else {
-  checkDbs();
+  $status = (checkDbs() ? 1 : 0);
 }
 if ($options{m}) {
   sendEmailReport($report);
 } else {
   print @$report;
 }
+
+exit $status;
 
 #------------- 
 # Subroutines
