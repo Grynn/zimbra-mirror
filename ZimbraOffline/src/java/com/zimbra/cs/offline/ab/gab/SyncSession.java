@@ -67,8 +67,8 @@ public class SyncSession {
 
     private static final Log LOG = OfflineLog.gab;
 
-    private static final boolean FORCE_TRACE = true; // DEBUG
-    private static final boolean HTTP_DEBUG = true;
+    private static final boolean FORCE_TRACE = true;
+    private static final boolean HTTP_DEBUG = false;
 
     static {
         if (HTTP_DEBUG) {
