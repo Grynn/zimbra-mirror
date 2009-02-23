@@ -178,15 +178,21 @@ public class ContactData implements Serializable {
         case workURL:
             return SimpleField.link(value, Flag.WORK);
         case homeFax:
-            return SimpleField.phone(value, Flag.HOME, Flag.FAX);
+            return SimpleField.phone(value, Flag.FAX);
         case workFax:
             return SimpleField.phone(value, Flag.WORK, Flag.FAX);
         case homePhone: case homePhone2:
             return SimpleField.phone(value, Flag.HOME);
         case workPhone: case workPhone2:
             return SimpleField.phone(value, Flag.WORK);
+        case mobilePhone:
+            return SimpleField.phone(value, Flag.MOBILE);
+        case workMobile:
+            return SimpleField.phone(value, Flag.WORK, Flag.MOBILE);
+        case pager:
+            return SimpleField.phone(value, Flag.PAGER);
         case otherPhone:
-            return SimpleField.phone(value);
+            return SimpleField.phone(value, Flag.EXTERNAL);
         case imAddress1: case imAddress2: case imAddress3:
             return getRemoteImAddress(value);
         default:
@@ -215,17 +221,17 @@ public class ContactData implements Serializable {
             return A_notes;
         } else if (simple.isPhone()) {
             if (simple.isFlag(Flag.FAX)) {
-                if (simple.isHome()) {
-                    return A_homeFax;
-                } else if (simple.isWork()) {
-                    return A_workFax;
-                }
+                return simple.isWork() ? A_workFax : A_homeFax;
+            } else if (simple.isFlag(Flag.MOBILE)) {
+                return simple.isWork() ? A_workMobile : A_mobilePhone;
+            } else if (simple.isFlag(Flag.PAGER)) {
+                return A_pager;
+            } else if (simple.isFlag(Flag.EXTERNAL)) {
+                return A_otherPhone;
             } else if (simple.isHome()) {
                 return getFirst(A_homePhone, A_homePhone2);
             } else if (simple.isWork()) {
                 return getFirst(A_workPhone, A_workPhone2);
-            } else {
-                return A_otherPhone;
             }
         }
         return null;
