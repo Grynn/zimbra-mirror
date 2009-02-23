@@ -21,7 +21,6 @@ import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Contact.Attachment;
-import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.cs.offline.ab.SyncState;
@@ -40,6 +39,7 @@ import com.google.gdata.data.contacts.ContactGroupEntry;
 import com.google.gdata.data.contacts.ContactGroupFeed;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.DateTime;
+import com.google.gdata.data.extensions.Email;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -55,7 +55,6 @@ import java.io.IOException;
 public class SyncSession {
     private final LocalData localData;
     private final GabService service;
-    private Map<String, ContactGroup> contactGroups;
 
     private static class Stats {
         int added, updated, deleted;
@@ -68,8 +67,8 @@ public class SyncSession {
 
     private static final Log LOG = OfflineLog.gab;
 
-    private static final boolean FORCE_TRACE = true;
-    private static final boolean HTTP_DEBUG = false;
+    private static final boolean FORCE_TRACE = true; // DEBUG
+    private static final boolean HTTP_DEBUG = true;
 
     static {
         if (HTTP_DEBUG) {
@@ -106,19 +105,19 @@ public class SyncSession {
         ContactFeed contacts = service.getContacts(lastSyncTime, null);
         Map<String, Attachment> photos = getContactPhotos(contacts.getEntries());
         DateTime updated = contacts.getUpdated();
-        ContactGroupFeed groups = service.getGroups(lastSyncTime, updated);
+        ContactGroupFeed groups = service.getGroups(null, updated);
         state.setLastRevision(updated.toString());
         List<SyncRequest> contactRequests;
         int seq = state.getLastModSequence();
-        contactGroups = new HashMap<String, ContactGroup>();
         synchronized (mbox) {
             // Get local changes since last sync
             Map<Integer, Change> contactChanges = localData.getContactChanges(seq);
-            // Process remote group and contact changes
-            processGroupChanges(groups.getEntries());
-            processContactChanges(contacts.getEntries(), contactChanges, photos);
+            // Process remote contact changes
+            processRemoteChanges(contacts.getEntries(), contactChanges, photos);
             // Process local changes and determine changes to push
-            contactRequests = getContactRequests(contactChanges.values());
+            contactRequests = processLocalChanges(contactChanges.values());
+            // Update local contact group changes
+            processGroups(groups.getEntries());
             state.setLastModSequence(mbox.getLastChangeID());
         }
         // Push local changes to remote
@@ -128,65 +127,74 @@ public class SyncSession {
             LOG.debug("Contact sync had %d error(s)", errors);
         }
         localData.saveState(state);
-        localData.saveContactGroups(contactGroups.values());
     }
 
-    private void processGroupChanges(List<ContactGroupEntry> entries)
+    private void processGroups(List<ContactGroupEntry> entries)
         throws ServiceException, IOException {
-        LOG.debug("Processing %d remote contact group changes", entries.size());
+        LOG.debug("Found %d remote contact group(s)", entries.size());
         Stats stats = new Stats();
+        // Get all existing contact groups
+        Map<String, ContactGroup> groups = new HashMap<String, ContactGroup>();
         for (ContactGroupEntry entry : entries) {
-            DataSourceItem dsi = localData.getReverseMapping(entry.getId());
-            try {
-                processGroupChange(entry, dsi, stats);
-            } catch (ServiceException e) {
-                localData.syncContactFailed(e, dsi.itemId, service.pp(entry));
+            // Ignore system groups...
+            if (entry.getSystemGroup() == null) {
+                ContactGroup group = new ContactGroup(getName(entry));
+                groups.put(entry.getId(), group);
             }
+        }
+        // Get all contact mappings and update contact group dlist information
+        Collection<DataSourceItem> mappings =
+            localData.getAllMappingsInFolder(Mailbox.ID_FOLDER_CONTACTS);
+        for (DataSourceItem dsi : mappings) {
+            if (Gab.isContactId(dsi.remoteId)) {
+                ContactEntry contact = getEntry(dsi, ContactEntry.class);
+                if (contact.hasGroupMembershipInfos() && contact.hasEmailAddresses()) {
+                    for (GroupMembershipInfo gmi : contact.getGroupMembershipInfos()) {
+                        boolean deleted = Boolean.TRUE.equals(gmi.getDeleted());
+                        if (!deleted) {
+                            ContactGroup group = groups.get(gmi.getHref());
+                            if (group != null) {
+                                for (Email email : contact.getEmailAddresses()) {
+                                    group.addEmail(email.getAddress());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // Remove contact groups deleted remotely
+        for (DataSourceItem dsi : mappings) {
+            if (Gab.isGroupId(dsi.remoteId) && !groups.containsKey(dsi.remoteId)) {
+                localData.deleteContactGroup(dsi.itemId);
+                groups.remove(dsi.remoteId);
+                stats.deleted++;
+            }
+        }
+        // Create new or update existing contact groups
+        for (Map.Entry<String, ContactGroup> me : groups.entrySet()) {
+            updateGroup(me.getKey(), me.getValue(), stats);
         }
         LOG.debug("Processed remote contact group changes: " + stats);
     }
 
-    private void processGroupChange(ContactGroupEntry entry,
-                                    DataSourceItem dsi,
-                                    Stats stats) throws ServiceException {
-        if (isTraceEnabled()) {
-            LOG.debug("Processing remote group entry:\n%s", service.pp(entry));
-        }
-        int itemId = dsi.itemId;
-        boolean deleted = entry.getDeleted() != null;
-        String remoteId = entry.getId();
-        if (itemId > 0) {
-            // Existing ontact group updated or deleted
-            ContactGroup group = getContactGroup(remoteId, itemId);
-            if (deleted) {
-                // Don't delete tag since we can't be sure that it is not
-                // also used by other non-contact items
-                localData.deleteMapping(itemId);
-                localData.deleteContactGroup(itemId);
-                contactGroups.remove(remoteId);
+    private void updateGroup(String remoteId, ContactGroup group, Stats stats)
+        throws ServiceException {
+        DataSourceItem dsi = localData.getReverseMapping(remoteId);
+        if (dsi.itemId > 0) {
+            if (group.isEmpty()) {
+                localData.deleteContactGroup(dsi.itemId);
                 stats.deleted++;
-                LOG.debug("Deleted contact group: " + group);
             } else {
-                String newName = getName(entry);
-                if (!newName.equals(group.getName())) {
-                    group.setName(newName);
-                    group.modify();
+                ContactGroup oldGroup = localData.getContactGroup(dsi.itemId);
+                if (!group.equals(oldGroup)) {
+                    localData.modifyContactGroup(dsi.itemId, group);
                     stats.updated++;
-                    LOG.debug("Updated contact group: " + group);
                 }
-                updateEntry(itemId, entry);
             }
-        } else if (!deleted) {
-            // Add new contact group if not a system group
-            if (entry.getSystemGroup() == null) {
-                ContactGroup group = localData.createContactGroup(
-                    Mailbox.ID_FOLDER_CONTACTS, getName(entry));
-                contactGroups.put(remoteId, group);
-                stats.added++;
-                LOG.debug("Contact group added: " + group);
-            } else {
-                LOG.debug("Not adding system group: " + entry.getId());
-            }
+        } else if (!group.isEmpty()) {
+            localData.createContactGroup(remoteId, group);
+            stats.added++;
         }
     }
 
@@ -228,16 +236,16 @@ public class SyncSession {
         return service.getPhoto(entry);
     }
     
-    private void processContactChanges(List<ContactEntry> entries,
-                                       Map<Integer, Change> changes,
-                                       Map<String, Attachment> photos)
+    private void processRemoteChanges(List<ContactEntry> entries,
+                                      Map<Integer, Change> changes,
+                                      Map<String, Attachment> photos)
         throws ServiceException, IOException {
         LOG.debug("Processing %d remote contact changes", entries.size());
         Stats stats = new Stats();
         for (ContactEntry entry : entries) {
             DataSourceItem dsi = localData.getReverseMapping(entry.getId());
             try {
-                processContactChange(entry, dsi, changes, photos, stats);
+                processRemoteChange(entry, dsi, changes, photos, stats);
             } catch (ServiceException e) {
                 localData.syncContactFailed(e, dsi.itemId, service.pp(entry));
             }
@@ -245,11 +253,11 @@ public class SyncSession {
         LOG.debug("Processed remote contact changes: " + stats);
     }
 
-    private void processContactChange(ContactEntry entry,
-                                      DataSourceItem dsi,
-                                      Map<Integer, Change> changes,
-                                      Map<String, Attachment> photos,
-                                      Stats stats)
+    private void processRemoteChange(ContactEntry entry,
+                                     DataSourceItem dsi,
+                                     Map<Integer, Change> changes,
+                                     Map<String, Attachment> photos,
+                                     Stats stats)
         throws IOException, ServiceException {
         if (isTraceEnabled()) {
             LOG.debug("Processing remote contact entry:\n%s", service.pp(entry));
@@ -282,9 +290,10 @@ public class SyncSession {
             }
         } else if (!deleted) {
             // Add a new contact, but only if the contact is a member of at
-            // least one group. All contacts are members of the system group
-            // "My Contacts" unless they are "Suggested Contacts" created
-            // automatically by Gmail which we want to exclude.
+            // least one group. All user added contacts are members of the
+            // system group "My Contacts", whereas "Suggested Contacts" created
+            // automatically by Gmail do not have a contact group and are
+            // excluded.
             if (entry.hasGroupMembershipInfos()) {
                 ContactData cd = new ContactData(entry);
                 ParsedContact pc = cd.newParsedContact(photos.get(editUrl));
@@ -302,12 +311,12 @@ public class SyncSession {
         return entry.getEditLink().getHref();
     }
 
-    private List<SyncRequest> getContactRequests(Collection<Change> changes)
+    private List<SyncRequest> processLocalChanges(Collection<Change> changes)
         throws ServiceException {
         LOG.debug("Processing %d local contact changes", changes.size());
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
         for (Change change : changes) {
-            SyncRequest req = getContactSyncRequest(change);
+            SyncRequest req = processLocalChange(change);
             if (req != null) {
                 reqs.add(req);
             }
@@ -315,7 +324,7 @@ public class SyncSession {
         return reqs;
     }
     
-    private SyncRequest getContactSyncRequest(Change change)
+    private SyncRequest processLocalChange(Change change)
         throws ServiceException {
         // For ADD and UPDATE, group membership info will be set later after
         // we've pushed contact group changes, since until then we will not
@@ -323,7 +332,10 @@ public class SyncSession {
         int id = change.getItemId();
         if (change.isAdd() || change.isUpdate()) {
             Contact contact = localData.getContact(id);
-            if (!ContactGroup.isContactGroup(contact)) {
+            if (ContactGroup.isContactGroup(contact)) {
+                // Delete mapping so contact group will no longer be sync'd
+                localData.deleteMapping(id);
+            } else {
                 ContactData cd = new ContactData(contact);
                 SyncRequest req;
                 if (change.isAdd()) {
@@ -341,10 +353,15 @@ public class SyncSession {
                 return req;
             }
         } else if (change.isDelete()) {
-            ContactEntry entry = getEntry(id, ContactEntry.class);
-            // Entry will be null for contact group
-            if (entry != null) {
-                return SyncRequest.delete(this, id, entry);
+            DataSourceItem dsi = localData.getMapping(id);
+            if (dsi.remoteId != null && Gab.isGroupId(dsi.remoteId)) {
+                // Remove mapping for deleted contact group 
+                localData.deleteMapping(id);
+            } else {
+                ContactEntry entry = getEntry(dsi, ContactEntry.class);
+                if (entry != null) {
+                    return SyncRequest.delete(this, id, entry);
+                }
             }
         }
         return null;
@@ -399,51 +416,6 @@ public class SyncSession {
 
     private void updateEntry(int itemId, BaseEntry entry) throws ServiceException {
         localData.updateMapping(itemId, entry.getId(), service.toXml(entry));
-        if (entry.getClass() == ContactEntry.class) {
-            updateContactGroups(itemId, (ContactEntry) entry);
-        }
-    }
-
-    private void updateContactGroups(int itemId, ContactEntry entry) throws ServiceException {
-        for (GroupMembershipInfo info : entry.getGroupMembershipInfos()) {
-            ContactGroup group = getContactGroup(info.getHref());
-            if (group != null) {
-                boolean deleted = Boolean.TRUE.equals(info.getDeleted());
-                if (deleted) {
-                    if (group.removeContact(itemId)) {
-                        LOG.debug("Removed contact id %d from group %s", itemId, group);
-                    }
-                } else if (group.addContact(itemId)) {
-                    LOG.debug("Added contact id %d to group %s", itemId, group);
-                }
-            }
-        }
-    }
-
-    private ContactGroup getContactGroup(String remoteId)
-        throws ServiceException {
-        ContactGroup group = contactGroups.get(remoteId);
-        if (group == null) {
-            DataSourceItem dsi = localData.getReverseMapping(remoteId);
-            if (dsi.itemId > 0) {
-                group = getContactGroup(remoteId, dsi.itemId);
-            }
-        }
-        return group;
-    }
-
-    private ContactGroup getContactGroup(String remoteId, int itemId)
-        throws ServiceException {
-        ContactGroup group = contactGroups.get(remoteId);
-        if (group == null) {
-            try {
-                group = localData.getContactGroup(itemId);
-            } catch (MailServiceException.NoSuchItemException e) {
-                return null;
-            }
-            contactGroups.put(remoteId, group);
-        }
-        return group;
     }
 
     public boolean isTraceEnabled() {

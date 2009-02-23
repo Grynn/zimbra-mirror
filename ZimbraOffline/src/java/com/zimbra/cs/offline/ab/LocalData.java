@@ -34,13 +34,10 @@ import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 
 import java.util.List;
 import java.util.Collections;
-import java.util.Set;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public final class LocalData {
     private final OfflineDataSource ds;
@@ -140,10 +137,11 @@ public final class LocalData {
 
     public void updateMapping(int itemId, String remoteId, String data)
         throws ServiceException {
-        log.debug("Updating entry for item: item id = %d, remote id = %s",
-                  itemId, remoteId);
-        Metadata md = new Metadata();
-        md.put(key, data);
+        Metadata md = null;
+        if (data != null) {
+            md = new Metadata();
+            md.put(key, data);
+        }
         DataSourceItem dsi = new DataSourceItem(itemId, remoteId, md);
         if (DbDataSource.hasMapping(ds, itemId)) {
             DbDataSource.updateMapping(ds, dsi);
@@ -174,8 +172,8 @@ public final class LocalData {
     }
 
     public void modifyContact(int id, ParsedContact pc) throws ServiceException {
+        log.debug("Updating contact: id = %d", id);
         mbox.modifyContact(CONTEXT, id, pc);
-        log.debug("Modified contact: id = %d", id);
     }
 
     public void deleteContact(int id) throws ServiceException {
@@ -187,47 +185,39 @@ public final class LocalData {
                 log.debug("Deleted contact: id = %d", id);
             }
         } catch (MailServiceException.NoSuchItemException e) {
-
         }
     }
 
     public ContactGroup getContactGroup(int id) throws ServiceException {
-        return ContactGroup.get(mbox, id);
+        try {
+            Contact contact = getContact(id);
+            if (ContactGroup.isContactGroup(contact)) {
+                return new ContactGroup(contact);
+            }
+        } catch (MailServiceException.NoSuchItemException e) {
+        }
+        return null;
     }
 
-    public ContactGroup createContactGroup(int folderId, String name)
+    public void modifyContactGroup(int id, ContactGroup group)
         throws ServiceException {
-        log.debug("Creating contact group: folder = %d, name = %s", folderId, name);
-        return ContactGroup.create(mbox, folderId, name);
+        log.debug("Updating contact group: id = " + id);
+        mbox.modifyContact(CONTEXT, id, group.getParsedContact());
+    }
+    
+    public int createContactGroup(String remoteId, ContactGroup group)
+        throws ServiceException {
+        Contact contact = createContact(group.getParsedContact());
+        updateMapping(contact.getId(), remoteId, null);
+        log.debug("Created new contact group: item id = %d, remote id = %s, name = %s, dlist = %s",
+                  contact.getId(), remoteId, group.getName(), group.getEmails());
+        return contact.getId();
     }
 
     public void deleteContactGroup(int id) throws ServiceException {
-        log.debug("Deleting contact group: id = %d", id);
-        mbox.delete(CONTEXT, id, Contact.TYPE_CONTACT);
-    }
-
-    public void saveContactGroups(Collection<ContactGroup> groups)
-        throws ServiceException {
-        Iterator<ContactGroup> it = groups.iterator();
-        while (it.hasNext()) {
-            ContactGroup group = it.next();
-            try {
-                if (group.hasChanges()) {
-                    if (group.isEmpty()) {
-                        // Remove empty contact group
-                        log.debug("Removing empty contact group: " + group);
-                        deleteContactGroup(group.getId());
-                        deleteMapping(group.getId());
-                        it.remove();
-                    } else {
-                        log.debug("Saving changes for contact group: " + group);
-                        group.modify();
-                    }
-                }
-            } catch (ServiceException e) {
-                syncContactFailed(e, group.getId(), group.toString());
-            }
-        }
+        log.debug("Deleting contact group: id = " + id);
+        mbox.delete(CONTEXT, id, MailItem.TYPE_CONTACT);
+        deleteMapping(id);
     }
 
     public SyncState loadState() throws ServiceException {

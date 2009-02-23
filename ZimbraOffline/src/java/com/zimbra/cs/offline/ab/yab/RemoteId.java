@@ -27,12 +27,12 @@ public class RemoteId {
     public static final String CONTACT_PREFIX = "contact:";
     public static final String CATEGORY_PREFIX = "category:";
 
-    public static RemoteId contactId(int value) {
-        return new RemoteId(Type.CONTACT, value);
+    public static RemoteId contactId(int id) {
+        return new RemoteId(Type.CONTACT, id);
     }
 
-    public static RemoteId categoryId(int value) {
-        return new RemoteId(Type.CATEGORY, value);
+    public static RemoteId categoryId(int id) {
+        return new RemoteId(Type.CATEGORY, id);
     }
 
     public static RemoteId parse(String s) throws SyncException {
@@ -55,7 +55,7 @@ public class RemoteId {
         this.value = value;
     }
 
-    public int getValue() { return value; }
+    public int getId() { return value; }
 
     public boolean isContact() {
         return type == Type.CONTACT;

@@ -41,7 +41,6 @@ import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.contacts.ContactGroupFeed;
 
 import java.net.URL;
-import java.net.MalformedURLException;
 import java.io.StringWriter;
 import java.io.IOException;
 import java.io.StringReader;
@@ -54,17 +53,12 @@ class GabService {
 
     private static final Log LOG = OfflineLog.gab;
 
-    private static final String BASE_URL = OfflineLC.zdesktop_gab_base_url.value();
-
-    private static final String APP_NAME = String.format("Zimbra-%s-%s",
-        OfflineLC.zdesktop_name.value(), OfflineLC.zdesktop_version.value());
-    
     GabService(String user, String pass) throws ServiceException {
-        cs = new ContactsService(APP_NAME);
+        cs = new ContactsService(Gab.APP_NAME);
         cs.setReadTimeout(OfflineLC.http_so_timeout.intValue());
         cs.setConnectTimeout(OfflineLC.http_connection_timeout.intValue());
-        contactFeedUrl = toUrl(BASE_URL + "/contacts/" + user + "/full");
-        groupFeedUrl = toUrl(BASE_URL + "/groups/" + user + "/full");
+        contactFeedUrl = Gab.toUrl(Gab.BASE_URL + Gab.CONTACTS + user + "/full");
+        groupFeedUrl = Gab.toUrl(Gab.BASE_URL + Gab.GROUPS + user + "/full");
         authenticate(user, pass);
     }
 
@@ -156,13 +150,13 @@ class GabService {
     public <T extends BaseEntry> T update(T entry)
         throws IOException, com.google.gdata.util.ServiceException {
         // Perform unconditional update
-        return cs.update(getEditUrl(entry), entry, "*");
+        return cs.update(Gab.getEditUrl(entry), entry, "*");
     }
 
     public void delete(BaseEntry entry)
         throws IOException, com.google.gdata.util.ServiceException {
         // Perform unconditional delete
-        cs.delete(getEditUrl(entry), "*");
+        cs.delete(Gab.getEditUrl(entry), "*");
     }
 
     public void addPhoto(ContactEntry entry, byte[] data, String type)
@@ -201,17 +195,5 @@ class GabService {
 
     private URL getFeedUrl(BaseEntry entry) {
         return entry.getClass() == ContactEntry.class ? contactFeedUrl : groupFeedUrl;
-    }
-    
-    private static URL getEditUrl(BaseEntry entry) throws MalformedURLException {
-        return new URL(entry.getEditLink().getHref());
-    }
-    
-    private static URL toUrl(String url) throws ServiceException {
-        try {
-            return new URL(url);
-        } catch (MalformedURLException e) {
-            throw ServiceException.FAILURE("Bad URL format: " + url, null);
-        }
     }
 }

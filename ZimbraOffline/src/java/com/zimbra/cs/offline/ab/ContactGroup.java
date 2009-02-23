@@ -17,188 +17,91 @@
 package com.zimbra.cs.offline.ab;
 
 import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OfflineMailbox;
-import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Arrays;
 
 public class ContactGroup {
-    private final Mailbox mbox;
-    private int itemId;
-    private String name;
-    private final Set<Integer> contactIds = new HashSet<Integer>();
-    private List<String> emails;
-    private boolean nameChanged;
-    private boolean contactsChanged;
-
-    private static final String A_mlist = Contact.A_otherCustom1;
-
-    private static final String[] EMAIL_FIELDS =
-        { Contact.A_email, Contact.A_email2, Contact.A_email3 };
-    
-    private static final Mailbox.OperationContext CONTEXT =
-        new OfflineMailbox.OfflineContext();
+    private final String name;
+    private final Set<String> emails;
 
     public static boolean isContactGroup(Contact contact) {
         return Contact.TYPE_GROUP.equals(contact.get(Contact.A_type));
     }
 
-    public static ContactGroup create(Mailbox mbox, int folderId, String name)
-        throws ServiceException {
-        ContactGroup group = new ContactGroup(mbox);
-        group.setName(name);
-        group.create(folderId);
-        return group;
-    }
-
-    public static ContactGroup get(Mailbox mbox, int itemId)
-        throws ServiceException {
-        Contact contact = mbox.getContactById(CONTEXT, itemId);
-        if (!isContactGroup(contact)) {
-            throw ServiceException.FAILURE("Not a contact group", null);
-        }
-        ContactGroup group = new ContactGroup(mbox);
-        group.get(contact);
-        return group;
-    }
-    
-    private ContactGroup(Mailbox mbox) throws ServiceException {
-        this.mbox = mbox;
-    }
-
-    private void create(int folderId) throws ServiceException {
-        contactsChanged = true;
-        Contact contact = mbox.createContact(
-            CONTEXT, getParsedContact(true), folderId, null);
-        itemId = contact.getId();
-    }
-       
-    private void get(Contact contact) throws ServiceException {
-        itemId = contact.getId();
-        name = contact.get(Contact.A_nickname);
-        String mlist = contact.get(A_mlist);
-        if (mlist != null) {
-            mlist = mlist.trim();
-            if (mlist.length() > 0) {
-                for (String id : mlist.split(",")) {
-                    contactIds.add(Integer.parseInt(id));
-                }
-            }
-        }
-    }
-
-    public int getId() {
-        return itemId;
-    }
-    
-    public void setName(String name) {
+    public ContactGroup(String name) {
         this.name = name;
-        nameChanged = true;
+        emails = new HashSet<String>();
     }
 
+    public ContactGroup(Contact contact) throws ServiceException {
+        if (!isContactGroup(contact)) {
+            throw new IllegalArgumentException("Not a contact group: " + contact);
+        }
+        name = contact.get(Contact.A_nickname);
+        emails = new HashSet<String>();
+        String dlist = contact.get(Contact.A_dlist);
+        if (dlist != null) {
+            emails.addAll(Arrays.asList(dlist.trim().split(",")));
+        }
+    }
+    
     public String getName() {
         return name;
     }
 
-    public boolean hasContact(int cid) {
-        return contactIds.contains(cid);
-    }
-    
-    public boolean addContact(int cid) {
-        if (!contactIds.contains(cid)) {
-            contactIds.add(cid);
-            contactsChanged = true;
-            emails = null;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean removeContact(int cid) {
-        if (contactIds.contains(cid)) {
-            contactIds.remove(cid);
-            contactsChanged = true;
-            emails = null;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean hasChanges() {
-        return nameChanged || contactsChanged;
-    }
-
     public boolean isEmpty() throws ServiceException {
-        return getEmailAddresses().isEmpty();
-    }
-    
-    public void modify() throws ServiceException {
-        if (hasChanges()) {
-            mbox.modifyContact(CONTEXT, itemId, getParsedContact(contactsChanged));
-            nameChanged = false;
-            contactsChanged = false;
-        }
+        return emails.isEmpty();
     }
 
-    private ParsedContact getParsedContact(boolean saveContacts)
+    public void addEmail(String email) {
+        emails.add(email);
+    }
+
+    public Set<String> getEmails() {
+        return emails;
+    }
+    
+    public ParsedContact getParsedContact()
         throws ServiceException {
         Map<String, String> fields = new HashMap<String, String>();
         fields.put(Contact.A_type, Contact.TYPE_GROUP);
         fields.put(Contact.A_nickname, name);
         fields.put(Contact.A_fileAs, Contact.FA_EXPLICIT + ":" + name);
-        if (saveContacts) {
-            fields.put(A_mlist, join(contactIds, ","));
-            fields.put(Contact.A_dlist, join(getEmailAddresses(), ","));
-        }
+        fields.put(Contact.A_dlist, join(emails, ","));
         return new ParsedContact(fields);
     }
     
-    public List<String> getEmailAddresses() throws ServiceException {
-        if (emails == null) {
-            emails = new ArrayList<String>();
-            for (int id : contactIds) {
-                try {
-                    Contact contact = mbox.getContactById(CONTEXT, id);
-                    for (String name : EMAIL_FIELDS) {
-                        String email = contact.get(name);
-                        if (email != null && email.length() > 0) {
-                            emails.add(email);
-                        }
-                    }
-                } catch (NoSuchItemException e) {
-                    e.printStackTrace(); // DEBUG
-                    // Ignore
-                }
-            }
-        }
-        return emails;
-    }
-
-    private static String join(Collection<?> parts, String delim) {
+    private static String join(Collection<?> parts, String del) {
         StringBuilder sb = new StringBuilder();
         Iterator<?> it = parts.iterator();
         if (it.hasNext()) {
             sb.append(it.next().toString());
             while (it.hasNext()) {
-                sb.append(delim).append(it.next().toString());
+                sb.append(del).append(it.next().toString());
             }
         }
         return sb.toString();
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj.getClass() == ContactGroup.class) {
+            ContactGroup group = (ContactGroup) obj;
+            return name.equals(group.name) && emails.equals(group.emails);
+        }
+        return false;
+    }
+    
+    @Override
     public String toString() {
-        return String.format(
-            "{name=%s,id=%d,count=%d}", name, itemId, contactIds.size());
+        return String.format("{name=%s,dlist=%s}", name, emails);
     }
 }
