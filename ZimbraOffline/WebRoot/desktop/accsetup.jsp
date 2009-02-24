@@ -14,6 +14,11 @@
 <c:set var='save'><fmt:message key='Save'/></c:set>
 <c:set var='buttonType' value="default"/>
 <c:set var="uri" value="${zdf:addAuthToken('/zimbra/desktop/accsetup.jsp')}"/>
+<c:set var="betaWarn">
+  <fmt:message key='BetaWarn'>
+	<fmt:param><a href="javascript:zd.toggle('betaNote')"><fmt:message key='BetaService'/></a></fmt:param>
+  </fmt:message>
+</c:set>
 
 <c:choose>
     <c:when test="${accountFlavor eq 'AOL'}">
@@ -22,6 +27,12 @@
         <jsp:setProperty name="abean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(abean)}
         <c:set var="bean" value="${abean}" scope="request"/>
+        <c:set var="betaNote">
+          <fmt:message key='BetaNoteCommon'>
+            <fmt:param><fmt:message key='BetaNoteAOL'/></fmt:param>
+            <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
+          </fmt:message>
+        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Gmail'}">
         <jsp:useBean id="gbean" class="com.zimbra.cs.offline.jsp.GmailBean" scope="request"/>
@@ -44,6 +55,12 @@
                 <li><fmt:message key='GmailClick'><fmt:param><b><fmt:message key='GmailSaveChgs'/></b></fmt:param></fmt:message>
             </ol>
         </c:set>
+        <c:set var="betaNote">
+          <fmt:message key='BetaNoteCommon'>
+            <fmt:param><fmt:message key='BetaNoteGmail'/></fmt:param>
+            <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
+          </fmt:message>
+        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Imap'}">
         <jsp:useBean id="ibean" class="com.zimbra.cs.offline.jsp.ImapBean" scope="request"/>
@@ -51,6 +68,12 @@
         <jsp:setProperty name="ibean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(ibean)}
         <c:set var="bean" value="${ibean}" scope="request"/>
+        <c:set var="betaNote">
+          <fmt:message key='BetaNoteCommon'>
+            <fmt:param><fmt:message key='BetaNoteIMAP'/></fmt:param>
+            <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
+          </fmt:message>
+        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Live'}">
         <jsp:useBean id="lbean" class="com.zimbra.cs.offline.jsp.LiveBean" scope="request"/>
@@ -68,6 +91,12 @@
 	        <fmt:param><a href=http://mail.yahoo.com target=_blank><fmt:message key='YMPLink'/></a></fmt:param>
             </fmt:message>
         </c:set>
+        <c:set var="betaNote">
+          <fmt:message key='BetaNoteCommon'>
+            <fmt:param><fmt:message key='BetaNoteLive'/></fmt:param>
+            <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
+          </fmt:message>
+        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'MSE'}">
         <jsp:useBean id="mbean" class="com.zimbra.cs.offline.jsp.MmailBean" scope="request"/>
@@ -75,6 +104,12 @@
         <jsp:setProperty name="mbean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(mbean)}
         <c:set var="bean" value="${mbean}" scope="request"/>
+        <c:set var="betaNote">
+          <fmt:message key='BetaNoteCommon'>
+            <fmt:param><fmt:message key='BetaNoteExchange'/></fmt:param>
+            <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
+          </fmt:message>
+        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Pop'}">
         <jsp:useBean id="pbean" class="com.zimbra.cs.offline.jsp.PopBean" scope="request"/>
@@ -82,6 +117,12 @@
         <jsp:setProperty name="pbean" property="locale" value="${pageContext.request.locale}"/>
         ${zdf:doRequest(pbean)}
         <c:set var="bean" value="${pbean}" scope="request"/>
+        <c:set var="betaNote">
+          <fmt:message key='BetaNoteCommon'>
+            <fmt:param><fmt:message key='BetaNotePOP'/></fmt:param>
+            <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
+          </fmt:message>
+        </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'YMP'}">
         <jsp:useBean id="ybean" class="com.zimbra.cs.offline.jsp.YmailBean" scope="request"/>
@@ -98,6 +139,12 @@
 	    <fmt:message key='YMPToSignup'>
 	        <fmt:param><a href=http://mail.yahoo.com target=_blank><fmt:message key='YMPLink'/></a></fmt:param>
             </fmt:message>
+        </c:set>
+        <c:set var="betaNote">
+          <fmt:message key='BetaNoteCommon'>
+            <fmt:param><fmt:message key='BetaNoteYahoo'/></fmt:param>
+            <fmt:param><a href=https://www.zimbra.com/products/desktop_support.html target=_blank><fmt:message key='BetaNoteLink'/></a></fmt:param>
+          </fmt:message>
         </c:set>
     </c:when>
     <c:when test="${accountFlavor eq 'Zimbra'}">
@@ -259,14 +306,18 @@ function onEditLink(id, keep) {
     </jsp:forward>
 </c:when>
 <c:when test="${bean.add || empty bean.accountId}">
-    <c:if test="${not empty help}">
+    <c:if test="${not empty help || not empty betaNote}">
             <tr>
 	      <td></td>
               <td class="ZAccountHelp">
-                ${help}
+                <c:if test="${not empty help}">${help}</c:if>
+                <c:if test="${not empty betaNote}"><div>${betaWarn}</div></c:if>
 	<c:if test="${not empty helpInfo}">
                 <div id="helpInfo" style="display:none"><br>${helpInfo}</div>
 	</c:if>
+	<c:if test="${not empty betaNote}">
+                <div id="betaNote" style="display:none"><br>${betaNote}</div>
+    </c:if>
               </td>
             </tr>
     </c:if>
