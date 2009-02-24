@@ -79,7 +79,8 @@ public class PushChanges {
 			
 			try {
 				ByteArrayOutputStream bao = new ByteArrayOutputStream();
-				mm.writeTo(bao);
+				if (mm != null)
+				    mm.writeTo(bao);
 				return bao.toByteArray();
 			} catch (Exception x) {
 				throw ServiceException.FAILURE("calitem=" + calendarItemId + ";inv=" + inviteId, x);

@@ -56,6 +56,7 @@ import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.OfflineMailbox.OfflineContext;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
+import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.CompressedBlobReader;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedDocument;
@@ -770,9 +771,49 @@ public class InitialSync {
             if (mpOK) {
             	msg.addElement(topMp.detach());
             } else {
-            	Element content = msg.addElement(MailConstants.E_CONTENT);
-                byte[] mimeContent = imLocator.getInviteMime(Integer.parseInt(calId), (int)inv.getAttributeLong(MailConstants.A_ID));
-                content.setText(new String(mimeContent));
+                boolean noBlob = comp.getAttributeBool(MailConstants.A_CAL_NO_BLOB, false);
+                if (!noBlob) {
+                	Element content = msg.addElement(MailConstants.E_CONTENT);
+                    byte[] mimeContent = imLocator.getInviteMime(Integer.parseInt(calId), (int)inv.getAttributeLong(MailConstants.A_ID));
+                    content.setText(new String(mimeContent));
+                } else {
+                    // Add plain/html MIME parts for backward compatibility with older server.
+                    String desc = null, descHtml = null;
+                    Element descElem = comp.getOptionalElement(MailConstants.E_CAL_DESCRIPTION);
+                    if (descElem != null)
+                        desc = descElem.getText();
+                    Element descHtmlElem = comp.getOptionalElement(MailConstants.E_CAL_DESC_HTML);
+                    if (descHtmlElem != null)
+                        descHtml = descHtmlElem.getText();
+                    if ((desc != null && desc.length() > 0) || (descHtml != null && descHtml.length() > 0)) {
+                        Element multiAltMp = msg.addElement(MailConstants.E_MIMEPART);
+                        multiAltMp.addAttribute(MailConstants.A_CONTENT_TYPE, Mime.CT_MULTIPART_ALTERNATIVE);
+                        multiAltMp.addAttribute(MailConstants.A_BODY, "TEXT");
+                        int estimatedMultiAltSize =
+                            (desc != null ? desc.length() : 0) + (descHtml != null ? descHtml.length() : 0);
+                        multiAltMp.addAttribute(MailConstants.A_SIZE, estimatedMultiAltSize);
+                        int part = 1;
+                        if (desc != null && desc.length() > 0) {
+                            Element plainMp = multiAltMp.addElement(MailConstants.E_MIMEPART);
+                            plainMp.addAttribute(MailConstants.A_CONTENT_TYPE, Mime.CT_TEXT_PLAIN);
+                            plainMp.addAttribute(MailConstants.A_SIZE, desc.length());
+                            plainMp.addAttribute(MailConstants.A_BODY, true);
+                            plainMp.addAttribute(MailConstants.A_PART, part);
+                            ++part;
+                            desc = StringUtil.stripControlCharacters(desc);
+                            plainMp.addAttribute(MailConstants.E_CONTENT, desc, Element.Disposition.CONTENT);
+                        }
+                        if (descHtml != null && descHtml.length() > 0) {
+                            Element htmlMp = multiAltMp.addElement(MailConstants.E_MIMEPART);
+                            htmlMp.addAttribute(MailConstants.A_CONTENT_TYPE, Mime.CT_TEXT_HTML);
+                            htmlMp.addAttribute(MailConstants.A_SIZE, descHtml.length());
+                            htmlMp.addAttribute(MailConstants.A_BODY, true);
+                            htmlMp.addAttribute(MailConstants.A_PART, part);
+                            // descHtml is already clean, so don't repeat defang or stripping of control chars.
+                            htmlMp.addAttribute(MailConstants.E_CONTENT, descHtml, Element.Disposition.CONTENT);
+                        }
+                    }
+                }
             }
             
             req.addElement(newInv);
