@@ -42,6 +42,11 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	MYSQL_INCLUDE := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
 
+ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
+	EXPAT_INCLUDE := EXPATINCPATH=$(ZIMBRA_HOME)/include
+	EXPAT_LIB := EXPATLIBPATH=$(ZIMBRA_HOME)/lib
+endif
+
 # DESTINATIONS
 
 # Order is important here
@@ -227,7 +232,7 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 	
 	@for lib in $(PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		LDFLAGS="-fPIC" CFLAGS="-fPIC" $(EXPAT_LIB) $(EXPAT_INCLUDE) BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
