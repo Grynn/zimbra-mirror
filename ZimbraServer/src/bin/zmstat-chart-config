@@ -28,6 +28,7 @@ my $ZIMBRA_HOME = getZimbraHome();
 my $mtaqstatCsv = 'mtaqueue.csv';
 my $cpustatCsv = 'cpu.csv';
 my $fdstatCsv = 'fd.csv';
+my $dfstatCsv = 'df.csv';
 my $pstatCsv = 'proc.csv';
 my $vmstatCsv = 'vm.csv';
 my $iostatxCsv = 'io-x.csv';
@@ -493,6 +494,15 @@ _HERE_
          showRaw="false"
          showMovingAvg="true">
     <plot data="$partition:tps" legend="$partition tps"/>
+  </chart>
+  
+  <chart title="Host $ZIMBRA_HOSTNAME: Disk Usage"
+         category="IO"
+         height="400"
+         infile="$dfstatCsv"
+         outfile="${ZIMBRA_HOSTNAME}_disk_usage.png"
+         yAxis="% used">
+    <groupplot data="disk_pct_used" groupBy="path" />
   </chart>
 
 _HERE_
