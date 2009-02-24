@@ -20,6 +20,7 @@ use strict;
 use Getopt::Long;
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Zmstat;
+use Zimbra::Mon::Logger;
 
 zmstatInit();
 
@@ -254,7 +255,9 @@ while (1) {
 
         # Don't allow log rotation in signal handler while we're writing.
         $ROTATE_DEFER = 1;
-        $LOGFH->print("$tstamp, " . join(', ', @vals) . "\n");
+        my $values = join(', ', @vals);
+        $LOGFH->print("$tstamp, $values\n");
+        Zimbra::Mon::Logger::Log( "info", "zmstat-io: ${HEADING}:: $tstamp, $values"); 
         $LOGFH->flush();
         $ROTATE_DEFER = 0;
         if ($ROTATE_NOW) {

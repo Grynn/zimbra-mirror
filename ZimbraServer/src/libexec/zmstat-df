@@ -22,6 +22,7 @@ use strict;
 use Getopt::Long;
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Zmstat;
+use Zimbra::Mon::Logger;
 use vars qw($LOGFH $CONSOLE $LOGFILE $ROTATE_NOW $ROTATE_DEFER);
 
 zmstatInit();
@@ -122,8 +123,11 @@ while (1) {
     }
     $ROTATE_DEFER = 1;
     foreach my $stat (@stats) {
-        $LOGFH->printf("%s, %s, %s, %d, %d, %d\n", $tstamp,
-         $stat->{path}, $stat->{disk}, $stat->{disk_use}, $stat->{disk_space}, $stat->{disk_pct_used});
+    	my $line = sprintf("%s, %s, %s, %d, %d, %d", $tstamp,
+                           $stat->{path}, $stat->{disk}, $stat->{disk_use},
+                           $stat->{disk_space}, $stat->{disk_pct_used});
+        $LOGFH->print("$line\n");
+        Zimbra::Mon::Logger::Log( "info", "zmstat-df: ${HEADING}:: $line"); 
     }
     $LOGFH->flush();
     $ROTATE_DEFER = 0;

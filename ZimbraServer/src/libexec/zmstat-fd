@@ -25,6 +25,7 @@ use strict;
 use Getopt::Long;
 use lib "/opt/zimbra/zimbramon/lib";
 use Zimbra::Mon::Zmstat;
+use Zimbra::Mon::Logger;
 use vars qw($LOGFH $CONSOLE $LOGFILE $ROTATE_NOW $ROTATE_DEFER);
 
 zmstatInit();
@@ -99,6 +100,7 @@ while (1) {
     }
     $ROTATE_DEFER = 1;
     $LOGFH->print("$tstamp, $stat\n");
+    Zimbra::Mon::Logger::Log( "info", "zmstat-fd: ${HEADING}:: $tstamp, $stat"); 
     $LOGFH->flush();
     $ROTATE_DEFER = 0;
     if ($ROTATE_NOW) {
