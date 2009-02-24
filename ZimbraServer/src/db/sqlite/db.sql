@@ -36,7 +36,6 @@ CREATE TABLE volume (
    compression_threshold  BIGINT NOT NULL
 );
 
-
 -- This table has only one row.  It points to message and index volumes
 -- to use for newly provisioned mailboxes.
 CREATE TABLE current_volumes (
@@ -84,47 +83,12 @@ CREATE TABLE current_volumes (
 
 CREATE TABLE mailbox (
    id                  INTEGER UNSIGNED NOT NULL PRIMARY KEY,
-   group_id            INTEGER UNSIGNED NOT NULL,     -- mailbox group
    account_id          VARCHAR(127) NOT NULL UNIQUE,  -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
-   index_volume_id     INTEGER NOT NULL,
-   item_id_checkpoint  INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   contact_count       INTEGER UNSIGNED DEFAULT 0,
-   size_checkpoint     BIGINT UNSIGNED NOT NULL DEFAULT 0,
-   change_checkpoint   INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   tracking_sync       INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   tracking_imap       BOOLEAN NOT NULL DEFAULT 0,
    last_backup_at      INTEGER UNSIGNED,              -- last full backup time, UNIX-style timestamp
-   comment             VARCHAR(255),                  -- usually the main email address originally associated with the mailbox
-   last_soap_access    INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   new_messages        INTEGER UNSIGNED NOT NULL DEFAULT 0,
-   idx_deferred_count  INTEGER UNSIGNED NOT NULL DEFAULT 0,
-
-   CONSTRAINT fk_mailbox_index_volume_id FOREIGN KEY (index_volume_id) REFERENCES volume(id)
+   comment             VARCHAR(255)                   -- usually the main email address originally associated with the mailbox
 );
 
-CREATE INDEX i_mailbox_index_volume_id ON mailbox(index_volume_id);
 CREATE INDEX i_mailbox_last_backup_at ON mailbox(last_backup_at, id);
-
--- CREATE TRIGGER fki_mailbox_index_volume_id
--- BEFORE INSERT ON [mailbox]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "mailbox" violates foreign key constraint "fki_mailbox_index_volume_id"')
---   WHERE (SELECT id FROM volume WHERE id = NEW.index_volume_id) IS NULL;
--- END;
-
--- CREATE TRIGGER fku_mailbox_index_volume_id
--- BEFORE UPDATE OF index_volume_id ON [mailbox] 
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "mailbox" violates foreign key constraint "fku_mailbox_index_volume_id"')
---       WHERE (SELECT id FROM volume WHERE id = NEW.index_volume_id) IS NULL;
--- END;
-
--- CREATE TRIGGER fkd_mailbox_index_volume_id
--- BEFORE DELETE ON volume
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'delete on table "volume" violates foreign key constraint "fkd_mailbox_index_volume_id"')
---   WHERE (SELECT index_volume_id FROM mailbox WHERE index_volume_id = OLD.id) IS NOT NULL;
--- END;
 
 -- -----------------------------------------------------------------------
 -- deleted accounts
@@ -138,76 +102,6 @@ CREATE TABLE deleted_account (
 );
 
 -- -----------------------------------------------------------------------
--- mailbox metadata info
--- -----------------------------------------------------------------------
-
-CREATE TABLE mailbox_metadata (
-   mailbox_id  INTEGER UNSIGNED NOT NULL,
-   section     VARCHAR(64) NOT NULL,       -- e.g. "imap"
-   metadata    MEDIUMTEXT,
-
-   PRIMARY KEY (mailbox_id, section),
-   CONSTRAINT fk_metadata_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
-);
-
--- CREATE TRIGGER fki_metadata_mailbox_id
--- BEFORE INSERT ON [mailbox_metadata]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "mailbox_metadata" violates foreign key constraint "fki_metadata_mailbox_id')
---   WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
--- END;
-
--- CREATE TRIGGER fku_metadata_mailbox_id
--- BEFORE UPDATE OF mailbox_id ON [mailbox_metadata] 
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "mailbox_metadata" violates foreign key constraint "fku_metadata_mailbox_id')
---       WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
--- END;
-
-CREATE TRIGGER fkdc_metadata_mailbox_id
-BEFORE DELETE ON mailbox
-FOR EACH ROW BEGIN 
-    DELETE FROM mailbox_metadata WHERE mailbox_metadata.mailbox_id = OLD.id;
-END;
-
-
--- -----------------------------------------------------------------------
--- out-of-office reply history
--- -----------------------------------------------------------------------
-
-CREATE TABLE out_of_office (
-   mailbox_id  INTEGER UNSIGNED NOT NULL,
-   sent_to     VARCHAR(255) NOT NULL,
-   sent_on     DATETIME NOT NULL,
-
-   PRIMARY KEY (mailbox_id, sent_to),
-   CONSTRAINT fk_out_of_office_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
-);
-
-CREATE INDEX i_out_of_office_sent_on ON out_of_office(sent_on);
-
--- -- CONSTRAINT fk_out_of_office_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
--- CREATE TRIGGER fki_out_of_office_mailbox_id
--- BEFORE INSERT ON [out_of_office]
--- FOR EACH ROW BEGIN
---   SELECT RAISE(ROLLBACK, 'insert on table "out_of_office" violates foreign key constraint "fki_out_of_office_mailbox_id"')
---   WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
--- END;
-
--- CREATE TRIGGER fku_out_of_office_mailbox_id
--- BEFORE UPDATE OF mailbox_id ON [out_of_office] 
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "out_of_office" violates foreign key constraint "fku_out_of_office_mailbox_id"')
---       WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
--- END;
-
-CREATE TRIGGER fkdc_out_of_office_mailbox_id
-BEFORE DELETE ON mailbox
-FOR EACH ROW BEGIN 
-    DELETE FROM out_of_office WHERE out_of_office.mailbox_id = OLD.id;
-END;
-
--- -----------------------------------------------------------------------
 -- etc.
 -- -----------------------------------------------------------------------
 
@@ -216,7 +110,7 @@ CREATE TABLE config (
    name         VARCHAR(255) NOT NULL PRIMARY KEY,
    value        TEXT,
    description  TEXT,
-   modified     TIMESTAMP
+   modified     TIMESTAMP DEFAULT (DATETIME('NOW'))
 );
 
 -- table for tracking database table maintenance

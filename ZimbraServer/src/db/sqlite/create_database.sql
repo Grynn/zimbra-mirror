@@ -23,14 +23,39 @@ PRAGMA encoding = "UTF-8"%
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mailbox (
    id                  INTEGER UNSIGNED NOT NULL PRIMARY KEY,
+   account_id          VARCHAR(127) NOT NULL UNIQUE,  -- e.g. "d94e42c4-1636-11d9-b904-4dd689d02402"
+   index_volume_id     INTEGER NOT NULL,
    item_id_checkpoint  INTEGER UNSIGNED NOT NULL DEFAULT 0,
    contact_count       INTEGER UNSIGNED DEFAULT 0,
    size_checkpoint     BIGINT UNSIGNED NOT NULL DEFAULT 0,
    change_checkpoint   INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   tracking_sync       INTEGER UNSIGNED NOT NULL DEFAULT 0,
+   tracking_imap       BOOLEAN NOT NULL DEFAULT 0,
    last_soap_access    INTEGER UNSIGNED NOT NULL DEFAULT 0,
    new_messages        INTEGER UNSIGNED NOT NULL DEFAULT 0,
    idx_deferred_count  INTEGER UNSIGNED NOT NULL DEFAULT 0
 )%
+
+-- -----------------------------------------------------------------------
+-- mailbox metadata info
+-- -----------------------------------------------------------------------
+
+CREATE TABLE ${DATABASE_NAME}.mailbox_metadata (
+   section     VARCHAR(64) NOT NULL PRIMARY KEY,      -- e.g. "imap"
+   metadata    MEDIUMTEXT
+)%
+
+-- -----------------------------------------------------------------------
+-- out-of-office reply history
+-- -----------------------------------------------------------------------
+
+CREATE TABLE ${DATABASE_NAME}.out_of_office (
+   sent_to     VARCHAR(255) NOT NULL PRIMARY KEY,
+   sent_on     DATETIME NOT NULL
+)%
+
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_out_of_office_sent_on ON out_of_office(sent_on)%
+
 
 -- -----------------------------------------------------------------------
 -- items in mailboxes
