@@ -135,7 +135,7 @@ DBFILE_PERL_LIBS := \
 	DB_File
 
 BDB_PERL_LIBS := \
-	BerkeleyDB-0.36
+	BerkeleyDB-0.38
 
 SA_PERL_LIBS = \
 	Mail::SpamAssassin
