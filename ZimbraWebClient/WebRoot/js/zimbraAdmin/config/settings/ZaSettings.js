@@ -320,7 +320,7 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SAVE_SEARCH, label: ZaMsg.
 ZaSettings.ACCOUNTS_CHPWD = "accountsChangePassword";
 ZaSettings.MOVE_ALIAS = "moveAlias";
 ZaSettings.ACCOUNTS_REINDEX = "accountsReindex";
-ZaSettings.ACCOUNTS_VIEW_MAIL = "accountsViewMail";
+//ZaSettings.ACCOUNTS_VIEW_MAIL = "accountsViewMail";
 ZaSettings.ACCOUNTS_ASSIGN_SERVER = "accountsAssignServer";
 ZaSettings.ACCOUNTS_RESTORE = "accountsRestore"; //this should be in bnr extension
 ZaSettings.ACCOUNTS_CREATE = "accountsCreate"; //this should be in bnr extension

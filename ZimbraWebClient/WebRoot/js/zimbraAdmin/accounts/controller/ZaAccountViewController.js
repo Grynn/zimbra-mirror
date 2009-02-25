@@ -70,10 +70,10 @@ function () {
 	this._toolbarOperations[ZaOperation.NEW_WIZARD] = new ZaOperation(ZaOperation.NEW_WIZARD, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis", new AjxListener(this, ZaAccountViewController.prototype._newButtonListener));   			    	
 	this._toolbarOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));    	    	
 	
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		this._toolbarOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailboxDis", new AjxListener(this, ZaAccountViewController.prototype._viewMailListener));		
 		this._toolbarOrder.push(ZaOperation.VIEW_MAIL);
-	}
+	//}
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_REINDEX] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		this._toolbarOperations[ZaOperation.REINDEX_MAILBOX] = new ZaOperation(ZaOperation.REINDEX_MAILBOX, ZaMsg.ACTBB_ReindexMbx, ZaMsg.ACTBB_ReindexMbx_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaAccountViewController.prototype._reindexMbxListener));
 		this._toolbarOrder.push(ZaOperation.REINDEX_MAILBOX);
@@ -150,12 +150,12 @@ function(entry) {
 ZaController.setViewMethods["ZaAccountViewController"].push(ZaAccountViewController.setViewMethod);
 
 ZaAccountViewController.changeActionsStateMethod = function () {
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || 
-		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+/*I	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || 
+		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {*/
 			if(!this._currentObject.rights || !this._currentObject.rights[ZaAccount.VIEW_MAIL_RIGHT])	{
 				this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
 			}
-	}
+	//}
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_REINDEX] || 
 		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(!this._currentObject.rights || !this._currentObject.rights[ZaAccount.REINDEX_MBX_RIGHT])	{

@@ -238,7 +238,7 @@ function () {
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CHPWD] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this._popupOperations[ZaOperation.CHNG_PWD] = new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
 
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
 		this._popupOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, ZaAccountListController.prototype._viewMailListener));		
 
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MOVE_ALIAS] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])	
@@ -299,9 +299,9 @@ function () {
 	if((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_CHPWD] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) && this._defaultType == ZaItem.ACCOUNT) {
 		this._toolbarOperations[ZaOperation.CHNG_PWD] = new ZaOperation(ZaOperation.CHNG_PWD, ZaMsg.ACTBB_ChngPwd, ZaMsg.ACTBB_ChngPwd_tt, "Padlock", "PadlockDis", new AjxListener(this, ZaAccountListController.prototype._chngPwdListener));
 	}
-	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	//if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		this._toolbarOperations[ZaOperation.VIEW_MAIL] = new ZaOperation(ZaOperation.VIEW_MAIL, ZaMsg.ACTBB_ViewMail, ZaMsg.ACTBB_ViewMail_tt, "ReadMailbox", "ReadMailbox", new AjxListener(this, ZaAccountListController.prototype._viewMailListener));		
-	}
+	//}
 	if((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MOVE_ALIAS] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) && this._defaultType == ZaItem.ALIAS) {	
 		this._toolbarOperations[ZaOperation.MOVE_ALIAS] = new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));		    	
 	}
@@ -903,9 +903,26 @@ function () {
             if (item.type == ZaItem.DL) {
                 if(this._popupOperations[ZaOperation.MOVE_ALIAS])	{
                     this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
-                }	    
+                }
+                if(this._popupOperations[ZaOperation.VIEW_MAIL])
+				 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+					 
+				if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+				 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+                	    
             }
-
+			if (((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT)) || (item.type == ZaItem.ACCOUNT)) {
+				if(AjxUtil.isEmpty(item.rights)) {
+					item.loadEffectiveRights("id", item.id, false);
+				} 
+				if(!item.rights[ZaAccount.VIEW_MAIL_RIGHT]) {
+					 if(this._popupOperations[ZaOperation.VIEW_MAIL])
+					 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+					 
+					 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+					 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+				}
+			} 
         } else {
 			if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
 				this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
