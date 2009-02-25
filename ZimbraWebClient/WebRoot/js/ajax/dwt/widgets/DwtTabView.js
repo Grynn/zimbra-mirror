@@ -38,11 +38,13 @@ DwtTabView = function(params) {
 	DwtComposite.call(this, params);
 
 	this._stateChangeEv = new DwtEvent(true);
+	this._stateChangeEv.item = this;
+
 	this._tabs = [];
 	this._tabIx = 1;
     this._createHtml();
 
-	var tabGroupId = [this.toString(), this._htmlElId].join("-")
+	var tabGroupId = [this.toString(), this._htmlElId].join("-");
 	this._tabGroup = new DwtTabGroup(tabGroupId);
 	this._tabGroup.addMember(this._tabBar);
 };
@@ -87,7 +89,7 @@ DwtTabView.prototype.getTabGroupMember = function() {
 
 /**
 * @param title  -  text for the tab button
-* @param tabView - instance of DwtTabViewPage or an AjxCallback that
+* @param tabViewOrCallback - instance of DwtTabViewPage or an AjxCallback that
 *                  returns an instance of DwtTabViewPage
 * @return - the key for the added tab. This key can be used to retreive the tab using @link getTab
 * public method addTab. Note that this method does not automatically update the tabs panel.
@@ -156,6 +158,10 @@ function (tabKey) {
 	return (this._tabs && this._tabs[tabKey])
 		? this._tabs[tabKey]
 		: null;
+};
+
+DwtTabView.prototype.getTabBar = function() {
+	return this._tabBar;
 };
 
 DwtTabView.prototype.getTabTitle =
@@ -514,7 +520,7 @@ function(listener) {
 };
 
 /**
-* @param tabId - the id used to create tab button in @link DwtTabBar.addButton method
+* @param tabKey - the id used to create tab button in @link DwtTabBar.addButton method
 * @param listener - AjxListener
 **/
 DwtTabBar.prototype.addSelectionListener =
@@ -523,7 +529,7 @@ function(tabKey, listener) {
 };
 
 /**
-* @param tabId - the id used to create tab button in @link DwtTabBar.addButton method
+* @param tabKey - the id used to create tab button in @link DwtTabBar.addButton method
 * @param listener - AjxListener
 **/
 DwtTabBar.prototype.removeSelectionListener =
