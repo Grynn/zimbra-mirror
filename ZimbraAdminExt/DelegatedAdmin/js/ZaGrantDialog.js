@@ -35,7 +35,7 @@ function() {
                },
                { ref: ZaGrant.A_grantee_type, type:_TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
                     visibilityChecks:[], //temporary solution to make this element visible
-                    enableDisableChecks:false,
+                    enableDisableChecks:false,bmolsnr:true,
 //                    enableDisableChangeEventSources:[ZaGrant.A_right_type],
                     labelLocation:_LEFT_
                },     /*
@@ -99,7 +99,7 @@ ZaGrantDialog.setGranteeChanged = function (value, event, form) {
 	this.setInstanceValue(value);
 
 
-    if(AjxUtil.EMAIL_FULL_RE.test(value)) {
+    if((value.lastIndexOf ("@")==value.indexOf ("@")) && (value.indexOf ("@")>0)) {
 	    //update Grantee Type
         form.parent.updateGranteeType (value) ;
     } else {
@@ -152,7 +152,7 @@ ZaGrantDialog.prototype.setGranteeType = function (resp) {
                     granteeType = "grp" ;
                 }
                 this._localXForm.setInstanceValue(granteeType, ZaGrant.A_grantee_type) ;
-                this._localXForm.getItemsById (ZaGrant.A_grantee_type)[0].updateElement (granteeType);
+                //this._localXForm.getItemsById (ZaGrant.A_grantee_type)[0].updateElement (granteeType);
             }
         }
     } catch (ex) {
