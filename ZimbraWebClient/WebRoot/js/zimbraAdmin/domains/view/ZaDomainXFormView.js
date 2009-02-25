@@ -300,18 +300,18 @@ function () {
 ZaDomainXFormView.editButtonListener =
 function () {
 	var instance = this.getInstance();
-	if(instance.acl_selection_cache && instance.acl_selection_cache[0]) {	
+	if(instance[ZaDomain.A2_acl_selection_cache] && instance[ZaDomain.A2_acl_selection_cache][0]) {	
 		var formPage = this.getForm().parent;
 		if(!formPage.editAclDlg) {
 			formPage.editAclDlg = new ZaEditDomainAclXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "150px");
 			formPage.editAclDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainXFormView.updateAcl, this.getForm(), null);						
 		}
 		var obj = {};
-		obj.gt = instance.acl_selection_cache[0].gt;
-		obj.name = instance.acl_selection_cache[0].name;
+		obj.gt = instance[ZaDomain.A2_acl_selection_cache][0].gt;
+		obj.name = instance[ZaDomain.A2_acl_selection_cache][0].name;
 		obj.acl = {r:0,w:0,i:0,d:0,a:0,x:0};
-		for(var a in instance.acl_selection_cache[0].acl) {
-			obj.acl[a] = instance.acl_selection_cache[0].acl[a];
+		for(var a in instance[ZaDomain.A2_acl_selection_cache][0].acl) {
+			obj.acl[a] = instance[ZaDomain.A2_acl_selection_cache][0].acl[a];
 		}
 		formPage.editAclDlg.setObject(obj);
 		formPage.editAclDlg.popup();		
@@ -324,7 +324,7 @@ function () {
 	if(this.parent.editAclDlg) {
 		this.parent.editAclDlg.popdown();
 		var obj = this.parent.editAclDlg.getObject();
-		var aclSelection = this.getInstanceValue(ZaDomain.A2_acl_selection_cache);
+		var aclSelection = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A2_acl_selection_cache);
 		var dirty = false;
 		if(obj.name != aclSelection[0].name) {
 			dirty = true;
@@ -337,12 +337,23 @@ function () {
 			}
 		}
 		if(dirty) {
-			aclSelection[0].acl = obj.acl;
-			aclSelection[0].name = obj.name;
-			this.getInstance()[ZaDomain.A_allNotebookACLS]._version++;
+			aclSelection = [];
+			aclSelection[0] = obj;
+			var allNoteBookACLs = this.getModel().getInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS);
+			var newNoteBookACLs = [];
+			newNoteBookACLs._version = allNoteBookACLs._version + 1;
+			var cnt = allNoteBookACLs.length;
+			for(var i=0; i<cnt; i ++) {
+				if(obj.name && allNoteBookACLs[i].name && (allNoteBookACLs[i].name == obj.name)) {
+					newNoteBookACLs.push(obj);
+				} else if(!obj.name && !allNoteBookACLs[i].name && (allNoteBookACLs[i].gt == obj.gt)) {
+					newNoteBookACLs.push(obj);					
+				} else {
+					newNoteBookACLs.push(allNoteBookACLs[i]);
+				}
+			}
 			this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A2_acl_selection_cache,aclSelection);
-
-			//this.refresh();
+			this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,newNoteBookACLs);
 			this.parent.setDirty(true);	
 		}		
 	}
@@ -352,33 +363,44 @@ ZaDomainXFormView.deleteButtonListener =
 function () {
 	var instance = this.getInstance();
 	var aclSelectionCache = this.getInstanceValue(ZaDomain.A2_acl_selection_cache);
+	if(AjxUtil.isEmpty(aclSelectionCache))
+		return;
+		
 	var allNoteBookACLs = this.getInstanceValue(ZaDomain.A_allNotebookACLS);
-	if(aclSelectionCache) {
-		var cnt = aclSelectionCache.length;
-		for(var i=0; i<cnt;i++) {
-			if(aclSelectionCache[i].name && (aclSelectionCache[i].gt==ZaDomain.A_NotebookGroupACLs ||
-			 aclSelectionCache[i].gt==ZaDomain.A_NotebookUserACLs ||
-			 aclSelectionCache[i].gt==ZaDomain.A_NotebookDomainACLs)) {
-				var cnt2 = allNoteBookACLs.length-1;
-				for(var j=cnt2; j >= 0; j--) {
-					if(allNoteBookACLs[j].name == aclSelectionCache[i].name) {
-						allNoteBookACLs.splice(j,1);
-						break;
-					}
-				}
-			} else if (aclSelectionCache[i].gt) {
-				var cnt2 = allNoteBookACLs.length-1;
-				for(var j=cnt2; j >= 0; j--) {
-					if(allNoteBookACLs[j].gt == aclSelectionCache[i].gt) {
-						allNotebookACLS[j].acl = {r:0,w:0,i:0,d:0,a:0,x:0};
-						break;
-					}
+
+	if(AjxUtil.isEmpty(allNoteBookACLs))
+		return;
+
+	var newNoteBookACLs = AjxUtil.arraySubstract(allNoteBookACLs,aclSelectionCache,ZaDomain.compareACLs);
+	newNoteBookACLs._version = allNoteBookACLs._version+1;
+	/*var cnt = allNoteBookACLs.length;
+
+	for(var i=0; i<cnt;i++) {
+		if(aclSelectionCache[i].name && (aclSelectionCache[i].gt==ZaDomain.A_NotebookGroupACLs ||
+		 aclSelectionCache[i].gt==ZaDomain.A_NotebookUserACLs ||
+		 aclSelectionCache[i].gt==ZaDomain.A_NotebookDomainACLs)) {
+			var cnt2 = allNoteBookACLs.length-1;
+			for(var j=0; j < cnt2; j++) {
+				if(allNoteBookACLs[j].name == aclSelectionCache[i].name) {
+					continue;
+				} else {
+					newNoteBookACLs.push(allNoteBookACLs[j]);
 				}
 			}
+		} else if (aclSelectionCache[i].gt) {
+			var cnt2 = allNoteBookACLs.length-1;
+			for(var j=cnt2; j >= 0; j--) {
+				if(allNoteBookACLs[j].gt == aclSelectionCache[i].gt) {
+					
+					allNotebookACLS[j].acl = {r:0,w:0,i:0,d:0,a:0,x:0};
+					break;
+				}
+			}
+			
 		}
-	}
-	allNotebookACLS._version++;
-	this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,allNotebookACLS);
+	}*/
+	
+	this.getModel().setInstanceValue(this.getInstance(),ZaDomain.A_allNotebookACLS,newNoteBookACLs);
 	//instance[ZaDomain.A_allNotebookACLS]._version++; 
 	//this.getForm().refresh();
 	this.getForm().parent.setDirty(true);	

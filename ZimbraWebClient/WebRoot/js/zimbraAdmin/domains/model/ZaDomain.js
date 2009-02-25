@@ -267,7 +267,40 @@ ZaDomain.putDomainToCache = function(domain) {
 		ZaDomain.staticDomainByIdCacheTable[domain.id] = domain;
 	}
 }
+ZaDomain.compareACLs = function (val1, val2) {
+	if(AjxUtil.isEmpty(val1.name) && AjxUtil.isEmpty(val2.name)) {
+		if(AjxUtil.isEmpty(val1.gt) && AjXUtil.isEmpty(val2.gt)) {
+			return 0;
+		}
+		
+		if(val1.gt == val2.gt) 
+			return 0;
+		
+		if(val1.gt < val2.gt)
+			return -1;
 
+		if(val1.gt > val2.gt)
+			return 1;
+	} else {
+		if(val1.gt == val2.gt) {
+			if(val1.name == val2.name)
+				return 0;
+			if(val1.name < val2.name)
+				return -1;
+			if(val1.name > val2.name)
+				return 1;	
+		} else {
+			if(val1.gt == val2.gt) 
+				return 0;
+			
+			if(val1.gt < val2.gt)
+				return -1;
+	
+			if(val1.gt > val2.gt)
+				return 1;
+		}	
+	}		
+}
 //Use ZaSearch.SearchDirectory
 //In order to keep the domain list synchronized with server, we use synchronous call here.
 ZaDomain.getAll =
