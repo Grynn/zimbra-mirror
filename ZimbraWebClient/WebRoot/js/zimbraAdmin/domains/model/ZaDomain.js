@@ -32,15 +32,20 @@ ZaDomain = function() {
 
 	//default attributes
 	this.attrs[ZaDomain.A_GalMode] = ZaDomain.GAL_Mode_internal;
-	var globalConfig = null;
-	globalConfig = (ZaApp.getInstance() ? ZaApp.getInstance().getGlobalConfig(false): null );
-	 
-	if(globalConfig) {
-		this.attrs[ZaDomain.A_GalMaxResults] = globalConfig.attrs[ZaGlobalConfig.A_zimbraGalMaxResults];
-	} else {
-		this.attrs[ZaDomain.A_GalMaxResults] = 100;
-	}
-	this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra;
+	try {
+        var globalConfig = null;
+        globalConfig = (ZaApp.getInstance() ? ZaApp.getInstance().getGlobalConfig(false): null );
+    }catch (e) {
+
+    }
+
+    if(globalConfig) {
+        this.attrs[ZaDomain.A_GalMaxResults] = globalConfig.attrs[ZaGlobalConfig.A_zimbraGalMaxResults];
+    } else {
+        this.attrs[ZaDomain.A_GalMaxResults] = 100;
+    }
+
+    this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra;
 	this.attrs[ZaDomain.A_GALSyncUseGALSearch]='TRUE';
 	this.notebookAcls = {};
 	this[ZaDomain.A_NotebookTemplateFolder] = "Template";

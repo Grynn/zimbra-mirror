@@ -314,6 +314,7 @@ ZaSettings.DL_NOTES_TAB = "dlMemberOfTab";
 
 //Miscelaneous operations
 ZaSettings.SAVE_SEARCH = "saveSearch";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SAVE_SEARCH, label: ZaMsg.UI_Comp_SaveSearch });
 
 //Account operations
 ZaSettings.ACCOUNTS_CHPWD = "accountsChangePassword";
