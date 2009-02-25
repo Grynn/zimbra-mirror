@@ -80,7 +80,6 @@ PERL_LIBS 	:= \
 	MIME::Lite \
 	Mail::Mailer \
 	D/DO/DONEILL/MIME-tools-5.427.tar.gz \
-	XML::Parser \
 	SOAP::Lite \
 	Net::Telnet \
 	Device::SerialPort \
@@ -145,6 +144,9 @@ SWATCH = \
 
 LDAPAPI = \
 	Net-LDAPapi-3.0.3
+
+XML_PARSER = \
+	XML-Parser-2.36.tar.gz
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
@@ -230,9 +232,18 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 	
+	@for lib in $(XML_PARSER); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) $(EXPAT_LIB) $(EXPAT_INCLUDE); \
+		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+	
 	@for lib in $(PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		LDFLAGS="-fPIC" CFLAGS="-fPIC" $(EXPAT_LIB) $(EXPAT_INCLUDE) BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
