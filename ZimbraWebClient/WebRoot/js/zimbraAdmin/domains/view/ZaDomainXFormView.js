@@ -257,7 +257,7 @@ ZaDomainXFormView.addButtonListener =
 function () {
 	var formPage = this.getForm().parent;
 	if(!formPage.addAclDlg) {
-		formPage.addAclDlg = new ZaAddDomainAclXDialog(ZaApp.getInstance().getAppCtxt().getShell(), ZaApp.getInstance(),"550px", "150px");
+		formPage.addAclDlg = new ZaAddDomainAclXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "150px");
 		formPage.addAclDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDomainXFormView.addAcl, this.getForm(), null);						
 	}
 	var obj = {};

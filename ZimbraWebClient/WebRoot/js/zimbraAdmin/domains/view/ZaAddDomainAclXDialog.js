@@ -41,7 +41,7 @@ function() {
 			{type:_OSELECT1_, ref:"gt", choices:[{value:ZaDomain.A_NotebookGroupACLs, label:ZaMsg.ACL_Grp},
 				{value:ZaDomain.A_NotebookUserACLs,label:ZaMsg.ACL_User},
 				{value:ZaDomain.A_NotebookDomainACLs,label:ZaMsg.ACL_Dom}
-			] },
+			],visibilityChecks:[],enableDisableChecks:[] },
 			{type:_SWITCH_, items:[
 				{type:_CASE_, 
 					visibilityChecks:[[XForm.checkInstanceValue,"gt",ZaDomain.A_NotebookGroupACLs]],
