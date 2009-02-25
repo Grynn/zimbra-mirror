@@ -21,6 +21,7 @@ GPG     := $(shell which gpg)
 LESS    := $(shell which less)
 WGET    := $(shell which wget)
 MAKE    := $(shell which make)
+SED     := $(shell which sed)
 CMIRROR	?= http://buildmaster.lab.zimbra.com/cpan/
 
 BDB_VERSION ?= 4.7.25.3
@@ -286,6 +287,8 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
+			$(SED) -i .bak -e 's#/usr/lib/sendmail /usr/sbin/sendmail#/opt/zimbra/postfix/sbin/sendmail#' lib/Swatch/Actions.pm; \
+			rm -f lib/Swatch/Actions.pm.bak; \
 			BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
@@ -300,6 +303,7 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 	tar cfz $(PERL_BIN_TGZ_DEST) sa-compile sa-learn sa-update spamassassin spamc spamd); \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi
 	chmod -R a+w $(PERL_TGZ_DEST_DIR)
+
 
 tarball:
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
