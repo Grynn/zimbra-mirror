@@ -295,16 +295,36 @@ ZaSettings.OVERVIEW_MONITORING_ITEMS = [ZaSettings.GLOBAL_STATS_VIEW,ZaSettings.
 
 //Account view tabs
 ZaSettings.ACCOUNTS_GENERAL_TAB = "accountsGeneralTab";
+
 ZaSettings.ACCOUNTS_CONTACT_TAB = "accountsContactTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_CONTACT_TAB, label: ZaMsg.UI_Comp_AccountsContactTab });
+
 ZaSettings.ACCOUNTS_MEMBEROF_TAB = "accountsMemberOfTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_MEMBEROF_TAB, label: ZaMsg.UI_Comp_AccountsMemberofTab });
+
 ZaSettings.ACCOUNTS_PREFS_TAB = "accountsPrefsTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_PREFS_TAB, label: ZaMsg.UI_Comp_AccountsPrefsTab });
+
 ZaSettings.ACCOUNTS_FEATURES_TAB = "accountsFeaturesTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_FEATURES_TAB, label: ZaMsg.UI_Comp_AccountsFeaturesTab });
+
 ZaSettings.ACCOUNTS_ADVANCED_TAB = "accountsAdvancedTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_ADVANCED_TAB, label: ZaMsg.UI_Comp_AccountsAdvancedTab });
+
 ZaSettings.ACCOUNTS_FORWARDING_TAB = "accountsForwardingTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_FORWARDING_TAB, label: ZaMsg.UI_Comp_AccountsForwardingTab });
+
 ZaSettings.ACCOUNTS_ALIASES_TAB = "accountsAliasesTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_ALIASES_TAB, label: ZaMsg.UI_Comp_AccountsAliasesTab });
+
 ZaSettings.ACCOUNTS_INTEROP_TAB = "accountsInteropTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_INTEROP_TAB, label: ZaMsg.UI_Comp_AccountsInteropTab });
+
 ZaSettings.ACCOUNTS_SKIN_TAB = "accountsSkinTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_SKIN_TAB, label: ZaMsg.UI_Comp_AccountsSkinsTab });
+
 ZaSettings.ACCOUNTS_ZIMLET_TAB = "accountsZimletTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_ZIMLET_TAB, label: ZaMsg.UI_Comp_AccountsZimletsTab });
 
 //Distribution list view tabs
 ZaSettings.DL_MEMBERS_TAB = "dlMembersTab";
