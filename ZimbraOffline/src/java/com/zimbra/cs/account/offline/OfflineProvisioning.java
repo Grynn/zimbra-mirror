@@ -849,9 +849,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	if (account == null)
     		account = createLocalAccount();
     	
+    	String uri = "http://localhost:7633/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value();
     	String webappUri = account.getAttr(A_offlineWebappUri, null);
-    	if (webappUri == null)
-    	    setAccountAttribute(account, A_offlineWebappUri, "http://localhost:7633/desktop/login.jsp?at=" + OfflineLC.zdesktop_installation_key.value());
+    	if (webappUri == null || !webappUri.equals(uri))
+    	    setAccountAttribute(account, A_offlineWebappUri, uri);
     	return account;
     }
 
