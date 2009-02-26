@@ -117,7 +117,8 @@ PERL_LIBS 	:= \
 	Mail::DKIM \
 	XML::SAX::Expat \
 	XML::Simple \
-	IO::Socket::INET6
+	IO::Socket::INET6 \
+	DBD::SQLite
 
 NET_SSLeay := \
 	Net-SSLeay-1.35
