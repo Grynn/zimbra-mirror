@@ -157,7 +157,7 @@ function() {
 								iconVisible: false, 
 								content: null,
 								ref:ZaSearch.A_ResultMsg,align:_CENTER_, valign:_MIDDLE_,
-								visibilityChecks:[[XForm.checkInstanceValueEmty,ZaSearch.A_ResultMsg]],
+								visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaSearch.A_ResultMsg]],
 				  				visibilityChangeEventSources:[ZaSearch.A_ResultMsg]
 							}
 						]
