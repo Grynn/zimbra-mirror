@@ -328,9 +328,13 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_ZIMLET_TAB, label
 
 //Distribution list view tabs
 ZaSettings.DL_MEMBERS_TAB = "dlMembersTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_MEMBERS_TAB, label: ZaMsg.UI_Comp_DLMembersTab });
 ZaSettings.DL_ALIASES_TAB = "dlAliasesTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_ALIASES_TAB, label: ZaMsg.UI_Comp_DLAliasTab });
 ZaSettings.DL_MEMBEROF_TAB = "dlMemberOfTab";
-ZaSettings.DL_NOTES_TAB = "dlMemberOfTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_MEMBEROF_TAB, label: ZaMsg.UI_Comp_DLMemberOfTab });
+ZaSettings.DL_NOTES_TAB = "dlNotesOfTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_NOTES_TAB, label: ZaMsg.UI_Comp_DLNotesTab });
 
 //Miscelaneous operations
 ZaSettings.SAVE_SEARCH = "saveSearch";
@@ -347,24 +351,28 @@ ZaSettings.ACCOUNTS_CREATE = "accountsCreate"; //this should be in bnr extension
 
 //Domain view tabs
 ZaSettings.DOMAIN_GENERAL_TAB = "domainGeneralTab";
-ZaSettings.DOMAIN_SKIN_TAB = "domainSkinsTab"; 
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_GENERAL_TAB, label: ZaMsg.UI_Comp_DomainGeneralTab });
+ZaSettings.DOMAIN_SKIN_TAB = "domainSkinsTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_SKIN_TAB, label: ZaMsg.UI_Comp_DomainThemesTab});
 ZaSettings.DOMAIN_WIKI_TAB = "domainWikiTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_WIKI_TAB, label: ZaMsg.UI_Comp_DomainDocumentsTab });
 ZaSettings.DOMAIN_VIRTUAL_HOST_TAB = "domainVirtualHostTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_VIRTUAL_HOST_TAB, label: ZaMsg.UI_Comp_DomainVHTab });
 ZaSettings.DOMAIN_INTEROP_TAB = "domainInteropTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_INTEROP_TAB, label: ZaMsg.UI_Comp_DomainInteropTab });
 ZaSettings.DOMAIN_AUTH_TAB = "domainAuthTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_AUTH_TAB, label: ZaMsg.UI_Comp_DomainAuthTab });
 ZaSettings.DOMAIN_GAL_TAB = "domainGALTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_GAL_TAB, label: ZaMsg.UI_Comp_DomainGALTab });
 ZaSettings.DOMAIN_ZIMLETS_TAB = "domainGALTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_ZIMLETS_TAB, label: ZaMsg.UI_Comp_DomainZimletsTab });
 
-//Domain operations
+//Domain operations  - it might be duplicated to domain view tabs
 ZaSettings.DOMAIN_GAL_WIZ = "domainGALWizard";
 ZaSettings.DOMAIN_AUTH_WIZ = "domainAuthWizard";
 ZaSettings.DOMAIN_WIKI_WIZ = "domainWikiWizard";
 ZaSettings.DOMAIN_CHECK_MX_WIZ = "domainCheckMXWiz";
 
-//Distribution list view tabs
-ZaSettings.DL_NOTES_TAB = "dlNotesTab";
-ZaSettings.DL_MEMBEROF_TAB = "dlMemberOfTab";
-ZaSettings.DL_ALIASES_TAB = "dlAliasesTab";
 
 //Distribution list operations
 ZaSettings.DL_CREATE_RIGHT = "createDL";

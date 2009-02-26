@@ -95,7 +95,9 @@ ZaRight.rightsOvTreeModifier = function (tree) {
     var overviewPanelController = this ;
     if (!overviewPanelController) throw new Exception("ZaRight.rightsOvTreeModifier: Overview Panel Controller is not set.");
 
-    if(ZaSettings.RIGHTS_ENABLED && overviewPanelController._configTi) {
+    if ((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RIGHT_LIST_VIEW] 
+            || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+            && overviewPanelController._configTi) {
         overviewPanelController._rightsTi = new DwtTreeItem(overviewPanelController._configTi);
         overviewPanelController._rightsTi.setText(com_zimbra_delegatedadmin.OVP_rights);
         overviewPanelController._rightsTi.setImage("RightObject"); //TODO: Use Rights icons

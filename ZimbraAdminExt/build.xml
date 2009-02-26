@@ -116,9 +116,10 @@
 			<arg line="deploy" />
 			<arg file="${build.zimlet.dir}/${ext.name}.zip" />
 		</java>
-	</target>	
+	</target>
 
-	<target name="compile" depends="build-init" description="Compiles the source code">
+
+    <target name="compile" depends="build-init" description="Compiles the source code">
         <path id="all.java.path">
             <pathelement location="${ext.dir}/java" />
         </path>
@@ -201,6 +202,24 @@
 	<target name="deploy-dev-cert" depends="package-zimlet, jar, copy-files-to-dev-machine" description="Deploy the extension"/>
 
     <target name="deploy" depends="clean, deploy-zimlet, deploy-server-extension"
-            description="Deploy the extension, must have ext.dir and ext.name property set"/> 
+            description="Deploy the extension, must have ext.dir and ext.name property set"/>
+
+    <target name="deploy-all" description="deploy all the admin extensions in ZimbraAdminExt">
+
+		<antcall target="deploy-zimlet">
+	    	<param name="ext.dir" value="DelegatedAdmin"/>
+			<param name="ext.name" value="com_zimbra_delegatedadmin" />
+	  	</antcall>
+
+        <antcall target="deploy">
+	    	<param name="ext.dir" value="CertificateMgr"/>
+			<param name="ext.name" value="com_zimbra_cert_manager" />
+	  	</antcall>
+
+        <antcall target="deploy">
+	    	<param name="ext.dir" value="BulkProvision"/>
+			<param name="ext.name" value="com_zimbra_bulkprovision" />
+	  	</antcall>
+    </target>
    
 </project>

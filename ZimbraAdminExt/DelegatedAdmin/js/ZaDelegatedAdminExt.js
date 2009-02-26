@@ -9,8 +9,8 @@ if (AjxEnv.hasFirebug) console.debug("Loaded ZaDelegatedAdminExt.js");
 
 function ZaDelegatedAdminExt () {} ;
 
-ZaSettings.RIGHTS_ENABLED = true ;
-ZaSettings.GRANTS_ENABLED = true ;
+//ZaSettings.RIGHTS_ENABLED = true ;
+//ZaSettings.GRANTS_ENABLED = true ;
 ZaEvent.S_RIGHT = ZaEvent.EVENT_SOURCE_INDEX++;
 ZaEvent.S_GRANT = ZaEvent.EVENT_SOURCE_INDEX++;
 ZaItem.RIGHT = "right" ;
