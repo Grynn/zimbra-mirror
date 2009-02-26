@@ -102,7 +102,7 @@ function() {
 				//throw	
 				throw (new AjxException(ZaMsg.FAILED_MOVE_ALIAS, AjxException.UNKNOWN_ERROR, "MoveAliasXDialog.prototype.moveAlias", "Alias name is not available"));
 			}
-			ZaApp.getInstance().getAccountListController().show();	
+			ZaApp.getInstance().getCurrentController().show();	
 			this._containedObject[ZaSearch.A_ResultMsg] = String(ZaMsg.Alias_Moved_To).replace("{0}",name).replace("{1}",this._containedObject[ZaSearch.A_selected].name); 
 			return true;							
 		}else{
