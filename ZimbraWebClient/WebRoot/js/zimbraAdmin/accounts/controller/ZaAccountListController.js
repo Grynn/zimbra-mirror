@@ -911,7 +911,7 @@ function () {
 				 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
                 	    
             }
-			if (((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT)) || (item.type == ZaItem.ACCOUNT)) {
+			if (item.type == ZaItem.ACCOUNT) {
 				if(AjxUtil.isEmpty(item.rights)) {
 					item.loadEffectiveRights("id", item.id, false);
 				} 
@@ -922,7 +922,19 @@ function () {
 					 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
 					 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
 				}
-			} 
+			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT))  {
+				var targetObj = item.getAliasTargetObj() ;
+				if(AjxUtil.isEmpty(targetObj.rights)) {
+					targetObj.loadEffectiveRights("id", item.id, false);
+				} 
+				if(!targetObj.rights[ZaAccount.VIEW_MAIL_RIGHT]) {
+					 if(this._popupOperations[ZaOperation.VIEW_MAIL])
+					 	this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+					 
+					 if(this._toolbarOperations[ZaOperation.VIEW_MAIL])
+					 	this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;   
+				}				
+			}
         } else {
 			if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
 				this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
