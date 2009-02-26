@@ -101,7 +101,7 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 				var tmpGrouperItems = tmpItems[i].items;
 				var cnt2 = tmpGrouperItems.length;
 				for(var j=0;j<cnt2;j++) {
-					if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_isAdminAccount) {
+					if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsAdminAccount) {
 						//add domain admin quota field
 					    xFormObject.items[2].items[0].items[i].items.splice(j+1,0, accountDomainAdminMaxQuotaField);
                     	break;
@@ -121,7 +121,7 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 						var cnt2 = tmpGrouperItems.length;
 						for(var k=0;k<cnt2;k++) {
 							if(tmpGrouperItems[k] && tmpGrouperItems[k].ref == ZaAccount.A_zimbraAdminAuthTokenLifetime) {
-								tmpGrouperItems[k].visibilityChecks = ["instance.attrs[ZaAccount.A_zimbraIsDomainAdminAccount]==\'TRUE\' || instance.attrs[ZaAccount.A_isAdminAccount]==\'TRUE\'"];
+								tmpGrouperItems[k].visibilityChecks = ["instance.attrs[ZaAccount.A_zimbraIsAdminAccount]==\'TRUE\' || instance.attrs[ZaAccount.A_zimbraIsSystemAdminAccount]==\'TRUE\'"];
 								break;
 							}
 						}
@@ -156,7 +156,7 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 				var tmpGrouperItems = tmpItems[i].items;
 				var cnt2 = tmpGrouperItems.length;
 				for(var j=0;j<cnt2;j++) {
-					if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_isAdminAccount) {
+					if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsAdminAccount) {
 						xFormObject.items[3].items[0].items[i].items.splice(j+1,0, accountDomainAdminMaxQuotaField);
 						break;
 					}
@@ -175,7 +175,7 @@ if(ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
 						var cnt2 = tmpGrouperItems.length;
 						for(var k=0;k<cnt2;k++) {
 							if(tmpGrouperItems[k] && tmpGrouperItems[k].ref == ZaAccount.A_zimbraAdminAuthTokenLifetime) {
-								tmpGrouperItems[k].visibilityChecks = ["instance.attrs[ZaAccount.A_zimbraIsDomainAdminAccount]==\'TRUE\' || instance.attrs[ZaAccount.A_isAdminAccount]==\'TRUE\'"];
+								tmpGrouperItems[k].visibilityChecks = ["instance.attrs[ZaAccount.A_zimbraIsAdminAccount]==\'TRUE\' || instance.attrs[ZaAccount.A_zimbraIsSystemAdminAccount]==\'TRUE\'"];
 								break;
 							}
 						}

@@ -553,8 +553,8 @@ if (ZaSearch) {
             query = "(&" + query
                     + "(|"
                     + "(" + ZaDistributionList.A_isAdminGroup + "=TRUE)"
-                    + "(" + ZaAccount.A_isAdminAccount + "=TRUE)"
-                    + "(" + ZaAccount.A_isSystemAdminAccount + "=TRUE)"
+                    + "(" + ZaAccount.A_zimbraIsSystemAdminAccount + "=TRUE)"
+                    + "(" + ZaAccount.A_zimbraIsAdminAccount + "=TRUE)"
                     + ")"
                     + ")"
             dataCallback = new AjxCallback(this, this.dynSelectGranteeCallback, callback);

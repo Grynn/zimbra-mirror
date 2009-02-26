@@ -585,8 +585,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				]
 			});
 		
-		setupGroup.items.push({ref:ZaAccount.A_isAdminAccount, type:_CHECKBOX_, 
-								msgName:ZaMsg.NAD_IsAdmin,label:ZaMsg.NAD_IsAdmin,
+		setupGroup.items.push({ref:ZaAccount.A_zimbraIsSystemAdminAccount, type:_CHECKBOX_, 
+								msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
 								trueValue:"TRUE", falseValue:"FALSE"
 							});
 							
@@ -1348,7 +1348,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 									msgName:ZaMsg.NAD_AdminAuthTokenLifetime,
 									txtBoxLabel:ZaMsg.NAD_AdminAuthTokenLifetime+":",
 									enableDisableChecks:[ZaAccountXFormView.isAdminAccount],
-									enableDisableChangeEventSources:[ZaAccount.A_isAdminAccount]
+									enableDisableChangeEventSources:[ZaAccount.A_zimbraIsSystemAdminAccount]
 								},							
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,
 									type:_SUPERWIZ_LIFETIME_, 

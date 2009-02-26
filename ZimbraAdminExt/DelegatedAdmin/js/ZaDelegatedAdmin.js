@@ -5,19 +5,19 @@
 ZaDelegatedAdmin = function () {};
 
 if (ZaAccount) {
-    ZaAccount.A_isSystemAdminAccount = "zimbraIsSystemAdminAccount" ;
+    ZaAccount.A_zimbraIsAdminAccount = "zimbraIsAdminAccount" ;
     ZaAccount.myXModel.items.push (
-        {id:ZaAccount.A_isSystemAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
-            ref:"attrs/"+ZaAccount.A_isSystemAdminAccount}) ;
+        {id:ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
+            ref:"attrs/"+ZaAccount.A_zimbraIsAdminAccount}) ;
 }
 
 
 if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
    ZaDelegatedAdmin.AccountXFormModifier = function (xFormObject) {
 
-       var systemAdminChkBx = {
-            ref:ZaAccount.A_isSystemAdminAccount,type:_CHECKBOX_,
-            label:com_zimbra_delegatedadmin.NAD_IsSystemAdminAccount,
+       var adminChkBox = {
+            ref:ZaAccount.A_zimbraIsAdminAccount,type:_CHECKBOX_,
+            label:ZaMsg.NAD_IsAdmin,
             trueValue:"TRUE", falseValue:"FALSE"
         };
         var tabs = xFormObject.items[2].items;
@@ -28,9 +28,9 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
                var tmpGrouperItems = tmpItems[i].items;
                var cnt2 = tmpGrouperItems.length;
                for(var j=0;j<cnt2;j++) {
-                   if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_isAdminAccount) {
-                       //add System Admin checkbox
-                       xFormObject.items[2].items[0].items[i].items.splice(j,0, systemAdminChkBx);
+                   if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsSystemAdminAccount) {
+                       //add  Admin checkbox
+                       xFormObject.items[2].items[0].items[i].items.splice(j+1,0, adminChkBox);
                        break;
                    }
                }
