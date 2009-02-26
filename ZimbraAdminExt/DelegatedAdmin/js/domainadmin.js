@@ -30,10 +30,10 @@ if(ZaAccount) {
 	ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed = "zimbraDomainAdminMailQuotaAllowed" ;
 	var domainAdminMaxMailQuotaItem = {id:ZaAccount.A_zimbraDomainAdminMaxMailQuota, type:_COS_MAILQUOTA_, ref:"attrs."+ZaAccount.A_zimbraDomainAdminMaxMailQuota} ;
 	var domainAdminMailQuotaAllowedItem = {id:ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed} ;
-	if (ZaSettings.isDomainAdmin) {
-		domainAdminMaxMailQuotaItem.type = _MAILQUOTA_ ;
+//	if (ZaSettings.isDomainAdmin) {
+		domainAdminMaxMailQuotaItem.type = _COS_MAILQUOTA_ ;
 		domainAdminMailQuotaAllowedItem.type = _ENUM_;
-	}
+//	}
 	ZaAccount.myXModel.items.push(domainAdminMaxMailQuotaItem);
 	ZaAccount.myXModel.items.push(domainAdminMailQuotaAllowedItem);
 }
@@ -86,12 +86,13 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 				onChange:ZaTabView.onFormFieldChanged,
 				txtBoxLabel:com_zimbra_delegatedadmin.NAD_DomainAdminMaxMailQuota,
 				toolTipContent: com_zimbra_delegatedadmin.tt_DomainAdminMaxMailQuota,
-                visibilityChecks:[]    
+                visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsAdminAccount]==\'TRUE\' "],
+                visibilityChangeEventSources: [ZaAccount.A_zimbraIsAdminAccount]              
                 //				relevantBehavior: _HIDE_,
 //				relevant: "instance.attrs[ZaAccount.A_zimbraIsDomainAdminAccount]==\'TRUE\' && (instance[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed]==\'TRUE\' || (!instance[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed] && instance.cos[ZaAccount.A2_zimbraDomainAdminMailQuotaAllowed]==\'TRUE\'))"
 			};
 
-		var tabs = xFormObject.items[2].items;
+        var tabs = xFormObject.items[2].items;
 
 		//change General tab
 		var tmpItems = tabs[0].items;
