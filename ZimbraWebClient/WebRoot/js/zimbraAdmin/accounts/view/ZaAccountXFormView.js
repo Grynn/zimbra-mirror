@@ -937,9 +937,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 
 		
 		setupGroup.items.push({ref:ZaAccount.A_zimbraIsSystemAdminAccount, type:_CHECKBOX_, 
-								msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
-								trueValue:"TRUE", falseValue:"FALSE"
-							});
+                msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
+				bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE"
+		});
 		case1Items.push(setupGroup);
 		
 		var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_form_password_group", 

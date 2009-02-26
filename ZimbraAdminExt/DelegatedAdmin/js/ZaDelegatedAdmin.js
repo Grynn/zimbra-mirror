@@ -18,6 +18,14 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
        var adminChkBox = {
             ref:ZaAccount.A_zimbraIsAdminAccount,type:_CHECKBOX_,
             label:ZaMsg.NAD_IsAdmin,
+            bmolsnr:true,
+            elementChanged :
+            function(elementValue,instanceValue, event) {
+                if(elementValue == "TRUE") {
+                    this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsSystemAdminAccount);
+                }
+                    this.getForm().itemChanged(this, elementValue, event);
+            },
             trueValue:"TRUE", falseValue:"FALSE"
         };
         var tabs = xFormObject.items[2].items;
@@ -31,6 +39,14 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
                    if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsSystemAdminAccount) {
                        //add  Admin checkbox
                        xFormObject.items[2].items[0].items[i].items.splice(j+1,0, adminChkBox);
+                       //add the mutual exclusive action to global admin 
+                       tmpGrouperItems[j].elementChanged =
+								function(elementValue,instanceValue, event) {
+									if(elementValue == "TRUE") {
+										this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
+								    }
+										this.getForm().itemChanged(this, elementValue, event);
+								};
                        break;
                    }
                }
