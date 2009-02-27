@@ -29,7 +29,7 @@ skin.hints = {
 						url: "@HelpAdminURL@", daUrl: "@HelpDelegatedURL@"	},
 	logoutButton	: { style:"link", 		container:"quota"	},
 	logo			: { url: "@LogoURL@" },
-	tree:			{ minWidth:150, maxWidth:300, containers: ["skin_td_tree_container", "skin_table", "skin_tr_tree", "skin_td_tree", "skin_container_tree"] },
+	tree:			{ minWidth:150, maxWidth:300, containers: ["skin_td_tree_container", "skin_table", "skin_tr_tree", "skin_td_tree", "skin_container_tree"] }
 }
 
 /* PUBLIC API FOR SHOWING/HIDING PIECES OF THE SKIN */
