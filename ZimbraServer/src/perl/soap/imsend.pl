@@ -47,11 +47,11 @@ GetOptions("u|user=s" => \$user,
            "typing"=>\$typing,
            "t=s"=>\$to,
            "m=s"=>\$msg,
-           "h=s"=>\$html,
+           "html=s"=>\$html,
           );
 
 if (!defined($user) || !defined($to)) {
-    print "USAGE: imsend -u USER [-typing] -t (ADDRESS|THREAD) [-m MESSAGE] [-h HTML]\n";
+    print "USAGE: imsend -u USER [-typing] -t (ADDRESS|THREAD) [-m MESSAGE] [-html HTML]\n";
     exit 1;
 }
 
