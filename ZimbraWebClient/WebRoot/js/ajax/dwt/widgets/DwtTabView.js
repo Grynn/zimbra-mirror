@@ -645,6 +645,7 @@ function(ev) {
 * @constructor
 **/
 DwtTabButton = function(parent, id) {
+	if (arguments.length == 0) return;
 	DwtButton.call(this, {parent:parent, className:"ZTab", id:id});
 };
 
@@ -685,3 +686,89 @@ DwtTabButton.prototype.setDisplayState = function(state) {
     }
     DwtButton.prototype.setDisplayState.call(this, state);
 };
+
+
+/**
+* @class
+* @constructor
+* @param parent
+* DwtTabBarFloat 
+**/
+DwtTabBarFloat = function(parent, tabCssClass, btnCssClass) {
+	if (arguments.length == 0) return;
+	DwtTabBar.call(this,parent,tabCssClass,btnCssClass)
+};
+
+DwtTabBarFloat.prototype = new DwtTabBar;
+DwtTabBarFloat.prototype.constructor = DwtTabBarFloat;
+
+DwtTabBarFloat.prototype.TEMPLATE = "dwt.Widgets#ZTabBarFloat";
+
+/**
+* @param tabKey
+* @param tabTitle
+**/
+DwtTabBarFloat.prototype.addButton =
+function(tabKey, tabTitle, id) {
+	var b = this._buttons[tabKey] = new DwtTabButtonFloat(this, id);
+	
+	this._buttons[tabKey].addSelectionListener(new AjxListener(this, DwtTabBar._setActiveTab));
+
+	if (this._btnImage != null) {
+		b.setImage(this._btnImage);
+	}
+
+	if (tabTitle != null) {
+		b.setText(tabTitle);
+	}
+
+	b.setEnabled(true);
+	b.setData("tabKey", tabKey);
+
+	if (parseInt(tabKey) == 1) {
+		this.openTab(tabKey, true);
+	}
+
+	// make sure that new button is selected properly
+    var sindex = this.__getButtonIndex(this._currentTabKey);
+    if (sindex != -1) {
+        var nindex = this.__getButtonIndex(tabKey);
+        if (nindex == sindex + 1) {
+            Dwt.addClass(b.getHtmlElement(), DwtTabBar.SELECTED_NEXT);
+        }
+    }
+
+    return b;
+};
+
+DwtTabBarFloat.prototype.addChild =
+function(child, index) {
+    DwtComposite.prototype.addChild.apply(this, arguments);
+
+    this._addItem(DwtToolBar.ELEMENT, child, index);
+};
+
+DwtTabBarFloat.prototype._addItem =
+function(type, element, index) {
+
+    // get the reference element for insertion
+    var placeEl = this._items[index] || this._suffixEl;
+
+    // insert item
+	var spliceIndex = index || (typeof index == "number") ? index : this._items.length;
+	this._items.splice(spliceIndex, 0, element);
+    
+    this._itemsEl.insertBefore(element.getHtmlElement(), placeEl);
+
+    // append spacer
+    // TODO!
+};
+
+DwtTabButtonFloat = function(parent, id) {
+	DwtTabButton.call(this, parent,id);
+};
+
+DwtTabButtonFloat.prototype = new DwtTabButton;
+DwtTabButtonFloat.prototype.constructor = DwtTabButtonFloat;
+
+DwtTabButtonFloat.prototype.TEMPLATE = "dwt.Widgets#ZTabFloat";

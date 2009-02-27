@@ -444,7 +444,7 @@ ZaServerSessionStatsPage.prototype._getXForm = function () {
 		   */
 		   {type:_SPACER_, height:"10px", colSpan:"*", id:"xform_header" },
 		   
-		   {type:_DWT_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"*", 
+		   {type:_TAB_BAR_,  ref:ZaModel.currentTab, colSpan:"*", 
 		   		onChange: ZaServerSessionStatsPage.tabChanged,
 		   		choices:[
 			     {value:ZaServerSessionStatsPage.SOAP_TAB_ID, label:ZaMsg.TABT_SessStatsSoap},

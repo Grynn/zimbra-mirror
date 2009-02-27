@@ -4608,65 +4608,6 @@ Button_Grid_XFormItem.prototype.constructWidget = function () {
 }
 
 
-/**	
-* @class defines XFormItem type _TAB_BAR_
-* A simple tab (for switching a switch)
-* @constructor
-**/
-Tab_Bar_XFormItem = function() {}
-XFormItemFactory.createItemType("_TAB_BAR_", "tab_bar", Tab_Bar_XFormItem, Button_Grid_XFormItem)
-
-//	type defaults
-Tab_Bar_XFormItem.prototype.multiple = false;
-Tab_Bar_XFormItem.prototype.cssClass = "xform_button_grid_tab";
-Tab_Bar_XFormItem.prototype.align = _CENTER_;
-Tab_Bar_XFormItem.prototype.colSpan = "*";
-
-//	methods
-Tab_Bar_XFormItem.prototype.elementChanged = function(elementValue, instanceValue, event) {
-	this.getForm().itemChanged(this.getId(), elementValue, event, true);
-}
-
-Tab_Bar_XFormItem.prototype.constructWidget = function () {
-	var changeHandler = this.getExternalChangeHandler();
-	var attributes = {
-		numCols:this.getNumCols(),
-		cssClass:this.getCssClass(),
-		onChange:changeHandler,
-		addBracketingCells:(this.getAlign() == _CENTER_)
-	}
-
-	var choices = this.getChoices();
-	if(choices.constructor == XFormChoices) {
-		attributes.choices = choices.getChoiceObject();
-	} else {
-		attributes.choices = choices;
-	}
-	var multiple = this.getMultiple();
-	if (multiple !== null) attributes.multiple = multiple;
-	return new ButtonGrid(attributes);
-}
-
-Tab_Bar_XFormItem.prototype.initFormItem = function() {
-	this.choices = this.getChoices();
-
-	if(!this.choices)
-		return;
-	if(this.choices.constructor == XFormChoices) {
-		var listener = new AjxListener(this, this.dirtyDisplay);
-		this.choices.addListener(DwtEvent.XFORMS_CHOICES_CHANGED, listener);	
-		this.numCols = this.getChoices().values.length;
-	} else {
-		this.numCols = this.getChoices().length;
-	}
-}
-
-Tab_Bar_XFormItem.prototype.dirtyDisplay = function(newChoices) {
-	//this.dirtyDisplay();
-	if(this.choices.constructor == XFormChoices) {
-		this.widget.updateChoicesHTML(this.getNormalizedLabels());	
-	}
-}
 
 /**	
 * @class defines XFormItem type _DWT_CHOOSER_
@@ -4867,15 +4808,15 @@ Dwt_Alert_XFormItem.prototype.updateWidget = function(newvalue) {
 }
 
 //
-// XFormItem class: "dwt_tab_bar"
+// XFormItem class: "dwt_tab_bar" ("tab_bar")
 //
 
 Dwt_TabBar_XFormItem = function() {}
-XFormItemFactory.createItemType("_DWT_TAB_BAR_", "dwt_tab_bar", Dwt_TabBar_XFormItem, Dwt_Adaptor_XFormItem);
+XFormItemFactory.createItemType("_TAB_BAR_", "tab_bar", Dwt_TabBar_XFormItem, Dwt_Adaptor_XFormItem);
 Dwt_TabBar_XFormItem.prototype.colSpan = "*";
 Dwt_TabBar_XFormItem.prototype.labelLocation = _NONE_;
 // NOTE: Overriding the _TAB_BAR_
-XFormItemFactory.registerItemType(_TAB_BAR_, "tab_bar", Dwt_TabBar_XFormItem);
+//XFormItemFactory.registerItemType(_TAB_BAR_, "tab_bar", Dwt_TabBar_XFormItem);
 
 Dwt_TabBar_XFormItem.prototype._value2tabkey;
 Dwt_TabBar_XFormItem.prototype._tabkey2value;
@@ -4904,7 +4845,7 @@ Dwt_TabBar_XFormItem.prototype.constructWidget = function() {
 	var cssClass = this.getCssClass();
 	var btnCssClass = this.getInheritedProperty("buttonCssClass");	
 	
-	var widget = new DwtTabBar(form, cssClass, btnCssClass);
+	var widget = new DwtTabBarFloat(form, cssClass, btnCssClass);
 	this._value2tabkey = {};
 	this._tabkey2value = {};
 	
