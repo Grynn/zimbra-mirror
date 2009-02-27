@@ -2,7 +2,7 @@ POSTFIX_ROOT := $(shell pwd)
 
 ZIMBRA_HOME ?= /opt/zimbra
 POSTFIX_RELEASE ?= 2.5.6
-POSTFIX_PATCH_LEVEL ?= 2z
+POSTFIX_PATCH_LEVEL ?= 3z
 POSTFIX_VERSION ?= $(POSTFIX_RELEASE).$(POSTFIX_PATCH_LEVEL)
 
 P4_ROOT ?= $(shell cd $(POSTFIX_ROOT)/../..; pwd)
@@ -80,6 +80,7 @@ build:
 	cd postfix-$(POSTFIX_VERSION); \
 	patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch; \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
+	patch -g0 -p1 < ../patches/postfix-tls.patch; \
 	$(MAKE) $(MAKEARGS)  makefiles \
 	OPT="-O2" \
 	DEBUG="-g" \
