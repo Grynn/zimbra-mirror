@@ -1,14 +1,14 @@
 
 # for storing mime config
 dn: cn=mime,cn=config,cn=zimbra
-objectclass: organizationalRole
+objectClass: organizationalRole
 cn: mime
 description: for storing MIME configuration
 
 dn: cn=message/rfc822,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: message/rfc822
 cn: message/rfc822
-objectclass: zimbraMimeEntry
+objectClass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
 zimbraMimeHandlerClass: MessageRFC822Handler
 description: Mail Message
@@ -16,7 +16,7 @@ description: Mail Message
 dn: cn=text/html,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: text/html
 cn: text/html
-objectclass: zimbraMimeEntry
+objectClass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
 zimbraMimeHandlerClass: com.zimbra.cs.mime.handler.TextHtmlHandler
 zimbraMimeFileExtension: html
@@ -26,7 +26,7 @@ description: HTML Document
 dn: cn=text/enriched,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: text/enriched
 cn: text/enriched
-objectclass: zimbraMimeEntry
+objectClass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
 zimbraMimeHandlerClass: TextEnrichedHandler
 zimbraMimeFileExtension: txe
@@ -35,7 +35,7 @@ description: Enriched Text Document
 dn: cn=text/plain,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: text/plain
 cn: text/plain
-objectclass: zimbraMimeEntry
+objectClass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
 zimbraMimeHandlerClass: TextPlainHandler
 zimbraMimeFileExtension: text
@@ -45,7 +45,7 @@ description: Plain Text Document
 dn: cn=text/calendar,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: text/calendar
 cn: text/calendar
-objectclass: zimbraMimeEntry
+objectClass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
 zimbraMimeHandlerClass: TextCalendarHandler
 zimbraMimeFileExtension: ics
@@ -55,7 +55,7 @@ description: iCalendar Document
 dn: cn=all,cn=mime,cn=config,cn=zimbra
 zimbraMimeType: all
 cn: all
-objectclass: zimbraMimeEntry
+objectClass: zimbraMimeEntry
 zimbraMimeIndexingEnabled: TRUE
 zimbraMimeHandlerClass: UnknownTypeHandler
 description: All Documents
