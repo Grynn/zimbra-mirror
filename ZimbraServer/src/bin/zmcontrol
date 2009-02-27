@@ -221,7 +221,7 @@ sub doStartup {
 	if ($rrc) {
 		$rc = 1;
 		my $out = `cat $zmcontrolLogfile`;
-		print "FAILED\n";
+		print "Failed.\n";
 		print "$out\n\n";
 		exit (1);
 	}
@@ -240,7 +240,7 @@ sub doStartup {
 	if ($rrc) {
 		$rc = 1;
 		my $out = `cat $zmcontrolLogfile`;
-		print "FAILED\n";
+		print "Failed.\n";
 		print "$out\n\n";
 		exit (1);
 	}
@@ -262,7 +262,7 @@ sub doStartup {
 		if ($rrc) {
 			$rc = 1;
 			my $out = `cat $zmcontrolLogfile`;
-			print "FAILED\n";
+			print "Failed.\n";
 			print "$out\n\n";
 		} else {
 			print "Done.\n";
@@ -293,10 +293,10 @@ sub doShutdown {
 		if ($rrc) {
 			$rc = 1;
 			my $out = `cat $zmcontrolLogfile`;
-			print "FAILED\n";
+			print "Failed.\n";
 			print "$out\n\n";
 		} else {
-			print "Done\n";
+			print "Done.\n";
 		}
 		unlink($zmcontrolLogfile);
 	}
