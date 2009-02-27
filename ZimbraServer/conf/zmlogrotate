@@ -87,8 +87,9 @@
     compress
 }
 
-/opt/zimbra/log/nginx.log {
+/opt/zimbra/log/nginx.log /opt/zimbra/log/nginx.access.log {
     daily
+    sharedscripts
     missingok
     notifempty
     create 0644 zimbra zimbra
