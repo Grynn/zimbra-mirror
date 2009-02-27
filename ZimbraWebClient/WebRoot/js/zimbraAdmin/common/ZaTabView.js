@@ -174,6 +174,19 @@ function(entry) {
 	this.updateTab();
 }
 
+ZaTabView.ObjectModifiers = {} ;
+ZaTabView.prototype.modifyContainedObject = function () {
+     if(ZaTabView.ObjectModifiers[this._iKeyName]) {
+		var methods = ZaTabView.ObjectModifiers[this._iKeyName];
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this);
+			}
+		}
+	}
+}
+
 ZaTabView.prototype.setEnabled = 
 function(enable) {
 	//abstract. This method may be depriicated in near future

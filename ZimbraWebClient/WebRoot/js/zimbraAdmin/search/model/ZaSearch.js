@@ -265,15 +265,16 @@ ZaSearch.prototype.dynSelectSearchAccounts = function (value, event, callback) {
 	}
 }
 
-ZaSearch.prototype.dynSelectSearchGroups = function (value, event, callback) {
+ZaSearch.prototype.dynSelectSearchGroups = function (value, event, callback, extraLdapQuery) {
 	try {
 		var params = new Object();
 		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
 		params.types = [ZaSearch.DLS];
-		params.callback = dataCallback;
+        params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
 		params.query = ZaSearch.getSearchByNameQuery(value);
-		params.controller = ZaApp.getInstance().getCurrentController();
+        if (extraLdapQuery) params.query = "(&" + extraLdapQuery + params.query + ")" ; 
+        params.controller = ZaApp.getInstance().getCurrentController();
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		

@@ -9,6 +9,56 @@ if (ZaAccount) {
     ZaAccount.myXModel.items.push (
         {id:ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
             ref:"attrs/"+ZaAccount.A_zimbraIsAdminAccount}) ;
+
+    //admin roles model item
+      ZaAccount.A2_adminRoles = "adminRoles" ;
+      var adminRolesModelItem = {ref: ZaAccount.A2_adminRoles ,id: ZaAccount.A2_adminRoles,
+                                type: _LIST_, listItem:{type:_EMAIL_ADDRESS_}} ;
+      ZaAccount.myXModel.items.push (adminRolesModelItem) ;
+
+
+    ZaAccount.changeAdminRoles = function (value, event, form) {
+        var oldVal = this.getInstanceValue();
+        if(oldVal == value)
+            return;
+
+        this.setInstanceValue(value);
+
+         //add this value to the  direct member
+        var directMemberOfList = this.getInstance () [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
+        if (ZaUtil.findValueInObjArrByPropertyName(directMemberOfList, value, "name") < 0){
+            directMemberOfList.push ({
+                id: this.getChoices().getChoiceByValue(value).id,
+                name: value
+            }) ;
+       
+            form.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_directMemberList, directMemberOfList) ;
+        }
+    }
+
+    ZaAccount.onAdminRoleRemove = function (index, form) {
+        var list = this.getInstanceValue();
+        if (list == null || typeof(list) == "string" || index >= list.length || index<0) return;
+        list.splice(index, 1);
+    }
+
+
+      
+}
+
+ZaDelegatedAdmin.accountObjectModifer = function () {
+    var directMemberOfList = this._containedObject [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
+    if (! this._containedObject [ZaAccount.A2_adminRoles]) this._containedObject [ZaAccount.A2_adminRoles] = [];
+    
+    for (var i = 0; i < directMemberOfList.length; i ++) {
+    // TODO: enable it when GetAccountMembershipRequest returns isAdminGroup
+                //            if (directMemberOfList[i][ZaDistributionList.A_isAdminGroup] == "TRUE")
+                    this._containedObject [ZaAccount.A2_adminRoles].push (directMemberOfList[i].name) ;
+            }
+}
+
+if (ZaTabView.ObjectModifiers["ZaAccountXFormView"]){
+    ZaTabView.ObjectModifiers["ZaAccountXFormView"].push(ZaDelegatedAdmin.accountObjectModifer) ;
 }
 
 
@@ -28,6 +78,45 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
             },
             trueValue:"TRUE", falseValue:"FALSE"
         };
+       /* Use list may cause thousands of accounts returned issue
+       var adminRolesField = {
+            ref: ZaAccount.A2_adminRoles, type: _DWT_LIST_, width:300, height: 100,
+            cssClass: "DLSource", widgetClass: ZaCheckBoxListView,
+            headerList: ZaCheckBoxListView._getHeaderList (),
+            onSelection:ZaCheckBoxListView.onSelectionListener,
+            forceUpdate: true, preserveSelection:true, hideHeader: false
+         } */
+
+       var adminRoleField = {
+            ref: ".", type: _DYNSELECT_ ,
+//           label: com_zimbra_delegatedadmin.Label_AssignAdminRole, labelLocation:_LEFT_ ,
+//           choices:this.adminRolesChoices,
+//            inputPreProcessor:ZaAccountXFormView.preProcessCOS,
+//            visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsAdminAccount]==\'TRUE\' "],
+//            visibilityChangeEventSources: [ZaAccount.A_zimbraIsAdminAccount] ,
+//            bmolsnr:true,
+            dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAdminGroups,
+            onChange: ZaAccount.changeAdminRoles ,
+            emptyText:com_zimbra_delegatedadmin.searchTermAdminGroup,
+            dataFetcherClass:ZaSearch,editable:true
+       }
+
+       var adminRolesItem = {
+           ref: ZaAccount.A2_adminRoles , type: _REPEAT_,  
+           label: com_zimbra_delegatedadmin.Label_AssignAdminRole, labelLocation:_LEFT_ ,
+           labelCssStyle:"vertical-align: top; padding-top: 3px;",
+           align:_LEFT_,
+           repeatInstance:"",
+           showAddButton:true, showAddOnNextRow:true, addButtonWidth: 50, addButtonLabel:com_zimbra_cert_manager.NAD_Add,
+           showRemoveButton:true , removeButtonWidth: 50, removeButtonLabel:com_zimbra_cert_manager.NAD_Remove,
+           visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsAdminAccount]==\'TRUE\' "],
+           visibilityChangeEventSources: [ZaAccount.A_zimbraIsAdminAccount] ,
+           onRemove:ZaAccount.onAdminRoleRemove,
+           items:[adminRoleField]
+
+       }
+       
+
         var tabs = xFormObject.items[2].items;
         var tmpItems = tabs[0].items;
         var cnt = tmpItems.length;
@@ -38,7 +127,8 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
                for(var j=0;j<cnt2;j++) {
                    if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsSystemAdminAccount) {
                        //add  Admin checkbox
-                       xFormObject.items[2].items[0].items[i].items.splice(j+1,0, adminChkBox);
+                       xFormObject.items[2].items[0].items[i].items.splice(j+1,0, adminChkBox, adminRolesItem);
+                       
                        //add the mutual exclusive action to global admin 
                        tmpGrouperItems[j].elementChanged =
 								function(elementValue,instanceValue, event) {
@@ -56,6 +146,31 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
    }
 
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaDelegatedAdmin.AccountXFormModifier);
+}
+
+
+ZaDelegatedAdmin.accountViewMethod =
+function (entry) {
+    if (entry.attrs[ZaAccount.A_zimbraIsAdminAccount]
+            && entry.attrs[ZaAccount.A_zimbraIsAdminAccount] == "TRUE" ) {
+        this._view._containedObject[ZaAccount.A2_adminRoles] = [] ;
+        //Get the isAdminAccount DLs from the directMemberList
+        var allDirectMemberOfs = this._view._containedObject [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
+        for (var i = 0; i < allDirectMemberOfs.length; i ++) {
+// TODO: enable it when GetAccountMembershipRequest returns isAdminGroup
+            //            if (allDirectMemberOfs[i][ZaDistributionList.A_isAdminGroup] == "TRUE")
+                this._view._containedObject[ZaAccount.A2_adminRoles].push (allDirectMemberOfs[i].name) ;
+        }
+
+        var xform = this._view._localXForm ;
+        var instance  = xform.getInstance ();
+        xform.getModel().setInstanceValue(instance,ZaAccount.A2_adminRoles,
+                 this._view._containedObject[ZaAccount.A2_adminRoles]);
+    }
+}
+
+if (ZaController.setViewMethods["ZaAccountViewController"]) {
+	ZaController.setViewMethods["ZaAccountViewController"].push(ZaDelegatedAdmin.accountViewMethod);
 }
 
 if (ZaDistributionList) {
@@ -126,6 +241,13 @@ if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
 
    ZaTabView.XFormModifiers["ZaDLXFormView"].push(ZaDelegatedAdmin.DLXFormModifier);
 
+}
+
+if (ZaSearch) {
+    ZaSearch.prototype.dynSelectSearchAdminGroups =  function (value, event, callback) {
+        var extraLdapQuery = "(zimbraIsAdminGroup=TRUE)" ;
+        ZaSearch.prototype.dynSelectSearchGroups.call (this, value, event, callback, extraLdapQuery) ;
+    }
 }
 
 

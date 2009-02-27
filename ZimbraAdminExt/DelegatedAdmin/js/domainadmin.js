@@ -102,7 +102,7 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 				var tmpGrouperItems = tmpItems[i].items;
 				var cnt2 = tmpGrouperItems.length;
 				for(var j=0;j<cnt2;j++) {
-					if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsAdminAccount) {
+					if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A2_adminRoles ) {
 						//add domain admin quota field
 					    xFormObject.items[2].items[0].items[i].items.splice(j+1,0, accountDomainAdminMaxQuotaField);
                     	break;

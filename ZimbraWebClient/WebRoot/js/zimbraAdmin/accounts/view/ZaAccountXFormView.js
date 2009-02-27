@@ -46,6 +46,7 @@ ZaAccountXFormView = function(parent) {
 ZaAccountXFormView.prototype = new ZaTabView();
 ZaAccountXFormView.prototype.constructor = ZaAccountXFormView;
 ZaTabView.XFormModifiers["ZaAccountXFormView"] = new Array();
+ZaTabView.ObjectModifiers["ZaAccountXFormView"] = [] ;
 ZaAccountXFormView.prototype.TAB_INDEX=0;
 ZaAccountXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
@@ -205,6 +206,8 @@ function(entry) {
     var domainObj =  ZaDomain.getDomainByName (domainName) ;
     this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
     this._containedObject[ZaAccount.A2_currentAccountType] = entry[ZaAccount.A2_currentAccountType]  ;
+
+    this.modifyContainedObject () ;
 
     this._localXForm.setInstance(this._containedObject);
 	//update the tab
