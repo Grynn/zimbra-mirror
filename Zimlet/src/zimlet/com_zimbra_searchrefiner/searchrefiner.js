@@ -96,16 +96,16 @@ function(result) {
 		com_zimbra_searchrefiner.hide();
 		return;
 	}
-
 	//if we need to do further search with diferent offset go ahead. BUT, if #results is < total expected, start processing(ignore further processing)
 	if (this._totalNumberOfSearchRequests > this._currentRequestNumber && (this._totalMsgArray.length == this._currentRequestNumber * com_zimbra_searchrefiner.limit)) {
-		this._processResult(this._totalMsgArray, true);
+		//this._processResult(this._totalMsgArray, true);
 		setTimeout(AjxCallback.simpleClosure(this.doInternalSearch, this, com_zimbra_searchrefiner.limit, this._currentRequestNumber * com_zimbra_searchrefiner.limit), 1000);
 		return;
 	}
-	//all the searching, now process..
+	//done with searching, now process..
 	this._currentRequestNumber = 0;//reset
 	this._processResult(this._totalMsgArray, false);
+	this._totalMsgArray = [];
 
 };
 
