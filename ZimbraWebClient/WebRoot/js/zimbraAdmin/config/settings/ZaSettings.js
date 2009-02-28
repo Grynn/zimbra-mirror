@@ -93,6 +93,32 @@ ZaSettings.initRights = function () {
 	} catch (ex) {
 		//not implemented yet
 	}	
+	
+	soapDoc = AjxSoapDoc.create("GetAdminConsoleUICompRequest", ZaZimbraAdmin.URN, null);
+	csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;	
+	reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS ;
+	try {
+		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetAdminConsoleUICompResponse;
+		var comps = [];
+		if(!AjxUtil.isEmpty(resp.a)) {
+			if (typeof(resp.a) == "string" ) {
+				comps = [resp.a];
+			} else if(resp.a instanceof Array) {
+				comps = resp.a;
+			}
+		}
+		var cnt = comps.length;
+		for(var i=0;i<cnt;i++) {
+			ZaSettings.ENABLED_UI_COMPONENTS[comps[i]._content] = true;
+		}
+		//ZaZimbraAdmin.currentAdminAccount.initEffectiveRightsFromJS(resp);
+	} catch (ex) {
+		//not implemented yet
+	}	
+	
 }
 ZaSettings.initMethods.push(ZaSettings.initRights);
 
