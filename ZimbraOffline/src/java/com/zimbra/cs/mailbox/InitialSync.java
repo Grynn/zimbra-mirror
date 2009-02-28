@@ -644,13 +644,18 @@ public class InitialSync {
         }
     }
     
+    private static final Version MIN_ZCS_VER_CAL_NO_MIME = new Version(OfflineLC.zdesktop_min_zcs_version_cal_no_mime.value()); //5.0.15
+    
     void syncCalendarItem(int id, int folderId, boolean isAppointment) throws ServiceException {
     	OfflineSyncManager.getInstance().continueOK();
         
     	try {
             Element request = new Element.XMLElement(isAppointment ? MailConstants.GET_APPOINTMENT_REQUEST : MailConstants.GET_TASK_REQUEST);
             request.addAttribute(MailConstants.A_ID, Integer.toString(id));
-            //request.addAttribute(MailConstants.A_CAL_INCLUDE_CONTENT, 1);
+            
+            if (!ombx.getRemoteServerVersion().isAtLeast(MIN_ZCS_VER_CAL_NO_MIME))
+            	request.addAttribute(MailConstants.A_CAL_INCLUDE_CONTENT, 1);
+            
             request.addAttribute(MailConstants.A_SYNC, 1);
             Element response = ombx.sendRequest(request);
             //OfflineLog.offline.debug(response.prettyPrint());
@@ -773,9 +778,9 @@ public class InitialSync {
             } else {
                 boolean noBlob = comp.getAttributeBool(MailConstants.A_CAL_NO_BLOB, false);
                 if (!noBlob) {
-                	Element content = msg.addElement(MailConstants.E_CONTENT);
                     byte[] mimeContent = imLocator.getInviteMime(Integer.parseInt(calId), (int)inv.getAttributeLong(MailConstants.A_ID));
-                    content.setText(new String(mimeContent));
+                    if (mimeContent != null && mimeContent.length > 0)
+                    	msg.addElement(MailConstants.E_CONTENT).setText(new String(mimeContent));
                 } else {
                     // Add plain/html MIME parts for backward compatibility with older server.
                     String desc = null, descHtml = null;

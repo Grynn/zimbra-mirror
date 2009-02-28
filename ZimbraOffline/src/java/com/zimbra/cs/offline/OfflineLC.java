@@ -84,6 +84,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_support_email;
     
     public static final KnownKey zdesktop_min_zcs_version_sync_tgz;
+    public static final KnownKey zdesktop_min_zcs_version_cal_no_mime;
+    
     public static final KnownKey zdesktop_caldav_enabled;
 
     public static final KnownKey zdesktop_gab_base_url;
@@ -294,6 +296,10 @@ public class OfflineLC {
 	    zdesktop_min_zcs_version_sync_tgz = new KnownKey("zdesktop_min_zcs_version_sync_tgz");
 	    zdesktop_min_zcs_version_sync_tgz.setDefault("5.0.11");
 	    zdesktop_min_zcs_version_sync_tgz.setDoc("min zcs server version to support tgz format for sync");
+	    
+	    zdesktop_min_zcs_version_cal_no_mime = new KnownKey("zdesktop_min_zcs_version_cal_no_mime");
+	    zdesktop_min_zcs_version_cal_no_mime.setDefault("5.0.15");
+	    zdesktop_min_zcs_version_cal_no_mime.setDoc("min zcs server version to support fetching mime separately");
 	    
 	    zdesktop_caldav_enabled = new KnownKey("zdesktop_caldav_enabled", "false", "whether to enable caldav sync");
 
