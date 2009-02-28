@@ -150,6 +150,9 @@ function(entry) {
 ZaController.setViewMethods["ZaAccountViewController"].push(ZaAccountViewController.setViewMethod);
 
 ZaAccountViewController.changeActionsStateMethod = function () {
+	if(!this._currentObject)
+		return;
+		
 /*I	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_VIEW_MAIL] || 
 		ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {*/
 			if(!this._currentObject.rights || !this._currentObject.rights[ZaAccount.VIEW_MAIL_RIGHT])	{
