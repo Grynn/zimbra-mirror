@@ -1,101 +1,61 @@
-/*
- * ***** BEGIN LICENSE BLOCK *****
- *
- * Zimbra Collaboration Suite Server
- * Copyright (C) 2007, 2008 Zimbra, Inc.
- *
- * The contents of this file are subject to the Yahoo! Public License
- * Version 1.0 ("License"); you may not use this file except in
- * compliance with the License.  You may obtain a copy of the License at
- * http://www.zimbra.com/license.
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- *
- * ***** END LICENSE BLOCK *****
- */
 package com.zimbra.cs.offline.util.ymail;
 
-import com.yahoo.mail.YmwsPortType;
-import com.yahoo.mail.Ymws;
-import com.yahoo.mail.ComposeMessage;
-import com.yahoo.mail.ComposeAddress;
-import com.yahoo.mail.UserData;
-import com.yahoo.mail.Address;
-import com.yahoo.mail.ComposeMessagePart;
-import com.yahoo.mail.MidRequest;
-import com.yahoo.mail.Message;
-import com.yahoo.mail.ErrorCode;
-import com.zimbra.cs.util.yauth.Auth;
-import com.zimbra.cs.offline.util.Xml;
-import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.common.soap.SoapHttpTransport;
+import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.AdminConstants;
+import com.zimbra.common.soap.SoapFaultException;
+import com.zimbra.common.soap.SoapTransport;
 import com.zimbra.common.util.Log;
+import com.zimbra.common.util.DateUtil;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.util.yauth.Auth;
 
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Binding;
-import javax.xml.ws.Holder;
-import javax.xml.ws.soap.SOAPFaultException;
-import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.handler.Handler;
-import javax.xml.ws.handler.soap.SOAPHandler;
-import javax.xml.ws.handler.soap.SOAPMessageContext;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPFault;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMessage.RecipientType;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.SharedInputStream;
-import javax.mail.internet.ContentType;
 import javax.mail.internet.MimePart;
+import javax.mail.internet.ContentType;
+import javax.mail.internet.InternetAddress;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
-import java.net.URLEncoder;
-import java.io.UnsupportedEncodingException;
+import javax.mail.Address;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
 
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.Header;
+import org.dom4j.Namespace;
+import org.dom4j.QName;
 
-public final class YMailClient {
+public class YMailClient {
     private final Auth auth;
-    private final YmwsPortType stub;
-    private int maxInlineDataSize = MAX_INLINE_DATA_SIZE;
-    private boolean trace;
+    private final SoapHttpTransport transport;
 
-    private static DatatypeFactory dataTypeFactory;
-
-    public static final Log LOG = OfflineLog.ymail;
+    private static final Log LOG = OfflineLog.ymail;
 
     private static final String BASE_URL = "http://mail.yahooapis.com";
     private static final String SOAP_URL = BASE_URL + "/ws/mail/v1.1/soap";
     private static final String UPLOAD_URL = BASE_URL + "/ya/upload";
 
-    // Maximum size of text/* attachment to include inline.
+    // Maximum size of text attachment to include inline.
     private static final int MAX_INLINE_DATA_SIZE = 64*1024;
 
     private static final String ENCODING_BASE64 = "base64";
@@ -106,172 +66,166 @@ public final class YMailClient {
 
     private static final String CONTENT_TYPE_RFC822 = "message/rfc822";
 
+    private static final Namespace NS = Namespace.get("urn:yahoo:ymws");
+    private static final QName GET_USER_DATA = new QName("GetUserData", NS);
+    private static final QName SEND_MESSAGE = new QName("SendMessage", NS);
+
     public YMailClient(Auth auth) {
         this.auth = auth;
-        this.stub = getStub(auth);
+        transport = getTransport(auth);
     }
 
-    public void close() throws IOException {
-        ((Closeable) stub).close();
+    private static SoapHttpTransport getTransport(Auth auth) {
+        SoapHttpTransport transport =
+            new SoapHttpTransport(SOAP_URL + "?" + getQueryString(auth));
+        transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
+        transport.setRequestProtocol(SoapProtocol.Soap11);
+        transport.setResponseProtocol(SoapProtocol.Soap11);
+        transport.setTimeout(OfflineLC.http_connection_timeout.intValue());
+        transport.setRetryCount(1);
+        transport.getCustomHeaders().put("Cookie", auth.getCookie());
+        //transport.setPrettyPrint(true);
+        return transport;
     }
 
-    public void setMaxInlineDataSize(int size) {
-        maxInlineDataSize = size;
-    }
-    
-    public UserData getUserData() throws IOException {
+    private static String getQueryString(Auth auth) {
         try {
-            return stub.getUserData();
-        } catch (Exception e) {
-            failed("GetUserData", e);
-            return null;
+            return "appid=" + URLEncoder.encode(auth.getAppId(), "UTF-8") +
+                "&WSSID=" + URLEncoder.encode(auth.getWSSID(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("URL encoding error", e);
         }
     }
 
-    /**
-     * Sends specified email message via Cascade.
-     *
-     * @param mm the MimeMessage to send
-     * @param saveCopy if true then copy will be saved to Sent folder
-     * @return the message id of the sent message
-     * @throws YMailException if the request could not be created
-     * @throws IOException if an I/O error occurred while sending the request
-     */
+    public void test() throws SoapFaultException, IOException {
+        Element req = new Element.XMLElement(AdminConstants.PING_REQUEST);
+        transport.invokeWithoutSession(req.detach());
+    }
+
+    public void setTrace(boolean enabled) {
+        if (enabled) {
+            transport.setDebugListener(
+                new SoapTransport.DebugListener() {
+                    public void receiveSoapMessage(Element e) {
+                        LOG.debug("Received response:\n%s", e.prettyPrint());
+                    }
+                    public void sendSoapMessage(Element e) {
+                        LOG.debug("Sending request:\n%s", e.prettyPrint());
+                    }
+                });
+        } else {
+            transport.setDebugListener(null);
+        }
+    }
+
+    public void close() {
+        transport.shutdown();
+    }
+
+    public boolean isBizMail(String email) throws ServiceException, IOException {
+        Element req = new Element.XMLElement(GET_USER_DATA);
+        Element res = transport.invokeWithoutSession(req.detach());
+        Element mbs = res.getElement("data").getOptionalElement("otherYahooMboxes");
+        if (mbs != null) {
+            Iterator<Element> it = mbs.elementIterator("yMbox");
+            while (it.hasNext()) {
+                Element mb = it.next();
+                if (mb.getAttribute("email").equalsIgnoreCase(email)) {
+                    return mb.getAttributeBool("isBizmail");
+                }
+            }
+        }
+        return false;
+    }
+
     public String sendMessage(MimeMessage mm, boolean saveCopy) throws IOException {
-        ComposeMessage cm;
+        Element sm = new Element.XMLElement(SEND_MESSAGE);
         try {
-            cm = getComposeMessage(mm);
+            sm.addElement(getComposeMessage(mm));
+            addElement(sm, "savecopy", String.valueOf(saveCopy));
         } catch (MessagingException e) {
             throw new YMailException("Unable to create request", e);
         }
         try {
-            return stub.sendMessage(cm, saveCopy);
+            Element res = transport.invokeWithoutSession(sm);
+            Element mid = res.getOptionalElement("mid");
+            return mid != null ? mid.getText() : null;
         } catch (Exception e) {
             failed("SendMessage", e);
             return null;
         }
     }
 
-    public Message getMessage(String fid, String... mids) throws IOException {
-        List<MidRequest> mrs = new ArrayList<MidRequest>(mids.length);
-        for (String mid : mids) {
-            MidRequest mr = new MidRequest();
-            mr.setMid(mid);
-            mrs.add(mr);
-        }
-        Holder<List<Message>> msgs = new Holder<List<Message>>();
-        Holder<List<ErrorCode>> codes = new Holder<List<ErrorCode>>();
-        try {
-            stub.getMessage(
-                null,       // Long truncateAt
-                fid,        // String fid
-                null,       // List<String> mid
-                mrs,        // List<MidRequest> message
-                null,       // String charsetHint
-                null,       // Holder<BigInteger> total
-                null,       // Holder<FolderData> folder
-                msgs,       // Holder<List<Message>> message0
-                null,       // Holder<List<Header>> header
-                codes);     // Holder<List<ErrorCode>> code
-        } catch (Exception e) {
-            failed("GetMessage", e);
-            return null;
-        }
-        if (codes.value != null) {
-            String err = codes.value.get(0).getCode();
-            throw new YMailException("GetMessage failed: " + err);
-        }
-        if (msgs.value == null || msgs.value.isEmpty()) {
-            return null;
-        }
-        return msgs.value.get(0);
-    }
-
-    private void failed(String name, Exception e) throws IOException {
-        if (e instanceof SOAPFaultException) {
-            YMailException yme = new YMailException(
-                name + " failed: " + e.getMessage(), e);
-            SOAPFault fault = ((SOAPFaultException) e).getFault();
-            if (fault != null) {
-                yme.setError(YMailError.fromSOAPFault(fault));
-            }
-            throw yme;
-        }
-        // Otherwise, assume its a protocol exception
-        IOException ioe = new IOException(name + " could not be sent");
-        ioe.initCause(e);
-        throw ioe;
-    }
-
-    public void setTrace(boolean trace) {
-        this.trace = trace;
-        if (trace) {
-            LOG.debug("SOAP trace enabled");
-            Binding binding = ((BindingProvider) stub).getBinding();
-            List<Handler> handlers = binding.getHandlerChain();
-            handlers.add(new LoggingHandler());
-            binding.setHandlerChain(handlers);
-        }
-    }
-
-    private ComposeMessage getComposeMessage(MimeMessage mm)
+    private Element getComposeMessage(MimeMessage mm)
         throws MessagingException, IOException {
-        ComposeMessage cm = new ComposeMessage();
-        cm.setSubject(mm.getSubject());
-        List<Address> from = getAddresses(mm.getFrom());
-        if (from.isEmpty()) {
+        Element cm = new Element.XMLElement("message");
+        addElement(cm, "subject", mm.getSubject());
+        Address[] from = mm.getFrom();
+        if (from == null || from.length == 0) {
             throw new IllegalArgumentException("Missing 'From' header field");
         }
-        cm.setFrom(from.get(0));
-        List<Address> replyTo = getAddresses(mm.getReplyTo());
-        if (!replyTo.isEmpty()) {
-            cm.setReplyto(replyTo.get(0));
-        }
-        cm.getTo().addAll(getComposeAddresses(mm.getRecipients(RecipientType.TO)));
-        cm.getCc().addAll(getComposeAddresses(mm.getRecipients(RecipientType.CC)));
-        cm.getBcc().addAll(getComposeAddresses(mm.getRecipients(RecipientType.BCC)));
+        cm.addElement(getAddress("from", (InternetAddress) from[0]));
+        addAddresses(cm, "replyto", mm.getReplyTo());
+        addAddresses(cm, "to", mm.getRecipients(MimeMessage.RecipientType.TO));
+        addAddresses(cm, "cc", mm.getRecipients(MimeMessage.RecipientType.CC));
+        addAddresses(cm, "bcc", mm.getRecipients(MimeMessage.RecipientType.BCC));
         Date date = mm.getSentDate();
         if (date == null) {
             date = new Date();
         }
-        cm.setDate(getXmlGregorianCalendar(date));
+        addElement(cm, "date", DateUtil.toISO8601(date));
         String[] mailer = mm.getHeader("X-Mailer");
-        if (mailer != null) {
-            cm.setMailer(mailer[0]);
+        if (mailer != null && mailer.length > 0) {
+            addElement(cm, "mailer", mailer[0]);
         }
-        ComposeMessagePart cmp = new ComposeMessagePart();
-        setAttributes(cmp, mm);
+        Element cmp = new Element.XMLElement("body");
+        addAttributes(cmp, mm);
         Object content = mm.getContent();
         if (content instanceof String) {
-            cmp.setData((String) content);
+            addElement(cmp, "data", (String) content);
         } else if (content instanceof Multipart) {
             addSubparts(cmp, (Multipart) content);
         } else {
             throw new IllegalArgumentException(
                 "Unsupported content type: " + mm.getContentType());
         }
-        cm.setBody(cmp);
+        cm.addElement(cmp);
         return cm;
     }
 
-    private void addSubparts(ComposeMessagePart cmp, Multipart mp)
-        throws MessagingException, IOException {
-        for (int i = 0; i < mp.getCount(); i++) {
-            cmp.getSubparts().add(getSubpart((MimeBodyPart) mp.getBodyPart(i)));
+    private void addAddresses(Element e, String name, Address[] addrs) {
+        if (addrs != null) {
+            for (Address addr : addrs) {
+                e.addElement(getAddress(name, (InternetAddress) addr));
+            }
         }
     }
 
-    private ComposeMessagePart getSubpart(MimeBodyPart mbp)
+    private static Element getAddress(String name, InternetAddress addr) {
+        Element e = new Element.XMLElement(name);
+        addElement(e, "name", addr.getPersonal());
+        addElement(e, "email", addr.getAddress());
+        return e;
+    }
+
+    private void addSubparts(Element cmp, Multipart mp)
         throws MessagingException, IOException {
-        ComposeMessagePart cmp = new ComposeMessagePart();
-        setAttributes(cmp, mbp);
+        for (int i = 0; i < mp.getCount(); i++) {
+            cmp.addElement(getSubpart((MimeBodyPart) mp.getBodyPart(i)));
+        }
+    }
+
+    private Element getSubpart(MimeBodyPart mbp)
+        throws MessagingException, IOException {
+        Element cmp = new Element.XMLElement("subparts");
+        addAttributes(cmp, mbp);
         String type = mbp.getContentType();
         if (isAsciiText(mbp) && !mustAttach(mbp)) {
-            cmp.setData(getContentString(mbp));
+            addElement(cmp, "data", getContentString(mbp));
         } else if (type.startsWith("multipart/")) {
             addSubparts(cmp, (Multipart) mbp.getContent());
         } else {
-            cmp.setAttachment("upload://" + uploadAttachment(mbp));
+            cmp.addAttribute("attachment", "upload://" + uploadAttachment(mbp));
         }
         return cmp;
     }
@@ -279,7 +233,7 @@ public final class YMailClient {
     private boolean mustAttach(MimeBodyPart mbp)
         throws MessagingException, IOException {
         int size = getContentSize(mbp);
-        return size < 0 || size > maxInlineDataSize;
+        return size < 0 || size > MAX_INLINE_DATA_SIZE;
     }
 
     private static boolean isAsciiText(MimeBodyPart mbp)
@@ -290,7 +244,7 @@ public final class YMailClient {
         if (content instanceof String) return true;
         String encoding = mbp.getEncoding();
         return ENCODING_7BIT.equals(encoding) ||
-               ENCODING_QUOTABLE_PRINTABLE.equals(encoding);
+            ENCODING_QUOTABLE_PRINTABLE.equals(encoding);
     }
 
     private static String getContentString(MimeBodyPart mbp)
@@ -312,57 +266,26 @@ public final class YMailClient {
         throws MessagingException, IOException {
         InputStream is = mbp.getRawInputStream();
         return (is instanceof SharedInputStream ||
-                is instanceof ByteArrayInputStream) ? is.available() : -1;
+            is instanceof ByteArrayInputStream) ? is.available() : -1;
     }
-    
-    private static void setAttributes(ComposeMessagePart cmp, MimePart mp)
+
+    private static void addAttributes(Element cmp, MimePart mp)
         throws MessagingException {
         ContentType ct = new ContentType(mp.getContentType());
-        cmp.setType(ct.getPrimaryType());
-        cmp.setSubtype(ct.getSubType());
-        cmp.setCharset(ct.getParameter("charset"));
-        cmp.setEncoding(mp.getEncoding());
-        cmp.setFilename(mp.getFileName());
-        cmp.setContentid(mp.getContentID());
-        cmp.setDisposition(mp.getDisposition());
-    }
-    
-    private static List<Address> getAddresses(javax.mail.Address[] addrs) {
-        if (addrs == null) {
-            return Collections.emptyList();
-        }
-        List<Address> yaddrs = new ArrayList<Address>(addrs.length);
-        for (javax.mail.Address addr : addrs) {
-            yaddrs.add(newAddress((InternetAddress) addr));
-        }
-        return yaddrs;
+        addAttribute(cmp, "type", ct.getPrimaryType());
+        addAttribute(cmp, "subtype", ct.getSubType());
+        addAttribute(cmp, "charset", ct.getParameter("charset"));
+        addAttribute(cmp, "encoding", mp.getEncoding());
+        addAttribute(cmp, "filename", mp.getFileName());
+        addAttribute(cmp, "contentid", mp.getContentID());
+        addAttribute(cmp, "disposition", mp.getDisposition());
     }
 
-    private static List<ComposeAddress> getComposeAddresses(javax.mail.Address[] addrs) {
-        if (addrs == null) {
-            return Collections.emptyList();
+    private static void addAttribute(Element e, String name, String value) {
+        if (value != null) {
+            e.addAttribute(name, value);
         }
-        List<ComposeAddress> caddrs = new ArrayList<ComposeAddress>(addrs.length);
-        for (javax.mail.Address addr : addrs) {
-            caddrs.add(newComposeAddress((InternetAddress) addr));
-        }
-        return caddrs;
     }
-
-    private static Address newAddress(InternetAddress inaddr) {
-        Address addr = new Address();
-        addr.setName(inaddr.getPersonal());
-        addr.setEmail(inaddr.getAddress());
-        return addr;
-    }
-
-    private static ComposeAddress newComposeAddress(InternetAddress inaddr) {
-        ComposeAddress addr = new ComposeAddress();
-        addr.setName(inaddr.getPersonal());
-        addr.setEmail(inaddr.getAddress());
-        return addr;
-    }
-
     public String uploadAttachment(MimeBodyPart mbp) throws IOException {
         File tmpFile = null;
         Part part;
@@ -413,7 +336,7 @@ public final class YMailClient {
             throw new IOException("Upload failed (unknown error)");
         }
         LOG.debug("Uploaded YMail attachment: id = %s, filesize = %s, mimetype = %s",
-                  id, params.get("filesize"), params.get("mimetype"));
+            id, params.get("filesize"), params.get("mimetype"));
         return id;
     }
 
@@ -427,7 +350,7 @@ public final class YMailClient {
         }
         return params;
     }
-    
+
     private static Part getPart(MimeBodyPart mbp)
         throws MessagingException, IOException {
         System.out.printf("getPart: name = %s, type = %s, encoding = %s, disposition = %s\n",
@@ -471,77 +394,44 @@ public final class YMailClient {
         return file;
     }
 
-    private static XMLGregorianCalendar getXmlGregorianCalendar(Date date) {
-        GregorianCalendar gc = new GregorianCalendar();
-        gc.setTime(date);
-        return getDatatypeFactory().newXMLGregorianCalendar(gc);
+
+    private void failed(String name, Exception e) throws IOException {
+        if (e instanceof SoapFaultException) {
+            SoapFaultException sfe = (SoapFaultException) e;
+            Element fault = sfe.getFault();
+            String code = getText(fault, "faultcode");
+            String msg = getText(fault, "faultstring");
+            if (msg == null) {
+                msg = code != null ? code : "Unknown error";
+            }
+            YMailException yme = new YMailException(name + " request failed: " + msg, e);
+            if (code != null) {
+                yme.setError(YMailError.fromFaultCode(code));
+            }
+            throw yme;
+        }
+        // Otherwise, assume its a protocol exception
+        IOException ioe = new IOException(name + " could not be sent");
+        ioe.initCause(e);
+        throw ioe;
     }
 
-    private static synchronized DatatypeFactory getDatatypeFactory() {
-        if (dataTypeFactory == null) {
-            try {
-                dataTypeFactory = DatatypeFactory.newInstance();
-            } catch (DatatypeConfigurationException e) {
-                throw new IllegalStateException("Configuration error", e);
+    private String getText(Element e, String name) {
+        if (e != null) {
+            Element child = e.getOptionalElement(name);
+            if (child != null) {
+                return child.getTextTrim();
             }
         }
-        return dataTypeFactory;
+        return null;
     }
 
-    private static YmwsPortType getStub(Auth auth) {
-        Ymws service = new Ymws();
-        YmwsPortType stub = service.getYmws();
-        Map<String, Object> rc = ((BindingProvider) stub).getRequestContext();
-        String url = SOAP_URL + "?" + getQueryString(auth);
-        //LOG.debug("Endpoint is %s", url);
-        //LOG.debug("Cookie is %s", auth.getCookie());
-        rc.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
-        rc.put(MessageContext.HTTP_REQUEST_HEADERS, getHeaders(auth));
-        return stub;
-    }
-
-    private static String getQueryString(Auth auth) {
-        try {
-            return "appid=" + URLEncoder.encode(auth.getAppId(), "UTF-8") +
-                   "&WSSID=" + URLEncoder.encode(auth.getWSSID(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException("URL encoding error", e);
+    private static Element addElement(Element e, String name, String value) {
+        if (value != null) {
+            Element child = e.addElement(name);
+            child.setText(value);
+            return child;
         }
-    }
-
-    private static Map<String, List<String>> getHeaders(Auth auth) {
-        Map<String, List<String>> headers = new HashMap<String, List<String>>();
-        headers.put("Cookie", Arrays.asList(auth.getCookie()));
-        return headers;
-    }
-
-    private class LoggingHandler implements SOAPHandler<SOAPMessageContext> {
-        public boolean handleMessage(SOAPMessageContext smc) {
-            return logMessage(smc);
-        }
-
-        public boolean handleFault(SOAPMessageContext smc) {
-            return logMessage(smc);
-        }
-
-        public void close(MessageContext mc) {}
-
-        public Set<QName> getHeaders() { return null; }
-
-        private boolean logMessage(SOAPMessageContext smc) {
-            if (trace && LOG.isDebugEnabled()) {
-                boolean request = (Boolean)
-                    smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-                try {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    smc.getMessage().writeTo(baos);
-                    LOG.debug("SOAP %s:\n%s", request ? "request" : "response",
-                              Xml.prettyPrint(baos.toString("utf-8")));
-                } catch (Exception e) {
-                    LOG.debug("Exception in handler", e);
-                }
-            }
-            return true;
-        }
+        return null;
     }
 }

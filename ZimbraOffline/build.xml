@@ -100,50 +100,11 @@
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
 	<property name="jetty.version" value="6.1.5" />
 
-
-	<!-- JAXWS definitions for YMail SOAP API -->
-
-	<property name="jaxws.dir" value="tools/jaxws" />
-	<property name="ymail.wsdl" value="http://mail.yahooapis.com/ws/mail/v1.1/wsdl"/>
-	<property name="jaxb.bindings" value="${config.dir}/jaxb-bindings.xml"/>
-	<property name="ymail.classes.dir" value="${build.dir}/ymail-classes"/>
-	<property name="ymail.jar" value="${jars.dir}/ymail.jar"/>
-
-	<fileset id="jaxws.jars" dir="${jaxws.dir}/lib">
-		<include name="*.jar"/>
-		<exclude name="jaxb-xjc.jar"/>
-		<exclude name="jaxws-tools.jar"/>
-	</fileset>
-
         <fileset id="gdata.jars" dir="${jars.dir}">
                 <include name="gdata-core-*.jar"/>
                 <include name="gdata-client-*.jar"/>
                 <include name="gdata-contacts-*.jar"/>
         </fileset>
-
-	<path id="jaxws.classpath">
-		<pathelement location="${java.home}/../lib/tools.jar"/>
-		<fileset dir="${jaxws.dir}/lib">
-			<include name="*.jar"/>
-		</fileset>
-	</path>
-
-	<taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
-		<classpath refid="jaxws.classpath"/>
-	</taskdef>
-
-	<target name="generate-ymail-client" description="Generate YMail SOAP client jar">
-		<delete dir="${ymail.classes.dir}"/>
-		<mkdir dir="${ymail.classes.dir}"/>
-		<wsimport verbose="true" debug="true" keep="true" extension="true"
-				  wsdl="${ymail.wsdl}"
-				  binding="${jaxb.bindings}"
-				  package="com.yahoo.mail"
-				  destdir="${ymail.classes.dir}"/>
-		<jar destfile="${build.dir}/ymail.jar" basedir="${ymail.classes.dir}"/>
-		<copy todir="${jars.dir}" file="${build.dir}/ymail.jar"/>
-		<delete dir="${ymail.classes.dir}"/>
-	</target>
 
 	<path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
@@ -162,8 +123,7 @@
 		<fileset dir="${server.tools.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<path refid="jaxws.classpath"/>
-	</path>
+        </path>
 
 	<path id="deploy.class.path">
 		<fileset dir="${server.build.dir}/dist/lib/jars">
@@ -218,10 +178,9 @@
 	<target name="offline-war" depends="offline-jar">
 		<unzip src="${server.warfile}" dest="${dist.dir}/jetty/webapps/service" overwrite="true"/>
 		<copy file="${config.dir}/web.xml" todir="${dist.dir}/jetty/webapps/service/WEB-INF" overwrite="true"/>
-		<copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib" overwrite="true">
-			<fileset dir="${build.dir}" includes="${jarfile}"/>
-			<fileset file="${ymail.jar}"/>
-		</copy>
+                <copy todir="${dist.dir}/jetty/webapps/service/WEB-INF/lib" overwrite="true">
+                        <fileset dir="${build.dir}" includes="${jarfile}"/>
+                </copy>
 	</target>
 
 	<target name="offline-zimbra-war">
@@ -418,7 +377,6 @@
 		<copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
 			<fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="sqlite*.jar,mysql*.jar" />
 			<fileset file="${common.jars.dir}/derby.jar"/>
-			<fileset refid="jaxws.jars"/>
 			<fileset refid="gdata.jars"/>
                 </copy>
 		<copy tofile="${dist.dir}/jetty/lib/log4j-1.2.8.jar" file="${common.jars.dir}/log4j-1.2.8.jar" overwrite="true" />

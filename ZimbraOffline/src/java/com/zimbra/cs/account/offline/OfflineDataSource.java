@@ -33,7 +33,6 @@ import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.LocalMailbox;
 import com.zimbra.cs.mailbox.SyncExceptionHandler;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.Message;
 import com.zimbra.cs.offline.OfflineLC;
@@ -41,15 +40,11 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.GMailImport;
 import com.zimbra.cs.offline.YMailImport;
 import com.zimbra.cs.offline.OfflineImport;
-import com.zimbra.cs.offline.util.ymail.YMailClient;
 import com.zimbra.cs.offline.util.OfflineYAuth;
+import com.zimbra.cs.offline.util.ymail.YMailClient;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.datasource.SyncState;
-import com.zimbra.cs.datasource.ImapSync;
 import com.zimbra.cs.mailclient.CommandFailedException;
-import com.yahoo.mail.UserData;
-import com.yahoo.mail.AllOtherYahooMboxes;
-import com.yahoo.mail.YahooMbox;
 
 import javax.mail.Session;
 
@@ -420,16 +415,7 @@ public class OfflineDataSource extends DataSource {
         if (!isYahoo()) return false;
         try {
             YMailClient ymc = new YMailClient(OfflineYAuth.authenticate(this));
-            UserData ud = ymc.getUserData();
-            AllOtherYahooMboxes mbs = ud.getOtherYahooMboxes();
-            if (mbs != null && mbs.getOtherYahooMboxesTotal() > 0) {
-                String email = getEmailAddress();
-                for (YahooMbox mb : mbs.getYMbox()) {
-                    if (email.equalsIgnoreCase(mb.getEmail())) {
-                        return mb.isIsBizmail();
-                    }
-                }
-            }
+            return ymc.isBizMail(getEmailAddress());
         } catch (Exception e) {
             OfflineLog.ymail.warn(
                 "Unable to get UserData for address %s", getEmailAddress());

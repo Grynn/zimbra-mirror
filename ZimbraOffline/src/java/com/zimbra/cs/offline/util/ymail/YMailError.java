@@ -16,7 +16,6 @@
  */
 package com.zimbra.cs.offline.util.ymail;
 
-import javax.xml.soap.SOAPFault;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -87,22 +86,22 @@ public enum YMailError {
         return byName.get(name.toLowerCase());
     }
 
-    public static boolean isRetriable(SOAPFault fault) {
-        YMailError code = fromSOAPFault(fault);
+    public static boolean isRetriable(String faultCode) {
+        YMailError code = fromFaultCode(faultCode);
         return code != null && code.isRetriable();
     }
     
-    public static YMailError fromSOAPFault(SOAPFault fault) {
-        String code = fault.getFaultCode();
-        if (code != null) {
-            int i = code.lastIndexOf(".");
+    public static YMailError fromFaultCode(String faultCode) {
+        if (faultCode != null) {
+            int i = faultCode.lastIndexOf(".");
             if (i != -1) {
-                return fromName(code.substring(i + 1).toLowerCase());
+                return fromName(faultCode.substring(i + 1).toLowerCase());
             }
         }
         return null;
     }
-    
+
+
     public boolean isRetriable() {
         switch (this) {
         case NICKNAME_EXPANSION_FAILED:

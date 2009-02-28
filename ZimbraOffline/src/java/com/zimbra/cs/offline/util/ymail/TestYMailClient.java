@@ -12,6 +12,7 @@ import com.zimbra.cs.util.yauth.FileTokenStore;
 import com.zimbra.cs.util.yauth.Auth;
 import com.zimbra.cs.util.yauth.XYMEAuthenticator;
 import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.mailclient.imap.ImapConnection;
 import com.zimbra.cs.mailclient.imap.ImapConfig;
 import com.zimbra.cs.mailclient.imap.IDInfo;
@@ -20,8 +21,7 @@ import com.zimbra.cs.mailclient.imap.MessageData;
 import com.zimbra.cs.mailclient.imap.Body;
 import com.zimbra.cs.mailclient.imap.BodyStructure;
 import com.zimbra.cs.util.ZimbraApplication;
-import com.zimbra.cs.util.JMSession;
-import com.yahoo.mail.UserData;
+import com.zimbra.common.util.Log;
 
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -49,6 +49,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class TestYMailClient {
+    private static RawAuthManager ram;
     private static YMailClient ymc;
     private static ImapConnection imc;
 
@@ -62,8 +63,6 @@ public class TestYMailClient {
         Logger.getRootLogger().setLevel(Level.INFO);
     }
 
-    private static final Logger LOG = Logger.getLogger(TestYMailClient.class);
-    
     private static final File TOKENS_FILE = new File("/tmp/tokens");
 
     private static final String APPID = OfflineLC.zdesktop_yauth_appid.value();
@@ -85,13 +84,13 @@ public class TestYMailClient {
 
     @BeforeClass
     public static void setUpOnce() throws Exception {
-        LOG.setLevel(Level.DEBUG);
+        OfflineLog.ymail.setLevel(Log.Level.debug);
         // Set up YMail client
         FileTokenStore ts = new FileTokenStore(TOKENS_FILE);
         if (!ts.hasToken(APPID, USER)) {
             ts.newToken(APPID, USER, PASS);
         }
-        RawAuthManager ram = new RawAuthManager(ts);
+        ram = new RawAuthManager(ts);
         Auth auth = ram.authenticate(APPID, USER, PASS);
         ymc = new YMailClient(auth);
         ymc.setTrace(true);
@@ -132,11 +131,16 @@ public class TestYMailClient {
     public void testConnect() throws Exception {
         imc.select("INBOX");
     }
-    
+
+    private static final String BIZ_USER = "jjzhuang@vivazimbra.com";
+    private static final String BIZ_PASS = "test1234";
+
     @Test
     public void testUserData() throws Exception {
-        UserData ud = ymc.getUserData();
-        assertTrue(ud.getUserFeaturePref().isIsPremium());
+        YMailClient ymc = new YMailClient(
+            ram.authenticate(APPID, BIZ_USER, BIZ_PASS));
+        ymc.setTrace(true);
+        assertTrue(ymc.isBizMail(BIZ_USER));
     }
 
     @Test
@@ -289,7 +293,7 @@ public class TestYMailClient {
 
     private MimeMessage getMessage(long uid) throws IOException, MessagingException {
         Body body = getMessageData(uid, "BODY.PEEK[]").getBodySections()[0];
-        return new MimeMessage(JMSession.getSession(), body.getInputStream());
+        return new MimeMessage(null, body.getInputStream());
     }
 
     private BodyStructure getBodyStructure(long uid) throws IOException {
@@ -360,7 +364,7 @@ public class TestYMailClient {
     }
 
     private static void debug(String fmt, Object... args) {
-        LOG.debug(String.format(fmt, args));
+        OfflineLog.ymail.debug(String.format(fmt, args));
     }
 
     public static void main(String... args) throws Exception {
