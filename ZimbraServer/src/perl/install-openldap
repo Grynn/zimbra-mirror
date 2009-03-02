@@ -32,7 +32,7 @@ my %BINARIES = (
                 "cyrus-sasl" => "2.1.22.3z",
                 "heimdal" => "1.2.1",
                 "libtool" => "2.2.6a",
-                "openldap" => "2.4.14.2z",
+                "openldap" => "2.4.15.2z",
                 "openssl" => "0.9.8j",
                 "tcmalloc" => "1.0"
                );
