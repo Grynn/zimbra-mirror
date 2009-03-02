@@ -3,6 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
-	<classpathentry sourcepath="/ThirdParty/dom4j-1.5/src/java" kind="lib" path="/ZimbraCommon/jars/dom4j-1.5.jar"/>
+	<classpathentry sourcepath="/ThirdParty/dom4j-1.6.1/src/java" kind="lib" path="/ZimbraCommon/jars/dom4j-1.6.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
