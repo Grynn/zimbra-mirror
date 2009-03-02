@@ -45,7 +45,6 @@ sub handleThread();
 sub dumpThreads();
 sub usage();
 sub readFile($);
-sub getBlockedThreads($);
 
 if (!defined $filename) {
   usage();
@@ -234,7 +233,7 @@ sub dumpThreads() {
       # continue
     } elsif (defined $filterByState && !(ThreadDumpAnalyzer::getThreadState($threadId) =~ /$filterByState/)) {
       # continue
-    } elsif (defined $waiting && (getBlockedThreads($threadId) < $waiting)) {
+    } elsif (defined $waiting && (ThreadDumpAnalyzer::getBlockedThreads($threadId) < $waiting)) {
       # continue
     } else {
       print formatThread($threadId);

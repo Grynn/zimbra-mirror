@@ -118,13 +118,15 @@ sub getBlockedThreads($) {
     my $threadId = shift;
     my @ret;
     foreach my $lockId ( sort keys %locks ) {
-	if (getLockOwner($lockId) eq $threadId) { # a lock we own
-	    my @blockedThreads = getLockWaiters($lockId);
-	    foreach my $blockedThread (@blockedThreads) {
-		push @ret, $blockedThread;
-		push @ret, getBlockedThreads($blockedThread); #recurse!
-	    }
-	}
+        if (getLockOwner($lockId) eq $threadId) { # a lock we own
+            my @blockedThreads = getLockWaiters($lockId);
+            foreach my $blockedThread (@blockedThreads) {
+                if (!($blockedThread eq $threadId)) { # stop infinite recursion, bug 34090
+                    push @ret, $blockedThread;
+                    push @ret, getBlockedThreads($blockedThread); #recurse!
+                }    
+            }
+        }
     }
     return @ret;
 }
