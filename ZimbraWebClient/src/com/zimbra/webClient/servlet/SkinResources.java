@@ -49,6 +49,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.servlet.ZimbraServlet;
+import com.zimbra.cs.util.Zimbra;
 import com.zimbra.kabuki.util.Colors;
 
 import java.awt.Color;
@@ -1164,8 +1165,9 @@ public class SkinResources
 							}
 						}
 					}
-				}
-                catch (Throwable t) {
+				} catch (OutOfMemoryError e) {
+                Zimbra.halt("out of memory", e);
+                } catch (Throwable t) {
                     ZimbraLog.webclient.debug("ERROR loading subst file: " + file);
                 }
 
