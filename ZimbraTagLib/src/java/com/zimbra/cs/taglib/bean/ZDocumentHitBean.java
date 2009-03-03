@@ -46,7 +46,7 @@ public class ZDocumentHitBean extends ZSearchHitBean {
 	}
 
     public Date getCreatedDate() {
-        return new Date(mHit.getDocument().getCreatedDate());
+        return new Date(mHit.getDocument().getCreatedDate()/1000);
     }
 
     public Date getModifiedDate() {
@@ -54,7 +54,7 @@ public class ZDocumentHitBean extends ZSearchHitBean {
     }
 
     public Date getMetaDataChangedDate() {
-        return new Date(mHit.getDocument().getMetaDataChangedDate());
+        return new Date(mHit.getDocument().getMetaDataChangedDate()/1000);
     }
   
 }
