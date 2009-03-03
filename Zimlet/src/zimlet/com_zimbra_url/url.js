@@ -58,11 +58,11 @@ Com_Zimbra_Url.THUMB_SIZE = 'width="200" height="150"';
 
 Com_Zimbra_Url.prototype.match =
 function(line, startIndex) {
-    for (i = 0; i < Com_Zimbra_Url.REGEXES.length; i++) {
+    for (var i = 0; i < Com_Zimbra_Url.REGEXES.length; i++) {
         
-        re = Com_Zimbra_Url.REGEXES[i];
+        var re = Com_Zimbra_Url.REGEXES[i];
 		re.lastIndex = startIndex;
-		m = re.exec(line);
+		var m = re.exec(line);
         if (!m) {
             continue;
         }
