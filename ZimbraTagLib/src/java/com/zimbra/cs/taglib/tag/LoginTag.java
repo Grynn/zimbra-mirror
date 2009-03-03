@@ -77,7 +77,7 @@ public class LoginTag extends ZimbraSimpleTag {
     public void setRequestedSkin(String skin) { this.mRequestedSkin = skin; }
 
     private String getVirtualHost(HttpServletRequest request) {
-        return HttpUtil.getVirtulaHost(request);
+        return HttpUtil.getVirtualHost(request);
         /*
         String virtualHost = request.getHeader("Host");
         if (virtualHost != null) {

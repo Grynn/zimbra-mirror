@@ -707,7 +707,7 @@ public class SkinResources
 		if(serverName==null || serverName.trim().length() == 0)
 			serverName = getServletConfig().getInitParameter(P_SERVER_NAME);
 		
-		return serverName != null ? serverName.trim() : HttpUtil.getVirtulaHost(req);
+		return serverName != null ? serverName.trim() : HttpUtil.getVirtualHost(req);
 	}
 
     /**

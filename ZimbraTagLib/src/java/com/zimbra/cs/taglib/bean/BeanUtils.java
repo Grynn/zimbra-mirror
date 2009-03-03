@@ -542,7 +542,7 @@ public class BeanUtils {
 
     public static String getServerName(PageContext pc) {
 		String serverName = pc.getRequest().getParameter("customerDomain");
-        return serverName != null ? serverName.trim() : HttpUtil.getVirtulaHost((HttpServletRequest) pc.getRequest());
+        return serverName != null ? serverName.trim() : HttpUtil.getVirtualHost((HttpServletRequest) pc.getRequest());
     }
     
     public static ZTagBean getTag(PageContext pc, String id) throws JspException {
