@@ -2656,6 +2656,26 @@
 
     </tag>
 
+	<tag>
+		<description>Retrieve the favicon set on the domain or local config.</description>
+		<name>getFavIcon</name>
+		<tag-class>com.zimbra.cs.taglib.tag.GetFavIconTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>Variable to place fav icon URL.</description>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Request.</description>
+			<name>request</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>javax.servlet.http.HttpServletRequest</type>
+		</attribute>
+	</tag>
+
         <tag>
         <description>
             Retreive the Domain info data.
