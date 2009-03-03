@@ -163,8 +163,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/dom4j-1.5.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/dom4j-1.5.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/lib/dom4j-1.6.1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/dom4j-1.6.1.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -258,8 +258,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/xercesImpl.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/xercesImpl.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/lib/xercesImpl-2.9.1.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/xercesImpl-2.9.1.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
