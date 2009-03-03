@@ -265,7 +265,7 @@ ZaItem.createMethods["ZaDistributionList"].push(ZaDistributionList.createMethod)
 * Updates ZaDistributionList attributes (SOAP)
 * @param mods set of modified attributes and their new values
 */
-ZaDistributionList.modifyMethod = function(obj) {
+ZaDistributionList.modifyMethod = function(mods, obj) {
 	var soapDoc = AjxSoapDoc.create("ModifyDistributionListRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
 	//transfer the fields from the tmpObj to the _currentObject
@@ -324,7 +324,7 @@ ZaDistributionList.modifyMethod = function(obj) {
 }
 ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.modifyMethod);
 
-ZaDistributionList.addRemoveAliases = function (obj) {
+ZaDistributionList.addRemoveAliases = function (mods, obj) {
 	//add-remove aliases
 	var tmpObjCnt = -1;
 	var currentObjCnt = -1;
@@ -763,7 +763,7 @@ ZaDistributionList.prototype._dedupList = function (vector) {
 	}
 };
 
-ZaDistributionList.addNewMembers = function (obj, dl, finishedCallback) {
+ZaDistributionList.addNewMembers = function (mods, obj, dl, finishedCallback) {
 	var addMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
 	addMemberSoapDoc = AjxSoapDoc.create("AddDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
@@ -785,9 +785,13 @@ ZaDistributionList.addNewMembers = function (obj, dl, finishedCallback) {
 	command.invoke(params);
 };
 ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.addNewMembers);
-ZaItem.createMethods["ZaDistributionList"].push(ZaDistributionList.addNewMembers);
 
-ZaDistributionList.removeDeletedMembers = function (obj, dl, finishedCallback) {
+ZaDistributionList.addNewMembersCreateMethod = function (obj, dl, finishedCallback) {
+    ZaDistributionList.addNewMembers.call (this, null, obj, dl, finishedCallback) ;  
+}
+ZaItem.createMethods["ZaDistributionList"].push(ZaDistributionList.addNewMembersCreateMethod);
+
+ZaDistributionList.removeDeletedMembers = function (mods, obj, dl, finishedCallback) {
 	var removeMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
 	//var member = list.getLast();

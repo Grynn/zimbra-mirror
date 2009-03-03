@@ -34,8 +34,6 @@ ZaAccountMemberOfListView.prototype.toString = function (){
 ZaAccountMemberOfListView.A_name = "name" ;
 //ZaAccountMemberOfListView.A_isgroup = "isgroup" ;
 ZaAccountMemberOfListView.A_via = "via" ;
-//ZaAccountMemberOfListView._addList = [];
-//ZaAccountMemberOfListView._removeList = [];
 ZaAccountMemberOfListView.SEARCH_LIMIT = 25 ;
 
 //modify the ZaAccount and ZaDistributionList model
@@ -326,8 +324,6 @@ function (form, listArr){
 
     memberOf[ZaAccount.A2_directMemberList] = memberOf[ZaAccount.A2_directMemberList].concat(nonDupArr);
     
-    //add the added lists to the _addList
-//	instance._addList = instance._addList.concat(listArr);
 	form.parent.setDirty(true);
     form.getModel().setInstanceValue(instance, ZaAccount.A2_directMemberList, memberOf[ZaAccount.A2_directMemberList]) ;
     form.getModel().setInstanceValue(instance, ZaAccount.A2_nonMemberList, memberOf[ZaAccount.A2_nonMemberList]) ;
@@ -426,6 +422,7 @@ function (mods, tmpObj) {
 	}
 }
 ZaItem.modifyMethods["ZaAccount"].push (ZaAccountMemberOfListView.modifyMemberList) ;
+ZaItem.modifyMethods["ZaDistributionList"].push(ZaAccountMemberOfListView.modifyMemberList);
 
 /*
  * Add the current account/dl to the new groups/dls 

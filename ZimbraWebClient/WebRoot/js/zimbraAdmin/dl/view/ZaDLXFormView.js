@@ -443,10 +443,7 @@ function (entry) {
 	this._containedObject[ZaDistributionList.A2_memNumPages] = 1;
 	this._containedObject[ZaDistributionList.A2_query] = "";
 	//membership related instance variables
-	this._containedObject[ZaAccount.A2_memberOf] = entry[ZaAccount.A2_memberOf];
-	//this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_directMemberList] = [];
-	//this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_indirectMemberList] = [];
-	//this._containedObject[ZaAccount.A2_memberOf][ZaDistributionList.A2_nonMemberList] = [];
+	this._containedObject[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.cloneMemberOf(entry);
 
 	this._containedObject[ZaAccount.A2_directMemberList + "_more"] = entry[ZaAccount.A2_directMemberList + "_more"];
 	this._containedObject[ZaAccount.A2_directMemberList + "_offset"] = entry[ZaAccount.A2_directMemberList + "_offset"];
@@ -457,8 +454,6 @@ function (entry) {
 
 	//dl.isgroup = this.isgroup ;
 	
-	//clone the membership information
-	this._containedObject[ZaAccount.A2_memberOf] = entry[ZaAccount.A2_memberOf];
 	if(entry.rights)
 		this._containedObject.rights = entry.rights;
 
