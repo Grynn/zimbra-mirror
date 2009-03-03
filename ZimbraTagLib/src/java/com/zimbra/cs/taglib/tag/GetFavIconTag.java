@@ -76,7 +76,7 @@ public class GetFavIconTag extends ZimbraSimpleTag {
 //				serverName = getServletConfig().getInitParameter(P_SERVER_NAME);
 //			}
 			if (serverName == null) {
-				serverName = HttpUtil.getVirtulaHost(this.request);
+				serverName = HttpUtil.getVirtualHost(this.request);
 			}
 
 			// get info
