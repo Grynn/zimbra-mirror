@@ -32,12 +32,8 @@ class OfflineConfig extends Config {
         super(attrs, provisioning);
     }
 
-    private static OfflineConfig config;
 
     static synchronized OfflineConfig instantiate(Provisioning provisioning) {
-    	if (config != null)
-    		return config;
-    	
         try {
             Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.CONFIG, OfflineProvisioning.A_offlineDn, "config");
             if (attrs == null) {
@@ -57,8 +53,7 @@ class OfflineConfig extends Config {
             attrs.put(Provisioning.A_zimbraNotebookAccount, "local@host.local");
             attrs.put(Provisioning.A_zimbraMtaMaxMessageSize, OfflineLC.zdesktop_upload_size_limit.value());
             
-            config = new OfflineConfig(attrs, provisioning);
-            return config;
+            return new OfflineConfig(attrs, provisioning);
         } catch (ServiceException e) {
             // throw RuntimeException because we're being called at startup...
             throw new RuntimeException("failure instantiating global Config", e);
