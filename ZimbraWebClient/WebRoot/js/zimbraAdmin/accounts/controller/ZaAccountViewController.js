@@ -303,7 +303,7 @@ function () {
 	}
 	//save changed fields
 	try {	
-		this._currentObject.modify(mods);
+		this._currentObject.modify(mods, tmpObj);
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.ACCT_EXISTS) {
 			this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);

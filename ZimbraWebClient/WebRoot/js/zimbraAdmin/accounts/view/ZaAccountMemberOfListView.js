@@ -34,11 +34,9 @@ ZaAccountMemberOfListView.prototype.toString = function (){
 ZaAccountMemberOfListView.A_name = "name" ;
 //ZaAccountMemberOfListView.A_isgroup = "isgroup" ;
 ZaAccountMemberOfListView.A_via = "via" ;
-ZaAccountMemberOfListView._addList = [];
-ZaAccountMemberOfListView._removeList = [];
+//ZaAccountMemberOfListView._addList = [];
+//ZaAccountMemberOfListView._removeList = [];
 ZaAccountMemberOfListView.SEARCH_LIMIT = 25 ;
-
-
 
 //modify the ZaAccount and ZaDistributionList model
 ZaAccountMemberOfListView.modelItems = [
@@ -160,6 +158,27 @@ function (val, by){
 	return memberOf ;
 }
 
+ZaAccountMemberOfListView.cloneMemberOf = function (src) {
+    var memberOf = {};
+    for (var p in src[ZaAccount.A2_memberOf]) {
+        memberOf [p] = [] ;
+        for (var i = 0; i < src[ZaAccount.A2_memberOf][p].length; i ++) {
+            var v = src[ZaAccount.A2_memberOf][p][i] ;
+            if (v instanceof Object) {
+                var newV = {} ;
+                for (var p2 in v) {
+                    newV [p2] = v[p2] ;
+                }
+                memberOf[p].push (newV) ;
+            } else {
+                memberOf [p].push (v) ;
+            }
+        }
+    }
+
+    return memberOf;
+}
+
 ZaAccountMemberOfListView.removeAllGroups =
 function(event, listId){
 	var form = this.getForm();
@@ -180,7 +199,7 @@ function (form, listArr){
 	var directMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
 	var indirectMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList];	
 	var nonMemberList = instance[ZaAccount.A2_memberOf][ZaAccount.A2_nonMemberList];		
-	//add the removed lists to the _removedList
+
 	var j = -1;	
 	var dlName = null ;
 	var indirectArrFound = null;
@@ -209,16 +228,8 @@ function (form, listArr){
 				continue;
 			}			
 			directMemberList.splice(j, 1);
-
+            form.parent.setDirty(true);
         }
-				
-		j = ZaUtil.findValueInObjArrByPropertyName(ZaAccountMemberOfListView._addList, dlName, ZaAccountMemberOfListView.A_name);
-		if (j >= 0){ //found in _addedList
-			ZaAccountMemberOfListView._addList.splice(j, 1);
-		}else{
-			ZaAccountMemberOfListView._removeList = ZaAccountMemberOfListView._removeList.concat(listArr[i]);
-			form.parent.setDirty(true);
-		}
 	}
 
     form.getModel().setInstanceValue(instance, ZaAccount.A2_directMemberList, directMemberList) ;
@@ -245,12 +256,6 @@ function (form, dialog, directDlName, indirectDlsNameArr){
 		//remove from directMemberList
 		j = ZaUtil.findValueInObjArrByPropertyName(directMemberList, directDlName, ZaAccountMemberOfListView.A_name);
 		if (j >= 0){		
-			m = ZaUtil.findValueInObjArrByPropertyName(ZaAccountMemberOfListView._addList, directDlName, ZaAccountMemberOfListView.A_name);
-			if (m >= 0){ //found in _addedList
-				ZaAccountMemberOfListView._addList.splice(m, 1);
-			}else{
-				ZaAccountMemberOfListView._removeList = ZaAccountMemberOfListView._removeList.concat(directMemberList[j]);
-			}
 			directMemberList.splice(j, 1);
 		}
 		
@@ -322,7 +327,7 @@ function (form, listArr){
     memberOf[ZaAccount.A2_directMemberList] = memberOf[ZaAccount.A2_directMemberList].concat(nonDupArr);
     
     //add the added lists to the _addList
-	ZaAccountMemberOfListView._addList = ZaAccountMemberOfListView._addList.concat(listArr);
+//	instance._addList = instance._addList.concat(listArr);
 	form.parent.setDirty(true);
     form.getModel().setInstanceValue(instance, ZaAccount.A2_directMemberList, memberOf[ZaAccount.A2_directMemberList]) ;
     form.getModel().setInstanceValue(instance, ZaAccount.A2_nonMemberList, memberOf[ZaAccount.A2_nonMemberList]) ;
@@ -375,6 +380,52 @@ function (listItemId){
 	var more = this.getInstance()[listItemId + "_more"] ;
 	return ((more && more > 0) ? true : false) ;		
 };
+
+ZaAccountMemberOfListView.modifyMemberList =
+function (mods, tmpObj) {
+     try {
+        var addList = [];
+        var removeList = [] ;
+
+        var currentDirectMember = this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
+        var newDirectMember = tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
+
+        //Compose the added dl list - any dl from new direct memberOf list, not in the current memberOf list
+        for (var i = 0; i < newDirectMember.length; i ++) {
+            var dlName = newDirectMember[i].name ; //dl in the new direct member
+            var j = ZaUtil.findValueInObjArrByPropertyName(currentDirectMember, dlName, ZaAccountMemberOfListView.A_name);
+            if (j >= 0){
+                //found in the current memberOf List, not need to add
+            }else{   //need to be added
+                addList.push (newDirectMember[i]) ;
+            }
+        }
+
+         //Compose the remove dl list - any dl in the current memberOf list not in the new direct member list, 
+         for (var m = 0; m < currentDirectMember.length; m ++) {
+             var dlName = currentDirectMember[m].name ; //dl in the current direct member
+             var j = ZaUtil.findValueInObjArrByPropertyName(newDirectMember, dlName, ZaAccountMemberOfListView.A_name);
+             if (j >= 0){
+                 //found in the new memberOf List, no need to remove
+             }else{   //need to be removed
+                 removeList.push (currentDirectMember[m]) ;
+             }
+         }
+
+
+        if (addList.length > 0) { //you have new membership to be added.
+            ZaAccountMemberOfListView.addNewGroupsBySoap(this, addList);
+        }
+
+         if (removeList.length >0){//you have membership to be removed
+			ZaAccountMemberOfListView.removeGroupsBySoap(this, removeList);
+		}
+
+    }catch (ex){
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.modifyMemberList: add group failed", null, false);	//try not to halt the account modification
+	}
+}
+ZaItem.modifyMethods["ZaAccount"].push (ZaAccountMemberOfListView.modifyMemberList) ;
 
 /*
  * Add the current account/dl to the new groups/dls 

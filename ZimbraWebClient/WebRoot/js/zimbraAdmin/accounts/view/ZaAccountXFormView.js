@@ -95,9 +95,13 @@ function(entry) {
 	if(entry.id)
 		this._containedObject.id = entry.id;
 	
-	//add the member group
-	this._containedObject[ZaAccount.A2_memberOf] = entry [ZaAccount.A2_memberOf];
-	//add the memberList page information
+	//add the member group, need a deep clone
+//	this._containedObject[ZaAccount.A2_memberOf] = entry [ZaAccount.A2_memberOf];
+//    this._containedObject[ZaAccount.A2_memberOf] = {};
+    this._containedObject[ZaAccount.A2_memberOf] =
+                ZaAccountMemberOfListView.cloneMemberOf(entry);
+    
+    //add the memberList page information
 	this._containedObject[ZaAccount.A2_directMemberList + "_offset"] = entry[ZaAccount.A2_directMemberList + "_offset"];
 	this._containedObject[ZaAccount.A2_directMemberList + "_more"] = entry[ZaAccount.A2_directMemberList + "_more"];
 	this._containedObject[ZaAccount.A2_indirectMemberList + "_offset"] = entry[ZaAccount.A2_indirectMemberList + "_offset"];

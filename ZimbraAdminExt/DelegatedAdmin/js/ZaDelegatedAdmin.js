@@ -37,13 +37,20 @@ if (ZaAccount) {
     }
 
     ZaAccount.onAdminRoleRemove = function (index, form) {
-        var list = this.getInstanceValue();
-        if (list == null || typeof(list) == "string" || index >= list.length || index<0) return;
-        list.splice(index, 1);
+        var value = this.getInstanceValue () [index] ;
+        var path = this.getRefPath();
+		this.getModel().removeRow(this.getInstance(), path, index);
+        this.items[index].clearError();
+
+        //update the memberOf instance value
+        var directMemberOfList = this.getInstance () [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
+        var i = ZaUtil.findValueInObjArrByPropertyName(directMemberOfList, value, "name")  ; 
+        if (i >= 0){
+            directMemberOfList.splice (i, 1) ;
+            form.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_directMemberList, directMemberOfList) ;
+            form.parent.setDirty (true) ;
+        }
     }
-
-
-      
 }
 
 ZaDelegatedAdmin.accountObjectModifer = function () {
@@ -113,7 +120,6 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
            visibilityChangeEventSources: [ZaAccount.A_zimbraIsAdminAccount] ,
            onRemove:ZaAccount.onAdminRoleRemove,
            items:[adminRoleField]
-
        }
        
 

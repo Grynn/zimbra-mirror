@@ -387,14 +387,19 @@ ZaItem.prototype.load = function (by, val, skipRights, expandDefaults) {
 	//Instrumentation code end
 }
 
-ZaItem.prototype.modify = function (mods) {
+/**
+ * this - the current instance should be the old instance
+ * @param mods: modified attributes
+ * @param tmpObj: the new data object of the view
+ */
+ZaItem.prototype.modify = function (mods, tmpObj) {
 	//Instrumentation code start
 	if(ZaItem.modifyMethods[this._iKeyName]) {
 		var methods = ZaItem.modifyMethods[this._iKeyName];
 		var cnt = methods.length;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(methods[i]) == "function") {
-				methods[i].call(this, mods);
+				methods[i].call(this, mods, tmpObj);
 			}
 		}
 	}	

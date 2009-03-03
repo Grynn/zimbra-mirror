@@ -757,13 +757,14 @@ ZaItem.createMethods["ZaAccount"].push(ZaAccount.createMethod);
 ZaAccount.modifyMethod =
 function(mods) {
 	//update the member of first
-	try {
-		if (ZaAccountMemberOfListView._addList.length >0) { //you have new membership to be added.
-			ZaAccountMemberOfListView.addNewGroupsBySoap(this, ZaAccountMemberOfListView._addList);
+    /* They are moved to ZaAccountMemberOfListView.modifyMemberList
+    try {
+		if (this._addList.length >0) { //you have new membership to be added.
+			ZaAccountMemberOfListView.addNewGroupsBySoap(this, this._addList);
 		}	
-		ZaAccountMemberOfListView._addList = []; //reset
+		this._addList = []; //reset
 	}catch (ex){
-		ZaAccountMemberOfListView._addList = []; //reset 
+		this._addList = []; //reset 
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.modifyMethod: add group failed", null, false);	//try not to halt the account modification	
 	}
 	
@@ -776,7 +777,7 @@ function(mods) {
 		ZaAccountMemberOfListView._removeList = []; //reset
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.modifyMethod: remove group failed", null, false);		
 				
-	}
+	} */
 	
 	//update the object
 	var soapDoc = AjxSoapDoc.create("ModifyAccountRequest", ZaZimbraAdmin.URN, null);
