@@ -71,20 +71,13 @@ AjxTemplate.expand = function(name, data, buffer) {
 		}
 	}
 
-    var pkg = name.replace(/#.*$/, "");
-    if (name.match(/^#/) && AjxTemplate._stack.length > 0) {
-        pkg = AjxTemplate._stack[AjxTemplate._stack.length - 1];
-    }
+    var pkg = AjxTemplate.__name2Package(name);
     var id = name.replace(/^[^#]*#?/, "");
     if (id) {
         name = [pkg, id].join("#");
     }
 
-    AjxPackage.require({
-		name: pkg,
-		basePath: AjxTemplate._basePath,
-		extension: AjxTemplate._extension
-	});
+    AjxTemplate.require(pkg);
 
     var hasBuffer = Boolean(buffer);
     buffer = buffer || [];
@@ -108,6 +101,19 @@ AjxTemplate.expand = function(name, data, buffer) {
     return hasBuffer ? buffer.length : buffer.join("");
 };
 
+/**
+ * Force load of template.
+ * @return True or false depending whether the template is defined.
+ */
+AjxTemplate.require = function(name) {
+	AjxPackage.require({
+		name: AjxTemplate.__name2Package(name),
+		basePath: AjxTemplate._basePath,
+		extension: AjxTemplate._extension
+	});
+	return AjxTemplate.getTemplate(name) != null;
+};
+
 // set innerHTML of a DOM element with the results of a template expansion
 // TODO: have some sort of actual error reporting
 AjxTemplate.setContent = function(element, name, data) {
@@ -119,6 +125,13 @@ AjxTemplate.setContent = function(element, name, data) {
 	element.innerHTML = html;
 };
 
+AjxTemplate.__name2Package = function(name) {
+	var pkg = name.replace(/#.*$/, "");
+	if (name.match(/^#/) && AjxTemplate._stack.length > 0) {
+	    pkg = AjxTemplate._stack[AjxTemplate._stack.length - 1];
+	}
+	return pkg;
+};
 
 // temporary API for handling logic errors in templates
 //	may change to more robust solution later
