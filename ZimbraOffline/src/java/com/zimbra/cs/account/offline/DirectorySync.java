@@ -196,7 +196,7 @@ public class DirectorySync {
             ZFilterRules rules = zmbx.getFilterRules(true);
             Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
             rules.toElement(e);
-            RuleManager.setXMLRules(acct, e.getElement(MailConstants.E_RULES));
+            RuleManager.setXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES));
             OfflineLog.offline.debug("dsync: pulled %d filter rules: %s", rules.getRules().size(), acct.getName());
         }
     }

@@ -36,6 +36,9 @@ class OfflineLocalServer extends Server {
         attrs.put(Provisioning.A_cn, "localhost");
         attrs.put(Provisioning.A_zimbraServiceHostname, "localhost");
         attrs.put(Provisioning.A_zimbraSmtpHostname, "localhost");
+        attrs.put(Provisioning.A_zimbraSmtpPort, "25");
+        attrs.put(Provisioning.A_zimbraSmtpTimeout, "60000");        
+        attrs.put(Provisioning.A_zimbraSmtpSendPartial, "false");
         attrs.put(Provisioning.A_zimbraId, UUID.randomUUID().toString());
         attrs.put("zimbraServiceEnabled", "mailbox");
         attrs.put("zimbraServiceInstalled", "mailbox");
