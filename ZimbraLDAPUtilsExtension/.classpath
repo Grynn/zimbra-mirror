@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
-	<classpathentry sourcepath="/ThirdParty/dom4j-1.6.1/src/java" kind="lib" path="/ZimbraCommon/jars/dom4j-1.6.1.jar"/>
+	<classpathentry sourcepath="/ThirdParty/dom4j-1.5.2/src/java" kind="lib" path="/ZimbraCommon/jars/dom4j-1.5.2.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api.jar">
 		<attributes>
 			<attribute value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/" name="javadoc_location"/>
