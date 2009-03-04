@@ -32,6 +32,7 @@ relay     unix  -       -       n       -       -       smtp
 	-o fallback_relay=
 showq     unix  n       -       n       -       -       showq
 error     unix  -       -       n       -       -       error
+retry     unix  -       -       n       -       -       error
 discard   unix  -       -       n       -       -       discard
 local     unix  -       n       n       -       -       local
 virtual   unix  -       n       n       -       -       virtual
