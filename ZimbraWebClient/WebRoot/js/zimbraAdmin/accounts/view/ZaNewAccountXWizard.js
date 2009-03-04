@@ -251,7 +251,7 @@ function() {
 **/
 ZaNewAccountXWizard.prototype.setObject =
 function(entry) {
-	this._containedObject = new Object();
+	this._containedObject = new ZaAccount();
 	this._containedObject.attrs = new Object();
 
 	for (var a in entry.attrs) {
@@ -296,6 +296,7 @@ function(entry) {
 	this._containedObject[ZaAccount.A2_confirmPassword] = null;
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
+	this._containedObject[ZaAccount.A2_errorMessage] = "";
 //	var domainName = ZaApp.getInstance()._appCtxt.getAppController().getOverviewPanelController().getCurrentDomain();
 	var domainName;
 	if(!domainName) {
@@ -375,9 +376,19 @@ function(entry) {
 	}
     //check the account type here
     var domainName = ZaAccount.getDomain (this._containedObject.name) ;
-    var domainObj = ZaDomain.getDomainByName (domainName) ;
-    this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
-   
+    try {
+//   	 	ZaApp.checkMyRight(ZaItem.DOMAIN,"name",domainName,"getDomain",[{n:ZaDomain.A_zimbraDomainCOSMaxAccounts,val:""}]);
+   	 	var domainObj = ZaDomain.getDomainByName(domainName) ;
+    	this._containedObject[ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
+    } catch (ex) {
+    	if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
+    		this._containedObject[ZaAccount.A2_errorMessage] = AjxMessageFormat.format(ZaMsg.CANNOT_CREATE_ACCOUNTS_IN_THIS_DOMAIN,[domainName]);
+    		//ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.CANNOT_CREATE_ACCOUNTS_IN_THIS_DOMAIN,[domainName])	, ex);
+    	} else {	
+    		this._containedObject[ZaAccount.A2_errorMessage] = "";
+	 		throw(ex);
+		}
+    }
     this._localXForm.setInstance(this._containedObject);
 }
 
@@ -451,7 +462,20 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 					containerCssStyle: "width:400px;",
 					style: DwtAlert.WARNING, iconVisible: false
 			 },
-	
+			{type: _DWT_ALERT_, ref: ZaAccount.A2_warningMessage,
+	                visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaAccount.A2_warningMessage]],
+	                visibilityChangeEventSources:[ZaAccount.A2_warningMessage],
+	                bmolsnr:true,
+					containerCssStyle: "width:400px;",
+					style: DwtAlert.WARNING, iconVisible: false
+			 },
+			{type: _DWT_ALERT_, ref: ZaAccount.A2_errorMessage,
+	                visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaAccount.A2_errorMessage]],
+	                visibilityChangeEventSources:[ZaAccount.A2_errorMessage],
+	                bmolsnr:true,
+					containerCssStyle: "width:400px;",
+					style: DwtAlert.CRITICAL, iconVisible: false
+			 },
 	        //account types group
 	        {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_wiz_type_group",
 	                colSpan: "*", numCols: 1, colSizes: ["100%"],
@@ -467,6 +491,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	                    },
 	                    { type: _OUTPUT_, id: ZaNewAccountXWizard.accountTypeItemId,
 	                        getDisplayValue: ZaAccount.getAccountTypeOutput,
+	                        valueChangeEventSources:[ZaAccount.A_name,ZaAccount.A_COSId,ZaAccount.A2_accountTypes,ZaAccount.A2_currentAccountType],
 	                        //center the elements
 	                        cssStyle: "width: 600px; margin-left: auto; margin-right: auto;"
 	                    }
@@ -475,8 +500,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	        {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_wiz_name_group",numCols:2,
 				items:[
 				{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
-								 labelLocation:_LEFT_,forceUpdate:true,
-								 onChange: ZaAccount.setDomainChanged
+					labelLocation:_LEFT_,forceUpdate:true,
+					onChange: ZaAccount.setDomainChanged,visibilityChecks:[],enableDisableChecks:[]
 				},
 				{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
 					labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
@@ -609,17 +634,19 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		case1Items.push(setupGroup);
 		
 		var passwordGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_wiz_password_group", 
-			numCols:2,
+			numCols:2,visibilityChecks:[],
 			items:[
 			{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,
 				label:ZaMsg.NAD_Password, labelLocation:_LEFT_, 
+				visibilityChecks:[],enableDisableChecks:[], 
 				cssClass:"admin_xform_name_input"
 			},
 			{ref:ZaAccount.A2_confirmPassword, type:_SECRET_, msgName:ZaMsg.NAD_ConfirmPassword,
-				label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_, 
+				label:ZaMsg.NAD_ConfirmPassword, labelLocation:_LEFT_,
+				visibilityChecks:[],enableDisableChecks:[],  
 				cssClass:"admin_xform_name_input"
 			},
-			{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,  
+			{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,
 				msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE"}
 			]
 		};

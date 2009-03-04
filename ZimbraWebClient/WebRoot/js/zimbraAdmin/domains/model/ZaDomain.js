@@ -1241,9 +1241,10 @@ function(domName) {
 			} else {
 				throw (ex);
 			}*/
-            if (ZaApp.getInstance() && ZaApp.getInstance().getCurrentController()) {
+            /*if (ZaApp.getInstance() && ZaApp.getInstance().getCurrentController()) {
                 ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.getDomainByName", null, false);
-            }
+            }*/
+            throw (ex);
         }
 
 		ZaDomain.putDomainToCache(domain);

@@ -373,7 +373,7 @@ ZaSettings.ACCOUNTS_REINDEX = "accountsReindex";
 //ZaSettings.ACCOUNTS_VIEW_MAIL = "accountsViewMail";
 ZaSettings.ACCOUNTS_ASSIGN_SERVER = "accountsAssignServer";
 ZaSettings.ACCOUNTS_RESTORE = "accountsRestore"; //this should be in bnr extension
-ZaSettings.ACCOUNTS_CREATE = "accountsCreate"; //this should be in bnr extension
+//ZaSettings.ACCOUNTS_CREATE = "accountsCreate"; //this should be in bnr extension
 
 //Domain view tabs
 ZaSettings.DOMAIN_GENERAL_TAB = "domainGeneralTab";
@@ -401,13 +401,13 @@ ZaSettings.DOMAIN_CHECK_MX_WIZ = "domainCheckMXWiz";
 
 
 //Distribution list operations
-ZaSettings.DL_CREATE_RIGHT = "createDL";
+//ZaSettings.DL_CREATE_RIGHT = "createDL";
 
 //Alias operations
-ZaSettings.ALIAS_CREATE_RIGHT = "createAlias";
+//ZaSettings.ALIAS_CREATE_RIGHT = "createAlias";
 
 //Resources operations
-ZaSettings.RESOURCES_CREATE_RIGHT = "createResource";
+//ZaSettings.RESOURCES_CREATE_RIGHT = "createResource";
 
 ZaSettings.GLOBAL_CONFIG_VIEW="globalConfigView";
 

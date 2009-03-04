@@ -251,10 +251,11 @@ ZaAccount.A2_currentAccountType = "currentAccountType" ; //used to save the curr
 ZaAccount.A2_alias_selection_cache = "alias_selection_cache";
 ZaAccount.A2_fwdAddr_selection_cache = "fwdAddr_selection_cache";
 ZaAccount.A2_fp_selection_cache = "fp_selection_cache"; 
-
+ZaAccount.A2_errorMessage = "errorMessage";
+ZaAccount.A2_warningMessage = "warningMessage";
 //constants for rights
 
-ZaAccount.SET_PASSWORD_RIGHT = "setPassword";
+ZaAccount.SET_PASSWORD_RIGHT = "setAccountPassword";
 ZaAccount.RENAME_ACCOUNT_RIGHT = "renameAccount";
 ZaAccount.REINDEX_MBX_RIGHT = "reindexMailbox";
 ZaAccount.GET_MBX_DUMP_RIGHT = "getMailboxDump";
@@ -1360,6 +1361,8 @@ ZaAccount.myXModel = {
     	{id:"getAttrs",type:_LIST_},
     	{id:"setAttrs",type:_LIST_},
     	{id:"rights",type:_LIST_},
+    	{id:ZaAccount.A2_errorMessage, ref:ZaAccount.A2_errorMessage, type:_STRING_},
+    	{id:ZaAccount.A2_warningMessage, ref:ZaAccount.A2_warningMessage, type:_STRING_},
         {id:ZaAccount.A2_domainLeftAccounts, ref:ZaAccount.A2_domainLeftAccounts, type:_STRING_},
         {id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true},
         {id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
@@ -1619,29 +1622,41 @@ function (value, event, form){
 	//form.parent.setDirty(true);
 	try {
 		var instance = form.getInstance();
+		this.setInstanceValue(value);
 		var p = form.parent ;
         var oldDomainName = this.getOldDomainPart ();
         var newDomainName = ZaAccount.getDomain(value) ;
-        var domainObj =  ZaDomain.getDomainByName(newDomainName) ;
-
+        var domainObj;
+        try {
+        	domainObj =  ZaDomain.getDomainByName(newDomainName) ;
+        } catch (ex) {
+        	if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
+        		//form.getModel().setInstanceValue(form.getInstance(),"getAttrs",[]);
+        		form.getModel().setInstanceValue(form.getInstance(),"setAttrs",[]);
+        		form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_errorMessage,AjxMessageFormat.format(ZaMsg.CANNOT_CREATE_ACCOUNTS_IN_THIS_DOMAIN,[newDomainName]));
+        		//ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.CANNOT_CREATE_ACCOUNTS_IN_THIS_DOMAIN,[newDomainName])	, ex, true);
+        		return;
+        	} else if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
+        		return;
+        	} else {
+        		throw (ex);
+        	}
+        	
+        }
         if ((newDomainName != oldDomainName)
 				//set the right default cos at the account creation time
 				|| (instance [ZaAccount.A_name].indexOf("@") == 0)) 
 		{ //see if the cos needs to be updated accordingly
-			if(!form.getModel().getInstanceValue(instance, ZaAccount.A_COSId)) {
-				try {
-					var myNewCos = ZaCos.getDefaultCos4Account.call(p, value);
-					if(!AjxUtil.isEmpty(myNewCos))
-						instance._defaultValues = myNewCos;
-				} catch (ex) {
-					//catch access denied and ignore or show a warning
-					//throw any other exception
-					ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.setDomainChanged", null, false);	
-				}	
+			try {
+				instance.loadNewObjectDefaults("name", newDomainName);
+			} catch (ex) {
+				if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
+        			return value;
+        		} else {
+        			throw (ex);
+        		}
 			}
-			
-			//instance.attrs[ZaAccount.A_COSId] = instance._defaultValues.id ;
-			//form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A_COSId,instance._defaultValues.id);
+			form.refresh();
 		}
        
                    
@@ -1658,14 +1673,12 @@ function (value, event, form){
                         AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]),
                             null);
                 }else{
-                    //instance[ZaAccount.A2_domainLeftAccounts] = null ;
                     form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,null);
                 }
             }
 
             //update the account type information
-            
-            //instance [ZaAccount.A2_accountTypes] = domainObj.getAccountTypes () ;
+            form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_errorMessage,"");
             form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_accountTypes,domainObj.getAccountTypes ());
             form.parent.updateAccountType();
         }
@@ -1675,7 +1688,6 @@ function (value, event, form){
             //nothing
         }
         
-        this.setInstanceValue(value);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccount.setDomainChanged", null, false);	
 	}

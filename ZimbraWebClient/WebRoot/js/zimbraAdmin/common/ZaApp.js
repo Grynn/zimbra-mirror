@@ -58,6 +58,37 @@ function() {
 	return "ZaApp";
 }
 
+ZaApp.checkMyRight = function(targetType,targetBy,targetVal,right,attrs) {
+	var soapDoc = AjxSoapDoc.create("CheckRightRequest", ZaZimbraAdmin.URN, null);
+	var elGrantee = soapDoc.set("grantee", ZaZimbraAdmin.currentUserId);
+	elGrantee.setAttribute("by","id");
+	var elTarget = soapDoc.set("target", targetVal);
+	elTarget.setAttribute("type", targetType);
+	elTarget.setAttribute("by", targetBy);
+	var elRight = soapDoc.set("right", right);
+	var cnt = attrs.length;
+	if(cnt>0) {
+		var elAttrs = soapDoc.set("attrs","")
+		for(var i=0;i<cnt;i++) {
+			var elA = soapDoc.set("a",attrs[i].val,elAttrs);
+			elA.setAttribute("n", attrs[i].n);
+		}	
+	}
+
+	var csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;	
+	var reqMgrParams = {} ;
+	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS ;
+	try {
+		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.CheckRightResponse;
+		return resp;
+	} catch (ex) {
+		//not implemented yet
+	}
+	
+}
+
 ZaApp.prototype.launch =
 function(appCtxt) {
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {

@@ -42,10 +42,6 @@ ZaController = function(appCtxt, container,iKeyName) {
 	
 	this._authenticating = false;
 
-	this._loginDialog = appCtxt.getLoginDialog();
-
-	this._loginDialog.registerCallback(this.loginCallback, this);
-
     this.initDialogs ();
     
     this.objType = ZaEvent.S_ACCOUNT;
@@ -66,6 +62,10 @@ ZaController.prototype.initDialogs = function (refresh) {
 	    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
     	this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);
 	}
+	this._loginDialog = this._appCtxt.getLoginDialog();
+
+	this._loginDialog.registerCallback(this.loginCallback, this);
+	
 }
 
 /**

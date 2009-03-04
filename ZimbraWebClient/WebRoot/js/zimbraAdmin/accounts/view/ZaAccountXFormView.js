@@ -685,6 +685,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 			domainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
 	} catch (ex) { 
 		domainName = ZaSettings.myDomainName;
+		if(ex.code != ZmCsfeException.SVC_PERM_DENIED) {
+			throw(ex);
+		}		
 	}
 		
 	var emptyAlias = " @" + domainName;
@@ -964,7 +967,6 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				cssClass:"admin_xform_name_input"
 			},
 			{ref:ZaAccount.A_zimbraPasswordMustChange,  type:_CHECKBOX_,
-				visibilityChecks:[],  enableDisableChecks:[],
 				msgName:ZaMsg.NAD_MustChangePwd,label:ZaMsg.NAD_MustChangePwd,trueValue:"TRUE", falseValue:"FALSE"}
 			]
 		};

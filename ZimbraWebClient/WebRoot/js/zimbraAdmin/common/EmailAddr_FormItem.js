@@ -65,9 +65,9 @@ function () {
 
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	try {
-		if(this.getForm().parent._app) {
-			this._domainPart = ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraDefaultDomainName]
-		}
+		
+		this._domainPart = ZaSettings.myDomainName;
+		
 	} catch (ex) {
 		this._domainPart = null;
 	}
