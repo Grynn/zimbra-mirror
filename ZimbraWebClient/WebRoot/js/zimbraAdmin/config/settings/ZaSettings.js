@@ -362,6 +362,12 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_MEMBEROF_TAB, label: Za
 ZaSettings.DL_NOTES_TAB = "dlNotesOfTab";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_NOTES_TAB, label: ZaMsg.UI_Comp_DLNotesTab });
 
+//Resource View Tabs
+ZaSettings.RESOURCE_PROPERTIES_TAB = "resourcePropertiesTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.RESOURCE_PROPERTIES_TAB, label: ZaMsg.UI_Comp_ResourcePropTab });
+ZaSettings.RESOURCE_CONTACT_INFO_TAB = "resourceContactTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.RESOURCE_CONTACT_INFO_TAB, label: ZaMsg.UI_Comp_ResourceContactTab });
+
 //Miscelaneous operations
 ZaSettings.SAVE_SEARCH = "saveSearch";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SAVE_SEARCH, label: ZaMsg.UI_Comp_SaveSearch });
