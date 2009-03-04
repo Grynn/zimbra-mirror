@@ -354,8 +354,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/tnef-1.3.0.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/tnef-1.3.0.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/lib/tnef-1.4.0.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/tnef-1.4.0.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
