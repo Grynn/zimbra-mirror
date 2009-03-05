@@ -43,14 +43,16 @@ AjxEmailAddress.CC			= "CC";
 AjxEmailAddress.BCC			= "BCC";
 AjxEmailAddress.REPLY_TO	= "REPLY_TO";
 AjxEmailAddress.SENDER		= "SENDER";
+AjxEmailAddress.READ_RECEIPT= "READ_RECEIPT";
 
 AjxEmailAddress.TYPE_STRING = {};
-AjxEmailAddress.TYPE_STRING[AjxEmailAddress.FROM]		= "from";
-AjxEmailAddress.TYPE_STRING[AjxEmailAddress.TO]			= "to";
-AjxEmailAddress.TYPE_STRING[AjxEmailAddress.CC]			= "cc";
-AjxEmailAddress.TYPE_STRING[AjxEmailAddress.BCC]		= "bcc";
-AjxEmailAddress.TYPE_STRING[AjxEmailAddress.REPLY_TO]	= "replyTo";
-AjxEmailAddress.TYPE_STRING[AjxEmailAddress.SENDER]		= "sender";
+AjxEmailAddress.TYPE_STRING[AjxEmailAddress.FROM]			= "from";
+AjxEmailAddress.TYPE_STRING[AjxEmailAddress.TO]				= "to";
+AjxEmailAddress.TYPE_STRING[AjxEmailAddress.CC]				= "cc";
+AjxEmailAddress.TYPE_STRING[AjxEmailAddress.BCC]			= "bcc";
+AjxEmailAddress.TYPE_STRING[AjxEmailAddress.REPLY_TO]		= "replyTo";
+AjxEmailAddress.TYPE_STRING[AjxEmailAddress.SENDER]			= "sender";
+AjxEmailAddress.TYPE_STRING[AjxEmailAddress.READ_RECEIPT]	= "readReceipt";
 
 AjxEmailAddress.fromSoapType = {};
 AjxEmailAddress.fromSoapType["f"] = AjxEmailAddress.FROM;
@@ -59,6 +61,7 @@ AjxEmailAddress.fromSoapType["c"] = AjxEmailAddress.CC;
 AjxEmailAddress.fromSoapType["b"] = AjxEmailAddress.BCC;
 AjxEmailAddress.fromSoapType["r"] = AjxEmailAddress.REPLY_TO;
 AjxEmailAddress.fromSoapType["s"] = AjxEmailAddress.SENDER;
+AjxEmailAddress.fromSoapType["n"] = AjxEmailAddress.READ_RECEIPT;
 
 AjxEmailAddress.toSoapType = {};
 AjxEmailAddress.toSoapType[AjxEmailAddress.FROM]		= "f";
@@ -67,6 +70,7 @@ AjxEmailAddress.toSoapType[AjxEmailAddress.CC]			= "c";
 AjxEmailAddress.toSoapType[AjxEmailAddress.BCC]			= "b";
 AjxEmailAddress.toSoapType[AjxEmailAddress.REPLY_TO]	= "r";
 AjxEmailAddress.toSoapType[AjxEmailAddress.SENDER]		= "s";
+AjxEmailAddress.toSoapType[AjxEmailAddress.READ_RECEIPT]= "n";
 
 AjxEmailAddress.SEPARATOR = "; ";				// used to join addresses
 AjxEmailAddress.DELIMS = [';', ',', '\n', ' '];	// recognized as address delimiters
