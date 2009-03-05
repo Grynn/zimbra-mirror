@@ -28,7 +28,6 @@ ZaDistributionList = function(id, name, memberList, description, notes) {
 	this.type = ZaItem.DL;
 	this.name = (name != null) ? name: null;
 	this._selfMember = new ZaDistributionListMember(this.name);
-	//this[ZaDistributionList.A2_memberList] = (memberList != null) ? AjxVector.fromArray(memberList): new AjxVector();
 	if (description != null) this.attrs.description = description;
 	if (notes != null) this.attrs.zimbraNotes = notes;
 	this[ZaDistributionList.A2_numMembers] = 0;
@@ -50,7 +49,6 @@ ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
 ZaDistributionList.ID = "ZDLID";
 ZaDistributionList.MEMBER_QUERY_LIMIT = 25;
-//ZaDistributionList.A_isgroup = "isgroup";
 ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
 ZaDistributionList.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
@@ -115,23 +113,6 @@ ZaDistributionList.prototype.removeMembers = function (arr) {
 	}
 	return removed;
 };
-
-/*
-ZaDistributionList.prototype.refresh = function () {
-	this.load();
-}   */
-
-/**
- * Remove duplicates from the members list
- */
-ZaDistributionList.prototype.dedupMembers = function () {
-	this._dedupList(this._memberList);
-};
-
-/*
-ZaDistributionList.prototype.remove = function () {
-	return this._remove(this.id);
-};*/
 
 ZaDistributionList.prototype.remove = 
 function(callback) {
@@ -686,83 +667,6 @@ ZaDistributionList.prototype.getMembers = function (by, val, limit) {
 
 ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getMembers) ;
 
-// ==============================================================
-// private internal methods
-// ==============================================================
-
-
-
-ZaDistributionList.prototype._addArrayToList = function (newArray, vector, preAddCallback) {
-	var add = true;
-	var cnt = newArray.length;
-	for (var i = 0; i < cnt; i++) {
-		if(!newArray[i])
-			continue;
-			
-		if (newArray[i].toString() != this._selfMember.toString()) {
-			add = true;
-			if (preAddCallback != null){
-				add = preAddCallback(newArray[i]);
-			}
-			if (add) vector.add(newArray[i]);
-		}
-	}
-	return (newArray.length > 0)? true: false;
-};
-
-ZaDistributionList.prototype._addVectorToList = function (newVector, vector) {
-	var i = -1;
-	var added = false;
-	if ( (i = newVector.binarySearch(this._selfMember)) != -1) {
-		if (i > 0){
-			vector.merge(vector.size(),newVector.slice(0,i));
-		}
-		if (i+1 < newVector.length) {
-			vector.merge(vector.size(),newVector.slice(i+1));
-		}
-	} else {
-		vector.merge(vector.size(),newVector);
-	}
-	return (vector.size() > 0)? true: false;
-};
-
-/**
-* removes members of @param newArray from @param vector
-* @param newArray - contains members to remove 
-* @param vector  - List to remove from
-* @return boolean (true if at least one member was removed)
-**/
-ZaDistributionList.prototype._removeArrayFromList = function (newArray, vector) {
-	var vecArray = vector.getArray(); //get direct reference to underlying array
-	var ret = false;
-	for (var i = 0; i < newArray.length ; ++i) {
-		for (var j = 0; j < vecArray.length; ++j) {
-			if (vecArray[j].toString() == newArray[i].toString()) {
-				vecArray.splice(j,1);
-				ret = true;
-			}
-		}
-	}
-	return ret;
-};
-
-ZaDistributionList.prototype._dedupList = function (vector) {
-	vector.sort();
-	var arr = vector.getArray();
-	var len = arr.length;
-	var i;
-	var prev = null;
-	var curr = null;
-	for (i = len; i >= 0; --i) {
-		curr = arr[i];
-		if((curr!=null) && (prev!=null) && curr.toString() == prev.toString()) {
-			arr.splice(i,1);
-		} else {
-			prev = curr;
-		}
-	}
-};
-
 ZaDistributionList.addNewMembers = function (mods, obj, dl, finishedCallback) {
 	var addMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
@@ -817,45 +721,6 @@ ZaDistributionList.removeDeletedMembers = function (mods, obj, dl, finishedCallb
 ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.removeDeletedMembers);
 
 
-ZaDistributionList.prototype.initFromDom = function(node) {
-	this.name = node.getAttribute("name");
-	this._selfMember = new ZaDistributionListMember(this.name);
-	this.id = node.getAttribute("id");
-	this.attrs = new Object();
-
-	var children = node.childNodes;
-	for (var i=0; i< children.length;  i++) {
-		var child = children[i];
-		if (child.nodeName == 'a'){
-			var name = child.getAttribute("n");
-			if (child.firstChild != null) {
-				var value = child.firstChild.nodeValue;
-				if (name in this.attrs) {
-					var vc = this.attrs[name];
-					if ((typeof vc) == "object") {
-						vc.push(value);
-					} else {
-						this.attrs[name] = [vc, value];
-					}
-				} else {
-					this.attrs[name] = value;
-				}
-			}
-		} else if (child.nodeName == 'member') {
-			if (this._memberList == null) this._memberList = new AjxVector();
-			this._memberList.add(child.getAttribute('name'));
-		}
-	}
-	if (this._memberList != null){
-		this._origList = new AjxVector();
- 		for (var i = 0 ; i < this._memberList.length; ++i) {
- 			this._origList.add(this._memberList[i]);
- 		}
-		this._memberList.sort();
-		this._origList.sort();
-	}
-};
-
 ZaDistributionList.prototype.initFromJS = 
 function (dl) {
 	if(!dl)
@@ -885,18 +750,6 @@ function (dl) {
 	}
 	
 }
-
-ZaDistributionList.prototype.removeAllMembers = function () {
-	var arr = this._memberList.getArray();
-	this.setMembers();
-	this._removeFromList(arr, this._addList);
-	this._addToList(arr, this._removeList);
-};
-
-ZaDistributionList.prototype.setMembers = function (list) {
-	if (list == null) list = [];
-	return this._memberList = AjxVector.fromArray(list);
-};
 
 ZaDistributionList.compareTwoMembers = function (val1, val2) {
 	var a = AjxUtil.isEmpty(val1);
@@ -975,9 +828,7 @@ ZaDistributionList.myXModel = {
 					   }
 			}
 		},
-		//{id:ZaDistributionList.A2_members, type:_LIST_, getter: "getMembersArray", getterScope:_MODEL_, setter: "setMembersArray", setterScope:_MODEL_},
 		{id:ZaDistributionList.A2_members, type:_LIST_},
-//		{id:ZaAccount.A_description,ref:"attrs/"+ZaAccount.A_description, type:_STRING_},
 		ZaItem.descriptionModelItem,
         {id:ZaAccount.A_zimbraHideInGal, type:_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraHideInGal, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaAccount.A_notes, ref:"attrs/"+ZaAccount.A_notes, type:_STRING_},

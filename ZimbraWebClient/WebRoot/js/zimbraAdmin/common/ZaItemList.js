@@ -135,15 +135,6 @@ function() {
 		this._idHash[id] = null;
 	this._idHash = new Object();
 }
-/*
-Sorting is done on the server
-ZaItemList.prototype.sortByName =
-function(descending) {
-	if (descending)
-		this._vector.getArray().sort(ZaItem.compareNamesDesc);
-	else 
-		this._vector.getArray().sort(ZaItem.compareNamesAsc);	
-}*/
 
 /**
 * Populates the list with elements created from the response to a SOAP command. Each

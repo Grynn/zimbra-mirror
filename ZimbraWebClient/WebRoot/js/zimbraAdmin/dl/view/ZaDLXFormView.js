@@ -238,11 +238,6 @@ ZaDLXFormView.shouldEnableMemberListButtons = function() {
 **/
 ZaDLXFormView.shouldEnableRemoveAllButton = function() {
 	return (!AjxUtil.isEmpty(this.getInstanceValue(ZaDistributionList.A2_members)));
-	/*var list = this.getForm().getItemsById(ZaDistributionList.A2_members)[0].widget.getList();
-	if (list != null) {
-		return ( list.size() > 0);
-	}
-	return false;*/
 };
 
 /**
@@ -346,9 +341,6 @@ ZaDLXFormView.addAddressesToMembers = function (event) {
 **/
 ZaDLXFormView.addAllAddressesToMembers = function (event) {
 	var form = this.getForm();
-//	var pool = form.get("memberPool");
-//	ZaDLXFormView.addListToMemberList.call(form, pool);
-
 	var tmpAddArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList),
 		form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberPool),ZaDistributionList.compareTwoMembers);
 	
@@ -674,11 +666,6 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
                                 cssClass:"admin_xform_name_input", align: _LEFT_
 						    },
                             ZaItem.descriptionXFormItem,
-                            /*
-                            {ref:ZaAccount.A_description, type:_TEXTFIELD_, label: ZaMsg.DLXV_LabelDescription+":",msgName: ZaMsg.DLXV_LabelDescription, width:"100%",
-						    	visibilityChecks:[],
-                                cssClass:"admin_xform_name_input"
-						    }, */
 							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
 								visibilityChecks:[],
                                 label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,
