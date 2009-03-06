@@ -1039,7 +1039,21 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 				
 		var case5 = {type:_ZATABCASE_, numCols:1, colSpan:"*", caseKey:_tab5, colSizes: ["100%"],
 		items:[
-			{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"100%", label:ZaMsg.PQV_Messages,  
+			{type:_SPACER_, height:"5"},
+			{type: _GROUP_, width: "98%", id: "dl_shares_options_grp", numCols: 2, colSizes:["275px","*"],
+				items: [
+					{ref:ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers, type:_CHECKBOX_,
+					  msgName:ZaMsg.DL_zimbraDistributionListSendShareMessageToNewMembers,
+					  label:ZaMsg.DL_zimbraDistributionListSendShareMessageToNewMembers, trueValue:"TRUE", falseValue:"FALSE"
+					},
+					{ref:ZaDistributionList.A_zimbraDistributionListSendShareMessageFromAddress, type:_TEXTFIELD_,width:250,
+						msgName:ZaMsg.DL_zimbraDistributionListSendShareMessageFromAddress,label:ZaMsg.DL_zimbraDistributionListSendShareMessageFromAddress, labelLocation:_LEFT_, align:_LEFT_
+					}
+				]
+			},
+			
+			{type:_SPACER_, height:"5"},  
+			{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"98%", label:ZaMsg.PQV_Messages,  
 			items: [
 		    	{ref:ZaDistributionList.A2_publishedShares, 
 		    		type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",

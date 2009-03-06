@@ -53,6 +53,8 @@ ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
 ZaDistributionList.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
 ZaDistributionList.A_mailStatus = "zimbraMailStatus";
+ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers = "zimbraDistributionListSendShareMessageToNewMembers";
+ZaDistributionList.A_zimbraDistributionListSendShareMessageFromAddress = "zimbraDistributionListSendShareMessageFromAddress";
 ZaDistributionList.A2_publishedShares = "publishedShares";
 ZaDistributionList.A2_members = "members";
 ZaDistributionList.A2_memberList = "memberList";
@@ -874,7 +876,8 @@ ZaDistributionList.myXModel = {
 		{id:(ZaAccount.A2_nonMemberList + "_more"), type:_LIST_},
 		{id:(ZaAccount.A2_nonMemberList + "_offset"), type:_LIST_},
 		{id:ZaDistributionList.A2_alias_selection_cache, type:_LIST_},
-		{id:ZaDistributionList.A2_publishedShares, type:_LIST_}	
-		
+		{id:ZaDistributionList.A2_publishedShares, type:_LIST_},
+		{id:ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers, ref:"attrs/"+ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},	
+		{id:ZaDistributionList.A_zimbraDistributionListSendShareMessageFromAddress, ref:"attrs/"+ZaDistributionList.A_zimbraDistributionListSendShareMessageFromAddress, type:_STRING_}
 	]
 };
