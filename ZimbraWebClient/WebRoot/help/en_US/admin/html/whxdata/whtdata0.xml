@@ -20,8 +20,14 @@
   <item name="IMAP and POP Proxy Server" url="managing_global_settings/imap_and_pop_proxy_server.htm" />
   <item name="Anti-Virus Protection" url="managing_global_settings/anti-virus_configuration_options.htm" />
   <item name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
-  <item name="Customizing UI Themes" url="ui_themes/customizing_ui_themes.htm" />
+  <item name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
   <item name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
+  <item name="Making Free/Busy View Available" url="managing_global_settings/making_free_busy_view__available_.htm" />
+</book>
+<book name="Searching" >
+  <item name="Using Search" url="managing_accounts/search.htm" />
+  <item name="Help Search" url="delegated_admin/help_search.htm" />
+  <item name="Advanced Search" url="managing_accounts/advanced_search.htm" />
 </book>
 <book name="Managing Domains" >
   <item name="Managing Domains" url="managing_domains/managing_domains.htm" />
@@ -48,14 +54,17 @@
   <item name="Override COS Settings" url="cos/override_cos_settings.htm" />
 </book>
 <book name="Managing Accounts" >
+  <item name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
   <item name="Managing Addresses" url="managing_accounts/provisioning_accounts.htm" />
   <item name="Re-Indexing a Mailbox" url="managing_accounts/re-indexing_a_mailbox.htm" />
-  <item name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
   <item name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
   <item name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
+  <item name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
   <book name="Accounts" >
     <item name="ZCS Communication Features" url="managing_accounts/zcs__communication_features.htm" />
     <item name="Provisioning Account" url="managing_accounts/create_an_account.htm" />
+    <item name="Bulk Provisioning" url="managing_accounts/bulk_provisioning.htm" />
+    <item name="How to Provision Multiple Accounts" url="managing_accounts/how_to_provision_multiple_accounts.htm" />
     <item name="Editing Accounts" url="managing_accounts/editing_accounts.htm" />
     <item name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
     <item name="Renaming an Account" url="managing_accounts/renaming_an_account.htm" />
@@ -86,10 +95,6 @@
     <item name="Autocomplete on GAL" url="managing_domains/autocomplete_on_gal.htm" />
     <item name="About Session Idle Timeout and Auth Token Lifetime" url="managing_servers/session_timeout.htm" />
   </book>
-  <book name="Searching" >
-    <item name="Using Search" url="managing_accounts/search.htm" />
-    <item name="Advanced Search" url="managing_accounts/advanced_search.htm" />
-  </book>
 </book>
 <book name="Managing Resources" >
   <item name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
@@ -118,14 +123,20 @@
   <item name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
   <item name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
 </book>
+<book name="Working with Themes" >
+  <item name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
+  <item name="Quick Custom Color" url="ui_themes/how_to_customize_theme_colors_and_logos.htm" />
+  <item name="How to customize themes from admin console" url="ui_themes/how_to_customize_themes_and_logos.htm" />
+  <item name="Restricting User Interface Theme Choice" url="ui_themes/restricting_user_interface_theme_choice.htm" />
+  <item name="Making UI Themes available by COS" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
+  <item name="Making UI Themes Available by Account" url="ui_themes/making_ui_themes_available_by_account.htm" />
+</book>
 <book name="Migration Wizards" >
   <item name="Zimbra Migration Wizard for Exchange" url="migration_wizard/mw_using_the_migration_wizard.htm" />
   <item name="Zimbra Migration Wizard for Lotus Domino" url="migration_wizard/zimbra_migration_wizard_for_lotus_domino.htm" />
 </book>
 <book name="Using the Admin Console" >
-  <item name="Enhancing the Zimbra Admin Console User Interface" url="admin_console_misc/enhancing_the_zimbra_admin_console_user_interface.htm" />
-  <item name="Removing Admin Extension Modules" url="admin_console_misc/removing_admin_extension_modules.htm" />
-  <item name="Using Search" url="managing_accounts/search.htm" />
+<chunk name="Using the Admin Console" ref="whtdata1.xml" />
 </book>
 
 </tocdata>

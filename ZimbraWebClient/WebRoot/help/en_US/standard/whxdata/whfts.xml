@@ -1,12 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="consum"/>
-<chunkinfo url="whfwdata1.xml" first="contact" last="icalendar"/>
-<chunkinfo url="whfwdata2.xml" first="icon" last="pattern"/>
-<chunkinfo url="whfwdata3.xml" first="pdf" last="suit"/>
-<chunkinfo url="whfwdata4.xml" first="supervisor" last="ó"/>
+<chunkinfo url="whfwdata0.xml" first="!" last="copy"/>
+<chunkinfo url="whfwdata1.xml" first="copyright" last="incom"/>
+<chunkinfo url="whfwdata2.xml" first="increas" last="pres"/>
+<chunkinfo url="whfwdata3.xml" first="presenc" last="turnaround"/>
+<chunkinfo url="whfwdata4.xml" first="two" last="|"/>
 
-<tchunkinfo first="0" last="73" url="whftdata0.xml" />
+<tchunkinfo first="0" last="63" url="whftdata0.xml" />
 
 </fts>

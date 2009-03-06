@@ -19,10 +19,6 @@
 <key name="address completion in mail" >
   <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
-<key name="Attachment Blocking" >
-  <topic name="Attachment Blocking" url="reading_mail/attachment_blocking.htm" />
-  <topic name="Message blocking feature" url="reading_mail/Message_blocking_feature.htm" />
-</key>
 <key name="Attachment File Types Supported" >
   <topic name="Attachment File Types Supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
@@ -31,9 +27,6 @@
 </key>
 <key name="auto-complete addresses" >
   <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="blocking attachments" >
-  <topic name="Attachment Blocking" url="reading_mail/attachment_blocking.htm" />
 </key>
 <key name="calendar, exclude from free/busy" >
   <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
@@ -61,9 +54,6 @@
 <key name="Email Message" >
   <topic name="Parts of an Email Message" url="Creating_Messages/parts_of_an_email_message.htm" />
 </key>
-<key name="Empty Trash" >
-  <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
 <key name="Filter Conditions" >
   <topic name="Filter Conditions and Actions Supported" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
@@ -75,7 +65,6 @@
 </key>
 <key name="folders" >
   <topic name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <topic name="About folders" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
 <key name="fonts" >
   <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -92,9 +81,6 @@
 <key name="free/busy, exclude calendar" >
   <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
-<key name="full mailbox" >
-  <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
 <key name="group contacts, adding" >
   <topic name="Adding new contacts" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
@@ -106,12 +92,6 @@
 </key>
 <key name="logging off" >
   <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="mail" >
-  <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
-  <key name="Reading" >
-    <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
-  </key>
 </key>
 <key name="mail notification" >
   <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
@@ -140,10 +120,6 @@
 <key name="options, new mail notification" >
   <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
 </key>
-<key name="password" >
-  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
-</key>
 <key name="planning a meeting" >
   <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
@@ -155,9 +131,6 @@
 </key>
 <key name="Query language description" >
   <topic name="Query language description" url="Search/query_language_description.htm" />
-</key>
-<key name="Quotas" >
-  <topic name="Quotas" url="Navigation_folders_and_tips/quotas.htm" />
 </key>
 <key name="Recovering" >
   <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
@@ -180,6 +153,9 @@
 <key name="RSS feed" >
   <topic name="Subscribe to RSS/ATOM feed " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
+<key name="save search" >
+  <topic name="Create and Save a Search Query" url="Search/b_Create_and_Save_a_Search_Query.htm" />
+</key>
 <key name="scheduling a meeting" >
   <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
@@ -191,12 +167,6 @@
 </key>
 <key name="search, saving" >
   <topic name="Using Search" url="Search/b_Using_Search.htm" />
-</key>
-<key name="Sent folder" >
-  <topic name="Sent folder" url="Navigation_folders_and_tips/sent_folder.htm" />
-</key>
-<key name="session expires" >
-  <topic name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
 </key>
 <key name="setting a forwarding address" >
   <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />

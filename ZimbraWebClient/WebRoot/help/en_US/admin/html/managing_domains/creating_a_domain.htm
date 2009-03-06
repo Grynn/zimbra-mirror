@@ -1,4 +1,4 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
 <head>
@@ -14,18 +14,16 @@ if (navigator.appName !="Netscape")
 <style type="text/css">
 <!--
 ol.whs1 { list-style:decimal; }
-ul.whs2 { list-style:decimal; }
+ul.whs2 { list-style:disc; }
 p.whs3 { margin-left:40px; }
-ol.whs4 { list-style:lower-alpha; }
-ul.whs5 { list-style:disc; }
-p.whs6 { margin-left:0px; }
+p.whs4 { margin-left:0px; }
 -->
 </style><script type="text/javascript" language="JavaScript">
 <!--
 if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
 {
   var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs6 {margin-left:1pt; }";
+  strNSS += "p.whs4 {margin-left:1pt; }";
   strNSS +="</style>";
   document.write(strNSS);
 }
@@ -112,35 +110,65 @@ if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( t
  New Domain wizard walks you through the steps to add the new domain. </p>
 <ol type="1" class="whs1">
 	<li class=p><p>On the <span style="font-weight: bold;"><B>General Information</B></span> 
- dialog, enter the complete domain name, description, the default Class 
- of Service (COS) for the domain, and notes you want to add about the domain. 
- You can also set the maximum number of accounts that can be configured 
- for this domain. &nbsp;Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
-	<ul type="1" class="whs2">
-		<li class=p-note><p class=note>If you do not enter a specific COS, 
- the default COS is used.</p></li>
+ dialog, enter the following domain information.</p></li>
+	<ul type="disc" class="whs2">
+		<li class=p><p><span style="font-weight: bold;"><B>Domain name</B></span>. 
+ Enter the full name of the domain (domainexample.com)</p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Public service 
+ host name</B></span>. Enter the host name of the REST URL. This is the URL 
+ that is used when sharing Documents Notebooks, email folders and Briefcase 
+ folders as well as sharing Task lists, Address Books, and Calendars. See 
+ Setting up a Public Service Host Name in the Managing ZCS Configurations 
+ chapter in the ZCS Administrator's Guide.</p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Inbound SMTP host 
+ name</B></span>. If your MX records point to a spam-relay or any other external 
+ non-Zimbra server, enter the name of the server here. </p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Description</B></span>. 
+ Text field that displays in the Domain list in the Content pane.</p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Maximum accounts 
+ for this domain</B></span>. Enter the maximum number of accounts that can 
+ be created on this domain. &nbsp;The number entered here 
+ is displayed in the Account Limits tab. &nbsp;The default 
+ is no limit (blank field) </p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Default Class of 
+ Service</B></span> (COS) for the domain. If you do not enter a COS, the default 
+ COS is used. The COS entered here is &nbsp;automatically 
+ assigned to accounts created on the domain if no other COS is entered.</p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Domain status</B></span>. 
+ The <a href="changing_domain_status.htm">domain status</a> is active in 
+ the normal state. You may want to change this status when you setting 
+ up the domain if you are not ready to use the domain. </p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Notes</B></span> you 
+ want to add about the domain. You can also set the maximum number of accounts 
+ that can be configured for this domain. &nbsp;</p></li>
 	</ul>
-	<li class=p><p>Choose the GAL mode, either <span style="font-weight: bold;"><B>Internal</B></span>, 
+</ol>
+<p class="whs3">Click <span style="font-weight: bold;"><B>Next</B></span>.</p>
+<ol start="2" type="1" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>Global Address List 
+ Mode.</B></span> Choose the GAL mode, either <span style="font-weight: bold;"><B>Internal</B></span>, 
  <span style="font-weight: bold;"><B>External, </B></span>or <span style="font-weight: bold;"><B>Both</B></span>. 
- The default is Internal.</p></li>
-	<li class=p><p>(Optional) Change the maximum number of search results 
- returned for a GAL Search. &nbsp;The default is 100 results. 
- Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
-	<li class=p><p>If you selected <span style="font-weight: bold;"><B>Internal</B></span> 
- as the GAL mode, the next step is to configure the authentication mode.</p></li>
+ The default is Internal. (Optional) Change the maximum number of search 
+ results returned for a GAL Search. &nbsp;The default 
+ is 100 results. Click <span style="font-weight: bold;"><B>Next</B></span>.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Authentication Mode</B></span>. 
+ If you selected <span style="font-weight: bold;"><B>Internal</B></span> as the 
+ GAL mode, the next step is to configure the authentication mode.</p></li>
 </ol>
-<p class="whs3">If you selected <span style="font-weight: bold;"><B>External</B></span> 
- or <span style="font-weight: bold;"><B>Both</B></span>, the next step is to configure 
- the <a href="how_to_configure_gal.htm">LDAP server</a></p>
-<ol start="5" type="1" class="whs1">
-	<li class=p><p>If the authentication mechanism is <span style="font-weight: bold;"><B>Internal</B></span>, 
+<ul type="disc" class="whs2">
+	<ul type="disc" class="whs2">
+		<li class=p><p class="whs4">If you selected <span 
+ style="font-weight: bold;"><B>External</B></span> or <span style="font-weight: bold;"><B>Both</B></span>, 
+ the next step is to configure the <a href="how_to_configure_gal.htm">LDAP 
+ server</a></p></li>
+		<li class=p><p>If the authentication mechanism is <span style="font-weight: bold;"><B>Internal</B></span>, 
  no other authentication mode configuration is required. </p></li>
-</ol>
-<p class="whs3">If the authentication mechanism is <span 
- style="font-weight: bold;"><B>External LDAP</B></span> or <span style="font-weight: bold;"><B>External 
+	</ul>
+	<li class=p><p class="whs3">If the authentication mechanism 
+ is <span style="font-weight: bold;"><B>External LDAP</B></span> or <span style="font-weight: bold;"><B>External 
  Active Directory,</B></span> the next step is to configure the <a href="how_to_configure_authentication_mode.htm">authentication 
  mechanism</a><a class="dropspot" href="javascript:TextPopup(this)" id="a2">.</a></p>
-<div class="droptext" id="POPUP366268298" style="display: 'none'; " x-ss-type="dropdown">
+<div class="droptext" id="POPUP333194691" style="display: 'none'; " x-ss-type="dropdown">
  <ol type="1" class="whs1">
   <li style="list-style: lower-alpha;" type=a class=p>
   <p>Select either 
@@ -175,23 +203,30 @@ if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( t
  </ol>
  <p class="whs3">&nbsp;</p>
  <p>&nbsp;</p>
-</div>
+</div></li>
+</ul>
 <p class="whs3">Click <span style="font-weight: bold;"><B>Next</B></span>. 
  </p>
-<ol start="6" type="1" class="whs1">
-	<li class=p><p>(Optional) Set up the virtual hosts. Enter the virtual 
- host addresses. Click <span style="font-weight: bold;"><B>Next</B></span>. </p></li>
-	<li class=p><p>(Optional) Create the domain level Documents wiki account. 
+<ol start="4" type="1" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>Virtual Hosts</B></span>. 
+ (Optional) Enter the <a href="configuring_virtual_hosts.htm">virtual host 
+ address</a>. Virtual hosting allows you to host more than one domain name 
+ on a server. When you create a virtual host, this becomes the default 
+ domain user login. Click <span style="font-weight: bold;"><B>Next</B></span>. 
  </p></li>
-	<ol type="a" class="whs4">
-		<li class=p><p>Check the box to create domain Documents.</p></li>
-		<li class=p><p>Enter the Documents account name and password. The 
- default account name is &quot;wiki&quot;, but you can change this. &nbsp;Click 
- <span style="font-weight: bold;"><B>Next</B></span><span>.</span></p></li>
-		<li class=p><p>On the <span style="font-weight: bold;"><B>Documents 
- Access Control</B></span> dialog, define the global access control privileges. 
- </p></li>
-		<ul type="disc" class="whs5">
+	<li class=p><p><span style="font-weight: bold;"><B>Documents</B></span>. (Optional) 
+ Create the domain level Documents wiki account. Documents is a document 
+ sharing and collaboration application. See <a href="../documents/about_zimbra_documents.htm">About 
+ Zimbra Documents</a> </p></li>
+	<ul><li style="list-style: disc;" type=disc class=p><p>Check the box 
+ to create domain Documents.</p></li>
+		<li style="list-style: disc;" type=disc class=p><p>Enter the Documents 
+ account name and password. The default account name is &quot;wiki&quot;, 
+ but you can change this. &nbsp;Click <span style="font-weight: bold;"><B>Next</B></span><span>.</span></p></li>
+		<li style="list-style: disc;" type=disc class=p><p>On the <span 
+ style="font-weight: bold;"><B>Documents Access Control</B></span> dialog, define 
+ the global access control privileges. </p></li>
+		<ul type="disc" class="whs2">
 			<li class=p><p>By default all users in the domain can read, 
  write, delete, and insert (add) new pages in the Domain Documents wiki. 
  </p></li>
@@ -202,13 +237,13 @@ if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( t
 			<li class=p><p>Members of distribution lists can be given read, 
  write, delete, and insert permissions. </p></li>
 		</ul>
-	</ol>
-	<li class=p><p class="whs6">When <span style="font-weight: bold;"><B>Finish</B></span> 
+	</ul>
+	<li class=p><p class="whs4">When <span style="font-weight: bold;"><B>Finish</B></span> 
  is clicked, the domain is created.</p></li>
 </ol>
 <p class="whs3">&nbsp;</p>
 <script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a2','POPUP366268298');
+TextPopupInit('a2','POPUP333194691');
 //--></script><script type="text/javascript" language="javascript1.2">
 <!--
 highlightSearch();

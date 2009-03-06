@@ -1,16 +1,17 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="box"/>
-<chunkinfo url="whfwdata1.xml" first="boxman" last="deliver"/>
-<chunkinfo url="whfwdata2.xml" first="deliverabl" last="friend"/>
-<chunkinfo url="whfwdata3.xml" first="from:john" last="macintosh"/>
-<chunkinfo url="whfwdata4.xml" first="mail" last="permanent"/>
-<chunkinfo url="whfwdata5.xml" first="permission" last="security"/>
-<chunkinfo url="whfwdata6.xml" first="select" last="txt"/>
-<chunkinfo url="whfwdata7.xml" first="typ" last="™"/>
+<chunkinfo url="whfwdata0.xml" first="!" last="bob"/>
+<chunkinfo url="whfwdata1.xml" first="body" last="dal"/>
+<chunkinfo url="whfwdata2.xml" first="dat" last="fin"/>
+<chunkinfo url="whfwdata3.xml" first="finaliz" last="kept"/>
+<chunkinfo url="whfwdata4.xml" first="key" last="onto"/>
+<chunkinfo url="whfwdata5.xml" first="open" last="reply"/>
+<chunkinfo url="whfwdata6.xml" first="report" last="suit"/>
+<chunkinfo url="whfwdata7.xml" first="sup" last="without"/>
+<chunkinfo url="whfwdata8.xml" first="wmv" last="ó"/>
 
-<tchunkinfo first="0" last="99" url="whftdata0.xml" />
-<tchunkinfo first="100" last="151" url="whftdata1.xml" />
+<tchunkinfo first="0" last="98" url="whftdata0.xml" />
+<tchunkinfo first="99" last="159" url="whftdata1.xml" />
 
 </fts>

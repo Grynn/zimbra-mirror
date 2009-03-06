@@ -31,7 +31,7 @@ function delayReload()
 	}
 }
 
-var gsToolbarOrder = "toc|idx|fts|blankblock";
+var gsToolbarOrder = "toc|idx|fts|blankblock|banner";
 var gsMinibarOrder = "blankblock|hide2|";
 
 var gsTopic = "getting_started/about_zcs.htm";
@@ -62,13 +62,13 @@ if (location.hash.length > 1)
 		if (nPos>1)
 		{
 			if(IsInternal(sParam.substring(1, nPos)))
-				gsTopic = sParam.substring(1, nPos);
+				gsTopic = _textToHtml(sParam.substring(1, nPos));
 			parseParam(sParam.substring(nPos+2));
 		}
 		else
 		{
 			if(IsInternal(sParam.substring(1)))
-				gsTopic = sParam.substring(1);
+				gsTopic = _textToHtml(sParam.substring(1));
 		}
 	}
 	if (gnPans == 1 && gsTopic)

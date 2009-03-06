@@ -1,0 +1,179 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<title>Making Free/Busy View Available </title>
+<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../default.css'>");}
+//-->
+</script>
+<style type="text/css">
+<!--
+ul.whs1 { list-style:disc; }
+p.whs2 { margin-left:40px; }
+-->
+</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Global Settings\nMaking Free/Busy View Available");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if(1)
+	{
+	
+	}
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../administration_console_help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+</script>
+<h1>Making Free/Busy Schedule View Available (Beta)</h1>
+<p>When ZCS is deployed in &nbsp;a mix of ZCS servers 
+ and third party email servers and Calendar is an important function of 
+ your users, you may want users to be able to see the free/busy scheduling 
+ across the mix so that users can efficiently schedule meetings. &nbsp;</p>
+<p>For this release, the Zimbra Free/Busy Module to connect with Microsoft 
+ Exchange feature can be configured between ZCS and Microsoft Exchange 
+ Servers. The ZCS can pull the free/busy schedule of a user on Exchange 
+ and also push the free/busy schedule of a ZCS user to the Exchange server. 
+ You configure Global Config, Domain, COS, and Account 
+ settings. </p>
+<h2>Global Config Settings</h2>
+<p>The &nbsp;<span style="font-weight: bold;"><B>Interop 
+ </B></span><span>tap</span> is used to configure the Exchange server settings. 
+ In order to enable the Exchange free/busy interop implementation, a single 
+ AD must be in the system or the Global Catalog must be available and the 
+ ZCS server must be able to access the HTTP(S) port 
+ of IIS on at least one of the Exchange servers.</p>
+<p>You configure the following on the tab:</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>Exchange server URL. &nbsp;This is 
+ the Web interface to the Exchange.</p></li>
+	<li class=p><p>Exchange authentication scheme, either <span style="font-weight: bold;"><B>Basic</B></span> 
+ or <span style="font-weight: bold;"><B>Form</B></span>. </p></li>
+	<ul type="disc" class="whs1">
+		<li class=p><p>Basic is authentication to Exchange via HTTP 
+ basic authentication. </p></li>
+		<li class=p><p>Form is authentication to Exchange as HTML form 
+ based authentication.</p></li>
+	</ul>
+</ul>
+<ul type="disc" class="whs1">
+	<li class=p><p>Exchange user name and password . This is the name of 
+ the account in Active Directory and password that has access to the public 
+ folders.</p></li>
+</ul>
+<h2>Domain Setting</h2>
+<p>The<span style="font-weight: bold;"><B> Interop </B></span><span>tab</span> 
+ is used to configure the Exchange server settings. This information is 
+ the basic property of the Exchange server account that has access to the 
+ Exchange public folders. In order to enable the Exchange free/busy interop 
+ implementation, a &nbsp;single AD must be in the system 
+ or the Global Catalog must be available and the ZCS server must be able 
+ to access the HTTP(S) port of IIS 
+ on at least one of the Exchange servers.</p>
+<p>You configure the following on the tab:</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>Exchange server URL. &nbsp;This is 
+ the Web interface to the Exchange public folders.</p></li>
+	<li class=p><p>Exchange authorization schema, either <span style="font-weight: bold;"><B>Basic</B></span> 
+ or <span style="font-weight: bold;"><B>Form</B></span>. </p></li>
+	<ul type="disc" class="whs1">
+		<li class=p><p>Basic is authentication to Exchange via HTTP 
+ basic authentication. </p></li>
+		<li class=p><p>Form is authentication to Exchange as HTML form 
+ based authentication.</p></li>
+	</ul>
+</ul>
+<ul type="disc" class="whs1">
+	<li class=p><p>Exchange user name and password . This is the name of 
+ the account &nbsp;and password that has access to the 
+ public folders.</p></li>
+	<li class=p-note><p class=note>Domain settings overwrite Global settings. 
+ </p></li>
+</ul>
+<h2>COS Setting</h2>
+<p>The Free/Busy Interop section of the Advanced tab 
+ is used to set the O and OU used in legacyExchangeDN 
+ attribute (i.e. legacyExchangeDN : /o=First 
+ Organization/ou=First Administrative Group).</p>
+<h2>Account Settings</h2>
+<p>Two tabs have Free/Busy Interop configuration options. 
+ </p>
+<ul type="disc" class="whs1">
+	<li class=p><p>Advanced tab. This is the same as the COS Setting configuration 
+ unless you want to change it for a specific account.</p></li>
+	<li class=p><p>Free/Busy Interop tab. This is the 
+ tab to configure the foreign principal for the account. &nbsp;This 
+ is a mapping from the ZCS account to the corresponding object in the Active 
+ Directory. The Zimbra foreign principal maps like this: <span style="font-weight: bold;"><B>legacyExchangeDN 
+ : /o=.../ou=.../cn-Recipient/cn=&lt;Zimbra foreign principal&gt;</B></span>. 
+ The Zimbra foreign principal is usually the user's address.</p></li>
+</ul>
+<p class="whs2">This is a multi-value attribute, you can 
+ add more than one account address. A prefix is added to the address. &nbsp;For 
+ Exchange the prefix is AD. </p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">
+<!--
+highlightSearch();
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+if(0)
+{
+
+}
+//-->
+</script>
+</body>
+</html>

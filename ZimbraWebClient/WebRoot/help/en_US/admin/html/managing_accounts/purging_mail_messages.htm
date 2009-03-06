@@ -1,4 +1,4 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
 <head>
@@ -78,17 +78,18 @@ else
 </script>
 <h1>Purging Mail Messages</h1>
 <p>You can configure how many days that messages can remain in users' Inbox, 
- Trash, or Junk folders before they are automatically deleted. Mail aging 
- is configured as COS attributes and can be overridden for individual accounts. 
- The date is calculated from the day the message is received for incoming 
- messages and the day the message was composed for sent messages. </p>
+ Sent, personal folders, Trash, or Junk folders before they are automatically 
+ deleted. Mail aging is configured as COS attributes and can be overridden 
+ for individual accounts. The date is calculated from the day the message 
+ is received for incoming messages and the day the message was composed 
+ for sent messages. </p>
 <p>The attributes are set from the Advanced Features tab for either COS 
- or Accounts. You can set the number of days for</p>
+ or Accounts. You can set the following:</p>
 <ul type="disc" class="whs1">
 	<li class=p><p><span class=attribute>Email Message Lifetime</span>. 
  The number of days that a mail message can reside in any folder, except 
- Trash and Junk folders, before being automatically purged. The default 
- is to not delete mail.</p></li>
+ Trash and Junk folders, before being automatically purged. The minimum 
+ message retention is 31 days. The default is to not delete mail. </p></li>
 	<li class=p><p><span class=attribute>Trash Message Lifetime</span>. 
  The number of days that a mail message will remain in the Trash folder 
  before being automatically purged. The default is to purge mail from the 
@@ -98,10 +99,11 @@ else
  before being automatically purged. The default is to purge junk mail older 
  than 30 days.</p></li>
 </ul>
-<p>The server manages the message purge schedule. To enable message purge 
- schedule, use the CLI command zmprov to set the <span style="font-weight: bold;"><B>zimbraMailPurgeSleepInterval</B></span> 
- attribute to the duration of time that the server should &quot;rest&quot; 
- between purging of mailboxes.</p>
+<p>The server manages the message purge schedule. The message purge schedule 
+ is set in the Global Settings, General Information tab. The <span style="font-weight: bold;"><B>Sleep 
+ time between subsequent mailbox purges</B></span>. default setting is to run 
+ every 1 minute. If the message purge schedule is set to 0, messages are 
+ not purged even if the mail, trash, and spam message lifetime is set.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>

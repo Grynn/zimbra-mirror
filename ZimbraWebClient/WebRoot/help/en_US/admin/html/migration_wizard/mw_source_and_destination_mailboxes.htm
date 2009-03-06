@@ -1,4 +1,4 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
 <head>
@@ -18,6 +18,8 @@ p.whs2 { font-weight:bold; }
 ul.whs3 { list-style:url(ocean_arrow_med.gif); }
 p.whs4 { margin-left:80px; }
 ol.whs5 { list-style:decimal; }
+ol.whs6 { list-style:disc; }
+ul.whs7 { list-style:decimal; }
 -->
 </style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
 <!--
@@ -95,9 +97,9 @@ else
  import users from marketing.domain.com on your Exchange 
  server to zimbra.domain.com on your Zimbra server.<span 
  class=code> </span></p></li>
-	<li class=p><p>The user&rsquo;s Common Name (CN) 
- in Exchange will be the first portion of the email address on the Zimbra 
- server. To continue the above example, a user who has an account for joe@marketing.zimbra.com 
+	<li class=p><p>The user’s Common Name (CN) in Exchange 
+ will be the first portion of the email address on the Zimbra server. To 
+ continue the above example, a user who has an account for joe@marketing.zimbra.com 
  on Exchange would become joe@marketing.zimbra.example.com, 
  on your Zimbra server.</p></li>
 </ul>
@@ -108,7 +110,7 @@ else
  is a Windows standard dialog. For more Help to complete these dialogs, 
  click the <span style="font-weight: bold;"><B>?</B></span>. </p></li>
 </ul>
-<ul><ol><li style="list-style: decimal;" type=1 class=p><p>In the dialog, 
+<ol><ol><li style="list-style: decimal;" type=1 class=p><p>In the dialog, 
  the Object Type is pre configured with the object type, <span style="font-weight: bold;"><B>Users</B></span>. 
  This cannot be changed. </p></li>
 		<li style="list-style: decimal;" type=1 class=p><p>Click <span 
@@ -117,28 +119,30 @@ else
 		<li style="list-style: decimal;" type=1 class=p><p>In the <span 
  style="font-weight: bold;"><B>Enter object names</B></span> text box, type a 
  user name or partial user name and click <span style="font-weight: bold;"><B>Check 
- Names</B></span>. A dialog appears with a list of names that meet your query. 
- For example, if you type Jo, all names that begin with Jo are displayed, 
- i.e., Joe Smith, Joseph Flanders, Joanna Writh. &nbsp;Select 
+ Names</B></span>. Separate the names with a comma. &nbsp;For 
+ example, if you type Jo, all names that begin with Jo are displayed, i.e., 
+ Joe Smith, Joseph Flanders, Joanna Writh. &nbsp;Select 
  one or more of the names and click <span style="font-weight: bold;"><B>OK</B></span>. 
  </p></li>
+		<li class=P-note><p class=note>When using the Domino Wizard, separate 
+ the list with a pipe '|'.</p></li>
 	</ol>
-</ul>
+</ol>
 <p class="whs4">You can continue to use the Object Picker 
  to add more names. &nbsp;When complete, click <span style="font-weight: bold;"><B>OK</B></span><span>.</span></p>
 <p class="whs4">If you type the names and email addresses 
  instead of using Check Names, separate entries with commas. </p>
-<ul><ol start="4" type="1" class="whs5">
+<ol><ol start="4" type="1" class="whs5">
 		<li class=p><p>When all the names are displayed in the Source and 
  Destination Mailboxes dialog, click <span style="font-weight: bold;"><B>Next</B></span>. 
  </p></li>
 	</ol>
-</ul>
+</ol>
 <p class="whs4">The Wizard now checks to see if the accounts 
  selected exists on the Zimbra server.</p>
 <p>Click <span class=attribute>Query Builder</span> to select groups of 
  accounts to migrate. </p>
-<ul type="disc" class="whs1">
+<ol type="disc" class="whs6">
 	<ol type="1" class="whs5">
 		<li class=p><p>When the <span style="font-weight: bold;"><B>Select 
  Users</B></span> dialog appears, click <span style="font-weight: bold;"><B>Locations</B></span>, 
@@ -149,7 +153,7 @@ else
 		<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>, 
  when the names are listed.</p></li>
 	</ol>
-</ul>
+</ol>
 <p class="whs4">In the <span style="font-weight: bold;"><B>Active 
  Directory Query Builder</B></span> dialog, click <span style="font-weight: bold;"><B>Browse</B></span> 
  to select the base distinguished name (DN) of the container 
@@ -158,8 +162,8 @@ else
  <span style="font-weight: bold;"><B>Subtree</B></span>. </p>
 <p class="whs4">To construct a filter to identify which mailboxes 
  to import, click <span style="font-weight: bold;"><B>Create</B></span>. A standard 
- Window&rsquo;s database query is displayed in the Filter box.</p>
-<ol type="1" class="whs5">
+ Window’s database query is displayed in the Filter box.</p>
+<ul type="1" class="whs7">
 	<ol start="4" type="1" class="whs5">
 		<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. 
  The Source &amp; Destination Mailboxes dialog now displays the Zimbra 
@@ -170,7 +174,7 @@ else
  click <span style="font-weight: bold;"><B>Remove</B></span>. Click <span style="font-weight: bold;"><B>Next</B></span>, 
  to continue. </p></li>
 	</ol>
-</ol>
+</ul>
 <p class="whs4">The Wizard now checks to see if the accounts 
  selected exists on the Zimbra server. </p>
 <ul><li class=p-note><p class=note>The steps above are for the Exchange 

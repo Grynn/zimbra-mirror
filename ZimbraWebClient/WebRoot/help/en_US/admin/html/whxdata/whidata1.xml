@@ -1,6 +1,21 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="free_busy, on 3rd party servers" >
+  <topic name="Making Free/Busy View  Available " url="managing_global_settings/making_free_busy_view__available_.htm" />
+</key>
+<key name="GAL configuration wizard" >
+  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
+</key>
+<key name="GAL, how to configure" >
+  <topic name="How to Configure GAL" url="managing_domains/how_to_configure_gal.htm" />
+</key>
+<key name="GAL, using" >
+  <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
+</key>
+<key name="generate CSR" >
+  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
+</key>
 <key name="Global Access List" >
   <topic name="Using the Global Address List (GAL)" url="managing_domains/using_the_global_address_list_(gal).htm" />
 </key>
@@ -34,10 +49,16 @@
 <key name="IMAP proxy" >
   <topic name="Configuring IMAP" url="managing_global_settings/configuring_imap.htm" />
 </key>
+<key name="indexing, junk messages" >
+  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
+</key>
 <key name="installing certificates" >
   <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
 </key>
 <key name="junk" >
+  <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
+</key>
+<key name="junk indexing, disable" >
   <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
 </key>
 <key name="keyboard shortcuts" >
@@ -227,6 +248,9 @@
 <key name="provision an account" >
   <topic name="Create an Account" url="managing_accounts/create_an_account.htm" />
 </key>
+<key name="provisioning" >
+  <topic name="Bulk Provisioning" url="managing_accounts/bulk_provisioning.htm" />
+</key>
 <key name="proxy server" >
   <topic name="IMAP and POP Proxy Server" url="managing_global_settings/imap_and_pop_proxy_server.htm" />
 </key>
@@ -299,41 +323,12 @@
 <key name="secondary volumes" >
   <topic name="Volume Management" url="managing_servers/volume_management.htm" />
 </key>
-<key name="self-signed certifcates" >
-  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
-</key>
 <key name="self-signed certificates" >
   <topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
+  <topic name="Installing Certificates" url="tools/installing_certificates.htm" />
 </key>
 <key name="server pool" >
   <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
-</key>
-<key name="server, monitoring" >
-  <topic name="Monitoring Zimbra Collaboration Suite" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
-</key>
-<key name="server, search" >
-  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
-</key>
-<key name="server, stopping service" >
-  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
-</key>
-<key name="servers" >
-  <topic name="Managing Servers" url="managing_servers/managing_servers.htm" />
-</key>
-<key name="servers, configuring MTA" >
-  <topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
-</key>
-<key name="service status" >
-  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
-</key>
-<key name="service, stopping" >
-  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
-</key>
-<key name="services, turning off/on" >
-  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
-</key>
-<key name="session timeout" >
-  <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
 </key>
 
 </indexdata>

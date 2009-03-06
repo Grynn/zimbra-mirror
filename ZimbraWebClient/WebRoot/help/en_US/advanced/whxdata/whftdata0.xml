@@ -58,7 +58,7 @@
 <topic name="Working within a shared mail folder" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
 <topic name="Accepting access to a Documents notebook" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
 <topic name="Adding a table to a notebook page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-<topic name="Cancelling access to your Documents wiki folder" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
+<topic name="Cancelling access to your Document notebook" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
 <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
 <topic name="Create new notebooks" url="Documents/Create_multiple_notebooks.htm" />
 <topic name="Linking to a shared notebook" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
@@ -72,8 +72,14 @@
 <topic name="wildcards" url="filters/wildcards.htm" />
 <topic name="About Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
 <topic name="User Interface Features and Shortcuts" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+<topic name="Accessing Instant Messaging" url="instant_messaging/Accessing_Instant_Messaging.htm" />
+<topic name="Changing status and availability" url="instant_messaging/Changing_status_and_availability.htm" />
+<topic name="IM Chat Options to customize your chat experience" url="instant_messaging/IM_Chat_Options_to_customize_your_chat_experience.htm" />
 <topic name="Instant Messaging Basics" url="instant_messaging/Instant_Messaging_Basics.htm" />
-<topic name="Your Junk folder" url="junk_delete/spam_filtering.htm" />
+<topic name="Log into other IM clients" url="instant_messaging/Log_into_other_IM_clients.htm" />
+<topic name="Setting IM preferences" url="instant_messaging/Setting_IM_preferences.htm" />
+<topic name="Starting an IM chat" url="instant_messaging/Starting_an_IM_chat.htm" />
+<topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 <topic name="Sharing your Briefcase" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
 <topic name="Working in Briefcase" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
 <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
@@ -82,24 +88,17 @@
 <topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 <topic name="Browser use with Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
 <topic name="Categorizing your mail messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-<topic name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
 <topic name="Creating custom folders" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+<topic name="Customize your view" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 <topic name="Customizing your initial email page" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
 <topic name="Deleting folders" url="Navigation_folders_and_tips/deleting_folders.htm" />
 <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
 <topic name="System Folders" url="Navigation_folders_and_tips/inbox_folder.htm" />
+<topic name="Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 <topic name="Moving mail messages between folders" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
 <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-<topic name="quotas" url="Navigation_folders_and_tips/quotas.htm" />
 <topic name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
 <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
-<topic name="Sent folder" url="Navigation_folders_and_tips/sent_folder.htm" />
 <topic name="Sorting Content Pane List Columns" url="Navigation_folders_and_tips/sorting_conversations.htm" />
-<topic name="Traditional View" url="Navigation_folders_and_tips/Traditional_View.htm" />
-<topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
-<topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
-<topic name="purging messages" url="reading_mail/archiving_old_messages.htm" />
-<topic name="Attachment Blocking" url="reading_mail/attachment_blocking.htm" />
-<topic name="Displaying HTML in email messages" url="reading_mail/displaying_html_in_email_messages.htm" />
 
 </ftstdata>  

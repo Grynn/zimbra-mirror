@@ -1,9 +1,19 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <ftstdata>
-<topic name="Customizing UI Themes" url="ui_themes/customizing_ui_themes.htm" />
-<topic name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
+<topic name="Changing Locked Out Status" url="passwords/changing_locked_out_status.htm" />
+<topic name="Password Options" url="passwords/password_options.htm" />
+<topic name="Setting Account Lockout Rules" url="passwords/setting_account_lockout_rules.htm" />
+<topic name="Setting Password Rules" url="passwords/setting_password_rules.htm" />
+<topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
+<topic name="LMTP" url="popup_and_hotspots_/lmtp.htm" />
+<topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
+<topic name="Installing Certificates" url="tools/installing_certificates.htm" />
+<topic name="Making UI Themes available by COS" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
+<topic name="Quick Customer Color" url="ui_themes/how_to_customize_theme_colors_and_logos.htm" />
+<topic name="How to customize themes and logos" url="ui_themes/how_to_customize_themes_and_logos.htm" />
 <topic name="Making UI Themes Available by Account" url="ui_themes/making_ui_themes_available_by_account.htm" />
+<topic name="Restricting User Interface Theme Choice" url="ui_themes/restricting_user_interface_theme_choice.htm" />
 <topic name="Version" url="version_and_trademarks.htm" />
 <topic name="Managing Zimlets" url="zimlets/about_zimlets.htm" />
 <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />

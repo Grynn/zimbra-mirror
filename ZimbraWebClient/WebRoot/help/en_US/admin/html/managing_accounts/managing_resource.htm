@@ -1,4 +1,4 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
 <head>
@@ -14,7 +14,9 @@ if (navigator.appName !="Netscape")
 <style type="text/css">
 <!--
 ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
+p.whs2 { x-condition:NET_OS; }
+p.whs3 { font-weight:bold; }
+ol.whs4 { list-style:decimal; }
 -->
 </style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
 <!--
@@ -77,27 +79,39 @@ else
 
 //-->
 </script>
-<h1>Creating a Resource</h1>
-<p>A resource is a location or piece of equipment that can be scheduled 
- for a meeting. The resource has its own mailbox and can accept or reject 
- invitations automatically. &nbsp;The administrator does 
- not need to monitor these mailboxes on a regular basis. The contents of 
- the resource mailboxes are deleted according to the restrictions set in 
- the COS for email message and trash lifetime.</p>
-<p>When you create a resource account, a mailbox is created on the designated 
- server and a directory account is created on the LDAP server. </p>
+<h1>Creating a Resource Account</h1>
+<p>A resource account is set up for either a location or piece of equipment 
+ that can be scheduled for a meeting. The resource has its own mailbox 
+ and can accept or reject invitations automatically. &nbsp;The 
+ administrator does not need to monitor these mailboxes on a regular basis. 
+ The contents of the resource mailboxes are purged according to the restrictions 
+ set in the COS for email message and trash lifetime.</p>
+<p>When you create a resource account a directory account is created on 
+ the LDAP server. </p>
 <p>When you initially create a resource, you can configure the following:</p>
+<p><span style="font-weight: bold;"><B>Resource name</B></span>. </p>
 <ul type="disc" class="whs1">
-	<li class=p><p>Resource name. Descriptive name of location or equipment. 
- </p></li>
-	<li class=p><p>Type of resource: location or equipment.</p></li>
-	<li class=p><p>The email address for the resource. This field is automatically 
- populated with the resource name. You can change this. </p></li>
-	<li style="x-condition: NET_OS;" class=p><p>Class of service. </p></li>
-	<li class=p><p>Status. Active or unavailable. An active resource can 
- be scheduled. When a resource status is <a href="taking_a_resource_out_of_service.htm">unavailable</a>, 
- the resource is not included in resource list. &nbsp;</p></li>
-	<li class=p><p>Scheduling policy. You can select </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Name</B></span>: Descriptive 
+ name for the location or equipment. </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Email</B></span>: The email 
+ address for the resource. This field is automatically populated with the 
+ name. You can change this. </p></li>
+</ul>
+<p><span style="font-weight: bold;"><B>Resource Setup</B></span>.</p>
+<ul type="disc" class="whs1">
+	<li class=p><p><span style="font-weight: bold;"><B>Type</B></span> of resource, 
+ select either location or equipment.</p></li>
+	<li style=" x-condition: NET_OS; " class=p><p class="whs2"><span 
+ style="font-weight: bold;"><B>Class of Service</B></span>. Note: If many resources 
+ are going to be created and you are configuring Account Limits, you may 
+ want to set up a separate COS for resources and configure the COS with 
+ only the features the resource account needs. </p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Status</B></span>. Active 
+ or unavailable. An active resource can be scheduled. When a resource status 
+ is <a href="taking_a_resource_out_of_service.htm">unavailable</a>, the 
+ resource is not included in resource list. &nbsp;</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Scheduling policy</B></span>. 
+ You can select </p></li>
 	<ul type="disc" class="whs1">
 		<li class=p><p><span style="font-weight: bold;"><B>Auto-accept appointments 
  unless busy </B></span>to automatically accept appointments unless the resource 
@@ -110,7 +124,22 @@ else
  use for this policy would be for a frequently used location off premises 
  so that the location address can be included in the invite to attendees. 
  &nbsp;&nbsp;</p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Manually accept/decline 
+ appointments</B></span> to manage resources manually. &nbsp;A 
+ delegated user logs into the resource account and accepts or declines 
+ the reservation request for the resource. </p></li>
 	</ul>
+	<li class=p><p>If the schedule policy is <span style="font-weight: bold;"><B>Auto-accept 
+ appointments unless busy</B></span>, you can set up<span style="font-weight: bold;"><B> 
+ Maximum allowed number of conflicts</B></span> and/or <span style="font-weight: bold;"><B>Maximum 
+ allowed percent of conflicts</B></span> to allow a recurring resource to be 
+ scheduled even if it is not available for all the requested recurring 
+ appointment dates. The resource accepts appointments even if there are 
+ conflicts until either the number of conflicts reaches the maximum allowed 
+ or the maximum percentage of conflicts allowed is reached. The default 
+ is to decline any appointment that creates a conflict. If you set both 
+ fields, the resource declines appointments whenever either of the conditions 
+ are met.</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Auto-decline recurring</B></span> 
  appointments can be checked in addition to selecting a scheduling policy. 
  &nbsp;When this is checked, the resource can be scheduled 
@@ -119,6 +148,14 @@ else
  Server</B></span>. You can specify the mail server where the resource account 
  is created. The default is to have the resource created on any of the 
  servers listed in the <a href="../cos/assigning_accounts_to_different_servers.htm" style="x-condition: NET_OS;">COS server pool</a>. </p></li>
+</ul>
+<p class="whs3">Password.</p>
+<ul type="disc" class="whs1">
+	<li class=p><p>Enter the password for this account and reenter the 
+ password to confirm.</p></li>
+</ul>
+<p><span style="font-weight: bold;"><B>Notes.</B></span></p>
+<ul type="disc" class="whs1">
 	<li class=p><p><span style="font-weight: bold;"><B>Description</B></span> 
  of the resource. Description can be helpful information about the resource 
  such as room layout, number of occupants, or type of projector, etc. Details 
@@ -127,6 +164,9 @@ else
 	<li class=p><p><span style="font-weight: bold;"><B>Notes</B></span>. Notes 
  can be used to record any type of information. Details in Notes are not 
  exposed to users.</p></li>
+</ul>
+<p class="whs3">Resource Location/Contact Information.</p>
+<ul type="disc" class="whs1">
 	<li class=p><p>Resource location includes, site details, capacity and 
  street, city, state address. The information from Building, Floor, and 
  Room fields is automatically populated to the Location Display Name field, 
@@ -143,7 +183,7 @@ else
  and if the resource is free, the meeting is automatically entered in the 
  resource's calendar. </p>
 <h6>To create a resource</h6>
-<ol type="1" class="whs2">
+<ol type="1" class="whs4">
 	<ol class=whs2 style="list-style: decimal;" type=1>
 		<li class=p><p>Click <span style="font-weight: bold;"><B>Resources, 
  </B></span>in the navigation pane.</p></li>

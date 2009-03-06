@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<ftstdata>
+<topic name="Managing your account identities" url="Userspecific/Mail_Identities.htm" />
+<topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
+<topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
+<topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
+<topic name="Vacation message" url="Userspecific/vacation_message.htm" />
+<topic name="Setting your Desktop Preferences" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
+<topic name="version" url="version.htm" />
+<topic name="Archiving your email messages" url="Zdesktop/Archiving_your_email_messages.htm" />
+<topic name="Overview of Yahoo! Zimbra Desktop Features" url="Zdesktop/Overview_of_Yahoo_Zimbra_Desktop_Features.htm" />
+<topic name="Synchronize your account to Zimbra Desktop" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
+<topic name="Turning Off Automatic Sync" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
+<topic name="Changing account order on Desktop" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
+<topic name="Deleting an account from Desktop" url="Zdesktop/z-Deleting_an_account_from_Desktop.htm" />
+<topic name="Setting up POP/IMAP accounts" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+<topic name="Setting up Yahoo! Mail Plus, Gmail, AOL account setup" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+<topic name="Setting up your Zimbra Web Client account" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
+<topic name="Working Offline" url="Zdesktop/z-Working_Offline.htm" />
+<topic name="How to share your folders" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
+<topic name="Sharing Your Zimbra Folders" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
+<topic name="Working in a Shared Folder" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
+<topic name="About Zimlets" url="Zimlets/About_Zimlets.htm" />
+
+</ftstdata>  

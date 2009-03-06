@@ -1,10 +1,14 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Sharing mail folders" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-<item name="Sharing your mailbox" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-<item name="Revoking a access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-<item name="Accepting access to the shared mailbox folder" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-<item name="Working within a shared mail folder" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+<item name="About Tasks" url="Tasks/About_Tasks.htm" />
+<item name="Create tasks lists" url="Tasks/Create_tasks_folders.htm" />
+<item name="Add a task" url="Tasks/Add_a_task.htm" />
+<item name="Change a task" url="Tasks/Change_a_task.htm" />
+<item name="Moving tasks" url="Tasks/Moving_tasks.htm" />
+<item name="Delete a task" url="Tasks/Delete_a_task.htm" />
+<item name="Share your task list" url="Tasks/Share_your_Task_folder.htm" />
+<item name="Accepting access to shared  task lists" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+<item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
 
 </tocdata>

@@ -1,7 +1,7 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
-<head>
+ <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="generator" content="Adobe RoboHelp - www.adobe.com">
 <title>Filter Conditions and Actions Supported</title>
@@ -14,6 +14,7 @@ if (navigator.appName !="Netscape")
 <style type="text/css">
 <!--
 ul.whs1 { list-style:disc; }
+p.whs2 { font-weight:bold; }
 -->
 </style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
 <!--
@@ -47,7 +48,7 @@ if (window.gbWhTopic)
 	if (window.addTocInfo)
 	{
 	addTocInfo("Creating Filters \nFilter conditions and actions supported");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -86,7 +87,7 @@ else
  to specify a name in the From: header of an email message. </p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>To.</B></span> Same as 
  From, but looks for specified names in the To: header.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>CC.</B></span> Same as 
+	<li class=p><p><span style="font-weight: bold;"><B>Cc.</B></span> Same as 
  From, but looks in the Cc: header.</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Subject.</B></span> Looks 
  in the message's Subject header.</p></li>
@@ -123,9 +124,9 @@ else
 </ul>
 <p>Comparison operators include the following:</p>
 <ul type="disc" class="whs1">
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Matches 
- exactly/does not match exactly</B></span>. Specifies an exact match. For example, 
- specifying <span style="font-weight: bold;"><B>Subject</B></span> <span style="font-weight: bold;"><B>matches 
+	<li class=p><p><span style="font-weight: bold;"><B>Matches exactly/does 
+ not match exactly</B></span>. Specifies an exact match. For example, specifying 
+ <span style="font-weight: bold;"><B>Subject</B></span> <span style="font-weight: bold;"><B>matches 
  exactly</B></span> &nbsp;<span style="font-weight: bold;"><B>Banana</B></span> 
  would only match &quot;Banana&quot; and not &quot;Bananas&quot; or &quot;A 
  truck full of banana leaves&quot;.</p></li>
@@ -133,21 +134,12 @@ else
  Specifies that the subject line must contain the specified substring. 
  &nbsp;For example, specifying <span style="font-weight: bold;"><B>Subject 
  contains Banana</B></span> would match &quot;I'm going bananas&quot;.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Matches pattern/does 
- not match pattern</B></span>. The wildcard * is a character used in the mail 
- filter comparison field to represent one or more characters in the filter 
- . For example, specifying Subject matches &quot;banana*&quot; 
+	<li class=p><p><span style="font-weight: bold;"><B>Matches wildcard/does 
+ not match wildcard condition</B></span>. The wildcard * is a character used 
+ in the mail filter comparison field to represent one or more characters 
+ in the filter . For example, specifying Subject matches &quot;banana*&quot; 
  would match &quot;bananas&quot; or &quot;banana-leaf casserole&quot; but 
  not &quot;my banana-leaf casserole.&quot;</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Exists/does 
- not exist</B></span>. Matches if the specified field is present in the message. 
- Used with the Header Named and Attachment fields.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Under/not 
- under, over/not over</B></span>. Used for comparison against the Size field.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Before/not 
- before, after/not after</B></span>. Used for comparison against the Date field.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>In/not 
- in</B></span>. Used to test for presence of an address in your contacts.</p></li>
 </ul>
 <h3>Actions</h3>
 <ul type="disc" class="whs1">
@@ -161,9 +153,6 @@ else
  folders, not even Trash.</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Forward</B></span>. Forwards 
  mail to the address you specify</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Stop 
- evaluation.</B></span> This action prevents subsequent filter rules from being 
- applied to any message that matches the current one.</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>Mark.</B></span> Select 
  <span style="font-weight: bold;"><B>as Read</B></span> or <span style="font-weight: bold;"><B>as 
  Flagged</B></span>. </p></li>
@@ -171,14 +160,12 @@ else
  can tag matching messages with a selected tag.</p></li>
 </ul>
 <h3>Multiple Actions</h3>
-<p>A filter rule can specify multiple actions. The combinations of actions 
- are interpreted as follows:</p>
+<p>You can create a filter rule made up of multiple actions. The combinations 
+ of actions in your rule are interpreted as follows:</p>
 <ul type="disc" class="whs1">
 	<li class=p><p><span style="font-weight: bold;"><B>Discard.</B></span> If 
  combined with other actions, discard is ignored and the other actions 
  take place.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Stop 
- evaluation.</B></span> Actions specified after this one are ignored.</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>File into folder.</B></span> 
  Multiple &quot;file into&quot; actions results in multiple copies of the 
  message being stored in different folders. If a specified folder does 
@@ -191,7 +178,9 @@ else
 	<li class=p><p><span style="font-weight: bold;"><B>Keep in Inbox.</B></span> 
  Multiple &quot;keep&quot; actions can be specified, but only one copy 
  of the message is saved to the Inbox.</p></li>
-	</ul>
+	<li class=p><p class="whs2">Forward to address. <span 
+ style="font-weight: normal;">Mail is forwarded to the address specified.</span></p></li>
+</ul>
 <p>&nbsp;</p>
 <script type="text/javascript" language="javascript1.2">
 <!--

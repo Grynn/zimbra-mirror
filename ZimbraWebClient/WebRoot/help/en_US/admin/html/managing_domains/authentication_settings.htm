@@ -1,4 +1,4 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
 <head>
@@ -96,8 +96,8 @@ else
  to the Active Directory server. You identify the Active Directory domain 
  name and URL.</p></li>
 </ul>
-<p>An authentication wizard is used to configure the authentication settings 
- on your domain. </p>
+<p>An authentication wizard is used to <a href="how_to_configure_authentication_mode.htm" target="_blank">configure the authentication settings</a> on your domain. 
+ </p>
 <h2>Internal</h2>
 <p>The Internal authentication method assumes the Zimbra schema, running 
  on the OpenLDAP directory server. &nbsp;No additional 
@@ -108,10 +108,13 @@ else
  succeeds, the connection is closed and the password is considered valid. 
  &nbsp;You configure the following External LDAP settings:</p>
 <ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>LDAP URL and </B></span>whether 
- to use <span style="font-weight: bold;"><B>SSL</B></span>. Enter the LDAP address. 
- The default port is 389. If you use SSL, the default port is 636. You 
- can configure multiple external LDAP hosts.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>LDAP URL </B></span>and<span 
+ style="font-weight: bold;"> <B></B></span>whether to use <span style="font-weight: bold;"><B>SSL 
+ </B></span>or <span style="font-weight: bold;"><B>StartTLS</B></span>. 
+ Enter the LDAP address. Check either to use SSL or StartTLS. 
+ <br>
+	The default port is 389. If you use SSL, the default port is 636. <br>
+	You can configure multiple external LDAP hosts.</p></li>
 	<li class=p><p><span style="font-weight: bold;"><B>LDAP filter</B></span>. 
  The filter defines the search rules used for directory searches and tries 
  to map the user name to one user on the external LDAP. You should ensure 

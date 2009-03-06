@@ -1,4 +1,4 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
 <head>
@@ -86,6 +86,13 @@ else
  appointments, Tasks, files in Briefcase, and Documents notebook pages.<span 
  style="font-weight: bold;"> <B></B></span>When the quota is reached, all email 
  messages to that account are rejected.</p>
+<ul><li class=p-note><p class=note>By default rejected messages are deferred. 
+ The deferred queue is scanned to resend messages. If the message cannot 
+ be sent after the specified number of delivery attempts, the message is 
+ bounced back to the original owner. You can configure a setting from the 
+ zmprov CLI so that when a mailbox quota is reached, messages received 
+ to that mailbox are bounced instead of being deferred. </p></li>
+</ul>
 <p class="whs1">You can configure a warning message to 
  automatically notify users that are close to using their allotted space.</p>
 <p>Users will need to delete email messages, old calendar appointments, 

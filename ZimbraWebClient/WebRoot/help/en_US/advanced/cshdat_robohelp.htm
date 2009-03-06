@@ -1,5 +1,5 @@
-﻿<!-- saved from url=(0014)about:internet -->
-<html>
+﻿<html>
+<!-- saved from url=(0014)about:internet -->
 <head>
 <title>Zimbra Mail Help</title>
 
@@ -85,7 +85,7 @@ function GetTopicNumberOnly(strTopicString)
 			return GetTopicNumberById(strValue);
 		} else if (strTopicString.toLowerCase().indexOf("remoteurl") == 0) {
 			if(IsInternal(strValue))
-				gstrURL = strValue;
+				gstrURL = _textToHtml(strValue);
 			return -1;
 		}
 

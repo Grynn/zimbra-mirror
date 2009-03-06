@@ -1,17 +1,73 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="roles" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="RSS" >
+  <topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="rules, filter" >
+  <topic name="Filtering your messages" url="filters/filtering_your_messages.htm" />
+  <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
+</key>
+<key name="schedule view" >
+  <topic name="Viewing Multiple Calendars" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+</key>
+<key name="scheduling a meeting" >
+  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="scheduling a room or equipment" >
+  <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="Search Builder" >
+  <topic name="Building search queries" url="Search/building_search_queries.htm" />
+</key>
+<key name="Search examples" >
+  <topic name="Search examples" url="Search/search_examples.htm" />
+</key>
+<key name="search feature" >
+  <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
+  <key name="Using" >
+    <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="search queries" >
+  <topic name="Building search queries" url="Search/building_search_queries.htm" />
+  <topic name="Saving search queries" url="Search/saving_search_queries.htm" />
+  <key name="Saving" >
+    <topic name="Saving search queries" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="search with wildcard" >
+  <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="search, and/or" >
+  <topic name="&quot;And&quot; vs. &quot;Or&quot; type searches" url="Search/and_vs_or_searches.htm" />
+</key>
+<key name="searching for a message" >
+  <topic name="Searching for messages" url="Search/_search__vs.__search_for_.htm" />
+</key>
+<key name="setting a forwarding address" >
+  <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="share your calendar" >
+  <topic name="Delegating Calendar Access" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
 <key name="shared access, address book" >
   <topic name="Sharing your Address Book" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
 <key name="sharing address books" >
   <topic name="Sharing your Address Book" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
+<key name="sharing folders" >
+  <topic name="Sharing a folder" url="Sharing/Sharing_a_folder.htm" />
+</key>
 <key name="sharing wiki folders" >
   <topic name="Sharing wiki folders" url="Documents/Sharing_Notebooks.htm" />
 </key>
 <key name="shortcut keys" >
-  <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="shortcuts" >
@@ -26,14 +82,17 @@
 <key name="sorting contents pane columns" >
   <topic name="Sorting conversations" url="Navigation_folders_and_tips/sorting_conversations.htm" />
 </key>
+<key name="sorting incoming email" >
+  <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
+</key>
 <key name="sorting tasks" >
   <topic name="Sorting tasks " url="Tasks/Sorting_tasks_.htm" />
 </key>
-<key name="Spam" >
-  <topic name="Spam filtering" url="junk_delete/spam_filtering.htm" />
-</key>
 <key name="spell check" >
   <topic name="Using Spell Check" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
+<key name="starting IM chat" >
+  <topic name="Starting an IM chat" url="instant_messaging/Starting_an_IM_chat.htm" />
 </key>
 <key name="subscribe to RSS" >
   <topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
@@ -83,6 +142,9 @@
 </key>
 <key name="view as HTML" >
   <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="view reading pane" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="view, calendar" >
   <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />

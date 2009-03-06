@@ -4,11 +4,7 @@
 <book name="Getting Started" >
   <item name="Getting Start with ZCS Standard Web Client" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="Logging in and out" url="Userspecific/logging_on_and_off.htm" />
-  <item name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
-  <item name="Changing your password" url="Userspecific/chaning_your_password.htm" />
-  <item name="Forget your password?" url="Userspecific/if_you_forget_your_password.htm" />
-  <item name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="Navigating Your Mailbox" >
   <item name="Navigating around your mailbox" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
@@ -25,11 +21,8 @@
   <item name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Purging email messages" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Reading Messages" >
-    <item name="Reading mail" url="reading_mail/reading_mail.htm" />
     <item name="Marking mail as unread" url="reading_mail/b_Marking_mail_as_unread.htm" />
     <item name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
-    <item name="Attachment blocking" url="reading_mail/attachment_blocking.htm" />
-    <item name="Message blocking feature" url="reading_mail/Message_blocking_feature.htm" />
     <item name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
   </book>
 </book>
@@ -60,7 +53,7 @@
   <item name="Link to Shared Calendar" url="Calendar/Link_to_Shared_Calendar.htm" />
   <item name="Importing iCalendars" url="Calendar/Importing_iCalendars.htm" />
   <item name="Calendar view options" url="Calendar/Calendar_Views.htm" />
-  <item name="Cleaning up your Calendar" url="Calendar/Cleaning_up_your_Calendar.htm" />
+  <item name="Cleaning up your Calendar" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Scheduling Appointments, Meetings and Events" >
   <item name="Planning a meeting" url="Calendar/About_the_Appointment_Page.htm" />
@@ -75,12 +68,12 @@
 </book>
 <book name="Searching for Items" >
   <item name="Using Search" url="Search/b_Using_Search.htm" />
+  <item name="Create and Save a Search Query" url="Search/b_Create_and_Save_a_Search_Query.htm" />
   <item name="Query language description" url="Search/query_language_description.htm" />
 </book>
 <book name="Using Tags and Folders to Organize Email" >
   <item name="Assigning Tags to messages and contacts" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
   <item name="Flagging an email message" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
-  <item name="Using folders" url="Navigation_folders_and_tips/about_folders.htm" />
   <item name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="Deleting folders" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
@@ -92,8 +85,6 @@
   <item name="Setting your preferences" url="Userspecific/b_Setting_your_Options.htm" />
   <item name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
   <item name="Creating away messages" url="Userspecific/vacation_message.htm" />
-  <item name="Saving messages you send" url="Navigation_folders_and_tips/sent_folder.htm" />
-  <item name="Mailbox quota" url="Navigation_folders_and_tips/quotas.htm" />
   <item name="Changing your default time zone" url="Userspecific/Changing_your_default_timezone.htm" />
   <item name="Subscribing to RSS/ATOM feed" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>

@@ -1,4 +1,4 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
 <head>
@@ -16,16 +16,17 @@ if (navigator.appName !="Netscape")
 ul.whs1 { list-style:disc; }
 p.whs2 { margin-left:40px; }
 h6.whs3 { margin-left:40px; }
-ol.whs4 { list-style:decimal; }
-p.whs5 { margin-left:80px; }
-p.whs6 { margin-left:0px; }
+ul.whs4 { list-style:decimal; }
+ol.whs5 { list-style:decimal; }
+p.whs6 { margin-left:80px; }
+p.whs7 { margin-left:0px; }
 -->
 </style><script type="text/javascript" language="JavaScript">
 <!--
 if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
 {
   var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs6 {margin-left:1pt; }";
+  strNSS += "p.whs7 {margin-left:1pt; }";
   strNSS +="</style>";
   document.write(strNSS);
 }
@@ -62,7 +63,7 @@ if (window.gbWhTopic)
 {
 	if (window.addTocInfo)
 	{
-	addTocInfo("Managing Accounts\nSearching\nUsing Search");
+	addTocInfo("Searching\nUsing Search");
 addTocInfo("Using the Admin Console\nUsing Search");
 addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
 
@@ -97,11 +98,12 @@ else
 <p>Three search options are available from the administration console. 
  </p>
 <ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Search</B></span> is used 
- to quickly find specific accounts, aliases, distribution lists, resources 
- on the domain and you can search for a specific domain. In the drop-down 
- arrow at the left of the search box, you select which type of items to 
- search for: Accounts, Distribution Lists, Aliases, Resources, or Domains.</p></li>
+	<li class=p><p><span style="font-weight: bold;"><B>Simple Search</B></span> 
+ is used to quickly find specific accounts, aliases, distribution lists, 
+ resources on the domain and you can search for a specific domain. In the 
+ drop-down arrow at the left of the search box, you select which type of 
+ items to search for: Accounts, Distribution Lists, Aliases, Resources, 
+ or Domains.</p></li>
 </ul>
 <p class="whs2">For accounts, you can search by display name, 
  first and last name, first part of the mail address, alias, delivery address, 
@@ -113,24 +115,23 @@ else
  example, if you searched for Sam in Accounts, the results could include 
  Samuel, Samantha, Sammy, Samson.</p>
 <h6 class="whs3">To use the Search feature</h6>
-<ol type="1" class="whs4">
-	<ol type="1" class="whs4">
+<ul type="1" class="whs4">
+	<ol type="1" class="whs5">
 		<li class=p><p>From the drop-down arrow next to the search box, 
  select what type of search to perform.</p></li>
 		<li class=p><p>In the Search box, enter the name or partial name 
  or string</p></li>
 		<li class=p><p>Click <span style="font-weight: bold;"><B>Search</B></span>.</p></li>
 	</ol>
-</ol>
-<p class="whs5">Matching types are displayed in the content 
+</ul>
+<p class="whs6">Matching types are displayed in the content 
  pane.</p>
 <ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Help 
- Search. </B></span>This is a powerful unified search to quickly find answers 
- to common questions. When you enter a search query in the search field 
- and click Help Search, Zimbra's wiki, forums, and documents are searched. 
- The results are displayed in a new window with links to the information. 
- </p></li>
+	<li style="x-condition: NET_OS;" class=p><p><span style="font-weight: bold;"><B><a href="../delegated_admin/help_search.htm">Help Search</a>. </B></span>This 
+ is a powerful unified search to quickly find answers to common questions. 
+ When you enter a search query in the search field and click Help Search, 
+ Zimbra's wiki, forums, and documents are searched. The results are displayed 
+ in a new window with links to the information. </p></li>
 	<li class=p><p><span style="font-weight: bold;"><B><a href="advanced_search.htm">Advanced 
  Search</a></B></span>. A complex query can be created to search for addresses 
  by domain or server. Individual mini-search panes let you select the criteria 
@@ -140,8 +141,8 @@ else
  searches to quickly search for inactive accounts, locked out account, 
  closed accounts and by account status. Click the search and the results 
  display in the Content pane.</p>
-<p class="whs5">&nbsp;</p>
 <p class="whs6">&nbsp;</p>
+<p class="whs7">&nbsp;</p>
 <p class="whs2">&nbsp;</p>
 <script type="text/javascript" language="javascript1.2">
 <!--

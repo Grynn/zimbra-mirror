@@ -7,7 +7,9 @@
 <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
 <topic name="Class of Service Managing" url="cos/class_of_service.htm" />
 <topic name="Creating Classes of Service" url="cos/creating_classes_of_service.htm" />
+<topic name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
 <topic name="Override COS Settings" url="cos/override_cos_settings.htm" />
+<topic name="Help Search" url="delegated_admin/help_search.htm" />
 <topic name="About Zimbra Documents" url="documents/about_zimbra_documents.htm" />
 <topic name="Adding Access to Domain Notebook folder" url="documents/adding_access_to_domain_wiki_notebook_folder.htm" />
 <topic name="Changing Access Permission for Documents" url="documents/changing_access_permission_for_documents.htm" />
@@ -19,6 +21,7 @@
 <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
 <topic name="Adding Distribution Lists to an Account" url="managing_accounts/adding_distribution_lists_to_an_account.htm" />
 <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+<topic name="Bulk Provisioning" url="managing_accounts/bulk_provisioning.htm" />
 <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
 <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
 <topic name="Create an Account" url="managing_accounts/create_an_account.htm" />
@@ -28,6 +31,7 @@
 <topic name="Editing Accounts" url="managing_accounts/editing_accounts.htm" />
 <topic name="Enabling the Calendar Feature" url="managing_accounts/enabling_the_calendar_feature.htm" />
 <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
+<topic name="How to Provision Multiple Accounts" url="managing_accounts/how_to_provision_multiple_accounts.htm" />
 <topic name="Mailbox usage" url="managing_accounts/mailbox_usage.htm" />
 <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
 <topic name="Preferences" url="managing_accounts/preferences.htm" />
@@ -37,6 +41,7 @@
 <topic name="Renaming an Account" url="managing_accounts/renaming_an_account.htm" />
 <topic name="Prevent Users from Changing Passwords" url="managing_accounts/restricting_passwords.htm" />
 <topic name="Using Search" url="managing_accounts/search.htm" />
+<topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
 <topic name="Setting time zones for accounts" url="managing_accounts/setting_time_zones_for_accounts.htm" />
 <topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
 <topic name="User Interface Features" url="managing_accounts/user_interface_features.htm" />
@@ -59,9 +64,11 @@
 <topic name="Configuring IMAP" url="managing_global_settings/configuring_imap.htm" />
 <topic name="Configuring POP" url="managing_global_settings/configuring_pop.htm" />
 <topic name="Configuring the MTA Tab for Global Settings" url="managing_global_settings/configuring_the_mta_tab_for_global_settings.htm" />
+<topic name="General Information for Global Settings" url="managing_global_settings/general_information_for_global_settings.htm" />
 <topic name="Global Attachment Settings" url="managing_global_settings/global_attachment_settings.htm" />
 <topic name="Managing Global Settings" url="managing_global_settings/global_settings.htm" />
 <topic name="IMAP and POP Proxy Server" url="managing_global_settings/imap_and_pop_proxy_server.htm" />
+<topic name="Making Free/Busy View Available" url="managing_global_settings/making_free_busy_view__available_.htm" />
 <topic name="MTA SMTP Restrictions" url="managing_global_settings/mta_smtp_restrictions.htm" />
 <topic name="Relay MTA for external delivery" url="managing_global_settings/relay_mta_for_external_delivery.htm" />
 <topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
@@ -92,13 +99,5 @@
 <topic name="View Server Status" url="monitoring/view_server_status.htm" />
 <topic name="Viewing User's Mailbox Content" url="monitoring/viewing_user_s_mailbox_content.htm" />
 <topic name="Changing a Password" url="passwords/changing_a_password.htm" />
-<topic name="Changing Locked Out Status" url="passwords/changing_locked_out_status.htm" />
-<topic name="Password Options" url="passwords/password_options.htm" />
-<topic name="Setting Account Lockout Rules" url="passwords/setting_account_lockout_rules.htm" />
-<topic name="Setting Password Rules" url="passwords/setting_password_rules.htm" />
-<topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
-<topic name="LMTP" url="popup_and_hotspots_/lmtp.htm" />
-<topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
-<topic name="Installing Certificates" url="tools/installing_certificates.htm" />
 
 </ftstdata>  

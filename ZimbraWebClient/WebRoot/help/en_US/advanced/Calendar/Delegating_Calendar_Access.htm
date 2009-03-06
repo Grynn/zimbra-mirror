@@ -1,4 +1,4 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
 <head>
@@ -14,20 +14,20 @@ if (navigator.appName !="Netscape")
 <style type="text/css">
 <!--
 ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; font-weight:bold; }
-ol.whs3 { list-style:decimal; }
-p.whs4 { margin-left:40px; }
-p.whs5 { margin-left:80px; }
-p.whs6 { margin-left:0px; }
-ul.whs7 { list-style:inside decimal; }
-ol.whs8 { list-style:inside decimal; }
+ol.whs2 { list-style:inside decimal; }
+p.whs3 { margin-left:40px; font-weight:bold; }
+ol.whs4 { list-style:decimal; }
+p.whs5 { margin-left:40px; }
+p.whs6 { margin-left:80px; }
+p.whs7 { margin-left:0px; }
+ul.whs8 { list-style:inside decimal; }
 -->
 </style><script type="text/javascript" language="JavaScript">
 <!--
 if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
 {
   var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs6 {margin-left:1pt; }";
+  strNSS += "p.whs7 {margin-left:1pt; }";
   strNSS +="</style>";
   document.write(strNSS);
 }
@@ -65,7 +65,7 @@ if (window.gbWhTopic)
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your  Calendar\nSharing your calendar");
-addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -112,8 +112,12 @@ if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( t
  The Grantee can see the activities posted to your calendar and the status 
  of meeting requests, but cannot make any changes to your calendar.</p></li>
 		<li class=p><p><span style="font-weight: bold;"><B>Manager</B></span>. 
- The Grantee has full permission to create meetings, accept or decline 
- invitations, and edit and delete activities from your calendar. </p></li>
+ The Grantee has permission to create meetings, accept or decline invitations, 
+ and edit and delete activities from your calendar. </p></li>
+		<li class=p><p><span style="font-weight: bold;"><B>Admin</B></span>. 
+ The Grantee has permission to create meetings, accept or decline invitations, 
+ and edit and delete activities from your calendar, share your calendar 
+ with others and revoke calendar shares.</p></li>
 		<li class=p-note><p class=note><span style="font-weight: bold;"><B>None</B></span> 
  is an option to temporarily disable access to a grantor's shared calendar 
  without revoking the share privileges. The Grantee still has the calendar 
@@ -126,48 +130,62 @@ if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( t
 	<li class=p><p>Public. Anyone that knows the URL to the shared calendar 
  can view it. They cannot make any changes to the calendar.</p></li>
 </ul>
+<h3>Sharing Private Appointment Details</h3>
+<p>When you share your calendar you can select the check box to allow internal 
+ users or groups and external guests to see your private appointments. 
+ They will be able to see details of the appointment. &nbsp;If 
+ you do not check the box, the calendar shows only that your are busy during 
+ a private appointment time.</p>
 <h6>To share your Calendar</h6>
-<p>Right-click on the calendar to share and select Share Calendar.</p>
-<p>On the Share Properties dialog select whom to share with.</p>
-<p class="whs2"><span style="font-weight: bold;"><B><a class="dropspot" href="javascript:TextPopup(this)" id="a4">Internal Users or Groups</a></B></span></p>
-<div class="droptext" id="POPUP256698672" style="display: 'none'; " x-ss-type="dropdown">
- <ol type="1" class="whs3">
+<ol type="1" class="whs2">
+	<li class=p><p>Right-click on the calendar to share and select Share 
+ Calendar.</p></li>
+	<li class=p><p>On the Share Properties dialog select whom to share 
+ with.</p></li>
+</ol>
+<p class="whs3"><span style="font-weight: bold;"><B><a class="dropspot" href="javascript:TextPopup(this)" id="a4">Internal Users or Groups</a></B></span></p>
+<div class="droptext" id="POPUP320724155" style="display: 'none'; " x-ss-type="dropdown">
+ <ol type="1" class="whs4">
   <li style="margin-left: -20px;" class=p>
-  <p class="whs4">When 
+  <p class="whs5">When 
  you choose Internal, you can choose addresses from the list that appears 
  as you type or you can type addresses that are not in the list. The user 
  or group must be a valid address in your company's mail server. </p></li>
   <li style="margin-left: -20px;" class=p>
-  <p class="whs4">In 
+  <p class="whs5">In 
  the <span style="font-weight: bold;"><B>Role</B></span> area, select the access 
  permissions.</p></li>
- </ol>
- <ol start="3" type="1" class="whs3">
   <li style="margin-left: -20px;" class=p>
-  <p class="whs4">In 
+  <p class="whs5">If 
+ you want to share your private appointment information, check <span style="font-weight: bold;"><B>Allow 
+ user(s) to see my private appointments</B></span><span>.</span></p></li>
+ </ol>
+ <ol start="4" type="1" class="whs4">
+  <li style="margin-left: -20px;" class=p>
+  <p class="whs5">In 
  the <span style="font-weight: bold;"><B>Message</B></span> area, select which 
  type of message to send. &nbsp;The options are as follows:</p></li>
  </ol>
  <ul type="disc" class="whs1">
   <li style="margin-left: -20px;" class=p>
-  <p class="whs5"><span 
+  <p class="whs6"><span 
  style="font-weight: bold;"><B>Send standard message</B></span>. The standard 
  share notification message is sent to the email address. &nbsp;</p></li>
   <li style="margin-left: -20px;" class=p>
-  <p class="whs5"><span 
+  <p class="whs6"><span 
  style="font-weight: bold;"><B>Add a note to standard message</B></span>. You 
  can add additional information to the standard message.</p></li>
  </ul>
- <ol start="4" type="1" class="whs3">
+ <ol start="5" type="1" class="whs4">
   <li style="margin-left: -20px;" class=p>
-  <p class="whs4">Click 
+  <p class="whs5">Click 
  <span style="font-weight: bold;"><B>OK</B></span>. </p></li>
  </ol>
  <p>&nbsp;</p>
 </div>
-<p class="whs2"><a class="dropspot" href="javascript:TextPopup(this)" id="a5">External 
+<p class="whs3"><a class="dropspot" href="javascript:TextPopup(this)" id="a5">External 
  guests</a></p>
-<div class="droptext" id="POPUP258526686" style="display: 'none'; " x-ss-type="dropdown">
+<div class="droptext" id="POPUP322946364" style="display: 'none'; " x-ss-type="dropdown">
  <ol>
   <li style="list-style: decimal;" type=1 class=p>
   <p>When you choose 
@@ -177,54 +195,58 @@ if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( t
   <li style="list-style: decimal;" type=1 class=p>
   <p>Enter the password 
  that users must enter to view your calendar.</p></li>
+  <li style="list-style: decimal;" type=1 class=p>
+  <p>If you want to share 
+ your private appointment information, check <span style="font-weight: bold;"><B>Allow 
+ user(s) to see my private appointments</B></span>. </p></li>
  </ol>
- <ol start=3>
+ <ol start=4>
   <li class=p>
-  <p class="whs6">In the <span style="font-weight: bold;"><B>Message</B></span> 
+  <p class="whs7">In the <span style="font-weight: bold;"><B>Message</B></span> 
  area, select which type of message to send. &nbsp;The 
  URL to your calendar and the password is included in the email message.</p></li>
-  <ul type="1" class="whs7">
+  <ul type="1" class="whs8">
    <li style="list-style: disc;" type=disc class=p>
-   <p class="whs6"><span 
+   <p class="whs7"><span 
  style="font-weight: bold;"><B>Send standard message</B></span>. The standard 
  share notification message is sent to the email address. </p></li>
    <li style="list-style: disc;" type=disc class=p>
-   <p class="whs6"><span 
+   <p class="whs7"><span 
  style="font-weight: bold;"><B>Add a note to standard message</B></span>. You 
  can add additional information to the standard message.</p></li>
   </ul>
   <li class=p>
-  <p class="whs6">Click <span style="font-weight: bold;"><B>OK</B></span>. 
+  <p class="whs7">Click <span style="font-weight: bold;"><B>OK</B></span>. 
  </p></li>
  </ol>
 </div>
-<p class="whs2"><a class="dropspot" href="javascript:TextPopup(this)" id="a6">Public</a></p>
-<div class="droptext" id="POPUP153628896" style="display: 'none'; " x-ss-type="dropdown">
+<p class="whs3"><a class="dropspot" href="javascript:TextPopup(this)" id="a6">Public</a></p>
+<div class="droptext" id="POPUP318827631" style="display: 'none'; " x-ss-type="dropdown">
  <p>When you choose Public, anyone who has the URL can view your calendar. 
  &nbsp;No password is required. </p>
 </div>
 <h3>Editing or revoking permission</h3>
 <p>You can edit or revoke permissions at any time.</p>
-<ol type="1" class="whs8">
-	<li class=p><p>Right-click a shared calendar.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Edit Properties</B></span>. 
+<ol type="1" class="whs2">
+	<li class=P><p>Right-click a shared calendar.</p></li>
+	<li class=P><p>Click <span style="font-weight: bold;"><B>Edit Properties</B></span>. 
  Users sharing the folder are listed.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Edit</B></span> to 
+	<li class=P><p>Click <span style="font-weight: bold;"><B>Edit</B></span> to 
  change permissions, or<br>
 	Click <span style="font-weight: bold;"><B>Revoke</B></span> to remove permissions. 
  </p></li>
-	<li class=p><p>Select whether a message describing the change should 
+	<li class=P><p>Select whether a message describing the change should 
  be sent.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>.</p></li>
+	<li class=P><p>Click <span style="font-weight: bold;"><B>OK</B></span>.</p></li>
 </ol>
 <h6>&nbsp;</h6>
-<p class="whs6">&nbsp;</p>
+<p class="whs7">&nbsp;</p>
 <script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a4','POPUP256698672');
+TextPopupInit('a4','POPUP320724155');
 //--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a5','POPUP258526686');
+TextPopupInit('a5','POPUP322946364');
 //--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a6','POPUP153628896');
+TextPopupInit('a6','POPUP318827631');
 //--></script><script type="text/javascript" language="javascript1.2">
 <!--
 highlightSearch();

@@ -1,4 +1,4 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
 <!-- saved from url=(0014)about:internet -->
 <html>
 <head>
@@ -82,11 +82,10 @@ else
  anti-spam software as the mail filter to identify spam 
  mail. When you installed the Zimbra Collaboration Suite, the anti-spam 
  software is automatically enabled. </p>
-<p>You can enable or disable this protection and set rules for handling 
- spam from the <span style="font-weight: bold;"><B>Global 
- Settings&gt;Anti-Spam</B></span> tab. How these rules are configured determine 
- how aggressively spam is filtered. The following options 
- can be changed:</p>
+<p>You can set rules for handling spam from the <span 
+ style="font-weight: bold;"><B>Global Settings&gt;Anti-Spam</B></span> tab. How 
+ these rules are configured determine how aggressively spam 
+ is filtered. The following options can be changed:</p>
 <ul type="disc" class="whs1">
 	<li class=p><p><span style="font-weight: bold;"><B>Kill percent</B></span> 
  at 75%. Mail that is scored at 75% is considered spam and is not delivered.</p></li>
@@ -98,15 +97,21 @@ else
  line for messages tagged as spam. </p></li>
 </ul>
 <p>When ZCS was installed, an automated spam training filter was enabled. 
- Two mail accounts were created. </p>
+ </p>
+<p>Two mail accounts were created. </p>
 <ul type="disc" class="whs1">
 	<li class=p><p>The Spam Training User address receives mail notification 
  about mail that was not marked as junk, but should have been.</p></li>
 	<li class=p><p>The Non-Spam (HAM) Training User 
  address receives mail notification about mail that was marked as junk 
- but should not have been.</p></li>
+ but should not have been. </p></li>
 </ul>
-<p>When a message is tagged as spam, the message is delivered to the recipient&rsquo;s 
+<p>For these training accounts, the mailbox quota is disabled (i.e. set 
+ to 0). Disabling quotas prevents bouncing messages when the mailbox is 
+ full. Attachment indexing is also disabled. </p>
+<p>Junk email messages are indexed, but you can disable indexing of junk 
+ email messages from the COS Preferences tab. </p>
+<p>When a message is tagged as spam, the message is delivered to the recipient’s 
  <span style="font-weight: bold;"><B>Junk</B></span> folder. Users can view the 
  number of unread messages and can open the Junk folder to review the messages 
  marked as spam. </p>

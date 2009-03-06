@@ -1,6 +1,33 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="server, monitoring" >
+  <topic name="Monitoring Zimbra Collaboration Suite" url="managing_servers/monitoring_zimbra_collaboration_suite.htm" />
+</key>
+<key name="server, search" >
+  <topic name="Advanced Search" url="managing_accounts/advanced_search.htm" />
+</key>
+<key name="server, stopping service" >
+  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
+</key>
+<key name="servers" >
+  <topic name="Managing Servers" url="managing_servers/managing_servers.htm" />
+</key>
+<key name="servers, configuring MTA" >
+  <topic name="Configuring the MTA Tab for Servers" url="managing_servers/configuring_the_mta_tab_for_servers.htm" />
+</key>
+<key name="service status" >
+  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
+</key>
+<key name="service, stopping" >
+  <topic name="Stopping Mailbox Service on a Server" url="managing_servers/stopping_mailbox_service_on_a_server.htm" />
+</key>
+<key name="services, turning off/on" >
+  <topic name="View Server Status" url="monitoring/view_server_status.htm" />
+</key>
+<key name="session timeout" >
+  <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
+</key>
 <key name="session token  lifetime" >
   <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
 </key>
@@ -10,11 +37,17 @@
 <key name="setting passwords" >
   <topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
 </key>
+<key name="setting version to view upon login" >
+  <topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
+</key>
+<key name="showing free busy" >
+  <topic name="Making Free/Busy View  Available " url="managing_global_settings/making_free_busy_view__available_.htm" />
+</key>
 <key name="signature length" >
   <topic name="Preferences" url="managing_accounts/preferences.htm" />
 </key>
 <key name="skins" >
-  <topic name="Customizing UI Themes" url="ui_themes/customizing_ui_themes.htm" />
+  <topic name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
 </key>
 <key name="skins, defining for user interface" >
   <topic name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
@@ -56,7 +89,7 @@
   <topic name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
 </key>
 <key name="themes" >
-  <topic name="Customizing UI Themes" url="ui_themes/customizing_ui_themes.htm" />
+  <topic name="Customizing UI Themes" url="cos/customizing_ui_themes.htm" />
 </key>
 <key name="themes defining" >
   <topic name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
@@ -96,6 +129,12 @@
 </key>
 <key name="volume management" >
   <topic name="Volume Management" url="managing_servers/volume_management.htm" />
+</key>
+<key name="volume, blob compression" >
+  <topic name="Volume Management" url="managing_servers/volume_management.htm" />
+</key>
+<key name="Zimbra Web Client Versions" >
+  <topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />
 </key>
 <key name="Zimlets, adding to COS" >
   <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
