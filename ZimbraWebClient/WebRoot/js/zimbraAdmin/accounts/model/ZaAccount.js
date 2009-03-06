@@ -1952,38 +1952,9 @@ ZaAccount.isAccountTypeSet = function (tmpObj) {
 
 }
 
-//Set the zimbraMailCatchAll address
-//this is a seriously evil call :) we should not make searches that broad unless we plan to paginate them. This is likely to return TOO_MANY_RESULTS and take a lot of time
-/*ZaAccount.getAllDomainAccounts = function (domainName) {
-     var searchParams = {
-          limit : 0 , //all
-          type : [ZaSearch.ACCOUNTS] ,
-          domain: domainName ,
-          applyCos:  0,
-          attrs: [ZaAccount.A_zimbraMailCatchAllAddress]
-        }
-    var resp =  ZaSearch.searchDirectory (searchParams).Body.SearchDirectoryResponse ;
-    var list = new ZaItemList(null, null);
-	list.loadFromJS(resp);
-    return list.getArray() ;
-}*/
-
-
-
 ZaAccount.getCatchAllDomain = function (domainName) {
     return "@" + domainName ;
 }
-
-/*
-ZaAccount.getCatchAllChoices = function (domainName) {
-    var accounts = ZaAccount.getAllDomainAccounts (domainName) ;
-    //var choices = [{value:"", label: ZaMsg.L_none}] ;
-    var choices = [{value:"", label: ""}] ;         
-    for (var i=0; i < accounts.length; i++) {
-        choices.push ({ value: accounts[i].id, label: accounts[i].name}) ;
-    }
-    return choices ;
-}*/
 
 //find the catch all account for the domain
 ZaAccount.getCatchAllAccount = function (domainName) {

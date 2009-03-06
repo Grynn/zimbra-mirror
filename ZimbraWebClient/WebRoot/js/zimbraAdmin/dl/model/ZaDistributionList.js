@@ -53,6 +53,7 @@ ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
 ZaDistributionList.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
 ZaDistributionList.A_mailStatus = "zimbraMailStatus";
+ZaDistributionList.A2_publishedShares = "publishedShares";
 ZaDistributionList.A2_members = "members";
 ZaDistributionList.A2_memberList = "memberList";
 ZaDistributionList.A2_origList = "origList";
@@ -647,11 +648,11 @@ ZaDistributionList.prototype.getMembers = function (by, val, limit) {
 			this.initFromJS(resp.dl[0]);
 			
 			//Make a GetAccountMembershipRequest
-	this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getDlMemberShip(this.id, "id" ) ;
-	this[ZaAccount.A2_directMemberList + "_more"] = 
-			(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
-	this[ZaAccount.A2_indirectMemberList + "_more"] = 
-			(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+			this[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.getDlMemberShip(this.id, "id" ) ;
+			this[ZaAccount.A2_directMemberList + "_more"] = 
+				(this[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
+			this[ZaAccount.A2_indirectMemberList + "_more"] = 
+				(this[ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT) ? 1: 0;
 			
 		} catch (ex) {
 			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDistributionList.prototype.getMembers", null, false);
@@ -664,6 +665,28 @@ ZaDistributionList.prototype.getMembers = function (by, val, limit) {
 };
 
 ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getMembers) ;
+
+ZaDistributionList.prototype.getPublishedShareInfo = function () {
+	if (this.id == null) {
+		return;
+	}
+	var soapDoc = AjxSoapDoc.create("GetPublishedShareInfoRequest", ZaZimbraAdmin.URN, null);
+	var dl = soapDoc.set("dl", this.id);
+	dl.setAttribute("by", "id");
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_DL
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetPublishedShareInfoResponse;	
+	if(!AjxUtil.isEmpty(resp.share)) {
+		this[ZaDistributionList.A2_publishedShares] = new ZaItemList(ZaShare);
+		this[ZaDistributionList.A2_publishedShares].loadFromJS(resp);
+	}
+	//GetShareInfoRequest	
+}
+ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getPublishedShareInfo) ;
 
 ZaDistributionList.addNewMembers = function (mods, obj, dl, finishedCallback) {
 	var addMemberSoapDoc, r;
@@ -850,7 +873,8 @@ ZaDistributionList.myXModel = {
 		{id:(ZaAccount.A2_indirectMemberList + "_offset"), type:_LIST_},	
 		{id:(ZaAccount.A2_nonMemberList + "_more"), type:_LIST_},
 		{id:(ZaAccount.A2_nonMemberList + "_offset"), type:_LIST_},
-		{id:ZaDistributionList.A2_alias_selection_cache, type:_LIST_}	
+		{id:ZaDistributionList.A2_alias_selection_cache, type:_LIST_},
+		{id:ZaDistributionList.A2_publishedShares, type:_LIST_}	
 		
 	]
 };

@@ -361,6 +361,8 @@ ZaSettings.DL_MEMBEROF_TAB = "dlMemberOfTab";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_MEMBEROF_TAB, label: ZaMsg.UI_Comp_DLMemberOfTab });
 ZaSettings.DL_NOTES_TAB = "dlNotesOfTab";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_NOTES_TAB, label: ZaMsg.UI_Comp_DLNotesTab });
+ZaSettings.DL_SHARES_TAB = "dlSharesTab";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_SHARES_TAB, label: ZaMsg.UI_Comp_DLSharesTab });
 
 //Resource View Tabs
 ZaSettings.RESOURCE_PROPERTIES_TAB = "resourcePropertiesTab";

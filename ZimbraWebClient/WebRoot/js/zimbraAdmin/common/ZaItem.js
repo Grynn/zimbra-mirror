@@ -37,6 +37,7 @@ ZaItem.removeMethods = new Object();
 
 ZaItem.ACCOUNT = "account";
 ZaItem.DL = "dl";
+ZaItem.GROUP = "grp";
 ZaItem.ALIAS = "alias";
 ZaItem.RESOURCE = "calresource";
 ZaItem.DOMAIN = "domain";

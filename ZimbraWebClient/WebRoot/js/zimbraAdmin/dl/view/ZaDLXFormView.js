@@ -377,8 +377,6 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 			if ((result = stdEmailRegEx.exec(tmpval)) != null) {
 				tmpval = result[2];
 			}
-			
-			/*if(!AjxUtil.EMAIL_SHORT_RE.test(tmpval) ) {*/
 			if(tmpval.lastIndexOf ("@")!=tmpval.indexOf ("@")) {
 				//how error msg
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,null,DwtMessageDialog.WARNING_STYLE);
@@ -466,6 +464,14 @@ function (entry) {
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
+	
+	this._containedObject[ZaDistributionList.A2_publishedShares] = [];
+	if(!AjxUtil.isEmpty(entry[ZaDistributionList.A2_publishedShares]) && !AjxUtil.isEmpty(entry[ZaDistributionList.A2_publishedShares].getArray())) {
+		for(var i=0;i<entry[ZaDistributionList.A2_publishedShares].getArray().length;i++) {
+			this._containedObject[ZaDistributionList.A2_publishedShares][i] = entry[ZaDistributionList.A2_publishedShares].getArray()[i];
+		}
+		this._containedObject[ZaDistributionList.A2_publishedShares]._version = 1;
+	}
 		
 	this._localXForm.setInstance(this._containedObject);	
 	
@@ -632,12 +638,14 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 	var _tab1 = ++this.TAB_INDEX;
 	var _tab2 = ++this.TAB_INDEX;	
 	var _tab3 = ++this.TAB_INDEX;	
-	var _tab4 = ++this.TAB_INDEX;	
+	var _tab4 = ++this.TAB_INDEX;
+	var _tab5 = ++this.TAB_INDEX;	
 	
 	this.tabChoices.push({value:_tab1, label:ZaMsg.DLXV_TabMembers});
 	this.tabChoices.push({value:_tab2, label:ZaMsg.DLXV_TabNotes});
 	this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
     this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});
+    this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Shares});
     	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	xFormObject.numCols=5;
@@ -1021,6 +1029,25 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 		};
 		cases.push(case4);
 	}
+	
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_SHARES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		var shareHeaderList = new Array();
+		shareHeaderList[0] = new ZaListHeaderItem(ZaShare.A_folderPath, ZaMsg.Shares_FolderPath, null, "100px", null, null, false, true);
+		shareHeaderList[1] = new ZaListHeaderItem(ZaShare.A_ownerName, ZaMsg.Shares_OwnerName, null, "106px", null, null, false, true);
+		shareHeaderList[2] = new ZaListHeaderItem(ZaShare.A_granteeName, ZaMsg.Shares_GranteeName, null, "106px", null, null, false, true);
+		
+				
+		var case5 = {type:_ZATABCASE_, numCols:1, colSpan:"*", caseKey:_tab5, colSizes: ["100%"],
+		items:[
+			{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"100%", label:ZaMsg.PQV_Messages,  
+			items: [
+		    	{ref:ZaDistributionList.A2_publishedShares, 
+		    		type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",
+				   	multiselect:true, widgetClass:ZaSharesListView, headerList:shareHeaderList}								
+			]}
+		]};		
+		cases.push(case5);
+	}	
 	xFormObject.items = [
 		{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header", 
 			items: [

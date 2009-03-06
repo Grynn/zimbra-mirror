@@ -80,6 +80,7 @@ AjxPackage.require("zimbraAdmin.search.controller.ZaSearchBuilderController");
 // model
 AjxPackage.require("zimbraAdmin.accounts.model.ZaAccount");
 AjxPackage.require("zimbraAdmin.dl.model.ZaDistributionList");
+AjxPackage.require("zimbraAdmin.dl.model.ZaShare");
 AjxPackage.require("zimbraAdmin.resource.model.ZaResource");
 AjxPackage.require("zimbraAdmin.resource.model.ZaContactList");
 AjxPackage.require("zimbraAdmin.accounts.model.ZaAlias");
@@ -151,6 +152,7 @@ AjxPackage.require("zimbraAdmin.statistics.view.ZaServerSessionStatsPage");
 AjxPackage.require("zimbraAdmin.globalconfig.view.GlobalConfigXFormView");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaAccMiniListView");
 AjxPackage.require("zimbraAdmin.dl.view.ZaDLXFormView");
+AjxPackage.require("zimbraAdmin.dl.view.ZaSharesListView");
 AjxPackage.require("zimbraAdmin.resource.view.ZaResourceXFormView");
 AjxPackage.require("zimbraAdmin.resource.view.ZaNewResourceXWizard");
 AjxPackage.require("zimbraAdmin.ZaZimbraAdmin");
