@@ -161,8 +161,6 @@ function(tmpObj, dl) {
 	//create SOAP request
 	var soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set(ZaAccount.A_name, tmpObj.name);
-	if(tmpObj.attrs[ZaAccount.A_password] && tmpObj.attrs[ZaAccount.A_password].length > 0)
-		soapDoc.set(ZaAccount.A_password, tmpObj.attrs[ZaAccount.A_password]);
 		
 	if(tmpObj[ZaAccount.A2_autoMailServer] == "TRUE") {
 		tmpObj.attrs[ZaAccount.A_mailHost] = null;
@@ -174,7 +172,7 @@ function(tmpObj, dl) {
 	}
 	
 	for (var aname in tmpObj.attrs) {
-		if(aname == ZaAccount.A_password || aname == ZaAccount.A_zimbraMailAlias || aname == ZaItem.A_objectClass || aname == ZaAccount.A2_mbxsize || aname == ZaAccount.A_mail) {
+		if( aname == ZaAccount.A_zimbraMailAlias || aname == ZaItem.A_objectClass || aname == ZaAccount.A2_mbxsize || aname == ZaAccount.A_mail) {
 			continue;
 		}	
 		

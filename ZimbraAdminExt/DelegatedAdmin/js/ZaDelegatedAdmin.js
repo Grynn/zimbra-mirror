@@ -51,6 +51,51 @@ if (ZaAccount) {
             form.parent.setDirty (true) ;
         }
     }
+
+    ZaAccount.getAdminChkBoxItem = function () {
+        var adminChkBox = {
+            ref:ZaAccount.A_zimbraIsAdminAccount,type:_CHECKBOX_,
+            label:ZaMsg.NAD_IsAdmin,
+            bmolsnr:true,
+            elementChanged :
+            function(elementValue,instanceValue, event) {
+                if(elementValue == "TRUE") {
+                    this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsSystemAdminAccount);
+                }
+                    this.getForm().itemChanged(this, elementValue, event);
+            },
+            trueValue:"TRUE", falseValue:"FALSE"
+        };
+
+        return adminChkBox;
+    }
+
+    ZaAccount.getAdminRolesItem = function () {
+       var adminRoleField = {
+            ref: ".", type: _DYNSELECT_ ,
+            dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAdminGroups,
+            onChange: ZaAccount.changeAdminRoles ,
+            emptyText:com_zimbra_delegatedadmin.searchTermAdminGroup,
+            dataFetcherClass:ZaSearch,editable:true
+       }
+
+       var adminRolesItem = {
+           ref: ZaAccount.A2_adminRoles , type: _REPEAT_,
+           label: com_zimbra_delegatedadmin.Label_AssignAdminRole, labelLocation:_LEFT_ ,
+           labelCssStyle:"vertical-align: top; padding-top: 3px;",
+           align:_LEFT_,
+           repeatInstance:"",
+           showAddButton:true, showAddOnNextRow:true, addButtonWidth: 50, addButtonLabel:com_zimbra_delegatedadmin.NAD_Add,
+           showRemoveButton:true , removeButtonWidth: 50, removeButtonLabel:com_zimbra_delegatedadmin.NAD_Remove,
+           visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsAdminAccount]==\'TRUE\' "],
+           visibilityChangeEventSources: [ZaAccount.A_zimbraIsAdminAccount] ,
+           onRemove:ZaAccount.onAdminRoleRemove,
+           items:[adminRoleField]
+       }
+
+        return adminRolesItem ;
+
+    }
 }
 
 ZaDelegatedAdmin.accountObjectModifer = function () {
@@ -71,57 +116,8 @@ if (ZaTabView.ObjectModifiers["ZaAccountXFormView"]){
 
 if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
    ZaDelegatedAdmin.AccountXFormModifier = function (xFormObject) {
-
-       var adminChkBox = {
-            ref:ZaAccount.A_zimbraIsAdminAccount,type:_CHECKBOX_,
-            label:ZaMsg.NAD_IsAdmin,
-            bmolsnr:true,
-            elementChanged :
-            function(elementValue,instanceValue, event) {
-                if(elementValue == "TRUE") {
-                    this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsSystemAdminAccount);
-                }
-                    this.getForm().itemChanged(this, elementValue, event);
-            },
-            trueValue:"TRUE", falseValue:"FALSE"
-        };
-       /* Use list may cause thousands of accounts returned issue
-       var adminRolesField = {
-            ref: ZaAccount.A2_adminRoles, type: _DWT_LIST_, width:300, height: 100,
-            cssClass: "DLSource", widgetClass: ZaCheckBoxListView,
-            headerList: ZaCheckBoxListView._getHeaderList (),
-            onSelection:ZaCheckBoxListView.onSelectionListener,
-            forceUpdate: true, preserveSelection:true, hideHeader: false
-         } */
-
-       var adminRoleField = {
-            ref: ".", type: _DYNSELECT_ ,
-//           label: com_zimbra_delegatedadmin.Label_AssignAdminRole, labelLocation:_LEFT_ ,
-//           choices:this.adminRolesChoices,
-//            inputPreProcessor:ZaAccountXFormView.preProcessCOS,
-//            visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsAdminAccount]==\'TRUE\' "],
-//            visibilityChangeEventSources: [ZaAccount.A_zimbraIsAdminAccount] ,
-//            bmolsnr:true,
-            dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAdminGroups,
-            onChange: ZaAccount.changeAdminRoles ,
-            emptyText:com_zimbra_delegatedadmin.searchTermAdminGroup,
-            dataFetcherClass:ZaSearch,editable:true
-       }
-
-       var adminRolesItem = {
-           ref: ZaAccount.A2_adminRoles , type: _REPEAT_,  
-           label: com_zimbra_delegatedadmin.Label_AssignAdminRole, labelLocation:_LEFT_ ,
-           labelCssStyle:"vertical-align: top; padding-top: 3px;",
-           align:_LEFT_,
-           repeatInstance:"",
-           showAddButton:true, showAddOnNextRow:true, addButtonWidth: 50, addButtonLabel:com_zimbra_delegatedadmin.NAD_Add,
-           showRemoveButton:true , removeButtonWidth: 50, removeButtonLabel:com_zimbra_delegatedadmin.NAD_Remove,
-           visibilityChecks:["instance.attrs[ZaAccount.A_zimbraIsAdminAccount]==\'TRUE\' "],
-           visibilityChangeEventSources: [ZaAccount.A_zimbraIsAdminAccount] ,
-           onRemove:ZaAccount.onAdminRoleRemove,
-           items:[adminRoleField]
-       }
-       
+       var adminChkBox = ZaAccount.getAdminChkBoxItem ();
+       var adminRolesItem = ZaAccount.getAdminRolesItem () ;
 
         var tabs = xFormObject.items[2].items;
         var tmpItems = tabs[0].items;
@@ -206,7 +202,7 @@ if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
        var adminGroupChkBx =
             {
                 ref: ZaDistributionList.A_isAdminGroup,type:_CHECKBOX_,
-                label:com_zimbra_delegatedadmin.NAD_IsAdminGroup,
+                label:com_zimbra_delegatedadmin.NAD_IsAdminGroup + ": ",
                 labelLocation:_LEFT_,  align:_LEFT_,
 				labelCssClass:"xform_label", cssStyle:"padding-left:0px",
                 enableDisableChecks:[],

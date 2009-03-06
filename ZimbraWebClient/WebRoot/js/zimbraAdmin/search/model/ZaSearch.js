@@ -519,6 +519,51 @@ function (opArr, orderArr) {
     }
 }
 
+ZaSearch.isAccountExist = function (params) {
+    var currentController =  ZaApp.getInstance().getCurrentController() ;
+
+    var accountName = params.name ;
+    var isPopupErrorDialog = params.popupError ? true : false;
+
+    if (!accountName) {
+        currentController.popupErrorDialog(ZaMsg.error_account_missing);
+        return true ;
+    }
+
+    var params = { 	query: ["(mail=",accountName,")"].join(""),
+                    limit : 2,
+                    applyCos: 0,
+                    types: [ZaSearch.DLS,ZaSearch.ALIASES,ZaSearch.ACCOUNTS,ZaSearch.RESOURCES],
+                    controller: currentController
+                 };
+    try {
+        var resp = ZaSearch.searchDirectory(params).Body.SearchDirectoryResponse;
+    } catch (ex) {
+        currentController._handleException(ex, "ZaSearch.isAccountExist", null, false);
+    }
+    var list = new ZaItemList(null);
+    list.loadFromJS(resp);
+    if(list.size() > 0) {
+        if (isPopupErrorDialog) {
+            var acc = list.getArray()[0];
+            if(acc.type==ZaItem.ALIAS) {
+                ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_aliasWithThisNameExists);
+            } else if (acc.type==ZaItem.RESOURCE) {
+                ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_resourceWithThisNameExists);
+            } else if (acc.type==ZaItem.DL) {
+                ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_dlWithThisNameExists);
+            } else {
+                ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_accountWithThisNameExists);
+            }
+        }
+
+    }else {
+        return false ;
+    }
+
+    return true;
+}
+
 /** Never use this call, always use CountAccountRequest
 ZaSearch.getUsedDomainAccounts =
 function (domainName, controller) {

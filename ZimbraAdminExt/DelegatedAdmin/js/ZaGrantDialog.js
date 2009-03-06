@@ -1,7 +1,18 @@
-ZaGrantDialog = function(parent,  app, title) {
+/**
+ *
+ * @param parent
+ * @param app
+ * @param title
+ * @param by - either by target or by grantee
+ *             if by target, target name and type are not modifiable
+ *             if by grantee, grantee name and type are not modifiable
+ */
+ZaGrantDialog = function(parent,  app, title, by) {
     if (arguments.length == 0) return;
     this._standardButtons = [ DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON];
     ZaXDialog.call(this, parent,null,  title, "400px", "200px");
+    if (!by) by = "target" ;
+    this.by = by;
     this._containedObject = {};
 
     this.systemRightsChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
@@ -20,29 +31,53 @@ function() {
         items:[
              {type:_GROUP_,isTabGroup:true, numCols:2, colSizes: [165, "*"], items: [ //allows tab key iteration
                { type: _SPACER_ },
-               { ref: ZaGrant.A_target, type: _OUTPUT_ , label: com_zimbra_delegatedadmin.Label_target_name },
-               { ref: ZaGrant.A_target_type, type:_OUTPUT_, label: com_zimbra_delegatedadmin.Label_target_type   },
 
-               // make it type _DYNSELECT_
-               { ref: ZaGrant.A_grantee, type: _DYNSELECT_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
-                   visibilityChecks:[],labelLocation:_LEFT_ ,
-                   emptyText:ZaMsg.enterSearchTerm,
-                   choices: this.granteeNameChoices,
-                   onChange: ZaGrantDialog.setGranteeChanged,
-                   dataFetcherClass:ZaSearch ,
-                   dataFetcherMethod:ZaSearch.prototype.dynSelectGrantees,
-                   editable: true
-               },
-               { ref: ZaGrant.A_grantee_type, type:_TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
-                    visibilityChecks:[], //temporary solution to make this element visible
-                    enableDisableChecks:false,bmolsnr:true,
-//                    enableDisableChangeEventSources:[ZaGrant.A_right_type],
-                    labelLocation:_LEFT_
-               },     /*
-               { ref: ZaGrant.A_grantee_type, type:_OSELECT1_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
-                    visibilityChecks:[], //temporary solution to make this element visible
-                    labelLocation:_LEFT_, choices: ZaGrant.GRANTEE_TYPE
-               },      */
+                 {type: _GROUP_, colSpan: "*", numCols:2, colSizes: [165, "*"],
+                     visibilityChecks:["this.getForm().parent.by == 'target'"],
+                     items : [
+                       { ref: ZaGrant.A_target, type: _OUTPUT_ ,
+                           label: com_zimbra_delegatedadmin.Label_target_name },
+                       { ref: ZaGrant.A_target_type, type:_OUTPUT_,
+                           label: com_zimbra_delegatedadmin.Label_target_type   },
+
+                       // make it type _DYNSELECT_
+                       { ref: ZaGrant.A_grantee, type: _DYNSELECT_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
+                           visibilityChecks:[],labelLocation:_LEFT_ ,
+                           emptyText:ZaMsg.enterSearchTerm,
+                           choices: this.granteeNameChoices,
+                           onChange: ZaGrantDialog.setGranteeChanged,
+                           dataFetcherClass:ZaSearch ,
+                           dataFetcherMethod:ZaSearch.prototype.dynSelectGrantees,
+                           editable: true
+                       },
+                       { ref: ZaGrant.A_grantee_type, type:_TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
+                            visibilityChecks:[], //temporary solution to make this element visible
+                            enableDisableChecks:false,bmolsnr:true,
+        //                    enableDisableChangeEventSources:[ZaGrant.A_right_type],
+                            labelLocation:_LEFT_
+                       },
+                     ]
+                 },
+
+                 {type: _GROUP_, colSpan: "*", numCols:2, colSizes: [165, "*"],
+                    visibilityChecks:["this.getForm().parent.by == 'grantee'"],
+                    items: [
+                         { ref: ZaGrant.A_grantee, type: _OUTPUT_ ,
+                            label: com_zimbra_delegatedadmin.Label_grantee_name },
+                        { ref: ZaGrant.A_grantee_type, type:_OUTPUT_,
+                            label: com_zimbra_delegatedadmin.Label_grantee_type   },
+
+                       { ref: ZaGrant.A_target_type, type: _OSELECT1_, choices: ZaZimbraRights.targetType,
+                           label: com_zimbra_delegatedadmin.Label_target_type ,
+                           visibilityChecks:[]
+                       },
+                       { ref: ZaGrant.A_target, type: _TEXTFIELD_,
+                           label: com_zimbra_delegatedadmin.Label_target_name ,
+                           visibilityChecks:[]
+                       }
+                   ]
+                 },
+
                { ref: ZaGrant.A_right_type, type: _OSELECT1_, label: com_zimbra_delegatedadmin.Label_right_type,
                    visibilityChecks:[],
                    labelLocation: _LEFT_, choices: ZaGrant.RIGHT_TYPE_CHOICES

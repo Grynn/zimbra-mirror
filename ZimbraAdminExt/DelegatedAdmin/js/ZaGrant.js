@@ -40,50 +40,7 @@ ZaGrant.INLINE_VERB_TYPE_CHOICES = [
     {value:"set", label:com_zimbra_delegatedadmin.Col_inline_verb_set},
     {value:"get", label:com_zimbra_delegatedadmin.Col_inline_verb_get}
 ]
-
- /*
- A sample grant on a target:
-   {
-      type: usr or grp
-      id: 75b0677b-6ed1-4f0a-a37e-e5b24e4c2d22  (grantee-zimbraId)
-      name: user1 (grantee-name)
-      right: createAccount (right-name)
-      deny: 1 | 0 (default)
-  }
-
-  */
-ZaGrant.getSampleGrants = function () {
-    var grant1 = new ZaGrant ()  ;
-    var grant2 = new ZaGrant () ;
-    grant1.grantee_type =  "usr" ;
-    grant1.id = "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d22" ;
-    grant1.grantee = "user1@ccaomac.zimbra.com" ;
-    grant1.right = "createAccount" ;
-    grant1.deny = "1" ;
-
-    grant2.grantee_type = "grp";
-    grant2.id = "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d23";
-    grant2.grantee = "dl1@ccaomac.zimbra.com";
-    grant2.right = "deleteAccount";
-    grant2.deny =  "1" ;
-    return [
-        grant1, grant2
-         /*
-        { grantee_type: "usr",
-          id: "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d22",
-          grantee: "user1@ccaomac.zimbra.com",
-          right: "createAccount" ,
-          deny:  "1"                                     Z
-        } ,
-        { grantee_type: "grp",
-          id: "75b0677b-6ed1-4f0a-a37e-e5b24e4c2d23",
-          grantee: "dl1@ccaomac.zimbra.com",
-          right: "deleteAccount" ,
-          deny:  "1"
-        }  */
-    ]
-}
-
+ 
 
 ZaGrant.getSampleGrantsList = function () {
     var list = new ZaItemList(ZaGrant);

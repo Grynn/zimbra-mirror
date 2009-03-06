@@ -36,7 +36,8 @@ ZaUIComponent.addUIComp  = function () {
 			arr.push (obj[ZaUIComponent.A_comp_name]);  //TODO, may need to add a list item
 			this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraAdminConsoleUIComponents, arr);
 			this.getModel().setInstanceValue(this.getInstance(),ZaUIComponent.A2_ui_comp_selection_cache, []);
-			this.parent.setDirty(true);
+
+            if (this.parent && this.parent.setDirty) this.parent.setDirty(true);
 		}
 	}
 }
@@ -162,28 +163,11 @@ ZaUIComponent.accountTargetXFormModifier = function (xFormObject) {
 
     var componentUIItems = [
         {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_ui_comp, id:"permission_ui_comp_grouper",
-            colSizes:["700px"],numCols:1,
-            items:[
-                   ZaUIComponent.UIComponentsXFormItem ,
-                   {type:_GROUP_, numCols:3,width: 350, colSizes:["100px","20px","*"],  height: 30,
-                        cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left: 200px; margin-right:auto;",
-                        items: [
-                            {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_grant,width:"100px",
-                                onActivate:"ZaUIComponent.addButtonListener.call (this);",
-                                align: _RIGHT_},
-                            {type:_CELLSPACER_},
-                            {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px", align: _LEFT_ ,
-//                                enableDisableChangeEventSources: [ZaGrant.A2_grantsListSelectedItems, ZaGrant.A2_grantsList] ,
-//                                enableDisableChecks:[ZaGrantsListView.isDeleteEnabled],
-                                onActivate:"ZaUIComponent.deleteButtonListener.call(this);"
-                            }
-                        ]
-                    }
-
-            ]
+            colSizes:["700px"],numCols:1
         }
     ];
-
+    componentUIItems.items = ZaUIComponent.getUIComponentsXFormItem () ;
+    
     permissionView.items = permissionView.items.concat(componentUIItems);
     return ;
 }
@@ -193,15 +177,38 @@ ZaUIComponent.UIComponentsItem = {
      type: _LIST_, listItems: { type: _STRING_ }
 };
 
-//    ZaUIComponent.uiCompListSelectItem = { ref: ZaGrant.A2_grantsListSelectedItems, type:_LIST_ }
 
-ZaUIComponent.UIComponentsXFormItem  =  {
-    ref: ZaAccount.A_zimbraAdminConsoleUIComponents, type: _DWT_LIST_, width:700, height: 200,
-    cssClass: "DLSource", widgetClass: ZaUICompListView,
-    headerList: ZaUICompListView._getHeaderList (),
-    onSelection:ZaUICompListView.uiCompSelectionListener,
-    forceUpdate: true, preserveSelection:false, hideHeader: false
-} ;
+ZaUIComponent.getUIComponentsXFormItem  = function (params) {
+    if (!params) params = {};
+    var w = params.width ? params.width : 700 ;
+    var h = params.height ? params.height : 200 ;
+    var list = {
+        ref: ZaAccount.A_zimbraAdminConsoleUIComponents, type: _DWT_LIST_,
+        width:w, height: h,
+        cssClass: "DLSource", widgetClass: ZaUICompListView,
+        headerList: ZaUICompListView._getHeaderList (),
+        onSelection:ZaUICompListView.uiCompSelectionListener,
+        forceUpdate: true, preserveSelection:false, hideHeader: false
+    } ;
+
+    var marginLeft = ( w - 220 ) / 2 ;
+
+    var buttons =  {
+        type:_GROUP_, numCols:3,width: 350, colSizes:["100px","20px","*"],  height: 30,
+        cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left: " + marginLeft + "; margin-right:auto;",
+        items: [
+            {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_grant,width:"100px",
+                onActivate:"ZaUIComponent.addButtonListener.call (this);",
+                align: _RIGHT_},
+            {type:_CELLSPACER_},
+            {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px", align: _LEFT_ ,
+                onActivate:"ZaUIComponent.deleteButtonListener.call(this);"
+            }
+        ]
+    };
+
+    return [list, buttons] ;
+}
 
 ZaUIComponent.uiCompViewMethod =
 function (entry) {

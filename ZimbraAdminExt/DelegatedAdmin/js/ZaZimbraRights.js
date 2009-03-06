@@ -22,11 +22,12 @@ ZaZimbraRights.type = [
 ZaZimbraRights.type_dl = ZaItem.DL ;
 
 ZaZimbraRights.inlineTargetType = [
-    ZaItem.ACCOUNT, ZaZimbraRights.type_dl, ZaItem.RESOURCE, ZaItem.DOMAIN ,
+    ZaItem.ACCOUNT, ZaItem.DL, ZaItem.RESOURCE, ZaItem.DOMAIN ,
     ZaItem.COS , ZaItem.SERVER, ZaItem.GLOBAL_CONFIG
 ];
 
-ZaZimbraRights.targetType =  ZaZimbraRights.inlineTargetType.concat("global") ;
+ZaZimbraRights.targetType =  ZaZimbraRights.inlineTargetType.concat(
+    [ZaItem.ZIMLET,  ZaItem.GLOBAL_GRANT]) ;
 
 ZaZimbraRights.definedBy = ["system", "custom"] ;
 

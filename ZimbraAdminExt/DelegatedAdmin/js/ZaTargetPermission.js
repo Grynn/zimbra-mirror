@@ -84,21 +84,21 @@ function(grant, now, isDragProxy) {
 }
 
 ZaGrantsListView._getHeaderList =
-function() {
+function(width) {
 	var headerList = [];
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	var sortable=1;
 	headerList[0] = new ZaListHeaderItem(ZaGrant.A_grantee, com_zimbra_delegatedadmin.Col_grantee_name,
-            null, 200, null, ZaGrant.A_grantee, true, true);
+            null, width/4 + 50, null, ZaGrant.A_grantee, true, true);
 
 	headerList[1] = new ZaListHeaderItem(ZaGrant.A_grantee_type, com_zimbra_delegatedadmin.Col_grantee_type,
-            null, 100, null  , ZaGrant.A_grantee_type, true, true);
+            null, width/4 - 50, null  , ZaGrant.A_grantee_type, true, true);
 
-    headerList[2] = new ZaListHeaderItem(ZaGrant.A_deny, com_zimbra_delegatedadmin.Col_deny,
-                null, 150, null , ZaGrant.A_deny, true, true);
+    headerList[2] = new ZaListHeaderItem(ZaGrant.A_right, com_zimbra_delegatedadmin.Col_grant_right_name,
+                        null, 180, null , ZaGrant.A_right, true, true);
 
-    headerList[3] = new ZaListHeaderItem(ZaGrant.A_right, com_zimbra_delegatedadmin.Col_grant_right_name,
-                    null, null, null , ZaGrant.A_right, true, true);
+    headerList[3] = new ZaListHeaderItem(ZaGrant.A_deny, com_zimbra_delegatedadmin.Col_deny,
+                null, null, null , ZaGrant.A_deny, true, true);
 
     return headerList;
 }
@@ -182,14 +182,48 @@ ZaTargetPermission.grantListItem = {
     }
 };
 
-ZaTargetPermission.grantsListXFormItem  =  {
-    ref: ZaGrant.A2_grantsList, id: ZaGrant.A2_grantsList, type: _DWT_LIST_, width:700, height: 200,
-    cssClass: "DLSource", widgetClass: ZaGrantsListView,
-    headerList: ZaGrantsListView._getHeaderList (),
-    hideHeader: false ,
-    onSelection:ZaGrantsListView.grantSelectionListener,
-    multiselect: false  //TODO: enable multiselect in the future
-} ;
+/**
+ * xform item for the grant lists view
+ * It is used in very target's permssion view and the new Administrator wizard
+ * @param params
+ */
+ZaTargetPermission.getGrantsListXFormItem = function (params) {
+    if (!params) params = {} ;
+    var w = params.width ? params.width : 700 ;
+    var h = params.height ? params.height : 200 ;
+    var by = params.by ? params.by : "target" ;
+    var grantsListXFormItem  =  {
+        ref: ZaGrant.A2_grantsList, id: ZaGrant.A2_grantsList, type: _DWT_LIST_,
+        width:w, height: h,
+        cssClass: "DLSource", widgetClass: ZaGrantsListView,
+        headerList: ZaGrantsListView._getHeaderList (w),
+        hideHeader: false ,
+        onSelection:ZaGrantsListView.grantSelectionListener,
+        multiselect: false  //TODO: enable multiselect in the future
+    } ;
+
+    var marginLeft = ( w - 220 ) / 2 ;
+    var grantsListButtonsItem =
+    {type:_GROUP_, numCols:3, colSizes:["100px","20px","*"],  height: 30,
+        cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left: " + marginLeft + "; margin-right:auto;",
+        items: [
+            {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_grant,width:"100px",
+                onActivate:"ZaTargetPermission.grantButtonListener.call (this, '" + by +"');",
+                align: _RIGHT_},
+            {type:_CELLSPACER_},
+//                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px" },
+//                            {type:_CELLSPACER_},
+            {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px", align: _LEFT_ ,
+                enableDisableChangeEventSources: [ZaGrant.A2_grantsListSelectedItems, ZaGrant.A2_grantsList] ,
+                enableDisableChecks:[ZaGrantsListView.isDeleteEnabled],
+                onActivate:"ZaTargetPermission.revokeButtonListener.call(this);"
+            }
+        ]
+    }
+
+    return [ grantsListXFormItem, grantsListButtonsItem] ;
+}
+
 
 ZaTargetPermission.targetXFormModifier = function (xFormObject) {
     var tabBar, switchGroup ;
@@ -215,28 +249,12 @@ ZaTargetPermission.targetXFormModifier = function (xFormObject) {
                 {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_permission,
                     id:"permission_grouper",
                     colSizes:["700px"],numCols:1,
-                    items:[
-                        ZaTargetPermission.grantsListXFormItem ,
-                       {type:_GROUP_, numCols:3,width: 350, colSizes:["100px","20px","*"],  height: 30,
-                            cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;margin-left: 200px; margin-right:auto;",
-                            items: [
-                                {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_grant,width:"100px",
-                                    onActivate:"ZaTargetPermission.grantButtonListener.call (this);",
-                                    align: _RIGHT_},
-                                {type:_CELLSPACER_},
-        //                            {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px" },
-        //                            {type:_CELLSPACER_},
-                                {type:_DWT_BUTTON_, label:com_zimbra_delegatedadmin.Bt_revoke,width:"100px", align: _LEFT_ ,
-                                    enableDisableChangeEventSources: [ZaGrant.A2_grantsListSelectedItems, ZaGrant.A2_grantsList] ,
-                                    enableDisableChecks:[ZaGrantsListView.isDeleteEnabled],
-                                    onActivate:"ZaTargetPermission.revokeButtonListener.call(this);"
-                                }
-                            ]
-                        }
-                   ]
+
                 }
             ]
-        }
+        } ;
+
+    caseItem.items = ZaTargetPermission.getGrantsListXFormItem () ;
     switchGroup.items.push(caseItem);
 }
 
@@ -409,25 +427,34 @@ if (ZaController.setViewMethods["ZaZimletViewController"]) {
 }
 
 ZaTargetPermission.grantButtonListener =
-function () {
+function (by) {
     var instance = this.getInstance();
 	var formPage = this.getForm().parent;
 	if(!formPage.grantRightDlg) {
 		formPage.grantRightDlg = new ZaGrantDialog (
                 ZaApp.getInstance().getAppCtxt().getShell(),
-                ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_grant_rights);
+                ZaApp.getInstance(), com_zimbra_delegatedadmin.Title_grant_rights, by);
 		formPage.grantRightDlg.registerCallback(DwtDialog.OK_BUTTON, ZaGrantDialog.grantRight, this.getForm(), null);
 	}
 
 	var obj = {};
-    var targetType = instance.type ;
-    if (targetType == ZaItem.DL) targetType = ZaZimbraRights.type_dl ;
-    obj[ZaGrant.A_target_type] = targetType ;
-
-    if (targetType == ZaItem.GLOBAL_CONFIG) {
-        obj[ZaGrant.A_target] = ZaMsg.OVP_global ;     
-    }else{
-        obj[ZaGrant.A_target] = instance.name;
+    if (by == null || by == "target") {
+       var targetType = instance.type ;
+       obj[ZaGrant.A_target_type] = targetType ;
+        if (targetType == ZaItem.GLOBAL_CONFIG) {
+            obj[ZaGrant.A_target] = ZaMsg.OVP_global ;
+        }else{
+            obj[ZaGrant.A_target] = instance.name;
+        }
+    } else if (by == "grantee") {
+       var granteeType = instance[ZaNewAdmin.A_admin_type] ;
+       if (granteeType == ZaItem.ACCOUNT) {
+            granteeType = "usr" ;
+        }else if (granteeType == ZaItem.DL){
+            granteeType = "grp" ;
+        }
+        obj[ZaGrant.A_grantee_type] = granteeType ;
+        obj[ZaGrant.A_grantee] = instance.name ;
     }
 
     obj.setAttrs = {} ;
