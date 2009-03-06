@@ -3051,6 +3051,23 @@ return true;</string>
                 </serializedBean>
                 <condition>Util.isMacOS() &amp;&amp; !context.isErrorOccured()</condition>
               </action>
+              <action name="set access mode for LaunchAgents" id="289389" beanClass="com.install4j.runtime.beans.actions.files.SetModeAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.files.SetModeAction">
+                      <void property="file">
+                        <object class="java.io.File">
+                          <string>${installer:sys.userHome}/Library/LaunchAgents</string>
+                        </object>
+                      </void>
+                      <void property="mode">
+                        <string>755</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>Util.isMacOS() &amp;&amp; !context.isErrorOccured()</condition>
+              </action>
               <action name="launchctl" id="145688" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -3129,6 +3146,34 @@ return true;</string>
                   </java>
                 </serializedBean>
                 <condition>!Util.isMacOS() &amp;&amp; !context.isErrorOccured()</condition>
+              </action>
+              <action name="quote path to exe on windows" id="289390" beanClass="com.install4j.runtime.beans.actions.registry.SetRegistryValueAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.registry.SetRegistryValueAction">
+                      <void property="createKey">
+                        <boolean>false</boolean>
+                      </void>
+                      <void property="keyName">
+                        <string>SYSTEM\CurrentControlSet\Services\Yahoo! Zimbra Desktop Service</string>
+                      </void>
+                      <void property="registryRoot">
+                        <object class="com.install4j.api.windows.RegistryRoot" field="HKEY_LOCAL_MACHINE" />
+                      </void>
+                      <void property="value">
+                        <string>"${installer:sys.installationDir}\zdesktop.exe"</string>
+                      </void>
+                      <void property="valueName">
+                        <string>ImagePath</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>if (!Util.isWindows())
+    return false;    
+String instDir = (String)context.getVariable("sys.installationDir");
+return instDir.indexOf(" ") &gt;= 0;
+</condition>
               </action>
               <action name="" id="263047" beanClass="com.install4j.runtime.beans.actions.services.StartServiceAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="${i18n:installer.ErrCoreSvcNotStarted}">
                 <serializedBean>
