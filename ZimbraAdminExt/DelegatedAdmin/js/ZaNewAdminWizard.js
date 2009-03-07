@@ -21,6 +21,7 @@ ZaNewAdmin.getMyXModel = function () {
        items: [
            { id: ZaNewAdmin.A_admin_type, type: _STRING_, //choices: ZaNewAdmin.getNewAdminChoices (),
                ref: ZaNewAdmin.A_admin_type },
+           { id: "id", type:_STRING_, ref:"id"},
            { id: ZaAccount.A_name, type:_STRING_, ref:ZaAccount.A_name},
            { id: ZaAccount.A_password, type:_STRING_, ref:"attrs/" + ZaAccount.A_password},
            { id: ZaAccount.A2_confirmPassword, type:_STRING_, ref: ZaAccount.A2_confirmPassword},
@@ -37,7 +38,7 @@ ZaNewAdmin.getMyXModel = function () {
 
 ZaNewAdmin.createAdmin = function (tmpObj) {
     var soapDoc ;
-     var controller =  ZaApp.getInstance().getCurrentController() ;
+    var controller =  ZaApp.getInstance().getCurrentController() ;
 
     if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.ACCOUNT) {
         //creat admin account
@@ -61,7 +62,7 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
         }
     } else if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
         //create admin group
-        var soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", ZaZimbraAdmin.URN, null);
+        soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", ZaZimbraAdmin.URN, null);
             soapDoc.set(ZaAccount.A_name, tmpObj.name);
         var attr = soapDoc.set("a", "TRUE");
             attr.setAttribute("n", ZaDistributionList.A_isAdminGroup) ;
@@ -79,10 +80,12 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
         var respBody = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body ;
         if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.ACCOUNT) {
             if (respBody.CreateAccountResponse.account[0].name == tmpObj.name) {
+                tmpObj.id = respBody.CreateAccountResponse.account[0].id ;
                 return true ;
             }
         } else if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
             if (respBody.CreateDistributionListResponse.dl[0].name == tmpObj.name) {
+                 tmpObj.id =  respBody.CreateDistributionListResponse.dl[0].id ;
                 return true ;
             }
         }
@@ -90,6 +93,56 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
         controller.popupErrorDialog(com_zimbra_delegatedadmin.ERROR_CREATE_ADMIN) ;
     }catch (ex) {
         controller._handleException(ex, "ZaNewAdmin.createAdmin", null, false);
+    }
+    return false ;
+}
+
+ZaNewAdmin.modifyAdmin = function (tmpObj) {
+    var soapDoc ;
+    var controller =  ZaApp.getInstance().getCurrentController() ;
+
+    if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.ACCOUNT) {
+        //creat admin account
+        soapDoc = AjxSoapDoc.create("ModifyAccountRequest", ZaZimbraAdmin.URN, null);
+    } else if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
+        //create admin group
+        soapDoc = AjxSoapDoc.create("ModifyDistributionListRequest", ZaZimbraAdmin.URN, null);
+    } else {
+        controller.popupErrorDialog(com_zimbra_delegatedadmin.ERROR_INVALID_ADMIN_TYPE) ;
+        return false ;
+    }
+
+    soapDoc.set("id", tmpObj.id);
+
+    //modify the zimbraAdminConsoleUIComponents
+    if (tmpObj.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents]
+            && tmpObj.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents].length > 0) {
+        for (var i=0; i < tmpObj.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents].length; i ++) {
+            var attr = soapDoc.set("a", tmpObj.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents][i]);
+            attr.setAttribute("n", ZaAccount.A_zimbraAdminConsoleUIComponents) ;
+        }
+    }
+
+    var csfeParams = new Object();
+    csfeParams.soapDoc = soapDoc;
+    var reqMgrParams = {} ;
+    reqMgrParams.controller = controller;
+    reqMgrParams.busyMsg = com_zimbra_delegatedadmin.BUSY_SETTING_UI_COMP ;
+    try {
+        var respBody = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body ;
+        if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.ACCOUNT) {
+            if (respBody.ModifyAccountResponse.account[0].name == tmpObj.name) {
+                return true ;
+            }
+        } else if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
+            if (respBody.ModifyDistributionListResponse.dl[0].name == tmpObj.name) {
+                return true ;
+            }
+        }
+
+        controller.popupErrorDialog(com_zimbra_delegatedadmin.ERROR_SETTING_UI_COMP) ;
+    }catch (ex) {
+        controller._handleException(ex, "ZaNewAdmin.modifyAdmin", null, false);
     }
     return false ;
 }
@@ -158,6 +211,10 @@ function(ev) {
 	}
 }
 
+ZaNewAdminWizard.prototype.popup = function () {
+    ZaXDialog.prototype.popup.call (this);
+    this.goPage (ZaNewAdminWizard.STEP_START) ;
+}
 
 ZaNewAdminWizard.prototype.goPage = function (pageKey) {
     ZaXWizardDialog.prototype.goPage.call(this, pageKey) ;
@@ -197,8 +254,6 @@ function() {
     this.goPage(prevStep);
 }
 
-
-
 ZaNewAdminWizard.prototype.goNext =
 function() {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
@@ -211,32 +266,57 @@ function() {
         }
     } else if (cStep == ZaNewAdminWizard.STEP_NEW_ACCOUNT
             || cStep == ZaNewAdminWizard.STEP_NEW_GROUP) {
-        //check if the account exists already
-        if (ZaSearch.isAccountExist.call(this, {name: this._containedObject[ZaAccount.A_name], popupError: true})) {
+
+        if (this.createNewAdmin()) {
+            nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
+        } else {
             return false ;
         }
-        //check if passwords match
-		if(this._containedObject.attrs[ZaAccount.A_password]) {
-			if(this._containedObject.attrs[ZaAccount.A_password] != this._containedObject[ZaAccount.A2_confirmPassword]) {
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
-				return false;
-			}
-		}
-
-        //Everything looks good, create account now
-        if (!ZaNewAdmin.createAdmin(this._containedObject) ) {
-            return false ;
-        }
-
-        
-        nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
     } else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
 		nextStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;
     } else if (cStep == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
-		nextStep = ZaNewAdminWizard.STEP_FINISH ;
+        if (ZaNewAdmin.modifyAdmin(this._containedObject)) {
+            nextStep = ZaNewAdminWizard.STEP_FINISH ;
+        }else{
+            return false ;
+        }
     } 
 
     this.goPage(nextStep);
+}
+
+ZaNewAdminWizard.prototype.createNewAdmin = function () {
+   //check if the account exists already
+   if (ZaSearch.isAccountExist.call(this, {name: this._containedObject[ZaAccount.A_name], popupError: true})) {
+       return false ;
+   }
+   //check if passwords match
+   if(this._containedObject.attrs[ZaAccount.A_password]) {
+       if(this._containedObject.attrs[ZaAccount.A_password] != this._containedObject[ZaAccount.A2_confirmPassword]) {
+           ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+           return false;
+       }
+   }
+
+   //Everything looks good, create account now
+   return ZaNewAdmin.createAdmin(this._containedObject)  ;
+}
+
+
+ZaNewAdminWizard.prototype.finishWizard = function () {
+    var cStep = this._containedObject[ZaModel.currentStep] ;
+    if (cStep == ZaNewAdminWizard.STEP_NEW_ACCOUNT
+            || cStep == ZaNewAdminWizard.STEP_NEW_GROUP) {
+        //create the account
+        this.createNewAdmin () ;
+    } else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
+        //do thing since the permissions are saved already
+    } else if (cStep == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
+        //save the UI components by modifyAccount or modifyDL
+        ZaNewAdmin.modifyAdmin(this._containedObject) ; 
+    }
+
+    this.popdown () ;
 }
 
 

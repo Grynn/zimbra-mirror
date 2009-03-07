@@ -127,11 +127,12 @@ ZaGrantsListView.revokeRight = function () {
     var selectedGrants = this.getItemsById (ZaGrant.A2_grantsList) [0].getSelection() ;
     if (selectedGrants && selectedGrants.length > 0) {
         var instance = this.getInstance();
+        var currentGrantList = instance [ZaGrant.A2_grantsList] ;
+
         var targetInfo = {} ;
         targetInfo [ZaGrant.A_target] = instance.name ;
         targetInfo [ZaGrant.A_target_type] = instance.type ;
-        var currentGrantList = instance [ZaGrant.A2_grantsList] ;
-
+    
         for (var i = 0; i < selectedGrants.length; i ++) {
 // TODO: when multiselection enabled, we need a progress dialog to show the progress
             if (ZaGrant.revokeMethod (targetInfo, selectedGrants[i])) {

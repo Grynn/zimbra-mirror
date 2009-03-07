@@ -161,9 +161,9 @@ ZaGrant.revokeMethod = function (target, obj) {
 //    var tempObj = ZaApp.getInstance().getCurrentController ()._view.GetObject ();
 //    var tempGrants = tempObj [ZaGrant.A2_grantsList]  ;
     var soapDoc = AjxSoapDoc.create("RevokeRightRequest", ZaZimbraAdmin.URN, null);
-    var elTarget = soapDoc.set(ZaGrant.A_target, target[ZaGrant.A_target]) ;
+    var elTarget = soapDoc.set(ZaGrant.A_target, (obj[ZaGrant.A_target] ? obj[ZaGrant.A_target] :target[ZaGrant.A_target])) ;
     elTarget.setAttribute("by", "name") ;
-    elTarget.setAttribute("type", target[ZaGrant.A_target_type]) ;
+    elTarget.setAttribute("type", (obj [ZaGrant.A_target_type] ? obj [ZaGrant.A_target_type] :target[ZaGrant.A_target_type])) ;
 
     var elGrantee = soapDoc.set(ZaGrant.A_grantee, obj[ZaGrant.A_grantee]) ;
     elGrantee.setAttribute("by", "name") ;
