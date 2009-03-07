@@ -163,10 +163,10 @@ ZaUIComponent.accountTargetXFormModifier = function (xFormObject) {
 
     var componentUIItems = [
         {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_ui_comp, id:"permission_ui_comp_grouper",
-            colSizes:["700px"],numCols:1
+            colSizes:["700px"],numCols:1 ,
+            items : ZaUIComponent.getUIComponentsXFormItem () 
         }
     ];
-    componentUIItems.items = ZaUIComponent.getUIComponentsXFormItem () ;
     
     permissionView.items = permissionView.items.concat(componentUIItems);
     return ;

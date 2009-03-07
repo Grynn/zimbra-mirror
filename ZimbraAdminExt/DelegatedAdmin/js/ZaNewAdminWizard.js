@@ -21,7 +21,7 @@ ZaNewAdmin.getMyXModel = function () {
        items: [
            { id: ZaNewAdmin.A_admin_type, type: _STRING_, //choices: ZaNewAdmin.getNewAdminChoices (),
                ref: ZaNewAdmin.A_admin_type },
-           { id: ZaAccount.A_name, type:_STRING_, ref:ZaAccount.A_name, required: true},
+           { id: ZaAccount.A_name, type:_STRING_, ref:ZaAccount.A_name},
            { id: ZaAccount.A_password, type:_STRING_, ref:"attrs/" + ZaAccount.A_password},
            { id: ZaAccount.A2_confirmPassword, type:_STRING_, ref: ZaAccount.A2_confirmPassword},
            { id: ZaAccount.A_zimbraPasswordMustChange, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
@@ -57,13 +57,14 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
         } else {
             var attr = soapDoc.set("a", "TRUE");
             attr.setAttribute("n", ZaAccount.A_zimbraIsAdminAccount) ;
+            
         }
     } else if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
         //create admin group
         var soapDoc = AjxSoapDoc.create("CreateDistributionListRequest", ZaZimbraAdmin.URN, null);
             soapDoc.set(ZaAccount.A_name, tmpObj.name);
         var attr = soapDoc.set("a", "TRUE");
-            attr.setAttribute("n", ZaAccount.A_isAdminGroup) ;
+            attr.setAttribute("n", ZaDistributionList.A_isAdminGroup) ;
     } else {
         controller.popupErrorDialog(com_zimbra_delegatedadmin.ERROR_INVALID_ADMIN_TYPE) ;
         return false ;
@@ -223,7 +224,10 @@ function() {
 		}
 
         //Everything looks good, create account now
-        if (!ZaNewAdmin.createAdmin(this._containedObject) ) return false ;
+        if (!ZaNewAdmin.createAdmin(this._containedObject) ) {
+            return false ;
+        }
+
         
         nextStep = ZaNewAdminWizard.STEP_PERMISSION ;
     } else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
@@ -331,16 +335,30 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
 
     var case_permission = {
             type: _CASE_,  numCols: 1, 
-            tabGroupKey:ZaNewAdminWizard.STEP_PERMISSION, caseKey:ZaNewAdminWizard.STEP_PERMISSION
+            tabGroupKey:ZaNewAdminWizard.STEP_PERMISSION, caseKey:ZaNewAdminWizard.STEP_PERMISSION ,
+            items:[
+                {type: _GROUP_, numCols: 2 , width: 530, colSize:[100, "*"],items: [
+                    {type:_OUTPUT_, ref: ZaAccount.A_name , label: com_zimbra_delegatedadmin.Label_grantee_name}
+                  ]
+                }
+            ]
     }
-    case_permission.items = ZaTargetPermission.getGrantsListXFormItem ({width: 530, height: 220, by: "grantee"});
+    case_permission.items = case_permission.items.concat(
+            ZaTargetPermission.getGrantsListXFormItem ({width: 530, height: 200, by: ZaGrant.A_grantee}));
     cases.push (case_permission) ;
 
     var case_ui_comp = {
             type: _CASE_,  numCols: 1, 
-            tabGroupKey:ZaNewAdminWizard.STEP_UI_COMPONENTS, caseKey:ZaNewAdminWizard.STEP_UI_COMPONENTS
+            tabGroupKey:ZaNewAdminWizard.STEP_UI_COMPONENTS, caseKey:ZaNewAdminWizard.STEP_UI_COMPONENTS,
+            items:[
+                {type: _GROUP_, numCols: 2 , width: 530, colSize:[100, "*"],items: [
+                    {type:_OUTPUT_, ref: ZaAccount.A_name , label: ZaMsg.NAD_AccountName}
+                  ]
+                }
+            ]
     } ;
-    case_ui_comp.items = ZaUIComponent.getUIComponentsXFormItem({width: 530, height: 220});
+    case_ui_comp.items = case_ui_comp.items.concat (
+            ZaUIComponent.getUIComponentsXFormItem({width: 530, height: 200}));
     cases.push (case_ui_comp) ;
 
     var case_finish = {

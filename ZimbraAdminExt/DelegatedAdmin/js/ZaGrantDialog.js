@@ -11,7 +11,7 @@ ZaGrantDialog = function(parent,  app, title, by) {
     if (arguments.length == 0) return;
     this._standardButtons = [ DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON];
     ZaXDialog.call(this, parent,null,  title, "400px", "200px");
-    if (!by) by = "target" ;
+    if (!by) by = ZaGrant.A_target ;
     this.by = by;
     this._containedObject = {};
 

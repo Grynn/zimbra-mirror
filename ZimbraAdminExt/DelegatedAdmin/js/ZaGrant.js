@@ -62,9 +62,9 @@ ZaGrant.loadMethod = function (by, val, type) {
     if (type == ZaItem.DL) type = ZaZimbraRights.type_dl ;
     var elTarget ;
     if (type == "global")  {
-        elTarget = soapDoc.set("target", "") ;
+        elTarget = soapDoc.set(ZaGrant.A_target, "") ;
     } else {
-        elTarget = soapDoc.set("target", val) ;
+        elTarget = soapDoc.set(ZaGrant.A_target, val) ;
         elTarget.setAttribute ("by", by) ;
     }
     elTarget.setAttribute ("type", type ) ;
@@ -119,11 +119,11 @@ ZaGrant.grantMethod = function (obj) {
 //    var tempObj = ZaApp.getInstance().getCurrentController ()._view.GetObject ();
 //    var tempGrants = tempObj [ZaGrant.A2_grantsList]  ;
     var soapDoc = AjxSoapDoc.create("GrantRightRequest", ZaZimbraAdmin.URN, null);
-    var elTarget = soapDoc.set("target", obj[ZaGrant.A_target]) ;
+    var elTarget = soapDoc.set(ZaGrant.A_target, obj[ZaGrant.A_target]) ;
     elTarget.setAttribute("by", "name") ;
     elTarget.setAttribute("type", obj[ZaGrant.A_target_type]) ;
 
-    var elGrantee = soapDoc.set("grantee", obj[ZaGrant.A_grantee]) ;
+    var elGrantee = soapDoc.set(ZaGrant.A_grantee, obj[ZaGrant.A_grantee]) ;
     elGrantee.setAttribute("by", "name") ;
     elGrantee.setAttribute("type",obj[ZaGrant.A_grantee_type] ) ;
 
@@ -161,11 +161,11 @@ ZaGrant.revokeMethod = function (target, obj) {
 //    var tempObj = ZaApp.getInstance().getCurrentController ()._view.GetObject ();
 //    var tempGrants = tempObj [ZaGrant.A2_grantsList]  ;
     var soapDoc = AjxSoapDoc.create("RevokeRightRequest", ZaZimbraAdmin.URN, null);
-    var elTarget = soapDoc.set("target", target[ZaGrant.A_target]) ;
+    var elTarget = soapDoc.set(ZaGrant.A_target, target[ZaGrant.A_target]) ;
     elTarget.setAttribute("by", "name") ;
     elTarget.setAttribute("type", target[ZaGrant.A_target_type]) ;
 
-    var elGrantee = soapDoc.set("grantee", obj[ZaGrant.A_grantee]) ;
+    var elGrantee = soapDoc.set(ZaGrant.A_grantee, obj[ZaGrant.A_grantee]) ;
     elGrantee.setAttribute("by", "name") ;
     elGrantee.setAttribute("type",obj[ZaGrant.A_grantee_type] ) ;
 

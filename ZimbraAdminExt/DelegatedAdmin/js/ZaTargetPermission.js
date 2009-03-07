@@ -84,16 +84,25 @@ function(grant, now, isDragProxy) {
 }
 
 ZaGrantsListView._getHeaderList =
-function(width) {
+function(width, by) {
 	var headerList = [];
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	var sortable=1;
-	headerList[0] = new ZaListHeaderItem(ZaGrant.A_grantee, com_zimbra_delegatedadmin.Col_grantee_name,
-            null, width/4 + 50, null, ZaGrant.A_grantee, true, true);
+    if (!width) width = 700;
+    if (!by) by = ZaGrant.A_target ;
+    if (by == ZaGrant.A_target) {
+        headerList[0] = new ZaListHeaderItem(ZaGrant.A_grantee, com_zimbra_delegatedadmin.Col_grantee_name,
+                null, width/4 + 50, null, ZaGrant.A_grantee, true, true);
 
-	headerList[1] = new ZaListHeaderItem(ZaGrant.A_grantee_type, com_zimbra_delegatedadmin.Col_grantee_type,
-            null, width/4 - 50, null  , ZaGrant.A_grantee_type, true, true);
+        headerList[1] = new ZaListHeaderItem(ZaGrant.A_grantee_type, com_zimbra_delegatedadmin.Col_grantee_type,
+                null, width/4 - 50, null  , ZaGrant.A_grantee_type, true, true);
+    } else if (by  == ZaGrant.A_grantee) {
+        headerList[0] = new ZaListHeaderItem(ZaGrant.A_target, com_zimbra_delegatedadmin.Col_target_name,
+                null, width/4 + 50, null, ZaGrant.A_target, true, true);
 
+        headerList[1] = new ZaListHeaderItem(ZaGrant.A_target_type, com_zimbra_delegatedadmin.Col_target_type,
+                null, width/4 - 50, null  , ZaGrant.A_target_type, true, true);
+    }
     headerList[2] = new ZaListHeaderItem(ZaGrant.A_right, com_zimbra_delegatedadmin.Col_grant_right_name,
                         null, 180, null , ZaGrant.A_right, true, true);
 
@@ -191,12 +200,12 @@ ZaTargetPermission.getGrantsListXFormItem = function (params) {
     if (!params) params = {} ;
     var w = params.width ? params.width : 700 ;
     var h = params.height ? params.height : 200 ;
-    var by = params.by ? params.by : "target" ;
+    var by = params.by ? params.by : ZaGrant.A_target ;
     var grantsListXFormItem  =  {
         ref: ZaGrant.A2_grantsList, id: ZaGrant.A2_grantsList, type: _DWT_LIST_,
         width:w, height: h,
         cssClass: "DLSource", widgetClass: ZaGrantsListView,
-        headerList: ZaGrantsListView._getHeaderList (w),
+        headerList: ZaGrantsListView._getHeaderList (w, by),
         hideHeader: false ,
         onSelection:ZaGrantsListView.grantSelectionListener,
         multiselect: false  //TODO: enable multiselect in the future
@@ -249,12 +258,11 @@ ZaTargetPermission.targetXFormModifier = function (xFormObject) {
                 {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_permission,
                     id:"permission_grouper",
                     colSizes:["700px"],numCols:1,
-
+                    items: ZaTargetPermission.getGrantsListXFormItem () 
                 }
             ]
         } ;
 
-    caseItem.items = ZaTargetPermission.getGrantsListXFormItem () ;
     switchGroup.items.push(caseItem);
 }
 
@@ -438,7 +446,7 @@ function (by) {
 	}
 
 	var obj = {};
-    if (by == null || by == "target") {
+    if (by == null || by == ZaGrant.A_target) {
        var targetType = instance.type ;
        obj[ZaGrant.A_target_type] = targetType ;
         if (targetType == ZaItem.GLOBAL_CONFIG) {
@@ -446,7 +454,7 @@ function (by) {
         }else{
             obj[ZaGrant.A_target] = instance.name;
         }
-    } else if (by == "grantee") {
+    } else if (by == ZaGrant.A_grantee) {
        var granteeType = instance[ZaNewAdmin.A_admin_type] ;
        if (granteeType == ZaItem.ACCOUNT) {
             granteeType = "usr" ;
