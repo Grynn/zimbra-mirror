@@ -669,7 +669,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 								enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.RENAME_DL_RIGHT]],
 								visibilityChecks:[]
 							},
-						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName+":", msgName:ZaMsg.NAD_DisplayName,width:"100%",
+						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName, msgName:ZaMsg.NAD_DisplayName,width:"100%",
 						    	visibilityChecks:[],
                                 cssClass:"admin_xform_name_input", align: _LEFT_
 						    },
