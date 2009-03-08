@@ -5,6 +5,8 @@ import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Domain;
+import com.zimbra.cs.account.accesscontrol.AdminRight;
+import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.service.ServiceException;
@@ -198,11 +200,15 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
                 h.put(domainName, count + 1);
             }
         }
+        
+        Set<String> attrRightNeeded = getAttrRightNeeded();
 
         for (Enumeration<String> keys = h.keys(); keys.hasMoreElements();){
             String domainName = keys.nextElement();
             Domain domain = prov.get(Provisioning.DomainBy.name, domainName);
-            if (domain != null && canAccessDomain(zsc, domain)) {
+            if (domain != null) {
+                checkDomainRight(zsc, domain, attrRightNeeded);
+                
                 String domainMaxAccounts = domain.getAttr("zimbraDomainMaxAccounts") ;
                 if (domainMaxAccounts != null && domainMaxAccounts.length() > 0) {
                     int limit = Integer.parseInt(domainMaxAccounts) ;
@@ -245,11 +251,8 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
         if (parts.length != 2)
             throw ServiceException.PARSE_ERROR(ERROR_INVALID_ACCOUNT_NAME, new Exception(ERROR_INVALID_ACCOUNT_NAME)) ;
 
-        if (!canAccessEmail(lc, accountName)) {
-            throw ServiceException.PERM_DENIED("Permission denied to create account " + accountName) ;
-        }
-
-
+        checkDomainRightByEmail(lc, accountName, Admin.R_createAccount);
+ 
         //2. if account already exists
         Account acct = null ;
         try {
@@ -330,6 +333,19 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
       private static int byteToInt(byte b) {
         return (int) b & 0xFF;
       }
+      
+      Set<String> getAttrRightNeeded() {
+          Set<String> attrRightNeeded = new HashSet<String>();
+          attrRightNeeded.add(Provisioning.A_zimbraDomainMaxAccounts);
+          return attrRightNeeded;
+      }
+      
+      @Override
+      protected void docRights(List<AdminRight> relatedRights, List<String> notes) {
+          relatedRights.add(Admin.R_createAccount);
+          notes.add("Needs rigths to get " + Provisioning.A_zimbraDomainMaxAccounts + "on domain");
+      }      
+       
     /*
     public static void main (String [] args) {
         try {
