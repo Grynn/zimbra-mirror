@@ -249,6 +249,22 @@ if (ZaController.setViewMethods["ZaAccountViewController"]) {
 	ZaController.setViewMethods["ZaAccountViewController"].push(ZaUIComponent.uiCompViewMethod);
 }
 
+if (ZaDistributionList) {
+    ZaDistributionList.myXModel.items.push(ZaUIComponent.UIComponentsItem);
+}
+
+if (ZaItem.ObjectModifiers["ZaDistributionList"]){
+    ZaItem.ObjectModifiers["ZaDistributionList"].push(ZaUIComponent.uiCompObjectModifer) ;
+}
+
+if (ZaTabView.XFormModifiers["ZaDLXFormView"]){
+    ZaTabView.XFormModifiers["ZaDLXFormView"].push(ZaUIComponent.accountTargetXFormModifier);
+}
+
+if (ZaController.setViewMethods["ZaDLController"]) {
+	ZaController.setViewMethods["ZaDLController"].push(ZaUIComponent.uiCompViewMethod);
+}
+
 
 //add UI component dialog
 ZaNewUICompXDialog = function(parent,   w, h, title) {

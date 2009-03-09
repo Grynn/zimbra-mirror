@@ -398,6 +398,7 @@ ZaDLXFormView.prototype.setObject =
 function (entry) {
 
     ZaItem.normalizeMultiValueAttr(entry, "description") ;
+    entry.modifyObject () ;  
     this._containedObject = {attrs:{}};
 
 	this._containedObject[ZaDistributionList.A2_memberList] = new Array();

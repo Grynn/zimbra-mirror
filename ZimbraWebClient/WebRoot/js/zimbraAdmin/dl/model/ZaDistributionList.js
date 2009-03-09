@@ -42,8 +42,8 @@ ZaItem.modifyMethods["ZaDistributionList"] = new Array();
 ZaItem.loadMethods["ZaDistributionList"] = new Array();
 ZaItem.initMethods["ZaDistributionList"] = new Array();
 ZaItem.createMethods["ZaDistributionList"] = new Array();
-
 ZaItem.loadMethods["ZaDistributionList"] = [];
+ZaItem.ObjectModifiers["ZaDistributionList"] = [] ;
 
 ZaDistributionList.EMAIL_ADDRESS = "ZDLEA";
 ZaDistributionList.DESCRIPTION = "ZDLDESC";
@@ -272,11 +272,11 @@ ZaDistributionList.modifyMethod = function(mods, obj) {
 					if(cnt) {
 						for(var ix=0; ix <cnt; ix++) {
 							var attr = null;
-							if(obj.attrs[a][ix] instanceof String)
+                            if(obj.attrs[a][ix] instanceof String )
 								var attr = soapDoc.set("a", obj.attrs[a][ix].toString());
-							else if(mods[aname][ix] instanceof Object)
+							else if(obj.attrs[a][ix] instanceof Object)
 								var attr = soapDoc.set("a", obj.attrs[a][ix].toString());
-							else if(mods[aname][ix])
+							else if(obj.attrs[a][ix])
 								var attr = soapDoc.set("a", obj.attrs[a][ix]);
 			
 							if(attr)
