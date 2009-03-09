@@ -9,6 +9,8 @@ ZaNewAdmin = function () {
     ZaItem.call (this, "ZaNewAdmin") ;
     this._init () ;
     this.type = ZaItem.NEW_ADMIN ;
+    this.attrs = {} ;
+    this.attrs[ZaAccount.A_zimbraIsAdminAccount] = "TRUE" ;
 }
 
 ZaNewAdmin.prototype = new ZaItem ;
@@ -28,6 +30,9 @@ ZaNewAdmin.getMyXModel = function () {
            { id: ZaAccount.A_zimbraPasswordMustChange, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
                     ref:"attrs/" + ZaAccount.A_zimbraPasswordMustChange},
            { id: ZaAccount.A_zimbraIsSystemAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaAccount.A_zimbraIsSystemAdminAccount},
+           { id:ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
+            ref:"attrs/"+ZaAccount.A_zimbraIsAdminAccount},
+           ZaAccount.adminRolesModelItem,  ZaAccount.adminAccountModelItem,
            { id:ZaDistributionList.A_isAdminGroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
                 ref:"attrs/" + ZaDistributionList.A_isAdminGroup},
            ZaTargetPermission.grantListItem ,
@@ -78,19 +83,27 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
     reqMgrParams.busyMsg = com_zimbra_delegatedadmin.BUSY_CREATE_ADMIN ;
     try {
         var respBody = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body ;
+        var createdAdmin ;
         if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.ACCOUNT) {
-            if (respBody.CreateAccountResponse.account[0].name == tmpObj.name) {
-                tmpObj.id = respBody.CreateAccountResponse.account[0].id ;
-                return true ;
-            }
+            createdAdmin = respBody.CreateAccountResponse.account[0] ;
         } else if (tmpObj[ZaNewAdmin.A_admin_type] == ZaItem.DL) {
-            if (respBody.CreateDistributionListResponse.dl[0].name == tmpObj.name) {
-                 tmpObj.id =  respBody.CreateDistributionListResponse.dl[0].id ;
-                return true ;
-            }
+            createdAdmin = respBody.CreateDistributionListResponse.dl[0] ;
+        } else {
+                throw (new AjxException(com_zimbra_delegatedadmin.ERROR_CREATE_ADMIN,
+                        AjxException.SERVER_ERROR, "ZaNewAdmin.createAdmin", "Unknow object type" ));
         }
 
-        controller.popupErrorDialog(com_zimbra_delegatedadmin.ERROR_CREATE_ADMIN) ;
+        if (createdAdmin.name == tmpObj.name) {
+                 tmpObj.id = createdAdmin.id ;
+        } else {
+            throw (new AjxException(com_zimbra_delegatedadmin.ERROR_CREATE_ADMIN,
+                    AjxException.SERVER_ERROR, "ZaNewAdmin.createAdmin" ));
+        }
+
+        //TODO: add the admin roles here
+        ZaAccountMemberOfListView.addMemberList (tmpObj, createdAdmin) ;    
+
+        return true ;
     }catch (ex) {
         controller._handleException(ex, "ZaNewAdmin.createAdmin", null, false);
     }
@@ -390,13 +403,24 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                 msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
                 visibilityChecks:[],
                 enableDisableChecks:[],
-                trueValue:"TRUE", falseValue:"FALSE"
-            }  
+                elementChanged :
+                function(elementValue,instanceValue, event) {
+                    if(elementValue == "TRUE") {
+                        this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
+
+                    } else{
+                        this.setInstanceValue("TRUE", ZaAccount.A_zimbraIsAdminAccount);                        
+                    }
+                    this.getForm().itemChanged(this, elementValue, event);
+                    this.getForm().parent._button[DwtWizardDialog.NEXT_BUTTON].setEnabled((!(elementValue && elementValue == "TRUE")));
+                },
+                bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE"
+            },
+            ZaAccount.getAdminRolesItem ()    
         ]
     }
     cases.push (case_account) ;
-
-
+    
     var case_group = {
             type: _CASE_,
             tabGroupKey:ZaNewAdminWizard.STEP_NEW_GROUP, caseKey:ZaNewAdminWizard.STEP_NEW_GROUP,
@@ -408,7 +432,6 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                         enableDisableChecks:[],
                         onChange: ZaAccount.setDomainChanged
                     }
-
             ]
     }
     cases.push (case_group) ;

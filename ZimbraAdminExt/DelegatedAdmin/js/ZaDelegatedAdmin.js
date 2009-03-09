@@ -6,16 +6,15 @@ ZaDelegatedAdmin = function () {};
 
 if (ZaAccount) {
     ZaAccount.A_zimbraIsAdminAccount = "zimbraIsAdminAccount" ;
-    ZaAccount.myXModel.items.push (
-        {id:ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
-            ref:"attrs/"+ZaAccount.A_zimbraIsAdminAccount}) ;
+    ZaAccount.A2_adminRoles = "adminRoles" ;
+    ZaAccount.adminRolesModelItem = {ref: ZaAccount.A2_adminRoles ,id: ZaAccount.A2_adminRoles,
+                                    type: _LIST_, listItem:{type:_EMAIL_ADDRESS_}} ;
+    ZaAccount.adminAccountModelItem = {id:ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
+            ref:"attrs/"+ZaAccount.A_zimbraIsAdminAccount} ;
+    ZaAccount.myXModel.items.push (ZaAccount.adminAccountModelItem) ;
 
     //admin roles model item
-      ZaAccount.A2_adminRoles = "adminRoles" ;
-      var adminRolesModelItem = {ref: ZaAccount.A2_adminRoles ,id: ZaAccount.A2_adminRoles,
-                                type: _LIST_, listItem:{type:_EMAIL_ADDRESS_}} ;
-      ZaAccount.myXModel.items.push (adminRolesModelItem) ;
-
+    ZaAccount.myXModel.items.push (ZaAccount.adminRolesModelItem) ;
 
     ZaAccount.changeAdminRoles = function (value, event, form) {
         var oldVal = this.getInstanceValue();
@@ -92,6 +91,7 @@ if (ZaAccount) {
             dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAdminGroups,
             onChange: ZaAccount.changeAdminRoles ,
             emptyText:com_zimbra_delegatedadmin.searchTermAdminGroup,
+            enableDisableChecks:[],
             dataFetcherClass:ZaSearch,editable:true
        }
 
