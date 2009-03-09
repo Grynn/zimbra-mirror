@@ -470,6 +470,11 @@ if [ -d ${zimbra_home}/backup -a ${extended} = "yes" ]; then
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/backup
 fi
 
+if [ -d ${zimbra_home}/redolog -a ${extended} = "yes" ]; then
+  printMsg "Fixing ownership of ${zimbra_home}/redolog"
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/redolog
+fi
+
 if [ -d ${zimbra_home}/store -a ${extended} = "yes" ]; then
   printMsg "Fixing ownership of ${zimbra_home}/store"
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/store
