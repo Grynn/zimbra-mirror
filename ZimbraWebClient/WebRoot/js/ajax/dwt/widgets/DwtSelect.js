@@ -476,10 +476,12 @@ function(option) {
     /* bug: 21041 */
     var divElId = this.getHtmlElement();
     AjxTimedAction.scheduleAction(new AjxTimedAction(this,
-			function(){
-        var divEl = document.getElementById(divElId.id);
-        divEl.style.width = divEl.childNodes[0].offsetWidth;
-    },200));
+		function(){
+			var divEl = document.getElementById(divElId.id);
+			if (divEl) {
+				divEl.style.width = divEl.childNodes[0].offsetWidth;
+			}
+    }, 200));
 };
 
 DwtSelect.prototype._updateSelection = 
