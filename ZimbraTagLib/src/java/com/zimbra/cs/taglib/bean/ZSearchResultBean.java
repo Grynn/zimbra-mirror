@@ -93,6 +93,8 @@ public class ZSearchResultBean {
                     mHits.add(new ZDocumentHitBean((ZDocumentHit)hit));
                 } else if (hit instanceof ZAppointmentHit) {
                     mHits.add(new ZAppointmentHitBean((ZAppointmentHit)hit));
+                }else if (hit instanceof ZWikiHit) {
+                    mHits.add(new ZWikiHitBean((ZWikiHit)hit));
                 }
             }
         }

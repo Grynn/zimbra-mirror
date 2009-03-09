@@ -20,7 +20,7 @@ import com.zimbra.cs.zclient.ZSearchHit;
 
 public abstract class ZSearchHitBean {
     
-    public enum HitType { conversation, contact, message, voiceMailItem, call, task, briefcase, appointment }
+    public enum HitType { conversation, contact, message, voiceMailItem, call, task, briefcase, appointment, wiki }
 
     private HitType mHitType;
     private ZSearchHit mHit;
@@ -50,6 +50,8 @@ public abstract class ZSearchHitBean {
 
     public final boolean getIsBriefcase() { return mHitType == HitType.briefcase; }
 
+    public final boolean getIsWiki() { return mHitType == HitType.wiki; }
+
     public final boolean getIsVoiceMailItem() { return mHitType == HitType.voiceMailItem; }
 
     public final boolean getIsCall() { return mHitType == HitType.call; }
@@ -60,7 +62,9 @@ public abstract class ZSearchHitBean {
 
     public final ZContactHitBean getContactHit() { return getIsContact() ? (ZContactHitBean) this : null; }
 
-    public final ZDocumentHitBean getBriefcaseHit() { return getIsBriefcase() ? (ZDocumentHitBean) this : null; }
+    public final ZDocumentHitBean getBriefcaseHit() { return getIsBriefcase()? (ZDocumentHitBean) this : null; }
+
+    public final ZWikiHitBean getWikiHit() { return getIsWiki() ? (ZWikiHitBean) this : null; }
 
     public final ZAppointmentHitBean getAppointmentHit() { return getIsAppointment() ? (ZAppointmentHitBean) this : null; }
 
