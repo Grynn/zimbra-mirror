@@ -100,8 +100,9 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
                     AjxException.SERVER_ERROR, "ZaNewAdmin.createAdmin" ));
         }
 
-        //TODO: add the admin roles here
-        ZaAccountMemberOfListView.addMemberList (tmpObj, createdAdmin) ;    
+        if (tmpObj[ZaAccount.A2_memberOf] && tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList]
+                && tmpObj[ZaAccount.A2_memberOf].length > 0)
+            ZaAccountMemberOfListView.addMemberList (tmpObj, createdAdmin) ;    
 
         return true ;
     }catch (ex) {

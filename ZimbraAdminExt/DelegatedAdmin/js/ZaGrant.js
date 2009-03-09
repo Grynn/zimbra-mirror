@@ -149,6 +149,15 @@ ZaGrant.grantMethod = function (obj) {
     }
 }
 
+//it is useful when an account is deleted, so its value is the Id of the account
+ZaGrant.byNameOrId = function (value) {
+    if (value.indexOf("@") > 0) {
+        return "name" ;
+    } else{
+        return "id" ;
+    }
+}
+
 //RevokeRightRequest
 /**
  *
@@ -158,15 +167,15 @@ ZaGrant.grantMethod = function (obj) {
 ZaGrant.revokeMethod = function (target, obj) {
     if (AjxEnv.hasFirebug)
       console.log("Revoke Rights ...") ;
-//    var tempObj = ZaApp.getInstance().getCurrentController ()._view.GetObject ();
-//    var tempGrants = tempObj [ZaGrant.A2_grantsList]  ;
     var soapDoc = AjxSoapDoc.create("RevokeRightRequest", ZaZimbraAdmin.URN, null);
-    var elTarget = soapDoc.set(ZaGrant.A_target, (obj[ZaGrant.A_target] ? obj[ZaGrant.A_target] :target[ZaGrant.A_target])) ;
+
+    var targetValue = (obj[ZaGrant.A_target] ? obj[ZaGrant.A_target] :target[ZaGrant.A_target]) ;
+    var elTarget = soapDoc.set(ZaGrant.A_target, targetValue) ;
     elTarget.setAttribute("by", "name") ;
     elTarget.setAttribute("type", (obj [ZaGrant.A_target_type] ? obj [ZaGrant.A_target_type] :target[ZaGrant.A_target_type])) ;
 
     var elGrantee = soapDoc.set(ZaGrant.A_grantee, obj[ZaGrant.A_grantee]) ;
-    elGrantee.setAttribute("by", "name") ;
+    elGrantee.setAttribute("by", ZaGrant.byNameOrId(obj[ZaGrant.A_grantee])) ;
     elGrantee.setAttribute("type",obj[ZaGrant.A_grantee_type] ) ;
 
     var elRight = soapDoc.set("right", obj[ZaGrant.A_right])
