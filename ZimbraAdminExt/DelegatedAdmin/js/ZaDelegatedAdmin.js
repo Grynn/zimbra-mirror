@@ -25,13 +25,21 @@ if (ZaAccount) {
         this.setInstanceValue(value);
 
          //add this value to the  direct member
+        if (!this.getInstance () [ZaAccount.A2_memberOf]) {
+            this.getInstance () [ZaAccount.A2_memberOf] = {} ;          
+        }
+
+        if (!this.getInstance () [ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList]) {
+            this.getInstance () [ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList] = [];   
+        }
+
         var directMemberOfList = this.getInstance () [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
-        if (ZaUtil.findValueInObjArrByPropertyName(directMemberOfList, value, "name") < 0){
+        if (value && value.length > 0 && ZaUtil.findValueInObjArrByPropertyName(directMemberOfList, value, "name") < 0){
             directMemberOfList.push ({
                 id: this.getChoices().getChoiceByValue(value).id,
                 name: value
             }) ;
-       
+
             form.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_directMemberList, directMemberOfList) ;
         }
     }
@@ -43,12 +51,20 @@ if (ZaAccount) {
         this.items[index].clearError();
 
         //update the memberOf instance value
+        if (!this.getInstance () [ZaAccount.A2_memberOf]) {
+            this.getInstance () [ZaAccount.A2_memberOf] = {} ;
+        }
+
+        if (!this.getInstance () [ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList]) {
+            this.getInstance () [ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList] = [];
+        }
+        
         var directMemberOfList = this.getInstance () [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
         var i = ZaUtil.findValueInObjArrByPropertyName(directMemberOfList, value, "name")  ; 
         if (i >= 0){
             directMemberOfList.splice (i, 1) ;
             form.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_directMemberList, directMemberOfList) ;
-            form.parent.setDirty (true) ;
+            if (form.parent.setDirty) form.parent.setDirty (true) ;
         }
     }
 
@@ -150,6 +166,48 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaDelegatedAdmin.AccountXFormModifier);
 }
 
+//for new account wizard
+/*
+if (ZaTabView.ObjectModifiers["ZaNewAccountXWizard"]){
+    ZaTabView.ObjectModifiers["ZaNewAccountXWizard"].push(ZaDelegatedAdmin.accountObjectModifer) ;
+} */
+
+
+if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
+   ZaDelegatedAdmin.newAccountModifier = function (xFormObject) {
+       var adminChkBox = ZaAccount.getAdminChkBoxItem ();
+       var adminRolesItem = ZaAccount.getAdminRolesItem () ;
+
+        var tabs = xFormObject.items[3].items;
+        var tmpItems = tabs[0].items;
+        var cnt = tmpItems.length;
+        for(var i = 0; i < cnt; i ++) {
+           if(tmpItems[i].id == "account_wiz_setup_group" && tmpItems[i].items) {
+               var tmpGrouperItems = tmpItems[i].items;
+               var cnt2 = tmpGrouperItems.length;
+               for(var j=0;j<cnt2;j++) {
+                   if(tmpGrouperItems[j] && tmpGrouperItems[j].ref == ZaAccount.A_zimbraIsSystemAdminAccount) {
+                       //add  Admin checkbox
+                      tmpItems[i].items.splice(j+1,0, adminChkBox, adminRolesItem);
+
+                       //add the mutual exclusive action to global admin
+                       tmpGrouperItems[j].elementChanged =
+								function(elementValue,instanceValue, event) {
+									if(elementValue == "TRUE") {
+										this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
+								    }
+										this.getForm().itemChanged(this, elementValue, event);
+								};
+                       break;
+                   }
+               }
+               break;
+           }
+       }
+   }
+
+    ZaXDialog.XFormModifiers["ZaNewAccountXWizard"].push(ZaDelegatedAdmin.newAccountModifier);
+}
 
 ZaDelegatedAdmin.accountViewMethod =
 function (entry) {

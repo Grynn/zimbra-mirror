@@ -249,24 +249,11 @@ function(entry) {
 		this._containedObject._defaultValues = entry._defaultValues;
 
 	this._containedObject.id = null;
-	/*if(ZaSettings.COSES_ENABLED) {
-		if(this._containedObject.attrs[ZaAccount.A_COSId]) {
-			this._containedObject._defaultValues = ZaCos.getCosById(this._containedObject.attrs[ZaAccount.A_COSId]);
-		}
-		if(!this._containedObject.cos) {
-			this._containedObject._defaultValues = ZaCos.getCosByName("default");
-		}
-		//this should never happen, because default cos should always be there. Last resort.
-		if(!this._containedObject.cos) {
-			var cosList = ZaApp.getInstance().getCosList().getArray();
-			this._containedObject._defaultValues = cosList[0];
-			this._containedObject.attrs[ZaAccount.A_COSId] = cosList[0].id;
-		}
-	} */
+
 	this.cosChoices.setChoices([this._containedObject.cos]);
 	this.cosChoices.dirtyChoices();
-	
-	this._containedObject.attrs[ZaAccount.A_accountStatus] = ZaAccount.ACCOUNT_STATUS_ACTIVE;
+
+    this._containedObject.attrs[ZaAccount.A_accountStatus] = ZaAccount.ACCOUNT_STATUS_ACTIVE;
 	this._containedObject[ZaAccount.A2_autodisplayname] = "TRUE";
 	this._containedObject[ZaAccount.A2_autoMailServer] = "TRUE";
 	this._containedObject[ZaAccount.A2_autoCos] = "TRUE";
@@ -589,7 +576,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 		
 		setupGroup.items.push({ref:ZaAccount.A_zimbraIsSystemAdminAccount, type:_CHECKBOX_, 
 								msgName:ZaMsg.NAD_IsSystemAdminAccount,label:ZaMsg.NAD_IsSystemAdminAccount,
-								trueValue:"TRUE", falseValue:"FALSE"
+								bmolsnr:true, trueValue:"TRUE", falseValue:"FALSE"
 							});
 							
 		setupGroup.items.push({type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_MailServer, labelLocation:_LEFT_,

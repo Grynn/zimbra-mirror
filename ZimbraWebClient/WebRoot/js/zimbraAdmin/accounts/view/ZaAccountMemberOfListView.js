@@ -377,6 +377,28 @@ function (listItemId){
 	return ((more && more > 0) ? true : false) ;		
 };
 
+ZaAccountMemberOfListView.addMemberList =
+function (tmpObj, item) {
+     try {
+        var addList = [];
+
+        var newDirectMember = tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
+
+        //Compose the added dl list - any dl from new direct memberOf list, not in the current memberOf list
+        for (var i = 0; i < newDirectMember.length; i ++) {
+            var dlName = newDirectMember[i].name ; //dl in the new direct member
+            addList.push (newDirectMember[i]) ;
+        }
+
+        if (addList.length > 0) { //you have new membership to be added.
+            ZaAccountMemberOfListView.addNewGroupsBySoap(item, addList);
+        }
+    }catch (ex){
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.addMemberList: add group failed", null, false);	//try not to halt the account modification
+	}
+}
+ZaItem.createMethods["ZaAccount"].push (ZaAccountMemberOfListView.addMemberList) ;
+
 ZaAccountMemberOfListView.modifyMemberList =
 function (mods, tmpObj) {
      try {
