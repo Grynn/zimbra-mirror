@@ -26,7 +26,7 @@ import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.cs.offline.ab.SyncState;
 import com.zimbra.cs.offline.ab.Change;
 import com.zimbra.cs.offline.ab.ContactGroup;
-import com.zimbra.cs.offline.ab.AbUtil;
+import com.zimbra.cs.offline.ab.Ab;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.util.Log;
@@ -345,10 +345,10 @@ public class SyncSession {
                     cd.updateContactEntry(entry);
                     req = SyncRequest.update(this, id, entry);
                 }
-                Attachment photo = AbUtil.getPhoto(contact);
+                Attachment photo = Ab.getPhoto(contact);
                 if (photo != null) {                                 
                     LOG.debug("Photo added for contact id " + contact.getId());
-                    req.setPhoto(AbUtil.getContent(contact, photo), photo.getContentType());
+                    req.setPhoto(Ab.getContent(contact, photo), photo.getContentType());
                 }
                 return req;
             }

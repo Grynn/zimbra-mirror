@@ -18,7 +18,7 @@ package com.zimbra.cs.offline.ab.gab;
 
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.offline.ab.AbUtil;
+import com.zimbra.cs.offline.ab.Ab;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.common.service.ServiceException;
@@ -180,7 +180,7 @@ class GabService {
         GDataRequest req = cs.createRequest(RequestType.QUERY, url, null);
         req.execute();
         ContentType ctype = req.getResponseContentType();
-        byte[] content = AbUtil.readFully(req.getResponseStream());
+        byte[] content = Ab.readFully(req.getResponseStream());
         LOG.debug("Retrieved photo for entry %s: size = %d, type = %s",
                   entry.getId(), content.length, ctype.getMediaType());
         return new Attachment(content, ctype.getMediaType(), Contact.A_image, null);

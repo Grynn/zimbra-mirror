@@ -23,7 +23,7 @@ import com.zimbra.cs.offline.util.Xml;
 /**
  * Simple, unstructured YAB field.
  */
-public final class SimpleField extends Field {
+public class SimpleField extends Field {
     private String value;
 
     public static final String NICKNAME = "nickname";
@@ -71,10 +71,6 @@ public final class SimpleField extends Field {
 
     public static SimpleField link(String link, String... flags) {
         return new SimpleField(LINK, link, flags);
-    }
-
-    public static SimpleField custom(String phone, String... flags) {
-        return new SimpleField(CUSTOM, phone, flags);
     }
 
     public SimpleField(String name) {

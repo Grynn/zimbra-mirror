@@ -37,7 +37,7 @@ import java.util.Iterator;
 
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mime.ParsedContact;
-import com.zimbra.cs.offline.ab.AbUtil;
+import com.zimbra.cs.offline.ab.Ab;
 import com.zimbra.common.service.ServiceException;
 
 import static com.zimbra.cs.mailbox.Contact.*;
@@ -51,7 +51,7 @@ public class ContactData {
     private static final String SERVICE_MSN = "msn";
     private static final String SERVICE_OTHER = "other";
 
-    private static final List<String> PHONES = Arrays.asList(
+    private static final Map<String, String> PHONES = Ab.asMap(
         PhoneNumber.Rel.MOBILE, A_mobilePhone,
         PhoneNumber.Rel.HOME, A_homePhone,
         PhoneNumber.Rel.WORK, A_workPhone,
@@ -65,7 +65,7 @@ public class ContactData {
         PhoneNumber.Rel.CAR, A_carPhone,
         PhoneNumber.Rel.OTHER, A_otherPhone
     );
-    
+
     public ContactData(ContactEntry contact) {
         importContact(contact);
     }
@@ -97,7 +97,7 @@ public class ContactData {
     }
 
     private void setFileAs() {
-        String fileAs = AbUtil.getFileAs(fields);
+        String fileAs = Ab.getFileAs(fields);
         if (fileAs != null) {
             fields.put(A_fileAs, FA_EXPLICIT + ":" + fileAs);
         }
@@ -130,8 +130,8 @@ public class ContactData {
         } else {
             importWorkAddress(new Address());
         }
-        for (Iterator<String> it = PHONES.iterator(); it.hasNext(); ) {
-            importPhone(contact, it.next(), it.next());
+        for (Map.Entry<String, String> e : PHONES.entrySet()) {
+            importPhone(contact, e.getKey(), e.getValue());
         }
         if (contact.hasOrganizations()) {
             Organization organization = contact.getOrganizations().get(0);
@@ -161,8 +161,8 @@ public class ContactData {
         exportIm(contact, 2, A_imAddress3);
         exportHomeAddress(contact);
         exportWorkAddress(contact);
-        for (Iterator<String> it = PHONES.iterator(); it.hasNext(); ) {
-            exportPhone(contact, it.next(), it.next());
+        for (Map.Entry<String, String> e : PHONES.entrySet()) {
+            exportPhone(contact, e.getKey(), e.getValue());
         }
         exportOrganization(contact);
         String notes = get(A_notes);

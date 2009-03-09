@@ -35,8 +35,9 @@ public class YabTest {
     private Session session;
 
     private static final String APPID = "D2hTUBHAkY0IEL5MA7ibTS_1K86E8RErSSaTGn4-";
+    //private static final String APPID = "0YbgbonAkY2iNypMZQOONB8mNDSJkrfBlr3wgxc-";
     private static final String USER = "dacztest";
-    private static final String PASS = "test123";
+    private static final String PASS = "test1234";
 
     private static final NameField NAME = new NameField("John", "Doe");
     private static final SimpleField EMAIL = SimpleField.email("john@foo.com", Flag.HOME);
@@ -45,14 +46,14 @@ public class YabTest {
 
     static {
         BasicConfigurator.configure();
-        Logger.getRootLogger().setLevel(Level.INFO);
+        Logger.getRootLogger().setLevel(Level.DEBUG);
     }
     
     static {
-        //System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-        //System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-        //System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
-        //System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+        System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
+        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
     }
 
     @Before

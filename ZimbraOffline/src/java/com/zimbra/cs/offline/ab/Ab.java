@@ -19,13 +19,32 @@ package com.zimbra.cs.offline.ab;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.common.service.ServiceException;
+import static com.zimbra.cs.mailbox.Contact.*;
 
 import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public final class AbUtil {
+public final class Ab {
+    public static final List<String> NAME_FIELDS = Arrays.asList(
+        A_firstName, A_middleName, A_lastName, A_namePrefix, A_nameSuffix);
+
+    public static final List<String> WORK_ADDRESS_FIELDS = Arrays.asList(
+        A_workStreet, A_workCity, A_workState, A_workPostalCode, A_workCountry);
+
+    public static final List<String> HOME_ADDRESS_FIELDS = Arrays.asList(
+        A_homeStreet, A_homeCity, A_homeState, A_homePostalCode, A_homeCountry);
+
+    public static final List<String> EMAIL_FIELDS = Arrays.asList(
+        A_email, A_email2, A_email3);
+
+    public static final List<String> IM_FIELDS = Arrays.asList(
+        A_imAddress1, A_imAddress2, A_imAddress3);
+    
     public static String getFileAs(Map<String, String> fields) {
         if (!fields.containsKey(Contact.A_firstName) &&
             !fields.containsKey(Contact.A_lastName)) {
@@ -70,5 +89,14 @@ public final class AbUtil {
             baos.write(buf, 0, len);
         }
         return baos.toByteArray();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <K,V> Map<K,V> asMap(Object... args) {
+        Map<K,V> map = new HashMap<K,V>();
+        for (int i = 0; i < args.length; ) {
+            map.put((K) args[i++], (V) args[i++]);
+        }
+        return map;
     }
 }

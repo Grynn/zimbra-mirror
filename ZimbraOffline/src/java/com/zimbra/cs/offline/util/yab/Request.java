@@ -55,7 +55,7 @@ public abstract class Request extends Entity {
             return sendRequest(auth.authenticate());
         } catch (HttpException e) {
             int code = e.getReasonCode();
-            if (code != 401 && code != 403) {
+            if (code != 401 && code != 403 && code != 999) {
                 throw e;
             }
             // Cached cookie expired or was invalid. Invalidate cookie
@@ -89,7 +89,7 @@ public abstract class Request extends Entity {
                 }
             }
             HttpException e = new HttpException(
-                "HTTP request failed: " + code + ": " + HttpStatus.getStatusText(code));
+                "HTTP request failed: " + code + ": " + method.getStatusText());
             e.setReasonCode(code);
             throw e;
         }

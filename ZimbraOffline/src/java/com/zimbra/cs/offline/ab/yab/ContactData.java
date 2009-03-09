@@ -25,13 +25,17 @@ import com.zimbra.cs.offline.util.yab.Contact;
 import com.zimbra.cs.offline.util.yab.Field;
 import com.zimbra.cs.offline.util.yab.ContactChange;
 import com.zimbra.cs.offline.util.yab.FieldChange;
-import com.zimbra.cs.offline.ab.AbUtil;
+import com.zimbra.cs.offline.ab.Ab;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.common.service.ServiceException;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
@@ -41,15 +45,24 @@ import static com.zimbra.cs.mailbox.Contact.*;
 public class ContactData implements Serializable {
     private final Map<String, Field> fields = new HashMap<String, Field>();
 
-    private static final String[] NAME_FIELDS =
-        { A_firstName, A_middleName, A_lastName, A_namePrefix, A_nameSuffix };
+    private static final List<String> OTHER_FIELDS = Arrays.asList(
+        A_company, A_nickname, A_jobTitle, A_email, A_email2, A_email3,
+        A_notes, A_homeURL, A_workURL, A_notes, A_homeURL, A_workURL,
+        A_homeFax, A_workFax, A_homePhone, A_homePhone2, A_workPhone,
+        A_workPhone2, A_mobilePhone, A_workMobile, A_pager, A_otherPhone,
+        A_imAddress1, A_imAddress2, A_imAddress3, A_fileAs, A_fullName
+    );
 
-    private static final String[] WORK_ADDRESS_FIELDS =
-        { A_workStreet, A_workCity, A_workState, A_workPostalCode, A_workCountry };
+    // All Zimbra fields that are synchronized with Yahoo address book
+    private static final List<String> ALL_FIELDS = new ArrayList<String>();
+    static {
+        ALL_FIELDS.addAll(Ab.NAME_FIELDS);
+        ALL_FIELDS.addAll(Ab.WORK_ADDRESS_FIELDS);
+        ALL_FIELDS.addAll(Ab.HOME_ADDRESS_FIELDS);
+        ALL_FIELDS.addAll(OTHER_FIELDS);
+    }
 
-    private static final String[] HOME_ADDRESS_FIELDS =
-        { A_homeStreet, A_homeCity, A_homeState, A_homePostalCode, A_homeCountry };
-
+    // Zimbra IM service names
     private static final String SERVICE_ZIMBRA = "local";
     private static final String SERVICE_YAHOO = "yahoo";
     private static final String SERVICE_AOL = "aol";
@@ -108,26 +121,26 @@ public class ContactData implements Serializable {
     }
 
     private static NameField getName(Map<String, String> fields) {
-        if (containsAny(fields, NAME_FIELDS)) {
+        if (!Collections.disjoint(fields.keySet(), Ab.NAME_FIELDS)) {
             NameField name = new NameField();
-            name.setFirst(get(fields, A_firstName, ""));
-            name.setMiddle(get(fields, A_middleName, ""));
-            name.setLast(get(fields, A_lastName, ""));
-            name.setPrefix(get(fields, A_namePrefix, ""));
-            name.setSuffix(get(fields, A_nameSuffix, ""));
+            name.setFirst(get(fields, A_firstName));
+            name.setMiddle(get(fields, A_middleName));
+            name.setLast(get(fields, A_lastName));
+            name.setPrefix(get(fields, A_namePrefix));
+            name.setSuffix(get(fields, A_nameSuffix));
             return name;
         }
         return null;
     }
 
     private static AddressField getWorkAddress(Map<String, String> fields) {
-        if (containsAny(fields, WORK_ADDRESS_FIELDS)) {
+        if (!Collections.disjoint(fields.keySet(), Ab.WORK_ADDRESS_FIELDS)) {
             AddressField addr = new AddressField();
-            addr.setStreet(get(fields, A_workStreet, ""));
-            addr.setCity(get(fields, A_workCity, ""));
-            addr.setState(get(fields, A_workState, ""));
-            addr.setZip(get(fields, A_workPostalCode, ""));
-            addr.setCountry(get(fields, A_workCountry, ""));
+            addr.setStreet(get(fields, A_workStreet));
+            addr.setCity(get(fields, A_workCity));
+            addr.setState(get(fields, A_workState));
+            addr.setZip(get(fields, A_workPostalCode));
+            addr.setCountry(get(fields, A_workCountry));
             addr.setFlag(Flag.WORK);
             return addr;
         }
@@ -135,13 +148,13 @@ public class ContactData implements Serializable {
     }
 
     private static AddressField getHomeAddress(Map<String, String> fields) {
-        if (containsAny(fields, HOME_ADDRESS_FIELDS)) {
+        if (!Collections.disjoint(fields.keySet(), Ab.HOME_ADDRESS_FIELDS)) {
             AddressField addr = new AddressField();
-            addr.setStreet(get(fields, A_homeStreet, ""));
-            addr.setCity(get(fields, A_homeCity, ""));
-            addr.setState(get(fields, A_homeState, ""));
-            addr.setZip(get(fields, A_homePostalCode, ""));
-            addr.setCountry(get(fields, A_homeCountry, ""));
+            addr.setStreet(get(fields, A_homeStreet));
+            addr.setCity(get(fields, A_homeCity));
+            addr.setState(get(fields, A_homeState));
+            addr.setZip(get(fields, A_homePostalCode));
+            addr.setCountry(get(fields, A_homeCountry));
             addr.setFlag(Flag.HOME);
             return addr;
         }
@@ -247,39 +260,50 @@ public class ContactData implements Serializable {
     }
 
     public ParsedContact getParsedContact() throws ServiceException {
-        Map<String, String> zfields = new HashMap<String, String>();
+        return new ParsedContact(getFieldDelta());
+    }
+    
+    public void modifyParsedContact(ParsedContact pc) throws ServiceException {
+        pc.modify(getFieldDelta(), null);
+    }
+
+    private Map<String, String> getFieldDelta() {
+        Map<String, String> fieldDelta = new HashMap<String, String>();
+        for (String name : ALL_FIELDS) {
+            fieldDelta.put(name, null);
+        }
         for (Map.Entry<String, Field> entry : fields.entrySet()) {
             String name = entry.getKey();
             Field field = entry.getValue();
             switch (getAttribute(name)) {
             case firstName:
-                addName(zfields, (NameField) field);
+                addName(fieldDelta, (NameField) field);
                 break;
             case homeStreet:
-                addHomeAddress(zfields, (AddressField) field);
+                addHomeAddress(fieldDelta, (AddressField) field);
                 break;
             case workStreet:
-                addWorkAddress(zfields, (AddressField) field);
+                addWorkAddress(fieldDelta, (AddressField) field);
                 break;
             case birthday:
-                zfields.put(A_birthday, toString((DateField) field));
+                fieldDelta.put(A_birthday, toString((DateField) field));
                 break;
             case imAddress1: case imAddress2: case imAddress3: {
                 SimpleField simple = (SimpleField) field;
-                zfields.put(name, getLocalImAddress(simple));
+                fieldDelta.put(name, getLocalImAddress(simple));
                 break;
             }
             default:
-                zfields.put(name, ((SimpleField) field).getValue());
+                fieldDelta.put(name, ((SimpleField) field).getValue());
             }
         }
-        String fileAs = AbUtil.getFileAs(zfields);
+        String fileAs = Ab.getFileAs(fieldDelta);
         if (fileAs != null) {
-            zfields.put(A_fileAs, FA_EXPLICIT + ":" + fileAs);
+            fieldDelta.put(A_fileAs, FA_EXPLICIT + ":" + fileAs);
         }
-        return new ParsedContact(zfields);
+        return fieldDelta;
     }
-
+    
     private static void addName(Map<String, String> zfields, NameField name) {
         zfields.put(A_firstName, name.getFirst());
         zfields.put(A_middleName, name.getMiddle());
@@ -420,17 +444,8 @@ public class ContactData implements Serializable {
         return String.format("%d-%d-%d", date.getYear(), date.getMonth(), date.getDay());
     }
 
-    private static <T> boolean containsAny(Map<T, ?> map, T[] keys) {
-        for (T key : keys) {
-            if (map.containsKey(key)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static <T, V> V get(Map<T, V> map, T key, V def) {
-        V value = map.get(key);
-        return value != null ? value : def;
+    private static String get(Map<String, String> fields, String name) {
+        String value = fields.get(name);
+        return value != null ? value : "";
     }
 }

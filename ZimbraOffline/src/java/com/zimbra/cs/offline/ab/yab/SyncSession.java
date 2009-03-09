@@ -168,7 +168,7 @@ public class SyncSession {
                     }
                     pushedContacts.put(itemId, newContact);
                     ContactChange cc = cd.getContactChange(oldContact);
-                    return SyncRequestEvent.updateContact(cc);
+                    return cc.isEmpty() ? null : SyncRequestEvent.updateContact(cc);
                 }
             }
         } else if (change.isDelete()) {
@@ -386,7 +386,9 @@ public class SyncSession {
         int cid = contact.getId();
         ContactData cd = new ContactData(contact);
         if (!cd.isEmpty()) {
-            localData.modifyContact(dsi.itemId, cd.getParsedContact());
+            ParsedContact pc = new ParsedContact(localData.getContact(dsi.itemId));
+            cd.modifyParsedContact(pc);
+            localData.modifyContact(dsi.itemId, pc);
             updateContactMapping(dsi.itemId, contact);
             stats.updated++;
             LOG.debug("Modified local contact: itemId=%d, cid=%d", dsi.itemId, cid);

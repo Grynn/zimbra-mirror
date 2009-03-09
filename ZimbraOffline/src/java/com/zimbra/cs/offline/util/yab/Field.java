@@ -135,6 +135,8 @@ public abstract class Field extends Entity {
         } else if (name.equals(DateField.BIRTHDAY) ||
                    name.equals(DateField.ANNIVERSARY)) {
             return new DateField(name);
+        } else if (name.equals(CustomField.CUSTOM)) {
+            return new CustomField();
         } else {
             return new SimpleField(name);
         }
