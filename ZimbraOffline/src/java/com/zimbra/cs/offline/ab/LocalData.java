@@ -209,8 +209,8 @@ public final class LocalData {
         throws ServiceException {
         Contact contact = createContact(group.getParsedContact());
         updateMapping(contact.getId(), remoteId, null);
-        log.debug("Created new contact group: item id = %d, remote id = %s, name = %s, dlist = %s",
-                  contact.getId(), remoteId, group.getName(), group.getEmails());
+        log.debug("Created new contact group: item id = %d, remote id = %s, name = %s",
+                  contact.getId(), remoteId, group.getName());
         return contact.getId();
     }
 

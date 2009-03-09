@@ -65,10 +65,6 @@ public class ContactGroup {
         emails.add(email);
     }
 
-    public Set<String> getEmails() {
-        return emails;
-    }
-    
     public ParsedContact getParsedContact()
         throws ServiceException {
         Map<String, String> fields = new HashMap<String, String>();
@@ -79,13 +75,13 @@ public class ContactGroup {
         return new ParsedContact(fields);
     }
     
-    private static String join(Collection<?> parts, String del) {
+    private static String join(Collection<?> parts, String delimiter) {
         StringBuilder sb = new StringBuilder();
         Iterator<?> it = parts.iterator();
         if (it.hasNext()) {
             sb.append(it.next().toString());
             while (it.hasNext()) {
-                sb.append(del).append(it.next().toString());
+                sb.append(delimiter).append(it.next().toString());
             }
         }
         return sb.toString();

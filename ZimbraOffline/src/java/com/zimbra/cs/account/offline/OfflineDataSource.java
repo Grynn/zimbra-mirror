@@ -415,10 +415,11 @@ public class OfflineDataSource extends DataSource {
         if (!isYahoo()) return false;
         try {
             YMailClient ymc = new YMailClient(OfflineYAuth.authenticate(this));
+            ymc.setTrace(isDebugTraceEnabled()); 
             return ymc.isBizMail(getEmailAddress());
         } catch (Exception e) {
             OfflineLog.ymail.warn(
-                "Unable to get UserData for address %s", getEmailAddress());
+                "Unable to get UserData for address: " + getEmailAddress(), e);
         }
         return false;
     }

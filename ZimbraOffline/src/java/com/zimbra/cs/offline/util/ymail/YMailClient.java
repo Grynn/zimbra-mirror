@@ -123,19 +123,24 @@ public class YMailClient {
     }
 
     public boolean isBizMail(String email) throws ServiceException, IOException {
-        Element req = new Element.XMLElement(GET_USER_DATA);
-        Element res = transport.invokeWithoutSession(req.detach());
-        Element mbs = res.getElement("data").getOptionalElement("otherYahooMboxes");
-        if (mbs != null) {
-            Iterator<Element> it = mbs.elementIterator("yMbox");
-            while (it.hasNext()) {
-                Element mb = it.next();
-                if (mb.getAttribute("email").equalsIgnoreCase(email)) {
-                    return mb.getAttributeBool("isBizmail");
+        try {
+            Element req = new Element.XMLElement(GET_USER_DATA);
+            Element res = transport.invokeWithoutSession(req.detach());
+            Element mbs = res.getElement("data").getOptionalElement("otherYahooMboxes");
+            if (mbs != null) {
+                Iterator<Element> it = mbs.elementIterator("yMbox");
+                while (it.hasNext()) {
+                    Element mb = it.next();
+                    if (mb.getAttribute("email").equalsIgnoreCase(email)) {
+                        return mb.getAttributeBool("isBizmail");
+                    }
                 }
             }
+            return false;
+        } catch (Exception e) {
+            failed("GetUserData", e);
+            return false;
         }
-        return false;
     }
 
     public String sendMessage(MimeMessage mm, boolean saveCopy) throws IOException {

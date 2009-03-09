@@ -149,14 +149,13 @@ public class SyncSession {
             if (Gab.isContactId(dsi.remoteId)) {
                 ContactEntry contact = getEntry(dsi, ContactEntry.class);
                 if (contact.hasGroupMembershipInfos() && contact.hasEmailAddresses()) {
+                    Email email = getPrimaryEmail(contact);
                     for (GroupMembershipInfo gmi : contact.getGroupMembershipInfos()) {
                         boolean deleted = Boolean.TRUE.equals(gmi.getDeleted());
                         if (!deleted) {
                             ContactGroup group = groups.get(gmi.getHref());
                             if (group != null) {
-                                for (Email email : contact.getEmailAddresses()) {
-                                    group.addEmail(email.getAddress());
-                                }
+                                group.addEmail(email.getAddress());
                             }
                         }
                     }
@@ -178,6 +177,19 @@ public class SyncSession {
         LOG.debug("Processed remote contact group changes: " + stats);
     }
 
+    private Email getPrimaryEmail(ContactEntry contact) {
+        if (contact.hasEmailAddresses()) {
+            for (Email email : contact.getEmailAddresses()) {
+                if (email.getPrimary()) {
+                    return email;
+                }
+            }
+            // If primary not found, then use first available
+            return contact.getEmailAddresses().get(0);
+        }
+        return null;
+    }
+    
     private void updateGroup(String remoteId, ContactGroup group, Stats stats)
         throws ServiceException {
         DataSourceItem dsi = localData.getReverseMapping(remoteId);

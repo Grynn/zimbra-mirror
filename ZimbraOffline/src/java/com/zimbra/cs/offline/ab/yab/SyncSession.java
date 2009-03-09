@@ -261,7 +261,7 @@ public class SyncSession {
                                 for (Category cat : cats) {
                                     ContactGroup group = groups.get(cat.getId());
                                     if (group != null) {
-                                        group.getEmails().addAll(emails);
+                                        group.addEmail(emails.get(0));
                                     }
                                 }
                             }
