@@ -103,6 +103,10 @@ public abstract class Field extends Entity {
         return isFlag(Flag.WORK);
     }
 
+    public boolean isPersonal() {
+        return isFlag(Flag.PERSONAL);
+    }
+
     public Element toXml(Document doc, String tag) {
         Element e = doc.createElement(tag);
         if (id != -1) {

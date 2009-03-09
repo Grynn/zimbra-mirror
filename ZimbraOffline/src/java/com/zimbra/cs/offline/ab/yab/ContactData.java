@@ -187,7 +187,7 @@ public class ContactData implements Serializable {
         case notes:
             return SimpleField.notes(value);
         case homeURL:
-            return SimpleField.link(value, Flag.HOME);
+            return SimpleField.link(value, Flag.PERSONAL);
         case workURL:
             return SimpleField.link(value, Flag.WORK);
         case homeFax:
@@ -225,7 +225,7 @@ public class ContactData implements Serializable {
         } else if (simple.isYahooid() || simple.isOtherid()) {
             return getFirst(A_imAddress1, A_imAddress2, A_imAddress3);
         } else if (simple.isLink()) {
-            if (simple.isHome()) {
+            if (simple.isPersonal()) {
                 return A_homeURL;
             } else if (simple.isWork()) {
                 return A_workURL;
@@ -449,3 +449,4 @@ public class ContactData implements Serializable {
         return value != null ? value : "";
     }
 }
+  
