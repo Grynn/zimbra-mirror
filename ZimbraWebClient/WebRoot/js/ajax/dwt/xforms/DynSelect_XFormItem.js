@@ -126,16 +126,20 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 }
 
 DynSelect_XFormItem.prototype.resetChoices = function () {
+	var choices = this.getChoices();
+	choices.setChoices([]);
+	choices.dirtyChoices();
+	
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
 			this.dataFetcherObject = new this.dataFetcherClass(this.getForm().getController());
 	} else if(this.getInheritedProperty("dataFetcherInstance")) {
 		this.dataFetcherObject = this.getInstance();
 	}	
-	if(!this.dataFetcherObject)
-		return;
+//	if(!this.dataFetcherObject)
+//		return;
 		
-	var callback = new AjxCallback(this, this.changeChoicesCallback);
-	this.dataFetcherMethod.call(this.dataFetcherObject, "", null, callback , this.getForm());
+	//var callback = new AjxCallback(this, this.changeChoicesCallback);
+	//this.dataFetcherMethod.call(this.dataFetcherObject, "", null, callback , this.getForm());
 }
 
 
