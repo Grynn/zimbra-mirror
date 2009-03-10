@@ -201,7 +201,7 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
             }
         }
         
-        Set<String> attrRightNeeded = getAttrRightNeeded();
+        Set<String> attrRightNeeded = needGetAttrsRight();
 
         for (Enumeration<String> keys = h.keys(); keys.hasMoreElements();){
             String domainName = keys.nextElement();
@@ -334,10 +334,10 @@ public class GetBulkProvisionAccounts extends AdminDocumentHandler {
         return (int) b & 0xFF;
       }
       
-      Set<String> getAttrRightNeeded() {
-          Set<String> attrRightNeeded = new HashSet<String>();
-          attrRightNeeded.add(Provisioning.A_zimbraDomainMaxAccounts);
-          return attrRightNeeded;
+      private Set<String> needGetAttrsRight() {
+          Set<String> attrsNeeded = new HashSet<String>();
+          attrsNeeded.add(Provisioning.A_zimbraDomainMaxAccounts);
+          return attrsNeeded;
       }
       
       @Override
