@@ -232,7 +232,7 @@ ZaNewAdminWizard.prototype.popup = function () {
 
 ZaNewAdminWizard.prototype.goPage = function (pageKey) {
     ZaXWizardDialog.prototype.goPage.call(this, pageKey) ;
-    var prev = next = finish = true ;
+    var prev = next = finish = cancel = true ;
     if (pageKey == ZaNewAdminWizard.STEP_START) {
 		prev = false;
         finish = false ;
@@ -240,15 +240,17 @@ ZaNewAdminWizard.prototype.goPage = function (pageKey) {
                     || pageKey == ZaNewAdminWizard.STEP_NEW_GROUP) {
 
 
-    } else if (pageKey == ZaNewAdminWizard.STEP_PERMISSION) {
-        prev = false ;
+    } else if (pageKey == ZaNewAdminWizard.STEP_PERMISSION
+            || pageKey == ZaNewAdminWizard.STEP_UI_COMPONENTS) {
+        cancel = prev = false ;
     } else if (pageKey == ZaNewAdminWizard.STEP_FINISH) {
-        next = false ; 
+        next = prev = cancel = false ;
     }
 
 	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(prev);
     this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(next);
     this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(finish);
+    this._button[DwtDialog.CANCEL_BUTTON].setEnabled(cancel);
 
 }
 
@@ -367,7 +369,10 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                 label: com_zimbra_delegatedadmin.Label_admin_type , labelLocation:_LEFT_, 
                 visibilityChecks:[],
                 enableDisableChecks:[],
-                choices: this.newAdminTypesChoices }
+                choices: this.newAdminTypesChoices } ,
+            {type : _SPACER_, height: 20 },
+            { type: _OUTPUT_, colSpan: 2,value: com_zimbra_delegatedadmin.Help_new_administrator }    
+
         ]
 
     };
@@ -471,7 +476,23 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
             type: _CASE_,
             tabGroupKey:ZaNewAdminWizard.STEP_FINISH, caseKey:ZaNewAdminWizard.STEP_FINISH,
             items: [
-                {type: _OUTPUT_, value: "Add instructions on how to change the permssion or add admins to the admin group" }    
+                {ref: ZaNewAdmin.A_admin_type,  type: _OUTPUT_,
+                    valueChangeEventSources:[ZaNewAdmin.A_admin_type],
+                    getDisplayValue: function (newValue) {
+                        var instance = this.getInstance () ;
+                        var name = instance.name ;
+                        var viewName ;
+
+                        if (instance [ ZaNewAdmin.A_admin_type] == ZaItem.ACCOUNT) {
+                            viewName = com_zimbra_delegatedadmin.Help_new_admin_summary_account ;
+                        } else if (instance [ ZaNewAdmin.A_admin_type] == ZaItem.DL) {
+                            viewName = com_zimbra_delegatedadmin.Help_new_admin_summary_dl ;
+                        }
+
+                        return  AjxMessageFormat.format(
+                                com_zimbra_delegatedadmin.Help_new_admin_summary,[name, viewName]) ;
+                    }
+                }
             ]
     }
     cases.push (case_finish) ;
