@@ -581,7 +581,7 @@ while (1) {
     $ROTATE_DEFER = 1;
     my $values = join(", ", @vals);
     $LOGFH->print("$values\n");
-    Zimbra::Mon::Logger::Log( "info", "zmstat-proc: ${HEADING}:: $values"); 
+    Zimbra::Mon::Logger::Log( "info", "zmstat proc.csv: ${HEADING}:: $values"); 
     $LOGFH->flush();
     $ROTATE_DEFER = 0;
     if ($ROTATE_NOW) {

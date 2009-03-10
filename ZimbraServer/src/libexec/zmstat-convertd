@@ -178,7 +178,7 @@ sub main() {
             }
             my $values = join(', ', @printstats);
             $LOGFH->print("$values\n");
-            Zimbra::Mon::Logger::Log( "info", "zmstat-convertd: ${HEADING}:: $values"); 
+            Zimbra::Mon::Logger::Log( "info", "zmstat convertd.csv: ${HEADING}:: $values"); 
             $LOGFH->flush();
             $ROTATE_DEFER = 0;
             if ($ROTATE_NOW) {

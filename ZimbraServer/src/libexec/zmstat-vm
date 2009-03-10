@@ -236,7 +236,7 @@ while (1) {
     # Don't allow rotation in signal handler while we're writing.
     $ROTATE_DEFER = 1;
     $LOGFH->print("$tstamp, $line\n");
-    Zimbra::Mon::Logger::Log( "info", "zmstat-vm: ${HEADING}:: $tstamp, $line"); 
+    Zimbra::Mon::Logger::Log( "info", "zmstat vm.csv: ${HEADING}:: $tstamp, $line"); 
     $LOGFH->flush();
     $ROTATE_DEFER = 0;
     if ($ROTATE_NOW) {

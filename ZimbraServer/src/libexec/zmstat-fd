@@ -100,7 +100,7 @@ while (1) {
     }
     $ROTATE_DEFER = 1;
     $LOGFH->print("$tstamp, $stat\n");
-    Zimbra::Mon::Logger::Log( "info", "zmstat-fd: ${HEADING}:: $tstamp, $stat"); 
+    Zimbra::Mon::Logger::Log( "info", "zmstat fd.csv: ${HEADING}:: $tstamp, $stat"); 
     $LOGFH->flush();
     $ROTATE_DEFER = 0;
     if ($ROTATE_NOW) {
