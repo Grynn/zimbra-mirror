@@ -381,8 +381,9 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                  msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
                  labelLocation:_LEFT_,forceUpdate:true,
                 visibilityChecks:[],
-                enableDisableChecks:[],
-                onChange: ZaAccount.setDomainChanged
+                enableDisableChecks:[]
+                //TODO: may need the onchange method
+//                onChange: ZaAccount.setDomainChanged
             },
             {ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,
 				label:ZaMsg.NAD_Password, labelLocation:_LEFT_,
@@ -430,8 +431,9 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                         label:ZaMsg.DLXV_LabelListName + ": ",
                         labelLocation:_LEFT_,forceUpdate:true,
                         visibilityChecks:[],
-                        enableDisableChecks:[],
-                        onChange: ZaAccount.setDomainChanged
+                        enableDisableChecks:[]
+                        //TODO: may need the onchange method
+//              onChange: ZaAccount.setDomainChanged
                     }
             ]
     }

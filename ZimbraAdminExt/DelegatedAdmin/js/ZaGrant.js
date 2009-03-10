@@ -17,6 +17,7 @@ ZaGrant.A_grantee = "grantee" ;
 ZaGrant.A_grantee_type = "grantee_type" ;
 ZaGrant.A_right = "right" ;
 ZaGrant.A_deny = "deny" ;
+ZaGrant.A_canDelegate = "canDelegate";
 ZaGrant.A_target = "target" ;
 ZaGrant.A_target_type = "target_type"
 ZaGrant.A_right_type = "right_type" ;
@@ -85,9 +86,13 @@ ZaGrant.loadMethod = function (by, val, type) {
         if (grants != null) {
             for (var i = 0; i < grants.length; i++) {
                 var grant = new ZaGrant () ;
+                grant [ZaGrant.A_target] = val ;
+                grant [ZaGrant.A_target_type] = type ;
                 for (var key in grants[i]) {
                     if (key == "deny") {
                         grant [ZaGrant.A_deny] = grants[i][key] ? "1" : "0" ;
+                    } else if (key == ZaGrant.A_canDelegate) {
+                        grant [ZaGrant.A_canDelegate] = grants[i][key] ? "1" : "0" ;
                     } else if (key == "name") {
                         grant [ZaGrant.A_grantee] = grants[i][key] ;
                     } else if (key == "type") {
@@ -130,6 +135,9 @@ ZaGrant.grantMethod = function (obj) {
     var elRight = soapDoc.set("right", obj[ZaGrant.A_right])
     if (obj[ZaGrant.A_deny] == "1") {
         elRight.setAttribute("deny", "1") ;   
+    }
+    if (obj[ZaGrant.A_canDelegate] == "1") {
+        elRight.setAttribute(ZaGrant.A_canDelegate, "1") ;   
     }
     var ctler =  ZaApp.getInstance().getCurrentController();
     try {
@@ -182,6 +190,10 @@ ZaGrant.revokeMethod = function (target, obj) {
     if (obj[ZaGrant.A_deny] == "1") {
         elRight.setAttribute("deny", "1") ;
     }
+
+    if (obj[ZaGrant.A_canDelegate] == "1") {
+        elRight.setAttribute(ZaGrant.A_canDelegate, "1") ;
+    }
     var ctler =  ZaApp.getInstance().getCurrentController();
     try {
         var params = new Object();
@@ -207,6 +219,7 @@ ZaGrant.myXModel = {
         {id: ZaGrant.A_grantee_type, type:_STRING_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
         {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
         {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 },
+        {id: ZaGrant.A_canDelegate, type:_ENUM_, ref: ZaGrant.A_canDelegate, choices:ZaModel.BOOLEAN_CHOICES2 },
         {id: ZaGrant.A_target_type, ref: ZaGrant.A_target_type, type: _STRING_, choices: ZaZimbraRights.targetType },
         {id: ZaGrant.A_target, type:_STRING_, ref: ZaGrant.A_target, required: true } ,
         {id: ZaGrant.A_right_type, type:_ENUM_, ref: ZaGrant.A_right_type, required:true, choices: ZaGrant.RIGHT_TYPE_CHOICES },

@@ -66,7 +66,7 @@ function(grant, now, isDragProxy) {
 		var field = this._headerList[i]._field;
 
         html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-        if (field == ZaGrant.A_deny) {
+        if (field == ZaGrant.A_deny || field == ZaGrant.A_canDelegate) {
             if (grant [field] && grant [field] == "1") {
                 html[idx++] = ZaMsg.Yes ;
             }else {
@@ -93,25 +93,25 @@ function(width, by) {
     if (by == ZaGrant.A_target) {
         headerList[0] = new ZaListHeaderItem(ZaGrant.A_grantee, com_zimbra_delegatedadmin.Col_grantee_name,
                 null, width/4 + 50, null, ZaGrant.A_grantee, true, true);
-
         headerList[1] = new ZaListHeaderItem(ZaGrant.A_grantee_type, com_zimbra_delegatedadmin.Col_grantee_type,
-                null, width/4 - 50, null  , ZaGrant.A_grantee_type, true, true);
+                null, width/4 - 80, null  , ZaGrant.A_grantee_type, true, true);
     } else if (by  == ZaGrant.A_grantee) {
         headerList[0] = new ZaListHeaderItem(ZaGrant.A_target, com_zimbra_delegatedadmin.Col_target_name,
                 null, width/4 + 50, null, ZaGrant.A_target, true, true);
-
         headerList[1] = new ZaListHeaderItem(ZaGrant.A_target_type, com_zimbra_delegatedadmin.Col_target_type,
-                null, width/4 - 50, null  , ZaGrant.A_target_type, true, true);
+                null, width/4 - 80, null  , ZaGrant.A_target_type, true, true);
     }
     headerList[2] = new ZaListHeaderItem(ZaGrant.A_right, com_zimbra_delegatedadmin.Col_grant_right_name,
-                        null, 180, null , ZaGrant.A_right, true, true);
+                        null, 150, null , ZaGrant.A_right, true, true);
 
-    headerList[3] = new ZaListHeaderItem(ZaGrant.A_deny, com_zimbra_delegatedadmin.Col_deny,
+    headerList[3] = new ZaListHeaderItem(ZaGrant.A_canDelegate, com_zimbra_delegatedadmin.Col_canDelegate,
+                    null, 80, null , ZaGrant.A_canDelegate, true, true);
+
+    headerList[4] = new ZaListHeaderItem(ZaGrant.A_deny, com_zimbra_delegatedadmin.Col_deny,
                 null, null, null , ZaGrant.A_deny, true, true);
 
     return headerList;
 }
-
 
 ZaGrantsListView.isDeleteEnabled = function () {
     var grantListItem = this.getForm().getItemsById (ZaGrant.A2_grantsList) [0] ;
@@ -184,9 +184,12 @@ ZaTargetPermission.grantListItem = {
     id: ZaGrant.A2_grantsList, ref: ZaGrant.A2_grantsList, type: _LIST_,
     listItems: { type: _OBJECT_, items:
         [
-            {id: ZaGrant.A_grantee, type: _STRING_, ref: ZaGrant.A_grantee, required: true },    
+            {id: ZaGrant.A_target, type: _STRING_, ref: ZaGrant.A_target },
+            {id: ZaGrant.A_target_type, ref: ZaGrant.A_target_type, type: _STRING_, choices: ZaZimbraRights.targetType },
+            {id: ZaGrant.A_grantee, type: _STRING_, ref: ZaGrant.A_grantee, required: true },
             {id: ZaGrant.A_grantee_type, type:_LIST_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
             {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
+            {id: ZaGrant.A_canDelegate, type:_ENUM_, ref: ZaGrant.A_canDelegate, choices:ZaModel.BOOLEAN_CHOICES2 },    
             {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 }
         ]
     }
@@ -484,7 +487,8 @@ ZaTargetPermission.revokeButtonListener = function () {
                     null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
         }
         formPage.revokeRightDlg.registerCallback(DwtDialog.YES_BUTTON, ZaGrantsListView.revokeRight, form, null);
-        var confirmMsg =  com_zimbra_delegatedadmin.confirm_delete_grants + ZaTargetPermission.getDlMsgFromGrant(selectedGrant) ;
+        var confirmMsg =  com_zimbra_delegatedadmin.confirm_delete_grants
+                + ZaTargetPermission.getDlMsgFromGrant(selectedGrant) ;
         formPage.revokeRightDlg.setMessage (confirmMsg,  DwtMessageDialog.INFO_STYLE) ;
         formPage.revokeRightDlg.popup ();
     } else {
@@ -495,23 +499,26 @@ ZaTargetPermission.revokeButtonListener = function () {
 ZaTargetPermission.getDlMsgFromGrant =
 function (grantsList) {
 	var dlgMsg =  "<br><table>";
-    var keys = [ZaGrant.A_grantee,ZaGrant.A_right ,ZaGrant.A_deny] ;
+    var keys = [ZaGrant.A_target, ZaGrant.A_grantee, ZaGrant.A_right, ZaGrant.A_deny, ZaGrant.A_canDelegate] ;
     for (var i=0; i < grantsList.length; i ++) {
         var grant = grantsList [i] ;
 
         for (var j =0; j < keys.length; j ++) {
             var key = keys [j] ;
             dlgMsg += "<tr>";
-            if (key ==ZaGrant.A_grantee)  {
+             if (key == ZaGrant.A_target)  {
+                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_target_name + ": " + "</td>";
+                dlgMsg += "<td>" + grant[ZaGrant.A_target] + "</td>" ;
+            } else if (key ==ZaGrant.A_grantee)  {
                 dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_grantee_name + ": " + "</td>";
                 dlgMsg += "<td>" + grant[ZaGrant.A_grantee] + "</td>" ;
             } else if (key == ZaGrant.A_right) {
                 dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_grant_right_name + ": " + "</td>";
-                dlgMsg += "<td>" + grant[ZaGrant.A_right] + "</td>" ;
-            } else if (key == ZaGrant.A_deny) {
-                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_deny + ": " + "</td>";
-                dlgMsg += "<td>" +( grant[key] && grant[key] == "1" ? ZaMsg.Yes : ZaMsg.No )+ "</td>" ;
-            }
+                dlgMsg += "<td>"
+                        + (grant[ZaGrant.A_canDelegate] == "1" ? "+" : "")
+                        + (grant[ZaGrant.A_deny] == "1" ? "-" : "")
+                        + grant[ZaGrant.A_right] + "</td>" ;
+            } 
             dlgMsg += "</tr>";
         }
     }

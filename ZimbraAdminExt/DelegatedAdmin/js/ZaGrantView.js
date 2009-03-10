@@ -52,6 +52,9 @@ ZaGrantView.myXFormModifier = function(xFormObject) {
                    labelLocation:_LEFT_ },
                {ref: ZaGrant.A_deny,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_deny ,
                    visibilityChecks:[],  
+                   labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" } ,
+               {ref: ZaGrant.A_canDelegate,  type: _CHECKBOX_ , label: com_zimbra_delegatedadmin.Col_can_grant ,
+                   visibilityChecks:[],
                    labelLocation:_RIGHT_, trueValue:"1", falseValue:"0" }
               ]
             }
