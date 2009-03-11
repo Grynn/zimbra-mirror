@@ -503,6 +503,42 @@ function (obj) {
 	}
 }
 
+ZaItem.initAttrsFromJS =
+function (obj) {
+	if(!obj)
+		return;
+
+    var attrs = {} ;
+	if(obj.a) {
+		var len = obj.a.length;
+		for(var ix = 0; ix < len; ix++) {
+			if(!attrs[[obj.a[ix].n]]) {
+				attrs[[obj.a[ix].n]] = obj.a[ix]._content;
+			}else {
+				if(!(attrs[[obj.a[ix].n]] instanceof Array)) {
+					attrs[[obj.a[ix].n]] = [attrs[[obj.a[ix].n]]];
+				}
+				attrs[[obj.a[ix].n]].push(obj.a[ix]._content);
+			}
+		}
+	}
+	if(obj._attrs) {
+		for (var ix in obj._attrs) {
+			if(!attrs[ix]) {
+				attrs[ix] = obj._attrs[ix];
+			} else {
+				if(!(attrs[ix] instanceof Array)) {
+					attrs[ix] = [attrs[ix]];
+				}
+				attrs[ix].push(obj._attrs[ix]);
+			}
+		}
+	}
+
+    return attrs ;
+}
+
+
 // Adds a row to the tool tip.
 ZaItem.prototype._addRow =
 function(msg, value, html, idx) {

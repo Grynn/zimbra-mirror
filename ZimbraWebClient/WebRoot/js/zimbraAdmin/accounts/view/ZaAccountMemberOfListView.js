@@ -89,19 +89,22 @@ function (val, by){
 			var dls = resp.dl ;
 			var n = resp.dl.length ;
 			for (var i=0, d=0, m=0; m < n; m++ ){
-				//if (dls[m].isgroup) {
 				if (dls[m].via && (dls[m].via.length >0)){ //indirect dl
 					indirectML[i] = { name: dls[m].name, id: dls[m].id, via: dls[m].via} ;
 					i ++ ;
 				}else{
 					directML[d] = { name: dls[m].name, id: dls[m].id } ;
-					d ++ ;
+                    var attrs = ZaItem.initAttrsFromJS (dls[m]) ;
+                    if (attrs["zimbraIsAdminGroup"] != null) {
+                        directML[d]["zimbraIsAdminGroup"] = attrs["zimbraIsAdminGroup"] ; 
+                    }
+                    d ++ ;
 				}
 			}
 		}
-
 	}catch (ex){
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.getAccountMemberShip", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex,
+                "ZaAccountMemberOfListView.getAccountMemberShip", null, false);
 	}
 	
 	var memberOf = {	directMemberList: directML,

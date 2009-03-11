@@ -120,7 +120,7 @@ ZaDelegatedAdmin.accountObjectModifer = function () {
     
     for (var i = 0; i < directMemberOfList.length; i ++) {
     // TODO: enable it when GetAccountMembershipRequest returns isAdminGroup
-                //            if (directMemberOfList[i][ZaDistributionList.A_isAdminGroup] == "TRUE")
+              if (directMemberOfList[i][ZaDistributionList.A_isAdminGroup] == "TRUE")
                     this._containedObject [ZaAccount.A2_adminRoles].push (directMemberOfList[i].name) ;
             }
 }
@@ -218,7 +218,7 @@ function (entry) {
         var allDirectMemberOfs = this._view._containedObject [ZaAccount.A2_memberOf] [ZaAccount.A2_directMemberList] ;
         for (var i = 0; i < allDirectMemberOfs.length; i ++) {
 // TODO: enable it when GetAccountMembershipRequest returns isAdminGroup
-            //            if (allDirectMemberOfs[i][ZaDistributionList.A_isAdminGroup] == "TRUE")
+        if (allDirectMemberOfs[i][ZaDistributionList.A_isAdminGroup] == "TRUE")
                 this._view._containedObject[ZaAccount.A2_adminRoles].push (allDirectMemberOfs[i].name) ;
         }
 
@@ -243,20 +243,6 @@ if (ZaDistributionList) {
 
 if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
    ZaDelegatedAdmin.DLXFormModifier = function (xFormObject) {
-       /*this item is to be added in the permission view
-            var adminGroupChkBx =
-                {type:_GROUP_, numCols:2,colSpan: "*", colSizes:["20px","*"],
-                    cssStyle:"margin-top:10px;margin-left: 10px; margin-right:auto;",
-                    items: [
-                        {
-                            ref: ZaDistributionList.A_isAdminGroup,type:_CHECKBOX_,
-                            label:com_zimbra_delegatedadmin.NAD_IsAdminGroup,
-                            enableDisableChecks:[],
-                            visibilityChecks:[],
-                            trueValue:"TRUE", falseValue:"FALSE"
-                        }
-                    ]
-                }; */
        var adminGroupChkBx =
             {
                 ref: ZaDistributionList.A_isAdminGroup,type:_CHECKBOX_,
