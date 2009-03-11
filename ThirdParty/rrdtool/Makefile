@@ -76,7 +76,7 @@ build:
 	cd $(APP_ROOT); \
 	tar xzf src/$(APP_NAME)-$(APP_RELEASE).tar.gz; \
 	cd $(APP_NAME)-$(APP_VERSION); \
-	patch -N -g0 -p1 < ../patches/perllib.patch; \
+	patch -N -g0 -p1 < ../patches/perllibs.patch; \
 	autoconf; \
 	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) --enable-static --enable-shared=no \
 	 --disable-tcl --disable-ruby  --disable-python; \
