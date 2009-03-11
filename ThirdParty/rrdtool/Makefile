@@ -67,7 +67,7 @@ build:
 	cd $(APP_ROOT); \
 	tar xfz src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz; \
 	cd $(FREETYPE_NAME)-$(FREETYPE_VERSION); \
-	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
+	env CFLAGS-"-g -O2 -fPIC" ./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(APP_ROOT); \
 	tar xfz src/$(LIBART_NAME)-$(LIBART_VERSION).tar.gz; \
