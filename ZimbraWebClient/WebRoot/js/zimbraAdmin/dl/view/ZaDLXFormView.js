@@ -518,6 +518,17 @@ function (ev) {
 	}	
 }
 
+ZaDLXFormView.publishNewShareButtonListener = function () {
+	var instance = this.getInstance();
+	var formPage = this.getForm().parent;
+	if(!formPage.publishShareDlg) {
+		formPage.publishShareDlg = new ZaPublishShareXDialog(ZaApp.getInstance().getAppCtxt().getShell(), "550px", "300px",ZaMsg.Share_PublishNewTitle);
+		//formPage.publishShareDlg.registerCallback(DwtDialog.OK_BUTTON, ZaDLXFormView.publishShare, this.getForm(), null);						
+	}
+	
+	formPage.publishShareDlg.setObject(instance);
+	formPage.publishShareDlg.popup();	
+}
 
 ZaDLXFormView.deleteAliasButtonListener = function () {
 	var instance = this.getInstance();
@@ -646,7 +657,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 	this.tabChoices.push({value:_tab2, label:ZaMsg.DLXV_TabNotes});
 	this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
     this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});
-    this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Shares});
+    this.tabChoices.push({value:_tab5, label:ZaMsg.Share_TabTitle});
     	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	xFormObject.numCols=5;
@@ -1058,7 +1069,17 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 			items: [
 		    	{ref:ZaDistributionList.A2_publishedShares, 
 		    		type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",
-				   	multiselect:true, widgetClass:ZaSharesListView, headerList:shareHeaderList}								
+				   	multiselect:true, widgetClass:ZaSharesListView, headerList:shareHeaderList},
+					{type:_GROUP_, numCols:2, width:"350px", colSizes:["150px","auto"], 
+						cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
+						items: [
+							{type:_DWT_BUTTON_, label:ZaMsg.Shares_PublishNew,width:"150px",
+								id:"deleteShareButton",onActivate:"ZaDLXFormView.publishNewShareButtonListener.call(this,event)",
+								enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.PUBLISH_SHARE_RIGHT]]
+							},
+							{type:_CELLSPACER_}
+						]
+					}
 			]}
 		]};		
 		cases.push(case5);

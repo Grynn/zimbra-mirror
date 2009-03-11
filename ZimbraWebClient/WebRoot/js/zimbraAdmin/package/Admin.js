@@ -153,6 +153,7 @@ AjxPackage.require("zimbraAdmin.globalconfig.view.GlobalConfigXFormView");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaAccMiniListView");
 AjxPackage.require("zimbraAdmin.dl.view.ZaDLXFormView");
 AjxPackage.require("zimbraAdmin.dl.view.ZaSharesListView");
+AjxPackage.require("zimbraAdmin.dl.view.ZaPublishShareXDialog");
 AjxPackage.require("zimbraAdmin.resource.view.ZaResourceXFormView");
 AjxPackage.require("zimbraAdmin.resource.view.ZaNewResourceXWizard");
 AjxPackage.require("zimbraAdmin.ZaZimbraAdmin");

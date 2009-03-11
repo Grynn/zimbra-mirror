@@ -82,6 +82,7 @@ ZaDistributionList.A2_directMemberList = "directMemberList";
 ZaDistributionList.A2_indirectMemberList = "indirectMemberList";
 ZaDistributionList.A2_nonMemberList = "nonMemberList";
 ZaDistributionList.A2_alias_selection_cache = "alias_selection_cache";
+ZaDistributionList.A2_share_selection_cache = "alias_selection_cache";
 ZaDistributionList._dlStatus = {
 	enabled  : ZaMsg.DL_Status_enabled ,
 	disabled : ZaMsg.DL_Status_disabled
@@ -92,6 +93,7 @@ ZaDistributionList.ADD_DL_ALIAS_RIGHT = "addDistributionListAlias";
 ZaDistributionList.REMOVE_DL_ALIAS_RIGHT = "removeDistributionListAlias";
 ZaDistributionList.REMOVE_DL_MEMBER_RIGHT = "removeDistributionListMember";
 ZaDistributionList.ADD_DL_MEMBER_RIGHT = "addDistributionListMember";
+ZaDistributionList.PUBLISH_SHARE_RIGHT = "publishDistributionListShareInfo";
 
 ZaDistributionList.searchAttributes = AjxBuffer.concat(ZaAccount.A_displayname,",",
 													   ZaItem.A_zimbraId,  "," , 
@@ -682,7 +684,7 @@ ZaDistributionList.prototype.getPublishedShareInfo = function () {
 	params.soapDoc = soapDoc;
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_GET_DL
+		busyMsg : ZaMsg.BUSY_GET_SHARES
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetPublishedShareInfoResponse;	
 	if(!AjxUtil.isEmpty(resp.share)) {
@@ -692,6 +694,62 @@ ZaDistributionList.prototype.getPublishedShareInfo = function () {
 	//GetShareInfoRequest	
 }
 ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getPublishedShareInfo) ;
+
+ZaDistributionList.prototype.getUnpublishedShares = function (ownerBy, ownerVal) {
+	if (this.id == null || !ownerBy || !ownerVal) {
+		return;
+	}
+	var soapDoc = AjxSoapDoc.create("GetShareInfoRequest", ZaZimbraAdmin.URN, null);
+	var dl = soapDoc.set("grantee", "");
+	dl.setAttribute("id", this.id)
+	//dl.setAttribute("type", ZaItem.DL);
+	var owner = soapDoc.set("owner", ownerVal);
+	owner.setAttribute("by", ownerBy);
+	
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_SHARES
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetShareInfoResponse;	
+	var allSharesList, allSharesArray;
+	if(!AjxUtil.isEmpty(resp.share)) {
+		allSharesList = new ZaItemList(ZaShare);
+		allSharesList.loadFromJS(resp);
+		allSharesArray = allSharesList.getArray();
+	}
+	
+	soapDoc = AjxSoapDoc.create("GetPublishedShareInfoRequest", ZaZimbraAdmin.URN, null);
+	dl = soapDoc.set("dl", this.id);
+	dl.setAttribute("by", "id");
+	owner = soapDoc.set("owner", ownerVal);
+	owner.setAttribute("by", ownerBy);
+	
+	params = new Object();
+	params.soapDoc = soapDoc;
+	reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : ZaMsg.BUSY_GET_SHARES
+	}
+	resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetPublishedShareInfoResponse;	
+	var publishedSharesList, publishedSharesArray;
+	if(!AjxUtil.isEmpty(resp.share)) {
+		publishedSharesList = new ZaItemList(ZaShare);
+		publishedSharesList.loadFromJS(resp);
+		publishedSharesArray = publishedSharesList.getArray();
+	}	
+	var unpublishedSharesArray;
+	if(!AjxUtil.isEmpty(allSharesArray)) {
+		if(!AjxUtil.isEmpty(publishedSharesArray)) {
+			unpublishedSharesArray = AjxUtil.arraySubstract(allSharesArray,publishedSharesArray,ZaUtil.compareObjects);
+		} else {
+			unpublishedSharesArray = allSharesArray;
+		}
+	}
+	return unpublishedSharesArray;
+}
+
 
 ZaDistributionList.addNewMembers = function (mods, obj, dl, finishedCallback) {
 	var addMemberSoapDoc, r;
@@ -823,6 +881,7 @@ ZaDistributionListMember.prototype.toString = function () {
 ZaDistributionList.myXModel = {
 
 	items: [
+		{id:"id", type:_STRING_},
 		{id:ZaDistributionList.A2_query, type:_STRING_},
 		{id:ZaDistributionList.A2_pagenum, type:_NUMBER_, defaultValue:1},
 		{id:ZaDistributionList.A2_poolPagenum, type:_NUMBER_, defaultValue:1},
@@ -884,7 +943,8 @@ ZaDistributionList.myXModel = {
 		{id:ZaDistributionList.A_zimbraDistributionListSendShareMessageFromAddress, ref:"attrs/"+ZaDistributionList.A_zimbraDistributionListSendShareMessageFromAddress, type:_STRING_},
 		{id:ZaDistributionList.A2_sharesOwner, type:_STRING_},
 		{id:ZaDistributionList.A2_sharesPool, type:_LIST_},
-		{id:ZaDistributionList.A2_newSharePath, type:_STRING_}	
+		{id:ZaDistributionList.A2_newSharePath, type:_STRING_},
+		{id:ZaDistributionList.A2_share_selection_cache, type:_LIST_}	
 		
 	]
 };

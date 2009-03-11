@@ -108,4 +108,11 @@ function (date, useUTC) {
 	return s.substring(0,8) + s.substring(9) ;
 }
 
-
+ZaUtil.compareObjects = function(obj1, obj2) {
+	if(obj1.id==obj2.id)
+		return 0;
+	if (obj1.name > obj2.name)
+		return 1;
+	if (obj1.name < obj2.name)
+		return -1;	
+}
