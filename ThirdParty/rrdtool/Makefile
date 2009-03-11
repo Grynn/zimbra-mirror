@@ -62,7 +62,7 @@ build:
 	cd $(PNG_NAME)-$(PNG_VERSION); \
 	patch -N -g0 -p1 < ../patches/libtoolize.patch; \
 	./autogen.sh; \
-	./configure --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION) --mandir=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/man --enable-shared=no; \
+	env CFLAGS="-g -O2 -fPIC" ./configure --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION) --mandir=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/man --enable-shared=no; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(APP_ROOT); \
 	tar xfz src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz; \
