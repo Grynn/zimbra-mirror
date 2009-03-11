@@ -381,17 +381,24 @@ ZaAccountMemberOfListView.addMemberList =
 function (tmpObj, item) {
      try {
         var addList = [];
+        if (tmpObj[ZaAccount.A2_memberOf] && tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList]) {
+            var newDirectMember = tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
 
-        var newDirectMember = tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
+            //Compose the added dl list - any dl from new direct memberOf list, not in the current memberOf list
+            if (newDirectMember ) {
+                if (!newDirectMember instanceof Array) {
+                     newDirectMember = [newDirectMember] ;
+                }
+                
+                for (var i = 0; i < newDirectMember.length; i ++) {
+                    var dlName = newDirectMember[i].name ; //dl in the new direct member
+                    addList.push (newDirectMember[i]) ;
+                }
 
-        //Compose the added dl list - any dl from new direct memberOf list, not in the current memberOf list
-        for (var i = 0; i < newDirectMember.length; i ++) {
-            var dlName = newDirectMember[i].name ; //dl in the new direct member
-            addList.push (newDirectMember[i]) ;
-        }
-
-        if (addList.length > 0) { //you have new membership to be added.
-            ZaAccountMemberOfListView.addNewGroupsBySoap(item, addList);
+                if (addList.length > 0) { //you have new membership to be added.
+                    ZaAccountMemberOfListView.addNewGroupsBySoap(item, addList);
+                }
+            }
         }
     }catch (ex){
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaAccountMemberOfListView.addMemberList: add group failed", null, false);	//try not to halt the account modification
