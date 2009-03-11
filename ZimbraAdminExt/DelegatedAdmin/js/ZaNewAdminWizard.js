@@ -101,7 +101,7 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
         }
 
         if (tmpObj[ZaAccount.A2_memberOf] && tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList]
-                && tmpObj[ZaAccount.A2_memberOf].length > 0)
+                && tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > 0)
             ZaAccountMemberOfListView.addMemberList (tmpObj, createdAdmin) ;    
 
         return true ;
