@@ -321,7 +321,7 @@ function() {
 			ZaSettings.init();
 		else
 			ZaZimbraAdmin._killSplash();
-		
+
 	} catch (ex) {
 		if(ex && ex.code != ZmCsfeException.NO_AUTH_TOKEN && ex.code != ZmCsfeException.SVC_AUTH_EXPIRED && ex.code != ZmCsfeException.SVC_AUTH_REQUIRED) {
 			if(!ZaSettings.initialized)
@@ -519,9 +519,13 @@ function () {
 ZaZimbraAdmin.prototype._getLoginMsgPanel = function () {
     if (!this._loginMsgPanel) {
         this._loginMsgPanel = new DwtComposite (this._shell, null, Dwt.ABSOLUTE_STYLE);
-        
-        var loginMsg = ZaDomain.getLoginMessage() ;
-//        var loginMsg = "abcd" ;
+
+        var loginMsg ;
+        try {
+            loginMsg = ZaDomain.getLoginMessage() ;
+        }catch (ex) {
+            this._handleException(ex, "ZaZimbraAdmin.prototype._getLoginMsgPanel", null, true);
+        }
         if (loginMsg) {
             var loginMsgEl = new DwtAlert (this._loginMsgPanel, null, Dwt.ABSOLUTE_STYLE) ;
 

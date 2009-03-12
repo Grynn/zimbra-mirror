@@ -386,8 +386,12 @@ function(ex, method, params, restartOnError, obj) {
 	else 
 	{
 		this._execFrame = {obj: obj, func: method, args: params, restartOnError: restartOnError};
-		this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
-		if(!ex.code) {
+		if (!this._errorDialog) {
+            this._errorDialog = ZaApp.getInstance().dialogs["errorDialog"] ; 
+        }
+        if (this._errorDialog)
+            this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
+        if(!ex.code) {
 			this.popupErrorDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
 		
 		} else if (ex.code == ZmCsfeException.SOAP_ERROR) {
