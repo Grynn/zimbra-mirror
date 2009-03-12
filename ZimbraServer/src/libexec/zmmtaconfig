@@ -1238,7 +1238,14 @@ sub daemonize {
   if (-f "$config{pidFile}") {
     my $cpid = `cat $config{pidFile}`;
     chomp $cpid;
-    if (kill (0,$cpid)) { logMsg(2, "$config{progname} already running at $cpid"); exit 0; }
+    if ($cpid eq "") {
+      unlink($config{pidFile});
+    } else {
+      if (kill (0,$cpid)) { 
+        logMsg(2, "$config{progname} already running at $cpid"); 
+        exit 0;
+      }
+    }
   } 
 
   logMsg(0, "$config{progname} can not fork into a daemon.") 
