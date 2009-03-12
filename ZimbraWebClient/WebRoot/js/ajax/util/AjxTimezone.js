@@ -121,11 +121,41 @@
  * by setting the <code>DEFAULT</code> property's value. The default 
  * timezone is specified using the client identifier.
  */
-AjxTimezone = function() {}
+AjxTimezone = function() {};
 
 //
 // Static methods
 //
+
+AjxTimezone.getTransition = function(onset, year) {
+	var trans = [ year || new Date().getFullYear(), onset.mon, 1 ];
+	if (onset.mday) {
+		trans[2] = onset.mday;
+	}
+	else if (onset.wkday) {
+		var date = new Date(year, onset.mon - 1, 1, onset.hour, onset.min, onset.sec);
+
+		// last wkday of month
+		if (onset.week == -1) {
+			// NOTE: This creates a date of the *last* day of specified month by
+			//       setting the month to *next* month and setting day of month
+			//       to zero (i.e. the day *before* the first day).
+			var last = new Date(new Date(date.getTime()).setMonth(onset.mon, 0));
+			var count = last.getDate();
+			var wkday = last.getDay() + 1;
+			var adjust = wkday >= onset.wkday ? wkday - onset.wkday : 7 - onset.wkday - wkday;
+			trans[2] = count - adjust;
+		}
+
+		// Nth wkday of month
+		else {
+			var wkday = date.getDay() + 1;
+			var adjust = onset.wkday == wkday ? 1 :0;
+			trans[2] = onset.wkday + 7 * (onset.week - adjust) - wkday + 1;
+		}
+	}
+	return trans;
+};
 
 AjxTimezone.createMDayTransition = function(date, offset) {
 	if (date instanceof Date) {
@@ -331,20 +361,36 @@ AjxTimezone.getRule = function(clientId, tz) {
 };
 
 AjxTimezone.getOffset = function(clientId, date) {
-	var rule = AjxTimezone.getRule(clientId);
-	var offset = rule ? rule.standard.offset : 0;
+	var rule = AjxTimezone.getRule(clientId || AjxTimezone.DEFAULT);
 	if (rule && rule.daylight) {
-		var month = date.getMonth() + 1;
-		var day = date.getDate();
-        var stdTrans = rule.standard.trans;
-        var dstTrans = rule.daylight.trans;
-        if ((month == dstTrans[1] && day >= dstTrans[2]) ||
-			(month == stdTrans[1] && day < stdTrans[2]) ||
-			(month > dstTrans[1] && month < stdTrans[1])) {
-			offset = rule.daylight.offset;
+		var year = date.getFullYear();
+
+		var standard = rule.standard, daylight  = rule.daylight;
+		var stdTrans = AjxTimezone.getTransition(standard, year);
+		var dstTrans = AjxTimezone.getTransition(daylight, year);
+
+		var month    = date.getMonth()+1, day = date.getDate();
+		var stdMonth = stdTrans[1], stdDay = stdTrans[2];
+		var dstMonth = dstTrans[1], dstDay = dstTrans[2];
+
+		// northern hemisphere
+		var isDST = false;
+		if (dstMonth < stdMonth) {
+			isDST = month > dstMonth && month < stdMonth;
+			isDST = isDST || (month == dstMonth && day >= dstDay);
+			isDST = isDST || (month == stdMonth && day <  stdDay);
 		}
+
+		// sorthern hemisphere
+		else {
+			isDST = month < dstMonth || month > stdMonth;
+			isDST = isDST || (month == dstMonth && day <  dstDay);
+			isDST = isDST || (month == stdMonth && day >= stdDay);
+		}
+
+		return isDST ? daylight.offset : standard.offset;
 	}
-	return offset;
+	return rule ? rule.standard.offset : -(new Date().getTimezoneOffset());
 };
 
 AjxTimezone.guessMachineTimezone = function() {
