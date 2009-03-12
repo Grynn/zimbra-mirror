@@ -28,7 +28,7 @@ endif
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
 		 LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
+		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2" \
 	PERLLDDLFLAGS="\"-bundle -undefined dynamic_lookup -L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib\"" \
 	PERLCC=gcc
 endif
@@ -36,7 +36,7 @@ endif
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
 		 LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
+		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2" \
 	PERLLDDLFLAGS="\"-arch i386 -arch ppc -bundle -undefined dynamic_lookup -L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib\"" \
 	PERLCC=gcc
 endif
