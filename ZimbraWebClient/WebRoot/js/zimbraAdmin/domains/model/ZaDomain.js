@@ -351,7 +351,7 @@ function(tmpObj) {
 	}
 	tmpObj.name = tmpObj.attrs[ZaDomain.A_domainName];
 	//check values
-	if(!AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaDomain.A_GalMaxResults])) {
+	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaDomain.A_GalMaxResults]) && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaDomain.A_GalMaxResults])) {
 		//show error msg
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE + ": " + ZaMsg.NAD_GalMaxResults + " ! ");
 		return null;
