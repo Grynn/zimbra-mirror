@@ -308,7 +308,12 @@ public class  ZFolderBean {
         //TODO: handle perm check on mountpoint!
         return getIsDocumentView() && !(getIsMountPoint() || getRemoteURL() != null);
     }
-    
+
+    public boolean getIsWikiMoveTarget() {
+        //TODO: handle perm check on mountpoint!
+        return getIsWikiView() && !(getIsMountPoint() || getRemoteURL() != null);
+    }
+
     public boolean getIsContactCreateTarget() {
         return (getIsContactView()) &&
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || getRemoteURL() != null);
