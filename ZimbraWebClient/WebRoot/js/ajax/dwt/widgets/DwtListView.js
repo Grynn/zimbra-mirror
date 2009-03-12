@@ -680,7 +680,7 @@ function() {
  *
  * @param item		[object]*		an item
  * @param element	[Element]		an HTML element
- * @param type		[constant]*		role that element has
+ * @param type		[constant]*		role that element has; defaults to DwtListView.TYPE_LIST_ITEM
  * @param id		[string]*		ID for element; if not provided, one is generated from the item
  * @param data		[hash]*			additional attributes to store
  */
@@ -690,6 +690,7 @@ function(item, element, type, id, data) {
 	if (element) {
 		element.id = id;
 	}
+	type = type || DwtListView.TYPE_LIST_ITEM;
 	this._data[id] = {item:item, id:id, type:type};
 	if (data) {
 		for (var key in data) {
@@ -1081,7 +1082,7 @@ function(item, params) {
 	}
 
 	var id = params.isDragProxy ? this._getItemId(item) + "_dnd" : null;
-	this.associateItemWithElement(item, div, DwtListView.TYPE_LIST_ITEM, id);
+	this.associateItemWithElement(item, div, null, id);
 
 	return div;
 };
@@ -1120,7 +1121,7 @@ function(item, params, html, idx, count) {
 
 	var id = params.isDragProxy ? this._getItemId(item) + "_dnd" : null;
 	html[idx++] = " id='";
-	html[idx++] = this.associateItemWithElement(item, null, DwtListView.TYPE_LIST_ITEM, id);
+	html[idx++] = this.associateItemWithElement(item, null, null, id);
 	html[idx++] = "'>";
 
 	return idx;
