@@ -14,6 +14,7 @@ ZaItem.initMethods["ZaGrant"] = [] ;
 ZaGrant.A_id = "id" ;
 ZaGrant.A_by = "by" ;
 ZaGrant.A_grantee = "grantee" ;
+ZaGrant.A_grantee_id = "grantee_id" ;
 ZaGrant.A_grantee_type = "grantee_type" ;
 ZaGrant.A_right = "right" ;
 ZaGrant.A_deny = "deny" ;
@@ -97,8 +98,10 @@ ZaGrant.loadMethod = function (by, val, type) {
                         grant [ZaGrant.A_grantee] = grants[i][key] ;
                     } else if (key == "type") {
                         grant [ZaGrant.A_grantee_type] = grants[i][key] ;
-                    } else if (key = "right") {
+                    } else if (key == "right") {
                         grant [ZaGrant.A_right] = grants[i][key] ;
+                    } else if (key == "id") {
+                        grant [ZaGrant.A_grantee_id] = grants[i][key] ;
                     }
                 }
                 grantList.push (grant) ;
@@ -182,8 +185,9 @@ ZaGrant.revokeMethod = function (target, obj) {
     elTarget.setAttribute("by", "name") ;
     elTarget.setAttribute("type", (obj [ZaGrant.A_target_type] ? obj [ZaGrant.A_target_type] :target[ZaGrant.A_target_type])) ;
 
-    var elGrantee = soapDoc.set(ZaGrant.A_grantee, obj[ZaGrant.A_grantee]) ;
-    elGrantee.setAttribute("by", ZaGrant.byNameOrId(obj[ZaGrant.A_grantee])) ;
+    var elGrantee = soapDoc.set(ZaGrant.A_grantee, obj[ZaGrant.A_grantee_id]) ;
+//    elGrantee.setAttribute("by", ZaGrant.byNameOrId(obj[ZaGrant.A_grantee])) ;
+    elGrantee.setAttribute("by", "id") ;
     elGrantee.setAttribute("type",obj[ZaGrant.A_grantee_type] ) ;
 
     var elRight = soapDoc.set("right", obj[ZaGrant.A_right])
@@ -216,6 +220,7 @@ ZaGrant.revokeMethod = function (target, obj) {
 ZaGrant.myXModel = {
 	items: [
         {id: ZaGrant.A_grantee, type: _EMAIL_ADDRESS_, ref: ZaGrant.A_grantee, required: true },
+        {id: ZaGrant.A_grantee_id, type: _STRING_, ref: ZaGrant.A_grantee_id },
         {id: ZaGrant.A_grantee_type, type:_STRING_, ref:  ZaGrant.A_grantee_type, required: true, choices: ZaGrant.GRANT_TYPE},
         {id: ZaGrant.A_right, type: _STRING_, ref:  ZaGrant.A_right, required: true },
         {id: ZaGrant.A_deny, type:_ENUM_, ref: ZaGrant.A_deny, choices:ZaModel.BOOLEAN_CHOICES2 },

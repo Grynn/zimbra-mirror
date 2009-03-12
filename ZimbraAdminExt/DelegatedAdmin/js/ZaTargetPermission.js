@@ -74,7 +74,13 @@ function(grant, now, isDragProxy) {
             }
 
         }  else {
-            html[idx++] = AjxStringUtil.htmlEncode(grant [field]) ;
+            var value = grant [field] ;
+            if (field == ZaGrant.A_grantee) {
+                if (value == null || value.length < 0) {
+                    value = grant [ZaGrant.A_grantee_id] ;
+                }
+            }
+            html[idx++] = AjxStringUtil.htmlEncode(value) ;
         }
         html[idx++] = "</nobr></td>" ;
 	}
@@ -510,8 +516,14 @@ function (grantsList) {
                 dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_target_name + ": " + "</td>";
                 dlgMsg += "<td>" + grant[ZaGrant.A_target] + "</td>" ;
             } else if (key ==ZaGrant.A_grantee)  {
-                dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_grantee_name + ": " + "</td>";
-                dlgMsg += "<td>" + grant[ZaGrant.A_grantee] + "</td>" ;
+                var label = com_zimbra_delegatedadmin.Col_grantee_name ;
+                var value = grant[ZaGrant.A_grantee] ;
+                if ( value == null || value.length <= 0) {
+                    label = com_zimbra_delegatedadmin.Col_grantee_id ;
+                    value = grant[ZaGrant.A_grantee_id] ;
+                }
+                dlgMsg += "<td>" + label + ": " + "</td>";
+                dlgMsg += "<td>" + value + "</td>" ;
             } else if (key == ZaGrant.A_right) {
                 dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_grant_right_name + ": " + "</td>";
                 dlgMsg += "<td>"
@@ -554,38 +566,6 @@ function (resp) {
         item.initFromJS(resp.right[i]) ;
         this.add (item) ;
     }
-    /*
-    for(var ix in resp) {
-		if(resp[ix] instanceof Array) {
-			var arr = resp[ix];
-			var len = arr.length;
-			for(var i = 0; i < len; i++) {
-				var item;
-				if(this._constructor) {
-					item = new this._constructor();
-				} else {
-					item = ZaItem.getFromType(ix);
-				}
-				item.type = ix;
-				item.initFromJS(arr[i]);
-
-				//special cases
-				if (item instanceof ZaDomain && item.attrs[ZaDomain.A_domainType] == "alias"){
-					continue ;
-				}
-				if (item instanceof ZaAlias) {
-					item.attrs[ZaAlias.A_targetType] = arr[i][ZaAlias.A_targetType] ;
-					item.attrs[ZaAlias.A_targetAccount] = arr[i][ZaAlias.A_targetAccount] ;
-				}
-
-				if(this._idHash[item.id]) {
-					this._idHash[item.id].initFromJS(arr[i]);
-				} else {
-					this.add(item);
-				}
-			}
-		}
-	}  */
 }
 
 if (ZaSearch) {
