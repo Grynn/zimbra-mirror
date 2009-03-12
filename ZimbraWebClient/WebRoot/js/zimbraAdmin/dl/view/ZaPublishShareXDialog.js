@@ -35,17 +35,40 @@ ZaPublishShareXDialog.prototype.constructor = ZaPublishShareXDialog;
 ZaXDialog.XFormModifiers["ZaPublishShareXDialog"] = new Array();
 
 ZaPublishShareXDialog.publishSelectedButtonListener = function () {
-	
+	var form = this.getForm();
+	var dl = this.getInstance();
+	var shares = this.getInstanceValue(ZaDistributionList.A2_share_selection_cache);
+	ZaDistributionList.publishShare.call(dl,shares,false, new AjxCallback(form,ZaPublishShareXDialog.publishShareCallback));		
 }
 
 ZaPublishShareXDialog.publishAllButtonListener = function () {
-	
+	var form = this.getForm();
+	var dl = this.getInstance();
+	var shares = this.getInstanceValue(ZaDistributionList.A2_sharesPool);
+	ZaDistributionList.publishShare.call(dl,shares,false,new AjxCallback(form,ZaPublishShareXDialog.publishShareCallback));		
+}
+
+ZaPublishShareXDialog.publishShareCallback = function () {
+	var dl = this.getInstance();
+	var owner = this.getModel().getInstanceValue(dl,ZaDistributionList.A2_sharesOwner);
+	var oldList = this.getModel().getInstanceValue(dl,ZaDistributionList.A2_sharesPool);
+	var list = ZaDistributionList.getUnpublishedShares.call(dl,"name", owner);
+	if(!list) {
+		list = new Array();
+	}
+	list._version = oldList ? oldList._version+1 : 2;
+	this.getModel().setInstanceValue(dl,ZaDistributionList.A2_sharesPool,list);
 }
 
 ZaPublishShareXDialog.findSharesButtonListener = function () {
 	var dl = this.getInstance();
 	var owner = this.getInstanceValue(ZaDistributionList.A2_sharesOwner);
-	var list = ZaDistributionList.prototype.getUnpublishedShares.call(dl,"name", owner);
+	var list = ZaDistributionList.getUnpublishedShares.call(dl,"name", owner);
+	var oldList = this.getInstanceValue(ZaDistributionList.A2_sharesPool);
+	if(!list) {
+		list = new Array();
+	}
+	list._version = oldList ? oldList._version+1 : 2;
 	this.getModel().setInstanceValue(dl,ZaDistributionList.A2_sharesPool,list);
 }
 
@@ -81,7 +104,7 @@ ZaPublishShareXDialog.myXFormModifier = function(xFormObject) {
 		{type:_SPACER_, height:"5px",colSpan:"*"},	
 		{ref:ZaDistributionList.A2_sharesPool,colSpan:"*", 
     		type:_DWT_LIST_, height:"150px", width:"500px", cssClass: "DLSource",onSelection:ZaPublishShareXDialog.shareSelectionListener,
-		 		multiselect:true, widgetClass:ZaSharesListView, headerList:shareHeaderList, visibilityChecks:[], enableDisableChecks:[]
+		 		multiselect:true, bmolsnr:true, widgetClass:ZaSharesListView, headerList:shareHeaderList, visibilityChecks:[], enableDisableChecks:[],emptyText:ZaMsg.Shares_DLNoUnpublishedResults
 		},
 		{type:_SPACER_, height:"5px",colSpan:"*"},
 	   	{type:_GROUP_, width:"98%", numCols:4, colSizes:[200,5, 200,"auto"],items:[

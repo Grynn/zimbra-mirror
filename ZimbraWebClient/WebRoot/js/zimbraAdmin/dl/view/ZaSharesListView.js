@@ -21,6 +21,7 @@
 ZaSharesListView = function(parent, className, posStyle, headerList) {
 	//var headerList = this._getHeaderList();
 	ZaListView.call(this, parent, className, posStyle, headerList);
+	this.emptyText = ZaMsg.Shares_DLNoPublishedResults;
 }
 
 ZaSharesListView.prototype = new ZaListView;
@@ -79,7 +80,7 @@ ZaSharesListView.prototype._setNoResultsHtml = function() {
 	var	div = document.createElement("div");
 	
 	buffer.append("<table width='100%' cellspacing='0' cellpadding='1'>",
-				  "<tr><td class='NoResults'><br>",ZaMsg.Shares_DLNoResults,
+				  "<tr><td class='NoResults'><br>",this.emptyText,
 				  "</td></tr></table>");
 	
 	div.innerHTML = buffer.toString();
