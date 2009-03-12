@@ -365,8 +365,38 @@ createKeystore () {
   rm -f ${tmpfile} 2> /dev/null
 }
 
+addCACERT() {
+  crt=$1
+  alias=zcs-user-$(basename $crt .crt)
+
+  if [ ! -f "${crt}" ]; then
+    usage
+    return
+  fi
+  
+
+  echo -n "** Importing certificate ${crt} to CACERTS as $alias..."
+  tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
+  ${zimbra_java_home}/bin/keytool -delete -alias ${alias} -keystore ${CACERTS} -storepass ${mailboxd_truststore_password} > /dev/null 2>&1
+  ${zimbra_java_home}/bin/keytool -import -noprompt -keystore ${CACERTS} -file ${crt} -alias ${alias} -storepass ${mailboxd_truststore_password} > ${tmpfile} 2>&1
+  if [ $? != 0 ]; then
+    echo "failed."
+    echo "${ERROR_PREFIX} failed to import certficate."
+    echo
+    cat $tmpfile
+    echo
+    rm -f $tmpfile 2>/dev/null
+    exit 1
+  else
+    echo "done."
+    echo "** NOTE: mailboxd must be restarted in order to use the imported certificate."
+  fi
+  rm -f $tmpfile 2>/dev/null
+
+}
 
 updateCACERTS() {
+
   echo -n "** Importing CA ${zimbra_ca_crt} into CACERTS..."
   tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
   ${zimbra_java_home}/bin/keytool -delete -alias my_ca -keystore ${CACERTS} -storepass ${mailboxd_truststore_password} > /dev/null 2>&1
@@ -1425,6 +1455,7 @@ usage () {
   echo "  $0 verifycrt <self|comm> [priv_key] [certfile]"
   echo "  $0 verifycrtchain <ca_file> <certfile>"
   echo "  $0 checkcrtexpiration [-days 30] [service]"
+  echo "  $0 addcacert <certfile>"
   echo "  $0 migrate"
   echo
   echo "Comments:  "
@@ -1442,6 +1473,8 @@ usage () {
   echo "-  deploycrt comm installs the certificates using commercially signed certificate in ${zimbra_comm_cert_directory} "
   echo "-  verifycrt <self|comm> compares openssl md5 [priv_key] and [certfile]."
   echo "-  migrate moves certs/keys from ZCS installs prior to version 5.0.x"
+  echo "-  addcacert appends an otherwise untrusted ssl certificate to the cacerts file."
+  echo "     This is primarily for allowance of untrusted ssl certificates in external data sources."
 
   echo
   
@@ -1487,6 +1520,8 @@ elif [ x"$ACTION" = "xverifycrtchain" ]; then
   verifycrtchain $@
 elif [ x"$ACTION" = "xcheckcrtexpiration" ]; then
   checkCertExpiration $@
+elif [ x"$ACTION" = "xaddcacert" ]; then
+  addCACERT $@
 elif [ x"$ACTION" = "xmigrate" ]; then
   migrate $@
 elif [ x"$ACTION" = "x-help" -o x"$ACTION" = "xhelp" -o x"$ACTION" = "x-h" -o x"$ACTION" = "x--help" ]; then
