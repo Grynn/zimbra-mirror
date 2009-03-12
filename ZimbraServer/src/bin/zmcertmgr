@@ -30,6 +30,7 @@ zmsetvars -f \
   zimbra_server_hostname \
   zimbra_tmp_directory \
   zimbra_java_home \
+  zimbra_zmcertmgr_expiration_threshold \
   ldap_is_master \
   mailboxd_directory \
   mailboxd_server \
@@ -50,6 +51,8 @@ fi
 
 zimbra_home=${zimbra_home:=/opt/zimbra}
 zimbra_conf_directory=${zimbra_home}/conf
+exp_thres_days=${zimbra_zmcertmgr_expiration_threshold:=30}
+exp_thres_secs=$(($exp_thres_days*24*60*60))
 
 csr_download_directory=${zimbra_home}/mailboxd/webapps/zimbraAdmin/tmp
 csr_download_file=${csr_download_directory}/current.csr
@@ -964,6 +967,99 @@ getsubjectaltnames() {
   echo "SubjectAltName= $names"
 }
 
+checkCertExpiration() {
+
+  if [ "x$1" = "x-days" ]; then
+    shift
+    exp_thres_days=$1
+    shift
+    exp_thres_secs=$((exp_thres_days*24*60*60))
+  fi 
+
+  if [ "x$1" = "x" ]; then
+    VIEW="all"
+  elif [ "x$1" = "xall" -o "x$1" = "xmta" -o "x$1" = "xproxy" -o "x$1" = "xmailboxd" -o "x$1" = "xldap" ]; then
+    VIEW="$1"
+  else
+    echo "${ERROR_PREFIX} Can't verify cert expiration for $1.  Unknown service."
+    return
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "mta" ]; then
+    service_crt=/opt/zimbra/conf/smtpd.crt
+    #echo "::service mta::"
+    if [ -f "${service_crt}" ]; then
+      ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
+      if [ $? != 0 ]; then
+        status=1
+        echo "${service_crt} is expiring within ${exp_thres_days} days."
+        ${openssl} x509  -in ${service_crt} -enddate -noout 
+      fi
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "proxy" ]; then
+    service_crt=/opt/zimbra/conf/nginx.crt
+    #echo "::service proxy::"
+    if [ -f "${service_crt}" ]; then
+      ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
+      if [ $? != 0 ]; then
+        status=1
+        echo "${service_crt} is expiring within ${exp_thres_days} days."
+        ${openssl} x509  -in ${service_crt} -enddate -noout 
+      fi
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+  
+  if [ $VIEW = "all" -o $VIEW = "mailboxd" ]; then
+    service_der=/opt/zimbra/mailboxd/etc/mailboxd.der
+    service_crt=/opt/zimbra/mailboxd/etc/mailboxd.pem
+    #echo "::service mailboxd::"
+    tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "${ERROR_PREFIX} Failed to create tmpfile" && exit 1)
+    ${zimbra_java_home}/bin/keytool -export -file ${service_der} -alias ${mailboxd_server} \
+      -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > ${tmpfile} 2>&1
+    if [ $? != 0 ]; then
+      echo "${ERROR_PREFIX} failed to export ${service_crt} from keystore."
+      echo
+      cat $tmpfile
+      echo
+    fi
+    rm -f $tmpfile 2>/dev/null
+    if [ -f "${service_der}" ]; then
+      ${openssl} x509  -inform DER -outform PEM -in ${service_der} -out ${service_crt}
+      ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
+      if [ $? != 0 ]; then
+        status=1
+        echo "${service_crt} is expiring within ${exp_thres_days} days."
+        ${openssl} x509  -in ${service_crt} -enddate -noout 
+      fi
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "ldap" ]; then
+    service_crt=/opt/zimbra/conf/slapd.crt
+    #echo "::service ldap::"
+    if [ -f "${service_crt}" ]; then
+      ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
+      if [ $? != 0 ]; then
+        status=1
+        echo "${service_crt} is expiring within ${exp_thres_days} days."
+        ${openssl} x509  -in ${service_crt} -enddate -noout 
+      fi
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  exit $status
+}
+
 viewdeployedcrt() {
   if [ "x$1" = "x" ]; then
     VIEW="all"
@@ -1328,6 +1424,7 @@ usage () {
   echo "  $0 viewstagedcrt <self|comm> [certfile]"
   echo "  $0 verifycrt <self|comm> [priv_key] [certfile]"
   echo "  $0 verifycrtchain <ca_file> <certfile>"
+  echo "  $0 checkcrtexpiration [-days 30] [service]"
   echo "  $0 migrate"
   echo
   echo "Comments:  "
@@ -1386,8 +1483,10 @@ elif [ x"$ACTION" = "xverifycrt" ]; then
   verifycrt $@
 elif [ x"$ACTION" = "xverifycrtkey" ]; then
   verifycrtkey $@
- elif [ x"$ACTION" = "xverifycrtchain" ]; then
+elif [ x"$ACTION" = "xverifycrtchain" ]; then
   verifycrtchain $@
+elif [ x"$ACTION" = "xcheckcrtexpiration" ]; then
+  checkCertExpiration $@
 elif [ x"$ACTION" = "xmigrate" ]; then
   migrate $@
 elif [ x"$ACTION" = "x-help" -o x"$ACTION" = "xhelp" -o x"$ACTION" = "x-h" -o x"$ACTION" = "x--help" ]; then
