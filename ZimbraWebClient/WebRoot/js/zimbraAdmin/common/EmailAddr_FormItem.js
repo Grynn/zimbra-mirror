@@ -96,7 +96,6 @@ EmailAddr_XFormItem.prototype.items = [
 				if(emailChunks.length > 1 ) {
 					val = emailChunks[0];
 				} 
-				
 			} 
 
 			if(val === null || val ===undefined)
@@ -116,28 +115,11 @@ EmailAddr_XFormItem.prototype.items = [
 		}
 	},
 	{type:_OUTPUT_, value:"@"},
-	/*{type:_OUTPUT_,ref:".",visibilityChecks:[EmailAddr_XFormItem.isStaticDomain],
-		choices:EmailAddr_XFormItem.domainChoices,
-		getDisplayValue:function (itemVal){
-			var val = null;
-			if(itemVal) {
-				var emailChunks = itemVal.split("@");
-			
-				if(emailChunks.length > 1 ) {
-					val = emailChunks[1];
-				} 
-			}
-			if(!val) {
-					val = this.getParentItem()._domainPart;
-			}	
-			
-			return val;
-		}	
-	},*/
 	{type:_DYNSELECT_DOMAIN_PART_, ref:".", labelLocation:_NONE_,  
 	 	choices:EmailAddr_XFormItem.domainChoices,
 	 	editable:true,
-	 	//visibilityChecks:[EmailAddr_XFormItem.isNonSaticDomain],
+        bmolsnr:true,
+         //visibilityChecks:[EmailAddr_XFormItem.isNonSaticDomain],
 	 	visibilityChecks:[],
 	 	enableDisableChecks:[],
 	 	dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,

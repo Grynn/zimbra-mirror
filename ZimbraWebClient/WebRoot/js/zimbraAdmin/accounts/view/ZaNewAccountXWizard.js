@@ -423,7 +423,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 			 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
 	                visibilityChecks:[ZaNewAccountXWizard.isDomainLeftAccountsAlertVisible],
 	                visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes],
-					containerCssStyle: "width:400px;",
+				    bmolsnr:true,	
+                    containerCssStyle: "width:400px;",
 					style: DwtAlert.WARNING, iconVisible: false
 			 },
 			{type: _DWT_ALERT_, ref: ZaAccount.A2_warningMessage,
@@ -452,7 +453,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 	                        containerCssStyle: "width:400px;",
 	                        style: DwtAlert.CRITICAL, iconVisible: false ,
 	                        content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
-	                    },
+	                    },                                                                      
 	                    { type: _OUTPUT_, id: ZaNewAccountXWizard.accountTypeItemId,
 	                        getDisplayValue: ZaAccount.getAccountTypeOutput,
 	                        valueChangeEventSources:[ZaAccount.A_name,ZaAccount.A_COSId,ZaAccount.A2_accountTypes,ZaAccount.A2_currentAccountType],
@@ -465,7 +466,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				items:[
 				{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
 					labelLocation:_LEFT_,forceUpdate:true,
-					onChange: ZaAccount.setDomainChanged,visibilityChecks:[],enableDisableChecks:[]
+                    bmolsnr: true,
+                    onChange: ZaAccount.setDomainChanged,visibilityChecks:[],enableDisableChecks:[]
 				},
 				{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
 					labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,

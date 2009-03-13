@@ -1658,34 +1658,34 @@ function (value, event, form){
 			}
 			form.refresh();
 		}
-       
                    
         //if domain name is not changed, we don't want to update the account type output
-        if ((!ZaSettings.isDomainAdmin) && (oldDomainName !=  newDomainName)) {   
-            if (ZaDomain.A_domainMaxAccounts || ZaDomain.A_zimbraDomainCOSMaxAccounts){
+        if  (oldDomainName !=  newDomainName){   
+            if (domainObj && domainObj.attrs ){
                 var maxDomainAccounts = domainObj.attrs[ZaDomain.A_domainMaxAccounts] ;
                 var cosMaxAccounts = domainObj.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts] ;
+                if (maxDomainAccounts) {
+                    maxDomainAccounts = parseInt (maxDomainAccounts);
+                }
                 if ((maxDomainAccounts && maxDomainAccounts > 0)
                         && (!cosMaxAccounts || cosMaxAccounts.length <= 0)) {
                     //only show domain left accounts when zimbraDomainMaxAccounts is set, but zimbraDomainCOSMaxAccounts is not set
                     var usedAccounts = domainObj.getUsedDomainAccounts(newDomainName );
-                    form.getModel().setInstanceValue(form.getInstance(),
-                        AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]),
-                            null);
+                    form.getModel().setInstanceValue(form.getInstance(),     ZaAccount.A2_domainLeftAccounts,
+                        AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]));
+                }else if (cosMaxAccounts && cosMaxAccounts.length > 0){
+                    //update the account type information
+                    form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_errorMessage,"");
+                    form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_accountTypes,domainObj.getAccountTypes ());
+                    form.parent.updateAccountType();
                 }else{
                     form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,null);
                 }
-            }
-
-            //update the account type information
-            form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_errorMessage,"");
-            form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_accountTypes,domainObj.getAccountTypes ());
-            form.parent.updateAccountType();
+             }
         }
+
         if(form.parent.setDirty)  { //edit account view
 			form.parent.setDirty(true);	
-        }else {  //new account view
-            //nothing
         }
         
 	} catch (ex) {
