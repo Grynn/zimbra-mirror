@@ -94,8 +94,6 @@ build:
 	tar xzf src/$(APP_NAME)-$(APP_RELEASE).tar.gz; \
 	rm -rf $(PERL_DIR)/lib; \
 	cd $(APP_NAME)-$(APP_VERSION); \
-	patch -N -g0 -p1 < ../patches/perllibs.patch; \
-	autoconf; \
 	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) \
 		--enable-static --enable-shared=no \
 		--with-perl-options="PREFIX=$(PERL_DIR) LIB=$(PERL_LIB_DIR) LIBS='-L$(INSTALL_PREFIX)/lib -lm -lpng -lz -lfreetype'" \
