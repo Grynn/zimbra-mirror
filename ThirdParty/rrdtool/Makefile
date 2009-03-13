@@ -21,46 +21,46 @@ APP_VERSION ?= $(APP_RELEASE)
 APP_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/rrdtool/$(APP_NAME)-$(APP_VERSION).tar.gz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
 
+PERL_DIR	:= $(ZIMBRA_HOME)/zimbramon
+PERL_LIB_DIR	:= $(ZIMBRA_HOME)/zimbramon/lib
+
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86)
-	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
-		 LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2" \
-	PERLLDDLFLAGS="\"-bundle -undefined dynamic_lookup -L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib\"" \
-	PERLCC=gcc
+	ENVMOD := env LIBS="-lresolv" CFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0" \
+		LDFLAGS="-L$(INSTALL_PREFIX)/lib" \
+		LD_RUN_PATH=$(INSTALL_PREFIX)/lib \
+		CPPFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0 -I$(INSTALL_PREFIX)/include/freetype2"
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
-	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
-		 LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2" \
-	PERLLDDLFLAGS="\"-arch i386 -arch ppc -bundle -undefined dynamic_lookup -L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib\"" \
-	PERLCC=gcc
+	ENVMOD := env LIBS="-lresolv" CFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0" \
+		LDFLAGS="-L$(INSTALL_PREFIX)/lib" \
+		LD_RUN_PATH=$(INSTALL_PREFIX)/lib \
+		CPPFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0 -I$(INSTALL_PREFIX)/include/freetype2"
 endif
 
 ifeq ($(BUILD_PLATFORM), MACOSX)
-	ENVMOD := env LIBS="-lresolv" CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
-		LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2"
+	ENVMOD := env LIBS="-lresolv" CFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0" \
+		LDFLAGS="-L$(INSTALL_PREFIX)/lib" \
+		LD_RUN_PATH=$(INSTALL_PREFIX)/lib \
+		CPPFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0 -I$(INSTALL_PREFIX)/include/freetype2"
 endif
 
 ifeq ($(BUILD_PLATFORM), RHEL5_64)
-	ENVMOD := env CFLAGS="-fPIC -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
-		LDFLAGS="-fPIC -L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-		CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2" \
-	PERLLDDLFLAGS="\"-shared -L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib\"" \
-	PERLCC=gcc
+	ENVMOD := env CFLAGS="-fPIC -I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0" \
+		LDFLAGS="-fPIC -L$(INSTALL_PREFIX)/lib" \
+		LD_RUN_PATH=$(INSTALL_PREFIX)/lib \
+		CPPFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0 -I$(INSTALL_PREFIX)/include/freetype2"
 endif
 
 ifeq ($(ENVMOD), )
-ENVMOD := env CFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0" \
-	LDFLAGS="-L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib" \
-	CPPFLAGS="-I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/libart-2.0 -I/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/include/freetype2" \
-	PERLLDDLFLAGS="\"-shared -L/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib\"" \
-	PERLCC=gcc
+	ENVMOD := env CFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0" \
+		LDFLAGS="-L$(INSTALL_PREFIX)/lib" \
+		LD_RUN_PATH=$(INSTALL_PREFIX)/lib \
+		CPPFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0 -I$(INSTALL_PREFIX)/include/freetype2"
 endif
 
 all: allclean build tar
@@ -70,37 +70,46 @@ build:
 	cd $(PNG_NAME)-$(PNG_VERSION); \
 	patch -N -g0 -p1 < ../patches/libtoolize.patch; \
 	./autogen.sh; \
-	env CFLAGS="-g -O2 -fPIC" ./configure --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION) --mandir=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/man --enable-shared=no; \
+	env CFLAGS="-g -O2 -fPIC" ./configure \
+		--prefix=$(INSTALL_PREFIX) \
+		--mandir=$(INSTALL_PREFIX)/man \
+		--enable-shared=no; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(APP_ROOT); \
 	tar xfz src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz; \
 	cd $(FREETYPE_NAME)-$(FREETYPE_VERSION); \
-	env CFLAGS="-g -O2 -fPIC" ./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
+	env CFLAGS="-g -O2 -fPIC" ./configure \
+		--enable-shared=no \
+		--prefix=$(INSTALL_PREFIX); \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(APP_ROOT); \
 	tar xfz src/$(LIBART_NAME)-$(LIBART_VERSION).tar.gz; \
 	cd $(LIBART_NAME)-$(LIBART_VERSION); \
-	./configure --enable-shared=no --prefix=/opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION); \
+	./configure --enable-shared=no --prefix=$(INSTALL_PREFIX); \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
-	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/lib/pkgconfig; \
-	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/share; \
-	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/bin; \
+	rm -rf $(INSTALL_PREFIX)/lib/pkgconfig; \
+	rm -rf $(INSTALL_PREFIX)/share; \
+	rm -rf $(INSTALL_PREFIX)/bin; \
 	cd $(APP_ROOT); \
 	tar xzf src/$(APP_NAME)-$(APP_RELEASE).tar.gz; \
+	rm -rf $(PERL_DIR)/lib; \
 	cd $(APP_NAME)-$(APP_VERSION); \
 	patch -N -g0 -p1 < ../patches/perllibs.patch; \
 	autoconf; \
-	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) --enable-static --enable-shared=no \
-	 --disable-tcl --disable-ruby  --disable-python; \
+	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) \
+		--enable-static --enable-shared=no \
+		--with-perl-options="PREFIX=$(PERL_DIR) LIB=$(PERL_LIB_DIR) LIBS='-L$(INSTALL_PREFIX)/lib -lm -lpng -lz -lfreetype'" \
+		--disable-tcl --disable-ruby  --disable-python; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
-	rm -rf /opt/zimbra/zimbramon/$(APP_NAME)-$(APP_VERSION)/share/rrdtool/examples)
+	rm -rf $(INSTALL_PREFIX)/share/rrdtool/examples)
+	rm -rf $(PERL_DIR)/share
 	(cp -f $(APP_NAME)-$(APP_VERSION)/COPYING $(INSTALL_PREFIX)/LICENSE)
 	(mkdir -p $(INSTALL_PREFIX)/var)
 	(cd $(INSTALL_PREFIX)/..; ln -s $(APP_NAME)-$(APP_VERSION) $(APP_NAME))
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/rrdtool
-	(cd $(INSTALL_PREFIX)/..; tar czf $(APP_TGZ_TARGET) $(APP_NAME)-$(APP_VERSION))
+	(cd $(PERL_DIR); tar czf $(APP_TGZ_TARGET) $(APP_NAME)-$(APP_VERSION) lib)
 
 p4edit: $(APP_TGZ_TARGET)
 	p4 add $(APP_TGZ_TARGET)
@@ -116,4 +125,5 @@ clean:
 allclean: clean
 	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)-$(APP_VERSION)
 	/bin/rm -rf $(ZIMBRA_HOME)/zimbramon/$(APP_NAME)
+	/bin/rm -rf $(PERL_DIR)/lib
 	rm -rf $(APP_TGZ_TARGET)
