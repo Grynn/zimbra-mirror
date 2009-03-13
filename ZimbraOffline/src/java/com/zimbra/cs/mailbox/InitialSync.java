@@ -1355,8 +1355,10 @@ public class InitialSync {
             TarEntry te;
 
             while ((te = tis.getNextEntry()) != null) {
-            	if (!te.getName().endsWith(".meta"))
+            	if (!te.getName().endsWith(".meta")) {
+                	OfflineLog.offline.warn("skipping tar entry " + te.getName());
             		continue;
+            	}
 
             	ItemData itemData = new ItemData(TarFormatter.readTarEntry(tis, te));
             	UnderlyingData ud = itemData.ud;
