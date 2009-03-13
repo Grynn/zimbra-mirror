@@ -63,7 +63,11 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
+import com.zimbra.cs.mailbox.MailServiceException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.AddressException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.DateFormatSymbols;
@@ -1234,6 +1238,25 @@ public class BeanUtils {
         else
             return false;
 
+    }
+
+    public static boolean isValidEmailAddresses(String emailline) {
+        boolean validEmail = true;
+        try {
+            emailline = emailline.replace(";", ",");
+            InternetAddress[] inetAddrs = InternetAddress.parseHeader(emailline, false);
+            for (InternetAddress ia : inetAddrs) {
+                Matcher m = sEMAIL_ADDRESS.matcher(ia.getAddress());                          
+                boolean matchFound = m.matches();
+                if(matchFound)
+                    validEmail = true;
+                else
+                    validEmail =  false;
+            }
+            return validEmail;
+        } catch ( AddressException e) {
+            return false;
+        }
     }
 
     public static boolean getIsMyCard(PageContext pc, String ids) throws ServiceException, JspException {

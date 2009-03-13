@@ -6549,6 +6549,12 @@
     </function>
 
     <function>
+        <name>isValidEmailAddresses</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isValidEmailAddresses(java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>getServerName</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getServerName(javax.servlet.jsp.PageContext)</function-signature>
