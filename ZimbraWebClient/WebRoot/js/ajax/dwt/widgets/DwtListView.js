@@ -474,6 +474,11 @@ function(item, skipNotify) {
 	if (this._list) {
 		this._list.remove(item);
 	}
+	var id = itemEl.id;
+	if (this._data[id]) {
+		this._data[id] = null;
+		delete this._data[id];
+	}
 
 	if (!skipNotify && this._evtMgr.isListenerRegistered(DwtEvent.STATE_CHANGE)) {
 		this._evtMgr.notifyListeners(DwtEvent.STATE_CHANGE, this._stateChangeEv);
