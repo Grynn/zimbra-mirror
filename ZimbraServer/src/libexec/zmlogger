@@ -16,7 +16,7 @@
 # ***** END LICENSE BLOCK *****
 #
 
-use lib qw(/opt/zimbra/zimbramon/lib /opt/zimbra/zimbramon/rrdtool/lib/perl);
+use lib qw(/opt/zimbra/zimbramon/lib);
 use strict;
 use warnings;
 use Zimbra::Mon::Zmstat;
