@@ -81,7 +81,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/java_memcached-release_1.6.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdavmail-0.9.007.jar" sourcepath="/ThirdParty/jdavmail/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.5.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/json.jar" sourcepath="/ThirdParty/json/src/java/org/json">
 		<attributes>
 			<attribute name="javadoc_location" value="http://www.json.org/javadoc/"/>
@@ -113,5 +112,6 @@
 			<attribute name="javadoc_location" value="http://james.apache.org/jsieve/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.15.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
