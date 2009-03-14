@@ -47,7 +47,7 @@
 		<jetty tempDirectory="${project.outputDirectory}" jettyXml="jetty-ant-config.xml">
 			<connectors>
 				<selectChannelConnector port="7070" />
-				<sslConnector port="7071" keystore="${jetty_run_base}/jetty/etc/keystore" password="zimbra" />
+				<sslConnector port="7071" keystore="${jetty_run_base}/jetty/etc/keystore" password="zimbra" KeyPassword="zimbra" />
 			</connectors>
 
 			<systemProperties>

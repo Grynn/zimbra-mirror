@@ -115,6 +115,8 @@ public class Props2JsServlet
             return dirname;
         }
         String basedir = this.getServletContext().getRealPath("/");
+        if (!basedir.endsWith("/"))
+        	basedir += "/";
         return basedir + dirname;
     }
 
