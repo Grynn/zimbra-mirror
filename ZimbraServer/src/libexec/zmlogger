@@ -222,7 +222,16 @@ sub insert_data($$$$$$) {
         if (exists $structure->{$column}) {
             my $struct = $structure->{$column};
             my $fileno = $struct->{'rrd_file'};
-            $rrd_updates{$fileno} = [] if (! exists $rrd_updates{$fileno});
+            if (! exists $rrd_updates{$fileno}) {
+                $rrd_updates{$fileno} = [];
+                my $last_index = 0;
+                foreach my $k (keys %{$structure}) {
+                    next if ($fileno != $structure->{$k}->{'rrd_file'});
+                    my $num = $structure->{$k}->{'col_num'} - 1;
+                    $last_index = $last_index < $num ? $num : $last_index;
+                }
+                $rrd_updates{$fileno}->[$last_index] = 'U';
+            }
             $rrd_updates{$fileno}->[$struct->{'col_num'} - 1] = $dataref->[$i];
         } else {
             warn "Missing column: $csv_file:$column";
@@ -282,6 +291,7 @@ sub run() {
     my $zimbramonre = qr/zmstat (\S+\.csv): (.*):: (.*)$/;
     
     while (<>) {
+        chomp;
         die "No parent process. logswatch stopped?" if (getppid() == 1);
         next if (/last message repeated/);
         my ($log_date, $host, $ip, $name, $app, undef, $pid, $msg) =
@@ -302,11 +312,14 @@ sub run() {
         }
         my ($csv_file, $headers, $data);
         if ($app eq 'zimbramon') {
-            ($csv_file, $headers, $data) = ($msg =~ m/$zimbramonre/);
+            my @match = ($msg =~ m/$zimbramonre/);
+            next if (!scalar @match);
+            ($csv_file, $headers, $data) = @match;
         } elsif ($app eq 'mailboxd') {
             my $csv_confirm;
-            ($csv_file, $csv_confirm, $headers, $data) =
-                    ($msg =~ m/$mailboxdre/);
+            my @match = ($msg =~ m/$mailboxdre/);
+            next if (!scalar @match);
+            ($csv_file, $csv_confirm, $headers, $data) = @match;
             die "$csv_file != $csv_confirm" if ($csv_file ne $csv_confirm);
         } else {
             next;
