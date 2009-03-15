@@ -194,6 +194,27 @@ CREATE TABLE scheduled_task (
    INDEX i_mailbox_id (mailbox_id)
 ) ENGINE = InnoDB;
 
+-- Mobile Devices
+CREATE TABLE mobile_devices (
+   mailbox_id          INTEGER UNSIGNED NOT NULL,
+   device_id           VARCHAR(64) NOT NULL,
+   device_type         VARCHAR(64) NOT NULL,
+   user_agent          VARCHAR(64),
+   protocol_version    VARCHAR(64),
+   provisionable       BOOLEAN NOT NULL DEFAULT 0,
+   status              TINYINT UNSIGNED NOT NULL DEFAULT 0,
+   policy_key          INTEGER UNSIGNED,
+   recovery_password   VARCHAR(64),
+   first_req_received  INTEGER UNSIGNED NOT NULL,
+   last_policy_update  INTEGER UNSIGNED,
+   remote_wipe_req     INTEGER UNSIGNED,
+   remote_wipe_ack     INTEGER UNSIGNED,
+
+   PRIMARY KEY (mailbox_id, device_id),
+   CONSTRAINT fk_mobile_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+
 -- -----------------------------------------------------------------------
 -- IM tables (Wildfire code)
 -- -----------------------------------------------------------------------
