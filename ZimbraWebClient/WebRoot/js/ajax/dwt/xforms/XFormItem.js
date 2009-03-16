@@ -1369,30 +1369,6 @@ XFormItem.getInheritedRelevancy = function (item) {
 		return true;
 }
 
-XFormItem.prototype.isRelevant = function () {
-	if(this.__isRelevant === true || this.__isRelevant === false) {
-		return this.__isRelevant;
-	} else {
-		return XFormItem.getInheritedRelevancy(this);
-	}
-}
-
-XFormItem.prototype.setRelevant = function (isRelevant) {
-	this.__isRelevant = isRelevant;
-}
-
-XFormItem.prototype.getRelevantBehavior = function () {
-	var behavior = this.getInheritedProperty("relevantBehavior");
-	if (behavior == _PARENT_) {
-		if (this.__parentItem) {
-			return this.__parentItem.getRelevantBehavior();
-		} else {
-			return _HIDE_;
-		}
-	}
-	return behavior;
-}
-
 XFormItem.prototype.getChoices = function () {
 	return this.getInheritedProperty("choices");
 }
@@ -1761,9 +1737,9 @@ XFormItem.prototype.getContainerCssString = function () {
 		style += "vertical-align:middle";
 	}
 
-	var relevant = this.getRelevant();
+/*		var relevant = this.getRelevant();
 	if (relevant) {
-		var relevantBehavior = this.getRelevantBehavior();
+	var relevantBehavior = this.getRelevantBehavior();
 		if (relevantBehavior == _HIDE_) {
 			if(style.length)
 				style += ";";
@@ -1775,7 +1751,7 @@ XFormItem.prototype.getContainerCssString = function () {
 		
 			style += "display:block";
 		} 
-	}
+	}*/
 
 	if (style != "") css += " style=\"" + style + ";\"";
 	return css;
@@ -3095,7 +3071,15 @@ Case_XFormItem.prototype.cssClass = "XFormCase";
 Case_XFormItem.prototype.isTabGroup = true;	
 Case_XFormItem.prototype.caseVarRef = "currentStep";
 Case_XFormItem.prototype.visibilityChangeEventSources = [Case_XFormItem.prototype.caseVarRef];
+Case_XFormItem.prototype.initFormItem = function () {
+	XFormItem.prototype.initFormItem.call(this);	
+	if(this.getInheritedProperty("isTabGroup")) {
+		var form = this.getForm();
+		form.tabIdOrder[this.getId()] = this.tabIdOrder;
+		form.addTabGroup(this,"caseKey");
+	}
 
+}
 Case_XFormItem.prototype.outputHTML = function (html,  currentCol) {
 	this.deferred = this.getInheritedProperty("deferred");
 	if(this.deferred) {

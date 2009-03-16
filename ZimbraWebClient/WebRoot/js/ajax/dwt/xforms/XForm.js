@@ -185,7 +185,7 @@ XForm.prototype.focusFirst = function(currentTabId) {
 		tabIdOrder = this.tabIdOrder[currentTabId];
 	} else {
 		for(var a in this.tabIdOrder) {
-			if(this.getItemById(a).isRelevant() && this.tabIdOrder[a] && this.tabIdOrder[a].length > 0) {
+			if(this.getItemById(a).getIsVisible() && this.getItemById(a).getIsEnabled() && this.tabIdOrder[a] && this.tabIdOrder[a].length > 0) {
 				tabIdOrder = this.tabIdOrder[a];
 				break;
 			}
@@ -195,7 +195,7 @@ XForm.prototype.focusFirst = function(currentTabId) {
 		var cnt = tabIdOrder.length;
 		for (var i = 0; i < cnt; i++) {
 			var nextItem = this.getItemById(tabIdOrder[i]);
-			if(nextItem && nextItem.focusable && nextItem.isRelevant()) {
+			if(nextItem && nextItem.focusable && nextItem.getIsVisible() && nextItem.getIsEnabled()) {
 				this.focusElement(tabIdOrder[i]);
 				break;
 			}
@@ -203,8 +203,9 @@ XForm.prototype.focusFirst = function(currentTabId) {
 	}
 }
 
-XForm.prototype.addTabGroup = function(item) {
-	var tabGroupKey = item.getInheritedProperty("tabGroupKey") ? item.getInheritedProperty("tabGroupKey") : item.getId();
+XForm.prototype.addTabGroup = function(item, tabGroupKeyAttr) {
+	tabGroupKeyAttr = tabGroupKeyAttr ? tabGroupKeyAttr : "tabGroupKey";
+	var tabGroupKey = item.getInheritedProperty(tabGroupKeyAttr) ? item.getInheritedProperty(tabGroupKeyAttr) : item.getId();
 	this.tabGroupIDs[tabGroupKey] = item.getId();
 }
 
@@ -227,7 +228,7 @@ XForm.prototype.focusNext = function(id, currentTabId) {
 					var elIndex = ((i+1) % cnt);
 					if(tabIdOrder[elIndex]) {
 						var nextEl = this.getItemById(tabIdOrder[elIndex]);
-						if(nextEl.focusable && nextEl.isRelevant()) {
+						if(nextEl.focusable && nextEl.getIsVisible() && nextEl.getIsEnabled()) {
 							this.focusElement(tabIdOrder[elIndex]);
 							found=true;
 							break;
@@ -263,7 +264,7 @@ XForm.prototype.focusPrevious = function(id, currentTabId) {
 					var elIndex = ((i-1) % cnt);
 					if(tabIdOrder[elIndex]) {
 						var nextEl = this.getItemById(tabIdOrder[elIndex]);
-						if(nextEl.focusable && nextEl.isRelevant()) {
+						if(nextEl.focusable && nextEl.getIsVisible()  && nextEl.getIsEnabled()) {
 							this.focusElement(tabIdOrder[elIndex]);
 							found=true;
 							break;
