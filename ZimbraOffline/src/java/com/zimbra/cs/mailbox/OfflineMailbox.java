@@ -26,7 +26,6 @@ import java.util.Set;
 import org.apache.commons.httpclient.Header;
 import org.dom4j.ElementHandler;
 
-import com.posisoft.jdavmail.FolderProxy;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -80,17 +79,15 @@ public class OfflineMailbox extends DesktopMailbox {
     OfflineMailbox(MailboxData data) throws ServiceException {
         super(data);
     }
-    
-    @Override
-    protected synchronized void initialize() throws ServiceException {
+
+    @Override protected synchronized void initialize() throws ServiceException {
         super.initialize();
         // create Local Folders
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
-        Folder.create(ID_FOLDER_ARCHIVE, this, userRoot, ARCHIVE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR, null);
+        Folder.create(ID_FOLDER_ARCHIVE, this, userRoot, ARCHIVE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, Flag.BITMASK_ARCHIVED, MailItem.DEFAULT_COLOR, null, null);
     }
     
-    @Override
-    synchronized void ensureSystemFolderExists() throws ServiceException {
+    @Override synchronized void ensureSystemFolderExists() throws ServiceException {
     	super.ensureSystemFolderExists();
 		Folder f = null;
 		try {

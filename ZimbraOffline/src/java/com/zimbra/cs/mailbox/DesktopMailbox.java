@@ -48,8 +48,7 @@ public abstract class DesktopMailbox extends Mailbox {
 			super(data);
 		}
 		
-		@Override
-		synchronized boolean finishInitialization() throws ServiceException {
+		@Override synchronized boolean finishInitialization() {
 	        final String accountId = getAccountId();
 	        new Thread(new Runnable() {
 				public void run() {
@@ -63,14 +62,11 @@ public abstract class DesktopMailbox extends Mailbox {
 			return false;
 		}
 		
-		@Override
-		void resetSyncStatus() throws ServiceException {}
+		@Override void resetSyncStatus() {}
 		
-		@Override
-		public boolean isAutoSyncDisabled() { return false; }
+		@Override public boolean isAutoSyncDisabled() { return false; }
 		
-		@Override
-		protected void syncOnTimer() {}
+		@Override protected void syncOnTimer() {}
 	}
 	
 	private static final String DELETING_MID_SUFFIX = ":delete";
@@ -126,13 +122,12 @@ public abstract class DesktopMailbox extends Mailbox {
     	return (OfflineAccount)getAccount();
     }
 	
-    @Override
-    protected synchronized void initialize() throws ServiceException {
+    @Override protected synchronized void initialize() throws ServiceException {
         super.initialize();
         // create a system folders
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
-        Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
-        Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null);
+        Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null, null);
+        Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH, Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR, null, null);
         
         // set the version to CURRENT
         Metadata md = new Metadata();
@@ -141,8 +136,7 @@ public abstract class DesktopMailbox extends Mailbox {
         DbMailbox.updateConfig(this, CONFIG_OFFLINE_VERSION, md);
     }
     
-	@Override
-	synchronized boolean finishInitialization() throws ServiceException {
+	@Override synchronized boolean finishInitialization() throws ServiceException {
 		if (super.finishInitialization()) {
 			ensureSystemFolderExists();
 			checkOfflineVersion();
@@ -427,17 +421,21 @@ public abstract class DesktopMailbox extends Mailbox {
     	return path.startsWith("/Trash");
     }
     
-    boolean isItemInArchive(MailItem item) throws ServiceException {
+    boolean isItemInArchive(MailItem item) {
     	return (item.getInternalFlagBitmask() & Flag.BITMASK_ARCHIVED) != 0;
     }
-	
-	void trackChangeNew(MailItem item) throws ServiceException {}
-	
-	void trackChangeModified(MailItem item, int changeMask) throws ServiceException {}
-	
-	boolean trackChangeArchived(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException { return true; }
-	
-	void itemCreated(MailItem item, boolean inArchive) throws ServiceException {}
+
+	@SuppressWarnings("unused")
+    void trackChangeNew(MailItem item) throws ServiceException {}
+
+	@SuppressWarnings("unused")
+    void trackChangeModified(MailItem item, int changeMask) throws ServiceException {}
+
+	@SuppressWarnings("unused")
+    boolean trackChangeArchived(MailItem item, boolean toArchive, boolean isTrashing) throws ServiceException { return true; }
+
+	@SuppressWarnings("unused")
+    void itemCreated(MailItem item, boolean inArchive) throws ServiceException {}
 
 	protected synchronized void initSyncTimer() throws ServiceException {
 		if (((OfflineAccount)getAccount()).isLocalAccount())

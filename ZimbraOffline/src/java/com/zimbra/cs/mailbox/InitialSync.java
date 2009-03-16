@@ -1151,7 +1151,7 @@ public class InitialSync {
         if (type == MailItem.TYPE_CHAT)
             redo = new CreateChat(ombx.getId(), digest, size, folderId, flags, tags);
         else
-            redo = new CreateMessage(ombx.getId(), null, received, false, digest, size, folderId, true, flags, tags);
+            redo = new CreateMessage(ombx.getId(), null, received, false, digest, size, folderId, true, flags, tags, null);
         redo.setMessageId(id);
         redo.setConvId(convId);
         redo.setChangeId(mod_content);
@@ -1172,7 +1172,7 @@ public class InitialSync {
             		onebox.add(ombx.getId());
             		sharedDeliveryCtxt = new SharedDeliveryContext(false, onebox);
             	}
-                msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", sharedDeliveryCtxt);
+                msg = ombx.addMessage(new OfflineContext(redo), pm, folderId, true, flags, tags, convId, ":API:", null, sharedDeliveryCtxt);
             }
             ombx.syncChangeIds(sContext, id, type, received, mod_content, change_date, mod_metadata);
             OfflineLog.offline.debug("initial: created " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
