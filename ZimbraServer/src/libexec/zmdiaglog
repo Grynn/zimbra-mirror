@@ -2,7 +2,7 @@
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
-# Copyright (C) 2008 Zimbra, Inc.
+# Copyright (C) 2008, 2009 Zimbra, Inc.
 # 
 # The contents of this file are subject to the Yahoo! Public License
 # Version 1.0 ("License"); you may not use this file except in
@@ -40,12 +40,6 @@ $ZMSTAT_CONF = '/opt/zimbra/conf/zmstat-chart.xml';
 $ZMDUMPENV = '/opt/zimbra/bin/zmdumpenv';
 $ZMPROV = '/opt/zimbra/bin/zmprov';
 
-my ($login,$pass,$uid,$gid) = getpwnam('zimbra');
-
-if ($< != 0) {
-    print STDERR "zmdiaglog needs to be run as root\n";
-    exit 1;
-}
 
 sub logmsg($) {
     my $msg = shift;
@@ -95,6 +89,25 @@ sub save_heap_info($$$$) {
         $dumped = -f 'heapdump.snapshot';
     }
     $dumped && $success;
+}
+
+sub save_jvm_core($$) {
+    my ($JAVA_VERSION, $mailboxd_pid) = @_;
+    if ($HAVE_GCORE) {
+        logmsg "Failed collecting heapdump.  Collecting JVM coredump\n";
+        # longer timeout for gcore because it can take a lot longer
+        my $got_core = exec_with_timeout("gcore $mailboxd_pid", 300);
+        logmsg "Converting coredump to heap snapshot\n";
+        if ($got_core) {
+            if ($JAVA_VERSION eq "1.6") {
+                qx($JMAP -dump:file=heapdump.snapshot $JAVA core.$mailboxd_pid);
+            } else {
+                qx($JMAP -heap:format=b $JAVA core.$mailboxd_pid);
+            }
+        }
+    } elsif (!$HAVE_GCORE) {
+        logmsg "'gcore' (gdb) is not installed, will not collect JVM coredump\n";
+    }
 }
 
 sub has_cmd($) {
@@ -179,6 +192,7 @@ sub HELP_MESSAGE {
     print $fd <<"EOF";
 Usage: zmdiaglog [-dth]
 
+    -a    - Do everything: also gather JVM heapdump/coredump
     -d    - Log destination (Default /tmp/zmdiaglog.PID)
     -t    - Timeout in seconds for hanging commands (Default $DEFAULT_TIMEOUT)
     -h    - This help message
@@ -187,128 +201,127 @@ EOF
 
 
 # "main"
-my %options;
-$options{'d'} = $DEFAULT_DEST;
-$options{'t'} = $DEFAULT_TIMEOUT;
-getopts('d:t:h', \%options);
+sub run() {
+    my %options;
+    $options{'d'} = $DEFAULT_DEST;
+    $options{'t'} = $DEFAULT_TIMEOUT;
+    getopts('d:t:ha', \%options);
+    
+    if ($options{'h'}) {
+        HELP_MESSAGE(\*STDERR);
+        exit(0);
+    }
+    if ($< != 0) {
+        print STDERR "zmdiaglog needs to be run as root\n";
+        exit 1;
+    }
+    
+    my $destination = $options{'d'};
+    $destination    = File::Spec->rel2abs($destination);
+    my $timeout     = $options{'t'};
+    
+    if (! -d $destination) {
+        qx(mkdir -p $destination); # would use mkdir() but no -p
+    }
+    my (undef, undef,$uid,$gid) = getpwnam('zimbra');
 
-if ($options{'h'}) {
-    HELP_MESSAGE(\*STDERR);
-    exit(0);
-}
-
-my $destination = $options{'d'};
-$destination    = File::Spec->rel2abs($destination);
-my $timeout     = $options{'t'};
-
-if (! -d $destination) {
-    qx(mkdir -p $destination); # would use mkdir() but no -p
-}
-chown $uid, $gid, $destination;
-chdir($destination);
-
-my $mailboxd_pid = get_pid();
-logmsg "ZCS mailboxd pid: $mailboxd_pid\n";
-logmsg "Saving diagnostic logging output to: $destination\n";
-
-my $JAVA_VERSION = get_java_version();
-logmsg "Java version: $JAVA_VERSION\n";
-
-logmsg "Saving output of zmdumpenv\n";
-exec_with_timeout("su - zimbra -c '$ZMDUMPENV' > zmdumpenv.txt 2>&1", $timeout);
-logmsg "Saving server configuration\n";
-exec_with_timeout("su - zimbra -c '$ZMPROV gs $ZMHOSTNAME' > zmprov-gs.txt 2>&1", $timeout);
-exec_with_timeout("su - zimbra -c '$ZMPROV gacf' > zmprov-gacf.txt 2>&1", $timeout);
-system("cp /opt/zimbra/conf/localconfig.xml $destination/");
-system("cp /opt/zimbra/conf/my.cnf $destination/");
-
-for (my $i = 1; $i <= 10; $i++) {
-    logmsg "Collecting thread stats/stacks: $i of 10\n";
-    my $TS = strftime("%H-%M-%S", localtime());
-
-    invoke_thread_dump($i, $TS);
-
-    my $stats = collect_thread_stats($mailboxd_pid);
-    open(STATS, ">proc-stats.$i.$TS") || warn $i;
-    print STATS $stats;
-    close(STATS);
-
-    sleep(5);
-}
-my $dumped = save_heap_info($JAVA_VERSION, $destination, $mailboxd_pid, $timeout);
-
-if ($HAVE_PSTACK) {
-    for (my $i = 1; $i <= 3; $i++) {
-        logmsg "Collecting process stack: $i of 3\n";
+    chown $uid, $gid, $destination;
+    chdir($destination);
+    
+    my $mailboxd_pid = get_pid();
+    logmsg "No '-a' argument, skipping heap and coredump collection.\n"
+            if (!$options{'a'});
+    logmsg "ZCS mailboxd pid: $mailboxd_pid\n";
+    logmsg "Saving diagnostic logging output to: $destination\n";
+    
+    my $JAVA_VERSION = get_java_version();
+    logmsg "Java version: $JAVA_VERSION\n";
+    
+    logmsg "Saving output of zmdumpenv\n";
+    exec_with_timeout("su - zimbra -c '$ZMDUMPENV' > zmdumpenv.txt 2>&1", $timeout);
+    logmsg "Saving server configuration\n";
+    exec_with_timeout("su - zimbra -c '$ZMPROV gs $ZMHOSTNAME' > zmprov-gs.txt 2>&1", $timeout);
+    exec_with_timeout("su - zimbra -c '$ZMPROV gacf' > zmprov-gacf.txt 2>&1", $timeout);
+    system("cp /opt/zimbra/conf/localconfig.xml $destination/");
+    system("cp /opt/zimbra/conf/my.cnf $destination/");
+    
+    for (my $i = 1; $i <= 10; $i++) {
+        logmsg "Collecting thread stats/stacks: $i of 10\n";
         my $TS = strftime("%H-%M-%S", localtime());
-        exec_with_timeout("pstack $mailboxd_pid > pstack.$i.$TS 2>&1", $timeout);
+    
+        invoke_thread_dump($i, $TS);
+    
+        my $stats = collect_thread_stats($mailboxd_pid);
+        open(STATS, ">proc-stats.$i.$TS") || warn $i;
+        print STATS $stats;
+        close(STATS);
+    
         sleep(5);
     }
-} else {
-    logmsg "'pstack' is not installed, will not collect process stacks\n";
-}
-
-if ($HAVE_GCORE && !$dumped) {
-    logmsg "Failed collecting heapdump.  Collecting JVM coredump\n";
-    # longer timeout for gcore because it can take a lot longer
-    my $got_core = exec_with_timeout("gcore $mailboxd_pid", 300);
-    logmsg "Converting coredump to heap snapshot\n";
-    if ($got_core) {
-        if ($JAVA_VERSION eq "1.6") {
-            qx($JMAP -dump:file=heapdump.snapshot $JAVA core.$mailboxd_pid);
-        } else {
-            qx($JMAP -heap:format=b $JAVA core.$mailboxd_pid);
+    my $dumped = save_heap_info($JAVA_VERSION, $destination,
+            $mailboxd_pid, $timeout) if ($options{'a'});
+    
+    if ($HAVE_PSTACK) {
+        for (my $i = 1; $i <= 3; $i++) {
+            logmsg "Collecting process stack: $i of 3\n";
+            my $TS = strftime("%H-%M-%S", localtime());
+            exec_with_timeout("pstack $mailboxd_pid > pstack.$i.$TS 2>&1", $timeout);
+            sleep(5);
         }
+    } else {
+        logmsg "'pstack' is not installed, will not collect process stacks\n";
     }
-} elsif (!$HAVE_GCORE) {
-    logmsg "'gcore' (gdb) is not installed, will not collect JVM coredump\n";
-}
-
-if ($HAVE_LSOF) {
-    logmsg "Saving output of LSOF\n";
-    qx(lsof > lsof.out 2>&1);
-} else {
-    logmsg "'lsof' is not installed, will not check fd status\n";
-}
-mkdir("$destination/logs");
-mkdir("$destination/stats");
-mkdir("$destination/ld.so.conf");
-if (! -f $ZMSTAT_CONF) {
-    logmsg "Saving ZCS statistics chart config\n";
-    open(CONF, "su - zimbra -c 'zmstat-chart-config' |");
-    open(CONF_OUT, ">stats/zmstat-chart.xml");
-    while (<CONF>) {
-        print CONF_OUT;
+    
+    save_jvm_core($JAVA_VERSION, $mailboxd_pid) if (!$dumped && $options{'a'});
+    
+    if ($HAVE_LSOF) {
+        logmsg "Saving output of LSOF\n";
+        qx(lsof > lsof.out 2>&1);
+    } else {
+        logmsg "'lsof' is not installed, will not check fd status\n";
     }
-    close(CONF);
-    close(CONF_OUT);
-} else {
-    logmsg "Copying ZCS statistics chart config\n";
-    system("cp $ZMSTAT_CONF stats/");
+    mkdir("$destination/logs");
+    mkdir("$destination/stats");
+    mkdir("$destination/ld.so.conf");
+    if (! -f $ZMSTAT_CONF) {
+        logmsg "Saving ZCS statistics chart config\n";
+        open(CONF, "su - zimbra -c 'zmstat-chart-config' |");
+        open(CONF_OUT, ">stats/zmstat-chart.xml");
+        while (<CONF>) {
+            print CONF_OUT;
+        }
+        close(CONF);
+        close(CONF_OUT);
+    } else {
+        logmsg "Copying ZCS statistics chart config\n";
+        system("cp $ZMSTAT_CONF stats/");
+    }
+    logmsg "Copying current ZCS logs\n";
+    system("cp /opt/zimbra/log/my*.log /opt/zimbra/log/mailbox.log /opt/zimbra/log/zmmailboxd.out $destination/logs/");
+    system("cp /opt/zimbra/db/data/*.err $destination/logs/");
+    logmsg "Copying today's ZCS statistics\n";
+    system("cp /opt/zimbra/zmstat/*.csv $destination/stats/");
+    
+    my $yesterday = time() - (24 * 60 * 60);
+    my $yesterday_stats_dir = strftime("%Y-%m-%d", localtime($yesterday));
+    if (-d "/opt/zimbra/zmstat/$yesterday_stats_dir") {
+        logmsg "Copying yesterday's ZCS statistics\n";
+        mkdir("$destination/stats/$yesterday_stats_dir");
+        system("cp /opt/zimbra/zmstat/$yesterday_stats_dir/* $destination/stats/$yesterday_stats_dir/");
+    }
+    
+    logmsg "Copying ld.so configuration\n";
+    system("cp /etc/ld.so.conf /etc/ld.so.conf.d/* $destination/ld.so.conf/");
+    
+    my $dirname = `pwd`;
+    chomp($dirname);
+    chomp($dirname = `basename $dirname`);
+    logmsg "Zipping up contents into $destination/$dirname.zip\n";
+    chdir('..');
+    system("nice -n 19 zip -9r $dirname.zip $dirname/");
+    rename("$dirname.zip", "$dirname/$dirname.zip");
+    chdir($destination);
+    logmsg "\n *** Diagnostics collection done, stored in $destination/$dirname.zip\n";
 }
-logmsg "Copying current ZCS logs\n";
-system("cp /opt/zimbra/log/my*.log /opt/zimbra/log/mailbox.log /opt/zimbra/log/zmmailboxd.out $destination/logs/");
-system("cp /opt/zimbra/db/data/*.err $destination/logs/");
-logmsg "Copying today's ZCS statistics\n";
-system("cp /opt/zimbra/zmstat/*.csv $destination/stats/");
 
-my $yesterday = time() - (24 * 60 * 60);
-my $yesterday_stats_dir = strftime("%Y-%m-%d", localtime($yesterday));
-if (-d "/opt/zimbra/zmstat/$yesterday_stats_dir") {
-    logmsg "Copying yesterday's ZCS statistics\n";
-    mkdir("$destination/stats/$yesterday_stats_dir");
-    system("cp /opt/zimbra/zmstat/$yesterday_stats_dir/* $destination/stats/$yesterday_stats_dir/");
-}
-
-logmsg "Copying ld.so configuration\n";
-system("cp /etc/ld.so.conf /etc/ld.so.conf.d/* $destination/ld.so.conf/");
-
-my $dirname = `pwd`;
-chomp($dirname);
-chomp($dirname = `basename $dirname`);
-logmsg "Zipping up contents into $destination/$dirname.zip\n";
-chdir('..');
-system("nice -n 19 zip -9r $dirname.zip $dirname/");
-rename("$dirname.zip", "$dirname/$dirname.zip");
-chdir($destination);
-logmsg "\n *** Diagnostics collection done, stored in $destination/$dirname.zip\n";
+run();
