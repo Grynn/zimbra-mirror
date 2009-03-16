@@ -165,3 +165,43 @@ BEFORE DELETE ON mailbox
 FOR EACH ROW BEGIN 
     DELETE FROM scheduled_task WHERE scheduled_task.mailbox_id = OLD.id;
 END;
+
+-- Mobile Devices
+CREATE TABLE mobile_devices (
+   mailbox_id          INTEGER UNSIGNED NOT NULL,
+   device_id           VARCHAR(64) NOT NULL,
+   device_type         VARCHAR(64) NOT NULL,
+   user_agent          VARCHAR(64),
+   protocol_version    VARCHAR(64),
+   provisionable       BOOLEAN NOT NULL DEFAULT 0,
+   status              TINYINT UNSIGNED NOT NULL DEFAULT 0,
+   policy_key          INTEGER UNSIGNED,
+   recovery_password   VARCHAR(64),
+   first_req_received  INTEGER UNSIGNED NOT NULL,
+   last_policy_update  INTEGER UNSIGNED,
+   remote_wipe_req     INTEGER UNSIGNED,
+   remote_wipe_ack     INTEGER UNSIGNED,
+
+   PRIMARY KEY (mailbox_id, device_id),
+   CONSTRAINT fk_mobile_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
+);
+
+-- CREATE TRIGGER fki_mobile_devices_mailbox_id
+-- BEFORE INSERT ON [mobile_devices]
+-- FOR EACH ROW BEGIN
+--   SELECT RAISE(ROLLBACK, 'insert on table "mobile_devices" violates foreign key constraint "fki_mobile_devices_mailbox_id"')
+--   WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
+-- END;
+
+-- CREATE TRIGGER fku_mobile_devices_mailbox_id
+-- BEFORE UPDATE OF mailbox_id ON [mobile_devices] 
+-- FOR EACH ROW BEGIN
+--     SELECT RAISE(ROLLBACK, 'update on table "mobile_devices" violates foreign key constraint "fku_mobile_devices_mailbox_id"')
+--       WHERE (SELECT id FROM mailbox WHERE id = NEW.mailbox_id) IS NULL;
+-- END;
+
+CREATE TRIGGER fkdc_mobile_devices_mailbox_id
+BEFORE DELETE ON mailbox
+FOR EACH ROW BEGIN 
+    DELETE FROM mobile_devices WHERE mobile_devices.mailbox_id = OLD.id;
+END;
