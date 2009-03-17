@@ -82,6 +82,20 @@ $mesg->code && die "Bind: ". $mesg->error . "\n";
 
 my $dn="olcDatabase={2}hdb,cn=config";
 
+if($ldap_is_master eq "true") {
+  $mesg = $ldap->search(
+                        base=> "cn=accesslog",
+                        filter=>"(objectClass=*)",
+                        scope => "base",
+                        attrs => ['1.1'],
+                 );
+  my @entries=$mesg->entries;
+  my $size = @entries;
+  if ($size > 0 ) {
+    $dn="olcDatabase={3}hdb,cn=config";
+  }
+}
+
 $mesg = $ldap->modify(
     $dn,
     delete => {olcAccess => '{3}'},
