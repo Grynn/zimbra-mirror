@@ -14,7 +14,7 @@
 			<attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar" sourcepath="/ThirdParty/javamail-1.3.2/src">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar" sourcepath="/ThirdParty/javamail/javamail-1.4.1ea/mail/src/java">
 		<attributes>
 			<attribute name="javadoc_location" value="http://java.sun.com/products/javamail/javadocs/"/>
 		</attributes>
@@ -54,5 +54,10 @@
 	<classpathentry kind="lib" path="jars/gdata-contacts-meta-2.0.jar"/>
 	<classpathentry kind="lib" path="jars/gdata-core-1.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.4.0.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/activation.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
