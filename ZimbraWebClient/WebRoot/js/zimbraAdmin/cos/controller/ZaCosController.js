@@ -134,41 +134,7 @@ function () {
 ZaController.initToolbarMethods["ZaCosController"].push(ZaCosController.initToolbarMethod);
 
 
-/**
-* Adds listener to creation of an ZaCos 
-* @param listener
-**/
-ZaCosController.prototype.addCosCreationListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_CREATE, listener);
-}
 
-/**
-* Removes listener to creation of an ZaCos 
-* @param listener
-**/
-ZaCosController.prototype.removeCosCreationListener = 
-function(listener) {
-	this._evtMgr.removeListener(ZaEvent.E_CREATE, listener);    	
-}
-
-/**
-* Adds listener to removal of an ZaCos 
-* @param listener
-**/
-ZaCosController.prototype.addCosRemovalListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
-}
-
-/**
-* Removes listener to removal of an ZaCos 
-* @param listener
-**/
-ZaCosController.prototype.removeCosRemovalListener = 
-function(listener) {
-	this._evtMgr.removeListener(ZaEvent.E_REMOVE, listener);    	
-}
 
 /**
 * saves the changes in the fields, calls modify or create on the current ZaCos

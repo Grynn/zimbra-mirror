@@ -389,8 +389,8 @@ ZaApp.prototype.getCosListController =
 function() {
 	if (this._controllers[ZaZimbraAdmin._COS_LIST_VIEW] == null) {
 		this._controllers[ZaZimbraAdmin._COS_LIST_VIEW] = new ZaCosListController(this._appCtxt, this._container, this);
-		this._controllers[ZaZimbraAdmin._COS_LIST_VIEW].addCosRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
-		this._controllers[ZaZimbraAdmin._COS_LIST_VIEW].addCosRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosRemoval));									
+		this._controllers[ZaZimbraAdmin._COS_LIST_VIEW].addRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
+		this._controllers[ZaZimbraAdmin._COS_LIST_VIEW].addRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosRemoval));									
 	}
 	return this._controllers[ZaZimbraAdmin._COS_LIST_VIEW];
 }
@@ -399,17 +399,16 @@ function() {
 ZaApp.prototype.getCosController =
 function() {
 	var c = new ZaCosController(this._appCtxt, this._container, this);
-	//c.addChangeListener(new AjxListener(this, ZaApp.prototype.handleCosChange));			
-	c.addChangeListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosChange));
+		
+	c.addChangeListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleChange));
 	c.addChangeListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosChange));						
 
-	c.addCosCreationListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosCreation));	
-	//c.addCosCreationListener(new AjxListener(this, ZaApp.prototype.handleCosCreation));			
-	c.addCosCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosCreation));				
+	c.addCreationListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCreation));	
+	c.addCreationListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosCreation));				
 	
-	c.addCosRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
-	c.addCosRemovalListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleCosRemoval));			
-	c.addCosRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosRemoval));						
+	c.addRemovalListener(new AjxListener(this, ZaApp.prototype.handleCosRemoval));			
+	c.addRemovalListener(new AjxListener(this.getCosListController(), ZaCosListController.prototype.handleRemoval));			
+	c.addRemovalListener(new AjxListener(this._appCtxt.getAppController().getOverviewPanelController(), ZaOverviewPanelController.prototype.handleCosRemoval));						
 	return c ;
 
 }
@@ -752,100 +751,6 @@ function (ev) {
 	}
 }
 
-/**
-* @param ev
-* This listener is invoked by any controller that can create an ZaCos object
-**/
-/*
-ZaApp.prototype.handleCosCreation = 
-function (ev) {
-	if(ev) {
-		//add the new ZaCos to the controlled list
-		if(ev.getDetails()) {
-			if(!this._cosList) {
-				this._cosList=ZaCos.getAll();
-			} else {
-				this._cosList.add(ev.getDetails());
-			}
-			if(this._cosListChoices == null) {
-				this._cosListChoices = new XFormChoices(this._cosList.getArray(), XFormChoices.OBJECT_LIST, "id", "name");	
-			} else {
-				this._cosListChoices.setChoices(this._cosList.getArray());
-				this._cosListChoices.dirtyChoices();			
-			}
-		}
-	}
-}*/
-
-/**
-* @param ev
-* This listener is invoked by any controller that can change an ZaCos object
-**/
-/*
-ZaApp.prototype.handleCosChange = 
-function (ev) {
-	if(ev) {
-		//add the new ZaCos to the controlled list
-		if(ev.getDetails()) {
-			if(!this._cosList) {
-				this._cosList=ZaCos.getAll();
-			} else {
-				//find the modified COS 
-				this._cosList.replaceItem(ev.getDetails());
-			}
-			
-			if(this._cosListChoices == null) {
-				this._cosListChoices = new XFormChoices(this._cosList.getArray(), XFormChoices.OBJECT_LIST, "id", "name");	
-			} else {
-				this._cosListChoices.setChoices(this._cosList.getArray());
-				this._cosListChoices.dirtyChoices();			
-			}
-		}
-	}
-}*/
-/**
-* @param ev
-* This listener is invoked by any controller that can create an ZaAccount object
-**/
-/*
-ZaApp.prototype.handleAccountCreation = 
-function (ev) {
-	if(ev) {
-		//add the new ZaAccount to the controlled list
-		if(ev.getDetails()) {
-			if(!this._accountList) {
-				this._accountList=ZaSearch.getAll().list;
-			} else {
-				this._accountList.add(ev.getDetails());
-			}
-		}
-	}
-}
-*/
-/**
-* @param ev
-* This listener is invoked by ZaAccountViewController or any other controller that can remove an ZaAccount object
-**/
-/*
-ZaApp.prototype.handleAccountRemoval = 
-function (ev) {
-	if(ev) {
-		if(!this._accountList) {
-			this._accountList=ZaSearch.getAll().list;
-		} else {
-			//remove the ZaAccount from the controlled list
-			var detls = ev.getDetails();
-			if(detls && (detls instanceof Array)) {
-				for (var key in detls) {
-					this._accountList.remove(detls[key]);
-				}
-			} else if(detls && (detls instanceof ZaAccount)) {
-				this._accountList.remove(ev.getDetails());
-			}
-		}
-	}
-}
-*/
 /**
 * @param ev
 * This listener is invoked by ZaCosController or any other controller that can remove an ZaCos object
