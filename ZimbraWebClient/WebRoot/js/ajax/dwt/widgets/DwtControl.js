@@ -2407,6 +2407,7 @@ function(ev) {
 	var obj = DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 
+	ev = DwtUiEvent.getEvent(ev);
 	obj._focusByMouseDownEvent(ev);
 
 	if (obj.__hasToolTipContent()) {
