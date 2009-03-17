@@ -272,9 +272,8 @@ ZaGrant.grantsOvTreeModifier = function (tree) {
     var overviewPanelController = this ;
     if (!overviewPanelController) throw new Exception("ZaGrant.grantsOvTreeModifier: Overview Panel Controller is not set.");
 
-    if ((ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_PERMISSION_VIEW] 
-            || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
-            && overviewPanelController._configTi) {
+    if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_PERMISSION_VIEW]
+            || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
         overviewPanelController._rightsTi = new DwtTreeItem(overviewPanelController._configTi);
         overviewPanelController._rightsTi.setText(com_zimbra_delegatedadmin.OVP_global_grants);
         overviewPanelController._rightsTi.setImage("GlobalPermission"); //TODO: Use Grants icons

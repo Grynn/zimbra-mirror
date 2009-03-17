@@ -283,36 +283,42 @@ ZaSettings.ALL_UI_COMPONENTS = [] ;
 //List views
 ZaSettings.ACCOUNT_LIST_VIEW = "accountListView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNT_LIST_VIEW, label: ZaMsg.UI_Comp_AccountListView });
-ZaSettings.DOMAIN_LIST_VIEW = "domainListView";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_LIST_VIEW, label: ZaMsg.UI_Comp_DomainListView });
-ZaSettings.ALIAS_LIST_VIEW = "aliasListView";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ALIAS_LIST_VIEW, label: ZaMsg.UI_Comp_AliasListView });
 ZaSettings.DL_LIST_VIEW = "DLListView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_LIST_VIEW, label: ZaMsg.UI_Comp_DlListView });
+ZaSettings.ALIAS_LIST_VIEW = "aliasListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ALIAS_LIST_VIEW, label: ZaMsg.UI_Comp_AliasListView });
 ZaSettings.RESOURCE_LIST_VIEW = "resourceListView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.RESOURCE_LIST_VIEW, label: ZaMsg.UI_Comp_ResourceListView });
 ZaSettings.COS_LIST_VIEW = "COSListView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_LIST_VIEW, label: ZaMsg.UI_Comp_COSListView });
+ZaSettings.DOMAIN_LIST_VIEW = "domainListView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_LIST_VIEW, label: ZaMsg.UI_Comp_DomainListView });
 ZaSettings.SERVER_LIST_VIEW = "serverListView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_LIST_VIEW, label: ZaMsg.UI_Comp_ServerListView });
-ZaSettings.GLOBAL_STATS_VIEW = "globalStatsView";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_VIEW, label: ZaMsg.UI_Comp_GlobalStatsView });
-ZaSettings.GLOBAL_STATUS_VIEW = "globalStatusView";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATUS_VIEW, label: ZaMsg.UI_Comp_GlobalStatusView });
-ZaSettings.SERVER_STATS_VIEW = "serverStatsView";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_VIEW, label: ZaMsg.UI_Comp_ServerStatsView });
-ZaSettings.MAILQ_VIEW = "mailQueueView";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.MAILQ_VIEW, label: ZaMsg.UI_Comp_mailQueueView });
-
 ZaSettings.ZIMLET_LIST_VIEW = "zimletListView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ZIMLET_LIST_VIEW, label: ZaMsg.UI_Comp_ZimletListView });
-
 ZaSettings.ADMIN_ZIMLET_LIST_VIEW = "adminZimletListView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ADMIN_ZIMLET_LIST_VIEW, label: ZaMsg.UI_Comp_AdminZimletListView });
+ZaSettings.GLOBAL_CONFIG_VIEW="globalConfigView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_CONFIG_VIEW, label: ZaMsg.UI_Comp_globalConfigView });
+ZaSettings.GLOBAL_STATUS_VIEW = "globalServerStatusView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATUS_VIEW, label: ZaMsg.UI_Comp_GlobalStatusView });
+ZaSettings.GLOBAL_STATS_VIEW = "globalServerStatisticsView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_VIEW, label: ZaMsg.UI_Comp_GlobalStatsView });
+ZaSettings.MAILQ_VIEW = "mailQueueView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.MAILQ_VIEW, label: ZaMsg.UI_Comp_mailQueueView });
+ZaSettings.SAVE_SEARCH = "saveSearch";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SAVE_SEARCH, label: ZaMsg.UI_Comp_SaveSearch });
+
+
+
+ZaSettings.SERVER_STATS_VIEW = "perServerStatisticsView";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_VIEW, label: ZaMsg.UI_Comp_ServerStatsView });
 
 
 //List view groups
-ZaSettings.OVERVIEW_CONFIG_ITEMS = [ZaSettings.COS_LIST_VIEW,ZaSettings.ZIMLET_LIST_VIEW,ZaSettings.SERVER_LIST_VIEW,ZaSettings.ADMIN_ZIMLET_LIST_VIEW,ZaSettings.DOMAIN_LIST_VIEW,ZaSettings.GLOBAL_CONFIG_VIEW];
+ZaSettings.OVERVIEW_CONFIG_ITEMS = [ZaSettings.COS_LIST_VIEW,ZaSettings.ZIMLET_LIST_VIEW,ZaSettings.SERVER_LIST_VIEW,ZaSettings.ADMIN_ZIMLET_LIST_VIEW,
+    ZaSettings.DOMAIN_LIST_VIEW,ZaSettings.GLOBAL_CONFIG_VIEW];
 ZaSettings.OVERVIEW_ADDRESSES_ITEMS = [ZaSettings.ACCOUNT_LIST_VIEW,ZaSettings.ALIAS_LIST_VIEW,ZaSettings.DL_LIST_VIEW,ZaSettings.RESOURCE_LIST_VIEW];
 ZaSettings.OVERVIEW_TOOLS_ITEMS = [ZaSettings.MAILQ_VIEW];
 ZaSettings.OVERVIEW_MONITORING_ITEMS = [ZaSettings.GLOBAL_STATS_VIEW,ZaSettings.GLOBAL_STATUS_VIEW,ZaSettings.SERVER_STATS_VIEW];
@@ -369,8 +375,6 @@ ZaSettings.RESOURCE_CONTACT_INFO_TAB = "resourceContactTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.RESOURCE_CONTACT_INFO_TAB, label: ZaMsg.UI_Comp_ResourceContactTab });
 
 //Miscelaneous operations
-ZaSettings.SAVE_SEARCH = "saveSearch";
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SAVE_SEARCH, label: ZaMsg.UI_Comp_SaveSearch });
 
 //Account operations
 ZaSettings.ACCOUNTS_CHPWD = "accountsChangePassword";
@@ -414,9 +418,6 @@ ZaSettings.DOMAIN_CHECK_MX_WIZ = "domainCheckMXWiz";
 
 //Resources operations
 //ZaSettings.RESOURCES_CREATE_RIGHT = "createResource";
-
-ZaSettings.GLOBAL_CONFIG_VIEW="globalConfigView";
-
 
 ZaSettings.ACCOUNTS_RESTORE_ENABLED = true;
 

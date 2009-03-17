@@ -550,7 +550,7 @@ function() {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;				
 		}
 	}
-	if(showTools) {
+	if(showMonitoring) {
 		this._monitoringTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._monitoringTi.enableSelection(false);	
 		this._monitoringTi.setText(ZaMsg.OVP_monitoring);
@@ -604,7 +604,7 @@ function() {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._STATISTICS_BY_SERVER] = ZaOverviewPanelController.statsByServerTreeListener;						
 	}
 	
-	if(showMonitoring) {
+	if(showTools) {
 		this._toolsTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 		this._toolsTi.enableSelection(false);	
 		this._toolsTi.setText(ZaMsg.OVP_tools);
