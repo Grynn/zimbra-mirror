@@ -98,7 +98,7 @@
 	<property name="jetty.src.dir" location="../ThirdParty/jetty" />
 	<property name="prism.src.dir" location="../ThirdParty/prism" />
 	<property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
-	<property name="jetty.version" value="6.1.5" />
+	<property name="jetty.version" value="6.1.15" />
 
         <fileset id="gdata.jars" dir="${jars.dir}">
                 <include name="gdata-core-*.jar"/>
