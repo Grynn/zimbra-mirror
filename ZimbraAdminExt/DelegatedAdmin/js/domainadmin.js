@@ -63,7 +63,11 @@ if (ZaCos) {
 }
 
 if(ZaSettings) {
-	ZaDomainAdmin.initSettings = function() {
+
+    ZaSettings.DOMAIN_ACCT_LIMIT_TAB = "domainAccountLimitsTab";
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_ACCT_LIMIT_TAB, label: com_zimbra_delegatedadmin.UI_Comp_domainAcctLimitsTab});
+
+    ZaDomainAdmin.initSettings = function() {
 	    if (AjxEnv.hasFirebug) console.log("domainadmin.js is modifying ZaSettings");
                                
         /*
@@ -1002,28 +1006,31 @@ if (ZaTabView.XFormModifiers["ZaDomainXFormView"]) {
         }
 
         if (tabBar && switchGroup) {
-            var tabIx = tabBar.choices.length + 1;
-            tabBar.choices.push({value:tabIx, label: com_zimbra_delegatedadmin.TT_account_limits}) ;
 
-            var caseItem =
-                {type:_ZATABCASE_, id:"account_form_account_limits_tab", numCols:2, colSizes:["300px","*"],
-//                    relevant:("instance[ZaModel.currentTab] == " + tabIx),
-                    caseKey: tabIx,
-                    items:[
-                       {type:_SPACER_, height: "10px" },
-                       warningItem,
-                       domainXformMaxAccountItem,
-                       {type:_SPACER_, height: "10px" },
-                       accountLimitsItems
-                        /** Disable the feature max accounts see bug: 32921
-                        ,
-                       {type:_SPACER_, height: "10px" },
-                       domainFeatureMaxAccountItem
-                           **/
-                    ]
-                }
-    	    switchGroup.items.push(caseItem);
+            if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DOMAIN_ACCT_LIMIT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+                var tabIx = tabBar.choices.length + 1;
+                tabBar.choices.push({value:tabIx, label: com_zimbra_delegatedadmin.TT_account_limits}) ;
 
+                var caseItem =
+                    {type:_ZATABCASE_, id:"account_form_account_limits_tab", numCols:2, colSizes:["300px","*"],
+    //                    relevant:("instance[ZaModel.currentTab] == " + tabIx),
+                        caseKey: tabIx,
+                        items:[
+                           {type:_SPACER_, height: "10px" },
+                           warningItem,
+                           domainXformMaxAccountItem,
+                           {type:_SPACER_, height: "10px" },
+                           accountLimitsItems
+                            /** Disable the feature max accounts see bug: 32921
+                            ,
+                           {type:_SPACER_, height: "10px" },
+                           domainFeatureMaxAccountItem
+                               **/
+                        ]
+                    }
+                switchGroup.items.push(caseItem);
+            }
+            
             //add the Skin Logo properties
             var skinTab = null;
             for (var i=0; i < switchGroup.items.length; i ++) {

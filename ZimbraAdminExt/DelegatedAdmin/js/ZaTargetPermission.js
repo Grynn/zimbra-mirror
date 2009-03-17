@@ -245,6 +245,32 @@ ZaTargetPermission.getGrantsListXFormItem = function (params) {
 
 
 ZaTargetPermission.targetXFormModifier = function (xFormObject) {
+
+    //check if the UI component is enabled
+    if (! ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        var uiEnabled  = false ;
+        if (this instanceof ZaAccountXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.ACCOUNTS_PERM_TAB] ;
+        } else if (this instanceof ZaDLXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.DL_PERM_TAB] ;
+        } else if (this instanceof ZaResourceXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.RESOURCE_PERM_TAB] ;
+        } else if (this instanceof ZaDomainXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.DOMAIN_PERM_TAB] ;
+        } else if (this instanceof ZaCosXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.COS_PERM_TAB] ;
+        } else if (this instanceof GlobalConfigXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.CONFIG_PERM_TAB] ;
+        } else if (this instanceof ZaServerXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.SERVER_PERM_TAB] ;
+        } else if (this instanceof ZaZimletXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.ZIMLET_PERM_TAB] ;
+        }
+
+
+        if (!uiEnabled) return ;
+    }
+   
     var tabBar, switchGroup ;
     for (var i=0; i < xFormObject.items.length; i ++) {
         if (xFormObject.items[i].type == _TAB_BAR_) {
@@ -298,6 +324,8 @@ if (ZaDomain) {
 }
 
 if (ZaTabView.XFormModifiers["ZaDomainXFormView"]){
+    ZaSettings.DOMAIN_PERM_TAB = "domainPermissionTab";
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DOMAIN_PERM_TAB, label: com_zimbra_delegatedadmin.UI_Comp_domainPermTab });
     ZaTabView.XFormModifiers["ZaDomainXFormView"].push(ZaTargetPermission.targetXFormModifier);
 }
 
@@ -316,6 +344,8 @@ if (ZaAccount) {
 }
 
 if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
+    ZaSettings.ACCOUNTS_PERM_TAB = "accountsPermissionTab";
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_PERM_TAB, label: com_zimbra_delegatedadmin.UI_Comp_AccountsPermTab });
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaTargetPermission.targetXFormModifier);
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaTargetPermission.accountTargetXFormModifier);
 }
@@ -342,6 +372,8 @@ if (ZaDistributionList) {
 }
 
 if (ZaTabView.XFormModifiers["ZaDLXFormView"]){
+    ZaSettings.DL_PERM_TAB = "dlPermissionTab";
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_PERM_TAB, label: com_zimbra_delegatedadmin.UI_Comp_dlPermTab });
     ZaTabView.XFormModifiers["ZaDLXFormView"].push(ZaTargetPermission.targetXFormModifier);
 }
 
@@ -361,6 +393,8 @@ if (ZaResource) {
 }
 
 if (ZaTabView.XFormModifiers["ZaResourceXFormView"]){
+    ZaSettings.RESOURCE_PERM_TAB = "resourcePermissionTab";
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.RESOURCE_PERM_TAB, label: com_zimbra_delegatedadmin.UI_Comp_resourcePermTab });
     ZaTabView.XFormModifiers["ZaResourceXFormView"].push(ZaTargetPermission.targetXFormModifier);
 }
 
@@ -379,6 +413,8 @@ if (ZaCos) {
 }
 
 if (ZaTabView.XFormModifiers["ZaCosXFormView"]){
+    ZaSettings.COS_PERM_TAB = "cosPermissionTab";
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.COS_PERM_TAB, label: com_zimbra_delegatedadmin.UI_Comp_cosPermTab });
     ZaTabView.XFormModifiers["ZaCosXFormView"].push(ZaTargetPermission.targetXFormModifier);
 }
 
@@ -397,6 +433,8 @@ if (ZaGlobalConfig) {
 }
 
 if (ZaTabView.XFormModifiers["GlobalConfigXFormView"]){
+    ZaSettings.CONFIG_PERM_TAB = "configPermissionTab";
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_PERM_TAB, label: com_zimbra_delegatedadmin.UI_Comp_configPermTab });
     ZaTabView.XFormModifiers["GlobalConfigXFormView"].push(ZaTargetPermission.targetXFormModifier);
 }
 
@@ -415,6 +453,8 @@ if (ZaServer) {
 }
 
 if (ZaTabView.XFormModifiers["ZaServerXFormView"]){
+    ZaSettings.SERVER_PERM_TAB = "serverPermissionTab";
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_PERM_TAB, label: com_zimbra_delegatedadmin.UI_Comp_serverPermTab });
     ZaTabView.XFormModifiers["ZaServerXFormView"].push(ZaTargetPermission.targetXFormModifier);
 }
 
@@ -433,6 +473,8 @@ if (ZaZimlet) {
 }
 
 if (ZaTabView.XFormModifiers["ZaZimletXFormView"]){
+    ZaSettings.ZIMLET_PERM_TAB = "zimletPermissionTab";
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ZIMLET_PERM_TAB, label: com_zimbra_delegatedadmin.UI_Comp_zimletPermTab });
     ZaTabView.XFormModifiers["ZaZimletXFormView"].push(ZaTargetPermission.targetXFormModifier);
 }
 

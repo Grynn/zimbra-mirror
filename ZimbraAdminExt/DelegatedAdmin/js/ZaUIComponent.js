@@ -183,8 +183,8 @@ ZaUIComponent.accountTargetXFormModifier = function (xFormObject) {
             items : ZaUIComponent.getUIComponentsXFormItem () 
         }
     ];
-    
-    permissionView.items = permissionView.items.concat(componentUIItems);
+
+    if (permissionView) permissionView.items = permissionView.items.concat(componentUIItems);
     return ;
 }
 

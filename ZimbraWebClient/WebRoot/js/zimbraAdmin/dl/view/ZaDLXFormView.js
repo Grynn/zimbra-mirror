@@ -684,10 +684,18 @@ ZaDLXFormView.myXFormModifier = function(xFormObject) {
 	var _tab5 = ++this.TAB_INDEX;	
 	
 	this.tabChoices.push({value:_tab1, label:ZaMsg.DLXV_TabMembers});
-	this.tabChoices.push({value:_tab2, label:ZaMsg.DLXV_TabNotes});
-	this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
-    this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});
-    this.tabChoices.push({value:_tab5, label:ZaMsg.Share_TabTitle});
+
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_NOTES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) 
+        this.tabChoices.push({value:_tab2, label:ZaMsg.DLXV_TabNotes});
+
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_MEMBEROF_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+        this.tabChoices.push({value:_tab3, label:ZaMsg.TABT_MemberOf});
+
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_ALIASES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+        this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});
+
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_SHARES_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])
+        this.tabChoices.push({value:_tab5, label:ZaMsg.Share_TabTitle});
     	
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
 	xFormObject.numCols=5;
