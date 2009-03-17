@@ -158,12 +158,14 @@ sub create_rrd($$$) {
     my @ds = ();
     my @rra = ();
     foreach my $c (@$columns) {
-        push(@ds, "DS:$c:GAUGE:120:U:U");
+        push(@ds, "DS:$c:GAUGE:1200:U:U");
     }
-    push(@rra, "RRA:AVERAGE:0.5:1:20160");   # 30s:1 week
-    push(@rra, "RRA:AVERAGE:0.5:10:10080");  # 5min:5 weeks
-    push(@rra, "RRA:AVERAGE:0.5:60:8766");   # 30min:6 months
-    push(@rra, "RRA:AVERAGE:0.5:120:17532"); # 1 hour:2 years
+    @rra = (
+        "RRA:AVERAGE:0.9999:1:20160",   # 30s:1 week
+        "RRA:AVERAGE:0.9999:10:10080",  # 5min:5 weeks
+        "RRA:AVERAGE:0.9999:60:8766",   # 30min:6 months
+        "RRA:AVERAGE:0.9999:120:17532", # 1 hour:2 years
+    );
     RRDs::create($rrd_file, '--start', 'now', '--step', '30', @ds, @rra);
     my $err = RRDs::error();
     die $err if $err;
@@ -286,7 +288,9 @@ sub run() {
     my %fragments; # workaround for syslogd 1024 byte limit
 
     my $mailboxdre = qr/\[(\w+\.csv)\] .* slogger - (\w+\.csv): (.*):: (.*)$/;
-    my $zimbramonre = qr/zmstat (\S+\.csv): (.*):: (.*)$/;
+    my $zimbramonstatre = qr/zmstat (\S+\.csv): (.*):: (.*)$/;
+    my $zimbramonstatusre = qr/STATUS: (\S+): (\S+): (\w+)\s*$/;
+    my $zimbramonqueuere = qr/QUEUE: (\d+) (\d+)\s*$/;
     
     while (<>) {
         chomp;
@@ -310,9 +314,22 @@ sub run() {
         }
         my ($csv_file, $headers, $data);
         if ($app eq 'zimbramon') {
-            my @match = ($msg =~ m/$zimbramonre/);
-            next if (!scalar @match);
-            ($csv_file, $headers, $data) = @match;
+            my @match;
+            if (@match = ($msg =~ m/$zimbramonstatre/)) {
+                ($csv_file, $headers, $data) = @match;
+            } elsif (@match = ($msg =~ m/$zimbramonstatusre/)) {
+                my ($hostname, $service, $status) = @match;
+                $host     = $hostname;
+                $csv_file = 'zmstatuslog';
+                $headers  = $service;
+                $data     = $status eq 'Running' ? 1 : 0;
+            } elsif (@match = ($msg =~ m/$zimbramonqueuere/)) {
+                my ($kbs, $msgs) = @match;
+                $csv_file = 'zmqueuelog';
+                $headers  = 'kB,msgs';
+                $data     = "$kbs,$msgs";
+            }
+            next if (!@match);
         } elsif ($app eq 'mailboxd') {
             my $csv_confirm;
             my @match = ($msg =~ m/$mailboxdre/);

@@ -1,0 +1,169 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib qw(/opt/zimbra/zimbramon/lib /opt/zimbra/zimbramon/rrdtool/lib/perl);
+use RRDs;
+use DBI;
+use Zimbra::Mon::Zmstat;
+use Getopt::Std;
+
+Zimbra::Mon::Zmstat::getLocalConfig();
+my $logger_directory     = $Zimbra::Mon::Zmstat::LC{'logger_data_directory'};
+my $logger_rrd_directory = "$logger_directory/rrds";
+
+sub gethostid($$) {
+    my ($dbh, $hostname) = @_;
+    my $sth = $dbh->prepare("SELECT id FROM hosts WHERE zm_hostname = ?");
+    $sth->bind_param(1, $hostname);
+    $sth->execute;
+    my @row = $sth->fetchrow_array();
+    die $sth->err if $sth->err;
+    $sth->finish;
+    return $row[0];
+}
+
+sub getdatastructure($$$) {
+    my ($dbh, $file, $hostid) = @_;
+    my $ref = undef;
+    if ($hostid != -1) {
+        my $sth = $dbh->prepare(q{
+            SELECT col_name, col_name_19, col_num, rrd_file FROM rrds
+            WHERE host_id = ? AND csv_file = ?
+        });
+        $sth->bind_param(1, $hostid);
+        $sth->bind_param(2, $file);
+        $sth->execute;
+        die $sth->err if $sth->err;
+        $ref = $sth->fetchall_hashref('col_name');
+    } else {
+        my $sth = $dbh->prepare(q{
+            SELECT col_name, col_name_19, col_num, rrd_file, zm_hostname
+            FROM rrds join hosts ON hosts.id = rrds.host_id
+            WHERE csv_file = ?
+        });
+        $sth->bind_param(1, $file);
+        $sth->execute;
+        die $sth->err if $sth->err;
+        my $data = $sth->fetchall_arrayref({});
+        my %hash;
+        foreach my $row (@$data) {
+            my $host = $row->{'zm_hostname'};
+            my $colname = $row->{'col_name'};
+            $hash{$host} = {} if (!exists $hash{$host});
+            $hash{$host}->{$colname} = {};
+            $hash{$host}->{$colname}->{'col_name_19'} = $row->{'col_name_19'};
+            $hash{$host}->{$colname}->{'col_num'}     = $row->{'col_num'};
+            $hash{$host}->{$colname}->{'rrd_file'}    = $row->{'rrd_file'};
+        };
+        $ref = \%hash;
+    }
+    keys %$ref > 0 ? $ref : undef;
+}
+
+sub get_rrd_file($$) {
+    my ($hostid, $rrd_file) = @_;
+    sprintf "%s/%d-%d.rrd", $logger_rrd_directory, $hostid, $rrd_file;
+}
+sub dump_data($$$$) {
+    my ($hostid, $structure, $start, $end) = @_;
+    my %col19col;
+    my @start;
+    my @end;
+    @start = ("-s", $start) if ($start);
+    @end   = ("-e", $end)   if ($end);
+    my %files;
+
+    foreach my $column (keys %$structure) {
+        $col19col{$structure->{$column}->{'col_name_19'}} = $column;
+        $files{$structure->{$column}->{'rrd_file'}} = 1;
+    }
+    my @columns;
+    my @rows;
+    my ($rrd_start, $rrd_step);
+    foreach my $file (keys %files) {
+        my $rrd = get_rrd_file($hostid, $file);
+        next if ! -f $rrd;
+        my ($names, $data);
+        ($rrd_start, $rrd_step, $names, $data)  =
+                RRDs::fetch($rrd, @start, @end, 'AVERAGE');
+        if (@rows == 0) {
+            @rows = @$data;
+        } else {
+            for (my $i = 0; $i < @$data; $i++) {
+                next if ($i > $#rows);
+                push(@{$rows[$i]}, @{$data->[$i]});
+            }
+        }
+        push(@columns, @$names);
+        my $err = RRDs::error();
+        die $err if $err;
+    }
+    @columns = map { $col19col{$_} } @columns;
+    unshift @columns, 'timestamp';
+    print join(",", @columns) . "\n";
+    my $ts = $rrd_start;
+    foreach my $row (@rows) {
+        my @r = map { defined($_) ? $_ : '' } @$row;
+        #unshift @r, scalar localtime($ts);
+        unshift @r, $ts;
+        $ts += $rrd_step;
+        print join(",", @r) . "\n";
+    }
+}
+sub list_files($) {
+    my $dbh = shift @_;
+    my $sth = $dbh->prepare("SELECT DISTINCT(csv_file) FROM rrds");
+    $sth->execute;
+    die $sth->err if $sth->err;
+    my $ref = $sth->fetchall_arrayref([0]);
+    print "Statistics are gathered from the following sources:\n\n";
+    foreach my $file (@$ref) {
+        print "    " . $file->[0] . "\n";
+    }
+    exit;
+}
+sub list_hosts($) {
+    my $dbh = shift @_;
+    my $sth = $dbh->prepare("SELECT DISTINCT(zm_hostname) FROM hosts");
+    $sth->execute;
+    die $sth->err if $sth->err;
+    my $ref = $sth->fetchall_arrayref([0]);
+    print "Statistics are gathered from the following hosts:\n\n";
+    foreach my $host (@$ref) {
+        print "    " . $host->[0] . "\n";
+    }
+    exit;
+}
+sub run() {
+    my %options;
+    my $hostid = -1;
+    getopts('f:h:s:e:ln', \%options);
+
+    my $filename = $options{f};
+    my $start    = $options{s};
+    my $end      = $options{e};
+
+    my $dbh = DBI->connect(
+            "dbi:SQLite:dbname=$logger_directory/logger.sqlitedb", "", "");
+
+    list_files($dbh) if exists $options{l};
+    list_hosts($dbh) if exists $options{n};
+
+    die "-f option is required" if (!exists $options{f});
+
+    $hostid = gethostid($dbh, $options{h}) if (exists $options{h});
+    my $structure = getdatastructure($dbh, $filename, $hostid);
+    die "no structure found for $filename" if (!$structure);
+    if ($hostid == -1) {
+        foreach my $host (keys %$structure) {
+            print "\nHost: $host\n\n";
+            $hostid = gethostid($dbh, $host);
+            dump_data($hostid, $structure->{$host}, $start, $end);
+        }
+    } else {
+        dump_data($hostid, $structure, $start, $end);
+    }
+    $dbh->disconnect;
+}
+
+run();
