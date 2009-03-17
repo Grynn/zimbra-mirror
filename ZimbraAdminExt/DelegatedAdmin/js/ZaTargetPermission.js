@@ -611,8 +611,15 @@ function (resp) {
 }
 
 if (ZaSearch) {
+/**
+ * @argument callArgs {value, event, callback}
+ */	
     ZaSearch.prototype.dynSelectGrantees = function (value, event, callback) {
         try {
+			var value = callArgs["value"];
+			var event = callArgs["event"];
+			var callback = callArgs["callback"];
+		        	
             var params = new Object();
             var query = ZaSearch.getSearchByNameQuery(value);
             query = "(&" + query

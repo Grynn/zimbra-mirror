@@ -247,9 +247,16 @@ ZaSearch.prototype.dynSelectSearchCosesCallback = function (callback, resp) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchCosesCallback");	
 	}
 }
-
-ZaSearch.prototype.dynSelectSearchAccounts = function (value, event, callback) {
+/**
+ * @argument callArgs {value, event, callback}
+ */
+ZaSearch.prototype.dynSelectSearchAccounts = function (callArgs) {
 	try {
+		var value = callArgs["value"];
+		var event = callArgs["event"];
+		var callback = callArgs["callback"];
+		
+		
 		var params = new Object();
 		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
 		params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
@@ -259,12 +266,20 @@ ZaSearch.prototype.dynSelectSearchAccounts = function (value, event, callback) {
 		params.controller = ZaApp.getInstance().getCurrentController();
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchAccounts");		
 	}
 }
 
-ZaSearch.prototype.dynSelectSearchGroups = function (value, event, callback, extraLdapQuery) {
+/**
+ * @argument callArgs {value, event, callback, extraLdapQuery}
+ */
+ZaSearch.prototype.dynSelectSearchGroups = function (callArgs) {
 	try {
+		var value = callArgs["value"];
+		var event = callArgs["event"];
+		var callback = callArgs["callback"];
+		var extraLdapQuery = callArgs["extraLdapQuery"];
+		
 		var params = new Object();
 		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
 		params.types = [ZaSearch.DLS];
@@ -275,12 +290,19 @@ ZaSearch.prototype.dynSelectSearchGroups = function (value, event, callback, ext
         params.controller = ZaApp.getInstance().getCurrentController();
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectDataFetcher");		
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchGroups");		
 	}
 }
 
-ZaSearch.prototype.dynSelectSearchDomains = function (value, event, callback) {
+/**
+ * @argument callArgs {value, event, callback}
+ */
+ZaSearch.prototype.dynSelectSearchDomains = function (callArgs) {
 	try {
+		var value = callArgs["value"];
+		var event = callArgs["event"];
+		var callback = callArgs["callback"];
+				
 		var params = new Object();
 		dataCallback = new AjxCallback(this, this.dynSelectDataCallback, callback);
 		params.types = [ZaSearch.DOMAINS];
@@ -294,8 +316,15 @@ ZaSearch.prototype.dynSelectSearchDomains = function (value, event, callback) {
 	}
 }
 
-ZaSearch.prototype.dynSelectSearchCoses = function (value, event, callback) {
+/**
+ * @argument callArgs {value, event, callback}
+ */
+ZaSearch.prototype.dynSelectSearchCoses = function (callArgs) {
 	try {
+		var value = callArgs["value"];
+		var event = callArgs["event"];
+		var callback = callArgs["callback"];
+				
 		var params = new Object();
 		dataCallback = new AjxCallback(this, this.dynSelectSearchCosesCallback, callback);
 		params.types = [ZaSearch.COSES];

@@ -290,9 +290,16 @@ if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
 }
 
 if (ZaSearch) {
-    ZaSearch.prototype.dynSelectSearchAdminGroups =  function (value, event, callback) {
+	/**
+ 	* @argument callArgs {value, event, callback}
+ 	*/
+    ZaSearch.prototype.dynSelectSearchAdminGroups =  function (callArgs) {
         var extraLdapQuery = "(zimbraIsAdminGroup=TRUE)" ;
-        ZaSearch.prototype.dynSelectSearchGroups.call (this, value, event, callback, extraLdapQuery) ;
+		var value = callArgs["value"];
+		var event = callArgs["event"];
+		var callback = callArgs["callback"];
+		        
+        ZaSearch.prototype.dynSelectSearchGroups.call (this, {value:value, event:event, callback:callback, extraLdapQuery:extraLdapQuery}) ;
     }
 }
 

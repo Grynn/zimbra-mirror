@@ -482,9 +482,15 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
                 emptyText:ZaMsg.enterSearchTerm,
                 dataFetcherInstance:true,
                 width:250,
-                //dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,
-                dataFetcherMethod:function (value, event, callback) {
+				/**
+				 * @argument callArgs {value, event, callback}
+				 */
+                dataFetcherMethod:function (callArgs) {
                 	try {
+							var value = callArgs["value"];
+							var event = callArgs["event"];
+							var callback = callArgs["callback"];
+	
 							var params = new Object();
 							dataCallback = new AjxCallback(this, ZaSearch.prototype.dynSelectDataCallback, callback);
 							params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
