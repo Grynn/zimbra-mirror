@@ -1646,7 +1646,7 @@ function (value, event, form){
 				|| (instance [ZaAccount.A_name].indexOf("@") == 0)) 
 		{ //see if the cos needs to be updated accordingly
 			try {
-				instance.loadNewObjectDefaults("name", newDomainName);
+				ZaItem.prototype.loadNewObjectDefaults.call(instance,"name", newDomainName);
 			} catch (ex) {
 				if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
         			return value;
