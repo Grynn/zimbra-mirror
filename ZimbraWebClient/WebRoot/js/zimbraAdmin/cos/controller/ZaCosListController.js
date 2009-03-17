@@ -135,67 +135,6 @@ function (openInNewTab, openInSearchTab) {
 	this._UICreated = true;
 }
 
-/**
-* @param ev
-* This listener is invoked by ZaAccountController or any other controller that can create an ZaAccount object
-**/
-ZaCosListController.prototype.handleCosCreation = 
-function (ev) {
-	if(ev) {
-		if(ev.getDetails() && this._list) {
-			if (this._list) this._list.add(ev.getDetails());
-			if (this._contentView) this._contentView.setUI();
-			if(ZaApp.getInstance().getCurrentController() == this) {
-				this.show();			
-			}
-		}
-	}
-}
-
-/**
-* @param ev
-* This listener is invoked by ZaCosController or any other controller that can remove an ZaCos object
-**/
-ZaCosListController.prototype.handleCosRemoval = 
-function (ev) {
-	if(ev) {
-		//add the new ZaAccount to the controlled list
-		if(ev.getDetails() && this._list) {
-			if (this._list) this._list.remove(ev.getDetails());
-			if (this._contentView) this._contentView.setUI();
-			if(ZaApp.getInstance().getCurrentController() == this) {
-				this.show();			
-			}
-		}
-	}
-}
-
-ZaCosListController.prototype.handleCosChange =
-function (ev) {
-	//if any of the data that is currently visible has changed - update the view
-	if(ev) {
-		var details = ev.getDetails();
-		//if(details && (details["mods"][ZaCos.A_name] || details["mods"][ZaCos.A_description])) {
-		if (details) {
-			if (this._list) {
-				this._list.replace(details);
-			}
-			if (this._contentView) this._contentView.setUI();
-			if(ZaApp.getInstance().getCurrentController() == this) {
-				this.show();			
-			}
-		}
-	}
-}
-
-/**
-* Adds listener to removal of an ZaCos 
-* @param listener
-**/
-ZaCosListController.prototype.addCosRemovalListener = 
-function(listener) {
-	this._evtMgr.addListener(ZaEvent.E_REMOVE, listener);
-}
 
 // refresh button was pressed
 ZaCosListController.prototype._refreshButtonListener =
