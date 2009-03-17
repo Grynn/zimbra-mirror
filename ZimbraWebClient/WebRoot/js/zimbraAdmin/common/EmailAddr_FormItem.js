@@ -30,7 +30,7 @@ DynSelectDomainPart_XFormItem.prototype.handleKeyPressDelay = function (event,va
 		return;
 		
 	var callback = new AjxCallback(this, this.changeChoicesCallback);
-	this.dataFetcherMethod.call(this.dataFetcherObject, value, event, callback);
+	this.dataFetcherMethod.call(this.dataFetcherObject, {value:value, event:event, callback:callback});
 	var val = "";
 	if(this.getParentItem()._namePart) {
 		val = this.getParentItem()._namePart;
