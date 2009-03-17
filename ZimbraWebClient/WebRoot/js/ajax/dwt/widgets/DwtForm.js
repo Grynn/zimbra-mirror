@@ -378,7 +378,11 @@ DwtForm.prototype._getControlValue = function(id) {
 // utility
 
 DwtForm.prototype._call = function(func, args) {
-	if (func) return func.apply(this, args);
+	if (func) {
+		if (args) return func.apply(this, args);
+		// NOTE: Hack for IE which barfs with null args on apply
+		return func.call(this);
+	}
 };
 
 // html creation
@@ -803,7 +807,7 @@ DwtForm.prototype._input2model2handler = function(id, handler) {
 	this._setModelValue(id, this._getControlValue(id));
 	this.update();
 	if (handler) {
-		this._call(handler, id);
+		this._call(handler, [id]);
 	}
 };
 

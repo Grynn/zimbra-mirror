@@ -189,6 +189,6 @@ AjxTemplate.__printBufferLine = function(buffer, s1 /* ..., sN */) {
 
 AjxTemplate.__printEscaped = function(buffer, s) {
 	var offset = buffer.length;
-	buffer[offset++] = s.replace(/"/g,"\\\"").replace('\n',"\\n");
+	buffer[offset++] = s.replace(/"/g,"\\\"").replace('\n',"\\n").replace('\r',"\\r");
 	return offset;
 };
