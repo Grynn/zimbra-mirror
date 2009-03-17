@@ -42,7 +42,7 @@ function() {
 					visibilityChangeEventSources:["gt"],
 				 	
 					items:[
-						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
+						{ref:".", type:_STATIC_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
 							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchGroups
 						}						
@@ -53,7 +53,7 @@ function() {
 					visibilityChangeEventSources:["gt"],
 					
 					items:[
-						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
+						{ref:".", type:_STATIC_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
 							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
 						}						
@@ -64,7 +64,7 @@ function() {
 					visibilityChangeEventSources:["gt"],
 					
 					items:[
-						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
+						{ref:".", type:_STATIC_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
 							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains
 						}					
