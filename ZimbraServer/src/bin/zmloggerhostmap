@@ -1,0 +1,103 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib qw(/opt/zimbra/zimbramon/lib /opt/zimbra/zimbramon/rrdtool/lib/perl);
+use DBI;
+use Zimbra::Mon::Zmstat;
+use Getopt::Std;
+
+Zimbra::Mon::Zmstat::getLocalConfig();
+my $logger_directory     = $Zimbra::Mon::Zmstat::LC{'logger_data_directory'};
+my $logger_rrd_directory = "$logger_directory/rrds";
+
+sub list_hosts($) {
+    my $dbh = shift @_;
+    my $sth = $dbh->prepare("SELECT dns_hostname, zm_hostname FROM hosts");
+    $sth->execute;
+    die $sth->err if $sth->err;
+    my $ref = $sth->fetchall_hashref('dns_hostname');
+    my ($host, $zmhost);
+    format STDOUT_TOP =
+Zimbra Logger Service Hostname Map
+
+---------------------    --------------------- 
+DNS Hostname             Zimbra Hostname
+---------------------    ---------------------
+.
+    format STDOUT =
+@<<<<<<<<<<<<<<<<<<<<    @<<<<<<<<<<<<<<<<<<<<   
+$host,                   $zmhost
+.
+    foreach $host (keys %$ref) {
+        $zmhost = $ref->{$host}->{'zm_hostname'};
+        write;
+    }
+    exit;
+}
+
+sub usage() {
+    print STDERR <<'EOF';
+Usage: zmloggerhostmap [-hcd] <dns_hostname> <zm_hostname>
+  -a        - create a new host mapping
+  -d        - delete a host mapping (specify both names to prevent accidents)
+  -h        - show this help
+EOF
+    exit(1);
+}
+
+sub map_host($$$) {
+    my ($dbh, $dns_hostname, $zm_hostname) = @_;
+    my $sth = $dbh->prepare(q{
+        UPDATE hosts SET zm_hostname = ? WHERE dns_hostname = ?
+    });
+    my $rows = $sth->execute($zm_hostname, $dns_hostname);
+    die $sth->err if $sth->err;
+    die "Hostname $dns_hostname does not exist" if ($rows != 1);
+    print "Mapped $dns_hostname to $zm_hostname\n";
+}
+
+sub insert_host($$$) {
+    my ($dbh, $dns_hostname, $zm_hostname) = @_;
+    my $sth = $dbh->prepare(q{
+            INSERT INTO hosts (dns_hostname,zm_hostname) VALUES (?,?)
+    });
+    my $rows = $sth->execute($dns_hostname, $zm_hostname);
+    die $sth->errstr if ($sth->err);
+    die "Unable to insert mapping" if ($rows == 0);
+    print "Added mapping for $dns_hostname to $zm_hostname\n";
+}
+sub delete_host($$$) {
+    my ($dbh, $dns_hostname, $zm_hostname) = @_;
+    my $sth = $dbh->prepare(q{
+        DELETE FROM hosts WHERE zm_hostname = ? AND dns_hostname = ?
+    });
+    my $rows = $sth->execute($zm_hostname, $dns_hostname);
+    die $sth->err if $sth->err;
+    die "Host mapping $dns_hostname:$zm_hostname does not exist"
+            if ($rows != 1);
+    print "Deleted mapping for $dns_hostname to $zm_hostname\n";
+}
+
+sub run() {
+    my %options;
+    my $hostid = -1;
+    getopts('had', \%options);
+
+    usage() if ($options{h});
+    my $dbh = DBI->connect(
+            "dbi:SQLite:dbname=$logger_directory/logger.sqlitedb", "", "");
+
+    list_hosts($dbh) if (@ARGV == 0);
+    usage() if (@ARGV != 2);
+    if ($options{a}) {
+        insert_host($dbh, shift @ARGV, shift @ARGV);
+    } elsif ($options{d}) {
+        delete_host($dbh, shift @ARGV, shift @ARGV);
+    } else {
+        map_host($dbh, shift @ARGV, shift @ARGV);
+    }
+
+    $dbh->disconnect;
+}
+
+run();
