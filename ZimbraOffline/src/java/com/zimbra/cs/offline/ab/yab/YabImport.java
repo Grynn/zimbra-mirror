@@ -17,6 +17,8 @@ package com.zimbra.cs.offline.ab.yab;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.offline.util.yab.Session;
+import com.zimbra.cs.offline.util.yab.ErrorResult;
+import com.zimbra.cs.offline.util.yab.YabException;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.LocalData;
@@ -28,13 +30,15 @@ import com.zimbra.common.util.Log;
 import java.util.List;
 import java.io.IOException;
 
+import org.apache.commons.httpclient.HttpException;
+
 public class YabImport implements DataSource.DataImport {
     private final OfflineDataSource ds;
     private SyncSession session;
 
     private static final Log LOG = OfflineLog.yab;
     
-    private static final String ERROR = "Yahoo address book synchronization failed";
+    private static final String YAB_FAILED = "Yahoo address book synchronization failed";
 
     public YabImport(DataSource ds) {
         this.ds = (OfflineDataSource) ds;
@@ -63,10 +67,33 @@ public class YabImport implements DataSource.DataImport {
         try {
             session.sync();
         } catch (Exception e) {
-            SyncExceptionHandler.checkRecoverableException(ERROR, e);
-            ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR, e);
+            failed(e);
         }
         LOG.info("Finished importing contacts for account '%s'", ds.getName());
+    }
+
+    @SuppressWarnings("deprecation")
+    private void failed(Exception e) throws ServiceException {
+        if (e instanceof HttpException) {
+            int code = ((HttpException) e).getReasonCode();
+            if (code == 999) {
+                // Dreaded "999" error code indicating that rate limiting is in
+                // effect. Make sure we report this error to the user.
+                throw serviceException(YAB_FAILED, code);
+            }
+        } else if (e instanceof YabException) {
+            ErrorResult error = ((YabException) e).getErrorResult();
+            if (error.isTemporary()) {
+                throw serviceException(
+                    YAB_FAILED + ":" + error.getUserMessage(), error.getCode());
+            }
+        }
+        SyncExceptionHandler.checkRecoverableException(YAB_FAILED, e);
+        ds.reportError(Mailbox.ID_FOLDER_CONTACTS, YAB_FAILED, e);
+    }
+
+    private static ServiceException serviceException(String msg, int code) {
+        return new ServiceException(msg, "yab." + code, false) {};
     }
 
     private SyncSession newSyncSession() throws ServiceException {

@@ -30,7 +30,6 @@ import com.zimbra.cs.util.yauth.Authenticator;
 
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.w3c.dom.Document;
@@ -65,24 +64,26 @@ public abstract class Request extends Entity {
         }
     }
 
-    public Response send() throws AuthenticationException, IOException {
+    @SuppressWarnings("deprecation")
+    public Response send() throws AuthenticationException, YabException, IOException {
         Authenticator auth = session.getAuthenticator();
         try {
             return sendRequest(auth.authenticate());
         } catch (HttpException e) {
             int code = e.getReasonCode();
-            if (code != 401 && code != 403 && code != 999) {
+            if (code == 401 || code == 403) {
+                // Cached cookie expired or was invalid. Invalidate cookie and try again.
+                Yab.debug("Invalidating possibly expired cookie and retrying auth");
+                auth.invalidate();
+                return sendRequest(auth.authenticate());
+            } else {
                 throw e;
             }
-            // Cached cookie expired or was invalid. Invalidate cookie
-            // and try once more.
-            Yab.debug("Invalidating possibly expired cookie and retrying auth");
-            auth.invalidate();
-            return sendRequest(auth.authenticate());
         }
     }
 
-    private Response sendRequest(Auth auth) throws IOException {
+    @SuppressWarnings("deprecation")
+    private Response sendRequest(Auth auth) throws YabException, IOException {
         HttpMethod method = getHttpMethod(auth);
         if (Yab.isDebug()) {
             if (isPOST()) {
@@ -97,15 +98,15 @@ public abstract class Request extends Entity {
         int code = session.getHttpClient().executeMethod(method);
         InputStream is = method.getResponseBodyAsStream();
         if (code != 200) {
-            if (Yab.isDebug()) {
+            if (code != 401 && code != 403) {
                 ErrorResult error = getErrorResult(method);
                 if (error != null) {
-                    Yab.debug("Received error response: code = %d, user = %s, debug = %s",
-                              error.getCode(), error.getUserMessage(), error.getDebugMessage());
+                    throw new YabException(error);
                 }
             }
             HttpException e = new HttpException(
                 "HTTP request failed: " + code + ": " + method.getStatusText());
+            e.setReason(method.getStatusText());
             e.setReasonCode(code);
             throw e;
         }
@@ -120,6 +121,9 @@ public abstract class Request extends Entity {
         InputStream is = method.getResponseBodyAsStream();
         try {
             Document doc = session.parseDocument(is);
+            if (Yab.isDebug() && session.isTrace()) {
+                Yab.debug("Response body:\n%s", Xml.toString(doc));
+            }
             return ErrorResult.fromXml(doc.getDocumentElement());
         } catch (IOException e) {
             return null;

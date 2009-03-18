@@ -24,6 +24,11 @@ public class ErrorResult extends Result {
     private String debugMessage;
     private int retryAfter = -1;
 
+    public static final int CODE_EXPIRED_COOKIES = 17005;
+    public static final int CODE_CLIENT_TIMED_OUT = 17010;
+    public static final int CODE_SERVER_DOWN = 17011;
+    public static final int CODE_USER_LOCKED = 50302;
+
     public static final String TAG = "error";
 
     private static final String CODE = "code";
@@ -40,6 +45,10 @@ public class ErrorResult extends Result {
         return code;
     }
 
+    public boolean isTemporary() {
+        return retryAfter > 0;
+    }
+    
     public String getUserMessage() {
         return userMessage;
     }
@@ -92,5 +101,9 @@ public class ErrorResult extends Result {
             Xml.appendElement(e, RETRY_AFTER, retryAfter);
         }
         return e;
+    }                                  
+
+    public String toString() {
+        return String.format("%s (code = %d)", userMessage, code);
     }
 }

@@ -19,6 +19,7 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.common.service.ServiceException;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class YMailImport implements DataSource.DataImport {
     private final OfflineImport imapImport;
@@ -45,13 +46,28 @@ public class YMailImport implements DataSource.DataImport {
 
     public void importData(List<Integer> folderIds, boolean fullSync)
         throws ServiceException {
-        imapImport.importData(folderIds, fullSync);
-
+        List<ServiceException> errors = new ArrayList<ServiceException>();
+        try {
+            imapImport.importData(folderIds, fullSync);
+        } catch (ServiceException e) {
+            errors.add(e);
+        }
         if (yabImport != null) {
-            yabImport.importData(folderIds, fullSync);
-        }                
+            try {
+                yabImport.importData(folderIds, fullSync);
+            } catch (ServiceException e) {
+                errors.add(e);
+            }
+        }
         if (calDavImport != null) {
-            calDavImport.importData(null, fullSync);
+            try {
+                calDavImport.importData(null, fullSync);
+            } catch (ServiceException e) {
+                errors.add(e);
+            }
+        }
+        if (!errors.isEmpty()) {
+            throw errors.get(0);
         }
     }
 }

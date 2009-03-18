@@ -80,7 +80,7 @@ public class Session {
     }
     
     public List<Contact> search(String params)
-        throws AuthenticationException, IOException {
+        throws AuthenticationException, YabException, IOException {
         SearchResponse res = (SearchResponse) createSearchRequest(params).send();
         return res.getContacts();
     }
