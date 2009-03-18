@@ -39,7 +39,7 @@ public class LiveBean extends XmailBean {
     }
 
     public boolean isContactSyncSupported() {
-	return true;
+	return false;
     }
 
     public boolean isFolderSyncSupported() {
