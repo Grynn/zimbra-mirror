@@ -168,14 +168,14 @@ sub create_rrd($$$) {
     );
     RRDs::create($rrd_file, '--start', 'now', '--step', '30', @ds, @rra);
     my $err = RRDs::error();
-    die $err if $err;
+    die "@$columns $err" if $err;
 }
 
 sub map_col_for_rrd($$) {
     my $truncated = shift @_;
     my $col       = shift @_;
 
-    $col =~ s#[ %/:-]#_#g;
+    $col =~ s#[^a-zA-Z0-9_]#_#g;
     if (length $col > 19) {
         $col =~ s/^(.{18}).*/$1/;
         if (exists $truncated->{$col}) {
@@ -253,7 +253,7 @@ sub insert_data($$$$$$) {
         }
         RRDs::update($rrd_file, "N:$update");
         my $err = RRDs::error();
-        die $err if $err;
+        die "$update: $err" if $err;
     }
 }
 
@@ -303,6 +303,10 @@ sub run() {
         if ($msg =~ /$fragnextre/) {
             my $uuid = $1;
             $msg =~ s/$fragnextre//;
+            
+            # zmlogger is starting halfway into a message
+            next if !exists $fragments{$uuid};
+            
             $msg = $fragments{$uuid} . $msg;
             delete $fragments{$uuid};
         }
