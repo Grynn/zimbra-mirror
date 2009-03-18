@@ -482,6 +482,35 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_INTEROP_TAB, label:
 ZaSettings.CONFIG_THEMES_TAB = "configThemesTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_THEMES_TAB, label: ZaMsg.UI_Comp_configThemesTab });
 
+//Global Server Statistics View
+ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB = "globalServerStatsMsgCountTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB, label: ZaMsg.UI_Comp_globalStatsMsgCountTab });
+
+ZaSettings.GLOBAL_STATS_MSG_VOL_TAB = "globalServerStatsMsgVolTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_MSG_VOL_TAB, label: ZaMsg.UI_Comp_globalStatsMsgVolTab });
+
+ZaSettings.GLOBAL_STATS_MSG_ASAV_TAB = "globalServerStatsASAVTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_MSG_ASAV_TAB, label: ZaMsg.UI_Comp_globalStatsMsgASAVTab });
+
+//Individual Server Statistics View
+ZaSettings.SERVER_STATS_MSG_COUNT_TAB = "perServerStatsMsgCountTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_MSG_COUNT_TAB, label: ZaMsg.UI_Comp_serverStatsMsgCountTab });
+
+ZaSettings.SERVER_STATS_MSG_VOL_TAB = "perServerStatsMsgVolTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_MSG_VOL_TAB, label: ZaMsg.UI_Comp_serverStatsMsgVolTab });
+
+ZaSettings.SERVER_STATS_MSG_ASAV_TAB = "perServerStatsASAVTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_MSG_ASAV_TAB, label: ZaMsg.UI_Comp_serverStatsMsgASAVTab });
+
+ZaSettings.SERVER_STATS_DISK_TAB = "perServerStatsDiskTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_DISK_TAB, label: ZaMsg.UI_Comp_serverStatsDiskTab });
+
+ZaSettings.SERVER_STATS_SESSION_TAB = "perServerSessionTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_SESSION_TAB, label: ZaMsg.UI_Comp_serverStatsSessTab });
+
+ZaSettings.SERVER_STATS_QUOTA_TAB = "perServerStatsQuotaTab" ;
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_QUOTA_TAB, label: ZaMsg.UI_Comp_serverStatsQuotaTab });
+
 //Distribution list operations
 //ZaSettings.DL_CREATE_RIGHT = "createDL";
 

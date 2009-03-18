@@ -32,7 +32,7 @@ function () {
 	var formPage = this.getForm().parent;
 	if(!formPage.addUICompDlg) {
 		formPage.addUICompDlg = new ZaNewUICompXDialog(ZaApp.getInstance().getAppCtxt().getShell(),
-                "450px", "80px",com_zimbra_delegatedadmin.Add_UIComp_Title);
+                "550px", "80px",com_zimbra_delegatedadmin.Add_UIComp_Title);
 		formPage.addUICompDlg.registerCallback(DwtDialog.OK_BUTTON, ZaUIComponent.addUIComp, this.getForm(), null);
 	}
 

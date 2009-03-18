@@ -25,13 +25,21 @@ ZaGlobalStatsView = function(parent) {
 	DwtTabView.call(this, parent);
 	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
-	this._msgCountPage = new ZaGlobalMessageCountPage(this);
-	this._msgsVolumePage = new ZaGlobalMessageVolumePage(this);
-	this._spamPage = new ZaGlobalSpamActivityPage(this);	
-	this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);		
-	this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);			
-	this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);				
-//	this.setScrollStyle(DwtControl.SCROLL);
+    
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        this._msgCountPage = new ZaGlobalMessageCountPage(this);
+        this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);
+    }
+    
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_VOL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+	    this._msgsVolumePage = new ZaGlobalMessageVolumePage(this);
+        this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);
+    }
+
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_ASAV_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]){
+        this._spamPage = new ZaGlobalSpamActivityPage(this);
+        this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
+    }
 }
 
 ZaGlobalStatsView.prototype = new DwtTabView;
