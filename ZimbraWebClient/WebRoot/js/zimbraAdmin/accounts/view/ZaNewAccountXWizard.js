@@ -278,7 +278,7 @@ function(entry) {
 		domainName =  ZaSettings.myDomainName;
 	}
 	this._containedObject[ZaAccount.A_name] = "@" + domainName;
-	EmailAddr_XFormItem.domainChoices.setChoices([{name:domainName}]);
+	EmailAddr_XFormItem.domainChoices.setChoices([]);
 	EmailAddr_XFormItem.domainChoices.dirtyChoices();
 	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
@@ -352,6 +352,9 @@ function(entry) {
 		}
     }
     this._localXForm.setInstance(this._containedObject);
+    var nameFields = this._localXForm.getItemsById(ZaAccount.A_name);
+    if(!AjxUtil.isEmpty(nameFields) && nameFields[0] && nameFields[0].resetEditedState)
+		nameFields[0].resetEditedState();
 }
 
 ZaNewAccountXWizard.isDomainLeftAccountsAlertVisible = function () {
@@ -543,22 +546,25 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						enableDisableChecks:[ZaNewAccountXWizard.isAutoCos],
 						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
 						visibilityChecks:[],
-						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,choices:this.cosChoices,
-						dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
-								// dereference through the choices array, if provided
-								//newValue = this.getChoiceLabel(newValue);
-								if(ZaItem.ID_PATTERN.test(newValue)) {
-									var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
-									if(cos)
-										newValue = cos.name;
-								} 
-								if (newValue == null) {
-									newValue = "";
-								} else {
-									newValue = "" + newValue;
-								}
-								return newValue;
+						dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
+						choices:this.cosChoices,
+						dataFetcherClass:ZaSearch,
+						editable:true,
+						getDisplayValue:function(newValue) {
+							// dereference through the choices array, if provided
+							//newValue = this.getChoiceLabel(newValue);
+							if(ZaItem.ID_PATTERN.test(newValue)) {
+								var cos = ZaCos.getCosById(newValue, this.getForm().parent._app);
+								if(cos)
+									newValue = cos.name;
+							} 
+							if (newValue == null) {
+								newValue = "";
+							} else {
+								newValue = "" + newValue;
 							}
+							return newValue;
+						}
 					},
 					{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_, 
 						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,

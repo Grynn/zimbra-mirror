@@ -117,6 +117,7 @@ EmailAddr_XFormItem.prototype.items = [
 	 	choices:EmailAddr_XFormItem.domainChoices,
 	 	editable:true,
         bmolsnr:true,
+        toolTipContent:ZaMsg.tt_StartTypingDomainName,
          //visibilityChecks:[EmailAddr_XFormItem.isNonSaticDomain],
 	 	visibilityChecks:[],
 	 	enableDisableChecks:[],
@@ -175,6 +176,9 @@ EmailAddr_XFormItem.prototype.items = [
 	}
 ];
 
+EmailAddr_XFormItem.prototype.resetEditedState = function () {
+	this.items[2].edited = false;
+}
 //reset the domainchoices for the domain list menu, bug 12495
 EmailAddr_XFormItem.resetDomainLists =
 function (force) {

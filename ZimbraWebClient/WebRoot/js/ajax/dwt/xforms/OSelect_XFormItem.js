@@ -134,7 +134,9 @@ OSelect1_XFormItem.prototype.getNoteElement = function () {
 OSelect1_XFormItem.prototype.showMenu = function() {
 	if(!this._enabled)
 		return;
-
+	
+	this.hideInputTooltip();
+	
 	if (AjxEnv.isIE && !OSelect1_XFormItem._mouseWheelEventAttached) {
 		var form = this.getForm();
 		var formElement = form.getHtmlElement();

@@ -181,6 +181,7 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 	inputHtml = ["<input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
 				" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
 				" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", "size=",inputSize,
+				this.getMouseoutHandlerHTML(),
 				">"].join("");
 	
 	if (this.getWidth() == "auto") {
@@ -211,7 +212,7 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 
 	HTMLoutput.append(
 		"<div id=", id, this.getCssString(),
-			" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').onClick(this)\"",
+			" onclick=\"", this.getFormGlobalRef(), ".getItemById('",this.getId(),"').onClick(event)\"",
 			" onselectstart=\"return false\"",
 			">",
 			"<table ", this.getTableCssString(), ">", 
@@ -223,17 +224,36 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
  	this.edited = false;
 }
 
-DynSelect_XFormItem.prototype.onClick = function() {
+DynSelect_XFormItem.prototype.getMouseoutHandlerHTML =
+function () {
+	var formId = this.getFormGlobalRef(), 
+		itemId = this.getId()
+		;
+	
+	var onMouseoutAction = "";
+	
+	var onMouseoutFunc = this.getInheritedProperty("onMouseout") ;
+	onMouseoutAction = AjxBuffer.concat(" onmouseout=\"", onMouseoutFunc || "XFormItem.prototype.hideInputTooltip" , 
+						".call(" ,   this.getGlobalRef(), ", event );\" ");
+						
+	return AjxBuffer.concat( onMouseoutAction );	
+}
+
+DynSelect_XFormItem.prototype.onClick = function(event) {
 	var choices = this.getNormalizedChoices();
-	if(choices && choices.values && choices.values.length) {
-		this.showMenu();
+	if(!this.edited && this.getInheritedProperty("editable")) {
+		this.showInputTooltip(event);
+	} else {
+		if(choices && choices.values && choices.values.length) {
+			this.showMenu();
+		}
 	}
 	if(AjxUtil.isEmpty(this.getInstanceValue()) && this._enabled) {
 		var el = this.getDisplayElement();
 		el.value = "";
 		el.className = this.getDisplayCssClass();
 	}
-	
+
 }
 
 DynSelect_XFormItem.prototype.getArrowElement = function () {
