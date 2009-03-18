@@ -1145,6 +1145,8 @@ public class PushChanges {
                 action = request.addElement(MailConstants.E_MSG);
                 if (msg.isDraft() && !msg.getDraftOrigId().equals(""))
                     action.addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType()).addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId());
+                else if (!msg.isDraft())
+                    action.addAttribute(MailConstants.A_DATE, msg.getDate());
                 upload = true;
                 create = true;
             } else if ((mask & Change.MODIFIED_CONTENT) != 0) {            	
