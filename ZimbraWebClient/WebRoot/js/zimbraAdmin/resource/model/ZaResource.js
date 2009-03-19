@@ -427,7 +427,7 @@ function() {
 		idx = this._addRow(ZaMsg.NAD_ResourceName, this.attrs[ZaResource.A_displayname], html, idx);
 		idx = this._addRow(ZaMsg.NAD_ResType, 
 						ZaResource.getResTypeLabel(this.attrs[ZaResource.A_zimbraCalResType]), html, idx);
-		if(this.getAttrs[ZaResource.A_mailHost]) {
+		if(this.getAttrs && this.getAttrs[ZaResource.A_mailHost]) {
 			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaResource.A_mailHost], html, idx);
 		}
 		
