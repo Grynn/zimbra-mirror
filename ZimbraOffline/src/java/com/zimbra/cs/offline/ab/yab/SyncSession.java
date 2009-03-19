@@ -77,15 +77,7 @@ public class SyncSession {
         this.session = session;
     }
 
-    public void sync() throws ServiceException {
-        try {
-            syncData();
-        } catch (Exception e) {
-            throw ServiceException.FAILURE("Contact sync error", e);
-        }
-    }
-    
-    private void syncData() throws IOException, ServiceException, YabException {
+    public void sync() throws IOException, YabException, ServiceException {
         Mailbox mbox = localData.getMailbox();
         SyncState ss = localData.loadState();
         SyncRequest req;
