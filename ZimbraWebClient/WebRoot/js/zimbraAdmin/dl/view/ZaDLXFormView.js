@@ -394,8 +394,6 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 
 ZaDLXFormView.prototype.setObject = 
 function (entry) {
-
-    ZaItem.normalizeMultiValueAttr(entry, "description") ;
     entry.modifyObject () ;  
     this._containedObject = {attrs:{}};
 
@@ -408,20 +406,20 @@ function (entry) {
  			this._containedObject[ZaDistributionList.A2_memberList].push(memberList[i]);
  		}
 	}
- 	    
-	var val, tmp;
-	for (key in entry.attrs) {
-		val = entry.attrs[key];
-		if (AjxUtil.isArray(val)){
-			tmp = new Array();
-			for (var i = 0; i < val.length; ++i){
-				tmp[i] = val[i];
-			}
-			val = tmp;
-		}
-		this._containedObject.attrs[key] = val;
-	}
-	//Utility members
+
+	for (var a in entry.attrs) {
+        var modelItem = this._localXForm.getModel().getItem(a) ;
+        if ((modelItem != null && modelItem.type == _LIST_)
+           || (entry.attrs[a] != null && entry.attrs[a] instanceof Array))
+        {  //need deep clone
+            this._containedObject.attrs [a] =
+                    ZaItem.deepCloneListItem (entry.attrs[a]);
+        } else {
+            this._containedObject.attrs[a] = entry.attrs[a];
+        }
+    }
+    
+    //Utility members
 	this._containedObject[ZaDistributionList.A2_addList] = new Array(); //members to add
 	this._containedObject[ZaDistributionList.A2_addList]._version = 1;
 	this._containedObject[ZaDistributionList.A2_removeList] = new Array(); //members to remove

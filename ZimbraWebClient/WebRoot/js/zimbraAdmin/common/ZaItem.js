@@ -754,12 +754,12 @@ ZaItem.descriptionXFormItem = {
     showAddButton:false,
     showRemoveButton:false,
     showAddOnNextRow:false,
-    enableDisableChecks:[],
+//    enableDisableChecks:[],
     visibilityChecks:[],
     //removeButtonLabel:ZaMsg.NAD_RemoveAddress,
     items: [
         {ref:".", type:_TEXTFIELD_,
-            enableDisableChecks:[],
+//            enableDisableChecks:[],
             visibilityChecks:[],
             width:"30em"}
     ]
@@ -775,12 +775,24 @@ ZaItem.getDescriptionValue = function (desp) {
     return desp ;
 }
 
-ZaItem.normalizeMultiValueAttr = function (entry, attrName) {
-    if (entry.attrs[attrName] == null) {
-        entry.attrs[attrName] = [];
-    } else if (! (entry.attrs[attrName] instanceof Array)) {
-        entry.attrs[attrName] = [entry.attrs[attrName]] ;
-    }
+/**
+ *
+ * @param entry
+ * @param attrName
+ * @return an new array object with the each value deep copied
+ */
+ZaItem.deepCloneListItem = function (sourceValue) {
+   if (sourceValue == null) {
+       return [];
+    } else if (! (sourceValue instanceof Array)) {
+       return [sourceValue] ;
+    } else {
+       var val = [] ;
+       for (var i = 0 ; i < sourceValue.length; i ++) {
+            val.push (sourceValue[i]) ;
+       }
+       return val ;
+   }
 }
 
 /**

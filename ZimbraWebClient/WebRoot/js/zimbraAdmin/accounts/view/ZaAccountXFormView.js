@@ -62,18 +62,17 @@ function(entry) {
 
     this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
-
-    ZaItem.normalizeMultiValueAttr (entry, ZaAccount.A_description) ;
     
     for (var a in entry.attrs) {
-		if(entry.attrs[a] instanceof Array) {
-			this._containedObject.attrs[a] = new Array();
-            for(var aa in entry.attrs[a]) {
-				this._containedObject.attrs[a][aa] = entry.attrs[a][aa];
-			}
-		} else {
-			this._containedObject.attrs[a] = entry.attrs[a];
-		}
+		var modelItem = this._localXForm.getModel().getItem(a) ;
+        if ((modelItem != null && modelItem.type == _LIST_)
+           || (entry.attrs[a] != null && entry.attrs[a] instanceof Array))
+        {  //need deep clone
+            this._containedObject.attrs [a] =
+                    ZaItem.deepCloneListItem (entry.attrs[a]);
+        } else {
+            this._containedObject.attrs[a] = entry.attrs[a];
+        }
 	}
 	this._containedObject.name = entry.name;
 	this._containedObject.type = entry.type;

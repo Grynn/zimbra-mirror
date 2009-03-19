@@ -63,7 +63,6 @@ function (index, form) {
 ZaDomainXFormView.prototype.setObject =
 function(entry) {
     ZaAccount.prototype.manageSpecialAttrs.call (entry) ;
-    ZaItem.normalizeMultiValueAttr (entry, ZaDomain.A_description) ;
 
     this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
@@ -85,16 +84,16 @@ function(entry) {
 	this._containedObject.type = entry.type ;
 	
 	for (var a in entry.attrs) {
-		if(entry.attrs[a] instanceof Array) {
-			this._containedObject.attrs[a] = new Array();
-			var cnt = entry.attrs[a].length;
-			for(var ix = 0; ix < cnt; ix++) {
-				this._containedObject.attrs[a][ix]=entry.attrs[a][ix];
-			}
-		} else {
-			this._containedObject.attrs[a] = entry.attrs[a];
-		}
-	}
+        var modelItem = this._localXForm.getModel().getItem(a) ;
+        if ((modelItem != null && modelItem.type == _LIST_)
+           || (entry.attrs[a] != null && entry.attrs[a] instanceof Array))
+        {  //need deep clone
+            this._containedObject.attrs [a] =
+                    ZaItem.deepCloneListItem (entry.attrs[a]);
+        } else {
+            this._containedObject.attrs[a] = entry.attrs[a];
+        }
+    }
 	if(!this._containedObject.attrs[ZaDomain.A_zimbraDomainStatus]) {
 		this._containedObject.attrs[ZaDomain.A_zimbraDomainStatus] = ZaDomain.DOMAIN_STATUS_ACTIVE;
 	}

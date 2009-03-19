@@ -62,17 +62,24 @@ function(entry) {
 		
 	if(entry.id)
 		this._containedObject.id = entry.id;
-
-    ZaItem.normalizeMultiValueAttr(entry, ZaCos.A_description) ;
-
+    
     for (var a in entry.attrs) {
-		this._containedObject.attrs[a] = entry.attrs[a];
-	}
+        var modelItem = this._localXForm.getModel().getItem(a) ;
+        if ((modelItem != null && modelItem.type == _LIST_)
+           || (entry.attrs[a] != null && entry.attrs[a] instanceof Array)) 
+        {  //need deep clone
+            this._containedObject.attrs [a] =
+                    ZaItem.deepCloneListItem (entry.attrs[a]);
+        } else {
+            this._containedObject.attrs[a] = entry.attrs[a];
+        }
+    }
 	
 	if (typeof ZaDomainAdmin == "function") {
 		this._containedObject[ZaCos.A2_zimbraDomainAdminMailQuotaAllowed] = entry [ZaCos.A2_zimbraDomainAdminMailQuotaAllowed];
 	}
-	
+    
+    /** Not needed anymore, it should be automatically handled by deepCloneListItem.
 	var servers = entry.attrs[ZaCos.A_zimbraMailHostPool];
 	if(servers != null && servers != "") {
 		if (AjxUtil.isString(servers))	 {
@@ -86,7 +93,7 @@ function(entry) {
 		}
 	} else {
 		this._containedObject.attrs[ZaCos.A_zimbraMailHostPool] = null;		
-	}
+	}  */
 
 	
 /*	if(entry.attrs[ZaCos.A_zimbraMailHostPool] instanceof Array)
@@ -131,9 +138,7 @@ function(entry) {
 
             ZaCosXFormView.themeChoices.setChoices(skins);
             ZaCosXFormView.themeChoices.dirtyChoices();
-
         }
-
 
         if(entry.getAttrs[ZaCos.A_zimbraZimletAvailableZimlets] || entry.getAttrs.all) {
             var zimlets = entry.attrs[ZaCos.A_zimbraZimletAvailableZimlets];
@@ -242,8 +247,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject) {
 
 	var cases = [];
 	var case1 = {type:_ZATABCASE_,caseKey:_tab1,numCols:1,colSizes:["auto"]};
-	
-	var case1Items = [
+
+    var case1Items = [
 		{type:_ZAGROUP_,
 			items:[
 				{ref:ZaCos.A_name, type:_INPUT_,

@@ -57,8 +57,6 @@ function (value, event, form) {
 
 ZaServerXFormView.prototype.setObject = 
 function (entry) {
-    ZaItem.normalizeMultiValueAttr (entry, ZaServer.A_description) ;
-
     this.entry = entry;
 	this._containedObject = {attrs:{}};
 	this._containedObject[ZaServer.A_showVolumes] = entry[ZaServer.A_showVolumes];
@@ -83,9 +81,17 @@ function (entry) {
 
 	this._containedObject[ZaServer.A_Volumes] = [];
 	if(entry.attrs) {
-		for(var a in entry.attrs) {
-			this._containedObject.attrs[a] = entry.attrs[a];
-		}
+        for (var a in entry.attrs) {
+            var modelItem = this._localXForm.getModel().getItem(a) ;
+            if ((modelItem != null && modelItem.type == _LIST_)
+               || (entry.attrs[a] != null && entry.attrs[a] instanceof Array))
+            {  //need deep clone
+                this._containedObject.attrs [a] =
+                        ZaItem.deepCloneListItem (entry.attrs[a]);
+            } else {
+                this._containedObject.attrs[a] = entry.attrs[a];
+            }
+        }
 	}
 
 	if(entry[ZaServer.A_Volumes]) {
