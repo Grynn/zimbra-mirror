@@ -614,7 +614,7 @@ if (ZaSearch) {
 /**
  * @argument callArgs {value, event, callback}
  */	
-    ZaSearch.prototype.dynSelectGrantees = function (value, event, callback) {
+    ZaSearch.prototype.dynSelectGrantees = function (callArgs) {
         try {
 			var value = callArgs["value"];
 			var event = callArgs["event"];
