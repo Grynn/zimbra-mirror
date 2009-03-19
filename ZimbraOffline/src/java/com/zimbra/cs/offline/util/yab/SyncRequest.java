@@ -73,7 +73,7 @@ public class SyncRequest extends Request {
     }
 
     @Override
-    public Response send() throws AuthenticationException, IOException {
+    public Response send() throws AuthenticationException, YabException, IOException {
         SyncResponse res = (SyncResponse) super.send();
         List<Result> results = res.getResults();
         if (events.size() != results.size()) {

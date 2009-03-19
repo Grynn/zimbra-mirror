@@ -29,6 +29,7 @@ import com.zimbra.cs.offline.util.yab.Entity;
 import com.zimbra.cs.offline.util.yab.ContactChange;
 import com.zimbra.cs.offline.util.yab.Field;
 import com.zimbra.cs.offline.util.yab.SimpleField;
+import com.zimbra.cs.offline.util.yab.YabException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.cs.offline.ab.SyncState;
@@ -84,7 +85,7 @@ public class SyncSession {
         }
     }
     
-    private void syncData() throws IOException, ServiceException {
+    private void syncData() throws IOException, ServiceException, YabException {
         Mailbox mbox = localData.getMailbox();
         SyncState ss = localData.loadState();
         SyncRequest req;
