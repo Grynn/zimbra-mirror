@@ -16,12 +16,15 @@
  */
 package com.zimbra.bp;
 
+import com.zimbra.cs.account.accesscontrol.AdminRight;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
+import com.zimbra.cs.service.admin.AdminRightCheckPoint;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.soap.ZimbraSoapContext;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Hashtable;
 
@@ -60,4 +63,9 @@ public class UpdateBulkProvisionStatus  extends AdminDocumentHandler {
 
         return response;
 	}
+	
+    @Override
+    public void docRights(List<AdminRight> relatedRights, List<String> notes) {
+        notes.add(AdminRightCheckPoint.Notes.ALLOW_ALL_ADMINS);
+    }
 }

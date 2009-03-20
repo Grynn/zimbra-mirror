@@ -25,9 +25,11 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.Provisioning.ServerBy;
+import com.zimbra.cs.account.accesscontrol.AdminRight;
 import com.zimbra.cs.rmgmt.RemoteManager;
 import com.zimbra.cs.rmgmt.RemoteResult;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
+import com.zimbra.cs.service.admin.AdminRightCheckPoint;
 import com.zimbra.soap.ZimbraSoapContext;
 import com.zimbra.common.util.ZimbraLog;
 
@@ -42,6 +44,9 @@ public class GenerateCSR extends AdminDocumentHandler {
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
+        
+        checkRight(lc, context, null, AdminRight.PR_SYSTEM_ADMIN_ONLY);
+        
         Provisioning prov = Provisioning.getInstance();
         
         Server server = null;
@@ -129,5 +134,10 @@ public class GenerateCSR extends AdminDocumentHandler {
         }
    
         return subjectAltNames ;
+    }
+    
+    @Override
+    public void docRights(List<AdminRight> relatedRights, List<String> notes) {
+        notes.add(AdminRightCheckPoint.Notes.SYSTEM_ADMINS_ONLY);
     }
 }

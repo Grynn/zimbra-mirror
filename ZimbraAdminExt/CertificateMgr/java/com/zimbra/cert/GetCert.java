@@ -28,10 +28,12 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.Provisioning.ServerBy;
+import com.zimbra.cs.account.accesscontrol.AdminRight;
 import com.zimbra.cs.rmgmt.RemoteManager;
 import com.zimbra.cs.rmgmt.RemoteResult;
 import com.zimbra.cs.rmgmt.RemoteResultParser;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
+import com.zimbra.cs.service.admin.AdminRightCheckPoint;
 import com.zimbra.soap.ZimbraSoapContext;
 
 
@@ -45,6 +47,9 @@ public class GetCert extends AdminDocumentHandler {
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException{
         ZimbraSoapContext lc = getZimbraSoapContext(context);
+        
+        checkRight(lc, context, null, AdminRight.PR_SYSTEM_ADMIN_ONLY);
+        
         Provisioning prov = Provisioning.getInstance();
         try {
         	Server server = null;
@@ -118,5 +123,10 @@ public class GetCert extends AdminDocumentHandler {
             ZimbraLog.security.warn ("Failed to retrieve the certificate information for " + certType + ".");
             ZimbraLog.security.error(e) ;
         }
+    }
+    
+    @Override
+    public void docRights(List<AdminRight> relatedRights, List<String> notes) {
+        notes.add(AdminRightCheckPoint.Notes.SYSTEM_ADMINS_ONLY);
     }
 }
