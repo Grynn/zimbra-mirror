@@ -40,7 +40,7 @@ public class CreateContactTag extends ContactOpTag {
             if (mAttrs.isEmpty() || allFieldsEmpty())
                 throw ZTagLibException.EMPTY_CONTACT("can't create an empty contact", null);
 
-            String id = getMailbox().createContact(mFolderid, mTagids, mAttrs);
+            String id = getMailbox().createContact(mFolderid, mTagids, mAttrs).getId();
             getJspContext().setAttribute(mVar, id, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);

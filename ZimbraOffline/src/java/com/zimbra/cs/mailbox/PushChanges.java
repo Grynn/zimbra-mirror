@@ -523,7 +523,7 @@ public class PushChanges {
     private String uploadMessage(Message msg) throws ServiceException {
         int timeout = (int) (OfflineLC.http_connection_timeout.intValue() + msg.getSize() / 25000 * Constants.MILLIS_PER_SECOND);
     	if (ombx.getRemoteServerVersion().isAtLeast(minServerVersionForUploadStreaming))
-    		return getZMailbox().uploadContentAsStream(msg.getContentStream(), Mime.CT_MESSAGE_RFC822 + "; name=msg-" + msg.getId(), msg.getSize(), timeout);
+    		return getZMailbox().uploadContentAsStream("msg-" + msg.getId(), msg.getContentStream(), Mime.CT_MESSAGE_RFC822, msg.getSize(), timeout);
     	else
     		return getZMailbox().uploadAttachment("message", msg.getContent(), Mime.CT_MESSAGE_RFC822, timeout);
     }
@@ -964,6 +964,8 @@ public class PushChanges {
             if (!sfe.getCode().equals(MailServiceException.NO_SUCH_CONTACT))
                 throw sfe;
             OfflineLog.offline.info("push: remote contact " + id + " has been deleted; skipping");
+        } catch (IOException e) {
+            throw ServiceException.FAILURE("Unable to sync contact.", e);
         }
 
         synchronized (ombx) {
