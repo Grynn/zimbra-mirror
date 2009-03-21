@@ -1,0 +1,19 @@
+SourceZCSServer=10.66.118.237
+SourceAdminUser=Admin
+SourceAdminPwd=z1mbr4
+SourceAdminPort=7071
+TargetZCSServer=10.66.118.237
+TargetAdminUser=Admin
+TargetAdminPwd=z1mbr4
+TargetAdminPort=7071
+Threads=4
+WorkingDirectory=C:\Zimbra_Work\YZYMigration\ZCSProvisioning\zcsprov\mailboxdumps
+FailedDirectory=/var/tmp/mailboxfailures
+SuccessDirectory=/C:\Zimbra_Work\YZYMigration\ZCSProvisioning\zcsprov\successes
+LogDirectory=C:\Zimbra_Work\YZYMigration\ZCSProvisioning\zcsprov\logs
+KeepSuccessFiles=TRUE
+DomainMap=in.zimbra.com zmexch.in.zimbra.com
+DomainMap=goog.com yhoo.com
+Accounts=test1@in.zimbra.com,test11@in.zimbra.com,av1_different@in.zimbra.com,av1@in.zimbra.com,av2@in.zimbra.com
+#test1@in.zimbra.com,test11@in.zimbra.com,av1_different@in.zimbra.com,av1@in.zimbra.com,av2@in.zimbra.com
+#test1@in.zimbra.com,test11@in.zimbra.com,av1_different@in.zimbra.com

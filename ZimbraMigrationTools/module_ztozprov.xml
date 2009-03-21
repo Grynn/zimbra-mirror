@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="module_ztozprov" default="compile.module.ztozprov">
+  <dirname property="module.ztozprov.basedir" file="module_ztozprov.xml"/>
+  
+  <property name="module.jdk.home.ztozprov" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.ztozprov" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.ztozprov" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.ztozprov" value="${compiler.args}"/>
+  
+  <property name="ztozprov.output.dir" value="${module.ztozprov.basedir}/out/production/ztozprov"/>
+  <property name="ztozprov.testoutput.dir" value="${module.ztozprov.basedir}/out/test/ztozprov"/>
+  
+  <path id="ztozprov.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="ztozprov.module.classpath">
+    <path refid="${module.jdk.classpath.ztozprov}"/>
+    <pathelement location="${module.ztozprov.basedir}/../../Program Files/JetBrains/IntelliJ IDEA 7.0.3/lib/javaee.jar"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="ztozprov.runtime.module.classpath">
+    <path refid="${module.jdk.classpath.ztozprov}"/>
+    <pathelement location="${ztozprov.output.dir}"/>
+    <pathelement location="${ztozprov.testoutput.dir}"/>
+    <pathelement location="${module.ztozprov.basedir}/../../Program Files/JetBrains/IntelliJ IDEA 7.0.3/lib/javaee.jar"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.ztozprov">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.ztozprov">
+    <patternset refid="excluded.from.module.ztozprov"/>
+  </patternset>
+  
+  <path id="ztozprov.module.sourcepath">
+    <dirset dir="${module.ztozprov.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.ztozprov" depends="compile.module.ztozprov.production,compile.module.ztozprov.tests" description="Compile module ztozprov"/>
+  
+  <target name="compile.module.ztozprov.production" description="Compile module ztozprov; production classes">
+    <mkdir dir="${ztozprov.output.dir}"/>
+    <javac2 destdir="${ztozprov.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.ztozprov}/javac">
+      <compilerarg line="${compiler.args.ztozprov}"/>
+      <bootclasspath refid="ztozprov.module.bootclasspath"/>
+      <classpath refid="ztozprov.module.classpath"/>
+      <src refid="ztozprov.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.ztozprov"/>
+    </javac2>
+    
+    <copy todir="${ztozprov.output.dir}">
+      <fileset dir="${module.ztozprov.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.ztozprov.tests" depends="compile.module.ztozprov.production" description="compile module ztozprov; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.ztozprov" description="cleanup module">
+    <delete dir="${ztozprov.output.dir}"/>
+    <delete dir="${ztozprov.testoutput.dir}"/>
+  </target>
+  
+  <property name="ztozprovjavaeeapplication.dir.exploded" value="${module.ztozprov.basedir}/out/exploded/ztozprovEar"/>
+  <target name="j2ee.build.ztozprovjavaeeapplication" depends="compile.module.ztozprov" description="Build configured Java EE directories and archives for facet 'javaEEApplication'">
+    <antcall target="j2ee.build.exploded.ztozprovjavaeeapplication">
+      <param name="j2ee.dir.exploded" value="${ztozprovjavaeeapplication.dir.exploded}"/>
+    </antcall>
+  </target>
+  
+  <!-- Call the target to build exploded directory for module 'javaEEApplication'.
+       Path to the exploded directory is specified by parameter 'j2ee.dir.exploded' -->
+  <target name="j2ee.build.exploded.ztozprovjavaeeapplication" description="Build exploded directory for facet 'javaEEApplication'">
+    <copy file="${module.ztozprov.basedir}/META-INF/application.xml" tofile="${j2ee.dir.exploded}/META-INF/application.xml"/>
+  </target>
+  
+  <!-- Call the target to build ear archive for module 'javaEEApplication'.
+       Path to the archive file is specified by parameter 'j2ee.path.jar' -->
+  <target name="j2ee.build.jar.ztozprovjavaeeapplication" description="Build Java EE archive for facet 'javaEEApplication'">
+    <dirname property="jar.dir" file="${j2ee.path.jar}"/>
+    <mkdir dir="${jar.dir}"/>
+    <jar destfile="${j2ee.path.jar}" duplicate="preserve">
+      <manifest>
+        <attribute name="Created-By" value="IntelliJ IDEA"/>
+        <attribute name="Manifest-Version" value="1.0"/>
+      </manifest>
+      <zipfileset file="${module.ztozprov.basedir}/META-INF/application.xml" prefix="META-INF"/>
+    </jar>
+  </target>
+</project>
