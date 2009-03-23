@@ -2235,7 +2235,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public void flushCache(CacheEntryType type, CacheEntry[] entries) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("flushCache");
+        //no-op
     }
     
     private String promoteAccount(String accountId) throws ServiceException {
