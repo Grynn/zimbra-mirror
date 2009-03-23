@@ -386,13 +386,13 @@ function(spanElement, contentObjText, matchContext, ev) {
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
 
-	var parts = addr.split("@");
+	/*var parts = addr.split("@");
 	var domain = (parts.length > 0) ? parts[1] : null;
 	if (domain && domain == "yahoo.com") {
 		var yProfileUrl = "http://profiles.yahoo.com/" + parts[0];
 		window.open(yProfileUrl, "_blank");
 		return;
-	}
+	}*/
 
 	var contactList = AjxDispatcher.run("GetContacts");
 	var contact = contactList ? contactList.getContactByEmail(addr) : null;
