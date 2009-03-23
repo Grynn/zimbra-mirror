@@ -366,6 +366,8 @@
         </copy>
 		<fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" />
 
+		<copy tofile="${dist.dir}/conf/globs2" file="${server.config.dir}/globs2" overwrite="true" />
+		<copy tofile="${dist.dir}/conf/magic" file="${server.config.dir}/magic" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/cacerts" file="${config.dir}/cacerts" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/keystore.base" file="${config.dir}/keystore.base" overwrite="true" />
 
