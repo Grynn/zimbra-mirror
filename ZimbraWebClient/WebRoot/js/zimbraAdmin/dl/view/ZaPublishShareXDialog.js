@@ -91,6 +91,7 @@ ZaPublishShareXDialog.myXFormModifier = function(xFormObject) {
 		{type:_GROUP_, colSizes:["200px","200px","100px"],numCols:3,colSpan:"*", items:[
 			{ref:ZaDistributionList.A2_sharesOwner, type:_DYNSELECT_,editable:true,width:"200px", inputSize:30, label:ZaMsg.Shares_OwnersEmailAddress,
 				dataFetcherClass:ZaSearch,
+				toolTipContent:ZaMsg.tt_StartTypingAccountName,
 				dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,visibilityChecks:[],enableDisableChecks:[]
 			},
 			{type:_DWT_BUTTON_, label:ZaMsg.Shares_FindShares, width:80, 

@@ -541,6 +541,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 				items: [
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
 						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
+						toolTipContent:ZaMsg.tt_StartTypingCOSName,
 						onChange:ZaAccount.setCosChanged,
 						emptyText:ZaMsg.enterSearchTerm,						
 						enableDisableChecks:[ZaNewAccountXWizard.isAutoCos],

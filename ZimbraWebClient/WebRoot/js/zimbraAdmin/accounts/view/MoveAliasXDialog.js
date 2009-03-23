@@ -135,6 +135,7 @@ function() {
 							},						
 							{type:_DYNSELECT_, ref:ZaSearch.A_selected, dataFetcherClass:ZaSearch, 
 								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts,
+								toolTipContent:ZaMsg.tt_StartTypingAccountName,
 								width:"200px", inputSize:30, editable:true, forceUpdate:true,
 								choices:new XFormChoices([], XFormChoices.OBJECT_REFERENCE_LIST, "name", "name"),
 								visibilityChecks:[],enableDisableChecks:[],

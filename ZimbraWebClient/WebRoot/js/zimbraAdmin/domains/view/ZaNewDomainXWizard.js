@@ -707,6 +707,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject) {
 						]},	
 						{ref:ZaDomain.A_description, type:_TEXTFIELD_, label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width:250},
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
+							toolTipContent:ZaMsg.tt_StartTypingCOSName,
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
 							onChange:ZaNewDomainXWizard.onCOSChanged,
 							dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,

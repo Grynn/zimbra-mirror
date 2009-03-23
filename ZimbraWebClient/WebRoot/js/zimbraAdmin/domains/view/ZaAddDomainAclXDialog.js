@@ -47,6 +47,7 @@ function() {
 					items:[
 						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
+							toolTipContent:ZaMsg.tt_StartTypingDLName,
 							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchGroups
 						}						
 					]
@@ -57,6 +58,7 @@ function() {
 					items:[
 						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
+							toolTipContent:ZaMsg.tt_StartTypingAccountName,
 							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchAccounts
 						}						
 					]
@@ -67,6 +69,7 @@ function() {
 					items:[
 						{ref:".", type:_ADDR_ACL_, label:null, labelLocation:_NONE_,
 							visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false},
+							toolTipContent:ZaMsg.tt_StartTypingDomainName,
 							forceUpdate:true,dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains
 						}
 					]

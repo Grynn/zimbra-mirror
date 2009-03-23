@@ -904,6 +904,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 							enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
 							visibilityChecks:[],
 							bmolsnr:true,
+							toolTipContent:ZaMsg.tt_StartTypingCOSName,
 							dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
 							onChange:ZaAccount.setCosChanged,
 							emptyText:ZaMsg.enterSearchTerm,

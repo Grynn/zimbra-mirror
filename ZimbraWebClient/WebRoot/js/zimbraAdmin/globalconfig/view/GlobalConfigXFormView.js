@@ -176,6 +176,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject) {
 							},*/
 							{ref:ZaGlobalConfig.A_zimbraDefaultDomainName, type:_DYNSELECT_,
 								label: ZaMsg.NAD_DefaultDomainName,
+								toolTipContent:ZaMsg.tt_StartTypingDomainName,
 								dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
 								dataFetcherClass:ZaSearch,editable:true
 							},

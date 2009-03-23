@@ -279,9 +279,11 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 				{ref:ZaResource.A_COSId, type:_DYNSELECT_,label: null, 
 					inputPreProcessor:ZaAccountXFormView.preProcessCOS,
 					visibilityChecks:[],
+					emptyText:ZaMsg.enterSearchTerm,
 					enableDisableChecks:[ [XForm.checkInstanceValue,ZaResource.A2_autoCos,"FALSE"]],
 					enableDisableChangeEventSources:[ZaResource.A2_autoCos],
 					dataFetcherMethod:ZaSearch.prototype.dynSelectSearchCoses,
+					toolTipContent:ZaMsg.tt_StartTypingCOSName,
 					onChange:ZaAccount.setCosChanged,
 					dataFetcherClass:ZaSearch,editable:true,getDisplayValue:function(newValue) {
 							if(ZaItem.ID_PATTERN.test(newValue)) {

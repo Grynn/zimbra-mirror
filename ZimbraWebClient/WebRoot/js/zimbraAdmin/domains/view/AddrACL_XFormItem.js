@@ -42,6 +42,11 @@ AddrACL_XFormItem.prototype.initializeItems = function() {
 	var dataFetcherMethod = this.getInheritedProperty("dataFetcherMethod");
 	if(dataFetcherMethod)
 		this.items[0].dataFetcherMethod = dataFetcherMethod;
+		
+	var toolTipContent = this.getInheritedProperty("toolTipContent");
+	if(toolTipContent)
+		this.items[0].toolTipContent = toolTipContent;
+		
 	Composite_XFormItem.prototype.initializeItems.call(this);
 }
 AddrACL_XFormItem.prototype.items = [
