@@ -849,8 +849,9 @@
 		<copy tofile="${dist.dir}/linux/prism/extensions/prism-runtime@developer.mozilla.org/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 	
 		<!-- unzip zimbra drag and drop extension -->
+		<ant dir="../ZimbraWebClient" target="ffext-reset-the-world" inheritAll="false"/>
 		<mkdir dir="${dist.dir}/profile/extensions/zimbradnd@zimbra.com"/>
-		<unzip src="src/installer/extensions/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
+		<unzip src="../ZimbraWebClient/ffext/build/ZimbraDnD.xpi" dest="${dist.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 		
 		<!-- unzip inquisitor extension -->
 		<mkdir dir="${dist.dir}/profile/extensions/Inquisitor@yahoo"/>
