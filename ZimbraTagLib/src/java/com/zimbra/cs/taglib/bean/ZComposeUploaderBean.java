@@ -17,6 +17,9 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean.MessageAttachment;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.service.FileUploadServlet;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
@@ -153,8 +156,9 @@ public class ZComposeUploaderBean {
     public static final String F_reminderSendEmail = "reminderSendEmail";
     public static final String F_reminderSendMobile = "reminderSendMobile";
     public static final String F_reminderSendYIM = "reminderSendYIM";
-
-    private static final long DEFAULT_MAX_SIZE = 100 * 1024 * 1024;
+    public static final String F_limitByFileUploadMaxSize = "lbfums";
+    
+    private static final long DEFAULT_MAX_SIZE = 10 * 1024 * 1024;
 
     private boolean mIsUpload;
     private List<FileItem> mItems;
@@ -169,9 +173,12 @@ public class ZComposeUploaderBean {
     @SuppressWarnings("unchecked")
     public ZComposeUploaderBean(PageContext pageContext, ZMailbox mailbox) throws JspTagException, ServiceException {
         HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
-        ServletFileUpload upload = getUploader();
-        try {
 
+        //bug:32865
+        boolean limitByFileUploadMaxSize = (req.getParameter(F_limitByFileUploadMaxSize) != null);
+        ServletFileUpload upload = getUploader(limitByFileUploadMaxSize);
+
+        try {
             mIsUpload = ServletFileUpload.isMultipartContent(req);
             if (mIsUpload) {
                 mParamValues = new HashMap<String, List<String>>();
@@ -494,16 +501,25 @@ public class ZComposeUploaderBean {
 
     public String getContactLocation() { return getParam(F_contactLocation); }
     
-    private static ServletFileUpload getUploader() {
-        // look up the maximum file size for uploads
-        // TODO: get from config,
+    private static ServletFileUpload getUploader(boolean limitByFileUploadMaxSize) {
         DiskFileItemFactory dfif = new DiskFileItemFactory();
         ServletFileUpload upload;
         
         dfif.setSizeThreshold(32 * 1024);
         dfif.setRepository(new File(getTempDirectory()));
         upload = new ServletFileUpload(dfif);
-        upload.setSizeMax(DEFAULT_MAX_SIZE);
+        try {
+            if(limitByFileUploadMaxSize) {
+                upload.setSizeMax(Provisioning.getInstance().getLocalServer().getLongAttr(Provisioning.A_zimbraFileUploadMaxSize, DEFAULT_MAX_SIZE));
+            } else {
+                upload.setSizeMax(Provisioning.getInstance().getConfig().getLongAttr(Provisioning.A_zimbraMtaMaxMessageSize, DEFAULT_MAX_SIZE));
+            }
+        } catch (ServiceException e) {
+            if (ZimbraLog.webclient.isDebugEnabled()) {
+				ZimbraLog.webclient.debug("unable to read " +
+                        ((limitByFileUploadMaxSize) ? Provisioning.A_zimbraFileUploadMaxSize : Provisioning.A_zimbraMtaMaxMessageSize) + "attribute" + e.getMessage());
+			}
+        }
         return upload;
     }
 
