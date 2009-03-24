@@ -57,7 +57,7 @@ public class OfflineMailSender extends MailSender {
 
         try {
             // set the From, Sender, Date, Reply-To, etc. headers
-            updateHeaders(mm, acct, authuser, octxt, null /* don't set originating IP in offline client */, replyToSender);
+            updateHeaders(mm, acct, authuser, octxt, null /* don't set originating IP in offline client */, replyToSender, false);
 
             // save as a draft for now...
             ParsedMessage pm = new ParsedMessage(mm, mm.getSentDate().getTime(), mbox.attachmentsIndexingEnabled());
