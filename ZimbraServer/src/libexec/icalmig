@@ -20,7 +20,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.24";
+my $version = "1.25";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -602,6 +602,8 @@ sub processfile
       $g_isdelrdate=0;
       $g_isrdate=0;
       $IsFirstRecId=0;
+      #reset it #36415:it will add VTIMEZONE to all VCALENDAR components
+      $IsTZHeaderPrinted=0;
     }
 #Case: 1 *******************************************************>>>>>>>>>>>
     #shall we delete the RDATEs from VEVENT with RRULE and RDATEs?
