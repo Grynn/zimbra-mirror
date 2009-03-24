@@ -1923,7 +1923,7 @@ function(columnId) {
 	if (this._currentColId && (columnId != this._currentColId)) {
 		// unset current column arrow
 		var headerCol = this._headerIdHash[this._currentColId];
-		if (!headerCol._noSortArrow) {
+		if (headerCol && !headerCol._noSortArrow) {
 			var field = headerCol._field;
 			var oldArrowId = DwtId.getListViewHdrId(DwtId.WIDGET_HDR_ARROW, this._view, field);
 			var oldArrowCell = document.getElementById(oldArrowId);
