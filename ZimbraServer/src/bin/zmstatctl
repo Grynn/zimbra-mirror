@@ -183,6 +183,7 @@ if (defined($cmd)) {
             if ($pid) {
                 print "Sending HUP to process $pid\n";
                 my $rc = kill(1, $pid);  # SIGHUP
+                print "PID $pid was not running\n" if !$rc;
             }
         }
     } else {
