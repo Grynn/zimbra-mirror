@@ -135,7 +135,7 @@ DwtDialog = function(params) {
 		var button = this._button[list[i]];
 		this._tabGroup.addMember(button);		
 	}
-}
+};
 
 DwtDialog.PARAMS = ["parent", "className", "title", "standardButtons", "extraButtons", "zIndex", "mode", "loc"];
 
@@ -289,13 +289,13 @@ DwtDialog.prototype.setButtonListener =
 function(buttonId, listener) {
 	this._button[buttonId].removeSelectionListeners();
 	this._button[buttonId].addSelectionListener(listener);
-}
+};
 
 DwtDialog.prototype.setEnterListener =
 function(listener) {
 	this.removeAllListeners(DwtEvent.ENTER);
 	this.addEnterListener(listener);
-}
+};
 
 DwtDialog.prototype.associateEnterWithButton =
 function(id) {
@@ -316,8 +316,13 @@ function(actionCode, ev) {
 			break;
 			
 		case DwtKeyMap.CANCEL:
+			// hitting ESC should act as a cancel
+			var handled = false;
+			handled = handled || this._runCallbackForButtonId(DwtDialog.CANCEL_BUTTON);
+			handled = handled || this._runCallbackForButtonId(DwtDialog.NO_BUTTON);
+			handled = handled || this._runCallbackForButtonId(DwtDialog.DISMISS_BUTTON);
 			this.popdown();
-			break;
+			return true;
 
 		case DwtKeyMap.YES:
 			if (this._buttonDesc[DwtDialog.YES_BUTTON]) {
@@ -458,10 +463,12 @@ function(ev, args) {
 
 DwtDialog.prototype._runCallbackForButtonId =
 function(id, args) {
-	var callback = this._buttonDesc[id].callback;
-	if (!callback) return;
+	var buttonDesc = this._buttonDesc[id];
+	var callback = buttonDesc && buttonDesc.callback;
+	if (!callback) return false;
 	args = (args instanceof Array) ? args : [args];
 	callback.run.apply(callback, args);
+	return true;
 };
 
 DwtDialog.prototype._runEnterCallback =
