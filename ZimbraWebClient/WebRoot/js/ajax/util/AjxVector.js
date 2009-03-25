@@ -62,10 +62,20 @@ AjxVector.prototype.addList =
 function(list) {
 	if (!list) return;
 
-	if (list.length) // array
+	if (list.length) {// array
 		this._array = this._array.concat(list);
-	else if (list.size && list.size()) // AjxVector
+	} else if (list.size && list.size()) {// AjxVector
+		// in new window, IE seems to lose its rtti :(
+		if (AjxEnv.isIE && (!(list._array instanceof Array))) {
+			var newList = [];
+			for (var i = 0; i < list._array.length; i++) {
+				newList.push(list._array[i]);
+			}
+			list._array = newList;
+		}
+
 		this._array = this._array.concat(list._array);
+	}
 };
 
 AjxVector.prototype.remove =
