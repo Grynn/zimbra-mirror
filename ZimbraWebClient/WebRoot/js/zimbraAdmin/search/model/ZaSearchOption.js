@@ -319,7 +319,7 @@ function (optionId, height){
 	var advancedItems = [
 		{ type: _GROUP_,  numCols: 2, items:[
 		 		{type:_OUTPUT_, colSpan: "*", cssClass: "ZaSearchOptionViewSubHeader", 
-		 			value: ZaMsg.search_option_lastAccessTime  },
+		 			value: ZaMsg.search_option_lastAccessTime, width: 280  },
 		 		{type: _GROUP_, numCols: 5, colSpan: "*", 
 		 			items: [
 		 				{type: _CELL_SPACER_, width: 40 },
@@ -354,15 +354,17 @@ function (optionId, height){
 			 			onChange: ZaSearchBuilderController.handleOptions,
 			 			visibilityChecks:[[XForm.checkInstanceValue,ZaSearchOption.A_enableAccountLastLoginTime_From,"TRUE"]],
 			 			//relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_From] == 'TRUE'", 
-			 			
+			 			bmolsnr:true,
+                        visibilityChangeEventSources: [ZaSearchOption.A_enableAccountLastLoginTime_From] ,
 			 			label:ZaMsg.search_option_label_from, labelLocation:_LEFT_
 					},
 					{ref:ZaSearchOption.A_accountLastLoginTime_To, colSpan: "*", type:_DWT_DATETIME_,
 			 			onChange: ZaSearchBuilderController.handleOptions,	
 			 			visibilityChecks:[[XForm.checkInstanceValue,ZaSearchOption.A_enableAccountLastLoginTime_To,"TRUE"]],
 			 			//relevant: "instance[ZaSearchOption.A_enableAccountLastLoginTime_To] == 'TRUE'", 
-			 				 				
-			 			label:ZaMsg.search_option_label_to, labelLocation:_LEFT_
+                        visibilityChangeEventSources: [ZaSearchOption.A_enableAccountLastLoginTime_To] ,			 				 				
+			 			bmolsnr:true,
+                        label:ZaMsg.search_option_label_to, labelLocation:_LEFT_
 					}]
 		 		},
 				{type:_SPACER_} //used to avoid the missing border of the calendar
@@ -406,8 +408,8 @@ function (optionId) {
 	}else if (optionId == ZaSearchOption.BASIC_TYPE_ID) {
 		//no default value
 	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
-		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_From] = "TRUE" ;
-		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_To] = "TRUE" ;
+		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_From] = "FALSE" ;
+		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_To] = "FALSE" ;
 		optionInstance[ZaSearchOption.A_includeNeverLoginedAccounts] = "FALSE" ;
 	}
 	

@@ -96,14 +96,29 @@ function (value, event, form){
 		if (value == "TRUE") { 
 			invertValue = "FALSE";
 		}
-		//can't both be set
-		if (invertValue == "FALSE" && this.getRef () == ZaSearchOption.A_objTypeAccountDomainAdmin) {
+
+        var ref = this.getRef () ; 
+        //can't both be set
+		if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeAccountDomainAdmin) {
 			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountAdmin) ;
-		}else if (invertValue == "FALSE" && this.getRef () == ZaSearchOption.A_objTypeAccountAdmin) {
+		}else if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeAccountAdmin) {
 			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
 		}
-		
-		//set the query value
+
+        //set the advanced login timestamp attributes value
+        if ((ref == ZaSearchOption.A_enableAccountLastLoginTime_From || ref == ZaSearchOption.A_enableAccountLastLoginTime_To)
+            && ( value == "TRUE" )) {
+            var loginTimeRef ;
+            if (ref == ZaSearchOption.A_enableAccountLastLoginTime_From) loginTimeRef = ZaSearchOption.A_accountLastLoginTime_From ;
+            if (ref == ZaSearchOption.A_enableAccountLastLoginTime_To) loginTimeRef = ZaSearchOption.A_accountLastLoginTime_To ;
+
+            var loginTime = this.getInstanceValue (loginTimeRef);
+            if (!loginTime) {
+                this.setInstanceValue (new Date(), loginTimeRef) ;
+            }
+        }
+
+        //set the query value
 		controller.setQuery () ;
 	}
 	
