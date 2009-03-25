@@ -253,7 +253,7 @@
       <module fileurl="file://$PROJECT_DIR$/ZimbraMigrationTools.iml" filepath="$PROJECT_DIR$/ZimbraMigrationTools.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="false" project-jdk-name="1.5" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ResourceManagerContainer">
@@ -277,11 +277,11 @@
   <component name="libraryTable">
     <library name="lib">
       <CLASSES>
-        <root url="file://C:/opt/zimbra/lib/jars" />
+        <root url="file://C:/Zimbra_Work/src/FRANKLIN/ZimbraCommon/jars" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
-      <jarDirectory url="file://C:/opt/zimbra/lib/jars" recursive="false" />
+      <jarDirectory url="file://C:/Zimbra_Work/src/FRANKLIN/ZimbraCommon/jars" recursive="false" />
     </library>
   </component>
 </project>

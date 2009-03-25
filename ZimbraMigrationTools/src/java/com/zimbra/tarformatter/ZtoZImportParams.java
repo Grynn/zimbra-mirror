@@ -39,7 +39,9 @@ public class ZtoZImportParams
     public String KeepSuccessFiles;
     public HashMap<String,String> DomainMap;
     public String SourceServerURI;
+    public String TrgtServerURI;
     public ArrayList<String> AccountsList;
+    public boolean debug_mig;
 
     ZtoZImportParams()
     {
@@ -61,5 +63,6 @@ public class ZtoZImportParams
         DomainMap =new HashMap<String,String>();
         SourceServerURI="";
         AccountsList=new ArrayList<String>();
+        debug_mig=false;
     }
 }

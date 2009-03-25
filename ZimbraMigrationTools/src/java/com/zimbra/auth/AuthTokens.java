@@ -24,6 +24,8 @@ public class AuthTokens
     private static HashMap<String,String> AdminSessionIDMap=new HashMap<String,String>();
     private static HashMap<String,String> NonAdminAuthTokenMap = new HashMap<String,String>();
     private static HashMap<String,String> NonAdminSessionIDMap=new HashMap<String,String>();
+    private static HashMap<String,String> AdminDestAuthTokenMap = new HashMap<String,String>();
+    private static HashMap<String,String> AdminDestSessionIDMap=new HashMap<String,String>();
 
     public static void set_admin_auth_token(String ZCSUrl,String auth_token)
     {
@@ -38,6 +40,14 @@ public class AuthTokens
         if(!NonAdminAuthTokenMap.containsKey(ZCSUrl))
         {
             NonAdminAuthTokenMap.put(ZCSUrl,auth_token);
+        }
+    }
+
+    public static void set_dest_admin_auth_token(String ZCSUrl,String auth_token)
+    {
+        if(!AdminDestAuthTokenMap.containsKey(ZCSUrl))
+        {
+            AdminDestAuthTokenMap.put(ZCSUrl,auth_token);
         }
     }
 
@@ -59,6 +69,14 @@ public class AuthTokens
         return null;
     }
 
+    public static String get_dest_admin_auth_token(String ZCSUrl)
+    {
+        if(AdminDestAuthTokenMap.containsKey(ZCSUrl))
+        {
+            return AdminDestAuthTokenMap.get(ZCSUrl);
+        }
+        return null;
+    }
 
     public static void set_admin_sessionid(String ZCSUrl,String sessionid)
     {
@@ -76,6 +94,14 @@ public class AuthTokens
         }
     }
 
+    public static void set_dest_admin_sessionid(String ZCSUrl,String sessionid)
+    {
+        if(!AdminDestSessionIDMap.containsKey(ZCSUrl))
+        {
+            AdminDestSessionIDMap.put(ZCSUrl,sessionid);
+        }
+    }
+
     public static String get_admin_sessionid(String ZCSUrl)
     {
         if(AdminSessionIDMap.containsKey(ZCSUrl))
@@ -90,6 +116,15 @@ public class AuthTokens
         if(NonAdminSessionIDMap.containsKey(ZCSUrl))
         {
             return NonAdminSessionIDMap.get(ZCSUrl);
+        }
+        return null;
+    }
+
+    public static String get_dest_admin_sessionid(String ZCSUrl)
+    {
+        if(AdminDestSessionIDMap.containsKey(ZCSUrl))
+        {
+            return AdminDestSessionIDMap.get(ZCSUrl);
         }
         return null;
     }

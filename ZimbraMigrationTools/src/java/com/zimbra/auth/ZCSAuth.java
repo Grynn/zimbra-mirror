@@ -128,7 +128,8 @@ public class ZCSAuth
             //create SOAP Body
             Name bodyName=null;
             SOAPElement bodyElement=null;
-            if(iauthtype== ZMSoapSession.AUTH_TYPE_ADMIN)
+            if((iauthtype== ZMSoapSession.AUTH_TYPE_ADMIN)||
+               (iauthtype== ZMSoapSession.AUTH_TYPE_ADMIN_DEST))
             {
                 bodyName = se.createName("AuthRequest", "nsg","urn:zimbraAdmin");
                 bodyElement = body.addBodyElement(bodyName);
@@ -184,7 +185,7 @@ public class ZCSAuth
                 session_id= ZCSUtils.StFindNodeValue(response.getSOAPHeader().getFirstChild(),"sessionId");
                 if ((auth_token!=null)) //&& (session_id!=null))
                 {
-                    auth_logger.log(Level.INFO,"AuthToken: "+auth_token +"\nSession_ID: "+session_id);
+                    //auth_logger.log(Level.INFO,"AuthToken: "+auth_token +"\nSession_ID: "+session_id);
                     ret= true;
                 }
             }

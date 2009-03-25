@@ -357,7 +357,8 @@ public class ZCSUtils
     public static String GetSlashedDir(String dirpath)
     {
         String retval=dirpath;
-        if ((retval.charAt(retval.length()-1)!='/') ||(retval.charAt(retval.length()-1)!='\\'))
+
+        if (retval.charAt(retval.length()-1)!='/')
         {
             retval = retval+'/';
         }

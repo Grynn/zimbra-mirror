@@ -220,7 +220,7 @@ public class ZCSACProvision
         {
             prog_logger.log(Level.WARNING, "GetAccountInfoByName Failed: "+name);
         }
-        else
+        if(dump_all)
         {
             prog_logger.log(Level.INFO, "Success in GetAccountInfoByName: "+name);
         }
@@ -234,7 +234,7 @@ public class ZCSACProvision
         {
             prog_logger.log(Level.WARNING, "ModifyAccountMailTransport Failed: "+zimbraid);
         }
-        else
+        if(dump_all)
         {
             prog_logger.log(Level.INFO, "Success in ModifyAccountMailTransport: "+zimbraid);
         }
@@ -248,7 +248,7 @@ public class ZCSACProvision
         {
             prog_logger.log(Level.WARNING, "ModifyAccountStatus Failed: "+zimbraid);
         }
-        else
+        if(dump_all)
         {
             prog_logger.log(Level.INFO, "Success in ModifyAccountStatus: "+zimbraid);
         }
@@ -262,7 +262,7 @@ public class ZCSACProvision
         {
             prog_logger.log(Level.WARNING, "AddAccountAliasRequest Failed: "+alias);
         }
-        else
+        if(dump_all)
         {
             prog_logger.log(Level.INFO, "Success in AddAccountAliasRequest: "+alias);
         }
@@ -278,7 +278,7 @@ public class ZCSACProvision
         {
             prog_logger.log(Level.WARNING, "RemovePassword Failed: "+zimbraid);
         }
-        else
+        if(dump_all)
         {
             prog_logger.log(Level.INFO, "Success in RemovePassword: "+zimbraid);
         }
@@ -292,7 +292,7 @@ public class ZCSACProvision
         {
             prog_logger.log(Level.WARNING, "AddZMAuthMech Failed: "+Domain);
         }
-        else
+        if(dump_all)
         {
             prog_logger.log(Level.INFO, "Success in AddZMAuthMech: "+Domain);
         }

@@ -31,9 +31,6 @@ public class ZCSPLogger
     private static final int log_max_size=100*1000000; // 100 Mb
     private static final int log_max_files=100;
     private String ilogpath;
-    //private String ilogname;
-    //private FileHandler ilfh;
-    //private Logger ilogger;
     private HashMap<String,Logger> LoggerMap;
     private HashMap<String,FileHandler> FileHandlerMap;
     Handler hwndconsole;
@@ -65,13 +62,13 @@ public class ZCSPLogger
             tmplfh.setFormatter(new LogFormatter());
             tmplogger = Logger.getLogger(logname);
             tmplogger.addHandler(tmplfh);
-            tmplogger.addHandler(hwndconsole);
             tmplogger.setUseParentHandlers(false);
-            LoggerMap.put(logname,tmplogger);
-            FileHandlerMap.put(logname,tmplfh);
             tmplogger.log(Level.INFO, "**********************************************************");
             tmplogger.log(Level.INFO, "Start Logging:");
             tmplogger.log(Level.INFO, "**********************************************************");
+            tmplogger.addHandler(hwndconsole);            
+            LoggerMap.put(logname,tmplogger);
+            FileHandlerMap.put(logname,tmplfh);
         }
         catch(Exception ex)
         {
@@ -81,13 +78,39 @@ public class ZCSPLogger
         return tmplogger;
     }
 
+    public synchronized void RemoveConsoleHwnd(String logname)
+    {
+        Logger tmpLogger=null;
+        if (LoggerMap.containsKey(logname))
+        {
+            tmpLogger=LoggerMap.get(logname);
+        }
+        if (tmpLogger!=null)
+        {
+            tmpLogger.removeHandler(hwndconsole);
+        }
+    }
+
+    public synchronized void AddConsoleHwnd(String logname)
+    {
+        Logger tmpLogger=null;
+        if (LoggerMap.containsKey(logname))
+        {
+            tmpLogger=LoggerMap.get(logname);
+        }
+        if (tmpLogger!=null)
+        {
+            tmpLogger.addHandler(hwndconsole);
+        }
+    }
+
     public synchronized void close(String logname)
     {
         Logger tmpLogger=null;
-         if (LoggerMap.containsKey(logname))
-         {
+        if (LoggerMap.containsKey(logname))
+        {
             tmpLogger=LoggerMap.get(logname);
-         }
+        }
         if (tmpLogger!=null)
         {
             FileHandler tmpFh= FileHandlerMap.get(logname);

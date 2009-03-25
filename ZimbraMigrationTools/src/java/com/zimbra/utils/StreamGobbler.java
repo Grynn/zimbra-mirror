@@ -57,7 +57,10 @@ public class StreamGobbler implements Runnable
 
     private synchronized void writeLogger(String str)
     {
-        str_logger.log(Level.INFO,   str);
+        if(str_logger!=null)
+        {
+            str_logger.log(Level.INFO,   str);
+        }
     }
 
     public void run ()

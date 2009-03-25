@@ -36,34 +36,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/java/com/zimbra/tarformatter/tarFormatter.java" line="391" class="com.zimbra.tarformatter.tarMigrator" package="com.zimbra.tarformatter">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/java/com/zimbra/tarformatter/tarFormatter.java" line="413" class="com.zimbra.tarformatter.tarMigrator" package="com.zimbra.tarformatter">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-    </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -108,73 +80,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ZCSAccounts.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZCSAccounts.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="255" column="0" selection-start="9338" selection-end="9338" vertical-scroll-proportion="0.48346055">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ZCSACProvision.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZCSACProvision.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="240" column="0" selection-start="7639" selection-end="7639" vertical-scroll-proportion="0.36132315">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ztozconfig" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ztozconfig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="47" selection-start="191" selection-end="242" vertical-scroll-proportion="0.33333334">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ZMSoapSession.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZMSoapSession.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="92" column="0" selection-start="2793" selection-end="2793" vertical-scroll-proportion="0.3602941">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AuthTokens.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/auth/AuthTokens.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="47" column="0" selection-start="1561" selection-end="1561" vertical-scroll-proportion="0.3602941">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tarFormatter.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="tarFormatter.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/tarformatter/tarFormatter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="413" column="0" selection-start="14381" selection-end="14381" vertical-scroll-proportion="0.30706522">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="zmztozmig" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/libexec/zmztozmig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="34" selection-start="532" selection-end="532" vertical-scroll-proportion="0.6666667">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MANIFEST.MF" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MANIFEST.MF">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="794" column="37" selection-start="28652" selection-end="28661" vertical-scroll-proportion="0.38276553">
               <folding />
             </state>
           </provider>
@@ -183,16 +92,34 @@
       <file leaf-file-name="ZCSUtils.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/utils/ZCSUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="366" column="0" selection-start="11077" selection-end="11077" vertical-scroll-proportion="0.75">
+            <state line="28" column="13" selection-start="814" selection-end="814" vertical-scroll-proportion="0.034068137">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ZtoZImportParams.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/tarformatter/ZtoZImportParams.java">
+      <file leaf-file-name="ZCSAccounts.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZCSAccounts.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="53" column="31" selection-start="1584" selection-end="1584" vertical-scroll-proportion="0.7107843">
+            <state line="19" column="42" selection-start="627" selection-end="627" vertical-scroll-proportion="0.034068137">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ZMSoapSession.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZMSoapSession.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="295" column="57" selection-start="9589" selection-end="9589" vertical-scroll-proportion="0.40881765">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReadMe.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ReadMe.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="9" selection-start="1002" selection-end="1003" vertical-scroll-proportion="0.3747495">
               <folding />
             </state>
           </provider>
@@ -247,6 +174,72 @@
           <option name="myItemId" value="ztozprov" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ZimbraMigrationTools" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ztozprov" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ZimbraMigrationTools" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Zimbra_Work\src\FRANKLIN\ZimbraMigrationTools" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ztozprov" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ZimbraMigrationTools" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Zimbra_Work\src\FRANKLIN\ZimbraMigrationTools" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Zimbra_Work\src\FRANKLIN\ZimbraMigrationTools\src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ztozprov" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ZimbraMigrationTools" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Zimbra_Work\src\FRANKLIN\ZimbraMigrationTools" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Zimbra_Work\src\FRANKLIN\ZimbraMigrationTools\src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Zimbra_Work\src\FRANKLIN\ZimbraMigrationTools\src\java" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Zimbra_Work\src\FRANKLIN\ZimbraMigrationTools\src\java\com" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:C:\Zimbra_Work\src\FRANKLIN\ZimbraMigrationTools\src\java\com\zimbra" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
       </PATH>
     </subPane>
   </component>
@@ -286,6 +279,18 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.TarFromatter">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG" enabled="false" merge="false">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -315,18 +320,6 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" />
       <option name="VM_PARAMETERS" />
@@ -342,6 +335,13 @@
       <method>
         <option name="Make" value="true" />
       </method>
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <module name="" />
@@ -364,13 +364,6 @@
       <method>
         <option name="Make" value="true" />
       </method>
-    </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
     </configuration>
     <configuration default="false" name="TarFromatter" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" value="com.zimbra.tarformatter.tarFormatter" />
@@ -471,22 +464,22 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="6" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.113469385" order="1" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18449612" order="1" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28062016" order="3" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14108527" order="3" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="13" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32927817" order="3" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="9" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14263566" order="10" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924962" order="7" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14418605" order="10" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32868218" order="7" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3998378" order="0" />
       <window_info id="Maven projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32927817" order="4" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="5" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19591837" order="0" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24" order="0" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="11" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="2" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45541403" order="6" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="12" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17611027" order="2" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30387598" order="2" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="5" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="0" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="2" />
@@ -570,114 +563,114 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZCSDomain.java">
+    <entry file="file://$PROJECT_DIR$/src/libexec/zmztozmig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="3" selection-start="543" selection-end="543" vertical-scroll-proportion="0.6407035">
+        <state line="16" column="34" selection-start="532" selection-end="532" vertical-scroll-proportion="0.45637584">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZCSImportFile.java">
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/utils/CSVReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="3" selection-start="543" selection-end="543" vertical-scroll-proportion="0.6407035">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/utils/ZCSPLogger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="55" selection-start="570" selection-end="570" vertical-scroll-proportion="0.72613066">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="62" selection-start="1660" selection-end="1660" vertical-scroll-proportion="1.9845815">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/auth/ZCSAuth.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="0" selection-start="2165" selection-end="2165" vertical-scroll-proportion="0.45355192">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/auth/AuthTokens.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="0" selection-start="1561" selection-end="1561" vertical-scroll-proportion="0.3602941">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZMSoapSession.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="0" selection-start="2793" selection-end="2793" vertical-scroll-proportion="0.3602941">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/HttpSession.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="13" selection-start="1449" selection-end="1449" vertical-scroll-proportion="0.03837472">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/tarformatter/ZtoZImportParams.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="31" selection-start="1584" selection-end="1584" vertical-scroll-proportion="0.7107843">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZCSAccounts.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="255" column="0" selection-start="9338" selection-end="9338" vertical-scroll-proportion="0.48346055">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZCSACProvision.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="240" column="0" selection-start="7639" selection-end="7639" vertical-scroll-proportion="0.36132315">
+        <state line="87" column="0" selection-start="2984" selection-end="2984" vertical-scroll-proportion="0.036324788">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ztozconfig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="47" selection-start="191" selection-end="242" vertical-scroll-proportion="0.33333334">
+        <state line="19" column="25" selection-start="813" selection-end="813" vertical-scroll-proportion="0.68432206">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/utils/ZCSUtils.java">
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZCSACProvision.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="366" column="0" selection-start="11077" selection-end="11077" vertical-scroll-proportion="0.75">
+        <state line="219" column="58" selection-start="6955" selection-end="6955" vertical-scroll-proportion="0.062962964">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/tarformatter/tarFormatter.java">
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/tarformatter/ZtoZImportParams.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="413" column="0" selection-start="14381" selection-end="14381" vertical-scroll-proportion="0.30706522">
+        <state line="42" column="55" selection-start="1344" selection-end="1344" vertical-scroll-proportion="0.15436241">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="55" selection-start="1631" selection-end="1631" vertical-scroll-proportion="0.030357143">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/auth/AuthTokens.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="77" column="0" selection-start="2492" selection-end="2492" vertical-scroll-proportion="0.02852349">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/auth/ZCSAuth.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="133" column="67" selection-start="3871" selection-end="3871" vertical-scroll-proportion="0.027687296">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/utils/ZCSPLogger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="91" column="0" selection-start="3073" selection-end="3073" vertical-scroll-proportion="0.027687296">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MANIFEST.MF">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="3" column="298" selection-start="395" selection-end="395" vertical-scroll-proportion="0.085141905">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/libexec/zmztozmig">
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/utils/StreamGobbler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="34" selection-start="532" selection-end="532" vertical-scroll-proportion="0.6666667">
+        <state line="75" column="74" selection-start="1819" selection-end="1819" vertical-scroll-proportion="0.4267101">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/utils/ZCSUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="13" selection-start="814" selection-end="814" vertical-scroll-proportion="0.034068137">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZCSAccounts.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="42" selection-start="627" selection-end="627" vertical-scroll-proportion="0.034068137">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/zcsprov/ZMSoapSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="295" column="57" selection-start="9589" selection-end="9589" vertical-scroll-proportion="0.40881765">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ReadMe.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="9" selection-start="1002" selection-end="1003" vertical-scroll-proportion="0.3747495">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/java/com/zimbra/tarformatter/tarFormatter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="794" column="37" selection-start="28652" selection-end="28661" vertical-scroll-proportion="0.38276553">
           <folding />
         </state>
       </provider>

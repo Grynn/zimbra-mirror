@@ -36,6 +36,7 @@ public class ZMSoapSession
 {
     public static final int AUTH_TYPE_ADMIN=1;
     public static final int AUTH_TYPE_ACUSER=2;
+    public static final int AUTH_TYPE_ADMIN_DEST=3;    
     private final String UPLOAD_URI="/service/upload?lbfums=&fmt=raw";
     private MessageFactory mf;
     private SOAPConnection soapconn;
@@ -125,6 +126,15 @@ public class ZMSoapSession
                     return true;
                 }
             }
+            else if(iAuthType ==AUTH_TYPE_ADMIN_DEST )
+            {
+                if(AuthTokens.get_dest_admin_auth_token(sZCSurl)!=null)
+                {
+                    iauth_token = AuthTokens.get_dest_admin_auth_token(sZCSurl);
+                    isession_id = AuthTokens.get_dest_admin_sessionid(sZCSurl);
+                    return true;
+                }
+            }
             else 
             {
                 throw new ZmProvGenericException("Non-Supported AuthType: "+iAuthType);
@@ -145,6 +155,11 @@ public class ZMSoapSession
             {
                 AuthTokens.set_non_admin_auth_token(sZCSurl,iauth_token);
                 AuthTokens.set_non_admin_sessionid(sZCSurl,isession_id);
+            }
+            else if (iAuthType ==AUTH_TYPE_ADMIN_DEST)
+            {
+                AuthTokens.set_dest_admin_auth_token(sZCSurl,iauth_token);
+                AuthTokens.set_dest_admin_sessionid(sZCSurl,isession_id);
             }
         }
         return active;

@@ -66,7 +66,7 @@ class tarMigrator implements Runnable
     private static int paccountscount=0;
     private static Logger print_menu_logger;
     private static double TotalMigTime;
-
+    private static boolean debugmsg;
     private ZtoZImportParams tarMigparams;
     private double tarMigtime ; //in miliseconds
     private ZCSPLogger tarMig_Logger;
@@ -82,7 +82,7 @@ class tarMigrator implements Runnable
         tarMig_Logger = tarmig_logger;
         ExcThreadCount=0;
         tarMigtime=0;
-
+        debugmsg=false;
     }
 
     public static synchronized void incr_exec_count()
@@ -128,19 +128,48 @@ class tarMigrator implements Runnable
     {
         return TotalMigTime;
     }
-    public void Init()
+
+    private void debug_msg(Logger logger,String debug_msg)
     {
+        if(tarMigparams.debug_mig)
+        {
+            logger.log(Level.INFO, debug_msg);
+        }
+    }
+    
+    public boolean Init() throws ZmProvGenericException
+    {
+        boolean retval=false;
         tarmig_log = tarMig_Logger.get_logger(ztozlogFile);
         print_menu_logger=tarmig_log;
         tarMigparams.SourceServerURI=https+tarMigparams.SourceZCSServer+":"+tarMigparams.SrcZCSPort+soapuri;
         zmsession = new ZMSoapSession(tarMigparams.SourceServerURI,
                 tarMigparams.SrcAdminUser, tarMigparams.SrcAdminPwd,
                 ZMSoapSession.AUTH_TYPE_ADMIN, tarmig_log);
-        zmsession.enable_dump_all();
+        retval=zmsession.check_auth();
+        if(!retval)
+        {
+            throw new ZmProvGenericException("Source Server"+"("+tarMigparams.SourceZCSServer+")"+"Authentication Failed");
+        }
+        ZMSoapSession zmtrgtsession;
+        tarMigparams.TrgtServerURI=https+tarMigparams.TargetZCSServer+":"+tarMigparams.TrgtZCSPort+soapuri;
+        zmtrgtsession = new ZMSoapSession(tarMigparams.TrgtServerURI,
+                tarMigparams.TrgtAdminUser, tarMigparams.TrgtAdminPwd,
+                ZMSoapSession.AUTH_TYPE_ADMIN_DEST, tarmig_log);
+
+        retval=zmtrgtsession.check_auth();
+        if (!retval)
+        {
+            throw new ZmProvGenericException("Destination Server"+"("+tarMigparams.TargetZCSServer+")"+"Authentication Failed");
+        }
+        if(tarMigparams.debug_mig)
+        {
+            zmsession.enable_dump_all();
+        }
         ZCSUtils.set_logger(tarmig_log);
         httpsession = new HttpSession();
 
-
+        return retval;
     }
 
     public boolean GetTarredMailBox(String username,Logger gtmbLog)
@@ -148,21 +177,20 @@ class tarMigrator implements Runnable
         boolean retval=false;
         if(zmsession.check_auth())
         {
-            gtmbLog.log(Level.INFO, "Auth Token: "+tarMigparams.SourceZCSServer+": "+AuthTokens.get_admin_auth_token(tarMigparams.SourceServerURI));
+            debug_msg(gtmbLog,"Auth Token: "+tarMigparams.SourceZCSServer+": "+AuthTokens.get_admin_auth_token(tarMigparams.SourceServerURI));
             httpsession.SetPostMethod(false);
             //https://10.66.118.103:7071/service/home/test1?fmt=tgz&authToken=0_84af9241c9ed5864f6ffb11c6cf..23we32
             String uri=https+tarMigparams.SourceZCSServer+":"+tarMigparams.SrcZCSPort+httpuri+
                     username+"?fmt=tgz&authToken="+AuthTokens.get_admin_auth_token(tarMigparams.SourceServerURI);
-            gtmbLog.log(Level.INFO, "Download URL:"+uri);
+            debug_msg(gtmbLog,"Download URL:"+uri);
             InputStream istr= httpsession.Send(uri);
             if (istr!=null)
             {
-                retval=true;
                 incr_exec_count();
                 try
                 {
                     gtmbLog.log(Level.INFO,"Starting mailbox"+" ("+username+") "+"download...");
-                    writeToFile(tarMigparams.WorkingDirectory+username+".tgz",istr,true,
+                    retval=writeToFile(tarMigparams.WorkingDirectory+username+".tgz",istr,true,
                             gtmbLog,get_exec_count());
                     gtmbLog.log(Level.INFO,"Finished mailbox"+" ("+username+") "+"download.");
                 }
@@ -186,10 +214,11 @@ class tarMigrator implements Runnable
         return retval;
     } 
 
-    private void writeToFile(String fileName, InputStream iStream,
+    private boolean writeToFile(String fileName, InputStream iStream,
         boolean createDir,Logger wflog,int exc_count)
         throws IOException
     {
+        boolean retval =true;
         String me = "FileUtils.WriteToFile";
         if (fileName == null)
         {
@@ -245,6 +274,7 @@ class tarMigrator implements Runnable
         }
         catch (Exception e)
         {
+            retval=false;
             wflog.log(Level.SEVERE,"Download error("+fileName+"): "+ e.toString()+
                     ": Total KBytes downloaded: "+(biTotBytesWritten/1000));
             throw new IOException(me + " failed, got: " + e.toString());
@@ -253,6 +283,7 @@ class tarMigrator implements Runnable
         {
             close(iStream, fOut);
         }
+        return retval;
     }
 
 
@@ -277,7 +308,7 @@ class tarMigrator implements Runnable
 
     public boolean UploadTarredMailBox(String destAdminuname,String destAdminpwd,String tarfile,
                                     String destServer,String destPort,String destmailbox,
-                                    Logger utmbLog)
+                                    Logger utmbLog,boolean debug)
     {
 /*        String zcs_nonssl_url=http+ztozparams.SourceZCSServer;
 
@@ -302,7 +333,6 @@ class tarMigrator implements Runnable
         }
 */
         boolean retval=false;
-        utmbLog.log(Level.INFO,"Starting File Upload....");
         Runtime r = Runtime.getRuntime();
         try
         {
@@ -328,8 +358,13 @@ class tarMigrator implements Runnable
             InputStream errStrm = process.getErrorStream();
             InputStream inStrm = process.getInputStream();
             OutputStream outStrm = process.getOutputStream();
-            StreamGobbler s1 = new StreamGobbler("INFO :",inStrm ,utmbLog);
-            StreamGobbler s2 = new StreamGobbler ("INFO:", errStrm,utmbLog);
+            Logger itmpL=null;
+            if(debug)
+            {
+                itmpL =utmbLog;
+            }
+            StreamGobbler s1 = new StreamGobbler("INFO :",inStrm ,itmpL);
+            StreamGobbler s2 = new StreamGobbler ("INFO:", errStrm,itmpL);
             s2.start ();
             s1.start ();
             try
@@ -385,10 +420,13 @@ class tarMigrator implements Runnable
                     tarmig_log.log(Level.INFO,"Download TarredMailBox Finsihed "+"("+userAccount+").");
 
                     tarmig_log.log(Level.INFO,"Upload TarredMailBox Started... "+"("+userAccount+")");
-                    boolean uploadRet=UploadTarredMailBox(tarMigparams.TrgtAdminUser,tarMigparams.TrgtAdminPwd,
+                    boolean uploadRet=false;
+
+                    uploadRet=UploadTarredMailBox(tarMigparams.TrgtAdminUser,tarMigparams.TrgtAdminPwd,
                         tarMigparams.WorkingDirectory +userAccount+".tgz",
                         tarMigparams.TargetZCSServer,tarMigparams.TrgtZCSPort,
-                        userInfoArr[0]+"@"+targetDomain,accountLog);
+                        userInfoArr[0]+"@"+targetDomain,accountLog,tarMigparams.debug_mig);
+
                     if(uploadRet)
                     {
                         tarmig_log.log(Level.INFO,"Upload TarredMailBox Finsihed "+"("+userAccount+").");
@@ -420,9 +458,13 @@ class tarMigrator implements Runnable
                                 zcsprovparams.adminpwd = tarMigparams.TrgtAdminPwd;
                                 zcsprovparams.zcsport = tarMigparams.TrgtZCSPort;
                                 zcsacprov= new ZCSACProvision(zcsprovparams,accountLog);
-                                zcsacprov.Init();                                
+                                zcsacprov.Init();
+                                if(tarMigparams.debug_mig)
+                                {
+                                    zcsacprov.enable_dump_all();
+                                }
                                 String accntId=zcsacprov.GetAccountIDByName(userInfoArr[0]+"@"+targetDomain);
-                                tarmig_log.log(Level.INFO,"AccountID: "+accntId);
+                                debug_msg(tarmig_log,"AccountID: "+accntId);
                                 if(!zcsacprov.ModifyAccountMailTransport(accntId,tarMigparams.ZimbraMailTransport))
                                 {
                                     tarmig_log.log(Level.SEVERE,"ModifyAccountMailTransport Failed: "+userInfoArr[0]+"@"+targetDomain);
@@ -494,12 +536,14 @@ public class tarFormatter implements EventNotifier
     public boolean Init(String[] args)
     {
         boolean retval=true;
+        tarfmtparams = new ZtoZImportParams();
         // Initiate the arguments engine.
         ArgsEngine engine = new ArgsEngine();
         // Configure the switches/options. Use true for valued options
         engine.add("-h", "--help");
         engine.add("-v", "--version");
         engine.add("-f", "--ConfigFile",true);
+        engine.add("-d", "--debug");
 
         // Perform the parsing. The 'args' is the String[] received by main method.
         try
@@ -527,12 +571,15 @@ public class tarFormatter implements EventNotifier
         {
             configFile = engine.getString("-f");
         }
-
+        else if(engine.getBoolean("-d"))
+        {
+            tarfmtparams.debug_mig=true;
+        }
         if (configFile != null && configFile.length() == 0)
         {
             configFile=ZCSUtils.GetSlashedDir(ztoz_default_configpath)+ztozconfigFile;
         }
-        tarfmtparams = new ZtoZImportParams();
+
         retval=GetInputFromConfigFile(configFile);
         if(retval)
         {           
@@ -569,28 +616,38 @@ public class tarFormatter implements EventNotifier
         ThreadGroup tg = new ThreadGroup("ztozMigThreadGroup");
         Thread LocThreadPool[]= new Thread[THREAD_COUNT];
 
-        for (int t=0;t<THREAD_COUNT;t++)
+        try
         {
-            tarMigrator tarmigrator= new tarMigrator(tarfmtparams,tarformatter_Logger);
-            tarmigrator.Init();
+            for (int t=0;t<THREAD_COUNT;t++)
+            {
+                tarMigrator tarmigrator= new tarMigrator(tarfmtparams,tarformatter_Logger);
+                tarmigrator.Init();
 
-            LocThreadPool[t]  = new Thread(tg,tarmigrator,"ZTOZThread"+(t+1));
-            LocThreadPool[t].start();
+                LocThreadPool[t]  = new Thread(tg,tarmigrator,"ZTOZThread"+(t+1));
+                LocThreadPool[t].start();
+            }
+
+            int i;
+            for (i=0; i <THREAD_COUNT; i++)
+            {
+                try
+                {
+                    LocThreadPool[i].join();
+                }
+                catch (InterruptedException e)
+                {
+                    System.out.print("Join interrupted\n");
+                }
+            }
         }
-
-        int i;
-        for (i=0; i <THREAD_COUNT; i++)
+        catch(ZmProvGenericException zex)
         {
-            try
-            {
-                LocThreadPool[i].join();
-            }
-            catch (InterruptedException e)
-            {
-                System.out.print("Join interrupted\n");
-            }
+            tarfmt_log.log(Level.SEVERE,"Error: "+zex.getMessage());
         }
-
+        catch(Exception ex)
+        {
+            tarfmt_log.log(Level.SEVERE,"Error: "+ex.getMessage());    
+        }
         tarMigrator.print_summary();
     }
 
@@ -629,103 +686,103 @@ public class tarFormatter implements EventNotifier
     public void notifCUyevent(String[] params)
     {
         String attr[]= params[0].split("=");
-        if (attr[0].compareToIgnoreCase("SourceZCSServer")==0)
+        if (attr[0].trim().compareToIgnoreCase("SourceZCSServer")==0)
         {
-            tarfmtparams.SourceZCSServer = attr[1];
+            tarfmtparams.SourceZCSServer = attr[1].trim();
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("SourceAdminUser")==0)
+        else if (attr[0].trim().compareToIgnoreCase("SourceAdminUser")==0)
         {
-            tarfmtparams.SrcAdminUser = attr[1];
+            tarfmtparams.SrcAdminUser = attr[1].trim();
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("SourceAdminPwd")==0)
+        else if (attr[0].trim().compareToIgnoreCase("SourceAdminPwd")==0)
         {
-            tarfmtparams.SrcAdminPwd = attr[1];
+            tarfmtparams.SrcAdminPwd = attr[1].trim();
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("SourceAdminPort")==0)
+        else if (attr[0].trim().compareToIgnoreCase("SourceAdminPort")==0)
         {
-            tarfmtparams.SrcZCSPort = attr[1];
+            tarfmtparams.SrcZCSPort = attr[1].trim();
             ztozparamcounter++;
         }
-        if (attr[0].compareToIgnoreCase("TargetZCSServer")==0)
+        if (attr[0].trim().compareToIgnoreCase("TargetZCSServer")==0)
         {
-            tarfmtparams.TargetZCSServer = attr[1];
+            tarfmtparams.TargetZCSServer = attr[1].trim();
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("TargetAdminUser")==0)
+        else if (attr[0].trim().compareToIgnoreCase("TargetAdminUser")==0)
         {
-            tarfmtparams.TrgtAdminUser = attr[1];
+            tarfmtparams.TrgtAdminUser = attr[1].trim();
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("TargetAdminPwd")==0)
+        else if (attr[0].trim().compareToIgnoreCase("TargetAdminPwd")==0)
         {
-            tarfmtparams.TrgtAdminPwd = attr[1];
+            tarfmtparams.TrgtAdminPwd = attr[1].trim();
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("TargetAdminPort")==0)
+        else if (attr[0].trim().compareToIgnoreCase("TargetAdminPort")==0)
         {
-            tarfmtparams.TrgtZCSPort = attr[1];
+            tarfmtparams.TrgtZCSPort = attr[1].trim();
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("Threads")==0)
+        else if (attr[0].trim().compareToIgnoreCase("Threads")==0)
         {
-            tarfmtparams.Threads = Integer.parseInt(attr[1]);
+            tarfmtparams.Threads = Integer.parseInt(attr[1].trim());
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("WorkingDirectory")==0)
+        else if (attr[0].trim().compareToIgnoreCase("WorkingDirectory")==0)
         {
-            tarfmtparams.WorkingDirectory = ZCSUtils.GetSlashedDir(attr[1]);
+            tarfmtparams.WorkingDirectory = ZCSUtils.GetSlashedDir(attr[1].trim());
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("FailedDirectory")==0)
+        else if (attr[0].trim().compareToIgnoreCase("FailedDirectory")==0)
         {
-            tarfmtparams.FailedDirectory = ZCSUtils.GetSlashedDir(attr[1]);
+            tarfmtparams.FailedDirectory = ZCSUtils.GetSlashedDir(attr[1].trim());
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("SuccessDirectory")==0)
+        else if (attr[0].trim().compareToIgnoreCase("SuccessDirectory")==0)
         {
-            tarfmtparams.SuccessDirectory = ZCSUtils.GetSlashedDir(attr[1]);
+            tarfmtparams.SuccessDirectory = ZCSUtils.GetSlashedDir(attr[1].trim());
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("LogDirectory")==0)
+        else if (attr[0].trim().compareToIgnoreCase("LogDirectory")==0)
         {
-            tarfmtparams.LogDirectory = ZCSUtils.GetSlashedDir(attr[1]);
+            tarfmtparams.LogDirectory = ZCSUtils.GetSlashedDir(attr[1].trim());
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("KeepSuccessFiles")==0)
+        else if (attr[0].trim().compareToIgnoreCase("KeepSuccessFiles")==0)
         {
-            tarfmtparams.KeepSuccessFiles = attr[1];
+            tarfmtparams.KeepSuccessFiles = attr[1].trim();
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("ZimbraMailTransport")==0)
+        else if (attr[0].trim().compareToIgnoreCase("ZimbraMailTransport")==0)
         {
-            tarfmtparams.ZimbraMailTransport = attr[1];
+            tarfmtparams.ZimbraMailTransport = attr[1].trim();
             ztozparamcounter++;
         }
-        else if (attr[0].compareToIgnoreCase("DomainMap")==0)
+        else if (attr[0].trim().compareToIgnoreCase("DomainMap")==0)
         {
-            String strDomainMap=attr[1];
+            String strDomainMap=attr[1].trim();
             String dmattr[]= strDomainMap.split(" ");
             if(dmattr.length ==2)
             {
-                tarfmtparams.DomainMap.put(dmattr[0],dmattr[1]);
+                tarfmtparams.DomainMap.put(dmattr[0].trim(),dmattr[1].trim());
             }
             else
             {
                 System.out.println("Domain map is not in correct format.");
             }
         }
-        else if(attr[0].compareToIgnoreCase("Accounts")==0)
+        else if(attr[0].trim().compareToIgnoreCase("Accounts")==0)
         {
             String AllAccounts=attr[1];
             String AccountsArr[]= AllAccounts.split(",");
 
-            tarfmtparams.AccountsList.add(attr[1]);
+            tarfmtparams.AccountsList.add(attr[1].trim());
             for(int i=1;i<params.length;i++)
             {
-                tarfmtparams.AccountsList.add(params[i]);
+                tarfmtparams.AccountsList.add(params[i].trim());
             }
             AccountsList.SetAccountList(tarfmtparams.AccountsList);
         }
@@ -735,12 +792,13 @@ public class tarFormatter implements EventNotifier
     {
         System.out.println("usage:");
         System.out.println("*********************");
-        System.out.println("zmzimbratozimbramig.jar -[options]");
+        System.out.println("zmztozmig -[options]");
         System.out.println("Options details:");
         System.out.println("-v --version                    Prints version");
         System.out.println("-h --help                       Shows help");
-        System.out.println("-f                              Config file path [defualt to cutrrent directory]");
-        System.out.println("                                default filename -> ztozconfig");
+        System.out.println("-f --ConfigFile                 Config file path");
+        System.out.println("                                [default file -> /opt/zimbra/conf/ztozmig.conf]");
+        System.out.println("-d --debug                      prints versbose debug messages");        
     }
     
     public static void main(String[] args)
