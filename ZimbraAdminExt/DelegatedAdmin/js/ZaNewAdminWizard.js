@@ -164,7 +164,7 @@ ZaNewAdmin.modifyAdmin = function (tmpObj) {
 
 ZaNewAdminWizard = function (parent) {
     ZaXWizardDialog.call(this, parent, null, com_zimbra_delegatedadmin.title_new_admin_wizard, 
-            (AjxEnv.isIE ? "600px" : "550px"), (AjxEnv.isIE ? "330px" :"320px"),"ZaNewAdminWizard");
+            (AjxEnv.isIE ? "620px" : "570px"), (AjxEnv.isIE ? "330px" :"320px"),"ZaNewAdminWizard");
 
     this.newAdminTypesChoices = [
         {value: ZaItem.ACCOUNT, label: com_zimbra_delegatedadmin.type_account },
@@ -370,9 +370,8 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
                 visibilityChecks:[],
                 enableDisableChecks:[],
                 choices: this.newAdminTypesChoices } ,
-            {type : _SPACER_, height: 20 },
-            { type: _OUTPUT_, colSpan: 2,value: com_zimbra_delegatedadmin.Help_new_administrator }    
-
+            { type : _SPACER_, height: 20 },
+            { type : _OUTPUT_, colSpan: 2,value: com_zimbra_delegatedadmin.Help_new_administrator }
         ]
 
     };
@@ -448,7 +447,7 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
             type: _CASE_,  numCols: 1, 
             tabGroupKey:ZaNewAdminWizard.STEP_PERMISSION, caseKey:ZaNewAdminWizard.STEP_PERMISSION ,
             items:[
-                {type: _GROUP_, numCols: 2 , width: 530, colSize:[100, "*"],items: [
+                {type: _GROUP_, numCols: 2 , width: 530, colSizes:[100, "*"],items: [
                     {type:_OUTPUT_, ref: ZaAccount.A_name , label: com_zimbra_delegatedadmin.Label_grantee_name}
                   ]
                 }
@@ -459,17 +458,17 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
     cases.push (case_permission) ;
 
     var case_ui_comp = {
-            type: _CASE_,  numCols: 1, 
+            type: _CASE_,  numCols: 1,
             tabGroupKey:ZaNewAdminWizard.STEP_UI_COMPONENTS, caseKey:ZaNewAdminWizard.STEP_UI_COMPONENTS,
             items:[
-                {type: _GROUP_, numCols: 2 , width: 530, colSize:[100, "*"],items: [
-                    {type:_OUTPUT_, ref: ZaAccount.A_name , label: ZaMsg.NAD_AccountName}
-                  ]
-                }
-            ]
+                    {type: _GROUP_, numCols:2, colSizes:[100, "*"],items: [
+                        {type:_OUTPUT_, ref: ZaAccount.A_name , label: ZaMsg.NAD_AccountName}
+                       ]
+                    }
+                ]
     } ;
     case_ui_comp.items = case_ui_comp.items.concat (
-            ZaUIComponent.getUIComponentsXFormItem({width: 530, height: 200}));
+            ZaUIComponent.getUIComponentsXFormItem());
     cases.push (case_ui_comp) ;
 
     var case_finish = {

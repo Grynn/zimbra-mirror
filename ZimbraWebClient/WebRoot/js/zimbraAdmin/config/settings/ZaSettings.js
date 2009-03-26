@@ -462,10 +462,10 @@ ZaSettings.CONFIG_GENERAL_TAB = "configGeneralTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_GENERAL_TAB, label: ZaMsg.UI_Comp_configGeneralTab });
 
 ZaSettings.CONFIG_ATTACHMENT_TAB = "configAttachmentTab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_GENERAL_TAB, label: ZaMsg.UI_Comp_configAttachmentTab });
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_ATTACHMENT_TAB, label: ZaMsg.UI_Comp_configAttachmentTab });
 
 ZaSettings.CONFIG_MTA_TAB = "configMTATab" ;
-ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_ATTACHMENT_TAB, label: ZaMsg.UI_Comp_configMTATab });
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_MTA_TAB, label: ZaMsg.UI_Comp_configMTATab });
 
 ZaSettings.CONFIG_IMAP_TAB = "configIMAPTab" ;
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.CONFIG_IMAP_TAB, label: ZaMsg.UI_Comp_configIMAPTab });

@@ -673,19 +673,21 @@ Zimlet_Select_XFormItem.prototype.nowrap = false;
 Zimlet_Select_XFormItem.prototype.labelWrap = true;
 Zimlet_Select_XFormItem.prototype.items = [];
 Zimlet_Select_XFormItem.prototype.labelWidth = "275px";
+Zimlet_Select_XFormItem.prototype.choicesWidth = "275px";
 
 Zimlet_Select_XFormItem.prototype.initializeItems = function() {
 	var selectRef = this.getInheritedProperty("selectRef");
 	var choices = this.getInheritedProperty("choices");	
-	var selectLabel = this.getInheritedProperty("selectLabel");	
-	var selectChck = {
+	var selectLabel = this.getInheritedProperty("selectLabel");
+    var choicesWidth = this.getInheritedProperty ("choicesWidth") || "275px" ;
+    var selectChck = {
 		type:_OSELECT_CHECK_,
 		choices:choices,
 		colSpan:3,
 		ref:selectRef,
 		label:selectLabel,
 		labelLocation:_TOP_,
-		width:"275px",
+		width:choicesWidth,
 		onChange:function (value, event, form) {
 			if (this.getParentItem() && this.getParentItem().getParentItem() && this.getParentItem().getParentItem().getOnChangeMethod()) {
 				return this.getParentItem().getParentItem().getOnChangeMethod().call(this, value, event, form);
