@@ -161,30 +161,46 @@ ZaUICompListView.uiCompSelectionListener = function () {
 
 //zimbraAdminConsoleUIComponents   view in account permission view
 ZaUIComponent.accountTargetXFormModifier = function (xFormObject) {
-    var switchGroupItems ;
+
+    //check if the UI component is enabled
+    if (! ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        var uiEnabled  = false ;
+        if (this instanceof ZaAccountXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.ACCOUNT_UI_COMP_TAB] ;
+        } else if (this instanceof ZaDLXFormView) {
+            uiEnabled = ZaSettings.ENABLED_UI_COMPONENTS [ZaSettings.DL_UI_COMP_TAB] ;
+        } 
+
+        if (!uiEnabled) return ;
+    }
+
+    var tabBar, switchGroup ;
     for (var i=0; i < xFormObject.items.length; i ++) {
+        if (xFormObject.items[i].type == _TAB_BAR_) {
+            tabBar = xFormObject.items[i] ;
+        }
+
         if (xFormObject.items[i].type == _SWITCH_) {
-            switchGroupItems = xFormObject.items[i].items ;
-            break ;
+            switchGroup = xFormObject.items[i]
         }
     }
 
-    var permissionView;
-    for (var j=0; j < switchGroupItems.length; j ++) {
-        if ((switchGroupItems[j].type == _ZATABCASE_ )
-                && (switchGroupItems[j].id == "target_form_permission_tab")) {
-            permissionView = switchGroupItems[j] ;
-        }
+    if (tabBar && switchGroup) {
+        var tabIx = tabBar.choices.length + 1;
+        tabBar.choices.push({value:tabIx, label: com_zimbra_delegatedadmin.Tab_ui_components}) ;
     }
 
-    var componentUIItems = [
-        {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_ui_comp, id:"permission_ui_comp_grouper",
-            colSizes:["700px"],numCols:1 ,
-            items : ZaUIComponent.getUIComponentsXFormItem () 
-        }
-    ];
+    var caseItem = {type:_ZATABCASE_, id:"target_form_permission_tab", numCols:1, colSizes:["700px"],
+            caseKey:  tabIx,
+            items:[
+                {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_ui_comp, id:"permission_ui_comp_grouper",
+                    colSizes:["700px"],numCols:1 ,
+                    items : ZaUIComponent.getUIComponentsXFormItem ()
+                }
+            ]
+    };
 
-    if (permissionView) permissionView.items = permissionView.items.concat(componentUIItems);
+    switchGroup.items.push(caseItem);
     return ;
 }
 
@@ -258,6 +274,8 @@ if (ZaItem.ObjectModifiers["ZaAccount"]){
 }
 
 if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
+    ZaSettings.ACCOUNT_UI_COMP_TAB = "accountUIComponentsTab" ;
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNT_UI_COMP_TAB, label: com_zimbra_delegatedadmin.UI_Comp_AccountsUICompTab });
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaUIComponent.accountTargetXFormModifier);
 }
 
@@ -274,6 +292,8 @@ if (ZaItem.ObjectModifiers["ZaDistributionList"]){
 }
 
 if (ZaTabView.XFormModifiers["ZaDLXFormView"]){
+    ZaSettings.DL_UI_COMP_TAB = "dlUIComponentsTab" ;
+    ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_UI_COMP_TAB, label: com_zimbra_delegatedadmin.UI_Comp_dlUICompTab });
     ZaTabView.XFormModifiers["ZaDLXFormView"].push(ZaUIComponent.accountTargetXFormModifier);
 }
 

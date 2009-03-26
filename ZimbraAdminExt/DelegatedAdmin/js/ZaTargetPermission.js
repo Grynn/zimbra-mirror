@@ -347,7 +347,6 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
     ZaSettings.ACCOUNTS_PERM_TAB = "accountsPermissionTab";
     ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNTS_PERM_TAB, label: com_zimbra_delegatedadmin.UI_Comp_AccountsPermTab });
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaTargetPermission.targetXFormModifier);
-    ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaTargetPermission.accountTargetXFormModifier);
 }
 
 if (ZaItem.loadMethods["ZaAccount"]) {
