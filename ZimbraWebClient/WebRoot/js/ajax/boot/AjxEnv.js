@@ -156,20 +156,20 @@ function() {
 		AjxEnv.isNav 			= (beginsWithMozilla && !isSpoofer && !isCompatible && !AjxEnv.isOpera && !isWebTv && !isHotJava && !AjxEnv.isSafari);
 		AjxEnv.isIE				= (AjxEnv.isIE && !AjxEnv.isOpera);
 		AjxEnv.isNav4			= (AjxEnv.isNav && (browserVersion == 4) && (!AjxEnv.isIE));
-		AjxEnv.isNav6			= (AjxEnv.isNav && AjxEnv.trueNs && (browserVersion >= 6.0) && (browserVersion < 7.0));
-		AjxEnv.isNav6up 		= (AjxEnv.isNav && AjxEnv.trueNs &&	(browserVersion >= 6.0));
-		AjxEnv.isNav7 			= (AjxEnv.isNav && AjxEnv.trueNs &&	(browserVersion == 7.0));
-		AjxEnv.isIE3 			= (AjxEnv.isIE && (browserVersion < 4));
-		AjxEnv.isIE4			= (AjxEnv.isIE && (browserVersion == 4) && (browserVersion == 4.0));
-		AjxEnv.isIE4up			= (AjxEnv.isIE && (browserVersion >= 4));
-		AjxEnv.isIE5			= (AjxEnv.isIE && (browserVersion == 4) && (browserVersion == 5.0));
-		AjxEnv.isIE5_5			= (AjxEnv.isIE && (browserVersion == 4) && (browserVersion == 5.5));
-		AjxEnv.isIE5up			= (AjxEnv.isIE && (browserVersion >= 5.0));
-		AjxEnv.isIE5_5up		= (AjxEnv.isIE && (browserVersion >= 5.5));
-		AjxEnv.isIE6			= (AjxEnv.isIE && (browserVersion == 6.0));
-		AjxEnv.isIE6up			= (AjxEnv.isIE && (browserVersion >= 6.0));
-		AjxEnv.isIE7			= (AjxEnv.isIE && (browserVersion == 7.0));
-		AjxEnv.isIE7up			= (AjxEnv.isIE && (browserVersion >= 7.0));
+		AjxEnv.isNav6			= (AjxEnv.isNav && AjxEnv.trueNs && (browserVersion >= 6.0 && browserVersion < 7.0));
+		AjxEnv.isNav6up 		= (AjxEnv.isNav && AjxEnv.trueNs && (browserVersion >= 6.0));
+		AjxEnv.isNav7 			= (AjxEnv.isNav && AjxEnv.trueNs && (browserVersion >= 7.0 && browserVersion < 8.0));
+		AjxEnv.isIE3 			= (AjxEnv.isIE && browserVersion <  4.0);
+		AjxEnv.isIE4			= (AjxEnv.isIE && browserVersion >= 4.0 && browserVersion < 5.0);
+		AjxEnv.isIE4up			= (AjxEnv.isIE && browserVersion >= 4.0);
+		AjxEnv.isIE5			= (AjxEnv.isIE && browserVersion >= 5.0 && browserVersion < 6.0);
+		AjxEnv.isIE5_5			= (AjxEnv.isIE && browserVersion == 5.5);
+		AjxEnv.isIE5up			= (AjxEnv.isIE && browserVersion >= 5.0);
+		AjxEnv.isIE5_5up		= (AjxEnv.isIE && browserVersion >= 5.5);
+		AjxEnv.isIE6			= (AjxEnv.isIE && browserVersion >= 6.0 && browserVersion < 7.0);
+		AjxEnv.isIE6up			= (AjxEnv.isIE && browserVersion >= 6.0);
+		AjxEnv.isIE7			= (AjxEnv.isIE && browserVersion >= 7.0 && browserVersion < 8.0);
+		AjxEnv.isIE7up			= (AjxEnv.isIE && browserVersion >= 7.0);
 		AjxEnv.isMozilla		= ((AjxEnv.isNav && AjxEnv.mozVersion && AjxEnv.isGeckoBased && (AjxEnv.geckoDate != 0)));
 		AjxEnv.isMozilla1_4up	= (AjxEnv.isMozilla && (AjxEnv.mozVersion >= 1.4));
 		AjxEnv.isFirefox 		= ((AjxEnv.isMozilla && AjxEnv.isFirefox));
@@ -177,9 +177,9 @@ function() {
 		AjxEnv.isFirefox1_5up	= (AjxEnv.isFirefox && browserVersion >= 1.5);
 		AjxEnv.isFirefox2_0up	= (AjxEnv.isFirefox && browserVersion >= 2.0);
 		AjxEnv.isFirefox3up		= (AjxEnv.isFirefox && browserVersion >= 3.0);
-		AjxEnv.isSafari2		= (AjxEnv.isSafari && browserVersion == 2.0);
-		AjxEnv.isSafari3		= (AjxEnv.isSafari && browserVersion == 3.0) || AjxEnv.isChrome;
-		AjxEnv.isSafari3up		= (AjxEnv.isSafari && browserVersion >= 3.0);
+		AjxEnv.isSafari2		= (AjxEnv.isSafari && browserVersion >= 2.0 && browserVersion < 3.0);
+		AjxEnv.isSafari3		= (AjxEnv.isSafari && browserVersion >= 3.0 && browserVersion < 4.0) || AjxEnv.isChrome;
+		AjxEnv.isSafari3up		= (AjxEnv.isSafari && browserVersion >= 3.0) || AjxEnv.isChrome;
 
 		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
