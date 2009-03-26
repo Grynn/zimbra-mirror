@@ -789,6 +789,31 @@ ZaDistributionList.publishShare = function (shares, unpublish, callback) {
 	ZaRequestMgr.invoke(params, reqMgrParams);
 }
 
+ZaDistributionList.removeDeletedMembers = function (mods, obj, dl, finishedCallback) {
+	var removeMemberSoapDoc, r;
+	var command = new ZmCsfeCommand();
+	//var member = list.getLast();
+	removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
+	removeMemberSoapDoc.set("id", obj.id);
+	var len = obj[ZaDistributionList.A2_removeList].length;
+	if(len < 1)
+		return;
+		
+	
+	for (var i = 0; i < len; i++) {
+		removeMemberSoapDoc.set("dlm", obj[ZaDistributionList.A2_removeList][i].toString());
+	}
+
+	var params = new Object();
+	params.soapDoc = removeMemberSoapDoc;
+	if(finishedCallback && finishedCallback instanceof AjxCallback) {
+		params.asyncMode = true;
+		params.callback = finishedCallback;
+	}
+	command.invoke(params);
+};
+ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.removeDeletedMembers);
+
 ZaDistributionList.addNewMembers = function (mods, obj, dl, finishedCallback) {
 	var addMemberSoapDoc, r;
 	var command = new ZmCsfeCommand();
@@ -816,31 +841,6 @@ ZaDistributionList.addNewMembersCreateMethod = function (obj, dl, finishedCallba
     ZaDistributionList.addNewMembers.call (this, null, obj, dl, finishedCallback) ;  
 }
 ZaItem.createMethods["ZaDistributionList"].push(ZaDistributionList.addNewMembersCreateMethod);
-
-ZaDistributionList.removeDeletedMembers = function (mods, obj, dl, finishedCallback) {
-	var removeMemberSoapDoc, r;
-	var command = new ZmCsfeCommand();
-	//var member = list.getLast();
-	removeMemberSoapDoc = AjxSoapDoc.create("RemoveDistributionListMemberRequest", ZaZimbraAdmin.URN, null);
-	removeMemberSoapDoc.set("id", obj.id);
-	var len = obj[ZaDistributionList.A2_removeList].length;
-	if(len < 1)
-		return;
-		
-	
-	for (var i = 0; i < len; i++) {
-		removeMemberSoapDoc.set("dlm", obj[ZaDistributionList.A2_removeList][i].toString());
-	}
-
-	var params = new Object();
-	params.soapDoc = removeMemberSoapDoc;
-	if(finishedCallback && finishedCallback instanceof AjxCallback) {
-		params.asyncMode = true;
-		params.callback = finishedCallback;
-	}
-	command.invoke(params);
-};
-ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.removeDeletedMembers);
 
 
 ZaDistributionList.prototype.initFromJS = 
