@@ -53,9 +53,10 @@ function() {
                      items : [
                        { ref: ZaGrant.A_target, type: _OUTPUT_ ,
                            label: com_zimbra_delegatedadmin.Label_target_name },
+                      /*
                        { ref: ZaGrant.A_target_type, type:_OUTPUT_,
                            label: com_zimbra_delegatedadmin.Label_target_type   },
-
+                        */
                        // make it type _DYNSELECT_
                        { ref: ZaGrant.A_grantee, type: _DYNSELECT_, label: com_zimbra_delegatedadmin.Label_grantee_name ,
                            visibilityChecks:[],labelLocation:_LEFT_ ,
@@ -65,13 +66,14 @@ function() {
                            dataFetcherClass:ZaSearch ,
                            dataFetcherMethod:ZaSearch.prototype.dynSelectGrantees,
                            editable: true
-                       },
+                       }/*,
+
                        { ref: ZaGrant.A_grantee_type, type:_TEXTFIELD_, label: com_zimbra_delegatedadmin.Label_grantee_type ,
                             visibilityChecks:[], //temporary solution to make this element visible
                             enableDisableChecks:false,bmolsnr:true,
         //                    enableDisableChangeEventSources:[ZaGrant.A_right_type],
                             labelLocation:_LEFT_
-                       },
+                       }, */
                      ]
                  },
 
