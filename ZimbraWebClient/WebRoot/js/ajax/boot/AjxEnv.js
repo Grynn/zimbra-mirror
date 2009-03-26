@@ -53,6 +53,7 @@ function() {
 	AjxEnv.isMozilla1_4up = false;
 	AjxEnv.isSafari = false;
 	AjxEnv.isSafari2 = false;
+	AjxEnv.isSafari3 = false;
 	AjxEnv.isSafari3up = false;
 	AjxEnv.isCamino = false;
 	AjxEnv.isChrome = false;
@@ -177,7 +178,8 @@ function() {
 		AjxEnv.isFirefox2_0up	= (AjxEnv.isFirefox && browserVersion >= 2.0);
 		AjxEnv.isFirefox3up		= (AjxEnv.isFirefox && browserVersion >= 3.0);
 		AjxEnv.isSafari2		= (AjxEnv.isSafari && browserVersion == 2.0);
-		AjxEnv.isSafari3up		= ((AjxEnv.isSafari && browserVersion >= 3.0) || AjxEnv.isChrome);
+		AjxEnv.isSafari3		= (AjxEnv.isSafari && browserVersion == 3.0) || AjxEnv.isChrome;
+		AjxEnv.isSafari3up		= (AjxEnv.isSafari && browserVersion >= 3.0);
 
 		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
