@@ -471,6 +471,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     	return account;
     }
     
+    @Override
+    public synchronized Account restoreAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("restoreAccount");
+    }
+    
     private OfflineAccount.Version MIN_ZCS_VER = new OfflineAccount.Version("5.0");
     
     private synchronized Account createSyncAccount(String emailAddress, String password, Map<String, Object> attrs) throws ServiceException {    
@@ -1608,7 +1613,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
         return createIdentity(account, name, attrs, isSyncAccount(account));
     }
-
+    
+    @Override
+    public synchronized Identity restoreIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("restoreIdentity");
+    }
+        
     synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
         if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
             throw AccountServiceException.IDENTITY_EXISTS(name);
@@ -1761,6 +1771,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs) throws ServiceException {
     	return createSignature(account, signatureName, attrs, isSyncAccount(account));
+    }
+    
+    @Override
+    public synchronized Signature restoreSignature(Account account, String signatureName, Map<String, Object> attrs) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("restoreSignature");
     }
     
     synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
@@ -1928,6 +1943,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
         return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, isSyncAccount(account));
+    }
+    
+    @Override
+    public synchronized DataSource restoreDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("restoreDataSource");
     }
 
     synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted, boolean markChanged)
