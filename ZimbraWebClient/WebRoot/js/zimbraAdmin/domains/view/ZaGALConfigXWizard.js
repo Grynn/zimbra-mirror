@@ -128,12 +128,30 @@ function(stepNum) {
 **/
 ZaGALConfigXWizard.prototype.setObject =
 function(entry) {
-	this._containedObject = new Object();
-	this._containedObject.attrs = new Object();
+	this._containedObject = new ZaDomain();
+	//this._containedObject.attrs = new Object();
 
 	for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
+
+	this._containedObject.name = entry.name;
+	this._containedObject.type = entry.type ;
+	this._containedObject.id = entry.id;
+			
+	if(entry.rights)
+		this._containedObject.rights = entry.rights;
+
+	if(entry.setAttrs)
+		this._containedObject.setAttrs = entry.setAttrs;
+	
+	if(entry.getAttrs)
+		this._containedObject.getAttrs = entry.getAttrs;
+		
+	if(entry._defaultValues)
+		this._containedObject._defaultValues = entry._defaultValues;
+
+	
 	this.setTitle(ZaMsg.NCD_GALConfigTitle + " (" + entry.name + ")");
 	this._containedObject[ZaModel.currentStep] = 1;
 	this._localXForm.setInstance(this._containedObject);	
