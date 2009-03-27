@@ -1,0 +1,157 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005, 2006, 2007, 2008, 2009 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+
+use lib "/opt/zimbra/zimbramon/lib";
+use strict;
+use warnings;
+use Zimbra::Mon::Zmstat;
+
+use vars qw($logger_unprocessed_log $logger_processing_log $logger_directory);
+
+# Exit if software-only node.
+exit(0) unless (-f '/opt/zimbra/conf/localconfig.xml');
+
+my $zimbra_home = "/opt/zimbra";
+my $pid_file = "${zimbra_home}/log/zmlogprocess.pid";
+$logger_directory = getLocalConfig("logger_data_directory");
+$logger_unprocessed_log = "$logger_directory/unprocessed.log";
+$logger_processing_log  = "$logger_directory/zmlogprocessing.log";
+
+sub checkPID {
+  # try to avoid multiple instances
+  if (-f ${pid_file} ) {
+    open PID, "$pid_file";
+    my $p = <PID>;
+    close PID;
+    if ($p eq "") {
+      unlink($pid_file);
+      return
+    }
+    if (kill (0, $p)){
+      warn("$0 already running with pid $p\n");
+      exit;
+    }
+  }
+}
+
+sub updatePID {
+  open PID, "> $pid_file";
+  print PID $$;
+  close PID;
+}
+
+sub getLocalConfig {
+  my $key = shift;
+  if (defined ($ENV{zmsetvars})) {
+    return $ENV{$key};
+  }
+  open CONF, 
+    "${zimbra_home}/bin/zmlocalconfig -q -x -s -m shell |" 
+    or die "Can't open local config: $!";
+  my @conf = <CONF>;
+  close CONF;
+
+  chomp @conf;
+
+  foreach (@conf) {
+    my ($key, $val) = split '=', $_, 2;
+    $val =~ s/;$//;
+    $val =~ s/'$//;
+    $val =~ s/^'//;
+    $ENV{$key} = $val;
+  }
+  $ENV{zmsetvars} = 'true';
+  return $ENV{$key};
+}
+
+sub counter_increment($$$) {
+    my ($data, $host, $counter) = @_;
+    counter_add($data, $host, $counter, 1);
+}
+
+sub counter_add($$$$) {
+    my ($data, $host, $counter, $amount) = @_;
+    $data->{$host} = {} if (!exists $data->{$host});
+    $data->{$host}->{$counter}  = 0 if (!exists $data->{$host}->{$counter});
+    $data->{$host}->{$counter} += $amount;
+}
+
+sub run() {
+    return if ! -f $logger_unprocessed_log;
+    checkPID();
+    updatePID();
+    unlink($logger_processing_log) if -f $logger_processing_log; # must be stale
+    rename($logger_unprocessed_log, $logger_processing_log);
+    open(LOG, "<$logger_processing_log") || die $!;
+    open(LOG, "</home/pfnguyen/zimbra.log") || die $!;
+
+    my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)(\[(\d+)\])?: (.*)$/o;
+    my %host_data;
+    my %seen_qid;
+    while (<LOG>) {
+        my ($log_date, $host, $ip, $name, $app, undef, $pid, $msg) =
+                ($_ =~ m/$logregex/);
+        $host = ((defined($ip) && $ip ne "") ? $ip : $name);
+
+        if ($app eq 'clamd') {
+            counter_increment(\%host_data, $host, 'clam_events');
+        } elsif ($app eq 'sendmail') {
+            counter_increment(\%host_data, $host, 'sendmail_events');
+        } elsif ($app eq 'amavis') {
+            if ($msg =~ /\(\S+\) (Passed|Blocked) (\w+)/) {
+                my $disp = $1;
+                my $reason = $2;
+                counter_increment(\%host_data, $host, 'filter_count');
+                if ($disp eq 'Passed') {
+                } elsif ($disp eq 'Blocked') {
+                    if ($reason =~ /INFECTED/) {
+                        counter_increment(\%host_data, $host, 'filter_virus');
+                    } elsif ($reason =~ /SPAM/) {
+                        counter_increment(\%host_data, $host, 'filter_spam');
+                    } else {
+                        counter_increment(\%host_data, $host, 'filter_misc');
+                    }
+                }
+            }
+        } elsif ($app =~ /^postfix/o) {
+            if ($msg =~ /^([A-F0-9]+):/) {
+                my $qid = $1;
+                counter_increment(\%host_data, $host, 'mta_count')
+                        if (!exists $seen_qid{$qid});
+                $seen_qid{$qid} = 1;
+                counter_add(\%host_data, $host, 'mta_volume', $1)
+                        if ($msg =~ /, size=(\d+),/);
+            }
+        }
+    }
+    close(LOG);
+    foreach my $host (keys %host_data) {
+        my $hdata = $host_data{$host};
+        my @columns = keys %$hdata;
+        my $columns = join(',', @columns);
+        my @data;
+        foreach my $c (@columns) {
+            push(@data, $hdata->{$c});
+        }
+        my $data = join(',', @data);
+        Zimbra::Mon::Logger::Log("info", "MTA: $host: ${columns}:: $data");
+    }
+
+    unlink($pid_file);
+    unlink($logger_processing_log);
+}
+
+run();

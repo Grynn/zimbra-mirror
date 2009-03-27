@@ -288,6 +288,7 @@ sub run() {
     my %fragments; # workaround for syslogd 1024 byte limit
 
     my $mailboxdre = qr/\[(\w+\.csv)\] .* slogger - (\w+\.csv): (.*):: (.*)$/;
+    my $zimbramonmtare = qr/MTA: (\S+): (.*):: (.*)$/;
     my $zimbramonstatre = qr/zmstat (\S+\.csv): (.*):: (.*)$/;
     my $zimbramonstatusre = qr/STATUS: (\S+): (\S+): (\w+)\s*$/;
     my $zimbramonqueuere = qr/QUEUE: (\d+) (\d+)\s*$/;
@@ -332,6 +333,9 @@ sub run() {
                 $csv_file = 'zmqueuelog';
                 $headers  = 'kB,msgs';
                 $data     = "$kbs,$msgs";
+            } elsif (@match = ($msg =~ m/$zimbramonmtare/)) {
+                ($host, $headers, $data) = @match;
+                $csv_file = 'zmmtastats';
             }
             next if (!@match);
         } elsif ($app eq 'mailboxd') {
