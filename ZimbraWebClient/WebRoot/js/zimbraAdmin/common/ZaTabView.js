@@ -72,8 +72,8 @@ function (xModelMetaData, xFormMetaData) {
 	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
 	this._localXForm.setController(ZaApp.getInstance());
 	this._localXForm.draw();
-	var formChangeListener = new AjxListener(this, ZaTabView.prototype.setDirty,[true]) ;
-	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_CHANGED,formChangeListener);
+	this.formChangeListener = new AjxListener(this, ZaTabView.prototype.setDirty,[true]) ;
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_CHANGED,this.formChangeListener);
 	this._drawn = true;
 }
 
