@@ -75,7 +75,9 @@ if (ZaAccount) {
             elementChanged :
             function(elementValue,instanceValue, event) {
                 if(elementValue == "TRUE") {
-                    this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsSystemAdminAccount);
+                    var isSystemAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsSystemAdminAccount) ;
+                    if ( isSystemAdmin && isSystemAdmin == "TRUE" )
+                        this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsSystemAdminAccount);
                 }
                     this.getForm().itemChanged(this, elementValue, event);
             },
@@ -151,9 +153,11 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
                        tmpGrouperItems[j].elementChanged =
 								function(elementValue,instanceValue, event) {
 									if(elementValue == "TRUE") {
-										this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
+                                        var isAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsAdminAccount) ;
+                                        if ( isAdmin && isAdmin == "TRUE" )
+                                            this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
 								    }
-										this.getForm().itemChanged(this, elementValue, event);
+								    this.getForm().itemChanged(this, elementValue, event);
 								};
                        break;
                    }
@@ -194,9 +198,11 @@ if (ZaXDialog.XFormModifiers["ZaNewAccountXWizard"]) {
                        tmpGrouperItems[j].elementChanged =
 								function(elementValue,instanceValue, event) {
 									if(elementValue == "TRUE") {
-										this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
+                                        var isAdmin = this.getInstanceValue(ZaAccount.A_zimbraIsAdminAccount) ;
+                                        if ( isAdmin && isAdmin == "TRUE" )
+                                            this.setInstanceValue("FALSE", ZaAccount.A_zimbraIsAdminAccount);
 								    }
-										this.getForm().itemChanged(this, elementValue, event);
+								    this.getForm().itemChanged(this, elementValue, event);
 								};
                        break;
                    }

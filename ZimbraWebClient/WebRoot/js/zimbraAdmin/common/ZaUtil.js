@@ -114,19 +114,3 @@ ZaUtil.compareObjects = function(obj1, obj2) {
 	if (obj1.name < obj2.name)
 		return -1;	
 }
-
-ZaUtil.isServerBooleanValue = function (value) {
-    if ((value && (value == "TRUE" || value == "FALSE"))){
-        return true;  //when value is undefined, it returns undefined.
-    }else {
-        return false ;
-    }
-}
-
-ZaUtil.getBooleanValue = function (value) {
-    if (value && value == "TRUE"){
-        return true;
-    }else{
-        return false ;
-    }
-}

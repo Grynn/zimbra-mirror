@@ -256,9 +256,6 @@ function () {
                 if( tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
 					mods[a] = tmpObj.attrs[a];
 				}
-			} else if (ZaUtil.isServerBooleanValue (tmpObj.attrs[a]))   {
-                if (ZaUtil.getBooleanValue(tmpObj.attrs[a]) != ZaUtil.getBooleanValue(this._currentObject.attrs[a]))				
-				        mods[a] = tmpObj.attrs[a];
 			} else {
 				mods[a] = tmpObj.attrs[a];
 			}				
