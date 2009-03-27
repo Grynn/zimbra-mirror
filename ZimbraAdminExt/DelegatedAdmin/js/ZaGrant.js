@@ -36,13 +36,13 @@ ZaGrant.A_right = "right" ;
 ZaGrant.A_deny = "deny" ;
 ZaGrant.A_canDelegate = "canDelegate";
 ZaGrant.A_target = "target" ;
+ZaGrant.A_target_id = "target_id" ;
 ZaGrant.A_target_type = "target_type"
 ZaGrant.A_right_type = "right_type" ;
 ZaGrant.A_inline_right = "inline_right" ;
 ZaGrant.A_inline_verb = "verb" ;
 ZaGrant.A_inline_target_type = "inline_target_type" ;
 ZaGrant.A_inline_attr = "inline_attr" ;
-
 
 ZaGrant.A2_grantsList = "grantsList" ;
 ZaGrant.A2_grantsListSelectedItems = "grantsListSelectedItems" ;
@@ -58,13 +58,6 @@ ZaGrant.INLINE_VERB_TYPE_CHOICES = [
     {value:"set", label:com_zimbra_delegatedadmin.Col_inline_verb_set},
     {value:"get", label:com_zimbra_delegatedadmin.Col_inline_verb_get}
 ]
- 
-
-ZaGrant.getSampleGrantsList = function () {
-    var list = new ZaItemList(ZaGrant);
-    list._vector = AjxVector.fromArray(ZaGrant.getSampleGrants())  ;
-    return list ;
-}
 
 ZaGrant.getGlobalGrantsList = function () {
     var list = new ZaItemRightList(ZaRight);
@@ -73,13 +66,11 @@ ZaGrant.getGlobalGrantsList = function () {
 }
 
 ZaGrant.loadMethod = function (by, val, type) {
-//    var grants = ZaGrant.getSampleGrants () ;
-
     var soapDoc = AjxSoapDoc.create("GetGrantsRequest", ZaZimbraAdmin.URN, null);
     if (!type) type = this.type ;
-    if (type == ZaItem.DL) type = ZaZimbraRights.type_dl ;
+    
     var elTarget ;
-    if (type == "global")  {
+    if (type == ZaItem.GLOBAL_GRANT || type == ZaItem.GLOBAL_CONFIG)  {
         elTarget = soapDoc.set(ZaGrant.A_target, "") ;
     } else {
         elTarget = soapDoc.set(ZaGrant.A_target, val) ;
@@ -103,8 +94,23 @@ ZaGrant.loadMethod = function (by, val, type) {
         if (grants != null) {
             for (var i = 0; i < grants.length; i++) {
                 var grant = new ZaGrant () ;
-                grant [ZaGrant.A_target] = val ;
+
+                /*if (by == "id") {
+                    grant [ZaGrant.A_target_id] = val ;                    
+                } else if (by == "name") {
+                    grant [ZaGrant.A_target] = val ;
+                } else if (type == "global") {
+                    grant [ZaGrant.A_target] = "global" ;                    
+                } */
+
+                if (type == ZaItem.GLOBAL_GRANT || type == ZaItem.GLOBAL_CONFIG) {
+                    grant [ZaGrant.A_target] = type ;
+                } else {
+                    grant [ZaGrant.A_target] = this.name ;
+                    grant [ZaGrant.A_target_id] = this.id ;
+                }
                 grant [ZaGrant.A_target_type] = type ;
+                
                 for (var key in grants[i]) {
                     if (key == "deny") {
                         grant [ZaGrant.A_deny] = grants[i][key] ? "1" : "0" ;
@@ -176,34 +182,43 @@ ZaGrant.grantMethod = function (obj) {
     }
 }
 
-//it is useful when an account is deleted, so its value is the Id of the account
-ZaGrant.byNameOrId = function (value) {
-    if (value.indexOf("@") > 0) {
-        return "name" ;
-    } else{
-        return "id" ;
-    }
-}
-
 //RevokeRightRequest
 /**
  *
  * @param target - target information
  * @param obj - grant informaiton
  */
-ZaGrant.revokeMethod = function (target, obj) {
+ZaGrant.revokeMethod = function (obj) {
     if (AjxEnv.hasFirebug)
       console.log("Revoke Rights ...") ;
     var soapDoc = AjxSoapDoc.create("RevokeRightRequest", ZaZimbraAdmin.URN, null);
 
-    var targetValue = (obj[ZaGrant.A_target] ? obj[ZaGrant.A_target] :target[ZaGrant.A_target]) ;
-    var elTarget = soapDoc.set(ZaGrant.A_target, targetValue) ;
-    elTarget.setAttribute("by", "name") ;
-    elTarget.setAttribute("type", (obj [ZaGrant.A_target_type] ? obj [ZaGrant.A_target_type] :target[ZaGrant.A_target_type])) ;
+    var targetType = obj [ZaGrant.A_target_type] ;
+    if (targetType == ZaItem.GLOBAL_GRANT || targetType == ZaItem.GLOBAL_CONFIG) {
+        var elTarget = soapDoc.set(ZaGrant.A_target, "") ;
+    } else if (targetType == ZaItem.ZIMLET){
+        var elTarget = soapDoc.set(ZaGrant.A_target, obj[ZaGrant.A_target]) ;
+        elTarget.setAttribute("by", "name") ;
+    } else {
+        var elTarget ;
+        if (obj[ZaGrant.A_target_id]) {
+            elTarget = soapDoc.set(ZaGrant.A_target, obj[ZaGrant.A_target_id]) ;
+            elTarget.setAttribute("by", "id") ;
+        } else if (obj[ZaGrant.A_target]) {
+            elTarget = soapDoc.set(ZaGrant.A_target, obj[ZaGrant.A_target]) ;
+            elTarget.setAttribute("by", "name") ;
+        }
+    }
+    elTarget.setAttribute("type", targetType) ;
 
-    var elGrantee = soapDoc.set(ZaGrant.A_grantee, obj[ZaGrant.A_grantee_id]) ;
-//    elGrantee.setAttribute("by", ZaGrant.byNameOrId(obj[ZaGrant.A_grantee])) ;
-    elGrantee.setAttribute("by", "id") ;
+    var elGrantee ;
+    if (obj[ZaGrant.A_grantee_id]) {
+        elGrantee = soapDoc.set(ZaGrant.A_grantee, obj[ZaGrant.A_grantee_id]) ;
+        elGrantee.setAttribute("by", "id") ;
+    }else if (obj[ZaGrant.A_grantee]) { //there is no grantee id when we just granted a right
+        elGrantee = soapDoc.set(ZaGrant.A_grantee, obj[ZaGrant.A_grantee]) ;
+        elGrantee.setAttribute("by", "name") ;
+    }
     elGrantee.setAttribute("type",obj[ZaGrant.A_grantee_type] ) ;
 
     var elRight = soapDoc.set("right", obj[ZaGrant.A_right])

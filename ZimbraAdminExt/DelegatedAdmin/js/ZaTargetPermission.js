@@ -141,7 +141,7 @@ ZaGrantsListView.revokeRight = function () {
     
         for (var i = 0; i < selectedGrants.length; i ++) {
 // TODO: when multiselection enabled, we need a progress dialog to show the progress
-            if (ZaGrant.revokeMethod (targetInfo, selectedGrants[i])) {
+            if (ZaGrant.revokeMethod (selectedGrants[i])) {
 //                var j = ZaTargetPermission.findIndexOfGrant(currentGrantList, selectedGrants[i]);
                 for (var j = 0; j < currentGrantList.length; j ++) {
                     if (selectedGrants[i] == currentGrantList[j] ) {
@@ -167,7 +167,7 @@ ZaGrantsListView.revokeGlobalGrant = function () {
 
         for (var i = 0; i < selectedGrants.length; i ++) {
 // TODO: when multiselection enabled, we need a progress dialog to show the progress
-            if (ZaGrant.revokeMethod (targetInfo, selectedGrants[i])) {
+            if (ZaGrant.revokeMethod (selectedGrants[i])) {
 // fire the removal event.               
                 this.fireRemovalEvent (selectedGrants[i]) ;
             } else {
@@ -504,6 +504,7 @@ function (by) {
             obj[ZaGrant.A_target] = ZaMsg.OVP_global ;
         }else{
             obj[ZaGrant.A_target] = instance.name;
+            obj[ZaGrant.A_target_id] = instance.id ;
         }
     } else if (by == ZaGrant.A_grantee) {
        var granteeType = instance[ZaNewAdmin.A_admin_type] ;
@@ -514,6 +515,7 @@ function (by) {
         }
         obj[ZaGrant.A_grantee_type] = granteeType ;
         obj[ZaGrant.A_grantee] = instance.name ;
+        obj[ZaGrant.A_grantee_id] = instance.id ;
     }
 
     obj.setAttrs = {} ;
@@ -555,7 +557,13 @@ function (grantsList) {
             dlgMsg += "<tr>";
              if (key == ZaGrant.A_target)  {
                 dlgMsg += "<td>" + com_zimbra_delegatedadmin.Col_target_name + ": " + "</td>";
-                dlgMsg += "<td>" + grant[ZaGrant.A_target] + "</td>" ;
+                var targetName = grant[ZaGrant.A_target] ;
+                if (grant[ZaGrant.A_target_type] == ZaItem.GLOBAL_GRANT) {
+                    targetName = com_zimbra_delegatedadmin.val_global_grant  ;
+                } else if (grant[ZaGrant.A_target_type] == ZaItem.GLOBAL_CONFIG) {
+                    targetName = ZaMsg.OVP_global ; 
+                }
+                dlgMsg += "<td>" + targetName + "</td>" ;
             } else if (key ==ZaGrant.A_grantee)  {
                 var label = com_zimbra_delegatedadmin.Col_grantee_name ;
                 var value = grant[ZaGrant.A_grantee] ;
