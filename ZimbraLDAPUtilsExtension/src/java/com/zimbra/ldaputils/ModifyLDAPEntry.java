@@ -42,18 +42,23 @@ public class ModifyLDAPEntry extends AdminDocumentHandler {
 		zlc = new ZimbraLdapContext(true);
 
 		String dn = request.getAttribute(ZimbraLDAPUtilsService.E_DN);
+		if(dn==null)
+			throw ServiceException.INVALID_REQUEST("Missing request parameter: "+ZimbraLDAPUtilsService.E_DN, null);
+		
 		Map<String, Object> attrs = AdminService.getAttrs(request);
 
 		try {
 			LDAPUtilEntry ne = GetLDAPEntries.getObjectByDN(dn, zlc);
+			if(ne==null)
+				throw ServiceException.FAILURE("Cannot find an object for DN "+dn, null);
+			
 			LdapUtil.modifyAttrs(zlc, ne.getDN(), attrs, ne);
 
 			ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] { "cmd",
 					"SaveLDAPEntry", "dn", dn }, attrs));
 			
 			LDAPUtilEntry newNe = GetLDAPEntries.getObjectByDN(dn, zlc);
-			Element response = lc
-					.createElement(ZimbraLDAPUtilsService.MODIFY_LDAP_ENTRY_RESPONSE);
+			Element response = lc.createElement(ZimbraLDAPUtilsService.MODIFY_LDAP_ENTRY_RESPONSE);
 			ZimbraLDAPUtilsService.encodeLDAPEntry(response, newNe);
 
 			return response;
