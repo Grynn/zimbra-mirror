@@ -445,13 +445,28 @@ function(n) {
 }
 
 ZaSearch.getSearchByNameQuery =
-function(n) {
+function(n, types) {
 	if (n == null || n == "") {
 		return "";
 	} else {
 		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
-		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraId="+n+")" +
-                "(mail=*"+n+"*)(zimbraMailAlias=*"+n+"*)(zimbraMailDeliveryAddress=*"+n+"*)(zimbraDomainName=*"+n+"*))");
+        var query = [];
+        for (var i = 0 ; i < types.length; i ++) {
+            if (types[i] == "domains") {
+                query.push ("(zimbraDomainName=*"+n+"*)") ;
+            } else {
+                query.push("(mail=*"+n+"*)") ;
+                if (types[i] == "accounts" || types[i] == "resources") {
+                    query.push ("(zimbraMailDeliveryAddress=*"+n+"*)");
+                } else if (types[i] == "distributionlists" || types[i] == "aliases") {
+                    query.push("(zimbraMailAlias=*"+n+"*)(uid=*"+n+"*)")  ;
+                } 
+            }
+        }
+        return "(|" + query.join("") + ")" ;
+        /*
+        return ("(|(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)(zimbraId="+n+")" +
+                ")"); */
 	}
 }
 
