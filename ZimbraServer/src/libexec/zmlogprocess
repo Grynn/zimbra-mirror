@@ -96,7 +96,6 @@ sub run() {
     unlink($logger_processing_log) if -f $logger_processing_log; # must be stale
     rename($logger_unprocessed_log, $logger_processing_log);
     open(LOG, "<$logger_processing_log") || die $!;
-    open(LOG, "</home/pfnguyen/zimbra.log") || die $!;
 
     my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)(\[(\d+)\])?: (.*)$/o;
     my %host_data;
