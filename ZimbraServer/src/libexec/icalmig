@@ -20,17 +20,20 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.25";
+my $version = "1.26";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
-my @TZHeader;
+#TZ tag to convert date-time info into TZ format
 my $TZTag="";
-my @TZIDArray=();
-my $GTZOffset="-00.00";
+#hold TZID records from timezones.ics
+my %TZIDHash=();
+#global TZ record for chosen TZ
+my $GTZRec;
 
 #get script directory
 my $progdir = cwd;
+#store timezones.ics file path
 my $timezonefile;
 #keep log file in script directory
 my $logfilepath;
@@ -47,13 +50,11 @@ else
 my $logfilename = "icalmig.log";
 my $logfile;
 my $icalfile;
+my $outfile;
 my $invalidfile;
-my $chtzid; #chosen TZID
 my $tzx_tz="NOTZ";
 #used for debug purpose
 $icalfile="" if ($DEBUG);
-
-my $outfile;
 
 #used as const values for pattern calcualtions.
 my $DAILY = 1,
@@ -197,6 +198,7 @@ sub help
   print "\n";
   
 }
+
 #Initialize: open logfile and iCal file for parsing
 sub Initialize
 {
@@ -232,12 +234,12 @@ sub Initialize
   if ($useTZcomponent)
   {
     open TZFHANDLE, "<$timezonefile" or die "can not open time zone file.";
-    &init_TZArray();
+    &init_TZRec();
     my $tzcoice;
     if($tzx_tz eq "NOTZ")
     {
       print "Available TimeZones:\n";
-      &print_TZArray();
+      &print_TZIDs();
       print "You have chosen to include the TimeZone information.\n";
       print "Please mention the TZID of the required TimeZone from above printed list.\n";
       chomp($tzcoice = <STDIN>);
@@ -249,18 +251,12 @@ sub Initialize
     }
     &log_message("Entered time zone: $tzcoice");
     $tzcoice = trim($tzcoice);
-    $chtzid=&get_chosed_TZ($tzcoice);
-    $chtzid = trim($chtzid);
+    #Retreive Timze record for chosen TZ
+    $GTZRec=get_chosed_TZRec($tzcoice);
+    my $chtzid = trim($GTZRec->{'TZID'});
     &log_message("Retrieved time zone: $chtzid");
     $TZTag= ";".$chtzid;
-    #get TZ offset
-    my $stidx= index($chtzid,'(');
-    my $enidx= index($chtzid,')');
-    my $tmptoff=substr($chtzid,$stidx+4,($enidx-$stidx-4));
-    $GTZOffset =$tmptoff;
-    &log_message("Offset: $GTZOffset");
   }
-  #&init_TZHeader if $useTZcomponent;
 }
 
 #unInitialize: close logfile and ical file
@@ -284,6 +280,7 @@ sub UnInitialize
   }
 }
 
+#print final status message
 sub end_message
 {
   &log_message("\n");
@@ -338,8 +335,7 @@ sub processfile
       if (($useTZcomponent)&&(!$IsTZHeaderPrinted))
       {
         &log_message("Add TimeZoneHeader.");
-        #&Add_TZHeader;
-        &print_TZINFObyTZID($chtzid);
+        &print_TZINFObyTZID($GTZRec->{'TZID'});
         $write_pos = tell OTHANDLE;
         $IsTZHeaderPrinted=1;
       }
@@ -365,7 +361,7 @@ sub processfile
       $gen_CFsteventpos = tell CFHANDLE;#CFHANDLEs generic event start pos
       $firstevchkctr++;
     }
-    #RRULE etc will be created on the base of UID change as in some cases, RDATEs
+    #RRULE will be created on the base of UID change as in some cases, RDATEs
     #are not part of last VEVENT. RDATEs may appear in any VEVENT also. So UID
     #will be used as criteria to check to process group VEVENTS e.g. VEVENTS with
     #same UID.
@@ -949,7 +945,7 @@ sub processfile
                     
                     #check for if master date time is equal to rdate time component
                     my $rsttime= $sdt;
-                    if (!istime_equal($msttime,$sdt))
+                    if (!istime_equal(get_offset_datetime($msttime),get_offset_datetime($sdt)))
                     {
                       $isrdtimeok = 0;
                       $ltd_exlist{$rsdt}=0;
@@ -1039,7 +1035,7 @@ sub processfile
                   $ltd_exlist{$rndt}=1;
                 }
                 #check for if master date time is equal to rdate time component
-                if (!istime_equal($msttime,$ndt))
+                if (!istime_equal(get_offset_datetime($msttime),get_offset_datetime($ndt)))
                 {
                   $isrdtimeok = 0;
                   $ltd_exlist{$rndt}=0;
@@ -1619,6 +1615,7 @@ sub processfile
   return %hlist;
 }
 
+#check the status and if complete 100% set it COMPLETED
 sub sed_settaskstatus
 {
   &log_message("using sed to set 100% compelete task's status to complete");
@@ -1627,6 +1624,7 @@ sub sed_settaskstatus
   system $sedcmd;
 }
 
+#create monthly RRULE
 sub get_monthly_rrule
 {
   my $srtd_darray = shift;
@@ -2020,6 +2018,7 @@ sub get_byday
   return $bywkday;
 }
 
+#create weekly RRULE
 sub get_weekly_rrule
 {
   my $wkdaylist=shift;
@@ -2262,10 +2261,9 @@ sub get_str_weekday
     $iwkday=7;
   }
   return $iwkday;
-
 }
 
-
+#get string representation of weekday by day number
 sub get_weekday_str
 {
   my $stwkday = shift;
@@ -2311,7 +2309,6 @@ sub get_datepart_from_icsdt
   my $ldt = substr($icsdate,0,$tidx);
   return $ndt;
 }
-
 
 #get date by adding days into date
 sub get_date_by_days
@@ -2424,13 +2421,13 @@ sub get_time
   return $tm;
 }
 
+#get date part from icsdt
 sub get_date_part
 {
   my $dt=shift;
   $dt = get_date($dt);
   $dt = substr($dt,6,2);
   return $dt;
-
 }
 
 #Input format 20070302T153000Z, 20070406
@@ -2453,43 +2450,6 @@ sub get_year
   return $yr;
 }
 
-#Input DateTime format 20070302T153000Z, 20070302T153000,20070406
-#Input TZ Offset -/+HR.MN([-/+]hour.minute)
-#returns
-sub get_DeltaDHMS
-{
-  my $dttm=shift;
-  my $tzoffset =shift;
-  
-  #DATETIME Info
-  my @darr = split(/T/, $dttm);
-  my $tdt= $darr[0];
-  my $yr= substr($tdt,0,4);
-  my $mm= substr($tdt,4,2);
-  my $dy= substr($tdt,6,2);
-  
-  my $dt= $darr[1];
-  my $hh= substr($dt,0,2);
-  my $mn= substr($dt,2,2);
-  my $ss= substr($dt,4,2);
-  
-  #TZ offset info
-  my $sgn= substr($tzoffset,0,1);
-  my $Dd =0;
-  my $Dh= substr($tzoffset,1,2);
-  my $Dm= substr($tzoffset,4,2);
-  my $Ds=0;
-  
-  my $yr2, my $mm2, my $dy2, my $h2, my $m2, my $s2;
-  ($yr2, $mm2, $dy2, $h2, $m2, $s2) =
-    Add_Delta_DHMS( $yr, $mm, $dy, $hh, $mn, $ss,
-                $Dd, $sgn.$Dh, $sgn.$Dm, $Ds );
-  my $newdt=sprintf("%d%02d%02dT%02d%02d%02d", $yr2,$mm2,$dy2,$h2,$m2,$s2);
-  
-  #my $newdt= $yr2.$mm2.$dy2.'T'.$h2.$m2.$s2;
-  return $newdt;
-
-}
 sub print_outfile
 {
   my $str=@_[0];
@@ -2561,37 +2521,310 @@ sub rtrim($)
 	return $string;
 }
 
-#initialize the time zone array with available TZID
-sub init_TZArray
+#add METHOD:PUBLISH
+sub Add_METHOD_PUBLISH
 {
+  print_outfile("METHOD:PUBLISH");
+}
+#*********TimeZone processing*****************>>>>>>>>>>>
+
+#initialize the time zone array with available TZID
+sub init_TZRec
+{
+  my $TZRec;
+  my $stdtz=0;my $dyltz=0;
   while (<TZFHANDLE>)
   {
-    if($_=~/^TZID:/)
+    if($_=~/^BEGIN:VTIMEZONE/)
     {
-      push (@TZIDArray,$_);
+      $TZRec=();
+      $TZRec->{'STDTZOFFSETTO'}=-1;
+      $TZRec->{'DYLTZOFFSETTO'}=-1;
+      $TZRec->{'STDBYMONTH'}=-1;
+      $TZRec->{'DYLBYMONTH'}=-1;
+      $TZRec->{'STDBYDAY'}=-1;
+      $TZRec->{'DYLBYDAY'}=-1;
+      $TZRec->{'TZID'}=-1;
+      $TZRec->{'RRULE'}=-1;
+    }
+    elsif($_=~/^TZID:/)
+    {
+      $TZRec->{'TZID'}=$_;
+    }
+    elsif($_=~/^BEGIN:STANDARD/)
+    {
+      $stdtz=1;
+    }
+    elsif($_=~/^END:STANDARD/)
+    {
+      $stdtz=0;
+    }
+    elsif($_=~/^BEGIN:DAYLIGHT/)
+    {
+      $dyltz=1;
+    }
+    elsif($_=~/^END:DAYLIGHT/)
+    {
+      $dyltz=0;
+    }
+    elsif($_=~/^TZOFFSETTO/)
+    {
+      my $len=length($_);
+      my $ridx= rindex($_,':');
+      my $tzto=substr($_,($ridx+1),($len-$ridx));
+      if($stdtz)
+      {
+        $TZRec->{'STDTZOFFSETTO'}=$tzto;
+      }
+      elsif($dyltz)
+      {
+        $TZRec->{'DYLTZOFFSETTO'}=$tzto;
+      }
+      else
+      {
+        &log_message("FATAL ERROR--No TZ Component available for offset assignment.");
+      }
+    }
+    elsif($_=~/^RRULE:/) #get RRULE for TZIds
+    {
+      $TZRec->{'RRULE'}=$_;
+      my $len=length($_);
+      #get STDBYDAY
+      my $bydridx= rindex($_,';BYDAY');
+      my $stbyday=substr($_,($bydridx+1),($len-$bydridx));
+      my @bydarr=split(/=/, $stbyday);
+
+      #get STDBYMONTH
+      my $bymridx= rindex($_,';BYMONTH');
+      my $stbymonth=substr($_,($bymridx+1),($bydridx-$bymridx-1));
+      my @bymarr=split(/=/, $stbymonth);
+      if($stdtz)
+      {
+        $TZRec->{'STDBYDAY'}=$bydarr[1];
+        $TZRec->{'STDBYMONTH'}=$bymarr[1];
+      }
+      elsif($dyltz)
+      {
+        $TZRec->{'DYLBYDAY'}=$bydarr[1];
+        $TZRec->{'DYLBYMONTH'}=$bymarr[1];
+      }
+      else
+      {
+        &log_message("FATAL ERROR!!! No TZ Component available for RRULE assignment.");
+      }
+    }
+    elsif($_=~/^END:VTIMEZONE/)
+    {
+      $TZIDHash{$TZRec->{'TZID'}}= $TZRec;
     }
   } #end while<TZFHANDLE>
 }
-#print TZID array for users choice
-sub print_TZArray
+
+#Get the TZ offset on the base of STANDARD and DAYLIGHT RRULE
+sub Get_TZoffset
 {
-  for(my $i=0; $i<=$#TZIDArray; $i++)
+  my $iTzRec = shift;
+  my $iicsdt = shift;
+  my $tzoffset;
+  #no RRULE means only single Standard time available
+  if ($iTzRec->{'RRULE'} eq -1)
   {
-    print "$TZIDArray[$i]";
+    $tzoffset= $iTzRec->{'STDTZOFFSETTO'};
+  }
+  else #else check date for STANDARD or DAYLIGHT time segment
+  {
+    my $dt=get_date($iicsdt);
+    my $stdbd=$iTzRec->{'STDBYDAY'};
+    my $stdbm=$iTzRec->{'STDBYMONTH'};
+    my $yr=get_year($dt);
+    #get STANDARD TZ date
+    my $stddt= Get_Date_By_Weekday_Month_Year($stdbd,$stdbm,$yr);
+    #&log_message("$stddt");
+    
+    my $dylbd=$iTzRec->{'DYLBYDAY'};
+    my $dylbm=$iTzRec->{'DYLBYMONTH'};
+    my $dyldt= Get_Date_By_Weekday_Month_Year($dylbd,$dylbm,$yr);
+    #&log_message("$dyldt");
+    if(IsDateInSTANDARDTZRange($stddt,$dyldt,$dt))
+    {
+      #STANDARD TZ
+      $tzoffset= $iTzRec->{'STDTZOFFSETTO'};
+    }
+    else
+    {
+      #DAYLIGHT TZ
+      $tzoffset= $iTzRec->{'DYLTZOFFSETTO'};
+    }
+  }
+  my $newTzoffset;
+  my $noffset=substr($tzoffset,0,1);
+  $noffset = trim($noffset);
+  if($noffset ne '-')
+  {
+    $newTzoffset= substr($tzoffset,0,3);
+    $newTzoffset = $newTzoffset.'.'.substr($tzoffset,3,2);
+  }
+  else
+  {
+    $newTzoffset= substr($tzoffset,0,3);
+    $newTzoffset = $newTzoffset.'.'.substr($tzoffset,3,2);
+  }
+  return $newTzoffset;
+}
+
+#find if dates are in given range
+#Input date1, date2, date to test
+#date can be in format of icsdt e.g. 20080402T120000, 20080903
+#returns 1 if in range or 0 if not in range
+sub IsDateInSTANDARDTZRange
+{
+  my @STD_MONTHS=();
+  my $stddt=shift;
+  my $dyldt=shift;
+  my $ms_date=shift;
+
+  my $sdt = substr($stddt,6,2);
+  my $smth= substr($stddt,4,2);
+  my $syr= substr($stddt,0,4);
+  
+  my $ddt = substr($dyldt,6,2);
+  my $dmth=  substr($dyldt,4,2);
+  my $dyr= substr($dyldt,0,4);
+  
+  my $mdt = substr($ms_date,6,2);
+  my $mmth = substr($ms_date,4,2);
+  my $myr = substr($ms_date,0,4);
+  
+  # if STANDARD starts at end of year e.g. 11
+  if ($smth>$dmth)
+  {
+    my $totmths= (12-$smth)+$dmth;
+    for(my $i=$smth;$i<=($smth+$totmths);$i++)
+    {
+      if($i eq 12)
+      {
+        $STD_MONTHS[($i-$smth)]=12;
+      }
+      else
+      {
+        $STD_MONTHS[($i-$smth)]= ($i % 12);
+      }
+    }
+  }
+  else #if STANDARD is in same year e.g 3 to 10
+  {
+    for (my $i=$smth;$i<=$dmth;$i++)
+    {
+      $STD_MONTHS[($i-$smth)]=$i;
+    }
+  }
+  #if month is in STANDARD month list, continue else..
+  my $cont=0;
+  for (my $i=0; $i<=$#STD_MONTHS;$i++)
+  {
+    if($mmth == $STD_MONTHS[$i])
+    {
+      $cont=1;
+      last;
+    }
+  }
+  #for edge case. If month is same then check for dates
+  if($cont)
+  {
+    if($smth == $mmth)
+    {
+      if(!($mdt ge $sdt))
+      {
+        $cont=0;
+      }
+    }
+    elsif($dmth == $mmth)
+    {
+      if(!($mdt le $ddt))
+      {
+        $cont=0;
+      }
+    }
+  }
+  return $cont;
+}
+
+#get the date by weekday, monthe and year
+#e.g. weekdays can be 1SU, -1SA, 2SU
+#input weekday,month,icsdate
+#returns Date e.g. 20080303
+sub Get_Date_By_Weekday_Month_Year
+{
+  my $weekday = shift;
+  my $month = shift;
+  my $icsdtyear= shift;
+  my $newdt=-1;
+  my $nweek=substr($weekday,0,1);
+  $nweek = trim($nweek);
+  if($nweek ne '-')#going forward in week
+  {
+    #get first day of week
+    my $firstday=1;
+    my $wday = Day_of_Week($icsdtyear, $month, $firstday);#7 for sunday
+    my $wkday=substr($weekday,1,2);
+    $wkday=trim($wkday);
+
+    #get weekday number
+    my $nwkday= get_str_weekday($wkday);
+
+    my $dt= (7*($nweek-1))+1+($nwkday - $wday);
+    $newdt=sprintf("%d%02d%02d", $icsdtyear,$month,$dt);
+  }
+  else #else going backward in week
+  {
+    $nweek=substr($weekday,1,1);
+    $nweek = trim($nweek);
+    my $ndaysmth=Days_in_Month($icsdtyear,$month);
+    my $wday = Day_of_Week($icsdtyear, $month, $ndaysmth);#7 for sunday
+    my $wkday=substr($weekday,2,2);
+    $wkday=trim($wkday);
+    #get weekday number
+    my $nwkday= get_str_weekday($wkday);
+
+    my $dt;
+    #if month-end wkday is less then what we need to go
+    if($wday<$nwkday)
+    {
+      $dt= $ndaysmth - ((7*($nweek-1))+ (7-$nwkday+$wday));
+    }
+    else
+    {
+      $dt = $ndaysmth - ((7*($nweek-1))+($wday-$nwkday));
+    }
+
+    $newdt=sprintf("%d%02d%02d", $icsdtyear,$month,$dt);
+  }
+  return $newdt;
+}
+
+#print TZID Values for users choice
+sub print_TZIDs
+{
+  foreach my $tzid (sort keys %TZIDHash)
+  {
+    my $tzrec= $TZIDHash{$tzid};
+    print "$tzrec->{'TZID'}";
   }
 }
 
-#get the complete TZID on the base of user's choice
-sub get_chosed_TZ
+#Get TZRec on the basis of TZID
+sub get_chosed_TZRec
 {
   my $tzchoice=shift;
   my $retval; my $tzfound=0;
-  for(my $i=0; $i<=$#TZIDArray; $i++)
+TRY_AGAIN:
+  foreach my $tzid (keys %TZIDHash)
   {
-    my $sindex = index( lc( $TZIDArray[$i] ), lc($tzchoice) );
-    if ($sindex !=-1)#($TZIDArray[$i] =~/$tzchoice/)
+    my $tzrec= $TZIDHash{$tzid};
+    my $sindex = index( lc( $tzrec->{'TZID'} ), lc($tzchoice) );
+    if ($sindex !=-1)
     {
-      $retval = $TZIDArray[$i];
+      $retval = $tzrec;
       $tzfound=1;
       last;
     }
@@ -2599,7 +2832,8 @@ sub get_chosed_TZ
   if(!$tzfound)
   {
     &log_message("$tzchoice not found. Switching to default TZID ((GMT-08.00) Pacific Time (US & Canada))");
-    $retval = "TZID:(GMT-08.00) Pacific Time (US & Canada)";
+    $tzchoice = "TZID:(GMT-08.00) Pacific Time (US & Canada)";
+    goto TRY_AGAIN;
   }
   return $retval;
 }
@@ -2610,6 +2844,7 @@ sub print_TZINFObyTZID
   #reset to start of file
   seek(TZFHANDLE, 0, 0);
   my $tzid= shift;
+  $tzid=trim($tzid);
   my $tzf_pos=0;
   my $tzinfofound=0;
   my $prv_pos=0;
@@ -2638,7 +2873,7 @@ sub print_TZINFObyTZID
   $_=$tmpdlr;
 }
 
-#input icsdate with or without TZTag
+#input icsdate with or without TZTag and TZRec
 #Rules to offset the given time as per RFC2445
 #floating date-time shouldnt be offset (19980118T230000)
 #UTC date-time should not have TZID at all (19980119T070000Z)
@@ -2659,7 +2894,8 @@ sub get_offset_datetime
   #UTC time->convert to local by offset and add TZID
   if (($lastchr eq "Z")&&($useTZcomponent))
   {
-    $offsdt=get_DeltaDHMS($ndt,$GTZOffset);
+    my $calculated_tzoffset=Get_TZoffset($GTZRec,$ndt);
+    $offsdt=get_DeltaDHMS($ndt,$calculated_tzoffset);
   }
   else #local time? Add just TZID
   {
@@ -2671,55 +2907,40 @@ sub get_offset_datetime
   my $newdt=sprintf("%s%s", $ldt,$offsdt);
   return $newdt;
 }
-#TimeZone information header for EST5EDT
-sub init_TZHeader
-{
-  @TZHeader =(
-  "BEGIN:VTIMEZONE",
-  "TZID:EST5EDT",
-  "BEGIN:DAYLIGHT",
-  "RRULE:FREQ=YEARLY;UNTIL=20750314T020000Z;BYMONTH=3;BYDAY=2SU",
-  "TZNAME:Eastern Standard Time\, Eastern Daylight Time",
-  "TZOFFSETTO:-0400",
-  "TZOFFSETFROM:-0500",
-  "DTSTART:20070308T020000",
-  "END:DAYLIGHT",
-  "BEGIN:STANDARD",
-  "RRULE:FREQ=YEARLY;UNTIL=20751107T020000Z;BYMONTH=11;BYDAY=1SU",
-  "TZNAME:Eastern Standard Time\, Eastern Daylight Time",
-  "TZOFFSETTO:-0500",
-  "TZOFFSETFROM:-0400",
-  "DTSTART:20071101T020000",
-  "END:STANDARD",
-  "BEGIN:DAYLIGHT",
-  "RRULE:FREQ=YEARLY;UNTIL=20060407T020000Z;BYMONTH=4;BYDAY=1SU",
-  "TZNAME:Eastern Standard Time\, Eastern Daylight Time",
-  "TZOFFSETTO:-0400",
-  "TZOFFSETFROM:-0500",
-  "DTSTART:19910401T020000",
-  "END:DAYLIGHT",
-  "BEGIN:STANDARD",
-  "RRULE:FREQ=YEARLY;UNTIL=20061031T020000Z;BYMONTH=10;BYDAY=-1SU",
-  "TZNAME:Eastern Standard Time\, Eastern Daylight Time",
-  "TZOFFSETTO:-0500",
-  "TZOFFSETFROM:-0400",
-  "DTSTART:19911025T020000",
-  "END:STANDARD",
-  "END:VTIMEZONE"
-  );
-  $TZTag= ";TZID=EST5EDT";
-}
 
-sub Add_TZHeader
+#Input DateTime format 20070302T153000Z, 20070302T153000,20070406
+#Input TZ Offset -/+HR.MN([-/+]hour.minute)
+#returns
+sub get_DeltaDHMS
 {
-  my $i;
-  for($i=0;$i <= $#TZHeader;$i++)
-  {
-    print_outfile("$TZHeader[$i]");
-  }
-}
+  my $dttm=shift;
+  my $tzoffset =shift;
 
-sub Add_METHOD_PUBLISH
-{
-  print_outfile("METHOD:PUBLISH");
+  #DATETIME Info
+  my @darr = split(/T/, $dttm);
+  my $tdt= $darr[0];
+  my $yr= substr($tdt,0,4);
+  my $mm= substr($tdt,4,2);
+  my $dy= substr($tdt,6,2);
+
+  my $dt= $darr[1];
+  my $hh= substr($dt,0,2);
+  my $mn= substr($dt,2,2);
+  my $ss= substr($dt,4,2);
+
+  #TZ offset info
+  my $sgn= substr($tzoffset,0,1);
+  my $Dd =0;
+  my $Dh= substr($tzoffset,1,2);
+  my $Dm= substr($tzoffset,4,2);
+  my $Ds=0;
+
+  my $yr2, my $mm2, my $dy2, my $h2, my $m2, my $s2;
+  ($yr2, $mm2, $dy2, $h2, $m2, $s2) =
+    Add_Delta_DHMS( $yr, $mm, $dy, $hh, $mn, $ss,
+                $Dd, $sgn.$Dh, $sgn.$Dm, $Ds );
+  my $newdt=sprintf("%d%02d%02dT%02d%02d%02d", $yr2,$mm2,$dy2,$h2,$m2,$s2);
+  return $newdt;
 }
+#*********TimeZone processing*****************<<<<<<<<<<<<<<<<
+
