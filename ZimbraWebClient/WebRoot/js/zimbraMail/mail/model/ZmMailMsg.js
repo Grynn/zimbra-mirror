@@ -1456,7 +1456,8 @@ function(addrNodes, parentNode, isDraft, accountName) {
 			}
 		}
 
-		var node = {t:"f", a:accountName};
+		var addr = this.identity ? this.identity.sendFromAddress : accountName;
+		var node = {t:"f", a:addr};
 		var displayName = this.identity ? this.identity.sendFromDisplay : null;
 		if (displayName) {
 			node.p = displayName;
