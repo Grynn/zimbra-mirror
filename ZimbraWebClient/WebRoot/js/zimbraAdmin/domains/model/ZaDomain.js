@@ -261,9 +261,10 @@ ZaDomain.putDomainToCache = function(domain) {
 		
 	if(!ZaDomain.staticDomainByNameCacheTable[domain.name] || !ZaDomain.staticDomainByIdCacheTable[domain.id]) {
 		ZaDomain.cacheCounter++;
-		ZaDomain.staticDomainByNameCacheTable[domain.name] = domain;
-		ZaDomain.staticDomainByIdCacheTable[domain.id] = domain;
 	}
+
+    ZaDomain.staticDomainByNameCacheTable[domain.name] = domain;
+    ZaDomain.staticDomainByIdCacheTable[domain.id] = domain;
 }
 ZaDomain.compareACLs = function (val1, val2) {
 	if(AjxUtil.isEmpty(val1.name) && AjxUtil.isEmpty(val2.name)) {
@@ -996,7 +997,8 @@ ZaDomain.modifyMethod =
 function(mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", ZaZimbraAdmin.URN, null);
 	soapDoc.set("id", this.id);
-	for (var aname in mods) {
+
+    for (var aname in mods) {
 		//multy value attribute
 		if(mods[aname] instanceof Array) {
 			var cnt = mods[aname].length;
@@ -1015,7 +1017,7 @@ function(mods) {
 			var attr = soapDoc.set("a", mods[aname],modifyDomainRequest);
 			attr.setAttribute("n", aname);
 		}
-	}
+    }
 	var params = new Object();
 	params.soapDoc = soapDoc;
 	var reqMgrParams = {
@@ -1024,8 +1026,8 @@ function(mods) {
 	}	
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
 	this.refresh(false,true);
-	//this.initFromJS(resp.domain[0]);
-	ZaDomain.putDomainToCache(this);	
+//	this.initFromJS(resp.domain[0]);
+	ZaDomain.putDomainToCache(this);
 }
 ZaItem.modifyMethods["ZaDomain"].push(ZaDomain.modifyMethod);
 
@@ -1634,7 +1636,24 @@ ZaDomain.prototype.getAccountCountsByCoses = function () {
 }
 
 ZaDomain.prototype.updateUsedAccounts = function () {
-    this.getUsedAccounts("default", true) ;
+    this.updateMaxAccounts() ;  //make sure all the defined cos in cosMaxAccounts are initialized
+
+    //need to call the CountAccountRequest
+    var accountCountsByCoses = this.getAccountCountsByCoses();
+    if (accountCountsByCoses && accountCountsByCoses.length > 0) {
+        for (var i = 0 ; i < accountCountsByCoses.length; i ++) {
+            var aCosName =  accountCountsByCoses[i].name ;
+            if (!this[ZaDomain.A2_account_limit][aCosName])
+                this[ZaDomain.A2_account_limit][aCosName] = {} ;
+            this[ZaDomain.A2_account_limit][aCosName].used =
+                                            parseInt (accountCountsByCoses[i]._content) ;
+        }
+    }
+
+    for (aCosName in this[ZaDomain.A2_account_limit]) {
+        if (!this[ZaDomain.A2_account_limit][aCosName].used)
+            this[ZaDomain.A2_account_limit][aCosName].used = 0;
+    }
 }
 
 ZaDomain.prototype.getUsedAccounts =
@@ -1643,50 +1662,44 @@ function (cosName, refresh) {
     if (!this[ZaDomain.A2_account_limit][cosName])  this[ZaDomain.A2_account_limit][cosName] = {} ;
 
     if (refresh || (this[ZaDomain.A2_account_limit][cosName].used == null)) {
-        //need to call the CountAccountRequest
-        var accountCountsByCoses = this.getAccountCountsByCoses();
-        if (accountCountsByCoses && accountCountsByCoses.length > 0) {
-            for (var i = 0 ; i < accountCountsByCoses.length; i ++) {
-                var aCosName =  accountCountsByCoses[i].name ;
-                if (!this[ZaDomain.A2_account_limit][aCosName]) this[ZaDomain.A2_account_limit][aCosName] = {} ;
-                this[ZaDomain.A2_account_limit][aCosName].used =
-                                                parseInt (accountCountsByCoses[i]._content) ;
-            }
-        }else{
-            //no account has been created, so the used accounts are 0  
-        }
+        this.updateUsedAccounts();   
     }
-
-    if (this[ZaDomain.A2_account_limit][cosName].used == null) this[ZaDomain.A2_account_limit][cosName].used = 0;
-    
+ 
     return this[ZaDomain.A2_account_limit][cosName].used ;
 }
 
-ZaDomain.prototype.getMaxAccounts = function (cosName) {
+ZaDomain.prototype.getMaxAccounts = function (cosName, refresh) {
     if (! this [ZaDomain.A2_account_limit] )  this[ZaDomain.A2_account_limit] = {} ;
 
     //var cosName = ZaCos.getCosById (cosId).name ;
     if (!this[ZaDomain.A2_account_limit][cosName]) this[ZaDomain.A2_account_limit][cosName] = {} ;
 
-    if (! this [ZaDomain.A2_account_limit][cosName].max ) {
+    if (! this[ZaDomain.A2_account_limit][cosName].max || refresh) {
         //retrieve the total allowed accounts
-        var cosMaxAccounts = this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts];
-        for (var i=0; i < cosMaxAccounts.length; i ++) {
-            var val = cosMaxAccounts[i].split(":") ;
-            var cos = ZaCos.getCosById (val[0]) ;
-            if (cos == null) {
-                    ZaApp.getInstance().getCurrentController.popupErrorDialog(
-                        AjxMessageFormat.format(ZaMsg.ERROR_INVALID_ACCOUNT_TYPE, [val[0]]));
-                return ;
-            }
-            var n = cos.name ;
-            //TODO: report error on the invalid value 
-            if (!this[ZaDomain.A2_account_limit][n]) this[ZaDomain.A2_account_limit][n] = {} ;
-            this[ZaDomain.A2_account_limit][n].max = val [1] ;
-        }
+       this.updateMaxAccounts ();
     }
 
     return  this[ZaDomain.A2_account_limit][cosName].max ;
+}
+
+//init or refresh the cos max accounts
+ZaDomain.prototype.updateMaxAccounts = function () {
+    this[ZaDomain.A2_account_limit] = {} ;
+    
+    var cosMaxAccounts = this.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts];
+    for (var i=0; i < cosMaxAccounts.length; i ++) {
+        var val = cosMaxAccounts[i].split(":") ;
+        var cos = ZaCos.getCosById (val[0]) ;
+        if (cos == null) {
+                ZaApp.getInstance().getCurrentController.popupErrorDialog(
+                    AjxMessageFormat.format(ZaMsg.ERROR_INVALID_ACCOUNT_TYPE, [val[0]]));
+            return ;
+        }
+        var n = cos.name ;
+
+        this[ZaDomain.A2_account_limit][n] = {} ;
+        this[ZaDomain.A2_account_limit][n].max = val [1] ;
+    }
 }
 
 ZaDomain.prototype.getAvailableAccounts = function (cosName, refresh) {
@@ -1696,7 +1709,7 @@ ZaDomain.prototype.getAvailableAccounts = function (cosName, refresh) {
             || refresh ) {
         //retrieve the used accounts
         var used = this.getUsedAccounts (cosName, refresh);
-        var max = this.getMaxAccounts (cosName) ;
+        var max = this.getMaxAccounts (cosName, refresh) ;
         this [ZaDomain.A2_account_limit][cosName].available = max - used ;
     }
 

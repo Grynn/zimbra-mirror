@@ -381,7 +381,7 @@ function () {
             }
 
 			if(haveSmth) {
-				var modifyDomainRequest = soapDoc.set("ModifyDomainRequest", null, null, ZaZimbraAdmin.URN);
+                var modifyDomainRequest = soapDoc.set("ModifyDomainRequest", null, null, ZaZimbraAdmin.URN);
 				soapDoc.set("id", this._currentObject.id,modifyDomainRequest);
 				for (var aname in mods) {
 					//multy value attribute
@@ -403,8 +403,7 @@ function () {
 						attr.setAttribute("n", aname);
 					}
 				}
-	
-			}
+            }
 	
 			var command = new ZmCsfeCommand();
 			var params = new Object();
@@ -635,13 +634,16 @@ function (resp) {
 			this._handleException(ex, "ZaDomainController.prototype.saveChangesCallback", null, false);
 		}
 	}
-	if(response.ModifyDomainResponse && response.ModifyDomainResponse.domain && response.ModifyDomainResponse.domain[0]) {
-		this._currentObject.initFromJS(response.ModifyDomainResponse.domain[0]);
-	} else {
+	if(response.ModifyDomainResponse && response.ModifyDomainResponse[0].domain && response.ModifyDomainResponse[0].domain[0]) {
+		this._currentObject.initFromJS(response.ModifyDomainResponse[0].domain[0]);
+    } else {
 		this._currentObject.refresh(false);
 	}	
-	this._view.setObject(this._currentObject);			
-	this.fireChangeEvent(this._currentObject);			
+
+	this._view.setObject(this._currentObject);
+	this.fireChangeEvent(this._currentObject);
+
+    ZaDomain.putDomainToCache(this._currentObject);
 }
 
 ZaDomainController.prototype._finishDomainNotebookListener =
