@@ -262,7 +262,7 @@ ZaSearch.prototype.dynSelectSearchAccounts = function (callArgs) {
 		params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
 		params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
-		params.query = ZaSearch.getSearchByNameQuery(value);
+		params.query = ZaSearch.getSearchByNameQuery(value, params.types);
 		params.controller = ZaApp.getInstance().getCurrentController();
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
@@ -285,7 +285,7 @@ ZaSearch.prototype.dynSelectSearchGroups = function (callArgs) {
 		params.types = [ZaSearch.DLS];
         params.callback = dataCallback;
 		params.sortBy = ZaAccount.A_name;
-		params.query = ZaSearch.getSearchByNameQuery(value);
+		params.query = ZaSearch.getSearchByNameQuery(value, params.types);
         if (extraLdapQuery) params.query = "(&" + extraLdapQuery + params.query + ")" ; 
         params.controller = ZaApp.getInstance().getCurrentController();
 		ZaSearch.searchDirectory(params);
@@ -450,6 +450,7 @@ function(n, types) {
 		return "";
 	} else {
 		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+        if (!types) types = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.RESOURCES, ZaSearch.DOMAINS] ;
         var query = [];
         for (var i = 0 ; i < types.length; i ++) {
             if (types[i] == "domains") {

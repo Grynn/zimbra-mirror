@@ -628,7 +628,8 @@ if (ZaSearch) {
 			var callback = callArgs["callback"];
 		        	
             var params = new Object();
-            var query = ZaSearch.getSearchByNameQuery(value);
+            params.types = [ZaSearch.ACCOUNTS,ZaSearch.DLS, ZaSearch.ALIASES];
+            var query = ZaSearch.getSearchByNameQuery(value,  params.types);
             query = "(&" + query
                     + "(|"
                     + "(" + ZaDistributionList.A_isAdminGroup + "=TRUE)"
@@ -637,7 +638,7 @@ if (ZaSearch) {
                     + ")"
                     + ")"
             dataCallback = new AjxCallback(this, this.dynSelectGranteeCallback, callback);
-            params.types = [ZaSearch.ACCOUNTS, ZaSearch.DLS];
+
             params.callback = dataCallback;
             params.sortBy = ZaAccount.A_name;
             params.query = query ;

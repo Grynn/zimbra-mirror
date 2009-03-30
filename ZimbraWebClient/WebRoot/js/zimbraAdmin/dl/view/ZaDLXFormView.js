@@ -479,8 +479,9 @@ ZaDLXFormView.prototype.searchAccounts =
 function (orderby, isascending) {
 	try {
 		orderby = (orderby !=null) ? orderby : ZaAccount.A_name;
-		
-		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject["query"]), [ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES], false, "",null,10);
+		var types = [ZaSearch.ACCOUNTS,ZaSearch.DLS,ZaSearch.ALIASES] ; 
+		var  searchQueryHolder = new ZaSearchQuery(ZaSearch.getSearchByNameQuery(this._containedObject["query"], types),
+                                types , false, "",null,10);
 		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["poolPagenum"], orderby, isascending);
 		if(result.list) {
 			this._containedObject.memberPool = result.list.getArray();

@@ -496,7 +496,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject) {
 							params.callback = dataCallback;
 							params.sortBy = ZaAccount.A_name;
 							params.domain = this.name;
-							params.query = ZaSearch.getSearchByNameQuery(value);
+							params.query = ZaSearch.getSearchByNameQuery(value,params.types);
 							params.controller = ZaApp.getInstance().getCurrentController();
 							ZaSearch.searchDirectory(params);
 						} catch (ex) {
