@@ -577,7 +577,8 @@ function (item, offset){
 			var attrs = [ZaAccount.A_name, ZaItem.A_zimbraId];
 			//var attrs = [""];
 			var valStr = curInstance[ZaSearch.A_query];
-			var query = ZaSearch.getSearchByNameQuery(valStr);
+            var queryTypes = [ZaSearch.DLS] ;
+            var query = ZaSearch.getSearchByNameQuery(valStr, queryTypes);
 			var params = { 	query: query ,
 							sortBy: sortby,
 							limit : ZaAccountMemberOfListView.SEARCH_LIMIT,
@@ -585,7 +586,7 @@ function (item, offset){
 							domain: domainName,
 							applyCos: 0,
 							attrs: attrs,
-							types: [ZaSearch.DLS],
+							types: queryTypes,
 							controller: ZaApp.getInstance().getCurrentController()
 						 } ;
 					
