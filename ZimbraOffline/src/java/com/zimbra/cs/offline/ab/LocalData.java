@@ -241,7 +241,7 @@ public final class LocalData {
         synchronized (mbox) {
             mbox.emptyFolder(CONTEXT, Mailbox.ID_FOLDER_CONTACTS, true);
             mbox.setConfig(CONTEXT, key, null);
-            DbDataSource.deleteAllMappings(ds);
+            DbDataSource.deleteAllMappingsInFolder(ds, Mailbox.ID_FOLDER_CONTACTS);
         }
     }
 
