@@ -15,6 +15,7 @@
  * ***** END LICENSE BLOCK *****
  */
 function ZaUIComponent () {}
+ZaUIComponent.A_inheritedUIComponents = "inheritedUIComponents";
 
 //zimbraAdminConsoleUIComponents   view in account permission view
 ZaUIComponent.accountTargetXFormModifier = function (xFormObject) {
@@ -70,13 +71,42 @@ ZaUIComponent.UIComponentsItem = {
 
 ZaUIComponent.getUIComponentsXFormItem  = function () {
 
-    var list = {type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ 400], choicesWidth: 400,
+    var list =
+        { type: _GROUP_, numCols: 2, colSize: [400, 400], items: [
+               {type: _OUTPUT_, value: com_zimbra_delegatedadmin.tLabel_direct_ui_comp, align: _LEFT_ },
+               {type: _OUTPUT_, value: com_zimbra_delegatedadmin.tLabel_indirect_ui_comp, align: _LEFT_ },
+               {type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ 400], choicesWidth: 400,
                     selectRef:ZaAccount.A_zimbraAdminConsoleUIComponents,
                     ref:ZaAccount.A_zimbraAdminConsoleUIComponents,
                     choices:ZaSettings.ALL_UI_COMPONENTS
-                };
+               } ,
+               { type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ 400], choicesWidth: 400,
+//                    ref:ZaUIComponent.A_inheritedUIComponents,
+                    selectRef:ZaUIComponent.A_inheritedUIComponents,
+                    enableDisableChecks: false,
+                    choices:ZaSettings.ALL_UI_COMPONENTS
+               }
+            ]
+        };
 
     return [list];
+}
+
+/**
+ * set the  ZaUIComponent.A_inheritedUIComponents
+ */
+
+ZaUIComponent.accountObjectModifer =
+function () {
+    var inheritedUIComps = [];
+    var comps = ZaSettings.getUIComponents (this._containedObject) ;
+     for(var i=0;i<comps.length;i++) {
+        if (comps[i].inherited) {
+            inheritedUIComps.push(comps[i]._content) ;
+        }
+    }
+
+    this._containedObject [ZaUIComponent.A_inheritedUIComponents] = inheritedUIComps ;
 }
 
 ZaUIComponent.uiCompObjectModifer = function () {
@@ -95,12 +125,20 @@ if (ZaItem.ObjectModifiers["ZaAccount"]){
     ZaItem.ObjectModifiers["ZaAccount"].push(ZaUIComponent.uiCompObjectModifer) ;
 }
 
+if (ZaTabView.ObjectModifiers["ZaAccountXFormView"]){
+    ZaTabView.ObjectModifiers["ZaAccountXFormView"].push(ZaUIComponent.accountObjectModifer) ;
+}
+
+if (ZaTabView.ObjectModifiers["ZaDLXFormView"]){
+    ZaTabView.ObjectModifiers["ZaDLXFormView"].push(ZaUIComponent.accountObjectModifer) ;
+}
+
+
 if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
     ZaSettings.ACCOUNT_UI_COMP_TAB = "accountUIComponentsTab" ;
     ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNT_UI_COMP_TAB, label: com_zimbra_delegatedadmin.UI_Comp_AccountsUICompTab });
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaUIComponent.accountTargetXFormModifier);
 }
-
 
 if (ZaDistributionList) {
     ZaDistributionList.myXModel.items.push(ZaUIComponent.UIComponentsItem);

@@ -831,6 +831,12 @@ OSelect_XFormItem.prototype.updateElement = function (values) {
 		var itemNum = this.getChoiceNum(values);
 		if (itemNum != -1) this.hiliteChoice(itemNum);
 	}
+
+    //updateEnabledDisabled() should run after the element is created.
+    //OSelect_XFormItem updateElement will redraw the elements.
+    //The redraw of the elements will screw the enable disable state of the element
+    //So we update the enable disable state after the redraw.      
+    this.updateEnabledDisabled();
 }
 
 OSelect_XFormItem.prototype.onChoiceOver = function (itemNum) {}

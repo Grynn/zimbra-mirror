@@ -680,6 +680,7 @@ Zimlet_Select_XFormItem.prototype.initializeItems = function() {
 	var choices = this.getInheritedProperty("choices");	
 	var selectLabel = this.getInheritedProperty("selectLabel");
     var choicesWidth = this.getInheritedProperty ("choicesWidth") || "275px" ;
+    
     var selectChck = {
 		type:_OSELECT_CHECK_,
 		choices:choices,
@@ -689,12 +690,14 @@ Zimlet_Select_XFormItem.prototype.initializeItems = function() {
 		labelLocation:_TOP_,
 		width:choicesWidth,
 		onChange:function (value, event, form) {
-			if (this.getParentItem() && this.getParentItem().getParentItem() && this.getParentItem().getParentItem().getOnChangeMethod()) {
-				return this.getParentItem().getParentItem().getOnChangeMethod().call(this, value, event, form);
-			} else {
-				return this.setInstanceValue(value);
-			}
-		},
+            if (this.getIsEnabled ()) { //the changes are only effective when it is enabled
+                if (this.getParentItem() && this.getParentItem().getParentItem() && this.getParentItem().getParentItem().getOnChangeMethod()) {
+                    return this.getParentItem().getParentItem().getOnChangeMethod().call(this, value, event, form);
+                } else {
+                    return this.setInstanceValue(value);
+                }
+            }
+        },
 		forceUpdate:true,
 		updateElement:function(value) {
 			OSelect_XFormItem.prototype.updateElement.call(this, value);

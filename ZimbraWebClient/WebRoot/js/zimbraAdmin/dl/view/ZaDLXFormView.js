@@ -35,6 +35,7 @@ ZaDLXFormView = function(parent) {
 ZaDLXFormView.prototype = new ZaTabView();
 ZaDLXFormView.prototype.constructor = ZaDLXFormView;
 ZaTabView.XFormModifiers["ZaDLXFormView"] = new Array();
+ZaTabView.ObjectModifiers["ZaDLXFormView"] = [] ;
 
 ZaDLXFormView.prototype.getTitle = 
 function () {
@@ -469,7 +470,7 @@ function (entry) {
 		}
 		this._containedObject[ZaDistributionList.A2_publishedShares]._version = 1;
 	}
-		
+	this.modifyContainedObject () ;	
 	this._localXForm.setInstance(this._containedObject);	
 	
 	this.updateTab();

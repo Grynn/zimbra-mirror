@@ -91,12 +91,25 @@ ZaSettings.initRights = function () {
 		//not implemented yet
 	}	
 	
-	soapDoc = AjxSoapDoc.create("GetAdminConsoleUICompRequest", ZaZimbraAdmin.URN, null);
-	csfeParams = new Object();
-	csfeParams.soapDoc = soapDoc;	
+	var comps = ZaSettings.getUIComponents() ;
+    var cnt = comps.length;
+    for(var i=0;i<cnt;i++) {
+        ZaSettings.ENABLED_UI_COMPONENTS[comps[i]._content] = true;
+    }
+}
+ZaSettings.initMethods.push(ZaSettings.initRights);
+
+ZaSettings.getUIComponents = function (item) {
+    soapDoc = AjxSoapDoc.create("GetAdminConsoleUICompRequest", ZaZimbraAdmin.URN, null);
+	if (item && item.type && item.id) {
+        var el = soapDoc.set(item.type, item.id) ;
+        el.setAttribute("by", "id");
+    }
+    csfeParams = new Object();
+	csfeParams.soapDoc = soapDoc;
 	reqMgrParams = {} ;
 	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
-	reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS ;
+	reqMgrParams.busyMsg = ZaMsg.BUSY_REQUESTING_UI_COMP ;
 	try {
 		var resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.GetAdminConsoleUICompResponse;
 		var comps = [];
@@ -107,17 +120,14 @@ ZaSettings.initRights = function () {
 				comps = resp.a;
 			}
 		}
-		var cnt = comps.length;
-		for(var i=0;i<cnt;i++) {
-			ZaSettings.ENABLED_UI_COMPONENTS[comps[i]._content] = true;
-		}
-		//ZaZimbraAdmin.currentAdminAccount.initEffectiveRightsFromJS(resp);
-	} catch (ex) {
+
+        return comps ;
+    } catch (ex) {
 		//not implemented yet
-	}	
-	
+	}
+
+    return [];
 }
-ZaSettings.initMethods.push(ZaSettings.initRights);
 
 ZaSettings.loadStyles = function(includes) {
     var head = document.getElementsByTagName("head")[0];
