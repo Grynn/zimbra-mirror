@@ -280,7 +280,7 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 
 	@for lib in $(SA_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib" ...; \
-		$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.=" DATADIR=/opt/zimbra/conf/spamassassin CONFDIR=/etc/mail/spamassassin"; force ("install", "Mail::SpamAssassin")' >> $(LOGFILE) 2>&1; \
+		$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.=" DATADIR=/opt/zimbra/conf/spamassassin CONFDIR=/etc/mail/spamassassin LOCAL_STATE_DIR=/var/spamassassin"; force ("install", "Mail::SpamAssassin")' >> $(LOGFILE) 2>&1; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done	
 
