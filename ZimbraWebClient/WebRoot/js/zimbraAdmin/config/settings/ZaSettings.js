@@ -140,70 +140,74 @@ ZaSettings.init = function () {
 	
 
 	try {
-		var soapDoc = AjxSoapDoc.create("GetAdminExtensionZimletsRequest", ZaZimbraAdmin.URN, null);	
-		var command = new ZmCsfeCommand();
-		var params = new Object();
-		params.soapDoc = soapDoc;	
-		var resp = command.invoke(params);
-		var zimlets = null;
-		try {
-			if(resp && resp.Body && resp.Body.GetAdminExtensionZimletsResponse && resp.Body.GetAdminExtensionZimletsResponse.zimlets && resp.Body.GetAdminExtensionZimletsResponse.zimlets.zimlet) {
-				zimlets = resp.Body.GetAdminExtensionZimletsResponse.zimlets.zimlet;
-			}
-		} catch (ex) {
-			//go on
-            if (AjxEnv.hasFirebug)
-                console.log("Error Getting the Zimlets: " + ex.message);
-        }
-		if(zimlets && zimlets.length > 0) {
-			var includes = new Array();	
-			var cssIncludes = new Array();	
-			var cnt = zimlets.length;
-			for(var ix = 0; ix < cnt; ix++) {
-				if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletContext && zimlets[ix].zimletContext[0]) {
-					var zimlet = zimlets[ix].zimlet[0];
-					var zimletContext = zimlets[ix].zimletContext[0];
-                    if (AjxEnv.hasFirebug)
-                        console.log("Adding zimlet: " + zimlet.name);
-                    //load message file first because consequent files may reference it
-                    includes.push([appContextPath, "/res/", zimlet.name, ".js?v=",appVers,ZaZimbraAdmin.LOCALE_QS].join(""));
-					if(zimlet.include && zimlet.include.length>0) {
-						var cnt2 = zimlet.include.length;
-						for (var j=0;j<cnt2;j++) {
-							includes.push(zimletContext.baseUrl + zimlet.include[j]._content + "?v=" +appVers);
-						}
-					}
-					if(zimlet.includeCSS && zimlet.includeCSS.length>0) {
-						var cnt3 = zimlet.includeCSS.length;
-						for (var j=0;j<cnt3;j++) {
-							cssIncludes.push(zimletContext.baseUrl + zimlet.includeCSS[j]._content  + "?v=" +appVers);
-						}
-					}
-				} else {
-					continue;
-				}
-			}
+		if(DBG.getDebugLevel() > AjxDebug.NONE || (location.search && (location.search.indexOf("mode=mjsf") != -1)) ) {
+			var soapDoc = AjxSoapDoc.create("GetAdminExtensionZimletsRequest", ZaZimbraAdmin.URN, null);	
+			var command = new ZmCsfeCommand();
+			var params = new Object();
+			params.soapDoc = soapDoc;	
+			var resp = command.invoke(params);
+			var zimlets = null;
 			try {
-	
-				if(cssIncludes.length > 0){
-				    if (AjxEnv.hasFirebug)
-                        console.log ("Loading Zimlets CSS: " + cssIncludes.join(", ") );
-                    ZaSettings.loadStyles(cssIncludes);
-                }
-
-				if(includes.length > 0)   {
-                    if (AjxEnv.hasFirebug)
-                        console.log ("Loading Zimlets JS: " + includes.join(", ") );
-                   	AjxInclude(includes, null,new AjxCallback(ZaSettings.postInit ));
-                }
-
-            } catch (ex) {
+				if(resp && resp.Body && resp.Body.GetAdminExtensionZimletsResponse && resp.Body.GetAdminExtensionZimletsResponse.zimlets && resp.Body.GetAdminExtensionZimletsResponse.zimlets.zimlet) {
+					zimlets = resp.Body.GetAdminExtensionZimletsResponse.zimlets.zimlet;
+				}
+			} catch (ex) {
 				//go on
-				throw ex;
+	            if (AjxEnv.hasFirebug)
+	                console.log("Error Getting the Zimlets: " + ex.message);
+	        }
+			if(zimlets && zimlets.length > 0) {
+				var includes = new Array();	
+				var cssIncludes = new Array();	
+				var cnt = zimlets.length;
+				for(var ix = 0; ix < cnt; ix++) {
+					if(zimlets[ix] && zimlets[ix].zimlet && zimlets[ix].zimlet[0] && zimlets[ix].zimletContext && zimlets[ix].zimletContext[0]) {
+						var zimlet = zimlets[ix].zimlet[0];
+						var zimletContext = zimlets[ix].zimletContext[0];
+	                    if (AjxEnv.hasFirebug)
+	                        console.log("Adding zimlet: " + zimlet.name);
+	                    //load message file first because consequent files may reference it
+	                    includes.push([appContextPath, "/res/", zimlet.name, ".js?v=",appVers,ZaZimbraAdmin.LOCALE_QS].join(""));
+						if(zimlet.include && zimlet.include.length>0) {
+							var cnt2 = zimlet.include.length;
+							for (var j=0;j<cnt2;j++) {
+								includes.push(zimletContext.baseUrl + zimlet.include[j]._content + "?v=" +appVers);
+							}
+						}
+						if(zimlet.includeCSS && zimlet.includeCSS.length>0) {
+							var cnt3 = zimlet.includeCSS.length;
+							for (var j=0;j<cnt3;j++) {
+								cssIncludes.push(zimletContext.baseUrl + zimlet.includeCSS[j]._content  + "?v=" +appVers);
+							}
+						}
+					} else {
+						continue;
+					}
+				}
+				try {
+		
+					if(cssIncludes.length > 0){
+					    if (AjxEnv.hasFirebug)
+	                        console.log ("Loading Zimlets CSS: " + cssIncludes.join(", ") );
+	                    ZaSettings.loadStyles(cssIncludes);
+	                }
+	
+					if(includes.length > 0)   {
+	                    if (AjxEnv.hasFirebug)
+	                        console.log ("Loading Zimlets JS: " + includes.join(", ") );
+	                   	AjxInclude(includes, null,new AjxCallback(ZaSettings.postInit ));
+	                }
+	
+	            } catch (ex) {
+					//go on
+					throw ex;
+				}
+						
+			} else {
+				ZaSettings.postInit();
 			}
-					
 		} else {
-			ZaSettings.postInit();
+			AjxInclude(["/service/zimlet/res/Zimlets-nodev_all.js.zgz"], null,new AjxCallback(ZaSettings.postInit ));
 		}
 	} catch (ex) {
 		ZaSettings.initializing = false ;
