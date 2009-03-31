@@ -139,7 +139,7 @@ BDB_PERL_LIBS := \
 	BerkeleyDB-0.38
 
 SA_PERL_LIBS = \
-	Mail::SpamAssassin
+	Mail-SpamAssassin-3.2.5
 
 SWATCH = \
 	swatch-3.2.3
@@ -196,8 +196,8 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --lib=/opt/zimbra/openssl-$(SSL_VERSION)/lib LDFLAGS="-L/opt/zimbra/openssl-$(SSL_VERSION)/lib -R/opt/zimbra/openssl-$(SSL_VERSION)/lib"; \
-			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) --lib=$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib LDFLAGS="-L$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib"; \
+			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -205,8 +205,8 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L/opt/zimbra/openssl-$(SSL_VERSION)/lib -R/opt/zimbra/openssl-$(SSL_VERSION)/lib -lssl -lcrypto" INC="-I/opt/zimbra/openssl-$(SSL_VERSION)/include"; \
-			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -lssl -lcrypto" INC="-I$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/include"; \
+			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -214,8 +214,8 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L/opt/zimbra/openssl-$(SSL_VERSION)/lib -R/opt/zimbra/openssl-$(SSL_VERSION)/lib -lssl -lcrypto" INC="-I/opt/zimbra/openssl-$(SSL_VERSION)/include"; \
-			LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) LIBS="-L$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib -lssl -lcrypto" INC="-I$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/include"; \
+			LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)/lib" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
@@ -229,8 +229,8 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-		OPENSSL_PREFIX=/opt/zimbra/openssl-$(SSL_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-		LD_RUN_PATH="/opt/zimbra/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		OPENSSL_PREFIX=$(ZIMBRA_HOME)/openssl-$(SSL_VERSION) $(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		LD_RUN_PATH="$(ZIMBRA_HOME)/openssl-$(SSL_VERSION)" $(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 	
@@ -256,7 +256,7 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR) \
 				-sdk openldap -lib_path $(LDAP_LIB) -include_path $(LDAP_INCLUDE) -sasl_include_path $(SASL_INCLUDE); \
 			LD_RUN_PATH="$(LDAP_LIB)" $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
-			if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
+		if [ $$? -ne 0 ]; then echo "FAILED."; else echo "done."; fi \
 	done
 
 	@for lib in $(BDB_PERL_LIBS); do \
@@ -270,18 +270,23 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 
 	@for lib in $(DBFILE_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
-		LD_RUN_PATH=/opt/zimbra/$(BDB_LIB) DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) $(DB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
+		LD_RUN_PATH=$(ZIMBRA_HOME)/$(BDB_LIB) DB_FILE_INCLUDE=$(BDB_INC) DB_FILE_LIB=$(BDB_LIB) $(DB_FILE_ARGS) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
 	@echo -n "Compiling perl lib DBD::mysql ..."; \
-	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"/opt/zimbra/mysql/bin/mysql_config\" --libs=\"-L/opt/zimbra/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
+	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"$(ZIMBRA_HOME)/mysql/bin/mysql_config\" --libs=\"-L$(ZIMBRA_HOME)/mysql/lib -lmysqlclient -lz -lm\" --cflags=\" -I$(MYSQL_INCLUDE) -Os -fno-common\" "; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 
 	@for lib in $(SA_PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib" ...; \
-		$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get "Mail::SpamAssassin"; $$CPAN::Config->{makepl_arg}.=" DATADIR=/opt/zimbra/conf/spamassassin CONFDIR=/etc/mail/spamassassin LOCALSTATEDIR=/var/spamassassin PERL_TAINT=no"; force ("install", "Mail::SpamAssassin")' >> $(LOGFILE) 2>&1; \
-	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(ZIMBRA_HOME)/zimbramon LIB=$(ZIMBRA_HOME)/zimbramon/lib DATADIR=$(ZIMBRA_HOME)/conf/spamassassin CONFDIR=/etc/spamassassin PERL_TAINT=no LOCALSTATEDIR=/var/spamassassin; \
+			$(MAKE); $(MAKE) install DESTDIR=$(DEST_DIR); \
+			cp -R $(DEST_DIR)/opt/zimbra/zimbramon/ $(DEST_DIR); \
+			rm -rf $(DEST_DIR)/opt;) >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done	
 
 	@for lib in $(SWATCH); do \
@@ -293,7 +298,7 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 			BERKELEYDB_INCLUDE=$(BDB_INC) BERKELEYDB_LIB=$(BDB_LIB) \
 			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 			$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
-			if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done	
 	@echo -n "Creating $(PERL_TGZ_DEST)..."; \
 	(cd $(DEST_LIB_DIR); rm -f i386-linux-thread-multi/goferperf.pl; \
