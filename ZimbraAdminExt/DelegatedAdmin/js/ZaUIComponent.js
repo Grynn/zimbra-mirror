@@ -79,21 +79,6 @@ ZaUIComponent.getUIComponentsXFormItem  = function () {
     return [list];
 }
 
-ZaUIComponent.uiCompViewMethod =
-function (entry) {
-    this._view._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents]
-                = entry.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] || [];
-
-    /*
-    if (! (this._view._containedObject[ZaAccount.A_zimbraAdminConsoleUIComponents] instanceof Array)) {
-        this._view._containedObject[ZaAccount.A_zimbraAdminConsoleUIComponents] = [this._view._containedObject[ZaAccount.A_zimbraAdminConsoleUIComponents]] ;        
-    } */
-    var xform = this._view._localXForm ;
-    var instance  = xform.getInstance ();
-    xform.getModel().setInstanceValue(instance, ZaAccount.A_zimbraAdminConsoleUIComponents,
-             this._view._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents]);
-}
-
 ZaUIComponent.uiCompObjectModifer = function () {
     if (this.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents]) {
         if(!(this.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] instanceof Array)) {
@@ -116,9 +101,6 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
     ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaUIComponent.accountTargetXFormModifier);
 }
 
-if (ZaController.setViewMethods["ZaAccountViewController"]) {
-	ZaController.setViewMethods["ZaAccountViewController"].push(ZaUIComponent.uiCompViewMethod);
-}
 
 if (ZaDistributionList) {
     ZaDistributionList.myXModel.items.push(ZaUIComponent.UIComponentsItem);
@@ -132,9 +114,5 @@ if (ZaTabView.XFormModifiers["ZaDLXFormView"]){
     ZaSettings.DL_UI_COMP_TAB = "dlUIComponentsTab" ;
     ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.DL_UI_COMP_TAB, label: com_zimbra_delegatedadmin.UI_Comp_dlUICompTab });
     ZaTabView.XFormModifiers["ZaDLXFormView"].push(ZaUIComponent.accountTargetXFormModifier);
-}
-
-if (ZaController.setViewMethods["ZaDLController"]) {
-	ZaController.setViewMethods["ZaDLController"].push(ZaUIComponent.uiCompViewMethod);
 }
 
