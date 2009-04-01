@@ -282,7 +282,7 @@ all: allclean setup $(DEST_LIB_DIR) $(DEST_BIN_DIR) $(PERL_TGZ_DEST_DIR)
 		echo -n "Compiling perl lib $$lib" ...; \
 		cp $(PERL_LIB_SOURCE)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xzf $$lib.tar.gz; cd $$lib; \
-			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(ZIMBRA_HOME)/zimbramon LIB=$(ZIMBRA_HOME)/zimbramon/lib DATADIR=$(ZIMBRA_HOME)/conf/spamassassin CONFDIR=/etc/spamassassin PERL_TAINT=no LOCALSTATEDIR=/var/spamassassin; \
+			$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(ZIMBRA_HOME)/zimbramon LIB=$(ZIMBRA_HOME)/zimbramon/lib DATADIR=$(ZIMBRA_HOME)/conf/spamassassin CONFDIR=/etc/spamassassin LOCALSTATEDIR=/var/spamassassin LOCALRULESDIR=/etc/mail/spamassassin; \
 			$(MAKE); $(MAKE) install DESTDIR=$(DEST_DIR); \
 			cp -R $(DEST_DIR)/opt/zimbra/zimbramon/ $(DEST_DIR); \
 			rm -rf $(DEST_DIR)/opt;) >> $(LOGFILE) 2>&1; \
