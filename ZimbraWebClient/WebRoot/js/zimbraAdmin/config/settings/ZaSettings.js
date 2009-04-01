@@ -150,7 +150,7 @@ ZaSettings.init = function () {
 	
 
 	try {
-		if(DBG.getDebugLevel() > AjxDebug.NONE || (location.search && (location.search.indexOf("mode=mjsf") != -1)) ) {
+		if(appDevMode || (DBG.getDebugLevel() > AjxDebug.NONE) || (location.search && (location.search.indexOf("mode=mjsf") != -1)) ) {
 			var soapDoc = AjxSoapDoc.create("GetAdminExtensionZimletsRequest", ZaZimbraAdmin.URN, null);	
 			var command = new ZmCsfeCommand();
 			var params = new Object();
