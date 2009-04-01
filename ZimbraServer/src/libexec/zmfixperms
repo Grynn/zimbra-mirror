@@ -154,13 +154,13 @@ fi
    
 if [ -d ${zimbra_home}/db ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/db"
-  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/db/*.sql ${zimbra_home}/db/*.sql.in
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/db/*.sql ${zimbra_home}/db/*.sql.in 2> /dev/null
   chmod 444 ${zimbra_home}/db/*.sql ${zimbra_home}/db/*.sql.in
 fi
 
 if [ -L ${zimbra_home}/cyrus-sasl ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/cyrus-sasl"
-	chown ${root_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl-*
+	chown ${root_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl-* 2> /dev/null
   chown -R ${root_user}:${root_group} ${zimbra_home}/cyrus-sasl/* 2> /dev/null
   if [ ! -d ${zimbra_home}/cyrus-sasl/state ]; then  
     mkdir -p ${zimbra_home}/cyrus-sasl/state
@@ -181,7 +181,7 @@ fi
 
 if [ -L ${zimbra_home}/dspam ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/dspam"
-  chown ${root_user}:${root_group} ${zimbra_home}/dspam-*
+  chown ${root_user}:${root_group} ${zimbra_home}/dspam-* 2> /dev/null
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/dspam/* 2> /dev/null
   if [ ! -d "${zimbra_home}/data/dspam" ]; then
     mkdir -p ${zimbra_home}/data/dspam
@@ -197,7 +197,7 @@ fi
 
 if [ -L ${zimbra_home}/jetty ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/jetty"
-  chown  ${root_user}:${root_group} /opt/zimbra/jetty-*
+  chown  ${root_user}:${root_group} /opt/zimbra/jetty-* 2> /dev/null
   if [ -f ${zimbra_home}/jetty/etc/keystore ]; then
     chmod 444 ${zimbra_home}/jetty/etc/keystore
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/etc/keystore
@@ -243,13 +243,13 @@ fi
 
 if [ -L ${zimbra_home}/httpd ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/httpd"
-  chown ${root_user}:${root_group} ${zimbra_home}/httpd-*
+  chown ${root_user}:${root_group} ${zimbra_home}/httpd-* 2> /dev/null
   chown -R ${root_user}:${root_group} ${zimbra_home}/httpd/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/logger/mysql ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/logger/mysql"
-  chown ${root_user}:${root_group} ${zimbra_home}/logger/mysql-*
+  chown ${root_user}:${root_group} ${zimbra_home}/logger/mysql-* 2> /dev/null
   chown -R ${root_user}:${root_group} ${zimbra_home}/logger/mysql/* 2> /dev/null
 fi
 
@@ -260,15 +260,17 @@ fi
 
 if [ -L ${zimbra_home}/mysql ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/mysql"
-  chown ${root_user}:${root_group} ${zimbra_home}/mysql-*
+  chown ${root_user}:${root_group} ${zimbra_home}/mysql-* 2> /dev/null
   chown -R ${root_user}:${root_group} ${zimbra_home}/mysql/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/snmp ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/snmp"
-  chown ${root_user}:${root_group} ${zimbra_home}/net-snmp-*
+  chown ${root_user}:${root_group} ${zimbra_home}/net-snmp-* 2> /dev/null
   chown -R ${root_user}:${root_group} ${zimbra_home}/snmp/* 2> /dev/null
-  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/snmp/var
+  if [ -d ${zimbra_home}/snmp/var ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/snmp/var
+  fi
 fi
 
 if [ -L ${zimbra_home}/openldap ]; then
@@ -297,19 +299,19 @@ fi
 
 if [ -L ${zimbra_home}/perdition ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/perdition"
-  chown ${root_user}:${root_group} ${zimbra_home}/perdition-*
+  chown ${root_user}:${root_group} ${zimbra_home}/perdition-* 2> /dev/null
   chown -R ${root_user}:${root_group} ${zimbra_home}/perdition/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/bdb ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/bdb"
-  chown ${root_user}:${root_group} ${zimbra_home}/bdb-*
+  chown ${root_user}:${root_group} ${zimbra_home}/bdb-* 2> /dev/null
   chown -R ${root_user}:${root_group} ${zimbra_home}/bdb/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/clamav ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/clamav"
-  chown ${root_user}:${root_group} ${zimbra_home}/clamav-*
+  chown ${root_user}:${root_group} ${zimbra_home}/clamav-* 2> /dev/null
 	chown ${root_user}:${root_group} ${zimbra_home}/clamav/* 2> /dev/null
   if [ -d ${zimbra_home}/clamav/db ]; then
     chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/clamav/db
@@ -329,14 +331,14 @@ fi
 
 if [ -L ${zimbra_home}/aspell ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/aspell"
-  chown ${root_user}:${root_group} ${zimbra_home}/aspell-*
+  chown ${root_user}:${root_group} ${zimbra_home}/aspell-* 2> /dev/null
 	chown ${root_user}:${root_group} ${zimbra_home}/aspell/* 2> /dev/null
 fi
 
 if [ -L ${zimbra_home}/tomcat ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/tomcat"
-  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/apache-tomcat-*
-  chown  ${root_user}:${root_group} ${zimbra_home}/apache-tomcat-*
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/apache-tomcat-* 2> /dev/null
+  chown  ${root_user}:${root_group} ${zimbra_home}/apache-tomcat-* 2> /dev/null
   if [ -d ${zimbra_home}/tomcat/bin ]; then
     chown -R ${root_user}:${root_group} ${zimbra_home}/tomcat/bin
     if [ ! -d ${zimbra_home}/tomcat/conf ]; then
@@ -372,7 +374,7 @@ fi
 
 if [ -L ${zimbra_home}/postfix ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/postfix"
-	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix*
+	chown -fR ${root_user}:${root_group} ${zimbra_home}/postfix* 2> /dev/null
 
   if [ -e ${zimbra_home}/postfix/conf ]; then
 	  chown -fR ${root_user}:${postfix_owner} ${zimbra_home}/postfix/conf
