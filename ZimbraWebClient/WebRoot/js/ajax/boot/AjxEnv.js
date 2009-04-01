@@ -43,6 +43,10 @@ function() {
 	AjxEnv.isIE5_5up = false;
 	AjxEnv.isIE6  = false;
 	AjxEnv.isIE6up = false;
+	AjxEnv.isIE7  = false;
+	AjxEnv.isIE7up = false;
+	AjxEnv.isIE8  = false;
+	AjxEnv.isIE8up = false;
 	AjxEnv.isNormalResolution = false;
 	AjxEnv.ieScaleFactor = 1;
 	AjxEnv.isFirefox = false;
@@ -170,6 +174,8 @@ function() {
 		AjxEnv.isIE6up			= (AjxEnv.isIE && browserVersion >= 6.0);
 		AjxEnv.isIE7			= (AjxEnv.isIE && browserVersion >= 7.0 && browserVersion < 8.0);
 		AjxEnv.isIE7up			= (AjxEnv.isIE && browserVersion >= 7.0);
+		AjxEnv.isIE8			= (AjxEnv.isIE && browserVersion >= 8.0 && browserVersion < 9.0);
+		AjxEnv.isIE8up			= (AjxEnv.isIE && browserVersion >= 8.0);
 		AjxEnv.isMozilla		= ((AjxEnv.isNav && AjxEnv.mozVersion && AjxEnv.isGeckoBased && (AjxEnv.geckoDate != 0)));
 		AjxEnv.isMozilla1_4up	= (AjxEnv.isMozilla && (AjxEnv.mozVersion >= 1.4));
 		AjxEnv.isFirefox 		= ((AjxEnv.isMozilla && AjxEnv.isFirefox));
@@ -197,6 +203,7 @@ function() {
 		else if (AjxEnv.isNav7)				{	AjxEnv.browser = "NAV7";	}
 		else if (AjxEnv.isNav6)				{	AjxEnv.browser = "NAV6";	}
 		else if (AjxEnv.isNav4)				{	AjxEnv.browser = "NAV4";	}
+		else if (AjxEnv.isIE8)				{	AjxEnv.browser = "IE8";		}
 		else if (AjxEnv.isIE7)				{	AjxEnv.browser = "IE7";		}
 		else if (AjxEnv.isIE6)				{	AjxEnv.browser = "IE6";		}
 		else if (AjxEnv.isIE5)				{	AjxEnv.browser = "IE5";		}
