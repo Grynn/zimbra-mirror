@@ -20,7 +20,8 @@ use warnings;
 use Zimbra::Mon::Zmstat;
 use RRDs;
 use DBI;
-use vars qw ($logger_directory $logger_rrd_directory);
+use FileHandle;
+use vars qw ($logger_directory $logger_rrd_directory $logger_unprocessed_log);
 
 my @CREATE_DDL = (
     q{CREATE TABLE IF NOT EXISTS hosts (
@@ -267,7 +268,8 @@ sub create_schema($) {
 sub init() {
     Zimbra::Mon::Zmstat::getLocalConfig();
     $logger_directory = $Zimbra::Mon::Zmstat::LC{logger_data_directory};
-    $logger_rrd_directory = "$logger_directory/rrds";
+    $logger_rrd_directory   = "$logger_directory/rrds";
+    $logger_unprocessed_log = "$logger_directory/unprocessed.log";
 
     mkdir($logger_directory)     if (! -d $logger_directory);
     mkdir($logger_rrd_directory) if (! -d $logger_rrd_directory);
@@ -281,6 +283,7 @@ sub init() {
 
 sub run() {
     my $dbh = init();
+    my $opened;
     my $logregex = qr/(^.{15}) ((\d+\.\d+\.\d+\.\d+) \S+|(\S+)) ([^[]+)(\[(\d+)\])?: (.*)$/o;
 
     my $fragre = qr/:::(\w{8}-\w{4}-\w{4}-\w{4}-\w{12}):::$/o;
@@ -294,11 +297,12 @@ sub run() {
     my $zimbramonqueuere = qr/QUEUE: (\d+) (\d+)\s*$/;
     
     while (<>) {
-        chomp;
+        my $line = $_;
+        chomp $line;
         die "No parent process. logswatch stopped?" if (getppid() == 1);
         next if (/last message repeated/);
         my ($log_date, $host, $ip, $name, $app, undef, $pid, $msg) =
-                ($_ =~ m/$logregex/);
+                ($line =~ m/$logregex/);
         $host = ((defined($ip) && $ip ne "") ? $ip : $name);
     
         if ($msg =~ /$fragnextre/) {
@@ -345,6 +349,13 @@ sub run() {
             ($csv_file, $csv_confirm, $headers, $data) = @match;
             die "$csv_file != $csv_confirm" if ($csv_file ne $csv_confirm);
         } else {
+            if (! -f $logger_unprocessed_log || !$opened) {
+                close(UNPROCESSED);
+                open(UNPROCESSED, ">$logger_unprocessed_log") || warn $!;
+                autoflush UNPROCESSED 1;
+                $opened = 1;
+            }
+            print UNPROCESSED "$line\n";
             next;
         }
         my $hostid = get_host_id($dbh,$host);
