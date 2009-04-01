@@ -24,6 +24,7 @@ ZaNewAdmin.getMyXModel = function () {
            { id: ZaNewAdmin.A_admin_type, type: _STRING_, //choices: ZaNewAdmin.getNewAdminChoices (),
                ref: ZaNewAdmin.A_admin_type },
            { id: "id", type:_STRING_, ref:"id"},
+           { id: "type", type:_STRING_, ref:"type"},
            { id: ZaAccount.A_name, type:_STRING_, ref:ZaAccount.A_name},
            { id: ZaAccount.A_password, type:_STRING_, ref:"attrs/" + ZaAccount.A_password},
            { id: ZaAccount.A2_confirmPassword, type:_STRING_, ref: ZaAccount.A2_confirmPassword},
@@ -36,7 +37,8 @@ ZaNewAdmin.getMyXModel = function () {
            { id:ZaDistributionList.A_isAdminGroup, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES,
                 ref:"attrs/" + ZaDistributionList.A_isAdminGroup},
            ZaTargetPermission.grantListItem ,
-           ZaUIComponent.UIComponentsItem
+           ZaUIComponent.UIComponentsItem,
+           ZaUIComponent.InheritedUIComponentsItem
        ]
    }
 }
@@ -95,6 +97,7 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
 
         if (createdAdmin.name == tmpObj.name) {
                  tmpObj.id = createdAdmin.id ;
+                 tmpObj.type = tmpObj[ZaNewAdmin.A_admin_type] ;
         } else {
             throw (new AjxException(com_zimbra_delegatedadmin.ERROR_CREATE_ADMIN,
                     AjxException.SERVER_ERROR, "ZaNewAdmin.createAdmin" ));
@@ -103,6 +106,9 @@ ZaNewAdmin.createAdmin = function (tmpObj) {
         if (tmpObj[ZaAccount.A2_memberOf] && tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList]
                 && tmpObj[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList].length > 0)
             ZaAccountMemberOfListView.addMemberList (tmpObj, createdAdmin) ;    
+
+        //load the effective rights for the current admin
+        tmpObj.loadEffectiveRights ("id", tmpObj.id, false) ;
 
         return true ;
     }catch (ex) {
@@ -289,7 +295,12 @@ function() {
             return false ;
         }
     } else if (cStep == ZaNewAdminWizard.STEP_PERMISSION ) {
-		nextStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;
+
+        nextStep = ZaNewAdminWizard.STEP_UI_COMPONENTS ;
+        //init the zimbraAdminConsoleUIComponents
+        this._containedObject.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
+        //get the inherited ui components
+        ZaUIComponent.accountObjectModifer.call(this) ;
     } else if (cStep == ZaNewAdminWizard.STEP_UI_COMPONENTS ) {
         if (ZaNewAdmin.modifyAdmin(this._containedObject)) {
             nextStep = ZaNewAdminWizard.STEP_FINISH ;
@@ -461,14 +472,15 @@ ZaNewAdminWizard.myXFormModifier = function (xFormObject) {
             type: _CASE_,  numCols: 1,
             tabGroupKey:ZaNewAdminWizard.STEP_UI_COMPONENTS, caseKey:ZaNewAdminWizard.STEP_UI_COMPONENTS,
             items:[
-                    {type: _GROUP_, numCols:2, colSizes:[100, "*"],items: [
-                        {type:_OUTPUT_, ref: ZaAccount.A_name , label: ZaMsg.NAD_AccountName}
-                       ]
+                    {type: _GROUP_, numCols:2, colSizes:[200, "*"],items: [
+                        {type:_OUTPUT_, ref: ZaAccount.A_name , label: ZaMsg.NAD_AccountName},
+                        {type:_SPACER_, height: 10}    
+                        ]
                     }
                 ]
     } ;
     case_ui_comp.items = case_ui_comp.items.concat (
-            ZaUIComponent.getUIComponentsXFormItem());
+            ZaUIComponent.getUIComponentsXFormItem(220));
     cases.push (case_ui_comp) ;
 
     var case_finish = {

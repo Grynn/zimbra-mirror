@@ -48,11 +48,11 @@ ZaUIComponent.accountTargetXFormModifier = function (xFormObject) {
         tabBar.choices.push({value:tabIx, label: com_zimbra_delegatedadmin.Tab_ui_components}) ;
     }
 
-    var caseItem = {type:_ZATABCASE_, id:"target_form_ui_comp_tab", numCols:1, colSizes:["700px"],
+    var caseItem = {type:_ZATABCASE_, id:"target_form_ui_comp_tab", numCols:1, colSizes:["800px"],
             caseKey:  tabIx,
             items:[
                 {type:_TOP_GROUPER_, label: com_zimbra_delegatedadmin.Label_ui_comp, id:"ui_comp_grouper",
-                    colSizes:["700px"],numCols:1 ,
+                    colSizes:["800px"],numCols:1 ,
                     items : ZaUIComponent.getUIComponentsXFormItem ()
                 }
             ]
@@ -68,19 +68,24 @@ ZaUIComponent.UIComponentsItem = {
     type: _LIST_, listItems: { type: _STRING_ }
 };
 
+ZaUIComponent.InheritedUIComponentsItem = {
+    id: ZaUIComponent.A_inheritedUIComponents, ref: ZaUIComponent.A_inheritedUIComponents,
+    outputType: _LIST_,    //it is important to set the attr value in OSELECT_XFormItem
+    type: _LIST_, listItems: { type: _STRING_ }
+};
 
-ZaUIComponent.getUIComponentsXFormItem  = function () {
-
+ZaUIComponent.getUIComponentsXFormItem  = function (choiceWidth) {
+    var w = choiceWidth || 400 ;
     var list =
-        { type: _GROUP_, numCols: 2, colSize: [400, 400], items: [
+        { type: _GROUP_, colSpan:"*", numCols: 2, colSize: [w, w], items: [
                {type: _OUTPUT_, value: com_zimbra_delegatedadmin.tLabel_direct_ui_comp, align: _LEFT_ },
                {type: _OUTPUT_, value: com_zimbra_delegatedadmin.tLabel_indirect_ui_comp, align: _LEFT_ },
-               {type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ 400], choicesWidth: 400,
+               {type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ w], choicesWidth: w,
                     selectRef:ZaAccount.A_zimbraAdminConsoleUIComponents,
                     ref:ZaAccount.A_zimbraAdminConsoleUIComponents,
-                    choices:ZaSettings.ALL_UI_COMPONENTS
+                   choices:ZaSettings.ALL_UI_COMPONENTS
                } ,
-               { type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ 400], choicesWidth: 400,
+               { type:_ZIMLET_SELECT_, numCols: 1, colSizes: [ w], choicesWidth: w,
 //                    ref:ZaUIComponent.A_inheritedUIComponents,
                     selectRef:ZaUIComponent.A_inheritedUIComponents,
                     enableDisableChecks: false,
@@ -119,6 +124,7 @@ ZaUIComponent.uiCompObjectModifer = function () {
 
 if (ZaAccount) {
     ZaAccount.myXModel.items.push(ZaUIComponent.UIComponentsItem);
+    ZaAccount.myXModel.items.push(ZaUIComponent.InheritedUIComponentsItem);
 }
 
 if (ZaItem.ObjectModifiers["ZaAccount"]){
@@ -142,6 +148,7 @@ if (ZaTabView.XFormModifiers["ZaAccountXFormView"]){
 
 if (ZaDistributionList) {
     ZaDistributionList.myXModel.items.push(ZaUIComponent.UIComponentsItem);
+    ZaDistributionList.myXModel.items.push(ZaUIComponent.InheritedUIComponentsItem);
 }
 
 if (ZaItem.ObjectModifiers["ZaDistributionList"]){
