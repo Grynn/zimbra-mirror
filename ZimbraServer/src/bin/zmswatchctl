@@ -55,7 +55,7 @@ checkrunning()
 case "$1" in 
   start)
     if [ ! -f ${configfile} ]; then
-      zmsnmpinit
+      ${zimbra_home}/libexec/zmsnmpinit
     fi
 
     checkrunning
