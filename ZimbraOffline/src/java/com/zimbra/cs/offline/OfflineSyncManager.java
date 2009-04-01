@@ -137,6 +137,10 @@ public class OfflineSyncManager {
         	return true;
         }
         
+        void resetLastSyncTime() {
+            mLastSyncTime = System.currentTimeMillis();
+        }
+        
         void connectionDown(String code) {
         	if (++mRetryCount >= OfflineLC.zdesktop_retry_limit.intValue()) {
         		mLastFailTime = System.currentTimeMillis();
@@ -298,6 +302,12 @@ public class OfflineSyncManager {
     	}
     	if (b)
     		notifyStateChange();
+    }
+    
+    public void resetLastSyncTime(String targetName) {
+        synchronized (syncStatusTable) {
+            getStatus(targetName).resetLastSyncTime();
+        }        
     }
     
     private void connectionDown(String targetName, String code) {

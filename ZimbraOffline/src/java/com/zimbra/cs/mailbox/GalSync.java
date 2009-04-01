@@ -38,13 +38,14 @@ import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.index.queryparser.ParseException;
+import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 
 import org.dom4j.ElementHandler;
 import org.dom4j.ElementPath;
 
 public class GalSync {
     
-    private class SaxHandler implements ElementHandler {
+    private static class SaxHandler implements ElementHandler {
         
         public static final String PATH_RESPONSE = "/Envelope/Body/SyncGalResponse";
         public static final String PATH_CN = PATH_RESPONSE + "/cn";
@@ -172,10 +173,50 @@ public class GalSync {
             row.detach(); // done with this node - prune it off to save memory
         }
     }
+     
+    private static class SyncThread extends Thread {
+        private OfflineMailbox ombx;
+        private String user;        
+        private OfflineAccount galAccount;
+        private long lastFullSync;
+        private boolean traceOn;
+        
+        public SyncThread(OfflineMailbox ombx, String user, OfflineAccount galAccount, long lastFullSync, boolean traceOn) {
+            this.ombx = ombx;
+            this.user = user;            
+            this.galAccount = galAccount;
+            this.lastFullSync = lastFullSync;
+            this.traceOn = traceOn;
+        }
+        
+        public void run() {
+            OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
+            String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;            
+            boolean success = true;            
+            try {
+                OfflineLog.offline.info("Offline GAL sync started: " + user);            
+                syncGal(ombx, galAccount, lastFullSync, traceOn);                            
+            } catch (Exception e) {
+                syncMan.processSyncException(target, "", e, traceOn);
+                success = false;
+            } finally {
+                if (success) {
+                    syncMan.syncComplete(target);
+                    OfflineLog.offline.info("Offline GAL sync completed successfully: " + user);
+                } else {
+                    OfflineLog.offline.info("Offline GAL sync failed: " + user);
+                }
+            }
+        }
+    };
     
-    public static void sync(OfflineMailbox ombx, OfflineSyncManager syncMan, boolean isOnRequest) throws ServiceException {
+    public static void sync(OfflineMailbox ombx, boolean isOnRequest) throws ServiceException {        
+        OfflineSyncManager syncMan = OfflineSyncManager.getInstance();        
         String user = ombx.getRemoteUser();
         String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;
+        if (syncMan.getSyncStatus(target) == SyncStatus.running)
+            return;
+            
         if (!isOnRequest) {
             if (!syncMan.retryOK(target))
                 return;
@@ -187,17 +228,16 @@ public class GalSync {
                 
         if (!OfflineLC.zdesktop_sync_gal.booleanValue()) {
             OfflineLog.offline.debug("Offline GAL sync is disabled in local config (zdesktop_sync_gal=false)");
+            syncMan.resetLastSyncTime(target);
             return;
         }
-        
-        syncMan.syncStart(target);
         
         OfflineAccount account = (OfflineAccount)ombx.getAccount();
         if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) ||
             !account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {
             OfflineLog.offline.debug("Offline GAL sync is disabled: " + user);
-            syncMan.syncComplete(target);
             ensureGalAccountNotExists(account);
+            syncMan.resetLastSyncTime(target);
             return;
         }
         
@@ -206,22 +246,14 @@ public class GalSync {
         if (isOnRequest && lastFullSync > 0)
             return;
         
-        boolean success = true;
-        try {            
-            OfflineLog.offline.info("Offline GAL sync started: " + user);            
-            syncGal(ombx, galAccount, lastFullSync, account.isDebugTraceEnabled());                            
-        } catch (Exception e) {
-            syncMan.processSyncException(target, "", e, account.isDebugTraceEnabled());
-            success = false;
-        } finally {
-            syncMan.syncComplete(target);
-            if (success)
-                OfflineLog.offline.info("Offline GAL sync completed successfully: " + user);
-            else
-                OfflineLog.offline.info("Offline GAL sync failed: " + user);
-        }
+        syncMan.syncStart(target);
+        
+        /* TODO: allow graceful shutdown of this thread once offline improves its shutdown routines
+         * currently if server shuts down during gal sync, we get a nasty redo log exception from this thread, 
+         * which is the same as what we would get during mailbox sync. */
+        new SyncThread(ombx, user, galAccount, lastFullSync, account.isDebugTraceEnabled()).start();
     }
-
+    
     private static void ensureGalAccountNotExists(OfflineAccount account) throws ServiceException {       
         OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
         prov.deleteGalAccount(account);
@@ -251,7 +283,7 @@ public class GalSync {
         if (!fullSync)
             req.addAttribute(AdminConstants.A_TOKEN, syncToken);
                
-        SaxHandler handler =  (new GalSync()).new SaxHandler(galAccount, fullSync, traceEnabled); 
+        SaxHandler handler =  new SaxHandler(galAccount, fullSync, traceEnabled); 
         HashMap<String, ElementHandler> handlers = new HashMap<String, ElementHandler>();
         handlers.put(SaxHandler.PATH_RESPONSE, handler);
         handlers.put(SaxHandler.PATH_CN, handler);
