@@ -44,7 +44,7 @@ EOF
 #
 if [ "x$1" = "x-h" -o "x$1" = "x--help" ]; then
 	usage
-	exit 1
+	exit 0
 fi
 
 if [ "x$1" = "x--root" ]; then
