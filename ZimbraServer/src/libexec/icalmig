@@ -20,7 +20,7 @@ use Date::Calc qw(:all);
 use strict;
 my $DEBUG = 0;
 #global constants
-my $version = "1.26";
+my $version = "1.27";
 my $newfileext=".zimbra";
 my $bakfileext=".bak";
 my $invalidfileext=".invalid";
@@ -1372,7 +1372,6 @@ sub processfile
         my $recidfmtstr="";
         my $recctr=1;
         my $mstrdtstart = $masterrec->{'DTSTART'};
-        my $ndtstart=$mstrdtstart;
         my $idx2= index($mstrdtstart,';');
         my $ridx= rindex($mstrdtstart,':');
         my $recidfmtstr="";
@@ -1386,7 +1385,6 @@ sub processfile
         }
         $mstrdtstart = substr($mstrdtstart,$ridx+1);
         my $ndtstart=$mstrdtstart;
-        my $syear= substr($ndtstart,0,4);
 
         foreach my $srdtkey (sort keys %ltd_exlist)
         {
@@ -1489,7 +1487,7 @@ sub processfile
           $recidfmtstr=":";
         }
         $mstrdtstart = substr($mstrdtstart,$ridx+1);
-        my $ndtstart=$mstrdtstart;
+        my $ndtstart=get_adjusted_recurrenceID_date($mstrdtstart);
         my $syear= substr($ndtstart,0,4);
         my $iUID=0;
         foreach my $srdtkey (sort keys %srtd_newrecarr)
@@ -1513,12 +1511,12 @@ sub processfile
                 #recurrecneID is less than the DTSTART
                 $syear++;
                 $ndtstart= $syear.substr($ndtstart,4);
-                #$ndtstart= get_date_by_days($ndtstart,$dyinyr); #for yearly increment
-                my $rndtstart= "RECURRENCE-ID$TZTag$recidfmtstr$ndtstart";
-                $rndtstart =get_offset_datetime($rndtstart);
+
                 #if yearlyException mode
                 if(($YearlyException)&&($IsExceptionSeries))
                 {
+                  my $rndtstart= "RECURRENCE-ID$TZTag$recidfmtstr$ndtstart";
+                  $rndtstart =get_offset_datetime($rndtstart);
                   print_outfile("$rndtstart");
                   &log_message("New RECURRENCE-$rndtstart");
                 }
@@ -1624,6 +1622,19 @@ sub sed_settaskstatus
   system $sedcmd;
 }
 
+sub get_adjusted_recurrenceID_date
+{
+  my $tdt= shift;
+  my $icsdt=get_datepart_from_icsdt($tdt);
+  my $dt=get_date_part($icsdt);
+  my $mth=get_month($icsdt);
+  my $retdt;
+  if(($mth==2)&&($dt>28))
+  {
+    $retdt=substr($tdt,0,6).'28'.substr($tdt,8,length($tdt)-8);
+  }
+  return $retdt;
+}
 #create monthly RRULE
 sub get_monthly_rrule
 {
