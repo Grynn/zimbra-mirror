@@ -60,10 +60,8 @@ function(pkg, callback) {
 	var pkgData = AjxDispatcher._getPackageData(pkg);
 	if (!pkgData._loaded && !AjxPackage.isDefined(pkg)) {
 		pkgData.callback.push(callback);
-	}
-	else {
-		var func = AjxCallback.simpleClosure(callback.run, callback);
-		setTimeout(func, 0);
+	} else {
+		AjxTimedAction.scheduleAction(new AjxTimedAction(callback, callback.run), 0);
 	}
 };
 
