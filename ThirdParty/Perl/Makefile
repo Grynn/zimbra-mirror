@@ -25,7 +25,7 @@ SED     := $(shell which sed)
 CMIRROR	?= http://buildmaster.lab.zimbra.com/cpan/
 
 BDB_VERSION ?= 4.7.25.3
-SSL_VERSION ?= 0.9.8j
+SSL_VERSION ?= 0.9.8k
 LDAP_VERSION ?= 2.4.15.2z
 BDB_INC ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
 BDB_LIB ?= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib
