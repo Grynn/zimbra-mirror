@@ -385,11 +385,11 @@ function() {
 
 		if (button == ZmOperation.UPCOMING) {
 			var b = this._toolbar.getOp(button);
-			b.setText(this._zimlet.getMessage("upcoming"));
+			b.setText(this._zimlet.getMessage("menuItemUpcoming"));
 			b.setToolTipContent(this._zimlet.getMessage("upcomingTooltip"));
 		} else if (button == ZmOperation.TRAFFIC) {
 			var b = this._toolbar.getOp(button);
-			b.setText(this._zimlet.getMessage("traffic"));
+			b.setText(this._zimlet.getMessage("menuItemTraffic"));
 			b.setToolTipContent(this._zimlet.getMessage("trafficTooltip"));
 		}
 
@@ -644,9 +644,11 @@ function(ev) {
 		"&mvt=m&tp=1"
 	].join("");
 
-	var body = "Hi,\n Your friend has shared you a Yahoo Map regarding \""+mapObject.query+"\". \n\nPlease access it @ \t\n\n";
-	var footer = "\n\nThis email was sent to you by a user on Yahoo Maps (maps.yahoo.com)."
-	var subject = appCtxt.get(ZmSetting.USERNAME) + " sent this Yahoo Maps.";
+	var body = this._zimlet.getMessage("msgBody").replace("{0}", mapObject.query ? "("+mapObject.query+")" : "");//"Hi,\n Your friend has shared you a Yahoo Map regarding \""+mapObject.query+"\". \n\nPlease access it @ \t\n\n";
+	var footer = this._zimlet.getMessage("msgFooter");//"\n\nThis email was sent to you by a user on Yahoo Maps (maps.yahoo.com)."
+	var subject = this._zimlet.getMessage("msgSubject").replace("{0}",appCtxt.get(ZmSetting.USERNAME));//appCtxt.get(ZmSetting.USERNAME) + " sent this Yahoo Maps.";
+
+    this._zimlet.getMessage("maxMindError");
 
 	if (appCtxt.get(ZmSetting.HTML_COMPOSE_ENABLED) &&
 		appCtxt.get(ZmSetting.COMPOSE_AS_FORMAT) == ZmSetting.COMPOSE_HTML)
