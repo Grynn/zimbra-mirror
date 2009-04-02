@@ -82,8 +82,12 @@ public class OfflineGal {
         types[0] = MailItem.TYPE_CONTACT;
         mOpContext = new Mailbox.OperationContext(mGalMbox);
         
-        String query = "#" + Contact.A_firstName + ":\"" + name + "*\" OR #" + Contact.A_lastName + ":\"" + name +
-            "*\" OR #" + Contact.A_fullName + ":\"" + name + "*\" OR #" + Contact.A_email + ":\"" + name + "*\"";
+        String[] searchFields = {Contact.A_firstName, Contact.A_lastName, Contact.A_fullName,
+            Contact.A_email, Contact.A_email2, Contact.A_email3};
+        String query = "";
+        for (int i = 0; i < searchFields.length; i++)
+            query = query + (i > 0 ? " OR #" : "#") + searchFields[i] + ":\"" + name + "*\"";
+        
         if (type.equals(CTYPE_ACCOUNT)) {
             query = "(" + query + ") AND #" + Contact.A_type + ":" + CTYPE_ACCOUNT;
         } else {
@@ -133,6 +137,10 @@ public class OfflineGal {
                     cn.addKeyValuePair(Contact.A_fullName, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
                 if ((val = contact.get(Contact.A_email)) != null)
                     cn.addKeyValuePair(Contact.A_email, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(Contact.A_email2)) != null)
+                    cn.addKeyValuePair(Contact.A_email2, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                if ((val = contact.get(Contact.A_email3)) != null)
+                    cn.addKeyValuePair(Contact.A_email3, val, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
             }
                     
             response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());
