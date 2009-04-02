@@ -219,7 +219,9 @@ ZaAccountXFormView.gotSkins = function () {
 	if(!ZaSettings.SKIN_PREFS_ENABLED)
 		return false;
 	else 
-		return ((this.getController().getInstalledSkins() != null) && (this.getController().getInstalledSkins().length > 0));
+		return ((this.getController() != null) &&
+                (this.getController().getInstalledSkins() != null) &&
+                (this.getController().getInstalledSkins().length > 0));
 }
 
 ZaAccountXFormView.preProcessCOS = 
@@ -1829,7 +1831,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject) {
 				{type:_SPACER_},
 				{type:_GROUP_, 
 					items:[
-					{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_,choices:ZaApp.getInstance().getInstalledSkins(),
+					{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPER_SELECT1_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+                        msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_,
+                        choices:ZaApp.getInstance().getInstalledSkins(),
 						visibilityChecks:[ZaAccountXFormView.gotSkins]}
 					] 
 				},

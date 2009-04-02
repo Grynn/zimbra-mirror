@@ -282,7 +282,7 @@ function(entry) {
 	EmailAddr_XFormItem.domainChoices.dirtyChoices();
 	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_SKIN_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		if(entry.getAttrs[ZaAccount.A_zimbraAvailableSkin]) {
+		if(entry.getAttrs[ZaAccount.A_zimbraAvailableSkin]|| entry.getAttrs.all) {
 			var skins = entry.attrs[ZaAccount.A_zimbraAvailableSkin];
 			if(skins != null && skins != "") {
 				if (AjxUtil.isString(skins))	 {
@@ -306,7 +306,7 @@ function(entry) {
 	}
 	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNTS_ZIMLET_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI])  {
-		if(entry.getAttrs[ZaAccount.A_zimbraZimletAvailableZimlets]) {
+		if(entry.getAttrs[ZaAccount.A_zimbraZimletAvailableZimlets] || entry.getAttrs.all) {
 			var zimlets = entry.attrs[ZaAccount.A_zimbraZimletAvailableZimlets];
 			if(zimlets != null && zimlets != "") {
 				var _tmpZimlets = [];
@@ -1164,11 +1164,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject) {
 						items: [	
 							{type:_GROUP_, 
 								items:[
-								{ref:ZaAccount.A_zimbraPrefSkin, type:_SUPERWIZ_SELECT1_, 
+								  {ref:ZaAccount.A_zimbraPrefSkin, type:_SUPERWIZ_SELECT1_,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_zimbraPrefSkin,label:ZaMsg.NAD_zimbraPrefSkin, labelLocation:_LEFT_, 
 									choices:ZaApp.getInstance().getInstalledSkins(),
-									visibilityChecks:[ZaAccountXFormView.gotSkins]}
+//									visibilityChecks:[ZaAccountXFormView.gotSkins]
+                                    visibilityChecks:[]     //always show the current skin in new account wizard, so user can change it                                     
+                                  }
 								] 
 							},
 							{type:_SPACER_},
