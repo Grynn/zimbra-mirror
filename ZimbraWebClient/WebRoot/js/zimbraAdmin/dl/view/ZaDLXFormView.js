@@ -384,12 +384,18 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 			members.push(new ZaDistributionListMember(tmpval));
 		}
 	}
+
+	var tmpAddArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList),members);
+	
+	tmpAddArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList)._version + 1; 
+	
 	var tmpMembersArray = AjxUtil.mergeArrays(form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList),
 		members,ZaDistributionList.compareTwoMembers);
 	
 	tmpMembersArray._version = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList)._version + 1;
 	this.setInstanceValue(tmpMembersArray, ZaDistributionList.A2_memberList);
 	this.setInstanceValue("", ZaDistributionList.A2_optionalAdd);
+	this.setInstanceValue(tmpAddArray, ZaDistributionList.A2_addList);
 	this.getForm().parent.setDirty(true);
 };
 
